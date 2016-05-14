@@ -82,8 +82,11 @@ namespace MKY.IO.Ports
 		private int userDefinedBaudRate;
 
 		/// <summary>Default is <see cref="BaudRate.Baud009600"/>.</summary>
+		public const BaudRate Default = BaudRate.Baud009600;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public BaudRateEx()
-			: this(BaudRate.Baud009600)
+			: this(Default)
 		{
 		}
 

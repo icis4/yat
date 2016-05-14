@@ -29,7 +29,7 @@ namespace MKY.IO.Serial.SerialPort
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SerialCommunicationSettings : MKY.Settings.SettingsItem
+	public class SerialCommunicationSettings : Settings.SettingsItem
 	{
 		/// <summary></summary>
 		public const int BaudRateDefault = (int)MKY.IO.Ports.BaudRate.Baud009600;

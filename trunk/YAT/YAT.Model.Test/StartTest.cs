@@ -49,6 +49,8 @@ namespace YAT.Model.Test
 		// Constants
 		//==========================================================================================
 
+		// Current:
+
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is meant to be a constant.")]
 		private readonly string TerminalFilePath = SettingsFilesProvider.FilePaths_Current.TerminalFilePaths[TerminalSettingsTestCase.T_00_COM1_Closed_Default];
 
@@ -60,6 +62,14 @@ namespace YAT.Model.Test
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is meant to be a constant.")]
 		private readonly string WorkspaceFilePath = SettingsFilesProvider.FilePaths_Current.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias];
+
+		// Empty:
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is meant to be a constant.")]
+		private readonly string EmptyTerminalFilePath = SettingsFilesProvider.FilePaths_Empty.TerminalFilePaths[TerminalSettingsTestCase.T_Empty];
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is meant to be a constant.")]
+		private readonly string EmptyWorkspaceFilePath = SettingsFilesProvider.FilePaths_Empty.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_Empty];
 
 		#endregion
 
@@ -73,14 +83,14 @@ namespace YAT.Model.Test
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
-			// Create temporary in-memory application settings for this test run.
+			// Create temporary in-memory application settings for this test run:
 			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
 
-			// Prevent auto-save of workspace settings.
+			// Prevent auto-save of workspace settings:
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
 
-			// Ensure that recent files are contained.
-			ApplicationSettings.LocalUserSettings.RecentFiles = new Model.Settings.RecentFileSettings();
+			// Ensure that recent files are contained:
+			ApplicationSettings.LocalUserSettings.RecentFiles = new Settings.RecentFileSettings();
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Add(TerminalFilePath);
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Add(WorkspaceFilePath);
 		}
@@ -90,7 +100,7 @@ namespace YAT.Model.Test
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			// Close temporary in-memory application settings.
+			// Close temporary in-memory application settings:
 			ApplicationSettings.Close();
 
 			Temp.CleanTempPath(GetType());
@@ -191,6 +201,70 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(main.StartArgs.WorkspaceSettingsHandler);
 				Assert.AreEqual (WorkspaceFilePath, main.StartArgs.WorkspaceSettingsHandler.SettingsFilePath);
 				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler); // By default the last terminal in the workspace.
+				Assert.IsFalse  (main.StartArgs.ShowNewTerminalDialog);
+			}
+		}
+
+		#endregion
+
+		#region Tests > EmptyTerminalFilePathPrepare
+		//------------------------------------------------------------------------------------------
+		// Tests > EmptyTerminalFilePathPrepare
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestEmptyTerminalFilePathPrepare()
+		{
+			using (Main main = new Main(EmptyTerminalFilePath))
+			{
+				PrepareMainAndVerifyResult(main);
+
+				Assert.IsNull   (main.StartArgs.WorkspaceSettingsHandler);
+				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler);
+				Assert.AreEqual (EmptyTerminalFilePath, main.StartArgs.TerminalSettingsHandler.SettingsFilePath);
+				Assert.IsFalse  (main.StartArgs.ShowNewTerminalDialog);
+			}
+
+			using (Main main = new Main(new CommandLineArgs(new string[] { EmptyTerminalFilePath })))
+			{
+				PrepareMainAndVerifyResult(main);
+
+				Assert.IsNull   (main.StartArgs.WorkspaceSettingsHandler);
+				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler);
+				Assert.AreEqual (EmptyTerminalFilePath, main.StartArgs.TerminalSettingsHandler.SettingsFilePath);
+				Assert.IsFalse  (main.StartArgs.ShowNewTerminalDialog);
+			}
+		}
+
+		#endregion
+
+		#region Tests > EmptyWorkspaceFilePathPrepare
+		//------------------------------------------------------------------------------------------
+		// Tests > EmptyWorkspaceFilePathPrepare
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestEmptyWorkspaceFilePathPrepare()
+		{
+			using (Main main = new Main(EmptyWorkspaceFilePath))
+			{
+				PrepareMainAndVerifyResult(main);
+
+				Assert.IsNotNull(main.StartArgs.WorkspaceSettingsHandler);
+				Assert.AreEqual (EmptyWorkspaceFilePath, main.StartArgs.WorkspaceSettingsHandler.SettingsFilePath);
+				Assert.IsNull   (main.StartArgs.TerminalSettingsHandler);
+				Assert.IsFalse  (main.StartArgs.ShowNewTerminalDialog);
+			}
+
+			using (Main main = new Main(new CommandLineArgs(new string[] { EmptyWorkspaceFilePath })))
+			{
+				PrepareMainAndVerifyResult(main);
+
+				Assert.IsNotNull(main.StartArgs.WorkspaceSettingsHandler);
+				Assert.AreEqual (EmptyWorkspaceFilePath, main.StartArgs.WorkspaceSettingsHandler.SettingsFilePath);
+				Assert.IsNull   (main.StartArgs.TerminalSettingsHandler);
 				Assert.IsFalse  (main.StartArgs.ShowNewTerminalDialog);
 			}
 		}

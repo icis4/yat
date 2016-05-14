@@ -119,8 +119,11 @@ namespace MKY.IO.Usb
 		#endregion
 
 		/// <summary>Default is <see cref="SerialHidReportFormatPreset.YAT"/>.</summary>
+		public const SerialHidReportFormatPreset Default = SerialHidReportFormatPreset.YAT;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public SerialHidReportFormatPresetEx()
-			: this(SerialHidReportFormatPreset.YAT)
+			: this(Default)
 		{
 		}
 

@@ -50,44 +50,44 @@ namespace MKY.IO.Serial.Socket
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Why not, the .NET framework itself does it everywhere...")]
-		public static readonly IPHostEx DefaultRemoteHost = new IPHostEx(IPHost.Localhost);
+		public static readonly IPHostEx RemoteHostDefault = new IPHostEx(IPHost.Localhost);
 
 		/// <summary></summary>
-		public static readonly IPAddress DefaultResolvedRemoteIPAddress = IPAddress.Loopback;
+		public static readonly IPAddress ResolvedRemoteIPAddressDefault = IPAddress.Loopback;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Why not, the .NET framework itself does it everywhere...")]
-		public static readonly IPNetworkInterfaceEx DefaultLocalInterface = new IPNetworkInterfaceEx(IPNetworkInterface.Any);
+		public static readonly IPNetworkInterfaceEx LocalInterfaceDefault = new IPNetworkInterfaceEx(IPNetworkInterface.Any);
 
 		/// <summary></summary>
-		public static readonly IPAddress DefaultResolvedLocalIPAddress = IPAddress.Any;
+		public static readonly IPAddress ResolvedLocalIPAddressDefault = IPAddress.Any;
 
 		/// <summary></summary>
-		public static readonly IPAddressFilterEx DefaultLocalFilter = new IPAddressFilterEx(IPAddressFilter.Any);
+		public static readonly IPAddressFilterEx LocalFilterDefault = new IPAddressFilterEx(IPAddressFilter.Any);
 
 		/// <summary></summary>
-		public static readonly IPAddress DefaultResolvedLocalIPAddressFilter = IPAddress.Any;
+		public static readonly IPAddress ResolvedLocalIPAddressFilterDefault = IPAddress.Any;
 
 		/// <summary></summary>
-		public const int DefaultPort = 10000;
+		public const int PortDefault = 10000;
 
 		/// <summary></summary>
-		public const int DefaultRemoteTcpPort = DefaultPort;
+		public const int RemoteTcpPortDefault = PortDefault;
 
 		/// <summary></summary>
-		public const int DefaultRemoteUdpPort = DefaultPort;
+		public const int RemoteUdpPortDefault = PortDefault;
 
 		/// <summary></summary>
-		public const int DefaultLocalTcpPort = DefaultPort;
+		public const int LocalTcpPortDefault = PortDefault;
 
 		/// <summary></summary>
-		public const int DefaultLocalUdpPort = DefaultPort + 1;
+		public const int LocalUdpPortDefault = PortDefault + 1;
 
 		/// <remarks>
 		/// Must be implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
-		public static AutoRetry DefaultTcpClientAutoReconnect
+		public static AutoRetry TcpClientAutoReconnectDefault
 		{
 			get { return (new AutoRetry(false, 500)); }
 		}
@@ -96,7 +96,7 @@ namespace MKY.IO.Serial.Socket
 		public const int TcpClientAutoReconnectMinInterval = 100;
 
 		/// <summary></summary>
-		public const UdpServerSendMode DefaultUdpServerSendMode = UdpServerSendMode.MostRecent;
+		public const UdpServerSendMode UdpServerSendModeDefault = UdpServerSendMode.MostRecent;
 
 		private const string Undefined = "<Undefined>";
 
@@ -206,17 +206,17 @@ namespace MKY.IO.Serial.Socket
 
 			Type           = SocketType.TcpAutoSocket;
 
-			RemoteHost     = DefaultRemoteHost;
-			RemoteTcpPort  = DefaultRemoteTcpPort;
-			RemoteUdpPort  = DefaultRemoteUdpPort;
+			RemoteHost     = RemoteHostDefault;
+			RemoteTcpPort  = RemoteTcpPortDefault;
+			RemoteUdpPort  = RemoteUdpPortDefault;
 
-			LocalInterface = DefaultLocalInterface;
-			LocalFilter    = DefaultLocalFilter;
-			LocalTcpPort   = DefaultLocalTcpPort;
-			LocalUdpPort   = DefaultLocalUdpPort;
+			LocalInterface = LocalInterfaceDefault;
+			LocalFilter    = LocalFilterDefault;
+			LocalTcpPort   = LocalTcpPortDefault;
+			LocalUdpPort   = LocalUdpPortDefault;
 
-			TcpClientAutoReconnect = DefaultTcpClientAutoReconnect;
-			UdpServerSendMode      = DefaultUdpServerSendMode;
+			TcpClientAutoReconnect = TcpClientAutoReconnectDefault;
+			UdpServerSendMode      = UdpServerSendModeDefault;
 		}
 
 		#endregion
@@ -261,7 +261,7 @@ namespace MKY.IO.Serial.Socket
 					if (IPResolver.TryResolveRemoteHost(this.remoteHost, out ipAddress))
 						this.resolvedRemoteIPAddress = ipAddress;
 					else
-						this.resolvedRemoteIPAddress = DefaultResolvedRemoteIPAddress;
+						this.resolvedRemoteIPAddress = ResolvedRemoteIPAddressDefault;
 				}
 			}
 		}
@@ -374,7 +374,7 @@ namespace MKY.IO.Serial.Socket
 					if (IPResolver.TryResolveRemoteHost(this.localInterface, out ipAddress))
 						this.resolvedLocalIPAddress = ipAddress;
 					else
-						this.resolvedLocalIPAddress = DefaultResolvedLocalIPAddress;
+						this.resolvedLocalIPAddress = ResolvedLocalIPAddressDefault;
 				}
 			}
 		}
@@ -406,7 +406,7 @@ namespace MKY.IO.Serial.Socket
 					if (IPResolver.TryResolveRemoteHost(this.localFilter, out ipAddress))
 						this.resolvedLocalIPAddressFilter = ipAddress;
 					else
-						this.resolvedLocalIPAddressFilter = DefaultResolvedLocalIPAddressFilter;
+						this.resolvedLocalIPAddressFilter = ResolvedLocalIPAddressFilterDefault;
 				}
 			}
 		}

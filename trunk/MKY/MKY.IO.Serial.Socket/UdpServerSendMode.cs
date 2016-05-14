@@ -66,8 +66,11 @@ namespace MKY.IO.Serial.Socket
 		#endregion
 
 		/// <summary>Default is <see cref="UdpServerSendMode.MostRecent"/>.</summary>
+		public const UdpServerSendMode Default = UdpServerSendMode.MostRecent;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public UdpServerSendModeEx()
-			: this(UdpServerSendMode.MostRecent)
+			: this(Default)
 		{
 		}
 

@@ -78,8 +78,11 @@ namespace MKY.IO.Serial.Socket
 		#endregion
 
 		/// <summary>Default is <see cref="SocketType.TcpAutoSocket"/>.</summary>
+		public const SocketType Default = SocketType.TcpAutoSocket;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public SocketTypeEx()
-			: this(SocketType.TcpAutoSocket)
+			: this(Default)
 		{
 		}
 

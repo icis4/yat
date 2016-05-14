@@ -69,8 +69,11 @@ namespace YAT.Domain
 		#endregion
 
 		/// <summary>Default is <see cref="CharSubstitution.None"/>.</summary>
+		public const CharSubstitution Default = CharSubstitution.None;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public CharSubstitutionEx()
-			: this(CharSubstitution.None)
+			: this(Default)
 		{
 		}
 

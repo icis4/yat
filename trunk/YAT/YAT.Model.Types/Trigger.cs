@@ -97,8 +97,11 @@ namespace YAT.Model.Types
 		private Command explicit_;
 
 		/// <summary>Default is <see cref="Trigger.None"/>.</summary>
+		public const Trigger Default = Trigger.None;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public TriggerEx()
-			: base(Trigger.None)
+			: base(Default)
 		{
 		}
 

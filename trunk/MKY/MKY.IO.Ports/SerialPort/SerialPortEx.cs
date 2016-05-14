@@ -164,11 +164,6 @@ namespace MKY.IO.Ports
 		// Constants
 		//==========================================================================================
 
-		private const int BaudRateDefault = 9600;
-		private const int DataBitsDefault = 8;
-		private const System.IO.Ports.Parity ParityDefault       = System.IO.Ports.Parity.None;
-		private const System.IO.Ports.StopBits StopBitsDefault   = System.IO.Ports.StopBits.One;
-		private const System.IO.Ports.Handshake HandshakeDefault = System.IO.Ports.Handshake.None;
 		private const string PortSettingsDefault = "9600, 8, None, 1, None";
 
 		#endregion
@@ -351,7 +346,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		[Category("Port")]
 		[Description("Baud rate.")]
-		[DefaultValue(BaudRateDefault)]
+		[DefaultValue(BaudRateEx.Default)]
 		public new int BaudRate
 		{
 			get
@@ -377,7 +372,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		[Category("Port")]
 		[Description("Data bits.")]
-		[DefaultValue(DataBitsDefault)]
+		[DefaultValue(DataBitsEx.Default)]
 		public new int DataBits
 		{
 			get
@@ -403,7 +398,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		[Category("Port")]
 		[Description("Parity")]
-		[DefaultValue(ParityDefault)]
+		[DefaultValue(ParityEx.Default)]
 		public new System.IO.Ports.Parity Parity
 		{
 			get
@@ -429,7 +424,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		[Category("Port")]
 		[Description("Stop bits.")]
-		[DefaultValue(StopBitsDefault)]
+		[DefaultValue(StopBitsEx.Default)]
 		public new System.IO.Ports.StopBits StopBits
 		{
 			get
@@ -455,7 +450,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		[Category("Port")]
 		[Description("Handshake.")]
-		[DefaultValue(HandshakeDefault)]
+		[DefaultValue(HandshakeEx.Default)]
 		public new System.IO.Ports.Handshake Handshake
 		{
 			get

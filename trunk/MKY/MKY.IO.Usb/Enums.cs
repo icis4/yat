@@ -283,8 +283,12 @@ namespace MKY.IO.Usb
 	public class HidUsagePageEx : EnumEx
 	{
 		/// <summary>Default is <see cref="HidUsagePage.Undefined"/>.</summary>
+		[CLSCompliant(false)]
+		public const HidUsagePage Default = HidUsagePage.Undefined;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public HidUsagePageEx()
-			: this(HidUsagePage.Undefined)
+			: this(Default)
 		{
 		}
 
@@ -434,8 +438,12 @@ namespace MKY.IO.Usb
 	public class HidUsageIdEx : EnumEx
 	{
 		/// <summary>Default is <see cref="HidUsageId.Undefined"/>.</summary>
+		[CLSCompliant(false)]
+		public const HidUsageId Default = HidUsageId.Undefined;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public HidUsageIdEx()
-			: this(HidUsageId.Undefined)
+			: this(Default)
 		{
 		}
 

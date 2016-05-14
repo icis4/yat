@@ -62,8 +62,11 @@ namespace MKY.IO.Ports
 	public class DataBitsEx : EnumEx
 	{
 		/// <summary>Default is <see cref="DataBits.Eight"/>.</summary>
+		public const DataBits Default = DataBits.Eight;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public DataBitsEx()
-			: this(DataBits.Eight)
+			: this(Default)
 		{
 		}
 

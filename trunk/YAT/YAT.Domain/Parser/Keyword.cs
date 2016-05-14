@@ -84,8 +84,11 @@ namespace YAT.Domain.Parser
 		#endregion
 
 		/// <summary>Default is <see cref="Keyword.None"/>.</summary>
+		public const Keyword Default = Keyword.None;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public KeywordEx()
-			: this(Keyword.None)
+			: this(Default)
 		{
 		}
 

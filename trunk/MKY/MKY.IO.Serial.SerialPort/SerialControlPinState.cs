@@ -68,8 +68,11 @@ namespace MKY.IO.Serial.SerialPort
 		#endregion
 
 		/// <summary>Default is <see cref="SerialControlPinState.Automatic"/>.</summary>
+		public const SerialControlPinState Default = SerialControlPinState.Automatic;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public SerialControlPinStateEx()
-			: this(SerialControlPinState.Automatic)
+			: this(Default)
 		{
 		}
 

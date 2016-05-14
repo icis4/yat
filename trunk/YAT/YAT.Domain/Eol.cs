@@ -100,8 +100,11 @@ namespace YAT.Domain
 		#endregion
 
 		/// <summary>Default is <see cref="Eol.CrLf"/>.</summary>
+		public const Eol Default = Eol.CrLf;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public EolEx()
-			: base(Eol.CrLf)
+			: base(Default)
 		{
 		}
 

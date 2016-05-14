@@ -92,8 +92,11 @@ namespace YAT.Domain
 		private string explicitEnclosure; // = null
 
 		/// <summary>Default is <see cref="InfoElementEnclosure.None"/>.</summary>
+		public const InfoElementEnclosure Default = InfoElementEnclosure.None;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public InfoElementEnclosureEx()
-			: this(InfoElementEnclosure.None)
+			: this(Default)
 		{
 		}
 

@@ -55,8 +55,11 @@ namespace MKY.IO.Ports
 		#endregion
 
 		/// <summary>Default is <see cref="Parity.None"/>.</summary>
+		public const Parity Default = Parity.None;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public ParityEx()
-			: this(Parity.None)
+			: this(Default)
 		{
 		}
 

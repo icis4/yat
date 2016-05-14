@@ -67,10 +67,10 @@ namespace YAT.Domain.Settings
 		public const bool DirectionLineBreakEnabledDefault = true;
 
 		/// <summary></summary>
-		public static readonly string DefaultInfoSeparator = " "; // Space for better separability of elements.
+		public static readonly string InfoSeparatorDefault = " "; // Space for better separability of elements.
 
 		/// <summary></summary>
-		public static readonly string DefaultInfoEnclosure = "()"; // Parenthesis for better recognizability of info elements.
+		public static readonly string InfoEnclosureDefault = "()"; // Parenthesis for better recognizability of info elements.
 
 		private bool separateTxRxRadix;
 		private Radix txRadix;
@@ -160,8 +160,8 @@ namespace YAT.Domain.Settings
 			PortLineBreakEnabled      = PortLineBreakEnabledDefault;
 			DirectionLineBreakEnabled = DirectionLineBreakEnabledDefault;
 
-			InfoSeparator     = DefaultInfoSeparator;
-			InfoEnclosure     = DefaultInfoEnclosure;
+			InfoSeparator     = InfoSeparatorDefault;
+			InfoEnclosure     = InfoEnclosureDefault;
 		}
 
 		#region Properties

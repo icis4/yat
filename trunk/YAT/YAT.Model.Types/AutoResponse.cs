@@ -101,8 +101,11 @@ namespace YAT.Model.Types
 		private Command explicit_;
 
 		/// <summary>Default is <see cref="AutoResponse.None"/>.</summary>
+		public const AutoResponse Default = AutoResponse.None;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public AutoResponseEx()
-			: this(AutoResponse.None)
+			: this(Default)
 		{
 		}
 

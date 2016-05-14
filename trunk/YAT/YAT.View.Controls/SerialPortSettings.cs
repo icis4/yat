@@ -55,11 +55,11 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
-		private const int                                        BaudRateDefault    = (int)MKY.IO.Ports.BaudRate.Baud009600;
-		private const MKY.IO.Ports.DataBits                      DataBitsDefault    = MKY.IO.Ports.DataBits.Eight;
-		private const System.IO.Ports.Parity                     ParityDefault      = System.IO.Ports.Parity.None;
-		private const System.IO.Ports.StopBits                   StopBitsDefault    = System.IO.Ports.StopBits.One;
-		private const MKY.IO.Serial.SerialPort.SerialFlowControl FlowControlDefault = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
+		private const int                                        BaudRateDefault    = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.BaudRateDefault;
+		private const MKY.IO.Ports.DataBits                      DataBitsDefault    = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.DataBitsDefault;
+		private const System.IO.Ports.Parity                     ParityDefault      = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.ParityDefault;
+		private const System.IO.Ports.StopBits                   StopBitsDefault    = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.StopBitsDefault;
+		private const MKY.IO.Serial.SerialPort.SerialFlowControl FlowControlDefault = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.FlowControlDefault;
 		private static readonly MKY.IO.Serial.AutoRetry          AutoReopenDefault  = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
 
 		#endregion
@@ -229,12 +229,10 @@ namespace YAT.View.Controls
 		}
 
 		/// <remarks>
-		/// <see cref="AutoReopenDefault"/> cannot be used as designer default value because it is
-		/// an object but not constant.
+		/// Structs cannot be used with the designer.
 		/// </remarks>
-		[Category("Serial Port")]
-		[Description("Auto reopen optione.")]
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual MKY.IO.Serial.AutoRetry AutoReopen
 		{
 			get { return (this.autoReopen); }
