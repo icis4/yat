@@ -20,9 +20,31 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable verbose output:
+////#define DEBUG_VERBOSE
+
+#endif // DEBUG
+
+#endregion
+
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+
+#endregion
 
 namespace MKY.IO.Usb
 {
@@ -50,13 +72,47 @@ namespace MKY.IO.Usb
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Ser/HID just happens to contain 'Ser'...")]
 		public override void FillWithAvailableDevices(bool retrieveStringsFromDevice = true)
 		{
-			Clear();
+			lock (this)
+			{
+				Clear();
 
-			foreach (DeviceInfo di in SerialHidDevice.GetDevices(retrieveStringsFromDevice))
-				Add(di);
+				DebugVerboseIndent("Retrieving connected USB Ser/HID devices...");
+				foreach (DeviceInfo di in SerialHidDevice.GetDevices(retrieveStringsFromDevice))
+				{
+					DebugVerboseIndent(di);
+					Add(di);
+					DebugVerboseUnindent();
+				}
+				DebugVerboseUnindent("...done");
 
-			Sort();
+				Sort();
+			}
 		}
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		[Conditional("DEBUG_VERBOSE")]
+		private void DebugVerboseIndent(string message = null)
+		{
+			if (!string.IsNullOrEmpty(message))
+				Debug.WriteLine(message);
+
+			Debug.Indent();
+		}
+
+		[Conditional("DEBUG_VERBOSE")]
+		private void DebugVerboseUnindent(string message = null)
+		{
+			Debug.Unindent();
+
+			if (!string.IsNullOrEmpty(message))
+				Debug.WriteLine(message);
+		}
+
+		#endregion
 	}
 }
 

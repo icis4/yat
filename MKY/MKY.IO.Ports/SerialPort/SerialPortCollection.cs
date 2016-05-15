@@ -21,10 +21,31 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable verbose output:
+////#define DEBUG_VERBOSE
+
+#endif // DEBUG
+
+#endregion
+
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+
+#endregion
 
 namespace MKY.IO.Ports
 {
@@ -83,8 +104,14 @@ namespace MKY.IO.Ports
 			{
 				Clear();
 
+				DebugVerboseIndent("Retrieving ports of local machine...");
 				foreach (string portName in System.IO.Ports.SerialPort.GetPortNames())
+				{
+					DebugVerboseIndent(portName);
 					Add(new SerialPortId(portName));
+					DebugVerboseUnindent();
+				}
+				DebugVerboseUnindent("...done");
 
 				Sort();
 			}
@@ -192,6 +219,31 @@ namespace MKY.IO.Ports
 				}
 			}
 		}
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		[Conditional("DEBUG_VERBOSE")]
+		private void DebugVerboseIndent(string message = null)
+		{
+			if (!string.IsNullOrEmpty(message))
+				Debug.WriteLine(message);
+
+			Debug.Indent();
+		}
+
+		[Conditional("DEBUG_VERBOSE")]
+		private void DebugVerboseUnindent(string message = null)
+		{
+			Debug.Unindent();
+
+			if (!string.IsNullOrEmpty(message))
+				Debug.WriteLine(message);
+		}
+
+		#endregion
 	}
 }
 
