@@ -65,6 +65,10 @@ namespace YAT.View.Forms
 			this.settings = settings;
 			this.settingsInEdit = new Settings.Terminal.ExplicitSettings(settings);
 
+			// Set visible/invisible before accessing any settings, to ensure that the correct
+			// control is shown in case one of the settings leads to an exception (e.g. bug #307).
+			SetControlsVisibiliy(this.settingsInEdit.Terminal.IO.IOType);
+
 			// SetControls() is initially called in the 'Shown' event handler.
 		}
 
@@ -87,24 +91,6 @@ namespace YAT.View.Forms
 		//==========================================================================================
 		// Form Event Handlers
 		//==========================================================================================
-
-		/// <summary>
-		/// Startup flag only used in the following event handler.
-		/// </summary>
-		private bool isStartingUp = true;
-
-		/// <summary>
-		/// Set visible/invisible before accessing the other settings, to ensure that the correct
-		/// control is shown in case one of the settings leads to an exception (e.g. bug #307).
-		/// </summary>
-		private void TerminalSettings_Paint(object sender, PaintEventArgs e)
-		{
-			if (this.isStartingUp)
-			{
-				this.isStartingUp = false;
-				SetControlsVisibiliy(this.settingsInEdit.Terminal.IO.IOType);
-			}
-		}
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
@@ -209,7 +195,7 @@ namespace YAT.View.Forms
 
 		private void socketSelection_RemoteHostChanged(object sender, EventArgs e)
 		{
-			this.settingsInEdit.Terminal.IO.Socket.RemoteHost = socketSelection.RemoteHost.ToCompactString();
+			this.settingsInEdit.Terminal.IO.Socket.RemoteHost = socketSelection.RemoteHost;
 		}
 
 		private void socketSelection_RemoteTcpPortChanged(object sender, EventArgs e)
@@ -224,12 +210,12 @@ namespace YAT.View.Forms
 
 		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
 		{
-			this.settingsInEdit.Terminal.IO.Socket.LocalInterface = socketSelection.LocalInterface.ToCompactString();
+			this.settingsInEdit.Terminal.IO.Socket.LocalInterface = socketSelection.LocalInterface;
 		}
 
 		private void socketSelection_LocalFilterChanged(object sender, EventArgs e)
 		{
-			this.settingsInEdit.Terminal.IO.Socket.LocalFilter = socketSelection.LocalFilter.ToCompactString();
+			this.settingsInEdit.Terminal.IO.Socket.LocalFilter = socketSelection.LocalFilter;
 		}
 
 		private void socketSelection_LocalTcpPortChanged(object sender, EventArgs e)
@@ -423,6 +409,15 @@ namespace YAT.View.Forms
 
 			terminalSelection.IOType = ioType;
 
+			serialPortSelection.PortId     = this.settingsInEdit.Terminal.IO.SerialPort.PortId;
+
+			serialPortSettings.BaudRate    = this.settingsInEdit.Terminal.IO.SerialPort.Communication.BaudRate;
+			serialPortSettings.DataBits    = this.settingsInEdit.Terminal.IO.SerialPort.Communication.DataBits;
+			serialPortSettings.Parity      = this.settingsInEdit.Terminal.IO.SerialPort.Communication.Parity;
+			serialPortSettings.StopBits    = this.settingsInEdit.Terminal.IO.SerialPort.Communication.StopBits;
+			serialPortSettings.FlowControl = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControl;
+			serialPortSettings.AutoReopen  = this.settingsInEdit.Terminal.IO.SerialPort.AutoReopen;
+
 			socketSelection.SocketType     = (Domain.IOTypeEx)ioType;
 			socketSelection.RemoteHost     = this.settingsInEdit.Terminal.IO.Socket.RemoteHost;
 			socketSelection.RemoteTcpPort  = this.settingsInEdit.Terminal.IO.Socket.RemoteTcpPort;
@@ -442,15 +437,6 @@ namespace YAT.View.Forms
 			usbSerialHidDeviceSettings.RxIdUsage    = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.RxIdUsage;
 			usbSerialHidDeviceSettings.FlowControl  = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.FlowControl;
 			usbSerialHidDeviceSettings.AutoOpen     = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.AutoOpen;
-
-			serialPortSelection.PortId     = this.settingsInEdit.Terminal.IO.SerialPort.PortId;
-
-			serialPortSettings.BaudRate    = this.settingsInEdit.Terminal.IO.SerialPort.Communication.BaudRate;
-			serialPortSettings.DataBits    = this.settingsInEdit.Terminal.IO.SerialPort.Communication.DataBits;
-			serialPortSettings.Parity      = this.settingsInEdit.Terminal.IO.SerialPort.Communication.Parity;
-			serialPortSettings.StopBits    = this.settingsInEdit.Terminal.IO.SerialPort.Communication.StopBits;
-			serialPortSettings.FlowControl = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControl;
-			serialPortSettings.AutoReopen  = this.settingsInEdit.Terminal.IO.SerialPort.AutoReopen;
 
 			// Trigger refresh of ports/devices if selection of I/O type has changed:
 			bool isSerialPort   = ((Domain.IOTypeEx)ioType).IsSerialPort;

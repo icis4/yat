@@ -195,7 +195,7 @@ namespace MKY.IO.Serial.Socket
 			this.instanceId = instanceId;
 
 			this.localIPAddress = localIPAddress;
-			this.localPort = localPort;
+			this.localPort      = localPort;
 		}
 
 		#region Disposal

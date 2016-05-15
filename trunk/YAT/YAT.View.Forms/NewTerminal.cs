@@ -66,6 +66,10 @@ namespace YAT.View.Forms
 			this.newTerminalSettings = newTerminalSettings;
 			this.newTerminalSettingsInEdit = new Model.Settings.NewTerminalSettings(newTerminalSettings);
 
+			// Set visible/invisible before accessing any settings, to ensure that the correct
+			// control is shown in case one of the settings leads to an exception (e.g. bug #307).
+			SetControlsVisibiliy(this.newTerminalSettingsInEdit.IOType);
+
 			// SetControls() is initially called in the 'Shown' event handler.
 		}
 
@@ -94,24 +98,6 @@ namespace YAT.View.Forms
 		//==========================================================================================
 		// Form Event Handlers
 		//==========================================================================================
-
-		/// <summary>
-		/// Startup flag only used in the following event handler.
-		/// </summary>
-		private bool isStartingUp = true;
-
-		/// <summary>
-		/// Set visible/invisible before accessing the other settings, to ensure that the correct
-		/// control is shown in case one of the settings leads to an exception (e.g. bug #307).
-		/// </summary>
-		private void NewTerminal_Paint(object sender, PaintEventArgs e)
-		{
-			if (this.isStartingUp)
-			{
-				this.isStartingUp = false;
-				SetControlsVisibiliy(this.newTerminalSettingsInEdit.IOType);
-			}
-		}
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
@@ -222,7 +208,7 @@ namespace YAT.View.Forms
 
 		private void socketSelection_RemoteHostChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettingsInEdit.SocketRemoteHost = socketSelection.RemoteHost.ToCompactString();
+			this.newTerminalSettingsInEdit.SocketRemoteHost = socketSelection.RemoteHost;
 		}
 
 		private void socketSelection_RemoteTcpPortChanged(object sender, EventArgs e)
@@ -237,12 +223,12 @@ namespace YAT.View.Forms
 
 		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettingsInEdit.SocketLocalInterface = socketSelection.LocalInterface.ToCompactString();
+			this.newTerminalSettingsInEdit.SocketLocalInterface = socketSelection.LocalInterface;
 		}
 
 		private void socketSelection_LocalFilterChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettingsInEdit.SocketLocalFilter = socketSelection.LocalFilter.ToCompactString();
+			this.newTerminalSettingsInEdit.SocketLocalFilter = socketSelection.LocalFilter;
 		}
 
 		private void socketSelection_LocalTcpPortChanged(object sender, EventArgs e)
@@ -422,6 +408,15 @@ namespace YAT.View.Forms
 
 			terminalSelection.IOType = ioType;
 
+			serialPortSelection.PortId     = this.newTerminalSettingsInEdit.SerialPortId;
+
+			serialPortSettings.BaudRate    = this.newTerminalSettingsInEdit.SerialPortCommunication.BaudRate;
+			serialPortSettings.DataBits    = this.newTerminalSettingsInEdit.SerialPortCommunication.DataBits;
+			serialPortSettings.Parity      = this.newTerminalSettingsInEdit.SerialPortCommunication.Parity;
+			serialPortSettings.StopBits    = this.newTerminalSettingsInEdit.SerialPortCommunication.StopBits;
+			serialPortSettings.FlowControl = this.newTerminalSettingsInEdit.SerialPortCommunication.FlowControl;
+			serialPortSettings.AutoReopen  = this.newTerminalSettingsInEdit.SerialPortAutoReopen;
+
 			socketSelection.SocketType     = (Domain.IOTypeEx)ioType;
 			socketSelection.RemoteHost     = this.newTerminalSettingsInEdit.SocketRemoteHost;
 			socketSelection.RemoteTcpPort  = this.newTerminalSettingsInEdit.SocketRemoteTcpPort;
@@ -441,15 +436,6 @@ namespace YAT.View.Forms
 			usbSerialHidDeviceSettings.RxIdUsage    = this.newTerminalSettingsInEdit.UsbSerialHidRxIdUsage;
 			usbSerialHidDeviceSettings.FlowControl  = this.newTerminalSettingsInEdit.UsbSerialHidFlowControl;
 			usbSerialHidDeviceSettings.AutoOpen     = this.newTerminalSettingsInEdit.UsbSerialHidAutoOpen;
-
-			serialPortSelection.PortId     = this.newTerminalSettingsInEdit.SerialPortId;
-
-			serialPortSettings.BaudRate    = this.newTerminalSettingsInEdit.SerialPortCommunication.BaudRate;
-			serialPortSettings.DataBits    = this.newTerminalSettingsInEdit.SerialPortCommunication.DataBits;
-			serialPortSettings.Parity      = this.newTerminalSettingsInEdit.SerialPortCommunication.Parity;
-			serialPortSettings.StopBits    = this.newTerminalSettingsInEdit.SerialPortCommunication.StopBits;
-			serialPortSettings.FlowControl = this.newTerminalSettingsInEdit.SerialPortCommunication.FlowControl;
-			serialPortSettings.AutoReopen  = this.newTerminalSettingsInEdit.SerialPortAutoReopen;
 
 			checkBox_StartTerminal.Checked = this.newTerminalSettingsInEdit.StartTerminal;
 

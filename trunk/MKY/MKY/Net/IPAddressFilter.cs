@@ -238,7 +238,7 @@ namespace MKY.Net
 				(
 					base.Equals(other) &&
 					StringEx.EqualsOrdinalIgnoreCase(this.explicitName, other.explicitName) &&
-					(this.explicitAddress == other.explicitAddress)
+					this.explicitAddress.Equals(other.explicitAddress) // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 				);
 			}
 			else

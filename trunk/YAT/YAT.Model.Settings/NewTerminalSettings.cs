@@ -24,6 +24,7 @@
 using System;
 using System.Xml.Serialization;
 
+using MKY;
 using MKY.Net;
 
 namespace YAT.Model.Settings
@@ -39,11 +40,11 @@ namespace YAT.Model.Settings
 		private MKY.IO.Serial.SerialPort.SerialCommunicationSettings serialPortCommunication;
 		private MKY.IO.Serial.AutoRetry serialPortAutoReopen;
 
-		private string socketRemoteHost;
+		private IPHostEx socketRemoteHost;
 		private int socketRemoteTcpPort;
 		private int socketRemoteUdpPort;
-		private string socketLocalInterface;
-		private string socketLocalFilter;
+		private IPNetworkInterfaceEx socketLocalInterface;
+		private IPAddressFilterEx socketLocalFilter;
 		private int socketLocalTcpPort;
 		private int socketLocalUdpPort;
 		private MKY.IO.Serial.AutoRetry tcpClientAutoReconnect;
@@ -246,7 +247,18 @@ namespace YAT.Model.Settings
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
 		[XmlElement("SocketRemoteHost")]
-		public virtual string SocketRemoteHost
+		public virtual string SocketRemoteHost_ForSerialization
+		{
+			get { return (SocketRemoteHost.ToCompactString()); } // Use compact string represenation, only taking host name or address into account!
+			set { SocketRemoteHost = value;                    }
+		}
+
+		/// <remarks>
+		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
+		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
+		/// </remarks>
+		[XmlIgnore]
+		public virtual IPHostEx SocketRemoteHost
 		{
 			get { return (this.socketRemoteHost); }
 			set
@@ -255,6 +267,8 @@ namespace YAT.Model.Settings
 				{
 					this.socketRemoteHost = value;
 					SetChanged();
+
+					// Do not try to resolve the IP address as this may take quite some time!
 				}
 			}
 		}
@@ -293,7 +307,18 @@ namespace YAT.Model.Settings
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
 		[XmlElement("SocketLocalInterface")]
-		public virtual string SocketLocalInterface
+		public virtual string SocketLocalInterface_ForSerialization
+		{
+			get { return (SocketLocalInterface.ToCompactString()); } // Use compact string represenation, only taking host name or address into account!
+			set { SocketLocalInterface = value;                    }
+		}
+
+		/// <remarks>
+		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
+		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
+		/// </remarks>
+		[XmlIgnore]
+		public virtual IPNetworkInterfaceEx SocketLocalInterface
 		{
 			get { return (this.socketLocalInterface); }
 			set
@@ -302,6 +327,8 @@ namespace YAT.Model.Settings
 				{
 					this.socketLocalInterface = value;
 					SetChanged();
+
+					// Do not try to resolve the IP address as this may take quite some time!
 				}
 			}
 		}
@@ -310,7 +337,18 @@ namespace YAT.Model.Settings
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
 		[XmlElement("SocketLocalFilter")]
-		public virtual string SocketLocalFilter
+		public virtual string SocketLocalFilter_ForSerialization
+		{
+			get { return (SocketLocalFilter.ToCompactString()); } // Use compact string represenation, only taking host name or address into account!
+			set { SocketLocalFilter = value;                    }
+		}
+
+		/// <remarks>
+		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
+		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
+		/// </remarks>
+		[XmlIgnore]
+		public virtual IPAddressFilterEx SocketLocalFilter
 		{
 			get { return (this.socketLocalFilter); }
 			set
@@ -319,6 +357,8 @@ namespace YAT.Model.Settings
 				{
 					this.socketLocalFilter = value;
 					SetChanged();
+
+					// Do not try to resolve the IP address as this may take quite some time!
 				}
 			}
 		}
@@ -548,11 +588,11 @@ namespace YAT.Model.Settings
 				(SerialPortCommunication  == other.SerialPortCommunication) &&
 				(SerialPortAutoReopen     == other.SerialPortAutoReopen) &&
 
-				(SocketRemoteHost         == other.SocketRemoteHost) &&
+				StringEx.EqualsOrdinalIgnoreCase(    SocketRemoteHost_ForSerialization,     SocketRemoteHost_ForSerialization) &&
 				(SocketRemoteTcpPort      == other.SocketRemoteTcpPort) &&
 				(SocketRemoteUdpPort      == other.SocketRemoteUdpPort) &&
-				(SocketLocalInterface     == other.SocketLocalInterface) &&
-				(SocketLocalFilter        == other.SocketLocalFilter) &&
+				StringEx.EqualsOrdinalIgnoreCase(SocketLocalInterface_ForSerialization, SocketLocalInterface_ForSerialization) &&
+				StringEx.EqualsOrdinalIgnoreCase(   SocketLocalFilter_ForSerialization,    SocketLocalFilter_ForSerialization) &&
 				(SocketLocalTcpPort       == other.SocketLocalTcpPort) &&
 				(SocketLocalUdpPort       == other.SocketLocalUdpPort) &&
 				(TcpClientAutoReconnect   == other.TcpClientAutoReconnect) &&
@@ -588,11 +628,11 @@ namespace YAT.Model.Settings
 				hashCode = (hashCode * 397) ^  SerialPortCommunication                                .GetHashCode();
 				hashCode = (hashCode * 397) ^  SerialPortAutoReopen                                   .GetHashCode();
 
-				hashCode = (hashCode * 397) ^ (SocketRemoteHost       != null ? SocketRemoteHost      .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (    SocketRemoteHost_ForSerialization != null ?     SocketRemoteHost_ForSerialization.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^  SocketRemoteTcpPort;
 				hashCode = (hashCode * 397) ^  SocketRemoteUdpPort;
-				hashCode = (hashCode * 397) ^ (SocketLocalInterface   != null ? SocketLocalInterface  .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (SocketLocalFilter      != null ? SocketLocalFilter     .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (SocketLocalInterface_ForSerialization != null ? SocketLocalInterface_ForSerialization.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (   SocketLocalFilter_ForSerialization != null ?    SocketLocalFilter_ForSerialization.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^  SocketLocalTcpPort;
 				hashCode = (hashCode * 397) ^  SocketLocalUdpPort;
 				hashCode = (hashCode * 397) ^  TcpClientAutoReconnect                                 .GetHashCode();

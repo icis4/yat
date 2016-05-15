@@ -967,12 +967,14 @@ namespace MKY.IO.Serial.Socket
 
 									if (updateRemoteEndPoint)
 									{
-										if (this.remoteIPAddress != remoteEndPoint.Address) {
+										if (!this.remoteIPAddress.Equals(remoteEndPoint.Address)) // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+										{
 											this.remoteIPAddress = remoteEndPoint.Address;
 											hasChanged = true;
 										}
 
-										if (this.remotePort != remoteEndPoint.Port) {
+										if (this.remotePort != remoteEndPoint.Port)
+										{
 											this.remotePort = remoteEndPoint.Port;
 											hasChanged = true;
 										}

@@ -170,9 +170,9 @@ namespace MKY.IO.Serial.Socket
 			this.instanceId = SocketBase.NextInstanceId;
 
 			this.remoteIPAddress = remoteIPAddress;
-			this.remotePort = remotePort;
-			this.localIPAddress = localIPAddress;
-			this.localPort = localPort;
+			this.remotePort      = remotePort;
+			this.localIPAddress  = localIPAddress;
+			this.localPort       = localPort;
 		}
 
 		#region Disposal

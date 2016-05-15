@@ -201,7 +201,7 @@ namespace MKY.Net
 				return
 				(
 					base.Equals(other) &&
-					(this.explicitAddress == other.explicitAddress)
+					this.explicitAddress.Equals(other.explicitAddress) // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 					// Ignore 'explicitDescription'
 				);
 			}

@@ -100,7 +100,7 @@ namespace MKY.Net
 
 							foreach (IPAddress hostAddress in hostEntry.AddressList)
 							{
-								if (ai.Address.Equals(hostAddress)) // IPAddress does not override the == operator!
+								if (ai.Address.Equals(hostAddress)) // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 									Add(new IPNetworkInterfaceEx(ai.Address, ni.Description));
 
 								// Note that ni.Name is of not much use, example:
