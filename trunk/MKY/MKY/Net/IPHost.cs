@@ -27,6 +27,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
 
+using MKY.Diagnostics;
+
 namespace MKY.Net
 {
 	#region Enum IPHostType
@@ -60,7 +62,7 @@ namespace MKY.Net
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
-	/// Make sure to use the underlying enum for serialization.
+	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	public class IPHostEx : EnumEx
@@ -76,11 +78,15 @@ namespace MKY.Net
 
 		#endregion
 
-		private IPAddress explicitAddress = IPAddress.None;
+		private string    explicitName = null;
+		private IPAddress explicitAddress  = IPAddress.None;
 
 		/// <summary>Default is <see cref="IPHost.Localhost"/>.</summary>
+		public const IPHost Default = IPHost.Localhost;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public IPHostEx()
-			: this(IPHost.Localhost)
+			: this(Default)
 		{
 		}
 
@@ -89,7 +95,7 @@ namespace MKY.Net
 			: base(hostType)
 		{
 			if (hostType == IPHost.Explicit)
-				throw (new InvalidOperationException("'IPHostType.Explicit' requires an IP address, use IPHost(IPAddress) instead!"));
+				throw (new InvalidOperationException("'IPHostType.Explicit' requires an IP address or URL string, use IPHostEx(IPAddress) or IPHostEx(string) instead!"));
 		}
 
 		/// <summary></summary>
@@ -100,13 +106,61 @@ namespace MKY.Net
 			else                                        { SetUnderlyingEnum(IPHost.Explicit);      this.explicitAddress = address;        }
 
 			// Note that 'IPHostType.IPv4Localhost' cannot be distinguished from 'IPHostType.Localhost' when 'IPAddress.Loopback' is given.
-			// Also note that similar but optimized code is found at ParseFromIPAddress() further below.
+			// Also note that similar but optimized code is found at FromIPAddress() further below.
+		}
+
+		/// <summary></summary>
+		public IPHostEx(string nameOrAddress)
+		{
+			IPHostEx result;
+			if (TryParse(nameOrAddress, out result))
+			{
+				SetUnderlyingEnum(result.UnderlyingEnum);
+
+				this.explicitName    = result.explicitName;
+				this.explicitAddress = result.explicitAddress;
+			}
+			else
+			{
+				throw (new ArgumentException("Invalid host address or URL string!", "url"));
+			}
+		}
+
+		/// <summary></summary>
+		protected IPHostEx(string name, IPAddress address)
+		{
+			this.explicitName     = name;
+			this.explicitAddress  = address;
 		}
 
 		#region Properties
 
 		/// <summary></summary>
-		public IPAddress IPAddress
+		public string Name
+		{
+			get
+			{
+				switch ((IPHost)UnderlyingEnum)
+				{
+					case IPHost.Localhost:     return ("localhost");
+					case IPHost.IPv4Localhost: return ("localhost");
+					case IPHost.IPv6Localhost: return ("localhost");
+					case IPHost.Explicit:
+					{
+						if (!string.IsNullOrEmpty(this.explicitName))
+							return (this.explicitName);
+						else if (this.explicitAddress != null)
+							return (this.explicitAddress.ToString());
+						else
+							return ("");
+					}
+				}
+				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		public IPAddress Address
 		{
 			get
 			{
@@ -128,12 +182,14 @@ namespace MKY.Net
 			{
 				switch ((IPHost)UnderlyingEnum)
 				{
-					case IPHost.Localhost:     return (true);
-					case IPHost.IPv4Localhost: return (true);
-					case IPHost.IPv6Localhost: return (true);
-					case IPHost.Explicit:      return (false);
+					case IPHost.Localhost:
+					case IPHost.IPv4Localhost:
+					case IPHost.IPv6Localhost:
+						return (true);
+
+					default:
+						return (false);
 				}
-				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -158,6 +214,7 @@ namespace MKY.Net
 				return
 				(
 					base.Equals(other) &&
+					StringEx.EqualsOrdinalIgnoreCase(this.explicitName, other.explicitName) &&
 					(this.explicitAddress == other.explicitAddress)
 				);
 			}
@@ -177,7 +234,10 @@ namespace MKY.Net
 				int hashCode = base.GetHashCode();
 
 				if ((IPHost)UnderlyingEnum == IPHost.Explicit)
-					hashCode = (hashCode * 397) ^ (this.explicitAddress != null ? this.explicitAddress.GetHashCode() : 0); // Ignore 'otherDescription'
+				{
+					hashCode = (hashCode * 397) ^ (this.explicitName    != null ? this.explicitName   .GetHashCode() : 0);
+					hashCode = (hashCode * 397) ^ (this.explicitAddress != null ? this.explicitAddress.GetHashCode() : 0);
+				}
 
 				return (hashCode);
 			}
@@ -192,7 +252,41 @@ namespace MKY.Net
 				case IPHost.Localhost:     return (Localhost_string);
 				case IPHost.IPv4Localhost: return (IPv4Localhost_string + " (" + IPAddress.Loopback + ")");
 				case IPHost.IPv6Localhost: return (IPv6Localhost_string + " (" + IPAddress.IPv6Loopback + ")");
-				case IPHost.Explicit:      return (this.explicitAddress.ToString());
+				case IPHost.Explicit:
+				{
+					if (!string.IsNullOrEmpty(this.explicitName))
+						return (this.explicitName);
+					else if (this.explicitAddress != null)
+						return (this.explicitAddress.ToString());
+					else
+						return ("");
+				}
+			}
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
+
+		/// <summary>
+		/// Returns a compact string representation:
+		/// - For predefined hosts, the predefined string is returned.
+		/// - For explicit hosts, the host name or address is returned.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		public string ToCompactString()
+		{
+			switch ((IPHost)UnderlyingEnum)
+			{
+				case IPHost.Localhost:     return (Localhost_string);
+				case IPHost.IPv4Localhost: return (IPv4Localhost_string);
+				case IPHost.IPv6Localhost: return (IPv6Localhost_string);
+				case IPHost.Explicit:
+				{
+					if (!string.IsNullOrEmpty(this.explicitName))
+						return (this.explicitName);
+					else if (this.explicitAddress != null)
+						return (this.explicitAddress.ToString());
+					else
+						return ("");
+				}
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -224,7 +318,13 @@ namespace MKY.Net
 				case IPHost.Localhost:     return (Localhost_string);
 				case IPHost.IPv4Localhost: return (IPv4Localhost_string);
 				case IPHost.IPv6Localhost: return (IPv6Localhost_string);
-				case IPHost.Explicit:      return (ToEndpointAdressString(this.explicitAddress.ToString()));
+				case IPHost.Explicit:
+				{
+					if (this.explicitAddress != null)
+						return (ToEndpointAdressString(this.explicitAddress.ToString()));
+					else
+						return ("");
+				}
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -270,7 +370,7 @@ namespace MKY.Net
 		{
 			IPHostEx host;
 			if (!string.IsNullOrEmpty(s) && TryParse(s, out host))
-				return (ToEndpointAdressString(host.IPAddress));
+				return (ToEndpointAdressString(host.Address));
 
 			return (s);
 		}
@@ -293,7 +393,7 @@ namespace MKY.Net
 
 		#endregion
 
-		#region Parse
+		#region Parse/From
 
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -305,7 +405,7 @@ namespace MKY.Net
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" is no valid host string!"));
+				throw (new FormatException(@"""" + s + @""" is an invalid host string! String must be an IP host name (URL), an IP address, or one of the predefined hosts."));
 		}
 
 		/// <remarks>
@@ -322,7 +422,7 @@ namespace MKY.Net
 			else
 			{
 				IPAddress address;
-				if (IPAddress.TryParse(s, out address)) // Valid other?
+				if (IPAddress.TryParse(s, out address)) // Valid explicit?
 				{
 					result = new IPHostEx(address);
 					return (true);
@@ -372,8 +472,48 @@ namespace MKY.Net
 			}
 		}
 
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParseAndResolve(string s, out IPHostEx result)
+		{
+			if (TryParse(s, out result))
+			{
+				return (true);
+			}
+			else
+			{
+				try
+				{
+					IPAddress[] addressesFromDns = Dns.GetHostAddresses(s);
+					foreach (IPAddress addressFromDns in addressesFromDns)
+					{
+						if (addressFromDns.AddressFamily == AddressFamily.InterNetwork) // IPv4 has precedence for compatibility reasons.
+						{
+							result = new IPHostEx(s, addressFromDns);
+							return (true);
+						}
+					}
+
+					if (addressesFromDns.Length > 0)
+					{
+						result = new IPHostEx(s, addressesFromDns[0]);
+						return (true);
+					}
+				}
+				catch (Exception ex)
+				{
+					DebugEx.WriteException(typeof(IPHostEx), ex, "Failed to get address from DNS!");
+				}
+
+				// Invalid string!
+				result = null;
+				return (false);
+			}
+		}
+
 		/// <summary></summary>
-		public static IPHostEx ParseFromIPAddress(IPAddress address)
+		public static IPHostEx FromIPAddress(IPAddress address)
 		{
 			if      (address == IPAddress.Loopback)
 				return (new IPHostEx(IPHost.Localhost));
@@ -405,13 +545,13 @@ namespace MKY.Net
 		/// <summary></summary>
 		public static implicit operator IPAddress(IPHostEx address)
 		{
-			return (address.IPAddress);
+			return (address.Address);
 		}
 
 		/// <summary></summary>
 		public static implicit operator IPHostEx(IPAddress address)
 		{
-			return (ParseFromIPAddress(address));
+			return (FromIPAddress(address));
 		}
 
 		/// <summary></summary>

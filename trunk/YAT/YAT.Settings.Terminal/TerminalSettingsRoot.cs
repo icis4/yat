@@ -434,33 +434,33 @@ namespace YAT.Settings.Terminal
 		/// The currently valid response items usable for automatic response.
 		/// </summary>
 		[XmlIgnore]
-		public Model.Types.TriggerEx[] ValidAutoResponseTriggerItems
+		public Model.Types.AutoTriggerEx[] ValidAutoResponseTriggerItems
 		{
 			get
 			{
-				Model.Types.TriggerEx[] triggers = Model.Types.TriggerEx.GetAllItems();
-				List<Model.Types.TriggerEx> a = new List<Model.Types.TriggerEx>(triggers.Length); // Preset the required capactiy to improve memory management.
+				Model.Types.AutoTriggerEx[] triggers = Model.Types.AutoTriggerEx.GetAllItems();
+				List<Model.Types.AutoTriggerEx> a = new List<Model.Types.AutoTriggerEx>(triggers.Length); // Preset the required capactiy to improve memory management.
 
-				foreach (Model.Types.TriggerEx trigger in triggers)
+				foreach (Model.Types.AutoTriggerEx trigger in triggers)
 				{
-					switch ((Model.Types.Trigger)trigger)
+					switch ((Model.Types.AutoTrigger)trigger)
 					{
-						case Model.Types.Trigger.PredefinedCommand1:
-						case Model.Types.Trigger.PredefinedCommand2:
-						case Model.Types.Trigger.PredefinedCommand3:
-						case Model.Types.Trigger.PredefinedCommand4:
-						case Model.Types.Trigger.PredefinedCommand5:
-						case Model.Types.Trigger.PredefinedCommand6:
-						case Model.Types.Trigger.PredefinedCommand7:
-						case Model.Types.Trigger.PredefinedCommand8:
-						case Model.Types.Trigger.PredefinedCommand9:
-						case Model.Types.Trigger.PredefinedCommand10:
-						case Model.Types.Trigger.PredefinedCommand11:
-						case Model.Types.Trigger.PredefinedCommand12:
+						case Model.Types.AutoTrigger.PredefinedCommand1:
+						case Model.Types.AutoTrigger.PredefinedCommand2:
+						case Model.Types.AutoTrigger.PredefinedCommand3:
+						case Model.Types.AutoTrigger.PredefinedCommand4:
+						case Model.Types.AutoTrigger.PredefinedCommand5:
+						case Model.Types.AutoTrigger.PredefinedCommand6:
+						case Model.Types.AutoTrigger.PredefinedCommand7:
+						case Model.Types.AutoTrigger.PredefinedCommand8:
+						case Model.Types.AutoTrigger.PredefinedCommand9:
+						case Model.Types.AutoTrigger.PredefinedCommand10:
+						case Model.Types.AutoTrigger.PredefinedCommand11:
+						case Model.Types.AutoTrigger.PredefinedCommand12:
 						{
 							int pageId = this.implicit_.Predefined.SelectedPage;
 							int commandId = trigger.ToPredefinedCommandId();
-							if (commandId != Model.Types.TriggerEx.InvalidPredefinedCommandId)
+							if (commandId != Model.Types.AutoTriggerEx.InvalidPredefinedCommandId)
 							{
 								Model.Types.Command c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
 								if ((c != null) && (c.IsValid))
@@ -470,17 +470,17 @@ namespace YAT.Settings.Terminal
 							break;
 						}
 
-						case Model.Types.Trigger.Explicit:
+						case Model.Types.AutoTrigger.Explicit:
 						{
-							Model.Types.Command c = this.implicit_.AutoResponse.ExplicitTrigger;
-							if ((c != null) && (c.IsValid))
+							Model.Types.Command c = new Model.Types.Command(this.implicit_.AutoResponse.Trigger); // Explicit trigger command.
+							if (c.IsValid)
 								a.Add(trigger);
 
 							break;
 						}
 
-						case Model.Types.Trigger.AnyLine:
-						case Model.Types.Trigger.None:
+						case Model.Types.AutoTrigger.AnyLine:
+						case Model.Types.AutoTrigger.None:
 						default:
 						{
 							a.Add(trigger); // Always add these fixed responses.
@@ -553,8 +553,8 @@ namespace YAT.Settings.Terminal
 
 						case Model.Types.AutoResponse.Explicit:
 						{
-							Model.Types.Command c = this.implicit_.AutoResponse.ExplicitResponse;
-							if ((c != null) && (c.IsValid))
+							Model.Types.Command c = new Model.Types.Command(this.implicit_.AutoResponse.Response); // Explicit trigger command.
+							if (c.IsValid)
 								a.Add(response);
 
 							break;
@@ -585,24 +585,24 @@ namespace YAT.Settings.Terminal
 
 				if (this.implicit_.AutoResponse.Enabled)
 				{
-					switch (this.implicit_.AutoResponse.TriggerSelection)
+					switch ((Model.Types.AutoTrigger)this.implicit_.AutoResponse.Trigger)
 					{
-						case Model.Types.Trigger.PredefinedCommand1:
-						case Model.Types.Trigger.PredefinedCommand2:
-						case Model.Types.Trigger.PredefinedCommand3:
-						case Model.Types.Trigger.PredefinedCommand4:
-						case Model.Types.Trigger.PredefinedCommand5:
-						case Model.Types.Trigger.PredefinedCommand6:
-						case Model.Types.Trigger.PredefinedCommand7:
-						case Model.Types.Trigger.PredefinedCommand8:
-						case Model.Types.Trigger.PredefinedCommand9:
-						case Model.Types.Trigger.PredefinedCommand10:
-						case Model.Types.Trigger.PredefinedCommand11:
-						case Model.Types.Trigger.PredefinedCommand12:
+						case Model.Types.AutoTrigger.PredefinedCommand1:
+						case Model.Types.AutoTrigger.PredefinedCommand2:
+						case Model.Types.AutoTrigger.PredefinedCommand3:
+						case Model.Types.AutoTrigger.PredefinedCommand4:
+						case Model.Types.AutoTrigger.PredefinedCommand5:
+						case Model.Types.AutoTrigger.PredefinedCommand6:
+						case Model.Types.AutoTrigger.PredefinedCommand7:
+						case Model.Types.AutoTrigger.PredefinedCommand8:
+						case Model.Types.AutoTrigger.PredefinedCommand9:
+						case Model.Types.AutoTrigger.PredefinedCommand10:
+						case Model.Types.AutoTrigger.PredefinedCommand11:
+						case Model.Types.AutoTrigger.PredefinedCommand12:
 						{
 							int pageId = this.implicit_.Predefined.SelectedPage;
-							int commandId = ((Model.Types.TriggerEx)(this.implicit_.AutoResponse.TriggerSelection)).ToPredefinedCommandId();
-							if (commandId != Model.Types.TriggerEx.InvalidPredefinedCommandId)
+							int commandId = this.implicit_.AutoResponse.Trigger.ToPredefinedCommandId();
+							if (commandId != Model.Types.AutoTriggerEx.InvalidPredefinedCommandId)
 							{
 								Model.Types.Command c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
 								if ((c != null) && (c.IsValid))
@@ -612,17 +612,17 @@ namespace YAT.Settings.Terminal
 							break;
 						}
 
-						case Model.Types.Trigger.Explicit:
+						case Model.Types.AutoTrigger.Explicit:
 						{
-							Model.Types.Command c = this.implicit_.AutoResponse.ExplicitTrigger;
-							if ((c != null) && (c.IsValid))
+							Model.Types.Command c = new Model.Types.Command(this.implicit_.AutoResponse.Trigger); // Explicit trigger command.
+							if (c.IsValid)
 								response = c;
 
 							break;
 						}
 
-						case Model.Types.Trigger.AnyLine:
-						case Model.Types.Trigger.None:
+						case Model.Types.AutoTrigger.AnyLine:
+						case Model.Types.AutoTrigger.None:
 						default:
 						{
 							break;

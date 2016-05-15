@@ -2213,7 +2213,7 @@ namespace YAT.Model
 			}
 
 			// AutoRespose:
-			if (this.settingsRoot.AutoResponse.Enabled && (this.settingsRoot.AutoResponse.TriggerSelection == Trigger.AnyLine))
+			if (this.settingsRoot.AutoResponse.Enabled && (this.settingsRoot.AutoResponse.Trigger == AutoTrigger.AnyLine))
 				SendAutoResponse();
 		}
 
@@ -3853,7 +3853,7 @@ namespace YAT.Model
 		{
 			if (this.settingsRoot.AutoResponse.Enabled)
 			{
-				if (((TriggerEx)(this.settingsRoot.AutoResponse.TriggerSelection)).CommandIsRequired) // = sequence required = helper required.
+				if (this.settingsRoot.AutoResponse.Trigger.CommandIsRequired) // = sequence required = helper required.
 				{
 					byte[] sequence;
 					if (TryParseCommandToSequence(this.settingsRoot.ActiveAutoResponseTrigger, out sequence))
@@ -3942,7 +3942,7 @@ namespace YAT.Model
 		{
 			int page = this.settingsRoot.Predefined.SelectedPage;
 
-			switch (this.settingsRoot.AutoResponse.ResponseSelection)
+			switch ((AutoResponse)this.settingsRoot.AutoResponse.Response)
 			{
 				case AutoResponse.PredefinedCommand1:  SendPredefined(page, 1);  break;
 				case AutoResponse.PredefinedCommand2:  SendPredefined(page, 2);  break;
@@ -3960,7 +3960,7 @@ namespace YAT.Model
 				case AutoResponse.SendFile:            SendFile();               break;
 
 				case AutoResponse.Explicit:
-					SendCommand(this.settingsRoot.AutoResponse.ExplicitResponse);
+					SendCommand(new Command(this.settingsRoot.AutoResponse.Response));
 					break;
 
 				case AutoResponse.None:

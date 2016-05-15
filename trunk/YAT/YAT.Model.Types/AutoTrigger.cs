@@ -39,7 +39,7 @@ namespace YAT.Model.Types
 	#pragma warning disable 1591
 
 	/// <summary></summary>
-	public enum Trigger
+	public enum AutoTrigger
 	{
 		None = 0,
 
@@ -73,7 +73,7 @@ namespace YAT.Model.Types
 	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	public class TriggerEx : EnumEx
+	public class AutoTriggerEx : EnumEx
 	{
 		/// <summary>
 		/// The invalid predefined command ID (1..12).
@@ -96,25 +96,25 @@ namespace YAT.Model.Types
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "'explicit' is a key word.")]
 		private Command explicit_;
 
-		/// <summary>Default is <see cref="Trigger.None"/>.</summary>
-		public const Trigger Default = Trigger.None;
+		/// <summary>Default is <see cref="AutoTrigger.None"/>.</summary>
+		public const AutoTrigger Default = AutoTrigger.None;
 
 		/// <summary>Default is <see cref="Default"/>.</summary>
-		public TriggerEx()
+		public AutoTriggerEx()
 			: base(Default)
 		{
 		}
 
 		/// <summary></summary>
-		public TriggerEx(Trigger trigger)
+		public AutoTriggerEx(AutoTrigger trigger)
 			: base(trigger)
 		{
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "'explicit' is a key word.")]
-		public TriggerEx(string explicit_)
-			: base(Trigger.Explicit)
+		public AutoTriggerEx(string explicit_)
+			: base(AutoTrigger.Explicit)
 		{
 			this.explicit_ = new Command(explicit_);
 		}
@@ -124,7 +124,7 @@ namespace YAT.Model.Types
 		{
 			get
 			{
-				if ((Trigger)UnderlyingEnum == Trigger.Explicit)
+				if ((AutoTrigger)UnderlyingEnum == AutoTrigger.Explicit)
 					return (this.explicit_);
 				else
 					return (new Command());
@@ -136,10 +136,10 @@ namespace YAT.Model.Types
 		{
 			get
 			{
-				switch ((Trigger)UnderlyingEnum)
+				switch ((AutoTrigger)UnderlyingEnum)
 				{
-					case Trigger.None:
-					case Trigger.AnyLine:
+					case AutoTrigger.None:
+					case AutoTrigger.AnyLine:
 						return (false);
 
 					default:
@@ -151,9 +151,9 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public int ToPredefinedCommandId()
 		{
-			int triggerInt = (int)(Trigger)UnderlyingEnum;
-			if ((triggerInt >= (int)Trigger.PredefinedCommand1) &&
-				(triggerInt <= (int)Trigger.PredefinedCommand12))
+			int triggerInt = (int)(AutoTrigger)UnderlyingEnum;
+			if ((triggerInt >= (int)AutoTrigger.PredefinedCommand1) &&
+				(triggerInt <= (int)AutoTrigger.PredefinedCommand12))
 			{
 				return (triggerInt);
 			}
@@ -168,23 +168,23 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public override string ToString()
 		{
-			switch ((Trigger)UnderlyingEnum)
+			switch ((AutoTrigger)UnderlyingEnum)
 			{
-				case Trigger.None:                return (None_string);
-				case Trigger.PredefinedCommand1:  return (PredefinedCommand_string + " 1]");
-				case Trigger.PredefinedCommand2:  return (PredefinedCommand_string + " 2]");
-				case Trigger.PredefinedCommand3:  return (PredefinedCommand_string + " 3]");
-				case Trigger.PredefinedCommand4:  return (PredefinedCommand_string + " 4]");
-				case Trigger.PredefinedCommand5:  return (PredefinedCommand_string + " 5]");
-				case Trigger.PredefinedCommand6:  return (PredefinedCommand_string + " 6]");
-				case Trigger.PredefinedCommand7:  return (PredefinedCommand_string + " 7]");
-				case Trigger.PredefinedCommand8:  return (PredefinedCommand_string + " 8]");
-				case Trigger.PredefinedCommand9:  return (PredefinedCommand_string + " 9]");
-				case Trigger.PredefinedCommand10: return (PredefinedCommand_string + " 10]");
-				case Trigger.PredefinedCommand11: return (PredefinedCommand_string + " 11]");
-				case Trigger.PredefinedCommand12: return (PredefinedCommand_string + " 12]");
-				case Trigger.AnyLine:             return (AnyLine_string);
-				case Trigger.Explicit:            return (this.explicit_.SingleLineText);
+				case AutoTrigger.None:                return (None_string);
+				case AutoTrigger.PredefinedCommand1:  return (PredefinedCommand_string + " 1]");
+				case AutoTrigger.PredefinedCommand2:  return (PredefinedCommand_string + " 2]");
+				case AutoTrigger.PredefinedCommand3:  return (PredefinedCommand_string + " 3]");
+				case AutoTrigger.PredefinedCommand4:  return (PredefinedCommand_string + " 4]");
+				case AutoTrigger.PredefinedCommand5:  return (PredefinedCommand_string + " 5]");
+				case AutoTrigger.PredefinedCommand6:  return (PredefinedCommand_string + " 6]");
+				case AutoTrigger.PredefinedCommand7:  return (PredefinedCommand_string + " 7]");
+				case AutoTrigger.PredefinedCommand8:  return (PredefinedCommand_string + " 8]");
+				case AutoTrigger.PredefinedCommand9:  return (PredefinedCommand_string + " 9]");
+				case AutoTrigger.PredefinedCommand10: return (PredefinedCommand_string + " 10]");
+				case AutoTrigger.PredefinedCommand11: return (PredefinedCommand_string + " 11]");
+				case AutoTrigger.PredefinedCommand12: return (PredefinedCommand_string + " 12]");
+				case AutoTrigger.AnyLine:             return (AnyLine_string);
+				case AutoTrigger.Explicit:            return (this.explicit_.SingleLineText);
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -196,7 +196,7 @@ namespace YAT.Model.Types
 		/// <remarks>
 		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
 		/// </remarks>
-		public static TriggerEx[] GetAllItems()
+		public static AutoTriggerEx[] GetAllItems()
 		{
 			return (GetItems(true, true));
 		}
@@ -204,7 +204,7 @@ namespace YAT.Model.Types
 		/// <remarks>
 		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
 		/// </remarks>
-		public static TriggerEx[] GetFixedItems()
+		public static AutoTriggerEx[] GetFixedItems()
 		{
 			return (GetItems(true, false));
 		}
@@ -212,23 +212,23 @@ namespace YAT.Model.Types
 		/// <remarks>
 		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
 		/// </remarks>
-		private static TriggerEx[] GetItems(bool addFixed, bool addVariable)
+		private static AutoTriggerEx[] GetItems(bool addFixed, bool addVariable)
 		{
-			List<TriggerEx> a = new List<TriggerEx>(16); // Preset the initial capactiy to improve memory management, 16 is a large enough value.
-			if (addFixed)		a.Add(new TriggerEx(Trigger.None));
-			if (addVariable)	a.Add(new TriggerEx(Trigger.PredefinedCommand1));
-			if (addVariable)	a.Add(new TriggerEx(Trigger.PredefinedCommand2));
-			if (addVariable)	a.Add(new TriggerEx(Trigger.PredefinedCommand3));
-			if (addVariable)	a.Add(new TriggerEx(Trigger.PredefinedCommand4));
-			if (addVariable)	a.Add(new TriggerEx(Trigger.PredefinedCommand5));
-			if (addVariable)	a.Add(new TriggerEx(Trigger.PredefinedCommand6));
-			if (addVariable)	a.Add(new TriggerEx(Trigger.PredefinedCommand7));
-			if (addVariable)	a.Add(new TriggerEx(Trigger.PredefinedCommand8));
-			if (addVariable)	a.Add(new TriggerEx(Trigger.PredefinedCommand9));
-			if (addVariable)	a.Add(new TriggerEx(Trigger.PredefinedCommand10));
-			if (addVariable)	a.Add(new TriggerEx(Trigger.PredefinedCommand11));
-			if (addVariable)	a.Add(new TriggerEx(Trigger.PredefinedCommand12));
-			if (addFixed)		a.Add(new TriggerEx(Trigger.AnyLine));
+			List<AutoTriggerEx> a = new List<AutoTriggerEx>(16); // Preset the initial capactiy to improve memory management, 16 is a large enough value.
+			if (addFixed)		a.Add(new AutoTriggerEx(AutoTrigger.None));
+			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand1));
+			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand2));
+			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand3));
+			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand4));
+			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand5));
+			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand6));
+			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand7));
+			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand8));
+			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand9));
+			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand10));
+			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand11));
+			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand12));
+			if (addFixed)		a.Add(new AutoTriggerEx(AutoTrigger.AnyLine));
 			return (a.ToArray());
 		}
 
@@ -239,9 +239,9 @@ namespace YAT.Model.Types
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static TriggerEx Parse(string s)
+		public static AutoTriggerEx Parse(string s)
 		{
-			TriggerEx result;
+			AutoTriggerEx result;
 			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
@@ -251,13 +251,13 @@ namespace YAT.Model.Types
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParse(string s, out TriggerEx result)
+		public static bool TryParse(string s, out AutoTriggerEx result)
 		{
-			Trigger enumResult;
+			AutoTrigger enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				if (enumResult == Trigger.Explicit)
-					result = new TriggerEx(s);
+				if (enumResult == AutoTrigger.Explicit)
+					result = new AutoTriggerEx(s);
 				else
 					result = enumResult;
 
@@ -273,20 +273,20 @@ namespace YAT.Model.Types
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParse(string s, out Trigger result)
+		public static bool TryParse(string s, out AutoTrigger result)
 		{
 			if (s != null)
 				s = s.Trim();
 
 			if (string.IsNullOrEmpty(s)) // None!
 			{
-				result = Trigger.None;
+				result = AutoTrigger.None;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase   (s, None_string) ||
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, None_stringAlternatives))
 			{
-				result = Trigger.None;
+				result = AutoTrigger.None;
 				return (true);
 			}
 			else if (StringEx.StartsWithOrdinalIgnoreCase   (s, PredefinedCommand_string) ||
@@ -300,26 +300,26 @@ namespace YAT.Model.Types
 					{
 						if ((intValue >= 1) && (intValue <= 12))
 						{
-							int enumValue = ((int)Trigger.PredefinedCommand1 - 1) + intValue;
-							result = (Trigger)enumValue;
+							int enumValue = ((int)AutoTrigger.PredefinedCommand1 - 1) + intValue;
+							result = (AutoTrigger)enumValue;
 							return (true);
 						}
 					}
 				}
 
 				// Fallback:
-				result = Trigger.PredefinedCommand1;
+				result = AutoTrigger.PredefinedCommand1;
 				return (false);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase   (s, AnyLine_string) ||
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, AnyLine_stringAlternatives))
 			{
-				result = Trigger.AnyLine;
+				result = AutoTrigger.AnyLine;
 				return (true);
 			}
 			else // Explicit!
 			{
-				result = Trigger.Explicit;
+				result = AutoTrigger.Explicit;
 				return (true);
 			}
 		}
@@ -329,25 +329,25 @@ namespace YAT.Model.Types
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator Trigger(TriggerEx trigger)
+		public static implicit operator AutoTrigger(AutoTriggerEx trigger)
 		{
-			return ((Trigger)trigger.UnderlyingEnum);
+			return ((AutoTrigger)trigger.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator TriggerEx(Trigger trigger)
+		public static implicit operator AutoTriggerEx(AutoTrigger trigger)
 		{
-			return (new TriggerEx(trigger));
+			return (new AutoTriggerEx(trigger));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(TriggerEx trigger)
+		public static implicit operator string(AutoTriggerEx trigger)
 		{
 			return (trigger.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator TriggerEx(string trigger)
+		public static implicit operator AutoTriggerEx(string trigger)
 		{
 			return (Parse(trigger));
 		}

@@ -177,9 +177,9 @@ namespace YAT.View.Controls
 			set
 			{
 				if ((this.remoteHost != value) ||
-					(value.IPAddress == IPAddress.Loopback)) // Always SetControls() to be able to
-				{	                                         //   deal with the different types of
-					this.remoteHost = value;                 //   localhost/loopback.
+					(value.Address == IPAddress.Loopback)) // Always SetControls() to be able to
+				{	                                       //   deal with the different types of
+					this.remoteHost = value;               //   localhost/loopback.
 					SetControls();
 					OnRemoteHostChanged(EventArgs.Empty);
 				}
@@ -231,9 +231,9 @@ namespace YAT.View.Controls
 			set
 			{
 				if ((this.localInterface != value) ||
-					(value.IPAddress == IPAddress.Loopback)) // Always SetControls() to be able to
-				{	                                         //   deal with the different types of
-					this.localInterface = value;             //   localhost/loopback.
+					(value.Address == IPAddress.Loopback)) // Always SetControls() to be able to
+				{	                                       //   deal with the different types of
+					this.localInterface = value;           //   localhost/loopback.
 					SetControls();
 					OnLocalInterfaceChanged(EventArgs.Empty);
 				}
@@ -249,9 +249,9 @@ namespace YAT.View.Controls
 			set
 			{
 				if ((this.localFilter != value) ||
-					(value.IPAddress == IPAddress.Any)) // Always SetControls() to be able to
-				{                                       //   deal with the different types of
-					this.localFilter = value;           //   any.
+					(value.Address == IPAddress.Any)) // Always SetControls() to be able to
+				{                                     //   deal with the different types of
+					this.localFilter = value;         //   any.
 					SetControls();
 					OnLocalFilterChanged(EventArgs.Empty);
 				}
@@ -355,17 +355,18 @@ namespace YAT.View.Controls
 				//   because SelectedItem is also set if text has changed in the meantime.
 
 				var remoteHost = (comboBox_RemoteHost.SelectedItem as IPHostEx);
-				if ((remoteHost != null) && (remoteHost.IPAddress != IPAddress.None) &&
+				if ((remoteHost != null) && (remoteHost.Address != IPAddress.None) &&
 					StringEx.EqualsOrdinalIgnoreCase(remoteHost.ToString(), comboBox_RemoteHost.Text))
 				{
 					RemoteHost = remoteHost;
 				}
 				else
 				{
-					IPAddress ipAddress;
-					if (IPResolver.TryResolveRemoteHost(comboBox_RemoteHost.Text, out ipAddress))
+					// Immediately try to resolve the corresponding remote IP address:
+					IPHostEx ipHost;
+					if (IPHostEx.TryParseAndResolve(comboBox_RemoteHost.Text, out ipHost))
 					{
-						RemoteHost = new IPHostEx(ipAddress);
+						RemoteHost = ipHost;
 					}
 					else
 					{
@@ -394,17 +395,18 @@ namespace YAT.View.Controls
 				//   because SelectedItem is also set if text has changed in the meantime.
 
 				var localFilter = (comboBox_LocalFilter.SelectedItem as IPAddressFilterEx);
-				if ((localFilter != null) && (localFilter.IPAddress != IPAddress.None) &&
+				if ((localFilter != null) && (localFilter.Address != IPAddress.None) &&
 					StringEx.EqualsOrdinalIgnoreCase(localFilter.ToString(), comboBox_LocalFilter.Text))
 				{
 					LocalFilter = localFilter;
 				}
 				else
 				{
-					IPAddress ipAddress;
-					if (IPResolver.TryResolveRemoteHost(comboBox_LocalFilter.Text, out ipAddress))
+					// Immediately try to resolve the corresponding IP address:
+					IPAddressFilterEx ipAddressFilter;
+					if (IPAddressFilterEx.TryParseAndResolve(comboBox_LocalFilter.Text, out ipAddressFilter))
 					{
-						LocalFilter = new IPAddressFilterEx(ipAddress);
+						LocalFilter = ipAddressFilter;
 					}
 					else
 					{

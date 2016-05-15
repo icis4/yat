@@ -24,6 +24,8 @@
 using System;
 using System.Xml.Serialization;
 
+using MKY;
+
 using YAT.Model.Types;
 
 namespace YAT.Model.Settings
@@ -34,10 +36,8 @@ namespace YAT.Model.Settings
 	{
 		private bool visible;
 		private bool enabled;
-		private Trigger triggerSelection;
-		private Command explicitTrigger;
-		private AutoResponse responseSelection;
-		private Command explicitResponse;
+		private AutoTriggerEx trigger;
+		private AutoResponseEx response;
 
 		/// <summary></summary>
 		public AutoResponseSettings()
@@ -61,12 +61,10 @@ namespace YAT.Model.Settings
 		public AutoResponseSettings(AutoResponseSettings rhs)
 			: base(rhs)
 		{
-			Visible           = rhs.Visible;
-			Enabled           = rhs.Enabled;
-			TriggerSelection  = rhs.TriggerSelection;
-			ExplicitTrigger   = new Command(rhs.ExplicitTrigger);
-			ResponseSelection = rhs.ResponseSelection;
-			ExplicitResponse  = new Command(rhs.ExplicitResponse);
+			Visible  = rhs.Visible;
+			Enabled  = rhs.Enabled;
+			Trigger  = rhs.Trigger;
+			Response = rhs.Response;
 			ClearChanged();
 		}
 
@@ -77,12 +75,10 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			Visible           = false;
-			Enabled           = false;
-			TriggerSelection  = Trigger.None;
-			ExplicitTrigger   = null;
-			ResponseSelection = AutoResponse.None;
-			ExplicitResponse  = null;
+			Visible  = false;
+			Enabled  = false;
+			Trigger  = AutoTrigger.None;
+			Response = AutoResponse.None;
 		}
 
 		#region Properties
@@ -120,61 +116,62 @@ namespace YAT.Model.Settings
 			}
 		}
 
-		/// <summary></summary>
-		[XmlElement("TriggerSelection")]
-		public Trigger TriggerSelection
+		/// <remarks>
+		/// Must be string because an 'EnumEx' cannot be serialized.
+		/// </remarks>
+		[XmlElement("Trigger")]
+		public virtual string Trigger_ForSerialization
 		{
-			get { return (this.triggerSelection); }
+			get { return (Trigger); }
+			set { Trigger = value;  }
+		}
+
+		/// <summary></summary>
+		/// <remarks>
+		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
+		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
+		/// </remarks>
+		[XmlIgnore]
+		public AutoTriggerEx Trigger
+		{
+			get { return (this.trigger); }
 			set
 			{
-				if (this.triggerSelection != value)
+				if (this.trigger != value)
 				{
-					this.triggerSelection = value;
+					this.trigger = value;
+					UpdateEnabled();
+
 					SetChanged();
 				}
 			}
 		}
 
-		/// <summary></summary>
-		[XmlElement("ExplicitTrigger")]
-		public Command ExplicitTrigger
+		/// Must be string because an 'EnumEx' cannot be serialized.
+		/// </remarks>
+		[XmlElement("Response")]
+		public virtual string Response_ForSerialization
 		{
-			get { return (this.explicitTrigger); }
-			set
-			{
-				if (this.explicitTrigger != value)
-				{
-					this.explicitTrigger = value;
-					SetChanged();
-				}
-			}
+			get { return (Response); }
+			set { Response = value;  }
 		}
 
 		/// <summary></summary>
-		[XmlElement("ResponseSelection")]
-		public AutoResponse ResponseSelection
+		/// <remarks>
+		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
+		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
+		/// </remarks>
+		[XmlIgnore]
+		public AutoResponseEx Response
 		{
-			get { return (this.responseSelection); }
+			get { return (this.response); }
 			set
 			{
-				if (this.responseSelection != value)
+				if (this.response != value)
 				{
-					this.responseSelection = value;
-					SetChanged();
-				}
-			}
-		}
+					this.response = value;
+					UpdateEnabled();
 
-		/// <summary></summary>
-		[XmlElement("ExplicitResponse")]
-		public Command ExplicitResponse
-		{
-			get { return (this.explicitResponse); }
-			set
-			{
-				if (this.explicitResponse != value)
-				{
-					this.explicitResponse = value;
 					SetChanged();
 				}
 			}
@@ -189,67 +186,7 @@ namespace YAT.Model.Settings
 
 		private void UpdateEnabled()
 		{
-			Enabled = ((TriggerSelection != Trigger.None) && (ResponseSelection != AutoResponse.None));
-		}
-
-		/// <summary></summary>
-		public virtual void FromTrigger(TriggerEx trigger)
-		{
-			SuspendChangeEvent();
-
-			TriggerSelection = trigger;
-
-			if (trigger == Trigger.Explicit)
-				ExplicitTrigger = trigger.Explicit;
-			else
-				ExplicitTrigger = null;
-
-			UpdateEnabled();
-
-			ResumeChangeEvent(true);
-		}
-
-		/// <summary></summary>
-		public virtual void FromExplicitTriggerText(string triggerText)
-		{
-			SuspendChangeEvent();
-
-			TriggerSelection = Trigger.Explicit;
-			ExplicitTrigger = new Command(triggerText);
-
-			UpdateEnabled();
-
-			ResumeChangeEvent(true);
-		}
-
-		/// <summary></summary>
-		public virtual void FromResponse(AutoResponseEx response)
-		{
-			SuspendChangeEvent();
-
-			ResponseSelection = response;
-
-			if (response == AutoResponse.Explicit)
-				ExplicitResponse = response.Explicit;
-			else
-				ExplicitResponse = null;
-
-			UpdateEnabled();
-
-			ResumeChangeEvent(true);
-		}
-
-		/// <summary></summary>
-		public virtual void FromExplicitResponseText(string responseText)
-		{
-			SuspendChangeEvent();
-
-			ResponseSelection = AutoResponse.Explicit;
-			ExplicitResponse = new Command(responseText);
-
-			UpdateEnabled();
-
-			ResumeChangeEvent(true);
+			Enabled = ((Trigger != AutoTrigger.None) && (Response != AutoResponse.None));
 		}
 
 		#endregion
@@ -276,12 +213,11 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(Visible           == other.Visible) &&
-				(Enabled           == other.Enabled) &&
-				(TriggerSelection  == other.TriggerSelection) &&
-				(ExplicitTrigger   == other.ExplicitTrigger) &&
-				(ResponseSelection == other.ResponseSelection) &&
-				(ExplicitResponse  == other.ExplicitResponse)
+				(Visible == other.Visible) &&
+				(Enabled == other.Enabled) &&
+
+				StringEx.EqualsOrdinalIgnoreCase(Trigger_ForSerialization,  other.Trigger_ForSerialization) &&
+				StringEx.EqualsOrdinalIgnoreCase(Response_ForSerialization, other.Response_ForSerialization)
 			);
 		}
 
@@ -298,12 +234,11 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^  Visible                                   .GetHashCode();
-				hashCode = (hashCode * 397) ^  Enabled                                   .GetHashCode();
-				hashCode = (hashCode * 397) ^  TriggerSelection                          .GetHashCode();
-				hashCode = (hashCode * 397) ^ (ExplicitTrigger != null ? ExplicitTrigger .GetHashCode() : 0); // Command may be 'null'!
-				hashCode = (hashCode * 397) ^  ResponseSelection                         .GetHashCode();
-				hashCode = (hashCode * 397) ^ (ExplicitResponse!= null ? ExplicitResponse.GetHashCode() : 0); // Command may be 'null'!
+				hashCode = (hashCode * 397) ^ Visible.GetHashCode();
+				hashCode = (hashCode * 397) ^ Enabled.GetHashCode();
+
+				hashCode = (hashCode * 397) ^ (Trigger_ForSerialization  != null ? Trigger_ForSerialization .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (Response_ForSerialization != null ? Response_ForSerialization.GetHashCode() : 0);
 
 				return (hashCode);
 			}
