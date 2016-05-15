@@ -266,7 +266,6 @@ namespace YAT.View.Forms
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Terminal Settings";
 			this.Shown += new System.EventHandler(this.TerminalSettings_Shown);
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.TerminalSettings_Paint);
 			this.groupBox_Settings.ResumeLayout(false);
 			this.groupBox_PortSettings.ResumeLayout(false);
 			this.ResumeLayout(false);

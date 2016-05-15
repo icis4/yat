@@ -32,7 +32,6 @@ namespace YAT.View.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewTerminal));
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_NewTerminal = new System.Windows.Forms.GroupBox();
@@ -143,7 +142,6 @@ namespace YAT.View.Forms
 			this.socketSettings.Name = "socketSettings";
 			this.socketSettings.Size = new System.Drawing.Size(260, 169);
 			this.socketSettings.TabIndex = 3;
-			this.socketSettings.UdpServerSendMode = MKY.IO.Serial.Socket.UdpServerSendMode.MostRecent;
 			this.socketSettings.TcpClientAutoReconnectChanged += new System.EventHandler(this.socketSettings_TcpClientAutoReconnectChanged);
 			this.socketSettings.UdpServerSendModeChanged += new System.EventHandler(this.socketSettings_UdpServerSendModeChanged);
 			// 
@@ -266,7 +264,6 @@ namespace YAT.View.Forms
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "New Terminal";
 			this.Shown += new System.EventHandler(this.NewTerminal_Shown);
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.NewTerminal_Paint);
 			this.groupBox_NewTerminal.ResumeLayout(false);
 			this.groupBox_NewTerminal.PerformLayout();
 			this.groupBox_PortSettings.ResumeLayout(false);
