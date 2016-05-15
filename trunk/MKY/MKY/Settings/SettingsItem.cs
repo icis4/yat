@@ -40,7 +40,7 @@ namespace MKY.Settings
 		/// Implicit (hidden) user settings, user doesn't get notified when setting changes.
 		/// E.g. window or layout settings that are automatically saved.
 		/// </summary>
-		Implicit,
+		Implicit
 	}
 
 	/// <remarks>

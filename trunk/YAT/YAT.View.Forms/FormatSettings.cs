@@ -220,7 +220,7 @@ namespace YAT.View.Forms
 					MessageBoxEx.Show
 					(
 						this,
-						"Enclosure string must be an even number of characters! E.g. enter 2 or 4 characters.",
+						"Enclosure string must be an even number of characters (e.g. 2 or 4 characters)!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error

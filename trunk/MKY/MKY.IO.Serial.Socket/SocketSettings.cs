@@ -244,9 +244,18 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[XmlElement("RemoteHost")]
 		public virtual string RemoteHost
+		{
+
+		}
+
+		/// <remarks>
+		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
+		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
+		/// </remarks>
+		[XmlIgnore]
+		public virtual IPHostEx RemoteHost
 		{
 			get { return (this.remoteHost); }
 			set
@@ -256,10 +265,10 @@ namespace MKY.IO.Serial.Socket
 					this.remoteHost = value;
 					SetChanged();
 
-					// Immediately try to resolve the corresponding remote IP address.
-					IPAddress ipAddress;
-					if (IPResolver.TryResolveRemoteHost(this.remoteHost, out ipAddress))
-						this.resolvedRemoteIPAddress = ipAddress;
+					// Immediately try to resolve the corresponding remote IP address:
+					IPHostEx ipHost;
+					if (IPHostEx.TryParseAndResolve(this.remoteHost, out ipHost))
+						this.resolvedRemoteIPAddress = ipHost.Address;
 					else
 						this.resolvedRemoteIPAddress = ResolvedRemoteIPAddressDefault;
 				}
@@ -357,9 +366,13 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[XmlElement("LocalInterface")]
-		public virtual string LocalInterface
+		public virtual IPNetworkInterfaceEx LocalInterface
+		/// <remarks>
+		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
+		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
+		/// </remarks>
+		[XmlIgnore]
 		{
 			get { return (this.localInterface); }
 			set
@@ -369,10 +382,10 @@ namespace MKY.IO.Serial.Socket
 					this.localInterface = value;
 					SetChanged();
 
-					// Immediately try to resolve the corresponding local IP address.
-					IPAddress ipAddress;
-					if (IPResolver.TryResolveRemoteHost(this.localInterface, out ipAddress))
-						this.resolvedLocalIPAddress = ipAddress;
+					// Immediately try to resolve the corresponding local IP address:
+					IPNetworkInterfaceEx ipNetworkInterface;
+					if (IPNetworkInterfaceEx.TryParseAndResolve(this.localInterface, out ipNetworkInterface))
+						this.resolvedLocalIPAddress = ipNetworkInterface.Address;
 					else
 						this.resolvedLocalIPAddress = ResolvedLocalIPAddressDefault;
 				}
@@ -389,9 +402,13 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[XmlElement("LocalFilter")]
-		public virtual string LocalFilter
+		/// <remarks>
+		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
+		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
+		/// </remarks>
+		[XmlIgnore]
+		public virtual IPAddressFilterEx LocalFilter
 		{
 			get { return (this.localFilter); }
 			set
@@ -401,10 +418,10 @@ namespace MKY.IO.Serial.Socket
 					this.localFilter = value;
 					SetChanged();
 
-					// Immediately try to resolve the corresponding remote IP address.
-					IPAddress ipAddress;
-					if (IPResolver.TryResolveRemoteHost(this.localFilter, out ipAddress))
-						this.resolvedLocalIPAddressFilter = ipAddress;
+					// Immediately try to resolve the corresponding IP address:
+					IPAddressFilterEx ipAddressFilter;
+					if (IPAddressFilterEx.TryParseAndResolve(this.localFilter, out ipAddressFilter))
+						this.resolvedLocalIPAddressFilter = ipAddressFilter.Address;
 					else
 						this.resolvedLocalIPAddressFilter = ResolvedLocalIPAddressFilterDefault;
 				}

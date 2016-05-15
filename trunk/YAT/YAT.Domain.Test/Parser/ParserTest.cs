@@ -288,16 +288,16 @@ namespace YAT.Domain.Test.Parser
 		/// <summary></summary>
 		public static IEnumerable TestCasesError
 		{
-			get					// Erroneous input		Expected substring		Expected message
+			get							// Erroneous input		Expected substring		Expected message
 			{
-				yield return (new TestCaseData(@"A<AAA",		@"A<AA",		@"""AAA"" is no valid ASCII mnemonic.").SetName("Invalid ASCII"));
+				yield return (new TestCaseData(@"A<AAA",		@"A<AA",		@"""AAA"" is an invalid ASCII mnemonic.").SetName("Invalid ASCII"));
 
-				yield return (new TestCaseData(@"A\d(A7)",		@"A\d(",		@"""A"" is no valid decimal value.").SetName("Invalid decimal value 1"));
-				yield return (new TestCaseData(@"A\d(A77)",		@"A\d(",		@"""A"" is no valid decimal value.").SetName("Invalid decimal value 2"));
-				yield return (new TestCaseData(@"A\d(7A)",		@"A\d(7",		@"""A"" of ""7A"" is no valid decimal value.").SetName("Invalid decimal digit 1"));
-				yield return (new TestCaseData(@"A\d(7AA)",		@"A\d(7",		@"""A"" of ""7A"" is no valid decimal value.").SetName("Invalid decimal digit 2"));
+				yield return (new TestCaseData(@"A\d(A7)",		@"A\d(",		@"""A"" is an invalid decimal value.").SetName("Invalid decimal value 1"));
+				yield return (new TestCaseData(@"A\d(A77)",		@"A\d(",		@"""A"" is an invalid decimal value.").SetName("Invalid decimal value 2"));
+				yield return (new TestCaseData(@"A\d(7A)",		@"A\d(7",		@"""A"" of ""7A"" is an invalid decimal value.").SetName("Invalid decimal digit 1"));
+				yield return (new TestCaseData(@"A\d(7AA)",		@"A\d(7",		@"""A"" of ""7A"" is an invalid decimal value.").SetName("Invalid decimal digit 2"));
 
-				yield return (new TestCaseData(@"A\e(AA)",		@"A\",			@"Character 'e' (0x65) is no valid escape character.").SetName("Invalid escape character"));
+				yield return (new TestCaseData(@"A\e(AA)",		@"A\",			@"Character 'e' (0x65) is an invalid escape character.").SetName("Invalid escape character"));
 
 				yield return (new TestCaseData(@"A\",			@"A",			@"Incomplete escape sequence.").SetName("Incomplete escape sequence 1"));
 				yield return (new TestCaseData(@"A\\\",			@"A\\",			@"Incomplete escape sequence.").SetName("Incomplete escape sequence 2"));

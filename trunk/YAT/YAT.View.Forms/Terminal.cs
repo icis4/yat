@@ -3013,7 +3013,7 @@ namespace YAT.View.Forms
 			int page = predefined.SelectedPage;
 			if (!this.terminal.CopyPredefined(page, command))
 			{
-				// If command is not valid, show settings dialog.
+				// If command is invalid, show settings dialog.
 				ShowPredefinedCommandSettings(page, command);
 			}
 		}
@@ -3026,7 +3026,7 @@ namespace YAT.View.Forms
 				int page = predefined.SelectedPage;
 				if (!this.terminal.SendPredefined(page, command))
 				{
-					// If command is not valid, show settings dialog.
+					// If command is invalid, show settings dialog.
 					ShowPredefinedCommandSettings(page, command);
 				}
 			}
