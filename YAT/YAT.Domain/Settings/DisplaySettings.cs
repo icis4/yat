@@ -88,9 +88,9 @@ namespace YAT.Domain.Settings
 		private bool portLineBreakEnabled;
 		private bool directionLineBreakEnabled;
 
-		private string infoSeparator; // = null
-		private string infoEnclosure; // = null
-		private string infoEnclosureLeft; // = null
+		private InfoElementSeparatorEx infoSeparator; // = null
+		private InfoElementEnclosureEx infoEnclosure; // = null
+		private string infoEnclosureLeft;  // = null
 		private string infoEnclosureRight; // = null
 
 		/// <summary></summary>
@@ -398,9 +398,22 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Must be string because an 'EnumEx' cannot be serialized.
+		/// </remarks>
 		[XmlElement("InfoSeparator")]
-		public string InfoSeparator
+		public virtual string InfoSeparator_ForSerialization
+		{
+			get { return (InfoSeparator.ToSeparator()); } // Use separator string only!
+			set { InfoSeparator = value;                }
+		}
+
+		/// <remarks>
+		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
+		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
+		/// </remarks>
+		[XmlIgnore]
+		public InfoElementSeparatorEx InfoSeparator
 		{
 			get { return (this.infoSeparator); }
 			set
@@ -413,20 +426,31 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Must be string because an 'EnumEx' cannot be serialized.
+		/// </remarks>
 		[XmlElement("InfoEnclosure")]
-		public string InfoEnclosure
+		public virtual string InfoEnclosure_ForSerialization
+		{
+			get { return (InfoEnclosure.ToEnclosure()); } // Use enclosure string only!
+			set { InfoEnclosure = value;                }
+		}
+
+		/// <remarks>
+		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
+		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
+		/// </remarks>
+		[XmlIgnore]
+		public InfoElementEnclosureEx InfoEnclosure
 		{
 			get { return (this.infoEnclosure); }
 			set
 			{
 				if (this.infoEnclosure != value)
 				{
-					InfoElementEnclosureEx enclosure = value;
-
-					this.infoEnclosure      = enclosure.ToEnclosure();
-					this.infoEnclosureLeft  = enclosure.ToEnclosureLeft();
-					this.infoEnclosureRight = enclosure.ToEnclosureRight();
+					this.infoEnclosure = value;
+					this.infoEnclosureLeft  = this.infoEnclosure.ToEnclosureLeft();  // For performance reasons.
+					this.infoEnclosureRight = this.infoEnclosure.ToEnclosureRight(); // For performance reasons.
 
 					SetChanged();
 				}

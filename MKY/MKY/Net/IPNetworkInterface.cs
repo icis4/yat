@@ -25,6 +25,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using System.Net.Sockets;
+
+using MKY.Diagnostics;
 
 namespace MKY.Net
 {
@@ -67,7 +70,7 @@ namespace MKY.Net
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
-	/// Make sure to use the underlying enum for serialization.
+	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	public class IPNetworkInterfaceEx : EnumEx
@@ -89,12 +92,15 @@ namespace MKY.Net
 
 		#endregion
 
-		private IPAddress explicitAddress = IPAddress.None;
-		private string explicitDescription = "";
+		private IPAddress explicitAddress     = IPAddress.None;
+		private string    explicitDescription = null;
 
 		/// <summary>Default is <see cref="IPNetworkInterface.Any"/>.</summary>
+		public const IPNetworkInterface Default = IPNetworkInterface.Any;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public IPNetworkInterfaceEx()
-			: this(IPNetworkInterface.Any)
+			: this(Default)
 		{
 		}
 
@@ -102,10 +108,12 @@ namespace MKY.Net
 		public IPNetworkInterfaceEx(IPNetworkInterface networkInterface)
 			: base(networkInterface)
 		{
+			if (networkInterface == IPNetworkInterface.Explicit)
+				throw (new InvalidOperationException("'IPNetworkInterface.Explicit' requires an IP address, use IPNetworkInterfaceEx(IPAddress, string) instead!"));
 		}
 
 		/// <summary></summary>
-		public IPNetworkInterfaceEx(IPAddress address, string description)
+		public IPNetworkInterfaceEx(IPAddress address, string description = null)
 		{
 			if      (address == IPAddress.Any)          { SetUnderlyingEnum(IPNetworkInterface.Any);          this.explicitAddress = IPAddress.None; }
 			else if (address == IPAddress.Loopback)     { SetUnderlyingEnum(IPNetworkInterface.Loopback);     this.explicitAddress = IPAddress.None; }
@@ -114,12 +122,15 @@ namespace MKY.Net
 			else                                        { SetUnderlyingEnum(IPNetworkInterface.Explicit);     this.explicitAddress = address;        }
 
 			this.explicitDescription = description;
+
+			// Note that 'IPHostType.IPv4Localhost' cannot be distinguished from 'IPHostType.Localhost' when 'IPAddress.Loopback' is given.
+			// Also note that similar but optimized code is found at FromIPAddress() further below.
 		}
 
 		#region Properties
 
 		/// <summary></summary>
-		public IPAddress IPAddress
+		public IPAddress Address
 		{
 			get
 			{
@@ -134,6 +145,38 @@ namespace MKY.Net
 					case IPNetworkInterface.Explicit:     return (this.explicitAddress);
 				}
 				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		public string Description
+		{
+			get
+			{
+				if (!string.IsNullOrEmpty(this.explicitDescription))
+					return (this.explicitDescription);
+				else if (this.explicitAddress != null)
+					return (this.explicitAddress.ToString());
+				else
+					return ("");
+			}
+		}
+
+		/// <summary></summary>
+		public bool IsLocalHost
+		{
+			get
+			{
+				switch ((IPNetworkInterface)UnderlyingEnum)
+				{
+					case IPNetworkInterface.Loopback:
+					case IPNetworkInterface.IPv4Loopback:
+					case IPNetworkInterface.IPv6Loopback:
+						return (true);
+
+					default:
+						return (false);
+				}
 			}
 		}
 
@@ -158,10 +201,8 @@ namespace MKY.Net
 				return
 				(
 					base.Equals(other) &&
-
 					(this.explicitAddress == other.explicitAddress)
-
-					// Ignore 'otherDescription'
+					// Ignore 'explicitDescription'
 				);
 			}
 			else
@@ -180,7 +221,10 @@ namespace MKY.Net
 				int hashCode = base.GetHashCode();
 
 				if ((IPNetworkInterface)UnderlyingEnum == IPNetworkInterface.Explicit)
+				{
 					hashCode = (hashCode * 397) ^ (this.explicitAddress != null ? this.explicitAddress.GetHashCode() : 0); // Ignore 'otherDescription'
+					// Ignore 'explicitDescription'
+				}
 
 				return (hashCode);
 			}
@@ -212,15 +256,38 @@ namespace MKY.Net
 						if (this.explicitAddress != IPAddress.None)
 							return (this.explicitAddress.ToString());
 						else
-							throw (new InvalidOperationException("IP address and interface description or both are undefined!"));
+							return ("");
 					}
 				}
+			}
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
 
-				default:
+		/// <summary>
+		/// Returns a compact string representation:
+		/// - For predefined interfaces, the predefined string is returned.
+		/// - For explicit interfaces, the resolved IP address is returned.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		public string ToCompactString()
+		{
+			switch ((IPNetworkInterface)UnderlyingEnum)
+			{
+				case IPNetworkInterface.Any:          return (Any_string);
+				case IPNetworkInterface.Loopback:     return (Loopback_string);
+				case IPNetworkInterface.IPv4Any:      return (IPv4Any_string);
+				case IPNetworkInterface.IPv4Loopback: return (IPv4Loopback_string);
+				case IPNetworkInterface.IPv6Any:      return (IPv6Any_string);
+				case IPNetworkInterface.IPv6Loopback: return (IPv6Loopback_string);
+				case IPNetworkInterface.Explicit:
 				{
-					throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					if (this.explicitAddress != null)
+						return (this.explicitAddress.ToString());
+					else
+						return ("");
 				}
 			}
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion
@@ -242,7 +309,7 @@ namespace MKY.Net
 
 		#endregion
 
-		#region Parse
+		#region Parse/From
 
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -254,7 +321,7 @@ namespace MKY.Net
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" is no valid network interface string!"));
+				throw (new FormatException(@"""" + s + @""" is an invalid network interface string! String must be an IP address, or one of the predefined interfaces."));
 		}
 
 		/// <remarks>
@@ -271,7 +338,7 @@ namespace MKY.Net
 			else
 			{
 				IPAddress address;
-				if (IPAddress.TryParse(s, out address)) // Valid other?
+				if (IPAddress.TryParse(s, out address)) // Valid explicit?
 				{
 					result = new IPNetworkInterfaceEx(address, null);
 					return (true);
@@ -338,8 +405,48 @@ namespace MKY.Net
 			}
 		}
 
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParseAndResolve(string s, out IPNetworkInterfaceEx result)
+		{
+			if (TryParse(s, out result))
+			{
+				return (true);
+			}
+			else
+			{
+				try
+				{
+					IPAddress[] addressesFromDns = Dns.GetHostAddresses(s);
+					foreach (IPAddress addressFromDns in addressesFromDns)
+					{
+						if (addressFromDns.AddressFamily == AddressFamily.InterNetwork) // IPv4 has precedence for compatibility reasons.
+						{
+							result = new IPNetworkInterfaceEx(addressFromDns);
+							return (true);
+						}
+					}
+
+					if (addressesFromDns.Length > 0)
+					{
+						result = new IPNetworkInterfaceEx(addressesFromDns[0]);
+						return (true);
+					}
+				}
+				catch (Exception ex)
+				{
+					DebugEx.WriteException(typeof(IPNetworkInterfaceEx), ex, "Failed to get address from DNS!");
+				}
+
+				// Invalid string!
+				result = null;
+				return (false);
+			}
+		}
+
 		/// <summary></summary>
-		public static IPNetworkInterfaceEx ParseFromIPAddress(IPAddress address)
+		public static IPNetworkInterfaceEx FromIPAddress(IPAddress address)
 		{
 			if      (address == IPAddress.Any)
 				return (new IPNetworkInterfaceEx(IPNetworkInterface.Any));
@@ -370,6 +477,18 @@ namespace MKY.Net
 		public static implicit operator IPNetworkInterfaceEx(IPNetworkInterface networkInterface)
 		{
 			return (new IPNetworkInterfaceEx(networkInterface));
+		}
+
+		/// <summary></summary>
+		public static implicit operator IPAddress(IPNetworkInterfaceEx address)
+		{
+			return (address.Address);
+		}
+
+		/// <summary></summary>
+		public static implicit operator IPNetworkInterfaceEx(IPAddress address)
+		{
+			return (FromIPAddress(address));
 		}
 
 		/// <summary></summary>

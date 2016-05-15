@@ -209,7 +209,7 @@ namespace YAT.View.Forms
 
 		private void socketSelection_RemoteHostChanged(object sender, EventArgs e)
 		{
-			this.settingsInEdit.Terminal.IO.Socket.RemoteHost = socketSelection.RemoteHost;
+			this.settingsInEdit.Terminal.IO.Socket.RemoteHost = socketSelection.RemoteHost.ToCompactString();
 		}
 
 		private void socketSelection_RemoteTcpPortChanged(object sender, EventArgs e)
@@ -224,12 +224,12 @@ namespace YAT.View.Forms
 
 		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
 		{
-			this.settingsInEdit.Terminal.IO.Socket.LocalInterface = socketSelection.LocalInterface;
+			this.settingsInEdit.Terminal.IO.Socket.LocalInterface = socketSelection.LocalInterface.ToCompactString();
 		}
 
 		private void socketSelection_LocalFilterChanged(object sender, EventArgs e)
 		{
-			this.settingsInEdit.Terminal.IO.Socket.LocalFilter = socketSelection.LocalFilter;
+			this.settingsInEdit.Terminal.IO.Socket.LocalFilter = socketSelection.LocalFilter.ToCompactString();
 		}
 
 		private void socketSelection_LocalTcpPortChanged(object sender, EventArgs e)

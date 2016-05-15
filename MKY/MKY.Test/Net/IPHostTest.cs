@@ -128,7 +128,7 @@ namespace MKY.Test.Net
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
 		public virtual void TestHostAddressEqualsAddress(IPHostEx ipHost, IPHost ipHostType, IPAddress ipAddress, string hostString)
 		{
-			Assert.AreEqual(ipAddress, ipHost.IPAddress);
+			Assert.AreEqual(ipAddress, ipHost.Address);
 		}
 
 		/// <summary></summary>

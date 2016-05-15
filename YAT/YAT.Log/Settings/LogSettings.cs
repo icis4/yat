@@ -27,12 +27,12 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 
+using MKY;
 using MKY.IO;
 
 using YAT.Application.Utilities;
@@ -82,7 +82,7 @@ namespace YAT.Log.Settings
 		private bool nameChannel;
 		private bool nameDate;
 		private bool nameTime;
-		private string nameSeparator;
+		private FileNameSeparatorEx nameSeparator;
 
 		// Folders:
 		private bool folderFormat;
@@ -232,24 +232,24 @@ namespace YAT.Log.Settings
 
 			if (this.nameFormat)
 			{
-				postFix.Append(this.nameSeparator);
+				postFix.Append(this.nameSeparator.ToSeparator());
 				postFix.Append(ToFormatString(format));
 			}
 			if (this.nameChannel)
 			{
-				postFix.Append(this.nameSeparator);
+				postFix.Append(this.nameSeparator.ToSeparator());
 				postFix.Append(ToChannelString(channelType));
 			}
 			if (this.nameDate)
 			{
-				postFix.Append(this.nameSeparator);
+				postFix.Append(this.nameSeparator.ToSeparator());
 				postFix.Append(now.Year.ToString ("D4", CultureInfo.InvariantCulture));
 				postFix.Append(now.Month.ToString("D2", CultureInfo.InvariantCulture));
 				postFix.Append(now.Day.ToString  ("D2", CultureInfo.InvariantCulture));
 			}
 			if (this.nameTime)
 			{
-				postFix.Append(this.nameSeparator);
+				postFix.Append(this.nameSeparator.ToSeparator());
 				postFix.Append(now.Hour.ToString  ("D2", CultureInfo.InvariantCulture));
 				postFix.Append(now.Minute.ToString("D2", CultureInfo.InvariantCulture));
 				postFix.Append(now.Second.ToString("D2", CultureInfo.InvariantCulture));
@@ -726,7 +726,18 @@ namespace YAT.Log.Settings
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
 		[XmlElement("NameSeparator")]
-		public virtual string NameSeparator
+		public virtual string NameSeparator_ForSerialization
+		{
+			get { return (NameSeparator.ToSeparator()); } // Use separator string only!
+			set { NameSeparator = value;                }
+		}
+
+		/// <remarks>
+		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
+		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
+		/// </remarks>
+		[XmlIgnore]
+		public virtual FileNameSeparatorEx NameSeparator
 		{
 			get { return (this.nameSeparator); }
 			set
@@ -867,7 +878,7 @@ namespace YAT.Log.Settings
 				(NameChannel             == other.NameChannel) &&
 				(NameDate                == other.NameDate) &&
 				(NameTime                == other.NameTime) &&
-				(NameSeparator           == other.NameSeparator) &&
+				StringEx.EqualsOrdinalIgnoreCase(NameSeparator_ForSerialization, other.NameSeparator_ForSerialization) &&
 				(FolderFormat            == other.FolderFormat) &&
 				(FolderChannel           == other.FolderChannel) &&
 				(WriteMode               == other.WriteMode) &&
@@ -904,7 +915,7 @@ namespace YAT.Log.Settings
 				hashCode = (hashCode * 397) ^  NameDate                             .GetHashCode();
 				hashCode = (hashCode * 397) ^  NameTime                             .GetHashCode();
 
-				hashCode = (hashCode * 397) ^ (NameSeparator != null ? NameSeparator.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (NameSeparator_ForSerialization != null ? NameSeparator_ForSerialization.GetHashCode() : 0);
 
 				hashCode = (hashCode * 397) ^  FolderFormat                         .GetHashCode();
 				hashCode = (hashCode * 397) ^  FolderChannel                        .GetHashCode();

@@ -25,6 +25,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using System.Net.Sockets;
+
+using MKY.Diagnostics;
 
 namespace MKY.Net
 {
@@ -67,7 +70,7 @@ namespace MKY.Net
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
-	/// Make sure to use the underlying enum for serialization.
+	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	public class IPAddressFilterEx : EnumEx
@@ -90,11 +93,15 @@ namespace MKY.Net
 
 		#endregion
 
-		private IPAddress explicitAddress = IPAddress.None;
+		private string    explicitName = null;
+		private IPAddress explicitAddress  = IPAddress.None;
 
 		/// <summary>Default is <see cref="IPAddressFilter.Any"/>.</summary>
+		public const IPAddressFilter Default = IPAddressFilter.Any;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public IPAddressFilterEx()
-			: this(IPAddressFilter.Any)
+			: this(Default)
 		{
 		}
 
@@ -102,6 +109,8 @@ namespace MKY.Net
 		public IPAddressFilterEx(IPAddressFilter addressFilter)
 			: base(addressFilter)
 		{
+			if (addressFilter == IPAddressFilter.Explicit)
+				throw (new InvalidOperationException("'IPAddressFilter.Explicit' requires an IP address, use IPAddressFilterEx(IPAddress) instead!"));
 		}
 
 		/// <summary></summary>
@@ -114,13 +123,64 @@ namespace MKY.Net
 			else                                        { SetUnderlyingEnum(IPAddressFilter.Explicit); this.explicitAddress = address;        }
 
 			// Note that 'IPAddressFilter.IPv4Any|Localhost' cannot be distinguished from 'IPAddressFilter.IPv4Any|Localhost' when 'IPAddress.Any|Loopback' is given.
-			// Also note that similar but optimized code is found at ParseFromIPAddress() further below.
+			// Also note that similar but optimized code is found at FromIPAddress() further below.
+		}
+
+		/// <summary></summary>
+		public IPAddressFilterEx(string nameOrAddress)
+		{
+			IPAddressFilterEx result;
+			if (TryParse(nameOrAddress, out result))
+			{
+				SetUnderlyingEnum(result.UnderlyingEnum);
+
+				this.explicitName    = result.explicitName;
+				this.explicitAddress = result.explicitAddress;
+			}
+			else
+			{
+				throw (new ArgumentException("Invalid host address or URL string!", "url"));
+			}
+		}
+
+		/// <summary></summary>
+		protected IPAddressFilterEx(string name, IPAddress address)
+		{
+			this.explicitName     = name;
+			this.explicitAddress  = address;
 		}
 
 		#region Properties
 
 		/// <summary></summary>
-		public IPAddress IPAddress
+		public string Name
+		{
+			get
+			{
+				switch ((IPAddressFilter)UnderlyingEnum)
+				{
+					case IPAddressFilter.Any:           return (IPAddress.Any.ToString());
+					case IPAddressFilter.Localhost:     return ("localhost");
+					case IPAddressFilter.IPv4Any:       return (IPAddress.Any.ToString());
+					case IPAddressFilter.IPv4Localhost: return ("localhost");
+					case IPAddressFilter.IPv6Any:       return (IPAddress.IPv6Any.ToString());
+					case IPAddressFilter.IPv6Localhost: return ("localhost");
+					case IPAddressFilter.Explicit:
+					{
+						if (!string.IsNullOrEmpty(this.explicitName))
+							return (this.explicitName);
+						else if (this.explicitAddress != null)
+							return (this.explicitAddress.ToString());
+						else
+							return ("");
+					}
+				}
+				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		public IPAddress Address
 		{
 			get
 			{
@@ -135,6 +195,24 @@ namespace MKY.Net
 					case IPAddressFilter.Explicit:      return (this.explicitAddress);
 				}
 				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		public bool IsLocalHost
+		{
+			get
+			{
+				switch ((IPAddressFilter)UnderlyingEnum)
+				{
+					case IPAddressFilter.Localhost:
+					case IPAddressFilter.IPv4Localhost:
+					case IPAddressFilter.IPv6Localhost:
+						return (true);
+
+					default:
+						return (false);
+				}
 			}
 		}
 
@@ -159,6 +237,7 @@ namespace MKY.Net
 				return
 				(
 					base.Equals(other) &&
+					StringEx.EqualsOrdinalIgnoreCase(this.explicitName, other.explicitName) &&
 					(this.explicitAddress == other.explicitAddress)
 				);
 			}
@@ -178,7 +257,10 @@ namespace MKY.Net
 				int hashCode = base.GetHashCode();
 
 				if ((IPAddressFilter)UnderlyingEnum == IPAddressFilter.Explicit)
+				{
+					hashCode = (hashCode * 397) ^ (this.explicitName    != null ? this.explicitName   .GetHashCode() : 0);
 					hashCode = (hashCode * 397) ^ (this.explicitAddress != null ? this.explicitAddress.GetHashCode() : 0);
+				}
 
 				return (hashCode);
 			}
@@ -196,7 +278,44 @@ namespace MKY.Net
 				case IPAddressFilter.IPv4Localhost: return (IPv4Localhost_string + " (" + IPAddress.Loopback + ")");
 				case IPAddressFilter.IPv6Any:       return (IPv6Any_string       + " (" + IPAddress.IPv6Any + ")");
 				case IPAddressFilter.IPv6Localhost: return (IPv6Localhost_string + " (" + IPAddress.IPv6Loopback + ")");
-				case IPAddressFilter.Explicit:      return (this.explicitAddress.ToString());
+				case IPAddressFilter.Explicit:
+				{
+					if (!string.IsNullOrEmpty(this.explicitName))
+						return (this.explicitName);
+					else if (this.explicitAddress != null)
+						return (this.explicitAddress.ToString());
+					else
+						return ("");
+				}
+			}
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
+
+		/// <summary>
+		/// Returns a compact string representation:
+		/// - For predefined filters, the predefined string is returned.
+		/// - For explicit filters, the host name or address is returned.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		public string ToCompactString()
+		{
+			switch ((IPAddressFilter)UnderlyingEnum)
+			{
+				case IPAddressFilter.Any:           return (Any_string);
+				case IPAddressFilter.Localhost:     return (Localhost_string);
+				case IPAddressFilter.IPv4Any:       return (IPv4Any_string);
+				case IPAddressFilter.IPv4Localhost: return (IPv4Localhost_string);
+				case IPAddressFilter.IPv6Any:       return (IPv6Any_string);
+				case IPAddressFilter.IPv6Localhost: return (IPv6Localhost_string);
+				case IPAddressFilter.Explicit:
+				{
+					if (!string.IsNullOrEmpty(this.explicitName))
+						return (this.explicitName);
+					else if (this.explicitAddress != null)
+						return (this.explicitAddress.ToString());
+					else
+						return ("");
+				}
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -220,7 +339,7 @@ namespace MKY.Net
 
 		#endregion
 
-		#region Parse
+		#region Parse/From
 
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -232,7 +351,7 @@ namespace MKY.Net
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" is no valid address filter string!"));
+				throw (new FormatException(@"""" + s + @""" is an invalid address filter string! String must be an IP host name (URL), an IP address, or one of the predefined filters."));
 		}
 
 		/// <remarks>
@@ -249,7 +368,7 @@ namespace MKY.Net
 			else
 			{
 				IPAddress address;
-				if (IPAddress.TryParse(s, out address)) // Valid other?
+				if (IPAddress.TryParse(s, out address)) // Valid explicit?
 				{
 					result = new IPAddressFilterEx(address);
 					return (true);
@@ -316,8 +435,48 @@ namespace MKY.Net
 			}
 		}
 
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParseAndResolve(string s, out IPAddressFilterEx result)
+		{
+			if (TryParse(s, out result))
+			{
+				return (true);
+			}
+			else
+			{
+				try
+				{
+					IPAddress[] addressesFromDns = Dns.GetHostAddresses(s);
+					foreach (IPAddress addressFromDns in addressesFromDns)
+					{
+						if (addressFromDns.AddressFamily == AddressFamily.InterNetwork) // IPv4 has precedence for compatibility reasons.
+						{
+							result = new IPAddressFilterEx(s, addressFromDns);
+							return (true);
+						}
+					}
+
+					if (addressesFromDns.Length > 0)
+					{
+						result = new IPAddressFilterEx(s, addressesFromDns[0]);
+						return (true);
+					}
+				}
+				catch (Exception ex)
+				{
+					DebugEx.WriteException(typeof(IPAddressFilterEx), ex, "Failed to get address from DNS!");
+				}
+
+				// Invalid string!
+				result = null;
+				return (false);
+			}
+		}
+
 		/// <summary></summary>
-		public static IPAddressFilter ParseFromIPAddress(IPAddress address)
+		public static IPAddressFilter FromIPAddress(IPAddress address)
 		{
 			if      (address == IPAddress.Any)
 				return (new IPAddressFilterEx(IPAddressFilter.Any));
@@ -353,13 +512,13 @@ namespace MKY.Net
 		/// <summary></summary>
 		public static implicit operator IPAddress(IPAddressFilterEx address)
 		{
-			return (address.IPAddress);
+			return (address.Address);
 		}
 
 		/// <summary></summary>
 		public static implicit operator IPAddressFilterEx(IPAddress address)
 		{
-			return (ParseFromIPAddress(address));
+			return (FromIPAddress(address));
 		}
 
 		/// <summary></summary>

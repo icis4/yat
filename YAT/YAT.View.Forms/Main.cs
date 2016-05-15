@@ -843,28 +843,24 @@ namespace YAT.View.Forms
 
 			bool arVisible = false;
 
-			TriggerEx[] arTriggerItems = TriggerEx.GetFixedItems();
-			Trigger arTriggerSelection = Trigger.None;
-			Command arExplicitTrigger = null;
+			AutoTriggerEx[] arTriggerItems = AutoTriggerEx.GetFixedItems();
+			AutoTriggerEx   arTrigger      = AutoTrigger.None;
 
 			AutoResponseEx[] arResponseItems = AutoResponseEx.GetFixedItems();
-			AutoResponse arResponseSelection = AutoResponse.None;
-			Command arExplicitResponse = null;
+			AutoResponseEx   arResponse      = AutoResponse.None;
 
 			if (childIsReady)
 			{
 				Model.Terminal terminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
 				if ((terminal != null) && (!terminal.IsDisposed))
 				{
-					arVisible           = terminal.SettingsRoot.AutoResponse.Visible;
+					arVisible      = terminal.SettingsRoot.AutoResponse.Visible;
 
-					arTriggerItems      = terminal.SettingsRoot.ValidAutoResponseTriggerItems;
-					arTriggerSelection  = terminal.SettingsRoot.AutoResponse.TriggerSelection;
-					arExplicitTrigger   = terminal.SettingsRoot.AutoResponse.ExplicitTrigger;
+					arTriggerItems = terminal.SettingsRoot.ValidAutoResponseTriggerItems;
+					arTrigger      = terminal.SettingsRoot.AutoResponse.Trigger;
 
-					arResponseItems     = terminal.SettingsRoot.ValidAutoResponseResponseItems;
-					arResponseSelection = terminal.SettingsRoot.AutoResponse.ResponseSelection;
-					arExplicitResponse  = terminal.SettingsRoot.AutoResponse.ExplicitResponse;
+					arResponseItems = terminal.SettingsRoot.ValidAutoResponseResponseItems;
+					arResponse      = terminal.SettingsRoot.AutoResponse.Response;
 				}
 			}
 
@@ -886,24 +882,20 @@ namespace YAT.View.Forms
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.Clear();
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.AddRange(arTriggerItems);
 
-					if (arTriggerSelection != Trigger.Explicit)
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedItem = (TriggerEx)arTriggerSelection;
-					else if (arExplicitTrigger != null)
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Text = arExplicitTrigger.SingleLineText;
+					if (arTrigger != AutoTrigger.Explicit)
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedItem = arTrigger;
 					else
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Text = Command.DefineCommandText;
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Text = new Command(arTrigger).SingleLineText;
 
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Visible = true;
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Enabled = childIsReady;
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.Clear();
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.AddRange(arResponseItems);
 
-					if (arResponseSelection != AutoResponse.Explicit)
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedItem = (AutoResponseEx)arResponseSelection;
-					else if (arExplicitResponse != null)
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Text = arExplicitResponse.SingleLineText;
+					if (arResponse != AutoResponse.Explicit)
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedItem = arResponse;
 					else
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Text = Command.DefineCommandText;
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Text = new Command(arResponse).SingleLineText;
 				}
 			}
 			else
@@ -1010,9 +1002,9 @@ namespace YAT.View.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				var trigger = (toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedItem as TriggerEx);
+				var trigger = (toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
 				if (trigger != null)
-					((Terminal)ActiveMdiChild).RequestAutoResponseFromTrigger(trigger);
+					((Terminal)ActiveMdiChild).RequestAutoResponseTrigger(trigger);
 			}
 		}
 
@@ -1027,7 +1019,7 @@ namespace YAT.View.Forms
 					if (!this.isSettingControls)
 					{
 						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
-						((Terminal)ActiveMdiChild).RequestAutoResponseFromExplicitTriggerText(triggerText);
+						((Terminal)ActiveMdiChild).RequestAutoResponseTrigger(triggerText);
 						this.mainToolValidationWorkaround_UpdateIsSuspended = false;
 					}
 				}
@@ -1044,7 +1036,7 @@ namespace YAT.View.Forms
 			{
 				var response = (toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedItem as AutoResponseEx);
 				if (response != null)
-					((Terminal)ActiveMdiChild).RequestAutoResponseFromResponse(response);
+					((Terminal)ActiveMdiChild).RequestAutoResponseResponse(response);
 			}
 		}
 
@@ -1063,7 +1055,7 @@ namespace YAT.View.Forms
 					if (!this.isSettingControls)
 					{
 						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
-						((Terminal)ActiveMdiChild).RequestAutoResponseFromExplicitResponseText(responseText);
+						((Terminal)ActiveMdiChild).RequestAutoResponseResponse(responseText);
 						this.mainToolValidationWorkaround_UpdateIsSuspended = false;
 					}
 				}

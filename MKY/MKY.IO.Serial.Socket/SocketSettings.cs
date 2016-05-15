@@ -53,20 +53,11 @@ namespace MKY.IO.Serial.Socket
 		public static readonly IPHostEx RemoteHostDefault = new IPHostEx(IPHost.Localhost);
 
 		/// <summary></summary>
-		public static readonly IPAddress ResolvedRemoteIPAddressDefault = IPAddress.Loopback;
-
-		/// <summary></summary>
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Why not, the .NET framework itself does it everywhere...")]
 		public static readonly IPNetworkInterfaceEx LocalInterfaceDefault = new IPNetworkInterfaceEx(IPNetworkInterface.Any);
 
 		/// <summary></summary>
-		public static readonly IPAddress ResolvedLocalIPAddressDefault = IPAddress.Any;
-
-		/// <summary></summary>
 		public static readonly IPAddressFilterEx LocalFilterDefault = new IPAddressFilterEx(IPAddressFilter.Any);
-
-		/// <summary></summary>
-		public static readonly IPAddress ResolvedLocalIPAddressFilterDefault = IPAddress.Any;
 
 		/// <summary></summary>
 		public const int PortDefault = 10000;
@@ -109,15 +100,12 @@ namespace MKY.IO.Serial.Socket
 
 		private SocketType type;
 
-		private string remoteHost;
-		private IPAddress resolvedRemoteIPAddress;
+		private IPHostEx remoteHost;
 		private int remoteTcpPort;
 		private int remoteUdpPort;
 
-		private string localInterface;
-		private IPAddress resolvedLocalIPAddress;
-		private string localFilter;
-		private IPAddress resolvedLocalIPAddressFilter;
+		private IPNetworkInterfaceEx localInterface;
+		private IPAddressFilterEx localFilter;
 		private int localTcpPort;
 		private int localUdpPort;
 
@@ -245,9 +233,10 @@ namespace MKY.IO.Serial.Socket
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
 		[XmlElement("RemoteHost")]
-		public virtual string RemoteHost
+		public virtual string RemoteHost_ForSerialization
 		{
-
+			get { return (RemoteHost.ToCompactString()); } // Use compact string represenation, only taking host name or address into account!
+			set { RemoteHost = value;                    }
 		}
 
 		/// <remarks>
@@ -265,21 +254,9 @@ namespace MKY.IO.Serial.Socket
 					this.remoteHost = value;
 					SetChanged();
 
-					// Immediately try to resolve the corresponding remote IP address:
-					IPHostEx ipHost;
-					if (IPHostEx.TryParseAndResolve(this.remoteHost, out ipHost))
-						this.resolvedRemoteIPAddress = ipHost.Address;
-					else
-						this.resolvedRemoteIPAddress = ResolvedRemoteIPAddressDefault;
+					// Do not try to resolve the IP address as this may take quite some time!
 				}
 			}
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
-		public virtual IPAddress ResolvedRemoteIPAddress
-		{
-			get { return (this.resolvedRemoteIPAddress); }
 		}
 
 		/// <summary></summary>
@@ -360,19 +337,25 @@ namespace MKY.IO.Serial.Socket
 		[XmlIgnore]
 		public virtual IPEndPoint RemoteEndPoint
 		{
-			get { return (new IPEndPoint(ResolvedRemoteIPAddress, RemotePort)); }
+			get { return (new IPEndPoint(this.remoteHost.Address, RemotePort)); }
 		}
 
 		/// <remarks>
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
 		[XmlElement("LocalInterface")]
-		public virtual IPNetworkInterfaceEx LocalInterface
+		public virtual string LocalInterface_ForSerialization
+		{
+			get { return (LocalInterface.ToCompactString()); } // Use compact string represenation, only taking host name or address into account!
+			set { LocalInterface = value;                    }
+		}
+
 		/// <remarks>
 		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
+		public virtual IPNetworkInterfaceEx LocalInterface
 		{
 			get { return (this.localInterface); }
 			set
@@ -382,27 +365,21 @@ namespace MKY.IO.Serial.Socket
 					this.localInterface = value;
 					SetChanged();
 
-					// Immediately try to resolve the corresponding local IP address:
-					IPNetworkInterfaceEx ipNetworkInterface;
-					if (IPNetworkInterfaceEx.TryParseAndResolve(this.localInterface, out ipNetworkInterface))
-						this.resolvedLocalIPAddress = ipNetworkInterface.Address;
-					else
-						this.resolvedLocalIPAddress = ResolvedLocalIPAddressDefault;
+					// Do not try to resolve the IP address as this may take quite some time!
 				}
 			}
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
-		public virtual IPAddress ResolvedLocalIPAddress
-		{
-			get { return (this.resolvedLocalIPAddress); }
 		}
 
 		/// <remarks>
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
 		[XmlElement("LocalFilter")]
+		public virtual string LocalFilter_ForSerialization
+		{
+			get { return (LocalFilter.ToCompactString()); } // Use compact string represenation, only taking host name or address into account!
+			set { LocalFilter = value;                    }
+		}
+
 		/// <remarks>
 		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
@@ -418,21 +395,9 @@ namespace MKY.IO.Serial.Socket
 					this.localFilter = value;
 					SetChanged();
 
-					// Immediately try to resolve the corresponding IP address:
-					IPAddressFilterEx ipAddressFilter;
-					if (IPAddressFilterEx.TryParseAndResolve(this.localFilter, out ipAddressFilter))
-						this.resolvedLocalIPAddressFilter = ipAddressFilter.Address;
-					else
-						this.resolvedLocalIPAddressFilter = ResolvedLocalIPAddressFilterDefault;
+					// Do not try to resolve the IP address as this may take quite some time!
 				}
 			}
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
-		public virtual IPAddress ResolvedLocalIPAddressFilter
-		{
-			get { return (this.resolvedLocalIPAddressFilter); }
 		}
 
 		/// <summary></summary>
@@ -566,16 +531,16 @@ namespace MKY.IO.Serial.Socket
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(Type                                         == other.Type) &&
-				StringEx.EqualsOrdinalIgnoreCase(RemoteHost,     other.RemoteHost) &&
-				(RemoteTcpPort                                == other.RemoteTcpPort) &&
-				(RemoteUdpPort                                == other.RemoteUdpPort) &&
-				StringEx.EqualsOrdinalIgnoreCase(LocalInterface, other.LocalInterface) &&
-				StringEx.EqualsOrdinalIgnoreCase(LocalFilter,    other.LocalFilter) &&
-				(LocalTcpPort                                 == other.LocalTcpPort) &&
-				(LocalUdpPort                                 == other.LocalUdpPort) &&
-				(TcpClientAutoReconnect                       == other.TcpClientAutoReconnect) &&
-				(UdpServerSendMode                            == other.UdpServerSendMode)
+				(Type                                                          == other.Type) &&
+				StringEx.EqualsOrdinalIgnoreCase(    RemoteHost_ForSerialization, other.    RemoteHost_ForSerialization) &&
+				(RemoteTcpPort                                                 == other.RemoteTcpPort) &&
+				(RemoteUdpPort                                                 == other.RemoteUdpPort) &&
+				StringEx.EqualsOrdinalIgnoreCase(LocalInterface_ForSerialization, other.LocalInterface_ForSerialization) &&
+				StringEx.EqualsOrdinalIgnoreCase(   LocalFilter_ForSerialization, other.   LocalFilter_ForSerialization) &&
+				(LocalTcpPort                                                  == other.LocalTcpPort) &&
+				(LocalUdpPort                                                  == other.LocalUdpPort) &&
+				(TcpClientAutoReconnect                                        == other.TcpClientAutoReconnect) &&
+				(UdpServerSendMode                                             == other.UdpServerSendMode)
 			);
 		}
 
@@ -592,15 +557,15 @@ namespace MKY.IO.Serial.Socket
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^  Type                                   .GetHashCode();
-				hashCode = (hashCode * 397) ^ (RemoteHost     != null ? RemoteHost    .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  Type                                                                     .GetHashCode();
+				hashCode = (hashCode * 397) ^ (    RemoteHost_ForSerialization != null ?     RemoteHost_ForSerialization.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^  RemoteTcpPort;
 				hashCode = (hashCode * 397) ^  RemoteUdpPort;
-				hashCode = (hashCode * 397) ^ (LocalInterface != null ? LocalInterface.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (LocalFilter    != null ? LocalFilter   .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (LocalInterface_ForSerialization != null ? LocalInterface_ForSerialization.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (   LocalFilter_ForSerialization != null ?    LocalFilter_ForSerialization.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^  LocalTcpPort;
 				hashCode = (hashCode * 397) ^  LocalUdpPort;
-				hashCode = (hashCode * 397) ^  TcpClientAutoReconnect                 .GetHashCode();
+				hashCode = (hashCode * 397) ^  TcpClientAutoReconnect                                                   .GetHashCode();
 
 				return (hashCode);
 			}
@@ -710,12 +675,12 @@ namespace MKY.IO.Serial.Socket
 		{
 			switch (type)
 			{
-				case SocketType.TcpClient:     return (                                         IPHostEx.ToEndpointAdressString(this.remoteHost) + ":" + this.remoteTcpPort);
+				case SocketType.TcpClient:     return (                                         this.remoteHost.ToEndpointAdressString() + ":" + this.remoteTcpPort);
 				case SocketType.TcpServer:     return ("Server:"  + this.localTcpPort                                                                         );
-				case SocketType.TcpAutoSocket: return ("Server:"  + this.localTcpPort + " / " + IPHostEx.ToEndpointAdressString(this.remoteHost) + ":" + this.remoteTcpPort);
-				case SocketType.UdpClient:     return (                                         IPHostEx.ToEndpointAdressString(this.remoteHost) + ":" + this.remoteUdpPort);
+				case SocketType.TcpAutoSocket: return ("Server:"  + this.localTcpPort + " / " + this.remoteHost.ToEndpointAdressString() + ":" + this.remoteTcpPort);
+				case SocketType.UdpClient:     return (                                         this.remoteHost.ToEndpointAdressString() + ":" + this.remoteUdpPort);
 				case SocketType.UdpServer:     return ("Receive:" + this.localUdpPort                                                                         );
-				case SocketType.UdpPairSocket: return ("Receive:" + this.localUdpPort + " / " + IPHostEx.ToEndpointAdressString(this.remoteHost) + ":" + this.remoteUdpPort);
+				case SocketType.UdpPairSocket: return ("Receive:" + this.localUdpPort + " / " + this.remoteHost.ToEndpointAdressString() + ":" + this.remoteUdpPort);
 
 				default:                       return (Undefined);
 			}
