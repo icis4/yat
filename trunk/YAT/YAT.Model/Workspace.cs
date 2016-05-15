@@ -827,49 +827,46 @@ namespace YAT.Model
 						FileEx.TryDelete(autoSaveFilePathToDelete);
 				}
 			}
-			catch (System.Xml.XmlException ex)
-			{
-				DebugEx.WriteException(GetType(), ex, "Error saving terminal!");
-
-				if (!isAutoSave)
-				{
-					OnFixedStatusTextRequest("Error saving workspace!");
-
-					string message =
-						"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
-						"XML error message:"  + Environment.NewLine + ex.Message                            + Environment.NewLine + Environment.NewLine +
-						"File error message:" + Environment.NewLine + ex.InnerException.Message;
-
-					OnMessageInputRequest
-					(
-						message,
-						"File Error",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
-
-					OnTimedStatusTextRequest("Workspace not saved!");
-				}
-				else // AutoSave
-				{
-					success = true; // Signal that exception has intentionally been ignored.
-				}
-			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(GetType(), ex, "Error saving terminal!");
+				DebugEx.WriteException(GetType(), ex, "Error saving workspace!");
 
 				if (!isAutoSave)
 				{
 					OnFixedStatusTextRequest("Error saving workspace!");
+
+					StringBuilder sb = new StringBuilder();
+					sb.AppendLine("Unable to save workspace file");
+					sb.AppendLine(this.settingsHandler.SettingsFilePath);
+
+					if (ex is System.Xml.XmlException)
+					{
+						sb.AppendLine();
+						sb.AppendLine("XML error message:");
+						sb.AppendLine(ex.Message);
+
+						if (ex.InnerException != null)
+						{
+							sb.AppendLine();
+							sb.AppendLine("File error message:");
+							sb.AppendLine(ex.InnerException.Message);
+						}
+					}
+					else if (ex != null)
+					{
+						sb.AppendLine();
+						sb.AppendLine("System error message:");
+						sb.AppendLine(ex.Message);
+					}
+
 					OnMessageInputRequest
 					(
-						"Unable to save file"   + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
-						"System error message:" + Environment.NewLine + ex.Message,
+						sb.ToString(),
 						"File Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
 					);
+
 					OnTimedStatusTextRequest("Workspace not saved!");
 				}
 				else // AutoSave
@@ -1357,16 +1354,23 @@ namespace YAT.Model
 						else
 						{
 							StringBuilder sb = new StringBuilder();
-							sb.AppendLine("Unable to open terminal");
 
 							if (!string.IsNullOrEmpty(item.FilePath))
-								sb.AppendLine(item.FilePath);
+							{
+								sb.AppendLine("Unable to open terminal");
+								sb.Append(item.FilePath);
+							}
+							else
+							{
+								sb.Append("Unable to open terminal!");
+							}
 
 							if (exception != null)
 							{
 								sb.AppendLine();
+								sb.AppendLine();
 								sb.AppendLine("System error message:");
-								sb.AppendLine(exception.Message);
+								sb.Append(exception.Message);
 							}
 
 							errorMessage = sb.ToString();
@@ -1389,10 +1393,16 @@ namespace YAT.Model
 						if (string.IsNullOrEmpty(errorMessage))
 						{
 							StringBuilder sb = new StringBuilder();
-							sb.AppendLine("Unable to open terminal");
 
 							if (!string.IsNullOrEmpty(item.FilePath))
-								sb.AppendLine(item.FilePath);
+							{
+								sb.AppendLine("Unable to open terminal");
+								sb.Append(item.FilePath);
+							}
+							else
+							{
+								sb.Append("Unable to open terminal!");
+							}
 
 							errorMessage = sb.ToString();
 						}
@@ -1401,7 +1411,7 @@ namespace YAT.Model
 						DialogResult result = OnMessageInputRequest
 						(
 							errorMessage + Environment.NewLine + Environment.NewLine + "Continue loading workspace?",
-							"Terminal File Error",
+							"Terminal Error",
 							MessageBoxButtons.YesNo,
 							MessageBoxIcon.Exclamation
 						);
@@ -1434,9 +1444,15 @@ namespace YAT.Model
 			return (openedTerminalCount);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Opens the terminal file given.
+		/// </summary>
+		/// <param name="filePath">Terminal file.</param>
+		/// <returns><c>true</c> if successfully opened the terminal, <c>false</c> otherwise.</returns>
 		public virtual bool OpenTerminalFromFile(string filePath)
 		{
+			AssertNotDisposed();
+
 			string fileName = Path.GetFileName(filePath);
 			OnFixedStatusTextRequest("Opening terminal " + fileName + "...");
 
@@ -1456,18 +1472,17 @@ namespace YAT.Model
 					MessageBoxIcon.Stop
 				);
 				OnTimedStatusTextRequest("Terminal not opened!");
+
 				return (false);
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private bool OpenTerminalFromFile(string filePath, Guid guid, int fixedIndex, WindowSettings windowSettings, out string errorMessage)
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> sh;
-			System.Xml.XmlException xmlEx;
-			if (OpenTerminalFile(filePath, out sh, out xmlEx))
+			Exception ex;
+			if (OpenTerminalFile(filePath, out sh, out ex))
 			{
-				Exception ex;
 				if (OpenTerminalFromSettings(sh, guid, fixedIndex, windowSettings, out ex))
 				{
 					errorMessage = null;
@@ -1477,13 +1492,14 @@ namespace YAT.Model
 				{
 					StringBuilder sb = new StringBuilder();
 					sb.AppendLine("Unable to open terminal");
-					sb.AppendLine(filePath);
+					sb.Append(filePath);
 
 					if (ex != null)
 					{
 						sb.AppendLine();
+						sb.AppendLine();
 						sb.AppendLine("System error message:");
-						sb.AppendLine(ex.Message);
+						sb.Append(ex.Message);
 					}
 
 					errorMessage = sb.ToString();
@@ -1493,21 +1509,30 @@ namespace YAT.Model
 			else
 			{
 				StringBuilder sb = new StringBuilder();
-				sb.AppendLine("Unable to open file");
-				sb.AppendLine(filePath);
+				sb.AppendLine("Unable to open terminal file");
+				sb.Append(filePath);
 
-				if (xmlEx != null)
+				if (ex is System.Xml.XmlException)
 				{
 					sb.AppendLine();
+					sb.AppendLine();
 					sb.AppendLine("XML error message:");
-					sb.AppendLine(xmlEx.Message);
+					sb.Append(ex.Message);
 
-					if (xmlEx.InnerException != null)
+					if (ex.InnerException != null)
 					{
 						sb.AppendLine();
+						sb.AppendLine();
 						sb.AppendLine("File error message:");
-						sb.AppendLine(xmlEx.InnerException.Message);
+						sb.Append(ex.InnerException.Message);
 					}
+				}
+				else if (ex != null)
+				{
+					sb.AppendLine();
+					sb.AppendLine();
+					sb.AppendLine("System error message:");
+					sb.Append(ex.Message);
 				}
 
 				errorMessage = sb.ToString();
@@ -1522,7 +1547,7 @@ namespace YAT.Model
 			return (OpenTerminalFromSettings(settingsHandler, Guid.Empty, Indices.DefaultFixedIndex, null, out exception));
 		}
 
-		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid, int fixedIndex, Settings.WindowSettings windowSettings, out Exception exception)
+		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid, int fixedIndex, WindowSettings windowSettings, out Exception exception)
 		{
 			AssertNotDisposed();
 
@@ -1609,7 +1634,7 @@ namespace YAT.Model
 			return (true);
 		}
 
-		private bool OpenTerminalFile(string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out System.Xml.XmlException exception)
+		private bool OpenTerminalFile(string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
 		{
 			// Combine absolute workspace path with terminal path if that one is relative:
 			terminalFilePath = PathEx.CombineFilePaths(this.settingsHandler.SettingsFilePath, terminalFilePath);
@@ -1631,7 +1656,7 @@ namespace YAT.Model
 					return (false);
 				}
 			}
-			catch (System.Xml.XmlException ex)
+			catch (Exception ex)
 			{
 				DebugEx.WriteException(GetType(), ex, "Failed to open terminal file!");
 				settingsHandler = null;

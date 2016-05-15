@@ -407,7 +407,9 @@ namespace YAT.Controller
 		// Private Methods > RunFullyWithView
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Exceptions are only handled in case of 'Release', otherwise by the debugger.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private MainResult RunFullyWithView()
 		{
@@ -415,18 +417,20 @@ namespace YAT.Controller
 			MessageHelper.RequestFeature = "New features can be requested as described in 'Help > Request Feature'.";
 			MessageHelper.SubmitBug      =      "Please report this issue as described in 'Help > Submit Bug'.";
 
-		#if (!DEBUG) // Only handle exceptions in case of 'Release', otherwise let them by handled by the debugger.
+#if (!DEBUG)
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler.
 			AppDomain currentDomain = AppDomain.CurrentDomain;
 			currentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunFullyWithView_currentDomain_UnhandledException);
-		#endif
+#endif
 			// Create model and view and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
 				MKY.Windows.Forms.ApplicationEx.EnableVisualStylesAndSetTextRenderingIfNotAlreadyDoneSo();
 
+#if (!DEBUG)
 				try
 				{
+#endif
 					// Application settings must be created and closed on main thread, otherwise
 					// there will be a synchronization exception on exit.
 					if (!ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadSharedWriteIfOwned))
@@ -437,6 +441,7 @@ namespace YAT.Controller
 					View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen();
 					if (welcomeScreen.ShowDialog() != DialogResult.OK)
 						return (MainResult.ApplicationSettingsError);
+#if (!DEBUG)
 				}
 				catch (Exception ex)
 				{
@@ -451,11 +456,14 @@ namespace YAT.Controller
 
 				try
 				{
+#endif
 					// If everything is fine so far, start main application including view.
 					using (View.Forms.Main view = new View.Forms.Main(model))
 					{
+#if (!DEBUG)
 						// Assume unhandled asynchronous synchronized exceptions and attach the application to the respective handler.
 						System.Windows.Forms.Application.ThreadException += new ThreadExceptionEventHandler(RunFullyWithView_Application_ThreadException);
+#endif
 
 						// Start the Win32 message loop on the current thread and the main form.
 						//
@@ -463,11 +471,14 @@ namespace YAT.Controller
 						// This call does not return until the application exits.
 						System.Windows.Forms.Application.Run(view);
 
+#if (!DEBUG)
 						System.Windows.Forms.Application.ThreadException -= new ThreadExceptionEventHandler(RunFullyWithView_Application_ThreadException);
+#endif
 
 						Model.MainResult viewResult = view.Result;
 						return (Convert(viewResult));
 					}
+#if (!DEBUG)
 				}
 				catch (Exception ex)
 				{
@@ -479,6 +490,7 @@ namespace YAT.Controller
 					}
 					return (MainResult.UnhandledException);
 				}
+#endif
 			} // Dispose of model to ensure immediate release of resources.
 		}
 
@@ -505,7 +517,7 @@ namespace YAT.Controller
 			}
 		}
 
-#if (!DEBUG) // Only handle exceptions in case of 'Release', otherwise let them by handled by the debugger.
+#if (!DEBUG)
 		/// <remarks>
 		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart.
 		/// </remarks>
@@ -529,7 +541,7 @@ namespace YAT.Controller
 				System.Windows.Forms.Application.Exit();
 			}
 		}
-#endif // !DEBUG
+#endif
 
 		#endregion
 
@@ -538,7 +550,9 @@ namespace YAT.Controller
 		// Private Methods > RunWithViewButOutputErrorsOnConsole
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Exceptions are only handled in case of 'Release', otherwise by the debugger.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private MainResult RunWithViewButOutputErrorsOnConsole()
 		{
@@ -546,18 +560,20 @@ namespace YAT.Controller
 			MessageHelper.RequestFeature = "New features can be requested as described in 'Help > Request Feature'.";
 			MessageHelper.SubmitBug      =      "Please report this issue as described in 'Help > Submit Bug'.";
 
-		#if (!DEBUG) // Only handle exceptions in case of 'Release', otherwise let them by handled by the debugger.
+#if (!DEBUG)
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler.
 			AppDomain currentDomain = AppDomain.CurrentDomain;
 			currentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_currentDomain_UnhandledException);
-		#endif
+#endif
 			// Create model and view and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
 				MKY.Windows.Forms.ApplicationEx.EnableVisualStylesAndSetTextRenderingIfNotAlreadyDoneSo();
 
+#if (!DEBUG)
 				try
 				{
+#endif
 					// Application settings must be created and closed on main thread, otherwise
 					// there will be a synchronization exception on exit.
 					if (!ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadSharedWriteIfOwned))
@@ -568,6 +584,7 @@ namespace YAT.Controller
 					View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen();
 					if (welcomeScreen.ShowDialog() != DialogResult.OK)
 						return (MainResult.ApplicationSettingsError);
+#if (!DEBUG)
 				}
 				catch (Exception ex)
 				{
@@ -582,11 +599,14 @@ namespace YAT.Controller
 
 				try
 				{
+#endif
 					// If everything is fine so far, start main application including view.
 					using (View.Forms.Main view = new View.Forms.Main(model))
 					{
+#if (!DEBUG)
 						// Assume unhandled asynchronous synchronized exceptions and attach the application to the respective handler.
 						System.Windows.Forms.Application.ThreadException += new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
+#endif
 
 						// Start the Win32 message loop on the current thread and the main form.
 						//
@@ -594,11 +614,14 @@ namespace YAT.Controller
 						// This call does not return until the application exits.
 						System.Windows.Forms.Application.Run(view);
 
+#if (!DEBUG)
 						System.Windows.Forms.Application.ThreadException -= new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
+#endif
 
 						Model.MainResult viewResult = view.Result;
 						return (Convert(viewResult));
 					}
+#if (!DEBUG)
 				}
 				catch (Exception ex)
 				{
@@ -610,9 +633,11 @@ namespace YAT.Controller
 
 					return (MainResult.UnhandledException);
 				}
+#endif
 			} // Dispose of model to ensure immediate release of resources.
 		}
 
+#if (!DEBUG)
 		/// <remarks>
 		/// In case of an <see cref="System.Windows.Forms.Application.ThreadException"/>, it is possible to continue operation.
 		/// </remarks>
@@ -626,7 +651,6 @@ namespace YAT.Controller
 				ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 		}
 
-#if (!DEBUG) // Only handle exceptions in case of 'Release', otherwise let them by handled by the debugger.
 		/// <remarks>
 		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart.
 		/// </remarks>
@@ -639,7 +663,7 @@ namespace YAT.Controller
 			if (ex != null)
 				ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 		}
-#endif // !DEBUG
+#endif
 
 		#endregion
 
@@ -651,6 +675,9 @@ namespace YAT.Controller
 		/// <summary>
 		/// Non-view application for automated test usage.
 		/// </summary>
+		/// <remarks>
+		/// Exceptions are only handled in case of 'Release', otherwise by the debugger.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private MainResult RunFullyFromConsole()
 		{
@@ -658,16 +685,18 @@ namespace YAT.Controller
 			MessageHelper.RequestFeature = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
 			MessageHelper.SubmitBug =           "Please report this issue at <sourceforge.net/projects/y-a-terminal/bugs/>.";
 
-		#if (!DEBUG) // Only handle exceptions in case of 'Release', otherwise let them by handled by the debugger.
+#if (!DEBUG)
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler.
 			AppDomain currentDomain = AppDomain.CurrentDomain;
 			currentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunFullyFromConsole_currentDomain_UnhandledException);
-		#endif
+#endif
 			// Create model and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
+#if (!DEBUG)
 				try
 				{
+#endif
 					if (ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadShared))
 					{
 						// Don't care about result,
@@ -680,6 +709,7 @@ namespace YAT.Controller
 					{
 						return (MainResult.ApplicationSettingsError);
 					}
+#if (!DEBUG)
 				}
 				catch (Exception ex)
 				{
@@ -694,11 +724,13 @@ namespace YAT.Controller
 
 				try
 				{
+#endif
 					Model.MainResult modelResult = model.Start();
 					if (modelResult == Model.MainResult.Success)
 						modelResult = model.Exit();
 
 					return (Convert(modelResult));
+#if (!DEBUG)
 				}
 				catch (Exception ex)
 				{
@@ -709,10 +741,11 @@ namespace YAT.Controller
 
 					return (MainResult.UnhandledException);
 				}
+#endif
 			} // Dispose of model to ensure immediate release of resources.
 		}
 
-#if (!DEBUG) // Only handle exceptions in case of 'Release', otherwise let them by handled by the debugger.
+#if (!DEBUG)
 		/// <remarks>
 		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart.
 		/// </remarks>
@@ -725,7 +758,7 @@ namespace YAT.Controller
 			if (ex != null)
 				ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 		}
-#endif // !DEBUG
+#endif
 
 		#endregion
 
@@ -737,6 +770,9 @@ namespace YAT.Controller
 		/// <summary>
 		/// Non-view application for automated test usage.
 		/// </summary>
+		/// <remarks>
+		/// Exceptions are only handled in case of 'Release', otherwise by the debugger.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private MainResult RunInvisible()
 		{
@@ -747,8 +783,10 @@ namespace YAT.Controller
 			// Create model and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
+#if (!DEBUG)
 				try
 				{
+#endif
 					if (ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadShared))
 					{
 						// Don't care about result,
@@ -761,6 +799,7 @@ namespace YAT.Controller
 					{
 						return (MainResult.ApplicationSettingsError);
 					}
+#if (!DEBUG)
 				}
 				catch (Exception ex)
 				{
@@ -772,11 +811,13 @@ namespace YAT.Controller
 
 				try
 				{
+#endif
 					Model.MainResult modelResult = model.Start();
 					if (modelResult == Model.MainResult.Success)
 						modelResult = model.Exit();
 
 					return (Convert(modelResult));
+#if (!DEBUG)
 				}
 				catch (Exception ex)
 				{
@@ -785,6 +826,7 @@ namespace YAT.Controller
 
 					return (MainResult.UnhandledException);
 				}
+#endif
 			} // Dispose of model to ensure immediate release of resources.
 		}
 

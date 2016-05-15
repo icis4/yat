@@ -97,8 +97,7 @@ namespace YAT.Model.Types
 
 		#endregion
 
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "'explicit' is a key word.")]
-		private Command explicit_;
+		private string explicitCommandString;
 
 		/// <summary>Default is <see cref="AutoResponse.None"/>.</summary>
 		public const AutoResponse Default = AutoResponse.None;
@@ -116,22 +115,10 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		public AutoResponseEx(string explicit_)
+		public AutoResponseEx(string explicitCommandString)
 			: base(AutoResponse.Explicit)
 		{
-			this.explicit_ = new Command(explicit_);
-		}
-
-		/// <summary></summary>
-		public Command Explicit
-		{
-			get
-			{
-				if ((AutoResponse)UnderlyingEnum == AutoResponse.Explicit)
-					return (this.explicit_);
-				else
-					return (new Command());
-			}
+			this.explicitCommandString = explicitCommandString;
 		}
 
 		/// <summary></summary>
@@ -165,7 +152,49 @@ namespace YAT.Model.Types
 			}
 		}
 
-		#region ToString
+		#region Object Members
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(obj, null))
+				return (false);
+
+			if (GetType() != obj.GetType())
+				return (false);
+
+			AutoResponseEx other = (AutoResponseEx)obj;
+			if ((AutoResponse)UnderlyingEnum == AutoResponse.Explicit)
+			{
+				return
+				(
+					base.Equals(other) &&
+					(this.explicitCommandString == other.explicitCommandString)
+				);
+			}
+			else
+			{
+				return (base.Equals(other));
+			}
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+
+				if ((AutoResponse)UnderlyingEnum == AutoResponse.Explicit)
+					hashCode = (hashCode * 397) ^ (this.explicitCommandString != null ? this.explicitCommandString.GetHashCode() : 0);
+
+				return (hashCode);
+			}
+		}
 
 		/// <summary></summary>
 		public override string ToString()
@@ -187,7 +216,7 @@ namespace YAT.Model.Types
 				case AutoResponse.PredefinedCommand12: return (PredefinedCommand_string + " 12]");
 				case AutoResponse.SendText:            return (SendText_string);
 				case AutoResponse.SendFile:            return (SendFile_string);
-				case AutoResponse.Explicit:    return (this.explicit_.SingleLineText);
+				case AutoResponse.Explicit:            return (this.explicitCommandString);
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -296,11 +325,11 @@ namespace YAT.Model.Types
 			else if (StringEx.StartsWithOrdinalIgnoreCase   (s, PredefinedCommand_string) ||
 			         StringEx.StartsWithAnyOrdinalIgnoreCase(s, PredefinedCommand_stringAlternatives))
 			{
-				string[] values = Regex.Split(s, @"\d+");
-				if (values.Length > 0)
+				Match match = Regex.Match(s, @"\d+");
+				if (match.Success)
 				{
 					int intValue;
-					if (int.TryParse(values[0], out intValue))
+					if (int.TryParse(match.Groups[0].Value, out intValue))
 					{
 						if ((intValue >= 1) && (intValue <= 12))
 						{

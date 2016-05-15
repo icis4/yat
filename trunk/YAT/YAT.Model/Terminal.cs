@@ -1668,34 +1668,6 @@ namespace YAT.Model
 						FileEx.TryDelete(autoSaveFilePathToDelete);
 				}
 			}
-			catch (System.Xml.XmlException ex)
-			{
-				DebugEx.WriteException(GetType(), ex, "Error saving terminal!");
-
-				if (!isAutoSave)
-				{
-					OnFixedStatusTextRequest("Error saving terminal!");
-
-					string message =
-						"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
-						"XML error message:"  + Environment.NewLine + ex.Message                            + Environment.NewLine + Environment.NewLine +
-						"File error message:" + Environment.NewLine + ex.InnerException.Message;
-
-					OnMessageInputRequest
-					(
-						message,
-						"File Error",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
-
-					OnTimedStatusTextRequest("Terminal not saved!");
-				}
-				else // AutoSave
-				{
-					success = true; // Signal that exception has intentionally been ignored.
-				}
-			}
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(GetType(), ex, "Error saving terminal!");
@@ -1704,13 +1676,36 @@ namespace YAT.Model
 				{
 					OnFixedStatusTextRequest("Error saving terminal!");
 
-					string message =
-						"Unable to save file"   + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
-						"System error message:" + Environment.NewLine + ex.Message;
+					StringBuilder sb = new StringBuilder();
+					sb.AppendLine("Unable to save terminal file");
+					sb.Append(this.settingsHandler.SettingsFilePath);
+
+					if (ex is System.Xml.XmlException)
+					{
+						sb.AppendLine();
+						sb.AppendLine();
+						sb.AppendLine("XML error message:");
+						sb.Append(ex.Message);
+
+						if (ex.InnerException != null)
+						{
+							sb.AppendLine();
+							sb.AppendLine();
+							sb.AppendLine("File error message:");
+							sb.Append(ex.InnerException.Message);
+						}
+					}
+					else if (ex != null)
+					{
+						sb.AppendLine();
+						sb.AppendLine();
+						sb.AppendLine("System error message:");
+						sb.Append(ex.Message);
+					}
 
 					OnMessageInputRequest
 					(
-						message,
+						sb.ToString(),
 						"File Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error

@@ -347,15 +347,13 @@ namespace YAT.Model
 						if (File.Exists(filePath))
 							success = OpenWorkspaceFromFile(filePath);
 
-						if (!success)
+						if (!success && !ApplicationSettings.LocalUserSettings.AutoWorkspace.AutoSaved)
 						{
 							OnFixedStatusTextRequest("Error opening workspace!");
 
 							StringBuilder sb = new StringBuilder();
-							sb.AppendLine("Unable to open workspace");
-							sb.AppendLine(filePath);
-							sb.AppendLine();
-							sb.AppendLine("A new empty workspace will be created.");
+							sb.AppendLine("Unable to open workspace file");
+							sb.Append(filePath);
 
 							OnMessageInputRequest
 							(
@@ -1007,6 +1005,7 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
+			string fileName = Path.GetFileName(filePath);
 			string extension = Path.GetExtension(filePath);
 			if (ExtensionHelper.IsWorkspaceFile(extension))
 			{
@@ -1017,12 +1016,9 @@ namespace YAT.Model
 						OnStarted(EventArgs.Empty);
 						return (true);
 					}
-					return (false);
 				}
-				else
-				{
-					return (false);
-				}
+
+				return (false);
 			}
 			else if (ExtensionHelper.IsTerminalFile(extension))
 			{
@@ -1045,12 +1041,9 @@ namespace YAT.Model
 						
 						return (true);
 					}
-					return (false);
 				}
-				else
-				{
-					return (false);
-				}
+
+				return (false);
 			}
 			else
 			{
@@ -1064,6 +1057,7 @@ namespace YAT.Model
 					MessageBoxIcon.Stop
 				);
 				OnTimedStatusTextRequest("No file opened!");
+
 				return (false);
 			}
 		}
@@ -1184,7 +1178,8 @@ namespace YAT.Model
 
 		private void workspace_Saved(object sender, SavedEventArgs e)
 		{
-			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath = e.FilePath;
+			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath  = e.FilePath;
+			ApplicationSettings.LocalUserSettings.AutoWorkspace.AutoSaved = e.IsAutoSave;
 			ApplicationSettings.Save();
 		}
 
@@ -1242,50 +1237,88 @@ namespace YAT.Model
 			string fileName = Path.GetFileName(filePath);
 			OnFixedStatusTextRequest("Opening workspace " + fileName + "...");
 
-			DocumentSettingsHandler<WorkspaceSettingsRoot> sh;
-			Guid guid;
-			System.Xml.XmlException ex;
-			if (OpenWorkspaceFile(filePath, out sh, out guid, out ex))
+			string errorMessage;
+			if (OpenWorkspaceFromFile(filePath, out errorMessage))
 			{
-				return (OpenWorkspaceFromSettings(sh, guid));
+				return (true);
 			}
 			else
 			{
 				OnFixedStatusTextRequest("Error opening workspace!");
-				if (ex is System.Xml.XmlException)
+				OnMessageInputRequest
+				(
+					errorMessage,
+					"Workspace File Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Stop
+				);
+				OnTimedStatusTextRequest("Workspace not opened!");
+
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
+		private bool OpenWorkspaceFromFile(string filePath, out string errorMessage)
+		{
+			DocumentSettingsHandler<WorkspaceSettingsRoot> sh;
+			Guid guid;
+			Exception ex;
+			if (OpenWorkspaceFile(filePath, out sh, out guid, out ex))
+			{
+				if (OpenWorkspaceFromSettings(sh, guid, out ex))
 				{
-					OnMessageInputRequest
-					(
-						"Unable to open file" + Environment.NewLine + filePath   + Environment.NewLine + Environment.NewLine +
-						"XML error message:"  + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine +
-						"File error message:" + Environment.NewLine + ex.InnerException.Message,
-						"Invalid Workspace File",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Stop
-					);
-				}
-				else if (ex is Exception)
-				{
-					OnMessageInputRequest
-					(
-						"Unable to open file"   + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
-						"System error message:" + Environment.NewLine + ex.Message,
-						"Invalid Workspace File",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Stop
-					);
+					errorMessage = null;
+					return (true);
 				}
 				else
 				{
-					OnMessageInputRequest
-					(
-						"Unable to open file" + Environment.NewLine + filePath,
-						"Invalid Workspace File",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Stop
-					);
+					StringBuilder sb = new StringBuilder();
+					sb.AppendLine("Unable to open workspace");
+					sb.Append(filePath);
+
+					if (ex != null)
+					{
+						sb.AppendLine();
+						sb.AppendLine();
+						sb.AppendLine("System error message:");
+						sb.Append(ex.Message);
+					}
+
+					errorMessage = sb.ToString();
+					return (false);
 				}
-				OnTimedStatusTextRequest("No workspace opened!");
+			}
+			else
+			{
+				StringBuilder sb = new StringBuilder();
+				sb.AppendLine("Unable to open workspace file");
+				sb.Append(filePath);
+
+				if (ex is System.Xml.XmlException)
+				{
+					sb.AppendLine();
+					sb.AppendLine();
+					sb.AppendLine("XML error message:");
+					sb.Append(ex.Message);
+
+					if (ex.InnerException != null)
+					{
+						sb.AppendLine();
+						sb.AppendLine();
+						sb.AppendLine("File error message:");
+						sb.Append(ex.InnerException.Message);
+					}
+				}
+				else if (ex != null)
+				{
+					sb.AppendLine();
+					sb.AppendLine();
+					sb.AppendLine("System error message:");
+					sb.Append(ex.Message);
+				}
+
+				errorMessage = sb.ToString();
 				return (false);
 			}
 		}
@@ -1293,30 +1326,38 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler)
 		{
-			return (OpenWorkspaceFromSettings(settingsHandler, Guid.NewGuid()));
-		}
-
-		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, Guid guid)
-		{
-			return (OpenWorkspaceFromSettings(settingsHandler, guid, Indices.InvalidIndex, null));
+			Exception exception;
+			return (OpenWorkspaceFromSettings(settingsHandler, Guid.NewGuid(), out exception));
 		}
 
 		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, int dynamicTerminalIndexToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace)
 		{
-			return (OpenWorkspaceFromSettings(settingsHandler, Guid.NewGuid(), dynamicTerminalIndexToReplace, terminalSettingsToReplace));
+			Exception exception;
+			return (OpenWorkspaceFromSettings(settingsHandler, Guid.NewGuid(), dynamicTerminalIndexToReplace, terminalSettingsToReplace, out exception));
 		}
 
-		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings, Guid guid, int dynamicTerminalIndexToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace)
+		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, Guid guid, out Exception exception)
+		{
+			return (OpenWorkspaceFromSettings(settingsHandler, guid, Indices.InvalidIndex, null, out exception));
+		}
+
+		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings, Guid guid, int dynamicTerminalIndexToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace, out Exception exception)
 		{
 			AssertNotDisposed();
 
 			// Ensure that the workspace file is not already open:
 			if (!CheckWorkspaceFile(settings.SettingsFilePath))
+			{
+				exception = null;
 				return (false);
+			}
 
 			// Close workspace, only one workspace can exist within the application:
 			if (!CloseWorkspace())
+			{
+				exception = null;
 				return (false);
+			}
 
 			// Create new workspace:
 			OnFixedStatusTextRequest("Opening workspace...");
@@ -1329,6 +1370,7 @@ namespace YAT.Model
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(GetType(), ex, "Failed to open workspace from settings!");
+				exception = ex;
 				return (false);
 			}
 
@@ -1336,7 +1378,8 @@ namespace YAT.Model
 			AttachWorkspaceEventHandlers();
 
 			// Save auto workspace:
-			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath = settings.SettingsFilePath;
+			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath  = settings.SettingsFilePath;
+			ApplicationSettings.LocalUserSettings.AutoWorkspace.AutoSaved = settings.Settings.AutoSaved;
 			ApplicationSettings.Save();
 
 			// Save recent:
@@ -1355,6 +1398,7 @@ namespace YAT.Model
 			else
 				OnTimedStatusTextRequest("Workspace contains no terminal to open.");
 
+			exception = null;
 			return (true);
 		}
 
@@ -1403,11 +1447,11 @@ namespace YAT.Model
 		private bool OpenWorkspaceFile(string filePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler)
 		{
 			Guid guid;
-			System.Xml.XmlException exception;
+			Exception exception;
 			return (OpenWorkspaceFile(filePath, out settingsHandler, out guid, out exception));
 		}
 
-		private bool OpenWorkspaceFile(string filePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, out Guid guid, out System.Xml.XmlException exception)
+		private bool OpenWorkspaceFile(string filePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, out Guid guid, out Exception exception)
 		{
 			try
 			{
@@ -1432,7 +1476,7 @@ namespace YAT.Model
 					return (false);
 				}
 			}
-			catch (System.Xml.XmlException ex)
+			catch (Exception ex)
 			{
 				DebugEx.WriteException(GetType(), ex, "Failed to open workspace file!");
 				settingsHandler = null;
@@ -1476,17 +1520,17 @@ namespace YAT.Model
 
 		private bool OpenTerminalFile(string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
-			System.Xml.XmlException exception;
+			Exception exception;
 			return (OpenTerminalFile("", terminalFilePath, out settingsHandler, out exception));
 		}
 
 		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
-			System.Xml.XmlException exception;
+			Exception exception;
 			return (OpenTerminalFile(workspaceFilePath, terminalFilePath, out settingsHandler, out exception));
 		}
 
-		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out System.Xml.XmlException exception)
+		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
 		{
 			// Combine absolute workspace path with terminal path if that one is relative:
 			terminalFilePath = PathEx.CombineFilePaths(workspaceFilePath, terminalFilePath);
@@ -1508,7 +1552,7 @@ namespace YAT.Model
 					return (false);
 				}
 			}
-			catch (System.Xml.XmlException ex)
+			catch (Exception ex)
 			{
 				DebugEx.WriteException(GetType(), ex, "Failed to open terminal file!");
 				settingsHandler = null;
