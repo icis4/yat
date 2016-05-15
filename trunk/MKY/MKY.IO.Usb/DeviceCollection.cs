@@ -20,8 +20,30 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable verbose output:
+////#define DEBUG_VERBOSE
+
+#endif // DEBUG
+
+#endregion
+
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+
+#endregion
 
 namespace MKY.IO.Usb
 {
@@ -63,12 +85,21 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public virtual void FillWithAvailableDevices(bool retrieveStringsFromDevice = true)
 		{
-			Clear();
+			lock (this)
+			{
+				Clear();
 
-			foreach (DeviceInfo di in Device.GetDevicesFromGuid(this.classGuid, retrieveStringsFromDevice))
-				Add(di);
+				DebugVerboseIndent("Retrieving connected USB devices...");
+				foreach (DeviceInfo di in Device.GetDevicesFromGuid(this.classGuid, retrieveStringsFromDevice))
+				{
+					DebugVerboseIndent(di);
+					Add(di);
+					DebugVerboseUnindent();
+				}
+				DebugVerboseUnindent("...done");
 
-			Sort();
+				Sort();
+			}
 		}
 
 		/// <summary>
@@ -82,13 +113,16 @@ namespace MKY.IO.Usb
 		/// </returns>
 		public virtual bool ContainsVidPid(DeviceInfo item)
 		{
-			foreach (DeviceInfo di in this)
+			lock (this)
 			{
-				if (di.EqualsVidPid(item))
-					return (true);
-			}
+				foreach (DeviceInfo di in this)
+				{
+					if (di.EqualsVidPid(item))
+						return (true);
+				}
 
-			return (false);
+				return (false);
+			}
 		}
 
 		/// <summary>
@@ -103,8 +137,11 @@ namespace MKY.IO.Usb
 		/// </returns>
 		public virtual DeviceInfo FindVidPid(DeviceInfo item)
 		{
-			EqualsVidPid predicate = new EqualsVidPid(item);
-			return (Find(predicate.Match));
+			lock (this)
+			{
+				EqualsVidPid predicate = new EqualsVidPid(item);
+				return (Find(predicate.Match));
+			}
 		}
 
 		/// <summary>
@@ -120,9 +157,37 @@ namespace MKY.IO.Usb
 		/// </returns>
 		public virtual int FindIndexVidPid(DeviceInfo item)
 		{
-			EqualsVidPid predicate = new EqualsVidPid(item);
-			return (FindIndex(predicate.Match));
+			lock (this)
+			{
+				EqualsVidPid predicate = new EqualsVidPid(item);
+				return (FindIndex(predicate.Match));
+			}
 		}
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		[Conditional("DEBUG_VERBOSE")]
+		private void DebugVerboseIndent(string message = null)
+		{
+			if (!string.IsNullOrEmpty(message))
+				Debug.WriteLine(message);
+
+			Debug.Indent();
+		}
+
+		[Conditional("DEBUG_VERBOSE")]
+		private void DebugVerboseUnindent(string message = null)
+		{
+			Debug.Unindent();
+
+			if (!string.IsNullOrEmpty(message))
+				Debug.WriteLine(message);
+		}
+
+		#endregion
 	}
 }
 
