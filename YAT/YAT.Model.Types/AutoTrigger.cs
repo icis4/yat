@@ -93,8 +93,7 @@ namespace YAT.Model.Types
 
 		#endregion
 
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "'explicit' is a key word.")]
-		private Command explicit_;
+		private string explicitCommandString;
 
 		/// <summary>Default is <see cref="AutoTrigger.None"/>.</summary>
 		public const AutoTrigger Default = AutoTrigger.None;
@@ -112,23 +111,10 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "'explicit' is a key word.")]
-		public AutoTriggerEx(string explicit_)
+		public AutoTriggerEx(string explicitCommandString)
 			: base(AutoTrigger.Explicit)
 		{
-			this.explicit_ = new Command(explicit_);
-		}
-
-		/// <summary></summary>
-		public Command Explicit
-		{
-			get
-			{
-				if ((AutoTrigger)UnderlyingEnum == AutoTrigger.Explicit)
-					return (this.explicit_);
-				else
-					return (new Command());
-			}
+			this.explicitCommandString = explicitCommandString;
 		}
 
 		/// <summary></summary>
@@ -163,7 +149,49 @@ namespace YAT.Model.Types
 			}
 		}
 
-		#region ToString
+		#region Object Members
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(obj, null))
+				return (false);
+
+			if (GetType() != obj.GetType())
+				return (false);
+
+			AutoTriggerEx other = (AutoTriggerEx)obj;
+			if ((AutoTrigger)UnderlyingEnum == AutoTrigger.Explicit)
+			{
+				return
+				(
+					base.Equals(other) &&
+					(this.explicitCommandString == other.explicitCommandString)
+				);
+			}
+			else
+			{
+				return (base.Equals(other));
+			}
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+
+				if ((AutoTrigger)UnderlyingEnum == AutoTrigger.Explicit)
+					hashCode = (hashCode * 397) ^ (this.explicitCommandString != null ? this.explicitCommandString.GetHashCode() : 0);
+
+				return (hashCode);
+			}
+		}
 
 		/// <summary></summary>
 		public override string ToString()
@@ -184,7 +212,7 @@ namespace YAT.Model.Types
 				case AutoTrigger.PredefinedCommand11: return (PredefinedCommand_string + " 11]");
 				case AutoTrigger.PredefinedCommand12: return (PredefinedCommand_string + " 12]");
 				case AutoTrigger.AnyLine:             return (AnyLine_string);
-				case AutoTrigger.Explicit:            return (this.explicit_.SingleLineText);
+				case AutoTrigger.Explicit:            return (this.explicitCommandString);
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}

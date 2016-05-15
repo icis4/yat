@@ -33,6 +33,7 @@ namespace YAT.Application.Settings
 	public class AutoWorkspaceSettings : MKY.Settings.SettingsItem
 	{
 		private string filePath;
+		private bool autoSaved;
 
 		/// <summary></summary>
 		public AutoWorkspaceSettings()
@@ -68,7 +69,8 @@ namespace YAT.Application.Settings
 		{
 			base.SetMyDefaults();
 
-			FilePath = null;
+			FilePath  = ""; // Do not use 'null' in order to keep the item in the XML.
+			AutoSaved = false;
 		}
 
 		#region Properties
@@ -83,6 +85,9 @@ namespace YAT.Application.Settings
 			get { return (this.filePath); }
 			set
 			{
+				if (value == null)
+					value = ""; // Do not use 'null' in order to keep the item in the XML.
+
 				if (this.filePath != value)
 				{
 					this.filePath = value;
@@ -94,7 +99,25 @@ namespace YAT.Application.Settings
 		/// <summary></summary>
 		public virtual void ResetFilePath()
 		{
-			FilePath = null;
+			FilePath = ""; // Do not use 'null' in order to keep the item in the XML.
+		}
+
+		/// <summary>
+		/// Auto save means that the settings have been saved at an automatically chosen location,
+		/// without telling the user anything about it.
+		/// </summary>
+		[XmlElement("AutoSaved")]
+		public virtual bool AutoSaved
+		{
+			get { return (this.autoSaved); }
+			set
+			{
+				if (this.autoSaved != value)
+				{
+					this.autoSaved = value;
+					SetChanged();
+				}
+			}
 		}
 
 		#endregion
@@ -121,7 +144,8 @@ namespace YAT.Application.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				PathEx.Equals(FilePath, other.FilePath)
+				PathEx.Equals(FilePath, other.FilePath) &&
+				(AutoSaved == other.AutoSaved)
 			);
 		}
 
@@ -139,6 +163,7 @@ namespace YAT.Application.Settings
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
 				hashCode = (hashCode * 397) ^ (FilePath != null ? FilePath.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  AutoSaved.GetHashCode();
 
 				return (hashCode);
 			}
