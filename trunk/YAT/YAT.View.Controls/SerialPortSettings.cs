@@ -412,7 +412,7 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 
 			MKY.IO.Ports.BaudRateEx baudRate = this.baudRate;
-			if (Enabled && (baudRate == MKY.IO.Ports.BaudRate.UserDefined))
+			if (Enabled && (baudRate == MKY.IO.Ports.BaudRate.Explicit))
 				comboBox_BaudRate.Text = baudRate;
 			else if (Enabled)
 				comboBox_BaudRate.SelectedItem = baudRate;

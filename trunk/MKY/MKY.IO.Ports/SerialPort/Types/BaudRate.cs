@@ -62,7 +62,8 @@ namespace MKY.IO.Ports
 		Baud230400 = 230400,
 		Baud460800 = 460800,
 		Baud921600 = 921600,
-		UserDefined = 0
+
+		Explicit = 0
 	}
 
 	#pragma warning restore 1591
@@ -79,7 +80,7 @@ namespace MKY.IO.Ports
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class BaudRateEx : EnumEx
 	{
-		private int userDefinedBaudRate;
+		private int explicitBaudRate;
 
 		/// <summary>Default is <see cref="BaudRate.Baud009600"/>.</summary>
 		public const BaudRate Default = BaudRate.Baud009600;
@@ -98,11 +99,11 @@ namespace MKY.IO.Ports
 
 		/// <summary></summary>
 		public BaudRateEx(int baudRate)
-			: base(BaudRate.UserDefined)
+			: base(BaudRate.Explicit)
 		{
 			if (IsPotentiallyValidBaudRate(baudRate))
 			{
-				this.userDefinedBaudRate = baudRate;
+				this.explicitBaudRate = baudRate;
 			}
 			else
 			{
@@ -115,13 +116,55 @@ namespace MKY.IO.Ports
 			}
 		}
 
-		#region ToString
+		#region Object Members
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(obj, null))
+				return (false);
+
+			if (GetType() != obj.GetType())
+				return (false);
+
+			BaudRateEx other = (BaudRateEx)obj;
+			if ((BaudRate)UnderlyingEnum == BaudRate.Explicit)
+			{
+				return
+				(
+					base.Equals(other) &&
+					(this.explicitBaudRate == other.explicitBaudRate)
+				);
+			}
+			else
+			{
+				return (base.Equals(other));
+			}
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+
+				if ((BaudRate)UnderlyingEnum == BaudRate.Explicit)
+					hashCode = (hashCode * 397) ^ this.explicitBaudRate;
+
+				return (hashCode);
+			}
+		}
 
 		/// <summary></summary>
 		public override string ToString()
 		{
-			if (this == BaudRate.UserDefined)
-				return (this.userDefinedBaudRate.ToString(CultureInfo.InvariantCulture));
+			if (this == BaudRate.Explicit)
+				return (this.explicitBaudRate.ToString(CultureInfo.InvariantCulture));
 			else
 				return (UnderlyingEnum.GetHashCode().ToString(CultureInfo.InvariantCulture));
 		}
@@ -283,8 +326,8 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static implicit operator int(BaudRateEx baudRate)
 		{
-			if (baudRate == BaudRate.UserDefined)
-				return (baudRate.userDefinedBaudRate);
+			if (baudRate == BaudRate.Explicit)
+				return (baudRate.explicitBaudRate);
 			else
 				return (baudRate.GetHashCode());
 		}
