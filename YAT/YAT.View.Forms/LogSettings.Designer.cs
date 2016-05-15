@@ -33,7 +33,6 @@ namespace YAT.View.Forms
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogSettings));
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
@@ -256,7 +255,9 @@ namespace YAT.View.Forms
 			this.comboBox_Options_NameSeparator.Name = "comboBox_Options_NameSeparator";
 			this.comboBox_Options_NameSeparator.Size = new System.Drawing.Size(149, 21);
 			this.comboBox_Options_NameSeparator.TabIndex = 5;
-			this.toolTip.SetToolTip(this.comboBox_Options_NameSeparator, resources.GetString("comboBox_Options_NameSeparator.ToolTip"));
+			this.toolTip.SetToolTip(this.comboBox_Options_NameSeparator, "Either select a preset from the list, or fill in any valid sequence of characters" +
+        ".\r\n\\ / : * ? \" < > | are invalid characters.\r\n\r\nContact YAT via \"Help > Request " +
+        "Feature\" to request additional presets.");
 			this.comboBox_Options_NameSeparator.SelectedIndexChanged += new System.EventHandler(this.comboBox_Options_NameSeparator_SelectedIndexChanged);
 			this.comboBox_Options_NameSeparator.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Options_NameSeparator_Validating);
 			// 
@@ -433,8 +434,8 @@ namespace YAT.View.Forms
 			this.comboBox_Raw_Extension.Size = new System.Drawing.Size(72, 21);
 			this.comboBox_Raw_Extension.TabIndex = 7;
 			this.toolTip.SetToolTip(this.comboBox_Raw_Extension, "Either select a preset from the list, or fill in any valid extension.\r\n\\ / : * ? " +
-        "\" < > | are not valid characters.\r\n\r\nContact YAT via \"Help > Request Feature\" to" +
-        " request additional presets.");
+        "\" < > | are invalid characters.\r\n\r\nContact YAT via \"Help > Request Feature\" to r" +
+        "equest additional presets.");
 			this.comboBox_Raw_Extension.TextChanged += new System.EventHandler(this.comboBox_Raw_Extension_TextChanged);
 			this.comboBox_Raw_Extension.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Raw_Extension_Validating);
 			// 
@@ -529,8 +530,8 @@ namespace YAT.View.Forms
 			this.comboBox_Neat_Extension.Size = new System.Drawing.Size(72, 21);
 			this.comboBox_Neat_Extension.TabIndex = 7;
 			this.toolTip.SetToolTip(this.comboBox_Neat_Extension, "Either select a preset from the list, or fill in any valid extension.\r\n\\ / : * ? " +
-        "\" < > | are not valid characters.\r\n\r\nContact YAT via \"Help > Request Feature\" to" +
-        " request additional presets.");
+        "\" < > | are invalid characters.\r\n\r\nContact YAT via \"Help > Request Feature\" to r" +
+        "equest additional presets.");
 			this.comboBox_Neat_Extension.TextChanged += new System.EventHandler(this.comboBox_Neat_Extension_TextChanged);
 			this.comboBox_Neat_Extension.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Neat_Extension_Validating);
 			// 

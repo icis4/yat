@@ -277,7 +277,7 @@ namespace MKY.IO.Usb
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
-	/// Make sure to use the underlying enum for serialization.
+	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class HidUsagePageEx : EnumEx
@@ -320,7 +320,7 @@ namespace MKY.IO.Usb
 			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" is no valid HID usage page string."));
+				throw (new FormatException(@"""" + s + @""" is an invalid HID usage page string! String must a HID usage page number, or one of the predefined encodings."));
 		}
 
 		/// <remarks>
@@ -432,7 +432,7 @@ namespace MKY.IO.Usb
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
-	/// Make sure to use the underlying enum for serialization.
+	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class HidUsageIdEx : EnumEx
@@ -475,7 +475,7 @@ namespace MKY.IO.Usb
 			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" is no valid HID usage ID string."));
+				throw (new FormatException(@"""" + s + @""" is an invalid HID usage ID string! String must a HID usage number, or one of the predefined encodings."));
 		}
 
 		/// <remarks>

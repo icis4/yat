@@ -142,7 +142,7 @@ namespace YAT.View.Controls
 
 		/// <summary>
 		/// Returns command at the specified id.
-		/// Returns <c>null</c> if command is undefined or not valid.
+		/// Returns <c>null</c> if command is undefined or invalid.
 		/// </summary>
 		public virtual Command GetCommandFromId(int id)
 		{
@@ -190,7 +190,7 @@ namespace YAT.View.Controls
 
 		/// <summary>
 		/// Returns command that is assigned to the button at the specified location.
-		/// Returns <c>null</c> if no button or if command is undefined or not valid.
+		/// Returns <c>null</c> if no button or if command is undefined or invalid.
 		/// </summary>
 		public Command GetCommandFromScreenPoint(Point point)
 		{

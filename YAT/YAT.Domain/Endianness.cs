@@ -49,7 +49,7 @@ namespace YAT.Domain
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
-	/// Make sure to use the underlying enum for serialization.
+	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Endianness", Justification = "'Endianness' is a correct English term.")]
@@ -122,7 +122,7 @@ namespace YAT.Domain
 			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" is no valid endianness string."));
+				throw (new FormatException(@"""" + s + @""" is an invalid endianness string! String must one of the underlying enumeration designations."));
 		}
 
 		/// <remarks>

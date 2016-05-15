@@ -125,7 +125,7 @@ namespace MKY.IO.Serial.SerialPort
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" is no valid serial control pin state string."));
+				throw (new FormatException(@"""" + s + @""" is an invalid serial control pin state string! String must one of the underlying enumeration designations."));
 		}
 
 		/// <remarks>

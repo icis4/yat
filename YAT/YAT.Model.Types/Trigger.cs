@@ -70,7 +70,7 @@ namespace YAT.Model.Types
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
-	/// Make sure to use the underlying enum for serialization.
+	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class TriggerEx : EnumEx
@@ -245,7 +245,7 @@ namespace YAT.Model.Types
 			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" is no valid Trigger string."));
+				throw (new FormatException(@"""" + s + @""" is an invalid trigger string! String must be a valid trigger string, or one of the predefined triggers."));
 		}
 
 		/// <remarks>

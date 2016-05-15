@@ -77,7 +77,7 @@ namespace MKY.Text
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" is no valid escape sequence!"));
+				throw (new FormatException(@"""" + s + @""" is an invalid escape sequence! String must a valid C-style escape sequence."));
 		}
 
 		/// <summary>

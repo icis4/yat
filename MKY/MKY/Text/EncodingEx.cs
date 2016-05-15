@@ -685,7 +685,7 @@ namespace MKY.Text
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
-	/// Make sure to use the underlying enum for serialization.
+	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public class EncodingEx : EnumEx
@@ -1071,7 +1071,7 @@ namespace MKY.Text
 			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" is no valid encoding string!"));
+				throw (new FormatException(@"""" + s + @""" is an invalid encoding string! String must a code page number, or one of the predefined encodings."));
 		}
 
 		/// <summary></summary>

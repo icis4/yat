@@ -291,7 +291,7 @@ namespace MKY.IO.Usb
 		/// Microsoft further restricts the serial string as documented in <a href="https://msdn.microsoft.com/en-us/library/windows/hardware/dn423379%28v=vs.85%29.aspx#usbsn"/>:
 		/// "Plug and Play requires that every byte in a USB serial number be valid. If a single
 		///  byte is invalid, Windows discards the serial number and treats the device as if it
-		///  had no serial number. The following byte values are not valid for USB serial numbers:
+		///  had no serial number. The following byte values are invalid for USB serial numbers:
 		///  - Values less than 0x20.
 		///  - Values greater than 0x7F.
 		///  - 0x2C (comma)."

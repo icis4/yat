@@ -92,7 +92,7 @@ namespace YAT.Model.Types
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
-	/// Make sure to use the underlying enum for serialization.
+	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
@@ -177,7 +177,7 @@ namespace YAT.Model.Types
 			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" is no valid workspace layout string!"));
+				throw (new FormatException(@"""" + s + @""" is an invalid workspace layout string! String must one of the underlying enumeration designations."));
 		}
 
 		/// <remarks>

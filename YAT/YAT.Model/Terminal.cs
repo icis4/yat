@@ -1521,7 +1521,7 @@ namespace YAT.Model
 				}
 				else
 				{
-					// Let save fail if the file path is not valid and no user interaction is allowed.
+					// Let save fail if the file path is invalid and no user interaction is allowed.
 					return (false);
 				}
 			}

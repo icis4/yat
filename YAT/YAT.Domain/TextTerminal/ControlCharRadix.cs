@@ -144,7 +144,7 @@ namespace YAT.Domain
 			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" is no valid control char radix string."));
+				throw (new FormatException(@"""" + s + @""" is an invalid control char radix string! String must one of the underlying enumeration designations."));
 		}
 
 		/// <remarks>

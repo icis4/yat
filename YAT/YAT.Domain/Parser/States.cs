@@ -587,7 +587,7 @@ namespace YAT.Domain.Parser
 					(
 						@"Character '" + (char)parseChar + "' " +
 						@"(0x" + parseChar.ToString("X", CultureInfo.InvariantCulture) + ") " +
-						@"is no valid escape character."
+						@"is an invalid escape character."
 					);
 					return (false);
 				}
@@ -779,7 +779,7 @@ namespace YAT.Domain.Parser
 
 				sb.Append(@"""");
 				sb.Append(s);
-				sb.Append(@""" is no valid ASCII mnemonic.");
+				sb.Append(@""" is an invalid ASCII mnemonic.");
 
 				formatException = new FormatException(sb.ToString());
 				result = new byte[] { };

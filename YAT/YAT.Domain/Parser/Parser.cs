@@ -918,7 +918,7 @@ namespace YAT.Domain.Parser
 
 				sb.Append(@"""");
 				sb.Append(s);
-				sb.Append(@""" is no valid ");
+				sb.Append(@""" is an invalid ");
 
 				switch (radix)
 				{
@@ -962,7 +962,7 @@ namespace YAT.Domain.Parser
 				else
 				{
 					result = new Result[] { };
-					formatException = new FormatException(@"""" + token + @""" is no valid keyword.");
+					formatException = new FormatException(@"""" + token + @""" is an invalid keyword.");
 					return (false);
 				}
 			}
