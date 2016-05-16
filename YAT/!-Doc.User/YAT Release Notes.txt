@@ -127,7 +127,7 @@ Important changes:
 - Several other menu items and toolbar icons added (includes feature request #222).
 - Parser is now capable to handle contiguous values such as \h(01020304) (related to bug #326).
 - Parser error message improved in terms of accuracy of the error location (bug #268).
-- File handling error messages improved and unified (bug #338).
+- File handling as well as error messages improved and unified (bugs #320 and #338).
 - Lookup of serial COM ports improved (also fixes bug #23).
 - Handling of serial COM port RFR and DTR state improved (feature request #236 and bugs #203, #294).
 - Handling of serial COM port XOff state fixed and improved (feature req. #216 and bugs #255, #295).
