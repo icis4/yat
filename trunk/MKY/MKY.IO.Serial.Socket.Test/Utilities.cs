@@ -124,7 +124,7 @@ namespace MKY.IO.Serial.Socket.Test
 
 		internal static void StartTcpServer(out TcpServer server, out int localPort)
 		{
-			// Create server and initiate asych start.
+			// Create server and initiate asych start:
 			localPort = AvailableLocalTcpPort;
 			server = new TcpServer(IPAddress.Loopback, localPort);
 			if (!server.Start())
@@ -133,15 +133,15 @@ namespace MKY.IO.Serial.Socket.Test
 
 		internal static void StartTcpClient(out TcpClient client, int remotePort)
 		{
-			// Create client and initiate asych start.
-			client = new TcpClient(IPAddress.Loopback, remotePort);
+			// Create client and initiate asych start:
+			client = new TcpClient(IPAddress.Loopback, remotePort, IPAddress.Any);
 			if (!client.Start())
 				Assert.Fail("TCP/IP client could not be started!");
 		}
 
 		internal static void StartTcpAutoSocketAsServer(out TcpAutoSocket autoSocket, out int localPort)
 		{
-			// Create AutoSocket and initiate asych start.
+			// Create AutoSocket and initiate asych start:
 			localPort = AvailableLocalTcpPort;
 			autoSocket = new TcpAutoSocket(IPAddress.Loopback, localPort, IPAddress.Any, localPort);
 			if (!autoSocket.Start())
@@ -150,7 +150,7 @@ namespace MKY.IO.Serial.Socket.Test
 
 		internal static void StartTcpAutoSocketAsClient(out TcpAutoSocket autoSocket, int remotePort)
 		{
-			// Create AutoSocket and initiate asych start.
+			// Create AutoSocket and initiate asych start:
 			autoSocket = new TcpAutoSocket(IPAddress.Loopback, remotePort, IPAddress.Any, remotePort);
 			if (!autoSocket.Start())
 				Assert.Fail("TCP/IP AutoSocket could not be started!");
@@ -158,7 +158,7 @@ namespace MKY.IO.Serial.Socket.Test
 
 		internal static void StartUdpPairSocket(out UdpSocket pairSocket, int remotePort, int localPort)
 		{
-			// Create socket and initiate asych start.
+			// Create socket and initiate asych start:
 			pairSocket = new UdpSocket(IPAddress.Loopback, remotePort, localPort);
 			if (!pairSocket.Start())
 				Assert.Fail("UDP/IP PairSocket could not be started!");
@@ -166,25 +166,25 @@ namespace MKY.IO.Serial.Socket.Test
 
 		internal static void StopTcpServer(TcpServer server)
 		{
-			// Initiate async stop.
+			// Initiate async stop:
 			server.Stop();
 		}
 
 		internal static void StopTcpClient(TcpClient client)
 		{
-			// Initiate async stop.
+			// Initiate async stop:
 			client.Stop();
 		}
 
 		internal static void StopTcpAutoSocket(TcpAutoSocket autoSocket)
 		{
-			// Initiate async stop.
+			// Initiate async stop:
 			autoSocket.Stop();
 		}
 
 		internal static void StopUdpSocket(UdpSocket socket)
 		{
-			// Initiate async stop.
+			// Initiate async stop:
 			socket.Stop();
 		}
 
