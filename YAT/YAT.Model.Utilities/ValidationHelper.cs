@@ -39,7 +39,7 @@ using MKY.Windows.Forms;
 namespace YAT.Model.Utilities
 {
 	/// <summary></summary>
-	public static class Validation
+	public static class ValidationHelper
 	{
 		/// <summary>Validation using <see cref="Domain.Radix.String"/> and <see cref="Domain.Parser.Modes.AllByteArrayResults"/>.</summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
