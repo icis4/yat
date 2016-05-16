@@ -495,25 +495,41 @@ namespace YAT.View.Controls
 			StringBuilder sb = new StringBuilder();
 
 			if (!string.IsNullOrEmpty(info))
-			{
-				sb.AppendLine(info);
-				sb.AppendLine();
-			}
+				sb.Append(info);
 
 			if (ex != null)
 			{
+				if (sb.Length > 0)
+				{
+					sb.AppendLine();
+					sb.AppendLine();
+				}
+
 				sb.AppendLine("System error message:");
-				sb.AppendLine(ex.Message);
+				sb.Append(ex.Message);
+
+				if (ex.InnerException != null)
+				{
+					sb.AppendLine();
+					sb.AppendLine();
+					sb.AppendLine("Additional error message:");
+					sb.Append(ex.InnerException.Message);
+				}
+			}
+
+			if (sb.Length > 0)
+			{
+				sb.AppendLine();
 				sb.AppendLine();
 			}
 
-			sb.AppendLine("Check the serial COM ports of your system.");
-			sb.AppendLine();
+			sb.Append("Check the serial COM ports of your system.");
 
 			if (!string.IsNullOrEmpty(hint))
 			{
-				sb.AppendLine(hint);
 				sb.AppendLine();
+				sb.AppendLine();
+				sb.Append(hint);
 			}
 
 			MessageBoxEx.Show

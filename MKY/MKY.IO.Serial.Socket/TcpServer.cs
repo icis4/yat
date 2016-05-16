@@ -53,6 +53,7 @@ using System.Threading;
 using MKY.Collections.Generic;
 using MKY.Contracts;
 using MKY.Diagnostics;
+using MKY.Net;
 
 #endregion
 
@@ -124,7 +125,7 @@ namespace MKY.IO.Serial.Socket
 		private int instanceId;
 		private bool isDisposed;
 
-		private System.Net.IPAddress localIPAddress;
+		private IPNetworkInterfaceEx localInterface;
 		private int localPort;
 
 		private SocketState state = SocketState.Reset;
@@ -184,17 +185,17 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <summary></summary>
-		public TcpServer(System.Net.IPAddress localIPAddress, int localPort)
-			: this(SocketBase.NextInstanceId, localIPAddress, localPort)
+		public TcpServer(IPNetworkInterfaceEx localInterface, int localPort)
+			: this(SocketBase.NextInstanceId, localInterface, localPort)
 		{
 		}
 
 		/// <summary></summary>
-		public TcpServer(int instanceId, System.Net.IPAddress localIPAddress, int localPort)
+		public TcpServer(int instanceId, IPNetworkInterfaceEx localInterface, int localPort)
 		{
 			this.instanceId = instanceId;
 
-			this.localIPAddress = localIPAddress;
+			this.localInterface = localInterface;
 			this.localPort      = localPort;
 		}
 
@@ -271,13 +272,13 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual System.Net.IPAddress LocalIPAddress
+		public virtual IPNetworkInterfaceEx LocalInterface
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.localIPAddress);
+				return (this.localInterface);
 			}
 		}
 

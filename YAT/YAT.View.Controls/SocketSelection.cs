@@ -59,7 +59,7 @@ namespace YAT.View.Controls
 		private const int RemoteUdpPortDefault                             = MKY.IO.Serial.Socket.SocketSettings.RemoteUdpPortDefault;
 
 		private static readonly IPNetworkInterfaceEx LocalInterfaceDefault = MKY.IO.Serial.Socket.SocketSettings.LocalInterfaceDefault;
-		private static readonly IPAddressFilterEx LocalFilterDefault       = MKY.IO.Serial.Socket.SocketSettings.LocalFilterDefault;
+		private static readonly IPFilterEx LocalFilterDefault              = MKY.IO.Serial.Socket.SocketSettings.LocalFilterDefault;
 		private const int LocalTcpPortDefault                              = MKY.IO.Serial.Socket.SocketSettings.LocalTcpPortDefault;
 		private const int LocalUdpPortDefault                              = MKY.IO.Serial.Socket.SocketSettings.LocalUdpPortDefault;
 
@@ -85,7 +85,7 @@ namespace YAT.View.Controls
 		private int remoteUdpPort                   = RemoteUdpPortDefault;
 
 		private IPNetworkInterfaceEx localInterface = LocalInterfaceDefault;
-		private IPAddressFilterEx localFilter       = LocalFilterDefault;
+		private IPFilterEx localFilter              = LocalFilterDefault;
 		private int localTcpPort                    = LocalTcpPortDefault;
 		private int localUdpPort                    = LocalUdpPortDefault;
 
@@ -176,10 +176,10 @@ namespace YAT.View.Controls
 			get { return (this.remoteHost); }
 			set
 			{
-				if ((this.remoteHost != value) ||
-					(value.Address == IPAddress.Loopback)) // Always SetControls() to be able to
-				{	                                       //   deal with the different types of
-					this.remoteHost = value;               //   localhost/loopback.
+				if ((this.remoteHost != value) || // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+					(value.Address.Equals(IPAddress.Loopback))) // Always SetControls() to be able to
+				{	                                            //   deal with the different types of
+					this.remoteHost = value;                    //   localhost/loopback.
 					SetControls();
 					OnRemoteHostChanged(EventArgs.Empty);
 				}
@@ -230,10 +230,10 @@ namespace YAT.View.Controls
 			get { return (this.localInterface); }
 			set
 			{
-				if ((this.localInterface != value) ||
-					(value.Address == IPAddress.Loopback)) // Always SetControls() to be able to
-				{	                                       //   deal with the different types of
-					this.localInterface = value;           //   localhost/loopback.
+				if ((this.localInterface != value) || // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+					(value.Address.Equals(IPAddress.Loopback))) // Always SetControls() to be able to
+				{	                                            //   deal with the different types of
+					this.localInterface = value;                //   localhost/loopback.
 					SetControls();
 					OnLocalInterfaceChanged(EventArgs.Empty);
 				}
@@ -243,15 +243,15 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual IPAddressFilterEx LocalFilter
+		public virtual IPFilterEx LocalFilter
 		{
 			get { return (this.localFilter); }
 			set
 			{
-				if ((this.localFilter != value) ||
-					(value.Address == IPAddress.Any)) // Always SetControls() to be able to
-				{                                     //   deal with the different types of
-					this.localFilter = value;         //   any.
+				if ((this.localFilter != value) || // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+					(value.Address.Equals(IPAddress.Any))) // Always SetControls() to be able to
+				{                                          //   deal with the different types of
+					this.localFilter = value;              //   any.
 					SetControls();
 					OnLocalFilterChanged(EventArgs.Empty);
 				}
@@ -394,7 +394,7 @@ namespace YAT.View.Controls
 				// Do not assume that the selected item maches the actual text in the box
 				//   because SelectedItem is also set if text has changed in the meantime.
 
-				var localFilter = (comboBox_LocalFilter.SelectedItem as IPAddressFilterEx);
+				var localFilter = (comboBox_LocalFilter.SelectedItem as IPFilterEx);
 				if ((localFilter != null) && (localFilter.Address != IPAddress.None) &&
 					StringEx.EqualsOrdinalIgnoreCase(localFilter.ToString(), comboBox_LocalFilter.Text))
 				{
@@ -403,8 +403,8 @@ namespace YAT.View.Controls
 				else
 				{
 					// Immediately try to resolve the corresponding IP address:
-					IPAddressFilterEx ipAddressFilter;
-					if (IPAddressFilterEx.TryParseAndResolve(comboBox_LocalFilter.Text, out ipAddressFilter))
+					IPFilterEx ipAddressFilter;
+					if (IPFilterEx.TryParseAndResolve(comboBox_LocalFilter.Text, out ipAddressFilter))
 					{
 						LocalFilter = ipAddressFilter;
 					}
@@ -599,7 +599,7 @@ namespace YAT.View.Controls
 
 			// Local filter:
 			comboBox_LocalFilter.Items.Clear();
-			comboBox_LocalFilter.Items.AddRange(IPAddressFilterEx.GetItems());
+			comboBox_LocalFilter.Items.AddRange(IPFilterEx.GetItems());
 
 			this.isSettingControls.Leave();
 		}
