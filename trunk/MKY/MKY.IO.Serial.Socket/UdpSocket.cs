@@ -107,10 +107,10 @@ namespace MKY.IO.Serial.Socket
 		private int instanceId;
 		private UdpSocketType socketType;
 
-		private System.Net.IPAddress remoteIPAddress;
+		private IPHostEx remoteHost;
 		private int remotePort;
 		private int localPort;
-		private System.Net.IPAddress localIPAddressFilter;
+		private IPFilterEx localFilter;
 
 		private UdpServerSendMode serverSendMode;
 
@@ -192,21 +192,21 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.Server"/>.</summary>
-		public UdpSocket(int localPort, System.Net.IPAddress localIPAddressFilter, UdpServerSendMode serverSendMode)
-			: this(SocketBase.NextInstanceId, localPort, localIPAddressFilter, serverSendMode)
+		public UdpSocket(int localPort, IPFilterEx localFilter, UdpServerSendMode serverSendMode)
+			: this(SocketBase.NextInstanceId, localPort, localFilter, serverSendMode)
 		{
 		}
 
 		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.Server"/>.</summary>
-		public UdpSocket(int instanceId, int localPort, System.Net.IPAddress localIPAddressFilter, UdpServerSendMode serverSendMode)
-			: this(instanceId, UdpSocketType.Server, System.Net.IPAddress.None, 0, localPort, localIPAddressFilter, serverSendMode)
+		public UdpSocket(int instanceId, int localPort, IPFilterEx localFilter, UdpServerSendMode serverSendMode)
+			: this(instanceId, UdpSocketType.Server, System.Net.IPAddress.None, 0, localPort, localFilter, serverSendMode)
 		{
 		}
 
 		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.PairSocket"/>.</summary>
 		/// <remarks>The local IP address filter is set to the remote IP address.</remarks>
-		public UdpSocket(System.Net.IPAddress remoteIPAddress, int remotePort, int localPort)
-			: this(SocketBase.NextInstanceId, remoteIPAddress, remotePort, localPort)
+		public UdpSocket(IPHostEx remoteHost, int remotePort, int localPort)
+			: this(SocketBase.NextInstanceId, remoteHost, remotePort, localPort)
 		{
 		}
 
@@ -219,39 +219,39 @@ namespace MKY.IO.Serial.Socket
 
 		/// <summary>Creates a new UDP socket of the given type.</summary>
 		/// <remarks>The local IP address filter is defaulted to <see cref="System.Net.IPAddress.Any"/>.</remarks>
-		public UdpSocket(UdpSocketType socketType, System.Net.IPAddress remoteIPAddress, int remotePort, int localPort)
-			: this(SocketBase.NextInstanceId, socketType, remoteIPAddress, remotePort, localPort, System.Net.IPAddress.Any, UdpServerSendMode.None)
+		public UdpSocket(UdpSocketType socketType, IPHostEx remoteHost, int remotePort, int localPort)
+			: this(SocketBase.NextInstanceId, socketType, remoteHost, remotePort, localPort, System.Net.IPAddress.Any, UdpServerSendMode.None)
 		{
 		}
 
 		/// <summary>Creates a new UDP socket of the given type.</summary>
 		/// <remarks>The local IP address filter is defaulted to <see cref="System.Net.IPAddress.Any"/>.</remarks>
-		public UdpSocket(int instanceId, UdpSocketType socketType, System.Net.IPAddress remoteIPAddress, int remotePort, int localPort)
-			: this(instanceId, socketType, remoteIPAddress, remotePort, localPort, System.Net.IPAddress.Any)
+		public UdpSocket(int instanceId, UdpSocketType socketType, IPHostEx remoteHost, int remotePort, int localPort)
+			: this(instanceId, socketType, remoteHost, remotePort, localPort, System.Net.IPAddress.Any)
 		{
 		}
 
 		/// <summary>Creates a new UDP socket of the given type.</summary>
-		public UdpSocket(UdpSocketType socketType, System.Net.IPAddress remoteIPAddress, int remotePort, int localPort, System.Net.IPAddress localIPAddressFilter, UdpServerSendMode serverSendMode)
-			: this(SocketBase.NextInstanceId, socketType, remoteIPAddress, remotePort, localPort, localIPAddressFilter, serverSendMode)
+		public UdpSocket(UdpSocketType socketType, IPHostEx remoteHost, int remotePort, int localPort, IPFilterEx localFilter, UdpServerSendMode serverSendMode)
+			: this(SocketBase.NextInstanceId, socketType, remoteHost, remotePort, localPort, localFilter, serverSendMode)
 		{
 		}
 
 		/// <summary>Creates a new UDP socket of the given type.</summary>
-		public UdpSocket(int instanceId, UdpSocketType socketType, System.Net.IPAddress remoteIPAddress, int remotePort, int localPort, System.Net.IPAddress localIPAddressFilter)
-			: this(instanceId, socketType, remoteIPAddress, remotePort, localPort, localIPAddressFilter, UdpServerSendMode.None)
+		public UdpSocket(int instanceId, UdpSocketType socketType, IPHostEx remoteHost, int remotePort, int localPort, IPFilterEx localFilter)
+			: this(instanceId, socketType, remoteHost, remotePort, localPort, localFilter, UdpServerSendMode.None)
 		{
 		}
 		/// <summary>Creates a new UDP socket of the given type.</summary>
-		public UdpSocket(int instanceId, UdpSocketType socketType, System.Net.IPAddress remoteIPAddress, int remotePort, int localPort, System.Net.IPAddress localIPAddressFilter, UdpServerSendMode serverSendMode)
+		public UdpSocket(int instanceId, UdpSocketType socketType, IPHostEx remoteHost, int remotePort, int localPort, IPFilterEx localFilter, UdpServerSendMode serverSendMode)
 		{
 			this.instanceId = instanceId;
 			this.socketType = socketType;
 
-			this.remoteIPAddress      = remoteIPAddress;
-			this.remotePort           = remotePort;
-			this.localPort            = localPort;
-			this.localIPAddressFilter = localIPAddressFilter;
+			this.remoteHost  = remoteHost;
+			this.remotePort  = remotePort;
+			this.localPort   = localPort;
+			this.localFilter = localFilter;
 
 			this.serverSendMode       = serverSendMode;
 		}
@@ -334,14 +334,14 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		public virtual System.Net.IPAddress RemoteIPAddress
+		public virtual IPHostEx RemoteHost
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				lock (this.socketSyncObj)
-					return (this.remoteIPAddress);
+					return (this.remoteHost);
 			}
 		}
 
@@ -353,7 +353,7 @@ namespace MKY.IO.Serial.Socket
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				lock (this.socketSyncObj)
-					return ((this.remoteIPAddress != null) && (this.remoteIPAddress != System.Net.IPAddress.None));
+					return ((this.remoteHost != null) && (this.remoteHost.Address != System.Net.IPAddress.None));
 			}
 		}
 
@@ -377,7 +377,7 @@ namespace MKY.IO.Serial.Socket
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				lock (this.socketSyncObj)
-					return (new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort));
+					return (new System.Net.IPEndPoint(this.remoteHost, this.remotePort));
 			}
 		}
 
@@ -394,14 +394,14 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		public virtual System.Net.IPAddress LocalIPAddressFilter
+		public virtual IPFilterEx LocalFilter
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				lock (this.socketSyncObj)
-					return (this.localIPAddressFilter);
+					return (this.localFilter);
 			}
 		}
 
@@ -530,9 +530,18 @@ namespace MKY.IO.Serial.Socket
 
 			if (IsStopped)
 			{
-				DebugMessage("Starting...");
-				StartSocket();
-				return (true);
+				DebugMessage("Resolving local filter addres...");
+				if (this.localFilter.TryResolve())
+				{
+					DebugMessage("Starting...");
+					StartSocket();
+					return (true);
+				}
+				else
+				{
+					DebugMessage("...failed");
+					return (false);
+				}
 			}
 			else
 			{
@@ -628,7 +637,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			System.Net.IPEndPoint remoteEndPoint;
 			lock (this.socketSyncObj)
-				remoteEndPoint = new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort);
+				remoteEndPoint = new System.Net.IPEndPoint(this.remoteHost, this.remotePort);
 
 			DebugThreadStateMessage("SendThread() has started.");
 
@@ -687,7 +696,7 @@ namespace MKY.IO.Serial.Socket
 							else // Server => Remote endpoint is the sender of the last received data.
 							{
 								lock (this.socketSyncObj)
-									remoteEndPoint = new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort);
+									remoteEndPoint = new System.Net.IPEndPoint(this.remoteHost, this.remotePort);
 
 								this.socket.Send(data, data.Length, remoteEndPoint);
 							}
@@ -795,7 +804,7 @@ namespace MKY.IO.Serial.Socket
 				{
 					this.socket.ExclusiveAddressUse = false;
 					this.socket.Client.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.ReuseAddress, true);
-					this.socket.Client.Bind(new System.Net.IPEndPoint(this.localIPAddressFilter, this.localPort));
+					this.socket.Client.Bind(new System.Net.IPEndPoint(this.localFilter, this.localPort));
 				}
 				else // Client
 				{
@@ -805,7 +814,7 @@ namespace MKY.IO.Serial.Socket
 				if ((this.socketType == UdpSocketType.Client) ||
 					(this.socketType == UdpSocketType.PairSocket)) // Connect the client port:
 				{
-					this.socket.Connect(this.remoteIPAddress, this.remotePort);
+					this.socket.Connect(this.remoteHost.Address, this.remotePort);
 				}
 				else // Server
 				{
@@ -914,7 +923,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			lock (this.socketSyncObj)
 			{
-				System.Net.IPEndPoint localFilterEndPoint = new System.Net.IPEndPoint(this.localIPAddressFilter, this.localPort);
+				System.Net.IPEndPoint localFilterEndPoint = new System.Net.IPEndPoint(this.localFilter, this.localPort);
 
 				AsyncReceiveState state = new AsyncReceiveState(localFilterEndPoint, this.socket);
 				this.socket.BeginReceive(new AsyncCallback(ReceiveCallback), state);
@@ -959,17 +968,17 @@ namespace MKY.IO.Serial.Socket
 
 									switch (this.serverSendMode)
 									{
-										case UdpServerSendMode.None:                                                               /* Do nothing. */           break;
-										case UdpServerSendMode.First:      if (this.remoteIPAddress == System.Net.IPAddress.None) updateRemoteEndPoint = true; break;
-										case UdpServerSendMode.MostRecent:                                                        updateRemoteEndPoint = true; break;
+										case UdpServerSendMode.None:                                                                       /* Do nothing. */           break;
+										case UdpServerSendMode.First:      if (this.remoteHost.Address.Equals(System.Net.IPAddress.None)) updateRemoteEndPoint = true; break; // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+										case UdpServerSendMode.MostRecent:                                                                updateRemoteEndPoint = true; break;
 										default: throw (new InvalidOperationException("Program execution should never get here,'" + this.serverSendMode.ToString() + "' is an unknown UDP/IP server send mode!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 									}
 
 									if (updateRemoteEndPoint)
 									{
-										if (!this.remoteIPAddress.Equals(remoteEndPoint.Address)) // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+										if (!this.remoteHost.Equals(remoteEndPoint.Address)) // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 										{
-											this.remoteIPAddress = remoteEndPoint.Address;
+											this.remoteHost = remoteEndPoint.Address;
 											hasChanged = true;
 										}
 
@@ -1074,7 +1083,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
 		public virtual string ToShortEndPointString()
 		{
-			return ("Receive:" + this.localPort + " / " + IPHostEx.ToEndpointAdressString(this.remoteIPAddress) + ":" + this.remotePort);
+			return ("Receive:" + this.localPort + " / " + this.remoteHost.ToEndpointAdressString() + ":" + this.remotePort);
 		}
 
 		#endregion

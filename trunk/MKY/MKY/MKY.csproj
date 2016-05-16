@@ -116,7 +116,8 @@
     <Compile Include="IO\DirectoryEx.cs" />
     <Compile Include="IO\StreamEx.cs" />
     <Compile Include="IO\Temp.cs" />
-    <Compile Include="Net\IPAddressFilter.cs" />
+    <Compile Include="Net\IPFilter.cs" />
+    <Compile Include="Net\IPNetworkInterfaceDescriptorPair.cs" />
     <Compile Include="Random\RandomEx.cs" />
     <Compile Include="Settings\SettingsFileHandler.cs" />
     <Compile Include="Text\Ascii.cs" />

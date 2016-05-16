@@ -124,7 +124,7 @@ namespace MKY.IO.Serial.Socket
 		private int instanceId;
 		private bool isDisposed;
 
-		private System.Net.IPAddress remoteIPAddress;
+		private IPHostEx remoteHost;
 		private int remotePort;
 		private AutoRetry autoReconnect;
 
@@ -188,31 +188,31 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <summary></summary>
-		public TcpClient(System.Net.IPAddress remoteIPAddress, int remotePort)
-			: this(SocketBase.NextInstanceId, remoteIPAddress, remotePort)
+		public TcpClient(IPHostEx remoteHost, int remotePort)
+			: this(SocketBase.NextInstanceId, remoteHost, remotePort)
 		{
 		}
 
 		/// <summary></summary>
-		public TcpClient(int instanceId, System.Net.IPAddress remoteIPAddress, int remotePort)
-			: this(instanceId, remoteIPAddress, remotePort, new AutoRetry())
+		public TcpClient(int instanceId, IPHostEx remoteHost, int remotePort)
+			: this(instanceId, remoteHost, remotePort, new AutoRetry())
 		{
 		}
 
 		/// <summary></summary>
-		public TcpClient(System.Net.IPAddress remoteIPAddress, int remotePort, AutoRetry autoReconnect)
-			: this(SocketBase.NextInstanceId, remoteIPAddress, remotePort, autoReconnect)
+		public TcpClient(IPHostEx remoteHost, int remotePort, AutoRetry autoReconnect)
+			: this(SocketBase.NextInstanceId, remoteHost, remotePort, autoReconnect)
 		{
 		}
 
 		/// <summary></summary>
-		public TcpClient(int instanceId, System.Net.IPAddress remoteIPAddress, int remotePort, AutoRetry autoReconnect)
+		public TcpClient(int instanceId, IPHostEx remoteHost, int remotePort, AutoRetry autoReconnect)
 		{
 			this.instanceId = instanceId;
 
-			this.remoteIPAddress = remoteIPAddress;
-			this.remotePort      = remotePort;
-			this.autoReconnect   = autoReconnect;
+			this.remoteHost    = remoteHost;
+			this.remotePort    = remotePort;
+			this.autoReconnect = autoReconnect;
 		}
 
 		#region Disposal
@@ -289,13 +289,13 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual System.Net.IPAddress RemoteIPAddress
+		public virtual IPHostEx RemoteHost
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.remoteIPAddress);
+				return (this.remoteHost);
 			}
 		}
 
@@ -435,9 +435,18 @@ namespace MKY.IO.Serial.Socket
 
 			if (IsStopped)
 			{
-				DebugMessage("Starting...");
-				StartSocketAndThread();
-				return (true);
+				DebugMessage("Resolving host address...");
+				if (this.remoteHost.TryResolve())
+				{
+					DebugMessage("Starting...");
+					StartSocketAndThread();
+					return (true);
+				}
+				else
+				{
+					DebugMessage("...failed");
+					return (false);
+				}
 			}
 			else
 			{
@@ -549,7 +558,7 @@ namespace MKY.IO.Serial.Socket
 				this.socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketClient
 				(
 					ALAZ.SystemEx.NetEx.SocketsEx.CallbackThreadType.ctWorkerThread,
-					(ALAZ.SystemEx.NetEx.SocketsEx.ISocketService)this,
+					this,
 					ALAZ.SystemEx.NetEx.SocketsEx.DelimiterType.dtNone,
 					null,
 					SocketDefaults.SocketBufferSize,
@@ -558,7 +567,7 @@ namespace MKY.IO.Serial.Socket
 					Timeout.Infinite
 				);
 
-				this.socket.AddConnector("MKY.IO.Serial.Socket.TcpClient", new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort));
+				this.socket.AddConnector("MKY.IO.Serial.Socket.TcpClient", new System.Net.IPEndPoint(this.remoteHost.Address, this.remotePort));
 				this.socket.Start(); // The ALAZ socket will be started asynchronously
 			}
 		}
@@ -801,7 +810,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			System.Net.IPEndPoint remoteEndPoint;
 			lock (this.socketSyncObj) // Remote end point is fixed for a TCP/IP client object.
-				remoteEndPoint = new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort);
+				remoteEndPoint = new System.Net.IPEndPoint(this.remoteHost.Address, this.remotePort);
 
 			DebugThreadStateMessage("SendThread() has started.");
 
@@ -942,7 +951,7 @@ namespace MKY.IO.Serial.Socket
 
 						if (e.Exception is ALAZ.SystemEx.NetEx.SocketsEx.ReconnectAttemptException)
 						{
-							OnIOError(new IOErrorEventArgs(ErrorSeverity.Acceptable, "Failed to connect to TCP/IP server " + this.remoteIPAddress + ":" + this.remotePort));
+							OnIOError(new IOErrorEventArgs(ErrorSeverity.Acceptable, "Failed to connect to TCP/IP server " + this.remoteHost.Address + ":" + this.remotePort));
 						}
 						else
 						{
@@ -1077,7 +1086,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
 		public virtual string ToShortEndPointString()
 		{
-			return (IPHostEx.ToEndpointAdressString(this.remoteIPAddress) + ":" + this.remotePort);
+			return (this.remoteHost.ToEndpointAdressString() + ":" + this.remotePort);
 		}
 
 		#endregion

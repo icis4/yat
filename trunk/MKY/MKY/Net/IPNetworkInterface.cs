@@ -25,13 +25,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using System.Net.Sockets;
-
-using MKY.Diagnostics;
 
 namespace MKY.Net
 {
-	#region Enum IPNetworkInterfaceType
+	#region Enum IPNetworkInterface
 
 	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
 	// warnings for each undocumented member below. Documenting each member makes little sense
@@ -66,7 +63,7 @@ namespace MKY.Net
 	#endregion
 
 	/// <summary>
-	/// Extended enum IPNetworkInterface.
+	/// Extended enum IPNetworkInterfaceEx.
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
@@ -92,8 +89,8 @@ namespace MKY.Net
 
 		#endregion
 
-		private IPAddress explicitAddress     = IPAddress.None;
 		private string    explicitDescription = null;
+		private IPAddress explicitAddress     = IPAddress.None;
 
 		/// <summary>Default is <see cref="IPNetworkInterface.Any"/>.</summary>
 		public const IPNetworkInterface Default = IPNetworkInterface.Any;
@@ -109,22 +106,40 @@ namespace MKY.Net
 			: base(networkInterface)
 		{
 			if (networkInterface == IPNetworkInterface.Explicit)
-				throw (new InvalidOperationException("'IPNetworkInterface.Explicit' requires an IP address, use IPNetworkInterfaceEx(IPAddress, string) instead!"));
+				throw (new InvalidOperationException("'IPNetworkInterface.Explicit' requires an IP address or interface description, use IPNetworkInterfaceEx(IPAddress, string) instead!"));
+		}
+
+		/// <summary></summary>
+		public IPNetworkInterfaceEx(string description)
+		{
+			if (string.IsNullOrEmpty(description))
+				throw (new ArgumentException("'IPNetworkInterface.Explicit' requires an IP address or interface description!", "description"));
+
+			SetUnderlyingEnum(IPNetworkInterface.Explicit);
+
+			this.explicitDescription = description;
+			this.explicitAddress     = IPAddress.None;
 		}
 
 		/// <summary></summary>
 		public IPNetworkInterfaceEx(IPAddress address, string description = null)
-		{
-			if      (address == IPAddress.Any)          { SetUnderlyingEnum(IPNetworkInterface.Any);          this.explicitAddress = IPAddress.None; }
-			else if (address == IPAddress.Loopback)     { SetUnderlyingEnum(IPNetworkInterface.Loopback);     this.explicitAddress = IPAddress.None; }
-			else if (address == IPAddress.IPv6Any)      { SetUnderlyingEnum(IPNetworkInterface.IPv6Any);      this.explicitAddress = IPAddress.None; }
-			else if (address == IPAddress.IPv6Loopback) { SetUnderlyingEnum(IPNetworkInterface.IPv6Loopback); this.explicitAddress = IPAddress.None; }
-			else                                        { SetUnderlyingEnum(IPNetworkInterface.Explicit);     this.explicitAddress = address;        }
+		{                        // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+			if      (address.Equals(IPAddress.Any))          { SetUnderlyingEnum(IPNetworkInterface.Any);          this.explicitAddress = IPAddress.None; }
+			else if (address.Equals(IPAddress.Loopback))     { SetUnderlyingEnum(IPNetworkInterface.Loopback);     this.explicitAddress = IPAddress.None; }
+			else if (address.Equals(IPAddress.IPv6Any))      { SetUnderlyingEnum(IPNetworkInterface.IPv6Any);      this.explicitAddress = IPAddress.None; }
+			else if (address.Equals(IPAddress.IPv6Loopback)) { SetUnderlyingEnum(IPNetworkInterface.IPv6Loopback); this.explicitAddress = IPAddress.None; }
+			else
+			{
+				if ((address == null) && string.IsNullOrEmpty(description))
+					throw (new InvalidOperationException("'IPNetworkInterface.Explicit' requires an IP address or interface description!"));
 
-			this.explicitDescription = description;
+				SetUnderlyingEnum(IPNetworkInterface.Explicit);
 
-			// Note that 'IPHostType.IPv4Localhost' cannot be distinguished from 'IPHostType.Localhost' when 'IPAddress.Loopback' is given.
-			// Also note that similar but optimized code is found at FromIPAddress() further below.
+				this.explicitDescription = description;
+				this.explicitAddress     = address;
+			}
+
+			// Note that 'IPNetworkInterface.IPv4Loopback' cannot be distinguished from 'IPNetworkInterface.Loopback' when 'IPAddress.Loopback' is given.
 		}
 
 		#region Properties
@@ -153,12 +168,23 @@ namespace MKY.Net
 		{
 			get
 			{
-				if (!string.IsNullOrEmpty(this.explicitDescription))
-					return (this.explicitDescription);
-				else if (this.explicitAddress != null)
-					return (this.explicitAddress.ToString());
-				else
-					return ("");
+				switch ((IPNetworkInterface)UnderlyingEnum)
+				{
+					case IPNetworkInterface.Any:          return (Any_string);
+					case IPNetworkInterface.Loopback:     return (Loopback_string);
+					case IPNetworkInterface.IPv4Any:      return (IPv4Any_string);
+					case IPNetworkInterface.IPv4Loopback: return (IPv4Loopback_string);
+					case IPNetworkInterface.IPv6Any:      return (IPv6Any_string);
+					case IPNetworkInterface.IPv6Loopback: return (IPv6Loopback_string);
+					case IPNetworkInterface.Explicit:
+					{
+						if (!string.IsNullOrEmpty(this.explicitDescription))
+							return (this.explicitDescription);
+						else
+							return ("");
+					}
+				}
+				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -201,8 +227,8 @@ namespace MKY.Net
 				return
 				(
 					base.Equals(other) &&
+					(this.explicitDescription == other.explicitDescription) &&
 					this.explicitAddress.Equals(other.explicitAddress) // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-					// Ignore 'explicitDescription'
 				);
 			}
 			else
@@ -222,8 +248,11 @@ namespace MKY.Net
 
 				if ((IPNetworkInterface)UnderlyingEnum == IPNetworkInterface.Explicit)
 				{
-					hashCode = (hashCode * 397) ^ (this.explicitAddress != null ? this.explicitAddress.GetHashCode() : 0); // Ignore 'otherDescription'
-					// Ignore 'explicitDescription'
+					if (!string.IsNullOrEmpty(this.explicitDescription))
+						hashCode = (hashCode * 397) ^ this.explicitDescription.GetHashCode();
+
+					if (this.explicitAddress != null)
+						hashCode = (hashCode * 397) ^ this.explicitAddress    .GetHashCode();
 				}
 
 				return (hashCode);
@@ -245,49 +274,20 @@ namespace MKY.Net
 				case IPNetworkInterface.Explicit:
 				{
 					if (!string.IsNullOrEmpty(this.explicitDescription))
-					{
-						if (this.explicitAddress != IPAddress.None)
-							return (this.explicitDescription + " (" + this.explicitAddress + ")");
-						else
-							return (this.explicitDescription);
-					}
-					else
-					{
-						if (this.explicitAddress != IPAddress.None)
-							return (this.explicitAddress.ToString());
-						else
-							return ("");
-					}
-				}
-			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-		}
-
-		/// <summary>
-		/// Returns a compact string representation:
-		/// - For predefined interfaces, the predefined string is returned.
-		/// - For explicit interfaces, the resolved IP address is returned.
-		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
-		public string ToCompactString()
-		{
-			switch ((IPNetworkInterface)UnderlyingEnum)
-			{
-				case IPNetworkInterface.Any:          return (Any_string);
-				case IPNetworkInterface.Loopback:     return (Loopback_string);
-				case IPNetworkInterface.IPv4Any:      return (IPv4Any_string);
-				case IPNetworkInterface.IPv4Loopback: return (IPv4Loopback_string);
-				case IPNetworkInterface.IPv6Any:      return (IPv6Any_string);
-				case IPNetworkInterface.IPv6Loopback: return (IPv6Loopback_string);
-				case IPNetworkInterface.Explicit:
-				{
-					if (this.explicitAddress != null)
+						return (this.explicitDescription); // Do not add address when explicit description is given.
+					else if (this.explicitAddress != IPAddress.None)
 						return (this.explicitAddress.ToString());
 					else
 						return ("");
 				}
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
+
+		/// <summary></summary>
+		public IPNetworkInterfaceDescriptorPair ToDescriptorPair()
+		{
+			return (new IPNetworkInterfaceDescriptorPair(Description, Address.ToString()));
 		}
 
 		#endregion
@@ -405,64 +405,6 @@ namespace MKY.Net
 			}
 		}
 
-		/// <remarks>
-		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
-		/// </remarks>
-		public static bool TryParseAndResolve(string s, out IPNetworkInterfaceEx result)
-		{
-			if (TryParse(s, out result))
-			{
-				return (true);
-			}
-			else
-			{
-				try
-				{
-					IPAddress[] addressesFromDns = Dns.GetHostAddresses(s);
-					foreach (IPAddress addressFromDns in addressesFromDns)
-					{
-						if (addressFromDns.AddressFamily == AddressFamily.InterNetwork) // IPv4 has precedence for compatibility reasons.
-						{
-							result = new IPNetworkInterfaceEx(addressFromDns);
-							return (true);
-						}
-					}
-
-					if (addressesFromDns.Length > 0)
-					{
-						result = new IPNetworkInterfaceEx(addressesFromDns[0]);
-						return (true);
-					}
-				}
-				catch (Exception ex)
-				{
-					DebugEx.WriteException(typeof(IPNetworkInterfaceEx), ex, "Failed to get address from DNS!");
-				}
-
-				// Invalid string!
-				result = null;
-				return (false);
-			}
-		}
-
-		/// <summary></summary>
-		public static IPNetworkInterfaceEx FromIPAddress(IPAddress address)
-		{
-			if      (address == IPAddress.Any)
-				return (new IPNetworkInterfaceEx(IPNetworkInterface.Any));
-			else if (address == IPAddress.Loopback)
-				return (new IPNetworkInterfaceEx(IPNetworkInterface.Loopback));
-			else if (address == IPAddress.IPv6Any)
-				return (new IPNetworkInterfaceEx(IPNetworkInterface.IPv6Any));
-			else if (address == IPAddress.IPv6Loopback)
-				return (new IPNetworkInterfaceEx(IPNetworkInterface.IPv6Loopback));
-			else
-				return (new IPNetworkInterfaceEx(address, ""));
-
-			// Note that 'IPNetworkInterfaceType.IPv4Any|Loopback' cannot be distinguished from 'IPNetworkInterfaceType.Any|Loopback' when 'IPAddress.Any|Loopback' is given.
-			// Also note that similar but less optimized code is found at IPNetworkInterfaceType(IPAddress) further above.
-		}
-
 		#endregion
 
 		#region Conversion Operators
@@ -480,15 +422,26 @@ namespace MKY.Net
 		}
 
 		/// <summary></summary>
-		public static implicit operator IPAddress(IPNetworkInterfaceEx address)
+		public static implicit operator IPNetworkInterfaceDescriptorPair(IPNetworkInterfaceEx networkInterface)
 		{
-			return (address.Address);
+			return (networkInterface.ToDescriptorPair());
 		}
 
 		/// <summary></summary>
-		public static implicit operator IPNetworkInterfaceEx(IPAddress address)
+		public static implicit operator IPNetworkInterfaceEx(IPNetworkInterfaceDescriptorPair networkInterface)
 		{
-			return (FromIPAddress(address));
+			if (!string.IsNullOrEmpty(networkInterface.Description))
+			{
+				IPAddress address;
+				if (IPAddress.TryParse(networkInterface.Address, out address))
+					return (new IPNetworkInterfaceEx(address, networkInterface.Description));
+				else
+					return (new IPNetworkInterfaceEx(IPAddress.None, networkInterface.Description));
+			}
+			else
+			{
+				return (new IPNetworkInterfaceEx(IPAddress.None));
+			}
 		}
 
 		/// <summary></summary>

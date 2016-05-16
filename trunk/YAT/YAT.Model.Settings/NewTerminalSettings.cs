@@ -43,8 +43,8 @@ namespace YAT.Model.Settings
 		private IPHostEx socketRemoteHost;
 		private int socketRemoteTcpPort;
 		private int socketRemoteUdpPort;
-		private IPNetworkInterfaceEx socketLocalInterface;
-		private IPAddressFilterEx socketLocalFilter;
+		private IPNetworkInterfaceDescriptorPair socketLocalInterface;
+		private IPFilterEx socketLocalFilter;
 		private int socketLocalTcpPort;
 		private int socketLocalUdpPort;
 		private MKY.IO.Serial.AutoRetry tcpClientAutoReconnect;
@@ -254,7 +254,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <remarks>
-		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
+		/// This 'EnumEx' cannot be serialized, thus, the helper above is used for serialization.
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
@@ -303,22 +303,9 @@ namespace YAT.Model.Settings
 			}
 		}
 
-		/// <remarks>
-		/// Must be string because an 'EnumEx' cannot be serialized.
-		/// </remarks>
+		/// <summary></summary>
 		[XmlElement("SocketLocalInterface")]
-		public virtual string SocketLocalInterface_ForSerialization
-		{
-			get { return (SocketLocalInterface.ToCompactString()); } // Use compact string represenation, only taking host name or address into account!
-			set { SocketLocalInterface = value;                    }
-		}
-
-		/// <remarks>
-		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
-		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
-		/// </remarks>
-		[XmlIgnore]
-		public virtual IPNetworkInterfaceEx SocketLocalInterface
+		public virtual IPNetworkInterfaceDescriptorPair SocketLocalInterface
 		{
 			get { return (this.socketLocalInterface); }
 			set
@@ -327,8 +314,6 @@ namespace YAT.Model.Settings
 				{
 					this.socketLocalInterface = value;
 					SetChanged();
-
-					// Do not try to resolve the IP address as this may take quite some time!
 				}
 			}
 		}
@@ -344,11 +329,11 @@ namespace YAT.Model.Settings
 		}
 
 		/// <remarks>
-		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
+		/// This 'EnumEx' cannot be serialized, thus, the helper above is used for serialization.
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
-		public virtual IPAddressFilterEx SocketLocalFilter
+		public virtual IPFilterEx SocketLocalFilter
 		{
 			get { return (this.socketLocalFilter); }
 			set
@@ -588,11 +573,11 @@ namespace YAT.Model.Settings
 				(SerialPortCommunication  == other.SerialPortCommunication) &&
 				(SerialPortAutoReopen     == other.SerialPortAutoReopen) &&
 
-				StringEx.EqualsOrdinalIgnoreCase(    SocketRemoteHost_ForSerialization,     SocketRemoteHost_ForSerialization) &&
+				StringEx.EqualsOrdinalIgnoreCase(SocketRemoteHost_ForSerialization, SocketRemoteHost_ForSerialization) &&
 				(SocketRemoteTcpPort      == other.SocketRemoteTcpPort) &&
 				(SocketRemoteUdpPort      == other.SocketRemoteUdpPort) &&
-				StringEx.EqualsOrdinalIgnoreCase(SocketLocalInterface_ForSerialization, SocketLocalInterface_ForSerialization) &&
-				StringEx.EqualsOrdinalIgnoreCase(   SocketLocalFilter_ForSerialization,    SocketLocalFilter_ForSerialization) &&
+				(SocketLocalInterface     == other.SocketLocalInterface) &&
+				StringEx.EqualsOrdinalIgnoreCase(SocketLocalFilter_ForSerialization, SocketLocalFilter_ForSerialization) &&
 				(SocketLocalTcpPort       == other.SocketLocalTcpPort) &&
 				(SocketLocalUdpPort       == other.SocketLocalUdpPort) &&
 				(TcpClientAutoReconnect   == other.TcpClientAutoReconnect) &&
@@ -621,30 +606,30 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^  TerminalType                                           .GetHashCode();
-				hashCode = (hashCode * 397) ^  IOType                                                 .GetHashCode();
+				hashCode = (hashCode * 397) ^  TerminalType                                                                   .GetHashCode();
+				hashCode = (hashCode * 397) ^  IOType                                                                         .GetHashCode();
 
-				hashCode = (hashCode * 397) ^ (SerialPortId           != null ? SerialPortId          .GetHashCode() : 0); // May be 'null' if no ports are available!
-				hashCode = (hashCode * 397) ^  SerialPortCommunication                                .GetHashCode();
-				hashCode = (hashCode * 397) ^  SerialPortAutoReopen                                   .GetHashCode();
+				hashCode = (hashCode * 397) ^ (SerialPortId                       != null ? SerialPortId                      .GetHashCode() : 0); // May be 'null' if no ports are available!
+				hashCode = (hashCode * 397) ^  SerialPortCommunication                                                        .GetHashCode();
+				hashCode = (hashCode * 397) ^  SerialPortAutoReopen                                                           .GetHashCode();
 
-				hashCode = (hashCode * 397) ^ (    SocketRemoteHost_ForSerialization != null ?     SocketRemoteHost_ForSerialization.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ ( SocketRemoteHost_ForSerialization != null ?  SocketRemoteHost_ForSerialization.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^  SocketRemoteTcpPort;
 				hashCode = (hashCode * 397) ^  SocketRemoteUdpPort;
-				hashCode = (hashCode * 397) ^ (SocketLocalInterface_ForSerialization != null ? SocketLocalInterface_ForSerialization.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (   SocketLocalFilter_ForSerialization != null ?    SocketLocalFilter_ForSerialization.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  SocketLocalInterface                                                           .GetHashCode();
+				hashCode = (hashCode * 397) ^ (SocketLocalFilter_ForSerialization != null ? SocketLocalFilter_ForSerialization.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^  SocketLocalTcpPort;
 				hashCode = (hashCode * 397) ^  SocketLocalUdpPort;
-				hashCode = (hashCode * 397) ^  TcpClientAutoReconnect                                 .GetHashCode();
-				hashCode = (hashCode * 397) ^  UdpServerSendMode                                      .GetHashCode();
+				hashCode = (hashCode * 397) ^  TcpClientAutoReconnect                                                         .GetHashCode();
+				hashCode = (hashCode * 397) ^  UdpServerSendMode                                                              .GetHashCode();
 
-				hashCode = (hashCode * 397) ^ (UsbSerialHidDeviceInfo != null ? UsbSerialHidDeviceInfo.GetHashCode() : 0); // May be 'null' if no devices are available!
-				hashCode = (hashCode * 397) ^  UsbSerialHidReportFormat                               .GetHashCode();
-				hashCode = (hashCode * 397) ^  UsbSerialHidRxIdUsage                                  .GetHashCode();
-				hashCode = (hashCode * 397) ^  UsbSerialHidFlowControl                                .GetHashCode();
-				hashCode = (hashCode * 397) ^  UsbSerialHidAutoOpen                                   .GetHashCode();
+				hashCode = (hashCode * 397) ^ (UsbSerialHidDeviceInfo             != null ? UsbSerialHidDeviceInfo            .GetHashCode() : 0); // May be 'null' if no devices are available!
+				hashCode = (hashCode * 397) ^  UsbSerialHidReportFormat                                                       .GetHashCode();
+				hashCode = (hashCode * 397) ^  UsbSerialHidRxIdUsage                                                          .GetHashCode();
+				hashCode = (hashCode * 397) ^  UsbSerialHidFlowControl                                                        .GetHashCode();
+				hashCode = (hashCode * 397) ^  UsbSerialHidAutoOpen                                                           .GetHashCode();
 
-				hashCode = (hashCode * 397) ^  StartTerminal                                          .GetHashCode();
+				hashCode = (hashCode * 397) ^  StartTerminal                                                                  .GetHashCode();
 
 				return (hashCode);
 			}

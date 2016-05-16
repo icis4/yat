@@ -31,7 +31,7 @@ using MKY.Diagnostics;
 
 namespace MKY.Net
 {
-	#region Enum IPHost
+	#region Enum IPFilter
 
 	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
 	// warnings for each undocumented member below. Documenting each member makes little sense
@@ -40,12 +40,20 @@ namespace MKY.Net
 	#pragma warning disable 1591
 
 	/// <summary></summary>
-	public enum IPHost
+	public enum IPFilter
 	{
+		Any,
+
 		Localhost,
 
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv4 is a common term, and even used by the .NET framework itself.")]
+		IPv4Any,
+
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv4 is a common term, and even used by the .NET framework itself.")]
 		IPv4Localhost,
+
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv6 is a common term, and even used by the .NET framework itself.")]
+		IPv6Any,
 
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv6 is a common term, and even used by the .NET framework itself.")]
 		IPv6Localhost,
@@ -58,22 +66,29 @@ namespace MKY.Net
 	#endregion
 
 	/// <summary>
-	/// Extended enum IPHostEx.
+	/// Extended enum IPFilterEx.
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
 	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
-	public class IPHostEx : EnumEx
+	public class IPFilterEx : EnumEx
 	{
 		#region String Definitions
+
+		private const string Any_string           = "[Any]";
+		private const string Any_stringOld2       = "<Any>"; // Backward compatibility.
+		private const string Any_stringOld1       =  "any";  // Backward compatibility.
 
 		private const string Localhost_string     = "[Localhost]";
 		private const string Localhost_stringOld2 = "<Localhost>"; // Backward compatibility.
 		private const string Localhost_stringOld1 =  "localhost";  // Backward compatibility.
 
+		private const string IPv4Any_string       = "IPv4 any";
 		private const string IPv4Localhost_string = "IPv4 localhost";
+
+		private const string IPv6Any_string       = "IPv6 any";
 		private const string IPv6Localhost_string = "IPv6 localhost";
 
 		#endregion
@@ -81,53 +96,55 @@ namespace MKY.Net
 		private string    explicitName = null;
 		private IPAddress explicitAddress  = IPAddress.None;
 
-		/// <summary>Default is <see cref="IPHost.Localhost"/>.</summary>
-		public const IPHost Default = IPHost.Localhost;
+		/// <summary>Default is <see cref="IPFilter.Any"/>.</summary>
+		public const IPFilter Default = IPFilter.Any;
 
 		/// <summary>Default is <see cref="Default"/>.</summary>
-		public IPHostEx()
+		public IPFilterEx()
 			: this(Default)
 		{
 		}
 
 		/// <summary></summary>
-		public IPHostEx(IPHost host)
-			: base(host)
+		public IPFilterEx(IPFilter addressFilter)
+			: base(addressFilter)
 		{
-			if (host == IPHost.Explicit)
-				throw (new InvalidOperationException("'IPHost.Explicit' requires an IP address or host name, use IPHostEx(IPAddress) or IPHostEx(string) instead!"));
+			if (addressFilter == IPFilter.Explicit)
+				throw (new InvalidOperationException("'IPFilter.Explicit' requires an IP address or host name, use IPFilterEx(IPAddress) instead!"));
 		}
 
 		/// <summary></summary>
-		public IPHostEx(IPAddress address)
+		public IPFilterEx(IPAddress address)
 		{                        // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-			if      (address.Equals(IPAddress.Loopback))     { SetUnderlyingEnum(IPHost.Localhost);     this.explicitAddress = IPAddress.None; }
-			else if (address.Equals(IPAddress.IPv6Loopback)) { SetUnderlyingEnum(IPHost.IPv6Localhost); this.explicitAddress = IPAddress.None; }
+			if      (address.Equals(IPAddress.Any))          { SetUnderlyingEnum(IPFilter.Any);           this.explicitAddress = IPAddress.None; }
+			else if (address.Equals(IPAddress.Loopback))     { SetUnderlyingEnum(IPFilter.Localhost);     this.explicitAddress = IPAddress.None; }
+			else if (address.Equals(IPAddress.IPv6Any))      { SetUnderlyingEnum(IPFilter.IPv6Any);       this.explicitAddress = IPAddress.None; }
+			else if (address.Equals(IPAddress.IPv6Loopback)) { SetUnderlyingEnum(IPFilter.IPv6Localhost); this.explicitAddress = IPAddress.None; }
 			else
 			{
 				if (address == null)
-					throw (new ArgumentException("'IPHost.Explicit' requires an IP address or host name!", "address"));
+					throw (new ArgumentException("'IPFilter.Explicit' requires an IP address or host name!", "address"));
 
-				SetUnderlyingEnum(IPHost.Explicit);
+				SetUnderlyingEnum(IPFilter.Explicit);
 
 				this.explicitAddress = address;
 			}
 
-			// Note that 'IPHost.IPv4Localhost' cannot be distinguished from 'IPHost.Localhost' when 'IPAddress.Loopback' is given.
+			// Note that 'IPAddressFilter.IPv4Any|Localhost' cannot be distinguished from 'IPAddressFilter.IPv4Any|Localhost' when 'IPAddress.Any|Loopback' is given.
 		}
 
 		/// <summary></summary>
-		public IPHostEx(string name)
+		public IPFilterEx(string name)
 		{
-			SetUnderlyingEnum(IPHost.Explicit);
+			SetUnderlyingEnum(IPFilter.Explicit);
 
 			this.explicitName = name;
 		}
 
 		/// <summary></summary>
-		public IPHostEx(string name, IPAddress address)
+		public IPFilterEx(string name, IPAddress address)
 		{
-			SetUnderlyingEnum(IPHost.Explicit);
+			SetUnderlyingEnum(IPFilter.Explicit);
 
 			this.explicitName = name;
 			this.explicitAddress = address;
@@ -140,12 +157,15 @@ namespace MKY.Net
 		{
 			get
 			{
-				switch ((IPHost)UnderlyingEnum)
+				switch ((IPFilter)UnderlyingEnum)
 				{
-					case IPHost.Localhost:     return ("localhost");
-					case IPHost.IPv4Localhost: return ("localhost");
-					case IPHost.IPv6Localhost: return ("localhost");
-					case IPHost.Explicit:
+					case IPFilter.Any:           return (IPAddress.Any.ToString());
+					case IPFilter.Localhost:     return ("localhost");
+					case IPFilter.IPv4Any:       return (IPAddress.Any.ToString());
+					case IPFilter.IPv4Localhost: return ("localhost");
+					case IPFilter.IPv6Any:       return (IPAddress.IPv6Any.ToString());
+					case IPFilter.IPv6Localhost: return ("localhost");
+					case IPFilter.Explicit:
 					{
 						if (!string.IsNullOrEmpty(this.explicitName))
 							return (this.explicitName);
@@ -164,12 +184,15 @@ namespace MKY.Net
 		{
 			get
 			{
-				switch ((IPHost)UnderlyingEnum)
+				switch ((IPFilter)UnderlyingEnum)
 				{
-					case IPHost.Localhost:     return (IPAddress.Loopback);
-					case IPHost.IPv4Localhost: return (IPAddress.Loopback);
-					case IPHost.IPv6Localhost: return (IPAddress.IPv6Loopback);
-					case IPHost.Explicit:      return (this.explicitAddress);
+					case IPFilter.Any:           return (IPAddress.Any);
+					case IPFilter.Localhost:     return (IPAddress.Loopback);
+					case IPFilter.IPv4Any:       return (IPAddress.Any);
+					case IPFilter.IPv4Localhost: return (IPAddress.Loopback);
+					case IPFilter.IPv6Any:       return (IPAddress.IPv6Any);
+					case IPFilter.IPv6Localhost: return (IPAddress.IPv6Loopback);
+					case IPFilter.Explicit:      return (this.explicitAddress);
 				}
 				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -180,11 +203,11 @@ namespace MKY.Net
 		{
 			get
 			{
-				switch ((IPHost)UnderlyingEnum)
+				switch ((IPFilter)UnderlyingEnum)
 				{
-					case IPHost.Localhost:
-					case IPHost.IPv4Localhost:
-					case IPHost.IPv6Localhost:
+					case IPFilter.Localhost:
+					case IPFilter.IPv4Localhost:
+					case IPFilter.IPv6Localhost:
 						return (true);
 
 					default:
@@ -208,8 +231,8 @@ namespace MKY.Net
 			if (GetType() != obj.GetType())
 				return (false);
 
-			IPHostEx other = (IPHostEx)obj;
-			if ((IPHost)UnderlyingEnum == IPHost.Explicit)
+			IPFilterEx other = (IPFilterEx)obj;
+			if ((IPFilter)UnderlyingEnum == IPFilter.Explicit)
 			{
 				if (!string.IsNullOrEmpty(this.explicitName))
 				{
@@ -244,7 +267,7 @@ namespace MKY.Net
 			{
 				int hashCode = base.GetHashCode();
 
-				if ((IPHost)UnderlyingEnum == IPHost.Explicit)
+				if ((IPFilter)UnderlyingEnum == IPFilter.Explicit)
 				{
 					if (!string.IsNullOrEmpty(this.explicitName))
 						hashCode = (hashCode * 397) ^ this.explicitName   .GetHashCode();
@@ -260,12 +283,15 @@ namespace MKY.Net
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
-			switch ((IPHost)UnderlyingEnum)
+			switch ((IPFilter)UnderlyingEnum)
 			{
-				case IPHost.Localhost:     return (Localhost_string);
-				case IPHost.IPv4Localhost: return (IPv4Localhost_string + " (" + IPAddress.Loopback + ")");
-				case IPHost.IPv6Localhost: return (IPv6Localhost_string + " (" + IPAddress.IPv6Loopback + ")");
-				case IPHost.Explicit:
+				case IPFilter.Any:           return (Any_string);
+				case IPFilter.Localhost:     return (Localhost_string);
+				case IPFilter.IPv4Any:       return (IPv4Any_string       + " (" + IPAddress.Any + ")");
+				case IPFilter.IPv4Localhost: return (IPv4Localhost_string + " (" + IPAddress.Loopback + ")");
+				case IPFilter.IPv6Any:       return (IPv6Any_string       + " (" + IPAddress.IPv6Any + ")");
+				case IPFilter.IPv6Localhost: return (IPv6Localhost_string + " (" + IPAddress.IPv6Loopback + ")");
+				case IPFilter.Explicit:
 				{
 					if (!string.IsNullOrEmpty(this.explicitName))
 						return (this.explicitName); // Do not add address when explicit name is given.
@@ -280,18 +306,21 @@ namespace MKY.Net
 
 		/// <summary>
 		/// Returns a compact string representation:
-		/// - For predefined hosts, the predefined string is returned.
-		/// - For explicit hosts, the host name or address is returned.
+		/// - For predefined filters, the predefined string is returned.
+		/// - For explicit filters, the host name or address is returned.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public string ToCompactString()
 		{
-			switch ((IPHost)UnderlyingEnum)
+			switch ((IPFilter)UnderlyingEnum)
 			{
-				case IPHost.Localhost:     return (Localhost_string);
-				case IPHost.IPv4Localhost: return (IPv4Localhost_string);
-				case IPHost.IPv6Localhost: return (IPv6Localhost_string);
-				case IPHost.Explicit:
+				case IPFilter.Any:           return (Any_string);
+				case IPFilter.Localhost:     return (Localhost_string);
+				case IPFilter.IPv4Any:       return (IPv4Any_string);
+				case IPFilter.IPv4Localhost: return (IPv4Localhost_string);
+				case IPFilter.IPv6Any:       return (IPv6Any_string);
+				case IPFilter.IPv6Localhost: return (IPv6Localhost_string);
+				case IPFilter.Explicit:
 				{
 					if (!string.IsNullOrEmpty(this.explicitName))
 						return (this.explicitName);
@@ -326,12 +355,12 @@ namespace MKY.Net
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public string ToEndpointAdressString()
 		{
-			switch ((IPHost)UnderlyingEnum)
+			switch ((IPFilter)UnderlyingEnum)
 			{
-				case IPHost.Localhost:     return (Localhost_string);
-				case IPHost.IPv4Localhost: return (IPv4Localhost_string);
-				case IPHost.IPv6Localhost: return (IPv6Localhost_string);
-				case IPHost.Explicit:
+				case IPFilter.Localhost:     return (Localhost_string);
+				case IPFilter.IPv4Localhost: return (IPv4Localhost_string);
+				case IPFilter.IPv6Localhost: return (IPv6Localhost_string);
+				case IPFilter.Explicit:
 				{
 					if (!string.IsNullOrEmpty(this.explicitName))
 						return (this.explicitName);
@@ -374,12 +403,15 @@ namespace MKY.Net
 		#region GetItems
 
 		/// <summary></summary>
-		public static IPHostEx[] GetItems()
+		public static IPFilterEx[] GetItems()
 		{
-			List<IPHostEx> a = new List<IPHostEx>(3); // Preset the required capactiy to improve memory management.
-			a.Add(new IPHostEx(IPHost.Localhost));
-			a.Add(new IPHostEx(IPHost.IPv4Localhost));
-			a.Add(new IPHostEx(IPHost.IPv6Localhost));
+			List<IPFilterEx> a = new List<IPFilterEx>(6); // Preset the required capactiy to improve memory management.
+			a.Add(new IPFilterEx(IPFilter.Any));
+			a.Add(new IPFilterEx(IPFilter.Localhost));
+			a.Add(new IPFilterEx(IPFilter.IPv4Any));
+			a.Add(new IPFilterEx(IPFilter.IPv4Localhost));
+			a.Add(new IPFilterEx(IPFilter.IPv6Any));
+			a.Add(new IPFilterEx(IPFilter.IPv6Localhost));
 			return (a.ToArray());
 		}
 
@@ -390,22 +422,22 @@ namespace MKY.Net
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static IPHostEx Parse(string s)
+		public static IPFilterEx Parse(string s)
 		{
-			IPHostEx result;
+			IPFilterEx result;
 
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" is an invalid host string! String must be an IP host name (URL), an IP address, or one of the predefined hosts."));
+				throw (new FormatException(@"""" + s + @""" is an invalid address filter string! String must be an IP host name (URL), an IP address, or one of the predefined filters."));
 		}
 
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParse(string s, out IPHostEx result)
+		public static bool TryParse(string s, out IPFilterEx result)
 		{
-			IPHost enumResult;
+			IPFilter enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
 				result = enumResult;
@@ -416,14 +448,14 @@ namespace MKY.Net
 				IPAddress address;
 				if (IPAddress.TryParse(s, out address)) // Valid explicit?
 				{
-					result = new IPHostEx(address);
+					result = new IPFilterEx(address);
 					return (true);
 				}
 				else
 				{
 					if (Uri.IsWellFormedUriString(s, UriKind.RelativeOrAbsolute))
 					{
-						result = new IPHostEx(s);
+						result = new IPFilterEx(s);
 						return (true);
 					}
 					else // Invalid string!
@@ -438,36 +470,53 @@ namespace MKY.Net
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParse(string s, out IPHost result)
+		public static bool TryParse(string s, out IPFilter result)
 		{
 			if (s != null)
 				s = s.Trim();
 
 			if (string.IsNullOrEmpty(s))
 			{
-				result = new IPHostEx(); // Default!
+				result = new IPFilterEx(); // Default!
 				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Any_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Any_stringOld1) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Any_stringOld2))
+			{
+				result = new IPFilterEx(IPFilter.Any);
+				return (true);
+			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Localhost_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringOld2) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringOld1))
+			         StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringOld1) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringOld2))
 			{
-				result = new IPHostEx(IPHost.Localhost);
+				result = new IPFilterEx(IPFilter.Localhost);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, IPv4Localhost_string))
+			else if (s.Contains(IPv4Any_string))
 			{
-				result = new IPHostEx(IPHost.IPv4Localhost);
+				result = new IPFilterEx(IPFilter.IPv4Any);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, IPv6Localhost_string))
+			else if (s.Contains(IPv4Localhost_string))
 			{
-				result = new IPHostEx(IPHost.IPv6Localhost);
+				result = new IPFilterEx(IPFilter.IPv4Localhost);
+				return (true);
+			}
+			else if (s.Contains(IPv6Any_string))
+			{
+				result = new IPFilterEx(IPFilter.IPv6Any);
+				return (true);
+			}
+			else if (s.Contains(IPv6Localhost_string))
+			{
+				result = new IPFilterEx(IPFilter.IPv6Localhost);
 				return (true);
 			}
 			else // Invalid string!
 			{
-				result = new IPHostEx(); // Default!
+				result = new IPFilterEx(); // Default!
 				return (false);
 			}
 		}
@@ -475,7 +524,7 @@ namespace MKY.Net
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParseAndResolve(string s, out IPHostEx result)
+		public static bool TryParseAndResolve(string s, out IPFilterEx result)
 		{
 			if (TryParse(s, out result))
 			{
@@ -486,7 +535,7 @@ namespace MKY.Net
 				IPAddress address;
 				if (TryResolve(s, out address))
 				{
-					result = new IPHostEx(s, address);
+					result = new IPFilterEx(s, address);
 					return (true);
 				}
 				else // Invalid string!
@@ -526,7 +575,7 @@ namespace MKY.Net
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(typeof(IPHostEx), ex, "Failed to get address from DNS!");
+				DebugEx.WriteException(typeof(IPFilterEx), ex, "Failed to get address from DNS!");
 			}
 
 			result = IPAddress.None;
@@ -538,7 +587,7 @@ namespace MKY.Net
 		/// </summary>
 		public virtual bool TryResolve()
 		{
-			if ((IPHost)UnderlyingEnum == IPHost.Explicit) // Predefined addresses don't need to be resolved.
+			if ((IPFilter)UnderlyingEnum == IPFilter.Explicit) // Predefined addresses don't need to be resolved.
 			{
 				IPAddress result;
 				if (TryResolve(this.explicitName, out result))
@@ -553,39 +602,39 @@ namespace MKY.Net
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator IPHost(IPHostEx host)
+		public static implicit operator IPFilter(IPFilterEx addressFilter)
 		{
-			return ((IPHost)host.UnderlyingEnum);
+			return ((IPFilter)addressFilter.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator IPHostEx(IPHost host)
+		public static implicit operator IPFilterEx(IPFilter addressFilter)
 		{
-			return (new IPHostEx(host));
+			return (new IPFilterEx(addressFilter));
 		}
 
 		/// <summary></summary>
-		public static implicit operator IPAddress(IPHostEx address)
+		public static implicit operator IPAddress(IPFilterEx address)
 		{
 			return (address.Address);
 		}
 
 		/// <summary></summary>
-		public static implicit operator IPHostEx(IPAddress address)
+		public static implicit operator IPFilterEx(IPAddress address)
 		{
-			return (new IPHostEx(address));
+			return (new IPFilterEx(address));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(IPHostEx host)
+		public static implicit operator string(IPFilterEx addressFilter)
 		{
-			return (host.ToString());
+			return (addressFilter.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator IPHostEx(string host)
+		public static implicit operator IPFilterEx(string addressFilter)
 		{
-			return (Parse(host));
+			return (Parse(addressFilter));
 		}
 
 		#endregion

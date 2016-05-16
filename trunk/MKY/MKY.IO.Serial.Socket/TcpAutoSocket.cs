@@ -118,9 +118,9 @@ namespace MKY.IO.Serial.Socket
 		private int instanceId;
 		private bool isDisposed;
 
-		private System.Net.IPAddress remoteIPAddress;
+		private IPHostEx remoteHost;
 		private int remotePort;
-		private System.Net.IPAddress localIPAddress;
+		private IPNetworkInterfaceEx localInterface;
 		private int localPort;
 
 		private SocketState state = SocketState.Reset;
@@ -165,13 +165,13 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <summary></summary>
-		public TcpAutoSocket(System.Net.IPAddress remoteIPAddress, int remotePort, System.Net.IPAddress localIPAddress, int localPort)
+		public TcpAutoSocket(IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, int localPort)
 		{
 			this.instanceId = SocketBase.NextInstanceId;
 
-			this.remoteIPAddress = remoteIPAddress;
+			this.remoteHost      = remoteHost;
 			this.remotePort      = remotePort;
-			this.localIPAddress  = localIPAddress;
+			this.localInterface  = localInterface;
 			this.localPort       = localPort;
 		}
 
@@ -242,13 +242,13 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual System.Net.IPAddress RemoteIPAddress
+		public virtual IPHostEx RemoteHost
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.remoteIPAddress);
+				return (this.remoteHost);
 			}
 		}
 
@@ -264,13 +264,13 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		public virtual System.Net.IPAddress LocalIPAddress
+		public virtual IPNetworkInterfaceEx LocalInterface
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.localIPAddress);
+				return (this.localInterface);
 			}
 		}
 
@@ -609,7 +609,7 @@ namespace MKY.IO.Serial.Socket
 			if (!IsDisposed && IsStarted) // Check 'IsDisposed' first!
 			{
 				SetStateSynchronizedAndNotify(SocketState.Connecting);
-				CreateClient(this.remoteIPAddress, this.remotePort);
+				CreateClient(this.remoteHost, this.remotePort);
 
 				bool startIsOngoing = false;
 				try
@@ -649,7 +649,7 @@ namespace MKY.IO.Serial.Socket
 			if (!IsDisposed && IsStarted) // Check 'IsDisposed' first!
 			{
 				SetStateSynchronizedAndNotify(SocketState.StartingListening);
-				CreateServer(this.localIPAddress, this.localPort);
+				CreateServer(this.localInterface, this.localPort);
 
 				bool startIsOngoing = false;
 				try
@@ -752,13 +752,13 @@ namespace MKY.IO.Serial.Socket
 		// Client > Lifetime
 		//------------------------------------------------------------------------------------------
 
-		private void CreateClient(System.Net.IPAddress remoteIPAddress, int remotePort)
+		private void CreateClient(IPHostEx remoteHost, int remotePort)
 		{
 			DisposeClient();
 
 			lock (this.socketSyncObj)
 			{
-				this.client = new TcpClient(this.instanceId, remoteIPAddress, remotePort);
+				this.client = new TcpClient(this.instanceId, remoteHost, remotePort);
 
 				this.client.IOChanged    += new EventHandler                       (this.client_IOChanged);
 				this.client.IOError      += new EventHandler<IOErrorEventArgs>     (this.client_IOError);
@@ -881,13 +881,13 @@ namespace MKY.IO.Serial.Socket
 		// Server > Lifetime
 		//------------------------------------------------------------------------------------------
 
-		private void CreateServer(System.Net.IPAddress localIPAddress, int localPort)
+		private void CreateServer(IPNetworkInterfaceEx localInterface, int localPort)
 		{
 			DisposeServer();
 
 			lock (this.socketSyncObj)
 			{
-				this.server = new TcpServer(this.instanceId, localIPAddress, localPort);
+				this.server = new TcpServer(this.instanceId, localInterface, localPort);
 
 				this.server.IOChanged    += new EventHandler(this.server_IOChanged);
 				this.server.IOError      += new EventHandler<IOErrorEventArgs>(this.server_IOError);
@@ -1072,7 +1072,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
 		public virtual string ToShortEndPointString()
 		{
-			return ("Server:" + this.localPort + " / " + IPHostEx.ToEndpointAdressString(this.remoteIPAddress) + ":" + this.remotePort);
+			return ("Server:" + this.localPort + " / " + this.remoteHost.ToEndpointAdressString() + ":" + this.remotePort);
 		}
 
 		#endregion
