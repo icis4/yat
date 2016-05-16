@@ -138,11 +138,6 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
             return AddConnector(name, remoteEndPoint, null, EncryptType.etNone, CompressionType.ctNone, null, 0, 0, new IPEndPoint(IPAddress.Any, 0));
         }
 
-        public SocketConnector AddConnector(string name, IPEndPoint remoteEndPoint, IPEndPoint localEndPoint)
-        {
-            return AddConnector(name, remoteEndPoint, null, EncryptType.etNone, CompressionType.ctNone, null, 0, 0, localEndPoint);
-        }
-
         public SocketConnector AddConnector(string name, IPEndPoint remoteEndPoint, ProxyInfo proxyData)
         {
             return AddConnector(name, remoteEndPoint, proxyData, EncryptType.etNone, CompressionType.ctNone, null, 0, 0, new IPEndPoint(IPAddress.Any, 0));

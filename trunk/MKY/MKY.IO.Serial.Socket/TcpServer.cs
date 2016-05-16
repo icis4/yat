@@ -529,7 +529,7 @@ namespace MKY.IO.Serial.Socket
 				this.socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketServer
 				(
 					ALAZ.SystemEx.NetEx.SocketsEx.CallbackThreadType.ctWorkerThread,
-					(ALAZ.SystemEx.NetEx.SocketsEx.ISocketService)this,
+					this,
 					ALAZ.SystemEx.NetEx.SocketsEx.DelimiterType.dtNone,
 					null,
 					SocketDefaults.SocketBufferSize,
@@ -538,7 +538,7 @@ namespace MKY.IO.Serial.Socket
 					Timeout.Infinite
 				);
 
-				this.socket.AddListener("MKY.IO.Serial.Socket.TcpServer", new System.Net.IPEndPoint(System.Net.IPAddress.Any, this.localPort));
+				this.socket.AddListener("MKY.IO.Serial.Socket.TcpServer", new System.Net.IPEndPoint(this.localInterface.Address, this.localPort));
 				this.socket.Start(); // The ALAZ socket will be started asynchronously.
 			}
 		}

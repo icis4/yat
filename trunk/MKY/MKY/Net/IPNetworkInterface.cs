@@ -110,18 +110,6 @@ namespace MKY.Net
 		}
 
 		/// <summary></summary>
-		public IPNetworkInterfaceEx(string description)
-		{
-			if (string.IsNullOrEmpty(description))
-				throw (new ArgumentException("'IPNetworkInterface.Explicit' requires an IP address or interface description!", "description"));
-
-			SetUnderlyingEnum(IPNetworkInterface.Explicit);
-
-			this.explicitDescription = description;
-			this.explicitAddress     = IPAddress.None;
-		}
-
-		/// <summary></summary>
 		public IPNetworkInterfaceEx(IPAddress address, string description = null)
 		{                        // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 			if      (address.Equals(IPAddress.Any))          { SetUnderlyingEnum(IPNetworkInterface.Any);          this.explicitAddress = IPAddress.None; }
@@ -340,7 +328,7 @@ namespace MKY.Net
 				IPAddress address;
 				if (IPAddress.TryParse(s, out address)) // Valid explicit?
 				{
-					result = new IPNetworkInterfaceEx(address, null);
+					result = new IPNetworkInterfaceEx(address);
 					return (true);
 				}
 				else // Invalid string!
