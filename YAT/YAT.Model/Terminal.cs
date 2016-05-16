@@ -1675,50 +1675,13 @@ namespace YAT.Model
 				if (!isAutoSave)
 				{
 					OnFixedStatusTextRequest("Error saving terminal!");
-
-					StringBuilder sb = new StringBuilder();
-					sb.AppendLine("Unable to save terminal file");
-					sb.Append(this.settingsHandler.SettingsFilePath);
-
-					if (ex is System.Xml.XmlException)
-					{
-						sb.AppendLine();
-						sb.AppendLine();
-						sb.AppendLine("XML error message:");
-						sb.Append(ex.Message);
-
-						if (ex.InnerException != null)
-						{
-							sb.AppendLine();
-							sb.AppendLine();
-							sb.AppendLine("File error message:");
-							sb.Append(ex.InnerException.Message);
-						}
-					}
-					else if (ex != null)
-					{
-						sb.AppendLine();
-						sb.AppendLine();
-						sb.AppendLine("System error message:");
-						sb.Append(ex.Message);
-
-						if (ex.InnerException != null)
-						{
-							sb.AppendLine();
-							sb.AppendLine();
-							sb.AppendLine("Additional error message:");
-							sb.Append(ex.InnerException.Message);
-						}
-					}
-
 					OnMessageInputRequest
 					(
-						sb.ToString(),
+						ErrorHelper.ComposeMessage("Unable to save terminal file", this.settingsHandler.SettingsFilePath, ex),
 						"File Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
 					);
-
 					OnTimedStatusTextRequest("Terminal not saved!");
 				}
 				else // AutoSave
@@ -2436,13 +2399,13 @@ namespace YAT.Model
 			{
 				OnFixedStatusTextRequest("Error starting terminal!");
 
-				string yatTitle;
+				string yatLead;
 				string yatText;
 				switch (this.settingsRoot.IOType)
 				{
 					case Domain.IOType.SerialPort:
 					{
-						yatTitle = ApplicationEx.ProductName + " hints:";
+						yatLead = ApplicationEx.ProductName + " hints:";
 						yatText  = "Make sure the selected serial COM port is available and not already in use. " +
 						           "Also, check the communication settings and keep in mind that hardware and driver may limit the allowed communication settings.";
 						break;
@@ -2454,33 +2417,27 @@ namespace YAT.Model
 					case Domain.IOType.UdpServer:
 					case Domain.IOType.UdpPairSocket:
 					{
-						yatTitle = ApplicationEx.ProductName + " hint:";
+						yatLead = ApplicationEx.ProductName + " hint:";
 						yatText  = "Make sure the selected socket is not already in use.";
 						break;
 					}
 					case Domain.IOType.UsbSerialHid:
 					{
-						yatTitle = ApplicationEx.ProductName + " hint:";
+						yatLead = ApplicationEx.ProductName + " hint:";
 						yatText  = "Make sure the selected USB device is connected and not already in use.";
 						break;
 					}
 					default:
 					{
-						yatTitle = ApplicationEx.ProductName + " error:";
+						yatLead = ApplicationEx.ProductName + " error:";
 						yatText  = "The I/O type " + this.settingsRoot.IOType  + " is unknown!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug;
 						break;
 					}
 				}
 
-				string message =
-					"Unable to start terminal!" + Environment.NewLine + Environment.NewLine +
-					"System error message:" + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine +
-					yatTitle + Environment.NewLine +
-					yatText;
-
 				OnMessageInputRequest
 				(
-					message,
+					ErrorHelper.ComposeMessage("Unable to start terminal!", ex, yatLead, yatText),
 					"Terminal Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
@@ -2563,15 +2520,14 @@ namespace YAT.Model
 						dataText = data.Length.ToString(CultureInfo.InvariantCulture) + " bytes";
 				}
 
-				string text;
+				string lead;
 				string title;
-				PrepareIOErrorMessageInputRequest(out text, out title);
+				PrepareIOErrorMessageInputRequest(out lead, out title);
 
 				OnFixedStatusTextRequest("Error sending " + dataText + "!");
 				OnMessageInputRequest
 				(
-					text + Environment.NewLine + Environment.NewLine +
-					"System error message:" + Environment.NewLine + ex.Message,
+					ErrorHelper.ComposeMessage(lead, ex),
 					title,
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
@@ -2614,20 +2570,18 @@ namespace YAT.Model
 
 				string dataText = (!string.IsNullOrEmpty(data) ? @"""" + data + @"""" : "");
 
-				string text;
+				string lead;
 				string title;
-				PrepareIOErrorMessageInputRequest(out text, out title);
+				PrepareIOErrorMessageInputRequest(out lead, out title);
 
 				OnFixedStatusTextRequest("Error sending " + dataText + "!");
 				OnMessageInputRequest
 				(
-					text + Environment.NewLine + Environment.NewLine +
-					"System error message:" + Environment.NewLine + ex.Message,
+					ErrorHelper.ComposeMessage(lead, ex),
 					title,
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
 				);
-
 				OnTimedStatusTextRequest(dataText + " not sent!");
 			}
 			catch (Domain.Parser.FormatException ex)
@@ -2713,20 +2667,18 @@ namespace YAT.Model
 
 				string dataText = (!string.IsNullOrEmpty(singleLineText) ? @"""" + singleLineText + @"""" : "");
 
-				string text;
+				string lead;
 				string title;
-				PrepareIOErrorMessageInputRequest(out text, out title);
+				PrepareIOErrorMessageInputRequest(out lead, out title);
 
 				OnFixedStatusTextRequest("Error sending " + dataText + "!");
 				OnMessageInputRequest
 				(
-					text + Environment.NewLine + Environment.NewLine +
-					"System error message:" + Environment.NewLine + ex.Message,
+					ErrorHelper.ComposeMessage(lead, ex),
 					title,
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
 				);
-
 				OnTimedStatusTextRequest(dataText + " not sent!");
 			}
 			catch (Domain.Parser.FormatException ex)
@@ -3760,8 +3712,7 @@ namespace YAT.Model
 					{
 						DialogResult dr = OnMessageInputRequest
 						(
-							"Unable to open log file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
-							"System error message:" + Environment.NewLine + ex.Message,
+							ErrorHelper.ComposeMessage("Unable to open log file", filePath, ex),
 							"Log File Error",
 							MessageBoxButtons.OKCancel,
 							MessageBoxIcon.Error
@@ -3803,9 +3754,8 @@ namespace YAT.Model
 				{
 					OnMessageInputRequest
 					(
-						"Unable to open log folder" + Environment.NewLine + rootPath + Environment.NewLine + Environment.NewLine +
-						"System error message:" + Environment.NewLine + ex.Message,
-						"Log File Error",
+						ErrorHelper.ComposeMessage("Unable to open log folder", rootPath, ex),
+						"Log Folder Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
 					);

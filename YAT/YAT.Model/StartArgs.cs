@@ -107,6 +107,10 @@ namespace YAT.Model
 		public bool NonInteractive;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		public string ErrorMessage;
+
+		/// <summary></summary>
 		public WorkspaceStartArgs ToWorkspaceStartArgs()
 		{
 			WorkspaceStartArgs args = new WorkspaceStartArgs();
