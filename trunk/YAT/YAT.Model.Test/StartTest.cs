@@ -218,22 +218,20 @@ namespace YAT.Model.Test
 		{
 			using (Main main = new Main(EmptyTerminalFilePath))
 			{
-				PrepareMainAndVerifyResult(main);
+				PrepareMainAndVerifyResult(main, MainResult.ApplicationStartError);
 
-				Assert.IsNull   (main.StartArgs.WorkspaceSettingsHandler);
-				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler);
-				Assert.AreEqual (EmptyTerminalFilePath, main.StartArgs.TerminalSettingsHandler.SettingsFilePath);
-				Assert.IsFalse  (main.StartArgs.ShowNewTerminalDialog);
+				Assert.IsNull (main.StartArgs.WorkspaceSettingsHandler);
+				Assert.IsNull (main.StartArgs.TerminalSettingsHandler);
+				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
 			}
 
 			using (Main main = new Main(new CommandLineArgs(new string[] { EmptyTerminalFilePath })))
 			{
-				PrepareMainAndVerifyResult(main);
+				PrepareMainAndVerifyResult(main, MainResult.ApplicationStartError);
 
-				Assert.IsNull   (main.StartArgs.WorkspaceSettingsHandler);
-				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler);
-				Assert.AreEqual (EmptyTerminalFilePath, main.StartArgs.TerminalSettingsHandler.SettingsFilePath);
-				Assert.IsFalse  (main.StartArgs.ShowNewTerminalDialog);
+				Assert.IsNull (main.StartArgs.WorkspaceSettingsHandler);
+				Assert.IsNull (main.StartArgs.TerminalSettingsHandler);
+				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
 			}
 		}
 
@@ -250,22 +248,20 @@ namespace YAT.Model.Test
 		{
 			using (Main main = new Main(EmptyWorkspaceFilePath))
 			{
-				PrepareMainAndVerifyResult(main);
+				PrepareMainAndVerifyResult(main, MainResult.ApplicationStartError);
 
-				Assert.IsNotNull(main.StartArgs.WorkspaceSettingsHandler);
-				Assert.AreEqual (EmptyWorkspaceFilePath, main.StartArgs.WorkspaceSettingsHandler.SettingsFilePath);
-				Assert.IsNull   (main.StartArgs.TerminalSettingsHandler);
-				Assert.IsFalse  (main.StartArgs.ShowNewTerminalDialog);
+				Assert.IsNull (main.StartArgs.WorkspaceSettingsHandler);
+				Assert.IsNull (main.StartArgs.TerminalSettingsHandler);
+				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
 			}
 
 			using (Main main = new Main(new CommandLineArgs(new string[] { EmptyWorkspaceFilePath })))
 			{
-				PrepareMainAndVerifyResult(main);
+				PrepareMainAndVerifyResult(main, MainResult.ApplicationStartError);
 
-				Assert.IsNotNull(main.StartArgs.WorkspaceSettingsHandler);
-				Assert.AreEqual (EmptyWorkspaceFilePath, main.StartArgs.WorkspaceSettingsHandler.SettingsFilePath);
-				Assert.IsNull   (main.StartArgs.TerminalSettingsHandler);
-				Assert.IsFalse  (main.StartArgs.ShowNewTerminalDialog);
+				Assert.IsNull (main.StartArgs.WorkspaceSettingsHandler);
+				Assert.IsNull (main.StartArgs.TerminalSettingsHandler);
+				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
 			}
 		}
 

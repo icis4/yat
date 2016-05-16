@@ -88,6 +88,9 @@ namespace YAT.Settings.Test
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "VID", Justification = "As always, there are exceptions to the rules...")]
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "PID", Justification = "As always, there are exceptions to the rules...")]
 		T_07_USB_SerHID_VID0EB8_PID2300_YAT8_Closed,
+
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "As always, there are exceptions to the rules...")]
+		T_Empty,
 	}
 
 	/// <summary></summary>
@@ -95,10 +98,15 @@ namespace YAT.Settings.Test
 	{
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "As always, there are exceptions to the rules...")]
 		W_04_Matthias,
+
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "As always, there are exceptions to the rules...")]
 		W_06_Matthias,
+
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "As always, there are exceptions to the rules...")]
 		W_08_Matthias,
+
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "As always, there are exceptions to the rules...")]
+		W_Empty,
 	}
 
 	#pragma warning restore 1591
@@ -280,6 +288,11 @@ namespace YAT.Settings.Test
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
 		public static readonly SettingsFilePaths FilePaths_Current;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
+		public static readonly SettingsFilePaths FilePaths_Empty;
 
 		#endregion
 
@@ -463,6 +476,12 @@ namespace YAT.Settings.Test
 			FilePaths_Current.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
 			FilePaths_Current.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2300_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2300) YAT.8 - Closed.yat");
 			FilePaths_Current.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
+
+			// Empty
+			FilePaths_Empty = new SettingsFilePaths("!-Empty");
+
+			FilePaths_Empty.AddTerminalFileName(TerminalSettingsTestCase.T_Empty, "Empty.yat");
+			FilePaths_Empty.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_Empty, "Empty.yaw");
 		}
 
 		#endregion

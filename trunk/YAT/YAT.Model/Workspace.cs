@@ -45,6 +45,7 @@ using MKY.Settings;
 using YAT.Application.Utilities;
 using YAT.Model.Settings;
 using YAT.Model.Types;
+using YAT.Model.Utilities;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
@@ -834,47 +835,13 @@ namespace YAT.Model
 				if (!isAutoSave)
 				{
 					OnFixedStatusTextRequest("Error saving workspace!");
-
-					StringBuilder sb = new StringBuilder();
-					sb.AppendLine("Unable to save workspace file");
-					sb.AppendLine(this.settingsHandler.SettingsFilePath);
-
-					if (ex is System.Xml.XmlException)
-					{
-						sb.AppendLine();
-						sb.AppendLine("XML error message:");
-						sb.AppendLine(ex.Message);
-
-						if (ex.InnerException != null)
-						{
-							sb.AppendLine();
-							sb.AppendLine("File error message:");
-							sb.AppendLine(ex.InnerException.Message);
-						}
-					}
-					else if (ex != null)
-					{
-						sb.AppendLine();
-						sb.AppendLine("System error message:");
-						sb.AppendLine(ex.Message);
-
-						if (ex.InnerException != null)
-						{
-							sb.AppendLine();
-							sb.AppendLine();
-							sb.AppendLine("Additional error message:");
-							sb.Append(ex.InnerException.Message);
-						}
-					}
-
 					OnMessageInputRequest
 					(
-						sb.ToString(),
+						ErrorHelper.ComposeMessage("Unable to save workspace file", this.settingsHandler.SettingsFilePath, ex),
 						"File Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
 					);
-
 					OnTimedStatusTextRequest("Workspace not saved!");
 				}
 				else // AutoSave
@@ -1353,43 +1320,18 @@ namespace YAT.Model
 
 					if (isToReplace)
 					{
-						Exception exception;
-						if (OpenTerminalFromSettings(terminalSettingsToReplace, item.Guid, item.FixedIndex, item.Window, out exception))
+						Exception ex;
+						if (OpenTerminalFromSettings(terminalSettingsToReplace, item.Guid, item.FixedIndex, item.Window, out ex))
 						{
 							openedTerminalCount++;
 							success = true;
 						}
 						else
 						{
-							StringBuilder sb = new StringBuilder();
-
 							if (!string.IsNullOrEmpty(item.FilePath))
-							{
-								sb.AppendLine("Unable to open terminal");
-								sb.Append(item.FilePath);
-							}
+								errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal", item.FilePath, ex);
 							else
-							{
-								sb.Append("Unable to open terminal!");
-							}
-
-							if (exception != null)
-							{
-								sb.AppendLine();
-								sb.AppendLine();
-								sb.AppendLine("System error message:");
-								sb.Append(exception.Message);
-
-								if (exception.InnerException != null)
-								{
-									sb.AppendLine();
-									sb.AppendLine();
-									sb.AppendLine("Additional error message:");
-									sb.Append(exception.InnerException.Message);
-								}
-							}
-
-							errorMessage = sb.ToString();
+								errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal!", ex);
 						}
 					}
 					else // In all other cases, 'normally' open the terminal from the given file:
@@ -1408,19 +1350,10 @@ namespace YAT.Model
 
 						if (string.IsNullOrEmpty(errorMessage))
 						{
-							StringBuilder sb = new StringBuilder();
-
 							if (!string.IsNullOrEmpty(item.FilePath))
-							{
-								sb.AppendLine("Unable to open terminal");
-								sb.Append(item.FilePath);
-							}
+								errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal", item.FilePath);
 							else
-							{
-								sb.Append("Unable to open terminal!");
-							}
-
-							errorMessage = sb.ToString();
+								errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal!");
 						}
 
 						OnFixedStatusTextRequest("Error opening terminal!");
@@ -1506,68 +1439,13 @@ namespace YAT.Model
 				}
 				else
 				{
-					StringBuilder sb = new StringBuilder();
-					sb.AppendLine("Unable to open terminal");
-					sb.Append(filePath);
-
-					if (ex != null)
-					{
-						sb.AppendLine();
-						sb.AppendLine();
-						sb.AppendLine("System error message:");
-						sb.Append(ex.Message);
-
-						if (ex.InnerException != null)
-						{
-							sb.AppendLine();
-							sb.AppendLine();
-							sb.AppendLine("Additional error message:");
-							sb.Append(ex.InnerException.Message);
-						}
-					}
-
-					errorMessage = sb.ToString();
+					errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal", filePath, ex);
 					return (false);
 				}
 			}
 			else
 			{
-				StringBuilder sb = new StringBuilder();
-				sb.AppendLine("Unable to open terminal file");
-				sb.Append(filePath);
-
-				if (ex is System.Xml.XmlException)
-				{
-					sb.AppendLine();
-					sb.AppendLine();
-					sb.AppendLine("XML error message:");
-					sb.Append(ex.Message);
-
-					if (ex.InnerException != null)
-					{
-						sb.AppendLine();
-						sb.AppendLine();
-						sb.AppendLine("File error message:");
-						sb.Append(ex.InnerException.Message);
-					}
-				}
-				else if (ex != null)
-				{
-					sb.AppendLine();
-					sb.AppendLine();
-					sb.AppendLine("System error message:");
-					sb.Append(ex.Message);
-
-					if (ex.InnerException != null)
-					{
-						sb.AppendLine();
-						sb.AppendLine();
-						sb.AppendLine("Additional error message:");
-						sb.Append(ex.InnerException.Message);
-					}
-				}
-
-				errorMessage = sb.ToString();
+				errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal file", filePath, ex);
 				return (false);
 			}
 		}

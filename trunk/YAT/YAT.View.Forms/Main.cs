@@ -34,6 +34,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -232,7 +233,7 @@ namespace YAT.View.Forms
 
 			if (this.result != Model.MainResult.Success)
 			{
-				bool showErrorModally = this.main.StartArgs.KeepOpenOnError;
+				bool showErrorModally = this.main.StartArgs.Interactive;
 				bool keepOpenOnError  = this.main.StartArgs.KeepOpenOnError;
 
 				switch (this.result)
@@ -242,17 +243,21 @@ namespace YAT.View.Forms
 						if (showErrorModally)
 						{
 							string executableName = Path.GetFileName(System.Windows.Forms.Application.ExecutablePath);
-							string message =
-								ApplicationEx.ProductName + " could not be started because the given command line is invalid." + Environment.NewLine +
-								@"Use """ + executableName + @" /?"" for command line help.";
+
+							StringBuilder sb = new StringBuilder();
+							sb.Append(ApplicationEx.ProductName);
+							sb.Append(" could not be started because the given command line is invalid!");
+							sb.AppendLine();
+							sb.AppendLine();
+							sb.Append(@"Use """ + executableName + @" /?"" for command line help.");
 
 							MessageBoxEx.Show
 							(
 								this,
-								message,
+								sb.ToString(),
 								"Invalid Command Line",
 								MessageBoxButtons.OK,
-								MessageBoxIcon.Warning
+								MessageBoxIcon.Exclamation
 							);
 						}
 						break;
@@ -262,13 +267,24 @@ namespace YAT.View.Forms
 					{
 						if (showErrorModally)
 						{
+							StringBuilder sb = new StringBuilder();
+							sb.Append(ApplicationEx.ProductName);
+							sb.Append(" could not be started with the given settings!");
+
+							if (!string.IsNullOrEmpty(this.main.StartArgs.ErrorMessage))
+							{
+								sb.AppendLine();
+								sb.AppendLine();
+								sb.Append(this.main.StartArgs.ErrorMessage);
+							}
+
 							MessageBoxEx.Show
 							(
 								this,
-								ApplicationEx.ProductName + " could not successfully be started with the given settings in the current environment!",
-								"Start Warning",
+								sb.ToString(),
+								"Start Error",
 								MessageBoxButtons.OK,
-								MessageBoxIcon.Warning
+								MessageBoxIcon.Error
 							);
 						}
 						break;
@@ -278,13 +294,17 @@ namespace YAT.View.Forms
 					{
 						if (showErrorModally)
 						{
+							StringBuilder sb = new StringBuilder();
+							sb.Append(ApplicationEx.ProductName);
+							sb.Append(" could not execute the requested operation!");
+
 							MessageBoxEx.Show
 							(
 								this,
-								ApplicationEx.ProductName + " could not successfully execute the requested operation!",
-								"Execution Warning",
+								sb.ToString(),
+								"Execution Error",
 								MessageBoxButtons.OK,
-								MessageBoxIcon.Warning
+								MessageBoxIcon.Error
 							);
 						}
 						break;

@@ -43,6 +43,7 @@ using MKY.Settings;
 
 using YAT.Application.Utilities;
 using YAT.Model.Types;
+using YAT.Model.Utilities;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
@@ -310,7 +311,12 @@ namespace YAT.Model
 
 			// Process command line args into start requests:
 			if (!ProcessCommandLineArgsIntoStartRequests())
-				return (MainResult.CommandLineError);
+			{
+				if ((this.commandLineArgs == null) || (!this.commandLineArgs.IsValid))
+					return (MainResult.CommandLineError);
+				else
+					return (MainResult.ApplicationStartError);
+			}
 
 			// Start YAT according to the start requests:
 			bool success = false;
@@ -467,7 +473,7 @@ namespace YAT.Model
 			}
 
 			// Prio 1 = Invalid:
-			if ((this.commandLineArgs != null) && (!this.commandLineArgs.IsValid))
+			if (!this.commandLineArgs.IsValid)
 			{
 				return (false);
 			}
@@ -516,18 +522,30 @@ namespace YAT.Model
 				if (ExtensionHelper.IsWorkspaceFile(requestedFilePath))
 				{
 					DocumentSettingsHandler<WorkspaceSettingsRoot> sh;
-					if (OpenWorkspaceFile(requestedFilePath, out sh))
+					Exception ex;
+					if (OpenWorkspaceFile(requestedFilePath, out sh, out ex))
+					{
 						this.startArgs.WorkspaceSettingsHandler = sh;
+					}
 					else
+					{
+						this.startArgs.ErrorMessage = ErrorHelper.ComposeMessage("Unable to open workspace file", requestedFilePath, ex);
 						return (false);
+					}
 				}
 				else if (ExtensionHelper.IsTerminalFile(requestedFilePath))
 				{
 					DocumentSettingsHandler<TerminalSettingsRoot> sh;
-					if (OpenTerminalFile(requestedFilePath, out sh))
+					Exception ex;
+					if (OpenTerminalFile(requestedFilePath, out sh, out ex))
+					{
 						this.startArgs.TerminalSettingsHandler = sh;
+					}
 					else
+					{
+						this.startArgs.ErrorMessage = ErrorHelper.ComposeMessage("Unable to open terminal file", requestedFilePath, ex);
 						return (false);
+					}
 				}
 				else
 				{
@@ -535,7 +553,7 @@ namespace YAT.Model
 				}
 			}
 
-			// Prio 7 = Retrieve the requested terminal and validate it:
+			// Prio 7 = Retrieve the requested terminal within the workspace and validate it:
 			if (this.startArgs.WorkspaceSettingsHandler != null) // Applies to a terminal within a workspace.
 			{
 				int requestedDynamicTerminalIndex = this.commandLineArgs.RequestedDynamicTerminalIndex;
@@ -1273,68 +1291,13 @@ namespace YAT.Model
 				}
 				else
 				{
-					StringBuilder sb = new StringBuilder();
-					sb.AppendLine("Unable to open workspace");
-					sb.Append(filePath);
-
-					if (ex != null)
-					{
-						sb.AppendLine();
-						sb.AppendLine();
-						sb.AppendLine("System error message:");
-						sb.Append(ex.Message);
-
-						if (ex.InnerException != null)
-						{
-							sb.AppendLine();
-							sb.AppendLine();
-							sb.AppendLine("Additional error message:");
-							sb.Append(ex.InnerException.Message);
-						}
-					}
-
-					errorMessage = sb.ToString();
+					errorMessage = ErrorHelper.ComposeMessage("Unable to open workspace", filePath, ex);
 					return (false);
 				}
 			}
 			else
 			{
-				StringBuilder sb = new StringBuilder();
-				sb.AppendLine("Unable to open workspace file");
-				sb.Append(filePath);
-
-				if (ex is System.Xml.XmlException)
-				{
-					sb.AppendLine();
-					sb.AppendLine();
-					sb.AppendLine("XML error message:");
-					sb.Append(ex.Message);
-
-					if (ex.InnerException != null)
-					{
-						sb.AppendLine();
-						sb.AppendLine();
-						sb.AppendLine("File error message:");
-						sb.Append(ex.InnerException.Message);
-					}
-				}
-				else if (ex != null)
-				{
-					sb.AppendLine();
-					sb.AppendLine();
-					sb.AppendLine("System error message:");
-					sb.Append(ex.Message);
-
-					if (ex.InnerException != null)
-					{
-						sb.AppendLine();
-						sb.AppendLine();
-						sb.AppendLine("Additional error message:");
-						sb.Append(ex.InnerException.Message);
-					}
-				}
-
-				errorMessage = sb.ToString();
+				errorMessage = ErrorHelper.ComposeMessage("Unable to open workspace file", filePath, ex);
 				return (false);
 			}
 		}
@@ -1467,6 +1430,12 @@ namespace YAT.Model
 			return (OpenWorkspaceFile(filePath, out settingsHandler, out guid, out exception));
 		}
 
+		private bool OpenWorkspaceFile(string filePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, out Exception exception)
+		{
+			Guid guid;
+			return (OpenWorkspaceFile(filePath, out settingsHandler, out guid, out exception));
+		}
+
 		private bool OpenWorkspaceFile(string filePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, out Guid guid, out Exception exception)
 		{
 			try
@@ -1537,6 +1506,11 @@ namespace YAT.Model
 		private bool OpenTerminalFile(string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
 			Exception exception;
+			return (OpenTerminalFile(terminalFilePath, out settingsHandler, out exception));
+		}
+
+		private bool OpenTerminalFile(string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
+		{
 			return (OpenTerminalFile("", terminalFilePath, out settingsHandler, out exception));
 		}
 
@@ -1695,8 +1669,7 @@ namespace YAT.Model
 							OnFixedStatusTextRequest("Unable to transmit text!");
 							OnMessageInputRequest
 							(
-								"Unable to transmit text" + Environment.NewLine + text + Environment.NewLine + Environment.NewLine +
-								"System error message:" + Environment.NewLine + ex.Message,
+								ErrorHelper.ComposeMessage("Unable to transmit text", text, ex),
 								"Transmission Error",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Stop
@@ -1724,8 +1697,7 @@ namespace YAT.Model
 							OnFixedStatusTextRequest("Unable to transmit file!");
 							OnMessageInputRequest
 							(
-								"Unable to transmit file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
-								"System error message:" + Environment.NewLine + ex.Message,
+								ErrorHelper.ComposeMessage("Unable to transmit file", filePath, ex),
 								"Transmission Error",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Stop
@@ -1822,8 +1794,7 @@ namespace YAT.Model
 						OnFixedStatusTextRequest("Unable to exit!");
 						OnMessageInputRequest
 						(
-							"Unable to exit!" + Environment.NewLine + Environment.NewLine +
-							"System error message:" + Environment.NewLine + ex.Message,
+							ErrorHelper.ComposeMessage("Unable to exit!", ex),
 							"Exit Error",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Stop
