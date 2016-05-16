@@ -671,7 +671,7 @@ namespace YAT.Model
 							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
 
 							sb.Append(" - ");
-							sb.Append(s.RemoteEndPoint.ToString());
+							sb.Append(s.RemoteEndPointString);
 							sb.Append(" - ");
 
 							if (IsConnected)
@@ -719,7 +719,7 @@ namespace YAT.Model
 								if (isClient)
 								{
 									sb.Append(" - ");
-									sb.Append(s.RemoteEndPoint.ToString()); // 'InvariantCulture' for TCP and UDP ports!
+									sb.Append(s.RemoteEndPointString);
 									sb.Append(" - ");
 									sb.Append(IsConnected ? "Connected" : "Disconnected");
 								}
@@ -753,7 +753,7 @@ namespace YAT.Model
 						{
 							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
 							sb.Append(" - ");
-							sb.Append(s.RemoteEndPoint.ToString());
+							sb.Append(s.RemoteEndPointString);
 							sb.Append(" - ");
 							sb.Append(IsOpen ? "Open" : "Closed");
 							break;
@@ -774,7 +774,7 @@ namespace YAT.Model
 						{
 							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
 							sb.Append(" - ");
-							sb.Append(s.RemoteEndPoint.ToString());
+							sb.Append(s.RemoteEndPointString);
 							sb.Append(" - ");
 							sb.Append("Receive:");
 							sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
@@ -886,7 +886,7 @@ namespace YAT.Model
 							else
 								sb.Append(" is disconnected from ");
 
-							sb.Append(s.RemoteEndPoint.ToString());
+							sb.Append(s.RemoteEndPointString);
 							break;
 						}
 
@@ -949,7 +949,7 @@ namespace YAT.Model
 								if (isClient)
 								{
 									sb.Append(" is connected to ");
-									sb.Append(s.RemoteEndPoint.ToString());
+									sb.Append(s.RemoteEndPointString);
 								}
 								else if (isServer)
 								{
@@ -960,13 +960,13 @@ namespace YAT.Model
 								else
 								{
 									sb.Append(" is starting to connect to ");
-									sb.Append(s.RemoteEndPoint.ToString());
+									sb.Append(s.RemoteEndPointString);
 								}
 							}
 							else
 							{
 								sb.Append(" is disconnected from ");
-								sb.Append(s.RemoteEndPoint.ToString());
+								sb.Append(s.RemoteEndPointString);
 							}
 							break;
 						}
@@ -1701,6 +1701,14 @@ namespace YAT.Model
 						sb.AppendLine();
 						sb.AppendLine("System error message:");
 						sb.Append(ex.Message);
+
+						if (ex.InnerException != null)
+						{
+							sb.AppendLine();
+							sb.AppendLine();
+							sb.AppendLine("Additional error message:");
+							sb.Append(ex.InnerException.Message);
+						}
 					}
 
 					OnMessageInputRequest

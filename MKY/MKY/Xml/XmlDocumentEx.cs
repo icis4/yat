@@ -57,7 +57,7 @@ namespace MKY.Xml
 			// Save the resulting document into a string:
 			StringBuilder sb = new StringBuilder();
 			using (XmlWriter writer = XmlWriter.Create(sb)) // Unlike file serialization, string serialization will be UTF-16 encoded!
-			{
+			{                                               // Use dedicated XML writer to e.g. preserve whitespace!
 				document.Save(writer);
 			}
 
@@ -117,7 +117,7 @@ namespace MKY.Xml
 			// Serialize the empty object tree into a string:
 			StringBuilder sb = new StringBuilder();
 			using (XmlWriter xw = XmlWriter.Create(sb)) // Unlike file serialization, string serialization will be UTF-16 encoded!
-			{
+			{                                           // Use dedicated XML writer to e.g. preserve whitespace!
 				XmlSerializer serializer = new XmlSerializer(type);
 				serializer.Serialize(xw, obj);
 			}

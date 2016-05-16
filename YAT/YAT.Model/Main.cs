@@ -768,8 +768,8 @@ namespace YAT.Model
 					 (finalIOType == Domain.IOType.UdpPairSocket)) &&
 					this.commandLineArgs.OptionIsGiven("LocalFilter"))
 				{
-					MKY.Net.IPAddressFilterEx localFilter;
-					if (MKY.Net.IPAddressFilterEx.TryParse(this.commandLineArgs.LocalFilter, out localFilter))
+					MKY.Net.IPFilterEx localFilter;
+					if (MKY.Net.IPFilterEx.TryParse(this.commandLineArgs.LocalFilter, out localFilter))
 						terminalSettings.IO.Socket.LocalFilter = localFilter;
 					else
 						return (false);
@@ -1283,6 +1283,14 @@ namespace YAT.Model
 						sb.AppendLine();
 						sb.AppendLine("System error message:");
 						sb.Append(ex.Message);
+
+						if (ex.InnerException != null)
+						{
+							sb.AppendLine();
+							sb.AppendLine();
+							sb.AppendLine("Additional error message:");
+							sb.Append(ex.InnerException.Message);
+						}
 					}
 
 					errorMessage = sb.ToString();
@@ -1316,6 +1324,14 @@ namespace YAT.Model
 					sb.AppendLine();
 					sb.AppendLine("System error message:");
 					sb.Append(ex.Message);
+
+					if (ex.InnerException != null)
+					{
+						sb.AppendLine();
+						sb.AppendLine();
+						sb.AppendLine("Additional error message:");
+						sb.Append(ex.InnerException.Message);
+					}
 				}
 
 				errorMessage = sb.ToString();

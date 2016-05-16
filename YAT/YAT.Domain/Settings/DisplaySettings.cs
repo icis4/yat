@@ -409,7 +409,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <remarks>
-		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
+		/// This 'EnumEx' cannot be serialized, thus, the helper above is used for serialization.
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
@@ -437,7 +437,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <remarks>
-		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
+		/// This 'EnumEx' cannot be serialized, thus, the helper above is used for serialization.
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
