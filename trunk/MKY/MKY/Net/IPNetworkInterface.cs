@@ -445,6 +445,18 @@ namespace MKY.Net
 		}
 
 		/// <summary></summary>
+		public static implicit operator IPAddress(IPNetworkInterfaceEx networkInterface)
+		{
+			return (networkInterface.Address);
+		}
+
+		/// <summary></summary>
+		public static implicit operator IPNetworkInterfaceEx(IPAddress address)
+		{
+			return (new IPNetworkInterfaceEx(address));
+		}
+
+		/// <summary></summary>
 		public static implicit operator string(IPNetworkInterfaceEx networkInterface)
 		{
 			return (networkInterface.ToString());
