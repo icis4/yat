@@ -45,8 +45,14 @@ namespace MKY.Xml.Serialization
 		{
 			using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
 			{
-				XmlSerializer serializer = new XmlSerializer(type);
-				serializer.Serialize(sw, obj);
+				XmlWriterSettings xws = new XmlWriterSettings();
+				xws.Indent = true;
+
+				using (XmlWriter xw = XmlWriter.Create(sw, xws)) // Use dedicated XML writer to e.g. preserve whitespace!
+				{
+					XmlSerializer serializer = new XmlSerializer(type);
+					serializer.Serialize(xw, obj);
+				}
 			}
 		}
 

@@ -309,7 +309,7 @@ namespace MKY.Settings
 						catch (Exception exTolerant)
 						{
 							DebugEx.WriteException(this.parentType, exTolerant, "Tolerant deserialization has failed!");
-							throw; // Re-throw!
+							throw (exStandard); // Re-throw! But use the standard error message, as that output line/char numbers and not just the char at line 1.
 						}
 					}
 					else
@@ -323,7 +323,7 @@ namespace MKY.Settings
 						catch (Exception exAlternateTolerant)
 						{
 							DebugEx.WriteException(this.parentType, exAlternateTolerant, "Alternate-tolerant deserialization has failed!");
-							throw; // Re-throw!
+							throw (exStandard); // Re-throw! But use the standard error message, as that output line/char numbers and not just the char at line 1.
 						}
 					}
 				}
