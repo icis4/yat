@@ -255,17 +255,36 @@ namespace MKY.IO.Ports
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SerialPortEx"/> class.
+		/// </summary>
 		public SerialPortEx()
 		{
 			InitializeComponent();
 			Initialize();
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SerialPortEx"/> class using the specified
+		/// <see cref="IContainer"/> object.
+		/// </summary>
 		public SerialPortEx(IContainer container)
+			: base(container)
 		{
-			container.Add(this);
+			InitializeComponent();
+			Initialize();
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SerialPortEx"/> class using the specified
+		/// port name.
+		/// </summary>
+		/// <param name="portName">
+		/// The port to use (for example, COM1).
+		/// </param>
+		public SerialPortEx(string portName)
+		{
+			PortName = portName;
 			InitializeComponent();
 			Initialize();
 		}

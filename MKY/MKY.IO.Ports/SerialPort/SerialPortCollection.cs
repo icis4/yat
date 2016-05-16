@@ -203,7 +203,7 @@ namespace MKY.IO.Ports
 							break;
 					}
 
-					using (System.IO.Ports.SerialPort p = new System.IO.Ports.SerialPort(portId))
+					using (SerialPortEx p = new SerialPortEx(portId)) // Use SerialPortEx to prevent potential 'ObjectDisposedException'.
 					{
 						try
 						{
