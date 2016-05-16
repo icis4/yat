@@ -153,7 +153,7 @@ Fixed bugs:
   any device sending continuous data. Otherwise, related serial COM ports may no longer be opened.
   Issue is being reported by many users of .NET, but Microsoft seems to have no plans on fixing it.
 - TCP/IP local interface setting fixed:
-   > Setting is now also considered by TCP/IP clients (bug #322).
+   > Setting is now properly applied to all TCP/IP sockets (bug #322).
    > Setting extended to interface description/address pair (bug #328).
 - UDP/IP functionality fixed:
    > Can now properly receive from a remote host (bug #327).

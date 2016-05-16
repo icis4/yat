@@ -609,7 +609,7 @@ namespace MKY.IO.Serial.Socket
 			if (!IsDisposed && IsStarted) // Check 'IsDisposed' first!
 			{
 				SetStateSynchronizedAndNotify(SocketState.Connecting);
-				CreateClient(this.remoteHost, this.remotePort);
+				CreateClient(this.remoteHost, this.remotePort, this.localInterface);
 
 				bool startIsOngoing = false;
 				try
@@ -752,13 +752,13 @@ namespace MKY.IO.Serial.Socket
 		// Client > Lifetime
 		//------------------------------------------------------------------------------------------
 
-		private void CreateClient(IPHostEx remoteHost, int remotePort)
+		private void CreateClient(IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface)
 		{
 			DisposeClient();
 
 			lock (this.socketSyncObj)
 			{
-				this.client = new TcpClient(this.instanceId, remoteHost, remotePort);
+				this.client = new TcpClient(this.instanceId, remoteHost, remotePort, localInterface);
 
 				this.client.IOChanged    += new EventHandler                       (this.client_IOChanged);
 				this.client.IOError      += new EventHandler<IOErrorEventArgs>     (this.client_IOError);

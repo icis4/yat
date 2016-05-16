@@ -126,6 +126,7 @@ namespace MKY.IO.Serial.Socket
 
 		private IPHostEx remoteHost;
 		private int remotePort;
+		private IPNetworkInterfaceEx localInterface;
 		private AutoRetry autoReconnect;
 
 		private SocketState state = SocketState.Reset;
@@ -188,31 +189,32 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <summary></summary>
-		public TcpClient(IPHostEx remoteHost, int remotePort)
-			: this(SocketBase.NextInstanceId, remoteHost, remotePort)
+		public TcpClient(IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface)
+			: this(SocketBase.NextInstanceId, remoteHost, remotePort, localInterface)
 		{
 		}
 
 		/// <summary></summary>
-		public TcpClient(int instanceId, IPHostEx remoteHost, int remotePort)
-			: this(instanceId, remoteHost, remotePort, new AutoRetry())
+		public TcpClient(int instanceId, IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface)
+			: this(instanceId, remoteHost, remotePort, localInterface, new AutoRetry())
 		{
 		}
 
 		/// <summary></summary>
-		public TcpClient(IPHostEx remoteHost, int remotePort, AutoRetry autoReconnect)
-			: this(SocketBase.NextInstanceId, remoteHost, remotePort, autoReconnect)
+		public TcpClient(IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, AutoRetry autoReconnect)
+			: this(SocketBase.NextInstanceId, remoteHost, remotePort, localInterface, autoReconnect)
 		{
 		}
 
 		/// <summary></summary>
-		public TcpClient(int instanceId, IPHostEx remoteHost, int remotePort, AutoRetry autoReconnect)
+		public TcpClient(int instanceId, IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, AutoRetry autoReconnect)
 		{
 			this.instanceId = instanceId;
 
-			this.remoteHost    = remoteHost;
-			this.remotePort    = remotePort;
-			this.autoReconnect = autoReconnect;
+			this.remoteHost     = remoteHost;
+			this.remotePort     = remotePort;
+			this.localInterface = localInterface;
+			this.autoReconnect  = autoReconnect;
 		}
 
 		#region Disposal
@@ -307,6 +309,17 @@ namespace MKY.IO.Serial.Socket
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				return (this.remotePort);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual IPNetworkInterfaceEx LocalInterface
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.localInterface);
 			}
 		}
 
@@ -567,7 +580,7 @@ namespace MKY.IO.Serial.Socket
 					Timeout.Infinite
 				);
 
-				this.socket.AddConnector("MKY.IO.Serial.Socket.TcpClient", new System.Net.IPEndPoint(this.remoteHost.Address, this.remotePort));
+				this.socket.AddConnector("MKY.IO.Serial.Socket.TcpClient", new System.Net.IPEndPoint(this.remoteHost.Address, this.remotePort), new System.Net.IPEndPoint(this.localInterface.Address, 0));
 				this.socket.Start(); // The ALAZ socket will be started asynchronously
 			}
 		}

@@ -47,6 +47,7 @@ namespace YAT.Domain
 						(
 						settings.Socket.RemoteHost,
 						settings.Socket.RemoteTcpPort,
+						settings.Socket.LocalInterface,
 						settings.Socket.TcpClientAutoReconnect
 						));
 				}
