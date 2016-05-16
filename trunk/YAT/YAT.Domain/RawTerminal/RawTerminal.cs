@@ -127,7 +127,7 @@ namespace YAT.Domain
 			AttachBufferSettings(bufferSettings);
 
 			AttachIOSettings(ioSettings);
-			AttachIO(IOFactory.CreateIO(ioSettings)); // settings are applied by factory
+			AttachIO(IOFactory.CreateIO(ioSettings)); // Settings are applied by the factory.
 		}
 
 		/// <summary></summary>
@@ -140,7 +140,7 @@ namespace YAT.Domain
 			AttachBufferSettings(bufferSettings);
 
 			AttachIOSettings(ioSettings);
-			AttachIO(IOFactory.CreateIO(ioSettings)); // settings are applied by factory
+			AttachIO(IOFactory.CreateIO(ioSettings)); // Settings are applied by the factory.
 		}
 
 		#region Disposal

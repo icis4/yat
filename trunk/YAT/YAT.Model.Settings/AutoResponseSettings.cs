@@ -126,9 +126,8 @@ namespace YAT.Model.Settings
 			set { Trigger = value;  }
 		}
 
-		/// <summary></summary>
 		/// <remarks>
-		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
+		/// This 'EnumEx' cannot be serialized, thus, the helper above is used for serialization.
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
@@ -147,6 +146,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <remarks>
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
 		[XmlElement("Response")]
@@ -156,9 +156,8 @@ namespace YAT.Model.Settings
 			set { Response = value;  }
 		}
 
-		/// <summary></summary>
 		/// <remarks>
-		/// This 'EnumEx' cannot be serialized, thus, the string above is used for serialization.
+		/// This 'EnumEx' cannot be serialized, thus, the helper above is used for serialization.
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]

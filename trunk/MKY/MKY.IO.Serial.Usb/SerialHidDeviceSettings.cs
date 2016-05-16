@@ -38,7 +38,7 @@ namespace MKY.IO.Serial.Usb
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SerialHidDeviceSettings : MKY.Settings.SettingsItem
+	public class SerialHidDeviceSettings : Settings.SettingsItem
 	{
 		#region Constants
 		//==========================================================================================

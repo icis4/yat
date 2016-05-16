@@ -857,6 +857,14 @@ namespace YAT.Model
 						sb.AppendLine();
 						sb.AppendLine("System error message:");
 						sb.AppendLine(ex.Message);
+
+						if (ex.InnerException != null)
+						{
+							sb.AppendLine();
+							sb.AppendLine();
+							sb.AppendLine("Additional error message:");
+							sb.Append(ex.InnerException.Message);
+						}
 					}
 
 					OnMessageInputRequest
@@ -1371,6 +1379,14 @@ namespace YAT.Model
 								sb.AppendLine();
 								sb.AppendLine("System error message:");
 								sb.Append(exception.Message);
+
+								if (exception.InnerException != null)
+								{
+									sb.AppendLine();
+									sb.AppendLine();
+									sb.AppendLine("Additional error message:");
+									sb.Append(exception.InnerException.Message);
+								}
 							}
 
 							errorMessage = sb.ToString();
@@ -1500,6 +1516,14 @@ namespace YAT.Model
 						sb.AppendLine();
 						sb.AppendLine("System error message:");
 						sb.Append(ex.Message);
+
+						if (ex.InnerException != null)
+						{
+							sb.AppendLine();
+							sb.AppendLine();
+							sb.AppendLine("Additional error message:");
+							sb.Append(ex.InnerException.Message);
+						}
 					}
 
 					errorMessage = sb.ToString();
@@ -1533,6 +1557,14 @@ namespace YAT.Model
 					sb.AppendLine();
 					sb.AppendLine("System error message:");
 					sb.Append(ex.Message);
+
+					if (ex.InnerException != null)
+					{
+						sb.AppendLine();
+						sb.AppendLine();
+						sb.AppendLine("Additional error message:");
+						sb.Append(ex.InnerException.Message);
+					}
 				}
 
 				errorMessage = sb.ToString();
