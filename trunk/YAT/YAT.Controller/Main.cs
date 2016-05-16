@@ -494,6 +494,7 @@ namespace YAT.Controller
 			} // Dispose of model to ensure immediate release of resources.
 		}
 
+#if (!DEBUG)
 		/// <remarks>
 		/// In case of an <see cref="System.Windows.Forms.Application.ThreadException"/>, it is possible to continue operation.
 		/// </remarks>
@@ -517,7 +518,6 @@ namespace YAT.Controller
 			}
 		}
 
-#if (!DEBUG)
 		/// <remarks>
 		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart.
 		/// </remarks>

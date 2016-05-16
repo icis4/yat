@@ -457,7 +457,7 @@ namespace YAT.Model
 			if (!string.IsNullOrEmpty(RequestedTransmitText))
 			{
 				string errorMessage;
-				if (!Validation.ValidateText("text to send", RequestedTransmitText, out errorMessage))
+				if (!ValidationHelper.ValidateText("text to send", RequestedTransmitText, out errorMessage))
 				{
 					RequestedTransmitText = null;
 					Invalidate(errorMessage);

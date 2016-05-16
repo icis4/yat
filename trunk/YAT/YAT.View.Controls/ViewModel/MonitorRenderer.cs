@@ -76,6 +76,7 @@ namespace YAT.View.Controls
 			staticMonitorFormat |= TextFormatFlags.SingleLine;
 			staticMonitorFormat |= TextFormatFlags.ExpandTabs;
 			staticMonitorFormat |= TextFormatFlags.NoPadding;
+			staticMonitorFormat |= TextFormatFlags.NoPrefix;
 
 			// Attention, do not use 'EndEllipsis' for the monitor! These ellipses were the root
 			// cause of issue #125 "Representation of long texts in the terminal".

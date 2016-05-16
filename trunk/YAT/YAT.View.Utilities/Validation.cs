@@ -79,7 +79,7 @@ namespace YAT.View.Utilities
 		public static bool ValidateText(IWin32Window owner, string description, string textToValidate, Domain.Radix defaultRadix, Domain.Parser.Modes modes, out int invalidTextStart, out int invalidTextLength)
 		{
 			string errorMessage;
-			if (Model.Utilities.Validation.ValidateText(description, textToValidate, defaultRadix, modes, out invalidTextStart, out invalidTextLength, out errorMessage))
+			if (Model.Utilities.ValidationHelper.ValidateText(description, textToValidate, defaultRadix, modes, out invalidTextStart, out invalidTextLength, out errorMessage))
 			{
 				return (true);
 			}
