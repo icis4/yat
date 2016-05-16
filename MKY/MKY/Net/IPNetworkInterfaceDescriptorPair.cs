@@ -33,50 +33,18 @@ namespace MKY.Net
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("Description")]
-		private string description;
+		public string Description;
 
 		/// <summary>Interval of reconnect in milliseconds.</summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("Address")]
-		private string address;
-
-		public string Description
-		{
-			get
-			{
-				return description;
-			}
-
-			set
-			{
-				if (value == null)
-					System.Diagnostics.Debugger.Break();
-
-				this.description = value;
-			}
-		}
-
-		public string Address
-		{
-			get
-			{
-				return address;
-			}
-
-			set
-			{
-				if (value == null)
-					System.Diagnostics.Debugger.Break();
-
-				this.address = value;
-			}
-		}
+		public string Address;
 
 		/// <summary></summary>
 		public IPNetworkInterfaceDescriptorPair(string description, string address)
 		{
-			this.description = description;
-			this.address     = address;
+			Description = description;
+			Address     = address;
 		}
 
 		#region Object Members
