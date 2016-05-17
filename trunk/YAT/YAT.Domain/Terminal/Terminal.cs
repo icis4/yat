@@ -368,12 +368,12 @@ namespace YAT.Domain
 					// In the 'normal' case, the timer will already have been stopped in Stop().
 					DisposePeriodicXOnTimer();
 
+					// In the 'normal' case, the send thread will already have been stopped in Close().
+					StopSendThread();
+
 					// In the 'normal' case, the terminal will already have been stopped in Stop().
 					if (this.rawTerminal != null)
 						this.rawTerminal.Dispose();
-
-					// In the 'normal' case, the send thread will already have been stopped in Close().
-					StopSendThread();
 				}
 
 				// Set state to disposed:

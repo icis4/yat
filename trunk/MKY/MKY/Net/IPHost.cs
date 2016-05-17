@@ -506,27 +506,30 @@ namespace MKY.Net
 		/// </summary>
 		public static bool TryResolve(string s, out IPAddress result)
 		{
-			try
+			if (!string.IsNullOrEmpty(s))
 			{
-				IPAddress[] addressesFromDns = Dns.GetHostAddresses(s);
-				foreach (IPAddress addressFromDns in addressesFromDns)
+				try
 				{
-					if (addressFromDns.AddressFamily == AddressFamily.InterNetwork) // IPv4 has precedence for compatibility reasons.
+					IPAddress[] addressesFromDns = Dns.GetHostAddresses(s);
+					foreach (IPAddress addressFromDns in addressesFromDns)
 					{
-						result = addressFromDns;
+						if (addressFromDns.AddressFamily == AddressFamily.InterNetwork) // IPv4 has precedence for compatibility reasons.
+						{
+							result = addressFromDns;
+							return (true);
+						}
+					}
+
+					if (addressesFromDns.Length > 0)
+					{
+						result = addressesFromDns[0];
 						return (true);
 					}
 				}
-
-				if (addressesFromDns.Length > 0)
+				catch (Exception ex)
 				{
-					result = addressesFromDns[0];
-					return (true);
+					DebugEx.WriteException(typeof(IPHostEx), ex, "Failed to get address from DNS!");
 				}
-			}
-			catch (Exception ex)
-			{
-				DebugEx.WriteException(typeof(IPHostEx), ex, "Failed to get address from DNS!");
 			}
 
 			result = IPAddress.None;
@@ -540,9 +543,18 @@ namespace MKY.Net
 		{
 			if ((IPHost)UnderlyingEnum == IPHost.Explicit) // Predefined addresses don't need to be resolved.
 			{
-				IPAddress result;
-				if (TryResolve(this.explicitName, out result))
-					this.explicitAddress = result;
+				if (!string.IsNullOrEmpty(this.explicitName))
+				{
+					IPAddress result;
+					if (TryResolve(this.explicitName, out result))
+						this.explicitAddress = result;
+					else
+						return (false);
+				}
+				else
+				{
+					return (false);
+				}
 			}
 
 			return (true);
