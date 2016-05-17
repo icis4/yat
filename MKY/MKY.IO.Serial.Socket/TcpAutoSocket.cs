@@ -164,15 +164,20 @@ namespace MKY.IO.Serial.Socket
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>Creates a TCP/IP AutoSocket.</summary>
+		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
 		public TcpAutoSocket(IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, int localPort)
 		{
+			if (remoteHost == null)     throw (new ArgumentNullException("remoteHost"));
+			if (localInterface == null) throw (new ArgumentNullException("localInterface"));
+
 			this.instanceId = SocketBase.NextInstanceId;
 
-			this.remoteHost      = remoteHost;
-			this.remotePort      = remotePort;
-			this.localInterface  = localInterface;
-			this.localPort       = localPort;
+			this.remoteHost     = remoteHost;
+			this.remotePort     = remotePort;
+			this.localInterface = localInterface;
+			this.localPort      = localPort;
 		}
 
 		#region Disposal

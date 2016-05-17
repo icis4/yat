@@ -184,15 +184,19 @@ namespace MKY.IO.Serial.Socket
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>Creates a TCP/IP server socket.</summary>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
 		public TcpServer(IPNetworkInterfaceEx localInterface, int localPort)
 			: this(SocketBase.NextInstanceId, localInterface, localPort)
 		{
 		}
 
-		/// <summary></summary>
+		/// <summary>Creates a TCP/IP server socket.</summary>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
 		public TcpServer(int instanceId, IPNetworkInterfaceEx localInterface, int localPort)
 		{
+			if (localInterface == null) throw (new ArgumentNullException("localInterface"));
+
 			this.instanceId = instanceId;
 
 			this.localInterface = localInterface;
@@ -717,7 +721,7 @@ namespace MKY.IO.Serial.Socket
 
 			SetStateSynchronizedAndNotify(SocketState.Accepted);
 
-			// Immediately begin receiving data.
+			// Immediately begin receiving data:
 			e.Connection.BeginReceive();
 		}
 
