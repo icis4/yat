@@ -170,7 +170,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
             {
 
                 //----- Create Socket!
-                FSocket = new Socket(InternalLocalEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                FSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 FSocket.Bind(InternalLocalEndPoint);
                 FSocket.ReceiveBufferSize = Host.SocketBufferSize;
                 FSocket.SendBufferSize = Host.SocketBufferSize;

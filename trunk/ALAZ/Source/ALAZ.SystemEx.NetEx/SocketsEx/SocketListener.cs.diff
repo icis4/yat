@@ -14,6 +14,15 @@
  using System;
  using System.Net;
  using System.Net.Sockets;
+@@ -126,7 +135,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+             if (!Disposed)
+             {
+ 
+-                FSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
++                FSocket = new Socket(LocalEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                 FSocket.Bind(LocalEndPoint);
+                 FSocket.Listen(FBackLog * FAcceptThreads);
+ 
 @@ -226,11 +235,24 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                  e2.UserToken = listener;
                  e2.Completed += new EventHandler<SocketAsyncEventArgs>(BeginAcceptCallbackAsync);
@@ -33,7 +42,7 @@
                  }
 +                catch (ObjectDisposedException ex)
 +                {
-+                    WriteDebugExceptionMessageLine(ex);
++                    DebugException(ex);
 +                }
  
 +                // ----- \remind  END  -----
@@ -51,7 +60,7 @@
 +		//==========================================================================================
 +
 +		[Conditional("DEBUG_EXCEPTIONS")]
-+		private void WriteDebugExceptionMessageLine(Exception ex)
++		private void DebugException(Exception ex)
 +		{
 +			MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes. It indicates an issue in ALAZ.");
 +		}
