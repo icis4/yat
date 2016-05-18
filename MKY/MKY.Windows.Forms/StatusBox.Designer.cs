@@ -39,7 +39,7 @@
 			// label_Status1
 			// 
 			this.label_Status1.AutoSize = true;
-			this.label_Status1.Location = new System.Drawing.Point(12, 9);
+			this.label_Status1.Location = new System.Drawing.Point(12, 15);
 			this.label_Status1.Name = "label_Status1";
 			this.label_Status1.Size = new System.Drawing.Size(55, 13);
 			this.label_Status1.TabIndex = 1;
@@ -48,7 +48,7 @@
 			// label_Status2
 			// 
 			this.label_Status2.AutoSize = true;
-			this.label_Status2.Location = new System.Drawing.Point(12, 24);
+			this.label_Status2.Location = new System.Drawing.Point(12, 30);
 			this.label_Status2.Name = "label_Status2";
 			this.label_Status2.Size = new System.Drawing.Size(55, 13);
 			this.label_Status2.TabIndex = 2;
@@ -59,7 +59,7 @@
 			this.checkBox_Setting.AutoSize = true;
 			this.checkBox_Setting.Checked = true;
 			this.checkBox_Setting.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox_Setting.Location = new System.Drawing.Point(15, 50);
+			this.checkBox_Setting.Location = new System.Drawing.Point(15, 56);
 			this.checkBox_Setting.Name = "checkBox_Setting";
 			this.checkBox_Setting.Size = new System.Drawing.Size(71, 17);
 			this.checkBox_Setting.TabIndex = 3;
