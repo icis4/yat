@@ -135,7 +135,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
             if (!Disposed)
             {
 
-                FSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                FSocket = new Socket(LocalEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                 FSocket.Bind(LocalEndPoint);
                 FSocket.Listen(FBackLog * FAcceptThreads);
 
