@@ -186,8 +186,8 @@ namespace YAT.Model.Test.Transmission
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			// Close temporary in-memory application settings.
-			ApplicationSettings.Close();
+			// Close and dispose of temporary in-memory application settings.
+			ApplicationSettings.CloseAndDispose();
 		}
 
 		#endregion

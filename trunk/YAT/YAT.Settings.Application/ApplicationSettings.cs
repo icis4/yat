@@ -199,25 +199,34 @@ namespace YAT.Settings.Application
 		}
 
 		/// <summary>
-		/// Close settings.
+		/// Close the application settings and release all resources.
 		/// </summary>
-		/// <remarks>
-		/// So far, there are only local user settings.
-		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public static bool Close()
+		public static bool CloseAndDispose()
 		{
 			if (staticSettingsHandler != null)
 			{
+				bool success = true;
+
 				try
 				{
 					staticSettingsHandler.Close();
-					return (true);
 				}
 				catch
 				{
-					return (false);
+					success = false;
 				}
+
+				try
+				{
+					staticSettingsHandler.Dispose();
+				}
+				catch
+				{
+					success = false;
+				}
+
+				return (success);
 			}
 			else
 			{

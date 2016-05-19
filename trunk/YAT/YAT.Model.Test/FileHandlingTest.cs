@@ -97,7 +97,7 @@ namespace YAT.Model.Test
 
 			// Restore 'normal' file-based application settings.
 			ApplicationSettings.Save();
-			ApplicationSettings.Close();
+			ApplicationSettings.CloseAndDispose();
 
 			Temp.CleanTempPath(GetType());
 		}

@@ -1110,7 +1110,7 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Close the application settings and release all resources.
+		/// Close the application settings.
 		/// </summary>
 		public virtual void Close()
 		{
