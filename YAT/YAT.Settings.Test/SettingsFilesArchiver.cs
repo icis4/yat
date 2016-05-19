@@ -145,8 +145,8 @@ namespace YAT.Settings.Test
 
 		private static void SelectiveTestTearDown()
 		{
-			// Close temporary in-memory application settings.
-			ApplicationSettings.Close();
+			// Close and dispose of temporary in-memory application settings.
+			ApplicationSettings.CloseAndDispose();
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]

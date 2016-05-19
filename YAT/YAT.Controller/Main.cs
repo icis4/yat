@@ -458,6 +458,7 @@ namespace YAT.Controller
 				{
 #endif
 					// If everything is fine so far, start main application including view.
+					Model.MainResult viewResult;
 					using (View.Forms.Main view = new View.Forms.Main(model))
 					{
 #if (!DEBUG)
@@ -474,10 +475,13 @@ namespace YAT.Controller
 #if (!DEBUG)
 						System.Windows.Forms.Application.ThreadException -= new ThreadExceptionEventHandler(RunFullyWithView_Application_ThreadException);
 #endif
-
-						Model.MainResult viewResult = view.Result;
-						return (Convert(viewResult));
+						viewResult = view.Result;
 					}
+
+					if (!ApplicationSettings.CloseAndDispose())
+						return (MainResult.ApplicationSettingsError);
+
+					return (Convert(viewResult));
 #if (!DEBUG)
 				}
 				catch (Exception ex)
@@ -601,6 +605,7 @@ namespace YAT.Controller
 				{
 #endif
 					// If everything is fine so far, start main application including view.
+					Model.MainResult viewResult;
 					using (View.Forms.Main view = new View.Forms.Main(model))
 					{
 #if (!DEBUG)
@@ -617,10 +622,13 @@ namespace YAT.Controller
 #if (!DEBUG)
 						System.Windows.Forms.Application.ThreadException -= new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
 #endif
-
-						Model.MainResult viewResult = view.Result;
-						return (Convert(viewResult));
+						viewResult = view.Result;
 					}
+
+					if (!ApplicationSettings.CloseAndDispose())
+						return (MainResult.ApplicationSettingsError);
+
+					return (Convert(viewResult));
 #if (!DEBUG)
 				}
 				catch (Exception ex)
@@ -729,6 +737,8 @@ namespace YAT.Controller
 					if (modelResult == Model.MainResult.Success)
 						modelResult = model.Exit();
 
+					ApplicationSettings.CloseAndDispose(); // Don't care about result, as upon creation above.
+
 					return (Convert(modelResult));
 #if (!DEBUG)
 				}
@@ -815,6 +825,8 @@ namespace YAT.Controller
 					Model.MainResult modelResult = model.Start();
 					if (modelResult == Model.MainResult.Success)
 						modelResult = model.Exit();
+
+					ApplicationSettings.CloseAndDispose(); // Don't care about result, as upon creation above.
 
 					return (Convert(modelResult));
 #if (!DEBUG)

@@ -76,8 +76,8 @@ namespace YAT.View.Test
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			// Close temporary in-memory application settings.
-			ApplicationSettings.Close();
+			// Close and dispose of temporary in-memory application settings.
+			ApplicationSettings.CloseAndDispose();
 
 			Temp.CleanTempPath(GetType());
 		}

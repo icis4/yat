@@ -78,9 +78,11 @@ namespace YAT
 		[STAThread]
 		private static int Main(string[] commandLineArgs)
 		{
-			Controller.Main main = new Controller.Main(commandLineArgs);
-			Controller.MainResult mainResult = main.Run();
-			return ((int)mainResult);
+			using (Controller.Main main = new Controller.Main(commandLineArgs))
+			{
+				Controller.MainResult mainResult = main.Run();
+				return ((int)mainResult);
+			}
 		}
 	}
 }
