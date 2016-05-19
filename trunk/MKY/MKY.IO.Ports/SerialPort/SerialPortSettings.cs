@@ -157,7 +157,7 @@ namespace MKY.IO.Ports
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(SerialPortSettings other)
+		public virtual bool Equals(SerialPortSettings other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);

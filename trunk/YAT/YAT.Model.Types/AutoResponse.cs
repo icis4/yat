@@ -159,13 +159,20 @@ namespace YAT.Model.Types
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(obj, null))
+			return (Equals(obj as AutoResponseEx));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public virtual bool Equals(AutoResponseEx other)
+		{
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (GetType() != other.GetType())
 				return (false);
 
-			AutoResponseEx other = (AutoResponseEx)obj;
 			if ((AutoResponse)UnderlyingEnum == AutoResponse.Explicit)
 			{
 				return

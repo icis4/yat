@@ -127,7 +127,7 @@ namespace MKY.Recent
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(RecentItem<T> other)
+		public virtual bool Equals(RecentItem<T> other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);

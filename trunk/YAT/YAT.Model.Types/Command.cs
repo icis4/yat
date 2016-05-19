@@ -652,7 +652,7 @@ namespace YAT.Model.Types
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(Command other)
+		public virtual bool Equals(Command other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);
