@@ -111,23 +111,39 @@ namespace MKY.Net
 
 		/// <summary></summary>
 		public IPNetworkInterfaceEx(IPAddress address, string description = null)
-		{                        // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-			if      (address.Equals(IPAddress.Any))          { SetUnderlyingEnum(IPNetworkInterface.Any);          this.explicitAddress = IPAddress.None; }
-			else if (address.Equals(IPAddress.Loopback))     { SetUnderlyingEnum(IPNetworkInterface.Loopback);     this.explicitAddress = IPAddress.None; }
-			else if (address.Equals(IPAddress.IPv6Any))      { SetUnderlyingEnum(IPNetworkInterface.IPv6Any);      this.explicitAddress = IPAddress.None; }
-			else if (address.Equals(IPAddress.IPv6Loopback)) { SetUnderlyingEnum(IPNetworkInterface.IPv6Loopback); this.explicitAddress = IPAddress.None; }
-			else
+		{
+			if (string.IsNullOrEmpty(description)) // Defined by address only.
 			{
-				if ((address == null) && string.IsNullOrEmpty(description))
-					throw (new InvalidOperationException("'IPNetworkInterface.Explicit' requires an IP address or interface description!"));
+				if (address == null)
+					throw (new ArgumentNullException("address", "An IP address is required when interface description is not given!"));
 
-				SetUnderlyingEnum(IPNetworkInterface.Explicit);
+				                   // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+				if      (address.Equals(IPAddress.Any))          { SetUnderlyingEnum(IPNetworkInterface.Any);          this.explicitAddress = IPAddress.None; }
+				else if (address.Equals(IPAddress.Loopback))     { SetUnderlyingEnum(IPNetworkInterface.Loopback);     this.explicitAddress = IPAddress.None; }
+				else if (address.Equals(IPAddress.IPv6Any))      { SetUnderlyingEnum(IPNetworkInterface.IPv6Any);      this.explicitAddress = IPAddress.None; }
+				else if (address.Equals(IPAddress.IPv6Loopback)) { SetUnderlyingEnum(IPNetworkInterface.IPv6Loopback); this.explicitAddress = IPAddress.None; }
+				else                                             { SetUnderlyingEnum(IPNetworkInterface.Explicit);     this.explicitAddress = address;        }
 
-				this.explicitDescription = description;
-				this.explicitAddress     = address;
+				// Note that 'IPNetworkInterface.IPv4Loopback' cannot be distinguished from 'IPNetworkInterface.Loopback' when 'IPAddress.Loopback' is given.
 			}
+			else // Defined by description (and optional address).
+			{
+				IPNetworkInterface enumResult;
+				if (TryParse(description, out enumResult)) // Predefined.
+				{
+					SetUnderlyingEnum(enumResult);
+				}
+				else // Explicitly defined, may also cover variants of predefined interfaces, e.g. interface specific loopback!
+				{
+					if ((address == null) || address.Equals(IPAddress.None))
+						throw (new InvalidOperationException("'IPNetworkInterface.Explicit' requires an IP address!"));
 
-			// Note that 'IPNetworkInterface.IPv4Loopback' cannot be distinguished from 'IPNetworkInterface.Loopback' when 'IPAddress.Loopback' is given.
+					SetUnderlyingEnum(IPNetworkInterface.Explicit);
+
+					this.explicitDescription = description;
+					this.explicitAddress     = address;
+				}
+			}
 		}
 
 		#region Properties
@@ -203,20 +219,53 @@ namespace MKY.Net
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(obj, null))
+			return (Equals(obj as IPNetworkInterfaceEx));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public virtual bool Equals(IPNetworkInterfaceEx other)
+		{
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (GetType() != other.GetType())
 				return (false);
 
-			IPNetworkInterfaceEx other = (IPNetworkInterfaceEx)obj;
 			if ((IPNetworkInterface)UnderlyingEnum == IPNetworkInterface.Explicit)
 			{
 				return
 				(
 					base.Equals(other) &&
 					(this.explicitDescription == other.explicitDescription) &&
-					this.explicitAddress.Equals(other.explicitAddress) // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+					this.explicitAddress.Equals(other.explicitAddress) // Explicit address is always given, at least 'IPAdress.None'.
+				);                         // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+			}
+			else
+			{
+				return (base.Equals(other));
+			}
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality,
+		/// ignoring <see cref="Address"/>.
+		/// </summary>
+		public bool EqualsDescription(IPNetworkInterfaceEx other)
+		{
+			if (ReferenceEquals(other, null))
+				return (false);
+
+			if (GetType() != other.GetType())
+				return (false);
+
+			if ((IPNetworkInterface)UnderlyingEnum == IPNetworkInterface.Explicit)
+			{
+				return
+				(
+					base.Equals(other) &&
+					(this.explicitDescription == other.explicitDescription)
 				);
 			}
 			else
@@ -239,8 +288,7 @@ namespace MKY.Net
 					if (!string.IsNullOrEmpty(this.explicitDescription))
 						hashCode = (hashCode * 397) ^ this.explicitDescription.GetHashCode();
 
-					if (this.explicitAddress != null)
-						hashCode = (hashCode * 397) ^ this.explicitAddress    .GetHashCode();
+					hashCode = (hashCode * 397) ^ this.explicitAddress.GetHashCode(); // Explicit address is always given, at least 'IPAdress.None'.
 				}
 
 				return (hashCode);
@@ -262,11 +310,9 @@ namespace MKY.Net
 				case IPNetworkInterface.Explicit:
 				{
 					if (!string.IsNullOrEmpty(this.explicitDescription))
-						return (this.explicitDescription); // Do not add address when explicit description is given.
-					else if (this.explicitAddress != IPAddress.None)
-						return (this.explicitAddress.ToString());
+						return (this.explicitDescription + " (" + this.explicitAddress.ToString() + ")"); // Explicit address is always given, at least 'IPAdress.None'.
 					else
-						return ("");
+						return (this.explicitAddress.ToString()); // Explicit address is always given, at least 'IPAdress.None'.
 				}
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -297,7 +343,7 @@ namespace MKY.Net
 
 		#endregion
 
-		#region Parse/From
+		#region Parse
 
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -418,18 +464,11 @@ namespace MKY.Net
 		/// <summary></summary>
 		public static implicit operator IPNetworkInterfaceEx(IPNetworkInterfaceDescriptorPair networkInterface)
 		{
-			if (!string.IsNullOrEmpty(networkInterface.Description))
-			{
-				IPAddress address;
-				if (IPAddress.TryParse(networkInterface.Address, out address))
-					return (new IPNetworkInterfaceEx(address, networkInterface.Description));
-				else
-					return (new IPNetworkInterfaceEx(IPAddress.None, networkInterface.Description));
-			}
+			IPAddress address;
+			if (IPAddress.TryParse(networkInterface.Address, out address))
+				return (new IPNetworkInterfaceEx(address, networkInterface.Description));
 			else
-			{
-				return (new IPNetworkInterfaceEx(IPAddress.None));
-			}
+				return (new IPNetworkInterfaceEx(IPAddress.None, networkInterface.Description));
 		}
 
 		/// <summary></summary>

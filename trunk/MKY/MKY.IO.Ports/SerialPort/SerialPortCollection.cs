@@ -152,11 +152,11 @@ namespace MKY.IO.Ports
 				{
 					staticCaptionsCache = SerialPortSearcher.GetCaptionsFromSystem();
 
-					Debug.WriteLine(GetType() + ": Captions retrieved from system");
+					DebugVerbose("Captions retrieved from system");
 				}
 				else
 				{
-					Debug.WriteLine(GetType() + ": Captions cache is up-to-date");
+					DebugVerbose("Captions cache is up-to-date");
 				}
 
 				lock (this)
@@ -226,11 +226,16 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 
 		[Conditional("DEBUG_VERBOSE")]
-		private void DebugVerboseIndent(string message = null)
+		private void DebugVerbose(string message = null)
 		{
 			if (!string.IsNullOrEmpty(message))
 				Debug.WriteLine(message);
+		}
 
+		[Conditional("DEBUG_VERBOSE")]
+		private void DebugVerboseIndent(string message = null)
+		{
+			DebugVerbose(message);
 			Debug.Indent();
 		}
 
@@ -238,9 +243,7 @@ namespace MKY.IO.Ports
 		private void DebugVerboseUnindent(string message = null)
 		{
 			Debug.Unindent();
-
-			if (!string.IsNullOrEmpty(message))
-				Debug.WriteLine(message);
+			DebugVerbose(message);
 		}
 
 		#endregion

@@ -116,7 +116,9 @@ namespace MKY.Net
 			// Note that 'IPHost.IPv4Localhost' cannot be distinguished from 'IPHost.Localhost' when 'IPAddress.Loopback' is given.
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Creates an explicit <see cref="IPHostEx"/> object, using the provided host name.
+		/// </summary>
 		public IPHostEx(string name)
 		{
 			SetUnderlyingEnum(IPHost.Explicit);
@@ -124,13 +126,17 @@ namespace MKY.Net
 			this.explicitName = name;
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Creates an explicit <see cref="IPHostEx"/> object, using the provided host name and address.
+		/// </summary>
 		public IPHostEx(string name, IPAddress address)
 		{
 			SetUnderlyingEnum(IPHost.Explicit);
 
 			this.explicitName = name;
-			this.explicitAddress = address;
+
+			if (address != null) // Keep 'IPAddress.None' otherwise.
+				this.explicitAddress = address;
 		}
 
 		#region Properties
@@ -149,10 +155,8 @@ namespace MKY.Net
 					{
 						if (!string.IsNullOrEmpty(this.explicitName))
 							return (this.explicitName);
-						else if (this.explicitAddress != null)
-							return (this.explicitAddress.ToString());
 						else
-							return ("");
+							return (this.explicitAddress.ToString()); // Explicit address is always given, at least 'IPAdress.None'.
 					}
 				}
 				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -202,13 +206,20 @@ namespace MKY.Net
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(obj, null))
+			return (Equals(obj as IPHostEx));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public virtual bool Equals(IPHostEx other)
+		{
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (GetType() != other.GetType())
 				return (false);
 
-			IPHostEx other = (IPHostEx)obj;
 			if ((IPHost)UnderlyingEnum == IPHost.Explicit)
 			{
 				if (!string.IsNullOrEmpty(this.explicitName))
@@ -225,8 +236,8 @@ namespace MKY.Net
 					return
 					(
 						base.Equals(other) &&
-						this.explicitAddress.Equals(other.explicitAddress) // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-					);
+						this.explicitAddress.Equals(other.explicitAddress) // Explicit address is always given, at least 'IPAdress.None'.
+					);                         // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 				}
 			}
 			else
@@ -248,8 +259,8 @@ namespace MKY.Net
 				{
 					if (!string.IsNullOrEmpty(this.explicitName))
 						hashCode = (hashCode * 397) ^ this.explicitName   .GetHashCode();
-					else if (this.explicitAddress != null)
-						hashCode = (hashCode * 397) ^ this.explicitAddress.GetHashCode();
+					else
+						hashCode = (hashCode * 397) ^ this.explicitAddress.GetHashCode(); // Explicit address is always given, at least 'IPAdress.None'.
 				}
 
 				return (hashCode);
@@ -268,11 +279,9 @@ namespace MKY.Net
 				case IPHost.Explicit:
 				{
 					if (!string.IsNullOrEmpty(this.explicitName))
-						return (this.explicitName); // Do not add address when explicit name is given.
-					else if (this.explicitAddress != IPAddress.None)
-						return (this.explicitAddress.ToString());
+						return (this.explicitName); // Do not add address when explicit name is given, as user may input either name -OR- address.
 					else
-						return ("");
+						return (this.explicitAddress.ToString()); // Explicit address is always given, at least 'IPAdress.None'.
 				}
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -294,11 +303,9 @@ namespace MKY.Net
 				case IPHost.Explicit:
 				{
 					if (!string.IsNullOrEmpty(this.explicitName))
-						return (this.explicitName);
-					else if (this.explicitAddress != null)
-						return (this.explicitAddress.ToString());
+						return (this.explicitName); // Do not add address when explicit name is given, as user may input either name -OR- address.
 					else
-						return ("");
+						return (this.explicitAddress.ToString()); // Explicit address is always given, at least 'IPAdress.None'.
 				}
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -335,10 +342,8 @@ namespace MKY.Net
 				{
 					if (!string.IsNullOrEmpty(this.explicitName))
 						return (this.explicitName);
-					else if (this.explicitAddress != null)
-						return (ToEndpointAdressString(this.explicitAddress));
 					else
-						return ("");
+						return (ToEndpointAdressString(this.explicitAddress)); // Explicit address is always given, at least 'IPAdress.None'.
 				}
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -385,7 +390,7 @@ namespace MKY.Net
 
 		#endregion
 
-		#region Parse/From
+		#region Parse
 
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -553,7 +558,7 @@ namespace MKY.Net
 				}
 				else
 				{
-					return (false);
+					return (!this.explicitAddress.Equals(IPAddress.None)); // Explicit address is always given, at least 'IPAdress.None'.
 				}
 			}
 

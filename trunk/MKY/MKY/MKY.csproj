@@ -118,6 +118,7 @@
     <Compile Include="IO\Temp.cs" />
     <Compile Include="Net\IPFilter.cs" />
     <Compile Include="Net\IPNetworkInterfaceDescriptorPair.cs" />
+    <Compile Include="Net\IPNetworkInterfacePredicates.cs" />
     <Compile Include="Random\RandomEx.cs" />
     <Compile Include="Settings\SettingsFileHandler.cs" />
     <Compile Include="Text\Ascii.cs" />

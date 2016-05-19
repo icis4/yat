@@ -292,7 +292,7 @@ namespace YAT.View.Controls
 
 				SerialPortCollection ports = null;
 
-				bool isSuccess;
+				bool scanSuccess;
 				Exception errorException = null;
 				string errorMessageLead = null;
 				string errorMessageHint = null;
@@ -351,14 +351,14 @@ namespace YAT.View.Controls
 							case DialogResult.Yes:
 							case DialogResult.Cancel:
 							{
-								isSuccess = true;
+								scanSuccess = true;
 								ports = worker.Ports;
 								break;
 							}
 
 							case DialogResult.Abort:
 							{
-								isSuccess = false;
+								scanSuccess = false;
 								errorException   = worker.Exception;
 								errorMessageLead = worker.ExceptionLead;
 								errorMessageHint = worker.ExceptionHint;
@@ -367,7 +367,7 @@ namespace YAT.View.Controls
 
 							default:
 							{
-								isSuccess = true; // Ignore resulting ports.
+								scanSuccess = true; // Ignore resulting ports.
 								break;
 							}
 						}
@@ -378,13 +378,13 @@ namespace YAT.View.Controls
 
 						if (result != DialogResult.Cancel)
 						{
-							isSuccess = false;
+							scanSuccess = false;
 							errorMessageLead = "Timeout while scanning the ports!";
 							errorMessageHint = "If the issue cannot be solved, tell YAT to differently scan the ports by going to 'File > Preferences...' and change the port related settings.";
 						}
 						else
 						{
-							isSuccess = true;
+							scanSuccess = true;
 						}
 					}
 
@@ -392,6 +392,10 @@ namespace YAT.View.Controls
 					worker.Status2Changed -= worker_Status2Changed;
 					worker.IsDone         -= worker_IsDone;
 				} // using (showStatusDialog)
+
+				// Attention:
+				// Similar code exists in Model.Terminal.ValidateIO().
+				// Changes here may have to be applied there too!
 
 				this.isSettingControls.Enter();
 
@@ -406,7 +410,7 @@ namespace YAT.View.Controls
 						// Nothing has changed, just restore the selected item:
 						comboBox_Port.SelectedItem = this.portId;
 
-						if (!isSuccess)
+						if (!scanSuccess)
 							ShowErrorMessage(errorException, errorMessageLead, errorMessageHint);
 					}
 					else
@@ -418,19 +422,19 @@ namespace YAT.View.Controls
 						// Set property instead of member to ensure that changed event is fired.
 						PortId = ports[0];
 
-						if (isSuccess)
+						if (scanSuccess)
 							ShowNotAvailableDefaultedMessage(portIdNotAvailable, ports[0]);
 						else
 							ShowErrorMessage(errorException, errorMessageLead, errorMessageHint);
 					}
 				}
-				else
+				else // ports.Count == 0
 				{
 					// Ensure that the settings item is nulled and reset by SetControls().
 					// Set property instead of member to ensure that changed event is fired.
 					PortId = null;
 
-					if (isSuccess)
+					if (scanSuccess)
 						ShowNoPortsMessage();
 					else
 						ShowErrorMessage(errorException, errorMessageLead, errorMessageHint);
@@ -461,7 +465,7 @@ namespace YAT.View.Controls
 		private void ShowNoPortsMessage()
 		{
 			string message =
-				"There are currently no serial COM ports available." + Environment.NewLine +
+				"There are currently no serial COM ports available." + Environment.NewLine + Environment.NewLine +
 				"Check the serial COM ports of your system.";
 
 			MessageBoxEx.Show
