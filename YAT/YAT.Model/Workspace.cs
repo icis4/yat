@@ -1247,23 +1247,18 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
+			// Create new terminal:
 			OnFixedStatusTextRequest("Creating new terminal...");
 
-			// Create terminal:
 			Terminal terminal = new Terminal(this.startArgs.ToTerminalStartArgs(), settingsHandler);
 			AddToWorkspace(terminal);
 
+			OnTimedStatusTextRequest("New terminal created.");
+
 			// Start terminal:
-			if (terminal.Start())
-			{
-				OnTimedStatusTextRequest("New terminal created.");
-				return (true);
-			}
-			else
-			{
-				OnFixedStatusTextRequest("Failed to create new terminal!");
-				return (true);
-			}
+			terminal.Start(); // Errors are handled within Start().
+
+			return (true); // Successfully created.
 		}
 
 		/// <summary>
@@ -1500,7 +1495,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual bool Start()
+		public virtual bool StartAllTerminals()
 		{
 			bool success = true;
 

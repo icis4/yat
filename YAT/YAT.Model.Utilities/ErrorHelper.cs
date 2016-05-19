@@ -24,11 +24,19 @@
 using System;
 using System.Text;
 
+using MKY;
+
 namespace YAT.Model.Utilities
 {
 	/// <summary></summary>
 	public static class ErrorHelper
 	{
+		/// <summary></summary>
+		public static string ComposeMessage(string lead, string additionalLead, string additionalText)
+		{
+			return (ComposeMessage(lead, null, additionalLead, additionalText));
+		}
+
 		/// <summary></summary>
 		public static string ComposeMessage(string lead, Exception ex = null, string additionalLead = null, string additionalText = null)
 		{
@@ -111,6 +119,89 @@ namespace YAT.Model.Utilities
 			}
 
 			return (sb.ToString());
+		}
+
+		/// <summary></summary>
+		public static void MakeStartHint(Domain.IOType ioType, out string yatLead, out string yatText)
+		{
+			switch (ioType)
+			{
+				case Domain.IOType.SerialPort:
+				{
+					yatLead = ApplicationEx.ProductName + " hints:";
+					yatText = "Check the communication settings and keep in mind that hardware and driver may limit the allowed communication settings.";
+					break;
+				}
+
+				case Domain.IOType.TcpClient:
+				case Domain.IOType.UdpClient:
+				{
+					yatLead = ApplicationEx.ProductName + " hint:";
+					yatText = "Make sure the selected remote host is available.";
+					break;
+				}
+
+				case Domain.IOType.TcpServer:
+				case Domain.IOType.TcpAutoSocket:
+				case Domain.IOType.UdpServer:
+				case Domain.IOType.UdpPairSocket:
+				{
+					yatLead = ApplicationEx.ProductName + " hint:";
+					yatText = "Make sure the selected socket is not already in use.";
+					break;
+				}
+
+				case Domain.IOType.UsbSerialHid:
+				{
+					yatLead = ApplicationEx.ProductName + " hint:";
+					yatText = "Make sure the selected USB device is ready.";
+					break;
+				}
+
+				default:
+				{
+					throw (new NotSupportedException("Program execution should never get here,'" + ioType + "' is an unknown I/O type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public static void MakeExceptionHint(Domain.IOType ioType, out string yatLead, out string yatText)
+		{
+			switch (ioType)
+			{
+				case Domain.IOType.SerialPort:
+				{
+					yatLead = ApplicationEx.ProductName + " hints:";
+					yatText = "Make sure the selected serial COM port is available and not already in use. " +
+					          "Also, check the communication settings and keep in mind that hardware and driver may limit the allowed communication settings.";
+					break;
+				}
+
+				case Domain.IOType.TcpClient:
+				case Domain.IOType.TcpServer:
+				case Domain.IOType.TcpAutoSocket:
+				case Domain.IOType.UdpClient:
+				case Domain.IOType.UdpServer:
+				case Domain.IOType.UdpPairSocket:
+				{
+					yatLead = ApplicationEx.ProductName + " hint:";
+					yatText = "Make sure the selected socket is not already in use.";
+					break;
+				}
+
+				case Domain.IOType.UsbSerialHid:
+				{
+					yatLead = ApplicationEx.ProductName + " hint:";
+					yatText = "Make sure the selected USB device is connected and not already in use.";
+					break;
+				}
+
+				default:
+				{
+					throw (new NotSupportedException("Program execution should never get here,'" + ioType + "' is an unknown I/O type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
 		}
 	}
 }
