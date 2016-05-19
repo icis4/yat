@@ -122,13 +122,20 @@ namespace YAT.Domain
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(obj, null))
+			return (Equals(obj as InfoElementEnclosureEx));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public virtual bool Equals(InfoElementEnclosureEx other)
+		{
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (GetType() != other.GetType())
 				return (false);
 
-			InfoElementEnclosureEx other = (InfoElementEnclosureEx)obj;
 			if ((InfoElementEnclosure)UnderlyingEnum == InfoElementEnclosure.Explicit)
 			{
 				return

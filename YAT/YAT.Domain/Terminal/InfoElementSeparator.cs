@@ -143,13 +143,20 @@ namespace YAT.Domain
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(obj, null))
+			return (Equals(obj as InfoElementSeparatorEx));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public virtual bool Equals(InfoElementSeparatorEx other)
+		{
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (GetType() != other.GetType())
 				return (false);
 
-			InfoElementSeparatorEx other = (InfoElementSeparatorEx)obj;
 			if ((InfoElementSeparator)UnderlyingEnum == InfoElementSeparator.Explicit)
 			{
 				return

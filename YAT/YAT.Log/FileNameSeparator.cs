@@ -123,13 +123,20 @@ namespace YAT.Log
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(obj, null))
+			return (Equals(obj as FileNameSeparatorEx));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public virtual bool Equals(FileNameSeparatorEx other)
+		{
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (GetType() != other.GetType())
 				return (false);
 
-			FileNameSeparatorEx other = (FileNameSeparatorEx)obj;
 			if ((FileNameSeparator)UnderlyingEnum == FileNameSeparator.Explicit)
 			{
 				return

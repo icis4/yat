@@ -270,7 +270,7 @@ namespace MKY.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(SettingsItem other)
+		public virtual bool Equals(SettingsItem other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);

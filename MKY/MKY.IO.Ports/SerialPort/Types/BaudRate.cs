@@ -123,13 +123,20 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(obj, null))
+			return (Equals(obj as BaudRateEx));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public virtual bool Equals(BaudRateEx other)
+		{
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (GetType() != other.GetType())
 				return (false);
 
-			BaudRateEx other = (BaudRateEx)obj;
 			if ((BaudRate)UnderlyingEnum == BaudRate.Explicit)
 			{
 				return

@@ -835,13 +835,14 @@ namespace MKY.Text
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
+			return (Equals(obj as EncodingEx));
+		}
 
-			if (GetType() != obj.GetType())
-				return (false);
-
-			EncodingEx other = (EncodingEx)obj;
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public virtual bool Equals(EncodingEx other)
+		{
 			return (base.Equals(other));
 		}
 
