@@ -224,7 +224,7 @@ namespace MKY.Net.Test
 			{
 				// Set which physical items are available on the current machine:
 				IPNetworkInterfaceCollection inferfaces = new IPNetworkInterfaceCollection();
-				inferfaces.FillWithAvailableInterfaces();
+				inferfaces.FillWithAvailableLocalInterfaces();
 
 				IPNetworkInterfaceEx ni;
 				if (IPNetworkInterfaceEx.TryParse(configuration.IPv4SpecificInterface, out ni))

@@ -265,7 +265,7 @@ namespace MKY.IO.Usb.Test
 			{
 				// Set which physical items are available on the current machine:
 				SerialHidDeviceCollection availableDevices = new SerialHidDeviceCollection();
-				availableDevices.FillWithAvailableDevices();
+				availableDevices.FillWithAvailableDevices(true); // Retrieve strings from devices in order to get serial strings.
 
 				DeviceInfo di;
 				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.DeviceA, out di))
