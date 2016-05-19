@@ -391,21 +391,17 @@ namespace YAT.Model
 				success = CreateNewWorkspace();
 			}
 
-			// Start the workspace, i.e. start all included terminals:
+			// Start all included terminals:
 			if (success)
 			{
-				success = this.workspace.Start();
+				this.workspace.StartAllTerminals(); // Don't care about success, workspace itself is fine.
 			}
 
-			// If requested, trigger Start the workspace, i.e. start all included terminals:
-			if (success)
+			// If requested, trigger operation:
+			if (success && this.StartArgs.PerformOperationOnRequestedTerminal)
 			{
-				// Automatically trigger operation if desired:
-				if (this.StartArgs.PerformOperationOnRequestedTerminal)
-				{
-					OnFixedStatusTextRequest("Triggering operation...");
-					CreateAndStartOperationTimer();
-				}
+				OnFixedStatusTextRequest("Triggering operation...");
+				CreateAndStartOperationTimer();
 			}
 
 			if (success)
@@ -1029,11 +1025,10 @@ namespace YAT.Model
 			{
 				if (OpenWorkspaceFromFile(filePath))
 				{
-					if (this.workspace.Start())
-					{
-						OnStarted(EventArgs.Empty);
-						return (true);
-					}
+					this.workspace.StartAllTerminals(); // Don't care about success, workspace itself is fine.
+
+					OnStarted(EventArgs.Empty);
+					return (true);
 				}
 
 				return (false);
@@ -1135,10 +1130,6 @@ namespace YAT.Model
 			{
 				OnFixedStatusTextRequest("Exiting " + ApplicationEx.ProductName + "...");
 
-				// Close the static application settings:
-				if (!ApplicationSettings.Close())
-					this.result = MainResult.ApplicationExitError;
-
 				// Signal the exit:
 				OnExited(new ExitEventArgs(this.result));
 
@@ -1229,21 +1220,22 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool CreateNewWorkspace()
 		{
-			// Close workspace, only one workspace can exist within application:
+			// Close existing, only one workspace can exist within application:
 			if (this.workspace != null)
 			{
 				if (!this.workspace.Close())
 					return (false);
 			}
 
+			// Create new workspace:
 			OnFixedStatusTextRequest("Creating new workspace...");
 
-			// Create workspace:
 			this.workspace = new Workspace(this.startArgs.ToWorkspaceStartArgs());
 			AttachWorkspaceEventHandlers();
 			OnWorkspaceOpened(new WorkspaceEventArgs(this.workspace));
 
 			OnTimedStatusTextRequest("New workspace created.");
+
 			return (true);
 		}
 

@@ -28,7 +28,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -1011,7 +1010,7 @@ namespace YAT.Model
 									sb.Append(socket.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 
 									System.Net.IPEndPoint remoteEndPoint = socket.RemoteEndPoint;
-									if (remoteEndPoint.Address != System.Net.IPAddress.None)
+									if ((remoteEndPoint != null) && (!remoteEndPoint.Address.Equals(System.Net.IPAddress.None))) // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 									{
 										sb.Append(" and sending to ");
 										sb.Append(socket.RemoteEndPoint.ToString());
@@ -2224,45 +2223,85 @@ namespace YAT.Model
 					{
 						MKY.IO.Ports.SerialPortCollection ports = new MKY.IO.Ports.SerialPortCollection();
 						ports.FillWithAvailablePorts(false); // No need to get descriptions, thus faster.
-						if (ports.Contains(portId))
+
+						// Attention:
+						// Similar code exists in View.Controls.SerialPortSelection.SetPortList().
+						// Changes here may have to be applied there too!
+
+						if (ports.Count > 0)
 						{
-							return (true);
-						}
-						else if (ports.Count > 0)
-						{
-							string message =
-								portId + " is currently not available. " +
-								"Switch to " + ports[0] + " instead?";
+							if (ports.Contains(portId))
+							{
+								return (true);
+							}
+							else
+							{
+								DialogResult dr = ShowSerialPortNotAvailableSwitchQuestion(portId, ports[0]);
+								if (dr == DialogResult.Yes)
+									this.settingsRoot.IO.SerialPort.PortId = ports[0];
 
-							DialogResult dr = OnMessageInputRequest
-							(
-								message,
-								"Switch serial COM port?",
-								MessageBoxButtons.YesNo,
-								MessageBoxIcon.Question
-							);
-
-							if (dr == DialogResult.Yes)
-								this.settingsRoot.IO.SerialPort.PortId = ports[0];
-
-							return (true); // Return 'true' in any case, device may not yet be available but 'AutoOpen'.
+								return (true); // Return 'true' in any case, device may not yet be available but 'AutoOpen'.
+							}
 						}
 						else // ports.Count == 0
 						{
-							string message =
-								"There are currently no serial COM ports available." + Environment.NewLine +
-								"Start with " + portId + " anyway?";
-
-							DialogResult dr = OnMessageInputRequest
-							(
-								message,
-								"No serial COM ports available",
-								MessageBoxButtons.YesNo,
-								MessageBoxIcon.Question,
-								MessageBoxDefaultButton.Button2
-							);
-
+							DialogResult dr = ShowNoSerialPortsStartAnywayQuestion(portId);
 							return (dr == DialogResult.Yes);
+						}
+					}
+
+					return (true); // Return 'true' in all 'non-handled' cases => still try to start I/O to force the underlying exception message.
+				}
+
+				case Domain.IOType.TcpClient:
+				case Domain.IOType.TcpServer:
+				case Domain.IOType.TcpAutoSocket:
+				{
+					MKY.Net.IPNetworkInterfaceEx localInterface = this.settingsRoot.IO.Socket.LocalInterface;
+					if (localInterface != null)
+					{
+						MKY.Net.IPNetworkInterfaceCollection localInterfaces = new MKY.Net.IPNetworkInterfaceCollection();
+						localInterfaces.FillWithAvailableLocalInterfaces();
+
+						// Attention:
+						// Similar code exists in View.Controls.SocketSelection.SetLocalInterfaceList().
+						// Changes here may have to be applied there too!
+
+						if (localInterfaces.Count > 0)
+						{
+							if (localInterfaces.Contains(localInterface))
+							{
+								return (true);
+							}
+							else if (localInterfaces.ContainsDescription(localInterface))
+							{
+								// A device with same description is available, use that:
+								int sameDescriptionIndex = localInterfaces.FindIndexDescription(localInterface);
+
+								DialogResult dr = ShowLocalInterfaceNotAvailableAlternateQuestion(localInterface, localInterfaces[sameDescriptionIndex]);
+								if (dr == DialogResult.Yes)
+									this.settingsRoot.IO.Socket.LocalInterface = localInterfaces[sameDescriptionIndex];
+
+								return (true); // Return 'true' in any case, device may not yet be available but 'AutoOpen'.
+							}
+							else
+							{
+								DialogResult dr = ShowLocalInterfaceNotAvailableDefaultQuestion(localInterface, localInterfaces[0]);
+								if (dr == DialogResult.Yes)
+								{
+									this.settingsRoot.IO.Socket.LocalInterface = localInterfaces[0];
+									return (true);
+								}
+								else
+								{
+									return (false);
+								}
+							}
+						}
+						else // localInterfaces.Count == 0
+						{
+							ShowNoLocalInterfacesMessage();
+							return (false);
 						}
 					}
 
@@ -2275,71 +2314,52 @@ namespace YAT.Model
 					if (deviceInfo != null)
 					{
 						MKY.IO.Usb.SerialHidDeviceCollection devices = new MKY.IO.Usb.SerialHidDeviceCollection();
-						devices.FillWithAvailableDevices(); // Retrieve strings from devices in order to get serial strings.
-						if (devices.Contains(deviceInfo))
-						{
-							return (true);
-						}
-						else if (devices.ContainsVidPid(deviceInfo))
-						{
-							// Attention:
-							// Similar code exists in View.Controls.UsbSerialHidDeviceSelection.SetDeviceList().
-							// Changes here may have to be applied there too!
+						devices.FillWithAvailableDevices(true); // Retrieve strings from devices in order to get serial strings.
 
-							// A device with same VID/PID is available, use that:
-							int sameVidPidIndex = devices.FindIndexVidPid(deviceInfo);
+						// Attention:
+						// Similar code exists in View.Controls.UsbSerialHidDeviceSelection.SetDeviceList().
+						// Changes here may have to be applied there too!
 
-							// Inform the user if serial is required:
-							if (ApplicationSettings.LocalUserSettings.General.UseUsbSerial)
+						if (devices.Count > 0)
+						{
+							if (devices.Contains(deviceInfo))
 							{
-								string message =
-									"The device '" + deviceInfo + "' is currently not available." + Environment.NewLine + Environment.NewLine +
-									"Switch to '" + devices[sameVidPidIndex] + "' (first available device with same VID and PID) instead?";
+								return (true);
+							}
+							else if (devices.ContainsVidPid(deviceInfo))
+							{
+								// A device with same VID/PID is available, use that:
+								int sameVidPidIndex = devices.FindIndexVidPid(deviceInfo);
 
-								DialogResult dr = OnMessageInputRequest
-								(
-									message,
-									"Switch USB HID device?",
-									MessageBoxButtons.YesNo,
-									MessageBoxIcon.Question
-								);
-
-								if (dr == DialogResult.Yes)
+								// Inform the user if serial is required:
+								if (ApplicationSettings.LocalUserSettings.General.UseUsbSerial)
 								{
-									this.settingsRoot.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
-								}
+									DialogResult dr = ShowUsbSerialHidDeviceNotAvailableAlternateQuestion(deviceInfo, devices[sameVidPidIndex]);
+									if (dr == DialogResult.Yes)
+										this.settingsRoot.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
 
-								return (true); // Return 'true' in any case, device may not yet be available but 'AutoOpen'.
+									return (true); // Return 'true' in any case, device may not yet be available but 'AutoOpen'.
+								}
+								else
+								{
+									// Clear the 'Changed' flag in case of automatically changing settings:
+									bool haveAlreadyBeenChanged = this.settingsRoot.IO.UsbSerialHidDevice.HaveChanged;
+									this.settingsRoot.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
+									if (!haveAlreadyBeenChanged)
+										this.settingsRoot.IO.UsbSerialHidDevice.ClearChanged();
+
+									return (true); // Return 'true' in any case, device may not yet be available but 'AutoOpen'.
+								}
 							}
 							else
 							{
-								// Clear the 'Changed' flag in case of automatically changing settings:
-
-								bool haveAlreadyBeenChanged = this.settingsRoot.IO.UsbSerialHidDevice.HaveChanged;
-
-								this.settingsRoot.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
-
-								if (!haveAlreadyBeenChanged)
-									this.settingsRoot.IO.UsbSerialHidDevice.ClearChanged();
-
-								return (true);
+								DialogResult dr = ShowUsbSerialHidDeviceNotAvailableStartAnywayQuestion(deviceInfo);
+								return (dr == DialogResult.Yes);
 							}
 						}
-						else // does not contain
+						else // devices.Count == 0
 						{
-							string message =
-								"There are currently no HID capable USB devices available." + Environment.NewLine +
-								"Start with " + deviceInfo + " anyway?";
-
-							DialogResult dr = OnMessageInputRequest
-							(
-								message,
-								"No USB HID devices available",
-								MessageBoxButtons.YesNo,
-								MessageBoxIcon.Question,
-								MessageBoxDefaultButton.Button2
-							);
-
+							DialogResult dr = ShowNoUsbSerialHidDevicesStartAnywayQuestion(deviceInfo);
 							return (dr == DialogResult.Yes);
 						}
 					}
@@ -2347,11 +2367,148 @@ namespace YAT.Model
 					return (true); // Return 'true' in all 'non-handled' cases => still try to start I/O to force the underlying exception message.
 				}
 
-				default: // Not really useful for TCP/IP and UDP/IP socket, they may be shared.
+				default: // Not (yet) useful for UDP/IP sockets.
 				{
 					return (true); // Return 'true' in all 'non-handled' cases.
 				}
 			}
+		}
+
+		private DialogResult ShowNoSerialPortsStartAnywayQuestion(string portIdNotAvailable)
+		{
+			string message =
+				"There are currently no serial COM ports available." + Environment.NewLine + Environment.NewLine +
+				"Start with " + portIdNotAvailable + " anyway?";
+
+			DialogResult dr = OnMessageInputRequest
+			(
+				message,
+				"No serial COM ports available",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question,
+				MessageBoxDefaultButton.Button2
+			);
+
+			return (dr);
+		}
+
+		private DialogResult ShowSerialPortNotAvailableSwitchQuestion(string portIdNotAvailable, string portIdAlternate)
+		{
+			string message =
+				"The previous serial port " + portIdNotAvailable + " is currently not available. " +
+				"Switch to " + portIdAlternate + " instead?";
+
+			DialogResult dr = OnMessageInputRequest
+			(
+				message,
+				"Switch serial COM port?",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question
+			);
+
+			return (dr);
+		}
+
+		private void ShowNoLocalInterfacesMessage()
+		{
+			string message =
+				"There are currently no local network interfaces available." + Environment.NewLine + Environment.NewLine +
+				"Terminal will not be started.";
+
+			DialogResult dr = OnMessageInputRequest
+			(
+				message,
+				"No interfaces available",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Warning
+			);
+		}
+
+		private DialogResult ShowLocalInterfaceNotAvailableDefaultQuestion(string localInterfaceNotAvailable, string localInterfaceDefaulted)
+		{
+			string message =
+				"The previous local network interface '" + localInterfaceNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+				"Switch to '" + localInterfaceDefaulted + "' (default) instead?";
+
+			DialogResult dr = OnMessageInputRequest
+			(
+				message,
+				"Switch interface?",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question
+			);
+
+			return (dr);
+		}
+
+		private DialogResult ShowLocalInterfaceNotAvailableAlternateQuestion(string localInterfaceNotAvailable, string localInterfaceAlternate)
+		{
+			string message =
+				"The previous local network interface '" + localInterfaceNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+				"Switch to '" + localInterfaceAlternate + "' (first available interface with same description) instead?";
+
+			DialogResult dr = OnMessageInputRequest
+			(
+				message,
+				"Switch interface?",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question
+			);
+
+			return (dr);
+		}
+
+		private DialogResult ShowNoUsbSerialHidDevicesStartAnywayQuestion(string deviceInfoNotAvailable)
+		{
+			string message =
+				"There are currently no HID capable USB devices available." + Environment.NewLine + Environment.NewLine +
+				"Start with " + deviceInfoNotAvailable + " anyway?";
+
+			DialogResult dr = OnMessageInputRequest
+			(
+				message,
+				"No USB HID devices available",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question,
+				MessageBoxDefaultButton.Button2
+			);
+
+			return (dr);
+		}
+
+		private DialogResult ShowUsbSerialHidDeviceNotAvailableStartAnywayQuestion(string deviceInfoNotAvailable)
+		{
+			string message =
+				"The previous device '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+				"Start anyway?";
+
+			DialogResult dr = OnMessageInputRequest
+			(
+				message,
+				"Previous USB HID device not available",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question,
+				MessageBoxDefaultButton.Button2
+			);
+
+			return (dr);
+		}
+
+		private DialogResult ShowUsbSerialHidDeviceNotAvailableAlternateQuestion(string deviceInfoNotAvailable, string deviceInfoAlternate)
+		{
+			string message =
+				"The previous device '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+				"Switch to '" + deviceInfoAlternate + "' (first available device with same VID and PID) instead?";
+
+			DialogResult dr = OnMessageInputRequest
+			(
+				message,
+				"Switch USB HID device?",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question
+			);
+
+			return (dr);
 		}
 
 		#endregion
@@ -2393,47 +2550,25 @@ namespace YAT.Model
 				else
 				{
 					OnFixedStatusTextRequest("Terminal could not be started!");
+
+					string yatLead, yatText;
+					ErrorHelper.MakeStartHint(this.settingsRoot.IOType, out yatLead, out yatText);
+
+					OnMessageInputRequest
+					(
+						ErrorHelper.ComposeMessage("Terminal could not be started!", yatLead, yatText),
+						"Terminal Warning",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+					);
 				}
 			}
 			catch (Exception ex)
 			{
 				OnFixedStatusTextRequest("Error starting terminal!");
 
-				string yatLead;
-				string yatText;
-				switch (this.settingsRoot.IOType)
-				{
-					case Domain.IOType.SerialPort:
-					{
-						yatLead = ApplicationEx.ProductName + " hints:";
-						yatText  = "Make sure the selected serial COM port is available and not already in use. " +
-						           "Also, check the communication settings and keep in mind that hardware and driver may limit the allowed communication settings.";
-						break;
-					}
-					case Domain.IOType.TcpClient:
-					case Domain.IOType.TcpServer:
-					case Domain.IOType.TcpAutoSocket:
-					case Domain.IOType.UdpClient:
-					case Domain.IOType.UdpServer:
-					case Domain.IOType.UdpPairSocket:
-					{
-						yatLead = ApplicationEx.ProductName + " hint:";
-						yatText  = "Make sure the selected socket is not already in use.";
-						break;
-					}
-					case Domain.IOType.UsbSerialHid:
-					{
-						yatLead = ApplicationEx.ProductName + " hint:";
-						yatText  = "Make sure the selected USB device is connected and not already in use.";
-						break;
-					}
-					default:
-					{
-						yatLead = ApplicationEx.ProductName + " error:";
-						yatText  = "The I/O type " + this.settingsRoot.IOType  + " is unknown!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug;
-						break;
-					}
-				}
+				string yatLead, yatText;
+				ErrorHelper.MakeExceptionHint(this.settingsRoot.IOType, out yatLead, out yatText);
 
 				OnMessageInputRequest
 				(
