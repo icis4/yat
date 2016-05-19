@@ -237,8 +237,13 @@ namespace YAT.View.Controls
 			if (Enabled && !DesignMode)
 			{
 				this.deviceListIsBeingSetOrIsAlreadySet = true; // Purpose see remarks above.
+
 				SerialHidDeviceCollection devices = new SerialHidDeviceCollection();
-				devices.FillWithAvailableDevices();
+				devices.FillWithAvailableDevices(true); // Retrieve strings from devices in order to get serial strings.
+
+				// Attention:
+				// Similar code exists in Model.Terminal.ValidateIO().
+				// Changes here may have to be applied there too!
 
 				this.isSettingControls.Enter();
 
@@ -255,10 +260,6 @@ namespace YAT.View.Controls
 					}
 					else if ((this.deviceInfo != null) && (devices.ContainsVidPid(this.deviceInfo)))
 					{
-						// Attention:
-						// Similar code exists in Model.Terminal.ValidateIO().
-						// Changes here may have to be applied there too!
-
 						// A device with same VID/PID is available, use that:
 						int sameVidPidIndex = devices.FindIndexVidPid(this.deviceInfo);
 
@@ -274,7 +275,7 @@ namespace YAT.View.Controls
 							// Set property instead of member to ensure that changed event is fired.
 							DeviceInfo = devices[sameVidPidIndex];
 
-							ShowNotAvailableDefaultedMessage(deviceInfoNotAvailable, devices[sameVidPidIndex]);
+							ShowNotAvailableSwitchedMessage(deviceInfoNotAvailable, devices[sameVidPidIndex]);
 						}
 						else
 						{
@@ -283,7 +284,7 @@ namespace YAT.View.Controls
 							DeviceInfo = devices[sameVidPidIndex];
 						}
 					}
-					else
+					else // devices.Count == 0
 					{
 						// Get the 'NotAvailable' string BEFORE defaulting!
 						string deviceInfoNotAvailable = null;
@@ -313,7 +314,7 @@ namespace YAT.View.Controls
 		private void ShowNoDevicesMessage()
 		{
 			string message =
-				"There are currently no HID capable USB devices available." + Environment.NewLine +
+				"There are currently no HID capable USB devices available." + Environment.NewLine + Environment.NewLine +
 				"Check the USB devices of your system.";
 
 			MessageBoxEx.Show

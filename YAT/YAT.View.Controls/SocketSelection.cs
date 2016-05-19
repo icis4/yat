@@ -355,7 +355,7 @@ namespace YAT.View.Controls
 				//   because SelectedItem is also set if text has changed in the meantime.
 
 				var remoteHost = (comboBox_RemoteHost.SelectedItem as IPHostEx);
-				if ((remoteHost != null) && (remoteHost.Address != IPAddress.None) &&
+				if ((remoteHost != null) && (!remoteHost.Address.Equals(IPAddress.None)) && // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 					StringEx.EqualsOrdinalIgnoreCase(remoteHost.ToString(), comboBox_RemoteHost.Text))
 				{
 					RemoteHost = remoteHost;
@@ -395,7 +395,7 @@ namespace YAT.View.Controls
 				//   because SelectedItem is also set if text has changed in the meantime.
 
 				var localFilter = (comboBox_LocalFilter.SelectedItem as IPFilterEx);
-				if ((localFilter != null) && (localFilter.Address != IPAddress.None) &&
+				if ((localFilter != null) && (!localFilter.Address.Equals(IPAddress.None)) && // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 					StringEx.EqualsOrdinalIgnoreCase(localFilter.ToString(), comboBox_LocalFilter.Text))
 				{
 					LocalFilter = localFilter;
@@ -637,7 +637,11 @@ namespace YAT.View.Controls
 				this.localInterfaceListIsBeingSetOrIsAlreadySet = true; // Purpose see remarks above.
 
 				IPNetworkInterfaceCollection localInterfaces = new IPNetworkInterfaceCollection();
-				localInterfaces.FillWithAvailableInterfaces();
+				localInterfaces.FillWithAvailableLocalInterfaces();
+
+				// Attention:
+				// Similar code exists in Model.Terminal.ValidateIO().
+				// Changes here may have to be applied there too!
 
 				this.isSettingControls.Enter();
 
@@ -652,6 +656,22 @@ namespace YAT.View.Controls
 						// Nothing has changed, just restore the selected item:
 						comboBox_LocalInterface.SelectedItem = this.localInterface;
 					}
+					else if ((this.localInterface != null) && (localInterfaces.ContainsDescription(this.localInterface)))
+					{
+						// A device with same description is available, use that:
+						int sameDescriptionIndex = localInterfaces.FindIndexDescription(this.localInterface);
+
+						// Get the 'NotAvailable' string BEFORE defaulting!
+						string localInterfaceNotAvailable = null;
+						if (this.localInterface != null)
+							localInterfaceNotAvailable = this.localInterface;
+
+						// Ensure that the settings item is switched and shown by SetControls().
+						// Set property instead of member to ensure that changed event is fired.
+						LocalInterface = localInterfaces[sameDescriptionIndex];
+
+						ShowNotAvailableSwitchedMessage(localInterfaceNotAvailable, localInterfaces[sameDescriptionIndex]);
+					}
 					else
 					{
 						// Get the 'NotAvailable' string BEFORE defaulting!
@@ -664,23 +684,23 @@ namespace YAT.View.Controls
 						ShowNotAvailableDefaultedMessage(localInterfaceNotAvailable, localInterfaces[0]);
 					}
 				}
-				else
+				else // localInterfaces.Count == 0
 				{
 					// Ensure that the settings item is nulled and reset by SetControls().
 					// Set property instead of member to ensure that changed event is fired.
 					LocalInterface = null;
 
-					ShowNoInterfacesMessage();
+					ShowNoLocalInterfacesMessage();
 				}
 
 				this.isSettingControls.Leave();
 			}
 		}
 
-		private void ShowNoInterfacesMessage()
+		private void ShowNoLocalInterfacesMessage()
 		{
 			string message =
-				"There are currently no local network interfaces available." + Environment.NewLine +
+				"There are currently no local network interfaces available." + Environment.NewLine + Environment.NewLine +
 				"Check the network devices of your system.";
 
 			MessageBoxEx.Show
@@ -693,11 +713,27 @@ namespace YAT.View.Controls
 			);
 		}
 
-		private void ShowNotAvailableDefaultedMessage(string localInterfaceNoLongerAvailable, string localInterfaceDefaulted)
+		private void ShowNotAvailableDefaultedMessage(string localInterfaceNotAvailable, string localInterfaceDefaulted)
 		{
 			string message =
-				"The previous local network interface " + localInterfaceNoLongerAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
+				"The previous local network interface '" + localInterfaceNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
 				"The selection has been defaulted to the first available interface '" + localInterfaceDefaulted + "'.";
+
+			MessageBoxEx.Show
+			(
+				this,
+				message,
+				"Previous interface not available",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information
+			);
+		}
+
+		private void ShowNotAvailableSwitchedMessage(string localInterfaceNotAvailable, string localInterfaceSwitched)
+		{
+			string message =
+				"The previous local network interface '" + localInterfaceNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+				"The selection has been switched to '" + localInterfaceSwitched + "' (first available device with same description).";
 
 			MessageBoxEx.Show
 			(
