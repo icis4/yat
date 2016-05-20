@@ -173,7 +173,7 @@
 			// PredefinedCommands
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.splitContainer_Commands);
 			this.Name = "PredefinedCommands";
 			this.Size = new System.Drawing.Size(144, 344);
