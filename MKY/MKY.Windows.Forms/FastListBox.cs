@@ -135,7 +135,7 @@ namespace MKY.Windows.Forms
 				int x = DisplayRectangle.Width - ir.Width; // (x).
 				Rectangle bounds = new Rectangle(x, offset * ItemHeight, ir.Width, ItemHeight);
 
-				// Set normal/selected state.
+				// Set normal/selected state:
 				DrawItemState state = DrawItemState.Default;
 				foreach (int index in SelectedIndices)
 				{
@@ -146,7 +146,7 @@ namespace MKY.Windows.Forms
 					}
 				}
 
-				// Request drawing of item.
+				// Request drawing of item:
 				OnDrawItem(new DrawItemEventArgs(e.Graphics, Font, bounds, i, state));
 			}
 		}
