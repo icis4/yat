@@ -371,17 +371,19 @@ namespace MKY.Net
 			}
 			else
 			{
-				IPAddress address;
-				if (IPAddress.TryParse(s, out address)) // Valid explicit?
+				if (s != null) // IPAddress.TryParse() does not support 'null', thanks Microsoft guys...
 				{
-					result = new IPNetworkInterfaceEx(address);
-					return (true);
+					IPAddress address;
+					if (IPAddress.TryParse(s, out address)) // Valid explicit?
+					{
+						result = new IPNetworkInterfaceEx(address);
+						return (true);
+					}
 				}
-				else // Invalid string!
-				{
-					result = null;
-					return (false);
-				}
+
+				// Invalid string!
+				result = null;
+				return (false);
 			}
 		}
 
@@ -464,11 +466,14 @@ namespace MKY.Net
 		/// <summary></summary>
 		public static implicit operator IPNetworkInterfaceEx(IPNetworkInterfaceDescriptorPair networkInterface)
 		{
-			IPAddress address;
-			if (IPAddress.TryParse(networkInterface.Address, out address))
-				return (new IPNetworkInterfaceEx(address, networkInterface.Description));
-			else
-				return (new IPNetworkInterfaceEx(IPAddress.None, networkInterface.Description));
+			if (networkInterface.Address != null) // IPAddress.TryParse() does not support 'null', thanks Microsoft guys...
+			{
+				IPAddress address;
+				if (IPAddress.TryParse(networkInterface.Address, out address))
+					return (new IPNetworkInterfaceEx(address, networkInterface.Description));
+			}
+
+			return (new IPNetworkInterfaceEx(IPAddress.None, networkInterface.Description));
 		}
 
 		/// <summary></summary>

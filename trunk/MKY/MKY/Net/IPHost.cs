@@ -418,24 +418,25 @@ namespace MKY.Net
 			}
 			else
 			{
-				IPAddress address;
-				if (IPAddress.TryParse(s, out address)) // Valid explicit?
+				if (s != null) // IPAddress.TryParse() does not support 'null', thanks Microsoft guys...
 				{
-					result = new IPHostEx(address);
-					return (true);
-				}
-				else
-				{
-					if (Uri.IsWellFormedUriString(s, UriKind.RelativeOrAbsolute))
+					IPAddress address;
+					if (IPAddress.TryParse(s, out address)) // Valid explicit?
 					{
-						result = new IPHostEx(s);
+						result = new IPHostEx(address);
 						return (true);
 					}
-					else // Invalid string!
-					{
-						result = null;
-						return (false);
-					}
+				}
+
+				if (Uri.IsWellFormedUriString(s, UriKind.RelativeOrAbsolute))
+				{
+					result = new IPHostEx(s);
+					return (true);
+				}
+				else // Invalid string!
+				{
+					result = null;
+					return (false);
 				}
 			}
 		}
