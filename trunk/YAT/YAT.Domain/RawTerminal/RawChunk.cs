@@ -165,11 +165,13 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ToString(string indent)
 		{
-			StringWriter to = new StringWriter(CultureInfo.InvariantCulture);
-			foreach (byte b in this.data)
-				to.Write(Convert.ToChar(b));
+			using (StringWriter sw = new StringWriter(CultureInfo.InvariantCulture))
+			{
+				foreach (byte b in this.data)
+					sw.Write(Convert.ToChar(b));
 
-			return (indent + to.ToString());
+				return (indent + sw.ToString());
+			}
 		}
 
 		/// <summary></summary>
@@ -181,23 +183,25 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ToDetailedString(string indent)
 		{
-			bool begin = true;
-			StringWriter data = new StringWriter(CultureInfo.InvariantCulture);
-			foreach (byte b in this.data)
+			using (StringWriter sw = new StringWriter(CultureInfo.InvariantCulture))
 			{
-				if (!begin)
-					data.Write(" ");
+				bool begin = true;
+				foreach (byte b in this.data)
+				{
+					if (!begin)
+						sw.Write(" ");
 
-				begin = false;
-				data.Write(b.ToString("X2", CultureInfo.InvariantCulture) + "h");
+					begin = false;
+					sw.Write(b.ToString("X2", CultureInfo.InvariantCulture) + "h");
+				}
+
+				StringBuilder sb = new StringBuilder();
+				sb.AppendLine(indent + "> Data: " + sw);
+				sb.AppendLine(indent + "> TimeStamp: " + this.timeStamp.ToLongTimeString() + "." + StringEx.Left(this.timeStamp.Millisecond.ToString("D3", CultureInfo.InvariantCulture), 2));
+				sb.AppendLine(indent + "> PortStamp: " + this.portStamp);
+				sb.AppendLine(indent + "> Direction: " + this.direction);
+				return (sb.ToString());
 			}
-
-			StringBuilder sb = new StringBuilder();
-			sb.AppendLine(indent + "> Data: " + data);
-			sb.AppendLine(indent + "> TimeStamp: " + this.timeStamp.ToLongTimeString() + "." + StringEx.Left(this.timeStamp.Millisecond.ToString("D3", CultureInfo.InvariantCulture), 2));
-			sb.AppendLine(indent + "> PortStamp: " + this.portStamp);
-			sb.AppendLine(indent + "> Direction: " + this.direction);
-			return (sb.ToString());
 		}
 
 		#endregion

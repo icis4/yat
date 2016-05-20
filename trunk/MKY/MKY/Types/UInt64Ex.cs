@@ -84,19 +84,20 @@ namespace MKY
 		[CLSCompliant(false)]
 		public static string ConvertToNumericBaseString(int numericBase, ulong value, ulong max)
 		{
-			StringWriter to = new StringWriter(CultureInfo.InvariantCulture);
-
-			ulong remainder = value; // Cast to double to prevent overflow on ulong.MaxValue.
-			double exactPower = Math.Log((double)max + 1, numericBase);
-			for (int power = (int)Math.Ceiling(exactPower) - 1; power >= 0; power--)
+			using (StringWriter to = new StringWriter(CultureInfo.InvariantCulture))
 			{
-				ulong divider = (ulong)Math.Pow(numericBase, power);
-				ulong data = remainder / divider;
-				to.Write(data);
-				remainder %= divider;
-			}
+				ulong remainder = value; // Cast to double to prevent overflow on ulong.MaxValue.
+				double exactPower = Math.Log((double)max + 1, numericBase);
+				for (int power = (int)Math.Ceiling(exactPower) - 1; power >= 0; power--)
+				{
+					ulong divider = (ulong)Math.Pow(numericBase, power);
+					ulong data = remainder / divider;
+					to.Write(data);
+					remainder %= divider;
+				}
 
-			return (to.ToString());
+				return (to.ToString());
+			}
 		}
 
 		/// <summary>

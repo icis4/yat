@@ -271,15 +271,17 @@ namespace MKY.Diagnostics
 				writer.WriteLine("Message:");
 				writer.Indent();
 				{
-					StringReader sr = new StringReader(message);
-					string line;
-					do
+					using (StringReader sr = new StringReader(message))
 					{
-						line = sr.ReadLine();
-						if (line != null)
-							writer.WriteLine(line);
+						string line;
+						do
+						{
+							line = sr.ReadLine();
+							if (line != null)
+								writer.WriteLine(line);
+						}
+						while (line != null);
 					}
-					while (line != null);
 				}
 				writer.Unindent();
 			}
@@ -302,15 +304,17 @@ namespace MKY.Diagnostics
 
 				// Stack trace is already indented. No need to indent again.
 
-				StringReader sr = new StringReader(stackTrace.ToString());
-				string line;
-				do
+				using (StringReader sr = new StringReader(stackTrace.ToString()))
 				{
-					line = sr.ReadLine();
-					if (line != null)
-						writer.WriteLine(line);
+					string line;
+					do
+					{
+						line = sr.ReadLine();
+						if (line != null)
+							writer.WriteLine(line);
+					}
+					while (line != null);
 				}
-				while (line != null);
 			}
 		}
 

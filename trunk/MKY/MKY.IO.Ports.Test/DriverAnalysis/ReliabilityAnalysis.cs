@@ -229,52 +229,50 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 		{
 			// Create file for logging:
 			string filePath = Temp.MakeTempFilePath(GetType(), "SubsequentECHO-" + portName + "-" + linesToTransmit.ToString(CultureInfo.InvariantCulture), ".txt");
-			this.file = new StreamWriter(filePath);
-
-			// Open port:
-			this.port = new System.IO.Ports.SerialPort();
-			this.port.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
-			this.port.NewLine = "\r\n"; // <CR><LF>
-			this.port.PortName = portName;
-			this.port.Open();
-			Assert.IsTrue(port.IsOpen);
-
-			// Prepare transmission:
-			Thread.Sleep(WaitForOperation);
-			this.port.WriteLine(""); // Sync before requesting ECHO.
-			Thread.Sleep(WaitForOperation);
-			this.port.ReadExisting(); // Clear sync data.
-			Trace.WriteLine(">> ECHO 1");
-			this.port.WriteLine("ECHO 1"); // Activate single echo mode.
-			Thread.Sleep(WaitForOperation);
-			Assert.AreEqual("ECHO C", this.port.ReadLine(), "Failed to initiate ECHO mode 1!");
-
-			this.port.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
-
-			// Perform ECHO:
-			for (int i = 0; i < linesToTransmit; i++)
+			using (this.file = new StreamWriter(filePath))
 			{
-				Trace.WriteLine(">> line #" + i);
-				this.port.WriteLine(CommandToEcho); // Request single echo.
+				// Open port:
+				this.port = new System.IO.Ports.SerialPort();
+				this.port.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
+				this.port.NewLine = "\r\n"; // <CR><LF>
+				this.port.PortName = portName;
+				this.port.Open();
+				Assert.IsTrue(port.IsOpen);
+
+				// Prepare transmission:
+				Thread.Sleep(WaitForOperation);
+				this.port.WriteLine(""); // Sync before requesting ECHO.
+				Thread.Sleep(WaitForOperation);
+				this.port.ReadExisting(); // Clear sync data.
+				Trace.WriteLine(">> ECHO 1");
+				this.port.WriteLine("ECHO 1"); // Activate single echo mode.
+				Thread.Sleep(WaitForOperation);
+				Assert.AreEqual("ECHO C", this.port.ReadLine(), "Failed to initiate ECHO mode 1!");
+
+				this.port.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
+
+				// Perform ECHO:
+				for (int i = 0; i < linesToTransmit; i++)
+				{
+					Trace.WriteLine(">> line #" + i);
+					this.port.WriteLine(CommandToEcho); // Request single echo.
+				}
+				Thread.Sleep(WaitForOperation);
+
+				// Terminate transmission:
+				this.port.DataReceived -= new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
+
+				this.port.Write(new byte[]{ 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
+				Thread.Sleep(WaitForOperation);
+				Assert.AreEqual("",       this.port.ReadLine(), "Failed to quit ECHO mode!");
+				Assert.AreEqual("ECHO A", this.port.ReadLine(), "Failed to quit ECHO mode!");
+
+				this.isOngoing = false;
+
+				this.port.Close();
+				this.port.Dispose();
+				this.port = null;
 			}
-			Thread.Sleep(WaitForOperation);
-
-			// Terminate transmission:
-			this.port.DataReceived -= new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
-
-			this.port.Write(new byte[]{ 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
-			Thread.Sleep(WaitForOperation);
-			Assert.AreEqual("",       this.port.ReadLine(), "Failed to quit ECHO mode!");
-			Assert.AreEqual("ECHO A", this.port.ReadLine(), "Failed to quit ECHO mode!");
-
-			this.isOngoing = false;
-
-			this.port.Close();
-			this.port.Dispose();
-			this.port = null;
-
-			// Close file:
-			this.file.Close();
 
 			// Process results:
 			this.receivedDataLock.EnterReadLock();
@@ -323,57 +321,55 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 		{
 			// Create file for logging:
 			string filePath = Temp.MakeTempFilePath(GetType(), "ContinuousECHO-" + portName + "-" + linesToReceive.ToString(CultureInfo.InvariantCulture), ".txt");
-			this.file = new StreamWriter(filePath);
-
-			// Open port:
-			this.port = new System.IO.Ports.SerialPort();
-			this.port.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
-			this.port.NewLine = "\r\n"; // <CR><LF>
-			this.port.PortName = portName;
-			this.port.Open();
-			Assert.IsTrue(port.IsOpen);
-
-			// Prepare transmission:
-			Thread.Sleep(WaitForOperation);
-			this.port.WriteLine(""); // Sync before requesting continuous ECHO.
-			Thread.Sleep(WaitForOperation);
-			this.port.ReadExisting(); // Clear sync data.
-			Trace.WriteLine(">> ECHO 2");
-			this.port.WriteLine("ECHO 2"); // Activate continuous echo mode.
-			Thread.Sleep(WaitForOperation);
-			Assert.AreEqual("ECHO C", this.port.ReadLine(), "Failed to initiate ECHO mode 2!");
-
-			this.port.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
-
-			// Perform ECHO:
-			Trace.WriteLine(">> " + CommandToEcho);
-			this.port.WriteLine(CommandToEcho); // Request continuous echo.
-			int receivedLines = 0;
-			do
+			using (this.file = new StreamWriter(filePath))
 			{
-				Thread.Sleep(1); // Wait just a little => improves accuracy in terms of number of received lines.
+				// Open port:
+				this.port = new System.IO.Ports.SerialPort();
+				this.port.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
+				this.port.NewLine = "\r\n"; // <CR><LF>
+				this.port.PortName = portName;
+				this.port.Open();
+				Assert.IsTrue(port.IsOpen);
 
-				this.receivedDataLock.EnterReadLock();
-				receivedLines = this.receivedLines;
-				this.receivedDataLock.ExitReadLock();
+				// Prepare transmission:
+				Thread.Sleep(WaitForOperation);
+				this.port.WriteLine(""); // Sync before requesting continuous ECHO.
+				Thread.Sleep(WaitForOperation);
+				this.port.ReadExisting(); // Clear sync data.
+				Trace.WriteLine(">> ECHO 2");
+				this.port.WriteLine("ECHO 2"); // Activate continuous echo mode.
+				Thread.Sleep(WaitForOperation);
+				Assert.AreEqual("ECHO C", this.port.ReadLine(), "Failed to initiate ECHO mode 2!");
+
+				this.port.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
+
+				// Perform ECHO:
+				Trace.WriteLine(">> " + CommandToEcho);
+				this.port.WriteLine(CommandToEcho); // Request continuous echo.
+				int receivedLines = 0;
+				do
+				{
+					Thread.Sleep(1); // Wait just a little => improves accuracy in terms of number of received lines.
+
+					this.receivedDataLock.EnterReadLock();
+					receivedLines = this.receivedLines;
+					this.receivedDataLock.ExitReadLock();
+				}
+				while (receivedLines < linesToReceive);
+				Thread.Sleep(WaitForOperation);
+
+				// Terminate transmission:
+				this.port.DataReceived -= new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
+
+				this.port.Write(new byte[]{ 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
+				Thread.Sleep(WaitForOperation);
+
+				this.isOngoing = false;
+
+				this.port.Close();
+				this.port.Dispose();
+				this.port = null;
 			}
-			while (receivedLines < linesToReceive);
-			Thread.Sleep(WaitForOperation);
-
-			// Terminate transmission:
-			this.port.DataReceived -= new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
-
-			this.port.Write(new byte[]{ 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
-			Thread.Sleep(WaitForOperation);
-
-			this.isOngoing = false;
-
-			this.port.Close();
-			this.port.Dispose();
-			this.port = null;
-
-			// Close file:
-			this.file.Close();
 
 			// Process results:
 			this.receivedDataLock.EnterReadLock();

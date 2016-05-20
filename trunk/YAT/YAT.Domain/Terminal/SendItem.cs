@@ -87,28 +87,32 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public override string ToString(string indent)
 		{
-			StringWriter to = new StringWriter(CultureInfo.InvariantCulture);
-			foreach (byte b in this.data)
-				to.Write(Convert.ToChar(b));
+			using (StringWriter sw = new StringWriter(CultureInfo.InvariantCulture))
+			{
+				foreach (byte b in this.data)
+					sw.Write(Convert.ToChar(b));
 
-			return (indent + to.ToString());
+				return (indent + sw.ToString());
+			}
 		}
 
 		/// <summary></summary>
 		public override string ToDetailedString(string indent)
 		{
-			bool begin = true;
-			StringWriter data = new StringWriter(CultureInfo.InvariantCulture);
-			foreach (byte b in this.data)
+			using (StringWriter sw = new StringWriter(CultureInfo.InvariantCulture))
 			{
-				if (!begin)
-					data.Write(" ");
+				bool begin = true;
+				foreach (byte b in this.data)
+				{
+					if (!begin)
+						sw.Write(" ");
 
-				begin = false;
-				data.Write(b.ToString("X2", CultureInfo.InvariantCulture) + "h");
+					begin = false;
+					sw.Write(b.ToString("X2", CultureInfo.InvariantCulture) + "h");
+				}
+
+				return (indent + "> Data: " + sw + Environment.NewLine);
 			}
-
-			return (indent + "> Data: " + data + Environment.NewLine);
 		}
 	}
 
