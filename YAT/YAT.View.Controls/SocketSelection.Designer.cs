@@ -148,7 +148,7 @@
 			// SocketSelection
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.Controls.Add(this.comboBox_LocalFilter);
 			this.Controls.Add(this.button_RefreshLocalInterfaces);
 			this.Controls.Add(this.textBox_LocalPort);

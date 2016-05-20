@@ -81,7 +81,7 @@
 			// TerminalSelection
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.Controls.Add(this.comboBox_TerminalType);
 			this.Controls.Add(this.label_TerminalType);
 			this.Controls.Add(this.comboBox_IOType);
