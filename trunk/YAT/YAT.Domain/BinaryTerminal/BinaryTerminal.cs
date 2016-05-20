@@ -200,7 +200,7 @@ namespace YAT.Domain
 			private bool isDisposed;
 
 			public LinePosition         LinePosition;
-			public DisplayLine          LineElements;
+			public DisplayLinePart      LineElements;
 			public SequenceQueue        SequenceAfter;
 			public SequenceQueue        SequenceBefore;
 			public List<DisplayElement> PendingSequenceBeforeElements;
@@ -210,7 +210,7 @@ namespace YAT.Domain
 			public LineState(SequenceQueue sequenceAfter, SequenceQueue sequenceBefore, DateTime timeStamp, LineBreakTimer lineBreakTimer)
 			{
 				LinePosition                  = LinePosition.Begin;
-				LineElements                  = new DisplayLine();
+				LineElements                  = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
 				SequenceAfter                 = sequenceAfter;
 				SequenceBefore                = sequenceBefore;
 				PendingSequenceBeforeElements = new List<DisplayElement>();
@@ -278,7 +278,7 @@ namespace YAT.Domain
 				AssertNotDisposed();
 
 				LinePosition                  = LinePosition.Begin;
-				LineElements                  = new DisplayLine();
+				LineElements                  = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
 				SequenceAfter                  .Reset();
 				SequenceBefore                 .Reset();
 				PendingSequenceBeforeElements = new List<DisplayElement>();
@@ -535,7 +535,7 @@ namespace YAT.Domain
 
 			// Convert data:
 			DisplayElement de = ByteToElement(b, d);
-			DisplayLinePart lp = new DisplayLinePart();
+			DisplayLinePart lp = new DisplayLinePart(); // Default behaviour regarding initial capacity is OK.
 
 			// Evaluate line breaks:
 			//  1. Evaluate the easiest case: Length line break.
@@ -635,7 +635,7 @@ namespace YAT.Domain
 
 		private void ExecuteLineEnd(LineState lineState, IODirection d, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
-			DisplayLinePart lp = new DisplayLinePart();
+			DisplayLinePart lp = new DisplayLinePart(1); // Preset the required capactiy to improve memory management.
 			if (TerminalSettings.Display.ShowLength)
 				PrepareLineEndInfo(lineState.LineElements.DataCount, out lp);
 
@@ -765,7 +765,7 @@ namespace YAT.Domain
 						if (!StringEx.EqualsOrdinalIgnoreCase(ps, this.bidirLineState.PortStamp) ||
 							(d != this.bidirLineState.Direction))
 						{
-							DisplayElementCollection elements = new DisplayElementCollection();
+							DisplayElementCollection elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
 							List<DisplayLine> lines = new List<DisplayLine>();
 
 							ExecuteLineEnd(lineState, d, elements, lines);
@@ -794,7 +794,7 @@ namespace YAT.Domain
 
 			if (lineState.LineElements.Count > 0)
 			{
-				DisplayElementCollection elements = new DisplayElementCollection();
+				DisplayElementCollection elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
 				List<DisplayLine> lines = new List<DisplayLine>();
 
 				ExecuteLineEnd(lineState, d, elements, lines);

@@ -52,6 +52,20 @@ namespace YAT.Domain
 	[Serializable]
 	public class DisplayElementCollection : List<DisplayElement>
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		/// <remarks>
+		/// Can be use to preset the initial capacity of collections. The value reflects typcial
+		/// maximum settings in case of string radix:
+		/// date, sep, time, sep, port, sep, direction, sep, data, eol, sep, length, linebreak = 13
+		/// </remarks>
+		public const int TypicalNumberOfElementsPerLine = 16; // Use 16 = on of the 'normal' values.
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -263,69 +277,6 @@ namespace YAT.Domain
 	}
 
 	/// <summary>
-	/// Implements a display line containing a list of display elements.
-	/// </summary>
-	/// <remarks>
-	/// This calls inherits <see cref="T:List`"/>. However, it only overrides functions required
-	/// for YAT use cases. It is only allowed to add to the list, removing items results in an
-	/// undefined behavior.
-	/// </remarks>
-	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "A display line is a collection of multiple elements, but not a collection of display lines as a name ending in 'Collection' would suggest.")]
-	[Serializable]
-	public class DisplayLine : DisplayElementCollection
-	{
-		#region Object Lifetime
-		//==========================================================================================
-		// Object Lifetime
-		//==========================================================================================
-
-		/// <summary></summary>
-		public DisplayLine()
-		{
-		}
-
-		/// <summary></summary>
-		public DisplayLine(int elementCapacity)
-			: base(elementCapacity)
-		{
-		}
-
-		/// <summary></summary>
-		public DisplayLine(DisplayElementCollection collection)
-			: base(collection)
-		{
-		}
-
-		/// <summary></summary>
-		public DisplayLine(DisplayElement displayElement)
-			: base(displayElement)
-		{
-		}
-
-		#endregion
-
-		#region DisplayElementCollection Members
-		//==========================================================================================
-		// DisplayElementCollection Members
-		//==========================================================================================
-
-		/// <summary>
-		/// Creates and returns a new object that is a deep-copy of this instance.
-		/// </summary>
-		public new DisplayLine Clone()
-		{
-			DisplayLine dl = new DisplayLine(this.Capacity); // Preset the required capactiy to improve memory management.
-
-			foreach (DisplayElement de in this) // Clone the whole collection.
-				dl.Add(de.Clone());
-
-			return (dl);
-		}
-
-		#endregion
-	}
-
-	/// <summary>
 	/// Implements a part of a display line containing a list of display elements.
 	/// </summary>
 	/// <remarks>
@@ -335,7 +286,7 @@ namespace YAT.Domain
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "A display line part is a collection of multiple elements, but not a collection of display lines as a name ending in 'Collection' would suggest.")]
 	[Serializable]
-	public class DisplayLinePart : DisplayLine
+	public class DisplayLinePart : DisplayElementCollection
 	{
 		#region Object Lifetime
 		//==========================================================================================
@@ -361,6 +312,69 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public DisplayLinePart(DisplayElement displayElement)
+			: base(displayElement)
+		{
+		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary>
+		/// Creates and returns a new object that is a deep-copy of this instance.
+		/// </summary>
+		public new DisplayLine Clone()
+		{
+			DisplayLine dl = new DisplayLine(this.Capacity); // Preset the required capactiy to improve memory management.
+
+			foreach (DisplayElement de in this) // Clone the whole collection.
+				dl.Add(de.Clone());
+
+			return (dl);
+		}
+
+		#endregion
+	}
+
+	/// <summary>
+	/// Implements a display line containing a list of display elements.
+	/// </summary>
+	/// <remarks>
+	/// This calls inherits <see cref="T:List`"/>. However, it only overrides functions required
+	/// for YAT use cases. It is only allowed to add to the list, removing items results in an
+	/// undefined behavior.
+	/// </remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "A display line is a collection of multiple elements, but not a collection of display lines as a name ending in 'Collection' would suggest.")]
+	[Serializable]
+	public class DisplayLine : DisplayLinePart
+	{
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
+
+		/// <summary></summary>
+		public DisplayLine()
+		{
+		}
+
+		/// <summary></summary>
+		public DisplayLine(int elementCapacity)
+			: base(elementCapacity)
+		{
+		}
+
+		/// <summary></summary>
+		public DisplayLine(DisplayElementCollection collection)
+			: base(collection)
+		{
+		}
+
+		/// <summary></summary>
+		public DisplayLine(DisplayElement displayElement)
 			: base(displayElement)
 		{
 		}

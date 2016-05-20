@@ -98,16 +98,16 @@ namespace YAT.Domain
 			public LineState(SequenceQueue eol)
 			{
 				LinePosition = LinePosition.Begin;
-				LineElements = new DisplayLinePart();
-				EolElements  = new DisplayLinePart();
+				LineElements = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
+				EolElements  = new DisplayLinePart(); // Default behaviour regarding initial capacity is OK.
 				Eol = eol;
 			}
 
 			public virtual void Reset()
 			{
 				LinePosition = LinePosition.Begin;
-				LineElements = new DisplayLinePart();
-				EolElements  = new DisplayLinePart();
+				LineElements = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
+				EolElements  = new DisplayLinePart(); // Default behaviour regarding initial capacity is OK.
 				Eol.Reset();
 			}
 		}
@@ -569,7 +569,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		private void ExecuteData(LineState lineState, IODirection d, byte b, DisplayElementCollection elements)
 		{
-			DisplayLinePart lp = new DisplayLinePart();
+			DisplayLinePart lp = new DisplayLinePart(); // Default behaviour regarding initial capacity is OK.
 
 			// Convert data:
 			DisplayElement de = ByteToElement(b, d);
@@ -689,7 +689,7 @@ namespace YAT.Domain
 		{
 			// Process EOL:
 			int eolLength = lineState.Eol.Sequence.Length;
-			DisplayLine line = new DisplayLine();
+			DisplayLine line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
 
 			if (TextTerminalSettings.ShowEol || (eolLength <= 0) || (!lineState.Eol.IsCompleteMatch))
 			{
@@ -718,7 +718,7 @@ namespace YAT.Domain
 			}
 
 			// Process length:
-			DisplayLinePart lp = new DisplayLinePart();
+			DisplayLinePart lp = new DisplayLinePart(1); // Preset the required capactiy to improve memory management.
 			if (TerminalSettings.Display.ShowLength)
 				PrepareLineEndInfo(line.DataCount, out lp);
 
@@ -785,7 +785,7 @@ namespace YAT.Domain
 						if (!StringEx.EqualsOrdinalIgnoreCase(ps, this.bidirLineState.PortStamp) ||
 							(d != this.bidirLineState.Direction))
 						{
-							DisplayElementCollection elements = new DisplayElementCollection();
+							DisplayElementCollection elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
 							List<DisplayLine> lines = new List<DisplayLine>();
 
 							ExecuteLineEnd(lineState, d, elements, lines);
