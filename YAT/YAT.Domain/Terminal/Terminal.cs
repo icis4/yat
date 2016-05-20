@@ -2005,7 +2005,7 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.ShowDate || TerminalSettings.Display.ShowTime ||
 				TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
 			{
-				lp = new DisplayLinePart();
+				lp = new DisplayLinePart(8); // Preset the required capactiy to improve memory management.
 
 				if (TerminalSettings.Display.ShowDate)
 				{
@@ -2050,7 +2050,7 @@ namespace YAT.Domain
 		{
 			if (TerminalSettings.Display.ShowLength)
 			{
-				lp = new DisplayLinePart();
+				lp = new DisplayLinePart(2); // Preset the required capactiy to improve memory management.
 
 				if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
 					lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparatorCache));
@@ -2066,7 +2066,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void ProcessRawChunk(RawChunk raw, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
-			DisplayLine dl = new DisplayLine();
+			DisplayLine dl = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
 
 			// Line begin:
 			if (TerminalSettings.Display.ShowDate || TerminalSettings.Display.ShowTime ||
@@ -2103,7 +2103,7 @@ namespace YAT.Domain
 		{
 			// Collection of elements processed, extends over one or multiple lines,
 			// depending on the number of bytes in raw chunk.
-			DisplayElementCollection elements = new DisplayElementCollection();
+			DisplayElementCollection elements = new DisplayElementCollection(); // Default behaviour regarding initial capacity is OK.
 			List<DisplayLine> lines = new List<DisplayLine>();
 
 			ProcessRawChunk(raw, elements, lines);
@@ -2563,7 +2563,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayElementProcessed(IODirection direction, DisplayElement element)
 		{
-			DisplayElementCollection elements = new DisplayElementCollection();
+			DisplayElementCollection elements = new DisplayElementCollection(1); // Preset the required capactiy to improve memory management.
 			elements.Add(element); // No clone needed as the element must be created when calling this event method.
 			OnDisplayElementsProcessed(direction, elements);
 		}

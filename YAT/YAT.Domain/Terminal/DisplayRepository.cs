@@ -51,7 +51,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		private int capacity; // = 0;
-		private DisplayLine currentLine; // = null;
+		private DisplayLinePart currentLine; // = null;
 		private int dataCount; // = 0;
 
 		private DisplayLine lastLineAuxiliary; // = null;
@@ -68,10 +68,10 @@ namespace YAT.Domain
 			: base(capacity)
 		{
 			this.capacity    = capacity;
-			this.currentLine = new DisplayLine();
+			this.currentLine = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
 		////this.dataCount   = 0;
 
-			this.lastLineAuxiliary    = new DisplayLine();
+			this.lastLineAuxiliary = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
 		}
 
 		/// <summary></summary>
@@ -79,10 +79,10 @@ namespace YAT.Domain
 			: base(rhs)
 		{
 			this.capacity    = rhs.capacity;
-			this.currentLine = new DisplayLine(rhs.currentLine.Clone());
+			this.currentLine = new DisplayLinePart(rhs.currentLine.Clone());
 			this.dataCount   = rhs.dataCount;
 
-			this.lastLineAuxiliary    = new DisplayLine(rhs.lastLineAuxiliary.Clone());
+			this.lastLineAuxiliary = new DisplayLine(rhs.lastLineAuxiliary.Clone());
 		}
 
 		#endregion

@@ -413,7 +413,7 @@ namespace YAT.View.Forms
 			for (int i = 0; i < this.monitors.Length; i++)
 				this.monitors[i].AddLine(exampleLines[i]);
 
-			Domain.DisplayRepository exampleComplete = new Domain.DisplayRepository(26);
+			Domain.DisplayRepository exampleComplete = new Domain.DisplayRepository(33);
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSpace(infoSeparator));
