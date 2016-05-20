@@ -159,9 +159,9 @@ namespace YAT.View.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				var enclosure = (comboBox_InfoSeparator.SelectedItem as Domain.InfoElementSeparatorEx);
-				if (enclosure != null)
-					this.infoSeparator = enclosure.ToSeparator();
+				var separator = (comboBox_InfoSeparator.SelectedItem as Domain.InfoElementSeparatorEx);
+				if (separator != null)
+					this.infoSeparator = separator;
 
 				SetControls();
 			}
@@ -174,7 +174,7 @@ namespace YAT.View.Forms
 				Domain.InfoElementSeparatorEx separator;
 				if (Domain.InfoElementSeparatorEx.TryParse(comboBox_InfoSeparator.Text, out separator))
 				{
-					this.infoSeparator = separator.ToSeparator();
+					this.infoSeparator = separator;
 					SetControls();
 				}
 				else
@@ -198,7 +198,7 @@ namespace YAT.View.Forms
 			{
 				var enclosure = (comboBox_InfoEnclosure.SelectedItem as Domain.InfoElementEnclosureEx);
 				if (enclosure != null)
-					this.infoEnclosure = enclosure.ToEnclosure();
+					this.infoEnclosure = enclosure;
 
 				SetControls();
 			}
@@ -212,7 +212,7 @@ namespace YAT.View.Forms
 				Domain.InfoElementEnclosureEx enclosure;
 				if (Domain.InfoElementEnclosureEx.TryParse(comboBox_InfoEnclosure.Text, out enclosure))
 				{
-					this.infoEnclosure = enclosure.ToEnclosure();
+					this.infoEnclosure = enclosure;
 					SetControls();
 				}
 				else
@@ -340,18 +340,39 @@ namespace YAT.View.Forms
 				this.textFormats[i].FormatColor     = tf.Color;
 			}
 
-			Domain.InfoElementSeparatorEx separator;
-			if (Domain.InfoElementSeparatorEx.TryParse(this.infoSeparator, out separator))
-				comboBox_InfoSeparator.SelectedItem = separator;
+			if (this.infoSeparator != null)
+			{
+				if (comboBox_InfoSeparator.Items.Contains(this.infoSeparator))
+				{	// Applies if an item of the combo box is selected.
+					comboBox_InfoSeparator.SelectedItem = this.infoSeparator;
+				}
+				else
+				{	// Applies if an item that is not in the combo box is selected.
+					comboBox_InfoSeparator.SelectedIndex = ControlEx.InvalidIndex;
+					comboBox_InfoSeparator.Text = this.infoSeparator;
+				}
+			}
 			else
-				comboBox_InfoSeparator.Text = this.infoSeparator;
+			{	// Item doesn't exist, use default = first item in the combo box, or none if list is empty.
+				comboBox_InfoSeparator.SelectedIndex = 0;
+			}
 
-			Domain.InfoElementEnclosureEx enclosure;
-			if (Domain.InfoElementEnclosureEx.TryParse(this.infoEnclosure, out enclosure))
-				comboBox_InfoEnclosure.SelectedItem = enclosure;
+			if (this.infoEnclosure != null)
+			{
+				if (comboBox_InfoEnclosure.Items.Contains(this.infoEnclosure))
+				{	// Applies if an item of the combo box is selected.
+					comboBox_InfoEnclosure.SelectedItem = this.infoEnclosure;
+				}
+				else
+				{	// Applies if an item that is not in the combo box is selected.
+					comboBox_InfoEnclosure.SelectedIndex = ControlEx.InvalidIndex;
+					comboBox_InfoEnclosure.Text = this.infoEnclosure;
+				}
+			}
 			else
-				comboBox_InfoEnclosure.Text = this.infoEnclosure;
-
+			{	// Item doesn't exist, use default = first item in the combo box, or none if list is empty.
+				comboBox_InfoEnclosure.SelectedIndex = 0;
+			}
 			                               // Clone settings before assigning them to control:
 			monitor_Example.FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
 

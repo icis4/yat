@@ -260,9 +260,9 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static InfoElementEnclosure Parse(string s)
+		public static InfoElementEnclosureEx Parse(string s)
 		{
-			InfoElementEnclosure result;
+			InfoElementEnclosureEx result;
 			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
@@ -315,24 +315,18 @@ namespace YAT.Domain
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Parentheses_stringEnclosure) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Parentheses_stringEnclosureLeft) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Parentheses_stringEnclosureRight) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Parentheses_stringDescription))
 			{
 				result = InfoElementEnclosure.Parentheses;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, SquareBrackets_stringEnclosure) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, SquareBrackets_stringEnclosureLeft) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, SquareBrackets_stringEnclosureRight) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, SquareBrackets_stringDescription))
 			{
 				result = InfoElementEnclosure.SquareBrackets;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, CurlyBraces_stringEnclosure) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, CurlyBraces_stringEnclosureLeft) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, CurlyBraces_stringEnclosureRight) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, CurlyBraces_stringDescription))
 			{
 				result = InfoElementEnclosure.CurlyBraces;
