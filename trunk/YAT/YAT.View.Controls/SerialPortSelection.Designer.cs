@@ -71,7 +71,7 @@
 			// SerialPortSelection
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.Controls.Add(this.button_RefreshPorts);
 			this.Controls.Add(this.comboBox_Port);
 			this.Controls.Add(this.label_Port);
