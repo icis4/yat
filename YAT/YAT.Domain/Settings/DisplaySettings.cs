@@ -90,8 +90,10 @@ namespace YAT.Domain.Settings
 
 		private InfoElementSeparatorEx infoSeparator; // = null
 		private InfoElementEnclosureEx infoEnclosure; // = null
-		private string infoEnclosureLeft;  // = null
-		private string infoEnclosureRight; // = null
+
+		private string infoSeparatorCache;      // = null
+		private string infoEnclosureLeftCache;  // = null
+		private string infoEnclosureRightCache; // = null
 
 		/// <summary></summary>
 		public DisplaySettings()
@@ -421,9 +423,18 @@ namespace YAT.Domain.Settings
 				if (this.infoSeparator != value)
 				{
 					this.infoSeparator = value;
+					this.infoSeparatorCache  = this.infoSeparator.ToSeparator(); // For performance reasons.
+
 					SetChanged();
 				}
 			}
+		}
+
+		/// <remarks>Available for performance reasons.</remarks>
+		[XmlIgnore]
+		public string InfoSeparatorCache
+		{
+			get { return (this.infoSeparatorCache); }
 		}
 
 		/// <remarks>
@@ -449,8 +460,8 @@ namespace YAT.Domain.Settings
 				if (this.infoEnclosure != value)
 				{
 					this.infoEnclosure = value;
-					this.infoEnclosureLeft  = this.infoEnclosure.ToEnclosureLeft();  // For performance reasons.
-					this.infoEnclosureRight = this.infoEnclosure.ToEnclosureRight(); // For performance reasons.
+					this.infoEnclosureLeftCache  = this.infoEnclosure.ToEnclosureLeft();  // For performance reasons.
+					this.infoEnclosureRightCache = this.infoEnclosure.ToEnclosureRight(); // For performance reasons.
 
 					SetChanged();
 				}
@@ -459,16 +470,16 @@ namespace YAT.Domain.Settings
 
 		/// <remarks>Available for performance reasons.</remarks>
 		[XmlIgnore]
-		public string InfoEnclosureLeft
+		public string InfoEnclosureLeftCache
 		{
-			get { return (this.infoEnclosureLeft); }
+			get { return (this.infoEnclosureLeftCache); }
 		}
 
 		/// <remarks>Available for performance reasons.</remarks>
 		[XmlIgnore]
-		public string InfoEnclosureRight
+		public string InfoEnclosureRightCache
 		{
-			get { return (this.infoEnclosureRight); }
+			get { return (this.infoEnclosureRightCache); }
 		}
 
 		#endregion

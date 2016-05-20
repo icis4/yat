@@ -540,18 +540,44 @@ namespace YAT.View.Forms
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.Clear();
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.ValidAutoResponseTriggerItems);
 
-				if (this.settingsRoot.AutoResponse.Trigger != Model.Types.AutoTrigger.Explicit)
-					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedItem = this.settingsRoot.AutoResponse.Trigger;
+				Model.Types.AutoTriggerEx trigger = this.settingsRoot.AutoResponse.Trigger;
+				if (trigger != null)
+				{
+					if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.Contains(trigger))
+					{	// Applies if an item of the combo box is selected.
+						toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedItem = trigger;
+					}
+					else
+					{	// Applies if an item that is not in the combo box is selected.
+						toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndex = ControlEx.InvalidIndex;
+						toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text = new Model.Types.Command(trigger).SingleLineText;
+					}
+				}
 				else
-					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text = new Model.Types.Command(this.settingsRoot.AutoResponse.Trigger).SingleLineText;
+				{	// Item doesn't exist, use default = first item in the combo box, or none if list is empty.
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndex = 0;
+				}
 
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Clear();
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.ValidAutoResponseResponseItems);
 
-				if (this.settingsRoot.AutoResponse.Response != Model.Types.AutoResponse.Explicit)
-					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedItem = this.settingsRoot.AutoResponse.Response;
+				Model.Types.AutoResponseEx response = this.settingsRoot.AutoResponse.Response;
+				if (response != null)
+				{
+					if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Contains(response))
+					{	// Applies if an item of the combo box is selected.
+						toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedItem = response;
+					}
+					else
+					{	// Applies if an item that is not in the combo box is selected.
+						toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndex = ControlEx.InvalidIndex;
+						toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text = new Model.Types.Command(response).SingleLineText;
+					}
+				}
 				else
-					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text = new Model.Types.Command(this.settingsRoot.AutoResponse.Response).SingleLineText;
+				{	// Item doesn't exist, use default = first item in the combo box, or none if list is empty.
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndex = 0;
+				}
 			}
 
 			this.isSettingControls.Leave();
@@ -2787,8 +2813,8 @@ namespace YAT.View.Forms
 			{
 				Refresh();
 				this.settingsRoot.Format = f.FormatSettingsResult;
-				this.settingsRoot.Display.InfoSeparator = f.InfoSeparatorResult.ToSeparator();
-				this.settingsRoot.Display.InfoEnclosure = f.InfoEnclosureResult.ToEnclosure();
+				this.settingsRoot.Display.InfoSeparator = f.InfoSeparatorResult;
+				this.settingsRoot.Display.InfoEnclosure = f.InfoEnclosureResult;
 			}
 		}
 

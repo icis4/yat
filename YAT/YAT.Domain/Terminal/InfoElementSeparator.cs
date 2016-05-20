@@ -282,9 +282,9 @@ namespace YAT.Domain
 		/// Opposed to the convention of the .NET framework, whitespace is NOT
 		/// trimmed from <paramref name="s"/> as certain separators contain spaces.
 		/// </remarks>
-		public static InfoElementSeparator Parse(string s)
+		public static InfoElementSeparatorEx Parse(string s)
 		{
-			InfoElementSeparator result;
+			InfoElementSeparatorEx result;
 			if (TryParse(s, out result))
 				return (result);
 			else

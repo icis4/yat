@@ -243,9 +243,9 @@ namespace YAT.Log
 		/// Opposed to the convention of the .NET framework, whitespace is NOT
 		/// trimmed from <paramref name="s"/> as certain separators contain spaces.
 		/// </remarks>
-		public static FileNameSeparator Parse(string s)
+		public static FileNameSeparatorEx Parse(string s)
 		{
-			FileNameSeparator result;
+			FileNameSeparatorEx result;
 			if (TryParse(s, out result))
 				return (result);
 			else

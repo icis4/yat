@@ -2009,34 +2009,34 @@ namespace YAT.Domain
 
 				if (TerminalSettings.Display.ShowDate)
 				{
-					lp.Add(new DisplayElement.DateInfo(ts, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight)); // Direction may become both!
+					lp.Add(new DisplayElement.DateInfo(ts, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
 
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparator))
-						lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparator));
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
+						lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparatorCache));
 				}
 
 				if (TerminalSettings.Display.ShowTime)
 				{
-					lp.Add(new DisplayElement.TimeInfo(ts, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight)); // Direction may become both!
+					lp.Add(new DisplayElement.TimeInfo(ts, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
 
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparator))
-						lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparator));
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
+						lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparatorCache));
 				}
 
 				if (TerminalSettings.Display.ShowPort)
 				{
-					lp.Add(new DisplayElement.PortInfo(ps, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight)); // Direction may become both!
+					lp.Add(new DisplayElement.PortInfo(ps, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
 
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparator))
-						lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparator));
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
+						lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparatorCache));
 				}
 
 				if (TerminalSettings.Display.ShowDirection)
 				{
-					lp.Add(new DisplayElement.DirectionInfo((Direction)d, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight));
+					lp.Add(new DisplayElement.DirectionInfo((Direction)d, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache));
 
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparator))
-						lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparator));
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
+						lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparatorCache));
 				}
 			}
 			else
@@ -2052,10 +2052,10 @@ namespace YAT.Domain
 			{
 				lp = new DisplayLinePart();
 
-				if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparator))
-					lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparator));
+				if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
+					lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparatorCache));
 
-				lp.Add(new DisplayElement.DataLength(dataCount, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight));
+				lp.Add(new DisplayElement.DataLength(dataCount, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache));
 			}
 			else
 			{

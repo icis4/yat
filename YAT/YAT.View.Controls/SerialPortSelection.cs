@@ -567,7 +567,7 @@ namespace YAT.View.Controls
 						}
 					}
 					else
-					{	// Item doesn't exist, use default = first item in the combo box.
+					{	// Item doesn't exist, use default = first item in the combo box, or none if list is empty.
 						comboBox_Port.SelectedIndex = 0;
 					}
 				}
