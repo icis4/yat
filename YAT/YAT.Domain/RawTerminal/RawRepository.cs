@@ -167,12 +167,13 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string QueueToString(string indent)
 		{
-			StringWriter to = new StringWriter(CultureInfo.InvariantCulture);
-			foreach (RawChunk re in ToChunks())
+			using (StringWriter sw = new StringWriter(CultureInfo.InvariantCulture))
 			{
-				to.Write(re.ToString(indent));
+				foreach (RawChunk re in ToChunks())
+					sw.Write(re.ToString(indent));
+
+				return (sw.ToString());
 			}
-			return (to.ToString());
 		}
 
 		/// <summary></summary>

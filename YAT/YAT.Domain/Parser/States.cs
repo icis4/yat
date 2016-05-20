@@ -699,26 +699,29 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
 		private static bool TryParseContiguousAsciiMnemonic(Parser parser, string s, out byte[] result, ref FormatException formatException)
 		{
-			MemoryStream bytes = new MemoryStream();
-			string[] items = s.Split(' ');
-			foreach (string item in items)
+			using (MemoryStream bytes = new MemoryStream())
 			{
-				if (item.Length > 0)
+				string[] items = s.Split(' ');
+				foreach (string item in items)
 				{
-					byte[] b;
-					if (TryParseContiguousAsciiMnemonicItem(parser, item, out b, ref formatException))
+					if (item.Length > 0)
 					{
-						bytes.Write(b, 0, b.Length);
-					}
-					else
-					{
-						result = new byte[] { };
-						return (false);
+						byte[] b;
+						if (TryParseContiguousAsciiMnemonicItem(parser, item, out b, ref formatException))
+						{
+							bytes.Write(b, 0, b.Length);
+						}
+						else
+						{
+							result = new byte[] { };
+							return (false);
+						}
 					}
 				}
-			}
-			result = bytes.ToArray();
-			return (true);
+
+				result = bytes.ToArray();
+				return (true);
+			} // using (MemoryStream)
 		}
 
 		/// <summary>
@@ -729,62 +732,63 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for recursion.")]
 		private static bool TryParseContiguousAsciiMnemonicItem(Parser parser, string s, out byte[] result, ref FormatException formatException)
 		{
-			string remaining = s;
-
-			MemoryStream bytes = new MemoryStream();
-			bool success = true;
-
-			while (remaining.Length > 0)
+			using (MemoryStream bytes = new MemoryStream())
 			{
-				bool found = false;
+				string remaining = s;
+				bool success = true;
 
-				int from = Math.Min(Ascii.MnemonicMaxLength, remaining.Length);
-				for (int i = from; i >= Ascii.MnemonicMinLength; i--) // Probe the max..min left-most characters for a valid ASCII mnemonic.
+				while (remaining.Length > 0)
 				{
-					byte code;
-					if (Ascii.TryParse(StringEx.Left(remaining, i), out code))
-					{
-						char c = Convert.ToChar(code);
-						byte[] b = parser.Encoding.GetBytes(new char[] { c });
-						bytes.Write(b, 0, b.Length);
+					bool found = false;
 
-						remaining = remaining.Remove(0, i);
-						found = true;
-						break; // Quit for-loop and continue within remaining string.
+					int from = Math.Min(Ascii.MnemonicMaxLength, remaining.Length);
+					for (int i = from; i >= Ascii.MnemonicMinLength; i--) // Probe the max..min left-most characters for a valid ASCII mnemonic.
+					{
+						byte code;
+						if (Ascii.TryParse(StringEx.Left(remaining, i), out code))
+						{
+							char c = Convert.ToChar(code);
+							byte[] b = parser.Encoding.GetBytes(new char[] { c });
+							bytes.Write(b, 0, b.Length);
+
+							remaining = remaining.Remove(0, i);
+							found = true;
+							break; // Quit for-loop and continue within remaining string.
+						}
+					}
+
+					if (!found)
+					{
+						success = false;
+						break; // Quit while-loop.
 					}
 				}
 
-				if (!found)
+				if (success)
 				{
-					success = false;
-					break; // Quit while-loop.
+					result = bytes.ToArray();
+					return (true);
 				}
-			}
-
-			if (success)
-			{
-				result = bytes.ToArray();
-				return (true);
-			}
-			else
-			{
-				StringBuilder sb = new StringBuilder();
-
-				if (remaining.Length != s.Length)
+				else
 				{
+					StringBuilder sb = new StringBuilder();
+
+					if (remaining.Length != s.Length)
+					{
+						sb.Append(@"""");
+						sb.Append(remaining);
+						sb.Append(@""" of ");
+					}
+
 					sb.Append(@"""");
-					sb.Append(remaining);
-					sb.Append(@""" of ");
+					sb.Append(s);
+					sb.Append(@""" is an invalid ASCII mnemonic.");
+
+					formatException = new FormatException(sb.ToString());
+					result = new byte[] { };
+					return (false);
 				}
-
-				sb.Append(@"""");
-				sb.Append(s);
-				sb.Append(@""" is an invalid ASCII mnemonic.");
-
-				formatException = new FormatException(sb.ToString());
-				result = new byte[] { };
-				return (false);
-			}
+			} // using (MemoryStream)
 		}
 	}
 

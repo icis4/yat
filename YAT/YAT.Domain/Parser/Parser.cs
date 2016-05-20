@@ -454,19 +454,21 @@ namespace YAT.Domain.Parser
 			Result[] typedResult;
 			if (TryParse(s, modes, out typedResult, out successfullyParsed, ref formatException))
 			{
-
-				MemoryStream bytes = new MemoryStream();
-				foreach (Result r in typedResult)
+				using (MemoryStream bytes = new MemoryStream())
 				{
-					var bar = (r as ByteArrayResult);
-					if (bar != null)
+					foreach (Result r in typedResult)
 					{
-						byte[] a = bar.ByteArray;
-						bytes.Write(a, 0, a.Length);
+						var bar = (r as ByteArrayResult);
+						if (bar != null)
+						{
+							byte[] a = bar.ByteArray;
+							bytes.Write(a, 0, a.Length);
+						}
 					}
+
+					result = bytes.ToArray();
+					return (true);
 				}
-				result = bytes.ToArray();
-				return (true);
 			}
 			else
 			{
@@ -612,8 +614,12 @@ namespace YAT.Domain.Parser
 
 			if (this.bytesWriter.Length > 0)
 			{
+				// Commit:
 				this.result.Add(new ByteArrayResult(this.bytesWriter.ToArray()));
-				this.bytesWriter = new MemoryStream();
+
+				// Restart:
+				this.bytesWriter.Dispose();
+				this.bytesWriter = new MemoryStream(); // Former stream has just been disposed of above.
 			}
 		}
 
@@ -636,42 +642,45 @@ namespace YAT.Domain.Parser
 		/// <exception cref="OverflowException">Thrown if a value cannot be converted into bytes.</exception>
 		internal virtual bool TryParseContiguousRadix(string s, Radix radix, out byte[] result, ref FormatException formatException)
 		{
-			MemoryStream bytes = new MemoryStream();
-			if (radix == Radix.String)
+			using (MemoryStream bytes = new MemoryStream())
 			{
-				byte[] b;
-				if (TryParseContiguousRadixItem(s, Radix.String, out b, ref formatException))
+				if (radix == Radix.String)
 				{
-					bytes.Write(b, 0, b.Length);
+					byte[] b;
+					if (TryParseContiguousRadixItem(s, Radix.String, out b, ref formatException))
+					{
+						bytes.Write(b, 0, b.Length);
+					}
+					else
+					{
+						result = new byte[] { };
+						return (false);
+					}
 				}
 				else
 				{
-					result = new byte[] { };
-					return (false);
-				}
-			}
-			else
-			{
-				string[] items = s.Split(' ');
-				foreach (string item in items)
-				{
-					if (item.Length > 0)
+					string[] items = s.Split(' ');
+					foreach (string item in items)
 					{
-						byte[] b;
-						if (TryParseContiguousRadixItem(item, radix, out b, ref formatException))
+						if (item.Length > 0)
 						{
-							bytes.Write(b, 0, b.Length);
-						}
-						else
-						{
-							result = new byte[] { };
-							return (false);
+							byte[] b;
+							if (TryParseContiguousRadixItem(item, radix, out b, ref formatException))
+							{
+								bytes.Write(b, 0, b.Length);
+							}
+							else
+							{
+								result = new byte[] { };
+								return (false);
+							}
 						}
 					}
 				}
-			}
-			result = bytes.ToArray();
-			return (true);
+
+				result = bytes.ToArray();
+				return (true);
+			} // using (MemoryStream)
 		}
 
 		/// <summary>
@@ -755,186 +764,187 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for recursion.")]
 		internal virtual bool TryParseAndConvertContiguousNumericItem(string s, Radix radix, out byte[] result, ref FormatException formatException)
 		{
-			string remaining = s;
-
-			MemoryStream bytes = new MemoryStream();
-			bool success = true;
-
-			switch (radix)
+			using (MemoryStream bytes = new MemoryStream())
 			{
-				case Radix.Bin:
-				{
-					while (remaining.Length > 0)
-					{
-						bool found = false;
-
-						int from = Math.Min(8, remaining.Length);
-						for (int i = from; i >= 1; i--) // Probe the 8-7-...-2-1 left-most characters for a valid binary byte.
-						{
-							UInt64 tempResult;
-							if (UInt64Ex.TryParseBinary(StringEx.Left(remaining, i), out tempResult))
-							{
-								if (tempResult <= 0xFF) // i left-most characters are a valid binary byte!
-								{
-									bytes.WriteByte((byte)tempResult);
-
-									remaining = remaining.Remove(0, i);
-									found = true;
-									break; // Quit for-loop and continue within remaining string.
-								}
-							}
-						}
-
-						if (!found)
-						{
-							success = false;
-							break; // Quit while-loop.
-						}
-					}
-
-					break; // Break switch-case.
-				}
-
-				case Radix.Oct:
-				{
-					while (remaining.Length > 0)
-					{
-						bool found = false;
-
-						int from = Math.Min(3, remaining.Length);
-						for (int i = from; i >= 1; i--) // Probe the 3-2-1 left-most characters for a valid octal byte.
-						{
-							UInt64 tempResult;
-							if (UInt64Ex.TryParseOctal(StringEx.Left(remaining, i), out tempResult))
-							{
-								if (tempResult <= 0xFF) // i left-most characters are a valid octal byte!
-								{
-									bytes.WriteByte((byte)tempResult);
-
-									remaining = remaining.Remove(0, i);
-									found = true;
-									break; // Quit for-loop and continue within remaining string.
-								}
-							}
-						}
-
-						if (!found)
-						{
-							success = false;
-							break; // Quit while-loop.
-						}
-					}
-
-					break; // Break switch-case.
-				}
-
-				case Radix.Dec:
-				{
-					while (remaining.Length > 0)
-					{
-						bool found = false;
-
-						int from = Math.Min(3, remaining.Length);
-						for (int i = from; i >= 1; i--) // Probe the 3-2-1 left-most characters for a valid decimal byte.
-						{
-							byte tempResult;
-							if (byte.TryParse(StringEx.Left(remaining, i), NumberStyles.Integer, CultureInfo.InvariantCulture, out tempResult))
-							{
-								if (tempResult <= 0xFF) // i left-most characters are a valid decimal byte!
-								{
-									bytes.WriteByte(tempResult);
-
-									remaining = remaining.Remove(0, i);
-									found = true;
-									break; // Quit for-loop and continue within remaining string.
-								}
-							}
-						}
-
-						if (!found)
-						{
-							success = false;
-							break; // Quit while-loop.
-						}
-					}
-
-					break; // Break switch-case.
-				}
-
-				case Radix.Hex:
-				{
-					while (remaining.Length > 0)
-					{
-						bool found = false;
-
-						int from = Math.Min(2, remaining.Length);
-						for (int i = from; i >= 1; i--) // Probe the 2-1 left-most characters for a valid hexadecimal byte.
-						{
-							byte tempResult;
-							if (byte.TryParse(StringEx.Left(remaining, i), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out tempResult))
-							{
-								if (tempResult <= 0xFF) // i left-most characters are a valid hexadecimal byte!
-								{
-									bytes.WriteByte(tempResult);
-
-									remaining = remaining.Remove(0, i);
-									found = true;
-									break; // Quit for-loop and continue within remaining string.
-								}
-							}
-						}
-
-						if (!found)
-						{
-							success = false;
-							break; // Quit while-loop.
-						}
-					}
-
-					break; // Break switch-case.
-				}
-
-				default:
-				{
-					throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""!"));
-				}
-			}
-
-			if (success)
-			{
-				result = bytes.ToArray();
-				return (true);
-			}
-			else
-			{
-				StringBuilder sb = new StringBuilder();
-
-				if (remaining.Length != s.Length)
-				{
-					sb.Append(@"""");
-					sb.Append(remaining);
-					sb.Append(@""" of ");
-				}
-
-				sb.Append(@"""");
-				sb.Append(s);
-				sb.Append(@""" is an invalid ");
+				string remaining = s;
+				bool success = true;
 
 				switch (radix)
 				{
-					case Radix.Bin: sb.Append("binary");      break;
-					case Radix.Oct: sb.Append("octal");       break;
-					case Radix.Dec: sb.Append("decimal");     break;
-					case Radix.Hex: sb.Append("hexadecimal"); break;
-					default: throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""!"));
+					case Radix.Bin:
+					{
+						while (remaining.Length > 0)
+						{
+							bool found = false;
+
+							int from = Math.Min(8, remaining.Length);
+							for (int i = from; i >= 1; i--) // Probe the 8-7-...-2-1 left-most characters for a valid binary byte.
+							{
+								UInt64 tempResult;
+								if (UInt64Ex.TryParseBinary(StringEx.Left(remaining, i), out tempResult))
+								{
+									if (tempResult <= 0xFF) // i left-most characters are a valid binary byte!
+									{
+										bytes.WriteByte((byte)tempResult);
+
+										remaining = remaining.Remove(0, i);
+										found = true;
+										break; // Quit for-loop and continue within remaining string.
+									}
+								}
+							}
+
+							if (!found)
+							{
+								success = false;
+								break; // Quit while-loop.
+							}
+						}
+
+						break; // Break switch-case.
+					}
+
+					case Radix.Oct:
+					{
+						while (remaining.Length > 0)
+						{
+							bool found = false;
+
+							int from = Math.Min(3, remaining.Length);
+							for (int i = from; i >= 1; i--) // Probe the 3-2-1 left-most characters for a valid octal byte.
+							{
+								UInt64 tempResult;
+								if (UInt64Ex.TryParseOctal(StringEx.Left(remaining, i), out tempResult))
+								{
+									if (tempResult <= 0xFF) // i left-most characters are a valid octal byte!
+									{
+										bytes.WriteByte((byte)tempResult);
+
+										remaining = remaining.Remove(0, i);
+										found = true;
+										break; // Quit for-loop and continue within remaining string.
+									}
+								}
+							}
+
+							if (!found)
+							{
+								success = false;
+								break; // Quit while-loop.
+							}
+						}
+
+						break; // Break switch-case.
+					}
+
+					case Radix.Dec:
+					{
+						while (remaining.Length > 0)
+						{
+							bool found = false;
+
+							int from = Math.Min(3, remaining.Length);
+							for (int i = from; i >= 1; i--) // Probe the 3-2-1 left-most characters for a valid decimal byte.
+							{
+								byte tempResult;
+								if (byte.TryParse(StringEx.Left(remaining, i), NumberStyles.Integer, CultureInfo.InvariantCulture, out tempResult))
+								{
+									if (tempResult <= 0xFF) // i left-most characters are a valid decimal byte!
+									{
+										bytes.WriteByte(tempResult);
+
+										remaining = remaining.Remove(0, i);
+										found = true;
+										break; // Quit for-loop and continue within remaining string.
+									}
+								}
+							}
+
+							if (!found)
+							{
+								success = false;
+								break; // Quit while-loop.
+							}
+						}
+
+						break; // Break switch-case.
+					}
+
+					case Radix.Hex:
+					{
+						while (remaining.Length > 0)
+						{
+							bool found = false;
+
+							int from = Math.Min(2, remaining.Length);
+							for (int i = from; i >= 1; i--) // Probe the 2-1 left-most characters for a valid hexadecimal byte.
+							{
+								byte tempResult;
+								if (byte.TryParse(StringEx.Left(remaining, i), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out tempResult))
+								{
+									if (tempResult <= 0xFF) // i left-most characters are a valid hexadecimal byte!
+									{
+										bytes.WriteByte(tempResult);
+
+										remaining = remaining.Remove(0, i);
+										found = true;
+										break; // Quit for-loop and continue within remaining string.
+									}
+								}
+							}
+
+							if (!found)
+							{
+								success = false;
+								break; // Quit while-loop.
+							}
+						}
+
+						break; // Break switch-case.
+					}
+
+					default:
+					{
+						throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""!"));
+					}
 				}
 
-				sb.Append(" value.");
+				if (success)
+				{
+					result = bytes.ToArray();
+					return (true);
+				}
+				else
+				{
+					StringBuilder sb = new StringBuilder();
 
-				formatException = new FormatException(sb.ToString());
-				result = new byte[] { };
-				return (false);
-			}
+					if (remaining.Length != s.Length)
+					{
+						sb.Append(@"""");
+						sb.Append(remaining);
+						sb.Append(@""" of ");
+					}
+
+					sb.Append(@"""");
+					sb.Append(s);
+					sb.Append(@""" is an invalid ");
+
+					switch (radix)
+					{
+						case Radix.Bin: sb.Append("binary");      break;
+						case Radix.Oct: sb.Append("octal");       break;
+						case Radix.Dec: sb.Append("decimal");     break;
+						case Radix.Hex: sb.Append("hexadecimal"); break;
+						default: throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""!"));
+					}
+
+					sb.Append(" value.");
+
+					formatException = new FormatException(sb.ToString());
+					result = new byte[] { };
+					return (false);
+				}
+			} // using (MemoryStream)
 		}
 
 		/// <summary>
@@ -989,8 +999,8 @@ namespace YAT.Domain.Parser
 
 			this.modes           = modes;
 
-			this.charReader      = new StringReader(s);
-			this.bytesWriter     = new MemoryStream();
+			this.charReader      = new StringReader(s); // Former reader has just been disposed of above.
+			this.bytesWriter     = new MemoryStream();  // Former stream has just been disposed of above.
 			this.result          = new List<Result>();
 			this.state           = new DefaultState();
 
@@ -1010,8 +1020,8 @@ namespace YAT.Domain.Parser
 			this.defaultRadix    = parent.defaultRadix;
 			this.modes           = parent.modes;
 
-			this.charReader      = parent.charReader;
-			this.bytesWriter     = new MemoryStream();
+			this.charReader      = parent.charReader;  // Former reader has just been disposed of above.
+			this.bytesWriter     = new MemoryStream(); // Former stream has just been disposed of above.
 			this.result          = parent.result;
 			this.state           = parserState;
 

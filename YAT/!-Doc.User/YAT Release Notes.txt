@@ -173,6 +173,7 @@ Limitations and known issues:
      In .NET Windows.Forms the first click only activates the application but doesn't execute
      anything (bug #210).
    > Horizontal auto scroll is not feasible to implement (feature request #163).
+   > System display scaling other than 100% results in partly clipped controls (bugs #85 and #235).
    > System errors are output in local language, even though YAT is all-English (bug #66).
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).

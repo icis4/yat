@@ -227,9 +227,8 @@ namespace DW.RtfWriter
 
 		public void save(string fname)
 		{
-			StreamWriter w = new StreamWriter(fname);
-			w.Write(render());
-			w.Close();
+			using (StreamWriter w = new StreamWriter(fname))
+				w.Write(render());
 		}
 	}
 }

@@ -70,8 +70,8 @@ namespace MKY.Xml.Schema
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "'GuidSchemaString' must be readonly because it refers to Environment.NewLine.")]
 		static XmlSchemaEx()
 		{
-			StringReader sr = new StringReader(GuidSchemaString);
-			GuidSchema = XmlSchema.Read(sr, ValidationCallback);
+			using (StringReader sr = new StringReader(GuidSchemaString))
+				GuidSchema = XmlSchema.Read(sr, ValidationCallback);
 		}
 
 		private static void ValidationCallback(object sender, ValidationEventArgs args)

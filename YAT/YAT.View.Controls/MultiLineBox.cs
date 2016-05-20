@@ -166,13 +166,16 @@ namespace YAT.View.Controls
 		{
 			if (!this.isSettingControls)
 			{
-				// Retrieve lines from text box with Environment.NewLine:
-				StringReader reader = new StringReader(textBox_Lines.Text);
 				List<string> multiLineText = new List<string>();
-				string line;
-				while ((line = reader.ReadLine()) != null)
+
+				// Retrieve lines from text box with Environment.NewLine:
+				using (StringReader reader = new StringReader(textBox_Lines.Text))
 				{
-					multiLineText.Add(line);
+					string line;
+					while ((line = reader.ReadLine()) != null)
+					{
+						multiLineText.Add(line);
+					}
 				}
 
 				// Validate each line:

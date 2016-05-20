@@ -53,37 +53,30 @@ namespace YAT.View.Forms
 		private string exceptionText;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public UnhandledException(Exception exception, string title, string originMessage)
 		{
 			InitializeComponent();
 
-			// Keep information.
+			// Keep information:
 			this.exception = exception;
 			this.title = title;
 			this.originMessage = originMessage;
 
-			// Set form title/caption.
+			// Set form title/caption:
 			Text = this.title;
 
-			// Compose exception text.
-			StringWriter text = new StringWriter(CultureInfo.InvariantCulture);
-			try
+			// Compose exception text:
+			using (StringWriter sw = new StringWriter(CultureInfo.InvariantCulture))
 			{
-				text.WriteLine(this.originMessage);
-				text.WriteLine();
-				text.WriteLine(ApplicationEx.ProductNameAndBuildNameAndVersion);
-				text.WriteLine();
+				sw.WriteLine(this.originMessage);
+				sw.WriteLine();
+				sw.WriteLine(ApplicationEx.ProductNameAndBuildNameAndVersion);
+				sw.WriteLine();
 
-				AnyWriter.WriteException(text, null, this.exception);
+				AnyWriter.WriteException(sw, null, this.exception);
+
+				this.exceptionText = sw.ToString();
 			}
-			catch (Exception ex)
-			{
-				string errorText = "Error, unhandled exception data could not be retrieved!";
-				DebugEx.WriteException(GetType(), ex, errorText);
-				text.Write(errorText);
-			}
-			this.exceptionText = text.ToString();
 		}
 
 		private void UnhandledException_Load(object sender, EventArgs e)

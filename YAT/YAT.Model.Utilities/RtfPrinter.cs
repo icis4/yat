@@ -143,8 +143,9 @@ namespace YAT.Model.Utilities
 		public virtual void Print(RichTextBox richTextProvider)
 		{
 			this.richTextProvider = richTextProvider;
+
 			this.reader = new StringReader(this.richTextProvider.Text);
-			try
+			try // This try-finally is an explicit "using (this.reader)", including resetting the field to null.
 			{
 				using (PrintDocument document = new PrintDocument())
 				{
@@ -156,6 +157,7 @@ namespace YAT.Model.Utilities
 			finally
 			{
 				this.reader.Close();
+				this.reader = null;
 			}
 		}
 
