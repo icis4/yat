@@ -580,6 +580,8 @@ namespace YAT.View.Forms
 				}
 			}
 
+			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset.Enabled = this.settingsRoot.AutoResponse.Enabled;
+
 			this.isSettingControls.Leave();
 		}
 
@@ -686,6 +688,11 @@ namespace YAT.View.Forms
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text.Remove(invalidTextStart);
 				}
 			}
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.AutoResponse.Reset();
 		}
 
 		#endregion
@@ -2225,6 +2232,12 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		public virtual void RequestAutoResponseReset()
+		{
+			this.settingsRoot.AutoResponse.Reset();
+		}
+
+		/// <summary></summary>
 		public virtual void RequestClear()
 		{
 			this.terminal.ClearRepositories();
@@ -2611,7 +2624,7 @@ namespace YAT.View.Forms
 					break;
 				}
 			}
-			settings.ResumeChangeEvent(true);
+			settings.ResumeChangeEvent(true); // Force event.
 
 			SetTimedStatusText("Terminal settings set to " + presetString + ".");
 		}

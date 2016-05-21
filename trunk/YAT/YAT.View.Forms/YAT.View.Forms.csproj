@@ -436,6 +436,7 @@
     <None Include="Resources\Tool\Image_Tool_application_edit_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_information_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_autoresponders_16x16.png" />
+    <None Include="Resources\Tool\Image_Tool_email_delete_16x16.png" />
     <Content Include="Resources\YAT\Icon_YAT.ico" />
     <Content Include="Resources\YAT\Icon_YAT_TerminalSettings.ico" />
     <Content Include="Resources\YAT\Icon_YAT_UserSettings.ico" />

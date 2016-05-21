@@ -183,6 +183,19 @@ namespace YAT.Model.Settings
 		// Methods
 		//==========================================================================================
 
+		/// <summary>
+		/// Resets the automatic response, i.e. trigger and response are reset to 'None'.
+		/// </summary>
+		public void Reset()
+		{
+			SuspendChangeEvent();
+
+			Trigger  = AutoTrigger.None;
+			Response = AutoResponse.None;
+
+			ResumeChangeEvent(true); // Force event.
+		}
+
 		private void UpdateEnabled()
 		{
 			Enabled = ((Trigger != AutoTrigger.None) && (Response != AutoResponse.None));
