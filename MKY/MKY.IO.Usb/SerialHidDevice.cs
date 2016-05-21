@@ -424,6 +424,9 @@ namespace MKY.IO.Usb
 					if (this.stateLock != null)
 						this.stateLock.Dispose();
 				}
+
+				// Set state to disposed:
+				this.stateLock = null;
 			}
 
 			base.Dispose(disposing);

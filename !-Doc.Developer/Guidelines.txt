@@ -132,18 +132,21 @@ Base class
 		{
 			if (!this.isDisposed)
 			{
-				// Finalize managed resources.
-				   - or -
-				// In any case, <CLOSE> the <ITEM> as it was created in the constructor:
-				// In any case, <CLOSE> the <ITEM>:
-
+				// Dispose of managed resources:
 				if (disposing)
 				{
-					// Dispose of unmanaged resources.
-					   - or -
+					if (<ITEM> != null)
+						<ITEM>.Dispose();
+
 					// In the 'normal' case, the <ITEM> is <CLOSED> in <METHOD>().
 				}
 
+				// Dispose of unmanaged resources:
+				if (<ITEM> != null)
+					<ITEM>.Dispose();
+
+				// Set state to disposed:
+				<ITEM> = null;
 				this.isDisposed = true;
 			}
 		}

@@ -637,8 +637,10 @@ namespace MKY.IO.Serial.Socket
 					{
 						DebugEx.WriteException(GetType(), ex, "Disposing socket of TCP/IP client failed!");
 					}
-
-					this.socket = null;
+					finally
+					{
+						this.socket = null;
+					}
 				}
 			}
 

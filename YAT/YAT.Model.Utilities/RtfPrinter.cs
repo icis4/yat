@@ -78,22 +78,19 @@ namespace YAT.Model.Utilities
 		{
 			if (!this.isDisposed)
 			{
-				if (this.richTextProvider != null) {
-					this.richTextProvider.Dispose();
-					this.richTextProvider = null;
-				}
-
-				if (this.reader != null) {
-					this.reader.Dispose();
-					this.reader = null;
-				}
-
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
+					if (this.richTextProvider != null)
+						this.richTextProvider.Dispose();
+
+					if (this.reader != null)
+						this.reader.Dispose();
 				}
 
 				// Set state to disposed:
+				this.richTextProvider = null;
+				this.reader = null;
 				this.isDisposed = true;
 			}
 		}

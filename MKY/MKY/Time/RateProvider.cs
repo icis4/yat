@@ -128,13 +128,11 @@ namespace MKY.Time
 		{
 			if (!this.isDisposed)
 			{
-				// In any case, dispose of the timer as it was created in the constructor:
-				if (this.updateTicker != null)
-					this.updateTicker.Dispose();
-
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
+					if (this.updateTicker != null)
+						this.updateTicker.Dispose();
 				}
 
 				// Set state to disposed:

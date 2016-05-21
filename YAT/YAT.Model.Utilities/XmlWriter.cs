@@ -98,15 +98,19 @@ namespace YAT.Model.Utilities
 		{
 			if (!this.isDisposed)
 			{
-				if (this.writer != null)
+				// Dispose of managed resources:
+				if (disposing)
 				{
-					this.writer.Close();
-					this.writer.Dispose();
+					if (this.writer != null)
+						this.writer.Dispose();
+
+					if (this.indentSyncObj != null)
+						this.indentSyncObj.Dispose();
 				}
 
-				if (this.indentSyncObj != null)
-					this.indentSyncObj.Dispose();
-
+				// Set state to disposed:
+				this.writer = null;
+				this.indentSyncObj = null;
 				this.isDisposed = true;
 			}
 		}
