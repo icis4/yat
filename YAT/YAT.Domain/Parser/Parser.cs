@@ -130,6 +130,7 @@ namespace YAT.Domain.Parser
 		private Parser parentParser;
 		private Parser nestedParser;
 		private bool isKeywordParser;
+		private bool doProbe;
 
 		private bool hasFinished;
 
@@ -346,6 +347,11 @@ namespace YAT.Domain.Parser
 			set { this.isKeywordParser = value; }
 		}
 
+		internal virtual bool DoProbe
+		{
+			get { return (this.doProbe); }
+		}
+
 		internal virtual bool HasFinished
 		{
 			get { return (this.hasFinished); }
@@ -547,7 +553,7 @@ namespace YAT.Domain.Parser
 		{
 			AssertNotDisposed();
 
-			InitializeTopLevel(s, modes);
+			InitializeTopLevel(s, modes, (s.Length <= 1000)); // Inhibit probing in order to keep speed at a decent level...
 
 			while (!HasFinished)
 			{
@@ -993,7 +999,7 @@ namespace YAT.Domain.Parser
 		/// <remarks>
 		/// Required to allow multiple use of parser.
 		/// </remarks>
-		private void InitializeTopLevel(string s, Modes modes)
+		private void InitializeTopLevel(string s, Modes modes, bool doProbe)
 		{
 			DisposeAndReset();
 
@@ -1005,6 +1011,7 @@ namespace YAT.Domain.Parser
 			this.state           = new DefaultState();
 
 			this.isKeywordParser = false;
+			this.doProbe         = doProbe;
 
 			this.hasFinished     = false;
 		}
@@ -1026,7 +1033,8 @@ namespace YAT.Domain.Parser
 			this.state           = parserState;
 
 			this.parentParser    = parent;
-			this.isKeywordParser = false;
+			this.isKeywordParser = false; // Keywords cannot be nested (yet).
+			this.doProbe         = parent.doProbe;
 
 			this.hasFinished     = false;
 		}

@@ -191,6 +191,7 @@ namespace YAT.Domain
 		{
 			Begin,
 			Data,
+			DataExceeded,
 			End
 		}
 
@@ -537,25 +538,10 @@ namespace YAT.Domain
 			DisplayLinePart lp = new DisplayLinePart(); // Default behaviour regarding initial capacity is OK.
 
 			// Evaluate line breaks:
-			//  1. Evaluate the easiest case: Length line break.
+			//  1. Evaluate the tricky case: Sequence before.
 			//  2. Evaluate the other easy case: Sequence after.
-			//  3. Evaluate the tricky case: Sequence before.
+			//  3. Evaluate the easiest case: Length line break.
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
-
-			if ((displaySettings.LengthLineBreak.Enabled) &&
-				(lineState.LinePosition != LinePosition.End))
-			{
-				if (lineState.LineElements.DataCount >= displaySettings.LengthLineBreak.Length)
-					lineState.LinePosition = LinePosition.End;
-			}
-
-			if ((displaySettings.SequenceLineBreakAfter.Enabled) &&
-				(lineState.LinePosition != LinePosition.End))
-			{
-				lineState.SequenceAfter.Enqueue(b);
-				if (lineState.SequenceAfter.IsCompleteMatch) // No need to check for partly matches.
-					lineState.LinePosition = LinePosition.End;
-			}
 
 			if ((displaySettings.SequenceLineBreakBefore.Enabled && (lineState.LineElements.DataCount > 0) &&
 				(lineState.LinePosition != LinePosition.End)))   // Also skip if line has just been brokwn.
@@ -605,8 +591,45 @@ namespace YAT.Domain
 				lp.Add(de);
 			}
 
-			lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
-			elements.AddRange(lp);
+			if (lineState.LinePosition != LinePosition.DataExceeded)
+			{
+				lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+				elements.AddRange(lp);
+			}
+
+			// Evaluate line breaks:
+			//  1. Evaluate the tricky case: Sequence before.
+			//  2. Evaluate the other easy case: Sequence after.
+			//  3. Evaluate the easiest case: Length line break.
+			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
+
+			if ((displaySettings.SequenceLineBreakAfter.Enabled) &&
+				(lineState.LinePosition != LinePosition.End))
+			{
+				lineState.SequenceAfter.Enqueue(b);
+				if (lineState.SequenceAfter.IsCompleteMatch) // No need to check for partly matches.
+					lineState.LinePosition = LinePosition.End;
+			}
+
+			if ((displaySettings.LengthLineBreak.Enabled) &&
+				(lineState.LinePosition != LinePosition.End))
+			{
+				if (lineState.LineElements.DataCount >= displaySettings.LengthLineBreak.Length)
+					lineState.LinePosition = LinePosition.End;
+			}
+
+			if (lineState.LinePosition != LinePosition.End)
+			{
+				if ((lineState.LineElements.DataCount >= TerminalSettings.Display.MaxBytePerLineCount) &&
+					(lineState.LinePosition != LinePosition.DataExceeded))
+				{
+					lineState.LinePosition = LinePosition.DataExceeded;
+
+					string message = "Maximal number of bytes per line exceeded! Check the end-of-line settings or increase the limit in the advanced terminal settings.";
+					lineState.LineElements.Add(new DisplayElement.ErrorInfo((Direction)d, message, true));
+					elements.Add              (new DisplayElement.ErrorInfo((Direction)d, message, true));
+				}
+			}
 		}
 
 		private void TreatSequenceBeforeAsNormal(LineState lineState, IODirection d, DisplayLinePart lp)

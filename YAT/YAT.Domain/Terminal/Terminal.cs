@@ -312,9 +312,9 @@ namespace YAT.Domain
 		{
 			this.instanceId = Interlocked.Increment(ref staticInstanceCounter);
 
-			this.txRepository    = new DisplayRepository(settings.Display.TxMaxLineCount);
-			this.bidirRepository = new DisplayRepository(settings.Display.BidirMaxLineCount);
-			this.rxRepository    = new DisplayRepository(settings.Display.RxMaxLineCount);
+			this.txRepository    = new DisplayRepository(settings.Display.MaxLineCount);
+			this.bidirRepository = new DisplayRepository(settings.Display.MaxLineCount);
+			this.rxRepository    = new DisplayRepository(settings.Display.MaxLineCount);
 
 			AttachTerminalSettings(settings);
 			AttachRawTerminal(new RawTerminal(this.terminalSettings.IO, this.terminalSettings.Buffer));
@@ -333,9 +333,9 @@ namespace YAT.Domain
 			this.bidirRepository = new DisplayRepository(terminal.bidirRepository);
 			this.rxRepository    = new DisplayRepository(terminal.rxRepository);
 
-			this.txRepository.Capacity    = settings.Display.TxMaxLineCount;
-			this.bidirRepository.Capacity = settings.Display.BidirMaxLineCount;
-			this.rxRepository.Capacity    = settings.Display.RxMaxLineCount;
+			this.txRepository.Capacity    = settings.Display.MaxLineCount;
+			this.bidirRepository.Capacity = settings.Display.MaxLineCount;
+			this.rxRepository.Capacity    = settings.Display.MaxLineCount;
 
 			AttachTerminalSettings(settings);
 			AttachRawTerminal(new RawTerminal(this.terminalSettings.IO, this.terminalSettings.Buffer, terminal.rawTerminal));
@@ -2384,9 +2384,9 @@ namespace YAT.Domain
 
 		private void ApplyDisplaySettings()
 		{
-			this.txRepository.Capacity    = this.terminalSettings.Display.TxMaxLineCount;
-			this.bidirRepository.Capacity = this.terminalSettings.Display.BidirMaxLineCount;
-			this.rxRepository.Capacity    = this.terminalSettings.Display.RxMaxLineCount;
+			this.txRepository.Capacity    = this.terminalSettings.Display.MaxLineCount;
+			this.bidirRepository.Capacity = this.terminalSettings.Display.MaxLineCount;
+			this.rxRepository.Capacity    = this.terminalSettings.Display.MaxLineCount;
 
 			ReloadRepositories();
 		}

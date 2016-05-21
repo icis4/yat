@@ -84,6 +84,7 @@ namespace YAT.Domain
 		{
 			Begin,
 			Data,
+			DataExceeded,
 			End
 		}
 
@@ -663,8 +664,25 @@ namespace YAT.Domain
 				lp.Add(de); // No clone needed as element has just been created further above.
 			}
 
-			lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
-			elements.AddRange(lp);
+			if (lineState.LinePosition != LinePosition.DataExceeded)
+			{
+				lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+				elements.AddRange(lp);
+			}
+
+			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
+			if (lineState.LinePosition != LinePosition.End)
+			{
+				if ((lineState.LineElements.DataCount >= TerminalSettings.Display.MaxBytePerLineCount) &&
+					(lineState.LinePosition != LinePosition.DataExceeded))
+				{
+					lineState.LinePosition = LinePosition.DataExceeded;
+
+					string message = "Maximal number of bytes per line exceeded! Check the end-of-line settings or increase the limit in the advanced terminal settings.";
+					lineState.LineElements.Add(new DisplayElement.ErrorInfo((Direction)d, message, true));
+					elements.Add              (new DisplayElement.ErrorInfo((Direction)d, message, true));
+				}
+			}
 		}
 
 		private void AddSpaceIfNecessary(LineState lineState, IODirection d, DisplayLinePart lp)

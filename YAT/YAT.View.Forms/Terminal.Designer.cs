@@ -726,7 +726,7 @@
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Name = "toolStripMenuItem_MonitorContextMenu_ShowEol";
 			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Size = new System.Drawing.Size(221, 22);
-			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Text = "Show End Of Line Sequence";
+			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Text = "Show End-Of-Line Sequence";
 			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowEol_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowLength
@@ -2052,7 +2052,7 @@
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Name = "toolStripMenuItem_TerminalMenu_View_ShowEol";
 			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Size = new System.Drawing.Size(221, 22);
-			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Text = "Show &End Of Line Sequence";
+			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Text = "Show &End-Of-Line Sequence";
 			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowEol_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowLength

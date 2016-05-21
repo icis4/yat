@@ -544,8 +544,8 @@ namespace YAT.View.Forms
 
 				this.settingsInEdit.Terminal.Display.PortLineBreakEnabled      = f.SettingsResult.Terminal.Display.PortLineBreakEnabled;
 				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = f.SettingsResult.Terminal.Display.DirectionLineBreakEnabled;
-				this.settingsInEdit.Terminal.Display.TxMaxLineCount            = f.SettingsResult.Terminal.Display.TxMaxLineCount;
-				this.settingsInEdit.Terminal.Display.RxMaxLineCount            = f.SettingsResult.Terminal.Display.RxMaxLineCount;
+				this.settingsInEdit.Terminal.Display.MaxLineCount              = f.SettingsResult.Terminal.Display.MaxLineCount;
+				this.settingsInEdit.Terminal.Display.MaxBytePerLineCount       = f.SettingsResult.Terminal.Display.MaxBytePerLineCount;
 
 				// Char replace:
 				this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = f.SettingsResult.Terminal.CharReplace.ReplaceControlChars;
