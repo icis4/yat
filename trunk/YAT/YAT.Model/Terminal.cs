@@ -201,22 +201,25 @@ namespace YAT.Model
 		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesReceived;
 
 		/// <summary></summary>
-		public event EventHandler<Domain.RepositoryEventArgs> RepositoryCleared;
+		public event EventHandler<EventArgs<Domain.RepositoryType>> RepositoryCleared;
 
 		/// <summary></summary>
-		public event EventHandler<Domain.RepositoryEventArgs> RepositoryReloaded;
+		public event EventHandler<EventArgs<Domain.RepositoryType>> RepositoryReloaded;
 
 		/// <summary></summary>
-		public event EventHandler<StatusTextEventArgs> FixedStatusTextRequest;
+		public event EventHandler<EventArgs<string>> FixedStatusTextRequest;
 
 		/// <summary></summary>
-		public event EventHandler<StatusTextEventArgs> TimedStatusTextRequest;
+		public event EventHandler<EventArgs<string>> TimedStatusTextRequest;
 
 		/// <summary></summary>
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
 
 		/// <summary></summary>
 		public event EventHandler<DialogEventArgs> SaveAsFileDialogRequest;
+
+		/// <summary></summary>
+		public event EventHandler<EventArgs<Cursor>> CursorRequest;
 
 		/// <summary></summary>
 		public event EventHandler<SavedEventArgs> Saved;
@@ -1197,13 +1200,13 @@ namespace YAT.Model
 		private void AttachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
-				this.settingsRoot.Changed += new EventHandler<SettingsEventArgs>(settingsRoot_Changed);
+				this.settingsRoot.Changed += settingsRoot_Changed;
 		}
 
 		private void DetachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
-				this.settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(settingsRoot_Changed);
+				this.settingsRoot.Changed -= settingsRoot_Changed;
 		}
 
 		#endregion
@@ -1962,18 +1965,18 @@ namespace YAT.Model
 		{
 			if (this.terminal != null)
 			{
-				this.terminal.IOChanged        += new EventHandler(terminal_IOChanged);
-				this.terminal.IOControlChanged += new EventHandler(terminal_IOControlChanged);
-				this.terminal.IOError          += new EventHandler<Domain.IOErrorEventArgs>(terminal_IOError);
+				this.terminal.IOChanged        += terminal_IOChanged;
+				this.terminal.IOControlChanged += terminal_IOControlChanged;
+				this.terminal.IOError          += terminal_IOError;
 
-				this.terminal.RawChunkSent            += new EventHandler<Domain.RawChunkEventArgs>(terminal_RawChunkSent);
-				this.terminal.RawChunkReceived        += new EventHandler<Domain.RawChunkEventArgs>(terminal_RawChunkReceived);
-				this.terminal.DisplayElementsSent     += new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsSent);
-				this.terminal.DisplayElementsReceived += new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsReceived);
-				this.terminal.DisplayLinesSent        += new EventHandler<Domain.DisplayLinesEventArgs>(terminal_DisplayLinesSent);
-				this.terminal.DisplayLinesReceived    += new EventHandler<Domain.DisplayLinesEventArgs>(terminal_DisplayLinesReceived);
-				this.terminal.RepositoryCleared       += new EventHandler<Domain.RepositoryEventArgs>(terminal_RepositoryCleared);
-				this.terminal.RepositoryReloaded      += new EventHandler<Domain.RepositoryEventArgs>(terminal_RepositoryReloaded);
+				this.terminal.RawChunkSent            += terminal_RawChunkSent;
+				this.terminal.RawChunkReceived        += terminal_RawChunkReceived;
+				this.terminal.DisplayElementsSent     += terminal_DisplayElementsSent;
+				this.terminal.DisplayElementsReceived += terminal_DisplayElementsReceived;
+				this.terminal.DisplayLinesSent        += terminal_DisplayLinesSent;
+				this.terminal.DisplayLinesReceived    += terminal_DisplayLinesReceived;
+				this.terminal.RepositoryCleared       += terminal_RepositoryCleared;
+				this.terminal.RepositoryReloaded      += terminal_RepositoryReloaded;
 			}
 		}
 
@@ -1981,18 +1984,18 @@ namespace YAT.Model
 		{
 			if (this.terminal != null)
 			{
-				this.terminal.IOChanged        -= new EventHandler(terminal_IOChanged);
-				this.terminal.IOControlChanged -= new EventHandler(terminal_IOControlChanged);
-				this.terminal.IOError          -= new EventHandler<Domain.IOErrorEventArgs>(terminal_IOError);
+				this.terminal.IOChanged        -= terminal_IOChanged;
+				this.terminal.IOControlChanged -= terminal_IOControlChanged;
+				this.terminal.IOError          -= terminal_IOError;
 
-				this.terminal.RawChunkSent            -= new EventHandler<Domain.RawChunkEventArgs>(terminal_RawChunkSent);
-				this.terminal.RawChunkReceived        -= new EventHandler<Domain.RawChunkEventArgs>(terminal_RawChunkReceived);
-				this.terminal.DisplayElementsSent     -= new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsSent);
-				this.terminal.DisplayElementsReceived -= new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsReceived);
-				this.terminal.DisplayLinesSent        -= new EventHandler<Domain.DisplayLinesEventArgs>(terminal_DisplayLinesSent);
-				this.terminal.DisplayLinesReceived    -= new EventHandler<Domain.DisplayLinesEventArgs>(terminal_DisplayLinesReceived);
-				this.terminal.RepositoryCleared       -= new EventHandler<Domain.RepositoryEventArgs>(terminal_RepositoryCleared);
-				this.terminal.RepositoryReloaded      -= new EventHandler<Domain.RepositoryEventArgs>(terminal_RepositoryReloaded);
+				this.terminal.RawChunkSent            -= terminal_RawChunkSent;
+				this.terminal.RawChunkReceived        -= terminal_RawChunkReceived;
+				this.terminal.DisplayElementsSent     -= terminal_DisplayElementsSent;
+				this.terminal.DisplayElementsReceived -= terminal_DisplayElementsReceived;
+				this.terminal.DisplayLinesSent        -= terminal_DisplayLinesSent;
+				this.terminal.DisplayLinesReceived    -= terminal_DisplayLinesReceived;
+				this.terminal.RepositoryCleared       -= terminal_RepositoryCleared;
+				this.terminal.RepositoryReloaded      -= terminal_RepositoryReloaded;
 			}
 		}
 
@@ -2042,44 +2045,44 @@ namespace YAT.Model
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void terminal_RawChunkSent(object sender, Domain.RawChunkEventArgs e)
+		private void terminal_RawChunkSent(object sender, EventArgs<Domain.RawChunk> e)
 		{
 			OnTimedStatusTextRequest("Sending...");
 
 			// Count:
-			this.txByteCount += e.Chunk.Data.Length;
+			this.txByteCount += e.Value.Data.Length;
 			OnIOCountChanged(EventArgs.Empty);
 
 			// Rate:
-			if (this.txByteRate.Update(e.Chunk.Data.Length))
+			if (this.txByteRate.Update(e.Value.Data.Length))
 				OnIORateChanged(EventArgs.Empty);
 
 			// Log:
 			if (this.log.IsOn)
 			{
-				this.log.Write(e.Chunk, Log.LogChannel.RawTx);
-				this.log.Write(e.Chunk, Log.LogChannel.RawBidir);
+				this.log.Write(e.Value, Log.LogChannel.RawTx);
+				this.log.Write(e.Value, Log.LogChannel.RawBidir);
 			}
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void terminal_RawChunkReceived(object sender, Domain.RawChunkEventArgs e)
+		private void terminal_RawChunkReceived(object sender, EventArgs<Domain.RawChunk> e)
 		{
 			OnTimedStatusTextRequest("Receiving...");
 
 			// Count:
-			this.rxByteCount += e.Chunk.Data.Length;
+			this.rxByteCount += e.Value.Data.Length;
 			OnIOCountChanged(EventArgs.Empty);
 
 			// Rate:
-			if (this.rxByteRate.Update(e.Chunk.Data.Length))
+			if (this.rxByteRate.Update(e.Value.Data.Length))
 				OnIORateChanged(EventArgs.Empty);
 
 			// Log:
 			if (this.log.IsOn)
 			{
-				this.log.Write(e.Chunk, Log.LogChannel.RawBidir);
-				this.log.Write(e.Chunk, Log.LogChannel.RawRx);
+				this.log.Write(e.Value, Log.LogChannel.RawBidir);
+				this.log.Write(e.Value, Log.LogChannel.RawRx);
 			}
 
 			// AutoRespose:
@@ -2087,7 +2090,7 @@ namespace YAT.Model
 			{
 				bool isMatch = false;
 
-				foreach (byte b in e.Chunk.Data)
+				foreach (byte b in e.Value.Data)
 				{
 					lock (this.autoResponseHelperSyncObj)
 					{
@@ -2182,12 +2185,12 @@ namespace YAT.Model
 				SendAutoResponse();
 		}
 
-		private void terminal_RepositoryCleared(object sender, Domain.RepositoryEventArgs e)
+		private void terminal_RepositoryCleared(object sender, EventArgs<Domain.RepositoryType> e)
 		{
 			OnRepositoryCleared(e);
 		}
 
-		private void terminal_RepositoryReloaded(object sender, Domain.RepositoryEventArgs e)
+		private void terminal_RepositoryReloaded(object sender, EventArgs<Domain.RepositoryType> e)
 		{
 			OnRepositoryReloaded(e);
 		}
@@ -3276,7 +3279,7 @@ namespace YAT.Model
 
 			this.totalConnectChrono = new Chronometer();
 			this.totalConnectChrono.Interval = 1000;
-			this.totalConnectChrono.TimeSpanChanged += new EventHandler<TimeSpanEventArgs>(totalConnectChrono_TimeSpanChanged);
+			this.totalConnectChrono.TimeSpanChanged += totalConnectChrono_TimeSpanChanged;
 		}
 
 		private void StopChronos()
@@ -3296,7 +3299,7 @@ namespace YAT.Model
 
 			if (this.totalConnectChrono != null)
 			{
-				this.totalConnectChrono.TimeSpanChanged -= new EventHandler<TimeSpanEventArgs>(totalConnectChrono_TimeSpanChanged);
+				this.totalConnectChrono.TimeSpanChanged -= totalConnectChrono_TimeSpanChanged;
 				this.totalConnectChrono.Dispose();
 				this.totalConnectChrono = null;
 			}
@@ -3485,38 +3488,38 @@ namespace YAT.Model
 			this.rxByteRate = new RateProvider(rateInterval, rateWindow, updateInterval);
 			this.rxLineRate = new RateProvider(rateInterval, rateWindow, updateInterval);
 
-			this.txByteRate.Changed += new EventHandler<RateEventArgs>(rate_Changed);
-			this.txLineRate.Changed += new EventHandler<RateEventArgs>(rate_Changed);
-			this.rxByteRate.Changed += new EventHandler<RateEventArgs>(rate_Changed);
-			this.rxLineRate.Changed += new EventHandler<RateEventArgs>(rate_Changed);
+			this.txByteRate.Changed += rate_Changed;
+			this.txLineRate.Changed += rate_Changed;
+			this.rxByteRate.Changed += rate_Changed;
+			this.rxLineRate.Changed += rate_Changed;
 		}
 
 		private void DisposeRates()
 		{
 			if (this.txByteRate != null)
 			{
-				this.txByteRate.Changed -= new EventHandler<RateEventArgs>(rate_Changed);
+				this.txByteRate.Changed -= rate_Changed;
 				this.txByteRate.Dispose();
 				this.txByteRate = null;
 			}
 
 			if (this.txLineRate != null)
 			{
-				this.txLineRate.Changed -= new EventHandler<RateEventArgs>(rate_Changed);
+				this.txLineRate.Changed -= rate_Changed;
 				this.txLineRate.Dispose();
 				this.txLineRate = null;
 			}
 
 			if (this.rxByteRate != null)
 			{
-				this.rxByteRate.Changed -= new EventHandler<RateEventArgs>(rate_Changed);
+				this.rxByteRate.Changed -= rate_Changed;
 				this.rxByteRate.Dispose();
 				this.rxByteRate = null;
 			}
 
 			if (this.rxLineRate != null)
 			{
-				this.rxLineRate.Changed -= new EventHandler<RateEventArgs>(rate_Changed);
+				this.rxLineRate.Changed -= rate_Changed;
 				this.rxLineRate.Dispose();
 				this.rxLineRate = null;
 			}
@@ -4125,29 +4128,29 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryCleared(Domain.RepositoryEventArgs e)
+		protected virtual void OnRepositoryCleared(EventArgs<Domain.RepositoryType> e)
 		{
-			EventHelper.FireSync<Domain.RepositoryEventArgs>(RepositoryCleared, this, e);
+			EventHelper.FireSync<EventArgs<Domain.RepositoryType>>(RepositoryCleared, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryReloaded(Domain.RepositoryEventArgs e)
+		protected virtual void OnRepositoryReloaded(EventArgs<Domain.RepositoryType> e)
 		{
-			EventHelper.FireSync<Domain.RepositoryEventArgs>(RepositoryReloaded, this, e);
+			EventHelper.FireSync<EventArgs<Domain.RepositoryType>>(RepositoryReloaded, this, e);
 		}
 
-		/// <summary></summary>
+		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
-			EventHelper.FireSync<StatusTextEventArgs>(FixedStatusTextRequest, this, new StatusTextEventArgs(text));
+			EventHelper.FireSync<EventArgs<string>>(FixedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
-		/// <summary></summary>
+		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
-			EventHelper.FireSync<StatusTextEventArgs>(TimedStatusTextRequest, this, new StatusTextEventArgs(text));
+			EventHelper.FireSync<EventArgs<string>>(TimedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
 		/// <summary></summary>
@@ -4162,6 +4165,8 @@ namespace YAT.Model
 			if (this.startArgs.Interactive)
 			{
 				DebugMessage(text);
+
+				OnCursorReset(); // Just in case...
 
 				MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon, defaultButton);
 				EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
@@ -4183,6 +4188,8 @@ namespace YAT.Model
 		{
 			if (this.startArgs.Interactive)
 			{
+				OnCursorReset(); // Just in case...
+
 				DialogEventArgs e = new DialogEventArgs();
 				EventHelper.FireSync<DialogEventArgs>(SaveAsFileDialogRequest, this, e);
 
@@ -4196,6 +4203,18 @@ namespace YAT.Model
 			{
 				return (DialogResult.None);
 			}
+		}
+
+		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		protected virtual void OnCursorRequest(Cursor cursor)
+		{
+			EventHelper.FireSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCursorReset()
+		{
+			OnCursorRequest(Cursors.Default);
 		}
 
 		/// <summary></summary>

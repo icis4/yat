@@ -101,22 +101,25 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary>Fired when a new terminal was added to the workspace.</summary>
-		public event EventHandler<TerminalEventArgs> TerminalAdded;
+		public event EventHandler<EventArgs<Terminal>> TerminalAdded;
 
 		/// <summary>Fired when a terminal was removed from the workspace.</summary>
-		public event EventHandler<TerminalEventArgs> TerminalRemoved;
+		public event EventHandler<EventArgs<Terminal>> TerminalRemoved;
 
 		/// <summary></summary>
-		public event EventHandler<StatusTextEventArgs> FixedStatusTextRequest;
+		public event EventHandler<EventArgs<string>> FixedStatusTextRequest;
 
 		/// <summary></summary>
-		public event EventHandler<StatusTextEventArgs> TimedStatusTextRequest;
+		public event EventHandler<EventArgs<string>> TimedStatusTextRequest;
 
 		/// <summary></summary>
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
 
 		/// <summary></summary>
 		public event EventHandler<DialogEventArgs> SaveAsFileDialogRequest;
+
+		/// <summary></summary>
+		public event EventHandler<EventArgs<Cursor>> CursorRequest;
 
 		/// <summary></summary>
 		public event EventHandler<SavedEventArgs> Saved;
@@ -497,13 +500,13 @@ namespace YAT.Model
 		private void AttachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
-				this.settingsRoot.Changed += new EventHandler<SettingsEventArgs>(settingsRoot_Changed);
+				this.settingsRoot.Changed += settingsRoot_Changed;
 		}
 
 		private void DetachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
-				this.settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(settingsRoot_Changed);
+				this.settingsRoot.Changed -= settingsRoot_Changed;
 		}
 
 		#endregion
@@ -1172,14 +1175,14 @@ namespace YAT.Model
 
 		private void AttachTerminalEventHandlers(Terminal terminal)
 		{
-			terminal.Saved  += new EventHandler<SavedEventArgs>(terminal_Saved);
-			terminal.Closed += new EventHandler<ClosedEventArgs>(terminal_Closed);
+			terminal.Saved  += terminal_Saved;
+			terminal.Closed += terminal_Closed;
 		}
 
 		private void DetachTerminalEventHandlers(Terminal terminal)
 		{
-			terminal.Saved  -= new EventHandler<SavedEventArgs>(terminal_Saved);
-			terminal.Closed -= new EventHandler<ClosedEventArgs>(terminal_Closed);
+			terminal.Saved  -= terminal_Saved;
+			terminal.Closed -= terminal_Closed;
 		}
 
 		#endregion
@@ -1249,10 +1252,12 @@ namespace YAT.Model
 
 			// Create new terminal:
 			OnFixedStatusTextRequest("Creating new terminal...");
+			OnCursorRequest(Cursors.WaitCursor);
 
 			Terminal terminal = new Terminal(this.startArgs.ToTerminalStartArgs(), settingsHandler);
 			AddToWorkspace(terminal);
 
+			OnCursorReset();
 			OnTimedStatusTextRequest("New terminal created.");
 
 			// Start terminal:
@@ -1281,6 +1286,8 @@ namespace YAT.Model
 				OnFixedStatusTextRequest("Opening workspace terminal...");
 			else if (requestedTerminalCount > 1)
 				OnFixedStatusTextRequest("Opening workspace terminals...");
+
+			OnCursorRequest(Cursors.WaitCursor);
 
 			int openedTerminalCount = 0;
 			GuidList<TerminalSettingsItem> clone = new GuidList<TerminalSettingsItem>(this.settingsRoot.TerminalSettings);
@@ -1351,6 +1358,7 @@ namespace YAT.Model
 								errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal!");
 						}
 
+						OnCursorReset();
 						OnFixedStatusTextRequest("Error opening terminal!");
 						DialogResult result = OnMessageInputRequest
 						(
@@ -1360,6 +1368,7 @@ namespace YAT.Model
 							MessageBoxIcon.Exclamation
 						);
 						OnTimedStatusTextRequest("Terminal not opened!");
+						OnCursorRequest(Cursors.WaitCursor);
 
 						if (result == DialogResult.No)
 						{
@@ -1379,7 +1388,9 @@ namespace YAT.Model
 					this.settingsRoot.TerminalSettings.Remove(item);
 					this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
 				}
-			}
+			} // for (each terminal in workspace)
+
+			OnCursorReset();
 
 			// On success, clear changed flag since all terminals got openend.
 			if (openedTerminalCount == requestedTerminalCount)
@@ -1399,14 +1410,17 @@ namespace YAT.Model
 
 			string fileName = Path.GetFileName(filePath);
 			OnFixedStatusTextRequest("Opening terminal " + fileName + "...");
+			OnCursorRequest(Cursors.WaitCursor);
 
 			string errorMessage;
 			if (OpenTerminalFromFile(filePath, Guid.Empty, Indices.DefaultFixedIndex, null, out errorMessage))
 			{
+				OnCursorReset();
 				return (true);
 			}
 			else
 			{
+				OnCursorReset();
 				OnFixedStatusTextRequest("Error opening terminal!");
 				OnMessageInputRequest
 				(
@@ -1564,6 +1578,7 @@ namespace YAT.Model
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(GetType(), ex, "Failed to open terminal file!");
+
 				settingsHandler = null;
 				exception = ex;
 				return (false);
@@ -1613,7 +1628,7 @@ namespace YAT.Model
 			this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
 
 			// Fire terminal added event.
-			OnTerminalAdded(new TerminalEventArgs(terminal));
+			OnTerminalAdded(terminal);
 		}
 
 		private void ReplaceInWorkspace(Terminal terminal)
@@ -1646,7 +1661,7 @@ namespace YAT.Model
 			this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
 
 			// Fire terminal added event.
-			OnTerminalRemoved(new TerminalEventArgs(terminal));
+			OnTerminalRemoved(terminal);
 		}
 
 		private int AddToFixedIndices(Terminal terminal, int requestedFixedIndex)
@@ -2080,30 +2095,30 @@ namespace YAT.Model
 		// Event Invoking
 		//==========================================================================================
 
-		/// <summary></summary>
-		protected virtual void OnTerminalAdded(TerminalEventArgs e)
+		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		protected virtual void OnTerminalAdded(Terminal terminal)
 		{
-			EventHelper.FireSync<TerminalEventArgs>(TerminalAdded, this, e);
+			EventHelper.FireSync<EventArgs<Terminal>>(TerminalAdded, this, new EventArgs<Terminal>(terminal));
 		}
 
-		/// <summary></summary>
-		protected virtual void OnTerminalRemoved(TerminalEventArgs e)
+		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		protected virtual void OnTerminalRemoved(Terminal terminal)
 		{
-			EventHelper.FireSync<TerminalEventArgs>(TerminalRemoved, this, e);
+			EventHelper.FireSync<EventArgs<Terminal>>(TerminalRemoved, this, new EventArgs<Terminal>(terminal));
 		}
 
-		/// <summary></summary>
+		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
-			EventHelper.FireSync<StatusTextEventArgs>(FixedStatusTextRequest, this, new StatusTextEventArgs(text));
+			EventHelper.FireSync<EventArgs<string>>(FixedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
-		/// <summary></summary>
+		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
-			EventHelper.FireSync<StatusTextEventArgs>(TimedStatusTextRequest, this, new StatusTextEventArgs(text));
+			EventHelper.FireSync<EventArgs<string>>(TimedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
 		/// <summary></summary>
@@ -2112,6 +2127,8 @@ namespace YAT.Model
 			if (this.startArgs.Interactive)
 			{
 				DebugMessage(text);
+
+				OnCursorReset(); // Just in case...
 
 				MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
 				EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
@@ -2133,6 +2150,8 @@ namespace YAT.Model
 		{
 			if (this.startArgs.Interactive)
 			{
+				OnCursorReset(); // Just in case...
+
 				DialogEventArgs e = new DialogEventArgs();
 				EventHelper.FireSync<DialogEventArgs>(SaveAsFileDialogRequest, this, e);
 
@@ -2146,6 +2165,18 @@ namespace YAT.Model
 			{
 				return (DialogResult.None);
 			}
+		}
+
+		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		protected virtual void OnCursorRequest(Cursor cursor)
+		{
+			EventHelper.FireSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCursorReset()
+		{
+			OnCursorRequest(Cursors.Default);
 		}
 
 		/// <summary></summary>
