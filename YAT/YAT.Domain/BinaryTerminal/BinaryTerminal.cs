@@ -348,11 +348,11 @@ namespace YAT.Domain
 			{
 				this.txLineState = casted.txLineState;
 				this.txLineState.LineBreakTimer = new LineBreakTimer(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
-				this.txLineState.LineBreakTimer.Timeout += new EventHandler(txTimer_Timeout);
+				this.txLineState.LineBreakTimer.Timeout += txTimer_Timeout;
 
 				this.rxLineState = casted.rxLineState;
 				this.rxLineState.LineBreakTimer = new LineBreakTimer(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
-				this.rxLineState.LineBreakTimer.Timeout += new EventHandler(rxTimer_Timeout);
+				this.rxLineState.LineBreakTimer.Timeout += rxTimer_Timeout;
 
 				this.bidirLineState = new BidirLineState(casted.bidirLineState);
 			}
@@ -487,7 +487,7 @@ namespace YAT.Domain
 					txSequenceBreakBefore = null;
 
 				t = new LineBreakTimer(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
-				t.Timeout += new EventHandler(txTimer_Timeout);
+				t.Timeout += txTimer_Timeout;
 
 				this.txLineState = new LineState(new SequenceQueue(txSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore), DateTime.Now, t);
 
@@ -502,7 +502,7 @@ namespace YAT.Domain
 					rxSequenceBreakBefore = null;
 
 				t = new LineBreakTimer(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
-				t.Timeout += new EventHandler(rxTimer_Timeout);
+				t.Timeout += rxTimer_Timeout;
 
 				this.rxLineState = new LineState(new SequenceQueue(rxSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore), DateTime.Now, t);
 			}
@@ -874,12 +874,12 @@ namespace YAT.Domain
 		{
 			TerminalSettings.BinaryTerminal = binaryTerminalSettings;
 
-			BinaryTerminalSettings.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(BinaryTerminalSettings_Changed);
+			BinaryTerminalSettings.Changed += BinaryTerminalSettings_Changed;
 		}
 
 		private void DetachBinaryTerminalSettings()
 		{
-			BinaryTerminalSettings.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(BinaryTerminalSettings_Changed);
+			BinaryTerminalSettings.Changed -= BinaryTerminalSettings_Changed;
 		}
 
 		private void ApplyBinaryTerminalSettings()

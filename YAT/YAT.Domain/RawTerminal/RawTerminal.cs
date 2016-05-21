@@ -102,13 +102,13 @@ namespace YAT.Domain
 		public event EventHandler<IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
-		public event EventHandler<RawChunkEventArgs> RawChunkSent;
+		public event EventHandler<EventArgs<RawChunk>> RawChunkSent;
 
 		/// <summary></summary>
-		public event EventHandler<RawChunkEventArgs> RawChunkReceived;
+		public event EventHandler<EventArgs<RawChunk>> RawChunkReceived;
 
 		/// <summary></summary>
-		public event EventHandler<RepositoryEventArgs> RepositoryCleared;
+		public event EventHandler<EventArgs<RepositoryType>> RepositoryCleared;
 
 		#endregion
 
@@ -446,9 +446,9 @@ namespace YAT.Domain
 				this.rxRepository.Clear();
 			}
 
-			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Tx));
-			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Bidir));
-			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Rx));
+			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Tx));
+			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Bidir));
+			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Rx));
 		}
 
 		/// <remarks>
@@ -471,9 +471,9 @@ namespace YAT.Domain
 				this.rxRepository.Clear();
 			}
 
-			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Tx));
-			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Bidir));
-			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Rx));
+			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Tx));
+			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Bidir));
+			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Rx));
 		}
 
 		/// <summary></summary>
@@ -511,12 +511,12 @@ namespace YAT.Domain
 				DetachBufferSettings();
 
 			this.bufferSettings = bufferSettings;
-			this.bufferSettings.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(bufferSettings_Changed);
+			this.bufferSettings.Changed += bufferSettings_Changed;
 		}
 
 		private void DetachBufferSettings()
 		{
-			this.bufferSettings.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(bufferSettings_Changed);
+			this.bufferSettings.Changed -= bufferSettings_Changed;
 			this.bufferSettings = null;
 		}
 
@@ -539,12 +539,12 @@ namespace YAT.Domain
 				DetachIOSettings();
 
 			this.ioSettings = ioSettings;
-			this.ioSettings.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(ioSettings_Changed);
+			this.ioSettings.Changed += ioSettings_Changed;
 		}
 
 		private void DetachIOSettings()
 		{
-			this.ioSettings.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(ioSettings_Changed);
+			this.ioSettings.Changed -= ioSettings_Changed;
 			this.ioSettings = null;
 		}
 
@@ -588,20 +588,20 @@ namespace YAT.Domain
 
 			this.io = io;
 
-			this.io.IOChanged        += new EventHandler(io_IOChanged);
-			this.io.IOControlChanged += new EventHandler(io_IOControlChanged);
-			this.io.IOError          += new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(io_IOError);
-			this.io.DataReceived     += new EventHandler<DataReceivedEventArgs>(io_DataReceived);
-			this.io.DataSent         += new EventHandler<DataSentEventArgs>(io_DataSent);
+			this.io.IOChanged        += io_IOChanged;
+			this.io.IOControlChanged += io_IOControlChanged;
+			this.io.IOError          += io_IOError;
+			this.io.DataReceived     += io_DataReceived;
+			this.io.DataSent         += io_DataSent;
 		}
 
 		private void DetachIO()
 		{
-			this.io.IOChanged        -= new EventHandler(io_IOChanged);
-			this.io.IOControlChanged -= new EventHandler(io_IOControlChanged);
-			this.io.IOError          -= new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(io_IOError);
-			this.io.DataReceived     -= new EventHandler<DataReceivedEventArgs>(io_DataReceived);
-			this.io.DataSent         -= new EventHandler<DataSentEventArgs>(io_DataSent);
+			this.io.IOChanged        -= io_IOChanged;
+			this.io.IOControlChanged -= io_IOControlChanged;
+			this.io.IOError          -= io_IOError;
+			this.io.DataReceived     -= io_DataReceived;
+			this.io.DataSent         -= io_DataSent;
 
 			this.io = null;
 		}
@@ -655,7 +655,7 @@ namespace YAT.Domain
 							this.rxRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
 							this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
 						}
-						OnRawChunkReceived(new RawChunkEventArgs(re));
+						OnRawChunkReceived(new EventArgs<RawChunk>(re));
 					}
 					finally
 					{
@@ -690,7 +690,7 @@ namespace YAT.Domain
 							this.txRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
 							this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
 						}
-						OnRawChunkSent(new RawChunkEventArgs(re));
+						OnRawChunkSent(new EventArgs<RawChunk>(re));
 					}
 					finally
 					{
@@ -728,21 +728,21 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRawChunkSent(RawChunkEventArgs e)
+		protected virtual void OnRawChunkSent(EventArgs<RawChunk> e)
 		{
-			EventHelper.FireSync<RawChunkEventArgs>(RawChunkSent, this, e);
+			EventHelper.FireSync<EventArgs<RawChunk>>(RawChunkSent, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRawChunkReceived(RawChunkEventArgs e)
+		protected virtual void OnRawChunkReceived(EventArgs<RawChunk> e)
 		{
-			EventHelper.FireSync<RawChunkEventArgs>(RawChunkReceived, this, e);
+			EventHelper.FireSync<EventArgs<RawChunk>>(RawChunkReceived, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryCleared(RepositoryEventArgs e)
+		protected virtual void OnRepositoryCleared(EventArgs<RepositoryType> e)
 		{
-			EventHelper.FireSync<RepositoryEventArgs>(RepositoryCleared, this, e);
+			EventHelper.FireSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
 		}
 
 		#endregion

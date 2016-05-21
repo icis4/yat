@@ -27,55 +27,13 @@ using System.Windows.Forms;
 namespace YAT.Model
 {
 	/// <summary></summary>
-	public class WorkspaceEventArgs : EventArgs
-	{
-		private Workspace workspace;
-
-		/// <summary></summary>
-		public WorkspaceEventArgs(Workspace workspace)
-		{
-			this.workspace = workspace;
-		}
-
-		/// <summary></summary>
-		public Workspace Workspace
-		{
-			get { return (this.workspace); }
-		}
-	}
-
-	/// <summary></summary>
-	public class TerminalEventArgs : EventArgs
-	{
-		private Terminal terminal;
-
-		/// <summary></summary>
-		public TerminalEventArgs(Terminal terminal)
-		{
-			this.terminal = terminal;
-		}
-
-		/// <summary></summary>
-		public Terminal Terminal
-		{
-			get { return (this.terminal); }
-		}
-	}
-
-	/// <summary></summary>
 	public class SavedEventArgs : EventArgs
 	{
 		private string filePath;
 		private bool isAutoSave;
 
 		/// <summary></summary>
-		public SavedEventArgs(string filePath)
-			: this(filePath, false)
-		{
-		}
-
-		/// <summary></summary>
-		public SavedEventArgs(string filePath, bool isAutoSave)
+		public SavedEventArgs(string filePath, bool isAutoSave = false)
 		{
 			this.filePath = filePath;
 			this.isAutoSave = isAutoSave;
@@ -103,13 +61,7 @@ namespace YAT.Model
 		private bool isParentClose;
 
 		/// <summary></summary>
-		public ClosedEventArgs()
-			: this(false)
-		{
-		}
-
-		/// <summary></summary>
-		public ClosedEventArgs(bool isParentClose)
+		public ClosedEventArgs(bool isParentClose = false)
 		{
 			this.isParentClose = isParentClose;
 		}
@@ -118,48 +70,6 @@ namespace YAT.Model
 		public bool IsParentClose
 		{
 			get { return (this.isParentClose); }
-		}
-	}
-
-	/// <summary></summary>
-	public class ExitEventArgs : EventArgs
-	{
-		private MainResult result;
-
-		/// <summary></summary>
-		public ExitEventArgs()
-			: this(MainResult.Success)
-		{
-		}
-
-		/// <summary></summary>
-		public ExitEventArgs(MainResult result)
-		{
-			this.result = result;
-		}
-
-		/// <summary></summary>
-		public MainResult Result
-		{
-			get { return (this.result); }
-		}
-	}
-
-	/// <summary></summary>
-	public class StatusTextEventArgs : EventArgs
-	{
-		private string text;
-
-		/// <summary></summary>
-		public StatusTextEventArgs(string text)
-		{
-			this.text = text;
-		}
-
-		/// <summary></summary>
-		public string Text
-		{
-			get { return (this.text); }
 		}
 	}
 
@@ -174,13 +84,7 @@ namespace YAT.Model
 		private DialogResult result;
 
 		/// <summary></summary>
-		public MessageInputEventArgs(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
-			: this(text, caption, buttons, icon, MessageBoxDefaultButton.Button1)
-		{
-		}
-
-		/// <summary></summary>
-		public MessageInputEventArgs(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
+		public MessageInputEventArgs(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
 		{
 			this.text = text;
 			this.caption = caption;

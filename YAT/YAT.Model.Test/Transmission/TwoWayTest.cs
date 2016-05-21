@@ -231,7 +231,7 @@ namespace YAT.Model.Test.Transmission
 			TerminalSettingsRoot settingsA = settingsDescriptorA.Value1(settingsDescriptorA.Value2);
 			using (Terminal terminalA = new Terminal(settingsA))
 			{
-				terminalA.MessageInputRequest += new EventHandler<MessageInputEventArgs>(Utilities.TerminalMessageInputRequest);
+				terminalA.MessageInputRequest += Utilities.TerminalMessageInputRequest;
 				if (!terminalA.Start())
 				{
 					if (Utilities.TerminalMessageInputRequestResultsInExclude) {
@@ -249,7 +249,7 @@ namespace YAT.Model.Test.Transmission
 					TerminalSettingsRoot settingsB = settingsDescriptorB.Value1(settingsDescriptorB.Value2);
 					using (Terminal terminalB = new Terminal(settingsB))
 					{
-						terminalB.MessageInputRequest += new EventHandler<MessageInputEventArgs>(Utilities.TerminalMessageInputRequest);
+						terminalB.MessageInputRequest += Utilities.TerminalMessageInputRequest;
 						if (!terminalB.Start())
 						{
 							if (Utilities.TerminalMessageInputRequestResultsInExclude) {

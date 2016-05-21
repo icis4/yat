@@ -932,7 +932,7 @@ namespace YAT.Settings.Test
 			using (Model.Terminal terminal = new Model.Terminal(sh))
 			{
 				// Required if COM1 is not available.
-				terminal.MessageInputRequest += new EventHandler<Model.MessageInputEventArgs>(terminal_MessageInputRequest);
+				terminal.MessageInputRequest += terminal_MessageInputRequest;
 
 				Assert.IsTrue(terminal.Start(), @"Failed to start """ + terminal.Caption + @"""");
 
@@ -960,7 +960,7 @@ namespace YAT.Settings.Test
 			using (Model.Terminal terminal = new Model.Terminal(sh))
 			{
 				// Required if COM2 is not available.
-				terminal.MessageInputRequest += new EventHandler<Model.MessageInputEventArgs>(terminal_MessageInputRequest);
+				terminal.MessageInputRequest += terminal_MessageInputRequest;
 
 				Assert.IsTrue(terminal.Start(), @"Failed to start """ + terminal.Caption + @"""");
 
@@ -1022,7 +1022,7 @@ namespace YAT.Settings.Test
 			using (Model.Terminal terminal = new Model.Terminal(sh))
 			{
 				// Required if COM1 is not available.
-				terminal.MessageInputRequest += new EventHandler<Model.MessageInputEventArgs>(terminal_MessageInputRequest);
+				terminal.MessageInputRequest += terminal_MessageInputRequest;
 
 				Assert.IsTrue(terminal.Start(), @"Failed to start """ + terminal.Caption + @"""");
 

@@ -874,12 +874,12 @@ namespace YAT.Domain
 		{
 			TerminalSettings.TextTerminal = textTerminalSettings;
 
-			TerminalSettings.TextTerminal.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(TextTerminalSettings_Changed);
+			TerminalSettings.TextTerminal.Changed += TextTerminalSettings_Changed;
 		}
 
 		private void DetachTextTerminalSettings()
 		{
-			TerminalSettings.TextTerminal.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(TextTerminalSettings_Changed);
+			TerminalSettings.TextTerminal.Changed -= TextTerminalSettings_Changed;
 		}
 
 		private void ApplyTextTerminalSettings()

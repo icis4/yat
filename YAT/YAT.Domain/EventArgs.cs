@@ -92,24 +92,6 @@ namespace YAT.Domain
 	}
 
 	/// <summary></summary>
-	public class RawChunkEventArgs : EventArgs
-	{
-		private RawChunk chunk;
-
-		/// <summary></summary>
-		public RawChunkEventArgs(RawChunk chunk)
-		{
-			this.chunk = chunk;
-		}
-
-		/// <summary></summary>
-		public RawChunk Chunk
-		{
-			get { return (this.chunk); }
-		}
-	}
-
-	/// <summary></summary>
 	public class DisplayElementsEventArgs : EventArgs
 	{
 		private DisplayElementCollection elements;
@@ -142,24 +124,6 @@ namespace YAT.Domain
 		public List<DisplayLine> Lines
 		{
 			get { return (this.lines); }
-		}
-	}
-
-	/// <summary></summary>
-	public class RepositoryEventArgs : EventArgs
-	{
-		private RepositoryType repository;
-
-		/// <summary></summary>
-		public RepositoryEventArgs(RepositoryType repository)
-		{
-			this.repository = repository;
-		}
-
-		/// <summary></summary>
-		public RepositoryType Repository
-		{
-			get { return (this.repository); }
 		}
 	}
 }
