@@ -1061,7 +1061,7 @@ namespace YAT.View.Forms
 			// User:
 			this.settingsInEdit.UserName = Settings.Terminal.ExplicitSettings.UserNameDefault;
 
-			this.settingsInEdit.ResumeChangeEvent();
+			this.settingsInEdit.ResumeChangeEvent(true); // Force event.
 		}
 
 		#endregion

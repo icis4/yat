@@ -941,6 +941,9 @@ namespace YAT.View.Forms
 						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedIndex = 0;
 					}
 				}
+
+				toolStripButton_MainTool_Terminal_AutoResponse_Reset.Visible = true;
+				toolStripButton_MainTool_Terminal_AutoResponse_Reset.Enabled = childIsReady;
 			}
 			else
 			{
@@ -953,6 +956,9 @@ namespace YAT.View.Forms
 				toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Visible = false;
 				toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Enabled = false;
 				toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.Clear();
+
+				toolStripButton_MainTool_Terminal_AutoResponse_Reset.Visible = false;
+				toolStripButton_MainTool_Terminal_AutoResponse_Reset.Enabled = false;
 			}
 
 			toolStripButton_MainTool_Terminal_Clear.Enabled             = childIsReady;
@@ -1108,6 +1114,11 @@ namespace YAT.View.Forms
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Text.Remove(invalidTextStart);
 				}
 			}
+		}
+
+		private void toolStripButton_MainTool_Terminal_AutoResponse_Reset_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestAutoResponseReset();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Clear_Click(object sender, EventArgs e)

@@ -194,6 +194,7 @@
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response = new System.Windows.Forms.ToolStripComboBox();
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log_On = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
@@ -356,7 +357,7 @@
             this.toolStripMenuItem_MonitorContextMenu_SaveToFile,
             this.toolStripMenuItem_MonitorContextMenu_Print});
 			this.contextMenuStrip_Monitor.Name = "contextMenuStrip_Monitor";
-			this.contextMenuStrip_Monitor.Size = new System.Drawing.Size(222, 558);
+			this.contextMenuStrip_Monitor.Size = new System.Drawing.Size(226, 558);
 			this.contextMenuStrip_Monitor.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Monitor_Opening);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Panels
@@ -368,7 +369,7 @@
             this.toolStripMenuItem_MonitorContextMenu_Panels_Separator1,
             this.toolStripComboBox_MonitorContextMenu_Panels_Orientation});
 			this.toolStripMenuItem_MonitorContextMenu_Panels.Name = "toolStripMenuItem_MonitorContextMenu_Panels";
-			this.toolStripMenuItem_MonitorContextMenu_Panels.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_Panels.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Panels.Text = "Panels";
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Panels_Tx
@@ -409,58 +410,58 @@
 			// toolStripMenuItem_MonitorContextMenu_Hide
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Hide.Name = "toolStripMenuItem_MonitorContextMenu_Hide";
-			this.toolStripMenuItem_MonitorContextMenu_Hide.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_Hide.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Hide.Text = "Hide";
 			this.toolStripMenuItem_MonitorContextMenu_Hide.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Hide_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Separator_1
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Separator_1.Name = "toolStripMenuItem_MonitorContextMenu_Separator_1";
-			this.toolStripMenuItem_MonitorContextMenu_Separator_1.Size = new System.Drawing.Size(218, 6);
+			this.toolStripMenuItem_MonitorContextMenu_Separator_1.Size = new System.Drawing.Size(222, 6);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowConnectTime
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Name = "toolStripMenuItem_MonitorContextMenu_ShowConnectTime";
-			this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Text = "Show Connect Time";
 			this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ResetConnectTime
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ResetConnectTime.Name = "toolStripMenuItem_MonitorContextMenu_ResetConnectTime";
-			this.toolStripMenuItem_MonitorContextMenu_ResetConnectTime.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ResetConnectTime.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ResetConnectTime.Text = "Reset Connect Time";
 			this.toolStripMenuItem_MonitorContextMenu_ResetConnectTime.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ResetConnectTime_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Separator_2
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Separator_2.Name = "toolStripMenuItem_MonitorContextMenu_Separator_2";
-			this.toolStripMenuItem_MonitorContextMenu_Separator_2.Size = new System.Drawing.Size(218, 6);
+			this.toolStripMenuItem_MonitorContextMenu_Separator_2.Size = new System.Drawing.Size(222, 6);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowCountAndRate
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowCountAndRate.Name = "toolStripMenuItem_MonitorContextMenu_ShowCountAndRate";
-			this.toolStripMenuItem_MonitorContextMenu_ShowCountAndRate.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ShowCountAndRate.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowCountAndRate.Text = "Show Byte/Line Count/Rate";
 			this.toolStripMenuItem_MonitorContextMenu_ShowCountAndRate.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowCountAndRate_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ResetCount
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ResetCount.Name = "toolStripMenuItem_MonitorContextMenu_ResetCount";
-			this.toolStripMenuItem_MonitorContextMenu_ResetCount.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ResetCount.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ResetCount.Text = "Reset Count";
 			this.toolStripMenuItem_MonitorContextMenu_ResetCount.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ResetCount_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Separator_3
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Separator_3.Name = "toolStripMenuItem_MonitorContextMenu_Separator_3";
-			this.toolStripMenuItem_MonitorContextMenu_Separator_3.Size = new System.Drawing.Size(218, 6);
+			this.toolStripMenuItem_MonitorContextMenu_Separator_3.Size = new System.Drawing.Size(222, 6);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Radix
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Radix.DropDown = this.contextMenuStrip_Radix;
 			this.toolStripMenuItem_MonitorContextMenu_Radix.Name = "toolStripMenuItem_MonitorContextMenu_Radix";
-			this.toolStripMenuItem_MonitorContextMenu_Radix.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_Radix.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Radix.Text = "Radix";
 			// 
 			// contextMenuStrip_Radix
@@ -480,7 +481,7 @@
             this.toolStripMenuItem_RadixContextMenu_RxRadix});
 			this.contextMenuStrip_Radix.Name = "contextMenuStrip_Radix";
 			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_TerminalMenu_View_Radix;
-			this.contextMenuStrip_Radix.Size = new System.Drawing.Size(152, 220);
+			this.contextMenuStrip_Radix.Size = new System.Drawing.Size(151, 220);
 			this.contextMenuStrip_Radix.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Radix_Opening);
 			// 
 			// toolStripMenuItem_RadixContextMenu_String
@@ -488,66 +489,66 @@
 			this.toolStripMenuItem_RadixContextMenu_String.Checked = true;
 			this.toolStripMenuItem_RadixContextMenu_String.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItem_RadixContextMenu_String.Name = "toolStripMenuItem_RadixContextMenu_String";
-			this.toolStripMenuItem_RadixContextMenu_String.Size = new System.Drawing.Size(151, 22);
+			this.toolStripMenuItem_RadixContextMenu_String.Size = new System.Drawing.Size(150, 22);
 			this.toolStripMenuItem_RadixContextMenu_String.Text = "&String";
 			this.toolStripMenuItem_RadixContextMenu_String.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_String_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Char
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Char.Name = "toolStripMenuItem_RadixContextMenu_Char";
-			this.toolStripMenuItem_RadixContextMenu_Char.Size = new System.Drawing.Size(151, 22);
+			this.toolStripMenuItem_RadixContextMenu_Char.Size = new System.Drawing.Size(150, 22);
 			this.toolStripMenuItem_RadixContextMenu_Char.Text = "&Character";
 			this.toolStripMenuItem_RadixContextMenu_Char.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Char_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Separator_1
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Separator_1.Name = "toolStripMenuItem_RadixContextMenu_Separator_1";
-			this.toolStripMenuItem_RadixContextMenu_Separator_1.Size = new System.Drawing.Size(148, 6);
+			this.toolStripMenuItem_RadixContextMenu_Separator_1.Size = new System.Drawing.Size(147, 6);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Bin
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Bin.Name = "toolStripMenuItem_RadixContextMenu_Bin";
-			this.toolStripMenuItem_RadixContextMenu_Bin.Size = new System.Drawing.Size(151, 22);
+			this.toolStripMenuItem_RadixContextMenu_Bin.Size = new System.Drawing.Size(150, 22);
 			this.toolStripMenuItem_RadixContextMenu_Bin.Text = "&Binary";
 			this.toolStripMenuItem_RadixContextMenu_Bin.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Bin_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Oct
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Oct.Name = "toolStripMenuItem_RadixContextMenu_Oct";
-			this.toolStripMenuItem_RadixContextMenu_Oct.Size = new System.Drawing.Size(151, 22);
+			this.toolStripMenuItem_RadixContextMenu_Oct.Size = new System.Drawing.Size(150, 22);
 			this.toolStripMenuItem_RadixContextMenu_Oct.Text = "&Octal";
 			this.toolStripMenuItem_RadixContextMenu_Oct.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Oct_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Dec
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Dec.Name = "toolStripMenuItem_RadixContextMenu_Dec";
-			this.toolStripMenuItem_RadixContextMenu_Dec.Size = new System.Drawing.Size(151, 22);
+			this.toolStripMenuItem_RadixContextMenu_Dec.Size = new System.Drawing.Size(150, 22);
 			this.toolStripMenuItem_RadixContextMenu_Dec.Text = "&Decimal";
 			this.toolStripMenuItem_RadixContextMenu_Dec.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Dec_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Hex
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Hex.Name = "toolStripMenuItem_RadixContextMenu_Hex";
-			this.toolStripMenuItem_RadixContextMenu_Hex.Size = new System.Drawing.Size(151, 22);
+			this.toolStripMenuItem_RadixContextMenu_Hex.Size = new System.Drawing.Size(150, 22);
 			this.toolStripMenuItem_RadixContextMenu_Hex.Text = "&Hexadecimal";
 			this.toolStripMenuItem_RadixContextMenu_Hex.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Hex_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Separator_2
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Separator_2.Name = "toolStripMenuItem_RadixContextMenu_Separator_2";
-			this.toolStripMenuItem_RadixContextMenu_Separator_2.Size = new System.Drawing.Size(148, 6);
+			this.toolStripMenuItem_RadixContextMenu_Separator_2.Size = new System.Drawing.Size(147, 6);
 			// 
 			// toolStripMenuItem_RadixContextMenu_SeparateTxRx
 			// 
 			this.toolStripMenuItem_RadixContextMenu_SeparateTxRx.Name = "toolStripMenuItem_RadixContextMenu_SeparateTxRx";
-			this.toolStripMenuItem_RadixContextMenu_SeparateTxRx.Size = new System.Drawing.Size(151, 22);
+			this.toolStripMenuItem_RadixContextMenu_SeparateTxRx.Size = new System.Drawing.Size(150, 22);
 			this.toolStripMenuItem_RadixContextMenu_SeparateTxRx.Text = "Separate Tx/Rx";
 			this.toolStripMenuItem_RadixContextMenu_SeparateTxRx.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_SeparateTxRx_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Separator_3
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Separator_3.Name = "toolStripMenuItem_RadixContextMenu_Separator_3";
-			this.toolStripMenuItem_RadixContextMenu_Separator_3.Size = new System.Drawing.Size(148, 6);
+			this.toolStripMenuItem_RadixContextMenu_Separator_3.Size = new System.Drawing.Size(147, 6);
 			// 
 			// toolStripMenuItem_RadixContextMenu_TxRadix
 			// 
@@ -560,7 +561,7 @@
             this.toolStripMenuItem_RadixContextMenu_Tx_Dec,
             this.toolStripMenuItem_RadixContextMenu_Tx_Hex});
 			this.toolStripMenuItem_RadixContextMenu_TxRadix.Name = "toolStripMenuItem_RadixContextMenu_TxRadix";
-			this.toolStripMenuItem_RadixContextMenu_TxRadix.Size = new System.Drawing.Size(151, 22);
+			this.toolStripMenuItem_RadixContextMenu_TxRadix.Size = new System.Drawing.Size(150, 22);
 			this.toolStripMenuItem_RadixContextMenu_TxRadix.Text = "&Tx Radix";
 			// 
 			// toolStripMenuItem_RadixContextMenu_Tx_String
@@ -623,7 +624,7 @@
             this.toolStripMenuItem_RadixContextMenu_Rx_Dec,
             this.toolStripMenuItem_RadixContextMenu_Rx_Hex});
 			this.toolStripMenuItem_RadixContextMenu_RxRadix.Name = "toolStripMenuItem_RadixContextMenu_RxRadix";
-			this.toolStripMenuItem_RadixContextMenu_RxRadix.Size = new System.Drawing.Size(151, 22);
+			this.toolStripMenuItem_RadixContextMenu_RxRadix.Size = new System.Drawing.Size(150, 22);
 			this.toolStripMenuItem_RadixContextMenu_RxRadix.Text = "&Rx Radix";
 			// 
 			// toolStripMenuItem_RadixContextMenu_Rx_String
@@ -678,87 +679,87 @@
 			// toolStripMenuItem_MonitorContextMenu_Separator_4
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Separator_4.Name = "toolStripMenuItem_MonitorContextMenu_Separator_4";
-			this.toolStripMenuItem_MonitorContextMenu_Separator_4.Size = new System.Drawing.Size(218, 6);
+			this.toolStripMenuItem_MonitorContextMenu_Separator_4.Size = new System.Drawing.Size(222, 6);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowRadix
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowRadix.Name = "toolStripMenuItem_MonitorContextMenu_ShowRadix";
-			this.toolStripMenuItem_MonitorContextMenu_ShowRadix.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ShowRadix.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowRadix.Text = "Show Radix";
 			this.toolStripMenuItem_MonitorContextMenu_ShowRadix.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowRadix_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowLineNumbers
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Name = "toolStripMenuItem_MonitorContextMenu_ShowLineNumbers";
-			this.toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Text = "Show Line Numbers";
 			this.toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowLineNumbers_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowDate
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowDate.Name = "toolStripMenuItem_MonitorContextMenu_ShowDate";
-			this.toolStripMenuItem_MonitorContextMenu_ShowDate.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ShowDate.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowDate.Text = "Show Date";
 			this.toolStripMenuItem_MonitorContextMenu_ShowDate.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowDate_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowTime
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowTime.Name = "toolStripMenuItem_MonitorContextMenu_ShowTime";
-			this.toolStripMenuItem_MonitorContextMenu_ShowTime.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ShowTime.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowTime.Text = "Show Time";
 			this.toolStripMenuItem_MonitorContextMenu_ShowTime.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowTime_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowPort
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowPort.Name = "toolStripMenuItem_MonitorContextMenu_ShowPort";
-			this.toolStripMenuItem_MonitorContextMenu_ShowPort.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ShowPort.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowPort.Text = "Show Port";
 			this.toolStripMenuItem_MonitorContextMenu_ShowPort.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowPort_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowDirection
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowDirection.Name = "toolStripMenuItem_MonitorContextMenu_ShowDirection";
-			this.toolStripMenuItem_MonitorContextMenu_ShowDirection.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ShowDirection.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowDirection.Text = "Show Direction";
 			this.toolStripMenuItem_MonitorContextMenu_ShowDirection.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowDirection_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowEol
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Name = "toolStripMenuItem_MonitorContextMenu_ShowEol";
-			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Text = "Show End-Of-Line Sequence";
 			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowEol_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowLength
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Name = "toolStripMenuItem_MonitorContextMenu_ShowLength";
-			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Text = "Show Length";
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowLength_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Separator_5
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Separator_5.Name = "toolStripMenuItem_MonitorContextMenu_Separator_5";
-			this.toolStripMenuItem_MonitorContextMenu_Separator_5.Size = new System.Drawing.Size(218, 6);
+			this.toolStripMenuItem_MonitorContextMenu_Separator_5.Size = new System.Drawing.Size(222, 6);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Format
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Format.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_font_16x16;
 			this.toolStripMenuItem_MonitorContextMenu_Format.Name = "toolStripMenuItem_MonitorContextMenu_Format";
-			this.toolStripMenuItem_MonitorContextMenu_Format.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_Format.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Format.Text = "Format...";
 			this.toolStripMenuItem_MonitorContextMenu_Format.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Format_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Separator_6
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Separator_6.Name = "toolStripMenuItem_MonitorContextMenu_Separator_6";
-			this.toolStripMenuItem_MonitorContextMenu_Separator_6.Size = new System.Drawing.Size(218, 6);
+			this.toolStripMenuItem_MonitorContextMenu_Separator_6.Size = new System.Drawing.Size(222, 6);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Clear
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Clear.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_lightning_16x16;
 			this.toolStripMenuItem_MonitorContextMenu_Clear.Name = "toolStripMenuItem_MonitorContextMenu_Clear";
-			this.toolStripMenuItem_MonitorContextMenu_Clear.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_Clear.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Clear.Text = "Clear";
 			this.toolStripMenuItem_MonitorContextMenu_Clear.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Clear_Click);
 			// 
@@ -766,39 +767,39 @@
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Refresh.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_refresh_16x16;
 			this.toolStripMenuItem_MonitorContextMenu_Refresh.Name = "toolStripMenuItem_MonitorContextMenu_Refresh";
-			this.toolStripMenuItem_MonitorContextMenu_Refresh.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_Refresh.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Refresh.Text = "Refresh";
 			this.toolStripMenuItem_MonitorContextMenu_Refresh.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Refresh_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Separator_7
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Separator_7.Name = "toolStripMenuItem_MonitorContextMenu_Separator_7";
-			this.toolStripMenuItem_MonitorContextMenu_Separator_7.Size = new System.Drawing.Size(218, 6);
+			this.toolStripMenuItem_MonitorContextMenu_Separator_7.Size = new System.Drawing.Size(222, 6);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_SelectAll
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_SelectAll.Name = "toolStripMenuItem_MonitorContextMenu_SelectAll";
-			this.toolStripMenuItem_MonitorContextMenu_SelectAll.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_SelectAll.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_SelectAll.Text = "Select All";
 			this.toolStripMenuItem_MonitorContextMenu_SelectAll.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_SelectAll_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_SelectNone
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_SelectNone.Name = "toolStripMenuItem_MonitorContextMenu_SelectNone";
-			this.toolStripMenuItem_MonitorContextMenu_SelectNone.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_SelectNone.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_SelectNone.Text = "Select None";
 			this.toolStripMenuItem_MonitorContextMenu_SelectNone.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_SelectNone_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Separator_8
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Separator_8.Name = "toolStripMenuItem_MonitorContextMenu_Separator_8";
-			this.toolStripMenuItem_MonitorContextMenu_Separator_8.Size = new System.Drawing.Size(218, 6);
+			this.toolStripMenuItem_MonitorContextMenu_Separator_8.Size = new System.Drawing.Size(222, 6);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_CopyToClipboard
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_exports_16x16;
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Name = "toolStripMenuItem_MonitorContextMenu_CopyToClipboard";
-			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Text = "Copy to Clipboard";
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard_Click);
 			// 
@@ -806,7 +807,7 @@
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_save_16x16;
 			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Name = "toolStripMenuItem_MonitorContextMenu_SaveToFile";
-			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Text = "Save to File...";
 			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_SaveToFile_Click);
 			// 
@@ -814,7 +815,7 @@
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Print.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_printer_16x16;
 			this.toolStripMenuItem_MonitorContextMenu_Print.Name = "toolStripMenuItem_MonitorContextMenu_Print";
-			this.toolStripMenuItem_MonitorContextMenu_Print.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_Print.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Print.Text = "Print...";
 			this.toolStripMenuItem_MonitorContextMenu_Print.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Print_Click);
 			// 
@@ -822,7 +823,7 @@
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Radix.DropDown = this.contextMenuStrip_Radix;
 			this.toolStripMenuItem_TerminalMenu_View_Radix.Name = "toolStripMenuItem_TerminalMenu_View_Radix";
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_TerminalMenu_View_Radix.Text = "&Radix";
 			// 
 			// contextMenuStrip_Predefined
@@ -1265,7 +1266,7 @@
 			this.toolStripMenuItem_SendContextMenu_Panels_SendText.Checked = true;
 			this.toolStripMenuItem_SendContextMenu_Panels_SendText.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItem_SendContextMenu_Panels_SendText.Name = "toolStripMenuItem_SendContextMenu_Panels_SendText";
-			this.toolStripMenuItem_SendContextMenu_Panels_SendText.Size = new System.Drawing.Size(157, 22);
+			this.toolStripMenuItem_SendContextMenu_Panels_SendText.Size = new System.Drawing.Size(156, 22);
 			this.toolStripMenuItem_SendContextMenu_Panels_SendText.Text = "Send Text Panel";
 			this.toolStripMenuItem_SendContextMenu_Panels_SendText.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_Panels_SendText_Click);
 			// 
@@ -1274,7 +1275,7 @@
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = true;
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Name = "toolStripMenuItem_SendContextMenu_Panels_SendFile";
-			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Size = new System.Drawing.Size(157, 22);
+			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Size = new System.Drawing.Size(156, 22);
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Text = "Send File Panel";
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_Panels_SendFile_Click);
 			// 
@@ -1391,7 +1392,7 @@
 			this.toolStripMenuItem_TerminalMenu_Terminal.MergeAction = System.Windows.Forms.MergeAction.Insert;
 			this.toolStripMenuItem_TerminalMenu_Terminal.MergeIndex = 1;
 			this.toolStripMenuItem_TerminalMenu_Terminal.Name = "toolStripMenuItem_TerminalMenu_Terminal";
-			this.toolStripMenuItem_TerminalMenu_Terminal.Size = new System.Drawing.Size(66, 20);
+			this.toolStripMenuItem_TerminalMenu_Terminal.Size = new System.Drawing.Size(65, 20);
 			this.toolStripMenuItem_TerminalMenu_Terminal.Text = "&Terminal";
 			this.toolStripMenuItem_TerminalMenu_Terminal.DropDownOpening += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_DropDownOpening);
 			// 
@@ -1401,7 +1402,7 @@
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Name = "toolStripMenuItem_TerminalMenu_Terminal_Start";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.O)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Size = new System.Drawing.Size(216, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Size = new System.Drawing.Size(215, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Text = "&Open Port";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Start_Click);
 			// 
@@ -1411,34 +1412,34 @@
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Name = "toolStripMenuItem_TerminalMenu_Terminal_Stop";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.C)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Size = new System.Drawing.Size(216, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Size = new System.Drawing.Size(215, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Text = "C&lose Port";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Stop_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Separator_1
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_1.Name = "toolStripMenuItem_TerminalMenu_Terminal_Separator_1";
-			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_1.Size = new System.Drawing.Size(213, 6);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_1.Size = new System.Drawing.Size(212, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Break
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Break.Name = "toolStripMenuItem_TerminalMenu_Terminal_Break";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Break.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_Break.Size = new System.Drawing.Size(216, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Break.Size = new System.Drawing.Size(215, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_Break.Text = "&Break Operation";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Break.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Break_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Separator_2
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_2.Name = "toolStripMenuItem_TerminalMenu_Terminal_Separator_2";
-			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_2.Size = new System.Drawing.Size(213, 6);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_2.Size = new System.Drawing.Size(212, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Clear
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_lightning_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Name = "toolStripMenuItem_TerminalMenu_Terminal_Clear";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.Delete)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Size = new System.Drawing.Size(216, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Size = new System.Drawing.Size(215, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Text = "Cl&ear";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Clear_Click);
 			// 
@@ -1447,20 +1448,20 @@
 			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_refresh_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Name = "toolStripMenuItem_TerminalMenu_Terminal_Refresh";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Size = new System.Drawing.Size(216, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Size = new System.Drawing.Size(215, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Refresh_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Separator_3
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_3.Name = "toolStripMenuItem_TerminalMenu_Terminal_Separator_3";
-			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_3.Size = new System.Drawing.Size(213, 6);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_3.Size = new System.Drawing.Size(212, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_SelectAll
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Name = "toolStripMenuItem_TerminalMenu_Terminal_SelectAll";
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectAll.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Size = new System.Drawing.Size(216, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Size = new System.Drawing.Size(215, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Text = "Select &All";
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_SelectAll_Click);
 			// 
@@ -1469,21 +1470,21 @@
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Name = "toolStripMenuItem_TerminalMenu_Terminal_SelectNone";
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.N)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Size = new System.Drawing.Size(216, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Size = new System.Drawing.Size(215, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Text = "Select &None";
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Separator_4
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_4.Name = "toolStripMenuItem_TerminalMenu_Terminal_Separator_4";
-			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_4.Size = new System.Drawing.Size(213, 6);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_4.Size = new System.Drawing.Size(212, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_exports_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Name = "toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard";
 			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Size = new System.Drawing.Size(216, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Size = new System.Drawing.Size(215, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Text = "&Copy To Clipboard";
 			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard_Click);
 			// 
@@ -1492,7 +1493,7 @@
 			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_save_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Name = "toolStripMenuItem_TerminalMenu_Terminal_SaveToFile";
 			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Size = new System.Drawing.Size(216, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Size = new System.Drawing.Size(215, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Text = "Save To &File...";
 			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile_Click);
 			// 
@@ -1501,14 +1502,14 @@
 			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_printer_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Name = "toolStripMenuItem_TerminalMenu_Terminal_Print";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Print.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Size = new System.Drawing.Size(216, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Size = new System.Drawing.Size(215, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Text = "&Print...";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Print_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Separator_5
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_5.Name = "toolStripMenuItem_TerminalMenu_Terminal_Separator_5";
-			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_5.Size = new System.Drawing.Size(213, 6);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_5.Size = new System.Drawing.Size(212, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Settings
 			// 
@@ -1516,7 +1517,7 @@
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Name = "toolStripMenuItem_TerminalMenu_Terminal_Settings";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.S)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Size = new System.Drawing.Size(216, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Size = new System.Drawing.Size(215, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Text = "&Settings...";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Settings_Click);
 			// 
@@ -1524,7 +1525,7 @@
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Presets.DropDown = this.contextMenuStrip_Preset;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Presets.Name = "toolStripMenuItem_TerminalMenu_Terminal_Presets";
-			this.toolStripMenuItem_TerminalMenu_Terminal_Presets.Size = new System.Drawing.Size(216, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Presets.Size = new System.Drawing.Size(215, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_Presets.Text = "Settings P&resets";
 			// 
 			// contextMenuStrip_Preset
@@ -1671,7 +1672,9 @@
 			// 
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger,
-            this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response});
+            this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response,
+            this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset});
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_autoresponders_16x16;
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse.Size = new System.Drawing.Size(320, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse.Text = "&Automatic Response";
@@ -1681,7 +1684,7 @@
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger});
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger";
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Size = new System.Drawing.Size(124, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Text = "&Trigger";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.ToolTipText = "The trigger that initiates an automatic response";
 			// 
@@ -1699,7 +1702,7 @@
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response});
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response";
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Size = new System.Drawing.Size(124, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Text = "&Response";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.ToolTipText = "The response that is automatically sent";
 			// 
@@ -1711,6 +1714,14 @@
     "r fill-in any command text";
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_SelectedIndexChanged);
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.TextChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_TextChanged);
+			// 
+			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_email_delete_16x16;
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset";
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset.Text = "R&eset";
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Log
 			// 
@@ -1875,7 +1886,7 @@
             this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_4,
             this.toolStripMenuItem_TerminalMenu_View_Panels_RearrangeAll});
 			this.toolStripMenuItem_TerminalMenu_View_Panels.Name = "toolStripMenuItem_TerminalMenu_View_Panels";
-			this.toolStripMenuItem_TerminalMenu_View_Panels.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Panels.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_TerminalMenu_View_Panels.Text = "&Panels";
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Panels_Tx
@@ -1965,107 +1976,107 @@
 			// toolStripMenuItem_TerminalMenu_View_Separator_1
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Separator_1.Name = "toolStripMenuItem_TerminalMenu_View_Separator_1";
-			this.toolStripMenuItem_TerminalMenu_View_Separator_1.Size = new System.Drawing.Size(218, 6);
+			this.toolStripMenuItem_TerminalMenu_View_Separator_1.Size = new System.Drawing.Size(222, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Name = "toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime";
-			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Text = "&Show Connect Time";
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime.Name = "toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime";
-			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime.Text = "Reset C&onnect Time";
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Separator_2
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Separator_2.Name = "toolStripMenuItem_TerminalMenu_View_Separator_2";
-			this.toolStripMenuItem_TerminalMenu_View_Separator_2.Size = new System.Drawing.Size(218, 6);
+			this.toolStripMenuItem_TerminalMenu_View_Separator_2.Size = new System.Drawing.Size(222, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate.Name = "toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate";
-			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate.Text = "S&how Byte/Line Count/Rate";
 			// 
 			// toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount.Name = "toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount";
-			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount.Text = "Reset Co&unt";
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Separator_3
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Separator_3.Name = "toolStripMenuItem_TerminalMenu_View_Separator_3";
-			this.toolStripMenuItem_TerminalMenu_View_Separator_3.Size = new System.Drawing.Size(218, 6);
+			this.toolStripMenuItem_TerminalMenu_View_Separator_3.Size = new System.Drawing.Size(222, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Separator_4
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Separator_4.Name = "toolStripMenuItem_TerminalMenu_View_Separator_4";
-			this.toolStripMenuItem_TerminalMenu_View_Separator_4.Size = new System.Drawing.Size(218, 6);
+			this.toolStripMenuItem_TerminalMenu_View_Separator_4.Size = new System.Drawing.Size(222, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowRadix
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_ShowRadix.Name = "toolStripMenuItem_TerminalMenu_View_ShowRadix";
-			this.toolStripMenuItem_TerminalMenu_View_ShowRadix.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ShowRadix.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ShowRadix.Text = "Show &Radix";
 			this.toolStripMenuItem_TerminalMenu_View_ShowRadix.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowRadix_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowLineNumbers
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Name = "toolStripMenuItem_TerminalMenu_View_ShowLineNumbers";
-			this.toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Text = "Show Line &Numbers";
 			this.toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowLineNumbers_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowDate
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_ShowDate.Name = "toolStripMenuItem_TerminalMenu_View_ShowDate";
-			this.toolStripMenuItem_TerminalMenu_View_ShowDate.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ShowDate.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ShowDate.Text = "Show D&ate";
 			this.toolStripMenuItem_TerminalMenu_View_ShowDate.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowDate_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowTime
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_ShowTime.Name = "toolStripMenuItem_TerminalMenu_View_ShowTime";
-			this.toolStripMenuItem_TerminalMenu_View_ShowTime.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ShowTime.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ShowTime.Text = "Show T&ime";
 			this.toolStripMenuItem_TerminalMenu_View_ShowTime.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowTime_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowPort
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_ShowPort.Name = "toolStripMenuItem_TerminalMenu_View_ShowPort";
-			this.toolStripMenuItem_TerminalMenu_View_ShowPort.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ShowPort.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ShowPort.Text = "Show &Port";
 			this.toolStripMenuItem_TerminalMenu_View_ShowPort.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowPort_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowDirection
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_ShowDirection.Name = "toolStripMenuItem_TerminalMenu_View_ShowDirection";
-			this.toolStripMenuItem_TerminalMenu_View_ShowDirection.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ShowDirection.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ShowDirection.Text = "Show &Direction";
 			this.toolStripMenuItem_TerminalMenu_View_ShowDirection.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowDirection_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowEol
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Name = "toolStripMenuItem_TerminalMenu_View_ShowEol";
-			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Text = "Show &End-Of-Line Sequence";
 			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowEol_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowLength
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_ShowLength.Name = "toolStripMenuItem_TerminalMenu_View_ShowLength";
-			this.toolStripMenuItem_TerminalMenu_View_ShowLength.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ShowLength.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ShowLength.Text = "Show &Length";
 			this.toolStripMenuItem_TerminalMenu_View_ShowLength.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowLength_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Separator_5
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Separator_5.Name = "toolStripMenuItem_TerminalMenu_View_Separator_5";
-			this.toolStripMenuItem_TerminalMenu_View_Separator_5.Size = new System.Drawing.Size(218, 6);
+			this.toolStripMenuItem_TerminalMenu_View_Separator_5.Size = new System.Drawing.Size(222, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_FlowControlCount
 			// 
@@ -2073,7 +2084,7 @@
             this.toolStripMenuItem_TerminalMenu_View_FlowControlCount_ShowCount,
             this.toolStripMenuItem_TerminalMenu_View_FlowControlCount_ResetCount});
 			this.toolStripMenuItem_TerminalMenu_View_FlowControlCount.Name = "toolStripMenuItem_TerminalMenu_View_FlowControlCount";
-			this.toolStripMenuItem_TerminalMenu_View_FlowControlCount.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_FlowControlCount.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_TerminalMenu_View_FlowControlCount.Text = "Flo&w Control Count";
 			// 
 			// toolStripMenuItem_TerminalMenu_View_FlowControlCount_ShowCount
@@ -2096,7 +2107,7 @@
             this.toolStripMenuItem_TerminalMenu_View_BreakCount_ShowCount,
             this.toolStripMenuItem_TerminalMenu_View_BreakCount_ResetCount});
 			this.toolStripMenuItem_TerminalMenu_View_BreakCount.Name = "toolStripMenuItem_TerminalMenu_View_BreakCount";
-			this.toolStripMenuItem_TerminalMenu_View_BreakCount.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_BreakCount.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_TerminalMenu_View_BreakCount.Text = "Brea&k Count";
 			// 
 			// toolStripMenuItem_TerminalMenu_View_BreakCount_ShowCount
@@ -2116,13 +2127,13 @@
 			// toolStripMenuItem_TerminalMenu_View_Separator_6
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Separator_6.Name = "toolStripMenuItem_TerminalMenu_View_Separator_6";
-			this.toolStripMenuItem_TerminalMenu_View_Separator_6.Size = new System.Drawing.Size(218, 6);
+			this.toolStripMenuItem_TerminalMenu_View_Separator_6.Size = new System.Drawing.Size(222, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Format
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Format.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_font_16x16;
 			this.toolStripMenuItem_TerminalMenu_View_Format.Name = "toolStripMenuItem_TerminalMenu_View_Format";
-			this.toolStripMenuItem_TerminalMenu_View_Format.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Format.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_TerminalMenu_View_Format.Text = "&Format...";
 			this.toolStripMenuItem_TerminalMenu_View_Format.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_Format_Click);
 			// 
@@ -2210,7 +2221,7 @@
 			// 
 			this.toolStripStatusLabel_TerminalStatus_Status.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripStatusLabel_TerminalStatus_Status.Name = "toolStripStatusLabel_TerminalStatus_Status";
-			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(172, 20);
+			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(204, 20);
 			this.toolStripStatusLabel_TerminalStatus_Status.Spring = true;
 			this.toolStripStatusLabel_TerminalStatus_Status.Text = "<Terminal Status>";
 			this.toolStripStatusLabel_TerminalStatus_Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2293,7 +2304,7 @@
 			this.toolStripStatusLabel_TerminalStatus_DTR.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_DTR.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_DTR.Name = "toolStripStatusLabel_TerminalStatus_DTR";
-			this.toolStripStatusLabel_TerminalStatus_DTR.Size = new System.Drawing.Size(45, 20);
+			this.toolStripStatusLabel_TerminalStatus_DTR.Size = new System.Drawing.Size(44, 20);
 			this.toolStripStatusLabel_TerminalStatus_DTR.Text = "DTR";
 			this.toolStripStatusLabel_TerminalStatus_DTR.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_DTR.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -2427,7 +2438,7 @@
 			this.splitContainer_Terminal.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainer_Terminal.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
 			this.splitContainer_Terminal.IsSplitterFixed = true;
-			this.splitContainer_Terminal.Location = new System.Drawing.Point(0, 0);
+			this.splitContainer_Terminal.Location = new System.Drawing.Point(0, 24);
 			this.splitContainer_Terminal.Name = "splitContainer_Terminal";
 			this.splitContainer_Terminal.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
@@ -2439,8 +2450,8 @@
 			// 
 			this.splitContainer_Terminal.Panel2.Controls.Add(this.panel_Send);
 			this.splitContainer_Terminal.Panel2MinSize = 97;
-			this.splitContainer_Terminal.Size = new System.Drawing.Size(712, 488);
-			this.splitContainer_Terminal.SplitterDistance = 390;
+			this.splitContainer_Terminal.Size = new System.Drawing.Size(712, 464);
+			this.splitContainer_Terminal.SplitterDistance = 366;
 			this.splitContainer_Terminal.SplitterWidth = 1;
 			this.splitContainer_Terminal.TabIndex = 1;
 			this.splitContainer_Terminal.TabStop = false;
@@ -2460,7 +2471,7 @@
 			// 
 			this.splitContainer_Predefined.Panel2.Controls.Add(this.panel_Predefined);
 			this.splitContainer_Predefined.Panel2MinSize = 144;
-			this.splitContainer_Predefined.Size = new System.Drawing.Size(712, 390);
+			this.splitContainer_Predefined.Size = new System.Drawing.Size(712, 366);
 			this.splitContainer_Predefined.SplitterDistance = 525;
 			this.splitContainer_Predefined.TabIndex = 0;
 			this.splitContainer_Predefined.TabStop = false;
@@ -2473,7 +2484,7 @@
 			this.panel_Monitor.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor.Name = "panel_Monitor";
 			this.panel_Monitor.Padding = new System.Windows.Forms.Padding(3, 3, 1, 0);
-			this.panel_Monitor.Size = new System.Drawing.Size(525, 390);
+			this.panel_Monitor.Size = new System.Drawing.Size(525, 366);
 			this.panel_Monitor.TabIndex = 0;
 			// 
 			// groupBox_Monitor
@@ -2484,7 +2495,7 @@
 			this.groupBox_Monitor.Location = new System.Drawing.Point(3, 3);
 			this.groupBox_Monitor.Name = "groupBox_Monitor";
 			this.groupBox_Monitor.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.groupBox_Monitor.Size = new System.Drawing.Size(521, 387);
+			this.groupBox_Monitor.Size = new System.Drawing.Size(521, 363);
 			this.groupBox_Monitor.TabIndex = 0;
 			this.groupBox_Monitor.TabStop = false;
 			this.groupBox_Monitor.Text = "Monitor";
@@ -2504,7 +2515,7 @@
 			// 
 			this.splitContainer_TxMonitor.Panel2.Controls.Add(this.splitContainer_RxMonitor);
 			this.splitContainer_TxMonitor.Panel2MinSize = 100;
-			this.splitContainer_TxMonitor.Size = new System.Drawing.Size(515, 371);
+			this.splitContainer_TxMonitor.Size = new System.Drawing.Size(515, 347);
 			this.splitContainer_TxMonitor.SplitterDistance = 168;
 			this.splitContainer_TxMonitor.TabIndex = 0;
 			this.splitContainer_TxMonitor.TabStop = false;
@@ -2517,7 +2528,7 @@
 			this.panel_Monitor_Tx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Tx.Name = "panel_Monitor_Tx";
 			this.panel_Monitor_Tx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Tx.Size = new System.Drawing.Size(168, 371);
+			this.panel_Monitor_Tx.Size = new System.Drawing.Size(168, 347);
 			this.panel_Monitor_Tx.TabIndex = 0;
 			// 
 			// monitor_Tx
@@ -2528,7 +2539,7 @@
 			this.monitor_Tx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Tx.Name = "monitor_Tx";
 			this.monitor_Tx.RepositoryType = YAT.Domain.RepositoryType.Tx;
-			this.monitor_Tx.Size = new System.Drawing.Size(162, 368);
+			this.monitor_Tx.Size = new System.Drawing.Size(162, 344);
 			this.monitor_Tx.TabIndex = 0;
 			this.monitor_Tx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Tx.Enter += new System.EventHandler(this.monitor_Tx_Enter);
@@ -2548,7 +2559,7 @@
 			// 
 			this.splitContainer_RxMonitor.Panel2.Controls.Add(this.panel_Monitor_Rx);
 			this.splitContainer_RxMonitor.Panel2MinSize = 48;
-			this.splitContainer_RxMonitor.Size = new System.Drawing.Size(343, 371);
+			this.splitContainer_RxMonitor.Size = new System.Drawing.Size(343, 347);
 			this.splitContainer_RxMonitor.SplitterDistance = 171;
 			this.splitContainer_RxMonitor.TabIndex = 1;
 			this.splitContainer_RxMonitor.TabStop = false;
@@ -2561,7 +2572,7 @@
 			this.panel_Monitor_Bidir.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Bidir.Name = "panel_Monitor_Bidir";
 			this.panel_Monitor_Bidir.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(171, 371);
+			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(171, 347);
 			this.panel_Monitor_Bidir.TabIndex = 0;
 			// 
 			// monitor_Bidir
@@ -2572,7 +2583,7 @@
 			this.monitor_Bidir.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Bidir.Name = "monitor_Bidir";
 			this.monitor_Bidir.RepositoryType = YAT.Domain.RepositoryType.Bidir;
-			this.monitor_Bidir.Size = new System.Drawing.Size(165, 368);
+			this.monitor_Bidir.Size = new System.Drawing.Size(165, 344);
 			this.monitor_Bidir.TabIndex = 0;
 			this.monitor_Bidir.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Bidir.Enter += new System.EventHandler(this.monitor_Bidir_Enter);
@@ -2584,7 +2595,7 @@
 			this.panel_Monitor_Rx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Rx.Name = "panel_Monitor_Rx";
 			this.panel_Monitor_Rx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Rx.Size = new System.Drawing.Size(168, 371);
+			this.panel_Monitor_Rx.Size = new System.Drawing.Size(168, 347);
 			this.panel_Monitor_Rx.TabIndex = 0;
 			// 
 			// monitor_Rx
@@ -2595,7 +2606,7 @@
 			this.monitor_Rx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Rx.Name = "monitor_Rx";
 			this.monitor_Rx.RepositoryType = YAT.Domain.RepositoryType.Rx;
-			this.monitor_Rx.Size = new System.Drawing.Size(162, 368);
+			this.monitor_Rx.Size = new System.Drawing.Size(162, 344);
 			this.monitor_Rx.TabIndex = 0;
 			this.monitor_Rx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Rx.Enter += new System.EventHandler(this.monitor_Rx_Enter);
@@ -2607,7 +2618,7 @@
 			this.panel_Predefined.Location = new System.Drawing.Point(0, 0);
 			this.panel_Predefined.Name = "panel_Predefined";
 			this.panel_Predefined.Padding = new System.Windows.Forms.Padding(1, 3, 3, 0);
-			this.panel_Predefined.Size = new System.Drawing.Size(183, 390);
+			this.panel_Predefined.Size = new System.Drawing.Size(183, 366);
 			this.panel_Predefined.TabIndex = 0;
 			// 
 			// groupBox_Predefined
@@ -2617,7 +2628,7 @@
 			this.groupBox_Predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox_Predefined.Location = new System.Drawing.Point(1, 3);
 			this.groupBox_Predefined.Name = "groupBox_Predefined";
-			this.groupBox_Predefined.Size = new System.Drawing.Size(179, 387);
+			this.groupBox_Predefined.Size = new System.Drawing.Size(179, 363);
 			this.groupBox_Predefined.TabIndex = 0;
 			this.groupBox_Predefined.TabStop = false;
 			this.groupBox_Predefined.Text = "&Predefined Commands";
@@ -2627,7 +2638,7 @@
 			this.predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.predefined.Location = new System.Drawing.Point(3, 16);
 			this.predefined.Name = "predefined";
-			this.predefined.Size = new System.Drawing.Size(173, 368);
+			this.predefined.Size = new System.Drawing.Size(173, 344);
 			this.predefined.TabIndex = 0;
 			this.predefined.SelectedPageChanged += new System.EventHandler(this.predefined_SelectedPageChanged);
 			this.predefined.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.predefined_SendCommandRequest);
@@ -2974,5 +2985,6 @@
 		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowPort;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowPort;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset;
 	}
 }

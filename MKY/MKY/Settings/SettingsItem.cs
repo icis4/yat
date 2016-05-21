@@ -384,16 +384,7 @@ namespace MKY.Settings
 		/// <summary>
 		/// Resumes change events.
 		/// </summary>
-		/// <remarks>
-		/// Calling the ResumeChangeEvent method forces changed events if there are any pending events.
-		/// </remarks>
-		public virtual void ResumeChangeEvent()
-		{
-			ResumeChangeEvent(true);
-		}
-
-		/// <summary></summary>
-		public virtual void ResumeChangeEvent(bool forcePendingChangeEvent)
+		public virtual void ResumeChangeEvent(bool forcePendingChangeEvent = true)
 		{
 			this.changeEventSuspendedCountLock.EnterWriteLock();
 			try
