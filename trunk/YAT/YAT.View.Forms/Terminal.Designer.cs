@@ -150,7 +150,7 @@
 			this.toolStripMenuItem_SendContextMenu_KeepCommand = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_SendImmediately = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuStrip_Terminal = new System.Windows.Forms.MenuStrip();
+			this.menuStrip_Terminal = new MKY.Windows.Forms.MenuStripEx();
 			this.toolStripMenuItem_TerminalMenu_File = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_File_Close = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_File_Save = new System.Windows.Forms.ToolStripMenuItem();
@@ -2741,7 +2741,7 @@
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_CopyToClipboard;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MonitorContextMenu_Separator_5;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_Print;
-		private System.Windows.Forms.MenuStrip menuStrip_Terminal;
+		private MKY.Windows.Forms.MenuStripEx menuStrip_Terminal;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_File;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_File_Close;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_File_Save;

@@ -63,7 +63,6 @@ namespace MKY.Windows.Forms
 	public class ListBoxEx : ListBox
 	{
 #if (ENABLE_HORIZONTAL_AUTO_SCROLL)
-	
 		#region General
 		//==========================================================================================
 		// General
@@ -75,8 +74,7 @@ namespace MKY.Windows.Forms
 		}
 
 		#endregion
-
-#endif
+#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
 
 		#region Selection
 		//==========================================================================================
@@ -101,7 +99,6 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 #if (ENABLE_HORIZONTAL_AUTO_SCROLL)
-
 		#region Scroll > Events
 		//------------------------------------------------------------------------------------------
 		// Scroll > Events
@@ -120,8 +117,7 @@ namespace MKY.Windows.Forms
 		public event ScrollEventHandler VerticalScrolled;
 
 		#endregion
-
-#endif
+#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
 
 		#region Scroll > Properties
 		//------------------------------------------------------------------------------------------
@@ -334,7 +330,6 @@ namespace MKY.Windows.Forms
 		#endregion
 
 #if (ENABLE_HORIZONTAL_AUTO_SCROLL)
-
 		#region Scroll > Overridden Methods
 		//------------------------------------------------------------------------------------------
 		// Scroll > Overridden Methods
@@ -451,8 +446,7 @@ namespace MKY.Windows.Forms
 		}
 
 		#endregion
-
-#endif
+#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
 
 		#endregion
 	}
