@@ -301,6 +301,7 @@ namespace MKY.IO.Serial.Socket
 				}
 
 				// Set state to disposed:
+				this.stateLock = null;
 				this.isDisposed = true;
 
 				DebugMessage("...successfully disposed.");

@@ -272,6 +272,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				this.port.Close();
 				this.port.Dispose();
 				this.port = null;
+				// Note the additional disposal in TearDown().
 			}
 
 			// Process results:
@@ -319,6 +320,8 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 		[Test, TestCaseSource(typeof(AnalysisTestData), "TestCases")]
 		public virtual void PerformContinuousReceivingOfECHO(string portName, int linesToReceive)
 		{
+			int receivedLines = 0;
+
 			// Create file for logging:
 			string filePath = Temp.MakeTempFilePath(GetType(), "ContinuousECHO-" + portName + "-" + linesToReceive.ToString(CultureInfo.InvariantCulture), ".txt");
 			using (this.file = new StreamWriter(filePath))
@@ -346,7 +349,6 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				// Perform ECHO:
 				Trace.WriteLine(">> " + CommandToEcho);
 				this.port.WriteLine(CommandToEcho); // Request continuous echo.
-				int receivedLines = 0;
 				do
 				{
 					Thread.Sleep(1); // Wait just a little => improves accuracy in terms of number of received lines.
@@ -369,6 +371,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				this.port.Close();
 				this.port.Dispose();
 				this.port = null;
+				// Note the additional disposal in TearDown().
 			}
 
 			// Process results:

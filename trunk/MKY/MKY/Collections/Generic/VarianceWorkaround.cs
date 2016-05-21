@@ -128,7 +128,8 @@ namespace MKY.Collections.Generic
 					// Dispose of managed resources if requested:
 					if (disposing)
 					{
-						this.source.Dispose();
+						if (this.source != null)
+							this.source.Dispose();
 					}
 
 					// Set state to disposed:

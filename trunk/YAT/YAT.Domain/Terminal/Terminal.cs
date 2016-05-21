@@ -378,7 +378,6 @@ namespace YAT.Domain
 
 				// Set state to disposed:
 				this.rawTerminal = null;
-				this.sendThreadEvent = null;
 				this.isDisposed = true;
 			}
 		}

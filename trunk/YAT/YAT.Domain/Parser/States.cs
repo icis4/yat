@@ -131,13 +131,11 @@ namespace YAT.Domain.Parser
 		{
 			if (!IsDisposed)
 			{
-				// In any case, dispose of the writer as it was created in the constructor:
-				if (this.contiguousWriter != null)
-					this.contiguousWriter.Dispose();
-
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
+					if (this.contiguousWriter != null)
+						this.contiguousWriter.Dispose();
 				}
 
 				// Set state to disposed:
@@ -641,13 +639,11 @@ namespace YAT.Domain.Parser
 		{
 			if (!IsDisposed)
 			{
-				// In any case, dispose of the writer as it was created in the constructor:
-				if (this.mnemonicWriter != null)
-					this.mnemonicWriter.Dispose();
-
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
+					if (this.mnemonicWriter != null)
+						this.mnemonicWriter.Dispose();
 				}
 
 				// Set state to disposed:
@@ -827,13 +823,11 @@ namespace YAT.Domain.Parser
 		{
 			if (!IsDisposed)
 			{
-				// In any case, dispose of the writer as it was created in the constructor:
-				if (this.valueWriter != null)
-					this.valueWriter.Dispose();
-
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
+					if (this.valueWriter != null)
+						this.valueWriter.Dispose();
 				}
 
 				// Set state to disposed:

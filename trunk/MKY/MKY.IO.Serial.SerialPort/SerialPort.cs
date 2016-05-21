@@ -228,6 +228,7 @@ namespace MKY.IO.Serial.SerialPort
 				}
 
 				// Set state to disposed:
+				this.stateLock = null;
 				this.isDisposed = true;
 			}
 		}

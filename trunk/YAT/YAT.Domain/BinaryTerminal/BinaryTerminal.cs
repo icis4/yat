@@ -377,17 +377,16 @@ namespace YAT.Domain
 		{
 			if (!IsDisposed)
 			{
-				// In any case, dispose of the state objects as they were created in the constructor.
-				if (this.txLineState != null)
-					this.txLineState.Dispose();
-
-				if (this.rxLineState != null)
-					this.rxLineState.Dispose();
-
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
 					DetachBinaryTerminalSettings();
+
+					if (this.txLineState != null)
+						this.txLineState.Dispose();
+
+					if (this.rxLineState != null)
+						this.rxLineState.Dispose();
 				}
 
 				// Set state to disposed:
