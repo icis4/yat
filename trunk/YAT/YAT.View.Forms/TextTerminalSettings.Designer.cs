@@ -36,7 +36,7 @@ namespace YAT.View.Forms
 			this.button_OK = new System.Windows.Forms.Button();
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.groupBox_Eol = new System.Windows.Forms.GroupBox();
 			this.checkBox_ShowEol = new System.Windows.Forms.CheckBox();
 			this.checkBox_SeparateTxRxEol = new System.Windows.Forms.CheckBox();
 			this.comboBox_RxEol = new System.Windows.Forms.ComboBox();
@@ -44,7 +44,7 @@ namespace YAT.View.Forms
 			this.comboBox_TxEol = new System.Windows.Forms.ComboBox();
 			this.label_TxEol = new System.Windows.Forms.Label();
 			this.comboBox_Encoding = new System.Windows.Forms.ComboBox();
-			this.groupBox_SendSettings = new System.Windows.Forms.GroupBox();
+			this.groupBox_Send = new System.Windows.Forms.GroupBox();
 			this.groupBox_Comments = new System.Windows.Forms.GroupBox();
 			this.checkBox_SkipEolCommentWhiteSpace = new System.Windows.Forms.CheckBox();
 			this.stringListEdit_EolCommentIndicators = new MKY.Windows.Forms.StringListEdit();
@@ -67,8 +67,8 @@ namespace YAT.View.Forms
 			this.button_Defaults = new System.Windows.Forms.Button();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.groupBox_Settings.SuspendLayout();
-			this.groupBox1.SuspendLayout();
-			this.groupBox_SendSettings.SuspendLayout();
+			this.groupBox_Eol.SuspendLayout();
+			this.groupBox_Send.SuspendLayout();
 			this.groupBox_Comments.SuspendLayout();
 			this.groupBox_Substitute.SuspendLayout();
 			this.SuspendLayout();
@@ -100,9 +100,9 @@ namespace YAT.View.Forms
 			this.groupBox_Settings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Settings.Controls.Add(this.groupBox1);
+			this.groupBox_Settings.Controls.Add(this.groupBox_Eol);
 			this.groupBox_Settings.Controls.Add(this.comboBox_Encoding);
-			this.groupBox_Settings.Controls.Add(this.groupBox_SendSettings);
+			this.groupBox_Settings.Controls.Add(this.groupBox_Send);
 			this.groupBox_Settings.Controls.Add(this.label_Encoding);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
@@ -110,20 +110,20 @@ namespace YAT.View.Forms
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
-			// groupBox1
+			// groupBox_Eol
 			// 
-			this.groupBox1.Controls.Add(this.checkBox_ShowEol);
-			this.groupBox1.Controls.Add(this.checkBox_SeparateTxRxEol);
-			this.groupBox1.Controls.Add(this.comboBox_RxEol);
-			this.groupBox1.Controls.Add(this.label_RxEol);
-			this.groupBox1.Controls.Add(this.comboBox_TxEol);
-			this.groupBox1.Controls.Add(this.label_TxEol);
-			this.groupBox1.Location = new System.Drawing.Point(6, 59);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(272, 122);
-			this.groupBox1.TabIndex = 2;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "EOL (end of line) sequence";
+			this.groupBox_Eol.Controls.Add(this.checkBox_ShowEol);
+			this.groupBox_Eol.Controls.Add(this.checkBox_SeparateTxRxEol);
+			this.groupBox_Eol.Controls.Add(this.comboBox_RxEol);
+			this.groupBox_Eol.Controls.Add(this.label_RxEol);
+			this.groupBox_Eol.Controls.Add(this.comboBox_TxEol);
+			this.groupBox_Eol.Controls.Add(this.label_TxEol);
+			this.groupBox_Eol.Location = new System.Drawing.Point(6, 59);
+			this.groupBox_Eol.Name = "groupBox_Eol";
+			this.groupBox_Eol.Size = new System.Drawing.Size(272, 122);
+			this.groupBox_Eol.TabIndex = 2;
+			this.groupBox_Eol.TabStop = false;
+			this.groupBox_Eol.Text = "EOL (end-of-line) sequence";
 			// 
 			// checkBox_ShowEol
 			// 
@@ -132,7 +132,7 @@ namespace YAT.View.Forms
 			this.checkBox_ShowEol.Name = "checkBox_ShowEol";
 			this.checkBox_ShowEol.Size = new System.Drawing.Size(155, 17);
 			this.checkBox_ShowEol.TabIndex = 5;
-			this.checkBox_ShowEol.Text = "&Show end of line sequence";
+			this.checkBox_ShowEol.Text = "&Show end-of-line sequence";
 			this.checkBox_ShowEol.CheckedChanged += new System.EventHandler(this.checkBox_ShowEol_CheckedChanged);
 			// 
 			// checkBox_SeparateTxRxEol
@@ -153,9 +153,9 @@ namespace YAT.View.Forms
 			this.comboBox_RxEol.Name = "comboBox_RxEol";
 			this.comboBox_RxEol.Size = new System.Drawing.Size(153, 21);
 			this.comboBox_RxEol.TabIndex = 4;
-			this.toolTip.SetToolTip(this.comboBox_RxEol, "Either select a preset from the list, or fill in any sequence of bytes, e.g. <ETB>" +
-        "<NUL> or \\h(17 00).\r\n\r\nContact YAT via \"Help > Request Feature\" to request addit" +
-        "ional presets.");
+			this.toolTip.SetToolTip(this.comboBox_RxEol, "Either select a preset from the list, or fill in any sequence of bytes, e.g. <ETB" +
+        "><NUL> or \\h(17 00).\r\n\r\nContact YAT via \"Help > Request Feature\" to request addi" +
+        "tional presets.");
 			this.comboBox_RxEol.SelectedIndexChanged += new System.EventHandler(this.comboBox_RxEol_SelectedIndexChanged);
 			this.comboBox_RxEol.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_RxEol_Validating);
 			// 
@@ -175,9 +175,9 @@ namespace YAT.View.Forms
 			this.comboBox_TxEol.Name = "comboBox_TxEol";
 			this.comboBox_TxEol.Size = new System.Drawing.Size(153, 21);
 			this.comboBox_TxEol.TabIndex = 1;
-			this.toolTip.SetToolTip(this.comboBox_TxEol, "Either select a preset from the list, or fill in any sequence of bytes, e.g. <ETB>" +
-        "<NUL> or \\h(17 00).\r\n\r\nContact YAT via \"Help > Request Feature\" to request addit" +
-        "ional presets.");
+			this.toolTip.SetToolTip(this.comboBox_TxEol, "Either select a preset from the list, or fill in any sequence of bytes, e.g. <ETB" +
+        "><NUL> or \\h(17 00).\r\n\r\nContact YAT via \"Help > Request Feature\" to request addi" +
+        "tional presets.");
 			this.comboBox_TxEol.SelectedIndexChanged += new System.EventHandler(this.comboBox_TxEol_SelectedIndexChanged);
 			this.comboBox_TxEol.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_TxEol_Validating);
 			// 
@@ -200,27 +200,27 @@ namespace YAT.View.Forms
 			this.comboBox_Encoding.TabIndex = 1;
 			this.comboBox_Encoding.SelectedIndexChanged += new System.EventHandler(this.comboBox_Encoding_SelectedIndexChanged);
 			// 
-			// groupBox_SendSettings
+			// groupBox_Send
 			// 
-			this.groupBox_SendSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.groupBox_Send.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-			this.groupBox_SendSettings.Controls.Add(this.groupBox_Comments);
-			this.groupBox_SendSettings.Controls.Add(this.groupBox_Substitute);
-			this.groupBox_SendSettings.Controls.Add(this.checkBox_WaitForResponse);
-			this.groupBox_SendSettings.Controls.Add(this.textBox_DelayInterval);
-			this.groupBox_SendSettings.Controls.Add(this.label_WaitForResponse);
-			this.groupBox_SendSettings.Controls.Add(this.label_WaitForResponseUnit);
-			this.groupBox_SendSettings.Controls.Add(this.label_DelayUnit);
-			this.groupBox_SendSettings.Controls.Add(this.textBox_WaitForResponse);
-			this.groupBox_SendSettings.Controls.Add(this.textBox_Delay);
-			this.groupBox_SendSettings.Controls.Add(this.label_DelayIntervalUnit);
-			this.groupBox_SendSettings.Controls.Add(this.checkBox_Delay);
-			this.groupBox_SendSettings.Location = new System.Drawing.Point(6, 187);
-			this.groupBox_SendSettings.Name = "groupBox_SendSettings";
-			this.groupBox_SendSettings.Size = new System.Drawing.Size(272, 374);
-			this.groupBox_SendSettings.TabIndex = 3;
-			this.groupBox_SendSettings.TabStop = false;
-			this.groupBox_SendSettings.Text = "Send Settings";
+			this.groupBox_Send.Controls.Add(this.groupBox_Comments);
+			this.groupBox_Send.Controls.Add(this.groupBox_Substitute);
+			this.groupBox_Send.Controls.Add(this.checkBox_WaitForResponse);
+			this.groupBox_Send.Controls.Add(this.textBox_DelayInterval);
+			this.groupBox_Send.Controls.Add(this.label_WaitForResponse);
+			this.groupBox_Send.Controls.Add(this.label_WaitForResponseUnit);
+			this.groupBox_Send.Controls.Add(this.label_DelayUnit);
+			this.groupBox_Send.Controls.Add(this.textBox_WaitForResponse);
+			this.groupBox_Send.Controls.Add(this.textBox_Delay);
+			this.groupBox_Send.Controls.Add(this.label_DelayIntervalUnit);
+			this.groupBox_Send.Controls.Add(this.checkBox_Delay);
+			this.groupBox_Send.Location = new System.Drawing.Point(6, 187);
+			this.groupBox_Send.Name = "groupBox_Send";
+			this.groupBox_Send.Size = new System.Drawing.Size(272, 374);
+			this.groupBox_Send.TabIndex = 3;
+			this.groupBox_Send.TabStop = false;
+			this.groupBox_Send.Text = "Send Settings";
 			// 
 			// groupBox_Comments
 			// 
@@ -243,7 +243,7 @@ namespace YAT.View.Forms
 			this.checkBox_SkipEolCommentWhiteSpace.AutoSize = true;
 			this.checkBox_SkipEolCommentWhiteSpace.Location = new System.Drawing.Point(10, 160);
 			this.checkBox_SkipEolCommentWhiteSpace.Name = "checkBox_SkipEolCommentWhiteSpace";
-			this.checkBox_SkipEolCommentWhiteSpace.Size = new System.Drawing.Size(193, 17);
+			this.checkBox_SkipEolCommentWhiteSpace.Size = new System.Drawing.Size(190, 17);
 			this.checkBox_SkipEolCommentWhiteSpace.TabIndex = 3;
 			this.checkBox_SkipEolCommentWhiteSpace.Text = "Omit whitespaces before indicators";
 			this.checkBox_SkipEolCommentWhiteSpace.CheckedChanged += new System.EventHandler(this.checkBox_SkipEolCommentWhiteSpace_CheckedChanged);
@@ -452,10 +452,10 @@ namespace YAT.View.Forms
 			this.Shown += new System.EventHandler(this.TextTerminalSettings_Shown);
 			this.groupBox_Settings.ResumeLayout(false);
 			this.groupBox_Settings.PerformLayout();
-			this.groupBox1.ResumeLayout(false);
-			this.groupBox1.PerformLayout();
-			this.groupBox_SendSettings.ResumeLayout(false);
-			this.groupBox_SendSettings.PerformLayout();
+			this.groupBox_Eol.ResumeLayout(false);
+			this.groupBox_Eol.PerformLayout();
+			this.groupBox_Send.ResumeLayout(false);
+			this.groupBox_Send.PerformLayout();
 			this.groupBox_Comments.ResumeLayout(false);
 			this.groupBox_Comments.PerformLayout();
 			this.groupBox_Substitute.ResumeLayout(false);
@@ -472,7 +472,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.Button button_Defaults;
 		private System.Windows.Forms.Label label_Encoding;
 		private System.Windows.Forms.ComboBox comboBox_Encoding;
-		private System.Windows.Forms.GroupBox groupBox_SendSettings;
+		private System.Windows.Forms.GroupBox groupBox_Send;
 		private System.Windows.Forms.GroupBox groupBox_Substitute;
 		private System.Windows.Forms.RadioButton radioButton_SubstituteToLower;
 		private System.Windows.Forms.RadioButton radioButton_SubstituteToUpper;
@@ -486,7 +486,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.Label label_WaitForResponse;
 		private System.Windows.Forms.Label label_WaitForResponseUnit;
 		private System.Windows.Forms.TextBox textBox_WaitForResponse;
-		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.GroupBox groupBox_Eol;
 		private System.Windows.Forms.CheckBox checkBox_ShowEol;
 		private System.Windows.Forms.CheckBox checkBox_SeparateTxRxEol;
 		private System.Windows.Forms.ComboBox comboBox_RxEol;

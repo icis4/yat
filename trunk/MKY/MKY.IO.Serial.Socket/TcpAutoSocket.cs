@@ -848,14 +848,28 @@ namespace MKY.IO.Serial.Socket
 				case SocketState.Connecting:
 				case SocketState.ConnectingFailed:
 				{
-					DisposeClient();                  // In case of error during startup,
-					StartListening();                 //   try to start as server.
+					DisposeClient();                // In case of error during startup,
+					StartListening();               //   try to start as server.
 					break;
 				}
+
 				case SocketState.Connected:
 				{
-					DisposeClient();                  // In case of error during client operation,
-					StartConnecting();                //   restart AutoSocket.
+					if (e.Severity == ErrorSeverity.Acceptable)
+					{
+						DisposeClient();            // In case of error during client operation,
+						StartConnecting();          //   restart AutoSocket.
+					}
+					else
+					{
+						OnIOError(e);
+					}
+					break;
+				}
+
+				default:
+				{
+					OnIOError(e);
 					break;
 				}
 			}
@@ -985,16 +999,30 @@ namespace MKY.IO.Serial.Socket
 		{
 			switch (GetStateSynchronized())
 			{
-				case SocketState.StartingListening:   // In case of error during startup,
-				{                                     //   increment start cycles and
-					RequestTryAgain();                //   continue depending on count
+				case SocketState.StartingListening: // In case of error during startup,
+				{                                   //   increment start cycles and
+					RequestTryAgain();              //   continue depending on count
 					break;
 				}
+
 				case SocketState.Listening:
 				case SocketState.Accepted:
 				{
-					DisposeServer();                  // In case of error during server operation,
-					StartConnecting();                //   restart AutoSocket
+					if (e.Severity == ErrorSeverity.Acceptable)
+					{
+						DisposeServer();            // In case of error during server operation,
+						StartConnecting();          //   restart AutoSocket
+					}
+					else
+					{
+						OnIOError(e);
+					}
+					break;
+				}
+
+				default:
+				{
+					OnIOError(e);
 					break;
 				}
 			}

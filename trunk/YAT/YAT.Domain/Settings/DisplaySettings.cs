@@ -61,6 +61,9 @@ namespace YAT.Domain.Settings
 		public const int MaxLineCountDefault = 1000;
 
 		/// <summary></summary>
+		public const int MaxBytePerLineCountDefault = 1000;
+
+		/// <summary></summary>
 		public const bool PortLineBreakEnabledDefault = true;
 
 		/// <summary></summary>
@@ -82,8 +85,8 @@ namespace YAT.Domain.Settings
 		private bool showPort;
 		private bool showDirection;
 		private bool showLength;
-		private int txMaxLineCount;
-		private int rxMaxLineCount;
+		private int maxLineCount;
+		private int maxBytePerLineCount;
 
 		private bool portLineBreakEnabled;
 		private bool directionLineBreakEnabled;
@@ -117,18 +120,18 @@ namespace YAT.Domain.Settings
 		public DisplaySettings(DisplaySettings rhs)
 			: base(rhs)
 		{
-			SeparateTxRxRadix = rhs.SeparateTxRxRadix;
-			TxRadix           = rhs.TxRadix;
-			RxRadix           = rhs.RxRadix;
-			ShowRadix         = rhs.ShowRadix;
-			ShowLineNumbers   = rhs.ShowLineNumbers;
-			ShowDate          = rhs.ShowDate;
-			ShowTime          = rhs.ShowTime;
-			ShowPort          = rhs.ShowPort;
-			ShowDirection     = rhs.ShowDirection;
-			ShowLength        = rhs.ShowLength;
-			TxMaxLineCount    = rhs.TxMaxLineCount;
-			RxMaxLineCount    = rhs.RxMaxLineCount;
+			SeparateTxRxRadix   = rhs.SeparateTxRxRadix;
+			TxRadix             = rhs.TxRadix;
+			RxRadix             = rhs.RxRadix;
+			ShowRadix           = rhs.ShowRadix;
+			ShowLineNumbers     = rhs.ShowLineNumbers;
+			ShowDate            = rhs.ShowDate;
+			ShowTime            = rhs.ShowTime;
+			ShowPort            = rhs.ShowPort;
+			ShowDirection       = rhs.ShowDirection;
+			ShowLength          = rhs.ShowLength;
+			MaxLineCount        = rhs.MaxLineCount;
+			MaxBytePerLineCount = rhs.MaxBytePerLineCount;
 
 			PortLineBreakEnabled      = rhs.PortLineBreakEnabled;
 			DirectionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
@@ -146,18 +149,18 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			SeparateTxRxRadix = SeparateTxRxRadixDefault;
-			TxRadix           = RadixDefault;
-			RxRadix           = RadixDefault;
-			ShowRadix         = ShowRadixDefault;
-			ShowLineNumbers   = ShowLineNumbersDefault;
-			ShowDate          = ShowDateDefault;
-			ShowTime          = ShowTimeDefault;
-			ShowPort          = ShowPortDefault;
-			ShowDirection     = ShowDirectionDefault;
-			ShowLength        = ShowLengthDefault;
-			TxMaxLineCount    = MaxLineCountDefault;
-			RxMaxLineCount    = MaxLineCountDefault;
+			SeparateTxRxRadix   = SeparateTxRxRadixDefault;
+			TxRadix             = RadixDefault;
+			RxRadix             = RadixDefault;
+			ShowRadix           = ShowRadixDefault;
+			ShowLineNumbers     = ShowLineNumbersDefault;
+			ShowDate            = ShowDateDefault;
+			ShowTime            = ShowTimeDefault;
+			ShowPort            = ShowPortDefault;
+			ShowDirection       = ShowDirectionDefault;
+			ShowLength          = ShowLengthDefault;
+			MaxLineCount        = MaxLineCountDefault;
+			MaxBytePerLineCount = MaxBytePerLineCountDefault;
 
 			PortLineBreakEnabled      = PortLineBreakEnabledDefault;
 			DirectionLineBreakEnabled = DirectionLineBreakEnabledDefault;
@@ -328,46 +331,43 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("TxMaxLineCount")]
-		public virtual int TxMaxLineCount
+		[XmlElement("MaxLineCount")]
+		public virtual int MaxLineCount
 		{
-			get { return (this.txMaxLineCount); }
+			get { return (this.maxLineCount); }
 			set
 			{
-				if (this.txMaxLineCount != value)
+				if (this.maxLineCount != value)
 				{
 					if (value < 1)
 						throw (new ArgumentOutOfRangeException("value", value, "Line count must at least be 1."));
 
-					this.txMaxLineCount = value;
+					this.maxLineCount = value;
 					SetChanged();
 				}
 			}
 		}
 
-		/// <summary></summary>
-		[XmlElement("RxMaxLineCount")]
-		public virtual int RxMaxLineCount
+		/// <remarks>
+		/// Required to keep monitor update performance at a decent level. In case of very long
+		/// lines, redrawing of a list box item may take way too long! It even looks as if there
+		/// is a recursion within 'mscorlib.dll'.
+		/// </remarks>
+		[XmlElement("MaxBytePerLineCount")]
+		public virtual int MaxBytePerLineCount
 		{
-			get { return (this.rxMaxLineCount); }
+			get { return (this.maxBytePerLineCount); }
 			set
 			{
-				if (this.rxMaxLineCount != value)
+				if (this.maxBytePerLineCount != value)
 				{
 					if (value < 1)
-						throw (new ArgumentOutOfRangeException("value", value, "Line count must at least be 1."));
+						throw (new ArgumentOutOfRangeException("value", value, "Byte per line count must at least be 1."));
 
-					this.rxMaxLineCount = value;
+					this.maxBytePerLineCount = value;
 					SetChanged();
 				}
 			}
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
-		public virtual int BidirMaxLineCount
-		{
-			get { return (TxMaxLineCount + RxMaxLineCount); }
 		}
 
 		/// <summary></summary>
@@ -506,18 +506,18 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(SeparateTxRxRadix == other.SeparateTxRxRadix) &&
-				(TxRadix           == other.TxRadix) &&
-				(RxRadix           == other.RxRadix) &&
-				(ShowRadix         == other.ShowRadix) &&
-				(ShowLineNumbers   == other.ShowLineNumbers) &&
-				(ShowDate          == other.ShowDate) &&
-				(ShowTime          == other.ShowTime) &&
-				(ShowPort          == other.ShowPort) &&
-				(ShowDirection     == other.ShowDirection) &&
-				(ShowLength        == other.ShowLength) &&
-				(TxMaxLineCount    == other.TxMaxLineCount) &&
-				(RxMaxLineCount    == other.rxMaxLineCount) &&
+				(SeparateTxRxRadix   == other.SeparateTxRxRadix) &&
+				(TxRadix             == other.TxRadix) &&
+				(RxRadix             == other.RxRadix) &&
+				(ShowRadix           == other.ShowRadix) &&
+				(ShowLineNumbers     == other.ShowLineNumbers) &&
+				(ShowDate            == other.ShowDate) &&
+				(ShowTime            == other.ShowTime) &&
+				(ShowPort            == other.ShowPort) &&
+				(ShowDirection       == other.ShowDirection) &&
+				(ShowLength          == other.ShowLength) &&
+				(MaxLineCount        == other.MaxLineCount) &&
+				(MaxBytePerLineCount == other.MaxBytePerLineCount) &&
 
 				(PortLineBreakEnabled      == other.PortLineBreakEnabled) &&
 				(DirectionLineBreakEnabled == other.DirectionLineBreakEnabled) &&
@@ -540,18 +540,18 @@ namespace YAT.Domain.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ SeparateTxRxRadix.GetHashCode();
-				hashCode = (hashCode * 397) ^ TxRadix          .GetHashCode();
-				hashCode = (hashCode * 397) ^ RxRadix          .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowRadix        .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowLineNumbers  .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowDate         .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowTime         .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowPort         .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowDirection    .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowLength       .GetHashCode();
-				hashCode = (hashCode * 397) ^ TxMaxLineCount   .GetHashCode();
-				hashCode = (hashCode * 397) ^ RxMaxLineCount   .GetHashCode();
+				hashCode = (hashCode * 397) ^ SeparateTxRxRadix  .GetHashCode();
+				hashCode = (hashCode * 397) ^ TxRadix            .GetHashCode();
+				hashCode = (hashCode * 397) ^ RxRadix            .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowRadix          .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowLineNumbers    .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowDate           .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowTime           .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowPort           .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowDirection      .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowLength         .GetHashCode();
+				hashCode = (hashCode * 397) ^ MaxLineCount       .GetHashCode();
+				hashCode = (hashCode * 397) ^ MaxBytePerLineCount.GetHashCode();
 
 				hashCode = (hashCode * 397) ^ PortLineBreakEnabled     .GetHashCode();
 				hashCode = (hashCode * 397) ^ DirectionLineBreakEnabled.GetHashCode();

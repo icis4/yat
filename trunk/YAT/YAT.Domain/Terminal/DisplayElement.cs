@@ -489,7 +489,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		private DisplayElement(Direction direction, byte[] origin, string text, int dataCount)
 		{
-			List<Pair<byte[], string>> l = new List<Pair<byte[], string>>(1); // Preset the required capactiy to improve memory management.
+			List<Pair<byte[], string>> l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
 			l.Add(new Pair<byte[], string>(origin, text));
 			Initialize(direction, l, text, dataCount, ModifierFlags.Data);
 		}

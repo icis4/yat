@@ -336,11 +336,10 @@ namespace YAT.View.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				int lineCount;
-				if (int.TryParse(textBox_MaxLineCount.Text, out lineCount) && (lineCount >= 1))
+				int count;
+				if (int.TryParse(textBox_MaxLineCount.Text, out count) && (count >= 1))
 				{
-					this.settingsInEdit.Terminal.Display.TxMaxLineCount = lineCount;
-					this.settingsInEdit.Terminal.Display.RxMaxLineCount = lineCount;
+					this.settingsInEdit.Terminal.Display.MaxLineCount = count;
 				}
 				else
 				{
@@ -348,6 +347,41 @@ namespace YAT.View.Forms
 					(
 						this,
 						"There must be at least 1 line displayed!",
+						"Invalid Input",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+					);
+
+					e.Cancel = true;
+				}
+			}
+		}
+
+		private void textBox_MaxBytePerLineCount_TextChanged(object sender, EventArgs e)
+		{
+			int bytes;
+			if (int.TryParse(textBox_MaxBytePerLineCount.Text, out bytes) && (Math.Abs(bytes) == 1))
+				label_MaxBytePerLineCountUnit.Text = "byte per line";
+			else
+				label_MaxBytePerLineCountUnit.Text = "bytes per line";
+		}
+
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		private void textBox_MaxBytePerLineCount_Validating(object sender, CancelEventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				int count;
+				if (int.TryParse(textBox_MaxBytePerLineCount.Text, out count) && (count >= 1))
+				{
+					this.settingsInEdit.Terminal.Display.MaxBytePerLineCount = count;
+				}
+				else
+				{
+					MessageBoxEx.Show
+					(
+						this,
+						"There must be at least 1 byte displayed!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -883,7 +917,8 @@ namespace YAT.View.Forms
 
 			checkBox_PortLineBreak.Checked      = this.settingsInEdit.Terminal.Display.PortLineBreakEnabled;
 			checkBox_DirectionLineBreak.Checked = this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled;
-			textBox_MaxLineCount.Text           = this.settingsInEdit.Terminal.Display.TxMaxLineCount.ToString(CultureInfo.CurrentCulture);
+			textBox_MaxLineCount.Text           = this.settingsInEdit.Terminal.Display.MaxLineCount.ToString(CultureInfo.CurrentCulture);
+			textBox_MaxBytePerLineCount.Text    = this.settingsInEdit.Terminal.Display.MaxBytePerLineCount.ToString(CultureInfo.CurrentCulture);
 
 			// Char replace:
 			bool replaceControlChars                    = this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars;
@@ -990,8 +1025,8 @@ namespace YAT.View.Forms
 
 			this.settingsInEdit.Terminal.Display.PortLineBreakEnabled      = Domain.Settings.DisplaySettings.PortLineBreakEnabledDefault;
 			this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = Domain.Settings.DisplaySettings.DirectionLineBreakEnabledDefault;
-			this.settingsInEdit.Terminal.Display.TxMaxLineCount            = Domain.Settings.DisplaySettings.MaxLineCountDefault;
-			this.settingsInEdit.Terminal.Display.RxMaxLineCount            = Domain.Settings.DisplaySettings.MaxLineCountDefault;
+			this.settingsInEdit.Terminal.Display.MaxLineCount              = Domain.Settings.DisplaySettings.MaxLineCountDefault;
+			this.settingsInEdit.Terminal.Display.MaxBytePerLineCount       = Domain.Settings.DisplaySettings.MaxBytePerLineCountDefault;
 
 			// Char replace:
 			this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsDefault;

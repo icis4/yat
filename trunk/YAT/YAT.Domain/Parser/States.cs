@@ -185,7 +185,7 @@ namespace YAT.Domain.Parser
 			{
 				this.contiguousWriter.Write((char)parseChar);
 
-				if (!parser.IsKeywordParser)
+				if (parser.DoProbe)
 				{   // Continuously probe the contiguous string to provide better error message:
 					if (!ProbeContiguous(parser, ref formatException))
 						return (false);

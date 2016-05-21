@@ -2690,9 +2690,9 @@ namespace YAT.View.Forms
 
 		private void SetMonitorLineCount()
 		{
-			monitor_Tx.MaxLineCount    = this.settingsRoot.Display.TxMaxLineCount;
-			monitor_Bidir.MaxLineCount = this.settingsRoot.Display.BidirMaxLineCount;
-			monitor_Rx.MaxLineCount    = this.settingsRoot.Display.RxMaxLineCount;
+			monitor_Tx.MaxLineCount    = this.settingsRoot.Display.MaxLineCount;
+			monitor_Bidir.MaxLineCount = this.settingsRoot.Display.MaxLineCount;
+			monitor_Rx.MaxLineCount    = this.settingsRoot.Display.MaxLineCount;
 		}
 
 		private void SetMonitorLineNumbers()
