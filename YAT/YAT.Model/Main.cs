@@ -83,25 +83,28 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public event EventHandler<WorkspaceEventArgs> WorkspaceOpened;
+		public event EventHandler<EventArgs<Workspace>> WorkspaceOpened;
 
 		/// <summary></summary>
-		public event EventHandler WorkspaceClosed;
+		public event EventHandler<ClosedEventArgs> WorkspaceClosed;
 
 		/// <summary></summary>
-		public event EventHandler<StatusTextEventArgs> FixedStatusTextRequest;
+		public event EventHandler<EventArgs<string>> FixedStatusTextRequest;
 
 		/// <summary></summary>
-		public event EventHandler<StatusTextEventArgs> TimedStatusTextRequest;
+		public event EventHandler<EventArgs<string>> TimedStatusTextRequest;
 
 		/// <summary></summary>
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
 
 		/// <summary></summary>
+		public event EventHandler<EventArgs<Cursor>> CursorRequest;
+
+		/// <summary></summary>
 		public event EventHandler Started;
 
 		/// <summary></summary>
-		public event EventHandler<ExitEventArgs> Exited;
+		public event EventHandler<EventArgs<MainResult>> Exited;
 
 		#endregion
 
@@ -406,7 +409,7 @@ namespace YAT.Model
 
 			if (success)
 			{
-				OnStarted(EventArgs.Empty);
+				OnStarted();
 				return (MainResult.Success);
 			}
 			else
@@ -1027,7 +1030,7 @@ namespace YAT.Model
 				{
 					this.workspace.StartAllTerminals(); // Don't care about success, workspace itself is fine.
 
-					OnStarted(EventArgs.Empty);
+					OnStarted();
 					return (true);
 				}
 
@@ -1050,7 +1053,7 @@ namespace YAT.Model
 					if (this.workspace.ActiveTerminal.Start())
 					{
 						if (newWorkspaceSoSignalStarted)
-							OnStarted(EventArgs.Empty);
+							OnStarted();
 						
 						return (true);
 					}
@@ -1131,7 +1134,7 @@ namespace YAT.Model
 				OnFixedStatusTextRequest("Exiting " + ApplicationEx.ProductName + "...");
 
 				// Signal the exit:
-				OnExited(new ExitEventArgs(this.result));
+				OnExited(this.result);
 
 				// Ensure that all resources get disposed of:
 				Dispose();
@@ -1164,8 +1167,8 @@ namespace YAT.Model
 		{
 			if (this.workspace != null)
 			{
-				this.workspace.Saved  += new EventHandler<SavedEventArgs> (workspace_Saved);
-				this.workspace.Closed += new EventHandler<ClosedEventArgs>(workspace_Closed);
+				this.workspace.Saved  += workspace_Saved;
+				this.workspace.Closed += workspace_Closed;
 			}
 		}
 
@@ -1173,8 +1176,8 @@ namespace YAT.Model
 		{
 			if (this.workspace != null)
 			{
-				this.workspace.Saved  -= new EventHandler<SavedEventArgs> (workspace_Saved);
-				this.workspace.Closed -= new EventHandler<ClosedEventArgs>(workspace_Closed);
+				this.workspace.Saved  -= workspace_Saved;
+				this.workspace.Closed -= workspace_Closed;
 			}
 		}
 
@@ -1229,11 +1232,13 @@ namespace YAT.Model
 
 			// Create new workspace:
 			OnFixedStatusTextRequest("Creating new workspace...");
+			OnCursorRequest(Cursors.WaitCursor);
 
 			this.workspace = new Workspace(this.startArgs.ToWorkspaceStartArgs());
 			AttachWorkspaceEventHandlers();
-			OnWorkspaceOpened(new WorkspaceEventArgs(this.workspace));
+			OnWorkspaceOpened(this.workspace);
 
+			OnCursorReset();
 			OnTimedStatusTextRequest("New workspace created.");
 
 			return (true);
@@ -1246,14 +1251,17 @@ namespace YAT.Model
 
 			string fileName = Path.GetFileName(filePath);
 			OnFixedStatusTextRequest("Opening workspace " + fileName + "...");
+			OnCursorRequest(Cursors.WaitCursor);
 
 			string errorMessage;
 			if (OpenWorkspaceFromFile(filePath, out errorMessage))
 			{
+				OnCursorReset();
 				return (true);
 			}
 			else
 			{
+				OnCursorReset();
 				OnFixedStatusTextRequest("Error opening workspace!");
 				OnMessageInputRequest
 				(
@@ -1357,7 +1365,7 @@ namespace YAT.Model
 			if (!settings.Settings.AutoSaved)
 				SetRecent(settings.SettingsFilePath);
 
-			OnWorkspaceOpened(new WorkspaceEventArgs(this.workspace));
+			OnWorkspaceOpened(this.workspace);
 			OnTimedStatusTextRequest("Workspace opened.");
 
 			// Open workspace terminals:
@@ -1415,13 +1423,6 @@ namespace YAT.Model
 			return (true);
 		}
 
-		private bool OpenWorkspaceFile(string filePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler)
-		{
-			Guid guid;
-			Exception exception;
-			return (OpenWorkspaceFile(filePath, out settingsHandler, out guid, out exception));
-		}
-
 		private bool OpenWorkspaceFile(string filePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, out Exception exception)
 		{
 			Guid guid;
@@ -1456,6 +1457,7 @@ namespace YAT.Model
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(GetType(), ex, "Failed to open workspace file!");
+
 				settingsHandler = null;
 				guid = Guid.Empty;
 				exception = ex;
@@ -1807,30 +1809,30 @@ namespace YAT.Model
 		// Event Invoking
 		//==========================================================================================
 
-		/// <summary></summary>
-		protected virtual void OnWorkspaceOpened(WorkspaceEventArgs e)
+		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		protected virtual void OnWorkspaceOpened(Workspace workspace)
 		{
-			EventHelper.FireSync<WorkspaceEventArgs>(WorkspaceOpened, this, e);
+			EventHelper.FireSync<EventArgs<Workspace>>(WorkspaceOpened, this, new EventArgs<Workspace>(workspace));
 		}
 
 		/// <summary></summary>
-		protected virtual void OnWorkspaceClosed(EventArgs e)
+		protected virtual void OnWorkspaceClosed(ClosedEventArgs e)
 		{
-			EventHelper.FireSync(WorkspaceClosed, this, e);
+			EventHelper.FireSync<ClosedEventArgs>(WorkspaceClosed, this, e);
 		}
 
-		/// <summary></summary>
+		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
-			EventHelper.FireSync<StatusTextEventArgs>(FixedStatusTextRequest, this, new StatusTextEventArgs(text));
+			EventHelper.FireSync<EventArgs<string>>(FixedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
-		/// <summary></summary>
+		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
-			EventHelper.FireSync<StatusTextEventArgs>(TimedStatusTextRequest, this, new StatusTextEventArgs(text));
+			EventHelper.FireSync<EventArgs<string>>(TimedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
 		/// <summary></summary>
@@ -1839,6 +1841,8 @@ namespace YAT.Model
 			if (this.startArgs.Interactive)
 			{
 				DebugMessage(text);
+
+				OnCursorReset(); // Just in case...
 
 				MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
 				EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
@@ -1855,16 +1859,28 @@ namespace YAT.Model
 			}
 		}
 
-		/// <summary></summary>
-		protected virtual void OnStarted(EventArgs e)
+		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		protected virtual void OnCursorRequest(Cursor cursor)
 		{
-			EventHelper.FireSync(Started, this, e);
+			EventHelper.FireSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));
 		}
 
 		/// <summary></summary>
-		protected virtual void OnExited(ExitEventArgs e)
+		protected virtual void OnCursorReset()
 		{
-			EventHelper.FireSync<ExitEventArgs>(Exited, this, e);
+			OnCursorRequest(Cursors.Default);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnStarted()
+		{
+			EventHelper.FireSync(Started, this, EventArgs.Empty);
+		}
+
+		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		protected virtual void OnExited(MainResult result)
+		{
+			EventHelper.FireSync<EventArgs<MainResult>>(Exited, this, new EventArgs<MainResult>(result));
 		}
 
 		#endregion

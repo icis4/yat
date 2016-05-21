@@ -1482,13 +1482,13 @@ namespace YAT.View.Forms
 		private void AttachLocalUserSettingsEventHandlers()
 		{
 			if (this.localUserSettingsRoot != null)
-				this.localUserSettingsRoot.Changed += new EventHandler<SettingsEventArgs>(localUserSettingsRoot_Changed);
+				this.localUserSettingsRoot.Changed += localUserSettingsRoot_Changed;
 		}
 
 		private void DetachLocalUserSettingsEventHandlers()
 		{
 			if (this.localUserSettingsRoot != null)
-				this.localUserSettingsRoot.Changed -= new EventHandler<SettingsEventArgs>(localUserSettingsRoot_Changed);
+				this.localUserSettingsRoot.Changed -= localUserSettingsRoot_Changed;
 		}
 
 		private void localUserSettingsRoot_Changed(object sender, SettingsEventArgs e)
@@ -1512,14 +1512,15 @@ namespace YAT.View.Forms
 		{
 			if (this.main != null)
 			{
-				this.main.WorkspaceOpened += new EventHandler<Model.WorkspaceEventArgs>(main_WorkspaceOpened);
-				this.main.WorkspaceClosed += new EventHandler(main_WorkspaceClosed);
+				this.main.WorkspaceOpened += main_WorkspaceOpened;
+				this.main.WorkspaceClosed += main_WorkspaceClosed;
 
-				this.main.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(main_FixedStatusTextRequest);
-				this.main.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(main_TimedStatusTextRequest);
-				this.main.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(main_MessageInputRequest);
+				this.main.FixedStatusTextRequest += main_FixedStatusTextRequest;
+				this.main.TimedStatusTextRequest += main_TimedStatusTextRequest;
+				this.main.MessageInputRequest    += main_MessageInputRequest;
+				this.main.CursorRequest          += main_CursorRequest;
 
-				this.main.Exited += new EventHandler<Model.ExitEventArgs>(main_Exited);
+				this.main.Exited += main_Exited;
 			}
 		}
 
@@ -1527,14 +1528,15 @@ namespace YAT.View.Forms
 		{
 			if (this.main != null)
 			{
-				this.main.WorkspaceOpened -= new EventHandler<Model.WorkspaceEventArgs>(main_WorkspaceOpened);
-				this.main.WorkspaceClosed -= new EventHandler(main_WorkspaceClosed);
+				this.main.WorkspaceOpened -= main_WorkspaceOpened;
+				this.main.WorkspaceClosed -= main_WorkspaceClosed;
 
-				this.main.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(main_FixedStatusTextRequest);
-				this.main.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(main_TimedStatusTextRequest);
-				this.main.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(main_MessageInputRequest);
+				this.main.FixedStatusTextRequest -= main_FixedStatusTextRequest;
+				this.main.TimedStatusTextRequest -= main_TimedStatusTextRequest;
+				this.main.MessageInputRequest    -= main_MessageInputRequest;
+				this.main.CursorRequest          -= main_CursorRequest;
 
-				this.main.Exited -= new EventHandler<Model.ExitEventArgs>(main_Exited);
+				this.main.Exited -= main_Exited;
 			}
 		}
 
@@ -1545,9 +1547,9 @@ namespace YAT.View.Forms
 		// Main > Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		private void main_WorkspaceOpened(object sender, Model.WorkspaceEventArgs e)
+		private void main_WorkspaceOpened(object sender, EventArgs<Model.Workspace> e)
 		{
-			this.workspace = e.Workspace;
+			this.workspace = e.Value;
 			AttachWorkspaceEventHandlers();
 
 			SetWorkspaceControls();
@@ -1561,14 +1563,14 @@ namespace YAT.View.Forms
 			SetWorkspaceControls();
 		}
 
-		private void main_TimedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
+		private void main_TimedStatusTextRequest(object sender, EventArgs<string> e)
 		{
-			SetTimedStatusText(e.Text);
+			SetTimedStatusText(e.Value);
 		}
 
-		private void main_FixedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
+		private void main_FixedStatusTextRequest(object sender, EventArgs<string> e)
 		{
-			SetFixedStatusText(e.Text);
+			SetFixedStatusText(e.Value);
 		}
 
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
@@ -1579,9 +1581,15 @@ namespace YAT.View.Forms
 			e.Result = dr;
 		}
 
-		private void main_Exited(object sender, Model.ExitEventArgs e)
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		private void main_CursorRequest(object sender, EventArgs<Cursor> e)
 		{
-			this.result = e.Result;
+			Cursor = e.Value;
+		}
+
+		private void main_Exited(object sender, EventArgs<Model.MainResult> e)
+		{
+			this.result = e.Value;
 
 			// Prevent multiple calls to Close():
 			if (this.closingState == ClosingState.None)
@@ -1946,19 +1954,20 @@ namespace YAT.View.Forms
 		{
 			if (this.workspace != null)
 			{
-				this.workspace.TerminalAdded   += new EventHandler<Model.TerminalEventArgs>(workspace_TerminalAdded);
-				this.workspace.TerminalRemoved += new EventHandler<Model.TerminalEventArgs>(workspace_TerminalRemoved);
+				this.workspace.TerminalAdded   += workspace_TerminalAdded;
+				this.workspace.TerminalRemoved += workspace_TerminalRemoved;
 
-				this.workspace.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(workspace_TimedStatusTextRequest);
-				this.workspace.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(workspace_FixedStatusTextRequest);
-				this.workspace.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(workspace_MessageInputRequest);
+				this.workspace.TimedStatusTextRequest += workspace_TimedStatusTextRequest;
+				this.workspace.FixedStatusTextRequest += workspace_FixedStatusTextRequest;
+				this.workspace.MessageInputRequest    += workspace_MessageInputRequest;
 
-				this.workspace.SaveAsFileDialogRequest += new EventHandler<Model.DialogEventArgs>(workspace_SaveAsFileDialogRequest);
+				this.workspace.SaveAsFileDialogRequest += workspace_SaveAsFileDialogRequest;
+				this.workspace.CursorRequest           += workspace_CursorRequest;
 				
-				this.workspace.Closed += new EventHandler<Model.ClosedEventArgs>(workspace_Closed);
+				this.workspace.Closed += workspace_Closed;
 
 				if (this.workspace.SettingsRoot != null)
-					this.workspace.SettingsRoot.Changed += new EventHandler<SettingsEventArgs>(workspaceSettingsRoot_Changed);
+					this.workspace.SettingsRoot.Changed += workspaceSettingsRoot_Changed;
 			}
 		}
 
@@ -1966,19 +1975,20 @@ namespace YAT.View.Forms
 		{
 			if (this.workspace != null)
 			{
-				this.workspace.TerminalAdded   -= new EventHandler<Model.TerminalEventArgs>(workspace_TerminalAdded);
-				this.workspace.TerminalRemoved -= new EventHandler<Model.TerminalEventArgs>(workspace_TerminalRemoved);
+				this.workspace.TerminalAdded   -= workspace_TerminalAdded;
+				this.workspace.TerminalRemoved -= workspace_TerminalRemoved;
 
-				this.workspace.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(workspace_TimedStatusTextRequest);
-				this.workspace.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(workspace_FixedStatusTextRequest);
-				this.workspace.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(workspace_MessageInputRequest);
+				this.workspace.TimedStatusTextRequest -= workspace_TimedStatusTextRequest;
+				this.workspace.FixedStatusTextRequest -= workspace_FixedStatusTextRequest;
+				this.workspace.MessageInputRequest    -= workspace_MessageInputRequest;
 
-				this.workspace.SaveAsFileDialogRequest -= new EventHandler<Model.DialogEventArgs>(workspace_SaveAsFileDialogRequest);
+				this.workspace.SaveAsFileDialogRequest -= workspace_SaveAsFileDialogRequest;
+				this.workspace.CursorRequest           -= workspace_CursorRequest;
 
-				this.workspace.Closed -= new EventHandler<Model.ClosedEventArgs>(workspace_Closed);
+				this.workspace.Closed -= workspace_Closed;
 
 				if (this.workspace.SettingsRoot != null)
-					this.workspace.SettingsRoot.Changed -= new EventHandler<SettingsEventArgs>(workspaceSettingsRoot_Changed);
+					this.workspace.SettingsRoot.Changed -= workspaceSettingsRoot_Changed;
 			}
 		}
 
@@ -1993,11 +2003,11 @@ namespace YAT.View.Forms
 		/// Terminal is removed in <see cref="terminalMdiChild_FormClosed"/> event handler.
 		/// </remarks>
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
-		private void workspace_TerminalAdded(object sender, Model.TerminalEventArgs e)
+		private void workspace_TerminalAdded(object sender, EventArgs<Model.Terminal> e)
 		{
 			// Create terminal form and immediately show it:
 
-			Terminal mdiChild = new Terminal(e.Terminal);
+			Terminal mdiChild = new Terminal(e.Value);
 			AttachTerminalEventHandlersAndMdiChildToParent(mdiChild);
 
 			this.isLayoutingMdi = true;
@@ -2012,21 +2022,21 @@ namespace YAT.View.Forms
 		/// Terminal is removed in <see cref="terminalMdiChild_FormClosed"/> event handler.
 		/// </remarks>
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
-		private void workspace_TerminalRemoved(object sender, Model.TerminalEventArgs e)
+		private void workspace_TerminalRemoved(object sender, EventArgs<Model.Terminal> e)
 		{
 			// Nothing to do, see remarks above.
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
-		private void workspace_TimedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
+		private void workspace_TimedStatusTextRequest(object sender, EventArgs<string> e)
 		{
-			SetTimedStatusText(e.Text);
+			SetTimedStatusText(e.Value);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
-		private void workspace_FixedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
+		private void workspace_FixedStatusTextRequest(object sender, EventArgs<string> e)
 		{
-			SetFixedStatusText(e.Text);
+			SetFixedStatusText(e.Value);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
@@ -2040,6 +2050,12 @@ namespace YAT.View.Forms
 		private void workspace_SaveAsFileDialogRequest(object sender, Model.DialogEventArgs e)
 		{
 			e.Result = ShowSaveWorkspaceAsFileDialog();
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		private void workspace_CursorRequest(object sender, EventArgs<Cursor> e)
+		{
+			Cursor = e.Value;
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
@@ -2075,18 +2091,18 @@ namespace YAT.View.Forms
 		{
 			terminalMdiChild.MdiParent = this;
 
-			terminalMdiChild.Changed    += new EventHandler(terminalMdiChild_Changed);
-			terminalMdiChild.Saved      += new EventHandler<Model.SavedEventArgs>(terminalMdiChild_Saved);
-			terminalMdiChild.Resize     += new EventHandler(terminalMdiChild_Resize);
-			terminalMdiChild.FormClosed += new FormClosedEventHandler(terminalMdiChild_FormClosed);
+			terminalMdiChild.Changed    += terminalMdiChild_Changed;
+			terminalMdiChild.Saved      += terminalMdiChild_Saved;
+			terminalMdiChild.Resize     += terminalMdiChild_Resize;
+			terminalMdiChild.FormClosed += terminalMdiChild_FormClosed;
 		}
 
 		private void DetachTerminalEventHandlersAndMdiChildFromParent(Terminal terminalMdiChild)
 		{
-			terminalMdiChild.Changed    -= new EventHandler(terminalMdiChild_Changed);
-			terminalMdiChild.Saved      -= new EventHandler<Model.SavedEventArgs>(terminalMdiChild_Saved);
-			terminalMdiChild.Resize     -= new EventHandler(terminalMdiChild_Resize);
-			terminalMdiChild.FormClosed -= new FormClosedEventHandler(terminalMdiChild_FormClosed);
+			terminalMdiChild.Changed    -= terminalMdiChild_Changed;
+			terminalMdiChild.Saved      -= terminalMdiChild_Saved;
+			terminalMdiChild.Resize     -= terminalMdiChild_Resize;
+			terminalMdiChild.FormClosed -= terminalMdiChild_FormClosed;
 
 			// Do not set terminalMdiChild.MdiParent to null. Doing so results in a detached non-
 			// MDI-form which appears for a short moment at the default startup location of windows.

@@ -3106,13 +3106,13 @@ namespace YAT.View.Forms
 		private void AttachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
-				this.settingsRoot.Changed += new EventHandler<SettingsEventArgs>(settingsRoot_Changed);
+				this.settingsRoot.Changed += settingsRoot_Changed;
 		}
 
 		private void DetachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
-				this.settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(settingsRoot_Changed);
+				this.settingsRoot.Changed -= settingsRoot_Changed;
 		}
 
 		#endregion
@@ -3277,27 +3277,27 @@ namespace YAT.View.Forms
 		{
 			if (this.terminal != null)
 			{
-				this.terminal.IOChanged            += new EventHandler(terminal_IOChanged);
-				this.terminal.IOControlChanged     += new EventHandler(terminal_IOControlChanged);
-				this.terminal.IOConnectTimeChanged += new EventHandler<TimeSpanEventArgs>(terminal_IOConnectTimeChanged);
-				this.terminal.IOCountChanged       += new EventHandler(terminal_IOCountChanged);
-				this.terminal.IORateChanged        += new EventHandler(terminal_IORateChanged);
-				this.terminal.IOError              += new EventHandler<Domain.IOErrorEventArgs>(terminal_IOError);
+				this.terminal.IOChanged            += terminal_IOChanged;
+				this.terminal.IOControlChanged     += terminal_IOControlChanged;
+				this.terminal.IOConnectTimeChanged += terminal_IOConnectTimeChanged;
+				this.terminal.IOCountChanged       += terminal_IOCountChanged;
+				this.terminal.IORateChanged        += terminal_IORateChanged;
+				this.terminal.IOError              += terminal_IOError;
 
-				this.terminal.DisplayElementsSent     += new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsSent);
-				this.terminal.DisplayElementsReceived += new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsReceived);
+				this.terminal.DisplayElementsSent     += terminal_DisplayElementsSent;
+				this.terminal.DisplayElementsReceived += terminal_DisplayElementsReceived;
 
-				this.terminal.RepositoryCleared  += new EventHandler<Domain.RepositoryEventArgs>(terminal_RepositoryCleared);
-				this.terminal.RepositoryReloaded += new EventHandler<Domain.RepositoryEventArgs>(terminal_RepositoryReloaded);
+				this.terminal.RepositoryCleared  += terminal_RepositoryCleared;
+				this.terminal.RepositoryReloaded += terminal_RepositoryReloaded;
 
-				this.terminal.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(terminal_TimedStatusTextRequest);
-				this.terminal.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(terminal_FixedStatusTextRequest);
-				this.terminal.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(terminal_MessageInputRequest);
+				this.terminal.TimedStatusTextRequest  += terminal_TimedStatusTextRequest;
+				this.terminal.FixedStatusTextRequest  += terminal_FixedStatusTextRequest;
+				this.terminal.MessageInputRequest     += terminal_MessageInputRequest;
+				this.terminal.SaveAsFileDialogRequest += terminal_SaveAsFileDialogRequest;
+				this.terminal.CursorRequest           += terminal_CursorRequest;
 
-				this.terminal.SaveAsFileDialogRequest += new EventHandler<Model.DialogEventArgs>(terminal_SaveAsFileDialogRequest);
-
-				this.terminal.Saved  += new EventHandler<Model.SavedEventArgs>(terminal_Saved);
-				this.terminal.Closed += new EventHandler<Model.ClosedEventArgs>(terminal_Closed);
+				this.terminal.Saved  += terminal_Saved;
+				this.terminal.Closed += terminal_Closed;
 			}
 		}
 
@@ -3305,27 +3305,27 @@ namespace YAT.View.Forms
 		{
 			if (this.terminal != null)
 			{
-				this.terminal.IOChanged            -= new EventHandler(terminal_IOChanged);
-				this.terminal.IOControlChanged     -= new EventHandler(terminal_IOControlChanged);
-				this.terminal.IOConnectTimeChanged -= new EventHandler<TimeSpanEventArgs>(terminal_IOConnectTimeChanged);
-				this.terminal.IOCountChanged       -= new EventHandler(terminal_IOCountChanged);
-				this.terminal.IORateChanged        -= new EventHandler(terminal_IORateChanged);
-				this.terminal.IOError              -= new EventHandler<Domain.IOErrorEventArgs>(terminal_IOError);
+				this.terminal.IOChanged            -= terminal_IOChanged;
+				this.terminal.IOControlChanged     -= terminal_IOControlChanged;
+				this.terminal.IOConnectTimeChanged -= terminal_IOConnectTimeChanged;
+				this.terminal.IOCountChanged       -= terminal_IOCountChanged;
+				this.terminal.IORateChanged        -= terminal_IORateChanged;
+				this.terminal.IOError              -= terminal_IOError;
 
-				this.terminal.DisplayElementsSent     -= new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsSent);
-				this.terminal.DisplayElementsReceived -= new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsReceived);
+				this.terminal.DisplayElementsSent     -= terminal_DisplayElementsSent;
+				this.terminal.DisplayElementsReceived -= terminal_DisplayElementsReceived;
 
-				this.terminal.RepositoryCleared  -= new EventHandler<Domain.RepositoryEventArgs>(terminal_RepositoryCleared);
-				this.terminal.RepositoryReloaded -= new EventHandler<Domain.RepositoryEventArgs>(terminal_RepositoryReloaded);
+				this.terminal.RepositoryCleared  -= terminal_RepositoryCleared;
+				this.terminal.RepositoryReloaded -= terminal_RepositoryReloaded;
 
-				this.terminal.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(terminal_TimedStatusTextRequest);
-				this.terminal.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(terminal_FixedStatusTextRequest);
-				this.terminal.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(terminal_MessageInputRequest);
+				this.terminal.TimedStatusTextRequest  -= terminal_TimedStatusTextRequest;
+				this.terminal.FixedStatusTextRequest  -= terminal_FixedStatusTextRequest;
+				this.terminal.MessageInputRequest     -= terminal_MessageInputRequest;
+				this.terminal.SaveAsFileDialogRequest -= terminal_SaveAsFileDialogRequest;
+				this.terminal.CursorRequest           -= terminal_CursorRequest;
 
-				this.terminal.SaveAsFileDialogRequest -= new EventHandler<Model.DialogEventArgs>(terminal_SaveAsFileDialogRequest);
-
-				this.terminal.Saved  -= new EventHandler<Model.SavedEventArgs>(terminal_Saved);
-				this.terminal.Closed -= new EventHandler<Model.ClosedEventArgs>(terminal_Closed);
+				this.terminal.Saved  -= terminal_Saved;
+				this.terminal.Closed -= terminal_Closed;
 			}
 		}
 
@@ -3474,9 +3474,9 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
-		private void terminal_RepositoryCleared(object sender, Domain.RepositoryEventArgs e)
+		private void terminal_RepositoryCleared(object sender, EventArgs<Domain.RepositoryType> e)
 		{
-			switch (e.Repository)
+			switch (e.Value)
 			{
 				case Domain.RepositoryType.Tx:    monitor_Tx.Clear();    break;
 				case Domain.RepositoryType.Bidir: monitor_Bidir.Clear(); break;
@@ -3485,9 +3485,9 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
-		private void terminal_RepositoryReloaded(object sender, Domain.RepositoryEventArgs e)
+		private void terminal_RepositoryReloaded(object sender, EventArgs<Domain.RepositoryType> e)
 		{
-			switch (e.Repository)
+			switch (e.Value)
 			{
 				case Domain.RepositoryType.Tx:    monitor_Tx.AddLines   (this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Tx));    break;
 				case Domain.RepositoryType.Bidir: monitor_Bidir.AddLines(this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Bidir)); break;
@@ -3496,15 +3496,15 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
-		private void terminal_TimedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
+		private void terminal_TimedStatusTextRequest(object sender, EventArgs<string> e)
 		{
-			SetTimedStatusText(e.Text);
+			SetTimedStatusText(e.Value);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
-		private void terminal_FixedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
+		private void terminal_FixedStatusTextRequest(object sender, EventArgs<string> e)
 		{
-			SetFixedStatusText(e.Text);
+			SetFixedStatusText(e.Value);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
@@ -3518,6 +3518,12 @@ namespace YAT.View.Forms
 		private void terminal_SaveAsFileDialogRequest(object sender, Model.DialogEventArgs e)
 		{
 			e.Result = ShowSaveTerminalAsFileDialog();
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		private void terminal_CursorRequest(object sender, EventArgs<Cursor> e)
+		{
+			Cursor = e.Value;
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
