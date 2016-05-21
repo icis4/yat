@@ -53,7 +53,7 @@
 			this.toolStripMenuItem_MainMenu_File_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainContextMenu_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainContextMenu_File_Exit = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuStrip_Main = new System.Windows.Forms.MenuStrip();
+			this.menuStrip_Main = new MKY.Windows.Forms.MenuStripEx();
 			this.toolStripMenuItem_MainMenu_File = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_File_New = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_File_Open = new System.Windows.Forms.ToolStripMenuItem();
@@ -110,7 +110,7 @@
 			this.toolStripStatusLabel_MainStatus_Status = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel_MainStatus_TerminalInfo = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel_MainStatus_Chrono = new System.Windows.Forms.ToolStripStatusLabel();
-			this.toolStrip_Main = new System.Windows.Forms.ToolStrip();
+			this.toolStrip_Main = new MKY.Windows.Forms.ToolStripEx();
 			this.toolStripButton_MainTool_File_New = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_File_Open = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_File_Save = new System.Windows.Forms.ToolStripButton();
@@ -1243,7 +1243,7 @@
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainContextMenu_File_Recent;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainContextMenu_Separator_2;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainContextMenu_File_Exit;
-		private System.Windows.Forms.MenuStrip menuStrip_Main;
+		private MKY.Windows.Forms.MenuStripEx menuStrip_Main;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_File;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_File_New;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_File_Open;
@@ -1264,7 +1264,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainMenu_Help_Separator_1;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_About;
 		private System.Windows.Forms.StatusStrip statusStrip_Main;
-		private System.Windows.Forms.ToolStrip toolStrip_Main;
+		private MKY.Windows.Forms.ToolStripEx toolStrip_Main;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_File_New;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_File_Open;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_File_Save;

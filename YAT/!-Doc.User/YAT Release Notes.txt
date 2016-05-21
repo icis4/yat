@@ -119,6 +119,7 @@ Important changes:
 - 'Send Command' renamed to 'Send Text' (related to feature request #252).
 - Active terminal is highlighted/emphasized (feature request #247).
 - Automatic terminal layout added. Use 'Window > ...' for dedicated layout (feature request #247).
+- If YAT is not the active app, a single click is now sufficient to execute an action (bug #210).
 - Icons migrated from glyfx to FatCow (much larger variety) as preparation for the items below.
 - Additional log menu items and toolbar icons added, including indication whether logging is
   switched on or off, as well as opening/viewing of log file (feature requests #69, #103, #245).
@@ -169,9 +170,6 @@ Fixed bugs:
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
 - General imitations of .NET Windows.Forms:
-   > If YAT is not the active application, two clicks are required to execute an action. Reason:
-     In .NET Windows.Forms the first click only activates the application but doesn't execute
-     anything (bug #210).
    > Horizontal auto scroll is not feasible to implement (feature request #163).
    > System display scaling other than 100% results in partly clipped controls (bugs #85 and #235).
    > System errors are output in local language, even though YAT is all-English (bug #66).
