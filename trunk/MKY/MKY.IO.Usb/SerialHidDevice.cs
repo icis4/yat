@@ -388,8 +388,8 @@ namespace MKY.IO.Usb
 
 		private void RegisterAndAttachStaticDeviceEventHandlers()
 		{
-			DeviceConnected    += new EventHandler<DeviceEventArgs>(Device_DeviceConnected);
-			DeviceDisconnected += new EventHandler<DeviceEventArgs>(Device_DeviceDisconnected);
+			DeviceConnected    += Device_DeviceConnected;
+			DeviceDisconnected += Device_DeviceDisconnected;
 
 			RegisterStaticDeviceNotificationHandler();
 		}
@@ -398,8 +398,8 @@ namespace MKY.IO.Usb
 		{
 			UnregisterStaticDeviceNotificationHandler();
 
-			DeviceConnected    -= new EventHandler<DeviceEventArgs>(Device_DeviceConnected);
-			DeviceDisconnected -= new EventHandler<DeviceEventArgs>(Device_DeviceDisconnected);
+			DeviceConnected    -= Device_DeviceConnected;
+			DeviceDisconnected -= Device_DeviceDisconnected;
 		}
 
 		#region Disposal

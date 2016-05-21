@@ -65,7 +65,7 @@ namespace MKY.Data
 
 				node.SuspendChangeEvent();
 				node.SetChanged();
-				node.Changed += new EventHandler<DataEventArgs>(node_Changed);
+				node.Changed += node_Changed;
 				this.nodes.Add(node);
 
 				ResumeChangeEvent();
@@ -81,13 +81,13 @@ namespace MKY.Data
 				{
 					SuspendChangeEvent();
 
-					nodeOld.Changed -= new EventHandler<DataEventArgs>(node_Changed);
+					nodeOld.Changed -= node_Changed;
 					int index = this.nodes.IndexOf(nodeOld);
 					this.nodes.RemoveAt(index);
 
 					nodeNew.SuspendChangeEvent(nodeOld.changeEventSuspendedCount);
 					nodeNew.SetChanged();
-					nodeNew.Changed += new EventHandler<DataEventArgs>(node_Changed);
+					nodeNew.Changed += node_Changed;
 					this.nodes.Insert(index, nodeNew);
 
 					ResumeChangeEvent();
@@ -102,7 +102,7 @@ namespace MKY.Data
 			{
 				SuspendChangeEvent();
 
-				node.Changed -= new EventHandler<DataEventArgs>(node_Changed);
+				node.Changed -= node_Changed;
 				this.nodes.Remove(node);
 
 				ResumeChangeEvent();

@@ -227,7 +227,7 @@ namespace YAT.Model.Test.Transmission
 			// Create terminals from settings:
 			using (Terminal terminal = new Terminal(settings))
 			{
-				terminal.MessageInputRequest += new EventHandler<MessageInputEventArgs>(Utilities.TerminalMessageInputRequest);
+				terminal.MessageInputRequest += Utilities.TerminalMessageInputRequest;
 				if (!terminal.Start())
 				{
 					if (Utilities.TerminalMessageInputRequestResultsInExclude) {

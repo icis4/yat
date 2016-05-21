@@ -769,13 +769,13 @@ namespace MKY.IO.Serial.Usb
 					this.device.RxIdUsage    = this.settings.RxIdUsage;
 					this.device.AutoOpen     = this.settings.AutoOpen;
 
-					this.device.Connected    += new EventHandler(device_Connected);
-					this.device.Disconnected += new EventHandler(device_Disconnected);
-					this.device.Opened       += new EventHandler(device_Opened);
-					this.device.Closed       += new EventHandler(device_Closed);
-					this.device.DataReceived += new EventHandler(device_DataReceived);
+					this.device.Connected    += device_Connected;
+					this.device.Disconnected += device_Disconnected;
+					this.device.Opened       += device_Opened;
+					this.device.Closed       += device_Closed;
+					this.device.DataReceived += device_DataReceived;
 				////this.device.DataSent is not used, see remarks above.
-					this.device.IOError        += new EventHandler<IO.Usb.ErrorEventArgs>(device_IOError);
+					this.device.IOError      += device_IOError;
 				}
 
 				return (true);

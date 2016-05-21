@@ -107,7 +107,7 @@ namespace YAT.Model.Test
 			// Create terminals from settings:
 			using (Terminal terminal = new Terminal(settings))
 			{
-				terminal.MessageInputRequest += new EventHandler<MessageInputEventArgs>(Utilities.TerminalMessageInputRequest);
+				terminal.MessageInputRequest += Utilities.TerminalMessageInputRequest;
 				if (!terminal.StartIO())
 				{
 					if (Utilities.TerminalMessageInputRequestResultsInExclude)
@@ -246,7 +246,7 @@ namespace YAT.Model.Test
 			// Create terminals from settings:
 			using (Terminal terminal = new Terminal(settings))
 			{
-				terminal.MessageInputRequest += new EventHandler<MessageInputEventArgs>(Utilities.TerminalMessageInputRequest);
+				terminal.MessageInputRequest += Utilities.TerminalMessageInputRequest;
 				if (!terminal.StartIO())
 				{
 					if (Utilities.TerminalMessageInputRequestResultsInExclude)

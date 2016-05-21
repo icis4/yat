@@ -766,10 +766,10 @@ namespace MKY.IO.Serial.Socket
 			{
 				this.client = new TcpClient(this.instanceId, remoteHost, remotePort, localInterface);
 
-				this.client.IOChanged    += new EventHandler                       (this.client_IOChanged);
-				this.client.IOError      += new EventHandler<IOErrorEventArgs>     (this.client_IOError);
-				this.client.DataReceived += new EventHandler<DataReceivedEventArgs>(this.client_DataReceived);
-				this.client.DataSent     += new EventHandler<DataSentEventArgs>    (this.client_DataSent);
+				this.client.IOChanged    += client_IOChanged;
+				this.client.IOError      += client_IOError;
+				this.client.DataReceived += client_DataReceived;
+				this.client.DataSent     += client_DataSent;
 			}
 		}
 
@@ -779,10 +779,10 @@ namespace MKY.IO.Serial.Socket
 			{
 				if (this.client != null)
 				{
-					this.client.IOChanged    -= new EventHandler                       (this.client_IOChanged);
-					this.client.IOError      -= new EventHandler<IOErrorEventArgs>     (this.client_IOError);
-					this.client.DataReceived -= new EventHandler<DataReceivedEventArgs>(this.client_DataReceived);
-					this.client.DataSent     -= new EventHandler<DataSentEventArgs>    (this.client_DataSent);
+					this.client.IOChanged    -= client_IOChanged;
+					this.client.IOError      -= client_IOError;
+					this.client.DataReceived -= client_DataReceived;
+					this.client.DataSent     -= client_DataSent;
 
 					this.client.Dispose();
 					this.client = null;
@@ -895,10 +895,10 @@ namespace MKY.IO.Serial.Socket
 			{
 				this.server = new TcpServer(this.instanceId, localInterface, localPort);
 
-				this.server.IOChanged    += new EventHandler(this.server_IOChanged);
-				this.server.IOError      += new EventHandler<IOErrorEventArgs>(this.server_IOError);
-				this.server.DataReceived += new EventHandler<DataReceivedEventArgs>(this.server_DataReceived);
-				this.server.DataSent     += new EventHandler<DataSentEventArgs>(this.server_DataSent);
+				this.server.IOChanged    += server_IOChanged;
+				this.server.IOError      += server_IOError;
+				this.server.DataReceived += server_DataReceived;
+				this.server.DataSent     += server_DataSent;
 			}
 		}
 
@@ -908,10 +908,10 @@ namespace MKY.IO.Serial.Socket
 			{
 				if (this.server != null)
 				{
-					this.server.IOChanged    -= new EventHandler(this.server_IOChanged);
-					this.server.IOError      -= new EventHandler<IOErrorEventArgs>(this.server_IOError);
-					this.server.DataReceived -= new EventHandler<DataReceivedEventArgs>(this.server_DataReceived);
-					this.server.DataSent     -= new EventHandler<DataSentEventArgs>(this.server_DataSent);
+					this.server.IOChanged    -= server_IOChanged;
+					this.server.IOError      -= server_IOError;
+					this.server.DataReceived -= server_DataReceived;
+					this.server.DataSent     -= server_DataSent;
 
 					this.server.Dispose();
 					this.server = null;

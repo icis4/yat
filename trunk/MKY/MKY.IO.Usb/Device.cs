@@ -734,8 +734,8 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
 		private void RegisterAndAttachStaticDeviceEventHandlers(Guid classGuid)
 		{
-			DeviceConnected    += new EventHandler<DeviceEventArgs>(Device_DeviceConnected);
-			DeviceDisconnected += new EventHandler<DeviceEventArgs>(Device_DeviceDisconnected);
+			DeviceConnected    += Device_DeviceConnected;
+			DeviceDisconnected += Device_DeviceDisconnected;
 
 			RegisterStaticDeviceNotificationHandler(classGuid);
 		}
@@ -744,8 +744,8 @@ namespace MKY.IO.Usb
 		{
 			UnregisterStaticDeviceNotificationHandler();
 
-			DeviceConnected    -= new EventHandler<DeviceEventArgs>(Device_DeviceConnected);
-			DeviceDisconnected -= new EventHandler<DeviceEventArgs>(Device_DeviceDisconnected);
+			DeviceConnected    -= Device_DeviceConnected;
+			DeviceDisconnected -= Device_DeviceDisconnected;
 		}
 
 		#region Disposal

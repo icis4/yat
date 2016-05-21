@@ -277,10 +277,10 @@ namespace YAT.Domain
 		public event EventHandler<IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
-		public event EventHandler<RawChunkEventArgs> RawChunkSent;
+		public event EventHandler<EventArgs<RawChunk>> RawChunkSent;
 
 		/// <summary></summary>
-		public event EventHandler<RawChunkEventArgs> RawChunkReceived;
+		public event EventHandler<EventArgs<RawChunk>> RawChunkReceived;
 
 		/// <summary></summary>
 		public event EventHandler<DisplayElementsEventArgs> DisplayElementsSent;
@@ -295,10 +295,10 @@ namespace YAT.Domain
 		public event EventHandler<DisplayLinesEventArgs> DisplayLinesReceived;
 
 		/// <summary></summary>
-		public event EventHandler<RepositoryEventArgs> RepositoryCleared;
+		public event EventHandler<EventArgs<RepositoryType>> RepositoryCleared;
 
 		/// <summary></summary>
-		public event EventHandler<RepositoryEventArgs> RepositoryReloaded;
+		public event EventHandler<EventArgs<RepositoryType>> RepositoryReloaded;
 
 		#endregion
 
@@ -2148,7 +2148,7 @@ namespace YAT.Domain
 
 			// Clear repository:
 			ClearMyRepository(repository);
-			OnRepositoryCleared(new RepositoryEventArgs(repository));
+			OnRepositoryCleared(new EventArgs<RepositoryType>(repository));
 
 			// Reload repository:
 			SuspendEventsForReload();
@@ -2157,7 +2157,7 @@ namespace YAT.Domain
 				ProcessAndSignalRawChunk(rawChunk);
 			}
 			ResumeEventsAfterReload();
-			OnRepositoryReloaded(new RepositoryEventArgs(repository));
+			OnRepositoryReloaded(new EventArgs<RepositoryType>(repository));
 		}
 
 		/// <summary></summary>
@@ -2169,9 +2169,9 @@ namespace YAT.Domain
 			ClearMyRepository(RepositoryType.Tx);
 			ClearMyRepository(RepositoryType.Bidir);
 			ClearMyRepository(RepositoryType.Rx);
-			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Tx));
-			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Bidir));
-			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Rx));
+			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Tx));
+			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Bidir));
+			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Rx));
 
 			// Reload repositories:
 			SuspendEventsForReload();
@@ -2180,9 +2180,9 @@ namespace YAT.Domain
 				ProcessAndSignalRawChunk(rawChunk);
 			}
 			ResumeEventsAfterReload();
-			OnRepositoryReloaded(new RepositoryEventArgs(RepositoryType.Tx));
-			OnRepositoryReloaded(new RepositoryEventArgs(RepositoryType.Bidir));
-			OnRepositoryReloaded(new RepositoryEventArgs(RepositoryType.Rx));
+			OnRepositoryReloaded(new EventArgs<RepositoryType>(RepositoryType.Tx));
+			OnRepositoryReloaded(new EventArgs<RepositoryType>(RepositoryType.Bidir));
+			OnRepositoryReloaded(new EventArgs<RepositoryType>(RepositoryType.Rx));
 		}
 
 		/// <summary></summary>
@@ -2353,12 +2353,12 @@ namespace YAT.Domain
 				DetachTerminalSettings();
 
 			this.terminalSettings = terminalSettings;
-			this.terminalSettings.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(terminalSettings_Changed);
+			this.terminalSettings.Changed += terminalSettings_Changed;
 		}
 
 		private void DetachTerminalSettings()
 		{
-			this.terminalSettings.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(terminalSettings_Changed);
+			this.terminalSettings.Changed -= terminalSettings_Changed;
 			this.terminalSettings = null;
 		}
 
@@ -2446,13 +2446,13 @@ namespace YAT.Domain
 		{
 			this.rawTerminal = rawTerminal;
 
-			this.rawTerminal.IOChanged         += new EventHandler(rawTerminal_IOChanged);
-			this.rawTerminal.IOControlChanged  += new EventHandler(rawTerminal_IOControlChanged);
-			this.rawTerminal.IOError           += new EventHandler<IOErrorEventArgs>(rawTerminal_IOError);
+			this.rawTerminal.IOChanged         += rawTerminal_IOChanged;
+			this.rawTerminal.IOControlChanged  += rawTerminal_IOControlChanged;
+			this.rawTerminal.IOError           += rawTerminal_IOError;
 
-			this.rawTerminal.RawChunkSent      += new EventHandler<RawChunkEventArgs>(rawTerminal_RawChunkSent);
-			this.rawTerminal.RawChunkReceived  += new EventHandler<RawChunkEventArgs>(rawTerminal_RawChunkReceived);
-			this.rawTerminal.RepositoryCleared += new EventHandler<RepositoryEventArgs>(rawTerminal_RepositoryCleared);
+			this.rawTerminal.RawChunkSent      += rawTerminal_RawChunkSent;
+			this.rawTerminal.RawChunkReceived  += rawTerminal_RawChunkReceived;
+			this.rawTerminal.RepositoryCleared += rawTerminal_RepositoryCleared;
 		}
 
 		#endregion
@@ -2503,22 +2503,22 @@ namespace YAT.Domain
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void rawTerminal_RawChunkSent(object sender, RawChunkEventArgs e)
+		private void rawTerminal_RawChunkSent(object sender, EventArgs<RawChunk> e)
 		{
 			OnRawChunkSent(e);
-			ProcessAndSignalRawChunk(e.Chunk);
+			ProcessAndSignalRawChunk(e.Value);
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void rawTerminal_RawChunkReceived(object sender, RawChunkEventArgs e)
+		private void rawTerminal_RawChunkReceived(object sender, EventArgs<RawChunk> e)
 		{
 			OnRawChunkReceived(e);
-			ProcessAndSignalRawChunk(e.Chunk);
+			ProcessAndSignalRawChunk(e.Value);
 		}
 
-		private void rawTerminal_RepositoryCleared(object sender, RepositoryEventArgs e)
+		private void rawTerminal_RepositoryCleared(object sender, EventArgs<RepositoryType> e)
 		{
-			ClearMyRepository(e.Repository);
+			ClearMyRepository(e.Value);
 			OnRepositoryCleared(e);
 		}
 
@@ -2548,15 +2548,15 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRawChunkSent(RawChunkEventArgs e)
+		protected virtual void OnRawChunkSent(EventArgs<RawChunk> e)
 		{
-			EventHelper.FireSync<RawChunkEventArgs>(RawChunkSent, this, e);
+			EventHelper.FireSync<EventArgs<RawChunk>>(RawChunkSent, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRawChunkReceived(RawChunkEventArgs e)
+		protected virtual void OnRawChunkReceived(EventArgs<RawChunk> e)
 		{
-			EventHelper.FireSync<RawChunkEventArgs>(RawChunkReceived, this, e);
+			EventHelper.FireSync<EventArgs<RawChunk>>(RawChunkReceived, this, e);
 		}
 
 		/// <summary></summary>
@@ -2650,17 +2650,17 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryCleared(RepositoryEventArgs e)
+		protected virtual void OnRepositoryCleared(EventArgs<RepositoryType> e)
 		{
 			if (!this.eventsSuspendedForReload)
-				EventHelper.FireSync<RepositoryEventArgs>(RepositoryCleared, this, e);
+				EventHelper.FireSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryReloaded(RepositoryEventArgs e)
+		protected virtual void OnRepositoryReloaded(EventArgs<RepositoryType> e)
 		{
 			if (!this.eventsSuspendedForReload)
-				EventHelper.FireSync<RepositoryEventArgs>(RepositoryReloaded, this, e);
+				EventHelper.FireSync<EventArgs<RepositoryType>>(RepositoryReloaded, this, e);
 		}
 
 		#endregion

@@ -29,6 +29,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
+using MKY;
 using MKY.IO;
 using MKY.Settings;
 
@@ -609,7 +610,7 @@ namespace YAT.Model.Test
 				);
 
 				// Install callback handler that sets the normal file path for terminal 2:
-				terminal2.SaveAsFileDialogRequest += new EventHandler<DialogEventArgs>(terminal2_SaveAsFileDialogRequest_SaveAs);
+				terminal2.SaveAsFileDialogRequest += terminal2_SaveAsFileDialogRequest_SaveAs;
 
 				string autoWorkspaceFilePath = workspace.SettingsFilePath;
 				string autoTerminal2FilePath = terminal2.SettingsFilePath;
@@ -684,7 +685,7 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(terminal3, uc + "Terminal 3 could not be created!");
 
 				// Install callback handler that sets the normal file path for terminal 3:
-				terminal3.SaveAsFileDialogRequest += new EventHandler<DialogEventArgs>(terminal3_SaveAsFileDialogRequest_SaveAsOK);
+				terminal3.SaveAsFileDialogRequest += terminal3_SaveAsFileDialogRequest_SaveAsOK;
 
 				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
@@ -1190,7 +1191,7 @@ namespace YAT.Model.Test
 			{
 				step = "Step 3: ";
 				int countBefore = this.workspace_MessageInputRequest_No_counter;
-				main.WorkspaceOpened += new EventHandler<WorkspaceEventArgs>(main_WorkspaceOpened_AttachToWorkspace_MessageInputRequest_No);
+				main.WorkspaceOpened += main_WorkspaceOpened_AttachToWorkspace_MessageInputRequest_No;
 				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be started!");
 				int countAfter = this.workspace_MessageInputRequest_No_counter;
@@ -1268,7 +1269,7 @@ namespace YAT.Model.Test
 			{
 				step = "Step 3: ";
 				int countBefore = this.main_MessageInputRequest_OK_counter;
-				main.MessageInputRequest += new EventHandler<MessageInputEventArgs>(main_MessageInputRequest_OK);
+				main.MessageInputRequest += main_MessageInputRequest_OK;
 				success = (main.Start() == MainResult.ApplicationStartError);
 				Assert.IsTrue(success, step + "Main could be started even though workspace file is missing!");
 				int countAfter = this.main_MessageInputRequest_OK_counter;
@@ -1409,11 +1410,11 @@ namespace YAT.Model.Test
 				Assert.AreEqual(2, workspace.TerminalCount, step + "Workspace doesn't contain 2 terminals!");
 
 				// Install callback handler that does not save terminal 2:
-				terminal2.SaveAsFileDialogRequest += new EventHandler<DialogEventArgs>(terminal2_SaveAsFileDialogRequest_No);
+				terminal2.SaveAsFileDialogRequest += terminal2_SaveAsFileDialogRequest_No;
 
 				// Workspace also has to be saved:
 				int countBefore = this.workspace_MessageInputRequest_No_counter;
-				workspace.MessageInputRequest += new EventHandler<MessageInputEventArgs>(workspace_MessageInputRequest_No);
+				workspace.MessageInputRequest += workspace_MessageInputRequest_No;
 				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
 				int countAfter = this.workspace_MessageInputRequest_No_counter;
@@ -1885,9 +1886,9 @@ namespace YAT.Model.Test
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private int main_WorkspaceOpened_AttachToWorkspace_MessageInputRequest_No_counter; // = 0;
 
-		private void main_WorkspaceOpened_AttachToWorkspace_MessageInputRequest_No(object sender, WorkspaceEventArgs e)
+		private void main_WorkspaceOpened_AttachToWorkspace_MessageInputRequest_No(object sender, EventArgs<Workspace> e)
 		{
-			e.Workspace.MessageInputRequest += new EventHandler<MessageInputEventArgs>(workspace_MessageInputRequest_No);
+			e.Value.MessageInputRequest += workspace_MessageInputRequest_No;
 			this.main_WorkspaceOpened_AttachToWorkspace_MessageInputRequest_No_counter++;
 		}
 

@@ -96,12 +96,12 @@ namespace YAT.View.Forms
 		{
 			this.settings = settings;
 			this.settingsInEdit = new Domain.Settings.TextTerminalSettings(settings);
-			this.settingsInEdit.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
+			this.settingsInEdit.Changed += settings_Form_Changed;
 		}
 
 		private void DetachAndAcceptSettings()
 		{
-			this.settingsInEdit.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
+			this.settingsInEdit.Changed -= settings_Form_Changed;
 			this.settings = this.settingsInEdit;
 		}
 
