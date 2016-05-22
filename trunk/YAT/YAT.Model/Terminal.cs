@@ -2086,7 +2086,7 @@ namespace YAT.Model
 			}
 
 			// AutoRespose:
-			if (this.settingsRoot.AutoResponse.Enabled)
+			if (this.settingsRoot.AutoResponse.IsActive)
 			{
 				bool isMatch = false;
 
@@ -2181,7 +2181,7 @@ namespace YAT.Model
 			}
 
 			// AutoRespose:
-			if (this.settingsRoot.AutoResponse.Enabled && (this.settingsRoot.AutoResponse.Trigger == AutoTrigger.AnyLine))
+			if (this.settingsRoot.AutoResponse.IsActive && (this.settingsRoot.AutoResponse.Trigger == AutoTrigger.AnyLine))
 				SendAutoResponse();
 		}
 
@@ -3942,7 +3942,7 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual void UpdateAutoResponse()
 		{
-			if (this.settingsRoot.AutoResponse.Enabled)
+			if (this.settingsRoot.AutoResponse.IsActive)
 			{
 				if (this.settingsRoot.AutoResponse.Trigger.CommandIsRequired) // = sequence required = helper required.
 				{
@@ -3962,7 +3962,7 @@ namespace YAT.Model
 						lock (this.autoResponseHelperSyncObj)
 							this.autoResponseHelper = null;
 
-						this.settingsRoot.AutoResponse.Enabled = false;
+						this.settingsRoot.AutoResponse.Deactivate();
 
 						OnMessageInputRequest
 						(

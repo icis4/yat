@@ -35,7 +35,6 @@ namespace YAT.Model.Settings
 	public class AutoResponseSettings : MKY.Settings.SettingsItem
 	{
 		private bool visible;
-		private bool enabled;
 		private AutoTriggerEx trigger;
 		private AutoResponseEx response;
 
@@ -62,7 +61,6 @@ namespace YAT.Model.Settings
 			: base(rhs)
 		{
 			Visible  = rhs.Visible;
-			Enabled  = rhs.Enabled;
 			Trigger  = rhs.Trigger;
 			Response = rhs.Response;
 			ClearChanged();
@@ -76,7 +74,6 @@ namespace YAT.Model.Settings
 			base.SetMyDefaults();
 
 			Visible  = false;
-			Enabled  = false;
 			Trigger  = AutoTrigger.None;
 			Response = AutoResponse.None;
 		}
@@ -96,21 +93,6 @@ namespace YAT.Model.Settings
 				if (this.visible != value)
 				{
 					this.visible = value;
-					SetChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("Enabled")]
-		public bool Enabled
-		{
-			get { return (this.enabled); }
-			set
-			{
-				if (this.enabled != value)
-				{
-					this.enabled = value;
 					SetChanged();
 				}
 			}
@@ -139,11 +121,16 @@ namespace YAT.Model.Settings
 				if (this.trigger != value)
 				{
 					this.trigger = value;
-					UpdateEnabled();
-
 					SetChanged();
 				}
 			}
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public bool TriggerIsActive
+		{
+			get { return (Trigger != AutoTrigger.None); }
 		}
 
 		/// <remarks>
@@ -169,11 +156,23 @@ namespace YAT.Model.Settings
 				if (this.response != value)
 				{
 					this.response = value;
-					UpdateEnabled();
-
 					SetChanged();
 				}
 			}
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public bool ResponseIsActive
+		{
+			get { return (Response != AutoResponse.None); }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public bool IsActive
+		{
+			get { return (TriggerIsActive && ResponseIsActive); }
 		}
 
 		#endregion
@@ -186,7 +185,7 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Resets the automatic response, i.e. trigger and response are reset to 'None'.
 		/// </summary>
-		public void Reset()
+		public void Deactivate()
 		{
 			SuspendChangeEvent();
 
@@ -194,11 +193,6 @@ namespace YAT.Model.Settings
 			Response = AutoResponse.None;
 
 			ResumeChangeEvent(true); // Force event.
-		}
-
-		private void UpdateEnabled()
-		{
-			Enabled = ((Trigger != AutoTrigger.None) && (Response != AutoResponse.None));
 		}
 
 		#endregion
@@ -226,7 +220,6 @@ namespace YAT.Model.Settings
 				base.Equals(other) && // Compare all settings nodes.
 
 				(Visible == other.Visible) &&
-				(Enabled == other.Enabled) &&
 
 				StringEx.EqualsOrdinalIgnoreCase(Trigger_ForSerialization,  other.Trigger_ForSerialization) &&
 				StringEx.EqualsOrdinalIgnoreCase(Response_ForSerialization, other.Response_ForSerialization)
@@ -247,7 +240,6 @@ namespace YAT.Model.Settings
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
 				hashCode = (hashCode * 397) ^ Visible.GetHashCode();
-				hashCode = (hashCode * 397) ^ Enabled.GetHashCode();
 
 				hashCode = (hashCode * 397) ^ (Trigger_ForSerialization  != null ? Trigger_ForSerialization .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (Response_ForSerialization != null ? Response_ForSerialization.GetHashCode() : 0);

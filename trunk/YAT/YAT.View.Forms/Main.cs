@@ -861,6 +861,7 @@ namespace YAT.View.Forms
 			toolStripButton_MainTool_Terminal_Radix_Hex.Checked    = (radix == Domain.Radix.Hex);
 
 			bool arVisible = false;
+			bool arEnabled = false;
 
 			AutoTriggerEx[] arTriggerItems = AutoTriggerEx.GetFixedItems();
 			AutoTriggerEx   arTrigger      = AutoTrigger.None;
@@ -873,10 +874,11 @@ namespace YAT.View.Forms
 				Model.Terminal terminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
 				if ((terminal != null) && (!terminal.IsDisposed))
 				{
-					arVisible      = terminal.SettingsRoot.AutoResponse.Visible;
+					arVisible       = terminal.SettingsRoot.AutoResponse.Visible;
+					arEnabled       = terminal.SettingsRoot.AutoResponse.IsActive;
 
-					arTriggerItems = terminal.SettingsRoot.ValidAutoResponseTriggerItems;
-					arTrigger      = terminal.SettingsRoot.AutoResponse.Trigger;
+					arTriggerItems  = terminal.SettingsRoot.ValidAutoResponseTriggerItems;
+					arTrigger       = terminal.SettingsRoot.AutoResponse.Trigger;
 
 					arResponseItems = terminal.SettingsRoot.ValidAutoResponseResponseItems;
 					arResponse      = terminal.SettingsRoot.AutoResponse.Response;
@@ -911,8 +913,8 @@ namespace YAT.View.Forms
 					Utilities.SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_AutoResponse_Response, arResponse, new Command(arResponse).SingleLineText);
 				}
 
-				toolStripButton_MainTool_Terminal_AutoResponse_Reset.Visible = true;
-				toolStripButton_MainTool_Terminal_AutoResponse_Reset.Enabled = childIsReady;
+				toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Visible = true;
+				toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Enabled = arEnabled;
 			}
 			else
 			{
@@ -926,8 +928,8 @@ namespace YAT.View.Forms
 				toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Enabled = false;
 				toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.Clear();
 
-				toolStripButton_MainTool_Terminal_AutoResponse_Reset.Visible = false;
-				toolStripButton_MainTool_Terminal_AutoResponse_Reset.Enabled = false;
+				toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Visible = false;
+				toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Enabled = false;
 			}
 
 			toolStripButton_MainTool_Terminal_Clear.Enabled             = childIsReady;
@@ -1085,9 +1087,9 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void toolStripButton_MainTool_Terminal_AutoResponse_Reset_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Terminal_AutoResponse_Deactivate_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestAutoResponseReset();
+			((Terminal)ActiveMdiChild).RequestAutoResponseDeactivate();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Clear_Click(object sender, EventArgs e)

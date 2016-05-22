@@ -583,7 +583,7 @@ namespace YAT.Settings.Terminal
 			{
 				Model.Types.Command response = null;
 
-				if (this.implicit_.AutoResponse.Enabled)
+				if (this.implicit_.AutoResponse.TriggerIsActive)
 				{
 					switch ((Model.Types.AutoTrigger)this.implicit_.AutoResponse.Trigger)
 					{
