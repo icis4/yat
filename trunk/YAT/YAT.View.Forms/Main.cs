@@ -48,7 +48,6 @@ using YAT.Application.Utilities;
 using YAT.Model.Types;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
-using YAT.View.Utilities;
 
 #endregion
 
@@ -902,44 +901,14 @@ namespace YAT.View.Forms
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.Clear();
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.AddRange(arTriggerItems);
 
-					if (arTrigger != null)
-					{
-						if (toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.Contains(arTrigger))
-						{	// Applies if an item of the combo box is selected.
-							toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedItem = arTrigger;
-						}
-						else
-						{	// Applies if an item that is not in the combo box is selected.
-							toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedIndex = ControlEx.InvalidIndex;
-							toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Text = new Command(arTrigger).SingleLineText;
-						}
-					}
-					else
-					{	// Item doesn't exist, use default = first item in the combo box, or none if list is empty.
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedIndex = 0;
-					}
+					Utilities.SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger, arTrigger, new Command(arTrigger).SingleLineText);
 
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Visible = true;
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Enabled = childIsReady;
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.Clear();
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.AddRange(arResponseItems);
 
-					if (arResponse != null)
-					{
-						if (toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.Contains(arResponse))
-						{	// Applies if an item of the combo box is selected.
-							toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedItem = arResponse;
-						}
-						else
-						{	// Applies if an item that is not in the combo box is selected.
-							toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedIndex = ControlEx.InvalidIndex;
-							toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Text = new Command(arResponse).SingleLineText;
-						}
-					}
-					else
-					{	// Item doesn't exist, use default = first item in the combo box, or none if list is empty.
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedIndex = 0;
-					}
+					Utilities.SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_AutoResponse_Response, arResponse, new Command(arResponse).SingleLineText);
 				}
 
 				toolStripButton_MainTool_Terminal_AutoResponse_Reset.Visible = true;
@@ -1064,7 +1033,7 @@ namespace YAT.View.Forms
 			{
 				string triggerText = toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Text;
 				int invalidTextStart;
-				if (Validation.ValidateText(this, "automatic response trigger", triggerText, out invalidTextStart))
+				if (Utilities.ValidationHelper.ValidateText(this, "automatic response trigger", triggerText, out invalidTextStart))
 				{
 					if (!this.isSettingControls)
 					{
@@ -1100,7 +1069,7 @@ namespace YAT.View.Forms
 			{
 				string responseText = toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Text;
 				int invalidTextStart;
-				if (Validation.ValidateText(this, "automatic response", responseText, out invalidTextStart))
+				if (Utilities.ValidationHelper.ValidateText(this, "automatic response", responseText, out invalidTextStart))
 				{
 					if (!this.isSettingControls)
 					{

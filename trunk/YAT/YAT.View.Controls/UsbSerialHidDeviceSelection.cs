@@ -376,40 +376,9 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 
 			if (!DesignMode && Enabled)
-			{
-				if (comboBox_Device.Items.Count > 0)
-				{
-					if (this.deviceInfo != null)
-					{
-						if (comboBox_Device.Items.Contains(this.deviceInfo))
-						{	// Applies if an item of the combo box is selected.
-							comboBox_Device.SelectedItem = this.deviceInfo;
-						}
-						else
-						{	// Applies if an item that is not in the combo box is selected.
-							comboBox_Device.SelectedIndex = ControlEx.InvalidIndex;
-							comboBox_Device.Text = this.deviceInfo;
-						}
-					}
-					else
-					{	// Item doesn't exist, use default = first item in the combo box, or none if list is empty.
-						comboBox_Device.SelectedIndex = 0;
-					}
-				}
-				else
-				{
-					comboBox_Device.SelectedIndex = ControlEx.InvalidIndex;
-					if (this.deviceInfo != null)
-						comboBox_Device.Text = this.deviceInfo;
-					else
-						comboBox_Device.Text = "";
-				}
-			}
+				Utilities.SelectionHelper.Select(comboBox_Device, this.deviceInfo, this.deviceInfo);
 			else
-			{
-				comboBox_Device.SelectedIndex = ControlEx.InvalidIndex;
-				comboBox_Device.Text = "";
-			}
+				Utilities.SelectionHelper.Deselect(comboBox_Device);
 
 			this.isSettingControls.Leave();
 		}

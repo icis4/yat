@@ -29,7 +29,6 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -471,22 +470,7 @@ namespace YAT.View.Forms
 			checkBox_Options_NameTime.Checked    = this.settingsInEdit.NameTime;
 
 			Log.FileNameSeparatorEx separator = this.settingsInEdit.NameSeparator;
-			if (separator != null)
-			{
-				if (comboBox_Options_NameSeparator.Items.Contains(separator))
-				{	// Applies if an item of the combo box is selected.
-					comboBox_Options_NameSeparator.SelectedItem = separator;
-				}
-				else
-				{	// Applies if an item that is not in the combo box is selected.
-					comboBox_Options_NameSeparator.SelectedIndex = ControlEx.InvalidIndex;
-					comboBox_Options_NameSeparator.Text = separator;
-				}
-			}
-			else
-			{	// Item doesn't exist, use default = first item in the combo box, or none if list is empty.
-				comboBox_Options_NameSeparator.SelectedIndex = 0;
-			}
+			Utilities.SelectionHelper.Select(comboBox_Options_NameSeparator, separator, separator);
 
 			bool dateTimeEnabled = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Create);
 			checkBox_Options_NameDate.Enabled = dateTimeEnabled;

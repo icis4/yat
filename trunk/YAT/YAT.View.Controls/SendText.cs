@@ -56,7 +56,6 @@ using MKY.Windows.Forms;
 
 using YAT.Model.Settings;
 using YAT.Model.Types;
-using YAT.View.Utilities;
 
 #endregion
 
@@ -553,7 +552,7 @@ namespace YAT.View.Controls
 						// Single line => Validate!
 						int invalidTextStart;
 						int invalidTextLength;
-						if (Validation.ValidateText(this, "text", comboBox_SingleLineText.Text, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
+						if (Utilities.ValidationHelper.ValidateText(this, "text", comboBox_SingleLineText.Text, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
 						{
 							this.isValidated = true;
 

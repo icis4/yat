@@ -48,10 +48,10 @@ using MKY.Settings;
 using MKY.Windows.Forms;
 
 using YAT.Application.Utilities;
+using YAT.Model.Types;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.View.Controls;
-using YAT.View.Utilities;
 
 #endregion
 
@@ -527,8 +527,8 @@ namespace YAT.View.Forms
 			toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked = this.settingsRoot.Send.SendImmediately;
 
 			toolStripMenuItem_TerminalMenu_Send_AutoResponse.Checked          =  this.settingsRoot.AutoResponse.Enabled;
-			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Checked  = (this.settingsRoot.AutoResponse.Trigger  != Model.Types.AutoTrigger.None);
-			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Checked = (this.settingsRoot.AutoResponse.Response != Model.Types.AutoResponse.None);
+			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Checked  = (this.settingsRoot.AutoResponse.Trigger  != AutoTrigger.None);
+			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Checked = (this.settingsRoot.AutoResponse.Response != AutoResponse.None);
 
 			// Attention:
 			// Similar code exists in the following location:
@@ -540,44 +540,14 @@ namespace YAT.View.Forms
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.Clear();
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.ValidAutoResponseTriggerItems);
 
-				Model.Types.AutoTriggerEx trigger = this.settingsRoot.AutoResponse.Trigger;
-				if (trigger != null)
-				{
-					if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.Contains(trigger))
-					{	// Applies if an item of the combo box is selected.
-						toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedItem = trigger;
-					}
-					else
-					{	// Applies if an item that is not in the combo box is selected.
-						toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndex = ControlEx.InvalidIndex;
-						toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text = new Model.Types.Command(trigger).SingleLineText;
-					}
-				}
-				else
-				{	// Item doesn't exist, use default = first item in the combo box, or none if list is empty.
-					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndex = 0;
-				}
+				AutoTriggerEx trigger = this.settingsRoot.AutoResponse.Trigger;
+				Utilities.SelectionHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText);
 
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Clear();
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.ValidAutoResponseResponseItems);
 
-				Model.Types.AutoResponseEx response = this.settingsRoot.AutoResponse.Response;
-				if (response != null)
-				{
-					if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Contains(response))
-					{	// Applies if an item of the combo box is selected.
-						toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedItem = response;
-					}
-					else
-					{	// Applies if an item that is not in the combo box is selected.
-						toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndex = ControlEx.InvalidIndex;
-						toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text = new Model.Types.Command(response).SingleLineText;
-					}
-				}
-				else
-				{	// Item doesn't exist, use default = first item in the combo box, or none if list is empty.
-					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndex = 0;
-				}
+				AutoResponseEx response = this.settingsRoot.AutoResponse.Response;
+				Utilities.SelectionHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response, new Command(response).SingleLineText);
 			}
 
 			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset.Enabled = this.settingsRoot.AutoResponse.Enabled;
@@ -622,7 +592,7 @@ namespace YAT.View.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				var trigger = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedItem as Model.Types.AutoTriggerEx);
+				var trigger = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
 				if (trigger != null)
 					this.settingsRoot.AutoResponse.Trigger = trigger;
 			}
@@ -638,7 +608,7 @@ namespace YAT.View.Forms
 			{
 				string triggerText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text;
 				int invalidTextStart;
-				if (Validation.ValidateText(this, "automatic response trigger", triggerText, out invalidTextStart))
+				if (Utilities.ValidationHelper.ValidateText(this, "automatic response trigger", triggerText, out invalidTextStart))
 				{
 					if (!this.isSettingControls)
 					{
@@ -658,7 +628,7 @@ namespace YAT.View.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				var response = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedItem as Model.Types.AutoResponseEx);
+				var response = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedItem as AutoResponseEx);
 				if (response != null)
 					this.settingsRoot.AutoResponse.Response = response;
 			}
@@ -674,7 +644,7 @@ namespace YAT.View.Forms
 			{
 				string responseText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text;
 				int invalidTextStart;
-				if (Validation.ValidateText(this, "automatic response", responseText, out invalidTextStart))
+				if (Utilities.ValidationHelper.ValidateText(this, "automatic response", responseText, out invalidTextStart))
 				{
 					if (!this.isSettingControls)
 					{
@@ -1478,7 +1448,7 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 
 			// Pages:
-			List<Model.Types.PredefinedCommandPage> pages = this.settingsRoot.PredefinedCommand.Pages;
+			List<PredefinedCommandPage> pages = this.settingsRoot.PredefinedCommand.Pages;
 
 			int pageCount = 0;
 			if (pages != null)
@@ -1509,7 +1479,7 @@ namespace YAT.View.Forms
 			}
 
 			// Commands:
-			List<Model.Types.Command> commands = null;
+			List<Command> commands = null;
 			if (pageCount > 0)
 				commands = this.settingsRoot.PredefinedCommand.Pages[predefined.SelectedPage - 1].Commands;
 
@@ -1541,7 +1511,7 @@ namespace YAT.View.Forms
 					if (this.menuItems_Predefined_Commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
 						this.menuItems_Predefined_Commands[i].Font = DrawingEx.DefaultFontItalic;
 
-					this.menuItems_Predefined_Commands[i].Text = MenuEx.PrependIndex(i + 1, Model.Types.Command.DefineCommandText);
+					this.menuItems_Predefined_Commands[i].Text = MenuEx.PrependIndex(i + 1, Command.DefineCommandText);
 					this.menuItems_Predefined_Commands[i].Enabled = true;
 				}
 			}
@@ -1553,7 +1523,7 @@ namespace YAT.View.Forms
 				if (this.menuItems_Predefined_Commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
 					this.menuItems_Predefined_Commands[i].Font = DrawingEx.DefaultFontItalic;
 
-				this.menuItems_Predefined_Commands[i].Text = MenuEx.PrependIndex(i + 1, Model.Types.Command.DefineCommandText);
+				this.menuItems_Predefined_Commands[i].Text = MenuEx.PrependIndex(i + 1, Command.DefineCommandText);
 				this.menuItems_Predefined_Commands[i].Enabled = true;
 			}
 
@@ -1567,14 +1537,14 @@ namespace YAT.View.Forms
 		private int contextMenuStrip_Predefined_SelectedCommand; // = 0;
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private Model.Types.Command contextMenuStrip_Predefined_CopyToSendText; // = null;
+		private Command contextMenuStrip_Predefined_CopyToSendText; // = null;
 
 		private void contextMenuStrip_Predefined_Opening(object sender, CancelEventArgs e)
 		{
 			if (contextMenuStrip_Predefined.SourceControl == groupBox_Predefined)
 			{
 				int id = predefined.GetCommandIdFromScreenPoint(new Point(contextMenuStrip_Predefined.Left, contextMenuStrip_Predefined.Top));
-				Model.Types.Command c = predefined.GetCommandFromId(id);
+				Command c = predefined.GetCommandFromId(id);
 
 				contextMenuStrip_Predefined_SelectedCommand = id;
 				contextMenuStrip_Predefined_CopyToSendText = c;
@@ -1654,7 +1624,7 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_PredefinedContextMenu_CopyToSendText_Click(object sender, EventArgs e)
 		{
-			Model.Types.Command c = contextMenuStrip_Predefined_CopyToSendText;
+			Command c = contextMenuStrip_Predefined_CopyToSendText;
 			if (c != null)
 			{
 				if (c.IsText)
@@ -1910,12 +1880,12 @@ namespace YAT.View.Forms
 				this.settingsRoot.Implicit.Predefined.SelectedPage = predefined.SelectedPage;
 		}
 
-		private void predefined_SendCommandRequest(object sender, Model.Types.PredefinedCommandEventArgs e)
+		private void predefined_SendCommandRequest(object sender, PredefinedCommandEventArgs e)
 		{
 			this.terminal.SendPredefined(e.Page, e.Command);
 		}
 
-		private void predefined_DefineCommandRequest(object sender, Model.Types.PredefinedCommandEventArgs e)
+		private void predefined_DefineCommandRequest(object sender, PredefinedCommandEventArgs e)
 		{
 			ShowPredefinedCommandSettings(e.Page, e.Command);
 		}
@@ -2220,13 +2190,13 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public virtual void RequestAutoResponseTrigger(Model.Types.AutoTriggerEx trigger)
+		public virtual void RequestAutoResponseTrigger(AutoTriggerEx trigger)
 		{
 			this.settingsRoot.AutoResponse.Trigger = trigger;
 		}
 
 		/// <summary></summary>
-		public virtual void RequestAutoResponseResponse(Model.Types.AutoResponseEx response)
+		public virtual void RequestAutoResponseResponse(AutoResponseEx response)
 		{
 			this.settingsRoot.AutoResponse.Response = response;
 		}

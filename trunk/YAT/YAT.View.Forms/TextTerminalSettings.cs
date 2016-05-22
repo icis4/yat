@@ -35,8 +35,6 @@ using System.Windows.Forms;
 using MKY.Text;
 using MKY.Windows.Forms;
 
-using YAT.View.Utilities;
-
 #endregion
 
 namespace YAT.View.Forms
@@ -188,7 +186,7 @@ namespace YAT.View.Forms
 
 				int invalidTextStart;
 				int invalidTextLength;
-				if (Validation.ValidateText(this, description, eolString, out invalidTextStart, out invalidTextLength))
+				if (Utilities.ValidationHelper.ValidateText(this, description, eolString, out invalidTextStart, out invalidTextLength))
 				{
 					if (!this.isSettingControls)
 					{
@@ -230,7 +228,7 @@ namespace YAT.View.Forms
 				string description = "Rx EOL";
 				int invalidTextStart;
 				int invalidTextLength;
-				if (Validation.ValidateText(this, description, eolString, out invalidTextStart, out invalidTextLength))
+				if (Utilities.ValidationHelper.ValidateText(this, description, eolString, out invalidTextStart, out invalidTextLength))
 				{
 					if (!this.isSettingControls)
 						this.settingsInEdit.RxEol = eolString;

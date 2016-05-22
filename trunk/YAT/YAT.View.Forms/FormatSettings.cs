@@ -340,39 +340,9 @@ namespace YAT.View.Forms
 				this.textFormats[i].FormatColor     = tf.Color;
 			}
 
-			if (this.infoSeparator != null)
-			{
-				if (comboBox_InfoSeparator.Items.Contains(this.infoSeparator))
-				{	// Applies if an item of the combo box is selected.
-					comboBox_InfoSeparator.SelectedItem = this.infoSeparator;
-				}
-				else
-				{	// Applies if an item that is not in the combo box is selected.
-					comboBox_InfoSeparator.SelectedIndex = ControlEx.InvalidIndex;
-					comboBox_InfoSeparator.Text = this.infoSeparator;
-				}
-			}
-			else
-			{	// Item doesn't exist, use default = first item in the combo box, or none if list is empty.
-				comboBox_InfoSeparator.SelectedIndex = 0;
-			}
+			Utilities.SelectionHelper.Select(comboBox_InfoSeparator, this.infoSeparator, this.infoSeparator);
+			Utilities.SelectionHelper.Select(comboBox_InfoEnclosure, this.infoEnclosure, this.infoEnclosure);
 
-			if (this.infoEnclosure != null)
-			{
-				if (comboBox_InfoEnclosure.Items.Contains(this.infoEnclosure))
-				{	// Applies if an item of the combo box is selected.
-					comboBox_InfoEnclosure.SelectedItem = this.infoEnclosure;
-				}
-				else
-				{	// Applies if an item that is not in the combo box is selected.
-					comboBox_InfoEnclosure.SelectedIndex = ControlEx.InvalidIndex;
-					comboBox_InfoEnclosure.Text = this.infoEnclosure;
-				}
-			}
-			else
-			{	// Item doesn't exist, use default = first item in the combo box, or none if list is empty.
-				comboBox_InfoEnclosure.SelectedIndex = 0;
-			}
 			                               // Clone settings before assigning them to control:
 			monitor_Example.FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
 
