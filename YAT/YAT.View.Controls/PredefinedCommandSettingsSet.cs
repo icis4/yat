@@ -40,7 +40,6 @@ using MKY.Windows.Forms;
 using YAT.Application.Utilities;
 using YAT.Model.Types;
 using YAT.Settings.Application;
-using YAT.View.Utilities;
 
 #endregion
 
@@ -308,7 +307,7 @@ namespace YAT.View.Controls
 
 				int invalidTextStart;
 				int invalidTextLength;
-				if (Validation.ValidateText(this, "text", textBox_SingleLineText.Text, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
+				if (Utilities.ValidationHelper.ValidateText(this, "text", textBox_SingleLineText.Text, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
 				{
 					this.isValidated = true;
 

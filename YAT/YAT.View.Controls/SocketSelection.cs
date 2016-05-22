@@ -755,39 +755,12 @@ namespace YAT.View.Controls
 				 (this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpPairSocket)))
 			{
 				comboBox_RemoteHost.Enabled = true;
-				if (comboBox_RemoteHost.Items.Count > 0)
-				{
-					if (this.remoteHost != null)
-					{
-						if (comboBox_RemoteHost.Items.Contains(this.remoteHost))
-						{	// Applies if an item of the combo box is selected.
-							comboBox_RemoteHost.SelectedItem = this.remoteHost;
-						}
-						else
-						{	// Applies if an item that is not in the combo box is selected.
-							comboBox_RemoteHost.SelectedIndex = ControlEx.InvalidIndex;
-							comboBox_RemoteHost.Text = this.remoteHost;
-						}
-					}
-					else
-					{	// Item doesn't exist, use default = first item in the combo box, or none if list is empty.
-						comboBox_RemoteHost.SelectedIndex = 0;
-					}
-				}
-				else
-				{
-					comboBox_RemoteHost.SelectedIndex = ControlEx.InvalidIndex;
-					if (this.remoteHost != null)
-						comboBox_RemoteHost.Text = this.remoteHost;
-					else
-						comboBox_RemoteHost.Text = "";
-				}
+				Utilities.SelectionHelper.Select(comboBox_RemoteHost, this.remoteHost, this.remoteHost);
 			}
 			else
 			{
 				comboBox_RemoteHost.Enabled = false;
-				comboBox_RemoteHost.SelectedIndex = ControlEx.InvalidIndex;
-				comboBox_RemoteHost.Text = "";
+				Utilities.SelectionHelper.Deselect(comboBox_RemoteHost);
 			}
 
 			// Remote port label:
@@ -858,49 +831,21 @@ namespace YAT.View.Controls
 					case SocketType.UdpClient:
 					{
 						comboBox_LocalFilter.Enabled = false;
-						comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
-						comboBox_LocalFilter.Text = "";
+						Utilities.SelectionHelper.Deselect(comboBox_LocalFilter, this.remoteHost);
 						break;
 					}
 
 					case SocketType.UdpServer:
 					{
 						comboBox_LocalFilter.Enabled = true;
-						if (comboBox_LocalFilter.Items.Count > 0)
-						{
-							if (this.localFilter != null)
-							{
-								if (comboBox_LocalFilter.Items.Contains(this.localFilter))
-								{   // Applies if an item of the combo box is selected.
-									comboBox_LocalFilter.SelectedItem = this.localFilter;
-								}
-								else
-								{   // Applies if an item that is not in the combo box is selected.
-									comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
-									comboBox_LocalFilter.Text = this.localFilter;
-								}
-							}
-							else
-							{   // Item doesn't exist, use default = first item in the combo box, or none if list is empty.
-								comboBox_LocalFilter.SelectedIndex = 0;
-							}
-						}
-						else
-						{
-							comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
-							if (this.localFilter != null)
-								comboBox_LocalFilter.Text = this.localFilter;
-							else
-								comboBox_LocalFilter.Text = "";
-						}
+						Utilities.SelectionHelper.Select(comboBox_LocalFilter, this.remoteHost, this.remoteHost);
 						break;
 					}
 
 					case SocketType.UdpPairSocket:
 					{
 						comboBox_LocalFilter.Enabled = false;
-						comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
-						comboBox_LocalFilter.Text = this.remoteHost;
+						Utilities.SelectionHelper.Deselect(comboBox_LocalFilter, this.remoteHost);
 						break;
 					}
 

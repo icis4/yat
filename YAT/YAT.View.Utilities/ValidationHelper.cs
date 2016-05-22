@@ -39,7 +39,7 @@ using MKY.Windows.Forms;
 namespace YAT.View.Utilities
 {
 	/// <summary></summary>
-	public static class Validation
+	public static class ValidationHelper
 	{
 		/// <summary>Validation using <see cref="Domain.Radix.String"/> and <see cref="Domain.Parser.Modes.AllByteArrayResults"/>.</summary>
 		public static bool ValidateText(IWin32Window owner, string description, string textToValidate)

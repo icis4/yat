@@ -39,7 +39,6 @@ using System.Windows.Forms;
 using MKY.Windows.Forms;
 
 using YAT.Model.Types;
-using YAT.View.Utilities;
 
 #endregion
 
@@ -185,7 +184,7 @@ namespace YAT.View.Controls
 				{
 					int invalidTextStart;
 					int invalidTextLength;
-					if (!Validation.ValidateText(this, "text", s, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
+					if (!Utilities.ValidationHelper.ValidateText(this, "text", s, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
 					{
 						invalidTextStart += textLength;
 						invalidTextLength = textBox_Lines.Text.Length - invalidTextStart;

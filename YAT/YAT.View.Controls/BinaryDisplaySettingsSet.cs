@@ -35,7 +35,6 @@ using MKY;
 using MKY.Windows.Forms;
 
 using YAT.Domain.Settings;
-using YAT.View.Utilities;
 
 #endregion
 
@@ -175,7 +174,7 @@ namespace YAT.View.Controls
 		{
 			int invalidTextStart;
 			int invalidTextLength;
-			if (Validation.ValidateText(this, "sequence", textBox_SequenceLineBreakBeforeSequence.Text, out invalidTextStart, out invalidTextLength))
+			if (Utilities.ValidationHelper.ValidateText(this, "sequence", textBox_SequenceLineBreakBeforeSequence.Text, out invalidTextStart, out invalidTextLength))
 			{
 				Domain.BinarySequenceLineBreak slb = this.settings.SequenceLineBreakBefore;
 				slb.Sequence = textBox_SequenceLineBreakBeforeSequence.Text;
@@ -206,7 +205,7 @@ namespace YAT.View.Controls
 		{
 			int invalidTextStart;
 			int invalidTextLength;
-			if (Validation.ValidateText(this, "sequence", textBox_SequenceLineBreakAfterSequence.Text, out invalidTextStart, out invalidTextLength))
+			if (Utilities.ValidationHelper.ValidateText(this, "sequence", textBox_SequenceLineBreakAfterSequence.Text, out invalidTextStart, out invalidTextLength))
 			{
 				Domain.BinarySequenceLineBreak slb = this.settings.SequenceLineBreakAfter;
 				slb.Sequence = textBox_SequenceLineBreakAfterSequence.Text;

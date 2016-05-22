@@ -551,40 +551,9 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 
 			if (!DesignMode && Enabled)
-			{
-				if (comboBox_Port.Items.Count > 0)
-				{
-					if (this.portId != null)
-					{
-						if (comboBox_Port.Items.Contains(this.portId))
-						{	// Applies if an item of the combo box is selected.
-							comboBox_Port.SelectedItem = this.portId;
-						}
-						else
-						{	// Applies if an item that is not in the combo box is selected.
-							comboBox_Port.SelectedIndex = ControlEx.InvalidIndex;
-							comboBox_Port.Text = this.portId;
-						}
-					}
-					else
-					{	// Item doesn't exist, use default = first item in the combo box, or none if list is empty.
-						comboBox_Port.SelectedIndex = 0;
-					}
-				}
-				else
-				{
-					comboBox_Port.SelectedIndex = ControlEx.InvalidIndex;
-					if (this.portId != null)
-						comboBox_Port.Text = this.portId;
-					else
-						comboBox_Port.Text = "";
-				}
-			}
+				Utilities.SelectionHelper.Select(comboBox_Port, this.portId, this.portId);
 			else
-			{
-				comboBox_Port.SelectedIndex = ControlEx.InvalidIndex;
-				comboBox_Port.Text = "";
-			}
+				Utilities.SelectionHelper.Deselect(comboBox_Port);
 
 			this.isSettingControls.Leave();
 		}
