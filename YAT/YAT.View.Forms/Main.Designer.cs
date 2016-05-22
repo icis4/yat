@@ -131,7 +131,7 @@
 			this.toolStripButton_MainTool_Terminal_AutoResponse_ShowHide = new System.Windows.Forms.ToolStripButton();
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response = new System.Windows.Forms.ToolStripComboBox();
-			this.toolStripButton_MainTool_Terminal_AutoResponse_Reset = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Terminal_AutoResponse_Deactivate = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItem_MainTool_Separator_5 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_MainTool_Terminal_Clear = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Terminal_Refresh = new System.Windows.Forms.ToolStripButton();
@@ -855,7 +855,7 @@
             this.toolStripButton_MainTool_Terminal_AutoResponse_ShowHide,
             this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger,
             this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response,
-            this.toolStripButton_MainTool_Terminal_AutoResponse_Reset,
+            this.toolStripButton_MainTool_Terminal_AutoResponse_Deactivate,
             this.toolStripMenuItem_MainTool_Separator_5,
             this.toolStripButton_MainTool_Terminal_Clear,
             this.toolStripButton_MainTool_Terminal_Refresh,
@@ -1050,14 +1050,14 @@
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response_SelectedIndexChanged);
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response_TextChanged);
 			// 
-			// toolStripButton_MainTool_Terminal_AutoResponse_Reset
+			// toolStripButton_MainTool_Terminal_AutoResponse_Deactivate
 			// 
-			this.toolStripButton_MainTool_Terminal_AutoResponse_Reset.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_AutoResponse_Reset.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_email_delete_16x16;
-			this.toolStripButton_MainTool_Terminal_AutoResponse_Reset.Name = "toolStripButton_MainTool_Terminal_AutoResponse_Reset";
-			this.toolStripButton_MainTool_Terminal_AutoResponse_Reset.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_AutoResponse_Reset.Text = "Reset automatic response";
-			this.toolStripButton_MainTool_Terminal_AutoResponse_Reset.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_AutoResponse_Reset_Click);
+			this.toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_email_delete_16x16;
+			this.toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Name = "toolStripButton_MainTool_Terminal_AutoResponse_Deactivate";
+			this.toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Text = "Deactivate automatic response";
+			this.toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_AutoResponse_Deactivate_Click);
 			// 
 			// toolStripMenuItem_MainTool_Separator_5
 			// 
@@ -1362,6 +1362,6 @@
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_AutoResponse_ShowHide;
 		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_MainTool_Terminal_AutoResponse_Response;
 		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_AutoResponse_Reset;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_AutoResponse_Deactivate;
 	}
 }

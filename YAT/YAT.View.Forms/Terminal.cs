@@ -526,9 +526,9 @@ namespace YAT.View.Forms
 			toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked  = this.settingsRoot.Send.CopyPredefined;
 			toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked = this.settingsRoot.Send.SendImmediately;
 
-			toolStripMenuItem_TerminalMenu_Send_AutoResponse.Checked          =  this.settingsRoot.AutoResponse.Enabled;
-			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Checked  = (this.settingsRoot.AutoResponse.Trigger  != AutoTrigger.None);
-			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Checked = (this.settingsRoot.AutoResponse.Response != AutoResponse.None);
+			toolStripMenuItem_TerminalMenu_Send_AutoResponse.Checked          = this.settingsRoot.AutoResponse.IsActive;
+			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Checked  = this.settingsRoot.AutoResponse.TriggerIsActive;
+			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Checked = this.settingsRoot.AutoResponse.ResponseIsActive;
 
 			// Attention:
 			// Similar code exists in the following location:
@@ -550,7 +550,7 @@ namespace YAT.View.Forms
 				Utilities.SelectionHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response, new Command(response).SingleLineText);
 			}
 
-			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset.Enabled = this.settingsRoot.AutoResponse.Enabled;
+			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Enabled = this.settingsRoot.AutoResponse.IsActive;
 
 			this.isSettingControls.Leave();
 		}
@@ -660,9 +660,9 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.AutoResponse.Reset();
+			this.settingsRoot.AutoResponse.Deactivate();
 		}
 
 		#endregion
@@ -2202,9 +2202,9 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public virtual void RequestAutoResponseReset()
+		public virtual void RequestAutoResponseDeactivate()
 		{
-			this.settingsRoot.AutoResponse.Reset();
+			this.settingsRoot.AutoResponse.Deactivate();
 		}
 
 		/// <summary></summary>

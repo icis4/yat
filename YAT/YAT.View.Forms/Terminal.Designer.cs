@@ -78,6 +78,7 @@
 			this.toolStripMenuItem_RadixContextMenu_Rx_Oct = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_RadixContextMenu_Rx_Dec = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_Radix = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_ShowRadix = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ShowLineNumbers = new System.Windows.Forms.ToolStripMenuItem();
@@ -99,7 +100,6 @@
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_SaveToFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Print = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_View_Radix = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Predefined = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_PredefinedContextMenu_Command_1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_Command_2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -194,7 +194,7 @@
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response = new System.Windows.Forms.ToolStripComboBox();
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log_On = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
@@ -480,7 +480,6 @@
             this.toolStripMenuItem_RadixContextMenu_TxRadix,
             this.toolStripMenuItem_RadixContextMenu_RxRadix});
 			this.contextMenuStrip_Radix.Name = "contextMenuStrip_Radix";
-			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_TerminalMenu_View_Radix;
 			this.contextMenuStrip_Radix.Size = new System.Drawing.Size(151, 220);
 			this.contextMenuStrip_Radix.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Radix_Opening);
 			// 
@@ -676,6 +675,13 @@
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex.Text = "&Hexadecimal";
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Rx_Hex_Click);
 			// 
+			// toolStripMenuItem_TerminalMenu_View_Radix
+			// 
+			this.toolStripMenuItem_TerminalMenu_View_Radix.DropDown = this.contextMenuStrip_Radix;
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Name = "toolStripMenuItem_TerminalMenu_View_Radix";
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(225, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Text = "&Radix";
+			// 
 			// toolStripMenuItem_MonitorContextMenu_Separator_4
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Separator_4.Name = "toolStripMenuItem_MonitorContextMenu_Separator_4";
@@ -818,13 +824,6 @@
 			this.toolStripMenuItem_MonitorContextMenu_Print.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Print.Text = "Print...";
 			this.toolStripMenuItem_MonitorContextMenu_Print.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Print_Click);
-			// 
-			// toolStripMenuItem_TerminalMenu_View_Radix
-			// 
-			this.toolStripMenuItem_TerminalMenu_View_Radix.DropDown = this.contextMenuStrip_Radix;
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Name = "toolStripMenuItem_TerminalMenu_View_Radix";
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(225, 22);
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Text = "&Radix";
 			// 
 			// contextMenuStrip_Predefined
 			// 
@@ -1344,7 +1343,7 @@
 			this.toolStripMenuItem_TerminalMenu_File_Close.MergeAction = System.Windows.Forms.MergeAction.Insert;
 			this.toolStripMenuItem_TerminalMenu_File_Close.MergeIndex = 3;
 			this.toolStripMenuItem_TerminalMenu_File_Close.Name = "toolStripMenuItem_TerminalMenu_File_Close";
-			this.toolStripMenuItem_TerminalMenu_File_Close.Size = new System.Drawing.Size(138, 22);
+			this.toolStripMenuItem_TerminalMenu_File_Close.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem_TerminalMenu_File_Close.Text = "&Close";
 			this.toolStripMenuItem_TerminalMenu_File_Close.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_File_Close_Click);
 			// 
@@ -1355,7 +1354,7 @@
 			this.toolStripMenuItem_TerminalMenu_File_Save.MergeIndex = 6;
 			this.toolStripMenuItem_TerminalMenu_File_Save.Name = "toolStripMenuItem_TerminalMenu_File_Save";
 			this.toolStripMenuItem_TerminalMenu_File_Save.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-			this.toolStripMenuItem_TerminalMenu_File_Save.Size = new System.Drawing.Size(138, 22);
+			this.toolStripMenuItem_TerminalMenu_File_Save.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem_TerminalMenu_File_Save.Text = "&Save";
 			this.toolStripMenuItem_TerminalMenu_File_Save.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_File_Save_Click);
 			// 
@@ -1365,7 +1364,7 @@
 			this.toolStripMenuItem_TerminalMenu_File_SaveAs.MergeAction = System.Windows.Forms.MergeAction.Insert;
 			this.toolStripMenuItem_TerminalMenu_File_SaveAs.MergeIndex = 7;
 			this.toolStripMenuItem_TerminalMenu_File_SaveAs.Name = "toolStripMenuItem_TerminalMenu_File_SaveAs";
-			this.toolStripMenuItem_TerminalMenu_File_SaveAs.Size = new System.Drawing.Size(138, 22);
+			this.toolStripMenuItem_TerminalMenu_File_SaveAs.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem_TerminalMenu_File_SaveAs.Text = "Save &As...";
 			this.toolStripMenuItem_TerminalMenu_File_SaveAs.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_File_SaveAs_Click);
 			// 
@@ -1673,7 +1672,7 @@
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger,
             this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response,
-            this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset});
+            this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate});
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_autoresponders_16x16;
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse.Size = new System.Drawing.Size(320, 22);
@@ -1684,7 +1683,7 @@
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger});
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger";
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Size = new System.Drawing.Size(171, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Text = "&Trigger";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.ToolTipText = "The trigger that initiates an automatic response";
 			// 
@@ -1702,7 +1701,7 @@
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response});
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response";
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Size = new System.Drawing.Size(171, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Text = "&Response";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.ToolTipText = "The response that is automatically sent";
 			// 
@@ -1715,13 +1714,14 @@
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_SelectedIndexChanged);
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.TextChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_TextChanged);
 			// 
-			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset
+			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate
 			// 
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_email_delete_16x16;
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset";
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset.Size = new System.Drawing.Size(152, 22);
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset.Text = "R&eset";
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset_Click);
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_email_delete_16x16;
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate";
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Size = new System.Drawing.Size(171, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Text = "&Deactivate";
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Log
 			// 
@@ -2090,14 +2090,14 @@
 			// toolStripMenuItem_TerminalMenu_View_FlowControlCount_ShowCount
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_FlowControlCount_ShowCount.Name = "toolStripMenuItem_TerminalMenu_View_FlowControlCount_ShowCount";
-			this.toolStripMenuItem_TerminalMenu_View_FlowControlCount_ShowCount.Size = new System.Drawing.Size(139, 22);
+			this.toolStripMenuItem_TerminalMenu_View_FlowControlCount_ShowCount.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem_TerminalMenu_View_FlowControlCount_ShowCount.Text = "&Show Count";
 			this.toolStripMenuItem_TerminalMenu_View_FlowControlCount_ShowCount.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_FlowControlCount_ShowCount_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_FlowControlCount_ResetCount
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_FlowControlCount_ResetCount.Name = "toolStripMenuItem_TerminalMenu_View_FlowControlCount_ResetCount";
-			this.toolStripMenuItem_TerminalMenu_View_FlowControlCount_ResetCount.Size = new System.Drawing.Size(139, 22);
+			this.toolStripMenuItem_TerminalMenu_View_FlowControlCount_ResetCount.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem_TerminalMenu_View_FlowControlCount_ResetCount.Text = "&Reset Count";
 			this.toolStripMenuItem_TerminalMenu_View_FlowControlCount_ResetCount.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_FlowControlCount_ResetCount_Click);
 			// 
@@ -2113,14 +2113,14 @@
 			// toolStripMenuItem_TerminalMenu_View_BreakCount_ShowCount
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_BreakCount_ShowCount.Name = "toolStripMenuItem_TerminalMenu_View_BreakCount_ShowCount";
-			this.toolStripMenuItem_TerminalMenu_View_BreakCount_ShowCount.Size = new System.Drawing.Size(139, 22);
+			this.toolStripMenuItem_TerminalMenu_View_BreakCount_ShowCount.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem_TerminalMenu_View_BreakCount_ShowCount.Text = "&Show Count";
 			this.toolStripMenuItem_TerminalMenu_View_BreakCount_ShowCount.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_BreakCount_ShowCount_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_BreakCount_ResetCount
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_BreakCount_ResetCount.Name = "toolStripMenuItem_TerminalMenu_View_BreakCount_ResetCount";
-			this.toolStripMenuItem_TerminalMenu_View_BreakCount_ResetCount.Size = new System.Drawing.Size(139, 22);
+			this.toolStripMenuItem_TerminalMenu_View_BreakCount_ResetCount.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem_TerminalMenu_View_BreakCount_ResetCount.Text = "&Reset Count";
 			this.toolStripMenuItem_TerminalMenu_View_BreakCount_ResetCount.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_BreakCount_ResetCount_Click);
 			// 
@@ -2438,7 +2438,7 @@
 			this.splitContainer_Terminal.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainer_Terminal.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
 			this.splitContainer_Terminal.IsSplitterFixed = true;
-			this.splitContainer_Terminal.Location = new System.Drawing.Point(0, 24);
+			this.splitContainer_Terminal.Location = new System.Drawing.Point(0, 0);
 			this.splitContainer_Terminal.Name = "splitContainer_Terminal";
 			this.splitContainer_Terminal.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
@@ -2450,8 +2450,8 @@
 			// 
 			this.splitContainer_Terminal.Panel2.Controls.Add(this.panel_Send);
 			this.splitContainer_Terminal.Panel2MinSize = 97;
-			this.splitContainer_Terminal.Size = new System.Drawing.Size(712, 464);
-			this.splitContainer_Terminal.SplitterDistance = 366;
+			this.splitContainer_Terminal.Size = new System.Drawing.Size(712, 488);
+			this.splitContainer_Terminal.SplitterDistance = 390;
 			this.splitContainer_Terminal.SplitterWidth = 1;
 			this.splitContainer_Terminal.TabIndex = 1;
 			this.splitContainer_Terminal.TabStop = false;
@@ -2471,7 +2471,7 @@
 			// 
 			this.splitContainer_Predefined.Panel2.Controls.Add(this.panel_Predefined);
 			this.splitContainer_Predefined.Panel2MinSize = 144;
-			this.splitContainer_Predefined.Size = new System.Drawing.Size(712, 366);
+			this.splitContainer_Predefined.Size = new System.Drawing.Size(712, 390);
 			this.splitContainer_Predefined.SplitterDistance = 525;
 			this.splitContainer_Predefined.TabIndex = 0;
 			this.splitContainer_Predefined.TabStop = false;
@@ -2484,7 +2484,7 @@
 			this.panel_Monitor.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor.Name = "panel_Monitor";
 			this.panel_Monitor.Padding = new System.Windows.Forms.Padding(3, 3, 1, 0);
-			this.panel_Monitor.Size = new System.Drawing.Size(525, 366);
+			this.panel_Monitor.Size = new System.Drawing.Size(525, 390);
 			this.panel_Monitor.TabIndex = 0;
 			// 
 			// groupBox_Monitor
@@ -2495,7 +2495,7 @@
 			this.groupBox_Monitor.Location = new System.Drawing.Point(3, 3);
 			this.groupBox_Monitor.Name = "groupBox_Monitor";
 			this.groupBox_Monitor.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.groupBox_Monitor.Size = new System.Drawing.Size(521, 363);
+			this.groupBox_Monitor.Size = new System.Drawing.Size(521, 387);
 			this.groupBox_Monitor.TabIndex = 0;
 			this.groupBox_Monitor.TabStop = false;
 			this.groupBox_Monitor.Text = "Monitor";
@@ -2515,7 +2515,7 @@
 			// 
 			this.splitContainer_TxMonitor.Panel2.Controls.Add(this.splitContainer_RxMonitor);
 			this.splitContainer_TxMonitor.Panel2MinSize = 100;
-			this.splitContainer_TxMonitor.Size = new System.Drawing.Size(515, 347);
+			this.splitContainer_TxMonitor.Size = new System.Drawing.Size(515, 371);
 			this.splitContainer_TxMonitor.SplitterDistance = 168;
 			this.splitContainer_TxMonitor.TabIndex = 0;
 			this.splitContainer_TxMonitor.TabStop = false;
@@ -2528,7 +2528,7 @@
 			this.panel_Monitor_Tx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Tx.Name = "panel_Monitor_Tx";
 			this.panel_Monitor_Tx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Tx.Size = new System.Drawing.Size(168, 347);
+			this.panel_Monitor_Tx.Size = new System.Drawing.Size(168, 371);
 			this.panel_Monitor_Tx.TabIndex = 0;
 			// 
 			// monitor_Tx
@@ -2539,7 +2539,7 @@
 			this.monitor_Tx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Tx.Name = "monitor_Tx";
 			this.monitor_Tx.RepositoryType = YAT.Domain.RepositoryType.Tx;
-			this.monitor_Tx.Size = new System.Drawing.Size(162, 344);
+			this.monitor_Tx.Size = new System.Drawing.Size(162, 368);
 			this.monitor_Tx.TabIndex = 0;
 			this.monitor_Tx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Tx.Enter += new System.EventHandler(this.monitor_Tx_Enter);
@@ -2559,7 +2559,7 @@
 			// 
 			this.splitContainer_RxMonitor.Panel2.Controls.Add(this.panel_Monitor_Rx);
 			this.splitContainer_RxMonitor.Panel2MinSize = 48;
-			this.splitContainer_RxMonitor.Size = new System.Drawing.Size(343, 347);
+			this.splitContainer_RxMonitor.Size = new System.Drawing.Size(343, 371);
 			this.splitContainer_RxMonitor.SplitterDistance = 171;
 			this.splitContainer_RxMonitor.TabIndex = 1;
 			this.splitContainer_RxMonitor.TabStop = false;
@@ -2572,7 +2572,7 @@
 			this.panel_Monitor_Bidir.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Bidir.Name = "panel_Monitor_Bidir";
 			this.panel_Monitor_Bidir.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(171, 347);
+			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(171, 371);
 			this.panel_Monitor_Bidir.TabIndex = 0;
 			// 
 			// monitor_Bidir
@@ -2583,7 +2583,7 @@
 			this.monitor_Bidir.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Bidir.Name = "monitor_Bidir";
 			this.monitor_Bidir.RepositoryType = YAT.Domain.RepositoryType.Bidir;
-			this.monitor_Bidir.Size = new System.Drawing.Size(165, 344);
+			this.monitor_Bidir.Size = new System.Drawing.Size(165, 368);
 			this.monitor_Bidir.TabIndex = 0;
 			this.monitor_Bidir.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Bidir.Enter += new System.EventHandler(this.monitor_Bidir_Enter);
@@ -2595,7 +2595,7 @@
 			this.panel_Monitor_Rx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Rx.Name = "panel_Monitor_Rx";
 			this.panel_Monitor_Rx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Rx.Size = new System.Drawing.Size(168, 347);
+			this.panel_Monitor_Rx.Size = new System.Drawing.Size(168, 371);
 			this.panel_Monitor_Rx.TabIndex = 0;
 			// 
 			// monitor_Rx
@@ -2606,7 +2606,7 @@
 			this.monitor_Rx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Rx.Name = "monitor_Rx";
 			this.monitor_Rx.RepositoryType = YAT.Domain.RepositoryType.Rx;
-			this.monitor_Rx.Size = new System.Drawing.Size(162, 344);
+			this.monitor_Rx.Size = new System.Drawing.Size(162, 368);
 			this.monitor_Rx.TabIndex = 0;
 			this.monitor_Rx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Rx.Enter += new System.EventHandler(this.monitor_Rx_Enter);
@@ -2618,7 +2618,7 @@
 			this.panel_Predefined.Location = new System.Drawing.Point(0, 0);
 			this.panel_Predefined.Name = "panel_Predefined";
 			this.panel_Predefined.Padding = new System.Windows.Forms.Padding(1, 3, 3, 0);
-			this.panel_Predefined.Size = new System.Drawing.Size(183, 366);
+			this.panel_Predefined.Size = new System.Drawing.Size(183, 390);
 			this.panel_Predefined.TabIndex = 0;
 			// 
 			// groupBox_Predefined
@@ -2628,7 +2628,7 @@
 			this.groupBox_Predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox_Predefined.Location = new System.Drawing.Point(1, 3);
 			this.groupBox_Predefined.Name = "groupBox_Predefined";
-			this.groupBox_Predefined.Size = new System.Drawing.Size(179, 363);
+			this.groupBox_Predefined.Size = new System.Drawing.Size(179, 387);
 			this.groupBox_Predefined.TabIndex = 0;
 			this.groupBox_Predefined.TabStop = false;
 			this.groupBox_Predefined.Text = "&Predefined Commands";
@@ -2638,7 +2638,7 @@
 			this.predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.predefined.Location = new System.Drawing.Point(3, 16);
 			this.predefined.Name = "predefined";
-			this.predefined.Size = new System.Drawing.Size(173, 344);
+			this.predefined.Size = new System.Drawing.Size(173, 368);
 			this.predefined.TabIndex = 0;
 			this.predefined.SelectedPageChanged += new System.EventHandler(this.predefined_SelectedPageChanged);
 			this.predefined.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.predefined_SendCommandRequest);
@@ -2985,6 +2985,6 @@
 		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowPort;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowPort;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Reset;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate;
 	}
 }
