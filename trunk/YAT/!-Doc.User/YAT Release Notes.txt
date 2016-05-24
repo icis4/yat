@@ -137,7 +137,7 @@ Important changes:
 - Settings related to XOn/XOff and ASCII control character replacement improved (bug #319).
 - Synchronization among outgoing and incoming data improved, preventing data mix-ups and exceptions
   (related to feature requests #14, #252 as well as bugs #132, #275, #292, #321, #331, #333, #334).
-- Performance in terms of CPU usage and RAM consumption improved (bugs #189, #243, #263, #336).
+- Performance in terms of CPU and RAM usage improved (bugs #189, #243, #263, #302, #336).
 - Adaptive monitor update rate significantly improved, it is now dependent on the CPU load.
 - Number of bytes per line limited, in order to keep performance even in case of enormous lines.
 - Implementation of keyword \!(Clear) improved, it now shortly waits before clearing (bug #251).

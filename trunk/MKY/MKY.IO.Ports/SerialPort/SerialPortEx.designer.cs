@@ -11,8 +11,6 @@ namespace MKY.IO.Ports
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
-		private bool isDisposed;
-
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
@@ -74,22 +72,5 @@ namespace MKY.IO.Ports
 		}
 
 		#endregion
-
-		/// <summary>
-		/// Returns whether the object has already been disposed.
-		/// </summary>
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public bool IsDisposed
-		{
-			get { return (this.isDisposed); }
-		}
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (this.isDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
-		}
 	}
 }

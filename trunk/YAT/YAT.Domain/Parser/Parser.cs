@@ -224,14 +224,22 @@ namespace YAT.Domain.Parser
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
+		/// "Types that declare disposable members should also implement IDisposable. If the type
+		///  does not own any unmanaged resources, do not implement a finalizer on it."
+		/// 
+		/// Well, true for best performance on finalizing. However, it's not easy to find missing
+		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
+		/// is kept, opposing rule CA1001, but getting debug messages indicating missing calls.
+		/// 
+		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
+		/// </remarks>
 		~Parser()
 		{
 			Dispose(false);
 
-			// \fixme (2015-05-01 / MKY)
-			// #302 "Ensure that Dispose() is called in any case"
-		////System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -338,7 +346,13 @@ namespace YAT.Domain.Parser
 		internal virtual Parser NestedParser
 		{
 			get { return (this.nestedParser); }
-			set { this.nestedParser = value; }
+			set
+			{
+				if (this.nestedParser != null)
+					this.nestedParser.Dispose();
+
+				this.nestedParser = value;
+			}
 		}
 
 		internal virtual bool IsKeywordParser
@@ -560,7 +574,7 @@ namespace YAT.Domain.Parser
 				int c = CharEx.InvalidChar; // 'int' is given by Read() below.
 				try
 				{
-					c = this.CharReader.Read();
+					c = this.charReader.Read();
 				}
 				catch (ObjectDisposedException ex)
 				{
@@ -574,7 +588,7 @@ namespace YAT.Domain.Parser
 					string remaining = null;
 					try
 					{
-						remaining = this.CharReader.ReadToEnd();
+						remaining = this.charReader.ReadToEnd();
 					}
 					catch (ObjectDisposedException ex)
 					{
@@ -1039,6 +1053,17 @@ namespace YAT.Domain.Parser
 			this.hasFinished     = false;
 		}
 
+		/// <summary>
+		/// Releases all resources referenced by a nested parse-level.
+		/// </summary>
+		internal void ReleaseNestedParse()
+		{
+			this.charReader   = null; // De-reference the parent's reader.
+			this.result       = null; // De-reference the parent's result list.
+
+			this.parentParser = null; // De-reference the parent itself.
+		}
+
 		private void DisposeAndReset()
 		{
 			if (this.charReader != null)
@@ -1050,12 +1075,16 @@ namespace YAT.Domain.Parser
 			if (this.state != null)
 				this.state.Dispose();
 
+			if (this.parentParser != null)
+				this.parentParser.Dispose();
+
 			if (this.nestedParser != null)
 				this.nestedParser.Dispose();
 
 			this.charReader   = null;
 			this.bytesWriter  = null;
 			this.state        = null;
+			this.parentParser = null;
 			this.nestedParser = null;
 		}
 
