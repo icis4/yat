@@ -133,51 +133,6 @@ namespace MKY.IO.Serial.SerialPort
 			FlowControl = FlowControlDefault;
 		}
 
-		/// <summary></summary>
-		public static SerialControlPinState ToRfrPinDefault(SerialFlowControl flowControl)
-		{
-			switch (flowControl)
-			{
-				case SerialFlowControl.Hardware:
-				case SerialFlowControl.Combined:
-					return (SerialControlPinState.Automatic);
-
-				case SerialFlowControl.ManualHardware:
-				case SerialFlowControl.ManualCombined:
-					return (SerialControlPinState.Enabled);
-
-				case SerialFlowControl.RS485:
-					return (SerialControlPinState.Disabled); // Will be enabled for each frame.
-
-				default: // Includes 'None', 'Software', 'ManualSoftware'
-					return (SerialControlPinState.Disabled);
-			}
-		}
-
-		/// <summary></summary>
-		public static SerialControlPinState ToDtrPinDefault(SerialFlowControl flowControl)
-		{
-			switch (flowControl)
-			{
-				case SerialFlowControl.Hardware:
-				case SerialFlowControl.Combined:
-				case SerialFlowControl.ManualHardware:
-				case SerialFlowControl.ManualCombined:
-					return (SerialControlPinState.Enabled);
-
-					// Note that certain devices require the DTR pin to be active in case of
-					// hardware flow control. This e.g. applies to USB Ser/CDC devices, which
-					// indicate "DTE not present" if DTR is inactive. Also applies to modems
-					// and similar, where DTR/DSR are supposed to be active for the session.
-
-				case SerialFlowControl.RS485:
-					return (SerialControlPinState.Disabled);
-
-				default: // Includes 'None', 'Software', 'ManualSoftware'
-					return (SerialControlPinState.Disabled);
-			}
-		}
-
 		#region Properties
 		//==========================================================================================
 		// Properties
@@ -240,6 +195,52 @@ namespace MKY.IO.Serial.SerialPort
 					this.stopBits = value;
 					SetChanged();
 				}
+			}
+		}
+
+		/// <summary>
+		/// The number of bits per frame.
+		/// </summary>
+		/// <remarks>
+		/// Typically an integral value, but may be .5 in case of
+		/// <see cref="System.IO.Ports.StopBits.OnePointFive"/>.
+		/// </remarks>
+		[XmlIgnore]
+		public virtual double BitsPerFrame
+		{
+			get
+			{
+				double value = 1.0; // Start bit.
+
+				value += (MKY.IO.Ports.DataBitsEx)DataBits;
+
+				switch (Parity)
+				{
+					case System.IO.Ports.Parity.Odd:
+					case System.IO.Ports.Parity.Even:
+					case System.IO.Ports.Parity.Mark:
+					case System.IO.Ports.Parity.Space:
+					{
+						value += 1.0; // Parity bit.
+						break;
+					}
+				}
+
+				value += (MKY.IO.Ports.StopBitsEx)StopBits;
+
+				return (value);
+			}
+		}
+
+		/// <summary>
+		/// The frame length in seconds.
+		/// </summary>
+		[XmlIgnore]
+		public virtual double FrameLength
+		{
+			get
+			{
+				return (BitsPerFrame / (MKY.IO.Ports.BaudRateEx)BaudRate);
 			}
 		}
 
@@ -378,6 +379,58 @@ namespace MKY.IO.Serial.SerialPort
 					this.dtrPin = value;
 					SetChanged();
 				}
+			}
+		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static SerialControlPinState ToRfrPinDefault(SerialFlowControl flowControl)
+		{
+			switch (flowControl)
+			{
+				case SerialFlowControl.Hardware:
+				case SerialFlowControl.Combined:
+					return (SerialControlPinState.Automatic);
+
+				case SerialFlowControl.ManualHardware:
+				case SerialFlowControl.ManualCombined:
+					return (SerialControlPinState.Enabled);
+
+				case SerialFlowControl.RS485:
+					return (SerialControlPinState.Disabled); // Will be enabled for each frame.
+
+				default: // Includes 'None', 'Software', 'ManualSoftware'
+					return (SerialControlPinState.Disabled);
+			}
+		}
+
+		/// <summary></summary>
+		public static SerialControlPinState ToDtrPinDefault(SerialFlowControl flowControl)
+		{
+			switch (flowControl)
+			{
+				case SerialFlowControl.Hardware:
+				case SerialFlowControl.Combined:
+				case SerialFlowControl.ManualHardware:
+				case SerialFlowControl.ManualCombined:
+					return (SerialControlPinState.Enabled);
+
+					// Note that certain devices require the DTR pin to be active in case of
+					// hardware flow control. This e.g. applies to USB Ser/CDC devices, which
+					// indicate "DTE not present" if DTR is inactive. Also applies to modems
+					// and similar, where DTR/DSR are supposed to be active for the session.
+
+				case SerialFlowControl.RS485:
+					return (SerialControlPinState.Disabled);
+
+				default: // Includes 'None', 'Software', 'ManualSoftware'
+					return (SerialControlPinState.Disabled);
 			}
 		}
 
