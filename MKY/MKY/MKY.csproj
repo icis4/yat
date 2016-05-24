@@ -111,7 +111,6 @@
     <Compile Include="Data\EventArgs.cs" />
     <Compile Include="Data\DataItem.cs" />
     <Compile Include="Drawing\RotateFlipTypeEx.cs" />
-    <Compile Include="IDisposableEx.cs" />
     <Compile Include="EventHelper.cs" />
     <Compile Include="IO\DirectoryEx.cs" />
     <Compile Include="IO\StreamEx.cs" />

@@ -157,7 +157,7 @@ namespace MKY.IO.Ports
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	[ToolboxBitmap(typeof(System.IO.Ports.SerialPort))]
 	[DefaultProperty("PortName")]
-	public partial class SerialPortEx : System.IO.Ports.SerialPort, ISerialPort, IDisposableEx
+	public partial class SerialPortEx : System.IO.Ports.SerialPort, ISerialPort
 	{
 		#region Constants
 		//==========================================================================================
@@ -172,6 +172,8 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
+
+		private bool isDisposed;
 
 		private SerialPortControlPinCount controlPinCount;
 
@@ -295,6 +297,48 @@ namespace MKY.IO.Ports
 			base.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(base_ErrorReceived);
 			base.PinChanged    += new System.IO.Ports.SerialPinChangedEventHandler   (base_PinChanged);
 		}
+
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		/// <remarks>
+		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
+		/// "Types that declare disposable members should also implement IDisposable. If the type
+		///  does not own any unmanaged resources, do not implement a finalizer on it."
+		/// 
+		/// Well, true for best performance on finalizing. However, it's not easy to find missing
+		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
+		/// is kept, opposing rule CA1001, but getting debug messages indicating missing calls.
+		/// 
+		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
+		/// </remarks>
+		~SerialPortEx()
+		{
+			Dispose(false);
+
+			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+		}
+
+		/// <summary>
+		/// Returns whether the object has already been disposed.
+		/// </summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public bool IsDisposed
+		{
+			get { return (this.isDisposed); }
+		}
+
+		/// <summary></summary>
+		protected void AssertNotDisposed()
+		{
+			if (this.isDisposed)
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
+		}
+
+		#endregion
 
 		#endregion
 
