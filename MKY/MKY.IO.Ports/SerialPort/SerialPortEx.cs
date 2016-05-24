@@ -303,6 +303,8 @@ namespace MKY.IO.Ports
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
+#if (DEBUG)
+
 		/// <remarks>
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
@@ -310,7 +312,7 @@ namespace MKY.IO.Ports
 		/// 
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept, opposing rule CA1001, but getting debug messages indicating missing calls.
+		/// is kept for DEBUG, indicating missing calls.
 		/// 
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
@@ -320,6 +322,8 @@ namespace MKY.IO.Ports
 
 			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
+
+#endif // DEBUG
 
 		/// <summary>
 		/// Returns whether the object has already been disposed.
