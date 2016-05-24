@@ -1036,7 +1036,8 @@ namespace MKY.IO.Serial.SerialPort
 
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 			{
-				this.port.Flush(); // Make sure that data is sent before restoring RFR.
+				this.port.Flush(); // Make sure that data is sent before restoring RFR, including the underlying physical UART.
+				Thread.Sleep((int)Math.Ceiling(this.settings.Communication.FrameLength * 1000)); // Single byte/frame.
 				this.port.RfrEnable = false;
 			}
 
@@ -1138,7 +1139,12 @@ namespace MKY.IO.Serial.SerialPort
 
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 			{
-				this.port.Flush(); // Make sure that data is sent before restoring RFR.
+				int maxFramesInFifo = 0;
+				if (effectiveChunkData != null)
+					maxFramesInFifo = Math.Min(effectiveChunkData.Count, 16); // Max 16 bytes/frames in FIFO.
+
+				this.port.Flush(); // Make sure that data is sent before restoring RFR, including the underlying physical UART.
+				Thread.Sleep((int)Math.Ceiling(this.settings.Communication.FrameLength * 1000 * maxFramesInFifo));
 				this.port.RfrEnable = false;
 			}
 
