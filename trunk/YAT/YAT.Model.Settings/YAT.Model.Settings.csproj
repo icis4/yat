@@ -103,6 +103,7 @@
     <Compile Include="..\YAT.Version.cs">
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
+    <Compile Include="ViewSettings.cs" />
     <Compile Include="FormatSettings.cs" />
     <Compile Include="LayoutSettings.cs" />
     <Compile Include="MainWindowSettings.cs" />

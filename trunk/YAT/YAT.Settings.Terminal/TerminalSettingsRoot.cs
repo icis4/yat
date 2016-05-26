@@ -401,6 +401,14 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
+		public virtual Model.Settings.ViewSettings View
+		{
+			get { return (this.implicit_.View); }
+			set { this.implicit_.View = value;  }
+		}
+
+		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
+		[XmlIgnore]
 		public virtual Model.Settings.PredefinedCommandSettings PredefinedCommand
 		{
 			get { return (this.explicit_.PredefinedCommand); }

@@ -22,11 +22,8 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Xml.Serialization;
-
-using MKY.Recent;
 
 using YAT.Model.Types;
 
@@ -54,9 +51,6 @@ namespace YAT.Model.Settings
 		/// <remarks><see cref="SystemColors.Window"/>.</remarks>
 		public static readonly Color BackColorDefault = SystemColors.Window;
 
-		/// <summary></summary>
-		public const int MaxCustomColors = 16;
-
 		private FontFormat font;
 
 		private TextFormat txDataFormat;
@@ -72,8 +66,6 @@ namespace YAT.Model.Settings
 		private TextFormat errorFormat;
 
 		private BackFormat backFormat;
-
-		private RecentItemCollection<string> customColors;
 
 		/// <summary></summary>
 		public FormatSettings()
@@ -113,8 +105,6 @@ namespace YAT.Model.Settings
 
 			BackFormat        = new BackFormat(rhs.BackFormat);
 
-			CustomColors      = new RecentItemCollection<string>(rhs.CustomColors);
-
 			ClearChanged();
 		}
 
@@ -140,8 +130,6 @@ namespace YAT.Model.Settings
 			ErrorFormat       = new TextFormat(ErrorColorDefault,        true, false, false, false); // Bold.
 
 			BackFormat        = new BackFormat(BackColorDefault);
-
-			CustomColors      = new RecentItemCollection<string>(MaxCustomColors);
 		}
 
 		#region Properties
@@ -374,63 +362,6 @@ namespace YAT.Model.Settings
 			}
 		}
 
-		/// <remarks>
-		/// Using string because...
-		/// ...<see cref="Color"/> does not implement <see cref="IEquatable{T}"/> that is needed for a recent item collection, and because...
-		/// ...<see cref="Color"/> cannot be serialized.
-		/// </remarks>
-		[XmlElement("CustomColors")]
-		public RecentItemCollection<string> CustomColors
-		{
-			get { return (this.customColors); }
-			set
-			{
-				if (this.customColors != value)
-				{
-					this.customColors = value;
-					SetChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		public int[] CustomColorsToWin32()
-		{
-			List<int> l = new List<int>(this.customColors.Count);
-
-			foreach (RecentItem<string> ri in this.customColors)
-			{
-				Color c = ColorTranslator.FromHtml(ri.Item);
-				int win32 = ColorTranslator.ToWin32(c);
-				l.Add(win32);
-			}
-
-			return (l.ToArray());
-		}
-
-		/// <summary></summary>
-		public bool UpdateCustomColorsFromWin32(int[] customColors)
-		{
-			// Do not add 'White', as that...
-			// ...is the default color, and...
-			// ...is available predefined anyway.
-			int win32White = ColorTranslator.ToWin32(Color.White);
-
-			List<string> otherThanWhite = new List<string>(customColors.Length);
-
-			foreach (int win32 in customColors)
-			{
-				if (win32 != win32White)
-				{
-					Color c = ColorTranslator.FromWin32(win32);
-					string html = ColorTranslator.ToHtml(c);
-					otherThanWhite.Add(html);
-				}
-			}
-
-			return (this.customColors.UpdateFrom(otherThanWhite));
-		}
-
 		#endregion
 
 		#region Object Members
@@ -469,9 +400,7 @@ namespace YAT.Model.Settings
 				(WhiteSpacesFormat == other.WhiteSpacesFormat) &&
 				(ErrorFormat       == other.ErrorFormat) &&
 
-				(BackFormat        == other.BackFormat) &&
-
-				(CustomColors      == other.CustomColors)
+				(BackFormat        == other.BackFormat)
 			);
 		}
 
@@ -503,8 +432,6 @@ namespace YAT.Model.Settings
 				hashCode = (hashCode * 397) ^ (ErrorFormat       != null ? ErrorFormat      .GetHashCode() : 0);
 
 				hashCode = (hashCode * 397) ^ (BackFormat        != null ? BackFormat       .GetHashCode() : 0);
-
-				hashCode = (hashCode * 397) ^ (CustomColors      != null ? CustomColors     .GetHashCode() : 0);
 
 				return (hashCode);
 			}
