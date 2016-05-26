@@ -180,9 +180,9 @@ namespace YAT.Domain.Parser
 				if (!TryWriteContiguous(parser, ref formatException))
 					return (false);
 
+				// Commit bytes, create a nested parser and then change state:
 				parser.CommitPendingBytes();
-				// Commit bytes and then change state:
-				parser.NestedParser = parser.GetParser(new EscapeState(), parser);
+				parser.NestedParser = parser.GetNestedParser(new EscapeState());
 				ChangeState(parser, new NestedState());
 			}
 			else if (parseChar == '<')               // ASCII mnemonic sequence.
@@ -190,9 +190,9 @@ namespace YAT.Domain.Parser
 				if (!TryWriteContiguous(parser, ref formatException))
 					return (false);
 
+				// Commit bytes, create a nested parser and then change state:
 				parser.CommitPendingBytes();
-				// Commit bytes and then change state:
-				parser.NestedParser = parser.GetParser(new AsciiMnemonicState(), parser);
+				parser.NestedParser = parser.GetNestedParser(new AsciiMnemonicState());
 				ChangeState(parser, new NestedState());
 			}
 			else                                     // Compose contiguous string.
@@ -267,7 +267,9 @@ namespace YAT.Domain.Parser
 
 			if (parser.NestedParser.HasFinished) // Regain parser "focus".
 			{
-				parser.NestedParser.ReleaseNestedParse();
+				parser.NestedParser.Close(); // Close to release references to parent.
+				parser.NestedParser = null; // Property will dispose the nested parser.
+
 				ChangeState(parser, new DefaultState());
 
 				if (!parseCharHasBeenParsed) // Again try to parse the character with the 'new' parser:
@@ -367,6 +369,7 @@ namespace YAT.Domain.Parser
 					if ((parser.Modes & Modes.Keywords) == Modes.Keywords)
 					{
 						parser.IsKeywordParser = true;
+						parser.DoProbe         = false; // Keywords cannot be probed (yet).
 						ChangeState(parser, new OpeningState());
 						return (true);
 					}
