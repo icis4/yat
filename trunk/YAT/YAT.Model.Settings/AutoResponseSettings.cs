@@ -99,17 +99,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <remarks>
-		/// Must be string because an 'EnumEx' cannot be serialized.
-		/// </remarks>
-		[XmlElement("Trigger")]
-		public virtual string Trigger_ForSerialization
-		{
-			get { return (Trigger); }
-			set { Trigger = value;  }
-		}
-
-		/// <remarks>
-		/// This 'EnumEx' cannot be serialized, thus, the helper above is used for serialization.
+		/// This 'EnumEx' cannot be serialized, thus, the helper below is used for serialization.
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
@@ -126,6 +116,16 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <remarks>
+		/// Must be string because an 'EnumEx' cannot be serialized.
+		/// </remarks>
+		[XmlElement("Trigger")]
+		public virtual string Trigger_ForSerialization
+		{
+			get { return (Trigger); }
+			set { Trigger = value;  }
+		}
+
 		/// <summary></summary>
 		[XmlIgnore]
 		public bool TriggerIsActive
@@ -134,17 +134,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <remarks>
-		/// Must be string because an 'EnumEx' cannot be serialized.
-		/// </remarks>
-		[XmlElement("Response")]
-		public virtual string Response_ForSerialization
-		{
-			get { return (Response); }
-			set { Response = value;  }
-		}
-
-		/// <remarks>
-		/// This 'EnumEx' cannot be serialized, thus, the helper above is used for serialization.
+		/// This 'EnumEx' cannot be serialized, thus, the helper below is used for serialization.
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
@@ -159,6 +149,16 @@ namespace YAT.Model.Settings
 					SetChanged();
 				}
 			}
+		}
+
+		/// <remarks>
+		/// Must be string because an 'EnumEx' cannot be serialized.
+		/// </remarks>
+		[XmlElement("Response")]
+		public virtual string Response_ForSerialization
+		{
+			get { return (Response); }
+			set { Response = value;  }
 		}
 
 		/// <summary></summary>

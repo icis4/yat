@@ -35,18 +35,6 @@ namespace YAT.View.Controls
 	[DefaultEvent("FormatChanged")]
 	public partial class TextFormat : UserControl
 	{
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const bool BoldDefault = false;
-		private const bool ItalicDefault = false;
-		private const bool UnderlineDefault = false;
-		private const bool StrikeoutDefault = false;
-
-		#endregion
-
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -56,6 +44,7 @@ namespace YAT.View.Controls
 
 		private Font font = new Font(Model.Types.FontFormat.NameDefault, Model.Types.FontFormat.SizeDefault, Model.Types.FontFormat.StyleDefault);
 		private Color color = Color.Black;
+		private int[] customColors; // = null
 
 		#endregion
 
@@ -68,6 +57,11 @@ namespace YAT.View.Controls
 		[Category("Property Changed")]
 		[Description("Event raised when any of the text format properties is changed.")]
 		public event EventHandler FormatChanged;
+
+		/// <summary></summary>
+		[Category("Property Changed")]
+		[Description("Event raised when any of the CustomColors property is changed.")]
+		public event EventHandler CustomColorsChanged;
 
 		#endregion
 
@@ -93,27 +87,38 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Format")]
 		[Description("The font.")]
-		public Font FormatFont
+		public virtual Font FormatFont
 		{
 			get { return (this.font); }
 			set
 			{
-				this.font = new Font(value.Name, value.Size, value.Style);
-				SetControls();
-				OnFormatChanged(EventArgs.Empty);
+				if ((this.font.Name  != value.Name) ||
+					(this.font.Size  != value.Size) ||
+					(this.font.Style != value.Style))
+				{
+					this.font = new Font(value.Name, value.Size, value.Style);
+
+					SetControls();
+					OnFormatChanged(EventArgs.Empty);
+				}
 			}
 		}
 
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Font FormatFontWithoutStyle
+		public virtual Font FormatFontWithoutStyle
 		{
 			set
 			{
-				this.font = new Font(value.Name, value.Size, this.font.Style);
-				SetControls();
-				OnFormatChanged(EventArgs.Empty);
+				if ((this.font.Name != value.Name) ||
+					(this.font.Size != value.Size))
+				{
+					this.font = new Font(value.Name, value.Size, this.font.Style);
+
+					SetControls();
+					OnFormatChanged(EventArgs.Empty);
+				}
 			}
 		}
 
@@ -121,109 +126,140 @@ namespace YAT.View.Controls
 		[Category("Format")]
 		[Description("The font style.")]
 		[DefaultValue(Model.Types.FontFormat.StyleDefault)]
-		public FontStyle FormatFontStyle
+		public virtual FontStyle FormatFontStyle
 		{
 			get { return (this.font.Style); }
 			set
 			{
-				Bold = ((value & FontStyle.Bold) == FontStyle.Bold);
-				Italic = ((value & FontStyle.Italic) == FontStyle.Italic);
-				Underline = ((value & FontStyle.Underline) == FontStyle.Underline);
-				Strikeout = ((value & FontStyle.Strikeout) == FontStyle.Strikeout);
+				Bold      = ((value & FontStyle.Bold)      != 0);
+				Italic    = ((value & FontStyle.Italic)    != 0);
+				Underline = ((value & FontStyle.Underline) != 0);
+				Strikeout = ((value & FontStyle.Strikeout) != 0);
 			}
 		}
 
-		/// <summary></summary>
-		[Category("Format")]
-		[Description("Bold.")]
-		[DefaultValue(BoldDefault)]
 		private bool Bold
 		{
 			get { return (this.font.Bold); }
 			set
 			{
 				FontStyle style = this.font.Style;
-				if (value)
-					style |= FontStyle.Bold;
-				else
-					style &= ~FontStyle.Bold;
-				this.font = new Font(this.font.Name, this.font.Size, style);
-				SetControls();
-				OnFormatChanged(EventArgs.Empty);
+				if (((style & FontStyle.Bold) != 0) != value)
+				{
+					if (value)
+						style |= FontStyle.Bold;
+					else
+						style &= ~FontStyle.Bold;
+
+					this.font = new Font(this.font.Name, this.font.Size, style);
+
+					SetControls();
+					OnFormatChanged(EventArgs.Empty);
+				}
 			}
 		}
 
-		/// <summary></summary>
-		[Category("Format")]
-		[Description("Italic.")]
-		[DefaultValue(ItalicDefault)]
 		private bool Italic
 		{
 			get { return (this.font.Italic); }
 			set
 			{
 				FontStyle style = this.font.Style;
-				if (value)
-					style |= FontStyle.Italic;
-				else
-					style &= ~FontStyle.Italic;
-				this.font = new Font(this.font.Name, this.font.Size, style);
-				SetControls();
-				OnFormatChanged(EventArgs.Empty);
+				if (((style & FontStyle.Italic) != 0) != value)
+				{
+					if (value)
+						style |= FontStyle.Italic;
+					else
+						style &= ~FontStyle.Italic;
+
+					this.font = new Font(this.font.Name, this.font.Size, style);
+
+					SetControls();
+					OnFormatChanged(EventArgs.Empty);
+				}
 			}
 		}
 
-		/// <summary></summary>
-		[Category("Format")]
-		[Description("Underline.")]
-		[DefaultValue(UnderlineDefault)]
 		private bool Underline
 		{
 			get { return (this.font.Underline); }
 			set
 			{
 				FontStyle style = this.font.Style;
-				if (value)
-					style |= FontStyle.Underline;
-				else
-					style &= ~FontStyle.Underline;
-				this.font = new Font(this.font.Name, this.font.Size, style);
-				SetControls();
-				OnFormatChanged(EventArgs.Empty);
+				if (((style & FontStyle.Underline) != 0) != value)
+				{
+					if (value)
+						style |= FontStyle.Underline;
+					else
+						style &= ~FontStyle.Underline;
+
+					this.font = new Font(this.font.Name, this.font.Size, style);
+
+					SetControls();
+					OnFormatChanged(EventArgs.Empty);
+				}
 			}
 		}
 
-		/// <summary></summary>
-		[Category("Format")]
-		[Description("Strikeout.")]
-		[DefaultValue(StrikeoutDefault)]
 		private bool Strikeout
 		{
 			get { return (this.font.Strikeout); }
 			set
 			{
 				FontStyle style = this.font.Style;
-				if (value)
-					style |= FontStyle.Strikeout;
-				else
-					style &= ~FontStyle.Strikeout;
-				this.font = new Font(this.font.Name, this.font.Size, style);
-				SetControls();
-				OnFormatChanged(EventArgs.Empty);
+				if (((style & FontStyle.Strikeout) != 0) != value)
+				{
+					if (value)
+						style |= FontStyle.Strikeout;
+					else
+						style &= ~FontStyle.Strikeout;
+
+					this.font = new Font(this.font.Name, this.font.Size, style);
+
+					SetControls();
+					OnFormatChanged(EventArgs.Empty);
+				}
 			}
 		}
 
 		/// <summary></summary>
 		[Category("Format")]
 		[Description("The format color.")]
-		public Color FormatColor
+		public virtual Color FormatColor
 		{
 			get { return (this.color); }
 			set
 			{
-				this.color = value;
-				SetControls();
-				OnFormatChanged(EventArgs.Empty);
+				if (this.color != value)
+				{
+					this.color = value;
+
+					SetControls();
+					OnFormatChanged(EventArgs.Empty);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the set of custom colors shown in the dialog box.
+		/// </summary>
+		/// <returns>
+		/// A set of custom colors shown by the dialog box. The default value is null.
+		/// </returns>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public int[] CustomColors
+		{
+			get { return (this.customColors); }
+			set
+			{
+				if (!ArrayEx.ValuesEqual(this.customColors, value))
+				{
+					this.customColors = value;
+
+					SetControls();
+					OnCustomColorsChanged(EventArgs.Empty);
+				}
 			}
 		}
 
@@ -261,12 +297,13 @@ namespace YAT.View.Controls
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Color_Click(object sender, EventArgs e)
 		{
-			ColorDialog cd = new ColorDialog();
-			cd.Color = FormatColor;
-			if (cd.ShowDialog(this) == DialogResult.OK)
+			colorDialog.CustomColors = CustomColors;
+			colorDialog.Color        = FormatColor;
+			if (colorDialog.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
-				FormatColor = cd.Color;
+				FormatColor  = colorDialog.Color;
+				CustomColors = colorDialog.CustomColors;
 			}
 		}
 
@@ -274,8 +311,8 @@ namespace YAT.View.Controls
 		{
 			this.isSettingControls.Enter();
 
-			checkBox_Bold.Checked = Bold;
-			checkBox_Italic.Checked = Italic;
+			checkBox_Bold.Checked      = Bold;
+			checkBox_Italic.Checked    = Italic;
 			checkBox_Underline.Checked = Underline;
 			checkBox_Strikeout.Checked = Strikeout;
 
@@ -293,6 +330,12 @@ namespace YAT.View.Controls
 		protected virtual void OnFormatChanged(EventArgs e)
 		{
 			EventHelper.FireSync(FormatChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCustomColorsChanged(EventArgs e)
+		{
+			EventHelper.FireSync(CustomColorsChanged, this, e);
 		}
 
 		#endregion

@@ -61,6 +61,20 @@ namespace MKY.Recent
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
+		/// Determines whether an element is in the collections.
+		/// </summary>
+		public virtual bool Contains(T item)
+		{
+			foreach (RecentItem<T> ri in this)
+			{
+				if (ri.Item.Equals(item))
+					return (true);
+			}
+
+			return (false);
+		}
+
+		/// <summary>
 		/// Inserts the recent item at the beginning of the collection (least recent). The most
 		/// recent item will be removed in case the collection already contains <see cref="T:RecentItemCollection`1.Capacity"/> items.
 		/// </summary>
@@ -70,7 +84,7 @@ namespace MKY.Recent
 			RemoveAll(li => (li == item));
 
 			// Ensure there is space for the item to be inserted:
-			while (Count >= Capacity)
+			while ((Count > 0) && (Count >= Capacity))
 				RemoveMostRecent();
 
 			Insert(0, item);
@@ -112,7 +126,7 @@ namespace MKY.Recent
 			// If there are indeed duplicates, take the long to remove the recent ones...
 			while (this.Distinct().ToList().Count < Count)
 			{
-				List<RecentItem<T>> duplicates = new List<RecentItem<T>>();
+				List<RecentItem<T>> duplicates = new List<RecentItem<T>>(Count); // Preset the initial capactiy to improve memory management.
 
 				// Traverse the collection and search for duplicates:
 				for (int outer = 0; outer < (Count - 1); outer++)
@@ -144,16 +158,53 @@ namespace MKY.Recent
 		/// </summary>
 		public virtual void ValidateAll()
 		{
-			List<RecentItem<T>> invalids = new List<RecentItem<T>>();
+			List<RecentItem<T>> invalids = new List<RecentItem<T>>(Count); // Preset the initial capactiy to improve memory management.
+
 			foreach (RecentItem<T> ri in this)
 			{
 				if (!ri.IsValid)
 					invalids.Add(ri);
 			}
+
 			foreach (RecentItem<T> ri in invalids)
 			{
 				Remove(ri);
 			}
+		}
+
+		/// <summary>
+		/// Copies the items of this collection to a new array.
+		/// </summary>
+		public virtual T[] ToItemArray()
+		{
+			List<T> items = new List<T>(Count); // Preset the initial capactiy to improve memory management.
+
+			foreach (RecentItem<T> ri in this)
+				items.Add(ri.Item);
+
+			return (items.ToArray());
+		}
+
+		/// <summary>
+		/// Updates this collection from the given array.
+		/// </summary>
+		/// <returns>
+		/// Returns whether collection has changed.
+		/// </returns>
+		public virtual bool UpdateFrom(IEnumerable<T> items)
+		{
+			bool hasChanged = false;
+
+			foreach (T item in items)
+			{
+				if (!Contains(item))
+				{
+					ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(new RecentItem<T>(item));
+					hasChanged = true;
+				}
+			}
+
+			return (hasChanged);
 		}
 
 		#endregion

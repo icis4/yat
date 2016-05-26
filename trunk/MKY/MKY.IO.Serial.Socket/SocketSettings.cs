@@ -236,17 +236,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <remarks>
-		/// Must be string because an 'EnumEx' cannot be serialized.
-		/// </remarks>
-		[XmlElement("RemoteHost")]
-		public virtual string RemoteHost_ForSerialization
-		{
-			get { return (RemoteHost.ToCompactString()); } // Use compact string represenation, only taking host name or address into account!
-			set { RemoteHost = value;                    }
-		}
-
-		/// <remarks>
-		/// This 'EnumEx' cannot be serialized, thus, the helper above is used for serialization.
+		/// This 'EnumEx' cannot be serialized, thus, the helper below is used for serialization.
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
@@ -263,6 +253,16 @@ namespace MKY.IO.Serial.Socket
 					// Do not try to resolve the IP address as this may take quite some time!
 				}
 			}
+		}
+
+		/// <remarks>
+		/// Must be string because an 'EnumEx' cannot be serialized.
+		/// </remarks>
+		[XmlElement("RemoteHost")]
+		public virtual string RemoteHost_ForSerialization
+		{
+			get { return (RemoteHost.ToCompactString()); } // Use compact string represenation, only taking host name or address into account!
+			set { RemoteHost = value;                    }
 		}
 
 		/// <summary></summary>
@@ -362,17 +362,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <remarks>
-		/// Must be string because an 'EnumEx' cannot be serialized.
-		/// </remarks>
-		[XmlElement("LocalFilter")]
-		public virtual string LocalFilter_ForSerialization
-		{
-			get { return (LocalFilter.ToCompactString()); } // Use compact string represenation, only taking host name or address into account!
-			set { LocalFilter = value;                    }
-		}
-
-		/// <remarks>
-		/// This 'EnumEx' cannot be serialized, thus, the helper above is used for serialization.
+		/// This 'EnumEx' cannot be serialized, thus, the helper below is used for serialization.
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
@@ -389,6 +379,16 @@ namespace MKY.IO.Serial.Socket
 					// Do not try to resolve the IP address as this may take quite some time!
 				}
 			}
+		}
+
+		/// <remarks>
+		/// Must be string because an 'EnumEx' cannot be serialized.
+		/// </remarks>
+		[XmlElement("LocalFilter")]
+		public virtual string LocalFilter_ForSerialization
+		{
+			get { return (LocalFilter.ToCompactString()); } // Use compact string represenation, only taking host name or address into account!
+			set { LocalFilter = value;                    }
 		}
 
 		/// <summary></summary>

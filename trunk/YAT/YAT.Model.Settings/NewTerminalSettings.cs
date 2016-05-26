@@ -244,17 +244,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <remarks>
-		/// Must be string because an 'EnumEx' cannot be serialized.
-		/// </remarks>
-		[XmlElement("SocketRemoteHost")]
-		public virtual string SocketRemoteHost_ForSerialization
-		{
-			get { return (SocketRemoteHost.ToCompactString()); } // Use compact string represenation, only taking host name or address into account!
-			set { SocketRemoteHost = value;                    }
-		}
-
-		/// <remarks>
-		/// This 'EnumEx' cannot be serialized, thus, the helper above is used for serialization.
+		/// This 'EnumEx' cannot be serialized, thus, the helper below is used for serialization.
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
@@ -271,6 +261,16 @@ namespace YAT.Model.Settings
 					// Do not try to resolve the IP address as this may take quite some time!
 				}
 			}
+		}
+
+		/// <remarks>
+		/// Must be string because an 'EnumEx' cannot be serialized.
+		/// </remarks>
+		[XmlElement("SocketRemoteHost")]
+		public virtual string SocketRemoteHost_ForSerialization
+		{
+			get { return (SocketRemoteHost.ToCompactString()); } // Use compact string represenation, only taking host name or address into account!
+			set { SocketRemoteHost = value;                    }
 		}
 
 		/// <summary></summary>
@@ -319,17 +319,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <remarks>
-		/// Must be string because an 'EnumEx' cannot be serialized.
-		/// </remarks>
-		[XmlElement("SocketLocalFilter")]
-		public virtual string SocketLocalFilter_ForSerialization
-		{
-			get { return (SocketLocalFilter.ToCompactString()); } // Use compact string represenation, only taking host name or address into account!
-			set { SocketLocalFilter = value;                    }
-		}
-
-		/// <remarks>
-		/// This 'EnumEx' cannot be serialized, thus, the helper above is used for serialization.
+		/// This 'EnumEx' cannot be serialized, thus, the helper below is used for serialization.
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
@@ -346,6 +336,16 @@ namespace YAT.Model.Settings
 					// Do not try to resolve the IP address as this may take quite some time!
 				}
 			}
+		}
+
+		/// <remarks>
+		/// Must be string because an 'EnumEx' cannot be serialized.
+		/// </remarks>
+		[XmlElement("SocketLocalFilter")]
+		public virtual string SocketLocalFilter_ForSerialization
+		{
+			get { return (SocketLocalFilter.ToCompactString()); } // Use compact string represenation, only taking host name or address into account!
+			set { SocketLocalFilter = value;                    }
 		}
 
 		/// <summary></summary>

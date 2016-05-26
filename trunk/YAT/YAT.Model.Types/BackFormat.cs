@@ -26,6 +26,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Xml.Serialization;
 
+using MKY;
+using MKY.Drawing;
+
 namespace YAT.Model.Types
 {
 	/// <summary></summary>
@@ -57,21 +60,24 @@ namespace YAT.Model.Types
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <see cref="Color"/> cannot be serialized, thus, the helper below is used for serialization.
+		/// </remarks>
 		[XmlIgnore]
 		public virtual Color Color
 		{
 			get { return (this.color); }
-			set { this.color = value; }
+			set { this.color = value;  }
 		}
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Argb", Justification = "ARGB is a common term, and even used by the .NET framework itself.")]
+		/// <remarks>
+		/// Using string because <see cref="Color"/> cannot be serialized.
+		/// </remarks>
 		[XmlElement("Color")]
-		public virtual int ColorAsArgb
+		public virtual string Color_ForSerialization
 		{
-			get { return (this.color.ToArgb()); }
-			set { this.color = Color.FromArgb(value); }
+			get { return (ColorTranslator.ToHtml(Color));  }
+			set { Color = ColorTranslator.FromHtml(value); }
 		}
 
 		#endregion
@@ -103,7 +109,7 @@ namespace YAT.Model.Types
 
 			return
 			(
-				(Color == other.Color)
+				StringEx.EqualsOrdinalIgnoreCase(Color_ForSerialization, other.Color_ForSerialization)
 			);
 		}
 
@@ -118,7 +124,7 @@ namespace YAT.Model.Types
 		{
 			unchecked
 			{
-				return (Color.GetHashCode());
+				return (Color_ForSerialization != null ? Color_ForSerialization.GetHashCode() : 0);
 			}
 		}
 

@@ -311,8 +311,8 @@ namespace MKY.IO.Ports
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
 		/// 
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
+		/// calls to <see cref="Component.Dispose()"/>. In order to detect such missing calls, the
+		/// finalizer is kept for DEBUG, indicating missing calls.
 		/// 
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>

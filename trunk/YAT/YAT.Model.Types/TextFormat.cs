@@ -22,9 +22,11 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Xml.Serialization;
+
+using MKY;
+using MKY.Drawing;
 
 namespace YAT.Model.Types
 {
@@ -38,18 +40,18 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public TextFormat()
 		{
-			this.color = Color.Black;
+			this.color     = Color.Black;
 			this.fontStyle = FontStyle.Regular;
 		}
 
 		/// <summary></summary>
 		public TextFormat(Color color, bool bold, bool italic, bool underline, bool strikeout)
 		{
-			this.color = color;
-
+			this.color     = color;
 			this.fontStyle = FontStyle.Regular;
-			Bold = bold;
-			Italic = italic;
+
+			Bold      = bold;
+			Italic    = italic;
 			Underline = underline;
 			Strikeout = strikeout;
 		}
@@ -57,7 +59,7 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public TextFormat(TextFormat rhs)
 		{
-			this.color = rhs.color;
+			this.color     = rhs.color;
 			this.fontStyle = rhs.fontStyle;
 		}
 
@@ -66,21 +68,24 @@ namespace YAT.Model.Types
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <see cref="Color"/> cannot be serialized, thus, the helper below is used for serialization.
+		/// </remarks>
 		[XmlIgnore]
 		public virtual Color Color
 		{
 			get { return (this.color); }
-			set { this.color = value; }
+			set { this.color = value;  }
 		}
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Argb", Justification = "ARGB is a common term, and even used by the .NET framework itself.")]
+		/// <remarks>
+		/// Using string because <see cref="Color"/> cannot be serialized.
+		/// </remarks>
 		[XmlElement("Color")]
-		public virtual int ColorAsArgb
+		public virtual string Color_ForSerialization
 		{
-			get { return (this.color.ToArgb()); }
-			set { this.color = Color.FromArgb(value); }
+			get { return (ColorTranslator.ToHtml(Color));           }
+			set { Color = ColorTranslatorEx.FromHtmlOrWin32(value); } // Also allow Win32 for backward compatibility!
 		}
 
 		/// <summary></summary>
@@ -88,7 +93,7 @@ namespace YAT.Model.Types
 		public virtual FontStyle FontStyle
 		{
 			get { return (this.fontStyle); }
-			set { this.fontStyle = value; }
+			set { this.fontStyle = value;  }
 		}
 
 		/// <summary></summary>
@@ -176,7 +181,7 @@ namespace YAT.Model.Types
 
 			return
 			(
-				(Color     == other.Color) &&
+				StringEx.EqualsOrdinalIgnoreCase(Color_ForSerialization, other.Color_ForSerialization) &&
 				(FontStyle == other.FontStyle)
 			);
 		}
@@ -192,9 +197,8 @@ namespace YAT.Model.Types
 		{
 			unchecked
 			{
-				int hashCode;
+				int hashCode = (Color_ForSerialization != null ? Color_ForSerialization.GetHashCode() : 0);
 
-				hashCode =                    Color    .GetHashCode();
 				hashCode = (hashCode * 397) ^ FontStyle.GetHashCode();
 
 				return (hashCode);

@@ -158,8 +158,8 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ Command       .GetHashCode();
-				hashCode = (hashCode * 397) ^ RecentCommands.GetHashCode();
+				hashCode = (hashCode * 397) ^ (Command        != null ? Command       .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (RecentCommands != null ? RecentCommands.GetHashCode() : 0);
 
 				return (hashCode);
 			}
