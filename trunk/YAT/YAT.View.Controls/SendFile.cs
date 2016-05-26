@@ -73,9 +73,11 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypeDefault;
+
 		private const bool TerminalIsReadyToSendDefault = false;
-		private const int SplitterDistanceDefault = 356; // Designer requires that this is a constant.
-		                                                 // Set same value as splitContainer.SplitterDistance is designed.
+
+		private const int SendSplitterDistanceDefault = 356; // Designer requires that this is a constant.
+		                                                     // Set same value as splitContainer.SplitterDistance is designed.
 		#endregion
 
 		#region Fields
@@ -87,9 +89,14 @@ namespace YAT.View.Controls
 
 		private Command command = new Command();
 		private RecentItemCollection<Command> recent;
+
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
+		private bool useExplicitDefaultRadix = Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault;
+		private Domain.RadixEx explicitDefaultRadix = Command.DefaultRadixDefault;
+
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
-		private int splitterDistance = SplitterDistanceDefault;
+
+		private int sendSplitterDistance = SendSplitterDistanceDefault;
 
 		#endregion
 
@@ -120,7 +127,8 @@ namespace YAT.View.Controls
 		{
 			InitializeComponent();
 
-			// SetControls() is initially called in the 'Paint' event handler.
+			InitializeExplicitDefaultRadixControls();
+			// Set...Controls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion
@@ -193,6 +201,54 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		[Category("Command")]
+		[Description("Whether to use an explicit default radix.")]
+		[DefaultValue(Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault)]
+		public virtual bool UseExplicitDefaultRadix
+		{
+			get { return (this.useExplicitDefaultRadix); }
+			set
+			{
+				if (this.useExplicitDefaultRadix != value)
+				{
+					this.useExplicitDefaultRadix = value;
+					SetExplicitDefaultRadixControls();
+					SetCommandDefaultRadix();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		protected virtual Domain.RadixEx ExplicitDefaultRadix
+		{
+			set
+			{
+				if (this.explicitDefaultRadix != value)
+				{
+					this.explicitDefaultRadix = value;
+					SetExplicitDefaultRadixControls();
+					SetCommandDefaultRadix();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		protected virtual Domain.Radix DefaultRadix
+		{
+			get
+			{
+				if (this.useExplicitDefaultRadix)
+					return (this.explicitDefaultRadix);
+				else
+					return (Command.DefaultRadixDefault);
+			}
+		}
+
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual bool TerminalIsReadyToSend
@@ -208,22 +264,22 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[DefaultValue(SplitterDistanceDefault)]
-		public virtual int SplitterDistance
+		[DefaultValue(SendSplitterDistanceDefault)]
+		public virtual int SendSplitterDistance
 		{
-			get { return (this.splitterDistance); }
+			get { return (this.sendSplitterDistance); }
 			set
 			{
 				// Do not check if (this.splitterDistance != value) because the distance (position)
 				// will be limited to the control's width, and that may change AFTER the distance
 				// has been set.
 
-				this.splitterDistance = value;
+				this.sendSplitterDistance = value;
 
 				// No need to call SetControls(); as only the splitter will be moved, and that will
 				// not be accessed anywhere else.
 
-				splitContainer.SplitterDistance = Int32Ex.Limit((this.splitterDistance - splitContainer.Left), 0, (splitContainer.Width - 1));
+				splitContainer_Send.SplitterDistance = Int32Ex.Limit((this.sendSplitterDistance - splitContainer_Send.Left), 0, (splitContainer_Send.Width - 1));
 			}
 		}
 
@@ -274,6 +330,7 @@ namespace YAT.View.Controls
 			if (this.isStartingUp)
 			{
 				this.isStartingUp = false;
+				SetExplicitDefaultRadixControls();
 				SetCommandAndRecentControls();
 			}
 		}
@@ -284,6 +341,12 @@ namespace YAT.View.Controls
 		//==========================================================================================
 		// Controls Event Handlers
 		//==========================================================================================
+
+		private void comboBox_ExplicitDefaultRadix_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				ExplicitDefaultRadix = (Domain.RadixEx)comboBox_ExplicitDefaultRadix.SelectedItem;
+		}
 
 		private void pathComboBox_FilePath_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -323,6 +386,30 @@ namespace YAT.View.Controls
 		//------------------------------------------------------------------------------------------
 		// Private Methods > Set Controls
 		//------------------------------------------------------------------------------------------
+
+		private void InitializeExplicitDefaultRadixControls()
+		{
+			this.isSettingControls.Enter();
+
+			comboBox_ExplicitDefaultRadix.Items.Clear();
+			comboBox_ExplicitDefaultRadix.Items.AddRange(Domain.RadixEx.GetItems());
+
+			this.isSettingControls.Leave();
+		}
+
+		private void SetExplicitDefaultRadixControls()
+		{
+			this.isSettingControls.Enter();
+
+			splitContainer_ExplicitDefaultRadix.Panel1Collapsed = !this.useExplicitDefaultRadix;
+
+			if (this.useExplicitDefaultRadix)
+				Utilities.SelectionHelper.Select(comboBox_ExplicitDefaultRadix, this.explicitDefaultRadix, this.explicitDefaultRadix);
+			else
+				Utilities.SelectionHelper.Deselect(comboBox_ExplicitDefaultRadix);
+
+			this.isSettingControls.Leave();
+		}
 
 		private void SetCommandAndRecentControls()
 		{
@@ -423,6 +510,35 @@ namespace YAT.View.Controls
 
 		#endregion
 
+		#region Private Methods > Command Radix
+		//------------------------------------------------------------------------------------------
+		// Private Methods > Command Radix
+		//------------------------------------------------------------------------------------------
+
+		private void SetCommandDefaultRadix()
+		{
+			if (UseExplicitDefaultRadix)
+			{
+				if (this.command.DefaultRadix != this.explicitDefaultRadix)
+				{
+					Command c = new Command(this.command); // Recreate to enforce property change.
+					c.DefaultRadix = this.explicitDefaultRadix;
+					Command = c; // Enforce property setter.
+				}
+			}
+			else
+			{
+				if (this.command.DefaultRadix != Command.DefaultRadixDefault)
+				{
+					Command c = new Command(this.command); // Recreate to enforce property change.
+					c.DefaultRadix = Command.DefaultRadixDefault;
+					Command = c; // Enforce property setter.
+				}
+			}
+		}
+
+		#endregion
+
 		#region Private Methods > Open File
 		//------------------------------------------------------------------------------------------
 		// Private Methods > Open File
@@ -489,7 +605,7 @@ namespace YAT.View.Controls
 			else
 			{
 				SetCommandAndRecentControls();
-				//// Do not call OnCommandChanged(), nothing has changed.
+				// Do not call OnCommandChanged(), nothing has changed.
 			}
 
 			button_Send.Select();
@@ -514,7 +630,10 @@ namespace YAT.View.Controls
 		/// </remarks>
 		private void CreateAndConfirmCommand(string filePath)
 		{
-			this.command = new Command(filePath, true, filePath);
+			if (UseExplicitDefaultRadix)
+				this.command = new Command(filePath, true, filePath);
+			else
+				this.command = new Command(filePath, true, filePath);
 
 			SetCommandAndRecentControls();
 			OnCommandChanged(EventArgs.Empty);

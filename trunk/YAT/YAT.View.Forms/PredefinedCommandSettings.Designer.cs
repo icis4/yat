@@ -78,6 +78,7 @@
 			this.button_InsertPage = new System.Windows.Forms.Button();
 			this.button_AddPage = new System.Windows.Forms.Button();
 			this.button_NamePage = new System.Windows.Forms.Button();
+			this.label_ExplicitDefaultRadix = new System.Windows.Forms.Label();
 			this.groupBox_Page.SuspendLayout();
 			this.groupBox_Predefined.SuspendLayout();
 			this.groupBox_Pages.SuspendLayout();
@@ -111,7 +112,7 @@
 			this.button_ClearPage.Location = new System.Drawing.Point(536, 354);
 			this.button_ClearPage.Name = "button_ClearPage";
 			this.button_ClearPage.Size = new System.Drawing.Size(75, 23);
-			this.button_ClearPage.TabIndex = 34;
+			this.button_ClearPage.TabIndex = 35;
 			this.button_ClearPage.Text = "Clear All...";
 			this.button_ClearPage.Click += new System.EventHandler(this.button_ClearPage_Click);
 			// 
@@ -120,6 +121,7 @@
 			this.groupBox_Page.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Page.Controls.Add(this.label_ExplicitDefaultRadix);
 			this.groupBox_Page.Controls.Add(this.predefinedCommandSettingsSet_12);
 			this.groupBox_Page.Controls.Add(this.predefinedCommandSettingsSet_11);
 			this.groupBox_Page.Controls.Add(this.predefinedCommandSettingsSet_10);
@@ -169,8 +171,8 @@
 			this.predefinedCommandSettingsSet_12.Location = new System.Drawing.Point(30, 318);
 			this.predefinedCommandSettingsSet_12.Name = "predefinedCommandSettingsSet_12";
 			this.predefinedCommandSettingsSet_12.ShortcutString = "Shift+F12";
-			this.predefinedCommandSettingsSet_12.Size = new System.Drawing.Size(584, 20);
-			this.predefinedCommandSettingsSet_12.TabIndex = 28;
+			this.predefinedCommandSettingsSet_12.Size = new System.Drawing.Size(584, 21);
+			this.predefinedCommandSettingsSet_12.TabIndex = 29;
 			this.predefinedCommandSettingsSet_12.Tag = "12";
 			this.predefinedCommandSettingsSet_12.CommandChanged += new System.EventHandler(this.predefinedCommandSettingsSet_CommandChanged);
 			// 
@@ -181,8 +183,8 @@
 			this.predefinedCommandSettingsSet_11.Location = new System.Drawing.Point(30, 292);
 			this.predefinedCommandSettingsSet_11.Name = "predefinedCommandSettingsSet_11";
 			this.predefinedCommandSettingsSet_11.ShortcutString = "Shift+F11";
-			this.predefinedCommandSettingsSet_11.Size = new System.Drawing.Size(584, 20);
-			this.predefinedCommandSettingsSet_11.TabIndex = 26;
+			this.predefinedCommandSettingsSet_11.Size = new System.Drawing.Size(584, 21);
+			this.predefinedCommandSettingsSet_11.TabIndex = 27;
 			this.predefinedCommandSettingsSet_11.Tag = "11";
 			this.predefinedCommandSettingsSet_11.CommandChanged += new System.EventHandler(this.predefinedCommandSettingsSet_CommandChanged);
 			// 
@@ -193,8 +195,8 @@
 			this.predefinedCommandSettingsSet_10.Location = new System.Drawing.Point(30, 266);
 			this.predefinedCommandSettingsSet_10.Name = "predefinedCommandSettingsSet_10";
 			this.predefinedCommandSettingsSet_10.ShortcutString = "Shift+F10";
-			this.predefinedCommandSettingsSet_10.Size = new System.Drawing.Size(584, 20);
-			this.predefinedCommandSettingsSet_10.TabIndex = 24;
+			this.predefinedCommandSettingsSet_10.Size = new System.Drawing.Size(584, 21);
+			this.predefinedCommandSettingsSet_10.TabIndex = 25;
 			this.predefinedCommandSettingsSet_10.Tag = "10";
 			this.predefinedCommandSettingsSet_10.CommandChanged += new System.EventHandler(this.predefinedCommandSettingsSet_CommandChanged);
 			// 
@@ -205,8 +207,8 @@
 			this.predefinedCommandSettingsSet_9.Location = new System.Drawing.Point(30, 240);
 			this.predefinedCommandSettingsSet_9.Name = "predefinedCommandSettingsSet_9";
 			this.predefinedCommandSettingsSet_9.ShortcutString = "Shift+F9";
-			this.predefinedCommandSettingsSet_9.Size = new System.Drawing.Size(584, 20);
-			this.predefinedCommandSettingsSet_9.TabIndex = 22;
+			this.predefinedCommandSettingsSet_9.Size = new System.Drawing.Size(584, 21);
+			this.predefinedCommandSettingsSet_9.TabIndex = 23;
 			this.predefinedCommandSettingsSet_9.Tag = "9";
 			this.predefinedCommandSettingsSet_9.CommandChanged += new System.EventHandler(this.predefinedCommandSettingsSet_CommandChanged);
 			// 
@@ -217,8 +219,8 @@
 			this.predefinedCommandSettingsSet_8.Location = new System.Drawing.Point(30, 214);
 			this.predefinedCommandSettingsSet_8.Name = "predefinedCommandSettingsSet_8";
 			this.predefinedCommandSettingsSet_8.ShortcutString = "Shift+F8";
-			this.predefinedCommandSettingsSet_8.Size = new System.Drawing.Size(584, 20);
-			this.predefinedCommandSettingsSet_8.TabIndex = 20;
+			this.predefinedCommandSettingsSet_8.Size = new System.Drawing.Size(584, 21);
+			this.predefinedCommandSettingsSet_8.TabIndex = 21;
 			this.predefinedCommandSettingsSet_8.Tag = "8";
 			this.predefinedCommandSettingsSet_8.CommandChanged += new System.EventHandler(this.predefinedCommandSettingsSet_CommandChanged);
 			// 
@@ -229,8 +231,8 @@
 			this.predefinedCommandSettingsSet_7.Location = new System.Drawing.Point(30, 188);
 			this.predefinedCommandSettingsSet_7.Name = "predefinedCommandSettingsSet_7";
 			this.predefinedCommandSettingsSet_7.ShortcutString = "Shift+F7";
-			this.predefinedCommandSettingsSet_7.Size = new System.Drawing.Size(584, 20);
-			this.predefinedCommandSettingsSet_7.TabIndex = 18;
+			this.predefinedCommandSettingsSet_7.Size = new System.Drawing.Size(584, 21);
+			this.predefinedCommandSettingsSet_7.TabIndex = 19;
 			this.predefinedCommandSettingsSet_7.Tag = "7";
 			this.predefinedCommandSettingsSet_7.CommandChanged += new System.EventHandler(this.predefinedCommandSettingsSet_CommandChanged);
 			// 
@@ -241,8 +243,8 @@
 			this.predefinedCommandSettingsSet_6.Location = new System.Drawing.Point(30, 162);
 			this.predefinedCommandSettingsSet_6.Name = "predefinedCommandSettingsSet_6";
 			this.predefinedCommandSettingsSet_6.ShortcutString = "Shift+F6";
-			this.predefinedCommandSettingsSet_6.Size = new System.Drawing.Size(584, 20);
-			this.predefinedCommandSettingsSet_6.TabIndex = 16;
+			this.predefinedCommandSettingsSet_6.Size = new System.Drawing.Size(584, 21);
+			this.predefinedCommandSettingsSet_6.TabIndex = 17;
 			this.predefinedCommandSettingsSet_6.Tag = "6";
 			this.predefinedCommandSettingsSet_6.CommandChanged += new System.EventHandler(this.predefinedCommandSettingsSet_CommandChanged);
 			// 
@@ -253,8 +255,8 @@
 			this.predefinedCommandSettingsSet_5.Location = new System.Drawing.Point(30, 136);
 			this.predefinedCommandSettingsSet_5.Name = "predefinedCommandSettingsSet_5";
 			this.predefinedCommandSettingsSet_5.ShortcutString = "Shift+F5";
-			this.predefinedCommandSettingsSet_5.Size = new System.Drawing.Size(584, 20);
-			this.predefinedCommandSettingsSet_5.TabIndex = 14;
+			this.predefinedCommandSettingsSet_5.Size = new System.Drawing.Size(584, 21);
+			this.predefinedCommandSettingsSet_5.TabIndex = 15;
 			this.predefinedCommandSettingsSet_5.Tag = "5";
 			this.predefinedCommandSettingsSet_5.CommandChanged += new System.EventHandler(this.predefinedCommandSettingsSet_CommandChanged);
 			// 
@@ -265,8 +267,8 @@
 			this.predefinedCommandSettingsSet_4.Location = new System.Drawing.Point(30, 110);
 			this.predefinedCommandSettingsSet_4.Name = "predefinedCommandSettingsSet_4";
 			this.predefinedCommandSettingsSet_4.ShortcutString = "Shift+F4";
-			this.predefinedCommandSettingsSet_4.Size = new System.Drawing.Size(584, 20);
-			this.predefinedCommandSettingsSet_4.TabIndex = 12;
+			this.predefinedCommandSettingsSet_4.Size = new System.Drawing.Size(584, 21);
+			this.predefinedCommandSettingsSet_4.TabIndex = 13;
 			this.predefinedCommandSettingsSet_4.Tag = "4";
 			this.predefinedCommandSettingsSet_4.CommandChanged += new System.EventHandler(this.predefinedCommandSettingsSet_CommandChanged);
 			// 
@@ -277,8 +279,8 @@
 			this.predefinedCommandSettingsSet_3.Location = new System.Drawing.Point(30, 84);
 			this.predefinedCommandSettingsSet_3.Name = "predefinedCommandSettingsSet_3";
 			this.predefinedCommandSettingsSet_3.ShortcutString = "Shift+F3";
-			this.predefinedCommandSettingsSet_3.Size = new System.Drawing.Size(584, 20);
-			this.predefinedCommandSettingsSet_3.TabIndex = 10;
+			this.predefinedCommandSettingsSet_3.Size = new System.Drawing.Size(584, 21);
+			this.predefinedCommandSettingsSet_3.TabIndex = 11;
 			this.predefinedCommandSettingsSet_3.Tag = "3";
 			this.predefinedCommandSettingsSet_3.CommandChanged += new System.EventHandler(this.predefinedCommandSettingsSet_CommandChanged);
 			// 
@@ -288,8 +290,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_1.Location = new System.Drawing.Point(30, 32);
 			this.predefinedCommandSettingsSet_1.Name = "predefinedCommandSettingsSet_1";
-			this.predefinedCommandSettingsSet_1.Size = new System.Drawing.Size(584, 20);
-			this.predefinedCommandSettingsSet_1.TabIndex = 6;
+			this.predefinedCommandSettingsSet_1.Size = new System.Drawing.Size(584, 21);
+			this.predefinedCommandSettingsSet_1.TabIndex = 7;
 			this.predefinedCommandSettingsSet_1.Tag = "1";
 			this.predefinedCommandSettingsSet_1.CommandChanged += new System.EventHandler(this.predefinedCommandSettingsSet_CommandChanged);
 			// 
@@ -300,118 +302,118 @@
 			this.predefinedCommandSettingsSet_2.Location = new System.Drawing.Point(30, 58);
 			this.predefinedCommandSettingsSet_2.Name = "predefinedCommandSettingsSet_2";
 			this.predefinedCommandSettingsSet_2.ShortcutString = "Shift+F2";
-			this.predefinedCommandSettingsSet_2.Size = new System.Drawing.Size(584, 20);
-			this.predefinedCommandSettingsSet_2.TabIndex = 8;
+			this.predefinedCommandSettingsSet_2.Size = new System.Drawing.Size(584, 21);
+			this.predefinedCommandSettingsSet_2.TabIndex = 9;
 			this.predefinedCommandSettingsSet_2.Tag = "2";
 			this.predefinedCommandSettingsSet_2.CommandChanged += new System.EventHandler(this.predefinedCommandSettingsSet_CommandChanged);
 			// 
 			// label_File
 			// 
 			this.label_File.AutoSize = true;
-			this.label_File.Location = new System.Drawing.Point(6, 16);
+			this.label_File.Location = new System.Drawing.Point(84, 16);
 			this.label_File.Name = "label_File";
 			this.label_File.Size = new System.Drawing.Size(48, 13);
-			this.label_File.TabIndex = 0;
+			this.label_File.TabIndex = 1;
 			this.label_File.Text = "Use File:";
 			this.label_File.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label_predefinedCommandSettingsSet_12
 			// 
 			this.label_predefinedCommandSettingsSet_12.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_12.Location = new System.Drawing.Point(6, 321);
+			this.label_predefinedCommandSettingsSet_12.Location = new System.Drawing.Point(6, 322);
 			this.label_predefinedCommandSettingsSet_12.Name = "label_predefinedCommandSettingsSet_12";
 			this.label_predefinedCommandSettingsSet_12.Size = new System.Drawing.Size(22, 13);
-			this.label_predefinedCommandSettingsSet_12.TabIndex = 27;
+			this.label_predefinedCommandSettingsSet_12.TabIndex = 28;
 			this.label_predefinedCommandSettingsSet_12.Text = "12:";
 			// 
 			// label_predefinedCommandSettingsSet_11
 			// 
 			this.label_predefinedCommandSettingsSet_11.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_11.Location = new System.Drawing.Point(6, 295);
+			this.label_predefinedCommandSettingsSet_11.Location = new System.Drawing.Point(6, 296);
 			this.label_predefinedCommandSettingsSet_11.Name = "label_predefinedCommandSettingsSet_11";
 			this.label_predefinedCommandSettingsSet_11.Size = new System.Drawing.Size(22, 13);
-			this.label_predefinedCommandSettingsSet_11.TabIndex = 25;
+			this.label_predefinedCommandSettingsSet_11.TabIndex = 26;
 			this.label_predefinedCommandSettingsSet_11.Text = "11:";
 			// 
 			// label_predefinedCommandSettingsSet_10
 			// 
 			this.label_predefinedCommandSettingsSet_10.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_10.Location = new System.Drawing.Point(6, 269);
+			this.label_predefinedCommandSettingsSet_10.Location = new System.Drawing.Point(6, 270);
 			this.label_predefinedCommandSettingsSet_10.Name = "label_predefinedCommandSettingsSet_10";
 			this.label_predefinedCommandSettingsSet_10.Size = new System.Drawing.Size(22, 13);
-			this.label_predefinedCommandSettingsSet_10.TabIndex = 23;
+			this.label_predefinedCommandSettingsSet_10.TabIndex = 24;
 			this.label_predefinedCommandSettingsSet_10.Text = "1&0:";
 			// 
 			// label_predefinedCommandSettingsSet_9
 			// 
 			this.label_predefinedCommandSettingsSet_9.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_9.Location = new System.Drawing.Point(12, 243);
+			this.label_predefinedCommandSettingsSet_9.Location = new System.Drawing.Point(12, 244);
 			this.label_predefinedCommandSettingsSet_9.Name = "label_predefinedCommandSettingsSet_9";
 			this.label_predefinedCommandSettingsSet_9.Size = new System.Drawing.Size(16, 13);
-			this.label_predefinedCommandSettingsSet_9.TabIndex = 21;
+			this.label_predefinedCommandSettingsSet_9.TabIndex = 22;
 			this.label_predefinedCommandSettingsSet_9.Text = "&9:";
 			// 
 			// label_predefinedCommandSettingsSet_8
 			// 
 			this.label_predefinedCommandSettingsSet_8.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_8.Location = new System.Drawing.Point(12, 217);
+			this.label_predefinedCommandSettingsSet_8.Location = new System.Drawing.Point(12, 218);
 			this.label_predefinedCommandSettingsSet_8.Name = "label_predefinedCommandSettingsSet_8";
 			this.label_predefinedCommandSettingsSet_8.Size = new System.Drawing.Size(16, 13);
-			this.label_predefinedCommandSettingsSet_8.TabIndex = 19;
+			this.label_predefinedCommandSettingsSet_8.TabIndex = 20;
 			this.label_predefinedCommandSettingsSet_8.Text = "&8:";
 			// 
 			// label_predefinedCommandSettingsSet_7
 			// 
 			this.label_predefinedCommandSettingsSet_7.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_7.Location = new System.Drawing.Point(12, 191);
+			this.label_predefinedCommandSettingsSet_7.Location = new System.Drawing.Point(12, 192);
 			this.label_predefinedCommandSettingsSet_7.Name = "label_predefinedCommandSettingsSet_7";
 			this.label_predefinedCommandSettingsSet_7.Size = new System.Drawing.Size(16, 13);
-			this.label_predefinedCommandSettingsSet_7.TabIndex = 17;
+			this.label_predefinedCommandSettingsSet_7.TabIndex = 18;
 			this.label_predefinedCommandSettingsSet_7.Text = "&7:";
 			// 
 			// label_predefinedCommandSettingsSet_6
 			// 
 			this.label_predefinedCommandSettingsSet_6.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_6.Location = new System.Drawing.Point(12, 165);
+			this.label_predefinedCommandSettingsSet_6.Location = new System.Drawing.Point(12, 166);
 			this.label_predefinedCommandSettingsSet_6.Name = "label_predefinedCommandSettingsSet_6";
 			this.label_predefinedCommandSettingsSet_6.Size = new System.Drawing.Size(16, 13);
-			this.label_predefinedCommandSettingsSet_6.TabIndex = 15;
+			this.label_predefinedCommandSettingsSet_6.TabIndex = 16;
 			this.label_predefinedCommandSettingsSet_6.Text = "&6:";
 			// 
 			// label_predefinedCommandSettingsSet_5
 			// 
 			this.label_predefinedCommandSettingsSet_5.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_5.Location = new System.Drawing.Point(12, 139);
+			this.label_predefinedCommandSettingsSet_5.Location = new System.Drawing.Point(12, 140);
 			this.label_predefinedCommandSettingsSet_5.Name = "label_predefinedCommandSettingsSet_5";
 			this.label_predefinedCommandSettingsSet_5.Size = new System.Drawing.Size(16, 13);
-			this.label_predefinedCommandSettingsSet_5.TabIndex = 13;
+			this.label_predefinedCommandSettingsSet_5.TabIndex = 14;
 			this.label_predefinedCommandSettingsSet_5.Text = "&5:";
 			// 
 			// label_predefinedCommandSettingsSet_4
 			// 
 			this.label_predefinedCommandSettingsSet_4.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_4.Location = new System.Drawing.Point(12, 113);
+			this.label_predefinedCommandSettingsSet_4.Location = new System.Drawing.Point(12, 114);
 			this.label_predefinedCommandSettingsSet_4.Name = "label_predefinedCommandSettingsSet_4";
 			this.label_predefinedCommandSettingsSet_4.Size = new System.Drawing.Size(16, 13);
-			this.label_predefinedCommandSettingsSet_4.TabIndex = 11;
+			this.label_predefinedCommandSettingsSet_4.TabIndex = 12;
 			this.label_predefinedCommandSettingsSet_4.Text = "&4:";
 			// 
 			// label_predefinedCommandSettingsSet_3
 			// 
 			this.label_predefinedCommandSettingsSet_3.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_3.Location = new System.Drawing.Point(12, 87);
+			this.label_predefinedCommandSettingsSet_3.Location = new System.Drawing.Point(12, 88);
 			this.label_predefinedCommandSettingsSet_3.Name = "label_predefinedCommandSettingsSet_3";
 			this.label_predefinedCommandSettingsSet_3.Size = new System.Drawing.Size(16, 13);
-			this.label_predefinedCommandSettingsSet_3.TabIndex = 9;
+			this.label_predefinedCommandSettingsSet_3.TabIndex = 10;
 			this.label_predefinedCommandSettingsSet_3.Text = "&3:";
 			// 
 			// label_predefinedCommandSettingsSet_2
 			// 
 			this.label_predefinedCommandSettingsSet_2.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_2.Location = new System.Drawing.Point(12, 61);
+			this.label_predefinedCommandSettingsSet_2.Location = new System.Drawing.Point(12, 62);
 			this.label_predefinedCommandSettingsSet_2.Name = "label_predefinedCommandSettingsSet_2";
 			this.label_predefinedCommandSettingsSet_2.Size = new System.Drawing.Size(16, 13);
-			this.label_predefinedCommandSettingsSet_2.TabIndex = 7;
+			this.label_predefinedCommandSettingsSet_2.TabIndex = 8;
 			this.label_predefinedCommandSettingsSet_2.Text = "&2:";
 			// 
 			// label_ExampleBinary_Description
@@ -421,7 +423,7 @@
 			this.label_ExampleBinary_Description.Location = new System.Drawing.Point(402, 368);
 			this.label_ExampleBinary_Description.Name = "label_ExampleBinary_Description";
 			this.label_ExampleBinary_Description.Size = new System.Drawing.Size(72, 13);
-			this.label_ExampleBinary_Description.TabIndex = 33;
+			this.label_ExampleBinary_Description.TabIndex = 34;
 			this.label_ExampleBinary_Description.Text = "Reset Device";
 			// 
 			// label_ExampleBinary_Data
@@ -431,16 +433,16 @@
 			this.label_ExampleBinary_Data.Location = new System.Drawing.Point(67, 368);
 			this.label_ExampleBinary_Data.Name = "label_ExampleBinary_Data";
 			this.label_ExampleBinary_Data.Size = new System.Drawing.Size(66, 13);
-			this.label_ExampleBinary_Data.TabIndex = 32;
+			this.label_ExampleBinary_Data.TabIndex = 33;
 			this.label_ExampleBinary_Data.Text = "\\h(52 53 54)";
 			// 
 			// label_predefinedCommandSettingsSet_1
 			// 
 			this.label_predefinedCommandSettingsSet_1.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_1.Location = new System.Drawing.Point(12, 35);
+			this.label_predefinedCommandSettingsSet_1.Location = new System.Drawing.Point(12, 36);
 			this.label_predefinedCommandSettingsSet_1.Name = "label_predefinedCommandSettingsSet_1";
 			this.label_predefinedCommandSettingsSet_1.Size = new System.Drawing.Size(16, 13);
-			this.label_predefinedCommandSettingsSet_1.TabIndex = 5;
+			this.label_predefinedCommandSettingsSet_1.TabIndex = 6;
 			this.label_predefinedCommandSettingsSet_1.Text = "&1:";
 			// 
 			// label_Clear
@@ -450,7 +452,7 @@
 			this.label_Clear.Location = new System.Drawing.Point(583, 16);
 			this.label_Clear.Name = "label_Clear";
 			this.label_Clear.Size = new System.Drawing.Size(34, 13);
-			this.label_Clear.TabIndex = 4;
+			this.label_Clear.TabIndex = 5;
 			this.label_Clear.Text = "Clear:";
 			this.label_Clear.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -461,17 +463,17 @@
 			this.label_Shortcut.Location = new System.Drawing.Point(527, 16);
 			this.label_Shortcut.Name = "label_Shortcut";
 			this.label_Shortcut.Size = new System.Drawing.Size(50, 13);
-			this.label_Shortcut.TabIndex = 3;
+			this.label_Shortcut.TabIndex = 4;
 			this.label_Shortcut.Text = "Shortcut:";
 			this.label_Shortcut.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label_Data
 			// 
 			this.label_Data.AutoSize = true;
-			this.label_Data.Location = new System.Drawing.Point(54, 16);
+			this.label_Data.Location = new System.Drawing.Point(134, 16);
 			this.label_Data.Name = "label_Data";
 			this.label_Data.Size = new System.Drawing.Size(52, 13);
-			this.label_Data.TabIndex = 1;
+			this.label_Data.TabIndex = 2;
 			this.label_Data.Text = "Text/File:";
 			this.label_Data.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -482,7 +484,7 @@
 			this.label_Description.Location = new System.Drawing.Point(402, 16);
 			this.label_Description.Name = "label_Description";
 			this.label_Description.Size = new System.Drawing.Size(63, 13);
-			this.label_Description.TabIndex = 2;
+			this.label_Description.TabIndex = 3;
 			this.label_Description.Text = "Description:";
 			this.label_Description.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -493,7 +495,7 @@
 			this.label_ExampleText_Description.Location = new System.Drawing.Point(402, 350);
 			this.label_ExampleText_Description.Name = "label_ExampleText_Description";
 			this.label_ExampleText_Description.Size = new System.Drawing.Size(72, 13);
-			this.label_ExampleText_Description.TabIndex = 31;
+			this.label_ExampleText_Description.TabIndex = 32;
 			this.label_ExampleText_Description.Text = "Reset Device";
 			// 
 			// label_ExampleText_Data
@@ -503,7 +505,7 @@
 			this.label_ExampleText_Data.Location = new System.Drawing.Point(67, 350);
 			this.label_ExampleText_Data.Name = "label_ExampleText_Data";
 			this.label_ExampleText_Data.Size = new System.Drawing.Size(29, 13);
-			this.label_ExampleText_Data.TabIndex = 30;
+			this.label_ExampleText_Data.TabIndex = 31;
 			this.label_ExampleText_Data.Text = "RST";
 			// 
 			// label_Example
@@ -513,7 +515,7 @@
 			this.label_Example.Location = new System.Drawing.Point(6, 359);
 			this.label_Example.Name = "label_Example";
 			this.label_Example.Size = new System.Drawing.Size(55, 13);
-			this.label_Example.TabIndex = 29;
+			this.label_Example.TabIndex = 30;
 			this.label_Example.Text = "Examples:";
 			// 
 			// button_Help
@@ -641,6 +643,16 @@
 			this.button_NamePage.Text = "&Name...";
 			this.button_NamePage.Click += new System.EventHandler(this.button_NamePage_Click);
 			// 
+			// label_ExplicitDefaultRadix
+			// 
+			this.label_ExplicitDefaultRadix.AutoSize = true;
+			this.label_ExplicitDefaultRadix.Location = new System.Drawing.Point(8, 16);
+			this.label_ExplicitDefaultRadix.Name = "label_ExplicitDefaultRadix";
+			this.label_ExplicitDefaultRadix.Size = new System.Drawing.Size(74, 13);
+			this.label_ExplicitDefaultRadix.TabIndex = 0;
+			this.label_ExplicitDefaultRadix.Text = "Default Radix:";
+			this.label_ExplicitDefaultRadix.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// PredefinedCommandSettings
 			// 
 			this.AcceptButton = this.button_OK;
@@ -719,5 +731,6 @@
 		private System.Windows.Forms.Label label_predefinedCommandSettingsSet_10;
 		private System.Windows.Forms.Button button_CopyPage;
 		private System.Windows.Forms.Label label_Clear;
+		private System.Windows.Forms.Label label_ExplicitDefaultRadix;
 	}
 }

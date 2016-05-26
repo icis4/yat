@@ -55,6 +55,7 @@ namespace YAT.View.Controls
 
 		private SettingControlsHelper isSettingControls;
 
+		private Domain.RadixEx defaultRadix;
 		private Domain.Parser.Modes parseMode;
 
 		private Command command;
@@ -68,7 +69,7 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		public MultiLineBox(Command command, Point startupLocation, Domain.Parser.Modes parseMode)
+		public MultiLineBox(Command command, Point startupLocation, Domain.Radix defaultRadix, Domain.Parser.Modes parseMode)
 		{
 			InitializeComponent();
 
@@ -76,6 +77,7 @@ namespace YAT.View.Controls
 			Location = startupLocation;
 			ResumeLayout();
 
+			this.defaultRadix = defaultRadix;
 			this.parseMode = parseMode;
 
 			this.command = command;
@@ -184,7 +186,7 @@ namespace YAT.View.Controls
 				{
 					int invalidTextStart;
 					int invalidTextLength;
-					if (!Utilities.ValidationHelper.ValidateText(this, "text", s, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
+					if (!Utilities.ValidationHelper.ValidateText(this, "text", s, out invalidTextStart, out invalidTextLength, this.defaultRadix, this.parseMode))
 					{
 						invalidTextStart += textLength;
 						invalidTextLength = textBox_Lines.Text.Length - invalidTextStart;

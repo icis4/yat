@@ -41,6 +41,12 @@ namespace YAT.Domain
 		None,
 
 		/// <summary></summary>
+		String,
+
+		/// <summary></summary>
+		Char,
+
+		/// <summary></summary>
 		Bin,
 
 		/// <summary></summary>
@@ -50,13 +56,7 @@ namespace YAT.Domain
 		Dec,
 
 		/// <summary></summary>
-		Hex,
-
-		/// <summary></summary>
-		Char,
-
-		/// <summary></summary>
-		String,
+		Hex
 	}
 
 	#endregion
@@ -165,12 +165,15 @@ namespace YAT.Domain
 		public static RadixEx[] GetItems()
 		{
 			List<RadixEx> a = new List<RadixEx>(6); // Preset the required capactiy to improve memory management.
-			a.Add(new RadixEx(Radix.Bin));
+
+			a.Add(new RadixEx(Radix.String)); // Alpha radices.
+			a.Add(new RadixEx(Radix.Char));
+
+			a.Add(new RadixEx(Radix.Bin)); // Numeric radices.
 			a.Add(new RadixEx(Radix.Oct));
 			a.Add(new RadixEx(Radix.Dec));
 			a.Add(new RadixEx(Radix.Hex));
-			a.Add(new RadixEx(Radix.Char));
-			a.Add(new RadixEx(Radix.String));
+
 			return (a.ToArray());
 		}
 

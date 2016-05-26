@@ -286,10 +286,10 @@ namespace YAT.Domain
 		/// <summary>
 		/// Tries to parse <paramref name="s"/>, taking the current settings into account.
 		/// </summary>
-		public override bool TryParse(string s, out byte[] result)
+		public override bool TryParse(string s, out byte[] result, Radix defaultRadix = Radix.String)
 		{
-			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding))
-				return (p.TryParse(s, TextTerminalSettings.CharSubstitution, TerminalSettings.Send.ToParseMode(), out result));
+			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.Send.ToParseMode()))
+				return (p.TryParse(s, out result, defaultRadix));
 		}
 
 		#endregion
@@ -326,11 +326,11 @@ namespace YAT.Domain
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
 
-			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding))
-				hasSucceeded = p.TryParse(textToParse, TextTerminalSettings.CharSubstitution, TerminalSettings.Send.ToParseMode(), out parseResult, out textSuccessfullyParsed);
+			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.Send.ToParseMode()))
+				hasSucceeded = p.TryParse(textToParse, out parseResult, out textSuccessfullyParsed);
 
 			if (hasSucceeded)
-				ProcessParsedSendItem(item, parseResult);
+				ProcessParserResult(parseResult, item.IsLine);
 			else
 				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
 		}
@@ -399,23 +399,23 @@ namespace YAT.Domain
 
 			byte[] txEol;
 			byte[] rxEol;
-			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding))
+			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding, Parser.Modes.AllByteArrayResults))
 			{
-				if (!p.TryParse(TextTerminalSettings.TxEol, TextTerminalSettings.CharSubstitution, Parser.Modes.AllByteArrayResults, out txEol))
+				if (!p.TryParse(TextTerminalSettings.TxEol, out txEol))
 				{
 					// In case of an invalid EOL sequence, default it. This should never happen,
 					// YAT verifies the EOL sequence when the user enters it. However, the user might
 					// manually edit the EOL sequence in a settings file.
 					TextTerminalSettings.TxEol = Settings.TextTerminalSettings.DefaultEol;
-					txEol = p.Parse(TextTerminalSettings.TxEol, TextTerminalSettings.CharSubstitution);
+					txEol = p.Parse(TextTerminalSettings.TxEol);
 				}
-				if (!p.TryParse(TextTerminalSettings.RxEol, TextTerminalSettings.CharSubstitution, Parser.Modes.AllByteArrayResults, out rxEol))
+				if (!p.TryParse(TextTerminalSettings.RxEol, out rxEol))
 				{
 					// In case of an invalid EOL sequence, default it. This should never happen,
 					// YAT verifies the EOL sequence when the user enters it. However, the user might
 					// manually edit the EOL sequence in a settings file.
 					TextTerminalSettings.RxEol = Settings.TextTerminalSettings.DefaultEol;
-					rxEol = p.Parse(TextTerminalSettings.RxEol, TextTerminalSettings.CharSubstitution);
+					rxEol = p.Parse(TextTerminalSettings.RxEol);
 				}
 			}
 			this.txLineState = new LineState(new SequenceQueue(txEol));
@@ -431,7 +431,7 @@ namespace YAT.Domain
 		{
 			switch (r)
 			{
-				// Bin/Oct/Dec/Hex.
+				// Bin/Oct/Dec/Hex:
 				case Radix.Bin:
 				case Radix.Oct:
 				case Radix.Dec:
@@ -440,7 +440,7 @@ namespace YAT.Domain
 					return (base.ByteToElement(b, d, r));
 				}
 
-				// Char/String.
+				// Char/String:
 				case Radix.Char:
 				case Radix.String:
 				{

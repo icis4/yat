@@ -40,6 +40,17 @@ namespace YAT.Domain
 		/// <summary></summary>
 		None = Radix.None,
 
+		/// <remarks>
+		/// String makes no sense for single byte/character replacement. Still, keep this item to
+		/// ensure that items can 1:1 be mapped to <see cref="Radix"/> and that additional items
+		/// get distinct enum identifiers.
+		/// </remarks>
+		[Obsolete]
+		String = Radix.String,
+
+		/// <summary></summary>
+		Char = Radix.Char,
+
 		/// <summary></summary>
 		Bin = Radix.Bin,
 
@@ -51,17 +62,6 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		Hex = Radix.Hex,
-
-		/// <summary></summary>
-		Chr = Radix.Char,
-
-		/// <remarks>
-		/// String makes no sense for single byte/character replacement. Still, keep this item to
-		/// ensure that items can 1:1 be mapped to <see cref="Radix"/> and that additional items
-		/// get distinct enum identifiers.
-		/// </remarks>
-		[Obsolete]
-		Str = Radix.String,
 
 		/// <summary></summary>
 		AsciiMnemonic,

@@ -64,41 +64,10 @@ namespace YAT.Domain.Parser
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
-		public SubstitutionParser(Endianness endianness)
-			: base(endianness)
+		public SubstitutionParser(CharSubstitution substitution, Endianness endianness, Encoding encoding, Modes modes)
+			: base(endianness, encoding, modes)
 		{
-		}
-
-		/// <summary></summary>
-		public SubstitutionParser(Encoding encoding)
-			: base(encoding)
-		{
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
-		public SubstitutionParser(Endianness endianness, Encoding encoding)
-			: base(endianness, encoding)
-		{
-		}
-
-		/// <summary></summary>
-		public SubstitutionParser(Radix defaultRadix)
-			: base(defaultRadix)
-		{
-		}
-
-		/// <summary></summary>
-		public SubstitutionParser(Encoding encoding, Radix defaultRadix)
-			: base(encoding, defaultRadix)
-		{
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
-		public SubstitutionParser(Endianness endianness, Encoding encoding, Radix defaultRadix)
-			: base(endianness, encoding, defaultRadix)
-		{
+			this.substitution = substitution;
 		}
 
 		/// <summary></summary>
@@ -150,68 +119,6 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 		// Methods
 		//==========================================================================================
-
-		/// <summary></summary>
-		public virtual byte[] Parse(string s, CharSubstitution substitution)
-		{
-			// AssertNotDisposed() is called by 'Parse()' below.
-
-			this.substitution = substitution;
-			return (Parse(s));
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool TryParse(string s, CharSubstitution substitution, out byte[] result)
-		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
-
-			string successfullyParsed;
-			return (TryParse(s, substitution, out result, out successfullyParsed));
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool TryParse(string s, CharSubstitution substitution, Modes modes, out byte[] result)
-		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
-
-			string successfullyParsed;
-			return (TryParse(s, substitution, modes, out result, out successfullyParsed));
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool TryParse(string s, CharSubstitution substitution, out byte[] result, out string successfullyParsed)
-		{
-			// AssertNotDisposed() is called by 'base.TryParse()' below.
-
-			this.substitution = substitution;
-			return (TryParse(s, out result, out successfullyParsed));
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool TryParse(string s, CharSubstitution substitution, Modes modes, out byte[] result, out string successfullyParsed)
-		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
-
-			this.substitution = substitution;
-			return (TryParse(s, modes, out result, out successfullyParsed));
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool TryParse(string s, CharSubstitution substitution, Modes modes, out Result[] result, out string successfullyParsed)
-		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
-
-			this.substitution = substitution;
-			return (TryParse(s, modes, out result, out successfullyParsed));
-		}
 
 		/// <summary></summary>
 		internal override bool TryParseContiguousRadixItem(string item, Radix radix, out byte[] result, ref FormatException formatException)

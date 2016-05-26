@@ -2726,31 +2726,31 @@ namespace YAT.Model
 			}
 		}
 
-		private void Send(string data)
+		private void Send(string data, Domain.Radix defaultRadix = Domain.Parser.Parser.DefaultRadixDefault)
 		{
-			Send(data, false);
+			Send(data, defaultRadix, false);
 		}
 
 		private void SendEol()
 		{
-			Send("", true);
+			Send("", Domain.Radix.String, true);
 		}
 
-		private void SendLine(string line)
+		private void SendLine(string line, Domain.Radix defaultRadix = Domain.Parser.Parser.DefaultRadixDefault)
 		{
-			Send(line, true);
+			Send(line, defaultRadix, true);
 		}
 
-		private void Send(string data, bool isLine)
+		private void Send(string data, Domain.Radix defaultRadix, bool isLine)
 		{
 			try
 			{
 				DebugMessage(@"Sending """ + (!string.IsNullOrEmpty(data) ? data : "") + @"""...");
 
 				if (isLine)
-					this.terminal.SendLine(data);
+					this.terminal.SendLine(data, defaultRadix);
 				else
-					this.terminal.Send(data);
+					this.terminal.Send(data, defaultRadix);
 			}
 			catch (IOException ex)
 			{
@@ -2841,13 +2841,13 @@ namespace YAT.Model
 		///  3. Response to first line is received and displayed
 		///     and so on, mix-up among sent and received lines...
 		/// </remarks>
-		private void SendMultiLine(string[] multiLineText, string singleLineText)
+		private void SendMultiLine(string[] multiLineText, Domain.Radix defaultRadix, string singleLineText)
 		{
 			try
 			{
 				DebugMessage(@"Sending """ + (!string.IsNullOrEmpty(singleLineText) ? singleLineText : "") + @"""...");
 
-				this.terminal.SendLines(multiLineText);
+				this.terminal.SendLines(multiLineText, defaultRadix);
 			}
 			catch (IOException ex)
 			{
@@ -2960,19 +2960,19 @@ namespace YAT.Model
 				if (c.IsSingleLineText)
 				{
 					if (SendTextSettings.IsEasterEggCommand(c.SingleLineText))
-						SendLine(SendTextSettings.EasterEggCommandText);
+						SendLine(SendTextSettings.EasterEggCommandText, Domain.Radix.String);
 					else
-						SendLine(c.SingleLineText);
+						SendLine(c.SingleLineText, c.DefaultRadix);
 				}
 				else if (c.IsMultiLineText)
 				{
-					SendMultiLine(c.MultiLineText, c.SingleLineText);
+					SendMultiLine(c.MultiLineText, c.DefaultRadix, c.SingleLineText);
 				}
 				else if (c.IsPartialText)
 				{
 					if (!c.IsPartialTextEol)
 					{
-						Send(c.PartialText);
+						Send(c.PartialText, c.DefaultRadix);
 
 						// Compile the partial command line for later use:
 						if (string.IsNullOrEmpty(this.partialCommandLine))
@@ -3076,7 +3076,7 @@ namespace YAT.Model
 						{										// Automatically detect encoding from BOM, otherwise use given setting.
 							string line;
 							while (((line = sr.ReadLine()) != null) && (!this.terminal.BreakState))
-								SendLine(line);
+								SendLine(line, c.DefaultRadix); // Enable parsing.
 						}
 					}
 				}
@@ -4058,7 +4058,7 @@ namespace YAT.Model
 				if (c.IsSingleLineText)
 				{
 					byte[] lineResult;
-					if (this.terminal.TryParse(c.SingleLineText, out lineResult))
+					if (this.terminal.TryParse(c.SingleLineText, out lineResult, c.DefaultRadix))
 					{
 						sequence = lineResult;
 						return (true);
@@ -4071,7 +4071,7 @@ namespace YAT.Model
 					foreach (string line in c.MultiLineText)
 					{
 						byte[] lineResult;
-						if (this.terminal.TryParse(line, out lineResult))
+						if (this.terminal.TryParse(line, out lineResult, c.DefaultRadix))
 							commandResult.AddRange(lineResult);
 					}
 

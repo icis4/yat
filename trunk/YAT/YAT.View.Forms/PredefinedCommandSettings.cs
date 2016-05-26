@@ -90,25 +90,27 @@ namespace YAT.View.Forms
 
 		/// <param name="settings">Settings to be displayed.</param>
 		/// <param name="terminalType">The terminal type related to the command.</param>
+		/// <param name="useExplicitDefaultRadix">Whether to use an explicit default radix.</param>
 		/// <param name="parseMode">The parse mode related to the command.</param>
 		/// <param name="requestedPage">Page 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
 		/// <param name="requestedCommand">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
-		public PredefinedCommandSettings(Model.Settings.PredefinedCommandSettings settings, Domain.TerminalType terminalType, Domain.Parser.Modes parseMode, int requestedPage, int requestedCommand)
+		public PredefinedCommandSettings(Model.Settings.PredefinedCommandSettings settings, Domain.TerminalType terminalType, bool useExplicitDefaultRadix, Domain.Parser.Modes parseMode, int requestedPage, int requestedCommand)
 		{
 			InitializeComponent();
 
 			this.settings = settings;
 			this.settingsInEdit = new Model.Settings.PredefinedCommandSettings(settings);
 
-			InitializeControls();
+			InitializeControls(useExplicitDefaultRadix);
 
-			foreach (Controls.PredefinedCommandSettingsSet set in this.predefinedCommandSettingsSets)
+			foreach (Controls.PredefinedCommandSettingsSet s in this.predefinedCommandSettingsSets)
 			{
-				set.TerminalType = terminalType;
-				set.ParseMode = parseMode;
+				s.TerminalType            = terminalType;
+				s.UseExplicitDefaultRadix = useExplicitDefaultRadix;
+				s.ParseMode               = parseMode;
 			}
 
-			this.startupControl.RequestedPage = requestedPage;
+			this.startupControl.RequestedPage    = requestedPage;
 			this.startupControl.RequestedCommand = requestedCommand;
 
 			// SetControls() is initially called in the 'Shown' event handler.
@@ -296,8 +298,10 @@ namespace YAT.View.Forms
 		// Private Methods > Controls
 		//------------------------------------------------------------------------------------------
 
-		private void InitializeControls()
+		private void InitializeControls(bool useExplicitDefaultRadix)
 		{
+			label_ExplicitDefaultRadix.Visible = useExplicitDefaultRadix;
+
 			this.predefinedCommandSettingsSetLabels = new List<Label>(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); // Preset the required capactiy to improve memory management.
 			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_1);
 			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_2);

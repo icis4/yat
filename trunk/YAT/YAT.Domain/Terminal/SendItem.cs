@@ -123,12 +123,14 @@ namespace YAT.Domain
 	public class ParsableSendItem : SendItem
 	{
 		private string data;
+		private Radix defaultRadix;
 		private bool isLine;
 
 		/// <summary></summary>
-		public ParsableSendItem(string data, bool isLine)
+		public ParsableSendItem(string data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault, bool isLine = false)
 		{
 			this.data = data;
+			this.defaultRadix = defaultRadix;
 			this.isLine = isLine;
 		}
 
@@ -136,6 +138,12 @@ namespace YAT.Domain
 		public virtual string Data
 		{
 			get { return (this.data); }
+		}
+
+		/// <summary></summary>
+		public virtual Radix DefaultRadix
+		{
+			get { return (this.defaultRadix); }
 		}
 
 		/// <summary></summary>
@@ -153,8 +161,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public override string ToDetailedString(string indent)
 		{
-			return (indent + "> Data: " + this.data + Environment.NewLine +
-					indent + "> IsLine: " + this.isLine + Environment.NewLine);
+			return (indent + "> Data         : " + this.data         + Environment.NewLine +
+					indent + "> DefaultRadix : " + this.defaultRadix + Environment.NewLine +
+					indent + "> IsLine       : " + this.isLine       + Environment.NewLine);
 		}
 	}
 }

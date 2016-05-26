@@ -56,6 +56,9 @@ namespace YAT.Model.Types
 		//==========================================================================================
 
 		/// <summary></summary>
+		public const Domain.Radix DefaultRadixDefault = Domain.Parser.Parser.DefaultRadixDefault;
+
+		/// <summary></summary>
 		public const string DefineCommandText = "<Define...>";
 
 		/// <remarks>'TextText' as it is the text of a text command.</remarks>
@@ -98,62 +101,44 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		public Command(string commandLine)
+		public Command(string commandLine, bool isPartialText = false)
 		{
-			Initialize(true, "", new string[] { commandLine }, Domain.Radix.String, false, false, false, "");
-		}
-
-		/// <summary></summary>
-		public Command(string commandLine, bool isPartialText)
-		{
-			Initialize(true, "", new string[] { commandLine }, Domain.Radix.String, isPartialText, false, false, "");
+			Initialize(true, "", new string[] { commandLine }, DefaultRadixDefault, isPartialText, false, false, "");
 		}
 
 		/// <summary></summary>
 		public Command(bool isPartialTextEol)
 		{
-			Initialize(true, "", new string[] { "" }, Domain.Radix.String, isPartialTextEol, isPartialTextEol, false, "");
-		}
-
-		/// <summary></summary>
-		public Command(string description, string commandLine)
-		{
-			Initialize(true, description, new string[] { commandLine }, Domain.Radix.String, false, false, false, "");
+			Initialize(true, "", new string[] { "" }, DefaultRadixDefault, isPartialTextEol, isPartialTextEol, false, "");
 		}
 
 		/// <summary></summary>
 		public Command(string[] commandLines)
 		{
-			Initialize(true, "", commandLines, Domain.Radix.String, false, false, false, "");
+			Initialize(true, "", commandLines, DefaultRadixDefault, false, false, false, "");
 		}
 
 		/// <summary></summary>
-		public Command(string description, string[] commandLines)
-		{
-			Initialize(true, description, commandLines, Domain.Radix.String, false, false, false, "");
-		}
-
-		/// <summary></summary>
-		public Command(string description, string commandLine, Domain.Radix defaultRadix)
+		public Command(string description, string commandLine, Domain.Radix defaultRadix = DefaultRadixDefault)
 		{
 			Initialize(true, description, new string[] { commandLine }, defaultRadix, false, false, false, "");
 		}
 
 		/// <summary></summary>
-		public Command(string description, string[] commandLines, Domain.Radix defaultRadix)
+		public Command(string description, string[] commandLines, Domain.Radix defaultRadix = DefaultRadixDefault)
 		{
 			Initialize(true, description, commandLines, defaultRadix, false, false, false, "");
 		}
 
 		/// <summary></summary>
-		public Command(string description, bool isFilePath, string filePath)
+		public Command(string description, bool isFilePath, string filePath, Domain.Radix defaultRadix = DefaultRadixDefault)
 		{
-			Initialize(true, description, new string[] { "" }, Domain.Radix.String, false, false, isFilePath, filePath);
+			Initialize(true, description, new string[] { "" }, defaultRadix, false, false, isFilePath, filePath);
 		}
 
 		private void Initialize()
 		{
-			Initialize(false, "", new string[] { "" }, Domain.Radix.String, false, false, false, "");
+			Initialize(false, "", new string[] { "" }, DefaultRadixDefault, false, false, false, "");
 		}
 
 		private void Initialize(bool isDefined, string description, string[] commandLines, Domain.Radix defaultRadix, bool isPartialText, bool isPartialTextEol, bool isFilePath, string filePath)
@@ -481,11 +466,11 @@ namespace YAT.Model.Types
 				if (!IsText)
 					return (false);
 
-				using (Domain.Parser.Parser p = new Domain.Parser.Parser(this.defaultRadix))
+				using (Domain.Parser.Parser p = new Domain.Parser.Parser())
 				{
 					foreach (string commandLine in this.commandLines)
 					{
-						if (!p.TryParse(commandLine))
+						if (!p.TryParse(commandLine, this.defaultRadix))
 							return (false);
 					}
 					return (true);

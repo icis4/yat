@@ -77,6 +77,7 @@ namespace YAT.View.Controls
 
 		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypeDefault;
 		private const Domain.Parser.Modes ParseModeDefault = Domain.Parser.Modes.Default;
+
 		private const string ShortcutStringDefault = "Shift+F1";
 
 		#endregion
@@ -88,10 +89,12 @@ namespace YAT.View.Controls
 
 		private SettingControlsHelper isSettingControls;
 
-		private Domain.TerminalType terminalType = TerminalTypeDefault;
-		private Domain.Parser.Modes parseMode = ParseModeDefault;
+		private Command command = new Command();
 
-		private Model.Types.Command command = new Model.Types.Command();
+		private Domain.TerminalType terminalType = TerminalTypeDefault;
+		private bool useExplicitDefaultRadix = Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault;
+		private Domain.RadixEx explicitDefaultRadix = Command.DefaultRadixDefault;
+		private Domain.Parser.Modes parseMode = ParseModeDefault;
 
 		private FocusState focusState = FocusState.Inactive;
 		private bool isValidated; // = false;
@@ -120,6 +123,7 @@ namespace YAT.View.Controls
 		{
 			InitializeComponent();
 
+			InitializeControls();
 			// SetControls() is initially called in the 'Paint' event handler.
 		}
 
@@ -129,6 +133,27 @@ namespace YAT.View.Controls
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <summary>
+		/// This property always returns a <see cref="Command"/> object,
+		/// it never returns <c>null</c>.
+		/// </summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual Command Command
+		{
+			get { return (this.command); }
+			set
+			{
+				if (value != null)
+					this.command = value;
+				else
+					this.command = new Command();
+
+				OnCommandChanged(EventArgs.Empty);
+				SetControls();
+			}
+		}
 
 		/// <summary></summary>
 		[Category("Command")]
@@ -141,6 +166,54 @@ namespace YAT.View.Controls
 			{
 				this.terminalType = value;
 				SetControls();
+			}
+		}
+
+		/// <summary></summary>
+		[Category("Command")]
+		[Description("Whether to use an explicit default radix.")]
+		[DefaultValue(Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault)]
+		public virtual bool UseExplicitDefaultRadix
+		{
+			get { return (this.useExplicitDefaultRadix); }
+			set
+			{
+				if (this.useExplicitDefaultRadix != value)
+				{
+					this.useExplicitDefaultRadix = value;
+					SetControls();
+					SetCommandDefaultRadix();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		protected virtual Domain.RadixEx ExplicitDefaultRadix
+		{
+			set
+			{
+				if (this.explicitDefaultRadix != value)
+				{
+					this.explicitDefaultRadix = value;
+					SetControls();
+					SetCommandDefaultRadix();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		protected virtual Domain.Radix DefaultRadix
+		{
+			get
+			{
+				if (this.useExplicitDefaultRadix)
+					return (this.explicitDefaultRadix);
+				else
+					return (Command.DefaultRadixDefault);
 			}
 		}
 
@@ -166,27 +239,6 @@ namespace YAT.View.Controls
 		{
 			get { return (label_Shortcut.Text); }
 			set { label_Shortcut.Text = value; }
-		}
-
-		/// <summary>
-		/// This property always returns a <see cref="Model.Types.Command"/> object,
-		/// it never returns <c>null</c>.
-		/// </summary>
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual Command Command
-		{
-			get { return (this.command); }
-			set
-			{
-				if (value != null)
-					this.command = value;
-				else
-					this.command = new Command();
-
-				OnCommandChanged(EventArgs.Empty);
-				SetControls();
-			}
 		}
 
 		#endregion
@@ -232,6 +284,12 @@ namespace YAT.View.Controls
 		//==========================================================================================
 		// Controls Event Handlers
 		//==========================================================================================
+
+		private void comboBox_ExplicitDefaultRadix_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				ExplicitDefaultRadix = (Domain.RadixEx)comboBox_ExplicitDefaultRadix.SelectedItem;
+		}
 
 		private void checkBox_IsFile_CheckedChanged(object sender, EventArgs e)
 		{
@@ -305,9 +363,10 @@ namespace YAT.View.Controls
 					return;
 				}
 
+				Domain.Radix radix = (this.useExplicitDefaultRadix ? (Domain.Radix)this.explicitDefaultRadix : Command.DefaultRadixDefault);
 				int invalidTextStart;
 				int invalidTextLength;
-				if (Utilities.ValidationHelper.ValidateText(this, "text", textBox_SingleLineText.Text, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
+				if (Utilities.ValidationHelper.ValidateText(this, "text", textBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, radix, this.parseMode))
 				{
 					this.isValidated = true;
 
@@ -361,9 +420,26 @@ namespace YAT.View.Controls
 		// Private Methods
 		//==========================================================================================
 
+		private void InitializeControls()
+		{
+			this.isSettingControls.Enter();
+
+			comboBox_ExplicitDefaultRadix.Items.Clear();
+			comboBox_ExplicitDefaultRadix.Items.AddRange(Domain.RadixEx.GetItems());
+
+			this.isSettingControls.Leave();
+		}
+
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
+
+			splitContainer_ExplicitDefaultRadix.Panel1Collapsed = !this.useExplicitDefaultRadix;
+
+			if (this.useExplicitDefaultRadix)
+				Utilities.SelectionHelper.Select(comboBox_ExplicitDefaultRadix, this.explicitDefaultRadix, this.explicitDefaultRadix);
+			else
+				Utilities.SelectionHelper.Deselect(comboBox_ExplicitDefaultRadix);
 
 			// Description:
 			textBox_Description.Text = this.command.Description;
@@ -490,6 +566,28 @@ namespace YAT.View.Controls
 			OnCommandChanged(EventArgs.Empty);
 		}
 
+		private void SetCommandDefaultRadix()
+		{
+			if (UseExplicitDefaultRadix)
+			{
+				if (this.command.DefaultRadix != this.explicitDefaultRadix)
+				{
+					Command c = new Command(this.command); // Recreate to enforce property change.
+					c.DefaultRadix = this.explicitDefaultRadix;
+					Command = c; // Enforce property setter.
+				}
+			}
+			else
+			{
+				if (this.command.DefaultRadix != Command.DefaultRadixDefault)
+				{
+					Command c = new Command(this.command); // Recreate to enforce property change.
+					c.DefaultRadix = Command.DefaultRadixDefault;
+					Command = c; // Enforce property setter.
+				}
+			}
+		}
+
 		private void ClearCommand()
 		{
 			this.isSettingControls.Enter();
@@ -519,7 +617,7 @@ namespace YAT.View.Controls
 			formStartupLocation.Y = area.Y + area.Height;
 
 			// Show multi-line box:
-			MultiLineBox f = new MultiLineBox(this.command, formStartupLocation, this.parseMode);
+			MultiLineBox f = new MultiLineBox(this.command, formStartupLocation, DefaultRadix, this.parseMode);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
