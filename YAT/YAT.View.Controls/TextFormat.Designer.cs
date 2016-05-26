@@ -52,6 +52,7 @@
 			this.button_Color = new System.Windows.Forms.Button();
 			this.checkBox_Strikeout = new System.Windows.Forms.CheckBox();
 			this.checkBox_Underline = new System.Windows.Forms.CheckBox();
+			this.colorDialog = new System.Windows.Forms.ColorDialog();
 			this.SuspendLayout();
 			// 
 			// checkBox_Italic
@@ -130,5 +131,6 @@
 		private System.Windows.Forms.CheckBox checkBox_Underline;
 		private System.Windows.Forms.CheckBox checkBox_Strikeout;
 		private System.Windows.Forms.Button button_Color;
+		private System.Windows.Forms.ColorDialog colorDialog;
 	}
 }

@@ -22,8 +22,11 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Xml.Serialization;
+
+using MKY.Recent;
 
 using YAT.Model.Types;
 
@@ -39,17 +42,20 @@ namespace YAT.Model.Settings
 		/// <remarks>Color.Purple = 800080.</remarks>
 		public static readonly Color RxColorDefault = Color.Purple;
 
-		/// <remarks>Color.DarkGreen = 006400.</remarks>
-		public static readonly Color InfoColorDefault = Color.DarkGreen;
+		/// <remarks>Color.Green = 008000.</remarks>
+		public static readonly Color InfoColorDefault = Color.Green;
 
 		/// <remarks>Color.Black = 000000.</remarks>
 		public static readonly Color WhiteSpacesColorDefault = Color.Black;
 
-		/// <remarks>Color.OrangeRed = FF4500.</remarks>
-		public static readonly Color ErrorColorDefault = Color.OrangeRed;
+		/// <remarks>'Orange' predefined by the color dialog = FF8000.</remarks>
+		public static readonly Color ErrorColorDefault = Color.FromArgb(0xFF, 0x80, 0x00);
 
 		/// <remarks><see cref="SystemColors.Window"/>.</remarks>
 		public static readonly Color BackColorDefault = SystemColors.Window;
+
+		/// <summary></summary>
+		public const int MaxCustomColors = 16;
 
 		private FontFormat font;
 
@@ -66,6 +72,8 @@ namespace YAT.Model.Settings
 		private TextFormat errorFormat;
 
 		private BackFormat backFormat;
+
+		private RecentItemCollection<string> customColors;
 
 		/// <summary></summary>
 		public FormatSettings()
@@ -105,6 +113,8 @@ namespace YAT.Model.Settings
 
 			BackFormat        = new BackFormat(rhs.BackFormat);
 
+			CustomColors      = new RecentItemCollection<string>(rhs.CustomColors);
+
 			ClearChanged();
 		}
 
@@ -130,6 +140,8 @@ namespace YAT.Model.Settings
 			ErrorFormat       = new TextFormat(ErrorColorDefault,        true, false, false, false); // Bold.
 
 			BackFormat        = new BackFormat(BackColorDefault);
+
+			CustomColors      = new RecentItemCollection<string>(MaxCustomColors);
 		}
 
 		#region Properties
@@ -362,6 +374,63 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <remarks>
+		/// Using string because...
+		/// ...<see cref="Color"/> does not implement <see cref="IEquatable{T}"/> that is needed for a recent item collection, and because...
+		/// ...<see cref="Color"/> cannot be serialized.
+		/// </remarks>
+		[XmlElement("CustomColors")]
+		public RecentItemCollection<string> CustomColors
+		{
+			get { return (this.customColors); }
+			set
+			{
+				if (this.customColors != value)
+				{
+					this.customColors = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public int[] CustomColorsToWin32()
+		{
+			List<int> l = new List<int>(this.customColors.Count);
+
+			foreach (RecentItem<string> ri in this.customColors)
+			{
+				Color c = ColorTranslator.FromHtml(ri.Item);
+				int win32 = ColorTranslator.ToWin32(c);
+				l.Add(win32);
+			}
+
+			return (l.ToArray());
+		}
+
+		/// <summary></summary>
+		public bool UpdateCustomColorsFromWin32(int[] customColors)
+		{
+			// Do not add 'White', as that...
+			// ...is the default color, and...
+			// ...is available predefined anyway.
+			int win32White = ColorTranslator.ToWin32(Color.White);
+
+			List<string> otherThanWhite = new List<string>(customColors.Length);
+
+			foreach (int win32 in customColors)
+			{
+				if (win32 != win32White)
+				{
+					Color c = ColorTranslator.FromWin32(win32);
+					string html = ColorTranslator.ToHtml(c);
+					otherThanWhite.Add(html);
+				}
+			}
+
+			return (this.customColors.UpdateFrom(otherThanWhite));
+		}
+
 		#endregion
 
 		#region Object Members
@@ -400,7 +469,9 @@ namespace YAT.Model.Settings
 				(WhiteSpacesFormat == other.WhiteSpacesFormat) &&
 				(ErrorFormat       == other.ErrorFormat) &&
 
-				(BackFormat        == other.BackFormat)
+				(BackFormat        == other.BackFormat) &&
+
+				(CustomColors      == other.CustomColors)
 			);
 		}
 
@@ -417,21 +488,23 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^  Font             .GetHashCode();
+				hashCode = (hashCode * 397) ^ (Font              != null ? Font             .GetHashCode() : 0);
 
-				hashCode = (hashCode * 397) ^  TxDataFormat     .GetHashCode();
-				hashCode = (hashCode * 397) ^  TxControlFormat  .GetHashCode();
-				hashCode = (hashCode * 397) ^  RxDataFormat     .GetHashCode();
-				hashCode = (hashCode * 397) ^  RxControlFormat  .GetHashCode();
-				hashCode = (hashCode * 397) ^  DateFormat       .GetHashCode();
-				hashCode = (hashCode * 397) ^  TimeFormat       .GetHashCode();
-				hashCode = (hashCode * 397) ^  PortFormat       .GetHashCode();
-				hashCode = (hashCode * 397) ^  DirectionFormat  .GetHashCode();
-				hashCode = (hashCode * 397) ^  LengthFormat     .GetHashCode();
-				hashCode = (hashCode * 397) ^  WhiteSpacesFormat.GetHashCode();
-				hashCode = (hashCode * 397) ^  ErrorFormat      .GetHashCode();
+				hashCode = (hashCode * 397) ^ (TxDataFormat      != null ? TxDataFormat     .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (TxControlFormat   != null ? TxControlFormat  .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (RxDataFormat      != null ? RxDataFormat     .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (RxControlFormat   != null ? RxControlFormat  .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (DateFormat        != null ? DateFormat       .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (TimeFormat        != null ? TimeFormat       .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (PortFormat        != null ? PortFormat       .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (DirectionFormat   != null ? DirectionFormat  .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (LengthFormat      != null ? LengthFormat     .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (WhiteSpacesFormat != null ? WhiteSpacesFormat.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (ErrorFormat       != null ? ErrorFormat      .GetHashCode() : 0);
 
-				hashCode = (hashCode * 397) ^  BackFormat       .GetHashCode();
+				hashCode = (hashCode * 397) ^ (BackFormat        != null ? BackFormat       .GetHashCode() : 0);
+
+				hashCode = (hashCode * 397) ^ (CustomColors      != null ? CustomColors     .GetHashCode() : 0);
 
 				return (hashCode);
 			}

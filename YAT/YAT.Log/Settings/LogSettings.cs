@@ -723,17 +723,7 @@ namespace YAT.Log.Settings
 		}
 
 		/// <remarks>
-		/// Must be string because an 'EnumEx' cannot be serialized.
-		/// </remarks>
-		[XmlElement("NameSeparator")]
-		public virtual string NameSeparator_ForSerialization
-		{
-			get { return (NameSeparator.ToSeparator()); } // Use separator string only!
-			set { NameSeparator = value;                }
-		}
-
-		/// <remarks>
-		/// This 'EnumEx' cannot be serialized, thus, the helper above is used for serialization.
+		/// This 'EnumEx' cannot be serialized, thus, the helper below is used for serialization.
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
@@ -748,6 +738,16 @@ namespace YAT.Log.Settings
 					SetChanged();
 				}
 			}
+		}
+
+		/// <remarks>
+		/// Must be string because an 'EnumEx' cannot be serialized.
+		/// </remarks>
+		[XmlElement("NameSeparator")]
+		public virtual string NameSeparator_ForSerialization
+		{
+			get { return (NameSeparator.ToSeparator()); } // Use separator string only!
+			set { NameSeparator = value;                }
 		}
 
 		//- Folders --------------------------------------------------------------------------------

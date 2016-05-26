@@ -401,17 +401,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <remarks>
-		/// Must be string because an 'EnumEx' cannot be serialized.
-		/// </remarks>
-		[XmlElement("InfoSeparator")]
-		public virtual string InfoSeparator_ForSerialization
-		{
-			get { return (InfoSeparator.ToSeparator()); } // Use separator string only!
-			set { InfoSeparator = value;                }
-		}
-
-		/// <remarks>
-		/// This 'EnumEx' cannot be serialized, thus, the helper above is used for serialization.
+		/// This 'EnumEx' cannot be serialized, thus, the helper below is used for serialization.
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
@@ -430,6 +420,16 @@ namespace YAT.Domain.Settings
 			}
 		}
 
+		/// <remarks>
+		/// Must be string because an 'EnumEx' cannot be serialized.
+		/// </remarks>
+		[XmlElement("InfoSeparator")]
+		public virtual string InfoSeparator_ForSerialization
+		{
+			get { return (InfoSeparator.ToSeparator()); } // Use separator string only!
+			set { InfoSeparator = value;                }
+		}
+
 		/// <remarks>Available for performance reasons.</remarks>
 		[XmlIgnore]
 		public string InfoSeparatorCache
@@ -438,17 +438,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <remarks>
-		/// Must be string because an 'EnumEx' cannot be serialized.
-		/// </remarks>
-		[XmlElement("InfoEnclosure")]
-		public virtual string InfoEnclosure_ForSerialization
-		{
-			get { return (InfoEnclosure.ToEnclosure()); } // Use enclosure string only!
-			set { InfoEnclosure = value;                }
-		}
-
-		/// <remarks>
-		/// This 'EnumEx' cannot be serialized, thus, the helper above is used for serialization.
+		/// This 'EnumEx' cannot be serialized, thus, the helper below is used for serialization.
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
@@ -466,6 +456,16 @@ namespace YAT.Domain.Settings
 					SetChanged();
 				}
 			}
+		}
+
+		/// <remarks>
+		/// Must be string because an 'EnumEx' cannot be serialized.
+		/// </remarks>
+		[XmlElement("InfoEnclosure")]
+		public virtual string InfoEnclosure_ForSerialization
+		{
+			get { return (InfoEnclosure.ToEnclosure()); } // Use enclosure string only!
+			set { InfoEnclosure = value;                }
 		}
 
 		/// <remarks>Available for performance reasons.</remarks>

@@ -145,6 +145,15 @@ namespace YAT.View.Forms
 			}
 		}
 
+		private void textFormat_CustomColorsChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				GetCustomColorsFromControl(int.Parse((string)(((Controls.TextFormat)sender).Tag), CultureInfo.InvariantCulture));
+				SetControls();
+			}
+		}
+
 		private void button_Font_Click(object sender, EventArgs e)
 		{
 			ShowFontDialog();
@@ -320,6 +329,11 @@ namespace YAT.View.Forms
 			tf.Color     = this.textFormats[index].FormatColor;
 		}
 
+		private void GetCustomColorsFromControl(int index)
+		{
+			this.formatSettingsInEdit.UpdateCustomColorsFromWin32(this.textFormats[index].CustomColors);
+		}
+
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
@@ -338,6 +352,8 @@ namespace YAT.View.Forms
 				Model.Types.TextFormat tf = GetFormatFromIndex(i);
 				this.textFormats[i].FormatFontStyle = tf.FontStyle;
 				this.textFormats[i].FormatColor     = tf.Color;
+
+				this.textFormats[i].CustomColors = this.formatSettingsInEdit.CustomColorsToWin32();
 			}
 
 			Utilities.SelectionHelper.Select(comboBox_InfoSeparator, this.infoSeparator, this.infoSeparator);
@@ -482,12 +498,13 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowBackgroundColorDialog()
 		{
-			ColorDialog cd = new ColorDialog();
-			cd.Color = this.formatSettingsInEdit.BackFormat.Color;
-			if (cd.ShowDialog(this) == DialogResult.OK)
+			colorDialog.CustomColors = this.formatSettingsInEdit.CustomColorsToWin32();
+			colorDialog.Color        = this.formatSettingsInEdit.BackColor;
+			if (colorDialog.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
-				this.formatSettingsInEdit.BackFormat.Color = cd.Color;
+				this.formatSettingsInEdit.BackColor                 = colorDialog.Color;
+				this.formatSettingsInEdit.UpdateCustomColorsFromWin32(colorDialog.CustomColors);
 				SetControls();
 			}
 		}

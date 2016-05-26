@@ -149,7 +149,7 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ FilePaths.GetHashCode();
+				hashCode = (hashCode * 397) ^ (FilePaths != null ? FilePaths.GetHashCode() : 0);
 
 				return (hashCode);
 			}

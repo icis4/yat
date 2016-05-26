@@ -79,6 +79,7 @@ namespace YAT.View.Forms
 			this.comboBox_InfoEnclosure = new System.Windows.Forms.ComboBox();
 			this.comboBox_InfoSeparator = new System.Windows.Forms.ComboBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.colorDialog = new System.Windows.Forms.ColorDialog();
 			this.groupBox_Elements.SuspendLayout();
 			this.groupBox_Options.SuspendLayout();
 			this.SuspendLayout();
@@ -161,6 +162,7 @@ namespace YAT.View.Forms
 			this.textFormat_Port.TabIndex = 20;
 			this.textFormat_Port.Tag = "6";
 			this.textFormat_Port.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
+			this.textFormat_Port.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
 			// monitor_Port
 			// 
@@ -227,6 +229,7 @@ namespace YAT.View.Forms
 			this.textFormat_Date.TabIndex = 14;
 			this.textFormat_Date.Tag = "4";
 			this.textFormat_Date.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
+			this.textFormat_Date.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
 			// monitor_Date
 			// 
@@ -258,6 +261,7 @@ namespace YAT.View.Forms
 			this.textFormat_Direction.TabIndex = 23;
 			this.textFormat_Direction.Tag = "7";
 			this.textFormat_Direction.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
+			this.textFormat_Direction.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
 			// monitor_Direction
 			// 
@@ -428,6 +432,7 @@ namespace YAT.View.Forms
 			this.textFormat_Error.TabIndex = 29;
 			this.textFormat_Error.Tag = "9";
 			this.textFormat_Error.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
+			this.textFormat_Error.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
 			// textFormat_Length
 			// 
@@ -440,6 +445,7 @@ namespace YAT.View.Forms
 			this.textFormat_Length.TabIndex = 26;
 			this.textFormat_Length.Tag = "8";
 			this.textFormat_Length.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
+			this.textFormat_Length.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
 			// textFormat_Time
 			// 
@@ -451,6 +457,7 @@ namespace YAT.View.Forms
 			this.textFormat_Time.TabIndex = 17;
 			this.textFormat_Time.Tag = "5";
 			this.textFormat_Time.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
+			this.textFormat_Time.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
 			// textFormat_RxControl
 			// 
@@ -462,6 +469,7 @@ namespace YAT.View.Forms
 			this.textFormat_RxControl.TabIndex = 11;
 			this.textFormat_RxControl.Tag = "3";
 			this.textFormat_RxControl.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
+			this.textFormat_RxControl.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
 			// textFormat_RxData
 			// 
@@ -473,6 +481,7 @@ namespace YAT.View.Forms
 			this.textFormat_RxData.TabIndex = 8;
 			this.textFormat_RxData.Tag = "2";
 			this.textFormat_RxData.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
+			this.textFormat_RxData.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
 			// textFormat_TxControl
 			// 
@@ -484,6 +493,7 @@ namespace YAT.View.Forms
 			this.textFormat_TxControl.TabIndex = 5;
 			this.textFormat_TxControl.Tag = "1";
 			this.textFormat_TxControl.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
+			this.textFormat_TxControl.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
 			// textFormat_TxData
 			// 
@@ -495,6 +505,7 @@ namespace YAT.View.Forms
 			this.textFormat_TxData.TabIndex = 2;
 			this.textFormat_TxData.Tag = "0";
 			this.textFormat_TxData.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
+			this.textFormat_TxData.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
 			// button_Font
 			// 
@@ -672,5 +683,6 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ComboBox comboBox_InfoEnclosure;
 		private System.Windows.Forms.ComboBox comboBox_InfoSeparator;
 		private System.Windows.Forms.ToolTip toolTip;
+		private System.Windows.Forms.ColorDialog colorDialog;
 	}
 }
