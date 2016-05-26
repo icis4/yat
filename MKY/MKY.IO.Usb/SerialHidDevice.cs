@@ -427,6 +427,11 @@ namespace MKY.IO.Usb
 
 				// Set state to disposed:
 				this.stateLock = null;
+
+				DisposeHelper.NotifyEventRemains(GetType(), Opened);
+				DisposeHelper.NotifyEventRemains(GetType(), Closed);
+				DisposeHelper.NotifyEventRemains(GetType(), DataReceived);
+				DisposeHelper.NotifyEventRemains(GetType(), DataSent);
 			}
 
 			base.Dispose(disposing);

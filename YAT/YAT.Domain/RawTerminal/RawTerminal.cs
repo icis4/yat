@@ -28,12 +28,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
 
 using MKY;
+using MKY.Diagnostics;
 using MKY.IO.Serial;
 
 #endregion
@@ -166,14 +166,21 @@ namespace YAT.Domain
 					// In the 'normal' case, Stop() will have already been called...
 					Stop();
 
-					// ...and the I/O provider will have stopped as well.
-					if (this.io != null)
-						this.io.Dispose();
+					// ...and objects will already have been detached and disposed of in Close():
+					DetachIOSettings();
+					DetachBufferSettings();
+					DetachAndDisposeIO();
 				}
 
 				// Set state to disposed:
-				this.io = null;
 				this.isDisposed = true;
+
+				DisposeHelper.NotifyEventRemains(GetType(), IOChanged);
+				DisposeHelper.NotifyEventRemains(GetType(), IOControlChanged);
+				DisposeHelper.NotifyEventRemains(GetType(), IOError);
+				DisposeHelper.NotifyEventRemains(GetType(), RawChunkSent);
+				DisposeHelper.NotifyEventRemains(GetType(), RawChunkReceived);
+				DisposeHelper.NotifyEventRemains(GetType(), RepositoryCleared);
 			}
 		}
 
@@ -194,7 +201,7 @@ namespace YAT.Domain
 		{
 			Dispose(false);
 
-			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			System.Diagnostics.Debug.WriteLine("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 #endif // DEBUG
@@ -357,7 +364,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		//------------------------------------------------------------------------------------------
-		// Start/Stop
+		// Start/Stop/Close
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
@@ -375,6 +382,14 @@ namespace YAT.Domain
 			AssertNotDisposed();
 
 			this.io.Stop();
+		}
+
+		/// <summary></summary>
+		public virtual void Close()
+		{
+			AssertNotDisposed();
+
+			DetachAndDisposeIO();
 		}
 
 		//------------------------------------------------------------------------------------------
@@ -530,8 +545,11 @@ namespace YAT.Domain
 
 		private void DetachBufferSettings()
 		{
-			this.bufferSettings.Changed -= bufferSettings_Changed;
-			this.bufferSettings = null;
+			if (this.bufferSettings != null)
+			{
+				this.bufferSettings.Changed -= bufferSettings_Changed;
+				this.bufferSettings = null;
+			}
 		}
 
 		private void ApplyBufferSettings()
@@ -558,8 +576,11 @@ namespace YAT.Domain
 
 		private void DetachIOSettings()
 		{
-			this.ioSettings.Changed -= ioSettings_Changed;
-			this.ioSettings = null;
+			if (this.ioSettings != null)
+			{
+				this.ioSettings.Changed -= ioSettings_Changed;
+				this.ioSettings = null;
+			}
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "For potential future use.")]
@@ -594,30 +615,29 @@ namespace YAT.Domain
 
 		private void AttachIO(IIOProvider io)
 		{
-			if (IIOProvider.ReferenceEquals(this.io, io))
-				return;
-
-			if (this.io != null)
-				DetachIO();
-
 			this.io = io;
-
-			this.io.IOChanged        += io_IOChanged;
-			this.io.IOControlChanged += io_IOControlChanged;
-			this.io.IOError          += io_IOError;
-			this.io.DataReceived     += io_DataReceived;
-			this.io.DataSent         += io_DataSent;
+			{
+				this.io.IOChanged        += io_IOChanged;
+				this.io.IOControlChanged += io_IOControlChanged;
+				this.io.IOError          += io_IOError;
+				this.io.DataReceived     += io_DataReceived;
+				this.io.DataSent         += io_DataSent;
+			}
 		}
 
-		private void DetachIO()
+		private void DetachAndDisposeIO()
 		{
-			this.io.IOChanged        -= io_IOChanged;
-			this.io.IOControlChanged -= io_IOControlChanged;
-			this.io.IOError          -= io_IOError;
-			this.io.DataReceived     -= io_DataReceived;
-			this.io.DataSent         -= io_DataSent;
+			if (this.io != null)
+			{
+				this.io.IOChanged        -= io_IOChanged;
+				this.io.IOControlChanged -= io_IOControlChanged;
+				this.io.IOError          -= io_IOError;
+				this.io.DataReceived     -= io_DataReceived;
+				this.io.DataSent         -= io_DataSent;
 
-			this.io = null;
+				this.io.Dispose();
+				this.io = null;
+			}
 		}
 
 		#endregion

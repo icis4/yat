@@ -183,11 +183,11 @@ namespace YAT.View.Forms
 
 			InitializeControls();
 
-			// Link and attach to terminal model.
+			// Link and attach to terminal model:
 			this.terminal = terminal;
 			AttachTerminalEventHandlers();
 
-			// Link and attach to terminal settings.
+			// Link and attach to terminal settings:
 			this.settingsRoot = this.terminal.SettingsRoot;
 			AttachSettingsEventHandlers();
 
@@ -195,7 +195,7 @@ namespace YAT.View.Forms
 			LayoutTerminal();
 
 			// Force settings changed event to set all controls.
-			// For improved performance, manually suspend/resume handler for terminal settings
+			// For improved performance, manually suspend/resume handler for terminal settings:
 			SuspendHandlingTerminalSettings();
 			this.settingsRoot.ClearChanged();
 			this.settingsRoot.ForceChangeEvent();

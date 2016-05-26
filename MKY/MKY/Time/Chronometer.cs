@@ -105,6 +105,8 @@ namespace MKY.Time
 				// Set state to disposed:
 				this.timer = null;
 				this.isDisposed = true;
+
+				Diagnostics.DisposeHelper.NotifyEventRemains(GetType(), TimeSpanChanged);
 			}
 		}
 
@@ -125,7 +127,7 @@ namespace MKY.Time
 		{
 			Dispose(false);
 
-			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			System.Diagnostics.Debug.WriteLine("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 #endif // DEBUG

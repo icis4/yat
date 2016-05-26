@@ -26,15 +26,14 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 
 using MKY.Contracts;
+using MKY.Diagnostics;
 using MKY.Net;
 
 #endregion
@@ -214,6 +213,12 @@ namespace MKY.IO.Serial.Socket
 				this.isDisposed = true;
 
 				DebugMessage("...successfully disposed.");
+
+				DisposeHelper.NotifyEventRemains(GetType(), IOChanged);
+				DisposeHelper.NotifyEventRemains(GetType(), IOControlChanged);
+				DisposeHelper.NotifyEventRemains(GetType(), IOError);
+				DisposeHelper.NotifyEventRemains(GetType(), DataReceived);
+				DisposeHelper.NotifyEventRemains(GetType(), DataSent);
 			}
 		}
 
@@ -234,7 +239,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			Dispose(false);
 
-			DebugMessage("The finalizer should have never been called! Ensure to call Dispose()!");
+			DebugMessage("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 #endif // DEBUG

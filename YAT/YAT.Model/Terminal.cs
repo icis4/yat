@@ -339,27 +339,42 @@ namespace YAT.Model
 					// In the 'normal' case, terminal and log have already been closed, otherwise...
 
 					// ...first, detach event handlers to ensure that no more events are received...
-					DetachTerminalEventHandlers();
 					DetachSettingsEventHandlers();
+					DetachTerminalEventHandlers();
 
-					// ...then, dispose of objects.
+					// ...then, dispose of objects:
 					DisposeRates();
 					DisposeChronos();
 					DisposeAutoResponse();
 
-					if (this.log != null)
-						this.log.Dispose();
-
-					if (this.terminal != null)
-						this.terminal.Dispose();
+					CloseAndDisposeTerminal();
+					DisposeLog();
 				}
 
 				// Set state to disposed:
-				this.log = null;
-				this.terminal = null;
 				this.isDisposed = true;
 
 				DebugMessage("...successfully disposed.");
+
+				DisposeHelper.NotifyEventRemains(GetType(), IOChanged);
+				DisposeHelper.NotifyEventRemains(GetType(), IOControlChanged);
+				DisposeHelper.NotifyEventRemains(GetType(), IOConnectTimeChanged);
+				DisposeHelper.NotifyEventRemains(GetType(), IOCountChanged);
+				DisposeHelper.NotifyEventRemains(GetType(), IORateChanged);
+				DisposeHelper.NotifyEventRemains(GetType(), IOError);
+				DisposeHelper.NotifyEventRemains(GetType(), DisplayElementsSent);
+				DisposeHelper.NotifyEventRemains(GetType(), DisplayElementsReceived);
+				DisposeHelper.NotifyEventRemains(GetType(), DisplayLinesSent);
+				DisposeHelper.NotifyEventRemains(GetType(), DisplayLinesReceived);
+				DisposeHelper.NotifyEventRemains(GetType(), RepositoryCleared);
+				DisposeHelper.NotifyEventRemains(GetType(), RepositoryReloaded);
+				DisposeHelper.NotifyEventRemains(GetType(), FixedStatusTextRequest);
+				DisposeHelper.NotifyEventRemains(GetType(), TimedStatusTextRequest);
+				DisposeHelper.NotifyEventRemains(GetType(), MessageInputRequest);
+				DisposeHelper.NotifyEventRemains(GetType(), SaveAsFileDialogRequest);
+				DisposeHelper.NotifyEventRemains(GetType(), CursorRequest);
+				DisposeHelper.NotifyEventRemains(GetType(), Saved);
+				DisposeHelper.NotifyEventRemains(GetType(), Closed);
 			}
 		}
 
@@ -380,7 +395,7 @@ namespace YAT.Model
 		{
 			Dispose(false);
 
-			DebugMessage("The finalizer should have never been called! Ensure to call Dispose()!");
+			DebugMessage("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 #endif // DEBUG
@@ -1164,12 +1179,12 @@ namespace YAT.Model
 				// Terminal is open, close and re-open it with the new settings:
 				if (StopIO(false))
 				{
-					DetachTerminalEventHandlers(); // Detach to suspend events.
+					this.settingsRoot.SuspendChangeEvent();
 					this.settingsRoot.Explicit = settings;
 					Domain.Terminal oldTerminal = this.terminal;
 					this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
 					oldTerminal.Dispose();         // Ensure to dispose of the 'old' resources.
-					AttachTerminalEventHandlers(); // Attach and resume events.
+					this.settingsRoot.ResumeChangeEvent();
 
 					this.terminal.ReloadRepositories();
 
@@ -1186,12 +1201,12 @@ namespace YAT.Model
 			else
 			{
 				// Terminal is closed, simply set the new settings:
-				DetachTerminalEventHandlers(); // Detach to suspend events.
+				this.settingsRoot.SuspendChangeEvent();
 				this.settingsRoot.Explicit = settings;
 				Domain.Terminal oldTerminal = this.terminal;
 				this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
 				oldTerminal.Dispose();         // Ensure to dispose of the 'old' resources.
-				AttachTerminalEventHandlers(); // Attach and resume events.
+				this.settingsRoot.ResumeChangeEvent();
 
 				this.terminal.ReloadRepositories();
 
@@ -1908,24 +1923,38 @@ namespace YAT.Model
 			}
 
 			// -------------------------------------------------------------------------------------
-			// Finally, close the terminal and signal state.
+			// Stop the underlying items.
+			// -------------------------------------------------------------------------------------
+
+			if (success && this.terminal.IsStarted)
+			{
+				success = StopIO(false);
+			}
+
+			if (success && this.log.IsOn)
+			{
+				SwitchLogOff();
+			}
+
+			// -------------------------------------------------------------------------------------
+			// Finally, cleanup and signal state.
 			// -------------------------------------------------------------------------------------
 
 			if (success)
 			{
-				// Next, stop underlying terminal...
-				if (this.terminal.IsStarted)
-					success = StopIO(false);
+				DetachSettingsEventHandlers();
+				DetachTerminalEventHandlers();
 
-				// ...and signal that the terminal can definitely close:
-				this.terminal.Close();
+				// Ensure that timed objects are stopped and do not fire events anymore...
+				DisposeRates();
+				DisposeChronos();
+				DisposeAutoResponse();
 
-				// Then, close log:
-				if (this.log.IsOn)
-					SwitchLogOff();
+				// ...signal that the terminal can definitely close...
+				CloseAndDisposeTerminal();
 
-				// Finally, ensure that chronos are stopped and do not fire events anymore:
-				StopChronos();
+				// ...and finally the log:
+				DisposeLog();
 			}
 
 			if (success)
@@ -1934,13 +1963,12 @@ namespace YAT.Model
 				OnTimedStatusTextRequest("Terminal successfully closed.");
 				OnClosed(new ClosedEventArgs(isWorkspaceClose));
 
-				// Ensure that all resources of this terminal get disposed of:
-				Dispose();
 				return (true);
 			}
 			else
 			{
 				OnTimedStatusTextRequest("Terminal not closed.");
+
 				return (false);
 			}
 		}
@@ -2010,6 +2038,16 @@ namespace YAT.Model
 				this.terminal.DisplayLinesReceived    -= terminal_DisplayLinesReceived;
 				this.terminal.RepositoryCleared       -= terminal_RepositoryCleared;
 				this.terminal.RepositoryReloaded      -= terminal_RepositoryReloaded;
+			}
+		}
+
+		private void CloseAndDisposeTerminal()
+		{
+			if (this.terminal != null)
+			{
+				this.terminal.Close();
+				this.terminal.Dispose();
+				this.terminal = null;
 			}
 		}
 
@@ -3753,6 +3791,15 @@ namespace YAT.Model
 		//==========================================================================================
 		// Log
 		//==========================================================================================
+
+		private void DisposeLog()
+		{
+			if (this.log != null)
+			{
+				this.log.Dispose();
+				this.log = null;
+			}
+		}
 
 		/// <summary></summary>
 		public virtual bool SwitchLogOn()

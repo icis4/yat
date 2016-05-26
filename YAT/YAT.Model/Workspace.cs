@@ -203,30 +203,28 @@ namespace YAT.Model
 				{
 					// In the 'normal' case, the terminals have already been closed, otherwise...
 
-					if (this.terminals != null)
-					{
-						// ...first, detach event handlers to ensure that no more events are received...
-						foreach (Terminal t in this.terminals)
-							DetachTerminalEventHandlers(t);
-					}
-
+					// ...first, detach event handlers to ensure that no more events are received...
 					DetachSettingsEventHandlers();
+					DetachAllTerminalEventHandlers();
 
-					if (this.terminals != null)
-					{
-						// ...then, dispose of objects.
-						foreach (Terminal t in this.terminals)
-							t.Dispose();
-
-						this.terminals.Clear();
-					}
+					// ...then, dispose of objects:
+					DisposeAllTerminals();
 				}
 
 				// Set state to disposed:
-				this.terminals = null;
 				this.isDisposed = true;
 
 				DebugMessage("...successfully disposed.");
+
+				DisposeHelper.NotifyEventRemains(GetType(), TerminalAdded);
+				DisposeHelper.NotifyEventRemains(GetType(), TerminalRemoved);
+				DisposeHelper.NotifyEventRemains(GetType(), FixedStatusTextRequest);
+				DisposeHelper.NotifyEventRemains(GetType(), TimedStatusTextRequest);
+				DisposeHelper.NotifyEventRemains(GetType(), MessageInputRequest);
+				DisposeHelper.NotifyEventRemains(GetType(), SaveAsFileDialogRequest);
+				DisposeHelper.NotifyEventRemains(GetType(), CursorRequest);
+				DisposeHelper.NotifyEventRemains(GetType(), Saved);
+				DisposeHelper.NotifyEventRemains(GetType(), Closed);
 			}
 		}
 
@@ -247,7 +245,7 @@ namespace YAT.Model
 		{
 			Dispose(false);
 
-			DebugMessage("The finalizer should have never been called! Ensure to call Dispose()!");
+			DebugMessage("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 #endif // DEBUG
@@ -1101,17 +1099,22 @@ namespace YAT.Model
 			}
 
 			// -------------------------------------------------------------------------------------
-			// Finally, close the terminals and signal state.
+			// Finally, cleanup and signal state.
 			// -------------------------------------------------------------------------------------
 
 			if (successWithTerminals && successWithWorkspace)
 			{
+				DetachSettingsEventHandlers();
+
 				// Close all contained terminals signaling them a workspace close to ensure that the
 				// workspace is not modified when the terminals get closed, but do not save anymore:
 				if (this.settingsHandler.SettingsFileExists)
 					successWithTerminals = CloseAllTerminals(true, false, false, false);
 				else
 					successWithTerminals = CloseAllTerminals(true, false, false, true);
+
+				DetachAllTerminalEventHandlers();
+				DisposeAllTerminals();
 			}
 
 			if (successWithTerminals && successWithWorkspace)
@@ -1123,9 +1126,6 @@ namespace YAT.Model
 					OnTimedStatusTextRequest("Workspace successfully closed.");
 
 				OnClosed(new ClosedEventArgs(isMainExit));
-
-				// Ensure that all resources of the workspace get disposed of:
-				Dispose();
 				return (true);
 			}
 			else
@@ -1189,14 +1189,46 @@ namespace YAT.Model
 
 		private void AttachTerminalEventHandlers(Terminal terminal)
 		{
-			terminal.Saved  += terminal_Saved;
-			terminal.Closed += terminal_Closed;
+			if (terminal != null)
+			{
+				terminal.Saved  += terminal_Saved;
+				terminal.Closed += terminal_Closed;
+			}
 		}
 
 		private void DetachTerminalEventHandlers(Terminal terminal)
 		{
-			terminal.Saved  -= terminal_Saved;
-			terminal.Closed -= terminal_Closed;
+			if (terminal != null)
+			{
+				terminal.Saved  -= terminal_Saved;
+				terminal.Closed -= terminal_Closed;
+			}
+		}
+
+		private void DetachAllTerminalEventHandlers()
+		{
+			if (this.terminals != null)
+			{
+				foreach (Terminal t in this.terminals)
+					DetachTerminalEventHandlers(t);
+			}
+		}
+
+		private void DisposeTerminal(Terminal terminal)
+		{
+			if (terminal != null)
+				terminal.Dispose();
+		}
+
+		private void DisposeAllTerminals()
+		{
+			if (this.terminals != null)
+			{
+				foreach (Terminal t in this.terminals)
+					DisposeTerminal(t);
+
+				this.terminals.Clear();
+			}
 		}
 
 		#endregion
@@ -1505,7 +1537,7 @@ namespace YAT.Model
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(GetType(), ex, "Failed to open terminal from settings!");
+				DebugEx.WriteException(GetType(), ex, "Failed to create/open terminal from settings!");
 				exception = ex;
 				return (false);
 			}
@@ -1631,32 +1663,32 @@ namespace YAT.Model
 		{
 			AttachTerminalEventHandlers(terminal);
 
-			// Add terminal to terminal list.
+			// Add terminal to terminal list:
 			this.terminals.Add(terminal);
 			this.activeTerminal = terminal;
 			int effectiveIndex = AddToFixedIndices(terminal, requestedFixedIndex);
 
-			// Add terminal settings for new terminals.
+			// Add terminal settings for new terminals:
 			// Replace terminal settings if workspace settings have been loaded from file prior.
-			this.settingsRoot.TerminalSettings.AddOrReplaceGuidItem(CreateTerminalSettingsItem(terminal, effectiveIndex));
+			this.settingsRoot.TerminalSettings.AddOrReplace(CreateTerminalSettingsItem(terminal, effectiveIndex));
 			this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
 
-			// Fire terminal added event.
+			// Fire terminal added event:
 			OnTerminalAdded(terminal);
 		}
 
 		private void ReplaceInWorkspace(Terminal terminal)
 		{
-			// Replace terminal in terminal list.
-			this.terminals.ReplaceGuidItem(terminal);
+			// Replace terminal in terminal list:
+			this.terminals.Replace(terminal);
 			this.activeTerminal = terminal;
 
-			// Replace terminal in workspace settings if the settings have indeed changed.
+			// Replace terminal in workspace settings if the settings have indeed changed:
 			TerminalSettingsItem tsiNew = CreateTerminalSettingsItem(terminal, GetFixedIndexByTerminal(terminal));
-			TerminalSettingsItem tsiOld = this.settingsRoot.TerminalSettings.GetGuidItem(terminal.Guid);
+			TerminalSettingsItem tsiOld = this.settingsRoot.TerminalSettings.Find(terminal.Guid);
 			if ((tsiOld == null) || (tsiNew != tsiOld))
 			{
-				this.settingsRoot.TerminalSettings.ReplaceGuidItem(tsiNew);
+				this.settingsRoot.TerminalSettings.Replace(tsiNew);
 				this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
 			}
 		}
@@ -1665,22 +1697,22 @@ namespace YAT.Model
 		{
 			DetachTerminalEventHandlers(terminal);
 
-			// Remove terminal from terminal list.
-			this.terminals.RemoveGuid(terminal.Guid);
-			this.activeTerminal = null;
-			RemoveFromFixedIndices(terminal);
-
-			// Remove terminal from workspace settings.
-			this.settingsRoot.TerminalSettings.RemoveGuid(terminal.Guid);
+			// Remove terminal from workspace settings:
+			this.settingsRoot.TerminalSettings.Remove(terminal.Guid);
 			this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
 
-			// Fire terminal added event.
+			// Remove terminal from workspace lists:
+			this.terminals.Remove(terminal.Guid);
+			RemoveFromFixedIndices(terminal);
+			DeactivateTerminal(terminal);
+
+			// Fire terminal removed event:
 			OnTerminalRemoved(terminal);
 		}
 
 		private int AddToFixedIndices(Terminal terminal, int requestedFixedIndex)
 		{
-			// First, try to lookup the requested fixed index if suitable.
+			// First, try to lookup the requested fixed index if suitable:
 			if (requestedFixedIndex >= Indices.FirstFixedIndex)
 			{
 				if (!this.fixedIndices.ContainsKey(requestedFixedIndex))
@@ -1690,7 +1722,7 @@ namespace YAT.Model
 				}
 			}
 
-			// As fallback, use the next available fixed index.
+			// As fallback, use the next available fixed index:
 			for (int i = Indices.FirstFixedIndex; i <= int.MaxValue; i++)
 			{
 				if (!this.fixedIndices.ContainsKey(i))
@@ -1726,6 +1758,7 @@ namespace YAT.Model
 				if (kvp.Value == terminal)
 					return (kvp.Key);
 			}
+
 			throw (new ArgumentOutOfRangeException("terminal", terminal, "Terminal not found in index table!"));
 		}
 
@@ -1754,6 +1787,7 @@ namespace YAT.Model
 				if (t.Guid == guid)
 					return (t);
 			}
+
 			return (null);
 		}
 
@@ -1772,6 +1806,7 @@ namespace YAT.Model
 				if (t.SequentialIndex == sequentialIndex)
 					return (t);
 			}
+
 			return (null);
 		}
 
@@ -2054,6 +2089,15 @@ namespace YAT.Model
 		public virtual void ActivateTerminalBySequentialIndex(int index)
 		{
 			ActivateTerminal(GetTerminalBySequentialIndex(index));
+		}
+
+		/// <summary></summary>
+		public virtual void DeactivateTerminal(Terminal terminal)
+		{
+			AssertNotDisposed();
+
+			if (this.activeTerminal == terminal)
+				this.activeTerminal = null;
 		}
 
 		/// <summary></summary>
