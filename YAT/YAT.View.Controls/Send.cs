@@ -51,9 +51,9 @@ namespace YAT.View.Controls
 
 		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypeDefault;
 		private const bool TerminalIsReadyToSendDefault = false;
-		private const int SplitterDistanceDefault = 353; // Designer requires that this is a constant.
-		                                                 // Set same value as underlying elements (less the left margin of 3).
 
+		private const int SendSplitterDistanceDefault = 353; // Designer requires that this is a constant.
+		                                                     // Set same value as underlying elements (less the left margin of 3).
 		#endregion
 
 		#region Fields
@@ -63,7 +63,8 @@ namespace YAT.View.Controls
 
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
-		private int splitterDistance = SplitterDistanceDefault;
+
+		private int sendSplitterDistance = SendSplitterDistanceDefault;
 
 		#endregion
 
@@ -108,6 +109,7 @@ namespace YAT.View.Controls
 		public Send()
 		{
 			InitializeComponent();
+
 			SetControls();
 		}
 
@@ -193,11 +195,24 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		[DefaultValue(Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault)]
+		public virtual bool UseExplicitDefaultRadix
+		{
+			set
+			{
+				sendText.UseExplicitDefaultRadix = value;
+				sendFile.UseExplicitDefaultRadix = value;
+			}
+		}
+
+		/// <summary></summary>
 		[DefaultValue(SendText.SendImmediatelyDefault)]
 		public virtual bool SendTextImmediately
 		{
-			get { return (sendText.SendImmediately); }
-			set { sendText.SendImmediately = value; }
+			set
+			{
+				sendText.SendImmediately = value;
+			}
 		}
 
 		/// <summary></summary>
@@ -214,7 +229,7 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[DefaultValue(true)]
-		public virtual bool CommandPanelIsVisible
+		public virtual bool TextPanelIsVisible
 		{
 			get { return (!splitContainer_Send.Panel1Collapsed); }
 			set { splitContainer_Send.Panel1Collapsed = !value;  }
@@ -229,18 +244,18 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[DefaultValue(SplitterDistanceDefault)]
-		public virtual int SplitterDistance
+		[DefaultValue(SendSplitterDistanceDefault)]
+		public virtual int SendSplitterDistance
 		{
-			get { return (this.splitterDistance); }
+			get { return (this.sendSplitterDistance); }
 			set
 			{
 				// Do not check if (this.splitterDistance != value) because the distance (position)
 				// will be limited to the control's width, and that may change AFTER the distance
 				// has been set.
 
-				this.splitterDistance = value;
-				SetSplitterControls();
+				this.sendSplitterDistance = value;
+				SetSendSplitterControls();
 			}
 		}
 
@@ -306,7 +321,7 @@ namespace YAT.View.Controls
 		private void SetControls()
 		{
 			SetTerminalControls();
-			SetSplitterControls();
+			SetSendSplitterControls();
 		}
 
 		private void SetTerminalControls()
@@ -318,10 +333,10 @@ namespace YAT.View.Controls
 			sendFile.TerminalIsReadyToSend = this.terminalIsReadyToSend;
 		}
 
-		private void SetSplitterControls()
+		private void SetSendSplitterControls()
 		{
-			sendText.SplitterDistance = this.splitterDistance - sendText.Left;
-			sendFile.SplitterDistance    = this.splitterDistance - sendFile.Left;
+			sendText.SendSplitterDistance = this.sendSplitterDistance - sendText.Left;
+			sendFile.SendSplitterDistance    = this.sendSplitterDistance - sendFile.Left;
 		}
 
 		#endregion

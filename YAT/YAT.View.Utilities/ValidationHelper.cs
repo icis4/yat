@@ -41,14 +41,7 @@ namespace YAT.View.Utilities
 	/// <summary></summary>
 	public static class ValidationHelper
 	{
-		/// <summary>Validation using <see cref="Domain.Radix.String"/> and <see cref="Domain.Parser.Modes.AllByteArrayResults"/>.</summary>
-		public static bool ValidateText(IWin32Window owner, string description, string textToValidate)
-		{
-			int invalidTextStart;
-			return (ValidateText(owner, description, textToValidate, out invalidTextStart));
-		}
-
-		/// <summary>Validation using <see cref="Domain.Radix.String"/> and <see cref="Domain.Parser.Modes.AllByteArrayResults"/>.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool ValidateText(IWin32Window owner, string description, string textToValidate, out int invalidTextStart)
 		{
@@ -56,30 +49,13 @@ namespace YAT.View.Utilities
 			return (ValidateText(owner, description, textToValidate, out invalidTextStart, out invalidTextLength));
 		}
 
-		/// <summary>Validation using <see cref="Domain.Radix.String"/> and <see cref="Domain.Parser.Modes.AllByteArrayResults"/>.</summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool ValidateText(IWin32Window owner, string description, string textToValidate, out int invalidTextStart, out int invalidTextLength)
-		{
-			return (ValidateText(owner, description, textToValidate, Domain.Radix.String, Domain.Parser.Modes.AllByteArrayResults, out invalidTextStart, out invalidTextLength));
-		}
-
-		/// <summary>Validation using <see cref="Domain.Radix.String"/>.</summary>
-		/// <remarks>\ToDo: Remove after FR#238 has been implemented.</remarks>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool ValidateText(IWin32Window owner, string description, string textToValidate, Domain.Parser.Modes modes, out int invalidTextStart, out int invalidTextLength)
-		{
-			return (ValidateText(owner, description, textToValidate, Domain.Radix.String, modes, out invalidTextStart, out invalidTextLength));
-		}
-
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool ValidateText(IWin32Window owner, string description, string textToValidate, Domain.Radix defaultRadix, Domain.Parser.Modes modes, out int invalidTextStart, out int invalidTextLength)
+		public static bool ValidateText(IWin32Window owner, string description, string textToValidate, out int invalidTextStart, out int invalidTextLength, Domain.Radix defaultRadix = Domain.Parser.Parser.DefaultRadixDefault, Domain.Parser.Modes modes = Domain.Parser.Modes.AllExceptKeywords)
 		{
 			string errorMessage;
-			if (Model.Utilities.ValidationHelper.ValidateText(description, textToValidate, defaultRadix, modes, out invalidTextStart, out invalidTextLength, out errorMessage))
+			if (Model.Utilities.ValidationHelper.ValidateText(description, textToValidate, out invalidTextStart, out invalidTextLength, out errorMessage, defaultRadix, modes))
 			{
 				return (true);
 			}

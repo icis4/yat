@@ -790,10 +790,10 @@ namespace YAT.Domain
 		/// <summary>
 		/// Tries to parse <paramref name="s"/>, taking the current settings into account.
 		/// </summary>
-		public virtual bool TryParse(string s, out byte[] result)
+		public virtual bool TryParse(string s, out byte[] result, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
-			using (Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianness))
-				return (p.TryParse(s, TerminalSettings.Send.ToParseMode(), out result));
+			using (Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianness, TerminalSettings.Send.ToParseMode()))
+				return (p.TryParse(s, out result, defaultRadix));
 		}
 
 		#endregion
@@ -812,19 +812,19 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual void Send(string data)
+		public virtual void Send(string data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
 			// AssertNotDisposed() is called by Send() below.
 
-			DoSend(new ParsableSendItem(data, false));
+			DoSend(new ParsableSendItem(data, defaultRadix));
 		}
 
 		/// <summary></summary>
-		public virtual void SendLine(string data)
+		public virtual void SendLine(string data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
 			// AssertNotDisposed() is called by Send() below.
 
-			DoSend(new ParsableSendItem(data, true));
+			DoSend(new ParsableSendItem(data, defaultRadix, true));
 		}
 
 		/// <remarks>
@@ -835,13 +835,13 @@ namespace YAT.Domain
 		///  3. Response to first line is received and displayed
 		///     and so on, mix-up among sent and received lines...
 		/// </remarks>
-		public virtual void SendLines(string[] data)
+		public virtual void SendLines(string[] data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
 			// AssertNotDisposed() is called by Send() below.
 
 			List<ParsableSendItem> l = new List<ParsableSendItem>(data.Length);
 			foreach (string line in data)
-				l.Add(new ParsableSendItem(line, true));
+				l.Add(new ParsableSendItem(line, defaultRadix, true));
 
 			DoSend(l.ToArray());
 		}
@@ -997,31 +997,27 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Parsable", Justification = "'Parsable' is a correct English term.")]
 		protected virtual void ProcessParsableSendItem(ParsableSendItem item)
 		{
-			string textToParse = item.Data;
-
-			// Parse the item text:
 			bool hasSucceeded;
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
 
-			using (Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianness))
-				hasSucceeded = p.TryParse(textToParse, TerminalSettings.Send.ToParseMode(), out parseResult, out textSuccessfullyParsed);
+			using (Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianness, TerminalSettings.Send.ToParseMode()))
+				hasSucceeded = p.TryParse(item.Data, out parseResult, out textSuccessfullyParsed, item.DefaultRadix);
 
 			if (hasSucceeded)
-				ProcessParsedSendItem(item, parseResult);
+				ProcessParserResult(parseResult, item.IsLine);
 			else
-				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
+				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(item.Data, textSuccessfullyParsed)));
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessParsedSendItem(ParsableSendItem item, Parser.Result[] parseResult)
+		protected virtual void ProcessParserResult(Parser.Result[] result, bool sendEol = false)
 		{
-			bool sendEol = item.IsLine;
-			bool performLineDelay = false;    // \remind For binary terminals, this is rather a 'PacketDelay'.
-			bool performLineInterval = false; // \remind For binary terminals, this is rather a 'PacketInterval'.
-			bool performLineRepeat = false;   // \remind For binary terminals, this is rather a 'PacketRepeat'.
+			bool performLineDelay     = false; // \remind For binary terminals, this is rather a 'PacketDelay'.
+			bool performLineInterval  = false; // \remind For binary terminals, this is rather a 'PacketInterval'.
+			bool performLineRepeat    = false; // \remind For binary terminals, this is rather a 'PacketRepeat'.
 			bool lineRepeatIsInfinite = (TerminalSettings.Send.DefaultLineRepeat == Settings.SendSettings.LineRepeatInfinite);
-			int lineRepeatRemaining = TerminalSettings.Send.DefaultLineRepeat;
+			int  lineRepeatRemaining  =  TerminalSettings.Send.DefaultLineRepeat;
 
 			do // Process at least once, potentially repeat.
 			{
@@ -1031,7 +1027,7 @@ namespace YAT.Domain
 
 				// --- Process the line/packet ---
 
-				foreach (Parser.Result ri in parseResult)
+				foreach (Parser.Result ri in result)
 				{
 					var bar = (ri as Parser.ByteArrayResult);
 					if (bar != null)
@@ -1786,6 +1782,7 @@ namespace YAT.Domain
 
 			switch (r)
 			{
+				// Bin/Oct/Dec/Hex:
 				case Radix.Bin:
 				case Radix.Oct:
 				case Radix.Dec:
@@ -1809,6 +1806,7 @@ namespace YAT.Domain
 					break;
 				}
 
+				// Char/String:
 				case Radix.Char:
 				case Radix.String:
 				{
@@ -1968,14 +1966,14 @@ namespace YAT.Domain
 		{
 			switch (TerminalSettings.CharReplace.ControlCharRadix)
 			{
+				case ControlCharRadix.Char:
+					return (ByteToCharacterString(b));
+
 				case ControlCharRadix.Bin:
 				case ControlCharRadix.Oct:
 				case ControlCharRadix.Dec:
 				case ControlCharRadix.Hex:
 					return (ByteToNumericRadixString(b, (Radix)TerminalSettings.CharReplace.ControlCharRadix));
-
-				case ControlCharRadix.Chr:
-					return (ByteToCharacterString(b));
 
 				case ControlCharRadix.AsciiMnemonic:
 					return (ByteToAsciiString(b));
@@ -2003,12 +2001,13 @@ namespace YAT.Domain
 		{
 			switch (r)
 			{
+				case Radix.String: return (false);
+				case Radix.Char:   return (true);
+
 				case Radix.Bin:    return (true);
 				case Radix.Oct:    return (true);
 				case Radix.Dec:    return (true);
 				case Radix.Hex:    return (true);
-				case Radix.Char:   return (true);
-				case Radix.String: return (false);
 			}
 			throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, '" + r + "' is an invalid radix." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}

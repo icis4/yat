@@ -110,6 +110,16 @@ namespace YAT.Domain.Parser
 
 		#endregion
 
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		/// <summary></summary>
+		public const Radix DefaultRadixDefault = Radix.String;
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -121,7 +131,7 @@ namespace YAT.Domain.Parser
 
 		private Endianness endianness = Endianness.BigEndian;
 		private Encoding encoding = Encoding.Default;
-		private Radix defaultRadix = Radix.String;
+		private Radix defaultRadix = DefaultRadixDefault;
 		private Modes modes = Modes.All;
 
 		private StringReader charReader;
@@ -144,51 +154,26 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Parser()
+		public Parser(Modes modes = Modes.All)
 		{
+			this.modes = modes;
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
-		public Parser(Endianness endianness)
+		public Parser(Endianness endianness, Modes modes = Modes.All)
 		{
 			this.endianness = endianness;
-		}
-
-		/// <summary></summary>
-		public Parser(Encoding encoding)
-		{
-			this.encoding = encoding;
+			this.modes      = modes;
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
-		public Parser(Endianness endianness, Encoding encoding)
+		public Parser(Endianness endianness, Encoding encoding, Modes modes = Modes.All)
 		{
 			this.endianness = endianness;
 			this.encoding   = encoding;
-		}
-
-		/// <summary></summary>
-		public Parser(Radix defaultRadix)
-		{
-			this.defaultRadix = defaultRadix;
-		}
-
-		/// <summary></summary>
-		public Parser(Encoding encoding, Radix defaultRadix)
-		{
-			this.encoding     = encoding;
-			this.defaultRadix = defaultRadix;
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
-		public Parser(Endianness endianness, Encoding encoding, Radix defaultRadix)
-		{
-			this.endianness   = endianness;
-			this.encoding     = encoding;
-			this.defaultRadix = defaultRadix;
+			this.modes      = modes;
 		}
 
 		/// <summary></summary>
@@ -320,21 +305,21 @@ namespace YAT.Domain.Parser
 			get { return (this.encoding); }
 		}
 
-		/// <summary></summary>
+		internal virtual Modes Modes
+		{
+			get { return (this.modes); }
+		}
+
 		/// <remarks>Radix: public get, private set.</remarks>
 		public virtual Radix Radix
 		{
 			get { return (this.defaultRadix); }
 		}
 
+		/// <remarks>Radix: public get, private set.</remarks>
 		internal virtual void SetDefaultRadix(Radix defaultRadix)
 		{
 			this.defaultRadix = defaultRadix;
-		}
-
-		internal virtual Modes Modes
-		{
-			get { return (this.modes); }
 		}
 
 		/// <summary></summary>
@@ -381,13 +366,13 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual byte[] Parse(string s)
+		public virtual byte[] Parse(string s, Radix defaultRadix = DefaultRadixDefault)
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			byte[] result;
 			FormatException formatException = new FormatException("");
-			if (!TryParse(s, out result, ref formatException))
+			if (!TryParse(s, out result, ref formatException, defaultRadix))
 				throw (formatException);
 
 			return (result);
@@ -395,85 +380,44 @@ namespace YAT.Domain.Parser
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool TryParse(string s, out byte[] result)
-		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
-
-			string successfullyParsed;
-			return (TryParse(s, out result, out successfullyParsed));
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool TryParse(string s, out byte[] result, out string successfullyParsed)
+		public virtual bool TryParse(string s, out byte[] result, Radix defaultRadix = DefaultRadixDefault)
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			FormatException formatException = new FormatException("");
-			return (TryParse(s, out result, out successfullyParsed, ref formatException));
+			return (TryParse(s, out result, ref formatException, defaultRadix));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public virtual bool TryParse(string s, out byte[] result, out string successfullyParsed, Radix defaultRadix = DefaultRadixDefault)
+		{
+			// AssertNotDisposed() is called by 'TryParse()' below.
+
+			FormatException formatException = new FormatException("");
+			return (TryParse(s, out result, out successfullyParsed, ref formatException, defaultRadix));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Required for recursion.")]
-		public virtual bool TryParse(string s, out byte[] result, ref FormatException formatException)
+		public virtual bool TryParse(string s, out byte[] result, ref FormatException formatException, Radix defaultRadix = DefaultRadixDefault)
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			string successfullyParsed;
-			return (TryParse(s, Modes.AllByteArrayResults, out result, out successfullyParsed, ref formatException));
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Required for recursion.")]
-		public virtual bool TryParse(string s, out string successfullyParsed, ref FormatException formatException)
-		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
-
-			Result[] result;
-			return (TryParse(s, Modes.AllByteArrayResults, out result, out successfullyParsed, ref formatException));
+			return (TryParse(s, out result, out successfullyParsed, ref formatException, defaultRadix));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
-		public virtual bool TryParse(string s, out byte[] result, out string successfullyParsed, ref FormatException formatException)
-		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
-
-			return (TryParse(s, Modes.AllByteArrayResults, out result, out successfullyParsed, ref formatException));
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool TryParse(string s, Modes modes, out byte[] result)
-		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
-
-			string successfullyParsed;
-			return (TryParse(s, modes, out result, out successfullyParsed));
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool TryParse(string s, Modes modes, out byte[] result, out string successfullyParsed)
-		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
-
-			FormatException formatException = new FormatException("");
-			return (TryParse(s, modes, out result, out successfullyParsed, ref formatException));
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
-		public virtual bool TryParse(string s, Modes modes, out byte[] result, out string successfullyParsed, ref FormatException formatException)
+		public virtual bool TryParse(string s, out byte[] result, out string successfullyParsed, ref FormatException formatException, Radix defaultRadix = DefaultRadixDefault)
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			Result[] typedResult;
-			if (TryParse(s, modes, out typedResult, out successfullyParsed, ref formatException))
+			if (TryParse(s, out typedResult, out successfullyParsed, ref formatException, defaultRadix))
 			{
 				using (MemoryStream bytes = new MemoryStream())
 				{
@@ -499,76 +443,65 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		public virtual bool TryParse(string s, Modes modes = Modes.All)
+		public virtual bool TryParse(string s, Radix defaultRadix = DefaultRadixDefault)
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			Result[] result;
-			return (TryParse(s, modes, out result));
+			return (TryParse(s, out result, defaultRadix));
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool TryParse(string s, Modes modes, out Result[] result)
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public virtual bool TryParse(string s, out string successfullyParsed, Radix defaultRadix = DefaultRadixDefault)
+		{
+			// AssertNotDisposed() is called by 'TryParse()' below.
+
+			Result[] result;
+			return (TryParse(s, out result, out successfullyParsed, defaultRadix));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Required for recursion.")]
+		public virtual bool TryParse(string s, out string successfullyParsed, ref FormatException formatException, Radix defaultRadix = DefaultRadixDefault)
+		{
+			// AssertNotDisposed() is called by 'TryParse()' below.
+
+			Result[] result;
+			return (TryParse(s, out result, out successfullyParsed, ref formatException, defaultRadix));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public virtual bool TryParse(string s, out Result[] result, Radix defaultRadix = DefaultRadixDefault)
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			string successfullyParsed;
-			return (TryParse(s, modes, out result, out successfullyParsed));
+			return (TryParse(s, out result, out successfullyParsed, defaultRadix));
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool TryParse(string s, Modes modes, out string successfullyParsed)
-		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
-
-			Result[] result;
-			return (TryParse(s, modes, out result, out successfullyParsed));
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
-		public virtual bool TryParse(string s, Modes modes, out string successfullyParsed, ref FormatException formatException)
-		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
-
-			Result[] result;
-			return (TryParse(s, modes, out result, out successfullyParsed, ref formatException));
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool TryParse(string s, Modes modes, out Result[] result, out string successfullyParsed)
+		public virtual bool TryParse(string s, out Result[] result, out string successfullyParsed, Radix defaultRadix = DefaultRadixDefault)
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			FormatException formatException = new FormatException("");
-			return (TryParse(s, modes, out result, out successfullyParsed, ref formatException));
+			return (TryParse(s, out result, out successfullyParsed, ref formatException, defaultRadix));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
-		public virtual bool TryParse(string s, out Result[] result, out string successfullyParsed, ref FormatException formatException)
-		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
-
-			return (TryParse(s, Modes.All, out result, out successfullyParsed, ref formatException));
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for recursion.")]
-		public virtual bool TryParse(string s, Modes modes, out Result[] result, out string successfullyParsed, ref FormatException formatException)
+		public virtual bool TryParse(string s, out Result[] result, out string successfullyParsed, ref FormatException formatException, Radix defaultRadix = DefaultRadixDefault)
 		{
 			AssertNotDisposed();
 
-			InitializeTopLevel(s, modes, (s.Length <= 1000)); // Inhibit probing in order to keep speed at a decent level...
+			InitializeTopLevel(s, defaultRadix, (s.Length <= 1000)); // Inhibit probing in order to keep speed at a decent level...
 
 			while (!HasFinished)
 			{
@@ -668,7 +601,7 @@ namespace YAT.Domain.Parser
 				if (radix == Radix.String)
 				{
 					byte[] b;
-					if (TryParseContiguousRadixItem(s, Radix.String, out b, ref formatException))
+					if (TryParseContiguousRadixItem(s, radix, out b, ref formatException))
 					{
 						bytes.Write(b, 0, b.Length);
 					}
@@ -1011,22 +944,24 @@ namespace YAT.Domain.Parser
 		/// <summary>
 		/// Initialize or re-initialize the top-level of a parser.
 		/// </summary>
-		private void InitializeTopLevel(string s, Modes modes, bool doProbe)
+		private void InitializeTopLevel(string s, Radix defaultRadix, bool doProbe)
 		{
 			DisposeAndReset();
 
 		////this.parentParser has just been reset to 'null' by DisposeAndReset() above.
 
-		////this.endianness   is set by the constructor.
-		////this.encoding     is set by the constructor.
-		////this.defaultRadix is set by the constructor.
-			this.modes           = modes;
+		////this.endianness is set by the constructor.
+		////this.encoding   is set by the constructor.
+		////this.modes      is set by the constructor.
+
+			this.defaultRadix    = defaultRadix;
 
 			this.charReader      = new StringReader(s); // Former reader has just been disposed of above.
 			this.bytesWriter     = new MemoryStream();  // Former stream has just been disposed of above.
 			this.result          = new List<Result>();
 			this.state           = new DefaultState();
 
+			this.parentParser    = null;
 			this.isKeywordParser = false;
 			this.doProbe         = doProbe;
 
@@ -1046,8 +981,9 @@ namespace YAT.Domain.Parser
 
 			this.endianness      = parent.endianness;
 			this.encoding        = parent.encoding;
-			this.defaultRadix    = parent.defaultRadix;
 			this.modes           = parent.modes;
+
+			this.defaultRadix    = parent.defaultRadix;
 
 			this.charReader      = parent.charReader;  // Former reader has just been disposed of above.
 			this.bytesWriter     = new MemoryStream(); // Former stream has just been disposed of above.
@@ -1071,7 +1007,8 @@ namespace YAT.Domain.Parser
 
 		private void DisposeAndReset()
 		{
-			// Do not dispose of the parent!
+			if (this.parentParser != null)
+				this.parentParser.Dispose();
 
 			if (this.charReader != null)
 				this.charReader.Dispose();
@@ -1085,6 +1022,7 @@ namespace YAT.Domain.Parser
 			if (this.nestedParser != null)
 				this.nestedParser.Dispose();
 
+			this.parentParser = null;
 			this.charReader   = null;
 			this.bytesWriter  = null;
 			this.state        = null;

@@ -41,50 +41,23 @@ namespace YAT.Model.Utilities
 	/// <summary></summary>
 	public static class ValidationHelper
 	{
-		/// <summary>Validation using <see cref="Domain.Radix.String"/> and <see cref="Domain.Parser.Modes.AllByteArrayResults"/>.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool ValidateText(string description, string textToValidate, out string errorMessage)
+		public static bool ValidateText(string description, string textToValidate, out string errorMessage, Domain.Radix defaultRadix = Domain.Radix.String, Domain.Parser.Modes modes = Domain.Parser.Modes.AllExceptKeywords)
 		{
 			int invalidTextStart;
-			return (ValidateText(description, textToValidate, out invalidTextStart, out errorMessage));
-		}
-
-		/// <summary>Validation using <see cref="Domain.Radix.String"/> and <see cref="Domain.Parser.Modes.AllByteArrayResults"/>.</summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool ValidateText(string description, string textToValidate, out int invalidTextStart, out string errorMessage)
-		{
 			int invalidTextLength;
-			return (ValidateText(description, textToValidate, out invalidTextStart, out invalidTextLength, out errorMessage));
-		}
-
-		/// <summary>Validation using <see cref="Domain.Radix.String"/> and <see cref="Domain.Parser.Modes.AllByteArrayResults"/>.</summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool ValidateText(string description, string textToValidate, out int invalidTextStart, out int invalidTextLength, out string errorMessage)
-		{
-			return (ValidateText(description, textToValidate, Domain.Radix.String, Domain.Parser.Modes.AllByteArrayResults, out invalidTextStart, out invalidTextLength, out errorMessage));
-		}
-
-		/// <summary>Validation using <see cref="Domain.Radix.String"/>.</summary>
-		/// <remarks>\ToDo: Remove after FR#238 has been implemented.</remarks>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool ValidateText(string description, string textToValidate, Domain.Parser.Modes modes, out int invalidTextStart, out int invalidTextLength, out string errorMessage)
-		{
-			return (ValidateText(description, textToValidate, Domain.Radix.String, modes, out invalidTextStart, out invalidTextLength, out errorMessage));
+			return (ValidateText(description, textToValidate, out invalidTextStart, out invalidTextLength, out errorMessage, defaultRadix, modes));
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool ValidateText(string description, string textToValidate, Domain.Radix defaultRadix, Domain.Parser.Modes modes, out int invalidTextStart, out int invalidTextLength, out string errorMessage)
+		public static bool ValidateText(string description, string textToValidate, out int invalidTextStart, out int invalidTextLength, out string errorMessage, Domain.Radix defaultRadix = Domain.Radix.String, Domain.Parser.Modes modes = Domain.Parser.Modes.AllExceptKeywords)
 		{
 			string successfullyParsed;
-			if (ValidateText(description, textToValidate, defaultRadix, modes, out successfullyParsed, out errorMessage))
+			if (ValidateText(description, textToValidate, out successfullyParsed, out errorMessage, defaultRadix, modes))
 			{
 				invalidTextStart = -1;
 				invalidTextLength = 0;
@@ -99,16 +72,16 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
-		public static bool ValidateText(string description, string textToValidate, Domain.Radix defaultRadix, Domain.Parser.Modes modes, out string successfullyParsed, out string errorMessage)
+		public static bool ValidateText(string description, string textToValidate, out string successfullyParsed, out string errorMessage, Domain.Radix defaultRadix = Domain.Radix.String, Domain.Parser.Modes modes = Domain.Parser.Modes.AllExceptKeywords)
 		{
 			bool hasSucceeded;
 			Domain.Parser.FormatException formatException = new Domain.Parser.FormatException("");
 
-			using (Domain.Parser.Parser p = new Domain.Parser.Parser(defaultRadix))
-				hasSucceeded = p.TryParse(textToValidate, modes, out successfullyParsed, ref formatException);
+			using (Domain.Parser.Parser p = new Domain.Parser.Parser(modes))
+				hasSucceeded = p.TryParse(textToValidate, out successfullyParsed, ref formatException, defaultRadix);
 
 			if (hasSucceeded)
 			{

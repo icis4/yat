@@ -522,9 +522,10 @@ namespace YAT.View.Forms
 			toolStripMenuItem_TerminalMenu_Send_Text.Enabled = sendTextEnabled && this.terminal.IsReadyToSend;
 			toolStripMenuItem_TerminalMenu_Send_File.Enabled = sendFileEnabled && this.terminal.IsReadyToSend;
 
-			toolStripMenuItem_TerminalMenu_Send_KeepCommand.Checked     = this.settingsRoot.Send.KeepCommand;
-			toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked  = this.settingsRoot.Send.CopyPredefined;
-			toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked = this.settingsRoot.Send.SendImmediately;
+			toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix.Checked = this.settingsRoot.Send.UseExplicitDefaultRadix;
+			toolStripMenuItem_TerminalMenu_Send_KeepCommand.Checked             = this.settingsRoot.Send.KeepCommand;
+			toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked          = this.settingsRoot.Send.CopyPredefined;
+			toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked         = this.settingsRoot.Send.SendImmediately;
 
 			toolStripMenuItem_TerminalMenu_Send_AutoResponse.Checked          = this.settingsRoot.AutoResponse.IsActive;
 			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Checked  = this.settingsRoot.AutoResponse.TriggerIsActive;
@@ -571,6 +572,11 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_TerminalMenu_Send_File_Click(object sender, EventArgs e)
 		{
 			this.terminal.SendFile();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Send.UseExplicitDefaultRadix = !this.settingsRoot.Send.UseExplicitDefaultRadix;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_KeepCommand_Click(object sender, EventArgs e)
@@ -1696,9 +1702,10 @@ namespace YAT.View.Forms
 			toolStripMenuItem_SendContextMenu_Panels_SendText.Checked = this.settingsRoot.Layout.SendTextPanelIsVisible;
 			toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = this.settingsRoot.Layout.SendFilePanelIsVisible;
 
-			toolStripMenuItem_SendContextMenu_KeepCommand.Checked     = this.settingsRoot.Send.KeepCommand;
-			toolStripMenuItem_SendContextMenu_CopyPredefined.Checked  = this.settingsRoot.Send.CopyPredefined;
-			toolStripMenuItem_SendContextMenu_SendImmediately.Checked = this.settingsRoot.Send.SendImmediately;
+			toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix.Checked = this.settingsRoot.Send.UseExplicitDefaultRadix;
+			toolStripMenuItem_SendContextMenu_KeepCommand.Checked             = this.settingsRoot.Send.KeepCommand;
+			toolStripMenuItem_SendContextMenu_CopyPredefined.Checked          = this.settingsRoot.Send.CopyPredefined;
+			toolStripMenuItem_SendContextMenu_SendImmediately.Checked         = this.settingsRoot.Send.SendImmediately;
 
 			this.isSettingControls.Leave();
 		}
@@ -1729,6 +1736,11 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_SendContextMenu_Panels_SendFile_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Layout.SendFilePanelIsVisible = !this.settingsRoot.Layout.SendFilePanelIsVisible;
+		}
+
+		private void toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Send.UseExplicitDefaultRadix = !this.settingsRoot.Send.UseExplicitDefaultRadix;
 		}
 
 		private void toolStripMenuItem_SendContextMenu_KeepCommand_Click(object sender, EventArgs e)
@@ -2449,8 +2461,8 @@ namespace YAT.View.Forms
 				splitContainer_Terminal.SplitterDistance = Int32Ex.Limit(splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth, 0, (splitContainer_Terminal.Height - 1));
 			}
 
-			send.CommandPanelIsVisible = this.settingsRoot.Layout.SendTextPanelIsVisible;
-			send.FilePanelIsVisible    = this.settingsRoot.Layout.SendFilePanelIsVisible;
+			send.TextPanelIsVisible = this.settingsRoot.Layout.SendTextPanelIsVisible;
+			send.FilePanelIsVisible = this.settingsRoot.Layout.SendFilePanelIsVisible;
 
 			LayoutSend();
 
@@ -2465,7 +2477,7 @@ namespace YAT.View.Forms
 			const int PredefinedOffset = 6; // 2 x margin of 3 (frame + buttons)
 			int absoluteX = splitContainer_Predefined.SplitterDistance + splitContainer_Predefined.Left;
 			int relativeX = absoluteX - send.Left + PredefinedOffset;
-			send.SplitterDistance = Int32Ex.Limit(relativeX, 0, (send.Width - 1));
+			send.SendSplitterDistance = Int32Ex.Limit(relativeX, 0, (send.Width - 1));
 		}
 
 		private void SetDisplayControls()
@@ -2500,13 +2512,14 @@ namespace YAT.View.Forms
 			contextMenuStrip_Send_SetMenuItems();
 
 			this.isSettingControls.Enter();
-			send.TerminalType           = this.settingsRoot.TerminalType;
-			send.TextCommand            = this.settingsRoot.SendText.Command;
-			send.RecentCommands         = this.settingsRoot.SendText.RecentCommands;
-			send.FileCommand            = this.settingsRoot.SendFile.Command;
-			send.RecentFileCommands     = this.settingsRoot.SendFile.RecentCommands;
-			send.SendTextImmediately    = this.settingsRoot.Send.SendImmediately;
-			send.TerminalIsReadyToSend  = this.terminal.IsReadyToSend;
+			send.TextCommand             = this.settingsRoot.SendText.Command;
+			send.RecentCommands          = this.settingsRoot.SendText.RecentCommands;
+			send.FileCommand             = this.settingsRoot.SendFile.Command;
+			send.RecentFileCommands      = this.settingsRoot.SendFile.RecentCommands;
+			send.TerminalType            = this.settingsRoot.TerminalType;
+			send.UseExplicitDefaultRadix = this.settingsRoot.Send.UseExplicitDefaultRadix;
+			send.SendTextImmediately     = this.settingsRoot.Send.SendImmediately;
+			send.TerminalIsReadyToSend   = this.terminal.IsReadyToSend;
 			this.isSettingControls.Leave();
 		}
 
@@ -3055,7 +3068,16 @@ namespace YAT.View.Forms
 			{
 				ShowPredefinedCommandSettings_formIsOpen = true;
 
-				PredefinedCommandSettings f = new PredefinedCommandSettings(this.settingsRoot.PredefinedCommand, this.settingsRoot.TerminalType, this.settingsRoot.Send.ToParseMode(), page, command);
+				PredefinedCommandSettings f = new PredefinedCommandSettings
+					(
+					this.settingsRoot.PredefinedCommand,
+					this.settingsRoot.TerminalType,
+					this.settingsRoot.Send.UseExplicitDefaultRadix,
+					this.settingsRoot.Send.ToParseMode(),
+					page,
+					command
+					);
+
 				if (f.ShowDialog(this) == DialogResult.OK)
 				{
 					Refresh();
@@ -3624,23 +3646,23 @@ namespace YAT.View.Forms
 
 		private void SetTerminalControls()
 		{
-			// Terminal menu.
+			// Terminal menu:
 			toolStripMenuItem_TerminalMenu_File_SetMenuItems();
 			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
 
-			// Terminal panel.
+			// Terminal panel:
 			SetTerminalCaption();
 			SetIOStatus();
 			SetIOControlControls();
 			SetMonitorIOStatus();
 
-			// Send.
+			// Send:
 			SetSendControls();
 
-			// Predefined.
+			// Predefined:
 			SetPredefinedControls();
 
-			// Preset.
+			// Preset:
 			SetPresetControls();
 		}
 

@@ -452,6 +452,12 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable = checkBox_OutputBreakModifiable.Checked;
 		}
 
+		private void checkBox_UseExplicitDefaultRadix_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix = checkBox_UseExplicitDefaultRadix.Checked;
+		}
+
 		private void checkBox_KeepCommand_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -944,9 +950,10 @@ namespace YAT.View.Forms
 			checkBox_OutputBreakModifiable.Checked     = this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable;
 
 			// Send:
-			checkBox_KeepCommand.Checked     = this.settingsInEdit.Terminal.Send.KeepCommand;
-			checkBox_CopyPredefined.Checked  = this.settingsInEdit.Terminal.Send.CopyPredefined;
-			checkBox_SendImmediately.Checked = this.settingsInEdit.Terminal.Send.SendImmediately;
+			checkBox_UseExplicitDefaultRadix.Checked = this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix;
+			checkBox_KeepCommand.Checked             = this.settingsInEdit.Terminal.Send.KeepCommand;
+			checkBox_CopyPredefined.Checked          = this.settingsInEdit.Terminal.Send.CopyPredefined;
+			checkBox_SendImmediately.Checked         = this.settingsInEdit.Terminal.Send.SendImmediately;
 
 			checkBox_SignalXOnBeforeEachTransmission.Enabled = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
 			checkBox_SignalXOnBeforeEachTransmission.Checked = this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission;
@@ -1043,9 +1050,11 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable = Domain.Settings.IOSettings.SerialPortOutputBreakIsModifiableDefault;
 
 			// Send:
+			this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix         = Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault;
 			this.settingsInEdit.Terminal.Send.KeepCommand                     = Domain.Settings.SendSettings.KeepCommandDefault;
 			this.settingsInEdit.Terminal.Send.CopyPredefined                  = Domain.Settings.SendSettings.CopyPredefinedDefault;
 			this.settingsInEdit.Terminal.Send.SendImmediately                 = Domain.Settings.SendSettings.SendImmediatelyDefault;
+
 			this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission = Domain.Settings.SendSettings.SignalXOnBeforeEachTransmissionDefault;
 			this.settingsInEdit.Terminal.Send.SignalXOnPeriodically           = Domain.Settings.SendSettings.SignalXOnPeriodicallyDefault;
 			this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize       = MKY.IO.Serial.SerialPort.SerialPortSettings.OutputBufferSizeDefault;
@@ -1053,6 +1062,7 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate            = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxSendRateDefault;
 			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak    = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnOutputBreakDefault;
 			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak     = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnInputBreakDefault;
+
 			this.settingsInEdit.Terminal.Send.DefaultDelay                    = Domain.Settings.SendSettings.DefaultDelayDefault;
 			this.settingsInEdit.Terminal.Send.DefaultLineDelay                = Domain.Settings.SendSettings.DefaultLineDelayDefault;
 			this.settingsInEdit.Terminal.Send.DefaultLineInterval             = Domain.Settings.SendSettings.DefaultLineIntervalDefault;

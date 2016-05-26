@@ -91,9 +91,16 @@ YAT 2.0 Gamma 2 Version 1.99.36 :: 2016-??-??
 ----------------------------------------------------------------------------------------------------
 
 New:
-- Binary terminals now also support to break lines before a sequence (feat. reqs. #76, #140, #180).
+- UDP/IP functionality improved:
+   > Possibility to receive from multiple sources when using 'UDP/IP Server' (feature request #248).
+   > Dedicated settings for server, client and socket (related to feature request #248).
+- USB Ser/HID can be configured to XOn/XOff flow control (feature request #226).
+- USB Ser/HID discovery improved, serial string may optionally be ignored (feature request #261).
+- Automatic response feature, YAT can automatically respond to a request (feature request #252).
 - Keyword \!(LineInterval) implemented in addition to the existing \!(LineDelay), useful together
   with \!(LineRepeat), line will be sent in more or less accurate interval (feature request #255).
+- Binary terminals now also support to break lines before a sequence (feat. reqs. #76, #140, #180).
+- Default parse radix can be selected, e.g. useful when sending files with binary data (req. #238).
 - Options to define the enclosure and spacing of display elements added (related to bug #292).
 - Option to display the port as e.g. "COM1" or "127.0.0.1:10000" (feature request #14).
 - Option to display the direction as "<<" (Tx) and ">>" (Rx) (feature request #14).
@@ -108,12 +115,6 @@ New:
   after logging has finished, i.e. logging has been switched off or the terminal is closed.
 - Selectable background color added to format settings (feature request #250).
 - Window can be configured to always stay on top (feature request #241).
-- UDP/IP functionality improved:
-   > Possibility to receive from multiple sources when using 'UDP/IP Server' (feature request #248).
-   > Dedicated settings for server, client and socket (related to feature request #248).
-- USB Ser/HID can be configured to XOn/XOff flow control (feature request #226).
-- USB Ser/HID discovery improved, serial string may optionally be ignored (feature request #261).
-- Automatic response feature, YAT can automatically respond to a request (feature request #252).
 
 Important changes:
 - 'Send Command' renamed to 'Send Text' (related to feature request #252).
