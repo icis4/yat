@@ -365,20 +365,31 @@ namespace YAT.Domain
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					// In the 'normal' case, the timer will already have been stopped in Stop().
+					// In the 'normal' case, the timer will already have been stopped in Stop()...
 					DisposePeriodicXOnTimer();
 
-					// In the 'normal' case, the send thread will already have been stopped in Close().
+					// ...and the send thread will already have been stopped in Close()...
 					StopSendThread();
 
-					// In the 'normal' case, the terminal will already have been stopped in Stop().
-					if (this.rawTerminal != null)
-						this.rawTerminal.Dispose();
+					// ...and objects will already have been detached and disposed of in Close():
+					DetachTerminalSettings();
+					DetachAndDisposeRawTerminal();
 				}
 
 				// Set state to disposed:
-				this.rawTerminal = null;
 				this.isDisposed = true;
+
+				DisposeHelper.NotifyEventRemains(GetType(), IOChanged);
+				DisposeHelper.NotifyEventRemains(GetType(), IOControlChanged);
+				DisposeHelper.NotifyEventRemains(GetType(), IOError);
+				DisposeHelper.NotifyEventRemains(GetType(), RawChunkSent);
+				DisposeHelper.NotifyEventRemains(GetType(), RawChunkReceived);
+				DisposeHelper.NotifyEventRemains(GetType(), DisplayElementsSent);
+				DisposeHelper.NotifyEventRemains(GetType(), DisplayElementsReceived);
+				DisposeHelper.NotifyEventRemains(GetType(), DisplayLinesSent);
+				DisposeHelper.NotifyEventRemains(GetType(), DisplayLinesReceived);
+				DisposeHelper.NotifyEventRemains(GetType(), RepositoryCleared);
+				DisposeHelper.NotifyEventRemains(GetType(), RepositoryReloaded);
 			}
 		}
 
@@ -399,7 +410,7 @@ namespace YAT.Domain
 		{
 			Dispose(false);
 
-			DebugMessage("The finalizer should have never been called! Ensure to call Dispose()!");
+			DebugMessage("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 #endif // DEBUG
@@ -765,6 +776,8 @@ namespace YAT.Domain
 			AssertNotDisposed();
 
 			StopSendThread();
+
+			DetachAndDisposeRawTerminal();
 		}
 
 		#endregion
@@ -2372,8 +2385,11 @@ namespace YAT.Domain
 
 		private void DetachTerminalSettings()
 		{
-			this.terminalSettings.Changed -= terminalSettings_Changed;
-			this.terminalSettings = null;
+			if (this.terminalSettings != null)
+			{
+				this.terminalSettings.Changed -= terminalSettings_Changed;
+				this.terminalSettings = null;
+			}
 		}
 
 		private void ApplyTerminalSettings()
@@ -2459,14 +2475,32 @@ namespace YAT.Domain
 		private void AttachRawTerminal(RawTerminal rawTerminal)
 		{
 			this.rawTerminal = rawTerminal;
+			{
+				this.rawTerminal.IOChanged         += rawTerminal_IOChanged;
+				this.rawTerminal.IOControlChanged  += rawTerminal_IOControlChanged;
+				this.rawTerminal.IOError           += rawTerminal_IOError;
 
-			this.rawTerminal.IOChanged         += rawTerminal_IOChanged;
-			this.rawTerminal.IOControlChanged  += rawTerminal_IOControlChanged;
-			this.rawTerminal.IOError           += rawTerminal_IOError;
+				this.rawTerminal.RawChunkSent      += rawTerminal_RawChunkSent;
+				this.rawTerminal.RawChunkReceived  += rawTerminal_RawChunkReceived;
+				this.rawTerminal.RepositoryCleared += rawTerminal_RepositoryCleared;
+			}
+		}
 
-			this.rawTerminal.RawChunkSent      += rawTerminal_RawChunkSent;
-			this.rawTerminal.RawChunkReceived  += rawTerminal_RawChunkReceived;
-			this.rawTerminal.RepositoryCleared += rawTerminal_RepositoryCleared;
+		private void DetachAndDisposeRawTerminal()
+		{
+			if (this.rawTerminal != null)
+			{
+				this.rawTerminal.IOChanged         -= rawTerminal_IOChanged;
+				this.rawTerminal.IOControlChanged  -= rawTerminal_IOControlChanged;
+				this.rawTerminal.IOError           -= rawTerminal_IOError;
+
+				this.rawTerminal.RawChunkSent      -= rawTerminal_RawChunkSent;
+				this.rawTerminal.RawChunkReceived  -= rawTerminal_RawChunkReceived;
+				this.rawTerminal.RepositoryCleared -= rawTerminal_RepositoryCleared;
+
+				this.rawTerminal.Dispose();
+				this.rawTerminal = null;
+			}
 		}
 
 		#endregion

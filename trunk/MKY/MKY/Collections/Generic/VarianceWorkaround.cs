@@ -24,7 +24,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 
 namespace MKY.Collections.Generic
 {
@@ -140,7 +139,7 @@ namespace MKY.Collections.Generic
 				{
 					Dispose(false);
 
-					System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+					System.Diagnostics.Debug.WriteLine("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 				}
 
 				object System.Collections.IEnumerator.Current

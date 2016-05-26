@@ -183,7 +183,7 @@ namespace YAT.Domain
 		public TextTerminal(Settings.TerminalSettings settings)
 			: base(settings)
 		{
-			AttachTextTerminalSettings(settings.TextTerminal);
+			AttachTextTerminalSettings();
 			Initialize();
 		}
 
@@ -191,7 +191,7 @@ namespace YAT.Domain
 		public TextTerminal(Settings.TerminalSettings settings, Terminal terminal)
 			: base(settings, terminal)
 		{
-			AttachTextTerminalSettings(settings.TextTerminal);
+			AttachTextTerminalSettings();
 
 			var casted = (terminal as TextTerminal);
 			if (casted != null)
@@ -242,21 +242,14 @@ namespace YAT.Domain
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
-		public Settings.TextTerminalSettings TextTerminalSettings
+		private Settings.TextTerminalSettings TextTerminalSettings
 		{
 			get
 			{
-				AssertNotDisposed();
-
-				return (TerminalSettings.TextTerminal);
-			}
-			set
-			{
-				AssertNotDisposed();
-
-				AttachTextTerminalSettings(value);
-				ApplyTextTerminalSettings();
+				if (TerminalSettings != null)
+					return (TerminalSettings.TextTerminal);
+				else
+					return (null);
 			}
 		}
 
@@ -888,16 +881,16 @@ namespace YAT.Domain
 		// Settings
 		//==========================================================================================
 
-		private void AttachTextTerminalSettings(Settings.TextTerminalSettings textTerminalSettings)
+		private void AttachTextTerminalSettings()
 		{
-			TerminalSettings.TextTerminal = textTerminalSettings;
-
-			TerminalSettings.TextTerminal.Changed += TextTerminalSettings_Changed;
+			if (TextTerminalSettings != null)
+				TextTerminalSettings.Changed += TextTerminalSettings_Changed;
 		}
 
 		private void DetachTextTerminalSettings()
 		{
-			TerminalSettings.TextTerminal.Changed -= TextTerminalSettings_Changed;
+			if (TextTerminalSettings != null)
+				TextTerminalSettings.Changed -= TextTerminalSettings_Changed;
 		}
 
 		private void ApplyTextTerminalSettings()

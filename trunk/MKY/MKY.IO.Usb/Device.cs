@@ -34,6 +34,7 @@ using System.Windows.Forms;
 
 using Microsoft.Win32.SafeHandles;
 
+using MKY.Diagnostics;
 using MKY.Windows.Forms;
 
 #endregion
@@ -775,6 +776,10 @@ namespace MKY.IO.Usb
 
 				// Set state to disposed:
 				this.isDisposed = true;
+
+				DisposeHelper.NotifyEventRemains(GetType(), Connected);
+				DisposeHelper.NotifyEventRemains(GetType(), Disconnected);
+				DisposeHelper.NotifyEventRemains(GetType(), IOError);
 			}
 		}
 
@@ -795,7 +800,7 @@ namespace MKY.IO.Usb
 		{
 			Dispose(false);
 
-			Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			Debug.WriteLine("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 #endif // DEBUG

@@ -230,6 +230,12 @@ namespace MKY.IO.Serial.SerialPort
 				// Set state to disposed:
 				this.stateLock = null;
 				this.isDisposed = true;
+
+				DisposeHelper.NotifyEventRemains(GetType(), IOChanged);
+				DisposeHelper.NotifyEventRemains(GetType(), IOControlChanged);
+				DisposeHelper.NotifyEventRemains(GetType(), IOError);
+				DisposeHelper.NotifyEventRemains(GetType(), DataReceived);
+				DisposeHelper.NotifyEventRemains(GetType(), DataSent);
 			}
 		}
 
@@ -250,7 +256,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			Dispose(false);
 
-			DebugMessage("The finalizer should have never been called! Ensure to call Dispose()!");
+			DebugMessage("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 #endif // DEBUG

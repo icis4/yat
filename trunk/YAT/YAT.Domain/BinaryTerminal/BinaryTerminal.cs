@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using MKY;
+using MKY.Diagnostics;
 using MKY.Collections.Generic;
 
 #endregion
@@ -98,6 +99,8 @@ namespace YAT.Domain
 
 					// Set state to disposed:
 					this.isDisposed = true;
+
+					DisposeHelper.NotifyEventRemains(GetType(), Timeout);
 				}
 			}
 
@@ -118,7 +121,7 @@ namespace YAT.Domain
 			{
 				Dispose(false);
 
-				System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+				System.Diagnostics.Debug.WriteLine("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 			}
 
 #endif // DEBUG
@@ -281,7 +284,7 @@ namespace YAT.Domain
 			{
 				Dispose(false);
 
-				System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+				System.Diagnostics.Debug.WriteLine("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 			}
 
 #endif // DEBUG
@@ -362,7 +365,7 @@ namespace YAT.Domain
 		public BinaryTerminal(Settings.TerminalSettings settings)
 			: base(settings)
 		{
-			AttachBinaryTerminalSettings(settings.BinaryTerminal);
+			AttachBinaryTerminalSettings();
 			Initialize();
 		}
 
@@ -370,7 +373,7 @@ namespace YAT.Domain
 		public BinaryTerminal(Settings.TerminalSettings settings, Terminal terminal)
 			: base(settings, terminal)
 		{
-			AttachBinaryTerminalSettings(settings.BinaryTerminal);
+			AttachBinaryTerminalSettings();
 
 			var casted = (terminal as BinaryTerminal);
 			if (casted != null)
@@ -435,21 +438,14 @@ namespace YAT.Domain
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
-		public Settings.BinaryTerminalSettings BinaryTerminalSettings
+		private Settings.BinaryTerminalSettings BinaryTerminalSettings
 		{
 			get
 			{
-				AssertNotDisposed();
-
-				return (TerminalSettings.BinaryTerminal);
-			}
-			set
-			{
-				AssertNotDisposed();
-
-				AttachBinaryTerminalSettings(value);
-				ApplyBinaryTerminalSettings();
+				if (TerminalSettings != null)
+					return (TerminalSettings.BinaryTerminal);
+				else
+					return (null);
 			}
 		}
 
@@ -921,16 +917,16 @@ namespace YAT.Domain
 		// Settings
 		//==========================================================================================
 
-		private void AttachBinaryTerminalSettings(Settings.BinaryTerminalSettings binaryTerminalSettings)
+		private void AttachBinaryTerminalSettings()
 		{
-			TerminalSettings.BinaryTerminal = binaryTerminalSettings;
-
-			BinaryTerminalSettings.Changed += BinaryTerminalSettings_Changed;
+			if (BinaryTerminalSettings != null)
+				BinaryTerminalSettings.Changed += BinaryTerminalSettings_Changed;
 		}
 
 		private void DetachBinaryTerminalSettings()
 		{
-			BinaryTerminalSettings.Changed -= BinaryTerminalSettings_Changed;
+			if (BinaryTerminalSettings != null)
+				BinaryTerminalSettings.Changed -= BinaryTerminalSettings_Changed;
 		}
 
 		private void ApplyBinaryTerminalSettings()

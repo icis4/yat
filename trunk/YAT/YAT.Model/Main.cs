@@ -164,29 +164,31 @@ namespace YAT.Model
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					if (this.operationTimer != null)
-						this.operationTimer.Dispose();
-
-					if (this.exitTimer != null)
-						this.exitTimer.Dispose();
+					StopAndDisposeOperationTimer();
+					StopAndDisposeExitTimer();
 
 					// In the 'normal' case, the workspace has already been closed, otherwise...
 
 					// ...first, detach event handlers to ensure that no more events are received...
 					DetachWorkspaceEventHandlers();
 
-					// ...then, dispose of objects.
-					if (this.workspace != null)
-						this.workspace.Dispose();
+					// ...then, dispose of objects:
+					DisposeWorkspace();
 				}
 
 				// Set state to disposed:
-				this.operationTimer = null;
-				this.exitTimer = null;
-				this.workspace = null;
 				this.isDisposed = true;
 
 				DebugMessage("...successfully disposed.");
+
+				DisposeHelper.NotifyEventRemains(GetType(), WorkspaceOpened);
+				DisposeHelper.NotifyEventRemains(GetType(), WorkspaceClosed);
+				DisposeHelper.NotifyEventRemains(GetType(), FixedStatusTextRequest);
+				DisposeHelper.NotifyEventRemains(GetType(), TimedStatusTextRequest);
+				DisposeHelper.NotifyEventRemains(GetType(), MessageInputRequest);
+				DisposeHelper.NotifyEventRemains(GetType(), CursorRequest);
+				DisposeHelper.NotifyEventRemains(GetType(), Started);
+				DisposeHelper.NotifyEventRemains(GetType(), Exited);
 			}
 		}
 
@@ -207,7 +209,7 @@ namespace YAT.Model
 		{
 			Dispose(false);
 
-			DebugMessage("The finalizer should have never been called! Ensure to call Dispose()!");
+			DebugMessage("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 #endif // DEBUG
@@ -1147,11 +1149,15 @@ namespace YAT.Model
 			{
 				OnFixedStatusTextRequest("Exiting " + ApplicationEx.ProductName + "...");
 
+				// Cleanup:
+				StopAndDisposeOperationTimer();
+				StopAndDisposeExitTimer();
+
+				DetachWorkspaceEventHandlers();
+				DisposeWorkspace();
+
 				// Signal the exit:
 				OnExited(this.result);
-
-				// Ensure that all resources get disposed of:
-				Dispose();
 
 				cancel = false;
 				return (this.result);
@@ -1192,6 +1198,15 @@ namespace YAT.Model
 			{
 				this.workspace.Saved  -= workspace_Saved;
 				this.workspace.Closed -= workspace_Closed;
+			}
+		}
+
+		private void DisposeWorkspace()
+		{
+			if (this.workspace != null)
+			{
+				this.workspace.Dispose();
+				this.workspace = null;
 			}
 		}
 
@@ -1240,8 +1255,8 @@ namespace YAT.Model
 			// Close existing, only one workspace can exist within application:
 			if (this.workspace != null)
 			{
-				if (!this.workspace.Close())
-					return (false);
+				if (!this.workspace.Close()) // Note that the reference to the workspace will be
+					return (false);          // removed in the 'workspace_Closed' event handler.
 			}
 
 			// Create new workspace:
@@ -1401,8 +1416,8 @@ namespace YAT.Model
 		public virtual bool CloseWorkspace()
 		{
 			if (this.workspace != null)
-				return (this.workspace.Close());
-			else
+				return (this.workspace.Close()); // Note that the reference to the workspace will be
+			else                                 // removed in the 'workspace_Closed' event handler.
 				return (true);
 		}
 
@@ -1570,6 +1585,8 @@ namespace YAT.Model
 
 		private void CreateAndStartOperationTimer()
 		{
+			StopAndDisposeOperationTimer();
+
 			this.operationTimer = new System.Timers.Timer(1000);
 			this.operationTimer.Elapsed += this.operationTimer_Elapsed;
 			this.operationTimer.Start();
@@ -1577,9 +1594,12 @@ namespace YAT.Model
 
 		private void StopAndDisposeOperationTimer()
 		{
-			this.operationTimer.Stop();
-			this.operationTimer.Dispose();
-			this.operationTimer = null;
+			if (this.operationTimer != null)
+			{
+				this.operationTimer.Stop();
+				this.operationTimer.Dispose();
+				this.operationTimer = null;
+			}
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
@@ -1732,6 +1752,8 @@ namespace YAT.Model
 				else
 					OnFixedStatusTextRequest("No operation performed, triggering exit...");
 
+				StopAndDisposeExitTimer();
+
 				this.exitTimer = new System.Timers.Timer(1000);
 				this.exitTimer.Elapsed += this.exitTimer_Elapsed;
 				this.exitTimer.Start();
@@ -1747,9 +1769,12 @@ namespace YAT.Model
 
 		private void StopAndDisposeExitTimer()
 		{
-			this.exitTimer.Stop();
-			this.exitTimer.Dispose();
-			this.exitTimer = null;
+			if (this.exitTimer != null)
+			{
+				this.exitTimer.Stop();
+				this.exitTimer.Dispose();
+				this.exitTimer = null;
+			}
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]

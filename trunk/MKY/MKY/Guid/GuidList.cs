@@ -71,19 +71,20 @@ namespace MKY
 		/// <summary>
 		/// Add or replaces the item that has the same <see cref="Guid"/> as item.
 		/// </summary>
-		public virtual void AddOrReplaceGuidItem(T item)
+		public virtual void AddOrReplace(T item)
 		{
 			// replace or add if not contained yet
-			if (!ReplaceGuidItem(item))
+			if (!Replace(item))
 				Add(item);
 		}
 
 		/// <summary>
 		/// Replaces the item that has the same <see cref="Guid"/> as item.
 		/// </summary>
-		public virtual bool ReplaceGuidItem(T item)
+		public virtual bool Replace(T item)
 		{
 			GuidList<T> clone = new GuidList<T>(this);
+
 			for (int i = 0; i < clone.Count; i++)
 			{
 				if (this[i].Guid == item.Guid)
@@ -92,42 +93,36 @@ namespace MKY
 					return (true);
 				}
 			}
+
 			return (false);
 		}
 
 		/// <summary>
-		/// Returns first item within the list that has the specified <see cref="Guid"/>,
-		/// <c>null</c> otherwise.
+		/// Returns the first item within the list that has the specified <see cref="Guid"/>,
+		/// <c>null</c>  if no item with the specified <see cref="Guid"/> exists.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
-		public virtual T GetGuidItem(Guid guid)
+		public virtual T Find(Guid guid)
 		{
 			foreach (T item in this)
 			{
 				if (item.Guid == guid)
 					return (item);
 			}
+
 			return (default(T));
 		}
 
 		/// <summary>
-		/// Removes all items that have the specified <see cref="Guid"/>.
+		/// Removes the first item within the list that has the specified <see cref="Guid"/>,
+		/// and returns it, <c>null</c> if no item with the specified <see cref="Guid"/> exists.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
-		public virtual void RemoveGuid(Guid guid)
+		public virtual T Remove(Guid guid)
 		{
-			GuidList<T> obsoleteItems = new GuidList<T>();
+			T item = Find(guid);
 
-			foreach (T item in this)
-			{
-				if (item.Guid == guid)
-					obsoleteItems.Add(item);
-			}
+			Remove(item);
 
-			foreach (T item in obsoleteItems)
-			{
-				Remove(item);
-			}
+			return (item);
 		}
 
 		#endregion
