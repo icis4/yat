@@ -117,6 +117,8 @@ namespace YAT.Domain.Parser
 
 		private bool isDisposed;
 
+		private Parser parentParser;
+
 		private Endianness endianness = Endianness.BigEndian;
 		private Encoding encoding = Encoding.Default;
 		private Radix defaultRadix = Radix.String;
@@ -127,12 +129,12 @@ namespace YAT.Domain.Parser
 		private List<Result> result;
 		private ParserState state;
 
-		private Parser parentParser;
-		private Parser nestedParser;
 		private bool isKeywordParser;
 		private bool doProbe;
 
 		private bool hasFinished;
+
+		private Parser nestedParser;
 
 		#endregion
 
@@ -190,9 +192,9 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		internal Parser(ParserState parserState, Parser parent)
+		internal Parser(Parser parent, ParserState parserState)
 		{
-			InitializeNestedParse(parserState, parent);
+			InitializeNestedLevelFromParent(parent, parserState);
 		}
 
 		#region Disposal
@@ -269,11 +271,11 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <summary></summary>
-		internal virtual Parser GetParser(ParserState parserState, Parser parent)
+		internal virtual Parser GetNestedParser(ParserState parserState)
 		{
 			AssertNotDisposed();
 
-			return (new Parser(parserState, parent));
+			return (new Parser(this, parserState));
 		}
 
 		#endregion
@@ -341,10 +343,22 @@ namespace YAT.Domain.Parser
 			get { return (this.parentParser == null); }
 		}
 
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal virtual Parser Parent
+		internal virtual bool IsKeywordParser
 		{
-			get { return (this.parentParser); }
+			get { return (this.isKeywordParser); }
+			set { this.isKeywordParser = value; }
+		}
+
+		internal virtual bool DoProbe
+		{
+			get { return (this.doProbe); }
+			set { this.doProbe = value;  }
+		}
+
+		internal virtual bool HasFinished
+		{
+			get { return (this.hasFinished); }
+			set { this.hasFinished = value; }
 		}
 
 		internal virtual Parser NestedParser
@@ -357,23 +371,6 @@ namespace YAT.Domain.Parser
 
 				this.nestedParser = value;
 			}
-		}
-
-		internal virtual bool IsKeywordParser
-		{
-			get { return (this.isKeywordParser); }
-			set { this.isKeywordParser = value; }
-		}
-
-		internal virtual bool DoProbe
-		{
-			get { return (this.doProbe); }
-		}
-
-		internal virtual bool HasFinished
-		{
-			get { return (this.hasFinished); }
-			set { this.hasFinished = value; }
 		}
 
 		#endregion
@@ -1012,15 +1009,17 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <summary>
-		/// Initialize or re-initialize the top-level of the parser.
+		/// Initialize or re-initialize the top-level of a parser.
 		/// </summary>
-		/// <remarks>
-		/// Required to allow multiple use of parser.
-		/// </remarks>
 		private void InitializeTopLevel(string s, Modes modes, bool doProbe)
 		{
 			DisposeAndReset();
 
+		////this.parentParser has just been reset to 'null' by DisposeAndReset() above.
+
+		////this.endianness   is set by the constructor.
+		////this.encoding     is set by the constructor.
+		////this.defaultRadix is set by the constructor.
 			this.modes           = modes;
 
 			this.charReader      = new StringReader(s); // Former reader has just been disposed of above.
@@ -1032,15 +1031,20 @@ namespace YAT.Domain.Parser
 			this.doProbe         = doProbe;
 
 			this.hasFinished     = false;
+
+		////this.nestedParser has just been reset to 'null' by DisposeAndReset() above.
 		}
 
 		/// <summary>
-		/// Initialize a nested parse-level.
+		/// Initialize a nested-level of a parser.
 		/// </summary>
-		private void InitializeNestedParse(ParserState parserState, Parser parent)
+		private void InitializeNestedLevelFromParent(Parser parent, ParserState parserState)
 		{
 			DisposeAndReset();
 
+			this.parentParser    = parent;
+
+			this.endianness      = parent.endianness;
 			this.encoding        = parent.encoding;
 			this.defaultRadix    = parent.defaultRadix;
 			this.modes           = parent.modes;
@@ -1050,26 +1054,25 @@ namespace YAT.Domain.Parser
 			this.result          = parent.result;
 			this.state           = parserState;
 
-			this.parentParser    = parent;
 			this.isKeywordParser = false; // Keywords cannot be nested (yet).
 			this.doProbe         = parent.doProbe;
 
 			this.hasFinished     = false;
+
+		////this.nestedParser has just been reset to 'null' by DisposeAndReset() above.
 		}
 
-		/// <summary>
-		/// Releases all resources referenced by a nested parse-level.
-		/// </summary>
-		internal void ReleaseNestedParse()
+		/// <summary></summary>
+		public void Close()
 		{
-			this.charReader   = null; // De-reference the parent's reader.
-			this.result       = null; // De-reference the parent's result list.
-
-			this.parentParser = null; // De-reference the parent itself.
+			this.parentParser = null;
+			this.charReader   = null; // The reader belongs to the parent!
 		}
 
 		private void DisposeAndReset()
 		{
+			// Do not dispose of the parent!
+
 			if (this.charReader != null)
 				this.charReader.Dispose();
 
@@ -1079,16 +1082,12 @@ namespace YAT.Domain.Parser
 			if (this.state != null)
 				this.state.Dispose();
 
-			if (this.parentParser != null)
-				this.parentParser.Dispose();
-
 			if (this.nestedParser != null)
 				this.nestedParser.Dispose();
 
 			this.charReader   = null;
 			this.bytesWriter  = null;
 			this.state        = null;
-			this.parentParser = null;
 			this.nestedParser = null;
 		}
 

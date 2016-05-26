@@ -102,10 +102,10 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		internal SubstitutionParser(ParserState parserState, Parser parent)
-			: base(parserState, parent)
+		internal SubstitutionParser(SubstitutionParser parent, ParserState parserState)
+			: base(parent, parserState)
 		{
-			this.substitution = ((SubstitutionParser)parent).substitution;
+			this.substitution = parent.substitution;
 		}
 
 		#region Disposal
@@ -137,11 +137,11 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <summary></summary>
-		internal override Parser GetParser(ParserState parserState, Parser parent)
+		internal override Parser GetNestedParser(ParserState parserState)
 		{
 			AssertNotDisposed();
 
-			return (new SubstitutionParser(parserState, parent));
+			return (new SubstitutionParser(this, parserState));
 		}
 
 		#endregion
