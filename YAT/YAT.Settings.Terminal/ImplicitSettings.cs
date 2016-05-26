@@ -45,6 +45,7 @@ namespace YAT.Settings.Terminal
 		private Model.Settings.AutoResponseSettings autoResponse;
 		private Model.Settings.WindowSettings window;
 		private Model.Settings.LayoutSettings layout;
+		private Model.Settings.ViewSettings view;
 
 		/// <summary></summary>
 		public ImplicitSettings()
@@ -58,6 +59,7 @@ namespace YAT.Settings.Terminal
 			AutoResponse = new Model.Settings.AutoResponseSettings(SettingsType);
 			Window       = new Model.Settings.WindowSettings(SettingsType);
 			Layout       = new Model.Settings.LayoutSettings(SettingsType);
+			View         = new Model.Settings.ViewSettings(SettingsType);
 
 			ClearChanged();
 		}
@@ -78,6 +80,7 @@ namespace YAT.Settings.Terminal
 			AutoResponse = new Model.Settings.AutoResponseSettings(rhs.AutoResponse);
 			Window       = new Model.Settings.WindowSettings(rhs.Window);
 			Layout       = new Model.Settings.LayoutSettings(rhs.Layout);
+			View         = new Model.Settings.ViewSettings(rhs.View);
 
 			ClearChanged();
 		}
@@ -280,6 +283,32 @@ namespace YAT.Settings.Terminal
 					Model.Settings.LayoutSettings old = this.layout;
 					this.layout = value;
 					ReplaceNode(old, this.layout);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("View")]
+		public virtual Model.Settings.ViewSettings View
+		{
+			get { return (this.view); }
+			set
+			{
+				if (value == null)
+				{
+					DetachNode(this.view);
+					this.view = null;
+				}
+				else if (this.view == null)
+				{
+					this.view = value;
+					AttachNode(this.view);
+				}
+				else if (this.view != value)
+				{
+					Model.Settings.ViewSettings old = this.view;
+					this.view = value;
+					ReplaceNode(old, this.view);
 				}
 			}
 		}

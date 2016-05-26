@@ -51,6 +51,8 @@ namespace YAT.View.Forms
 		private Model.Settings.FormatSettings formatSettings;
 		private Model.Settings.FormatSettings formatSettingsInEdit;
 
+		private int[] customColors;
+
 		private Domain.InfoElementSeparatorEx infoSeparator;
 		private Domain.InfoElementEnclosureEx infoEnclosure;
 
@@ -65,12 +67,14 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public FormatSettings(Model.Settings.FormatSettings formatSettings, Domain.InfoElementSeparatorEx infoSeparator, Domain.InfoElementEnclosureEx infoEnclosure)
+		public FormatSettings(Model.Settings.FormatSettings formatSettings, int[] customColors, Domain.InfoElementSeparatorEx infoSeparator, Domain.InfoElementEnclosureEx infoEnclosure)
 		{
 			InitializeComponent();
 
 			this.formatSettings = formatSettings;
 			this.formatSettingsInEdit = new Model.Settings.FormatSettings(formatSettings);
+
+			this.customColors = customColors;
 
 			this.infoSeparator = infoSeparator;
 			this.infoEnclosure = infoEnclosure;
@@ -86,6 +90,13 @@ namespace YAT.View.Forms
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <summary></summary>
+		public int[] CustomColors
+		{
+			get { return (this.customColors); }
+			set { this.customColors = value;  }
+		}
 
 		/// <summary></summary>
 		public Model.Settings.FormatSettings FormatSettingsResult
@@ -331,7 +342,7 @@ namespace YAT.View.Forms
 
 		private void GetCustomColorsFromControl(int index)
 		{
-			this.formatSettingsInEdit.UpdateCustomColorsFromWin32(this.textFormats[index].CustomColors);
+			this.customColors = this.textFormats[index].CustomColors;
 		}
 
 		private void SetControls()
@@ -353,7 +364,7 @@ namespace YAT.View.Forms
 				this.textFormats[i].FormatFontStyle = tf.FontStyle;
 				this.textFormats[i].FormatColor     = tf.Color;
 
-				this.textFormats[i].CustomColors = this.formatSettingsInEdit.CustomColorsToWin32();
+				this.textFormats[i].CustomColors = this.customColors;
 			}
 
 			Utilities.SelectionHelper.Select(comboBox_InfoSeparator, this.infoSeparator, this.infoSeparator);
@@ -498,13 +509,13 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowBackgroundColorDialog()
 		{
-			colorDialog.CustomColors = this.formatSettingsInEdit.CustomColorsToWin32();
+			colorDialog.CustomColors = this.customColors;
 			colorDialog.Color        = this.formatSettingsInEdit.BackColor;
 			if (colorDialog.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
-				this.formatSettingsInEdit.BackColor                 = colorDialog.Color;
-				this.formatSettingsInEdit.UpdateCustomColorsFromWin32(colorDialog.CustomColors);
+				this.formatSettingsInEdit.BackColor = colorDialog.Color;
+				this.customColors                   = colorDialog.CustomColors;
 				SetControls();
 			}
 		}

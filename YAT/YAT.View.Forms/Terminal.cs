@@ -2791,11 +2791,16 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowFormatSettings()
 		{
-			FormatSettings f = new FormatSettings(this.settingsRoot.Format, this.settingsRoot.Display.InfoSeparator, this.settingsRoot.Display.InfoEnclosure);
+			int[] customColors = this.settingsRoot.View.CustomColorsToWin32();
+
+			FormatSettings f = new FormatSettings(this.settingsRoot.Format, customColors, this.settingsRoot.Display.InfoSeparator, this.settingsRoot.Display.InfoEnclosure);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
 				this.settingsRoot.Format = f.FormatSettingsResult;
+
+				this.settingsRoot.View.UpdateCustomColorsFromWin32(f.CustomColors);
+
 				this.settingsRoot.Display.InfoSeparator = f.InfoSeparatorResult;
 				this.settingsRoot.Display.InfoEnclosure = f.InfoEnclosureResult;
 			}
@@ -2986,9 +2991,9 @@ namespace YAT.View.Forms
 			}
 		}
 
-#endregion
+		#endregion
 
-#endregion
+		#endregion
 
 		#region Predefined Panel
 		//==========================================================================================
