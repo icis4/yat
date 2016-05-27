@@ -764,6 +764,8 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
+			EventCleanupHelper.DebugNotifyAllEventRemains(this);
+
 			if (!this.isDisposed)
 			{
 				// In any case, ensure that the static event handlers get detached:
@@ -776,10 +778,6 @@ namespace MKY.IO.Usb
 
 				// Set state to disposed:
 				this.isDisposed = true;
-
-				DisposeHelper.NotifyEventRemains(GetType(), Connected);
-				DisposeHelper.NotifyEventRemains(GetType(), Disconnected);
-				DisposeHelper.NotifyEventRemains(GetType(), IOError);
 			}
 		}
 

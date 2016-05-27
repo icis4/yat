@@ -158,6 +158,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
+			EventCleanupHelper.DebugNotifyAllEventRemains(this);
+
 			if (!this.isDisposed)
 			{
 				// Dispose of managed resources if requested:
@@ -174,13 +176,6 @@ namespace YAT.Domain
 
 				// Set state to disposed:
 				this.isDisposed = true;
-
-				DisposeHelper.NotifyEventRemains(GetType(), IOChanged);
-				DisposeHelper.NotifyEventRemains(GetType(), IOControlChanged);
-				DisposeHelper.NotifyEventRemains(GetType(), IOError);
-				DisposeHelper.NotifyEventRemains(GetType(), RawChunkSent);
-				DisposeHelper.NotifyEventRemains(GetType(), RawChunkReceived);
-				DisposeHelper.NotifyEventRemains(GetType(), RepositoryCleared);
 			}
 		}
 

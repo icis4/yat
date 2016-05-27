@@ -329,6 +329,8 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
+			EventCleanupHelper.DebugNotifyAllEventRemains(this);
+
 			if (!this.isDisposed)
 			{
 				DebugMessage("Disposing...");
@@ -355,26 +357,6 @@ namespace YAT.Model
 				this.isDisposed = true;
 
 				DebugMessage("...successfully disposed.");
-
-				DisposeHelper.NotifyEventRemains(GetType(), IOChanged);
-				DisposeHelper.NotifyEventRemains(GetType(), IOControlChanged);
-				DisposeHelper.NotifyEventRemains(GetType(), IOConnectTimeChanged);
-				DisposeHelper.NotifyEventRemains(GetType(), IOCountChanged);
-				DisposeHelper.NotifyEventRemains(GetType(), IORateChanged);
-				DisposeHelper.NotifyEventRemains(GetType(), IOError);
-				DisposeHelper.NotifyEventRemains(GetType(), DisplayElementsSent);
-				DisposeHelper.NotifyEventRemains(GetType(), DisplayElementsReceived);
-				DisposeHelper.NotifyEventRemains(GetType(), DisplayLinesSent);
-				DisposeHelper.NotifyEventRemains(GetType(), DisplayLinesReceived);
-				DisposeHelper.NotifyEventRemains(GetType(), RepositoryCleared);
-				DisposeHelper.NotifyEventRemains(GetType(), RepositoryReloaded);
-				DisposeHelper.NotifyEventRemains(GetType(), FixedStatusTextRequest);
-				DisposeHelper.NotifyEventRemains(GetType(), TimedStatusTextRequest);
-				DisposeHelper.NotifyEventRemains(GetType(), MessageInputRequest);
-				DisposeHelper.NotifyEventRemains(GetType(), SaveAsFileDialogRequest);
-				DisposeHelper.NotifyEventRemains(GetType(), CursorRequest);
-				DisposeHelper.NotifyEventRemains(GetType(), Saved);
-				DisposeHelper.NotifyEventRemains(GetType(), Closed);
 			}
 		}
 

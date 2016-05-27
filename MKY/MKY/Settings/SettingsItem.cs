@@ -83,6 +83,16 @@ namespace MKY.Settings
 			this.nodes = new List<SettingsItem>();
 		}
 
+#if (DEBUG)
+
+		/// <summary></summary>
+		~SettingsItem()
+		{
+			Diagnostics.EventCleanupHelper.DebugNotifyAllEventRemains(this);
+		}
+
+#endif // DEBUG
+
 		#region Setup/Teardown Properties and Methods
 		//==========================================================================================
 		// Setup/Teardown Properties and Methods

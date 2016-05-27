@@ -51,6 +51,16 @@ namespace MKY.Data
 			this.nodes = new List<DataItem>();
 		}
 
+#if (DEBUG)
+
+		/// <summary></summary>
+		~DataItem()
+		{
+			Diagnostics.EventCleanupHelper.DebugNotifyAllEventRemains(this);
+		}
+
+#endif // DEBUG
+
 		#region Setup/Teardown Properties and Methods
 		//==========================================================================================
 		// Setup/Teardown Properties and Methods

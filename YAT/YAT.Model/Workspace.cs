@@ -194,6 +194,8 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
+			EventCleanupHelper.DebugNotifyAllEventRemains(this);
+
 			if (!this.isDisposed)
 			{
 				DebugMessage("Disposing...");
@@ -215,16 +217,6 @@ namespace YAT.Model
 				this.isDisposed = true;
 
 				DebugMessage("...successfully disposed.");
-
-				DisposeHelper.NotifyEventRemains(GetType(), TerminalAdded);
-				DisposeHelper.NotifyEventRemains(GetType(), TerminalRemoved);
-				DisposeHelper.NotifyEventRemains(GetType(), FixedStatusTextRequest);
-				DisposeHelper.NotifyEventRemains(GetType(), TimedStatusTextRequest);
-				DisposeHelper.NotifyEventRemains(GetType(), MessageInputRequest);
-				DisposeHelper.NotifyEventRemains(GetType(), SaveAsFileDialogRequest);
-				DisposeHelper.NotifyEventRemains(GetType(), CursorRequest);
-				DisposeHelper.NotifyEventRemains(GetType(), Saved);
-				DisposeHelper.NotifyEventRemains(GetType(), Closed);
 			}
 		}
 
