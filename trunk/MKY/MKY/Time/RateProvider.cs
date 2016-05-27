@@ -23,7 +23,10 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+
+using MKY.Diagnostics;
 
 namespace MKY.Time
 {
@@ -126,6 +129,8 @@ namespace MKY.Time
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
+			EventCleanupHelper.DebugNotifyAllEventRemains(this);
+
 			if (!this.isDisposed)
 			{
 				// Dispose of managed resources if requested:
@@ -138,8 +143,6 @@ namespace MKY.Time
 				// Set state to disposed:
 				this.updateTicker = null;
 				this.isDisposed = true;
-
-				Diagnostics.DisposeHelper.NotifyEventRemains(GetType(), Changed);
 			}
 		}
 
@@ -160,7 +163,7 @@ namespace MKY.Time
 		{
 			Dispose(false);
 
-			System.Diagnostics.Debug.WriteLine("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			Debug.WriteLine("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 #endif // DEBUG

@@ -410,6 +410,8 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected override void Dispose(bool disposing)
 		{
+			EventCleanupHelper.DebugNotifyAllEventRemains(this);
+
 			if (!IsDisposed)
 			{
 				DetachAndUnregisterStaticDeviceEventHandlers();
@@ -427,11 +429,6 @@ namespace MKY.IO.Usb
 
 				// Set state to disposed:
 				this.stateLock = null;
-
-				DisposeHelper.NotifyEventRemains(GetType(), Opened);
-				DisposeHelper.NotifyEventRemains(GetType(), Closed);
-				DisposeHelper.NotifyEventRemains(GetType(), DataReceived);
-				DisposeHelper.NotifyEventRemains(GetType(), DataSent);
 			}
 
 			base.Dispose(disposing);

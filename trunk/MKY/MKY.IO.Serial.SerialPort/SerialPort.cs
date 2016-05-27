@@ -215,6 +215,8 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
+			EventCleanupHelper.DebugNotifyAllEventRemains(this);
+
 			if (!this.isDisposed)
 			{
 				// Dispose of managed resources if requested:
@@ -230,12 +232,6 @@ namespace MKY.IO.Serial.SerialPort
 				// Set state to disposed:
 				this.stateLock = null;
 				this.isDisposed = true;
-
-				DisposeHelper.NotifyEventRemains(GetType(), IOChanged);
-				DisposeHelper.NotifyEventRemains(GetType(), IOControlChanged);
-				DisposeHelper.NotifyEventRemains(GetType(), IOError);
-				DisposeHelper.NotifyEventRemains(GetType(), DataReceived);
-				DisposeHelper.NotifyEventRemains(GetType(), DataSent);
 			}
 		}
 

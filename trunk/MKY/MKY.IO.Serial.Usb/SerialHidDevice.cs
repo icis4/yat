@@ -173,6 +173,8 @@ namespace MKY.IO.Serial.Usb
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
+			EventCleanupHelper.DebugNotifyAllEventRemains(this);
+
 			if (!this.isDisposed)
 			{
 				// Dispose of managed resources if requested:
@@ -186,12 +188,6 @@ namespace MKY.IO.Serial.Usb
 				this.sendThreadEvent = null;
 				this.receiveThreadEvent = null;
 				this.isDisposed = true;
-
-				DisposeHelper.NotifyEventRemains(GetType(), IOChanged);
-				DisposeHelper.NotifyEventRemains(GetType(), IOControlChanged);
-				DisposeHelper.NotifyEventRemains(GetType(), IOError);
-				DisposeHelper.NotifyEventRemains(GetType(), DataReceived);
-				DisposeHelper.NotifyEventRemains(GetType(), DataSent);
 			}
 		}
 

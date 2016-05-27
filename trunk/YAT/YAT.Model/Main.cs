@@ -157,6 +157,8 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
+			EventCleanupHelper.DebugNotifyAllEventRemains(this);
+
 			if (!this.isDisposed)
 			{
 				DebugMessage("Disposing...");
@@ -180,15 +182,6 @@ namespace YAT.Model
 				this.isDisposed = true;
 
 				DebugMessage("...successfully disposed.");
-
-				DisposeHelper.NotifyEventRemains(GetType(), WorkspaceOpened);
-				DisposeHelper.NotifyEventRemains(GetType(), WorkspaceClosed);
-				DisposeHelper.NotifyEventRemains(GetType(), FixedStatusTextRequest);
-				DisposeHelper.NotifyEventRemains(GetType(), TimedStatusTextRequest);
-				DisposeHelper.NotifyEventRemains(GetType(), MessageInputRequest);
-				DisposeHelper.NotifyEventRemains(GetType(), CursorRequest);
-				DisposeHelper.NotifyEventRemains(GetType(), Started);
-				DisposeHelper.NotifyEventRemains(GetType(), Exited);
 			}
 		}
 
