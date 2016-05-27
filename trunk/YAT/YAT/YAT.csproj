@@ -119,6 +119,10 @@
     <Compile Include="YAT.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
+      <Project>{f489b948-95cf-49fe-b9aa-a51654f5688b}</Project>
+      <Name>MKY</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YAT.Controller\YAT.Controller.csproj">
       <Project>{D639409C-0B93-494B-9A01-4FE79686FAD6}</Project>
       <Name>YAT.Controller</Name>

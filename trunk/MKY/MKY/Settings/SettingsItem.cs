@@ -88,7 +88,8 @@ namespace MKY.Settings
 		/// <summary></summary>
 		~SettingsItem()
 		{
-			Diagnostics.EventCleanupHelper.DebugNotifyAllEventRemains(this);
+			Diagnostics.EventManagementHelper.DebugNotifyAllEventRemains(this);
+			Diagnostics.FinalizationHelper.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 
 #endif // DEBUG

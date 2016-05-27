@@ -139,7 +139,7 @@ namespace MKY.Collections.Generic
 				{
 					Dispose(false);
 
-					System.Diagnostics.Debug.WriteLine("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+					Diagnostics.DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
 				}
 
 				object System.Collections.IEnumerator.Current

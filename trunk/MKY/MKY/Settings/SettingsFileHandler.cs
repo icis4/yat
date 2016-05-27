@@ -90,6 +90,18 @@ namespace MKY.Settings
 			this.parentType = parentType;
 		}
 
+#if (DEBUG)
+
+		/// <remarks>
+		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
+		/// </remarks>
+		~SettingsFileHandler()
+		{
+			FinalizationHelper.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
+		}
+
+#endif // DEBUG
+
 		#endregion
 
 		#region Properties

@@ -194,7 +194,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			EventCleanupHelper.DebugNotifyAllEventRemains(this);
+			EventManagementHelper.DebugNotifyAllEventRemains(this);
 
 			if (!this.isDisposed)
 			{
@@ -235,7 +235,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			Dispose(false);
 
-			DebugMessage("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
 #endif // DEBUG

@@ -194,7 +194,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			EventCleanupHelper.DebugNotifyAllEventRemains(this);
+			EventManagementHelper.DebugNotifyAllEventRemains(this);
 
 			if (!this.isDisposed)
 			{
@@ -237,7 +237,7 @@ namespace YAT.Model
 		{
 			Dispose(false);
 
-			DebugMessage("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
 #endif // DEBUG
@@ -1118,6 +1118,7 @@ namespace YAT.Model
 					OnTimedStatusTextRequest("Workspace successfully closed.");
 
 				OnClosed(new ClosedEventArgs(isMainExit));
+				// Attention, do not perform any action since the object will get disposed by the main!
 				return (true);
 			}
 			else
@@ -1245,8 +1246,12 @@ namespace YAT.Model
 		/// </remarks>
 		private void terminal_Closed(object sender, ClosedEventArgs e)
 		{
+			Terminal t = (Terminal)sender;
+
 			if (!e.IsParentClose)
-				RemoveFromWorkspace((Terminal)sender);
+				RemoveFromWorkspace(t);
+
+			DisposeTerminal(t); // Dispose the terminal as it got created by this workspace.
 		}
 
 		#endregion

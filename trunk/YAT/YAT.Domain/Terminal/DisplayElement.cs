@@ -503,6 +503,18 @@ namespace YAT.Domain
 			this.flags     = flags;
 		}
 
+#if (DEBUG)
+
+		/// <remarks>
+		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
+		/// </remarks>
+		~DisplayElement()
+		{
+			MKY.Diagnostics.FinalizationHelper.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
+		}
+
+#endif // DEBUG
+
 		#endregion
 
 		#region Properties

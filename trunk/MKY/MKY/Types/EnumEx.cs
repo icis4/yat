@@ -202,6 +202,18 @@ namespace MKY
 			SetUnderlyingEnum(underlyingEnum);
 		}
 
+#if (DEBUG)
+
+		/// <remarks>
+		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
+		/// </remarks>
+		~EnumEx()
+		{
+			Diagnostics.FinalizationHelper.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
+		}
+
+#endif // DEBUG
+
 		/// <summary>
 		/// Underlying enum.
 		/// </summary>

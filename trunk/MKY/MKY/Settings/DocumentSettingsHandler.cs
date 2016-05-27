@@ -88,6 +88,18 @@ namespace MKY.Settings
 				this.alternateXmlElements = aep.AlternateXmlElements;
 		}
 
+#if (DEBUG)
+
+		/// <remarks>
+		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
+		/// </remarks>
+		~DocumentSettingsHandler()
+		{
+			Diagnostics.FinalizationHelper.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
+		}
+
+#endif // DEBUG
+
 		#endregion
 
 		#region Properties

@@ -329,7 +329,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			EventCleanupHelper.DebugNotifyAllEventRemains(this);
+			EventManagementHelper.DebugNotifyAllEventRemains(this);
 
 			if (!this.isDisposed)
 			{
@@ -377,7 +377,7 @@ namespace YAT.Model
 		{
 			Dispose(false);
 
-			DebugMessage("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
 #endif // DEBUG
@@ -1943,7 +1943,9 @@ namespace YAT.Model
 			{
 				// Status text request must be before closed event, closed event may close the view:
 				OnTimedStatusTextRequest("Terminal successfully closed.");
+
 				OnClosed(new ClosedEventArgs(isWorkspaceClose));
+				// Attention, do not perform any action since the object will get disposed by the workspace!
 
 				return (true);
 			}

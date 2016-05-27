@@ -173,6 +173,18 @@ namespace YAT.Model.Types
 			}
 		}
 
+#if (DEBUG)
+
+		/// <remarks>
+		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
+		/// </remarks>
+		~Command()
+		{
+			MKY.Diagnostics.FinalizationHelper.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
+		}
+
+#endif // DEBUG
+
 		#endregion
 
 		#region Properties
