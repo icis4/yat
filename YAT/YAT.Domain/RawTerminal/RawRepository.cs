@@ -61,6 +61,18 @@ namespace YAT.Domain
 			this.queue = new Queue<RawChunk>(rhs.queue);
 		}
 
+#if (DEBUG)
+
+		/// <remarks>
+		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
+		/// </remarks>
+		~RawRepository()
+		{
+			MKY.Diagnostics.FinalizationHelper.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
+		}
+
+#endif // DEBUG
+
 		/// <summary></summary>
 		public virtual int Capacity
 		{

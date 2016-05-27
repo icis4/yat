@@ -132,7 +132,7 @@ namespace YAT.Model.Utilities
 		{
 			Dispose(false);
 
-			System.Diagnostics.Debug.WriteLine("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			MKY.Diagnostics.DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
 #endif // DEBUG

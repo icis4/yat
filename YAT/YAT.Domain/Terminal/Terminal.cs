@@ -360,7 +360,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			EventCleanupHelper.DebugNotifyAllEventRemains(this);
+			EventManagementHelper.DebugNotifyAllEventRemains(this);
 
 			if (!this.isDisposed)
 			{
@@ -400,7 +400,7 @@ namespace YAT.Domain
 		{
 			Dispose(false);
 
-			DebugMessage("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
 #endif // DEBUG

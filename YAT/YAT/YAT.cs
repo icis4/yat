@@ -78,11 +78,16 @@ namespace YAT
 		[STAThread]
 		private static int Main(string[] commandLineArgs)
 		{
+			Controller.MainResult result;
+
 			using (Controller.Main main = new Controller.Main(commandLineArgs))
 			{
-				Controller.MainResult mainResult = main.Run();
-				return ((int)mainResult);
+				result = main.Run();
 			}
+
+			MKY.Diagnostics.FinalizationHelper.FinalizationShouldHaveCompleted = true;
+
+			return ((int)result);
 		}
 	}
 }

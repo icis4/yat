@@ -89,7 +89,9 @@
     <Compile Include="..\MKY.Version.cs">
       <Link>Properties\MKY.Version.cs</Link>
     </Compile>
-    <Compile Include="Diagnostics\EventCleanupHelper.cs" />
+    <Compile Include="Diagnostics\FinalizationHelper.cs" />
+    <Compile Include="Diagnostics\DisposalHelper.cs" />
+    <Compile Include="Diagnostics\EventManagementHelper.cs" />
     <Compile Include="Diagnostics\StopwatchEx.cs" />
     <Compile Include="Drawing\ColorTranslatorEx.cs" />
     <Compile Include="EventArgs.cs" />

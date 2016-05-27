@@ -318,11 +318,11 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		~SerialPortEx()
 		{
-			EventCleanupHelper.DebugNotifyAllEventRemains(this);
+			EventManagementHelper.DebugNotifyAllEventRemains(this);
 
 			Dispose(false);
 
-			System.Diagnostics.Debug.WriteLine("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
 #endif // DEBUG

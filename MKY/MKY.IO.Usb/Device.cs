@@ -764,7 +764,7 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			EventCleanupHelper.DebugNotifyAllEventRemains(this);
+			EventManagementHelper.DebugNotifyAllEventRemains(this);
 
 			if (!this.isDisposed)
 			{
@@ -798,7 +798,7 @@ namespace MKY.IO.Usb
 		{
 			Dispose(false);
 
-			Debug.WriteLine("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
 #endif // DEBUG

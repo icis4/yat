@@ -228,7 +228,7 @@ namespace YAT.Domain.Parser
 		{
 			Dispose(false);
 
-			System.Diagnostics.Debug.WriteLine("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
 #endif // DEBUG

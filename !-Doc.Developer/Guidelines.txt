@@ -98,9 +98,16 @@ differing functionality.
 Events
 ------
 Use "EventArgs.Empty" instead of "new EventArgs()".
+Use MKY.EventHelper.
+Use MKY.Diagnostics.EventManagementHelper.Notify...() in Dispose() or ~Finalizer.
 
-Dispose
--------
+Finalization
+------------
+Use MKY.Diagnostics.FinalizationHelper
+
+Disposal
+--------
+Use MKY.Diagnostics.DisposalHelper
 
 Base class
 

@@ -39,7 +39,7 @@ namespace MKY.Diagnostics
 	/// <remarks>
 	/// Based on http://www.codeproject.com/Articles/103542/Removing-Event-Handlers-using-Reflection.
 	/// </remarks>
-	public static class EventCleanupHelper
+	public static class EventManagementHelper
 	{
 		private static BindingFlags AllBindings
 		{

@@ -56,7 +56,8 @@ namespace MKY.Data
 		/// <summary></summary>
 		~DataItem()
 		{
-			Diagnostics.EventCleanupHelper.DebugNotifyAllEventRemains(this);
+			Diagnostics.EventManagementHelper.DebugNotifyAllEventRemains(this);
+			Diagnostics.FinalizationHelper.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 
 #endif // DEBUG
