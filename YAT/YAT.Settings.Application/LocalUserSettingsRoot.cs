@@ -131,21 +131,11 @@ namespace YAT.Settings.Application
 			get { return (this.general); }
 			set
 			{
-				if (value == null)
+				if (this.general != value)
 				{
-					DetachNode(this.general);
-					this.general = null;
-				}
-				else if (this.general == null)
-				{
+					var oldNode = this.general;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.general = value;
-					AttachNode(this.general);
-				}
-				else if (this.general != value)
-				{
-					GeneralSettings old = this.general;
-					this.general = value;
-					ReplaceNode(old, this.general);
 				}
 			}
 		}
@@ -157,21 +147,11 @@ namespace YAT.Settings.Application
 			get { return (this.paths); }
 			set
 			{
-				if (value == null)
+				if (this.paths != value)
 				{
-					DetachNode(this.paths);
-					this.paths = null;
-				}
-				else if (this.paths == null)
-				{
+					var oldNode = this.paths;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.paths = value;
-					AttachNode(this.paths);
-				}
-				else if (this.paths != value)
-				{
-					PathSettings old = this.paths;
-					this.paths = value;
-					ReplaceNode(old, this.paths);
 				}
 			}
 		}
@@ -183,21 +163,11 @@ namespace YAT.Settings.Application
 			get { return (this.extensions); }
 			set
 			{
-				if (value == null)
+				if (this.extensions != value)
 				{
-					DetachNode(this.extensions);
-					this.extensions = null;
-				}
-				else if (this.extensions == null)
-				{
+					var oldNode = this.extensions;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.extensions = value;
-					AttachNode(this.extensions);
-				}
-				else if (this.extensions != value)
-				{
-					ExtensionSettings old = this.extensions;
-					this.extensions = value;
-					ReplaceNode(old, this.extensions);
 				}
 			}
 		}
@@ -209,21 +179,11 @@ namespace YAT.Settings.Application
 			get { return (this.autoAutoWorkspace); }
 			set
 			{
-				if (value == null)
+				if (this.autoAutoWorkspace != value)
 				{
-					DetachNode(this.autoAutoWorkspace);
-					this.autoAutoWorkspace = null;
-				}
-				else if (this.autoAutoWorkspace == null)
-				{
+					var oldNode = this.autoAutoWorkspace;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.autoAutoWorkspace = value;
-					AttachNode(this.autoAutoWorkspace);
-				}
-				else if (this.autoAutoWorkspace != value)
-				{
-					AutoWorkspaceSettings old = this.autoAutoWorkspace;
-					this.autoAutoWorkspace = value;
-					ReplaceNode(old, this.autoAutoWorkspace);
 				}
 			}
 		}
@@ -235,21 +195,11 @@ namespace YAT.Settings.Application
 			get { return (this.mainWindow); }
 			set
 			{
-				if (value == null)
+				if (this.mainWindow != value)
 				{
-					DetachNode(this.mainWindow);
-					this.mainWindow = null;
-				}
-				else if (this.mainWindow == null)
-				{
+					var oldNode = this.mainWindow;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.mainWindow = value;
-					AttachNode(this.mainWindow);
-				}
-				else if (this.mainWindow != value)
-				{
-					Model.Settings.MainWindowSettings old = this.mainWindow;
-					this.mainWindow = value;
-					ReplaceNode(old, this.mainWindow);
 				}
 			}
 		}
@@ -261,21 +211,11 @@ namespace YAT.Settings.Application
 			get { return (this.newTerminal); }
 			set
 			{
-				if (value == null)
+				if (this.newTerminal != value)
 				{
-					DetachNode(this.newTerminal);
-					this.newTerminal = null;
-				}
-				else if (this.newTerminal == null)
-				{
+					var oldNode = this.newTerminal;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.newTerminal = value;
-					AttachNode(this.newTerminal);
-				}
-				else if (this.newTerminal != value)
-				{
-					Model.Settings.NewTerminalSettings old = this.newTerminal;
-					this.newTerminal = value;
-					ReplaceNode(old, this.newTerminal);
 				}
 			}
 		}
@@ -287,21 +227,11 @@ namespace YAT.Settings.Application
 			get { return (this.recentFiles); }
 			set
 			{
-				if (value == null)
+				if (this.recentFiles != value)
 				{
-					DetachNode(this.recentFiles);
-					this.recentFiles = null;
-				}
-				else if (this.recentFiles == null)
-				{
+					var oldNode = this.recentFiles;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.recentFiles = value;
-					AttachNode(this.recentFiles);
-				}
-				else if (this.recentFiles != value)
-				{
-					Model.Settings.RecentFileSettings old = this.recentFiles;
-					this.recentFiles = value;
-					ReplaceNode(old, this.recentFiles);
 				}
 			}
 		}

@@ -209,21 +209,11 @@ namespace YAT.Model.Settings
 			get { return (this.serialPortCommunication); }
 			set
 			{
-				if (value == null)
+				if (this.serialPortCommunication != value)
 				{
-					DetachNode(this.serialPortCommunication);
-					this.serialPortCommunication = null;
-				}
-				else if (this.serialPortCommunication == null)
-				{
+					var oldNode = this.serialPortCommunication;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.serialPortCommunication = value;
-					AttachNode(this.serialPortCommunication);
-				}
-				else if (this.serialPortCommunication != value)
-				{
-					MKY.IO.Serial.SerialPort.SerialCommunicationSettings old = this.serialPortCommunication;
-					this.serialPortCommunication = value;
-					ReplaceNode(old, this.serialPortCommunication);
 				}
 			}
 		}

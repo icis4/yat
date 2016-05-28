@@ -138,21 +138,11 @@ namespace YAT.Settings.Terminal
 			get { return (this.sendText); }
 			set
 			{
-				if (value == null)
+				if (this.sendText != value)
 				{
-					DetachNode(this.sendText);
-					this.sendText = null;
-				}
-				else if (this.sendText == null)
-				{
+					var oldNode = this.sendText;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.sendText = value;
-					AttachNode(this.sendText);
-				}
-				else if (this.sendText != value)
-				{
-					Model.Settings.SendTextSettings old = this.sendText;
-					this.sendText = value;
-					ReplaceNode(old, this.sendText);
 				}
 			}
 		}
@@ -164,21 +154,11 @@ namespace YAT.Settings.Terminal
 			get { return (this.sendFile); }
 			set
 			{
-				if (value == null)
+				if (this.sendFile != value)
 				{
-					DetachNode(this.sendFile);
-					this.sendFile = null;
-				}
-				else if (this.sendFile == null)
-				{
+					var oldNode = this.sendFile;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.sendFile = value;
-					AttachNode(this.sendFile);
-				}
-				else if (this.sendFile != value)
-				{
-					Model.Settings.SendFileSettings old = this.sendFile;
-					this.sendFile = value;
-					ReplaceNode(old, this.sendFile);
 				}
 			}
 		}
@@ -190,21 +170,11 @@ namespace YAT.Settings.Terminal
 			get { return (this.predefined); }
 			set
 			{
-				if (value == null)
+				if (this.predefined != value)
 				{
-					DetachNode(this.predefined);
-					this.predefined = null;
-				}
-				else if (this.predefined == null)
-				{
+					var oldNode = this.predefined;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.predefined = value;
-					AttachNode(this.predefined);
-				}
-				else if (this.predefined != value)
-				{
-					Model.Settings.PredefinedSettings old = this.predefined;
-					this.predefined = value;
-					ReplaceNode(old, this.predefined);
 				}
 			}
 		}
@@ -216,21 +186,11 @@ namespace YAT.Settings.Terminal
 			get { return (this.autoResponse); }
 			set
 			{
-				if (value == null)
+				if (this.autoResponse != value)
 				{
-					DetachNode(this.autoResponse);
-					this.autoResponse = null;
-				}
-				else if (this.autoResponse == null)
-				{
+					var oldNode = this.autoResponse;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.autoResponse = value;
-					AttachNode(this.autoResponse);
-				}
-				else if (this.autoResponse != value)
-				{
-					Model.Settings.AutoResponseSettings old = this.autoResponse;
-					this.autoResponse = value;
-					ReplaceNode(old, this.autoResponse);
 				}
 			}
 		}
@@ -242,21 +202,11 @@ namespace YAT.Settings.Terminal
 			get { return (this.window); }
 			set
 			{
-				if (value == null)
+				if (this.window != value)
 				{
-					DetachNode(this.window);
-					this.window = null;
-				}
-				else if (this.window == null)
-				{
+					var oldNode = this.window;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.window = value;
-					AttachNode(this.window);
-				}
-				else if (this.window != value)
-				{
-					Model.Settings.WindowSettings old = this.window;
-					this.window = value;
-					ReplaceNode(old, this.window);
 				}
 			}
 		}
@@ -268,21 +218,11 @@ namespace YAT.Settings.Terminal
 			get { return (this.layout); }
 			set
 			{
-				if (value == null)
+				if (this.layout != value)
 				{
-					DetachNode(this.layout);
-					this.layout = null;
-				}
-				else if (this.layout == null)
-				{
+					var oldNode = this.layout;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.layout = value;
-					AttachNode(this.layout);
-				}
-				else if (this.layout != value)
-				{
-					Model.Settings.LayoutSettings old = this.layout;
-					this.layout = value;
-					ReplaceNode(old, this.layout);
 				}
 			}
 		}
@@ -294,21 +234,11 @@ namespace YAT.Settings.Terminal
 			get { return (this.view); }
 			set
 			{
-				if (value == null)
+				if (this.view != value)
 				{
-					DetachNode(this.view);
-					this.view = null;
-				}
-				else if (this.view == null)
-				{
+					var oldNode = this.view;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.view = value;
-					AttachNode(this.view);
-				}
-				else if (this.view != value)
-				{
-					Model.Settings.ViewSettings old = this.view;
-					this.view = value;
-					ReplaceNode(old, this.view);
 				}
 			}
 		}

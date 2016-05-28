@@ -156,21 +156,11 @@ namespace YAT.Domain.Settings
 			get { return (this.io); }
 			set
 			{
-				if (value == null)
+				if (this.io != value)
 				{
-					DetachNode(this.io);
-					this.io = null;
-				}
-				else if (this.io == null)
-				{
+					var oldNode = this.io;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.io = value;
-					AttachNode(this.io);
-				}
-				else if (this.io != value)
-				{
-					IOSettings old = this.io;
-					this.io = value;
-					ReplaceNode(old, this.io);
 				}
 			}
 		}
@@ -182,21 +172,11 @@ namespace YAT.Domain.Settings
 			get { return (this.status); }
 			set
 			{
-				if (value == null)
+				if (this.status != value)
 				{
-					DetachNode(this.status);
-					this.status = null;
-				}
-				else if (this.status == null)
-				{
+					var oldNode = this.status;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.status = value;
-					AttachNode(this.status);
-				}
-				else if (this.status != value)
-				{
-					StatusSettings old = this.status;
-					this.status = value;
-					ReplaceNode(old, this.status);
 				}
 			}
 		}
@@ -208,21 +188,11 @@ namespace YAT.Domain.Settings
 			get { return (this.buffer); }
 			set
 			{
-				if (value == null)
+				if (this.buffer != value)
 				{
-					DetachNode(this.buffer);
-					this.buffer = null;
-				}
-				else if (this.buffer == null)
-				{
+					var oldNode = this.buffer;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.buffer = value;
-					AttachNode(this.buffer);
-				}
-				else if (this.buffer != value)
-				{
-					BufferSettings old = this.buffer;
-					this.buffer = value;
-					ReplaceNode(old, this.buffer);
 				}
 			}
 		}
@@ -234,21 +204,11 @@ namespace YAT.Domain.Settings
 			get { return (this.display); }
 			set
 			{
-				if (value == null)
+				if (this.display != value)
 				{
-					DetachNode(this.display);
-					this.display = null;
-				}
-				else if (this.display == null)
-				{
+					var oldNode = this.display;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.display = value;
-					AttachNode(this.display);
-				}
-				else if (this.display != value)
-				{
-					DisplaySettings old = this.display;
-					this.display = value;
-					ReplaceNode(old, this.display);
 				}
 			}
 		}
@@ -260,21 +220,11 @@ namespace YAT.Domain.Settings
 			get { return (this.charReplace); }
 			set
 			{
-				if (value == null)
+				if (this.charReplace != value)
 				{
-					DetachNode(this.charReplace);
-					this.charReplace = null;
-				}
-				else if (this.charReplace == null)
-				{
+					var oldNode = this.charReplace;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.charReplace = value;
-					AttachNode(this.charReplace);
-				}
-				else if (this.charReplace != value)
-				{
-					CharReplaceSettings old = this.charReplace;
-					this.charReplace = value;
-					ReplaceNode(old, this.charReplace);
 				}
 			}
 		}
@@ -286,21 +236,11 @@ namespace YAT.Domain.Settings
 			get { return (this.charHide); }
 			set
 			{
-				if (value == null)
+				if (this.charHide != value)
 				{
-					DetachNode(this.charHide);
-					this.charHide = null;
-				}
-				else if (this.charHide == null)
-				{
+					var oldNode = this.charHide;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.charHide = value;
-					AttachNode(this.charHide);
-				}
-				else if (this.charHide != value)
-				{
-					CharHideSettings old = this.charHide;
-					this.charHide = value;
-					ReplaceNode(old, this.charHide);
 				}
 			}
 		}
@@ -312,21 +252,11 @@ namespace YAT.Domain.Settings
 			get { return (this.send); }
 			set
 			{
-				if (value == null)
+				if (this.send != value)
 				{
-					DetachNode(this.send);
-					this.send = null;
-				}
-				else if (this.send == null)
-				{
+					var oldNode = this.send;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.send = value;
-					AttachNode(this.send);
-				}
-				else if (this.send != value)
-				{
-					SendSettings old = this.send;
-					this.send = value;
-					ReplaceNode(old, this.send);
 				}
 			}
 		}
@@ -338,21 +268,11 @@ namespace YAT.Domain.Settings
 			get { return (this.textTerminal); }
 			set
 			{
-				if (value == null)
+				if (this.textTerminal != value)
 				{
-					DetachNode(this.textTerminal);
-					this.textTerminal = null;
-				}
-				else if (this.textTerminal == null)
-				{
+					var oldNode = this.textTerminal;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.textTerminal = value;
-					AttachNode(this.textTerminal);
-				}
-				else if (this.textTerminal != value)
-				{
-					TextTerminalSettings old = this.textTerminal;
-					this.textTerminal = value;
-					ReplaceNode(old, this.textTerminal);
 				}
 			}
 		}
@@ -364,21 +284,11 @@ namespace YAT.Domain.Settings
 			get { return (this.binaryTerminal); }
 			set
 			{
-				if (value == null)
+				if (this.binaryTerminal != value)
 				{
-					DetachNode(this.binaryTerminal);
-					this.binaryTerminal = null;
-				}
-				else if (this.binaryTerminal == null)
-				{
+					var oldNode = this.binaryTerminal;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.binaryTerminal = value;
-					AttachNode(this.binaryTerminal);
-				}
-				else if (this.binaryTerminal != value)
-				{
-					BinaryTerminalSettings old = this.binaryTerminal;
-					this.binaryTerminal = value;
-					ReplaceNode(old, this.binaryTerminal);
 				}
 			}
 		}

@@ -264,21 +264,11 @@ namespace YAT.Domain.Settings
 			get { return (this.eolComment); }
 			set
 			{
-				if (value == null)
+				if (this.eolComment != value)
 				{
-					DetachNode(this.eolComment);
-					this.eolComment = null;
-				}
-				else if (this.eolComment == null)
-				{
+					var oldNode = this.eolComment;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.eolComment = value;
-					AttachNode(this.eolComment);
-				}
-				else if (this.eolComment != value)
-				{
-					EolCommentSettings old = this.eolComment;
-					this.eolComment = value;
-					ReplaceNode(old, this.eolComment);
 				}
 			}
 		}

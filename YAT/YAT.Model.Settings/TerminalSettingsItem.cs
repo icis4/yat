@@ -161,21 +161,11 @@ namespace YAT.Model.Settings
 			get { return (this.window); }
 			set
 			{
-				if (value == null)
+				if (this.window != value)
 				{
-					DetachNode(this.window);
-					this.window = null;
-				}
-				else if (this.window == null)
-				{
+					var oldNode = this.window;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.window = value;
-					AttachNode(this.window);
-				}
-				else if (this.window != value)
-				{
-					WindowSettings old = this.window;
-					this.window = value;
-					ReplaceNode(old, this.window);
 				}
 			}
 		}

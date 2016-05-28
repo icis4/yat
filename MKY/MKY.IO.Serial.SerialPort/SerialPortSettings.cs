@@ -235,21 +235,11 @@ namespace MKY.IO.Serial.SerialPort
 			get { return (this.communication); }
 			set
 			{
-				if (value == null)
+				if (this.communication != value)
 				{
-					DetachNode(this.communication);
-					this.communication = null;
-				}
-				else if (this.communication == null)
-				{
+					var oldNode = this.communication;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.communication = value;
-					AttachNode(this.communication);
-				}
-				else if (this.communication != value)
-				{
-					SerialCommunicationSettings old = this.communication;
-					this.communication = value;
-					ReplaceNode(old, this.communication);
 				}
 			}
 		}

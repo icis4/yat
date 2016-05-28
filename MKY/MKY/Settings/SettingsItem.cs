@@ -88,8 +88,8 @@ namespace MKY.Settings
 		/// <summary></summary>
 		~SettingsItem()
 		{
-			Diagnostics.EventManagementHelper.DebugNotifyAllEventRemains(this);
-			Diagnostics.FinalizationHelper.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
+			Diagnostics.DebugEventManagement.DebugNotifyAllEventRemains(this);
+			Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 
 #endif // DEBUG
@@ -103,6 +103,27 @@ namespace MKY.Settings
 		public virtual SettingsType SettingsType
 		{
 			get { return (this.settingsType); }
+		}
+
+		/// <summary></summary>
+		protected virtual void AttachOrReplaceOrDetachNode(SettingsItem nodeOld, SettingsItem nodeNew)
+		{
+			if      (nodeNew == null)
+			{
+				DetachNode(nodeOld);
+			}
+			else if (nodeOld == null)
+			{
+				AttachNode(nodeNew);
+			}
+			else if (nodeNew != nodeOld)
+			{
+				ReplaceNode(nodeOld, nodeNew);
+			}
+			else // nodeNew == nodeOld
+			{
+				// Nothing to do.
+			}
 		}
 
 		/// <summary></summary>
