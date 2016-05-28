@@ -122,21 +122,11 @@ namespace YAT.Domain.Settings
 			get { return (this.txDisplay); }
 			set
 			{
-				if (value == null)
+				if (this.txDisplay != value)
 				{
-					DetachNode(this.txDisplay);
-					this.txDisplay = null;
-				}
-				else if (this.txDisplay == null)
-				{
+					var oldNode = this.txDisplay;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.txDisplay = value;
-					AttachNode(this.txDisplay);
-				}
-				else if (this.txDisplay != value)
-				{
-					BinaryDisplaySettings old = this.txDisplay;
-					this.txDisplay = value;
-					ReplaceNode(old, this.txDisplay);
 				}
 			}
 		}
@@ -154,21 +144,11 @@ namespace YAT.Domain.Settings
 			}
 			set
 			{
-				if (value == null)
+				if (this.txDisplay != value)
 				{
-					DetachNode(this.rxDisplay);
-					this.rxDisplay = null;
-				}
-				else if (this.rxDisplay == null)
-				{
-					this.rxDisplay = value;
-					AttachNode(this.rxDisplay);
-				}
-				else if (this.rxDisplay != value)
-				{
-					BinaryDisplaySettings old = this.rxDisplay;
-					this.rxDisplay = value;
-					ReplaceNode(old, this.rxDisplay);
+					var oldNode = this.txDisplay;
+					AttachOrReplaceOrDetachNode(oldNode, value);
+					this.txDisplay = value;
 				}
 			}
 		}

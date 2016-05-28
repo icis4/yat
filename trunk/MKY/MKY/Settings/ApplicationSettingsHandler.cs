@@ -220,7 +220,7 @@ namespace MKY.Settings
 			{
 				Dispose(false);
 
-				DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
+				DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 			}
 
 #endif // DEBUG
@@ -552,7 +552,7 @@ namespace MKY.Settings
 		{
 			Dispose(false);
 
-			DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
+			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
 #endif // DEBUG

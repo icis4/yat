@@ -145,21 +145,11 @@ namespace YAT.Domain.Settings
 			get { return (this.serialPort); }
 			set
 			{
-				if (value == null)
+				if (this.serialPort != value)
 				{
-					DetachNode(this.serialPort);
-					this.serialPort = null;
-				}
-				else if (this.serialPort == null)
-				{
+					var oldNode = this.serialPort;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.serialPort = value;
-					AttachNode(this.serialPort);
-				}
-				else if (this.serialPort != value)
-				{
-					MKY.IO.Serial.SerialPort.SerialPortSettings old = this.serialPort;
-					this.serialPort = value;
-					ReplaceNode(old, this.serialPort);
 				}
 			}
 		}
@@ -171,21 +161,11 @@ namespace YAT.Domain.Settings
 			get { return (this.socket); }
 			set
 			{
-				if (value == null)
+				if (this.socket != value)
 				{
-					DetachNode(this.socket);
-					this.socket = null;
-				}
-				else if (this.socket == null)
-				{
+					var oldNode = this.socket;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.socket = value;
-					AttachNode(this.socket);
-				}
-				else if (this.socket != value)
-				{
-					MKY.IO.Serial.Socket.SocketSettings old = this.socket;
-					this.socket = value;
-					ReplaceNode(old, this.socket);
 				}
 			}
 		}
@@ -197,21 +177,11 @@ namespace YAT.Domain.Settings
 			get { return (this.usbSerialHidDevice); }
 			set
 			{
-				if (value == null)
+				if (this.usbSerialHidDevice != value)
 				{
-					DetachNode(this.usbSerialHidDevice);
-					this.usbSerialHidDevice = null;
-				}
-				else if (this.usbSerialHidDevice == null)
-				{
+					var oldNode = this.usbSerialHidDevice;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.usbSerialHidDevice = value;
-					AttachNode(this.usbSerialHidDevice);
-				}
-				else if (this.usbSerialHidDevice != value)
-				{
-					MKY.IO.Serial.Usb.SerialHidDeviceSettings old = this.usbSerialHidDevice;
-					this.usbSerialHidDevice = value;
-					ReplaceNode(old, this.usbSerialHidDevice);
 				}
 			}
 		}

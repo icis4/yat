@@ -97,7 +97,7 @@ namespace MKY.Settings
 		/// </remarks>
 		~SettingsFileHandler()
 		{
-			FinalizationHelper.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
+			DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 
 #endif // DEBUG

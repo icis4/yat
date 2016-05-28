@@ -147,21 +147,11 @@ namespace YAT.Settings.Terminal
 			get { return (this.explicit_); }
 			set
 			{
-				if (value == null)
+				if (this.explicit_ != value)
 				{
-					DetachNode(this.explicit_);
-					this.explicit_ = null;
-				}
-				else if (this.explicit_ == null)
-				{
+					var oldNode = this.explicit_;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.explicit_ = value;
-					AttachNode(this.explicit_);
-				}
-				else if (this.explicit_ != value)
-				{
-					ExplicitSettings old = this.explicit_;
-					this.explicit_ = value;
-					ReplaceNode(old, this.explicit_);
 				}
 			}
 		}
@@ -173,21 +163,11 @@ namespace YAT.Settings.Terminal
 			get { return (this.implicit_); }
 			set
 			{
-				if (value == null)
+				if (this.implicit_ != value)
 				{
-					DetachNode(this.implicit_);
-					this.implicit_ = null;
-				}
-				else if (this.implicit_ == null)
-				{
+					var oldNode = this.implicit_;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.implicit_ = value;
-					AttachNode(this.implicit_);
-				}
-				else if (this.implicit_ != value)
-				{
-					ImplicitSettings old = this.implicit_;
-					this.implicit_ = value;
-					ReplaceNode(old, this.implicit_);
 				}
 			}
 		}

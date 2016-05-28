@@ -130,21 +130,11 @@ namespace YAT.Settings.Workspace
 			get { return (this.workspace); }
 			set
 			{
-				if (value == null)
+				if (this.workspace != value)
 				{
-					DetachNode(this.workspace);
-					this.workspace = null;
-				}
-				else if (this.workspace == null)
-				{
+					var oldNode = this.workspace;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.workspace = value;
-					AttachNode(this.workspace);
-				}
-				else if (this.workspace != value)
-				{
-					WorkspaceSettings old = this.workspace;
-					this.workspace = value;
-					ReplaceNode(old, this.workspace);
 				}
 			}
 		}

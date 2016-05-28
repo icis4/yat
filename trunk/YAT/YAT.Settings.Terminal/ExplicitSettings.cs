@@ -110,21 +110,11 @@ namespace YAT.Settings.Terminal
 			get { return (this.terminal); }
 			set
 			{
-				if (value == null)
+				if (this.terminal != value)
 				{
-					DetachNode(this.terminal);
-					this.terminal = null;
-				}
-				else if (this.terminal == null)
-				{
+					var oldNode = this.terminal;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.terminal = value;
-					AttachNode(this.terminal);
-				}
-				else if (this.terminal != value)
-				{
-					Domain.Settings.TerminalSettings old = this.terminal;
-					this.terminal = value;
-					ReplaceNode(old, this.terminal);
 				}
 			}
 		}
@@ -136,21 +126,11 @@ namespace YAT.Settings.Terminal
 			get { return (this.predefinedCommand); }
 			set
 			{
-				if (value == null)
+				if (this.predefinedCommand != value)
 				{
-					DetachNode(this.predefinedCommand);
-					this.predefinedCommand = null;
-				}
-				else if (this.predefinedCommand == null)
-				{
+					var oldNode = this.predefinedCommand;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.predefinedCommand = value;
-					AttachNode(this.predefinedCommand);
-				}
-				else if (this.predefinedCommand != value)
-				{
-					Model.Settings.PredefinedCommandSettings old = this.predefinedCommand;
-					this.predefinedCommand = value;
-					ReplaceNode(old, this.predefinedCommand);
 				}
 			}
 		}
@@ -162,21 +142,11 @@ namespace YAT.Settings.Terminal
 			get { return (this.format); }
 			set
 			{
-				if (value == null)
+				if (this.format != value)
 				{
-					DetachNode(this.format);
-					this.format = null;
-				}
-				else if (this.format == null)
-				{
+					var oldNode = this.format;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.format = value;
-					AttachNode(this.format);
-				}
-				else if (this.format != value)
-				{
-					Model.Settings.FormatSettings old = this.format;
-					this.format = value;
-					ReplaceNode(old, this.format);
 				}
 			}
 		}
@@ -188,21 +158,11 @@ namespace YAT.Settings.Terminal
 			get { return (this.log); }
 			set
 			{
-				if (value == null)
+				if (this.log != value)
 				{
-					DetachNode(this.log);
-					this.log = null;
-				}
-				else if (this.log == null)
-				{
+					var oldNode = this.log;
+					AttachOrReplaceOrDetachNode(oldNode, value);
 					this.log = value;
-					AttachNode(this.log);
-				}
-				else if (this.log != value)
-				{
-					Log.Settings.LogSettings old = this.log;
-					this.log = value;
-					ReplaceNode(old, this.log);
 				}
 			}
 		}

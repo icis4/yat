@@ -202,21 +202,11 @@ namespace MKY.Test.Settings
 				get { return (this.childLevel2A); }
 				set
 				{
-					if (value == null)
+					if (this.childLevel2A != value)
 					{
-						DetachNode(this.childLevel2A);
-						this.childLevel2A = null;
-					}
-					else if (this.childLevel2A == null)
-					{
+						var oldNode = this.childLevel2A;
+						AttachOrReplaceOrDetachNode(oldNode, value);
 						this.childLevel2A = value;
-						AttachNode(this.childLevel2A);
-					}
-					else if (this.childLevel2A != value)
-					{
-						TestTreeChildLevel2 old = this.childLevel2A;
-						this.childLevel2A = value;
-						ReplaceNode(old, this.childLevel2A);
 					}
 				}
 			}
@@ -228,21 +218,11 @@ namespace MKY.Test.Settings
 				get { return (this.childLevel2B); }
 				set
 				{
-					if (value == null)
+					if (this.childLevel2B != value)
 					{
-						DetachNode(this.childLevel2B);
-						this.childLevel2B = null;
-					}
-					else if (this.childLevel2B == null)
-					{
+						var oldNode = this.childLevel2B;
+						AttachOrReplaceOrDetachNode(oldNode, value);
 						this.childLevel2B = value;
-						AttachNode(this.childLevel2B);
-					}
-					else if (this.childLevel2B != value)
-					{
-						TestTreeChildLevel2 old = this.childLevel2B;
-						this.childLevel2B = value;
-						ReplaceNode(old, this.childLevel2B);
 					}
 				}
 			}
@@ -354,21 +334,11 @@ namespace MKY.Test.Settings
 				get { return (this.childLevel1); }
 				set
 				{
-					if (value == null)
+					if (this.childLevel1 != value)
 					{
-						DetachNode(this.childLevel1);
-						this.childLevel1 = null;
-					}
-					else if (this.childLevel1 == null)
-					{
+						var oldNode = this.childLevel1;
+						AttachOrReplaceOrDetachNode(oldNode, value);
 						this.childLevel1 = value;
-						AttachNode(this.childLevel1);
-					}
-					else if (this.childLevel1 != value)
-					{
-						TestTreeChildLevel1 old = this.childLevel1;
-						this.childLevel1 = value;
-						ReplaceNode(old, this.childLevel1);
 					}
 				}
 			}
