@@ -27,7 +27,7 @@ using System.Windows.Forms;
 namespace MKY.Windows.Forms
 {
 	/// <summary>
-	/// Provides a list box that extends <see cref="MenuStrip"/>.
+	/// Extends <see cref="MenuStrip"/>.
 	/// </summary>
 	/// <remarks>
 	/// Workaround to the Windows/WinForms requirement to first activate the application before
@@ -35,7 +35,7 @@ namespace MKY.Windows.Forms
 	/// http://stackoverflow.com/questions/3427696/windows-requires-a-click-to-activate-a-window-before-a-second-click-will-select.
 	/// 
 	/// Attention:
-	/// The same code also exists in <see cref="ToolStrip"/>.
+	/// The same code also exists in <see cref="StatusStripEx"/> and <see cref="ToolStripEx"/>.
 	/// Changes here must be applied there too.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]

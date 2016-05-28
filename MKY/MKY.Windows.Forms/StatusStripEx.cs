@@ -27,19 +27,19 @@ using System.Windows.Forms;
 namespace MKY.Windows.Forms
 {
 	/// <summary>
-	/// Extends <see cref="ToolStrip"/>.
+	/// Extends <see cref="StatusStrip"/>.
 	/// </summary>
 	/// <remarks>
 	/// Workaround to the Windows/WinForms requirement to first activate the application before
 	/// a menu or tool strip can be invoked. Based on:
-	/// http://stackoverflow.com/questions/3427696/windows-requires-a-click-to-activate-a-window-before-a-second-click-will-select
+	/// http://stackoverflow.com/questions/3427696/windows-requires-a-click-to-activate-a-window-before-a-second-click-will-select.
 	/// 
 	/// Attention:
-	/// The same code also exists in <see cref="MenuStripEx"/> and <see cref="StatusStripEx"/>.
+	/// The same code also exists in <see cref="MenuStripEx"/> and <see cref="ToolStripEx"/>.
 	/// Changes here must be applied there too.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
-	public class ToolStripEx : ToolStrip
+	public class StatusStripEx : StatusStrip
 	{
 		private const int WM_LBUTTONDOWN = 0x201;
 		private const int WM_LBUTTONUP   = 0x202;
