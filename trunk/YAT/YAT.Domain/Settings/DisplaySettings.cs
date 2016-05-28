@@ -91,12 +91,12 @@ namespace YAT.Domain.Settings
 		private bool portLineBreakEnabled;
 		private bool directionLineBreakEnabled;
 
-		private InfoElementSeparatorEx infoSeparator; // = null
-		private InfoElementEnclosureEx infoEnclosure; // = null
+		private InfoElementSeparatorEx infoSeparator; // = null;
+		private InfoElementEnclosureEx infoEnclosure; // = null;
 
-		private string infoSeparatorCache;      // = null
-		private string infoEnclosureLeftCache;  // = null
-		private string infoEnclosureRightCache; // = null
+		private string infoSeparatorCache;      // = null;
+		private string infoEnclosureLeftCache;  // = null;
+		private string infoEnclosureRightCache; // = null;
 
 		/// <summary></summary>
 		public DisplaySettings()

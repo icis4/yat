@@ -47,17 +47,21 @@ namespace MKY
 		}
 
 		private static Dictionary<Type, List<FieldInfo>> staticEventFieldInfoCache = new Dictionary<Type, List<FieldInfo>>();
+		private static object staticEventFieldInfoCacheSyncObj = new object();
 
 		private static List<FieldInfo> GetEventFields(Type type)
 		{
-			// Retrieve from cache if available:
-			if (staticEventFieldInfoCache.ContainsKey(type))
-				return (staticEventFieldInfoCache[type]);
+			lock (staticEventFieldInfoCacheSyncObj)
+			{
+				// Retrieve from cache if available:
+				if (staticEventFieldInfoCache.ContainsKey(type))
+					return (staticEventFieldInfoCache[type]);
 
-			// Retrieve using reflection and add to cache:
-			List<FieldInfo> fis = GetEventFieldsUsingReflection(type);
-			staticEventFieldInfoCache.Add(type, fis);
-			return (fis);
+				// Retrieve using reflection and add to cache:
+				List<FieldInfo> fis = GetEventFieldsUsingReflection(type);
+				staticEventFieldInfoCache.Add(type, fis);
+				return (fis);
+			}
 		}
 
 		private static List<FieldInfo> GetEventFieldsUsingReflection(Type type)

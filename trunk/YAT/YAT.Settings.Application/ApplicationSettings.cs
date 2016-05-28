@@ -130,14 +130,14 @@ namespace YAT.Settings.Application
 		/// So far, there are only local user settings.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public static bool Create(ApplicationSettingsFileAccess fileAccess)
+		public static bool Create(ApplicationSettingsFileAccess localUserSettingsFileAccess)
 		{
 			try
 			{
 				staticSettingsHandler = new ApplicationSettingsHandler<EmptySettingsItem, LocalUserSettingsRoot, EmptySettingsItem>
 				(
 					ApplicationSettingsFileAccess.None,
-					fileAccess,
+					localUserSettingsFileAccess,
 					ApplicationSettingsFileAccess.None
 				);
 

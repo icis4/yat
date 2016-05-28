@@ -44,7 +44,7 @@ namespace YAT.View.Controls
 
 		private Font font = new Font(Model.Types.FontFormat.NameDefault, Model.Types.FontFormat.SizeDefault, Model.Types.FontFormat.StyleDefault);
 		private Color color = Color.Black;
-		private int[] customColors; // = null
+		private int[] customColors; // = null;
 
 		#endregion
 

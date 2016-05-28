@@ -142,18 +142,18 @@ Base class
 				// Dispose of managed resources:
 				if (disposing)
 				{
-					if (<ITEM> != null)
-						<ITEM>.Dispose();
+					if (this.FIELD != null)
+						this.FIELD.Dispose();
 
-					// In the 'normal' case, the <ITEM> is <CLOSED> in <METHOD>().
+					// In the 'normal' case, the FIELD is CLOSED/DISPOSED in METHOD().
 				}
 
 				// Dispose of unmanaged resources:
-				if (<ITEM> != null)
-					<ITEM>.Dispose();
+				if (this.FIELD != null)
+					this.FIELD.Dispose();
 
 				// Set state to disposed:
-				<ITEM> = null;
+				this.FIELD = null;
 				this.isDisposed = true;
 			}
 		}
@@ -171,11 +171,11 @@ Base class
 		/// 
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
-		~<Class>()
+		~CLASS()
 		{
 			Dispose(false);
 
-			System.Diagnostics.Debug.WriteLine("The finalizer of this '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			MKY.Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
 #endif // DEBUG

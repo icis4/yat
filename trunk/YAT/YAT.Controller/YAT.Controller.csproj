@@ -104,6 +104,7 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="CommandLineArgs.cs" />
+    <Compile Include="Diagnostics\DebugFinalization.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="MainResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

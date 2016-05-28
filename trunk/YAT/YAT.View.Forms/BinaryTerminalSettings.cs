@@ -195,6 +195,7 @@ namespace YAT.View.Forms
 				groupBox_TxDisplay.Text = "&Tx and Rx";
 			else
 				groupBox_TxDisplay.Text = "&Tx";
+
 			binaryTerminalSettingsSet_Tx.Settings = this.settingsInEdit.TxDisplay;
 
 			checkBox_SeparateTxRxDisplay.Checked = this.settingsInEdit.SeparateTxRxDisplay;

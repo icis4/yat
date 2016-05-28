@@ -681,8 +681,8 @@ namespace YAT.Domain
 						RawChunk re = new RawChunk(e.Data, e.TimeStamp, e.PortStamp, IODirection.Rx);
 						lock (this.repositorySyncObj)
 						{
-							this.rxRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
-							this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
+							this.rxRepository   .Enqueue(re.Clone()); // Clone element as it is needed again below.
+							this.bidirRepository.Enqueue(re.Clone()); // Clone element as it is needed again below.
 						}
 						OnRawChunkReceived(new EventArgs<RawChunk>(re));
 					}
@@ -716,8 +716,8 @@ namespace YAT.Domain
 						RawChunk re = new RawChunk(e.Data, e.TimeStamp, e.PortStamp, IODirection.Tx);
 						lock (this.repositorySyncObj)
 						{
-							this.txRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
-							this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
+							this.txRepository   .Enqueue(re.Clone()); // Clone element as it is needed again below.
+							this.bidirRepository.Enqueue(re.Clone()); // Clone element as it is needed again below.
 						}
 						OnRawChunkSent(new EventArgs<RawChunk>(re));
 					}

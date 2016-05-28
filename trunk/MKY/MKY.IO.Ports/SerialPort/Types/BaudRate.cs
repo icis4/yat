@@ -99,7 +99,7 @@ namespace MKY.IO.Ports
 
 		/// <summary></summary>
 		public BaudRateEx(int baudRate)
-			: base(BaudRate.Explicit)
+			: this(BaudRate.Explicit)
 		{
 			if (IsPotentiallyValidBaudRate(baudRate))
 			{

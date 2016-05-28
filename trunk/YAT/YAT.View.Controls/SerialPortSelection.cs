@@ -76,7 +76,7 @@ namespace YAT.View.Controls
 		/// </remarks>
 		private SerialPortId portId = SerialPortId.FirstStandardPort;
 
-		private StatusBox showStatusDialog; // = null
+		private StatusBox showStatusDialog; // = null;
 
 		#endregion
 

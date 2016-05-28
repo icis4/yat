@@ -89,7 +89,7 @@ namespace YAT.Domain
 
 		#endregion
 
-		private string explicitEnclosure; // = null
+		private string explicitEnclosure; // = null;
 
 		/// <summary>Default is <see cref="InfoElementEnclosure.None"/>.</summary>
 		public const InfoElementEnclosure Default = InfoElementEnclosure.None;
@@ -110,7 +110,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public InfoElementEnclosureEx(string enclosure)
-			: base(InfoElementEnclosure.Explicit)
+			: this(InfoElementEnclosure.Explicit)
 		{
 			this.explicitEnclosure = enclosure;
 		}

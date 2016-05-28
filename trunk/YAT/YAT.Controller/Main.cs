@@ -446,12 +446,11 @@ namespace YAT.Controller
 				{
 #endif
 					// Application settings must be created and closed on main thread, otherwise
-					// there will be a synchronization exception on exit.
+					// there will be a synchronization exception on exit (settings are closed there):
 					if (!ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadSharedWriteIfOwned))
 						return (MainResult.ApplicationSettingsError);
-				
-					// ApplicationSettings are loaded while showing the welcome screen, and will
-					// be closed when exiting or disposing the main model.
+
+					// Application settings are loaded while showing the welcome screen:
 					View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen();
 					if (welcomeScreen.ShowDialog() != DialogResult.OK)
 						return (MainResult.ApplicationSettingsError);
@@ -593,12 +592,11 @@ namespace YAT.Controller
 				{
 #endif
 					// Application settings must be created and closed on main thread, otherwise
-					// there will be a synchronization exception on exit.
+					// there will be a synchronization exception on exit (settings are closed there):
 					if (!ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadSharedWriteIfOwned))
 						return (MainResult.ApplicationSettingsError);
 
-					// ApplicationSettings are loaded while showing the welcome screen, and will
-					// be closed when exiting or disposing the main model.
+					// Application settings are loaded while showing the welcome screen:
 					View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen();
 					if (welcomeScreen.ShowDialog() != DialogResult.OK)
 						return (MainResult.ApplicationSettingsError);
@@ -725,7 +723,7 @@ namespace YAT.Controller
 						//   either settings have been loaded or settings have been set to defaults.
 						ApplicationSettings.Load();
 
-						// The ApplicationSettings will be closed when exiting or disposing the main model.
+						// Application settings will be closed when exiting main.
 					}
 					else
 					{
@@ -814,10 +812,10 @@ namespace YAT.Controller
 					if (ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadShared))
 					{
 						// Don't care about result,
-						// either settings have been loaded or settings have been set to defaults.
+						//   either settings have been loaded or settings have been set to defaults.
 						ApplicationSettings.Load();
 
-						// The ApplicationSettings will be closed when exiting or disposing the main model.
+						// Application settings will be closed when exiting main.
 					}
 					else
 					{

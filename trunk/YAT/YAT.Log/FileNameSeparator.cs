@@ -90,7 +90,7 @@ namespace YAT.Log
 
 		#endregion
 
-		private string explicitSeparator; // = null
+		private string explicitSeparator; // = null;
 
 		/// <summary>Default is <see cref="FileNameSeparator.Dash"/>.</summary>
 		public const FileNameSeparator Default = FileNameSeparator.Dash;
@@ -111,7 +111,7 @@ namespace YAT.Log
 
 		/// <summary></summary>
 		public FileNameSeparatorEx(string separator)
-			: base(FileNameSeparator.Explicit)
+			: this(FileNameSeparator.Explicit)
 		{
 			this.explicitSeparator = separator;
 		}

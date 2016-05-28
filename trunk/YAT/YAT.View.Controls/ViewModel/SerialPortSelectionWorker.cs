@@ -49,10 +49,10 @@ namespace YAT.View.Controls
 
 		private bool isBusy = true;
 
-		private DialogResult result; // = DialogResult.None
-		private Exception exception; // = null
-		private string exceptionLead; // = null
-		private string exceptionHint; // = null
+		private DialogResult result;  // = DialogResult.None;
+		private Exception exception;  // = null;
+		private string exceptionLead; // = null;
+		private string exceptionHint; // = null;
 
 		public event EventHandler<EventArgs<string>> Status1Changed;
 		public event EventHandler<EventArgs<string>> Status2Changed;
