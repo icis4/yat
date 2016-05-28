@@ -249,7 +249,7 @@
 			this.toolStripMenuItem_TerminalMenu_View_BreakCount_ResetCount = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_Format = new System.Windows.Forms.ToolStripMenuItem();
-			this.statusStrip_Terminal = new System.Windows.Forms.StatusStrip();
+			this.statusStrip_Terminal = new MKY.Windows.Forms.StatusStripEx();
 			this.contextMenuStrip_Status = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.contextMenuStrip_Status_FlowControlCount = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Status_FlowControlCount_ShowCount = new System.Windows.Forms.ToolStripMenuItem();
@@ -2811,7 +2811,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Log_Separator_2;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Log_Settings;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View;
-		private System.Windows.Forms.StatusStrip statusStrip_Terminal;
+		private MKY.Windows.Forms.StatusStripEx statusStrip_Terminal;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_Status;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_IOStatus;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_RFR;

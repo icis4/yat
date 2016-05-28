@@ -101,7 +101,7 @@
 			this.toolStripMenuItem_MainMenu_Help_SubmitBug = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Help_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainMenu_Help_About = new System.Windows.Forms.ToolStripMenuItem();
-			this.statusStrip_Main = new System.Windows.Forms.StatusStrip();
+			this.statusStrip_Main = new MKY.Windows.Forms.StatusStripEx();
 			this.contextMenuStrip_Status = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_StatusContextMenu_ShowChrono = new System.Windows.Forms.ToolStripMenuItem();
@@ -1274,7 +1274,7 @@
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_Contents;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainMenu_Help_Separator_1;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_About;
-		private System.Windows.Forms.StatusStrip statusStrip_Main;
+		private MKY.Windows.Forms.StatusStripEx statusStrip_Main;
 		private MKY.Windows.Forms.ToolStripEx toolStrip_Main;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_File_New;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_File_Open;
