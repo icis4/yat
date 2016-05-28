@@ -106,7 +106,7 @@ namespace MKY.Configuration
 			if (TryGetSelectedConfigurationName(c, configurationGroupName, out selectedConfigurationName))
 			{
 				T configuration;
-				if (Selector.TryGetSelectedConfigurationSection<T>(c, configurationsGroupName, selectedConfigurationName, out configuration))
+				if (TryGetSelectedConfigurationSection<T>(c, configurationsGroupName, selectedConfigurationName, out configuration))
 				{
 					selectedConfiguration = configuration;
 					return (true);

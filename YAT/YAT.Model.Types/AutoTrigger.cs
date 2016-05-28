@@ -112,7 +112,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		public AutoTriggerEx(string explicitCommandString)
-			: base(AutoTrigger.Explicit)
+			: this(AutoTrigger.Explicit)
 		{
 			this.explicitCommandString = explicitCommandString;
 		}

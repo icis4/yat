@@ -138,17 +138,33 @@ namespace YAT.Domain.Settings
 			get
 			{
 				if (this.separateTxRxDisplay)
+				{
 					return (this.rxDisplay);
-				else
+				}
+				else // Rx redirects to Tx:
+				{
 					return (this.txDisplay);
+				}
 			}
 			set
 			{
-				if (this.txDisplay != value)
+				if (this.separateTxRxDisplay)
 				{
-					var oldNode = this.txDisplay;
-					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.txDisplay = value;
+					if (this.rxDisplay != value)
+					{
+						var oldNode = this.rxDisplay;
+						AttachOrReplaceOrDetachNode(oldNode, value);
+						this.rxDisplay = value;
+					}
+				}
+				else // Rx redirects to Tx:
+				{
+					if (this.txDisplay != value)
+					{
+						var oldNode = this.txDisplay;
+						AttachOrReplaceOrDetachNode(oldNode, value);
+						this.txDisplay = value;
+					}
 				}
 			}
 		}

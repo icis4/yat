@@ -55,10 +55,10 @@ namespace MKY.IO.Ports
 	[Serializable]
 	public class SerialPortCollection : List<SerialPortId>
 	{
-		static string[]                   staticPortNamesCache; // = null
+		static string[]                   staticPortNamesCache; // = null;
 		static object                     staticPortNamesCacheSyncObj = new object();
 
-		static Dictionary<string, string> staticCaptionsCache; // = null
+		static Dictionary<string, string> staticCaptionsCache; // = null;
 		static object                     staticCaptionsCacheSyncObj = new object();
 
 		/// <summary></summary>

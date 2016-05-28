@@ -24,8 +24,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-using MKY.Diagnostics;
-
 namespace YAT
 {
 	/// <summary>
@@ -87,8 +85,9 @@ namespace YAT
 				result = main.Run();
 			}
 #if (DEBUG)
-			GC.Collect(); // Force garbage collection to allow detecting memory leaks.
-			DebugFinalization.FinalizationShouldHaveCompleted = true;
+			GC.Collect(); // Force garbage collection to allow detecting memory leaks upon exit.
+			MKY.Diagnostics.DebugFinalization.FinalizationShouldHaveCompleted = true;
+			Controller.Diagnostics.DebugFinalization.DebugNotifyAllowedStaticObjects();
 #endif
 			return ((int)result);
 		}

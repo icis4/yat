@@ -116,7 +116,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		public AutoResponseEx(string explicitCommandString)
-			: base(AutoResponse.Explicit)
+			: this(AutoResponse.Explicit)
 		{
 			this.explicitCommandString = explicitCommandString;
 		}
@@ -141,6 +141,7 @@ namespace YAT.Model.Types
 		public int ToPredefinedCommandId()
 		{
 			int responseInt = (int)(AutoResponse)UnderlyingEnum;
+
 			if ((responseInt >= (int)AutoResponse.PredefinedCommand1) &&
 				(responseInt <= (int)AutoResponse.PredefinedCommand12))
 			{

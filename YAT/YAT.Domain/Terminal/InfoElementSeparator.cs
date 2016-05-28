@@ -110,7 +110,7 @@ namespace YAT.Domain
 
 		#endregion
 
-		private string explicitSeparator; // = null
+		private string explicitSeparator; // = null;
 
 		/// <summary>Default is <see cref="InfoElementSeparator.None"/>.</summary>
 		public const InfoElementSeparator Default = InfoElementSeparator.None;
@@ -131,7 +131,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public InfoElementSeparatorEx(string separator)
-			: base(InfoElementSeparator.Explicit)
+			: this(InfoElementSeparator.Explicit)
 		{
 			this.explicitSeparator = separator;
 		}

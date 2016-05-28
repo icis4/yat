@@ -1901,6 +1901,8 @@ namespace YAT.Model
 			if (autoSaveIsAllowed)
 				autoSaveIsAllowed = EvaluateWhetherAutoSaveIsAllowedIndeed(autoSaveIsAllowed);
 
+			// Calling Save() on a terminal may modify 'this.terminals' in the terminal_Saved()
+			// event, therefore clone the list first.
 			List<Terminal> clone = new List<Terminal>(this.terminals);
 			foreach (Terminal t in clone)
 			{
@@ -1955,6 +1957,8 @@ namespace YAT.Model
 		{
 			bool success = true;
 
+			// Calling Save() on a terminal may modify 'this.terminals' in the terminal_Saved()
+			// event, therefore clone the list first.
 			List<Terminal> clone = new List<Terminal>(this.terminals);
 			foreach (Terminal t in clone)
 			{

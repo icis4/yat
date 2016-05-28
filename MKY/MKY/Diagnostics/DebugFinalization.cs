@@ -26,7 +26,7 @@ using System.Diagnostics;
 namespace MKY.Diagnostics
 {
 	/// <summary>
-	/// Provides static methods to help with disposal.
+	/// Provides static methods to help with finalization.
 	/// </summary>
 	public static class DebugFinalization
 	{
@@ -44,7 +44,7 @@ namespace MKY.Diagnostics
 		public static void DebugNotifyFinalizerAndCheckWhetherOverdue(object obj)
 		{
 			if (staticFinalizationShouldHaveCompleted)
-				Debug.WriteLine("The finalizer of this '" + obj.GetType().FullName + "' has been called too late! Ensure to de-reference the object early enough!");
+				Debug.WriteLine("The finalizer of this '" + obj.GetType().FullName + "' has been called too late! If this is not a static object, ensure to de-reference it early enough!");
 		}
 	}
 }
