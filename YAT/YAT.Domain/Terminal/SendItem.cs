@@ -52,7 +52,7 @@ namespace YAT.Domain
 		/// </remarks>
 		~SendItem()
 		{
-			MKY.Diagnostics.FinalizationHelper.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
+			MKY.Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 
 #endif // DEBUG

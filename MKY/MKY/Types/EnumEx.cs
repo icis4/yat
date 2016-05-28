@@ -209,7 +209,7 @@ namespace MKY
 		/// </remarks>
 		~EnumEx()
 		{
-			Diagnostics.FinalizationHelper.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
+			Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 
 #endif // DEBUG

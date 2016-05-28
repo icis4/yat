@@ -31,15 +31,15 @@ using System.Text;
 
 using MKY.Collections.Generic;
 
-namespace MKY.Diagnostics
+namespace MKY
 {
 	/// <summary>
-	/// Provides static methods to help with detaching events.
+	/// Provides static methods to help with event handlers.
 	/// </summary>
 	/// <remarks>
 	/// Based on http://www.codeproject.com/Articles/103542/Removing-Event-Handlers-using-Reflection.
 	/// </remarks>
-	public static class EventManagementHelper
+	public static class EventHandlerHelper
 	{
 		private static BindingFlags AllBindings
 		{
@@ -86,7 +86,15 @@ namespace MKY.Diagnostics
 				return (null);
 		}
 
-		private static List<Pair<EventInfo, Delegate>> GetEventSinks(object obj, string eventName = null)
+		/// <summary>
+		/// Gets all event sinks for the given event, or all events if <paramref name="eventName"/>
+		/// is <c>null</c> or <see cref="string.Empty"/>.
+		/// </summary>
+		/// <param name="obj">The object.</param>
+		/// <param name="eventName">Name of the event.</param>
+		/// <returns>All event sinks for the given object.</returns>
+		/// <exception cref="System.ArgumentNullException">obj;An object is required!</exception>
+		public static List<Pair<EventInfo, Delegate>> GetEventSinks(object obj, string eventName = null)
 		{
 			if (obj == null)
 				throw (new ArgumentNullException("obj", "An object is required!"));
@@ -134,56 +142,25 @@ namespace MKY.Diagnostics
 			return (sinks);
 		}
 
-		/// <summary></summary>
-		public static void RemoveAllEventHandlers(object obj, bool debugNotify = true)
+		/// <summary>
+		/// Removes all event handlers from the given object.
+		/// </summary>
+		/// <param name="obj">The object.</param>
+		public static void RemoveAllEventHandlers(object obj)
 		{
-			RemoveEventHandler(obj, null, debugNotify);
+			RemoveEventHandler(obj, null);
 		}
 
-		/// <summary></summary>
-		public static void RemoveEventHandler(object obj, string eventName, bool debugNotify = true)
+		/// <summary>
+		/// Removes the event handler.
+		/// </summary>
+		/// <param name="obj">The object.</param>
+		/// <param name="eventName">Name of the event.</param>
+		public static void RemoveEventHandler(object obj, string eventName)
 		{
 			var sinks = GetEventSinks(obj, eventName);
 			foreach (var sink in sinks)
-			{
 				sink.Value1.RemoveEventHandler(obj, sink.Value2);
-
-				if (debugNotify)
-					DebugNotifyEventRemains(obj, eventName);
-			}
-		}
-
-		/// <summary></summary>
-		[Conditional("DEBUG")]
-		public static void DebugNotifyAllEventRemains(object obj)
-		{
-			DebugNotifyEventRemains(obj, null);
-		}
-
-		/// <summary></summary>
-		[Conditional("DEBUG")]
-		public static void DebugNotifyEventRemains(object obj, string eventName)
-		{
-			var sinks = GetEventSinks(obj, eventName);
-			if (sinks.Count > 0)
-			{
-				StringBuilder sb = new StringBuilder(sinks.Count.ToString(CultureInfo.InvariantCulture));
-
-				if (sinks.Count == 1)
-					sb.Append(" remaining event sink in ");
-				else
-					sb.Append(" remaining event sinks in ");
-
-				sb.Append(obj.GetType().FullName + "!");
-
-				Debug.WriteLine(sb.ToString());
-				Debug.Indent();
-
-				foreach (var sink in sinks)
-					Debug.WriteLine(sink.Value2.Target + " still references " + sink.Value2.Method);
-
-				Debug.Unindent();
-			}
 		}
 	}
 }

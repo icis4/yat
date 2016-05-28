@@ -111,7 +111,7 @@ namespace YAT.Domain
 		/// </remarks>
 		~DisplayElementCollection()
 		{
-			MKY.Diagnostics.FinalizationHelper.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
+			MKY.Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 
 #endif // DEBUG

@@ -135,7 +135,7 @@ namespace YAT.Log
 		{
 			Dispose(false);
 
-			MKY.Diagnostics.DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
+			MKY.Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
 #endif // DEBUG

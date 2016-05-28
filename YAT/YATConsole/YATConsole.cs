@@ -23,6 +23,8 @@
 
 using System;
 
+using MKY.Diagnostics;
+
 namespace YAT
 {
 	/// <summary>
@@ -82,9 +84,10 @@ namespace YAT
 			{
 				result = main.RunFromConsole();
 			}
-
-			MKY.Diagnostics.FinalizationHelper.FinalizationShouldHaveCompleted = true;
-
+#if (DEBUG)
+			GC.Collect(); // Force garbage collection to allow detecting memory leaks.
+			DebugFinalization.FinalizationShouldHaveCompleted = true;
+#endif
 			return ((int)result);
 		}
 	}

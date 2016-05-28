@@ -286,7 +286,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			EventManagementHelper.DebugNotifyAllEventRemains(this);
+			DebugEventManagement.DebugNotifyAllEventRemains(this);
 
 			if (!this.isDisposed)
 			{
@@ -327,7 +327,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			Dispose(false);
 
-			DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
+			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
 #endif // DEBUG

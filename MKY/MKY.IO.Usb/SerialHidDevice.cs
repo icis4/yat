@@ -410,7 +410,7 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected override void Dispose(bool disposing)
 		{
-			EventManagementHelper.DebugNotifyAllEventRemains(this);
+			DebugEventManagement.DebugNotifyAllEventRemains(this);
 
 			if (!IsDisposed)
 			{

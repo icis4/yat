@@ -99,12 +99,13 @@ namespace MKY.Windows.Forms
 		public static void RegisterMainForm(Form mainForm)
 		{
 			UnregisterMainForm();
+			{
+				Debug.WriteLine(@"Registering main form """ + mainForm.ToString() + @""" as native message source.");
+				staticMainForm = mainForm;
 
-			Debug.WriteLine(@"Registering main form """ + mainForm.ToString() + @""" as native message source.");
-			staticMainForm = mainForm;
-
-			foreach (NativeMessageHandler handler in staticMessageHandlers)
-				handler.Register(mainForm);
+				foreach (NativeMessageHandler handler in staticMessageHandlers)
+					handler.Register(mainForm);
+			}
 		}
 
 		/// <remarks>
@@ -113,11 +114,14 @@ namespace MKY.Windows.Forms
 		/// </remarks>
 		public static void UnregisterMainForm()
 		{
-			foreach (NativeMessageHandler handler in staticMessageHandlers)
-				handler.Unregister();
+			if (staticMainForm != null)
+			{
+				foreach (NativeMessageHandler handler in staticMessageHandlers)
+					handler.Unregister();
 
-			staticMainForm = null;
-			Debug.WriteLine("Main form unregistered as native message source.");
+				staticMainForm = null;
+				Debug.WriteLine("Main form unregistered as native message source.");
+			}
 		}
 
 		#endregion

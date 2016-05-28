@@ -318,11 +318,11 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		~SerialPortEx()
 		{
-			EventManagementHelper.DebugNotifyAllEventRemains(this);
+			DebugEventManagement.DebugNotifyAllEventRemains(this);
 
 			Dispose(false);
 
-			DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
+			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
 #endif // DEBUG
