@@ -139,7 +139,7 @@ namespace MKY.Collections.Generic
 				{
 					Dispose(false);
 
-					Diagnostics.DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
+					Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 				}
 
 				object System.Collections.IEnumerator.Current

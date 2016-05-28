@@ -92,7 +92,7 @@ namespace YAT.Domain
 		/// </remarks>
 		~DisplayRepository()
 		{
-			MKY.Diagnostics.FinalizationHelper.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
+			MKY.Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 
 #endif // DEBUG

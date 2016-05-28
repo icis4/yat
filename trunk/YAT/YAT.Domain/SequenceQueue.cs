@@ -98,7 +98,7 @@ namespace YAT.Domain
 		/// </remarks>
 		~SequenceQueue()
 		{
-			MKY.Diagnostics.FinalizationHelper.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
+			MKY.Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 
 #endif // DEBUG

@@ -105,7 +105,7 @@ namespace YAT.Domain
 		/// </remarks>
 		~RawChunk()
 		{
-			MKY.Diagnostics.FinalizationHelper.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
+			MKY.Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 
 #endif // DEBUG

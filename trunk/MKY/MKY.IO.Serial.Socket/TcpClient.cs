@@ -247,7 +247,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "isStoppingAndDisposingLock", Justification = "See comments below.")]
 		protected virtual void Dispose(bool disposing)
 		{
-			EventManagementHelper.DebugNotifyAllEventRemains(this);
+			DebugEventManagement.DebugNotifyAllEventRemains(this);
 
 			if (!this.isDisposed)
 			{
@@ -290,7 +290,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			Dispose(false);
 
-			DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
+			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
 #endif // DEBUG

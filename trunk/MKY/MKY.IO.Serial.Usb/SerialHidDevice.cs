@@ -173,7 +173,7 @@ namespace MKY.IO.Serial.Usb
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			EventManagementHelper.DebugNotifyAllEventRemains(this);
+			DebugEventManagement.DebugNotifyAllEventRemains(this);
 
 			if (!this.isDisposed)
 			{
@@ -208,7 +208,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			Dispose(false);
 
-			DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
+			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
 #endif // DEBUG

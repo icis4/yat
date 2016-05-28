@@ -28,7 +28,7 @@ namespace MKY.Diagnostics
 	/// <summary>
 	/// Provides static methods to help with disposal.
 	/// </summary>
-	public static class FinalizationHelper
+	public static class DebugFinalization
 	{
 		private static bool staticFinalizationShouldHaveCompleted; // = false
 
@@ -40,6 +40,7 @@ namespace MKY.Diagnostics
 		}
 
 		/// <summary></summary>
+		[Conditional("DEBUG")]
 		public static void DebugNotifyFinalizerAndCheckWhetherOverdue(object obj)
 		{
 			if (staticFinalizationShouldHaveCompleted)

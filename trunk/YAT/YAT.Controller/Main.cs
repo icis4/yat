@@ -144,7 +144,7 @@ namespace YAT.Controller
 		{
 			Dispose(false);
 
-			DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
+			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
 #endif // DEBUG

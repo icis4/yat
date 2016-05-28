@@ -89,12 +89,13 @@
     <Compile Include="..\MKY.Version.cs">
       <Link>Properties\MKY.Version.cs</Link>
     </Compile>
-    <Compile Include="Diagnostics\FinalizationHelper.cs" />
-    <Compile Include="Diagnostics\DisposalHelper.cs" />
-    <Compile Include="Diagnostics\EventManagementHelper.cs" />
+    <Compile Include="Diagnostics\DebugFinalization.cs" />
+    <Compile Include="Diagnostics\DebugDisposal.cs" />
+    <Compile Include="Diagnostics\DebugEventManagement.cs" />
     <Compile Include="Diagnostics\StopwatchEx.cs" />
     <Compile Include="Drawing\ColorTranslatorEx.cs" />
     <Compile Include="EventArgs.cs" />
+    <Compile Include="EventHandlerHelper.cs" />
     <Compile Include="MessageHelper.cs" />
     <Compile Include="Collections\Generic\Quadruple.cs" />
     <Compile Include="Collections\Generic\Triple.cs" />

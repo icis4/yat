@@ -104,7 +104,7 @@ namespace MKY.IO
 		{
 			Dispose(false);
 
-			Diagnostics.DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
+			Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
 #endif // DEBUG
