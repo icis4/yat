@@ -41,7 +41,7 @@ namespace MKY.Settings
 	/// Generic class to handle any kind of document settings, e.g. MDI application settings.
 	/// </summary>
 	/// <typeparam name="TSettings">The type of the settings.</typeparam>
-	public class DocumentSettingsHandler<TSettings>
+	public class DocumentSettingsHandler<TSettings> : IDisposable
 		where TSettings : SettingsItem, new()
 	{
 		#region Fields
@@ -49,10 +49,12 @@ namespace MKY.Settings
 		// Fields
 		//==========================================================================================
 
+		private bool isDisposed;
+
 		private SettingsFileHandler fileHandler;
 
-		private TSettings settings = default(TSettings);
-		private AlternateXmlElement[] alternateXmlElements = null;
+		private TSettings settings; // = null;
+		private AlternateXmlElement[] alternateXmlElements; // = null;
 
 		#endregion
 
@@ -66,7 +68,7 @@ namespace MKY.Settings
 		/// </summary>
 		public DocumentSettingsHandler()
 		{
-			Initialize(SettingsDefault);
+			Initialize(Defaults);
 		}
 
 		/// <summary>
@@ -88,17 +90,73 @@ namespace MKY.Settings
 				this.alternateXmlElements = aep.AlternateXmlElements;
 		}
 
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary></summary>
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!this.isDisposed)
+			{
+				// Dispose of managed resources:
+				if (disposing)
+				{
+				}
+
+				// Set state to disposed:
+				this.fileHandler = null;
+				this.settings = null; // De-reference settings, to let them get free'd by GC.
+				this.alternateXmlElements = null;
+
+				this.isDisposed = true;
+			}
+		}
+
 #if (DEBUG)
 
 		/// <remarks>
+		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
+		/// "Types that declare disposable members should also implement IDisposable. If the type
+		///  does not own any unmanaged resources, do not implement a finalizer on it."
+		/// 
+		/// Well, true for best performance on finalizing. However, it's not easy to find missing
+		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
+		/// is kept for DEBUG, indicating missing calls.
+		/// 
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~DocumentSettingsHandler()
 		{
-			Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
+			Dispose(false);
+
+			Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
 #endif // DEBUG
+
+		/// <summary></summary>
+		public bool IsDisposed
+		{
+			get { return (this.isDisposed); }
+		}
+
+		/// <summary></summary>
+		protected void AssertNotDisposed()
+		{
+			if (this.isDisposed)
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
+		}
+
+		#endregion
 
 		#endregion
 
@@ -112,13 +170,15 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual string SettingsFilePath
 		{
-			get { return (this.fileHandler.FilePath); }
-			set { this.fileHandler.FilePath = value;  }
+			get { AssertNotDisposed(); return (this.fileHandler.FilePath); }
+			set { AssertNotDisposed(); this.fileHandler.FilePath = value;  }
 		}
 
 		/// <summary></summary>
 		public virtual void ResetSettingsFilePath()
 		{
+			AssertNotDisposed();
+
 			SettingsFilePath = null;
 		}
 
@@ -127,7 +187,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFilePathIsDefined
 		{
-			get { return (this.fileHandler.FilePathIsDefined); }
+			get { AssertNotDisposed(); return (this.fileHandler.FilePathIsDefined); }
 		}
 
 		/// <summary>
@@ -135,7 +195,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFilePathIsValid
 		{
-			get { return (this.fileHandler.FilePathIsValid); }
+			get { AssertNotDisposed(); return (this.fileHandler.FilePathIsValid); }
 		}
 
 		/// <summary>
@@ -143,7 +203,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileExists
 		{
-			get { return (this.fileHandler.FileExists); }
+			get { AssertNotDisposed(); return (this.fileHandler.FileExists); }
 		}
 
 		/// <summary>
@@ -151,7 +211,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileExistsNoMore
 		{
-			get { return (this.fileHandler.FileExistsNoMore); }
+			get { AssertNotDisposed(); return (this.fileHandler.FileExistsNoMore); }
 		}
 
 		/// <summary>
@@ -159,7 +219,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileIsUpToDate
 		{
-			get { return (this.fileHandler.FileIsUpToDate); }
+			get { AssertNotDisposed(); return (this.fileHandler.FileIsUpToDate); }
 		}
 
 		/// <summary>
@@ -167,7 +227,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileIsReadable
 		{
-			get { return (this.fileHandler.FileIsReadable); }
+			get { AssertNotDisposed(); return (this.fileHandler.FileIsReadable); }
 		}
 
 		/// <summary>
@@ -175,7 +235,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileIsWritable
 		{
-			get { return (this.fileHandler.FileIsWritable); }
+			get { AssertNotDisposed(); return (this.fileHandler.FileIsWritable); }
 		}
 
 		/// <summary>
@@ -183,7 +243,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileIsReadOnly
 		{
-			get { return (this.fileHandler.FileIsReadOnly); }
+			get { AssertNotDisposed(); return (this.fileHandler.FileIsReadOnly); }
 		}
 
 		/// <summary>
@@ -192,7 +252,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileSuccessfullyLoaded
 		{
-			get { return (this.fileHandler.FileSuccessfullyLoaded); }
+			get { AssertNotDisposed(); return (this.fileHandler.FileSuccessfullyLoaded); }
 		}
 
 		/// <summary>
@@ -200,13 +260,13 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual TSettings Settings
 		{
-			get { return (this.settings); }
+			get { AssertNotDisposed(); return (this.settings); }
 		}
 
 		/// <summary>
-		/// Handler to settings default.
+		/// Handler to defaults.
 		/// </summary>
-		public virtual TSettings SettingsDefault
+		public static TSettings Defaults
 		{
 			get { return (new TSettings()); }
 		}
@@ -231,16 +291,18 @@ namespace MKY.Settings
 		/// </exception>
 		public virtual bool Load()
 		{
+			AssertNotDisposed();
+
 			// Try to open existing file of current version.
-			object settings = this.fileHandler.LoadFromFile(this.settings.GetType(), this.alternateXmlElements);
+			var settings = (TSettings)this.fileHandler.LoadFromFile(this.settings.GetType(), this.alternateXmlElements);
 			if (settings != null)
 			{
-				this.settings = (TSettings)settings;
+				this.settings = settings;
 				return (true);
 			}
 
 			// Nothing found, return default settings:
-			this.settings = SettingsDefault;
+			this.settings = Defaults;
 			return (false);
 		}
 
@@ -260,6 +322,8 @@ namespace MKY.Settings
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual void Save()
 		{
+			AssertNotDisposed();
+
 			this.fileHandler.SaveToFile(typeof(TSettings), this.settings);
 			this.settings.ClearChanged();
 		}
@@ -273,6 +337,8 @@ namespace MKY.Settings
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual bool TryDelete()
 		{
+			AssertNotDisposed();
+
 			return (this.fileHandler.TryDelete());
 		}
 
