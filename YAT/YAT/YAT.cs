@@ -86,8 +86,8 @@ namespace YAT
 			}
 #if (DEBUG)
 			GC.Collect(); // Force garbage collection to allow detecting memory leaks upon exit.
-			MKY.Diagnostics.DebugFinalization.FinalizationShouldHaveCompleted = true;
 			Controller.Diagnostics.DebugFinalization.DebugNotifyAllowedStaticObjects();
+			MKY.Diagnostics.DebugFinalization.FinalizationShouldHaveCompleted = true;
 #endif
 			return ((int)result);
 		}

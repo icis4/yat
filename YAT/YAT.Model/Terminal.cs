@@ -1945,7 +1945,13 @@ namespace YAT.Model
 				OnTimedStatusTextRequest("Terminal successfully closed.");
 
 				OnClosed(new ClosedEventArgs(isWorkspaceClose));
-				// Attention, do not perform any action since the object will get disposed by the workspace!
+
+				// The terminal shall dispose of itself. This ensures that it is disposed AFTER
+				// it fired the 'Closed' event and all subscribers of the event may still refer
+				// to a non-disposed object. This is especially important, as the order of the
+				// subscribers is not fixed, i.e. Model.Workspace may dispose of the terminal
+				// before View.Terminal receives the event callback!
+				Dispose();
 
 				return (true);
 			}

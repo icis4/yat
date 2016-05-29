@@ -174,11 +174,13 @@ namespace YAT.Model
 					// ...first, detach event handlers to ensure that no more events are received...
 					DetachWorkspaceEventHandlers();
 
-					// ...then, dispose of objects:
-					DisposeWorkspace();
+					// ...then, dispose of workspace (normally it disposes of itself):
+					if (this.workspace != null)
+						this.workspace.Dispose();
 				}
 
 				// Set state to disposed:
+				this.workspace = null;
 				this.isDisposed = true;
 
 				DebugMessage("...successfully disposed.");
@@ -1146,11 +1148,15 @@ namespace YAT.Model
 				StopAndDisposeOperationTimer();
 				StopAndDisposeExitTimer();
 
-				DetachWorkspaceEventHandlers();
-				DisposeWorkspace();
-
 				// Signal the exit:
 				OnExited(this.result);
+
+				// The main shall dispose of itself. This ensures that it main is disposed AFTER
+				// it fired the 'Exited' event and all subscribers of the event may still refer
+				// to a non-disposed object. This is especially important, as the order of the
+				// subscribers is not fixed, i.e. a subscriber may dispose of the main before
+				// View.Main receives the event callback!
+				Dispose();
 
 				cancel = false;
 				return (this.result);
@@ -1194,15 +1200,6 @@ namespace YAT.Model
 			}
 		}
 
-		private void DisposeWorkspace()
-		{
-			if (this.workspace != null)
-			{
-				this.workspace.Dispose();
-				this.workspace = null;
-			}
-		}
-
 		#endregion
 
 		#region Workspace > Event Handlers
@@ -1230,8 +1227,6 @@ namespace YAT.Model
 			}
 
 			DetachWorkspaceEventHandlers();
-			DisposeWorkspace(); // Dispose the workspace as it got created by this main.
-
 			OnWorkspaceClosed(e);
 		}
 

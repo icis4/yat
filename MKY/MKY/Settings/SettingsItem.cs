@@ -90,7 +90,7 @@ namespace MKY.Settings
 		/// </remarks>
 		~SettingsItem()
 		{
-		////Diagnostics.DebugEventManagement.DebugNotifyAllEventRemains(this); Temporarily disabled until bug #344 has been resolved.
+			// Do not Diagnostics.DebugEventManagement.DebugNotifyAllEventRemains(this) as XML deserialization doesn't Free() items (didn't Dispose() either...).
 			Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 

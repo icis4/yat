@@ -424,6 +424,11 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <remarks>
+		/// Not really sure whether handling here is required in any case. Normally, workspace as
+		/// well as main signal via <see cref="workspace_Closed"/> and <see cref="main_Exited"/>.
+		/// However, instead of verifying every possible case, simply detach here too.
+		/// </remarks>
 		private void Main_FormClosed(object sender, FormClosedEventArgs e)
 		{
 			DetachWorkspaceEventHandlers();
@@ -1572,6 +1577,12 @@ namespace YAT.View.Forms
 		private void main_Exited(object sender, EventArgs<Model.MainResult> e)
 		{
 			this.result = e.Value;
+
+			DetachMainEventHandlers();
+			this.main = null;
+
+			DetachLocalUserSettingsEventHandlers();
+			this.localUserSettingsRoot = null;
 
 			// Prevent multiple calls to Close():
 			if (this.closingState == ClosingState.None)
