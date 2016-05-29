@@ -38,9 +38,8 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		public BufferSettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			ClearChanged();
 		}
 
 		/// <summary></summary>

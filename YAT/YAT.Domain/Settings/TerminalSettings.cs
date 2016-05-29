@@ -53,10 +53,8 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		public TerminalSettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			InitializeNodes();
-			ClearChanged();
 		}
 
 		/// <summary></summary>
@@ -64,22 +62,19 @@ namespace YAT.Domain.Settings
 			: base(settingsType)
 		{
 			SetMyDefaults();
-			InitializeNodes();
+
+			IO          = new IOSettings(settingsType);
+			Status      = new StatusSettings(settingsType);
+			Buffer      = new BufferSettings(settingsType);
+			Display     = new DisplaySettings(settingsType);
+			CharReplace = new CharReplaceSettings(settingsType);
+			CharHide    = new CharHideSettings(settingsType);
+			Send        = new SendSettings(settingsType);
+
+			TextTerminal   = new TextTerminalSettings(settingsType);
+			BinaryTerminal = new BinaryTerminalSettings(settingsType);
+
 			ClearChanged();
-		}
-
-		private void InitializeNodes()
-		{
-			IO          = new IOSettings(SettingsType);
-			Status      = new StatusSettings(SettingsType);
-			Buffer      = new BufferSettings(SettingsType);
-			Display     = new DisplaySettings(SettingsType);
-			CharReplace = new CharReplaceSettings(SettingsType);
-			CharHide    = new CharHideSettings(SettingsType);
-			Send        = new SendSettings(SettingsType);
-
-			TextTerminal   = new TextTerminalSettings(SettingsType);
-			BinaryTerminal = new BinaryTerminalSettings(SettingsType);
 		}
 
 		/// <remarks>

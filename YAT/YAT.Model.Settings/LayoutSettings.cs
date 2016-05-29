@@ -46,9 +46,8 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		public LayoutSettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			ClearChanged();
 		}
 
 		/// <summary></summary>

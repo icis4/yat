@@ -41,10 +41,8 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		public PredefinedCommandSettings()
-			: base()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			ClearChanged();
 		}
 
 		/// <summary></summary>

@@ -44,7 +44,13 @@ namespace YAT.Settings.Terminal
 
 		/// <summary></summary>
 		public ExplicitSettings()
-			: base(MKY.Settings.SettingsType.Explicit)
+			: this(MKY.Settings.SettingsType.Explicit)
+		{
+		}
+
+		/// <summary></summary>
+		public ExplicitSettings(MKY.Settings.SettingsType settingsType)
+			: base(settingsType)
 		{
 			SetMyDefaults();
 

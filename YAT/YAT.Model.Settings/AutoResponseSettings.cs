@@ -40,9 +40,8 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		public AutoResponseSettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			ClearChanged();
 		}
 
 		/// <summary></summary>

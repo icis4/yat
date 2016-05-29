@@ -116,9 +116,20 @@ namespace MKY.IO.Serial.SerialPort
 		/// Creates new port settings with defaults.
 		/// </summary>
 		public SerialPortSettings()
+			: this(Settings.SettingsType.Explicit)
+		{
+		}
+
+		/// <summary>
+		/// Creates new port settings with defaults.
+		/// </summary>
+		public SerialPortSettings(Settings.SettingsType settingsType)
+			: base(settingsType)
 		{
 			SetMyDefaults();
-			InitializeNodes();
+
+			Communication = new SerialCommunicationSettings(settingsType);
+
 			ClearChanged();
 		}
 
@@ -128,7 +139,6 @@ namespace MKY.IO.Serial.SerialPort
 		public SerialPortSettings(SerialPortId portId, SerialCommunicationSettings communication)
 		{
 			SetMyDefaults();
-			InitializeNodes();
 
 			// Attention: Port ID can be null (if no serial COM ports are available on system).
 			if (portId != null)
@@ -139,20 +149,6 @@ namespace MKY.IO.Serial.SerialPort
 			Communication = new SerialCommunicationSettings(communication);
 
 			ClearChanged();
-		}
-
-		/// <summary></summary>
-		public SerialPortSettings(Settings.SettingsType settingsType)
-			: base(settingsType)
-		{
-			SetMyDefaults();
-			InitializeNodes();
-			ClearChanged();
-		}
-
-		private void InitializeNodes()
-		{
-			Communication = new SerialCommunicationSettings(SettingsType);
 		}
 
 		/// <summary>

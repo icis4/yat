@@ -48,10 +48,8 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		public BinaryTerminalSettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			InitializeNodes();
-			ClearChanged();
 		}
 
 		/// <summary></summary>
@@ -59,14 +57,11 @@ namespace YAT.Domain.Settings
 			: base(settingsType)
 		{
 			SetMyDefaults();
-			InitializeNodes();
-			ClearChanged();
-		}
 
-		private void InitializeNodes()
-		{
 			TxDisplay = new BinaryDisplaySettings(SettingsType);
 			RxDisplay = new BinaryDisplaySettings(SettingsType);
+
+			ClearChanged();
 		}
 
 		/// <remarks>

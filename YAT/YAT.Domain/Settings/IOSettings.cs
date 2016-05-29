@@ -58,10 +58,8 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		public IOSettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			InitializeNodes();
-			ClearChanged();
 		}
 
 		/// <summary></summary>
@@ -69,15 +67,12 @@ namespace YAT.Domain.Settings
 			: base(settingsType)
 		{
 			SetMyDefaults();
-			InitializeNodes();
-			ClearChanged();
-		}
 
-		private void InitializeNodes()
-		{
-			SerialPort         = new MKY.IO.Serial.SerialPort.SerialPortSettings(SettingsType);
-			Socket             = new MKY.IO.Serial.Socket.SocketSettings(SettingsType);
-			UsbSerialHidDevice = new MKY.IO.Serial.Usb.SerialHidDeviceSettings(SettingsType);
+			SerialPort         = new MKY.IO.Serial.SerialPort.SerialPortSettings(settingsType);
+			Socket             = new MKY.IO.Serial.Socket.SocketSettings(settingsType);
+			UsbSerialHidDevice = new MKY.IO.Serial.Usb.SerialHidDeviceSettings(settingsType);
+
+			ClearChanged();
 		}
 
 		/// <remarks>

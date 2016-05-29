@@ -62,8 +62,9 @@ namespace YAT.Settings.Terminal
 		public TerminalSettingsRoot()
 			: base(MKY.Settings.SettingsType.Explicit)
 		{
-			Explicit = new ExplicitSettings();
-			Implicit = new ImplicitSettings();
+			Explicit = new ExplicitSettings(MKY.Settings.SettingsType.Explicit);
+			Implicit = new ImplicitSettings(MKY.Settings.SettingsType.Implicit);
+
 			ClearChanged();
 		}
 
@@ -73,6 +74,7 @@ namespace YAT.Settings.Terminal
 		{
 			Explicit = new ExplicitSettings(rhs.Explicit);
 			Implicit = new ImplicitSettings(rhs.Implicit);
+
 			ClearChanged();
 		}
 

@@ -55,9 +55,8 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		public StatusSettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			ClearChanged();
 		}
 
 		/// <summary></summary>

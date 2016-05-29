@@ -40,10 +40,8 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		public RecentFileSettings()
-			: base()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			ClearChanged();
 		}
 
 		/// <summary></summary>

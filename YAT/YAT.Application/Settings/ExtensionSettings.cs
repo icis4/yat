@@ -38,9 +38,8 @@ namespace YAT.Application.Settings
 
 		/// <summary></summary>
 		public ExtensionSettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			ClearChanged();
 		}
 
 		/// <summary></summary>

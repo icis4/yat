@@ -60,10 +60,8 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		public NewTerminalSettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			InitializeNodes();
-			ClearChanged();
 		}
 
 		/// <summary></summary>
@@ -71,13 +69,10 @@ namespace YAT.Model.Settings
 			: base(settingsType)
 		{
 			SetMyDefaults();
-			InitializeNodes();
-			ClearChanged();
-		}
 
-		private void InitializeNodes()
-		{
-			SerialPortCommunication = new MKY.IO.Serial.SerialPort.SerialCommunicationSettings(SettingsType);
+			SerialPortCommunication = new MKY.IO.Serial.SerialPort.SerialCommunicationSettings(settingsType);
+
+			ClearChanged();
 		}
 
 		/// <remarks>
@@ -130,7 +125,7 @@ namespace YAT.Model.Settings
 			IOType                   = Domain.IOType.SerialPort;
 
 			SerialPortId             = MKY.IO.Ports.SerialPortId.FirstStandardPort;
-			//// SerialPortCommunication is attached as settings object.
+		////SerialPortCommunication is attached as settings object.
 			SerialPortAutoReopen     = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
 
 			SocketRemoteHost         = MKY.IO.Serial.Socket.SocketSettings.RemoteHostDefault;

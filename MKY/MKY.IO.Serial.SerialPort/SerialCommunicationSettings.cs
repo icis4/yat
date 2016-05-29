@@ -59,6 +59,15 @@ namespace MKY.IO.Serial.SerialPort
 		/// Creates new port settings with defaults.
 		/// </summary>
 		public SerialCommunicationSettings()
+			: this(Settings.SettingsType.Explicit)
+		{
+		}
+
+		/// <summary>
+		/// Creates new port settings with defaults.
+		/// </summary>
+		public SerialCommunicationSettings(Settings.SettingsType settingsType)
+			: base(settingsType)
 		{
 			SetMyDefaults();
 			ClearChanged();
@@ -86,14 +95,6 @@ namespace MKY.IO.Serial.SerialPort
 			// Override the default pin settings by the provided values:
 			RfrPin = rfrPin;
 			DtrPin = dtrPin;
-		}
-
-		/// <summary></summary>
-		public SerialCommunicationSettings(Settings.SettingsType settingsType)
-			: base(settingsType)
-		{
-			SetMyDefaults();
-			ClearChanged();
 		}
 
 		/// <summary>

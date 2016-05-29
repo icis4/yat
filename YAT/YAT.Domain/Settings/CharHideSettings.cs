@@ -45,9 +45,8 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		public CharHideSettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			ClearChanged();
 		}
 
 		/// <summary></summary>
