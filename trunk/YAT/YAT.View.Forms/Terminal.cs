@@ -315,6 +315,11 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <remarks>
+		/// Not really sure whether handling here is required in any case. Normally, a terminal
+		/// signals via <see cref="terminal_Closed"/>. However, instead of verifying every possible
+		/// case, simply detach here too.
+		/// </remarks>
 		private void Terminal_FormClosed(object sender, FormClosedEventArgs e)
 		{
 			DetachTerminalEventHandlers();
@@ -3546,7 +3551,13 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_Closed(object sender, Model.ClosedEventArgs e)
 		{
-			// Prevent multiple calls to Close().
+			DetachTerminalEventHandlers();
+			this.terminal = null;
+
+			DetachSettingsEventHandlers();
+			this.settingsRoot = null;
+
+			// Prevent multiple calls to Close():
 			if (this.closingState == ClosingState.None)
 			{
 				this.closingState = ClosingState.IsClosingFromModel;
