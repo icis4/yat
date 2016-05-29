@@ -53,13 +53,13 @@ namespace YAT.Settings.Application
 		public LocalUserSettingsRoot()
 			: base(MKY.Settings.SettingsType.Explicit)
 		{
-			General       = new GeneralSettings();
-			Paths         = new PathSettings();
-			Extensions    = new ExtensionSettings();
-			AutoWorkspace = new AutoWorkspaceSettings();
-			MainWindow    = new Model.Settings.MainWindowSettings();
-			NewTerminal   = new Model.Settings.NewTerminalSettings();
-			RecentFiles   = new Model.Settings.RecentFileSettings();
+			General       = new GeneralSettings(MKY.Settings.SettingsType.Explicit);
+			Paths         = new PathSettings(MKY.Settings.SettingsType.Explicit);
+			Extensions    = new ExtensionSettings(MKY.Settings.SettingsType.Explicit);
+			AutoWorkspace = new AutoWorkspaceSettings(MKY.Settings.SettingsType.Explicit);
+			MainWindow    = new Model.Settings.MainWindowSettings(MKY.Settings.SettingsType.Explicit);
+			NewTerminal   = new Model.Settings.NewTerminalSettings(MKY.Settings.SettingsType.Explicit);
+			RecentFiles   = new Model.Settings.RecentFileSettings(MKY.Settings.SettingsType.Explicit);
 
 			ClearChanged();
 		}

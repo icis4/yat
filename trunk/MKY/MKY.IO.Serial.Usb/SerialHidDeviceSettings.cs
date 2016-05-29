@@ -77,9 +77,8 @@ namespace MKY.IO.Serial.Usb
 
 		/// <summary></summary>
 		public SerialHidDeviceSettings()
+			: this(Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			ClearChanged();
 		}
 
 		/// <summary></summary>

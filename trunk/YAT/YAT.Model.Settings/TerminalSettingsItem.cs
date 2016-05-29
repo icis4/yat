@@ -57,7 +57,13 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		public TerminalSettingsItem()
-			: base(MKY.Settings.SettingsType.Implicit)
+			: this(MKY.Settings.SettingsType.Explicit)
+		{
+		}
+
+		/// <summary></summary>
+		public TerminalSettingsItem(MKY.Settings.SettingsType settingsType)
+			: base(settingsType)
 		{
 			SetMyDefaults();
 

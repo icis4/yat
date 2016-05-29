@@ -110,13 +110,12 @@ namespace MKY.Settings
 				// Dispose of managed resources:
 				if (disposing)
 				{
+					if (this.settings != null)
+						this.settings.Free(); // See 'SettingsItem' why Free() instead of Dispose().
 				}
 
 				// Set state to disposed:
-				this.fileHandler = null;
-				this.settings = null; // De-reference settings, to let them get free'd by GC.
-				this.alternateXmlElements = null;
-
+				this.settings = null;
 				this.isDisposed = true;
 			}
 		}
@@ -256,8 +255,25 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
+		/// Assign the settings handler.
+		/// </summary>
+		/// <remarks>
+		/// Public getter, protected setter.
+		/// </remarks>
+		protected virtual void AssignSettings(TSettings settings)
+		{
+			if (this.settings != null)
+				this.settings.Free();
+
+			this.settings = settings;
+		}
+
+		/// <summary>
 		/// Handler to settings.
 		/// </summary>
+		/// <remarks>
+		/// Public getter, protected setter.
+		/// </remarks>
 		public virtual TSettings Settings
 		{
 			get { AssertNotDisposed(); return (this.settings); }
@@ -297,12 +313,12 @@ namespace MKY.Settings
 			var settings = (TSettings)this.fileHandler.LoadFromFile(this.settings.GetType(), this.alternateXmlElements);
 			if (settings != null)
 			{
-				this.settings = settings;
+				AssignSettings(settings);
 				return (true);
 			}
 
 			// Nothing found, return default settings:
-			this.settings = Defaults;
+			AssignSettings(Defaults);
 			return (false);
 		}
 

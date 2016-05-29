@@ -39,9 +39,8 @@ namespace YAT.Application.Settings
 
 		/// <summary></summary>
 		public PathSettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			ClearChanged();
 		}
 
 		/// <summary></summary>

@@ -129,6 +129,15 @@ namespace MKY.IO.Serial.Socket
 		/// Creates new port settings with defaults.
 		/// </summary>
 		public SocketSettings()
+			: this(Settings.SettingsType.Explicit)
+		{
+		}
+
+		/// <summary>
+		/// Creates new port settings with defaults.
+		/// </summary>
+		public SocketSettings(Settings.SettingsType settingsType)
+			: base(settingsType)
 		{
 			SetMyDefaults();
 			ClearChanged();
@@ -153,14 +162,6 @@ namespace MKY.IO.Serial.Socket
 			TcpClientAutoReconnect = tcpClientAutoReconnect;
 			UdpServerSendMode      = udpServerSendMode;
 
-			ClearChanged();
-		}
-
-		/// <summary></summary>
-		public SocketSettings(Settings.SettingsType settingsType)
-			: base(settingsType)
-		{
-			SetMyDefaults();
 			ClearChanged();
 		}
 

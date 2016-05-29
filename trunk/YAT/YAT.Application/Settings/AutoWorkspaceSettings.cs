@@ -37,9 +37,8 @@ namespace YAT.Application.Settings
 
 		/// <summary></summary>
 		public AutoWorkspaceSettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			ClearChanged();
 		}
 
 		/// <summary></summary>

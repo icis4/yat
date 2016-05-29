@@ -52,9 +52,8 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		public CharReplaceSettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			ClearChanged();
 		}
 
 		/// <summary></summary>

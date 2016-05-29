@@ -41,10 +41,8 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		public WorkspaceSettings()
-			: base(MKY.Settings.SettingsType.Explicit)
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			ClearChanged();
 		}
 
 		/// <summary></summary>

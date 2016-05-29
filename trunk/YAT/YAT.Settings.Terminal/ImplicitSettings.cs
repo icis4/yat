@@ -49,7 +49,13 @@ namespace YAT.Settings.Terminal
 
 		/// <summary></summary>
 		public ImplicitSettings()
-			: base(MKY.Settings.SettingsType.Implicit)
+			: this(MKY.Settings.SettingsType.Implicit)
+		{
+		}
+
+		/// <summary></summary>
+		public ImplicitSettings(MKY.Settings.SettingsType settingsType)
+			: base(settingsType)
 		{
 			SetMyDefaults();
 

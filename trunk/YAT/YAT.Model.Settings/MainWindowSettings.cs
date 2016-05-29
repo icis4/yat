@@ -42,9 +42,8 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		public MainWindowSettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			ClearChanged();
 		}
 
 		/// <summary></summary>

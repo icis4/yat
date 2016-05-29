@@ -47,7 +47,8 @@ namespace YAT.Settings.Workspace
 		public WorkspaceSettingsRoot()
 			: base(MKY.Settings.SettingsType.Explicit)
 		{
-			Workspace = new WorkspaceSettings();
+			Workspace = new WorkspaceSettings(MKY.Settings.SettingsType.Explicit);
+
 			ClearChanged();
 		}
 
@@ -56,6 +57,7 @@ namespace YAT.Settings.Workspace
 			: base(rhs)
 		{
 			Workspace = new WorkspaceSettings(rhs.Workspace);
+
 			ClearChanged();
 		}
 

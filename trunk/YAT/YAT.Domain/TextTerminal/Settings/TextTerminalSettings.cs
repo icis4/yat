@@ -51,11 +51,8 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		public TextTerminalSettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			InitializeNodes();
-			SetNodeDefaults();
-			ClearChanged();
 		}
 
 		/// <summary></summary>
@@ -63,14 +60,11 @@ namespace YAT.Domain.Settings
 			: base(settingsType)
 		{
 			SetMyDefaults();
-			InitializeNodes();
+
+			EolComment = new EolCommentSettings(SettingsType);
+
 			SetNodeDefaults();
 			ClearChanged();
-		}
-
-		private void InitializeNodes()
-		{
-			EolComment = new EolCommentSettings(SettingsType);
 		}
 
 		/// <remarks>

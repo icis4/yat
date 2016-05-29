@@ -103,10 +103,8 @@ namespace YAT.Log.Settings
 
 		/// <summary></summary>
 		public LogSettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			OverrideMyDefaults();
-			ClearChanged();
 		}
 
 		/// <summary></summary>
@@ -114,7 +112,6 @@ namespace YAT.Log.Settings
 			: base(settingsType)
 		{
 			SetMyDefaults();
-			OverrideMyDefaults();
 			ClearChanged();
 		}
 
@@ -174,12 +171,12 @@ namespace YAT.Log.Settings
 			RawLogTx     = false;
 			RawLogBidir  = false;
 			RawLogRx     = false;
-			RawExtension = ExtensionHelper.RawLogFilesDefault;
+			RawExtension = ApplicationSettings.LocalUserSettings.Extensions.RawLogFiles;
 
 			NeatLogTx     = false;
 			NeatLogBidir  = true;
 			NeatLogRx     = false;
-			NeatExtension = ExtensionHelper.NeatLogFilesDefault;
+			NeatExtension = ApplicationSettings.LocalUserSettings.Extensions.NeatLogFiles;
 
 			NameFormat    = false;
 			NameChannel   = false;
@@ -193,15 +190,6 @@ namespace YAT.Log.Settings
 			WriteMode     = LogFileWriteMode.Create;
 
 			TextEncoding  = LogFileEncoding.UTF8;
-		}
-
-		/// <remarks>
-		/// Set fields through properties to ensure correct setting of changed flag.
-		/// </remarks>
-		protected virtual void OverrideMyDefaults()
-		{
-			RawExtension  = ApplicationSettings.LocalUserSettings.Extensions.RawLogFiles;
-			NeatExtension = ApplicationSettings.LocalUserSettings.Extensions.NeatLogFiles;
 		}
 
 		private static string ToFormatString(LogFormat format)

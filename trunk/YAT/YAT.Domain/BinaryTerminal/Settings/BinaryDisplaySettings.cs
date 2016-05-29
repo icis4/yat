@@ -37,9 +37,8 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		public BinaryDisplaySettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
-			ClearChanged();
 		}
 
 		/// <summary></summary>

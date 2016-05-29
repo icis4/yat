@@ -196,14 +196,15 @@ namespace MKY.Settings
 					// Dispose of managed resources if requested:
 					if (disposing)
 					{
+						if (this.settings != null)
+							this.settings.Free(); // See 'SettingsItem' why Free() instead of Dispose().
+
 						if (this.mutex != null)
 							this.mutex.Close();
 					}
 
 					// Set state to disposed:
-					this.settings = null; // De-reference settings, to let them get free'd by GC.
-					this.alternateXmlElements = null;
-
+					this.settings = null;
 					this.mutex = null;
 					this.isDisposed = true;
 				}
@@ -253,7 +254,26 @@ namespace MKY.Settings
 			// Properties
 			//======================================================================================
 
-			/// <summary></summary>
+			/// <summary>
+			/// Assign the settings handler.
+			/// </summary>
+			/// <remarks>
+			/// Public getter, protected setter.
+			/// </remarks>
+			protected virtual void AssignSettings(TSettings settings)
+			{
+				if (this.settings != null)
+					this.settings.Free();
+
+				this.settings = settings;
+			}
+
+			/// <summary>
+			/// Handler to settings.
+			/// </summary>
+			/// <remarks>
+			/// Public getter, protected setter.
+			/// </remarks>
 			public virtual TSettings Settings
 			{
 				get { AssertNotDisposed(); return (this.settings); }
@@ -312,7 +332,7 @@ namespace MKY.Settings
 						var settings = (TSettings)LoadFromFile(typeof(TSettings), this.alternateXmlElements);
 						if (settings != null)
 						{
-							this.settings = settings;
+							AssignSettings(settings);
 							return (true);
 						}
 					}
@@ -354,7 +374,7 @@ namespace MKY.Settings
 								var settings = (TSettings)LoadFromFile(oldFilePath, typeof(TSettings), this.alternateXmlElements);
 								if (settings != null)
 								{
-									this.settings = settings;
+									AssignSettings(settings);
 									return (true);
 								}
 							}
@@ -367,7 +387,7 @@ namespace MKY.Settings
 				}
 
 				// Nothing found, return default settings:
-				this.settings = Defaults;
+				AssignSettings(Defaults);
 				return (false);
 			}
 

@@ -23,7 +23,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace MKY.Settings
 {
@@ -91,15 +90,15 @@ namespace MKY.Settings
 		/// </remarks>
 		~SettingsItem()
 		{
-			Diagnostics.DebugEventManagement.DebugNotifyAllEventRemains(this);
+		////Diagnostics.DebugEventManagement.DebugNotifyAllEventRemains(this); Temporarily disabled until bug #344 has been resolved.
 			Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 
 #endif // DEBUG
 
-		#region Setup/Teardown Properties and Methods
+		#region Create/Destroy Properties and Methods
 		//==========================================================================================
-		// Setup/Teardown Properties and Methods
+		// Create/Destroy Properties and Methods
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -137,7 +136,7 @@ namespace MKY.Settings
 				SuspendChangeEvent();
 
 				node.SetChangeEventSuspendedCount(this.changeEventSuspendedCount);
-				node.SetChanged(); // Indicate potentially different settings of the new.
+				node.SetChanged(); // Indicate new settings.
 				node.Changed += node_Changed;
 				this.nodes.Add(node);
 
@@ -159,7 +158,7 @@ namespace MKY.Settings
 					this.nodes.RemoveAt(index);
 
 					nodeNew.SetChangeEventSuspendedCount(this.changeEventSuspendedCount);
-					nodeNew.SetChanged(); // Indicate potentially different settings of the new.
+					nodeNew.SetChanged(); // Indicate potentially different settings.
 					nodeNew.Changed += node_Changed;
 					this.nodes.Insert(index, nodeNew);
 
@@ -182,6 +181,34 @@ namespace MKY.Settings
 			}
 		}
 
+		/// <summary>
+		/// Frees all resources attached to this node.
+		/// </summary>
+		/// <remarks>
+		/// Note that this class intentionally doesn't implement <see cref="IDisposable"/>. That
+		/// would unnecessarily complicate the handling of settings item, e.g. in a settings dialog.
+		/// </remarks>
+		public virtual void Free()
+		{
+			if (this.nodes != null)
+			{
+				SuspendChangeEvent(); // Permanently suspend the event, as this object is being free'd.
+
+				var clone = new List<SettingsItem>(this.nodes); // Clone is required as list is being modified below.
+
+				foreach (SettingsItem node in clone)
+					DetachNode(node);
+
+				foreach (SettingsItem node in clone)
+					node.Free();
+
+				this.nodes.Clear();
+				this.nodes = null;
+
+				// Do not ResumeChangeEvent(), as this object is being free'd.
+			}
+		}
+
 		#endregion
 
 		#region Changed Properties and Methods
@@ -190,8 +217,8 @@ namespace MKY.Settings
 		//==========================================================================================
 
 		/// <summary>
-		/// This flag indicates that the data item has changed. Either the data of the item itself
-		/// or any of the sub-items. Either explicit or implicit data.
+		/// This flag indicates that the item has changed. Either one of the values of the item
+		/// itself, or any of the sub-items. Either explicit or implicit settings.
 		/// </summary>
 		/// <remarks>
 		/// To clear this flag, <see cref="ClearChanged"/> must be called. The flag is never cleared
@@ -202,16 +229,21 @@ namespace MKY.Settings
 			get
 			{
 				bool hc = this.haveChanged;
-				foreach (SettingsItem node in this.nodes)
-					hc = hc || node.HaveChanged;
+
+				if (this.nodes != null)
+				{
+					foreach (SettingsItem node in this.nodes)
+						hc = hc || node.HaveChanged;
+				}
+
 				return (hc);
 			}
 		}
 
 		/// <summary>
-		/// This flag indicates that the data item has changed. Either the data of the item itself
-		/// or any of the sub-items. This flag can be used to e.g. display an asterisk * indicating
-		/// a change of data, settings,...
+		/// This flag indicates that the item has changed. Either one of the values of the item
+		/// itself, or any of the sub-items. This flag can be used to e.g. display an asterisk *
+		/// indicating a change of data, settings,...
 		/// </summary>
 		/// <remarks>
 		/// To clear this flag, <see cref="ClearChanged"/> must be called. The flag is never cleared
@@ -225,8 +257,13 @@ namespace MKY.Settings
 					return (false);
 
 				bool hc = this.haveChanged;
-				foreach (SettingsItem node in this.nodes)
-					hc = hc || node.ExplicitHaveChanged;
+
+				if (this.nodes != null)
+				{
+					foreach (SettingsItem node in this.nodes)
+						hc = hc || node.ExplicitHaveChanged;
+				}
+
 				return (hc);
 			}
 		}
@@ -236,8 +273,11 @@ namespace MKY.Settings
 		{
 			SuspendChangeEvent();
 
-			foreach (SettingsItem node in this.nodes)
-				node.SetChanged();
+			if (this.nodes != null)
+			{
+				foreach (SettingsItem node in this.nodes)
+					node.SetChanged();
+			}
 
 			this.haveChanged = true;
 
@@ -249,8 +289,11 @@ namespace MKY.Settings
 		{
 			SuspendChangeEvent();
 
-			foreach (SettingsItem node in this.nodes)
-				node.ClearChanged();
+			if (this.nodes != null)
+			{
+				foreach (SettingsItem node in this.nodes)
+					node.ClearChanged();
+			}
 
 			this.haveChanged = false;
 
@@ -269,8 +312,11 @@ namespace MKY.Settings
 		{
 			SuspendChangeEvent();
 
-			foreach (SettingsItem node in this.nodes)
-				node.SetDefaults();
+			if (this.nodes != null)
+			{
+				foreach (SettingsItem node in this.nodes)
+					node.SetDefaults();
+			}
 
 			SetMyDefaults();
 			SetNodeDefaults();
@@ -315,17 +361,22 @@ namespace MKY.Settings
 
 			if (GetType() == other.GetType())
 			{
-				// Compare all nodes, settings values are compared by inheriting class.
-				if (this.nodes.Count == other.nodes.Count)
+				if ((this.nodes != null) && (other.nodes != null))
 				{
-					for (int i = 0; i < this.nodes.Count; i++)
+					// Compare all nodes, settings values are compared by inheriting class.
+					if (this.nodes.Count == other.nodes.Count)
 					{
-						if (this.nodes[i] != other.nodes[i])
-							return (false);
+						for (int i = 0; i < this.nodes.Count; i++)
+						{
+							if (this.nodes[i] != other.nodes[i])
+								return (false);
+						}
+
+						return (true);
 					}
-					return (true);
 				}
 			}
+
 			return (false);
 		}
 
@@ -338,8 +389,11 @@ namespace MKY.Settings
 			{
 				int hashCode = 0;
 
-				foreach (SettingsItem node in this.nodes)
-					hashCode = (hashCode * 397) ^ node.GetHashCode();
+				if (this.nodes != null)
+				{
+					foreach (SettingsItem node in this.nodes)
+						hashCode = (hashCode * 397) ^ node.GetHashCode();
+				}
 
 				return (hashCode);
 			}
@@ -389,8 +443,11 @@ namespace MKY.Settings
 		/// </summary>
 		protected virtual void SetChangeEventSuspendedCount(int count)
 		{
-			foreach (SettingsItem node in this.nodes)
-				node.SetChangeEventSuspendedCount(count);
+			if (this.nodes != null)
+			{
+				foreach (SettingsItem node in this.nodes)
+					node.SetChangeEventSuspendedCount(count);
+			}
 
 			lock (this.changeEventSuspendedCountSyncObj)
 			{
@@ -403,8 +460,11 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual void SuspendChangeEvent()
 		{
-			foreach (SettingsItem node in this.nodes)
-				node.SuspendChangeEvent();
+			if (this.nodes != null)
+			{
+				foreach (SettingsItem node in this.nodes)
+					node.SuspendChangeEvent();
+			}
 
 			lock (this.changeEventSuspendedCountSyncObj)
 			{
@@ -424,8 +484,11 @@ namespace MKY.Settings
 					this.changeEventSuspendedCount = 0;
 			}
 
-			foreach (SettingsItem node in this.nodes)
-				node.ResumeChangeEvent(forcePendingChangeEvent);
+			if (this.nodes != null)
+			{
+				foreach (SettingsItem node in this.nodes)
+					node.ResumeChangeEvent(forcePendingChangeEvent);
+			}
 
 			if (forcePendingChangeEvent && this.haveChanged)
 				OnChanged(new SettingsEventArgs(this));
@@ -437,8 +500,11 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual void ForceChangeEvent()
 		{
-			foreach (SettingsItem node in this.nodes)
-				node.ForceChangeEvent();
+			if (this.nodes != null)
+			{
+				foreach (SettingsItem node in this.nodes)
+					node.ForceChangeEvent();
+			}
 
 			OnChanged(new SettingsEventArgs(this));
 		}
