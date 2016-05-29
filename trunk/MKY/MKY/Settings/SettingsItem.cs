@@ -32,13 +32,11 @@ namespace MKY.Settings
 	{
 		/// <summary>
 		/// Explicit (normal) user settings, user gets notified as soon as setting changes.
-		/// E.g. communication settings or command definitions.
 		/// </summary>
 		Explicit,
 
 		/// <summary>
 		/// Implicit (hidden) user settings, user doesn't get notified when setting changes.
-		/// E.g. window or layout settings that are automatically saved.
 		/// </summary>
 		Implicit
 	}
@@ -50,6 +48,9 @@ namespace MKY.Settings
 	/// The YAT feature request #3392253 "Consider replacing 'Settings' by 'DataItem'" deals with
 	/// this issue, it will therefore not be forgotten. Until this feature request is implemented,
 	/// changes to this class also have to be applied to <see cref="Data.DataItem"/>.
+	/// 
+	/// Also note that this class intentionally doesn't implement <see cref="IDisposable"/>. That
+	/// would unnecessarily complicate the handling of settings item, e.g. in a settings dialog.
 	/// </remarks>
 	public abstract class SettingsItem : IEquatable<SettingsItem>
 	{
@@ -58,7 +59,7 @@ namespace MKY.Settings
 		private List<SettingsItem> nodes;      // = null;
 		private bool haveChanged;              // = false;
 		private int changeEventSuspendedCount; // = 0;
-		private ReaderWriterLockSlim changeEventSuspendedCountLock = new ReaderWriterLockSlim();
+		private object changeEventSuspendedCountSyncObj = new object();
 
 		/// <summary></summary>
 		public event EventHandler<SettingsEventArgs> Changed;
@@ -85,7 +86,9 @@ namespace MKY.Settings
 
 #if (DEBUG)
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
+		/// </remarks>
 		~SettingsItem()
 		{
 			Diagnostics.DebugEventManagement.DebugNotifyAllEventRemains(this);
@@ -133,8 +136,8 @@ namespace MKY.Settings
 			{
 				SuspendChangeEvent();
 
-				node.SuspendChangeEvent();
-				node.SetChanged();
+				node.SetChangeEventSuspendedCount(this.changeEventSuspendedCount);
+				node.SetChanged(); // Indicate potentially different settings of the new.
 				node.Changed += node_Changed;
 				this.nodes.Add(node);
 
@@ -155,8 +158,8 @@ namespace MKY.Settings
 					int index = this.nodes.IndexOf(nodeOld);
 					this.nodes.RemoveAt(index);
 
-					nodeNew.SuspendChangeEvent(nodeOld.changeEventSuspendedCount);
-					nodeNew.SetChanged();
+					nodeNew.SetChangeEventSuspendedCount(this.changeEventSuspendedCount);
+					nodeNew.SetChanged(); // Indicate potentially different settings of the new.
 					nodeNew.Changed += node_Changed;
 					this.nodes.Insert(index, nodeNew);
 
@@ -365,14 +368,9 @@ namespace MKY.Settings
 		{
 			bool fire = false;
 
-			this.changeEventSuspendedCountLock.EnterReadLock();
-			try
+			lock (this.changeEventSuspendedCountSyncObj)
 			{
 				fire = (this.changeEventSuspendedCount == 0);
-			}
-			finally
-			{
-				this.changeEventSuspendedCountLock.ExitReadLock();
 			}
 
 			if (fire)
@@ -387,29 +385,30 @@ namespace MKY.Settings
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Temporarily suspends the change event for the settings and all nodes of the settings tree.
+		/// Sets the change event suspended count.
 		/// </summary>
-		public virtual void SuspendChangeEvent()
+		protected virtual void SetChangeEventSuspendedCount(int count)
 		{
-			SuspendChangeEvent(1);
+			foreach (SettingsItem node in this.nodes)
+				node.SetChangeEventSuspendedCount(count);
+
+			lock (this.changeEventSuspendedCountSyncObj)
+			{
+				this.changeEventSuspendedCount = count;
+			}
 		}
 
 		/// <summary>
 		/// Temporarily suspends the change event for the settings and all nodes of the settings tree.
 		/// </summary>
-		protected virtual void SuspendChangeEvent(int suspendedCount)
+		public virtual void SuspendChangeEvent()
 		{
 			foreach (SettingsItem node in this.nodes)
-				node.SuspendChangeEvent(suspendedCount);
+				node.SuspendChangeEvent();
 
-			this.changeEventSuspendedCountLock.EnterWriteLock();
-			try
+			lock (this.changeEventSuspendedCountSyncObj)
 			{
-				this.changeEventSuspendedCount += suspendedCount;
-			}
-			finally
-			{
-				this.changeEventSuspendedCountLock.ExitWriteLock();
+				this.changeEventSuspendedCount++;
 			}
 		}
 
@@ -418,16 +417,11 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual void ResumeChangeEvent(bool forcePendingChangeEvent = true)
 		{
-			this.changeEventSuspendedCountLock.EnterWriteLock();
-			try
+			lock (this.changeEventSuspendedCountSyncObj)
 			{
 				this.changeEventSuspendedCount--;
 				if (this.changeEventSuspendedCount < 0)
 					this.changeEventSuspendedCount = 0;
-			}
-			finally
-			{
-				this.changeEventSuspendedCountLock.ExitWriteLock();
 			}
 
 			foreach (SettingsItem node in this.nodes)

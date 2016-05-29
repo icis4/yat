@@ -40,7 +40,7 @@ namespace MKY.Data
 		private List<DataItem> nodes;          // = null;
 		private bool haveChanged;              // = false;
 		private int changeEventSuspendedCount; // = 0;
-		private ReaderWriterLockSlim changeEventSuspendedCountLock = new ReaderWriterLockSlim();
+		private object changeEventSuspendedCountSyncObj = new object();
 
 		/// <summary></summary>
 		public event EventHandler<DataEventArgs> Changed;
@@ -53,7 +53,9 @@ namespace MKY.Data
 
 #if (DEBUG)
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
+		/// </remarks>
 		~DataItem()
 		{
 			Diagnostics.DebugEventManagement.DebugNotifyAllEventRemains(this);
@@ -68,14 +70,35 @@ namespace MKY.Data
 		//==========================================================================================
 
 		/// <summary></summary>
+		protected virtual void AttachOrReplaceOrDetachNode(DataItem nodeOld, DataItem nodeNew)
+		{
+			if      (nodeNew == null)
+			{
+				DetachNode(nodeOld);
+			}
+			else if (nodeOld == null)
+			{
+				AttachNode(nodeNew);
+			}
+			else if (nodeNew != nodeOld)
+			{
+				ReplaceNode(nodeOld, nodeNew);
+			}
+			else // nodeNew == nodeOld
+			{
+				// Nothing to do.
+			}
+		}
+
+		/// <summary></summary>
 		protected virtual void AttachNode(DataItem node)
 		{
 			if (node != null)
 			{
 				SuspendChangeEvent();
 
-				node.SuspendChangeEvent();
-				node.SetChanged();
+				node.SetChangeEventSuspendedCount(this.changeEventSuspendedCount);
+				node.SetChanged(); // Indicate potentially different settings of the new.
 				node.Changed += node_Changed;
 				this.nodes.Add(node);
 
@@ -96,8 +119,8 @@ namespace MKY.Data
 					int index = this.nodes.IndexOf(nodeOld);
 					this.nodes.RemoveAt(index);
 
-					nodeNew.SuspendChangeEvent(nodeOld.changeEventSuspendedCount);
-					nodeNew.SetChanged();
+					nodeNew.SetChangeEventSuspendedCount(this.changeEventSuspendedCount);
+					nodeNew.SetChanged(); // Indicate potentially different settings of the new.
 					nodeNew.Changed += node_Changed;
 					this.nodes.Insert(index, nodeNew);
 
@@ -284,14 +307,9 @@ namespace MKY.Data
 		{
 			bool fire = false;
 
-			this.changeEventSuspendedCountLock.EnterReadLock();
-			try
+			lock (this.changeEventSuspendedCountSyncObj)
 			{
 				fire = (this.changeEventSuspendedCount == 0);
-			}
-			finally
-			{
-				this.changeEventSuspendedCountLock.ExitReadLock();
 			}
 
 			if (fire)
@@ -306,29 +324,30 @@ namespace MKY.Data
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Temporarily suspends the change event for the settings and all nodes of the settings tree.
+		/// Sets the change event suspended count.
 		/// </summary>
-		public virtual void SuspendChangeEvent()
+		protected virtual void SetChangeEventSuspendedCount(int count)
 		{
-			SuspendChangeEvent(1);
+			foreach (SettingsItem node in this.nodes)
+				node.SetChangeEventSuspendedCount(count);
+
+			lock (this.changeEventSuspendedCountSyncObj)
+			{
+				this.changeEventSuspendedCount = count;
+			}
 		}
 
 		/// <summary>
 		/// Temporarily suspends the change event for the settings and all nodes of the settings tree.
 		/// </summary>
-		protected virtual void SuspendChangeEvent(int suspendedCount)
+		public virtual void SuspendChangeEvent()
 		{
 			foreach (DataItem node in this.nodes)
-				node.SuspendChangeEvent(suspendedCount);
+				node.SuspendChangeEvent();
 
-			this.changeEventSuspendedCountLock.EnterWriteLock();
-			try
+			lock (this.changeEventSuspendedCountSyncObj)
 			{
-				this.changeEventSuspendedCount += suspendedCount;
-			}
-			finally
-			{
-				this.changeEventSuspendedCountLock.ExitWriteLock();
+				this.changeEventSuspendedCount++;
 			}
 		}
 
@@ -337,16 +356,11 @@ namespace MKY.Data
 		/// </summary>
 		public virtual void ResumeChangeEvent(bool forcePendingChangeEvent = true)
 		{
-			this.changeEventSuspendedCountLock.EnterWriteLock();
-			try
+			lock (this.changeEventSuspendedCountSyncObj)
 			{
 				this.changeEventSuspendedCount--;
 				if (this.changeEventSuspendedCount < 0)
 					this.changeEventSuspendedCount = 0;
-			}
-			finally
-			{
-				this.changeEventSuspendedCountLock.ExitWriteLock();
 			}
 
 			foreach (DataItem node in this.nodes)

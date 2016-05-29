@@ -93,9 +93,9 @@ namespace MKY.Settings
 			where TSettings : SettingsItem, new()
 		{
 			#region Fields
-			//==========================================================================================
+			//======================================================================================
 			// Fields
-			//==========================================================================================
+			//======================================================================================
 
 			[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "This is a bug in FxCop 1.36.")]
 			private bool isDisposed;
@@ -104,7 +104,7 @@ namespace MKY.Settings
 			private string name;
 
 			[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "This is a bug in FxCop 1.36.")]
-			private TSettings settings = default(TSettings);
+			private TSettings settings;
 
 			[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "This is a bug in FxCop 1.36.")]
 			private AlternateXmlElement[] alternateXmlElements;
@@ -121,9 +121,9 @@ namespace MKY.Settings
 			#endregion
 
 			#region Object Lifetime
-			//==========================================================================================
+			//======================================================================================
 			// Object Lifetime
-			//==========================================================================================
+			//======================================================================================
 
 			/// <param name="name">The name of the settings.</param>
 			/// <param name="filePath">The file path to the settings file.</param>
@@ -196,9 +196,15 @@ namespace MKY.Settings
 					// Dispose of managed resources if requested:
 					if (disposing)
 					{
+						if (this.mutex != null)
+							this.mutex.Close();
 					}
 
 					// Set state to disposed:
+					this.settings = null; // De-reference settings, to let them get free'd by GC.
+					this.alternateXmlElements = null;
+
+					this.mutex = null;
 					this.isDisposed = true;
 				}
 			}
@@ -243,30 +249,22 @@ namespace MKY.Settings
 			#endregion
 
 			#region Properties
-			//==========================================================================================
+			//======================================================================================
 			// Properties
-			//==========================================================================================
+			//======================================================================================
 
 			/// <summary></summary>
 			public virtual TSettings Settings
 			{
-				get
-				{
-					AssertNotDisposed();
-					return (this.settings);
-				}
+				get { AssertNotDisposed(); return (this.settings); }
 			}
 
 			/// <summary>
-			/// Handler to settings default.
+			/// Handler to defaults.
 			/// </summary>
-			public virtual TSettings SettingsDefault
+			public static TSettings Defaults
 			{
-				get
-				{
-					AssertNotDisposed();
-					return (new TSettings());
-				}
+				get { return (new TSettings()); }
 			}
 
 			/// <summary>
@@ -290,9 +288,9 @@ namespace MKY.Settings
 			#endregion
 
 			#region Methods
-			//==========================================================================================
+			//======================================================================================
 			// Methods
-			//==========================================================================================
+			//======================================================================================
 
 			/// <summary>
 			/// Tries to load settings from corresponding file path.
@@ -308,15 +306,13 @@ namespace MKY.Settings
 
 				if ((this.effectiveFileAccess & FileAccessFlags.Read) == FileAccessFlags.Read)
 				{
-					object settings;
-
 					// Try to open existing file of current version:
 					try
 					{
-						settings = LoadFromFile(typeof(TSettings), this.alternateXmlElements);
+						var settings = (TSettings)LoadFromFile(typeof(TSettings), this.alternateXmlElements);
 						if (settings != null)
 						{
-							this.settings = (TSettings)settings;
+							this.settings = settings;
 							return (true);
 						}
 					}
@@ -355,10 +351,10 @@ namespace MKY.Settings
 							string oldFilePath = oldDirectories[i] + Path.DirectorySeparatorChar + fileName;
 							try
 							{
-								settings = LoadFromFile(oldFilePath, typeof(TSettings), this.alternateXmlElements);
+								var settings = (TSettings)LoadFromFile(oldFilePath, typeof(TSettings), this.alternateXmlElements);
 								if (settings != null)
 								{
-									this.settings = (TSettings)settings;
+									this.settings = settings;
 									return (true);
 								}
 							}
@@ -371,7 +367,7 @@ namespace MKY.Settings
 				}
 
 				// Nothing found, return default settings:
-				this.settings = SettingsDefault;
+				this.settings = Defaults;
 				return (false);
 			}
 
