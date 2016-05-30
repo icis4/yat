@@ -34,10 +34,12 @@ namespace YAT.Controller.Diagnostics
 		[Conditional("DEBUG")]
 		public static void DebugNotifyAllowedStaticObjects()
 		{
-			Debug.WriteLine("Late finalizer calls are allowed for the following static objects:");
-			Debug.Indent();
-			Debug.WriteLine("<TBD>");
-			Debug.Unindent();
+		////Debug.WriteLine("Late finalizer calls are allowed for the following static objects:");
+		////Debug.Indent();
+		////Debug.WriteLine("<TBD>");
+		////Debug.Unindent();
+
+			Debug.WriteLine("Detection of late finalizer calls has been disabled until fix of bugs #243, #263 and #336 continues.");
 		}
 	}
 }

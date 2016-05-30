@@ -258,7 +258,7 @@ namespace YAT.Model
 		{
 		}
 
-		/// <summary></summary>
+		/// <remarks><see cref="Guid.Empty"/> cannot be used as default argument as it is read-only.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		public Terminal(TerminalStartArgs startArgs, DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid)
 		{
@@ -340,17 +340,21 @@ namespace YAT.Model
 				{
 					// In the 'normal' case, terminal and log have already been closed, otherwise...
 
-					// ...first, detach event handlers to ensure that no more events are received...
-					DetachSettingsEventHandlers();
+					// ...detach event handlers to ensure that no more events are received...
 					DetachTerminalEventHandlers();
 
-					// ...then, dispose of objects:
+					// ...ensure that timed objects are stopped and do not fire events anymore...
 					DisposeRates();
 					DisposeChronos();
 					DisposeAutoResponse();
 
+					// ...close and dispose of terminal and log...
 					CloseAndDisposeTerminal();
 					DisposeLog();
+
+					// ...and finally dispose of the settings:
+					DetachSettingsEventHandlers();
+					DisposeSettingsHandler();
 				}
 
 				// Set state to disposed:
@@ -1220,6 +1224,15 @@ namespace YAT.Model
 				this.settingsRoot.Changed -= settingsRoot_Changed;
 		}
 
+		private void DisposeSettingsHandler()
+		{
+			if (this.settingsHandler != null)
+			{
+				this.settingsHandler.Dispose();
+				this.settingsHandler = null;
+			}
+		}
+
 		#endregion
 
 		#region Settings > Event Handlers
@@ -1921,23 +1934,6 @@ namespace YAT.Model
 			// -------------------------------------------------------------------------------------
 			// Finally, cleanup and signal state.
 			// -------------------------------------------------------------------------------------
-
-			if (success)
-			{
-				DetachSettingsEventHandlers();
-				DetachTerminalEventHandlers();
-
-				// Ensure that timed objects are stopped and do not fire events anymore...
-				DisposeRates();
-				DisposeChronos();
-				DisposeAutoResponse();
-
-				// ...signal that the terminal can definitely close...
-				CloseAndDisposeTerminal();
-
-				// ...and finally the log:
-				DisposeLog();
-			}
 
 			if (success)
 			{

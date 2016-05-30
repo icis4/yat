@@ -171,10 +171,10 @@ namespace YAT.Model
 
 					// In the 'normal' case, the workspace has already been closed, otherwise...
 
-					// ...first, detach event handlers to ensure that no more events are received...
+					// ...detach event handlers to ensure that no more events are received...
 					DetachWorkspaceEventHandlers();
 
-					// ...then, dispose of workspace (normally it disposes of itself):
+					// ...dispose of workspace (normally it disposes of itself)...
 					if (this.workspace != null)
 						this.workspace.Dispose();
 				}
@@ -1144,10 +1144,6 @@ namespace YAT.Model
 			{
 				OnFixedStatusTextRequest("Exiting " + ApplicationEx.ProductName + "...");
 
-				// Cleanup:
-				StopAndDisposeOperationTimer();
-				StopAndDisposeExitTimer();
-
 				// Signal the exit:
 				OnExited(this.result);
 
@@ -1227,6 +1223,7 @@ namespace YAT.Model
 			}
 
 			DetachWorkspaceEventHandlers();
+			this.workspace = null;
 			OnWorkspaceClosed(e);
 		}
 
