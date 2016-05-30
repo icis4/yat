@@ -772,7 +772,7 @@ namespace YAT.Domain
 		}
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		private void ProcessAndSignalPortAndDirectionLineBreak(string ps, IODirection d)
+		private void ProcessAndSignalPortOrDirectionLineBreak(string ps, IODirection d)
 		{
 			if (TerminalSettings.Display.PortLineBreakEnabled ||
 				TerminalSettings.Display.DirectionLineBreakEnabled)
@@ -781,20 +781,33 @@ namespace YAT.Domain
 				{
 					this.bidirLineState.IsFirstLine = false;
 				}
-				else
+				else // is subsequent line
 				{
-					LineState lineState; // Attention: Direction changed => Use opposite state.
-					switch (d)
+					if (!StringEx.EqualsOrdinalIgnoreCase(ps, this.bidirLineState.PortStamp) ||
+						(d != this.bidirLineState.Direction))
 					{
-						case IODirection.Tx: lineState = this.rxLineState; break; // Reversed!
-						case IODirection.Rx: lineState = this.txLineState; break;
-						default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-					}
+						LineState lineState;
 
-					if (lineState.LineElements.Count > 0)
-					{
-						if (!StringEx.EqualsOrdinalIgnoreCase(ps, this.bidirLineState.PortStamp) ||
-							(d != this.bidirLineState.Direction))
+						if (d == this.bidirLineState.Direction)
+						{
+							switch (d)
+							{
+								case IODirection.Tx: lineState = this.txLineState; break;
+								case IODirection.Rx: lineState = this.rxLineState; break;
+								default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
+						}
+						else // Attention: Direction changed => Use opposite state.
+						{
+							switch (d)
+							{
+								case IODirection.Tx: lineState = this.rxLineState; break; // Reversed!
+								case IODirection.Rx: lineState = this.txLineState; break;
+								default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
+						}
+
+						if ((lineState.LineElements != null) && (lineState.LineElements.Count > 0))
 						{
 							DisplayElementCollection elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
 							List<DisplayLine> lines = new List<DisplayLine>();
@@ -804,9 +817,9 @@ namespace YAT.Domain
 							OnDisplayElementsProcessed(this.bidirLineState.Direction, elements);
 							OnDisplayLinesProcessed   (this.bidirLineState.Direction, lines);
 						}
-					}
-				}
-			}
+					} // a line break has been detected
+				} // is subsequent line
+			} // a line break is active
 
 			this.bidirLineState.PortStamp = ps;
 			this.bidirLineState.Direction = d;
@@ -815,8 +828,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected override void ProcessAndSignalRawChunk(RawChunk raw)
 		{
-			// Check whether direction has changed:
-			ProcessAndSignalPortAndDirectionLineBreak(raw.PortStamp, raw.Direction);
+			// Check whether port or direction has changed:
+			ProcessAndSignalPortOrDirectionLineBreak(raw.PortStamp, raw.Direction);
 
 			// Process the raw chunk:
 			base.ProcessAndSignalRawChunk(raw);

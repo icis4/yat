@@ -842,14 +842,19 @@ namespace MKY.IO.Serial.Socket
 
 						while (this.dataSentQueue.Count > 0)
 						{
-							Pair<byte, System.Net.IPEndPoint> item = this.dataSentQueue.Dequeue();
+							Pair<byte, System.Net.IPEndPoint> item;
 
-							data.Add(item.Value1);
+							// First, peek to check whether data refers to different end point:
+							item = this.dataSentQueue.Peek();
 
 							if (remoteEndPoint == null)
 								remoteEndPoint = item.Value2;
 							else if (remoteEndPoint != item.Value2)
 								break; // Break as soon as data of a different end point is available.
+
+							// If still the same end point, dequeue the item to acknowledge it's gone:
+							item = this.dataSentQueue.Dequeue();
+							data.Add(item.Value1);
 						}
 					}
 
