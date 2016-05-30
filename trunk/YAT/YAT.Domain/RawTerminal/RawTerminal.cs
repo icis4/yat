@@ -165,16 +165,19 @@ namespace YAT.Domain
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					// In the 'normal' case, Stop() will have already been called...
-					Stop();
+					// In the 'normal' case, I/O will already have been stopped in Stop()...
+					if (this.io != null)
+						this.io.Stop();
 
 					// ...and objects will already have been detached and disposed of in Close():
+					DetachAndDisposeIO();
 					DetachIOSettings();
 					DetachBufferSettings();
-					DetachAndDisposeIO();
+					DisposeRepositories();
 				}
 
 				// Set state to disposed:
+				this.io = null;
 				this.isDisposed = true;
 			}
 		}
@@ -385,6 +388,9 @@ namespace YAT.Domain
 			AssertNotDisposed();
 
 			DetachAndDisposeIO();
+			DetachIOSettings();
+			DetachBufferSettings();
+			DisposeRepositories();
 		}
 
 		//------------------------------------------------------------------------------------------
@@ -517,6 +523,30 @@ namespace YAT.Domain
 				}
 			}
 			return (s);
+		}
+
+		private void DisposeRepositories()
+		{
+			lock (this.repositorySyncObj)
+			{
+				if (this.txRepository != null)
+				{
+					this.txRepository.Clear();
+					this.txRepository = null;
+				}
+
+				if (this.bidirRepository != null)
+				{
+					this.bidirRepository.Clear();
+					this.bidirRepository = null;
+				}
+
+				if (this.rxRepository != null)
+				{
+					this.rxRepository.Clear();
+					this.rxRepository = null;
+				}
+			}
 		}
 
 		#endregion

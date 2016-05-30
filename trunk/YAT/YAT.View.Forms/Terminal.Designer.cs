@@ -1,4 +1,8 @@
-﻿namespace YAT.View.Forms
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace YAT.View.Forms
 {
 	partial class Terminal
 	{
@@ -13,7 +17,7 @@
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
-			DebugMessage("Disposing...");
+			DebugMessage("Disposing..."); // Additional debug message indicating the sequence of disposal (model -vs- view).
 
 			if (disposing && (components != null))
 			{
@@ -21,7 +25,7 @@
 			}
 			base.Dispose(disposing);
 
-			DebugMessage("...successfully disposed.");
+			DebugMessage("...successfully disposed."); // Additional debug message indicating the sequence of disposal (model -vs- view).
 		}
 
 		#region Windows Form Designer generated code

@@ -146,7 +146,7 @@ namespace YAT.Model
 		{
 		}
 
-		/// <summary></summary>
+		/// <remarks><see cref="Guid.Empty"/> cannot be used as default argument as it is read-only.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		public Workspace(WorkspaceStartArgs startArgs, DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, Guid guid)
 		{
@@ -205,11 +205,10 @@ namespace YAT.Model
 				{
 					// In the 'normal' case, the terminals have already been closed, otherwise...
 
-					// ...first, detach event handlers to ensure that no more events are received...
-					DetachSettingsEventHandlers();
+					// ...detach event handlers to ensure that no more events are received...
 					DetachAllTerminalEventHandlers();
 
-					// ...then, dispose of terminals (normally they dispose of themselves):
+					// ...dispose of terminals (normally they dispose of themselves)...
 					if (this.terminals != null)
 					{
 						foreach (Terminal t in this.terminals)
@@ -217,6 +216,10 @@ namespace YAT.Model
 
 						this.terminals.Clear();
 					}
+
+					// ...and finally the settings:
+					DetachSettingsEventHandlers();
+					DisposeSettingsHandler();
 				}
 
 				// Set state to disposed:
@@ -518,6 +521,15 @@ namespace YAT.Model
 		{
 			if (this.settingsRoot != null)
 				this.settingsRoot.Changed -= settingsRoot_Changed;
+		}
+
+		private void DisposeSettingsHandler()
+		{
+			if (this.settingsHandler != null)
+			{
+				this.settingsHandler.Dispose();
+				this.settingsHandler = null;
+			}
 		}
 
 		#endregion
@@ -1103,14 +1115,14 @@ namespace YAT.Model
 
 			if (successWithTerminals && successWithWorkspace)
 			{
-				DetachSettingsEventHandlers();
-
 				// Close all contained terminals signaling them a workspace close to ensure that the
 				// workspace is not modified when the terminals get closed, but do not save anymore:
 				if (this.settingsHandler.SettingsFileExists)
 					successWithTerminals = CloseAllTerminals(true, false, false, false);
 				else
 					successWithTerminals = CloseAllTerminals(true, false, false, true);
+
+				// The terminal event handlers will get detached in the 'terminal_Closed' event.
 			}
 
 			if (successWithTerminals && successWithWorkspace)
@@ -1227,7 +1239,9 @@ namespace YAT.Model
 
 		private void terminal_Saved(object sender, SavedEventArgs e)
 		{
-			ReplaceInWorkspace((Terminal)sender);
+			Terminal t = (Terminal)sender;
+
+			ReplaceTerminalInWorkspace(t);
 
 			if (!e.IsAutoSave)
 				SetRecent(e.FilePath);
@@ -1242,10 +1256,8 @@ namespace YAT.Model
 		{
 			Terminal t = (Terminal)sender;
 
-			if (!e.IsParentClose)
-				RemoveFromWorkspace(t);
-
 			DetachTerminalEventHandlers(t);
+			RemoveTerminalFromWorkspace(t, !e.IsParentClose);
 			OnTerminalRemoved(t);
 		}
 
@@ -1299,7 +1311,7 @@ namespace YAT.Model
 
 			Terminal terminal = new Terminal(this.startArgs.ToTerminalStartArgs(), settingsHandler);
 			AttachTerminalEventHandlers(terminal);
-			AddToWorkspace(terminal);
+			AddTerminalToWorkspace(terminal);
 			OnTerminalAdded(terminal);
 
 			OnCursorReset();
@@ -1542,7 +1554,7 @@ namespace YAT.Model
 			}
 
 			AttachTerminalEventHandlers(terminal);
-			AddToWorkspace(terminal, fixedIndex);
+			AddTerminalToWorkspace(terminal, fixedIndex);
 			OnTerminalAdded(terminal);
 
 			if (!settingsHandler.Settings.AutoSaved)
@@ -1660,12 +1672,12 @@ namespace YAT.Model
 			return (tsi);
 		}
 
-		private void AddToWorkspace(Terminal terminal, int requestedFixedIndex = Indices.DefaultFixedIndex)
+		private void AddTerminalToWorkspace(Terminal terminal, int requestedFixedIndex = Indices.DefaultFixedIndex)
 		{
 			// Add terminal to terminal list:
 			this.terminals.Add(terminal);
 			this.activeTerminal = terminal;
-			int effectiveIndex = AddToFixedIndices(terminal, requestedFixedIndex);
+			int effectiveIndex = AddTerminalToFixedIndices(terminal, requestedFixedIndex);
 
 			// Add terminal settings for new terminals:
 			// Replace terminal settings if workspace settings have been loaded from file prior.
@@ -1673,7 +1685,7 @@ namespace YAT.Model
 			this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
 		}
 
-		private void ReplaceInWorkspace(Terminal terminal)
+		private void ReplaceTerminalInWorkspace(Terminal terminal)
 		{
 			// Replace terminal in terminal list:
 			this.terminals.Replace(terminal);
@@ -1689,19 +1701,22 @@ namespace YAT.Model
 			}
 		}
 
-		private void RemoveFromWorkspace(Terminal terminal)
+		private void RemoveTerminalFromWorkspace(Terminal terminal, bool doNotRemoveFromSettings)
 		{
 			// Remove terminal from workspace settings:
-			this.settingsRoot.TerminalSettings.Remove(terminal.Guid);
-			this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
+			if (doNotRemoveFromSettings)
+			{
+				this.settingsRoot.TerminalSettings.Remove(terminal.Guid);
+				this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
+			}
 
 			// Remove terminal from workspace lists:
 			this.terminals.Remove(terminal.Guid);
-			RemoveFromFixedIndices(terminal);
+			RemoveTerminalFromFixedIndices(terminal);
 			DeactivateTerminal(terminal);
 		}
 
-		private int AddToFixedIndices(Terminal terminal, int requestedFixedIndex)
+		private int AddTerminalToFixedIndices(Terminal terminal, int requestedFixedIndex)
 		{
 			// First, try to lookup the requested fixed index if suitable:
 			if (requestedFixedIndex >= Indices.FirstFixedIndex)
@@ -1727,7 +1742,7 @@ namespace YAT.Model
 			throw (new OverflowException("Constant index of terminals exceeded!"));
 		}
 
-		private void RemoveFromFixedIndices(Terminal terminal)
+		private void RemoveTerminalFromFixedIndices(Terminal terminal)
 		{
 			this.fixedIndices.Remove(GetFixedIndexByTerminal(terminal));
 		}

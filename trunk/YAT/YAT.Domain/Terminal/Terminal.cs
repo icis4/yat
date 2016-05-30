@@ -376,6 +376,7 @@ namespace YAT.Domain
 					// ...and objects will already have been detached and disposed of in Close():
 					DetachTerminalSettings();
 					DetachAndDisposeRawTerminal();
+					DisposeRepositories();
 				}
 
 				// Set state to disposed:
@@ -766,8 +767,9 @@ namespace YAT.Domain
 			AssertNotDisposed();
 
 			StopSendThread();
-
+			this.rawTerminal.Close();
 			DetachAndDisposeRawTerminal();
+			DisposeRepositories();
 		}
 
 		#endregion
@@ -2349,6 +2351,30 @@ namespace YAT.Domain
 			AssertNotDisposed();
 
 			return (this.rawTerminal.RepositoryToChunks(repository));
+		}
+
+		private void DisposeRepositories()
+		{
+			lock (this.repositorySyncObj)
+			{
+				if (this.txRepository != null)
+				{
+					this.txRepository.Clear();
+					this.txRepository = null;
+				}
+
+				if (this.bidirRepository != null)
+				{
+					this.bidirRepository.Clear();
+					this.bidirRepository = null;
+				}
+
+				if (this.rxRepository != null)
+				{
+					this.rxRepository.Clear();
+					this.rxRepository = null;
+				}
+			}
 		}
 
 		#endregion
