@@ -129,7 +129,7 @@ namespace YAT.Model.Utilities
 				case Domain.IOType.SerialPort:
 				{
 					yatLead = ApplicationEx.ProductName + " hints:";
-					yatText = "Check the communication settings and keep in mind that hardware and driver may limit the allowed communication settings.";
+					yatText = "Check the communication settings and keep in mind that hardware and driver may limit the allowed settings.";
 					break;
 				}
 
@@ -174,7 +174,7 @@ namespace YAT.Model.Utilities
 				{
 					yatLead = ApplicationEx.ProductName + " hints:";
 					yatText = "Make sure the selected serial COM port is available and not already in use. " +
-					          "Also, check the communication settings and keep in mind that hardware and driver may limit the allowed communication settings.";
+					          "Also, check the communication settings and keep in mind that hardware and driver may limit the allowed settings.";
 					break;
 				}
 
