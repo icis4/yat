@@ -3621,18 +3621,16 @@ namespace YAT.View.Forms
 		{
 			SetFixedStatusText("Terminal Settings...");
 
-			// Clone settings to ensure that settings result is a different object than the original settings.
-			ExplicitSettings clone = new ExplicitSettings(this.settingsRoot.Explicit);
-			TerminalSettings f = new TerminalSettings(clone);
+			TerminalSettings f = new TerminalSettings(this.settingsRoot.Explicit);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
 
-				Settings.Terminal.ExplicitSettings s = f.SettingsResult;
-				if (s.HaveChanged)
+				ExplicitSettings fsr = f.SettingsResult;
+				if (fsr.HaveChanged)
 				{
 					SuspendHandlingTerminalSettings();
-					this.terminal.SetSettings(s);
+					this.terminal.SetSettings(fsr);
 					ResumeHandlingTerminalSettings();
 				}
 				else

@@ -131,7 +131,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public RawTerminal(Settings.IOSettings ioSettings, Settings.BufferSettings bufferSettings, RawTerminal rhs)
+		public RawTerminal(RawTerminal rhs, Settings.IOSettings ioSettings, Settings.BufferSettings bufferSettings)
 		{
 			this.txRepository    = new RawRepository(rhs.txRepository);
 			this.bidirRepository = new RawRepository(rhs.bidirRepository);

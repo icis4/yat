@@ -333,12 +333,8 @@ namespace YAT.Domain
 			this.bidirRepository = new DisplayRepository(terminal.bidirRepository);
 			this.rxRepository    = new DisplayRepository(terminal.rxRepository);
 
-			this.txRepository.Capacity    = settings.Display.MaxLineCount;
-			this.bidirRepository.Capacity = settings.Display.MaxLineCount;
-			this.rxRepository.Capacity    = settings.Display.MaxLineCount;
-
 			AttachTerminalSettings(settings);
-			AttachRawTerminal(new RawTerminal(this.terminalSettings.IO, this.terminalSettings.Buffer, terminal.rawTerminal));
+			AttachRawTerminal(new RawTerminal(terminal.rawTerminal, this.terminalSettings.IO, this.terminalSettings.Buffer));
 
 			this.eventsSuspendedForReload = terminal.eventsSuspendedForReload;
 

@@ -149,7 +149,12 @@ namespace YAT.Domain
 
 			public LineSendDelayState()
 			{
-				Reset();
+				LineCount = 0;
+			}
+
+			public LineSendDelayState(LineSendDelayState rhs)
+			{
+				LineCount = rhs.LineCount;
 			}
 
 			public virtual void Reset()
@@ -197,10 +202,12 @@ namespace YAT.Domain
 			if (casted != null)
 			{
 				this.rxMultiByteDecodingStream = casted.rxMultiByteDecodingStream;
-				this.txLineState      = casted.txLineState;
-				this.rxLineState      = casted.rxLineState;
+				this.txLineState               = casted.txLineState;
+				this.rxLineState               = casted.rxLineState;
 
 				this.bidirLineState = new BidirLineState(casted.bidirLineState);
+
+				this.lineSendDelayState = new LineSendDelayState(casted.lineSendDelayState);
 			}
 			else
 			{

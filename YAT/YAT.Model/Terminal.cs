@@ -1167,11 +1167,14 @@ namespace YAT.Model
 				{
 					this.settingsRoot.SuspendChangeEvent();
 					this.settingsRoot.Explicit = settings;
+
+					DetachTerminalEventHandlers();
 					Domain.Terminal oldTerminal = this.terminal;
 					this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
-					oldTerminal.Dispose();         // Ensure to dispose of the 'old' resources.
-					this.settingsRoot.ResumeChangeEvent();
+					oldTerminal.Dispose();
+					AttachTerminalEventHandlers();
 
+					this.settingsRoot.ResumeChangeEvent();
 					this.terminal.ReloadRepositories();
 
 					if (StartIO(false))
@@ -1189,11 +1192,14 @@ namespace YAT.Model
 				// Terminal is closed, simply set the new settings:
 				this.settingsRoot.SuspendChangeEvent();
 				this.settingsRoot.Explicit = settings;
+
+				DetachTerminalEventHandlers();
 				Domain.Terminal oldTerminal = this.terminal;
 				this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
-				oldTerminal.Dispose();         // Ensure to dispose of the 'old' resources.
-				this.settingsRoot.ResumeChangeEvent();
+				oldTerminal.Dispose();
+				AttachTerminalEventHandlers();
 
+				this.settingsRoot.ResumeChangeEvent();
 				this.terminal.ReloadRepositories();
 
 				OnTimedStatusTextRequest("Terminal settings applied.");
