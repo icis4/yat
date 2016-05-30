@@ -1223,7 +1223,7 @@ namespace YAT.Model
 			}
 
 			DetachWorkspaceEventHandlers();
-			this.workspace = null;
+			this.workspace = null; // Simply de-reference the workspace, it disposes of itself.
 			OnWorkspaceClosed(e);
 		}
 

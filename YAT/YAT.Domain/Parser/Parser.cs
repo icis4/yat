@@ -80,6 +80,7 @@ namespace YAT.Domain.Parser
 			@"Formats can be nested, e.g. ""\d(79 \h(4B) 79)""" + Environment.NewLine +
 			@"Three letter radix identifiers are also allowed, e.g. ""\hex"" alternative to ""\h""" + Environment.NewLine +
 			@"+/- signs are not allowed, neither are decimal points nor separators such as the apostroph" + Environment.NewLine +
+			@"Enable ""Explicit Default Radix"" to switch default radix to a different setting than string" + Environment.NewLine +
 			Environment.NewLine +
 			@"In addition, C-style escape sequences are supported:" + Environment.NewLine +
 			@"""\r\n"" alternative to ""<CR><LF>""" + Environment.NewLine +

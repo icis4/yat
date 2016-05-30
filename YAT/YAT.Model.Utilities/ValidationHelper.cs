@@ -42,6 +42,13 @@ namespace YAT.Model.Utilities
 	public static class ValidationHelper
 	{
 		/// <summary></summary>
+		public static bool ValidateText(string description, string textToValidate, Domain.Radix defaultRadix = Domain.Radix.String, Domain.Parser.Modes modes = Domain.Parser.Modes.AllExceptKeywords)
+		{
+			string errorMessage;
+			return (ValidateText(description, textToValidate, out errorMessage, defaultRadix, modes));
+		}
+
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool ValidateText(string description, string textToValidate, out string errorMessage, Domain.Radix defaultRadix = Domain.Radix.String, Domain.Parser.Modes modes = Domain.Parser.Modes.AllExceptKeywords)
 		{

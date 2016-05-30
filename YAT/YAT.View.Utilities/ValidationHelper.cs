@@ -73,6 +73,28 @@ namespace YAT.View.Utilities
 				return (false);
 			}
 		}
+
+		/// <summary></summary>
+		public static bool ValidateRadix(IWin32Window owner, string description, string textToValidate, Domain.Radix defaultRadix = Domain.Parser.Parser.DefaultRadixDefault, Domain.Parser.Modes modes = Domain.Parser.Modes.AllExceptKeywords)
+		{
+			if (Model.Utilities.ValidationHelper.ValidateText(description, textToValidate, defaultRadix, modes))
+			{
+				return (true);
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					owner,
+					"This " + description + " is not valid with the current command. Clear or change the command before changing the " + description + ".",
+					"Invalid " + description,
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Exclamation
+				);
+
+				return (false);
+			}
+		}
 	}
 }
 

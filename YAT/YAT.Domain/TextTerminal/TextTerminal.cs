@@ -334,7 +334,7 @@ namespace YAT.Domain
 			string textSuccessfullyParsed;
 
 			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.Send.ToParseMode()))
-				hasSucceeded = p.TryParse(textToParse, out parseResult, out textSuccessfullyParsed);
+				hasSucceeded = p.TryParse(textToParse, out parseResult, out textSuccessfullyParsed, item.DefaultRadix);
 
 			if (hasSucceeded)
 				ProcessParserResult(parseResult, item.IsLine);

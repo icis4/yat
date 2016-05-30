@@ -1257,7 +1257,7 @@ namespace YAT.Model
 			Terminal t = (Terminal)sender;
 
 			DetachTerminalEventHandlers(t);
-			RemoveTerminalFromWorkspace(t, !e.IsParentClose);
+			RemoveTerminalFromWorkspace(t, !e.IsParentClose); // Simply remove the terminal from the workspace, it disposes of itself.
 			OnTerminalRemoved(t);
 		}
 
