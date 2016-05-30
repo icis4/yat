@@ -49,7 +49,8 @@ namespace MKY.Settings
 	/// changes to this class also have to be applied to <see cref="Data.DataItem"/>.
 	/// 
 	/// Also note that this class intentionally doesn't implement <see cref="IDisposable"/>. That
-	/// would unnecessarily complicate the handling of settings item, e.g. in a settings dialog.
+	/// would unnecessarily complicate the handling of settings item, e.g. in a settings dialog,
+	/// as code analysis requires that <see cref="IDisposable"/> are indeed disposed of.
 	/// </remarks>
 	public abstract class SettingsItem : IEquatable<SettingsItem>
 	{
@@ -178,34 +179,6 @@ namespace MKY.Settings
 				this.nodes.Remove(node);
 
 				ResumeChangeEvent();
-			}
-		}
-
-		/// <summary>
-		/// Frees all resources attached to this node.
-		/// </summary>
-		/// <remarks>
-		/// Note that this class intentionally doesn't implement <see cref="IDisposable"/>. That
-		/// would unnecessarily complicate the handling of settings item, e.g. in a settings dialog.
-		/// </remarks>
-		public virtual void Free()
-		{
-			if (this.nodes != null)
-			{
-				SuspendChangeEvent(); // Permanently suspend the event, as this object is being free'd.
-
-				var clone = new List<SettingsItem>(this.nodes); // Clone is required as list is being modified below.
-
-				foreach (SettingsItem node in clone)
-					DetachNode(node);
-
-				foreach (SettingsItem node in clone)
-					node.Free();
-
-				this.nodes.Clear();
-				this.nodes = null;
-
-				// Do not ResumeChangeEvent(), as this object is being free'd.
 			}
 		}
 
