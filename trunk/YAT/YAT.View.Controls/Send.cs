@@ -206,6 +206,17 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual Domain.Parser.Modes ParseMode
+		{
+			set
+			{
+				sendText.ParseMode = value;
+			}
+		}
+
+		/// <summary></summary>
 		[DefaultValue(SendText.SendImmediatelyDefault)]
 		public virtual bool SendTextImmediately
 		{
@@ -336,7 +347,7 @@ namespace YAT.View.Controls
 		private void SetSendSplitterControls()
 		{
 			sendText.SendSplitterDistance = this.sendSplitterDistance - sendText.Left;
-			sendFile.SendSplitterDistance    = this.sendSplitterDistance - sendFile.Left;
+			sendFile.SendSplitterDistance = this.sendSplitterDistance - sendFile.Left;
 		}
 
 		#endregion

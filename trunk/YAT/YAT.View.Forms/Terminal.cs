@@ -2523,6 +2523,7 @@ namespace YAT.View.Forms
 			send.RecentFileCommands      = this.settingsRoot.SendFile.RecentCommands;
 			send.TerminalType            = this.settingsRoot.TerminalType;
 			send.UseExplicitDefaultRadix = this.settingsRoot.Send.UseExplicitDefaultRadix;
+			send.ParseMode               = this.settingsRoot.Send.ToParseMode();
 			send.SendTextImmediately     = this.settingsRoot.Send.SendImmediately;
 			send.TerminalIsReadyToSend   = this.terminal.IsReadyToSend;
 			this.isSettingControls.Leave();
