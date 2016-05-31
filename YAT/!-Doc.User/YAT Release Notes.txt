@@ -193,6 +193,9 @@ Limitations and known issues:
 - Text terminals: Wait for answer line not yet implemented (feature request #19).
 - Breaking while sending files not possible yet (bug #305).
 - Direct mode does not yet support special formats and commands (feature request #10).
+- Running YAT for a long period, or creating many terminals, results in memory leaks, which result
+  in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
+  unknown, could even be a limitation of the memory management within .NET 3.5).
 
 
 YAT 2.0 Gamma 1'' Version 1.99.34 :: 2015-06-13

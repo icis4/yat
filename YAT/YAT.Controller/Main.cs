@@ -416,6 +416,9 @@ namespace YAT.Controller
 		// Private Methods
 		//==========================================================================================
 
+		// Note that exceptions are only handled in case of 'Release'.
+		// In case of 'Debug', they shall be handled by the debugger.
+
 		#region Private Methods > RunFullyWithView
 		//------------------------------------------------------------------------------------------
 		// Private Methods > RunFullyWithView
@@ -434,7 +437,7 @@ namespace YAT.Controller
 #if (!DEBUG)
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler.
 			AppDomain currentDomain = AppDomain.CurrentDomain;
-			currentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunFullyWithView_currentDomain_UnhandledException);
+			currentDomain.UnhandledException += RunFullyWithView_currentDomain_UnhandledException;
 #endif
 			// Create model and view and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
@@ -476,7 +479,7 @@ namespace YAT.Controller
 					{
 #if (!DEBUG)
 						// Assume unhandled asynchronous synchronized exceptions and attach the application to the respective handler.
-						System.Windows.Forms.Application.ThreadException += new ThreadExceptionEventHandler(RunFullyWithView_Application_ThreadException);
+						System.Windows.Forms.Application.ThreadException += RunFullyWithView_Application_ThreadException;
 #endif
 
 						// Start the Win32 message loop on the current thread and the main form.
@@ -486,7 +489,7 @@ namespace YAT.Controller
 						System.Windows.Forms.Application.Run(view);
 
 #if (!DEBUG)
-						System.Windows.Forms.Application.ThreadException -= new ThreadExceptionEventHandler(RunFullyWithView_Application_ThreadException);
+						System.Windows.Forms.Application.ThreadException -= RunFullyWithView_Application_ThreadException;
 #endif
 						viewResult = view.Result;
 					}
@@ -580,7 +583,7 @@ namespace YAT.Controller
 #if (!DEBUG)
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler.
 			AppDomain currentDomain = AppDomain.CurrentDomain;
-			currentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_currentDomain_UnhandledException);
+			currentDomain.UnhandledException += RunWithViewButOutputErrorsOnConsole_currentDomain_UnhandledException;
 #endif
 			// Create model and view and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
@@ -622,7 +625,7 @@ namespace YAT.Controller
 					{
 #if (!DEBUG)
 						// Assume unhandled asynchronous synchronized exceptions and attach the application to the respective handler.
-						System.Windows.Forms.Application.ThreadException += new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
+						System.Windows.Forms.Application.ThreadException += RunWithViewButOutputErrorsOnConsole_Application_ThreadException;
 #endif
 
 						// Start the Win32 message loop on the current thread and the main form.
@@ -708,7 +711,7 @@ namespace YAT.Controller
 #if (!DEBUG)
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler.
 			AppDomain currentDomain = AppDomain.CurrentDomain;
-			currentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunFullyFromConsole_currentDomain_UnhandledException);
+			currentDomain.UnhandledException += RunFullyFromConsole_currentDomain_UnhandledException;
 #endif
 			// Create model and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
