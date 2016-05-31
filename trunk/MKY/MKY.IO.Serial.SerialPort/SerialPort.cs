@@ -959,14 +959,14 @@ namespace MKY.IO.Serial.SerialPort
 					} // while (dataAvailable)
 				} // while (isRunning)
 			}
-			catch (IOException ex) // No other way to detect a disconnected device than forcing this exception...
+			catch (IOException ex) // The best way to detect a disconnected device is handling this exception...
 			{
 				DebugEx.WriteException(GetType(), ex, "SendThread() has detected shutdown of port.");
 				RestartOrResetPortAndThreadsAndNotify();
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(GetType(), ex, "SendThread() has caught an unhandled exception!");
+				DebugEx.WriteException(GetType(), ex, "SendThread() has caught an unexpected exception! Restarting the port to try fixing the issue...");
 				RestartOrResetPortAndThreadsAndNotify();
 			}
 
@@ -1858,14 +1858,14 @@ namespace MKY.IO.Serial.SerialPort
 						OnIOControlChangedAsync(EventArgs.Empty);
 				}
 			}
-			catch (IOException ex) // No other way to detect a disconnected device than forcing this exception...
+			catch (IOException ex) // The best way to detect a disconnected device is handling this exception...
 			{
-				DebugEx.WriteException(GetType(), ex, "Disconnect detected while reading from port.");
+				DebugEx.WriteException(GetType(), ex, "DataReceived() has detected shutdown of port as it is no longer accessible.");
 				RestartOrResetPortAndThreadsAndNotify();
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(GetType(), ex, "Error while reading from port.");
+				DebugEx.WriteException(GetType(), ex, "DataReceived() has has caught an unexpected exception! Restarting the port to try fixing the issue...");
 				RestartOrResetPortAndThreadsAndNotify();
 			}
 		}
@@ -2006,14 +2006,14 @@ namespace MKY.IO.Serial.SerialPort
 					//  > #277 "Blocking application with internal serial interface"
 				}
 			}
-			catch (IOException ex) // No other way to detect a disconnected device than forcing this exception...
+			catch (IOException ex) // The best way to detect a disconnected device is handling this exception...
 			{
 				DebugEx.WriteException(GetType(), ex, "PinChanged() has detected shutdown of port as it is no longer accessible.");
 				RestartOrResetPortAndThreadsAndNotify();
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(GetType(), ex, "PinChanged() has caught an unhandled exception!");
+				DebugEx.WriteException(GetType(), ex, "PinChanged() has caught an unexpected exception! Restarting the port to try fixing the issue...");
 				RestartOrResetPortAndThreadsAndNotify();
 			}
 		}
@@ -2153,17 +2153,41 @@ namespace MKY.IO.Serial.SerialPort
 								RestartOrResetPortAndThreadsAndNotify();
 							}
 
-							int byteToReadDummy = this.port.BytesToRead; // Force e.g. 'IOException', see above.
-							UnusedLocal.PreventAnalysisWarning(byteToReadDummy);
+							if (this.port.PortId >= 3) // Skip for COM1 and COM2, explanation see below.
+							{
+								int byteToReadDummy = this.port.BytesToRead; // Force e.g. 'IOException', see above.
+								UnusedLocal.PreventAnalysisWarning(byteToReadDummy);
+							}
+							else
+							{
+								// Attention:
+								// On an internal port that is open and in use, accessing 'BytesToRead' will first properly lead to an 'IOException',
+								// but later an additional 'ObjectDisposedException' will happen on a separate thread!
+								//   > Message : "Safe handle has been closed"
+								//   > Source  : "mscorlib"
+								//   > Stack   : at System.StubHelpers.StubHelpers.SafeHandleC2NHelper(Object pThis, IntPtr pCleanupWorkList)
+								//               at Microsoft.Win32.UnsafeNativeMethods.GetOverlappedResult(SafeFileHandle hFile, NativeOverlapped* lpOverlapped, Int32& lpNumberOfBytesTransferred, Boolean bWait)
+								//               at System.IO.Ports.SerialStream.EventLoopRunner.WaitForCommEvent()
+								//               at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+								//               at System.Threading.ThreadHelper.ThreadStart()
+								//
+								// A couple of workarounds have been considered:
+								//   > Detecting a suspend request from the operating system.
+								//       => Not a solution, as .NET doesn't provide this functionlity and thus the implementation would get OS dependent.
+								//   > Ignoring 'ObjectDisposedException' from "mscorlib" in the 'currentDomain_UnhandledException' (Controller.Main).
+								//       => Not a solution, as the exception already happened and will have closed the port.
+								//   > Preventing such exception in best-effort style, by skipping the access to 'BytesToRead' for internal ports COM1 and COM2.
+								//       => Only partial, but mostly good enough solution ;-)
+							}
 						}
-						catch (IOException ex) // No other way to detect a disconnected device than forcing this exception...
+						catch (IOException ex) // The best way to detect a disconnected device is handling this exception...
 						{
 							DebugEx.WriteException(GetType(), ex, "AliveTimerElapsed() has detected shutdown of port as it is no longer accessible.");
 							RestartOrResetPortAndThreadsAndNotify();
 						}
 						catch (Exception ex)
 						{
-							DebugEx.WriteException(GetType(), ex, "AliveTimerElapsed() has caught an unhandled exception!");
+							DebugEx.WriteException(GetType(), ex, "AliveTimerElapsed() has caught an unexpected exception! Restarting the port to try fixing the issue...");
 							RestartOrResetPortAndThreadsAndNotify();
 						}
 					}
@@ -2217,7 +2241,7 @@ namespace MKY.IO.Serial.SerialPort
 					CreateAndOpenPortAndThreadsAndNotify(); // Try to reopen port.
 					DebugMessage("ReopenTimerElapsed() successfully reopened the port.");
 				}
-				catch
+				catch // Do not output exception onto debug console, console would get spoilt with useless information.
 				{
 					DebugMessage("ReopenTimerElapsed() has failed to reopen the port.");
 					RestartOrResetPortAndThreadsAndNotify(false); // Cleanup and restart. No notifications.
