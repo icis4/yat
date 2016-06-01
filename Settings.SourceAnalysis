@@ -1,10 +1,17 @@
 <StyleCopSettings Version="105">
   <GlobalSettings>
     <CollectionProperty Name="RecognizedWords">
+      <Value>approx</Value>
+      <Value>codeproject</Value>
+      <Value>dll</Value>
       <Value>enum</Value>
+      <Value>finalizer</Value>
       <Value>fixme</Value>
       <Value>fx</Value>
       <Value>mky</Value>
+      <Value>mscorlib</Value>
+      <Value>netrtfwriter</Value>
+      <Value>stackoverflow</Value>
       <Value>todo</Value>
       <Value>yat</Value>
     </CollectionProperty>
@@ -233,10 +240,14 @@
       <AnalyzerSettings>
         <CollectionProperty Name="Hungarian">
           <Value>ar</Value>
+          <Value>de</Value>
+          <Value>ex</Value>
           <Value>io</Value>
           <Value>ip</Value>
           <Value>mt</Value>
           <Value>rx</Value>
+          <Value>sm</Value>
+          <Value>ti</Value>
           <Value>tx</Value>
         </CollectionProperty>
       </AnalyzerSettings>

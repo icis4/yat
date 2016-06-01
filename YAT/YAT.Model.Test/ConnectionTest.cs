@@ -100,7 +100,7 @@ namespace YAT.Model.Test
 		{
 			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
 				Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
-				// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			TerminalSettingsRoot settings = Utilities.GetStartedTextSerialPortMTSicsDeviceASettings();
 
@@ -113,7 +113,7 @@ namespace YAT.Model.Test
 					if (Utilities.TerminalMessageInputRequestResultsInExclude)
 					{
 						Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
-						// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+						//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 					}
 					else
 					{
@@ -201,7 +201,6 @@ namespace YAT.Model.Test
 				Assert.IsFalse(terminal.IsStarted);
 				Assert.IsFalse(terminal.IsOpen);
 				Assert.IsFalse(terminal.IsReadyToSend);
-
 			} // Expected: No exceptions, terminal can be disposed.
 		}
 
@@ -230,11 +229,11 @@ namespace YAT.Model.Test
 		{
 			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
 				Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
-				// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			if (!UsbHubControl.Probe())
 				Assert.Ignore(UsbHubControl.ErrorMessage);
-				// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			string portName = ConfigurationProvider.Configuration.MTSicsDeviceA;
 			UsbHubSetting portOut = UsbHubSetting.Out4;
@@ -252,7 +251,7 @@ namespace YAT.Model.Test
 					if (Utilities.TerminalMessageInputRequestResultsInExclude)
 					{
 						Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
-						// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+						//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 					}
 					else
 					{
@@ -267,8 +266,8 @@ namespace YAT.Model.Test
 
 				// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
 				Assert.IsTrue(UsbHubControl.Set(UsbHubSetting.None), "Failed to modify USB hub!");
-				// Disabling all outputs is used to improve speed when enabling single outputs below.
-				// See comments in implementation of 'UsbHubControl' for explanation.
+				//// Disabling all outputs is used to improve speed when enabling single outputs below.
+				//// See comments in implementation of 'UsbHubControl' for explanation.
 				Assert.IsTrue(terminal.IsStarted); // Terminal still started, and must automatically close!
 				Utilities.WaitForDisconnection(terminal);
 				Assert.IsFalse(terminal.IsOpen);
@@ -408,7 +407,6 @@ namespace YAT.Model.Test
 				Assert.IsFalse(terminal.IsStarted);
 				Assert.IsFalse(terminal.IsOpen);
 				Assert.IsFalse(terminal.IsReadyToSend);
-
 			} // Expected: No exceptions, terminal can be disposed.
 
 			// --- Postcondition: USB hub is set to its defaults, i.e. all outputs are enabled. ----

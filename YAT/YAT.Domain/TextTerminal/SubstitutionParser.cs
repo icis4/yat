@@ -57,15 +57,15 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <summary></summary>
-		public SubstitutionParser()
-			: base()
+		public SubstitutionParser(Modes modes = Modes.All)
+			: base(modes)
 		{
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
-		public SubstitutionParser(CharSubstitution substitution, Endianness endianness, Encoding encoding, Modes modes)
-			: base(endianness, encoding, modes)
+		public SubstitutionParser(CharSubstitution substitution, Encoding encoding, Endianness endianness = Endianness.BigEndian, Modes modes = Modes.All)
+			: base(encoding, endianness, modes)
 		{
 			this.substitution = substitution;
 		}

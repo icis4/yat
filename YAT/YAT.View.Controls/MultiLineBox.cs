@@ -32,8 +32,8 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
-using System.Text;
 using System.Security.Permissions;
+using System.Text;
 using System.Windows.Forms;
 
 using MKY.Windows.Forms;

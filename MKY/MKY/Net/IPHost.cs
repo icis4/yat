@@ -228,7 +228,7 @@ namespace MKY.Net
 					(
 						base.Equals(other) &&
 						StringEx.EqualsOrdinalIgnoreCase(this.explicitName, other.explicitName)
-						// Ignore 'explicitAddress', it shall be resolved when required.
+					////Ignore this.explicitAddress, it shall be resolved when required.
 					);
 				}
 				else
@@ -236,6 +236,7 @@ namespace MKY.Net
 					return
 					(
 						base.Equals(other) &&
+					////this.explicitName is not given.
 						this.explicitAddress.Equals(other.explicitAddress) // Explicit address is always given, at least 'IPAdress.None'.
 					);                         // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 				}

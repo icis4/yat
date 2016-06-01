@@ -44,7 +44,7 @@ namespace YAT.Model.Utilities
 	/// </summary>
 	public static class XmlWriterHelperNeat
 	{
-		/// <returns>Returns the number of lines that could succesfully be written to the file.</returns>
+		/// <returns>Returns the number of lines that could successfully be written to the file.</returns>
 		public static int LinesToFile(List<DisplayLine> displayLines, string filePath, bool addSchema)
 		{
 			List<XmlTransferNeatLine> transferLines;
@@ -65,7 +65,7 @@ namespace YAT.Model.Utilities
 			}
 		}
 
-		/// <returns>Returns the number of lines that could succesfully be converted.</returns>
+		/// <returns>Returns the number of lines that could successfully be converted.</returns>
 		private static int LinesFromDisplayToTransfer(List<DisplayLine> displayLines, out List<XmlTransferNeatLine> transferLines)
 		{
 			transferLines = new List<XmlTransferNeatLine>(displayLines.Count); // Preset the required capactiy to improve memory management.
@@ -81,7 +81,7 @@ namespace YAT.Model.Utilities
 			return (transferLines.Count);
 		}
 
-		/// <returns>Returns <c>true</c> if the line could succesfully be converted.</returns>
+		/// <returns>Returns <c>true</c> if the line could successfully be converted.</returns>
 		public static bool LineFromDisplayToTransfer(DisplayLine displayLine, out XmlTransferNeatLine transferLine)
 		{
 			// Note that display elements are text-only and no longer contain the underlying typed
@@ -150,6 +150,7 @@ namespace YAT.Model.Utilities
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
 				}
+
 				// Then try to cast to the singleton elements:
 				{
 					var casted = (e as DisplayElement.DateInfo);
@@ -191,6 +192,7 @@ namespace YAT.Model.Utilities
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
 				}
+
 				// All white-space elements do not need to be processed.
 			}
 

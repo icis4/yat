@@ -31,8 +31,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using MKY;
-using MKY.Diagnostics;
 using MKY.Collections.Generic;
+using MKY.Diagnostics;
 
 #endregion
 
@@ -462,6 +462,7 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
+		[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1022:PositiveSignsMustBeSpacedCorrectly", Justification = "What's wrong with closing parenthesis_+_quote? Bug in StyleCop?")]
 		protected override void ProcessInLineKeywords(Parser.KeywordResult result)
 		{
 			switch (result.Keyword)
@@ -476,7 +477,8 @@ namespace YAT.Domain
 							OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.DataSpace());
 					}
 
-					OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo((Parser.KeywordEx)(result.Keyword) + " keyword is not supported for binary terminals"));
+					string info = (Parser.KeywordEx)(result.Keyword) + " keyword is not supported for binary terminals";
+					OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(info));
 					break;
 				}
 
@@ -761,6 +763,7 @@ namespace YAT.Domain
 								{
 									List<DisplayElement> elementsForNextLineDummy;
 									ExecuteData(displaySettings, lineState, raw.Direction, originByte, elements, out elementsForNextLineDummy);
+
 									// Note that 're.Direction' above is OK, this function is processing all in the same direction.
 								}
 							}

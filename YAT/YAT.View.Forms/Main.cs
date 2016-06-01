@@ -118,6 +118,7 @@ namespace YAT.View.Forms
 		private LocalUserSettingsRoot localUserSettingsRoot;
 
 		// Toolstrip-combobox-validation-workaround (too late invocation of 'Validate' event):
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 		private bool mainToolValidationWorkaround_UpdateIsSuspended;
 
 		#endregion
@@ -1799,8 +1800,7 @@ namespace YAT.View.Forms
 			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
 
 			// Other than for terminals, workspace 'Save As' always suggests 'UserName.yaw':
-			sfd.FileName = Environment.UserName + PathEx.NormalizeExtension(sfd.DefaultExt);
-			// Note that 'DefaultExt' states "The returned string does not include the period."!
+			sfd.FileName = Environment.UserName + PathEx.NormalizeExtension(sfd.DefaultExt); // Note that 'DefaultExt' states "The returned string does not include the period."!
 
 			DialogResult dr = sfd.ShowDialog(this);
 			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))

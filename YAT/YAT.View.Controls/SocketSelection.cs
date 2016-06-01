@@ -775,7 +775,7 @@ namespace YAT.View.Controls
 				textBox_RemotePort.Enabled = true;
 				textBox_RemotePort.Text = this.remoteTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
 			}
-			else if (!DesignMode && Enabled && (this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpPairSocket))
+			else if (!DesignMode && Enabled && ((this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpPairSocket)))
 			{
 				textBox_RemotePort.Enabled = true;
 				textBox_RemotePort.Text = this.remoteUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
@@ -875,7 +875,7 @@ namespace YAT.View.Controls
 				textBox_LocalPort.Enabled = true;
 				textBox_LocalPort.Text = this.localTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
 			}
-			else if (Enabled && (this.socketType == SocketType.UdpServer) || (this.socketType == SocketType.UdpPairSocket))
+			else if (Enabled && ((this.socketType == SocketType.UdpServer) || (this.socketType == SocketType.UdpPairSocket)))
 			{
 				textBox_LocalPort.Enabled = true;
 				textBox_LocalPort.Text = this.localUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!

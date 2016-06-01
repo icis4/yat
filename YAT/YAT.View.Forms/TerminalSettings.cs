@@ -374,6 +374,8 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// This functionality is partly duplicated in <see cref="NewTerminal.SetControls"/>.
 		/// Changes here must be applied there too!
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void SetControls()
 		{
@@ -462,6 +464,8 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// This functionality is partly duplicated in <see cref="NewTerminal.SetControls"/>.
 		/// Changes here must be applied there too!
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void SetControlsVisibiliy(Domain.IOType ioType)
 		{

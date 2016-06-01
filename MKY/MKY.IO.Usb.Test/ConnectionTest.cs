@@ -44,7 +44,7 @@ namespace MKY.IO.Usb.Test
 		{
 			if (!ConfigurationProvider.Configuration.DeviceAIsAvailable)
 				Assert.Ignore("'USB Ser/HID Device A' is not available, therefore this test is excluded. Ensure that 'USB Ser/HID Device A' is properly configured and available if passing this test is required.");
-				// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			Assert.Ignore("The USB Ser/HID connect/disconnect test is not yet implemented.");
 		}
@@ -55,7 +55,7 @@ namespace MKY.IO.Usb.Test
 		{
 			if (!ConfigurationProvider.Configuration.DeviceBIsAvailable)
 				Assert.Ignore("'USB Ser/HID Device B' is not available, therefore this test is excluded. Ensure that 'USB Ser/HID Device B' is properly configured and available if passing this test is required.");
-				// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			Assert.Ignore("The USB Ser/HID connect/disconnect test is not yet implemented.");
 		}

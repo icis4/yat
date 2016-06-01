@@ -812,7 +812,7 @@ namespace YAT.Domain.Parser
 	/// a non-supported character is found.
 	/// </summary>
 	/// <remarks>
-	/// +/- signs are not allowed, neither are decimal points nor separators such as the apostroph.
+	/// +/- signs are not allowed, neither are decimal points nor separators such as the apostrophe.
 	/// </remarks>
 	internal class NumericValueState : ParserState
 	{

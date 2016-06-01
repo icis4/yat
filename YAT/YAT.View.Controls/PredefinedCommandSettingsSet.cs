@@ -124,7 +124,7 @@ namespace YAT.View.Controls
 			InitializeComponent();
 
 			InitializeControls();
-			// SetControls() is initially called in the 'Paint' event handler.
+		////SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion
@@ -632,7 +632,7 @@ namespace YAT.View.Controls
 			{
 				SetControls();
 				textBox_Description.Select();
-				// Do not call OnCommandChanged(), nothing has changed.
+			////OnCommandChanged() is not called, nothing has changed.
 			}
 		}
 

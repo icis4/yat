@@ -28,7 +28,7 @@ namespace MKY.IO.Serial.Socket
 	/// <summary></summary>
 	public class SocketDataReceivedEventArgs : DataReceivedEventArgs
 	{
-		IPEndPoint remoteEndPoint;
+		private IPEndPoint remoteEndPoint;
 
 		/// <summary></summary>
 		public SocketDataReceivedEventArgs(byte data, IPEndPoint remoteEndPoint)
@@ -53,7 +53,7 @@ namespace MKY.IO.Serial.Socket
 	/// <summary></summary>
 	public class SocketDataSentEventArgs : DataSentEventArgs
 	{
-		IPEndPoint remoteEndPoint;
+		private IPEndPoint remoteEndPoint;
 
 		/// <summary></summary>
 		public SocketDataSentEventArgs(byte data, IPEndPoint remoteEndPoint)

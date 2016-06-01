@@ -25,7 +25,10 @@ using System;
 
 namespace MKY
 {
-	/// <summary></summary>
+	/// <summary>
+	/// Generic event args with a (simple) type.
+	/// </summary>
+	/// <typeparam name="T">(Simple) type of the event args.</typeparam>
 	public class EventArgs<T> : EventArgs
 	{
 		private T value;

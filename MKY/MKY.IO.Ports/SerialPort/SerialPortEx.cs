@@ -52,107 +52,109 @@ using MKY.Diagnostics;
 
 namespace MKY.IO.Ports
 {
+	// =============================================================================================
+	// Some detailed information on .NET implementation can be found at Kim Hamilton's post at
+	// http://www.innovatic.dk/knowledg/SerialCOM/SerialCOM.htm.
+	// 
+	// Note, there is a serious deadlock issue in <see cref="System.IO.Ports.SerialPort"/>.
+	// 
+	// Google for...
+	//  > [UnauthorizedAccessException "access to the port"]
+	//  > [ObjectDisposedException "safe handle has been closed"]
+	// ...for additional information and suggested workarounds.
+	// 
+	// This issue can be reproduced by 'TestDisconnectReconnectSerialPortExWithContinuousSending'
+	// implemented in 'MKY.IO.Ports.Test.SerialPort.ConnectionTest'. Note this is an 'Explicit'
+	// test as it requires to manually reset the sending device beause it will remain in continuous
+	// mode as well as the port device because it cannot be opened until disconnected/reconnected!
+	// 
+	// =============================================================================================
+	// Source: http://msdn.microsoft.com/en-us/library/system.io.ports.serialport_methods.aspx (3.5)
+	// Author: Dan Randolph
+	// 
+	// There is a deadlock problem with the internal close operation of
+	// <see cref="System.IO.Ports.SerialPort"/>. Use BeginInvoke instead of Invoke from the
+	// serialPort_DataReceived event handler to start the method that reads from the
+	// SerialPort buffer and it will solve the problem. I finally tracked down the problem
+	// to the Close method by putting a start/stop button on the form. Then I was able to
+	// lock up the application and found that Close was the culpret. I'm pretty sure that
+	// components.Dispose() will end up calling the SerialPort Close method if it is open.
+	// 
+	// In my application, the user can change the baud rate and the port. In order to do
+	// this, the SerialPort must be closed fist and this caused a random deadlock in my
+	// application. Microsoft should document this better!
+	// =============================================================================================
+	// 
+	// Use case 1: Open/close a single time from GUI
+	// ---------------------------------------------
+	// 1. Start YAT
+	// 2. Open port
+	// 3. Close port
+	// 4. Exit YAT
+	// 
+	// Use case 2: Close/open multiple times from GUI
+	// ----------------------------------------------
+	// 1. Start YAT
+	// 2. Open port
+	// 3. Close port
+	// 4. Open port
+	// 5. Repeat close/open multiple times
+	// 6. Exit YAT
+	// 
+	// Use case 3: Close/disconnect/reconnect/open multiple times
+	// ----------------------------------------------------------
+	// 1. Start YAT
+	// 2. Open port
+	// 3. Close port
+	// 4. Disconnect USB-to-serial adapter
+	// 5. Reconnect USB-to-serial adapter
+	// 6. Open port
+	// 7. Repeat close/disconnect/reconnect/open multiple times
+	// 8. Exit YAT
+	// 
+	// Use case 4: Disconnect/reconnect multiple times
+	// -----------------------------------------------
+	// 1. Start YAT
+	// 2. Open port
+	// 3. Disconnect USB-to-serial adapter
+	// 4. Reconnect USB-to-serial adapter
+	//    => System.UnauthorizedAccssException("Access is denied.")
+	//       @ System.IO.Ports.InternalResources.WinIOError(int errorCode, string str)
+	//       @ System.IO.Ports.SerialStream.Dispose(bool disposing)
+	//       @ System.IO.Ports.SerialStream.Finalize()
+	// 5. Repeat disconnect/reconnect multiple times
+	// 6. Exit YAT
+	// 
+	// =============================================================================================
+	// (from above)
+	// 
+	// Use cases 1 through 3 work fine. But use case 4 results in an exception. Workarounds tried
+	// in May 2008:
+	// - Async close
+	// - Async DataReceived event
+	// - Immediate async read
+	// - Dispatch of all open/close operations onto Windows.Forms main thread using OnRequest event
+	// - try GC.Collect(Forced) => no exceptions on GC, exception gets fired afterwards
+	// 
+	// --------------------------------------------------------------------------------------------
+	// 
+	// October 2011:
+	// Issue fixed by adding the DisposeBaseStream_SerialPortBugFix() to MKY.IO.Ports.SerialPortEx()
+	// 
+	// (see below)
+	// =============================================================================================
+	// Source: http://msdn.microsoft.com/en-us/library/system.io.ports.serialport_methods.aspx (3.5)
+	// Author: jmatos1
+	// 
+	// I suspect that adding a Dispose() call on the internalSerialStream might be a good change.
+	// =============================================================================================
+
+	/// Saying hello to StyleCop ;-.
 	/// <summary>
 	/// Serial port component based on <see cref="System.IO.Ports.SerialPort"/>.
 	/// </summary>
 	/// <remarks>
-	/// Some detailed information on .NET implementation can be found at Kim Hamilton's post at
-	/// http://www.innovatic.dk/knowledg/SerialCOM/SerialCOM.htm.
-	/// 
-	/// Note, there is a serious deadlock issue in <see cref="System.IO.Ports.SerialPort"/>.
-	/// 
-	/// Google for...
-	///  > [UnauthorizedAccessException "access to the port"]
-	///  > [ObjectDisposedException "safe handle has been closed"]
-	/// ...for additional information and suggested workarounds.
-	/// 
-	/// This issue can be reproduced by 'TestDisconnectReconnectSerialPortExWithContinuousSending'
-	/// implemented in 'MKY.IO.Ports.Test.SerialPort.ConnectionTest'. Note this is an 'Explicit'
-	/// test as it requires to manually reset the sending device beause it will remain in continuous
-	/// mode as well as the port device because it cannot be opened until disconnected/reconnected!
-	/// 
-	/// ============================================================================================
-	/// Source: http://msdn.microsoft.com/en-us/library/system.io.ports.serialport_methods.aspx (3.5)
-	/// Author: Dan Randolph
-	/// 
-	/// There is a deadlock problem with the internal close operation of
-	/// <see cref="System.IO.Ports.SerialPort"/>. Use BeginInvoke instead of Invoke from the
-	/// serialPort_DataReceived event handler to start the method that reads from the
-	/// SerialPort buffer and it will solve the problem. I finally tracked down the problem
-	/// to the Close method by putting a start/stop button on the form. Then I was able to
-	/// lock up the application and found that Close was the culpret. I'm pretty sure that
-	/// components.Dispose() will end up calling the SerialPort Close method if it is open.
-	/// 
-	/// In my application, the user can change the baud rate and the port. In order to do
-	/// this, the SerialPort must be closed fist and this caused a random deadlock in my
-	/// application. Microsoft should document this better!
-	/// ============================================================================================
-	/// 
-	/// Use case 1: Open/close a single time from GUI
-	/// ---------------------------------------------
-	/// 1. Start YAT
-	/// 2. Open port
-	/// 3. Close port
-	/// 4. Exit YAT
-	/// 
-	/// Use case 2: Close/open multiple times from GUI
-	/// ----------------------------------------------
-	/// 1. Start YAT
-	/// 2. Open port
-	/// 3. Close port
-	/// 4. Open port
-	/// 5. Repeat close/open multiple times
-	/// 6. Exit YAT
-	/// 
-	/// Use case 3: Close/disconnect/reconnect/open multiple times
-	/// ----------------------------------------------------------
-	/// 1. Start YAT
-	/// 2. Open port
-	/// 3. Close port
-	/// 4. Disconnect USB-to-serial adapter
-	/// 5. Reconnect USB-to-serial adapter
-	/// 6. Open port
-	/// 7. Repeat close/disconnect/reconnect/open multiple times
-	/// 8. Exit YAT
-	/// 
-	/// Use case 4: Disconnect/reconnect multiple times
-	/// -----------------------------------------------
-	/// 1. Start YAT
-	/// 2. Open port
-	/// 3. Disconnect USB-to-serial adapter
-	/// 4. Reconnect USB-to-serial adapter
-	///    => System.UnauthorizedAccssException("Access is denied.")
-	///       @ System.IO.Ports.InternalResources.WinIOError(int errorCode, string str)
-	///       @ System.IO.Ports.SerialStream.Dispose(bool disposing)
-	///       @ System.IO.Ports.SerialStream.Finalize()
-	/// 5. Repeat disconnect/reconnect multiple times
-	/// 6. Exit YAT
-	/// 
-	/// ============================================================================================
-	/// (from above)
-	/// 
-	/// Use cases 1 through 3 work fine. But use case 4 results in an exception. Workarounds tried
-	/// in May 2008:
-	/// - Async close
-	/// - Async DataReceived event
-	/// - Immediate async read
-	/// - Dispatch of all open/close operations onto Windows.Forms main thread using OnRequest event
-	/// - try GC.Collect(Forced) => no exceptions on GC, exception gets fired afterwards
-	/// 
-	/// --------------------------------------------------------------------------------------------
-	/// 
-	/// October 2011:
-	/// Issue fixed by adding the DisposeBaseStream_SerialPortBugFix() to MKY.IO.Ports.SerialPortEx()
-	/// 
-	/// (see below)
-	/// ============================================================================================
-	/// Source: http://msdn.microsoft.com/en-us/library/system.io.ports.serialport_methods.aspx (3.5)
-	/// Author: jmatos1
-	/// 
-	/// I suspect that adding a Dispose() call on the internalSerialStream might be a good change.
-	/// ============================================================================================
-	/// 
-	/// Saying hello to StyleCop ;-.
+	/// Remarks see above (out of doc tag due to words not recognized by StyleCop).
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	[ToolboxBitmap(typeof(System.IO.Ports.SerialPort))]

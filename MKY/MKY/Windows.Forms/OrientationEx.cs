@@ -80,7 +80,7 @@ namespace MKY.Windows.Forms
 		#region GetItems
 
 		/// <remarks>
-		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
 		/// </remarks>
 		public static OrientationEx[] GetItems()
 		{

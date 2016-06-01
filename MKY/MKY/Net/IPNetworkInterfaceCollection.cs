@@ -142,7 +142,6 @@ namespace MKY.Net
 			}
 		}
 
-
 		/// <summary>
 		/// Searches for an element that matches the <paramref name="item"/>, and returns the
 		/// first occurrence within the entire collection.
@@ -151,7 +150,7 @@ namespace MKY.Net
 		/// The object to locate in the collection. The value can be null for reference types.
 		/// </param>
 		/// <returns>
-		/// The first element that matchesthe <paramref name="item"/>, if found; otherwise, –1.
+		/// The first element that matches the <paramref name="item"/>, if found; otherwise, –1.
 		/// </returns>
 		public virtual IPNetworkInterfaceEx FindDescription(IPNetworkInterfaceEx item)
 		{

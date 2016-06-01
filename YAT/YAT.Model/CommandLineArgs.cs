@@ -330,7 +330,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "OperationDelay", ShortName = "od", Description =
-			"Delay operation by the given milliseconds. Useful to keep the application open until the operation has completed. "+
+			"Delay operation by the given milliseconds. Useful to keep the application open until the operation has completed. " +
 			"The default value is 500." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies when performing an operation like 'TransmitText' or 'TransmitFile'.")]
 		public int OperationDelay = 500;
@@ -338,7 +338,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "ExitDelay", ShortName = "ed", Description =
-			"Delay exit by the given milliseconds. Useful to keep the application open until the operation has completed. "+
+			"Delay exit by the given milliseconds. Useful to keep the application open until the operation has completed. " +
 			"The default value is 500." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies when performing an operation like 'TransmitText' or 'TransmitFile' and 'KeepOpen' is not enabled.")]
 		public int ExitDelay = 500;

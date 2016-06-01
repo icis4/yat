@@ -447,13 +447,13 @@ namespace YAT.View.Controls
 		private void worker_Status1Changed(object sender, EventArgs<string> e)
 		{
 			this.showStatusDialog.SetStatus1Synchronized(e.Value);
-			// Do not check for 'IsShowing', as status box may get shown after this event.
+		////IsShowing is not check for, as status box may get shown after this event.
 		}
 
 		private void worker_Status2Changed(object sender, EventArgs<string> e)
 		{
 			this.showStatusDialog.SetStatus2Synchronized(e.Value);
-			// Do not check for 'IsShowing', as status box may get shown after this event.
+		////IsShowing is not check for, as status box may get shown after this event.
 		}
 
 		private void worker_IsDone(object sender, EventArgs<DialogResult> e)

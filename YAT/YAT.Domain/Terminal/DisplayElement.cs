@@ -352,6 +352,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary>The space that is added inbetween characters of the data content (i.e. radix = char).</summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'inbetween' is a correct English term.")]
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class DataSpace : WhiteSpaceDisplayElement
 		{

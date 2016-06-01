@@ -89,8 +89,7 @@ namespace YAT.Model.Utilities
 		/// <summary></summary>
 		public RtfWriter(FileStream stream, Encoding encoding, FormatSettings settings)
 		{
-			CultureInfo ci = CultureInfo.CurrentCulture;
-			// Do not use the UICulture as people are likely to use English on non-US computers too.
+			CultureInfo ci = CultureInfo.CurrentCulture; // Do not use the UICulture as people are likely to use English on non-US computers too.
 
 			PaperSize paper;
 			if      (StringEx.EndsWithOrdinalIgnoreCase  (ci.Name, "-US"))		paper = PaperSize.Letter;

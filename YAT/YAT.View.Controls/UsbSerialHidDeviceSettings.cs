@@ -400,11 +400,13 @@ namespace YAT.View.Controls
 			Exception ex;
 			if (!MKY.Net.Browser.TryBrowseUri(MKY.IO.Usb.SerialHidReportFormatPresetEx.TI_Link, out ex))
 			{
+				string message = "Unable to open link." + Environment.NewLine + Environment.NewLine +
+				                 "System error message:" + Environment.NewLine + ex.Message;
+
 				MessageBox.Show
 				(
 					this.Parent,
-					"Unable to open link." + Environment.NewLine + Environment.NewLine +
-					"System error message:" + Environment.NewLine + ex.Message,
+					message,
 					"System Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning

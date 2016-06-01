@@ -85,6 +85,8 @@ namespace MKY.IO.Serial.SerialPort
 		// Constants
 		//==========================================================================================
 
+		private const string Undefined = "<Undefined>";
+
 		private const int SendQueueFixedCapacity      = 2048; // = default 'WriteBufferSize'
 		private const int ReceiveQueueInitialCapacity = 4096; // = default 'ReadBufferSize'
 
@@ -92,9 +94,9 @@ namespace MKY.IO.Serial.SerialPort
 		private const int AliveInterval     = 500;
 
 		private const int IOControlChangedTimeout = 47; // Timeout is fixed to 47 ms (a prime number).
-		private readonly long IOControlChangedTickInterval = StopwatchEx.TimeToTicks(IOControlChangedTimeout);
 
-		private const string Undefined = "<Undefined>";
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
+		private readonly long IOControlChangedTickInterval = StopwatchEx.TimeToTicks(IOControlChangedTimeout);
 
 		#endregion
 
@@ -148,6 +150,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// Only used with <see cref="SerialFlowControl.ManualSoftware"/>
 		/// and <see cref="SerialFlowControl.ManualCombined"/>.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Emphasize the existance of the interface in use.")]
 		private IXOnXOffHelper iXOnXOffHelper = new IXOnXOffHelper();
 
 		/// <summary>
@@ -2137,6 +2140,7 @@ namespace MKY.IO.Serial.SerialPort
 						{
 							// Detect whether port has been shut down, e.g. USB-to-serial-converter
 							// device has been disconnected.
+							//
 							// This is not that straight-forward to achieve, as different devices
 							// or their driver behave differently. Used to only check for 'IsOpen',
 							// but that is not sufficient for e.g. Prolific driver which will still
@@ -2161,6 +2165,7 @@ namespace MKY.IO.Serial.SerialPort
 							else
 							{
 								// Attention:
+								//
 								// On an internal port that is open and in use, accessing 'BytesToRead' will first properly lead to an 'IOException',
 								// but later an additional 'ObjectDisposedException' will happen on a separate thread!
 								//   > Message : "Safe handle has been closed"
@@ -2174,10 +2179,11 @@ namespace MKY.IO.Serial.SerialPort
 								// A couple of workarounds have been considered:
 								//   > Detecting a suspend request from the operating system.
 								//       => Not a solution, as .NET doesn't provide this functionlity and thus the implementation would get OS dependent.
+								//          Note that SystemEvents.PowerModeChanged is located in Microsoft.Win32 and therefore also OS dependent.
 								//   > Ignoring 'ObjectDisposedException' from "mscorlib" in the 'currentDomain_UnhandledException' (Controller.Main).
 								//       => Not a solution, as the exception already happened and will have closed the port.
 								//   > Preventing such exception in best-effort style, by skipping the access to 'BytesToRead' for internal ports COM1 and COM2.
-								//       => Only partial, but mostly good enough solution ;-)
+								//       => Only partial, but mostly good enough workaround ;-)
 							}
 						}
 						catch (IOException ex) // The best way to detect a disconnected device is handling this exception...

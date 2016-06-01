@@ -163,11 +163,13 @@ namespace YAT.View.Forms
 			Exception ex;
 			if (!DirectoryEx.TryOpen(this.settingsInEdit.RootPath, out ex))
 			{
+				string message = "Unable to open folder." + Environment.NewLine + Environment.NewLine +
+				                 "System error message:" + Environment.NewLine + ex.Message;
+
 				MessageBox.Show
 				(
 					this.Parent,
-					"Unable to open folder." + Environment.NewLine + Environment.NewLine +
-					"System error message:" + Environment.NewLine + ex.Message,
+					message,
 					"System Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning

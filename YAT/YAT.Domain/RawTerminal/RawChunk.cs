@@ -64,6 +64,8 @@ namespace YAT.Domain
 
 		/// <remarks>
 		/// "Guidelines for Collections": "Do use byte arrays instead of collections of bytes."
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private byte[]      data;
 		private DateTime    timeStamp;

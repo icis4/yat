@@ -138,6 +138,7 @@ namespace YAT.View.Forms
 		private bool ioStatusIndicatorFlashingIsOn; // = false;
 
 		// Toolstrip-combobox-validation-workaround (too late invocation of 'Validate' event):
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 		private bool terminalMenuValidationWorkaround_UpdateIsSuspended;
 
 		#endregion
@@ -3589,8 +3590,7 @@ namespace YAT.View.Forms
 			if (StringEx.EndsWithOrdinalIgnoreCase(AutoName, ExtensionHelper.TerminalFile))
 				sfd.FileName = AutoName;
 			else
-				sfd.FileName = AutoName + PathEx.NormalizeExtension(sfd.DefaultExt);
-				// Note that 'DefaultExt' states "The returned string does not include the period."!
+				sfd.FileName = AutoName + PathEx.NormalizeExtension(sfd.DefaultExt); // Note that 'DefaultExt' states "The returned string does not include the period."!
 
 			DialogResult dr = sfd.ShowDialog(this);
 			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))

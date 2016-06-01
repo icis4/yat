@@ -55,6 +55,7 @@ namespace MKY.IO.Serial.Socket
 	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "A type shall spell 'Udp' like this...")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class UdpSocketTypeEx : EnumEx
 	{
@@ -103,7 +104,7 @@ namespace MKY.IO.Serial.Socket
 		#region GetItems
 
 		/// <remarks>
-		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
 		/// </remarks>
 		public static UdpSocketTypeEx[] GetItems()
 		{
