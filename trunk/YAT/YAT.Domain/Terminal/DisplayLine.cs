@@ -58,10 +58,13 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <remarks>
-		/// Can be use to preset the initial capacity of collections. The value reflects typcial
+		/// Can be use to preset the initial capacity of collections. The value reflects typical
 		/// maximum settings in case of string radix:
 		/// date, sep, time, sep, port, sep, direction, sep, data, eol, sep, length, linebreak = 13
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'linebreak' is a YAT display element.")]
 		public const int TypicalNumberOfElementsPerLine = 16; // Use 16 = on of the 'normal' values.
 
 		#endregion

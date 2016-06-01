@@ -113,6 +113,8 @@ namespace YAT.View.Controls
 
 		// Update:
 		private const int DataStatusIntervalMs = 31; // Interval shall be quite short => fixed to 31 ms (a prime number) = approx. 32 updates per second.
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
 		private readonly long DataStatusTickInterval = StopwatchEx.TimeToTicks(DataStatusIntervalMs);
 
 		#endregion
@@ -1196,7 +1198,7 @@ namespace YAT.View.Controls
 		/// <param name="totalProcessorLoadInPercent">
 		/// Load in %, i.e. values from 0.0 to 100.0.
 		/// </param>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "What's wrong with 'inbetween'?")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Inbetween' is a correct English term.")]
 		private void CalculateUpdateRates(int totalProcessorLoadInPercent)
 		{
 			const int LowerLoad = 25; // %

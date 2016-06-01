@@ -44,12 +44,14 @@ namespace MKY.IO.Serial.Usb
 		/// dynamically managed and increased if necessary. Received XOff will be taken into account
 		/// though.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, Ser/HID is just called 'Ser'...")]
 		Software,
 
 		/// <summary>
 		/// Manually managing XOn/XOff flow control, mainly useful for development of devices that
 		/// provide XOn/XOff for USB Ser/HID, e.g. MT Ser/HID devices.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, Ser/HID is just called 'Ser'...")]
 		ManualSoftware,
 	}
 
@@ -129,7 +131,7 @@ namespace MKY.IO.Serial.Usb
 		#region GetItems
 
 		/// <remarks>
-		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
 		/// </remarks>
 		public static SerialHidFlowControlEx[] GetItems()
 		{

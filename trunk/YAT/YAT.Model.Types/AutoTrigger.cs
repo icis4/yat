@@ -72,6 +72,8 @@ namespace YAT.Model.Types
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
 	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
+	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class AutoTriggerEx : EnumEx
 	{
@@ -229,7 +231,7 @@ namespace YAT.Model.Types
 		#region GetItems
 
 		/// <remarks>
-		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
 		/// </remarks>
 		public static AutoTriggerEx[] GetAllItems()
 		{
@@ -237,7 +239,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <remarks>
-		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
 		/// </remarks>
 		public static AutoTriggerEx[] GetFixedItems()
 		{
@@ -245,7 +247,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <remarks>
-		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
 		/// </remarks>
 		private static AutoTriggerEx[] GetItems(bool addFixed, bool addVariable)
 		{

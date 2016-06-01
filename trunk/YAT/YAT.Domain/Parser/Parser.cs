@@ -54,6 +54,9 @@ namespace YAT.Domain.Parser
 	///  - <see cref="AsciiMnemonicState"/> : Sequence of ASCII mnemonics.
 	///  - <see cref="NumericValueState"/>  : Sequence of numeric values.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Parsable' is a correct English term.")]
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Parsable", Justification = "'Parsable' is a correct English term.")]
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public class Parser : IDisposable
 	{
@@ -130,8 +133,8 @@ namespace YAT.Domain.Parser
 
 		private Parser parentParser;
 
-		private Endianness endianness = Endianness.BigEndian;
 		private Encoding encoding = Encoding.Default;
+		private Endianness endianness = Endianness.BigEndian;
 		private Radix defaultRadix = DefaultRadixDefault;
 		private Modes modes = Modes.All;
 
@@ -170,10 +173,10 @@ namespace YAT.Domain.Parser
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
-		public Parser(Endianness endianness, Encoding encoding, Modes modes = Modes.All)
+		public Parser(Encoding encoding, Endianness endianness = Endianness.BigEndian, Modes modes = Modes.All)
 		{
-			this.endianness = endianness;
 			this.encoding   = encoding;
+			this.endianness = endianness;
 			this.modes      = modes;
 		}
 
@@ -294,16 +297,16 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
+		public virtual Encoding Encoding
+		{
+			get { return (this.encoding); }
+		}
+
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Endianness", Justification = "'Endianness' is a correct English term.")]
 		public virtual Endianness Endianness
 		{
 			get { return (this.endianness); }
-		}
-
-		/// <summary></summary>
-		public virtual Encoding Encoding
-		{
-			get { return (this.encoding); }
 		}
 
 		internal virtual Modes Modes
@@ -735,7 +738,7 @@ namespace YAT.Domain.Parser
 							int from = Math.Min(8, remaining.Length);
 							for (int i = from; i >= 1; i--) // Probe the 8-7-...-2-1 left-most characters for a valid binary byte.
 							{
-								UInt64 tempResult;
+								ulong tempResult;
 								if (UInt64Ex.TryParseBinary(StringEx.Left(remaining, i), out tempResult))
 								{
 									if (tempResult <= 0xFF) // i left-most characters are a valid binary byte!
@@ -768,7 +771,7 @@ namespace YAT.Domain.Parser
 							int from = Math.Min(3, remaining.Length);
 							for (int i = from; i >= 1; i--) // Probe the 3-2-1 left-most characters for a valid octal byte.
 							{
-								UInt64 tempResult;
+								ulong tempResult;
 								if (UInt64Ex.TryParseOctal(StringEx.Left(remaining, i), out tempResult))
 								{
 									if (tempResult <= 0xFF) // i left-most characters are a valid octal byte!
@@ -951,8 +954,8 @@ namespace YAT.Domain.Parser
 
 		////this.parentParser has just been reset to 'null' by DisposeAndReset() above.
 
-		////this.endianness is set by the constructor.
 		////this.encoding   is set by the constructor.
+		////this.endianness is set by the constructor.
 		////this.modes      is set by the constructor.
 
 			this.defaultRadix    = defaultRadix;
@@ -980,8 +983,8 @@ namespace YAT.Domain.Parser
 
 			this.parentParser    = parent;
 
-			this.endianness      = parent.endianness;
 			this.encoding        = parent.encoding;
+			this.endianness      = parent.endianness;
 			this.modes           = parent.modes;
 
 			this.defaultRadix    = parent.defaultRadix;

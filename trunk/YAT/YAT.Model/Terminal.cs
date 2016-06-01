@@ -3319,7 +3319,7 @@ namespace YAT.Model
 		{
 			this.activeConnectChrono = new Chronometer();
 			this.activeConnectChrono.Interval = 1000;
-			// No elapsed event, events are fired by total connect chrono.
+		////this.activeConnectChrono.TimeSpanChanged shall not be used, events are fired by 'totalConnectChrono' below.
 
 			this.totalConnectChrono = new Chronometer();
 			this.totalConnectChrono.Interval = 1000;

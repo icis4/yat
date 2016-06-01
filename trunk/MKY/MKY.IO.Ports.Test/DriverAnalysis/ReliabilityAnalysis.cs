@@ -61,7 +61,6 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				yield return (new Pair<string, string>("FTDI",     "COM24"));
 				yield return (new Pair<string, string>("Prolific", "COM31"));
 				yield return (new Pair<string, string>("MT",       "COM43"));
-				
 			}
 		}
 
@@ -112,6 +111,8 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 	/// - 2008-06-18 @ 1111 :    0 missing chars out of   ~360'000 chars total :-)
 	/// 
 	/// => MCT reproducibly lost 1 char/byte per approx. 70'000 chars/bytes !!!
+	/// 
+	/// Saying hello to StyleCop ;-.
 	/// </remarks>
 	[TestFixture, Explicit("This test fixture assesses the reliability of serial port drivers. It does not perform any tests. It is only useful for measurments and analysis.")]
 	public class ReliabilityAnalysis
@@ -144,7 +145,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 		private int receivedErrors = 0;
 		private ReaderWriterLockSlim receivedErrorLock = new ReaderWriterLockSlim();
 
-		Thread[] threads = null;
+		private Thread[] threads = null;
 		private bool isOngoing = false;
 
 		#endregion
@@ -202,7 +203,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			// Ensure that echoing has stopped (e.g. in case of an exception):
 			if ((this.port != null) && (this.port.IsOpen))
 			{
-				this.port.Write(new byte[]{ 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
+				this.port.Write(new byte[] { 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
 				Thread.Sleep(WaitForOperation);
 
 				this.port.Close();
@@ -262,7 +263,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				// Terminate transmission:
 				this.port.DataReceived -= new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
 
-				this.port.Write(new byte[]{ 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
+				this.port.Write(new byte[] { 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
 				Thread.Sleep(WaitForOperation);
 				Assert.AreEqual("",       this.port.ReadLine(), "Failed to quit ECHO mode!");
 				Assert.AreEqual("ECHO A", this.port.ReadLine(), "Failed to quit ECHO mode!");
@@ -272,6 +273,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				this.port.Close();
 				this.port.Dispose();
 				this.port = null;
+
 				// Note the additional disposal in TearDown().
 			}
 
@@ -363,7 +365,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				// Terminate transmission:
 				this.port.DataReceived -= new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
 
-				this.port.Write(new byte[]{ 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
+				this.port.Write(new byte[] { 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
 				Thread.Sleep(WaitForOperation);
 
 				this.isOngoing = false;
@@ -371,6 +373,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				this.port.Close();
 				this.port.Dispose();
 				this.port = null;
+
 				// Note the additional disposal in TearDown().
 			}
 

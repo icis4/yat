@@ -29,7 +29,7 @@ namespace MKY.IO.Serial.SerialPort
 	/// <summary></summary>
 	public class SerialDataReceivedEventArgs : DataReceivedEventArgs
 	{
-		SerialPortId portId;
+		private SerialPortId portId;
 
 		/// <summary></summary>
 		public SerialDataReceivedEventArgs(byte data, SerialPortId portId)
@@ -54,7 +54,7 @@ namespace MKY.IO.Serial.SerialPort
 	/// <summary></summary>
 	public class SerialDataSentEventArgs : DataSentEventArgs
 	{
-		SerialPortId portId;
+		private SerialPortId portId;
 
 		/// <summary></summary>
 		public SerialDataSentEventArgs(byte data, SerialPortId portId)

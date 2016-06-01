@@ -29,7 +29,7 @@ namespace MKY.IO.Serial.Usb
 	/// <summary></summary>
 	public class SerialDataReceivedEventArgs : DataReceivedEventArgs
 	{
-		DeviceInfo deviceInfo;
+		private DeviceInfo deviceInfo;
 
 		/// <summary></summary>
 		public SerialDataReceivedEventArgs(byte data, DeviceInfo deviceInfo)
@@ -54,7 +54,7 @@ namespace MKY.IO.Serial.Usb
 	/// <summary></summary>
 	public class SerialDataSentEventArgs : DataSentEventArgs
 	{
-		DeviceInfo deviceInfo;
+		private DeviceInfo deviceInfo;
 
 		/// <summary></summary>
 		public SerialDataSentEventArgs(byte data, DeviceInfo deviceInfo)

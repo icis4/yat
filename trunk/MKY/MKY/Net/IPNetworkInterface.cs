@@ -270,7 +270,11 @@ namespace MKY.Net
 			}
 			else
 			{
-				return (base.Equals(other));
+				return
+				(
+					base.Equals(other)
+				////this.explicitDescription is not given.
+				);
 			}
 		}
 

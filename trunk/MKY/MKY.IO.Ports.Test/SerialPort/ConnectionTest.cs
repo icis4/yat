@@ -26,8 +26,8 @@
 //==================================================================================================
 
 using System;
-using System.Threading;
 using System.Reflection;
+using System.Threading;
 
 using NUnit;
 using NUnit.Framework;
@@ -77,7 +77,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		{
 			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
 				Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
-				// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			string portName = ConfigurationProvider.Configuration.MTSicsDeviceA;
 			const int WaitForOperation = 100;
@@ -135,7 +135,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			Assert.IsTrue(port.IsOpen);
 
 			// Stop continuous data:
-			port.Write(new byte[]{ 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
+			port.Write(new byte[] { 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
 			Thread.Sleep(WaitForOperation);
 			port.ReadExisting();
 
@@ -182,11 +182,11 @@ namespace MKY.IO.Ports.Test.SerialPort
 
 			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
 				Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
-				// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			if (!UsbHubControl.Probe())
 				Assert.Ignore(UsbHubControl.ErrorMessage);
-				// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			string portName = ConfigurationProvider.Configuration.MTSicsDeviceA;
 			UsbHubSetting portOut = UsbHubSetting.Out4;
@@ -204,8 +204,8 @@ namespace MKY.IO.Ports.Test.SerialPort
 
 			// Disconnect USB/RS-232 converter. Expected: No exceptions, port is closed:
 			Assert.IsTrue(UsbHubControl.Set(UsbHubSetting.None), "Failed to modify USB hub!");
-			// Disabling all outputs is used to improve speed when enabling single outputs below.
-			// See comments in implementation of 'UsbHubControl' for explanation.
+			//// Disabling all outputs is used to improve speed when enabling single outputs below.
+			//// See comments in implementation of 'UsbHubControl' for explanation.
 			Assert.IsFalse(port.IsOpen);
 
 			// Reconnect USB/RS-232 converter. Expected: No exceptions, port can be reopened.
@@ -292,7 +292,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 				Assert.IsTrue(port.IsOpen);
 
 				// Stop continuous data:
-				port.Write(new byte[]{ 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
+				port.Write(new byte[] { 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
 				Thread.Sleep(WaitForOperation);
 				port.ReadExisting();
 			}

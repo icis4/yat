@@ -41,10 +41,13 @@ namespace MKY.Windows.Forms
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public class ToolStripEx : ToolStrip
 	{
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Field name is given by the Win32 API.")]
 		private const int WM_LBUTTONDOWN = 0x201;
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Field name is given by the Win32 API.")]
 		private const int WM_LBUTTONUP   = 0x202;
 
-		static private bool isDown = false;
+		private static bool isDown = false;
 
 		/// <summary>
 		/// Processes Windows messages.

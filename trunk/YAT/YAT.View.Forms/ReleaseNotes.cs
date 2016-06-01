@@ -41,13 +41,13 @@ namespace YAT.View.Forms
 	/// <summary></summary>
 	public partial class ReleaseNotes : Form
 	{
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is meant to be a constant.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
 		private static readonly string ReleaseNotesFileName = ApplicationEx.ProductName + " Release Notes.txt";
 
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is meant to be a constant.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
 		private static readonly string ReleaseNotesFilePath = System.Windows.Forms.Application.StartupPath + Path.DirectorySeparatorChar + ReleaseNotesFileName;
 
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is meant to be a constant.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
 		private static readonly string ReleaseNotesDevelopmentRelativeFilePath =
 			".." + Path.DirectorySeparatorChar +
 			".." + Path.DirectorySeparatorChar +

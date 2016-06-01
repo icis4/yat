@@ -128,7 +128,7 @@ namespace YAT.View.Controls
 			InitializeComponent();
 
 			InitializeExplicitDefaultRadixControls();
-			// Set...Controls() is initially called in the 'Paint' event handler.
+		////Set...Controls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion
@@ -605,7 +605,7 @@ namespace YAT.View.Controls
 			else
 			{
 				SetCommandAndRecentControls();
-				// Do not call OnCommandChanged(), nothing has changed.
+			////OnCommandChanged() is not called, nothing has changed.
 			}
 
 			button_Send.Select();

@@ -823,9 +823,7 @@ namespace MKY.Win32
 
 			bool success = GetString(deviceHandle, NativeMethods.HidD_GetManufacturerString, out manufacturer);
 
-			DebugStringAccessMessageBox(success,
-			                               @"...successfully retrieved """ + manufacturer + @""".",
-			                                "...failed to retrieve manufacturer string.");
+			DebugStringAccessMessageBox(success, @"...successfully retrieved """ + manufacturer + @""".", "...failed to retrieve manufacturer string.");
 
 			return (success);
 		}
@@ -838,9 +836,7 @@ namespace MKY.Win32
 
 			bool success = GetString(deviceHandle, NativeMethods.HidD_GetProductString, out product);
 
-			DebugStringAccessMessageBox(success,
-			                               @"...successfully retrieved """ + product + @""".",
-			                                "...failed to retrieve product string.");
+			DebugStringAccessMessageBox(success, @"...successfully retrieved """ + product + @""".", "...failed to retrieve product string.");
 
 			return (success);
 		}
@@ -853,9 +849,7 @@ namespace MKY.Win32
 
 			bool success = GetString(deviceHandle, NativeMethods.HidD_GetSerialString, out serial);
 
-			DebugStringAccessMessageBox(success,
-			                               @"...successfully retrieved """ + serial + @""".",
-			                                "...failed to retrieve serial string.");
+			DebugStringAccessMessageBox(success, @"...successfully retrieved """ + serial + @""".", "...failed to retrieve serial string.");
 
 			return (success);
 		}

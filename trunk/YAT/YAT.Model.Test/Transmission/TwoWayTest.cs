@@ -198,6 +198,9 @@ namespace YAT.Model.Test.Transmission
 		//==========================================================================================
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
 		[Test, TestCaseSource(typeof(TwoWayTestData), "TestCasesSerialPortLoopbackPairs")]
 		public void SerialPortLoopbackPairs(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
 		                                    Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
@@ -207,6 +210,9 @@ namespace YAT.Model.Test.Transmission
 		}
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
 		[Test, TestCaseSource(typeof(TwoWayTestData), "TestCasesSerialPortLoopbackSelfs")]
 		public void SerialPortLoopbackSelfs(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
 		                                    Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
@@ -216,6 +222,9 @@ namespace YAT.Model.Test.Transmission
 		}
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
 		[Test, TestCaseSource(typeof(TwoWayTestData), "TestCasesIPLoopbacks")]
 		public virtual void IPLoopbacks(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
 		                                Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
@@ -224,6 +233,9 @@ namespace YAT.Model.Test.Transmission
 			PerformTransmission(settingsDescriptorA, settingsDescriptorB, testSet, transmissionCount);
 		}
 
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
 		private void PerformTransmission(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
 		                                 Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                 Utilities.TestSet testSet, int transmissionCount)
@@ -236,7 +248,7 @@ namespace YAT.Model.Test.Transmission
 				{
 					if (Utilities.TerminalMessageInputRequestResultsInExclude) {
 						Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
-						// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+						//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 					}
 					else {
 						Assert.Fail(@"Failed to start """ + terminalA.Caption + @"""");
@@ -254,7 +266,7 @@ namespace YAT.Model.Test.Transmission
 						{
 							if (Utilities.TerminalMessageInputRequestResultsInExclude) {
 								Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
-								// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+								//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 							}
 							else {
 								Assert.Fail(@"Failed to start """ + terminalB.Caption + @"""");

@@ -42,7 +42,7 @@ namespace MKY
 		/// The default bug submission message is <![CDATA["Please report this issue at the origin of this software."]]>.
 		/// </summary>
 		/// <remarks>
-		/// Note the preceeding space.
+		/// Note the preceding space.
 		/// </remarks>
 		public const string SubmitBugDefault = "Please report this issue at the origin of this software.";
 

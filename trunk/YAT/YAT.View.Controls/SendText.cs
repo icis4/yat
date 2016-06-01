@@ -106,8 +106,12 @@ namespace YAT.View.Controls
 
 		private const bool TerminalIsReadyToSendDefault = false;
 
-		private const int SendSplitterDistanceDefault = 356; // Designer requires that this is a constant.
-		                                                     // Set same value as splitContainer.SplitterDistance is designed.
+		/// <remarks>
+		/// The designer requires that this is a constant.
+		/// Set same value as splitContainer.SplitterDistance is designed.
+		/// </remarks>
+		private const int SendSplitterDistanceDefault = 356;
+
 		/// <summary></summary>
 		public const bool SendImmediatelyDefault = false;
 
@@ -171,7 +175,7 @@ namespace YAT.View.Controls
 			InitializeComponent();
 
 			InitializeExplicitDefaultRadixControls();
-			// Set...Controls() is initially called in the 'Paint' event handler.
+		//// Set...Controls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion
@@ -911,7 +915,7 @@ namespace YAT.View.Controls
 			else
 			{
 				SetCommandControls();
-				// Do not call OnCommandChanged(), nothing has changed.
+			////OnCommandChanged() is not called, nothing has changed.
 			}
 
 			button_Send.Select();

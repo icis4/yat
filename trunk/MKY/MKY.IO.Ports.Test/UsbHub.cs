@@ -22,6 +22,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading;
 
@@ -38,8 +39,10 @@ namespace MKY.IO.Ports.Test
 	{
 		/// <summary>No outputs enabled.</summary>
 		None = 0x00,
+
 		/// <summary>All outputs enabled, i.e. "Out 1..4".</summary>
 		All  = 0x0F,
+
 	/////// <summary>All outputs enabled, i.e. "Out 1..6".</summary>
 	////All  = 0x3F, \If1To6
 
@@ -49,25 +52,34 @@ namespace MKY.IO.Ports.Test
 		/// </remarks>
 		/// <summary>Upper pair of outputs, i.e. "Out 3+4".</summary>
 		Step1 = 0x0C,
+
 		/// <summary>Lower pair of outputs, i.e. "Out 1+2".</summary>
 		Step2 = 0x03,
+
 	/////// <summary>Upper pair of outputs, i.e. "Out 5+6".</summary>
 	////Step1 = 0x30,
+
 	/////// <summary>Middle pair of outputs, i.e. "Out 3+4".</summary>
 	////Step2 = 0x0C,
+
 	/////// <summary>Lower pair of outputs, i.e. "Out 1+2".</summary>
 	////Step3 = 0x03, \If1To6
 
 		/// <summary>Out 1.</summary>
 		Out1 = 0x01,
+
 		/// <summary>Out 2.</summary>
 		Out2 = 0x02,
+
 		/// <summary>Out 3.</summary>
 		Out3 = 0x04,
+
 		/// <summary>Out 4.</summary>
 		Out4 = 0x08,
+
 	/////// <summary>Out 5.</summary>
 	////Out5 = 0x10,
+
 	/////// <summary>Out 6.</summary>
 	////Out6 = 0x20 \If1To6
 	}
@@ -93,13 +105,14 @@ namespace MKY.IO.Ports.Test
 		/// <remarks>Makes not (yet) sense to put this into the test configuration.</remarks>
 		private const string Serial = "A6YJ5A78";
 
-		/// <remarks>Example: 001100</remarks>
+		/// <remarks>Example: 001100.</remarks>
 		private const int MaxBits = 6;
 
 		/// <summary>Error message for convenience.</summary>
 		public const string ErrorMessage = @"The required """ + Executable + @""" is not available, therefore this test is excluded. Ensure that the ""MCD Conline USB HUB"" drivers are installed, and ""\Tools\CommandLine\USBHubControl.exe"" has been added to the system's PATH.";
 
 		/// <remarks>Same delay as in "MCD Conline USB HUB 6-Port Runtime Config.bat".</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Conline' is the product name.")]
 		private const int WaitForDriverLoading = 10000;
 
 		/// <remarks>Unloading seems to also require some delay, otherwise subsequent calls (e.g. enable) will fail.</remarks>
@@ -143,7 +156,6 @@ namespace MKY.IO.Ports.Test
 		/// <summary>
 		/// Sets all outputs to the given setting.
 		/// </summary>
-		/// <param name="setting"></param>
 		/// <returns><c>true</c> if successful; otherwise <c>false</c></returns>
 		public static bool Set(UsbHubSetting setting)
 		{
@@ -217,7 +229,6 @@ namespace MKY.IO.Ports.Test
 		/// <summary>
 		/// Enables the given outputs.
 		/// </summary>
-		/// <param name="enableMask"></param>
 		/// <returns><c>true</c> if successful; otherwise <c>false</c></returns>
 		public static bool Enable(UsbHubSetting enableMask)
 		{
@@ -235,7 +246,6 @@ namespace MKY.IO.Ports.Test
 		/// <summary>
 		/// Disables the given outputs.
 		/// </summary>
-		/// <param name="disableMask"></param>
 		/// <returns><c>true</c> if successful; otherwise <c>false</c></returns>
 		public static bool Disable(UsbHubSetting disableMask)
 		{

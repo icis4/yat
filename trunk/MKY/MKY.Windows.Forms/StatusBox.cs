@@ -57,11 +57,11 @@ namespace MKY.Windows.Forms
 		/// <param name="owner">
 		/// An implementation of System.Windows.Forms.IWin32Window that will own the modal dialog box.
 		/// </param>
-		/// <param name="status1">
-		/// The text to display in the first line of status box.
-		/// </param>
 		/// <param name="caption">
 		/// The text to display in the title bar of the status box.
+		/// </param>
+		/// <param name="status1">
+		/// The text to display in the first line of status box.
 		/// </param>
 		/// <param name="status2">
 		/// The text to display in the second line of status box.
@@ -83,11 +83,11 @@ namespace MKY.Windows.Forms
 		/// <param name="owner">
 		/// An implementation of System.Windows.Forms.IWin32Window that will own the modal dialog box.
 		/// </param>
-		/// <param name="status1">
-		/// The text to display in the first line of status box.
-		/// </param>
 		/// <param name="caption">
 		/// The text to display in the title bar of the status box.
+		/// </param>
+		/// <param name="status1">
+		/// The text to display in the first line of status box.
 		/// </param>
 		/// <param name="status2">
 		/// The text to display in the second line of status box.

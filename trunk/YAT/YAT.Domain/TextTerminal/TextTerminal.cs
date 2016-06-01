@@ -295,12 +295,11 @@ namespace YAT.Domain
 		/// </summary>
 		public override bool TryParse(string s, out byte[] result, Radix defaultRadix = Radix.String)
 		{
-			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.Send.ToParseMode()))
+			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, TerminalSettings.Send.ToParseMode()))
 				return (p.TryParse(s, out result, defaultRadix));
 		}
 
 		#endregion
-
 
 		#region Methods > Send
 		//------------------------------------------------------------------------------------------
@@ -333,7 +332,7 @@ namespace YAT.Domain
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
 
-			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.Send.ToParseMode()))
+			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, TerminalSettings.Send.ToParseMode()))
 				hasSucceeded = p.TryParse(textToParse, out parseResult, out textSuccessfullyParsed, item.DefaultRadix);
 
 			if (hasSucceeded)
@@ -406,7 +405,7 @@ namespace YAT.Domain
 
 			byte[] txEol;
 			byte[] rxEol;
-			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding, Parser.Modes.AllByteArrayResults))
+			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, Parser.Modes.AllByteArrayResults))
 			{
 				if (!p.TryParse(TextTerminalSettings.TxEol, out txEol))
 				{

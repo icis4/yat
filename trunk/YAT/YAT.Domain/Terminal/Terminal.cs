@@ -1202,7 +1202,6 @@ namespace YAT.Domain
 				int interval = this.terminalSettings.Send.DefaultLineInterval;
 				TimeSpan elapsed = (lineEndTimeStamp - lineBeginTimeStamp);
 				delay = interval - (int)elapsed.TotalMilliseconds;
-
 			}
 			else if (performLineDelay)
 			{

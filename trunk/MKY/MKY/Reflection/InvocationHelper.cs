@@ -65,6 +65,7 @@ namespace MKY.Reflection
 		/// <summary>
 		/// Invokes the given static property.
 		/// </summary>
+		/// <typeparam name="TReturn">The return type of the method to invoke.</typeparam>
 		public static TReturn InvokeStaticPropertyFromAttribute<TReturn>(Type type)
 		{
 			StaticPropertyAttribute[] atts = (StaticPropertyAttribute[])type.GetCustomAttributes(typeof(StaticPropertyAttribute), true);

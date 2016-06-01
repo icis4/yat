@@ -119,6 +119,7 @@ namespace MKY.IO.Serial.Usb
 		/// Only used with <see cref="SerialHidFlowControl.Software"/>
 		/// and <see cref="SerialHidFlowControl.ManualSoftware"/>.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Emphasize the existance of the interface in use.")]
 		private IXOnXOffHelper iXOnXOffHelper = new IXOnXOffHelper();
 
 		#endregion

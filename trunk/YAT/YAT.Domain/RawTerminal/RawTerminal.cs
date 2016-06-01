@@ -694,7 +694,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Note that this I/O event has a calling contract of:
 		///   [CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
-		/// Therefore, no additional synchronization to prevent race conditiond is required here.
+		/// Therefore, no additional synchronization to prevent race condition is required here.
 		/// </remarks>
 		private void io_DataReceived(object sender, DataReceivedEventArgs e)
 		{
@@ -729,7 +729,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Note that this I/O event has a calling contract of:
 		///   [CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
-		/// Therefore, no additional synchronization to prevent race conditiond is required here.
+		/// Therefore, no additional synchronization to prevent race condition is required here.
 		/// </remarks>
 		private void io_DataSent(object sender, DataSentEventArgs e)
 		{

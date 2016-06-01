@@ -27,12 +27,11 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
-using NUnit.Framework;
-
 using MKY.Net.Test;
+
+using NUnit.Framework;
 
 #endregion
 
@@ -240,15 +239,16 @@ namespace YAT.Domain.Test.TextTerminal
 			int txTotalLineCount = terminalTx.GetRepositoryLineCount(RepositoryType.Bidir);
 			int rxTotalLineCount = terminalRx.GetRepositoryLineCount(RepositoryType.Bidir);
 
-			Assert.AreEqual(expectedTotalLineCount, txTotalLineCount,
-				"Error!" +
-				" Number of total lines = " + txTotalLineCount +
-				" mismatches expected = " + expectedTotalLineCount + ".");
+			string txMessage = "Error!" + 
+			                   " Number of total lines = " + txTotalLineCount +
+			                   " mismatches expected = " + expectedTotalLineCount + ".";
 
-			Assert.AreEqual(expectedTotalLineCount, rxTotalLineCount,
-				"Error!" +
-				" Number of total lines = " + rxTotalLineCount +
-				" mismatches expected = " + expectedTotalLineCount + ".");
+			string rxMessage = "Error!" + 
+			                   " Number of total lines = " + rxTotalLineCount +
+			                   " mismatches expected = " + expectedTotalLineCount + ".";
+
+			Assert.AreEqual(expectedTotalLineCount, txTotalLineCount, txMessage);
+			Assert.AreEqual(expectedTotalLineCount, rxTotalLineCount, rxMessage);
 		}
 
 		#endregion
