@@ -1672,7 +1672,7 @@ namespace YAT.Model
 						try
 						{
 							OnFixedStatusTextRequest("Automatically transmitting text on terminal " + id);
-							requestedTerminal.SendText(new Command(text));
+							requestedTerminal.SendText(new Command(text)); // No explicit default radix available (yet).
 							success = true;
 						}
 						catch (Exception ex)
@@ -1700,7 +1700,7 @@ namespace YAT.Model
 						try
 						{
 							OnFixedStatusTextRequest("Automatically transmitting file on terminal " + id);
-							requestedTerminal.SendFile(new Command("", true, filePath));
+							requestedTerminal.SendFile(new Command("", true, filePath)); // No explicit default radix available (yet).
 							success = true;
 						}
 						catch (Exception ex)

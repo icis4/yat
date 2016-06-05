@@ -69,6 +69,12 @@ namespace YAT.View.Controls
 	/// On focus enter, edit state is always reset.
 	/// On focus leave, edit state is kept depending on how focus is leaving.
 	/// </remarks>
+	/// <remarks>
+	/// Note that similar code exists in <see cref="SendFile"/> and <see cref="PredefinedCommandSettingsSet"/>.
+	/// The diff among these three implementations shall be kept as small as possible.
+	/// 
+	/// For a future refactoring, consider to separate the common code into a common view-model.
+	/// </remarks>
 	[DefaultEvent("SendCommandRequest")]
 	public partial class SendText : UserControl
 	{
@@ -77,22 +83,13 @@ namespace YAT.View.Controls
 		// Types
 		//==========================================================================================
 
-		// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
-		// warnings for each undocumented member below. Documenting each member makes little sense
-		// since they pretty much tell their purpose and documentation tags between the members
-		// makes the code less readable.
-		#pragma warning disable 1591
-
-		/// <summary></summary>
-		protected enum EditFocusState
+		private enum EditFocusState
 		{
 			EditIsInactive,
 			EditHasFocus,
 			IsLeavingEdit,
-			IsLeavingParent,
+			IsLeavingParent
 		}
-
-		#pragma warning restore 1591
 
 		#endregion
 
@@ -129,7 +126,6 @@ namespace YAT.View.Controls
 
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
 		private bool useExplicitDefaultRadix = Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault;
-		private Domain.RadixEx explicitDefaultRadix = Command.DefaultRadixDefault;
 		private Domain.Parser.Modes parseMode = ParseModeDefault;
 
 		private bool sendImmediately = SendImmediatelyDefault;
@@ -138,7 +134,7 @@ namespace YAT.View.Controls
 		private int sendSplitterDistance = SendSplitterDistanceDefault;
 
 		private EditFocusState editFocusState = EditFocusState.EditIsInactive;
-		private bool isValidated;
+		private bool isValidated; // = false;
 
 		#endregion
 
@@ -174,8 +170,8 @@ namespace YAT.View.Controls
 		{
 			InitializeComponent();
 
-			InitializeExplicitDefaultRadixControls();
-		//// Set...Controls() is initially called in the 'Paint' event handler.
+			InitializeControls();
+		////Set...Controls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion
@@ -265,39 +261,15 @@ namespace YAT.View.Controls
 				if (this.useExplicitDefaultRadix != value)
 				{
 					this.useExplicitDefaultRadix = value;
-					SetExplicitDefaultRadixControls();
-					SetCommandDefaultRadix();
-				}
-			}
-		}
 
-		/// <summary></summary>
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		protected virtual Domain.RadixEx ExplicitDefaultRadix
-		{
-			set
-			{
-				if (this.explicitDefaultRadix != value)
-				{
-					this.explicitDefaultRadix = value;
-					SetExplicitDefaultRadixControls();
-					SetCommandDefaultRadix();
-				}
-			}
-		}
+					if (value) // Explicit => Refresh the command controls.
+						SetCommandControls();
 
-		/// <summary></summary>
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		protected virtual Domain.Radix DefaultRadix
-		{
-			get
-			{
-				if (this.useExplicitDefaultRadix)
-					return (this.explicitDefaultRadix);
-				else
-					return (Command.DefaultRadixDefault);
+					SetExplicitDefaultRadixControls();
+
+					if (!value) // Implicit => Reset default radix.
+						ValidateAndConfirmRadix(Command.DefaultRadixDefault);
+				}
 			}
 		}
 
@@ -366,20 +338,20 @@ namespace YAT.View.Controls
 			}
 		}
 
+		/// <remarks>Function instead of property to emphasize purpose and prevent naming conflict among enum and property.</remarks>
+		private void SetEditFocusState(EditFocusState state)
+		{
+			if (this.editFocusState != state)
+			{
+				this.editFocusState = state;
+				OnEditFocusStateChanged(EventArgs.Empty);
+			}
+		}
+
 		/// <summary></summary>
 		public virtual bool EditIsActive
 		{
 			get { return (this.editFocusState != EditFocusState.EditIsInactive); }
-		}
-
-		/// <summary></summary>
-		protected virtual void SetEditFocusState(EditFocusState editFocusSet)
-		{
-			if (this.editFocusState != editFocusSet)
-			{
-				this.editFocusState = editFocusSet;
-				OnEditFocusStateChanged(EventArgs.Empty);
-			}
 		}
 
 		#endregion
@@ -490,10 +462,58 @@ namespace YAT.View.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		private void comboBox_ExplicitDefaultRadix_SelectedIndexChanged(object sender, EventArgs e)
+		private void comboBox_ExplicitDefaultRadix_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)
-				ExplicitDefaultRadix = (Domain.RadixEx)comboBox_ExplicitDefaultRadix.SelectedItem;
+			{
+				Domain.Radix radix = this.command.DefaultRadix;
+				Domain.RadixEx selectedItem = comboBox_ExplicitDefaultRadix.SelectedItem as Domain.RadixEx;
+				if (selectedItem != null) // Can be 'null' when validating all controls before an item got selected.
+					radix = selectedItem;
+
+				if (!ValidateAndConfirmRadix(radix))
+					e.Cancel = true;
+			}
+		}
+
+		private bool ValidateAndConfirmRadix(Domain.Radix radix)
+		{
+			if (this.command.IsSingleLineText)
+			{
+				string s = this.command.SingleLineText;
+				if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", s, radix, this.parseMode))
+				{
+					this.command.DefaultRadix = radix;
+				////this.isValidated is intentionally not set, as the validation above only verifies the changed radix but not the text.
+				////ConfirmCommand() is intentionally not called, as that may confirm the command with not yet updated text on ValidateChildren().
+					return (true);
+				}
+			}
+			else if (this.command.IsMultiLineText)
+			{
+				bool isValid = true;
+
+				foreach (string s in this.command.MultiLineText)
+				{
+					if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", s, radix, this.parseMode))
+						isValid = false;
+				}
+
+				if (isValid)
+				{
+					this.command.DefaultRadix = radix;
+				////this.isValidated is intentionally not set, as the validation above only verifies the changed radix but not the text.
+				////ConfirmCommand() is intentionally not called, as that may confirm the command with not yet updated text on ValidateChildren().
+					return (true);
+				}
+			}
+			else // Neither single- nor multi-line, simply set the radix.
+			{
+				this.command.DefaultRadix = radix;
+				return (true);
+			}
+
+			return (false);
 		}
 
 		private void comboBox_SingleLineText_Enter(object sender, EventArgs e)
@@ -548,7 +568,7 @@ namespace YAT.View.Controls
 			if (this.sendImmediately)
 			{
 				this.isValidated = true;
-				CreateAndConfirmPartialCommand(e.KeyChar.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for keys!
+				ConfirmPartialText(e.KeyChar.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for keys!
 				InvokeSendCommandRequest();
 			}
 
@@ -604,7 +624,7 @@ namespace YAT.View.Controls
 							if (this.editFocusState == EditFocusState.IsLeavingEdit)
 								SetEditFocusState(EditFocusState.EditIsInactive);
 
-							CreateAndConfirmSingleLineText(comboBox_SingleLineText.Text);
+							ConfirmSingleLineText(comboBox_SingleLineText.Text);
 
 							DebugCommandLeave();
 							return;
@@ -613,14 +633,14 @@ namespace YAT.View.Controls
 						// Single line => Validate!
 						int invalidTextStart;
 						int invalidTextLength;
-						if (Utilities.ValidationHelper.ValidateText(this, "text", comboBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, DefaultRadix, this.parseMode))
+						if (Utilities.ValidationHelper.ValidateText(this, "text", comboBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, this.command.DefaultRadix, this.parseMode))
 						{
 							this.isValidated = true;
 
 							if (this.editFocusState == EditFocusState.IsLeavingEdit)
 								SetEditFocusState(EditFocusState.EditIsInactive);
 
-							CreateAndConfirmSingleLineText(comboBox_SingleLineText.Text);
+							ConfirmSingleLineText(comboBox_SingleLineText.Text);
 
 							DebugCommandLeave();
 							return;
@@ -664,9 +684,9 @@ namespace YAT.View.Controls
 			}
 		}
 		
-		private void button_MultiLine_Click(object sender, EventArgs e)
+		private void button_SetMultiLineText_Click(object sender, EventArgs e)
 		{
-			ShowMultiLineBox(button_MultiLine);
+			ShowMultiLineBox(button_SetMultiLineText);
 		}
 
 		private void button_Send_Click(object sender, EventArgs e)
@@ -682,12 +702,12 @@ namespace YAT.View.Controls
 		// Private Methods
 		//==========================================================================================
 
-		#region Private Methods > Set Controls
+		#region Private Methods > Controls
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Set Controls
+		// Private Methods > Controls
 		//------------------------------------------------------------------------------------------
 
-		private void InitializeExplicitDefaultRadixControls()
+		private void InitializeControls()
 		{
 			this.isSettingControls.Enter();
 
@@ -702,11 +722,6 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 
 			splitContainer_ExplicitDefaultRadix.Panel1Collapsed = !this.useExplicitDefaultRadix;
-
-			if (this.useExplicitDefaultRadix)
-				Utilities.SelectionHelper.Select(comboBox_ExplicitDefaultRadix, this.explicitDefaultRadix, this.explicitDefaultRadix);
-			else
-				Utilities.SelectionHelper.Deselect(comboBox_ExplicitDefaultRadix);
 
 			this.isSettingControls.Leave();
 		}
@@ -744,6 +759,11 @@ namespace YAT.View.Controls
 		{
 			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			this.isSettingControls.Enter();
+
+			if (this.useExplicitDefaultRadix)
+				Utilities.SelectionHelper.Select(comboBox_ExplicitDefaultRadix, (Domain.RadixEx)this.command.DefaultRadix, (Domain.RadixEx)this.command.DefaultRadix);
+			else
+				Utilities.SelectionHelper.Deselect(comboBox_ExplicitDefaultRadix);
 
 			if (this.editFocusState == EditFocusState.EditIsInactive)
 			{
@@ -847,31 +867,39 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Private Methods > Command Radix
+		#region Private Methods > Handle Command
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Command Radix
+		// Private Methods > Handle Command
 		//------------------------------------------------------------------------------------------
 
-		private void SetCommandDefaultRadix()
+		private void ConfirmCommand()
 		{
-			if (UseExplicitDefaultRadix)
-			{
-				if (this.command.DefaultRadix != this.explicitDefaultRadix)
-				{
-					Command c = new Command(this.command); // Recreate to enforce property change.
-					c.DefaultRadix = this.explicitDefaultRadix;
-					Command = c; // Enforce property setter.
-				}
-			}
-			else
-			{
-				if (this.command.DefaultRadix != Command.DefaultRadixDefault)
-				{
-					Command c = new Command(this.command); // Recreate to enforce property change.
-					c.DefaultRadix = Command.DefaultRadixDefault;
-					Command = c; // Enforce property setter.
-				}
-			}
+			SetCommandControls();
+			OnCommandChanged(EventArgs.Empty);
+		}
+
+		private void ConfirmSingleLineText(string text)
+		{
+			this.command.SingleLineText = text;
+
+			SetCommandControls();
+			OnCommandChanged(EventArgs.Empty);
+		}
+
+		private void ConfirmPartialText(string text)
+		{
+			this.command.PartialText = text;
+
+			SetCommandControls();
+			OnCommandChanged(EventArgs.Empty);
+		}
+
+		private void ConfirmPartialTextEolCommand()
+		{
+			this.command.IsPartialTextEol = true;
+
+			SetCommandControls();
+			OnCommandChanged(EventArgs.Empty);
 		}
 
 		#endregion
@@ -901,13 +929,13 @@ namespace YAT.View.Controls
 			formStartupLocation.Y = area.Y + area.Height;
 
 			// Show multi-line box:
-			MultiLineBox f = new MultiLineBox(this.command, formStartupLocation, DefaultRadix, this.parseMode);
+			MultiLineBox f = new MultiLineBox(this.command, formStartupLocation, this.command.DefaultRadix, this.parseMode);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
 
-				this.isValidated = true; // Command has been validated by multi-line box.
 				this.command = f.CommandResult;
+				this.isValidated = true; // Command has been validated by multi-line box.
 
 				SetCommandControls();
 				OnCommandChanged(EventArgs.Empty);
@@ -923,52 +951,6 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Private Methods > Handle Command
-		//------------------------------------------------------------------------------------------
-		// Private Methods > Handle Command
-		//------------------------------------------------------------------------------------------
-
-		private void ConfirmCommand()
-		{
-			SetCommandControls();
-			OnCommandChanged(EventArgs.Empty);
-		}
-
-		/// <remarks>
-		/// Always create new command to ensure that not only command but also description is updated.
-		/// </remarks>
-		private void CreateAndConfirmSingleLineText(string singleLineText)
-		{
-			this.command = new Command(singleLineText);
-
-			SetCommandControls();
-			OnCommandChanged(EventArgs.Empty);
-		}
-
-		/// <remarks>
-		/// Always create new command to ensure that not only command but also description is updated.
-		/// </remarks>
-		private void CreateAndConfirmPartialCommand(string partialCommand)
-		{
-			this.command = new Command(partialCommand, true);
-
-			SetCommandControls();
-			OnCommandChanged(EventArgs.Empty);
-		}
-
-		/// <remarks>
-		/// Always create new command to ensure that not only command but also description is updated.
-		/// </remarks>
-		private void CreateAndConfirmPartialEolCommand()
-		{
-			this.command = new Command(true);
-
-			SetCommandControls();
-			OnCommandChanged(EventArgs.Empty);
-		}
-
-		#endregion
-
 		#region Private Methods > Request Send
 		//------------------------------------------------------------------------------------------
 		// Private Methods > Request Send
@@ -978,7 +960,7 @@ namespace YAT.View.Controls
 		{
 			if (this.sendImmediately)
 			{
-				CreateAndConfirmPartialEolCommand();
+				ConfirmPartialTextEolCommand();
 				InvokeSendCommandRequest();
 			}
 			else
@@ -990,7 +972,7 @@ namespace YAT.View.Controls
 				}
 				else
 				{
-					if (ValidateChildren()) // CreateAndConfirmSingleLineText() gets called here.
+					if (ValidateChildren()) // ConfirmSingleLineText() gets called here.
 						InvokeSendCommandRequest();
 				}
 			}

@@ -462,7 +462,7 @@ namespace YAT.Settings.Terminal
 
 						case Model.Types.AutoTrigger.Explicit:
 						{
-							Model.Types.Command c = new Model.Types.Command(this.implicit_.AutoResponse.Trigger); // Explicit trigger command.
+							Model.Types.Command c = new Model.Types.Command(this.implicit_.AutoResponse.Trigger); // No explicit default radix available (yet).
 							if (c.IsValid)
 								a.Add(trigger);
 
@@ -543,7 +543,7 @@ namespace YAT.Settings.Terminal
 
 						case Model.Types.AutoResponse.Explicit:
 						{
-							Model.Types.Command c = new Model.Types.Command(this.implicit_.AutoResponse.Response); // Explicit trigger command.
+							Model.Types.Command c = new Model.Types.Command(this.implicit_.AutoResponse.Response); // No explicit default radix available (yet).
 							if (c.IsValid)
 								a.Add(response);
 
@@ -604,7 +604,7 @@ namespace YAT.Settings.Terminal
 
 						case Model.Types.AutoTrigger.Explicit:
 						{
-							Model.Types.Command c = new Model.Types.Command(this.implicit_.AutoResponse.Trigger); // Explicit trigger command.
+							Model.Types.Command c = new Model.Types.Command(this.implicit_.AutoResponse.Trigger); // No explicit default radix available (yet).
 							if (c.IsValid)
 								response = c;
 

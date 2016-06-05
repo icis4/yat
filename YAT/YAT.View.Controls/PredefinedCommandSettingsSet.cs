@@ -53,6 +53,12 @@ namespace YAT.View.Controls
 	/// On focus enter, edit state is always reset.
 	/// On focus leave, edit state is kept depending on how focus is leaving.
 	/// </remarks>
+	/// <remarks>
+	/// Note that similar code exists in <see cref="SendText"/> and <see cref="SendFile"/>.
+	/// The diff among these three implementations shall be kept as small as possible.
+	/// 
+	/// For a future refactoring, consider to separate the common code into a common view-model.
+	/// </remarks>
 	[DefaultEvent("CommandChanged")]
 	public partial class PredefinedCommandSettingsSet : UserControl
 	{
@@ -61,11 +67,11 @@ namespace YAT.View.Controls
 		// Types
 		//==========================================================================================
 
-		private enum FocusState
+		private enum EditFocusState
 		{
-			Inactive,
-			HasFocus,
-			IsLeaving,
+			EditIsInactive,
+			EditHasFocus,
+			IsLeavingEdit
 		}
 
 		#endregion
@@ -93,10 +99,9 @@ namespace YAT.View.Controls
 
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
 		private bool useExplicitDefaultRadix = Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault;
-		private Domain.RadixEx explicitDefaultRadix = Command.DefaultRadixDefault;
 		private Domain.Parser.Modes parseMode = ParseModeDefault;
 
-		private FocusState focusState = FocusState.Inactive;
+		private EditFocusState editFocusState = EditFocusState.EditIsInactive;
 		private bool isValidated; // = false;
 
 		#endregion
@@ -108,7 +113,7 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Category("Property Changed")]
-		[Description("Event raised when any of the commands properties have changed.")]
+		[Description("Event raised when any command related property has changed.")]
 		public event EventHandler CommandChanged;
 
 		#endregion
@@ -134,10 +139,9 @@ namespace YAT.View.Controls
 		// Properties
 		//==========================================================================================
 
-		/// <summary>
-		/// This property always returns a <see cref="Command"/> object,
-		/// it never returns <c>null</c>.
-		/// </summary>
+		/// <remarks>
+		/// This property always returns a <see cref="Command"/> object, it never returns <c>null</c>.
+		/// </remarks>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Command Command
@@ -145,27 +149,37 @@ namespace YAT.View.Controls
 			get { return (this.command); }
 			set
 			{
-				if (value != null)
-					this.command = value;
-				else
-					this.command = new Command();
+				if (this.command != value)
+				{
+					if (value != null)
+					{
+						this.command = value;
+						this.isValidated = value.IsValidText;
+					}
+					else
+					{
+						this.command = new Command();
+						this.isValidated = false;
+					}
 
-				OnCommandChanged(EventArgs.Empty);
-				SetControls();
+					SetControls();
+					OnCommandChanged(EventArgs.Empty);
+				}
 			}
 		}
 
 		/// <summary></summary>
-		[Category("Command")]
-		[Description("The terminal type related to the command.")]
-		[DefaultValue(TerminalTypeDefault)]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Domain.TerminalType TerminalType
 		{
-			get { return (this.terminalType); }
 			set
 			{
-				this.terminalType = value;
-				SetControls();
+				if (this.terminalType != value)
+				{
+					this.terminalType = value;
+					SetControls();
+				}
 			}
 		}
 
@@ -181,8 +195,14 @@ namespace YAT.View.Controls
 				if (this.useExplicitDefaultRadix != value)
 				{
 					this.useExplicitDefaultRadix = value;
-					SetControls();
-					SetCommandDefaultRadix();
+
+					if (value) // Explicit => Refresh the command controls.
+						SetControls();
+
+					SetExplicitDefaultRadixControls();
+
+					if (!value) // Implicit => Reset default radix.
+						ValidateAndConfirmRadix(Command.DefaultRadixDefault);
 				}
 			}
 		}
@@ -190,44 +210,15 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		protected virtual Domain.RadixEx ExplicitDefaultRadix
-		{
-			set
-			{
-				if (this.explicitDefaultRadix != value)
-				{
-					this.explicitDefaultRadix = value;
-					SetControls();
-					SetCommandDefaultRadix();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		protected virtual Domain.Radix DefaultRadix
-		{
-			get
-			{
-				if (this.useExplicitDefaultRadix)
-					return (this.explicitDefaultRadix);
-				else
-					return (Command.DefaultRadixDefault);
-			}
-		}
-
-		/// <summary></summary>
-		[Category("Command")]
-		[Description("The parse mode related to the command.")]
-		[DefaultValue(ParseModeDefault)]
 		public virtual Domain.Parser.Modes ParseMode
 		{
-			get { return (this.parseMode); }
 			set
 			{
-				this.parseMode = value;
-				SetControls();
+				if (this.parseMode != value)
+				{
+					this.parseMode = value;
+					SetControls();
+				}
 			}
 		}
 
@@ -239,6 +230,13 @@ namespace YAT.View.Controls
 		{
 			get { return (label_Shortcut.Text); }
 			set { label_Shortcut.Text = value; }
+		}
+
+		/// <remarks>Dedicated function for symmetricity with <see cref="SendText"/>.</remarks>
+		private void SetEditFocusState(EditFocusState state)
+		{
+			if (this.editFocusState != state)
+				this.editFocusState = state;
 		}
 
 		#endregion
@@ -265,17 +263,18 @@ namespace YAT.View.Controls
 			if (this.isStartingUp)
 			{
 				this.isStartingUp = false;
+				SetExplicitDefaultRadixControls();
 				SetControls();
-
-				// Move cursor to end:
-				textBox_SingleLineText.SelectionStart = textBox_SingleLineText.Text.Length;
+				SetCursorToEnd();
 			}
 		}
 
+		/// <remarks>
+		/// Do not modify <see cref="isValidated"/>. Command may already have been validated.
+		/// </remarks>
 		private void PredefinedCommandSettingsSet_Enter(object sender, EventArgs e)
 		{
-			this.focusState = FocusState.Inactive;
-			this.isValidated = false;
+			SetEditFocusState(EditFocusState.EditIsInactive);
 		}
 
 		#endregion
@@ -285,10 +284,56 @@ namespace YAT.View.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		private void comboBox_ExplicitDefaultRadix_SelectedIndexChanged(object sender, EventArgs e)
+		private void comboBox_ExplicitDefaultRadix_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)
-				ExplicitDefaultRadix = (Domain.RadixEx)comboBox_ExplicitDefaultRadix.SelectedItem;
+			{
+				Domain.Radix radix = this.command.DefaultRadix;
+				Domain.RadixEx selectedItem = comboBox_ExplicitDefaultRadix.SelectedItem as Domain.RadixEx;
+				if (selectedItem != null) // Can be 'null' when validating all controls before an item got selected.
+					radix = selectedItem;
+
+				if (!ValidateAndConfirmRadix(radix))
+					e.Cancel = true;
+			}
+		}
+
+		private bool ValidateAndConfirmRadix(Domain.Radix radix)
+		{
+			if (this.command.IsSingleLineText)
+			{
+				string s = this.command.SingleLineText;
+				if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", s, radix, this.parseMode))
+				{
+					this.command.DefaultRadix = radix;
+				////this.isValidated is intentionally not set, as the validation above only verifies the changed radix but not the text.
+					return (true);
+				}
+			}
+			else if (this.command.IsMultiLineText)
+			{
+				bool isValid = true;
+
+				foreach (string s in this.command.MultiLineText)
+				{
+					if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", s, radix, this.parseMode))
+						isValid = false;
+				}
+
+				if (isValid)
+				{
+					this.command.DefaultRadix = radix;
+				////this.isValidated is intentionally not set, as the validation above only verifies the changed radix but not the text.
+					return (true);
+				}
+			}
+			else // Neither single- nor multi-line, simply set the radix.
+			{
+				this.command.DefaultRadix = radix;
+				return (true);
+			}
+
+			return (false);
 		}
 
 		private void checkBox_IsFile_CheckedChanged(object sender, EventArgs e)
@@ -311,11 +356,18 @@ namespace YAT.View.Controls
 		private void textBox_SingleLineText_Enter(object sender, EventArgs e)
 		{
 			// Clear "<Enter a command...>" if needed.
-			if ((this.focusState == FocusState.Inactive) && !this.command.IsSingleLineText)
-				ClearCommand();
+			if ((this.editFocusState == EditFocusState.EditIsInactive) && !this.command.IsText)
+			{
+				this.isSettingControls.Enter();
+				textBox_SingleLineText.Text      = "";
+				textBox_SingleLineText.ForeColor = SystemColors.ControlText;
+				textBox_SingleLineText.Font      = SystemFonts.DefaultFont;
+				this.isSettingControls.Leave();
+			}
 
-			this.focusState = FocusState.HasFocus;
-			this.isValidated = false;
+			SetEditFocusState(EditFocusState.EditHasFocus);
+
+			// No need to set this.isValidated = false yet. The 'TextChanged' event will do so.
 		}
 
 		/// <remarks>
@@ -325,15 +377,15 @@ namespace YAT.View.Controls
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		private void textBox_SingleLineText_Leave(object sender, System.EventArgs e)
+		private void textBox_SingleLineText_Leave(object sender, EventArgs e)
 		{
 			if (this.isValidated)
-				this.focusState = FocusState.Inactive;
+				SetEditFocusState(EditFocusState.EditIsInactive);
 			else
-				this.focusState = FocusState.IsLeaving;
+				SetEditFocusState(EditFocusState.IsLeavingEdit);
 		}
 
-		private void textBox_SingleLineText_TextChanged(object sender, System.EventArgs e)
+		private void textBox_SingleLineText_TextChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
 				this.isValidated = false;
@@ -354,32 +406,28 @@ namespace YAT.View.Controls
 				{
 					this.isValidated = true;
 
-					if (this.focusState == FocusState.IsLeaving)
-						this.focusState = FocusState.Inactive;
-					else
-						this.focusState = FocusState.HasFocus;
+					if (this.editFocusState == EditFocusState.IsLeavingEdit)
+								SetEditFocusState(EditFocusState.EditIsInactive);
 
-					SetSingleLineText(textBox_SingleLineText.Text);
+					ConfirmSingleLineText(textBox_SingleLineText.Text);
 					return;
 				}
 
-				Domain.Radix radix = (this.useExplicitDefaultRadix ? (Domain.Radix)this.explicitDefaultRadix : Command.DefaultRadixDefault);
+				// Single line => Validate!
 				int invalidTextStart;
 				int invalidTextLength;
-				if (Utilities.ValidationHelper.ValidateText(this, "text", textBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, radix, this.parseMode))
+				if (Utilities.ValidationHelper.ValidateText(this, "text", textBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, this.command.DefaultRadix, this.parseMode))
 				{
 					this.isValidated = true;
 
-					if (this.focusState == FocusState.IsLeaving)
-						this.focusState = FocusState.Inactive;
-					else
-						this.focusState = FocusState.HasFocus;
+					if (this.editFocusState == EditFocusState.IsLeavingEdit)
+						SetEditFocusState(EditFocusState.EditIsInactive);
 
-					SetSingleLineText(textBox_SingleLineText.Text);
+					ConfirmSingleLineText(textBox_SingleLineText.Text);
 					return;
 				}
 
-				this.focusState = FocusState.HasFocus;
+				SetEditFocusState(EditFocusState.EditHasFocus);
 				textBox_SingleLineText.Select(invalidTextStart, invalidTextLength);
 				e.Cancel = true;
 			}
@@ -403,7 +451,7 @@ namespace YAT.View.Controls
 		private void textBox_Description_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)
-				SetDescription(textBox_Description.Text);
+				ConfirmDescription(textBox_Description.Text);
 		}
 
 		private void button_Delete_Click(object sender, EventArgs e)
@@ -420,6 +468,11 @@ namespace YAT.View.Controls
 		// Private Methods
 		//==========================================================================================
 
+		#region Private Methods > Controls
+		//------------------------------------------------------------------------------------------
+		// Private Methods > Controls
+		//------------------------------------------------------------------------------------------
+
 		private void InitializeControls()
 		{
 			this.isSettingControls.Enter();
@@ -430,14 +483,21 @@ namespace YAT.View.Controls
 			this.isSettingControls.Leave();
 		}
 
-		private void SetControls()
+		private void SetExplicitDefaultRadixControls()
 		{
 			this.isSettingControls.Enter();
 
 			splitContainer_ExplicitDefaultRadix.Panel1Collapsed = !this.useExplicitDefaultRadix;
 
+			this.isSettingControls.Leave();
+		}
+
+		private void SetControls()
+		{
+			this.isSettingControls.Enter();
+
 			if (this.useExplicitDefaultRadix)
-				Utilities.SelectionHelper.Select(comboBox_ExplicitDefaultRadix, this.explicitDefaultRadix, this.explicitDefaultRadix);
+				Utilities.SelectionHelper.Select(comboBox_ExplicitDefaultRadix, (Domain.RadixEx)this.command.DefaultRadix, (Domain.RadixEx)this.command.DefaultRadix);
 			else
 				Utilities.SelectionHelper.Deselect(comboBox_ExplicitDefaultRadix);
 
@@ -448,7 +508,7 @@ namespace YAT.View.Controls
 			{
 				// Command:
 				textBox_SingleLineText.Visible = true;
-				if (this.focusState == FocusState.Inactive)
+				if (this.editFocusState == EditFocusState.EditIsInactive)
 				{
 					if (textBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
 						textBox_SingleLineText.ForeColor = SystemColors.ControlText;
@@ -517,7 +577,7 @@ namespace YAT.View.Controls
 			{
 				// Command:
 				textBox_SingleLineText.Visible = true;
-				if (this.focusState == FocusState.Inactive)
+				if (this.editFocusState == EditFocusState.EditIsInactive)
 				{
 					if (textBox_SingleLineText.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 						textBox_SingleLineText.ForeColor = SystemColors.GrayText;
@@ -546,7 +606,23 @@ namespace YAT.View.Controls
 			this.isSettingControls.Leave();
 		}
 
-		private void SetDescription(string description)
+		private void SetCursorToEnd()
+		{
+			this.isSettingControls.Enter();
+
+			textBox_SingleLineText.SelectionStart = textBox_SingleLineText.Text.Length;
+
+			this.isSettingControls.Leave();
+		}
+
+		#endregion
+
+		#region Private Methods > Handle Command
+		//------------------------------------------------------------------------------------------
+		// Private Methods > Handle Command
+		//------------------------------------------------------------------------------------------
+
+		private void ConfirmDescription(string description)
 		{
 			if (!string.IsNullOrEmpty(description))
 				this.command.Description = description;
@@ -557,45 +633,20 @@ namespace YAT.View.Controls
 			OnCommandChanged(EventArgs.Empty);
 		}
 
-		private void SetSingleLineText(string text)
+		private void ConfirmSingleLineText(string text)
 		{
-			this.command.IsFilePath = false;
 			this.command.SingleLineText = text;
 
 			SetControls();
 			OnCommandChanged(EventArgs.Empty);
 		}
 
-		private void SetCommandDefaultRadix()
-		{
-			if (UseExplicitDefaultRadix)
-			{
-				if (this.command.DefaultRadix != this.explicitDefaultRadix)
-				{
-					Command c = new Command(this.command); // Recreate to enforce property change.
-					c.DefaultRadix = this.explicitDefaultRadix;
-					Command = c; // Enforce property setter.
-				}
-			}
-			else
-			{
-				if (this.command.DefaultRadix != Command.DefaultRadixDefault)
-				{
-					Command c = new Command(this.command); // Recreate to enforce property change.
-					c.DefaultRadix = Command.DefaultRadixDefault;
-					Command = c; // Enforce property setter.
-				}
-			}
-		}
+		#endregion
 
-		private void ClearCommand()
-		{
-			this.isSettingControls.Enter();
-			textBox_SingleLineText.Text      = "";
-			textBox_SingleLineText.ForeColor = SystemColors.ControlText;
-			textBox_SingleLineText.Font      = SystemFonts.DefaultFont;
-			this.isSettingControls.Leave();
-		}
+		#region Private Methods > Multi-Line Text
+		//------------------------------------------------------------------------------------------
+		// Private Methods > Multi-Line Text
+		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
 		/// Almost duplicated code in <see cref="SendText.ShowMultiLineBox"/>.
@@ -617,24 +668,32 @@ namespace YAT.View.Controls
 			formStartupLocation.Y = area.Y + area.Height;
 
 			// Show multi-line box:
-			MultiLineBox f = new MultiLineBox(this.command, formStartupLocation, DefaultRadix, this.parseMode);
+			MultiLineBox f = new MultiLineBox(this.command, formStartupLocation, this.command.DefaultRadix, this.parseMode);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
+
 				this.command = f.CommandResult;
 				this.isValidated = true; // Command has been validated by multi-line box.
 
 				SetControls();
-				textBox_Description.Select();
 				OnCommandChanged(EventArgs.Empty);
 			}
 			else
 			{
 				SetControls();
-				textBox_Description.Select();
 			////OnCommandChanged() is not called, nothing has changed.
 			}
+
+			textBox_Description.Select();
 		}
+
+		#endregion
+
+		#region Private Methods > File
+		//------------------------------------------------------------------------------------------
+		// Private Methods > File
+		//------------------------------------------------------------------------------------------
 
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowOpenFileDialog()
@@ -701,6 +760,8 @@ namespace YAT.View.Controls
 			//   C  => Checkbox needs to be refreshed.
 			SetControls();
 		}
+
+		#endregion
 
 		#endregion
 

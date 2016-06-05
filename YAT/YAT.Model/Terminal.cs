@@ -1290,10 +1290,6 @@ namespace YAT.Model
 			{
 				HandleTerminalSettings(e.Inner);
 			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.PredefinedCommand))
-			{
-				this.log.NeatFormat = this.settingsRoot.Format;
-			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Format))
 			{
 				this.log.NeatFormat = this.settingsRoot.Format;
@@ -2918,7 +2914,7 @@ namespace YAT.Model
 
 			// Clear command if desired:
 			if (!this.settingsRoot.Send.KeepCommand)
-				this.settingsRoot.SendText.Command = new Command(); // Set command to "".
+				this.settingsRoot.SendText.Command = new Command(this.settingsRoot.SendText.Command.DefaultRadix); // Set command to "".
 		}
 
 		/// <summary>
@@ -2926,7 +2922,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendPartialTextEol()
 		{
-			DoSendText(new Command(true));
+			DoSendText(new Command(true, this.settingsRoot.SendText.Command.DefaultRadix));
 		}
 
 		/// <summary>
@@ -2962,20 +2958,17 @@ namespace YAT.Model
 				}
 				else if (c.IsPartialText)
 				{
-					if (!c.IsPartialTextEol)
-					{
-						Send(c.PartialText, c.DefaultRadix);
+					Send(c.PartialText, c.DefaultRadix);
 
-						// Compile the partial command line for later use:
-						if (string.IsNullOrEmpty(this.partialCommandLine))
-							this.partialCommandLine = string.Copy(c.PartialText);
-						else
-							this.partialCommandLine += c.PartialText;
-					}
+					// Compile the partial command line for later use:
+					if (string.IsNullOrEmpty(this.partialCommandLine))
+						this.partialCommandLine = string.Copy(c.PartialText);
 					else
-					{
-						SendEol();
-					}
+						this.partialCommandLine += c.PartialText;
+				}
+				else if (c.IsPartialTextEol)
+				{
+					SendEol();
 				}
 				else
 				{
@@ -2983,14 +2976,14 @@ namespace YAT.Model
 				}
 
 				// Copy line text into recent commands, include compiled partial text:
-				if (c.IsSingleLineText || c.IsMultiLineText || c.IsPartialTextEol)
+				if (c.IsSingleLineText || c.IsMultiLineText /* || do not add c.IsPartialText to recents */ || c.IsPartialTextEol)
 				{
 					// Clone the command for the recent commands collection:
 					Command clone;
 					if (!c.IsPartialTextEol)
 						clone = new Command(c); // 'Normal' case, simply clone the command.
 					else                        // Partial, create an equivalent single line text.
-						clone = new Command(this.partialCommandLine);
+						clone = new Command(this.partialCommandLine, false, c.DefaultRadix);
 
 					// Put clone into recent history:
 					this.settingsRoot.SendText.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(new RecentItem<Command>(clone));
@@ -4104,7 +4097,7 @@ namespace YAT.Model
 				case AutoResponse.SendFile:            SendFile();               break;
 
 				case AutoResponse.Explicit:
-					SendCommand(new Command(this.settingsRoot.AutoResponse.Response));
+					SendCommand(new Command(this.settingsRoot.AutoResponse.Response)); // No explicit default radix available (yet).
 					break;
 
 				case AutoResponse.None:
