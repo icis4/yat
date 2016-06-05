@@ -477,7 +477,8 @@ namespace MKY.Net
 					return (new IPNetworkInterfaceEx(address, networkInterface.Description));
 			}
 
-			return (new IPNetworkInterfaceEx(IPAddress.None, networkInterface.Description));
+			// Use default = [Any] in case o invalid interface (required for backward compatibility with old settings).
+			return (new IPNetworkInterfaceEx(IPAddress.Any, networkInterface.Description));
 		}
 
 		/// <summary></summary>
