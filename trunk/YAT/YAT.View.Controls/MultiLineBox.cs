@@ -200,7 +200,6 @@ namespace YAT.View.Controls
 				if (isValid)
 				{
 					this.commandInEdit.MultiLineText = multiLineText.ToArray();
-					this.commandInEdit.SetDescriptionFromSingleLineText(); // Enforce "<N lines...> [...] [...] ..." description.
 					SetControls();
 				}
 				else

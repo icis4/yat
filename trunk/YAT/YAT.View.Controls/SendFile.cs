@@ -63,7 +63,12 @@ using YAT.Settings.Application;
 
 namespace YAT.View.Controls
 {
-	/// <summary></summary>
+	/// <remarks>
+	/// Note that similar code exists in <see cref="SendText"/> and <see cref="PredefinedCommandSettingsSet"/>.
+	/// The diff among these three implementations shall be kept as small as possible.
+	/// 
+	/// For a future refactoring, consider to separate the common code into a common view-model.
+	/// </remarks>
 	[DefaultEvent("SendCommandRequest")]
 	public partial class SendFile : UserControl
 	{
@@ -76,8 +81,12 @@ namespace YAT.View.Controls
 
 		private const bool TerminalIsReadyToSendDefault = false;
 
-		private const int SendSplitterDistanceDefault = 356; // Designer requires that this is a constant.
-		                                                     // Set same value as splitContainer.SplitterDistance is designed.
+		/// <remarks>
+		/// The designer requires that this is a constant.
+		/// Set same value as splitContainer.SplitterDistance is designed.
+		/// </remarks>
+		private const int SendSplitterDistanceDefault = 356;
+
 		#endregion
 
 		#region Fields
@@ -92,7 +101,6 @@ namespace YAT.View.Controls
 
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
 		private bool useExplicitDefaultRadix = Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault;
-		private Domain.RadixEx explicitDefaultRadix = Command.DefaultRadixDefault;
 
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 
@@ -127,7 +135,7 @@ namespace YAT.View.Controls
 		{
 			InitializeComponent();
 
-			InitializeExplicitDefaultRadixControls();
+			InitializeControls();
 		////Set...Controls() is initially called in the 'Paint' event handler.
 		}
 
@@ -157,7 +165,7 @@ namespace YAT.View.Controls
 					else
 						this.command = new Command();
 
-					SetCommandAndRecentControls();
+					SetRecentAndCommandControls();
 					OnCommandChanged(EventArgs.Empty);
 
 					DebugCommandLeave();
@@ -179,7 +187,7 @@ namespace YAT.View.Controls
 				// Do not check if (this.recent != value) because the collection will always be the same!
 
 				this.recent = value;
-				SetCommandAndRecentControls(); // Recent must immediately be updated, otherwise order will be wrong on arrow-up/down.
+				SetRecentAndCommandControls(); // Recent must immediately be updated, otherwise order will be wrong on arrow-up/down.
 
 				DebugCommandLeave();
 			}
@@ -212,39 +220,15 @@ namespace YAT.View.Controls
 				if (this.useExplicitDefaultRadix != value)
 				{
 					this.useExplicitDefaultRadix = value;
-					SetExplicitDefaultRadixControls();
-					SetCommandDefaultRadix();
-				}
-			}
-		}
 
-		/// <summary></summary>
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		protected virtual Domain.RadixEx ExplicitDefaultRadix
-		{
-			set
-			{
-				if (this.explicitDefaultRadix != value)
-				{
-					this.explicitDefaultRadix = value;
-					SetExplicitDefaultRadixControls();
-					SetCommandDefaultRadix();
-				}
-			}
-		}
+					if (value) // Explicit => Refresh the command controls.
+						SetRecentAndCommandControls();
 
-		/// <summary></summary>
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		protected virtual Domain.Radix DefaultRadix
-		{
-			get
-			{
-				if (this.useExplicitDefaultRadix)
-					return (this.explicitDefaultRadix);
-				else
-					return (Command.DefaultRadixDefault);
+					SetExplicitDefaultRadixControls();
+
+					if (!value) // Implicit => Reset default radix.
+						this.command.DefaultRadix = Command.DefaultRadixDefault;
+				}
 			}
 		}
 
@@ -331,7 +315,7 @@ namespace YAT.View.Controls
 			{
 				this.isStartingUp = false;
 				SetExplicitDefaultRadixControls();
-				SetCommandAndRecentControls();
+				SetRecentAndCommandControls();
 			}
 		}
 
@@ -342,10 +326,20 @@ namespace YAT.View.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		private void comboBox_ExplicitDefaultRadix_SelectedIndexChanged(object sender, EventArgs e)
+		/// <remarks>Using 'Validation' instead of 'SelectedIndexChanged' for symmetricity with <see cref="SendText"/>.</remarks>
+		private void comboBox_ExplicitDefaultRadix_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)
-				ExplicitDefaultRadix = (Domain.RadixEx)comboBox_ExplicitDefaultRadix.SelectedItem;
+			{
+				Domain.Radix radix = this.command.DefaultRadix;
+				Domain.RadixEx selectedItem = comboBox_ExplicitDefaultRadix.SelectedItem as Domain.RadixEx;
+				if (selectedItem != null) // Can be 'null' when validating all controls before an item got selected.
+					radix = selectedItem;
+
+				// No need to validate the radix, simply set and confirm it:
+				this.command.DefaultRadix = radix;
+				ConfirmCommand();
+			}
 		}
 
 		private void pathComboBox_FilePath_SelectedIndexChanged(object sender, EventArgs e)
@@ -358,7 +352,7 @@ namespace YAT.View.Controls
 				{
 					var ri = (pathComboBox_FilePath.SelectedItem as RecentItem<Command>);
 					if (ri != null)
-						CreateAndConfirmCommand(ri.Item.FilePath);
+						ConfirmCommand(ri.Item.FilePath);
 				}
 
 				DebugCommandLeave();
@@ -382,12 +376,12 @@ namespace YAT.View.Controls
 		// Private Methods
 		//==========================================================================================
 
-		#region Private Methods > Set Controls
+		#region Private Methods > Controls
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Set Controls
+		// Private Methods > Controls
 		//------------------------------------------------------------------------------------------
 
-		private void InitializeExplicitDefaultRadixControls()
+		private void InitializeControls()
 		{
 			this.isSettingControls.Enter();
 
@@ -403,18 +397,18 @@ namespace YAT.View.Controls
 
 			splitContainer_ExplicitDefaultRadix.Panel1Collapsed = !this.useExplicitDefaultRadix;
 
-			if (this.useExplicitDefaultRadix)
-				Utilities.SelectionHelper.Select(comboBox_ExplicitDefaultRadix, this.explicitDefaultRadix, this.explicitDefaultRadix);
-			else
-				Utilities.SelectionHelper.Deselect(comboBox_ExplicitDefaultRadix);
-
 			this.isSettingControls.Leave();
 		}
 
-		private void SetCommandAndRecentControls()
+		private void SetRecentAndCommandControls()
 		{
 			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			this.isSettingControls.Enter();
+
+			if (this.useExplicitDefaultRadix)
+				Utilities.SelectionHelper.Select(comboBox_ExplicitDefaultRadix, (Domain.RadixEx)this.command.DefaultRadix, (Domain.RadixEx)this.command.DefaultRadix);
+			else
+				Utilities.SelectionHelper.Deselect(comboBox_ExplicitDefaultRadix);
 
 			pathComboBox_FilePath.Items.Clear();
 
@@ -510,35 +504,6 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Private Methods > Command Radix
-		//------------------------------------------------------------------------------------------
-		// Private Methods > Command Radix
-		//------------------------------------------------------------------------------------------
-
-		private void SetCommandDefaultRadix()
-		{
-			if (UseExplicitDefaultRadix)
-			{
-				if (this.command.DefaultRadix != this.explicitDefaultRadix)
-				{
-					Command c = new Command(this.command); // Recreate to enforce property change.
-					c.DefaultRadix = this.explicitDefaultRadix;
-					Command = c; // Enforce property setter.
-				}
-			}
-			else
-			{
-				if (this.command.DefaultRadix != Command.DefaultRadixDefault)
-				{
-					Command c = new Command(this.command); // Recreate to enforce property change.
-					c.DefaultRadix = Command.DefaultRadixDefault;
-					Command = c; // Enforce property setter.
-				}
-			}
-		}
-
-		#endregion
-
 		#region Private Methods > Open File
 		//------------------------------------------------------------------------------------------
 		// Private Methods > Open File
@@ -600,11 +565,11 @@ namespace YAT.View.Controls
 				ApplicationSettings.LocalUserSettings.Paths.SendFiles = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
-				CreateAndConfirmCommand(ofd.FileName);
+				ConfirmCommand(ofd.FileName);
 			}
 			else
 			{
-				SetCommandAndRecentControls();
+				SetRecentAndCommandControls();
 			////OnCommandChanged() is not called, nothing has changed.
 			}
 
@@ -621,21 +586,15 @@ namespace YAT.View.Controls
 
 		private void ConfirmCommand()
 		{
-			SetCommandAndRecentControls();
+			SetRecentAndCommandControls();
 			OnCommandChanged(EventArgs.Empty);
 		}
 
-		/// <remarks>
-		/// Always create new command to ensure that not only command but also description is updated.
-		/// </remarks>
-		private void CreateAndConfirmCommand(string filePath)
+		private void ConfirmCommand(string filePath)
 		{
-			if (UseExplicitDefaultRadix)
-				this.command = new Command(filePath, true, filePath);
-			else
-				this.command = new Command(filePath, true, filePath);
+			this.command.FilePath = filePath;
 
-			SetCommandAndRecentControls();
+			SetRecentAndCommandControls();
 			OnCommandChanged(EventArgs.Empty);
 		}
 
@@ -668,7 +627,7 @@ namespace YAT.View.Controls
 
 				if (dr == DialogResult.Yes)
 				{
-					if (ShowOpenFileDialog()) // CreateAndConfirmCommand() gets called here.
+					if (ShowOpenFileDialog()) // ConfirmCommand() gets called here.
 						InvokeSendCommandRequest();
 				}
 			}

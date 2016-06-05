@@ -909,14 +909,14 @@ namespace YAT.View.Forms
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.Clear();
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.AddRange(arTriggerItems);
 
-					Utilities.SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger, arTrigger, new Command(arTrigger).SingleLineText);
+					Utilities.SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger, arTrigger, new Command(arTrigger).SingleLineText); // No explicit default radix available (yet).
 
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Visible = true;
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Enabled = childIsReady;
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.Clear();
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.AddRange(arResponseItems);
 
-					Utilities.SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_AutoResponse_Response, arResponse, new Command(arResponse).SingleLineText);
+					Utilities.SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_AutoResponse_Response, arResponse, new Command(arResponse).SingleLineText); // No explicit default radix available (yet).
 				}
 
 				toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Visible = true;

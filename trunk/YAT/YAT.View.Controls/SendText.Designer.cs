@@ -30,7 +30,7 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.button_MultiLine = new System.Windows.Forms.Button();
+			this.button_SetMultiLineText = new System.Windows.Forms.Button();
 			this.button_Send = new System.Windows.Forms.Button();
 			this.comboBox_SingleLineText = new System.Windows.Forms.ComboBox();
 			this.comboBox_ExplicitDefaultRadix = new System.Windows.Forms.ComboBox();
@@ -44,18 +44,18 @@
 			this.splitContainer_ExplicitDefaultRadix.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// button_MultiLine
+			// button_SetMultiLineText
 			// 
-			this.button_MultiLine.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.button_SetMultiLineText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_MultiLine.Location = new System.Drawing.Point(247, 3);
-			this.button_MultiLine.Name = "button_MultiLine";
-			this.button_MultiLine.Size = new System.Drawing.Size(25, 21);
-			this.button_MultiLine.TabIndex = 1;
-			this.button_MultiLine.Text = "...";
-			this.toolTip.SetToolTip(this.button_MultiLine, "Multi-line text");
-			this.button_MultiLine.UseVisualStyleBackColor = true;
-			this.button_MultiLine.Click += new System.EventHandler(this.button_MultiLine_Click);
+			this.button_SetMultiLineText.Location = new System.Drawing.Point(247, 3);
+			this.button_SetMultiLineText.Name = "button_SetMultiLineText";
+			this.button_SetMultiLineText.Size = new System.Drawing.Size(25, 21);
+			this.button_SetMultiLineText.TabIndex = 1;
+			this.button_SetMultiLineText.Text = "...";
+			this.toolTip.SetToolTip(this.button_SetMultiLineText, "Multi-line text");
+			this.button_SetMultiLineText.UseVisualStyleBackColor = true;
+			this.button_SetMultiLineText.Click += new System.EventHandler(this.button_SetMultiLineText_Click);
 			// 
 			// button_Send
 			// 
@@ -100,7 +100,7 @@
 			this.comboBox_ExplicitDefaultRadix.Size = new System.Drawing.Size(74, 21);
 			this.comboBox_ExplicitDefaultRadix.TabIndex = 0;
 			this.toolTip.SetToolTip(this.comboBox_ExplicitDefaultRadix, "Select the radix which is used by default,");
-			this.comboBox_ExplicitDefaultRadix.SelectedIndexChanged += new System.EventHandler(this.comboBox_ExplicitDefaultRadix_SelectedIndexChanged);
+			this.comboBox_ExplicitDefaultRadix.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_ExplicitDefaultRadix_Validating);
 			// 
 			// splitContainer_Send
 			// 
@@ -135,7 +135,7 @@
 			// splitContainer_ExplicitDefaultRadix.Panel2
 			// 
 			this.splitContainer_ExplicitDefaultRadix.Panel2.Controls.Add(this.comboBox_SingleLineText);
-			this.splitContainer_ExplicitDefaultRadix.Panel2.Controls.Add(this.button_MultiLine);
+			this.splitContainer_ExplicitDefaultRadix.Panel2.Controls.Add(this.button_SetMultiLineText);
 			this.splitContainer_ExplicitDefaultRadix.Size = new System.Drawing.Size(356, 27);
 			this.splitContainer_ExplicitDefaultRadix.SplitterDistance = 80;
 			this.splitContainer_ExplicitDefaultRadix.SplitterWidth = 1;
@@ -165,7 +165,7 @@
 
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.SplitContainer splitContainer_Send;
-		private System.Windows.Forms.Button button_MultiLine;
+		private System.Windows.Forms.Button button_SetMultiLineText;
 		private System.Windows.Forms.Button button_Send;
 		private System.Windows.Forms.ComboBox comboBox_SingleLineText;
 		private System.Windows.Forms.SplitContainer splitContainer_ExplicitDefaultRadix;

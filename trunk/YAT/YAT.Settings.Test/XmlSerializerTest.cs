@@ -136,8 +136,8 @@ namespace YAT.Settings.Test
 
 			filePath = Temp.MakeTempFilePath(GetType(), "PredefinedCommandPage", FileExtension);
 			PredefinedCommandPage pcp = new PredefinedCommandPage();
-			pcp.Commands.Add(new Command("Hello", "World"));
-			pcp.Commands.Add(new Command("Hallo", "Wält"));
+			pcp.Commands.Add(new Command("Hello", new string[] { "World" }));
+			pcp.Commands.Add(new Command("Hallo", new string[] { "Wält"  }));
 			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(PredefinedCommandPage), pcp);
 
 			PredefinedCommandPageCollection c = new PredefinedCommandPageCollection();

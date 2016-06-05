@@ -548,13 +548,13 @@ namespace YAT.View.Forms
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.ValidAutoResponseTriggerItems);
 
 				AutoTriggerEx trigger = this.settingsRoot.AutoResponse.Trigger;
-				Utilities.SelectionHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText);
+				Utilities.SelectionHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
 
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Clear();
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.ValidAutoResponseResponseItems);
 
 				AutoResponseEx response = this.settingsRoot.AutoResponse.Response;
-				Utilities.SelectionHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response, new Command(response).SingleLineText);
+				Utilities.SelectionHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
 			}
 
 			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Enabled = this.settingsRoot.AutoResponse.IsActive;

@@ -94,7 +94,7 @@
 			this.comboBox_ExplicitDefaultRadix.Size = new System.Drawing.Size(74, 21);
 			this.comboBox_ExplicitDefaultRadix.TabIndex = 0;
 			this.toolTip.SetToolTip(this.comboBox_ExplicitDefaultRadix, "Select the radix which is used by default,\r\ni.e. without an escape sequence.");
-			this.comboBox_ExplicitDefaultRadix.SelectedIndexChanged += new System.EventHandler(this.comboBox_ExplicitDefaultRadix_SelectedIndexChanged);
+			this.comboBox_ExplicitDefaultRadix.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_ExplicitDefaultRadix_Validating);
 			// 
 			// splitContainer_Send
 			// 
