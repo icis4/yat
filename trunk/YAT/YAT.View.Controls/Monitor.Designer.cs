@@ -42,12 +42,10 @@
 			this.timer_Opacity = new System.Windows.Forms.Timer(this.components);
 			this.timer_MonitorUpdateTimeout = new System.Windows.Forms.Timer(this.components);
 			this.timer_DataStatusUpdateTimeout = new System.Windows.Forms.Timer(this.components);
-			this.performanceCounter_TotalProcessorLoad = new System.Diagnostics.PerformanceCounter();
-			this.timer_TotalProcessorLoad = new System.Windows.Forms.Timer(this.components);
+			this.timer_ProcessorLoad = new System.Windows.Forms.Timer(this.components);
 			this.panel_Monitor.SuspendLayout();
 			this.panel_Picture.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_Monitor)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.performanceCounter_TotalProcessorLoad)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// panel_Monitor
@@ -178,17 +176,11 @@
 			// 
 			this.timer_DataStatusUpdateTimeout.Tick += new System.EventHandler(this.timer_DataStatusUpdateTimeout_Tick);
 			// 
-			// performanceCounter_TotalProcessorLoad
+			// timer_ProcessorLoad
 			// 
-			this.performanceCounter_TotalProcessorLoad.CategoryName = "Processor";
-			this.performanceCounter_TotalProcessorLoad.CounterName = "% Processor Time";
-			this.performanceCounter_TotalProcessorLoad.InstanceName = "_Total";
-			// 
-			// timer_TotalProcessorLoad
-			// 
-			this.timer_TotalProcessorLoad.Enabled = true;
-			this.timer_TotalProcessorLoad.Interval = 347;
-			this.timer_TotalProcessorLoad.Tick += new System.EventHandler(this.timer_TotalProcessorLoad_Tick);
+			this.timer_ProcessorLoad.Enabled = true;
+			this.timer_ProcessorLoad.Interval = 347;
+			this.timer_ProcessorLoad.Tick += new System.EventHandler(this.timer_ProcessorLoad_Tick);
 			// 
 			// Monitor
 			// 
@@ -201,7 +193,6 @@
 			this.panel_Monitor.ResumeLayout(false);
 			this.panel_Picture.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_Monitor)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.performanceCounter_TotalProcessorLoad)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -221,7 +212,6 @@
 		private MKY.Windows.Forms.FastListBox fastListBox_LineNumbers;
 		private System.Windows.Forms.Label label_DataStatusEmpty;
 		private System.Windows.Forms.Label label_TimeStatusEmpty;
-		private System.Diagnostics.PerformanceCounter performanceCounter_TotalProcessorLoad;
-		private System.Windows.Forms.Timer timer_TotalProcessorLoad;
+		private System.Windows.Forms.Timer timer_ProcessorLoad;
 	}
 }

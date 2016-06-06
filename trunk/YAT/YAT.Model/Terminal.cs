@@ -1162,6 +1162,11 @@ namespace YAT.Model
 			// Settings have changed, recreate terminal with new settings:
 			if (this.terminal.IsStarted)
 			{
+				// \todo
+				// The code below could be improved such that the I/O is only restarted/recreated
+				// in case the I/O settings have changed (but not e.g. 'ShowPort'). This could be
+				// done along with FR#251 "Migrate settings to tabbed dialog".
+
 				// Terminal is open, close and re-open it with the new settings:
 				if (StopIO(false))
 				{
