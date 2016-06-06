@@ -120,8 +120,9 @@ namespace YAT.Domain.Settings
 				if (this.txDisplay != value)
 				{
 					var oldNode = this.txDisplay;
+					this.txDisplay = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.txDisplay = value;
 				}
 			}
 		}
@@ -148,8 +149,9 @@ namespace YAT.Domain.Settings
 					if (this.rxDisplay != value)
 					{
 						var oldNode = this.rxDisplay;
+						this.rxDisplay = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 						AttachOrReplaceOrDetachNode(oldNode, value);
-						this.rxDisplay = value;
 					}
 				}
 				else // Rx redirects to Tx:
@@ -157,8 +159,9 @@ namespace YAT.Domain.Settings
 					if (this.txDisplay != value)
 					{
 						var oldNode = this.txDisplay;
+						this.txDisplay = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 						AttachOrReplaceOrDetachNode(oldNode, value);
-						this.txDisplay = value;
 					}
 				}
 			}

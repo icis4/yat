@@ -119,8 +119,9 @@ namespace YAT.Settings.Terminal
 				if (this.terminal != value)
 				{
 					var oldNode = this.terminal;
+					this.terminal = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.terminal = value;
 				}
 			}
 		}
@@ -135,8 +136,9 @@ namespace YAT.Settings.Terminal
 				if (this.predefinedCommand != value)
 				{
 					var oldNode = this.predefinedCommand;
+					this.predefinedCommand = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.predefinedCommand = value;
 				}
 			}
 		}
@@ -151,8 +153,9 @@ namespace YAT.Settings.Terminal
 				if (this.format != value)
 				{
 					var oldNode = this.format;
+					this.format = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.format = value;
 				}
 			}
 		}
@@ -167,8 +170,9 @@ namespace YAT.Settings.Terminal
 				if (this.log != value)
 				{
 					var oldNode = this.log;
+					this.log = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.log = value;
 				}
 			}
 		}

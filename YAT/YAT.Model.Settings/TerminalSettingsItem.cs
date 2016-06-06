@@ -170,8 +170,9 @@ namespace YAT.Model.Settings
 				if (this.window != value)
 				{
 					var oldNode = this.window;
+					this.window = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.window = value;
 				}
 			}
 		}

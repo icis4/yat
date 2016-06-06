@@ -208,8 +208,9 @@ namespace YAT.Model.Settings
 				if (this.serialPortCommunication != value)
 				{
 					var oldNode = this.serialPortCommunication;
+					this.serialPortCommunication = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.serialPortCommunication = value;
 				}
 			}
 		}

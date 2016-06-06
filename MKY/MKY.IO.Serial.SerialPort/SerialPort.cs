@@ -2057,7 +2057,6 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
-
 		/// <remarks>
 		/// Asynchronously invoke incoming events to prevent potential deadlocks if close/dispose
 		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.

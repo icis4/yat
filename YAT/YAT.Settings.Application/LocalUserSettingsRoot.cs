@@ -134,8 +134,9 @@ namespace YAT.Settings.Application
 				if (this.general != value)
 				{
 					var oldNode = this.general;
+					this.general = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.general = value;
 				}
 			}
 		}
@@ -150,8 +151,9 @@ namespace YAT.Settings.Application
 				if (this.paths != value)
 				{
 					var oldNode = this.paths;
+					this.paths = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.paths = value;
 				}
 			}
 		}
@@ -166,8 +168,9 @@ namespace YAT.Settings.Application
 				if (this.extensions != value)
 				{
 					var oldNode = this.extensions;
+					this.extensions = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.extensions = value;
 				}
 			}
 		}
@@ -182,8 +185,9 @@ namespace YAT.Settings.Application
 				if (this.autoAutoWorkspace != value)
 				{
 					var oldNode = this.autoAutoWorkspace;
+					this.autoAutoWorkspace = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.autoAutoWorkspace = value;
 				}
 			}
 		}
@@ -198,8 +202,9 @@ namespace YAT.Settings.Application
 				if (this.mainWindow != value)
 				{
 					var oldNode = this.mainWindow;
+					this.mainWindow = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.mainWindow = value;
 				}
 			}
 		}
@@ -214,8 +219,9 @@ namespace YAT.Settings.Application
 				if (this.newTerminal != value)
 				{
 					var oldNode = this.newTerminal;
+					this.newTerminal = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.newTerminal = value;
 				}
 			}
 		}
@@ -230,8 +236,9 @@ namespace YAT.Settings.Application
 				if (this.recentFiles != value)
 				{
 					var oldNode = this.recentFiles;
+					this.recentFiles = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.recentFiles = value;
 				}
 			}
 		}

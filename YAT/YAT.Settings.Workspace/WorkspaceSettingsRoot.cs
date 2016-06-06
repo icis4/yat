@@ -135,8 +135,9 @@ namespace YAT.Settings.Workspace
 				if (this.workspace != value)
 				{
 					var oldNode = this.workspace;
+					this.workspace = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.workspace = value;
 				}
 			}
 		}

@@ -205,8 +205,9 @@ namespace MKY.Test.Settings
 					if (this.childLevel2A != value)
 					{
 						var oldNode = this.childLevel2A;
+						this.childLevel2A = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 						AttachOrReplaceOrDetachNode(oldNode, value);
-						this.childLevel2A = value;
 					}
 				}
 			}
@@ -221,8 +222,9 @@ namespace MKY.Test.Settings
 					if (this.childLevel2B != value)
 					{
 						var oldNode = this.childLevel2B;
+						this.childLevel2B = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 						AttachOrReplaceOrDetachNode(oldNode, value);
-						this.childLevel2B = value;
 					}
 				}
 			}
@@ -337,8 +339,9 @@ namespace MKY.Test.Settings
 					if (this.childLevel1 != value)
 					{
 						var oldNode = this.childLevel1;
+						this.childLevel1 = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 						AttachOrReplaceOrDetachNode(oldNode, value);
-						this.childLevel1 = value;
 					}
 				}
 			}
