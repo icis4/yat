@@ -32,16 +32,20 @@ namespace MKY.Diagnostics
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class StopwatchEx
 	{
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the given number of <see cref="Stopwatch"/> ticks into milliseconds.
+		/// </summary>
 		public static int TicksToTime(long ticks)
 		{
-			return ((int)(ticks * 1000 / Stopwatch.Frequency));
+			return ((int)((ticks * 1000 / Stopwatch.Frequency) + 0.5));
 		}
 
-		/// <summary></summary>
-		public static long TimeToTicks(int timeMs)
+		/// <summary>
+		/// Converts the given number of milliseconds into <see cref="Stopwatch"/> ticks.
+		/// </summary>
+		public static long TimeToTicks(int time)
 		{
-			return (Stopwatch.Frequency * timeMs / 1000);
+			return (Stopwatch.Frequency * time / 1000);
 		}
 	}
 }
