@@ -117,8 +117,8 @@ namespace MKY.IO.Serial.SerialPort
 		private bool isDisposed;
 
 		private State state = State.Reset;
-		private ReaderWriterLockSlim stateLock = new ReaderWriterLockSlim();
-		
+		private object stateSyncObj = new object(); // Required as port will be disposed and recreated on open/close.
+
 		private SerialPortSettings settings;
 
 		private Ports.ISerialPort port;
@@ -157,8 +157,10 @@ namespace MKY.IO.Serial.SerialPort
 		/// Alive timer detects port disconnects, i.e. when a USB to serial converter is disconnected.
 		/// </summary>
 		private System.Timers.Timer aliveTicker;
+		private object aliveTickerSyncObj = new object();
 
 		private System.Timers.Timer reopenTimeout;
+		private object reopenTimeoutSyncObj = new object();
 
 		private object dataEventSyncObj = new object();
 
@@ -227,13 +229,9 @@ namespace MKY.IO.Serial.SerialPort
 				{
 					// In the 'normal' case, the items have already been disposed of in e.g. Stop().
 					ResetPortAndThreadsAndNotify(false); // Suppress notifications during disposal!
-
-					if (this.stateLock != null)
-						this.stateLock.Dispose();
 				}
 
 				// Set state to disposed:
-				this.stateLock = null;
 				this.isDisposed = true;
 			}
 		}
@@ -1359,13 +1357,8 @@ namespace MKY.IO.Serial.SerialPort
 
 		private State GetStateSynchronized()
 		{
-			State state;
-
-			this.stateLock.EnterReadLock();
-			state = this.state;
-			this.stateLock.ExitReadLock();
-
-			return (state);
+			lock (this.stateSyncObj)
+				return (this.state);
 		}
 
 		private void SetStateSynchronizedAndNotify(State state, bool withNotify = true)
@@ -1373,9 +1366,8 @@ namespace MKY.IO.Serial.SerialPort
 #if (DEBUG)
 			State oldState = GetStateSynchronized();
 #endif
-			this.stateLock.EnterWriteLock();
-			this.state = state;
-			this.stateLock.ExitWriteLock();
+			lock (this.stateSyncObj)
+				this.state = state;
 
 			if (withNotify)
 			{
@@ -1504,6 +1496,8 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
+		private delegate void WithNotifyDelegate(bool withNotify = true);
+
 		private void RestartOrResetPortAndThreadsAndNotify(bool withNotify = true)
 		{
 			if (this.settings.AutoReopen.Enabled)
@@ -1511,13 +1505,9 @@ namespace MKY.IO.Serial.SerialPort
 				StopAndDisposeAliveTicker();
 				StopAndDisposeControlEventTimeout();
 				StopThreads();
-				CloseAndDisposePort();
 
-				SetStateSynchronizedAndNotify(State.Closed, withNotify); // Notification must succeed here, do not try/catch.
-
-				StartReopenTimeout();
-
-				SetStateSynchronizedAndNotify(State.WaitingForReopen, withNotify); // Notification must succeed here, do not try/catch.
+				WithNotifyDelegate asyncInvoker = new WithNotifyDelegate(CloseAndDisposePortAndStartReopenTimeoutAndNotifyAsync);
+				asyncInvoker.BeginInvoke(withNotify, null, null);
 			}
 			else
 			{
@@ -1525,23 +1515,37 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		/// <remarks>See remarks on top of MKY.IO.Ports.SerialPort.SerialPortEx why asynchronously is required.</remarks>
+		[CallingContract(IsNeverMainThread = true, Rationale = "This function is called using BeginInvoke() only.")]
+		private void CloseAndDisposePortAndStartReopenTimeoutAndNotifyAsync(bool withNotify = true)
+		{
+			CloseAndDisposePort();
+
+			SetStateSynchronizedAndNotify(State.Closed, withNotify);
+
+			StartReopenTimeout();
+
+			SetStateSynchronizedAndNotify(State.WaitingForReopen, withNotify);
+		}
+
 		private void ResetPortAndThreadsAndNotify(bool withNotify = true)
 		{
 			StopAndDisposeReopenTimeout();
 			StopAndDisposeAliveTicker();
 			StopAndDisposeControlEventTimeout();
 			StopThreads();
+
+			WithNotifyDelegate asyncInvoker = new WithNotifyDelegate(CloseAndDisposePortAndNotifyAsync);
+			asyncInvoker.BeginInvoke(withNotify, null, null);
+		}
+
+		/// <remarks>See remarks on top of MKY.IO.Ports.SerialPort.SerialPortEx why asynchronously is required.</remarks>
+		[CallingContract(IsNeverMainThread = true, Rationale = "This function is called using BeginInvoke() only.")]
+		private void CloseAndDisposePortAndNotifyAsync(bool withNotify = true)
+		{
 			CloseAndDisposePort();
 
-			try
-			{
-				SetStateSynchronizedAndNotify(State.Reset, withNotify);
-			}
-			catch (Exception ex)
-			{
-				DebugEx.WriteException(GetType(), ex, "Exception while notifying!");
-			}
+			SetStateSynchronizedAndNotify(State.Reset, withNotify);
 		}
 
 		#endregion
@@ -1794,6 +1798,16 @@ namespace MKY.IO.Serial.SerialPort
 		/// queue, no more event gets fired. Thus, the 3 bytes do not get shown until new data
 		/// arrives. This is not acceptable.
 		/// </remarks>
+		/// <remarks>
+		/// Asynchronously manage incoming events to prevent potential deadlocks if close/dispose
+		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
+		/// Also, the mechanism implemented below reduces the amount of events that are propagated
+		/// to the main application. Small chunks of received data will generate many events
+		/// handled by <see cref="port_DataReceived"/>. However, since <see cref="OnDataReceived"/>
+		/// synchronously invokes the event, it will take some time until the send queue is checked
+		/// again. During this time, no more new events are invoked, instead, outgoing data is
+		/// buffered.
+		/// </remarks>
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "SerialPort.DataReceived: Only one event handler can execute at a time.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that any exception leads to restart or reset of port.")]
 		private void port_DataReceived(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
@@ -1858,7 +1872,7 @@ namespace MKY.IO.Serial.SerialPort
 
 					// Immediately invoke the event, but invoke it asynchronously and NOT on this thread!
 					if (signalXOnXOff || signalXOnXOffCount)
-						OnIOControlChangedAsync(EventArgs.Empty);
+						OnIOControlChangedAsync(EventArgs.Empty); // Async! See remarks above.
 				}
 			}
 			catch (IOException ex) // The best way to detect a disconnected device is handling this exception...
@@ -1873,16 +1887,6 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
-		/// <summary>
-		/// Asynchronously manage incoming events to prevent potential deadlocks if close/dispose
-		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
-		/// Also, the mechanism implemented below reduces the amount of events that are propagated
-		/// to the main application. Small chunks of received data will generate many events
-		/// handled by <see cref="port_DataReceived"/>. However, since <see cref="OnDataReceived"/>
-		/// synchronously invokes the event, it will take some time until the send queue is checked
-		/// again. During this time, no more new events are invoked, instead, outgoing data is
-		/// buffered.
-		/// </summary>
 		/// <remarks>
 		/// Will be signaled by <see cref="port_DataReceived"/> event above, or by XOn/XOff while
 		/// sending.
@@ -1953,8 +1957,6 @@ namespace MKY.IO.Serial.SerialPort
 		/// Asynchronously invoke incoming events to prevent potential deadlocks if close/dispose
 		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
 		/// </remarks>
-		private delegate void port_PinChangedDelegate(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e);
-
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "SerialPort.PinChanged: Only one event handler can execute at a time.")]
 		private void port_PinChanged(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
@@ -2055,29 +2057,20 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
-		/// <summary>
+
+		/// <remarks>
 		/// Asynchronously invoke incoming events to prevent potential deadlocks if close/dispose
 		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
-		/// </summary>
-		private delegate void port_ErrorReceivedDelegate(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e);
-
+		/// </remarks>
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "SerialPort.ErrorReceived: Only one event handler can execute at a time.")]
 		private void port_ErrorReceived(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
-		{
-			if (!IsDisposed && IsOpen) // Ensure not to forward events during closing anymore.
-			{
-				port_ErrorReceivedDelegate asyncInvoker = new port_ErrorReceivedDelegate(port_ErrorReceivedAsync);
-				asyncInvoker.BeginInvoke(sender, e, null, null);
-			}
-		}
-
-		private void port_ErrorReceivedAsync(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
 		{
 			if (!IsDisposed && IsOpen) // Ensure not to forward events during closing anymore.
 			{
 				ErrorSeverity severity = ErrorSeverity.Severe;
 				Direction direction;
 				string message;
+
 				switch (e.EventType)
 				{
 					case System.IO.Ports.SerialError.Frame:    direction = Direction.Input;  message = "Serial port input framing error!";            break;
@@ -2087,7 +2080,8 @@ namespace MKY.IO.Serial.SerialPort
 					case System.IO.Ports.SerialError.TXFull:   direction = Direction.Output; message = "Serial port output buffer full!";             break;
 					default:   severity = ErrorSeverity.Fatal; direction = Direction.None;   message = "Unknown serial port error!";                  break;
 				}
-				OnIOError(new SerialPortErrorEventArgs(severity, direction, message, e.EventType));
+
+				OnIOErrorAsync(new SerialPortErrorEventArgs(severity, direction, message, e.EventType)); // Async! See remarks above.
 			}
 		}
 
@@ -2101,22 +2095,32 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "Well, any better idea on how to check whether the serial port is still alive?")]
 		private void StartAliveTicker()
 		{
-			if (this.aliveTicker == null)
+			lock (this.aliveTickerSyncObj)
 			{
-				this.aliveTicker = new System.Timers.Timer(AliveInterval);
-				this.aliveTicker.AutoReset = true;
-				this.aliveTicker.Elapsed += new System.Timers.ElapsedEventHandler(this.aliveTicker_Elapsed);
-				this.aliveTicker.Start();
+				if (this.aliveTicker == null)
+				{
+					this.aliveTicker = new System.Timers.Timer(AliveInterval);
+					this.aliveTicker.AutoReset = true;
+					this.aliveTicker.Elapsed += new System.Timers.ElapsedEventHandler(this.aliveTicker_Elapsed);
+					this.aliveTicker.Start();
+				}
+				else
+				{
+					// Already exists and running (AutoReset = true).
+				}
 			}
 		}
 
 		private void StopAndDisposeAliveTicker()
 		{
-			if (this.aliveTicker != null)
+			lock (this.aliveTickerSyncObj)
 			{
-				this.aliveTicker.Stop();
-				this.aliveTicker.Dispose();
-				this.aliveTicker = null;
+				if (this.aliveTicker != null)
+				{
+					this.aliveTicker.Stop();
+					this.aliveTicker.Dispose();
+					this.aliveTicker = null;
+				}
 			}
 		}
 
@@ -2155,12 +2159,14 @@ namespace MKY.IO.Serial.SerialPort
 							{
 								DebugMessage("AliveTimerElapsed() has detected shutdown of port as it is no longer open.");
 								RestartOrResetPortAndThreadsAndNotify();
+								return;
 							}
 
 							if (this.port.PortId >= 3) // Skip for COM1 and COM2, explanation see below.
 							{
 								int byteToReadDummy = this.port.BytesToRead; // Force e.g. 'IOException', see above.
 								UnusedLocal.PreventAnalysisWarning(byteToReadDummy);
+								return;
 							}
 							else
 							{
@@ -2218,22 +2224,33 @@ namespace MKY.IO.Serial.SerialPort
 
 		private void StartReopenTimeout()
 		{
-			if (this.reopenTimeout == null)
+			lock (this.reopenTimeoutSyncObj)
 			{
-				this.reopenTimeout = new System.Timers.Timer(this.settings.AutoReopen.Interval);
-				this.reopenTimeout.AutoReset = false;
-				this.reopenTimeout.Elapsed += new System.Timers.ElapsedEventHandler(this.reopenTimeout_Elapsed);
+				if (this.reopenTimeout == null)
+				{
+					this.reopenTimeout = new System.Timers.Timer(this.settings.AutoReopen.Interval);
+					this.reopenTimeout.AutoReset = false;
+					this.reopenTimeout.Elapsed += new System.Timers.ElapsedEventHandler(this.reopenTimeout_Elapsed);
+				}
+				else
+				{
+					// Already exists but not necessarily running (AutoReset = false).
+				}
+
+				this.reopenTimeout.Start();
 			}
-			this.reopenTimeout.Start();
 		}
 
 		private void StopAndDisposeReopenTimeout()
 		{
-			if (this.reopenTimeout != null)
+			lock (this.reopenTimeoutSyncObj)
 			{
-				this.reopenTimeout.Stop();
-				this.reopenTimeout.Dispose();
-				this.reopenTimeout = null;
+				if (this.reopenTimeout != null)
+				{
+					this.reopenTimeout.Stop();
+					this.reopenTimeout.Dispose();
+					this.reopenTimeout = null;
+				}
 			}
 		}
 
@@ -2273,7 +2290,7 @@ namespace MKY.IO.Serial.SerialPort
 			EventHelper.FireSync(IOChanged, this, e);
 		}
 
-		/// <summary></summary>
+		/// <remarks>See remarks on top of MKY.IO.Ports.SerialPort.SerialPortEx why asynchronously is required.</remarks>
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOChangedAsync(EventArgs e)
 		{
@@ -2289,7 +2306,7 @@ namespace MKY.IO.Serial.SerialPort
 			SetNextControlChangedTickStamp();
 		}
 
-		/// <summary></summary>
+		/// <remarks>See remarks on top of MKY.IO.Ports.SerialPort.SerialPortEx why asynchronously is required.</remarks>
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOControlChangedAsync(EventArgs e)
 		{
@@ -2301,7 +2318,12 @@ namespace MKY.IO.Serial.SerialPort
 		private void SetNextControlChangedTickStamp()
 		{
 			lock (this.nextIOControlEventTickStampSyncObj)
-				this.nextIOControlEventTickStamp = (Stopwatch.GetTimestamp() + IOControlChangedTickInterval);
+			{
+				unchecked
+				{
+					this.nextIOControlEventTickStamp = (Stopwatch.GetTimestamp() + IOControlChangedTickInterval);
+				}
+			}
 		}
 
 		/// <summary></summary>
@@ -2309,6 +2331,13 @@ namespace MKY.IO.Serial.SerialPort
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
 			EventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
+		}
+
+		/// <remarks>See remarks on top of MKY.IO.Ports.SerialPort.SerialPortEx why asynchronously is required.</remarks>
+		[CallingContract(IsNeverMainThread = true)]
+		protected virtual void OnIOErrorAsync(IOErrorEventArgs e)
+		{
+			EventHelper.FireAsync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>

@@ -46,6 +46,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Threading;
 
+using MKY.Contracts;
 using MKY.Diagnostics;
 
 #endregion
@@ -72,12 +73,11 @@ namespace MKY.IO.Ports
 	// Source: http://msdn.microsoft.com/en-us/library/system.io.ports.serialport_methods.aspx (3.5)
 	// Author: Dan Randolph
 	// 
-	// There is a deadlock problem with the internal close operation of
-	// <see cref="System.IO.Ports.SerialPort"/>. Use BeginInvoke instead of Invoke from the
-	// serialPort_DataReceived event handler to start the method that reads from the
-	// SerialPort buffer and it will solve the problem. I finally tracked down the problem
-	// to the Close method by putting a start/stop button on the form. Then I was able to
-	// lock up the application and found that Close was the culpret. I'm pretty sure that
+	// There is a deadlock problem with the internal close operation of System.IO.Ports.SerialPort.
+	// Use BeginInvoke instead of Invoke from the DataReceived event handler to start the method
+	// that reads from the SerialPort buffer and it will solve the problem. I finally tracked down
+	// the problem to the Close method by putting a start/stop button on the form. Then I was able
+	// to lock up the application and found that Close was the culpret. I'm pretty sure that
 	// components.Dispose() will end up calling the SerialPort Close method if it is open.
 	// 
 	// In my application, the user can change the baud rate and the port. In order to do
@@ -1095,6 +1095,7 @@ namespace MKY.IO.Ports
 		// Base Event Handling
 		//==========================================================================================
 
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "SerialPort.DataReceived: Only one event handler can execute at a time.")]
 		private void base_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
 		{
 			// Improve performance by only locking if input break is active.
@@ -1107,12 +1108,24 @@ namespace MKY.IO.Ports
 					else
 						this.inputBreak = false; // Restore input break if data has been received successfully.
 				}
+
 				OnPinChanged(new SerialPinChangedEventArgs((SerialPinChange)e.EventType));
+
+				// Note that this event is invoked synchronously even though there is the deadlock
+				// issue documented on top. Reason: This SerialPortEx shall behave the same as the
+				// base implementation SerialPort. To work around the issue, a client class shall
+				// ensure that these event are handled asynchronously.
 			}
 
 			OnDataReceived(new SerialDataReceivedEventArgs(e.EventType));
+
+			// Note that this event is invoked synchronously even though there is the deadlock
+			// issue documented on top. Reason: This SerialPortEx shall behave the same as the
+			// base implementation SerialPort. To work around the issue, a client class shall
+			// ensure that these event are handled asynchronously.
 		}
 
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "SerialPort.PinChanged: Only one event handler can execute at a time.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that any exception leads to restart or reset of port.")]
 		private void base_PinChanged(object sender, System.IO.Ports.SerialPinChangedEventArgs e)
 		{
@@ -1164,11 +1177,21 @@ namespace MKY.IO.Ports
 			}
 
 			OnPinChanged(new SerialPinChangedEventArgs((SerialPinChange)e.EventType));
+
+			// Note that this event is invoked synchronously even though there is the deadlock
+			// issue documented on top. Reason: This SerialPortEx shall behave the same as the
+			// base implementation SerialPort. To work around the issue, a client class shall
+			// ensure that these event are handled asynchronously.
 		}
 
 		private void base_ErrorReceived(object sender, System.IO.Ports.SerialErrorReceivedEventArgs e)
 		{
 			OnErrorReceived(new SerialErrorReceivedEventArgs(e.EventType));
+
+			// Note that this event is invoked synchronously even though there is the deadlock
+			// issue documented on top. Reason: This SerialPortEx shall behave the same as the
+			// base implementation SerialPort. To work around the issue, a client class shall
+			// ensure that these event are handled asynchronously.
 		}
 
 		#endregion

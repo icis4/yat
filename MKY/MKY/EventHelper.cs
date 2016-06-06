@@ -194,6 +194,41 @@ namespace MKY
 			}
 		}
 
+		/// <summary>
+		/// Fires event with supplied arguments asynchronously. Event is fired safely, exceptions are
+		/// caught. If an event sink implements <see cref="System.ComponentModel.ISynchronizeInvoke"/>,
+		/// the event is invoked on that thread. Otherwise, the event is invoked on a thread from the
+		/// thread pool.
+		/// </summary>
+		/// <remarks>
+		/// This overloaded method is provided for backward compatibility with .NET 1.0/1.1 style events.
+		/// </remarks>
+		/// <typeparam name="TEventArgs">The type of the EventArgs of the requested event.</typeparam>
+		/// <typeparam name="TEventHandler">The type of the requested event.</typeparam>
+		[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Haven't found any alternative way to implement a generic event helper.")]
+		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event firing.")]
+		public static void FireAsync<TEventArgs, TEventHandler>(Delegate eventDelegate, params object[] args)
+			where TEventArgs : EventArgs
+		{
+			if (eventDelegate == null)
+				return;
+
+			Delegate[] sinks = eventDelegate.GetInvocationList();
+			foreach (Delegate sink in sinks)
+			{
+				var sinkTarget = (sink.Target as ISynchronizeInvoke);
+				if (sinkTarget != null)          // No need to check for InvokeRequired,
+				{                                //   async always requires invoke.
+					sinkTarget.BeginInvoke(sink, args);
+				}
+				else
+				{
+					var asyncInvoker = new AsyncInvokeDelegate(InvokeOnCurrentThread);
+					asyncInvoker.BeginInvoke(sink, args, null, null);
+				}
+			}
+		}
+
 		#endregion
 
 		#region Safe Invoke Synchronized To ISynchronizeInvoke
