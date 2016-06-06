@@ -804,11 +804,12 @@ namespace YAT.View.Forms
 			toolStripMenuItem_TerminalMenu_View_ShowRadix.Enabled = isNotString; // Attention, same code further below as well as in View.Forms.AdvancedTerminalSettings.
 			toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked = isNotString && this.settingsRoot.Display.ShowRadix;
 
-			toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Checked = this.settingsRoot.Display.ShowLineNumbers;
-			toolStripMenuItem_TerminalMenu_View_ShowDate.Checked        = this.settingsRoot.Display.ShowDate;
-			toolStripMenuItem_TerminalMenu_View_ShowTime.Checked        = this.settingsRoot.Display.ShowTime;
-			toolStripMenuItem_TerminalMenu_View_ShowPort.Checked        = this.settingsRoot.Display.ShowPort;
-			toolStripMenuItem_TerminalMenu_View_ShowDirection.Checked   = this.settingsRoot.Display.ShowDirection;
+			toolStripMenuItem_TerminalMenu_View_ShowBufferLineNumbers.Checked = this.settingsRoot.Display.ShowBufferLineNumbers;
+			toolStripMenuItem_TerminalMenu_View_ShowTotalLineNumbers.Checked  = this.settingsRoot.Display.ShowTotalLineNumbers;
+			toolStripMenuItem_TerminalMenu_View_ShowDate.Checked              = this.settingsRoot.Display.ShowDate;
+			toolStripMenuItem_TerminalMenu_View_ShowTime.Checked              = this.settingsRoot.Display.ShowTime;
+			toolStripMenuItem_TerminalMenu_View_ShowPort.Checked              = this.settingsRoot.Display.ShowPort;
+			toolStripMenuItem_TerminalMenu_View_ShowDirection.Checked         = this.settingsRoot.Display.ShowDirection;
 
 			toolStripMenuItem_TerminalMenu_View_ShowEol.Enabled = (isText);
 			toolStripMenuItem_TerminalMenu_View_ShowEol.Checked = (isText && this.settingsRoot.TextTerminal.ShowEol);
@@ -901,9 +902,14 @@ namespace YAT.View.Forms
 			this.settingsRoot.Display.ShowRadix = !this.settingsRoot.Display.ShowRadix;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_ShowLineNumbers_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_ShowBufferLineNumbers_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.Display.ShowLineNumbers = !this.settingsRoot.Display.ShowLineNumbers;
+			this.settingsRoot.Display.ShowBufferLineNumbers = !this.settingsRoot.Display.ShowBufferLineNumbers;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_View_ShowTotalLineNumbers_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Display.ShowTotalLineNumbers = !this.settingsRoot.Display.ShowTotalLineNumbers;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowDate_Click(object sender, EventArgs e)
@@ -1070,11 +1076,12 @@ namespace YAT.View.Forms
 			toolStripMenuItem_MonitorContextMenu_ShowRadix.Enabled = isNotString; // Attention, same code further above as well as in View.Forms.AdvancedTerminalSettings.
 			toolStripMenuItem_MonitorContextMenu_ShowRadix.Checked = isNotString && this.settingsRoot.Display.ShowRadix;
 
-			toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Checked = this.settingsRoot.Display.ShowLineNumbers;
-			toolStripMenuItem_MonitorContextMenu_ShowDate.Checked        = this.settingsRoot.Display.ShowDate;
-			toolStripMenuItem_MonitorContextMenu_ShowTime.Checked        = this.settingsRoot.Display.ShowTime;
-			toolStripMenuItem_MonitorContextMenu_ShowPort.Checked        = this.settingsRoot.Display.ShowPort;
-			toolStripMenuItem_MonitorContextMenu_ShowDirection.Checked   = this.settingsRoot.Display.ShowDirection;
+			toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers.Checked = this.settingsRoot.Display.ShowBufferLineNumbers;
+			toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers.Checked  = this.settingsRoot.Display.ShowTotalLineNumbers;
+			toolStripMenuItem_MonitorContextMenu_ShowDate.Checked              = this.settingsRoot.Display.ShowDate;
+			toolStripMenuItem_MonitorContextMenu_ShowTime.Checked              = this.settingsRoot.Display.ShowTime;
+			toolStripMenuItem_MonitorContextMenu_ShowPort.Checked              = this.settingsRoot.Display.ShowPort;
+			toolStripMenuItem_MonitorContextMenu_ShowDirection.Checked         = this.settingsRoot.Display.ShowDirection;
 
 			bool isText = ((Domain.TerminalTypeEx)terminalType).IsText;
 			toolStripMenuItem_MonitorContextMenu_ShowEol.Enabled = isText;
@@ -1143,9 +1150,14 @@ namespace YAT.View.Forms
 			this.settingsRoot.Display.ShowRadix = !this.settingsRoot.Display.ShowRadix;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowLineNumbers_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.Display.ShowLineNumbers = !this.settingsRoot.Display.ShowLineNumbers;
+			this.settingsRoot.Display.ShowBufferLineNumbers = !this.settingsRoot.Display.ShowBufferLineNumbers;
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Display.ShowTotalLineNumbers = !this.settingsRoot.Display.ShowTotalLineNumbers;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowDate_Click(object sender, EventArgs e)
@@ -2693,17 +2705,19 @@ namespace YAT.View.Forms
 
 		private void SetMonitorLineCount()
 		{
-			monitor_Tx.MaxLineCount    = this.settingsRoot.Display.MaxLineCount;
+			monitor_Tx   .MaxLineCount = this.settingsRoot.Display.MaxLineCount;
 			monitor_Bidir.MaxLineCount = this.settingsRoot.Display.MaxLineCount;
-			monitor_Rx.MaxLineCount    = this.settingsRoot.Display.MaxLineCount;
+			monitor_Rx   .MaxLineCount = this.settingsRoot.Display.MaxLineCount;
 		}
 
 		private void SetMonitorLineNumbers()
 		{
-			bool showLineNumbers = this.settingsRoot.Display.ShowLineNumbers;
-			monitor_Tx.ShowLineNumbers    = showLineNumbers;
-			monitor_Bidir.ShowLineNumbers = showLineNumbers;
-			monitor_Rx.ShowLineNumbers    = showLineNumbers;
+			bool showBufferLineNumbers = this.settingsRoot.Display.ShowBufferLineNumbers;
+			bool showTotalLineNumbers  = this.settingsRoot.Display.ShowTotalLineNumbers;
+
+			monitor_Tx   .SetLineNumbers(showBufferLineNumbers, showTotalLineNumbers);
+			monitor_Bidir.SetLineNumbers(showBufferLineNumbers, showTotalLineNumbers);
+			monitor_Rx   .SetLineNumbers(showBufferLineNumbers, showTotalLineNumbers);
 		}
 
 		private void SetMonitorIOStatus()

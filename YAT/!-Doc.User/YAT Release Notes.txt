@@ -113,6 +113,7 @@ New:
 - Logging in XML format implemented (feature requests #26 and #27). Note that the log file's XML
   structure is incomplete while logging is ongoing. The file can only be opened by an XML reader
   after logging has finished, i.e. logging has been switched off or the terminal is closed.
+- Line numbers may indicate the total number of transmitted lines (feature request #265).
 - Selectable background color added to format settings (feature request #250).
 - Window can be configured to always stay on top (feature request #241).
 

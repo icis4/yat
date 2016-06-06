@@ -85,7 +85,8 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_Radix = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_ShowRadix = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_MonitorContextMenu_ShowLineNumbers = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ShowDate = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ShowTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ShowPort = new System.Windows.Forms.ToolStripMenuItem();
@@ -237,7 +238,8 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_ShowRadix = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_View_ShowLineNumbers = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_ShowBufferLineNumbers = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_ShowTotalLineNumbers = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_ShowDate = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_ShowTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_ShowPort = new System.Windows.Forms.ToolStripMenuItem();
@@ -345,7 +347,8 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_MonitorContextMenu_Radix,
             this.toolStripMenuItem_MonitorContextMenu_Separator_4,
             this.toolStripMenuItem_MonitorContextMenu_ShowRadix,
-            this.toolStripMenuItem_MonitorContextMenu_ShowLineNumbers,
+            this.toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers,
+            this.toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers,
             this.toolStripMenuItem_MonitorContextMenu_ShowDate,
             this.toolStripMenuItem_MonitorContextMenu_ShowTime,
             this.toolStripMenuItem_MonitorContextMenu_ShowPort,
@@ -703,12 +706,19 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_ShowRadix.Text = "Show Radix";
 			this.toolStripMenuItem_MonitorContextMenu_ShowRadix.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowRadix_Click);
 			// 
-			// toolStripMenuItem_MonitorContextMenu_ShowLineNumbers
+			// toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers
 			// 
-			this.toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Name = "toolStripMenuItem_MonitorContextMenu_ShowLineNumbers";
-			this.toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Size = new System.Drawing.Size(225, 22);
-			this.toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Text = "Show Line Numbers";
-			this.toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowLineNumbers_Click);
+			this.toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers.Name = "toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers";
+			this.toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers.Size = new System.Drawing.Size(225, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers.Text = "Show Buffer Line Numbers";
+			this.toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers_Click);
+			// 
+			// toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers
+			// 
+			this.toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers.Name = "toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers";
+			this.toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers.Size = new System.Drawing.Size(225, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers.Text = "Show Total Line Numbers";
+			this.toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowDate
 			// 
@@ -1892,7 +1902,8 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_TerminalMenu_View_Radix,
             this.toolStripMenuItem_TerminalMenu_View_Separator_4,
             this.toolStripMenuItem_TerminalMenu_View_ShowRadix,
-            this.toolStripMenuItem_TerminalMenu_View_ShowLineNumbers,
+            this.toolStripMenuItem_TerminalMenu_View_ShowBufferLineNumbers,
+            this.toolStripMenuItem_TerminalMenu_View_ShowTotalLineNumbers,
             this.toolStripMenuItem_TerminalMenu_View_ShowDate,
             this.toolStripMenuItem_TerminalMenu_View_ShowTime,
             this.toolStripMenuItem_TerminalMenu_View_ShowPort,
@@ -2062,15 +2073,22 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_ShowRadix.Name = "toolStripMenuItem_TerminalMenu_View_ShowRadix";
 			this.toolStripMenuItem_TerminalMenu_View_ShowRadix.Size = new System.Drawing.Size(225, 22);
-			this.toolStripMenuItem_TerminalMenu_View_ShowRadix.Text = "Show &Radix";
+			this.toolStripMenuItem_TerminalMenu_View_ShowRadix.Text = "Show R&adix";
 			this.toolStripMenuItem_TerminalMenu_View_ShowRadix.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowRadix_Click);
 			// 
-			// toolStripMenuItem_TerminalMenu_View_ShowLineNumbers
+			// toolStripMenuItem_TerminalMenu_View_ShowBufferLineNumbers
 			// 
-			this.toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Name = "toolStripMenuItem_TerminalMenu_View_ShowLineNumbers";
-			this.toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Size = new System.Drawing.Size(225, 22);
-			this.toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Text = "Show Line &Numbers";
-			this.toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowLineNumbers_Click);
+			this.toolStripMenuItem_TerminalMenu_View_ShowBufferLineNumbers.Name = "toolStripMenuItem_TerminalMenu_View_ShowBufferLineNumbers";
+			this.toolStripMenuItem_TerminalMenu_View_ShowBufferLineNumbers.Size = new System.Drawing.Size(225, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ShowBufferLineNumbers.Text = "Show Buffer Line &Numbers";
+			this.toolStripMenuItem_TerminalMenu_View_ShowBufferLineNumbers.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowBufferLineNumbers_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_View_ShowTotalLineNumbers
+			// 
+			this.toolStripMenuItem_TerminalMenu_View_ShowTotalLineNumbers.Name = "toolStripMenuItem_TerminalMenu_View_ShowTotalLineNumbers";
+			this.toolStripMenuItem_TerminalMenu_View_ShowTotalLineNumbers.Size = new System.Drawing.Size(225, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ShowTotalLineNumbers.Text = "Show Total Line Nu&mbers";
+			this.toolStripMenuItem_TerminalMenu_View_ShowTotalLineNumbers.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowTotalLineNumbers_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowDate
 			// 
@@ -2984,8 +3002,10 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_OutputXOnXOff;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_Separator3;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_InputXOnXOff;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowLineNumbers;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowLineNumbers;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowBufferLineNumbers;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowTotalLineNumbers;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_FlowControlCount;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_View_Separator_5;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_BreakCount;
