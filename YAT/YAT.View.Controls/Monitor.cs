@@ -105,7 +105,8 @@ namespace YAT.View.Controls
 		// Line numbers:
 		private const int VerticalScrollBarWidth = 18;
 		private const int AdditionalMargin = 4;
-		private const bool ShowLineNumbersDefault = false;
+		private const bool ShowBufferLineNumbersDefault = false;
+		private const bool ShowTotalLineNumbersDefault = false;
 
 		// Status:
 		private const bool ShowTimeStatusDefault = false;
@@ -139,9 +140,11 @@ namespace YAT.View.Controls
 		private Model.Settings.FormatSettings formatSettings = new Model.Settings.FormatSettings();
 
 		// Line numbers:
+		private long lineNumberOffset;
 		private int initialLineNumberWidth;
 		private int currentLineNumberWidth;
-		private bool showLineNumbers = ShowLineNumbersDefault;
+		private bool showBufferLineNumbers = ShowBufferLineNumbersDefault;
+		private bool showTotalLineNumbers = ShowTotalLineNumbersDefault;
 
 		// Status:
 		private bool showTimeStatus = ShowTimeStatusDefault;
@@ -295,19 +298,59 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Category("Monitor")]
-		[Description("Show the line numbers.")]
-		[DefaultValue(ShowLineNumbersDefault)]
-		public virtual bool ShowLineNumbers
+		[Description("Show buffer line numbers.")]
+		[DefaultValue(ShowBufferLineNumbersDefault)]
+		public virtual bool ShowBufferLineNumbers
 		{
-			get { return (this.showLineNumbers); }
+			get { return (this.showBufferLineNumbers); }
 			set
 			{
-				if (this.showLineNumbers != value)
+				if (this.showBufferLineNumbers != value)
 				{
-					this.showLineNumbers = value;
+					this.showBufferLineNumbers = value;
 					SetLineNumbersControls();
 				}
 			}
+		}
+
+		/// <summary></summary>
+		[Category("Monitor")]
+		[Description("Show total line numbers.")]
+		[DefaultValue(ShowTotalLineNumbersDefault)]
+		public virtual bool ShowTotalLineNumbers
+		{
+			get { return (this.showTotalLineNumbers); }
+			set
+			{
+				if (this.showTotalLineNumbers != value)
+				{
+					this.showTotalLineNumbers = value;
+					SetLineNumbersControls();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Sets <see cref="ShowBufferLineNumbers"/> and <see cref="ShowTotalLineNumbers"/> at once.
+		/// </summary>
+		public virtual void SetLineNumbers(bool showBufferLineNumbers, bool showTotalLineNumbers)
+		{
+			bool hasChanged = false;
+
+			if (this.showBufferLineNumbers != showBufferLineNumbers)
+			{
+				this.showBufferLineNumbers = showBufferLineNumbers;
+				hasChanged = true;
+			}
+
+			if (this.showTotalLineNumbers != showTotalLineNumbers)
+			{
+				this.showTotalLineNumbers = showTotalLineNumbers;
+				hasChanged = true;
+			}
+
+			if (hasChanged)
+				SetLineNumbersControls();
 		}
 
 		/// <summary></summary>
@@ -498,6 +541,8 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		public virtual void Clear()
 		{
+			this.lineNumberOffset = 0;
+
 			ClearAndResetListBoxes();
 		}
 
@@ -674,14 +719,14 @@ namespace YAT.View.Controls
 			{
 				if (e.Index >= 0)
 				{
-					string lineNumberString = ((e.Index + 1).ToString(CultureInfo.CurrentCulture));
+					string lineNumberString = ((this.lineNumberOffset + e.Index + 1).ToString(CultureInfo.CurrentCulture));
 
 					ListBox lb = fastListBox_LineNumbers;
 					int requestedWidth;
 
 				////e.DrawBackground(); is not needed and actually draws a white background.
 					MonitorRenderer.DrawAndMeasureLineNumber(lineNumberString, this.formatSettings,
-					                                 e.Graphics, e.Bounds, out requestedWidth);
+					                                         e.Graphics, e.Bounds, out requestedWidth);
 				////e.DrawFocusRectangle(); is not needed.
 
 					// The item width is handled here.
@@ -772,7 +817,7 @@ namespace YAT.View.Controls
 					e.DrawBackground();
 
 					MonitorRenderer.DrawAndMeasureLine((lb.Items[e.Index] as Domain.DisplayLine), this.formatSettings,
-					                           e.Graphics, e.Bounds, e.State, out requestedWidth, out drawnWidth);
+					                                   e.Graphics, e.Bounds, e.State, out requestedWidth, out drawnWidth);
 
 					e.DrawFocusRectangle();
 
@@ -815,11 +860,18 @@ namespace YAT.View.Controls
 			UpdateDataStatusText();
 		}
 
-		private void timer_TotalProcessorLoad_Tick(object sender, EventArgs e)
+		private int timer_ProcessorLoad_Tick_LastValue = 100;
+
+		private void timer_ProcessorLoad_Tick(object sender, EventArgs e)
 		{
-			int totalProcessorLoad = (int)performanceCounter_TotalProcessorLoad.NextValue();
-			DebugUpdateMessage("CPU load = " + totalProcessorLoad.ToString(CultureInfo.InvariantCulture) + "%");
-			CalculateUpdateRates(totalProcessorLoad);
+			// Calculate average of last two samples:
+
+			int currentValue = ProcessorLoad.Update();
+			int averageValue = ((currentValue + timer_ProcessorLoad_Tick_LastValue) / 2);
+			timer_ProcessorLoad_Tick_LastValue = currentValue;
+
+			DebugUpdateMessage("CPU load = " + averageValue.ToString(CultureInfo.InvariantCulture) + "% resulting in ");
+			CalculateUpdateRates(averageValue);
 		}
 
 		private void timer_Opacity_Tick(object sender, EventArgs e)
@@ -1019,7 +1071,10 @@ namespace YAT.View.Controls
 			this.pendingElementsAndLines.Clear();
 
 			// Calculate tick stamp of next update:
-			this.nextMonitorUpdateTickStamp = (Stopwatch.GetTimestamp() + this.monitorUpdateTickInterval);
+			unchecked
+			{
+				this.nextMonitorUpdateTickStamp = (Stopwatch.GetTimestamp() + this.monitorUpdateTickInterval);
+			}
 
 			if (lbmon.VerticalScrollToBottomIfNoItemButTheLastIsSelected())
 				lblin.VerticalScrollToBottom();
@@ -1069,6 +1124,9 @@ namespace YAT.View.Controls
 						{
 							lblin.Items.RemoveAt(0);
 							lbmon.Items.RemoveAt(0);
+
+							if (this.showTotalLineNumbers)
+								this.lineNumberOffset++;
 						}
 
 						// Add element to a new line:
@@ -1108,9 +1166,11 @@ namespace YAT.View.Controls
 
 		private void ResizeAndRelocateListBoxes(int requestedWidth)
 		{
-			fastListBox_LineNumbers.Visible = this.showLineNumbers;
+			bool showLineNumbers = (this.showBufferLineNumbers || this.showTotalLineNumbers);
 
-			if (this.showLineNumbers)
+			fastListBox_LineNumbers.Visible = showLineNumbers;
+
+			if (showLineNumbers)
 			{
 				int effectiveWidth = requestedWidth + VerticalScrollBarWidth + AdditionalMargin;
 				fastListBox_LineNumbers.Width = effectiveWidth;
@@ -1170,7 +1230,10 @@ namespace YAT.View.Controls
 			label_DataStatus.Text = this.dataStatusHelper.StatusText;
 
 			// Calculate tick stamp of next update:
-			this.nextDataStatusUpdateTickStamp = (Stopwatch.GetTimestamp() + DataStatusTickInterval);
+			unchecked
+			{
+				this.nextDataStatusUpdateTickStamp = (Stopwatch.GetTimestamp() + DataStatusTickInterval);
+			}
 		}
 
 		/// <summary>
@@ -1178,8 +1241,8 @@ namespace YAT.View.Controls
 		/// 
 		///      update interval in ms
 		///                 ^
-		///      max = 2500 |-----------xxxx|
-		///                 |           x   |
+		///      max = 1250 |-------------xx|
+		///                 |            x  |
 		///                 |           x   |
 		///                 |          x    |
 		///                 |       xx      |
@@ -1188,55 +1251,55 @@ namespace YAT.View.Controls
 		///                 0  25  50  75  100
 		/// 
 		/// Up to 25%, the update is done immediately.
-		/// Above 75%, the update is done every 2500 milliseconds.
+		/// Above 95%, the update is done every 1250 milliseconds.
 		/// Quadratic inbetween, at y = x^2.
 		/// 
 		/// Rationale:
 		///  - For better user expericence, interval shall gradually increase.
 		///  - Even at high CPU load, there shall still be some updating.
 		/// </summary>
-		/// <param name="totalProcessorLoadInPercent">
-		/// Load in %, i.e. values from 0.0 to 100.0.
+		/// <param name="processorLoadPercentage">
+		/// Load in %, i.e. values from 0 to 100.
 		/// </param>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Inbetween' is a correct English term.")]
-		private void CalculateUpdateRates(int totalProcessorLoadInPercent)
+		private void CalculateUpdateRates(int processorLoadPercentage)
 		{
 			const int LowerLoad = 25; // %
-			const int UpperLoad = 75; // %
-		////const int LoadSpan  = 50; // %
+			const int UpperLoad = 95; // %
 
 			const int LowerInterval =   41; // Interval shall be quite short => fixed to 41 ms (a prime number) = approx. 24 updates per second.
-			const int UpperInterval = 2500; // = 50*50 => eases calculation.
+			const int UpperInterval = 1125; // = (75*75) / 5 => eases calculation.
 
-			if (totalProcessorLoadInPercent < LowerLoad)
+			if (processorLoadPercentage < LowerLoad)
 			{
-				this.monitorUpdateTickInterval = LowerInterval;
+				this.monitorUpdateTickInterval = StopwatchEx.TimeToTicks(LowerInterval);
 				this.performImmediateUpdate = true;
 
-				DebugUpdateMessage("Update interval is minimum:");
+				DebugUpdateMessage("minimum update interval of ");
 			}
-			else if (totalProcessorLoadInPercent > UpperLoad)
+			else if (processorLoadPercentage > UpperLoad)
 			{
 				this.monitorUpdateTickInterval = StopwatchEx.TimeToTicks(UpperInterval);
 				this.performImmediateUpdate = false;
 
-				DebugUpdateMessage("Update interval is maximum:");
+				DebugUpdateMessage("maximum update interval of ");
 			}
 			else
 			{
-				int x = (totalProcessorLoadInPercent - LowerLoad);
-				int y = x * x;
+				int x = (processorLoadPercentage - LowerLoad); // x is max. 75%
+				int y = (x * x) / 5;
 
 				y = Int32Ex.Limit(y, LowerInterval, UpperInterval);
 
 				this.monitorUpdateTickInterval = StopwatchEx.TimeToTicks(y);
 				this.performImmediateUpdate = false;
 
-				DebugUpdateMessage("Update interval is calculated:");
+				DebugUpdateMessage("calculated update interval of ");
 			}
 
-			DebugUpdateMessage(" > " + this.monitorUpdateTickInterval.ToString(CultureInfo.InvariantCulture) + " ticks");
-			DebugUpdateMessage(" > " + StopwatchEx.TicksToTime(this.monitorUpdateTickInterval).ToString(CultureInfo.InvariantCulture) + " ms");
+			DebugUpdateMessage(this.monitorUpdateTickInterval.ToString(CultureInfo.InvariantCulture) + " ticks = ");
+			DebugUpdateMessage(StopwatchEx.TicksToTime(this.monitorUpdateTickInterval).ToString(CultureInfo.InvariantCulture) + " ms");
+			DebugUpdateMessage(Environment.NewLine);
 		}
 
 		/// <summary>
@@ -1317,7 +1380,7 @@ namespace YAT.View.Controls
 		[Conditional("DEBUG_UPDATE")]
 		protected virtual void DebugUpdateMessage(string message)
 		{
-			Debug.WriteLine(message);
+			Debug.Write(message);
 		}
 
 		#endregion

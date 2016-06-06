@@ -332,6 +332,9 @@ namespace YAT.Model
 					return (MainResult.ApplicationStartError);
 			}
 
+			// YAT will fully start, hence initialize required resources:
+			ProcessorLoad.Initialize();
+
 			// Start YAT according to the start requests:
 			bool success = false;
 
