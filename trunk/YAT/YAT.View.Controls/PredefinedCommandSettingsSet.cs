@@ -294,7 +294,13 @@ namespace YAT.View.Controls
 					radix = selectedItem;
 
 				if (!ValidateAndConfirmRadix(radix))
+				{
 					e.Cancel = true;
+
+					// Automatically reset the radix for convenience:
+					comboBox_ExplicitDefaultRadix.SelectedItem = this.command.DefaultRadix;
+					SetControls();
+				}
 			}
 		}
 
