@@ -143,8 +143,9 @@ namespace YAT.Domain.Settings
 				if (this.serialPort != value)
 				{
 					var oldNode = this.serialPort;
+					this.serialPort = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.serialPort = value;
 				}
 			}
 		}
@@ -159,8 +160,9 @@ namespace YAT.Domain.Settings
 				if (this.socket != value)
 				{
 					var oldNode = this.socket;
+					this.socket = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.socket = value;
 				}
 			}
 		}
@@ -175,8 +177,9 @@ namespace YAT.Domain.Settings
 				if (this.usbSerialHidDevice != value)
 				{
 					var oldNode = this.usbSerialHidDevice;
+					this.usbSerialHidDevice = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.usbSerialHidDevice = value;
 				}
 			}
 		}

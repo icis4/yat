@@ -154,8 +154,9 @@ namespace YAT.Domain.Settings
 				if (this.io != value)
 				{
 					var oldNode = this.io;
+					this.io = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.io = value;
 				}
 			}
 		}
@@ -170,8 +171,9 @@ namespace YAT.Domain.Settings
 				if (this.status != value)
 				{
 					var oldNode = this.status;
+					this.status = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.status = value;
 				}
 			}
 		}
@@ -186,8 +188,9 @@ namespace YAT.Domain.Settings
 				if (this.buffer != value)
 				{
 					var oldNode = this.buffer;
+					this.buffer = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.buffer = value;
 				}
 			}
 		}
@@ -202,8 +205,9 @@ namespace YAT.Domain.Settings
 				if (this.display != value)
 				{
 					var oldNode = this.display;
+					this.display = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.display = value;
 				}
 			}
 		}
@@ -218,8 +222,9 @@ namespace YAT.Domain.Settings
 				if (this.charReplace != value)
 				{
 					var oldNode = this.charReplace;
+					this.charReplace = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.charReplace = value;
 				}
 			}
 		}
@@ -234,8 +239,9 @@ namespace YAT.Domain.Settings
 				if (this.charHide != value)
 				{
 					var oldNode = this.charHide;
+					this.charHide = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.charHide = value;
 				}
 			}
 		}
@@ -250,8 +256,9 @@ namespace YAT.Domain.Settings
 				if (this.send != value)
 				{
 					var oldNode = this.send;
+					this.send = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.send = value;
 				}
 			}
 		}
@@ -266,8 +273,9 @@ namespace YAT.Domain.Settings
 				if (this.textTerminal != value)
 				{
 					var oldNode = this.textTerminal;
+					this.textTerminal = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.textTerminal = value;
 				}
 			}
 		}
@@ -282,8 +290,9 @@ namespace YAT.Domain.Settings
 				if (this.binaryTerminal != value)
 				{
 					var oldNode = this.binaryTerminal;
+					this.binaryTerminal = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.binaryTerminal = value;
 				}
 			}
 		}

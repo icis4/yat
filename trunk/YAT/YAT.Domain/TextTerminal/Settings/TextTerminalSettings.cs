@@ -261,8 +261,9 @@ namespace YAT.Domain.Settings
 				if (this.eolComment != value)
 				{
 					var oldNode = this.eolComment;
+					this.eolComment = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.eolComment = value;
 				}
 			}
 		}

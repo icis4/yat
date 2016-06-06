@@ -234,8 +234,9 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.communication != value)
 				{
 					var oldNode = this.communication;
+					this.communication = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.communication = value;
 				}
 			}
 		}

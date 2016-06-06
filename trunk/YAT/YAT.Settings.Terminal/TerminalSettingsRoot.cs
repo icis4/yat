@@ -152,8 +152,9 @@ namespace YAT.Settings.Terminal
 				if (this.explicit_ != value)
 				{
 					var oldNode = this.explicit_;
+					this.explicit_ = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.explicit_ = value;
 				}
 			}
 		}
@@ -168,8 +169,9 @@ namespace YAT.Settings.Terminal
 				if (this.implicit_ != value)
 				{
 					var oldNode = this.implicit_;
+					this.implicit_ = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
 					AttachOrReplaceOrDetachNode(oldNode, value);
-					this.implicit_ = value;
 				}
 			}
 		}
