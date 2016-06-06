@@ -32,11 +32,11 @@
 			this.label_Shortcut = new System.Windows.Forms.Label();
 			this.splitContainer_Lower = new System.Windows.Forms.SplitContainer();
 			this.panel_Commands = new System.Windows.Forms.Panel();
+			this.pageButtons = new YAT.View.Controls.PredefinedCommandPageButtons();
 			this.label_Page = new System.Windows.Forms.Label();
 			this.button_PageNext = new System.Windows.Forms.Button();
 			this.button_PagePrevious = new System.Windows.Forms.Button();
 			this.comboBox_Pages = new System.Windows.Forms.ComboBox();
-			this.pageButtons = new YAT.View.Controls.PredefinedCommandPageButtons();
 			this.splitContainer_Commands.Panel1.SuspendLayout();
 			this.splitContainer_Commands.Panel2.SuspendLayout();
 			this.splitContainer_Commands.SuspendLayout();
@@ -63,7 +63,7 @@
 			// splitContainer_Commands.Panel2
 			// 
 			this.splitContainer_Commands.Panel2.Controls.Add(this.splitContainer_Lower);
-			this.splitContainer_Commands.Size = new System.Drawing.Size(144, 344);
+			this.splitContainer_Commands.Size = new System.Drawing.Size(144, 370);
 			this.splitContainer_Commands.SplitterDistance = 26;
 			this.splitContainer_Commands.TabIndex = 0;
 			this.splitContainer_Commands.TabStop = false;
@@ -100,8 +100,8 @@
 			this.splitContainer_Lower.Panel2.Controls.Add(this.button_PagePrevious);
 			this.splitContainer_Lower.Panel2.Controls.Add(this.comboBox_Pages);
 			this.splitContainer_Lower.Panel2MinSize = 48;
-			this.splitContainer_Lower.Size = new System.Drawing.Size(144, 314);
-			this.splitContainer_Lower.SplitterDistance = 265;
+			this.splitContainer_Lower.Size = new System.Drawing.Size(144, 340);
+			this.splitContainer_Lower.SplitterDistance = 291;
 			this.splitContainer_Lower.SplitterWidth = 1;
 			this.splitContainer_Lower.TabIndex = 0;
 			this.splitContainer_Lower.TabStop = false;
@@ -113,8 +113,19 @@
 			this.panel_Commands.Location = new System.Drawing.Point(0, 0);
 			this.panel_Commands.Name = "panel_Commands";
 			this.panel_Commands.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
-			this.panel_Commands.Size = new System.Drawing.Size(144, 265);
+			this.panel_Commands.Size = new System.Drawing.Size(144, 291);
 			this.panel_Commands.TabIndex = 0;
+			// 
+			// pageButtons
+			// 
+			this.pageButtons.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pageButtons.Location = new System.Drawing.Point(3, 0);
+			this.pageButtons.Margin = new System.Windows.Forms.Padding(3, 2, 3, 3);
+			this.pageButtons.Name = "pageButtons";
+			this.pageButtons.Size = new System.Drawing.Size(138, 291);
+			this.pageButtons.TabIndex = 2;
+			this.pageButtons.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
+			this.pageButtons.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
 			// 
 			// label_Page
 			// 
@@ -160,23 +171,13 @@
 			this.comboBox_Pages.TabIndex = 3;
 			this.comboBox_Pages.SelectedIndexChanged += new System.EventHandler(this.comboBox_Pages_SelectedIndexChanged);
 			// 
-			// pageButtons
-			// 
-			this.pageButtons.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.pageButtons.Location = new System.Drawing.Point(3, 0);
-			this.pageButtons.Name = "pageButtons";
-			this.pageButtons.Size = new System.Drawing.Size(138, 265);
-			this.pageButtons.TabIndex = 2;
-			this.pageButtons.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
-			this.pageButtons.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
-			// 
 			// PredefinedCommands
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.splitContainer_Commands);
 			this.Name = "PredefinedCommands";
-			this.Size = new System.Drawing.Size(144, 344);
+			this.Size = new System.Drawing.Size(144, 370);
 			this.splitContainer_Commands.Panel1.ResumeLayout(false);
 			this.splitContainer_Commands.Panel2.ResumeLayout(false);
 			this.splitContainer_Commands.ResumeLayout(false);

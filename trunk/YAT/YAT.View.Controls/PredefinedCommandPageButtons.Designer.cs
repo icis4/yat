@@ -46,9 +46,10 @@
 			// 
 			// button_Command_8
 			// 
-			this.button_Command_8.Dock = System.Windows.Forms.DockStyle.Top;
+			this.button_Command_8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_8.Enabled = false;
-			this.button_Command_8.Location = new System.Drawing.Point(0, 154);
+			this.button_Command_8.Location = new System.Drawing.Point(0, 165);
 			this.button_Command_8.Name = "button_Command_8";
 			this.button_Command_8.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_8.TabIndex = 7;
@@ -59,9 +60,10 @@
 			// 
 			// button_Command_7
 			// 
-			this.button_Command_7.Dock = System.Windows.Forms.DockStyle.Top;
+			this.button_Command_7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_7.Enabled = false;
-			this.button_Command_7.Location = new System.Drawing.Point(0, 132);
+			this.button_Command_7.Location = new System.Drawing.Point(0, 143);
 			this.button_Command_7.Name = "button_Command_7";
 			this.button_Command_7.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_7.TabIndex = 6;
@@ -72,9 +74,10 @@
 			// 
 			// button_Command_6
 			// 
-			this.button_Command_6.Dock = System.Windows.Forms.DockStyle.Top;
+			this.button_Command_6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_6.Enabled = false;
-			this.button_Command_6.Location = new System.Drawing.Point(0, 110);
+			this.button_Command_6.Location = new System.Drawing.Point(0, 121);
 			this.button_Command_6.Name = "button_Command_6";
 			this.button_Command_6.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_6.TabIndex = 5;
@@ -85,9 +88,10 @@
 			// 
 			// button_Command_5
 			// 
-			this.button_Command_5.Dock = System.Windows.Forms.DockStyle.Top;
+			this.button_Command_5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_5.Enabled = false;
-			this.button_Command_5.Location = new System.Drawing.Point(0, 88);
+			this.button_Command_5.Location = new System.Drawing.Point(0, 99);
 			this.button_Command_5.Name = "button_Command_5";
 			this.button_Command_5.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_5.TabIndex = 4;
@@ -98,7 +102,8 @@
 			// 
 			// button_Command_4
 			// 
-			this.button_Command_4.Dock = System.Windows.Forms.DockStyle.Top;
+			this.button_Command_4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_4.Enabled = false;
 			this.button_Command_4.Location = new System.Drawing.Point(0, 66);
 			this.button_Command_4.Name = "button_Command_4";
@@ -111,7 +116,8 @@
 			// 
 			// button_Command_3
 			// 
-			this.button_Command_3.Dock = System.Windows.Forms.DockStyle.Top;
+			this.button_Command_3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_3.Enabled = false;
 			this.button_Command_3.Location = new System.Drawing.Point(0, 44);
 			this.button_Command_3.Name = "button_Command_3";
@@ -124,7 +130,8 @@
 			// 
 			// button_Command_2
 			// 
-			this.button_Command_2.Dock = System.Windows.Forms.DockStyle.Top;
+			this.button_Command_2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_2.Enabled = false;
 			this.button_Command_2.Location = new System.Drawing.Point(0, 22);
 			this.button_Command_2.Name = "button_Command_2";
@@ -137,7 +144,8 @@
 			// 
 			// button_Command_1
 			// 
-			this.button_Command_1.Dock = System.Windows.Forms.DockStyle.Top;
+			this.button_Command_1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_1.Enabled = false;
 			this.button_Command_1.Location = new System.Drawing.Point(0, 0);
 			this.button_Command_1.Name = "button_Command_1";
@@ -150,9 +158,10 @@
 			// 
 			// button_Command_9
 			// 
-			this.button_Command_9.Dock = System.Windows.Forms.DockStyle.Top;
+			this.button_Command_9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_9.Enabled = false;
-			this.button_Command_9.Location = new System.Drawing.Point(0, 176);
+			this.button_Command_9.Location = new System.Drawing.Point(0, 198);
 			this.button_Command_9.Name = "button_Command_9";
 			this.button_Command_9.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_9.TabIndex = 8;
@@ -163,9 +172,10 @@
 			// 
 			// button_Command_10
 			// 
-			this.button_Command_10.Dock = System.Windows.Forms.DockStyle.Top;
+			this.button_Command_10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_10.Enabled = false;
-			this.button_Command_10.Location = new System.Drawing.Point(0, 198);
+			this.button_Command_10.Location = new System.Drawing.Point(0, 220);
 			this.button_Command_10.Name = "button_Command_10";
 			this.button_Command_10.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_10.TabIndex = 9;
@@ -176,9 +186,10 @@
 			// 
 			// button_Command_11
 			// 
-			this.button_Command_11.Dock = System.Windows.Forms.DockStyle.Top;
+			this.button_Command_11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_11.Enabled = false;
-			this.button_Command_11.Location = new System.Drawing.Point(0, 220);
+			this.button_Command_11.Location = new System.Drawing.Point(0, 242);
 			this.button_Command_11.Name = "button_Command_11";
 			this.button_Command_11.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_11.TabIndex = 10;
@@ -189,9 +200,10 @@
 			// 
 			// button_Command_12
 			// 
-			this.button_Command_12.Dock = System.Windows.Forms.DockStyle.Top;
+			this.button_Command_12.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_12.Enabled = false;
-			this.button_Command_12.Location = new System.Drawing.Point(0, 242);
+			this.button_Command_12.Location = new System.Drawing.Point(0, 264);
 			this.button_Command_12.Name = "button_Command_12";
 			this.button_Command_12.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_12.TabIndex = 11;
@@ -218,7 +230,7 @@
 			this.Controls.Add(this.button_Command_1);
 			this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 3);
 			this.Name = "PredefinedCommandPageButtons";
-			this.Size = new System.Drawing.Size(176, 264);
+			this.Size = new System.Drawing.Size(176, 286);
 			this.ResumeLayout(false);
 
 		}
