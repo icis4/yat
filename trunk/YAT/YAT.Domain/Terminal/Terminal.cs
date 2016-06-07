@@ -256,7 +256,8 @@ namespace YAT.Domain
 		private DisplayRepository rxRepository;
 		private object repositorySyncObj = new object();
 
-		private bool eventsSuspendedForReload;
+		private object reloadSyncObj = new object();
+		private bool isReloading;
 
 		private System.Timers.Timer periodicXOnTimer;
 
@@ -319,7 +320,7 @@ namespace YAT.Domain
 			AttachTerminalSettings(settings);
 			AttachRawTerminal(new RawTerminal(this.terminalSettings.IO, this.terminalSettings.Buffer));
 
-		////this.eventsSuspendedForReload has been initialized to false.
+		////this.isReloading has been initialized to false.
 
 			CreateAndStartSendThread();
 		}
@@ -336,7 +337,7 @@ namespace YAT.Domain
 			AttachTerminalSettings(settings);
 			AttachRawTerminal(new RawTerminal(terminal.rawTerminal, this.terminalSettings.IO, this.terminalSettings.Buffer));
 
-			this.eventsSuspendedForReload = terminal.eventsSuspendedForReload;
+			this.isReloading = terminal.isReloading;
 
 			CreateAndStartSendThread();
 		}
@@ -681,7 +682,7 @@ namespace YAT.Domain
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.eventsSuspendedForReload);
+				return (this.isReloading);
 			}
 		}
 
@@ -2000,24 +2001,12 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected void SuspendEventsForReload()
-		{
-			this.eventsSuspendedForReload = true;
-		}
-
-		/// <summary></summary>
-		protected void ResumeEventsAfterReload()
-		{
-			this.eventsSuspendedForReload = false;
-		}
-
-		/// <summary></summary>
 		protected virtual void PrepareLineBeginInfo(DateTime ts, string ps, IODirection d, out DisplayLinePart lp)
 		{
 			if (TerminalSettings.Display.ShowDate || TerminalSettings.Display.ShowTime ||
 				TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
 			{
-				lp = new DisplayLinePart(8); // Preset the required capactiy to improve memory management.
+				lp = new DisplayLinePart(8); // Preset the required capacity to improve memory management.
 
 				if (TerminalSettings.Display.ShowDate)
 				{
@@ -2062,7 +2051,7 @@ namespace YAT.Domain
 		{
 			if (TerminalSettings.Display.ShowLength)
 			{
-				lp = new DisplayLinePart(2); // Preset the required capactiy to improve memory management.
+				lp = new DisplayLinePart(2); // Preset the required capacity to improve memory management.
 
 				if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
 					lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparatorCache));
@@ -2078,16 +2067,17 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void ProcessRawChunk(RawChunk raw, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
-			DisplayLine dl = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
+			DisplayLine dl = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			// Line begin:
+			dl.Add(new DisplayElement.LineStart((Direction)raw.Direction));
+
 			if (TerminalSettings.Display.ShowDate || TerminalSettings.Display.ShowTime ||
 				TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
 			{
-				DisplayLinePart lp;
-				PrepareLineBeginInfo(raw.TimeStamp, raw.PortStamp, raw.Direction, out lp);
-
-				dl.AddRange(lp);
+				DisplayLinePart info;
+				PrepareLineBeginInfo(raw.TimeStamp, raw.PortStamp, raw.Direction, out info);
+				dl.AddRange(info);
 			}
 
 			// Data:
@@ -2099,11 +2089,11 @@ namespace YAT.Domain
 			// Line end:
 			if (TerminalSettings.Display.ShowLength)
 			{
-				DisplayLinePart lp;
-				PrepareLineEndInfo(raw.Data.Length, out lp);
-
-				dl.AddRange(lp);
+				DisplayLinePart info;
+				PrepareLineEndInfo(raw.Data.Length, out info);
+				dl.AddRange(info);
 			}
+
 			dl.Add(new DisplayElement.LineBreak((Direction)raw.Direction));
 
 			elements.AddRange(dl.Clone()); // Clone elements because they are needed again a line below.
@@ -2155,47 +2145,79 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual void ReloadRepository(RepositoryType repository)
+		public virtual bool ReloadRepository(RepositoryType repository)
 		{
 			AssertNotDisposed();
 
-			// Clear repository:
-			ClearMyRepository(repository);
-			OnRepositoryCleared(new EventArgs<RepositoryType>(repository));
+			if (Monitor.TryEnter(this.reloadSyncObj, 250)) // Only try for some time, otherwise ignore. This
+			{                                              //   prevents deadlocks among main thread (view)
+				try                                        //   and large amounts of incoming data.
+				{
+					// Clear repository:
+					ClearMyRepository(repository);
+					OnRepositoryCleared(new EventArgs<RepositoryType>(repository));
 
-			// Reload repository:
-			SuspendEventsForReload();
-			foreach (RawChunk rawChunk in this.rawTerminal.RepositoryToChunks(repository))
-			{
-				ProcessAndSignalRawChunk(rawChunk);
+					// Reload repository:
+					this.isReloading = true;
+					foreach (RawChunk rawChunk in this.rawTerminal.RepositoryToChunks(repository))
+					{
+						ProcessAndSignalRawChunk(rawChunk);
+					}
+					this.isReloading = false;
+					OnRepositoryReloaded(new EventArgs<RepositoryType>(repository));
+				}
+				finally
+				{
+					Monitor.Exit(this.reloadSyncObj);
+				}
+
+				return (true);
 			}
-			ResumeEventsAfterReload();
-			OnRepositoryReloaded(new EventArgs<RepositoryType>(repository));
+			else
+			{
+				return (false);
+			}
 		}
 
 		/// <summary></summary>
-		public virtual void ReloadRepositories()
+		public virtual bool ReloadRepositories()
 		{
 			AssertNotDisposed();
 
-			// Clear repositories
-			ClearMyRepository(RepositoryType.Tx);
-			ClearMyRepository(RepositoryType.Bidir);
-			ClearMyRepository(RepositoryType.Rx);
-			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Tx));
-			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Bidir));
-			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Rx));
+			if (Monitor.TryEnter(this.reloadSyncObj, 250)) // Only try for some time, otherwise ignore. This
+			{                                              //   prevents deadlocks among main thread (view)
+				try                                        //   and large amounts of incoming data.
+				{
+					// Clear repositories
+					ClearMyRepository(RepositoryType.Tx);
+					ClearMyRepository(RepositoryType.Bidir);
+					ClearMyRepository(RepositoryType.Rx);
+					OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Tx));
+					OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Bidir));
+					OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Rx));
 
-			// Reload repositories:
-			SuspendEventsForReload();
-			foreach (RawChunk rawChunk in this.rawTerminal.RepositoryToChunks(RepositoryType.Bidir))
-			{
-				ProcessAndSignalRawChunk(rawChunk);
+					// Reload repositories:
+					this.isReloading = true;
+					foreach (RawChunk rawChunk in this.rawTerminal.RepositoryToChunks(RepositoryType.Bidir))
+					{
+						ProcessAndSignalRawChunk(rawChunk);
+					}
+					this.isReloading = false;
+					OnRepositoryReloaded(new EventArgs<RepositoryType>(RepositoryType.Tx));
+					OnRepositoryReloaded(new EventArgs<RepositoryType>(RepositoryType.Bidir));
+					OnRepositoryReloaded(new EventArgs<RepositoryType>(RepositoryType.Rx));
+				}
+				finally
+				{
+					Monitor.Exit(this.reloadSyncObj);
+				}
+
+				return (true);
 			}
-			ResumeEventsAfterReload();
-			OnRepositoryReloaded(new EventArgs<RepositoryType>(RepositoryType.Tx));
-			OnRepositoryReloaded(new EventArgs<RepositoryType>(RepositoryType.Bidir));
-			OnRepositoryReloaded(new EventArgs<RepositoryType>(RepositoryType.Rx));
+			else
+			{
+				return (false);
+			}
 		}
 
 		/// <summary></summary>
@@ -2532,52 +2554,64 @@ namespace YAT.Domain
 
 		private void rawTerminal_IOError(object sender, IOErrorEventArgs e)
 		{
-			SerialPortErrorEventArgs serialPortErrorEventArgs = (e as SerialPortErrorEventArgs);
-			if (serialPortErrorEventArgs != null)
+			lock (this.reloadSyncObj) // Delay processing new raw data until reloading has completed.
 			{
-				// Handle serial port errors whenever possible.
-				switch (serialPortErrorEventArgs.SerialPortError)
+				SerialPortErrorEventArgs serialPortErrorEventArgs = (e as SerialPortErrorEventArgs);
+				if (serialPortErrorEventArgs != null)
 				{
-					case System.IO.Ports.SerialError.Frame:    OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(RxFramingErrorString));        break;
-					case System.IO.Ports.SerialError.Overrun:  OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(RxBufferOverrunErrorString));  break;
-					case System.IO.Ports.SerialError.RXOver:   OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(RxBufferOverflowErrorString)); break;
-					case System.IO.Ports.SerialError.RXParity: OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(RxParityErrorString));         break;
-					case System.IO.Ports.SerialError.TXFull:   OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(TxBufferFullErrorString));     break;
-					default:                                   OnIOError(e); break;
+					// Handle serial port errors whenever possible.
+					switch (serialPortErrorEventArgs.SerialPortError)
+					{
+						case System.IO.Ports.SerialError.Frame:    OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(RxFramingErrorString));        break;
+						case System.IO.Ports.SerialError.Overrun:  OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(RxBufferOverrunErrorString));  break;
+						case System.IO.Ports.SerialError.RXOver:   OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(RxBufferOverflowErrorString)); break;
+						case System.IO.Ports.SerialError.RXParity: OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(RxParityErrorString));         break;
+						case System.IO.Ports.SerialError.TXFull:   OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(TxBufferFullErrorString));     break;
+						default:                                   OnIOError(e); break;
+					}
 				}
-			}
-			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Rx)) // Acceptable errors are only shown as terminal text.
-			{
-				OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, e.Message, true));
-			}
-			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Tx)) // Acceptable errors are only shown as terminal text.
-			{
-				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, e.Message, true));
-			}
-			else
-			{
-				OnIOError(e);
+				else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Rx)) // Acceptable errors are only shown as terminal text.
+				{
+					OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, e.Message, true));
+				}
+				else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Tx)) // Acceptable errors are only shown as terminal text.
+				{
+					OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, e.Message, true));
+				}
+				else
+				{
+					OnIOError(e);
+				}
 			}
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void rawTerminal_RawChunkSent(object sender, EventArgs<RawChunk> e)
 		{
-			OnRawChunkSent(e);
-			ProcessAndSignalRawChunk(e.Value);
+			lock (this.reloadSyncObj) // Delay processing new raw data until reloading has completed.
+			{
+				OnRawChunkSent(e);
+				ProcessAndSignalRawChunk(e.Value);
+			}
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void rawTerminal_RawChunkReceived(object sender, EventArgs<RawChunk> e)
 		{
-			OnRawChunkReceived(e);
-			ProcessAndSignalRawChunk(e.Value);
+			lock (this.reloadSyncObj) // Delay processing new raw data until reloading has completed.
+			{
+				OnRawChunkReceived(e);
+				ProcessAndSignalRawChunk(e.Value);
+			}
 		}
 
 		private void rawTerminal_RepositoryCleared(object sender, EventArgs<RepositoryType> e)
 		{
-			ClearMyRepository(e.Value);
-			OnRepositoryCleared(e);
+			lock (this.reloadSyncObj) // Delay processing new raw data until reloading has completed.
+			{
+				ClearMyRepository(e.Value);
+				OnRepositoryCleared(e);
+			}
 		}
 
 		#endregion
@@ -2620,7 +2654,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayElementProcessed(IODirection direction, DisplayElement element)
 		{
-			DisplayElementCollection elements = new DisplayElementCollection(1); // Preset the required capactiy to improve memory management.
+			DisplayElementCollection elements = new DisplayElementCollection(1); // Preset the required capacity to improve memory management.
 			elements.Add(element); // No clone needed as the element must be created when calling this event method.
 			OnDisplayElementsProcessed(direction, elements);
 		}
@@ -2638,7 +2672,7 @@ namespace YAT.Domain
 						this.bidirRepository.Enqueue(elements.Clone()); // Clone elements because they are needed again below.
 					}
 
-					if (!this.eventsSuspendedForReload)
+					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
 						OnDisplayElementsSent(new DisplayElementsEventArgs(elements)); // No clone needed as the elements must be created when calling this event method.
 
 					break;
@@ -2652,7 +2686,7 @@ namespace YAT.Domain
 						this.rxRepository   .Enqueue(elements.Clone()); // Clone elements because they are needed again below.
 					}
 
-					if (!this.eventsSuspendedForReload)
+					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
 						OnDisplayElementsReceived(new DisplayElementsEventArgs(elements)); // No clone needed as the elements must be created when calling this event method.
 
 					break;
@@ -2668,21 +2702,21 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsSent(DisplayElementsEventArgs e)
 		{
-			if (!this.eventsSuspendedForReload)
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
 				EventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsReceived(DisplayElementsEventArgs e)
 		{
-			if (!this.eventsSuspendedForReload)
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
 				EventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesProcessed(IODirection d, List<DisplayLine> lines)
 		{
-			if (!this.eventsSuspendedForReload)
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
 			{
 				switch (d)
 				{
@@ -2696,28 +2730,28 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesSent(DisplayLinesEventArgs e)
 		{
-			if (!this.eventsSuspendedForReload)
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
 				EventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesReceived(DisplayLinesEventArgs e)
 		{
-			if (!this.eventsSuspendedForReload)
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
 				EventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryCleared(EventArgs<RepositoryType> e)
 		{
-			if (!this.eventsSuspendedForReload)
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
 				EventHelper.FireSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryReloaded(EventArgs<RepositoryType> e)
 		{
-			if (!this.eventsSuspendedForReload)
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
 				EventHelper.FireSync<EventArgs<RepositoryType>>(RepositoryReloaded, this, e);
 		}
 

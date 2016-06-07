@@ -59,6 +59,7 @@ namespace YAT.Domain
 	[XmlInclude(typeof(WhiteSpaceDisplayElement))]
 	[XmlInclude(typeof(DataSpace))]
 	[XmlInclude(typeof(InfoSpace))]
+	[XmlInclude(typeof(LineStart))]
 	[XmlInclude(typeof(LineBreak))]
 	[XmlInclude(typeof(ErrorInfo))]
 	public abstract class DisplayElement
@@ -394,6 +395,23 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		public class LineStart : WhiteSpaceDisplayElement
+		{
+			/// <summary></summary>
+			public LineStart()
+				: this(Direction.None)
+			{
+			}
+
+			/// <summary></summary>
+			public LineStart(Direction direction)
+				: base(direction)
+			{
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class LineBreak : WhiteSpaceDisplayElement
 		{
 			/// <summary></summary>
@@ -490,7 +508,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		private DisplayElement(Direction direction, byte[] origin, string text, int dataCount)
 		{
-			List<Pair<byte[], string>> l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
+			List<Pair<byte[], string>> l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 			l.Add(new Pair<byte[], string>(origin, text));
 			Initialize(direction, l, text, dataCount, ModifierFlags.Data);
 		}
@@ -650,6 +668,7 @@ namespace YAT.Domain
 			else if (this is DataLength)	clone = new DataLength();
 			else if (this is DataSpace)		clone = new DataSpace();
 			else if (this is InfoSpace)		clone = new InfoSpace();
+			else if (this is LineStart)		clone = new LineStart();
 			else if (this is LineBreak)		clone = new LineBreak();
 			else if (this is ErrorInfo)		clone = new ErrorInfo();
 			else throw (new TypeLoadException("Program execution should never get here, '" + GetType() + "' is an unknown display element type." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -671,7 +690,7 @@ namespace YAT.Domain
 			// Keep direction, isData and isEol.
 
 			// Replace origin and dataCount.
-			List<Pair<byte[], string>> clonedOrigin = new List<Pair<byte[], string>>(1); // Preset the required capactiy to improve memory management.
+			List<Pair<byte[], string>> clonedOrigin = new List<Pair<byte[], string>>(1); // Preset the required capacity to improve memory management.
 			clonedOrigin.Add(PerformDeepClone(originItem));
 			clone.origin = clonedOrigin;
 			clone.dataCount = 1;
@@ -755,7 +774,7 @@ namespace YAT.Domain
 		{
 			if (origin != null)
 			{
-				List<Pair<byte[], string>> clone = new List<Pair<byte[], string>>(origin.Capacity); // Preset the required capactiy to improve memory management.
+				List<Pair<byte[], string>> clone = new List<Pair<byte[], string>>(origin.Capacity); // Preset the required capacity to improve memory management.
 
 				foreach (Pair<byte[], string> originItem in origin)
 					clone.Add(PerformDeepClone(originItem));

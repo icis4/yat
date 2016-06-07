@@ -153,7 +153,7 @@ namespace YAT.View.Controls
 		private MonitorDataStatusHelper dataStatusHelper;
 
 		// Update:
-		private List<object> pendingElementsAndLines = new List<object>(32); // Preset the initial capactiy to improve memory management, 32 is an arbitrary value.
+		private List<object> pendingElementsAndLines = new List<object>(32); // Preset the initial capacity to improve memory management, 32 is an arbitrary value.
 		private bool performImmediateUpdate;
 		private long monitorUpdateTickInterval;
 		private long nextMonitorUpdateTickStamp; // Ticks as defined by 'Stopwatch'.
@@ -542,31 +542,17 @@ namespace YAT.View.Controls
 		public virtual void Clear()
 		{
 			this.lineNumberOffset = 0;
-
+			this.pendingElementsAndLines.Clear();
 			ClearAndResetListBoxes();
 		}
 
 		/// <summary></summary>
-		public virtual void Reload(List<Domain.DisplayElement> elements)
-		{
-			Clear();
-			AddElements(elements);
-		}
-
-		/// <summary></summary>
-		public virtual void Reload(List<Domain.DisplayLine> lines)
-		{
-			Clear();
-			AddLines(lines);
-		}
-
-		/// <summary></summary>
-		public virtual void Reload()
+		protected virtual void Reload()
 		{
 			ListBox lb = fastListBox_Monitor;
 
 			// Retrieve lines from list box:
-			List<Domain.DisplayLine> lines = new List<Domain.DisplayLine>(lb.Items.Count); // Preset the required capactiy to improve memory management.
+			List<Domain.DisplayLine> lines = new List<Domain.DisplayLine>(lb.Items.Count); // Preset the required capacity to improve memory management.
 			foreach (object item in lb.Items)
 			{
 				var line = (item as Domain.DisplayLine);
@@ -576,6 +562,13 @@ namespace YAT.View.Controls
 
 			// Clear and perform reload:
 			Reload(lines);
+		}
+
+		/// <summary></summary>
+		protected virtual void Reload(List<Domain.DisplayLine> lines)
+		{
+			Clear();
+			AddLines(lines);
 		}
 
 		/// <summary></summary>
@@ -609,7 +602,7 @@ namespace YAT.View.Controls
 			{
 				ListBox lb = fastListBox_Monitor;
 
-				List<Domain.DisplayLine> selectedLines = new List<Domain.DisplayLine>(32); // Preset the initial capactiy to improve memory management, 32 is an arbitrary value.
+				List<Domain.DisplayLine> selectedLines = new List<Domain.DisplayLine>(32); // Preset the initial capacity to improve memory management, 32 is an arbitrary value.
 				if (lb.SelectedItems.Count > 0)
 				{
 					foreach (int i in lb.SelectedIndices)
@@ -1114,10 +1107,8 @@ namespace YAT.View.Controls
 				}
 				else
 				{
-					// If current line has ended, add element to a new line.
-					// Otherwise, simply add element to current line:
-					int lastElementIndex = current.Count - 1;
-					if (current[lastElementIndex] is Domain.DisplayElement.LineBreak)
+					// If a new line starts, add element to a new line.
+					if (element is Domain.DisplayElement.LineStart)
 					{
 						// Remove lines if maximum exceeded:
 						while (lbmon.Items.Count >= (this.maxLineCount))
