@@ -93,7 +93,7 @@ namespace MKY.IO.Usb
 				SetId(report[0]);
 
 			// Get report data:
-			List<byte> data = new List<byte>(report.Length); // Preset the initial capactiy to improve memory management.
+			List<byte> data = new List<byte>(report.Length); // Preset the initial capacity to improve memory management.
 			if (format.PrependPayloadByteLength)
 			{
 				// Get the payload by the length which is located in the first or second byte of the report:

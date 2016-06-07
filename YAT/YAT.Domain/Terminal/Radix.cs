@@ -164,7 +164,7 @@ namespace YAT.Domain
 		/// </remarks>
 		public static RadixEx[] GetItems()
 		{
-			List<RadixEx> a = new List<RadixEx>(6); // Preset the required capactiy to improve memory management.
+			List<RadixEx> a = new List<RadixEx>(6); // Preset the required capacity to improve memory management.
 
 			a.Add(new RadixEx(Radix.String)); // Alpha radices.
 			a.Add(new RadixEx(Radix.Char));

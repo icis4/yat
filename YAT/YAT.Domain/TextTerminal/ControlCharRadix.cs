@@ -114,7 +114,7 @@ namespace YAT.Domain
 		public static new ControlCharRadixEx[] GetItems()
 		{
 			RadixEx[] radices = RadixEx.GetItems();
-			List<ControlCharRadixEx> items = new List<ControlCharRadixEx>(radices.Length - 1); // Preset the required capactiy to improve memory management.
+			List<ControlCharRadixEx> items = new List<ControlCharRadixEx>(radices.Length - 1); // Preset the required capacity to improve memory management.
 
 			// Re-use items from base:
 			foreach (RadixEx radix in radices)

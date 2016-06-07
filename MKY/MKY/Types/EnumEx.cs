@@ -442,7 +442,7 @@ namespace MKY
 		{
 			Type underlyingEnumType = EnumExTypeToUnderlyingEnumType(enumExType);
 			FieldInfo[] fis = underlyingEnumType.GetFields(BindingFlags.Public | BindingFlags.Static);
-			List<Enum> items = new List<Enum>(fis.Length); // Preset the required capactiy to improve memory management.
+			List<Enum> items = new List<Enum>(fis.Length); // Preset the required capacity to improve memory management.
 
 			foreach (FieldInfo fi in fis)
 			{

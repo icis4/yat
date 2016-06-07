@@ -431,7 +431,7 @@ namespace YAT.Settings.Terminal
 			get
 			{
 				Model.Types.AutoTriggerEx[] triggers = Model.Types.AutoTriggerEx.GetAllItems();
-				List<Model.Types.AutoTriggerEx> a = new List<Model.Types.AutoTriggerEx>(triggers.Length); // Preset the required capactiy to improve memory management.
+				List<Model.Types.AutoTriggerEx> a = new List<Model.Types.AutoTriggerEx>(triggers.Length); // Preset the required capacity to improve memory management.
 
 				foreach (Model.Types.AutoTriggerEx trigger in triggers)
 				{
@@ -494,7 +494,7 @@ namespace YAT.Settings.Terminal
 			get
 			{
 				Model.Types.AutoResponseEx[] responses = Model.Types.AutoResponseEx.GetAllItems();
-				List<Model.Types.AutoResponseEx> a = new List<Model.Types.AutoResponseEx>(responses.Length); // Preset the required capactiy to improve memory management.
+				List<Model.Types.AutoResponseEx> a = new List<Model.Types.AutoResponseEx>(responses.Length); // Preset the required capacity to improve memory management.
 
 				foreach (Model.Types.AutoResponseEx response in responses)
 				{

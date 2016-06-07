@@ -65,7 +65,7 @@ namespace MKY.Time
 			this.interval = interval;
 			this.window   = window;
 
-			this.queue = new Queue<TimeStampItem<int>>(window); // Preset the assumed capactiy to improve memory management.
+			this.queue = new Queue<TimeStampItem<int>>(window); // Preset the assumed capacity to improve memory management.
 		}
 
 		#endregion

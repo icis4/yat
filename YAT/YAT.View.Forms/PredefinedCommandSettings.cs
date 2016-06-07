@@ -302,7 +302,7 @@ namespace YAT.View.Forms
 		{
 			label_ExplicitDefaultRadix.Visible = useExplicitDefaultRadix;
 
-			this.predefinedCommandSettingsSetLabels = new List<Label>(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); // Preset the required capactiy to improve memory management.
+			this.predefinedCommandSettingsSetLabels = new List<Label>(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); // Preset the required capacity to improve memory management.
 			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_1);
 			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_2);
 			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_3);
@@ -316,7 +316,7 @@ namespace YAT.View.Forms
 			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_11);
 			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_12);
 
-			this.predefinedCommandSettingsSets = new List<Controls.PredefinedCommandSettingsSet>(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); // Preset the required capactiy to improve memory management.
+			this.predefinedCommandSettingsSets = new List<Controls.PredefinedCommandSettingsSet>(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); // Preset the required capacity to improve memory management.
 			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_1);
 			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_2);
 			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_3);

@@ -109,7 +109,7 @@ namespace YAT.Domain
 		/// </remarks>
 		public static DirectionEx[] GetItems()
 		{
-			List<DirectionEx> a = new List<DirectionEx>(4); // Preset the required capactiy to improve memory management.
+			List<DirectionEx> a = new List<DirectionEx>(4); // Preset the required capacity to improve memory management.
 			a.Add(new DirectionEx(Direction.None));
 			a.Add(new DirectionEx(Direction.Tx));
 			a.Add(new DirectionEx(Direction.Rx));

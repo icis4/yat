@@ -251,7 +251,7 @@ namespace YAT.Model.Types
 		/// </remarks>
 		private static AutoTriggerEx[] GetItems(bool addFixed, bool addVariable)
 		{
-			List<AutoTriggerEx> a = new List<AutoTriggerEx>(16); // Preset the initial capactiy to improve memory management, 16 is a large enough value.
+			List<AutoTriggerEx> a = new List<AutoTriggerEx>(16); // Preset the initial capacity to improve memory management, 16 is a large enough value.
 			if (addFixed)		a.Add(new AutoTriggerEx(AutoTrigger.None));
 			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand1));
 			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand2));

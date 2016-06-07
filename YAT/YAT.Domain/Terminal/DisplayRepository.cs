@@ -68,10 +68,10 @@ namespace YAT.Domain
 			: base(capacity)
 		{
 			this.capacity    = capacity;
-			this.currentLine = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
+			this.currentLine = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 		////this.dataCount   = 0;
 
-			this.lastLineAuxiliary = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
+			this.lastLineAuxiliary = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 		}
 
 		/// <summary></summary>
@@ -228,7 +228,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual List<DisplayElement> ToElements()
 		{
-			List<DisplayElement> elements = new List<DisplayElement>(256); // Preset the initial capactiy to improve memory management, 256 is an arbitrary value.
+			List<DisplayElement> elements = new List<DisplayElement>(256); // Preset the initial capacity to improve memory management, 256 is an arbitrary value.
 
 			foreach (DisplayLine line in ToLines())
 				elements.AddRange(line.ToArray());

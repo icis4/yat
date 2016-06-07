@@ -159,6 +159,7 @@ namespace YAT.Model.Utilities
 			else if ((element is DisplayElement.Nothing) ||
 			         (element is DisplayElement.DataSpace) ||
 			         (element is DisplayElement.InfoSpace) ||
+			         (element is DisplayElement.LineStart) ||
 			         (element is DisplayElement.LineBreak))		{ format = this.whiteSpacesFormat; }
 			else if ( element is DisplayElement.ErrorInfo)		{ format = this.errorFormat; }
 			else
@@ -244,7 +245,7 @@ namespace YAT.Model.Utilities
 				// Analyze the line and split it into segments:
 				int position = 0;
 				StringBuilder text = new StringBuilder();
-				var segments = new List<Pair<DisplayElement, Pair<int, int>>>(line.Count); // Preset the required capactiy to improve memory management.
+				var segments = new List<Pair<DisplayElement, Pair<int, int>>>(line.Count); // Preset the required capacity to improve memory management.
 				foreach (DisplayElement element in line)
 				{
 					if (!string.IsNullOrEmpty(element.Text))

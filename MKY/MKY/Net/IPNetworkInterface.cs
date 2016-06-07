@@ -335,7 +335,7 @@ namespace MKY.Net
 		/// <summary></summary>
 		public static IPNetworkInterfaceEx[] GetItems()
 		{
-			List<IPNetworkInterfaceEx> a = new List<IPNetworkInterfaceEx>(6); // Preset the required capactiy to improve memory management.
+			List<IPNetworkInterfaceEx> a = new List<IPNetworkInterfaceEx>(6); // Preset the required capacity to improve memory management.
 			a.Add(new IPNetworkInterfaceEx(IPNetworkInterface.Any));
 			a.Add(new IPNetworkInterfaceEx(IPNetworkInterface.Loopback));
 			a.Add(new IPNetworkInterfaceEx(IPNetworkInterface.IPv4Any));
