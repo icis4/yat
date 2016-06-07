@@ -99,7 +99,7 @@ namespace YAT.Domain
 			public LineState(SequenceQueue eol)
 			{
 				LinePosition = LinePosition.Begin;
-				LineElements = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
+				LineElements = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				EolElements  = new DisplayLinePart(); // Default behaviour regarding initial capacity is OK.
 				Eol = eol;
 			}
@@ -107,7 +107,7 @@ namespace YAT.Domain
 			public virtual void Reset()
 			{
 				LinePosition = LinePosition.Begin;
-				LineElements = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
+				LineElements = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				EolElements  = new DisplayLinePart(); // Default behaviour regarding initial capacity is OK.
 				Eol.Reset();
 			}
@@ -189,7 +189,7 @@ namespace YAT.Domain
 			: base(settings)
 		{
 			AttachTextTerminalSettings();
-			Initialize();
+			InitializeStates();
 		}
 
 		/// <summary></summary>
@@ -211,13 +211,8 @@ namespace YAT.Domain
 			}
 			else
 			{
-				Initialize();
+				InitializeStates();
 			}
-		}
-
-		private void Initialize()
-		{
-			InitializeStates();
 		}
 
 		#region Disposal
@@ -401,7 +396,7 @@ namespace YAT.Domain
 
 		private void InitializeStates()
 		{
-			this.rxMultiByteDecodingStream = new List<byte>(4); // Preset the initial capactiy to improve memory management, 4 is the maximum value for multi-byte characters.
+			this.rxMultiByteDecodingStream = new List<byte>(4); // Preset the initial capacity to improve memory management, 4 is the maximum value for multi-byte characters.
 
 			byte[] txEol;
 			byte[] rxEol;
@@ -552,15 +547,20 @@ namespace YAT.Domain
 
 		private void ExecuteLineBegin(LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elements)
 		{
+			DisplayLinePart lp = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+
+			lp.Add(new DisplayElement.LineStart()); // Direction may be both!
+
 			if (TerminalSettings.Display.ShowDate || TerminalSettings.Display.ShowTime ||
 				TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
 			{
-				DisplayLinePart lp;
-				PrepareLineBeginInfo(ts, ps, d, out lp);
-
-				lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
-				elements.AddRange(lp);
+				DisplayLinePart info;
+				PrepareLineBeginInfo(ts, ps, d, out info);
+				lp.AddRange(info);
 			}
+
+			lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+			elements.AddRange(lp);
 
 			lineState.LinePosition = LinePosition.Data;
 		}
@@ -587,7 +587,7 @@ namespace YAT.Domain
 					if ((lineState.EolElements.Count == 1) && (lineState.EolElements[0].OriginCount == lineState.Eol.Sequence.Length))
 					{
 						// Unfold the elements into single elements for correct processing:
-						List<DisplayElement> l = new List<DisplayElement>(lineState.EolElements.DataCount); // Preset the required capactiy to improve memory management.
+						List<DisplayElement> l = new List<DisplayElement>(lineState.EolElements.DataCount); // Preset the required capacity to improve memory management.
 						foreach (DisplayElement item in lineState.EolElements)
 						{
 							foreach (Pair<byte[], string> originItem in item.Origin)
@@ -607,7 +607,7 @@ namespace YAT.Domain
 						// Note that sequence might look like <CR><CR><LF>, only the last two are EOL!
 					
 						// Unfold the elements into single elements for correct processing:
-						List<DisplayElement> l = new List<DisplayElement>(lineState.EolElements.DataCount); // Preset the required capactiy to improve memory management.
+						List<DisplayElement> l = new List<DisplayElement>(lineState.EolElements.DataCount); // Preset the required capacity to improve memory management.
 						foreach (DisplayElement item in lineState.EolElements)
 						{
 							foreach (Pair<byte[], string> originItem in item.Origin)
@@ -706,7 +706,7 @@ namespace YAT.Domain
 		{
 			// Process EOL:
 			int eolLength = lineState.Eol.Sequence.Length;
-			DisplayLine line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
+			DisplayLine line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			if (TextTerminalSettings.ShowEol || (eolLength <= 0) || (!lineState.Eol.IsCompleteMatch))
 			{
@@ -734,21 +734,24 @@ namespace YAT.Domain
 					elements.RemoveAtEnd(eolAndWhiteCount);
 			}
 
+			lineState.Reset(); // Reset line state, it is no longer needed.
+
 			// Process length:
-			DisplayLinePart lp = new DisplayLinePart(1); // Preset the required capactiy to improve memory management.
+			DisplayLinePart lp = new DisplayLinePart(); // Default behaviour regarding initial capacity is OK.
+
 			if (TerminalSettings.Display.ShowLength)
-				PrepareLineEndInfo(line.DataCount, out lp);
+			{
+				DisplayLinePart info;
+				PrepareLineEndInfo(line.DataCount, out info);
+				lp.AddRange(info);
+			}
 
 			lp.Add(new DisplayElement.LineBreak()); // Direction may be both!
 
+			// Finalize elements and line:
 			elements.AddRange(lp.Clone()); // Clone elements because they are needed again right below.
-
-			// Also add line end to line and return it:
 			line.AddRange(lp);
 			lines.Add(line);
-
-			// Reset line state:
-			lineState.Reset();
 		}
 
 		/// <summary></summary>
@@ -815,7 +818,7 @@ namespace YAT.Domain
 
 						if ((lineState.LineElements != null) && (lineState.LineElements.Count > 0))
 						{
-							DisplayElementCollection elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capactiy to improve memory management.
+							DisplayElementCollection elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 							List<DisplayLine> lines = new List<DisplayLine>();
 
 							ExecuteLineEnd(lineState, d, elements, lines);
@@ -848,18 +851,16 @@ namespace YAT.Domain
 		// Methods > Repository Access
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		/// <remarks>Ensure that line states are completely reset.</remarks>
-		public override void ReloadRepositories()
+		/// <remarks>Ensure that states are completely reset.</remarks>
+		public override bool ReloadRepositories()
 		{
 			AssertNotDisposed();
 
 			InitializeStates();
-			base.ReloadRepositories();
+			return (base.ReloadRepositories());
 		}
 
-		/// <summary></summary>
-		/// <remarks>Ensure that line states are completely reset.</remarks>
+		/// <remarks>Ensure that states are completely reset.</remarks>
 		protected override void ClearMyRepository(RepositoryType repository)
 		{
 			AssertNotDisposed();
