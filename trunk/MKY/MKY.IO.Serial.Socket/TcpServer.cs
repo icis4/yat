@@ -837,7 +837,7 @@ namespace MKY.IO.Serial.Socket
 
 					lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
 					{
-						data = new List<byte>(this.dataSentQueue.Count); // Preset the initial capactiy to improve memory management.
+						data = new List<byte>(this.dataSentQueue.Count); // Preset the initial capacity to improve memory management.
 						remoteEndPoint = null;
 
 						while (this.dataSentQueue.Count > 0)

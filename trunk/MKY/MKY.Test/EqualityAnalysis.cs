@@ -2042,9 +2042,9 @@ namespace MKY.Test
 		[Test]
 		public virtual void TestSystemCollectionReferenceTypeNotIEquatableWithoutOperators()
 		{
-			List<int> objToCompareAgainst = new List<int>(2); // Preset the required capactiy to improve memory management.
-			List<int> objEqual            = new List<int>(2); // Preset the required capactiy to improve memory management.
-			List<int> objNotEqual         = new List<int>(2); // Preset the required capactiy to improve memory management.
+			List<int> objToCompareAgainst = new List<int>(2); // Preset the required capacity to improve memory management.
+			List<int> objEqual            = new List<int>(2); // Preset the required capacity to improve memory management.
+			List<int> objNotEqual         = new List<int>(2); // Preset the required capacity to improve memory management.
 
 			objToCompareAgainst.AddRange(new int[] { 1, 1 });
 			objEqual           .AddRange(new int[] { 1, 1 });

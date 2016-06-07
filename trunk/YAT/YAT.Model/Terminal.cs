@@ -4056,7 +4056,7 @@ namespace YAT.Model
 				}
 				else if (c.IsMultiLineText)
 				{
-					List<byte> commandResult = new List<byte>(256); // Preset the initial capactiy to improve memory management, 256 is an arbitrary value.
+					List<byte> commandResult = new List<byte>(256); // Preset the initial capacity to improve memory management, 256 is an arbitrary value.
 
 					foreach (string line in c.MultiLineText)
 					{

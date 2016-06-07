@@ -382,7 +382,7 @@ namespace MKY.Net
 		/// <summary></summary>
 		public static IPHostEx[] GetItems()
 		{
-			List<IPHostEx> a = new List<IPHostEx>(3); // Preset the required capactiy to improve memory management.
+			List<IPHostEx> a = new List<IPHostEx>(3); // Preset the required capacity to improve memory management.
 			a.Add(new IPHostEx(IPHost.Localhost));
 			a.Add(new IPHostEx(IPHost.IPv4Localhost));
 			a.Add(new IPHostEx(IPHost.IPv6Localhost));

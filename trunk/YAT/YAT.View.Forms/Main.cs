@@ -1208,7 +1208,7 @@ namespace YAT.View.Forms
 
 		private void contextMenuStrip_FileRecent_InitializeControls()
 		{
-			this.menuItems_recent = new List<ToolStripMenuItem>(Model.Settings.RecentFileSettings.MaxFilePaths); // Preset the required capactiy to improve memory management.
+			this.menuItems_recent = new List<ToolStripMenuItem>(Model.Settings.RecentFileSettings.MaxFilePaths); // Preset the required capacity to improve memory management.
 			this.menuItems_recent.Add(toolStripMenuItem_FileRecentContextMenu_1);
 			this.menuItems_recent.Add(toolStripMenuItem_FileRecentContextMenu_2);
 			this.menuItems_recent.Add(toolStripMenuItem_FileRecentContextMenu_3);

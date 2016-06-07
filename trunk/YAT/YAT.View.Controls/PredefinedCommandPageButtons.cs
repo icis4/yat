@@ -218,7 +218,7 @@ namespace YAT.View.Controls
 
 		private void InitializeButtons()
 		{
-			this.buttons_commands = new List<Button>(PredefinedCommandSettings.MaxCommandsPerPage); // Preset the required capactiy to improve memory management.
+			this.buttons_commands = new List<Button>(PredefinedCommandSettings.MaxCommandsPerPage); // Preset the required capacity to improve memory management.
 			this.buttons_commands.Add(button_Command_1);
 			this.buttons_commands.Add(button_Command_2);
 			this.buttons_commands.Add(button_Command_3);

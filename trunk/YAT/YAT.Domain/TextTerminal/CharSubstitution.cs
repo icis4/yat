@@ -107,7 +107,7 @@ namespace YAT.Domain
 		/// </remarks>
 		public static CharSubstitutionEx[] GetItems()
 		{
-			List<CharSubstitutionEx> a = new List<CharSubstitutionEx>(3); // Preset the required capactiy to improve memory management.
+			List<CharSubstitutionEx> a = new List<CharSubstitutionEx>(3); // Preset the required capacity to improve memory management.
 			a.Add(new CharSubstitutionEx(CharSubstitution.None));
 			a.Add(new CharSubstitutionEx(CharSubstitution.ToUpper));
 			a.Add(new CharSubstitutionEx(CharSubstitution.ToLower));

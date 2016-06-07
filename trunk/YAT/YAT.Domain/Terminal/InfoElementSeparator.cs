@@ -258,7 +258,7 @@ namespace YAT.Domain
 		/// </remarks>
 		public static InfoElementSeparatorEx[] GetItems()
 		{
-			List<InfoElementSeparatorEx> a = new List<InfoElementSeparatorEx>(12); // Preset the required capactiy to improve memory management.
+			List<InfoElementSeparatorEx> a = new List<InfoElementSeparatorEx>(12); // Preset the required capacity to improve memory management.
 			a.Add(new InfoElementSeparatorEx(InfoElementSeparator.None));
 			a.Add(new InfoElementSeparatorEx(InfoElementSeparator.Space));
 			a.Add(new InfoElementSeparatorEx(InfoElementSeparator.Underscore));

@@ -183,6 +183,7 @@ namespace YAT.Model.Utilities
 			else if ((element is DisplayElement.Nothing) ||
 			         (element is DisplayElement.DataSpace) ||
 			         (element is DisplayElement.InfoSpace) ||
+			         (element is DisplayElement.LineStart) ||
 			         (element is DisplayElement.LineBreak))
 			{
 				fontStyle = settings.WhiteSpacesFormat.FontStyle;

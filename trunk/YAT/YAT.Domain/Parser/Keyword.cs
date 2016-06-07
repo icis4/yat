@@ -131,7 +131,7 @@ namespace YAT.Domain.Parser
 		/// </remarks>
 		public static KeywordEx[] GetItems()
 		{
-			List<KeywordEx> a = new List<KeywordEx>(10); // Preset the required capactiy to improve memory management.
+			List<KeywordEx> a = new List<KeywordEx>(10); // Preset the required capacity to improve memory management.
 			a.Add(new KeywordEx(Keyword.Clear));
 			a.Add(new KeywordEx(Keyword.Delay));
 			a.Add(new KeywordEx(Keyword.LineDelay));

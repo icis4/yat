@@ -108,7 +108,7 @@ namespace YAT.Model.Utilities
 			var rawLines = (deserializedLines as List<XmlTransferRawLine>);
 			if (rawLines != null)
 			{
-				List<string> l = new List<string>(rawLines.Count); // Preset the required capactiy to improve memory management.
+				List<string> l = new List<string>(rawLines.Count); // Preset the required capacity to improve memory management.
 				foreach (XmlTransferRawLine rawLine in rawLines)
 				{
 					if (rawLine.Data != null)
@@ -146,7 +146,7 @@ namespace YAT.Model.Utilities
 			var neatLines = (deserializedLines as List<XmlTransferNeatLine>);
 			if (neatLines != null)
 			{
-				List<string> l = new List<string>(neatLines.Count); // Preset the required capactiy to improve memory management.
+				List<string> l = new List<string>(neatLines.Count); // Preset the required capacity to improve memory management.
 				foreach (XmlTransferNeatLine neatLine in neatLines)
 				{
 					if (neatLine.Text != null)

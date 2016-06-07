@@ -394,7 +394,7 @@ namespace YAT.View.Forms
 			string infoEnclosureLeft  = this.infoEnclosure.ToEnclosureLeft();
 			string infoEnclosureRight = this.infoEnclosure.ToEnclosureRight();
 
-			List<Domain.DisplayLine> exampleLines = new List<Domain.DisplayLine>(10); // Preset the required capactiy to improve memory management.
+			List<Domain.DisplayLine> exampleLines = new List<Domain.DisplayLine>(10); // Preset the required capacity to improve memory management.
 
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxData(0x41, "41h")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxControl(0x13, "<CR>")));
@@ -410,8 +410,9 @@ namespace YAT.View.Forms
 			for (int i = 0; i < this.monitors.Length; i++)
 				this.monitors[i].AddLine(exampleLines[i]);
 
-			Domain.DisplayRepository exampleComplete = new Domain.DisplayRepository(33);
+			Domain.DisplayRepository exampleComplete = new Domain.DisplayRepository(37); // Preset the required capacity to improve memory management.
 
+			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
 			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSpace(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now, infoEnclosureLeft, infoEnclosureRight));
@@ -427,6 +428,7 @@ namespace YAT.View.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.DataLength(2, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
 
+			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
 			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSpace(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now, infoEnclosureLeft, infoEnclosureRight));
@@ -442,11 +444,13 @@ namespace YAT.View.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.DataLength(2, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
 
+			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
 			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSpace(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSpace(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.ErrorInfo("Message"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
 
 			monitor_Example.AddLines(exampleComplete.ToLines());
 		}

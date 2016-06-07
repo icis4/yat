@@ -160,7 +160,7 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		public static SocketTypeEx[] GetItems()
 		{
-			List<SocketTypeEx> a = new List<SocketTypeEx>(6); // Preset the required capactiy to improve memory management.
+			List<SocketTypeEx> a = new List<SocketTypeEx>(6); // Preset the required capacity to improve memory management.
 			a.Add(new SocketTypeEx(SocketType.TcpClient));
 			a.Add(new SocketTypeEx(SocketType.TcpServer));
 			a.Add(new SocketTypeEx(SocketType.TcpAutoSocket));

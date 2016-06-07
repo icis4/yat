@@ -160,7 +160,7 @@ namespace YAT.Domain
 		/// </remarks>
 		public static EolEx[] GetItems()
 		{
-			List<EolEx> a = new List<EolEx>(8); // Preset the required capactiy to improve memory management.
+			List<EolEx> a = new List<EolEx>(8); // Preset the required capacity to improve memory management.
 			a.Add(new EolEx(Eol.None));
 			a.Add(new EolEx(Eol.Cr));
 			a.Add(new EolEx(Eol.Lf));

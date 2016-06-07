@@ -329,14 +329,14 @@ namespace MKY.IO.Ports.Test
 
 				List<bool> l;
 
-				l = new List<bool>(configuration.LoopbackPairs.Count); // Preset the required capactiy to improve memory management.
+				l = new List<bool>(configuration.LoopbackPairs.Count); // Preset the required capacity to improve memory management.
 				foreach (SerialPortPairConfigurationElement item in configuration.LoopbackPairs)
 				{
 					l.Add(availablePorts.Contains(item.PortA) && availablePorts.Contains(item.PortB));
 				}
 				configuration.LoopbackPairIsAvailable = l.ToArray();
 
-				l = new List<bool>(configuration.LoopbackSelfs.Count); // Preset the required capactiy to improve memory management.
+				l = new List<bool>(configuration.LoopbackSelfs.Count); // Preset the required capacity to improve memory management.
 				foreach (SerialPortConfigurationElement item in configuration.LoopbackSelfs)
 				{
 					l.Add(availablePorts.Contains(item.Port));

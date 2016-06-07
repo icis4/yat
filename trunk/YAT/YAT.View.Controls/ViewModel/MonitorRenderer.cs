@@ -230,6 +230,7 @@ namespace YAT.View.Controls
 			else if ((element is Domain.DisplayElement.Nothing) ||
 			         (element is Domain.DisplayElement.DataSpace) ||
 			         (element is Domain.DisplayElement.InfoSpace) ||
+			         (element is Domain.DisplayElement.LineStart) ||
 			         (element is Domain.DisplayElement.LineBreak))
 			{
 				foreColor = settings.WhiteSpacesFormat.Color;

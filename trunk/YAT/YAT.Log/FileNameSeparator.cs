@@ -224,7 +224,7 @@ namespace YAT.Log
 		/// </remarks>
 		public static FileNameSeparatorEx[] GetItems()
 		{
-			List<FileNameSeparatorEx> a = new List<FileNameSeparatorEx>(7); // Preset the required capactiy to improve memory management.
+			List<FileNameSeparatorEx> a = new List<FileNameSeparatorEx>(7); // Preset the required capacity to improve memory management.
 			a.Add(new FileNameSeparatorEx(FileNameSeparator.None));
 			a.Add(new FileNameSeparatorEx(FileNameSeparator.Underscore));
 			a.Add(new FileNameSeparatorEx(FileNameSeparator.UnderscoreWithSpaces));

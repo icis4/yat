@@ -101,7 +101,7 @@ namespace MKY.IO.Usb
 		public static DeviceInfo[] GetDevices(HidUsagePage usagePage, bool retrieveStringsFromDevice = true)
 		{
 			DeviceInfo[] dis = GetDevices(retrieveStringsFromDevice);
-			List<DeviceInfo> l = new List<DeviceInfo>(dis.Length); // Preset the required capactiy to improve memory management.
+			List<DeviceInfo> l = new List<DeviceInfo>(dis.Length); // Preset the required capacity to improve memory management.
 
 			foreach (DeviceInfo di in dis)
 			{
@@ -123,7 +123,7 @@ namespace MKY.IO.Usb
 		public static DeviceInfo[] GetDevices(HidUsagePage usagePage, HidUsageId usageId, bool retrieveStringsFromDevice = true)
 		{
 			DeviceInfo[] dis = GetDevices(retrieveStringsFromDevice);
-			List<DeviceInfo> l = new List<DeviceInfo>(dis.Length); // Preset the required capactiy to improve memory management.
+			List<DeviceInfo> l = new List<DeviceInfo>(dis.Length); // Preset the required capacity to improve memory management.
 
 			foreach (DeviceInfo di in dis)
 			{

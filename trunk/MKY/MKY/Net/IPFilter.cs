@@ -411,7 +411,7 @@ namespace MKY.Net
 		/// <summary></summary>
 		public static IPFilterEx[] GetItems()
 		{
-			List<IPFilterEx> a = new List<IPFilterEx>(6); // Preset the required capactiy to improve memory management.
+			List<IPFilterEx> a = new List<IPFilterEx>(6); // Preset the required capacity to improve memory management.
 			a.Add(new IPFilterEx(IPFilter.Any));
 			a.Add(new IPFilterEx(IPFilter.Localhost));
 			a.Add(new IPFilterEx(IPFilter.IPv4Any));

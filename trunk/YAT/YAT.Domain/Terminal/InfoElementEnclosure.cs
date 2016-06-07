@@ -245,7 +245,7 @@ namespace YAT.Domain
 		/// </remarks>
 		public static InfoElementEnclosureEx[] GetItems()
 		{
-			List<InfoElementEnclosureEx> a = new List<InfoElementEnclosureEx>(4); // Preset the required capactiy to improve memory management.
+			List<InfoElementEnclosureEx> a = new List<InfoElementEnclosureEx>(4); // Preset the required capacity to improve memory management.
 			a.Add(new InfoElementEnclosureEx(InfoElementEnclosure.None));
 			a.Add(new InfoElementEnclosureEx(InfoElementEnclosure.Parentheses));
 			a.Add(new InfoElementEnclosureEx(InfoElementEnclosure.SquareBrackets));
