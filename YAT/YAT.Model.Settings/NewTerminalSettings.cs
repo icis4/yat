@@ -39,7 +39,8 @@ namespace YAT.Model.Settings
 
 		private MKY.IO.Ports.SerialPortId serialPortId;
 		private MKY.IO.Serial.SerialPort.SerialCommunicationSettings serialPortCommunication;
-		private MKY.IO.Serial.AutoRetry serialPortAutoReopen;
+		private MKY.IO.Serial.AutoInterval serialPortAliveMonitor;
+		private MKY.IO.Serial.AutoInterval serialPortAutoReopen;
 
 		private IPHostEx socketRemoteHost;
 		private int socketRemoteTcpPort;
@@ -48,7 +49,7 @@ namespace YAT.Model.Settings
 		private IPFilterEx socketLocalFilter;
 		private int socketLocalTcpPort;
 		private int socketLocalUdpPort;
-		private MKY.IO.Serial.AutoRetry tcpClientAutoReconnect;
+		private MKY.IO.Serial.AutoInterval tcpClientAutoReconnect;
 		private MKY.IO.Serial.Socket.UdpServerSendMode udpServerSendMode;
 
 		private MKY.IO.Usb.DeviceInfo usbSerialHidDeviceInfo;
@@ -88,6 +89,7 @@ namespace YAT.Model.Settings
 
 			SerialPortId             = rhs.SerialPortId;
 			SerialPortCommunication  = rhs.SerialPortCommunication;
+			SerialPortAliveMonitor   = rhs.SerialPortAliveMonitor;
 			SerialPortAutoReopen     = rhs.SerialPortAutoReopen;
 
 			SocketRemoteHost         = rhs.SocketRemoteHost;
@@ -127,6 +129,7 @@ namespace YAT.Model.Settings
 
 			SerialPortId             = MKY.IO.Ports.SerialPortId.FirstStandardPort;
 		////SerialPortCommunication is attached as settings object.
+			SerialPortAliveMonitor   = MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorDefault;
 			SerialPortAutoReopen     = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
 
 			SocketRemoteHost         = MKY.IO.Serial.Socket.SocketSettings.RemoteHostDefault;
@@ -216,8 +219,23 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("SerialPortAliveMonitor")]
+		public virtual MKY.IO.Serial.AutoInterval SerialPortAliveMonitor
+		{
+			get { return (this.serialPortAliveMonitor); }
+			set
+			{
+				if (this.serialPortAliveMonitor != value)
+				{
+					this.serialPortAliveMonitor = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("SerialPortAutoReopen")]
-		public virtual MKY.IO.Serial.AutoRetry SerialPortAutoReopen
+		public virtual MKY.IO.Serial.AutoInterval SerialPortAutoReopen
 		{
 			get { return (this.serialPortAutoReopen); }
 			set
@@ -412,7 +430,7 @@ namespace YAT.Model.Settings
 		/// <remarks>Item is already named 'TcpClient', therefore no 'Socket' is prepended.</remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "A type shall spell 'Tcp' like this...")]
 		[XmlElement("TcpClientAutoReconnect")]
-		public virtual MKY.IO.Serial.AutoRetry TcpClientAutoReconnect
+		public virtual MKY.IO.Serial.AutoInterval TcpClientAutoReconnect
 		{
 			get { return (this.tcpClientAutoReconnect); }
 			set
@@ -560,6 +578,7 @@ namespace YAT.Model.Settings
 
 				(SerialPortId             == other.SerialPortId) &&
 				(SerialPortCommunication  == other.SerialPortCommunication) &&
+				(SerialPortAliveMonitor   == other.SerialPortAliveMonitor) &&
 				(SerialPortAutoReopen     == other.SerialPortAutoReopen) &&
 
 				StringEx.EqualsOrdinalIgnoreCase(SocketRemoteHost_ForSerialization, SocketRemoteHost_ForSerialization) &&
@@ -600,6 +619,7 @@ namespace YAT.Model.Settings
 
 				hashCode = (hashCode * 397) ^ (SerialPortId                       != null ? SerialPortId                      .GetHashCode() : 0); // May be 'null' if no ports are available!
 				hashCode = (hashCode * 397) ^  SerialPortCommunication                                                        .GetHashCode();
+				hashCode = (hashCode * 397) ^  SerialPortAliveMonitor                                                         .GetHashCode();
 				hashCode = (hashCode * 397) ^  SerialPortAutoReopen                                                           .GetHashCode();
 
 				hashCode = (hashCode * 397) ^ ( SocketRemoteHost_ForSerialization != null ?  SocketRemoteHost_ForSerialization.GetHashCode() : 0);

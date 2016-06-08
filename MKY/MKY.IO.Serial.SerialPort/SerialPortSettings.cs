@@ -41,9 +41,21 @@ namespace MKY.IO.Serial.SerialPort
 		/// Implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
-		public static AutoRetry AutoReopenDefault
+		public static AutoInterval AliveMonitorDefault
 		{
-			get { return (new AutoRetry(true, 2000)); }
+			get { return (new AutoInterval(true, 500)); }
+		}
+
+		/// <summary></summary>
+		public const int AliveMonitorMinInterval = 100;
+
+		/// <remarks>
+		/// Implemented as property that creates a new object on each call to ensure that
+		/// there aren't multiple clients referencing (and modifying) the same object.
+		/// </remarks>
+		public static AutoInterval AutoReopenDefault
+		{
+			get { return (new AutoInterval(true, 2000)); }
 		}
 
 		/// <summary></summary>
@@ -97,7 +109,8 @@ namespace MKY.IO.Serial.SerialPort
 		private SerialPortId portId;
 
 		private SerialCommunicationSettings communication;
-		private AutoRetry autoReopen;
+		private AutoInterval aliveMonitor;
+		private AutoInterval autoReopen;
 		private OutputBufferSize outputBufferSize;
 		private ChunkSize maxChunkSize;
 		private SendRate maxSendRate;
@@ -168,7 +181,8 @@ namespace MKY.IO.Serial.SerialPort
 				PortId = null;
 
 			Communication       = new SerialCommunicationSettings(rhs.Communication);
-			AutoReopen          = rhs.autoReopen;
+			AliveMonitor        = rhs.AliveMonitor;
+			AutoReopen          = rhs.AutoReopen;
 			OutputBufferSize    = rhs.OutputBufferSize;
 			MaxChunkSize        = rhs.MaxChunkSize;
 			MaxSendRate         = rhs.MaxSendRate;
@@ -193,6 +207,7 @@ namespace MKY.IO.Serial.SerialPort
 			// Attention: See remarks above.
 			PortId              = SerialPortId.FirstStandardPort;
 
+			AliveMonitor        = AliveMonitorDefault;
 			AutoReopen          = AutoReopenDefault;
 			OutputBufferSize    = OutputBufferSizeDefault;
 			MaxChunkSize        = MaxChunkSizeDefault;
@@ -242,8 +257,23 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary></summary>
+		[XmlElement("AliveMonitor")]
+		public virtual AutoInterval AliveMonitor
+		{
+			get { return (this.aliveMonitor); }
+			set
+			{
+				if (this.aliveMonitor != value)
+				{
+					this.aliveMonitor = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("AutoReopen")]
-		public virtual AutoRetry AutoReopen
+		public virtual AutoInterval AutoReopen
 		{
 			get { return (this.autoReopen); }
 			set
@@ -373,6 +403,7 @@ namespace MKY.IO.Serial.SerialPort
 
 				(PortId              == other.PortId) &&
 
+				(AliveMonitor        == other.AliveMonitor) &&
 				(AutoReopen          == other.AutoReopen) &&
 				(OutputBufferSize    == other.OutputBufferSize) &&
 				(MaxChunkSize        == other.MaxChunkSize) &&
@@ -398,6 +429,7 @@ namespace MKY.IO.Serial.SerialPort
 
 				hashCode = (hashCode * 397) ^ (PortId != null ? PortId.GetHashCode() : 0); // May be 'null' if no ports are available!
 
+				hashCode = (hashCode * 397) ^  AliveMonitor           .GetHashCode();
 				hashCode = (hashCode * 397) ^  AutoReopen             .GetHashCode();
 				hashCode = (hashCode * 397) ^  OutputBufferSize       .GetHashCode();
 				hashCode = (hashCode * 397) ^  MaxChunkSize           .GetHashCode();

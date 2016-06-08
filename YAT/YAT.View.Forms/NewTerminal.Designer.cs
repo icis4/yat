@@ -159,6 +159,7 @@ namespace YAT.View.Forms
 			this.serialPortSettings.ParityChanged += new System.EventHandler(this.serialPortSettings_ParityChanged);
 			this.serialPortSettings.StopBitsChanged += new System.EventHandler(this.serialPortSettings_StopBitsChanged);
 			this.serialPortSettings.FlowControlChanged += new System.EventHandler(this.serialPortSettings_FlowControlChanged);
+			this.serialPortSettings.AliveMonitorChanged += new System.EventHandler(this.serialPortSettings_AliveMonitorChanged);
 			this.serialPortSettings.AutoReopenChanged += new System.EventHandler(this.serialPortSettings_AutoReopenChanged);
 			// 
 			// serialPortSelection

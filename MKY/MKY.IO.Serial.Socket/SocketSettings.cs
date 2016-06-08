@@ -84,9 +84,9 @@ namespace MKY.IO.Serial.Socket
 		/// Must be implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
-		public static AutoRetry TcpClientAutoReconnectDefault
+		public static AutoInterval TcpClientAutoReconnectDefault
 		{
-			get { return (new AutoRetry(false, 500)); }
+			get { return (new AutoInterval(false, 500)); }
 		}
 
 		/// <summary></summary>
@@ -115,7 +115,7 @@ namespace MKY.IO.Serial.Socket
 		private int localTcpPort;
 		private int localUdpPort;
 
-		private AutoRetry tcpClientAutoReconnect;
+		private AutoInterval tcpClientAutoReconnect;
 		private UdpServerSendMode udpServerSendMode;
 
 		#endregion
@@ -146,7 +146,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>
 		/// Creates new port settings with specified arguments.
 		/// </summary>
-		public SocketSettings(SocketType type, string remoteHost, int remoteTcpPort, int remoteUdpPort, IPNetworkInterfaceDescriptorPair localInterface, string localFilter, int localTcpPort, int localUdpPort, AutoRetry tcpClientAutoReconnect, UdpServerSendMode udpServerSendMode)
+		public SocketSettings(SocketType type, string remoteHost, int remoteTcpPort, int remoteUdpPort, IPNetworkInterfaceDescriptorPair localInterface, string localFilter, int localTcpPort, int localUdpPort, AutoInterval tcpClientAutoReconnect, UdpServerSendMode udpServerSendMode)
 		{
 			Type           = type;
 
@@ -468,7 +468,7 @@ namespace MKY.IO.Serial.Socket
 
 		/// <summary></summary>
 		[XmlElement("TcpClientAutoReconnect")]
-		public virtual AutoRetry TcpClientAutoReconnect
+		public virtual AutoInterval TcpClientAutoReconnect
 		{
 			get { return (this.tcpClientAutoReconnect); }
 			set
@@ -634,7 +634,7 @@ namespace MKY.IO.Serial.Socket
 										int arInterval;
 										if (int.TryParse(sa[10], out arInterval))
 										{
-											AutoRetry autoRetry = new AutoRetry(arEnabled, arInterval);
+											AutoInterval autoRetry = new AutoInterval(arEnabled, arInterval);
 
 											int smValue;
 											if (int.TryParse(sa[11], out smValue))

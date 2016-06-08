@@ -120,6 +120,36 @@
   <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="comboBox_FlowControl.ToolTip" xml:space="preserve">
+    <value>Manual: RFR/DTR and/or XOn/XOff set manually.
+RS-485:  RFR is set high while sending.
+
+Note that RFR (Ready For Receiving) is the official name
+of the formerly called RTS (Request To Send) control line.</value>
+  </data>
+  <data name="checkBox_AutoReopen.ToolTip" xml:space="preserve">
+    <value>Useful to automatically reopen a port
+after disconnect/reconnected or after
+a power cycle of a device.
+
+Note that this is mainly useful together
+with the option above, but can also be
+used independently, e.g. after trying to
+send to a disconnected device, or after
+the port got closed due to an error.</value>
+  </data>
+  <data name="checkBox_AliveMonitor.ToolTip" xml:space="preserve">
+    <value>Useful to detect a disconnect of e.g. an
+USB/COM converter or a docking station.
+
+Note that this feature does not work on
+some internal serial COM ports as well as
+some USB/COM converters such as the
+Microchip MCP2221 USB-to-UART/I2C
+bridge. The bug preventing this to work
+is located in the .NET SerialPort class but
+Microsoft seems to have no plans fixing it.</value>
+  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>62</value>
   </metadata>

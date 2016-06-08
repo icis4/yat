@@ -127,7 +127,7 @@ namespace MKY.IO.Serial.Socket
 		private IPHostEx remoteHost;
 		private int remotePort;
 		private IPNetworkInterfaceEx localInterface;
-		private AutoRetry autoReconnect;
+		private AutoInterval autoReconnect;
 
 		private SocketState state = SocketState.Reset;
 		private ReaderWriterLockSlim stateLock = new ReaderWriterLockSlim();
@@ -200,14 +200,14 @@ namespace MKY.IO.Serial.Socket
 		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is is <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
 		public TcpClient(int instanceId, IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface)
-			: this(instanceId, remoteHost, remotePort, localInterface, new AutoRetry())
+			: this(instanceId, remoteHost, remotePort, localInterface, new AutoInterval())
 		{
 		}
 
 		/// <summary>Creates a TCP/IP client socket.</summary>
 		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is is <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
-		public TcpClient(IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, AutoRetry autoReconnect)
+		public TcpClient(IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, AutoInterval autoReconnect)
 			: this(SocketBase.NextInstanceId, remoteHost, remotePort, localInterface, autoReconnect)
 		{
 		}
@@ -215,7 +215,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>Creates a TCP/IP client socket.</summary>
 		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is is <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
-		public TcpClient(int instanceId, IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, AutoRetry autoReconnect)
+		public TcpClient(int instanceId, IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, AutoInterval autoReconnect)
 		{
 			if (remoteHost == null)     throw (new ArgumentNullException("remoteHost"));
 			if (localInterface == null) throw (new ArgumentNullException("localInterface"));
@@ -351,7 +351,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		public virtual AutoRetry AutoReconnect
+		public virtual AutoInterval AutoReconnect
 		{
 			get
 			{

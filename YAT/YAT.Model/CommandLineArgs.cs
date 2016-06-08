@@ -144,8 +144,18 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "SerialPortAutoReopen", ShortName = "npar", Description =
-			"When device is no longer available, e.g. a USB/Serial converter, try to reopen the port every given milliseconds. " +
+		[OptionArg(Name = "SerialPortAliveMonitor", ShortName = "spam", Description =
+			"When device is connected, e.g. a USB/COM converter, check the port every given milliseconds. " +
+			"Must be positive integral value equal or greater than 100. A common value is 500. " +
+			"The special value 0 indicates disabled. " +
+			"By default, this feature is enabled and set to 500 milliseconds." + EnvironmentEx.NewLineConstWorkaround +
+			"Only applies to serial COM ports.")]
+		public int SerialPortAliveMonitor;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[OptionArg(Name = "SerialPortAutoReopen", ShortName = "spar", Description =
+			"When device is no longer available, e.g. a USB/COM converter, try to reopen the port every given milliseconds. " +
 			"Must be positive integral value equal or greater than 100. A common value is 2000. " +
 			"The special value 0 indicates disabled. " +
 			"By default, this feature is enabled and set to 2000 milliseconds." + EnvironmentEx.NewLineConstWorkaround +

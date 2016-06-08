@@ -156,8 +156,8 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Alive timer detects port disconnects, i.e. when a USB to serial converter is disconnected.
 		/// </summary>
-		private System.Timers.Timer aliveTicker;
-		private object aliveTickerSyncObj = new object();
+		private System.Timers.Timer aliveMonitor;
+		private object aliveMonitorSyncObj = new object();
 
 		private System.Timers.Timer reopenTimeout;
 		private object reopenTimeoutSyncObj = new object();
@@ -349,14 +349,6 @@ namespace MKY.IO.Serial.SerialPort
 						return (false);
 					}
 				}
-			}
-		}
-
-		private bool AutoReopenEnabledAndAllowed
-		{
-			get
-			{
-				return (!IsDisposed && IsStarted && !IsOpen && this.settings.AutoReopen.Enabled); // Check 'IsDisposed' first!
 			}
 		}
 
@@ -704,6 +696,544 @@ namespace MKY.IO.Serial.SerialPort
 				return (false);
 			}
 		}
+
+		// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.Usb.SerialHidDevice too!
+		// Changes here must most likely be applied there too.
+
+		/// <summary></summary>
+		protected virtual void AssumeOutputXOn()
+		{
+			this.iXOnXOffHelper.OutputIsXOn = true;
+
+			OnIOControlChanged(EventArgs.Empty);
+		}
+
+		/// <summary>
+		/// Signals the other communication endpoint that this device is in XOn state.
+		/// </summary>
+		public virtual void SignalInputXOn()
+		{
+			AssertNotDisposed();
+
+			Send(XOnXOff.XOnByte);
+		}
+
+		/// <summary>
+		/// Signals the other communication endpoint that this device is in XOff state.
+		/// </summary>
+		public virtual void SignalInputXOff()
+		{
+			AssertNotDisposed();
+
+			Send(XOnXOff.XOffByte);
+		}
+
+		/// <summary>
+		/// Toggles the input XOn/XOff state.
+		/// </summary>
+		public virtual void ToggleInputXOnXOff()
+		{
+			// AssertNotDisposed() and FlowControlManagesXOnXOffManually { get; } are called by the
+			// 'InputIsXOn' property.
+
+			if (InputIsXOn)
+				SignalInputXOff();
+			else
+				SignalInputXOn();
+		}
+
+		/// <summary>
+		/// Resets the XOn/XOff signaling count.
+		/// </summary>
+		public virtual void ResetXOnXOffCount()
+		{
+			AssertNotDisposed();
+
+			this.iXOnXOffHelper.ResetCounts();
+
+			OnIOControlChanged(EventArgs.Empty);
+		}
+
+		/// <summary>
+		/// Resets the flow control signaling count.
+		/// </summary>
+		public virtual void ResetFlowControlCount()
+		{
+			// AssertNotDisposed() is called by 'ResetXOnXOffCount()' below.
+
+			lock (this.portSyncObj)
+			{
+				ResetXOnXOffCount();
+
+				if (this.port != null)
+					this.port.ResetControlPinCount();
+			}
+		}
+
+		/// <summary>
+		/// Resets the break count.
+		/// </summary>
+		public virtual void ResetBreakCount()
+		{
+			AssertNotDisposed();
+
+			lock (this.portSyncObj)
+			{
+				if (this.port != null)
+					this.port.ResetBreakCount();
+			}
+		}
+
+		#endregion
+
+		#region Settings Methods
+		//==========================================================================================
+		// Settings Methods
+		//==========================================================================================
+
+		private void ApplySettings()
+		{
+			lock (this.portSyncObj)
+			{
+				if (this.port == null)
+					return;
+
+				this.port.PortId = this.settings.PortId;
+
+				if (this.settings.OutputBufferSize.Enabled)
+					this.port.WriteBufferSize = this.settings.OutputBufferSize.Size;
+
+				SerialCommunicationSettings s = this.settings.Communication;
+				this.port.BaudRate  = (MKY.IO.Ports.BaudRateEx)s.BaudRate;
+				this.port.DataBits  = (MKY.IO.Ports.DataBitsEx)s.DataBits;
+				this.port.Parity    = s.Parity;
+				this.port.StopBits  = s.StopBits;
+				this.port.Handshake = (SerialFlowControlEx)s.FlowControl;
+
+				switch (s.RfrPin)
+				{
+					case SerialControlPinState.Automatic: /* Do not access the pin! */ break;
+					case SerialControlPinState.Enabled:   this.port.RfrEnable = true;  break;
+					case SerialControlPinState.Disabled:  this.port.RfrEnable = false; break;
+					default: throw (new NotSupportedException("Program execution should never get here,'" + s.RfrPin.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+
+				switch (s.DtrPin)
+				{
+					case SerialControlPinState.Automatic: /* Do not access the pin! */ break;
+					case SerialControlPinState.Enabled:   this.port.DtrEnable = true;  break;
+					case SerialControlPinState.Disabled:  this.port.DtrEnable = false; break;
+					default: throw (new NotSupportedException("Program execution should never get here,'" + s.DtrPin.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+		}
+
+		#endregion
+
+		#region State Methods
+		//==========================================================================================
+		// State Methods
+		//==========================================================================================
+
+		private State GetStateSynchronized()
+		{
+			lock (this.stateSyncObj)
+				return (this.state);
+		}
+
+		private void SetStateSynchronizedAndNotify(State state, bool withNotify = true)
+		{
+#if (DEBUG)
+			State oldState = GetStateSynchronized();
+#endif
+			lock (this.stateSyncObj)
+				this.state = state;
+
+			if (withNotify)
+			{
+#if (DEBUG)
+				if (this.state != oldState)
+					DebugMessage("State has changed from " + oldState + " to " + state + ".");
+				else
+					DebugMessage("State is already " + oldState + ".");
+#endif
+				// Notify asynchronously because the state will get changed from asynchronous items
+				// such as the reopen timer. In case of that timer, the port needs to be locked to
+				// ensure proper operation. In such case, a synchronous notification callback would
+				// likely result in a deadlock, in case the callback sink would call any method or
+				// property that also locks the port!
+
+				OnIOChangedAsync(EventArgs.Empty);
+				OnIOControlChangedAsync(EventArgs.Empty);
+			}
+		}
+
+		#endregion
+
+		#region Simple Port Methods
+		//==========================================================================================
+		// Simple Port Methods
+		//==========================================================================================
+
+		private void CreatePort()
+		{
+			lock (this.portSyncObj)
+			{
+				if (this.port != null)
+					CloseAndDisposePort();
+
+				this.port = new Ports.SerialPortEx();
+				this.port.WriteTimeout = 50; // By default 'Timeout.Infinite', but that leads to
+				// deadlock in case of disabled flow control! Win32 used to default to 500 ms, but
+				// that sounds way too long. 1 ms doesn't look like a good idea either, since an
+				// exception per ms won't help good performance... 50 ms seems to works fine, still
+				// it's just a best guess...
+
+				this.port.DataReceived  += new Ports.SerialDataReceivedEventHandler (port_DataReceived);
+				this.port.PinChanged    += new Ports.SerialPinChangedEventHandler   (port_PinChanged);
+				this.port.ErrorReceived += new Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
+			}
+		}
+
+		private void OpenPort()
+		{
+			lock (this.portSyncObj)
+			{
+				if (this.port != null)
+				{
+					if (!this.port.IsOpen)
+						this.port.Open();
+				}
+			}
+		}
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		private void CloseAndDisposePort()
+		{
+			lock (this.portSyncObj)
+			{
+				if (this.port != null)
+				{
+					try
+					{
+						if (this.port.IsOpen)
+							this.port.Close();
+					}
+					finally
+					{
+						this.port.Dispose();
+						this.port = null;
+					}
+				}
+			}
+		}
+
+		#endregion
+
+		#region Complex Port Methods
+		//==========================================================================================
+		// Complex Port Methods
+		//==========================================================================================
+
+		/// <summary></summary>
+		private void CreateAndOpenPortAndThreadsAndNotify()
+		{
+			lock (this.portSyncObj) // Ensure that whole operation is performed at once!
+			{
+				CreatePort();    // Port must be created each time because this.port.Close()
+				ApplySettings(); //   disposes the underlying IO instance
+				OpenPort();
+			}
+
+			StartThreads();
+
+			if (this.settings.AliveMonitor.Enabled)
+				StartAliveMonitor();
+
+			SetStateSynchronizedAndNotify(State.Opened); // Notify outside lock!
+
+			// Handle initial XOn/XOff state:
+			if (this.settings.Communication.FlowControlUsesXOnXOff)
+			{
+				AssumeOutputXOn();
+
+				// Immediately send XOn if software flow control is enabled to ensure that
+				//   device gets put into XOn if it was XOff before.
+				switch (this.settings.Communication.FlowControl)
+				{
+					case SerialFlowControl.ManualSoftware:
+					case SerialFlowControl.ManualCombined:
+					{
+						if (this.iXOnXOffHelper.ManualInputWasXOn)
+							SignalInputXOn();
+
+						break;
+					}
+
+					default:
+					{
+						SignalInputXOn();
+						break;
+					}
+				}
+			}
+		}
+
+		private delegate void WithNotifyDelegate(bool withNotify = true);
+
+		private void RestartOrResetPortAndThreadsAndNotify(bool withNotify = true)
+		{
+			if (this.settings.AutoReopen.Enabled)
+			{
+				StopAndDisposeAliveMonitor();
+				StopAndDisposeControlEventTimeout();
+				StopThreads();
+
+				WithNotifyDelegate asyncInvoker = new WithNotifyDelegate(CloseAndDisposePortAndStartReopenTimeoutAndNotifyAsync);
+				asyncInvoker.BeginInvoke(withNotify, null, null);
+			}
+			else
+			{
+				ResetPortAndThreadsAndNotify();
+			}
+		}
+
+		/// <remarks>See remarks on top of MKY.IO.Ports.SerialPort.SerialPortEx why asynchronously is required.</remarks>
+		[CallingContract(IsNeverMainThread = true, Rationale = "This function is called using BeginInvoke() only.")]
+		private void CloseAndDisposePortAndStartReopenTimeoutAndNotifyAsync(bool withNotify = true)
+		{
+			CloseAndDisposePort();
+
+			SetStateSynchronizedAndNotify(State.Closed, withNotify);
+
+			StartReopenTimeout();
+
+			SetStateSynchronizedAndNotify(State.WaitingForReopen, withNotify);
+		}
+
+		private void ResetPortAndThreadsAndNotify(bool withNotify = true)
+		{
+			StopAndDisposeReopenTimeout();
+			StopAndDisposeAliveMonitor();
+			StopAndDisposeControlEventTimeout();
+			StopThreads();
+
+			WithNotifyDelegate asyncInvoker = new WithNotifyDelegate(CloseAndDisposePortAndNotifyAsync);
+			asyncInvoker.BeginInvoke(withNotify, null, null);
+		}
+
+		/// <remarks>See remarks on top of MKY.IO.Ports.SerialPort.SerialPortEx why asynchronously is required.</remarks>
+		[CallingContract(IsNeverMainThread = true, Rationale = "This function is called using BeginInvoke() only.")]
+		private void CloseAndDisposePortAndNotifyAsync(bool withNotify = true)
+		{
+			CloseAndDisposePort();
+
+			SetStateSynchronizedAndNotify(State.Reset, withNotify);
+		}
+
+		#endregion
+
+		#region Port Threads
+		//==========================================================================================
+		// Port Threads
+		//==========================================================================================
+
+		private void StartThreads()
+		{
+			lock (this.sendThreadSyncObj)
+			{
+				if (this.sendThread == null)
+				{
+					this.sendThreadRunFlag = true;
+					this.sendThreadEvent = new AutoResetEvent(false);
+					this.sendThread = new Thread(new ThreadStart(SendThread));
+					this.sendThread.Name = ToShortPortString() + " Send Thread";
+					this.sendThread.Start();
+				}
+			}
+
+			lock (this.receiveThreadSyncObj)
+			{
+				if (this.receiveThread == null)
+				{
+					this.receiveThreadRunFlag = true;
+					this.receiveThreadEvent = new AutoResetEvent(false);
+					this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
+					this.receiveThread.Name = ToShortPortString() + " Receive Thread";
+					this.receiveThread.Start();
+				}
+			}
+		}
+
+		/// <remarks>
+		/// Especially useful during potentially dangerous creation and disposal sequence.
+		/// </remarks>
+		private void SignalThreadsSafely()
+		{
+			SignalSendThreadSafely();
+			SignalReceiveThreadSafely();
+		}
+
+		/// <remarks>
+		/// Especially useful during potentially dangerous creation and disposal sequence.
+		/// </remarks>
+		private void SignalSendThreadSafely()
+		{
+			try
+			{
+				if (this.sendThreadEvent != null)
+					this.sendThreadEvent.Set();
+			}
+			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+
+			// Catch 'NullReferenceException' for the unlikely case that the event has just been
+			// disposed after the if-check. This way, the event doesn't need to be locked (which
+			// is a relatively time-consuming operation). Still keep the if-check for the normal
+			// cases.
+		}
+
+		/// <remarks>
+		/// Especially useful during potentially dangerous creation and disposal sequence.
+		/// </remarks>
+		private void SignalReceiveThreadSafely()
+		{
+			try
+			{
+				if (this.receiveThreadEvent != null)
+					this.receiveThreadEvent.Set();
+			}
+			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+
+			// Catch 'NullReferenceException' for the unlikely case that the event has just been
+			// disposed after the if-check. This way, the event doesn't need to be locked (which
+			// is a relatively time-consuming operation). Still keep the if-check for the normal
+			// cases.
+		}
+
+		private void StopThreads()
+		{
+			// First clear both flags to reduce the time to stop the receive thread, it may already
+			// be signaled while receiving data or while the send thread is still running.
+			lock (this.sendThreadSyncObj)
+				this.sendThreadRunFlag = false;
+			lock (this.receiveThreadSyncObj)
+				this.receiveThreadRunFlag = false;
+
+			lock (this.sendThreadSyncObj)
+			{
+				if (this.sendThread != null)
+				{
+					// Attention, this method may also be called from exception handler within SendThread()!
+					if (this.sendThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId)
+					{
+						DebugThreadStateMessage("SendThread() gets stopped...");
+
+						try
+						{
+							int accumulatedTimeout = 0;
+							int interval = 0; // Use a relatively short random interval to trigger the thread:
+							while (!this.sendThread.Join(interval = staticRandom.Next(5, 20)))
+							{
+								SignalSendThreadSafely();
+
+								accumulatedTimeout += interval;
+								if (accumulatedTimeout >= ThreadWaitTimeout)
+								{
+									DebugThreadStateMessage("...failed! Aborting...");
+									DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+									this.sendThread.Abort();
+									break;
+								}
+
+								DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
+							}
+						}
+						catch (ThreadStateException)
+						{
+							// Ignore thread state exceptions such as "Thread has not been started" and
+							// "Thread cannot be aborted" as it just needs to be ensured that the thread
+							// has or will be terminated for sure.
+
+							DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						}
+						finally
+						{
+							this.sendThread = null;
+						}
+					} // Not itself thread.
+
+					DebugThreadStateMessage("...successfully terminated.");
+				}
+
+				if (this.sendThreadEvent != null)
+				{
+					try     { this.sendThreadEvent.Close(); }
+					finally { this.sendThreadEvent = null; }
+				}
+			}
+
+			lock (this.receiveThreadSyncObj)
+			{
+				if (this.receiveThread != null)
+				{
+					// Attention, this method may also be called from exception handler within ReceiveThread()!
+					if (this.receiveThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId)
+					{
+						DebugThreadStateMessage("ReceiveThread() gets stopped...");
+
+						try
+						{
+							int accumulatedTimeout = 0;
+							int interval = 0; // Use a relatively short random interval to trigger the thread:
+							while (!this.receiveThread.Join(interval = staticRandom.Next(5, 20)))
+							{
+								SignalReceiveThreadSafely();
+
+								accumulatedTimeout += interval;
+								if (accumulatedTimeout >= ThreadWaitTimeout)
+								{
+									DebugThreadStateMessage("...failed! Aborting...");
+									DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+									this.receiveThread.Abort();
+									break;
+								}
+
+								DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
+							}
+						}
+						catch (ThreadStateException)
+						{
+							// Ignore thread state exceptions such as "Thread has not been started" and
+							// "Thread cannot be aborted" as it just needs to be ensured that the thread
+							// has or will be terminated for sure.
+
+							DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						}
+						finally
+						{
+							this.receiveThread = null;
+						}
+					} // Not itself thread.
+
+					DebugThreadStateMessage("...successfully terminated.");
+				}
+
+				if (this.receiveThreadEvent != null)
+				{
+					try     { this.receiveThreadEvent.Close(); }
+					finally { this.receiveThreadEvent = null; }
+				}
+			}
+		}
+
+		#endregion
+
+		#region Send Thread
+		//==========================================================================================
+		// Send Thread
+		//==========================================================================================
 
 		/// <summary>
 		/// Asynchronously manage outgoing send requests to ensure that software and/or hardware
@@ -1217,534 +1747,6 @@ namespace MKY.IO.Serial.SerialPort
 			);
 		}
 
-		// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.Usb.SerialHidDevice too!
-		// Changes here must most likely be applied there too.
-
-		/// <summary></summary>
-		protected virtual void AssumeOutputXOn()
-		{
-			this.iXOnXOffHelper.OutputIsXOn = true;
-
-			OnIOControlChanged(EventArgs.Empty);
-		}
-
-		/// <summary>
-		/// Signals the other communication endpoint that this device is in XOn state.
-		/// </summary>
-		public virtual void SignalInputXOn()
-		{
-			AssertNotDisposed();
-
-			Send(XOnXOff.XOnByte);
-		}
-
-		/// <summary>
-		/// Signals the other communication endpoint that this device is in XOff state.
-		/// </summary>
-		public virtual void SignalInputXOff()
-		{
-			AssertNotDisposed();
-
-			Send(XOnXOff.XOffByte);
-		}
-
-		/// <summary>
-		/// Toggles the input XOn/XOff state.
-		/// </summary>
-		public virtual void ToggleInputXOnXOff()
-		{
-			// AssertNotDisposed() and FlowControlManagesXOnXOffManually { get; } are called by the
-			// 'InputIsXOn' property.
-
-			if (InputIsXOn)
-				SignalInputXOff();
-			else
-				SignalInputXOn();
-		}
-
-		/// <summary>
-		/// Resets the XOn/XOff signaling count.
-		/// </summary>
-		public virtual void ResetXOnXOffCount()
-		{
-			AssertNotDisposed();
-
-			this.iXOnXOffHelper.ResetCounts();
-
-			OnIOControlChanged(EventArgs.Empty);
-		}
-
-		/// <summary>
-		/// Resets the flow control signaling count.
-		/// </summary>
-		public virtual void ResetFlowControlCount()
-		{
-			// AssertNotDisposed() is called by 'ResetXOnXOffCount()' below.
-
-			lock (this.portSyncObj)
-			{
-				ResetXOnXOffCount();
-
-				if (this.port != null)
-					this.port.ResetControlPinCount();
-			}
-		}
-
-		/// <summary>
-		/// Resets the break count.
-		/// </summary>
-		public virtual void ResetBreakCount()
-		{
-			AssertNotDisposed();
-
-			lock (this.portSyncObj)
-			{
-				if (this.port != null)
-					this.port.ResetBreakCount();
-			}
-		}
-
-		#endregion
-
-		#region Settings Methods
-		//==========================================================================================
-		// Settings Methods
-		//==========================================================================================
-
-		private void ApplySettings()
-		{
-			lock (this.portSyncObj)
-			{
-				if (this.port == null)
-					return;
-
-				this.port.PortId = this.settings.PortId;
-
-				if (this.settings.OutputBufferSize.Enabled)
-					this.port.WriteBufferSize = this.settings.OutputBufferSize.Size;
-
-				SerialCommunicationSettings s = this.settings.Communication;
-				this.port.BaudRate  = (MKY.IO.Ports.BaudRateEx)s.BaudRate;
-				this.port.DataBits  = (MKY.IO.Ports.DataBitsEx)s.DataBits;
-				this.port.Parity    = s.Parity;
-				this.port.StopBits  = s.StopBits;
-				this.port.Handshake = (SerialFlowControlEx)s.FlowControl;
-
-				switch (s.RfrPin)
-				{
-					case SerialControlPinState.Automatic: /* Do not access the pin! */ break;
-					case SerialControlPinState.Enabled:   this.port.RfrEnable = true;  break;
-					case SerialControlPinState.Disabled:  this.port.RfrEnable = false; break;
-					default: throw (new NotSupportedException("Program execution should never get here,'" + s.RfrPin.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-
-				switch (s.DtrPin)
-				{
-					case SerialControlPinState.Automatic: /* Do not access the pin! */ break;
-					case SerialControlPinState.Enabled:   this.port.DtrEnable = true;  break;
-					case SerialControlPinState.Disabled:  this.port.DtrEnable = false; break;
-					default: throw (new NotSupportedException("Program execution should never get here,'" + s.DtrPin.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-			}
-		}
-
-		#endregion
-
-		#region State Methods
-		//==========================================================================================
-		// State Methods
-		//==========================================================================================
-
-		private State GetStateSynchronized()
-		{
-			lock (this.stateSyncObj)
-				return (this.state);
-		}
-
-		private void SetStateSynchronizedAndNotify(State state, bool withNotify = true)
-		{
-#if (DEBUG)
-			State oldState = GetStateSynchronized();
-#endif
-			lock (this.stateSyncObj)
-				this.state = state;
-
-			if (withNotify)
-			{
-#if (DEBUG)
-				if (this.state != oldState)
-					DebugMessage("State has changed from " + oldState + " to " + state + ".");
-				else
-					DebugMessage("State is already " + oldState + ".");
-#endif
-				// Notify asynchronously because the state will get changed from asynchronous items
-				// such as the reopen timer. In case of that timer, the port needs to be locked to
-				// ensure proper operation. In such case, a synchronous notification callback would
-				// likely result in a deadlock, in case the callback sink would call any method or
-				// property that also locks the port!
-
-				OnIOChangedAsync(EventArgs.Empty);
-				OnIOControlChangedAsync(EventArgs.Empty);
-			}
-		}
-
-		#endregion
-
-		#region Simple Port Methods
-		//==========================================================================================
-		// Simple Port Methods
-		//==========================================================================================
-
-		private void CreatePort()
-		{
-			lock (this.portSyncObj)
-			{
-				if (this.port != null)
-					CloseAndDisposePort();
-
-				this.port = new Ports.SerialPortEx();
-				this.port.WriteTimeout = 50; // By default 'Timeout.Infinite', but that leads to
-				// deadlock in case of disabled flow control! Win32 used to default to 500 ms, but
-				// that sounds way too long. 1 ms doesn't look like a good idea either, since an
-				// exception per ms won't help good performance... 50 ms seems to works fine, still
-				// it's just a best guess...
-
-				this.port.DataReceived  += new Ports.SerialDataReceivedEventHandler (port_DataReceived);
-				this.port.PinChanged    += new Ports.SerialPinChangedEventHandler   (port_PinChanged);
-				this.port.ErrorReceived += new Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
-			}
-		}
-
-		private void OpenPort()
-		{
-			lock (this.portSyncObj)
-			{
-				if (this.port != null)
-				{
-					if (!this.port.IsOpen)
-						this.port.Open();
-				}
-			}
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private void CloseAndDisposePort()
-		{
-			lock (this.portSyncObj)
-			{
-				if (this.port != null)
-				{
-					try
-					{
-						if (this.port.IsOpen)
-							this.port.Close();
-					}
-					finally
-					{
-						this.port.Dispose();
-						this.port = null;
-					}
-				}
-			}
-		}
-
-		#endregion
-
-		#region Complex Port Methods
-		//==========================================================================================
-		// Complex Port Methods
-		//==========================================================================================
-
-		/// <summary></summary>
-		private void CreateAndOpenPortAndThreadsAndNotify()
-		{
-			lock (this.portSyncObj) // Ensure that whole operation is performed at once!
-			{
-				CreatePort();    // Port must be created each time because this.port.Close()
-				ApplySettings(); //   disposes the underlying IO instance
-				OpenPort();
-			}
-
-			StartThreads();
-			StartAliveTicker();
-			SetStateSynchronizedAndNotify(State.Opened); // Notify outside lock!
-
-			// Handle initial XOn/XOff state:
-			if (this.settings.Communication.FlowControlUsesXOnXOff)
-			{
-				AssumeOutputXOn();
-
-				// Immediately send XOn if software flow control is enabled to ensure that
-				//   device gets put into XOn if it was XOff before.
-				switch (this.settings.Communication.FlowControl)
-				{
-					case SerialFlowControl.ManualSoftware:
-					case SerialFlowControl.ManualCombined:
-					{
-						if (this.iXOnXOffHelper.ManualInputWasXOn)
-							SignalInputXOn();
-
-						break;
-					}
-
-					default:
-					{
-						SignalInputXOn();
-						break;
-					}
-				}
-			}
-		}
-
-		private delegate void WithNotifyDelegate(bool withNotify = true);
-
-		private void RestartOrResetPortAndThreadsAndNotify(bool withNotify = true)
-		{
-			if (this.settings.AutoReopen.Enabled)
-			{
-				StopAndDisposeAliveTicker();
-				StopAndDisposeControlEventTimeout();
-				StopThreads();
-
-				WithNotifyDelegate asyncInvoker = new WithNotifyDelegate(CloseAndDisposePortAndStartReopenTimeoutAndNotifyAsync);
-				asyncInvoker.BeginInvoke(withNotify, null, null);
-			}
-			else
-			{
-				ResetPortAndThreadsAndNotify();
-			}
-		}
-
-		/// <remarks>See remarks on top of MKY.IO.Ports.SerialPort.SerialPortEx why asynchronously is required.</remarks>
-		[CallingContract(IsNeverMainThread = true, Rationale = "This function is called using BeginInvoke() only.")]
-		private void CloseAndDisposePortAndStartReopenTimeoutAndNotifyAsync(bool withNotify = true)
-		{
-			CloseAndDisposePort();
-
-			SetStateSynchronizedAndNotify(State.Closed, withNotify);
-
-			StartReopenTimeout();
-
-			SetStateSynchronizedAndNotify(State.WaitingForReopen, withNotify);
-		}
-
-		private void ResetPortAndThreadsAndNotify(bool withNotify = true)
-		{
-			StopAndDisposeReopenTimeout();
-			StopAndDisposeAliveTicker();
-			StopAndDisposeControlEventTimeout();
-			StopThreads();
-
-			WithNotifyDelegate asyncInvoker = new WithNotifyDelegate(CloseAndDisposePortAndNotifyAsync);
-			asyncInvoker.BeginInvoke(withNotify, null, null);
-		}
-
-		/// <remarks>See remarks on top of MKY.IO.Ports.SerialPort.SerialPortEx why asynchronously is required.</remarks>
-		[CallingContract(IsNeverMainThread = true, Rationale = "This function is called using BeginInvoke() only.")]
-		private void CloseAndDisposePortAndNotifyAsync(bool withNotify = true)
-		{
-			CloseAndDisposePort();
-
-			SetStateSynchronizedAndNotify(State.Reset, withNotify);
-		}
-
-		#endregion
-
-		#region Port Threads
-		//==========================================================================================
-		// Port Threads
-		//==========================================================================================
-
-		private void StartThreads()
-		{
-			lock (this.sendThreadSyncObj)
-			{
-				if (this.sendThread == null)
-				{
-					this.sendThreadRunFlag = true;
-					this.sendThreadEvent = new AutoResetEvent(false);
-					this.sendThread = new Thread(new ThreadStart(SendThread));
-					this.sendThread.Name = ToShortPortString() + " Send Thread";
-					this.sendThread.Start();
-				}
-			}
-
-			lock (this.receiveThreadSyncObj)
-			{
-				if (this.receiveThread == null)
-				{
-					this.receiveThreadRunFlag = true;
-					this.receiveThreadEvent = new AutoResetEvent(false);
-					this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
-					this.receiveThread.Name = ToShortPortString() + " Receive Thread";
-					this.receiveThread.Start();
-				}
-			}
-		}
-
-		/// <remarks>
-		/// Especially useful during potentially dangerous creation and disposal sequence.
-		/// </remarks>
-		private void SignalThreadsSafely()
-		{
-			SignalSendThreadSafely();
-			SignalReceiveThreadSafely();
-		}
-
-		/// <remarks>
-		/// Especially useful during potentially dangerous creation and disposal sequence.
-		/// </remarks>
-		private void SignalSendThreadSafely()
-		{
-			try
-			{
-				if (this.sendThreadEvent != null)
-					this.sendThreadEvent.Set();
-			}
-			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
-			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
-
-			// Catch 'NullReferenceException' for the unlikely case that the event has just been
-			// disposed after the if-check. This way, the event doesn't need to be locked (which
-			// is a relatively time-consuming operation). Still keep the if-check for the normal
-			// cases.
-		}
-
-		/// <remarks>
-		/// Especially useful during potentially dangerous creation and disposal sequence.
-		/// </remarks>
-		private void SignalReceiveThreadSafely()
-		{
-			try
-			{
-				if (this.receiveThreadEvent != null)
-					this.receiveThreadEvent.Set();
-			}
-			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
-			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
-
-			// Catch 'NullReferenceException' for the unlikely case that the event has just been
-			// disposed after the if-check. This way, the event doesn't need to be locked (which
-			// is a relatively time-consuming operation). Still keep the if-check for the normal
-			// cases.
-		}
-
-		private void StopThreads()
-		{
-			// First clear both flags to reduce the time to stop the receive thread, it may already
-			// be signaled while receiving data or while the send thread is still running.
-			lock (this.sendThreadSyncObj)
-				this.sendThreadRunFlag = false;
-			lock (this.receiveThreadSyncObj)
-				this.receiveThreadRunFlag = false;
-
-			lock (this.sendThreadSyncObj)
-			{
-				if (this.sendThread != null)
-				{
-					// Attention, this method may also be called from exception handler within SendThread()!
-					if (this.sendThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId)
-					{
-						DebugThreadStateMessage("SendThread() gets stopped...");
-
-						try
-						{
-							int accumulatedTimeout = 0;
-							int interval = 0; // Use a relatively short random interval to trigger the thread:
-							while (!this.sendThread.Join(interval = staticRandom.Next(5, 20)))
-							{
-								SignalSendThreadSafely();
-
-								accumulatedTimeout += interval;
-								if (accumulatedTimeout >= ThreadWaitTimeout)
-								{
-									DebugThreadStateMessage("...failed! Aborting...");
-									DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
-									this.sendThread.Abort();
-									break;
-								}
-
-								DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
-							}
-						}
-						catch (ThreadStateException)
-						{
-							// Ignore thread state exceptions such as "Thread has not been started" and
-							// "Thread cannot be aborted" as it just needs to be ensured that the thread
-							// has or will be terminated for sure.
-
-							DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
-						}
-						finally
-						{
-							this.sendThread = null;
-						}
-					} // Not itself thread.
-
-					DebugThreadStateMessage("...successfully terminated.");
-				}
-
-				if (this.sendThreadEvent != null)
-				{
-					try     { this.sendThreadEvent.Close(); }
-					finally { this.sendThreadEvent = null; }
-				}
-			}
-
-			lock (this.receiveThreadSyncObj)
-			{
-				if (this.receiveThread != null)
-				{
-					// Attention, this method may also be called from exception handler within ReceiveThread()!
-					if (this.receiveThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId)
-					{
-						DebugThreadStateMessage("ReceiveThread() gets stopped...");
-
-						try
-						{
-							int accumulatedTimeout = 0;
-							int interval = 0; // Use a relatively short random interval to trigger the thread:
-							while (!this.receiveThread.Join(interval = staticRandom.Next(5, 20)))
-							{
-								SignalReceiveThreadSafely();
-
-								accumulatedTimeout += interval;
-								if (accumulatedTimeout >= ThreadWaitTimeout)
-								{
-									DebugThreadStateMessage("...failed! Aborting...");
-									DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
-									this.receiveThread.Abort();
-									break;
-								}
-
-								DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
-							}
-						}
-						catch (ThreadStateException)
-						{
-							// Ignore thread state exceptions such as "Thread has not been started" and
-							// "Thread cannot be aborted" as it just needs to be ensured that the thread
-							// has or will be terminated for sure.
-
-							DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
-						}
-						finally
-						{
-							this.receiveThread = null;
-						}
-					} // Not itself thread.
-
-					DebugThreadStateMessage("...successfully terminated.");
-				}
-
-				if (this.receiveThreadEvent != null)
-				{
-					try     { this.receiveThreadEvent.Close(); }
-					finally { this.receiveThreadEvent = null; }
-				}
-			}
-		}
-
 		#endregion
 
 		#region Port Events
@@ -2092,16 +2094,16 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 
 		[SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "Well, any better idea on how to check whether the serial port is still alive?")]
-		private void StartAliveTicker()
+		private void StartAliveMonitor()
 		{
-			lock (this.aliveTickerSyncObj)
+			lock (this.aliveMonitorSyncObj)
 			{
-				if (this.aliveTicker == null)
+				if (this.aliveMonitor == null)
 				{
-					this.aliveTicker = new System.Timers.Timer(AliveInterval);
-					this.aliveTicker.AutoReset = true;
-					this.aliveTicker.Elapsed += new System.Timers.ElapsedEventHandler(this.aliveTicker_Elapsed);
-					this.aliveTicker.Start();
+					this.aliveMonitor = new System.Timers.Timer(this.settings.AliveMonitor.Interval);
+					this.aliveMonitor.AutoReset = true;
+					this.aliveMonitor.Elapsed += new System.Timers.ElapsedEventHandler(this.aliveMonitor_Elapsed);
+					this.aliveMonitor.Start();
 				}
 				else
 				{
@@ -2110,30 +2112,30 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
-		private void StopAndDisposeAliveTicker()
+		private void StopAndDisposeAliveMonitor()
 		{
-			lock (this.aliveTickerSyncObj)
+			lock (this.aliveMonitorSyncObj)
 			{
-				if (this.aliveTicker != null)
+				if (this.aliveMonitor != null)
 				{
-					this.aliveTicker.Stop();
-					this.aliveTicker.Dispose();
-					this.aliveTicker = null;
+					this.aliveMonitor.Stop();
+					this.aliveMonitor.Dispose();
+					this.aliveMonitor = null;
 				}
 			}
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private object aliveTicker_Elapsed_SyncObj = new object();
+		private object aliveMonitor_Elapsed_SyncObj = new object();
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private void aliveTicker_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void aliveMonitor_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			// Ensure that only one timer elapsed event thread is active at a time. Because if the
 			// execution takes longer than the timer interval, more and more timer threads will pend
 			// here, and then be executed after the previous has been executed. This will require
 			// more and more resources and lead to a drop in performance.
-			if (Monitor.TryEnter(aliveTicker_Elapsed_SyncObj))
+			if (Monitor.TryEnter(aliveMonitor_Elapsed_SyncObj))
 			{
 				try
 				{
@@ -2156,60 +2158,55 @@ namespace MKY.IO.Serial.SerialPort
 
 							if (!this.port.IsOpen)
 							{
-								DebugMessage("AliveTimerElapsed() has detected shutdown of port as it is no longer open.");
+								DebugMessage("AliveMonitorElapsed() has detected shutdown of port as it is no longer open.");
 								RestartOrResetPortAndThreadsAndNotify();
 								return;
 							}
 
-							if (this.port.PortId >= 3) // Skip for COM1 and COM2, explanation see below.
-							{
-								int byteToReadDummy = this.port.BytesToRead; // Force e.g. 'IOException', see above.
-								UnusedLocal.PreventAnalysisWarning(byteToReadDummy);
-								return;
-							}
-							else
-							{
-								// Attention:
-								//
-								// On an internal port that is open and in use, accessing 'BytesToRead' will first properly lead to an 'IOException',
-								// but later an additional 'ObjectDisposedException' will happen on a separate thread!
-								//   > Message : "Safe handle has been closed"
-								//   > Source  : "mscorlib"
-								//   > Stack   : at System.StubHelpers.StubHelpers.SafeHandleC2NHelper(Object pThis, IntPtr pCleanupWorkList)
-								//               at Microsoft.Win32.UnsafeNativeMethods.GetOverlappedResult(SafeFileHandle hFile, NativeOverlapped* lpOverlapped, Int32& lpNumberOfBytesTransferred, Boolean bWait)
-								//               at System.IO.Ports.SerialStream.EventLoopRunner.WaitForCommEvent()
-								//               at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-								//               at System.Threading.ThreadHelper.ThreadStart()
-								//
-								// A couple of workarounds have been considered:
-								//   > Detecting a suspend request from the operating system.
-								//       => Not a solution, as .NET doesn't provide this functionlity and thus the implementation would get OS dependent.
-								//          Note that SystemEvents.PowerModeChanged is located in Microsoft.Win32 and therefore also OS dependent.
-								//   > Ignoring 'ObjectDisposedException' from "mscorlib" in the 'currentDomain_UnhandledException' (Controller.Main).
-								//       => Not a solution, as the exception already happened and will have closed the port.
-								//   > Preventing such exception in best-effort style, by skipping the access to 'BytesToRead' for internal ports COM1 and COM2.
-								//       => Only partial, but mostly good enough workaround ;-)
-							}
+							int byteToReadDummy = this.port.BytesToRead; // Force e.g. 'IOException', see above.
+							UnusedLocal.PreventAnalysisWarning(byteToReadDummy);
+
+							// Attention:
+							//
+							// On an internal port that is open and in use, accessing 'BytesToRead' will first properly lead to an 'IOException',
+							// but later an additional 'ObjectDisposedException' will happen on a separate thread!
+							//   > Message : "Safe handle has been closed"
+							//   > Source  : "mscorlib"
+							//   > Stack   : at System.StubHelpers.StubHelpers.SafeHandleC2NHelper(Object pThis, IntPtr pCleanupWorkList)
+							//               at Microsoft.Win32.UnsafeNativeMethods.GetOverlappedResult(SafeFileHandle hFile, NativeOverlapped* lpOverlapped, Int32& lpNumberOfBytesTransferred, Boolean bWait)
+							//               at System.IO.Ports.SerialStream.EventLoopRunner.WaitForCommEvent()
+							//               at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+							//               at System.Threading.ThreadHelper.ThreadStart()
+							//
+							// A couple of workarounds have been considered:
+							//   > Detecting a suspend request from the operating system.
+							//       => Not a solution, as .NET doesn't provide this functionlity and thus the implementation would get OS dependent.
+							//          Note that SystemEvents.PowerModeChanged is located in Microsoft.Win32 and therefore also OS dependent.
+							//   > Ignoring 'ObjectDisposedException' from "mscorlib" in the 'currentDomain_UnhandledException' (Controller.Main).
+							//       => Not a solution, as the exception already happened and will have closed the port.
+							//   > Preventing such exception in best-effort style, by skipping the access to 'BytesToRead' for internal ports COM1 and COM2.
+							//       => Not really a solution, doesn't work for other than COM1/COM2 (e.g. Microchip MCP2221 USB-to-UART/I2C Bridge)
+							//   > Make AliveMonitor configurable and handle the exception above in by the 'ThreadException'.
 						}
 						catch (IOException ex) // The best way to detect a disconnected device is handling this exception...
 						{
-							DebugEx.WriteException(GetType(), ex, "AliveTimerElapsed() has detected shutdown of port as it is no longer accessible.");
+							DebugEx.WriteException(GetType(), ex, "AliveMonitorElapsed() has detected shutdown of port as it is no longer accessible.");
 							RestartOrResetPortAndThreadsAndNotify();
 						}
 						catch (Exception ex)
 						{
-							DebugEx.WriteException(GetType(), ex, "AliveTimerElapsed() has caught an unexpected exception! Restarting the port to try fixing the issue...");
+							DebugEx.WriteException(GetType(), ex, "AliveMonitorElapsed() has caught an unexpected exception! Restarting the port to try fixing the issue...");
 							RestartOrResetPortAndThreadsAndNotify();
 						}
 					}
 					else
 					{
-						StopAndDisposeAliveTicker();
+						StopAndDisposeAliveMonitor();
 					}
 				}
 				finally
 				{
-					Monitor.Exit(aliveTicker_Elapsed_SyncObj);
+					Monitor.Exit(aliveMonitor_Elapsed_SyncObj);
 				}
 			} // Monitor.TryEnter()
 		}
@@ -2256,7 +2253,7 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void reopenTimeout_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			if (AutoReopenEnabledAndAllowed)
+			if (!IsDisposed && IsStarted && !IsOpen && this.settings.AutoReopen.Enabled) // Check 'IsDisposed' first!
 			{
 				try
 				{

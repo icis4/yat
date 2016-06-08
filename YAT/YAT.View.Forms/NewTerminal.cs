@@ -194,6 +194,11 @@ namespace YAT.View.Forms
 			this.newTerminalSettingsInEdit.SerialPortCommunication.FlowControl = serialPortSettings.FlowControl;
 		}
 
+		private void serialPortSettings_AliveMonitorChanged(object sender, EventArgs e)
+		{
+			this.newTerminalSettingsInEdit.SerialPortAliveMonitor = serialPortSettings.AliveMonitor;
+		}
+
 		private void serialPortSettings_AutoReopenChanged(object sender, EventArgs e)
 		{
 			this.newTerminalSettingsInEdit.SerialPortAutoReopen = serialPortSettings.AutoReopen;
@@ -320,6 +325,7 @@ namespace YAT.View.Forms
 			this.terminalSettings.Terminal.IO.SerialPort.Communication.Parity      = this.newTerminalSettings.SerialPortCommunication.Parity;
 			this.terminalSettings.Terminal.IO.SerialPort.Communication.StopBits    = this.newTerminalSettings.SerialPortCommunication.StopBits;
 			this.terminalSettings.Terminal.IO.SerialPort.Communication.FlowControl = this.newTerminalSettings.SerialPortCommunication.FlowControl;
+			this.terminalSettings.Terminal.IO.SerialPort.AliveMonitor              = this.newTerminalSettings.SerialPortAliveMonitor;
 			this.terminalSettings.Terminal.IO.SerialPort.AutoReopen                = this.newTerminalSettings.SerialPortAutoReopen;
 
 			this.terminalSettings.Terminal.IO.Socket.RemoteHost                    = this.newTerminalSettings.SocketRemoteHost;
@@ -412,12 +418,13 @@ namespace YAT.View.Forms
 
 			serialPortSelection.PortId     = this.newTerminalSettingsInEdit.SerialPortId;
 
-			serialPortSettings.BaudRate    = this.newTerminalSettingsInEdit.SerialPortCommunication.BaudRate;
-			serialPortSettings.DataBits    = this.newTerminalSettingsInEdit.SerialPortCommunication.DataBits;
-			serialPortSettings.Parity      = this.newTerminalSettingsInEdit.SerialPortCommunication.Parity;
-			serialPortSettings.StopBits    = this.newTerminalSettingsInEdit.SerialPortCommunication.StopBits;
-			serialPortSettings.FlowControl = this.newTerminalSettingsInEdit.SerialPortCommunication.FlowControl;
-			serialPortSettings.AutoReopen  = this.newTerminalSettingsInEdit.SerialPortAutoReopen;
+			serialPortSettings.BaudRate     = this.newTerminalSettingsInEdit.SerialPortCommunication.BaudRate;
+			serialPortSettings.DataBits     = this.newTerminalSettingsInEdit.SerialPortCommunication.DataBits;
+			serialPortSettings.Parity       = this.newTerminalSettingsInEdit.SerialPortCommunication.Parity;
+			serialPortSettings.StopBits     = this.newTerminalSettingsInEdit.SerialPortCommunication.StopBits;
+			serialPortSettings.FlowControl  = this.newTerminalSettingsInEdit.SerialPortCommunication.FlowControl;
+			serialPortSettings.AliveMonitor = this.newTerminalSettingsInEdit.SerialPortAliveMonitor;
+			serialPortSettings.AutoReopen   = this.newTerminalSettingsInEdit.SerialPortAutoReopen;
 
 			socketSelection.SocketType     = (Domain.IOTypeEx)ioType;
 			socketSelection.RemoteHost     = this.newTerminalSettingsInEdit.SocketRemoteHost;

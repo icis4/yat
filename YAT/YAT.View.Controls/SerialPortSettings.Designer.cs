@@ -29,6 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SerialPortSettings));
 			this.comboBox_StopBits = new System.Windows.Forms.ComboBox();
 			this.comboBox_FlowControl = new System.Windows.Forms.ComboBox();
 			this.comboBox_Parity = new System.Windows.Forms.ComboBox();
@@ -39,12 +40,13 @@
 			this.label_Parity = new System.Windows.Forms.Label();
 			this.label_DataBits = new System.Windows.Forms.Label();
 			this.label_BaudRate = new System.Windows.Forms.Label();
-			this.label_FlowControlRemarks_1 = new System.Windows.Forms.Label();
-			this.label_FlowControlRemarks_2 = new System.Windows.Forms.Label();
 			this.label_AutoReopenIntervalUnit = new System.Windows.Forms.Label();
 			this.textBox_AutoReopenInterval = new System.Windows.Forms.TextBox();
 			this.checkBox_AutoReopen = new System.Windows.Forms.CheckBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.checkBox_AliveMonitor = new System.Windows.Forms.CheckBox();
+			this.textBox_AliveMonitorInterval = new System.Windows.Forms.TextBox();
+			this.label_AliveMonitorIntervalUnit = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// comboBox_StopBits
@@ -67,8 +69,7 @@
 			this.comboBox_FlowControl.Name = "comboBox_FlowControl";
 			this.comboBox_FlowControl.Size = new System.Drawing.Size(254, 21);
 			this.comboBox_FlowControl.TabIndex = 9;
-			this.toolTip.SetToolTip(this.comboBox_FlowControl, "RFR (Ready For Receiving) is the official name of the formerly called RTS (Reques" +
-        "t To Send) control line");
+			this.toolTip.SetToolTip(this.comboBox_FlowControl, resources.GetString("comboBox_FlowControl.ToolTip"));
 			this.comboBox_FlowControl.SelectedIndexChanged += new System.EventHandler(this.comboBox_FlowControl_SelectedIndexChanged);
 			// 
 			// comboBox_Parity
@@ -151,30 +152,11 @@
 			this.label_BaudRate.TabIndex = 0;
 			this.label_BaudRate.Text = "Bits per Second:";
 			// 
-			// label_FlowControlRemarks_1
-			// 
-			this.label_FlowControlRemarks_1.AutoSize = true;
-			this.label_FlowControlRemarks_1.Location = new System.Drawing.Point(3, 154);
-			this.label_FlowControlRemarks_1.Name = "label_FlowControlRemarks_1";
-			this.label_FlowControlRemarks_1.Size = new System.Drawing.Size(46, 26);
-			this.label_FlowControlRemarks_1.TabIndex = 10;
-			this.label_FlowControlRemarks_1.Text = "Manual:\r\nRS-485:";
-			// 
-			// label_FlowControlRemarks_2
-			// 
-			this.label_FlowControlRemarks_2.AutoSize = true;
-			this.label_FlowControlRemarks_2.Location = new System.Drawing.Point(55, 154);
-			this.label_FlowControlRemarks_2.Name = "label_FlowControlRemarks_2";
-			this.label_FlowControlRemarks_2.Size = new System.Drawing.Size(203, 26);
-			this.label_FlowControlRemarks_2.TabIndex = 11;
-			this.label_FlowControlRemarks_2.Text = "RFR/DTR and/or XOn/XOff set manually\r\nRFR is set high while sending\r\n";
-			this.toolTip.SetToolTip(this.label_FlowControlRemarks_2, "RFR (Ready For Receiving) is the official name of the formerly called RTS (Reques" +
-        "t To Send) control line");
-			// 
 			// label_AutoReopenIntervalUnit
 			// 
+			this.label_AutoReopenIntervalUnit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_AutoReopenIntervalUnit.AutoSize = true;
-			this.label_AutoReopenIntervalUnit.Location = new System.Drawing.Point(151, 212);
+			this.label_AutoReopenIntervalUnit.Location = new System.Drawing.Point(200, 239);
 			this.label_AutoReopenIntervalUnit.Name = "label_AutoReopenIntervalUnit";
 			this.label_AutoReopenIntervalUnit.Size = new System.Drawing.Size(20, 13);
 			this.label_AutoReopenIntervalUnit.TabIndex = 15;
@@ -183,8 +165,9 @@
 			// 
 			// textBox_AutoReopenInterval
 			// 
+			this.textBox_AutoReopenInterval.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.textBox_AutoReopenInterval.Enabled = false;
-			this.textBox_AutoReopenInterval.Location = new System.Drawing.Point(101, 209);
+			this.textBox_AutoReopenInterval.Location = new System.Drawing.Point(146, 236);
 			this.textBox_AutoReopenInterval.Name = "textBox_AutoReopenInterval";
 			this.textBox_AutoReopenInterval.Size = new System.Drawing.Size(48, 20);
 			this.textBox_AutoReopenInterval.TabIndex = 14;
@@ -193,24 +176,64 @@
 			// 
 			// checkBox_AutoReopen
 			// 
+			this.checkBox_AutoReopen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBox_AutoReopen.AutoSize = true;
-			this.checkBox_AutoReopen.Location = new System.Drawing.Point(6, 192);
+			this.checkBox_AutoReopen.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.checkBox_AutoReopen.Location = new System.Drawing.Point(6, 219);
 			this.checkBox_AutoReopen.Name = "checkBox_AutoReopen";
 			this.checkBox_AutoReopen.Size = new System.Drawing.Size(237, 17);
 			this.checkBox_AutoReopen.TabIndex = 12;
 			this.checkBox_AutoReopen.Text = "When disconnected, try to reopen port every";
+			this.toolTip.SetToolTip(this.checkBox_AutoReopen, resources.GetString("checkBox_AutoReopen.ToolTip"));
 			this.checkBox_AutoReopen.UseVisualStyleBackColor = true;
 			this.checkBox_AutoReopen.CheckedChanged += new System.EventHandler(this.checkBox_AutoReopen_CheckedChanged);
+			// 
+			// checkBox_AliveMonitor
+			// 
+			this.checkBox_AliveMonitor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.checkBox_AliveMonitor.AutoSize = true;
+			this.checkBox_AliveMonitor.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.checkBox_AliveMonitor.Location = new System.Drawing.Point(6, 177);
+			this.checkBox_AliveMonitor.Name = "checkBox_AliveMonitor";
+			this.checkBox_AliveMonitor.Size = new System.Drawing.Size(214, 30);
+			this.checkBox_AliveMonitor.TabIndex = 16;
+			this.checkBox_AliveMonitor.Text = "When connected, detect disconnect by\r\nchecking the port every";
+			this.toolTip.SetToolTip(this.checkBox_AliveMonitor, resources.GetString("checkBox_AliveMonitor.ToolTip"));
+			this.checkBox_AliveMonitor.UseVisualStyleBackColor = true;
+			this.checkBox_AliveMonitor.CheckedChanged += new System.EventHandler(this.checkBox_AliveMonitor_CheckedChanged);
+			// 
+			// textBox_AliveMonitorInterval
+			// 
+			this.textBox_AliveMonitorInterval.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.textBox_AliveMonitorInterval.Enabled = false;
+			this.textBox_AliveMonitorInterval.Location = new System.Drawing.Point(146, 193);
+			this.textBox_AliveMonitorInterval.Name = "textBox_AliveMonitorInterval";
+			this.textBox_AliveMonitorInterval.Size = new System.Drawing.Size(48, 20);
+			this.textBox_AliveMonitorInterval.TabIndex = 17;
+			this.textBox_AliveMonitorInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textBox_AliveMonitorInterval.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_AliveMonitorInterval_Validating);
+			// 
+			// label_AliveMonitorIntervalUnit
+			// 
+			this.label_AliveMonitorIntervalUnit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label_AliveMonitorIntervalUnit.AutoSize = true;
+			this.label_AliveMonitorIntervalUnit.Location = new System.Drawing.Point(200, 196);
+			this.label_AliveMonitorIntervalUnit.Name = "label_AliveMonitorIntervalUnit";
+			this.label_AliveMonitorIntervalUnit.Size = new System.Drawing.Size(20, 13);
+			this.label_AliveMonitorIntervalUnit.TabIndex = 18;
+			this.label_AliveMonitorIntervalUnit.Text = "ms";
+			this.label_AliveMonitorIntervalUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// SerialPortSettings
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.label_AliveMonitorIntervalUnit);
+			this.Controls.Add(this.textBox_AliveMonitorInterval);
+			this.Controls.Add(this.checkBox_AliveMonitor);
 			this.Controls.Add(this.label_AutoReopenIntervalUnit);
 			this.Controls.Add(this.textBox_AutoReopenInterval);
 			this.Controls.Add(this.checkBox_AutoReopen);
-			this.Controls.Add(this.label_FlowControlRemarks_2);
-			this.Controls.Add(this.label_FlowControlRemarks_1);
 			this.Controls.Add(this.comboBox_StopBits);
 			this.Controls.Add(this.comboBox_FlowControl);
 			this.Controls.Add(this.comboBox_Parity);
@@ -222,7 +245,7 @@
 			this.Controls.Add(this.label_DataBits);
 			this.Controls.Add(this.label_BaudRate);
 			this.Name = "SerialPortSettings";
-			this.Size = new System.Drawing.Size(260, 232);
+			this.Size = new System.Drawing.Size(260, 259);
 			this.EnabledChanged += new System.EventHandler(this.SerialPortSettings_EnabledChanged);
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.SerialPortSettings_Paint);
 			this.ResumeLayout(false);
@@ -242,11 +265,12 @@
 		private System.Windows.Forms.Label label_Parity;
 		private System.Windows.Forms.Label label_DataBits;
 		private System.Windows.Forms.Label label_BaudRate;
-		private System.Windows.Forms.Label label_FlowControlRemarks_1;
-		private System.Windows.Forms.Label label_FlowControlRemarks_2;
 		private System.Windows.Forms.Label label_AutoReopenIntervalUnit;
 		private System.Windows.Forms.TextBox textBox_AutoReopenInterval;
 		private System.Windows.Forms.CheckBox checkBox_AutoReopen;
 		private System.Windows.Forms.ToolTip toolTip;
+		private System.Windows.Forms.CheckBox checkBox_AliveMonitor;
+		private System.Windows.Forms.TextBox textBox_AliveMonitorInterval;
+		private System.Windows.Forms.Label label_AliveMonitorIntervalUnit;
 	}
 }

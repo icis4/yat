@@ -55,12 +55,13 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
-		private const int                                        BaudRateDefault    = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.BaudRateDefault;
-		private const MKY.IO.Ports.DataBits                      DataBitsDefault    = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.DataBitsDefault;
-		private const System.IO.Ports.Parity                     ParityDefault      = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.ParityDefault;
-		private const System.IO.Ports.StopBits                   StopBitsDefault    = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.StopBitsDefault;
-		private const MKY.IO.Serial.SerialPort.SerialFlowControl FlowControlDefault = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.FlowControlDefault;
-		private static readonly MKY.IO.Serial.AutoRetry          AutoReopenDefault  = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
+		private const int                                        BaudRateDefault     = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.BaudRateDefault;
+		private const MKY.IO.Ports.DataBits                      DataBitsDefault     = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.DataBitsDefault;
+		private const System.IO.Ports.Parity                     ParityDefault       = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.ParityDefault;
+		private const System.IO.Ports.StopBits                   StopBitsDefault     = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.StopBitsDefault;
+		private const MKY.IO.Serial.SerialPort.SerialFlowControl FlowControlDefault  = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.FlowControlDefault;
+		private static readonly MKY.IO.Serial.AutoInterval       AliveMonitorDefault = MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorDefault;
+		private static readonly MKY.IO.Serial.AutoInterval       AutoReopenDefault   = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
 
 		#endregion
 
@@ -71,12 +72,13 @@ namespace YAT.View.Controls
 
 		private SettingControlsHelper isSettingControls;
 
-		private int                                        baudRate    = BaudRateDefault;
-		private MKY.IO.Ports.DataBits                      dataBits    = DataBitsDefault;
-		private System.IO.Ports.Parity                     parity      = ParityDefault;
-		private System.IO.Ports.StopBits                   stopBits    = StopBitsDefault;
-		private MKY.IO.Serial.SerialPort.SerialFlowControl flowControl = FlowControlDefault;
-		private MKY.IO.Serial.AutoRetry                    autoReopen  = AutoReopenDefault;
+		private int                                        baudRate     = BaudRateDefault;
+		private MKY.IO.Ports.DataBits                      dataBits     = DataBitsDefault;
+		private System.IO.Ports.Parity                     parity       = ParityDefault;
+		private System.IO.Ports.StopBits                   stopBits     = StopBitsDefault;
+		private MKY.IO.Serial.SerialPort.SerialFlowControl flowControl  = FlowControlDefault;
+		private MKY.IO.Serial.AutoInterval                 aliveMonitor = AliveMonitorDefault;
+		private MKY.IO.Serial.AutoInterval                 autoReopen   = AutoReopenDefault;
 
 		#endregion
 
@@ -109,6 +111,11 @@ namespace YAT.View.Controls
 		[Category("Property Changed")]
 		[Description("Event raised when the FlowControl property is changed.")]
 		public event EventHandler FlowControlChanged;
+
+		/// <summary></summary>
+		[Category("Property Changed")]
+		[Description("Event raised when the AliveMonitor property is changed.")]
+		public event EventHandler AliveMonitorChanged;
 
 		/// <summary></summary>
 		[Category("Property Changed")]
@@ -233,7 +240,26 @@ namespace YAT.View.Controls
 		/// </remarks>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual MKY.IO.Serial.AutoRetry AutoReopen
+		public virtual MKY.IO.Serial.AutoInterval AliveMonitor
+		{
+			get { return (this.aliveMonitor); }
+			set
+			{
+				if (this.aliveMonitor != value)
+				{
+					this.aliveMonitor = value;
+					SetControls();
+					OnAliveMonitorChanged(EventArgs.Empty);
+				}
+			}
+		}
+
+		/// <remarks>
+		/// Structs cannot be used with the designer.
+		/// </remarks>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual MKY.IO.Serial.AutoInterval AutoReopen
 		{
 			get { return (this.autoReopen); }
 			set
@@ -350,11 +376,48 @@ namespace YAT.View.Controls
 				FlowControl = (MKY.IO.Serial.SerialPort.SerialFlowControlEx)comboBox_FlowControl.SelectedItem;
 		}
 
+		private void checkBox_AliveMonitor_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				MKY.IO.Serial.AutoInterval ar = AliveMonitor;
+				ar.Enabled = checkBox_AutoReopen.Checked;
+				AliveMonitor = ar;
+			}
+		}
+
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		private void textBox_AliveMonitorInterval_Validating(object sender, CancelEventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				int interval;
+				if (int.TryParse(textBox_AliveMonitorInterval.Text, out interval) && (interval >= MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorMinInterval))
+				{
+					MKY.IO.Serial.AutoInterval ar = AliveMonitor;
+					ar.Interval = interval;
+					AliveMonitor = ar;
+				}
+				else
+				{
+					MessageBoxEx.Show
+					(
+						this,
+						"Alive interval must be at least " + MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorMinInterval + " ms!",
+						"Invalid Input",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+					);
+					e.Cancel = true;
+				}
+			}
+		}
+
 		private void checkBox_AutoReopen_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
 			{
-				MKY.IO.Serial.AutoRetry ar = this.autoReopen;
+				MKY.IO.Serial.AutoInterval ar = AutoReopen;
 				ar.Enabled = checkBox_AutoReopen.Checked;
 				AutoReopen = ar;
 			}
@@ -368,7 +431,7 @@ namespace YAT.View.Controls
 				int interval;
 				if (int.TryParse(textBox_AutoReopenInterval.Text, out interval) && (interval >= MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenMinInterval))
 				{
-					MKY.IO.Serial.AutoRetry ar = this.autoReopen;
+					MKY.IO.Serial.AutoInterval ar = AutoReopen;
 					ar.Interval = interval;
 					AutoReopen = ar;
 				}
@@ -377,7 +440,7 @@ namespace YAT.View.Controls
 					MessageBoxEx.Show
 					(
 						this,
-						"Reconnect interval must be at least " + MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenMinInterval + " ms!",
+						"Reopen interval must be at least " + MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenMinInterval + " ms!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -436,6 +499,11 @@ namespace YAT.View.Controls
 
 			if (Enabled)
 			{
+				bool aliveMonitorEnabled             = this.aliveMonitor.Enabled;
+				checkBox_AliveMonitor.Checked        = aliveMonitorEnabled;
+				textBox_AliveMonitorInterval.Enabled = aliveMonitorEnabled;
+				textBox_AliveMonitorInterval.Text    = this.aliveMonitor.Interval.ToString(CultureInfo.CurrentCulture);
+
 				bool autoReopenEnabled             = this.autoReopen.Enabled;
 				checkBox_AutoReopen.Checked        = autoReopenEnabled;
 				textBox_AutoReopenInterval.Enabled = autoReopenEnabled;
@@ -443,6 +511,10 @@ namespace YAT.View.Controls
 			}
 			else
 			{
+				checkBox_AliveMonitor.Checked        = false;
+				textBox_AliveMonitorInterval.Enabled = false;
+				textBox_AliveMonitorInterval.Text    = "";
+
 				checkBox_AutoReopen.Checked        = false;
 				textBox_AutoReopenInterval.Enabled = false;
 				textBox_AutoReopenInterval.Text    = "";
@@ -486,6 +558,12 @@ namespace YAT.View.Controls
 		protected virtual void OnFlowControlChanged(EventArgs e)
 		{
 			EventHelper.FireSync(FlowControlChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnAliveMonitorChanged(EventArgs e)
+		{
+			EventHelper.FireSync(AliveMonitorChanged, this, e);
 		}
 
 		/// <summary></summary>

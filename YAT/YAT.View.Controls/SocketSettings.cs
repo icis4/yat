@@ -62,7 +62,7 @@ namespace YAT.View.Controls
 
 		private MKY.IO.Serial.Socket.SocketType socketType               = SocketTypeDefault;
 
-		private MKY.IO.Serial.AutoRetry tcpClientAutoReconnect           = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
+		private MKY.IO.Serial.AutoInterval tcpClientAutoReconnect        = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
 		private MKY.IO.Serial.Socket.UdpServerSendMode udpServerSendMode = UdpServerSendModeDefault;
 
 		#endregion
@@ -125,7 +125,7 @@ namespace YAT.View.Controls
 		/// </remarks>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public MKY.IO.Serial.AutoRetry TcpClientAutoReconnect
+		public MKY.IO.Serial.AutoInterval TcpClientAutoReconnect
 		{
 			get { return (this.tcpClientAutoReconnect); }
 			set
@@ -205,7 +205,7 @@ namespace YAT.View.Controls
 		{
 			if (!this.isSettingControls)
 			{
-				MKY.IO.Serial.AutoRetry ar = TcpClientAutoReconnect;
+				MKY.IO.Serial.AutoInterval ar = TcpClientAutoReconnect;
 				ar.Enabled = checkBox_TcpClientAutoReconnect.Checked;
 				TcpClientAutoReconnect = ar;
 			}
@@ -219,7 +219,7 @@ namespace YAT.View.Controls
 				int interval;
 				if (int.TryParse(textBox_TcpClientAutoReconnectInterval.Text, out interval) && (interval >= MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectMinInterval))
 				{
-					MKY.IO.Serial.AutoRetry ar = TcpClientAutoReconnect;
+					MKY.IO.Serial.AutoInterval ar = TcpClientAutoReconnect;
 					ar.Interval = interval;
 					TcpClientAutoReconnect = ar;
 				}
