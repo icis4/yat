@@ -547,6 +547,16 @@ namespace YAT.Controller
 			{
 				Exception ex = (e.ExceptionObject as Exception);
 				string message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
+
+				if ((ex is ObjectDisposedException) && (ex.Source == "mscorlib"))
+				{
+					message += Environment.NewLine + Environment.NewLine +
+					           "Such 'ObjectDisposedException' exception in 'mscorlib' may happen when a serial COM port gets disconnected. " +
+					           "It happens due to a bug in the .NET 'SerialPort' class for which Microsoft seems to have no plans fixing. " +
+					           "The issue is known for internal serial COM ports as well as Microchip MCP2221 USB-to-UART/I2C bridges. " +
+					           "To work around this issue, disable checking serial COM ports for disconnection (serial port alive monitor).";
+				}
+
 				View.Forms.UnhandledExceptionResult result = View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.AsynchronousNonSynchronized, false);
 
 				if (result == View.Forms.UnhandledExceptionResult.ExitAndRestart)
@@ -684,7 +694,18 @@ namespace YAT.Controller
 
 			Exception ex = (e.ExceptionObject as Exception);
 			if (ex != null)
+			{
 				ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
+
+				if ((ex is ObjectDisposedException) && (ex.Source == "mscorlib"))
+				{
+					Console.Error.WriteLine();
+					Console.Error.WriteLine("Such 'ObjectDisposedException' exception in 'mscorlib' may happen when a serial COM port gets disconnected.");
+					Console.Error.WriteLine("It happens due to a bug in the .NET 'SerialPort' class for which Microsoft seems to have no plans fixing.");
+					Console.Error.WriteLine("The issue is known for internal serial COM ports as well as Microchip MCP2221 USB-to-UART/I2C bridges. ");
+					Console.Error.WriteLine("To work around this issue, disable checking serial COM ports for disconnection (serial port alive monitor).");
+				}
+			}
 		}
 #endif
 
@@ -781,7 +802,18 @@ namespace YAT.Controller
 
 			Exception ex = (e.ExceptionObject as Exception);
 			if (ex != null)
+			{
 				ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
+
+				if ((ex is ObjectDisposedException) && (ex.Source == "mscorlib"))
+				{
+					Console.Error.WriteLine();
+					Console.Error.WriteLine("Such 'ObjectDisposedException' exception in 'mscorlib' may happen when a serial COM port gets disconnected.");
+					Console.Error.WriteLine("It happens due to a bug in the .NET 'SerialPort' class for which Microsoft seems to have no plans fixing.");
+					Console.Error.WriteLine("The issue is known for internal serial COM ports as well as Microchip MCP2221 USB-to-UART/I2C bridges. ");
+					Console.Error.WriteLine("To work around this issue, disable checking serial COM ports for disconnection (serial port alive monitor).");
+				}
+			}
 		}
 #endif
 

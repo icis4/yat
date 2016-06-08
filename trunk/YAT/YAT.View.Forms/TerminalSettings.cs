@@ -181,6 +181,11 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControl = serialPortSettings.FlowControl;
 		}
 
+		private void serialPortSettings_AliveMonitorChanged(object sender, EventArgs e)
+		{
+			this.settingsInEdit.Terminal.IO.SerialPort.AliveMonitor = serialPortSettings.AliveMonitor;
+		}
+
 		private void serialPortSettings_AutoReopenChanged(object sender, EventArgs e)
 		{
 			this.settingsInEdit.Terminal.IO.SerialPort.AutoReopen = serialPortSettings.AutoReopen;
@@ -413,12 +418,13 @@ namespace YAT.View.Forms
 
 			serialPortSelection.PortId     = this.settingsInEdit.Terminal.IO.SerialPort.PortId;
 
-			serialPortSettings.BaudRate    = this.settingsInEdit.Terminal.IO.SerialPort.Communication.BaudRate;
-			serialPortSettings.DataBits    = this.settingsInEdit.Terminal.IO.SerialPort.Communication.DataBits;
-			serialPortSettings.Parity      = this.settingsInEdit.Terminal.IO.SerialPort.Communication.Parity;
-			serialPortSettings.StopBits    = this.settingsInEdit.Terminal.IO.SerialPort.Communication.StopBits;
-			serialPortSettings.FlowControl = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControl;
-			serialPortSettings.AutoReopen  = this.settingsInEdit.Terminal.IO.SerialPort.AutoReopen;
+			serialPortSettings.BaudRate     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.BaudRate;
+			serialPortSettings.DataBits     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.DataBits;
+			serialPortSettings.Parity       = this.settingsInEdit.Terminal.IO.SerialPort.Communication.Parity;
+			serialPortSettings.StopBits     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.StopBits;
+			serialPortSettings.FlowControl  = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControl;
+			serialPortSettings.AliveMonitor = this.settingsInEdit.Terminal.IO.SerialPort.AliveMonitor;
+			serialPortSettings.AutoReopen   = this.settingsInEdit.Terminal.IO.SerialPort.AutoReopen;
 
 			socketSelection.SocketType     = (Domain.IOTypeEx)ioType;
 			socketSelection.RemoteHost     = this.settingsInEdit.Terminal.IO.Socket.RemoteHost;

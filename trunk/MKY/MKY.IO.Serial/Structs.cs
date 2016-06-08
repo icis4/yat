@@ -28,7 +28,7 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]
-	public struct AutoRetry
+	public struct AutoInterval
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
@@ -41,9 +41,9 @@ namespace MKY.IO.Serial
 		public int Interval;
 
 		/// <summary></summary>
-		public AutoRetry(bool enabled, int interval)
+		public AutoInterval(bool enabled, int interval)
 		{
-			Enabled = enabled;
+			Enabled  = enabled;
 			Interval = interval;
 		}
 
@@ -64,7 +64,7 @@ namespace MKY.IO.Serial
 			if (GetType() != obj.GetType())
 				return (false);
 
-			AutoRetry other = (AutoRetry)obj;
+			AutoInterval other = (AutoInterval)obj;
 			return
 			(
 				(Enabled  == other.Enabled) &&
@@ -115,7 +115,7 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(AutoRetry lhs, AutoRetry rhs)
+		public static bool operator ==(AutoInterval lhs, AutoInterval rhs)
 		{
 			// Value type implementation of operator ==.
 			// See MKY.Test.EqualityTest for details.
@@ -130,7 +130,7 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(AutoRetry lhs, AutoRetry rhs)
+		public static bool operator !=(AutoInterval lhs, AutoInterval rhs)
 		{
 			return (!(lhs == rhs));
 		}
