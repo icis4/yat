@@ -406,9 +406,9 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 
 			if (this.useExplicitDefaultRadix)
-				Utilities.SelectionHelper.Select(comboBox_ExplicitDefaultRadix, (Domain.RadixEx)this.command.DefaultRadix, (Domain.RadixEx)this.command.DefaultRadix);
+				SelectionHelper.Select(comboBox_ExplicitDefaultRadix, (Domain.RadixEx)this.command.DefaultRadix, (Domain.RadixEx)this.command.DefaultRadix);
 			else
-				Utilities.SelectionHelper.Deselect(comboBox_ExplicitDefaultRadix);
+				SelectionHelper.Deselect(comboBox_ExplicitDefaultRadix);
 
 			pathComboBox_FilePath.Items.Clear();
 

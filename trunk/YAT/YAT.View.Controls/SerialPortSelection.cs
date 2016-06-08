@@ -551,9 +551,9 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 
 			if (!DesignMode && Enabled)
-				Utilities.SelectionHelper.Select(comboBox_Port, this.portId, this.portId);
+				SelectionHelper.Select(comboBox_Port, this.portId, this.portId);
 			else
-				Utilities.SelectionHelper.Deselect(comboBox_Port);
+				SelectionHelper.Deselect(comboBox_Port);
 
 			this.isSettingControls.Leave();
 		}
