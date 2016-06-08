@@ -97,6 +97,7 @@
     <Compile Include="Drawing\ColorTranslatorEx.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="EventHandlerHelper.cs" />
+    <Compile Include="Media\SystemSoundsEx.cs" />
     <Compile Include="MessageHelper.cs" />
     <Compile Include="Collections\Generic\Quadruple.cs" />
     <Compile Include="Collections\Generic\Triple.cs" />
