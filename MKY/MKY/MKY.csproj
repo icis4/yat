@@ -145,6 +145,7 @@
     <Compile Include="Windows.Forms\MessageBoxEx.cs" />
     <Compile Include="Windows.Forms\ModalBehavior.cs" />
     <Compile Include="Windows.Forms\LayoutInfo.cs" />
+    <Compile Include="Windows.Forms\SelectionHelper.cs" />
     <Compile Include="Windows.Forms\SettingControlsHelper.cs" />
     <Compile Include="Windows.Forms\MenuEx.cs" />
     <Compile Include="EnvironmentEx.cs" />

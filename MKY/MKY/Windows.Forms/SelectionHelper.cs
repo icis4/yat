@@ -23,9 +23,7 @@
 
 using System.Windows.Forms;
 
-using MKY.Windows.Forms;
-
-namespace YAT.View.Utilities
+namespace MKY.Windows.Forms
 {
 	/// <summary></summary>
 	public static class SelectionHelper

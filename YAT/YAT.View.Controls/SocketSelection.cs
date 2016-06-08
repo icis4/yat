@@ -755,12 +755,12 @@ namespace YAT.View.Controls
 				 (this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpPairSocket)))
 			{
 				comboBox_RemoteHost.Enabled = true;
-				Utilities.SelectionHelper.Select(comboBox_RemoteHost, this.remoteHost, this.remoteHost);
+				SelectionHelper.Select(comboBox_RemoteHost, this.remoteHost, this.remoteHost);
 			}
 			else
 			{
 				comboBox_RemoteHost.Enabled = false;
-				Utilities.SelectionHelper.Deselect(comboBox_RemoteHost);
+				SelectionHelper.Deselect(comboBox_RemoteHost);
 			}
 
 			// Remote port label:
@@ -831,21 +831,21 @@ namespace YAT.View.Controls
 					case SocketType.UdpClient:
 					{
 						comboBox_LocalFilter.Enabled = false;
-						Utilities.SelectionHelper.Deselect(comboBox_LocalFilter, this.remoteHost);
+						SelectionHelper.Deselect(comboBox_LocalFilter, this.remoteHost);
 						break;
 					}
 
 					case SocketType.UdpServer:
 					{
 						comboBox_LocalFilter.Enabled = true;
-						Utilities.SelectionHelper.Select(comboBox_LocalFilter, this.remoteHost, this.remoteHost);
+						SelectionHelper.Select(comboBox_LocalFilter, this.remoteHost, this.remoteHost);
 						break;
 					}
 
 					case SocketType.UdpPairSocket:
 					{
 						comboBox_LocalFilter.Enabled = false;
-						Utilities.SelectionHelper.Deselect(comboBox_LocalFilter, this.remoteHost);
+						SelectionHelper.Deselect(comboBox_LocalFilter, this.remoteHost);
 						break;
 					}
 

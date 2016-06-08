@@ -367,8 +367,8 @@ namespace YAT.View.Forms
 				this.textFormats[i].CustomColors = this.customColors;
 			}
 
-			Utilities.SelectionHelper.Select(comboBox_InfoSeparator, this.infoSeparator, this.infoSeparator);
-			Utilities.SelectionHelper.Select(comboBox_InfoEnclosure, this.infoEnclosure, this.infoEnclosure);
+			SelectionHelper.Select(comboBox_InfoSeparator, this.infoSeparator, this.infoSeparator);
+			SelectionHelper.Select(comboBox_InfoEnclosure, this.infoEnclosure, this.infoEnclosure);
 
 			                               // Clone settings before assigning them to control:
 			monitor_Example.FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
