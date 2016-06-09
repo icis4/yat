@@ -255,7 +255,7 @@ namespace YAT.View.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				GetCommandFromSettingsSet(int.Parse((string)(((Controls.PredefinedCommandSettingsSet)sender).Tag), CultureInfo.InvariantCulture));
+				GetCommandFromSettingsSet(int.Parse((string)(((Control)sender).Tag), CultureInfo.InvariantCulture));
 				SetClearControls();
 			}
 		}
