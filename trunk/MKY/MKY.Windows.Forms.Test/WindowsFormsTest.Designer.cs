@@ -278,8 +278,8 @@
 			this.listBoxEx.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listBoxEx.Size = new System.Drawing.Size(339, 553);
 			this.listBoxEx.TabIndex = 0;
-			this.listBoxEx.VerticalScrolled += new System.Windows.Forms.ScrollEventHandler(this.listBoxEx_VerticalScrolled);
-			this.listBoxEx.HorizontalScrolled += new System.Windows.Forms.ScrollEventHandler(this.listBoxEx_HorizontalScrolled);
+//			this.listBoxEx.VerticalScrolled += new System.Windows.Forms.ScrollEventHandler(this.listBoxEx_VerticalScrolled);
+//			this.listBoxEx.HorizontalScrolled += new System.Windows.Forms.ScrollEventHandler(this.listBoxEx_HorizontalScrolled);
 			// 
 			// WindowsFormsTest
 			// 
