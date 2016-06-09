@@ -46,7 +46,7 @@ namespace YAT.Model.Types
 		public PredefinedCommandPageCollection(IEnumerable<PredefinedCommandPage> collection)
 			: base()
 		{
-			// Perfom a deep copy of the pages to break command references
+			// Perfom a deep copy to break references:
 			foreach (PredefinedCommandPage pcp in collection)
 				Add(new PredefinedCommandPage(pcp));
 		}

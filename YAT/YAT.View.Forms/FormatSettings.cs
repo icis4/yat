@@ -151,7 +151,7 @@ namespace YAT.View.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				GetFormatFromControl(int.Parse((string)(((Controls.TextFormat)sender).Tag), CultureInfo.InvariantCulture));
+				GetFormatFromControl(int.Parse((string)(((Control)sender).Tag), CultureInfo.InvariantCulture));
 				SetControls();
 			}
 		}
@@ -160,7 +160,7 @@ namespace YAT.View.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				GetCustomColorsFromControl(int.Parse((string)(((Controls.TextFormat)sender).Tag), CultureInfo.InvariantCulture));
+				GetCustomColorsFromControl(int.Parse((string)(((Control)sender).Tag), CultureInfo.InvariantCulture));
 				SetControls();
 			}
 		}

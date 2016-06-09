@@ -206,7 +206,7 @@ namespace YAT.View.Controls
 
 		private void button_Command_Click(object sender, EventArgs e)
 		{
-			CommandRequest(int.Parse((string)(((Button)sender).Tag), CultureInfo.InvariantCulture));
+			CommandRequest(int.Parse((string)(((Control)sender).Tag), CultureInfo.InvariantCulture));
 		}
 
 		#endregion

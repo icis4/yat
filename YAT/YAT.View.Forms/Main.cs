@@ -1291,7 +1291,7 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_FileRecentContextMenu_Click(object sender, EventArgs e)
 		{
-			this.main.OpenRecent(int.Parse((string)(((ToolStripMenuItem)sender).Tag), CultureInfo.InvariantCulture));
+			this.main.OpenRecent(int.Parse((string)(((Control)sender).Tag), CultureInfo.InvariantCulture));
 		}
 
 		#endregion
