@@ -38,7 +38,7 @@ using MKY.Windows.Forms;
 
 namespace YAT.View.Controls
 {
-	/// <summary></summary>
+	/// <remarks>The preview control is not scalable to simplify implementation.</remarks>
 	[DefaultEvent("ReportFormatChanged")]
 	public partial class UsbSerialHidDeviceSettings : UserControl
 	{

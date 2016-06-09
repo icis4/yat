@@ -39,7 +39,7 @@ using MKY.Windows.Forms;
 
 namespace YAT.View.Controls
 {
-	/// <summary></summary>
+	/// <remarks>This control is not scalable to simplify implementation.</remarks>
 	[DefaultEvent("UseIdChanged")]
 	public partial class UsbSerialHidReportFormatPreview : UserControl
 	{
