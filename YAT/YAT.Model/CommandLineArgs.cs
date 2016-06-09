@@ -145,7 +145,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "SerialPortAliveMonitor", ShortName = "spam", Description =
-			"When device is connected, e.g. a USB/COM converter, check the port every given milliseconds. " +
+			"When device is connected, e.g. a USB/COM converter, monitor the port every given milliseconds. " +
 			"Must be positive integral value equal or greater than 100. A common value is 500. " +
 			"The special value 0 indicates disabled. " +
 			"By default, this feature is enabled and set to 500 milliseconds." + EnvironmentEx.NewLineConstWorkaround +

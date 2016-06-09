@@ -52,8 +52,8 @@
 			this.label_Preview_5 = new System.Windows.Forms.Label();
 			this.label_Preview_6 = new System.Windows.Forms.Label();
 			this.label_Preview_7 = new System.Windows.Forms.Label();
-			this.reportFormatPreview = new YAT.View.Controls.UsbSerialHidReportFormatPreview();
 			this.label_FlowControl = new System.Windows.Forms.Label();
+			this.reportFormatPreview = new YAT.View.Controls.UsbSerialHidReportFormatPreview();
 			this.SuspendLayout();
 			// 
 			// checkBox_AutoOpen
@@ -303,19 +303,6 @@
 			this.label_Preview_7.Text = "w";
 			this.label_Preview_7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
-			// reportFormatPreview
-			// 
-			this.reportFormatPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.reportFormatPreview.AppendTerminatingZero = false;
-			this.reportFormatPreview.FillLastReport = false;
-			this.reportFormatPreview.Location = new System.Drawing.Point(3, 77);
-			this.reportFormatPreview.Name = "reportFormatPreview";
-			this.reportFormatPreview.PrependPayloadByteLength = false;
-			this.reportFormatPreview.Size = new System.Drawing.Size(254, 88);
-			this.reportFormatPreview.TabIndex = 8;
-			this.reportFormatPreview.UseId = false;
-			// 
 			// label_FlowControl
 			// 
 			this.label_FlowControl.AutoSize = true;
@@ -324,6 +311,17 @@
 			this.label_FlowControl.Size = new System.Drawing.Size(68, 13);
 			this.label_FlowControl.TabIndex = 20;
 			this.label_FlowControl.Text = "Flow Control:";
+			// 
+			// reportFormatPreview
+			// 
+			this.reportFormatPreview.AppendTerminatingZero = false;
+			this.reportFormatPreview.FillLastReport = false;
+			this.reportFormatPreview.Location = new System.Drawing.Point(3, 77);
+			this.reportFormatPreview.Name = "reportFormatPreview";
+			this.reportFormatPreview.PrependPayloadByteLength = false;
+			this.reportFormatPreview.Size = new System.Drawing.Size(254, 88);
+			this.reportFormatPreview.TabIndex = 8;
+			this.reportFormatPreview.UseId = false;
 			// 
 			// UsbSerialHidDeviceSettings
 			// 

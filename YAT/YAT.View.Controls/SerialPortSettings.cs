@@ -381,7 +381,7 @@ namespace YAT.View.Controls
 			if (!this.isSettingControls)
 			{
 				MKY.IO.Serial.AutoInterval ar = AliveMonitor;
-				ar.Enabled = checkBox_AutoReopen.Checked;
+				ar.Enabled = checkBox_AliveMonitor.Checked;
 				AliveMonitor = ar;
 			}
 		}
@@ -403,7 +403,7 @@ namespace YAT.View.Controls
 					MessageBoxEx.Show
 					(
 						this,
-						"Alive interval must be at least " + MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorMinInterval + " ms!",
+						"Monitoring interval must be at least " + MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorMinInterval + " ms!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error

@@ -124,6 +124,7 @@
 			// splitContainer_ExplicitDefaultRadix
 			// 
 			this.splitContainer_ExplicitDefaultRadix.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitContainer_ExplicitDefaultRadix.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
 			this.splitContainer_ExplicitDefaultRadix.IsSplitterFixed = true;
 			this.splitContainer_ExplicitDefaultRadix.Location = new System.Drawing.Point(0, 0);
 			this.splitContainer_ExplicitDefaultRadix.Name = "splitContainer_ExplicitDefaultRadix";

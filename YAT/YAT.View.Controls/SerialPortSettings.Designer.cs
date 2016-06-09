@@ -156,7 +156,7 @@
 			// 
 			this.label_AutoReopenIntervalUnit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_AutoReopenIntervalUnit.AutoSize = true;
-			this.label_AutoReopenIntervalUnit.Location = new System.Drawing.Point(200, 239);
+			this.label_AutoReopenIntervalUnit.Location = new System.Drawing.Point(205, 239);
 			this.label_AutoReopenIntervalUnit.Name = "label_AutoReopenIntervalUnit";
 			this.label_AutoReopenIntervalUnit.Size = new System.Drawing.Size(20, 13);
 			this.label_AutoReopenIntervalUnit.TabIndex = 15;
@@ -167,7 +167,7 @@
 			// 
 			this.textBox_AutoReopenInterval.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.textBox_AutoReopenInterval.Enabled = false;
-			this.textBox_AutoReopenInterval.Location = new System.Drawing.Point(146, 236);
+			this.textBox_AutoReopenInterval.Location = new System.Drawing.Point(151, 236);
 			this.textBox_AutoReopenInterval.Name = "textBox_AutoReopenInterval";
 			this.textBox_AutoReopenInterval.Size = new System.Drawing.Size(48, 20);
 			this.textBox_AutoReopenInterval.TabIndex = 14;
@@ -181,9 +181,9 @@
 			this.checkBox_AutoReopen.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
 			this.checkBox_AutoReopen.Location = new System.Drawing.Point(6, 219);
 			this.checkBox_AutoReopen.Name = "checkBox_AutoReopen";
-			this.checkBox_AutoReopen.Size = new System.Drawing.Size(237, 17);
-			this.checkBox_AutoReopen.TabIndex = 12;
-			this.checkBox_AutoReopen.Text = "When disconnected, try to reopen port every";
+			this.checkBox_AutoReopen.Size = new System.Drawing.Size(142, 30);
+			this.checkBox_AutoReopen.TabIndex = 13;
+			this.checkBox_AutoReopen.Text = "When disconnected, try\r\n to reopen the port every";
 			this.toolTip.SetToolTip(this.checkBox_AutoReopen, resources.GetString("checkBox_AutoReopen.ToolTip"));
 			this.checkBox_AutoReopen.UseVisualStyleBackColor = true;
 			this.checkBox_AutoReopen.CheckedChanged += new System.EventHandler(this.checkBox_AutoReopen_CheckedChanged);
@@ -196,8 +196,8 @@
 			this.checkBox_AliveMonitor.Location = new System.Drawing.Point(6, 177);
 			this.checkBox_AliveMonitor.Name = "checkBox_AliveMonitor";
 			this.checkBox_AliveMonitor.Size = new System.Drawing.Size(214, 30);
-			this.checkBox_AliveMonitor.TabIndex = 16;
-			this.checkBox_AliveMonitor.Text = "When connected, detect disconnect by\r\nchecking the port every";
+			this.checkBox_AliveMonitor.TabIndex = 10;
+			this.checkBox_AliveMonitor.Text = "When connected, detect disconnect by\r\n monitoring the port every";
 			this.toolTip.SetToolTip(this.checkBox_AliveMonitor, resources.GetString("checkBox_AliveMonitor.ToolTip"));
 			this.checkBox_AliveMonitor.UseVisualStyleBackColor = true;
 			this.checkBox_AliveMonitor.CheckedChanged += new System.EventHandler(this.checkBox_AliveMonitor_CheckedChanged);
@@ -206,10 +206,10 @@
 			// 
 			this.textBox_AliveMonitorInterval.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.textBox_AliveMonitorInterval.Enabled = false;
-			this.textBox_AliveMonitorInterval.Location = new System.Drawing.Point(146, 193);
+			this.textBox_AliveMonitorInterval.Location = new System.Drawing.Point(151, 193);
 			this.textBox_AliveMonitorInterval.Name = "textBox_AliveMonitorInterval";
 			this.textBox_AliveMonitorInterval.Size = new System.Drawing.Size(48, 20);
-			this.textBox_AliveMonitorInterval.TabIndex = 17;
+			this.textBox_AliveMonitorInterval.TabIndex = 11;
 			this.textBox_AliveMonitorInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textBox_AliveMonitorInterval.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_AliveMonitorInterval_Validating);
 			// 
@@ -217,10 +217,10 @@
 			// 
 			this.label_AliveMonitorIntervalUnit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_AliveMonitorIntervalUnit.AutoSize = true;
-			this.label_AliveMonitorIntervalUnit.Location = new System.Drawing.Point(200, 196);
+			this.label_AliveMonitorIntervalUnit.Location = new System.Drawing.Point(205, 196);
 			this.label_AliveMonitorIntervalUnit.Name = "label_AliveMonitorIntervalUnit";
 			this.label_AliveMonitorIntervalUnit.Size = new System.Drawing.Size(20, 13);
-			this.label_AliveMonitorIntervalUnit.TabIndex = 18;
+			this.label_AliveMonitorIntervalUnit.TabIndex = 12;
 			this.label_AliveMonitorIntervalUnit.Text = "ms";
 			this.label_AliveMonitorIntervalUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
