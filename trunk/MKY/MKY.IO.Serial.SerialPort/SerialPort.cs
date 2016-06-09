@@ -2093,6 +2093,11 @@ namespace MKY.IO.Serial.SerialPort
 		// Alive Ticker
 		//==========================================================================================
 
+		/// <remarks>
+		/// Note that this monitor is active even during sending and receiving data. Restarting the
+		/// timer on each write and read operation to the port, i.e. temporarily disable the timer,
+		/// is too time consuming. It's way better performing by simply letting the monitor run.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "Well, any better idea on how to check whether the serial port is still alive?")]
 		private void StartAliveMonitor()
 		{
