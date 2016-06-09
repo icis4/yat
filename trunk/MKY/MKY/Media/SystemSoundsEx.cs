@@ -89,6 +89,19 @@ namespace MKY.Media
 
 		#endregion
 
+		#region Play
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		public virtual void Play()
+		{
+			SystemSounds sound = (SystemSounds)UnderlyingEnum;
+			if (sound != SystemSounds.None)
+				((System.Media.SystemSound)((SystemSoundsEx)sound)).Play();
+		}
+
+		#endregion
+
 		#region GetItems
 
 		/// <remarks>
