@@ -89,7 +89,7 @@ namespace MKY.IO
 		/// <summary>
 		/// Denormalizes an extension, i.e. removes a '.' if apparent.
 		/// </summary>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "What's wrong with 'denormalize'?")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Denormalize' is a correct English term.")]
 		public static string DenormalizeExtension(string extension)
 		{
 			if (string.IsNullOrEmpty(extension))

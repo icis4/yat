@@ -60,7 +60,7 @@ using MKY.Time;
 namespace MKY.IO.Serial.SerialPort
 {
 	/// <summary></summary>
-	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to skip URLs...")]
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Different root namespace.")]
 	public class SerialPort : IIOProvider, IXOnXOffHandler, IDisposable
 	{

@@ -28,6 +28,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -233,6 +234,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <remarks>Dedicated function for symmetricity with <see cref="SendText"/>.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
 		private void SetEditFocusState(EditFocusState state)
 		{
 			if (this.editFocusState != state)

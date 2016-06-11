@@ -1760,7 +1760,7 @@ namespace YAT.View.Forms
 		/// This is for symmetricity with 'Save Workspace' and 'Save Workspace As...'. However, it
 		/// is also possible to select a workspace file using the 'normal' 'File Open' method.
 		/// </remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "What's wrong with 'symmetricity'?")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowOpenWorkspaceFromFileDialog()
 		{

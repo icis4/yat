@@ -211,7 +211,7 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// The USB usage page as described in http://www.usb.org/developers/devclass_docs/Hut1_12v2.pdf.
 	/// </summary>
-	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to skip URLs...")]
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 	[SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags", Justification = "These are NOT flags!")]
 	[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
 	[CLSCompliant(false)]
@@ -415,7 +415,7 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// The USB HID usage as described in http://www.usb.org/developers/devclass_docs/Hut1_12v2.pdf.
 	/// </summary>
-	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to skip URLs...")]
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 	[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
 	[CLSCompliant(false)]
 	public enum HidUsageId : ushort // 16 bits!

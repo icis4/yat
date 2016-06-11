@@ -329,8 +329,8 @@ namespace YAT.Log
 		/// Unfortunately, neither <see cref="Stream"/> nor any derived class implements some kind
 		/// of intelligent flushing except for <see cref="StreamWriter.AutoFlush"/>. However, that
 		/// is very inefficient. Therefore, a timer is used to flush the stream regularly. This
-		/// ensures that a log file is up to date within a reasonable time, while being performant
-		/// at the same time.
+		/// ensures that a log file is up to date within a reasonable time, while it is still
+		/// performing well.
 		/// </remarks>
 		protected virtual void TriggerFlushTimer()
 		{

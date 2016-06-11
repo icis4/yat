@@ -50,6 +50,7 @@ namespace YAT.Controller
 	/// This class is separated into its own project for those who want to use YAT components within
 	/// their own context.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
 	public class Main : IDisposable
 	{
 		#region Constants
@@ -381,7 +382,7 @@ namespace YAT.Controller
 		/// reads the application settings, independent on whether it is the first or subsequent
 		/// instance.
 		/// </remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, StyleCop doesn't seem to be able to deal with command line terms such as 'cmd' or 'nv'...")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, StyleCop isn't able to deal with command line terms such as 'cmd' or 'nv'...")]
 		public virtual MainResult Run(bool runFromConsole, bool runWithView)
 		{
 			AssertNotDisposed();

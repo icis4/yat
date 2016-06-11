@@ -789,7 +789,7 @@ namespace YAT.View.Controls
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to deal with abbreviations or extensions such as 'ms'...")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to deal with abbreviations or extensions such as 'ms'...")]
 		private void fastListBox_Monitor_DrawItem(object sender, DrawItemEventArgs e)
 		{
 			unchecked
@@ -853,6 +853,7 @@ namespace YAT.View.Controls
 			UpdateDataStatusText();
 		}
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private int timer_ProcessorLoad_Tick_LastValue = 100;
 
 		private void timer_ProcessorLoad_Tick(object sender, EventArgs e)
