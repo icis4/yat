@@ -51,6 +51,7 @@ namespace MKY.IO
 		/// <param name="directoryPath">File to open.</param>
 		/// <param name="exception">Exception object, in case of failure.</param>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static bool TryOpen(string directoryPath, out Exception exception)
 		{
 			try
@@ -69,6 +70,7 @@ namespace MKY.IO
 		/// <summary>
 		/// Makes all files within a directory writable, including or excluding sub-directories.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 		public static void MakeAllFilesWritable(string path, bool recursive = true)
 		{
 			if (Directory.Exists(path))

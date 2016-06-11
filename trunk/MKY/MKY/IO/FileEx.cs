@@ -43,6 +43,7 @@ namespace MKY.IO
 		/// <summary>
 		/// Returns a unique file name for a file specified by path, unique part is separated by separator string.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 		public static string MakeUniqueFileName(string path, string separator = "")
 		{
 			string dir  = Path.GetDirectoryName(path) + Path.DirectorySeparatorChar;
@@ -167,6 +168,7 @@ namespace MKY.IO
 		/// <returns>
 		/// Returns <c>true</c> if file is findable.
 		/// </returns>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static bool IsFindable(string fileName, out string filePath)
 		{
@@ -186,7 +188,7 @@ namespace MKY.IO
 
 				if (p.ExitCode == 0)
 				{
-					filePath = whereResult.Substring(0, whereResult.IndexOf(Environment.NewLine));
+					filePath = whereResult.Substring(0, whereResult.IndexOf(Environment.NewLine, StringComparison.OrdinalIgnoreCase));
 					return (true);
 				}
 				else

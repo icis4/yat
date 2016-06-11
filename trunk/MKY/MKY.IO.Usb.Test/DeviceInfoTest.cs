@@ -178,11 +178,14 @@ namespace MKY.IO.Usb.Test
 			{
 				try
 				{
-					DeviceInfo info;
+					DeviceInfo dummyInfoToForceException;
+
 					if (!useSerial)
-						info = new DeviceInfo(vendorId, productId);
+						dummyInfoToForceException = new DeviceInfo(vendorId, productId);
 					else
-						info = new DeviceInfo(vendorId, productId, serial);
+						dummyInfoToForceException = new DeviceInfo(vendorId, productId, serial);
+
+					UnusedLocal.PreventAnalysisWarning(dummyInfoToForceException);
 
 					if (!useSerial)
 						Assert.Fail("Invalid pair " + vendorId + "/" + productId + " wasn't properly handled!");
@@ -198,11 +201,14 @@ namespace MKY.IO.Usb.Test
 				{
 					try
 					{
-						DeviceInfo info;
+						DeviceInfo dummyInfoToForceException;
+
 						if (!useSerial)
-							info = DeviceInfo.ParseFromVidAndPid(descriptor);
+							dummyInfoToForceException = DeviceInfo.ParseFromVidAndPid(descriptor);
 						else
-							info = DeviceInfo.ParseFromVidAndPidAndSerial(descriptor);
+							dummyInfoToForceException = DeviceInfo.ParseFromVidAndPidAndSerial(descriptor);
+
+						UnusedLocal.PreventAnalysisWarning(dummyInfoToForceException);
 
 						Assert.Fail("Invalid descripton " + descriptor + " wasn't properly handled!");
 					}

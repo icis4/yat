@@ -23,6 +23,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Text
 {
@@ -48,6 +49,7 @@ namespace MKY.Text
 		/// <param name="filePath">File to open.</param>
 		/// <param name="exception">Exception object, in case of failure.</param>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static bool TryOpenFile(string filePath, out Exception exception)
 		{
 			try

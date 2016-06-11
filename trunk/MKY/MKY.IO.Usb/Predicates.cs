@@ -21,16 +21,21 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.IO.Usb
 {
 	/// <summary></summary>
-	public class EqualsVidPid
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
+	public class EqualsVidAndPid
 	{
 		private DeviceInfo deviceInfo;
 
 		/// <summary></summary>
-		public EqualsVidPid(DeviceInfo deviceInfo)
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
+		public EqualsVidAndPid(DeviceInfo deviceInfo)
 		{
 			this.deviceInfo = deviceInfo;
 		}

@@ -30,6 +30,7 @@ namespace MKY.Media
 	#region Enum SystemSounds
 
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1717:OnlyFlagsEnumsShouldHavePluralNames", Justification = "Same name as 'System.Media.SystemSounds'.")]
 	public enum SystemSounds
 	{
 		/// <remarks>No corresponding item in <see cref="System.Media.SystemSounds"/>.</remarks>
@@ -269,6 +270,7 @@ namespace MKY.Media
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public static implicit operator System.Media.SystemSound(SystemSoundsEx sound)
 		{
 			switch ((SystemSounds)sound)
@@ -284,6 +286,7 @@ namespace MKY.Media
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public static implicit operator SystemSoundsEx(System.Media.SystemSound sound)
 		{
 			if      (sound == System.Media.SystemSounds.Asterisk)

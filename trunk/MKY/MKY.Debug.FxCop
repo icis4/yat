@@ -34,7 +34,6 @@
   <Target Name="$(ProjectDir)/MKY.IO.Serial.Usb.Test/bin/Debug/MKY.IO.Serial.Usb.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Serial.Usb/bin/Debug/MKY.IO.Serial.Usb.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Serial/bin/Debug/MKY.IO.Serial.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/MKY.IO.Usb.Demo/bin/Debug/MKY.IO.Usb.Demo.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Usb.Test/bin/Debug/MKY.IO.Usb.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Usb/bin/Debug/MKY.IO.Usb.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.Net.Test/bin/Debug/MKY.Net.Test.dll" Analyze="True" AnalyzeAllChildren="True" />

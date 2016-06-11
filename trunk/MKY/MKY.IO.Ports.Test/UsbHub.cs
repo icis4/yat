@@ -35,7 +35,7 @@ namespace MKY.IO.Ports.Test
 
 	/// <summary>Flags to enable/disable the outputs of the 'RS-232' USB Hub.</summary>
 	[Flags]
-	public enum UsbHubSetting
+	public enum UsbHubSettings
 	{
 		/// <summary>No outputs enabled.</summary>
 		None = 0x00,
@@ -135,7 +135,7 @@ namespace MKY.IO.Ports.Test
 		/// <remarks>
 		/// Assume that all used outputs are enabled at first.
 		/// </remarks>
-		private static UsbHubSetting staticProxy = UsbHubSetting.All;
+		private static UsbHubSettings staticProxy = UsbHubSettings.All;
 
 		#endregion
 
@@ -157,16 +157,16 @@ namespace MKY.IO.Ports.Test
 		/// Sets all outputs to the given setting.
 		/// </summary>
 		/// <returns><c>true</c> if successful; otherwise <c>false</c></returns>
-		public static bool Set(UsbHubSetting setting)
+		public static bool Set(UsbHubSettings setting)
 		{
 			DebugMessage("Setting   " + ToBinaryString(setting) + " mask.");
 
-			UsbHubSetting disableMask = ( staticProxy & ~setting);
-			UsbHubSetting enableMask  = (~staticProxy &  setting);
+			UsbHubSettings disableMask = ( staticProxy & ~setting);
+			UsbHubSettings enableMask  = (~staticProxy &  setting);
 
-			if (disableMask != UsbHubSetting.None)
+			if (disableMask != UsbHubSettings.None)
 			{
-				UsbHubSetting accumulated = (staticProxy & ~disableMask);
+				UsbHubSettings accumulated = (staticProxy & ~disableMask);
 				if (!ExecuteControl(accumulated)) // No need to do steps here, disabling only.
 					return (false);
 
@@ -174,9 +174,9 @@ namespace MKY.IO.Ports.Test
 				Thread.Sleep(WaitForDriverUnloading);
 			}
 
-			if (enableMask != UsbHubSetting.None)
+			if (enableMask != UsbHubSettings.None)
 			{
-				UsbHubSetting accumulated = (staticProxy | enableMask);
+				UsbHubSettings accumulated = (staticProxy | enableMask);
 				if (!SetInSteps(accumulated))
 					return (false);
 
@@ -186,14 +186,14 @@ namespace MKY.IO.Ports.Test
 			return (true);
 		}
 
-		private static bool SetInSteps(UsbHubSetting setting)
+		private static bool SetInSteps(UsbHubSettings setting)
 		{
-			UsbHubSetting stepMask;
+			UsbHubSettings stepMask;
 
-			stepMask = setting & UsbHubSetting.Step1;
-			if (stepMask != UsbHubSetting.None)
+			stepMask = setting & UsbHubSettings.Step1;
+			if (stepMask != UsbHubSettings.None)
 			{
-				UsbHubSetting accumulated = (staticProxy | stepMask);
+				UsbHubSettings accumulated = (staticProxy | stepMask);
 				if (!ExecuteControl(accumulated))
 					return (false);
 
@@ -201,10 +201,10 @@ namespace MKY.IO.Ports.Test
 				Thread.Sleep(WaitForDriverLoading);
 			}
 
-			stepMask = setting & UsbHubSetting.Step2;
-			if (stepMask != UsbHubSetting.None)
+			stepMask = setting & UsbHubSettings.Step2;
+			if (stepMask != UsbHubSettings.None)
 			{
-				UsbHubSetting accumulated = (staticProxy | stepMask);
+				UsbHubSettings accumulated = (staticProxy | stepMask);
 				if (!ExecuteControl(accumulated))
 					return (false);
 
@@ -230,12 +230,12 @@ namespace MKY.IO.Ports.Test
 		/// Enables the given outputs.
 		/// </summary>
 		/// <returns><c>true</c> if successful; otherwise <c>false</c></returns>
-		public static bool Enable(UsbHubSetting enableMask)
+		public static bool Enable(UsbHubSettings enableMask)
 		{
 			DebugMessage("Enabling  " + ToBinaryString(enableMask) + " mask. " +
 			                      "Proxy was " + ToBinaryString(staticProxy) + " mask.");
 
-			UsbHubSetting accumulated = (staticProxy | enableMask);
+			UsbHubSettings accumulated = (staticProxy | enableMask);
 			if (!SetInSteps(accumulated))
 				return (false);
 
@@ -247,12 +247,12 @@ namespace MKY.IO.Ports.Test
 		/// Disables the given outputs.
 		/// </summary>
 		/// <returns><c>true</c> if successful; otherwise <c>false</c></returns>
-		public static bool Disable(UsbHubSetting disableMask)
+		public static bool Disable(UsbHubSettings disableMask)
 		{
 			DebugMessage("Disabling " + ToBinaryString(disableMask) + " mask. " +
 			                      "Proxy was " + ToBinaryString(staticProxy) + " mask.");
 
-			UsbHubSetting accumulated = (staticProxy & ~disableMask);
+			UsbHubSettings accumulated = (staticProxy & ~disableMask);
 			if (!ExecuteControl(accumulated)) // No need to do steps here, disabling only.
 				return (false);
 
@@ -268,7 +268,7 @@ namespace MKY.IO.Ports.Test
 		/// Execution requires approx 3 seconds.
 		/// </remarks>
 		/// <returns><c>true</c> if successful; otherwise <c>false</c></returns>
-		private static bool ExecuteControl(UsbHubSetting setting)
+		private static bool ExecuteControl(UsbHubSettings setting)
 		{
 			string mask = ToBinaryString(setting);
 			string args = Serial + " " + mask;
@@ -296,7 +296,7 @@ namespace MKY.IO.Ports.Test
 			}
 		}
 
-		private static string ToBinaryString(UsbHubSetting setting)
+		private static string ToBinaryString(UsbHubSettings setting)
 		{
 			return (StringEx.Right(ByteEx.ConvertToBinaryString((byte)setting), MaxBits));
 		}

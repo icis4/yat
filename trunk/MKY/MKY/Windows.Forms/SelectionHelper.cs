@@ -21,6 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
 namespace MKY.Windows.Forms
@@ -29,52 +30,54 @@ namespace MKY.Windows.Forms
 	public static class SelectionHelper
 	{
 		/// <summary>
-		/// Selects the given item in a <see cref="ComboBox"/>.
+		/// Selects the given item in a <see cref="ListControl"/>.
 		/// </summary>
 		/// <remarks>
 		/// Separate <paramref name="itemText"/> need to selectively chose the way the item is
 		/// converted into a string. This can e.g. be an implicit string conversion operator,
 		/// or the item's ToString() method, or something else.
 		/// </remarks>
-		public static void Select(ComboBox cb, object item, string itemText)
+		public static void Select(ComboBox control, object item, string itemText)
 		{
-			if (cb.Items.Count > 0)
+			if (control.Items.Count > 0)
 			{
 				if (item != null)
 				{
-					if (cb.Items.Contains(item))
+					if (control.Items.Contains(item))
 					{	// Applies if an item of the combo box is selected.
-						cb.SelectedItem = item;
+						control.SelectedItem = item;
 					}
 					else
 					{	// Applies if an item that is not in the combo box is selected.
-						cb.SelectedIndex = ControlEx.InvalidIndex;
-						cb.Text = itemText;
+						control.SelectedIndex = ControlEx.InvalidIndex;
+						control.Text = itemText;
 					}
 				}
 				else
 				{	// Item doesn't exist, use default = first item in the combo box, or none if list is empty.
-					cb.SelectedIndex = 0;
+					control.SelectedIndex = 0;
 				}
 			}
 			else
 			{
-				cb.SelectedIndex = ControlEx.InvalidIndex;
-				cb.Text = itemText;
+				control.SelectedIndex = ControlEx.InvalidIndex;
+				control.Text = itemText;
 			}
 		}
 
 		/// <summary></summary>
-		public static void Deselect(ComboBox cb, string itemText = null)
+		[SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "Same type as Select() above.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		public static void Deselect(ComboBox control, string itemText = null)
 		{
 			if (string.IsNullOrEmpty(itemText))
 			{
-				cb.Text = null; // Setting the 'Text' property to null or an empty string ("") sets the SelectedIndex to -1.
+				control.Text = null; // Setting the 'Text' property to null or an empty string ("") sets the SelectedIndex to -1.
 			}
 			else
 			{
-				cb.SelectedIndex = ControlEx.InvalidIndex; // -1.
-				cb.Text = itemText;
+				control.SelectedIndex = ControlEx.InvalidIndex; // -1.
+				control.Text = itemText;
 			}
 		}
 
@@ -86,45 +89,46 @@ namespace MKY.Windows.Forms
 		/// converted into a string. This can e.g. be an implicit string conversion operator,
 		/// or the item's ToString() method, or something else.
 		/// </remarks>
-		public static void Select(ToolStripComboBox cb, object item, string itemText)
+		public static void Select(ToolStripComboBox control, object item, string itemText)
 		{
-			if (cb.Items.Count > 0)
+			if (control.Items.Count > 0)
 			{
 				if (item != null)
 				{
-					if (cb.Items.Contains(item))
+					if (control.Items.Contains(item))
 					{	// Applies if an item of the combo box is selected.
-						cb.SelectedItem = item;
+						control.SelectedItem = item;
 					}
 					else
 					{	// Applies if an item that is not in the combo box is selected.
-						cb.SelectedIndex = ControlEx.InvalidIndex;
-						cb.Text = itemText;
+						control.SelectedIndex = ControlEx.InvalidIndex;
+						control.Text = itemText;
 					}
 				}
 				else
 				{	// Item doesn't exist, use default = first item in the combo box, or none if list is empty.
-					cb.SelectedIndex = 0;
+					control.SelectedIndex = 0;
 				}
 			}
 			else
 			{
-				cb.SelectedIndex = ControlEx.InvalidIndex;
-				cb.Text = itemText;
+				control.SelectedIndex = ControlEx.InvalidIndex;
+				control.Text = itemText;
 			}
 		}
 
 		/// <summary></summary>
-		public static void Deselect(ToolStripComboBox cb, string itemText = null)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		public static void Deselect(ToolStripComboBox control, string itemText = null)
 		{
 			if (string.IsNullOrEmpty(itemText))
 			{
-				cb.Text = null; // Setting the 'Text' property to null or an empty string ("") sets the SelectedIndex to -1.
+				control.Text = null; // Setting the 'Text' property to null or an empty string ("") sets the SelectedIndex to -1.
 			}
 			else
 			{
-				cb.SelectedIndex = ControlEx.InvalidIndex; // -1.
-				cb.Text = itemText;
+				control.SelectedIndex = ControlEx.InvalidIndex; // -1.
+				control.Text = itemText;
 			}
 		}
 	}

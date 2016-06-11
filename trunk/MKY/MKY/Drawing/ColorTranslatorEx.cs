@@ -36,6 +36,7 @@ namespace MKY.Drawing
 		/// <summary>
 		/// Translates an HTML or Win32 color representation to a GDI+ <see cref="Color"/> structure.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Emphasizes the color's representation.")]
 		public static Color FromHtmlOrWin32(string colorString)
 		{
 			try

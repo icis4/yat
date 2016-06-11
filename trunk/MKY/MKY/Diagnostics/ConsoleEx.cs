@@ -61,6 +61,7 @@ namespace MKY.Diagnostics
 			/// <summary>
 			/// Writes source, type and time stamp to the output writer of this object.
 			/// </summary>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 			public void WriteTimeStamp(Type type, string callerMemberName = null, string message = null)
 			{
 				DiagnosticsWriterOutput.WriteTimeStamp(writer, type, callerMemberName, message);
@@ -70,6 +71,7 @@ namespace MKY.Diagnostics
 			/// Writes source, type, message and stack of the given exception and its inner
 			/// exceptions to the output writer of this object.
 			/// </summary>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 			public void WriteException(Type type, Exception ex, string leadMessage = null)
 			{
 				DiagnosticsWriterOutput.WriteException(writer, type, ex, leadMessage);
@@ -78,6 +80,7 @@ namespace MKY.Diagnostics
 			/// <summary>
 			/// Writes a <see cref="StackTrace"/> to the output writer of this object.
 			/// </summary>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 			public void WriteStack(Type type, string leadMessage = null)
 			{
 				WriteStack(type, new StackTrace(), leadMessage);
@@ -86,6 +89,7 @@ namespace MKY.Diagnostics
 			/// <summary>
 			/// Writes a <see cref="StackTrace"/> to the output writer of this object.
 			/// </summary>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 			public void WriteStack(Type type, StackTrace st, string leadMessage = null)
 			{
 				DiagnosticsWriterOutput.WriteStack(writer, type, st, leadMessage);
@@ -94,6 +98,7 @@ namespace MKY.Diagnostics
 			/// <summary>
 			/// Writes the properties of a <see cref="Message"/> to the output writer of this object.
 			/// </summary>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 			[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
 			public void WriteWindowsFormsMessage(Type type, Message m, string leadMessage = null)
 			{
@@ -103,6 +108,7 @@ namespace MKY.Diagnostics
 			/// <summary>
 			/// Writes the properties of a <see cref="FileStream"/> to the output writer of this object.
 			/// </summary>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 			public void WriteFileStream(Type type, FileStream fs, string leadMessage = null)
 			{
 				DiagnosticsWriterOutput.WriteFileStream(writer, type, fs, leadMessage);

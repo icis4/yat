@@ -43,6 +43,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.NetworkInformation;
 
@@ -71,6 +72,7 @@ namespace MKY.Net
 		/// <summary>
 		/// Fills list with all interfaces.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 		public virtual void FillWithAvailableLocalInterfaces(bool prependPredefined = true)
 		{
 			lock (this)
@@ -187,7 +189,7 @@ namespace MKY.Net
 		//==========================================================================================
 
 		[Conditional("DEBUG_VERBOSE")]
-		private void DebugVerboseIndent(string message = null)
+		private static void DebugVerboseIndent(string message = null)
 		{
 			if (!string.IsNullOrEmpty(message))
 				Debug.WriteLine(message);
@@ -196,7 +198,7 @@ namespace MKY.Net
 		}
 
 		[Conditional("DEBUG_VERBOSE")]
-		private void DebugVerboseUnindent(string message = null)
+		private static void DebugVerboseUnindent(string message = null)
 		{
 			Debug.Unindent();
 

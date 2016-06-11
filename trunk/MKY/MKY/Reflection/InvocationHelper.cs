@@ -21,6 +21,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace MKY.Reflection
@@ -33,6 +34,7 @@ namespace MKY.Reflection
 		/// <summary>
 		/// Attribute to select a static property of a generic type, i.e. kind of a static interface.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		[CLSCompliant(false)]
 		[AttributeUsage(AttributeTargets.Class)]
 		public sealed class StaticPropertyAttribute : Attribute
@@ -51,14 +53,12 @@ namespace MKY.Reflection
 			public string PropertyName
 			{
 				get { return (this.propertyName); }
-				set { this.propertyName = value;  }
 			}
 
 			/// <summary></summary>
 			public Type PropertyType
 			{
 				get { return (this.propertyType); }
-				set { this.propertyType = value;  }
 			}
 		}
 

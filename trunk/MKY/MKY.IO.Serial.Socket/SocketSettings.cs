@@ -40,7 +40,6 @@ namespace MKY.IO.Serial.Socket
 {
 	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
-	[Serializable]
 	public class SocketSettings : Settings.SettingsItem
 	{
 		#region Constants
@@ -222,6 +221,7 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods", Justification = "Well, there are other types than object types...")]
 		[XmlElement("Type")]
 		public virtual SocketType Type
 		{
@@ -259,6 +259,7 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
 		[XmlElement("RemoteHost")]
 		public virtual string RemoteHost_ForSerialization
 		{
@@ -344,7 +345,7 @@ namespace MKY.IO.Serial.Socket
 		[XmlIgnore]
 		public virtual string RemoteEndPointString
 		{
-			get { return (this.remoteHost.ToEndpointAdressString() + ":" + RemotePort); }
+			get { return (this.remoteHost.ToEndpointAddressString() + ":" + RemotePort); }
 		}
 
 		/// <summary></summary>
@@ -385,6 +386,7 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
 		[XmlElement("LocalFilter")]
 		public virtual string LocalFilter_ForSerialization
 		{
@@ -668,12 +670,12 @@ namespace MKY.IO.Serial.Socket
 		{
 			switch (type)
 			{
-				case SocketType.TcpClient:     return (                                         this.remoteHost.ToEndpointAdressString() + ":" + this.remoteTcpPort);
+				case SocketType.TcpClient:     return (                                         this.remoteHost.ToEndpointAddressString() + ":" + this.remoteTcpPort);
 				case SocketType.TcpServer:     return ("Server:"  + this.localTcpPort                                                                         );
-				case SocketType.TcpAutoSocket: return ("Server:"  + this.localTcpPort + " / " + this.remoteHost.ToEndpointAdressString() + ":" + this.remoteTcpPort);
-				case SocketType.UdpClient:     return (                                         this.remoteHost.ToEndpointAdressString() + ":" + this.remoteUdpPort);
+				case SocketType.TcpAutoSocket: return ("Server:"  + this.localTcpPort + " / " + this.remoteHost.ToEndpointAddressString() + ":" + this.remoteTcpPort);
+				case SocketType.UdpClient:     return (                                         this.remoteHost.ToEndpointAddressString() + ":" + this.remoteUdpPort);
 				case SocketType.UdpServer:     return ("Receive:" + this.localUdpPort                                                                         );
-				case SocketType.UdpPairSocket: return ("Receive:" + this.localUdpPort + " / " + this.remoteHost.ToEndpointAdressString() + ":" + this.remoteUdpPort);
+				case SocketType.UdpPairSocket: return ("Receive:" + this.localUdpPort + " / " + this.remoteHost.ToEndpointAddressString() + ":" + this.remoteUdpPort);
 
 				default:                       return (Undefined);
 			}

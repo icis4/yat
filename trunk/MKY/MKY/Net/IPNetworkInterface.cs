@@ -70,6 +70,7 @@ namespace MKY.Net
 	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public class IPNetworkInterfaceEx : EnumEx
 	{
 		#region String Definitions
@@ -110,6 +111,7 @@ namespace MKY.Net
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 		public IPNetworkInterfaceEx(IPAddress address, string description = null)
 		{
 			if (string.IsNullOrEmpty(description)) // Defined by address only.
@@ -193,7 +195,7 @@ namespace MKY.Net
 		}
 
 		/// <summary></summary>
-		public bool IsLocalHost
+		public bool IsLocalhost
 		{
 			get
 			{

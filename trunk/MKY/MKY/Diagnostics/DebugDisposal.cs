@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Diagnostics
 {
@@ -31,6 +32,7 @@ namespace MKY.Diagnostics
 	public static class DebugDisposal
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		[Conditional("DEBUG")]
 		public static void DebugNotifyFinalizerInsteadOfDispose(object obj)
 		{

@@ -42,6 +42,7 @@ namespace MKY.Xml
 		/// <summary>
 		/// Reads XML input stream into a document.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Emphasize type.")]
 		public static XmlDocument FromReader(XmlReader reader)
 		{
 			XmlDocument document = new XmlDocument();
@@ -52,6 +53,7 @@ namespace MKY.Xml
 		/// <summary>
 		/// Creates and returns an object tree of the given type from a document.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Emphasize type.")]
 		public static object ToObjectTree(XmlDocument document, Type type)
 		{
 			// Save the resulting document into a string:
@@ -76,6 +78,7 @@ namespace MKY.Xml
 		/// Creates and returns the default document of the given type.
 		/// </summary>
 		/// <param name="type">The type to be used.</param>
+		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Emphasize type.")]
 		public static XmlDocument CreateDefaultDocument(Type type)
 		{
 			return (CreateDefaultDocument(type, null));
@@ -86,6 +89,7 @@ namespace MKY.Xml
 		/// </summary>
 		/// <param name="type">The type to be used.</param>
 		/// <param name="requiredSchema">Schema(s) required in addition to the default schema.</param>
+		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Emphasize type.")]
 		public static XmlDocument CreateDefaultDocument(Type type, params XmlSchema[] requiredSchema)
 		{
 			// Create an empty object tree of the type to be able to serialize it afterwards.

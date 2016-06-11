@@ -179,6 +179,7 @@ namespace MKY.IO.Ports.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 		public virtual SerialPortConfigurationElementCollection LoopbackSelfs
 		{
 			get { return ((SerialPortConfigurationElementCollection)this["LoopbackSelfs"]); }
@@ -246,6 +247,7 @@ namespace MKY.IO.Ports.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
 		public virtual bool[] LoopbackPairIsAvailable
 		{
 			get { return (this.loopbackPairIsAvailable); }
@@ -253,6 +255,7 @@ namespace MKY.IO.Ports.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
 		public virtual bool[] LoopbackSelfIsAvailable
 		{
 			get { return (this.loopbackSelfIsAvailable); }
@@ -260,19 +263,6 @@ namespace MKY.IO.Ports.Test
 		}
 
 		#endregion
-
-		#endregion
-
-		#region Methods
-		//==========================================================================================
-		// Methods
-		//==========================================================================================
-
-		private void AssertNotReadOnly(string propertyName)
-		{
-			if (IsReadOnly())
-				throw (new ConfigurationErrorsException("The property " + propertyName + " is read only!"));
-		}
 
 		#endregion
 	}
@@ -398,6 +388,7 @@ namespace MKY.IO.Ports.Test
 		public static readonly string LoopbackPairsAreAvailable = "Serial port loopback pair" + ((ConfigurationProvider.Configuration.LoopbackPairs.Count > 0) ? ((ConfigurationProvider.Configuration.LoopbackPairs.Count > 1) ? "s are " : " is ") : " is not ") + "available";
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 		public static readonly string LoopbackSelfsAreAvailable = "Serial port loopback self" + ((ConfigurationProvider.Configuration.LoopbackSelfs.Count > 0) ? ((ConfigurationProvider.Configuration.LoopbackSelfs.Count > 1) ? "s are " : " is ") : " is not ") + "available";
 
 		/// <summary></summary>
@@ -488,6 +479,7 @@ namespace MKY.IO.Ports.Test
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class LoopbackSelfsAreAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{

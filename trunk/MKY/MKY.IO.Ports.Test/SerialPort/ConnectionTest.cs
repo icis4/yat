@@ -26,6 +26,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Threading;
 
@@ -67,13 +68,14 @@ namespace MKY.IO.Ports.Test.SerialPort
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 		[Test, MTSicsDeviceAIsConnectedCategory]
 		public virtual void TestCloseReopenSerialPortEx()
 		{
 			TestCloseReopen(new SerialPortEx());
 		}
 
-		private void TestCloseReopen(System.IO.Ports.SerialPort port)
+		private static void TestCloseReopen(System.IO.Ports.SerialPort port)
 		{
 			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
 				Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
@@ -162,6 +164,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 		[Test, MTSicsDeviceAIsConnectedCategory, MinuteDurationCategory(1)]
 		public virtual void TestDisconnectReconnectSerialPortEx()
 		{
@@ -175,7 +178,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			TestDisconnectReconnect(new SerialPortEx(), true); // See comments in TestDisconnectReconnect().
 		}
 
-		private void TestDisconnectReconnect(System.IO.Ports.SerialPort port, bool testWithContinuousReceiving)
+		private static void TestDisconnectReconnect(System.IO.Ports.SerialPort port, bool testWithContinuousReceiving)
 		{
 			// Keep constructor of effective type in order to later recreate a port object of the same type:
 			ConstructorInfo ci = port.GetType().GetConstructor(Type.EmptyTypes);
@@ -189,7 +192,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			string portName = ConfigurationProvider.Configuration.MTSicsDeviceA;
-			UsbHubSetting portOut = UsbHubSetting.Out4;
+			UsbHubSettings portOut = UsbHubSettings.Out4;
 			const int WaitForOperation = 100;
 
 			// --- Precondition: USB hub is set to its defaults, i.e. all outputs are enabled. -----
@@ -203,7 +206,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			// --- Test: Disconnect/Reconnect without sending. -------------------------------------
 
 			// Disconnect USB/RS-232 converter. Expected: No exceptions, port is closed:
-			Assert.IsTrue(UsbHubControl.Set(UsbHubSetting.None), "Failed to modify USB hub!");
+			Assert.IsTrue(UsbHubControl.Set(UsbHubSettings.None), "Failed to modify USB hub!");
 			//// Disabling all outputs is used to improve speed when enabling single outputs below.
 			//// See comments in implementation of 'UsbHubControl' for explanation.
 			Assert.IsFalse(port.IsOpen);
@@ -305,7 +308,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			Thread.Sleep(WaitForOperation); // Wait to prevent issues in subsequent test cases.
 
 			// --- Postcondition: USB hub is set to its defaults, i.e. all outputs are enabled. ----
-			Assert.IsTrue(UsbHubControl.Set(UsbHubSetting.All), "Failed to set USB hub!");
+			Assert.IsTrue(UsbHubControl.Set(UsbHubSettings.All), "Failed to set USB hub!");
 		}
 
 		#endregion

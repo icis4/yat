@@ -262,14 +262,6 @@ namespace MKY.Settings
 			}
 
 			/// <summary>
-			/// Handler to defaults.
-			/// </summary>
-			public static TSettings Defaults
-			{
-				get { return (new TSettings()); }
-			}
-
-			/// <summary>
 			/// Returns whether settings are currently owned by the current instance,
 			/// <c>false</c> if not.
 			/// </summary>
@@ -369,7 +361,7 @@ namespace MKY.Settings
 				}
 
 				// Nothing found, return default settings:
-				this.settings = Defaults;
+				this.settings = new TSettings();
 				return (false);
 			}
 
