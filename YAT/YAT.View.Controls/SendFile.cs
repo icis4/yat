@@ -327,6 +327,7 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <remarks>Using 'Validation' instead of 'SelectedIndexChanged' for symmetricity with <see cref="SendText"/>.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
 		private void comboBox_ExplicitDefaultRadix_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)

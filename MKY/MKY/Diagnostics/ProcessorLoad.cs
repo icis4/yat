@@ -23,6 +23,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Diagnostics
 {
@@ -31,10 +32,13 @@ namespace MKY.Diagnostics
 	/// because that...
 	/// ...is pretty resource hungry, and...
 	/// ...is language dependent!
+	/// 
+	/// Saying hello to StyleCop ;-.
 	/// </summary>
 	/// <remarks>
 	/// Based on http://stackoverflow.com/questions/19756454/calculating-process-cpu-usage-from-process-totalprocessortime.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 	public static class ProcessorLoad
 	{
 		private const int MinimumUpdateIntervalDefault = 100;

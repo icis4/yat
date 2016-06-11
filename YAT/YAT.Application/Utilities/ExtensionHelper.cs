@@ -54,7 +54,7 @@ namespace YAT.Application.Utilities
 		/// Allows to alter the file extension used for terminal files,
 		/// e.g. ".ab1" instead of ".yat".
 		/// </summary>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to deal with abbreviations or extensions such as '.ab1'...")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to deal with abbreviations or extensions such as '.ab1'...")]
 		public static string TerminalFile
 		{
 			get { return (terminalFile); }
@@ -84,7 +84,7 @@ namespace YAT.Application.Utilities
 		/// Allows to alter the file extension used for workspace files,
 		/// e.g. ".ab2" instead of ".yaw".
 		/// </summary>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to deal with abbreviations or extensions such as '.ab1'...")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to deal with abbreviations or extensions such as '.ab1'...")]
 		public static string WorkspaceFile
 		{
 			get { return (workspaceFile); }

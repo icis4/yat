@@ -32,7 +32,7 @@ namespace MKY.Windows.Forms
 	/// aware message box as suggested by FxCop rule CA1300 "Specify MessageBoxOptions" in
 	/// the MSDN at http://msdn.microsoft.com/library/ms182191.aspx.
 	/// </summary>
-	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to skip URLs...")]
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class MessageBoxEx
 	{

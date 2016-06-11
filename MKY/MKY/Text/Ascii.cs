@@ -30,7 +30,7 @@ namespace MKY.Text
 	/// <summary>
 	/// ASCII code conversions. Source: http://www.asciitable.com.
 	/// </summary>
-	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to skip URLs...")]
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 	public static class Ascii
 	{
 		/// <summary>

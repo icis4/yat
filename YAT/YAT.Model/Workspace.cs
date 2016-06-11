@@ -1185,7 +1185,7 @@ namespace YAT.Model
 		/// layouting itself is done in the form as the MDI functionality is an integral part of
 		/// the Windows.Forms environment.
 		/// </summary>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "What's wrong with 'layouting'?")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Layouting' is a correct English term.")]
 		public virtual void NotifyLayout(WorkspaceLayout layout)
 		{
 			this.settingsRoot.Workspace.Layout = layout;

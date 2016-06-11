@@ -40,7 +40,7 @@ namespace MKY.Windows.Forms
 		/// Convert a menu index into a prependable string, e.g. "1: ".
 		/// Indices 1 through 10 will be accessible via ALT + numeric key using the ampersand.
 		/// </summary>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "What's wrong with 'prependable'?")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Prependable' is a correct English term.")]
 		public static string PrependIndex(int index, string text)
 		{
 			StringBuilder sb = new StringBuilder();

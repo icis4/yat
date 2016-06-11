@@ -1,4 +1,27 @@
-﻿using System;
+﻿//==================================================================================================
+// YAT - Yet Another Terminal.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
+// Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
+// ------------------------------------------------------------------------------------------------
+// $URL$
+// $Author$
+// $Date$
+// $Revision$
+// ------------------------------------------------------------------------------------------------
+// MKY Development Version 1.0.14
+// ------------------------------------------------------------------------------------------------
+// See SVN change log for revision details.
+// See release notes for product version details.
+// ------------------------------------------------------------------------------------------------
+// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
+// Copyright © 2003-2016 Matthias Kläy.
+// All rights reserved.
+// ------------------------------------------------------------------------------------------------
+// This source code is licensed under the GNU LGPL.
+// See http://www.gnu.org/licenses/lgpl.html for license details.
+//==================================================================================================
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
@@ -9,7 +32,7 @@ namespace MKY.Media
 	/// <summary></summary>
 	public enum SystemSounds
 	{
-		/// <remarks></remarks>
+		/// <remarks>No corresponding item in <see cref="System.Media.SystemSounds"/>.</remarks>
 		None,
 
 		/// <remarks>Corresponds to <see cref="System.Media.SystemSounds.Asterisk"/>.</remarks>
@@ -37,6 +60,7 @@ namespace MKY.Media
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
 	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class SystemSoundsEx : EnumEx
@@ -279,3 +303,8 @@ namespace MKY.Media
 		#endregion
 	}
 }
+
+//==================================================================================================
+// End of
+// $URL$
+//==================================================================================================
