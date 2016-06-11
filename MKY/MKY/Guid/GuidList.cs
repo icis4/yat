@@ -101,6 +101,7 @@ namespace MKY
 		/// Returns the first item within the list that has the specified <see cref="Guid"/>,
 		/// <c>null</c>  if no item with the specified <see cref="Guid"/> exists.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		public virtual T Find(Guid guid)
 		{
 			foreach (T item in this)
@@ -116,6 +117,7 @@ namespace MKY
 		/// Removes the first item within the list that has the specified <see cref="Guid"/>,
 		/// and returns it, <c>null</c> if no item with the specified <see cref="Guid"/> exists.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		public virtual T Remove(Guid guid)
 		{
 			T item = Find(guid);

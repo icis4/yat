@@ -114,6 +114,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 	/// 
 	/// Saying hello to StyleCop ;-.
 	/// </remarks>
+	[SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Justification = "Makes no sense for a test class.")]
 	[TestFixture, Explicit("This test fixture assesses the reliability of serial port drivers. It does not perform any tests. It is only useful for measurments and analysis.")]
 	public class ReliabilityAnalysis
 	{
@@ -226,7 +227,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(AnalysisTestData), "TestCases")]
-		public virtual void PerformSubsequentTransmissionOfECHO(string portName, int linesToTransmit)
+		public virtual void PerformSubsequentTransmissionOfMTSicsEcho(string portName, int linesToTransmit)
 		{
 			// Create file for logging:
 			string filePath = Temp.MakeTempFilePath(GetType(), "SubsequentECHO-" + portName + "-" + linesToTransmit.ToString(CultureInfo.InvariantCulture), ".txt");
@@ -280,7 +281,6 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			// Process results:
 			this.receivedDataLock.EnterReadLock();
 			int receivedBytes = this.receivedBytes;
-			int receivedLines = this.receivedLines;
 			this.receivedDataLock.ExitReadLock();
 
 			this.receivedErrorLock.EnterReadLock();
@@ -320,7 +320,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(AnalysisTestData), "TestCases")]
-		public virtual void PerformContinuousReceivingOfECHO(string portName, int linesToReceive)
+		public virtual void PerformContinuousReceivingOfMTSicsEcho(string portName, int linesToReceive)
 		{
 			int receivedLines = 0;
 

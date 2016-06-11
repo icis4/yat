@@ -41,6 +41,7 @@ namespace MKY.Xml.Serialization
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static void SerializeToFile(string filePath, Type type, object obj)
 		{
 			using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))

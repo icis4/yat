@@ -32,6 +32,7 @@ namespace MKY.Collections.Generic
 	/// <typeparam name="T1">The first type of the triple.</typeparam>
 	/// <typeparam name="T2">The second type of the triple.</typeparam>
 	/// <typeparam name="T3">The third type of the triple.</typeparam>
+	[SuppressMessage("Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes", Justification = "Well, that's what a quadruple is meant to be...")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "1", Justification = "T1 relates to Value1.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "2", Justification = "T2 relates to Value2.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "3", Justification = "T3 relates to Value3.")]

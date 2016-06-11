@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
@@ -36,6 +37,7 @@ namespace MKY.Diagnostics
 	public static class DebugEventManagement
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		[Conditional("DEBUG")]
 		public static void DebugNotifyAllEventRemains(object obj)
 		{
@@ -43,6 +45,7 @@ namespace MKY.Diagnostics
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		[Conditional("DEBUG")]
 		public static void DebugNotifyEventRemains(object obj, string eventName)
 		{

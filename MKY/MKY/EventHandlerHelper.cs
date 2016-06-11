@@ -24,10 +24,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using System.Text;
 
 using MKY.Collections.Generic;
 
@@ -98,7 +96,10 @@ namespace MKY
 		/// <param name="eventName">Name of the event.</param>
 		/// <returns>All event sinks for the given object.</returns>
 		/// <exception cref="System.ArgumentNullException"><paramref name="obj"/> must be an object.</exception>
-		public static List<Pair<EventInfo, Delegate>> GetEventSinks(object obj, string eventName = null)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
+		public static ICollection<Pair<EventInfo, Delegate>> GetEventSinks(object obj, string eventName = null)
 		{
 			if (obj == null)
 				throw (new ArgumentNullException("obj", "An object is required!"));
@@ -150,6 +151,7 @@ namespace MKY
 		/// Removes all event handlers from the given object.
 		/// </summary>
 		/// <param name="obj">The object.</param>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static void RemoveAllEventHandlers(object obj)
 		{
 			RemoveEventHandler(obj, null);
@@ -160,6 +162,7 @@ namespace MKY
 		/// </summary>
 		/// <param name="obj">The object.</param>
 		/// <param name="eventName">Name of the event.</param>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static void RemoveEventHandler(object obj, string eventName)
 		{
 			var sinks = GetEventSinks(obj, eventName);

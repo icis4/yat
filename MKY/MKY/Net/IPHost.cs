@@ -65,6 +65,7 @@ namespace MKY.Net
 	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public class IPHostEx : EnumEx
 	{
 		#region String Definitions
@@ -180,7 +181,7 @@ namespace MKY.Net
 		}
 
 		/// <summary></summary>
-		public bool IsLocalHost
+		public bool IsLocalhost
 		{
 			get
 			{
@@ -332,7 +333,7 @@ namespace MKY.Net
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
 		[SuppressMessage("Microsoft.Design", "CA1055:UriReturnValuesShouldNotBeStrings", Justification = "What's wrong with a variant of ToString() ?!?")]
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
-		public string ToEndpointAdressString()
+		public string ToEndpointAddressString()
 		{
 			switch ((IPHost)UnderlyingEnum)
 			{
@@ -344,7 +345,7 @@ namespace MKY.Net
 					if (!string.IsNullOrEmpty(this.explicitName))
 						return (this.explicitName);
 					else
-						return (ToEndpointAdressString(this.explicitAddress)); // Explicit address is always given, at least 'IPAdress.None'.
+						return (ToEndpointAddressString(this.explicitAddress)); // Explicit address is always given, at least 'IPAdress.None'.
 				}
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -364,7 +365,7 @@ namespace MKY.Net
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
 		[SuppressMessage("Microsoft.Design", "CA1055:UriReturnValuesShouldNotBeStrings", Justification = "What's wrong with a variant of ToString() ?!?")]
-		public static string ToEndpointAdressString(IPAddress a)
+		public static string ToEndpointAddressString(IPAddress a)
 		{
 			switch (a.AddressFamily)
 			{
@@ -511,6 +512,7 @@ namespace MKY.Net
 		/// <summary>
 		/// Tries to resolve an IP address from DNS.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static bool TryResolve(string s, out IPAddress result)
 		{
 			if (!string.IsNullOrEmpty(s))

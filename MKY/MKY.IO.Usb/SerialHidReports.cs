@@ -28,6 +28,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 
 #endregion
 
@@ -74,6 +75,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Returns the payload that was received via input reports.
 		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
 		public byte[] Payload
 		{
 			get { return (this.payload); }

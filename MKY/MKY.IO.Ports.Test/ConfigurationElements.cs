@@ -21,6 +21,7 @@
 //==================================================================================================
 
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.IO.Ports.Test
 {
@@ -56,6 +57,7 @@ namespace MKY.IO.Ports.Test
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface", Justification = "Inheriting from 'ConfigurationElementCollection'.")]
 	[ConfigurationCollection(typeof(SerialPortConfigurationElement), CollectionType = ConfigurationElementCollectionType.BasicMap)]
 	public class SerialPortConfigurationElementCollection : ConfigurationElementCollection
 	{
@@ -133,6 +135,7 @@ namespace MKY.IO.Ports.Test
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface", Justification = "Inheriting from 'ConfigurationElementCollection'.")]
 	[ConfigurationCollection(typeof(SerialPortPairConfigurationElement), CollectionType = ConfigurationElementCollectionType.BasicMap)]
 	public class SerialPortPairConfigurationElementCollection : ConfigurationElementCollection
 	{
@@ -150,8 +153,10 @@ namespace MKY.IO.Ports.Test
 		/// <summary></summary>
 		protected override object GetElementKey(ConfigurationElement element)
 		{
-			string strA = ((SerialPortPairConfigurationElement)element).PortA;
-			string strB = ((SerialPortPairConfigurationElement)element).PortB;
+			SerialPortPairConfigurationElement casted = (SerialPortPairConfigurationElement)element;
+
+			string strA = casted.PortA;
+			string strB = casted.PortB;
 
 			return (strA + " " + strB);
 		}

@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Data
 {
@@ -59,6 +60,7 @@ namespace MKY.Data
 		/// <remarks>
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
+		[SuppressMessage("Microsoft.Performance", "CA1821:RemoveEmptyFinalizers", Justification = "See remarks.")]
 		~DataItem()
 		{
 		////Diagnostics.DebugEventManagement.DebugNotifyAllEventRemains(this); Temporarily disabled until bug #344 has been resolved.
@@ -385,6 +387,7 @@ namespace MKY.Data
 		/// <summary>
 		/// Resumes change events.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 		public virtual void ResumeChangeEvent(bool forcePendingChangeEvent = true)
 		{
 			lock (this.changeEventSuspendedCountSyncObj)

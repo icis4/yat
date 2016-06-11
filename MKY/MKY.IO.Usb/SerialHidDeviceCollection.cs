@@ -70,6 +70,7 @@ namespace MKY.IO.Usb
 		/// Fills list with the available USB Ser/HID devices.
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Ser/HID just happens to contain 'Ser'...")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 		public override void FillWithAvailableDevices(bool retrieveStringsFromDevice = true)
 		{
 			lock (this)
@@ -95,7 +96,7 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		[Conditional("DEBUG_VERBOSE")]
-		private void DebugVerboseIndent(string message = null)
+		private static void DebugVerboseIndent(string message = null)
 		{
 			if (!string.IsNullOrEmpty(message))
 				Debug.WriteLine(message);
@@ -104,7 +105,7 @@ namespace MKY.IO.Usb
 		}
 
 		[Conditional("DEBUG_VERBOSE")]
-		private void DebugVerboseUnindent(string message = null)
+		private static void DebugVerboseUnindent(string message = null)
 		{
 			Debug.Unindent();
 

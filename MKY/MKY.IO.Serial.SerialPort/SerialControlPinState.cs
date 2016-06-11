@@ -85,6 +85,7 @@ namespace MKY.IO.Serial.SerialPort
 		#region ToString
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
 			switch ((SerialControlPinState)UnderlyingEnum)

@@ -68,7 +68,7 @@ namespace MKY.Settings
 		/// </summary>
 		public DocumentSettingsHandler()
 		{
-			Initialize(Defaults);
+			Initialize(new TSettings());
 		}
 
 		/// <summary>
@@ -262,14 +262,6 @@ namespace MKY.Settings
 			get { AssertNotDisposed(); return (this.settings); }
 		}
 
-		/// <summary>
-		/// Handler to defaults.
-		/// </summary>
-		public static TSettings Defaults
-		{
-			get { return (new TSettings()); }
-		}
-
 		#endregion
 
 		#region Methods
@@ -301,7 +293,7 @@ namespace MKY.Settings
 			}
 
 			// Nothing found, return default settings:
-			this.settings = Defaults;
+			this.settings = new TSettings();
 			return (false);
 		}
 

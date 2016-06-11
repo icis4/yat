@@ -161,6 +161,7 @@ namespace MKY.Net.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "int", Justification = "Work arond naming conflict.")]
 		public virtual int MTSicsDeviceTcpPortAsInt
 		{
 			get { return (this.mtSicsDeviceTcpPortAsInt); }
@@ -168,19 +169,6 @@ namespace MKY.Net.Test
 		}
 
 		#endregion
-
-		#endregion
-
-		#region Methods
-		//==========================================================================================
-		// Methods
-		//==========================================================================================
-
-		private void AssertNotReadOnly(string propertyName)
-		{
-			if (IsReadOnly())
-				throw (new ConfigurationErrorsException("The property " + propertyName + " is read only!"));
-		}
 
 		#endregion
 	}

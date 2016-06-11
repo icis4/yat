@@ -21,7 +21,7 @@
 //==================================================================================================
 
 using System;
-using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace MKY.IO.Serial
@@ -49,6 +49,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
 		public virtual byte[] Data
 		{
 			get { return (this.data); }
@@ -87,7 +88,7 @@ namespace MKY.IO.Serial
 	public abstract class DataReceivedEventArgs : DataEventArgs
 	{
 		/// <summary></summary>
-		public DataReceivedEventArgs(byte[] data)
+		protected DataReceivedEventArgs(byte[] data)
 			: base(data)
 		{
 		}
@@ -97,7 +98,7 @@ namespace MKY.IO.Serial
 	public abstract class DataSentEventArgs : DataEventArgs
 	{
 		/// <summary></summary>
-		public DataSentEventArgs(byte[] data)
+		protected DataSentEventArgs(byte[] data)
 			: base(data)
 		{
 		}

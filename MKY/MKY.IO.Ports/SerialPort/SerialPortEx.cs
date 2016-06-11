@@ -318,6 +318,7 @@ namespace MKY.IO.Ports
 		/// 
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Justification = "See remarks.")]
 		~SerialPortEx()
 		{
 			DebugEventManagement.DebugNotifyAllEventRemains(this);
@@ -901,6 +902,7 @@ namespace MKY.IO.Ports
 		/// <exception cref="System.InvalidOperationException">
 		/// The specified port is open.
 		/// </exception>
+		[SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly", Justification = "See comments...")]
 		public new void Open()
 		{
 			AssertNotDisposed();

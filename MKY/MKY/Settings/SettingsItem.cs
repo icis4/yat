@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Settings
 {
@@ -89,6 +90,7 @@ namespace MKY.Settings
 		/// <remarks>
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
+		[SuppressMessage("Microsoft.Performance", "CA1821:RemoveEmptyFinalizers", Justification = "See remarks.")]
 		~SettingsItem()
 		{
 			// Do not Diagnostics.DebugEventManagement.DebugNotifyAllEventRemains(this) as XML deserialization doesn't Free() items (didn't Dispose() either...).
@@ -448,6 +450,7 @@ namespace MKY.Settings
 		/// <summary>
 		/// Resumes change events.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 		public virtual void ResumeChangeEvent(bool forcePendingChangeEvent = true)
 		{
 			lock (this.changeEventSuspendedCountSyncObj)

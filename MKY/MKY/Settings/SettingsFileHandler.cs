@@ -95,6 +95,7 @@ namespace MKY.Settings
 		/// <remarks>
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
+		[SuppressMessage("Microsoft.Performance", "CA1821:RemoveEmptyFinalizers", Justification = "See remarks.")]
 		~SettingsFileHandler()
 		{
 			DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
@@ -308,6 +309,7 @@ namespace MKY.Settings
 				}
 				catch (Exception exStandard)
 				{
+					bool rethrow = false;
 					DebugEx.WriteException(this.parentType, exStandard, "Standard deserialization has failed!");
 
 					if (alternateXmlElements == null)
@@ -321,7 +323,7 @@ namespace MKY.Settings
 						catch (Exception exTolerant)
 						{
 							DebugEx.WriteException(this.parentType, exTolerant, "Tolerant deserialization has failed!");
-							throw (exStandard); // Re-throw! But use the standard error message, as that output line/char numbers and not just the char at line 1.
+							rethrow = true; // Re-throw! But use the standard error message, as that output line/char numbers and not just the char at line 1.
 						}
 					}
 					else
@@ -335,9 +337,12 @@ namespace MKY.Settings
 						catch (Exception exAlternateTolerant)
 						{
 							DebugEx.WriteException(this.parentType, exAlternateTolerant, "Alternate-tolerant deserialization has failed!");
-							throw (exStandard); // Re-throw! But use the standard error message, as that output line/char numbers and not just the char at line 1.
+							rethrow = true; // Re-throw! But use the standard error message, as that output line/char numbers and not just the char at line 1.
 						}
 					}
+
+					if (rethrow)
+						throw; // Re-throw!
 				}
 			}
 
