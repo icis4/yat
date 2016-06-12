@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 using MKY;
@@ -118,6 +119,7 @@ namespace YAT.Model.Settings
 		/// <remarks>
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
 		[XmlElement("Trigger")]
 		public virtual string Trigger_ForSerialization
 		{
@@ -153,6 +155,7 @@ namespace YAT.Model.Settings
 		/// <remarks>
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
 		[XmlElement("Response")]
 		public virtual string Response_ForSerialization
 		{

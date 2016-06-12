@@ -117,6 +117,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "The naming emphasizes the difference between string and enum parameters.")]
 		public AutoResponseEx(string explicitCommandString)
 			: this(AutoResponse.Explicit)
 		{
@@ -207,6 +208,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
 			switch ((AutoResponse)UnderlyingEnum)

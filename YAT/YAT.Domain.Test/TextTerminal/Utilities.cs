@@ -80,6 +80,7 @@ namespace YAT.Domain.Test
 		// Wait
 		//==========================================================================================
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static void WaitForConnection(Terminal terminal)
 		{
 			int timeout = 0;
@@ -121,6 +122,7 @@ namespace YAT.Domain.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static void WaitForDisconnection(Terminal terminalA, Terminal terminalB)
 		{
 			int timeout = 0;

@@ -73,6 +73,7 @@ namespace YAT.Model.Types
 		/// <remarks>
 		/// Using string because <see cref="Color"/> cannot be serialized.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
 		[XmlElement("Color")]
 		public virtual string Color_ForSerialization
 		{

@@ -288,6 +288,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Tries to parse <paramref name="s"/>, taking the current settings into account.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 		public override bool TryParse(string s, out byte[] result, Radix defaultRadix = Radix.String)
 		{
 			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, TerminalSettings.Send.ToParseMode()))
@@ -458,7 +459,7 @@ namespace YAT.Domain
 						}
 						else if ((b == 0xFF) && TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF)
 						{
-							return (new DisplayElement.Nothing()); // Return nothing, ignore the character, this results in hiding.
+							return (new DisplayElement.Nonentity()); // Return nothing, ignore the character, this results in hiding.
 						}
 						else
 						{
@@ -534,7 +535,7 @@ namespace YAT.Domain
 						}
 
 						// Nothing to decode (yet).
-						return (new DisplayElement.Nothing());
+						return (new DisplayElement.Nonentity());
 					} // MultiByte
 				}
 
@@ -693,7 +694,7 @@ namespace YAT.Domain
 			}
 		}
 
-		private void TreatEolAsNormal(LineState lineState, DisplayLinePart lp)
+		private static void TreatEolAsNormal(LineState lineState, DisplayLinePart lp)
 		{
 			if (lineState.EolElements.Count > 0)
 			{

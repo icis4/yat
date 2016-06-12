@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace YAT.Domain.Settings
@@ -34,9 +35,13 @@ namespace YAT.Domain.Settings
 		public const bool HideXOnXOffDefault = false;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "ult", Justification = "?!?")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ult", Justification = "?!?")]
 		public const bool Hide0x00Default = false;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "ult", Justification = "?!?")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ult", Justification = "?!?")]
 		public const bool Hide0xFFDefault = false;
 
 		private bool hideXOnXOff;

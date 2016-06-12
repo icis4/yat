@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -53,6 +54,8 @@ namespace YAT.Model.Utilities
 		/// <exception cref="InvalidDataException">
 		/// A <see cref="InvalidDataException"/> is thrown if the file is empty or doesn't match the expected XML schema.
 		/// </exception>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static int LinesFromFile(string filePath, out string[] lines)
 		{
 			if (!File.Exists(filePath))

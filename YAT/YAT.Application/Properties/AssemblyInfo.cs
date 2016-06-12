@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -49,6 +50,10 @@ using System.Runtime.InteropServices;
 
 // CLS compliance.
 [assembly: CLSCompliant(true)]
+
+// Assembly-level FxCop suppressions.
+[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "YAT.Application.Settings", Justification = "Namespace instead of dedicated assembly.")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "YAT.Application.Utilities", Justification = "Namespace instead of dedicated assembly.")]
 
 //==================================================================================================
 // End of

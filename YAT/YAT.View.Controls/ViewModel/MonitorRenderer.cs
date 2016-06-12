@@ -227,7 +227,7 @@ namespace YAT.View.Controls
 				fontStyle = settings.LengthFormat.FontStyle;
 				font      = CacheAndAssignIfChanged(ref staticLengthFont, fontName, fontSize, fontStyle, graphics);
 			}
-			else if ((element is Domain.DisplayElement.Nothing) ||
+			else if ((element is Domain.DisplayElement.Nonentity) ||
 			         (element is Domain.DisplayElement.DataSpace) ||
 			         (element is Domain.DisplayElement.InfoSpace) ||
 			         (element is Domain.DisplayElement.LineStart) ||

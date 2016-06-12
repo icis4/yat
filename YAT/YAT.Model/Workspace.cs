@@ -1523,6 +1523,7 @@ namespace YAT.Model
 			return (OpenTerminalFromSettings(settingsHandler, Guid.Empty, Indices.DefaultFixedIndex, null, out exception));
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure to handle any case.")]
 		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid, int fixedIndex, WindowSettings windowSettings, out Exception exception)
 		{
 			AssertNotDisposed();
@@ -1617,6 +1618,7 @@ namespace YAT.Model
 			return (true);
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure to handle any case.")]
 		private bool OpenTerminalFile(string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
 		{
 			// Combine absolute workspace path with terminal path if that one is relative:

@@ -1052,7 +1052,7 @@ namespace YAT.View.Forms
 				}
 				else
 				{
-					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Text.Remove(invalidTextStart);
+					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Text = triggerText.Remove(invalidTextStart);
 				}
 			}
 		}
@@ -1088,7 +1088,7 @@ namespace YAT.View.Forms
 				}
 				else
 				{
-					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Text.Remove(invalidTextStart);
+					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Text = responseText.Remove(invalidTextStart);
 				}
 			}
 		}

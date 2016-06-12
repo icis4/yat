@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -156,7 +157,7 @@ namespace YAT.Model.Utilities
 			else if ( element is DisplayElement.PortInfo)		{ format = this.portFormat; }
 			else if ( element is DisplayElement.DirectionInfo)	{ format = this.directionFormat; }
 			else if ( element is DisplayElement.DataLength)		{ format = this.lengthFormat; }
-			else if ((element is DisplayElement.Nothing) ||
+			else if ((element is DisplayElement.Nonentity) ||
 			         (element is DisplayElement.DataSpace) ||
 			         (element is DisplayElement.InfoSpace) ||
 			         (element is DisplayElement.LineStart) ||
@@ -236,6 +237,7 @@ namespace YAT.Model.Utilities
 		#endregion
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure to handle any case.")]
 		public virtual void WriteLine(DisplayLine line)
 		{
 			AssertNotDisposed();

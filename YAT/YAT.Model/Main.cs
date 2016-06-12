@@ -677,6 +677,7 @@ namespace YAT.Model
 		/// Unfortunately, 'normal' terminal settings and new terminal settings are defined rather
 		/// differently. Therefore, this implementation looks a bit weird.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals", Justification = "Well...")]
 		private bool ProcessCommandLineArgsIntoExistingTerminalSettings(Domain.Settings.TerminalSettings terminalSettings, ref bool terminalIsStarted, ref bool logIsOn)
 		{
 			if (this.commandLineArgs.OptionIsGiven("TerminalType"))
@@ -1047,7 +1048,6 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			string fileName = Path.GetFileName(filePath);
 			string extension = Path.GetExtension(filePath);
 			if (ExtensionHelper.IsWorkspaceFile(extension))
 			{
@@ -1348,6 +1348,7 @@ namespace YAT.Model
 			return (OpenWorkspaceFromSettings(settingsHandler, guid, Indices.InvalidIndex, null, out exception));
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure to handle any case.")]
 		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings, Guid guid, int dynamicTerminalIndexToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace, out Exception exception)
 		{
 			AssertNotDisposed();
@@ -1457,6 +1458,7 @@ namespace YAT.Model
 			return (OpenWorkspaceFile(filePath, out settingsHandler, out guid, out exception));
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure to handle any case.")]
 		private bool OpenWorkspaceFile(string filePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, out Guid guid, out Exception exception)
 		{
 			try
@@ -1525,6 +1527,7 @@ namespace YAT.Model
 		// Terminal > Private Methods
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		private bool OpenTerminalFile(string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
 			Exception exception;
@@ -1542,6 +1545,7 @@ namespace YAT.Model
 			return (OpenTerminalFile(workspaceFilePath, terminalFilePath, out settingsHandler, out exception));
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure to handle any case.")]
 		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
 		{
 			// Combine absolute workspace path with terminal path if that one is relative:

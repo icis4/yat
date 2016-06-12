@@ -54,6 +54,7 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <typeparam name="T">The (simple) settings type.</typeparam>
+		[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Why not?")]
 		public delegate TerminalSettingsRoot TerminalSettingsDelegate<T>(T arg);
 
 		/// <summary></summary>
@@ -79,6 +80,7 @@ namespace YAT.Model.Test
 
 			/// <summary></summary>
 			[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
+			[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 			public static IEnumerable<Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>> SerialPortLoopbackSelfs
 			{
 				get
@@ -328,6 +330,7 @@ namespace YAT.Model.Test
 			return (settings);
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static TerminalSettingsRoot GetStartedTextSerialPortASettings()
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortAIsAvailable)
@@ -339,12 +342,14 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static TerminalSettingsRoot GetStartedTextSerialPortASettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
 			return (GetStartedTextSerialPortASettings());
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static TerminalSettingsRoot GetStartedTextSerialPortBSettings()
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortBIsAvailable)
@@ -356,6 +361,7 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static TerminalSettingsRoot GetStartedTextSerialPortBSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
@@ -522,6 +528,7 @@ namespace YAT.Model.Test
 			return (settings);
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidDeviceASettings()
 		{
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceAIsAvailable)
@@ -533,12 +540,14 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidDeviceASettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
 			return (GetStartedTextUsbSerialHidDeviceASettings());
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidDeviceBSettings()
 		{
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceBIsAvailable)
@@ -550,6 +559,7 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidDeviceBSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
@@ -640,6 +650,7 @@ namespace YAT.Model.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static void WaitForDisconnection(Terminal terminalA, Terminal terminalB)
 		{
 			int timeout = 0;

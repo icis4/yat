@@ -2030,7 +2030,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		
-		[SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "The timer just invokes a single-shot callback to show the RFR state for a longer period that it is actually active.")]
+		[SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "The timer just invokes a single-shot callback.")]
 		private void StartControlEventTimeout()
 		{
 			if (this.ioControlEventTimeout == null)

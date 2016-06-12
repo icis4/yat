@@ -169,7 +169,7 @@ namespace YAT.Domain.Test.TextTerminal
 		}
 
 		/// <remarks>Verification simply waits for transmission. If line count mismatches, a timeout assertion will get thrown.</remarks>
-		private void Verify(Domain.TextTerminal terminalTx, Domain.TextTerminal terminalRx, string eolTx, string eolRx, int currentLineCount, int expectedTotalLineCount)
+		private static void Verify(Domain.TextTerminal terminalTx, Domain.TextTerminal terminalRx, string eolTx, string eolRx, int currentLineCount, int expectedTotalLineCount)
 		{
 			if (eolTx == eolRx)
 				Utilities.WaitForTransmission(terminalTx, terminalRx, currentLineCount, expectedTotalLineCount);
@@ -234,7 +234,7 @@ namespace YAT.Domain.Test.TextTerminal
 			Thread.Sleep(WaitForDisposal);
 		}
 
-		private void Verify(Domain.TextTerminal terminalTx, Domain.TextTerminal terminalRx, int expectedTotalLineCount)
+		private static void Verify(Domain.TextTerminal terminalTx, Domain.TextTerminal terminalRx, int expectedTotalLineCount)
 		{
 			int txTotalLineCount = terminalTx.GetRepositoryLineCount(RepositoryType.Bidir);
 			int rxTotalLineCount = terminalRx.GetRepositoryLineCount(RepositoryType.Bidir);

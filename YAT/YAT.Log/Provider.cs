@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace YAT.Log
@@ -313,29 +314,26 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		private Log GetFile(LogChannel channel)
-		{
-			return (this.logs[channel.GetHashCode()]);
-		}
-
-		/// <summary></summary>
 		private Log GetLog(LogChannel channel)
 		{
 			return (this.logs[channel.GetHashCode()]);
 		}
 
 		/// <summary></summary>
-		public virtual IList<string> GetFilePaths()
+		public virtual IList<string> FilePaths
 		{
-			List<string> result = new List<string>(this.logs.Count); // Preset the initial capacity to improve memory management.
-
-			foreach (Log l in this.logs)
+			get
 			{
-				if (l.IsEnabled)
-					result.Add(l.FilePath);
-			}
+				List<string> result = new List<string>(this.logs.Count); // Preset the initial capacity to improve memory management.
 
-			return (result);
+				foreach (Log l in this.logs)
+				{
+					if (l.IsEnabled)
+						result.Add(l.FilePath);
+				}
+
+				return (result);
+			}
 		}
 
 		#endregion

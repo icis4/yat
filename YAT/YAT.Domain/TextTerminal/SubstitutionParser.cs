@@ -57,12 +57,14 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 		public SubstitutionParser(Modes modes = Modes.All)
 			: base(modes)
 		{
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
 		public SubstitutionParser(CharSubstitution substitution, Encoding encoding, Endianness endianness = Endianness.BigEndian, Modes modes = Modes.All)
 			: base(encoding, endianness, modes)

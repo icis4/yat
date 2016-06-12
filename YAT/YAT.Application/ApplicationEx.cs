@@ -28,6 +28,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace YAT
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public static class ApplicationEx
 	{
 		/// <summary>

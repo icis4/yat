@@ -2463,7 +2463,7 @@ namespace YAT.Model
 				"There are currently no local network interfaces available." + Environment.NewLine + Environment.NewLine +
 				"Terminal will not be started.";
 
-			DialogResult dr = OnMessageInputRequest
+			OnMessageInputRequest
 			(
 				message,
 				"No interfaces available",
@@ -3324,12 +3324,6 @@ namespace YAT.Model
 			this.totalConnectChrono.TimeSpanChanged += totalConnectChrono_TimeSpanChanged;
 		}
 
-		private void StopChronos()
-		{
-			this.activeConnectChrono.Stop();
-			this.totalConnectChrono.Stop();
-		}
-
 		private void DisposeChronos()
 		{
 			if (this.activeConnectChrono != null)
@@ -3368,6 +3362,8 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual void GetConnectTime(out TimeSpan activeConnectTime, out TimeSpan totalConnectTime)
 		{
 			AssertNotDisposed();
@@ -3478,6 +3474,10 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual void GetDataCount(out int txByteCount, out int txLineCount, out int rxByteCount, out int rxLineCount)
 		{
 			AssertNotDisposed();
@@ -3489,6 +3489,10 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual void GetDataRate(out int txByteRate, out int txLineRate, out int rxByteRate, out int rxLineRate)
 		{
 			AssertNotDisposed();
@@ -3885,16 +3889,13 @@ namespace YAT.Model
 			int fileCount = 0;
 
 			if (this.log != null)
-			{
-				IList<string> filePaths = this.log.GetFilePaths();
-				fileCount = filePaths.Count;
-			}
+				fileCount = this.log.FilePaths.Count;
 
 			if (fileCount > 0)
 			{
 				bool success = true;
 
-				foreach (string filePath in this.log.GetFilePaths())
+				foreach (string filePath in this.log.FilePaths)
 				{
 					Exception ex;
 					if (!Editor.TryOpenFile(filePath, out ex))
