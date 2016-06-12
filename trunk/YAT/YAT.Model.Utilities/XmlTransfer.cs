@@ -46,12 +46,12 @@ namespace YAT.Model.Utilities
 		private Direction direction;
 
 		/// <summary></summary>
-		public XmlTransferLine()
+		protected XmlTransferLine()
 		{
 		}
 
 		/// <summary></summary>
-		public XmlTransferLine(DateTime timeStamp, Direction direction)
+		protected XmlTransferLine(DateTime timeStamp, Direction direction)
 		{
 			this.timeStamp = timeStamp;
 			this.direction = direction;

@@ -26,6 +26,7 @@
 // Using
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows.Forms;
 
@@ -39,6 +40,7 @@ namespace YAT.Model.Utilities
 	public static class RtfReaderHelper
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static int LinesFromRtfFile(string filePath, out string[] lines)
 		{
 			RichTextBox richTextProvider = new RichTextBox();

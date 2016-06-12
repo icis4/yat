@@ -271,6 +271,7 @@ namespace YAT.Model.Settings
 		/// <remarks>
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
 		[XmlElement("SocketRemoteHost")]
 		public virtual string SocketRemoteHost_ForSerialization
 		{
@@ -346,6 +347,7 @@ namespace YAT.Model.Settings
 		/// <remarks>
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
 		[XmlElement("SocketLocalFilter")]
 		public virtual string SocketLocalFilter_ForSerialization
 		{

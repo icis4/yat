@@ -41,11 +41,10 @@ namespace YAT.Domain
 		None = Radix.None,
 
 		/// <remarks>
-		/// String makes no sense for single byte/character replacement. Still, keep this item to
-		/// ensure that items can 1:1 be mapped to <see cref="Radix"/> and that additional items
-		/// get distinct enum identifiers.
+		/// Keep this item to ensure that items can 1:1 be mapped to <see cref="Radix"/>
+		/// and that additional items get distinct enum identifiers.
 		/// </remarks>
-		[Obsolete]
+		[Obsolete("String makes no sense for single byte/character replacement.")]
 		String = Radix.String,
 
 		/// <summary></summary>

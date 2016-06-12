@@ -180,7 +180,7 @@ namespace YAT.Model.Utilities
 				color     = settings.LengthFormat.Color;
 				font      = CacheAndAssignIfChanged(ref lengthFont, fontName, fontSize, fontStyle);
 			}
-			else if ((element is DisplayElement.Nothing) ||
+			else if ((element is DisplayElement.Nonentity) ||
 			         (element is DisplayElement.DataSpace) ||
 			         (element is DisplayElement.InfoSpace) ||
 			         (element is DisplayElement.LineStart) ||

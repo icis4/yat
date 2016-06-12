@@ -103,6 +103,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 		public Command(Domain.Radix defaultRadix = DefaultRadixDefault)
 		{
 			Initialize(defaultRadix);
@@ -115,30 +116,35 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 		public Command(string commandLine, bool isPartialText = false, Domain.Radix defaultRadix = DefaultRadixDefault)
 		{
 			Initialize(true, "", new string[] { commandLine }, defaultRadix, isPartialText, false, false, "");
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 		public Command(bool isPartialTextEol, Domain.Radix defaultRadix = DefaultRadixDefault)
 		{
 			Initialize(true, "", new string[] { "" }, defaultRadix, isPartialTextEol, isPartialTextEol, false, "");
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 		public Command(string[] commandLines, Domain.Radix defaultRadix = DefaultRadixDefault)
 			: this("", commandLines, defaultRadix)
 		{
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 		public Command(string description, string[] commandLines, Domain.Radix defaultRadix = DefaultRadixDefault)
 		{
 			Initialize(true, description, commandLines, defaultRadix, false, false, false, "");
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 		public Command(string description, bool isFilePath, string filePath, Domain.Radix defaultRadix = DefaultRadixDefault)
 		{
 			Initialize(true, description, new string[] { "" }, defaultRadix, false, false, isFilePath, filePath);
@@ -174,6 +180,7 @@ namespace YAT.Model.Types
 		/// <remarks>
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
+		[SuppressMessage("Microsoft.Performance", "CA1821:RemoveEmptyFinalizers", Justification = "See remarks.")]
 		~Command()
 		{
 			MKY.Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);

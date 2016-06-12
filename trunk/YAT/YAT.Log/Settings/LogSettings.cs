@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -52,7 +53,8 @@ namespace YAT.Log.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
-		public readonly Encoding DefaultTextEncoding = System.Text.Encoding.UTF8;
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Type is given by the .NET framework.")]
+		public static readonly Encoding DefaultTextEncoding = Encoding.UTF8;
 
 		#endregion
 
@@ -731,6 +733,7 @@ namespace YAT.Log.Settings
 		/// <remarks>
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
 		[XmlElement("NameSeparator")]
 		public virtual string NameSeparator_ForSerialization
 		{

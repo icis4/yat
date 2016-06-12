@@ -50,14 +50,6 @@ namespace YAT.Log
 		private object writerSyncObj = new object();
 
 		/// <summary></summary>
-		public NeatLog(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode, Model.Settings.FormatSettings format)
-			: base(enabled, makeFilePath, writeMode)
-		{
-			this.encoding = Encoding.UTF8;
-			this.format = format;
-		}
-
-		/// <summary></summary>
 		public NeatLog(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode, Encoding encoding, Model.Settings.FormatSettings format)
 			: base(enabled, makeFilePath, writeMode)
 		{

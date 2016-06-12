@@ -104,6 +104,7 @@ namespace YAT.View.Controls
 			OnIsDone(new EventArgs<DialogResult>(result));
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure to handle any case.")]
 		private DialogResult DoWorkWithResult()
 		{
 			OnStatus1Changed(new EventArgs<string>("Retrieving available ports..."));

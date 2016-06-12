@@ -459,7 +459,7 @@ namespace YAT.View.Controls
 						}
 						else
 						{
-							if (RemoteHost.IsLocalHost)
+							if (RemoteHost.IsLocalhost)
 							{
 								if (port < IPEndPoint.MaxPort)
 									LocalUdpPort = port + 1;
@@ -534,7 +534,7 @@ namespace YAT.View.Controls
 						//     > On remote host, typically using same port for client and server.
 						if (this.socketType == SocketType.UdpServer)
 						{
-							if (RemoteHost.IsLocalHost)
+							if (RemoteHost.IsLocalhost)
 							{
 								if (port > IPEndPoint.MinPort)
 									RemoteUdpPort = port - 1;

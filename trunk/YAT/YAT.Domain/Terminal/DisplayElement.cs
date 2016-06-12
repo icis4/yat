@@ -45,7 +45,7 @@ namespace YAT.Domain
 {
 	/// <summary></summary>
 	[Serializable]
-	[XmlInclude(typeof(Nothing))]
+	[XmlInclude(typeof(Nonentity))]
 	[XmlInclude(typeof(TxData))]
 	[XmlInclude(typeof(TxControl))]
 	[XmlInclude(typeof(RxData))]
@@ -92,12 +92,12 @@ namespace YAT.Domain
 			WhiteSpace = 16
 		}
 
-		/// <summary></summary>
+		/// <remarks>Using 'nonentitiy' instead of 'nothing' as that is a keyword in other .NET languages.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class Nothing : DisplayElement
+		public class Nonentity : DisplayElement
 		{
 			/// <summary></summary>
-			public Nothing()
+			public Nonentity()
 				: base(ModifierFlags.None)
 			{
 			}
@@ -200,13 +200,13 @@ namespace YAT.Domain
 		public abstract class InfoDisplayElement : DisplayElement
 		{
 			/// <summary></summary>
-			public InfoDisplayElement(string info)
+			protected InfoDisplayElement(string info)
 				: this(Direction.None, info)
 			{
 			}
 
 			/// <summary></summary>
-			public InfoDisplayElement(Direction direction, string info)
+			protected InfoDisplayElement(Direction direction, string info)
 				: base(direction, info, ModifierFlags.Info)
 			{
 			}
@@ -334,19 +334,19 @@ namespace YAT.Domain
 		public abstract class WhiteSpaceDisplayElement : DisplayElement
 		{
 			/// <summary></summary>
-			public WhiteSpaceDisplayElement(Direction direction)
+			protected WhiteSpaceDisplayElement(Direction direction)
 				: this(direction, null)
 			{
 			}
 
 			/// <summary></summary>
-			public WhiteSpaceDisplayElement(string whiteSpace)
+			protected WhiteSpaceDisplayElement(string whiteSpace)
 				: this(Direction.None, whiteSpace)
 			{
 			}
 
 			/// <summary></summary>
-			public WhiteSpaceDisplayElement(Direction direction, string whiteSpace)
+			protected WhiteSpaceDisplayElement(Direction direction, string whiteSpace)
 				: base(direction, whiteSpace, ModifierFlags.WhiteSpace)
 			{
 			}
@@ -527,6 +527,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
+		[SuppressMessage("Microsoft.Performance", "CA1821:RemoveEmptyFinalizers", Justification = "See remarks.")]
 		~DisplayElement()
 		{
 			MKY.Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
@@ -656,7 +657,7 @@ namespace YAT.Domain
 
 			DisplayElement clone;
 
-			if      (this is Nothing)		clone = new Nothing();
+			if      (this is Nonentity)		clone = new Nonentity();
 			else if (this is TxData)		clone = new TxData();
 			else if (this is TxControl)		clone = new TxControl();
 			else if (this is RxData)		clone = new RxData();

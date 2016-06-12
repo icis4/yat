@@ -118,6 +118,7 @@
 			this.textBox_TcpClientAutoReconnectInterval.Size = new System.Drawing.Size(48, 20);
 			this.textBox_TcpClientAutoReconnectInterval.TabIndex = 2;
 			this.textBox_TcpClientAutoReconnectInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textBox_TcpClientAutoReconnectInterval.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_TcpClientAutoReconnectInterval_Validating);
 			// 
 			// checkBox_TcpClientAutoReconnect
 			// 
@@ -128,6 +129,7 @@
 			this.checkBox_TcpClientAutoReconnect.TabIndex = 0;
 			this.checkBox_TcpClientAutoReconnect.Text = "When connection is lost, try to reconnect to";
 			this.checkBox_TcpClientAutoReconnect.UseVisualStyleBackColor = true;
+			this.checkBox_TcpClientAutoReconnect.CheckedChanged += new System.EventHandler(this.checkBox_TcpClientAutoReconnect_CheckedChanged);
 			// 
 			// panel_Udp
 			// 

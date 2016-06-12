@@ -114,7 +114,6 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 	/// 
 	/// Saying hello to StyleCop ;-.
 	/// </remarks>
-	[SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Justification = "Makes no sense for a test class.")]
 	[TestFixture, Explicit("This test fixture assesses the reliability of serial port drivers. It does not perform any tests. It is only useful for measurments and analysis.")]
 	public class ReliabilityAnalysis
 	{
@@ -135,6 +134,8 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 		// Fields
 		//==========================================================================================
 
+		private bool isDisposed;
+
 		private System.IO.Ports.SerialPort port;
 		private StreamWriter file;
 
@@ -148,6 +149,78 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 
 		private Thread[] threads = null;
 		private bool isOngoing = false;
+
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
+
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary></summary>
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!this.isDisposed)
+			{
+				// Dispose of managed resources:
+				if (disposing)
+				{
+					if (this.receivedDataLock != null)
+						this.receivedDataLock.Dispose();
+
+					if (this.receivedErrorLock != null)
+						this.receivedErrorLock.Dispose();
+				}
+
+				// Set state to disposed:
+				this.receivedDataLock = null;
+				this.receivedErrorLock = null;
+				this.isDisposed = true;
+			}
+		}
+
+#if (DEBUG)
+
+		/// <remarks>
+		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
+		/// "Types that declare disposable members should also implement IDisposable. If the type
+		///  does not own any unmanaged resources, do not implement a finalizer on it."
+		/// 
+		/// Well, true for best performance on finalizing. However, it's not easy to find missing
+		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
+		/// is kept for DEBUG, indicating missing calls.
+		/// 
+		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
+		/// </remarks>
+		~ReliabilityAnalysis()
+		{
+			Dispose(false);
+
+			MKY.Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
+		}
+
+#endif // DEBUG
+
+		/// <summary></summary>
+		protected void AssertNotDisposed()
+		{
+			if (this.isDisposed)
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
+		}
+
+		#endregion
 
 		#endregion
 

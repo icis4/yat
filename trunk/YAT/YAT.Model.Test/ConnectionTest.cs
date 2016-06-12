@@ -225,7 +225,7 @@ namespace YAT.Model.Test
 			TestDisconnectReconnect(true); // See comments in MKY.IO.Ports.Test.TestDisconnectReconnect().
 		}
 
-		private void TestDisconnectReconnect(bool testWithContinuousReceiving)
+		private static void TestDisconnectReconnect(bool testWithContinuousReceiving)
 		{
 			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
 				Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
@@ -235,8 +235,7 @@ namespace YAT.Model.Test
 				Assert.Ignore(UsbHubControl.ErrorMessage);
 				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			string portName = ConfigurationProvider.Configuration.MTSicsDeviceA;
-			UsbHubSetting portOut = UsbHubSetting.Out4;
+			UsbHubSettings portOut = UsbHubSettings.Out4;
 
 			// --- Precondition: USB hub is set to its defaults, i.e. all outputs are enabled. -----
 
@@ -265,7 +264,7 @@ namespace YAT.Model.Test
 				// --- Test: Disconnect/Reconnect without sending. ---------------------------------
 
 				// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
-				Assert.IsTrue(UsbHubControl.Set(UsbHubSetting.None), "Failed to modify USB hub!");
+				Assert.IsTrue(UsbHubControl.Set(UsbHubSettings.None), "Failed to modify USB hub!");
 				//// Disabling all outputs is used to improve speed when enabling single outputs below.
 				//// See comments in implementation of 'UsbHubControl' for explanation.
 				Assert.IsTrue(terminal.IsStarted); // Terminal still started, and must automatically close!
@@ -410,7 +409,7 @@ namespace YAT.Model.Test
 			} // Expected: No exceptions, terminal can be disposed.
 
 			// --- Postcondition: USB hub is set to its defaults, i.e. all outputs are enabled. ----
-			Assert.IsTrue(UsbHubControl.Set(UsbHubSetting.All), "Failed to set USB hub!");
+			Assert.IsTrue(UsbHubControl.Set(UsbHubSettings.All), "Failed to set USB hub!");
 		}
 
 		#endregion

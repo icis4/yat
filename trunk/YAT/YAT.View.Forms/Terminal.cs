@@ -631,7 +631,7 @@ namespace YAT.View.Forms
 				}
 				else
 				{
-					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text.Remove(invalidTextStart);
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text = triggerText.Remove(invalidTextStart);
 				}
 			}
 		}
@@ -667,7 +667,7 @@ namespace YAT.View.Forms
 				}
 				else
 				{
-					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text.Remove(invalidTextStart);
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text = responseText.Remove(invalidTextStart);
 				}
 			}
 		}
@@ -3790,6 +3790,7 @@ namespace YAT.View.Forms
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals", Justification = "Well...")]
 		private void SetIOControlControls()
 		{
 			SuspendLayout(); // Prevent flickering when visibility of status labels temporarily changes.
@@ -4122,7 +4123,7 @@ namespace YAT.View.Forms
 			ResumeLayout();
 		}
 
-		[SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "The timer just invokes a single-shot callback to show the RFR state for a longer period that it is actually active.")]
+		[SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "The timer just invokes a single-shot callback.")]
 		private void TriggerRfrLuminescence()
 		{
 			timer_RfrLuminescence.Enabled = false;
@@ -4162,7 +4163,6 @@ namespace YAT.View.Forms
 			}
 			else
 			{
-				Image rfr = off;
 				if (toolStripStatusLabel_TerminalStatus_RFR.Image != off) // Improve performance by only assigning if different.
 					toolStripStatusLabel_TerminalStatus_RFR.Image = off;
 			}

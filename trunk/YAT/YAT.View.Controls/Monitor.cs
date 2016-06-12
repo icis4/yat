@@ -170,6 +170,7 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "Well, any better idea on how to implement the monitor update timeout?")]
 		public Monitor()
 		{
 			InitializeComponent();
@@ -631,12 +632,14 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
 		public virtual void SetDataCountStatus(int txByteCount, int txLineCount, int rxByteCount, int rxLineCount)
 		{
 			this.dataStatusHelper.SetCount(txByteCount, txLineCount, rxByteCount, rxLineCount);
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
 		public virtual void SetDataRateStatus(int txByteRate, int txLineRate, int rxByteRate, int rxLineRate)
 		{
 			this.dataStatusHelper.SetRate(txByteRate, txLineRate, rxByteRate, rxLineRate);

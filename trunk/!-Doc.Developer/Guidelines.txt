@@ -180,11 +180,11 @@ Base class
 
 #endif // DEBUG
 
-		/// <summary></summary>
+((		/// <summary></summary>
 		public bool IsDisposed
 		{
 			get { return (this.isDisposed); }
-		}
+))		}
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()

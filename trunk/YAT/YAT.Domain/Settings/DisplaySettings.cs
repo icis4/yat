@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace YAT.Domain.Settings
@@ -451,6 +452,7 @@ namespace YAT.Domain.Settings
 		/// <remarks>
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
 		[XmlElement("InfoSeparator")]
 		public virtual string InfoSeparator_ForSerialization
 		{
@@ -489,6 +491,7 @@ namespace YAT.Domain.Settings
 		/// <remarks>
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
 		[XmlElement("InfoEnclosure")]
 		public virtual string InfoEnclosure_ForSerialization
 		{

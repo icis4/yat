@@ -21,6 +21,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace YAT.Log
 {
 	/// <summary></summary>
@@ -82,6 +84,7 @@ namespace YAT.Log
 	public enum LogFileEncoding
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "UTF", Justification = "Same spelling as 'Encoding.UTF8'.")]
 		UTF8,
 
 		/// <summary></summary>

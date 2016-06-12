@@ -141,12 +141,6 @@ namespace YAT.Log
 #endif // DEBUG
 
 		/// <summary></summary>
-		public bool IsDisposed
-		{
-			get { return (this.isDisposed); }
-		}
-
-		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
 			if (this.isDisposed)
