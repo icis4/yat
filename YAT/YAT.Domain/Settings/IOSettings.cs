@@ -28,7 +28,6 @@ using System.Xml.Serialization;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	[Serializable]
 	public class IOSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>

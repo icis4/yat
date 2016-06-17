@@ -27,7 +27,7 @@
 //==================================================================================================
 
 using System;
-using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 using YAT.Domain;
@@ -103,6 +103,7 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
 		[XmlIgnore]
 		public virtual byte[] Data
 		{

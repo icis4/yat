@@ -92,7 +92,7 @@ namespace YAT.View.Controls
 		                                            out int requestedWidth)
 		{
 			Font font;
-			SetLineNumberDrawingObjects(settings, graphics, out font);
+			SetLineNumberDrawingObjects(settings, out font);
 
 			TextRenderer.DrawText(graphics, s, font, bounds, SystemColors.ControlText, staticLineNumberFormat);
 
@@ -103,13 +103,12 @@ namespace YAT.View.Controls
 			requestedWidth = requestedSize.Width;
 		}
 
-		private static void SetLineNumberDrawingObjects(Model.Settings.FormatSettings settings,
-		                                                Graphics graphics, out Font font)
+		private static void SetLineNumberDrawingObjects(Model.Settings.FormatSettings settings, out Font font)
 		{
 			string    fontName  = settings.Font.Name;
 			float     fontSize  = settings.Font.Size;
 			FontStyle fontStyle = FontStyle.Regular;
-			font = CacheAndAssignIfChanged(ref staticLineNumberFont, fontName, fontSize, fontStyle, graphics);
+			font = CacheAndAssignIfChanged(ref staticLineNumberFont, fontName, fontSize, fontStyle);
 		}
 
 		/// <summary></summary>
@@ -148,7 +147,7 @@ namespace YAT.View.Controls
 				Font  font;
 				Color foreColor;
 				Color backColor;
-				SetDrawingObjects(element, settings, graphics, state, out font, out foreColor, out backColor);
+				SetDrawingObjects(element, settings, state, out font, out foreColor, out backColor);
 
 				TextRenderer.DrawText(graphics, element.Text, font, bounds, foreColor, backColor, staticMonitorFormat);
 
@@ -165,8 +164,7 @@ namespace YAT.View.Controls
 			}
 		}
 
-		private static void SetDrawingObjects(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
-		                                      Graphics graphics, DrawItemState state,
+		private static void SetDrawingObjects(Domain.DisplayElement element, Model.Settings.FormatSettings settings, DrawItemState state,
 		                                      out Font font, out Color foreColor, out Color backColor)
 		{
 			string    fontName = settings.Font.Name;
@@ -177,55 +175,55 @@ namespace YAT.View.Controls
 			{
 				foreColor = settings.TxDataFormat.Color;
 				fontStyle = settings.TxDataFormat.FontStyle;
-				font      = CacheAndAssignIfChanged(ref staticTxDataFont, fontName, fontSize, fontStyle, graphics);
+				font      = CacheAndAssignIfChanged(ref staticTxDataFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is Domain.DisplayElement.TxControl)
 			{
 				foreColor = settings.TxControlFormat.Color;
 				fontStyle = settings.TxControlFormat.FontStyle;
-				font      = CacheAndAssignIfChanged(ref staticTxControlFont, fontName, fontSize, fontStyle, graphics);
+				font      = CacheAndAssignIfChanged(ref staticTxControlFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is Domain.DisplayElement.RxData)
 			{
 				foreColor = settings.RxDataFormat.Color;
 				fontStyle = settings.RxDataFormat.FontStyle;
-				font      = CacheAndAssignIfChanged(ref staticRxDataFont, fontName, fontSize, fontStyle, graphics);
+				font      = CacheAndAssignIfChanged(ref staticRxDataFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is Domain.DisplayElement.RxControl)
 			{
 				foreColor = settings.RxControlFormat.Color;
 				fontStyle = settings.RxControlFormat.FontStyle;
-				font      = CacheAndAssignIfChanged(ref staticRxControlFont, fontName, fontSize, fontStyle, graphics);
+				font      = CacheAndAssignIfChanged(ref staticRxControlFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is Domain.DisplayElement.DateInfo)
 			{
 				foreColor = settings.DateFormat.Color;
 				fontStyle = settings.DateFormat.FontStyle;
-				font      = CacheAndAssignIfChanged(ref staticDateFont, fontName, fontSize, fontStyle, graphics);
+				font      = CacheAndAssignIfChanged(ref staticDateFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is Domain.DisplayElement.TimeInfo)
 			{
 				foreColor = settings.TimeFormat.Color;
 				fontStyle = settings.TimeFormat.FontStyle;
-				font      = CacheAndAssignIfChanged(ref staticTimeFont, fontName, fontSize, fontStyle, graphics);
+				font      = CacheAndAssignIfChanged(ref staticTimeFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is Domain.DisplayElement.PortInfo)
 			{
 				foreColor = settings.PortFormat.Color;
 				fontStyle = settings.PortFormat.FontStyle;
-				font      = CacheAndAssignIfChanged(ref staticPortFont, fontName, fontSize, fontStyle, graphics);
+				font      = CacheAndAssignIfChanged(ref staticPortFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is Domain.DisplayElement.DirectionInfo)
 			{
 				foreColor = settings.DirectionFormat.Color;
 				fontStyle = settings.DirectionFormat.FontStyle;
-				font      = CacheAndAssignIfChanged(ref staticDirectionFont, fontName, fontSize, fontStyle, graphics);
+				font      = CacheAndAssignIfChanged(ref staticDirectionFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is Domain.DisplayElement.DataLength)
 			{
 				foreColor = settings.LengthFormat.Color;
 				fontStyle = settings.LengthFormat.FontStyle;
-				font      = CacheAndAssignIfChanged(ref staticLengthFont, fontName, fontSize, fontStyle, graphics);
+				font      = CacheAndAssignIfChanged(ref staticLengthFont, fontName, fontSize, fontStyle);
 			}
 			else if ((element is Domain.DisplayElement.Nonentity) ||
 			         (element is Domain.DisplayElement.DataSpace) ||
@@ -235,13 +233,13 @@ namespace YAT.View.Controls
 			{
 				foreColor = settings.WhiteSpacesFormat.Color;
 				fontStyle = settings.WhiteSpacesFormat.FontStyle;
-				font      = CacheAndAssignIfChanged(ref staticWhiteSpacesFont, fontName, fontSize, fontStyle, graphics);
+				font      = CacheAndAssignIfChanged(ref staticWhiteSpacesFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is Domain.DisplayElement.ErrorInfo)
 			{
 				foreColor = settings.ErrorFormat.Color;
 				fontStyle = settings.ErrorFormat.FontStyle;
-				font      = CacheAndAssignIfChanged(ref staticErrorFont, fontName, fontSize, fontStyle, graphics);
+				font      = CacheAndAssignIfChanged(ref staticErrorFont, fontName, fontSize, fontStyle);
 			}
 			else
 			{
@@ -260,7 +258,7 @@ namespace YAT.View.Controls
 			}
 		}
 
-		private static Font CacheAndAssignIfChanged(ref Font cachedFont, string fontName, float fontSize, FontStyle fontStyle, Graphics graphics)
+		private static Font CacheAndAssignIfChanged(ref Font cachedFont, string fontName, float fontSize, FontStyle fontStyle)
 		{
 			// Create the font:
 			if (cachedFont == null)

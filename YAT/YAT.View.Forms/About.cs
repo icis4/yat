@@ -272,9 +272,9 @@ namespace YAT.View.Forms
 			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
-			textBefore = "...Hosting and change managment on ";
-			textLink   =                                    "SourceForge.net";
-			textAfter  =                                                   "...";
+			textBefore = "...Hosting and change management on ";
+			textLink   =                                     "SourceForge.net";
+			textAfter  =                                                    "...";
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
@@ -322,6 +322,7 @@ namespace YAT.View.Forms
 		// Controls Event Handlers
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "YAT is not (yet) capable for RTL")]
 		private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			string link = e.Link.LinkData as string;

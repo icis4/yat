@@ -545,13 +545,13 @@ namespace YAT.View.Forms
 			if (!this.terminalMenuValidationWorkaround_UpdateIsSuspended)
 			{
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.Clear();
-				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.ValidAutoResponseTriggerItems);
+				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoResponseTriggerItems());
 
 				AutoTriggerEx trigger = this.settingsRoot.AutoResponse.Trigger;
 				SelectionHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
 
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Clear();
-				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.ValidAutoResponseResponseItems);
+				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.GetValidAutoResponseResponseItems());
 
 				AutoResponseEx response = this.settingsRoot.AutoResponse.Response;
 				SelectionHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
@@ -2531,7 +2531,7 @@ namespace YAT.View.Forms
 
 			this.isSettingControls.Enter();
 			send.TextCommand             = this.settingsRoot.SendText.Command;
-			send.RecentCommands          = this.settingsRoot.SendText.RecentCommands;
+			send.RecentTextCommands      = this.settingsRoot.SendText.RecentCommands;
 			send.FileCommand             = this.settingsRoot.SendFile.Command;
 			send.RecentFileCommands      = this.settingsRoot.SendFile.RecentCommands;
 			send.TerminalType            = this.settingsRoot.TerminalType;

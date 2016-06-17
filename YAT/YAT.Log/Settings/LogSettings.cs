@@ -44,7 +44,6 @@ using YAT.Settings.Application;
 namespace YAT.Log.Settings
 {
 	/// <summary></summary>
-	[Serializable]
 	public class LogSettings : MKY.Settings.SettingsItem
 	{
 		#region Constants

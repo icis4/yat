@@ -362,7 +362,7 @@ namespace YAT.Domain.Test.Parser
 
 				string actualMessage;
 				if (formatException.Message.Contains(Environment.NewLine))
-					actualMessage = formatException.Message.Substring(0, formatException.Message.IndexOf(Environment.NewLine));
+					actualMessage = formatException.Message.Substring(0, formatException.Message.IndexOf(Environment.NewLine, StringComparison.CurrentCultureIgnoreCase));
 				else
 					actualMessage = formatException.Message;
 

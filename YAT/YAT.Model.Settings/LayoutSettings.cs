@@ -28,7 +28,6 @@ using System.Xml.Serialization;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	[Serializable]
 	public class LayoutSettings : MKY.Settings.SettingsItem
 	{
 		private bool txMonitorPanelIsVisible;

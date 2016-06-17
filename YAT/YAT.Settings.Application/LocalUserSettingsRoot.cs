@@ -31,7 +31,6 @@ using YAT.Application.Utilities;
 namespace YAT.Settings.Application
 {
 	/// <summary></summary>
-	[Serializable]
 	[XmlRoot("LocalUserSettings")]
 	public class LocalUserSettingsRoot : MKY.Settings.SettingsItem, MKY.Xml.IAlternateXmlElementProvider
 	{

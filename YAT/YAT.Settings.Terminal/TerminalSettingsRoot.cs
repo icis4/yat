@@ -31,8 +31,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-using MKY.Text;
-
 using YAT.Application.Utilities;
 
 #endregion
@@ -40,7 +38,6 @@ using YAT.Application.Utilities;
 namespace YAT.Settings.Terminal
 {
 	/// <summary></summary>
-	[Serializable]
 	[XmlRoot("Settings")]
 	public class TerminalSettingsRoot : MKY.Settings.SettingsItem, MKY.Xml.IAlternateXmlElementProvider
 	{
@@ -425,144 +422,136 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// The currently valid response items usable for automatic response.
 		/// </summary>
-		[XmlIgnore]
-		public Model.Types.AutoTriggerEx[] ValidAutoResponseTriggerItems
+		public Model.Types.AutoTriggerEx[] GetValidAutoResponseTriggerItems()
 		{
-			get
+			Model.Types.AutoTriggerEx[] triggers = Model.Types.AutoTriggerEx.GetAllItems();
+			List<Model.Types.AutoTriggerEx> a = new List<Model.Types.AutoTriggerEx>(triggers.Length); // Preset the required capacity to improve memory management.
+
+			foreach (Model.Types.AutoTriggerEx trigger in triggers)
 			{
-				Model.Types.AutoTriggerEx[] triggers = Model.Types.AutoTriggerEx.GetAllItems();
-				List<Model.Types.AutoTriggerEx> a = new List<Model.Types.AutoTriggerEx>(triggers.Length); // Preset the required capacity to improve memory management.
-
-				foreach (Model.Types.AutoTriggerEx trigger in triggers)
+				switch ((Model.Types.AutoTrigger)trigger)
 				{
-					switch ((Model.Types.AutoTrigger)trigger)
+					case Model.Types.AutoTrigger.PredefinedCommand1:
+					case Model.Types.AutoTrigger.PredefinedCommand2:
+					case Model.Types.AutoTrigger.PredefinedCommand3:
+					case Model.Types.AutoTrigger.PredefinedCommand4:
+					case Model.Types.AutoTrigger.PredefinedCommand5:
+					case Model.Types.AutoTrigger.PredefinedCommand6:
+					case Model.Types.AutoTrigger.PredefinedCommand7:
+					case Model.Types.AutoTrigger.PredefinedCommand8:
+					case Model.Types.AutoTrigger.PredefinedCommand9:
+					case Model.Types.AutoTrigger.PredefinedCommand10:
+					case Model.Types.AutoTrigger.PredefinedCommand11:
+					case Model.Types.AutoTrigger.PredefinedCommand12:
 					{
-						case Model.Types.AutoTrigger.PredefinedCommand1:
-						case Model.Types.AutoTrigger.PredefinedCommand2:
-						case Model.Types.AutoTrigger.PredefinedCommand3:
-						case Model.Types.AutoTrigger.PredefinedCommand4:
-						case Model.Types.AutoTrigger.PredefinedCommand5:
-						case Model.Types.AutoTrigger.PredefinedCommand6:
-						case Model.Types.AutoTrigger.PredefinedCommand7:
-						case Model.Types.AutoTrigger.PredefinedCommand8:
-						case Model.Types.AutoTrigger.PredefinedCommand9:
-						case Model.Types.AutoTrigger.PredefinedCommand10:
-						case Model.Types.AutoTrigger.PredefinedCommand11:
-						case Model.Types.AutoTrigger.PredefinedCommand12:
+						int pageId = this.implicit_.Predefined.SelectedPage;
+						int commandId = trigger.ToPredefinedCommandId();
+						if (commandId != Model.Types.AutoTriggerEx.InvalidPredefinedCommandId)
 						{
-							int pageId = this.implicit_.Predefined.SelectedPage;
-							int commandId = trigger.ToPredefinedCommandId();
-							if (commandId != Model.Types.AutoTriggerEx.InvalidPredefinedCommandId)
-							{
-								Model.Types.Command c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
-								if ((c != null) && (c.IsValid))
-									a.Add(trigger);
-							}
-
-							break;
-						}
-
-						case Model.Types.AutoTrigger.Explicit:
-						{
-							Model.Types.Command c = new Model.Types.Command(this.implicit_.AutoResponse.Trigger); // No explicit default radix available (yet).
-							if (c.IsValid)
+							Model.Types.Command c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
+							if ((c != null) && (c.IsValid))
 								a.Add(trigger);
-
-							break;
 						}
 
-						case Model.Types.AutoTrigger.AnyLine:
-						case Model.Types.AutoTrigger.None:
-						default:
-						{
-							a.Add(trigger); // Always add these fixed responses.
-							break;
-						}
+						break;
+					}
+
+					case Model.Types.AutoTrigger.Explicit:
+					{
+						Model.Types.Command c = new Model.Types.Command(this.implicit_.AutoResponse.Trigger); // No explicit default radix available (yet).
+						if (c.IsValid)
+							a.Add(trigger);
+
+						break;
+					}
+
+					case Model.Types.AutoTrigger.AnyLine:
+					case Model.Types.AutoTrigger.None:
+					default:
+					{
+						a.Add(trigger); // Always add these fixed responses.
+						break;
 					}
 				}
-
-				return (a.ToArray());
 			}
+
+			return (a.ToArray());
 		}
 
 		/// <summary>
 		/// The currently valid response items usable for automatic response.
 		/// </summary>
-		[XmlIgnore]
-		public Model.Types.AutoResponseEx[] ValidAutoResponseResponseItems
+		public Model.Types.AutoResponseEx[] GetValidAutoResponseResponseItems()
 		{
-			get
+			Model.Types.AutoResponseEx[] responses = Model.Types.AutoResponseEx.GetAllItems();
+			List<Model.Types.AutoResponseEx> a = new List<Model.Types.AutoResponseEx>(responses.Length); // Preset the required capacity to improve memory management.
+
+			foreach (Model.Types.AutoResponseEx response in responses)
 			{
-				Model.Types.AutoResponseEx[] responses = Model.Types.AutoResponseEx.GetAllItems();
-				List<Model.Types.AutoResponseEx> a = new List<Model.Types.AutoResponseEx>(responses.Length); // Preset the required capacity to improve memory management.
-
-				foreach (Model.Types.AutoResponseEx response in responses)
+				switch ((Model.Types.AutoResponse)response)
 				{
-					switch ((Model.Types.AutoResponse)response)
+					case Model.Types.AutoResponse.PredefinedCommand1:
+					case Model.Types.AutoResponse.PredefinedCommand2:
+					case Model.Types.AutoResponse.PredefinedCommand3:
+					case Model.Types.AutoResponse.PredefinedCommand4:
+					case Model.Types.AutoResponse.PredefinedCommand5:
+					case Model.Types.AutoResponse.PredefinedCommand6:
+					case Model.Types.AutoResponse.PredefinedCommand7:
+					case Model.Types.AutoResponse.PredefinedCommand8:
+					case Model.Types.AutoResponse.PredefinedCommand9:
+					case Model.Types.AutoResponse.PredefinedCommand10:
+					case Model.Types.AutoResponse.PredefinedCommand11:
+					case Model.Types.AutoResponse.PredefinedCommand12:
 					{
-						case Model.Types.AutoResponse.PredefinedCommand1:
-						case Model.Types.AutoResponse.PredefinedCommand2:
-						case Model.Types.AutoResponse.PredefinedCommand3:
-						case Model.Types.AutoResponse.PredefinedCommand4:
-						case Model.Types.AutoResponse.PredefinedCommand5:
-						case Model.Types.AutoResponse.PredefinedCommand6:
-						case Model.Types.AutoResponse.PredefinedCommand7:
-						case Model.Types.AutoResponse.PredefinedCommand8:
-						case Model.Types.AutoResponse.PredefinedCommand9:
-						case Model.Types.AutoResponse.PredefinedCommand10:
-						case Model.Types.AutoResponse.PredefinedCommand11:
-						case Model.Types.AutoResponse.PredefinedCommand12:
+						int pageId = this.implicit_.Predefined.SelectedPage;
+						int commandId = response.ToPredefinedCommandId();
+						if (commandId != Model.Types.AutoResponseEx.InvalidPredefinedCommandId)
 						{
-							int pageId = this.implicit_.Predefined.SelectedPage;
-							int commandId = response.ToPredefinedCommandId();
-							if (commandId != Model.Types.AutoResponseEx.InvalidPredefinedCommandId)
-							{
-								Model.Types.Command c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
-								if ((c != null) && (c.IsValid))
-									a.Add(response);
-							}
-
-							break;
-						}
-
-						case Model.Types.AutoResponse.SendText:
-						{
-							Model.Types.Command c = this.implicit_.SendText.Command;
+							Model.Types.Command c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
 							if ((c != null) && (c.IsValid))
 								a.Add(response);
-
-							break;
 						}
 
-						case Model.Types.AutoResponse.SendFile:
-						{
-							Model.Types.Command c = this.implicit_.SendFile.Command;
-							if ((c != null) && (c.IsValid))
-								a.Add(response);
+						break;
+					}
 
-							break;
-						}
+					case Model.Types.AutoResponse.SendText:
+					{
+						Model.Types.Command c = this.implicit_.SendText.Command;
+						if ((c != null) && (c.IsValid))
+							a.Add(response);
 
-						case Model.Types.AutoResponse.Explicit:
-						{
-							Model.Types.Command c = new Model.Types.Command(this.implicit_.AutoResponse.Response); // No explicit default radix available (yet).
-							if (c.IsValid)
-								a.Add(response);
+						break;
+					}
 
-							break;
-						}
+					case Model.Types.AutoResponse.SendFile:
+					{
+						Model.Types.Command c = this.implicit_.SendFile.Command;
+						if ((c != null) && (c.IsValid))
+							a.Add(response);
 
-						case Model.Types.AutoResponse.None:
-						default:
-						{
-							a.Add(response); // Always add these fixed responses.
-							break;
-						}
+						break;
+					}
+
+					case Model.Types.AutoResponse.Explicit:
+					{
+						Model.Types.Command c = new Model.Types.Command(this.implicit_.AutoResponse.Response); // No explicit default radix available (yet).
+						if (c.IsValid)
+							a.Add(response);
+
+						break;
+					}
+
+					case Model.Types.AutoResponse.None:
+					default:
+					{
+						a.Add(response); // Always add these fixed responses.
+						break;
 					}
 				}
-
-				return (a.ToArray());
 			}
+
+			return (a.ToArray());
 		}
 
 		/// <summary>

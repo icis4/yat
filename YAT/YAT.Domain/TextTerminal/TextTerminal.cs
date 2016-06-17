@@ -703,7 +703,7 @@ namespace YAT.Domain
 			}
 		}
 
-		private void ExecuteLineEnd(LineState lineState, IODirection d, DisplayElementCollection elements, List<DisplayLine> lines)
+		private void ExecuteLineEnd(LineState lineState, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			// Process EOL:
 			int eolLength = lineState.Eol.Sequence.Length;
@@ -777,7 +777,7 @@ namespace YAT.Domain
 
 				// Line end and length:
 				if (lineState.LinePosition == LinePosition.End)
-					ExecuteLineEnd(lineState, raw.Direction, elements, lines);
+					ExecuteLineEnd(lineState, elements, lines);
 			}
 		}
 
@@ -822,7 +822,7 @@ namespace YAT.Domain
 							DisplayElementCollection elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 							List<DisplayLine> lines = new List<DisplayLine>();
 
-							ExecuteLineEnd(lineState, d, elements, lines);
+							ExecuteLineEnd(lineState, elements, lines);
 
 							OnDisplayElementsProcessed(this.bidirLineState.Direction, elements);
 							OnDisplayLinesProcessed   (this.bidirLineState.Direction, lines);

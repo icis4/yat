@@ -70,7 +70,7 @@ namespace YAT.Model.Utilities
 		private bool isDisposed;
 
 		private RtfDocument document;
-		private Align alignement;
+		private Align alignment;
 
 		private FormatDescriptor txDataFormat;
 		private FormatDescriptor txControlFormat;
@@ -88,7 +88,7 @@ namespace YAT.Model.Utilities
 		private object writerSyncObj = new object();
 
 		/// <summary></summary>
-		public RtfWriter(FileStream stream, Encoding encoding, FormatSettings settings)
+		public RtfWriter(FileStream stream, FormatSettings settings)
 		{
 			CultureInfo ci = CultureInfo.CurrentCulture; // Do not use the UICulture as people are likely to use English on non-US computers too.
 
@@ -111,7 +111,7 @@ namespace YAT.Model.Utilities
 			this.document = new RtfDocument(paper, PaperOrientation.Landscape, lcid); // Same orientation as maximized terminal monitor.
 			this.document.DefaultCharFormat.Font = this.document.createFont(settings.Font.Name);
 			this.document.DefaultCharFormat.FontSize = settings.Font.Size;
-			this.alignement = Align.Left;
+			this.alignment = Align.Left;
 
 			// Formats:
 			this.txDataFormat      = new FormatDescriptor(settings.TxDataFormat.FontStyle,      this.document.createColor(settings.TxDataFormat.Color),      this.document.createColor(settings.BackColor));
@@ -263,7 +263,7 @@ namespace YAT.Model.Utilities
 				{
 					// Set the paragraph text:
 					RtfParagraph par = this.document.addParagraph();
-					par.Alignment = this.alignement;
+					par.Alignment = this.alignment;
 					par.setText(text.ToString());
 
 					// Set the text format segment-by-segment:

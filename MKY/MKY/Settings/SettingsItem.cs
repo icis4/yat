@@ -519,7 +519,6 @@ namespace MKY.Settings
 	}
 
 	/// <summary></summary>
-	[Serializable]
 	public class EmptySettingsItem : SettingsItem
 	{
 	}

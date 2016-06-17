@@ -456,7 +456,6 @@ namespace MKY.Data
 	}
 
 	/// <summary></summary>
-	[Serializable]
 	public class EmptyDataItem : DataItem
 	{
 	}

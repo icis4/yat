@@ -30,7 +30,6 @@ using MKY.Recent;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	[Serializable]
 	public class RecentFileSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>

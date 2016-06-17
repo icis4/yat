@@ -30,7 +30,6 @@ using YAT.Model.Types;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	[Serializable]
 	public class FormatSettings : MKY.Settings.SettingsItem
 	{
 		/// <remarks>Color.Blue = 0000FF.</remarks>

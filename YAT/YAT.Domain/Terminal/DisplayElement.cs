@@ -70,8 +70,9 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Public property is required for default XML serialization/deserialization.")]
 		[Flags]
-		public enum ModifierFlags
+		public enum ElementAttributes
 		{
 			/// <summary></summary>
 			None       =  0,
@@ -98,7 +99,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public Nonentity()
-				: base(ModifierFlags.None)
+				: base(ElementAttributes.None)
 			{
 			}
 		}
@@ -109,7 +110,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public TxData()
-				: base(ModifierFlags.Data)
+				: base(ElementAttributes.Data)
 			{
 			}
 
@@ -132,7 +133,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public TxControl()
-				: base(ModifierFlags.Data)
+				: base(ElementAttributes.Data)
 			{
 			}
 
@@ -155,7 +156,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public RxData()
-				: base(ModifierFlags.Data)
+				: base(ElementAttributes.Data)
 			{
 			}
 
@@ -178,7 +179,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public RxControl()
-				: base(ModifierFlags.Data)
+				: base(ElementAttributes.Data)
 			{
 			}
 
@@ -207,7 +208,7 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			protected InfoDisplayElement(Direction direction, string info)
-				: base(direction, info, ModifierFlags.Info)
+				: base(direction, info, ElementAttributes.Info)
 			{
 			}
 		}
@@ -347,7 +348,7 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			protected WhiteSpaceDisplayElement(Direction direction, string whiteSpace)
-				: base(direction, whiteSpace, ModifierFlags.WhiteSpace)
+				: base(direction, whiteSpace, ElementAttributes.WhiteSpace)
 			{
 			}
 		}
@@ -450,13 +451,13 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public ErrorInfo(Direction direction, string message)
-				: this(Direction.None, message, false)
+				: this(direction, message, false)
 			{
 			}
 
 			/// <summary></summary>
 			public ErrorInfo(Direction direction, string message, bool isWarningOnly)
-				: base(direction, (isWarningOnly ? ("<Warning: " + message + ">") : ("<Error: " + message + ">")), ModifierFlags.Inline)
+				: base(direction, (isWarningOnly ? ("<Warning: " + message + ">") : ("<Error: " + message + ">")), ElementAttributes.Inline)
 			{
 			}
 		}
@@ -472,7 +473,7 @@ namespace YAT.Domain
 		private List<Pair<byte[], string>> origin;
 		private string text;
 		private int dataCount;
-		private ModifierFlags flags;
+		private ElementAttributes attributes;
 
 		#endregion
 
@@ -483,18 +484,18 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		private DisplayElement()
-			: this(ModifierFlags.None)
+			: this(ElementAttributes.None)
 		{
 		}
 
 		/// <summary></summary>
-		private DisplayElement(ModifierFlags flags)
-			: this(Direction.None, null, ModifierFlags.None)
+		private DisplayElement(ElementAttributes flags)
+			: this(Direction.None, null, flags)
 		{
 		}
 
 		/// <summary></summary>
-		private DisplayElement(Direction direction, string text, ModifierFlags flags)
+		private DisplayElement(Direction direction, string text, ElementAttributes flags)
 		{
 			Initialize(direction, null, text, 0, flags);
 		}
@@ -510,16 +511,16 @@ namespace YAT.Domain
 		{
 			List<Pair<byte[], string>> l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 			l.Add(new Pair<byte[], string>(origin, text));
-			Initialize(direction, l, text, dataCount, ModifierFlags.Data);
+			Initialize(direction, l, text, dataCount, ElementAttributes.Data);
 		}
 
-		private void Initialize(Direction direction, List<Pair<byte[], string>> origin, string text, int dataCount, ModifierFlags flags)
+		private void Initialize(Direction direction, List<Pair<byte[], string>> origin, string text, int dataCount, ElementAttributes attributes)
 		{
-			this.direction = direction;
-			this.origin    = origin;
-			this.text      = text;
-			this.dataCount = dataCount;
-			this.flags     = flags;
+			this.direction  = direction;
+			this.origin     = origin;
+			this.text       = text;
+			this.dataCount  = dataCount;
+			this.attributes = attributes;
 		}
 
 #if (DEBUG)
@@ -588,31 +589,31 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[XmlAttribute("Flags")]
-		public virtual ModifierFlags Flags
+		[XmlAttribute("Attributes")]
+		public virtual ElementAttributes Attributes
 		{
-			get { return (this.flags); }
-			set { this.flags = value;  }
+			get { return (this.attributes); }
+			set { this.attributes = value;  }
 		}
 
 		/// <summary></summary>
 		[XmlIgnore]
 		public virtual bool IsData
 		{
-			get { return ((this.flags & ModifierFlags.Data) != 0); }
+			get { return ((this.attributes & ElementAttributes.Data) != 0); }
 		}
 
 		/// <summary></summary>
 		[XmlIgnore]
 		public virtual bool IsEol
 		{
-			get { return ((this.flags & ModifierFlags.Eol) != 0); }
+			get { return ((this.attributes & ElementAttributes.Eol) != 0); }
 			set
 			{
 				if (value)
-					this.flags |= ModifierFlags.Eol;
+					this.attributes |= ElementAttributes.Eol;
 				else
-					this.flags &= ~ModifierFlags.Eol;
+					this.attributes &= ~ElementAttributes.Eol;
 			}
 		}
 
@@ -620,21 +621,21 @@ namespace YAT.Domain
 		[XmlIgnore]
 		public virtual bool IsInline
 		{
-			get { return ((this.flags & ModifierFlags.Inline) != 0); }
+			get { return ((this.attributes & ElementAttributes.Inline) != 0); }
 		}
 
 		/// <summary></summary>
 		[XmlIgnore]
 		public virtual bool IsInfo
 		{
-			get { return ((this.flags & ModifierFlags.Info) != 0); }
+			get { return ((this.attributes & ElementAttributes.Info) != 0); }
 		}
 
 		/// <summary></summary>
 		[XmlIgnore]
 		public virtual bool IsWhiteSpace
 		{
-			get { return ((this.flags & ModifierFlags.WhiteSpace) != 0); }
+			get { return ((this.attributes & ElementAttributes.WhiteSpace) != 0); }
 		}
 
 		#endregion
@@ -678,7 +679,7 @@ namespace YAT.Domain
 			clone.origin    = PerformDeepClone(this.origin);
 			clone.text      = this.text;
 			clone.dataCount = this.dataCount;
-			clone.flags     = this.flags;
+			clone.attributes     = this.attributes;
 
 			return (clone);
 		}
@@ -723,7 +724,7 @@ namespace YAT.Domain
 			if (this.direction != other.direction) // Self-explaining.
 				return (false);
 
-			if (this.flags != other.flags) // Self-explaining.
+			if (this.attributes != other.attributes) // Self-explaining.
 				return (false);
 
 			return (true);
@@ -823,7 +824,7 @@ namespace YAT.Domain
 			sb.Append(indent); sb.Append("> Origin:       "); sb.AppendLine(Origin != null ? Origin.ToString() : "'null'");
 			sb.Append(indent); sb.Append("> Text:         "); sb.AppendLine(Text   != null ? Text              :    ""   );
 			sb.Append(indent); sb.Append("> DataCount:    "); sb.AppendLine(DataCount.ToString(CultureInfo.InvariantCulture));
-			sb.Append(indent); sb.Append("> Flags:        "); sb.AppendLine(Flags.ToString());
+			sb.Append(indent); sb.Append("> Flags:        "); sb.AppendLine(Attributes.ToString());
 
 			return (sb.ToString());
 		}

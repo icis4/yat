@@ -29,7 +29,6 @@ using System.Xml.Serialization;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	[Serializable]
 	public class MainWindowSettings : MKY.Settings.SettingsItem
 	{
 		private FormStartPosition startPosition;

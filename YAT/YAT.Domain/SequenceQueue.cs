@@ -114,6 +114,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
 		public virtual byte[] Sequence
 		{
 			get { return (this.sequence); }

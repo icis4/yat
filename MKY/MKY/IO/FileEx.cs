@@ -188,7 +188,7 @@ namespace MKY.IO
 
 				if (p.ExitCode == 0)
 				{
-					filePath = whereResult.Substring(0, whereResult.IndexOf(Environment.NewLine, StringComparison.OrdinalIgnoreCase));
+					filePath = whereResult.Substring(0, whereResult.IndexOf(Environment.NewLine, StringComparison.CurrentCultureIgnoreCase));
 					return (true);
 				}
 				else

@@ -43,7 +43,6 @@ namespace MKY.Settings
 	/// <summary>
 	/// Options to control access to the applications settings file(s).
 	/// </summary>
-	[Serializable]
 	public enum ApplicationSettingsFileAccess
 	{
 		/// <summary>Do no access the file at all, only use temporary settings.</summary>
@@ -79,7 +78,6 @@ namespace MKY.Settings
 		// Types
 		//==========================================================================================
 
-		[Serializable]
 		[Flags]
 		private enum FileAccessFlags
 		{

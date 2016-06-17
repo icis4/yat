@@ -158,6 +158,10 @@ namespace YAT.View.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual SocketType SocketType
 		{
+			get
+			{
+				return (this.socketType);
+			}
 			set
 			{
 				if (this.socketType != value)

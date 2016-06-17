@@ -30,7 +30,6 @@ using MKY.IO;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	[Serializable]
 	public class TerminalSettingsItem : MKY.Settings.SettingsItem, IGuidProvider
 	{
 		/// <remarks>

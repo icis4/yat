@@ -27,7 +27,6 @@ using System.Xml.Serialization;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	[Serializable]
 	public class BufferSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>

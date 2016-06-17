@@ -31,7 +31,6 @@ using MKY.Net;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	[Serializable]
 	public class NewTerminalSettings : MKY.Settings.SettingsItem
 	{
 		private Domain.TerminalType terminalType;

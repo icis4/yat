@@ -681,7 +681,7 @@ namespace YAT.Domain
 			}
 		}
 
-		private void ExecuteLineEnd(LineState lineState, IODirection d, DisplayElementCollection elements, List<DisplayLine> lines)
+		private void ExecuteLineEnd(LineState lineState, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of TextTerminal for better comparability.
 
@@ -730,7 +730,7 @@ namespace YAT.Domain
 			{
 				// In case of reload, timed line breaks are executed here:
 				if (IsReloading && displaySettings.TimedLineBreak.Enabled)
-					ExecuteTimedLineBreakOnReload(displaySettings, lineState, raw.TimeStamp, raw.Direction, elements, lines);
+					ExecuteTimedLineBreakOnReload(displaySettings, lineState, raw.TimeStamp, elements, lines);
 
 				// Line begin and time stamp:
 				if (lineState.LinePosition == LinePosition.Begin)
@@ -756,7 +756,7 @@ namespace YAT.Domain
 					if (displaySettings.TimedLineBreak.Enabled)
 						lineState.LineBreakTimer.Stop();
 
-					ExecuteLineEnd(lineState, raw.Direction, elements, lines);
+					ExecuteLineEnd(lineState, elements, lines);
 
 					// In case of a pending immediately insert the sequence into a new line:
 					if ((elementsForNextLine != null) && (elementsForNextLine.Count > 0))
@@ -785,13 +785,13 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too long for one line.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too long for one line.")]
 		private void ExecuteTimedLineBreakOnReload(Settings.BinaryDisplaySettings displaySettings, LineState lineState,
-		                                           DateTime ts, IODirection d, DisplayElementCollection elements, List<DisplayLine> lines)
+		                                           DateTime ts, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			if (lineState.LineElements.Count > 0)
 			{
 				TimeSpan span = ts - lineState.TimeStamp;
 				if (span.TotalMilliseconds >= displaySettings.TimedLineBreak.Timeout) {
-					ExecuteLineEnd(lineState, d, elements, lines);
+					ExecuteLineEnd(lineState, elements, lines);
 				}
 			}
 			lineState.TimeStamp = ts;
@@ -838,7 +838,7 @@ namespace YAT.Domain
 							DisplayElementCollection elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 							List<DisplayLine> lines = new List<DisplayLine>();
 
-							ExecuteLineEnd(lineState, d, elements, lines);
+							ExecuteLineEnd(lineState, elements, lines);
 
 							OnDisplayElementsProcessed(this.bidirLineState.Direction, elements);
 							OnDisplayLinesProcessed   (this.bidirLineState.Direction, lines);
@@ -867,7 +867,7 @@ namespace YAT.Domain
 				DisplayElementCollection elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				List<DisplayLine> lines = new List<DisplayLine>();
 
-				ExecuteLineEnd(lineState, d, elements, lines);
+				ExecuteLineEnd(lineState, elements, lines);
 
 				OnDisplayElementsProcessed(d, elements);
 				OnDisplayLinesProcessed(d, lines);

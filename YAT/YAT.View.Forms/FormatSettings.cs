@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
@@ -92,6 +93,7 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Same type as ColorDialog.CustomColors.")]
 		public int[] CustomColors
 		{
 			get { return (this.customColors); }

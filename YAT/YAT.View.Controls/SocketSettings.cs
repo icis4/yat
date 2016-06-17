@@ -110,6 +110,10 @@ namespace YAT.View.Controls
 		[DefaultValue(SocketTypeDefault)]
 		public MKY.IO.Serial.Socket.SocketType SocketType
 		{
+			get
+			{
+				return (this.socketType);
+			}
 			set
 			{
 				if (this.socketType != value)

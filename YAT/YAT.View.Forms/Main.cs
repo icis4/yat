@@ -883,10 +883,10 @@ namespace YAT.View.Forms
 					arVisible       = terminal.SettingsRoot.AutoResponse.Visible;
 					arEnabled       = terminal.SettingsRoot.AutoResponse.IsActive;
 
-					arTriggerItems  = terminal.SettingsRoot.ValidAutoResponseTriggerItems;
+					arTriggerItems  = terminal.SettingsRoot.GetValidAutoResponseTriggerItems();
 					arTrigger       = terminal.SettingsRoot.AutoResponse.Trigger;
 
-					arResponseItems = terminal.SettingsRoot.ValidAutoResponseResponseItems;
+					arResponseItems = terminal.SettingsRoot.GetValidAutoResponseResponseItems();
 					arResponse      = terminal.SettingsRoot.AutoResponse.Response;
 				}
 			}
