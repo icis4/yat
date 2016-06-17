@@ -29,7 +29,6 @@ using MKY;
 namespace YAT.Settings.Terminal
 {
 	/// <summary></summary>
-	[Serializable]
 	public class ExplicitSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>

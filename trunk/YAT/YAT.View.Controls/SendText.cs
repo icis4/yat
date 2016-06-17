@@ -215,7 +215,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Setter is intended.")]
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Setter is intended.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -239,6 +239,10 @@ namespace YAT.View.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Domain.TerminalType TerminalType
 		{
+			get
+			{
+				return (this.terminalType);
+			}
 			set
 			{
 				if (this.terminalType != value)
@@ -278,6 +282,10 @@ namespace YAT.View.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Domain.Parser.Modes ParseMode
 		{
+			get
+			{
+				return (this.parseMode);
+			}
 			set
 			{
 				if (this.parseMode != value)
@@ -293,6 +301,10 @@ namespace YAT.View.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual bool SendImmediately
 		{
+			get
+			{
+				return (this.sendImmediately);
+			}
 			set
 			{
 				if (this.sendImmediately != value)
@@ -308,6 +320,10 @@ namespace YAT.View.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual bool TerminalIsReadyToSend
 		{
+			get
+			{
+				return (this.terminalIsReadyToSend);
+			}
 			set
 			{
 				if (this.terminalIsReadyToSend != value)

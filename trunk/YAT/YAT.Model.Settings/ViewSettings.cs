@@ -32,7 +32,6 @@ using MKY.Recent;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	[Serializable]
 	public class ViewSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
@@ -86,6 +85,7 @@ namespace YAT.Model.Settings
 		/// ...<see cref="Color"/> does not implement <see cref="IEquatable{T}"/> that is needed for a recent item collection, and because...
 		/// ...<see cref="Color"/> cannot be serialized.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
 		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
 		[XmlElement("CustomColors")]
 		public RecentItemCollection<string> CustomColors

@@ -27,7 +27,6 @@ using System.Xml.Serialization;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	[Serializable]
 	public class PredefinedSettings : MKY.Settings.SettingsItem
 	{
 		private int selectedPage;

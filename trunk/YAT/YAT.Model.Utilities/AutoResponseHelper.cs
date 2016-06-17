@@ -21,6 +21,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 using MKY;
 
 namespace YAT.Model.Utilities
@@ -53,8 +55,13 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
 		public byte[] Sequence
 		{
+			get
+			{
+				return (this.sequence);
+			}
 			set
 			{
 				lock (this)

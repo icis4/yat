@@ -29,7 +29,6 @@ using MKY.IO;
 namespace YAT.Application.Settings
 {
 	/// <summary></summary>
-	[Serializable]
 	public class AutoWorkspaceSettings : MKY.Settings.SettingsItem
 	{
 		private string filePath;

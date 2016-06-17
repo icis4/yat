@@ -29,7 +29,6 @@ using System.Xml.Serialization;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	[Serializable]
 	public class WindowSettings : MKY.Settings.SettingsItem
 	{
 		private FormWindowState state;

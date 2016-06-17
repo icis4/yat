@@ -75,7 +75,7 @@ namespace MKY.Win32
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeTypes
 		{
 			/// <summary></summary>
@@ -126,7 +126,7 @@ namespace MKY.Win32
 
 		/// <summary></summary>
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeMethods
 		{
 			private const string ADVANCED_DLL = "advapi32.dll";

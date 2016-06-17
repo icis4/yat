@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Runtime.Serialization;
 
 namespace YAT.Domain.Parser
 {
@@ -53,7 +54,7 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		protected FormatException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+		protected FormatException(SerializationInfo info, StreamingContext context)
 			: base(info, context)
 		{
 		}

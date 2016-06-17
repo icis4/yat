@@ -23,6 +23,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -105,6 +106,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Font FormatFontWithoutStyle
@@ -246,6 +248,7 @@ namespace YAT.View.Controls
 		/// <returns>
 		/// A set of custom colors shown by the dialog box. The default value is null.
 		/// </returns>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Same type as ColorDialog.CustomColors.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int[] CustomColors

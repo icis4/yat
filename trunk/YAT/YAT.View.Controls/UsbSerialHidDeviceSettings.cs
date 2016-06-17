@@ -28,6 +28,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Windows.Forms;
 
@@ -395,6 +396,7 @@ namespace YAT.View.Controls
 			}
 		}
 
+		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "YAT is not (yet) capable for RTL")]
 		private void linkLabel_Info_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			Exception ex;

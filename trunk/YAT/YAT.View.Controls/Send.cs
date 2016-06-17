@@ -152,11 +152,11 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Setter is intended.")]
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Setter is intended.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual RecentItemCollection<Command> RecentCommands
+		public virtual RecentItemCollection<Command> RecentTextCommands
 		{
 			set { sendText.Recent = value; }
 		}
@@ -173,7 +173,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Setter is intended.")]
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Setter is intended.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -183,6 +183,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Domain.TerminalType TerminalType
@@ -195,6 +196,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[DefaultValue(Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault)]
 		public virtual bool UseExplicitDefaultRadix
 		{
@@ -206,6 +208,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Domain.Parser.Modes ParseMode
@@ -217,6 +220,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[DefaultValue(SendText.SendImmediatelyDefault)]
 		public virtual bool SendTextImmediately
 		{
@@ -227,6 +231,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual bool TerminalIsReadyToSend

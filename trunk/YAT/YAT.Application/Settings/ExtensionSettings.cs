@@ -27,7 +27,6 @@ using System.Xml.Serialization;
 namespace YAT.Application.Settings
 {
 	/// <summary></summary>
-	[Serializable]
 	public class ExtensionSettings : MKY.Settings.SettingsItem
 	{
 		private string textSendFiles;

@@ -54,10 +54,12 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <typeparam name="T">The (simple) settings type.</typeparam>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasizing the 'utility' nature of this delegate.")]
 		[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Why not?")]
 		public delegate TerminalSettingsRoot TerminalSettingsDelegate<T>(T arg);
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasizing the 'utility' nature of this class.")]
 		public static class TransmissionSettings
 		{
 			/// <summary></summary>
@@ -883,7 +885,7 @@ namespace YAT.Model.Test
 			e.Result = DialogResult.OK;
 
 			// ...and signal exclusion via a flag:
-			if (e.Text.StartsWith("Unable to start terminal"))
+			if (e.Text.StartsWith("Unable to start terminal", StringComparison.Ordinal)) // 'Ordinal' since YAT is all-English.
 			{
 				staticTerminalMessageInputRequestResultsInExclude = true;
 				staticTerminalMessageInputRequestResultsInExcludeText = e.Text;

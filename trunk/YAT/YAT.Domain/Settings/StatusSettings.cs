@@ -33,7 +33,6 @@ namespace YAT.Domain.Settings
 	/// Now it is possible to show/hide the status labels without reloading the monitors, thus
 	/// saving time, especially in case of large data.
 	/// </remarks>
-	[Serializable]
 	public class StatusSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>

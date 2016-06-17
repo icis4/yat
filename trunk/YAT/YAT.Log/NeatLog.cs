@@ -125,10 +125,10 @@ namespace YAT.Log
 			{
 				switch (this.fileType)
 				{
-					case FileType.Xml:		this.xmlWriter = new XmlWriterNeat(stream, true, FilePath);			break;
-					case FileType.Rtf:		this.rtfWriter = new RtfWriter(stream, this.encoding, this.format);	break;
+					case FileType.Xml:		this.xmlWriter = new XmlWriterNeat(stream, true, FilePath);		break;
+					case FileType.Rtf:		this.rtfWriter = new RtfWriter(stream, this.format);			break;
 					case FileType.Text:
-					default:				this.textWriter = new TextWriter(stream, this.encoding);			break;
+					default:				this.textWriter = new TextWriter(stream, this.encoding);		break;
 				}
 			}
 		}

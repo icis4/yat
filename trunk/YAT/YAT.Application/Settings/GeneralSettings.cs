@@ -29,7 +29,6 @@ namespace YAT.Application.Settings
 {
 	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
-	[Serializable]
 	public class GeneralSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>

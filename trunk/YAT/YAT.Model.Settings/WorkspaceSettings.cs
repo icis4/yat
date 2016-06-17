@@ -32,7 +32,6 @@ using YAT.Model.Types;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	[Serializable]
 	public class WorkspaceSettings : MKY.Settings.SettingsItem
 	{
 		private bool alwaysOnTop;

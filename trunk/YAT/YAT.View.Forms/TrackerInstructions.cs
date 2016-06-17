@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Windows.Forms;
 
@@ -198,6 +199,7 @@ namespace YAT.View.Forms
 		// Controls Event Handlers
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "YAT is not (yet) capable for RTL")]
 		private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			var link = (e.Link.LinkData as string);

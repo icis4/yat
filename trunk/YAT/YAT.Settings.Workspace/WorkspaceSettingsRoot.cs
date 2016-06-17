@@ -30,7 +30,6 @@ using YAT.Model.Settings;
 namespace YAT.Settings.Workspace
 {
 	/// <summary></summary>
-	[Serializable]
 	[XmlRoot("Settings")]
 	public class WorkspaceSettingsRoot : MKY.Settings.SettingsItem
 	{

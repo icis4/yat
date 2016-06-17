@@ -34,7 +34,6 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "This is the easter egg!")]
-	[Serializable]
 	public class SendTextSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>

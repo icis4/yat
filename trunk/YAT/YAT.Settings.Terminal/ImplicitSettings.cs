@@ -27,7 +27,6 @@ using System.Xml.Serialization;
 namespace YAT.Settings.Terminal
 {
 	/// <summary></summary>
-	[Serializable]
 	public class ImplicitSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
