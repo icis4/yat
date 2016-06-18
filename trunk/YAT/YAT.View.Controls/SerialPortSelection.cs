@@ -550,7 +550,7 @@ namespace YAT.View.Controls
 		{
 			this.isSettingControls.Enter();
 
-			if (!DesignMode && Enabled)
+			if (!DesignMode && Enabled && (this.portId != null))
 				SelectionHelper.Select(comboBox_Port, this.portId, this.portId);
 			else
 				SelectionHelper.Deselect(comboBox_Port);

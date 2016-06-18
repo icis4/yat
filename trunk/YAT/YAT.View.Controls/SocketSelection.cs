@@ -754,7 +754,7 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 
 			// Remote host address:
-			if (!DesignMode && Enabled &&
+			if (!DesignMode && Enabled && (this.remoteHost != null) &&
 				((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket) ||
 				 (this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpPairSocket)))
 			{
@@ -835,21 +835,32 @@ namespace YAT.View.Controls
 					case SocketType.UdpClient:
 					{
 						comboBox_LocalFilter.Enabled = false;
-						SelectionHelper.Deselect(comboBox_LocalFilter, this.remoteHost);
+						SelectionHelper.Deselect(comboBox_LocalFilter, this.localFilter);
 						break;
 					}
 
 					case SocketType.UdpServer:
 					{
 						comboBox_LocalFilter.Enabled = true;
-						SelectionHelper.Select(comboBox_LocalFilter, this.remoteHost, this.remoteHost);
+						if (comboBox_LocalFilter.Items.Count > 0)
+						{
+							if (this.localFilter != null)
+								comboBox_LocalFilter.SelectedItem = this.localFilter;
+							else
+								comboBox_LocalFilter.SelectedItem = (IPFilterEx)IPFilter.Any;
+						}
+						else
+						{
+							comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
+						}
+
 						break;
 					}
 
 					case SocketType.UdpPairSocket:
 					{
 						comboBox_LocalFilter.Enabled = false;
-						SelectionHelper.Deselect(comboBox_LocalFilter, this.remoteHost);
+						SelectionHelper.Deselect(comboBox_LocalFilter, this.localFilter);
 						break;
 					}
 

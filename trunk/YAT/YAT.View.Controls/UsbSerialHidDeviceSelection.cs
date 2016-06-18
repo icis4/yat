@@ -264,7 +264,7 @@ namespace YAT.View.Controls
 						int sameVidPidIndex = devices.FindIndexVidPid(this.deviceInfo);
 
 						// Inform the user if serial is required:
-						if (ApplicationSettings.LocalUserSettings.General.UseUsbSerial)
+						if (ApplicationSettings.LocalUserSettings.General.MatchUsbSerial)
 						{
 							// Get the 'NotAvailable' string BEFORE defaulting!
 							string deviceInfoNotAvailable = null;
@@ -375,7 +375,7 @@ namespace YAT.View.Controls
 		{
 			this.isSettingControls.Enter();
 
-			if (!DesignMode && Enabled)
+			if (!DesignMode && Enabled && (this.deviceInfo != null))
 				SelectionHelper.Select(comboBox_Device, this.deviceInfo, this.deviceInfo);
 			else
 				SelectionHelper.Deselect(comboBox_Device);

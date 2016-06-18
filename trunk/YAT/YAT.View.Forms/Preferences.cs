@@ -170,10 +170,10 @@ namespace YAT.View.Forms
 				this.settingsInEdit.General.DetectSerialPortsInUse = checkBox_DetectSerialPortsInUse.Checked;
 		}
 
-		private void checkBox_UseUsbSerial_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_MatchUsbSerial_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settingsInEdit.General.UseUsbSerial = checkBox_UseUsbSerial.Checked;
+				this.settingsInEdit.General.MatchUsbSerial = checkBox_MatchUsbSerial.Checked;
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -234,7 +234,7 @@ namespace YAT.View.Forms
 			checkBox_RetrieveSerialPortCaptions.Checked = this.settingsInEdit.General.RetrieveSerialPortCaptions;
 			checkBox_DetectSerialPortsInUse.Checked     = this.settingsInEdit.General.DetectSerialPortsInUse;
 
-			checkBox_UseUsbSerial.Checked = this.settingsInEdit.General.UseUsbSerial;
+			checkBox_MatchUsbSerial.Checked = this.settingsInEdit.General.MatchUsbSerial;
 
 			this.isSettingControls.Leave();
 		}

@@ -70,14 +70,14 @@ namespace MKY.IO.Serial.Usb.Test
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[Test, TestCaseSource(typeof(DeviceInfoTestData), "TestCases")]
-		public virtual void TestSerialization(bool isValid, int vendorId, int productId, bool useSerial, string serial, string[] descriptors)
+		public virtual void TestSerialization(bool isValid, int vendorId, int productId, bool matchSerial, string serial, string[] descriptors)
 		{
 			if (isValid)
 			{
 				string filePath = Temp.MakeTempFilePath(GetType(), ".xml");
 				SerialHidDeviceSettings settingsDeserialized = null;
 				SerialHidDeviceSettings settings = new SerialHidDeviceSettings();
-				if (!useSerial)
+				if (!matchSerial)
 					settings.DeviceInfo = new DeviceInfo(vendorId, productId);
 				else
 					settings.DeviceInfo = new DeviceInfo(vendorId, productId, serial);
@@ -89,19 +89,19 @@ namespace MKY.IO.Serial.Usb.Test
 				settingsDeserialized = (SerialHidDeviceSettings)XmlSerializerTest.TestDeserializeFromFile(filePath, typeof(SerialHidDeviceSettings));
 				Assert.AreEqual(vendorId, settingsDeserialized.DeviceInfo.VendorId);
 				Assert.AreEqual(productId, settingsDeserialized.DeviceInfo.ProductId);
-				if (useSerial)
+				if (matchSerial)
 					Assert.AreEqual(serial, settingsDeserialized.DeviceInfo.Serial);
 
 				settingsDeserialized = (SerialHidDeviceSettings)XmlSerializerTest.TestTolerantDeserializeFromFile(filePath, typeof(SerialHidDeviceSettings));
 				Assert.AreEqual(vendorId, settingsDeserialized.DeviceInfo.VendorId);
 				Assert.AreEqual(productId, settingsDeserialized.DeviceInfo.ProductId);
-				if (useSerial)
+				if (matchSerial)
 					Assert.AreEqual(serial, settingsDeserialized.DeviceInfo.Serial);
 
 				settingsDeserialized = (SerialHidDeviceSettings)XmlSerializerTest.TestAlternateTolerantDeserializeFromFile(filePath, typeof(SerialHidDeviceSettings));
 				Assert.AreEqual(vendorId, settingsDeserialized.DeviceInfo.VendorId);
 				Assert.AreEqual(productId, settingsDeserialized.DeviceInfo.ProductId);
-				if (useSerial)
+				if (matchSerial)
 					Assert.AreEqual(serial, settingsDeserialized.DeviceInfo.Serial);
 			}
 		}

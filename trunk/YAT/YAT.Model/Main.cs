@@ -872,9 +872,15 @@ namespace YAT.Model
 
 						// The SNR is optional:
 						if (!this.commandLineArgs.OptionIsGiven("SerialString"))
+						{
 							terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.DeviceInfo(vendorId, productId);
+							terminalSettings.IO.UsbSerialHidDevice.MatchSerial = false;
+						}
 						else
+						{
 							terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.DeviceInfo(vendorId, productId, this.commandLineArgs.SerialString);
+							terminalSettings.IO.UsbSerialHidDevice.MatchSerial = true;
+						}
 					}
 					else
 					{
@@ -920,7 +926,7 @@ namespace YAT.Model
 		/// Unfortunately, 'normal' terminal settings and new terminal settings are defined rather
 		/// differently. Therefore, this implementation looks a bit weird.
 		/// </remarks>
-		public bool ProcessCommandLineArgsIntoExistingNewTerminalSettings(Model.Settings.NewTerminalSettings newTerminalSettings)
+		public bool ProcessCommandLineArgsIntoExistingNewTerminalSettings(Settings.NewTerminalSettings newTerminalSettings)
 		{
 			// These are temporary settings. Therefore, child items of these settings are not
 			// cloned below. They can simply be assigned and will then later be assigned back.
@@ -945,6 +951,7 @@ namespace YAT.Model
 			terminalSettings.IO.Socket.UdpServerSendMode        = newTerminalSettings.UdpServerSendMode;
 
 			terminalSettings.IO.UsbSerialHidDevice.DeviceInfo   = newTerminalSettings.UsbSerialHidDeviceInfo;
+			terminalSettings.IO.UsbSerialHidDevice.MatchSerial  = newTerminalSettings.UsbSerialHidMatchSerial;
 			terminalSettings.IO.UsbSerialHidDevice.ReportFormat = newTerminalSettings.UsbSerialHidReportFormat;
 			terminalSettings.IO.UsbSerialHidDevice.RxIdUsage    = newTerminalSettings.UsbSerialHidRxIdUsage;
 			terminalSettings.IO.UsbSerialHidDevice.FlowControl  = newTerminalSettings.UsbSerialHidFlowControl;
@@ -974,6 +981,7 @@ namespace YAT.Model
 				newTerminalSettings.UdpServerSendMode        = terminalSettings.IO.Socket.UdpServerSendMode;
 
 				newTerminalSettings.UsbSerialHidDeviceInfo   = terminalSettings.IO.UsbSerialHidDevice.DeviceInfo;
+				newTerminalSettings.UsbSerialHidMatchSerial  = terminalSettings.IO.UsbSerialHidDevice.MatchSerial;
 				newTerminalSettings.UsbSerialHidReportFormat = terminalSettings.IO.UsbSerialHidDevice.ReportFormat;
 				newTerminalSettings.UsbSerialHidRxIdUsage    = terminalSettings.IO.UsbSerialHidDevice.RxIdUsage;
 				newTerminalSettings.UsbSerialHidFlowControl  = terminalSettings.IO.UsbSerialHidDevice.FlowControl;

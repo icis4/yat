@@ -130,13 +130,13 @@ namespace MKY.IO.Usb.Test
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[Test, TestCaseSource(typeof(DeviceInfoTestData), "TestCases")]
-		public virtual void TestConstructorAndParse(bool isValid, int vendorId, int productId, bool useSerial, string serial, string[] descriptors)
+		public virtual void TestConstructorAndParse(bool isValid, int vendorId, int productId, bool matchSerial, string serial, string[] descriptors)
 		{
 			if (isValid)
 			{
 				DeviceInfo info;
 
-				if (!useSerial)
+				if (!matchSerial)
 				{
 					info = new DeviceInfo(vendorId, productId);
 					Assert.AreEqual(vendorId,  info.VendorId);
@@ -180,14 +180,14 @@ namespace MKY.IO.Usb.Test
 				{
 					DeviceInfo dummyInfoToForceException;
 
-					if (!useSerial)
+					if (!matchSerial)
 						dummyInfoToForceException = new DeviceInfo(vendorId, productId);
 					else
 						dummyInfoToForceException = new DeviceInfo(vendorId, productId, serial);
 
 					UnusedLocal.PreventAnalysisWarning(dummyInfoToForceException);
 
-					if (!useSerial)
+					if (!matchSerial)
 						Assert.Fail("Invalid pair " + vendorId + "/" + productId + " wasn't properly handled!");
 					else
 						Assert.Fail("Invalid triple " + vendorId + "/" + productId + "/" + serial + " wasn't properly handled!");
@@ -203,7 +203,7 @@ namespace MKY.IO.Usb.Test
 					{
 						DeviceInfo dummyInfoToForceException;
 
-						if (!useSerial)
+						if (!matchSerial)
 							dummyInfoToForceException = DeviceInfo.ParseFromVidAndPid(descriptor);
 						else
 							dummyInfoToForceException = DeviceInfo.ParseFromVidAndPidAndSerial(descriptor);
@@ -230,14 +230,14 @@ namespace MKY.IO.Usb.Test
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[Test, TestCaseSource(typeof(DeviceInfoTestData), "TestCases")]
-		public virtual void TestSerialization(bool isValid, int vendorId, int productId, bool useSerial, string serial, string[] descriptors)
+		public virtual void TestSerialization(bool isValid, int vendorId, int productId, bool matchSerial, string serial, string[] descriptors)
 		{
 			if (isValid)
 			{
 				string filePath = Temp.MakeTempFilePath(GetType(), ".xml");
 				DeviceInfo infoDeserialized = null;
 				DeviceInfo info;
-				if (!useSerial)
+				if (!matchSerial)
 					info = new DeviceInfo(vendorId, productId);
 				else
 					info = new DeviceInfo(vendorId, productId, serial);
@@ -249,19 +249,19 @@ namespace MKY.IO.Usb.Test
 				infoDeserialized = (DeviceInfo)XmlSerializerTest.TestDeserializeFromFile(filePath, typeof(DeviceInfo));
 				Assert.AreEqual(vendorId,  infoDeserialized.VendorId);
 				Assert.AreEqual(productId, infoDeserialized.ProductId);
-				if (useSerial)
+				if (matchSerial)
 					Assert.AreEqual(serial, infoDeserialized.Serial);
 
 				infoDeserialized = (DeviceInfo)XmlSerializerTest.TestTolerantDeserializeFromFile(filePath, typeof(DeviceInfo));
 				Assert.AreEqual(vendorId,  infoDeserialized.VendorId);
 				Assert.AreEqual(productId, infoDeserialized.ProductId);
-				if (useSerial)
+				if (matchSerial)
 					Assert.AreEqual(serial, infoDeserialized.Serial);
 
 				infoDeserialized = (DeviceInfo)XmlSerializerTest.TestAlternateTolerantDeserializeFromFile(filePath, typeof(DeviceInfo));
 				Assert.AreEqual(vendorId,  infoDeserialized.VendorId);
 				Assert.AreEqual(productId, infoDeserialized.ProductId);
-				if (useSerial)
+				if (matchSerial)
 					Assert.AreEqual(serial, infoDeserialized.Serial);
 			}
 		}

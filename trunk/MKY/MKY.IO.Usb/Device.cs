@@ -195,6 +195,9 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Returns manufacturer, product and serial strings of a given path.
 		/// </summary>
+		/// <remarks>
+		/// 
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
@@ -205,8 +208,8 @@ namespace MKY.IO.Usb
 			{
 				try
 				{
-					if (GetStringsFromHandle(deviceHandle, out manufacturer, out product, out serial))
-						return (true);
+					GetStringsFromHandle(deviceHandle, out manufacturer, out product, out serial);
+					return (true);
 				}
 				finally
 				{
@@ -220,21 +223,15 @@ namespace MKY.IO.Usb
 			return (false);
 		}
 
-		private static bool GetStringsFromHandle(SafeFileHandle deviceHandle, out string manufacturer, out string product, out string serial)
+		/// <remarks>
+		/// A device may not define any or some strings (e.g. no serial string).
+		/// Therefore, simply try to retrieve the strings in best-effort manner.
+		/// </remarks>
+		private static void GetStringsFromHandle(SafeFileHandle deviceHandle, out string manufacturer, out string product, out string serial)
 		{
-			if (Win32.Hid.GetManufacturerString(deviceHandle, out manufacturer))
-			{
-				if (Win32.Hid.GetProductString(deviceHandle, out product))
-				{
-					if (Win32.Hid.GetSerialString(deviceHandle, out serial))
-						return (true);
-				}
-			}
-
-			manufacturer = "";
-			product      = "";
-			serial       = "";
-			return (false);
+			Win32.Hid.GetManufacturerString(deviceHandle, out manufacturer);
+			Win32.Hid.GetProductString(deviceHandle, out product);
+			Win32.Hid.GetSerialString(deviceHandle, out serial);
 		}
 
 		/// <summary>
@@ -315,8 +312,8 @@ namespace MKY.IO.Usb
 					{
 						if (retrieveStringsFromDevice)
 						{
-							if (GetStringsFromHandle(deviceHandle, out manufacturer, out product, out serial))
-								return (true);
+							GetStringsFromHandle(deviceHandle, out manufacturer, out product, out serial);
+							return (true);
 						}
 						else
 						{
