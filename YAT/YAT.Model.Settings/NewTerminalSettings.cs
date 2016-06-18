@@ -52,6 +52,7 @@ namespace YAT.Model.Settings
 		private MKY.IO.Serial.Socket.UdpServerSendMode udpServerSendMode;
 
 		private MKY.IO.Usb.DeviceInfo usbSerialHidDeviceInfo;
+		private bool usbSerialHidMatchSerial;
 		private MKY.IO.Usb.SerialHidReportFormat usbSerialHidReportFormat;
 		private MKY.IO.Usb.SerialHidRxIdUsage usbSerialHidRxIdUsage;
 		private MKY.IO.Serial.Usb.SerialHidFlowControl usbSerialHidFlowControl;
@@ -102,6 +103,7 @@ namespace YAT.Model.Settings
 			UdpServerSendMode        = rhs.UdpServerSendMode;
 
 			UsbSerialHidDeviceInfo   = rhs.UsbSerialHidDeviceInfo;
+			UsbSerialHidMatchSerial  = rhs.UsbSerialHidMatchSerial;
 			UsbSerialHidReportFormat = rhs.UsbSerialHidReportFormat;
 			UsbSerialHidRxIdUsage    = rhs.UsbSerialHidRxIdUsage;
 			UsbSerialHidFlowControl  = rhs.UsbSerialHidFlowControl;
@@ -142,6 +144,7 @@ namespace YAT.Model.Settings
 			UdpServerSendMode        = MKY.IO.Serial.Socket.SocketSettings.UdpServerSendModeDefault;
 
 			UsbSerialHidDeviceInfo   = null;
+			UsbSerialHidMatchSerial  = MKY.IO.Serial.Usb.SerialHidDeviceSettings.MatchSerialDefault;
 			UsbSerialHidReportFormat = new MKY.IO.Usb.SerialHidReportFormat();
 			UsbSerialHidRxIdUsage    = new MKY.IO.Usb.SerialHidRxIdUsage();
 			UsbSerialHidFlowControl  = MKY.IO.Serial.Usb.SerialHidDeviceSettings.FlowControlDefault;
@@ -476,6 +479,21 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("UsbSerialHidMatchSerial")]
+		public virtual bool UsbSerialHidMatchSerial
+		{
+			get { return (this.usbSerialHidMatchSerial); }
+			set
+			{
+				if (this.usbSerialHidMatchSerial != value)
+				{
+					this.usbSerialHidMatchSerial = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("UsbSerialHidReportFormat")]
 		public virtual MKY.IO.Usb.SerialHidReportFormat UsbSerialHidReportFormat
 		{
@@ -593,6 +611,7 @@ namespace YAT.Model.Settings
 				(UdpServerSendMode        == other.UdpServerSendMode) &&
 
 				(UsbSerialHidDeviceInfo   == other.UsbSerialHidDeviceInfo) &&
+				(UsbSerialHidMatchSerial  == other.UsbSerialHidMatchSerial) &&
 				(UsbSerialHidReportFormat == other.UsbSerialHidReportFormat) &&
 				(UsbSerialHidRxIdUsage    == other.UsbSerialHidRxIdUsage) &&
 				(UsbSerialHidFlowControl  == other.UsbSerialHidFlowControl) &&
@@ -634,6 +653,7 @@ namespace YAT.Model.Settings
 				hashCode = (hashCode * 397) ^  UdpServerSendMode                                                              .GetHashCode();
 
 				hashCode = (hashCode * 397) ^ (UsbSerialHidDeviceInfo             != null ? UsbSerialHidDeviceInfo            .GetHashCode() : 0); // May be 'null' if no devices are available!
+				hashCode = (hashCode * 397) ^  UsbSerialHidMatchSerial                                                        .GetHashCode();
 				hashCode = (hashCode * 397) ^  UsbSerialHidReportFormat                                                       .GetHashCode();
 				hashCode = (hashCode * 397) ^  UsbSerialHidRxIdUsage                                                          .GetHashCode();
 				hashCode = (hashCode * 397) ^  UsbSerialHidFlowControl                                                        .GetHashCode();

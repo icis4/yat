@@ -88,6 +88,11 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary>
+		/// By default, the USB device serial string must match the connected device.
+		/// </summary>
+		public const bool MatchSerialDefault = true;
+
+		/// <summary>
 		/// By default, the USB device is automatically opened as soon as it gets connected to the
 		/// computer, given this device object is up and running.
 		/// </summary>
@@ -292,6 +297,8 @@ namespace MKY.IO.Usb
 		private State state = State.Reset;
 		private ReaderWriterLockSlim stateLock = new ReaderWriterLockSlim();
 
+		private bool matchSerial = MatchSerialDefault;
+
 		private SerialHidReportFormat reportFormat = new SerialHidReportFormat();
 		private SerialHidRxIdUsage    rxIdUsage    = new SerialHidRxIdUsage();
 
@@ -443,6 +450,25 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <summary>
+		/// Indicates whether the configured USB serial string must match the current device.
+		/// </summary>
+		public virtual bool MatchSerial
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.matchSerial);
+			}
+			set
+			{
+				AssertNotDisposed();
+
+				this.matchSerial = value;
+			}
+		}
 
 		/// <summary>
 		/// Indicates the HID report format of the current device.
@@ -1123,7 +1149,14 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		private void Device_DeviceConnected(object sender, DeviceEventArgs e)
 		{
-			if (Info == e.DeviceInfo)
+			bool isMatch = false;
+
+			if (this.matchSerial)
+				isMatch = Info.Equals(e.DeviceInfo);
+			else
+				isMatch = Info.EqualsVidPid(e.DeviceInfo);
+
+			if (isMatch)
 			{
 				// Force reinitialize with new device info:
 				Reinitialize(e.DeviceInfo);

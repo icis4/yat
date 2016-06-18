@@ -2380,7 +2380,7 @@ namespace YAT.Model
 								int sameVidPidIndex = devices.FindIndexVidPid(deviceInfo);
 
 								// Inform the user if serial is required:
-								if (ApplicationSettings.LocalUserSettings.General.UseUsbSerial)
+								if (ApplicationSettings.LocalUserSettings.General.MatchUsbSerial)
 								{
 									DialogResult dr = ShowUsbSerialHidDeviceNotAvailableAlternateQuestion(deviceInfo, devices[sameVidPidIndex]);
 									if (dr == DialogResult.Yes)

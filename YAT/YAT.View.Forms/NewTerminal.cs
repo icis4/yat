@@ -32,6 +32,8 @@ using System.Windows.Forms;
 
 using MKY.Windows.Forms;
 
+using YAT.Settings.Application;
+
 #endregion
 
 namespace YAT.View.Forms
@@ -310,10 +312,11 @@ namespace YAT.View.Forms
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
-			// New terminal settings.
+			// New terminal settings:
 			this.newTerminalSettings = this.newTerminalSettingsInEdit;
+			this.newTerminalSettings.UsbSerialHidMatchSerial = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial; // Defined by the LocalUserSettings.
 
-			// Create document settings and fill it with new terminal settings.
+			// Create document settings and fill it with new terminal settings:
 			this.terminalSettings = new Settings.Terminal.TerminalSettingsRoot();
 
 			this.terminalSettings.Terminal.TerminalType = this.newTerminalSettings.TerminalType;
@@ -339,6 +342,7 @@ namespace YAT.View.Forms
 			this.terminalSettings.Terminal.IO.Socket.UdpServerSendMode             = this.newTerminalSettings.UdpServerSendMode;
 
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.DeviceInfo        = this.newTerminalSettings.UsbSerialHidDeviceInfo;
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.MatchSerial       = this.newTerminalSettings.UsbSerialHidMatchSerial;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.ReportFormat      = this.newTerminalSettings.UsbSerialHidReportFormat;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.RxIdUsage         = this.newTerminalSettings.UsbSerialHidRxIdUsage;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.FlowControl       = this.newTerminalSettings.UsbSerialHidFlowControl;
@@ -441,6 +445,7 @@ namespace YAT.View.Forms
 
 			usbSerialHidDeviceSelection.DeviceInfo  = this.newTerminalSettingsInEdit.UsbSerialHidDeviceInfo;
 
+			                                      ////this.newTerminalSettingsInEdit.UsbSerialHidMatchSerial is defined by the LocalUserSettings.
 			usbSerialHidDeviceSettings.ReportFormat = this.newTerminalSettingsInEdit.UsbSerialHidReportFormat;
 			usbSerialHidDeviceSettings.RxIdUsage    = this.newTerminalSettingsInEdit.UsbSerialHidRxIdUsage;
 			usbSerialHidDeviceSettings.FlowControl  = this.newTerminalSettingsInEdit.UsbSerialHidFlowControl;

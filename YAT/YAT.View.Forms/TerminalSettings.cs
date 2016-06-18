@@ -33,6 +33,8 @@ using System.Windows.Forms;
 using MKY;
 using MKY.Windows.Forms;
 
+using YAT.Settings.Application;
+
 #endregion
 
 namespace YAT.View.Forms
@@ -310,6 +312,7 @@ namespace YAT.View.Forms
 		private void button_OK_Click(object sender, EventArgs e)
 		{
 			this.settings = this.settingsInEdit;
+			this.settings.Terminal.IO.UsbSerialHidDevice.MatchSerial = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial; // Defined by the LocalUserSettings.
 		}
 
 		private void button_Cancel_Click(object sender, EventArgs e)
@@ -441,6 +444,7 @@ namespace YAT.View.Forms
 
 			usbSerialHidDeviceSelection.DeviceInfo  = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
 
+			                                      ////this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.MatchSerial is defined by the LocalUserSettings.
 			usbSerialHidDeviceSettings.ReportFormat = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.ReportFormat;
 			usbSerialHidDeviceSettings.RxIdUsage    = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.RxIdUsage;
 			usbSerialHidDeviceSettings.FlowControl  = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.FlowControl;

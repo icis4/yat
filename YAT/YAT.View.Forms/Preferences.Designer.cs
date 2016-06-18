@@ -34,7 +34,7 @@
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_Preferences = new System.Windows.Forms.GroupBox();
 			this.groupBox_UsbDevice = new System.Windows.Forms.GroupBox();
-			this.checkBox_UseUsbSerial = new System.Windows.Forms.CheckBox();
+			this.checkBox_MatchUsbSerial = new System.Windows.Forms.CheckBox();
 			this.label_UsbDeviceDiscovery = new System.Windows.Forms.Label();
 			this.groupBox_Main = new System.Windows.Forms.GroupBox();
 			this.checkBox_ShowChrono = new System.Windows.Forms.CheckBox();
@@ -107,7 +107,7 @@
 			this.groupBox_UsbDevice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_UsbDevice.Controls.Add(this.checkBox_UseUsbSerial);
+			this.groupBox_UsbDevice.Controls.Add(this.checkBox_MatchUsbSerial);
 			this.groupBox_UsbDevice.Controls.Add(this.label_UsbDeviceDiscovery);
 			this.groupBox_UsbDevice.Location = new System.Drawing.Point(6, 282);
 			this.groupBox_UsbDevice.Name = "groupBox_UsbDevice";
@@ -116,19 +116,19 @@
 			this.groupBox_UsbDevice.TabStop = false;
 			this.groupBox_UsbDevice.Text = "USB Ser/HID";
 			// 
-			// checkBox_UseUsbSerial
+			// checkBox_MatchUsbSerial
 			// 
-			this.checkBox_UseUsbSerial.AutoSize = true;
-			this.checkBox_UseUsbSerial.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.checkBox_UseUsbSerial.Location = new System.Drawing.Point(12, 38);
-			this.checkBox_UseUsbSerial.Name = "checkBox_UseUsbSerial";
-			this.checkBox_UseUsbSerial.Size = new System.Drawing.Size(173, 17);
-			this.checkBox_UseUsbSerial.TabIndex = 1;
-			this.checkBox_UseUsbSerial.Text = "...take s&erial string into account";
-			this.toolTip.SetToolTip(this.checkBox_UseUsbSerial, "Enabled: Discovery takes VID, PID and serial string into account.\r\nDisabled: Disc" +
+			this.checkBox_MatchUsbSerial.AutoSize = true;
+			this.checkBox_MatchUsbSerial.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.checkBox_MatchUsbSerial.Location = new System.Drawing.Point(12, 38);
+			this.checkBox_MatchUsbSerial.Name = "checkBox_MatchUsbSerial";
+			this.checkBox_MatchUsbSerial.Size = new System.Drawing.Size(173, 17);
+			this.checkBox_MatchUsbSerial.TabIndex = 1;
+			this.checkBox_MatchUsbSerial.Text = "...take s&erial string into account";
+			this.toolTip.SetToolTip(this.checkBox_MatchUsbSerial, "Enabled: Discovery takes VID, PID and serial string into account.\r\nDisabled: Disc" +
         "overy is limited to VID and PID.");
-			this.checkBox_UseUsbSerial.UseVisualStyleBackColor = true;
-			this.checkBox_UseUsbSerial.CheckedChanged += new System.EventHandler(this.checkBox_UseUsbSerial_CheckedChanged);
+			this.checkBox_MatchUsbSerial.UseVisualStyleBackColor = true;
+			this.checkBox_MatchUsbSerial.CheckedChanged += new System.EventHandler(this.checkBox_MatchUsbSerial_CheckedChanged);
 			// 
 			// label_UsbDeviceDiscovery
 			// 
@@ -319,7 +319,7 @@
 		private System.Windows.Forms.CheckBox checkBox_RetrieveSerialPortCaptions;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.GroupBox groupBox_UsbDevice;
-		private System.Windows.Forms.CheckBox checkBox_UseUsbSerial;
+		private System.Windows.Forms.CheckBox checkBox_MatchUsbSerial;
 		private System.Windows.Forms.Label label_UsbDeviceDiscovery;
 	}
 }

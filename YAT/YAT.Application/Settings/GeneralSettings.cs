@@ -47,7 +47,7 @@ namespace YAT.Application.Settings
 		private bool retrieveSerialPortCaptions;
 		private bool detectSerialPortsInUse;
 
-		private bool useUsbSerial;
+		private bool matchUsbSerial;
 
 		/// <summary></summary>
 		public GeneralSettings()
@@ -77,7 +77,7 @@ namespace YAT.Application.Settings
 			RetrieveSerialPortCaptions = rhs.RetrieveSerialPortCaptions;
 			DetectSerialPortsInUse     = rhs.DetectSerialPortsInUse;
 
-			UseUsbSerial            = rhs.UseUsbSerial;
+			MatchUsbSerial             = rhs.MatchUsbSerial;
 
 			ClearChanged();
 		}
@@ -96,7 +96,7 @@ namespace YAT.Application.Settings
 			RetrieveSerialPortCaptions = true;
 			DetectSerialPortsInUse     = true;
 
-			UseUsbSerial            = true;
+			MatchUsbSerial             = true;
 		}
 
 		#region Properties
@@ -187,15 +187,15 @@ namespace YAT.Application.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("UseUsbSerial")]
-		public virtual bool UseUsbSerial
+		[XmlElement("MatchUsbSerial")]
+		public virtual bool MatchUsbSerial
 		{
-			get { return (this.useUsbSerial); }
+			get { return (this.matchUsbSerial); }
 			set
 			{
-				if (this.useUsbSerial != value)
+				if (this.matchUsbSerial != value)
 				{
-					this.useUsbSerial = value;
+					this.matchUsbSerial = value;
 					SetChanged();
 				}
 			}
@@ -232,7 +232,7 @@ namespace YAT.Application.Settings
 				(RetrieveSerialPortCaptions == other.RetrieveSerialPortCaptions) &&
 				(DetectSerialPortsInUse     == other.DetectSerialPortsInUse) &&
 
-				(UseUsbSerial            == other.UseUsbSerial)
+				(MatchUsbSerial             == other.MatchUsbSerial)
 			);
 		}
 
@@ -256,7 +256,7 @@ namespace YAT.Application.Settings
 				hashCode = (hashCode * 397) ^ RetrieveSerialPortCaptions.GetHashCode();
 				hashCode = (hashCode * 397) ^ DetectSerialPortsInUse    .GetHashCode();
 
-				hashCode = (hashCode * 397) ^ UseUsbSerial              .GetHashCode();
+				hashCode = (hashCode * 397) ^ MatchUsbSerial            .GetHashCode();
 
 				return (hashCode);
 			}

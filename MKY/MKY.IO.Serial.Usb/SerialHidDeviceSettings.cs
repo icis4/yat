@@ -46,6 +46,9 @@ namespace MKY.IO.Serial.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
+		public const bool MatchSerialDefault = IO.Usb.SerialHidDevice.MatchSerialDefault;
+
+		/// <summary></summary>
 		public const SerialHidFlowControl FlowControlDefault = SerialHidFlowControl.None;
 
 		/// <summary></summary>
@@ -61,6 +64,7 @@ namespace MKY.IO.Serial.Usb
 		private const string Undefined = "<Undefined>";
 
 		private DeviceInfo deviceInfo;
+		private bool matchSerial;
 
 		private SerialHidReportFormat reportFormat;
 		private SerialHidRxIdUsage rxIdUsage;
@@ -102,6 +106,8 @@ namespace MKY.IO.Serial.Usb
 			else
 				DeviceInfo = null;
 
+			MatchSerial  = rhs.MatchSerial;
+
 			ReportFormat = new SerialHidReportFormat(rhs.ReportFormat);
 			RxIdUsage    = new SerialHidRxIdUsage   (rhs.RxIdUsage);
 
@@ -118,13 +124,14 @@ namespace MKY.IO.Serial.Usb
 		{
 			base.SetMyDefaults();
 
-			DeviceInfo = new DeviceInfo(); // Required for XML serialization.
+			DeviceInfo   = new DeviceInfo(); // Required for XML serialization.
+			MatchSerial  = MatchSerialDefault;
 
 			ReportFormat = new SerialHidReportFormat();
 			RxIdUsage    = new SerialHidRxIdUsage();
 
-			FlowControl = FlowControlDefault;
-			AutoOpen    = AutoOpenDefault;
+			FlowControl  = FlowControlDefault;
+			AutoOpen     = AutoOpenDefault;
 		}
 
 		#endregion
@@ -144,6 +151,21 @@ namespace MKY.IO.Serial.Usb
 				if (this.deviceInfo != value)
 				{
 					this.deviceInfo = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("MatchSerial")]
+		public virtual bool MatchSerial
+		{
+			get { return (this.matchSerial); }
+			set
+			{
+				if (this.matchSerial != value)
+				{
+					this.matchSerial = value;
 					SetChanged();
 				}
 			}
@@ -275,9 +297,11 @@ namespace MKY.IO.Serial.Usb
 				base.Equals(other) && // Compare all settings nodes.
 
 				(DeviceInfo   == other.DeviceInfo) &&
+				(MatchSerial  == other.MatchSerial) &&
 
 				(ReportFormat == other.ReportFormat) &&
 				(RxIdUsage    == other.RxIdUsage) &&
+
 				(FlowControl  == other.FlowControl) &&
 				(AutoOpen     == other.AutoOpen)
 			);
@@ -297,9 +321,11 @@ namespace MKY.IO.Serial.Usb
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
 				hashCode = (hashCode * 397) ^ (DeviceInfo != null ? DeviceInfo.GetHashCode() : 0); // May be 'null' if no devices are available!
+				hashCode = (hashCode * 397) ^  MatchSerial                    .GetHashCode();
 
 				hashCode = (hashCode * 397) ^  ReportFormat                   .GetHashCode();
 				hashCode = (hashCode * 397) ^  RxIdUsage                      .GetHashCode();
+
 				hashCode = (hashCode * 397) ^  FlowControl                    .GetHashCode();
 				hashCode = (hashCode * 397) ^  AutoOpen                       .GetHashCode();
 
