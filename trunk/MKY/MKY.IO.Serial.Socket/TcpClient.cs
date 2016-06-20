@@ -144,6 +144,8 @@ namespace MKY.IO.Serial.Socket
 		private ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection socketConnection;
 		private object socketConnectionSyncObj = new object();
 
+		private object dataEventSyncObj = new object();
+
 		/// <remarks>
 		/// Async event handling. The capacity is set large enough to reduce the number of resizing
 		/// operations while adding elements.
@@ -606,7 +608,7 @@ namespace MKY.IO.Serial.Socket
 				);
 
 				this.socket.AddConnector("MKY.IO.Serial.Socket.TcpClient", new System.Net.IPEndPoint(this.remoteHost.Address, this.remotePort), new System.Net.IPEndPoint(this.localInterface.Address, 0));
-				this.socket.Start(); // The ALAZ socket will be started asynchronously
+				this.socket.Start(); // The ALAZ socket will be started asynchronously.
 			}
 		}
 
@@ -798,13 +800,23 @@ namespace MKY.IO.Serial.Socket
 		/// </param>
 		public virtual void OnReceived(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
-			// This receive callback is always asychronous, thus the event handler can
-			// be called directly. It is also ensured that the event handler is called
-			// sequential because the 'BeginReceive()' method is only called after
-			// the event handler has returned.
-			OnDataReceived(new SocketDataReceivedEventArgs((byte[])e.Buffer.Clone(), e.Connection.RemoteEndPoint));
+			if (Monitor.TryEnter(this.dataEventSyncObj))
+			{
+				try
+				{
+					// This receive callback is always asychronous, thus the event handler can
+					// be called directly. It is also ensured that the event handler is called
+					// sequentially because the 'BeginReceive()' method is only called after
+					// the event handler has returned.
+					OnDataReceived(new SocketDataReceivedEventArgs((byte[])e.Buffer.Clone(), e.Connection.RemoteEndPoint));
+				}
+				finally
+				{
+					Monitor.Exit(this.dataEventSyncObj);
+				}
+			} // Monitor.TryEnter()
 
-			// Continue receiving data.
+			// Continue receiving:
 			e.Connection.BeginReceive();
 		}
 
@@ -827,6 +839,10 @@ namespace MKY.IO.Serial.Socket
 				{
 					foreach (byte b in e.Buffer)
 						this.dataSentQueue.Enqueue(b);
+
+					// Note that individual bytes are enqueued, not array of bytes. Analysis has
+					// shown that this is faster than enqueuing arrays, since this callback will
+					// mostly be called with rather low numbers of bytes.
 				}
 
 				SignalDataSentThreadSafely();
@@ -883,16 +899,34 @@ namespace MKY.IO.Serial.Socket
 					// Subsequently, yield to other threads to allow processing the data.
 					Thread.Sleep(TimeSpan.Zero);
 
-					byte[] data;
-					lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
-					{
-						data = this.dataSentQueue.ToArray();
-						this.dataSentQueue.Clear();
-					}
+					// Synchronize the send/receive events to prevent mix-ups at the event
+					// sinks, i.e. the send/receive operations shall be synchronized with
+					// signaling of them.
+					// But attention, do not simply lock() the sync obj. Instead, just try
+					// to get the lock or try again later. The thread = direction that get's
+					// the lock first, shall also be the one to signal first:
 
-					OnDataSent(new SocketDataSentEventArgs(data, remoteEndPoint));
+					if (Monitor.TryEnter(this.dataEventSyncObj))
+					{
+						try
+						{
+							byte[] data;
+							lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
+							{
+								data = this.dataSentQueue.ToArray();
+								this.dataSentQueue.Clear();
+							}
+
+							OnDataSent(new SocketDataSentEventArgs(data, remoteEndPoint));
+						}
+						finally
+						{
+							Monitor.Exit(this.dataEventSyncObj);
+						}
+					} // Monitor.TryEnter()
 
 					// Note the Thread.Sleep(TimeSpan.Zero) above.
+
 				} // Inner loop
 			} // Outer loop
 

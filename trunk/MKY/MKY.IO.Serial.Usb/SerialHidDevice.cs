@@ -1011,7 +1011,7 @@ namespace MKY.IO.Serial.Usb
 					try     { this.sendThreadEvent.Close(); }
 					finally { this.sendThreadEvent = null; }
 				}
-			}
+			} // lock (sendThreadSyncObj)
 
 			lock (this.receiveThreadSyncObj)
 			{
@@ -1063,7 +1063,7 @@ namespace MKY.IO.Serial.Usb
 					try     { this.receiveThreadEvent.Close(); }
 					finally { this.receiveThreadEvent = null; }
 				}
-			}
+			} // lock (sendThreadSyncObj)
 		}
 
 		#endregion
@@ -1097,10 +1097,11 @@ namespace MKY.IO.Serial.Usb
 		/// The <see cref="Usb.SerialHidDevice.DataSent"/> event is not used. Instead, the
 		/// corresponding event is triggered in the <see cref="Send(byte[])"/> method.
 		/// </remarks>
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "Usb.SerialHidDevice uses a 'ReceiveThread' to invoke this event.")]
 		private void device_DataReceived(object sender, EventArgs e)
 		{
-			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized. At the
-			{                        // same time this lock prevents race-conditions of 'DataReceived'.
+			if (!IsDisposed && IsOpen) // Ensure not to perform any operations during closing anymore. Check 'IsDisposed' first!
+			{
 				byte[] data;
 				this.device.Receive(out data);
 
@@ -1147,7 +1148,7 @@ namespace MKY.IO.Serial.Usb
 				// Immediately invoke the event, but invoke it asynchronously and NOT on this thread!
 				if (signalXOnXOff || signalXOnXOffCount)
 					OnIOControlChangedAsync(EventArgs.Empty);
-			}
+			} // if (!IsDisposed && ...)
 		}
 
 		/// <summary>
@@ -1157,7 +1158,7 @@ namespace MKY.IO.Serial.Usb
 		/// to the main application. Small chunks of received data will generate many events
 		/// handled by <see cref="device_DataReceived"/>. However, since <see cref="OnDataReceived"/>
 		/// synchronously invokes the event, it will take some time until the send queue is checked
-		/// again. During this time, no more new events are invoked, instead, outgoing data is
+		/// again. During this time, no more new events are invoked, instead, incoming data is
 		/// buffered.
 		/// </summary>
 		/// <remarks>

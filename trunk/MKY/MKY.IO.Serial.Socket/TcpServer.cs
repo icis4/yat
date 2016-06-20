@@ -142,6 +142,8 @@ namespace MKY.IO.Serial.Socket
 
 		private List<ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection> socketConnections = new List<ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection>();
 
+		private object dataEventSyncObj = new object();
+
 		/// <remarks>
 		/// Async event handling. The capacity is set large enough to reduce the number of resizing
 		/// operations while adding elements.
@@ -751,13 +753,23 @@ namespace MKY.IO.Serial.Socket
 		/// </param>
 		public virtual void OnReceived(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
-			// This receive callback is always asychronous, thus the event handler can
-			// be called directly. It is also ensured that the event handler is called
-			// sequential because the 'BeginReceive()' method is only called after
-			// the event handler has returned.
-			OnDataReceived(new SocketDataReceivedEventArgs((byte[])e.Buffer.Clone(), e.Connection.RemoteEndPoint));
+			if (Monitor.TryEnter(this.dataEventSyncObj))
+			{
+				try
+				{
+					// This receive callback is always asychronous, thus the event handler can
+					// be called directly. It is also ensured that the event handler is called
+					// sequentially because the 'BeginReceive()' method is only called after
+					// the event handler has returned.
+					OnDataReceived(new SocketDataReceivedEventArgs((byte[])e.Buffer.Clone(), e.Connection.RemoteEndPoint));
+				}
+				finally
+				{
+					Monitor.Exit(this.dataEventSyncObj);
+				}
+			} // Monitor.TryEnter()
 
-			// Continue receiving data.
+			// Continue receiving:
 			e.Connection.BeginReceive();
 		}
 
@@ -780,6 +792,10 @@ namespace MKY.IO.Serial.Socket
 				{
 					foreach (byte b in e.Buffer)
 						this.dataSentQueue.Enqueue(new Pair<byte, System.Net.IPEndPoint>(b, e.Connection.RemoteEndPoint));
+
+					// Note that individual bytes are enqueued, not array of bytes. Analysis has
+					// shown that this is faster than enqueuing arrays, since this callback will
+					// mostly be called with rather low numbers of bytes.
 				}
 
 				SignalDataSentThreadSafely();
@@ -832,35 +848,52 @@ namespace MKY.IO.Serial.Socket
 					// Subsequently, yield to other threads to allow processing the data.
 					Thread.Sleep(TimeSpan.Zero);
 
-					List<byte> data;
-					System.Net.IPEndPoint remoteEndPoint;
+					// Synchronize the send/receive events to prevent mix-ups at the event
+					// sinks, i.e. the send/receive operations shall be synchronized with
+					// signaling of them.
+					// But attention, do not simply lock() the sync obj. Instead, just try
+					// to get the lock or try again later. The thread = direction that get's
+					// the lock first, shall also be the one to signal first:
 
-					lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
+					if (Monitor.TryEnter(this.dataEventSyncObj))
 					{
-						data = new List<byte>(this.dataSentQueue.Count); // Preset the initial capacity to improve memory management.
-						remoteEndPoint = null;
-
-						while (this.dataSentQueue.Count > 0)
+						try
 						{
-							Pair<byte, System.Net.IPEndPoint> item;
+							System.Net.IPEndPoint remoteEndPoint = null;
+							List<byte> data;
 
-							// First, peek to check whether data refers to different end point:
-							item = this.dataSentQueue.Peek();
+							lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
+							{
+								data = new List<byte>(this.dataSentQueue.Count); // Preset the initial capacity to improve memory management.
 
-							if (remoteEndPoint == null)
-								remoteEndPoint = item.Value2;
-							else if (remoteEndPoint != item.Value2)
-								break; // Break as soon as data of a different end point is available.
+								while (this.dataSentQueue.Count > 0)
+								{
+									Pair<byte, System.Net.IPEndPoint> item;
 
-							// If still the same end point, dequeue the item to acknowledge it's gone:
-							item = this.dataSentQueue.Dequeue();
-							data.Add(item.Value1);
+									// First, peek to check whether data refers to a different end point:
+									item = this.dataSentQueue.Peek();
+
+									if (remoteEndPoint == null)
+										remoteEndPoint = item.Value2;
+									else if (remoteEndPoint != item.Value2)
+										break; // Break as soon as data of a different end point is available.
+
+									// If still the same end point, dequeue the item to acknowledge it's gone:
+									item = this.dataSentQueue.Dequeue();
+									data.Add(item.Value1);
+								}
+							}
+
+							OnDataSent(new SocketDataSentEventArgs(data.ToArray(), remoteEndPoint));
 						}
-					}
-
-					OnDataSent(new SocketDataSentEventArgs(data.ToArray(), remoteEndPoint));
+						finally
+						{
+							Monitor.Exit(this.dataEventSyncObj);
+						}
+					} // Monitor.TryEnter()
 
 					// Note the Thread.Sleep(TimeSpan.Zero) above.
+
 				} // Inner loop
 			} // Outer loop
 
