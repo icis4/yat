@@ -275,7 +275,8 @@ namespace YAT.View.Controls
 							// Set property instead of member to ensure that changed event is fired.
 							DeviceInfo = devices[sameVidPidIndex];
 
-							ShowNotAvailableSwitchedMessage(deviceInfoNotAvailable, devices[sameVidPidIndex]);
+							if (!string.IsNullOrEmpty(deviceInfoNotAvailable))
+								ShowNotAvailableSwitchedMessage(deviceInfoNotAvailable, devices[sameVidPidIndex]);
 						}
 						else
 						{
@@ -295,7 +296,8 @@ namespace YAT.View.Controls
 						// Set property instead of member to ensure that changed event is fired.
 						DeviceInfo = devices[0];
 
-						ShowNotAvailableDefaultedMessage(deviceInfoNotAvailable, devices[0]);
+						if (!string.IsNullOrEmpty(deviceInfoNotAvailable))
+							ShowNotAvailableDefaultedMessage(deviceInfoNotAvailable, devices[0]);
 					}
 				}
 				else
@@ -329,15 +331,9 @@ namespace YAT.View.Controls
 
 		private void ShowNotAvailableDefaultedMessage(string deviceInfoNotAvailable, string deviceInfoDefaulted)
 		{
-			string message;
-			if (!string.IsNullOrEmpty(deviceInfoNotAvailable))
-				message =
-					"The previous device '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
-					"The selection has been defaulted to the first available device '" + deviceInfoDefaulted + "'.";
-			else
-				message =
-					"The previous device is currently not available." + Environment.NewLine + Environment.NewLine +
-					"The selection has been defaulted to the first available device '" + deviceInfoDefaulted + "'.";
+			string message =
+				"The previous device '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+				"The selection has been defaulted to the first available device '" + deviceInfoDefaulted + "'.";
 
 			MessageBoxEx.Show
 			(
@@ -351,15 +347,9 @@ namespace YAT.View.Controls
 
 		private void ShowNotAvailableSwitchedMessage(string deviceInfoNotAvailable, string deviceInfoSwitched)
 		{
-			string message;
-			if (!string.IsNullOrEmpty(deviceInfoNotAvailable))
-				message =
-					"The previous device '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
-					"The selection has been switched to '" + deviceInfoSwitched + "' (first available device with previous VID and PID).";
-			else
-				message =
-					"The previous device is currently not available." + Environment.NewLine + Environment.NewLine +
-					"The selection has been switched to '" + deviceInfoSwitched + "' (first available device with previous VID and PID).";
+			string message =
+				"The previous device '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+				"The selection has been switched to '" + deviceInfoSwitched + "' (first available device with previous VID and PID).";
 
 			MessageBoxEx.Show
 			(
