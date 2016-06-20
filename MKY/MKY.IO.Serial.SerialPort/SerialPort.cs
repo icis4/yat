@@ -1173,7 +1173,7 @@ namespace MKY.IO.Serial.SerialPort
 					try     { this.sendThreadEvent.Close(); }
 					finally { this.sendThreadEvent = null; }
 				}
-			}
+			} // lock (sendThreadSyncObj)
 
 			lock (this.receiveThreadSyncObj)
 			{
@@ -1226,7 +1226,7 @@ namespace MKY.IO.Serial.SerialPort
 					try     { this.receiveThreadEvent.Close(); }
 					finally { this.receiveThreadEvent = null; }
 				}
-			}
+			} // lock (receiveThreadSyncObj)
 		}
 
 		#endregion
@@ -1810,7 +1810,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// to the main application. Small chunks of received data will generate many events
 		/// handled by <see cref="port_DataReceived"/>. However, since <see cref="OnDataReceived"/>
 		/// synchronously invokes the event, it will take some time until the send queue is checked
-		/// again. During this time, no more new events are invoked, instead, outgoing data is
+		/// again. During this time, no more new events are invoked, instead, incoming data is
 		/// buffered.
 		/// </remarks>
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "SerialPort.DataReceived: Only one event handler can execute at a time.")]
@@ -1878,7 +1878,7 @@ namespace MKY.IO.Serial.SerialPort
 					// Immediately invoke the event, but invoke it asynchronously and NOT on this thread!
 					if (signalXOnXOff || signalXOnXOffCount)
 						OnIOControlChangedAsync(EventArgs.Empty); // Async! See remarks above.
-				}
+				} // if (!IsDisposed && ...)
 			}
 			catch (IOException ex) // The best way to detect a disconnected device is handling this exception...
 			{

@@ -26,18 +26,18 @@ using System.Net;
 namespace MKY.IO.Serial.Socket
 {
 	/// <summary></summary>
-	public class SocketDataReceivedEventArgs : DataReceivedEventArgs
+	public class SocketDataSentEventArgs : DataSentEventArgs
 	{
 		private IPEndPoint remoteEndPoint;
 
 		/// <summary></summary>
-		public SocketDataReceivedEventArgs(byte data, IPEndPoint remoteEndPoint)
+		public SocketDataSentEventArgs(byte data, IPEndPoint remoteEndPoint)
 			: this(new byte[] { data }, remoteEndPoint)
 		{
 		}
 
 		/// <summary></summary>
-		public SocketDataReceivedEventArgs(byte[] data, IPEndPoint remoteEndPoint)
+		public SocketDataSentEventArgs(byte[] data, IPEndPoint remoteEndPoint)
 			: base(data)
 		{
 			this.remoteEndPoint = remoteEndPoint;
@@ -51,18 +51,18 @@ namespace MKY.IO.Serial.Socket
 	}
 
 	/// <summary></summary>
-	public class SocketDataSentEventArgs : DataSentEventArgs
+	public class SocketDataReceivedEventArgs : DataReceivedEventArgs
 	{
 		private IPEndPoint remoteEndPoint;
 
 		/// <summary></summary>
-		public SocketDataSentEventArgs(byte data, IPEndPoint remoteEndPoint)
+		public SocketDataReceivedEventArgs(byte data, IPEndPoint remoteEndPoint)
 			: this(new byte[] { data }, remoteEndPoint)
 		{
 		}
 
 		/// <summary></summary>
-		public SocketDataSentEventArgs(byte[] data, IPEndPoint remoteEndPoint)
+		public SocketDataReceivedEventArgs(byte[] data, IPEndPoint remoteEndPoint)
 			: base(data)
 		{
 			this.remoteEndPoint = remoteEndPoint;

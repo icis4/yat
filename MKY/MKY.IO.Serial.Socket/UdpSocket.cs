@@ -41,12 +41,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading;
 
+using MKY.Collections.Generic;
 using MKY.Contracts;
 using MKY.Diagnostics;
 using MKY.Net;
@@ -91,7 +91,8 @@ namespace MKY.IO.Serial.Socket
 		// Constants
 		//==========================================================================================
 
-		private const int SendQueueFixedCapacity = 4096;
+		private const int SendQueueFixedCapacity      = 8192; // = default 'Socket.SendBufferSize'
+		private const int ReceiveQueueInitialCapacity = 8192; // = default 'Socket.ReceiveBufferSize'
 
 		private const int ThreadWaitTimeout = 200;
 
@@ -131,6 +132,17 @@ namespace MKY.IO.Serial.Socket
 		private AutoResetEvent sendThreadEvent;
 		private Thread sendThread;
 		private object sendThreadSyncObj = new object();
+
+		/// <remarks>
+		/// Async receiving. The capacity is set large enough to reduce the number of resizing
+		/// operations while adding elements.
+		/// </remarks>
+		private Queue<Pair<byte, System.Net.IPEndPoint>> receiveQueue = new Queue<Pair<byte, System.Net.IPEndPoint>>(ReceiveQueueInitialCapacity);
+
+		private bool receiveThreadRunFlag;
+		private AutoResetEvent receiveThreadEvent;
+		private Thread receiveThread;
+		private object receiveThreadSyncObj = new object();
 
 		#endregion
 
@@ -296,7 +308,7 @@ namespace MKY.IO.Serial.Socket
 				if (disposing)
 				{
 					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
-					DisposeSocketAndThread();
+					DisposeSocketAndThreads();
 
 					if (this.stateLock != null)
 						this.stateLock.Dispose();
@@ -598,7 +610,7 @@ namespace MKY.IO.Serial.Socket
 		private void StartSocket()
 		{
 			SetStateSynchronizedAndNotify(SocketState.Opening);
-			CreateThreadAndSocket();
+			CreateSocketAndThreads();
 			SetStateSynchronizedAndNotify(SocketState.Opened);
 
 			// Immediately begin receiving data:
@@ -625,7 +637,7 @@ namespace MKY.IO.Serial.Socket
 		private void StopSocket()
 		{
 			SetStateSynchronizedAndNotify(SocketState.Closing);
-			DisposeSocketAndThread();
+			DisposeSocketAndThreads();
 			SetStateSynchronizedAndNotify(SocketState.Closed);
 		}
 
@@ -718,9 +730,9 @@ namespace MKY.IO.Serial.Socket
 					// Synchronize the send/receive events to prevent mix-ups at the event
 					// sinks, i.e. the send/receive operations shall be synchronized with
 					// signaling of them.
-					// But attention, do not simply lock() the 'dataSyncObj'. Instead, just
-					// try to get the lock or try again later. The thread = direction that
-					// get's the lock first, shall also be the one to signal first:
+					// But attention, do not simply lock() the sync obj. Instead, just try
+					// to get the lock or try again later. The thread = direction that get's
+					// the lock first, shall also be the one to signal first:
 
 					if (Monitor.TryEnter(this.dataEventSyncObj))
 					{
@@ -747,14 +759,14 @@ namespace MKY.IO.Serial.Socket
 							}
 
 							OnDataSent(new SocketDataSentEventArgs(data, remoteEndPoint));
-
-							// Note the Thread.Sleep(TimeSpan.Zero) above.
 						}
 						finally
 						{
 							Monitor.Exit(this.dataEventSyncObj);
 						}
 					} // Monitor.TryEnter()
+
+					// Note the Thread.Sleep(TimeSpan.Zero) above.
 
 					if (this.socketType == UdpSocketType.Client)
 					{
@@ -822,22 +834,22 @@ namespace MKY.IO.Serial.Socket
 		// Socket Methods
 		//==========================================================================================
 
-		private void CreateThreadAndSocket()
+		private void CreateSocketAndThreads()
 		{
-			// Create and start thread:
-			lock (this.sendThreadSyncObj)
+			// First, create and start receive thread to be ready when socket first receives data:
+			lock (this.receiveThreadSyncObj)
 			{
-				if (this.sendThread == null)
+				if (this.receiveThread == null)
 				{
-					this.sendThreadRunFlag = true;
-					this.sendThreadEvent = new AutoResetEvent(false);
-					this.sendThread = new Thread(new ThreadStart(SendThread));
-					this.sendThread.Name = ToShortEndPointString() + " Send Thread";
-					this.sendThread.Start();
+					this.receiveThreadRunFlag = true;
+					this.receiveThreadEvent = new AutoResetEvent(false);
+					this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
+					this.receiveThread.Name = ToShortEndPointString() + " Receive Thread";
+					this.receiveThread.Start();
 				}
 			}
 
-			// Create socket:
+			// Then, create socket:
 			lock (this.socketSyncObj)
 			{
 				// Neither local nor remote endpoint must be set in constructor!
@@ -866,6 +878,19 @@ namespace MKY.IO.Serial.Socket
 					// The remote address will be set to the sender of the first or most recently received data.
 				}
 			}
+
+			// Finally, create and start send thread:
+			lock (this.sendThreadSyncObj)
+			{
+				if (this.sendThread == null)
+				{
+					this.sendThreadRunFlag = true;
+					this.sendThreadEvent = new AutoResetEvent(false);
+					this.sendThread = new Thread(new ThreadStart(SendThread));
+					this.sendThread.Name = ToShortEndPointString() + " Send Thread";
+					this.sendThread.Start();
+				}
+			}
 		}
 
 		/// <remarks>
@@ -887,28 +912,40 @@ namespace MKY.IO.Serial.Socket
 			// cases.
 		}
 
-		private void DisposeSocketAndThread()
+		/// <remarks>
+		/// Especially useful during potentially dangerous creation and disposal sequence.
+		/// </remarks>
+		private void SignalReceiveThreadSafely()
 		{
-			// Close and dispose socket:
-			lock (this.socketSyncObj)
+			try
 			{
-				if (this.socket != null)
-				{
-					this.socket.Close();
-					this.socket = null;
-				}
+				if (this.receiveThreadEvent != null)
+					this.receiveThreadEvent.Set();
 			}
+			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
 
-			// Stop and dispose thread:
+			// Catch 'NullReferenceException' for the unlikely case that the event has just been
+			// disposed after the if-check. This way, the event doesn't need to be locked (which
+			// is a relatively time-consuming operation). Still keep the if-check for the normal
+			// cases.
+		}
+
+		private void DisposeSocketAndThreads()
+		{
+			// First clear both flags to reduce the time to stop the receive thread, it may already
+			// be signaled while receiving data while the send thread is still running.
+			lock (this.sendThreadSyncObj)
+				this.sendThreadRunFlag = false;
+			lock (this.receiveThreadSyncObj)
+				this.receiveThreadRunFlag = false;
+
+			// First, stop and dispose send thread to prevent more data being forwarded to socket:
 			lock (this.sendThreadSyncObj)
 			{
 				if (this.sendThread != null)
 				{
 					DebugThreadStateMessage("SendThread() gets stopped...");
-
-					// Stop the thread. Must be done AFTER the socket got closed to ensure that
-					// the last socket callbacks can still be properly processed.
-					this.sendThreadRunFlag = false;
 
 					// Ensure that send thread has stopped after the stop request:
 					try
@@ -955,6 +992,69 @@ namespace MKY.IO.Serial.Socket
 					finally { this.sendThreadEvent = null; }
 				}
 			}
+
+			// Then, close and dispose socket:
+			lock (this.socketSyncObj)
+			{
+				if (this.socket != null)
+				{
+					this.socket.Close();
+					this.socket = null;
+				}
+			}
+
+			// Finally, stop and dispose receive thread:
+			lock (this.receiveThreadSyncObj)
+			{
+				if (this.receiveThread != null)
+				{
+					DebugThreadStateMessage("ReceiveThread() gets stopped...");
+
+					// Ensure that receive thread has stopped after the stop request:
+					try
+					{
+						Debug.Assert(this.receiveThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
+
+						int accumulatedTimeout = 0;
+						int interval = 0; // Use a relatively short random interval to trigger the thread:
+						while (!this.receiveThread.Join(interval = SocketBase.Random.Next(5, 20)))
+						{
+							SignalReceiveThreadSafely();
+
+							accumulatedTimeout += interval;
+							if (accumulatedTimeout >= ThreadWaitTimeout)
+							{
+								DebugThreadStateMessage("...failed! Aborting...");
+								DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								this.receiveThread.Abort();
+								break;
+							}
+
+							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
+						}
+					}
+					catch (ThreadStateException)
+					{
+						// Ignore thread state exceptions such as "Thread has not been started" and
+						// "Thread cannot be aborted" as it just needs to be ensured that the thread
+						// has or will be terminated for sure.
+
+						DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+					}
+					finally
+					{
+						this.receiveThread = null;
+					}
+
+					DebugThreadStateMessage("...successfully terminated.");
+				}
+
+				if (this.receiveThreadEvent != null)
+				{
+					try     { this.receiveThreadEvent.Close(); }
+					finally { this.receiveThreadEvent = null; }
+				}
+			} // lock (sendThreadSyncObj)
 		}
 
 		#endregion
@@ -982,84 +1082,175 @@ namespace MKY.IO.Serial.Socket
 			// Ensure that async receive is discarded after close/dispose:
 			if (!IsDisposed && (state.Socket != null) && (GetStateSynchronized() == SocketState.Opened)) // Check 'IsDisposed' first!
 			{
-				if (Monitor.TryEnter(this.dataEventSyncObj))
+				System.Net.IPEndPoint remoteEndPoint = state.LocalFilterEndPoint;
+				byte[] data;
+				try
 				{
-					try
+					data = state.Socket.EndReceive(ar, ref remoteEndPoint);
+				}
+				catch (System.Net.Sockets.SocketException ex)
+				{
+					data = null;
+					SocketError();
+					OnIOError(new IOErrorEventArgs(ErrorSeverity.Fatal, ex.Message));
+				}
+
+				if (data != null)
+				{
+					// Handle data:
+					lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 					{
-						System.Net.IPEndPoint remoteEndPoint = state.LocalFilterEndPoint;
-						byte[] data;
-						try
-						{
-							data = state.Socket.EndReceive(ar, ref remoteEndPoint);
-						}
-						catch (System.Net.Sockets.SocketException ex)
-						{
-							data = null;
-							SocketError();
-							OnIOError(new IOErrorEventArgs(ErrorSeverity.Fatal, ex.Message));
-						}
+						foreach (byte b in data)
+							this.receiveQueue.Enqueue(new Pair<byte, System.Net.IPEndPoint>(b, remoteEndPoint));
 
-						if (data != null)
+						// Note that individual bytes are enqueued, not array of bytes. Analysis has
+						// shown that this is faster than enqueuing arrays, since this callback will
+						// mostly be called with rather low numbers of bytes.
+					}
+
+					// Handle connection:
+					if (this.socketType == UdpSocketType.Server)
+					{
+						// Set the remote end point to the sender of the first or most recently received data, depending on send mode:
+
+						bool hasChanged = false;
+
+						lock (this.socketSyncObj)
 						{
-							if (this.socketType == UdpSocketType.Server)
+							bool updateRemoteEndPoint = false;
+
+							switch (this.serverSendMode)
 							{
-								// Set the remote end point to the sender of the first or most recently received data, depending on send mode:
+								case UdpServerSendMode.None:                                                                       /* Do nothing. */           break;
+								case UdpServerSendMode.First:      if (this.remoteHost.Address.Equals(System.Net.IPAddress.None)) updateRemoteEndPoint = true; break; // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+								case UdpServerSendMode.MostRecent:                                                                updateRemoteEndPoint = true; break;
+								default: throw (new InvalidOperationException("Program execution should never get here,'" + this.serverSendMode.ToString() + "' is an unknown UDP/IP server send mode!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
 
-								bool hasChanged = false;
-
-								lock (this.socketSyncObj)
+							if (updateRemoteEndPoint)
+							{
+								if (!this.remoteHost.Equals(remoteEndPoint.Address)) // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 								{
-									bool updateRemoteEndPoint = false;
-
-									switch (this.serverSendMode)
-									{
-										case UdpServerSendMode.None:                                                                       /* Do nothing. */           break;
-										case UdpServerSendMode.First:      if (this.remoteHost.Address.Equals(System.Net.IPAddress.None)) updateRemoteEndPoint = true; break; // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-										case UdpServerSendMode.MostRecent:                                                                updateRemoteEndPoint = true; break;
-										default: throw (new InvalidOperationException("Program execution should never get here,'" + this.serverSendMode.ToString() + "' is an unknown UDP/IP server send mode!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-									}
-
-									if (updateRemoteEndPoint)
-									{
-										if (!this.remoteHost.Equals(remoteEndPoint.Address)) // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-										{
-											this.remoteHost = remoteEndPoint.Address;
-											hasChanged = true;
-										}
-
-										if (this.remotePort != remoteEndPoint.Port)
-										{
-											this.remotePort = remoteEndPoint.Port;
-											hasChanged = true;
-										}
-									}
+									this.remoteHost = remoteEndPoint.Address;
+									hasChanged = true;
 								}
 
-								if (hasChanged)
-									OnIOChanged(EventArgs.Empty);
-							} // Server
-
-							// This receive callback is always asychronous, thus the event handler can
-							// be called directly. It is also ensured that the event handler is called
-							// sequential because the 'BeginReceive()' method is only called after
-							// the event handler has returned.
-							OnDataReceived(new SocketDataReceivedEventArgs(data, remoteEndPoint));
-
-							// Continue receiving data:
-							BeginReceiveIfEnabled();
+								if (this.remotePort != remoteEndPoint.Port)
+								{
+									this.remotePort = remoteEndPoint.Port;
+									hasChanged = true;
+								}
+							}
 						}
-					}
-					finally
-					{
-						Monitor.Exit(this.dataEventSyncObj);
-					}
-				} // Monitor.TryEnter()
+
+						if (hasChanged)
+							OnIOChanged(EventArgs.Empty);
+					} // Server
+
+					// Signal data notification to receive thread:
+					SignalReceiveThreadSafely();
+				} // if (data != null)
+
+				// Continue receiving:
+				BeginReceiveIfEnabled();
 			} // if (!IsDisposed && ...)
+		}
+
+		/// <summary>
+		/// Asynchronously manage incoming events to prevent potential deadlocks if close/dispose
+		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
+		/// Also, the mechanism implemented below reduces the amount of events that are propagated
+		/// to the main application. Small chunks of received data will generate many events
+		/// handled by <see cref="ReceiveCallback"/>. However, since <see cref="OnDataReceived"/>
+		/// synchronously invokes the event, it will take some time until the send queue is checked
+		/// again. During this time, no more new events are invoked, instead, incoming data is
+		/// buffered.
+		/// </summary>
+		/// <remarks>
+		/// Will be signaled by <see cref="ReceiveCallback"/> event above.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
+		private void ReceiveThread()
+		{
+			DebugThreadStateMessage("ReceiveThread() has started.");
+
+			// Outer loop, processes data after a signal was received:
+			while (!IsDisposed && this.receiveThreadRunFlag) // Check 'IsDisposed' first!
+			{
+				try
+				{
+					// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+					// if the overlying client isn't able or forgets to call Stop() or Dispose().
+					// Therefore, only wait for a certain period and then poll the run flag again.
+					// The period can be quite long, as an event trigger will immediately resume.
+					if (!this.receiveThreadEvent.WaitOne(SocketBase.Random.Next(50, 200)))
+						continue;
+				}
+				catch (AbandonedMutexException ex)
+				{
+					// The mutex should never be abandoned, but in case it nevertheless happens,
+					// at least output a debug message and gracefully exit the thread.
+					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in ReceiveThread()!");
+					break;
+				}
+
+				// Inner loop, runs as long as there is data in the receive queue.
+				// Ensure not to forward events during disposing anymore. Check 'IsDisposed' first!
+				while (!IsDisposed && this.receiveThreadRunFlag && (this.receiveQueue.Count > 0))
+				{                                               // No lock required, just checking for empty.
+					// Initially, yield to other threads before starting to read the queue, since it is very
+					// likely that more data is to be enqueued, thus resulting in larger chunks processed.
+					// Subsequently, yield to other threads to allow processing the data.
+					Thread.Sleep(TimeSpan.Zero);
+
+					if (Monitor.TryEnter(this.dataEventSyncObj))
+					{
+						try
+						{
+							System.Net.IPEndPoint remoteEndPoint = null;
+							List<byte> data;
+
+							lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+							{
+								data = new List<byte>(this.receiveQueue.Count); // Preset the initial capacity to improve memory management.
+
+								while (this.receiveQueue.Count > 0)
+								{
+									Pair<byte, System.Net.IPEndPoint> item;
+
+									// First, peek to check whether data refers to a different end point:
+									item = this.receiveQueue.Peek();
+
+									if (remoteEndPoint == null)
+										remoteEndPoint = item.Value2;
+									else if (remoteEndPoint != item.Value2)
+										break; // Break as soon as data of a different end point is available.
+
+									// If still the same end point, dequeue the item to acknowledge it's gone:
+									item = this.receiveQueue.Dequeue();
+									data.Add(item.Value1);
+								}
+							}
+
+							OnDataReceived(new SocketDataReceivedEventArgs(data.ToArray(), remoteEndPoint));
+						}
+						finally
+						{
+							Monitor.Exit(this.dataEventSyncObj);
+						}
+					} // Monitor.TryEnter()
+
+					// Note the Thread.Sleep(TimeSpan.Zero) above.
+
+				} // Inner loop
+			} // Outer loop
+
+			DebugThreadStateMessage("ReceiveThread() has terminated.");
 		}
 
 		private void SocketError()
 		{
-			DisposeSocketAndThread();
+			DisposeSocketAndThreads();
 			SetStateSynchronizedAndNotify(SocketState.Error);
 		}
 

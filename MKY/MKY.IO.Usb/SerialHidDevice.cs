@@ -978,7 +978,7 @@ namespace MKY.IO.Usb
 		/// to the main application. Small chunks of received data will generate many events
 		/// handled by <see cref="AsyncReadCompleted"/>. However, since <see cref="OnDataReceived"/>
 		/// synchronously invokes the event, it will take some time until the send queue is checked
-		/// again. During this time, no more new events are invoked, instead, outgoing data is
+		/// again. During this time, no more new events are invoked, instead, incoming data is
 		/// buffered.
 		/// </summary>
 		/// <remarks>
