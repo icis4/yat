@@ -715,24 +715,24 @@ namespace YAT.Domain
 			}
 			else // Remove EOL:
 			{
-				// Traverse elements reverse and count EOL and whitespaces to be removed:
-				int eolAndWhiteCount = 0;
+				// Traverse elements reverse and count EOL elements to be removed:
+				int eolCount = 0;
 				DisplayElement[] des = lineState.LineElements.Clone().ToArray(); // Clone elements to ensure decoupling.
 				for (int i = (des.Length - 1); i >= 0; i--)
 				{
-					if (des[i].IsEol || des[i].IsWhiteSpace)
-						eolAndWhiteCount++;
+					if (des[i].IsEol)
+						eolCount++;
 					else
-						break; // Break at last non-EOL non-whitespace element.
+						break; // Break at last non-EOL element.
 				}
 
 				// Now, traverse elements forward and add elements to line:
-				for (int i = 0; i < (des.Length - eolAndWhiteCount); i++)
+				for (int i = 0; i < (des.Length - eolCount); i++)
 					line.Add(des[i]); // No clone needed as items have just been cloned futher above.
 
-				// Finally, remove EOL and whitespaces from elements:
-				if (elements.Count >= eolAndWhiteCount)
-					elements.RemoveAtEnd(eolAndWhiteCount);
+				// Finally, remove EOL from elements:
+				if (elements.Count >= eolCount)
+					elements.RemoveAtEnd(eolCount);
 			}
 
 			lineState.Reset(); // Reset line state, it is no longer needed.
