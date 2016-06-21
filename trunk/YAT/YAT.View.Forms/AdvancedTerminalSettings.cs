@@ -128,7 +128,7 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void AdvancedTerminalSettings_Shown(object sender, EventArgs e)
 		{
-				SetControls();
+			SetControls();
 		}
 
 		#endregion
@@ -881,8 +881,6 @@ namespace YAT.View.Forms
 			comboBox_TxRadix.Items.AddRange(Domain.RadixEx.GetItems());
 			comboBox_RxRadix.Items.AddRange(Domain.RadixEx.GetItems());
 			comboBox_Endianness.Items.AddRange(Domain.EndiannessEx.GetItems());
-
-			comboBox_ControlCharacterRadix.Items.Clear();
 			comboBox_ControlCharacterRadix.Items.AddRange(Domain.ControlCharRadixEx.GetItems());
 
 			this.isSettingControls.Leave();

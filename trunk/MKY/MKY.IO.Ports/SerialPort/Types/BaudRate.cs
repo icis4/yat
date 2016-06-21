@@ -111,7 +111,7 @@ namespace MKY.IO.Ports
 				(
 					"baudRate",
 					baudRate,
-					"Baud rate must be a positive integral value."
+					"Baud rate must be a positive integral value!"
 				));
 			}
 		}

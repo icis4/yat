@@ -541,7 +541,7 @@ namespace YAT.Domain
 
 				default:
 				{
-					throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, '" + r + "' is an invalid radix." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, '" + r + "' is an invalid radix!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
