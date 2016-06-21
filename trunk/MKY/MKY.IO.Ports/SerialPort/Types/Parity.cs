@@ -163,7 +163,7 @@ namespace MKY.IO.Ports
 			if (string.IsNullOrEmpty(s))
 			{
 				result = new ParityEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
+				return (true); // Default silently, can e.g. happen when deserializing an XML.
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Even_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Even_stringShort))

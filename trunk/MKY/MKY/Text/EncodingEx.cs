@@ -1092,7 +1092,7 @@ namespace MKY.Text
 			if (string.IsNullOrEmpty(s))
 			{
 				result = new EncodingEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
+				return (true); // Default silently, can e.g. happen when deserializing an XML.
 			}
 
 			foreach (EncodingInfoEx info in staticInfos)

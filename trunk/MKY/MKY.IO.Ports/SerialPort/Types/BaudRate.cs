@@ -264,7 +264,7 @@ namespace MKY.IO.Ports
 				if (string.IsNullOrEmpty(s))
 				{
 					result = new BaudRateEx(); // Default!
-					return (true); // Default silently, could e.g. happen when deserializing an XML.
+					return (true); // Default silently, can e.g. happen when deserializing an XML.
 				}
 				else // Invalid string!
 				{

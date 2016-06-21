@@ -117,7 +117,7 @@ namespace MKY
 	///             if (string.IsNullOrEmpty(s))
 	///             {
 	///                 result = new ModeEx(); // Default!
-	///                 return (true); // Default silently, could e.g. happen when deserializing an XML.
+	///                 return (true); // Default silently, can e.g. happen when deserializing an XML.
 	///             }
 	///             else // Invalid string!
 	///             {
