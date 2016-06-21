@@ -52,31 +52,31 @@ using MKY.IO;
 // Module-level FxCop suppressions
 //==================================================================================================
 
-// Justification = "The structure is defined by the Win32 API."
+// Justification = "Type is defined by the Win32 API."
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_HDR.#dbch_size")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_HDR.#dbch_devicetype")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_HDR.#dbch_reserved")]
 
-// Justification = "The structure is defined by the Win32 API."
+// Justification = "Type is defined by the Win32 API."
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE.#dbcc_name")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE.#dbcc_classguid")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE.#dbcc_reserved")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE.#dbcc_size")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE.#dbcc_devicetype")]
 
-// Justification = "The structure is defined by the Win32 API."
+// Justification = "Type is defined by the Win32 API."
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA.#InterfaceClassGuid")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA.#Reserved")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA.#cbSize")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA.#Flags")]
 
-// Justification = "The structure is defined by the Win32 API."
+// Justification = "Type is defined by the Win32 API."
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVINFO_DATA.#DevInst")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVINFO_DATA.#ClassGuid")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVINFO_DATA.#Reserved")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVINFO_DATA.#cbSize")]
 
-// Justification = "The structure is defined by the Win32 API."
+// Justification = "Type is defined by the Win32 API."
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DETAIL_DATA.#DevicePath")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DETAIL_DATA.#cbSize")]
 
