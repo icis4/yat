@@ -263,7 +263,7 @@ namespace MKY.IO.Ports
 					(
 						"value",
 						value,
-						"Standard port numbers are " + FirstStandardPortNumber + " to " + LastStandardPortNumber + "."
+						"Standard port numbers are " + FirstStandardPortNumber + " to " + LastStandardPortNumber + "!"
 					));
 				}
 			}

@@ -195,9 +195,9 @@ namespace MKY.IO.Usb
 		private void Initialize(string path, int vendorId, int productId, string manufacturer, string product, string serial)
 		{
 			if ((vendorId  < FirstVendorId)  || (vendorId  > LastVendorId))
-				throw (new ArgumentOutOfRangeException("vendorId",  vendorId,  "Invalid vendor ID."));
+				throw (new ArgumentOutOfRangeException("vendorId",  vendorId,  "Invalid vendor ID!"));
 			if ((productId < FirstProductId) || (productId > LastProductId))
-				throw (new ArgumentOutOfRangeException("productId", productId, "Invalid product ID."));
+				throw (new ArgumentOutOfRangeException("productId", productId, "Invalid product ID!"));
 
 			this.path = path;
 

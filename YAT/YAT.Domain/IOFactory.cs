@@ -108,7 +108,7 @@ namespace YAT.Domain
 
 				default:
 				{
-					throw (new ArgumentOutOfRangeException("settings", settings, "'" + settings + "' is an unknown IO type string"));
+					throw (new ArgumentOutOfRangeException("settings", settings, "'" + settings + "' is an unknown IO type string!"));
 				}
 			}
 		}
