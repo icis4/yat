@@ -104,6 +104,7 @@
     </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="Console.cs" />
+    <Compile Include="User.cs" />
     <Compile Include="Window.cs" />
     <Compile Include="WinError.cs" />
     <Compile Include="DeviceManagement.cs" />

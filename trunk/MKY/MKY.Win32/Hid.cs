@@ -69,7 +69,7 @@ using Microsoft.Win32.SafeHandles;
 // Module-level FxCop suppressions
 //==================================================================================================
 
-// Justification = "The structure is defined by the Win32 API."
+// Justification = "Type is defined by the Win32 API."
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#NumberInputDataIndices")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#NumberFeatureDataIndices")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#Reserved")]
@@ -87,7 +87,7 @@ using Microsoft.Win32.SafeHandles;
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#NumberLinkCollectionNodes")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#UsagePage")]
 
-// Justification = "The structure is defined by the Win32 API."
+// Justification = "Type is defined by the Win32 API."
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#ReportID")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#Reserved5")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#Reserved4")]
@@ -121,7 +121,7 @@ using Microsoft.Win32.SafeHandles;
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#UsageMin")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#LogicalMin")]
 
-// Justification = "The structure is defined by the Win32 API."
+// Justification = "Type is defined by the Win32 API."
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDD_ATTRIBUTES.#VendorID")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDD_ATTRIBUTES.#ProductID")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDD_ATTRIBUTES.#VersionNumber")]

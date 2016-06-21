@@ -46,7 +46,7 @@ using System.Runtime.InteropServices;
 // Module-level FxCop suppressions
 //==================================================================================================
 
-// Justification = "The structure is defined by the Win32 API."
+// Justification = "Type is defined by the Win32 API."
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Window+NativeTypes+RECT.#bottom")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Window+NativeTypes+RECT.#right")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Window+NativeTypes+RECT.#left")]

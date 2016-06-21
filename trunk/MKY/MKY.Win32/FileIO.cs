@@ -49,7 +49,7 @@ using Microsoft.Win32.SafeHandles;
 // Module-level FxCop suppressions
 //==================================================================================================
 
-// Justification = "The structure is defined by the Win32 API."
+// Justification = "Type is defined by the Win32 API."
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION.#LastAccessTime")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION.#FileAttributes")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION.#VolumeSerialNumber")]
@@ -61,7 +61,7 @@ using Microsoft.Win32.SafeHandles;
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION.#FileIndexHigh")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION.#FileIndexLow")]
 
-// Justification = "The structure is defined by the Win32 API."
+// Justification = "Type is defined by the Win32 API."
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+SECURITY_ATTRIBUTES.#bInheritHandle")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+SECURITY_ATTRIBUTES.#lpSecurityDescriptor")]
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+SECURITY_ATTRIBUTES.#nLength")]
