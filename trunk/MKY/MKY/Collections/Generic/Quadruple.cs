@@ -123,6 +123,26 @@ namespace MKY.Collections.Generic
 				return (false);
 
 			var other = (Quadruple<T1, T2, T3, T4>)obj;
+
+			// Attention, default(Tx) can lead to null, e.g. in case of a string!
+			if ((Value1 == null) || (Value2 == null) || (Value3 == null) || (Value4 == null))
+			{
+				if ((Value1 == null) && (other.Value1 != null))
+					return (false);
+
+				if ((Value2 == null) && (other.Value2 != null))
+					return (false);
+
+				if ((Value3 == null) && (other.Value3 != null))
+					return (false);
+
+				if ((Value4 == null) && (other.Value4 != null))
+					return (false);
+
+				return (true); // All values are 'null'.
+			}
+
+			// Attention, <Tx> may not overload the ==/!= operators.
 			return
 			(
 				(Value1.Equals(other.Value1)) &&

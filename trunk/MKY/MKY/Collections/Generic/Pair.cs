@@ -90,6 +90,20 @@ namespace MKY.Collections.Generic
 				return (false);
 
 			var other = (Pair<T1, T2>)obj;
+
+			// Attention, default(Tx) can lead to null, e.g. in case of a string!
+			if ((Value1 == null) || (Value2 == null))
+			{
+				if ((Value1 == null) && (other.Value1 != null))
+					return (false);
+
+				if ((Value2 == null) && (other.Value2 != null))
+					return (false);
+
+				return (true); // All values are 'null'.
+			}
+
+			// Attention, <Tx> may not overload the ==/!= operators.
 			return
 			(
 				(Value1.Equals(other.Value1)) &&

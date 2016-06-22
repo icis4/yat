@@ -136,10 +136,11 @@ namespace MKY.Recent
 				return (false);
 
 			// Attention, default(T) can lead to null, e.g. in case of a string!
-			if (Item != null)
-				return (Item.Equals(other.Item)); // Do not consider time stamp.
-			else
-				return (false);
+			if (Item == null)
+				return (other.Item == null);
+
+			// Attention, <T> may not overload the ==/!= operators.
+			return (Item.Equals(other.Item)); // Do not consider time stamp.
 		}
 
 		/// <summary>

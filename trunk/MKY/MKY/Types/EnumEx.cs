@@ -259,7 +259,7 @@ namespace MKY
 			if (GetType() != other.GetType())
 				return (false);
 
-			return ((UnderlyingEnum != null) && (UnderlyingEnum.Equals(other.UnderlyingEnum)));
+			return ((UnderlyingEnum != null) && (UnderlyingEnum.Equals(other.UnderlyingEnum))); // 'Enum' does not overload the ==/!= operators.
 		}
 
 		/// <summary>

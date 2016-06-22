@@ -387,12 +387,12 @@ namespace MKY.Test
 
 				// Dedicated list implementation:
 
-				if (!Count.Equals(other.Count))
+				if (Count != other.Count)
 					return (false);
 
 				for (int i = 0; i < Count; i++)
 				{
-					if (!this[i].Equals(other[i]))
+					if (!this[i].Equals(other[i])) // <T> might not overload the ==/!= operators.
 						return (false);
 				}
 
@@ -469,12 +469,12 @@ namespace MKY.Test
 
 				// Dedicated list implementation:
 
-				if (!Count.Equals(other.Count))
+				if (Count != other.Count)
 					return (false);
 
 				for (int i = 0; i < Count; i++)
 				{
-					if (!this[i].Equals(other[i]))
+					if (!this[i].Equals(other[i])) // <T> might not overload the ==/!= operators.
 						return (false);
 				}
 
