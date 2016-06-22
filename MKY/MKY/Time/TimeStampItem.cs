@@ -96,10 +96,15 @@ namespace MKY.Time
 				return (false);
 
 			TimeStampItem<T> other = (TimeStampItem<T>)obj;
+
+			// Attention, default(T) can lead to null, e.g. in case of a string!
+			if (Item == null)
+				return (other.Item == null);
+
 			return
 			(
-				(TimeStamp.Equals(other.TimeStamp)) &&
-				(Item.Equals(other.Item))
+				(TimeStamp == other.TimeStamp) &&
+				(Item.Equals(other.Item)) // Attention, <Tx> may not overload the ==/!= operators.
 			);
 		}
 

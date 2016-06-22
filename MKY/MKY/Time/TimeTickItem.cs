@@ -97,10 +97,15 @@ namespace MKY.Time
 				return (false);
 
 			TimeTickItem<T> other = (TimeTickItem<T>)obj;
+
+			// Attention, default(T) can lead to null, e.g. in case of a string!
+			if (Item == null)
+				return (other.Item == null);
+
 			return
 			(
-				(TimeTick.Equals(other.TimeTick)) &&
-				(Item.Equals(other.Item))
+				(TimeTick == other.TimeTick) &&
+				(Item.Equals(other.Item)) // Attention, <Tx> may not overload the ==/!= operators.
 			);
 		}
 
