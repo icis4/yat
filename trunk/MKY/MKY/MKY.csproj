@@ -128,6 +128,7 @@
     <Compile Include="Random\RandomEx.cs" />
     <Compile Include="Reflection\InvocationHelper.cs" />
     <Compile Include="Settings\SettingsFileHandler.cs" />
+    <Compile Include="IO\TextEx.cs" />
     <Compile Include="Text\Ascii.cs" />
     <Compile Include="Text\Editor.cs" />
     <Compile Include="Text\Escape.cs" />
