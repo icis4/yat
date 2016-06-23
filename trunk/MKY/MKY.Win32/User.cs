@@ -159,7 +159,7 @@ namespace MKY.Win32
 				long idleTime = Environment.TickCount - lastInputTime;
 
 				if (idleTime > 0)
-					return (TimeSpan.FromMilliseconds(idleTime / 1000));
+					return (TimeSpan.FromMilliseconds(idleTime));
 			}
 
 			return (TimeSpan.Zero);
