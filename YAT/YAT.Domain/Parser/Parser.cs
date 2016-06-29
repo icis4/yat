@@ -976,8 +976,8 @@ namespace YAT.Domain.Parser
 
 			this.defaultRadix    = defaultRadix;
 
-			this.charReader      = new StringReader(s); // Former reader has just been disposed of above.
-			this.bytesWriter     = new MemoryStream();  // Former stream has just been disposed of above.
+			this.charReader      = new StringReader(s); // Former stream has just been disposed of by DisposeAndReset() above.
+			this.bytesWriter     = new MemoryStream();  // Former stream has just been disposed of by DisposeAndReset() above.
 			this.result          = new List<Result>();
 			this.state           = new DefaultState();
 
@@ -1005,8 +1005,8 @@ namespace YAT.Domain.Parser
 
 			this.defaultRadix    = parent.defaultRadix;
 
-			this.charReader      = parent.charReader;  // Former reader has just been disposed of above.
-			this.bytesWriter     = new MemoryStream(); // Former stream has just been disposed of above.
+			this.charReader      = parent.charReader;  // Former reader has just been reset to 'null' by DisposeAndReset() above.
+			this.bytesWriter     = new MemoryStream(); // Former stream has just been disposed of by DisposeAndReset() above.
 			this.result          = parent.result;
 			this.state           = parserState;
 
@@ -1027,11 +1027,15 @@ namespace YAT.Domain.Parser
 
 		private void DisposeAndReset()
 		{
-			if (this.parentParser != null)
-				this.parentParser.Dispose();
+			// Do not dispose of the parent!
 
-			if (this.charReader != null)
-				this.charReader.Dispose();
+			// Only dispose of the reader if this is the top-level,
+			// i.e. the reader does not below to a overlying parent!
+			if (this.parentParser == null)
+			{
+				if (this.charReader != null)
+					this.charReader.Dispose();
+			}
 
 			if (this.bytesWriter != null)
 				this.bytesWriter.Dispose();
