@@ -218,7 +218,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId="port", Justification = "Actually is disposed of asynchronously in ResetPortAndThreadsAndNotify().")]
+		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "port", Justification = "Actually is disposed of asynchronously in ResetPortAndThreadsAndNotify().")]
 		protected virtual void Dispose(bool disposing)
 		{
 			DebugEventManagement.DebugNotifyAllEventRemains(this);
@@ -2029,7 +2029,6 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
-		
 		[SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "The timer just invokes a single-shot callback.")]
 		private void StartControlEventTimeout()
 		{

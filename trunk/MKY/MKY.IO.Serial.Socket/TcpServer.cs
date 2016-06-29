@@ -894,6 +894,7 @@ namespace MKY.IO.Serial.Socket
 
 					// Note the Thread.Sleep(TimeSpan.Zero) above.
 
+					// Saying hello to StyleCop ;-.
 				} // Inner loop
 			} // Outer loop
 
