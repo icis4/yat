@@ -80,7 +80,7 @@ namespace MKY.Recent
 		/// </summary>
 		public virtual void ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(RecentItem<T> item)
 		{
-			// Remove all equal items, as they are becoming more recent than the new item:
+			// Remove all equal items, as they are becoming less recent than the new item:
 			RemoveAll(li => (li == item));
 
 			// Ensure there is space for the item to be inserted:

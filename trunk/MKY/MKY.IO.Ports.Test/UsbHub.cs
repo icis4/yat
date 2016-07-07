@@ -147,7 +147,7 @@ namespace MKY.IO.Ports.Test
 		/// <summary>
 		/// Probes the USB hub control.
 		/// </summary>
-		/// <returns><c>true</c> if successful; otherwise <c>false</c></returns>
+		/// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
 		public static bool Probe()
 		{
 			return (FileEx.IsFindable(Executable));
@@ -156,7 +156,7 @@ namespace MKY.IO.Ports.Test
 		/// <summary>
 		/// Sets all outputs to the given setting.
 		/// </summary>
-		/// <returns><c>true</c> if successful; otherwise <c>false</c></returns>
+		/// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
 		public static bool Set(UsbHubSettings setting)
 		{
 			DebugMessage("Setting   " + ToBinaryString(setting) + " mask.");
@@ -229,7 +229,7 @@ namespace MKY.IO.Ports.Test
 		/// <summary>
 		/// Enables the given outputs.
 		/// </summary>
-		/// <returns><c>true</c> if successful; otherwise <c>false</c></returns>
+		/// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
 		public static bool Enable(UsbHubSettings enableMask)
 		{
 			DebugMessage("Enabling  " + ToBinaryString(enableMask) + " mask. " +
@@ -246,7 +246,7 @@ namespace MKY.IO.Ports.Test
 		/// <summary>
 		/// Disables the given outputs.
 		/// </summary>
-		/// <returns><c>true</c> if successful; otherwise <c>false</c></returns>
+		/// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
 		public static bool Disable(UsbHubSettings disableMask)
 		{
 			DebugMessage("Disabling " + ToBinaryString(disableMask) + " mask. " +
@@ -264,10 +264,10 @@ namespace MKY.IO.Ports.Test
 		/// <remarks>
 		/// Intentionally using command line instead of MCD USB .NET component to avoid dependency
 		/// to the MCD USB assembly (which would have to be installed on each computer testing YAT).
-		/// 
+		///
 		/// Execution requires approx 3 seconds.
 		/// </remarks>
-		/// <returns><c>true</c> if successful; otherwise <c>false</c></returns>
+		/// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
 		private static bool ExecuteControl(UsbHubSettings setting)
 		{
 			string mask = ToBinaryString(setting);
