@@ -655,6 +655,7 @@ namespace YAT.Model
 			{
 				// Event must be fired anyway to ensure that dependent objects are updated.
 				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, isAutoSave));
+				OnTimedStatusTextRequest("Workspace has no changes to be saved.");
 				return (true);
 			}
 
@@ -687,7 +688,7 @@ namespace YAT.Model
 							return (true);
 
 						case DialogResult.No:
-							OnTimedStatusTextRequest("Terminal not saved!");
+							OnTimedStatusTextRequest("Workspace not saved!");
 							return (true);
 
 						default:
@@ -716,7 +717,7 @@ namespace YAT.Model
 								return (true);
 
 							case DialogResult.No:
-								OnTimedStatusTextRequest("Terminal not saved!");
+								OnTimedStatusTextRequest("Workspace not saved!");
 								return (true);
 
 							default:
@@ -752,7 +753,7 @@ namespace YAT.Model
 										return (true);
 
 									case DialogResult.No:
-										OnTimedStatusTextRequest("Terminal not saved!");
+										OnTimedStatusTextRequest("Workspace not saved!");
 										return (true);
 
 									default:
@@ -827,8 +828,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private bool SaveToFile(bool isAutoSave, string autoSaveFilePathToDelete)
 		{
-			if (!isAutoSave)
-				OnFixedStatusTextRequest("Saving workspace...");
+			OnFixedStatusTextRequest("Saving workspace...");
 
 			bool success = false;
 
@@ -839,12 +839,10 @@ namespace YAT.Model
 				success = true;
 
 				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, isAutoSave));
+				OnTimedStatusTextRequest("Workspace saved.");
 
 				if (!isAutoSave)
-				{
 					SetRecent(this.settingsHandler.SettingsFilePath);
-					OnTimedStatusTextRequest("Workspace saved.");
-				}
 
 				// Try to delete existing auto save file:
 				if (!string.IsNullOrEmpty(autoSaveFilePathToDelete))
@@ -858,22 +856,15 @@ namespace YAT.Model
 			{
 				DebugEx.WriteException(GetType(), ex, "Error saving workspace!");
 
-				if (!isAutoSave)
-				{
-					OnFixedStatusTextRequest("Error saving workspace!");
-					OnMessageInputRequest
-					(
-						ErrorHelper.ComposeMessage("Unable to save workspace file", this.settingsHandler.SettingsFilePath, ex),
-						"File Error",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
-					OnTimedStatusTextRequest("Workspace not saved!");
-				}
-				else // AutoSave
-				{
-					success = true; // Signal that exception has intentionally been ignored.
-				}
+				OnFixedStatusTextRequest("Error saving workspace!");
+				OnMessageInputRequest
+				(
+					ErrorHelper.ComposeMessage("Unable to save workspace file", this.settingsHandler.SettingsFilePath, ex),
+					"File Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+				OnTimedStatusTextRequest("Workspace not saved!");
 			}
 
 			return (success);

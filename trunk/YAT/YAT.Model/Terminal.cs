@@ -1513,6 +1513,7 @@ namespace YAT.Model
 			{
 				// Event must be fired anyway to ensure that dependent objects are updated.
 				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, isAutoSave));
+				OnTimedStatusTextRequest("Terminal has no changes to be saved.");
 				return (true);
 			}
 
@@ -1671,8 +1672,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private bool SaveToFile(bool isAutoSave, string autoSaveFilePathToDelete)
 		{
-			if (!isAutoSave)
-				OnFixedStatusTextRequest("Saving terminal...");
+			OnFixedStatusTextRequest("Saving terminal...");
 
 			bool success = false;
 
@@ -1686,12 +1686,10 @@ namespace YAT.Model
 					AutoNameFromFile = this.settingsHandler.SettingsFilePath;
 
 				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, isAutoSave));
+				OnTimedStatusTextRequest("Terminal saved.");
 
 				if (!isAutoSave)
-				{
 					SetRecent(this.settingsHandler.SettingsFilePath);
-					OnTimedStatusTextRequest("Terminal saved.");
-				}
 
 				// Try to delete existing auto save file:
 				if (!string.IsNullOrEmpty(autoSaveFilePathToDelete))
@@ -1705,22 +1703,15 @@ namespace YAT.Model
 			{
 				DebugEx.WriteException(GetType(), ex, "Error saving terminal!");
 
-				if (!isAutoSave)
-				{
-					OnFixedStatusTextRequest("Error saving terminal!");
-					OnMessageInputRequest
-					(
-						ErrorHelper.ComposeMessage("Unable to save terminal file", this.settingsHandler.SettingsFilePath, ex),
-						"File Error",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
-					OnTimedStatusTextRequest("Terminal not saved!");
-				}
-				else // AutoSave
-				{
-					success = true; // Signal that exception has intentionally been ignored.
-				}
+				OnFixedStatusTextRequest("Error saving terminal!");
+				OnMessageInputRequest
+				(
+					ErrorHelper.ComposeMessage("Unable to save terminal file", this.settingsHandler.SettingsFilePath, ex),
+					"File Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+				OnTimedStatusTextRequest("Terminal not saved!");
 			}
 
 			return (success);
