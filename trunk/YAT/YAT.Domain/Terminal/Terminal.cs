@@ -621,6 +621,17 @@ namespace YAT.Domain
 			}
 		}
 
+		/// <remarks>Required to prevent superfluous 'IOChanged' events.</remarks>
+		protected virtual bool IsReadyToSend_Internal
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (IsTransmissive && !this.sendingIsOngoing);
+			}
+		}
+
 		/// <summary></summary>
 		public virtual bool IsReadyToSend
 		{
@@ -630,7 +641,18 @@ namespace YAT.Domain
 
 				this.ioChangedEventHelper.EventMustBeRaisedBecauseStatusHasBeenAccessed();
 
-				return (IsTransmissive && !this.sendingIsOngoing);
+				return (IsReadyToSend_Internal);
+			}
+		}
+
+		/// <remarks>Required to prevent superfluous 'IOChanged' events.</remarks>
+		protected virtual bool IsBusy_Internal
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (IsTransmissive && this.sendingIsOngoing);
 			}
 		}
 
@@ -643,7 +665,7 @@ namespace YAT.Domain
 
 				this.ioChangedEventHelper.EventMustBeRaisedBecauseStatusHasBeenAccessed();
 
-				return (IsTransmissive && this.sendingIsOngoing);
+				return (IsBusy_Internal);
 			}
 		}
 
@@ -913,8 +935,8 @@ namespace YAT.Domain
 
 				// Inner loop, runs as long as there is data in the send queue.
 				// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
-				while (!IsDisposed && this.sendThreadRunFlag && IsReadyToSend && (this.sendQueue.Count > 0))
-				{                                                             // No lock required, just checking for empty.
+				while (!IsDisposed && this.sendThreadRunFlag && IsReadyToSend_Internal && (this.sendQueue.Count > 0))
+				{                                                                      // No lock required, just checking for empty.
 					// Initially, yield to other threads before starting to read the queue, since it is very
 					// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 					// Subsequently, yield to other threads to allow processing the data.
@@ -1719,7 +1741,7 @@ namespace YAT.Domain
 				try
 				{
 					// Ensure not to forward events during closing anymore.
-					if (!this.isDisposed && this.IsReadyToSend)
+					if (!this.isDisposed && IsReadyToSend_Internal)
 						RequestSignalInputXOn();
 				}
 				finally

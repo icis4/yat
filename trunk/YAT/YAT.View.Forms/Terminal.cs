@@ -3164,13 +3164,15 @@ namespace YAT.View.Forms
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Explicit))
 			{
 				HandleExplicitSettings(e.Inner);
+
+				OnTerminalChanged(EventArgs.Empty);
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Implicit))
 			{
 				HandleImplicitSettings(e.Inner);
-			}
 
-			OnTerminalChanged(EventArgs.Empty);
+				// Do not invoke 'OnTerminalChanged' for implicit settings.
+			}
 		}
 
 		private void HandleExplicitSettings(SettingsEventArgs e)

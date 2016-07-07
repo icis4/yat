@@ -2189,7 +2189,7 @@ namespace YAT.View.Forms
 				{
 					case Status.ChildActivated: return (childText + " activated");
 					case Status.ChildActive:    return (""); // Display nothing to limit information.
-					case Status.ChildChanged:   return (childText + " changed");
+					case Status.ChildChanged:   return (""); // Display nothing to limit information. Used to display "childText + " changed"" but that results in such messages each time a command is sent (due to the 'IsReadyToSend' changes). In order to get this again, 'IsReadyToSend' changes would have to be separated from the 'IOChanged' event.
 					case Status.ChildSaved:     return (childText + " saved");
 					case Status.ChildClosed:    return (childText + " closed");
 				}
