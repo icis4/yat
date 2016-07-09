@@ -1071,7 +1071,7 @@ namespace YAT.View.Controls
 			// Calculate tick stamp of next update:
 			unchecked
 			{
-				this.nextMonitorUpdateTickStamp = (Stopwatch.GetTimestamp() + this.monitorUpdateTickInterval);
+				this.nextMonitorUpdateTickStamp = (Stopwatch.GetTimestamp() + this.monitorUpdateTickInterval); // Loop-around is OK.
 			}
 
 			if (lbmon.VerticalScrollToBottomIfNoItemButTheLastIsSelected())
@@ -1233,7 +1233,7 @@ namespace YAT.View.Controls
 			// Calculate tick stamp of next update:
 			unchecked
 			{
-				this.nextDataStatusUpdateTickStamp = (Stopwatch.GetTimestamp() + DataStatusTickInterval);
+				this.nextDataStatusUpdateTickStamp = (Stopwatch.GetTimestamp() + DataStatusTickInterval); // Loop-around is OK.
 			}
 		}
 
