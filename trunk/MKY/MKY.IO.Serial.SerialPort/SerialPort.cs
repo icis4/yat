@@ -992,9 +992,21 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			if (this.settings.AutoReopen.Enabled)
 			{
+				StopAndDisposeReopenTimeout();
 				StopAndDisposeAliveMonitor();
 				StopAndDisposeControlEventTimeout();
 				StopThreads();
+
+				// Used to invoke the code below via an async worker, in order to prevent deadlocks on
+				// closing, working around the issue described in MKY.IO.Ports.SerialPort.SerialPortEx.
+				// This worked well when closing a port during execution of the application, but again
+				// lead to 'ObjectDisposedException' when exiting the application, each time! The async
+				// implementation was added in SVN revision #1063 and again removed in #1101.
+				//
+				// If closing again leads to deadlocks, consider to implement an improved async variant,
+				// by invoking the code below with a timeout, i.e. terminate the async worker in case it
+				// does not complete within a second or two.
+
 				CloseAndDisposePort();
 
 				SetStateSynchronizedAndNotify(State.Closed, withNotify); // Notification must succeed here, do not try/catch.
@@ -1016,6 +1028,17 @@ namespace MKY.IO.Serial.SerialPort
 			StopAndDisposeAliveMonitor();
 			StopAndDisposeControlEventTimeout();
 			StopThreads();
+
+			// Used to invoke the code below via an async worker, in order to prevent deadlocks on
+			// closing, working around the issue described in MKY.IO.Ports.SerialPort.SerialPortEx.
+			// This worked well when closing a port during execution of the application, but again
+			// lead to 'ObjectDisposedException' when exiting the application, each time! The async
+			// implementation was added in SVN revision #1063 and again removed in #1101.
+			//
+			// If closing again leads to deadlocks, consider to implement an improved async variant,
+			// by invoking the code below with a timeout, i.e. terminate the async worker in case it
+			// does not complete within a second or two.
+
 			CloseAndDisposePort();
 
 			try
