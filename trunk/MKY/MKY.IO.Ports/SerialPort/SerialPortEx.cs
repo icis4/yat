@@ -134,7 +134,7 @@ namespace MKY.IO.Ports
 	// - Async DataReceived event
 	// - Immediate async read
 	// - Dispatch of all open/close operations onto Windows.Forms main thread using OnRequest event
-	// - try GC.Collect(Forced) => no exceptions on GC, exception gets fired afterwards
+	// - try GC.Collect(forced) => no exceptions on GC, exception gets fired afterwards
 	// 
 	// --------------------------------------------------------------------------------------------
 	// 
@@ -1009,7 +1009,7 @@ namespace MKY.IO.Ports
 				//
 				// Details on this exception:
 				// Type: System.ObjectDisposedException
-				// Message: Safe handle has been closed
+				// Message: SafeHandle has been closed
 				// Source: mscorlib
 				// Stack:
 				//    at System.StubHelpers.StubHelpers.SafeHandleC2NHelper(Object pThis, IntPtr pCleanupWorkList)

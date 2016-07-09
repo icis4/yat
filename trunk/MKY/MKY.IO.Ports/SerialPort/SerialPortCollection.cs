@@ -122,6 +122,39 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
+		/// Returns whether the given port name is available according to <see cref="System.IO.Ports.SerialPort.GetPortNames()"/>.
+		/// </summary>
+		public static bool IsAvailable(string portName)
+		{
+			if (!string.IsNullOrEmpty(portName))
+			{
+				SerialPortCollection c = new SerialPortCollection();
+				c.FillWithAvailablePorts(false);
+
+				return (c.Contains(portName));
+			}
+			else
+			{
+				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Returns whether the given port name is contained in the static cache.
+		/// </summary>
+		public static bool CacheContains(string portName)
+		{
+			if ((staticPortNamesCache != null) && (!string.IsNullOrEmpty(portName)))
+			{
+				return (Array.IndexOf(staticPortNamesCache, portName) >= 0);
+			}
+			else
+			{
+				return (false);
+			}
+		}
+
+		/// <summary>
 		/// Queries WMI (Windows Management Instrumentation) trying to retrieve to caption
 		/// that is associated with the serial port.
 		/// </summary>

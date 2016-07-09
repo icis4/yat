@@ -108,9 +108,7 @@ namespace YAT.View.Forms
 		{
 			try
 			{
-				// Don't care about result,
-				//   either the settings have been loaded or they have been set to defaults.
-				ApplicationSettings.Load();
+				ApplicationSettings.Load(); // Don't care about result, either the settings have been loaded or they have been set to defaults.
 
 				DialogResult = DialogResult.OK;
 			}
