@@ -613,33 +613,25 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary></summary>
 		public virtual bool Start()
 		{
-			// AssertNotDisposed() is called by 'IsStarted' below.
+			// AssertNotDisposed() is called by 'IsStopped' below.
 
 			if (IsStopped)
 			{
-				if (Ports.SerialPortCollection.IsAvailable(PortId))
+				DebugMessage("Starting...");
+				try
 				{
-					DebugMessage("Starting...");
-					try
-					{
-						CreateAndOpenPortAndThreadsAndNotify();
-						return (true);
-					}
-					catch
-					{
-						ResetPortAndThreadsAndNotify();
-						throw; // Re-throw!
-					}
+					CreateAndOpenPortAndThreadsAndNotify();
+					return (true); // Return 'true' whether port open or not, since port is started in any case.
 				}
-				else
+				catch
 				{
-					DebugMessage("Start() requested but port is not available.");
-					return (false);
+					ResetPortAndThreadsAndNotify();
+					throw; // Re-throw!
 				}
 			}
 			else
 			{
-				DebugMessage("Start() requested but state is " + GetStateSynchronized() + ".");
+				DebugMessage("Start() requested but state is already " + GetStateSynchronized() + ".");
 				return (true); // Return 'true' since port is already open.
 			}
 		}

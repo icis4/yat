@@ -462,8 +462,8 @@ namespace MKY.IO.Serial.Socket
 				}
 				default:
 				{
-					DebugMessage("Start() requested but state is " + state + ".");
-					return (false);
+					DebugMessage("Start() requested but state is already " + state + ".");
+					return (true); // Return 'true' since socket is already started.
 				}
 			}
 		}
