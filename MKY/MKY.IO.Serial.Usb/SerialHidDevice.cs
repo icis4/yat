@@ -461,12 +461,12 @@ namespace MKY.IO.Serial.Usb
 		/// <summary></summary>
 		public virtual bool Start()
 		{
-			// AssertNotDisposed() is called by 'IsStarted' below.
+			// AssertNotDisposed() is called by 'IsStopped' below.
 
 			if (IsStopped)
 				return (TryCreateAndStartDevice());
 
-			return (true);
+			return (true); // Return 'true' since device is started in any case.
 		}
 
 		/// <summary></summary>

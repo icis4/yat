@@ -473,7 +473,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		public virtual bool Start()
 		{
-			// AssertNotDisposed() is called by 'IsStarted' below.
+			// AssertNotDisposed() is called by 'IsStopped' below.
 
 			if (IsStopped)
 			{
@@ -490,8 +490,8 @@ namespace MKY.IO.Serial.Socket
 			}
 			else
 			{
-				DebugMessage("Start() requested but state is " + GetStateSynchronized() + ".");
-				return (false);
+				DebugMessage("Start() requested but state is already " + GetStateSynchronized() + ".");
+				return (true); // Return 'true' since socket is already started.
 			}
 		}
 
