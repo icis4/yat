@@ -128,7 +128,7 @@ namespace YAT.Model.Types
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 		public Command(bool isPartialTextEol, Domain.Radix defaultRadix = DefaultRadixDefault)
 		{
-			Initialize(true, "", UndefinedCommandLines, defaultRadix, isPartialTextEol, isPartialTextEol, false, "");
+			Initialize(true, "", UndefinedCommandLines, defaultRadix, false, isPartialTextEol, false, "");
 		}
 
 		/// <summary></summary>
