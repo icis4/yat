@@ -100,7 +100,7 @@ New:
 - Keyword \!(LineInterval) implemented in addition to the existing \!(LineDelay), useful together
   with \!(LineRepeat), line will be sent in more or less accurate interval (feature request #255).
 - Binary terminals now also support to break lines before a sequence (feat. reqs. #76, #140, #180).
-- Default parse radix can be selected, e.g. useful when sending files with binary data (req. #238).
+- Selectable default parse radix, e.g. useful when sending binary data (feat. reqs. #238, #270).
 - Options to define the enclosure and spacing of display elements added (related to bug #292).
 - Option to display the port as e.g. "COM1" or "127.0.0.1:10000" (feature request #14).
 - Option to display the direction as "<<" (Tx) and ">>" (Rx) (feature request #14).
@@ -138,7 +138,7 @@ Important changes:
 - Superfluous control pin events of e.g. internal COM ports is now being handled (bugs #271, #277).
 - Settings related to XOn/XOff and ASCII control character replacement improved (bug #319).
 - Synchronization among outgoing and incoming data improved, preventing data mix-ups and exceptions
-  (related to feature requests #14, #252 as well as bugs #132, #275, #292, #321, #331, #333, #334).
+  (related to feat. reqs. #14, #252 as well as bugs #132, #275, #292, #321, #331, #333, #334, #346).
 - Performance in terms of CPU and RAM usage improved (bugs #189, #243, #263, #302, #336).
 - Adaptive monitor update rate significantly improved, it is now dependent on the CPU load.
 - Number of bytes per line limited, in order to keep performance even in case of enormous lines.
