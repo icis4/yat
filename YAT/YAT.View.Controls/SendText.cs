@@ -697,8 +697,7 @@ namespace YAT.View.Controls
 					{
 						this.command = ri.Item;
 
-						SetCommandControls();
-						//// Do not call OnCommandChanged(), event shall only be invoked when command is requested.
+						ConfirmCommand();
 					}
 				}
 
@@ -959,13 +958,7 @@ namespace YAT.View.Controls
 				this.command = f.CommandResult;
 				this.isValidated = true; // Command has been validated by multi-line box.
 
-				SetCommandControls();
-				OnCommandChanged(EventArgs.Empty);
-			}
-			else
-			{
-				SetCommandControls();
-			////OnCommandChanged() is not called, nothing has changed.
+				ConfirmCommand();
 			}
 
 			button_Send.Select();
