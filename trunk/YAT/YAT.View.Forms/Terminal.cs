@@ -2180,25 +2180,37 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual bool RequestSaveFile()
 		{
-			return (this.terminal.Save());
+			if (this.terminal != null)
+				return (this.terminal.Save());
+
+			return (false);
 		}
 
 		/// <summary></summary>
 		public virtual bool RequestCloseFile()
 		{
-			return (this.terminal.Close());
+			if (this.terminal != null)
+				return (this.terminal.Close());
+
+			return (false);
 		}
 
 		/// <summary></summary>
 		public virtual bool RequestStartTerminal()
 		{
-			return (this.terminal.StartIO());
+			if (this.terminal != null)
+				return (this.terminal.StartIO());
+
+			return (false);
 		}
 
 		/// <summary></summary>
 		public virtual bool RequestStopTerminal()
 		{
-			return (this.terminal.StopIO());
+			if (this.terminal != null)
+				return (this.terminal.StopIO());
+
+			return (false);
 		}
 
 		/// <summary></summary>
@@ -2240,13 +2252,15 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestClear()
 		{
-			this.terminal.ClearRepositories();
+			if (this.terminal != null)
+				this.terminal.ClearRepositories();
 		}
 
 		/// <summary></summary>
 		public virtual void RequestRefresh()
 		{
-			this.terminal.ReloadRepositories();
+			if (this.terminal != null)
+				this.terminal.ReloadRepositories();
 		}
 
 		/// <summary></summary>
@@ -2276,25 +2290,29 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestSwitchLogOn()
 		{
-			this.terminal.SwitchLogOn();
+			if (this.terminal != null)
+				this.terminal.SwitchLogOn();
 		}
 
 		/// <summary></summary>
 		public virtual void RequestSwitchLogOff()
 		{
-			this.terminal.SwitchLogOff();
+			if (this.terminal != null)
+				this.terminal.SwitchLogOff();
 		}
 
 		/// <summary></summary>
 		public virtual void RequestOpenLogFile()
 		{
-			this.terminal.OpenLogFile();
+			if (this.terminal != null)
+				this.terminal.OpenLogFile();
 		}
 
 		/// <summary></summary>
 		public virtual void RequestOpenLogDirectory()
 		{
-			this.terminal.OpenLogDirectory();
+			if (this.terminal != null)
+				this.terminal.OpenLogDirectory();
 		}
 
 		/// <summary></summary>
