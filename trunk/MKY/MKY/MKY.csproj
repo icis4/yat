@@ -95,6 +95,7 @@
     <Compile Include="Diagnostics\ProcessorLoad.cs" />
     <Compile Include="Diagnostics\StopwatchEx.cs" />
     <Compile Include="Drawing\ColorTranslatorEx.cs" />
+    <Compile Include="ConvertEx.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="EventHandlerHelper.cs" />
     <Compile Include="Media\SystemSoundsEx.cs" />

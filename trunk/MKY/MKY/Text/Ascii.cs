@@ -46,7 +46,7 @@ namespace MKY.Text
 		/// <summary>
 		/// Returns whether the given byte is a control byte.
 		/// </summary>
-		public static bool IsControlByte(byte code)
+		public static bool IsControl(byte code)
 		{
 			return ((code  < 0x20) || (code == 0x7F));
 		}
