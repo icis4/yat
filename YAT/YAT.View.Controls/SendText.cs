@@ -266,8 +266,8 @@ namespace YAT.View.Controls
 				{
 					this.useExplicitDefaultRadix = value;
 
-					if (value) // Explicit => Refresh the command controls.
-						SetCommandControls();
+					if (value) // Explicit => Refresh the command.
+						ConfirmCommand();
 
 					SetExplicitDefaultRadixControls();
 
@@ -517,7 +517,7 @@ namespace YAT.View.Controls
 
 				foreach (string s in this.command.MultiLineText)
 				{
-					if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", s, radix, this.parseMode))
+					if (!Utilities.ValidationHelper.ValidateRadix(this, "default radix", s, radix, this.parseMode))
 						isValid = false;
 				}
 
