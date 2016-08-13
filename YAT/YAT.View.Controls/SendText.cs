@@ -47,11 +47,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Security.Permissions;
+using System.Text;
 using System.Windows.Forms;
 
 using MKY;
 using MKY.Drawing;
 using MKY.Recent;
+using MKY.Text;
 using MKY.Windows.Forms;
 
 using YAT.Model.Settings;
@@ -589,8 +591,19 @@ namespace YAT.View.Controls
 
 			if (this.sendImmediately)
 			{
-				this.isValidated = true;
-				ConfirmPartialText(e.KeyChar.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for keys!
+				this.isValidated = true; // Implicitly in any case.
+
+				byte asciiCode;
+				string text;
+
+				if (!char.IsControl(e.KeyChar))
+					text = e.KeyChar.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for keys!
+				else if ((CharEx.TryConvertToByte(e.KeyChar, out asciiCode)) && (Ascii.IsControl(asciiCode)))
+					text = "<" + Ascii.ConvertToMnemonic(asciiCode) + ">";
+				else // Applies to Unicode control characters U+0080..U+009F
+					text = "\\h(" + ConvertEx.ToHexadecimalString(Encoding.Unicode.GetBytes(new char[] { e.KeyChar })) + ")";
+
+				ConfirmPartialText(text);
 				InvokeSendCommandRequest();
 			}
 

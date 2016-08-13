@@ -13,52 +13,39 @@
 // See SVN change log for revision details.
 // See release notes for product version details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2016 Matthias Kläy.
+// Copyright © 2010-2016 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Text;
 
-// This code is intentionally placed into the MKY namespace even though the file is located in
-// MKY.Types for consistency with the Sytem namespace.
 namespace MKY
 {
-	/// <summary>
-	/// Char utility methods.
-	/// </summary>
+	/// <summary></summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
-	public static class CharEx
+	public static class ConvertEx
 	{
 		/// <summary>
-		/// An invalid char is represented by -1.
+		/// Converts values into hexadecimal string (e.g. "0A FF 20").
 		/// </summary>
-		/// <remarks>
-		/// Value corresponds to the value returned by <see cref="System.IO.StringReader.Read()"/>
-		/// and the other read functions if no more characters can be read from the stream.
-		/// Value also corresponds to <see cref="IO.StreamEx.EndOfStream"/>.
-		/// </remarks>
-		public const int InvalidChar = -1;
-
-		/// <summary>
-		/// Tries to convert the UTF-16 encoded value into the according ASCII code.
-		/// </summary>
-		public static bool TryConvertToByte(char value, out byte ascii)
+		public static string ToHexadecimalString(byte[] values)
 		{
-			try
+			StringBuilder sb = new StringBuilder();
+
+			for (int i = 0; i < values.Length; i++)
 			{
-				ascii = Convert.ToByte(value);
-				return (true);
+				if (i > 0)
+					sb.Append(" ");
+
+				sb.Append(values[i].ToString("X2", CultureInfo.InvariantCulture));
 			}
-			catch (OverflowException)
-			{
-				ascii = 0x00;
-				return (false);
-			}
+
+			return (sb.ToString());
 		}
 	}
 }

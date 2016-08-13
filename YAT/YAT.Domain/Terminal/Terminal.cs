@@ -1794,7 +1794,7 @@ namespace YAT.Domain
 					isByteToHide = true;
 			}
 
-			bool isControlByte = Ascii.IsControlByte(b);
+			bool isControl = Ascii.IsControl(b);
 			bool error = false;
 			string text = "";
 
@@ -1810,7 +1810,7 @@ namespace YAT.Domain
 					{
 						// Do nothing, ignore the character, this results in hiding.
 					}
-					else if (isControlByte)
+					else if (isControl)
 					{
 						if (TerminalSettings.CharReplace.ReplaceControlChars)
 							text = ByteToControlCharReplacementString(b, r);
@@ -1832,7 +1832,7 @@ namespace YAT.Domain
 					{
 						// Do nothing, ignore the character, this results in hiding.
 					}
-					else if (isControlByte)
+					else if (isControl)
 					{
 						if (TerminalSettings.CharReplace.ReplaceControlChars)
 							text = ByteToControlCharReplacementString(b, r);
@@ -1865,7 +1865,7 @@ namespace YAT.Domain
 				{
 					return (new DisplayElement.Nonentity()); // Return nothing, ignore the character, this results in hiding.
 				}
-				else if (isControlByte)
+				else if (isControl)
 				{
 					if (TerminalSettings.CharReplace.ReplaceControlChars)
 					{
