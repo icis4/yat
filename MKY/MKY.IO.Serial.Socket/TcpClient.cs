@@ -800,21 +800,19 @@ namespace MKY.IO.Serial.Socket
 		/// </param>
 		public virtual void OnReceived(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
-			if (Monitor.TryEnter(this.dataEventSyncObj))
+			// Synchronize the send/receive events to prevent mix-ups at the event
+			// sinks, i.e. the send/receive operations shall be synchronized with
+			// signaling of them. The thread = direction that get's the lock first,
+			// shall also be the one to signal first:
+
+			lock (this.dataEventSyncObj)
 			{
-				try
-				{
-					// This receive callback is always asychronous, thus the event handler can
-					// be called directly. It is also ensured that the event handler is called
-					// sequentially because the 'BeginReceive()' method is only called after
-					// the event handler has returned.
-					OnDataReceived(new SocketDataReceivedEventArgs((byte[])e.Buffer.Clone(), e.Connection.RemoteEndPoint));
-				}
-				finally
-				{
-					Monitor.Exit(this.dataEventSyncObj);
-				}
-			} // Monitor.TryEnter()
+				// This receive callback is always asychronous, thus the event handler can
+				// be called directly. It is also ensured that the event handler is called
+				// sequentially because the 'BeginReceive()' method is only called after
+				// the event handler has returned.
+				OnDataReceived(new SocketDataReceivedEventArgs((byte[])e.Buffer.Clone(), e.Connection.RemoteEndPoint));
+			}
 
 			// Continue receiving:
 			e.Connection.BeginReceive();
