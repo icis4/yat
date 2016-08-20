@@ -123,7 +123,7 @@ namespace MKY.Recent
 			// Keep the original item count:
 			int countWithDuplicates = Count;
 
-			// If there are indeed duplicates, take the long to remove the recent ones...
+			// If there are indeed duplicates, take the long way to remove the recent ones...
 			while (this.Distinct().ToList().Count < Count)
 			{
 				List<RecentItem<T>> duplicates = new List<RecentItem<T>>(Count); // Preset the initial capacity to improve memory management.
