@@ -317,7 +317,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[CLSCompliant(false)]
-		[OptionArg(Names = new string[] { "DynamicIndex", "DynamicTerminalIndex" }, ShortName = "dti", Description =
+		[OptionArg(Names = new string[] { "DynamicIndex", "DynamicTerminalIndex" }, ShortName = "di", Description =
 			"Perform any requested operation on the terminal with the given dynamic index within the opening workspace." + EnvironmentEx.NewLineConstWorkaround +
 			"Valid values are 1 based indices 1, 2, 3,... up to the number of open terminals. " +
 			"0 indicates that the currently active terminal is used, which typically is the last terminal opened. " +

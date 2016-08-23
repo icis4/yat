@@ -71,8 +71,8 @@ namespace YAT.Model.Settings
 
 			State    = FormWindowState.Maximized;
 			Location = new Point(0, 0);
-			Size     = new Size(800, 600);
-		}
+			Size     = new Size(900, 675); // Relates to 'Size' of the 'YAT.View.Main' form as
+		}                                  // well as the 'YAT.Model.Settings.MainWindowSettings'.
 
 		#region Properties
 		//==========================================================================================

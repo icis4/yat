@@ -21,7 +21,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Serialization;
@@ -81,7 +80,7 @@ namespace YAT.Model.Settings
 			StartPosition = FormStartPosition.WindowsDefaultLocation;
 			WindowState   = FormWindowState.Normal;
 			Location      = new Point(0, 0);
-			Size          = new Size(800, 600);
+			Size          = new Size(912, 684); // Equals 'Size' of the 'YAT.View.Main' form.
 
 			ShowTerminalInfo = false;
 			ShowChrono       = true;

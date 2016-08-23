@@ -256,7 +256,12 @@ namespace MKY.Settings
 			/// </remarks>
 			public virtual TSettings Settings
 			{
-				get { AssertNotDisposed(); return (this.settings); }
+				get
+				{
+					AssertNotDisposed();
+
+					return (this.settings);
+				}
 			}
 
 			/// <summary>
@@ -273,6 +278,7 @@ namespace MKY.Settings
 				get
 				{
 					// Do not call AssertNotDisposed() in a simple get-property.
+
 					return ((this.effectiveFileAccess & FileAccessFlags.Write) == FileAccessFlags.Write);
 				}
 			}

@@ -402,8 +402,8 @@ namespace YAT.View.Forms
 				this.closingState = ClosingState.IsClosingFromForm;
 
 				bool cancel;
-				Model.MainResult modelResult = this.main.Exit(out cancel);
-				if (cancel)
+				this.main.Exit(out cancel); // Focus on (form) cancel here, no need to deal with
+				if (cancel)                 // the result, that is handled in main_Exited().
 				{
 					e.Cancel = true;
 
@@ -417,10 +417,6 @@ namespace YAT.View.Forms
 						if (t != null)
 							t.RevertClosingState();
 					}
-				}
-				else
-				{
-					this.result = modelResult;
 				}
 			}
 		}
@@ -1577,7 +1573,8 @@ namespace YAT.View.Forms
 
 		private void main_Exited(object sender, EventArgs<Model.MainResult> e)
 		{
-			this.result = e.Value;
+			if (this.result == Model.MainResult.Success) // Otherwise, keep the previous result, e.g. 'ApplicationStartError'.
+				this.result = e.Value;
 
 			DetachMainEventHandlers();
 			this.main = null;

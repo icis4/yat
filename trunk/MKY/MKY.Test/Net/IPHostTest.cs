@@ -50,8 +50,8 @@ namespace MKY.Test.Net
 
 		private const string LocalhostString = "[Localhost]";
 
-		private const string IPv4LocalhostString = "IPv4 localhost";
-		private const string IPv6LocalhostString = "IPv6 localhost";
+		private const string IPv4LocalhostString = "IPv4 localhost (127.0.0.1)";
+		private const string IPv6LocalhostString = "IPv6 localhost (::1)";
 
 		private static readonly IPAddress SomeIPv4Address = new IPAddress(new byte[] { 1, 2, 3, 4 });
 		private const string SomeIPv4AddressString = "1.2.3.4";
