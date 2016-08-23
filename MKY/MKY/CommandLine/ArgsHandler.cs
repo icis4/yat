@@ -748,6 +748,7 @@ namespace MKY.CommandLine
 							optionStrings.Add(s);
 						}
 					}
+
 					foreach (string s in att.Names)
 					{
 						if (optionStrings.Contains(s))
@@ -762,6 +763,7 @@ namespace MKY.CommandLine
 						}
 					}
 				}
+
 				foreach (ValueArgAttribute att in GetValueArgAttributes(field))
 				{
 					if (!SupportValueArgs)

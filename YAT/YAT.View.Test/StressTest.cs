@@ -38,7 +38,6 @@ using NUnit;
 using NUnit.Framework;
 
 using YAT.Application.Utilities;
-using YAT.Controller;
 using YAT.Domain;
 using YAT.Model.Settings;
 using YAT.Model.Types;
@@ -185,14 +184,14 @@ namespace YAT.View.Test
 			{
 				@"""" + workspaceSettingsFilePath + @"""",
 				@"-tf=""" + transmitFilePath + @"""",
-				@"-t=0",
+				@"-di=0",
 				@"-ke"
 			};
 
-			using (Main main = new Main(args))
+			using (Controller.Main main = new Controller.Main(args))
 			{
-				MainResult mainResult = main.Run();
-				Assert.AreEqual(MainResult.Success, mainResult);
+				Controller.MainResult mainResult = main.Run();
+				Assert.AreEqual(Controller.MainResult.Success, mainResult);
 			}
 		}
 

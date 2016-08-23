@@ -183,7 +183,12 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFilePathIsDefined
 		{
-			get { AssertNotDisposed(); return (this.fileHandler.FilePathIsDefined); }
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.fileHandler.FilePathIsDefined);
+			}
 		}
 
 		/// <summary>
@@ -191,7 +196,12 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFilePathIsValid
 		{
-			get { AssertNotDisposed(); return (this.fileHandler.FilePathIsValid); }
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.fileHandler.FilePathIsValid);
+			}
 		}
 
 		/// <summary>
@@ -199,7 +209,12 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileExists
 		{
-			get { AssertNotDisposed(); return (this.fileHandler.FileExists); }
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.fileHandler.FileExists);
+			}
 		}
 
 		/// <summary>
@@ -207,7 +222,12 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileExistsNoMore
 		{
-			get { AssertNotDisposed(); return (this.fileHandler.FileExistsNoMore); }
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.fileHandler.FileExistsNoMore);
+			}
 		}
 
 		/// <summary>
@@ -215,7 +235,12 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileIsUpToDate
 		{
-			get { AssertNotDisposed(); return (this.fileHandler.FileIsUpToDate); }
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.fileHandler.FileIsUpToDate);
+			}
 		}
 
 		/// <summary>
@@ -223,7 +248,12 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileIsReadable
 		{
-			get { AssertNotDisposed(); return (this.fileHandler.FileIsReadable); }
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.fileHandler.FileIsReadable);
+			}
 		}
 
 		/// <summary>
@@ -231,7 +261,12 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileIsWritable
 		{
-			get { AssertNotDisposed(); return (this.fileHandler.FileIsWritable); }
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.fileHandler.FileIsWritable);
+			}
 		}
 
 		/// <summary>
@@ -239,7 +274,12 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileIsReadOnly
 		{
-			get { AssertNotDisposed(); return (this.fileHandler.FileIsReadOnly); }
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.fileHandler.FileIsReadOnly);
+			}
 		}
 
 		/// <summary>
@@ -248,7 +288,12 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileSuccessfullyLoaded
 		{
-			get { AssertNotDisposed(); return (this.fileHandler.FileSuccessfullyLoaded); }
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.fileHandler.FileSuccessfullyLoaded);
+			}
 		}
 
 		/// <summary>
@@ -259,7 +304,12 @@ namespace MKY.Settings
 		/// </remarks>
 		public virtual TSettings Settings
 		{
-			get { AssertNotDisposed(); return (this.settings); }
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.settings);
+			}
 		}
 
 		#endregion
