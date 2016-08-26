@@ -50,7 +50,7 @@
         <UsbSerialHidDevice>
           <DeviceInfo>
             <VendorId>3768</VendorId>
-            <ProductId>8960</ProductId>
+            <ProductId>8963</ProductId>
             <SerialNumber>YAT.8</SerialNumber>
           </DeviceInfo>
           <AutoOpen>true</AutoOpen>
