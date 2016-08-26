@@ -51,9 +51,9 @@
         </Socket>
         <UsbSerialHidDevice>
           <DeviceInfo>
-            <VendorId>3768</VendorId>
-            <ProductId>8960</ProductId>
-            <SerialNumber>YAT.8</SerialNumber>
+            <VendorId>0</VendorId>
+            <ProductId>0</ProductId>
+            <SerialNumber />
           </DeviceInfo>
           <AutoOpen>true</AutoOpen>
         </UsbSerialHidDevice>

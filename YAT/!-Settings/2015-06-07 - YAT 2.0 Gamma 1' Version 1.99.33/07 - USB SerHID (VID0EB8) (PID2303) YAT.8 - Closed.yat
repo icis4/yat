@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <FileType>YAT Terminal Settings</FileType>
-  <ProductVersion>1.99.28</ProductVersion>
-  <Warning>Modifying this file may cause undefined behaviour!</Warning>
+  <SettingsVersion>1.4.0</SettingsVersion>
+  <ProductVersion>1.99.33</ProductVersion>
+  <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
-    <TimeStamp>2011-12-04T13:00:22.172538+01:00</TimeStamp>
+    <TimeStamp>2015-05-29T15:35:30.8671314+02:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
@@ -16,7 +17,7 @@
         <IOType>UsbSerialHid</IOType>
         <SerialPort>
           <PortId>
-            <Name>COM2</Name>
+            <Name>COM1</Name>
           </PortId>
           <Communication>
             <BaudRate>9600</BaudRate>
@@ -29,13 +30,15 @@
             <Enabled>true</Enabled>
             <Interval>2000</Interval>
           </AutoReopen>
+          <MaxSendChunkSize>50</MaxSendChunkSize>
           <NoSendOnOutputBreak>true</NoSendOnOutputBreak>
           <NoSendOnInputBreak>false</NoSendOnInputBreak>
         </SerialPort>
         <Socket>
           <HostType>Unknown</HostType>
-          <RemoteHost>localhost</RemoteHost>
-          <RemotePort>10000</RemotePort>
+          <RemoteHost>&lt;Localhost&gt;</RemoteHost>
+          <RemoteTcpPort>10000</RemoteTcpPort>
+          <RemoteUdpPort>10000</RemoteUdpPort>
           <LocalInterface>&lt;Any&gt;</LocalInterface>
           <LocalTcpPort>10000</LocalTcpPort>
           <LocalUdpPort>10001</LocalUdpPort>
@@ -47,18 +50,32 @@
         <UsbSerialHidDevice>
           <DeviceInfo>
             <VendorId>3768</VendorId>
-            <ProductId>8960</ProductId>
+            <ProductId>8963</ProductId>
             <SerialNumber>YAT.8</SerialNumber>
           </DeviceInfo>
+          <ReportFormat>
+            <UseId>true</UseId>
+            <Id>0</Id>
+            <PrependPayloadByteLength>false</PrependPayloadByteLength>
+            <AppendTerminatingZero>false</AppendTerminatingZero>
+            <FillLastReport>true</FillLastReport>
+          </ReportFormat>
+          <RxIdUsage>
+            <SeparateRxId>false</SeparateRxId>
+            <AnyRxId>false</AnyRxId>
+            <RxId>0</RxId>
+          </RxIdUsage>
           <AutoOpen>true</AutoOpen>
         </UsbSerialHidDevice>
-        <Endianess>BigEndian</Endianess>
+        <Endianness>BigEndian</Endianness>
         <IndicateSerialPortBreakStates>false</IndicateSerialPortBreakStates>
         <SerialPortOutputBreakIsModifiable>false</SerialPortOutputBreakIsModifiable>
       </IO>
       <Status>
         <ShowConnectTime>false</ShowConnectTime>
         <ShowCountAndRate>false</ShowCountAndRate>
+        <ShowFlowControlCount>false</ShowFlowControlCount>
+        <ShowBreakCount>false</ShowBreakCount>
       </Status>
       <Buffer>
         <TxBufferSize>65536</TxBufferSize>
@@ -71,6 +88,7 @@
         <ShowRadix>true</ShowRadix>
         <ShowTimeStamp>false</ShowTimeStamp>
         <ShowLength>false</ShowLength>
+        <ShowLineNumbers>false</ShowLineNumbers>
         <TxMaxLineCount>1000</TxMaxLineCount>
         <RxMaxLineCount>1000</RxMaxLineCount>
         <DirectionLineBreakEnabled>true</DirectionLineBreakEnabled>
@@ -80,11 +98,16 @@
         <ControlCharRadix>AsciiMnemonic</ControlCharRadix>
         <ReplaceTab>false</ReplaceTab>
         <ReplaceSpace>false</ReplaceSpace>
+        <HideXOnXOff>false</HideXOnXOff>
       </CharReplace>
       <Send>
         <KeepCommand>true</KeepCommand>
         <CopyPredefined>false</CopyPredefined>
         <SendImmediately>false</SendImmediately>
+        <DefaultDelay>100</DefaultDelay>
+        <DefaultLineDelay>100</DefaultLineDelay>
+        <DefaultLineRepeat>-1</DefaultLineRepeat>
+        <DisableKeywords>false</DisableKeywords>
       </Send>
       <TextTerminal>
         <SeparateTxRxEol>false</SeparateTxRxEol>
@@ -102,9 +125,12 @@
           <Timeout>500</Timeout>
         </WaitForResponse>
         <CharSubstitution>None</CharSubstitution>
-        <SkipEolComments>false</SkipEolComments>
-        <EolCommentIndicators>//</EolCommentIndicators>
-        <EolCommentIndicators>REM</EolCommentIndicators>
+        <EolComment>
+          <SkipComment>false</SkipComment>
+          <SkipWhiteSpace>true</SkipWhiteSpace>
+          <Indicators>//</Indicators>
+          <Indicators>REM</Indicators>
+        </EolComment>
       </TextTerminal>
       <BinaryTerminal>
         <SeparateTxRxDisplay>false</SeparateTxRxDisplay>
@@ -208,8 +234,6 @@
         <Description />
         <CommandLines />
         <DefaultRadix>String</DefaultRadix>
-        <IsPartialText>false</IsPartialText>
-        <IsPartialEolText>false</IsPartialEolText>
         <IsFilePath>false</IsFilePath>
         <FilePath />
       </Command>
@@ -220,8 +244,6 @@
         <Description />
         <CommandLines />
         <DefaultRadix>String</DefaultRadix>
-        <IsPartialText>false</IsPartialText>
-        <IsPartialEolText>false</IsPartialEolText>
         <IsFilePath>false</IsFilePath>
         <FilePath />
       </Command>
