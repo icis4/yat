@@ -56,10 +56,12 @@ namespace YAT.Domain.Parser
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
-		public SubstitutionParser(Modes modes = Modes.All)
-			: base(modes)
+		/// <remarks>
+		/// Used for testing. Dedicated constructor required since <see cref="Encoding.Default"/>
+		/// cannot be used as default argument.
+		/// </remarks>
+		public SubstitutionParser(CharSubstitution substitution)
+			: this(substitution, Encoding.Default)
 		{
 		}
 
