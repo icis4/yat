@@ -192,7 +192,7 @@ namespace MKY
 		/// <returns>
 		/// The zero-based index position of the value parameter if that string is found,
 		/// or <see cref="InvalidIndex"/> if it is not. If value is <see cref="String.Empty"/>,
-		/// the return value is startIndex.
+		/// the return value is <paramref name="startIndex"/>.
 		/// </returns>
 		/// <exception cref="ArgumentNullException">searchString is null.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">count or startIndex is negative.  -or- count plus startIndex specify a position that is not within this instance.</exception>

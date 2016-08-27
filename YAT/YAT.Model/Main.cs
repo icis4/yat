@@ -1169,10 +1169,10 @@ namespace YAT.Model
 				// Signal the exit:
 				OnExited(this.result);
 
-				// The main shall dispose of itself. This ensures that it main is disposed AFTER
-				// it fired the 'Exited' event and all subscribers of the event may still refer
-				// to a non-disposed object. This is especially important, as the order of the
-				// subscribers is not fixed, i.e. a subscriber may dispose of the main before
+				// The main shall dispose of itself to free all resources for sure. It must be done
+				// AFTER it fired the 'Exited' event and all subscribers of the event may still
+				// refer to a non-disposed object. This is especially important, as the order of
+				// the subscribers is not fixed, i.e. a subscriber may dispose of the main before
 				// View.Main receives the event callback!
 				Dispose();
 

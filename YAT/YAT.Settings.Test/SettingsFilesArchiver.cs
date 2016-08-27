@@ -136,16 +136,16 @@ namespace YAT.Settings.Test
 
 		private static void SelectiveTestSetUp()
 		{
-			// Create temporary in-memory application settings for this test run.
+			// Create temporary in-memory application settings for this test run:
 			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
 
-			// Prevent auto-save of workspace settings.
+			// Prevent auto-save of workspace settings:
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
 		}
 
 		private static void SelectiveTestTearDown()
 		{
-			// Close and dispose of temporary in-memory application settings.
+			// Close and dispose of temporary in-memory application settings:
 			ApplicationSettings.CloseAndDispose();
 		}
 

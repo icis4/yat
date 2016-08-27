@@ -51,9 +51,9 @@ namespace YAT.Domain
 		// Types
 		//==========================================================================================
 
-		#region Line Break Timer
+		#region Types > Line Break Timer
 		//------------------------------------------------------------------------------------------
-		// Line Break Timer
+		// Types > Line Break Timer
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
@@ -65,7 +65,7 @@ namespace YAT.Domain
 			private System.Threading.Timer timer;
 
 			/// <summary></summary>
-			public event EventHandler Timeout;
+			public event EventHandler Elapsed;
 
 			/// <summary></summary>
 			public LineBreakTimer(int timeout)
@@ -193,15 +193,15 @@ namespace YAT.Domain
 			{
 				AssertNotDisposed();
 
-				EventHelper.FireSync(Timeout, this, e);
+				EventHelper.FireSync(Elapsed, this, e);
 			}
 		}
 
 		#endregion
 
-		#region Line State
+		#region Types > Line State
 		//------------------------------------------------------------------------------------------
-		// Line State
+		// Types > Line State
 		//------------------------------------------------------------------------------------------
 
 		private enum LinePosition
@@ -380,11 +380,11 @@ namespace YAT.Domain
 			{
 				this.txLineState = casted.txLineState;
 				this.txLineState.LineBreakTimer = new LineBreakTimer(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
-				this.txLineState.LineBreakTimer.Timeout += txTimer_Timeout;
+				this.txLineState.LineBreakTimer.Elapsed += txTimedLineBreak_Elapsed;
 
 				this.rxLineState = casted.rxLineState;
 				this.rxLineState.LineBreakTimer = new LineBreakTimer(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
-				this.rxLineState.LineBreakTimer.Timeout += rxTimer_Timeout;
+				this.rxLineState.LineBreakTimer.Elapsed += rxTimedLineBreak_Elapsed;
 
 				this.bidirLineState = new BidirLineState(casted.bidirLineState);
 			}
@@ -509,7 +509,7 @@ namespace YAT.Domain
 					txSequenceBreakBefore = null;
 
 				t = new LineBreakTimer(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
-				t.Timeout += txTimer_Timeout;
+				t.Elapsed += txTimedLineBreak_Elapsed;
 
 				this.txLineState = new LineState(new SequenceQueue(txSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore), DateTime.Now, t);
 
@@ -524,7 +524,7 @@ namespace YAT.Domain
 					rxSequenceBreakBefore = null;
 
 				t = new LineBreakTimer(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
-				t.Timeout += rxTimer_Timeout;
+				t.Elapsed += rxTimedLineBreak_Elapsed;
 
 				this.rxLineState = new LineState(new SequenceQueue(rxSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore), DateTime.Now, t);
 			}
@@ -765,14 +765,17 @@ namespace YAT.Domain
 
 						foreach (DisplayElement de in elementsForNextLine)
 						{
-							foreach (Pair<byte[], string> origin in de.Origin)
+							if (de.Origin != null) // Foreach element where origin exists.
 							{
-								foreach (byte originByte in origin.Value1)
+								foreach (Pair<byte[], string> origin in de.Origin)
 								{
-									List<DisplayElement> elementsForNextLineDummy;
-									ExecuteData(displaySettings, lineState, raw.Direction, originByte, elements, out elementsForNextLineDummy);
+									foreach (byte originByte in origin.Value1)
+									{
+										List<DisplayElement> elementsForNextLineDummy;
+										ExecuteData(displaySettings, lineState, raw.Direction, originByte, elements, out elementsForNextLineDummy);
 
-									// Note that 're.Direction' above is OK, this function is processing all in the same direction.
+										// Note that 're.Direction' above is OK, this function is processing all in the same direction.
+									}
 								}
 							}
 						}
@@ -977,12 +980,12 @@ namespace YAT.Domain
 		// Timer Events
 		//==========================================================================================
 
-		private void txTimer_Timeout(object sender, EventArgs e)
+		private void txTimedLineBreak_Elapsed(object sender, EventArgs e)
 		{
 			ProcessAndSignalTimedLineBreak(IODirection.Tx);
 		}
 
-		private void rxTimer_Timeout(object sender, EventArgs e)
+		private void rxTimedLineBreak_Elapsed(object sender, EventArgs e)
 		{
 			ProcessAndSignalTimedLineBreak(IODirection.Rx);
 		}

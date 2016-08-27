@@ -66,11 +66,11 @@ namespace YAT.Model.Test.Transmission
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic in the constructor, and anyway, performance isn't an issue here.")]
 		static MTSicsDeviceTestData()
 		{
-			Commands = new List<Pair<Pair<string, string>, TimeSpan>>(4); // Preset the required capacity to improve memory management.
-			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"S",  @"S S       0.00 g"), TimeSpan.FromSeconds(90.0 / 1000)));
-			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"SI", @"S S       0.00 g"), TimeSpan.FromSeconds(15.0 / 1000)));
-			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"I1", @"I1 A ""0123"" ""2.30"" ""2.22"" ""2.33"" ""2.20"""), TimeSpan.FromSeconds(50.0 / 1000)));
-			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"I6", @"ES"),  TimeSpan.FromSeconds(15.0 / 1000)));
+			Commands = new List<Pair<Pair<string, string>, TimeSpan>>(4); // Preset the required capacity to improve memory management.                Time in ms per cycle, including overhead.
+			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"S",  @"S S       0.00 g"),                                  TimeSpan.FromSeconds(150.0 / 1000)));
+			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"SI", @"S S       0.00 g"),                                  TimeSpan.FromSeconds(125.0 / 1000)));
+			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"I1", @"I1 A ""0123"" ""2.30"" ""2.22"" ""2.33"" ""2.20"""), TimeSpan.FromSeconds(125.0 / 1000)));
+			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"I6", @"ES"),                                                TimeSpan.FromSeconds(125.0 / 1000)));
 		}
 
 		#endregion
@@ -192,10 +192,23 @@ namespace YAT.Model.Test.Transmission
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
-			// Create temporary in-memory application settings for this test run.
+			// \remind 2016-05-26 / MKY: Should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
+			DialogResult dr = MessageBox.Show
+				(
+				"This test requires a weighing MT-SICS device:" + Environment.NewLine +
+				" > Serial COM Port: Start weight simulation if no load cell connected." + Environment.NewLine +
+				" > TCP/IP Socket: Start device simulation." + Environment.NewLine +
+				" > USB Ser/HID: Start weight simulation if no load cell connected.",
+				"Precondition", MessageBoxButtons.OKCancel, MessageBoxIcon.Information
+				);
+
+			if (dr != DialogResult.OK)
+				Assert.Fail("User cancel!");
+
+			// Create temporary in-memory application settings for this test run:
 			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
 
-			// Prevent auto-save of workspace settings.
+			// Prevent auto-save of workspace settings:
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
 		}
 
@@ -204,7 +217,7 @@ namespace YAT.Model.Test.Transmission
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			// Close and dispose of temporary in-memory application settings.
+			// Close and dispose of temporary in-memory application settings:
 			ApplicationSettings.CloseAndDispose();
 		}
 
@@ -239,7 +252,7 @@ namespace YAT.Model.Test.Transmission
 						Assert.Fail(@"Failed to start """ + terminal.Caption + @"""");
 					}
 				}
-				Utilities.WaitForConnection(terminal);
+				Utilities.WaitForOpen(terminal);
 
 				// Prepare stimulus and expected:
 				Types.Command stimulusCommand = new Types.Command(stimulus);

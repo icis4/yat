@@ -218,7 +218,7 @@ namespace YAT.Model.Test
 		{
 			using (Main main = new Main(EmptyTerminalFilePath))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.ApplicationStartError);
+				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
 
 				Assert.IsNull (main.StartArgs.WorkspaceSettingsHandler);
 				Assert.IsNull (main.StartArgs.TerminalSettingsHandler);
@@ -227,7 +227,7 @@ namespace YAT.Model.Test
 
 			using (Main main = new Main(new CommandLineArgs(new string[] { EmptyTerminalFilePath })))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.ApplicationStartError);
+				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
 
 				Assert.IsNull (main.StartArgs.WorkspaceSettingsHandler);
 				Assert.IsNull (main.StartArgs.TerminalSettingsHandler);
@@ -248,7 +248,7 @@ namespace YAT.Model.Test
 		{
 			using (Main main = new Main(EmptyWorkspaceFilePath))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.ApplicationStartError);
+				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
 
 				Assert.IsNull (main.StartArgs.WorkspaceSettingsHandler);
 				Assert.IsNull (main.StartArgs.TerminalSettingsHandler);
@@ -257,7 +257,7 @@ namespace YAT.Model.Test
 
 			using (Main main = new Main(new CommandLineArgs(new string[] { EmptyWorkspaceFilePath })))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.ApplicationStartError);
+				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
 
 				Assert.IsNull (main.StartArgs.WorkspaceSettingsHandler);
 				Assert.IsNull (main.StartArgs.TerminalSettingsHandler);
