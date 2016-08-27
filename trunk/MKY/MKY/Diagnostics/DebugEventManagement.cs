@@ -21,6 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -65,7 +66,29 @@ namespace MKY.Diagnostics
 				Debug.Indent();
 
 				foreach (var sink in sinks)
-					Debug.WriteLine(@"""" + sink.Value2.Target + @""" still references """ + sink.Value2.Method + @"""");
+				{
+					string target;
+					try
+					{
+						target = sink.Value2.Target.ToString();
+					}
+					catch (Exception ex)
+					{
+						target = "Exception while retrieving object information!" + Environment.NewLine + ex.Message;
+					}
+
+					string method;
+					try
+					{
+						method = sink.Value2.Method.ToString();
+					}
+					catch (Exception ex)
+					{
+						method = "Exception while retrieving object information!" + Environment.NewLine + ex.Message;
+					}
+
+					Debug.WriteLine(@"""" + target + @""" still references """ + method + @"""");
+				}
 
 				Debug.Unindent();
 			}

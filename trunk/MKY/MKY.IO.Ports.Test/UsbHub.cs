@@ -111,15 +111,18 @@ namespace MKY.IO.Ports.Test
 		/// <summary>Error message for convenience.</summary>
 		public const string ErrorMessage = @"The required """ + Executable + @""" is not available, therefore this test is excluded. Ensure that the ""MCD Conline USB HUB"" drivers are installed, and ""\Tools\CommandLine\USBHubControl.exe"" has been added to the system's PATH.";
 
+		/// <summary>Hub seems to also require some delay between two executions, otherwise execution will fail.</summary>
+		/// <remarks>Same delay as in "MCD Conline USB HUB 6-Port Runtime Config.bat".</remarks>
+		private const int WaitForNextExecution = 3000;
+
+		/// <summary>Delay until driver has been loaded, otherwise subsequent calls will fail.</summary>
 		/// <remarks>Same delay as in "MCD Conline USB HUB 6-Port Runtime Config.bat".</remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Conline' is the product name.")]
-		private const int WaitForDriverLoading = 10000;
+		private const int WaitForDriverLoading = 6000;
 
-		/// <remarks>Unloading seems to also require some delay, otherwise subsequent calls (e.g. enable) will fail.</remarks>
+		/// <summary>Unloading seems to also require some delay, otherwise subsequent calls will fail.</summary>
+		/// <remarks>Same delay as in "MCD Conline USB HUB 6-Port Runtime Config.bat".</remarks>
 		private const int WaitForDriverUnloading = 2000;
-
-		/// <remarks>Hub seems to also require some delay between two executions, otherwise execution will fail.</remarks>
-		private const int WaitForNextExecution = 1000;
 
 		#endregion
 

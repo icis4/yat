@@ -280,8 +280,11 @@ namespace YAT.Domain
 
 			foreach (DisplayElement de in this)
 			{
-				foreach (Pair<byte[], string> p in de.Origin)
-					l.AddRange(p.Value1);
+				if (de.Origin != null) // Foreach element where origin exists.
+				{
+					foreach (Pair<byte[], string> p in de.Origin)
+						l.AddRange(p.Value1);
+				}
 			}
 
 			return (l.ToArray());

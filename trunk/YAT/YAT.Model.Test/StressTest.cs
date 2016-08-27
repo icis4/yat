@@ -53,8 +53,7 @@ namespace YAT.Model.Test
 		[StressCategory, MinuteDurationCategory(1)]
 		public virtual void HeavySimultaneousUsage()
 		{
-			// Nothing yet (waiting for PowerShell intro to build stress test script).
-			// Note that there already is a TcpConnectionStressTest in MKY.IO.Serial.Socket.Test.
+			Assert.Ignore("The YAT stress test is not yet implemented (to be done with PowerShell to build stress test script). Note that there already is a TcpConnectionStressTest() in 'MKY.IO.Serial.Socket.Test'.");
 		}
 
 		#endregion

@@ -30,11 +30,13 @@ using System.Diagnostics.CodeAnalysis;
 
 using MKY.IO;
 using MKY.Recent;
+using MKY.Settings;
 
 using NUnit.Framework;
 
 using YAT.Model.Settings;
 using YAT.Model.Types;
+using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 
 #endregion
@@ -60,11 +62,26 @@ namespace YAT.Settings.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SetUp", Justification = "Naming according to NUnit.")]
+		[TestFixtureSetUp]
+		public virtual void TestFixtureSetUp()
+		{
+			// Create temporary in-memory application settings for this test run:
+			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
+
+			// Prevent auto-save of workspace settings:
+			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
+		}
+
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
 			Temp.CleanTempPath(GetType());
+
+			// Close and dispose of temporary in-memory application settings:
+			ApplicationSettings.CloseAndDispose();
 		}
 
 		#endregion

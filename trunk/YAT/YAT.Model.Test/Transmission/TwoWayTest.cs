@@ -64,7 +64,7 @@ namespace YAT.Model.Test.Transmission
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic in the constructor, and anyway, performance isn't an issue here.")]
 		static TwoWayTestData()
 		{
-			PingPongCommand = new Utilities.TestSet(new Types.Command(@"ABC DE F"), 1, new int[] { 2 }, new int[] { 8 }, true);
+			PingPongCommand = new Utilities.TestSet(new Types.Command(@"ABC DE F"), 1, new int[] { 3 }, new int[] { 8 }, true); // LineStart+LineBreak result in two more elements.
 		}
 
 		#endregion
@@ -82,7 +82,8 @@ namespace YAT.Model.Test.Transmission
 				yield return (new TestCaseData(PingPongCommand,  10).SetName("_PingPong10"));
 
 			////yield return (new TestCaseData(PingPongCommand, 100).SetName("_PingPong100"));
-			////Takes several minutes and doesn't reproduce bugs #3284550>#194 and #3480565>#221, therefore disabled.
+			//// Takes several minutes and doesn't reproduce bugs #3284550>#194 and #3480565>#221, therefore disabled.
+			//// \ToDo: Add dynamic TimeSpanCategory (same as for MT-SICS tests).
 			}
 		}
 
@@ -175,10 +176,10 @@ namespace YAT.Model.Test.Transmission
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
-			// Create temporary in-memory application settings for this test run.
+			// Create temporary in-memory application settings for this test run:
 			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
 
-			// Prevent auto-save of workspace settings.
+			// Prevent auto-save of workspace settings:
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
 		}
 
@@ -187,7 +188,7 @@ namespace YAT.Model.Test.Transmission
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			// Close and dispose of temporary in-memory application settings.
+			// Close and dispose of temporary in-memory application settings:
 			ApplicationSettings.CloseAndDispose();
 		}
 
@@ -259,7 +260,7 @@ namespace YAT.Model.Test.Transmission
 						Assert.Fail(@"Failed to start """ + terminalA.Caption + @"""");
 					}
 				}
-				Utilities.WaitForConnection(terminalA);
+				Utilities.WaitForStart(terminalA);
 
 				if (settingsDescriptorB.Value1 != null) // Loopback pair.
 				{

@@ -323,7 +323,7 @@ namespace YAT.Model
 				if (this.settingsHandler != null)
 					return (this.settingsHandler.SettingsFilePath);
 				else
-					return (string.Empty);
+					return ("");
 			}
 		}
 
@@ -1126,9 +1126,9 @@ namespace YAT.Model
 
 				OnClosed(new ClosedEventArgs(isMainExit));
 
-				// The workspace shall dispose of itself. This ensures that it is disposed AFTER
-				// it fired the 'Closed' event and all subscribers of the event may still refer
-				// to a non-disposed object. This is especially important, as the order of the
+				// The workspace shall dispose of itself to free all resources for sure. It must be
+				// done AFTER it fired the 'Closed' event and all subscribers of the event may still
+				// refer to a non-disposed object. This is especially important, as the order of the
 				// subscribers is not fixed, i.e. Model.Main may dispose of the workspace before
 				// View.Main receives the event callback!
 				Dispose();

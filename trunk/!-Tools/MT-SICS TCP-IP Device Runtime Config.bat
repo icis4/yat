@@ -23,14 +23,14 @@
 SET MT_SICS_EXE=ExampleBalance_RB_Evalboard_LPC1769.exe
 SET MT_SICS_EXE_PATH="D:\MKY\Projekte\Software\YAT\Test Environment\MT RB ExampleBalance"
 
-:: Verify that executable is available
+:: Verify that executable is available:
 WHERE %MT_SICS_EXE% >NUL 2>&1
 IF NOT %ERRORLEVEL% == 0 GOTO ERROR_EXE
 
-:: Change to executable directory (limitation of executable)
+:: Change to executable directory (limitation of executable):
 CD /D %MT_SICS_EXE_PATH%
 
-:: Start executable
+:: Start executable:
 %MT_SICS_EXE%
 
 GOTO END

@@ -281,7 +281,7 @@ namespace YAT.Model.Test
 			Workspace workspace;
 			Terminal terminal;
 
-			// Initial start with auto save on exit.
+			// Initial start with auto save on exit:
 
 			StartAndCreateDefaultTerminal(out main, out workspace, out terminal);
 
@@ -293,7 +293,7 @@ namespace YAT.Model.Test
 				VerifyFiles(workspace, true, terminal, true);
 			}
 
-			// Consecutive start with auto delete on close of workspace.
+			// Consecutive start with auto delete on close of workspace:
 
 			using (main = new Main())
 			{
@@ -1808,9 +1808,10 @@ namespace YAT.Model.Test
 
 		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, bool workspaceFileAutoExpected, Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
 		{
-			// Verify workspace file.
+			// Verify workspace file:
 			if (workspaceFileExpected)
 			{
+				Assert.IsNotNullOrEmpty(workspace.SettingsFilePath, prefix + "Workspace settings file path is empty!");
 				Assert.IsTrue(File.Exists(workspace.SettingsFilePath), prefix + "Workspace file doesn't exist!");
 
 				if (workspaceFileAutoExpected)
@@ -1823,11 +1824,12 @@ namespace YAT.Model.Test
 				Assert.IsFalse(File.Exists(workspace.SettingsFilePath), prefix + "Workspace file exists unexpectantly!");
 			}
 
-			// Verify terminal file(s).
+			// Verify terminal file(s):
 			for (int i = 0; i < terminal.Length; i++)
 			{
 				if (terminalFileExpected[i])
 				{
+					Assert.IsNotNullOrEmpty(terminal[i].SettingsFilePath, prefix + "Terminal settings file path is empty!");
 					Assert.IsTrue(File.Exists(terminal[i].SettingsFilePath), prefix + "Terminal file doesn't exist!");
 
 					if (terminalFileAutoExpected[i])
@@ -1841,16 +1843,16 @@ namespace YAT.Model.Test
 				}
 			}
 
-			// Verify application settings.
+			// Verify application settings:
 			if (workspaceFileExpected)
 				StringAssert.AreEqualIgnoringCase(workspace.SettingsFilePath, ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath, prefix + "Workspace file path not set!");
 			else
 				//// Note that the application settings may still contain a former workspace file path.
 				//// This is required to test certain use cases with normal and command line execution.
 				//// Therefore, do not check the local user settings, instead, check that the workspace file path is reset.
-				StringAssert.AreEqualIgnoringCase("", workspace.SettingsFilePath, prefix + "Workspace file path not reset!");
+				Assert.IsNullOrEmpty(workspace.SettingsFilePath, prefix + "Workspace file path not reset!");
 
-			// Verify recent settings.
+			// Verify recent settings:
 			if (workspaceFileExpected && (!workspaceFileAutoExpected))
 				Assert.IsTrue(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(workspace.SettingsFilePath), prefix + "Workspace file path doesn't exist in recent files!");
 			else

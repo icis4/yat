@@ -110,22 +110,22 @@ namespace YAT.Model.Test
 				{
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
 					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings, null),
-					              new Pair<TerminalSettingsDelegate<string>, string>(null, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings, null),
 					              "IPv4Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4LoopbackIsAvailable }));
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
 					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings, null),
-					              new Pair<TerminalSettingsDelegate<string>, string>(null, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings, null),
 					              "IPv6Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6LoopbackIsAvailable }));
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
 					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings, null),
-					              new Pair<TerminalSettingsDelegate<string>, string>(null, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings, null),
 					              "IPv4SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4SpecificInterfaceIsAvailable }));
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
 					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings, null),
-					              new Pair<TerminalSettingsDelegate<string>, string>(null, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings, null),
 					              "IPv6SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable }));
 				}
 			}
@@ -158,7 +158,7 @@ namespace YAT.Model.Test
 				this.expectedDataCounts    = new int[this.expectedLineCount];
 				for (int i = 0; i < this.expectedLineCount; i++)
 				{
-					this.expectedElementCounts[i] = 2; // 1 data element + 1 EOL element.
+					this.expectedElementCounts[i] = 3; // LineStart + 1 data element + LineBreak.
 					this.expectedDataCounts[i]    = command.CommandLines[i].Length;
 				}
 
@@ -611,6 +611,34 @@ namespace YAT.Model.Test
 		// Wait
 		//==========================================================================================
 
+		internal static void WaitForStart(Terminal terminal)
+		{
+			int timeout = 0;
+			do                         // Initially wait to allow async send,
+			{                          //   therefore, use do-while.
+				Thread.Sleep(WaitInterval);
+				timeout += WaitInterval;
+
+				if (timeout >= WaitTimeoutForConnectionChange)
+					Assert.Fail("Start timeout!");
+			}
+			while (!terminal.IsStarted);
+		}
+
+		internal static void WaitForOpen(Terminal terminal)
+		{
+			int timeout = 0;
+			do                         // Initially wait to allow async send,
+			{                          //   therefore, use do-while.
+				Thread.Sleep(WaitInterval);
+				timeout += WaitInterval;
+
+				if (timeout >= WaitTimeoutForConnectionChange)
+					Assert.Fail("Open timeout!");
+			}
+			while (!terminal.IsOpen);
+		}
+
 		internal static void WaitForConnection(Terminal terminal)
 		{
 			int timeout = 0;
@@ -637,6 +665,19 @@ namespace YAT.Model.Test
 					Assert.Fail("Connect timeout!");
 			}
 			while (!terminalA.IsConnected && !terminalB.IsConnected);
+		}
+
+		internal static void WaitForClose(Terminal terminal)
+		{
+			int timeout = 0;
+			while (terminal.IsOpen)
+			{
+				Thread.Sleep(WaitInterval);
+				timeout += WaitInterval;
+
+				if (timeout >= WaitTimeoutForConnectionChange)
+					Assert.Fail("Close timeout!");
+			}
 		}
 
 		internal static void WaitForDisconnection(Terminal terminal)
@@ -755,8 +796,10 @@ namespace YAT.Model.Test
 			//  > Terminal line count = number of *completed* lines in terminal
 			// This function uses display line count for verification!
 
-			// Calculate total expected dispaly line count at the receiver side:
-			int expectedTotalDisplayLineCountB = (testSet.ExpectedElementCounts.Length * cycle);
+			// Calculate total expected display line count at the receiver side:
+			int expectedTotalDisplayLineCountB = 0;
+			if (testSet.ExpectedElementCounts != null)
+				expectedTotalDisplayLineCountB = (testSet.ExpectedElementCounts.Length * cycle);
 
 			// Compare the expected line count at the receiver side:
 			if (displayLinesB.Count != expectedTotalDisplayLineCountB)

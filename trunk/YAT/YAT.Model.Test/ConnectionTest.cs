@@ -66,10 +66,10 @@ namespace YAT.Model.Test
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
-			// Create temporary in-memory application settings for this test run.
+			// Create temporary in-memory application settings for this test run:
 			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
 
-			// Prevent auto-save of workspace settings.
+			// Prevent auto-save of workspace settings:
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
 		}
 
@@ -78,7 +78,7 @@ namespace YAT.Model.Test
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			// Close and dispose of temporary in-memory application settings.
+			// Close and dispose of temporary in-memory application settings:
 			ApplicationSettings.CloseAndDispose();
 		}
 
@@ -120,7 +120,7 @@ namespace YAT.Model.Test
 						Assert.Fail(@"Failed to start """ + terminal.Caption + @"""");
 					}
 				}
-				Utilities.WaitForConnection(terminal);
+				Utilities.WaitForOpen(terminal);
 
 				const int WaitForOperation = 100;
 
@@ -257,7 +257,7 @@ namespace YAT.Model.Test
 						Assert.Fail(@"Failed to start """ + terminal.Caption + @"""");
 					}
 				}
-				Utilities.WaitForConnection(terminal);
+				Utilities.WaitForOpen(terminal);
 
 				const int WaitForOperation = 100;
 
@@ -268,14 +268,14 @@ namespace YAT.Model.Test
 				//// Disabling all outputs is used to improve speed when enabling single outputs below.
 				//// See comments in implementation of 'UsbHubControl' for explanation.
 				Assert.IsTrue(terminal.IsStarted); // Terminal still started, and must automatically close!
-				Utilities.WaitForDisconnection(terminal);
+				Utilities.WaitForClose(terminal);
 				Assert.IsFalse(terminal.IsOpen);
 				Assert.IsFalse(terminal.IsReadyToSend);
 
 				// Reconnect USB/RS-232 converter. Expected: No exceptions, terminal can be reopened.
 				Assert.IsTrue(UsbHubControl.Enable(portOut), "Failed to modify USB hub!");
 				Assert.IsTrue(terminal.IsStarted); // Terminal still started, and must automatically reopen!
-				Utilities.WaitForConnection(terminal);
+				Utilities.WaitForOpen(terminal);
 				Assert.IsTrue(terminal.IsOpen);
 				Assert.IsTrue(terminal.IsReadyToSend);
 
@@ -320,14 +320,14 @@ namespace YAT.Model.Test
 				// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
 				Assert.IsTrue(UsbHubControl.Disable(portOut), "Failed to modify USB hub!");
 				Assert.IsTrue(terminal.IsStarted); // Terminal still started, and must automatically close!
-				Utilities.WaitForDisconnection(terminal);
+				Utilities.WaitForClose(terminal);
 				Assert.IsFalse(terminal.IsOpen);
 				Assert.IsFalse(terminal.IsReadyToSend);
 
 				// Reconnect USB/RS-232 converter. Expected: No exceptions, terminal can be reopened.
 				Assert.IsTrue(UsbHubControl.Enable(portOut), "Failed to modify USB hub!");
 				Assert.IsTrue(terminal.IsStarted); // Terminal still started, and must automatically reopen!
-				Utilities.WaitForConnection(terminal);
+				Utilities.WaitForOpen(terminal);
 				Assert.IsTrue(terminal.IsOpen);
 				Assert.IsTrue(terminal.IsReadyToSend);
 
@@ -381,7 +381,7 @@ namespace YAT.Model.Test
 					// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
 					Assert.IsTrue(UsbHubControl.Disable(portOut), "Failed to modify USB hub!");
 					Assert.IsTrue(terminal.IsStarted); // Terminal still started, and must automatically close!
-					Utilities.WaitForDisconnection(terminal);
+					Utilities.WaitForClose(terminal);
 					Assert.IsFalse(terminal.IsOpen);
 					Assert.IsFalse(terminal.IsReadyToSend);
 
@@ -392,7 +392,7 @@ namespace YAT.Model.Test
 					// Reconnect USB/RS-232 converter. Expected: No exceptions, terminal can be reopened.
 					Assert.IsTrue(UsbHubControl.Enable(portOut), "Failed to modify USB hub!");
 					Assert.IsTrue(terminal.IsStarted); // Terminal still started, and must automatically reopen!
-					Utilities.WaitForConnection(terminal);
+					Utilities.WaitForOpen(terminal);
 					Assert.IsTrue(terminal.IsOpen);
 					Assert.IsTrue(terminal.IsReadyToSend);
 

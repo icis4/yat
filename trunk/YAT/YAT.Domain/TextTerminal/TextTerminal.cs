@@ -66,19 +66,15 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Element State
+		#region Types
 		//==========================================================================================
-		// Element State
+		// Types
 		//==========================================================================================
 
-		private List<byte> rxMultiByteDecodingStream;
-
-		#endregion
-
-		#region Line State
-		//==========================================================================================
-		// Line State
-		//==========================================================================================
+		#region Types > Line State
+		//------------------------------------------------------------------------------------------
+		// Types > Line State
+		//------------------------------------------------------------------------------------------
 
 		private enum LinePosition
 		{
@@ -137,10 +133,10 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Line Send Delay
-		//==========================================================================================
-		// Line Send Delay
-		//==========================================================================================
+		#region Types > Line Send Delay
+		//------------------------------------------------------------------------------------------
+		// Types > Line Send Delay
+		//------------------------------------------------------------------------------------------
 
 		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Private element.")]
 		private class LineSendDelayState
@@ -165,10 +161,14 @@ namespace YAT.Domain
 
 		#endregion
 
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
+
+		private List<byte> rxMultiByteDecodingStream;
 
 		private LineState txLineState;
 		private LineState rxLineState;

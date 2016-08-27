@@ -22,28 +22,51 @@
 
 SET USB_HUB_CTRL_EXE=USBHubControl.exe
 
-:: Verify that executable is available
+:: Verify that executable is available:
 WHERE %USB_HUB_CTRL_EXE% >NUL 2>&1
 IF NOT %ERRORLEVEL% == 0 GOTO ERROR_EXE
 
-:: Start Hub 1 'USB'
-%USB_HUB_CTRL_EXE% A6YJ5BDF 110111
+:: Reset both hubs:
+ECHO.
+ECHO Hub 1: Disabling devices...
+%USB_HUB_CTRL_EXE% A6YJ5BDF 000000
+ECHO Hub 2: Disabling devices...
+%USB_HUB_CTRL_EXE% A6YJ5A78 000000
+:: Time required for execution is below 3 seconds.
+:: Time required to unload the drivers is below 6 seconds.
+::  => 9 seconds timeout:
+TIMEOUT 9
+:: Note that the timeouts also need to be configured in 'MKY.IO.Ports.Test.UsbHubControl'.
 
-:: Start Hub 2 'RS-232'
-:: Ensure to activate devices subsequently (workaround to limitation of MCT or windows driver ??)
-:: Must be done in reversed order, enumeration/configuration of higher devices otherwise may fail ??
+:: Start hub 1 'USB'
 ECHO.
-ECHO Enabling higher pair of devices...
+ECHO Hub 1: Enabling devices...
+%USB_HUB_CTRL_EXE% A6YJ5BDF 110111
+:: Time required for execution is below 3 seconds.
+:: Time required to load the drivers is below 2 seconds.
+::  => 5 seconds timeout:
+TIMEOUT 5
+:: Note that the timeouts also need to be configured in 'MKY.IO.Ports.Test.UsbHubControl'.
+
+:: Start hub 2 'RS-232'
+:: Ensure to activate devices subsequently (workaround to limitation of MCT or windows driver ??).
+:: Must be done in reversed order, enumeration/configuration of higher devices otherwise may fail.
+ECHO.
+ECHO Hub 2: Enabling higher pair of devices...
 %USB_HUB_CTRL_EXE% A6YJ5A78 001100
-:: Time required for execution is approx 3 seconds
-TIMEOUT 10
-:: Time required to load the drivers is approx 6 seconds => 10 seconds timeout
+:: Time required for execution is below 3 seconds.
+:: Time required to load the drivers is below 6 seconds.
+::  => 9 seconds timeout:
+TIMEOUT 9
+:: Note that the timeouts also need to be configured in 'MKY.IO.Ports.Test.UsbHubControl'.
 ECHO.
-ECHO Additionally enabling lower pair of devices...
+ECHO Hub 2: Additionally enabling lower pair of devices...
 %USB_HUB_CTRL_EXE% A6YJ5A78 001111
-:: Time required for execution is approx 3 seconds
-TIMEOUT 10
-:: Time required to load the drivers is approx 6 seconds => 10 seconds timeout
+:: Time required for execution is below 3 seconds.
+:: Time required to load the drivers is below 6 seconds.
+::  => 9 seconds timeout:
+TIMEOUT 9
+:: Note that the timeouts also need to be configured in 'MKY.IO.Ports.Test.UsbHubControl'.
 
 GOTO END
 

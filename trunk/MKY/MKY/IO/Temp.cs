@@ -39,7 +39,7 @@ namespace MKY.IO
 		public static string MakeTempPath(Type type, bool outputPathToDebug = true)
 		{
 			// Results in e.g. "MKY".
-			string root = string.Empty;
+			string root = "";
 			string[] splits = type.Namespace.Split('.');
 			if (splits.Length > 0)
 				root = splits[0];

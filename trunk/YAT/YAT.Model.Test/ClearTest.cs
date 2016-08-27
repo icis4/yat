@@ -52,10 +52,10 @@ namespace YAT.Model.Test
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
-			// Create temporary in-memory application settings for this test run.
+			// Create temporary in-memory application settings for this test run:
 			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
 
-			// Prevent auto-save of workspace settings.
+			// Prevent auto-save of workspace settings:
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
 		}
 
@@ -64,7 +64,7 @@ namespace YAT.Model.Test
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			// Close and dispose of temporary in-memory application settings.
+			// Close and dispose of temporary in-memory application settings:
 			ApplicationSettings.CloseAndDispose();
 		}
 
@@ -98,7 +98,7 @@ namespace YAT.Model.Test
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					// Create test set to verify transmission:
-					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 2 }, new int[] { 1 }, true); // EOL results in one more element
+					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 3 }, new int[] { 1 }, true); // LineStart+LineBreak result in two more elements.
 
 					// Send test command:
 					terminalA.SendText(testSet.Command);
@@ -110,7 +110,7 @@ namespace YAT.Model.Test
 					                      testSet);
 
 					// Create test set to verify clear:
-					testSet = new Utilities.TestSet(new Types.Command(@""), 0, new int[] { 0 }, new int[] { 0 }, true); // Empty terminals expected
+					testSet = new Utilities.TestSet(new Types.Command(@""), 0, null, null, true); // Empty terminals expected.
 
 					// Clear data:
 					terminalA.ClearRepositories();
@@ -149,7 +149,7 @@ namespace YAT.Model.Test
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					// Create test set to verify transmission:
-					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 2 }, new int[] { 1 }, true); // EOL results in one more element
+					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 3 }, new int[] { 1 }, true); // LineStart+LineBreak result in two more elements.
 
 					// Send test command:
 					terminalA.SendText(testSet.Command);
@@ -170,7 +170,7 @@ namespace YAT.Model.Test
 						Assert.Fail("Incomplete line not received!");
 
 					// Create test set to verify clear:
-					testSet = new Utilities.TestSet(new Types.Command(@""), 0, new int[] { 0 }, new int[] { 0 }, true); // Empty terminals expected
+					testSet = new Utilities.TestSet(new Types.Command(@""), 0, null, null, true); // Empty terminals expected
 
 					// Clear data:
 					terminalA.ClearRepositories();
