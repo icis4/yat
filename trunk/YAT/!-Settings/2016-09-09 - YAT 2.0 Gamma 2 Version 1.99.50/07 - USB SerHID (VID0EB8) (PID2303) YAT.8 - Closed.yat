@@ -5,7 +5,7 @@
   <ProductVersion>1.99.50</ProductVersion>
   <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
-    <TimeStamp>2016-09-02T11:01:27.4539938+02:00</TimeStamp>
+    <TimeStamp>2016-09-02T11:01:04.5609782+02:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
@@ -14,7 +14,7 @@
     <Terminal>
       <TerminalType>Text</TerminalType>
       <IO>
-        <IOType>TcpAutoSocket</IOType>
+        <IOType>UsbSerialHid</IOType>
         <SerialPort>
           <PortId>
             <Name>COM1</Name>
@@ -69,9 +69,9 @@
         </Socket>
         <UsbSerialHidDevice>
           <DeviceInfo>
-            <VendorId>0</VendorId>
-            <ProductId>0</ProductId>
-            <SerialNumber />
+            <VendorId>3768</VendorId>
+            <ProductId>8963</ProductId>
+            <SerialNumber>YAT.8</SerialNumber>
           </DeviceInfo>
           <MatchSerial>true</MatchSerial>
           <ReportFormat>
@@ -290,7 +290,7 @@
     </Log>
   </Explicit>
   <Implicit>
-    <TerminalIsStarted>true</TerminalIsStarted>
+    <TerminalIsStarted>false</TerminalIsStarted>
     <LogIsOn>false</LogIsOn>
     <SendText>
       <Command>
@@ -321,14 +321,14 @@
       <Response>[None]</Response>
     </AutoResponse>
     <Window>
-      <State>Normal</State>
+      <State>Maximized</State>
       <Location>
-        <X>390</X>
+        <X>0</X>
         <Y>0</Y>
       </Location>
       <Size>
-        <Width>390</Width>
-        <Height>485</Height>
+        <Width>900</Width>
+        <Height>675</Height>
       </Size>
     </Window>
     <Layout>
@@ -339,7 +339,7 @@
       <TxMonitorSplitterRatio>0.333333343</TxMonitorSplitterRatio>
       <RxMonitorSplitterRatio>0.5</RxMonitorSplitterRatio>
       <PredefinedPanelIsVisible>true</PredefinedPanelIsVisible>
-      <PredefinedSplitterRatio>0.6042781</PredefinedSplitterRatio>
+      <PredefinedSplitterRatio>0.75</PredefinedSplitterRatio>
       <SendTextPanelIsVisible>true</SendTextPanelIsVisible>
       <SendFilePanelIsVisible>true</SendFilePanelIsVisible>
     </Layout>
