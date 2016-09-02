@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Gamma 2 Development Version 1.99.35
+// YAT 2.0 Gamma 2 Version 1.99.50
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -16,7 +16,7 @@
 // Copyright © 2007-2016 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
-// YAT is licensed under the GNU LGPL.
+// This source code is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
