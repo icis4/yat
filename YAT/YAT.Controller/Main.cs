@@ -94,10 +94,11 @@ namespace YAT.Controller
 
 		private const string ObjectDisposedExceptionInMscorlibMessage = 
 			"This 'ObjectDisposedException' exception in 'mscorlib' may happen when a serial COM " +
-			"port gets disconnected. It happens due to a bug in the .NET 'SerialPort' class for " +
-			"which Microsoft seems to have no plans fixing. The issue is known for internal " +
-			"ports as well as Microchip MCP2221 USB-to-UART/I2C bridges. To work around this " +
-			"issue, disable monitoring this port for disconnection in the terminal's port settings.";
+			"port gets physically disconnected. It happens due to a bug in the .NET 'SerialPort' " +
+			"class for which Microsoft seems to have no plans fixing. The issue is known for e.g. " +
+			"computer internal and external ports using the Microsoft USB Ser/CDC driver as well " +
+			"as Microchip MCP2221 USB-to-UART/I2C bridges. To prevent this issue, refrain from " +
+			"disconnecting a port while it is open.";
 
 		#endregion
 
