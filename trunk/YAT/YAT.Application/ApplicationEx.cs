@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Gamma 2 Development Version 1.99.35
+// YAT 2.0 Gamma 2 Version 1.99.50
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -17,7 +17,7 @@
 // Copyright © 2003-2016 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
-// YAT is licensed under the GNU LGPL.
+// This source code is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
@@ -45,10 +45,10 @@ namespace YAT
 		////public static readonly string ProductBuildName = " Final";
 
 		/// <summary>The product name postfix that describes the build.</summary>
-		////public static readonly string ProductBuildName = " Gamma 2";
+		public static readonly string ProductBuildName = " Gamma 2";
 
 		/////// <summary>The product name postfix that describes the build.</summary>
-		public static readonly string ProductBuildName = " Gamma 2 Development";
+		////public static readonly string ProductBuildName = " Gamma 2 Development";
 
 		/////// <summary>The product name postfix that describes the build.</summary>
 		////public static readonly string ProductBuildName = " Gamma 2 Preliminary";
@@ -83,7 +83,7 @@ namespace YAT
 			"Copyright © 2003-2016 Matthias Kläy.",
 			"All rights reserved.",
 			"",
-			"YAT is licensed under the GNU LGPL.",
+			"YAT is licensed under the GNU LGPL.", // Note that source files state "This source code is licensed under the GNU LGPL." to emphasize the context.
 			"See http://www.gnu.org/licenses/lgpl.html for license details."
 		};
 	}
