@@ -33,10 +33,10 @@ namespace YAT.Settings.Workspace
 	[XmlRoot("Settings")]
 	public class WorkspaceSettingsRoot : MKY.Settings.SettingsItem
 	{
-		/// <remarks>Is basically constant, but must be a normal variable for automatic XML serialization.</remarks>
-		private string settingsVersion = "1.2.0";
+		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
+		private string settingsVersion = "1.2.1";
 
-		/// <remarks>Is basically constant, but must be a normal variable for automatic XML serialization.</remarks>
+		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
 		private string productVersion = ApplicationEx.ProductVersion;
 
 		private bool autoSaved;
