@@ -34,6 +34,7 @@ using System.Windows.Forms;
 
 using MKY;
 using MKY.Collections.Generic;
+using MKY.IO.Serial.SerialPort;
 using MKY.Net;
 
 using NUnit.Framework;
@@ -328,6 +329,7 @@ namespace YAT.Model.Test
 			settings.TerminalType = Domain.TerminalType.Text;
 			settings.Terminal.IO.IOType = Domain.IOType.SerialPort;
 			settings.Terminal.IO.SerialPort.PortId = portId;
+			settings.Terminal.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software;
 			settings.TerminalIsStarted = true;
 			return (settings);
 		}
@@ -526,6 +528,7 @@ namespace YAT.Model.Test
 			settings.TerminalType = Domain.TerminalType.Text;
 			settings.Terminal.IO.IOType = Domain.IOType.UsbSerialHid;
 			settings.Terminal.IO.UsbSerialHidDevice.DeviceInfo = deviceInfo;
+			settings.Terminal.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software;
 			settings.TerminalIsStarted = true;
 			return (settings);
 		}
@@ -534,7 +537,7 @@ namespace YAT.Model.Test
 		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidDeviceASettings()
 		{
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceAIsAvailable)
-				return (GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceB));
+				return (GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceA));
 
 			Assert.Ignore("'DeviceA' is not available, therefore this test is excluded. Ensure that 'DeviceA' is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
