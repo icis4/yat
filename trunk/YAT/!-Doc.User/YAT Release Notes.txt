@@ -146,6 +146,7 @@ Important changes:
 - Additional hints (tool tips) added to the settings dialogs (feature request #189).
 - Help window is now sizeable to display more/all content (feature request #237).
 - Command line options fixed, extended and slightly changed (bug #335 and feature request #260).
+- DejaVu fonts updated to 2.37
 - Visual Studio upgraded to 2015 Community Edition, including installer (VSI).
 - Test board (serial COM ports, USB devices,...) created and test cases adapted accordingly.
 
