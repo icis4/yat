@@ -755,7 +755,7 @@ namespace YAT.Model.Types
 			if (other != null) // Using 'Description' as this is visible to the user.
 				return (string.Compare(Description, other.Description, StringComparison.CurrentCulture));
 			else
-				throw (new ArgumentException("Object is not a 'Command' entry!"));
+				throw (new ArgumentException(obj.ToString() + " does not specify a 'Command'!"));
 		}
 
 		#endregion

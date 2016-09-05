@@ -43,11 +43,11 @@ namespace MKY
 	/// underlying type <see cref="Enum"/> isn't.
 	/// </remarks>
 	/// <example>
-	/// 
+	///
 	/// -------------------------------------------------------------------------------------------
 	/// Creating a concrete EnumEx including implicit conversion operators
 	/// -------------------------------------------------------------------------------------------
-	/// 
+	///
 	/// <code>
 	/// public enum Mode
 	/// {
@@ -164,7 +164,7 @@ namespace MKY
 	/// -------------------------------------------
 	/// Adding ModeEx design time support to a class
 	/// -------------------------------------------
-	/// 
+	///
 	/// <code>
 	/// public class EnumExClient
 	/// {
@@ -323,7 +323,7 @@ namespace MKY
 			if (other != null)
 				return (UnderlyingEnum.CompareTo(other.UnderlyingEnum));
 			else
-				throw (new ArgumentException("Object is not a EnumEx!"));
+				throw (new ArgumentException(obj.ToString() + " does not specify an 'EnumEx'!"));
 		}
 
 		#endregion
@@ -469,9 +469,9 @@ namespace MKY
 		/// </exception>
 		/// <exception cref="ArgumentException">
 		/// The type of value is not an EnumEx.
-		/// 
+		///
 		/// -or-
-		/// 
+		///
 		/// The type of value is not an underlying type of EnumEx.
 		/// </exception>
 		public static bool IsDefined(Type enumExType, object value)
@@ -490,9 +490,9 @@ namespace MKY
 		/// </exception>
 		/// <exception cref="ArgumentException">
 		/// value is either an empty string or only contains whitespace.
-		/// 
+		///
 		/// -or-
-		/// 
+		///
 		/// value is a name, but not one of the named constants defined for the
 		/// enumeration.
 		/// </exception>
@@ -514,9 +514,9 @@ namespace MKY
 		/// </exception>
 		/// <exception cref="ArgumentException">
 		/// value is either an empty string or only contains whitespace.
-		/// 
+		///
 		/// -or-
-		/// 
+		///
 		/// value is a name, but not one of the named constants defined for the
 		/// enumeration.
 		/// </exception>
