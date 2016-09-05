@@ -85,6 +85,7 @@ namespace YAT.Model.Test.Transmission
 			get
 			{
 				string category01m = new NUnit.MinuteDurationCategoryAttribute( 1).Name;
+				string category10m = new NUnit.MinuteDurationCategoryAttribute(10).Name;
 				string category60m = new NUnit.MinuteDurationCategoryAttribute(60).Name;
 				string category24h = new NUnit.HourDurationCategoryAttribute(24).Name;
 
@@ -96,12 +97,14 @@ namespace YAT.Model.Test.Transmission
 
 					// Calculate number of transmissions based on the expected time available/required:
 					int loops01m = (int)((       60.0 * 1000) / c.Value2.TotalMilliseconds);
+					int loops10m = (int)((      600.0 * 1000) / c.Value2.TotalMilliseconds);
 					int loops60m = (int)((     3600.0 * 1000) / c.Value2.TotalMilliseconds);
 					int loops24h = (int)((24 * 3600.0 * 1000) / c.Value2.TotalMilliseconds);
 
 					yield return (new KeyValuePair<TestCaseData, string>(new TestCaseData(stimulus, expected,        1).SetName(stimulus +  "_1"), null));
 					yield return (new KeyValuePair<TestCaseData, string>(new TestCaseData(stimulus, expected,       10).SetName(stimulus + "_10"), null));
 					yield return (new KeyValuePair<TestCaseData, string>(new TestCaseData(stimulus, expected, loops01m).SetName(stimulus + "_" + loops01m), category01m));
+					yield return (new KeyValuePair<TestCaseData, string>(new TestCaseData(stimulus, expected, loops10m).SetName(stimulus + "_" + loops10m), category10m));
 					yield return (new KeyValuePair<TestCaseData, string>(new TestCaseData(stimulus, expected, loops60m).SetName(stimulus + "_" + loops60m), category60m));
 					yield return (new KeyValuePair<TestCaseData, string>(new TestCaseData(stimulus, expected, loops24h).SetName(stimulus + "_" + loops24h), category24h));
 				}
@@ -119,32 +122,32 @@ namespace YAT.Model.Test.Transmission
 					!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected) // Add 'A' if neither device is available => 'Ignore' is issued in that case.
 				{
 					Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextSerialPortMTSicsDeviceASettings, null);
-					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsConnected, "SerialPort_DeviceA_"));
+					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsConnected, "SerialPort_MTSicsDeviceA_"));
 				}
 
 				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
 				{
 					Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextSerialPortMTSicsDeviceBSettings, null);
-					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsConnected, "SerialPort_DeviceB_"));
+					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsConnected, "SerialPort_MTSicsDeviceB_"));
 				}
 
 				// Add device in any case => 'Ignore' is issued if device is not available.
 				{
 					Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextTcpAutoSocketMTSicsDeviceSettings, null);
-					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.Net.Test.ConfigurationCategoryStrings.MTSicsDeviceIsAvailable, "TcpAutoSocket_Device_"));
+					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.Net.Test.ConfigurationCategoryStrings.MTSicsDeviceIsAvailable, "TcpAutoSocket_MTSicsDevice_"));
 				}
 
 				if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ||
 					!MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected) // Add 'A' if neither device is available => 'Ignore' is issued in that case.
 				{
 					Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextUsbSerialHidMTSicsDeviceASettings, null);
-					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Usb.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsConnected, "UsbSerialHid_DeviceA_"));
+					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Usb.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsConnected, "UsbSerialHid_MTSicsDeviceA_"));
 				}
 
 				if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
 				{
 					Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextUsbSerialHidMTSicsDeviceBSettings, null);
-					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Usb.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsConnected, "UsbSerialHid_DeviceB_"));
+					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Usb.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsConnected, "UsbSerialHid_MTSicsDeviceB_"));
 				}
 
 				foreach (Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string> dev in devs)
