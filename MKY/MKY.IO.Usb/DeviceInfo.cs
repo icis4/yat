@@ -686,7 +686,7 @@ namespace MKY.IO.Usb
 			}
 			else
 			{
-				throw (new ArgumentException(obj.ToString() + " is not a 'UsbDeviceId'!"));
+				throw (new ArgumentException(obj.ToString() + " does not specify a 'UsbDeviceId'!"));
 			}
 		}
 
