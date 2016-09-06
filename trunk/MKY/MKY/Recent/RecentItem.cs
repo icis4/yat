@@ -185,10 +185,10 @@ namespace MKY.Recent
 		/// Compares this instance to a specified object and returns an indication
 		/// of their relative values.
 		/// </summary>
-		public virtual int CompareTo(RecentItem<T> other)
+		public virtual int CompareTo(RecentItem<T> obj)
 		{
-			if (other != null)
-				return (-(this.timeStamp.CompareTo(other.timeStamp))); // Sort inverse.
+			if (obj != null)
+				return (-(this.timeStamp.CompareTo(obj.timeStamp))); // Sort inverse.
 			else
 				throw (new ArgumentException(obj.ToString() + " does not specify a 'RecentItem'!"));
 		}
