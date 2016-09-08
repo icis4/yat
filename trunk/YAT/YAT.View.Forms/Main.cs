@@ -530,7 +530,6 @@ namespace YAT.View.Forms
 			if (workspaceIsReady)
 				workspaceFileIsWritable = this.workspace.SettingsFileIsWritable;
 
-			toolStripMenuItem_MainMenu_File_Workspace_New.Enabled    = !workspaceIsReady;
 			toolStripMenuItem_MainMenu_File_Workspace_Close.Enabled  = workspaceIsReady;
 			toolStripMenuItem_MainMenu_File_Workspace_Save.Enabled   = workspaceIsReady && workspaceFileIsWritable;
 			toolStripMenuItem_MainMenu_File_Workspace_SaveAs.Enabled = workspaceIsReady;

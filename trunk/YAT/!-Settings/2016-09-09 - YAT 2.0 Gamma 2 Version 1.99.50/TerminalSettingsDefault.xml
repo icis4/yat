@@ -5,7 +5,7 @@
   <ProductVersion>1.99.50</ProductVersion>
   <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
-    <TimeStamp>2016-09-02T10:33:53.6420923+02:00</TimeStamp>
+    <TimeStamp>2016-09-08T11:14:44.2819074+02:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
@@ -40,13 +40,14 @@
             <Enabled>false</Enabled>
             <Size>2048</Size>
           </OutputBufferSize>
+          <OutputMaxBaudRate>true</OutputMaxBaudRate>
           <MaxChunkSize>
             <Enabled>true</Enabled>
-            <Size>64</Size>
+            <Size>48</Size>
           </MaxChunkSize>
           <MaxSendRate>
             <Enabled>false</Enabled>
-            <Size>64</Size>
+            <Size>48</Size>
             <Interval>10</Interval>
           </MaxSendRate>
           <NoSendOnOutputBreak>true</NoSendOnOutputBreak>

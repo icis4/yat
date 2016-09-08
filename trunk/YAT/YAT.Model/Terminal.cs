@@ -1814,13 +1814,15 @@ namespace YAT.Model
 				}
 				else if (!this.settingsRoot.ExplicitHaveChanged)
 				{
-					// Implicit have changed, try to auto save but save is not required.
-					doSave = false;
+					// Implicit have changed, save is not required but try to auto save if desired.
+					if (autoSaveIsAllowed)
+						doSave = true;
+					else
+						success = true;
 				}
 				else
 				{
-					// Explicit have changed, try to auto save and save is required if auto save is desired.
-					doSave = autoSaveIsAllowed;
+					// Explicit have changed, save is required.
 				}
 			}
 			else
@@ -1842,7 +1844,6 @@ namespace YAT.Model
 				else
 				{
 					// Explicit have changed, save is required.
-					doSave = true;
 				}
 			}
 

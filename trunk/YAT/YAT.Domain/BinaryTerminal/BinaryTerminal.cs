@@ -258,7 +258,14 @@ namespace YAT.Domain
 					{
 						// In the 'normal' case, the timer is stopped in ExecuteLineEnd().
 						if (this.LineBreakTimer != null)
+						{
+							// \remind (2016-09-08 / mky)
+							// Ensure to free referenced resources such as the 'Elapsed' event handler.
+							// Whole timer handling should be encapsulated into the 'LineState' class.
+							EventHandlerHelper.RemoveEventHandler(this.LineBreakTimer, "Elapsed");
+
 							this.LineBreakTimer.Dispose();
+						}
 					}
 
 					// Set state to disposed:
@@ -378,11 +385,23 @@ namespace YAT.Domain
 			var casted = (terminal as BinaryTerminal);
 			if (casted != null)
 			{
+				// Tx:
+
 				this.txLineState = casted.txLineState;
+				                                               // \remind (2016-09-08 / mky)
+				if (this.txLineState.LineBreakTimer != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
+					this.txLineState.LineBreakTimer.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
+
 				this.txLineState.LineBreakTimer = new LineBreakTimer(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
 				this.txLineState.LineBreakTimer.Elapsed += txTimedLineBreak_Elapsed;
 
+				// Rx:
+
 				this.rxLineState = casted.rxLineState;
+				                                               // \remind (2016-09-08 / mky)
+				if (this.rxLineState.LineBreakTimer != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
+					this.rxLineState.LineBreakTimer.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
+
 				this.rxLineState.LineBreakTimer = new LineBreakTimer(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
 				this.rxLineState.LineBreakTimer.Elapsed += rxTimedLineBreak_Elapsed;
 
@@ -511,6 +530,9 @@ namespace YAT.Domain
 				t = new LineBreakTimer(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
 				t.Elapsed += txTimedLineBreak_Elapsed;
 
+				if (this.txLineState != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
+					this.txLineState.Dispose();
+
 				this.txLineState = new LineState(new SequenceQueue(txSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore), DateTime.Now, t);
 
 				// Rx:
@@ -525,6 +547,9 @@ namespace YAT.Domain
 
 				t = new LineBreakTimer(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
 				t.Elapsed += rxTimedLineBreak_Elapsed;
+
+				if (this.rxLineState != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
+					this.rxLineState.Dispose();
 
 				this.rxLineState = new LineState(new SequenceQueue(rxSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore), DateTime.Now, t);
 			}
