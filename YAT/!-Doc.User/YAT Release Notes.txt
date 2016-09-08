@@ -132,6 +132,7 @@ Important changes:
 - Parser error message improved in terms of accuracy of the error location (bug #268).
 - File handling as well as error messages improved and unified (bugs #320 and #338).
 - Lookup of serial COM ports improved (also fixes bug #23).
+- New option to limit the serial COM port output to the selected baud rate - 25%.
 - Handling of serial COM port RFR and DTR state improved (feature request #236 and bugs #203, #294).
 - Handling of serial COM port XOff state fixed and improved (feature req. #216 and bugs #255, #295).
 - Serial COM port software flow control options to send XOn more frequently added (feature #206).

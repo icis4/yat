@@ -1271,7 +1271,7 @@ namespace MKY.IO.Serial.SerialPort
 		private void SendThread()
 		{
 			Rate maxBaudRate = new Rate(100, 1000);
-			int maxFramesPerSecond = (int)(1.0 / this.settings.Communication.FrameLength);
+			int maxFramesPerSecond = (int)((1.0 / this.settings.Communication.FrameLength) * 0.75); // 25% safety margin.
 
 			Rate maxSendRate = new Rate(this.settings.MaxSendRate.Interval);
 

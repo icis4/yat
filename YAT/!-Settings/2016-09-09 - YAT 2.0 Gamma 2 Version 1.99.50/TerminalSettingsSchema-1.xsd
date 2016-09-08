@@ -632,6 +632,7 @@
           <xs:element minOccurs="1" maxOccurs="1" name="AliveMonitor" type="AutoInterval" />
           <xs:element minOccurs="1" maxOccurs="1" name="AutoReopen" type="AutoInterval" />
           <xs:element minOccurs="1" maxOccurs="1" name="OutputBufferSize" type="OutputBufferSize" />
+          <xs:element minOccurs="1" maxOccurs="1" name="OutputMaxBaudRate" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="MaxChunkSize" type="ChunkSize" />
           <xs:element minOccurs="1" maxOccurs="1" name="MaxSendRate" type="SendRate" />
           <xs:element minOccurs="1" maxOccurs="1" name="NoSendOnOutputBreak" type="xs:boolean" />

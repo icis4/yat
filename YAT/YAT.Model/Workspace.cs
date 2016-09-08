@@ -1008,13 +1008,19 @@ namespace YAT.Model
 				else if (!this.settingsRoot.ExplicitHaveChanged)
 				{
 					// Implicit have changed, save is not required but try to auto save if desired.
-					doSaveWorkspace = autoSaveIsAllowedForWorkspace;
+					if (autoSaveIsAllowedForWorkspace)
+						doSaveWorkspace = true;
+					else
+						successWithWorkspace = true;
 				}
 				else
 				{
 					// Explicit have changed, save is required, but only if desired.
 					if (!ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace && !SettingsFileHasAlreadyBeenNormallySaved)
+					{
 						doSaveWorkspace = false;
+						successWithWorkspace = true;
+					}
 				}
 			}
 			else

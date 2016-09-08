@@ -345,9 +345,9 @@
 			this.checkBox_OutputMaxBaudRate.AutoSize = true;
 			this.checkBox_OutputMaxBaudRate.Location = new System.Drawing.Point(6, 48);
 			this.checkBox_OutputMaxBaudRate.Name = "checkBox_OutputMaxBaudRate";
-			this.checkBox_OutputMaxBaudRate.Size = new System.Drawing.Size(207, 17);
+			this.checkBox_OutputMaxBaudRate.Size = new System.Drawing.Size(242, 17);
 			this.checkBox_OutputMaxBaudRate.TabIndex = 3;
-			this.checkBox_OutputMaxBaudRate.Text = "Output no more than baud &rate permits";
+			this.checkBox_OutputMaxBaudRate.Text = "Output no more than (baud &rate - 25%) permits";
 			this.toolTip.SetToolTip(this.checkBox_OutputMaxBaudRate, resources.GetString("checkBox_OutputMaxBaudRate.ToolTip"));
 			this.checkBox_OutputMaxBaudRate.UseVisualStyleBackColor = true;
 			this.checkBox_OutputMaxBaudRate.CheckedChanged += new System.EventHandler(this.checkBox_OutputMaxBaudRate_CheckedChanged);
