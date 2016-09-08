@@ -14,12 +14,12 @@
       <Window>
         <State>Normal</State>
         <Location>
-          <X>588</X>
+          <X>394</X>
           <Y>0</Y>
         </Location>
         <Size>
-          <Width>588</Width>
-          <Height>691</Height>
+          <Width>394</Width>
+          <Height>496</Height>
         </Size>
       </Window>
     </TerminalSettings>
@@ -32,8 +32,8 @@
           <Y>0</Y>
         </Location>
         <Size>
-          <Width>588</Width>
-          <Height>691</Height>
+          <Width>394</Width>
+          <Height>496</Height>
         </Size>
       </Window>
     </TerminalSettings>
