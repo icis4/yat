@@ -38,7 +38,7 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 
 		/// <remarks>
-		/// Implemented as property that creates a new object on each call to ensure that
+		/// Must be implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
 		public static AutoInterval AliveMonitorDefault
@@ -50,7 +50,7 @@ namespace MKY.IO.Serial.SerialPort
 		public const int AliveMonitorMinInterval = 100;
 
 		/// <remarks>
-		/// Implemented as property that creates a new object on each call to ensure that
+		/// Must be implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
 		public static AutoInterval AutoReopenDefault
@@ -62,7 +62,7 @@ namespace MKY.IO.Serial.SerialPort
 		public const int AutoReopenMinInterval = 100;
 
 		/// <remarks>
-		/// Implemented as property that creates a new object on each call to ensure that
+		/// Must be implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
 		public static OutputBufferSize OutputBufferSizeDefault
@@ -70,22 +70,37 @@ namespace MKY.IO.Serial.SerialPort
 			get { return (new OutputBufferSize(false, 2048)); } // 2048 is default of 'SerialPort'.
 		}
 
+		/// <summary></summary>
+		public const bool OutputMaxBaudRateDefault = true;
+
+		/// <summary>
+		/// Default of 48 bytes reflects the typical USB report size of 64, minus some bytes of
+		/// meta data, minus some spare bytes, to a value that looks 'well' for computer engineers.
+		/// 
+		/// Some concrete values 'measured' by experiment:
+		///  > Prolific USB/COM @ MT MKy looses data as soon as chunks above 356 bytes are sent.
+		///  > Dell docking station @ MT SSt (SPI/COM Intel chipset, Microsoft driver), looses
+		///                                      data as soon as chunks above 56 bytes are sent.
+		/// </summary>
 		/// <remarks>
-		/// Implemented as property that creates a new object on each call to ensure that
+		/// Must be implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
 		public static ChunkSize MaxChunkSizeDefault
 		{
-			get { return (new ChunkSize(true, 64)); } // 64 bytes reflects the typical USB report size, i.e. USB Ser/CDC converters.
+			get { return (new ChunkSize(true, 48)); }
 		}
 
+		/// <summary>
+		/// Default is 48 bytes per 10 ms, an example limitation of an embedded system.
+		/// </summary>
 		/// <remarks>
-		/// Implemented as property that creates a new object on each call to ensure that
+		/// Must be implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
 		public static SendRate MaxSendRateDefault
 		{
-			get { return (new SendRate(false, 64, 10)); } // 64 bytes per 10 ms, an example limitation of an embedded sytems.
+			get { return (new SendRate(false, 48, 10)); }
 		}
 
 		/// <summary></summary>
@@ -112,6 +127,7 @@ namespace MKY.IO.Serial.SerialPort
 		private AutoInterval aliveMonitor;
 		private AutoInterval autoReopen;
 		private OutputBufferSize outputBufferSize;
+		private bool outputMaxBaudRate;
 		private ChunkSize maxChunkSize;
 		private SendRate maxSendRate;
 
@@ -184,6 +200,7 @@ namespace MKY.IO.Serial.SerialPort
 			AliveMonitor        = rhs.AliveMonitor;
 			AutoReopen          = rhs.AutoReopen;
 			OutputBufferSize    = rhs.OutputBufferSize;
+			OutputMaxBaudRate   = rhs.OutputMaxBaudRate;
 			MaxChunkSize        = rhs.MaxChunkSize;
 			MaxSendRate         = rhs.MaxSendRate;
 
@@ -210,6 +227,7 @@ namespace MKY.IO.Serial.SerialPort
 			AliveMonitor        = AliveMonitorDefault;
 			AutoReopen          = AutoReopenDefault;
 			OutputBufferSize    = OutputBufferSizeDefault;
+			OutputMaxBaudRate   = OutputMaxBaudRateDefault;
 			MaxChunkSize        = MaxChunkSizeDefault;
 			MaxSendRate         = MaxSendRateDefault;
 
@@ -299,6 +317,21 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.outputBufferSize != value)
 				{
 					this.outputBufferSize = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("OutputMaxBaudRate")]
+		public virtual bool OutputMaxBaudRate
+		{
+			get { return (this.outputMaxBaudRate); }
+			set
+			{
+				if (this.outputMaxBaudRate != value)
+				{
+					this.outputMaxBaudRate = value;
 					SetChanged();
 				}
 			}
@@ -406,6 +439,7 @@ namespace MKY.IO.Serial.SerialPort
 				(AliveMonitor        == other.AliveMonitor) &&
 				(AutoReopen          == other.AutoReopen) &&
 				(OutputBufferSize    == other.OutputBufferSize) &&
+				(OutputMaxBaudRate   == other.OutputMaxBaudRate) &&
 				(MaxChunkSize        == other.MaxChunkSize) &&
 				(MaxSendRate         == other.MaxSendRate) &&
 
@@ -432,6 +466,7 @@ namespace MKY.IO.Serial.SerialPort
 				hashCode = (hashCode * 397) ^  AliveMonitor           .GetHashCode();
 				hashCode = (hashCode * 397) ^  AutoReopen             .GetHashCode();
 				hashCode = (hashCode * 397) ^  OutputBufferSize       .GetHashCode();
+				hashCode = (hashCode * 397) ^  OutputMaxBaudRate      .GetHashCode();
 				hashCode = (hashCode * 397) ^  MaxChunkSize           .GetHashCode();
 				hashCode = (hashCode * 397) ^  MaxSendRate            .GetHashCode();
 

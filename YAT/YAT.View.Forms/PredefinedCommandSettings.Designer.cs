@@ -32,6 +32,7 @@
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_ClearPage = new System.Windows.Forms.Button();
 			this.groupBox_Page = new System.Windows.Forms.GroupBox();
+			this.label_ExplicitDefaultRadix = new System.Windows.Forms.Label();
 			this.predefinedCommandSettingsSet_12 = new YAT.View.Controls.PredefinedCommandSettingsSet();
 			this.predefinedCommandSettingsSet_11 = new YAT.View.Controls.PredefinedCommandSettingsSet();
 			this.predefinedCommandSettingsSet_10 = new YAT.View.Controls.PredefinedCommandSettingsSet();
@@ -67,7 +68,6 @@
 			this.label_ExampleText_Data = new System.Windows.Forms.Label();
 			this.label_Example = new System.Windows.Forms.Label();
 			this.button_Help = new System.Windows.Forms.Button();
-			this.groupBox_Predefined = new System.Windows.Forms.GroupBox();
 			this.groupBox_Pages = new System.Windows.Forms.GroupBox();
 			this.button_CopyPage = new System.Windows.Forms.Button();
 			this.listBox_Pages = new System.Windows.Forms.ListBox();
@@ -78,9 +78,7 @@
 			this.button_InsertPage = new System.Windows.Forms.Button();
 			this.button_AddPage = new System.Windows.Forms.Button();
 			this.button_NamePage = new System.Windows.Forms.Button();
-			this.label_ExplicitDefaultRadix = new System.Windows.Forms.Label();
 			this.groupBox_Page.SuspendLayout();
-			this.groupBox_Predefined.SuspendLayout();
 			this.groupBox_Pages.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -88,10 +86,10 @@
 			// 
 			this.button_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_OK.Location = new System.Drawing.Point(617, 442);
+			this.button_OK.Location = new System.Drawing.Point(611, 417);
 			this.button_OK.Name = "button_OK";
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
-			this.button_OK.TabIndex = 1;
+			this.button_OK.TabIndex = 2;
 			this.button_OK.Text = "OK";
 			this.button_OK.Click += new System.EventHandler(this.button_OK_Click);
 			// 
@@ -99,10 +97,10 @@
 			// 
 			this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button_Cancel.Location = new System.Drawing.Point(698, 442);
+			this.button_Cancel.Location = new System.Drawing.Point(692, 417);
 			this.button_Cancel.Name = "button_Cancel";
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
-			this.button_Cancel.TabIndex = 2;
+			this.button_Cancel.TabIndex = 3;
 			this.button_Cancel.Text = "Cancel";
 			this.button_Cancel.Click += new System.EventHandler(this.button_Cancel_Click);
 			// 
@@ -157,12 +155,22 @@
 			this.groupBox_Page.Controls.Add(this.label_ExampleText_Description);
 			this.groupBox_Page.Controls.Add(this.label_ExampleText_Data);
 			this.groupBox_Page.Controls.Add(this.label_Example);
-			this.groupBox_Page.Location = new System.Drawing.Point(231, 16);
+			this.groupBox_Page.Location = new System.Drawing.Point(237, 12);
 			this.groupBox_Page.Name = "groupBox_Page";
 			this.groupBox_Page.Size = new System.Drawing.Size(620, 392);
 			this.groupBox_Page.TabIndex = 1;
 			this.groupBox_Page.TabStop = false;
 			this.groupBox_Page.Text = "<Page>";
+			// 
+			// label_ExplicitDefaultRadix
+			// 
+			this.label_ExplicitDefaultRadix.AutoSize = true;
+			this.label_ExplicitDefaultRadix.Location = new System.Drawing.Point(8, 16);
+			this.label_ExplicitDefaultRadix.Name = "label_ExplicitDefaultRadix";
+			this.label_ExplicitDefaultRadix.Size = new System.Drawing.Size(74, 13);
+			this.label_ExplicitDefaultRadix.TabIndex = 0;
+			this.label_ExplicitDefaultRadix.Text = "Default Radix:";
+			this.label_ExplicitDefaultRadix.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// predefinedCommandSettingsSet_12
 			// 
@@ -521,25 +529,12 @@
 			// button_Help
 			// 
 			this.button_Help.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Help.Location = new System.Drawing.Point(779, 442);
+			this.button_Help.Location = new System.Drawing.Point(773, 417);
 			this.button_Help.Name = "button_Help";
 			this.button_Help.Size = new System.Drawing.Size(75, 23);
-			this.button_Help.TabIndex = 3;
+			this.button_Help.TabIndex = 4;
 			this.button_Help.Text = "Help";
 			this.button_Help.Click += new System.EventHandler(this.button_Help_Click);
-			// 
-			// groupBox_Predefined
-			// 
-			this.groupBox_Predefined.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Predefined.Controls.Add(this.groupBox_Pages);
-			this.groupBox_Predefined.Controls.Add(this.groupBox_Page);
-			this.groupBox_Predefined.Location = new System.Drawing.Point(12, 12);
-			this.groupBox_Predefined.Name = "groupBox_Predefined";
-			this.groupBox_Predefined.Size = new System.Drawing.Size(857, 415);
-			this.groupBox_Predefined.TabIndex = 0;
-			this.groupBox_Predefined.TabStop = false;
 			// 
 			// groupBox_Pages
 			// 
@@ -554,7 +549,7 @@
 			this.groupBox_Pages.Controls.Add(this.button_InsertPage);
 			this.groupBox_Pages.Controls.Add(this.button_AddPage);
 			this.groupBox_Pages.Controls.Add(this.button_NamePage);
-			this.groupBox_Pages.Location = new System.Drawing.Point(6, 16);
+			this.groupBox_Pages.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Pages.Name = "groupBox_Pages";
 			this.groupBox_Pages.Size = new System.Drawing.Size(219, 392);
 			this.groupBox_Pages.TabIndex = 0;
@@ -643,24 +638,15 @@
 			this.button_NamePage.Text = "&Name...";
 			this.button_NamePage.Click += new System.EventHandler(this.button_NamePage_Click);
 			// 
-			// label_ExplicitDefaultRadix
-			// 
-			this.label_ExplicitDefaultRadix.AutoSize = true;
-			this.label_ExplicitDefaultRadix.Location = new System.Drawing.Point(8, 16);
-			this.label_ExplicitDefaultRadix.Name = "label_ExplicitDefaultRadix";
-			this.label_ExplicitDefaultRadix.Size = new System.Drawing.Size(74, 13);
-			this.label_ExplicitDefaultRadix.TabIndex = 0;
-			this.label_ExplicitDefaultRadix.Text = "Default Radix:";
-			this.label_ExplicitDefaultRadix.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// PredefinedCommandSettings
 			// 
 			this.AcceptButton = this.button_OK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(881, 478);
-			this.Controls.Add(this.groupBox_Predefined);
+			this.ClientSize = new System.Drawing.Size(869, 452);
+			this.Controls.Add(this.groupBox_Page);
+			this.Controls.Add(this.groupBox_Pages);
 			this.Controls.Add(this.button_Help);
 			this.Controls.Add(this.button_Cancel);
 			this.Controls.Add(this.button_OK);
@@ -674,7 +660,6 @@
 			this.Shown += new System.EventHandler(this.PredefinedCommandSettings_Shown);
 			this.groupBox_Page.ResumeLayout(false);
 			this.groupBox_Page.PerformLayout();
-			this.groupBox_Predefined.ResumeLayout(false);
 			this.groupBox_Pages.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -703,7 +688,6 @@
 		private System.Windows.Forms.Button button_OK;
 		private System.Windows.Forms.Button button_Cancel;
 		private System.Windows.Forms.Button button_Help;
-		private System.Windows.Forms.GroupBox groupBox_Predefined;
 		private System.Windows.Forms.Button button_DeletePages;
 		private YAT.View.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_8;
 		private YAT.View.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_7;

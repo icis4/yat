@@ -28,11 +28,17 @@
 
 #if (DEBUG)
 
-	// Enable debugging of thread state:
+	// Enable debugging of thread state (send and receive threads):
 ////#define DEBUG_THREAD_STATE
 
-	// Enable debugging of thread state:
+	// Enable debugging of send request:
+////#define DEBUG_SEND_REQUEST
+
+	// Enable debugging of data transmission to/from port:
 ////#define DEBUG_TRANSMISSION
+
+	// Enable debugging of receive request:
+////#define DEBUG_RECEIVE_REQUEST
 
 #endif // DEBUG
 
@@ -667,7 +673,7 @@ namespace MKY.IO.Serial.SerialPort
 
 			if (IsTransmissive)
 			{
-				DebugTransmissionMessage("Enqueuing " + data.Length.ToString(CultureInfo.InvariantCulture) + " byte(s) for sending...");
+				DebugSendRequestMessage("Enqueuing " + data.Length.ToString(CultureInfo.InvariantCulture) + " byte(s) for sending...");
 				foreach (byte b in data)
 				{
 					// Wait until there is space in the send queue:
@@ -685,7 +691,7 @@ namespace MKY.IO.Serial.SerialPort
 						this.sendQueue.Enqueue(b);
 					}
 				}
-				DebugTransmissionMessage("...enqueuing done");
+				DebugSendRequestMessage("...enqueuing done");
 
 				// Signal data notification to send thread:
 				SignalSendThreadSafely();
@@ -1264,7 +1270,10 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void SendThread()
 		{
-			Rate sendRate = new Rate(this.settings.MaxSendRate.Interval);
+			Rate maxBaudRate = new Rate(100, 1000);
+			int maxFramesPerSecond = (int)(1.0 / this.settings.Communication.FrameLength);
+
+			Rate maxSendRate = new Rate(this.settings.MaxSendRate.Interval);
 
 			bool isOutputBreakOldAndErrorHasBeenSignaled = false;
 			bool isCtsInactiveOldAndErrorHasBeenSignaled = false;
@@ -1392,10 +1401,38 @@ namespace MKY.IO.Serial.SerialPort
 									// By default, stuff as much data as possible into output buffer:
 									int maxChunkSize = (this.port.WriteBufferSize - this.port.BytesToWrite);
 
+									// Notes on sending:
+									//
+									// As soon as YAT started to write the maximum chunk size (in Q1/2016 ;-), data got lost
+									// even for e.g. a local port loopback pair. All seems to work fine as long as small chunks
+									// of e.g. 48 bytes some now and then are transmitted.
+									//
+									// For a while, I assumed data loss happens in the receive path. Therefore, I tried to use
+									// async reading instead of the 'DataReceived' event, as suggested by online resources like
+									// http://www.sparxeng.com/blog/software/must-use-net-system-io-ports-serialport written by
+									// Ben Voigt.
+									//
+									// See 'port_DataReceived()' for more details on receiving.
+									//
+									// Finally (MKy/SSt/ATo in Q3/2016), the root cause for the data loss could be tracked down
+									// to the physical limitations of the USB/COM or SPI/COM converter: If more data is sent
+									// than the baud rate permits forwarding, the converter simply discards superfluous data!
+									// Of course, what else could it do... Actually, it could propagate the information back to
+									// 'System.IO.Ports.SerialPort.BytesToWrite'. But that obviously isn't done...
+									//
+									// Solution: Limit output writing to baud rate :-)
+
+									// Reduce chunk size if maximum is limited to baud rate:
+									if (this.settings.OutputMaxBaudRate)
+									{
+										int remainingSizeInInterval = (maxFramesPerSecond - maxBaudRate.Value);
+										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, remainingSizeInInterval);
+									}
+
 									// Reduce chunk size if maximum send rate is specified:
 									if (this.settings.MaxSendRate.Enabled)
 									{
-										int remainingSizeInInterval = (this.settings.MaxSendRate.Size - sendRate.Value);
+										int remainingSizeInInterval = (this.settings.MaxSendRate.Size - maxSendRate.Value);
 										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, remainingSizeInInterval);
 									}
 
@@ -1406,36 +1443,21 @@ namespace MKY.IO.Serial.SerialPort
 										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, maxChunkSizeSetting);
 									}
 
-									// Notes on sending:
-									//
-									// As soon as YAT started to write the maximum chunk size (in Q1/2016 ;-),
-									// data got lost even for e.g. a local port loopback pair. All seems to work
-									// fine as long as small chunks of e.g. 50 bytes some now an then are transmitted.
-									//
-									// Tried to use async reading (see port_DataReceived() for details), but there
-									// seems to be no difference. Both methods loose the equal amount of data.
-									//
-									// Weirdly, data loss is much smaller when enabling 'DEBUG_TRANSMISSION',
-									// which obviously slows down sending. It seems that the issue is not only
-									// about receiving, but also about sending too fast!
-									//
-									// Suspecting that the issue is actually caused by limitations of the USB/COM
-									// converter in use (Prolific)! This suspicion shall be verified using as described
-									// in request #263 "Extend SerialPort driver analysis by sending and loopback".
-									//
-									// Again reducing the chunk size by default to work-around the issue.
-
 									List<byte> effectiveChunkData;
 									bool signalIOControlChanged;
 									if (TryWriteChunkToPort(maxChunkSize, out effectiveChunkData, out isWriteTimeout, out isOutputBreak, out signalIOControlChanged))
 									{
-										DebugTransmissionMessage("Signaling " + effectiveChunkData.Count.ToString() + " byte(s) sent...");
+										DebugSendRequestMessage("Signaling " + effectiveChunkData.Count.ToString() + " byte(s) sent...");
 										OnDataSent(new SerialDataSentEventArgs(effectiveChunkData.ToArray(), PortId));
-										DebugTransmissionMessage("...signaling done");
+										DebugSendRequestMessage("...signaling done");
 
-										// Update the send rate with the effective chunk size:
+										// Update the send rates with the effective chunk size:
+
+										if (this.settings.OutputMaxBaudRate)
+											maxBaudRate.Update(effectiveChunkData.Count);
+
 										if (this.settings.MaxSendRate.Enabled)
-											sendRate.Update(effectiveChunkData.Count);
+											maxSendRate.Update(effectiveChunkData.Count);
 
 										// Note the Thread.Sleep(TimeSpan.Zero) further above.
 									}
@@ -1755,27 +1777,25 @@ namespace MKY.IO.Serial.SerialPort
 		/// <remarks>
 		/// As soon as YAT started to write the maximum chunk size (in Q1/2016 ;-), data got lost
 		/// even for e.g. a local port loopback pair. All seems to work fine as long as small chunks
-		/// of e.g. 50 bytes some now an then are transmitted. Tried to use async reading instead of
-		/// the 'DataReceived' event as suggested by online resources like what Ben Voigt states at
-		/// http://www.sparxeng.com/blog/software/must-use-net-system-io-ports-serialport.
+		/// of e.g. 48 bytes some now and then are transmitted.
+		/// 
+		/// For a while, I assumed data loss happens in the receive path. Therefore, I tried to use
+		/// async reading instead of the 'DataReceived' event, as suggested by online resources like
+		/// http://www.sparxeng.com/blog/software/must-use-net-system-io-ports-serialport written by
+		/// Ben Voigt.
 		/// 
 		/// However, there seems to be no difference whether 'DataReceived' and 'BytesToRead' or
 		/// async reading is used. Both loose the equal amount of data, this fact is also supported
 		/// be the 'DriverAnalysis'. Also, opposed to what Ben Voigt states, async reading actually
 		/// results in smaller chunks, mostly 1 byte reads. Whereas the obvious 'DataReceived' and
-		/// 'BytesToRead' mostly result in 1..4 byte reads, even up to 20..30 bytes.
+		/// 'BytesToRead' mostly result in 1..4 byte reads, even up to 20..30 bytes. Thus, this
+		/// implementation again uses the 'normal' method.
 		/// 
-		/// Thus, this implementation again uses the 'normal' method. Data loss probably just has
-		/// to be expected in case of the maximum rate...
-		/// 
-		/// Note that there are several solutions to this issue:
-		///  - Use of flow control (SW or HW).
-		///  - Reduction of the write buffer size (advanced settings).
-		///  - Reduction of the write chunk size (advanced settings).
-		/// 
-		/// Weirdly, data loss is much smaller when enabling 'DEBUG_TRANSMISSION', which obviously
-		/// slows down sending. It seems that the issue is not only about receiving, but also about
-		/// sending too fast! See comments in <see cref="SendThread"/> for details on sending.
+		/// Finally (MKy/SSt/ATo in Q3/2016), the root cause for the data loss could be tracked down
+		/// to the physical limitations of the USB/COM or SPI/COM converter: If more data is sent
+		/// than the baud rate permits forwarding, the converter simply discards superfluous data!
+		/// Of course, what else could it do... Actually, it could propagate the information back to
+		/// <see cref="System.IO.Ports.SerialPort.BytesToWrite"/>. But that obviously isn't done...
 		/// 
 		/// 
 		/// Additional information on receiving
@@ -1936,9 +1956,9 @@ namespace MKY.IO.Serial.SerialPort
 								this.receiveQueue.Clear();
 							}
 
-							DebugTransmissionMessage("Signaling " + data.Length.ToString() + " byte(s) received...");
+							DebugReceiveRequestMessage("Signaling " + data.Length.ToString() + " byte(s) received...");
 							OnDataReceived(new SerialDataReceivedEventArgs(data, PortId));
-							DebugTransmissionMessage("...signaling done");
+							DebugReceiveRequestMessage("...signaling done");
 
 							// Note the Thread.Sleep(TimeSpan.Zero) above.
 						}
@@ -2413,8 +2433,20 @@ namespace MKY.IO.Serial.SerialPort
 			DebugMessage(message);
 		}
 
+		[Conditional("DEBUG_SEND_REQUEST")]
+		private void DebugSendRequestMessage(string message)
+		{
+			DebugMessage(message);
+		}
+
 		[Conditional("DEBUG_TRANSMISSION")]
 		private void DebugTransmissionMessage(string message)
+		{
+			DebugMessage(message);
+		}
+
+		[Conditional("DEBUG_RECEIVE_REQUEST")]
+		private void DebugReceiveRequestMessage(string message)
 		{
 			DebugMessage(message);
 		}

@@ -32,7 +32,6 @@
 			this.button_Defaults = new System.Windows.Forms.Button();
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
-			this.groupBox_Preferences = new System.Windows.Forms.GroupBox();
 			this.groupBox_UsbDevice = new System.Windows.Forms.GroupBox();
 			this.checkBox_MatchUsbSerial = new System.Windows.Forms.CheckBox();
 			this.label_UsbDeviceDiscovery = new System.Windows.Forms.Label();
@@ -48,7 +47,6 @@
 			this.checkBox_AutoSaveWorkspace = new System.Windows.Forms.CheckBox();
 			this.checkBox_AutoOpenWorkspace = new System.Windows.Forms.CheckBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.groupBox_Preferences.SuspendLayout();
 			this.groupBox_UsbDevice.SuspendLayout();
 			this.groupBox_Main.SuspendLayout();
 			this.groupBox_SerialPorts.SuspendLayout();
@@ -58,10 +56,10 @@
 			// button_Defaults
 			// 
 			this.button_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Defaults.Location = new System.Drawing.Point(284, 97);
+			this.button_Defaults.Location = new System.Drawing.Point(270, 103);
 			this.button_Defaults.Name = "button_Defaults";
 			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
-			this.button_Defaults.TabIndex = 3;
+			this.button_Defaults.TabIndex = 6;
 			this.button_Defaults.Text = "&Defaults...";
 			this.button_Defaults.Click += new System.EventHandler(this.button_Defaults_Click);
 			// 
@@ -69,10 +67,10 @@
 			// 
 			this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button_Cancel.Location = new System.Drawing.Point(284, 68);
+			this.button_Cancel.Location = new System.Drawing.Point(270, 56);
 			this.button_Cancel.Name = "button_Cancel";
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
-			this.button_Cancel.TabIndex = 2;
+			this.button_Cancel.TabIndex = 5;
 			this.button_Cancel.Text = "Cancel";
 			this.button_Cancel.Click += new System.EventHandler(this.button_Cancel_Click);
 			// 
@@ -80,36 +78,18 @@
 			// 
 			this.button_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_OK.Location = new System.Drawing.Point(284, 39);
+			this.button_OK.Location = new System.Drawing.Point(270, 27);
 			this.button_OK.Name = "button_OK";
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
-			this.button_OK.TabIndex = 1;
+			this.button_OK.TabIndex = 4;
 			this.button_OK.Text = "OK";
 			this.button_OK.Click += new System.EventHandler(this.button_OK_Click);
 			// 
-			// groupBox_Preferences
-			// 
-			this.groupBox_Preferences.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Preferences.Controls.Add(this.groupBox_UsbDevice);
-			this.groupBox_Preferences.Controls.Add(this.groupBox_Main);
-			this.groupBox_Preferences.Controls.Add(this.groupBox_SerialPorts);
-			this.groupBox_Preferences.Controls.Add(this.groupBox_Workspace);
-			this.groupBox_Preferences.Location = new System.Drawing.Point(12, 12);
-			this.groupBox_Preferences.Name = "groupBox_Preferences";
-			this.groupBox_Preferences.Size = new System.Drawing.Size(258, 354);
-			this.groupBox_Preferences.TabIndex = 0;
-			this.groupBox_Preferences.TabStop = false;
-			// 
 			// groupBox_UsbDevice
 			// 
-			this.groupBox_UsbDevice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_UsbDevice.Controls.Add(this.checkBox_MatchUsbSerial);
 			this.groupBox_UsbDevice.Controls.Add(this.label_UsbDeviceDiscovery);
-			this.groupBox_UsbDevice.Location = new System.Drawing.Point(6, 282);
+			this.groupBox_UsbDevice.Location = new System.Drawing.Point(12, 280);
 			this.groupBox_UsbDevice.Name = "groupBox_UsbDevice";
 			this.groupBox_UsbDevice.Size = new System.Drawing.Size(246, 66);
 			this.groupBox_UsbDevice.TabIndex = 3;
@@ -141,11 +121,9 @@
 			// 
 			// groupBox_Main
 			// 
-			this.groupBox_Main.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Main.Controls.Add(this.checkBox_ShowChrono);
 			this.groupBox_Main.Controls.Add(this.checkBox_ShowTerminalInfo);
-			this.groupBox_Main.Location = new System.Drawing.Point(6, 14);
+			this.groupBox_Main.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Main.Name = "groupBox_Main";
 			this.groupBox_Main.Size = new System.Drawing.Size(245, 70);
 			this.groupBox_Main.TabIndex = 0;
@@ -176,12 +154,10 @@
 			// 
 			// groupBox_SerialPorts
 			// 
-			this.groupBox_SerialPorts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_SerialPorts.Controls.Add(this.checkBox_RetrieveSerialPortCaptions);
 			this.groupBox_SerialPorts.Controls.Add(this.label_SerialPortDiscovery);
 			this.groupBox_SerialPorts.Controls.Add(this.checkBox_DetectSerialPortsInUse);
-			this.groupBox_SerialPorts.Location = new System.Drawing.Point(6, 188);
+			this.groupBox_SerialPorts.Location = new System.Drawing.Point(12, 186);
 			this.groupBox_SerialPorts.Name = "groupBox_SerialPorts";
 			this.groupBox_SerialPorts.Size = new System.Drawing.Size(246, 88);
 			this.groupBox_SerialPorts.TabIndex = 2;
@@ -223,12 +199,10 @@
 			// 
 			// groupBox_Workspace
 			// 
-			this.groupBox_Workspace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Workspace.Controls.Add(this.checkBox_UseRelativePaths);
 			this.groupBox_Workspace.Controls.Add(this.checkBox_AutoSaveWorkspace);
 			this.groupBox_Workspace.Controls.Add(this.checkBox_AutoOpenWorkspace);
-			this.groupBox_Workspace.Location = new System.Drawing.Point(6, 90);
+			this.groupBox_Workspace.Location = new System.Drawing.Point(12, 88);
 			this.groupBox_Workspace.Name = "groupBox_Workspace";
 			this.groupBox_Workspace.Size = new System.Drawing.Size(246, 92);
 			this.groupBox_Workspace.TabIndex = 1;
@@ -274,8 +248,11 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(371, 378);
-			this.Controls.Add(this.groupBox_Preferences);
+			this.ClientSize = new System.Drawing.Size(357, 357);
+			this.Controls.Add(this.groupBox_UsbDevice);
+			this.Controls.Add(this.groupBox_SerialPorts);
+			this.Controls.Add(this.groupBox_Main);
+			this.Controls.Add(this.groupBox_Workspace);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.button_Cancel);
 			this.Controls.Add(this.button_OK);
@@ -287,7 +264,6 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Preferences";
 			this.Shown += new System.EventHandler(this.Preferences_Shown);
-			this.groupBox_Preferences.ResumeLayout(false);
 			this.groupBox_UsbDevice.ResumeLayout(false);
 			this.groupBox_UsbDevice.PerformLayout();
 			this.groupBox_Main.ResumeLayout(false);
@@ -305,7 +281,6 @@
 		private System.Windows.Forms.Button button_Defaults;
 		private System.Windows.Forms.Button button_Cancel;
 		private System.Windows.Forms.Button button_OK;
-		private System.Windows.Forms.GroupBox groupBox_Preferences;
 		private System.Windows.Forms.GroupBox groupBox_Workspace;
 		private System.Windows.Forms.CheckBox checkBox_AutoSaveWorkspace;
 		private System.Windows.Forms.CheckBox checkBox_AutoOpenWorkspace;

@@ -120,6 +120,27 @@
   <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="checkBox_OutputMaxBaudRate.ToolTip" xml:space="preserve">
+    <value>Limiting the output to the baud rate prevents data loss in case of
+USB/COM or SPI/COM converters that do not support sending at
+maximum software buffer size.
+
+Examples of such limited devices:
+- Some Prolific USB/COM converters are limited to 356 bytes.
+- Some Dell/Intel SPI/COM converters are limited to 56 bytes.</value>
+  </data>
+  <data name="checkBox_OutputBufferSize.ToolTip" xml:space="preserve">
+    <value>Limiting the output buffer improves the responsiveness of hardware
+and/or software flow control, i.e. sending will be suspended sooner.
+Enlarging the output buffer improves throughput.
+
+Note that several USB/COM or SPI/COM converters have a much
+smaller hardware output buffer and do not feed back that buffer
+state to the software buffer. As a consequence, they do not support
+sending at maximum software buffer size. In such cases, either
+reduce the software output buffer to the hardware buffer value
+(if known), or limit sending with one of the settings below.</value>
+  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>60</value>
   </metadata>
