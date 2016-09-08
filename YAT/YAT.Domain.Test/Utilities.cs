@@ -25,6 +25,7 @@
 // Using
 //==================================================================================================
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
@@ -47,9 +48,14 @@ namespace YAT.Domain.Test
 		// Constants
 		//==========================================================================================
 
-		private const int WaitTimeoutForConnectionChange = 5000;
-		private const int WaitTimeoutForLineTransmission = 1000;
-		private const int WaitInterval = 100;
+		/// <summary></summary>
+		public const int WaitTimeoutForConnectionChange = 3000;
+
+		/// <summary></summary>
+		public const int WaitTimeoutForLineTransmission = 200;
+
+		/// <summary></summary>
+		public const int WaitInterval = 100;
 
 		#endregion
 
@@ -79,73 +85,69 @@ namespace YAT.Domain.Test
 		// Wait
 		//==========================================================================================
 
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static void WaitForConnection(Terminal terminal)
-		{
-			int timeout = 0;
-			do                         // Initially wait to allow async send,
-			{                          //   therefore, use do-while.
-				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
-
-				if (timeout >= WaitTimeoutForConnectionChange)
-					Assert.Fail("Connect timeout!");
-			}
-			while (!terminal.IsConnected);
-		}
-
+		/// <remarks>
+		/// There are similar utility methods in 'Model.Test.Utilities'.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		internal static void WaitForConnection(Terminal terminalA, Terminal terminalB)
 		{
-			int timeout = 0;
+			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
 				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
+				waitTime += WaitInterval;
 
-				if (timeout >= WaitTimeoutForConnectionChange)
+				Console.Out.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForConnectionChange + " ms...");
+
+				if (waitTime >= WaitTimeoutForConnectionChange)
 					Assert.Fail("Connect timeout!");
 			}
 			while (!terminalA.IsConnected && !terminalB.IsConnected);
+
+			Console.Out.WriteLine("...done");
 		}
 
+		/// <remarks>
+		/// There are similar utility methods in 'Model.Test.Utilities'.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		internal static void WaitForDisconnection(Terminal terminal)
 		{
-			int timeout = 0;
+			int waitTime = 0;
 			while (terminal.IsConnected)
 			{
 				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
+				waitTime += WaitInterval;
 
-				if (timeout >= WaitTimeoutForConnectionChange)
+				Console.Out.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForConnectionChange + " ms...");
+
+				if (waitTime >= WaitTimeoutForConnectionChange)
 					Assert.Fail("Disconnect timeout!");
 			}
+
+			Console.Out.WriteLine("...done");
 		}
 
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static void WaitForDisconnection(Terminal terminalA, Terminal terminalB)
-		{
-			int timeout = 0;
-			while (terminalA.IsConnected || terminalB.IsConnected)
-			{
-				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
-
-				if (timeout >= WaitTimeoutForConnectionChange)
-					Assert.Fail("Disconnect timeout!");
-			}
-		}
-
+		/// <remarks>
+		/// There are similar utility methods in 'Model.Test.Utilities'.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int currentLineCount, int expectedTotalLineCount)
 		{
+			// Calculate timeout:
+			int timeout = (WaitTimeoutForLineTransmission * currentLineCount);
+
 			int txLineCount = 0;
 			int rxLineCount = 0;
-			int timeout = 0;
+			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
 				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
+				waitTime += WaitInterval;
 
-				if (timeout >= (WaitTimeoutForLineTransmission * currentLineCount))
+				Console.Out.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+
+				if (waitTime >= timeout)
 					Assert.Fail("Transmission timeout! Not enough lines received within expected interval.");
 
 				txLineCount = terminalTx.GetRepositoryLineCount(RepositoryType.Tx);
@@ -162,18 +164,29 @@ namespace YAT.Domain.Test
 			}
 			while ((txLineCount != expectedTotalLineCount) &&
 			       (rxLineCount != expectedTotalLineCount));
+
+			Console.Out.WriteLine("...done");
 		}
 
+		/// <remarks>
+		/// There are similar utility methods in 'Model.Test.Utilities'.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		internal static void WaitForSending(Terminal terminalTx, int currentLineCount, int expectedTotalLineCount)
 		{
+			// Calculate timeout:
+			int timeout = (WaitTimeoutForLineTransmission * currentLineCount);
+
 			int lineCountTx = 0;
-			int timeout = 0;
+			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
 				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
+				waitTime += WaitInterval;
 
-				if (timeout >= (WaitTimeoutForLineTransmission * currentLineCount))
+				Console.Out.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+
+				if (waitTime >= timeout)
 					Assert.Fail("Transmission timeout! Not enough lines received within expected interval.");
 
 				lineCountTx = terminalTx.GetRepositoryLineCount(RepositoryType.Tx);
@@ -183,6 +196,8 @@ namespace YAT.Domain.Test
 						" mismatches expected = " + expectedTotalLineCount + ".");
 			}
 			while (lineCountTx != expectedTotalLineCount);
+
+			Console.Out.WriteLine("...done");
 		}
 
 		#endregion
