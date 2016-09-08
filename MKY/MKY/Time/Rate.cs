@@ -75,21 +75,27 @@ namespace MKY.Time
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// The interval to evaluate partial values of the rate.
+		/// </summary>
 		public int Interval
 		{
 			get { return (this.interval); }
 			set { this.interval = value;  }
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// The total window to evaluate the rate.
+		/// </summary>
 		public int Window
 		{
 			get { return (this.window); }
 			set { this.window = value;  }
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// The resulting rate value, in items per millisecond.
+		/// </summary>
 		public int Value
 		{
 			get { return (this.value); }

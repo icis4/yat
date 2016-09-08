@@ -65,7 +65,6 @@ namespace YAT.Domain.Test
 
 		internal static TerminalSettings GetTextTcpAutoSocketSettings(IPNetworkInterfaceEx networkInterface)
 		{
-			// Create settings:
 			TerminalSettings settings = new TerminalSettings();
 			settings.TerminalType = TerminalType.Text;
 			settings.IO.IOType = IOType.TcpAutoSocket;
