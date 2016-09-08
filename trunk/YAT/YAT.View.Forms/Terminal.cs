@@ -118,6 +118,7 @@ namespace YAT.View.Forms
 		// Startup/Update/Closing:
 		private bool isStartingUp = true;
 		private SettingControlsHelper isSettingControls;
+		private bool isAutoLayouting = false;
 		private ClosingState closingState = ClosingState.None;
 
 		// MDI:
@@ -282,13 +283,13 @@ namespace YAT.View.Forms
 
 		private void Terminal_LocationChanged(object sender, EventArgs e)
 		{
-			if (!IsStartingUp && !IsClosing)
+			if (!IsStartingUp && !IsAutoLayouting && !IsClosing)
 				SaveWindowSettings();
 		}
 
 		private void Terminal_SizeChanged(object sender, EventArgs e)
 		{
-			if (!IsStartingUp && !IsClosing)
+			if (!IsStartingUp && !IsAutoLayouting && !IsClosing)
 				SaveWindowSettings();
 		}
 
@@ -1840,7 +1841,7 @@ namespace YAT.View.Forms
 
 		private void splitContainer_TxMonitor_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!IsStartingUp && !this.isSettingControls && !IsClosing)
+			if (!IsStartingUp && !this.isSettingControls && !IsAutoLayouting && !IsClosing)
 			{
 				int widthOrHeight = 0;
 				if (this.settingsRoot.Layout.MonitorOrientation == Orientation.Vertical)
@@ -1854,7 +1855,7 @@ namespace YAT.View.Forms
 
 		private void splitContainer_RxMonitor_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!IsStartingUp && !this.isSettingControls && !IsClosing)
+			if (!IsStartingUp && !this.isSettingControls && !IsAutoLayouting && !IsClosing)
 			{
 				int widthOrHeight = 0;
 				if (this.settingsRoot.Layout.MonitorOrientation == Orientation.Vertical)
@@ -1868,7 +1869,7 @@ namespace YAT.View.Forms
 
 		private void splitContainer_Predefined_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!IsStartingUp && !this.isSettingControls && !IsClosing)
+			if (!IsStartingUp && !this.isSettingControls && !IsAutoLayouting && !IsClosing)
 				this.settingsRoot.Layout.PredefinedSplitterRatio = (float)splitContainer_Predefined.SplitterDistance / splitContainer_Predefined.Width;
 		}
 
@@ -2153,9 +2154,26 @@ namespace YAT.View.Forms
 			get { return (this.isStartingUp); }
 		}
 
+		private bool IsAutoLayouting
+		{
+			get { return (this.isAutoLayouting); }
+		}
+
+		/// <summary></summary>
+		public virtual void NotifyAutoLayouting(bool isAutoLayouting)
+		{
+			this.isAutoLayouting = isAutoLayouting;
+		}
+
 		private bool IsClosing
 		{
 			get { return (this.closingState != ClosingState.None); }
+		}
+
+		/// <summary></summary>
+		public virtual void NotifyClosingFromForm()
+		{
+			this.closingState = ClosingState.IsClosingFromForm;
 		}
 
 		/// <summary></summary>

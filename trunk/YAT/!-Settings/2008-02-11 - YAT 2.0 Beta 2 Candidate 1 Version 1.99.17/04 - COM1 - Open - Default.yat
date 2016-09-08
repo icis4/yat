@@ -196,14 +196,14 @@
       <SelectedPage>1</SelectedPage>
     </Predefined>
     <Window>
-      <State>Normal</State>
+      <State>Maximized</State>
       <Location>
-        <X>638</X>
+        <X>0</X>
         <Y>0</Y>
       </Location>
       <Size>
-        <Width>638</Width>
-        <Height>672</Height>
+        <Width>800</Width>
+        <Height>600</Height>
       </Size>
     </Window>
     <Layout>

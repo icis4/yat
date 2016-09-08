@@ -203,12 +203,12 @@
     <Window>
       <State>Maximized</State>
       <Location>
-        <X>22</X>
-        <Y>22</Y>
+        <X>0</X>
+        <Y>0</Y>
       </Location>
       <Size>
-        <Width>720</Width>
-        <Height>540</Height>
+        <Width>800</Width>
+        <Height>600</Height>
       </Size>
     </Window>
     <Layout>
