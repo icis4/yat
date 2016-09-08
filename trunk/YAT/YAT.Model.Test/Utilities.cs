@@ -302,9 +302,9 @@ namespace YAT.Model.Test
 		// Constants
 		//==========================================================================================
 
-		private const int WaitTimeoutForConnectionChange = 5000;
-		private const int WaitTimeoutForLineTransmission = 1000;
-		private const int WaitInterval = 100;
+		private const int WaitTimeoutForConnectionChange = Domain.Test.Utilities.WaitTimeoutForConnectionChange;
+		private const int WaitTimeoutForLineTransmission = Domain.Test.Utilities.WaitTimeoutForLineTransmission;
+		private const int WaitInterval                   = Domain.Test.Utilities.WaitInterval;
 
 		#endregion
 
@@ -638,100 +638,134 @@ namespace YAT.Model.Test
 		// Wait
 		//==========================================================================================
 
+		/// <remarks>
+		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		internal static void WaitForStart(Terminal terminal)
 		{
-			int timeout = 0;
+			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
 				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
+				waitTime += WaitInterval;
 
-				if (timeout >= WaitTimeoutForConnectionChange)
+				Console.Out.WriteLine("Waiting for start, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForConnectionChange + " ms...");
+
+				if (waitTime >= WaitTimeoutForConnectionChange)
 					Assert.Fail("Start timeout!");
 			}
 			while (!terminal.IsStarted);
+
+			Console.Out.WriteLine("...done");
 		}
 
+		/// <remarks>
+		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		internal static void WaitForOpen(Terminal terminal)
 		{
-			int timeout = 0;
+			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
 				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
+				waitTime += WaitInterval;
 
-				if (timeout >= WaitTimeoutForConnectionChange)
+				Console.Out.WriteLine("Waiting for open, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForConnectionChange + " ms...");
+
+				if (waitTime >= WaitTimeoutForConnectionChange)
 					Assert.Fail("Open timeout!");
 			}
 			while (!terminal.IsOpen);
+
+			Console.Out.WriteLine("...done");
 		}
 
+		/// <remarks>
+		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		internal static void WaitForConnection(Terminal terminal)
 		{
-			int timeout = 0;
+			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
 				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
+				waitTime += WaitInterval;
 
-				if (timeout >= WaitTimeoutForConnectionChange)
+				Console.Out.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForConnectionChange + " ms...");
+
+				if (waitTime >= WaitTimeoutForConnectionChange)
 					Assert.Fail("Connect timeout!");
 			}
 			while (!terminal.IsConnected);
+
+			Console.Out.WriteLine("...done");
 		}
 
+		/// <remarks>
+		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		internal static void WaitForConnection(Terminal terminalA, Terminal terminalB)
 		{
-			int timeout = 0;
+			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
 				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
+				waitTime += WaitInterval;
 
-				if (timeout >= WaitTimeoutForConnectionChange)
+				Console.Out.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForConnectionChange + " ms...");
+
+				if (waitTime >= WaitTimeoutForConnectionChange)
 					Assert.Fail("Connect timeout!");
 			}
 			while (!terminalA.IsConnected && !terminalB.IsConnected);
+
+			Console.Out.WriteLine("...done");
 		}
 
+		/// <remarks>
+		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		internal static void WaitForClose(Terminal terminal)
 		{
-			int timeout = 0;
+			int waitTime = 0;
 			while (terminal.IsOpen)
 			{
 				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
+				waitTime += WaitInterval;
 
-				if (timeout >= WaitTimeoutForConnectionChange)
+				Console.Out.WriteLine("Waiting for close, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForConnectionChange + " ms...");
+
+				if (waitTime >= WaitTimeoutForConnectionChange)
 					Assert.Fail("Close timeout!");
 			}
+
+			Console.Out.WriteLine("...done");
 		}
 
+		/// <remarks>
+		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		internal static void WaitForDisconnection(Terminal terminal)
 		{
-			int timeout = 0;
+			int waitTime = 0;
 			while (terminal.IsConnected)
 			{
 				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
+				waitTime += WaitInterval;
 
-				if (timeout >= WaitTimeoutForConnectionChange)
+				Console.Out.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForConnectionChange + " ms...");
+
+				if (waitTime >= WaitTimeoutForConnectionChange)
 					Assert.Fail("Disconnect timeout!");
 			}
-		}
 
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static void WaitForDisconnection(Terminal terminalA, Terminal terminalB)
-		{
-			int timeout = 0;
-			while (terminalA.IsConnected || terminalB.IsConnected)
-			{
-				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
-
-				if (timeout >= WaitTimeoutForConnectionChange)
-					Assert.Fail("Disconnect timeout!");
-			}
+			Console.Out.WriteLine("...done");
 		}
 
 		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, TestSet testSet)
@@ -744,6 +778,10 @@ namespace YAT.Model.Test
 			WaitForTransmission(terminalTx, terminalRx, expectedPerCycleLineCount, 1); // Single cycle.
 		}
 
+		/// <remarks>
+		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedPerCycleLineCount, int cycle)
 		{
 			// Calculate total expected line count at the receiver side:
@@ -752,13 +790,18 @@ namespace YAT.Model.Test
 			// Calculate timeout factor per line, taking cases with 0 lines into account:
 			int timeoutFactorPerLine = ((expectedPerCycleLineCount > 0) ? expectedPerCycleLineCount : 1);
 
-			int timeout = 0;
+			// Calculate timeout:
+			int timeout = (WaitTimeoutForLineTransmission * timeoutFactorPerLine);
+
+			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
 				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
+				waitTime += WaitInterval;
 
-				if (timeout >= (WaitTimeoutForLineTransmission * timeoutFactorPerLine))
+				Console.Out.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+
+				if (waitTime >= timeout)
 					Assert.Fail("Transmission timeout! Not enough lines received within expected interval.");
 
 				if (terminalRx.RxLineCount > expectedTotalLineCount) // Break in case of too much data to improve speed of test.
@@ -774,17 +817,28 @@ namespace YAT.Model.Test
 			//  > Terminal line count = number of *completed* lines in terminal
 			//  > Display line count = number of lines in view
 			// This function uses terminal line count for verification!
+
+			Console.Out.WriteLine("...done");
 		}
 
+		/// <remarks>
+		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		internal static void WaitForReceiving(Terminal terminalRx, int expectedTotalLineCount, int expectedTotalByteCount)
 		{
-			int timeout = 0;
+			// Calculate timeout:
+			int timeout = (WaitTimeoutForLineTransmission * expectedTotalLineCount);
+
+			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
 				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
+				waitTime += WaitInterval;
 
-				if (timeout >= (WaitTimeoutForLineTransmission * expectedTotalLineCount))
+				Console.Out.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+
+				if (waitTime >= timeout)
 					Assert.Fail("Transmission timeout! Not enough lines received within expected interval.");
 
 				if ((terminalRx.RxLineCount > expectedTotalLineCount) ||
@@ -800,6 +854,8 @@ namespace YAT.Model.Test
 			//  > Terminal line count = number of *completed* lines in terminal
 			//  > Display line count = number of lines in view
 			// This function uses terminal line count for verification!
+
+			Console.Out.WriteLine("...done");
 		}
 
 		#endregion

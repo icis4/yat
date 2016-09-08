@@ -1269,8 +1269,8 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that any exception leads to restart or reset of port.")]
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void SendThread()
-		{
-			Rate maxBaudRate = new Rate(100, 1000);
+		{	                                            // Must be a second, the calculation further below relies on this!
+			Rate maxBaudRatePerSecond = new Rate(100, 1000); // Keep observation interval rather narrow to ensure staying within limits.
 			int maxFramesPerSecond = (int)((1.0 / this.settings.Communication.FrameLength) * 0.75); // 25% safety margin.
 
 			Rate maxSendRate = new Rate(this.settings.MaxSendRate.Interval);
@@ -1425,7 +1425,7 @@ namespace MKY.IO.Serial.SerialPort
 									// Reduce chunk size if maximum is limited to baud rate:
 									if (this.settings.OutputMaxBaudRate)
 									{
-										int remainingSizeInInterval = (maxFramesPerSecond - maxBaudRate.Value);
+										int remainingSizeInInterval = (maxFramesPerSecond - maxBaudRatePerSecond.Value);
 										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, remainingSizeInInterval);
 									}
 
@@ -1454,7 +1454,7 @@ namespace MKY.IO.Serial.SerialPort
 										// Update the send rates with the effective chunk size:
 
 										if (this.settings.OutputMaxBaudRate)
-											maxBaudRate.Update(effectiveChunkData.Count);
+											maxBaudRatePerSecond.Update(effectiveChunkData.Count);
 
 										if (this.settings.MaxSendRate.Enabled)
 											maxSendRate.Update(effectiveChunkData.Count);
