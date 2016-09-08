@@ -366,14 +366,14 @@
       <Response>[None]</Response>
     </AutoResponse>
     <Window>
-      <State>Normal</State>
+      <State>Maximized</State>
       <Location>
         <X>0</X>
         <Y>0</Y>
       </Location>
       <Size>
-        <Width>390</Width>
-        <Height>485</Height>
+        <Width>900</Width>
+        <Height>675</Height>
       </Size>
     </Window>
     <Layout>

@@ -341,11 +341,11 @@ namespace YAT.View.Forms
 				{
 					// If workspace contains terminals, and if requested, arrange them accordingly:
 					if (this.main.StartArgs.TileHorizontal)
-						LayoutTerminals(WorkspaceLayout.TileHorizontal);
+						LayoutWorkspace(WorkspaceLayout.TileHorizontal);
 					else if (this.main.StartArgs.TileVertical)
-						LayoutTerminals(WorkspaceLayout.TileVertical);
+						LayoutWorkspace(WorkspaceLayout.TileVertical);
 					else
-						LayoutTerminals();
+						LayoutWorkspace();
 				}
 			}
 		}
@@ -365,7 +365,7 @@ namespace YAT.View.Forms
 		private void Main_Resize(object sender, EventArgs e)
 		{
 			if (!IsStartingUp)
-				ResizeTerminals();
+				ResizeWorkspace();
 		}
 
 		private void Main_MdiChildActivate(object sender, EventArgs e)
@@ -380,7 +380,7 @@ namespace YAT.View.Forms
 				if (this.invokeLayout)
 				{
 					this.invokeLayout = false;
-					LayoutTerminals();
+					LayoutWorkspace();
 				}
 
 				SetTimedStatus(Status.ChildActivated);
@@ -396,20 +396,28 @@ namespace YAT.View.Forms
 
 		private void Main_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			// Prevent multiple calls to Exit()/Close().
+			// Prevent multiple calls to Exit()/Close():
 			if (this.closingState == ClosingState.None)
 			{
 				this.closingState = ClosingState.IsClosingFromForm;
 
+				// Also notify MDI children about closing:
+				foreach (var f in this.MdiChildren)
+				{
+					var t = (f as Terminal);
+					if (t != null)
+						t.NotifyClosingFromForm();
+				}
+
 				bool cancel;
-				this.main.Exit(out cancel); // Focus on (form) cancel here, no need to deal with
-				if (cancel)                 // the result, that is handled in main_Exited().
+				this.main.Exit(out cancel); // Only need to handle cancel on form here, no need to
+				if (cancel)                 // deal with result, that is handled in main_Exited().
 				{
 					e.Cancel = true;
 
 					// Revert closing state in case of cancel:
 					this.closingState = ClosingState.None;
-					
+
 					// Also revert closing state for MDI children:
 					foreach (var f in this.MdiChildren)
 					{
@@ -1832,35 +1840,36 @@ namespace YAT.View.Forms
 				// here as the MDI functionality is an integral part of the Windows.Forms environment.
 				this.workspace.NotifyLayout(layout);
 
-				LayoutTerminals(layout);
+				LayoutWorkspace(layout);
 			}
 		}
 
-		private void ResizeTerminals()
+		private void ResizeWorkspace()
 		{
 			// Simply forward the resize request to the MDI layout engine:
-			LayoutTerminals();
+			LayoutWorkspace();
 		}
 
 		/// <summary>
-		/// Performs the layout operation on the terminals.
+		/// Performs the layout operation on the workspace, i.e. the terminals.
 		/// </summary>
 		/// <remarks>
 		/// Uses the MDI functionality Windows.Forms environment to perform the layout.
 		/// </remarks>
-		private void LayoutTerminals()
+		private void LayoutWorkspace()
 		{
 			if (this.workspace != null)
-				LayoutTerminals(this.workspace.SettingsRoot.Workspace.Layout);
+				LayoutWorkspace(this.workspace.SettingsRoot.Workspace.Layout);
 		}
 
 		/// <summary>
-		/// Performs the layout operation on the terminals. This method does not notify the workspace.
+		/// Performs the layout operation on the workspace, i.e. the terminals.
+		/// This method does not notify the workspace.
 		/// </summary>
 		/// <remarks>
 		/// Uses the MDI functionality Windows.Forms environment to perform the layout.
 		/// </remarks>
-		private void LayoutTerminals(WorkspaceLayout layout)
+		private void LayoutWorkspace(WorkspaceLayout layout)
 		{
 			switch (layout)
 			{
@@ -1908,7 +1917,9 @@ namespace YAT.View.Forms
 		protected new void LayoutMdi(MdiLayout value)
 		{
 			this.isLayoutingMdi = true;
+			NotifyAutoLayoutingToMdi(true);
 			base.LayoutMdi(value);
+			NotifyAutoLayoutingToMdi(false);
 			this.isLayoutingMdi = false;
 		}
 
@@ -1929,6 +1940,16 @@ namespace YAT.View.Forms
 				this.isLayoutingMdi = true;
 				ActiveMdiChild.WindowState = FormWindowState.Maximized;
 				this.isLayoutingMdi = false;
+			}
+		}
+
+		private void NotifyAutoLayoutingToMdi(bool isAutoLayouting)
+		{
+			foreach (var f in this.MdiChildren)
+			{
+				var t = (f as Terminal);
+				if (t != null)
+					t.NotifyAutoLayouting(isAutoLayouting);
 			}
 		}
 
@@ -2000,10 +2021,12 @@ namespace YAT.View.Forms
 			AttachTerminalEventHandlersAndMdiChildToParent(mdiChild);
 
 			this.isLayoutingMdi = true;
+			NotifyAutoLayoutingToMdi(true);
 			mdiChild.Show(); // MDI children must be shown without reference to 'this'.
+			NotifyAutoLayoutingToMdi(false);
 			this.isLayoutingMdi = false;
 
-			LayoutTerminals();
+			LayoutWorkspace();
 			SetChildControls();
 		}
 

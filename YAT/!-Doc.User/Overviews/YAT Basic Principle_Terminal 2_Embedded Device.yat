@@ -372,12 +372,12 @@
     <Window>
       <State>Maximized</State>
       <Location>
-        <X>669</X>
+        <X>0</X>
         <Y>0</Y>
       </Location>
       <Size>
-        <Width>669</Width>
-        <Height>638</Height>
+        <Width>900</Width>
+        <Height>675</Height>
       </Size>
     </Window>
     <Layout>
