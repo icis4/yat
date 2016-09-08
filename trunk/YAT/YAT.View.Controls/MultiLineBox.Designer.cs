@@ -46,6 +46,7 @@
 			this.textBox_Lines.ScrollBars = System.Windows.Forms.ScrollBars.Both;
 			this.textBox_Lines.Size = new System.Drawing.Size(268, 152);
 			this.textBox_Lines.TabIndex = 0;
+			this.textBox_Lines.WordWrap = false;
 			this.textBox_Lines.TextChanged += new System.EventHandler(this.textBox_Lines_TextChanged);
 			this.textBox_Lines.Leave += new System.EventHandler(this.textBox_Lines_Leave);
 			this.textBox_Lines.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_Lines_Validating);
@@ -58,9 +59,9 @@
 			this.label_Remarks.BackColor = System.Drawing.SystemColors.Window;
 			this.label_Remarks.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Remarks.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_Remarks.Location = new System.Drawing.Point(32, 33);
+			this.label_Remarks.Location = new System.Drawing.Point(24, 25);
 			this.label_Remarks.Name = "label_Remarks";
-			this.label_Remarks.Size = new System.Drawing.Size(224, 109);
+			this.label_Remarks.Size = new System.Drawing.Size(226, 107);
 			this.label_Remarks.TabIndex = 1;
 			this.label_Remarks.Text = "Press Enter to begin a new line.\r\nPress Ctrl+Enter to confirm.\r\nPress Escape to c" +
     "ancel.";
