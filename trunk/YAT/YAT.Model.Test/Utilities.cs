@@ -35,6 +35,7 @@ using System.Windows.Forms;
 using MKY;
 using MKY.Collections.Generic;
 using MKY.IO.Serial.SerialPort;
+using MKY.IO.Serial.Usb;
 using MKY.Net;
 
 using NUnit.Framework;
@@ -324,12 +325,10 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTextSerialPortSettings(MKY.IO.Ports.SerialPortId portId)
 		{
-			// Create settings:
 			TerminalSettingsRoot settings = new TerminalSettingsRoot();
 			settings.TerminalType = Domain.TerminalType.Text;
 			settings.Terminal.IO.IOType = Domain.IOType.SerialPort;
 			settings.Terminal.IO.SerialPort.PortId = portId;
-			settings.Terminal.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software;
 			settings.TerminalIsStarted = true;
 			return (settings);
 		}
@@ -375,7 +374,14 @@ namespace YAT.Model.Test
 		internal static TerminalSettingsRoot GetStartedTextSerialPortMTSicsDeviceASettings()
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
-				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceA));
+			{
+				TerminalSettingsRoot settings = GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceA);
+
+				// MT-SICS devices use XOn/XOff by default:
+				settings.Terminal.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software;
+
+				return (settings);
+			}
 
 			Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -392,7 +398,14 @@ namespace YAT.Model.Test
 		internal static TerminalSettingsRoot GetStartedTextSerialPortMTSicsDeviceBSettings()
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
-				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceB));
+			{
+				TerminalSettingsRoot settings = GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceB);
+
+				// MT-SICS devices use XOn/XOff by default:
+				settings.Terminal.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software;
+
+				return (settings);
+			}
 		
 			Assert.Ignore("'MTSicsDeviceB' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -420,7 +433,6 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketSettings(IPNetworkInterfaceEx networkInterface)
 		{
-			// Create settings:
 			TerminalSettingsRoot settings = new TerminalSettingsRoot();
 			settings.TerminalType = Domain.TerminalType.Text;
 			settings.Terminal.IO.IOType = Domain.IOType.TcpAutoSocket;
@@ -523,12 +535,10 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.DeviceInfo deviceInfo)
 		{
-			// Create settings:
 			TerminalSettingsRoot settings = new TerminalSettingsRoot();
 			settings.TerminalType = Domain.TerminalType.Text;
 			settings.Terminal.IO.IOType = Domain.IOType.UsbSerialHid;
 			settings.Terminal.IO.UsbSerialHidDevice.DeviceInfo = deviceInfo;
-			settings.Terminal.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software;
 			settings.TerminalIsStarted = true;
 			return (settings);
 		}
@@ -574,7 +584,14 @@ namespace YAT.Model.Test
 		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidMTSicsDeviceASettings()
 		{
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
-				return (GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceA));
+			{
+				TerminalSettingsRoot settings = GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceA);
+
+				// MT-SICS devices use XOn/XOff by default:
+				settings.Terminal.IO.UsbSerialHidDevice.FlowControl = SerialHidFlowControl.Software;
+
+				return (settings);
+			}
 
 			Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -591,7 +608,14 @@ namespace YAT.Model.Test
 		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidMTSicsDeviceBSettings()
 		{
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
-				return (GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceB));
+			{
+				TerminalSettingsRoot settings = GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceB);
+	
+				// MT-SICS devices use XOn/XOff by default:
+				settings.Terminal.IO.UsbSerialHidDevice.FlowControl = SerialHidFlowControl.Software;
+
+				return (settings);
+			}
 
 			Assert.Ignore("'MTSicsDeviceB' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
