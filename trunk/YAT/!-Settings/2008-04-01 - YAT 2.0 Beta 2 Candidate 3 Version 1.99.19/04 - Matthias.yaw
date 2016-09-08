@@ -12,14 +12,14 @@
     <TerminalSettings>
       <FilePath>.\04 - COM1 - Open - Default.yat</FilePath>
       <Window>
-        <State>Normal</State>
+        <State>Maximized</State>
         <Location>
-          <X>66</X>
-          <Y>66</Y>
+          <X>0</X>
+          <Y>0</Y>
         </Location>
         <Size>
-          <Width>720</Width>
-          <Height>540</Height>
+          <Width>800</Width>
+          <Height>600</Height>
         </Size>
       </Window>
     </TerminalSettings>
