@@ -2937,9 +2937,6 @@ namespace YAT.Model
 		/// </remarks>
 		protected void DoSendText(Command c)
 		{
-			// Each send request shall resume a pending break condition:
-			ResumeBreak();
-
 			if (c.IsValidText)
 			{
 				if (c.IsSingleLineText)
@@ -3030,9 +3027,6 @@ namespace YAT.Model
 
 			try
 			{
-				// Each send request shall resume a pending break condition:
-				ResumeBreak();
-
 				if (this.terminal is Domain.TextTerminal)
 				{
 					if (ExtensionHelper.IsXmlFile(filePath))
