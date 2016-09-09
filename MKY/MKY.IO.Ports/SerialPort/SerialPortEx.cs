@@ -646,8 +646,8 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public bool RfrEnable
 		{
-			get { return (RtsEnable); }
-			set { RtsEnable = value;  }
+			get { return (this.RtsEnable); }
+			set { this.RtsEnable = value;  }
 		}
 
 		/// <summary>
