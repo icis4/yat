@@ -1121,13 +1121,13 @@ namespace YAT.View.Controls
 							lblin.Items.RemoveAt(0);
 							lbmon.Items.RemoveAt(0);
 
-							if (this.showTotalLineNumbers)
+							unchecked
 							{
-								unchecked
-								{
-									this.lineNumberOffset++; // Overflow is OK.
-								}
+								this.lineNumberOffset++; // Overflow is OK.
 							}
+
+							// Note the offset is incremented independent on 'showTotalLineNumbers'
+							// to have the indeed total value when the user enables the setting.
 						}
 
 						// Add element to a new line:
