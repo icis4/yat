@@ -639,6 +639,9 @@ namespace MKY.IO.Serial.Usb
 							this.device.Send(data);
 							OnDataSent(new SerialDataSentEventArgs(data, DeviceInfo));
 
+							if (this.settings.FlowControlUsesXOnXOff)
+								HandleXOnOrXOffAndNotify(data);
+
 							// Note the Thread.Sleep(TimeSpan.Zero) above.
 						}
 						finally
@@ -652,11 +655,27 @@ namespace MKY.IO.Serial.Usb
 			DebugThreadStateMessage("SendThread() has terminated.");
 		}
 
+		private void HandleXOnOrXOffAndNotify(byte[] data)
+		{
+			bool signalIOControlChanged = false;
+
+			foreach (byte b in data)
+			{
+				if (XOnXOff.IsXOnOrXOffByte(b))
+				{
+					this.iXOnXOffHelper.XOnOrXOffSent(b);
+					signalIOControlChanged = true; // XOn/XOff count has changed.
+				}
+			}
+
+			if (signalIOControlChanged)
+				OnIOControlChanged(EventArgs.Empty);
+		}
+
 		private void SendXOnOrXOffAndNotify(byte b)
 		{
 			this.device.Send(b);
-
-			OnDataSent(new SerialDataSentEventArgs(b, DeviceInfo)); // Skip I/O synchronization for simplicity.
+			OnDataSent(new SerialDataSentEventArgs(b, DeviceInfo));
 
 			if (this.iXOnXOffHelper.XOnOrXOffSent(b))
 				OnIOControlChanged(EventArgs.Empty);
