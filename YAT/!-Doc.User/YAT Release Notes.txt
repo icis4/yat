@@ -162,7 +162,7 @@ Fixed bugs:
   occurs, the serial COM port connection monitoring has to be disabled in the terminal settings.
 - TCP/IP local interface setting fixed:
    > Setting is now properly applied to all TCP/IP sockets (bug #322).
-   > Setting extended to interface description/address pair (bug #328).
+   > Setting extended to interface description/address pair (bugs #328 and #355).
 - UDP/IP functionality fixed:
    > Can now properly receive from a remote host (bug #327).
    > Dedicated settings for server, client and socket (related to bug #248).
