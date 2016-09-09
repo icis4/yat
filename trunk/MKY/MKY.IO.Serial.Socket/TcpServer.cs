@@ -664,6 +664,10 @@ namespace MKY.IO.Serial.Socket
 			// cases.
 		}
 
+		/// <remarks>
+		/// Using 'Stop' instead of 'Terminate' to emphasize graceful termination, i.e. trying
+		/// to join first, then abort if not successfully joined.
+		/// </remarks>
 		private void StopDataSentThread()
 		{
 			lock (this.dataSentThreadSyncObj)
@@ -696,6 +700,8 @@ namespace MKY.IO.Serial.Socket
 
 							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 						}
+
+						DebugThreadStateMessage("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -705,12 +711,8 @@ namespace MKY.IO.Serial.Socket
 
 						DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
-					finally
-					{
-						this.dataSentThread = null;
-					}
 
-					DebugThreadStateMessage("...successfully terminated.");
+					this.dataSentThread = null;
 				}
 
 				if (this.dataSentThreadEvent != null)

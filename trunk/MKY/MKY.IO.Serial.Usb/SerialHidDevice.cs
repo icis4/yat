@@ -952,6 +952,10 @@ namespace MKY.IO.Serial.Usb
 			// cases.
 		}
 
+		/// <remarks>
+		/// Using 'Stop' instead of 'Terminate' to emphasize graceful termination, i.e. trying
+		/// to join first, then abort if not successfully joined.
+		/// </remarks>
 		private void StopThreads()
 		{
 			// First clear both flags to reduce the time to stop the receive thread, it may already
@@ -989,6 +993,8 @@ namespace MKY.IO.Serial.Usb
 
 							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 						}
+
+						DebugThreadStateMessage("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -998,12 +1004,8 @@ namespace MKY.IO.Serial.Usb
 
 						DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
-					finally
-					{
-						this.sendThread = null;
-					}
 
-					DebugThreadStateMessage("...successfully terminated.");
+					this.sendThread = null;
 				}
 
 				if (this.sendThreadEvent != null)
@@ -1041,6 +1043,8 @@ namespace MKY.IO.Serial.Usb
 
 							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 						}
+
+						DebugThreadStateMessage("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -1050,12 +1054,8 @@ namespace MKY.IO.Serial.Usb
 
 						DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
-					finally
-					{
-						this.receiveThread = null;
-					}
 
-					DebugThreadStateMessage("...successfully terminated.");
+					this.receiveThread = null;
 				}
 
 				if (this.receiveThreadEvent != null)
@@ -1063,7 +1063,7 @@ namespace MKY.IO.Serial.Usb
 					try     { this.receiveThreadEvent.Close(); }
 					finally { this.receiveThreadEvent = null; }
 				}
-			} // lock (sendThreadSyncObj)
+			} // lock (receiveThreadSyncObj)
 		}
 
 		#endregion
