@@ -982,13 +982,15 @@ namespace YAT.View.Forms
 
 		private void contextMenuStrip_Preset_Initialize()
 		{
-			this.menuItems_preset = new List<ToolStripMenuItem>(6); // Preset the required capacity to improve memory management.
+			this.menuItems_preset = new List<ToolStripMenuItem>(8); // Preset the required capacity to improve memory management.
 			this.menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_1);
 			this.menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_2);
 			this.menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_3);
 			this.menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_4);
 			this.menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_5);
 			this.menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_6);
+			this.menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_7);
+			this.menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_8);
 		}
 
 		/// <remarks>
@@ -2595,74 +2597,95 @@ namespace YAT.View.Forms
 			string presetString = "";
 			switch (preset)
 			{
-				case 1:	presetString =  "2400, 7, Even, 1, None";     break;
-				case 2:	presetString =  "2400, 7, Even, 1, XOn/XOff"; break;
-				case 3:	presetString =  "9600, 8, None, 1, None";     break;
-				case 4:	presetString =  "9600, 8, None, 1, XOn/XOff"; break;
-				case 5:	presetString = "19200, 8, None, 1, None";     break;
-				case 6:	presetString = "19200, 8, None, 1, XOn/XOff"; break;
+				case 1: presetString =   "2400, 7, Even, 1, None";     break;
+				case 2: presetString =   "2400, 7, Even, 1, Software"; break;
+				case 3: presetString =   "9600, 8, None, 1, None";     break;
+				case 4: presetString =   "9600, 8, None, 1, Software"; break;
+				case 5: presetString =  "19200, 8, None, 1, None";     break;
+				case 6: presetString =  "19200, 8, None, 1, Software"; break;
+				case 7: presetString = "115200, 8, None, 1, None";     break;
+				case 8: presetString = "115200, 8, None, 1, Software"; break;
+				default: throw (new NotSupportedException("Program execution should never get here, '" + preset + "' is an invalid preset!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
-			MKY.IO.Serial.SerialPort.SerialCommunicationSettings settings = this.settingsRoot.Terminal.IO.SerialPort.Communication;
-			settings.SuspendChangeEvent();
+			MKY.IO.Serial.SerialPort.SerialCommunicationSettings scs = this.settingsRoot.Terminal.IO.SerialPort.Communication;
+			scs.SuspendChangeEvent();
 			switch (preset)
 			{
 				case 1: // "2400, 7, Even, 1, None"
 				{
-					settings.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud002400;
-					settings.DataBits    = MKY.IO.Ports.DataBits.Seven;
-					settings.Parity      = System.IO.Ports.Parity.Even;
-					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
+					scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud002400;
+					scs.DataBits    = MKY.IO.Ports.DataBits.Seven;
+					scs.Parity      = System.IO.Ports.Parity.Even;
+					scs.StopBits    = System.IO.Ports.StopBits.One;
+					scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
 					break;
 				}
-				case 2: // "2400, 7, Even, 1, XOn/XOff"
+				case 2: // "2400, 7, Even, 1, Software"
 				{
-					settings.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud002400;
-					settings.DataBits    = MKY.IO.Ports.DataBits.Seven;
-					settings.Parity      = System.IO.Ports.Parity.Even;
-					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.Software;
+					scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud002400;
+					scs.DataBits    = MKY.IO.Ports.DataBits.Seven;
+					scs.Parity      = System.IO.Ports.Parity.Even;
+					scs.StopBits    = System.IO.Ports.StopBits.One;
+					scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.Software;
 					break;
 				}
 				case 3: // "9600, 8, None, 1, None"
 				{
-					settings.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud009600;
-					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
-					settings.Parity      = System.IO.Ports.Parity.None;
-					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
+					scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud009600;
+					scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
+					scs.Parity      = System.IO.Ports.Parity.None;
+					scs.StopBits    = System.IO.Ports.StopBits.One;
+					scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
 					break;
 				}
-				case 4: // "9600, 8, None, 1, XOn/XOff"
+				case 4: // "9600, 8, None, 1, Software"
 				{
-					settings.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud009600;
-					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
-					settings.Parity      = System.IO.Ports.Parity.None;
-					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.Software;
+					scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud009600;
+					scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
+					scs.Parity      = System.IO.Ports.Parity.None;
+					scs.StopBits    = System.IO.Ports.StopBits.One;
+					scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.Software;
 					break;
 				}
 				case 5: // "19200, 8, None, 1, None"
 				{
-					settings.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud019200;
-					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
-					settings.Parity      = System.IO.Ports.Parity.None;
-					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
+					scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud019200;
+					scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
+					scs.Parity      = System.IO.Ports.Parity.None;
+					scs.StopBits    = System.IO.Ports.StopBits.One;
+					scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
 					break;
 				}
-				case 6: // "19200, 8, None, 1, XOn/XOff"
+				case 6: // "19200, 8, None, 1, Software"
 				{
-					settings.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud019200;
-					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
-					settings.Parity      = System.IO.Ports.Parity.None;
-					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.Software;
+					scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud019200;
+					scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
+					scs.Parity      = System.IO.Ports.Parity.None;
+					scs.StopBits    = System.IO.Ports.StopBits.One;
+					scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.Software;
+					break;
+				}
+				case 7: // "115200, 8, None, 1, None"
+				{
+					scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud115200;
+					scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
+					scs.Parity      = System.IO.Ports.Parity.None;
+					scs.StopBits    = System.IO.Ports.StopBits.One;
+					scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
+					break;
+				}
+				case 8: // "115200, 8, None, 1, Software"
+				{
+					scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud115200;
+					scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
+					scs.Parity      = System.IO.Ports.Parity.None;
+					scs.StopBits    = System.IO.Ports.StopBits.One;
+					scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.Software;
 					break;
 				}
 			}
-			settings.ResumeChangeEvent(true); // Force event.
+			scs.ResumeChangeEvent(true); // Force event!
 
 			SetTimedStatusText("Terminal settings set to " + presetString + ".");
 		}
@@ -2725,7 +2748,7 @@ namespace YAT.View.Forms
 			{
 				case Domain.IODirection.Tx: this.settingsRoot.Display.TxRadix = radix; break;
 				case Domain.IODirection.Rx: this.settingsRoot.Display.RxRadix = radix; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
