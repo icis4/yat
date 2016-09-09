@@ -148,7 +148,7 @@ namespace MKY.IO.Serial.Socket
 				case SocketType.UdpServer:     return (UdpServer_string);
 				case SocketType.UdpPairSocket: return (UdpPairSocket_string);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

@@ -866,7 +866,7 @@ namespace YAT.View.Controls
 
 					default:
 					{
-						throw (new NotSupportedException("Program execution should never get here,'" + this.socketType + "' is invalid here." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new NotSupportedException("Program execution should never get here,'" + this.socketType + "' is invalid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 			}

@@ -110,7 +110,7 @@ namespace MKY.IO.Serial.Usb
 				case SerialHidFlowControl.Software:       return (Software_string);
 				case SerialHidFlowControl.ManualSoftware: return (ManualSoftware_string);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -123,7 +123,7 @@ namespace MKY.IO.Serial.Usb
 				case SerialHidFlowControl.Software:       return (Software_stringShort);
 				case SerialHidFlowControl.ManualSoftware: return (ManualSoftware_stringShort);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

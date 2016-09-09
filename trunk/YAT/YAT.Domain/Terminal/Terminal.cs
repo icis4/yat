@@ -469,6 +469,10 @@ namespace YAT.Domain
 			// cases.
 		}
 
+		/// <remarks>
+		/// Using 'Stop' instead of 'Terminate' to emphasize graceful termination, i.e. trying
+		/// to join first, then abort if not successfully joined.
+		/// </remarks>
 		private void StopSendThread()
 		{
 			lock (this.sendThreadSyncObj)
@@ -501,6 +505,8 @@ namespace YAT.Domain
 
 							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 						}
+
+						DebugThreadStateMessage("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -511,11 +517,7 @@ namespace YAT.Domain
 						DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
-					this.sendThreadEvent.Close();
-					this.sendThreadEvent = null;
 					this.sendThread = null;
-
-					DebugThreadStateMessage("...successfully terminated.");
 				}
 #if (DEBUG)
 				else
@@ -523,7 +525,12 @@ namespace YAT.Domain
 					DebugThreadStateMessage("...not necessary as it doesn't exist anymore.");
 				}
 #endif
-			}
+				if (this.sendThreadEvent != null)
+				{
+					try     { this.sendThreadEvent.Close(); }
+					finally { this.sendThreadEvent = null; }
+				}
+			} // lock (sendThreadSyncObj)
 		}
 
 		#endregion
@@ -998,7 +1005,7 @@ namespace YAT.Domain
 				if (psi != null)
 					ProcessParsableSendItem(psi);
 				else
-					throw (new NotSupportedException("Program execution should never get here,'" + item.GetType() + "' is an invalid send item type." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new NotSupportedException("Program execution should never get here,'" + item.GetType() + "' is an invalid send item type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -1767,7 +1774,7 @@ namespace YAT.Domain
 			{
 				case IODirection.Tx: return (ByteToElement(b, d, this.terminalSettings.Display.TxRadix));
 				case IODirection.Rx: return (ByteToElement(b, d, this.terminalSettings.Display.RxRadix));
-				default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -1880,7 +1887,7 @@ namespace YAT.Domain
 							{
 								case IODirection.Tx: return (new DisplayElement.TxData(b, text));
 								case IODirection.Rx: return (new DisplayElement.RxData(b, text));
-								default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+								default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
 						}
 						else
@@ -1889,7 +1896,7 @@ namespace YAT.Domain
 							{
 								case IODirection.Tx: return (new DisplayElement.TxControl(b, text));
 								case IODirection.Rx: return (new DisplayElement.RxControl(b, text));
-								default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+								default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
 						}
 					}
@@ -1899,7 +1906,7 @@ namespace YAT.Domain
 						{
 							case IODirection.Tx: return (new DisplayElement.TxData(b, text));
 							case IODirection.Rx: return (new DisplayElement.RxData(b, text));
-							default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
 					}
 				}
@@ -1909,7 +1916,7 @@ namespace YAT.Domain
 					{
 						case IODirection.Tx: return (new DisplayElement.TxData(b, text));
 						case IODirection.Rx: return (new DisplayElement.RxData(b, text));
-						default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 			}
@@ -2010,7 +2017,7 @@ namespace YAT.Domain
 			{
 				case IODirection.Tx: return (ElementsAreSeparate(this.terminalSettings.Display.TxRadix));
 				case IODirection.Rx: return (ElementsAreSeparate(this.terminalSettings.Display.RxRadix));
-				default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an unknown direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an unknown direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2729,7 +2736,7 @@ namespace YAT.Domain
 
 				default:
 				{
-					throw (new NotSupportedException("Program execution should never get here, '" + direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new NotSupportedException("Program execution should never get here, '" + direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -2758,7 +2765,7 @@ namespace YAT.Domain
 				{
 					case IODirection.Tx: OnDisplayLinesSent    (new DisplayLinesEventArgs(lines)); break;
 					case IODirection.Rx: OnDisplayLinesReceived(new DisplayLinesEventArgs(lines)); break;
-					default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}

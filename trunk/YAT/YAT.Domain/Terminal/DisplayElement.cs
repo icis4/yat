@@ -674,7 +674,7 @@ namespace YAT.Domain
 			else if (this is LineStart)		clone = new LineStart();
 			else if (this is LineBreak)		clone = new LineBreak();
 			else if (this is ErrorInfo)		clone = new ErrorInfo();
-			else throw (new TypeLoadException("Program execution should never get here, '" + GetType() + "' is an unknown display element type." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			else throw (new TypeLoadException("Program execution should never get here, '" + GetType() + "' is an unknown display element type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			clone.direction = this.direction;
 			clone.origin    = PerformDeepClone(this.origin);

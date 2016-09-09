@@ -236,14 +236,14 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// The frame length in seconds.
+		/// The frame duration in milliseconds.
 		/// </summary>
 		[XmlIgnore]
-		public virtual double FrameLength
+		public virtual double FrameTime
 		{
 			get
 			{
-				return (BitsPerFrame / (MKY.IO.Ports.BaudRateEx)BaudRate);
+				return ((BitsPerFrame / (MKY.IO.Ports.BaudRateEx)BaudRate) * 1000);
 			}
 		}
 

@@ -407,7 +407,7 @@ namespace YAT.View.Forms
 					break;
 
 				default:
-					throw (new NotSupportedException("Program execution should never get here, '" + tt + "' is an invalid terminal type." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new NotSupportedException("Program execution should never get here, '" + tt + "' is an invalid terminal type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 			button += " Settings...";
 			button_TextOrBinarySettings.Text = button;
@@ -521,7 +521,7 @@ namespace YAT.View.Forms
 				}
 				default:
 				{
-					throw (new NotSupportedException("Program execution should never get here, '" + tt + "' is an invalid terminal type." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new NotSupportedException("Program execution should never get here, '" + tt + "' is an invalid terminal type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}

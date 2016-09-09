@@ -141,7 +141,7 @@ namespace YAT.Model.Types
 				case WorkspaceLayout.Minimize:       return (Minimize_string);
 				case WorkspaceLayout.Maximize:       return (Maximize_string);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion
@@ -287,14 +287,14 @@ namespace YAT.Model.Types
 		{
 			switch ((WorkspaceLayout)layout.UnderlyingEnum)
 			{
-				case WorkspaceLayout.Automatic:      throw (new NotSupportedException("'Automatic' is not supported by 'Windows.Forms.MdiLayout'." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				case WorkspaceLayout.Automatic:      throw (new NotSupportedException("'Automatic' is not supported by 'Windows.Forms.MdiLayout'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				case WorkspaceLayout.Cascade:        return (MdiLayout.Cascade);
 				case WorkspaceLayout.TileHorizontal: return (MdiLayout.TileHorizontal);
 				case WorkspaceLayout.TileVertical:   return (MdiLayout.TileVertical);
-				case WorkspaceLayout.Manual:         throw (new NotSupportedException("'Manual' is not supported by 'Windows.Forms.MdiLayout'." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				case WorkspaceLayout.Minimize:       throw (new NotSupportedException("'Minimize' is not supported by 'Windows.Forms.MdiLayout'." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				case WorkspaceLayout.Maximize:       throw (new NotSupportedException("'Maximize' is not supported by 'Windows.Forms.MdiLayout'." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                             throw (new NotSupportedException("Program execution should never get here,'" + (WorkspaceLayout)layout.UnderlyingEnum + "' is an unknown workspace layout." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				case WorkspaceLayout.Manual:         throw (new NotSupportedException("'Manual' is not supported by 'Windows.Forms.MdiLayout'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				case WorkspaceLayout.Minimize:       throw (new NotSupportedException("'Minimize' is not supported by 'Windows.Forms.MdiLayout'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				case WorkspaceLayout.Maximize:       throw (new NotSupportedException("'Maximize' is not supported by 'Windows.Forms.MdiLayout'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                             throw (new NotSupportedException("Program execution should never get here,'" + (WorkspaceLayout)layout.UnderlyingEnum + "' is an unknown workspace layout!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -307,8 +307,8 @@ namespace YAT.Model.Types
 				case MdiLayout.Cascade:        return (new WorkspaceLayoutEx(WorkspaceLayout.Cascade));
 				case MdiLayout.TileHorizontal: return (new WorkspaceLayoutEx(WorkspaceLayout.TileHorizontal));
 				case MdiLayout.TileVertical:   return (new WorkspaceLayoutEx(WorkspaceLayout.TileVertical));
-				case MdiLayout.ArrangeIcons:   throw (new NotSupportedException("'ArrangeIcons' is not supported by " + ApplicationEx.ProductName + "." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                       throw (new NotSupportedException("Program execution should never get here,'" + layout + "' is an unknown workspace layout." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				case MdiLayout.ArrangeIcons:   throw (new NotSupportedException("'ArrangeIcons' is not supported by " + ApplicationEx.ProductName + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                       throw (new NotSupportedException("Program execution should never get here,'" + layout + "' is an unknown workspace layout!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
