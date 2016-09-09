@@ -969,6 +969,8 @@ namespace MKY.IO.Serial.Socket
 
 							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 						}
+
+						DebugThreadStateMessage("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -978,12 +980,8 @@ namespace MKY.IO.Serial.Socket
 
 						DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
-					finally
-					{
-						this.sendThread = null;
-					}
 
-					DebugThreadStateMessage("...successfully terminated.");
+					this.sendThread = null;
 				}
 
 				if (this.sendThreadEvent != null)
@@ -1032,6 +1030,8 @@ namespace MKY.IO.Serial.Socket
 
 							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 						}
+
+						DebugThreadStateMessage("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -1041,12 +1041,8 @@ namespace MKY.IO.Serial.Socket
 
 						DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
-					finally
-					{
-						this.receiveThread = null;
-					}
 
-					DebugThreadStateMessage("...successfully terminated.");
+					this.receiveThread = null;
 				}
 
 				if (this.receiveThreadEvent != null)

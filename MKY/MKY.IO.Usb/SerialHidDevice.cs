@@ -809,6 +809,10 @@ namespace MKY.IO.Usb
 			// cases.
 		}
 
+		/// <remarks>
+		/// Using 'Stop' instead of 'Terminate' to emphasize graceful termination, i.e. trying
+		/// to join first, then abort if not successfully joined.
+		/// </remarks>
 		private void StopReceiveThread()
 		{
 			lock (this.receiveThreadSyncObj)
@@ -841,6 +845,8 @@ namespace MKY.IO.Usb
 
 							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 						}
+
+						DebugThreadStateMessage("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -850,12 +856,8 @@ namespace MKY.IO.Usb
 
 						DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
-					finally
-					{
-						this.receiveThread = null;
-					}
 
-					DebugThreadStateMessage("...successfully terminated.");
+					this.receiveThread = null;
 				}
 
 				if (this.receiveThreadEvent != null)
@@ -863,7 +865,7 @@ namespace MKY.IO.Usb
 					try     { this.receiveThreadEvent.Close(); }
 					finally { this.receiveThreadEvent = null; }
 				}
-			}
+			} // lock (receiveThreadSyncObj)
 		}
 
 		#endregion
