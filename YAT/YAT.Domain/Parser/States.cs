@@ -908,7 +908,7 @@ namespace YAT.Domain.Parser
 
 				default:
 				{
-					throw (new NotSupportedException("Program execution should never get here,'" + parser.Radix + "' is an invalid radix." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new NotSupportedException("Program execution should never get here,'" + parser.Radix + "' is an invalid radix!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 
