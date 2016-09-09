@@ -268,8 +268,16 @@ namespace YAT.Model.Types
 
 				if ((value != null) && (value.Length >= 1) && (value[0] != null))
 				{
-					this.isDefined = true;
-					this.commandLines = value; // Empty string is OK for defined commands!
+					if (!string.IsNullOrEmpty(value[0]))
+					{
+						this.isDefined = true;
+						this.commandLines = value;
+					}
+					else // Empty string! Either explicitly defined by the user, or result of XML deserialization!
+					{
+						// Do not set isDefined = true since it could be the result of the of XML deserialization!
+						this.commandLines = value;
+					}
 
 					// Reset the other fields:
 					if (!string.IsNullOrEmpty(value[0]))

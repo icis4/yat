@@ -41,7 +41,6 @@ namespace YAT.Settings.Terminal
 		private Model.Settings.SendTextSettings sendText;
 		private Model.Settings.SendFileSettings sendFile;
 		private Model.Settings.PredefinedSettings predefined;
-		private Model.Settings.AutoResponseSettings autoResponse;
 		private Model.Settings.WindowSettings window;
 		private Model.Settings.LayoutSettings layout;
 		private Model.Settings.ViewSettings view;
@@ -61,7 +60,6 @@ namespace YAT.Settings.Terminal
 			SendText     = new Model.Settings.SendTextSettings(SettingsType);
 			SendFile     = new Model.Settings.SendFileSettings(SettingsType);
 			Predefined   = new Model.Settings.PredefinedSettings(SettingsType);
-			AutoResponse = new Model.Settings.AutoResponseSettings(SettingsType);
 			Window       = new Model.Settings.WindowSettings(SettingsType);
 			Layout       = new Model.Settings.LayoutSettings(SettingsType);
 			View         = new Model.Settings.ViewSettings(SettingsType);
@@ -82,7 +80,6 @@ namespace YAT.Settings.Terminal
 			SendText     = new Model.Settings.SendTextSettings(rhs.SendText);
 			SendFile     = new Model.Settings.SendFileSettings(rhs.SendFile);
 			Predefined   = new Model.Settings.PredefinedSettings(rhs.Predefined);
-			AutoResponse = new Model.Settings.AutoResponseSettings(rhs.AutoResponse);
 			Window       = new Model.Settings.WindowSettings(rhs.Window);
 			Layout       = new Model.Settings.LayoutSettings(rhs.Layout);
 			View         = new Model.Settings.ViewSettings(rhs.View);
@@ -181,23 +178,6 @@ namespace YAT.Settings.Terminal
 				{
 					var oldNode = this.predefined;
 					this.predefined = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
-
-					AttachOrReplaceOrDetachNode(oldNode, value);
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("AutoResponse")]
-		public virtual Model.Settings.AutoResponseSettings AutoResponse
-		{
-			get { return (this.autoResponse); }
-			set
-			{
-				if (this.autoResponse != value)
-				{
-					var oldNode = this.autoResponse;
-					this.autoResponse = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
 
 					AttachOrReplaceOrDetachNode(oldNode, value);
 				}

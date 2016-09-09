@@ -334,6 +334,38 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
+		public virtual Model.Settings.PredefinedCommandSettings PredefinedCommand
+		{
+			get { return (this.explicit_.PredefinedCommand); }
+			set { this.explicit_.PredefinedCommand = value;  }
+		}
+
+		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
+		[XmlIgnore]
+		public virtual Model.Settings.AutoResponseSettings AutoResponse
+		{
+			get { return (this.explicit_.AutoResponse); }
+			set { this.explicit_.AutoResponse = value;  }
+		}
+
+		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
+		[XmlIgnore]
+		public virtual Model.Settings.FormatSettings Format
+		{
+			get { return (this.explicit_.Format); }
+			set { this.explicit_.Format = value;  }
+		}
+
+		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
+		[XmlIgnore]
+		public virtual Log.Settings.LogSettings Log
+		{
+			get { return (this.explicit_.Log); }
+			set { this.explicit_.Log = value;  }
+		}
+
+		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
+		[XmlIgnore]
 		public virtual Model.Settings.SendTextSettings SendText
 		{
 			get { return (this.implicit_.SendText); }
@@ -358,14 +390,6 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual Model.Settings.AutoResponseSettings AutoResponse
-		{
-			get { return (this.implicit_.AutoResponse); }
-			set { this.implicit_.AutoResponse = value;  }
-		}
-
-		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
-		[XmlIgnore]
 		public virtual Model.Settings.WindowSettings Window
 		{
 			get { return (this.implicit_.Window); }
@@ -386,30 +410,6 @@ namespace YAT.Settings.Terminal
 		{
 			get { return (this.implicit_.View); }
 			set { this.implicit_.View = value;  }
-		}
-
-		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
-		[XmlIgnore]
-		public virtual Model.Settings.PredefinedCommandSettings PredefinedCommand
-		{
-			get { return (this.explicit_.PredefinedCommand); }
-			set { this.explicit_.PredefinedCommand = value;  }
-		}
-
-		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
-		[XmlIgnore]
-		public virtual Model.Settings.FormatSettings Format
-		{
-			get { return (this.explicit_.Format); }
-			set { this.explicit_.Format = value;  }
-		}
-
-		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
-		[XmlIgnore]
-		public virtual Log.Settings.LogSettings Log
-		{
-			get { return (this.explicit_.Log); }
-			set { this.explicit_.Log = value;  }
 		}
 
 		#endregion
@@ -444,11 +444,11 @@ namespace YAT.Settings.Terminal
 					case Model.Types.AutoTrigger.PredefinedCommand11:
 					case Model.Types.AutoTrigger.PredefinedCommand12:
 					{
-						int pageId = this.implicit_.Predefined.SelectedPage;
+						int pageId = Predefined.SelectedPage;
 						int commandId = trigger.ToPredefinedCommandId();
 						if (commandId != Model.Types.AutoTriggerEx.InvalidPredefinedCommandId)
 						{
-							Model.Types.Command c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
+							Model.Types.Command c = PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
 							if ((c != null) && (c.IsValid))
 								a.Add(trigger);
 						}
@@ -458,7 +458,7 @@ namespace YAT.Settings.Terminal
 
 					case Model.Types.AutoTrigger.Explicit:
 					{
-						Model.Types.Command c = new Model.Types.Command(this.implicit_.AutoResponse.Trigger); // No explicit default radix available (yet).
+						Model.Types.Command c = new Model.Types.Command(AutoResponse.Trigger); // No explicit default radix available (yet).
 						if (c.IsValid)
 							a.Add(trigger);
 
@@ -503,7 +503,7 @@ namespace YAT.Settings.Terminal
 					case Model.Types.AutoResponse.PredefinedCommand11:
 					case Model.Types.AutoResponse.PredefinedCommand12:
 					{
-						int pageId = this.implicit_.Predefined.SelectedPage;
+						int pageId = Predefined.SelectedPage;
 						int commandId = response.ToPredefinedCommandId();
 						if (commandId != Model.Types.AutoResponseEx.InvalidPredefinedCommandId)
 						{
@@ -517,7 +517,7 @@ namespace YAT.Settings.Terminal
 
 					case Model.Types.AutoResponse.SendText:
 					{
-						Model.Types.Command c = this.implicit_.SendText.Command;
+						Model.Types.Command c = SendText.Command;
 						if ((c != null) && (c.IsValid))
 							a.Add(response);
 
@@ -526,7 +526,7 @@ namespace YAT.Settings.Terminal
 
 					case Model.Types.AutoResponse.SendFile:
 					{
-						Model.Types.Command c = this.implicit_.SendFile.Command;
+						Model.Types.Command c = SendFile.Command;
 						if ((c != null) && (c.IsValid))
 							a.Add(response);
 
@@ -535,7 +535,7 @@ namespace YAT.Settings.Terminal
 
 					case Model.Types.AutoResponse.Explicit:
 					{
-						Model.Types.Command c = new Model.Types.Command(this.implicit_.AutoResponse.Response); // No explicit default radix available (yet).
+						Model.Types.Command c = new Model.Types.Command(AutoResponse.Response); // No explicit default radix available (yet).
 						if (c.IsValid)
 							a.Add(response);
 
@@ -564,9 +564,9 @@ namespace YAT.Settings.Terminal
 			{
 				Model.Types.Command response = null;
 
-				if (this.implicit_.AutoResponse.TriggerIsActive)
+				if (this.AutoResponse.TriggerIsActive)
 				{
-					switch ((Model.Types.AutoTrigger)this.implicit_.AutoResponse.Trigger)
+					switch ((Model.Types.AutoTrigger)this.AutoResponse.Trigger)
 					{
 						case Model.Types.AutoTrigger.PredefinedCommand1:
 						case Model.Types.AutoTrigger.PredefinedCommand2:
@@ -581,8 +581,8 @@ namespace YAT.Settings.Terminal
 						case Model.Types.AutoTrigger.PredefinedCommand11:
 						case Model.Types.AutoTrigger.PredefinedCommand12:
 						{
-							int pageId = this.implicit_.Predefined.SelectedPage;
-							int commandId = this.implicit_.AutoResponse.Trigger.ToPredefinedCommandId();
+							int pageId = Predefined.SelectedPage;
+							int commandId = AutoResponse.Trigger.ToPredefinedCommandId();
 							if (commandId != Model.Types.AutoTriggerEx.InvalidPredefinedCommandId)
 							{
 								Model.Types.Command c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
@@ -595,7 +595,7 @@ namespace YAT.Settings.Terminal
 
 						case Model.Types.AutoTrigger.Explicit:
 						{
-							Model.Types.Command c = new Model.Types.Command(this.implicit_.AutoResponse.Trigger); // No explicit default radix available (yet).
+							Model.Types.Command c = new Model.Types.Command(AutoResponse.Trigger); // No explicit default radix available (yet).
 							if (c.IsValid)
 								response = c;
 

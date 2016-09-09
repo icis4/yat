@@ -331,11 +331,11 @@ namespace YAT.Model.Types
 			else if (StringEx.StartsWithOrdinalIgnoreCase   (s, PredefinedCommand_string) ||
 			         StringEx.StartsWithAnyOrdinalIgnoreCase(s, PredefinedCommand_stringAlternatives))
 			{
-				string[] values = Regex.Split(s, @"\d+");
-				if (values.Length > 0)
+				Match match = Regex.Match(s, @"\d+");
+				if (match.Success)
 				{
 					int intValue;
-					if (int.TryParse(values[0], out intValue))
+					if (int.TryParse(match.Groups[0].Value, out intValue))
 					{
 						if ((intValue >= 1) && (intValue <= 12))
 						{
