@@ -21,7 +21,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
 using System.Xml.Serialization;
 
 using MKY;
@@ -38,6 +37,7 @@ namespace YAT.Settings.Terminal
 
 		private Domain.Settings.TerminalSettings terminal;
 		private Model.Settings.PredefinedCommandSettings predefinedCommand;
+		private Model.Settings.AutoResponseSettings autoResponse;
 		private Model.Settings.FormatSettings format;
 		private Log.Settings.LogSettings log;
 
@@ -55,6 +55,7 @@ namespace YAT.Settings.Terminal
 
 			Terminal          = new Domain.Settings.TerminalSettings(SettingsType);
 			PredefinedCommand = new Model.Settings.PredefinedCommandSettings(SettingsType);
+			AutoResponse      = new Model.Settings.AutoResponseSettings(SettingsType);
 			Format            = new Model.Settings.FormatSettings(SettingsType);
 			Log               = new Log.Settings.LogSettings(SettingsType);
 
@@ -72,6 +73,7 @@ namespace YAT.Settings.Terminal
 
 			Terminal          = new Domain.Settings.TerminalSettings(rhs.Terminal);
 			PredefinedCommand = new Model.Settings.PredefinedCommandSettings(rhs.PredefinedCommand);
+			AutoResponse      = new Model.Settings.AutoResponseSettings(rhs.AutoResponse);
 			Format            = new Model.Settings.FormatSettings(rhs.Format);
 			Log               = new Log.Settings.LogSettings(rhs.Log);
 
@@ -136,6 +138,23 @@ namespace YAT.Settings.Terminal
 				{
 					var oldNode = this.predefinedCommand;
 					this.predefinedCommand = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("AutoResponse")]
+		public virtual Model.Settings.AutoResponseSettings AutoResponse
+		{
+			get { return (this.autoResponse); }
+			set
+			{
+				if (this.autoResponse != value)
+				{
+					var oldNode = this.autoResponse;
+					this.autoResponse = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
 
 					AttachOrReplaceOrDetachNode(oldNode, value);
 				}

@@ -1295,6 +1295,14 @@ namespace YAT.Model
 			{
 				HandleTerminalSettings(e.Inner);
 			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.PredefinedCommand))
+			{
+				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.AutoResponse))
+			{
+				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Format))
 			{
 				this.log.NeatFormat = this.settingsRoot.Format;
@@ -1353,14 +1361,6 @@ namespace YAT.Model
 				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendFile))
-			{
-				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
-			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Predefined))
-			{
-				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
-			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.AutoResponse))
 			{
 				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 			}
