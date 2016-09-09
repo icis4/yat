@@ -822,7 +822,7 @@ namespace MKY.IO.Serial.SerialPort
 					case SerialControlPinState.Automatic: /* Do not access the pin! */ break;
 					case SerialControlPinState.Enabled:   this.port.RfrEnable = true;  break;
 					case SerialControlPinState.Disabled:  this.port.RfrEnable = false; break;
-					default: throw (new NotSupportedException("Program execution should never get here,'" + scs.RfrPin.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException("Program execution should never get here,'" + scs.RfrPin.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				switch (scs.DtrPin)
@@ -830,7 +830,7 @@ namespace MKY.IO.Serial.SerialPort
 					case SerialControlPinState.Automatic: /* Do not access the pin! */ break;
 					case SerialControlPinState.Enabled:   this.port.DtrEnable = true;  break;
 					case SerialControlPinState.Disabled:  this.port.DtrEnable = false; break;
-					default: throw (new NotSupportedException("Program execution should never get here,'" + scs.DtrPin.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException("Program execution should never get here,'" + scs.DtrPin.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -1006,6 +1006,7 @@ namespace MKY.IO.Serial.SerialPort
 				// does not complete within a second or two.
 
 				CloseAndDisposePort();
+				ClearQueues();
 
 				SetStateSynchronizedAndNotify(State.Closed, withNotify); // Notification must succeed here, do not try/catch.
 
@@ -1038,6 +1039,7 @@ namespace MKY.IO.Serial.SerialPort
 			// does not complete within a second or two.
 
 			CloseAndDisposePort();
+			ClearQueues();
 
 			try
 			{
@@ -1047,6 +1049,15 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				DebugEx.WriteException(GetType(), ex, "Exception while notifying!");
 			}
+		}
+
+		private void ClearQueues()
+		{
+			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+				this.sendQueue.Clear();
+
+			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+				this.receiveQueue.Clear();
 		}
 
 		#endregion
@@ -1130,6 +1141,10 @@ namespace MKY.IO.Serial.SerialPort
 			// cases.
 		}
 
+		/// <remarks>
+		/// Using 'Stop' instead of 'Terminate' to emphasize graceful termination, i.e. trying
+		/// to join first, then abort if not successfully joined.
+		/// </remarks>
 		private void StopThreads()
 		{
 			// First clear both flags to reduce the time to stop the receive thread, it may already
@@ -1167,6 +1182,8 @@ namespace MKY.IO.Serial.SerialPort
 
 								DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 							}
+
+							DebugThreadStateMessage("...successfully stopped.");
 						}
 						catch (ThreadStateException)
 						{
@@ -1176,13 +1193,13 @@ namespace MKY.IO.Serial.SerialPort
 
 							DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 						}
-						finally
-						{
-							this.sendThread = null;
-						}
-					} // Not itself thread.
 
-					DebugThreadStateMessage("...successfully terminated.");
+						this.sendThread = null;
+					}
+					else // Called by thread itself!
+					{
+						this.sendThread = null; // Simply drop the reference to this thread, to be prepar
+					}
 				}
 
 				if (this.sendThreadEvent != null)
@@ -1220,6 +1237,8 @@ namespace MKY.IO.Serial.SerialPort
 
 								DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 							}
+
+							DebugThreadStateMessage("...successfully stopped.");
 						}
 						catch (ThreadStateException)
 						{
@@ -1229,13 +1248,13 @@ namespace MKY.IO.Serial.SerialPort
 
 							DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 						}
-						finally
-						{
-							this.receiveThread = null;
-						}
-					} // Not itself thread.
 
-					DebugThreadStateMessage("...successfully terminated.");
+						this.receiveThread = null;
+					}
+					else // Called by thread itself!
+					{
+						this.receiveThread = null; // Simply drop the reference to this thread, to be prepar
+					}
 				}
 
 				if (this.receiveThreadEvent != null)
@@ -1269,9 +1288,10 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that any exception leads to restart or reset of port.")]
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void SendThread()
-		{	                                            // Must be a second, the calculation further below relies on this!
-			Rate maxBaudRatePerSecond = new Rate(100, 1000); // Keep observation interval rather narrow to ensure staying within limits.
-			int maxFramesPerSecond = (int)((1.0 / this.settings.Communication.FrameLength) * 0.75); // 25% safety margin.
+		{
+			const int Interval = 50; // Keep interval rather narrow to ensure being inside the limits.
+			Rate maxBaudRatePerInterval = new Rate(Interval);
+			int maxFramesPerInterval = (int)((1.0 / this.settings.Communication.FrameTime) * Interval * 0.75); // 25% safety margin.
 
 			Rate maxSendRate = new Rate(this.settings.MaxSendRate.Interval);
 
@@ -1425,7 +1445,7 @@ namespace MKY.IO.Serial.SerialPort
 									// Reduce chunk size if maximum is limited to baud rate:
 									if (this.settings.OutputMaxBaudRate)
 									{
-										int remainingSizeInInterval = (maxFramesPerSecond - maxBaudRatePerSecond.Value);
+										int remainingSizeInInterval = (maxFramesPerInterval - maxBaudRatePerInterval.Value);
 										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, remainingSizeInInterval);
 									}
 
@@ -1454,7 +1474,7 @@ namespace MKY.IO.Serial.SerialPort
 										// Update the send rates with the effective chunk size:
 
 										if (this.settings.OutputMaxBaudRate)
-											maxBaudRatePerSecond.Update(effectiveChunkData.Count);
+											maxBaudRatePerInterval.Update(effectiveChunkData.Count);
 
 										if (this.settings.MaxSendRate.Enabled)
 											maxSendRate.Update(effectiveChunkData.Count);
@@ -1614,7 +1634,7 @@ namespace MKY.IO.Serial.SerialPort
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 			{
 				this.port.Flush(); // Make sure that data is sent before restoring RFR, including the underlying physical UART.
-				Thread.Sleep((int)Math.Ceiling(this.settings.Communication.FrameLength * 1000)); // Single byte/frame.
+				Thread.Sleep((int)Math.Ceiling(this.settings.Communication.FrameTime)); // Single byte/frame.
 				this.port.RfrEnable = false;
 			}
 
@@ -1722,7 +1742,7 @@ namespace MKY.IO.Serial.SerialPort
 					maxFramesInFifo = Math.Min(effectiveChunkData.Count, 16); // Max 16 bytes/frames in FIFO.
 
 				this.port.Flush(); // Make sure that data is sent before restoring RFR, including the underlying physical UART.
-				Thread.Sleep((int)Math.Ceiling(this.settings.Communication.FrameLength * 1000 * maxFramesInFifo));
+				Thread.Sleep((int)Math.Ceiling(this.settings.Communication.FrameTime * maxFramesInFifo));
 				this.port.RfrEnable = false;
 			}
 
