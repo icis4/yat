@@ -187,6 +187,8 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_PresetContextMenu_Preset_4 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PresetContextMenu_Preset_5 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PresetContextMenu_Preset_6 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_PresetContextMenu_Preset_7 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_PresetContextMenu_Preset_8 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Text = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_File = new System.Windows.Forms.ToolStripMenuItem();
@@ -491,7 +493,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_RadixContextMenu_TxRadix,
             this.toolStripMenuItem_RadixContextMenu_RxRadix});
 			this.contextMenuStrip_Radix.Name = "contextMenuStrip_Radix";
-			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_MonitorContextMenu_Radix;
+			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_TerminalMenu_View_Radix;
 			this.contextMenuStrip_Radix.Size = new System.Drawing.Size(151, 220);
 			this.contextMenuStrip_Radix.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Radix_Opening);
 			// 
@@ -1570,7 +1572,9 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_PresetContextMenu_Preset_3,
             this.toolStripMenuItem_PresetContextMenu_Preset_4,
             this.toolStripMenuItem_PresetContextMenu_Preset_5,
-            this.toolStripMenuItem_PresetContextMenu_Preset_6});
+            this.toolStripMenuItem_PresetContextMenu_Preset_6,
+            this.toolStripMenuItem_PresetContextMenu_Preset_7,
+            this.toolStripMenuItem_PresetContextMenu_Preset_8});
 			this.contextMenuStrip_Preset.Name = "contextMenuStrip_Preset";
 			this.contextMenuStrip_Preset.Size = new System.Drawing.Size(234, 136);
 			this.contextMenuStrip_Preset.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Preset_Opening);
@@ -1588,7 +1592,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_PresetContextMenu_Preset_2.Name = "toolStripMenuItem_PresetContextMenu_Preset_2";
 			this.toolStripMenuItem_PresetContextMenu_Preset_2.Size = new System.Drawing.Size(233, 22);
 			this.toolStripMenuItem_PresetContextMenu_Preset_2.Tag = "2";
-			this.toolStripMenuItem_PresetContextMenu_Preset_2.Text = "&2: 2400, 7, Even, 1, XOn/XOff";
+			this.toolStripMenuItem_PresetContextMenu_Preset_2.Text = "&2: 2400, 7, Even, 1, Software";
 			this.toolStripMenuItem_PresetContextMenu_Preset_2.Click += new System.EventHandler(this.toolStripMenuItem_PresetContextMenu_Preset_Click);
 			// 
 			// toolStripMenuItem_PresetContextMenu_Preset_3
@@ -1604,7 +1608,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_PresetContextMenu_Preset_4.Name = "toolStripMenuItem_PresetContextMenu_Preset_4";
 			this.toolStripMenuItem_PresetContextMenu_Preset_4.Size = new System.Drawing.Size(233, 22);
 			this.toolStripMenuItem_PresetContextMenu_Preset_4.Tag = "4";
-			this.toolStripMenuItem_PresetContextMenu_Preset_4.Text = "&4: 9600, 8, None, 1, XOn/XOff";
+			this.toolStripMenuItem_PresetContextMenu_Preset_4.Text = "&4: 9600, 8, None, 1, Software";
 			this.toolStripMenuItem_PresetContextMenu_Preset_4.Click += new System.EventHandler(this.toolStripMenuItem_PresetContextMenu_Preset_Click);
 			// 
 			// toolStripMenuItem_PresetContextMenu_Preset_5
@@ -1620,8 +1624,24 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_PresetContextMenu_Preset_6.Name = "toolStripMenuItem_PresetContextMenu_Preset_6";
 			this.toolStripMenuItem_PresetContextMenu_Preset_6.Size = new System.Drawing.Size(233, 22);
 			this.toolStripMenuItem_PresetContextMenu_Preset_6.Tag = "6";
-			this.toolStripMenuItem_PresetContextMenu_Preset_6.Text = "&6: 19200, 8, None, 1, XOn/XOff";
+			this.toolStripMenuItem_PresetContextMenu_Preset_6.Text = "&6: 19200, 8, None, 1, Software";
 			this.toolStripMenuItem_PresetContextMenu_Preset_6.Click += new System.EventHandler(this.toolStripMenuItem_PresetContextMenu_Preset_Click);
+			// 
+			// toolStripMenuItem_PresetContextMenu_Preset_7
+			// 
+			this.toolStripMenuItem_PresetContextMenu_Preset_7.Name = "toolStripMenuItem_PresetContextMenu_Preset_7";
+			this.toolStripMenuItem_PresetContextMenu_Preset_7.Size = new System.Drawing.Size(233, 22);
+			this.toolStripMenuItem_PresetContextMenu_Preset_7.Tag = "7";
+			this.toolStripMenuItem_PresetContextMenu_Preset_7.Text = "&7: 115200, 8, None, 1, None";
+			this.toolStripMenuItem_PresetContextMenu_Preset_7.Click += new System.EventHandler(this.toolStripMenuItem_PresetContextMenu_Preset_Click);
+			// 
+			// toolStripMenuItem_PresetContextMenu_Preset_8
+			// 
+			this.toolStripMenuItem_PresetContextMenu_Preset_8.Name = "toolStripMenuItem_PresetContextMenu_Preset_8";
+			this.toolStripMenuItem_PresetContextMenu_Preset_8.Size = new System.Drawing.Size(233, 22);
+			this.toolStripMenuItem_PresetContextMenu_Preset_8.Tag = "8";
+			this.toolStripMenuItem_PresetContextMenu_Preset_8.Text = "&8: 115200, 8, None, 1, Software";
+			this.toolStripMenuItem_PresetContextMenu_Preset_8.Click += new System.EventHandler(this.toolStripMenuItem_PresetContextMenu_Preset_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send
 			// 
@@ -2941,6 +2961,8 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PresetContextMenu_Preset_4;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PresetContextMenu_Preset_5;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PresetContextMenu_Preset_6;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PresetContextMenu_Preset_7;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PresetContextMenu_Preset_8;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_Format;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_RadixContextMenu_Separator_2;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_RadixContextMenu_SeparateTxRx;
