@@ -428,9 +428,9 @@ namespace MKY.IO.Serial.SerialPort
 				case SerialFlowControl.ManualCombined:
 					return (SerialControlPinState.Enabled);
 
-					// Note that certain devices require the DTR pin to be active in case of
-					// hardware flow control. This e.g. applies to USB Ser/CDC devices, which
-					// indicate "DTE not present" if DTR is inactive. Also applies to modems
+					// Certain devices require the DTR pin to be active in case of hardware flow
+					// control. This e.g. applies to USB Ser/CDC (i.e. USB CDC/ACM) devices, which
+					// indicate "DTE not present" if DTR is inactive. Also applies to modems and
 					// and similar, where DTR/DSR are supposed to be active for the session.
 
 				case SerialFlowControl.RS485:
