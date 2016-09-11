@@ -29,7 +29,7 @@ using System.Text;
 namespace MKY.IO.Usb
 {
 	/// <summary>
-	/// Interface for serial communication, e.g. Ser/CDC or Ser/HID.
+	/// Interface for serial communication, e.g. Ser/CDC (i.e. USB CDC/ACM) or Ser/HID.
 	/// </summary>
 	/// <remarks>
 	/// This interface is defined similar to <see cref="System.IO.Ports.SerialPort"/>,
