@@ -92,13 +92,14 @@ namespace YAT.Controller
 			"  -6      Unhandled exception",
 		};
 
-		private const string ObjectDisposedExceptionInMscorlibMessage = 
+		private static readonly string ObjectDisposedExceptionInMscorlibMessage = 
 			"This 'ObjectDisposedException' exception in 'mscorlib' may happen when a serial COM " +
-			"port gets physically disconnected. It happens due to a bug in the .NET 'SerialPort' " +
-			"class for which Microsoft seems to have no plans fixing. The issue is known for e.g. " +
-			"computer internal and external ports using the Microsoft USB CDC/ACM driver as well " +
-			"as Microchip MCP2221 USB-to-UART/I2C bridges. To prevent this issue, refrain from " +
-			"disconnecting a port while it is open.";
+			"port gets physically disconnected while it is open. It happens due to a bug in the " +
+			".NET 'SerialPort' class for which Microsoft seems to have no plans fixing. The issue " +
+			"is known for e.g. internal ports using the Microsoft serial COM port driver, external " +
+			"USB/COM ports using the Microsoft USB CDC/ACM (virtual serial port) driver, as well as " +
+			"Microchip MCP2221 USB-to-UART/I2C bridges." + Environment.NewLine + Environment.NewLine +
+			"To prevent this issue, refrain from disconnecting a port while it is open.";
 
 		#endregion
 
