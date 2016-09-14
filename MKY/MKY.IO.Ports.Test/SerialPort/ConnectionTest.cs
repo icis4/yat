@@ -178,6 +178,15 @@ namespace MKY.IO.Ports.Test.SerialPort
 			TestDisconnectReconnect(new SerialPortEx(), true); // See comments in TestDisconnectReconnect().
 		}
 
+		/// <remarks>
+		/// There is a similar method in 'YAT.Model.Test.ConnectionTest'.
+		/// Changes here may have to be applied there too.
+		/// 
+		/// Tests implemented below:
+		///  - Disconnect/Reconnect without sending.
+		///  - Disconnect/Reconnect with previous and subsequent sending.
+		///  - Disconnect/Reconnect while continuous receiving.
+		/// </remarks>
 		private static void TestDisconnectReconnect(System.IO.Ports.SerialPort port, bool testWithContinuousReceiving)
 		{
 			// Keep constructor of effective type in order to later recreate a port object of the same type:
@@ -207,8 +216,8 @@ namespace MKY.IO.Ports.Test.SerialPort
 
 			// Disconnect USB/RS-232 converter. Expected: No exceptions, port is closed:
 			Assert.IsTrue(UsbHubControl.Set(UsbHubSettings.None), "Failed to modify USB hub!");
-			//// Disabling all outputs is used to improve speed when enabling single outputs below.
-			//// See comments in implementation of 'UsbHubControl' for explanation.
+			// Disabling all outputs is used to improve speed when enabling single outputs below.
+			// See comments in implementation of 'UsbHubControl' for explanation.
 			Assert.IsFalse(port.IsOpen);
 
 			// Reconnect USB/RS-232 converter. Expected: No exceptions, port can be reopened.
@@ -308,6 +317,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			Thread.Sleep(WaitForOperation); // Wait to prevent issues in subsequent test cases.
 
 			// --- Postcondition: USB hub is set to its defaults, i.e. all outputs are enabled. ----
+
 			Assert.IsTrue(UsbHubControl.Set(UsbHubSettings.All), "Failed to set USB hub!");
 		}
 
