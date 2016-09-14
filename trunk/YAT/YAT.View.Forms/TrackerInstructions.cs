@@ -98,57 +98,17 @@ namespace YAT.View.Forms
 			}
 			linkLabel_SourceForgeRemark.Text = sb.ToString();
 
-			// Link captions:
-			switch (tracker)
-			{
-				case TrackerType.Support:
-				{
-					linkLabel_DirectLinkCaption.Text = "Email:";
-					linkLabel_RootLinkCaption.Text   = "Support page:";
-					break;
-				}
-
-				case TrackerType.Feature:
-				case TrackerType.Bug:
-				default:
-				{
-					linkLabel_DirectLinkCaption.Text = "Filtered and sorted link:";
-					linkLabel_RootLinkCaption.Text   = "Tracker page:";
-					break;
-				}
-			}
-
 			// Links:
-			string directLink = "";
-			string rootLink = "";
+			string link = "";
 			switch (tracker)
 			{
-				case TrackerType.Support:
-				{
-					directLink = "mailto:y-a-terminal@users.sourceforge.net";
-					rootLink   = "https://sourceforge.net/projects/y-a-terminal/support";
-					break;
-				}
-
-				case TrackerType.Feature:
-				{
-					directLink = "https://sourceforge.net/projects/y-a-terminal/feature-requests/search/?q=!status%3Aclosed-rejected+%26%26+!status%3Aclosed-duplicate+%26%26+!status%3Awont-fix+%26%26+!status%3Aclosed-fixed+%26%26+!status%3Aclosed&limit=25&page=0&sort=_priority_s%20desc";
-					rootLink   = "https://sourceforge.net/projects/y-a-terminal/feature-requests/";
-					break;
-				}
-
+				case TrackerType.Support: link   = "https://sourceforge.net/projects/y-a-terminal/support";    break;
+				case TrackerType.Feature: link   = "https://sourceforge.net/p/y-a-terminal/feature-requests/"; break;
 				case TrackerType.Bug:
-				default:
-				{
-					directLink = "https://sourceforge.net/projects/y-a-terminal/bugs/?q={%22status%22%3A+{%22%24nin%22%3A+[%22closed-rejected%22%2C+%22closed-duplicate%22%2C+%22wont-fix%22%2C+%22closed-fixed%22%2C+%22closed%22]}}&limit=25&page=0&sort=_priority%20desc";
-					rootLink   = "https://sourceforge.net/projects/y-a-terminal/bugs/";
-					break;
-				}
+				default:                  link   = "https://sourceforge.net/p/y-a-terminal/bugs/";             break;
 			}
-			linkLabel_DirectLink.Text = directLink;
-			linkLabel_DirectLink.Links.Add(0, directLink.Length, directLink);
-			linkLabel_RootLink.Text = rootLink;
-			linkLabel_RootLink.Links.Add(0, rootLink.Length, rootLink);
+			linkLabel_Link.Text = link;
+			linkLabel_Link.Links.Add(0, link.Length, link);
 
 			// Instructions:
 			sb = new StringBuilder();
