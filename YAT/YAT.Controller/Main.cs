@@ -98,8 +98,10 @@ namespace YAT.Controller
 			".NET 'SerialPort' class for which Microsoft seems to have no plans fixing. The issue " +
 			"is known for e.g. internal ports using the Microsoft serial COM port driver, external " +
 			"USB/COM ports using the Microsoft USB CDC/ACM (virtual serial port) driver, as well as " +
-			"Microchip MCP2221 USB-to-UART/I2C bridges." + Environment.NewLine + Environment.NewLine +
-			"To prevent this issue, refrain from disconnecting a port while it is open.";
+			"Microchip MCP2221 USB-to-UART/I2C bridges." +
+			Environment.NewLine + Environment.NewLine +
+			"To prevent this issue, refrain from disconnecting a port while it is open. Or, manually " +
+			"close the port after it got disconnected.";
 
 		#endregion
 

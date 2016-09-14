@@ -225,6 +225,21 @@ namespace YAT.Model.Test
 			TestDisconnectReconnect(true); // See comments in MKY.IO.Ports.Test.TestDisconnectReconnect().
 		}
 
+		/// <remarks>
+		/// There is a similar method in 'MKY.IO.Ports.Test.SerialPort.ConnectionTest'.
+		/// Changes here may have to be applied there too.
+		/// 
+		/// Tests implemented below:
+		///  - Disconnect/Reconnect without sending.
+		///  - Disconnect/Reconnect with previous and subsequent sending.
+		///  - Disconnect/Reconnect while continuous receiving.
+		///  - Disconnect, then manually close.
+		/// 
+		/// Tests that should be added in addition:
+		///  - Disconnect, then try to send something.
+		///     => Either, terminal must detect disconnect (FTDI, MCT, Prolific, ToriLogic/Thesycon).
+		///     => Or, terminal must properly handle the exception that happens when sending on no longer available port (Microsoft, Microchip).
+		/// </remarks>
 		private static void TestDisconnectReconnect(bool testWithContinuousReceiving)
 		{
 			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
@@ -265,8 +280,8 @@ namespace YAT.Model.Test
 
 				// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
 				Assert.IsTrue(UsbHubControl.Set(UsbHubSettings.None), "Failed to modify USB hub!");
-				//// Disabling all outputs is used to improve speed when enabling single outputs below.
-				//// See comments in implementation of 'UsbHubControl' for explanation.
+				// Disabling all outputs is used to improve speed when enabling single outputs below.
+				// See comments in implementation of 'UsbHubControl' for explanation.
 				Assert.IsTrue(terminal.IsStarted); // Terminal still started, and must automatically close!
 				Utilities.WaitForClose(terminal);
 				Assert.IsFalse(terminal.IsOpen);
@@ -401,7 +416,35 @@ namespace YAT.Model.Test
 					Thread.Sleep(WaitForOperation);
 				}
 
+				// --- Test: Disconnect, then manually close. --------------------------------------
+
+				// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
+				Assert.IsTrue(UsbHubControl.Disable(portOut), "Failed to modify USB hub!");
+				Assert.IsTrue(terminal.IsStarted); // Terminal still started, and must automatically close!
+				Utilities.WaitForClose(terminal);
+				Assert.IsFalse(terminal.IsOpen);
+				Assert.IsFalse(terminal.IsReadyToSend);
+
+				// Manually close terminal. Expected: No exceptions, terminal can be closed.
+				Assert.IsTrue(terminal.StopIO());
+				Assert.IsFalse(terminal.IsStarted);
+				Assert.IsFalse(terminal.IsOpen);
+				Assert.IsFalse(terminal.IsReadyToSend);
+
+				// Reconnect USB/RS-232 converter. Expected: No exceptions, terminal can be reopened.
+				Assert.IsTrue(UsbHubControl.Enable(portOut), "Failed to modify USB hub!");
+				Assert.IsFalse(terminal.IsStarted);
+
+				// Manually open terminal again. Expected: No exceptions, terminal can be opened.
+				Thread.Sleep(WaitForOperation);
+				Assert.IsTrue(terminal.StartIO());
+				Utilities.WaitForOpen(terminal);
+				Assert.IsTrue(terminal.IsStarted);
+				Assert.IsTrue(terminal.IsOpen);
+				Assert.IsTrue(terminal.IsReadyToSend);
+
 				// Close terminal. Expected: No exceptions, terminal can be closed.
+				Thread.Sleep(WaitForOperation);
 				Assert.IsTrue(terminal.StopIO());
 				Assert.IsFalse(terminal.IsStarted);
 				Assert.IsFalse(terminal.IsOpen);
@@ -409,6 +452,7 @@ namespace YAT.Model.Test
 			} // Expected: No exceptions, terminal can be disposed.
 
 			// --- Postcondition: USB hub is set to its defaults, i.e. all outputs are enabled. ----
+
 			Assert.IsTrue(UsbHubControl.Set(UsbHubSettings.All), "Failed to set USB hub!");
 		}
 
