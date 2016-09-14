@@ -106,8 +106,8 @@ namespace YAT.View.Forms
 
 			// Serial monitoring:
 			linkLabel_Monitoring.Text = "";
-			textBefore = "YAT is a terminal (a connection endpoint). If you're looking for a tool to monitor serial data between an application and" + Environment.NewLine +
-						 "a device, or between two devices, check out ";
+			textBefore = "YAT is a terminal (connection endpoint). If you're looking for a tool to monitor serial data between an application and" + Environment.NewLine +
+			             "a device, or between two devices, check out ";
 			textLink   =                                             "HHD Monitoring Studio";
 			textAfter  =                                                                  ". It's worth the bucks. Or download the ";
 			linkLabel_Monitoring.Text += textBefore;
