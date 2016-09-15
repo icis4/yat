@@ -87,17 +87,6 @@
       <xs:element minOccurs="1" maxOccurs="1" name="Height" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="AutoResponseSettings">
-    <xs:complexContent mixed="false">
-      <xs:extension base="SettingsItem">
-        <xs:sequence>
-          <xs:element minOccurs="1" maxOccurs="1" name="Visible" type="xs:boolean" />
-          <xs:element minOccurs="0" maxOccurs="1" name="Trigger" type="xs:string" />
-          <xs:element minOccurs="0" maxOccurs="1" name="Response" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
   <xs:complexType name="PredefinedSettings">
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
@@ -163,7 +152,6 @@
           <xs:element minOccurs="0" maxOccurs="1" name="SendText" type="SendTextSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="SendFile" type="SendFileSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="Predefined" type="PredefinedSettings" />
-          <xs:element minOccurs="0" maxOccurs="1" name="AutoResponse" type="AutoResponseSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="Window" type="WindowSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="Layout" type="LayoutSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="View" type="ViewSettings" />
@@ -261,6 +249,17 @@
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="1" name="Color" type="xs:string" />
     </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AutoResponseSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="Visible" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Trigger" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Response" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="PredefinedCommandSettings">
     <xs:complexContent mixed="false">
@@ -730,6 +729,7 @@
           <xs:element minOccurs="0" maxOccurs="1" name="UserName" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="Terminal" type="TerminalSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="PredefinedCommand" type="PredefinedCommandSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AutoResponse" type="AutoResponseSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="Format" type="FormatSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="Log" type="LogSettings" />
         </xs:sequence>
