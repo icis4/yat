@@ -113,15 +113,17 @@ namespace MKY.IO.Ports.Test
 
 		/// <summary>Hub seems to also require some delay between two executions, otherwise execution will fail.</summary>
 		/// <remarks>Same delay as in "MCD Conline USB HUB 6-Port Runtime Config.bat".</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Conline' is a product name.")]
 		private const int WaitForNextExecution = 3000;
 
 		/// <summary>Delay until driver has been loaded, otherwise subsequent calls will fail.</summary>
 		/// <remarks>Same delay as in "MCD Conline USB HUB 6-Port Runtime Config.bat".</remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Conline' is the product name.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Conline' is a product name.")]
 		private const int WaitForDriverLoading = 6000;
 
 		/// <summary>Unloading seems to also require some delay, otherwise subsequent calls will fail.</summary>
 		/// <remarks>Same delay as in "MCD Conline USB HUB 6-Port Runtime Config.bat".</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Conline' is a product name.")]
 		private const int WaitForDriverUnloading = 2000;
 
 		#endregion

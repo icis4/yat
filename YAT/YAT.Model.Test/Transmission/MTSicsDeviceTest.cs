@@ -202,7 +202,9 @@ namespace YAT.Model.Test.Transmission
 				" > Serial COM Port: Start weight simulation if no load cell connected." + Environment.NewLine +
 				" > TCP/IP Socket: Start device simulation." + Environment.NewLine +
 				" > USB Ser/HID: Start weight simulation if no load cell connected.",
-				"Precondition", MessageBoxButtons.OKCancel, MessageBoxIcon.Information
+				"Precondition",
+				MessageBoxButtons.OKCancel,
+				MessageBoxIcon.Information
 				);
 
 			if (dr != DialogResult.OK)

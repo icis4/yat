@@ -240,6 +240,7 @@ namespace YAT.Model.Test
 		///     => Either, terminal must detect disconnect (FTDI, MCT, Prolific, ToriLogic/Thesycon).
 		///     => Or, terminal must properly handle the exception that happens when sending on no longer available port (Microsoft, Microchip).
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Thesycon' is a brand name.")]
 		private static void TestDisconnectReconnect(bool testWithContinuousReceiving)
 		{
 			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
@@ -279,9 +280,7 @@ namespace YAT.Model.Test
 				// --- Test: Disconnect/Reconnect without sending. ---------------------------------
 
 				// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
-				Assert.IsTrue(UsbHubControl.Set(UsbHubSettings.None), "Failed to modify USB hub!");
-				// Disabling all outputs is used to improve speed when enabling single outputs below.
-				// See comments in implementation of 'UsbHubControl' for explanation.
+				Assert.IsTrue(UsbHubControl.Set(UsbHubSettings.None), "Failed to modify USB hub!"); // Disabling all outputs is used to improve speed when enabling single outputs below. See comments in implementation of 'UsbHubControl' for explanation.
 				Assert.IsTrue(terminal.IsStarted); // Terminal still started, and must automatically close!
 				Utilities.WaitForClose(terminal);
 				Assert.IsFalse(terminal.IsOpen);

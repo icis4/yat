@@ -215,9 +215,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			// --- Test: Disconnect/Reconnect without sending. -------------------------------------
 
 			// Disconnect USB/RS-232 converter. Expected: No exceptions, port is closed:
-			Assert.IsTrue(UsbHubControl.Set(UsbHubSettings.None), "Failed to modify USB hub!");
-			// Disabling all outputs is used to improve speed when enabling single outputs below.
-			// See comments in implementation of 'UsbHubControl' for explanation.
+			Assert.IsTrue(UsbHubControl.Set(UsbHubSettings.None), "Failed to modify USB hub!"); // Disabling all outputs is used to improve speed when enabling single outputs below. See comments in implementation of 'UsbHubControl' for explanation.
 			Assert.IsFalse(port.IsOpen);
 
 			// Reconnect USB/RS-232 converter. Expected: No exceptions, port can be reopened.

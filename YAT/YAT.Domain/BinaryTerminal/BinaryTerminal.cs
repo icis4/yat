@@ -388,7 +388,7 @@ namespace YAT.Domain
 				// Tx:
 
 				this.txLineState = casted.txLineState;
-				                                               // \remind (2016-09-08 / mky)
+				                                             //// \remind (2016-09-08 / mky)
 				if (this.txLineState.LineBreakTimer != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
 					this.txLineState.LineBreakTimer.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
 
@@ -398,7 +398,7 @@ namespace YAT.Domain
 				// Rx:
 
 				this.rxLineState = casted.rxLineState;
-				                                               // \remind (2016-09-08 / mky)
+				                                             //// \remind (2016-09-08 / mky)
 				if (this.rxLineState.LineBreakTimer != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
 					this.rxLineState.LineBreakTimer.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
 
