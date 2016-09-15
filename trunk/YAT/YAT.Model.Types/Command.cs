@@ -71,6 +71,7 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public const string UndefinedFilePathText = "<Set a file...>";
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
 		private readonly string[] UndefinedCommandLines = new string[] { "" };
 
 		#endregion
