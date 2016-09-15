@@ -629,6 +629,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>Required to prevent superfluous 'IOChanged' events.</remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the scope.")]
 		protected virtual bool IsReadyToSend_Internal
 		{
 			get
@@ -653,6 +654,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>Required to prevent superfluous 'IOChanged' events.</remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the scope.")]
 		protected virtual bool IsBusy_Internal
 		{
 			get

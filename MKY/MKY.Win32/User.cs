@@ -47,14 +47,16 @@ using System.Runtime.InteropServices;
 //==================================================================================================
 
 // Justification = "Type is defined by the Win32 API."
-[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Window+NativeTypes+LASTINPUTINFO.#cbSize")]
-[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Window+NativeTypes+LASTINPUTINFO.#dwTime")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.User+NativeTypes+LASTINPUTINFO.#cbSize")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.User+NativeTypes+LASTINPUTINFO.#dwTime")]
 
 // Justification = "Naming is defined by the Win32 API."
-[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeTypes+LASTINPUTINFO.#cbSize", MessageId = "cb")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.User+NativeTypes+LASTINPUTINFO.#cbSize", MessageId = "cb")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.User+NativeTypes+LASTINPUTINFO.#dwTime", MessageId = "dw")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.User+NativeMethods.#GetLastInputInfo(MKY.Win32.User+NativeTypes+LASTINPUTINFO&)", MessageId = "plii")]
 
 // Justification = "Naming is defined by the Win32 API."
-[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.Window+NativeTypes+LASTINPUTINFO", MessageId = "LASTINPUTINFO")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.User+NativeTypes+LASTINPUTINFO", MessageId = "LASTINPUTINFO")]
 
 #endregion
 
@@ -137,32 +139,35 @@ namespace MKY.Win32
 
 		#endregion
 	
-		#region Static Methods
+		#region Static Properties
 		//==========================================================================================
-		// Static Methods
+		// Static Properties
 		//==========================================================================================
 
 		/// <summary>
-		/// Use <see cref="NativeMethods.GetLastInputInfo"/> API functions to retrieve the last user
-		/// input and calculates the corresponding idle time.
+		/// Uses the <see cref="NativeMethods.GetLastInputInfo"/> API function to retrieve the last
+		/// user input and calculates the corresponding idle time.
 		/// </summary>
 		/// <returns>The idle time.</returns>
-		public static TimeSpan GetIdleTime()
+		public static TimeSpan IdleTime
 		{
-			NativeTypes.LASTINPUTINFO lastInputInfo = new NativeTypes.LASTINPUTINFO();
-			lastInputInfo.cbSize = (uint)Marshal.SizeOf(lastInputInfo);
-			lastInputInfo.dwTime = 0;
-
-			if (NativeMethods.GetLastInputInfo(out lastInputInfo))
+			get
 			{
-				uint lastInputTime = lastInputInfo.dwTime;
-				long idleTime = Environment.TickCount - lastInputTime;
+				NativeTypes.LASTINPUTINFO lastInputInfo = new NativeTypes.LASTINPUTINFO();
+				lastInputInfo.cbSize = (uint)Marshal.SizeOf(lastInputInfo);
+				lastInputInfo.dwTime = 0;
 
-				if (idleTime > 0)
-					return (TimeSpan.FromMilliseconds(idleTime));
+				if (NativeMethods.GetLastInputInfo(out lastInputInfo))
+				{
+					uint lastInputTime = lastInputInfo.dwTime;
+					long idleTime = Environment.TickCount - lastInputTime;
+
+					if (idleTime > 0)
+						return (TimeSpan.FromMilliseconds(idleTime));
+				}
+
+				return (TimeSpan.Zero);
 			}
-
-			return (TimeSpan.Zero);
 		}
 
 		#endregion

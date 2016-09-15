@@ -686,6 +686,7 @@ namespace YAT.Model.Test
 		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static void WaitForConnection(Terminal terminal)
 		{
 			int waitTime = 0;
@@ -751,6 +752,7 @@ namespace YAT.Model.Test
 		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static void WaitForDisconnection(Terminal terminal)
 		{
 			int waitTime = 0;
