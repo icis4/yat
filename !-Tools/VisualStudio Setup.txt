@@ -38,6 +38,18 @@ Edit > Advanced
   > View White Space = true
 
 
+Installer
+---------
+
+1. VSI
+2. Package patch according to
+    > http://stackoverflow.com/questions/2726696/visual-studio-2010-setup-project-problem
+    > http://stackoverflow.com/questions/3626672/how-to-bootstrap-net-3-5-sp1-with-msbuild-following-found-instructions-doesnt
+   to
+    > "C:\Program Files (x86)\Microsoft Visual Studio 14.0\SDK\Bootstrapper\Packages\DotNetFX35SP1"
+    > "C:\Program Files (x86)\Microsoft Visual Studio 14.0\SDK\Bootstrapper\Packages\WindowsInstaller4_5"
+
+
 StyleCop
 --------
 
