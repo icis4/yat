@@ -23,28 +23,30 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace MKY.IO
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class TextEx
 	{
 		/// <summary>
 		/// Converts a string array to a multi-line string, using <see cref="Environment.NewLine"/>
 		/// as the end-of-line separator.
 		/// </summary>
-		public static string ToLines(string[] s)
+		public static string ToLines(string[] s, IFormatProvider formatProvider)
 		{
-			return (ToLines(s, Environment.NewLine));
+			return (ToLines(s, formatProvider, Environment.NewLine));
 		}
 
 		/// <summary>
 		/// Converts a string array to a multi-line string, using the given end-of-line separator.
 		/// </summary>
-		public static string ToLines(string[] s, string newLine)
+		public static string ToLines(string[] s, IFormatProvider formatProvider, string newLine)
 		{
-			using (StringWriter sw = new StringWriter())
+			using (StringWriter sw = new StringWriter(formatProvider))
 			{
 				sw.NewLine = newLine;
 

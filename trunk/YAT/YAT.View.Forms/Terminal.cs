@@ -2162,6 +2162,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Layouting", Justification = "'Layouting' is a correct English term.")]
 		public virtual void NotifyAutoLayouting(bool isAutoLayouting)
 		{
 			this.isAutoLayouting = isAutoLayouting;

@@ -92,6 +92,7 @@ namespace YAT.Controller
 			"  -6      Unhandled exception",
 		};
 
+		#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		private static readonly string ObjectDisposedExceptionInMscorlibMessage = 
 			"This 'ObjectDisposedException' exception in 'mscorlib' may happen when a serial COM " +
 			"port gets physically disconnected while it is open. It happens due to a bug in the " +
@@ -102,6 +103,7 @@ namespace YAT.Controller
 			Environment.NewLine + Environment.NewLine +
 			"To prevent this issue, refrain from disconnecting a port while it is open. Or, manually " +
 			"close the port after it got disconnected.";
+		#endif
 
 		#endregion
 
@@ -116,9 +118,9 @@ namespace YAT.Controller
 		private string[] commandLineArgsStrings;
 		private CommandLineArgs commandLineArgs;
 
-		#endregion
+#endregion
 
-		#region Object Lifetime
+#region Object Lifetime
 		//==========================================================================================
 		// Object Lifetime
 		//==========================================================================================
@@ -131,7 +133,7 @@ namespace YAT.Controller
 			this.commandLineArgs = new CommandLineArgs(this.commandLineArgsStrings);
 		}
 
-		#region Disposal
+#region Disposal
 		//------------------------------------------------------------------------------------------
 		// Disposal
 		//------------------------------------------------------------------------------------------
@@ -193,11 +195,11 @@ namespace YAT.Controller
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
-		#endregion
+#endregion
 
-		#endregion
+#endregion
 
-		#region Properties
+#region Properties
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
@@ -223,9 +225,9 @@ namespace YAT.Controller
 			get { return ((this.commandLineArgs != null) && (!this.commandLineArgs.NoLogo)); }
 		}
 
-		#endregion
+#endregion
 
-		#region Methods
+#region Methods
 		//==========================================================================================
 		// Methods
 		//==========================================================================================
@@ -440,9 +442,9 @@ namespace YAT.Controller
 			return (result);
 		}
 
-		#endregion
+#endregion
 
-		#region Private Methods
+#region Private Methods
 		//==========================================================================================
 		// Private Methods
 		//==========================================================================================
@@ -450,7 +452,7 @@ namespace YAT.Controller
 		// Note that exceptions are only handled in case of 'Release'.
 		// In case of 'Debug', they shall be handled by the debugger.
 
-		#region Private Methods > RunFullyWithView
+#region Private Methods > RunFullyWithView
 		//------------------------------------------------------------------------------------------
 		// Private Methods > RunFullyWithView
 		//------------------------------------------------------------------------------------------
@@ -597,9 +599,9 @@ namespace YAT.Controller
 		}
 #endif
 
-		#endregion
+#endregion
 
-		#region Private Methods > RunWithViewButOutputErrorsOnConsole
+#region Private Methods > RunWithViewButOutputErrorsOnConsole
 		//------------------------------------------------------------------------------------------
 		// Private Methods > RunWithViewButOutputErrorsOnConsole
 		//------------------------------------------------------------------------------------------
@@ -729,9 +731,9 @@ namespace YAT.Controller
 		}
 #endif
 
-		#endregion
+#endregion
 
-		#region Private Methods > RunFullyFromConsole
+#region Private Methods > RunFullyFromConsole
 		//------------------------------------------------------------------------------------------
 		// Private Methods > RunFullyFromConsole
 		//------------------------------------------------------------------------------------------
@@ -834,9 +836,9 @@ namespace YAT.Controller
 		}
 #endif
 
-		#endregion
+#endregion
 
-		#region Private Methods > RunInvisible
+#region Private Methods > RunInvisible
 		//------------------------------------------------------------------------------------------
 		// Private Methods > RunInvisible
 		//------------------------------------------------------------------------------------------
@@ -934,9 +936,9 @@ namespace YAT.Controller
 		}
 #endif
 
-		#endregion
+#endregion
 
-		#region Private Methods > MessageBox
+#region Private Methods > MessageBox
 		//------------------------------------------------------------------------------------------
 		// Private Methods > MessageBox
 		//------------------------------------------------------------------------------------------
@@ -963,9 +965,9 @@ namespace YAT.Controller
 			MessageBoxEx.Show(sb.ToString(), ApplicationEx.ProductNameLong, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 		}
 
-		#endregion
+#endregion
 
-		#region Private Methods > Console
+#region Private Methods > Console
 		//------------------------------------------------------------------------------------------
 		// Private Methods > Console
 		//------------------------------------------------------------------------------------------
@@ -1031,9 +1033,9 @@ namespace YAT.Controller
 			Console.Out.WriteLine(new string('=', (Console.WindowWidth - 1))); // ==========...
 		}
 
-		#endregion
+#endregion
 
-		#region Private Methods > Result
+#region Private Methods > Result
 		//------------------------------------------------------------------------------------------
 		// Private Methods > Result
 		//------------------------------------------------------------------------------------------
@@ -1052,9 +1054,9 @@ namespace YAT.Controller
 			}
 		}
 
-		#endregion
+#endregion
 
-		#endregion
+#endregion
 	}
 }
 

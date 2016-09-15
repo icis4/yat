@@ -115,7 +115,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 	/// Saying hello to StyleCop ;-.
 	/// </remarks>
 	[TestFixture, Explicit("This test fixture assesses the reliability of serial port drivers. It does not perform any tests. It is only useful for measurments and analysis.")]
-	public class ReliabilityAnalysis
+	public class ReliabilityAnalysis : IDisposable
 	{
 		#region Constants
 		//==========================================================================================
@@ -177,6 +177,12 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				// Dispose of managed resources:
 				if (disposing)
 				{
+					if (this.port != null)
+						this.port.Dispose();
+
+					if (this.file != null)
+						this.file.Dispose();
+
 					if (this.receivedDataLock != null)
 						this.receivedDataLock.Dispose();
 
@@ -185,6 +191,8 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				}
 
 				// Set state to disposed:
+				this.port = null;
+				this.file = null;
 				this.receivedDataLock = null;
 				this.receivedErrorLock = null;
 				this.isDisposed = true;
