@@ -279,15 +279,15 @@
     </Format>
     <Log>
       <RootPath>C:\Users\Matthias\Documents</RootPath>
-      <RootFileName>NUnit-Log</RootFileName>
+      <RootFileName>YAT-Log</RootFileName>
       <RawLogTx>false</RawLogTx>
       <RawLogBidir>false</RawLogBidir>
       <RawLogRx>false</RawLogRx>
-      <RawExtension>.log</RawExtension>
+      <RawExtension>.dat</RawExtension>
       <NeatLogTx>false</NeatLogTx>
       <NeatLogBidir>true</NeatLogBidir>
       <NeatLogRx>false</NeatLogRx>
-      <NeatExtension>.dat</NeatExtension>
+      <NeatExtension>.log</NeatExtension>
       <NameFormat>false</NameFormat>
       <NameChannel>false</NameChannel>
       <NameDate>true</NameDate>

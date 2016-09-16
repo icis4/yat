@@ -43,12 +43,12 @@
           <OutputMaxBaudRate>true</OutputMaxBaudRate>
           <MaxChunkSize>
             <Enabled>true</Enabled>
-            <Size>64</Size>
+            <Size>48</Size>
           </MaxChunkSize>
           <MaxSendRate>
             <Enabled>false</Enabled>
-            <Size>50</Size>
-            <Interval>50</Interval>
+            <Size>48</Size>
+            <Interval>10</Interval>
           </MaxSendRate>
           <NoSendOnOutputBreak>true</NoSendOnOutputBreak>
           <NoSendOnInputBreak>false</NoSendOnInputBreak>
@@ -58,7 +58,10 @@
           <RemoteHost>[Localhost]</RemoteHost>
           <RemoteTcpPort>10000</RemoteTcpPort>
           <RemoteUdpPort>10000</RemoteUdpPort>
-          <LocalInterface />
+          <LocalInterface>
+            <Description>[Any]</Description>
+            <Address>0.0.0.0</Address>
+          </LocalInterface>
           <LocalFilter>[Any]</LocalFilter>
           <LocalTcpPort>10000</LocalTcpPort>
           <LocalUdpPort>10001</LocalUdpPort>
@@ -120,7 +123,8 @@
         <MaxBytePerLineCount>1000</MaxBytePerLineCount>
         <PortLineBreakEnabled>true</PortLineBreakEnabled>
         <DirectionLineBreakEnabled>true</DirectionLineBreakEnabled>
-        <InfoSeparator> </InfoSeparator>
+        <InfoSeparator>
+        </InfoSeparator>
         <InfoEnclosure>()</InfoEnclosure>
       </Display>
       <CharReplace>
@@ -178,7 +182,7 @@
         <TxDisplay>
           <LengthLineBreak>
             <Enabled>false</Enabled>
-            <Length>0</Length>
+            <Length>16</Length>
           </LengthLineBreak>
           <SequenceLineBreakBefore>
             <Enabled>false</Enabled>
@@ -196,7 +200,7 @@
         <RxDisplay>
           <LengthLineBreak>
             <Enabled>false</Enabled>
-            <Length>0</Length>
+            <Length>16</Length>
           </LengthLineBreak>
           <SequenceLineBreakBefore>
             <Enabled>false</Enabled>
@@ -258,7 +262,7 @@
         <FontStyle>Regular</FontStyle>
       </DirectionFormat>
       <LengthFormat>
-        <Color>DarkGreen</Color>
+        <Color>Green</Color>
         <FontStyle>Regular</FontStyle>
       </LengthFormat>
       <WhiteSpacesFormat>
@@ -266,7 +270,7 @@
         <FontStyle>Regular</FontStyle>
       </WhiteSpacesFormat>
       <ErrorFormat>
-        <Color>OrangeRed</Color>
+        <Color>#FF8000</Color>
         <FontStyle>Bold</FontStyle>
       </ErrorFormat>
       <BackFormat>
@@ -288,7 +292,7 @@
       <NameChannel>false</NameChannel>
       <NameDate>true</NameDate>
       <NameTime>true</NameTime>
-      <NameSeparator />
+      <NameSeparator>-</NameSeparator>
       <FolderFormat>false</FolderFormat>
       <FolderChannel>false</FolderChannel>
       <WriteMode>Create</WriteMode>
