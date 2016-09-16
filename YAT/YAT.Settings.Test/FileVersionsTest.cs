@@ -27,6 +27,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Windows.Forms;
 
 using MKY;
 using MKY.Settings;
@@ -58,6 +59,19 @@ namespace YAT.Settings.Test
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
+			// \remind 2016-05-26 / MKY: Should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
+			DialogResult dr = MessageBox.Show
+				(
+				"This test requires open serial ports COM1 and COM2." + Environment.NewLine +
+				"Ensure that VSPE is running and providing these ports.",
+				"Precondition",
+				MessageBoxButtons.OKCancel,
+				MessageBoxIcon.Information
+				);
+
+			if (dr != DialogResult.OK)
+				Assert.Fail("User cancel!");
+
 			// Create temporary in-memory application settings for this test run:
 			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
 
