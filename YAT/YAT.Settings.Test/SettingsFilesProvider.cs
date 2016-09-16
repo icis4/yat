@@ -469,7 +469,7 @@ namespace YAT.Settings.Test
 			FilePaths_V1_99_34.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
 
 			// V1.99.50
-			FilePaths_V1_99_50 = new SettingsFilePaths("2016-09-15 - YAT 2.0 Gamma 2 Version 1.99.50");
+			FilePaths_V1_99_50 = new SettingsFilePaths("2016-09-16 - YAT 2.0 Gamma 2 Version 1.99.50");
 
 			FilePaths_V1_99_50.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM1_Closed_Default, "00 - COM1 - Closed - Default.yat");
 			FilePaths_V1_99_50.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM2_Closed_Default, "00 - COM2 - Closed - Default.yat");
