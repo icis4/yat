@@ -25,8 +25,8 @@
   <Extensions>
     <TextSendFiles>.txt</TextSendFiles>
     <BinarySendFiles>.dat</BinarySendFiles>
-    <RawLogFiles>.log</RawLogFiles>
-    <NeatLogFiles>.dat</NeatLogFiles>
+    <RawLogFiles>.dat</RawLogFiles>
+    <NeatLogFiles>.log</NeatLogFiles>
     <MonitorFiles>.rtf</MonitorFiles>
   </Extensions>
   <AutoWorkspace>

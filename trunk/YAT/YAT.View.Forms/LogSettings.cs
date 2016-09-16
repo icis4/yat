@@ -423,13 +423,13 @@ namespace YAT.View.Forms
 		{
 			this.isSettingControls.Enter();
 
-			comboBox_Neat_Extension.Items.Clear();
-			foreach (string s in ExtensionHelper.TextFilesWithDot)
-				comboBox_Neat_Extension.Items.Add(s);
-
 			comboBox_Raw_Extension.Items.Clear();
 			foreach (string s in ExtensionHelper.BinaryFilesWithDot)
 				comboBox_Raw_Extension.Items.Add(s);
+
+			comboBox_Neat_Extension.Items.Clear();
+			foreach (string s in ExtensionHelper.TextFilesWithDot)
+				comboBox_Neat_Extension.Items.Add(s);
 
 			comboBox_Options_NameSeparator.Items.Clear();
 			foreach (string s in Log.FileNameSeparatorEx.GetItems())
