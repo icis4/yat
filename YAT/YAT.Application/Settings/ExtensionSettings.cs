@@ -74,8 +74,8 @@ namespace YAT.Application.Settings
 
 			TextSendFiles   = Utilities.ExtensionHelper.TextFilesDefault;
 			BinarySendFiles = Utilities.ExtensionHelper.BinaryFilesDefault;
-			RawLogFiles     = Utilities.ExtensionHelper.NeatLogFilesDefault;
-			NeatLogFiles    = Utilities.ExtensionHelper.RawLogFilesDefault;
+			RawLogFiles     = Utilities.ExtensionHelper.RawLogFilesDefault;
+			NeatLogFiles    = Utilities.ExtensionHelper.NeatLogFilesDefault;
 			MonitorFiles    = Utilities.ExtensionHelper.MonitorFilesDefault;
 		}
 
