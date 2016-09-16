@@ -102,7 +102,7 @@ namespace YAT.Domain.Settings
 				if (this.hideXOnXOff != value)
 				{
 					this.hideXOnXOff = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -117,7 +117,7 @@ namespace YAT.Domain.Settings
 				if (this.hide0x00 != value)
 				{
 					this.hide0x00 = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -132,7 +132,7 @@ namespace YAT.Domain.Settings
 				if (this.hide0xFF != value)
 				{
 					this.hide0xFF = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

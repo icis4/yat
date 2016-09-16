@@ -117,7 +117,7 @@ namespace YAT.Application.Settings
 				if (this.autoOpenWorkspace != value)
 				{
 					this.autoOpenWorkspace = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -136,7 +136,7 @@ namespace YAT.Application.Settings
 				if (this.autoSaveWorkspace != value)
 				{
 					this.autoSaveWorkspace = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -151,7 +151,7 @@ namespace YAT.Application.Settings
 				if (this.useRelativePaths != value)
 				{
 					this.useRelativePaths = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -166,7 +166,7 @@ namespace YAT.Application.Settings
 				if (this.retrieveSerialPortCaptions != value)
 				{
 					this.retrieveSerialPortCaptions = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -181,7 +181,7 @@ namespace YAT.Application.Settings
 				if (this.detectSerialPortsInUse != value)
 				{
 					this.detectSerialPortsInUse = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -196,7 +196,7 @@ namespace YAT.Application.Settings
 				if (this.matchUsbSerial != value)
 				{
 					this.matchUsbSerial = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

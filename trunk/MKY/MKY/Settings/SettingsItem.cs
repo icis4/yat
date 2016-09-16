@@ -260,6 +260,14 @@ namespace MKY.Settings
 		}
 
 		/// <summary></summary>
+		protected virtual void SetMyChanged()
+		{
+			SuspendChangeEvent();
+			this.haveChanged = true;
+			ResumeChangeEvent();
+		}
+
+		/// <summary></summary>
 		public virtual void ClearChanged()
 		{
 			SuspendChangeEvent();
@@ -272,6 +280,14 @@ namespace MKY.Settings
 
 			this.haveChanged = false;
 
+			ResumeChangeEvent();
+		}
+
+		/// <summary></summary>
+		protected virtual void ClearMyChanged()
+		{
+			SuspendChangeEvent();
+			this.haveChanged = false;
 			ResumeChangeEvent();
 		}
 

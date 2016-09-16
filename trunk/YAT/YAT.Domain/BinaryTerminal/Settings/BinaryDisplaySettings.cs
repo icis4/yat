@@ -91,7 +91,7 @@ namespace YAT.Domain.Settings
 				if (this.lengthLineBreak != value)
 				{
 					this.lengthLineBreak = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -106,7 +106,7 @@ namespace YAT.Domain.Settings
 				if (this.sequenceLineBreakBefore != value)
 				{
 					this.sequenceLineBreakBefore = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -121,7 +121,7 @@ namespace YAT.Domain.Settings
 				if (this.sequenceLineBreakAfter != value)
 				{
 					this.sequenceLineBreakAfter = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -136,7 +136,7 @@ namespace YAT.Domain.Settings
 				if (this.timedLineBreak != value)
 				{
 					this.timedLineBreak = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

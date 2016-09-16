@@ -294,7 +294,7 @@ namespace YAT.Log.Settings
 				if (this.rootPath != value)
 				{
 					this.rootPath = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -309,7 +309,7 @@ namespace YAT.Log.Settings
 				if (this.rootFileName != value)
 				{
 					this.rootFileName = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -333,7 +333,7 @@ namespace YAT.Log.Settings
 				if (this.rawLogTx != value)
 				{
 					this.rawLogTx = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -367,7 +367,7 @@ namespace YAT.Log.Settings
 				if (this.rawLogBidir != value)
 				{
 					this.rawLogBidir = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -401,7 +401,7 @@ namespace YAT.Log.Settings
 				if (this.rawLogRx != value)
 				{
 					this.rawLogRx = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -435,7 +435,7 @@ namespace YAT.Log.Settings
 				if (this.rawExtension != value)
 				{
 					this.rawExtension = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -452,7 +452,7 @@ namespace YAT.Log.Settings
 				if (this.neatLogTx != value)
 				{
 					this.neatLogTx = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -486,7 +486,7 @@ namespace YAT.Log.Settings
 				if (this.neatLogBidir != value)
 				{
 					this.neatLogBidir = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -520,7 +520,7 @@ namespace YAT.Log.Settings
 				if (this.neatLogRx != value)
 				{
 					this.neatLogRx = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -554,7 +554,7 @@ namespace YAT.Log.Settings
 				if (this.neatExtension != value)
 				{
 					this.neatExtension = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -661,7 +661,7 @@ namespace YAT.Log.Settings
 				if (this.nameFormat != value)
 				{
 					this.nameFormat = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -676,7 +676,7 @@ namespace YAT.Log.Settings
 				if (this.nameChannel != value)
 				{
 					this.nameChannel = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -691,7 +691,7 @@ namespace YAT.Log.Settings
 				if (this.nameDate != value)
 				{
 					this.nameDate = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -706,7 +706,7 @@ namespace YAT.Log.Settings
 				if (this.nameTime != value)
 				{
 					this.nameTime = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -724,7 +724,7 @@ namespace YAT.Log.Settings
 				if (this.nameSeparator != value)
 				{
 					this.nameSeparator = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -755,7 +755,7 @@ namespace YAT.Log.Settings
 				if (this.folderFormat != value)
 				{
 					this.folderFormat = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -773,7 +773,7 @@ namespace YAT.Log.Settings
 				if (this.folderChannel != value)
 				{
 					this.folderChannel = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -790,7 +790,7 @@ namespace YAT.Log.Settings
 				if (this.writeMode != value)
 				{
 					this.writeMode = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -807,7 +807,7 @@ namespace YAT.Log.Settings
 				if (this.textEncoding != value)
 				{
 					this.textEncoding = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

@@ -189,7 +189,7 @@ namespace YAT.Domain.Settings
 				if (this.separateTxRxRadix != value)
 				{
 					this.separateTxRxRadix = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -204,7 +204,7 @@ namespace YAT.Domain.Settings
 				if (this.txRadix != value)
 				{
 					this.txRadix = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -225,8 +225,38 @@ namespace YAT.Domain.Settings
 				if (this.rxRadix != value)
 				{
 					this.rxRadix = value;
-					SetChanged();
+					SetMyChanged();
 				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool TxRadixIsShowable
+		{
+			get
+			{
+				return
+				(
+					(TxRadix != Radix.None)   &&
+					(TxRadix != Radix.String) &&
+					(TxRadix != Radix.Char)
+				);
+			}
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool RxRadixIsShowable
+		{
+			get
+			{
+				return
+				(
+					(RxRadix != Radix.None)   &&
+					(RxRadix != Radix.String) &&
+					(RxRadix != Radix.Char)
+				);
 			}
 		}
 
@@ -240,7 +270,7 @@ namespace YAT.Domain.Settings
 				if (this.showRadix != value)
 				{
 					this.showRadix = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -259,7 +289,7 @@ namespace YAT.Domain.Settings
 					if (this.showTotalLineNumbers && value)
 						this.showTotalLineNumbers = false; // Only one of the settings can be active at once.
 
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -278,7 +308,7 @@ namespace YAT.Domain.Settings
 					if (this.showBufferLineNumbers && value)
 						this.showBufferLineNumbers = false; // Only one of the settings can be active at once.
 
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -293,7 +323,7 @@ namespace YAT.Domain.Settings
 				if (this.showDate != value)
 				{
 					this.showDate = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -308,7 +338,7 @@ namespace YAT.Domain.Settings
 				if (this.showTime != value)
 				{
 					this.showTime = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -323,7 +353,7 @@ namespace YAT.Domain.Settings
 				if (this.showPort != value)
 				{
 					this.showPort = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -338,7 +368,7 @@ namespace YAT.Domain.Settings
 				if (this.showDirection != value)
 				{
 					this.showDirection = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -353,7 +383,7 @@ namespace YAT.Domain.Settings
 				if (this.showLength != value)
 				{
 					this.showLength = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -371,7 +401,7 @@ namespace YAT.Domain.Settings
 						throw (new ArgumentOutOfRangeException("value", value, "Line count must at least be 1!"));
 
 					this.maxLineCount = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -393,7 +423,7 @@ namespace YAT.Domain.Settings
 						throw (new ArgumentOutOfRangeException("value", value, "Byte per line count must at least be 1!"));
 
 					this.maxBytePerLineCount = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -408,7 +438,7 @@ namespace YAT.Domain.Settings
 				if (this.portLineBreakEnabled != value)
 				{
 					this.portLineBreakEnabled = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -423,7 +453,7 @@ namespace YAT.Domain.Settings
 				if (this.directionLineBreakEnabled != value)
 				{
 					this.directionLineBreakEnabled = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -443,7 +473,7 @@ namespace YAT.Domain.Settings
 					this.infoSeparator = value;
 					this.infoSeparatorCache  = this.infoSeparator.ToSeparator(); // For performance reasons.
 
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -482,7 +512,7 @@ namespace YAT.Domain.Settings
 					this.infoEnclosureLeftCache  = this.infoEnclosure.ToEnclosureLeft();  // For performance reasons.
 					this.infoEnclosureRightCache = this.infoEnclosure.ToEnclosureRight(); // For performance reasons.
 
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

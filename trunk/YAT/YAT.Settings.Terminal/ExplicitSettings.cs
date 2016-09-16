@@ -31,8 +31,16 @@ namespace YAT.Settings.Terminal
 	public class ExplicitSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
+		public const bool TerminalIsStartedDefault = true;
+
+		/// <summary></summary>
+		public const bool LogIsOnDefault = false;
+
+		/// <summary></summary>
 		public const string UserNameDefault = "";
 
+		private bool terminalIsStarted;
+		private bool logIsOn;
 		private string userName;
 
 		private Domain.Settings.TerminalSettings terminal;
@@ -69,6 +77,8 @@ namespace YAT.Settings.Terminal
 		public ExplicitSettings(ExplicitSettings rhs)
 			: base(rhs)
 		{
+			TerminalIsStarted = rhs.TerminalIsStarted;
+			LogIsOn           = rhs.LogIsOn;
 			UserName          = rhs.UserName;
 
 			Terminal          = new Domain.Settings.TerminalSettings(rhs.Terminal);
@@ -87,13 +97,45 @@ namespace YAT.Settings.Terminal
 		{
 			base.SetMyDefaults();
 
-			UserName = UserNameDefault;
+			TerminalIsStarted = TerminalIsStartedDefault;
+			LogIsOn           = LogIsOnDefault;
+			UserName          = UserNameDefault;
 		}
 
 		#region Properties
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <summary></summary>
+		[XmlElement("TerminalIsStarted")]
+		public virtual bool TerminalIsStarted
+		{
+			get { return (this.terminalIsStarted); }
+			set
+			{
+				if (this.terminalIsStarted != value)
+				{
+					this.terminalIsStarted = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("LogIsOn")]
+		public virtual bool LogIsOn
+		{
+			get { return (this.logIsOn); }
+			set
+			{
+				if (this.logIsOn != value)
+				{
+					this.logIsOn = value;
+					SetMyChanged();
+				}
+			}
+		}
 
 		/// <summary></summary>
 		[XmlElement("UserName")]
@@ -105,7 +147,7 @@ namespace YAT.Settings.Terminal
 				if (this.userName != value)
 				{
 					this.userName = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -219,6 +261,8 @@ namespace YAT.Settings.Terminal
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
+				(TerminalIsStarted == other.TerminalIsStarted) &&
+				(LogIsOn           == other.LogIsOn) &&
 				StringEx.EqualsOrdinal(UserName, other.UserName)
 			);
 		}
@@ -236,6 +280,8 @@ namespace YAT.Settings.Terminal
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
+				hashCode = (hashCode * 397) ^  TerminalIsStarted          .GetHashCode();
+				hashCode = (hashCode * 397) ^  LogIsOn                    .GetHashCode();
 				hashCode = (hashCode * 397) ^ (UserName != null ? UserName.GetHashCode() : 0);
 
 				return (hashCode);

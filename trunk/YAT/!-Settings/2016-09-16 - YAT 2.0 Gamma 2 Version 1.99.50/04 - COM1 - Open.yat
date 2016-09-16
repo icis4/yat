@@ -10,6 +10,8 @@
   </Saved>
   <AutoSaved>false</AutoSaved>
   <Explicit>
+    <TerminalIsStarted>true</TerminalIsStarted>
+    <LogIsOn>false</LogIsOn>
     <UserName />
     <Terminal>
       <TerminalType>Text</TerminalType>
@@ -300,8 +302,6 @@
     </Log>
   </Explicit>
   <Implicit>
-    <TerminalIsStarted>true</TerminalIsStarted>
-    <LogIsOn>false</LogIsOn>
     <SendText>
       <Command>
         <IsDefined>false</IsDefined>

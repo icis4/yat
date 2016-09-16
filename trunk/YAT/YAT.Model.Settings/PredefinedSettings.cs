@@ -81,7 +81,7 @@ namespace YAT.Model.Settings
 				if (this.selectedPage != value)
 				{
 					this.selectedPage = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

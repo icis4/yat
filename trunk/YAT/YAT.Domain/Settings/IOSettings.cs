@@ -127,7 +127,7 @@ namespace YAT.Domain.Settings
 					if (Socket != null)
 						Socket.Type = (IOTypeEx)value;
 
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -194,7 +194,7 @@ namespace YAT.Domain.Settings
 				if (this.endianness != value)
 				{
 					this.endianness = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -209,7 +209,7 @@ namespace YAT.Domain.Settings
 				if (this.indicateSerialPortBreakStates != value)
 				{
 					this.indicateSerialPortBreakStates = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -224,7 +224,7 @@ namespace YAT.Domain.Settings
 				if (this.serialPortOutputBreakIsModifiable != value)
 				{
 					this.serialPortOutputBreakIsModifiable = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

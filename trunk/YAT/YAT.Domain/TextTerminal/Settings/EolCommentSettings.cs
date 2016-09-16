@@ -91,7 +91,7 @@ namespace YAT.Domain.Settings
 				if (this.skipComment != value)
 				{
 					this.skipComment = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -106,7 +106,7 @@ namespace YAT.Domain.Settings
 				if (this.skipWhiteSpace != value)
 				{
 					this.skipWhiteSpace = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -123,7 +123,7 @@ namespace YAT.Domain.Settings
 				if (this.indicators != value)
 				{
 					this.indicators = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

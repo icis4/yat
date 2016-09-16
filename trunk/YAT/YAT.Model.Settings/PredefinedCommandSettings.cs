@@ -90,7 +90,7 @@ namespace YAT.Model.Settings
 				if (this.pages != value)
 				{
 					this.pages = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -107,7 +107,7 @@ namespace YAT.Model.Settings
 		{
 			this.pages = new PredefinedCommandPageCollection();
 			this.pages.Add(new PredefinedCommandPage("Page 1"));
-			SetChanged();
+			SetMyChanged();
 		}
 
 		/// <summary>
@@ -127,7 +127,7 @@ namespace YAT.Model.Settings
 				if ((commandIndex >= 0) && (commandIndex < MaxCommandsPerPage))
 				{
 					page.SetCommand(commandIndex, command);
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

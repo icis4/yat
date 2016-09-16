@@ -21,7 +21,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
 using System.Xml.Serialization;
 
 namespace YAT.Settings.Terminal
@@ -29,15 +28,6 @@ namespace YAT.Settings.Terminal
 	/// <summary></summary>
 	public class ImplicitSettings : MKY.Settings.SettingsItem
 	{
-		/// <summary></summary>
-		public const bool TerminalIsStartedDefault = false;
-
-		/// <summary></summary>
-		public const bool LogIsOnDefault = false;
-
-		private bool terminalIsStarted;
-		private bool logIsOn;
-
 		private Model.Settings.SendTextSettings sendText;
 		private Model.Settings.SendFileSettings sendFile;
 		private Model.Settings.PredefinedSettings predefined;
@@ -74,9 +64,6 @@ namespace YAT.Settings.Terminal
 		public ImplicitSettings(ImplicitSettings rhs)
 			: base(rhs)
 		{
-			TerminalIsStarted = rhs.TerminalIsStarted;
-			LogIsOn           = rhs.LogIsOn;
-
 			SendText     = new Model.Settings.SendTextSettings(rhs.SendText);
 			SendFile     = new Model.Settings.SendFileSettings(rhs.SendFile);
 			Predefined   = new Model.Settings.PredefinedSettings(rhs.Predefined);
@@ -93,45 +80,12 @@ namespace YAT.Settings.Terminal
 		protected override void SetMyDefaults()
 		{
 			base.SetMyDefaults();
-
-			TerminalIsStarted = TerminalIsStartedDefault;
-			LogIsOn           = LogIsOnDefault;
 		}
 
 		#region Properties
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
-
-		/// <summary></summary>
-		[XmlElement("TerminalIsStarted")]
-		public virtual bool TerminalIsStarted
-		{
-			get { return (this.terminalIsStarted); }
-			set
-			{
-				if (this.terminalIsStarted != value)
-				{
-					this.terminalIsStarted = value;
-					SetChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("LogIsOn")]
-		public virtual bool LogIsOn
-		{
-			get { return (this.logIsOn); }
-			set
-			{
-				if (this.logIsOn != value)
-				{
-					this.logIsOn = value;
-					SetChanged();
-				}
-			}
-		}
 
 		/// <summary></summary>
 		[XmlElement("SendText")]
@@ -257,10 +211,7 @@ namespace YAT.Settings.Terminal
 			ImplicitSettings other = (ImplicitSettings)obj;
 			return
 			(
-				base.Equals(other) && // Compare all settings nodes.
-
-				(TerminalIsStarted == other.TerminalIsStarted) &&
-				(LogIsOn           == other.LogIsOn)
+				base.Equals(other) // Compare all settings nodes.
 			);
 		}
 
@@ -275,12 +226,7 @@ namespace YAT.Settings.Terminal
 		{
 			unchecked
 			{
-				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
-
-				hashCode = (hashCode * 397) ^ TerminalIsStarted.GetHashCode();
-				hashCode = (hashCode * 397) ^ LogIsOn          .GetHashCode();
-
-				return (hashCode);
+				return (base.GetHashCode()); // Get hash code of all settings nodes.
 			}
 		}
 

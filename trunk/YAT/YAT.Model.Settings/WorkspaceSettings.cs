@@ -92,7 +92,7 @@ namespace YAT.Model.Settings
 				if (this.alwaysOnTop != value)
 				{
 					this.alwaysOnTop = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -107,7 +107,7 @@ namespace YAT.Model.Settings
 				if (this.layout != value)
 				{
 					this.layout = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -124,7 +124,7 @@ namespace YAT.Model.Settings
 				if (this.terminalSettings != value)
 				{
 					this.terminalSettings = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

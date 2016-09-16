@@ -138,7 +138,7 @@ namespace YAT.Domain.Settings
 						CharReplace.ReplaceControlChars = (!isBinary);
 					}
 
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

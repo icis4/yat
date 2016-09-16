@@ -911,10 +911,10 @@ namespace YAT.View.Forms
 			comboBox_RxRadix.Enabled           = separateRadix;
 			comboBox_RxRadix.SelectedItem      = (Domain.RadixEx)this.settingsInEdit.Terminal.Display.RxRadix;
 
-			bool isNotString = ((this.settingsInEdit.Terminal.Display.TxRadix != Domain.Radix.String) ||
-								(this.settingsInEdit.Terminal.Display.RxRadix != Domain.Radix.String));
-			checkBox_ShowRadix.Enabled = isNotString; // Attention, same code in two locations in View.Forms.Terminal.
-			checkBox_ShowRadix.Checked = isNotString && this.settingsInEdit.Terminal.Display.ShowRadix;
+			bool isShowable = ((this.settingsInEdit.Terminal.Display.TxRadixIsShowable) ||
+			                   (this.settingsInEdit.Terminal.Display.RxRadixIsShowable));
+			checkBox_ShowRadix.Enabled = isShowable; // Attention, same code in two locations in 'View.Forms.Terminal'.
+			checkBox_ShowRadix.Checked = isShowable && this.settingsInEdit.Terminal.Display.ShowRadix;
 
 			// Display:
 			checkBox_ShowBufferLineNumbers.Checked = this.settingsInEdit.Terminal.Display.ShowBufferLineNumbers;

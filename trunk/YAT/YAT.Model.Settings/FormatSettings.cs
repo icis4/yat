@@ -145,7 +145,7 @@ namespace YAT.Model.Settings
 				if (this.font != value)
 				{
 					this.font = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -160,7 +160,7 @@ namespace YAT.Model.Settings
 				if (this.font.Font != value)
 				{
 					this.font.Font = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -175,7 +175,7 @@ namespace YAT.Model.Settings
 				if (this.txDataFormat != value)
 				{
 					this.txDataFormat = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -190,7 +190,7 @@ namespace YAT.Model.Settings
 				if (this.txControlFormat != value)
 				{
 					this.txControlFormat = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -205,7 +205,7 @@ namespace YAT.Model.Settings
 				if (this.rxDataFormat != value)
 				{
 					this.rxDataFormat = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -220,7 +220,7 @@ namespace YAT.Model.Settings
 				if (this.rxControlFormat != value)
 				{
 					this.rxControlFormat = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -235,7 +235,7 @@ namespace YAT.Model.Settings
 				if (this.dateFormat != value)
 				{
 					this.dateFormat = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -250,7 +250,7 @@ namespace YAT.Model.Settings
 				if (this.timeFormat != value)
 				{
 					this.timeFormat = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -265,7 +265,7 @@ namespace YAT.Model.Settings
 				if (this.portFormat != value)
 				{
 					this.portFormat = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -280,7 +280,7 @@ namespace YAT.Model.Settings
 				if (this.directionFormat != value)
 				{
 					this.directionFormat = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -295,7 +295,7 @@ namespace YAT.Model.Settings
 				if (this.lengthFormat != value)
 				{
 					this.lengthFormat = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -310,7 +310,7 @@ namespace YAT.Model.Settings
 				if (this.whiteSpacesFormat != value)
 				{
 					this.whiteSpacesFormat = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -325,7 +325,7 @@ namespace YAT.Model.Settings
 				if (this.errorFormat != value)
 				{
 					this.errorFormat = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -340,7 +340,7 @@ namespace YAT.Model.Settings
 				if (this.backFormat != value)
 				{
 					this.backFormat = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -355,7 +355,7 @@ namespace YAT.Model.Settings
 				if (this.backFormat.Color != value)
 				{
 					this.backFormat.Color = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

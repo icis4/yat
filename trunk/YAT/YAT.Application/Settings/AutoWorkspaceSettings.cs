@@ -89,7 +89,7 @@ namespace YAT.Application.Settings
 				if (this.filePath != value)
 				{
 					this.filePath = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -113,7 +113,7 @@ namespace YAT.Application.Settings
 				if (this.autoSaved != value)
 				{
 					this.autoSaved = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
