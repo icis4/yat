@@ -104,7 +104,7 @@ namespace YAT.Domain.Settings
 				if (this.separateTxRxDisplay != value)
 				{
 					this.separateTxRxDisplay = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

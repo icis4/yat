@@ -109,7 +109,7 @@ namespace YAT.Domain.Settings
 				if (this.showConnectTime != value)
 				{
 					this.showConnectTime = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -125,7 +125,7 @@ namespace YAT.Domain.Settings
 				if (this.showCountAndRate != value)
 				{
 					this.showCountAndRate = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -141,7 +141,7 @@ namespace YAT.Domain.Settings
 				if (this.showFlowControlCount != value)
 				{
 					this.showFlowControlCount = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -157,7 +157,7 @@ namespace YAT.Domain.Settings
 				if (this.showBreakCount != value)
 				{
 					this.showBreakCount = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

@@ -800,10 +800,10 @@ namespace YAT.View.Forms
 			toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount.Enabled = showCountAndRate;
 
 			// Display:
-			bool isNotString = ((this.settingsRoot.Display.TxRadix != Domain.Radix.String) ||
-			                    (this.settingsRoot.Display.RxRadix != Domain.Radix.String));
-			toolStripMenuItem_TerminalMenu_View_ShowRadix.Enabled = isNotString; // Attention, same code further below as well as in View.Forms.AdvancedTerminalSettings.
-			toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked = isNotString && this.settingsRoot.Display.ShowRadix;
+			bool isShowable = ((this.settingsRoot.Display.TxRadixIsShowable) ||
+			                   (this.settingsRoot.Display.RxRadixIsShowable));
+			toolStripMenuItem_TerminalMenu_View_ShowRadix.Enabled = isShowable; // Attention, same code further below as well as in 'View.Forms.AdvancedTerminalSettings'.
+			toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked = isShowable && this.settingsRoot.Display.ShowRadix;
 
 			toolStripMenuItem_TerminalMenu_View_ShowBufferLineNumbers.Checked = this.settingsRoot.Display.ShowBufferLineNumbers;
 			toolStripMenuItem_TerminalMenu_View_ShowTotalLineNumbers.Checked  = this.settingsRoot.Display.ShowTotalLineNumbers;
@@ -1074,10 +1074,10 @@ namespace YAT.View.Forms
 			toolStripMenuItem_MonitorContextMenu_Hide.Visible = hideIsAllowed;
 			toolStripMenuItem_MonitorContextMenu_Hide.Enabled = isMonitor && hideIsAllowed;
 
-			bool isNotString = ((this.settingsRoot.Display.TxRadix != Domain.Radix.String) ||
-			                    (this.settingsRoot.Display.RxRadix != Domain.Radix.String));
-			toolStripMenuItem_MonitorContextMenu_ShowRadix.Enabled = isNotString; // Attention, same code further above as well as in View.Forms.AdvancedTerminalSettings.
-			toolStripMenuItem_MonitorContextMenu_ShowRadix.Checked = isNotString && this.settingsRoot.Display.ShowRadix;
+			bool isShowable = ((this.settingsRoot.Display.TxRadixIsShowable) ||
+			                   (this.settingsRoot.Display.RxRadixIsShowable));
+			toolStripMenuItem_MonitorContextMenu_ShowRadix.Enabled = isShowable; // Attention, same code further above as well as in 'View.Forms.AdvancedTerminalSettings'.
+			toolStripMenuItem_MonitorContextMenu_ShowRadix.Checked = isShowable && this.settingsRoot.Display.ShowRadix;
 
 			toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers.Checked = this.settingsRoot.Display.ShowBufferLineNumbers;
 			toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers.Checked  = this.settingsRoot.Display.ShowTotalLineNumbers;

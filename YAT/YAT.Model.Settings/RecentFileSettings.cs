@@ -89,7 +89,7 @@ namespace YAT.Model.Settings
 				if (this.filePaths != value)
 				{
 					this.filePaths = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

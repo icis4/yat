@@ -135,7 +135,7 @@ namespace YAT.Domain.Settings
 				if (this.separateTxRxEol != value)
 				{
 					this.separateTxRxEol = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -150,7 +150,7 @@ namespace YAT.Domain.Settings
 				if (this.txEol != value)
 				{
 					this.txEol = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -171,7 +171,7 @@ namespace YAT.Domain.Settings
 				if (this.rxEol != value)
 				{
 					this.rxEol = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -186,7 +186,7 @@ namespace YAT.Domain.Settings
 				if (this.encoding != value)
 				{
 					this.encoding = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -201,7 +201,7 @@ namespace YAT.Domain.Settings
 				if (this.showEol != value)
 				{
 					this.showEol = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -216,7 +216,7 @@ namespace YAT.Domain.Settings
 				if (this.lineSendDelay != value)
 				{
 					this.lineSendDelay = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -231,7 +231,7 @@ namespace YAT.Domain.Settings
 				if (this.waitForResponse != value)
 				{
 					this.waitForResponse = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -246,7 +246,7 @@ namespace YAT.Domain.Settings
 				if (this.charSubstitution != value)
 				{
 					this.charSubstitution = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

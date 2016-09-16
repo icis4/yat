@@ -91,7 +91,7 @@ namespace YAT.Model.Settings
 				if (this.visible != value)
 				{
 					this.visible = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -109,7 +109,7 @@ namespace YAT.Model.Settings
 				if (this.trigger != value)
 				{
 					this.trigger = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -145,7 +145,7 @@ namespace YAT.Model.Settings
 				if (this.response != value)
 				{
 					this.response = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

@@ -147,8 +147,6 @@
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
         <xs:sequence>
-          <xs:element minOccurs="1" maxOccurs="1" name="TerminalIsStarted" type="xs:boolean" />
-          <xs:element minOccurs="1" maxOccurs="1" name="LogIsOn" type="xs:boolean" />
           <xs:element minOccurs="0" maxOccurs="1" name="SendText" type="SendTextSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="SendFile" type="SendFileSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="Predefined" type="PredefinedSettings" />
@@ -726,6 +724,8 @@
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
         <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="TerminalIsStarted" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="LogIsOn" type="xs:boolean" />
           <xs:element minOccurs="0" maxOccurs="1" name="UserName" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="Terminal" type="TerminalSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="PredefinedCommand" type="PredefinedCommandSettings" />

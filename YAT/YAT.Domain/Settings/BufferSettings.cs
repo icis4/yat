@@ -88,7 +88,7 @@ namespace YAT.Domain.Settings
 				if (this.txBufferSize != value)
 				{
 					this.txBufferSize = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -103,7 +103,7 @@ namespace YAT.Domain.Settings
 				if (this.rxBufferSize != value)
 				{
 					this.rxBufferSize = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

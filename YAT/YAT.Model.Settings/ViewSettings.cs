@@ -96,7 +96,7 @@ namespace YAT.Model.Settings
 				if (this.customColors != value)
 				{
 					this.customColors = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

@@ -252,7 +252,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.portId != value)
 				{
 					this.portId = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -284,7 +284,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.aliveMonitor != value)
 				{
 					this.aliveMonitor = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -299,7 +299,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.autoReopen != value)
 				{
 					this.autoReopen = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -317,7 +317,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.outputBufferSize != value)
 				{
 					this.outputBufferSize = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -332,7 +332,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.outputMaxBaudRate != value)
 				{
 					this.outputMaxBaudRate = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -347,7 +347,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.maxChunkSize != value)
 				{
 					this.maxChunkSize = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -375,7 +375,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.maxSendRate != value)
 				{
 					this.maxSendRate = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -390,7 +390,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.noSendOnOutputBreak != value)
 				{
 					this.noSendOnOutputBreak = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -405,7 +405,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.noSendOnInputBreak != value)
 				{
 					this.noSendOnInputBreak = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

@@ -168,7 +168,7 @@ namespace YAT.Model.Settings
 				if (this.terminalType != value)
 				{
 					this.terminalType = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -183,7 +183,7 @@ namespace YAT.Model.Settings
 				if (this.ioType != value)
 				{
 					this.ioType = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -198,7 +198,7 @@ namespace YAT.Model.Settings
 				if (this.serialPortId != value)
 				{
 					this.serialPortId = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -230,7 +230,7 @@ namespace YAT.Model.Settings
 				if (this.serialPortAliveMonitor != value)
 				{
 					this.serialPortAliveMonitor = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -245,7 +245,7 @@ namespace YAT.Model.Settings
 				if (this.serialPortAutoReopen != value)
 				{
 					this.serialPortAutoReopen = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -263,7 +263,7 @@ namespace YAT.Model.Settings
 				if (this.socketRemoteHost != value)
 				{
 					this.socketRemoteHost = value;
-					SetChanged();
+					SetMyChanged();
 
 					// Do not try to resolve the IP address as this may take quite some time!
 				}
@@ -291,7 +291,7 @@ namespace YAT.Model.Settings
 				if (this.socketRemoteTcpPort != value)
 				{
 					this.socketRemoteTcpPort = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -306,7 +306,7 @@ namespace YAT.Model.Settings
 				if (this.socketRemoteUdpPort != value)
 				{
 					this.socketRemoteUdpPort = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -321,7 +321,7 @@ namespace YAT.Model.Settings
 				if (this.socketLocalInterface != value)
 				{
 					this.socketLocalInterface = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -339,7 +339,7 @@ namespace YAT.Model.Settings
 				if (this.socketLocalFilter != value)
 				{
 					this.socketLocalFilter = value;
-					SetChanged();
+					SetMyChanged();
 
 					// Do not try to resolve the IP address as this may take quite some time!
 				}
@@ -411,7 +411,7 @@ namespace YAT.Model.Settings
 				if (this.socketLocalTcpPort != value)
 				{
 					this.socketLocalTcpPort = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -426,7 +426,7 @@ namespace YAT.Model.Settings
 				if (this.socketLocalUdpPort != value)
 				{
 					this.socketLocalUdpPort = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -442,7 +442,7 @@ namespace YAT.Model.Settings
 				if (this.tcpClientAutoReconnect != value)
 				{
 					this.tcpClientAutoReconnect = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -458,7 +458,7 @@ namespace YAT.Model.Settings
 				if (this.udpServerSendMode != value)
 				{
 					this.udpServerSendMode = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -473,7 +473,7 @@ namespace YAT.Model.Settings
 				if (this.usbSerialHidDeviceInfo != value)
 				{
 					this.usbSerialHidDeviceInfo = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -488,7 +488,7 @@ namespace YAT.Model.Settings
 				if (this.usbSerialHidMatchSerial != value)
 				{
 					this.usbSerialHidMatchSerial = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -503,7 +503,7 @@ namespace YAT.Model.Settings
 				if (this.usbSerialHidReportFormat != value)
 				{
 					this.usbSerialHidReportFormat = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -518,7 +518,7 @@ namespace YAT.Model.Settings
 				if (this.usbSerialHidRxIdUsage != value)
 				{
 					this.usbSerialHidRxIdUsage = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -533,7 +533,7 @@ namespace YAT.Model.Settings
 				if (this.usbSerialHidFlowControl != value)
 				{
 					this.usbSerialHidFlowControl = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -548,7 +548,7 @@ namespace YAT.Model.Settings
 				if (this.usbSerialHidAutoOpen != value)
 				{
 					this.usbSerialHidAutoOpen = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -563,7 +563,7 @@ namespace YAT.Model.Settings
 				if (this.startTerminal != value)
 				{
 					this.startTerminal = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

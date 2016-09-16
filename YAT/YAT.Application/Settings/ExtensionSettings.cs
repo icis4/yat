@@ -94,7 +94,7 @@ namespace YAT.Application.Settings
 				if (this.textSendFiles != value)
 				{
 					this.textSendFiles = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -109,7 +109,7 @@ namespace YAT.Application.Settings
 				if (this.binarySendFiles != value)
 				{
 					this.binarySendFiles = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -124,7 +124,7 @@ namespace YAT.Application.Settings
 				if (this.rawLogFiles != value)
 				{
 					this.rawLogFiles = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -139,7 +139,7 @@ namespace YAT.Application.Settings
 				if (this.neatLogFiles != value)
 				{
 					this.neatLogFiles = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -154,7 +154,7 @@ namespace YAT.Application.Settings
 				if (this.monitorFiles != value)
 				{
 					this.monitorFiles = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

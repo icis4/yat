@@ -94,7 +94,7 @@ namespace YAT.Model.Settings
 				if (this.command != value)
 				{
 					this.command = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -111,7 +111,7 @@ namespace YAT.Model.Settings
 				if (this.recentCommands != value)
 				{
 					this.recentCommands = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

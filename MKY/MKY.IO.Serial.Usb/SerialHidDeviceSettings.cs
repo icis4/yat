@@ -151,7 +151,7 @@ namespace MKY.IO.Serial.Usb
 				if (this.deviceInfo != value)
 				{
 					this.deviceInfo = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -166,7 +166,7 @@ namespace MKY.IO.Serial.Usb
 				if (this.matchSerial != value)
 				{
 					this.matchSerial = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -181,7 +181,7 @@ namespace MKY.IO.Serial.Usb
 				if (this.reportFormat != value)
 				{
 					this.reportFormat = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -197,7 +197,7 @@ namespace MKY.IO.Serial.Usb
 				if (this.rxIdUsage != value)
 				{
 					this.rxIdUsage = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -212,7 +212,7 @@ namespace MKY.IO.Serial.Usb
 				if (this.flowControl != value)
 				{
 					this.flowControl = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -267,7 +267,7 @@ namespace MKY.IO.Serial.Usb
 				if (this.autoOpen != value)
 				{
 					this.autoOpen = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

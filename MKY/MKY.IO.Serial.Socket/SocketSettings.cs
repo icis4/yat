@@ -231,7 +231,7 @@ namespace MKY.IO.Serial.Socket
 				if (this.type != value)
 				{
 					this.type = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -249,7 +249,7 @@ namespace MKY.IO.Serial.Socket
 				if (this.remoteHost != value)
 				{
 					this.remoteHost = value;
-					SetChanged();
+					SetMyChanged();
 
 					// Do not try to resolve the IP address as this may take quite some time!
 				}
@@ -321,7 +321,7 @@ namespace MKY.IO.Serial.Socket
 				if (this.remoteTcpPort != value)
 				{
 					this.remoteTcpPort = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -336,7 +336,7 @@ namespace MKY.IO.Serial.Socket
 				if (this.remoteUdpPort != value)
 				{
 					this.remoteUdpPort = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -358,7 +358,7 @@ namespace MKY.IO.Serial.Socket
 				if (this.localInterface != value)
 				{
 					this.localInterface = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -376,7 +376,7 @@ namespace MKY.IO.Serial.Socket
 				if (this.localFilter != value)
 				{
 					this.localFilter = value;
-					SetChanged();
+					SetMyChanged();
 
 					// Do not try to resolve the IP address as this may take quite some time!
 				}
@@ -448,7 +448,7 @@ namespace MKY.IO.Serial.Socket
 				if (this.localTcpPort != value)
 				{
 					this.localTcpPort = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -463,7 +463,7 @@ namespace MKY.IO.Serial.Socket
 				if (this.localUdpPort != value)
 				{
 					this.localUdpPort = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -478,7 +478,7 @@ namespace MKY.IO.Serial.Socket
 				if (this.tcpClientAutoReconnect != value)
 				{
 					this.tcpClientAutoReconnect = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -493,7 +493,7 @@ namespace MKY.IO.Serial.Socket
 				if (this.udpServerSendMode != value)
 				{
 					this.udpServerSendMode = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

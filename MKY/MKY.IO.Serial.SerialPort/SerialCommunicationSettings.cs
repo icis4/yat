@@ -151,7 +151,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.baudRate != value)
 				{
 					this.baudRate = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -166,7 +166,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.dataBits != value)
 				{
 					this.dataBits = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -181,7 +181,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.parity != value)
 				{
 					this.parity = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -196,7 +196,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.stopBits != value)
 				{
 					this.stopBits = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -262,7 +262,7 @@ namespace MKY.IO.Serial.SerialPort
 					RfrPin = ToRfrPinDefault(FlowControl);
 					DtrPin = ToDtrPinDefault(FlowControl);
 
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -366,7 +366,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.rfrPin != value)
 				{
 					this.rfrPin = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -382,7 +382,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.dtrPin != value)
 				{
 					this.dtrPin = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

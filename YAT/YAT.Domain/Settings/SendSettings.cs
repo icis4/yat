@@ -157,7 +157,7 @@ namespace YAT.Domain.Settings
 				if (this.useExplicitDefaultRadix != value)
 				{
 					this.useExplicitDefaultRadix = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -172,7 +172,7 @@ namespace YAT.Domain.Settings
 				if (this.keepCommand != value)
 				{
 					this.keepCommand = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -187,7 +187,7 @@ namespace YAT.Domain.Settings
 				if (this.copyPredefined != value)
 				{
 					this.copyPredefined = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -202,7 +202,7 @@ namespace YAT.Domain.Settings
 				if (this.sendImmediately != value)
 				{
 					this.sendImmediately = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -217,7 +217,7 @@ namespace YAT.Domain.Settings
 				if (this.defaultDelay != value)
 				{
 					this.defaultDelay = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -232,7 +232,7 @@ namespace YAT.Domain.Settings
 				if (this.defaultLineDelay != value)
 				{
 					this.defaultLineDelay = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -247,7 +247,7 @@ namespace YAT.Domain.Settings
 				if (this.defaultLineInterval != value)
 				{
 					this.defaultLineInterval = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -262,7 +262,7 @@ namespace YAT.Domain.Settings
 				if (this.defaultLineRepeat != value)
 				{
 					this.defaultLineRepeat = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -277,7 +277,7 @@ namespace YAT.Domain.Settings
 				if (this.disableKeywords != value)
 				{
 					this.disableKeywords = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -292,7 +292,7 @@ namespace YAT.Domain.Settings
 				if (this.signalXOnBeforeEachTransmission != value)
 				{
 					this.signalXOnBeforeEachTransmission = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -307,7 +307,7 @@ namespace YAT.Domain.Settings
 				if (this.signalXOnPeriodically != value)
 				{
 					this.signalXOnPeriodically = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

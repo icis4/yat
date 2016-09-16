@@ -114,7 +114,7 @@ namespace YAT.Model.Settings
 				if (this.filePath != value)
 				{
 					this.filePath = value;
-					SetChanged();
+					SetMyChanged();
 				}
 				
 				// Create GUID from file path:
@@ -139,7 +139,7 @@ namespace YAT.Model.Settings
 				if (this.guid != value)
 				{
 					this.guid = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -154,7 +154,7 @@ namespace YAT.Model.Settings
 				if (this.fixedIndex != value)
 				{
 					this.fixedIndex = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}

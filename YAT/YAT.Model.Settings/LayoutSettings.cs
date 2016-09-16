@@ -116,7 +116,7 @@ namespace YAT.Model.Settings
 				if (this.txMonitorPanelIsVisible != value)
 				{
 					this.txMonitorPanelIsVisible = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -131,7 +131,7 @@ namespace YAT.Model.Settings
 				if (this.bidirMonitorPanelIsVisible != value)
 				{
 					this.bidirMonitorPanelIsVisible = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -146,7 +146,7 @@ namespace YAT.Model.Settings
 				if (this.rxMonitorPanelIsVisible != value)
 				{
 					this.rxMonitorPanelIsVisible = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -161,7 +161,7 @@ namespace YAT.Model.Settings
 				if (this.monitorOrientation != value)
 				{
 					this.monitorOrientation = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -176,7 +176,7 @@ namespace YAT.Model.Settings
 				if (this.txMonitorSplitterRatio != value)
 				{
 					this.txMonitorSplitterRatio = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -191,7 +191,7 @@ namespace YAT.Model.Settings
 				if (this.rxMonitorSplitterRatio != value)
 				{
 					this.rxMonitorSplitterRatio = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -206,7 +206,7 @@ namespace YAT.Model.Settings
 				if (this.predefinedPanelIsVisible != value)
 				{
 					this.predefinedPanelIsVisible = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -221,7 +221,7 @@ namespace YAT.Model.Settings
 				if (this.predefinedSplitterRatio != value)
 				{
 					this.predefinedSplitterRatio = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -236,7 +236,7 @@ namespace YAT.Model.Settings
 				if (this.sendTextPanelIsVisible != value)
 				{
 					this.sendTextPanelIsVisible = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
@@ -251,7 +251,7 @@ namespace YAT.Model.Settings
 				if (this.sendFilePanelIsVisible != value)
 				{
 					this.sendFilePanelIsVisible = value;
-					SetChanged();
+					SetMyChanged();
 				}
 			}
 		}
