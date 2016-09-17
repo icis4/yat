@@ -87,6 +87,17 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
+YAT 2.0 Gamma 2' Version 1.99.51 :: 2016-09-17
+----------------------------------------------------------------------------------------------------
+
+Important changes:
+- Distribution without .NET runtime restored to .zip due to limitation of Internet Explorer with
+  .msi downloads (even though .msi has been created with a Microsoft tool ?!?) (bugs #318 and #323).
+
+Fixed bugs:
+- Binary terminals: Radix 'String' and 'Char' fixed (bug #357).
+
+
 YAT 2.0 Gamma 2 Version 1.99.50 :: 2016-09-16
 ----------------------------------------------------------------------------------------------------
 
@@ -149,6 +160,7 @@ Important changes:
 - Command line options fixed, extended and slightly changed (bug #335 and feature request #260).
 - DejaVu fonts updated to 2.37
 - Visual Studio upgraded to 2015 Community Edition, including installer (VSI).
+- Distribution without .NET runtime simplified to .msi only (bugs #318 and #323).
 - Test board (serial COM ports, USB devices,...) created and test cases adapted accordingly.
 
 Fixed bugs:
