@@ -1,0 +1,6 @@
+@@ -140,0 +141,5 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
++        public SocketConnector AddConnector(string name, IPEndPoint remoteEndPoint, IPEndPoint localEndPoint)
++        {
++            return AddConnector(name, remoteEndPoint, null, EncryptType.etNone, CompressionType.ctNone, null, 0, 0, localEndPoint);
++        }
++
