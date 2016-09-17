@@ -1857,7 +1857,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						ByteToCharacterString(b);
+						text = ByteToCharacterString(b);
 					}
 					break;
 				}
@@ -1932,7 +1932,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		protected virtual string ByteToCharacterString(byte b)
 		{
-			return (((char)b).ToString());
+			return (((char)b).ToString(CultureInfo.InvariantCulture));
 		}
 
 		/// <summary></summary>
