@@ -32,6 +32,14 @@
 // been found. Therefore, it was decided to skip the automatism and simply provide the necessary
 // methods that allow the user of this control to trigger the auto scroll.
 
+// \todo MKY 2016-09-19 (related to upgrade of ExSim)
+// When enabling 'ENABLE_HORIZONTAL_AUTO_SCROLL', a reference to 'MKY.Win32' and thus Win32 API
+// calls is required. This is undesirable, as there shall be no references to the Win32 API from
+// within true .NET assemblies. As a consequence, when enabling 'ENABLE_HORIZONTAL_AUTO_SCROLL' for
+// e.g. testing or analysis, the reference to 'MKY.Win32' must manually be added. And, when finally
+// introducing 'ENABLE_HORIZONTAL_AUTO_SCROLL', a better solution must be found to deal with any
+// dependencies to the Win32 API.
+
 // Enable to continue working/testing with an automatic horizontally scrolling list box:
 //#define ENABLE_HORIZONTAL_AUTO_SCROLL
 
@@ -42,15 +50,17 @@
 // Using
 //==================================================================================================
 
-using System;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 
+#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
+using System;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
+using System.Text;
+
 using MKY.Win32;
+#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
 
 #endregion
 
