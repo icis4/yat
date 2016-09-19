@@ -24,7 +24,7 @@ Keep as-is but a little bit better (suggestion (BSc))
 Evaluation Mk.II (2015-03..04)
 ------------------------------
 
-YAT initially used the VS2003..2008 integrated installer functionality (VSI). But VS2013 no longer contained this. Therefore, alternatives were evaluated to pre-releasing YAT 1.99.31 for Raffi Zingg.
+YAT initially used the VS2003..2008 integrated installer functionality (VSI). But VS2013 no longer contained this. Therefore, alternatives were evaluated to pre-releasing YAT 1.99.31 for RZi.
 
 InstallShield Limited Edition
  + Prepared by VS2013 as the official replacement of the VSI
