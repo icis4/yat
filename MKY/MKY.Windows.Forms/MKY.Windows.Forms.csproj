@@ -151,6 +151,18 @@
     <Compile Include="TextInputBox.Designer.cs">
       <DependentUpon>TextInputBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="TransparentButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TransparentButton.Designer.cs">
+      <DependentUpon>TransparentButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TransparentPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TransparentPanel.Designer.cs">
+      <DependentUpon>TransparentPanel.cs</DependentUpon>
+    </Compile>
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
@@ -172,12 +184,14 @@
       <DependentUpon>TextInputBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="TransparentButton.resx">
+      <DependentUpon>TransparentButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TransparentPanel.resx">
+      <DependentUpon>TransparentPanel.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MKY.Win32\MKY.Win32.csproj">
-      <Project>{877BAA28-C2A6-41EC-BEDE-27B396FA8E20}</Project>
-      <Name>MKY.Win32</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY</Name>
