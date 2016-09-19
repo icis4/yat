@@ -92,7 +92,7 @@ YAT 2.0 Gamma 2' Version 1.99.51 :: 2016-09-17
 
 Important changes:
 - Distribution without .NET runtime restored to .zip due to limitation of Internet Explorer with
-  .msi downloads (even though .msi has been created with a Microsoft tool ?!?) (bugs #318 and #323).
+  .msi downloads (even though .msi has been created with a Microsoft tool...) (bugs #318 and #323).
 
 Fixed bugs:
 - Binary terminals: Radix 'String' and 'Char' fixed (bug #357).
