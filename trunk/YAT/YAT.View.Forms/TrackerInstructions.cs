@@ -183,7 +183,7 @@ namespace YAT.View.Forms
 			}
 			else
 			{
-				throw (new InvalidOperationException("Program execution should never get here, link data is invalid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Link data is invalid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

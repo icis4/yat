@@ -1900,7 +1900,7 @@ namespace YAT.View.Forms
 					break;
 
 				default:
-					throw (new NotSupportedException("Program execution should never get here, '" + layout + "' is an invalid workspace layout!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + layout + "' is an invalid workspace layout!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

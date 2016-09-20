@@ -97,7 +97,7 @@ namespace MKY.IO.Ports
 		{
 		}
 
-		/// <summary></summary>
+		/// <exception cref="ArgumentOutOfRangeException"> if given value is no potentially valid baud rate value.</exception>
 		public BaudRateEx(int baudRate)
 			: this(BaudRate.Explicit)
 		{
@@ -111,8 +111,8 @@ namespace MKY.IO.Ports
 				(
 					"baudRate",
 					baudRate,
-					"Baud rate must be a positive integral value!"
-				));
+					"Baud rate must be a potentially valid baud rate value!"
+				)); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
 			}
 		}
 

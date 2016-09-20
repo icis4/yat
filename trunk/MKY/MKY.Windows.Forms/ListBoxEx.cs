@@ -439,6 +439,9 @@ namespace MKY.Windows.Forms
 				message.AppendLine("Unable to retrieve scroll info from system:");
 				message.AppendLine();
 				message.AppendLine(WinError.GetLastError());
+
+				+ Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug
+
 				throw (new InvalidOperationException(message.ToString()));
 			}
 		}
@@ -471,6 +474,9 @@ namespace MKY.Windows.Forms
 				message.AppendLine("Unable to retrieve scroll info from system:");
 				message.AppendLine();
 				message.AppendLine(WinError.GetLastError());
+
+				+ Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug
+
 				throw (new InvalidOperationException(message.ToString()));
 			}
 		}

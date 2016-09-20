@@ -822,7 +822,7 @@ namespace MKY.IO.Serial.SerialPort
 					case SerialControlPinState.Automatic: /* Do not access the pin! */ break;
 					case SerialControlPinState.Enabled:   this.port.RfrEnable = true;  break;
 					case SerialControlPinState.Disabled:  this.port.RfrEnable = false; break;
-					default: throw (new NotSupportedException("Program execution should never get here,'" + scs.RfrPin.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + scs.RfrPin.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				switch (scs.DtrPin)
@@ -830,7 +830,7 @@ namespace MKY.IO.Serial.SerialPort
 					case SerialControlPinState.Automatic: /* Do not access the pin! */ break;
 					case SerialControlPinState.Enabled:   this.port.DtrEnable = true;  break;
 					case SerialControlPinState.Disabled:  this.port.DtrEnable = false; break;
-					default: throw (new NotSupportedException("Program execution should never get here,'" + scs.DtrPin.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + scs.DtrPin.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}

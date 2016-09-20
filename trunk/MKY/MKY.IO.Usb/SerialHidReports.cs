@@ -84,11 +84,12 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Create the data from a given input report.
 		/// </summary>
+		/// <exception cref="ArgumentException"> if either input report or payload in invalid.</exception>
 		public void ProcessReport(SerialHidReportFormat format, byte[] report)
 		{
 			// Ensure that report length fits:
 			if (report.Length > MaxByteLength)
-				throw (new ArgumentException("Length of input report exceeds the device's capabilities.", "report"));
+				throw (new ArgumentException("Length of input report exceeds the device's capabilities!", "report")); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
 
 			// If requested, get the ID which is located in the first byte of the report:
 			if (format.UseId)
@@ -108,7 +109,7 @@ namespace MKY.IO.Usb
 				for (int i = format.HeaderByteLength; i < (format.HeaderByteLength + payloadLength); i++)
 				{
 					if (i >= report.Length)
-						throw (new ArgumentException("The reported payload length exceeds the length of the report."));
+						throw (new ArgumentException("The reported payload length exceeds the length of the report!")); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
 
 					data.Add(report[i]);
 				}

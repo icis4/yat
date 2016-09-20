@@ -224,7 +224,7 @@ namespace MKY.Windows.Forms
 
 					default:
 					{
-						throw (new NotSupportedException("Program execution should never get here, unknown 'SizeMode'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Unknown 'SizeMode'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 			}
@@ -268,7 +268,7 @@ namespace MKY.Windows.Forms
 
 					default:
 					{
-						throw (new NotSupportedException("Program execution should never get here, unknown 'SizeMode'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Unknown 'SizeMode'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 			}

@@ -76,7 +76,7 @@ namespace YAT.Settings.Application
 				if (staticSettingsHandler != null)
 					return (staticSettingsHandler.LocalUserSettings);
 				else
-					throw (new InvalidOperationException("Program execution should never get here, the settings have to be created before they can be accessed, ensure to call Create() and if needed also Load() before accessing the settings!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The settings have to be created before they can be accessed, ensure to call Create() and if needed also Load() before accessing the settings!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

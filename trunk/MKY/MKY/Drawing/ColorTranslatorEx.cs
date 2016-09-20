@@ -36,6 +36,7 @@ namespace MKY.Drawing
 		/// <summary>
 		/// Translates an HTML or Win32 color representation to a GDI+ <see cref="Color"/> structure.
 		/// </summary>
+		/// <exception cref="ArgumentException"> if <paramref name="colorString"/> cannot be converted into a color structure.</exception>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Emphasizes the color's representation.")]
 		public static Color FromHtmlOrWin32(string colorString)
 		{
@@ -52,7 +53,7 @@ namespace MKY.Drawing
 				}
 				else
 				{
-					throw (new ArgumentException("Color string could not be converted into a color structure!", "colorString", exHtml));
+					throw (new ArgumentException("Color string could not be converted into a color structure!", "colorString", exHtml)); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
 				}
 			}
 		}

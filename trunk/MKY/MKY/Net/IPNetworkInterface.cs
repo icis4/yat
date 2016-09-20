@@ -107,7 +107,7 @@ namespace MKY.Net
 			: base(networkInterface)
 		{
 			if (networkInterface == IPNetworkInterface.Explicit)
-				throw (new InvalidOperationException("'IPNetworkInterface.Explicit' requires an IP address or interface description, use IPNetworkInterfaceEx(IPAddress, string) instead!"));
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'IPNetworkInterface.Explicit' requires an IP address or interface description, use IPNetworkInterfaceEx(IPAddress, string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -138,7 +138,7 @@ namespace MKY.Net
 				else // Explicitly defined, may also cover variants of predefined interfaces, e.g. interface specific loopback!
 				{
 					if ((address == null) || address.Equals(IPAddress.None))
-						throw (new InvalidOperationException("'IPNetworkInterface.Explicit' requires an IP address!"));
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'IPNetworkInterface.Explicit' requires an IP address!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 					SetUnderlyingEnum(IPNetworkInterface.Explicit);
 
@@ -165,7 +165,7 @@ namespace MKY.Net
 					case IPNetworkInterface.IPv6Loopback: return (IPAddress.IPv6Loopback);
 					case IPNetworkInterface.Explicit:     return (this.explicitAddress);
 				}
-				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -190,7 +190,7 @@ namespace MKY.Net
 							return ("");
 					}
 				}
-				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -321,7 +321,7 @@ namespace MKY.Net
 						return (this.explicitAddress.ToString()); // Explicit address is always given, at least 'IPAdress.None'.
 				}
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>

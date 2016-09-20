@@ -135,7 +135,7 @@ namespace MKY.Drawing
 														return (RotateType.Rotate270);
 			}
 
-			throw (new ArgumentOutOfRangeException("rotateFlip", "Argument unknown!"));
+			throw (new ArgumentOutOfRangeException("rotateFlip", rotateFlip, MessageHelper.InvalidExecutionPreamble + "'" + rotateFlip + "' is an invalid rotate/flip type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion
@@ -204,7 +204,7 @@ namespace MKY.Drawing
 														return (FlipType.FlipY);
 			}
 
-			throw (new ArgumentOutOfRangeException("rotateFlip", "Argument unknown!"));
+			throw (new ArgumentOutOfRangeException("rotateFlip", rotateFlip, MessageHelper.InvalidExecutionPreamble + "'" + rotateFlip + "' is an invalid rotate/flip type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

@@ -246,6 +246,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Port number (e.g. 1).
 		/// </summary>
+		/// <exception cref="ArgumentOutOfRangeException"> if given value is not standard port number.</exception>
 		[XmlIgnore]
 		public virtual int StandardPortNumber
 		{
@@ -264,7 +265,7 @@ namespace MKY.IO.Ports
 						"value",
 						value,
 						"Standard port numbers are " + FirstStandardPortNumber + " to " + LastStandardPortNumber + "!"
-					));
+					)); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
 				}
 			}
 		}
@@ -654,7 +655,7 @@ namespace MKY.IO.Ports
 			}
 			else
 			{
-				throw (new ArgumentException(obj.ToString() + " does not specify a 'SerialPortId!"));
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify a 'SerialPortId!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "obj"));
 			}
 		}
 

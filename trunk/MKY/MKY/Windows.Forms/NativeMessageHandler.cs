@@ -159,7 +159,7 @@ namespace MKY.Windows.Forms
 			}
 			else
 			{
-				throw (new InvalidOperationException("No message source to register at!"));
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "no message source to register at!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

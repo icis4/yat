@@ -861,13 +861,13 @@ namespace YAT.Model
 						if (!int.TryParse(this.commandLineArgs.VendorId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out vendorId))
 							return (false);
 
-						if (!Int32Ex.IsWithin(vendorId, MKY.IO.Usb.DeviceInfo.FirstVendorId, MKY.IO.Usb.DeviceInfo.LastVendorId))
+						if (!MKY.IO.Usb.DeviceInfo.IsValidVendorId(vendorId))
 							return (false);
 
 						if (!int.TryParse(this.commandLineArgs.ProductId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out productId))
 							return (false);
 
-						if (!Int32Ex.IsWithin(productId, MKY.IO.Usb.DeviceInfo.FirstProductId, MKY.IO.Usb.DeviceInfo.LastProductId))
+						if (!MKY.IO.Usb.DeviceInfo.IsValidProductId(productId))
 							return (false);
 
 						// The SNR is optional:
@@ -1634,7 +1634,7 @@ namespace YAT.Model
 						OnFixedStatusTextRequest("Invalid program operation!");
 						OnMessageInputRequest
 						(
-							"Program execution should never get here, workspace is 'null' while attempting to perform the operation!" + Environment.NewLine + Environment.NewLine +
+							MessageHelper.InvalidExecutionPreamble + "workspace is 'null' while attempting to perform the operation!" + Environment.NewLine + Environment.NewLine +
 							MessageHelper.SubmitBug,
 							"Invalid Program Operation",
 							MessageBoxButtons.OK,
@@ -1899,7 +1899,7 @@ namespace YAT.Model
 
 				// Ensure that the request is processed!
 				if (e.Result == DialogResult.None)
-					throw (new InvalidOperationException("A 'Message Input' request by main was not processed by the application!"));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + " 'Message Input' request by main was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 				return (e.Result);
 			}

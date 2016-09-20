@@ -1120,7 +1120,7 @@ namespace MKY.IO.Serial.Socket
 								case UdpServerSendMode.None:                                                                       /* Do nothing. */           break;
 								case UdpServerSendMode.First:      if (this.remoteHost.Address.Equals(System.Net.IPAddress.None)) updateRemoteEndPoint = true; break; // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 								case UdpServerSendMode.MostRecent:                                                                updateRemoteEndPoint = true; break;
-								default: throw (new InvalidOperationException("Program execution should never get here,'" + this.serverSendMode.ToString() + "' is an unknown UDP/IP server send mode!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+								default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.serverSendMode.ToString() + "' is an unknown UDP/IP server send mode!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
 
 							if (updateRemoteEndPoint)
@@ -1268,7 +1268,7 @@ namespace MKY.IO.Serial.Socket
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			UnusedEvent.PreventCompilerWarning(IOControlChanged);
-			throw (new InvalidOperationException("Program execution should never get here, the event 'IOControlChanged' is not in use for UDP/IP sockets!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The event 'IOControlChanged' is not in use for UDP/IP sockets!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>

@@ -681,7 +681,7 @@ namespace YAT.Domain.Parser
 					return (TryParseAndConvertContiguousNumericItem(s, radix, out result, ref formatException));
 
 				default:
-					throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""!"));
+					throw (new ArgumentOutOfRangeException("radix", radix, MessageHelper.InvalidExecutionPreamble + "'" + radix + "' is an invalid radix!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -879,7 +879,7 @@ namespace YAT.Domain.Parser
 
 					default:
 					{
-						throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""!"));
+						throw (new ArgumentOutOfRangeException(MessageHelper.InvalidExecutionPreamble + "'" + radix + "' is an invalid radix!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 
@@ -909,7 +909,7 @@ namespace YAT.Domain.Parser
 						case Radix.Oct: sb.Append("octal");       break;
 						case Radix.Dec: sb.Append("decimal");     break;
 						case Radix.Hex: sb.Append("hexadecimal"); break;
-						default: throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""!"));
+						default: throw (new ArgumentOutOfRangeException(MessageHelper.InvalidExecutionPreamble + "'" + radix + "' is an invalid radix!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 
 					sb.Append(" value.");

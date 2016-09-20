@@ -388,6 +388,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Gets or sets the port for communications, including but not limited to all available COM ports.
 		/// </summary>
+		/// <exception cref="InvalidOperationException"> if ID is attempted to be changed while the port is open.</exception>
 		[Category("Port")]
 		[Description(@"Port ID, i.e. either port name (e.g. ""COM1"") or port number (e.g. ""1"").")]
 		[DefaultValue(PortIdDefault)]
@@ -407,7 +408,7 @@ namespace MKY.IO.Ports
 				if (base.PortName != value.Name)
 				{
 					if (IsOpen)
-						throw (new InvalidOperationException("The serial COM port is already open, it must be stopped before changing the port ID!"));
+						throw (new InvalidOperationException("The serial COM port is already open, it must be stopped before changing the port ID!")); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
 
 					base.PortName = value.Name;
 					OnPortChanged(EventArgs.Empty);

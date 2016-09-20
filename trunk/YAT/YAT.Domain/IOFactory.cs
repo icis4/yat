@@ -23,6 +23,7 @@
 
 using System;
 
+using MKY;
 using MKY.IO.Serial;
 using MKY.IO.Serial.SerialPort;
 using MKY.IO.Serial.Socket;
@@ -108,7 +109,7 @@ namespace YAT.Domain
 
 				default:
 				{
-					throw (new ArgumentOutOfRangeException("settings", settings, "'" + settings + "' is an unknown IO type string!"));
+					throw (new ArgumentOutOfRangeException("settings", settings, MessageHelper.InvalidExecutionPreamble + "'" + settings + "' is an unknown IO type string!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}

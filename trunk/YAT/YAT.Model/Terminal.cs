@@ -840,7 +840,7 @@ namespace YAT.Model
 
 						default:
 						{
-							throw (new NotSupportedException("Program execution should never get here, '" + this.settingsRoot.IOType + "' is an invalid I/O type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.settingsRoot.IOType + "' is an invalid I/O type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
 					} // switch (I/O type)
 				} // if (settings available)
@@ -2809,7 +2809,7 @@ namespace YAT.Model
 					break;
 
 				default:
-					throw (new NotSupportedException("Program execution should never get here, '" + this.settingsRoot.IOType + "' is an invalid I/O type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.settingsRoot.IOType + "' is an invalid I/O type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 			textBuilder.Append(":");
 			titleBuilder.Append(" Error!");
@@ -2966,7 +2966,7 @@ namespace YAT.Model
 				}
 				else
 				{
-					throw (new NotSupportedException(@"The command """ + c + @""" has an unknown type!"));
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' has an unknown type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				// Copy line text into recent commands, include compiled partial text:
@@ -4211,7 +4211,7 @@ namespace YAT.Model
 
 				// Ensure that the request is processed!
 				if (e.Result == DialogResult.None)
-					throw (new InvalidOperationException(@"A 'Message Input' request by terminal """ + Caption + @""" was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Message Input' request by terminal '" + Caption + "' was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 				return (e.Result);
 			}
@@ -4233,7 +4233,7 @@ namespace YAT.Model
 
 				// Ensure that the request is processed!
 				if (e.Result == DialogResult.None)
-					throw (new InvalidOperationException(@"A 'Save As' request by terminal """ + Caption + @""" was not processed by the application!"));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by terminal '" + Caption + "' was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 				return (e.Result);
 			}

@@ -674,7 +674,7 @@ namespace YAT.Domain
 			else if (this is LineStart)		clone = new LineStart();
 			else if (this is LineBreak)		clone = new LineBreak();
 			else if (this is ErrorInfo)		clone = new ErrorInfo();
-			else throw (new TypeLoadException("Program execution should never get here, '" + GetType() + "' is an unknown display element type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			else throw (new TypeLoadException(MessageHelper.InvalidExecutionPreamble + "'" + GetType() + "' is an unknown display element type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			clone.direction = this.direction;
 			clone.origin    = PerformDeepClone(this.origin);
@@ -741,7 +741,7 @@ namespace YAT.Domain
 		public virtual void Append(DisplayElement other)
 		{
 			if (!AcceptsAppendOf(other))
-				throw (new NotSupportedException(@"Program execution should never get here, the given element """ + other + @""" cannot be appended to this element """ + this + @"""!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "The given element '" + other + "' cannot be appended to this element '" + this + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			// \fixme (2010-04-01 / MKY):
 			// Weird ArgumentException when receiving large chunks of data.

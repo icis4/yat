@@ -296,7 +296,7 @@ namespace YAT.View.Controls
 
 			int widthOffset = label_Id1.Width;
 			if (label_Id1.Width != label_Length1.Width)
-				throw (new ArgumentException("Labels must have equal width, but are " + label_Id1.Width + " and " + label_Length1.Width + "!"));
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Labels must have equal width, but are " + label_Id1.Width + " and " + label_Length1.Width + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			this.payload1Text = new Dictionary<int, string>(3); // Preset the required capacity to improve memory management.
 			this.payload1Text.Add((widthOffset * 0), "P1'  P2'  ...........................................................  Pn'");
@@ -305,9 +305,9 @@ namespace YAT.View.Controls
 
 			widthOffset = label_Id2.Width;
 			if (label_Id2.Width != label_Length2.Width)
-				throw (new ArgumentException("Labels must have equal width, but are " + label_Id2.Width + " and " + label_Length2.Width + "!"));
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Labels must have equal width, but are " + label_Id2.Width + " and " + label_Length2.Width + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			if (label_Id2.Width != label_TerminatingZero.Width)
-				throw (new ArgumentException("Labels must have equal width, but are " + label_Id2.Width + " and " + label_TerminatingZero.Width + "!"));
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Labels must have equal width, but are " + label_Id2.Width + " and " + label_TerminatingZero.Width + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			this.fillerBytesText = new Dictionary<int, string>(4); // Preset the required capacity to improve memory management.
 			this.fillerBytesText.Add((widthOffset * 0) + label_Payload2.Width, "0  ..................................  0");

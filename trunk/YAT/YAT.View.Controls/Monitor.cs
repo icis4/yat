@@ -1063,7 +1063,7 @@ namespace YAT.View.Controls
 						continue;
 					}
 				}
-				throw (new NotSupportedException("Program execution should never get here, '" + obj.GetType() + "' is an invalid pending item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + obj.GetType() + "' is an invalid pending item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			} // foreach (object in pending)
 
 			this.pendingElementsAndLines.Clear();
