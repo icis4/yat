@@ -599,7 +599,7 @@ namespace MKY.Net
 		/// </summary>
 		public virtual bool TryResolve()
 		{
-			if ((IPFilter)UnderlyingEnum == IPFilter.Explicit) // Predefined addresses don't need to be resolved.
+			if ((IPFilter)UnderlyingEnum == IPFilter.Explicit) // Only non-predefined addresses need to be resolved.
 			{
 				if (!string.IsNullOrEmpty(this.explicitName))
 				{
@@ -616,6 +616,17 @@ namespace MKY.Net
 			}
 
 			return (true);
+		}
+
+		/// <summary>
+		/// Returns whether IP has been resolved from DNS.
+		/// </summary>
+		public virtual bool HasBeenResolved
+		{
+			get
+			{
+				return (!this.explicitAddress.Equals(IPAddress.None));
+			}
 		}
 
 		#endregion

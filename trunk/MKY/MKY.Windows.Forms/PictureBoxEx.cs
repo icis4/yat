@@ -44,34 +44,49 @@ namespace MKY.Windows.Forms
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public class PictureBoxEx : PictureBox
 	{
-		#region Image Rotation
+		#region Constants
 		//==========================================================================================
-		// Image Rotation
+		// Constants
 		//==========================================================================================
-
-		#region Image Rotation > Constants
-		//------------------------------------------------------------------------------------------
-		// Image Rotation > Constants
-		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public const RotateType RotationDefault = RotateTypeEx.Default;
+		public const RotateType ImageRotationDefault = RotateTypeEx.Default;
+
+		/// <summary></summary>
+		public const int ImageZoomPercentDefault = 100;
 
 		#endregion
 
-		#region Image Rotation > Fields
-		//------------------------------------------------------------------------------------------
-		// Image Rotation > Fields
-		//------------------------------------------------------------------------------------------
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
 
-		private RotateType rotation = RotationDefault;
+		private RotateType imageRotation = ImageRotationDefault;
+		private int imageZoomPercent = ImageZoomPercentDefault;
 
 		#endregion
 
-		#region Image Rotation > Properties
-		//------------------------------------------------------------------------------------------
-		// Image Rotation > Properties
-		//------------------------------------------------------------------------------------------
+		#region Control Properties
+		//==========================================================================================
+		// Control Properties
+		//==========================================================================================
+
+		/// <summary>
+		/// Gets the aspect ratio of the control's rectangle.
+		/// </summary>
+		[Description("The aspect ratio of the control's rectangle.")]
+		public float AspectRatio
+		{
+			get { return ((float)Width / Height); }
+		}
+
+		#endregion
+
+		#region Image Properties
+		//==========================================================================================
+		// Image Properties
+		//==========================================================================================
 
 		/// <summary>
 		/// Gets or sets the image that is displayed by this picture box.
@@ -79,6 +94,7 @@ namespace MKY.Windows.Forms
 		/// <remarks>
 		/// Overridden to get a notification when the image changes.
 		/// </remarks>
+		[Description("The image that is displayed by this picture box.")]
 		[Localizable(true)]
 		[Bindable(true)]
 		public new Image Image
@@ -94,107 +110,257 @@ namespace MKY.Windows.Forms
 			}
 		}
 
-		/// <summary></summary>
-		[DefaultValue(RotationDefault)]
-		public virtual RotateType Rotation
+		/// <summary>
+		/// Gets the aspect ratio of the original's image rectangle.
+		/// </summary>
+		[Description("The aspect ratio of the original's image rectangle.")]
+		public float ImageAspectRatio
 		{
-			get { return (this.rotation); }
+			get
+			{
+				if (Image != null)
+					return ((float)Image.Size.Width / Image.Size.Height);
+				else
+					return (1.0f);
+			}
+		}
+
+		#endregion
+
+		#region Image Rotation Properties and Methods
+		//==========================================================================================
+		// Image Rotation Properties and Methods
+		//==========================================================================================
+		/// <summary></summary>
+		[DefaultValue(ImageRotationDefault)]
+		public virtual RotateType ImageRotation
+		{
+			get { return (this.imageRotation); }
 			set
 			{
-				if (this.rotation != value)
+				if (this.imageRotation != value)
 				{
-					this.rotation = value;
+					this.imageRotation = value;
 					ApplyImageRotationAfterRotationChange();
 				}
 			}
 		}
 
-		#endregion
-
-		#region Image Rotation > Methods
-		//------------------------------------------------------------------------------------------
-		// Image Rotation > Methods
-		//------------------------------------------------------------------------------------------
-
 		/// <summary>
 		/// This variable is used to get the difference between the actual and the desired rotation.
 		/// Without this, the image would need to be kept twice, with and without rotation. Upon a
-		/// change of a property, the image would have to be redrawn from the original image.
+		/// change of a property, the image would have to be redrawn from the not rotated image.
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'rotationOld' does start with a lower case letter.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private RotateType ApplyImageRotation_rotationOld = RotationDefault;
+		private RotateType ApplyImageRotation_imageRotationOld = ImageRotationDefault;
 
 		private void ApplyImageRotationAfterRotationChange()
 		{
-			if (this.ApplyImageRotation_rotationOld != this.rotation)
+			// Skip calculation during designer generated initalization sequence to ensure that the
+			// designer generated local resource is shown with the correct orientation:
+			if (!this.Created)
 			{
-				if (Image != null)
-				{
-					RotateType requiredRotation = RotateTypeEx.RotationFromDifference(this.ApplyImageRotation_rotationOld, this.rotation);
-					Image.RotateFlip(RotateTypeEx.ConvertToRotateFlipType(requiredRotation));
-					Invalidate();
+				this.ApplyImageRotation_imageRotationOld = this.imageRotation;
+				return;
+			}
 
-					this.ApplyImageRotation_rotationOld = this.rotation;
-				}
+			// Calculate the difference between the desired and the 'old' rotation and rotate the image:
+			if ((Image != null) &&
+				(this.ApplyImageRotation_imageRotationOld != this.imageRotation))
+			{
+				RotateType deltaRotation = RotateTypeEx.RotationFromDifference(this.ApplyImageRotation_imageRotationOld, this.imageRotation);
+				Image.RotateFlip(RotateTypeEx.ConvertToRotateFlipType(deltaRotation));
+				Invalidate();
+
+				this.ApplyImageRotation_imageRotationOld = this.imageRotation;
 			}
 		}
 
 		private void ApplyImageRotationAfterImageChange()
 		{
+			// Skip calculation during designer generated initalization sequence to ensure that the
+			// designer generated local resource is shown with the correct orientation:
+			if (!this.Created)
+			{
+				this.ApplyImageRotation_imageRotationOld = this.imageRotation;
+				return;
+			}
+
+			// The image must be given 'face up', i.e. in 'normal' rotation.
+			// So, simply apply the selected rotation to the image:
 			if (Image != null)
 			{
-				RotateType requiredRotation = this.rotation;
-				Image.RotateFlip(RotateTypeEx.ConvertToRotateFlipType(requiredRotation));
+				Image.RotateFlip(RotateTypeEx.ConvertToRotateFlipType(this.imageRotation));
 				Invalidate();
 
-				this.ApplyImageRotation_rotationOld = this.rotation;
+				this.ApplyImageRotation_imageRotationOld = this.imageRotation;
 			}
 		}
 
 		#endregion
 
+		#region Image Zoom Properties and Methods
+		//==========================================================================================
+		// Image Zoom Properties and Methods
+		//==========================================================================================
+
+		/// <summary></summary>
+		[DefaultValue(ImageZoomPercentDefault)]
+		public virtual int ImageZoomPercent
+		{
+			get { return (this.imageZoomPercent); }
+			set
+			{
+				if (this.imageZoomPercent != value)
+				{
+					this.imageZoomPercent = value;
+					ApplyImageZoom();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual float ImageZoomFactor
+		{
+			get { return ((float)ImageZoomPercent / 100); }
+		}
+
+		/// <remarks>
+		/// Workaround for border issue in 'Graphics.DrawImage()'.
+		/// See http://www.codeproject.com/csharp/BorderBug.asp for details.
+		/// </remarks>
+		protected virtual void ApplyImageZoom()
+		{
+			if (Image != null)
+			{
+				/*
+
+				// Clone the image before making transformations:
+				Image src = new Bitmap(this.image.Width, this.image.Height);
+				float srcAspect = (float)src.Width / (float)src.Height;
+
+				// Rotate the image according to the selected orientation:
+				src.RotateFlip(RotateTypeEx.ConvertToRotateFlipType(pictureBox_Screen.ImageRotation));
+
+				// Draw the image according to size mode (and zoom):
+				switch (pictureBox_Screen.SizeMode)
+				{
+					case PictureBoxSizeMode.AutoSize:
+					{
+						throw (new NotSupportedException(AutoSizeErrorMessage));
+					}
+
+					case PictureBoxSizeMode.Normal:
+					case PictureBoxSizeMode.CenterImage:
+					{
+						// \todo
+						break;
+					}
+
+					case PictureBoxSizeMode.Zoom:
+					case PictureBoxSizeMode.StretchImage:
+					default:
+					{
+						RectangleF srcRect = new RectangleF(-0.5f, -0.5f, src.Width, src.Height);
+
+						int destWidth = 0;
+						int destHeight = 0;
+						if (pictureBox_Screen.SizeMode == PictureBoxSizeMode.Zoom)
+						{	// Zoom but preserve aspect ratio:
+							destWidth  = (int)(ZoomFactor * pictureBox_Screen.Width);
+							destHeight = (int)(ZoomFactor * pictureBox_Screen.Height);
+						}
+						else
+						{	// Stretch:
+							destWidth  = (int)(ZoomFactor * pictureBox_Screen.Width);
+							destHeight = (int)(ZoomFactor * pictureBox_Screen.Height);
+						}
+						RectangleF destRect = new RectangleF(0, 0, destWidth, destHeight);
+
+						Image complete = new Bitmap(src.Width, src.Height);
+						using (Graphics g = Graphics.FromImage(complete))
+						{
+							g.InterpolationMode = InterpolationMode.NearestNeighbor;
+							g.DrawImage(src, destRect, srcRect, GraphicsUnit.Pixel);
+						}
+						pictureBox_Screen.Image = complete;
+
+						break;
+					}
+
+				*/
+			}
+		}
+
 		#endregion
 
-		#region Scaled Image
+		#region Image Scale Properties
 		//==========================================================================================
-		// Scaled Image
+		// Image Scale Properties
 		//==========================================================================================
 
-		#region Scaled Image > Properties
-		//------------------------------------------------------------------------------------------
-		// Scaled Image > Properties
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		public float ImageWidthHeightRatio
+		/// <summary>
+		/// The aspect ratio of the scaled image's rectangle.
+		/// </summary>
+		public float ImageScaledAspectRatio
 		{
-			get { return ((float)Image.Width / Image.Height); }
+			get
+			{
+				Size scaled = ImageScaledSize;
+				return ((float)scaled.Width / scaled.Height);
+			}
 		}
 
-		/// <summary></summary>
-		public float WidthHeightRatio
+		/// <summary>
+		/// Returns the effective size of the image after it got scaled according to
+		/// <see cref="PictureBox.SizeMode"/>.
+		/// </summary>
+		public Size ImageScaledSize
 		{
-			get { return ((float)Width / Height); }
-		}
+			get
+			{
+				switch (SizeMode)
+				{
+					case PictureBoxSizeMode.Normal:
+					case PictureBoxSizeMode.AutoSize:
+					case PictureBoxSizeMode.CenterImage:
+					{
+						return (new Size(Image.Width, Image.Height));
+					}
 
-		/// <summary></summary>
-		public bool WidthHasScaled
-		{
-			get { return (ImageWidthHeightRatio < WidthHeightRatio); }
-		}
+					case PictureBoxSizeMode.StretchImage:
+					{
+						return (new Size(Width, Height));
+					}
 
-		/// <summary></summary>
-		public bool HeightHasScaled
-		{
-			get { return (ImageWidthHeightRatio > WidthHeightRatio); }
+					case PictureBoxSizeMode.Zoom:
+					{
+						int scaledWidth = Width;
+						int scaledHeight = Height;
+
+						if (ImageAspectRatio < AspectRatio)
+							scaledWidth  = (int)(((float)Width  / AspectRatio * ImageAspectRatio) + 0.5f); // Equals non-existent 'int Floor(float)' rounding toward negative infinity.
+
+						if (ImageAspectRatio > AspectRatio)
+							scaledHeight = (int)(((float)Height * AspectRatio / ImageAspectRatio) + 0.5f); // Equals non-existent 'int Floor(float)' rounding toward negative infinity.
+
+						return (new Size(scaledWidth, scaledHeight));
+					}
+
+					default:
+					{
+						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Unknown 'SizeMode'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					}
+				}
+			}
 		}
 
 		/// <summary>
 		/// Returns the effective location of the image after it got scaled according to
 		/// <see cref="PictureBox.SizeMode"/>.
 		/// </summary>
-		public Point ScaledImageLocation
+		public Point ImageScaledLocation
 		{
 			get
 			{
@@ -209,16 +375,17 @@ namespace MKY.Windows.Forms
 
 					case PictureBoxSizeMode.CenterImage:
 					{
-						int scaledLeft = (Width - Image.Width) / 2;
-						int scaledTop = (Height - Image.Height) / 2;
+						Size imageSize = Image.Size;
+						int scaledLeft = (int)(((float)(Width - imageSize.Width) / 2) + 0.5f);  // Equals non-existent 'int Floor(float)' rounding toward negative infinity.
+						int scaledTop = (int)(((float)(Height - imageSize.Height) / 2) + 0.5f); // Equals non-existent 'int Floor(float)' rounding toward negative infinity.
 						return (new Point(scaledLeft, scaledTop));
 					}
 
 					case PictureBoxSizeMode.Zoom:
 					{
-						Size scaledSize = ScaledImageSize;
-						int scaledLeft = (Width - scaledSize.Width) / 2;
-						int scaledTop = (Height - scaledSize.Height) / 2;
+						Size scaledSize = ImageScaledSize;
+						int scaledLeft = (int)(((float)(Width - scaledSize.Width) / 2) + 0.5f);  // Equals non-existent 'int Floor(float)' rounding toward negative infinity.
+						int scaledTop = (int)(((float)(Height - scaledSize.Height) / 2) + 0.5f); // Equals non-existent 'int Floor(float)' rounding toward negative infinity.
 						return (new Point(scaledLeft, scaledTop));
 					}
 
@@ -231,50 +398,41 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary>
-		/// Returns the effective size of the image after it got scaled according to
+		/// Returns the rectangle of the image after it got scaled according to
 		/// <see cref="PictureBox.SizeMode"/>.
 		/// </summary>
-		public Size ScaledImageSize
+		public Rectangle ImageScaledRectangle
+		{
+			get { return (new Rectangle(ImageScaledLocation, ImageScaledSize)); }
+		}
+
+		/// <summary>
+		/// Returns the effectively visible rectangle of the image after it got scaled according to
+		/// <see cref="PictureBox.SizeMode"/>.
+		/// </summary>
+		public Rectangle ImageVisibleRectangle
 		{
 			get
 			{
-				switch (SizeMode)
-				{
-					case PictureBoxSizeMode.Normal:
-					case PictureBoxSizeMode.CenterImage:
-					{
-						return (new Size(Image.Width, Image.Height));
-					}
-
-					case PictureBoxSizeMode.StretchImage:
-					case PictureBoxSizeMode.AutoSize:
-					{
-						return (new Size(Width, Height));
-					}
-
-					case PictureBoxSizeMode.Zoom:
-					{
-						int scaledWidth = Width;
-						int scaledHeight = Height;
-
-						if (WidthHasScaled)
-							scaledWidth = (int)((float)Width / WidthHeightRatio * ImageWidthHeightRatio);
-
-						if (HeightHasScaled)
-							scaledHeight = (int)((float)Height * WidthHeightRatio / ImageWidthHeightRatio);
-
-						return (new Size(scaledWidth, scaledHeight));
-					}
-
-					default:
-					{
-						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Unknown 'SizeMode'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-					}
-				}
+				Rectangle r = ImageScaledRectangle;
+				r.Intersect(ClientRectangle);
+				return (r);
 			}
 		}
 
-		#endregion
+		/// <summary>
+		/// Returns the size of the effectively visible rectangle of the image after it got scaled
+		/// according to <see cref="PictureBox.SizeMode"/>.
+		/// </summary>
+		public Size ImageVisibleSize
+		{
+			get
+			{
+				Rectangle r = ImageVisibleRectangle;
+				Size s = new Size(r.Width, r.Height);
+				return (s);
+			}
+		}
 
 		#endregion
 	}
