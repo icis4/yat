@@ -56,6 +56,15 @@ namespace YAT.View.Controls
 	[DefaultEvent("PortIdChanged")]
 	public partial class SerialPortSelection : UserControl
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private const string PortIdDefault = SerialPortId.FirstStandardPortName;
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -74,7 +83,7 @@ namespace YAT.View.Controls
 		/// for the default port. <see cref="MKY.IO.Ports.SerialPortId.FirstStandardPort"/>
 		/// is way better performing and good enough for most use cases.
 		/// </remarks>
-		private SerialPortId portId = SerialPortId.FirstStandardPort;
+		private SerialPortId portId = PortIdDefault;
 
 		private StatusBox showStatusDialog; // = null;
 
@@ -115,7 +124,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Serial Port")]
 		[Description("Serial port ID.")]
-		[DefaultValue(SerialPortId.FirstStandardPortNumber)]
+		[DefaultValue(PortIdDefault)]
 		public SerialPortId PortId
 		{
 			get { return (this.portId); }

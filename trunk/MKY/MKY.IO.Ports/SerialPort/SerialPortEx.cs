@@ -166,6 +166,9 @@ namespace MKY.IO.Ports
 		// Constants
 		//==========================================================================================
 
+		private const string PortNameDefault = SerialPortId.FirstStandardPortName;
+		private const int    PortIdDefault   = SerialPortId.FirstStandardPortNumber;
+
 		private const string PortSettingsDefault = "9600, 8, None, 1, None";
 
 		#endregion
@@ -361,7 +364,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		[Category("Port")]
 		[Description(@"Port name, e.g. ""COM1"".")]
-		[DefaultValue(SerialPortId.FirstStandardPortName)]
+		[DefaultValue(PortNameDefault)]
 		public new string PortName
 		{
 			get
@@ -383,11 +386,11 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Communications port (e.g. COM1).
+		/// Gets or sets the port for communications, including but not limited to all available COM ports.
 		/// </summary>
 		[Category("Port")]
-		[Description("Port ID.")]
-		[DefaultValue(SerialPortId.FirstStandardPortNumber)]
+		[Description(@"Port ID, i.e. either port name (e.g. ""COM1"") or port number (e.g. ""1"").")]
+		[DefaultValue(PortIdDefault)]
 		[TypeConverter(typeof(SerialPortIdConverter))]
 		public virtual SerialPortId PortId
 		{

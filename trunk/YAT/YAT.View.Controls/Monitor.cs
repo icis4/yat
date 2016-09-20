@@ -412,7 +412,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Monitor")]
 		[Description("The Tx byte count.")]
-		[DefaultValue(0)]
+		[DefaultValue(MonitorDataStatusHelper.CountDefault)]
 		public virtual int TxByteCount
 		{
 			get { return (this.dataStatusHelper.TxByteCount); }
@@ -422,7 +422,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Monitor")]
 		[Description("The Tx line count.")]
-		[DefaultValue(0)]
+		[DefaultValue(MonitorDataStatusHelper.CountDefault)]
 		public virtual int TxLineCount
 		{
 			get { return (this.dataStatusHelper.TxLineCount); }
@@ -432,7 +432,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Monitor")]
 		[Description("The Rx byte count.")]
-		[DefaultValue(0)]
+		[DefaultValue(MonitorDataStatusHelper.CountDefault)]
 		public virtual int RxByteCount
 		{
 			get { return (this.dataStatusHelper.RxByteCount); }
@@ -442,7 +442,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Monitor")]
 		[Description("The Rx line count.")]
-		[DefaultValue(0)]
+		[DefaultValue(MonitorDataStatusHelper.CountDefault)]
 		public virtual int RxLineCount
 		{
 			get { return (this.dataStatusHelper.RxLineCount); }
@@ -452,7 +452,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Monitor")]
 		[Description("The Tx byte rate.")]
-		[DefaultValue(0)]
+		[DefaultValue(MonitorDataStatusHelper.RateDefault)]
 		public virtual int TxByteRate
 		{
 			get { return (this.dataStatusHelper.TxByteRate); }
@@ -462,7 +462,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Monitor")]
 		[Description("The Tx line rate.")]
-		[DefaultValue(0)]
+		[DefaultValue(MonitorDataStatusHelper.RateDefault)]
 		public virtual int TxLineRate
 		{
 			get { return (this.dataStatusHelper.TxLineRate); }
@@ -472,7 +472,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Monitor")]
 		[Description("The Rx byte rate.")]
-		[DefaultValue(0)]
+		[DefaultValue(MonitorDataStatusHelper.RateDefault)]
 		public virtual int RxByteRate
 		{
 			get { return (this.dataStatusHelper.RxByteRate); }
@@ -482,7 +482,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Monitor")]
 		[Description("The Rx line rate.")]
-		[DefaultValue(0)]
+		[DefaultValue(MonitorDataStatusHelper.RateDefault)]
 		public virtual int RxLineRate
 		{
 			get { return (this.dataStatusHelper.RxLineRate); }
