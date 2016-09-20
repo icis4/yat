@@ -196,7 +196,7 @@ namespace MKY.Collections.Generic
 		public static bool operator ==(Quadruple<T1, T2, T3, T4> lhs, Quadruple<T1, T2, T3, T4> rhs)
 		{
 			// Value type implementation of operator ==.
-			// See MKY.Test.EqualityTest for details.
+			// See MKY.Test.EqualityAnalysis for details.
 
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);

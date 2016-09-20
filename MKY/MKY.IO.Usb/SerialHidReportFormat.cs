@@ -272,7 +272,7 @@ namespace MKY.IO.Usb
 		public static bool operator ==(SerialHidReportFormat lhs, SerialHidReportFormat rhs)
 		{
 			// Base reference type implementation of operator ==.
-			// See MKY.Test.EqualityTest for details.
+			// See MKY.Test.EqualityAnalysis for details.
 
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);

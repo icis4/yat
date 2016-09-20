@@ -60,7 +60,7 @@ namespace MKY.Test
 	/// d) <see cref="T:IEquatable`T"/> should be implemented to improve performance.
 	/// e) operators (==/!=/...) cannot be applied within template methods.
 	/// </summary>
-	public static class EqualityTestData
+	public static class EqualityAnalysisData
 	{
 		private const string UnusedParameterSuppressionJustification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.";
 
@@ -204,7 +204,7 @@ namespace MKY.Test
 				// Normal implementation:
 
 				// Value type implementation of operator ==.
-				// See MKY.Test.EqualityTest for details.
+				// See MKY.Test.EqualityAnalysis for details.
 
 				if (ReferenceEquals(lhs, rhs))  return (true);
 				if (ReferenceEquals(lhs, null)) return (false);
@@ -1442,7 +1442,7 @@ namespace MKY.Test
 				// Normal implementation:
 
 				// Base reference type implementation of operator ==.
-				// See MKY.Test.EqualityTest for details.
+				// See MKY.Test.EqualityAnalysis for details.
 
 				if (ReferenceEquals(lhs, rhs))  return (true);
 				if (ReferenceEquals(lhs, null)) return (false);
@@ -1695,7 +1695,7 @@ namespace MKY.Test
 				// Normal implementation:
 
 				// Base reference type implementation of operator ==.
-				// See MKY.Test.EqualityTest for details.
+				// See MKY.Test.EqualityAnalysis for details.
 
 				if (ReferenceEquals(lhs, rhs)) return (true);
 				if (ReferenceEquals(lhs, null)) return (false);
@@ -1891,72 +1891,72 @@ namespace MKY.Test
 			Trace.WriteLine("");
 			Trace.WriteLine("Base without operators");
 			{
-				EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators a = new EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators(1);
-				EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators b = new EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators(1);
+				EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithoutOperators a = new EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithoutOperators(1);
+				EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithoutOperators b = new EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithoutOperators(1);
 				bool result = (a == b);
 				Trace.WriteLine("a == b of base reference type without operators results in " + result);
 			}
 			Trace.WriteLine("");
 			Trace.WriteLine("Derived without operators");
 			{
-				EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators a = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators(1, 2);
-				EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators b = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators(1, 2);
+				EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithoutOperators a = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithoutOperators(1, 2);
+				EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithoutOperators b = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithoutOperators(1, 2);
 				bool result = (a == b);
 				Trace.WriteLine("a == b of derived reference type without operators results in " + result);
 			}
 			Trace.WriteLine("");
 			Trace.WriteLine("Base IEquatable without operators");
 			{
-				EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators a = new EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators(1);
-				EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators b = new EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators(1);
+				EqualityAnalysisData.BaseReferenceTypeIEquatableWithoutOperators a = new EqualityAnalysisData.BaseReferenceTypeIEquatableWithoutOperators(1);
+				EqualityAnalysisData.BaseReferenceTypeIEquatableWithoutOperators b = new EqualityAnalysisData.BaseReferenceTypeIEquatableWithoutOperators(1);
 				bool result = (a == b);
 				Trace.WriteLine("a == b of base reference type IEquatable without operators results in " + result);
 			}
 			Trace.WriteLine("");
 			Trace.WriteLine("Derived IEquatable without operators");
 			{
-				EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators a = new EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators(1, 2);
-				EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators b = new EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators(1, 2);
+				EqualityAnalysisData.DerivedReferenceTypeIEquatableWithoutOperators a = new EqualityAnalysisData.DerivedReferenceTypeIEquatableWithoutOperators(1, 2);
+				EqualityAnalysisData.DerivedReferenceTypeIEquatableWithoutOperators b = new EqualityAnalysisData.DerivedReferenceTypeIEquatableWithoutOperators(1, 2);
 				bool result = (a == b);
 				Trace.WriteLine("a == b of derived reference type IEquatable without operators results in " + result);
 			}
 			Trace.WriteLine("");
 			Trace.WriteLine("Base with operators");
 			{
-				EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators a = new EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators(1);
-				EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators b = new EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators(1);
+				EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithOperators a = new EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithOperators(1);
+				EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithOperators b = new EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithOperators(1);
 				bool result = (a == b);
 				Trace.WriteLine("a == b of base reference type with operators results in " + result);
 			}
 			Trace.WriteLine("");
 			Trace.WriteLine("Derived with operators");
 			{
-				EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators a = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators(1, 2);
-				EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators b = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators(1, 2);
+				EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithOperators a = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithOperators(1, 2);
+				EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithOperators b = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithOperators(1, 2);
 				bool result = (a == b);
 				Trace.WriteLine("a == b of derived reference type with operators results in " + result);
 			}
 			Trace.WriteLine("");
 			Trace.WriteLine("Derived without operators");
 			{
-				EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators a = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators(1, 2, 3);
-				EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators b = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators(1, 2, 3);
+				EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithDerivedOperators a = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithDerivedOperators(1, 2, 3);
+				EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithDerivedOperators b = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithDerivedOperators(1, 2, 3);
 				bool result = (a == b);
 				Trace.WriteLine("a == b of derived reference type without operators results in " + result);
 			}
 			Trace.WriteLine("");
 			Trace.WriteLine("Base with base operators");
 			{
-				EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators a = new EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators(1);
-				EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators b = new EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators(1);
+				EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithBaseOperators a = new EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithBaseOperators(1);
+				EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithBaseOperators b = new EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithBaseOperators(1);
 				bool result = (a == b);
 				Trace.WriteLine("a == b of base reference type with base operators results in " + result);
 			}
 			Trace.WriteLine("");
 			Trace.WriteLine("Derived with base operators");
 			{
-				EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators a = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators(1, 2);
-				EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators b = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators(1, 2);
+				EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithBaseOperators a = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithBaseOperators(1, 2);
+				EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithBaseOperators b = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithBaseOperators(1, 2);
 				bool result = (a == b);
 				Trace.WriteLine("a == b of derived reference type with base operators results in " + result);
 			}
@@ -1967,17 +1967,17 @@ namespace MKY.Test
 	}
 
 	/// <summary></summary>
-	[TestFixture, Explicit("This test fixture only tests the general functionality of Equals() and ==/!=. It does neither perform any 'real' tests nor tests any MKY functionality.")]
-	public class EqualityTestOfValueTypes
+	[TestFixture, Explicit("This test fixture only analyzes the general functionality of Equals() and ==/!=. It does neither perform any 'real' tests nor tests any MKY functionality.")]
+	public class EqualityAnalysisOfValueTypes
 	{
-		#region Tests
+		#region Analysis
 		//==========================================================================================
-		// Test
+		// Analysis
 		//==========================================================================================
 
 		/// <summary></summary>
 		[Test]
-		public virtual void TestSystemValueType()
+		public virtual void AnalyzeSystemValueType()
 		{
 			DateTime objToCompareAgainst = new DateTime(2000, 1, 1, 12, 0, 0);
 			DateTime objEqual            = new DateTime(2000, 1, 1, 12, 0, 0);
@@ -1994,14 +1994,14 @@ namespace MKY.Test
 
 		/// <summary></summary>
 		[Test]
-		public virtual void TestOwnValueTypeWithoutOperators()
+		public virtual void AnalyzeOwnValueTypeWithoutOperators()
 		{
-			EqualityTestData.ValueTypeWithoutOperators objToCompareAgainst = new EqualityTestData.ValueTypeWithoutOperators(1);
-			EqualityTestData.ValueTypeWithoutOperators objEqual            = new EqualityTestData.ValueTypeWithoutOperators(1);
-			EqualityTestData.ValueTypeWithoutOperators objNotEqual         = new EqualityTestData.ValueTypeWithoutOperators(2);
+			EqualityAnalysisData.ValueTypeWithoutOperators objToCompareAgainst = new EqualityAnalysisData.ValueTypeWithoutOperators(1);
+			EqualityAnalysisData.ValueTypeWithoutOperators objEqual            = new EqualityAnalysisData.ValueTypeWithoutOperators(1);
+			EqualityAnalysisData.ValueTypeWithoutOperators objNotEqual         = new EqualityAnalysisData.ValueTypeWithoutOperators(2);
 
 			EqualityTestMethods.TestEquals<object>                                    (objToCompareAgainst, objEqual, objNotEqual);
-			EqualityTestMethods.TestEquals<EqualityTestData.ValueTypeWithoutOperators>(objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestEquals<EqualityAnalysisData.ValueTypeWithoutOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfValueType(objToCompareAgainst, objEqual, objNotEqual);
 			//// Operator ==/!= cannot be used on System.ValueType itself.
@@ -2011,14 +2011,14 @@ namespace MKY.Test
 
 		/// <summary></summary>
 		[Test]
-		public virtual void TestOwnValueTypeWithOperators()
+		public virtual void AnalyzeOwnValueTypeWithOperators()
 		{
-			EqualityTestData.ValueTypeWithOperators objToCompareAgainst = new EqualityTestData.ValueTypeWithOperators(1);
-			EqualityTestData.ValueTypeWithOperators objEqual            = new EqualityTestData.ValueTypeWithOperators(1);
-			EqualityTestData.ValueTypeWithOperators objNotEqual         = new EqualityTestData.ValueTypeWithOperators(2);
+			EqualityAnalysisData.ValueTypeWithOperators objToCompareAgainst = new EqualityAnalysisData.ValueTypeWithOperators(1);
+			EqualityAnalysisData.ValueTypeWithOperators objEqual            = new EqualityAnalysisData.ValueTypeWithOperators(1);
+			EqualityAnalysisData.ValueTypeWithOperators objNotEqual         = new EqualityAnalysisData.ValueTypeWithOperators(2);
 
 			EqualityTestMethods.TestEquals<object>                                 (objToCompareAgainst, objEqual, objNotEqual);
-			EqualityTestMethods.TestEquals<EqualityTestData.ValueTypeWithOperators>(objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestEquals<EqualityAnalysisData.ValueTypeWithOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfValueType             (objToCompareAgainst, objEqual, objNotEqual);
 			//// Operator ==/!= cannot be used on System.ValueType itself.
@@ -2030,8 +2030,8 @@ namespace MKY.Test
 	}
 
 	/// <summary></summary>
-	[TestFixture, Explicit("This test fixture only tests the general functionality of Equals() and ==/!=. It does neither perform any 'real' tests nor tests any MKY functionality.")]
-	public class EqualityTestOfReferenceTypesWithoutOperators
+	[TestFixture, Explicit("This test fixture only analyzes the general functionality of Equals() and ==/!=. It does neither perform any 'real' tests nor tests any MKY functionality.")]
+	public class EqualityAnalysisOfReferenceTypesWithoutOperators
 	{
 		#region Tests
 		//==========================================================================================
@@ -2040,7 +2040,7 @@ namespace MKY.Test
 
 		/// <summary></summary>
 		[Test]
-		public virtual void TestSystemCollectionReferenceTypeNotIEquatableWithoutOperators()
+		public virtual void AnalyzeSystemCollectionReferenceTypeNotIEquatableWithoutOperators()
 		{
 			List<int> objToCompareAgainst = new List<int>(2); // Preset the required capacity to improve memory management.
 			List<int> objEqual            = new List<int>(2); // Preset the required capacity to improve memory management.
@@ -2061,11 +2061,11 @@ namespace MKY.Test
 
 		/// <summary></summary>
 		[Test]
-		public virtual void TestOwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators()
+		public virtual void AnalyzeOwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators()
 		{
-			EqualityTestData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int> objToCompareAgainst = new EqualityTestData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int>();
-			EqualityTestData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int> objEqual            = new EqualityTestData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int>();
-			EqualityTestData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int> objNotEqual         = new EqualityTestData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int>();
+			EqualityAnalysisData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int> objToCompareAgainst = new EqualityAnalysisData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int>();
+			EqualityAnalysisData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int> objEqual            = new EqualityAnalysisData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int>();
+			EqualityAnalysisData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int> objNotEqual         = new EqualityAnalysisData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int>();
 
 			objToCompareAgainst.AddRange(new int[] { 1, 1 });
 			objEqual           .AddRange(new int[] { 1, 1 });
@@ -2082,18 +2082,18 @@ namespace MKY.Test
 
 		/// <summary></summary>
 		[Test]
-		public virtual void TestOwnDerivedCollectionReferenceTypeIEquatableWithoutOperators()
+		public virtual void AnalyzeOwnDerivedCollectionReferenceTypeIEquatableWithoutOperators()
 		{
-			EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int> objToCompareAgainst = new EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int>();
-			EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int> objEqual            = new EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int>();
-			EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int> objNotEqual         = new EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int>();
+			EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int> objToCompareAgainst = new EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int>();
+			EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int> objEqual            = new EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int>();
+			EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int> objNotEqual         = new EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int>();
 
 			objToCompareAgainst.AddRange(new int[] { 1, 1 });
 			objEqual           .AddRange(new int[] { 1, 1 });
 			objNotEqual        .AddRange(new int[] { 1, 2 });
 
 			EqualityTestMethods.TestEquals<object>(objToCompareAgainst, objEqual, objNotEqual);
-			EqualityTestMethods.TestEquals<EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int>>(objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestEquals<EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int>>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
@@ -2102,15 +2102,15 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(EqualityTestData), "TestCasesForBase")]
-		public virtual void TestOwnBaseReferenceTypeNotIEquatableWithoutOperators(int a1, int a2, int a3)
+		[Test, TestCaseSource(typeof(EqualityAnalysisData), "TestCasesForBase")]
+		public virtual void AnalyzeOwnBaseReferenceTypeNotIEquatableWithoutOperators(int a1, int a2, int a3)
 		{
-			EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst = new EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators(a1);
-			EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objEqual            = new EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators(a2);
-			EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objNotEqual         = new EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators(a3);
+			EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst = new EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithoutOperators(a1);
+			EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithoutOperators objEqual            = new EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithoutOperators(a2);
+			EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithoutOperators objNotEqual         = new EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithoutOperators(a3);
 
 			EqualityTestMethods.TestEquals<object>(objToCompareAgainst, objEqual, objNotEqual);
-			EqualityTestMethods.TestEquals<EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators>(objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestEquals<EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithoutOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
@@ -2119,15 +2119,15 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(EqualityTestData), "TestCasesForDerived")]
-		public virtual void TestOwnDerivedReferenceTypeNotIEquatableWithoutOperators(int a1, int b1, int a2, int b2, int a3, int b3)
+		[Test, TestCaseSource(typeof(EqualityAnalysisData), "TestCasesForDerived")]
+		public virtual void AnalyzeOwnDerivedReferenceTypeNotIEquatableWithoutOperators(int a1, int b1, int a2, int b2, int a3, int b3)
 		{
-			EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators(a1, b1);
-			EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objEqual            = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators(a2, b2);
-			EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objNotEqual         = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators(a3, b3);
+			EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithoutOperators(a1, b1);
+			EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithoutOperators objEqual            = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithoutOperators(a2, b2);
+			EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithoutOperators objNotEqual         = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithoutOperators(a3, b3);
 
 			EqualityTestMethods.TestEquals<object>(objToCompareAgainst, objEqual, objNotEqual);
-			EqualityTestMethods.TestEquals<EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators>(objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestEquals<EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithoutOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
@@ -2136,15 +2136,15 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(EqualityTestData), "TestCasesForBase")]
-		public virtual void TestOwnBaseReferenceTypeIEquatableWithoutOperators(int a1, int a2, int a3)
+		[Test, TestCaseSource(typeof(EqualityAnalysisData), "TestCasesForBase")]
+		public virtual void AnalyzeOwnBaseReferenceTypeIEquatableWithoutOperators(int a1, int a2, int a3)
 		{
-			EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objToCompareAgainst = new EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators(a1);
-			EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objEqual            = new EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators(a2);
-			EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objNotEqual         = new EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators(a3);
+			EqualityAnalysisData.BaseReferenceTypeIEquatableWithoutOperators objToCompareAgainst = new EqualityAnalysisData.BaseReferenceTypeIEquatableWithoutOperators(a1);
+			EqualityAnalysisData.BaseReferenceTypeIEquatableWithoutOperators objEqual            = new EqualityAnalysisData.BaseReferenceTypeIEquatableWithoutOperators(a2);
+			EqualityAnalysisData.BaseReferenceTypeIEquatableWithoutOperators objNotEqual         = new EqualityAnalysisData.BaseReferenceTypeIEquatableWithoutOperators(a3);
 
 			EqualityTestMethods.TestEquals<object>(objToCompareAgainst, objEqual, objNotEqual);
-			EqualityTestMethods.TestEquals<EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators>(objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestEquals<EqualityAnalysisData.BaseReferenceTypeIEquatableWithoutOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
@@ -2153,15 +2153,15 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(EqualityTestData), "TestCasesForDerived")]
-		public virtual void TestOwnDerivedReferenceTypeIEquatableWithoutOperators(int a1, int b1, int a2, int b2, int a3, int b3)
+		[Test, TestCaseSource(typeof(EqualityAnalysisData), "TestCasesForDerived")]
+		public virtual void AnalyzeOwnDerivedReferenceTypeIEquatableWithoutOperators(int a1, int b1, int a2, int b2, int a3, int b3)
 		{
-			EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objToCompareAgainst = new EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators(a1, b1);
-			EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objEqual            = new EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators(a2, b2);
-			EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objNotEqual         = new EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators(a3, b3);
+			EqualityAnalysisData.DerivedReferenceTypeIEquatableWithoutOperators objToCompareAgainst = new EqualityAnalysisData.DerivedReferenceTypeIEquatableWithoutOperators(a1, b1);
+			EqualityAnalysisData.DerivedReferenceTypeIEquatableWithoutOperators objEqual            = new EqualityAnalysisData.DerivedReferenceTypeIEquatableWithoutOperators(a2, b2);
+			EqualityAnalysisData.DerivedReferenceTypeIEquatableWithoutOperators objNotEqual         = new EqualityAnalysisData.DerivedReferenceTypeIEquatableWithoutOperators(a3, b3);
 
 			EqualityTestMethods.TestEquals<object>(objToCompareAgainst, objEqual, objNotEqual);
-			EqualityTestMethods.TestEquals<EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators>(objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestEquals<EqualityAnalysisData.DerivedReferenceTypeIEquatableWithoutOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
@@ -2173,8 +2173,8 @@ namespace MKY.Test
 	}
 
 	/// <summary></summary>
-	[TestFixture, Explicit("This test fixture only tests the general functionality of Equals() and ==/!=. It does neither perform any 'real' tests nor tests any MKY functionality.")]
-	public class EqualityTestOfReferenceTypesWithOperators
+	[TestFixture, Explicit("This test fixture only analyzes the general functionality of Equals() and ==/!=. It does neither perform any 'real' tests nor tests any MKY functionality.")]
+	public class EqualityAnalysisOfReferenceTypesWithOperators
 	{
 		#region Tests
 		//==========================================================================================
@@ -2183,7 +2183,7 @@ namespace MKY.Test
 
 		/// <summary></summary>
 		[Test]
-		public virtual void TestSystemBaseReferenceTypeIEquatableWithOperators()
+		public virtual void AnalyzeSystemBaseReferenceTypeIEquatableWithOperators()
 		{
 			Version objToCompareAgainst = new Version(1, 1);
 			Version objEqual            = new Version(1, 1);
@@ -2200,18 +2200,18 @@ namespace MKY.Test
 
 		/// <summary></summary>
 		[Test]
-		public virtual void TestOwnDerivedCollectionReferenceTypeIEquatableWithOperators()
+		public virtual void AnalyzeOwnDerivedCollectionReferenceTypeIEquatableWithOperators()
 		{
-			EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objToCompareAgainst = new EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int>();
-			EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objEqual            = new EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int>();
-			EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objNotEqual         = new EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int>();
+			EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objToCompareAgainst = new EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int>();
+			EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objEqual            = new EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int>();
+			EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objNotEqual         = new EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int>();
 
 			objToCompareAgainst.AddRange(new int[] { 1, 1 });
 			objEqual           .AddRange(new int[] { 1, 1 });
 			objNotEqual        .AddRange(new int[] { 1, 2 });
 
 			EqualityTestMethods.TestEquals<object>(objToCompareAgainst, objEqual, objNotEqual);
-			EqualityTestMethods.TestEquals<EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int>>(objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestEquals<EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int>>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
@@ -2220,15 +2220,15 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(EqualityTestData), "TestCasesForBase")]
-		public virtual void TestOwnBaseReferenceTypeNotIEquatableWithOperators(int a1, int a2, int a3)
+		[Test, TestCaseSource(typeof(EqualityAnalysisData), "TestCasesForBase")]
+		public virtual void AnalyzeOwnBaseReferenceTypeNotIEquatableWithOperators(int a1, int a2, int a3)
 		{
-			EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objToCompareAgainst = new EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators(a1);
-			EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objEqual            = new EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators(a2);
-			EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objNotEqual         = new EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators(a3);
+			EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithOperators objToCompareAgainst = new EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithOperators(a1);
+			EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithOperators objEqual            = new EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithOperators(a2);
+			EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithOperators objNotEqual         = new EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithOperators(a3);
 
 			EqualityTestMethods.TestEquals<object>(objToCompareAgainst, objEqual, objNotEqual);
-			EqualityTestMethods.TestEquals<EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators>(objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestEquals<EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
@@ -2237,15 +2237,15 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(EqualityTestData), "TestCasesForDerived")]
-		public virtual void TestOwnDerivedReferenceTypeNotIEquatableWithOperators(int a1, int b1, int a2, int b2, int a3, int b3)
+		[Test, TestCaseSource(typeof(EqualityAnalysisData), "TestCasesForDerived")]
+		public virtual void AnalyzeOwnDerivedReferenceTypeNotIEquatableWithOperators(int a1, int b1, int a2, int b2, int a3, int b3)
 		{
-			EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objToCompareAgainst = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators(a1, b1);
-			EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objEqual            = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators(a2, b2);
-			EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objNotEqual         = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators(a3, b3);
+			EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithOperators objToCompareAgainst = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithOperators(a1, b1);
+			EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithOperators objEqual            = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithOperators(a2, b2);
+			EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithOperators objNotEqual         = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithOperators(a3, b3);
 
 			EqualityTestMethods.TestEquals<object>(objToCompareAgainst, objEqual, objNotEqual);
-			EqualityTestMethods.TestEquals<EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators>(objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestEquals<EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
@@ -2254,15 +2254,15 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(EqualityTestData), "TestCasesForDerivedDerived")]
-		public virtual void TestOwnDerivedReferenceTypeNotIEquatableWithDerivedOperators(int a1, int b1, int c1, int a2, int b2, int c2, int a3, int b3, int c3)
+		[Test, TestCaseSource(typeof(EqualityAnalysisData), "TestCasesForDerivedDerived")]
+		public virtual void AnalyzeOwnDerivedReferenceTypeNotIEquatableWithDerivedOperators(int a1, int b1, int c1, int a2, int b2, int c2, int a3, int b3, int c3)
 		{
-			EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objToCompareAgainst = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators(a1, b1, c1);
-			EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objEqual            = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators(a2, b2, c2);
-			EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objNotEqual         = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators(a3, b3, c3);
+			EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objToCompareAgainst = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithDerivedOperators(a1, b1, c1);
+			EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objEqual            = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithDerivedOperators(a2, b2, c2);
+			EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objNotEqual         = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithDerivedOperators(a3, b3, c3);
 
 			EqualityTestMethods.TestEquals<object>(objToCompareAgainst, objEqual, objNotEqual);
-			EqualityTestMethods.TestEquals<EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators>(objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestEquals<EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithDerivedOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
@@ -2271,15 +2271,15 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(EqualityTestData), "TestCasesForBase")]
-		public virtual void TestOwnBaseReferenceTypeNotIEquatableWithBaseOperators(int a1, int a2, int a3)
+		[Test, TestCaseSource(typeof(EqualityAnalysisData), "TestCasesForBase")]
+		public virtual void AnalyzeOwnBaseReferenceTypeNotIEquatableWithBaseOperators(int a1, int a2, int a3)
 		{
-			EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst = new EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators(a1);
-			EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objEqual            = new EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators(a2);
-			EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objNotEqual         = new EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators(a3);
+			EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst = new EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithBaseOperators(a1);
+			EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithBaseOperators objEqual            = new EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithBaseOperators(a2);
+			EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithBaseOperators objNotEqual         = new EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithBaseOperators(a3);
 
 			EqualityTestMethods.TestEquals<object>(objToCompareAgainst, objEqual, objNotEqual);
-			EqualityTestMethods.TestEquals<EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators>(objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestEquals<EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithBaseOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
@@ -2288,15 +2288,15 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(EqualityTestData), "TestCasesForDerived")]
-		public virtual void TestOwnDerivedReferenceTypeNotIEquatableWithBaseOperators(int a1, int b1, int a2, int b2, int a3, int b3)
+		[Test, TestCaseSource(typeof(EqualityAnalysisData), "TestCasesForDerived")]
+		public virtual void AnalyzeOwnDerivedReferenceTypeNotIEquatableWithBaseOperators(int a1, int b1, int a2, int b2, int a3, int b3)
 		{
-			EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators(a1, b1);
-			EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objEqual            = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators(a2, b2);
-			EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objNotEqual         = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators(a3, b3);
+			EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithBaseOperators(a1, b1);
+			EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithBaseOperators objEqual            = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithBaseOperators(a2, b2);
+			EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithBaseOperators objNotEqual         = new EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithBaseOperators(a3, b3);
 
 			EqualityTestMethods.TestEquals<object>(objToCompareAgainst, objEqual, objNotEqual);
-			EqualityTestMethods.TestEquals<EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators>(objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestEquals<EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithBaseOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
@@ -2305,15 +2305,15 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(EqualityTestData), "TestCasesForBase")]
-		public virtual void TestOwnBaseReferenceTypeIEquatableWithBaseOperators(int a1, int a2, int a3)
+		[Test, TestCaseSource(typeof(EqualityAnalysisData), "TestCasesForBase")]
+		public virtual void AnalyzeOwnBaseReferenceTypeIEquatableWithBaseOperators(int a1, int a2, int a3)
 		{
-			EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objToCompareAgainst = new EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators(a1);
-			EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objEqual            = new EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators(a2);
-			EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objNotEqual         = new EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators(a3);
+			EqualityAnalysisData.BaseReferenceTypeIEquatableWithBaseOperators objToCompareAgainst = new EqualityAnalysisData.BaseReferenceTypeIEquatableWithBaseOperators(a1);
+			EqualityAnalysisData.BaseReferenceTypeIEquatableWithBaseOperators objEqual            = new EqualityAnalysisData.BaseReferenceTypeIEquatableWithBaseOperators(a2);
+			EqualityAnalysisData.BaseReferenceTypeIEquatableWithBaseOperators objNotEqual         = new EqualityAnalysisData.BaseReferenceTypeIEquatableWithBaseOperators(a3);
 
 			EqualityTestMethods.TestEquals<object>(objToCompareAgainst, objEqual, objNotEqual);
-			EqualityTestMethods.TestEquals<EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators>(objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestEquals<EqualityAnalysisData.BaseReferenceTypeIEquatableWithBaseOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
@@ -2322,15 +2322,15 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(EqualityTestData), "TestCasesForDerived")]
-		public virtual void TestOwnDerivedReferenceTypeDerivedIEquatableWithBaseOperators(int a1, int b1, int a2, int b2, int a3, int b3)
+		[Test, TestCaseSource(typeof(EqualityAnalysisData), "TestCasesForDerived")]
+		public virtual void AnalyzeOwnDerivedReferenceTypeDerivedIEquatableWithBaseOperators(int a1, int b1, int a2, int b2, int a3, int b3)
 		{
-			EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objToCompareAgainst = new EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators(a1, b1);
-			EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objEqual            = new EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators(a2, b2);
-			EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objNotEqual         = new EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators(a3, b3);
+			EqualityAnalysisData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objToCompareAgainst = new EqualityAnalysisData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators(a1, b1);
+			EqualityAnalysisData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objEqual            = new EqualityAnalysisData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators(a2, b2);
+			EqualityAnalysisData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objNotEqual         = new EqualityAnalysisData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators(a3, b3);
 
 			EqualityTestMethods.TestEquals<object>(objToCompareAgainst, objEqual, objNotEqual);
-			EqualityTestMethods.TestEquals<EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators>(objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestEquals<EqualityAnalysisData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
@@ -2363,7 +2363,7 @@ namespace MKY.Test
 
 			try
 			{
-				// Reference equal.
+				// Reference equal:
 
 				Trace.WriteLine("Reference equal using Equals()");
 				Trace.Indent();
@@ -2373,7 +2373,7 @@ namespace MKY.Test
 
 				Trace.Unindent();
 
-				// Value equal.
+				// Value equal:
 
 				Trace.WriteLine("Value equal using Equals()");
 				Trace.Indent();
@@ -2383,7 +2383,7 @@ namespace MKY.Test
 
 				Trace.Unindent();
 
-				// Value not equal.
+				// Value not equal:
 
 				Trace.WriteLine("Value not equal using Equals()");
 				Trace.Indent();
@@ -2422,7 +2422,7 @@ namespace MKY.Test
 
 			try
 			{
-				// Reference equal.
+				// Reference equal:
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
@@ -2467,7 +2467,7 @@ namespace MKY.Test
 
 			try
 			{
-				// Reference equal.
+				// Reference equal:
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
@@ -2508,7 +2508,7 @@ namespace MKY.Test
 
 			try
 			{
-				// Value equal.
+				// Value equal:
 
 				Trace.WriteLine("Value equal using operator ==()");
 				Trace.Indent();
@@ -2525,7 +2525,7 @@ namespace MKY.Test
 
 				Trace.Unindent();
 
-				// Value not equal.
+				// Value not equal:
 
 				Trace.WriteLine("Value not equal using operator ==()");
 				Trace.Indent();
@@ -2556,7 +2556,7 @@ namespace MKY.Test
 
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEqualityOfValueTypeWithOperators(EqualityTestData.ValueTypeWithOperators objToCompareAgainst, EqualityTestData.ValueTypeWithOperators objEqual, EqualityTestData.ValueTypeWithOperators objNotEqual)
+		public static void TestOperatorsForReferenceEqualityOfValueTypeWithOperators(EqualityAnalysisData.ValueTypeWithOperators objToCompareAgainst, EqualityAnalysisData.ValueTypeWithOperators objEqual, EqualityAnalysisData.ValueTypeWithOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForReferenceEqualityOfValueTypeWithOperators");
@@ -2597,7 +2597,7 @@ namespace MKY.Test
 			}
 		}
 
-		public static void TestOperatorsForValueEqualityOfValueTypeWithOperators(EqualityTestData.ValueTypeWithOperators objToCompareAgainst, EqualityTestData.ValueTypeWithOperators objEqual, EqualityTestData.ValueTypeWithOperators objNotEqual)
+		public static void TestOperatorsForValueEqualityOfValueTypeWithOperators(EqualityAnalysisData.ValueTypeWithOperators objToCompareAgainst, EqualityAnalysisData.ValueTypeWithOperators objEqual, EqualityAnalysisData.ValueTypeWithOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForValueEqualityOfValueTypeWithOperators");
@@ -2605,7 +2605,7 @@ namespace MKY.Test
 
 			try
 			{
-				// Value equal.
+				// Value equal:
 
 				Trace.WriteLine("Value equal using operator ==()");
 				Trace.Indent();
@@ -2622,7 +2622,7 @@ namespace MKY.Test
 
 				Trace.Unindent();
 
-				// Value not equal.
+				// Value not equal:
 
 				Trace.WriteLine("Value not equal using operator ==()");
 				Trace.Indent();
@@ -2668,7 +2668,7 @@ namespace MKY.Test
 
 			try
 			{
-				// Reference equal.
+				// Reference equal:
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
@@ -2713,7 +2713,7 @@ namespace MKY.Test
 
 			try
 			{
-				// Reference equal.
+				// Reference equal:
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
@@ -2900,7 +2900,7 @@ namespace MKY.Test
 
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEqualityOfOwnDerivedCollectionReferenceTypeIEquatableWithOperators(EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objToCompareAgainst, EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objEqual, EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objNotEqual)
+		public static void TestOperatorsForReferenceEqualityOfOwnDerivedCollectionReferenceTypeIEquatableWithOperators(EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objToCompareAgainst, EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objEqual, EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForReferenceEqualityOfOwnDerivedCollectionReferenceTypeIEquatableWithOperators");
@@ -2941,7 +2941,7 @@ namespace MKY.Test
 			}
 		}
 
-		public static void TestOperatorsForValueEqualityOfOwnDerivedCollectionReferenceTypeIEquatableWithOperators(EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objToCompareAgainst, EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objEqual, EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objNotEqual)
+		public static void TestOperatorsForValueEqualityOfOwnDerivedCollectionReferenceTypeIEquatableWithOperators(EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objToCompareAgainst, EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objEqual, EqualityAnalysisData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForValueEqualityOfOwnDerivedCollectionReferenceTypeIEquatableWithOperators");
@@ -2997,7 +2997,7 @@ namespace MKY.Test
 
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objEqual, EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objNotEqual)
+		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithoutOperators(EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst, EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithoutOperators objEqual, EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithoutOperators");
@@ -3039,7 +3039,7 @@ namespace MKY.Test
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Method exists for the sake of completeness.")]
-		public static void TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objEqual, EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objNotEqual)
+		public static void TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithoutOperators(EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst, EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithoutOperators objEqual, EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithoutOperators");
@@ -3095,7 +3095,7 @@ namespace MKY.Test
 
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objNotEqual)
+		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators(EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst, EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithoutOperators objEqual, EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators");
@@ -3137,7 +3137,7 @@ namespace MKY.Test
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Method exists for the sake of completeness.")]
-		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objNotEqual)
+		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators(EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst, EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithoutOperators objEqual, EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators");
@@ -3193,7 +3193,7 @@ namespace MKY.Test
 
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeIEquatableWithoutOperators(EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objEqual, EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objNotEqual)
+		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeIEquatableWithoutOperators(EqualityAnalysisData.BaseReferenceTypeIEquatableWithoutOperators objToCompareAgainst, EqualityAnalysisData.BaseReferenceTypeIEquatableWithoutOperators objEqual, EqualityAnalysisData.BaseReferenceTypeIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForReferenceEqualityOfBaseReferenceTypeIEquatableWithoutOperators");
@@ -3235,7 +3235,7 @@ namespace MKY.Test
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Method exists for the sake of completeness.")]
-		public static void TestOperatorsForValueEqualityOfBaseReferenceTypeIEquatableWithoutOperators(EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objEqual, EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objNotEqual)
+		public static void TestOperatorsForValueEqualityOfBaseReferenceTypeIEquatableWithoutOperators(EqualityAnalysisData.BaseReferenceTypeIEquatableWithoutOperators objToCompareAgainst, EqualityAnalysisData.BaseReferenceTypeIEquatableWithoutOperators objEqual, EqualityAnalysisData.BaseReferenceTypeIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForValueEqualityOfBaseReferenceTypeIEquatableWithoutOperators");
@@ -3291,7 +3291,7 @@ namespace MKY.Test
 
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objEqual, EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objNotEqual)
+		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeIEquatableWithoutOperators(EqualityAnalysisData.DerivedReferenceTypeIEquatableWithoutOperators objToCompareAgainst, EqualityAnalysisData.DerivedReferenceTypeIEquatableWithoutOperators objEqual, EqualityAnalysisData.DerivedReferenceTypeIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForReferenceEqualityOfDerivedReferenceTypeIEquatableWithoutOperators");
@@ -3333,7 +3333,7 @@ namespace MKY.Test
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Method exists for the sake of completeness.")]
-		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objEqual, EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objNotEqual)
+		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeIEquatableWithoutOperators(EqualityAnalysisData.DerivedReferenceTypeIEquatableWithoutOperators objToCompareAgainst, EqualityAnalysisData.DerivedReferenceTypeIEquatableWithoutOperators objEqual, EqualityAnalysisData.DerivedReferenceTypeIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForValueEqualityOfDerivedReferenceTypeIEquatableWithoutOperators");
@@ -3389,7 +3389,7 @@ namespace MKY.Test
 
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithOperators(EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objEqual, EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objNotEqual)
+		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithOperators(EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithOperators objToCompareAgainst, EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithOperators objEqual, EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithOperators");
@@ -3430,7 +3430,7 @@ namespace MKY.Test
 			}
 		}
 
-		public static void TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithOperators(EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objEqual, EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objNotEqual)
+		public static void TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithOperators(EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithOperators objToCompareAgainst, EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithOperators objEqual, EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithOperators");
@@ -3486,7 +3486,7 @@ namespace MKY.Test
 
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objNotEqual)
+		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithOperators(EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithOperators objToCompareAgainst, EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithOperators objEqual, EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithOperators");
@@ -3527,7 +3527,7 @@ namespace MKY.Test
 			}
 		}
 
-		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objNotEqual)
+		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithOperators(EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithOperators objToCompareAgainst, EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithOperators objEqual, EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithOperators");
@@ -3583,7 +3583,7 @@ namespace MKY.Test
 
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objNotEqual)
+		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators(EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objToCompareAgainst, EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objEqual, EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators");
@@ -3624,7 +3624,7 @@ namespace MKY.Test
 			}
 		}
 
-		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objNotEqual)
+		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators(EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objToCompareAgainst, EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objEqual, EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators");
@@ -3680,7 +3680,7 @@ namespace MKY.Test
 
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithBaseOperators(EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objEqual, EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objNotEqual)
+		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithBaseOperators(EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst, EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithBaseOperators objEqual, EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithBaseOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithBaseOperators");
@@ -3721,7 +3721,7 @@ namespace MKY.Test
 			}
 		}
 
-		public static void TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithBaseOperators(EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objEqual, EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objNotEqual)
+		public static void TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithBaseOperators(EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst, EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithBaseOperators objEqual, EqualityAnalysisData.BaseReferenceTypeNotIEquatableWithBaseOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithBaseOperators");
@@ -3777,7 +3777,7 @@ namespace MKY.Test
 
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithBaseOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objNotEqual)
+		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithBaseOperators(EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst, EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithBaseOperators objEqual, EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithBaseOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithBaseOperators");
@@ -3818,7 +3818,7 @@ namespace MKY.Test
 			}
 		}
 
-		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithBaseOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objNotEqual)
+		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithBaseOperators(EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst, EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithBaseOperators objEqual, EqualityAnalysisData.DerivedReferenceTypeNotIEquatableWithBaseOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithBaseOperators");
@@ -3874,7 +3874,7 @@ namespace MKY.Test
 
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeIEquatableWithBaseOperators(EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objEqual, EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objNotEqual)
+		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeIEquatableWithBaseOperators(EqualityAnalysisData.BaseReferenceTypeIEquatableWithBaseOperators objToCompareAgainst, EqualityAnalysisData.BaseReferenceTypeIEquatableWithBaseOperators objEqual, EqualityAnalysisData.BaseReferenceTypeIEquatableWithBaseOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForReferenceEqualityOfBaseReferenceTypeIEquatableWithBaseOperators");
@@ -3915,7 +3915,7 @@ namespace MKY.Test
 			}
 		}
 
-		public static void TestOperatorsForValueEqualityOfBaseReferenceTypeIEquatableWithBaseOperators(EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objEqual, EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objNotEqual)
+		public static void TestOperatorsForValueEqualityOfBaseReferenceTypeIEquatableWithBaseOperators(EqualityAnalysisData.BaseReferenceTypeIEquatableWithBaseOperators objToCompareAgainst, EqualityAnalysisData.BaseReferenceTypeIEquatableWithBaseOperators objEqual, EqualityAnalysisData.BaseReferenceTypeIEquatableWithBaseOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForValueEqualityOfBaseReferenceTypeIEquatableWithBaseOperators");
@@ -3971,7 +3971,7 @@ namespace MKY.Test
 
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeDerivedIEquatableWithBaseOperators(EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objEqual, EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objNotEqual)
+		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeDerivedIEquatableWithBaseOperators(EqualityAnalysisData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objToCompareAgainst, EqualityAnalysisData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objEqual, EqualityAnalysisData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForReferenceEqualityOfDerivedReferenceTypeDerivedIEquatableWithBaseOperators");
@@ -4012,7 +4012,7 @@ namespace MKY.Test
 			}
 		}
 
-		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeDerivedIEquatableWithBaseOperators(EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objEqual, EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objNotEqual)
+		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeDerivedIEquatableWithBaseOperators(EqualityAnalysisData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objToCompareAgainst, EqualityAnalysisData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objEqual, EqualityAnalysisData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objNotEqual)
 		{
 			Trace.Indent();
 			Trace.WriteLine("TestOperatorsForValueEqualityOfDerivedReferenceTypeDerivedIEquatableWithBaseOperators");

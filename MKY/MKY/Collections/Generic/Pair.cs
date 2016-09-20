@@ -153,7 +153,7 @@ namespace MKY.Collections.Generic
 		public static bool operator ==(Pair<T1, T2> lhs, Pair<T1, T2> rhs)
 		{
 			// Value type implementation of operator ==.
-			// See MKY.Test.EqualityTest for details.
+			// See MKY.Test.EqualityAnalysis for details.
 
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);

@@ -118,7 +118,7 @@ namespace MKY.IO.Serial.SerialPort
 		public static bool operator ==(OutputBufferSize lhs, OutputBufferSize rhs)
 		{
 			// Value type implementation of operator ==.
-			// See MKY.Test.EqualityTest for details.
+			// See MKY.Test.EqualityAnalysis for details.
 
 			if (ReferenceEquals(lhs, rhs)) return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -230,7 +230,7 @@ namespace MKY.IO.Serial.SerialPort
 		public static bool operator ==(ChunkSize lhs, ChunkSize rhs)
 		{
 			// Value type implementation of operator ==.
-			// See MKY.Test.EqualityTest for details.
+			// See MKY.Test.EqualityAnalysis for details.
 
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -351,7 +351,7 @@ namespace MKY.IO.Serial.SerialPort
 		public static bool operator ==(SendRate lhs, SendRate rhs)
 		{
 			// Value type implementation of operator ==.
-			// See MKY.Test.EqualityTest for details.
+			// See MKY.Test.EqualityAnalysis for details.
 
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
