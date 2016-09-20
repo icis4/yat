@@ -1016,7 +1016,7 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_PresetContextMenu_Preset_Click(object sender, EventArgs e)
 		{
-			RequestPreset(int.Parse((string)(((ToolStripMenuItem)sender).Tag), CultureInfo.InvariantCulture)); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			RequestPreset(ToolStripMenuItemEx.TagToIndex(sender)); // Attention, 'ToolStripMenuItem' is no 'Control'!
 		}
 
 		#endregion
@@ -1623,7 +1623,7 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_PredefinedContextMenu_Command_Click(object sender, EventArgs e)
 		{
-			SendPredefined(int.Parse((string)(((ToolStripMenuItem)sender).Tag), CultureInfo.InvariantCulture)); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			SendPredefined(ToolStripMenuItemEx.TagToIndex(sender)); // Attention, 'ToolStripMenuItem' is no 'Control'!
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Page_Next_Click(object sender, EventArgs e)
@@ -1638,7 +1638,7 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_PredefinedContextMenu_Page_Click(object sender, EventArgs e)
 		{
-			predefined.SelectedPage = int.Parse((string)(((ToolStripMenuItem)sender).Tag), CultureInfo.InvariantCulture); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			predefined.SelectedPage = ToolStripMenuItemEx.TagToIndex(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Define_Click(object sender, EventArgs e)
