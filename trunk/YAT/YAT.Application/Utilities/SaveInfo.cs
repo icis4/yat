@@ -102,7 +102,7 @@ namespace YAT.Application.Utilities
 		public static bool operator ==(SaveInfo lhs, SaveInfo rhs)
 		{
 			// Value type implementation of operator ==.
-			// See MKY.Test.EqualityTest for details.
+			// See MKY.Test.EqualityAnalysis for details.
 
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);

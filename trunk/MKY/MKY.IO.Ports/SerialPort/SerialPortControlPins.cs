@@ -149,7 +149,7 @@ namespace MKY.IO.Ports
 		public static bool operator ==(SerialPortControlPins lhs, SerialPortControlPins rhs)
 		{
 			// Value type implementation of operator ==.
-			// See MKY.Test.EqualityTest for details.
+			// See MKY.Test.EqualityAnalysis for details.
 
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -301,7 +301,7 @@ namespace MKY.IO.Ports
 		public static bool operator ==(SerialPortControlPinCount lhs, SerialPortControlPinCount rhs)
 		{
 			// Value type implementation of operator ==.
-			// See MKY.Test.EqualityTest for details.
+			// See MKY.Test.EqualityAnalysis for details.
 
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);

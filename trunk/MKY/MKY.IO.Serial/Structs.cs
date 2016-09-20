@@ -118,7 +118,7 @@ namespace MKY.IO.Serial
 		public static bool operator ==(AutoInterval lhs, AutoInterval rhs)
 		{
 			// Value type implementation of operator ==.
-			// See MKY.Test.EqualityTest for details.
+			// See MKY.Test.EqualityAnalysis for details.
 
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);

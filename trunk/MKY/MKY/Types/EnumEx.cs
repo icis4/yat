@@ -589,7 +589,7 @@ namespace MKY
 		public static bool operator ==(EnumEx lhs, EnumEx rhs)
 		{
 			// Base reference type implementation of operator ==.
-			// See MKY.Test.EqualityTest for details.
+			// See MKY.Test.EqualityAnalysis for details.
 
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);

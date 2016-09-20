@@ -208,7 +208,7 @@ namespace YAT.Settings.Workspace
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Test.EqualityTest for details.
+		// See MKY.Test.EqualityAnalysis for details.
 
 		#endregion
 	}

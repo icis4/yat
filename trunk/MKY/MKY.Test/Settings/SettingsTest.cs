@@ -153,7 +153,7 @@ namespace MKY.Test.Settings
 			#region Comparison Operators
 
 			// Use of base reference type implementation of operators ==/!=.
-			// See MKY.Test.EqualityTest for details.
+			// See MKY.Test.EqualityAnalysis for details.
 
 			#endregion
 		}
@@ -291,7 +291,7 @@ namespace MKY.Test.Settings
 			#region Comparison Operators
 
 			// Use of base reference type implementation of operators ==/!=.
-			// See MKY.Test.EqualityTest for details.
+			// See MKY.Test.EqualityAnalysis for details.
 
 			#endregion
 		}
@@ -412,7 +412,7 @@ namespace MKY.Test.Settings
 			public static bool operator ==(TestTreeRoot lhs, TestTreeRoot rhs)
 			{
 				// Base reference type implementation of operator ==.
-				// See MKY.Test.EqualityTest for details.
+				// See MKY.Test.EqualityAnalysis for details.
 
 				if (ReferenceEquals(lhs, rhs))  return (true);
 				if (ReferenceEquals(lhs, null)) return (false);

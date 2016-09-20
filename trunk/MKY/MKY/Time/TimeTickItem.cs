@@ -154,7 +154,7 @@ namespace MKY.Time
 		public static bool operator ==(TimeTickItem<T> lhs, TimeTickItem<T> rhs)
 		{
 			// Value type implementation of operator ==.
-			// See MKY.Test.EqualityTest for details.
+			// See MKY.Test.EqualityAnalysis for details.
 
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
