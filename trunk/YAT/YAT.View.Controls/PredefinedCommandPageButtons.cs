@@ -36,6 +36,7 @@ using System.Windows.Forms;
 
 using MKY;
 using MKY.Drawing;
+using MKY.Windows.Forms;
 
 using YAT.Model.Settings;
 using YAT.Model.Types;
@@ -207,7 +208,7 @@ namespace YAT.View.Controls
 
 		private void button_Command_Click(object sender, EventArgs e)
 		{
-			CommandRequest(int.Parse((string)(((Control)sender).Tag), CultureInfo.InvariantCulture));
+			CommandRequest(ControlEx.TagToIndex(sender));
 		}
 
 		#endregion

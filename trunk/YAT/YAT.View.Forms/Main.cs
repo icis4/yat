@@ -1294,7 +1294,7 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_FileRecentContextMenu_Click(object sender, EventArgs e)
 		{
-			this.main.OpenRecent(int.Parse((string)(((ToolStripMenuItem)sender).Tag), CultureInfo.InvariantCulture)); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			this.main.OpenRecent(ToolStripMenuItemEx.TagToIndex(sender)); // Attention, 'ToolStripMenuItem' is no 'Control'!
 		}
 
 		#endregion
@@ -1900,7 +1900,7 @@ namespace YAT.View.Forms
 					break;
 
 				default:
-					throw (new NotSupportedException("Program execution should never get here, '" + layout + "' is an invalid workspace layout!"));
+					throw (new NotSupportedException("Program execution should never get here, '" + layout + "' is an invalid workspace layout!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

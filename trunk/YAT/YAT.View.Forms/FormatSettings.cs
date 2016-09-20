@@ -153,7 +153,7 @@ namespace YAT.View.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				GetFormatFromControl(int.Parse((string)(((Control)sender).Tag), CultureInfo.InvariantCulture));
+				GetFormatFromControl(ControlEx.TagToIndex(sender));
 				SetControls();
 			}
 		}
@@ -162,7 +162,7 @@ namespace YAT.View.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				GetCustomColorsFromControl(int.Parse((string)(((Control)sender).Tag), CultureInfo.InvariantCulture));
+				GetCustomColorsFromControl(ControlEx.TagToIndex(sender));
 				SetControls();
 			}
 		}
@@ -332,7 +332,7 @@ namespace YAT.View.Forms
 				case 8: return (this.formatSettingsInEdit.LengthFormat);
 				case 9: return (this.formatSettingsInEdit.ErrorFormat);
 			}
-			throw (new ArgumentOutOfRangeException("index", index, "There is no format at this index!"));
+			throw (new ArgumentOutOfRangeException("index", index, "Program execution should never get here, there is no format at index '" + index + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		private void GetFormatFromControl(int index)
