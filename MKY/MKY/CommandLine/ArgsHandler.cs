@@ -834,7 +834,7 @@ namespace MKY.CommandLine
 		/// </summary>
 		/// <returns>
 		/// Returns <c>true</c> if the specified args could successfully be processed and validated,
-		/// otherwise <c>false</c>.
+		/// <c>false</c> otherwise.
 		/// </returns>
 		/// <remarks>
 		/// This method intentionally is public, and not called by the constructor, because it
