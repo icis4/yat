@@ -38,8 +38,7 @@ namespace MKY.Windows.Forms
 	/// be used.
 	/// </remarks>
 	[DefaultProperty("Text")]
-	[DesignerCategory("Windows Forms")]
-	public partial class TransparentButton : Control, IButtonControl
+	public class TransparentButton : Control, IButtonControl
 	{
 		#region Constants
 		//==========================================================================================
@@ -87,7 +86,7 @@ namespace MKY.Windows.Forms
 			get
 			{
 				CreateParams cp = base.CreateParams;
-				cp.ExStyle |= 0x20; // WS_EX_TRANSPARENT
+				cp.ExStyle |= 0x20; // 0x20 = WS_EX_TRANSPARENT = one of the 'Extended Window Styles' of the Win32 API.
 				return (cp);
 			}
 		}
@@ -178,7 +177,6 @@ namespace MKY.Windows.Forms
 				case BorderStyle.Fixed3D:     ControlPaint.DrawBorder(e.Graphics, e.ClipRectangle, SystemColors.ControlDark, ButtonBorderStyle.Outset); break;
 				default: break; // Do nothing, includes 'BorderStyle.None'.
 			}
-
 		}
 
 		#endregion
