@@ -31,7 +31,7 @@ namespace MKY.Diagnostics
 	/// </summary>
 	public static class DebugFinalization
 	{
-		private static bool staticFinalizationShouldHaveCompleted; // = false
+		private static bool staticFinalizationShouldHaveCompleted; // = false;
 
 		/// <summary></summary>
 		public static bool FinalizationShouldHaveCompleted

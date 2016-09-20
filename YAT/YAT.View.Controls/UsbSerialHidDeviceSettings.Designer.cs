@@ -314,14 +314,10 @@
 			// 
 			// reportFormatPreview
 			// 
-			this.reportFormatPreview.AppendTerminatingZero = false;
-			this.reportFormatPreview.FillLastReport = false;
 			this.reportFormatPreview.Location = new System.Drawing.Point(3, 77);
 			this.reportFormatPreview.Name = "reportFormatPreview";
-			this.reportFormatPreview.PrependPayloadByteLength = false;
 			this.reportFormatPreview.Size = new System.Drawing.Size(254, 88);
 			this.reportFormatPreview.TabIndex = 8;
-			this.reportFormatPreview.UseId = false;
 			// 
 			// UsbSerialHidDeviceSettings
 			// 

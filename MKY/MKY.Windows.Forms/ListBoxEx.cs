@@ -50,12 +50,12 @@
 // Using
 //==================================================================================================
 
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
 #if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 using System;
-using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -72,19 +72,47 @@ namespace MKY.Windows.Forms
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public class ListBoxEx : ListBox
 	{
-#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+	#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
+		private const bool HorizontalAutoScrollDefault = false;
+	#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
+
+		private const bool VerticalAutoScrollDefault = false;
+
+		#endregion
+
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
+	#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
+		private bool horizontalAutoScroll = HorizontalAutoScrollDefault;
+	#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
+
+		private bool verticalAutoScroll = VerticalAutoScrollDefault;
+
+		#endregion
+
 		#region General
 		//==========================================================================================
 		// General
 		//==========================================================================================
+
+#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 
 		private bool IsLeftToRight
 		{
 			get { return (RightToLeft == RightToLeft.No); }
 		}
 
-		#endregion
 #endif // ENABLE_HORIZONTAL_AUTO_SCROLL
+
+		#endregion
 
 		#region Selection
 		//==========================================================================================
@@ -109,6 +137,7 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 #if (ENABLE_HORIZONTAL_AUTO_SCROLL)
+
 		#region Scroll > Events
 		//------------------------------------------------------------------------------------------
 		// Scroll > Events
@@ -127,6 +156,7 @@ namespace MKY.Windows.Forms
 		public event ScrollEventHandler VerticalScrolled;
 
 		#endregion
+
 #endif // ENABLE_HORIZONTAL_AUTO_SCROLL
 
 		#region Scroll > Properties
@@ -135,10 +165,11 @@ namespace MKY.Windows.Forms
 		//------------------------------------------------------------------------------------------
 
 #if (ENABLE_HORIZONTAL_AUTO_SCROLL)
+
 		/// <summary></summary>
 		[Category("Scroll")]
 		[Description("Enables or disables horizontal auto scroll.")]
-		[DefaultValue(true)]
+		[DefaultValue(HorizontalAutoScrollDefault)]
 		public virtual bool HorizontalAutoScroll
 		{
 			get { return (this.horizontalAutoScroll); }
@@ -170,10 +201,12 @@ namespace MKY.Windows.Forms
 			}
 		}
 
+#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
+
 		/// <summary></summary>
 		[Category("Scroll")]
 		[Description("Enables or disables vertical auto scroll.")]
-		[DefaultValue(true)]
+		[DefaultValue(VerticalAutoScrollDefault)]
 		public virtual bool VerticalAutoScroll
 		{
 			get { return (this.verticalAutoScroll); }
@@ -182,7 +215,9 @@ namespace MKY.Windows.Forms
 				if (!this.verticalAutoScroll && value)
 				{
 					this.verticalAutoScroll = true;
-					VerticalScroll();
+
+					if (!DesignMode)
+						VerticalScrollToBottomIfNoItemsAreSelected();
 				}
 				else
 				{
@@ -190,7 +225,7 @@ namespace MKY.Windows.Forms
 				}
 			}
 		}
-#endif
+
 		#endregion
 
 		#region Scroll > Methods
@@ -199,6 +234,7 @@ namespace MKY.Windows.Forms
 		//------------------------------------------------------------------------------------------
 
 #if (ENABLE_HORIZONTAL_AUTO_SCROLL)
+
 		/// <summary>
 		/// Horizontally scroll the list to the beginning of the scroll extent, taking
 		/// <see cref="RightToLeft"/> into account.
@@ -279,7 +315,9 @@ namespace MKY.Windows.Forms
 				ScrollWindowHorizontalDelta(position);
 			}
 		}
-#endif
+
+#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
+
 		/// <summary>
 		/// Vertically scroll the list to the bottom.
 		/// </summary>
@@ -340,6 +378,7 @@ namespace MKY.Windows.Forms
 		#endregion
 
 #if (ENABLE_HORIZONTAL_AUTO_SCROLL)
+
 		#region Scroll > Overridden Methods
 		//------------------------------------------------------------------------------------------
 		// Scroll > Overridden Methods
@@ -456,6 +495,7 @@ namespace MKY.Windows.Forms
 		}
 
 		#endregion
+
 #endif // ENABLE_HORIZONTAL_AUTO_SCROLL
 
 		#endregion

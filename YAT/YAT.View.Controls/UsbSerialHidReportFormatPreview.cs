@@ -43,6 +43,18 @@ namespace YAT.View.Controls
 	[DefaultEvent("UseIdChanged")]
 	public partial class UsbSerialHidReportFormatPreview : UserControl
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private const bool UseIdDefault                    = false;
+		private const bool PrependPayloadByteLengthDefault = false;
+		private const bool AppendTerminatingZeroDefault    = false;
+		private const bool FillLastReportDefault           = false;
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -53,10 +65,10 @@ namespace YAT.View.Controls
 		private Dictionary<int, string> payload1Text;
 		private Dictionary<int, string> fillerBytesText;
 
-		private bool useId;
-		private bool prependPayloadByteLength;
-		private bool appendTerminatingZero;
-		private bool fillLastReport;
+		private bool useId                    = UseIdDefault;
+		private bool prependPayloadByteLength = PrependPayloadByteLengthDefault;
+		private bool appendTerminatingZero    = AppendTerminatingZeroDefault;
+		private bool fillLastReport           = FillLastReportDefault;
 
 		#endregion
 
@@ -118,7 +130,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Data")]
 		[Description("Indicates whether a report ID is used.")]
-		[DefaultValue(true)]
+		[DefaultValue(UseIdDefault)]
 		public bool UseId
 		{
 			get { return (this.useId); }
@@ -139,7 +151,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Data")]
 		[Description("Indicates whether the payload byte length is prepended.")]
-		[DefaultValue(true)]
+		[DefaultValue(PrependPayloadByteLengthDefault)]
 		public bool PrependPayloadByteLength
 		{
 			get { return (this.prependPayloadByteLength); }
@@ -160,7 +172,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Data")]
 		[Description("Indicates whether a terminating zero is appended.")]
-		[DefaultValue(true)]
+		[DefaultValue(AppendTerminatingZeroDefault)]
 		public bool AppendTerminatingZero
 		{
 			get { return (this.appendTerminatingZero); }
@@ -181,7 +193,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Data")]
 		[Description("Indicates whether the last report is filled.")]
-		[DefaultValue(true)]
+		[DefaultValue(FillLastReportDefault)]
 		public bool FillLastReport
 		{
 			get { return (this.fillLastReport); }

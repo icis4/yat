@@ -243,7 +243,9 @@ namespace YAT.View.Controls
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// No explicit 'Default' value constant as the default is given by <see cref="SplitContainer"/>.
+		/// </remarks>
 		[DefaultValue(true)]
 		public virtual bool TextPanelIsVisible
 		{
@@ -251,7 +253,9 @@ namespace YAT.View.Controls
 			set { splitContainer_Send.Panel1Collapsed = !value;  }
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// No explicit 'Default' value constant as the default is given by <see cref="SplitContainer"/>.
+		/// </remarks>
 		[DefaultValue(true)]
 		public virtual bool FilePanelIsVisible
 		{

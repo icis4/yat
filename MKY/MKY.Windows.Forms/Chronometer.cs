@@ -24,6 +24,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Windows.Forms;
 
 namespace MKY.Windows.Forms
 {
@@ -77,7 +78,9 @@ namespace MKY.Windows.Forms
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// No explicit 'Default' value constant as the default is given by <see cref="Timer"/>.
+		/// </remarks>
 		[DefaultValue(100)]
 		public virtual int Interval
 		{

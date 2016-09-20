@@ -38,6 +38,12 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
+		/// <summary></summary>
+		public const int CountDefault = 0;
+
+		/// <summary></summary>
+		public const int RateDefault = 0;
+
 		private const Domain.RepositoryType RepositoryTypeDefault = Domain.RepositoryType.None;
 
 		#endregion
@@ -49,15 +55,15 @@ namespace YAT.View.Controls
 
 		private Domain.RepositoryType repositoryType = RepositoryTypeDefault;
 
-		private int txByteCount;
-		private int rxByteCount;
-		private int txLineCount;
-		private int rxLineCount;
+		private int txByteCount = CountDefault;
+		private int rxByteCount = CountDefault;
+		private int txLineCount = CountDefault;
+		private int rxLineCount = CountDefault;
 
-		private int txByteRate;
-		private int rxByteRate;
-		private int txLineRate;
-		private int rxLineRate;
+		private int txByteRate = RateDefault;
+		private int rxByteRate = RateDefault;
+		private int txLineRate = RateDefault;
+		private int rxLineRate = RateDefault;
 
 		private string statusText;
 
