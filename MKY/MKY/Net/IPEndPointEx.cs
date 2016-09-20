@@ -36,7 +36,7 @@ namespace MKY.Net
 		/// </summary>
 		/// <param name="port">Port to evaluate.</param>
 		/// <returns><c>true</c> if value is valid, <c>false</c> otherwise.</returns>
-		static bool PortIsValid(int port)
+		public static bool IsValidPort(int port)
 		{
 			return (Int32Ex.IsWithin(port, System.Net.IPEndPoint.MinPort, System.Net.IPEndPoint.MaxPort));
 		}

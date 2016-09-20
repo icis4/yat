@@ -436,8 +436,7 @@ namespace YAT.View.Controls
 			if (!this.isSettingControls)
 			{
 				int port;
-				if (int.TryParse(textBox_RemotePort.Text, out port) &&
-					(port >= IPEndPoint.MinPort) && (port <= IPEndPoint.MaxPort))
+				if (int.TryParse(textBox_RemotePort.Text, out port) && IPEndPointEx.IsValidPort(port))
 				{
 					if ((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket))
 					{
@@ -516,8 +515,7 @@ namespace YAT.View.Controls
 			if (!this.isSettingControls)
 			{
 				int port;
-				if (int.TryParse(textBox_LocalPort.Text, out port) &&
-					(port >= IPEndPoint.MinPort) && (port <= IPEndPoint.MaxPort))
+				if (int.TryParse(textBox_LocalPort.Text, out port) && IPEndPointEx.IsValidPort(port))
 				{
 					if ((this.socketType == SocketType.TcpServer) || (this.socketType == SocketType.TcpAutoSocket))
 					{

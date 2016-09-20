@@ -789,7 +789,7 @@ namespace YAT.Model
 					 (finalIOType == Domain.IOType.UdpPairSocket)) &&
 					this.commandLineArgs.OptionIsGiven("RemotePort"))
 				{
-					if (Int32Ex.IsWithin(this.commandLineArgs.RemotePort, System.Net.IPEndPoint.MinPort, System.Net.IPEndPoint.MaxPort))
+					if (MKY.Net.IPEndPointEx.IsValidPort(this.commandLineArgs.RemotePort))
 						terminalSettings.IO.Socket.RemotePort = this.commandLineArgs.RemotePort;
 					else
 						return (false);
@@ -821,7 +821,7 @@ namespace YAT.Model
 					 (finalIOType == Domain.IOType.UdpPairSocket)) &&
 					this.commandLineArgs.OptionIsGiven("LocalPort"))
 				{
-					if (Int32Ex.IsWithin(this.commandLineArgs.LocalPort, System.Net.IPEndPoint.MinPort, System.Net.IPEndPoint.MaxPort))
+					if (MKY.Net.IPEndPointEx.IsValidPort(this.commandLineArgs.LocalPort))
 						terminalSettings.IO.Socket.LocalPort = this.commandLineArgs.LocalPort;
 					else
 						return (false);

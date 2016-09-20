@@ -225,7 +225,7 @@ namespace MKY.Net.Test
 				int port;
 				if (int.TryParse(configuration.MTSicsDeviceTcpPort, out port))
 				{
-					if ((port >= IPEndPoint.MinPort) && (port <= IPEndPoint.MaxPort))
+					if (IPEndPointEx.IsValidPort(port))
 					{
 						foreach (IPEndPoint tcpListener in IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpListeners())
 						{
