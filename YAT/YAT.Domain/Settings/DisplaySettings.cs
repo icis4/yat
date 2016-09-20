@@ -388,7 +388,7 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <exception cref="ArgumentOutOfRangeException"> if count is below 1.</exception>
 		[XmlElement("MaxLineCount")]
 		public virtual int MaxLineCount
 		{
@@ -398,7 +398,7 @@ namespace YAT.Domain.Settings
 				if (this.maxLineCount != value)
 				{
 					if (value < 1)
-						throw (new ArgumentOutOfRangeException("value", value, "Line count must at least be 1!"));
+						throw (new ArgumentOutOfRangeException("value", value, "Line count must at least be 1!")); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
 
 					this.maxLineCount = value;
 					SetMyChanged();
@@ -411,6 +411,7 @@ namespace YAT.Domain.Settings
 		/// lines, redrawing of a list box item may take way too long! It even looks as if there
 		/// is a recursion within 'mscorlib.dll'.
 		/// </remarks>
+		/// <exception cref="ArgumentOutOfRangeException"> if count is below 1.</exception>
 		[XmlElement("MaxBytePerLineCount")]
 		public virtual int MaxBytePerLineCount
 		{
@@ -420,7 +421,7 @@ namespace YAT.Domain.Settings
 				if (this.maxBytePerLineCount != value)
 				{
 					if (value < 1)
-						throw (new ArgumentOutOfRangeException("value", value, "Byte per line count must at least be 1!"));
+						throw (new ArgumentOutOfRangeException("value", value, "Byte per line count must at least be 1!")); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
 
 					this.maxBytePerLineCount = value;
 					SetMyChanged();

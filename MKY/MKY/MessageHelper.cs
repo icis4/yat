@@ -29,6 +29,14 @@ namespace MKY
 	public static class MessageHelper
 	{
 		/// <summary>
+		/// The default invalid execution preamble is <![CDATA["Program execution should never get here! "]]>.
+		/// </summary>
+		/// <remarks>
+		/// Note the adjacent space.
+		/// </remarks>
+		public const string InvalidExecutionPreambleDefault = "Program execution should never get here! ";
+
+		/// <summary>
 		/// The default support request message is <![CDATA["Support may be requested at the origin of this software."]]>.
 		/// </summary>
 		public const string RequestSupportDefault = "Support may be requested at the origin of this software.";
@@ -41,14 +49,22 @@ namespace MKY
 		/// <summary>
 		/// The default bug submission message is <![CDATA["Please report this issue at the origin of this software."]]>.
 		/// </summary>
-		/// <remarks>
-		/// Note the preceding space.
-		/// </remarks>
 		public const string SubmitBugDefault = "Please report this issue at the origin of this software.";
 
-		private static string staticRequestSupport = RequestSupportDefault;
-		private static string staticRequestFeature = RequestFeatureDefault;
-		private static string staticSubmitBug      = SubmitBugDefault;
+		private static string staticInvalidExecutionPreamble = InvalidExecutionPreambleDefault;
+		private static string staticRequestSupport           = RequestSupportDefault;
+		private static string staticRequestFeature           = RequestFeatureDefault;
+		private static string staticSubmitBug                = SubmitBugDefault;
+
+		/// <summary>
+		/// The currently active invalid execution preamble.
+		/// By default <see cref="InvalidExecutionPreambleDefault"/>.
+		/// </summary>
+		public static string InvalidExecutionPreamble
+		{
+			get { return (staticInvalidExecutionPreamble); }
+			set { staticInvalidExecutionPreamble = value;  }
+		}
 
 		/// <summary>
 		/// The currently active support request message.

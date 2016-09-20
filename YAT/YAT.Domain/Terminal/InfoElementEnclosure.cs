@@ -105,7 +105,7 @@ namespace YAT.Domain
 			: base(enclosure)
 		{
 			if (enclosure == InfoElementEnclosure.Explicit)
-				throw (new InvalidOperationException("'InfoElementEnclosure.Explicit' requires an enclosure string, use InfoElementEnclosureEx(string) instead!"));
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'InfoElementEnclosure.Explicit' requires an enclosure string, use InfoElementEnclosureEx(string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -185,7 +185,7 @@ namespace YAT.Domain
 
 				case InfoElementEnclosure.Explicit:       return (        this.explicitEnclosure);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -201,7 +201,7 @@ namespace YAT.Domain
 
 				case InfoElementEnclosure.Explicit:       return (StringEx.Left(this.explicitEnclosure, (this.explicitEnclosure.Length / 2)));
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -217,7 +217,7 @@ namespace YAT.Domain
 
 				case InfoElementEnclosure.Explicit:       return (StringEx.Right(this.explicitEnclosure, (this.explicitEnclosure.Length / 2)));
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -233,7 +233,7 @@ namespace YAT.Domain
 
 				case InfoElementEnclosure.Explicit:       return (          this.explicitEnclosure);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

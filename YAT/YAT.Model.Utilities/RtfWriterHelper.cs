@@ -198,7 +198,7 @@ namespace YAT.Model.Utilities
 			}
 			else
 			{
-				throw (new NotSupportedException("Program execution should never get here, '" + element.GetType() + "' is an invalid display element!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + element.GetType() + "' is an invalid display element!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

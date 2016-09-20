@@ -332,7 +332,7 @@ namespace YAT.View.Forms
 				case 8: return (this.formatSettingsInEdit.LengthFormat);
 				case 9: return (this.formatSettingsInEdit.ErrorFormat);
 			}
-			throw (new ArgumentOutOfRangeException("index", index, "Program execution should never get here, there is no format at index '" + index + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new ArgumentOutOfRangeException("index", index, MessageHelper.InvalidExecutionPreamble + "There is no format at index '" + index + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		private void GetFormatFromControl(int index)

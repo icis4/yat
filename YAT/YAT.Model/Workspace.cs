@@ -1764,7 +1764,7 @@ namespace YAT.Model
 					return (kvp.Key);
 			}
 
-			throw (new ArgumentOutOfRangeException("terminal", terminal, "Terminal not found in index table!"));
+			throw (new ArgumentOutOfRangeException("terminal", terminal, MessageHelper.InvalidExecutionPreamble + "Terminal'" + terminal + "'not found in index table!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary>
@@ -2217,7 +2217,7 @@ namespace YAT.Model
 
 				// Ensure that the request is processed!
 				if (e.Result == DialogResult.None)
-					throw (new InvalidOperationException("A 'Message Input' request by the workspace was not processed by the application!"));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Message Input' request by the workspace was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 				return (e.Result);
 			}
@@ -2239,7 +2239,7 @@ namespace YAT.Model
 
 				// Ensure that the request is processed!
 				if (e.Result == DialogResult.None)
-					throw (new InvalidOperationException("A 'Save As' request by the workspace was not processed by the application!"));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by the workspace was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 				return (e.Result);
 			}

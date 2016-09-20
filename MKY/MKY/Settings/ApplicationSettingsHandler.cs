@@ -685,7 +685,7 @@ namespace MKY.Settings
 				if (HasCommonSettings)
 					this.commonSettings.FilePath = value;
 				else
-					throw (new InvalidOperationException("This handler has no common settings!"));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "This handler has no common settings!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -714,7 +714,7 @@ namespace MKY.Settings
 				if (HasLocalUserSettings)
 					this.localUserSettings.FilePath = value;
 				else
-					throw (new InvalidOperationException("This handler has no local user settings!"));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "This handler has no local user settings!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -743,7 +743,7 @@ namespace MKY.Settings
 				if (HasRoamingUserSettings)
 					this.roamingUserSettings.FilePath = value;
 				else
-					throw (new InvalidOperationException("This handler has no roaming user settings!"));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "This handler has no roaming user settings!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

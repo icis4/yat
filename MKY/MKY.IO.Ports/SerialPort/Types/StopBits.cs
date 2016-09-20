@@ -77,7 +77,7 @@ namespace MKY.IO.Ports
 				case StopBits.OnePointFive: return (OnePointFive_double.ToString(CultureInfo.InvariantCulture));
 				case StopBits.Two:          return (Two_double         .ToString(CultureInfo.InvariantCulture));
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

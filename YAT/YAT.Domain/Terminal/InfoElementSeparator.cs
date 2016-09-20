@@ -126,7 +126,7 @@ namespace YAT.Domain
 			: base(separator)
 		{
 			if (separator == InfoElementSeparator.Explicit)
-				throw (new InvalidOperationException("'InfoElementSeparator.Explicit' requires a separator string, use InfoElementSeparatorEx(string) instead!"));
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'InfoElementSeparator.Explicit' requires a separator string, use InfoElementSeparatorEx(string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -218,7 +218,7 @@ namespace YAT.Domain
 
 				case InfoElementSeparator.Explicit:             return (this.explicitSeparator);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -246,7 +246,7 @@ namespace YAT.Domain
 
 				case InfoElementSeparator.Explicit:             return (this.explicitSeparator);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

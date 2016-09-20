@@ -1219,7 +1219,7 @@ namespace YAT.View.Forms
 			if (repositoryType != Domain.RepositoryType.None)
 				ClearMonitor(repositoryType);
 			else
-				throw (new InvalidOperationException("Program execution should never get here, invalid context menu source control received from " + sender.ToString() + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid context menu source control received from " + sender.ToString() + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Refresh_Click(object sender, EventArgs e)
@@ -1228,7 +1228,7 @@ namespace YAT.View.Forms
 			if (repositoryType != Domain.RepositoryType.None)
 				RefreshMonitor(repositoryType);
 			else
-				throw (new InvalidOperationException("Program execution should never get here, invalid context menu source control received from " + sender.ToString() + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid context menu source control received from " + sender.ToString() + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_SelectAll_Click(object sender, EventArgs e)
@@ -2606,7 +2606,7 @@ namespace YAT.View.Forms
 				case 6: presetString =  "19200, 8, None, 1, Software"; break;
 				case 7: presetString = "115200, 8, None, 1, None";     break;
 				case 8: presetString = "115200, 8, None, 1, Software"; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + preset + "' is an invalid preset!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + preset + "' is an invalid preset!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			MKY.IO.Serial.SerialPort.SerialCommunicationSettings scs = this.settingsRoot.Terminal.IO.SerialPort.Communication;
@@ -2749,7 +2749,7 @@ namespace YAT.View.Forms
 			{
 				case Domain.IODirection.Tx: this.settingsRoot.Display.TxRadix = radix; break;
 				case Domain.IODirection.Rx: this.settingsRoot.Display.RxRadix = radix; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2846,7 +2846,7 @@ namespace YAT.View.Forms
 					break;
 
 				default:
-					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2861,7 +2861,7 @@ namespace YAT.View.Forms
 					break;
 
 				default:
-					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -3933,7 +3933,7 @@ namespace YAT.View.Forms
 					}
 					else
 					{
-						throw (new InvalidOperationException("Program execution should never get here, the underlying I/O instance is no serial COM port!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying I/O instance is no serial COM port!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 
 					bool allowXOnXOff    = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;

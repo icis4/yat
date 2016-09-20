@@ -122,7 +122,7 @@ namespace YAT.Domain
 				case Radix.Char:   return (Char_string);
 				case Radix.String: return (String_string);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -137,7 +137,7 @@ namespace YAT.Domain
 				case Radix.Char:   return (Char_stringShort);
 				case Radix.String: return (String_stringShort);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -152,7 +152,7 @@ namespace YAT.Domain
 				case Radix.Char:   return (Char_stringMiddle);
 				case Radix.String: return (String_stringMiddle);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

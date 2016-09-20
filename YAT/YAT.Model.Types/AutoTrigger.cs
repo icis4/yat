@@ -225,7 +225,7 @@ namespace YAT.Model.Types
 				case AutoTrigger.AnyLine:             return (AnyLine_string);
 				case AutoTrigger.Explicit:            return (this.explicitCommandString);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

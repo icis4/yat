@@ -200,7 +200,7 @@ namespace YAT.Log.Settings
 				case LogFormat.Raw:  return ("Raw");
 				case LogFormat.Neat: return ("Neat");
 			}
-			throw (new ArgumentException("LogFormat '" + format + "' unknown!"));
+			throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Log format '" + format + "' unknown!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "format"));
 		}
 
 		private static string ToChannelString(LogChannelType channelType)
@@ -211,7 +211,7 @@ namespace YAT.Log.Settings
 				case LogChannelType.Bidir: return ("Bidir");
 				case LogChannelType.Rx:    return ("Rx");
 			}
-			throw (new ArgumentException("LogChannelType '" + channelType + "' unknown!"));
+			throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Log channel type '" + channelType + "' unknown!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "channelType"));
 		}
 
 		private string ToFileNamePostFixString(LogFormat format, LogChannelType channelType)

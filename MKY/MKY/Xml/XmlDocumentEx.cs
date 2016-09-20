@@ -100,7 +100,7 @@ namespace MKY.Xml
 			}
 			else if (type.IsInterface)
 			{
-				throw (new NotSupportedException("Interfaces cannot be serialized!"));
+				throw (new NotSupportedException("Programm execution should never get here, interfaces cannot be serialized!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 			else // IsClass
 			{

@@ -106,7 +106,7 @@ namespace YAT.Log
 			: base(separator)
 		{
 			if (separator == FileNameSeparator.Explicit)
-				throw (new InvalidOperationException("'FileNameSeparator.Explicit' requires a separator string, use FileNameSeparatorEx(string) instead!"));
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'FileNameSeparator.Explicit' requires a separator string, use FileNameSeparatorEx(string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -191,7 +191,7 @@ namespace YAT.Log
 
 				case FileNameSeparator.Explicit:             return (this.explicitSeparator);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -212,7 +212,7 @@ namespace YAT.Log
 
 				case FileNameSeparator.Explicit:             return (this.explicitSeparator);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

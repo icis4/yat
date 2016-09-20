@@ -175,7 +175,7 @@ namespace MKY.IO.Usb
 				if (staticDeviceNotificationCounter == 0)
 				{
 					if (staticDeviceNotificationHandle != IntPtr.Zero)
-						throw (new InvalidOperationException("Invalid state within USB HID device object!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid state within USB HID device object!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 					if (NativeMessageHandler.MessageSourceIsRegistered)
 					{

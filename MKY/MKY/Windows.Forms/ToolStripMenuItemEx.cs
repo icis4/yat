@@ -68,10 +68,10 @@ namespace MKY.Windows.Forms
 						return (index);
 				}
 
-				throw (new ArgumentException("Program execution should never get here, sender has an invalid tag '" + tag + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "sender"));
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Sender has an invalid tag '" + tag + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "sender"));
 			}
 
-			throw (new ArgumentOutOfRangeException("sender", sender, "Program execution should never get here, '" + sender + "' is no control!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new ArgumentOutOfRangeException("sender", sender, MessageHelper.InvalidExecutionPreamble + "'" + sender + "' is no control!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 	}
 }

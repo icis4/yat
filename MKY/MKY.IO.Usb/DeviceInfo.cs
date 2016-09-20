@@ -145,7 +145,7 @@ namespace MKY.IO.Usb
 				Initialize(path); // Initialize this info based on the available information only.
 		}
 
-		/// <summary></summary>
+		/// <exception cref="ArgumentOutOfRangeException"> if either vendor ID or product ID is an invalid value.</exception>
 		public DeviceInfo(int vendorId, int productId)
 		{
 			string path, manufacturer, product, serial;
@@ -155,7 +155,7 @@ namespace MKY.IO.Usb
 				Initialize(vendorId, productId); // Initialize this info based on the available information only.
 		}
 
-		/// <summary></summary>
+		/// <exception cref="ArgumentOutOfRangeException"> if either vendor ID or product ID is an invalid value.</exception>
 		public DeviceInfo(int vendorId, int productId, string serial)
 		{
 			string path, manufacturer, product;
@@ -165,13 +165,14 @@ namespace MKY.IO.Usb
 				Initialize(vendorId, productId, serial); // Initialize this info based on the available information only.
 		}
 
-		/// <summary></summary>
+		/// <exception cref="ArgumentOutOfRangeException"> if either vendor ID or product ID is an invalid value.</exception>
 		public DeviceInfo(string path, int vendorId, int productId)
 		{
 			Initialize(path, vendorId, productId, "", "", "");
 		}
 
 		/// <summary></summary>
+		/// <exception cref="ArgumentOutOfRangeException"> if either vendor ID or product ID is an invalid value.</exception>
 		public DeviceInfo(string path, int vendorId, int productId, string manufacturer, string product, string serial)
 		{
 			Initialize(path, vendorId, productId, manufacturer, product, serial);
@@ -182,22 +183,26 @@ namespace MKY.IO.Usb
 			Initialize(path, DefaultVendorId, DefaultProductId, "", "", "");
 		}
 
+		/// <exception cref="ArgumentOutOfRangeException"> if either vendor ID or product ID is an invalid value.</exception>
 		private void Initialize(int vendorId, int productId)
 		{
 			Initialize(vendorId, productId, "");
 		}
 
+		/// <exception cref="ArgumentOutOfRangeException"> if either vendor ID or product ID is an invalid value.</exception>
 		private void Initialize(int vendorId, int productId, string serial)
 		{
 			Initialize("", vendorId, productId, "", "", serial);
 		}
 
+		/// <exception cref="ArgumentOutOfRangeException"> if either vendor ID or product ID is an invalid value.</exception>
 		private void Initialize(string path, int vendorId, int productId, string manufacturer, string product, string serial)
 		{
-			if ((vendorId  < FirstVendorId)  || (vendorId  > LastVendorId))
-				throw (new ArgumentOutOfRangeException("vendorId",  vendorId,  "Invalid vendor ID!"));
-			if ((productId < FirstProductId) || (productId > LastProductId))
-				throw (new ArgumentOutOfRangeException("productId", productId, "Invalid product ID!"));
+			if (!IsValidVendorId(vendorId))
+				throw (new ArgumentOutOfRangeException("vendorId", vendorId, "'" + vendorId + "' is an invalid vendor ID!")); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
+
+			if (!IsValidProductId(productId))
+				throw (new ArgumentOutOfRangeException("productId", productId, "'" + productId + "' is an invalid product ID!")); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
 
 			this.path = path;
 
@@ -315,6 +320,22 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 		// Methods
 		//==========================================================================================
+
+		/// <summary>
+		/// Returns whether the given number is a valid vendor ID.
+		/// </summary>
+		public static bool IsValidVendorId(int vendorId)
+		{
+			return (Int32Ex.IsWithin(vendorId, FirstVendorId, LastVendorId));
+		}
+
+		/// <summary>
+		/// Returns whether the given number is a valid product ID.
+		/// </summary>
+		public static bool IsValidProductId(int productId)
+		{
+			return (Int32Ex.IsWithin(productId, FirstProductId, LastProductId));
+		}
 
 		/// <summary>
 		/// Queries the USB device for user readable strings like vendor or product name.
@@ -686,7 +707,7 @@ namespace MKY.IO.Usb
 			}
 			else
 			{
-				throw (new ArgumentException(obj.ToString() + " does not specify a 'UsbDeviceId'!"));
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify a 'UsbDeviceId'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "obj"));
 			}
 		}
 
