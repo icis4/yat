@@ -29,14 +29,8 @@ namespace MKY.Windows.Forms
 	/// <summary>
 	/// Provides a transparent panel. It can be used to handle user input on an invisible rectangle.
 	/// </summary>
-	[DesignerCategory("Windows Forms")]
-	public partial class TransparentPanel : Panel
+	public class TransparentPanel : Panel
 	{
-		/// <summary>
-		/// Tranparency mask of the extended windows styles.
-		/// </summary>
-		protected const int WS_EX_TRANSPARENT = 0x20;
-
 		/// <summary>
 		/// Gets the required creation parameters when the control handle is created.
 		/// </summary>
@@ -46,7 +40,7 @@ namespace MKY.Windows.Forms
 			get
 			{
 				CreateParams cp = base.CreateParams;
-				cp.ExStyle |= WS_EX_TRANSPARENT;
+				cp.ExStyle |= 0x20; // 0x20 = WS_EX_TRANSPARENT = one of the 'Extended Window Styles' of the Win32 API.
 				return (cp);
 			}
 		}
