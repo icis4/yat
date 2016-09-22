@@ -231,19 +231,10 @@ Also see "Implementing Finalize and Dispose to Clean Up Unmanaged Resources" in 
 Equality
 --------
 > Always implement operators ==/!= on value types
-> Always implement IEquatable
-> Implement operators ==/!= on base types
-> See MKY.Utilities.Test.EqualityTest
-
-		/// <remarks>
-		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
+> Where needed, implement implement operators ==/!= on value types and IEquatable<T> on reference types
+   > Improves performance
+> See Template.cs for implementation
+> Also see MKY.Test.EqualityAnalysis
 
 
 Variables

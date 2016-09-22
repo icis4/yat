@@ -49,7 +49,7 @@ using YAT/*.<TODO>*/;
 
 namespace YAT/*.<TODO>*/
 {
-	public class TODO
+	public class TODO : IEquatable<TODO>
 	{
 		#region Types
 		//==========================================================================================
@@ -113,6 +113,8 @@ namespace YAT/*.<TODO>*/
 		//==========================================================================================
 
 		private bool isDisposed;
+
+		private int todo;
 
 		#endregion
 
@@ -213,6 +215,20 @@ namespace YAT/*.<TODO>*/
 		// Properties
 		//==========================================================================================
 
+		public int TODO
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.todo);
+			}
+			set
+			{
+				this.todo = value;
+			}
+		}
+
 		#endregion
 
 		#region Methods
@@ -283,12 +299,107 @@ namespace YAT/*.<TODO>*/
 		// Object Members
 		//==========================================================================================
 
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as TODO)); // !!! For reference types !!!
+
+		//	if (obj is TODO)              // !!! For value types !!!
+		//		return (Equals((TODO)obj));
+		//	else
+		//		return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public bool Equals(TODO other)
+		{
+			if (ReferenceEquals(other, null)) // !!! Remove for value types !!!
+				return (false);
+
+			if (ReferenceEquals(this, other)) // !!! Remove for value types !!!
+				return (true);
+
+			if (this.GetType() != other.GetType()) // !!! Remove for value types !!!
+				return (false);
+
+			return
+			(
+				// !!! Remove for value types !!!
+				base.Equals(other) && // !!! If derived from other than 'Object', otherwise remove !!!
+				// Do not call 'base.Equals(other)' when deriving from 'Object'.
+
+				TODO.Equals(other.TODO)
+			//	Property1.Equals(other.Property1)
+			//	...
+			//	PropertyN.Equals(other.PropertyN)
+			);
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // !!! If derived from other than 'Object', otherwise remove !!!
+
+			//	hashCode =                     IntegerProperty;
+			//	hashCode = (hashCode * 397) ^  IntegerProperty;
+			//	hashCode = (hashCode * 397) ^  BooleanOrNumericOrEnumOrStructProperty               .GetHashCode();
+			//	hashCode = (hashCode * 397) ^ (ArrayProperty         != null ? ArrayProperty        .GetHashCode() : 0);
+			//	hashCode = (hashCode * 397) ^ (StringProperty        != null ? StringProperty       .GetHashCode() : 0);
+			//	hashCode = (hashCode * 397) ^ (ReferenceTypeProperty != null ? ReferenceTypeProperty.GetHashCode() : 0);
+
+				return (hashCode);
+			}
+		}
+
 		#region Object Members > Extensions
 		//------------------------------------------------------------------------------------------
 		// Object Members > Extensions
 		//------------------------------------------------------------------------------------------
 
 		#endregion
+
+		#endregion
+
+		#region Comparison Operators
+		//==========================================================================================
+		// Comparison Operators
+		//==========================================================================================
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(TODO lhs, TODO rhs)
+		{
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			return (lhs.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(TODO lhs, TODO rhs)
+		{
+			return (!(lhs == rhs));
+		}
 
 		#endregion
 

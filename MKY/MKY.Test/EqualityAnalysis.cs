@@ -54,7 +54,7 @@ namespace MKY.Test
 	/// Difficulties with equality:
 	/// a) Reference types need to deal with value equality on all virtual/inheritance levels.
 	///    Overriding Equals() provides this functionality.
-	/// b) object.operators == and != or not virtual by default and therefore cannot take
+	/// b) object.operators == and != are not virtual by default and therefore cannot take
 	///    value equality of reference types into account.
 	/// c) <c>null</c> must be handled.
 	/// d) <see cref="T:IEquatable`T"/> should be implemented to improve performance.
