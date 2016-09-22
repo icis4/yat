@@ -63,7 +63,7 @@ namespace MKY.Data
 		[SuppressMessage("Microsoft.Performance", "CA1821:RemoveEmptyFinalizers", Justification = "See remarks.")]
 		~DataItem()
 		{
-		////Diagnostics.DebugEventManagement.DebugNotifyAllEventRemains(this); Temporarily disabled until bug #344 has been resolved.
+			Diagnostics.DebugEventManagement.DebugNotifyAllEventRemains(this);
 			Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 
@@ -157,8 +157,7 @@ namespace MKY.Data
 
 		/// <summary>
 		/// This flag indicates that the item has changed. Either one of the values of the item
-		/// itself, or any of the sub-items. This flag can be used to e.g. display an asterisk *
-		/// indicating a change of data, settings,...
+		/// itself, or any of the sub-items.
 		/// </summary>
 		/// <remarks>
 		/// To clear this flag, <see cref="ClearChanged"/> must be called. The flag is never cleared
@@ -197,6 +196,16 @@ namespace MKY.Data
 		}
 
 		/// <summary></summary>
+		protected virtual void SetMyChanged()
+		{
+			SuspendChangeEvent();
+
+			this.haveChanged = true;
+
+			ResumeChangeEvent();
+		}
+
+		/// <summary></summary>
 		public virtual void ClearChanged()
 		{
 			SuspendChangeEvent();
@@ -206,6 +215,16 @@ namespace MKY.Data
 				foreach (DataItem node in this.nodes)
 					node.ClearChanged();
 			}
+
+			this.haveChanged = false;
+
+			ResumeChangeEvent();
+		}
+
+		/// <summary></summary>
+		protected virtual void ClearMyChanged()
+		{
+			SuspendChangeEvent();
 
 			this.haveChanged = false;
 

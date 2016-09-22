@@ -131,6 +131,7 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 		// Image Rotation Properties and Methods
 		//==========================================================================================
+
 		/// <summary></summary>
 		[DefaultValue(ImageRotationDefault)]
 		public virtual RotateType ImageRotation
