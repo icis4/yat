@@ -2,7 +2,7 @@
 <Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <FileType>YAT Workspace Settings</FileType>
   <SettingsVersion>1.2.1</SettingsVersion>
-  <ProductVersion>1.99.50</ProductVersion>
+  <ProductVersion>1.99.51</ProductVersion>
   <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
     <TimeStamp>2016-09-02T11:08:06.6684141+02:00</TimeStamp>
