@@ -1,0 +1,65 @@
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00800000
+X-Mozilla-Keys:                                                                                 
+Message-ID: <4BB84EC0.7000104@users.sourceforge.net>
+Date: Sun, 04 Apr 2010 10:33:04 +0200
+From: maettu_this <maettu_this@users.sourceforge.net>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; de; rv:1.9.1.9) Gecko/20100317 Thunderbird/3.0.4
+MIME-Version: 1.0
+To: dsd@gentoo.org, hjelmn@users.sourceforge.net, 
+ michael.plante@gmail.com, pbatard@gmail.com
+Subject: libusb.NET
+Content-Type: text/plain; charset=ISO-8859-15; format=flowed
+Content-Transfer-Encoding: 8bit
+
+Dear libusb implementers,
+
+I created a .NET adaption layer for 'libusb' which I called 
+'libusb.NET'. The layer is in alpha state, rather clean implemented but 
+not fully operating yet. Is there a good spot on libusb.org to place 
+'libusb.NET'? Probably others are interested in such library and could 
+further develop it.
+
+How did I start with 'libusb.NET'? For another SourceForge hosted 
+project I was searching the web for an USB HID implementation. Of course 
+I came across 'libusb' and 'windows_backend' and evaluted whether I 
+could make use of it.
+The project I am working on is called 'YAT- Yet Another Terminal' and 
+features a terminal to operate and debug serial communications. 'YAT' 
+supports RS-232/422/423/485 as well as TCP-Client/Server/AutoSocket, 
+UDP. Currently I am adding support for USB Ser/HID. You can find 'YAT' 
+on http://sourceforge.net/projects/y-a-terminal/.
+'YAT' is implemented in C#.NET. Therefore, I searched for a .NET 
+adaption layer for 'libusb' and found 'SharpUSBLib' by Mike Krüger on 
+http://www.icsharpcode.net/OpenSource/SharpUSBLib/default.aspx. 
+Unfortunately that project seems no more active and doesn't provide all 
+the features I needed for 'YAT'. Therefore, I created 'libusb.NET' which 
+is based on 'SharpUSBLib' but uses the March revision of 'windows_backend'.
+
+In parallel to this 'libusb' based approach I tried a pure C#.NET based 
+approch and created a MKY.IO.Usb library based on two other libraries. 
+Comparing the two approaches has shown that the second approach is much 
+more promising for what I require for 'YAT':
+- The API of 'libusb' isn't a good match for a C#.NET based project
+- 'libusb' doesn't easily fit into a managed .NET solution
+- 'libusb' is implemented platform dependent and must be separately 
+built for Win32/x86 and Win64/x64
+- 'libusb' only provides the basic USB functions but no HID specifics
+- 'libusb windows_backend' doesn't yet support detection of hot plug-in/out
+- 'libusb-win32' seems to have serious portability issues on Vista, 
+Win7, x64
+- 'libusb-win32' is based on libusb-0.1.12 but libusb-1.0 has been 
+available since 2008-12
+See 
+https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Usb/_Doc/MKY.IO.Usb.txt 
+for more details.
+
+Still, 'libusb' provides a much broader support for any kind of USB 
+operation, not only Ser/HID like MKY.IO.Usb. Therefore I suggest to put 
+'libusb.NET' onto libusb.org and make it available to others. In case 
+you have no interest in doing so I will create a separate project on 
+SourceForge.
+
+Best regards,
+Matthias
+

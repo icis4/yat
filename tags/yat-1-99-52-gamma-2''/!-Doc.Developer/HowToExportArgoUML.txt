@@ -1,0 +1,17 @@
+﻿
+In ArgoUML
+----------
+1. Zoom out to 300%
+2. Export graphic as .svg
+
+
+In CorelDraw or other .svg capable graphics tool
+------------------------------------------------
+1. Open .svg
+2. Setup page to A3
+3. Export as .png
+
+
+---
+
+2007-11-27, Matthias Kläy
