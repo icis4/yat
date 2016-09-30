@@ -41,7 +41,6 @@ using MKY.Windows.Forms;
 //==================================================================================================
 
 [module: SuppressMessage("Microsoft.Naming", "CA1703:ResourceStringsShouldBeSpelledCorrectly", Scope = "resource", Target = "YAT.View.Forms.About.resources", MessageId = "Ltech", Justification = "'TALtech' just calls itself like this...")]
-[module: SuppressMessage("Microsoft.Naming", "CA1701:ResourceStringCompoundWordsShouldBeCasedCorrectly", Scope = "resource", Target = "YAT.View.Forms.About.resources", MessageId = "Toolbar", Justification = "What's wrong with 'Toolbar'? The web is full with this term!")]
 
 #endregion
 
@@ -242,9 +241,9 @@ namespace YAT.View.Forms
 			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
-			textBefore = "...toolbar icons from ";
-			textLink   =                       "FatCow";
-			textAfter  =                             "...";
+			textBefore = "...tool bar icons from ";
+			textLink   =                        "FatCow";
+			textAfter  =                              "...";
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;

@@ -231,6 +231,7 @@ namespace MKY.Windows.Forms
 		/// Workaround for border issue in 'Graphics.DrawImage()'.
 		/// See http://www.codeproject.com/csharp/BorderBug.asp for details.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 		protected virtual void ApplyImageZoom()
 		{
 			if (Image != null)
