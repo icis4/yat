@@ -353,6 +353,15 @@ namespace YAT.Log
 		/// <summary></summary>
 		private void flushTimer_Timeout(object obj)
 		{
+			// Non-periodic timer, only a single timeout event thread can be active at a time.
+			// There is no need to synchronize callbacks to this event handler.
+
+			lock (this.flushTimerSyncObj)
+			{
+				if (this.flushTimer == null)
+					return; // Handle overdue event callbacks.
+			}
+
 			StopFlushTimer();
 			Flush();
 		}

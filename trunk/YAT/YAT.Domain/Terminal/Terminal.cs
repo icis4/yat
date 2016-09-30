@@ -1749,7 +1749,7 @@ namespace YAT.Domain
 			{
 				try
 				{
-					// Ensure not to forward events during closing anymore.
+					// Ensure not to forward events during closing anymore:
 					if (!this.isDisposed && IsReadyToSend_Internal)
 						RequestSignalInputXOn();
 				}
