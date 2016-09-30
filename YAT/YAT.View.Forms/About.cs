@@ -242,7 +242,7 @@ namespace YAT.View.Forms
 			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
-			textBefore = "...Toolbar icons from ";
+			textBefore = "...toolbar icons from ";
 			textLink   =                       "FatCow";
 			textAfter  =                             "...";
 			linkLabel_Environment.Text += textBefore;
@@ -252,7 +252,7 @@ namespace YAT.View.Forms
 			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
-			textBefore = "...Terminal font ";
+			textBefore = "...terminal font ";
 			textLink   =                  "DejaVu";
 			textAfter  =                        "...";
 			linkLabel_Environment.Text += textBefore;
@@ -272,7 +272,7 @@ namespace YAT.View.Forms
 			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
-			textBefore = "...Hosting and change management on ";
+			textBefore = "...hosting and change management on ";
 			textLink   =                                     "SourceForge.net";
 			textAfter  =                                                    "...";
 			linkLabel_Environment.Text += textBefore;
@@ -282,7 +282,7 @@ namespace YAT.View.Forms
 			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
-			textBefore = "...Documentation, test and release management using ";
+			textBefore = "...documentation, test and release management using ";
 			textLink   =                                                     "LibreOffice";
 			textAfter  =                                                                ".";
 			linkLabel_Environment.Text += textBefore;
@@ -450,6 +450,9 @@ namespace YAT.View.Forms
 		[SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Justification = "Intentionally raising the most general exception to ensure that EVERY exception handler really catches it.")]
 		private void timer_ExecuteManualTest3_Timeout(object obj)
 		{
+			// Non-periodic timer, only a single timeout event thread can be active at a time.
+			// There is no need to synchronize callbacks to this event handler.
+
 			timer_ExecuteManualTest3_Dispose();
 			throw (new Exception("Unhandled asynchronous non-synchronized exception test :: This is the outer exception.", new Exception("This is the inner exception.")));
 		}
