@@ -23,6 +23,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -65,7 +66,6 @@ namespace MKY.Windows.Forms
 		private BorderStyle borderStyle = BorderStyleDefault;
 		private bool useMnemonic = UseMnemonicDefault;
 
-		private bool isDefault = false;
 		private DialogResult dialogResult = DialogResult.None;
 
 		private bool hasFocus = false;
@@ -156,7 +156,7 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Paints the foreground of the control.
 		/// </summary>
-		/// <param name="e">A <see cref="PaintEventArgs"/> that contains the event data.</param>
+		/// <param name="e">A <see cref="PaintEventArgs"/> that contains information about the control to paint.</param>
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			// Overlay the focus rectangle if the control has focus:
@@ -167,7 +167,8 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Paints the background of the control.
 		/// </summary>
-		/// <param name="e">A <see cref="PaintEventArgs"/> that contains the event data.</param>
+		/// <param name="e">A <see cref="PaintEventArgs"/> that contains information about the control to paint.</param>
+		[SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration", MessageId="0#", Justification = "'pevent'? What weird name is this, sorry .NET guys...")]
 		protected override void OnPaintBackground(PaintEventArgs e)
 		{
 			// Draw border as requested:
@@ -256,7 +257,7 @@ namespace MKY.Windows.Forms
 		/// </param>
 		public void NotifyDefault(bool value)
 		{
-			this.isDefault = value;
+			UnusedArg.PreventAnalysisWarning(value);
 		}
 
 		/// <summary>

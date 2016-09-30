@@ -231,6 +231,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Showable", Justification = "'Showable' is a correct English term.")]
 		[XmlIgnore]
 		public virtual bool TxRadixIsShowable
 		{
@@ -246,6 +247,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Showable", Justification = "'Showable' is a correct English term.")]
 		[XmlIgnore]
 		public virtual bool RxRadixIsShowable
 		{
