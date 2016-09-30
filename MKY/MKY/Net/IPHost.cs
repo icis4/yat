@@ -562,7 +562,7 @@ namespace MKY.Net
 				}
 				else
 				{
-					return (!this.explicitAddress.Equals(IPAddress.None)); // Explicit address is always given, at least 'IPAdress.None'.
+					return (IPAddressEx.NotEqualsNone(this.explicitAddress)); // Explicit address is always given, at least 'IPAdress.None'.
 				}
 			}
 
@@ -576,7 +576,7 @@ namespace MKY.Net
 		{
 			get
 			{
-				return (!this.explicitAddress.Equals(IPAddress.None));
+				return (IPAddressEx.NotEqualsNone(this.explicitAddress)); // Explicit address is always given, at least 'IPAdress.None'.
 			}
 		}
 

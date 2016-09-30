@@ -123,6 +123,7 @@
     <Compile Include="IO\DirectoryEx.cs" />
     <Compile Include="IO\StreamEx.cs" />
     <Compile Include="IO\Temp.cs" />
+    <Compile Include="Net\IPAddressEx.cs" />
     <Compile Include="Net\IPFilter.cs" />
     <Compile Include="Net\IPNetworkInterfaceDescriptorPair.cs" />
     <Compile Include="Net\IPNetworkInterfacePredicates.cs" />

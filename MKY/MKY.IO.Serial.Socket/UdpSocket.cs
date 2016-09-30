@@ -397,7 +397,7 @@ namespace MKY.IO.Serial.Socket
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				lock (this.socketSyncObj)
-					return (!this.remoteHost.Address.Equals(System.Net.IPAddress.None)); // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+					return (IPAddressEx.NotEqualsNone(this.remoteHost.Address));
 			}
 		}
 
@@ -1117,9 +1117,9 @@ namespace MKY.IO.Serial.Socket
 
 							switch (this.serverSendMode)
 							{
-								case UdpServerSendMode.None:                                                                       /* Do nothing. */           break;
-								case UdpServerSendMode.First:      if (this.remoteHost.Address.Equals(System.Net.IPAddress.None)) updateRemoteEndPoint = true; break; // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-								case UdpServerSendMode.MostRecent:                                                                updateRemoteEndPoint = true; break;
+								case UdpServerSendMode.None:                                                             /* Do nothing. */           break;
+								case UdpServerSendMode.First:      if (IPAddressEx.EqualsNone(this.remoteHost.Address)) updateRemoteEndPoint = true; break;
+								case UdpServerSendMode.MostRecent:                                                      updateRemoteEndPoint = true; break;
 								default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.serverSendMode.ToString() + "' is an unknown UDP/IP server send mode!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
 
