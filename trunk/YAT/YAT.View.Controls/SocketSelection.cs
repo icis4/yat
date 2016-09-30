@@ -359,7 +359,7 @@ namespace YAT.View.Controls
 				//   because SelectedItem is also set if text has changed in the meantime.
 
 				var remoteHost = (comboBox_RemoteHost.SelectedItem as IPHostEx);
-				if ((remoteHost != null) && (!remoteHost.Address.Equals(IPAddress.None)) && // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+				if ((remoteHost != null) && (IPAddressEx.NotEqualsNone(remoteHost.Address)) &&
 					StringEx.EqualsOrdinalIgnoreCase(remoteHost.ToString(), comboBox_RemoteHost.Text))
 				{
 					RemoteHost = remoteHost;
@@ -399,7 +399,7 @@ namespace YAT.View.Controls
 				//   because SelectedItem is also set if text has changed in the meantime.
 
 				var localFilter = (comboBox_LocalFilter.SelectedItem as IPFilterEx);
-				if ((localFilter != null) && (!localFilter.Address.Equals(IPAddress.None)) && // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+				if ((localFilter != null) && (IPAddressEx.NotEqualsNone(localFilter.Address)) &&
 					StringEx.EqualsOrdinalIgnoreCase(localFilter.ToString(), comboBox_LocalFilter.Text))
 				{
 					LocalFilter = localFilter;

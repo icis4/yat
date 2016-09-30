@@ -1028,7 +1028,7 @@ namespace YAT.Model
 									sb.Append(socket.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 
 									System.Net.IPEndPoint remoteEndPoint = socket.RemoteEndPoint;
-									if ((remoteEndPoint != null) && (!remoteEndPoint.Address.Equals(System.Net.IPAddress.None))) // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+									if ((remoteEndPoint != null) && (MKY.Net.IPAddressEx.NotEqualsNone(remoteEndPoint.Address)))
 									{
 										sb.Append(" and sending to ");
 										sb.Append(socket.RemoteEndPoint.ToString());
