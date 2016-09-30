@@ -60,6 +60,7 @@ namespace MKY.IO.Ports
 		Baud115200 = 115200,
 		Baud128000 = 128000,
 		Baud230400 = 230400,
+		Baud256000 = 256000,
 		Baud460800 = 460800,
 		Baud921600 = 921600,
 
@@ -207,6 +208,7 @@ namespace MKY.IO.Ports
 			a.Add(new BaudRateEx(BaudRate.Baud115200));
 			a.Add(new BaudRateEx(BaudRate.Baud128000));
 			a.Add(new BaudRateEx(BaudRate.Baud230400));
+			a.Add(new BaudRateEx(BaudRate.Baud256000));
 			a.Add(new BaudRateEx(BaudRate.Baud460800));
 			a.Add(new BaudRateEx(BaudRate.Baud921600));
 			return (a.ToArray());
@@ -346,6 +348,7 @@ namespace MKY.IO.Ports
 
 			if      (baudRate == (int)BaudRate.Baud921600) return (new BaudRateEx(BaudRate.Baud921600));
 			else if (baudRate == (int)BaudRate.Baud460800) return (new BaudRateEx(BaudRate.Baud460800));
+			else if (baudRate == (int)BaudRate.Baud256000) return (new BaudRateEx(BaudRate.Baud256000));
 			else if (baudRate == (int)BaudRate.Baud230400) return (new BaudRateEx(BaudRate.Baud230400));
 			else if (baudRate == (int)BaudRate.Baud128000) return (new BaudRateEx(BaudRate.Baud128000));
 			else if (baudRate == (int)BaudRate.Baud115200) return (new BaudRateEx(BaudRate.Baud115200));
