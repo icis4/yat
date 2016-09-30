@@ -70,10 +70,10 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			LengthLineBreak         = new BinaryLengthLineBreak(false, 16);
+			LengthLineBreak         = new BinaryLengthLineBreak  (true, 16); // Enabled to prevent too long display lines.
 			SequenceLineBreakBefore = new BinarySequenceLineBreak(false, @"ABC");
 			SequenceLineBreakAfter  = new BinarySequenceLineBreak(false, @"\h(00)");
-			TimedLineBreak          = new BinaryTimedLineBreak(false, 500);
+			TimedLineBreak          = new BinaryTimedLineBreak   (false, 500);
 		}
 
 		#region Properties

@@ -712,19 +712,21 @@ namespace YAT.Domain
 
 			DisplayLine line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
-			lineState.Reset(); // Reset line state, it is no longer needed.
+			// Process line content:
+			line.AddRange(lineState.LineElements.Clone()); // Clone elements to ensure decoupling.
 
-			// Process length:
+			// Process line length:
 			DisplayLinePart lp = new DisplayLinePart(); // Default behaviour regarding initial capacity is OK.
-
 			if (TerminalSettings.Display.ShowLength)
 			{
 				DisplayLinePart info;
 				PrepareLineEndInfo(lineState.LineElements.DataCount, out info);
 				lp.AddRange(info);
 			}
-
 			lp.Add(new DisplayElement.LineBreak()); // Direction may be both!
+
+			// Reset line state, it is no longer needed:
+			lineState.Reset();
 
 			// Finalize elements and line:
 			elements.AddRange(lp.Clone()); // Clone elements because they are needed again right below.

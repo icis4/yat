@@ -21,8 +21,9 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
 using System.Xml.Serialization;
+
+using YAT.Application.Utilities;
 
 namespace YAT.Application.Settings
 {
@@ -72,11 +73,11 @@ namespace YAT.Application.Settings
 		{
 			base.SetMyDefaults();
 
-			TextSendFiles   = Utilities.ExtensionHelper.TextFilesDefault;
-			BinarySendFiles = Utilities.ExtensionHelper.BinaryFilesDefault;
-			RawLogFiles     = Utilities.ExtensionHelper.RawLogFilesDefault;
-			NeatLogFiles    = Utilities.ExtensionHelper.NeatLogFilesDefault;
-			MonitorFiles    = Utilities.ExtensionHelper.MonitorFilesDefault;
+			TextSendFiles   = ExtensionHelper.TextFilesDefault;
+			BinarySendFiles = ExtensionHelper.BinaryFilesDefault;
+			RawLogFiles     = ExtensionHelper.RawLogFilesDefault;
+			NeatLogFiles    = ExtensionHelper.NeatLogFilesDefault;
+			MonitorFiles    = ExtensionHelper.MonitorFilesDefault;
 		}
 
 		#region Properties

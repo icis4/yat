@@ -283,7 +283,7 @@ namespace YAT.Log
 		public virtual void Clear()
 		{
 			foreach (Log l in this.logs)
-				l.Truncate();
+				l.Clear();
 		}
 
 		/// <summary></summary>
