@@ -1,0 +1,293 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="Parser parses a formatted string to a byte array with the given encoding. The string can contain nested formats to any depth. Example:&#xD;&#xA;&quot;Hello\h(00 \c(A) 00)&lt;CR&gt;&lt;LF&gt;&quot;&#xD;&#xA;Parser is implemented using the state pattern.">
+    <Position X="0.5" Y="0.817" Height="1.018" Width="3.425" />
+  </Comment>
+  <Class Name="YAT.Domain.TerminalFactory">
+    <Position X="7" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TerminalFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YAT.Domain.Terminal">
+    <Position X="6.25" Y="2.25" Width="3.25" />
+    <Members>
+      <Method Name="~Terminal" Hidden="true" />
+      <Method Name="ApplyBufferSettings" Hidden="true" />
+      <Method Name="ApplyIOSettings" Hidden="true" />
+      <Method Name="ApplyTerminalSettings" Hidden="true" />
+      <Method Name="AssertNotDisposed" Hidden="true" />
+      <Method Name="AttachRawTerminal" Hidden="true" />
+      <Method Name="AttachTerminalSettings" Hidden="true" />
+      <Method Name="DetachTerminalSettings" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>YwDIGAACaLQAiGFMFchgmBEAJDFQ1AIkKRKAAlhfkCM=</HashCode>
+      <FileName>Terminal\Terminal.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="YAT.Domain.DisplayElement">
+    <Position X="9.5" Y="18.75" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="YAT.Domain.DisplayElement.RxControl" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.DisplayElement.RxData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.DisplayElement.Length" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.DisplayElement.LineBreak" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.DisplayElement.Error" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.DisplayElement.TxControl" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.DisplayElement.TxData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.DisplayElement.NoData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.DisplayElement.DateInfo" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.DisplayElement.TimeInfo" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.DisplayElement.DataSpace" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.DisplayElement.InfoSpace" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>CAAAgIAAAAAAIQAEACAAAAAEAAAgAwAIIAICSAgAAFA=</HashCode>
+      <FileName>Terminal\DisplayElement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YAT.Domain.RawChunk">
+    <Position X="20.5" Y="14.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAMAAEACAAAAAAAgAAABAAAAAQAAAAAAA=</HashCode>
+      <FileName>RawTerminal\RawChunk.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YAT.Domain.RawRepository">
+    <Position X="17.75" Y="14.75" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AADAAAAAAAAAEAAEAIJAAAACAABAAAAAAAAAAABAAQA=</HashCode>
+      <FileName>RawTerminal\RawRepository.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YAT.Domain.RawTerminal">
+    <Position X="17.75" Y="2" Width="2.5" />
+    <Members>
+      <Method Name="~RawTerminal" Hidden="true" />
+      <Method Name="ApplyBufferSettings" Hidden="true" />
+      <Method Name="ApplyIOSettings" Hidden="true" />
+      <Method Name="AssertNotDisposed" Hidden="true" />
+      <Method Name="AttachBufferSettings" Hidden="true" />
+      <Method Name="AttachIO" Hidden="true" />
+      <Method Name="AttachIOSettings" Hidden="true" />
+      <Method Name="DetachBufferSettings" Hidden="true" />
+      <Method Name="DetachIO" Hidden="true" />
+      <Method Name="DetachIOSettings" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>IiQACCgCILAAgChFGEhA0BEAJABIUAIBIBGAAhkyEAE=</HashCode>
+      <FileName>RawTerminal\RawTerminal.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="YAT.Domain.BinaryTerminal">
+    <Position X="10" Y="10.5" Width="3" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="YAT.Domain.BinaryTerminal.LineBreakTimer" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>BinaryTerminal\BinaryTerminal.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+      <Enum Name="YAT.Domain.BinaryTerminal.LinePosition" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>BinaryTerminal\BinaryTerminal.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Class Name="YAT.Domain.BinaryTerminal.LineState" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>BinaryTerminal\BinaryTerminal.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.BinaryTerminal.BidirLineState" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>BinaryTerminal\BinaryTerminal.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AQiAAAgAAKgAAYCMAACIAAAIECIAFAAAABAEBAAAAIA=</HashCode>
+      <FileName>BinaryTerminal\BinaryTerminal.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YAT.Domain.Parser.SubstitutionParser">
+    <Position X="0.5" Y="9.5" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AMAgAAAAACAAQgAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TextTerminal\SubstitutionParser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YAT.Domain.Parser.Parser">
+    <Position X="0.75" Y="2.25" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="YAT.Domain.Parser.Parser.ParserState" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Parser\Parser.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+      <Class Name="YAT.Domain.Parser.Parser.DefaultState" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Parser\Parser.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.Parser.Parser.EscapeState" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Parser\Parser.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.Parser.Parser.OpeningState" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Parser\Parser.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.Parser.Parser.AsciiMnemonicState" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Parser\Parser.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.Parser.Parser.NestedState" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Parser\Parser.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>BMJggBCCJCBQIEAAEAQkQBICggAEIMBGABAEBAASAAA=</HashCode>
+      <FileName>Parser\Parser.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="YAT.Domain.TextTerminal">
+    <Position X="10" Y="3.75" Width="3" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="YAT.Domain.TextTerminal.LinePosition" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>TextTerminal\TextTerminal.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Class Name="YAT.Domain.TextTerminal.LineState" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>TextTerminal\TextTerminal.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.TextTerminal.BidirLineState" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>TextTerminal\TextTerminal.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.TextTerminal.LineSendDelayState" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>TextTerminal\TextTerminal.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.TextTerminal.LineSendDelayThread" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>TextTerminal\TextTerminal.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AICAABAAAKgCAYCMAEAIEAAAASIABAAgABAAAAAiAIE=</HashCode>
+      <FileName>TextTerminal\TextTerminal.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YAT.Domain.DisplayRepository">
+    <Position X="6.5" Y="18.75" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAEAAIAgAQCAAAACAAEAAAAQADAAEA=</HashCode>
+      <FileName>Terminal\DisplayRepository.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="YAT.Domain.Eol">
+    <Position X="13.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAABAAAgAAAAAAAAAAAASAAAAAACAAAAAAEAAAA=</HashCode>
+      <FileName>Eol.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Tahoma" Size="9.75" />
+</ClassDiagram>

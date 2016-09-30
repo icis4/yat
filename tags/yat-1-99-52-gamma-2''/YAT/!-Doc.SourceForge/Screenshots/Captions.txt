@@ -1,0 +1,6 @@
+Welcome to YAT
+Terminal Monitor
+Terminal Settings - Serial Port
+Terminal Settings - TCP, UDP and USB
+Terminal Settings - Text or Binary
+Terminal Settings - Advanced

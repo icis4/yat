@@ -1,0 +1,166 @@
+Return-path: <michael.plante@gmail.com>
+Received: from MailExchange.mymail.ch (MailExchange.mymail.ch [194.230.79.125]) by mail.mymail.ch
+ (Rockliffe SMTPRA 9.2.0) with ESMTP id <B0144299719@mail.mymail.ch> for <matthias.klaey@my-mail.ch>;
+ Mon, 5 Apr 2010 22:14:51 +0200
+X-MailShell-Summary:
+X-MailShell-Blacklists: none
+X-MailShell-Phishing: no
+X-MailShell-Countries: ch,us,us,us
+X-MailShell-Charsets: iso-8859-15
+X-MailShell-Score: 1
+Received: from mx.sourceforge.net (MailDefense.xmc.ch [193.33.142.181]) by MailExchange.mymail.ch
+ (Rockliffe SMTPRA 9.2.0) with ESMTP id <B0052670352@MailExchange.mymail.ch> for <matthias.klaey@my-mail.ch>;
+ Mon, 5 Apr 2010 22:14:53 +0200
+Received: from mx.sourceforge.net (mx.sourceforge.net [216.34.181.68])
+	by MailDefense.xmc.ch with SpamAssassin 3.3.1;
+	Mon, 05 Apr 2010 22:14:42 +0200
+Received-SPF: pass (sfi-mx-3.v28.ch3.sourceforge.com: domain of gmail.com designates 74.125.83.179 as permitted sender) client-ip=74.125.83.179; envelope-from=michael.plante@gmail.com; helo=mail-pv0-f179.google.com;
+Received: from mail-pv0-f179.google.com ([74.125.83.179])
+	by sfi-mx-3.v28.ch3.sourceforge.com with esmtp 
+	(Exim 4.69)
+	id 1Nysgu-00069b-Ll; Mon, 05 Apr 2010 20:14:38 +0000
+Received: by pvg12 with SMTP id 12so2031318pvg.24
+        for <multiple recipients>; Mon, 05 Apr 2010 13:14:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:received:received:reply-to:from:to:cc:subject
+         :date:message-id:mime-version:content-type:content-transfer-encoding
+         :x-priority:x-msmail-priority:x-mailer:x-mimeole:in-reply-to
+         :importance:disposition-notification-to;
+        bh=k6ozTEm5CsyYZEGhQXX1+MEdx24rCRLj6uGdZ6H9DCE=;
+        b=hrGyasJgkVvag0powmEYyY57ndKDrILLPZrQSZYu3Trr/OVNzEYgCdIc7VoCpDb2L6
+         hBZaJDWuG9YwJx1qxADgCr8RwmoaL1OjkTtBxA2cB7jiFmBKEkCfapKo9HPybYjX4Azg
+         xcKGLh2oCXJkcLr3BSwUQGrpC2xoHuqjCFgWc=
+DomainKey-Signature: a=rsa-sha1; c=nofws;
+        d=gmail.com; s=gamma;
+        h=reply-to:from:to:cc:subject:date:message-id:mime-version
+         :content-type:content-transfer-encoding:x-priority:x-msmail-priority
+         :x-mailer:x-mimeole:in-reply-to:importance
+         :disposition-notification-to;
+        b=EPoEQEiLIkkG/DVjGiSSXWbyx+SnlBswJTus/jVtqfzAUjXnxaGJpNwyVoqidHTkxN
+         ie5hYmN9wLkxr3XPa8UqXTeYwnzf4w46uT9/+ZHVc75/8l7eROgw7ApmYOnCVAKgSGpf
+         DN9lLseSfH6jWg9yv06U/ADNTnvEqHgAXG6Ro=
+Received: by 10.142.7.41 with SMTP id 41mr2118411wfg.320.1270498469951;
+        Mon, 05 Apr 2010 13:14:29 -0700 (PDT)
+Received: from mkpmachine (adsl-70-234-234-122.dsl.rcsntx.sbcglobal.net [70.234.234.122])
+        by mx.google.com with ESMTPS id 20sm4808709iwn.9.2010.04.05.13.14.27
+        (version=SSLv3 cipher=RC4-MD5);
+        Mon, 05 Apr 2010 13:14:28 -0700 (PDT)
+Reply-To: <michael.plante@gmail.com>
+From: "Michael Plante" <michael.plante@gmail.com>
+To: "Travis" <travis_robinson@comcast.net>,
+	"maettu_this" <maettu_this@users.sourceforge.net>,
+	"Pete Batard" <pbatard@gmail.com>
+Cc: <dsd@gentoo.org>,
+	<hjelmn@users.sourceforge.net>
+Subject: RE: libusb.NET
+Date: Mon, 5 Apr 2010 15:13:09 -0500
+Message-ID: <HKEDKEEGPPEOHLHHEPEDIEDBCFAA.michael.plante@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="ISO-8859-15"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3 (Normal)
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook IMO, Build 9.0.6604 (9.0.2911.0)
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2900.5579
+In-Reply-To: <B7BFA063C8244EA59FA206826EABF356@TravisXP>
+Importance: Normal
+Disposition-Notification-To: "Michael Plante" <michael.plante@gmail.com>
+X-Spam-Score: -1.4 (-)
+X-Spam-Report: Spam Filtering performed by mx.sourceforge.net.
+	See http://spamassassin.org/tag/ for more details.
+	-1.5 SPF_CHECK_PASS         SPF reports sender host as permitted sender for
+	sender-domain
+	-0.0 SPF_PASS               SPF: sender matches SPF record
+	-0.0 DKIM_VERIFIED          Domain Keys Identified Mail: signature passes
+	verification
+	0.0 DKIM_SIGNED            Domain Keys Identified Mail: message has a signature
+	0.1 AWL                    AWL: From: address is in the auto white-list
+X-Headers-End: 1Nysgu-00069b-Ll
+
+Guys, please send further emails about this to libusb-devel.  Private email
+was *maybe* appropriate for the hosting questions, but not this stuff.
+
+
+
+
+-----Original Message-----
+From: Travis [mailto:travis_robinson@comcast.net]
+Sent: Monday, April 05, 2010 2:40 PM
+To: maettu_this; Pete Batard
+Cc: dsd@gentoo.org; hjelmn@users.sourceforge.net; michael.plante@gmail.com
+Subject: Re: libusb.NET
+
+
+Greetings,
+
+> maettu_this Wrote:
+> This is it! An indeed nice piece of work what Travis did, looks like he
+> really understands what he's doing. And way more complete than what I've
+> seen before.
+
+
+Travis Write:
+LibUsbDotNet can use libusb-1.0 in two different ways:
+ A simpler, but more restrictive higher level interface. (libusb-1.0,
+libusb-win32, native WinUSB) Example: LibUsbDotNet - ShowInfo  (also see the
+ForceLibUsbWinBack member)
+ The lower-level LibUsbDotNet MonoLibUsb api. (libusb-1.0 only - full api
+implementation) Example: MonoLibUsb - ShowInfo
+Note : libusb-1.0 is progressing very fast.  It now supports libusb-win32 as
+well.  In the future, LibUsbDotNet will implement only Libusb-1.0 and WinUSB
+support natively; the libusb-1.0 api will be used to support libusb-win32.
+
+ If you find thing something is missing in the library, please let me now so
+I can implement it.  FYI, I could not find your libusb.net anywhere in the
+YAT repository. (probably a non-issue now)
+
+> maettu_this Wrote:
+> Knowing of the existence of 'LibUsbDotNet' there is no more need for the
+> 'libusb.NET' I began with. I am wondering, why neither...
+> > http://www.libusb.org/
+> > http://www.libusb.org/wiki/windows_backend
+> > http://libusb-win32.sourceforge.net/
+> > http://sourceforge.net/projects/libusb-win32/
+> ...mentions 'LibUsbDotNet'? I spent quite some time searching the web
+> for such library but apparently never came across 'LibUsbDotNet'. I
+> strongly recommend that either http://www.libusb.org/ or a subsite
+> prominently refers to 'LibUsbDotNet'.
+
+Travis Write:
+I thought it was.. Apologies.. Pass the word! LibUsbDotNet was started in
+2006. Its a multi-driver/multi-platform USB Library for .NET
+
+> maettu_this Wrote:
+> By the way, Travis, why does "LibUsbDotNet.sln" contain separate Win32
+> configurations? I haven't found any reason for those since
+> 'LibUsbDotNet' seems completely platform independent.
+
+Travis Write:
+LibUsbDotNet Release build are always 'Any CPU' .  LibUsbDotNet is pure
+(safe) CLR code, the JIT binaries runs as native 32bit/64bit depending on
+the platform.  In most cases this is optimal. however, a problem arises when
+a 32bit application attempts to use LibUsbDotNet on a 64 bit platform.  This
+is why the Win32 configuration exist.  Building the Win32 configuration will
+force 32bit allowing LibUsbDotNet to work for a 32bit-only application on a
+64 bit platform.
+
+> maettu_this Wrote:
+> Hot plug-out is crucial to properly detect when a device is disconnected
+> and the serial communication port needs to be closed. Hot plug-in is a
+> nice-to-have to get the serial communication port automatically reopen
+> as soon as the device is again connected.
+> Both especially come into play when a device is rebooted to whatever
+> reason, e.g. after a firmware update or configuration parameter loading.
+
+Travis Write:
+LibUsbDotNet has a device notifier that works on all platforms (arrival and
+removal notifications).  The Linux implementation may not be as solid as
+windows; I hope to see this implemented in the ibusb-1.0 api in the future.
+(hint.. hint..)
+
+Regards,
+Travis
+
+
