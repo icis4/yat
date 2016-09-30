@@ -276,7 +276,7 @@ namespace MKY.Time
 			{
 				try
 				{
-					// Ensure not to forward events during closing anymore.
+					// Ensure not to forward events during closing anymore:
 					if (!this.isDisposed && (this.timer != null) && this.timer.Enabled)
 					{
 						OnTimeSpanChanged(new TimeSpanEventArgs(CalculateTimeSpan(e.SignalTime)));

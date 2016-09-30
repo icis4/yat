@@ -63,6 +63,7 @@ namespace YAT.Domain
 
 			private int timeout;
 			private System.Threading.Timer timer;
+			private object timerSyncObj = new object();
 
 			/// <summary></summary>
 			public event EventHandler Elapsed;
@@ -170,20 +171,38 @@ namespace YAT.Domain
 
 			private void CreateAndStartTimer()
 			{
-				this.timer = new System.Threading.Timer(new System.Threading.TimerCallback(timer_Timeout), null, this.timeout, System.Threading.Timeout.Infinite);
+				lock (this.timerSyncObj)
+				{
+					if (this.timer == null)
+					{
+						this.timer = new System.Threading.Timer(new System.Threading.TimerCallback(timer_Timeout), null, this.timeout, System.Threading.Timeout.Infinite);
+					}
+				}
 			}
 
 			private void StopAndDisposeTimer()
 			{
-				if (this.timer != null)
+				lock (this.timerSyncObj)
 				{
-					this.timer.Dispose();
-					this.timer = null;
+					if (this.timer != null)
+					{
+						this.timer.Dispose();
+						this.timer = null;
+					}
 				}
 			}
 
 			private void timer_Timeout(object obj)
 			{
+				// Non-periodic timer, only a single timeout event thread can be active at a time.
+				// There is no need to synchronize callbacks to this event handler.
+
+				lock (this.timerSyncObj)
+				{
+					if ((this.timer == null) || (this.isDisposed))
+						return; // Handle overdue event callbacks.
+				}
+
 				Stop();
 				OnTimeout(EventArgs.Empty);
 			}

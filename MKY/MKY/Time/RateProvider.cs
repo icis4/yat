@@ -24,6 +24,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 
 using MKY.Diagnostics;
 
@@ -276,11 +277,11 @@ namespace MKY.Time
 			// execution takes longer than the timer interval, more and more timer threads will pend
 			// here, and then be executed after the previous has been executed. This will require
 			// more and more resources and lead to a drop in performance.
-			if (System.Threading.Monitor.TryEnter(timer_Elapsed_SyncObj)) // Not using 'System.Threading' to prevent conflicts with 'System.Timers'.
+			if (Monitor.TryEnter(timer_Elapsed_SyncObj))
 			{
 				try
 				{
-					// Ensure not to forward events during closing anymore.
+					// Ensure not to forward events during closing anymore:
 					if (!this.isDisposed && (this.updateTicker != null) && this.updateTicker.Enabled)
 					{
 						Update(e.SignalTime);
@@ -288,7 +289,7 @@ namespace MKY.Time
 				}
 				finally
 				{
-					System.Threading.Monitor.Exit(timer_Elapsed_SyncObj); // Not using 'System.Threading' to prevent conflicts with 'System.Timers'.
+					Monitor.Exit(timer_Elapsed_SyncObj);
 				}
 			} // Monitor.TryEnter()
 		}
