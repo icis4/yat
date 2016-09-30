@@ -100,6 +100,8 @@ namespace YAT.View.Forms
 			this.settings = settings;
 			this.settingsInEdit = new Log.Settings.LogSettings(settings);
 			this.settingsInEdit.Changed += settings_Form_Changed;
+
+			// Note that extensions are handled via 'ApplicationSettings'.
 		}
 
 		private void DetachAndAcceptSettings()
@@ -409,6 +411,9 @@ namespace YAT.View.Forms
 				== DialogResult.Yes)
 			{
 				this.settingsInEdit.SetDefaults();
+
+				// Note that extensions are handled via 'ApplicationSettings'.
+				// The 'ApplicationSettings' can only be reset to defaults via the 'Preferences' dialog.
 			}
 		}
 
@@ -593,10 +598,11 @@ namespace YAT.View.Forms
 				(!(this.settingsInEdit.FolderFormat || this.settingsInEdit.NameFormat)))
 			{
 				string message =
-					"To avoid naming conflicts, files must either be placed in format folders or named by format or have different extensions. " +
+					"To avoid naming conflicts, files must either be named by format or separated into format folders (Raw/Neat) or have different extensions." +
 					Environment.NewLine + Environment.NewLine +
-					"Do you want to place the files in folders (Yes) or name them by format (No)? You may also cancel and" +
-					"set different extensions.";
+					"Do you want to name the files by format (Yes) or separate them into folders (No)?" +
+					Environment.NewLine + Environment.NewLine +
+					"You may also cancel and set different extensions, or manually change the settings.";
 
 				switch (MessageBoxEx.Show
 					(
@@ -607,8 +613,8 @@ namespace YAT.View.Forms
 					MessageBoxIcon.Question
 					))
 				{
-					case DialogResult.Yes: this.settingsInEdit.FolderFormat = true; break;
-					case DialogResult.No:  this.settingsInEdit.NameFormat   = true; break;
+					case DialogResult.Yes: this.settingsInEdit.NameFormat   = true; break;
+					case DialogResult.No:  this.settingsInEdit.FolderFormat = true; break;
 					default: return (false);
 				}
 			}
@@ -617,9 +623,11 @@ namespace YAT.View.Forms
 				(!(this.settingsInEdit.FolderChannel || this.settingsInEdit.NameChannel)))
 			{
 				string message =
-					"To avoid naming conflicts, files must either be placed in channel " +
-					"folders or named by channel (Tx/Bidir/Rx). Do you want to place " +
-					"the files in folders (Yes) or name them by channel (No)?";
+					"To avoid naming conflicts, files must either be named by channel or separated into channel folders (Tx/Bidir/Rx)." +
+					Environment.NewLine + Environment.NewLine +
+					"Do you want to name the files by channel (Yes) or separate them into folders (No)?" +
+					Environment.NewLine + Environment.NewLine +
+					"You may also cancel and manually change the settings.";
 
 				switch (MessageBoxEx.Show
 					(
@@ -630,11 +638,12 @@ namespace YAT.View.Forms
 					MessageBoxIcon.Question
 					))
 				{
-					case DialogResult.Yes: this.settingsInEdit.FolderChannel = true; break;
-					case DialogResult.No: this.settingsInEdit.NameChannel = true; break;
+					case DialogResult.Yes: this.settingsInEdit.NameChannel   = true; break;
+					case DialogResult.No:  this.settingsInEdit.FolderChannel = true; break;
 					default: return (false);
 				}
 			}
+
 			return (true);
 		}
 

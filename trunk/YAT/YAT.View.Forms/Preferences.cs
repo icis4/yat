@@ -192,7 +192,7 @@ namespace YAT.View.Forms
 			if (MessageBoxEx.Show
 				(
 				this,
-				"Reset all settings to default values?",
+				"Reset all application preferences to default values?",
 				"Defaults?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,

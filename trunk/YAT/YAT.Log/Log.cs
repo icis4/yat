@@ -283,7 +283,7 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		public virtual void Truncate()
+		public virtual void Clear()
 		{
 			if (this.isEnabled && this.isOn)
 			{

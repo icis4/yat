@@ -33,6 +33,7 @@ namespace YAT.View.Forms
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogSettings));
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
@@ -170,7 +171,7 @@ namespace YAT.View.Forms
 			// button_RootOpen
 			// 
 			this.button_RootOpen.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_folder_explorer_16x16;
-			this.button_RootOpen.Location = new System.Drawing.Point(465, 19);
+			this.button_RootOpen.Location = new System.Drawing.Point(460, 19);
 			this.button_RootOpen.Name = "button_RootOpen";
 			this.button_RootOpen.Size = new System.Drawing.Size(31, 23);
 			this.button_RootOpen.TabIndex = 3;
@@ -181,9 +182,9 @@ namespace YAT.View.Forms
 			// pathLabel_Root
 			// 
 			this.pathLabel_Root.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pathLabel_Root.Location = new System.Drawing.Point(72, 20);
+			this.pathLabel_Root.Location = new System.Drawing.Point(53, 20);
 			this.pathLabel_Root.Name = "pathLabel_Root";
-			this.pathLabel_Root.Size = new System.Drawing.Size(340, 20);
+			this.pathLabel_Root.Size = new System.Drawing.Size(354, 20);
 			this.pathLabel_Root.TabIndex = 1;
 			this.pathLabel_Root.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolTip.SetToolTip(this.pathLabel_Root, "The root file specifies file name and root directory for all log files. The effec" +
@@ -199,7 +200,7 @@ namespace YAT.View.Forms
 			this.groupBox_Options_Folders.Size = new System.Drawing.Size(161, 75);
 			this.groupBox_Options_Folders.TabIndex = 7;
 			this.groupBox_Options_Folders.TabStop = false;
-			this.groupBox_Options_Folders.Text = "Create F&olders";
+			this.groupBox_Options_Folders.Text = "Create &Folders";
 			// 
 			// checkBox_Options_FolderFormat
 			// 
@@ -337,15 +338,15 @@ namespace YAT.View.Forms
 			// label_Root
 			// 
 			this.label_Root.AutoSize = true;
-			this.label_Root.Location = new System.Drawing.Point(17, 24);
+			this.label_Root.Location = new System.Drawing.Point(14, 24);
 			this.label_Root.Name = "label_Root";
-			this.label_Root.Size = new System.Drawing.Size(49, 13);
+			this.label_Root.Size = new System.Drawing.Size(33, 13);
 			this.label_Root.TabIndex = 0;
-			this.label_Root.Text = "Root &file:";
+			this.label_Root.Text = "R&oot:";
 			// 
 			// button_Root
 			// 
-			this.button_Root.Location = new System.Drawing.Point(424, 19);
+			this.button_Root.Location = new System.Drawing.Point(419, 19);
 			this.button_Root.Name = "button_Root";
 			this.button_Root.Size = new System.Drawing.Size(31, 23);
 			this.button_Root.TabIndex = 2;
@@ -433,9 +434,7 @@ namespace YAT.View.Forms
 			this.comboBox_Raw_Extension.Name = "comboBox_Raw_Extension";
 			this.comboBox_Raw_Extension.Size = new System.Drawing.Size(72, 21);
 			this.comboBox_Raw_Extension.TabIndex = 7;
-			this.toolTip.SetToolTip(this.comboBox_Raw_Extension, "Either select a preset from the list, or fill in any valid extension.\r\n\\ / : * ? " +
-        "\" < > | are invalid characters.\r\n\r\nContact YAT via \"Help > Request Feature\" to r" +
-        "equest additional presets.");
+			this.toolTip.SetToolTip(this.comboBox_Raw_Extension, resources.GetString("comboBox_Raw_Extension.ToolTip"));
 			this.comboBox_Raw_Extension.TextChanged += new System.EventHandler(this.comboBox_Raw_Extension_TextChanged);
 			this.comboBox_Raw_Extension.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Raw_Extension_Validating);
 			// 
@@ -529,9 +528,7 @@ namespace YAT.View.Forms
 			this.comboBox_Neat_Extension.Name = "comboBox_Neat_Extension";
 			this.comboBox_Neat_Extension.Size = new System.Drawing.Size(72, 21);
 			this.comboBox_Neat_Extension.TabIndex = 7;
-			this.toolTip.SetToolTip(this.comboBox_Neat_Extension, "Either select a preset from the list, or fill in any valid extension.\r\n\\ / : * ? " +
-        "\" < > | are invalid characters.\r\n\r\nContact YAT via \"Help > Request Feature\" to r" +
-        "equest additional presets.");
+			this.toolTip.SetToolTip(this.comboBox_Neat_Extension, resources.GetString("comboBox_Neat_Extension.ToolTip"));
 			this.comboBox_Neat_Extension.TextChanged += new System.EventHandler(this.comboBox_Neat_Extension_TextChanged);
 			this.comboBox_Neat_Extension.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Neat_Extension_Validating);
 			// 
