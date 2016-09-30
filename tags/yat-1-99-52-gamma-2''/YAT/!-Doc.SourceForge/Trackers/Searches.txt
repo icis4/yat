@@ -1,9 +1,0 @@
-﻿
-1 - New					status:unread OR assigned_to:""
-2 - Open Ongoing		(status:open* OR status:pending) AND _priority:[7 TO 9]
-3 - Open				status:open* OR status:pending
-4 - Closed				status:closed* OR status:wont-fix
-5 - Closed Rejected		status:closed-rejected OR status:wont-fix
-6 - All					!status:dummy
-
-Not possible to nicely set order of columns and sort...
