@@ -52,7 +52,11 @@ namespace MKY.Settings
 	/// Also note that this class intentionally doesn't implement <see cref="IDisposable"/>. That
 	/// would unnecessarily complicate the handling of settings item, e.g. in a settings dialog,
 	/// as code analysis requires that <see cref="IDisposable"/> are indeed disposed of.
+	/// 
+	/// Finally note that <see cref="Serializable"/> is required to allow reflection using e.g.
+	/// <see cref="System.Runtime.Serialization.FormatterServices.GetSerializableMembers"/>.
 	/// </remarks>
+	[Serializable]
 	public abstract class SettingsItem : IEquatable<SettingsItem>
 	{
 		private SettingsType settingsType;
