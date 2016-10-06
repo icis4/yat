@@ -53,8 +53,8 @@ namespace MKY.Settings
 	/// would unnecessarily complicate the handling of settings item, e.g. in a settings dialog,
 	/// as code analysis requires that <see cref="IDisposable"/> are indeed disposed of.
 	/// 
-	/// Finally note that <see cref="Serializable"/> is required to allow reflection using e.g.
-	/// <see cref="System.Runtime.Serialization.FormatterServices.GetSerializableMembers"/>.
+	/// Finally note that the 'Serializable' attribute is required to allow reflection using e.g.
+	/// <see cref="System.Runtime.Serialization.FormatterServices.GetSerializableMembers(Type)"/>.
 	/// </remarks>
 	[Serializable]
 	public abstract class SettingsItem : IEquatable<SettingsItem>

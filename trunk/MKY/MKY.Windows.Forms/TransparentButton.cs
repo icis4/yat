@@ -3,10 +3,10 @@
 // Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/MKY/MKY.Windows.Forms/ToolStripEx.cs $
-// $Author: klaey-1 $
-// $Date: 2016/09/19 15:12:00MESZ $
-// $Revision: 1.1 $
+// $URL$
+// $Author$
+// $Date$
+// $Revision$
 // ------------------------------------------------------------------------------------------------
 // MKY Version 1.0.17
 // ------------------------------------------------------------------------------------------------
@@ -168,7 +168,7 @@ namespace MKY.Windows.Forms
 		/// Paints the background of the control.
 		/// </summary>
 		/// <param name="e">A <see cref="PaintEventArgs"/> that contains information about the control to paint.</param>
-		[SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration", MessageId="0#", Justification = "'pevent'? What weird name is this, sorry .NET guys...")]
+		[SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration", MessageId = "0#", Justification = "'pevent'? What weird name is this, sorry .NET guys...")]
 		protected override void OnPaintBackground(PaintEventArgs e)
 		{
 			// Draw border as requested:
@@ -275,5 +275,5 @@ namespace MKY.Windows.Forms
 
 //==================================================================================================
 // End of
-// $URL: http://svn.code.sf.net/p/y-a-terminal/code/trunk/MKY/MKY.Windows.Forms/PathLabel.cs $
+// $URL$
 //==================================================================================================
