@@ -90,6 +90,10 @@ namespace MKY
 		/// </summary>
 		public static bool EqualsOrdinal(string[] strA, string[] strB)
 		{
+			if (ReferenceEquals(strA, strB)) return (true);
+			if (ReferenceEquals(strA, null)) return (false);
+			if (ReferenceEquals(strB, null)) return (false);
+
 			if (strA.Length == strB.Length)
 			{
 				for (int i = 0; i < strA.Length; i++)
@@ -118,6 +122,10 @@ namespace MKY
 		/// </summary>
 		public static bool EqualsOrdinalIgnoreCase(string[] strA, string[] strB)
 		{
+			if (ReferenceEquals(strA, strB)) return (true);
+			if (ReferenceEquals(strA, null)) return (false);
+			if (ReferenceEquals(strB, null)) return (false);
+
 			if (strA.Length == strB.Length)
 			{
 				for (int i = 0; i < strA.Length; i++)

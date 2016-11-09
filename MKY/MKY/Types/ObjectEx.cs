@@ -37,6 +37,22 @@ namespace MKY
 		/// An invalid comparison result is represented by -1.
 		/// </summary>
 		public const int InvalidComparisonResult = -1;
+
+		/// <summary>
+		/// Compares two specified objects.
+		/// </summary>
+		/// <remarks>
+		/// This method is simply a wrapper to <see cref="object.Equals(object, object)"/>. It can
+		/// be used to implement an overloaded Equals() method. Calling this method is preferred
+		/// over directly calling <see cref="object.Equals(object, object)"/> or the respective base
+		/// method <see cref="System.Object.Equals(object, object)"/> to prevent code check from
+		/// suggesting to simply call <see cref="Equals(object, object)"/> as that could result in
+		/// an unintended call stack as soon as a class overloads that method.
+		/// </remarks>
+		public static new bool Equals(object objA, object objB)
+		{
+			return (object.Equals(objA, objB));
+		}
 	}
 }
 
