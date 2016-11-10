@@ -98,7 +98,7 @@ namespace MKY
 			{
 				for (int i = 0; i < strA.Length; i++)
 				{
-					if (EqualsOrdinal(strA[i], strB[i]))
+					if (!EqualsOrdinal(strA[i], strB[i]))
 						return (false);
 				}
 				return (true);
@@ -130,7 +130,7 @@ namespace MKY
 			{
 				for (int i = 0; i < strA.Length; i++)
 				{
-					if (EqualsOrdinalIgnoreCase(strA[i], strB[i]))
+					if (!EqualsOrdinalIgnoreCase(strA[i], strB[i]))
 						return (false);
 				}
 				return (true);
