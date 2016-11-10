@@ -168,6 +168,10 @@ namespace MKY.Windows.Forms
 		// Controls Event Handlers
 		//==========================================================================================
 
+		/// <remarks>
+		/// This 'Windows.Forms.Timer' event handler will be called on the application main thread,
+		/// i.e. is single-threaded. No synchronization or prevention of a race condition is needed.
+		/// </remarks>
 		private void timer_Chronometer_Tick(object sender, EventArgs e)
 		{
 			OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));

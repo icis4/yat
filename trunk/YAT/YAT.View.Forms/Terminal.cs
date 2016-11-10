@@ -3824,6 +3824,10 @@ namespace YAT.View.Forms
 			timer_IOStatusIndicator.Enabled = true;
 		}
 
+		/// <remarks>
+		/// This 'Windows.Forms.Timer' event handler will be called on the application main thread,
+		/// i.e. is single-threaded. No synchronization or prevention of a race condition is needed.
+		/// </remarks>
 		private void timer_IOStatusIndicator_Tick(object sender, EventArgs e)
 		{
 			if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag != null)
@@ -4197,6 +4201,10 @@ namespace YAT.View.Forms
 			timer_RfrLuminescence.Enabled = true;
 		}
 
+		/// <remarks>
+		/// This 'Windows.Forms.Timer' event handler will be called on the application main thread,
+		/// i.e. is single-threaded. No synchronization or prevention of a race condition is needed.
+		/// </remarks>
 		private void timer_RfrLuminescence_Tick(object sender, EventArgs e)
 		{
 			timer_RfrLuminescence.Enabled = false;
@@ -4326,6 +4334,10 @@ namespace YAT.View.Forms
 			SetFixedStatus(Status.Default);
 		}
 
+		/// <remarks>
+		/// This 'Windows.Forms.Timer' event handler will be called on the application main thread,
+		/// i.e. is single-threaded. No synchronization or prevention of a race condition is needed.
+		/// </remarks>
 		private void timer_StatusText_Tick(object sender, EventArgs e)
 		{
 			timer_StatusText.Enabled = false;

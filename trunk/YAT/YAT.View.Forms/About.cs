@@ -401,6 +401,10 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <remarks>
+		/// This 'Windows.Forms.Timer' event handler will be called on the application main thread,
+		/// i.e. is single-threaded. No synchronization or prevention of a race condition is needed.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Justification = "Intentionally raising the most general exception to ensure that EVERY exception handler really catches it.")]
 		private void timer_ExecuteManualTest2_Tick(object sender, EventArgs e)
 		{

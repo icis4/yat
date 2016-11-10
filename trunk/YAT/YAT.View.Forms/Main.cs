@@ -2247,6 +2247,10 @@ namespace YAT.View.Forms
 				SetFixedStatus(Status.Default);
 		}
 
+		/// <remarks>
+		/// This 'Windows.Forms.Timer' event handler will be called on the application main thread,
+		/// i.e. is single-threaded. No synchronization or prevention of a race condition is needed.
+		/// </remarks>
 		private void timer_Status_Tick(object sender, EventArgs e)
 		{
 			timer_Status.Enabled = false;
