@@ -845,12 +845,20 @@ namespace YAT.View.Controls
 			fastListBox_Monitor.ClearSelected();
 		}
 
+		/// <remarks>
+		/// This 'Windows.Forms.Timer' event handler will be called on the application main thread,
+		/// i.e. is single-threaded. No synchronization or prevention of a race condition is needed.
+		/// </remarks>
 		private void timer_MonitorUpdateTimeout_Tick(object sender, EventArgs e)
 		{
 			StopMonitorUpdateTimeout();
 			UpdateFastListBoxWithPendingElementsAndLines();
 		}
 
+		/// <remarks>
+		/// This 'Windows.Forms.Timer' event handler will be called on the application main thread,
+		/// i.e. is single-threaded. No synchronization or prevention of a race condition is needed.
+		/// </remarks>
 		private void timer_DataStatusUpdateTimeout_Tick(object sender, EventArgs e)
 		{
 			StopDataStatusUpdateTimeout();
@@ -860,6 +868,10 @@ namespace YAT.View.Controls
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private int timer_ProcessorLoad_Tick_LastValue = 100;
 
+		/// <remarks>
+		/// This 'Windows.Forms.Timer' event handler will be called on the application main thread,
+		/// i.e. is single-threaded. No synchronization or prevention of a race condition is needed.
+		/// </remarks>
 		private void timer_ProcessorLoad_Tick(object sender, EventArgs e)
 		{
 			// Calculate average of last two samples:
@@ -872,6 +884,10 @@ namespace YAT.View.Controls
 			CalculateUpdateRates(averageValue);
 		}
 
+		/// <remarks>
+		/// This 'Windows.Forms.Timer' event handler will be called on the application main thread,
+		/// i.e. is single-threaded. No synchronization or prevention of a race condition is needed.
+		/// </remarks>
 		private void timer_Opacity_Tick(object sender, EventArgs e)
 		{
 			if (this.imageOpacityState != OpacityState.Inactive)
