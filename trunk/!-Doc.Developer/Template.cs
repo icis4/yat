@@ -65,13 +65,6 @@ namespace YAT/*.<TODO>*/
 
 		#endregion
 
-		#region Constant Help Text
-		//==========================================================================================
-		// Constant Help Text
-		//==========================================================================================
-
-		#endregion
-
 		#region Static Fields
 		//==========================================================================================
 		// Static Fields
@@ -300,6 +293,38 @@ namespace YAT/*.<TODO>*/
 		//==========================================================================================
 
 		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		public override string ToString()
+		{
+			return ("TODO");
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // !!! If derived from other than 'Object', otherwise remove !!!
+
+			//	hashCode =                     IntegerProperty;
+			//	hashCode = (hashCode * 397) ^  IntegerProperty;
+			//	hashCode = (hashCode * 397) ^  BooleanOrNumericOrEnumOrStructProperty               .GetHashCode();
+			//	hashCode = (hashCode * 397) ^ (ArrayProperty         != null ? ArrayProperty        .GetHashCode() : 0);
+			//	hashCode = (hashCode * 397) ^ (StringProperty        != null ? StringProperty       .GetHashCode() : 0);
+			//	hashCode = (hashCode * 397) ^ (ReferenceTypeProperty != null ? ReferenceTypeProperty.GetHashCode() : 0);
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		public override bool Equals(object obj)
@@ -337,50 +362,32 @@ namespace YAT/*.<TODO>*/
 				// Do not call 'base.Equals(other)' when deriving from 'Object'.
 
 				TODO.Equals(other.TODO)
+			//	!!! For value types only !!!
 			//	Property1.Equals(other.Property1)
 			//	...
 			//	PropertyN.Equals(other.PropertyN)
+			//	...
+			//	!!! For reference types !!!
+			//	ArrayEx.ValuesEqual(ArrayProperty, other.ArrayProperty)
+			//	StringEx.EqualsOrdinal(StringProperty, other.StringProperty)
+			//	ObjectEx.Equals(ReferenceTypeProperty, other.ReferenceTypeProperty)
 			);
 		}
 
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode = base.GetHashCode(); // !!! If derived from other than 'Object', otherwise remove !!!
-
-			//	hashCode =                     IntegerProperty;
-			//	hashCode = (hashCode * 397) ^  IntegerProperty;
-			//	hashCode = (hashCode * 397) ^  BooleanOrNumericOrEnumOrStructProperty               .GetHashCode();
-			//	hashCode = (hashCode * 397) ^ (ArrayProperty         != null ? ArrayProperty        .GetHashCode() : 0);
-			//	hashCode = (hashCode * 397) ^ (StringProperty        != null ? StringProperty       .GetHashCode() : 0);
-			//	hashCode = (hashCode * 397) ^ (ReferenceTypeProperty != null ? ReferenceTypeProperty.GetHashCode() : 0);
-
-				return (hashCode);
-			}
-		}
-
-		#region Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-		// Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-
-		#endregion
-
-		#endregion
-
-		#region Comparison Operators
-		//==========================================================================================
-		// Comparison Operators
-		//==========================================================================================
-
+		// ----------------------------------------------------------------------------------------
+		// Background information and recommentations (to be removed for effective code)
+		// ----------------------------------------------------------------------------------------
+		// Section "Equality Operators" of the Microsoft "Framework Design Guidelines":
+		//  > "DO overload the equality operators on value types, if equality is meaningful."
+		//  > "AVOID overloading equality operators on mutable reference types.
+		//     Many languages have built-in equality operators for reference types. The built-in
+		//     operators usually implement the reference equality, and many developers are
+		//     surprised when the default behavior is changed to the value equality."
+		//     => Remove when value equality is not desired for a reference type.
+		//     => Keep when value equality is desired for a reference type.
+		//  > "DO ensure that Equals() and the equality operators have exactly the same semantics
+		//     and similar performance characteristics."
+		// ----------------------------------------------------------------------------------------
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>

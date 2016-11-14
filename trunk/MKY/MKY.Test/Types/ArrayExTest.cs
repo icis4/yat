@@ -164,19 +164,19 @@ namespace MKY.Test.Types
 			get
 			{
 				yield return (new TestCaseData(IntArrays[0], IntArrays[0], true) .SetName("IntArrays_ReferenceEquals"));
-				yield return (new TestCaseData(IntArrays[0], IntArrays[1], true) .SetName("IntArrays_ValueEquals"));
+				yield return (new TestCaseData(IntArrays[0], IntArrays[1], true) .SetName("IntArrays_ElementsEqual"));
 				yield return (new TestCaseData(IntArrays[0], IntArrays[2], false).SetName("IntArrays_Differs"));
 
 				yield return (new TestCaseData(StringArrays[0], StringArrays[0], true) .SetName("StringArrays_ReferenceEquals"));
-				yield return (new TestCaseData(StringArrays[0], StringArrays[1], true) .SetName("StringArrays_ValueEquals"));
+				yield return (new TestCaseData(StringArrays[0], StringArrays[1], true) .SetName("StringArrays_ElementsEqual"));
 				yield return (new TestCaseData(StringArrays[0], StringArrays[2], false).SetName("StringArrays_Differs"));
 
 				yield return (new TestCaseData(EnumArrays[0], EnumArrays[0], true) .SetName("EnumArrays_ReferenceEquals"));
-				yield return (new TestCaseData(EnumArrays[0], EnumArrays[1], true) .SetName("EnumArrays_ValueEquals"));
+				yield return (new TestCaseData(EnumArrays[0], EnumArrays[1], true) .SetName("EnumArrays_ElementsEqual"));
 				yield return (new TestCaseData(EnumArrays[0], EnumArrays[2], false).SetName("EnumArrays_Differs"));
 
 				yield return (new TestCaseData(ObjectArrays[0], ObjectArrays[0], true) .SetName("ObjectArrays_ReferenceEquals"));
-				yield return (new TestCaseData(ObjectArrays[0], ObjectArrays[1], true) .SetName("ObjectArrays_ValueEquals"));
+				yield return (new TestCaseData(ObjectArrays[0], ObjectArrays[1], true) .SetName("ObjectArrays_ElementsEqual"));
 				yield return (new TestCaseData(ObjectArrays[0], ObjectArrays[2], false).SetName("ObjectArrays_Differs"));
 
 				yield return (new TestCaseData(ArraysWithNull[0], ArraysWithNull[0], true) .SetName("ArraysWithNull_ReferenceEquals"));
@@ -204,16 +204,16 @@ namespace MKY.Test.Types
 		// Test
 		//==========================================================================================
 
-		#region Tests > ValuesEqual()
+		#region Tests > ElementsEqual()
 		//------------------------------------------------------------------------------------------
-		// Tests > ValuesEqual()
+		// Tests > ElementsEqual()
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(ArrayExTestData), "TestCases")]
-		public virtual void TestValuesEqual(Array objA, Array objB, bool equals)
+		public virtual void TestElementsEqual(Array objA, Array objB, bool equals)
 		{
-			Assert.AreEqual(ArrayEx.ValuesEqual(objA, objB), equals);
+			Assert.AreEqual(ArrayEx.ElementsEqual(objA, objB), equals);
 		}
 
 		#endregion

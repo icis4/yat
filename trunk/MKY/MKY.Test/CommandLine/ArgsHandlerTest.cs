@@ -751,7 +751,7 @@ namespace MKY.Test.CommandLine
 			if (isValid)
 			{
 				Assert.IsTrue(cla.OptionIsGiven("sao"));
-				Assert.IsTrue(ArrayEx.ValuesEqual(expectedArrayOptionArgs, cla.StringArrayOption));
+				Assert.IsTrue(ArrayEx.ElementsEqual(expectedArrayOptionArgs, cla.StringArrayOption));
 			}
 		}
 
@@ -775,7 +775,7 @@ namespace MKY.Test.CommandLine
 			if (isValid)
 			{
 				Assert.IsTrue(cla.OptionIsGiven("iao"));
-				Assert.IsTrue(ArrayEx.ValuesEqual(expectedArrayOptionArgs, cla.IntArrayOption));
+				Assert.IsTrue(ArrayEx.ElementsEqual(expectedArrayOptionArgs, cla.IntArrayOption));
 			}
 		}
 

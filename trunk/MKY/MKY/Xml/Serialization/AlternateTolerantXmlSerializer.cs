@@ -151,10 +151,10 @@ namespace MKY.Xml.Serialization
 			{
 				foreach (AlternateXmlElement element in alternates)
 				{
-					// Compare XML path.
-					if (ArrayEx.ValuesEqual(element.XmlPath, standardXmlPath))
+					// Compare XML path:
+					if (ArrayEx.ElementsEqual(element.XmlPath, standardXmlPath))
 					{
-						// Compare alternates to given local name.
+						// Compare alternates to given local name:
 						foreach (string alternateLocalName in element.AlternateLocalNames)
 						{
 							if (StringEx.EqualsOrdinalIgnoreCase(alternateLocalName, localName))
