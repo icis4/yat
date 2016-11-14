@@ -3,10 +3,10 @@
 // Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/MKY/MKY/Types/ArrayEx.cs $
-// $Author: maettu_this $
-// $Date: 2016-09-30 16:20:52 +0200 (Fr, 30 Sep 2016) $
-// $Revision: 1181 $
+// $URL$
+// $Author$
+// $Date$
+// $Revision$
 // ------------------------------------------------------------------------------------------------
 // MKY Version 1.0.17
 // ------------------------------------------------------------------------------------------------
@@ -111,5 +111,5 @@ namespace MKY.Collections
 
 //==================================================================================================
 // End of
-// $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/MKY/MKY/Types/ArrayEx.cs $
+// $URL$
 //==================================================================================================
