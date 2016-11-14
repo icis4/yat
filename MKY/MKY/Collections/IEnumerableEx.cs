@@ -3,10 +3,10 @@
 // Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL$
-// $Author$
-// $Date$
-// $Revision$
+// $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/MKY/MKY/Types/ArrayEx.cs $
+// $Author: maettu_this $
+// $Date: 2016-09-30 16:20:52 +0200 (Fr, 30 Sep 2016) $
+// $Revision: 1181 $
 // ------------------------------------------------------------------------------------------------
 // MKY Version 1.0.17
 // ------------------------------------------------------------------------------------------------
@@ -21,60 +21,39 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-// This code is intentionally placed into the MKY namespace even though the file is located in
-// MKY.Types for consistency with the Sytem namespace.
-namespace MKY
+namespace MKY.Collections
 {
 	/// <summary>
 	/// Array utility methods.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
-	public static class ArrayEx
+	public static class IEnumerableEx
 	{
 		/// <summary>
-		/// Creates an array using <see cref="Array.CreateInstance(Type, int)"/> and initializes
-		/// the given number of array elements with the given initial value.
-		/// </summary>
-		/// <typeparam name="T">The type of the array's items.</typeparam>
-		public static T[] CreateAndInitializeInstance<T>(int length, T initialValue)
-		{
-			T[] a = (T[])Array.CreateInstance(typeof(T), length);
-
-			for (int i = 0; i < length; i++)
-				a[i] = initialValue;
-
-			return (a);
-		}
-
-		/// <summary>
-		/// Determines whether the two arrays have value equality, i.e. contains the same number of
-		/// elements, all elements are equally sequenced and have value equality.
+		/// Determines whether the two enumerable objects have value equality, i.e. contains the
+		/// same number of elements, all elements are equally sequenced and have value equality.
 		/// </summary>
 		/// <remarks>
 		/// This method has intentionally been called "ElementsEqual()"...
 		/// ...for similar naming as <see cref="object.ReferenceEquals(object, object)"/> and...
-		/// ...to emphasize difference to "Array.Equals()" which is just "object.Equals()".
+		/// ...to emphasize difference to "IEnumerable.Equals()" which is just "object.Equals()".
 		/// 
 		/// Attention:
-		/// Similar code also exists in <see cref="Collections.IEnumerableEx"/>.
+		/// Similar code also exists in <see cref="ArrayEx"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		/// <returns>
 		/// True if arrays have value equality, otherwise false.
 		/// </returns>
-		public static bool ElementsEqual(Array objA, Array objB)
+		public static bool ElementsEqual(IEnumerable objA, IEnumerable objB)
 		{
 			if (ReferenceEquals(objA, objB)) return (true);
 			if (ReferenceEquals(objA, null)) return (false);
 			if (ReferenceEquals(objB, null)) return (false);
-
-			if (objA.Length != objB.Length)
-				return (false);
 
 			IEnumerator objAEnumerator = objA.GetEnumerator();
 			IEnumerator objBEnumerator = objB.GetEnumerator();
@@ -100,17 +79,17 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Appends all elements of an array to a string and returns the string.
+		/// Appends all elements of an enumerable object to a string and returns the string.
 		/// </summary>
 		/// <remarks>
 		/// Attention:
-		/// Similar code also exists in <see cref="Collections.IEnumerableEx"/>.
+		/// Similar code also exists in <see cref="ArrayEx"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		/// <returns>
 		/// String containing all elements.
 		/// </returns>
-		public static string ElementsToString(Array array)
+		public static string ElementsToString(IEnumerable array)
 		{
 			StringBuilder sb = new StringBuilder();
 
@@ -132,5 +111,5 @@ namespace MKY
 
 //==================================================================================================
 // End of
-// $URL$
+// $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/MKY/MKY/Types/ArrayEx.cs $
 //==================================================================================================
