@@ -67,7 +67,9 @@ namespace MKY.IO.Serial
 			get;
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
 		public override string ToString()
 		{
 			return (ToString(""));

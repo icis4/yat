@@ -141,11 +141,9 @@ namespace YAT.Settings.Workspace
 			}
 		}
 
-		#endregion
-
-		#region Property Shortcuts
+		#region Properties > Shortcuts
 		//------------------------------------------------------------------------------------------
-		// Property Shortcuts
+		// Properties > Shortcuts
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
@@ -157,7 +155,12 @@ namespace YAT.Settings.Workspace
 
 		#endregion
 
+		#endregion
+
 		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -203,12 +206,25 @@ namespace YAT.Settings.Workspace
 			}
 		}
 
-		#endregion
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(WorkspaceSettingsRoot lhs, WorkspaceSettingsRoot rhs)
+		{
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
-		#region Comparison Operators
+			return (lhs.Equals(rhs));
+		}
 
-		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Test.EqualityAnalysis for details.
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(WorkspaceSettingsRoot lhs, WorkspaceSettingsRoot rhs)
+		{
+			return (!(lhs == rhs));
+		}
 
 		#endregion
 	}

@@ -117,6 +117,9 @@ namespace YAT.Log
 		}
 
 		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -167,7 +170,9 @@ namespace YAT.Log
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
 		public override string ToString()
 		{
 			return (ToDescription());
@@ -218,6 +223,9 @@ namespace YAT.Log
 		#endregion
 
 		#region GetItems
+		//==========================================================================================
+		// GetItems
+		//==========================================================================================
 
 		/// <remarks>
 		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
@@ -238,6 +246,9 @@ namespace YAT.Log
 		#endregion
 
 		#region Parse
+		//==========================================================================================
+		// Parse
+		//==========================================================================================
 
 		/// <remarks>
 		/// Opposed to the convention of the .NET framework, whitespace is NOT
@@ -345,6 +356,9 @@ namespace YAT.Log
 		#endregion
 
 		#region Conversion Operators
+		//==========================================================================================
+		// Conversion Operators
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static implicit operator FileNameSeparator(FileNameSeparatorEx separator)

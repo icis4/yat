@@ -131,9 +131,9 @@ namespace YAT.Model.Types
 		#endregion
 
 		#region Object Members
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Object Members
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -191,56 +191,11 @@ namespace YAT.Model.Types
 			}
 		}
 
-		#endregion
-
-		#region IComparable Members
-		//------------------------------------------------------------------------------------------
-		// IComparable Members
-		//------------------------------------------------------------------------------------------
-
-		/// <summary>
-		/// Compares this instance to a specified object and returns an indication
-		/// of their relative values.
-		/// </summary>
-		public virtual int CompareTo(object obj)
-		{
-			var other = (obj as PredefinedCommandPage);
-			if (other != null)
-				return (string.Compare(this.pageName, other.pageName, StringComparison.CurrentCulture));
-			else
-				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify a 'PredefinedCommandPage'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "obj"));
-		}
-
-		#endregion
-
-		#region Comparison Methods
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
-		public static int Compare(object objA, object objB)
-		{
-			if (ReferenceEquals(objA, objB))
-				return (0);
-
-			var casted = (objA as PredefinedCommandPage);
-			if (casted != null)
-				return (casted.CompareTo(objB));
-
-			return (ObjectEx.InvalidComparisonResult);
-		}
-
-		#endregion
-
-		#region Comparison Operators
-
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
 		public static bool operator ==(PredefinedCommandPage lhs, PredefinedCommandPage rhs)
 		{
-			// Base reference type implementation of operator ==.
-			// See MKY.Test.EqualityAnalysis for details.
-
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
 			if (ReferenceEquals(rhs, null)) return (false);
@@ -257,6 +212,40 @@ namespace YAT.Model.Types
 		public static bool operator !=(PredefinedCommandPage lhs, PredefinedCommandPage rhs)
 		{
 			return (!(lhs == rhs));
+		}
+
+		#endregion
+
+		#region IComparable Members / Comparison Methods and Operators
+		//==========================================================================================
+		// IComparable Members / Comparison Methods and Operators
+		//==========================================================================================
+
+		/// <summary>
+		/// Compares this instance to a specified object and returns an indication
+		/// of their relative values.
+		/// </summary>
+		public virtual int CompareTo(object obj)
+		{
+			var other = (obj as PredefinedCommandPage);
+			if (other != null)
+				return (string.Compare(this.pageName, other.pageName, StringComparison.CurrentCulture));
+			else
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify a 'PredefinedCommandPage'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "obj"));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
+		public static int Compare(object objA, object objB)
+		{
+			if (ReferenceEquals(objA, objB))
+				return (0);
+
+			var casted = (objA as PredefinedCommandPage);
+			if (casted != null)
+				return (casted.CompareTo(objB));
+
+			return (ObjectEx.InvalidComparisonResult);
 		}
 
 		/// <summary></summary>

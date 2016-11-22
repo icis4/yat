@@ -120,7 +120,7 @@ namespace YAT.Controller
 
 #endregion
 
-#region Object Lifetime
+		#region Object Lifetime
 		//==========================================================================================
 		// Object Lifetime
 		//==========================================================================================
@@ -133,7 +133,7 @@ namespace YAT.Controller
 			this.commandLineArgs = new CommandLineArgs(this.commandLineArgsStrings);
 		}
 
-#region Disposal
+		#region Disposal
 		//------------------------------------------------------------------------------------------
 		// Disposal
 		//------------------------------------------------------------------------------------------
@@ -160,8 +160,7 @@ namespace YAT.Controller
 			}
 		}
 
-#if (DEBUG)
-
+	#if (DEBUG)
 		/// <remarks>
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
@@ -179,8 +178,7 @@ namespace YAT.Controller
 
 			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
-
-#endif // DEBUG
+	#endif // DEBUG
 
 		/// <summary></summary>
 		public bool IsDisposed
@@ -195,11 +193,11 @@ namespace YAT.Controller
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
-#endregion
+		#endregion
 
-#endregion
+		#endregion
 
-#region Properties
+		#region Properties
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
@@ -225,9 +223,9 @@ namespace YAT.Controller
 			get { return ((this.commandLineArgs != null) && (!this.commandLineArgs.NoLogo)); }
 		}
 
-#endregion
+		#endregion
 
-#region Methods
+		#region Methods
 		//==========================================================================================
 		// Methods
 		//==========================================================================================
@@ -442,9 +440,9 @@ namespace YAT.Controller
 			return (result);
 		}
 
-#endregion
+		#endregion
 
-#region Private Methods
+		#region Private Methods
 		//==========================================================================================
 		// Private Methods
 		//==========================================================================================
@@ -452,7 +450,7 @@ namespace YAT.Controller
 		// Note that exceptions are only handled in case of 'Release'.
 		// In case of 'Debug', they shall be handled by the debugger.
 
-#region Private Methods > RunFullyWithView
+		#region Private Methods > RunFullyWithView
 		//------------------------------------------------------------------------------------------
 		// Private Methods > RunFullyWithView
 		//------------------------------------------------------------------------------------------
@@ -466,19 +464,19 @@ namespace YAT.Controller
 			MessageHelper.RequestSupport =      "Support may be requested as described in 'Help > Request Support'.";
 			MessageHelper.RequestFeature = "New features can be requested as described in 'Help > Request Feature'.";
 			MessageHelper.SubmitBug      =      "Please report this issue as described in 'Help > Submit Bug'.";
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+		#if (HANDLE_UNHANDLED_EXCEPTIONS)
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler:
 			AppDomain currentDomain = AppDomain.CurrentDomain;
 			currentDomain.UnhandledException += RunFullyWithView_currentDomain_UnhandledException;
-#endif
+		#endif
 			// Create model and view and run application:
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
 				MKY.Windows.Forms.ApplicationEx.EnableVisualStylesAndSetTextRenderingIfNotAlreadyDoneSo();
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				try
 				{
-#endif
+			#endif
 					// Application settings must be created and closed on main thread, otherwise
 					// there will be a synchronization exception on exit (settings are closed there):
 					if (!ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadSharedWriteIfOwned))
@@ -488,7 +486,7 @@ namespace YAT.Controller
 					View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen();
 					if (welcomeScreen.ShowDialog() != DialogResult.OK)
 						return (MainResult.ApplicationSettingsError);
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				}
 				catch (Exception ex)
 				{
@@ -503,23 +501,23 @@ namespace YAT.Controller
 
 				try
 				{
-#endif
+			#endif
 					// If everything is fine so far, start main application including view:
 					Model.MainResult viewResult;
 					using (View.Forms.Main view = new View.Forms.Main(model))
 					{
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+					#if (HANDLE_UNHANDLED_EXCEPTIONS)
 						// Assume unhandled asynchronous synchronized exceptions and attach the application to the respective handler:
 						System.Windows.Forms.Application.ThreadException += RunFullyWithView_Application_ThreadException;
-#endif
+					#endif
 						// Start the Win32 message loop on the current thread and the main form.
 						//
 						// Attention:
 						// This call does not return until the application exits.
 						System.Windows.Forms.Application.Run(view);
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+					#if (HANDLE_UNHANDLED_EXCEPTIONS)
 						System.Windows.Forms.Application.ThreadException -= RunFullyWithView_Application_ThreadException;
-#endif
+					#endif
 						viewResult = view.Result;
 					}
 
@@ -527,7 +525,7 @@ namespace YAT.Controller
 						return (MainResult.ApplicationSettingsError);
 
 					return (Convert(viewResult));
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				}
 				catch (Exception ex)
 				{
@@ -539,14 +537,14 @@ namespace YAT.Controller
 					}
 					return (MainResult.UnhandledException);
 				}
-#endif
+			#endif
 			} // Dispose of model to ensure immediate release of resources.
 
 			// Do not detach the handler from currentDomain.UnhandledException. In case of an
 			// exception, detaching may result in a message like "YAT.exe doesn't work anymore".
 		}
 
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		/// <remarks>
 		/// In case of an <see cref="System.Windows.Forms.Application.ThreadException"/>, it is possible to continue operation.
 		/// </remarks>
@@ -597,11 +595,11 @@ namespace YAT.Controller
 				System.Windows.Forms.Application.Exit();
 			}
 		}
-#endif
+	#endif
 
-#endregion
+		#endregion
 
-#region Private Methods > RunWithViewButOutputErrorsOnConsole
+		#region Private Methods > RunWithViewButOutputErrorsOnConsole
 		//------------------------------------------------------------------------------------------
 		// Private Methods > RunWithViewButOutputErrorsOnConsole
 		//------------------------------------------------------------------------------------------
@@ -615,19 +613,19 @@ namespace YAT.Controller
 			MessageHelper.RequestSupport =      "Support may be requested as described in 'Help > Request Support'.";
 			MessageHelper.RequestFeature = "New features can be requested as described in 'Help > Request Feature'.";
 			MessageHelper.SubmitBug      =      "Please report this issue as described in 'Help > Submit Bug'.";
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+		#if (HANDLE_UNHANDLED_EXCEPTIONS)
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler:
 			AppDomain currentDomain = AppDomain.CurrentDomain;
 			currentDomain.UnhandledException += RunWithViewButOutputErrorsOnConsole_currentDomain_UnhandledException;
-#endif
+		#endif
 			// Create model and view and run application:
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
 				MKY.Windows.Forms.ApplicationEx.EnableVisualStylesAndSetTextRenderingIfNotAlreadyDoneSo();
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				try
 				{
-#endif
+			#endif
 					// Application settings must be created and closed on main thread, otherwise
 					// there will be a synchronization exception on exit (settings are closed there):
 					if (!ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadSharedWriteIfOwned))
@@ -637,7 +635,7 @@ namespace YAT.Controller
 					View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen();
 					if (welcomeScreen.ShowDialog() != DialogResult.OK)
 						return (MainResult.ApplicationSettingsError);
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				}
 				catch (Exception ex)
 				{
@@ -652,23 +650,23 @@ namespace YAT.Controller
 
 				try
 				{
-#endif
+			#endif
 					// If everything is fine so far, start main application including view:
 					Model.MainResult viewResult;
 					using (View.Forms.Main view = new View.Forms.Main(model))
 					{
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+					#if (HANDLE_UNHANDLED_EXCEPTIONS)
 						// Assume unhandled asynchronous synchronized exceptions and attach the application to the respective handler:
 						System.Windows.Forms.Application.ThreadException += RunWithViewButOutputErrorsOnConsole_Application_ThreadException;
-#endif
+					#endif
 						// Start the Win32 message loop on the current thread and the main form.
 						//
 						// Attention:
 						// This call does not return until the application exits.
 						System.Windows.Forms.Application.Run(view);
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+					#if (HANDLE_UNHANDLED_EXCEPTIONS)
 						System.Windows.Forms.Application.ThreadException -= new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
-#endif
+					#endif
 						viewResult = view.Result;
 					}
 
@@ -676,7 +674,7 @@ namespace YAT.Controller
 						return (MainResult.ApplicationSettingsError);
 
 					return (Convert(viewResult));
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				}
 				catch (Exception ex)
 				{
@@ -688,14 +686,14 @@ namespace YAT.Controller
 
 					return (MainResult.UnhandledException);
 				}
-#endif
+			#endif
 			} // Dispose of model to ensure immediate release of resources.
 
 			// Do not detach the handler from currentDomain.UnhandledException. In case of an
 			// exception, detaching may result in a message like "YAT.exe doesn't work anymore".
 		}
 
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		/// <remarks>
 		/// In case of an <see cref="System.Windows.Forms.Application.ThreadException"/>, it is possible to continue operation.
 		/// </remarks>
@@ -729,11 +727,11 @@ namespace YAT.Controller
 				}
 			}
 		}
-#endif
+	#endif
 
-#endregion
+		#endregion
 
-#region Private Methods > RunFullyFromConsole
+		#region Private Methods > RunFullyFromConsole
 		//------------------------------------------------------------------------------------------
 		// Private Methods > RunFullyFromConsole
 		//------------------------------------------------------------------------------------------
@@ -750,18 +748,18 @@ namespace YAT.Controller
 			MessageHelper.RequestSupport =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
 			MessageHelper.RequestFeature = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
 			MessageHelper.SubmitBug =           "Please report this issue at <sourceforge.net/projects/y-a-terminal/bugs/>.";
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+		#if (HANDLE_UNHANDLED_EXCEPTIONS)
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler:
 			AppDomain currentDomain = AppDomain.CurrentDomain;
 			currentDomain.UnhandledException += RunFullyFromConsole_currentDomain_UnhandledException;
-#endif
+		#endif
 			// Create model and run application:
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				try
 				{
-#endif
+			#endif
 					if (ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadShared))
 					{
 						ApplicationSettings.Load(); // Don't care about result, either settings have been loaded or settings have been set to defaults.
@@ -772,7 +770,7 @@ namespace YAT.Controller
 					{
 						return (MainResult.ApplicationSettingsError);
 					}
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				}
 				catch (Exception ex)
 				{
@@ -787,7 +785,7 @@ namespace YAT.Controller
 
 				try
 				{
-#endif
+			#endif
 					Model.MainResult modelResult = model.Start();
 					if (modelResult == Model.MainResult.Success)
 						modelResult = model.Exit();
@@ -795,7 +793,7 @@ namespace YAT.Controller
 					ApplicationSettings.CloseAndDispose(); // Don't care about result, as upon creation above.
 
 					return (Convert(modelResult));
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				}
 				catch (Exception ex)
 				{
@@ -806,14 +804,14 @@ namespace YAT.Controller
 
 					return (MainResult.UnhandledException);
 				}
-#endif
+			#endif
 			} // Dispose of model to ensure immediate release of resources.
 
 			// Do not detach the handler from currentDomain.UnhandledException. In case of an
 			// exception, detaching may result in a message like "YAT.exe doesn't work anymore".
 		}
 
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		/// <remarks>
 		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart.
 		/// </remarks>
@@ -834,11 +832,11 @@ namespace YAT.Controller
 				}
 			}
 		}
-#endif
+	#endif
 
-#endregion
+		#endregion
 
-#region Private Methods > RunInvisible
+		#region Private Methods > RunInvisible
 		//------------------------------------------------------------------------------------------
 		// Private Methods > RunInvisible
 		//------------------------------------------------------------------------------------------
@@ -855,18 +853,18 @@ namespace YAT.Controller
 			MessageHelper.RequestSupport =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
 			MessageHelper.RequestFeature = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
 			MessageHelper.SubmitBug =           "Please report this issue at <sourceforge.net/projects/y-a-terminal/bugs/>.";
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+		#if (HANDLE_UNHANDLED_EXCEPTIONS)
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler:
 			AppDomain currentDomain = AppDomain.CurrentDomain;
 			currentDomain.UnhandledException += RunInvisible_currentDomain_UnhandledException;
-#endif
+		#endif
 			// Create model and run application:
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				try
 				{
-#endif
+			#endif
 					if (ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadShared))
 					{
 						ApplicationSettings.Load(); // Don't care about result, either settings have been loaded or settings have been set to defaults.
@@ -877,7 +875,7 @@ namespace YAT.Controller
 					{
 						return (MainResult.ApplicationSettingsError);
 					}
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				}
 				catch (Exception ex)
 				{
@@ -889,7 +887,7 @@ namespace YAT.Controller
 
 				try
 				{
-#endif
+			#endif
 					Model.MainResult modelResult = model.Start();
 					if (modelResult == Model.MainResult.Success)
 						modelResult = model.Exit();
@@ -897,7 +895,7 @@ namespace YAT.Controller
 					ApplicationSettings.CloseAndDispose(); // Don't care about result, as upon creation above.
 
 					return (Convert(modelResult));
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				}
 				catch (Exception ex)
 				{
@@ -906,14 +904,14 @@ namespace YAT.Controller
 
 					return (MainResult.UnhandledException);
 				}
-#endif
+			#endif
 			} // Dispose of model to ensure immediate release of resources.
 
 			// Do not detach the handler from currentDomain.UnhandledException. In case of an
 			// exception, detaching may result in a message like "YAT.exe doesn't work anymore".
 		}
 
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
+	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		/// <remarks>
 		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart.
 		/// </remarks>
@@ -934,11 +932,11 @@ namespace YAT.Controller
 				}
 			}
 		}
-#endif
+	#endif
 
-#endregion
+		#endregion
 
-#region Private Methods > MessageBox
+		#region Private Methods > MessageBox
 		//------------------------------------------------------------------------------------------
 		// Private Methods > MessageBox
 		//------------------------------------------------------------------------------------------
@@ -965,9 +963,9 @@ namespace YAT.Controller
 			MessageBoxEx.Show(sb.ToString(), ApplicationEx.ProductNameLong, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 		}
 
-#endregion
+		#endregion
 
-#region Private Methods > Console
+		#region Private Methods > Console
 		//------------------------------------------------------------------------------------------
 		// Private Methods > Console
 		//------------------------------------------------------------------------------------------
@@ -1033,9 +1031,9 @@ namespace YAT.Controller
 			Console.Out.WriteLine(new string('=', (Console.WindowWidth - 1))); // ==========...
 		}
 
-#endregion
+		#endregion
 
-#region Private Methods > Result
+		#region Private Methods > Result
 		//------------------------------------------------------------------------------------------
 		// Private Methods > Result
 		//------------------------------------------------------------------------------------------
@@ -1054,9 +1052,9 @@ namespace YAT.Controller
 			}
 		}
 
-#endregion
+		#endregion
 
-#endregion
+		#endregion
 	}
 }
 

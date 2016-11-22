@@ -680,6 +680,9 @@ namespace YAT.Model.Types
 		// Object Members
 		//==========================================================================================
 
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
 		/// <remarks>
 		/// Do not redirect to <see cref="Description"/> in order to ensure that user defined
 		/// description string is not shown in a combo box or similar. Instead, use the dedicated
@@ -715,11 +718,11 @@ namespace YAT.Model.Types
 
 			return
 			(
-				(IsDefined                     == other.IsDefined) &&
-				ArrayEx.ValuesEqual(CommandLines, other.CommandLines) &&
-				(DefaultRadix                  == other.DefaultRadix) &&
-				(IsFilePath                    == other.IsFilePath) &&
-				PathEx.Equals(FilePath,           other.FilePath)
+				(IsDefined                       == other.IsDefined) &&
+				ArrayEx.ElementsEqual(CommandLines, other.CommandLines) &&
+				(DefaultRadix                    == other.DefaultRadix) &&
+				(IsFilePath                      == other.IsFilePath) &&
+				PathEx.Equals(FilePath,             other.FilePath)
 			);
 
 			// Do not consider 'Description' as it does not define the command.
@@ -750,59 +753,11 @@ namespace YAT.Model.Types
 			}
 		}
 
-		#endregion
-
-		#region IComparable Members
-		//==========================================================================================
-		// IComparable Members
-		//==========================================================================================
-
-		/// <summary></summary>
-		public virtual int CompareTo(object obj)
-		{
-			var other = (obj as Command);
-			if (other != null) // Using 'Description' as this is visible to the user.
-				return (string.Compare(Description, other.Description, StringComparison.CurrentCulture));
-			else
-				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify a 'Command'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "obj"));
-		}
-
-		#endregion
-
-		#region Comparison Methods
-		//==========================================================================================
-		// Comparison Methods
-		//==========================================================================================
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
-		public static int Compare(object objA, object objB)
-		{
-			if (ReferenceEquals(objA, objB))
-				return (0);
-
-			var casted = (objA as Command);
-			if (casted != null)
-				return (casted.CompareTo(objB));
-
-			return (ObjectEx.InvalidComparisonResult);
-		}
-
-		#endregion
-
-		#region Comparison Operators
-		//==========================================================================================
-		// Comparison Operators
-		//==========================================================================================
-
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
 		public static bool operator ==(Command lhs, Command rhs)
 		{
-			// Base reference type implementation of operator ==.
-			// See MKY.Test.EqualityAnalysis for details.
-
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
 			if (ReferenceEquals(rhs, null)) return (false);
@@ -819,6 +774,37 @@ namespace YAT.Model.Types
 		public static bool operator !=(Command lhs, Command rhs)
 		{
 			return (!(lhs == rhs));
+		}
+
+		#endregion
+
+		#region IComparable Members / Comparison Methods and Operators
+		//==========================================================================================
+		// IComparable Members / Comparison Methods and Operators
+		//==========================================================================================
+
+		/// <summary></summary>
+		public virtual int CompareTo(object obj)
+		{
+			var other = (obj as Command);
+			if (other != null) // Using 'Description' as this is visible to the user.
+				return (string.Compare(Description, other.Description, StringComparison.CurrentCulture));
+			else
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify a 'Command'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "obj"));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
+		public static int Compare(object objA, object objB)
+		{
+			if (ReferenceEquals(objA, objB))
+				return (0);
+
+			var casted = (objA as Command);
+			if (casted != null)
+				return (casted.CompareTo(objB));
+
+			return (ObjectEx.InvalidComparisonResult);
 		}
 
 		/// <summary></summary>

@@ -326,15 +326,18 @@ namespace YAT.Domain.Settings
 
 		#endregion
 
-				#region Object Members
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
-				/// <summary>
-				/// Determines whether this instance and the specified object have value equality.
-				/// </summary>
-				/// <remarks>
-				/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
-				/// properties, i.e. properties with some logic, are also properly handled.
-				/// </remarks>
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -371,12 +374,25 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		#endregion
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(TerminalSettings lhs, TerminalSettings rhs)
+		{
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
-		#region Comparison Operators
+			return (lhs.Equals(rhs));
+		}
 
-		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Test.EqualityAnalysis for details.
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(TerminalSettings lhs, TerminalSettings rhs)
+		{
+			return (!(lhs == rhs));
+		}
 
 		#endregion
 	}

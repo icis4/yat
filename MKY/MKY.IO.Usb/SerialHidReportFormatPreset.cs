@@ -134,8 +134,13 @@ namespace MKY.IO.Usb
 		}
 
 		#region ToString
+		//==========================================================================================
+		// ToString
+		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
@@ -154,6 +159,9 @@ namespace MKY.IO.Usb
 		#endregion
 
 		#region GetItems
+		//==========================================================================================
+		// GetItems
+		//==========================================================================================
 
 		/// <remarks>
 		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
@@ -173,6 +181,9 @@ namespace MKY.IO.Usb
 		#endregion
 
 		#region Parse
+		//==========================================================================================
+		// Parse
+		//==========================================================================================
 
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -256,7 +267,10 @@ namespace MKY.IO.Usb
 
 		#endregion
 
-		#region ToReportFormat
+		#region To/FromReportFormat
+		//==========================================================================================
+		// To/FromReportFormat
+		//==========================================================================================
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
@@ -273,10 +287,6 @@ namespace MKY.IO.Usb
 			}
 			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
-
-		#endregion
-
-		#region FromReportFormat
 
 		/// <summary></summary>
 		public static SerialHidReportFormatPreset FromReportFormat(SerialHidReportFormat format)
@@ -299,6 +309,9 @@ namespace MKY.IO.Usb
 		#endregion
 
 		#region Conversion Operators
+		//==========================================================================================
+		// Conversion Operators
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static implicit operator SerialHidReportFormatPreset(SerialHidReportFormatPresetEx formatPreset)

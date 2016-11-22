@@ -284,7 +284,7 @@ namespace YAT.Model.Test.Transmission
 					// Verify response:
 					Domain.DisplayLine lastLine = terminal.LastDisplayLineAuxiliary(Domain.RepositoryType.Rx);
 					byte[] actualBytes = lastLine.ElementsToOrigin();
-					Assert.True(ArrayEx.ValuesEqual(expectedBytes, actualBytes), "Unexpected respose from device! Should be " + ArrayEx.ElementsToString(expectedBytes) + " but is " + ArrayEx.ElementsToString(actualBytes));
+					Assert.True(ArrayEx.ElementsEqual(expectedBytes, actualBytes), "Unexpected respose from device! Should be " + ArrayEx.ElementsToString(expectedBytes) + " but is " + ArrayEx.ElementsToString(actualBytes));
 					Trace.WriteLine(@"<< """ + expected + @"""");
 					terminal.ClearLastDisplayLineAuxiliary(Domain.RepositoryType.Rx);
 				}

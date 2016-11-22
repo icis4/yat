@@ -97,6 +97,9 @@ namespace MKY.IO.Ports
 		}
 
 		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
 
 		/// <summary></summary>
 		[XmlElement("BaudRate")]
@@ -138,9 +141,32 @@ namespace MKY.IO.Ports
 			set { this.handshake = value; }
 		}
 
+		/// <summary>
+		/// Returns bits size of an interface packet according to the current
+		/// interface settings (StartBit + DataBits + StopBits).
+		/// </summary>
+		[XmlIgnore]
+		public double PacketSize
+		{
+			get { return (1 + (double)this.dataBits + (double)this.stopBits); }
+		}
+
+		/// <summary>
+		/// Returns duration of an interface packet according to the current
+		/// interface settings (PacketSize * (1 / BaudRate)) in milliseconds.
+		/// </summary>
+		[XmlIgnore]
+		public long PacketDuration
+		{
+			get { return ((long)(1000 * PacketSize * (1 / (int)this.baudRate))); }
+		}
+
 		#endregion
 
 		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -285,34 +311,9 @@ namespace MKY.IO.Ports
 			return (false);
 		}
 
-		#endregion
-
-		/// <summary>
-		/// Returns bits size of an interface packet according to the current
-		/// interface settings (StartBit + DataBits + StopBits).
-		/// </summary>
-		public double PacketSize
-		{
-			get { return (1 + (double)this.dataBits + (double)this.stopBits); }
-		}
-
-		/// <summary>
-		/// Returns duration of an interface packet according to the current
-		/// interface settings (PacketSize * (1 / BaudRate)) in milliseconds.
-		/// </summary>
-		public long PacketDuration
-		{
-			get { return ((long)(1000 * PacketSize * (1 / (int)this.baudRate))); }
-		}
-
-		#region Comparison Operators
-
 		/// <summary></summary>
 		public static bool operator ==(SerialPortSettings lhs, SerialPortSettings rhs)
 		{
-			// Base reference type implementation of operator ==.
-			// See MKY.Test.EqualityAnalysis for details.
-
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
 			if (ReferenceEquals(rhs, null)) return (false);
@@ -332,6 +333,9 @@ namespace MKY.IO.Ports
 		#endregion
 
 		#region Conversion Operators
+		//==========================================================================================
+		// Conversion Operators
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static implicit operator string(SerialPortSettings settings)

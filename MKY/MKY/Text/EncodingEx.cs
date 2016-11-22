@@ -735,6 +735,9 @@ namespace MKY.Text
 		}
 
 		#region CodePage/Name/DisplayName/Encoding/IsDefault
+		//==========================================================================================
+		// CodePage/Name/DisplayName/Encoding/IsDefault
+		//==========================================================================================
 
 		/// <summary>
 		/// Encoding code page.
@@ -826,9 +829,9 @@ namespace MKY.Text
 		#endregion
 
 		#region Object Members
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Object Members
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -855,7 +858,8 @@ namespace MKY.Text
 		}
 
 		/// <summary>
-		/// Returns "DisplayName [CodePage]".
+		/// Converts the value of this instance to its equivalent string representation,
+		/// which is "DisplayName [CodePage]".
 		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields. This ensures that 'intelligent' properties,
@@ -875,6 +879,9 @@ namespace MKY.Text
 		#endregion
 
 		#region GetItems
+		//==========================================================================================
+		// GetItems
+		//==========================================================================================
 
 		/// <summary>
 		/// Returns all available encodings in a useful order.
@@ -1056,6 +1063,9 @@ namespace MKY.Text
 		#endregion
 
 		#region Parse
+		//==========================================================================================
+		// Parse
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static EncodingEx Parse(int codePage)
@@ -1124,9 +1134,32 @@ namespace MKY.Text
 			return (false);
 		}
 
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(EncodingEx lhs, EncodingEx rhs)
+		{
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			return (lhs.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(EncodingEx lhs, EncodingEx rhs)
+		{
+			return (!(lhs == rhs));
+		}
+
 		#endregion
 
 		#region Conversion Operators
+		//==========================================================================================
+		// Conversion Operators
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static implicit operator SupportedEncoding(EncodingEx encoding)
@@ -1175,13 +1208,6 @@ namespace MKY.Text
 		{
 			return (Parse(encoding));
 		}
-
-		#endregion
-
-		#region Comparison Operators
-
-		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Test.EqualityAnalysis for details.
 
 		#endregion
 	}

@@ -99,8 +99,17 @@ namespace MKY.Test.Settings
 			}
 
 			#region Object Members
+			//==========================================================================================
+			// Object Members
+			//==========================================================================================
 
-			/// <summary></summary>
+			/// <summary>
+			/// Converts the value of this instance to its equivalent string representation.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields. This ensures that 'intelligent' properties,
+			/// i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override string ToString()
 			{
 				return (Environment.NewLine + "        2:SimpleValue = " + SimpleValue.ToString(CultureInfo.InvariantCulture));
@@ -148,12 +157,25 @@ namespace MKY.Test.Settings
 				}
 			}
 
-			#endregion
+			/// <summary>
+			/// Determines whether the two specified objects have reference or value equality.
+			/// </summary>
+			public static bool operator ==(TestTreeChildLevel2 lhs, TestTreeChildLevel2 rhs)
+			{
+				if (ReferenceEquals(lhs, rhs))  return (true);
+				if (ReferenceEquals(lhs, null)) return (false);
+				if (ReferenceEquals(rhs, null)) return (false);
 
-			#region Comparison Operators
+				return (lhs.Equals(rhs));
+			}
 
-			// Use of base reference type implementation of operators ==/!=.
-			// See MKY.Test.EqualityAnalysis for details.
+			/// <summary>
+			/// Determines whether the two specified objects have reference and value inequality.
+			/// </summary>
+			public static bool operator !=(TestTreeChildLevel2 lhs, TestTreeChildLevel2 rhs)
+			{
+				return (!(lhs == rhs));
+			}
 
 			#endregion
 		}
@@ -232,8 +254,17 @@ namespace MKY.Test.Settings
 			#endregion
 
 			#region Object Members
+			//==========================================================================================
+			// Object Members
+			//==========================================================================================
 
-			/// <summary></summary>
+			/// <summary>
+			/// Converts the value of this instance to its equivalent string representation.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields. This ensures that 'intelligent' properties,
+			/// i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override string ToString()
 			{
 				return
@@ -286,12 +317,25 @@ namespace MKY.Test.Settings
 				}
 			}
 
-			#endregion
+			/// <summary>
+			/// Determines whether the two specified objects have reference or value equality.
+			/// </summary>
+			public static bool operator ==(TestTreeChildLevel1 lhs, TestTreeChildLevel1 rhs)
+			{
+				if (ReferenceEquals(lhs, rhs))  return (true);
+				if (ReferenceEquals(lhs, null)) return (false);
+				if (ReferenceEquals(rhs, null)) return (false);
 
-			#region Comparison Operators
+				return (lhs.Equals(rhs));
+			}
 
-			// Use of base reference type implementation of operators ==/!=.
-			// See MKY.Test.EqualityAnalysis for details.
+			/// <summary>
+			/// Determines whether the two specified objects have reference and value inequality.
+			/// </summary>
+			public static bool operator !=(TestTreeChildLevel1 lhs, TestTreeChildLevel1 rhs)
+			{
+				return (!(lhs == rhs));
+			}
 
 			#endregion
 		}
@@ -349,6 +393,9 @@ namespace MKY.Test.Settings
 			#endregion
 
 			#region Object Members
+			//==========================================================================================
+			// Object Members
+			//==========================================================================================
 
 			/// <summary></summary>
 			public override string ToString()
@@ -402,18 +449,11 @@ namespace MKY.Test.Settings
 				}
 			}
 
-			#endregion
-
-			#region Comparison Operators
-
 			/// <summary>
 			/// Determines whether the two specified objects have reference or value equality.
 			/// </summary>
 			public static bool operator ==(TestTreeRoot lhs, TestTreeRoot rhs)
 			{
-				// Base reference type implementation of operator ==.
-				// See MKY.Test.EqualityAnalysis for details.
-
 				if (ReferenceEquals(lhs, rhs))  return (true);
 				if (ReferenceEquals(lhs, null)) return (false);
 				if (ReferenceEquals(rhs, null)) return (false);

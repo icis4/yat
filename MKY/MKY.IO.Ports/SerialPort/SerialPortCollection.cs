@@ -177,7 +177,7 @@ namespace MKY.IO.Ports
 				{
 					string[] formerCache = (string[])staticPortNamesCache.Clone();
 					staticPortNamesCache = System.IO.Ports.SerialPort.GetPortNames();
-					useCaptionsFromCache = ArrayEx.ValuesEqual(staticPortNamesCache, formerCache);
+					useCaptionsFromCache = ArrayEx.ElementsEqual(staticPortNamesCache, formerCache);
 				}
 			}
 

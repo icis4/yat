@@ -989,7 +989,8 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary>
-		/// Returns a string describing the USB device as accurate as possible.
+		/// Converts the value of this instance to its equivalent string representation,
+		/// which is a string describing the USB device as accurately as possible.
 		/// </summary>
 		public override string ToString()
 		{

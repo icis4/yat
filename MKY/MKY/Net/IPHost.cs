@@ -141,6 +141,9 @@ namespace MKY.Net
 		}
 
 		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
 
 		/// <summary></summary>
 		public string Name
@@ -201,6 +204,9 @@ namespace MKY.Net
 		#endregion
 
 		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -269,7 +275,9 @@ namespace MKY.Net
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
@@ -312,11 +320,6 @@ namespace MKY.Net
 			}
 			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
-
-		#region ToString > Extensions
-		//------------------------------------------------------------------------------------------
-		// ToString > Extensions
-		//------------------------------------------------------------------------------------------
 
 		/// <summary>
 		/// Returns a <see cref="string" /> that e.g. adds [] for IPv6 addresses.
@@ -376,11 +379,14 @@ namespace MKY.Net
 
 		#endregion
 
-		#endregion
-
 		#region GetItems
+		//==========================================================================================
+		// GetItems
+		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static IPHostEx[] GetItems()
 		{
 			List<IPHostEx> a = new List<IPHostEx>(3); // Preset the required capacity to improve memory management.
@@ -393,6 +399,9 @@ namespace MKY.Net
 		#endregion
 
 		#region Parse
+		//==========================================================================================
+		// Parse
+		//==========================================================================================
 
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -508,6 +517,9 @@ namespace MKY.Net
 		#endregion
 
 		#region Resolve
+		//==========================================================================================
+		// Resolve
+		//==========================================================================================
 
 		/// <summary>
 		/// Tries to resolve an IP address from DNS.
@@ -583,6 +595,9 @@ namespace MKY.Net
 		#endregion
 
 		#region Conversion Operators
+		//==========================================================================================
+		// Conversion Operators
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static implicit operator IPHost(IPHostEx host)

@@ -155,7 +155,13 @@ namespace MKY.Windows.Forms
 			Start();
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override string ToString()
 		{
 			return (TimeSpanEx.FormatInvariantTimeSpan(TimeSpan, true, true));

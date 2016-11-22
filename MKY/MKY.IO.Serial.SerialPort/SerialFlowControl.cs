@@ -106,8 +106,13 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		#region ToString
+		//==========================================================================================
+		// ToString
+		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
 		public override string ToString()
 		{
 			switch ((SerialFlowControl)UnderlyingEnum)
@@ -136,6 +141,9 @@ namespace MKY.IO.Serial.SerialPort
 		#endregion
 
 		#region GetItems
+		//==========================================================================================
+		// GetItems
+		//==========================================================================================
 
 		/// <remarks>
 		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
@@ -157,6 +165,9 @@ namespace MKY.IO.Serial.SerialPort
 		#endregion
 
 		#region Parse
+		//==========================================================================================
+		// Parse
+		//==========================================================================================
 
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -248,6 +259,9 @@ namespace MKY.IO.Serial.SerialPort
 		#endregion
 
 		#region Conversion Operators
+		//==========================================================================================
+		// Conversion Operators
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static implicit operator SerialFlowControl(SerialFlowControlEx flowControl)

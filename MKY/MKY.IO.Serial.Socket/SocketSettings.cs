@@ -565,20 +565,26 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override string ToString()
 		{
 			return
 			(
-				((SocketTypeEx)this.type)   + ", " +
-				this.remoteHost             + ", " +
-				this.remoteTcpPort          + ", " +
-				this.remoteUdpPort          + ", " +
-				this.localInterface         + ", " +
-				this.localFilter            + ", " +
-				this.localTcpPort           + ", " +
-				this.localUdpPort           + ", " +
-				this.tcpClientAutoReconnect
+				((SocketTypeEx)Type)   + ", " +
+				RemoteHost             + ", " +
+				RemoteTcpPort          + ", " +
+				RemoteUdpPort          + ", " +
+				LocalInterface         + ", " +
+				LocalFilter            + ", " +
+				LocalTcpPort           + ", " +
+				LocalUdpPort           + ", " +
+				TcpClientAutoReconnect
 			);
 		}
 
@@ -683,12 +689,25 @@ namespace MKY.IO.Serial.Socket
 
 		#endregion
 
-		#endregion
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(SocketSettings lhs, SocketSettings rhs)
+		{
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
-		#region Comparison Operators
+			return (lhs.Equals(rhs));
+		}
 
-		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Test.EqualityAnalysis for details.
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(SocketSettings lhs, SocketSettings rhs)
+		{
+			return (!(lhs == rhs));
+		}
 
 		#endregion
 	}

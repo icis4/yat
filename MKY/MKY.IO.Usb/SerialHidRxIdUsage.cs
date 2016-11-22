@@ -118,6 +118,9 @@ namespace MKY.IO.Usb
 		#endregion
 
 		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
@@ -149,6 +152,9 @@ namespace MKY.IO.Usb
 		#endregion
 
 		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -202,16 +208,9 @@ namespace MKY.IO.Usb
 			}
 		}
 
-		#endregion
-
-		#region Comparison Operators
-
 		/// <summary></summary>
 		public static bool operator ==(SerialHidRxIdUsage lhs, SerialHidRxIdUsage rhs)
 		{
-			// Base reference type implementation of operator ==.
-			// See MKY.Test.EqualityAnalysis for details.
-
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
 			if (ReferenceEquals(rhs, null)) return (false);

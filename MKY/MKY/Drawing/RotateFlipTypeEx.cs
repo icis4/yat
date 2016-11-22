@@ -98,6 +98,9 @@ namespace MKY.Drawing
 		}
 
 		#region Conversion Operators
+		//==========================================================================================
+		// Conversion Operators
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static RotateFlipType ConvertToRotateFlipType(RotateType rotate)
@@ -167,6 +170,9 @@ namespace MKY.Drawing
 		public const FlipType Default = FlipType.FlipNone;
 
 		#region Conversion Operators
+		//==========================================================================================
+		// Conversion Operators
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static RotateFlipType ConvertToRotateFlipType(FlipType flip)

@@ -94,9 +94,30 @@ namespace MKY.Media
 		{
 		}
 
-		#region ToString
+		#region Play
+		//==========================================================================================
+		// Play
+		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		public virtual void Play()
+		{
+			SystemSounds sound = (SystemSounds)UnderlyingEnum;
+			if (sound != SystemSounds.None)
+				((System.Media.SystemSound)((SystemSoundsEx)sound)).Play();
+		}
+
+		#endregion
+
+		#region ToString
+		//==========================================================================================
+		// ToString
+		//==========================================================================================
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
@@ -114,20 +135,10 @@ namespace MKY.Media
 
 		#endregion
 
-		#region Play
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
-		public virtual void Play()
-		{
-			SystemSounds sound = (SystemSounds)UnderlyingEnum;
-			if (sound != SystemSounds.None)
-				((System.Media.SystemSound)((SystemSoundsEx)sound)).Play();
-		}
-
-		#endregion
-
 		#region GetItems
+		//==========================================================================================
+		// GetItems
+		//==========================================================================================
 
 		/// <remarks>
 		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
@@ -147,6 +158,9 @@ namespace MKY.Media
 		#endregion
 
 		#region Parse
+		//==========================================================================================
+		// Parse
+		//==========================================================================================
 
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -232,6 +246,9 @@ namespace MKY.Media
 		#endregion
 
 		#region Conversion Operators
+		//==========================================================================================
+		// Conversion Operators
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static implicit operator SystemSounds(SystemSoundsEx sound)

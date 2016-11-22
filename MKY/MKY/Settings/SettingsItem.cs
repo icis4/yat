@@ -338,6 +338,9 @@ namespace MKY.Settings
 		#endregion
 
 		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -396,6 +399,29 @@ namespace MKY.Settings
 
 				return (hashCode);
 			}
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(SettingsItem lhs, SettingsItem rhs)
+		{
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			// Ensure that potiential <Derived>.Equals() is called.
+			// Thus, ensure that object.Equals() is called.
+			object obj = (object)lhs;
+			return (obj.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(SettingsItem lhs, SettingsItem rhs)
+		{
+			return (!(lhs == rhs));
 		}
 
 		#endregion
@@ -507,36 +533,6 @@ namespace MKY.Settings
 			}
 
 			OnChanged(new SettingsEventArgs(this));
-		}
-
-		#endregion
-
-		#region Comparison Operators
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(SettingsItem lhs, SettingsItem rhs)
-		{
-			// Base reference type implementation of operator ==.
-			// See MKY.Test.EqualityAnalysis for details.
-
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
-			// Ensure that potiential <Derived>.Equals() is called.
-			// Thus, ensure that object.Equals() is called.
-			object obj = (object)lhs;
-			return (obj.Equals(rhs));
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(SettingsItem lhs, SettingsItem rhs)
-		{
-			return (!(lhs == rhs));
 		}
 
 		#endregion
