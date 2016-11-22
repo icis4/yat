@@ -76,6 +76,9 @@ namespace MKY.IO.Ports
 		public bool Dcd;
 
 		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -126,7 +129,13 @@ namespace MKY.IO.Ports
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override string ToString()
 		{
 			return
@@ -139,18 +148,11 @@ namespace MKY.IO.Ports
 			);
 		}
 
-		#endregion
-
-		#region Comparison Operators
-
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
 		public static bool operator ==(SerialPortControlPins lhs, SerialPortControlPins rhs)
 		{
-			// Value type implementation of operator ==.
-			// See MKY.Test.EqualityAnalysis for details.
-
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
 			if (ReferenceEquals(rhs, null)) return (false);
@@ -228,6 +230,9 @@ namespace MKY.IO.Ports
 		}
 
 		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -278,7 +283,13 @@ namespace MKY.IO.Ports
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override string ToString()
 		{
 			return
@@ -291,18 +302,11 @@ namespace MKY.IO.Ports
 			);
 		}
 
-		#endregion
-
-		#region Comparison Operators
-
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
 		public static bool operator ==(SerialPortControlPinCount lhs, SerialPortControlPinCount rhs)
 		{
-			// Value type implementation of operator ==.
-			// See MKY.Test.EqualityAnalysis for details.
-
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
 			if (ReferenceEquals(rhs, null)) return (false);

@@ -58,6 +58,9 @@ namespace YAT.Domain
 		}
 
 		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -104,18 +107,11 @@ namespace YAT.Domain
 			}
 		}
 
-		#endregion
-
-		#region Comparison Operators
-
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
 		public static bool operator ==(TextLineSendDelay lhs, TextLineSendDelay rhs)
 		{
-			// Value type implementation of operator ==.
-			// See MKY.Test.EqualityAnalysis for details.
-
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
 			if (ReferenceEquals(rhs, null)) return (false);
@@ -156,6 +152,9 @@ namespace YAT.Domain
 		}
 
 		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -200,18 +199,11 @@ namespace YAT.Domain
 			}
 		}
 
-		#endregion
-
-		#region Comparison Operators
-
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
 		public static bool operator ==(WaitForResponse lhs, WaitForResponse rhs)
 		{
-			// Value type implementation of operator ==.
-			// See MKY.Test.EqualityAnalysis for details.
-
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
 			if (ReferenceEquals(rhs, null)) return (false);

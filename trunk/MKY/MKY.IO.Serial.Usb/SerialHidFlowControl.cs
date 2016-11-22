@@ -99,8 +99,13 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		#region ToString
+		//==========================================================================================
+		// ToString
+		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
@@ -129,6 +134,9 @@ namespace MKY.IO.Serial.Usb
 		#endregion
 
 		#region GetItems
+		//==========================================================================================
+		// GetItems
+		//==========================================================================================
 
 		/// <remarks>
 		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
@@ -145,6 +153,9 @@ namespace MKY.IO.Serial.Usb
 		#endregion
 
 		#region Parse
+		//==========================================================================================
+		// Parse
+		//==========================================================================================
 
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -219,6 +230,9 @@ namespace MKY.IO.Serial.Usb
 		#endregion
 
 		#region Conversion Operators
+		//==========================================================================================
+		// Conversion Operators
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static implicit operator SerialHidFlowControl(SerialHidFlowControlEx flowControl)

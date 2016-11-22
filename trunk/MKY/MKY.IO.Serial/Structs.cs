@@ -48,6 +48,9 @@ namespace MKY.IO.Serial
 		}
 
 		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -108,18 +111,11 @@ namespace MKY.IO.Serial
 			);
 		}
 
-		#endregion
-
-		#region Comparison Operators
-
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
 		public static bool operator ==(AutoInterval lhs, AutoInterval rhs)
 		{
-			// Value type implementation of operator ==.
-			// See MKY.Test.EqualityAnalysis for details.
-
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
 			if (ReferenceEquals(rhs, null)) return (false);

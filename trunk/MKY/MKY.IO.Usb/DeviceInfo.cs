@@ -450,10 +450,6 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields. This ensures that 'intelligent' properties,
-		/// i.e. properties with some logic, are also properly handled.
-		/// </remarks>
 		public override string ToString()
 		{
 			return (ToString(true, true));
@@ -563,6 +559,33 @@ namespace MKY.IO.Usb
 
 			return (sb.ToString());
 		}
+
+		#endregion
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(DeviceInfo lhs, DeviceInfo rhs)
+		{
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			// Ensure that potiential <Derived>.Equals() is called.
+			// Thus, ensure that object.Equals() is called.
+			object obj = (object)lhs;
+			return (obj.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(DeviceInfo lhs, DeviceInfo rhs)
+		{
+			return (!(lhs == rhs));
+		}
+
+		#endregion
 
 		#region Parse
 		//==========================================================================================
@@ -686,11 +709,10 @@ namespace MKY.IO.Usb
 
 		#endregion
 
-		#endregion
-
-		#endregion
-
-		#region IComparable Members
+		#region IComparable Members / Comparison Methods and Operators
+		//==========================================================================================
+		// IComparable Members / Comparison Methods and Operators
+		//==========================================================================================
 
 		/// <summary></summary>
 		public virtual int CompareTo(object obj)
@@ -711,10 +733,6 @@ namespace MKY.IO.Usb
 			}
 		}
 
-		#endregion
-
-		#region Comparison Methods
-
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static int Compare(object objA, object objB)
@@ -727,39 +745,6 @@ namespace MKY.IO.Usb
 				return (casted.CompareTo(objB));
 
 			return (ObjectEx.InvalidComparisonResult);
-		}
-
-		#endregion
-
-		#region Comparison Operators
-		//==========================================================================================
-		// Comparison Operators
-		//==========================================================================================
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(DeviceInfo lhs, DeviceInfo rhs)
-		{
-			// Base reference type implementation of operator ==.
-			// See MKY.Test.EqualityAnalysis for details.
-
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
-			// Ensure that potiential <Derived>.Equals() is called.
-			// Thus, ensure that object.Equals() is called.
-			object obj = (object)lhs;
-			return (obj.Equals(rhs));
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(DeviceInfo lhs, DeviceInfo rhs)
-		{
-			return (!(lhs == rhs));
 		}
 
 		/// <summary></summary>

@@ -156,10 +156,6 @@ namespace MKY.Test
 				return (A.GetHashCode());
 			}
 
-			#endregion
-
-			#region Comparison Operators
-
 			/// <summary>
 			/// Determines whether the two specified objects have reference or value equality.
 			/// </summary>
@@ -202,9 +198,6 @@ namespace MKY.Test
 			#else
 
 				// Normal implementation:
-
-				// Value type implementation of operator ==.
-				// See MKY.Test.EqualityAnalysis for details.
 
 				if (ReferenceEquals(lhs, rhs))  return (true);
 				if (ReferenceEquals(lhs, null)) return (false);
@@ -494,10 +487,6 @@ namespace MKY.Test
 			{
 				return (base.GetHashCode());
 			}
-
-			#endregion
-
-			#region Comparison Operators
 
 			/// <summary>
 			/// Determines whether the two specified objects have reference or value equality.
@@ -1003,10 +992,6 @@ namespace MKY.Test
 				return (A.GetHashCode());
 			}
 
-			#endregion
-
-			#region Comparison Operators
-
 			/// <summary>
 			/// Determines whether the two specified objects have reference or value equality.
 			/// </summary>
@@ -1152,10 +1137,6 @@ namespace MKY.Test
 			{
 				return (base.GetHashCode() ^ A.GetHashCode());
 			}
-
-			#endregion
-
-			#region Comparison Operators
 
 			/// <summary>
 			/// Determines whether the two specified objects have reference or value equality.
@@ -1392,10 +1373,6 @@ namespace MKY.Test
 				return (A.GetHashCode());
 			}
 
-			#endregion
-
-			#region Comparison Operators
-
 			/// <summary>
 			/// Determines whether the two specified objects have reference or value equality.
 			/// </summary>
@@ -1440,9 +1417,6 @@ namespace MKY.Test
 			#else
 
 				// Normal implementation:
-
-				// Base reference type implementation of operator ==.
-				// See MKY.Test.EqualityAnalysis for details.
 
 				if (ReferenceEquals(lhs, rhs))  return (true);
 				if (ReferenceEquals(lhs, null)) return (false);
@@ -1645,10 +1619,6 @@ namespace MKY.Test
 				return (A.GetHashCode());
 			}
 
-			#endregion
-
-			#region Comparison Operators
-
 			/// <summary>
 			/// Determines whether the two specified objects have reference or value equality.
 			/// </summary>
@@ -1693,9 +1663,6 @@ namespace MKY.Test
 			#else
 
 				// Normal implementation:
-
-				// Base reference type implementation of operator ==.
-				// See MKY.Test.EqualityAnalysis for details.
 
 				if (ReferenceEquals(lhs, rhs))  return (true);
 				if (ReferenceEquals(lhs, null)) return (false);

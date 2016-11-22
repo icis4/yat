@@ -93,9 +93,9 @@ namespace MKY.Recent
 		#endregion
 
 		#region Methods
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Methods
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary>
 		/// Checks whether the item is valid.
@@ -108,9 +108,9 @@ namespace MKY.Recent
 		#endregion
 
 		#region Object Members
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Object Members
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -163,7 +163,7 @@ namespace MKY.Recent
 		}
 
 		/// <summary>
-		/// Returns the recent item.
+		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields. This ensures that 'intelligent' properties,
@@ -174,60 +174,11 @@ namespace MKY.Recent
 			return (Item.ToString());
 		}
 
-		#endregion
-
-		#region IComparable<T> Members
-		//------------------------------------------------------------------------------------------
-		// IComparable<T> Members
-		//------------------------------------------------------------------------------------------
-
-		/// <summary>
-		/// Compares this instance to a specified object and returns an indication
-		/// of their relative values.
-		/// </summary>
-		public virtual int CompareTo(RecentItem<T> other)
-		{
-			return (-(this.timeStamp.CompareTo(other.timeStamp))); // Sort inverse.
-		}
-
-		#endregion
-
-		#region Comparison Methods
-		//------------------------------------------------------------------------------------------
-		// Comparison Methods
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		/// <typeparam name="MT">The underlying type of the recent item.</typeparam>
-		[SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes", Justification = "Any better idea to implement Compare() for generic types?")]
-		[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T", Justification = "MT is used to clearly show that this type only applies to this method.")]
-		public static int Compare<MT>(RecentItem<MT> otherA, RecentItem<MT> otherB)
-			where MT : IEquatable<MT>
-		{
-			if (ReferenceEquals(otherA, otherB))
-				return (0);
-
-			if (otherA != null)
-				return (otherA.CompareTo(otherB));
-
-			return (ObjectEx.InvalidComparisonResult);
-		}
-
-		#endregion
-
-		#region Comparison Operators
-		//------------------------------------------------------------------------------------------
-		// Comparison Operators
-		//------------------------------------------------------------------------------------------
-
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
 		public static bool operator ==(RecentItem<T> lhs, RecentItem<T> rhs)
 		{
-			// Base reference type implementation of operator ==.
-			// See MKY.Test.EqualityAnalysis for details.
-
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
 			if (ReferenceEquals(rhs, null)) return (false);
@@ -244,6 +195,38 @@ namespace MKY.Recent
 		public static bool operator !=(RecentItem<T> lhs, RecentItem<T> rhs)
 		{
 			return (!(lhs == rhs));
+		}
+
+		#endregion
+
+		#region IComparable Members / Comparison Methods and Operators
+		//==========================================================================================
+		// IComparable<T> Members
+		//==========================================================================================
+
+		/// <summary>
+		/// Compares this instance to a specified object and returns an indication
+		/// of their relative values.
+		/// </summary>
+		public virtual int CompareTo(RecentItem<T> other)
+		{
+			return (-(this.timeStamp.CompareTo(other.timeStamp))); // Sort inverse.
+		}
+
+		/// <summary></summary>
+		/// <typeparam name="MT">The underlying type of the recent item.</typeparam>
+		[SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes", Justification = "Any better idea to implement Compare() for generic types?")]
+		[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T", Justification = "MT is used to clearly show that this type only applies to this method.")]
+		public static int Compare<MT>(RecentItem<MT> otherA, RecentItem<MT> otherB)
+			where MT : IEquatable<MT>
+		{
+			if (ReferenceEquals(otherA, otherB))
+				return (0);
+
+			if (otherA != null)
+				return (otherA.CompareTo(otherB));
+
+			return (ObjectEx.InvalidComparisonResult);
 		}
 
 		/// <summary></summary>
@@ -273,9 +256,9 @@ namespace MKY.Recent
 		#endregion
 
 		#region Conversion Operators
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Conversion Operators
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static implicit operator T(RecentItem<T> item)

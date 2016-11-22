@@ -66,7 +66,7 @@ namespace YAT.Model.Utilities
 			{
 				lock (this)
 				{
-					if (!ArrayEx.ValuesEqual(this.sequence, value))
+					if (!ArrayEx.ElementsEqual(this.sequence, value))
 					{
 						this.sequence = value;
 						this.queue = new Domain.SequenceQueue(this.sequence);

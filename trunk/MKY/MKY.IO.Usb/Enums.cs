@@ -300,8 +300,13 @@ namespace MKY.IO.Usb
 		}
 
 		#region ToString
+		//==========================================================================================
+		// ToString
+		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
 		public override string ToString()
 		{
 			return (UnderlyingEnum.GetHashCode().ToString(CultureInfo.InvariantCulture));
@@ -310,6 +315,9 @@ namespace MKY.IO.Usb
 		#endregion
 
 		#region Parse
+		//==========================================================================================
+		// Parse
+		//==========================================================================================
 
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -368,6 +376,9 @@ namespace MKY.IO.Usb
 		#endregion
 
 		#region Conversion Operators
+		//==========================================================================================
+		// Conversion Operators
+		//==========================================================================================
 
 		/// <summary></summary>
 		[CLSCompliant(false)]
@@ -455,8 +466,13 @@ namespace MKY.IO.Usb
 		}
 
 		#region ToString
+		//==========================================================================================
+		// ToString
+		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
 		public override string ToString()
 		{
 			return (UnderlyingEnum.GetHashCode().ToString(CultureInfo.InvariantCulture));
@@ -465,6 +481,9 @@ namespace MKY.IO.Usb
 		#endregion
 
 		#region Parse
+		//==========================================================================================
+		// Parse
+		//==========================================================================================
 
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -523,6 +542,9 @@ namespace MKY.IO.Usb
 		#endregion
 
 		#region Conversion Operators
+		//==========================================================================================
+		// Conversion Operators
+		//==========================================================================================
 
 		/// <summary></summary>
 		[CLSCompliant(false)]

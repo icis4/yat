@@ -383,6 +383,9 @@ namespace MKY.IO.Ports
 		#endregion
 
 		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -483,6 +486,29 @@ namespace MKY.IO.Ports
 		public virtual string ToShortString()
 		{
 			return (ToString(false, false));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(SerialPortId lhs, SerialPortId rhs)
+		{
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			// Ensure that potiential <Derived>.Equals() is called.
+			// Thus, ensure that object.Equals() is called.
+			object obj = (object)lhs;
+			return (obj.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(SerialPortId lhs, SerialPortId rhs)
+		{
+			return (!(lhs == rhs));
 		}
 
 		#endregion
@@ -640,7 +666,10 @@ namespace MKY.IO.Ports
 
 		#endregion
 
-		#region IComparable Members
+		#region IComparable Members / Comparison Methods and Operators
+		//==========================================================================================
+		// IComparable Members / Comparison Methods and Operators
+		//==========================================================================================
 
 		/// <summary></summary>
 		public virtual int CompareTo(object obj)
@@ -659,10 +688,6 @@ namespace MKY.IO.Ports
 			}
 		}
 
-		#endregion
-
-		#region Comparison Methods
-
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static int Compare(object objA, object objB)
@@ -675,39 +700,6 @@ namespace MKY.IO.Ports
 				return (casted.CompareTo(objB));
 
 			return (ObjectEx.InvalidComparisonResult);
-		}
-
-		#endregion
-
-		#region Comparison Operators
-		//==========================================================================================
-		// Comparison Operators
-		//==========================================================================================
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(SerialPortId lhs, SerialPortId rhs)
-		{
-			// Base reference type implementation of operator ==.
-			// See MKY.Test.EqualityAnalysis for details.
-
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
-			// Ensure that potiential <Derived>.Equals() is called.
-			// Thus, ensure that object.Equals() is called.
-			object obj = (object)lhs;
-			return (obj.Equals(rhs));
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(SerialPortId lhs, SerialPortId rhs)
-		{
-			return (!(lhs == rhs));
 		}
 
 		/// <summary></summary>

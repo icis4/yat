@@ -798,7 +798,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary>
-		/// Standard ToString method returning the element contents only.
+		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
 		public override string ToString()
 		{

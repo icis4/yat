@@ -77,8 +77,13 @@ namespace MKY.IO.Ports
 		}
 
 		#region ToString
+		//==========================================================================================
+		// ToString
+		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
 		public override string ToString()
 		{
 			return (UnderlyingEnum.GetHashCode().ToString(CultureInfo.InvariantCulture));
@@ -87,6 +92,9 @@ namespace MKY.IO.Ports
 		#endregion
 
 		#region GetItems
+		//==========================================================================================
+		// GetItems
+		//==========================================================================================
 
 		/// <remarks>
 		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
@@ -104,6 +112,9 @@ namespace MKY.IO.Ports
 		#endregion
 
 		#region Parse/Form
+		//==========================================================================================
+		// Parse/From
+		//==========================================================================================
 
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -206,6 +217,9 @@ namespace MKY.IO.Ports
 		#endregion
 
 		#region Conversion Operators
+		//==========================================================================================
+		// Conversion Operators
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static implicit operator DataBits(DataBitsEx bits)

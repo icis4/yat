@@ -118,6 +118,9 @@ namespace MKY.IO.Ports
 		}
 
 		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -168,7 +171,9 @@ namespace MKY.IO.Ports
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
 		public override string ToString()
 		{
 			if (this == BaudRate.Explicit)
@@ -180,6 +185,9 @@ namespace MKY.IO.Ports
 		#endregion
 
 		#region GetItems
+		//==========================================================================================
+		// GetItems
+		//==========================================================================================
 
 		/// <remarks>
 		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
@@ -216,7 +224,10 @@ namespace MKY.IO.Ports
 
 		#endregion
 
-		#region Parse/Form
+		#region Parse/From
+		//==========================================================================================
+		// Parse/From
+		//==========================================================================================
 
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -319,6 +330,9 @@ namespace MKY.IO.Ports
 		#endregion
 
 		#region Conversion Operators
+		//==========================================================================================
+		// Conversion Operators
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static implicit operator BaudRate(BaudRateEx baudRate)

@@ -232,9 +232,9 @@ namespace MKY
 		}
 
 		#region Object Members
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Object Members
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -306,12 +306,35 @@ namespace MKY
 
 		#endregion
 
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(EnumEx lhs, EnumEx rhs)
+		{
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			// Ensure that potiential <Derived>.Equals() is called.
+			// Thus, ensure that object.Equals() is called.
+			object obj = (object)lhs;
+			return (obj.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(EnumEx lhs, EnumEx rhs)
+		{
+			return (!(lhs == rhs));
+		}
+
 		#endregion
 
-		#region IComparable Members
-		//------------------------------------------------------------------------------------------
-		// IComparable Members
-		//------------------------------------------------------------------------------------------
+		#region IComparable Members / Comparison Methods and Operators
+		//==========================================================================================
+		// IComparable Members / Comparison Methods and Operators
+		//==========================================================================================
 
 		/// <summary>
 		/// Compares this instance to a specified object and returns an indication
@@ -326,12 +349,50 @@ namespace MKY
 				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify an 'EnumEx'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "obj"));
 		}
 
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
+		public static int Compare(object objA, object objB)
+		{
+			if (ReferenceEquals(objA, objB))
+				return (0);
+
+			var casted = (objA as EnumEx);
+			if (casted != null)
+				return (casted.CompareTo(objB));
+
+			return (ObjectEx.InvalidComparisonResult);
+		}
+
+		/// <summary></summary>
+		public static bool operator <(EnumEx lhs, EnumEx rhs)
+		{
+			return (Compare(lhs, rhs) < 0);
+		}
+
+		/// <summary></summary>
+		public static bool operator >(EnumEx lhs, EnumEx rhs)
+		{
+			return (Compare(lhs, rhs) > 0);
+		}
+
+		/// <summary></summary>
+		public static bool operator <=(EnumEx lhs, EnumEx rhs)
+		{
+			return (Compare(lhs, rhs) <= 0);
+		}
+
+		/// <summary></summary>
+		public static bool operator >=(EnumEx lhs, EnumEx rhs)
+		{
+			return (Compare(lhs, rhs) >= 0);
+		}
+
 		#endregion
 
 		#region ICloneable Members
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// ICloneable Members
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary>
 		/// Creates and returns a new object that is a deep-copy of this instance.
@@ -350,9 +411,9 @@ namespace MKY
 		#endregion
 
 		#region Static Methods
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Static Methods
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		private static Type EnumExTypeToUnderlyingEnumType(Type enumExType)
 		{
@@ -559,78 +620,6 @@ namespace MKY
 		public static string Format(Type enumExType, object value, string format)
 		{
 			return (Enum.Format(EnumExTypeToUnderlyingEnumType(enumExType), value, format));
-		}
-
-		#endregion
-
-		#region Comparison Methods
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
-		public static int Compare(object objA, object objB)
-		{
-			if (ReferenceEquals(objA, objB))
-				return (0);
-
-			var casted = (objA as EnumEx);
-			if (casted != null)
-				return (casted.CompareTo(objB));
-
-			return (ObjectEx.InvalidComparisonResult);
-		}
-
-		#endregion
-
-		#region Comparison Operators
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(EnumEx lhs, EnumEx rhs)
-		{
-			// Base reference type implementation of operator ==.
-			// See MKY.Test.EqualityAnalysis for details.
-
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
-			// Ensure that potiential <Derived>.Equals() is called.
-			// Thus, ensure that object.Equals() is called.
-			object obj = (object)lhs;
-			return (obj.Equals(rhs));
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(EnumEx lhs, EnumEx rhs)
-		{
-			return (!(lhs == rhs));
-		}
-
-		/// <summary></summary>
-		public static bool operator <(EnumEx lhs, EnumEx rhs)
-		{
-			return (Compare(lhs, rhs) < 0);
-		}
-
-		/// <summary></summary>
-		public static bool operator >(EnumEx lhs, EnumEx rhs)
-		{
-			return (Compare(lhs, rhs) > 0);
-		}
-
-		/// <summary></summary>
-		public static bool operator <=(EnumEx lhs, EnumEx rhs)
-		{
-			return (Compare(lhs, rhs) <= 0);
-		}
-
-		/// <summary></summary>
-		public static bool operator >=(EnumEx lhs, EnumEx rhs)
-		{
-			return (Compare(lhs, rhs) >= 0);
 		}
 
 		#endregion

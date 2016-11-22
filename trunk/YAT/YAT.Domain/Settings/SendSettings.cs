@@ -331,6 +331,9 @@ namespace YAT.Domain.Settings
 		#endregion
 
 		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -397,12 +400,25 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		#endregion
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(SendSettings lhs, SendSettings rhs)
+		{
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
-		#region Comparison Operators
+			return (lhs.Equals(rhs));
+		}
 
-		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Test.EqualityAnalysis for details.
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(SendSettings lhs, SendSettings rhs)
+		{
+			return (!(lhs == rhs));
+		}
 
 		#endregion
 	}

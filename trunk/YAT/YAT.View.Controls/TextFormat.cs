@@ -256,7 +256,7 @@ namespace YAT.View.Controls
 			get { return (this.customColors); }
 			set
 			{
-				if (!ArrayEx.ValuesEqual(this.customColors, value))
+				if (!ArrayEx.ElementsEqual(this.customColors, value))
 				{
 					this.customColors = value;
 

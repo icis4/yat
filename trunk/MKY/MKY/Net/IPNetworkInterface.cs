@@ -149,6 +149,9 @@ namespace MKY.Net
 		}
 
 		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
 
 		/// <summary></summary>
 		public IPAddress Address
@@ -215,6 +218,9 @@ namespace MKY.Net
 		#endregion
 
 		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -301,7 +307,9 @@ namespace MKY.Net
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
@@ -333,8 +341,13 @@ namespace MKY.Net
 		#endregion
 
 		#region GetItems
+		//==========================================================================================
+		// GetItems
+		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static IPNetworkInterfaceEx[] GetItems()
 		{
 			List<IPNetworkInterfaceEx> a = new List<IPNetworkInterfaceEx>(6); // Preset the required capacity to improve memory management.
@@ -350,6 +363,9 @@ namespace MKY.Net
 		#endregion
 
 		#region Parse
+		//==========================================================================================
+		// Parse
+		//==========================================================================================
 
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -450,6 +466,9 @@ namespace MKY.Net
 		#endregion
 
 		#region Conversion Operators
+		//==========================================================================================
+		// Conversion Operators
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static implicit operator IPNetworkInterface(IPNetworkInterfaceEx networkInterface)

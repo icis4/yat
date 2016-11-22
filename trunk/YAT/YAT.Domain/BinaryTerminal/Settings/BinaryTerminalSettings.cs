@@ -216,12 +216,25 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		#endregion
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(BinaryTerminalSettings lhs, BinaryTerminalSettings rhs)
+		{
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
-		#region Comparison Operators
+			return (lhs.Equals(rhs));
+		}
 
-		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Test.EqualityAnalysis for details.
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(BinaryTerminalSettings lhs, BinaryTerminalSettings rhs)
+		{
+			return (!(lhs == rhs));
+		}
 
 		#endregion
 	}

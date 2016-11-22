@@ -295,6 +295,10 @@ namespace YAT/*.<TODO>*/
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override string ToString()
 		{
 			return ("TODO");
@@ -368,7 +372,7 @@ namespace YAT/*.<TODO>*/
 			//	PropertyN.Equals(other.PropertyN)
 			//	...
 			//	!!! For reference types !!!
-			//	ArrayEx.ValuesEqual(ArrayProperty, other.ArrayProperty)
+			//	ArrayEx.ElementsEqual(ArrayProperty, other.ArrayProperty)
 			//	StringEx.EqualsOrdinal(StringProperty, other.StringProperty)
 			//	ObjectEx.Equals(ReferenceTypeProperty, other.ReferenceTypeProperty)
 			);
