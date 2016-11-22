@@ -58,6 +58,11 @@ namespace YAT.Domain
 
 #endif // DEBUG
 
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
@@ -77,6 +82,8 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public abstract string ToDetailedString(string indent);
+
+		#endregion
 	}
 
 	/// <summary>
@@ -98,6 +105,11 @@ namespace YAT.Domain
 		{
 			get { return (this.data); }
 		}
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary></summary>
 		public override string ToString(string indent)
@@ -129,6 +141,8 @@ namespace YAT.Domain
 				return (indent + "> Data: " + sw + Environment.NewLine);
 			}
 		}
+
+		#endregion
 	}
 
 	/// <summary>
@@ -168,6 +182,11 @@ namespace YAT.Domain
 			get { return (this.isLine); }
 		}
 
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
 		/// <summary></summary>
 		public override string ToString(string indent)
 		{
@@ -181,6 +200,8 @@ namespace YAT.Domain
 					indent + "> DefaultRadix : " + this.defaultRadix + Environment.NewLine +
 					indent + "> IsLine       : " + this.isLine       + Environment.NewLine);
 		}
+
+		#endregion
 	}
 }
 

@@ -911,6 +911,32 @@ namespace MKY.IO
 		//==========================================================================================
 
 		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                     HaveCommon                         .GetHashCode();
+				hashCode = (hashCode * 397) ^ (CommonPath   != null ? CommonPath  .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  CommonDirectoryCount;
+				hashCode = (hashCode * 397) ^  AreRelative                        .GetHashCode();
+				hashCode = (hashCode * 397) ^  RelativeDirectoryCount;
+				hashCode = (hashCode * 397) ^  AreNearRelative                    .GetHashCode();
+				hashCode = (hashCode * 397) ^  NearRelativeDirectoryCount;
+				hashCode = (hashCode * 397) ^ (RelativePath != null ? RelativePath.GetHashCode() : 0);
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		/// <remarks>
@@ -937,32 +963,6 @@ namespace MKY.IO
 				(NearRelativeDirectoryCount == other.NearRelativeDirectoryCount) &&
 				PathEx.Equals(RelativePath,    other.RelativePath)
 			);
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode;
-
-				hashCode =                     HaveCommon                         .GetHashCode();
-				hashCode = (hashCode * 397) ^ (CommonPath   != null ? CommonPath  .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^  CommonDirectoryCount;
-				hashCode = (hashCode * 397) ^  AreRelative                        .GetHashCode();
-				hashCode = (hashCode * 397) ^  RelativeDirectoryCount;
-				hashCode = (hashCode * 397) ^  AreNearRelative                    .GetHashCode();
-				hashCode = (hashCode * 397) ^  NearRelativeDirectoryCount;
-				hashCode = (hashCode * 397) ^ (RelativePath != null ? RelativePath.GetHashCode() : 0);
-
-				return (hashCode);
-			}
 		}
 
 		/// <summary>

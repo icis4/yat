@@ -169,6 +169,61 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 
 		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override string ToString()
+		{
+			return
+			(
+				((BaudRateEx) BaudRate) + ", " +
+				((DataBitsEx) DataBits) + ", " +
+				((ParityEx)   Parity)   + ", " +
+				((StopBitsEx) StopBits) + ", " +
+				((HandshakeEx)Handshake).ToShortString()
+			);
+		}
+
+		/// <summary>
+		/// Returns port settings as a single string. The string is limited to the basic settings.
+		/// </summary>
+		public virtual string ToShortString()
+		{
+			return
+			(
+				((BaudRateEx)this.baudRate).ToString() + ", " +
+				((DataBitsEx)this.dataBits).ToString() + ", " +
+				((ParityEx)  this.parity)  .ToShortString()
+			);
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    BaudRate .GetHashCode();
+				hashCode = (hashCode * 397) ^ DataBits .GetHashCode();
+				hashCode = (hashCode * 397) ^ Parity   .GetHashCode();
+				hashCode = (hashCode * 397) ^ StopBits .GetHashCode();
+				hashCode = (hashCode * 397) ^ Handshake.GetHashCode();
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		public override bool Equals(object obj)
@@ -201,60 +256,31 @@ namespace MKY.IO.Ports
 			);
 		}
 
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
+		/// <summary></summary>
+		public static bool operator ==(SerialPortSettings lhs, SerialPortSettings rhs)
 		{
-			unchecked
-			{
-				int hashCode;
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
-				hashCode =                    BaudRate .GetHashCode();
-				hashCode = (hashCode * 397) ^ DataBits .GetHashCode();
-				hashCode = (hashCode * 397) ^ Parity   .GetHashCode();
-				hashCode = (hashCode * 397) ^ StopBits .GetHashCode();
-				hashCode = (hashCode * 397) ^ Handshake.GetHashCode();
-
-				return (hashCode);
-			}
+			// Ensure that potiential <Derived>.Equals() is called.
+			// Thus, ensure that object.Equals() is called.
+			object obj = (object)lhs;
+			return (obj.Equals(rhs));
 		}
 
-		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields. This ensures that 'intelligent' properties,
-		/// i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override string ToString()
+		/// <summary></summary>
+		public static bool operator !=(SerialPortSettings lhs, SerialPortSettings rhs)
 		{
-			return
-			(
-				((BaudRateEx) BaudRate) + ", " +
-				((DataBitsEx) DataBits) + ", " +
-				((ParityEx)   Parity)   + ", " +
-				((StopBitsEx) StopBits) + ", " +
-				((HandshakeEx)Handshake).ToShortString()
-			);
+			return (!(lhs == rhs));
 		}
 
-		/// <summary>
-		/// Returns port settings as a single string. The string is limited to the basic settings.
-		/// </summary>
-		public virtual string ToShortString()
-		{
-			return
-			(
-				((BaudRateEx)this.baudRate).ToString() + ", " +
-				((DataBitsEx)this.dataBits).ToString() + ", " +
-				((ParityEx)  this.parity)  .ToShortString()
-			);
-		}
+		#endregion
+
+		#region Parse
+		//==========================================================================================
+		// Parse
+		//==========================================================================================
 
 		/// <summary>
 		/// Parses <paramref name="s"/> for serial port settings and returns a corresponding settings object.
@@ -309,25 +335,6 @@ namespace MKY.IO.Ports
 
 			settings = null;
 			return (false);
-		}
-
-		/// <summary></summary>
-		public static bool operator ==(SerialPortSettings lhs, SerialPortSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
-			// Ensure that potiential <Derived>.Equals() is called.
-			// Thus, ensure that object.Equals() is called.
-			object obj = (object)lhs;
-			return (obj.Equals(rhs));
-		}
-
-		/// <summary></summary>
-		public static bool operator !=(SerialPortSettings lhs, SerialPortSettings rhs)
-		{
-			return (!(lhs == rhs));
 		}
 
 		#endregion

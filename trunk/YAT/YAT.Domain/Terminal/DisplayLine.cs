@@ -215,6 +215,23 @@ namespace YAT.Domain
 			return (c);
 		}
 
+		/// <summary></summary>
+		public virtual byte[] ElementsToOrigin()
+		{
+			List<byte> l = new List<byte>(this.DataCount); // Preset the initial capacity to improve memory management.
+
+			foreach (DisplayElement de in this)
+			{
+				if (de.Origin != null) // Foreach element where origin exists.
+				{
+					foreach (Pair<byte[], string> p in de.Origin)
+						l.AddRange(p.Value1);
+				}
+			}
+
+			return (l.ToArray());
+		}
+
 		#endregion
 
 		#region Object Members
@@ -233,11 +250,6 @@ namespace YAT.Domain
 
 			return (sb.ToString());
 		}
-
-		#region Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-		// Object Members > Extensions
-		//------------------------------------------------------------------------------------------
 
 		/// <summary>
 		/// Extended ToString method which can be used for trace/debug.
@@ -272,25 +284,6 @@ namespace YAT.Domain
 
 			return (sb.ToString());
 		}
-
-		/// <summary></summary>
-		public virtual byte[] ElementsToOrigin()
-		{
-			List<byte> l = new List<byte>(this.DataCount); // Preset the initial capacity to improve memory management.
-
-			foreach (DisplayElement de in this)
-			{
-				if (de.Origin != null) // Foreach element where origin exists.
-				{
-					foreach (Pair<byte[], string> p in de.Origin)
-						l.AddRange(p.Value1);
-				}
-			}
-
-			return (l.ToArray());
-		}
-
-		#endregion
 
 		#endregion
 	}

@@ -449,6 +449,64 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 
 		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override string ToString()
+		{
+			return
+			(
+				BaudRate                            + ", " +
+				((MKY.IO.Ports.DataBitsEx)DataBits) + ", " +
+				((MKY.IO.Ports.ParityEx)  Parity)   + ", " +
+				((MKY.IO.Ports.StopBitsEx)StopBits) + ", " +
+				((SerialFlowControlEx)FlowControl).ToShortString()
+
+				// Do not include the state of the RFR and DTR pins, as these are advanced settings typically not displayed.
+			);
+		}
+
+		/// <summary></summary>
+		public virtual string ToShortString()
+		{
+			return
+			(
+				BaudRate                            + ", " +
+				((MKY.IO.Ports.DataBitsEx)DataBits) + ", " +
+				((MKY.IO.Ports.ParityEx)  Parity).ToShortString()
+			);
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+
+				hashCode = (hashCode * 397) ^ BaudRate;
+				hashCode = (hashCode * 397) ^ DataBits   .GetHashCode();
+				hashCode = (hashCode * 397) ^ Parity     .GetHashCode();
+				hashCode = (hashCode * 397) ^ StopBits   .GetHashCode();
+				hashCode = (hashCode * 397) ^ FlowControl.GetHashCode();
+
+				hashCode = (hashCode * 397) ^ RfrPin     .GetHashCode();
+				hashCode = (hashCode * 397) ^ DtrPin     .GetHashCode();
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		/// <remarks>
@@ -480,51 +538,31 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// Serves as a hash function for a particular type.
+		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
+		public static bool operator ==(SerialCommunicationSettings lhs, SerialCommunicationSettings rhs)
 		{
-			unchecked
-			{
-				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
-				hashCode = (hashCode * 397) ^ BaudRate;
-				hashCode = (hashCode * 397) ^ DataBits   .GetHashCode();
-				hashCode = (hashCode * 397) ^ Parity     .GetHashCode();
-				hashCode = (hashCode * 397) ^ StopBits   .GetHashCode();
-				hashCode = (hashCode * 397) ^ FlowControl.GetHashCode();
-
-				hashCode = (hashCode * 397) ^ RfrPin     .GetHashCode();
-				hashCode = (hashCode * 397) ^ DtrPin     .GetHashCode();
-
-				return (hashCode);
-			}
+			return (lhs.Equals(rhs));
 		}
 
 		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
+		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields. This ensures that 'intelligent' properties,
-		/// i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override string ToString()
+		public static bool operator !=(SerialCommunicationSettings lhs, SerialCommunicationSettings rhs)
 		{
-			return
-			(
-				BaudRate                            + ", " +
-				((MKY.IO.Ports.DataBitsEx)DataBits) + ", " +
-				((MKY.IO.Ports.ParityEx)  Parity)   + ", " +
-				((MKY.IO.Ports.StopBitsEx)StopBits) + ", " +
-				((SerialFlowControlEx)FlowControl).ToShortString()
-
-				// Do not include the state of the RFR and DTR pins, as these are advanced settings typically not displayed.
-			);
+			return (!(lhs == rhs));
 		}
+
+		#endregion
+
+		#region Parse
+		//==========================================================================================
+		// Parse
+		//==========================================================================================
 
 		/// <summary>
 		/// Parses <paramref name="s"/> for serial communication settings and returns a corresponding settings object.
@@ -579,44 +617,6 @@ namespace MKY.IO.Serial.SerialPort
 
 			settings = null;
 			return (false);
-		}
-
-		#region Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-		// Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		public virtual string ToShortString()
-		{
-			return
-			(
-				BaudRate                            + ", " +
-				((MKY.IO.Ports.DataBitsEx)DataBits) + ", " +
-				((MKY.IO.Ports.ParityEx)  Parity).ToShortString()
-			);
-		}
-
-		#endregion
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(SerialCommunicationSettings lhs, SerialCommunicationSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
-			return (lhs.Equals(rhs));
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(SerialCommunicationSettings lhs, SerialCommunicationSettings rhs)
-		{
-			return (!(lhs == rhs));
 		}
 
 		#endregion

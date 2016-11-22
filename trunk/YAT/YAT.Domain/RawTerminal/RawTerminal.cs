@@ -821,11 +821,6 @@ namespace YAT.Domain
 			return (ToString(""));
 		}
 
-		#region Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-		// Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
 		public virtual string ToString(string indent)
 		{
@@ -858,8 +853,6 @@ namespace YAT.Domain
 			else
 				return (Undefined);
 		}
-
-		#endregion
 
 		#endregion
 	}

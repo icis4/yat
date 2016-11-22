@@ -506,6 +506,73 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override string ToString()
+		{
+			return
+			(
+				((SocketTypeEx)Type)   + ", " +
+				RemoteHost             + ", " +
+				RemoteTcpPort          + ", " +
+				RemoteUdpPort          + ", " +
+				LocalInterface         + ", " +
+				LocalFilter            + ", " +
+				LocalTcpPort           + ", " +
+				LocalUdpPort           + ", " +
+				TcpClientAutoReconnect
+			);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
+		public virtual string ToShortEndPointString()
+		{
+			switch (type)
+			{
+				case SocketType.TcpClient:     return (                                         this.remoteHost.ToEndpointAddressString() + ":" + this.remoteTcpPort);
+				case SocketType.TcpServer:     return ("Server:"  + this.localTcpPort                                                                         );
+				case SocketType.TcpAutoSocket: return ("Server:"  + this.localTcpPort + " / " + this.remoteHost.ToEndpointAddressString() + ":" + this.remoteTcpPort);
+				case SocketType.UdpClient:     return (                                         this.remoteHost.ToEndpointAddressString() + ":" + this.remoteUdpPort);
+				case SocketType.UdpServer:     return ("Receive:" + this.localUdpPort                                                                         );
+				case SocketType.UdpPairSocket: return ("Receive:" + this.localUdpPort + " / " + this.remoteHost.ToEndpointAddressString() + ":" + this.remoteUdpPort);
+
+				default:                       return (Undefined);
+			}
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+
+				hashCode = (hashCode * 397) ^  Type                                                               .GetHashCode();
+				hashCode = (hashCode * 397) ^ ( RemoteHost_ForSerialization != null ?  RemoteHost_ForSerialization.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  RemoteTcpPort;
+				hashCode = (hashCode * 397) ^  RemoteUdpPort;
+				hashCode = (hashCode * 397) ^  LocalInterface                                                     .GetHashCode();
+				hashCode = (hashCode * 397) ^ (LocalFilter_ForSerialization != null ? LocalFilter_ForSerialization.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  LocalTcpPort;
+				hashCode = (hashCode * 397) ^  LocalUdpPort;
+				hashCode = (hashCode * 397) ^  TcpClientAutoReconnect                                             .GetHashCode();
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		/// <remarks>
@@ -539,54 +606,31 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary>
-		/// Serves as a hash function for a particular type.
+		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
+		public static bool operator ==(SocketSettings lhs, SocketSettings rhs)
 		{
-			unchecked
-			{
-				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
-				hashCode = (hashCode * 397) ^  Type                                                               .GetHashCode();
-				hashCode = (hashCode * 397) ^ ( RemoteHost_ForSerialization != null ?  RemoteHost_ForSerialization.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^  RemoteTcpPort;
-				hashCode = (hashCode * 397) ^  RemoteUdpPort;
-				hashCode = (hashCode * 397) ^  LocalInterface                                                     .GetHashCode();
-				hashCode = (hashCode * 397) ^ (LocalFilter_ForSerialization != null ? LocalFilter_ForSerialization.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^  LocalTcpPort;
-				hashCode = (hashCode * 397) ^  LocalUdpPort;
-				hashCode = (hashCode * 397) ^  TcpClientAutoReconnect                                             .GetHashCode();
-
-				return (hashCode);
-			}
+			return (lhs.Equals(rhs));
 		}
 
 		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
+		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields. This ensures that 'intelligent' properties,
-		/// i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override string ToString()
+		public static bool operator !=(SocketSettings lhs, SocketSettings rhs)
 		{
-			return
-			(
-				((SocketTypeEx)Type)   + ", " +
-				RemoteHost             + ", " +
-				RemoteTcpPort          + ", " +
-				RemoteUdpPort          + ", " +
-				LocalInterface         + ", " +
-				LocalFilter            + ", " +
-				LocalTcpPort           + ", " +
-				LocalUdpPort           + ", " +
-				TcpClientAutoReconnect
-			);
+			return (!(lhs == rhs));
 		}
+
+		#endregion
+
+		#region Parse
+		//==========================================================================================
+		// Parse
+		//==========================================================================================
 
 		/// <summary>
 		/// Parses <paramref name="s"/> for socket settings and returns a corresponding settings object.
@@ -663,50 +707,6 @@ namespace MKY.IO.Serial.Socket
 
 			settings = null;
 			return (false);
-		}
-
-		#region Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-		// Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
-		public virtual string ToShortEndPointString()
-		{
-			switch (type)
-			{
-				case SocketType.TcpClient:     return (                                         this.remoteHost.ToEndpointAddressString() + ":" + this.remoteTcpPort);
-				case SocketType.TcpServer:     return ("Server:"  + this.localTcpPort                                                                         );
-				case SocketType.TcpAutoSocket: return ("Server:"  + this.localTcpPort + " / " + this.remoteHost.ToEndpointAddressString() + ":" + this.remoteTcpPort);
-				case SocketType.UdpClient:     return (                                         this.remoteHost.ToEndpointAddressString() + ":" + this.remoteUdpPort);
-				case SocketType.UdpServer:     return ("Receive:" + this.localUdpPort                                                                         );
-				case SocketType.UdpPairSocket: return ("Receive:" + this.localUdpPort + " / " + this.remoteHost.ToEndpointAddressString() + ":" + this.remoteUdpPort);
-
-				default:                       return (Undefined);
-			}
-		}
-
-		#endregion
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(SocketSettings lhs, SocketSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
-			return (lhs.Equals(rhs));
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(SocketSettings lhs, SocketSettings rhs)
-		{
-			return (!(lhs == rhs));
 		}
 
 		#endregion

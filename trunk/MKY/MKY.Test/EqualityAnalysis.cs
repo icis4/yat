@@ -84,11 +84,32 @@ namespace MKY.Test
 			}
 
 			#region Object Members
+			//======================================================================================
+			// Object Members
+			//======================================================================================
 
-			/// <summary></summary>
+			/// <summary>
+			/// Converts the value of this instance to its equivalent string representation.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields. This ensures that 'intelligent' properties,
+			/// i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override string ToString()
 			{
 				return ("A = " + A.ToString(CultureInfo.InvariantCulture));
+			}
+
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				return (A.GetHashCode());
 			}
 
 			/// <summary>
@@ -142,18 +163,6 @@ namespace MKY.Test
 				return (A == other.A);
 
 			#endif
-			}
-
-			/// <summary>
-			/// Serves as a hash function for a particular type.
-			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public override int GetHashCode()
-			{
-				return (A.GetHashCode());
 			}
 
 			/// <summary>
@@ -235,11 +244,32 @@ namespace MKY.Test
 			}
 
 			#region Object Members
+			//======================================================================================
+			// Object Members
+			//======================================================================================
 
-			/// <summary></summary>
+			/// <summary>
+			/// Converts the value of this instance to its equivalent string representation.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields. This ensures that 'intelligent' properties,
+			/// i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override string ToString()
 			{
 				return ("A = " + A.ToString(CultureInfo.InvariantCulture));
+			}
+
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				return (A.GetHashCode());
 			}
 
 			/// <summary>
@@ -296,18 +326,6 @@ namespace MKY.Test
 			#endif
 			}
 
-			/// <summary>
-			/// Serves as a hash function for a particular type.
-			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public override int GetHashCode()
-			{
-				return (A.GetHashCode());
-			}
-
 			#endregion
 		}
 
@@ -335,14 +353,35 @@ namespace MKY.Test
 			where T : IEquatable<T>
 		{
 			#region Object Members
+			//======================================================================================
+			// Object Members
+			//======================================================================================
 
-			/// <summary></summary>
+			/// <summary>
+			/// Converts the value of this instance to its equivalent string representation.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields. This ensures that 'intelligent' properties,
+			/// i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override string ToString()
 			{
 				return
 				(
 					Environment.NewLine + "      1:Base = " + base.ToString()
 				);
+			}
+
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				return (base.GetHashCode());
 			}
 
 			/// <summary>
@@ -394,18 +433,6 @@ namespace MKY.Test
 			#endif
 			}
 
-			/// <summary>
-			/// Serves as a hash function for a particular type.
-			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public override int GetHashCode()
-			{
-				return (base.GetHashCode());
-			}
-
 			#endregion
 		}
 
@@ -417,14 +444,35 @@ namespace MKY.Test
 			where T : IEquatable<T>
 		{
 			#region Object Members
+			//======================================================================================
+			// Object Members
+			//======================================================================================
 
-			/// <summary></summary>
+			/// <summary>
+			/// Converts the value of this instance to its equivalent string representation.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields. This ensures that 'intelligent' properties,
+			/// i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override string ToString()
 			{
 				return
 				(
 					Environment.NewLine + "      1:Base = " + base.ToString()
 				);
+			}
+
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				return (base.GetHashCode());
 			}
 
 			/// <summary>
@@ -474,18 +522,6 @@ namespace MKY.Test
 				return (true);
 
 			#endif
-			}
-
-			/// <summary>
-			/// Serves as a hash function for a particular type.
-			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public override int GetHashCode()
-			{
-				return (base.GetHashCode());
 			}
 
 			/// <summary>
@@ -568,11 +604,32 @@ namespace MKY.Test
 			}
 
 			#region Object Members
+			//======================================================================================
+			// Object Members
+			//======================================================================================
 
-			/// <summary></summary>
+			/// <summary>
+			/// Converts the value of this instance to its equivalent string representation.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields. This ensures that 'intelligent' properties,
+			/// i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override string ToString()
 			{
 				return (Environment.NewLine + "    0:A    = " + A.ToString(CultureInfo.InvariantCulture));
+			}
+
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				return (A.GetHashCode());
 			}
 
 			/// <summary>
@@ -628,18 +685,6 @@ namespace MKY.Test
 			#endif
 			}
 
-			/// <summary>
-			/// Serves as a hash function for a particular type.
-			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public override int GetHashCode()
-			{
-				return (A.GetHashCode());
-			}
-
 			#endregion
 		}
 
@@ -659,8 +704,17 @@ namespace MKY.Test
 			}
 
 			#region Object Members
+			//======================================================================================
+			// Object Members
+			//======================================================================================
 
-			/// <summary></summary>
+			/// <summary>
+			/// Converts the value of this instance to its equivalent string representation.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields. This ensures that 'intelligent' properties,
+			/// i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override string ToString()
 			{
 				return
@@ -668,6 +722,18 @@ namespace MKY.Test
 					Environment.NewLine + "      1:Base = " + base.ToString() +
 					Environment.NewLine + "      1:B    = " + B.ToString(CultureInfo.InvariantCulture)
 				);
+			}
+
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				return (base.GetHashCode() ^ A.GetHashCode());
 			}
 
 			/// <summary>
@@ -713,18 +779,6 @@ namespace MKY.Test
 			#endif
 			}
 
-			/// <summary>
-			/// Serves as a hash function for a particular type.
-			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public override int GetHashCode()
-			{
-				return (base.GetHashCode() ^ A.GetHashCode());
-			}
-
 			#endregion
 		}
 
@@ -743,11 +797,32 @@ namespace MKY.Test
 			}
 
 			#region Object Members
+			//======================================================================================
+			// Object Members
+			//======================================================================================
 
-			/// <summary></summary>
+			/// <summary>
+			/// Converts the value of this instance to its equivalent string representation.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields. This ensures that 'intelligent' properties,
+			/// i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override string ToString()
 			{
 				return (Environment.NewLine + "    0:A    = " + A.ToString(CultureInfo.InvariantCulture));
+			}
+
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				return (A.GetHashCode());
 			}
 
 			/// <summary>
@@ -809,18 +884,6 @@ namespace MKY.Test
 			#endif
 			}
 
-			/// <summary>
-			/// Serves as a hash function for a particular type.
-			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public override int GetHashCode()
-			{
-				return (A.GetHashCode());
-			}
-
 			#endregion
 		}
 
@@ -840,8 +903,17 @@ namespace MKY.Test
 			}
 
 			#region Object Members
+			//======================================================================================
+			// Object Members
+			//======================================================================================
 
-			/// <summary></summary>
+			/// <summary>
+			/// Converts the value of this instance to its equivalent string representation.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields. This ensures that 'intelligent' properties,
+			/// i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override string ToString()
 			{
 				return
@@ -849,6 +921,18 @@ namespace MKY.Test
 					Environment.NewLine + "      1:Base = " + base.ToString() +
 					Environment.NewLine + "      1:B    = " + B.ToString(CultureInfo.InvariantCulture)
 				);
+			}
+
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				return (base.GetHashCode() ^ B.GetHashCode());
 			}
 
 			/// <summary>
@@ -890,18 +974,6 @@ namespace MKY.Test
 			#endif
 			}
 
-			/// <summary>
-			/// Serves as a hash function for a particular type.
-			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public override int GetHashCode()
-			{
-				return (base.GetHashCode() ^ B.GetHashCode());
-			}
-
 			#endregion
 		}
 
@@ -920,11 +992,32 @@ namespace MKY.Test
 			}
 
 			#region Object Members
+			//======================================================================================
+			// Object Members
+			//======================================================================================
 
-			/// <summary></summary>
+			/// <summary>
+			/// Converts the value of this instance to its equivalent string representation.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields. This ensures that 'intelligent' properties,
+			/// i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override string ToString()
 			{
 				return (Environment.NewLine + "    0:A    = " + A.ToString(CultureInfo.InvariantCulture));
+			}
+
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				return (A.GetHashCode());
 			}
 
 			/// <summary>
@@ -978,18 +1071,6 @@ namespace MKY.Test
 				return (A == other.A);
 
 			#endif
-			}
-
-			/// <summary>
-			/// Serves as a hash function for a particular type.
-			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public override int GetHashCode()
-			{
-				return (A.GetHashCode());
 			}
 
 			/// <summary>
@@ -1072,8 +1153,17 @@ namespace MKY.Test
 			}
 
 			#region Object Members
+			//======================================================================================
+			// Object Members
+			//======================================================================================
 
-			/// <summary></summary>
+			/// <summary>
+			/// Converts the value of this instance to its equivalent string representation.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields. This ensures that 'intelligent' properties,
+			/// i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override string ToString()
 			{
 				return
@@ -1081,6 +1171,18 @@ namespace MKY.Test
 					Environment.NewLine + "      1:Base = " + base.ToString() +
 					Environment.NewLine + "      1:B    = " + B.ToString(CultureInfo.InvariantCulture)
 				);
+			}
+
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				return (base.GetHashCode() ^ A.GetHashCode());
 			}
 
 			/// <summary>
@@ -1124,18 +1226,6 @@ namespace MKY.Test
 				return (B == other.B);
 
 			#endif
-			}
-
-			/// <summary>
-			/// Serves as a hash function for a particular type.
-			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public override int GetHashCode()
-			{
-				return (base.GetHashCode() ^ A.GetHashCode());
 			}
 
 			/// <summary>
@@ -1217,8 +1307,17 @@ namespace MKY.Test
 			}
 
 			#region Object Members
+			//======================================================================================
+			// Object Members
+			//======================================================================================
 
-			/// <summary></summary>
+			/// <summary>
+			/// Converts the value of this instance to its equivalent string representation.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields. This ensures that 'intelligent' properties,
+			/// i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override string ToString()
 			{
 				return
@@ -1226,6 +1325,18 @@ namespace MKY.Test
 					Environment.NewLine + "        2:Base = " + base.ToString() +
 					Environment.NewLine + "        2:C    = " + this.C.ToString(CultureInfo.InvariantCulture)
 				);
+			}
+
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				return (base.GetHashCode() ^ A.GetHashCode());
 			}
 
 			/// <summary>
@@ -1271,18 +1382,6 @@ namespace MKY.Test
 			#endif
 			}
 
-			/// <summary>
-			/// Serves as a hash function for a particular type.
-			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public override int GetHashCode()
-			{
-				return (base.GetHashCode() ^ A.GetHashCode());
-			}
-
 			#endregion
 		}
 
@@ -1301,11 +1400,32 @@ namespace MKY.Test
 			}
 
 			#region Object Members
+			//======================================================================================
+			// Object Members
+			//======================================================================================
 
-			/// <summary></summary>
+			/// <summary>
+			/// Converts the value of this instance to its equivalent string representation.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields. This ensures that 'intelligent' properties,
+			/// i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override string ToString()
 			{
 				return (Environment.NewLine + "    0:A    = " + A.ToString(CultureInfo.InvariantCulture));
+			}
+
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				return (A.GetHashCode());
 			}
 
 			/// <summary>
@@ -1359,18 +1479,6 @@ namespace MKY.Test
 				return (A == other.A);
 
 			#endif
-			}
-
-			/// <summary>
-			/// Serves as a hash function for a particular type.
-			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public override int GetHashCode()
-			{
-				return (A.GetHashCode());
 			}
 
 			/// <summary>
@@ -1457,8 +1565,17 @@ namespace MKY.Test
 			}
 
 			#region Object Members
+			//======================================================================================
+			// Object Members
+			//======================================================================================
 
-			/// <summary></summary>
+			/// <summary>
+			/// Converts the value of this instance to its equivalent string representation.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields. This ensures that 'intelligent' properties,
+			/// i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override string ToString()
 			{
 				return
@@ -1466,6 +1583,18 @@ namespace MKY.Test
 					Environment.NewLine + "      1:Base = " + base.ToString() +
 					Environment.NewLine + "      1:B    = " + B.ToString(CultureInfo.InvariantCulture)
 				);
+			}
+
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				return (base.GetHashCode() ^ A.GetHashCode());
 			}
 
 			/// <summary>
@@ -1511,18 +1640,6 @@ namespace MKY.Test
 			#endif
 			}
 
-			/// <summary>
-			/// Serves as a hash function for a particular type.
-			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public override int GetHashCode()
-			{
-				return (base.GetHashCode() ^ A.GetHashCode());
-			}
-
 			#endregion
 		}
 
@@ -1541,11 +1658,32 @@ namespace MKY.Test
 			}
 
 			#region Object Members
+			//======================================================================================
+			// Object Members
+			//======================================================================================
 
-			/// <summary></summary>
+			/// <summary>
+			/// Converts the value of this instance to its equivalent string representation.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields. This ensures that 'intelligent' properties,
+			/// i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override string ToString()
 			{
 				return (Environment.NewLine + "    0:A    = " + A.ToString(CultureInfo.InvariantCulture));
+			}
+
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				return (A.GetHashCode());
 			}
 
 			/// <summary>
@@ -1605,18 +1743,6 @@ namespace MKY.Test
 				return (A == other.A);
 
 			#endif
-			}
-
-			/// <summary>
-			/// Serves as a hash function for a particular type.
-			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public override int GetHashCode()
-			{
-				return (A.GetHashCode());
 			}
 
 			/// <summary>
@@ -1703,8 +1829,17 @@ namespace MKY.Test
 			}
 
 			#region Object Members
+			//======================================================================================
+			// Object Members
+			//======================================================================================
 
-			/// <summary></summary>
+			/// <summary>
+			/// Converts the value of this instance to its equivalent string representation.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields. This ensures that 'intelligent' properties,
+			/// i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override string ToString()
 			{
 				return
@@ -1712,6 +1847,18 @@ namespace MKY.Test
 					Environment.NewLine + "      1:Base = " + base.ToString() +
 					Environment.NewLine + "      1:B    = " + B.ToString(CultureInfo.InvariantCulture)
 				);
+			}
+
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				return (base.GetHashCode() ^ A.GetHashCode());
 			}
 
 			/// <summary>
@@ -1765,18 +1912,6 @@ namespace MKY.Test
 				return (base.Equals(other) && (B == other.B));
 
 			#endif
-			}
-
-			/// <summary>
-			/// Serves as a hash function for a particular type.
-			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public override int GetHashCode()
-			{
-				return (base.GetHashCode() ^ A.GetHashCode());
 			}
 
 			#endregion

@@ -75,7 +75,9 @@ namespace MKY.IO.Serial
 			return (ToString(""));
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
 		public virtual string ToString(string indent)
 		{
 			StringBuilder sb = new StringBuilder();

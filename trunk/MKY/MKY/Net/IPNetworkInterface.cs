@@ -217,10 +217,99 @@ namespace MKY.Net
 
 		#endregion
 
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary></summary>
+		public IPNetworkInterfaceDescriptorPair ToDescriptorPair()
+		{
+			return (new IPNetworkInterfaceDescriptorPair(Description, Address.ToString()));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality,
+		/// ignoring <see cref="Address"/>.
+		/// </summary>
+		public bool EqualsDescription(IPNetworkInterfaceEx other)
+		{
+			if (ReferenceEquals(other, null))
+				return (false);
+
+			if (GetType() != other.GetType())
+				return (false);
+
+			if ((IPNetworkInterface)UnderlyingEnum == IPNetworkInterface.Explicit)
+			{
+				return
+				(
+					base.Equals(other) &&
+					(this.explicitDescription == other.explicitDescription)
+				);
+			}
+			else
+			{
+				return
+				(
+					base.Equals(other)
+				////this.explicitDescription is not given.
+				);
+			}
+		}
+
+		#endregion
+
 		#region Object Members
 		//==========================================================================================
 		// Object Members
 		//==========================================================================================
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		public override string ToString()
+		{
+			switch ((IPNetworkInterface)UnderlyingEnum)
+			{
+				case IPNetworkInterface.Any:          return (Any_string);
+				case IPNetworkInterface.Loopback:     return (Loopback_string);
+				case IPNetworkInterface.IPv4Any:      return (IPv4Any_string      + " (" + IPAddress.Any + ")");
+				case IPNetworkInterface.IPv4Loopback: return (IPv4Loopback_string + " (" + IPAddress.Loopback + ")");
+				case IPNetworkInterface.IPv6Any:      return (IPv6Any_string      + " (" + IPAddress.IPv6Any + ")");
+				case IPNetworkInterface.IPv6Loopback: return (IPv6Loopback_string + " (" + IPAddress.IPv6Loopback + ")");
+				case IPNetworkInterface.Explicit:
+				{
+					if (!string.IsNullOrEmpty(this.explicitDescription))
+						return (this.explicitDescription + " (" + this.explicitAddress.ToString() + ")"); // Explicit address is always given, at least 'IPAdress.None'.
+					else
+						return (this.explicitAddress.ToString()); // Explicit address is always given, at least 'IPAdress.None'.
+				}
+			}
+			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+
+				if ((IPNetworkInterface)UnderlyingEnum == IPNetworkInterface.Explicit)
+				{
+					if (!string.IsNullOrEmpty(this.explicitDescription))
+						hashCode = (hashCode * 397) ^ this.explicitDescription.GetHashCode();
+
+					hashCode = (hashCode * 397) ^ this.explicitAddress.GetHashCode(); // Explicit address is always given, at least 'IPAdress.None'.
+				}
+
+				return (hashCode);
+			}
+		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -257,85 +346,23 @@ namespace MKY.Net
 		}
 
 		/// <summary>
-		/// Determines whether this instance and the specified object have value equality,
-		/// ignoring <see cref="Address"/>.
+		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public bool EqualsDescription(IPNetworkInterfaceEx other)
+		public static bool operator ==(IPNetworkInterfaceEx lhs, IPNetworkInterfaceEx rhs)
 		{
-			if (ReferenceEquals(other, null))
-				return (false);
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
-			if (GetType() != other.GetType())
-				return (false);
-
-			if ((IPNetworkInterface)UnderlyingEnum == IPNetworkInterface.Explicit)
-			{
-				return
-				(
-					base.Equals(other) &&
-					(this.explicitDescription == other.explicitDescription)
-				);
-			}
-			else
-			{
-				return
-				(
-					base.Equals(other)
-				////this.explicitDescription is not given.
-				);
-			}
+			return (lhs.Equals(rhs));
 		}
 
 		/// <summary>
-		/// Serves as a hash function for a particular type.
+		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public override int GetHashCode()
+		public static bool operator !=(IPNetworkInterfaceEx lhs, IPNetworkInterfaceEx rhs)
 		{
-			unchecked
-			{
-				int hashCode = base.GetHashCode();
-
-				if ((IPNetworkInterface)UnderlyingEnum == IPNetworkInterface.Explicit)
-				{
-					if (!string.IsNullOrEmpty(this.explicitDescription))
-						hashCode = (hashCode * 397) ^ this.explicitDescription.GetHashCode();
-
-					hashCode = (hashCode * 397) ^ this.explicitAddress.GetHashCode(); // Explicit address is always given, at least 'IPAdress.None'.
-				}
-
-				return (hashCode);
-			}
-		}
-
-		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
-		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
-		public override string ToString()
-		{
-			switch ((IPNetworkInterface)UnderlyingEnum)
-			{
-				case IPNetworkInterface.Any:          return (Any_string);
-				case IPNetworkInterface.Loopback:     return (Loopback_string);
-				case IPNetworkInterface.IPv4Any:      return (IPv4Any_string      + " (" + IPAddress.Any + ")");
-				case IPNetworkInterface.IPv4Loopback: return (IPv4Loopback_string + " (" + IPAddress.Loopback + ")");
-				case IPNetworkInterface.IPv6Any:      return (IPv6Any_string      + " (" + IPAddress.IPv6Any + ")");
-				case IPNetworkInterface.IPv6Loopback: return (IPv6Loopback_string + " (" + IPAddress.IPv6Loopback + ")");
-				case IPNetworkInterface.Explicit:
-				{
-					if (!string.IsNullOrEmpty(this.explicitDescription))
-						return (this.explicitDescription + " (" + this.explicitAddress.ToString() + ")"); // Explicit address is always given, at least 'IPAdress.None'.
-					else
-						return (this.explicitAddress.ToString()); // Explicit address is always given, at least 'IPAdress.None'.
-				}
-			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-		}
-
-		/// <summary></summary>
-		public IPNetworkInterfaceDescriptorPair ToDescriptorPair()
-		{
-			return (new IPNetworkInterfaceDescriptorPair(Description, Address.ToString()));
+			return (!(lhs == rhs));
 		}
 
 		#endregion

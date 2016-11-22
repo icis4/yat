@@ -81,28 +81,21 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 
 		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
+		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
 		/// <remarks>
-		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public override string ToString()
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			SerialPortControlPins other = (SerialPortControlPins)obj;
 			return
 			(
-				(Rfr == other.Rfr) &&
-				(Cts == other.Cts) &&
-				(Dtr == other.Dtr) &&
-				(Dsr == other.Dsr) &&
-				(Dcd == other.Dcd)
+				"RFR=" + Rfr.ToString() + ", " +
+				"CTS=" + Cts.ToString() + ", " +
+				"DTR=" + Dtr.ToString() + ", " +
+				"DSR=" + Dsr.ToString() + ", " +
+				"DCD=" + Dcd.ToString()
 			);
 		}
 
@@ -130,21 +123,28 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
+		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		/// <remarks>
-		/// Use properties instead of fields. This ensures that 'intelligent' properties,
-		/// i.e. properties with some logic, are also properly handled.
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override string ToString()
+		public override bool Equals(object obj)
 		{
+			if (ReferenceEquals(obj, null))
+				return (false);
+
+			if (GetType() != obj.GetType())
+				return (false);
+
+			SerialPortControlPins other = (SerialPortControlPins)obj;
 			return
 			(
-				"RFR=" + Rfr.ToString() + ", " +
-				"CTS=" + Cts.ToString() + ", " +
-				"DTR=" + Dtr.ToString() + ", " +
-				"DSR=" + Dsr.ToString() + ", " +
-				"DCD=" + Dcd.ToString()
+				(Rfr == other.Rfr) &&
+				(Cts == other.Cts) &&
+				(Dtr == other.Dtr) &&
+				(Dsr == other.Dsr) &&
+				(Dcd == other.Dcd)
 			);
 		}
 
@@ -235,28 +235,21 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 
 		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
+		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
 		/// <remarks>
-		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public override string ToString()
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			SerialPortControlPinCount other = (SerialPortControlPinCount)obj;
 			return
 			(
-				(RfrDisableCount == other.RfrDisableCount) &&
-				(CtsDisableCount == other.CtsDisableCount) &&
-				(DtrDisableCount == other.DtrDisableCount) &&
-				(DsrDisableCount == other.DsrDisableCount) &&
-				(DcdCount        == other.DcdCount)
+				"RFR=" + RfrDisableCount.ToString(CultureInfo.InvariantCulture) + ", " +
+				"CTS=" + CtsDisableCount.ToString(CultureInfo.InvariantCulture) + ", " +
+				"DTR=" + DtrDisableCount.ToString(CultureInfo.InvariantCulture) + ", " +
+				"DSR=" + DsrDisableCount.ToString(CultureInfo.InvariantCulture) + ", " +
+				"DCD=" + DcdCount       .ToString(CultureInfo.InvariantCulture)
 			);
 		}
 
@@ -284,21 +277,28 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
+		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		/// <remarks>
-		/// Use properties instead of fields. This ensures that 'intelligent' properties,
-		/// i.e. properties with some logic, are also properly handled.
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override string ToString()
+		public override bool Equals(object obj)
 		{
+			if (ReferenceEquals(obj, null))
+				return (false);
+
+			if (GetType() != obj.GetType())
+				return (false);
+
+			SerialPortControlPinCount other = (SerialPortControlPinCount)obj;
 			return
 			(
-				"RFR=" + RfrDisableCount.ToString(CultureInfo.InvariantCulture) + ", " +
-				"CTS=" + CtsDisableCount.ToString(CultureInfo.InvariantCulture) + ", " +
-				"DTR=" + DtrDisableCount.ToString(CultureInfo.InvariantCulture) + ", " +
-				"DSR=" + DsrDisableCount.ToString(CultureInfo.InvariantCulture) + ", " +
-				"DCD=" + DcdCount       .ToString(CultureInfo.InvariantCulture)
+				(RfrDisableCount == other.RfrDisableCount) &&
+				(CtsDisableCount == other.CtsDisableCount) &&
+				(DtrDisableCount == other.DtrDisableCount) &&
+				(DsrDisableCount == other.DsrDisableCount) &&
+				(DcdCount        == other.DcdCount)
 			);
 		}
 

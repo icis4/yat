@@ -370,84 +370,6 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public override bool Equals(object obj)
-		{
-			return (Equals(obj as DeviceInfo));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public virtual bool Equals(DeviceInfo other)
-		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (GetType() != other.GetType())
-				return (false);
-
-			// Do not care about path, the path is likely to be system dependent.
-
-			return
-			(
-				(VendorId  == other.VendorId) &&
-				(ProductId == other.ProductId) &&
-				(Serial    == other.Serial)
-			);
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality,
-		/// ignoring <see cref="Serial"/>.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
-		public bool EqualsVidPid(DeviceInfo other)
-		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (GetType() != other.GetType())
-				return (false);
-
-			// Do not care about path, the path is likely to be system dependent.
-
-			return
-			(
-				(VendorId  == other.VendorId) &&
-				(ProductId == other.ProductId)
-			);
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				if (this.path != null)
-					return (this.path.GetHashCode());
-				else
-					return (base.GetHashCode());
-			}
-		}
-
-		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
 		public override string ToString()
@@ -455,9 +377,9 @@ namespace MKY.IO.Usb
 			return (ToString(true, true));
 		}
 
-		#region Object Members > Extensions
+		#region Object Members > ToString Extensions
 		//------------------------------------------------------------------------------------------
-		// Object Members > Extensions
+		// Object Members > ToString Extensions
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -561,6 +483,84 @@ namespace MKY.IO.Usb
 		}
 
 		#endregion
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				if (this.path != null)
+					return (this.path.GetHashCode());
+				else
+					return (base.GetHashCode());
+			}
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as DeviceInfo));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public virtual bool Equals(DeviceInfo other)
+		{
+			if (ReferenceEquals(other, null))
+				return (false);
+
+			if (GetType() != other.GetType())
+				return (false);
+
+			// Do not care about path, the path is likely to be system dependent.
+
+			return
+			(
+				(VendorId  == other.VendorId) &&
+				(ProductId == other.ProductId) &&
+				(Serial    == other.Serial)
+			);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality,
+		/// ignoring <see cref="Serial"/>.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
+		public bool EqualsVidPid(DeviceInfo other)
+		{
+			if (ReferenceEquals(other, null))
+				return (false);
+
+			if (GetType() != other.GetType())
+				return (false);
+
+			// Do not care about path, the path is likely to be system dependent.
+
+			return
+			(
+				(VendorId  == other.VendorId) &&
+				(ProductId == other.ProductId)
+			);
+		}
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.

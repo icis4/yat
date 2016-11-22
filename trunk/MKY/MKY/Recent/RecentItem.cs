@@ -113,6 +113,37 @@ namespace MKY.Recent
 		//==========================================================================================
 
 		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override string ToString()
+		{
+			return (Item.ToString());
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				// Attention, default(T) can lead to null, e.g. in case of a string!
+				if (Item != null)
+					return (Item.GetHashCode()); // Do not consider time stamp.
+				else
+					return (base.GetHashCode());
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		public override bool Equals(object obj)
@@ -141,37 +172,6 @@ namespace MKY.Recent
 
 			// Attention, <T> may not overload the ==/!= operators.
 			return (Item.Equals(other.Item)); // Do not consider time stamp.
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				// Attention, default(T) can lead to null, e.g. in case of a string!
-				if (Item != null)
-					return (Item.GetHashCode()); // Do not consider time stamp.
-				else
-					return (base.GetHashCode());
-			}
-		}
-
-		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields. This ensures that 'intelligent' properties,
-		/// i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override string ToString()
-		{
-			return (Item.ToString());
 		}
 
 		/// <summary>

@@ -123,6 +123,33 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 
 		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		public override string ToString()
+		{
+			if (this == BaudRate.Explicit)
+				return (this.explicitBaudRate.ToString(CultureInfo.InvariantCulture));
+			else
+				return (UnderlyingEnum.GetHashCode().ToString(CultureInfo.InvariantCulture));
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+
+				if ((BaudRate)UnderlyingEnum == BaudRate.Explicit)
+					hashCode = (hashCode * 397) ^ this.explicitBaudRate;
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		public override bool Equals(object obj)
@@ -156,30 +183,23 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Serves as a hash function for a particular type.
+		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public override int GetHashCode()
+		public static bool operator ==(BaudRateEx lhs, BaudRateEx rhs)
 		{
-			unchecked
-			{
-				int hashCode = base.GetHashCode();
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
-				if ((BaudRate)UnderlyingEnum == BaudRate.Explicit)
-					hashCode = (hashCode * 397) ^ this.explicitBaudRate;
-
-				return (hashCode);
-			}
+			return (lhs.Equals(rhs));
 		}
 
 		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
+		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public override string ToString()
+		public static bool operator !=(BaudRateEx lhs, BaudRateEx rhs)
 		{
-			if (this == BaudRate.Explicit)
-				return (this.explicitBaudRate.ToString(CultureInfo.InvariantCulture));
-			else
-				return (UnderlyingEnum.GetHashCode().ToString(CultureInfo.InvariantCulture));
+			return (!(lhs == rhs));
 		}
 
 		#endregion

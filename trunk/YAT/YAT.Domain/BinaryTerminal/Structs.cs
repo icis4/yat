@@ -59,6 +59,26 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    Enabled.GetHashCode();
+				hashCode = (hashCode * 397) ^ Length .GetHashCode();
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		/// <remarks>
@@ -79,26 +99,6 @@ namespace YAT.Domain
 				(Enabled == other.Enabled) &&
 				(Length  == other.Length)
 			);
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode;
-
-				hashCode =                    Enabled.GetHashCode();
-				hashCode = (hashCode * 397) ^ Length .GetHashCode();
-
-				return (hashCode);
-			}
 		}
 
 		/// <summary>
@@ -151,6 +151,26 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    Enabled .GetHashCode();
+				hashCode = (hashCode * 397) ^ Sequence.GetHashCode();
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		/// <remarks>
@@ -171,26 +191,6 @@ namespace YAT.Domain
 				(Enabled                                 == other.Enabled) &&
 				(StringEx.EqualsOrdinalIgnoreCase(Sequence, other.Sequence))
 			);
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode;
-
-				hashCode =                    Enabled .GetHashCode();
-				hashCode = (hashCode * 397) ^ Sequence.GetHashCode();
-
-				return (hashCode);
-			}
 		}
 
 		/// <summary>
@@ -243,6 +243,26 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    Enabled.GetHashCode();
+				hashCode = (hashCode * 397) ^ Timeout.GetHashCode();
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		/// <remarks>
@@ -263,26 +283,6 @@ namespace YAT.Domain
 				(Enabled == other.Enabled) &&
 				(Timeout == other.Timeout)
 			);
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode;
-
-				hashCode =                    Enabled.GetHashCode();
-				hashCode = (hashCode * 397) ^ Timeout.GetHashCode();
-
-				return (hashCode);
-			}
 		}
 
 		/// <summary>

@@ -66,6 +66,21 @@ namespace MKY.Test.Types
 			}
 
 			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				unchecked
+				{
+					return (A.GetHashCode() ^ B.GetHashCode());
+				}
+			}
+
+			/// <summary>
 			/// Determines whether this instance and the specified object have value equality.
 			/// </summary>
 			/// <remarks>
@@ -85,18 +100,23 @@ namespace MKY.Test.Types
 			}
 
 			/// <summary>
-			/// Serves as a hash function for a particular type.
+			/// Determines whether the two specified objects have reference or value equality.
 			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public override int GetHashCode()
+			public static bool operator ==(SimpleType lhs, SimpleType rhs)
 			{
-				unchecked
-				{
-					return (A.GetHashCode() ^ B.GetHashCode());
-				}
+				if (ReferenceEquals(lhs, rhs))  return (true);
+				if (ReferenceEquals(lhs, null)) return (false);
+				if (ReferenceEquals(rhs, null)) return (false);
+
+				return (lhs.Equals(rhs));
+			}
+
+			/// <summary>
+			/// Determines whether the two specified objects have reference and value inequality.
+			/// </summary>
+			public static bool operator !=(SimpleType lhs, SimpleType rhs)
+			{
+				return (!(lhs == rhs));
 			}
 		}
 

@@ -84,6 +84,41 @@ namespace MKY.Time
 		//==========================================================================================
 
 		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override string ToString()
+		{
+			string strA = TimeStamp.ToString(CultureInfo.InvariantCulture);
+			string strB = Item.ToString();
+
+			return (strA + " / " + strB);
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = TimeStamp.GetHashCode();
+
+				// Attention, default(T) can lead to null, e.g. in case of a string!
+				hashCode = (hashCode * 397) ^ (Item != null ? Item.GetHashCode() : 0);
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		/// <remarks>
@@ -109,41 +144,6 @@ namespace MKY.Time
 				(TimeStamp == other.TimeStamp) &&
 				(Item.Equals(other.Item)) // Attention, <Tx> may not overload the ==/!= operators.
 			);
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode = TimeStamp.GetHashCode();
-
-				// Attention, default(T) can lead to null, e.g. in case of a string!
-				hashCode = (hashCode * 397) ^ (Item != null ? Item.GetHashCode() : 0);
-
-				return (hashCode);
-			}
-		}
-
-		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields. This ensures that 'intelligent' properties,
-		/// i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override string ToString()
-		{
-			string strA = TimeStamp.ToString(CultureInfo.InvariantCulture);
-			string strB = Item.ToString();
-
-			return (strA + " / " + strB);
 		}
 
 		/// <summary>

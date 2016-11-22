@@ -834,30 +834,6 @@ namespace MKY.Text
 		//==========================================================================================
 
 		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public override bool Equals(object obj)
-		{
-			return (Equals(obj as EncodingEx));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public virtual bool Equals(EncodingEx other)
-		{
-			return (base.Equals(other));
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		public override int GetHashCode()
-		{
-			return (base.GetHashCode());
-		}
-
-		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation,
 		/// which is "DisplayName [CodePage]".
 		/// </summary>
@@ -874,6 +850,50 @@ namespace MKY.Text
 				sb.Append(" (Default)");
 
 			return (sb.ToString());
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		public override int GetHashCode()
+		{
+			return (base.GetHashCode());
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as EncodingEx));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public virtual bool Equals(EncodingEx other)
+		{
+			return (base.Equals(other));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(EncodingEx lhs, EncodingEx rhs)
+		{
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			return (lhs.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(EncodingEx lhs, EncodingEx rhs)
+		{
+			return (!(lhs == rhs));
 		}
 
 		#endregion
@@ -1132,26 +1152,6 @@ namespace MKY.Text
 			// Invalid string!
 			result = null;
 			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(EncodingEx lhs, EncodingEx rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
-			return (lhs.Equals(rhs));
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(EncodingEx lhs, EncodingEx rhs)
-		{
-			return (!(lhs == rhs));
 		}
 
 		#endregion

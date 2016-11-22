@@ -115,67 +115,10 @@ namespace YAT.Domain
 			this.explicitEnclosure = enclosure;
 		}
 
-		#region Object Members
+		#region Methods
 		//==========================================================================================
-		// Object Members
+		// Methods
 		//==========================================================================================
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public override bool Equals(object obj)
-		{
-			return (Equals(obj as InfoElementEnclosureEx));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public virtual bool Equals(InfoElementEnclosureEx other)
-		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (GetType() != other.GetType())
-				return (false);
-
-			if ((InfoElementEnclosure)UnderlyingEnum == InfoElementEnclosure.Explicit)
-			{
-				return
-				(
-					base.Equals(other) &&
-					(this.explicitEnclosure == other.explicitEnclosure)
-				);
-			}
-			else
-			{
-				return (base.Equals(other));
-			}
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode = base.GetHashCode();
-
-				if ((InfoElementEnclosure)UnderlyingEnum == InfoElementEnclosure.Explicit)
-					hashCode = (hashCode * 397) ^ (this.explicitEnclosure != null ? this.explicitEnclosure.GetHashCode() : 0);
-
-				return (hashCode);
-			}
-		}
-
-		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
-		/// </summary>
-		public override string ToString()
-		{
-			return (ToDescription());
-		}
 
 		/// <summary></summary>
 		public virtual string ToEnclosure()
@@ -239,6 +182,70 @@ namespace YAT.Domain
 				case InfoElementEnclosure.Explicit:       return (          this.explicitEnclosure);
 			}
 			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
+
+		#endregion
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		public override string ToString()
+		{
+			return (ToDescription());
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+
+				if ((InfoElementEnclosure)UnderlyingEnum == InfoElementEnclosure.Explicit)
+					hashCode = (hashCode * 397) ^ (this.explicitEnclosure != null ? this.explicitEnclosure.GetHashCode() : 0);
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as InfoElementEnclosureEx));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public virtual bool Equals(InfoElementEnclosureEx other)
+		{
+			if (ReferenceEquals(other, null))
+				return (false);
+
+			if (GetType() != other.GetType())
+				return (false);
+
+			if ((InfoElementEnclosure)UnderlyingEnum == InfoElementEnclosure.Explicit)
+			{
+				return
+				(
+					base.Equals(other) &&
+					(this.explicitEnclosure == other.explicitEnclosure)
+				);
+			}
+			else
+			{
+				return (base.Equals(other));
+			}
 		}
 
 		#endregion

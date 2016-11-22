@@ -264,6 +264,36 @@ namespace YAT.Model.Settings
 		//==========================================================================================
 
 		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+
+				hashCode =                     TxMonitorPanelIsVisible   .GetHashCode();
+				hashCode = (hashCode * 397) ^  BidirMonitorPanelIsVisible.GetHashCode();
+				hashCode = (hashCode * 397) ^  RxMonitorPanelIsVisible   .GetHashCode();
+				hashCode = (hashCode * 397) ^  MonitorOrientation        .GetHashCode();
+				hashCode = (hashCode * 397) ^  TxMonitorSplitterRatio    .GetHashCode();
+				hashCode = (hashCode * 397) ^  RxMonitorSplitterRatio    .GetHashCode();
+
+				hashCode = (hashCode * 397) ^  PredefinedPanelIsVisible  .GetHashCode();
+				hashCode = (hashCode * 397) ^  PredefinedSplitterRatio   .GetHashCode();
+
+				hashCode = (hashCode * 397) ^  SendTextPanelIsVisible    .GetHashCode();
+				hashCode = (hashCode * 397) ^  SendFilePanelIsVisible    .GetHashCode();
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		/// <remarks>
@@ -296,36 +326,6 @@ namespace YAT.Model.Settings
 				(SendTextPanelIsVisible     == other.SendTextPanelIsVisible) &&
 				(SendFilePanelIsVisible     == other.SendFilePanelIsVisible)
 			);
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
-
-				hashCode =                     TxMonitorPanelIsVisible   .GetHashCode();
-				hashCode = (hashCode * 397) ^  BidirMonitorPanelIsVisible.GetHashCode();
-				hashCode = (hashCode * 397) ^  RxMonitorPanelIsVisible   .GetHashCode();
-				hashCode = (hashCode * 397) ^  MonitorOrientation        .GetHashCode();
-				hashCode = (hashCode * 397) ^  TxMonitorSplitterRatio    .GetHashCode();
-				hashCode = (hashCode * 397) ^  RxMonitorSplitterRatio    .GetHashCode();
-
-				hashCode = (hashCode * 397) ^  PredefinedPanelIsVisible  .GetHashCode();
-				hashCode = (hashCode * 397) ^  PredefinedSplitterRatio   .GetHashCode();
-
-				hashCode = (hashCode * 397) ^  SendTextPanelIsVisible    .GetHashCode();
-				hashCode = (hashCode * 397) ^  SendFilePanelIsVisible    .GetHashCode();
-
-				return (hashCode);
-			}
 		}
 
 		/// <summary>

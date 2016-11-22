@@ -2406,11 +2406,6 @@ namespace MKY.IO.Serial.SerialPort
 			return (ToShortPortString());
 		}
 
-		#region Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-		// Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
 		public virtual string ToShortPortString()
 		{
@@ -2420,8 +2415,6 @@ namespace MKY.IO.Serial.SerialPort
 			else
 				return (Undefined);
 		}
-
-		#endregion
 
 		#endregion
 

@@ -808,14 +808,12 @@ namespace YAT.Domain
 				return ("");
 		}
 
-		#region Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-		// Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-
 		/// <summary>
-		/// Extended ToString method which can be used for trace/debug.
+		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
+		/// <remarks>
+		/// Extended ToString method which can be used for trace/debug.
+		/// </remarks>
 		public virtual string ToString(string indent)
 		{
 			StringBuilder sb = new StringBuilder();
@@ -829,8 +827,6 @@ namespace YAT.Domain
 
 			return (sb.ToString());
 		}
-
-		#endregion
 
 		#endregion
 	}

@@ -553,6 +553,43 @@ namespace YAT.Domain.Settings
 		//==========================================================================================
 
 		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+
+				hashCode = (hashCode * 397) ^ SeparateTxRxRadix    .GetHashCode();
+				hashCode = (hashCode * 397) ^ TxRadix              .GetHashCode();
+				hashCode = (hashCode * 397) ^ RxRadix              .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowRadix            .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowBufferLineNumbers.GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowTotalLineNumbers .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowDate             .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowTime             .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowPort             .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowDirection        .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowLength           .GetHashCode();
+				hashCode = (hashCode * 397) ^ MaxLineCount         .GetHashCode();
+				hashCode = (hashCode * 397) ^ MaxBytePerLineCount  .GetHashCode();
+
+				hashCode = (hashCode * 397) ^ PortLineBreakEnabled     .GetHashCode();
+				hashCode = (hashCode * 397) ^ DirectionLineBreakEnabled.GetHashCode();
+
+				hashCode = (hashCode * 397) ^ (InfoSeparator != null ? InfoSeparator.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (InfoEnclosure != null ? InfoEnclosure.GetHashCode() : 0);
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		/// <remarks>
@@ -592,43 +629,6 @@ namespace YAT.Domain.Settings
 				(InfoSeparator     == other.InfoSeparator) &&
 				(InfoEnclosure     == other.InfoEnclosure)
 			);
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
-
-				hashCode = (hashCode * 397) ^ SeparateTxRxRadix    .GetHashCode();
-				hashCode = (hashCode * 397) ^ TxRadix              .GetHashCode();
-				hashCode = (hashCode * 397) ^ RxRadix              .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowRadix            .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowBufferLineNumbers.GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowTotalLineNumbers .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowDate             .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowTime             .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowPort             .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowDirection        .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowLength           .GetHashCode();
-				hashCode = (hashCode * 397) ^ MaxLineCount         .GetHashCode();
-				hashCode = (hashCode * 397) ^ MaxBytePerLineCount  .GetHashCode();
-
-				hashCode = (hashCode * 397) ^ PortLineBreakEnabled     .GetHashCode();
-				hashCode = (hashCode * 397) ^ DirectionLineBreakEnabled.GetHashCode();
-
-				hashCode = (hashCode * 397) ^ (InfoSeparator != null ? InfoSeparator.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (InfoEnclosure != null ? InfoEnclosure.GetHashCode() : 0);
-
-				return (hashCode);
-			}
 		}
 
 		/// <summary>

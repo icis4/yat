@@ -158,6 +158,49 @@ namespace YAT.Model.Types
 		//==========================================================================================
 
 		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		public override string ToString()
+		{
+			switch ((AutoTrigger)UnderlyingEnum)
+			{
+				case AutoTrigger.None:                return (None_string);
+				case AutoTrigger.PredefinedCommand1:  return (PredefinedCommand_string + " 1]");
+				case AutoTrigger.PredefinedCommand2:  return (PredefinedCommand_string + " 2]");
+				case AutoTrigger.PredefinedCommand3:  return (PredefinedCommand_string + " 3]");
+				case AutoTrigger.PredefinedCommand4:  return (PredefinedCommand_string + " 4]");
+				case AutoTrigger.PredefinedCommand5:  return (PredefinedCommand_string + " 5]");
+				case AutoTrigger.PredefinedCommand6:  return (PredefinedCommand_string + " 6]");
+				case AutoTrigger.PredefinedCommand7:  return (PredefinedCommand_string + " 7]");
+				case AutoTrigger.PredefinedCommand8:  return (PredefinedCommand_string + " 8]");
+				case AutoTrigger.PredefinedCommand9:  return (PredefinedCommand_string + " 9]");
+				case AutoTrigger.PredefinedCommand10: return (PredefinedCommand_string + " 10]");
+				case AutoTrigger.PredefinedCommand11: return (PredefinedCommand_string + " 11]");
+				case AutoTrigger.PredefinedCommand12: return (PredefinedCommand_string + " 12]");
+				case AutoTrigger.AnyLine:             return (AnyLine_string);
+				case AutoTrigger.Explicit:            return (this.explicitCommandString);
+			}
+			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+
+				if ((AutoTrigger)UnderlyingEnum == AutoTrigger.Explicit)
+					hashCode = (hashCode * 397) ^ (this.explicitCommandString != null ? this.explicitCommandString.GetHashCode() : 0);
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		public override bool Equals(object obj)
@@ -188,49 +231,6 @@ namespace YAT.Model.Types
 			{
 				return (base.Equals(other));
 			}
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode = base.GetHashCode();
-
-				if ((AutoTrigger)UnderlyingEnum == AutoTrigger.Explicit)
-					hashCode = (hashCode * 397) ^ (this.explicitCommandString != null ? this.explicitCommandString.GetHashCode() : 0);
-
-				return (hashCode);
-			}
-		}
-
-		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
-		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
-		public override string ToString()
-		{
-			switch ((AutoTrigger)UnderlyingEnum)
-			{
-				case AutoTrigger.None:                return (None_string);
-				case AutoTrigger.PredefinedCommand1:  return (PredefinedCommand_string + " 1]");
-				case AutoTrigger.PredefinedCommand2:  return (PredefinedCommand_string + " 2]");
-				case AutoTrigger.PredefinedCommand3:  return (PredefinedCommand_string + " 3]");
-				case AutoTrigger.PredefinedCommand4:  return (PredefinedCommand_string + " 4]");
-				case AutoTrigger.PredefinedCommand5:  return (PredefinedCommand_string + " 5]");
-				case AutoTrigger.PredefinedCommand6:  return (PredefinedCommand_string + " 6]");
-				case AutoTrigger.PredefinedCommand7:  return (PredefinedCommand_string + " 7]");
-				case AutoTrigger.PredefinedCommand8:  return (PredefinedCommand_string + " 8]");
-				case AutoTrigger.PredefinedCommand9:  return (PredefinedCommand_string + " 9]");
-				case AutoTrigger.PredefinedCommand10: return (PredefinedCommand_string + " 10]");
-				case AutoTrigger.PredefinedCommand11: return (PredefinedCommand_string + " 11]");
-				case AutoTrigger.PredefinedCommand12: return (PredefinedCommand_string + " 12]");
-				case AutoTrigger.AnyLine:             return (AnyLine_string);
-				case AutoTrigger.Explicit:            return (this.explicitCommandString);
-			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

@@ -90,6 +90,26 @@ namespace MKY.Collections.Generic
 		}
 
 		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    Value1.GetHashCode();
+				hashCode = (hashCode * 397) ^ Value2.GetHashCode();
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		/// <remarks>
@@ -124,26 +144,6 @@ namespace MKY.Collections.Generic
 				(Value1.Equals(other.Value1)) &&
 				(Value2.Equals(other.Value2))
 			);
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode;
-
-				hashCode =                    Value1.GetHashCode();
-				hashCode = (hashCode * 397) ^ Value2.GetHashCode();
-
-				return (hashCode);
-			}
 		}
 
 		/// <summary>
