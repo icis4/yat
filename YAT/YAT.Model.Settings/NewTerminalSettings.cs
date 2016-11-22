@@ -576,6 +576,50 @@ namespace YAT.Model.Settings
 		//==========================================================================================
 
 		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+
+				hashCode = (hashCode * 397) ^  TerminalType                                                                   .GetHashCode();
+				hashCode = (hashCode * 397) ^  IOType                                                                         .GetHashCode();
+
+				hashCode = (hashCode * 397) ^ (SerialPortId                       != null ? SerialPortId                      .GetHashCode() : 0); // May be 'null' if no ports are available!
+				hashCode = (hashCode * 397) ^  SerialPortCommunication                                                        .GetHashCode();
+				hashCode = (hashCode * 397) ^  SerialPortAliveMonitor                                                         .GetHashCode();
+				hashCode = (hashCode * 397) ^  SerialPortAutoReopen                                                           .GetHashCode();
+
+				hashCode = (hashCode * 397) ^ ( SocketRemoteHost_ForSerialization != null ?  SocketRemoteHost_ForSerialization.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  SocketRemoteTcpPort;
+				hashCode = (hashCode * 397) ^  SocketRemoteUdpPort;
+				hashCode = (hashCode * 397) ^  SocketLocalInterface                                                           .GetHashCode();
+				hashCode = (hashCode * 397) ^ (SocketLocalFilter_ForSerialization != null ? SocketLocalFilter_ForSerialization.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  SocketLocalTcpPort;
+				hashCode = (hashCode * 397) ^  SocketLocalUdpPort;
+				hashCode = (hashCode * 397) ^  TcpClientAutoReconnect                                                         .GetHashCode();
+				hashCode = (hashCode * 397) ^  UdpServerSendMode                                                              .GetHashCode();
+
+				hashCode = (hashCode * 397) ^ (UsbSerialHidDeviceInfo             != null ? UsbSerialHidDeviceInfo            .GetHashCode() : 0); // May be 'null' if no devices are available!
+				hashCode = (hashCode * 397) ^  UsbSerialHidMatchSerial                                                        .GetHashCode();
+				hashCode = (hashCode * 397) ^  UsbSerialHidReportFormat                                                       .GetHashCode();
+				hashCode = (hashCode * 397) ^  UsbSerialHidRxIdUsage                                                          .GetHashCode();
+				hashCode = (hashCode * 397) ^  UsbSerialHidFlowControl                                                        .GetHashCode();
+				hashCode = (hashCode * 397) ^  UsbSerialHidAutoOpen                                                           .GetHashCode();
+
+				hashCode = (hashCode * 397) ^  StartTerminal                                                                  .GetHashCode();
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		/// <remarks>
@@ -622,50 +666,6 @@ namespace YAT.Model.Settings
 
 				(StartTerminal            == other.StartTerminal)
 			);
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
-
-				hashCode = (hashCode * 397) ^  TerminalType                                                                   .GetHashCode();
-				hashCode = (hashCode * 397) ^  IOType                                                                         .GetHashCode();
-
-				hashCode = (hashCode * 397) ^ (SerialPortId                       != null ? SerialPortId                      .GetHashCode() : 0); // May be 'null' if no ports are available!
-				hashCode = (hashCode * 397) ^  SerialPortCommunication                                                        .GetHashCode();
-				hashCode = (hashCode * 397) ^  SerialPortAliveMonitor                                                         .GetHashCode();
-				hashCode = (hashCode * 397) ^  SerialPortAutoReopen                                                           .GetHashCode();
-
-				hashCode = (hashCode * 397) ^ ( SocketRemoteHost_ForSerialization != null ?  SocketRemoteHost_ForSerialization.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^  SocketRemoteTcpPort;
-				hashCode = (hashCode * 397) ^  SocketRemoteUdpPort;
-				hashCode = (hashCode * 397) ^  SocketLocalInterface                                                           .GetHashCode();
-				hashCode = (hashCode * 397) ^ (SocketLocalFilter_ForSerialization != null ? SocketLocalFilter_ForSerialization.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^  SocketLocalTcpPort;
-				hashCode = (hashCode * 397) ^  SocketLocalUdpPort;
-				hashCode = (hashCode * 397) ^  TcpClientAutoReconnect                                                         .GetHashCode();
-				hashCode = (hashCode * 397) ^  UdpServerSendMode                                                              .GetHashCode();
-
-				hashCode = (hashCode * 397) ^ (UsbSerialHidDeviceInfo             != null ? UsbSerialHidDeviceInfo            .GetHashCode() : 0); // May be 'null' if no devices are available!
-				hashCode = (hashCode * 397) ^  UsbSerialHidMatchSerial                                                        .GetHashCode();
-				hashCode = (hashCode * 397) ^  UsbSerialHidReportFormat                                                       .GetHashCode();
-				hashCode = (hashCode * 397) ^  UsbSerialHidRxIdUsage                                                          .GetHashCode();
-				hashCode = (hashCode * 397) ^  UsbSerialHidFlowControl                                                        .GetHashCode();
-				hashCode = (hashCode * 397) ^  UsbSerialHidAutoOpen                                                           .GetHashCode();
-
-				hashCode = (hashCode * 397) ^  StartTerminal                                                                  .GetHashCode();
-
-				return (hashCode);
-			}
 		}
 
 		/// <summary>

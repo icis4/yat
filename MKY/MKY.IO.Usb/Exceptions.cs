@@ -117,6 +117,11 @@ namespace MKY.IO.Usb
 
 		#endregion
 
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
 		/// <summary></summary>
 		public string Method
 		{
@@ -134,6 +139,13 @@ namespace MKY.IO.Usb
 		{
 			get { return (this.nativeMessage); }
 		}
+
+		#endregion
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
@@ -160,6 +172,8 @@ namespace MKY.IO.Usb
 
 			return (sb.ToString());
 		}
+
+		#endregion
 	}
 }
 

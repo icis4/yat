@@ -189,6 +189,31 @@ namespace YAT.Model.Settings
 		//==========================================================================================
 
 		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+
+				hashCode = (hashCode * 397) ^ StartPosition   .GetHashCode();
+				hashCode = (hashCode * 397) ^ WindowState     .GetHashCode();
+				hashCode = (hashCode * 397) ^ Location        .GetHashCode();
+				hashCode = (hashCode * 397) ^ Size            .GetHashCode();
+
+				hashCode = (hashCode * 397) ^ ShowTerminalInfo.GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowChrono      .GetHashCode();
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		/// <remarks>
@@ -216,31 +241,6 @@ namespace YAT.Model.Settings
 				(ShowTerminalInfo == other.ShowTerminalInfo) &&
 				(ShowChrono       == other.ShowChrono)
 			);
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
-
-				hashCode = (hashCode * 397) ^ StartPosition   .GetHashCode();
-				hashCode = (hashCode * 397) ^ WindowState     .GetHashCode();
-				hashCode = (hashCode * 397) ^ Location        .GetHashCode();
-				hashCode = (hashCode * 397) ^ Size            .GetHashCode();
-
-				hashCode = (hashCode * 397) ^ ShowTerminalInfo.GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowChrono      .GetHashCode();
-
-				return (hashCode);
-			}
 		}
 
 		/// <summary>

@@ -89,6 +89,21 @@ namespace YAT.Model.Types
 		//==========================================================================================
 
 		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				return (Color_ForSerialization != null ? Color_ForSerialization.GetHashCode() : 0);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		public override bool Equals(object obj)
@@ -115,21 +130,6 @@ namespace YAT.Model.Types
 			(
 				StringEx.EqualsOrdinalIgnoreCase(Color_ForSerialization, other.Color_ForSerialization)
 			);
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				return (Color_ForSerialization != null ? Color_ForSerialization.GetHashCode() : 0);
-			}
 		}
 
 		/// <summary>

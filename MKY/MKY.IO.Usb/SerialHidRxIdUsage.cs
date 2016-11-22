@@ -157,6 +157,27 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    SeparateRxId.GetHashCode();
+				hashCode = (hashCode * 397) ^ AnyRxId     .GetHashCode();
+				hashCode = (hashCode * 397) ^ RxId        .GetHashCode();
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		public override bool Equals(object obj)
@@ -185,27 +206,6 @@ namespace MKY.IO.Usb
 				(AnyRxId      == other.AnyRxId     ) &&
 				(RxId         == other.RxId        )
 			);
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode;
-
-				hashCode =                    SeparateRxId.GetHashCode();
-				hashCode = (hashCode * 397) ^ AnyRxId     .GetHashCode();
-				hashCode = (hashCode * 397) ^ RxId        .GetHashCode();
-
-				return (hashCode);
-			}
 		}
 
 		/// <summary></summary>

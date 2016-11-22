@@ -343,6 +343,25 @@ namespace MKY.Settings
 		//==========================================================================================
 
 		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = 0;
+
+				if (this.nodes != null)
+				{
+					foreach (SettingsItem node in this.nodes)
+						hashCode = (hashCode * 397) ^ node.GetHashCode();
+				}
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		public override bool Equals(object obj)
@@ -380,25 +399,6 @@ namespace MKY.Settings
 			}
 
 			return (false);
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode = 0;
-
-				if (this.nodes != null)
-				{
-					foreach (SettingsItem node in this.nodes)
-						hashCode = (hashCode * 397) ^ node.GetHashCode();
-				}
-
-				return (hashCode);
-			}
 		}
 
 		/// <summary>

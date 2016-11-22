@@ -232,73 +232,6 @@ namespace MKY.Net
 		//==========================================================================================
 
 		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public override bool Equals(object obj)
-		{
-			return (Equals(obj as IPFilterEx));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public virtual bool Equals(IPFilterEx other)
-		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (GetType() != other.GetType())
-				return (false);
-
-			if ((IPFilter)UnderlyingEnum == IPFilter.Explicit)
-			{
-				if (!string.IsNullOrEmpty(this.explicitName))
-				{
-					return
-					(
-						base.Equals(other) &&
-						StringEx.EqualsOrdinalIgnoreCase(this.explicitName, other.explicitName)
-					////Ignore this.explicitAddress, it shall be resolved when required.
-					);
-				}
-				else
-				{
-					return
-					(
-						base.Equals(other) &&
-					////this.explicitName is not given.
-						this.explicitAddress.Equals(other.explicitAddress) // Explicit address is always given, at least 'IPAdress.None'.
-					);                         // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-				}
-			}
-			else
-			{
-				return (base.Equals(other));
-			}
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode = base.GetHashCode();
-
-				if ((IPFilter)UnderlyingEnum == IPFilter.Explicit)
-				{
-					if (!string.IsNullOrEmpty(this.explicitName))
-						hashCode = (hashCode * 397) ^ this.explicitName   .GetHashCode();
-					else
-						hashCode = (hashCode * 397) ^ this.explicitAddress.GetHashCode(); // Explicit address is always given, at least 'IPAdress.None'.
-				}
-
-				return (hashCode);
-			}
-		}
-
-		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
@@ -404,6 +337,93 @@ namespace MKY.Net
 				case AddressFamily.InterNetworkV6: return ("[" + a.ToString() + "]");
 				default:                           return (      a.ToString()      );
 			}
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+
+				if ((IPFilter)UnderlyingEnum == IPFilter.Explicit)
+				{
+					if (!string.IsNullOrEmpty(this.explicitName))
+						hashCode = (hashCode * 397) ^ this.explicitName   .GetHashCode();
+					else
+						hashCode = (hashCode * 397) ^ this.explicitAddress.GetHashCode(); // Explicit address is always given, at least 'IPAdress.None'.
+				}
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as IPFilterEx));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public virtual bool Equals(IPFilterEx other)
+		{
+			if (ReferenceEquals(other, null))
+				return (false);
+
+			if (GetType() != other.GetType())
+				return (false);
+
+			if ((IPFilter)UnderlyingEnum == IPFilter.Explicit)
+			{
+				if (!string.IsNullOrEmpty(this.explicitName))
+				{
+					return
+					(
+						base.Equals(other) &&
+						StringEx.EqualsOrdinalIgnoreCase(this.explicitName, other.explicitName)
+					////Ignore this.explicitAddress, it shall be resolved when required.
+					);
+				}
+				else
+				{
+					return
+					(
+						base.Equals(other) &&
+					////this.explicitName is not given.
+						this.explicitAddress.Equals(other.explicitAddress) // Explicit address is always given, at least 'IPAdress.None'.
+					);                         // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+				}
+			}
+			else
+			{
+				return (base.Equals(other));
+			}
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(IPFilterEx lhs, IPFilterEx rhs)
+		{
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			return (lhs.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(IPFilterEx lhs, IPFilterEx rhs)
+		{
+			return (!(lhs == rhs));
 		}
 
 		#endregion

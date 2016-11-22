@@ -75,6 +75,11 @@ namespace YAT.Domain
 
 #endif // DEBUG
 
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
 		/// <summary></summary>
 		public virtual int Capacity
 		{
@@ -98,6 +103,13 @@ namespace YAT.Domain
 				}
 			}
 		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
 
 		/// <summary></summary>
 		public virtual void Enqueue(RawChunk chunk)
@@ -145,6 +157,13 @@ namespace YAT.Domain
 			}
 			return (to);
 		}
+
+		#endregion
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
@@ -215,6 +234,8 @@ namespace YAT.Domain
 
 			return (sb.ToString());
 		}
+
+		#endregion
 	}
 }
 

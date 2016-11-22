@@ -237,6 +237,45 @@ namespace MKY
 		//==========================================================================================
 
 		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override string ToString()
+		{
+			return (UnderlyingEnum.ToString());
+		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation using the
+		/// specified format.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public virtual string ToString(string format)
+		{
+			return (UnderlyingEnum.ToString(format));
+		}
+
+	////Note that Enum.ToString(IFormatProvider) and Enum.ToString(format, IFormatProvider) are obsolete.
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			return (UnderlyingEnum.GetHashCode());
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		public override bool Equals(object obj)
@@ -261,50 +300,6 @@ namespace MKY
 
 			return ((UnderlyingEnum != null) && (UnderlyingEnum.Equals(other.UnderlyingEnum))); // 'Enum' does not overload the ==/!= operators.
 		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			return (UnderlyingEnum.GetHashCode());
-		}
-
-		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields. This ensures that 'intelligent' properties,
-		/// i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override string ToString()
-		{
-			return (UnderlyingEnum.ToString());
-		}
-
-		#region Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-		// Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-
-		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation using the
-		/// specified format.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields. This ensures that 'intelligent' properties,
-		/// i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public virtual string ToString(string format)
-		{
-			return (UnderlyingEnum.ToString(format));
-		}
-
-		#endregion
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.

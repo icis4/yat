@@ -116,6 +116,25 @@ namespace MKY.Test.Settings
 			}
 
 			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				unchecked
+				{
+					int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+
+					hashCode = (hashCode * 397) ^ SimpleValue;
+
+					return (hashCode);
+				}
+			}
+
+			/// <summary>
 			/// Determines whether this instance and the specified object have value equality.
 			/// </summary>
 			/// <remarks>
@@ -136,25 +155,6 @@ namespace MKY.Test.Settings
 					base.Equals(other) && // Compare all settings nodes.
 					(SimpleValue == other.SimpleValue)
 				);
-			}
-
-			/// <summary>
-			/// Serves as a hash function for a particular type.
-			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public override int GetHashCode()
-			{
-				unchecked
-				{
-					int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
-
-					hashCode = (hashCode * 397) ^ SimpleValue;
-
-					return (hashCode);
-				}
 			}
 
 			/// <summary>
@@ -276,6 +276,25 @@ namespace MKY.Test.Settings
 			}
 
 			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				unchecked
+				{
+					int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+
+					hashCode = (hashCode * 397) ^ SimpleValue;
+
+					return (hashCode);
+				}
+			}
+
+			/// <summary>
 			/// Determines whether this instance and the specified object have value equality.
 			/// </summary>
 			/// <remarks>
@@ -296,25 +315,6 @@ namespace MKY.Test.Settings
 					base.Equals(other) && // Compare all settings nodes.
 					(SimpleValue == other.SimpleValue)
 				);
-			}
-
-			/// <summary>
-			/// Serves as a hash function for a particular type.
-			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public override int GetHashCode()
-			{
-				unchecked
-				{
-					int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
-
-					hashCode = (hashCode * 397) ^ SimpleValue;
-
-					return (hashCode);
-				}
 			}
 
 			/// <summary>
@@ -397,7 +397,13 @@ namespace MKY.Test.Settings
 			// Object Members
 			//==========================================================================================
 
-			/// <summary></summary>
+			/// <summary>
+			/// Converts the value of this instance to its equivalent string representation.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields. This ensures that 'intelligent' properties,
+			/// i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override string ToString()
 			{
 				return
@@ -405,6 +411,25 @@ namespace MKY.Test.Settings
 					Environment.NewLine + "    0:SimpleValue = " + SimpleValue.ToString(CultureInfo.InvariantCulture) +
 					Environment.NewLine + "    0:ChildLevel1 = " + ChildLevel1.ToString()
 				);
+			}
+
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				unchecked
+				{
+					int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+
+					hashCode = (hashCode * 397) ^ SimpleValue;
+
+					return (hashCode);
+				}
 			}
 
 			/// <summary>
@@ -428,25 +453,6 @@ namespace MKY.Test.Settings
 					base.Equals(other) && // Compare all settings nodes.
 					(SimpleValue == other.SimpleValue)
 				);
-			}
-
-			/// <summary>
-			/// Serves as a hash function for a particular type.
-			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public override int GetHashCode()
-			{
-				unchecked
-				{
-					int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
-
-					hashCode = (hashCode * 397) ^ SimpleValue;
-
-					return (hashCode);
-				}
 			}
 
 			/// <summary>

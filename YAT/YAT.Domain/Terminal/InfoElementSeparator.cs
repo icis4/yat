@@ -136,67 +136,10 @@ namespace YAT.Domain
 			this.explicitSeparator = separator;
 		}
 
-		#region Object Members
+		#region Methods
 		//==========================================================================================
-		// Object Members
+		// Methods
 		//==========================================================================================
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public override bool Equals(object obj)
-		{
-			return (Equals(obj as InfoElementSeparatorEx));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public virtual bool Equals(InfoElementSeparatorEx other)
-		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (GetType() != other.GetType())
-				return (false);
-
-			if ((InfoElementSeparator)UnderlyingEnum == InfoElementSeparator.Explicit)
-			{
-				return
-				(
-					base.Equals(other) &&
-					(this.explicitSeparator == other.explicitSeparator)
-				);
-			}
-			else
-			{
-				return (base.Equals(other));
-			}
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode = base.GetHashCode();
-
-				if ((InfoElementSeparator)UnderlyingEnum == InfoElementSeparator.Explicit)
-					hashCode = (hashCode * 397) ^ (this.explicitSeparator != null ? this.explicitSeparator.GetHashCode() : 0);
-
-				return (hashCode);
-			}
-		}
-
-		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
-		/// </summary>
-		public override string ToString()
-		{
-			return (ToDescription());
-		}
 
 		/// <summary></summary>
 		public virtual string ToSeparator()
@@ -252,6 +195,70 @@ namespace YAT.Domain
 				case InfoElementSeparator.Explicit:             return (this.explicitSeparator);
 			}
 			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
+
+		#endregion
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		public override string ToString()
+		{
+			return (ToDescription());
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+
+				if ((InfoElementSeparator)UnderlyingEnum == InfoElementSeparator.Explicit)
+					hashCode = (hashCode * 397) ^ (this.explicitSeparator != null ? this.explicitSeparator.GetHashCode() : 0);
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as InfoElementSeparatorEx));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public virtual bool Equals(InfoElementSeparatorEx other)
+		{
+			if (ReferenceEquals(other, null))
+				return (false);
+
+			if (GetType() != other.GetType())
+				return (false);
+
+			if ((InfoElementSeparator)UnderlyingEnum == InfoElementSeparator.Explicit)
+			{
+				return
+				(
+					base.Equals(other) &&
+					(this.explicitSeparator == other.explicitSeparator)
+				);
+			}
+			else
+			{
+				return (base.Equals(other));
+			}
 		}
 
 		#endregion

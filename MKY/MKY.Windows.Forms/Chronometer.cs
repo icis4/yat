@@ -155,6 +155,13 @@ namespace MKY.Windows.Forms
 			Start();
 		}
 
+		#endregion
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>

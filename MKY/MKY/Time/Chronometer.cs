@@ -248,9 +248,20 @@ namespace MKY.Time
 			Start();
 		}
 
+		#endregion
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override string ToString()
 		{
 			AssertNotDisposed();

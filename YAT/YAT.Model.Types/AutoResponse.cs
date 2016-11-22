@@ -162,6 +162,50 @@ namespace YAT.Model.Types
 		//==========================================================================================
 
 		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		public override string ToString()
+		{
+			switch ((AutoResponse)UnderlyingEnum)
+			{
+				case AutoResponse.None:                return (None_string);
+				case AutoResponse.PredefinedCommand1:  return (PredefinedCommand_string + " 1]");
+				case AutoResponse.PredefinedCommand2:  return (PredefinedCommand_string + " 2]");
+				case AutoResponse.PredefinedCommand3:  return (PredefinedCommand_string + " 3]");
+				case AutoResponse.PredefinedCommand4:  return (PredefinedCommand_string + " 4]");
+				case AutoResponse.PredefinedCommand5:  return (PredefinedCommand_string + " 5]");
+				case AutoResponse.PredefinedCommand6:  return (PredefinedCommand_string + " 6]");
+				case AutoResponse.PredefinedCommand7:  return (PredefinedCommand_string + " 7]");
+				case AutoResponse.PredefinedCommand8:  return (PredefinedCommand_string + " 8]");
+				case AutoResponse.PredefinedCommand9:  return (PredefinedCommand_string + " 9]");
+				case AutoResponse.PredefinedCommand10: return (PredefinedCommand_string + " 10]");
+				case AutoResponse.PredefinedCommand11: return (PredefinedCommand_string + " 11]");
+				case AutoResponse.PredefinedCommand12: return (PredefinedCommand_string + " 12]");
+				case AutoResponse.SendText:            return (SendText_string);
+				case AutoResponse.SendFile:            return (SendFile_string);
+				case AutoResponse.Explicit:            return (this.explicitCommandString);
+			}
+			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode();
+
+				if ((AutoResponse)UnderlyingEnum == AutoResponse.Explicit)
+					hashCode = (hashCode * 397) ^ (this.explicitCommandString != null ? this.explicitCommandString.GetHashCode() : 0);
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		public override bool Equals(object obj)
@@ -192,50 +236,6 @@ namespace YAT.Model.Types
 			{
 				return (base.Equals(other));
 			}
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode = base.GetHashCode();
-
-				if ((AutoResponse)UnderlyingEnum == AutoResponse.Explicit)
-					hashCode = (hashCode * 397) ^ (this.explicitCommandString != null ? this.explicitCommandString.GetHashCode() : 0);
-
-				return (hashCode);
-			}
-		}
-
-		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
-		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
-		public override string ToString()
-		{
-			switch ((AutoResponse)UnderlyingEnum)
-			{
-				case AutoResponse.None:                return (None_string);
-				case AutoResponse.PredefinedCommand1:  return (PredefinedCommand_string + " 1]");
-				case AutoResponse.PredefinedCommand2:  return (PredefinedCommand_string + " 2]");
-				case AutoResponse.PredefinedCommand3:  return (PredefinedCommand_string + " 3]");
-				case AutoResponse.PredefinedCommand4:  return (PredefinedCommand_string + " 4]");
-				case AutoResponse.PredefinedCommand5:  return (PredefinedCommand_string + " 5]");
-				case AutoResponse.PredefinedCommand6:  return (PredefinedCommand_string + " 6]");
-				case AutoResponse.PredefinedCommand7:  return (PredefinedCommand_string + " 7]");
-				case AutoResponse.PredefinedCommand8:  return (PredefinedCommand_string + " 8]");
-				case AutoResponse.PredefinedCommand9:  return (PredefinedCommand_string + " 9]");
-				case AutoResponse.PredefinedCommand10: return (PredefinedCommand_string + " 10]");
-				case AutoResponse.PredefinedCommand11: return (PredefinedCommand_string + " 11]");
-				case AutoResponse.PredefinedCommand12: return (PredefinedCommand_string + " 12]");
-				case AutoResponse.SendText:            return (SendText_string);
-				case AutoResponse.SendFile:            return (SendFile_string);
-				case AutoResponse.Explicit:            return (this.explicitCommandString);
-			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

@@ -1112,11 +1112,6 @@ namespace MKY.IO.Serial.Socket
 			return (ToShortEndPointString());
 		}
 
-		#region Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-		// Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-
 		/// <remarks>
 		/// Named according to .NET <see cref="System.Net.IPEndPoint"/>.
 		/// </remarks>
@@ -1125,8 +1120,6 @@ namespace MKY.IO.Serial.Socket
 		{
 			return ("Server:" + this.localPort + " / " + this.remoteHost.ToEndpointAddressString() + ":" + this.remotePort);
 		}
-
-		#endregion
 
 		#endregion
 

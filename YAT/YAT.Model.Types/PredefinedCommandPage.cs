@@ -136,6 +136,26 @@ namespace YAT.Model.Types
 		//==========================================================================================
 
 		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = 0;
+
+				foreach (Command c in Commands)
+					hashCode = (hashCode * 397) ^ c.GetHashCode();
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		public override bool Equals(object obj)
@@ -169,26 +189,6 @@ namespace YAT.Model.Types
 					return (false);
 			}
 			return (true);
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode = 0;
-
-				foreach (Command c in Commands)
-					hashCode = (hashCode * 397) ^ c.GetHashCode();
-
-				return (hashCode);
-			}
 		}
 
 		/// <summary>

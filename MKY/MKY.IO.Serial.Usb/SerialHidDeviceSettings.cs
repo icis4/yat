@@ -279,6 +279,41 @@ namespace MKY.IO.Serial.Usb
 		// Object Members
 		//==========================================================================================
 
+		/// <summary></summary>
+		public virtual string ToShortDeviceInfoString()
+		{
+			if (DeviceInfo != null)
+				return (DeviceInfo.ToShortString());
+			else
+				return (Undefined);
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+
+				hashCode = (hashCode * 397) ^ (DeviceInfo != null ? DeviceInfo.GetHashCode() : 0); // May be 'null' if no devices are available!
+				hashCode = (hashCode * 397) ^  MatchSerial                    .GetHashCode();
+
+				hashCode = (hashCode * 397) ^  ReportFormat                   .GetHashCode();
+				hashCode = (hashCode * 397) ^  RxIdUsage                      .GetHashCode();
+
+				hashCode = (hashCode * 397) ^  FlowControl                    .GetHashCode();
+				hashCode = (hashCode * 397) ^  AutoOpen                       .GetHashCode();
+
+				return (hashCode);
+			}
+		}
+
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
@@ -309,48 +344,6 @@ namespace MKY.IO.Serial.Usb
 				(AutoOpen     == other.AutoOpen)
 			);
 		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
-
-				hashCode = (hashCode * 397) ^ (DeviceInfo != null ? DeviceInfo.GetHashCode() : 0); // May be 'null' if no devices are available!
-				hashCode = (hashCode * 397) ^  MatchSerial                    .GetHashCode();
-
-				hashCode = (hashCode * 397) ^  ReportFormat                   .GetHashCode();
-				hashCode = (hashCode * 397) ^  RxIdUsage                      .GetHashCode();
-
-				hashCode = (hashCode * 397) ^  FlowControl                    .GetHashCode();
-				hashCode = (hashCode * 397) ^  AutoOpen                       .GetHashCode();
-
-				return (hashCode);
-			}
-		}
-
-		#region Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-		// Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		public virtual string ToShortDeviceInfoString()
-		{
-			if (DeviceInfo != null)
-				return (DeviceInfo.ToShortString());
-			else
-				return (Undefined);
-		}
-
-		#endregion
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.

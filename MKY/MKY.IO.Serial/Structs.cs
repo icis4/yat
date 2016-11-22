@@ -53,25 +53,18 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
+		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
 		/// <remarks>
-		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public override string ToString()
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			AutoInterval other = (AutoInterval)obj;
 			return
 			(
-				(Enabled  == other.Enabled) &&
-				(Interval == other.Interval)
+				Enabled + ", " +
+				Interval
 			);
 		}
 
@@ -96,18 +89,25 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
+		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		/// <remarks>
-		/// Use properties instead of fields. This ensures that 'intelligent' properties,
-		/// i.e. properties with some logic, are also properly handled.
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override string ToString()
+		public override bool Equals(object obj)
 		{
+			if (ReferenceEquals(obj, null))
+				return (false);
+
+			if (GetType() != obj.GetType())
+				return (false);
+
+			AutoInterval other = (AutoInterval)obj;
 			return
 			(
-				Enabled + ", " +
-				Interval
+				(Enabled  == other.Enabled) &&
+				(Interval == other.Interval)
 			);
 		}
 

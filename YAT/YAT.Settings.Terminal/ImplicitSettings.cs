@@ -197,6 +197,21 @@ namespace YAT.Settings.Terminal
 		//==========================================================================================
 
 		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				return (base.GetHashCode()); // Get hash code of all settings nodes.
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		/// <remarks>
@@ -216,21 +231,6 @@ namespace YAT.Settings.Terminal
 			(
 				base.Equals(other) // Compare all settings nodes.
 			);
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				return (base.GetHashCode()); // Get hash code of all settings nodes.
-			}
 		}
 
 		/// <summary>

@@ -1312,11 +1312,6 @@ namespace MKY.IO.Serial.Usb
 			return (ToDeviceInfoString());
 		}
 
-		#region Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-		// Object Members > Extensions
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
 		public virtual string ToShortString()
 		{
@@ -1342,8 +1337,6 @@ namespace MKY.IO.Serial.Usb
 			else
 				return (Undefined);
 		}
-
-		#endregion
 
 		#endregion
 

@@ -368,6 +368,39 @@ namespace YAT.Model.Settings
 		//==========================================================================================
 
 		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+
+				hashCode = (hashCode * 397) ^ (Font              != null ? Font             .GetHashCode() : 0);
+
+				hashCode = (hashCode * 397) ^ (TxDataFormat      != null ? TxDataFormat     .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (TxControlFormat   != null ? TxControlFormat  .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (RxDataFormat      != null ? RxDataFormat     .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (RxControlFormat   != null ? RxControlFormat  .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (DateFormat        != null ? DateFormat       .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (TimeFormat        != null ? TimeFormat       .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (PortFormat        != null ? PortFormat       .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (DirectionFormat   != null ? DirectionFormat  .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (LengthFormat      != null ? LengthFormat     .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (WhiteSpacesFormat != null ? WhiteSpacesFormat.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (ErrorFormat       != null ? ErrorFormat      .GetHashCode() : 0);
+
+				hashCode = (hashCode * 397) ^ (BackFormat        != null ? BackFormat       .GetHashCode() : 0);
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		/// <remarks>
@@ -403,39 +436,6 @@ namespace YAT.Model.Settings
 
 				(BackFormat        == other.BackFormat)
 			);
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
-
-				hashCode = (hashCode * 397) ^ (Font              != null ? Font             .GetHashCode() : 0);
-
-				hashCode = (hashCode * 397) ^ (TxDataFormat      != null ? TxDataFormat     .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (TxControlFormat   != null ? TxControlFormat  .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (RxDataFormat      != null ? RxDataFormat     .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (RxControlFormat   != null ? RxControlFormat  .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (DateFormat        != null ? DateFormat       .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (TimeFormat        != null ? TimeFormat       .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (PortFormat        != null ? PortFormat       .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (DirectionFormat   != null ? DirectionFormat  .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (LengthFormat      != null ? LengthFormat     .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (WhiteSpacesFormat != null ? WhiteSpacesFormat.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (ErrorFormat       != null ? ErrorFormat      .GetHashCode() : 0);
-
-				hashCode = (hashCode * 397) ^ (BackFormat        != null ? BackFormat       .GetHashCode() : 0);
-
-				return (hashCode);
-			}
 		}
 
 		/// <summary>

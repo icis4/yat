@@ -694,6 +694,31 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                     IsDefined                      .GetHashCode();
+				hashCode = (hashCode * 397) ^  CommandLines                   .GetHashCode();
+				hashCode = (hashCode * 397) ^  DefaultRadix                   .GetHashCode();
+				hashCode = (hashCode * 397) ^  IsFilePath                     .GetHashCode();
+				hashCode = (hashCode * 397) ^ (FilePath     != null ? FilePath.GetHashCode() : 0);
+
+				// Do not consider 'Description' as it does not define the command.
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		public override bool Equals(object obj)
@@ -726,31 +751,6 @@ namespace YAT.Model.Types
 			);
 
 			// Do not consider 'Description' as it does not define the command.
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode;
-
-				hashCode =                     IsDefined                      .GetHashCode();
-				hashCode = (hashCode * 397) ^  CommandLines                   .GetHashCode();
-				hashCode = (hashCode * 397) ^  DefaultRadix                   .GetHashCode();
-				hashCode = (hashCode * 397) ^  IsFilePath                     .GetHashCode();
-				hashCode = (hashCode * 397) ^ (FilePath     != null ? FilePath.GetHashCode() : 0);
-
-				// Do not consider 'Description' as it does not define the command.
-
-				return (hashCode);
-			}
 		}
 
 		/// <summary>

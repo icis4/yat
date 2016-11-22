@@ -66,6 +66,27 @@ namespace MKY.Xml
 		//==========================================================================================
 
 		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                     XmlPath                      .GetHashCode();
+				hashCode = (hashCode * 397) ^ (LocalName != null ? LocalName.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  AlternateLocalNames          .GetHashCode();
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		/// <remarks>
@@ -87,27 +108,6 @@ namespace MKY.Xml
 				(StringEx.EqualsOrdinalIgnoreCase(LocalName,           other.LocalName)) &&
 				(StringEx.EqualsOrdinalIgnoreCase(AlternateLocalNames, other.AlternateLocalNames))
 			);
-		}
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode;
-
-				hashCode =                     XmlPath                      .GetHashCode();
-				hashCode = (hashCode * 397) ^ (LocalName != null ? LocalName.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^  AlternateLocalNames          .GetHashCode();
-
-				return (hashCode);
-			}
 		}
 
 		/// <summary>
