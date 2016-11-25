@@ -26,11 +26,13 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
+using MKY.Collections;
+
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class EolCommentSettings : MKY.Settings.SettingsItem
+	public class EolCommentSettings : MKY.Settings.SettingsItem, IEquatable<EolCommentSettings>
 	{
 		private bool skipComment;
 		private bool skipWhiteSpace;
@@ -159,26 +161,36 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as EolCommentSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(EolCommentSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			EolCommentSettings other = (EolCommentSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(SkipComment    == other.SkipComment) &&
-				(SkipWhiteSpace == other.SkipWhiteSpace) &&
-				(Indicators     == other.Indicators)
+				SkipComment   .Equals(                  other.SkipComment)    &&
+				SkipWhiteSpace.Equals(                  other.SkipWhiteSpace) &&
+				IEnumerableEx.ElementsEqual(Indicators, other.Indicators)
 			);
 		}
 

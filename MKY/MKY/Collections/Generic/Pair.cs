@@ -34,7 +34,7 @@ namespace MKY.Collections.Generic
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "1", Justification = "T1 relates to Value1.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "2", Justification = "T2 relates to Value2.")]
 	[Serializable]
-	public struct Pair<T1, T2>
+	public struct Pair<T1, T2> : IEquatable<Pair<T1, T2>>
 	{
 		private T1 value1;
 		private T2 value2;
@@ -112,37 +112,27 @@ namespace MKY.Collections.Generic
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is Pair<T1, T2>)
+				return (Equals((Pair<T1, T2>)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(Pair<T1, T2> other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			var other = (Pair<T1, T2>)obj;
-
-			// Attention, default(Tx) can lead to null, e.g. in case of a string!
-			if ((Value1 == null) || (Value2 == null))
-			{
-				if ((Value1 == null) && (other.Value1 != null))
-					return (false);
-
-				if ((Value2 == null) && (other.Value2 != null))
-					return (false);
-
-				return (true); // All values are 'null'.
-			}
-
-			// Attention, <Tx> may not overload the ==/!= operators.
 			return
 			(
-				(Value1.Equals(other.Value1)) &&
-				(Value2.Equals(other.Value2))
+				ObjectEx.Equals(Value1, other.Value1) &&
+				ObjectEx.Equals(Value2, other.Value2)
 			);
 		}
 

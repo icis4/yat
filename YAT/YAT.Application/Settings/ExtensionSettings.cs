@@ -21,14 +21,17 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Xml.Serialization;
+
+using MKY;
 
 using YAT.Application.Utilities;
 
 namespace YAT.Application.Settings
 {
 	/// <summary></summary>
-	public class ExtensionSettings : MKY.Settings.SettingsItem
+	public class ExtensionSettings : MKY.Settings.SettingsItem, IEquatable<ExtensionSettings>
 	{
 		private string textSendFiles;
 		private string binarySendFiles;
@@ -193,28 +196,38 @@ namespace YAT.Application.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as ExtensionSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(ExtensionSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			ExtensionSettings other = (ExtensionSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(TextSendFiles   == other.TextSendFiles) &&
-				(BinarySendFiles == other.BinarySendFiles) &&
-				(RawLogFiles     == other.RawLogFiles) &&
-				(NeatLogFiles    == other.NeatLogFiles) &&
-				(MonitorFiles    == other.MonitorFiles)
+				StringEx.EqualsOrdinalIgnoreCase(TextSendFiles,   other.TextSendFiles)   &&
+				StringEx.EqualsOrdinalIgnoreCase(BinarySendFiles, other.BinarySendFiles) &&
+				StringEx.EqualsOrdinalIgnoreCase(RawLogFiles,     other.RawLogFiles)     &&
+				StringEx.EqualsOrdinalIgnoreCase(NeatLogFiles,    other.NeatLogFiles)    &&
+				StringEx.EqualsOrdinalIgnoreCase(MonitorFiles,    other.MonitorFiles)
 			);
 		}
 

@@ -21,6 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
@@ -31,7 +32,7 @@ using YAT.Model.Types;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	public class AutoResponseSettings : MKY.Settings.SettingsItem
+	public class AutoResponseSettings : MKY.Settings.SettingsItem, IEquatable<AutoResponseSettings>
 	{
 		private bool visible;
 		private AutoTriggerEx trigger;
@@ -227,24 +228,34 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as AutoResponseSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(AutoResponseSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			AutoResponseSettings other = (AutoResponseSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(Visible == other.Visible) &&
+				Visible.Equals(other.Visible) &&
 
 				StringEx.EqualsOrdinalIgnoreCase(Trigger_ForSerialization,  other.Trigger_ForSerialization) &&
 				StringEx.EqualsOrdinalIgnoreCase(Response_ForSerialization, other.Response_ForSerialization)

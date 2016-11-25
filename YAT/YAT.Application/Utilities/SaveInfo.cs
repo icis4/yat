@@ -25,11 +25,13 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
+using MKY;
+
 namespace YAT.Application.Utilities
 {
 	/// <summary></summary>
 	[Serializable]
-	public struct SaveInfo
+	public struct SaveInfo : IEquatable<SaveInfo>
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
@@ -75,23 +77,27 @@ namespace YAT.Application.Utilities
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is SaveInfo)
+				return (Equals((SaveInfo)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(SaveInfo other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			SaveInfo other = (SaveInfo)obj;
 			return
 			(
-				(TimeStamp == other.TimeStamp) &&
-				(UserName  == other.UserName)
+				TimeStamp.Equals(                          other.TimeStamp) &&
+				StringEx.EqualsOrdinalIgnoreCase(UserName, other.UserName) // Ignore case of user names.
 			);
 		}
 

@@ -44,7 +44,7 @@ using YAT.Settings.Application;
 namespace YAT.Log.Settings
 {
 	/// <summary></summary>
-	public class LogSettings : MKY.Settings.SettingsItem
+	public class LogSettings : MKY.Settings.SettingsItem, IEquatable<LogSettings>
 	{
 		#region Constants
 		//==========================================================================================
@@ -880,42 +880,52 @@ namespace YAT.Log.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as LogSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(LogSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			LogSettings other = (LogSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				PathEx.Equals(RootPath,     other.RootPath) &&
-				PathEx.Equals(RootFileName, other.RootFileName) &&
-				(RawLogTx                == other.RawLogTx) &&
-				(RawLogBidir             == other.RawLogBidir) &&
-				(RawLogRx                == other.RawLogRx) &&
-				(RawExtension            == other.RawExtension) &&
-				(NeatLogTx               == other.NeatLogTx) &&
-				(NeatLogBidir            == other.NeatLogBidir) &&
-				(NeatLogRx               == other.NeatLogRx) &&
-				(NeatExtension           == other.NeatExtension) &&
-				(NameFormat              == other.NameFormat) &&
-				(NameChannel             == other.NameChannel) &&
-				(NameDate                == other.NameDate) &&
-				(NameTime                == other.NameTime) &&
+				PathEx.Equals(RootPath,     other.RootPath)      &&
+				PathEx.Equals(RootFileName, other.RootFileName)  &&
+				RawLogTx            .Equals(other.RawLogTx)      &&
+				RawLogBidir         .Equals(other.RawLogBidir)   &&
+				RawLogRx            .Equals(other.RawLogRx)      &&
+				RawExtension        .Equals(other.RawExtension)  &&
+				NeatLogTx           .Equals(other.NeatLogTx)     &&
+				NeatLogBidir        .Equals(other.NeatLogBidir)  &&
+				NeatLogRx           .Equals(other.NeatLogRx)     &&
+				NeatExtension       .Equals(other.NeatExtension) &&
+				NameFormat          .Equals(other.NameFormat)    &&
+				NameChannel         .Equals(other.NameChannel)   &&
+				NameDate            .Equals(other.NameDate)      &&
+				NameTime            .Equals(other.NameTime)      &&
 				StringEx.EqualsOrdinalIgnoreCase(NameSeparator_ForSerialization, other.NameSeparator_ForSerialization) &&
-				(FolderFormat            == other.FolderFormat) &&
-				(FolderChannel           == other.FolderChannel) &&
-				(WriteMode               == other.WriteMode) &&
-				(TextEncoding            == other.TextEncoding)
+				FolderFormat        .Equals(other.FolderFormat)  &&
+				FolderChannel       .Equals(other.FolderChannel) &&
+				WriteMode           .Equals(other.WriteMode)     &&
+				TextEncoding        .Equals(other.TextEncoding)
 			);
 		}
 

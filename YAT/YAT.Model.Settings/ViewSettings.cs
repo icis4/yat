@@ -27,12 +27,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Xml.Serialization;
 
+using MKY.Collections;
 using MKY.Recent;
 
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	public class ViewSettings : MKY.Settings.SettingsItem
+	public class ViewSettings : MKY.Settings.SettingsItem, IEquatable<ViewSettings>
 	{
 		/// <summary></summary>
 		public const int MaxCustomColors = 16;
@@ -168,24 +169,34 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as ViewSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(ViewSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			ViewSettings other = (ViewSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(CustomColors == other.CustomColors)
+				IEnumerableEx.ElementsEqual(CustomColors, other.CustomColors)
 			);
 		}
 

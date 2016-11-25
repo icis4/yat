@@ -27,7 +27,7 @@ using System.Xml.Serialization;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class CharReplaceSettings : MKY.Settings.SettingsItem
+	public class CharReplaceSettings : MKY.Settings.SettingsItem, IEquatable<CharReplaceSettings>
 	{
 		/// <summary></summary>
 		public const bool ReplaceControlCharsDefault = true;
@@ -188,27 +188,37 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as CharReplaceSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(CharReplaceSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			CharReplaceSettings other = (CharReplaceSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(ReplaceControlChars == other.ReplaceControlChars) &&
-				(ControlCharRadix    == other.ControlCharRadix) &&
-				(ReplaceTab          == other.ReplaceTab) &&
-				(ReplaceSpace        == other.ReplaceSpace)
+				ReplaceControlChars.Equals(other.ReplaceControlChars) &&
+				ControlCharRadix   .Equals(other.ControlCharRadix)    &&
+				ReplaceTab         .Equals(other.ReplaceTab)          &&
+				ReplaceSpace       .Equals(other.ReplaceSpace)
 			);
 		}
 

@@ -32,7 +32,7 @@ namespace MKY.Time
 	/// </summary>
 	/// <typeparam name="T">The type of the time stamped item.</typeparam>
 	[Serializable]
-	public struct TimeTickItem<T>
+	public struct TimeTickItem<T> : IEquatable<TimeTickItem<T>>
 	{
 		private long timeTick;
 		private T item;
@@ -122,28 +122,27 @@ namespace MKY.Time
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is TimeTickItem<T>)
+				return (Equals((TimeTickItem<T>)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(TimeTickItem<T> other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			TimeTickItem<T> other = (TimeTickItem<T>)obj;
-
-			// Attention, default(T) can lead to null, e.g. in case of a string!
-			if (Item == null)
-				return (other.Item == null);
-
 			return
 			(
-				(TimeTick == other.TimeTick) &&
-				(Item.Equals(other.Item)) // Attention, <Tx> may not overload the ==/!= operators.
+				TimeTick.Equals(      other.TimeTick) &&
+				ObjectEx.Equals(Item, other.Item)
 			);
 		}
 

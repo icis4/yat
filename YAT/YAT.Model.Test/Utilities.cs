@@ -139,7 +139,7 @@ namespace YAT.Model.Test
 		/// sender side (i.e. terminal A). Rationale: Testing of \!(Clear) behavior.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This struct really belongs to these test utilities only.")]
-		public struct TestSet
+		public struct TestSet : IEquatable<TestSet>
 		{
 			private Types.Command command;
 			private int   expectedLineCount;
@@ -245,26 +245,30 @@ namespace YAT.Model.Test
 			/// <summary>
 			/// Determines whether this instance and the specified object have value equality.
 			/// </summary>
+			public override bool Equals(object obj)
+			{
+				if (obj is TestSet)
+					return (Equals((TestSet)obj));
+				else
+					return (false);
+			}
+
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
 			/// <remarks>
 			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 			/// properties, i.e. properties with some logic, are also properly handled.
 			/// </remarks>
-			public override bool Equals(object obj)
+			public bool Equals(TestSet other)
 			{
-				if (ReferenceEquals(obj, null))
-					return (false);
-
-				if (GetType() != obj.GetType())
-					return (false);
-
-				TestSet other = (TestSet)obj;
 				return
 				(
-					(Command               == other.Command) &&
-					(ExpectedLineCount     == other.ExpectedLineCount) &&
-					(ExpectedElementCounts == other.ExpectedElementCounts) &&
-					(ExpectedDataCounts    == other.ExpectedDataCounts) &&
-					(ExpectedAlsoApplyToA  == other.ExpectedAlsoApplyToA)
+					ObjectEx            .Equals(Command,               other.Command) &&
+					ExpectedLineCount   .Equals(                       other.ExpectedLineCount) &&
+					ArrayEx     .ElementsEqual( ExpectedElementCounts, other.ExpectedElementCounts) &&
+					ArrayEx     .ElementsEqual( ExpectedDataCounts,    other.ExpectedDataCounts) &&
+					ExpectedAlsoApplyToA.Equals(                       other.ExpectedAlsoApplyToA)
 				);
 			}
 

@@ -28,7 +28,7 @@ namespace YAT.Domain
 {
 	/// <summary></summary>
 	[Serializable]
-	public struct PeriodicSetting
+	public struct PeriodicSetting : IEquatable<PeriodicSetting>
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
@@ -91,23 +91,27 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is PeriodicSetting)
+				return (Equals((PeriodicSetting)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(PeriodicSetting other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			PeriodicSetting other = (PeriodicSetting)obj;
 			return
 			(
-				(Enabled  == other.Enabled) &&
-				(Interval == other.Interval)
+				Enabled .Equals(other.Enabled) &&
+				Interval.Equals(other.Interval)
 			);
 		}
 

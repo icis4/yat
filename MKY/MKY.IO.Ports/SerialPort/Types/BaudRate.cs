@@ -79,7 +79,7 @@ namespace MKY.IO.Ports
 	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	public class BaudRateEx : EnumEx
+	public class BaudRateEx : EnumEx, IEquatable<BaudRateEx>
 	{
 		private int explicitBaudRate;
 
@@ -173,12 +173,15 @@ namespace MKY.IO.Ports
 				return
 				(
 					base.Equals(other) &&
-					(this.explicitBaudRate == other.explicitBaudRate)
+					this.explicitBaudRate.Equals(other.explicitBaudRate)
 				);
 			}
 			else
 			{
-				return (base.Equals(other));
+				return
+				(
+					base.Equals(other)
+				);
 			}
 		}
 

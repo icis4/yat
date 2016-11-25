@@ -33,7 +33,7 @@ namespace YAT.Domain.Settings
 	/// Now it is possible to show/hide the status labels without reloading the monitors, thus
 	/// saving time, especially in case of large data.
 	/// </remarks>
-	public class StatusSettings : MKY.Settings.SettingsItem
+	public class StatusSettings : MKY.Settings.SettingsItem, IEquatable<StatusSettings>
 	{
 		/// <summary></summary>
 		public const bool ShowConnectTimeDefault = false;
@@ -194,27 +194,37 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as StatusSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(StatusSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			StatusSettings other = (StatusSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(ShowConnectTime      == other.ShowConnectTime) &&
-				(ShowCountAndRate     == other.ShowCountAndRate) &&
-				(ShowFlowControlCount == other.ShowFlowControlCount) &&
-				(ShowBreakCount       == other.ShowBreakCount)
+				ShowConnectTime     .Equals(other.ShowConnectTime) &&
+				ShowCountAndRate    .Equals(other.ShowCountAndRate) &&
+				ShowFlowControlCount.Equals(other.ShowFlowControlCount) &&
+				ShowBreakCount      .Equals(other.ShowBreakCount)
 			);
 		}
 

@@ -184,7 +184,7 @@ namespace MKY.IO
 				case PlatformID.Unix:
 				case PlatformID.MacOSX:
 				default:
-					return (StringEx.EqualsOrdinalIgnoreCase(pathA, pathB));
+					return (StringEx.EqualsOrdinal(pathA, pathB));
 			}
 		}
 
@@ -827,7 +827,7 @@ namespace MKY.IO
 	/// <summary>
 	/// Structure to hold the complete result of a directory comparison.
 	/// </summary>
-	public struct PathCompareResult
+	public struct PathCompareResult : IEquatable<PathCompareResult>
 	{
 		/// <summary>True if directories share a common path, i.e. also a common root.</summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
@@ -939,29 +939,33 @@ namespace MKY.IO
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is PathCompareResult)
+				return (Equals((PathCompareResult)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(PathCompareResult other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			PathCompareResult other = (PathCompareResult)obj;
 			return
 			(
-				(HaveCommon                 == other.HaveCommon) &&
-				PathEx.Equals(CommonPath,      other.CommonPath) &&
-				(CommonDirectoryCount       == other.CommonDirectoryCount) &&
-				(AreRelative                == other.AreRelative) &&
-				(RelativeDirectoryCount     == other.RelativeDirectoryCount) &&
-				(AreNearRelative            == other.AreNearRelative) &&
-				(NearRelativeDirectoryCount == other.NearRelativeDirectoryCount) &&
-				PathEx.Equals(RelativePath,    other.RelativePath)
+				HaveCommon                .Equals(other.HaveCommon)                 &&
+				PathEx.Equals(CommonPath,         other.CommonPath)                 &&
+				CommonDirectoryCount      .Equals(other.CommonDirectoryCount)       &&
+				AreRelative               .Equals(other.AreRelative)                &&
+				RelativeDirectoryCount    .Equals(other.RelativeDirectoryCount)     &&
+				AreNearRelative           .Equals(other.AreNearRelative)            &&
+				NearRelativeDirectoryCount.Equals(other.NearRelativeDirectoryCount) &&
+				PathEx.Equals(RelativePath,       other.RelativePath)
 			);
 		}
 

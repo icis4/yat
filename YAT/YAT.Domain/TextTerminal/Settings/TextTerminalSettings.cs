@@ -22,16 +22,16 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.Xml.Serialization;
 
+using MKY;
 using MKY.Text;
 
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class TextTerminalSettings : MKY.Settings.SettingsItem
+	public class TextTerminalSettings : MKY.Settings.SettingsItem, IEquatable<TextTerminalSettings>
 	{
 		/// <summary></summary>
 		public static readonly string DefaultEol = EolEx.Parse(Environment.NewLine);
@@ -288,17 +288,25 @@ namespace YAT.Domain.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ SeparateTxRxEol .GetHashCode();
-				hashCode = (hashCode * 397) ^ TxEol           .GetHashCode();
-				hashCode = (hashCode * 397) ^ RxEol           .GetHashCode();
-				hashCode = (hashCode * 397) ^ Encoding        .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowEol         .GetHashCode();
-				hashCode = (hashCode * 397) ^ LineSendDelay   .GetHashCode();
-				hashCode = (hashCode * 397) ^ WaitForResponse .GetHashCode();
-				hashCode = (hashCode * 397) ^ CharSubstitution.GetHashCode();
+				hashCode = (hashCode * 397) ^  SeparateTxRxEol      .GetHashCode();
+				hashCode = (hashCode * 397) ^ (TxEol != null ? TxEol.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (RxEol != null ? RxEol.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  Encoding             .GetHashCode();
+				hashCode = (hashCode * 397) ^  ShowEol              .GetHashCode();
+				hashCode = (hashCode * 397) ^  LineSendDelay        .GetHashCode();
+				hashCode = (hashCode * 397) ^  WaitForResponse      .GetHashCode();
+				hashCode = (hashCode * 397) ^  CharSubstitution     .GetHashCode();
 
 				return (hashCode);
 			}
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as TextTerminalSettings));
 		}
 
 		/// <summary>
@@ -308,27 +316,29 @@ namespace YAT.Domain.Settings
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(TextTerminalSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			TextTerminalSettings other = (TextTerminalSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(SeparateTxRxEol          == other.SeparateTxRxEol) &&
-				(TxEol                    == other.TxEol) &&
-				(RxEol                    == other.RxEol) &&
-				(Encoding                 == other.Encoding) &&
-				(ShowEol                  == other.ShowEol) &&
-				(LineSendDelay            == other.LineSendDelay) &&
-				(WaitForResponse          == other.WaitForResponse) &&
-				(CharSubstitution         == other.CharSubstitution)
+				SeparateTxRxEol       .Equals(other.SeparateTxRxEol) &&
+				StringEx.EqualsOrdinal(TxEol, other.TxEol)           &&
+				StringEx.EqualsOrdinal(RxEol, other.RxEol)           &&
+				Encoding              .Equals(other.Encoding)        &&
+				ShowEol               .Equals(other.ShowEol)         &&
+				LineSendDelay         .Equals(other.LineSendDelay)   &&
+				WaitForResponse       .Equals(other.WaitForResponse) &&
+				CharSubstitution      .Equals(other.CharSubstitution)
 			);
 		}
 

@@ -66,7 +66,7 @@ namespace MKY.Net
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
-	public class IPHostEx : EnumEx
+	public class IPHostEx : EnumEx, IEquatable<IPHostEx>
 	{
 		#region String Definitions
 

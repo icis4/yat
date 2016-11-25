@@ -1652,7 +1652,7 @@ namespace YAT.Model
 
 			// Request the deletion of the obsolete auto saved settings file given the new file is different:
 			string autoSaveFilePathToDelete = null;
-			if (this.settingsRoot.AutoSaved && (!StringEx.EqualsOrdinalIgnoreCase(filePath, this.settingsHandler.SettingsFilePath)))
+			if (this.settingsRoot.AutoSaved && (!PathEx.Equals(filePath, this.settingsHandler.SettingsFilePath)))
 				autoSaveFilePathToDelete = this.settingsHandler.SettingsFilePath;
 
 			// Set the new file path:
@@ -1695,7 +1695,7 @@ namespace YAT.Model
 				if (!string.IsNullOrEmpty(autoSaveFilePathToDelete))
 				{
 					// Ensure that this is not the current file!
-					if (!StringEx.EqualsOrdinalIgnoreCase(autoSaveFilePathToDelete, this.settingsHandler.SettingsFilePath))
+					if (!PathEx.Equals(autoSaveFilePathToDelete, this.settingsHandler.SettingsFilePath))
 						FileEx.TryDelete(autoSaveFilePathToDelete);
 				}
 			}

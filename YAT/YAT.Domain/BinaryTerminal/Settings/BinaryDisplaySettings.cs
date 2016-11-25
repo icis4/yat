@@ -27,7 +27,7 @@ using System.Xml.Serialization;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class BinaryDisplaySettings : MKY.Settings.SettingsItem
+	public class BinaryDisplaySettings : MKY.Settings.SettingsItem, IEquatable<BinaryDisplaySettings>
 	{
 		private BinaryLengthLineBreak   lengthLineBreak;
 		private BinarySequenceLineBreak sequenceLineBreakBefore;
@@ -173,27 +173,37 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as BinaryDisplaySettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(BinaryDisplaySettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			BinaryDisplaySettings other = (BinaryDisplaySettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(LengthLineBreak         == other.LengthLineBreak) &&
-				(SequenceLineBreakBefore == other.SequenceLineBreakBefore) &&
-				(SequenceLineBreakAfter  == other.SequenceLineBreakAfter) &&
-				(TimedLineBreak          == other.TimedLineBreak)
+				LengthLineBreak        .Equals(other.LengthLineBreak)         &&
+				SequenceLineBreakBefore.Equals(other.SequenceLineBreakBefore) &&
+				SequenceLineBreakAfter .Equals(other.SequenceLineBreakAfter)  &&
+				TimedLineBreak         .Equals(other.TimedLineBreak)
 			);
 		}
 

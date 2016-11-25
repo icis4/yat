@@ -21,6 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Xml.Serialization;
 
 using MKY.IO;
@@ -28,7 +29,7 @@ using MKY.IO;
 namespace YAT.Application.Settings
 {
 	/// <summary></summary>
-	public class AutoWorkspaceSettings : MKY.Settings.SettingsItem
+	public class AutoWorkspaceSettings : MKY.Settings.SettingsItem, IEquatable<AutoWorkspaceSettings>
 	{
 		private string filePath;
 		private bool autoSaved;
@@ -147,25 +148,35 @@ namespace YAT.Application.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as AutoWorkspaceSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(AutoWorkspaceSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			AutoWorkspaceSettings other = (AutoWorkspaceSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
 				PathEx.Equals(FilePath, other.FilePath) &&
-				(AutoSaved == other.AutoSaved)
+				AutoSaved.Equals(       other.AutoSaved)
 			);
 		}
 

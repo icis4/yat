@@ -175,19 +175,23 @@ namespace YAT.Model.Types
 			if (ReferenceEquals(other, null))
 				return (false);
 
+			if (ReferenceEquals(this, other))
+				return (true);
+
 			if (GetType() != other.GetType())
 				return (false);
 
-			// Compare page name, i.e. header of page.
-			if (PageName != other.PageName)
+			// Compare page name, i.e. header of page:
+			if (!StringEx.EqualsOrdinal(PageName, other.PageName))
 				return (false);
 
-			// Compare commands, i.e. contents of page.
+			// Compare commands, i.e. contents of page:
 			for (int i = 0; i < Commands.Count; i++)
 			{
-				if (Commands[i] != other.Commands[i])
+				if (!ObjectEx.Equals(Commands[i], other.Commands[i]))
 					return (false);
 			}
+
 			return (true);
 		}
 

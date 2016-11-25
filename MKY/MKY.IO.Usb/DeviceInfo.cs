@@ -289,6 +289,10 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
+		/// The USB standard uses the term "SerialNumber" which not really makes sense as the value
+		/// can contain characters as well.
+		/// </remarks>
+		/// <remarks>
 		/// The USB standard does not seem to specify any restriction on the serial number string.
 		/// Thus, it may be any UTF-16 encoded string.
 		/// </remarks>
@@ -304,8 +308,6 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		/// <remarks>
 		/// Keeping "SerialNumber" for the XML element for backward-compatibility to older versions.
-		/// Note that the USB standard also uses the term "SerialNumber" which not really makes
-		/// sense as the value can contain characters as well.
 		/// </remarks>
 		[XmlElement("SerialNumber")]
 		public virtual string Serial
@@ -522,6 +524,9 @@ namespace MKY.IO.Usb
 			if (ReferenceEquals(other, null))
 				return (false);
 
+			if (ReferenceEquals(this, other))
+				return (true);
+
 			if (GetType() != other.GetType())
 				return (false);
 
@@ -529,9 +534,9 @@ namespace MKY.IO.Usb
 
 			return
 			(
-				(VendorId  == other.VendorId) &&
-				(ProductId == other.ProductId) &&
-				(Serial    == other.Serial)
+				VendorId .Equals(              other.VendorId) &&
+				ProductId.Equals(              other.ProductId) &&
+				StringEx.EqualsOrdinal(Serial, other.Serial)
 			);
 		}
 
@@ -550,6 +555,9 @@ namespace MKY.IO.Usb
 			if (ReferenceEquals(other, null))
 				return (false);
 
+			if (ReferenceEquals(this, other))
+				return (true);
+
 			if (GetType() != other.GetType())
 				return (false);
 
@@ -557,8 +565,8 @@ namespace MKY.IO.Usb
 
 			return
 			(
-				(VendorId  == other.VendorId) &&
-				(ProductId == other.ProductId)
+				VendorId .Equals(other.VendorId) &&
+				ProductId.Equals(other.ProductId)
 			);
 		}
 

@@ -367,14 +367,15 @@ namespace YAT/*.<TODO>*/
 
 				TODO.Equals(other.TODO)
 			//	!!! For value types only !!!
-			//	Property1.Equals(other.Property1)
+			//	Property1.Equals(other.Property1) &&
 			//	...
-			//	PropertyN.Equals(other.PropertyN)
+			//	PropertyN.Equals(other.PropertyN) &&
 			//	...
 			//	!!! For reference types !!!
-			//	ArrayEx.ElementsEqual(ArrayProperty, other.ArrayProperty)
-			//	StringEx.EqualsOrdinal(StringProperty, other.StringProperty)
-			//	ObjectEx.Equals(ReferenceTypeProperty, other.ReferenceTypeProperty)
+			//	StringEx     .EqualsOrdinal( StringProperty,        other.StringProperty)      &&
+			//	ArrayEx      .ElementsEqual( ArrayProperty,         other.ArrayProperty)       &&
+			//	IEnumerableEx.ElementsEqual( IEnumerableProperty,   other.IEnumerableProperty) &&
+			//	ObjectEx             .Equals(ReferenceTypeProperty, other.ReferenceTypeProperty)
 			);
 		}
 

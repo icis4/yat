@@ -28,7 +28,7 @@ namespace MKY.Net
 {
 	/// <summary></summary>
 	[Serializable]
-	public struct IPNetworkInterfaceDescriptorPair
+	public struct IPNetworkInterfaceDescriptorPair : IEquatable<IPNetworkInterfaceDescriptorPair>
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
@@ -100,23 +100,27 @@ namespace MKY.Net
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is IPNetworkInterfaceDescriptorPair)
+				return (Equals((IPNetworkInterfaceDescriptorPair)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(IPNetworkInterfaceDescriptorPair other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			IPNetworkInterfaceDescriptorPair other = (IPNetworkInterfaceDescriptorPair)obj;
 			return
 			(
-				(Description  == other.Description) &&
-				(Address      == other.Address)
+				StringEx.EqualsOrdinal(Description, other.Description) &&
+				StringEx.EqualsOrdinal(Address,     other.Address)
 			);
 		}
 

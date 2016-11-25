@@ -21,12 +21,13 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Xml.Serialization;
 
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class SendSettings : MKY.Settings.SettingsItem
+	public class SendSettings : MKY.Settings.SettingsItem, IEquatable<SendSettings>
 	{
 		/// <summary></summary>
 		public const int LineRepeatInfinite = -1;
@@ -368,35 +369,45 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as SendSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(SendSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			SendSettings other = (SendSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(UseExplicitDefaultRadix == other.UseExplicitDefaultRadix) &&
-				(KeepCommand             == other.KeepCommand) &&
-				(CopyPredefined          == other.CopyPredefined) &&
-				(SendImmediately         == other.SendImmediately) &&
-				(DefaultDelay            == other.DefaultDelay) &&
-				(DefaultLineDelay        == other.DefaultLineDelay) &&
-				(DefaultLineInterval     == other.DefaultLineInterval) &&
-				(DefaultLineRepeat       == other.DefaultLineRepeat) &&
-				(DisableKeywords         == other.DisableKeywords) &&
+				UseExplicitDefaultRadix.Equals(other.UseExplicitDefaultRadix) &&
+				KeepCommand            .Equals(other.KeepCommand)             &&
+				CopyPredefined         .Equals(other.CopyPredefined)          &&
+				SendImmediately        .Equals(other.SendImmediately)         &&
+				DefaultDelay           .Equals(other.DefaultDelay)            &&
+				DefaultLineDelay       .Equals(other.DefaultLineDelay)        &&
+				DefaultLineInterval    .Equals(other.DefaultLineInterval)     &&
+				DefaultLineRepeat      .Equals(other.DefaultLineRepeat)       &&
+				DisableKeywords        .Equals(other.DisableKeywords)         &&
 
-				(SignalXOnBeforeEachTransmission == other.SignalXOnBeforeEachTransmission) &&
-				(SignalXOnPeriodically           == other.SignalXOnPeriodically)
+				SignalXOnBeforeEachTransmission.Equals(other.SignalXOnBeforeEachTransmission) &&
+				SignalXOnPeriodically          .Equals(other.SignalXOnPeriodically)
 			);
 		}
 

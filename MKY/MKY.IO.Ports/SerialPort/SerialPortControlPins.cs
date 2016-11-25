@@ -33,7 +33,7 @@ namespace MKY.IO.Ports
 	/// Serial port control pins.
 	/// </summary>
 	[Serializable]
-	public struct SerialPortControlPins
+	public struct SerialPortControlPins : IEquatable<SerialPortControlPins>
 	{
 		/// <summary>
 		/// RFR (Ready For Receiving) control line. This line was formerly called RTS (Request To Send).
@@ -125,26 +125,30 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is SerialPortControlPins)
+				return (Equals((SerialPortControlPins)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(SerialPortControlPins other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			SerialPortControlPins other = (SerialPortControlPins)obj;
 			return
 			(
-				(Rfr == other.Rfr) &&
-				(Cts == other.Cts) &&
-				(Dtr == other.Dtr) &&
-				(Dsr == other.Dsr) &&
-				(Dcd == other.Dcd)
+				Rfr.Equals(other.Rfr) &&
+				Cts.Equals(other.Cts) &&
+				Dtr.Equals(other.Dtr) &&
+				Dsr.Equals(other.Dsr) &&
+				Dcd.Equals(other.Dcd)
 			);
 		}
 
@@ -175,7 +179,7 @@ namespace MKY.IO.Ports
 	/// Serial port control pin count.
 	/// </summary>
 	[Serializable]
-	public struct SerialPortControlPinCount
+	public struct SerialPortControlPinCount : IEquatable<SerialPortControlPinCount>
 	{
 		/// <summary>
 		/// RFR (Ready For Receiving) control line. This line was formerly called RTS (Request To Send).
@@ -279,26 +283,30 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is SerialPortControlPinCount)
+				return (Equals((SerialPortControlPinCount)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(SerialPortControlPinCount other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			SerialPortControlPinCount other = (SerialPortControlPinCount)obj;
 			return
 			(
-				(RfrDisableCount == other.RfrDisableCount) &&
-				(CtsDisableCount == other.CtsDisableCount) &&
-				(DtrDisableCount == other.DtrDisableCount) &&
-				(DsrDisableCount == other.DsrDisableCount) &&
-				(DcdCount        == other.DcdCount)
+				RfrDisableCount.Equals(other.RfrDisableCount) &&
+				CtsDisableCount.Equals(other.CtsDisableCount) &&
+				DtrDisableCount.Equals(other.DtrDisableCount) &&
+				DsrDisableCount.Equals(other.DsrDisableCount) &&
+				DcdCount       .Equals(other.DcdCount)
 			);
 		}
 

@@ -21,6 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Serialization;
@@ -28,7 +29,7 @@ using System.Xml.Serialization;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	public class MainWindowSettings : MKY.Settings.SettingsItem
+	public class MainWindowSettings : MKY.Settings.SettingsItem, IEquatable<MainWindowSettings>
 	{
 		private FormStartPosition startPosition;
 		private FormWindowState windowState;
@@ -216,30 +217,40 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as MainWindowSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(MainWindowSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			MainWindowSettings other = (MainWindowSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(StartPosition == other.StartPosition) &&
-				(WindowState   == other.WindowState) &&
-				(Location      == other.Location) &&
-				(Size          == other.Size) &&
+				StartPosition.Equals(other.StartPosition) &&
+				WindowState  .Equals(other.WindowState)   &&
+				Location     .Equals(other.Location)      &&
+				Size         .Equals(other.Size)          &&
 
-				(ShowTerminalInfo == other.ShowTerminalInfo) &&
-				(ShowChrono       == other.ShowChrono)
+				ShowTerminalInfo.Equals(other.ShowTerminalInfo) &&
+				ShowChrono      .Equals(other.ShowChrono)
 			);
 		}
 

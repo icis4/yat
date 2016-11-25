@@ -66,7 +66,7 @@ namespace YAT.Log
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	public class FileNameSeparatorEx : EnumEx
+	public class FileNameSeparatorEx : EnumEx, IEquatable<FileNameSeparatorEx>
 	{
 		#region String Definitions
 
@@ -210,6 +210,9 @@ namespace YAT.Log
 			if (ReferenceEquals(other, null))
 				return (false);
 
+			if (ReferenceEquals(this, other))
+				return (true);
+
 			if (GetType() != other.GetType())
 				return (false);
 
@@ -218,13 +221,33 @@ namespace YAT.Log
 				return
 				(
 					base.Equals(other) &&
-					(this.explicitSeparator == other.explicitSeparator)
+					StringEx.EqualsOrdinal(this.explicitSeparator, other.explicitSeparator)
 				);
 			}
 			else
 			{
 				return (base.Equals(other));
 			}
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(FileNameSeparatorEx lhs, FileNameSeparatorEx rhs)
+		{
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			return (lhs.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(FileNameSeparatorEx lhs, FileNameSeparatorEx rhs)
+		{
+			return (!(lhs == rhs));
 		}
 
 		#endregion

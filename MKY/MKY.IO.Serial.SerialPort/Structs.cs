@@ -28,7 +28,7 @@ namespace MKY.IO.Serial.SerialPort
 {
 	/// <summary></summary>
 	[Serializable]
-	public struct OutputBufferSize
+	public struct OutputBufferSize : IEquatable<OutputBufferSize>
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
@@ -91,23 +91,27 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is OutputBufferSize)
+				return (Equals((OutputBufferSize)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(OutputBufferSize other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			OutputBufferSize other = (OutputBufferSize)obj;
 			return
 			(
-				(Enabled == other.Enabled) &&
-				(Size == other.Size)
+				Enabled.Equals(other.Enabled) &&
+				Size   .Equals(other.Size)
 			);
 		}
 
@@ -136,7 +140,7 @@ namespace MKY.IO.Serial.SerialPort
 
 	/// <summary></summary>
 	[Serializable]
-	public struct ChunkSize
+	public struct ChunkSize : IEquatable<ChunkSize>
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
@@ -199,23 +203,27 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is ChunkSize)
+				return (Equals((ChunkSize)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(ChunkSize other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			ChunkSize other = (ChunkSize)obj;
 			return
 			(
-				(Enabled == other.Enabled) &&
-				(Size    == other.Size)
+				Enabled.Equals(other.Enabled) &&
+				Size   .Equals(other.Size)
 			);
 		}
 
@@ -244,7 +252,7 @@ namespace MKY.IO.Serial.SerialPort
 
 	/// <summary></summary>
 	[Serializable]
-	public struct SendRate
+	public struct SendRate : IEquatable<SendRate>
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
@@ -315,24 +323,28 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is SendRate)
+				return (Equals((SendRate)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(SendRate other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			SendRate other = (SendRate)obj;
 			return
 			(
-				(Enabled  == other.Enabled) &&
-				(Size     == other.Size) &&
-				(Interval == other.Interval)
+				Enabled .Equals(other.Enabled) &&
+				Size    .Equals(other.Size) &&
+				Interval.Equals(other.Interval)
 			);
 		}
 

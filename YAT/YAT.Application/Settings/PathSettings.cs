@@ -29,7 +29,7 @@ using MKY.IO;
 namespace YAT.Application.Settings
 {
 	/// <summary></summary>
-	public class PathSettings : MKY.Settings.SettingsItem
+	public class PathSettings : MKY.Settings.SettingsItem, IEquatable<PathSettings>
 	{
 		private string mainFiles;
 		private string sendFiles;
@@ -175,19 +175,29 @@ namespace YAT.Application.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as PathSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(PathSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			PathSettings other = (PathSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.

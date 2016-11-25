@@ -79,7 +79,7 @@ namespace MKY.Test.Settings
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		[Serializable]
-		public class TestTreeChildLevel2 : MKY.Settings.SettingsItem
+		public class TestTreeChildLevel2 : MKY.Settings.SettingsItem, IEquatable<TestTreeChildLevel2>
 		{
 			/// <summary></summary>
 			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
@@ -137,23 +137,34 @@ namespace MKY.Test.Settings
 			/// <summary>
 			/// Determines whether this instance and the specified object have value equality.
 			/// </summary>
+			public override bool Equals(object obj)
+			{
+				return (Equals(obj as TestTreeChildLevel2));
+			}
+
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
 			/// <remarks>
 			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 			/// properties, i.e. properties with some logic, are also properly handled.
 			/// </remarks>
-			public override bool Equals(object obj)
+			public bool Equals(TestTreeChildLevel2 other)
 			{
-				if (ReferenceEquals(obj, null))
+				if (ReferenceEquals(other, null))
 					return (false);
 
-				if (GetType() != obj.GetType())
+				if (ReferenceEquals(this, other))
+					return (true);
+
+				if (this.GetType() != other.GetType())
 					return (false);
 
-				TestTreeChildLevel2 other = (TestTreeChildLevel2)obj;
 				return
 				(
 					base.Equals(other) && // Compare all settings nodes.
-					(SimpleValue == other.SimpleValue)
+
+					SimpleValue.Equals(other.SimpleValue)
 				);
 			}
 
@@ -183,7 +194,7 @@ namespace MKY.Test.Settings
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		[Serializable]
-		public class TestTreeChildLevel1 : MKY.Settings.SettingsItem
+		public class TestTreeChildLevel1 : MKY.Settings.SettingsItem, IEquatable<TestTreeChildLevel1>
 		{
 			/// <summary></summary>
 			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
@@ -297,23 +308,34 @@ namespace MKY.Test.Settings
 			/// <summary>
 			/// Determines whether this instance and the specified object have value equality.
 			/// </summary>
+			public override bool Equals(object obj)
+			{
+				return (Equals(obj as TestTreeChildLevel1));
+			}
+
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
 			/// <remarks>
 			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 			/// properties, i.e. properties with some logic, are also properly handled.
 			/// </remarks>
-			public override bool Equals(object obj)
+			public bool Equals(TestTreeChildLevel1 other)
 			{
-				if (ReferenceEquals(obj, null))
+				if (ReferenceEquals(other, null))
 					return (false);
 
-				if (GetType() != obj.GetType())
+				if (ReferenceEquals(this, other))
+					return (true);
+
+				if (this.GetType() != other.GetType())
 					return (false);
 
-				TestTreeChildLevel1 other = (TestTreeChildLevel1)obj;
 				return
 				(
 					base.Equals(other) && // Compare all settings nodes.
-					(SimpleValue == other.SimpleValue)
+
+					SimpleValue.Equals(other.SimpleValue)
 				);
 			}
 
@@ -344,7 +366,7 @@ namespace MKY.Test.Settings
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		[Serializable]
 		[XmlRoot("TestTreeRoot")]
-		public class TestTreeRoot : MKY.Settings.SettingsItem
+		public class TestTreeRoot : MKY.Settings.SettingsItem, IEquatable<TestTreeRoot>
 		{
 			/// <summary></summary>
 			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
@@ -435,23 +457,34 @@ namespace MKY.Test.Settings
 			/// <summary>
 			/// Determines whether this instance and the specified object have value equality.
 			/// </summary>
+			public override bool Equals(object obj)
+			{
+				return (Equals(obj as TestTreeRoot));
+			}
+
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
 			/// <remarks>
 			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 			/// properties, i.e. properties with some logic, are also properly handled.
 			/// </remarks>
-			public override bool Equals(object obj)
+			public bool Equals(TestTreeRoot other)
 			{
-				if (ReferenceEquals(obj, null))
+				if (ReferenceEquals(other, null))
 					return (false);
 
-				if (GetType() != obj.GetType())
+				if (ReferenceEquals(this, other))
+					return (true);
+
+				if (this.GetType() != other.GetType())
 					return (false);
 
-				TestTreeRoot other = (TestTreeRoot)obj;
 				return
 				(
 					base.Equals(other) && // Compare all settings nodes.
-					(SimpleValue == other.SimpleValue)
+
+					SimpleValue.Equals(other.SimpleValue)
 				);
 			}
 

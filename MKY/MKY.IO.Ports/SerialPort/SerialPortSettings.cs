@@ -243,16 +243,19 @@ namespace MKY.IO.Ports
 			if (ReferenceEquals(other, null))
 				return (false);
 
+			if (ReferenceEquals(this, other))
+				return (true);
+
 			if (GetType() != other.GetType())
 				return (false);
 
 			return
 			(
-				(BaudRate  == other.BaudRate) &&
-				(DataBits  == other.DataBits) &&
-				(Parity    == other.Parity)   &&
-				(StopBits  == other.StopBits) &&
-				(Handshake == other.Handshake)
+				BaudRate .Equals(other.BaudRate) &&
+				DataBits .Equals(other.DataBits) &&
+				Parity   .Equals(other.Parity)   &&
+				StopBits .Equals(other.StopBits) &&
+				Handshake.Equals(other.Handshake)
 			);
 		}
 

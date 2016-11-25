@@ -39,7 +39,7 @@ namespace MKY.Collections.Generic
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "3", Justification = "T3 relates to Value3.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "4", Justification = "T4 relates to Value4.")]
 	[Serializable]
-	public struct Quadruple<T1, T2, T3, T4>
+	public struct Quadruple<T1, T2, T3, T4> : IEquatable<Quadruple<T1, T2, T3, T4>>
 	{
 		private T1 value1;
 		private T2 value2;
@@ -147,45 +147,29 @@ namespace MKY.Collections.Generic
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is Quadruple<T1, T2, T3, T4>)
+				return (Equals((Quadruple<T1, T2, T3, T4>)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(Quadruple<T1, T2, T3, T4> other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			var other = (Quadruple<T1, T2, T3, T4>)obj;
-
-			// Attention, default(Tx) can lead to null, e.g. in case of a string!
-			if ((Value1 == null) || (Value2 == null) || (Value3 == null) || (Value4 == null))
-			{
-				if ((Value1 == null) && (other.Value1 != null))
-					return (false);
-
-				if ((Value2 == null) && (other.Value2 != null))
-					return (false);
-
-				if ((Value3 == null) && (other.Value3 != null))
-					return (false);
-
-				if ((Value4 == null) && (other.Value4 != null))
-					return (false);
-
-				return (true); // All values are 'null'.
-			}
-
-			// Attention, <Tx> may not overload the ==/!= operators.
 			return
 			(
-				(Value1.Equals(other.Value1)) &&
-				(Value2.Equals(other.Value2)) &&
-				(Value3.Equals(other.Value3)) &&
-				(Value4.Equals(other.Value4))
+				ObjectEx.Equals(Value1, other.Value1) &&
+				ObjectEx.Equals(Value2, other.Value2) &&
+				ObjectEx.Equals(Value3, other.Value3) &&
+				ObjectEx.Equals(Value4, other.Value4)
 			);
 		}
 

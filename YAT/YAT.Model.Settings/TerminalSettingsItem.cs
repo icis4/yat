@@ -30,7 +30,7 @@ using MKY.IO;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	public class TerminalSettingsItem : MKY.Settings.SettingsItem, IGuidProvider
+	public class TerminalSettingsItem : MKY.Settings.SettingsItem, IEquatable<TerminalSettingsItem>, IGuidProvider
 	{
 		/// <remarks>
 		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
@@ -217,26 +217,36 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as TerminalSettingsItem));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(TerminalSettingsItem other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			TerminalSettingsItem other = (TerminalSettingsItem)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				PathEx.Equals(FilePath, other.FilePath) &&
-				(Guid                == other.Guid) &&
-				(FixedIndex          == other.FixedIndex)
+				PathEx    .Equals(FilePath, other.FilePath) &&
+				Guid      .Equals(          other.Guid)     &&
+				FixedIndex.Equals(          other.FixedIndex)
 			);
 		}
 

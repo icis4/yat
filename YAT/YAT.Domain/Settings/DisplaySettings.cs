@@ -25,10 +25,12 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
+using MKY;
+
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class DisplaySettings : MKY.Settings.SettingsItem
+	public class DisplaySettings : MKY.Settings.SettingsItem, IEquatable<DisplaySettings>
 	{
 		/// <summary></summary>
 		public const bool SeparateTxRxRadixDefault = false;
@@ -592,42 +594,52 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as DisplaySettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(DisplaySettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			DisplaySettings other = (DisplaySettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(SeparateTxRxRadix     == other.SeparateTxRxRadix) &&
-				(TxRadix               == other.TxRadix) &&
-				(RxRadix               == other.RxRadix) &&
-				(ShowRadix             == other.ShowRadix) &&
-				(ShowBufferLineNumbers == other.ShowBufferLineNumbers) &&
-				(ShowTotalLineNumbers  == other.ShowTotalLineNumbers) &&
-				(ShowDate              == other.ShowDate) &&
-				(ShowTime              == other.ShowTime) &&
-				(ShowPort              == other.ShowPort) &&
-				(ShowDirection         == other.ShowDirection) &&
-				(ShowLength            == other.ShowLength) &&
-				(MaxLineCount          == other.MaxLineCount) &&
-				(MaxBytePerLineCount   == other.MaxBytePerLineCount) &&
+				SeparateTxRxRadix    .Equals(other.SeparateTxRxRadix)     &&
+				TxRadix              .Equals(other.TxRadix)               &&
+				RxRadix              .Equals(other.RxRadix)               &&
+				ShowRadix            .Equals(other.ShowRadix)             &&
+				ShowBufferLineNumbers.Equals(other.ShowBufferLineNumbers) &&
+				ShowTotalLineNumbers .Equals(other.ShowTotalLineNumbers)  &&
+				ShowDate             .Equals(other.ShowDate)              &&
+				ShowTime             .Equals(other.ShowTime)              &&
+				ShowPort             .Equals(other.ShowPort)              &&
+				ShowDirection        .Equals(other.ShowDirection)         &&
+				ShowLength           .Equals(other.ShowLength)            &&
+				MaxLineCount         .Equals(other.MaxLineCount)          &&
+				MaxBytePerLineCount  .Equals(other.MaxBytePerLineCount)   &&
 
-				(PortLineBreakEnabled      == other.PortLineBreakEnabled) &&
-				(DirectionLineBreakEnabled == other.DirectionLineBreakEnabled) &&
+				PortLineBreakEnabled     .Equals(other.PortLineBreakEnabled)      &&
+				DirectionLineBreakEnabled.Equals(other.DirectionLineBreakEnabled) &&
 
-				(InfoSeparator     == other.InfoSeparator) &&
-				(InfoEnclosure     == other.InfoEnclosure)
+				ObjectEx.Equals(InfoSeparator, other.InfoSeparator) &&
+				ObjectEx.Equals(InfoEnclosure, other.InfoEnclosure)
 			);
 		}
 
