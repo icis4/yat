@@ -28,7 +28,7 @@ using System.Xml.Serialization;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	public class LayoutSettings : MKY.Settings.SettingsItem
+	public class LayoutSettings : MKY.Settings.SettingsItem, IEquatable<LayoutSettings>
 	{
 		private bool txMonitorPanelIsVisible;
 		private bool bidirMonitorPanelIsVisible;
@@ -296,35 +296,45 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as LayoutSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(LayoutSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			LayoutSettings other = (LayoutSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(TxMonitorPanelIsVisible    == other.TxMonitorPanelIsVisible) &&
-				(BidirMonitorPanelIsVisible == other.BidirMonitorPanelIsVisible) &&
-				(RxMonitorPanelIsVisible    == other.RxMonitorPanelIsVisible) &&
-				(MonitorOrientation         == other.MonitorOrientation) &&
-				(TxMonitorSplitterRatio     == other.TxMonitorSplitterRatio) &&
-				(RxMonitorSplitterRatio     == other.RxMonitorSplitterRatio) &&
+				TxMonitorPanelIsVisible   .Equals(other.TxMonitorPanelIsVisible)    &&
+				BidirMonitorPanelIsVisible.Equals(other.BidirMonitorPanelIsVisible) &&
+				RxMonitorPanelIsVisible   .Equals(other.RxMonitorPanelIsVisible)    &&
+				MonitorOrientation        .Equals(other.MonitorOrientation)         &&
+				TxMonitorSplitterRatio    .Equals(other.TxMonitorSplitterRatio)     &&
+				RxMonitorSplitterRatio    .Equals(other.RxMonitorSplitterRatio)     &&
 
-				(PredefinedPanelIsVisible   == other.PredefinedPanelIsVisible) &&
-				(PredefinedSplitterRatio    == other.PredefinedSplitterRatio) &&
+				PredefinedPanelIsVisible  .Equals(other.PredefinedPanelIsVisible)   &&
+				PredefinedSplitterRatio   .Equals(other.PredefinedSplitterRatio)    &&
 
-				(SendTextPanelIsVisible     == other.SendTextPanelIsVisible) &&
-				(SendFilePanelIsVisible     == other.SendFilePanelIsVisible)
+				SendTextPanelIsVisible    .Equals(other.SendTextPanelIsVisible)     &&
+				SendFilePanelIsVisible    .Equals(other.SendFilePanelIsVisible)
 			);
 		}
 

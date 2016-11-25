@@ -377,19 +377,19 @@ namespace MKY.Settings
 			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != other.GetType())
-				return (false);
+			if (ReferenceEquals(this, other))
+				return (true);
 
 			if (GetType() == other.GetType())
 			{
 				if ((this.nodes != null) && (other.nodes != null))
 				{
-					// Compare all nodes, settings values are compared by inheriting class.
+					// Compare all nodes, settings values are compared by inheriting class:
 					if (this.nodes.Count == other.nodes.Count)
 					{
 						for (int i = 0; i < this.nodes.Count; i++)
 						{
-							if (this.nodes[i] != other.nodes[i])
+							if (!ObjectEx.Equals(this.nodes[i], other.nodes[i]))
 								return (false);
 						}
 

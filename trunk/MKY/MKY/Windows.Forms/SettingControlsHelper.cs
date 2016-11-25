@@ -33,7 +33,7 @@ namespace MKY.Windows.Forms
 	/// Struct instead of class to allow same declaration as if this was just a simple bool.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Boolean just *is* 'bool'...")]
-	public struct SettingControlsHelper
+	public struct SettingControlsHelper : IEquatable<SettingControlsHelper>
 	{
 		private int count;
 
@@ -85,20 +85,20 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(obj, null))
+			if (obj is SettingControlsHelper)
+				return (Equals((SettingControlsHelper)obj));
+			else
 				return (false);
+		}
 
-			if (GetType() != obj.GetType())
-				return (false);
-
-			SettingControlsHelper other = (SettingControlsHelper)obj;
-			return (this.count == other.count);
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public bool Equals(SettingControlsHelper other)
+		{
+			return (this.count.Equals(other.count));
 		}
 
 		/// <summary>

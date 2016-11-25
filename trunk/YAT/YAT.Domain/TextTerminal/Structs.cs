@@ -32,7 +32,7 @@ namespace YAT.Domain
 {
 	/// <summary></summary>
 	[Serializable]
-	public struct TextLineSendDelay
+	public struct TextLineSendDelay : IEquatable<TextLineSendDelay>
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
@@ -86,24 +86,28 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is TextLineSendDelay)
+				return (Equals((TextLineSendDelay)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(TextLineSendDelay other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			TextLineSendDelay other = (TextLineSendDelay)obj;
 			return
 			(
-				(Enabled      == other.Enabled) &&
-				(Delay        == other.Delay) &&
-				(LineInterval == other.LineInterval)
+				Enabled     .Equals(other.Enabled) &&
+				Delay       .Equals(other.Delay)   &&
+				LineInterval.Equals(other.LineInterval)
 			);
 		}
 
@@ -132,7 +136,7 @@ namespace YAT.Domain
 
 	/// <summary></summary>
 	[Serializable]
-	public struct WaitForResponse
+	public struct WaitForResponse : IEquatable<WaitForResponse>
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
@@ -179,23 +183,27 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is WaitForResponse)
+				return (Equals((WaitForResponse)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(WaitForResponse other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			WaitForResponse other = (WaitForResponse)obj;
 			return
 			(
-				(Enabled == other.Enabled) &&
-				(Timeout == other.Timeout)
+				Enabled.Equals(other.Enabled) &&
+				Timeout.Equals(other.Timeout)
 			);
 		}
 

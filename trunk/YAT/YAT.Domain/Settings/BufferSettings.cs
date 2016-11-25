@@ -27,7 +27,7 @@ using System.Xml.Serialization;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class BufferSettings : MKY.Settings.SettingsItem
+	public class BufferSettings : MKY.Settings.SettingsItem, IEquatable<BufferSettings>
 	{
 		/// <summary></summary>
 		public const int BufferSizeDefault = 65536;
@@ -145,25 +145,35 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as BufferSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(BufferSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			BufferSettings other = (BufferSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(TxBufferSize == other.TxBufferSize) &&
-				(RxBufferSize == other.RxBufferSize)
+				TxBufferSize.Equals(other.TxBufferSize) &&
+				RxBufferSize.Equals(other.RxBufferSize)
 			);
 		}
 

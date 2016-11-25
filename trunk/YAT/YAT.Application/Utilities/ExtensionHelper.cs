@@ -31,7 +31,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
-using MKY;
+using MKY.IO;
 
 #endregion
 
@@ -65,7 +65,7 @@ namespace YAT.Application.Utilities
 		public static bool IsTerminalFile(string filePath)
 		{
 			string extension = Path.GetExtension(filePath);
-			return (StringEx.EqualsOrdinalIgnoreCase(extension, TerminalFile));
+			return (PathEx.Equals(extension, TerminalFile));
 		}
 
 		/// <summary></summary>
@@ -95,7 +95,7 @@ namespace YAT.Application.Utilities
 		public static bool IsWorkspaceFile(string filePath)
 		{
 			string extension = Path.GetExtension(filePath);
-			return (StringEx.EqualsOrdinalIgnoreCase(extension, WorkspaceFile));
+			return (PathEx.Equals(extension, WorkspaceFile));
 		}
 
 		/// <summary></summary>
@@ -139,13 +139,13 @@ namespace YAT.Application.Utilities
 		/// <summary></summary>
 		public static bool IsTextExtension(string extension)
 		{
-			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".txt"))
+			if (PathEx.Equals(extension, ".txt"))
 				return (true);
 
-			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".text"))
+			if (PathEx.Equals(extension, ".text"))
 				return (true);
 
-			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".log"))
+			if (PathEx.Equals(extension, ".log"))
 				return (true);
 
 			return (false);
@@ -161,13 +161,13 @@ namespace YAT.Application.Utilities
 		/// <summary></summary>
 		public static bool IsBinaryExtension(string extension)
 		{
-			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".dat"))
+			if (PathEx.Equals(extension, ".dat"))
 				return (true);
 
-			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".bin"))
+			if (PathEx.Equals(extension, ".bin"))
 				return (true);
 
-			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".binary"))
+			if (PathEx.Equals(extension, ".binary"))
 				return (true);
 
 			return (false);
@@ -183,7 +183,7 @@ namespace YAT.Application.Utilities
 		/// <summary></summary>
 		public static bool IsRtfExtension(string extension)
 		{
-			return (StringEx.EqualsOrdinalIgnoreCase(extension, ".rtf"));
+			return (PathEx.Equals(extension, ".rtf"));
 		}
 
 		/// <summary></summary>
@@ -196,7 +196,7 @@ namespace YAT.Application.Utilities
 		/// <summary></summary>
 		public static bool IsXmlExtension(string extension)
 		{
-			return (StringEx.EqualsOrdinalIgnoreCase(extension, ".xml"));
+			return (PathEx.Equals(extension, ".xml"));
 		}
 
 		/// <summary></summary>
@@ -327,7 +327,7 @@ namespace YAT.Application.Utilities
 		/// <summary></summary>
 		public static bool IsExecutableExtension(string extension)
 		{
-			return (StringEx.EqualsOrdinalIgnoreCase(extension, ".exe"));
+			return (PathEx.Equals(extension, ".exe"));
 		}
 
 		/// <summary></summary>

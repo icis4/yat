@@ -738,15 +738,18 @@ namespace YAT.Model.Types
 			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != other.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
 			return
 			(
-				(IsDefined                       == other.IsDefined) &&
+				IsDefined                   .Equals(other.IsDefined) &&
 				ArrayEx.ElementsEqual(CommandLines, other.CommandLines) &&
-				(DefaultRadix                    == other.DefaultRadix) &&
-				(IsFilePath                      == other.IsFilePath) &&
+				DefaultRadix                .Equals(other.DefaultRadix) &&
+				IsFilePath                  .Equals(other.IsFilePath) &&
 				PathEx.Equals(FilePath,             other.FilePath)
 			);
 

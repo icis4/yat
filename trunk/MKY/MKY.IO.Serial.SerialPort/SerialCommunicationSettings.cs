@@ -29,7 +29,7 @@ namespace MKY.IO.Serial.SerialPort
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SerialCommunicationSettings : Settings.SettingsItem
+	public class SerialCommunicationSettings : Settings.SettingsItem, IEquatable<SerialCommunicationSettings>
 	{
 		/// <summary></summary>
 		public const int BaudRateDefault = (int)MKY.IO.Ports.BaudRate.Baud009600;
@@ -509,31 +509,41 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as SerialCommunicationSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(SerialCommunicationSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			SerialCommunicationSettings other = (SerialCommunicationSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(BaudRate    == other.BaudRate)    &&
-				(DataBits    == other.DataBits)    &&
-				(Parity      == other.Parity)      &&
-				(StopBits    == other.StopBits)    &&
-				(FlowControl == other.FlowControl) &&
+				BaudRate   .Equals(other.BaudRate)    &&
+				DataBits   .Equals(other.DataBits)    &&
+				Parity     .Equals(other.Parity)      &&
+				StopBits   .Equals(other.StopBits)    &&
+				FlowControl.Equals(other.FlowControl) &&
 
-				(RfrPin      == other.RfrPin)      &&
-				(DtrPin      == other.DtrPin)
+				RfrPin     .Equals(other.RfrPin)      &&
+				DtrPin     .Equals(other.DtrPin)
 			);
 		}
 

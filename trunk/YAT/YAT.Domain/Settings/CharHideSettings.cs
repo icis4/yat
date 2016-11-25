@@ -28,7 +28,7 @@ using System.Xml.Serialization;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class CharHideSettings : MKY.Settings.SettingsItem
+	public class CharHideSettings : MKY.Settings.SettingsItem, IEquatable<CharHideSettings>
 	{
 		/// <summary></summary>
 		public const bool HideXOnXOffDefault = false;
@@ -168,26 +168,36 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as CharHideSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(CharHideSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			CharHideSettings other = (CharHideSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(HideXOnXOff == other.HideXOnXOff) &&
-				(Hide0x00    == other.Hide0x00) &&
-				(Hide0xFF    == other.Hide0xFF)
+				HideXOnXOff.Equals(other.HideXOnXOff) &&
+				Hide0x00   .Equals(other.Hide0x00)    &&
+				Hide0xFF   .Equals(other.Hide0xFF)
 			);
 		}
 

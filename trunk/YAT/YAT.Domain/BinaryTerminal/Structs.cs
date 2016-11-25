@@ -34,7 +34,7 @@ namespace YAT.Domain
 {
 	/// <summary></summary>
 	[Serializable]
-	public struct BinaryLengthLineBreak
+	public struct BinaryLengthLineBreak : IEquatable<BinaryLengthLineBreak>
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
@@ -81,23 +81,27 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is BinaryLengthLineBreak)
+				return (Equals((BinaryLengthLineBreak)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(BinaryLengthLineBreak other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			BinaryLengthLineBreak other = (BinaryLengthLineBreak)obj;
 			return
 			(
-				(Enabled == other.Enabled) &&
-				(Length  == other.Length)
+				Enabled.Equals(other.Enabled) &&
+				Length .Equals(other.Length)
 			);
 		}
 
@@ -126,7 +130,7 @@ namespace YAT.Domain
 
 	/// <summary></summary>
 	[Serializable]
-	public struct BinarySequenceLineBreak
+	public struct BinarySequenceLineBreak : IEquatable<BinarySequenceLineBreak>
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
@@ -173,23 +177,27 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is BinarySequenceLineBreak)
+				return (Equals((BinarySequenceLineBreak)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(BinarySequenceLineBreak other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			BinarySequenceLineBreak other = (BinarySequenceLineBreak)obj;
 			return
 			(
-				(Enabled                                 == other.Enabled) &&
-				(StringEx.EqualsOrdinalIgnoreCase(Sequence, other.Sequence))
+				Enabled.Equals(                            other.Enabled) &&
+				StringEx.EqualsOrdinalIgnoreCase(Sequence, other.Sequence)
 			);
 		}
 
@@ -218,7 +226,7 @@ namespace YAT.Domain
 
 	/// <summary></summary>
 	[Serializable]
-	public struct BinaryTimedLineBreak
+	public struct BinaryTimedLineBreak : IEquatable<BinaryTimedLineBreak>
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
@@ -265,23 +273,27 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is BinaryTimedLineBreak)
+				return (Equals((BinaryTimedLineBreak)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(BinaryTimedLineBreak other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			BinaryTimedLineBreak other = (BinaryTimedLineBreak)obj;
 			return
 			(
-				(Enabled == other.Enabled) &&
-				(Timeout == other.Timeout)
+				Enabled.Equals(other.Enabled) &&
+				Timeout.Equals(other.Timeout)
 			);
 		}
 

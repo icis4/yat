@@ -26,6 +26,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 using MKY;
+using MKY.Collections;
 using MKY.Recent;
 
 using YAT.Model.Types;
@@ -34,7 +35,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "This is the easter egg!")]
-	public class SendTextSettings : MKY.Settings.SettingsItem
+	public class SendTextSettings : MKY.Settings.SettingsItem, IEquatable<SendTextSettings>
 	{
 		/// <summary></summary>
 		public const int MaxRecentCommands = 24;
@@ -146,25 +147,35 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as SendTextSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(SendTextSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			SendTextSettings other = (SendTextSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(Command        == other.Command) &&
-				(RecentCommands == other.RecentCommands)
+				ObjectEx             .Equals(Command,        other.Command) &&
+				IEnumerableEx.ElementsEqual( RecentCommands, other.RecentCommands)
 			);
 		}
 

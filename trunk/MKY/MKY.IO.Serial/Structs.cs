@@ -28,7 +28,7 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]
-	public struct AutoInterval
+	public struct AutoInterval : IEquatable<AutoInterval>
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
@@ -91,23 +91,27 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is AutoInterval)
+				return (Equals((AutoInterval)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(AutoInterval other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			AutoInterval other = (AutoInterval)obj;
 			return
 			(
-				(Enabled  == other.Enabled) &&
-				(Interval == other.Interval)
+				Enabled .Equals(other.Enabled) &&
+				Interval.Equals(other.Interval)
 			);
 		}
 

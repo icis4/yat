@@ -31,7 +31,7 @@ using MKY.Net;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	public class NewTerminalSettings : MKY.Settings.SettingsItem
+	public class NewTerminalSettings : MKY.Settings.SettingsItem, IEquatable<NewTerminalSettings>
 	{
 		private Domain.TerminalType terminalType;
 		private Domain.IOType ioType;
@@ -622,49 +622,59 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as NewTerminalSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(NewTerminalSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			NewTerminalSettings other = (NewTerminalSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(TerminalType             == other.TerminalType) &&
-				(IOType                   == other.IOType) &&
+				TerminalType.Equals(other.TerminalType) &&
+				IOType      .Equals(other.IOType)       &&
 
-				(SerialPortId             == other.SerialPortId) &&
-				(SerialPortCommunication  == other.SerialPortCommunication) &&
-				(SerialPortAliveMonitor   == other.SerialPortAliveMonitor) &&
-				(SerialPortAutoReopen     == other.SerialPortAutoReopen) &&
+				ObjectEx.Equals(SerialPortId, other.SerialPortId)               &&
+				SerialPortCommunication .Equals(other.SerialPortCommunication)  &&
+				SerialPortAliveMonitor  .Equals(other.SerialPortAliveMonitor)   &&
+				SerialPortAutoReopen    .Equals(other.SerialPortAutoReopen)     &&
 
-				StringEx.EqualsOrdinalIgnoreCase(SocketRemoteHost_ForSerialization, SocketRemoteHost_ForSerialization) &&
-				(SocketRemoteTcpPort      == other.SocketRemoteTcpPort) &&
-				(SocketRemoteUdpPort      == other.SocketRemoteUdpPort) &&
-				(SocketLocalInterface     == other.SocketLocalInterface) &&
-				StringEx.EqualsOrdinalIgnoreCase(SocketLocalFilter_ForSerialization, SocketLocalFilter_ForSerialization) &&
-				(SocketLocalTcpPort       == other.SocketLocalTcpPort) &&
-				(SocketLocalUdpPort       == other.SocketLocalUdpPort) &&
-				(TcpClientAutoReconnect   == other.TcpClientAutoReconnect) &&
-				(UdpServerSendMode        == other.UdpServerSendMode) &&
+				StringEx.EqualsOrdinalIgnoreCase(SocketRemoteHost_ForSerialization, other.SocketRemoteHost_ForSerialization) &&
+				SocketRemoteTcpPort     .Equals(other.SocketRemoteTcpPort)      &&
+				SocketRemoteUdpPort     .Equals(other.SocketRemoteUdpPort)      &&
+				SocketLocalInterface    .Equals(other.SocketLocalInterface)     &&
+				StringEx.EqualsOrdinalIgnoreCase(SocketLocalFilter_ForSerialization, other.SocketLocalFilter_ForSerialization) &&
+				SocketLocalTcpPort      .Equals(other.SocketLocalTcpPort)       &&
+				SocketLocalUdpPort      .Equals(other.SocketLocalUdpPort)       &&
+				TcpClientAutoReconnect  .Equals(other.TcpClientAutoReconnect)   &&
+				UdpServerSendMode       .Equals(other.UdpServerSendMode)        &&
 
-				(UsbSerialHidDeviceInfo   == other.UsbSerialHidDeviceInfo) &&
-				(UsbSerialHidMatchSerial  == other.UsbSerialHidMatchSerial) &&
-				(UsbSerialHidReportFormat == other.UsbSerialHidReportFormat) &&
-				(UsbSerialHidRxIdUsage    == other.UsbSerialHidRxIdUsage) &&
-				(UsbSerialHidFlowControl  == other.UsbSerialHidFlowControl) &&
-				(UsbSerialHidAutoOpen     == other.UsbSerialHidAutoOpen) &&
+				ObjectEx.Equals(UsbSerialHidDeviceInfo, other.UsbSerialHidDeviceInfo) &&
+				UsbSerialHidMatchSerial .Equals(other.UsbSerialHidMatchSerial)  &&
+				UsbSerialHidReportFormat.Equals(other.UsbSerialHidReportFormat) &&
+				UsbSerialHidRxIdUsage   .Equals(other.UsbSerialHidRxIdUsage)    &&
+				UsbSerialHidFlowControl .Equals(other.UsbSerialHidFlowControl)  &&
+				UsbSerialHidAutoOpen    .Equals(other.UsbSerialHidAutoOpen)     &&
 
-				(StartTerminal            == other.StartTerminal)
+				StartTerminal.Equals(other.StartTerminal)
 			);
 		}
 

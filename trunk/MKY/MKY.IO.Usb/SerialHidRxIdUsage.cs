@@ -197,14 +197,17 @@ namespace MKY.IO.Usb
 			if (ReferenceEquals(other, null))
 				return (false);
 
+			if (ReferenceEquals(this, other))
+				return (true);
+
 			if (GetType() != other.GetType())
 				return (false);
 
 			return
 			(
-				(SeparateRxId == other.SeparateRxId) &&
-				(AnyRxId      == other.AnyRxId     ) &&
-				(RxId         == other.RxId        )
+				SeparateRxId.Equals(other.SeparateRxId) &&
+				AnyRxId     .Equals(other.AnyRxId     ) &&
+				RxId        .Equals(other.RxId        )
 			);
 		}
 

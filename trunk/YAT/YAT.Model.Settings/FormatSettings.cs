@@ -25,12 +25,14 @@ using System;
 using System.Drawing;
 using System.Xml.Serialization;
 
+using MKY;
+
 using YAT.Model.Types;
 
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	public class FormatSettings : MKY.Settings.SettingsItem
+	public class FormatSettings : MKY.Settings.SettingsItem, IEquatable<FormatSettings>
 	{
 		/// <remarks>Color.Blue = 0000FF.</remarks>
 		public static readonly Color TxColorDefault = Color.Blue;
@@ -403,38 +405,48 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as FormatSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(FormatSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			FormatSettings other = (FormatSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(Font              == other.Font) &&
+				ObjectEx.Equals(Font, other.Font) &&
 
-				(TxDataFormat      == other.TxDataFormat) &&
-				(TxControlFormat   == other.TxControlFormat) &&
-				(RxDataFormat      == other.RxDataFormat) &&
-				(RxControlFormat   == other.RxControlFormat) &&
-				(DateFormat        == other.DateFormat) &&
-				(TimeFormat        == other.TimeFormat) &&
-				(PortFormat        == other.PortFormat) &&
-				(DirectionFormat   == other.DirectionFormat) &&
-				(LengthFormat      == other.LengthFormat) &&
-				(WhiteSpacesFormat == other.WhiteSpacesFormat) &&
-				(ErrorFormat       == other.ErrorFormat) &&
+				ObjectEx.Equals(TxDataFormat,      other.TxDataFormat)      &&
+				ObjectEx.Equals(TxControlFormat,   other.TxControlFormat)   &&
+				ObjectEx.Equals(RxDataFormat,      other.RxDataFormat)      &&
+				ObjectEx.Equals(RxControlFormat,   other.RxControlFormat)   &&
+				ObjectEx.Equals(DateFormat,        other.DateFormat)        &&
+				ObjectEx.Equals(TimeFormat,        other.TimeFormat)        &&
+				ObjectEx.Equals(PortFormat,        other.PortFormat)        &&
+				ObjectEx.Equals(DirectionFormat,   other.DirectionFormat)   &&
+				ObjectEx.Equals(LengthFormat,      other.LengthFormat)      &&
+				ObjectEx.Equals(WhiteSpacesFormat, other.WhiteSpacesFormat) &&
+				ObjectEx.Equals(ErrorFormat,       other.ErrorFormat)       &&
 
-				(BackFormat        == other.BackFormat)
+				ObjectEx.Equals(BackFormat, other.BackFormat)
 			);
 		}
 

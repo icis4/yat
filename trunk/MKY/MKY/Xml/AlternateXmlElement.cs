@@ -21,12 +21,13 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Xml
 {
 	/// <summary></summary>
-	public struct AlternateXmlElement
+	public struct AlternateXmlElement : IEquatable<AlternateXmlElement>
 	{
 		private string[] xmlPath;
 		private string   localName;
@@ -89,21 +90,25 @@ namespace MKY.Xml
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is AlternateXmlElement)
+				return (Equals((AlternateXmlElement)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(AlternateXmlElement other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			AlternateXmlElement other = (AlternateXmlElement)obj;
 			return
-			(
+			(	// XML is case insensitive!
 				(StringEx.EqualsOrdinalIgnoreCase(XmlPath,             other.XmlPath)) &&
 				(StringEx.EqualsOrdinalIgnoreCase(LocalName,           other.LocalName)) &&
 				(StringEx.EqualsOrdinalIgnoreCase(AlternateLocalNames, other.AlternateLocalNames))

@@ -27,7 +27,6 @@ using System.Drawing;
 using System.Xml.Serialization;
 
 using MKY;
-using MKY.Drawing;
 
 namespace YAT.Model.Types
 {

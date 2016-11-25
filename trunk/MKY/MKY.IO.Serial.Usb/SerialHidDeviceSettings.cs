@@ -38,7 +38,7 @@ namespace MKY.IO.Serial.Usb
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SerialHidDeviceSettings : Settings.SettingsItem
+	public class SerialHidDeviceSettings : Settings.SettingsItem, IEquatable<SerialHidDeviceSettings>
 	{
 		#region Constants
 		//==========================================================================================
@@ -317,31 +317,41 @@ namespace MKY.IO.Serial.Usb
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as SerialHidDeviceSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(SerialHidDeviceSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			SerialHidDeviceSettings other = (SerialHidDeviceSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(DeviceInfo   == other.DeviceInfo) &&
-				(MatchSerial  == other.MatchSerial) &&
+				ObjectEx.Equals(DeviceInfo, other.DeviceInfo) &&
+				MatchSerial.Equals(         other.MatchSerial) &&
 
-				(ReportFormat == other.ReportFormat) &&
-				(RxIdUsage    == other.RxIdUsage) &&
+				ObjectEx.Equals(ReportFormat, other.ReportFormat) &&
+				ObjectEx.Equals(RxIdUsage,    other.RxIdUsage) &&
 
-				(FlowControl  == other.FlowControl) &&
-				(AutoOpen     == other.AutoOpen)
+				FlowControl.Equals(other.FlowControl) &&
+				AutoOpen.Equals(   other.AutoOpen)
 			);
 		}
 

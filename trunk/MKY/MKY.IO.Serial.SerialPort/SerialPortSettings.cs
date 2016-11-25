@@ -30,7 +30,7 @@ namespace MKY.IO.Serial.SerialPort
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SerialPortSettings : Settings.SettingsItem
+	public class SerialPortSettings : Settings.SettingsItem, IEquatable<SerialPortSettings>
 	{
 		#region Constants
 		//==========================================================================================
@@ -470,34 +470,44 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as SerialPortSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(SerialPortSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			SerialPortSettings other = (SerialPortSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(PortId              == other.PortId) &&
+				ObjectEx.Equals(PortId, other.PortId) &&
 
-				(AliveMonitor        == other.AliveMonitor) &&
-				(AutoReopen          == other.AutoReopen) &&
-				(OutputBufferSize    == other.OutputBufferSize) &&
-				(OutputMaxBaudRate   == other.OutputMaxBaudRate) &&
-				(MaxChunkSize        == other.MaxChunkSize) &&
-				(MaxSendRate         == other.MaxSendRate) &&
+				AliveMonitor       .Equals(other.AliveMonitor)      &&
+				AutoReopen         .Equals(other.AutoReopen)        &&
+				OutputBufferSize   .Equals(other.OutputBufferSize)  &&
+				OutputMaxBaudRate  .Equals(other.OutputMaxBaudRate) &&
+				MaxChunkSize       .Equals(other.MaxChunkSize)      &&
+				MaxSendRate        .Equals(other.MaxSendRate)       &&
 
-				(NoSendOnOutputBreak == other.NoSendOnOutputBreak) &&
-				(NoSendOnInputBreak  == other.NoSendOnInputBreak)
+				NoSendOnOutputBreak.Equals(other.NoSendOnOutputBreak) &&
+				NoSendOnInputBreak .Equals(other.NoSendOnInputBreak)
 			);
 		}
 

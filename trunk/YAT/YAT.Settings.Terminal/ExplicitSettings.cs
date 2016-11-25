@@ -21,6 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Xml.Serialization;
 
 using MKY;
@@ -28,7 +29,7 @@ using MKY;
 namespace YAT.Settings.Terminal
 {
 	/// <summary></summary>
-	public class ExplicitSettings : MKY.Settings.SettingsItem
+	public class ExplicitSettings : MKY.Settings.SettingsItem, IEquatable<ExplicitSettings>
 	{
 		/// <summary></summary>
 		public const bool TerminalIsStartedDefault = true;
@@ -268,26 +269,36 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as ExplicitSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(ExplicitSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			ExplicitSettings other = (ExplicitSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(TerminalIsStarted == other.TerminalIsStarted) &&
-				(LogIsOn           == other.LogIsOn) &&
-				StringEx.EqualsOrdinal(UserName, other.UserName)
+				TerminalIsStarted.Equals(other.TerminalIsStarted) &&
+				LogIsOn          .Equals(other.LogIsOn)           &&
+				StringEx.EqualsOrdinalIgnoreCase(UserName, other.UserName)
 			);
 		}
 

@@ -33,7 +33,7 @@ namespace MKY.Collections
 	/// its contents even though it is marked <see cref="SerializableAttribute"/>.
 	/// </remarks>
 	[Serializable]
-	public struct StringKeyValuePair
+	public struct StringKeyValuePair : IEquatable<StringKeyValuePair>
 	{
 		private string key;
 		private string value;
@@ -111,23 +111,27 @@ namespace MKY.Collections
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is StringKeyValuePair)
+				return (Equals((StringKeyValuePair)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(StringKeyValuePair other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			var other = (StringKeyValuePair)obj;
 			return
 			(
-				(Key   == other.Key) &&
-				(Value == other.Value)
+				StringEx.EqualsOrdinal(Key,   other.Key) &&
+				StringEx.EqualsOrdinal(Value, other.Value)
 			);
 		}
 

@@ -21,25 +21,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-#region Using
-//==================================================================================================
-// Using
-//==================================================================================================
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-using YAT.Application.Utilities;
+using MKY;
 
-#endregion
+using YAT.Application.Utilities;
 
 namespace YAT.Settings.Terminal
 {
 	/// <summary></summary>
 	[XmlRoot("Settings")]
-	public class TerminalSettingsRoot : MKY.Settings.SettingsItem, MKY.Xml.IAlternateXmlElementProvider
+	public class TerminalSettingsRoot : MKY.Settings.SettingsItem, IEquatable<TerminalSettingsRoot>, MKY.Xml.IAlternateXmlElementProvider
 	{
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
 		private string settingsVersion = "1.5.0";
@@ -706,24 +701,34 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as TerminalSettingsRoot));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(TerminalSettingsRoot other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			TerminalSettingsRoot other = (TerminalSettingsRoot)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(ProductVersion == other.ProductVersion)
+				StringEx.EqualsOrdinalIgnoreCase(ProductVersion, other.ProductVersion)
 				//// Do not consider AutoSaved.
 			);
 		}

@@ -50,7 +50,7 @@ namespace MKY.Test.Types
 			D,
 		}
 
-		private class SimpleType
+		private class SimpleReferenceType : IEquatable<SimpleReferenceType>
 		{
 			/// <summary></summary>
 			public readonly int A;
@@ -59,7 +59,7 @@ namespace MKY.Test.Types
 			public readonly double B;
 
 			/// <summary></summary>
-			public SimpleType(int a, double b)
+			public SimpleReferenceType(int a, double b)
 			{
 				A = a;
 				B = b;
@@ -83,26 +83,40 @@ namespace MKY.Test.Types
 			/// <summary>
 			/// Determines whether this instance and the specified object have value equality.
 			/// </summary>
+			public override bool Equals(object obj)
+			{
+				return (Equals(obj as SimpleReferenceType));
+			}
+
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
 			/// <remarks>
 			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 			/// properties, i.e. properties with some logic, are also properly handled.
 			/// </remarks>
-			public override bool Equals(object obj)
+			public bool Equals(SimpleReferenceType other)
 			{
-				if (ReferenceEquals(obj, null))
+				if (ReferenceEquals(other, null))
 					return (false);
 
-				if (GetType() != obj.GetType())
+				if (ReferenceEquals(this, other))
+					return (true);
+
+				if (this.GetType() != other.GetType())
 					return (false);
 
-				SimpleType other = (SimpleType)obj;
-				return ((A == other.A) && (B == other.B));
+				return
+				(
+					A.Equals(other.A) &&
+					B.Equals(other.B)
+				);
 			}
 
 			/// <summary>
 			/// Determines whether the two specified objects have reference or value equality.
 			/// </summary>
-			public static bool operator ==(SimpleType lhs, SimpleType rhs)
+			public static bool operator ==(SimpleReferenceType lhs, SimpleReferenceType rhs)
 			{
 				if (ReferenceEquals(lhs, rhs))  return (true);
 				if (ReferenceEquals(lhs, null)) return (false);
@@ -114,7 +128,7 @@ namespace MKY.Test.Types
 			/// <summary>
 			/// Determines whether the two specified objects have reference and value inequality.
 			/// </summary>
-			public static bool operator !=(SimpleType lhs, SimpleType rhs)
+			public static bool operator !=(SimpleReferenceType lhs, SimpleReferenceType rhs)
 			{
 				return (!(lhs == rhs));
 			}
@@ -148,11 +162,11 @@ namespace MKY.Test.Types
 				new SimpleEnum[] { SimpleEnum.B, SimpleEnum.C, SimpleEnum.D },
 			};
 
-		private static readonly SimpleType[][] ObjectArrays = new SimpleType[][]
+		private static readonly SimpleReferenceType[][] ObjectArrays = new SimpleReferenceType[][]
 			{
-				new SimpleType[] { new SimpleType(0, 1.0), new SimpleType(1, 1.1), new SimpleType(2, 1.2) },
-				new SimpleType[] { new SimpleType(0, 1.0), new SimpleType(1, 1.1), new SimpleType(2, 1.2) },
-				new SimpleType[] { new SimpleType(1, 1.1), new SimpleType(2, 1.2), new SimpleType(3, 1.3) },
+				new SimpleReferenceType[] { new SimpleReferenceType(0, 1.0), new SimpleReferenceType(1, 1.1), new SimpleReferenceType(2, 1.2) },
+				new SimpleReferenceType[] { new SimpleReferenceType(0, 1.0), new SimpleReferenceType(1, 1.1), new SimpleReferenceType(2, 1.2) },
+				new SimpleReferenceType[] { new SimpleReferenceType(1, 1.1), new SimpleReferenceType(2, 1.2), new SimpleReferenceType(3, 1.3) },
 			};
 
 		private static readonly string[][] ArraysWithNull = new string[][]

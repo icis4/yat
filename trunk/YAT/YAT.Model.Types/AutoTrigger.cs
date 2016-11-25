@@ -75,7 +75,7 @@ namespace YAT.Model.Types
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	public class AutoTriggerEx : EnumEx
+	public class AutoTriggerEx : EnumEx, IEquatable<AutoTriggerEx>
 	{
 		/// <summary>
 		/// The invalid predefined command ID (1..12).
@@ -216,7 +216,10 @@ namespace YAT.Model.Types
 			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != other.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
 			if ((AutoTrigger)UnderlyingEnum == AutoTrigger.Explicit)
@@ -224,13 +227,33 @@ namespace YAT.Model.Types
 				return
 				(
 					base.Equals(other) &&
-					(this.explicitCommandString == other.explicitCommandString)
+					StringEx.EqualsOrdinal(this.explicitCommandString, other.explicitCommandString)
 				);
 			}
 			else
 			{
 				return (base.Equals(other));
 			}
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(AutoTriggerEx lhs, AutoTriggerEx rhs)
+		{
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			return (lhs.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(AutoTriggerEx lhs, AutoTriggerEx rhs)
+		{
+			return (!(lhs == rhs));
 		}
 
 		#endregion

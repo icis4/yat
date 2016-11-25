@@ -71,7 +71,7 @@ namespace MKY.Net
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
-	public class IPNetworkInterfaceEx : EnumEx
+	public class IPNetworkInterfaceEx : EnumEx, IEquatable<IPNetworkInterfaceEx>
 	{
 		#region String Definitions
 
@@ -228,36 +228,6 @@ namespace MKY.Net
 			return (new IPNetworkInterfaceDescriptorPair(Description, Address.ToString()));
 		}
 
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality,
-		/// ignoring <see cref="Address"/>.
-		/// </summary>
-		public bool EqualsDescription(IPNetworkInterfaceEx other)
-		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (GetType() != other.GetType())
-				return (false);
-
-			if ((IPNetworkInterface)UnderlyingEnum == IPNetworkInterface.Explicit)
-			{
-				return
-				(
-					base.Equals(other) &&
-					(this.explicitDescription == other.explicitDescription)
-				);
-			}
-			else
-			{
-				return
-				(
-					base.Equals(other)
-				////this.explicitDescription is not given.
-				);
-			}
-		}
-
 		#endregion
 
 		#region Object Members
@@ -327,6 +297,9 @@ namespace MKY.Net
 			if (ReferenceEquals(other, null))
 				return (false);
 
+			if (ReferenceEquals(this, other))
+				return (true);
+
 			if (GetType() != other.GetType())
 				return (false);
 
@@ -335,13 +308,48 @@ namespace MKY.Net
 				return
 				(
 					base.Equals(other) &&
-					(this.explicitDescription == other.explicitDescription) &&
-					this.explicitAddress.Equals(other.explicitAddress) // Explicit address is always given, at least 'IPAdress.None'.
+					StringEx.EqualsOrdinalIgnoreCase(this.explicitDescription, other.explicitDescription) &&
+					ObjectEx.Equals(this.explicitAddress, other.explicitAddress) // Explicit address is always given, at least 'IPAdress.None'.
 				);                         // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 			}
 			else
 			{
-				return (base.Equals(other));
+				return
+				(
+					base.Equals(other)
+				);
+			}
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality,
+		/// ignoring <see cref="Address"/>.
+		/// </summary>
+		public bool EqualsDescription(IPNetworkInterfaceEx other)
+		{
+			if (ReferenceEquals(other, null))
+				return (false);
+
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (GetType() != other.GetType())
+				return (false);
+
+			if ((IPNetworkInterface)UnderlyingEnum == IPNetworkInterface.Explicit)
+			{
+				return
+				(
+					base.Equals(other) &&
+					StringEx.EqualsOrdinalIgnoreCase(this.explicitDescription, other.explicitDescription)
+				);
+			}
+			else
+			{
+				return
+				(
+					base.Equals(other)
+				);
 			}
 		}
 

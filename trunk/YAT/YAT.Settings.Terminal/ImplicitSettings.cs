@@ -21,12 +21,13 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Xml.Serialization;
 
 namespace YAT.Settings.Terminal
 {
 	/// <summary></summary>
-	public class ImplicitSettings : MKY.Settings.SettingsItem
+	public class ImplicitSettings : MKY.Settings.SettingsItem, IEquatable<ImplicitSettings>
 	{
 		private Model.Settings.SendTextSettings sendText;
 		private Model.Settings.SendFileSettings sendFile;
@@ -214,19 +215,29 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as ImplicitSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(ImplicitSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			ImplicitSettings other = (ImplicitSettings)obj;
 			return
 			(
 				base.Equals(other) // Compare all settings nodes.

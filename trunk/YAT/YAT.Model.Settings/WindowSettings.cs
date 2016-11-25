@@ -21,6 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Serialization;
@@ -28,7 +29,7 @@ using System.Xml.Serialization;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	public class WindowSettings : MKY.Settings.SettingsItem
+	public class WindowSettings : MKY.Settings.SettingsItem, IEquatable<WindowSettings>
 	{
 		private FormWindowState state;
 		private Point location;
@@ -154,28 +155,38 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as WindowSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(WindowSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			WindowSettings other = (WindowSettings)obj;
 			if (this.state == FormWindowState.Normal)
 			{   // Normal
 				return
 				(
 					base.Equals(other) && // Compare all settings nodes.
 
-					(State    == other.State) &&
-					(Location == other.Location) &&
-					(Size     == other.Size)
+					State   .Equals(other.State)    &&
+					Location.Equals(other.Location) &&
+					Size    .Equals(other.Size)
 				);
 			}
 			else
@@ -184,7 +195,7 @@ namespace YAT.Model.Settings
 				(
 					base.Equals(other) && // Compare all settings nodes.
 
-					(State == other.State)
+					State.Equals(other.State)
 				);
 			}
 		}

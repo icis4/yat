@@ -28,7 +28,7 @@ using System.Xml.Serialization;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class IOSettings : MKY.Settings.SettingsItem
+	public class IOSettings : MKY.Settings.SettingsItem, IEquatable<IOSettings>
 	{
 		/// <summary></summary>
 		public const IOType IOTypeDefault = IOType.SerialPort;
@@ -292,28 +292,38 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as IOSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(IOSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			IOSettings other = (IOSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(IOType     == other.IOType) &&
-				(Endianness == other.Endianness) &&
+				IOType    .Equals(other.IOType)     &&
+				Endianness.Equals(other.Endianness) &&
 
-				(IndicateSerialPortBreakStates     == other.IndicateSerialPortBreakStates) &&
-				(SerialPortOutputBreakIsModifiable == other.SerialPortOutputBreakIsModifiable)
+				IndicateSerialPortBreakStates    .Equals(other.IndicateSerialPortBreakStates) &&
+				SerialPortOutputBreakIsModifiable.Equals(other.SerialPortOutputBreakIsModifiable)
 			);
 		}
 

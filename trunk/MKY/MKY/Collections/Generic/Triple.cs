@@ -37,7 +37,7 @@ namespace MKY.Collections.Generic
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "2", Justification = "T2 relates to Value2.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "3", Justification = "T3 relates to Value3.")]
 	[Serializable]
-	public struct Triple<T1, T2, T3>
+	public struct Triple<T1, T2, T3> : IEquatable<Triple<T1, T2, T3>>
 	{
 		private T1 value1;
 		private T2 value2;
@@ -130,41 +130,28 @@ namespace MKY.Collections.Generic
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is Triple<T1, T2, T3>)
+				return (Equals((Triple<T1, T2, T3>)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(Triple<T1, T2, T3> other)
 		{
-			if (ReferenceEquals(obj, null))
-				return (false);
-
-			if (GetType() != obj.GetType())
-				return (false);
-
-			var other = (Triple<T1, T2, T3>)obj;
-
-			// Attention, default(Tx) can lead to null, e.g. in case of a string!
-			if ((Value1 == null) || (Value2 == null) || (Value3 == null))
-			{
-				if ((Value1 == null) && (other.Value1 != null))
-					return (false);
-
-				if ((Value2 == null) && (other.Value2 != null))
-					return (false);
-
-				if ((Value3 == null) && (other.Value3 != null))
-					return (false);
-
-				return (true); // All values are 'null'.
-			}
-
-			// Attention, <Tx> may not overload the ==/!= operators.
 			return
 			(
-				(Value1.Equals(other.Value1)) &&
-				(Value2.Equals(other.Value2)) &&
-				(Value3.Equals(other.Value3))
+				ObjectEx.Equals(Value1, other.Value1) &&
+				ObjectEx.Equals(Value2, other.Value2) &&
+				ObjectEx.Equals(Value3, other.Value3)
 			);
 		}
 

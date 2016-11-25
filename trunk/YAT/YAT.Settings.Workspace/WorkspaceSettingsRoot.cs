@@ -24,6 +24,8 @@
 using System;
 using System.Xml.Serialization;
 
+using MKY;
+
 using YAT.Application.Utilities;
 using YAT.Model.Settings;
 
@@ -31,7 +33,7 @@ namespace YAT.Settings.Workspace
 {
 	/// <summary></summary>
 	[XmlRoot("Settings")]
-	public class WorkspaceSettingsRoot : MKY.Settings.SettingsItem
+	public class WorkspaceSettingsRoot : MKY.Settings.SettingsItem, IEquatable<WorkspaceSettingsRoot>
 	{
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
 		private string settingsVersion = "1.2.1";
@@ -184,24 +186,34 @@ namespace YAT.Settings.Workspace
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as WorkspaceSettingsRoot));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(WorkspaceSettingsRoot other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			WorkspaceSettingsRoot other = (WorkspaceSettingsRoot)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(ProductVersion == other.ProductVersion)
+				StringEx.EqualsOrdinalIgnoreCase(ProductVersion, other.ProductVersion)
 				//// Do not consider AutoSaved.
 			);
 		}

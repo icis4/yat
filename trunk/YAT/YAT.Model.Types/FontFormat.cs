@@ -194,14 +194,17 @@ namespace YAT.Model.Types
 			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != other.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
 			return
 			(
 				StringEx.EqualsOrdinalIgnoreCase(Name, other.Name) &&
-				(Size  == other.Size) &&
-				(Style == other.Style)
+				Size .Equals(other.Size) &&
+				Style.Equals(other.Style)
 			);
 		}
 

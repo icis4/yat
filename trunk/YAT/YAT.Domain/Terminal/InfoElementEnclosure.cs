@@ -65,7 +65,7 @@ namespace YAT.Domain
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	public class InfoElementEnclosureEx : EnumEx
+	public class InfoElementEnclosureEx : EnumEx, IEquatable<InfoElementEnclosureEx>
 	{
 		#region String Definitions
 
@@ -231,6 +231,9 @@ namespace YAT.Domain
 			if (ReferenceEquals(other, null))
 				return (false);
 
+			if (ReferenceEquals(this, other))
+				return (true);
+
 			if (GetType() != other.GetType())
 				return (false);
 
@@ -239,13 +242,36 @@ namespace YAT.Domain
 				return
 				(
 					base.Equals(other) &&
-					(this.explicitEnclosure == other.explicitEnclosure)
+					StringEx.EqualsOrdinal(this.explicitEnclosure, other.explicitEnclosure)
 				);
 			}
 			else
 			{
-				return (base.Equals(other));
+				return
+				(
+					base.Equals(other)
+				);
 			}
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(InfoElementEnclosureEx lhs, InfoElementEnclosureEx rhs)
+		{
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			return (lhs.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(InfoElementEnclosureEx lhs, InfoElementEnclosureEx rhs)
+		{
+			return (!(lhs == rhs));
 		}
 
 		#endregion

@@ -257,16 +257,19 @@ namespace MKY.IO.Usb
 			if (ReferenceEquals(other, null))
 				return (false);
 
+			if (ReferenceEquals(this, other))
+				return (true);
+
 			if (GetType() != other.GetType())
 				return (false);
 
 			return
 			(
-				(UseId                    == other.UseId                   ) &&
-				(Id                       == other.Id                      ) &&
-				(PrependPayloadByteLength == other.PrependPayloadByteLength) &&
-				(AppendTerminatingZero    == other.AppendTerminatingZero   ) &&
-				(FillLastReport           == other.FillLastReport          )
+				UseId                   .Equals(other.UseId                   ) &&
+				Id                      .Equals(other.Id                      ) &&
+				PrependPayloadByteLength.Equals(other.PrependPayloadByteLength) &&
+				AppendTerminatingZero   .Equals(other.AppendTerminatingZero   ) &&
+				FillLastReport          .Equals(other.FillLastReport          )
 			);
 		}
 

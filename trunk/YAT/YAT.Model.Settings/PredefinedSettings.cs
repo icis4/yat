@@ -27,7 +27,7 @@ using System.Xml.Serialization;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	public class PredefinedSettings : MKY.Settings.SettingsItem
+	public class PredefinedSettings : MKY.Settings.SettingsItem, IEquatable<PredefinedSettings>
 	{
 		private int selectedPage;
 
@@ -115,24 +115,34 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as PredefinedSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(PredefinedSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			PredefinedSettings other = (PredefinedSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(SelectedPage == other.SelectedPage)
+				SelectedPage.Equals(other.SelectedPage)
 			);
 		}
 

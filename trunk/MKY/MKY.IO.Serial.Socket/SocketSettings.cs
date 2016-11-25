@@ -40,7 +40,7 @@ namespace MKY.IO.Serial.Socket
 {
 	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
-	public class SocketSettings : Settings.SettingsItem
+	public class SocketSettings : Settings.SettingsItem, IEquatable<SocketSettings>
 	{
 		#region Constants
 		//==========================================================================================
@@ -575,33 +575,43 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as SocketSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(SocketSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			SocketSettings other = (SocketSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(Type                                                       == other.Type) &&
-				StringEx.EqualsOrdinalIgnoreCase( RemoteHost_ForSerialization, other.RemoteHost_ForSerialization) &&
-				(RemoteTcpPort                                              == other.RemoteTcpPort) &&
-				(RemoteUdpPort                                              == other.RemoteUdpPort) &&
-				(LocalInterface                                             == other.LocalInterface) &&
+				Type                                                   .Equals(other.Type)                         &&
+				StringEx.EqualsOrdinalIgnoreCase( RemoteHost_ForSerialization, other.RemoteHost_ForSerialization)  &&
+				RemoteTcpPort                                          .Equals(other.RemoteTcpPort)                &&
+				RemoteUdpPort                                          .Equals(other.RemoteUdpPort)                &&
+				LocalInterface                                         .Equals(other.LocalInterface)               &&
 				StringEx.EqualsOrdinalIgnoreCase(LocalFilter_ForSerialization, other.LocalFilter_ForSerialization) &&
-				(LocalTcpPort                                               == other.LocalTcpPort) &&
-				(LocalUdpPort                                               == other.LocalUdpPort) &&
-				(TcpClientAutoReconnect                                     == other.TcpClientAutoReconnect) &&
-				(UdpServerSendMode                                          == other.UdpServerSendMode)
+				LocalTcpPort                                           .Equals(other.LocalTcpPort)                 &&
+				LocalUdpPort                                           .Equals(other.LocalUdpPort)                 &&
+				TcpClientAutoReconnect                                 .Equals(other.TcpClientAutoReconnect)       &&
+				UdpServerSendMode                                      .Equals(other.UdpServerSendMode)
 			);
 		}
 

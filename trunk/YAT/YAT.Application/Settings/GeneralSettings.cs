@@ -29,7 +29,7 @@ namespace YAT.Application.Settings
 {
 	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
-	public class GeneralSettings : MKY.Settings.SettingsItem
+	public class GeneralSettings : MKY.Settings.SettingsItem, IEquatable<GeneralSettings>
 	{
 		/// <summary></summary>
 		public static readonly string AutoSaveRoot = System.Windows.Forms.Application.LocalUserAppDataPath;
@@ -237,31 +237,41 @@ namespace YAT.Application.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as GeneralSettings));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(GeneralSettings other)
 		{
-			if (ReferenceEquals(obj, null))
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			if (GetType() != obj.GetType())
+			if (ReferenceEquals(this, other))
+				return (true);
+
+			if (this.GetType() != other.GetType())
 				return (false);
 
-			GeneralSettings other = (GeneralSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(AutoOpenWorkspace          == other.AutoOpenWorkspace) &&
-				(AutoSaveWorkspace          == other.AutoSaveWorkspace) &&
-				(UseRelativePaths           == other.UseRelativePaths) &&
+				AutoOpenWorkspace         .Equals(other.AutoOpenWorkspace) &&
+				AutoSaveWorkspace         .Equals(other.AutoSaveWorkspace) &&
+				UseRelativePaths          .Equals(other.UseRelativePaths)  &&
 
-				(RetrieveSerialPortCaptions == other.RetrieveSerialPortCaptions) &&
-				(DetectSerialPortsInUse     == other.DetectSerialPortsInUse) &&
+				RetrieveSerialPortCaptions.Equals(other.RetrieveSerialPortCaptions) &&
+				DetectSerialPortsInUse    .Equals(other.DetectSerialPortsInUse)     &&
 
-				(MatchUsbSerial             == other.MatchUsbSerial)
+				MatchUsbSerial            .Equals(other.MatchUsbSerial)
 			);
 		}
 
