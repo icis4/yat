@@ -464,15 +464,18 @@ namespace MKY.IO.Ports
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public virtual bool Equals(SerialPortId other)
+		public bool Equals(SerialPortId other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);
 
+			if (ReferenceEquals(this, other))
+				return (true);
+
 			if (GetType() != other.GetType())
 				return (false);
 
-			return (Equals(other.Name));
+			return (EqualsName(other.Name)); // Only 'Name' is relevant. Other properties are for convenience only.
 		}
 
 		/// <summary>
@@ -482,9 +485,8 @@ namespace MKY.IO.Ports
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public virtual bool Equals(string otherName)
+		public virtual bool EqualsName(string otherName)
 		{
-			// Only field 'name' is relevant. Other properties are for convenience only.
 			return (StringEx.EqualsOrdinalIgnoreCase(Name, otherName));
 		}
 

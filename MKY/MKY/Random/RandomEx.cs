@@ -25,7 +25,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
-// MKY.Times for consistency with the Sytem namespace.
+// MKY.Times for consistency with the System namespace.
 namespace MKY
 {
 	/// <summary>

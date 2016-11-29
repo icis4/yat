@@ -812,7 +812,7 @@ namespace YAT.Domain
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
 		/// <remarks>
-		/// Extended ToString method which can be used for trace/debug.
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
 		public virtual string ToString(string indent)
 		{

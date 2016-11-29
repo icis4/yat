@@ -400,7 +400,7 @@ namespace MKY.Test
 			/// properties, i.e. properties with some logic, are also properly handled.
 			/// </remarks>
 			[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Required for this equality test.")]
-			public virtual bool Equals(OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<T> other)
+			public bool Equals(OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<T> other)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
 
@@ -491,7 +491,7 @@ namespace MKY.Test
 			/// properties, i.e. properties with some logic, are also properly handled.
 			/// </remarks>
 			[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Required for this equality test.")]
-			public virtual bool Equals(OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T> other)
+			public bool Equals(OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T> other)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
 
@@ -840,7 +840,7 @@ namespace MKY.Test
 			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 			/// properties, i.e. properties with some logic, are also properly handled.
 			/// </remarks>
-			public virtual bool Equals(BaseReferenceTypeIEquatableWithoutOperators other)
+			public bool Equals(BaseReferenceTypeIEquatableWithoutOperators other)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
 
@@ -950,7 +950,7 @@ namespace MKY.Test
 			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 			/// properties, i.e. properties with some logic, are also properly handled.
 			/// </remarks>
-			public virtual bool Equals(DerivedReferenceTypeIEquatableWithoutOperators other)
+			public bool Equals(DerivedReferenceTypeIEquatableWithoutOperators other)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
 
@@ -1701,7 +1701,7 @@ namespace MKY.Test
 			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 			/// properties, i.e. properties with some logic, are also properly handled.
 			/// </remarks>
-			public virtual bool Equals(BaseReferenceTypeIEquatableWithBaseOperators other)
+			public bool Equals(BaseReferenceTypeIEquatableWithBaseOperators other)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
 

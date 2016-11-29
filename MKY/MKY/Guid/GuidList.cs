@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
-// MKY.Guid for consistency with the Sytem.Guid class.
+// MKY.Guid for consistency with the System.Guid class.
 namespace MKY
 {
 	/// <summary>

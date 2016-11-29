@@ -371,10 +371,13 @@ namespace MKY.Net
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public virtual bool Equals(IPFilterEx other)
+		public bool Equals(IPFilterEx other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);
+
+			if (ReferenceEquals(this, other))
+				return (true);
 
 			if (GetType() != other.GetType())
 				return (false);

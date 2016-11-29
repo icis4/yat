@@ -160,10 +160,13 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public virtual bool Equals(BaudRateEx other)
+		public bool Equals(BaudRateEx other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);
+
+			if (ReferenceEquals(this, other))
+				return (true);
 
 			if (GetType() != other.GetType())
 				return (false);

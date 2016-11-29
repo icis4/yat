@@ -252,8 +252,11 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Extended ToString method which can be used for trace/debug.
+		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public virtual string ToString(string indent)
 		{
 			return (indent + "> ElementCount: " +       Count.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +

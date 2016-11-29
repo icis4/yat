@@ -27,7 +27,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
-// MKY.Types for consistency with the Sytem namespace.
+// MKY.Types for consistency with the System namespace.
 namespace MKY
 {
 	/// <summary>
@@ -290,10 +290,13 @@ namespace MKY
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public virtual bool Equals(EnumEx other)
+		public bool Equals(EnumEx other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);
+
+			if (ReferenceEquals(this, other))
+				return (true);
 
 			if (GetType() != other.GetType())
 				return (false);

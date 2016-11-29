@@ -389,7 +389,7 @@ namespace YAT.Domain.Settings
 			if (ReferenceEquals(this, other))
 				return (true);
 
-			if (this.GetType() != other.GetType())
+			if (GetType() != other.GetType())
 				return (false);
 
 			return

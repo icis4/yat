@@ -189,7 +189,7 @@ namespace YAT.Model.Types
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public virtual bool Equals(FontFormat other)
+		public bool Equals(FontFormat other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);
@@ -197,7 +197,7 @@ namespace YAT.Model.Types
 			if (ReferenceEquals(this, other))
 				return (true);
 
-			if (this.GetType() != other.GetType())
+			if (GetType() != other.GetType())
 				return (false);
 
 			return

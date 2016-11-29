@@ -519,7 +519,7 @@ namespace MKY.IO.Usb
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public virtual bool Equals(DeviceInfo other)
+		public bool Equals(DeviceInfo other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);

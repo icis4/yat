@@ -33,7 +33,7 @@ using System.IO;
 #endregion
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
-// MKY.Guid for consistency with the Sytem namespace.
+// MKY.Guid for consistency with the System namespace.
 namespace MKY
 {
 	/// <summary>

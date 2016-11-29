@@ -139,7 +139,7 @@ namespace MKY.Recent
 				if (Item != null)
 					return (Item.GetHashCode()); // Do not consider time stamp.
 				else
-					return (base.GetHashCode());
+					return (0);
 			}
 		}
 
@@ -158,20 +158,18 @@ namespace MKY.Recent
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public virtual bool Equals(RecentItem<T> other)
+		public bool Equals(RecentItem<T> other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);
 
+			if (ReferenceEquals(this, other))
+				return (true);
+
 			if (GetType() != other.GetType())
 				return (false);
 
-			// Attention, default(T) can lead to null, e.g. in case of a string!
-			if (Item == null)
-				return (other.Item == null);
-
-			// Attention, <T> may not overload the ==/!= operators.
-			return (Item.Equals(other.Item)); // Do not consider time stamp.
+			return (ObjectEx.Equals(Item, other.Item)); // Do not consider time stamp.
 		}
 
 		/// <summary>
