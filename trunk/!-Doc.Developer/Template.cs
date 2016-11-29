@@ -356,7 +356,7 @@ namespace YAT/*.<TODO>*/
 			if (ReferenceEquals(this, other)) // !!! Remove for value types !!!
 				return (true);
 
-			if (this.GetType() != other.GetType()) // !!! Remove for value types !!!
+			if (GetType() != other.GetType()) // !!! Remove for value types !!!
 				return (false);
 
 			return
@@ -388,8 +388,8 @@ namespace YAT/*.<TODO>*/
 		//     Many languages have built-in equality operators for reference types. The built-in
 		//     operators usually implement the reference equality, and many developers are
 		//     surprised when the default behavior is changed to the value equality."
-		//     => Remove when value equality is not desired for a reference type.
-		//     => Keep when value equality is desired for a reference type.
+		//       => Remove when value equality is not desired for a reference type.
+		//       => Keep when value equality is desired for a reference type.
 		//  > "DO ensure that Equals() and the equality operators have exactly the same semantics
 		//     and similar performance characteristics."
 		// ----------------------------------------------------------------------------------------

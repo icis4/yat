@@ -205,7 +205,7 @@ namespace YAT.Log
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public virtual bool Equals(FileNameSeparatorEx other)
+		public bool Equals(FileNameSeparatorEx other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);

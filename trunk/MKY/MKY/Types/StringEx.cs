@@ -34,7 +34,7 @@ using System.Globalization;
 #endregion
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
-// MKY.Types for consistency with the Sytem namespace.
+// MKY.Types for consistency with the System namespace.
 namespace MKY
 {
 	/// <summary>

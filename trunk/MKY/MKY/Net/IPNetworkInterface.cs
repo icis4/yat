@@ -292,7 +292,7 @@ namespace MKY.Net
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public virtual bool Equals(IPNetworkInterfaceEx other)
+		public bool Equals(IPNetworkInterfaceEx other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);

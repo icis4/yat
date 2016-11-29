@@ -871,7 +871,7 @@ namespace MKY.Text
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public virtual bool Equals(EncodingEx other)
+		public bool Equals(EncodingEx other)
 		{
 			return (base.Equals(other));
 		}

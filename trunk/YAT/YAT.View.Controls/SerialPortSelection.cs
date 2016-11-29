@@ -225,7 +225,7 @@ namespace YAT.View.Controls
 				//   because SelectedItem is also set if text has changed in the meantime.
 
 				var id = comboBox_Port.SelectedItem as SerialPortId;
-				if ((id != null) && id.Equals(comboBox_Port.Text))
+				if ((id != null) && id.EqualsName(comboBox_Port.Text))
 				{
 					PortId = id;
 				}

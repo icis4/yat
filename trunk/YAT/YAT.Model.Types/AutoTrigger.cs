@@ -211,7 +211,7 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public virtual bool Equals(AutoTriggerEx other)
+		public bool Equals(AutoTriggerEx other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);
@@ -219,7 +219,7 @@ namespace YAT.Model.Types
 			if (ReferenceEquals(this, other))
 				return (true);
 
-			if (this.GetType() != other.GetType())
+			if (GetType() != other.GetType())
 				return (false);
 
 			if ((AutoTrigger)UnderlyingEnum == AutoTrigger.Explicit)

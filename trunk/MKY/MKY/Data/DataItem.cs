@@ -308,7 +308,7 @@ namespace MKY.Data
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public virtual bool Equals(DataItem other)
+		public bool Equals(DataItem other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);

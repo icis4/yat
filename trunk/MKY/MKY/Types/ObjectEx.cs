@@ -24,13 +24,14 @@
 using System.Diagnostics.CodeAnalysis;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
-// MKY.Types for consistency with the Sytem namespace.
+// MKY.Types for consistency with the System namespace.
 namespace MKY
 {
 	/// <summary>
 	/// Object utility methods.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
+
 	public static class ObjectEx
 	{
 		/// <summary>
@@ -48,7 +49,13 @@ namespace MKY
 		/// method <see cref="System.Object.Equals(object, object)"/> to prevent code check from
 		/// suggesting to simply call <see cref="Equals(object, object)"/> as that could result in
 		/// an unintended call stack as soon as a class overloads that method.
+		/// 
+		/// Note the logic behind <see cref="object.Equals(object, object)"/>:
+		///  - If both objects represent the same object reference, it returns true.
+		///  - If either or object is <c>null</c>, it returns false.
+		///  - Otherwise, it calls objA.Equals(objB) and returns the result.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "Same naming as 'object.Equals()'.")]
 		public static new bool Equals(object objA, object objB)
 		{
 			return (object.Equals(objA, objB));

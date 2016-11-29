@@ -226,7 +226,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public virtual bool Equals(InfoElementEnclosureEx other)
+		public bool Equals(InfoElementEnclosureEx other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);
