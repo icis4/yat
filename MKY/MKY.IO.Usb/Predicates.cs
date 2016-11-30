@@ -28,14 +28,14 @@ namespace MKY.IO.Usb
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
-	public class EqualsVidAndPid
+	public class EqualsVidPid
 	{
 		private DeviceInfo deviceInfo;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
-		public EqualsVidAndPid(DeviceInfo deviceInfo)
+		public EqualsVidPid(DeviceInfo deviceInfo)
 		{
 			this.deviceInfo = deviceInfo;
 		}
