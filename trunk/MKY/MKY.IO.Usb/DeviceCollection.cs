@@ -145,7 +145,7 @@ namespace MKY.IO.Usb
 		{
 			lock (this)
 			{
-				EqualsVidAndPid predicate = new EqualsVidAndPid(item);
+				EqualsVidPid predicate = new EqualsVidPid(item);
 				return (Find(predicate.Match));
 			}
 		}
@@ -167,7 +167,7 @@ namespace MKY.IO.Usb
 		{
 			lock (this)
 			{
-				EqualsVidAndPid predicate = new EqualsVidAndPid(item);
+				EqualsVidPid predicate = new EqualsVidPid(item);
 				return (FindIndex(predicate.Match));
 			}
 		}
