@@ -530,14 +530,30 @@ namespace MKY.IO.Usb
 			if (GetType() != other.GetType())
 				return (false);
 
-			// Do not care about path, the path is likely to be system dependent.
+			return (Equals(other.VendorId, other.ProductId, other.Serial));
 
+			// Do not care about path, the path is likely to be system dependent.
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified properties have value equality.
+		/// Note that the serial string is compared case-insensitive, same behaviour as Windows.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public virtual bool Equals(int vendorId, int productId, string serial)
+		{
 			return
 			(
-				VendorId .Equals(              other.VendorId) &&
-				ProductId.Equals(              other.ProductId) &&
-				StringEx.EqualsOrdinal(Serial, other.Serial)
+				VendorId .Equals(vendorId)  &&
+				ProductId.Equals(productId) &&
+				                      // Case-insensitive, same behaviour as Windows.
+				StringEx.EqualsOrdinalIgnoreCase(Serial, serial)
 			);
+
+			// Do not care about path, the path is likely to be system dependent.
 		}
 
 		/// <summary>
@@ -550,7 +566,7 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
-		public bool EqualsVidPid(DeviceInfo other)
+		public virtual bool EqualsVidPid(DeviceInfo other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);
@@ -561,13 +577,27 @@ namespace MKY.IO.Usb
 			if (GetType() != other.GetType())
 				return (false);
 
-			// Do not care about path, the path is likely to be system dependent.
+			return (EqualsVidPid(other.VendorId, other.ProductId));
 
+			// Do not care about path, the path is likely to be system dependent.
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified properties have value equality.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public virtual bool EqualsVidPid(int vendorId, int productId)
+		{
 			return
 			(
-				VendorId .Equals(other.VendorId) &&
-				ProductId.Equals(other.ProductId)
+				VendorId .Equals(vendorId) &&
+				ProductId.Equals(productId)
 			);
+
+			// Do not care about path, the path is likely to be system dependent.
 		}
 
 		/// <summary>
