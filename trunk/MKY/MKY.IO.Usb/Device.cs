@@ -377,7 +377,7 @@ namespace MKY.IO.Usb
 		{
 			foreach (DeviceInfo device in GetDevicesFromClass(DeviceClass.Hid))
 			{
-				if ((device.VendorId == vendorId) && (device.ProductId == productId))
+				if (device.EqualsVidPid(vendorId, productId))
 				{
 					path         = device.Path;
 					manufacturer = device.Manufacturer;
@@ -431,9 +431,7 @@ namespace MKY.IO.Usb
 		{
 			foreach (DeviceInfo device in GetDevicesFromClass(DeviceClass.Hid))
 			{
-				if ((device.VendorId == vendorId) &&
-					(device.ProductId == productId) &&
-					(StringEx.EqualsOrdinalIgnoreCase(device.Serial, serial))) // Case-insensitive (i.e. Windows behaviour).
+				if (device.Equals(vendorId, productId, serial))
 				{
 					path         = device.Path;
 					manufacturer = device.Manufacturer;
