@@ -49,14 +49,26 @@ namespace MKY.Diagnostics
 	#endif
 
 		/// <summary>
-		/// Writes source, type and time stamp to <see cref="System.Diagnostics.Trace"/>.
+		/// Writes location to <see cref="System.Diagnostics.Trace"/>.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 		[Conditional("TRACE")]
-		public static void WriteTimeStamp(Type type, string callerMemberName = null, string message = null)
+		public static void WriteLocation(string message = null)
 		{
 		#if (TRACE)
-			DiagnosticsWriterOutput.WriteTimeStamp(traceWrapper, type, callerMemberName, message);
+			DiagnosticsWriterOutput.WriteLocation(traceWrapper, new StackTrace(), 1, message);
+		#endif
+		}
+
+		/// <summary>
+		/// Writes time stamp and location to <see cref="System.Diagnostics.Trace"/>.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[Conditional("TRACE")]
+		public static void WriteTimeStamp(string message = null)
+		{
+		#if (TRACE)
+			DiagnosticsWriterOutput.WriteTimeStamp(traceWrapper, new StackTrace(), 1, message);
 		#endif
 		}
 
@@ -69,7 +81,7 @@ namespace MKY.Diagnostics
 		public static void WriteException(Type type, Exception ex, string leadMessage = null)
 		{
 		#if (TRACE)
-			DiagnosticsWriterOutput.WriteException(traceWrapper, type, ex, leadMessage);
+			DiagnosticsWriterOutput.WriteExceptionLines(traceWrapper, type, ex, leadMessage);
 		#endif
 		}
 
@@ -91,7 +103,7 @@ namespace MKY.Diagnostics
 		public static void WriteStack(Type type, StackTrace st, string leadMessage = null)
 		{
 		#if (TRACE)
-			DiagnosticsWriterOutput.WriteStack(traceWrapper, type, st, leadMessage);
+			DiagnosticsWriterOutput.WriteStackLines(traceWrapper, type, st, leadMessage);
 		#endif
 		}
 
@@ -104,7 +116,7 @@ namespace MKY.Diagnostics
 		public static void WriteWindowsFormsMessage(Type type, Message m, string leadMessage = null)
 		{
 		#if (TRACE)
-			DiagnosticsWriterOutput.WriteWindowsFormsMessage(traceWrapper, type, m, leadMessage);
+			DiagnosticsWriterOutput.WriteWindowsFormsMessageLines(traceWrapper, type, m, leadMessage);
 		#endif
 		}
 
@@ -116,7 +128,7 @@ namespace MKY.Diagnostics
 		public static void WriteFileStream(Type type, FileStream fs, string leadMessage = null)
 		{
 		#if (TRACE)
-			DiagnosticsWriterOutput.WriteFileStream(traceWrapper, type, fs, leadMessage);
+			DiagnosticsWriterOutput.WriteFileStreamLines(traceWrapper, type, fs, leadMessage);
 		#endif
 		}
 	}
