@@ -31,6 +31,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 #endregion
@@ -48,7 +49,7 @@ namespace MKY.Diagnostics
 		//==========================================================================================
 
 		/// <summary>
-		/// Writes source, type and time stamp to the given writer.
+		/// Writes location to the given writer.
 		/// </summary>
 		/// <remarks>
 		/// There are predefined variants for the static objects
@@ -59,28 +60,16 @@ namespace MKY.Diagnostics
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
 		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
-		public static void WriteTimeStamp(IDiagnosticsWriter writer, Type type, string callerMemberName, string message)
+		public static void WriteLocation(IDiagnosticsWriter writer, StackTrace st, int index, string message, bool appendLineBreak = true)
 		{
-			writer.Write(DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo));
-
-			if (type != null)
+			StackFrame sf = st.GetFrame(index);
+			if (sf != null)
 			{
-				writer.Write(" @ ");
-				writer.Write(type.FullName);
-			}
-
-			if (!string.IsNullOrEmpty(callerMemberName))
-			{
-				if (type != null)
-				{
-					writer.Write(".");
-					writer.Write(callerMemberName);
-				}
-				else
-				{
-					writer.Write(" @ ");
-					writer.Write(callerMemberName);
-				}
+				MethodBase m = sf.GetMethod();
+				writer.Write(m.ReflectedType.FullName);
+				writer.Write(".");
+				writer.Write(m.Name);
+				writer.Write("()");
 			}
 
 			if (!string.IsNullOrEmpty(message))
@@ -89,7 +78,44 @@ namespace MKY.Diagnostics
 				writer.Write(message);
 			}
 
-			writer.WriteLine("");
+			if (appendLineBreak)
+			{
+				writer.WriteLine("");
+			}
+		}
+
+		/// <summary>
+		/// Writes time stamp and location to the given writer.
+		/// </summary>
+		/// <remarks>
+		/// There are predefined variants for the static objects
+		/// <see cref="System.Diagnostics.Debug"/> and 
+		/// <see cref="System.Diagnostics.Trace"/> and
+		/// <see cref="System.Console"/> available in
+		/// <see cref="MKY.Diagnostics.DebugEx"/> and
+		/// <see cref="MKY.Diagnostics.TraceEx"/> and
+		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
+		/// </remarks>
+		public static void WriteTimeStamp(IDiagnosticsWriter writer, StackTrace st, int index, string message, bool appendLineBreak = true)
+		{
+			writer.Write(DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo));
+
+			if (st != null)
+			{
+				writer.Write(" @ ");
+				WriteLocation(writer, st, index, null, false);
+			}
+
+			if (!string.IsNullOrEmpty(message))
+			{
+				writer.Write(" : ");
+				writer.Write(message);
+			}
+
+			if (appendLineBreak)
+			{
+				writer.WriteLine("");
+			}
 		}
 
 		/// <summary>
@@ -105,7 +131,7 @@ namespace MKY.Diagnostics
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
 		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
-		public static void WriteException(IDiagnosticsWriter writer, Type type, Exception ex, string leadMessage)
+		public static void WriteExceptionLines(IDiagnosticsWriter writer, Type type, Exception ex, string leadMessage)
 		{
 			if (type != null)
 			{
@@ -119,8 +145,8 @@ namespace MKY.Diagnostics
 
 			writer.Indent();
 			{
-				WriteMessage(writer, leadMessage);
-				WriteException(writer, ex);
+				WriteMessageLines(writer, leadMessage);
+				WriteExceptionLines(writer, ex);
 			}
 			writer.Unindent();
 		}
@@ -137,7 +163,7 @@ namespace MKY.Diagnostics
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
 		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
-		public static void WriteStack(IDiagnosticsWriter writer, Type type, StackTrace st, string leadMessage)
+		public static void WriteStackLines(IDiagnosticsWriter writer, Type type, StackTrace st, string leadMessage)
 		{
 			if (type != null)
 			{
@@ -151,8 +177,8 @@ namespace MKY.Diagnostics
 
 			writer.Indent();
 			{
-				WriteMessage(writer, leadMessage);
-				WriteStack(writer, st.ToString());
+				WriteMessageLines(writer, leadMessage);
+				WriteStackLines(writer, st.ToString());
 			}
 			writer.Unindent();
 		}
@@ -170,7 +196,7 @@ namespace MKY.Diagnostics
 		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
-		public static void WriteWindowsFormsMessage(IDiagnosticsWriter writer, Type type, Message m, string leadMessage)
+		public static void WriteWindowsFormsMessageLines(IDiagnosticsWriter writer, Type type, Message m, string leadMessage)
 		{
 			if (type != null)
 			{
@@ -184,8 +210,8 @@ namespace MKY.Diagnostics
 
 			writer.Indent();
 			{
-				WriteMessage(writer, leadMessage);
-				WriteWindowsFormsMessage(writer, m);
+				WriteMessageLines(writer, leadMessage);
+				WriteWindowsFormsMessageLines(writer, m);
 			}
 			writer.Unindent();
 		}
@@ -202,7 +228,7 @@ namespace MKY.Diagnostics
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
 		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
-		public static void WriteFileStream(IDiagnosticsWriter writer, Type type, FileStream fs, string leadMessage)
+		public static void WriteFileStreamLines(IDiagnosticsWriter writer, Type type, FileStream fs, string leadMessage)
 		{
 			if (type != null)
 			{
@@ -216,8 +242,8 @@ namespace MKY.Diagnostics
 
 			writer.Indent();
 			{
-				WriteMessage(writer, leadMessage);
-				WriteFileStream(writer, fs);
+				WriteMessageLines(writer, leadMessage);
+				WriteFileStreamLines(writer, fs);
 			}
 			writer.Unindent();
 		}
@@ -229,7 +255,7 @@ namespace MKY.Diagnostics
 		// Private Static Methods
 		//==========================================================================================
 
-		private static void WriteException(IDiagnosticsWriter writer, Exception ex)
+		private static void WriteExceptionLines(IDiagnosticsWriter writer, Exception ex)
 		{
 			Exception exception = ex;
 			int exceptionLevel = 0;
@@ -243,10 +269,10 @@ namespace MKY.Diagnostics
 
 				writer.Indent();
 				{
-					WriteType   (writer, exception.GetType());
-					WriteMessage(writer, exception.Message);
-					WriteSource (writer, exception.Source);
-					WriteStack  (writer, exception.StackTrace);
+					WriteTypeLine    (writer, exception.GetType());
+					WriteMessageLines(writer, exception.Message);
+					WriteSourceLine  (writer, exception.Source);
+					WriteStackLines  (writer, exception.StackTrace);
 				}
 				writer.Unindent();
 
@@ -255,7 +281,7 @@ namespace MKY.Diagnostics
 			}
 		}
 
-		private static void WriteType(IDiagnosticsWriter writer, Type type)
+		private static void WriteTypeLine(IDiagnosticsWriter writer, Type type)
 		{
 			if (type != null)
 			{
@@ -264,7 +290,7 @@ namespace MKY.Diagnostics
 			}
 		}
 
-		private static void WriteMessage(IDiagnosticsWriter writer, string message)
+		private static void WriteMessageLines(IDiagnosticsWriter writer, string message)
 		{
 			if (!string.IsNullOrEmpty(message))
 			{
@@ -287,7 +313,7 @@ namespace MKY.Diagnostics
 			}
 		}
 
-		private static void WriteSource(IDiagnosticsWriter writer, string source)
+		private static void WriteSourceLine(IDiagnosticsWriter writer, string source)
 		{
 			if (!string.IsNullOrEmpty(source))
 			{
@@ -296,7 +322,7 @@ namespace MKY.Diagnostics
 			}
 		}
 
-		private static void WriteStack(IDiagnosticsWriter writer, string stackTrace)
+		private static void WriteStackLines(IDiagnosticsWriter writer, string stackTrace)
 		{
 			if (!string.IsNullOrEmpty(stackTrace))
 			{
@@ -318,7 +344,7 @@ namespace MKY.Diagnostics
 			}
 		}
 
-		private static void WriteWindowsFormsMessage(IDiagnosticsWriter writer, Message m)
+		private static void WriteWindowsFormsMessageLines(IDiagnosticsWriter writer, Message m)
 		{
 			if (m != null)
 			{
@@ -332,7 +358,7 @@ namespace MKY.Diagnostics
 			}
 		}
 
-		private static void WriteFileStream(IDiagnosticsWriter writer, FileStream fs)
+		private static void WriteFileStreamLines(IDiagnosticsWriter writer, FileStream fs)
 		{
 			if (fs != null)
 			{

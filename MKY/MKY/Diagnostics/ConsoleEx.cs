@@ -59,12 +59,21 @@ namespace MKY.Diagnostics
 			}
 
 			/// <summary>
-			/// Writes source, type and time stamp to the output writer of this object.
+			///  Writes location to the output writer of this object.
 			/// </summary>
 			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
-			public void WriteTimeStamp(Type type, string callerMemberName = null, string message = null)
+			public void WriteLocation(string message = null)
 			{
-				DiagnosticsWriterOutput.WriteTimeStamp(writer, type, callerMemberName, message);
+				DiagnosticsWriterOutput.WriteLocation(writer, new StackTrace(), 1, message);
+			}
+
+			/// <summary>
+			/// Writes time stamp and location to the output writer of this object.
+			/// </summary>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+			public void WriteTimeStamp(string message = null)
+			{
+				DiagnosticsWriterOutput.WriteTimeStamp(writer, new StackTrace(), 1, message);
 			}
 
 			/// <summary>
@@ -74,7 +83,7 @@ namespace MKY.Diagnostics
 			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 			public void WriteException(Type type, Exception ex, string leadMessage = null)
 			{
-				DiagnosticsWriterOutput.WriteException(writer, type, ex, leadMessage);
+				DiagnosticsWriterOutput.WriteExceptionLines(writer, type, ex, leadMessage);
 			}
 
 			/// <summary>
@@ -92,7 +101,7 @@ namespace MKY.Diagnostics
 			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 			public void WriteStack(Type type, StackTrace st, string leadMessage = null)
 			{
-				DiagnosticsWriterOutput.WriteStack(writer, type, st, leadMessage);
+				DiagnosticsWriterOutput.WriteStackLines(writer, type, st, leadMessage);
 			}
 
 			/// <summary>
@@ -102,7 +111,7 @@ namespace MKY.Diagnostics
 			[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
 			public void WriteWindowsFormsMessage(Type type, Message m, string leadMessage = null)
 			{
-				DiagnosticsWriterOutput.WriteWindowsFormsMessage(writer, type, m, leadMessage);
+				DiagnosticsWriterOutput.WriteWindowsFormsMessageLines(writer, type, m, leadMessage);
 			}
 
 			/// <summary>
@@ -111,7 +120,7 @@ namespace MKY.Diagnostics
 			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 			public void WriteFileStream(Type type, FileStream fs, string leadMessage = null)
 			{
-				DiagnosticsWriterOutput.WriteFileStream(writer, type, fs, leadMessage);
+				DiagnosticsWriterOutput.WriteFileStreamLines(writer, type, fs, leadMessage);
 			}
 		}
 

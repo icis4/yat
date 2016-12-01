@@ -49,14 +49,26 @@ namespace MKY.Diagnostics
 	#endif
 
 		/// <summary>
-		/// Writes source, type and time stamp to <see cref="System.Diagnostics.Debug"/>.
+		/// Writes location to <see cref="System.Diagnostics.Debug"/>.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
 		[Conditional("DEBUG")]
-		public static void WriteTimeStamp(Type type, string callerMemberName = null, string message = null)
+		public static void WriteLocation(string message = null)
 		{
 		#if (DEBUG)
-			DiagnosticsWriterOutput.WriteTimeStamp(debugWrapper, type, callerMemberName, message);
+			DiagnosticsWriterOutput.WriteLocation(debugWrapper, new StackTrace(), 1, message);
+		#endif
+		}
+
+		/// <summary>
+		/// Writes time stamp and location to <see cref="System.Diagnostics.Debug"/>.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[Conditional("DEBUG")]
+		public static void WriteTimeStamp(string message = null)
+		{
+		#if (DEBUG)
+			DiagnosticsWriterOutput.WriteTimeStamp(debugWrapper, new StackTrace(), 1, message);
 		#endif
 		}
 
@@ -69,7 +81,7 @@ namespace MKY.Diagnostics
 		public static void WriteException(Type type, Exception ex, string leadMessage = null)
 		{
 		#if (DEBUG)
-			DiagnosticsWriterOutput.WriteException(debugWrapper, type, ex, leadMessage);
+			DiagnosticsWriterOutput.WriteExceptionLines(debugWrapper, type, ex, leadMessage);
 		#endif
 		}
 
@@ -91,7 +103,7 @@ namespace MKY.Diagnostics
 		public static void WriteStack(Type type, StackTrace st, string leadMessage = null)
 		{
 		#if (DEBUG)
-			DiagnosticsWriterOutput.WriteStack(debugWrapper, type, st, leadMessage);
+			DiagnosticsWriterOutput.WriteStackLines(debugWrapper, type, st, leadMessage);
 		#endif
 		}
 
@@ -104,7 +116,7 @@ namespace MKY.Diagnostics
 		public static void WriteWindowsFormsMessage(Type type, Message m, string leadMessage = null)
 		{
 		#if (DEBUG)
-			DiagnosticsWriterOutput.WriteWindowsFormsMessage(debugWrapper, type, m, leadMessage);
+			DiagnosticsWriterOutput.WriteWindowsFormsMessageLines(debugWrapper, type, m, leadMessage);
 		#endif
 		}
 
@@ -116,7 +128,7 @@ namespace MKY.Diagnostics
 		public static void WriteFileStream(Type type, FileStream fs, string leadMessage = null)
 		{
 		#if (DEBUG)
-			DiagnosticsWriterOutput.WriteFileStream(debugWrapper, type, fs, leadMessage);
+			DiagnosticsWriterOutput.WriteFileStreamLines(debugWrapper, type, fs, leadMessage);
 		#endif
 		}
 	}

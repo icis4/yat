@@ -44,13 +44,24 @@ namespace MKY.Diagnostics
 		private static AnyWriterWrapper anyWriterWrapper = new AnyWriterWrapper();
 
 		/// <summary>
-		/// Writes source, type and time stamp to the given <see cref="TextWriter"/>.
+		/// Writes location to the given <see cref="TextWriter"/>.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
-		public static void WriteTimeStamp(TextWriter writer, Type type, string callerMemberName = null, string message = null)
+		public static void WriteLocation(TextWriter writer, string message = null)
 		{
 			anyWriterWrapper.SetWriter(writer);
-			DiagnosticsWriterOutput.WriteTimeStamp(anyWriterWrapper, type, callerMemberName, message);
+			DiagnosticsWriterOutput.WriteLocation(anyWriterWrapper, new StackTrace(), 1, message);
+			anyWriterWrapper.SetWriter(null);
+		}
+
+		/// <summary>
+		/// Writes time stamp and location to the given <see cref="TextWriter"/>.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		public static void WriteTimeStamp(TextWriter writer, string message = null)
+		{
+			anyWriterWrapper.SetWriter(writer);
+			DiagnosticsWriterOutput.WriteTimeStamp(anyWriterWrapper, new StackTrace(), 1, message);
 			anyWriterWrapper.SetWriter(null);
 		}
 
@@ -62,7 +73,7 @@ namespace MKY.Diagnostics
 		public static void WriteException(TextWriter writer, Type type, Exception ex, string leadMessage = null)
 		{
 			anyWriterWrapper.SetWriter(writer);
-			DiagnosticsWriterOutput.WriteException(anyWriterWrapper, type, ex, leadMessage);
+			DiagnosticsWriterOutput.WriteExceptionLines(anyWriterWrapper, type, ex, leadMessage);
 			anyWriterWrapper.SetWriter(null);
 		}
 
@@ -82,7 +93,7 @@ namespace MKY.Diagnostics
 		public static void WriteStack(TextWriter writer, Type type, StackTrace st, string leadMessage = null)
 		{
 			anyWriterWrapper.SetWriter(writer);
-			DiagnosticsWriterOutput.WriteStack(anyWriterWrapper, type, st, leadMessage);
+			DiagnosticsWriterOutput.WriteStackLines(anyWriterWrapper, type, st, leadMessage);
 			anyWriterWrapper.SetWriter(null);
 		}
 
@@ -94,7 +105,7 @@ namespace MKY.Diagnostics
 		public static void WriteWindowsFormsMessage(TextWriter writer, Type type, Message m, string leadMessage = null)
 		{
 			anyWriterWrapper.SetWriter(writer);
-			DiagnosticsWriterOutput.WriteWindowsFormsMessage(anyWriterWrapper, type, m, leadMessage);
+			DiagnosticsWriterOutput.WriteWindowsFormsMessageLines(anyWriterWrapper, type, m, leadMessage);
 			anyWriterWrapper.SetWriter(null);
 		}
 
@@ -105,7 +116,7 @@ namespace MKY.Diagnostics
 		public static void WriteFileStream(TextWriter writer, Type type, FileStream fs, string leadMessage = null)
 		{
 			anyWriterWrapper.SetWriter(writer);
-			DiagnosticsWriterOutput.WriteFileStream(anyWriterWrapper, type, fs, leadMessage);
+			DiagnosticsWriterOutput.WriteFileStreamLines(anyWriterWrapper, type, fs, leadMessage);
 			anyWriterWrapper.SetWriter(null);
 		}
 	}
