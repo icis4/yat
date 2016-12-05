@@ -29,11 +29,11 @@ using NUnit.Framework;
 
 namespace MKY.Test.Equality.Methods
 {
-	internal static class ReferenceTypeNotIEquatableWithoutOperatorsBase
+	internal static class ReferenceTypeNotIEquatableWithoutOperators_Base
 	{
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEquality(Types.ReferenceTypeNotIEquatableWithoutOperatorsBase objToCompareAgainst, Types.ReferenceTypeNotIEquatableWithoutOperatorsBase objEqual, Types.ReferenceTypeNotIEquatableWithoutOperatorsBase objNotEqual)
+		public static void TestOperatorsForReferenceEquality(Types.ReferenceTypeNotIEquatableWithoutOperators_Base objToCompareAgainst, Types.ReferenceTypeNotIEquatableWithoutOperators_Base objEqual, Types.ReferenceTypeNotIEquatableWithoutOperators_Base objNotEqual)
 		{
 			Trace.Indent();
 			TraceEx.WriteLocation();
@@ -74,8 +74,7 @@ namespace MKY.Test.Equality.Methods
 			}
 		}
 
-		//                 TestOperatorsForValueEquality is useless since it never succeeds.
-
+		// TestOperatorsForValueEquality() is useless since it never succeeds.
 	}
 }
 

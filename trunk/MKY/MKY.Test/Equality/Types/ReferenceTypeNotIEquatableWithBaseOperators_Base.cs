@@ -30,17 +30,16 @@ using MKY.Diagnostics;
 namespace MKY.Test.Equality.Types
 {
 	/// <summary></summary>
-	public class ReferenceTypeNotIEquatableWithOperatorsDerived : ReferenceTypeNotIEquatableWithOperatorsBase
+	public class ReferenceTypeNotIEquatableWithBaseOperators_Base
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public readonly int D; // = 'Derived'
+		public readonly int B; // = 'Base'
 
 		/// <summary></summary>
-		public ReferenceTypeNotIEquatableWithOperatorsDerived(int b, int d)
-			: base(b)
+		public ReferenceTypeNotIEquatableWithBaseOperators_Base(int b)
 		{
-			D = d;
+			B = b;
 		}
 
 		#region Object Members
@@ -57,11 +56,7 @@ namespace MKY.Test.Equality.Types
 		/// </remarks>
 		public override string ToString()
 		{
-			return
-			(
-				Environment.NewLine + "      1:Base = " + base.ToString() +
-				Environment.NewLine + "      1:B    = " + D.ToString(CultureInfo.InvariantCulture)
-			);
+			return (Environment.NewLine + "    0:B    = " + B.ToString(CultureInfo.InvariantCulture));
 		}
 
 		/// <summary>
@@ -73,7 +68,7 @@ namespace MKY.Test.Equality.Types
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode() ^ B.GetHashCode());
+			return (B.GetHashCode());
 		}
 
 		/// <summary>
@@ -90,15 +85,29 @@ namespace MKY.Test.Equality.Types
 				Trace.Indent();
 				TraceEx.WriteLocation();
 
-				if (!base.Equals(obj))
+				if (ReferenceEquals(obj, null))
 				{
-					Trace.WriteLine("Results in False within base.Equals()");
+					Trace.WriteLine("ReferenceEquals() results in 'False' since 'obj' is 'null'");
 					Trace.Unindent();
 					return (false);
 				}
 
-				var other = (obj as ReferenceTypeNotIEquatableWithOperatorsDerived);
-				bool result = (D.Equals(other.D));
+				if (ReferenceEquals(this, obj))
+				{
+					Trace.WriteLine("ReferenceEquals() results in 'True'");
+					Trace.Unindent();
+					return (true);
+				}
+
+				if (GetType() != obj.GetType())
+				{
+					Trace.WriteLine("Type comparison results in 'False'");
+					Trace.Unindent();
+					return (false);
+				}
+
+				var other = (obj as ReferenceTypeNotIEquatableWithBaseOperators_Base);
+				bool result = (B.Equals(other.B));
 
 				Trace.WriteLine("Results in " + result);
 				Trace.Unindent();
@@ -106,18 +115,24 @@ namespace MKY.Test.Equality.Types
 			}
 			else // Normal implementation:
 			{
-				if (!base.Equals(obj))
+				if (ReferenceEquals(obj, null))
 					return (false);
 
-				var other = (obj as ReferenceTypeNotIEquatableWithOperatorsDerived);
-				return (D.Equals(other.D));
+				if (ReferenceEquals(this, obj))
+					return (true);
+
+				if (GetType() != obj.GetType())
+					return (false);
+
+				var other = (obj as ReferenceTypeNotIEquatableWithBaseOperators_Base);
+				return (B.Equals(other.B));
 			}
 		}
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(ReferenceTypeNotIEquatableWithOperatorsDerived lhs, ReferenceTypeNotIEquatableWithOperatorsDerived rhs)
+		public static bool operator ==(ReferenceTypeNotIEquatableWithBaseOperators_Base lhs, ReferenceTypeNotIEquatableWithBaseOperators_Base rhs)
 		{
 			if (Configuration.TraceCallingSequence) // Trace the calling sequence:
 			{
@@ -145,8 +160,10 @@ namespace MKY.Test.Equality.Types
 					return (false);
 				}
 
-				bool result = lhs.Equals(rhs);
-
+				// Ensure that potiential <Derived>.Equals() is called.
+				// Thus, ensure that object.Equals() is called.
+				object obj = (object)lhs;
+				bool result = obj.Equals(rhs);
 				Trace.WriteLine("Equals() results in " + result);
 				Trace.Unindent();
 				return (result);
@@ -157,14 +174,17 @@ namespace MKY.Test.Equality.Types
 				if (ReferenceEquals(lhs, null)) return (false);
 				if (ReferenceEquals(rhs, null)) return (false);
 
-				return (lhs.Equals(rhs));
+				// Ensure that potiential <Derived>.Equals() is called.
+				// Thus, ensure that object.Equals() is called.
+				object obj = (object)lhs;
+				return (obj.Equals(rhs));
 			}
 		}
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(ReferenceTypeNotIEquatableWithOperatorsDerived lhs, ReferenceTypeNotIEquatableWithOperatorsDerived rhs)
+		public static bool operator !=(ReferenceTypeNotIEquatableWithBaseOperators_Base lhs, ReferenceTypeNotIEquatableWithBaseOperators_Base rhs)
 		{
 			return (!(lhs == rhs));
 		}

@@ -55,72 +55,72 @@ namespace MKY.Test.Equality
 			Trace.WriteLine("");
 			Trace.WriteLine("Base without operators");
 			{
-				Types.ReferenceTypeNotIEquatableWithoutOperatorsBase a = new Types.ReferenceTypeNotIEquatableWithoutOperatorsBase(1);
-				Types.ReferenceTypeNotIEquatableWithoutOperatorsBase b = new Types.ReferenceTypeNotIEquatableWithoutOperatorsBase(1);
+				Types.ReferenceTypeNotIEquatableWithoutOperators_Base a = new Types.ReferenceTypeNotIEquatableWithoutOperators_Base(1);
+				Types.ReferenceTypeNotIEquatableWithoutOperators_Base b = new Types.ReferenceTypeNotIEquatableWithoutOperators_Base(1);
 				bool result = (a == b);
 				Trace.WriteLine("a == b of base reference type without operators results in " + result);
 			}
 			Trace.WriteLine("");
 			Trace.WriteLine("Derived without operators");
 			{
-				Types.ReferenceTypeNotIEquatableWithoutOperatorsDerived a = new Types.ReferenceTypeNotIEquatableWithoutOperatorsDerived(1, 2);
-				Types.ReferenceTypeNotIEquatableWithoutOperatorsDerived b = new Types.ReferenceTypeNotIEquatableWithoutOperatorsDerived(1, 2);
+				Types.ReferenceTypeNotIEquatableWithoutOperators_Derived a = new Types.ReferenceTypeNotIEquatableWithoutOperators_Derived(1, 2);
+				Types.ReferenceTypeNotIEquatableWithoutOperators_Derived b = new Types.ReferenceTypeNotIEquatableWithoutOperators_Derived(1, 2);
 				bool result = (a == b);
 				Trace.WriteLine("a == b of derived reference type without operators results in " + result);
 			}
 			Trace.WriteLine("");
 			Trace.WriteLine("Base IEquatable without operators");
 			{
-				Types.ReferenceTypeIEquatableWithoutOperatorsBase a = new Types.ReferenceTypeIEquatableWithoutOperatorsBase(1);
-				Types.ReferenceTypeIEquatableWithoutOperatorsBase b = new Types.ReferenceTypeIEquatableWithoutOperatorsBase(1);
+				Types.ReferenceTypeIEquatableWithoutOperators_Base a = new Types.ReferenceTypeIEquatableWithoutOperators_Base(1);
+				Types.ReferenceTypeIEquatableWithoutOperators_Base b = new Types.ReferenceTypeIEquatableWithoutOperators_Base(1);
 				bool result = (a == b);
 				Trace.WriteLine("a == b of base reference type IEquatable without operators results in " + result);
 			}
 			Trace.WriteLine("");
 			Trace.WriteLine("Derived IEquatable without operators");
 			{
-				Types.ReferenceTypeIEquatableWithoutOperatorsDerived a = new Types.ReferenceTypeIEquatableWithoutOperatorsDerived(1, 2);
-				Types.ReferenceTypeIEquatableWithoutOperatorsDerived b = new Types.ReferenceTypeIEquatableWithoutOperatorsDerived(1, 2);
+				Types.ReferenceTypeIEquatableWithoutOperators_Derived a = new Types.ReferenceTypeIEquatableWithoutOperators_Derived(1, 2);
+				Types.ReferenceTypeIEquatableWithoutOperators_Derived b = new Types.ReferenceTypeIEquatableWithoutOperators_Derived(1, 2);
 				bool result = (a == b);
 				Trace.WriteLine("a == b of derived reference type IEquatable without operators results in " + result);
 			}
 			Trace.WriteLine("");
 			Trace.WriteLine("Base with operators");
 			{
-				Types.ReferenceTypeNotIEquatableWithOperatorsBase a = new Types.ReferenceTypeNotIEquatableWithOperatorsBase(1);
-				Types.ReferenceTypeNotIEquatableWithOperatorsBase b = new Types.ReferenceTypeNotIEquatableWithOperatorsBase(1);
+				Types.ReferenceTypeNotIEquatableWithOperators_Base a = new Types.ReferenceTypeNotIEquatableWithOperators_Base(1);
+				Types.ReferenceTypeNotIEquatableWithOperators_Base b = new Types.ReferenceTypeNotIEquatableWithOperators_Base(1);
 				bool result = (a == b);
 				Trace.WriteLine("a == b of base reference type with operators results in " + result);
 			}
 			Trace.WriteLine("");
 			Trace.WriteLine("Derived with operators");
 			{
-				Types.ReferenceTypeNotIEquatableWithOperatorsDerived a = new Types.ReferenceTypeNotIEquatableWithOperatorsDerived(1, 2);
-				Types.ReferenceTypeNotIEquatableWithOperatorsDerived b = new Types.ReferenceTypeNotIEquatableWithOperatorsDerived(1, 2);
+				Types.ReferenceTypeNotIEquatableWithOperators_Derived a = new Types.ReferenceTypeNotIEquatableWithOperators_Derived(1, 2);
+				Types.ReferenceTypeNotIEquatableWithOperators_Derived b = new Types.ReferenceTypeNotIEquatableWithOperators_Derived(1, 2);
 				bool result = (a == b);
 				Trace.WriteLine("a == b of derived reference type with operators results in " + result);
 			}
 			Trace.WriteLine("");
 			Trace.WriteLine("Derived without operators");
 			{
-				Types.ReferenceTypeNotIEquatableWithDerivedOperatorsDerived a = new Types.ReferenceTypeNotIEquatableWithDerivedOperatorsDerived(1, 2, 3);
-				Types.ReferenceTypeNotIEquatableWithDerivedOperatorsDerived b = new Types.ReferenceTypeNotIEquatableWithDerivedOperatorsDerived(1, 2, 3);
+				Types.ReferenceTypeNotIEquatableWithDerivedOperators_DerivedDerived a = new Types.ReferenceTypeNotIEquatableWithDerivedOperators_DerivedDerived(1, 2, 3);
+				Types.ReferenceTypeNotIEquatableWithDerivedOperators_DerivedDerived b = new Types.ReferenceTypeNotIEquatableWithDerivedOperators_DerivedDerived(1, 2, 3);
 				bool result = (a == b);
 				Trace.WriteLine("a == b of derived reference type without operators results in " + result);
 			}
 			Trace.WriteLine("");
 			Trace.WriteLine("Base with base operators");
 			{
-				Types.ReferenceTypeNotIEquatableWithBaseOperatorsBase a = new Types.ReferenceTypeNotIEquatableWithBaseOperatorsBase(1);
-				Types.ReferenceTypeNotIEquatableWithBaseOperatorsBase b = new Types.ReferenceTypeNotIEquatableWithBaseOperatorsBase(1);
+				Types.ReferenceTypeNotIEquatableWithBaseOperators_Base a = new Types.ReferenceTypeNotIEquatableWithBaseOperators_Base(1);
+				Types.ReferenceTypeNotIEquatableWithBaseOperators_Base b = new Types.ReferenceTypeNotIEquatableWithBaseOperators_Base(1);
 				bool result = (a == b);
 				Trace.WriteLine("a == b of base reference type with base operators results in " + result);
 			}
 			Trace.WriteLine("");
 			Trace.WriteLine("Derived with base operators");
 			{
-				Types.ReferenceTypeNotIEquatableWithBaseOperatorsDerived a = new Types.ReferenceTypeNotIEquatableWithBaseOperatorsDerived(1, 2);
-				Types.ReferenceTypeNotIEquatableWithBaseOperatorsDerived b = new Types.ReferenceTypeNotIEquatableWithBaseOperatorsDerived(1, 2);
+				Types.ReferenceTypeNotIEquatableWithBaseOperators_Derived a = new Types.ReferenceTypeNotIEquatableWithBaseOperators_Derived(1, 2);
+				Types.ReferenceTypeNotIEquatableWithBaseOperators_Derived b = new Types.ReferenceTypeNotIEquatableWithBaseOperators_Derived(1, 2);
 				bool result = (a == b);
 				Trace.WriteLine("a == b of derived reference type with base operators results in " + result);
 			}
@@ -329,70 +329,70 @@ namespace MKY.Test.Equality
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(Data), "TestCasesForBase")]
-		public virtual void AnalyzeOwnReferenceTypeNotIEquatableWithoutOperatorsBase(int b1, int b2, int b3)
+		[Test, TestCaseSource(typeof(Data), "TestCases_Base")]
+		public virtual void AnalyzeOwnReferenceTypeNotIEquatableWithoutOperators_Base(int b1, int b2, int b3)
 		{
-			Types.ReferenceTypeNotIEquatableWithoutOperatorsBase objToCompareAgainst = new Types.ReferenceTypeNotIEquatableWithoutOperatorsBase(b1);
-			Types.ReferenceTypeNotIEquatableWithoutOperatorsBase objEqual            = new Types.ReferenceTypeNotIEquatableWithoutOperatorsBase(b2);
-			Types.ReferenceTypeNotIEquatableWithoutOperatorsBase objNotEqual         = new Types.ReferenceTypeNotIEquatableWithoutOperatorsBase(b3);
+			Types.ReferenceTypeNotIEquatableWithoutOperators_Base objToCompareAgainst = new Types.ReferenceTypeNotIEquatableWithoutOperators_Base(b1);
+			Types.ReferenceTypeNotIEquatableWithoutOperators_Base objEqual            = new Types.ReferenceTypeNotIEquatableWithoutOperators_Base(b2);
+			Types.ReferenceTypeNotIEquatableWithoutOperators_Base objNotEqual         = new Types.ReferenceTypeNotIEquatableWithoutOperators_Base(b3);
 
 			Methods.Generic.TestEquals<object>                                              (objToCompareAgainst, objEqual, objNotEqual);
-			Methods.Generic.TestEquals<Types.ReferenceTypeNotIEquatableWithoutOperatorsBase>(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.Generic.TestEquals<Types.ReferenceTypeNotIEquatableWithoutOperators_Base>(objToCompareAgainst, objEqual, objNotEqual);
 
 			Methods.ReferenceTypeObject.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
-			Methods.ReferenceTypeNotIEquatableWithoutOperatorsBase.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.ReferenceTypeNotIEquatableWithoutOperators_Base.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= are called, thus only reference equality is evaluated too.
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(Data), "TestCasesForDerived")]
-		public virtual void AnalyzeOwnReferenceTypeNotIEquatableWithoutOperatorsDerived(int b1, int d1, int b2, int d2, int b3, int d3)
+		[Test, TestCaseSource(typeof(Data), "TestCases_Derived")]
+		public virtual void AnalyzeOwnReferenceTypeNotIEquatableWithoutOperators_Derived(int b1, int d1, int b2, int d2, int b3, int d3)
 		{
-			Types.ReferenceTypeNotIEquatableWithoutOperatorsDerived objToCompareAgainst = new Types.ReferenceTypeNotIEquatableWithoutOperatorsDerived(b1, d1);
-			Types.ReferenceTypeNotIEquatableWithoutOperatorsDerived objEqual            = new Types.ReferenceTypeNotIEquatableWithoutOperatorsDerived(b2, d2);
-			Types.ReferenceTypeNotIEquatableWithoutOperatorsDerived objNotEqual         = new Types.ReferenceTypeNotIEquatableWithoutOperatorsDerived(b3, d3);
+			Types.ReferenceTypeNotIEquatableWithoutOperators_Derived objToCompareAgainst = new Types.ReferenceTypeNotIEquatableWithoutOperators_Derived(b1, d1);
+			Types.ReferenceTypeNotIEquatableWithoutOperators_Derived objEqual            = new Types.ReferenceTypeNotIEquatableWithoutOperators_Derived(b2, d2);
+			Types.ReferenceTypeNotIEquatableWithoutOperators_Derived objNotEqual         = new Types.ReferenceTypeNotIEquatableWithoutOperators_Derived(b3, d3);
 
 			Methods.Generic.TestEquals<object>                                                 (objToCompareAgainst, objEqual, objNotEqual);
-			Methods.Generic.TestEquals<Types.ReferenceTypeNotIEquatableWithoutOperatorsDerived>(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.Generic.TestEquals<Types.ReferenceTypeNotIEquatableWithoutOperators_Derived>(objToCompareAgainst, objEqual, objNotEqual);
 
 			Methods.ReferenceTypeObject.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
-			Methods.ReferenceTypeNotIEquatableWithoutOperatorsDerived.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.ReferenceTypeNotIEquatableWithoutOperators_Derived.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= are called, thus only reference equality is evaluated too.
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(Data), "TestCasesForBase")]
-		public virtual void AnalyzeOwnReferenceTypeIEquatableWithoutOperatorsBase(int b1, int b2, int b3)
+		[Test, TestCaseSource(typeof(Data), "TestCases_Base")]
+		public virtual void AnalyzeOwnReferenceTypeIEquatableWithoutOperators_Base(int b1, int b2, int b3)
 		{
-			Types.ReferenceTypeIEquatableWithoutOperatorsBase objToCompareAgainst = new Types.ReferenceTypeIEquatableWithoutOperatorsBase(b1);
-			Types.ReferenceTypeIEquatableWithoutOperatorsBase objEqual            = new Types.ReferenceTypeIEquatableWithoutOperatorsBase(b2);
-			Types.ReferenceTypeIEquatableWithoutOperatorsBase objNotEqual         = new Types.ReferenceTypeIEquatableWithoutOperatorsBase(b3);
+			Types.ReferenceTypeIEquatableWithoutOperators_Base objToCompareAgainst = new Types.ReferenceTypeIEquatableWithoutOperators_Base(b1);
+			Types.ReferenceTypeIEquatableWithoutOperators_Base objEqual            = new Types.ReferenceTypeIEquatableWithoutOperators_Base(b2);
+			Types.ReferenceTypeIEquatableWithoutOperators_Base objNotEqual         = new Types.ReferenceTypeIEquatableWithoutOperators_Base(b3);
 
 			Methods.Generic.TestEquals<object>                                           (objToCompareAgainst, objEqual, objNotEqual);
-			Methods.Generic.TestEquals<Types.ReferenceTypeIEquatableWithoutOperatorsBase>(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.Generic.TestEquals<Types.ReferenceTypeIEquatableWithoutOperators_Base>(objToCompareAgainst, objEqual, objNotEqual);
 
 			Methods.ReferenceTypeObject.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
-			Methods.ReferenceTypeIEquatableWithoutOperatorsBase.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.ReferenceTypeIEquatableWithoutOperators_Base.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= are called, thus only reference equality is evaluated too.
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(Data), "TestCasesForDerived")]
-		public virtual void AnalyzeOwnReferenceTypeIEquatableWithoutOperatorsDerived(int b1, int d1, int b2, int d2, int b3, int d3)
+		[Test, TestCaseSource(typeof(Data), "TestCases_Derived")]
+		public virtual void AnalyzeOwnReferenceTypeIEquatableWithoutOperators_Derived(int b1, int d1, int b2, int d2, int b3, int d3)
 		{
-			Types.ReferenceTypeIEquatableWithoutOperatorsDerived objToCompareAgainst = new Types.ReferenceTypeIEquatableWithoutOperatorsDerived(b1, d1);
-			Types.ReferenceTypeIEquatableWithoutOperatorsDerived objEqual            = new Types.ReferenceTypeIEquatableWithoutOperatorsDerived(b2, d2);
-			Types.ReferenceTypeIEquatableWithoutOperatorsDerived objNotEqual         = new Types.ReferenceTypeIEquatableWithoutOperatorsDerived(b3, d3);
+			Types.ReferenceTypeIEquatableWithoutOperators_Derived objToCompareAgainst = new Types.ReferenceTypeIEquatableWithoutOperators_Derived(b1, d1);
+			Types.ReferenceTypeIEquatableWithoutOperators_Derived objEqual            = new Types.ReferenceTypeIEquatableWithoutOperators_Derived(b2, d2);
+			Types.ReferenceTypeIEquatableWithoutOperators_Derived objNotEqual         = new Types.ReferenceTypeIEquatableWithoutOperators_Derived(b3, d3);
 
 			Methods.Generic.TestEquals<object>                                              (objToCompareAgainst, objEqual, objNotEqual);
-			Methods.Generic.TestEquals<Types.ReferenceTypeIEquatableWithoutOperatorsDerived>(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.Generic.TestEquals<Types.ReferenceTypeIEquatableWithoutOperators_Derived>(objToCompareAgainst, objEqual, objNotEqual);
 
 			Methods.ReferenceTypeObject.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
-			Methods.ReferenceTypeIEquatableWithoutOperatorsDerived.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.ReferenceTypeIEquatableWithoutOperators_Derived.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= are called, thus only reference equality is evaluated too.
 		}
 
@@ -447,122 +447,173 @@ namespace MKY.Test.Equality
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(Data), "TestCasesForBase")]
-		public virtual void AnalyzeOwnReferenceTypeNotIEquatableWithOperatorsBase(int b1, int b2, int b3)
+		[Test, TestCaseSource(typeof(Data), "TestCases_Base")]
+		public virtual void AnalyzeOwnReferenceTypeNotIEquatableWithBaseOperators_Base(int b1, int b2, int b3)
 		{
-			Types.ReferenceTypeNotIEquatableWithOperatorsBase objToCompareAgainst = new Types.ReferenceTypeNotIEquatableWithOperatorsBase(b1);
-			Types.ReferenceTypeNotIEquatableWithOperatorsBase objEqual            = new Types.ReferenceTypeNotIEquatableWithOperatorsBase(b2);
-			Types.ReferenceTypeNotIEquatableWithOperatorsBase objNotEqual         = new Types.ReferenceTypeNotIEquatableWithOperatorsBase(b3);
+			Types.ReferenceTypeNotIEquatableWithBaseOperators_Base objToCompareAgainst = new Types.ReferenceTypeNotIEquatableWithBaseOperators_Base(b1);
+			Types.ReferenceTypeNotIEquatableWithBaseOperators_Base objEqual            = new Types.ReferenceTypeNotIEquatableWithBaseOperators_Base(b2);
+			Types.ReferenceTypeNotIEquatableWithBaseOperators_Base objNotEqual         = new Types.ReferenceTypeNotIEquatableWithBaseOperators_Base(b3);
 
-			Methods.Generic.TestEquals<object>                                           (objToCompareAgainst, objEqual, objNotEqual);
-			Methods.Generic.TestEquals<Types.ReferenceTypeNotIEquatableWithOperatorsBase>(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.Generic.TestEquals<object>                                                (objToCompareAgainst, objEqual, objNotEqual);
+			Methods.Generic.TestEquals<Types.ReferenceTypeNotIEquatableWithBaseOperators_Base>(objToCompareAgainst, objEqual, objNotEqual);
 
 			Methods.ReferenceTypeObject.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
-			Methods.ReferenceTypeNotIEquatableWithOperatorsBase.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
-			Methods.ReferenceTypeNotIEquatableWithOperatorsBase.TestOperatorsForValueEquality    (objToCompareAgainst, objEqual, objNotEqual);
+			Methods.ReferenceTypeNotIEquatableWithBaseOperators_Base.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.ReferenceTypeNotIEquatableWithBaseOperators_Base.TestOperatorsForValueEquality    (objToCompareAgainst, objEqual, objNotEqual);
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(Data), "TestCasesForDerived")]
-		public virtual void AnalyzeOwnReferenceTypeNotIEquatableWithOperatorsDerived(int b1, int d1, int b2, int d2, int b3, int d3)
+		[Test, TestCaseSource(typeof(Data), "TestCases_Derived")]
+		public virtual void AnalyzeOwnReferenceTypeNotIEquatableWithBaseOperators_Derived(int b1, int d1, int b2, int d2, int b3, int d3)
 		{
-			Types.ReferenceTypeNotIEquatableWithOperatorsDerived objToCompareAgainst = new Types.ReferenceTypeNotIEquatableWithOperatorsDerived(b1, d1);
-			Types.ReferenceTypeNotIEquatableWithOperatorsDerived objEqual            = new Types.ReferenceTypeNotIEquatableWithOperatorsDerived(b2, d2);
-			Types.ReferenceTypeNotIEquatableWithOperatorsDerived objNotEqual         = new Types.ReferenceTypeNotIEquatableWithOperatorsDerived(b3, d3);
+			Types.ReferenceTypeNotIEquatableWithBaseOperators_Derived objToCompareAgainst = new Types.ReferenceTypeNotIEquatableWithBaseOperators_Derived(b1, d1);
+			Types.ReferenceTypeNotIEquatableWithBaseOperators_Derived objEqual            = new Types.ReferenceTypeNotIEquatableWithBaseOperators_Derived(b2, d2);
+			Types.ReferenceTypeNotIEquatableWithBaseOperators_Derived objNotEqual         = new Types.ReferenceTypeNotIEquatableWithBaseOperators_Derived(b3, d3);
 
-			Methods.Generic.TestEquals<object>                                              (objToCompareAgainst, objEqual, objNotEqual);
-			Methods.Generic.TestEquals<Types.ReferenceTypeNotIEquatableWithOperatorsDerived>(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.Generic.TestEquals<object>                                                   (objToCompareAgainst, objEqual, objNotEqual);
+			Methods.Generic.TestEquals<Types.ReferenceTypeNotIEquatableWithBaseOperators_Derived>(objToCompareAgainst, objEqual, objNotEqual);
 
 			Methods.ReferenceTypeObject.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
-			Methods.ReferenceTypeNotIEquatableWithOperatorsDerived.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
-			Methods.ReferenceTypeNotIEquatableWithOperatorsDerived.TestOperatorsForValueEquality    (objToCompareAgainst, objEqual, objNotEqual);
+			Methods.ReferenceTypeNotIEquatableWithBaseOperators_Derived.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.ReferenceTypeNotIEquatableWithBaseOperators_Derived.TestOperatorsForValueEquality    (objToCompareAgainst, objEqual, objNotEqual);
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(Data), "TestCasesForDerivedDerived")]
-		public virtual void AnalyzeOwnReferenceTypeNotIEquatableWithDerivedOperatorsDerived(int b1, int d1, int dd1, int b2, int d2, int dd2, int b3, int d3, int dd3)
+		[Test, TestCaseSource(typeof(Data), "TestCases_DerivedDerived")]
+		public virtual void AnalyzeOwnReferenceTypeNotIEquatableWithDerivedOperators_DerivedDerived(int b1, int d1, int dd1, int b2, int d2, int dd2, int b3, int d3, int dd3)
 		{
-			Types.ReferenceTypeNotIEquatableWithDerivedOperatorsDerived objToCompareAgainst = new Types.ReferenceTypeNotIEquatableWithDerivedOperatorsDerived(b1, d1, dd1);
-			Types.ReferenceTypeNotIEquatableWithDerivedOperatorsDerived objEqual            = new Types.ReferenceTypeNotIEquatableWithDerivedOperatorsDerived(b2, d2, dd2);
-			Types.ReferenceTypeNotIEquatableWithDerivedOperatorsDerived objNotEqual         = new Types.ReferenceTypeNotIEquatableWithDerivedOperatorsDerived(b3, d3, dd3);
+			Types.ReferenceTypeNotIEquatableWithDerivedOperators_DerivedDerived objToCompareAgainst = new Types.ReferenceTypeNotIEquatableWithDerivedOperators_DerivedDerived(b1, d1, dd1);
+			Types.ReferenceTypeNotIEquatableWithDerivedOperators_DerivedDerived objEqual            = new Types.ReferenceTypeNotIEquatableWithDerivedOperators_DerivedDerived(b2, d2, dd2);
+			Types.ReferenceTypeNotIEquatableWithDerivedOperators_DerivedDerived objNotEqual         = new Types.ReferenceTypeNotIEquatableWithDerivedOperators_DerivedDerived(b3, d3, dd3);
 
-			Methods.Generic.TestEquals<object>                                                     (objToCompareAgainst, objEqual, objNotEqual);
-			Methods.Generic.TestEquals<Types.ReferenceTypeNotIEquatableWithDerivedOperatorsDerived>(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.Generic.TestEquals<object>                                                             (objToCompareAgainst, objEqual, objNotEqual);
+			Methods.Generic.TestEquals<Types.ReferenceTypeNotIEquatableWithDerivedOperators_DerivedDerived>(objToCompareAgainst, objEqual, objNotEqual);
 
 			Methods.ReferenceTypeObject.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
-			Methods.ReferenceTypeNotIEquatableWithDerivedOperatorsDerived.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
-			Methods.ReferenceTypeNotIEquatableWithDerivedOperatorsDerived.TestOperatorsForValueEquality    (objToCompareAgainst, objEqual, objNotEqual);
+			Methods.ReferenceTypeNotIEquatableWithDerivedOperators_DerivedDerived.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.ReferenceTypeNotIEquatableWithDerivedOperators_DerivedDerived.TestOperatorsForValueEquality    (objToCompareAgainst, objEqual, objNotEqual);
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(Data), "TestCasesForBase")]
-		public virtual void AnalyzeOwnReferenceTypeNotIEquatableWithBaseOperatorsBase(int b1, int b2, int b3)
+		[Test, TestCaseSource(typeof(Data), "TestCases_Base")]
+		public virtual void AnalyzeOwnReferenceTypeNotIEquatableWithOperators_Base(int b1, int b2, int b3)
 		{
-			Types.ReferenceTypeNotIEquatableWithBaseOperatorsBase objToCompareAgainst = new Types.ReferenceTypeNotIEquatableWithBaseOperatorsBase(b1);
-			Types.ReferenceTypeNotIEquatableWithBaseOperatorsBase objEqual            = new Types.ReferenceTypeNotIEquatableWithBaseOperatorsBase(b2);
-			Types.ReferenceTypeNotIEquatableWithBaseOperatorsBase objNotEqual         = new Types.ReferenceTypeNotIEquatableWithBaseOperatorsBase(b3);
-
-			Methods.Generic.TestEquals<object>                                               (objToCompareAgainst, objEqual, objNotEqual);
-			Methods.Generic.TestEquals<Types.ReferenceTypeNotIEquatableWithBaseOperatorsBase>(objToCompareAgainst, objEqual, objNotEqual);
-
-			Methods.ReferenceTypeObject.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
-			//// object.operators ==/!= only evaluate reference equality.
-			Methods.ReferenceTypeNotIEquatableWithBaseOperatorsBase.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
-			Methods.ReferenceTypeNotIEquatableWithBaseOperatorsBase.TestOperatorsForValueEquality    (objToCompareAgainst, objEqual, objNotEqual);
-		}
-
-		/// <summary></summary>
-		[Test, TestCaseSource(typeof(Data), "TestCasesForDerived")]
-		public virtual void AnalyzeOwnReferenceTypeNotIEquatableWithBaseOperatorsDerived(int b1, int d1, int b2, int d2, int b3, int d3)
-		{
-			Types.ReferenceTypeNotIEquatableWithBaseOperatorsDerived objToCompareAgainst = new Types.ReferenceTypeNotIEquatableWithBaseOperatorsDerived(b1, d1);
-			Types.ReferenceTypeNotIEquatableWithBaseOperatorsDerived objEqual            = new Types.ReferenceTypeNotIEquatableWithBaseOperatorsDerived(b2, d2);
-			Types.ReferenceTypeNotIEquatableWithBaseOperatorsDerived objNotEqual         = new Types.ReferenceTypeNotIEquatableWithBaseOperatorsDerived(b3, d3);
-
-			Methods.Generic.TestEquals<object>                                                  (objToCompareAgainst, objEqual, objNotEqual);
-			Methods.Generic.TestEquals<Types.ReferenceTypeNotIEquatableWithBaseOperatorsDerived>(objToCompareAgainst, objEqual, objNotEqual);
-
-			Methods.ReferenceTypeObject.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
-			//// object.operators ==/!= only evaluate reference equality.
-			Methods.ReferenceTypeNotIEquatableWithBaseOperatorsDerived.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
-			Methods.ReferenceTypeNotIEquatableWithBaseOperatorsDerived.TestOperatorsForValueEquality    (objToCompareAgainst, objEqual, objNotEqual);
-		}
-
-		/// <summary></summary>
-		[Test, TestCaseSource(typeof(Data), "TestCasesForBase")]
-		public virtual void AnalyzeOwnReferenceTypeIEquatableWithBaseOperatorsBase(int b1, int b2, int b3)
-		{
-			Types.ReferenceTypeIEquatableWithBaseOperatorsBase objToCompareAgainst = new Types.ReferenceTypeIEquatableWithBaseOperatorsBase(b1);
-			Types.ReferenceTypeIEquatableWithBaseOperatorsBase objEqual            = new Types.ReferenceTypeIEquatableWithBaseOperatorsBase(b2);
-			Types.ReferenceTypeIEquatableWithBaseOperatorsBase objNotEqual         = new Types.ReferenceTypeIEquatableWithBaseOperatorsBase(b3);
+			Types.ReferenceTypeNotIEquatableWithOperators_Base objToCompareAgainst = new Types.ReferenceTypeNotIEquatableWithOperators_Base(b1);
+			Types.ReferenceTypeNotIEquatableWithOperators_Base objEqual            = new Types.ReferenceTypeNotIEquatableWithOperators_Base(b2);
+			Types.ReferenceTypeNotIEquatableWithOperators_Base objNotEqual         = new Types.ReferenceTypeNotIEquatableWithOperators_Base(b3);
 
 			Methods.Generic.TestEquals<object>                                            (objToCompareAgainst, objEqual, objNotEqual);
-			Methods.Generic.TestEquals<Types.ReferenceTypeIEquatableWithBaseOperatorsBase>(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.Generic.TestEquals<Types.ReferenceTypeNotIEquatableWithOperators_Base>(objToCompareAgainst, objEqual, objNotEqual);
 
 			Methods.ReferenceTypeObject.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
-			Methods.ReferenceTypeIEquatableWithBaseOperatorsBase.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
-			Methods.ReferenceTypeIEquatableWithBaseOperatorsBase.TestOperatorsForValueEquality    (objToCompareAgainst, objEqual, objNotEqual);
+			Methods.ReferenceTypeNotIEquatableWithOperators_Base.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.ReferenceTypeNotIEquatableWithOperators_Base.TestOperatorsForValueEquality    (objToCompareAgainst, objEqual, objNotEqual);
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(Data), "TestCasesForDerived")]
-		public virtual void AnalyzeOwnReferenceTypeDerivedIEquatableWithBaseOperatorsDerived(int b1, int d1, int b2, int d2, int b3, int d3)
+		[Test, TestCaseSource(typeof(Data), "TestCases_Derived")]
+		public virtual void AnalyzeOwnReferenceTypeNotIEquatableWithOperators_Derived(int b1, int d1, int b2, int d2, int b3, int d3)
 		{
-			Types.ReferenceTypeIEquatableWithBaseOperatorsDerived objToCompareAgainst = new Types.ReferenceTypeIEquatableWithBaseOperatorsDerived(b1, d1);
-			Types.ReferenceTypeIEquatableWithBaseOperatorsDerived objEqual            = new Types.ReferenceTypeIEquatableWithBaseOperatorsDerived(b2, d2);
-			Types.ReferenceTypeIEquatableWithBaseOperatorsDerived objNotEqual         = new Types.ReferenceTypeIEquatableWithBaseOperatorsDerived(b3, d3);
+			Types.ReferenceTypeNotIEquatableWithOperators_Derived objToCompareAgainst = new Types.ReferenceTypeNotIEquatableWithOperators_Derived(b1, d1);
+			Types.ReferenceTypeNotIEquatableWithOperators_Derived objEqual            = new Types.ReferenceTypeNotIEquatableWithOperators_Derived(b2, d2);
+			Types.ReferenceTypeNotIEquatableWithOperators_Derived objNotEqual         = new Types.ReferenceTypeNotIEquatableWithOperators_Derived(b3, d3);
 
 			Methods.Generic.TestEquals<object>                                               (objToCompareAgainst, objEqual, objNotEqual);
-			Methods.Generic.TestEquals<Types.ReferenceTypeIEquatableWithBaseOperatorsDerived>(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.Generic.TestEquals<Types.ReferenceTypeNotIEquatableWithOperators_Derived>(objToCompareAgainst, objEqual, objNotEqual);
 
 			Methods.ReferenceTypeObject.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
-			Methods.ReferenceTypeIEquatableWithBaseOperatorsDerived.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
-			Methods.ReferenceTypeIEquatableWithBaseOperatorsDerived.TestOperatorsForValueEquality    (objToCompareAgainst, objEqual, objNotEqual);
+			Methods.ReferenceTypeNotIEquatableWithOperators_Derived.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.ReferenceTypeNotIEquatableWithOperators_Derived.TestOperatorsForValueEquality    (objToCompareAgainst, objEqual, objNotEqual);
+		}
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(Data), "TestCases_Base")]
+		public virtual void AnalyzeOwnReferenceTypeIEquatableWithBaseOperators_Base(int b1, int b2, int b3)
+		{
+			Types.ReferenceTypeIEquatableWithBaseOperators_Base objToCompareAgainst = new Types.ReferenceTypeIEquatableWithBaseOperators_Base(b1);
+			Types.ReferenceTypeIEquatableWithBaseOperators_Base objEqual            = new Types.ReferenceTypeIEquatableWithBaseOperators_Base(b2);
+			Types.ReferenceTypeIEquatableWithBaseOperators_Base objNotEqual         = new Types.ReferenceTypeIEquatableWithBaseOperators_Base(b3);
+
+			Methods.Generic.TestEquals<object>                                             (objToCompareAgainst, objEqual, objNotEqual);
+			Methods.Generic.TestEquals<Types.ReferenceTypeIEquatableWithBaseOperators_Base>(objToCompareAgainst, objEqual, objNotEqual);
+
+			Methods.ReferenceTypeObject.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
+			//// object.operators ==/!= only evaluate reference equality.
+			Methods.ReferenceTypeIEquatableWithBaseOperators_Base.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.ReferenceTypeIEquatableWithBaseOperators_Base.TestOperatorsForValueEquality    (objToCompareAgainst, objEqual, objNotEqual);
+		}
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(Data), "TestCases_Derived")]
+		public virtual void AnalyzeOwnReferenceTypeDerivedIEquatableWithBaseOperators_Derived(int b1, int d1, int b2, int d2, int b3, int d3)
+		{
+			Types.ReferenceTypeIEquatableWithBaseOperators_Derived objToCompareAgainst = new Types.ReferenceTypeIEquatableWithBaseOperators_Derived(b1, d1);
+			Types.ReferenceTypeIEquatableWithBaseOperators_Derived objEqual            = new Types.ReferenceTypeIEquatableWithBaseOperators_Derived(b2, d2);
+			Types.ReferenceTypeIEquatableWithBaseOperators_Derived objNotEqual         = new Types.ReferenceTypeIEquatableWithBaseOperators_Derived(b3, d3);
+
+			Methods.Generic.TestEquals<object>                                                (objToCompareAgainst, objEqual, objNotEqual);
+			Methods.Generic.TestEquals<Types.ReferenceTypeIEquatableWithBaseOperators_Derived>(objToCompareAgainst, objEqual, objNotEqual);
+
+			Methods.ReferenceTypeObject.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
+			//// object.operators ==/!= only evaluate reference equality.
+			Methods.ReferenceTypeIEquatableWithBaseOperators_Derived.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.ReferenceTypeIEquatableWithBaseOperators_Derived.TestOperatorsForValueEquality    (objToCompareAgainst, objEqual, objNotEqual);
+		}
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(Data), "TestCases_DerivedDerived")]
+		public virtual void AnalyzeOwnReferenceTypeIEquatableWithDerivedOperators_DerivedDerived(int b1, int d1, int dd1, int b2, int d2, int dd2, int b3, int d3, int dd3)
+		{
+			Types.ReferenceTypeIEquatableWithDerivedOperators_DerivedDerived objToCompareAgainst = new Types.ReferenceTypeIEquatableWithDerivedOperators_DerivedDerived(b1, d1, dd1);
+			Types.ReferenceTypeIEquatableWithDerivedOperators_DerivedDerived objEqual            = new Types.ReferenceTypeIEquatableWithDerivedOperators_DerivedDerived(b2, d2, dd2);
+			Types.ReferenceTypeIEquatableWithDerivedOperators_DerivedDerived objNotEqual         = new Types.ReferenceTypeIEquatableWithDerivedOperators_DerivedDerived(b3, d3, dd3);
+
+			Methods.Generic.TestEquals<object>                                                          (objToCompareAgainst, objEqual, objNotEqual);
+			Methods.Generic.TestEquals<Types.ReferenceTypeIEquatableWithDerivedOperators_DerivedDerived>(objToCompareAgainst, objEqual, objNotEqual);
+
+			Methods.ReferenceTypeObject.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
+			//// object.operators ==/!= only evaluate reference equality.
+			Methods.ReferenceTypeIEquatableWithDerivedOperators_DerivedDerived.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.ReferenceTypeIEquatableWithDerivedOperators_DerivedDerived.TestOperatorsForValueEquality    (objToCompareAgainst, objEqual, objNotEqual);
+		}
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(Data), "TestCases_Base")]
+		public virtual void AnalyzeOwnReferenceTypeIEquatableWithOperators_Base(int b1, int b2, int b3)
+		{
+			Types.ReferenceTypeIEquatableWithOperators_Base objToCompareAgainst = new Types.ReferenceTypeIEquatableWithOperators_Base(b1);
+			Types.ReferenceTypeIEquatableWithOperators_Base objEqual            = new Types.ReferenceTypeIEquatableWithOperators_Base(b2);
+			Types.ReferenceTypeIEquatableWithOperators_Base objNotEqual         = new Types.ReferenceTypeIEquatableWithOperators_Base(b3);
+
+			Methods.Generic.TestEquals<object>                                            (objToCompareAgainst, objEqual, objNotEqual);
+			Methods.Generic.TestEquals<Types.ReferenceTypeIEquatableWithOperators_Base>(objToCompareAgainst, objEqual, objNotEqual);
+
+			Methods.ReferenceTypeObject.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
+			//// object.operators ==/!= only evaluate reference equality.
+			Methods.ReferenceTypeIEquatableWithOperators_Base.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.ReferenceTypeIEquatableWithOperators_Base.TestOperatorsForValueEquality    (objToCompareAgainst, objEqual, objNotEqual);
+		}
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(Data), "TestCases_Derived")]
+		public virtual void AnalyzeOwnReferenceTypeIEquatableWithOperators_Derived(int b1, int d1, int b2, int d2, int b3, int d3)
+		{
+			Types.ReferenceTypeIEquatableWithOperators_Derived objToCompareAgainst = new Types.ReferenceTypeIEquatableWithOperators_Derived(b1, d1);
+			Types.ReferenceTypeIEquatableWithOperators_Derived objEqual            = new Types.ReferenceTypeIEquatableWithOperators_Derived(b2, d2);
+			Types.ReferenceTypeIEquatableWithOperators_Derived objNotEqual         = new Types.ReferenceTypeIEquatableWithOperators_Derived(b3, d3);
+
+			Methods.Generic.TestEquals<object>                                               (objToCompareAgainst, objEqual, objNotEqual);
+			Methods.Generic.TestEquals<Types.ReferenceTypeIEquatableWithOperators_Derived>(objToCompareAgainst, objEqual, objNotEqual);
+
+			Methods.ReferenceTypeObject.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
+			//// object.operators ==/!= only evaluate reference equality.
+			Methods.ReferenceTypeIEquatableWithOperators_Derived.TestOperatorsForReferenceEquality(objToCompareAgainst, objEqual, objNotEqual);
+			Methods.ReferenceTypeIEquatableWithOperators_Derived.TestOperatorsForValueEquality    (objToCompareAgainst, objEqual, objNotEqual);
 		}
 
 		#endregion

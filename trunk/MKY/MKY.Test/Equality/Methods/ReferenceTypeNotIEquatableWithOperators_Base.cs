@@ -29,11 +29,11 @@ using NUnit.Framework;
 
 namespace MKY.Test.Equality.Methods
 {
-	internal static class ReferenceTypeNotIEquatableWithBaseOperatorsDerived
+	internal static class ReferenceTypeNotIEquatableWithOperators_Base
 	{
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEquality(Types.ReferenceTypeNotIEquatableWithBaseOperatorsDerived objToCompareAgainst, Types.ReferenceTypeNotIEquatableWithBaseOperatorsDerived objEqual, Types.ReferenceTypeNotIEquatableWithBaseOperatorsDerived objNotEqual)
+		public static void TestOperatorsForReferenceEquality(Types.ReferenceTypeNotIEquatableWithOperators_Base objToCompareAgainst, Types.ReferenceTypeNotIEquatableWithOperators_Base objEqual, Types.ReferenceTypeNotIEquatableWithOperators_Base objNotEqual)
 		{
 			Trace.Indent();
 			TraceEx.WriteLocation();
@@ -74,7 +74,7 @@ namespace MKY.Test.Equality.Methods
 			}
 		}
 
-		public static void TestOperatorsForValueEquality(Types.ReferenceTypeNotIEquatableWithBaseOperatorsDerived objToCompareAgainst, Types.ReferenceTypeNotIEquatableWithBaseOperatorsDerived objEqual, Types.ReferenceTypeNotIEquatableWithBaseOperatorsDerived objNotEqual)
+		public static void TestOperatorsForValueEquality(Types.ReferenceTypeNotIEquatableWithOperators_Base objToCompareAgainst, Types.ReferenceTypeNotIEquatableWithOperators_Base objEqual, Types.ReferenceTypeNotIEquatableWithOperators_Base objNotEqual)
 		{
 			Trace.Indent();
 			TraceEx.WriteLocation();

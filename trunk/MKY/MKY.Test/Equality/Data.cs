@@ -30,7 +30,7 @@ namespace MKY.Test.Equality
 	public static class Data
 	{
 		/// <summary></summary>
-		public static IEnumerable TestCasesForBase
+		public static IEnumerable TestCases_Base
 		{
 			get
 			{
@@ -39,7 +39,7 @@ namespace MKY.Test.Equality
 		}
 
 		/// <summary></summary>
-		public static IEnumerable TestCasesForDerived
+		public static IEnumerable TestCases_Derived
 		{
 			get
 			{
@@ -59,7 +59,7 @@ namespace MKY.Test.Equality
 		}
 
 		/// <summary></summary>
-		public static IEnumerable TestCasesForDerivedDerived
+		public static IEnumerable TestCases_DerivedDerived
 		{
 			get
 			{

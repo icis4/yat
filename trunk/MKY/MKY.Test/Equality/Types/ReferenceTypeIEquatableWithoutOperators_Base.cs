@@ -30,17 +30,16 @@ using MKY.Diagnostics;
 namespace MKY.Test.Equality.Types
 {
 	/// <summary></summary>
-	public class ReferenceTypeIEquatableWithBaseOperatorsDerived : ReferenceTypeIEquatableWithBaseOperatorsBase
+	public class ReferenceTypeIEquatableWithoutOperators_Base : IEquatable<ReferenceTypeIEquatableWithoutOperators_Base>
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public readonly int D; // = 'Derived'
+		public readonly int B; // = 'Base'
 
 		/// <summary></summary>
-		public ReferenceTypeIEquatableWithBaseOperatorsDerived(int b, int d)
-			: base(b)
+		public ReferenceTypeIEquatableWithoutOperators_Base(int b)
 		{
-			D = d;
+			B = b;
 		}
 
 		#region Object Members
@@ -57,11 +56,7 @@ namespace MKY.Test.Equality.Types
 		/// </remarks>
 		public override string ToString()
 		{
-			return
-			(
-				Environment.NewLine + "      1:Base = " + base.ToString() +
-				Environment.NewLine + "      1:B    = " + D.ToString(CultureInfo.InvariantCulture)
-			);
+			return (Environment.NewLine + "    0:B    = " + B.ToString(CultureInfo.InvariantCulture));
 		}
 
 		/// <summary>
@@ -73,7 +68,15 @@ namespace MKY.Test.Equality.Types
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode() ^ B.GetHashCode());
+			return (B.GetHashCode());
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			return (Equals(obj as ReferenceTypeIEquatableWithoutOperators_Base));
 		}
 
 		/// <summary>
@@ -83,36 +86,35 @@ namespace MKY.Test.Equality.Types
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public override bool Equals(object obj)
+		public bool Equals(ReferenceTypeIEquatableWithoutOperators_Base other)
 		{
 			if (Configuration.TraceCallingSequence) // Trace the calling sequence:
 			{
 				Trace.Indent();
 				TraceEx.WriteLocation();
 
-				if (ReferenceEquals(obj, null))
+				if (ReferenceEquals(other, null))
 				{
 					Trace.WriteLine("ReferenceEquals() results in 'False' since 'obj' is 'null'");
 					Trace.Unindent();
 					return (false);
 				}
 
-				if (ReferenceEquals(this, obj))
+				if (ReferenceEquals(this, other))
 				{
 					Trace.WriteLine("ReferenceEquals() results in 'True'");
 					Trace.Unindent();
 					return (true);
 				}
 
-				if (GetType() != obj.GetType())
+				if (GetType() != other.GetType())
 				{
 					Trace.WriteLine("Type comparison results in 'False'");
 					Trace.Unindent();
 					return (false);
 				}
 
-				var other = (obj as ReferenceTypeIEquatableWithBaseOperatorsDerived);
-				bool result = (base.Equals(other) && D.Equals(other.D));
+				bool result = (B.Equals(other.B));
 
 				Trace.WriteLine("Results in " + result);
 				Trace.Unindent();
@@ -120,17 +122,16 @@ namespace MKY.Test.Equality.Types
 			}
 			else // Normal implementation:
 			{
-				if (ReferenceEquals(obj, null))
+				if (ReferenceEquals(other, null))
 					return (false);
 
-				if (ReferenceEquals(this, obj))
+				if (ReferenceEquals(this, other))
 					return (true);
 
-				if (GetType() != obj.GetType())
+				if (GetType() != other.GetType())
 					return (false);
 
-				var other = (obj as ReferenceTypeIEquatableWithBaseOperatorsDerived);
-				return (base.Equals(other) && D.Equals(other.D));
+				return (B.Equals(other.B));
 			}
 		}
 
