@@ -30,14 +30,14 @@ using MKY.Diagnostics;
 namespace MKY.Test.Equality.Types
 {
 	/// <summary></summary>
-	public class ReferenceTypeNotIEquatableWithBaseOperatorsDerived : ReferenceTypeNotIEquatableWithBaseOperatorsBase
+	public class ReferenceTypeNotIEquatableWithBaseOperators_Derived : ReferenceTypeNotIEquatableWithBaseOperators_Base
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		public readonly int D; // = 'Derived'
 
 		/// <summary></summary>
-		public ReferenceTypeNotIEquatableWithBaseOperatorsDerived(int b, int d)
+		public ReferenceTypeNotIEquatableWithBaseOperators_Derived(int b, int d)
 			: base(b)
 		{
 			D = d;
@@ -60,7 +60,7 @@ namespace MKY.Test.Equality.Types
 			return
 			(
 				Environment.NewLine + "      1:Base = " + base.ToString() +
-				Environment.NewLine + "      1:B    = " + D.ToString(CultureInfo.InvariantCulture)
+				Environment.NewLine + "      1:D    = " + D.ToString(CultureInfo.InvariantCulture)
 			);
 		}
 
@@ -92,12 +92,12 @@ namespace MKY.Test.Equality.Types
 
 				if (!base.Equals(obj))
 				{
-					Trace.WriteLine("Results in False within base.Equals()");
+					Trace.WriteLine("base.Equals() results in 'False'");
 					Trace.Unindent();
 					return (false);
 				}
 
-				var other = (obj as ReferenceTypeNotIEquatableWithBaseOperatorsDerived);
+				var other = (obj as ReferenceTypeNotIEquatableWithBaseOperators_Derived);
 				bool result = (D.Equals(other.D));
 
 				Trace.WriteLine("Results in " + result);
@@ -109,7 +109,7 @@ namespace MKY.Test.Equality.Types
 				if (!base.Equals(obj))
 					return (false);
 
-				var other = (obj as ReferenceTypeNotIEquatableWithBaseOperatorsDerived);
+				var other = (obj as ReferenceTypeNotIEquatableWithBaseOperators_Derived);
 				return (D.Equals(other.D));
 			}
 		}

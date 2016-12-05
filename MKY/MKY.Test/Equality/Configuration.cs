@@ -20,8 +20,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace MKY.Test.Equality
 {
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Internal configuration to enable/disable tracing, must be a field to prevent compilation warnings.")]
 	internal static class Configuration
 	{
 		/// <summary>
@@ -30,7 +33,7 @@ namespace MKY.Test.Equality
 		/// <remarks>
 		/// Must be a variable to prevent "Unreachable code detected" warnings where used.
 		/// </remarks>
-		public static bool TraceCallingSequence = true;
+		public static bool TraceCallingSequence = false;
 	}
 }
 

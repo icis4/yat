@@ -1,5 +1,4 @@
-﻿
-//==================================================================================================
+﻿//==================================================================================================
 // YAT - Yet Another Terminal.
 // Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
@@ -30,11 +29,11 @@ using NUnit.Framework;
 
 namespace MKY.Test.Equality.Methods
 {
-	internal static class ReferenceTypeNotIEquatableWithDerivedOperatorsDerived
+	internal static class ReferenceTypeIEquatableWithOperators_Derived
 	{
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEquality(Types.ReferenceTypeNotIEquatableWithDerivedOperatorsDerived objToCompareAgainst, Types.ReferenceTypeNotIEquatableWithDerivedOperatorsDerived objEqual, Types.ReferenceTypeNotIEquatableWithDerivedOperatorsDerived objNotEqual)
+		public static void TestOperatorsForReferenceEquality(Types.ReferenceTypeIEquatableWithOperators_Derived objToCompareAgainst, Types.ReferenceTypeIEquatableWithOperators_Derived objEqual, Types.ReferenceTypeIEquatableWithOperators_Derived objNotEqual)
 		{
 			Trace.Indent();
 			TraceEx.WriteLocation();
@@ -75,7 +74,7 @@ namespace MKY.Test.Equality.Methods
 			}
 		}
 
-		public static void TestOperatorsForValueEquality(Types.ReferenceTypeNotIEquatableWithDerivedOperatorsDerived objToCompareAgainst, Types.ReferenceTypeNotIEquatableWithDerivedOperatorsDerived objEqual, Types.ReferenceTypeNotIEquatableWithDerivedOperatorsDerived objNotEqual)
+		public static void TestOperatorsForValueEquality(Types.ReferenceTypeIEquatableWithOperators_Derived objToCompareAgainst, Types.ReferenceTypeIEquatableWithOperators_Derived objEqual, Types.ReferenceTypeIEquatableWithOperators_Derived objNotEqual)
 		{
 			Trace.Indent();
 			TraceEx.WriteLocation();

@@ -74,8 +74,7 @@ namespace MKY.Test.Equality.Methods
 			}
 		}
 
-		//                 TestOperatorsForValueEquality is useless since it never succeeds.
-
+		// TestOperatorsForValueEquality() is useless since it never succeeds.
 	}
 }
 

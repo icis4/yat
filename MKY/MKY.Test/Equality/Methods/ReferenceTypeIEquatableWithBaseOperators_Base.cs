@@ -29,11 +29,11 @@ using NUnit.Framework;
 
 namespace MKY.Test.Equality.Methods
 {
-	internal static class ReferenceTypeIEquatableWithoutOperatorsDerived
+	internal static class ReferenceTypeIEquatableWithBaseOperators_Base
 	{
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEquality(Types.ReferenceTypeIEquatableWithoutOperatorsDerived objToCompareAgainst, Types.ReferenceTypeIEquatableWithoutOperatorsDerived objEqual, Types.ReferenceTypeIEquatableWithoutOperatorsDerived objNotEqual)
+		public static void TestOperatorsForReferenceEquality(Types.ReferenceTypeIEquatableWithBaseOperators_Base objToCompareAgainst, Types.ReferenceTypeIEquatableWithBaseOperators_Base objEqual, Types.ReferenceTypeIEquatableWithBaseOperators_Base objNotEqual)
 		{
 			Trace.Indent();
 			TraceEx.WriteLocation();
@@ -74,8 +74,59 @@ namespace MKY.Test.Equality.Methods
 			}
 		}
 
-		//                 TestOperatorsForValueEquality is useless since it never succeeds.
+		public static void TestOperatorsForValueEquality(Types.ReferenceTypeIEquatableWithBaseOperators_Base objToCompareAgainst, Types.ReferenceTypeIEquatableWithBaseOperators_Base objEqual, Types.ReferenceTypeIEquatableWithBaseOperators_Base objNotEqual)
+		{
+			Trace.Indent();
+			TraceEx.WriteLocation();
+			Trace.Indent();
 
+			try
+			{
+				// Value equal:
+
+				Trace.WriteLine("Value equal using operator ==()");
+				Trace.Indent();
+
+				if (!(objToCompareAgainst == objEqual))
+					Assert.Fail("Value equal objects are not considered equal using operator ==()");
+
+				Trace.Unindent();
+				Trace.WriteLine("Value equal using operator !=()");
+				Trace.Indent();
+
+				if (objToCompareAgainst != objEqual)
+					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
+
+				Trace.Unindent();
+
+				// Value not equal:
+
+				Trace.WriteLine("Value not equal using operator ==()");
+				Trace.Indent();
+
+				if (objToCompareAgainst == objNotEqual)
+					Assert.Fail("Value not equal objects are considered equal using operator ==()");
+
+				Trace.Unindent();
+				Trace.WriteLine("Value not equal using operator !=()");
+				Trace.Indent();
+
+				if (!(objToCompareAgainst != objNotEqual))
+					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
+
+				Trace.Unindent();
+			}
+			catch (AssertionException)
+			{
+				Trace.Unindent();
+				throw; // Re-throw!
+			}
+			finally
+			{
+				Trace.Unindent();
+				Trace.Unindent();
+			}
+		}
 	}
 }
 

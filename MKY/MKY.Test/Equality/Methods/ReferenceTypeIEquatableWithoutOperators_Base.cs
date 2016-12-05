@@ -20,7 +20,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
@@ -30,11 +29,11 @@ using NUnit.Framework;
 
 namespace MKY.Test.Equality.Methods
 {
-	internal static class ReferenceTypeList
+	internal static class ReferenceTypeIEquatableWithoutOperators_Base
 	{
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEquality(List<int> objToCompareAgainst, List<int> objEqual, List<int> objNotEqual)
+		public static void TestOperatorsForReferenceEquality(Types.ReferenceTypeIEquatableWithoutOperators_Base objToCompareAgainst, Types.ReferenceTypeIEquatableWithoutOperators_Base objEqual, Types.ReferenceTypeIEquatableWithoutOperators_Base objNotEqual)
 		{
 			Trace.Indent();
 			TraceEx.WriteLocation();
