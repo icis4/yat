@@ -32,53 +32,79 @@ namespace MKY.Test.Equality.Methods
 	{
 		public static void TestEquals<T>(T objToCompareAgainst, T objEqual, T objNotEqual)
 		{
-			Trace.Indent();
-			TraceEx.WriteLocation();
-			Trace.Indent();
+			if (Configuration.TraceCallingSequence) {
+				Trace.Indent();
+				TraceEx.WriteLocation();
+				Trace.Indent();
+			}
 
 			try
 			{
 				// Reference equal:
 
-				Trace.WriteLine("Reference equal using Equals()");
-				Trace.Indent();
+				if (Configuration.TraceCallingSequence) {
+					Trace.WriteLine("Reference equal using Equals()");
+					Trace.Indent();
+				}
 
 				if (!objToCompareAgainst.Equals(objToCompareAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using Equals()");
 
-				Trace.Unindent();
+				if (Configuration.TraceCallingSequence)
+					Trace.Unindent();
 
 				// Value equal:
 
-				Trace.WriteLine("Value equal using Equals()");
-				Trace.Indent();
+				if (Configuration.TraceCallingSequence) {
+					Trace.WriteLine("Value equal using Equals()");
+					Trace.Indent();
+				}
 
 				if (!objToCompareAgainst.Equals(objEqual))
 					Assert.Fail("Value equal objects are not considered equal using Equals()");
 
-				Trace.Unindent();
+				if (Configuration.TraceCallingSequence)
+					Trace.Unindent();
 
 				// Value not equal:
 
-				Trace.WriteLine("Value not equal using Equals()");
-				Trace.Indent();
+				if (Configuration.TraceCallingSequence) {
+					Trace.WriteLine("Value not equal using Equals()");
+					Trace.Indent();
+				}
 
 				if (objToCompareAgainst.Equals(objNotEqual))
 					Assert.Fail("Value not equal objects are considered equal using Equals()");
 
-				Trace.Unindent();
+				if (Configuration.TraceCallingSequence)
+					Trace.Unindent();
 			}
 			catch (AssertionException)
 			{
-				Trace.Unindent();
+				if (Configuration.TraceCallingSequence)
+					Trace.Unindent();
+
 				throw; // Re-throw!
 			}
 			finally
 			{
-				Trace.Unindent();
-				Trace.Unindent();
+				if (Configuration.TraceCallingSequence) {
+					Trace.Unindent();
+					Trace.Unindent();
+				}
 			}
 		}
+
+		// Note that generic methods like TestOperatorsForValueEquality<T>() where T : class and
+		// TestOperatorsForReferenceEquality<T>() where T : class would be possible to implement but
+		// would not work as expected since .NET does not call overloaded operators, as explained at
+		// http://stackoverflow.com/questions/390900/cant-operator-be-applied-to-generic-types-in-c:
+		//
+		// .NET generics do not act like C++ templates. In C++ templates, overload resolution occurs
+		// after the actual template parameters are known. In .NET generics (including C#), overload
+		// resolution occurs without knowing the actual generic parameters. The only information the
+		// compiler can use to choose the function to call comes from type constraints on the
+		// generic parameters.
 	}
 }
 
