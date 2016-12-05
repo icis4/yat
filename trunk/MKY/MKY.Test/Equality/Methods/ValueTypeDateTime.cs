@@ -36,9 +36,11 @@ namespace MKY.Test.Equality.Methods
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
 		public static void TestOperatorsForReferenceEquality(DateTime objToCompareAgainst, DateTime objEqual, DateTime objNotEqual)
 		{
-			Trace.Indent();
-			TraceEx.WriteLocation();
-			Trace.Indent();
+			if (Configuration.TraceCallingSequence) {
+				Trace.Indent();
+				TraceEx.WriteLocation();
+				Trace.Indent();
+			}
 
 			try
 			{
@@ -46,86 +48,111 @@ namespace MKY.Test.Equality.Methods
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
-				Trace.WriteLine("Reference equal using operator ==()");
-				Trace.Indent();
+				if (Configuration.TraceCallingSequence) {
+					Trace.WriteLine("Reference equal using operator ==()");
+					Trace.Indent();
+				}
 
 				if (!(objToCompareAgainst == objToCompareAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
-				Trace.Unindent();
-				Trace.WriteLine("Reference equal using operator !=()");
-				Trace.Indent();
+				if (Configuration.TraceCallingSequence) {
+					Trace.Unindent();
+					Trace.WriteLine("Reference equal using operator !=()");
+					Trace.Indent();
+				}
 
 				if (objToCompareAgainst != objToCompareAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
-				Trace.Unindent();
+				if (Configuration.TraceCallingSequence)
+					Trace.Unindent();
 
 				#pragma warning restore 1718
 			}
 			catch (AssertionException)
 			{
-				Trace.Unindent();
+				if (Configuration.TraceCallingSequence)
+					Trace.Unindent();
+
 				throw; // Re-throw!
 			}
 			finally
 			{
-				Trace.Unindent();
-				Trace.Unindent();
+				if (Configuration.TraceCallingSequence) {
+					Trace.Unindent();
+					Trace.Unindent();
+				}
 			}
 		}
 
 		public static void TestOperatorsForValueEquality(DateTime objToCompareAgainst, DateTime objEqual, DateTime objNotEqual)
 		{
-			Trace.Indent();
-			TraceEx.WriteLocation();
-			Trace.Indent();
+			if (Configuration.TraceCallingSequence) {
+				Trace.Indent();
+				TraceEx.WriteLocation();
+				Trace.Indent();
+			}
 
 			try
 			{
 				// Value equal:
 
-				Trace.WriteLine("Value equal using operator ==()");
-				Trace.Indent();
+				if (Configuration.TraceCallingSequence) {
+					Trace.WriteLine("Value equal using operator ==()");
+					Trace.Indent();
+				}
 
 				if (!(objToCompareAgainst == objEqual))
 					Assert.Fail("Value equal objects are not considered equal using operator ==()");
 
-				Trace.Unindent();
-				Trace.WriteLine("Value equal using operator !=()");
-				Trace.Indent();
+				if (Configuration.TraceCallingSequence) {
+					Trace.Unindent();
+					Trace.WriteLine("Value equal using operator !=()");
+					Trace.Indent();
+				}
 
 				if (objToCompareAgainst != objEqual)
 					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
 
-				Trace.Unindent();
+				if (Configuration.TraceCallingSequence)
+					Trace.Unindent();
 
 				// Value not equal:
 
-				Trace.WriteLine("Value not equal using operator ==()");
-				Trace.Indent();
+				if (Configuration.TraceCallingSequence) {
+					Trace.WriteLine("Value not equal using operator ==()");
+					Trace.Indent();
+				}
 
 				if (objToCompareAgainst == objNotEqual)
 					Assert.Fail("Value not equal objects are considered equal using operator ==()");
 
-				Trace.Unindent();
-				Trace.WriteLine("Value not equal using operator !=()");
-				Trace.Indent();
+				if (Configuration.TraceCallingSequence) {
+					Trace.Unindent();
+					Trace.WriteLine("Value not equal using operator !=()");
+					Trace.Indent();
+				}
 
 				if (!(objToCompareAgainst != objNotEqual))
 					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
 
-				Trace.Unindent();
+				if (Configuration.TraceCallingSequence)
+					Trace.Unindent();
 			}
 			catch (AssertionException)
 			{
-				Trace.Unindent();
+				if (Configuration.TraceCallingSequence)
+					Trace.Unindent();
+
 				throw; // Re-throw!
 			}
 			finally
 			{
-				Trace.Unindent();
-				Trace.Unindent();
+				if (Configuration.TraceCallingSequence) {
+					Trace.Unindent();
+					Trace.Unindent();
+				}
 			}
 		}
 	}
