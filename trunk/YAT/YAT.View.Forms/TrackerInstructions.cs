@@ -128,7 +128,7 @@ namespace YAT.View.Forms
 				case TrackerType.Feature:
 				{
 					sb.AppendLine("    > YAT version you are using.");
-					sb.AppendLine("    > Expected behaviour of the new feature.");
+					sb.AppendLine("    > Expected behavior of the new feature.");
 					sb.AppendLine("    > Use case(s) of the new feature.");
 					break;
 				}

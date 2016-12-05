@@ -39,7 +39,7 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static string ComposeMessage(string lead, Exception ex = null, string additionalLead = null, string additionalText = null)
 		{
 			StringBuilder sb = new StringBuilder();
@@ -74,7 +74,7 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static string ComposeMessage(string lead, string text, Exception ex = null, string additionalLead = null, string additionalText = null)
 		{
 			StringBuilder sb = new StringBuilder();

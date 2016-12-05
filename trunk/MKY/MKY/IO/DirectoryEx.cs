@@ -70,7 +70,7 @@ namespace MKY.IO
 		/// <summary>
 		/// Makes all files within a directory writable, including or excluding sub-directories.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static void MakeAllFilesWritable(string path, bool recursive = true)
 		{
 			if (Directory.Exists(path))

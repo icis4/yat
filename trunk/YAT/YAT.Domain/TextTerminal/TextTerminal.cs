@@ -96,7 +96,7 @@ namespace YAT.Domain
 			{
 				LinePosition = LinePosition.Begin;
 				LineElements = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-				EolElements  = new DisplayLinePart(); // Default behaviour regarding initial capacity is OK.
+				EolElements  = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
 				Eol = eol;
 			}
 
@@ -104,7 +104,7 @@ namespace YAT.Domain
 			{
 				LinePosition = LinePosition.Begin;
 				LineElements = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-				EolElements  = new DisplayLinePart(); // Default behaviour regarding initial capacity is OK.
+				EolElements  = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
 				Eol.Reset();
 			}
 		}
@@ -288,7 +288,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Tries to parse <paramref name="s"/>, taking the current settings into account.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public override bool TryParse(string s, out byte[] result, Radix defaultRadix = Radix.String)
 		{
 			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, TerminalSettings.Send.ToParseMode()))
@@ -570,7 +570,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		private void ExecuteData(LineState lineState, IODirection d, byte b, DisplayElementCollection elements)
 		{
-			DisplayLinePart lp = new DisplayLinePart(); // Default behaviour regarding initial capacity is OK.
+			DisplayLinePart lp = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
 
 			// Convert data:
 			DisplayElement de = ByteToElement(b, d);
@@ -738,7 +738,7 @@ namespace YAT.Domain
 			}
 
 			// Process line length:
-			DisplayLinePart lp = new DisplayLinePart(); // Default behaviour regarding initial capacity is OK.
+			DisplayLinePart lp = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
 			if (TerminalSettings.Display.ShowLength)
 			{
 				DisplayLinePart info;

@@ -46,7 +46,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes location to the given <see cref="TextWriter"/>.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static void WriteLocation(TextWriter writer, string message = null)
 		{
 			anyWriterWrapper.SetWriter(writer);
@@ -57,7 +57,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes time stamp and location to the given <see cref="TextWriter"/>.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static void WriteTimeStamp(TextWriter writer, string message = null)
 		{
 			anyWriterWrapper.SetWriter(writer);
@@ -69,7 +69,7 @@ namespace MKY.Diagnostics
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
 		/// to the given <see cref="TextWriter"/>.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static void WriteException(TextWriter writer, Type type, Exception ex, string leadMessage = null)
 		{
 			anyWriterWrapper.SetWriter(writer);
@@ -80,7 +80,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes a <see cref="StackTrace"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static void WriteStack(TextWriter writer, Type type, string leadMessage = null)
 		{
 			WriteStack(writer, type, new StackTrace(), leadMessage);
@@ -89,7 +89,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes a <see cref="StackTrace"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static void WriteStack(TextWriter writer, Type type, StackTrace st, string leadMessage = null)
 		{
 			anyWriterWrapper.SetWriter(writer);
@@ -100,7 +100,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes the properties of a <see cref="Message"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
 		public static void WriteWindowsFormsMessage(TextWriter writer, Type type, Message m, string leadMessage = null)
 		{
@@ -112,7 +112,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes the properties of a <see cref="FileStream"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static void WriteFileStream(TextWriter writer, Type type, FileStream fs, string leadMessage = null)
 		{
 			anyWriterWrapper.SetWriter(writer);

@@ -43,7 +43,7 @@ namespace MKY.IO
 		/// <summary>
 		/// Returns a unique file name for a file specified by path, unique part is separated by separator string.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static string MakeUniqueFileName(string path, string separator = "")
 		{
 			string dir  = Path.GetDirectoryName(path) + Path.DirectorySeparatorChar;

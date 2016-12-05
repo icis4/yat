@@ -55,7 +55,7 @@ namespace MKY.Diagnostics
 
 		/// <summary>Initializes the processor load evaluation.</summary>
 		/// <remarks>Call once as soon as the application is ready.</remarks>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static void Initialize(int minimumUpdateInterval = MinimumUpdateIntervalDefault)
 		{
 			lock (staticSyncObj)

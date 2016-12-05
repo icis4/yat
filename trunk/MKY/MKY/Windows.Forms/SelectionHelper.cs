@@ -67,7 +67,7 @@ namespace MKY.Windows.Forms
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "Same type as Select() above.")]
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static void Deselect(ComboBox control, string itemText = null)
 		{
 			if (string.IsNullOrEmpty(itemText))
@@ -118,7 +118,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static void Deselect(ToolStripComboBox control, string itemText = null)
 		{
 			if (string.IsNullOrEmpty(itemText))
