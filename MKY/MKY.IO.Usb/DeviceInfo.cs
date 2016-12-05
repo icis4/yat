@@ -537,7 +537,7 @@ namespace MKY.IO.Usb
 
 		/// <summary>
 		/// Determines whether this instance and the specified properties have value equality.
-		/// Note that the serial string is compared case-insensitive, same behaviour as Windows.
+		/// Note that the serial string is compared case-insensitive, same behavior as Windows.
 		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
@@ -549,8 +549,7 @@ namespace MKY.IO.Usb
 			(
 				VendorId .Equals(vendorId)  &&
 				ProductId.Equals(productId) &&
-				                      // Case-insensitive, same behaviour as Windows.
-				StringEx.EqualsOrdinalIgnoreCase(Serial, serial)
+				StringEx.EqualsOrdinalIgnoreCase(Serial, serial) // Case-insensitive, same behavior as Windows.
 			);
 
 			// Do not care about path, the path is likely to be system dependent.
@@ -763,7 +762,7 @@ namespace MKY.IO.Usb
 				else if (ProductId != other.ProductId)
 					return (ProductId.CompareTo(other.ProductId));
 				else
-					return (StringEx.CompareOrdinalIgnoreCase(Serial, other.Serial)); // Case-insensitive (i.e. Windows behaviour).
+					return (StringEx.CompareOrdinalIgnoreCase(Serial, other.Serial)); // Case-insensitive, same behavior as Windows.
 			}
 			else
 			{

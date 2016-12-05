@@ -605,7 +605,7 @@ namespace YAT.Domain
 
 			// Convert data:
 			DisplayElement de = ByteToElement(b, d);
-			DisplayLinePart lp = new DisplayLinePart(); // Default behaviour regarding initial capacity is OK.
+			DisplayLinePart lp = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
 
 			// Evaluate line breaks:
 			//  1. Evaluate the tricky case: Sequence before.
@@ -735,7 +735,7 @@ namespace YAT.Domain
 			line.AddRange(lineState.LineElements.Clone()); // Clone elements to ensure decoupling.
 
 			// Process line length:
-			DisplayLinePart lp = new DisplayLinePart(); // Default behaviour regarding initial capacity is OK.
+			DisplayLinePart lp = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
 			if (TerminalSettings.Display.ShowLength)
 			{
 				DisplayLinePart info;

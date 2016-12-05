@@ -35,7 +35,7 @@ namespace MKY.IO
 	public static class Temp
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static string MakeTempPath(Type type, bool outputPathToDebug = true)
 		{
 			// Results in e.g. "MKY".
@@ -61,7 +61,7 @@ namespace MKY.IO
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static void CleanTempPath(Type type, bool outputPathToDebug = true)
 		{
 			string path = MakeTempPath(type, false);
@@ -78,7 +78,7 @@ namespace MKY.IO
 
 		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
 		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static string MakeTempFileName(Type type, string extension = null)
 		{
 			return (MakeTempFileName(type, null, extension));
@@ -87,7 +87,7 @@ namespace MKY.IO
 		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
 		/// <param name="name">An additional name that is appended to the file name.</param>
 		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static string MakeTempFileName(Type type, string name, string extension = null)
 		{
 			return (MakeTempFileName(type, name, null, extension, true));
@@ -97,7 +97,7 @@ namespace MKY.IO
 		/// <param name="name">An additional name that is appended to the file name.</param>
 		/// <param name="postfix">Yet another postfix to the file name.</param>
 		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static string MakeTempFileName(Type type, string name, string postfix, string extension = null)
 		{
 			return (MakeTempFileName(type, name, postfix, extension, true));
@@ -124,7 +124,7 @@ namespace MKY.IO
 
 		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
 		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static string MakeTempFilePath(Type type, string extension = null)
 		{
 			return (MakeTempFilePath(type, null, extension));
@@ -133,7 +133,7 @@ namespace MKY.IO
 		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
 		/// <param name="name">An additional name that is appended to the file name.</param>
 		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static string MakeTempFilePath(Type type, string name, string extension = null)
 		{
 			return (MakeTempFilePath(type, name, extension, true));

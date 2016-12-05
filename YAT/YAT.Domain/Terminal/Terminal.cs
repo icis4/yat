@@ -811,7 +811,7 @@ namespace YAT.Domain
 		/// Tries to parse <paramref name="s"/>, taking the current settings into account.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public virtual bool TryParse(string s, out byte[] result, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
 			using (Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianness, TerminalSettings.Send.ToParseMode()))
@@ -834,7 +834,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void Send(string data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
 			// AssertNotDisposed() is called by Send() below.
@@ -843,7 +843,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void SendLine(string data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
 			// AssertNotDisposed() is called by Send() below.
@@ -859,7 +859,7 @@ namespace YAT.Domain
 		///  3. Response to first line is received and displayed
 		///     and so on, mix-up among sent and received lines...
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void SendLines(string[] data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
 			// AssertNotDisposed() is called by Send() below.
@@ -1036,7 +1036,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		protected virtual void ProcessParserResult(Parser.Result[] result, bool sendEol = false)
 		{
 			bool performLineDelay     = false; // \remind For binary terminals, this is rather a 'PacketDelay'.
@@ -2149,7 +2149,7 @@ namespace YAT.Domain
 		{
 			// Collection of elements processed, extends over one or multiple lines,
 			// depending on the number of bytes in raw chunk.
-			DisplayElementCollection elements = new DisplayElementCollection(); // Default behaviour regarding initial capacity is OK.
+			DisplayElementCollection elements = new DisplayElementCollection(); // Default behavior regarding initial capacity is OK.
 			List<DisplayLine> lines = new List<DisplayLine>();
 
 			ProcessRawChunk(raw, elements, lines);

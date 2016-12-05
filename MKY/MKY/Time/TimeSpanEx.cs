@@ -40,7 +40,7 @@ namespace MKY
 		/// Returns time span formatted with "d:hh:mm:ss[.f[f[f]]]".
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'hh' and 'ss' just happen to be proper format strings...")]
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static string FormatInvariantTimeSpan(TimeSpan timeSpan, bool tenths = false, bool hundredths = false, bool thousandths = false)
 		{
 			StringBuilder sb = new StringBuilder();

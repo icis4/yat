@@ -436,7 +436,7 @@ namespace MKY.Data
 		/// <summary>
 		/// Resumes change events.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void ResumeChangeEvent(bool forcePendingChangeEvent = true)
 		{
 			lock (this.changeEventSuspendedCountSyncObj)

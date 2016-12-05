@@ -98,7 +98,7 @@ namespace MKY.IO.Ports
 		/// Attention, this may take quite some time, depending on the available ports.
 		/// Therefore, the default value is <c>false</c>.
 		/// </param>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void FillWithAvailablePorts(bool retrieveCaptions = false)
 		{
 			lock (this)
@@ -161,7 +161,7 @@ namespace MKY.IO.Ports
 		/// <remarks>
 		/// Attention, this may take quite some time, depending on the available ports.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void RetrieveCaptions(bool forceRetrieveFromSystem = false)
 		{
 			bool useCaptionsFromCache;
@@ -221,7 +221,7 @@ namespace MKY.IO.Ports
 		/// be opened. Set the <see cref="SerialPortChangedAndCancelEventArgs.Cancel"/> property
 		/// to <c>true</c> to cancel port scanning.
 		/// </param>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual void DetectPortsInUse(EventHandler<SerialPortChangedAndCancelEventArgs> portChangedCallback = null)
 		{

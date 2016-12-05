@@ -72,7 +72,7 @@ namespace MKY.Net
 		/// <summary>
 		/// Fills list with all interfaces.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behaviour.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void FillWithAvailableLocalInterfaces(bool prependPredefined = true)
 		{
 			lock (this)
