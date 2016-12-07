@@ -29,11 +29,11 @@ using NUnit.Framework;
 
 namespace MKY.Test.Equality.Methods
 {
-	internal static class ReferenceTypeIEquatableWithBaseOperators_Base
+	internal static class ReferenceTypeIEquatableWithOperatorsOfBaseOnly_Derived
 	{
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEquality(Types.ReferenceTypeIEquatableWithBaseOperators_Base objToCompareAgainst, Types.ReferenceTypeIEquatableWithBaseOperators_Base objEqual, Types.ReferenceTypeIEquatableWithBaseOperators_Base objNotEqual)
+		public static void TestOperatorsForReferenceEquality(Types.ReferenceTypeIEquatableWithOperatorsOfBaseOnly_Derived objToEqualAgainst, Types.ReferenceTypeIEquatableWithOperatorsOfBaseOnly_Derived objEqual, Types.ReferenceTypeIEquatableWithOperatorsOfBaseOnly_Derived objNotEqual)
 		{
 			if (Configuration.TraceCallingSequence) {
 				Trace.Indent();
@@ -52,7 +52,7 @@ namespace MKY.Test.Equality.Methods
 					Trace.Indent();
 				}
 
-				if (!(objToCompareAgainst == objToCompareAgainst))
+				if (!(objToEqualAgainst == objToEqualAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
 				if (Configuration.TraceCallingSequence) {
@@ -61,7 +61,7 @@ namespace MKY.Test.Equality.Methods
 					Trace.Indent();
 				}
 
-				if (objToCompareAgainst != objToCompareAgainst)
+				if (objToEqualAgainst != objToEqualAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
 				if (Configuration.TraceCallingSequence)
@@ -85,7 +85,7 @@ namespace MKY.Test.Equality.Methods
 			}
 		}
 
-		public static void TestOperatorsForValueEquality(Types.ReferenceTypeIEquatableWithBaseOperators_Base objToCompareAgainst, Types.ReferenceTypeIEquatableWithBaseOperators_Base objEqual, Types.ReferenceTypeIEquatableWithBaseOperators_Base objNotEqual)
+		public static void TestOperatorsForValueEquality(Types.ReferenceTypeIEquatableWithOperatorsOfBaseOnly_Derived objToEqualAgainst, Types.ReferenceTypeIEquatableWithOperatorsOfBaseOnly_Derived objEqual, Types.ReferenceTypeIEquatableWithOperatorsOfBaseOnly_Derived objNotEqual)
 		{
 			if (Configuration.TraceCallingSequence) {
 				Trace.Indent();
@@ -102,7 +102,7 @@ namespace MKY.Test.Equality.Methods
 					Trace.Indent();
 				}
 
-				if (!(objToCompareAgainst == objEqual))
+				if (!(objToEqualAgainst == objEqual))
 					Assert.Fail("Value equal objects are not considered equal using operator ==()");
 
 				if (Configuration.TraceCallingSequence) {
@@ -111,7 +111,7 @@ namespace MKY.Test.Equality.Methods
 					Trace.Indent();
 				}
 
-				if (objToCompareAgainst != objEqual)
+				if (objToEqualAgainst != objEqual)
 					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
 
 				if (Configuration.TraceCallingSequence)
@@ -124,7 +124,7 @@ namespace MKY.Test.Equality.Methods
 					Trace.Indent();
 				}
 
-				if (objToCompareAgainst == objNotEqual)
+				if (objToEqualAgainst == objNotEqual)
 					Assert.Fail("Value not equal objects are considered equal using operator ==()");
 
 				if (Configuration.TraceCallingSequence) {
@@ -133,7 +133,7 @@ namespace MKY.Test.Equality.Methods
 					Trace.Indent();
 				}
 
-				if (!(objToCompareAgainst != objNotEqual))
+				if (!(objToEqualAgainst != objNotEqual))
 					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
 
 				if (Configuration.TraceCallingSequence)

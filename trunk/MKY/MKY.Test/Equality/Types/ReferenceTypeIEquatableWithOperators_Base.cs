@@ -122,14 +122,9 @@ namespace MKY.Test.Equality.Types
 			}
 			else // Normal implementation:
 			{
-				if (ReferenceEquals(other, null))
-					return (false);
-
-				if (ReferenceEquals(this, other))
-					return (true);
-
-				if (GetType() != other.GetType())
-					return (false);
+				if (ReferenceEquals(other, null)) return (false);
+				if (ReferenceEquals(this, other)) return (true);
+				if (GetType() != other.GetType()) return (false);
 
 				return (B.Equals(other.B));
 			}
@@ -167,7 +162,6 @@ namespace MKY.Test.Equality.Types
 				}
 
 				bool result = lhs.Equals(rhs);
-
 				Trace.WriteLine("Equals() results in " + result);
 				Trace.Unindent();
 				return (result);

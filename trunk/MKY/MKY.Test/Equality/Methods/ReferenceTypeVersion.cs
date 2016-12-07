@@ -34,7 +34,7 @@ namespace MKY.Test.Equality.Methods
 	{
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEquality(Version objToCompareAgainst, Version objEqual, Version objNotEqual)
+		public static void TestOperatorsForReferenceEquality(Version objToEqualAgainst, Version objEqual, Version objNotEqual)
 		{
 			if (Configuration.TraceCallingSequence) {
 				Trace.Indent();
@@ -53,7 +53,7 @@ namespace MKY.Test.Equality.Methods
 					Trace.Indent();
 				}
 
-				if (!(objToCompareAgainst == objToCompareAgainst))
+				if (!(objToEqualAgainst == objToEqualAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
 				if (Configuration.TraceCallingSequence) {
@@ -62,7 +62,7 @@ namespace MKY.Test.Equality.Methods
 					Trace.Indent();
 				}
 
-				if (objToCompareAgainst != objToCompareAgainst)
+				if (objToEqualAgainst != objToEqualAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
 				if (Configuration.TraceCallingSequence)
@@ -86,7 +86,7 @@ namespace MKY.Test.Equality.Methods
 			}
 		}
 
-		public static void TestOperatorsForValueEquality(Version objToCompareAgainst, Version objEqual, Version objNotEqual)
+		public static void TestOperatorsForValueEquality(Version objToEqualAgainst, Version objEqual, Version objNotEqual)
 		{
 			Trace.Indent();
 			TraceEx.WriteLocation();
@@ -99,14 +99,14 @@ namespace MKY.Test.Equality.Methods
 				Trace.WriteLine("Value equal using operator ==()");
 				Trace.Indent();
 
-				if (!(objToCompareAgainst == objEqual))
+				if (!(objToEqualAgainst == objEqual))
 					Assert.Fail("Value equal objects are not considered equal using operator ==()");
 
 				Trace.Unindent();
 				Trace.WriteLine("Value equal using operator !=()");
 				Trace.Indent();
 
-				if (objToCompareAgainst != objEqual)
+				if (objToEqualAgainst != objEqual)
 					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
 
 				Trace.Unindent();
@@ -116,14 +116,14 @@ namespace MKY.Test.Equality.Methods
 				Trace.WriteLine("Value not equal using operator ==()");
 				Trace.Indent();
 
-				if (objToCompareAgainst == objNotEqual)
+				if (objToEqualAgainst == objNotEqual)
 					Assert.Fail("Value not equal objects are considered equal using operator ==()");
 
 				Trace.Unindent();
 				Trace.WriteLine("Value not equal using operator !=()");
 				Trace.Indent();
 
-				if (!(objToCompareAgainst != objNotEqual))
+				if (!(objToEqualAgainst != objNotEqual))
 					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
 
 				Trace.Unindent();

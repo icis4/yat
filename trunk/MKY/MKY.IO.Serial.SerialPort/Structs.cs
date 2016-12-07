@@ -120,10 +120,6 @@ namespace MKY.IO.Serial.SerialPort
 		/// </summary>
 		public static bool operator ==(OutputBufferSize lhs, OutputBufferSize rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
 			return (lhs.Equals(rhs));
 		}
 
@@ -232,10 +228,6 @@ namespace MKY.IO.Serial.SerialPort
 		/// </summary>
 		public static bool operator ==(ChunkSize lhs, ChunkSize rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
 			return (lhs.Equals(rhs));
 		}
 
@@ -353,10 +345,6 @@ namespace MKY.IO.Serial.SerialPort
 		/// </summary>
 		public static bool operator ==(SendRate lhs, SendRate rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
 			return (lhs.Equals(rhs));
 		}
 

@@ -157,10 +157,6 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public static bool operator ==(SerialPortControlPins lhs, SerialPortControlPins rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
 			return (lhs.Equals(rhs));
 		}
 
@@ -315,10 +311,6 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public static bool operator ==(SerialPortControlPinCount lhs, SerialPortControlPinCount rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
 			return (lhs.Equals(rhs));
 		}
 

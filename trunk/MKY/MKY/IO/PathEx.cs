@@ -974,10 +974,6 @@ namespace MKY.IO
 		/// </summary>
 		public static bool operator ==(PathCompareResult lhs, PathCompareResult rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
 			return (lhs.Equals(rhs));
 		}
 

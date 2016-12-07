@@ -254,14 +254,9 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public bool Equals(SerialHidReportFormat other)
 		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (ReferenceEquals(this, other))
-				return (true);
-
-			if (GetType() != other.GetType())
-				return (false);
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
+			if (GetType() != other.GetType()) return (false);
 
 			return
 			(

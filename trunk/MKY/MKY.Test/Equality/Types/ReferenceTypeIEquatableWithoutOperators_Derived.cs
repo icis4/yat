@@ -126,14 +126,10 @@ namespace MKY.Test.Equality.Types
 			}
 			else // Normal implementation:
 			{
-				if (ReferenceEquals(other, null))
-					return (false);
+				if (ReferenceEquals(other, null)) return (false);
+				if (ReferenceEquals(this, other)) return (true);
+				if (GetType() != other.GetType()) return (false);
 
-				if (ReferenceEquals(this, other))
-					return (true);
-
-				if (GetType() != other.GetType())
-					return (false);
 				return (base.Equals(other) && D.Equals(other.D));
 			}
 		}

@@ -172,14 +172,9 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public bool Equals(PredefinedCommandPage other)
 		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (ReferenceEquals(this, other))
-				return (true);
-
-			if (GetType() != other.GetType())
-				return (false);
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
+			if (GetType() != other.GetType()) return (false);
 
 			// Compare page name, i.e. header of page:
 			if (!StringEx.EqualsOrdinal(PageName, other.PageName))

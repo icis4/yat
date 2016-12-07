@@ -374,11 +374,8 @@ namespace MKY.Settings
 		/// </summary>
 		public bool Equals(SettingsItem other)
 		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (ReferenceEquals(this, other))
-				return (true);
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
 
 			if (GetType() == other.GetType())
 			{

@@ -34,7 +34,7 @@ namespace MKY.Test.Equality.Methods
 	{
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
 		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEquality(List<int> objToCompareAgainst, List<int> objEqual, List<int> objNotEqual)
+		public static void TestOperatorsForReferenceEquality(List<int> objToEqualAgainst, List<int> objEqual, List<int> objNotEqual)
 		{
 			if (Configuration.TraceCallingSequence) {
 				Trace.Indent();
@@ -53,7 +53,7 @@ namespace MKY.Test.Equality.Methods
 					Trace.Indent();
 				}
 
-				if (!(objToCompareAgainst == objToCompareAgainst))
+				if (!(objToEqualAgainst == objToEqualAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
 				if (Configuration.TraceCallingSequence) {
@@ -62,7 +62,7 @@ namespace MKY.Test.Equality.Methods
 					Trace.Indent();
 				}
 
-				if (objToCompareAgainst != objToCompareAgainst)
+				if (objToEqualAgainst != objToEqualAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
 				if (Configuration.TraceCallingSequence)

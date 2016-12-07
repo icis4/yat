@@ -151,14 +151,9 @@ namespace MKY.Test.Settings
 			/// </remarks>
 			public bool Equals(TestTreeChildLevel2 other)
 			{
-				if (ReferenceEquals(other, null))
-					return (false);
-
-				if (ReferenceEquals(this, other))
-					return (true);
-
-				if (GetType() != other.GetType())
-					return (false);
+				if (ReferenceEquals(other, null)) return (false);
+				if (ReferenceEquals(this, other)) return (true);
+				if (GetType() != other.GetType()) return (false);
 
 				return
 				(
@@ -322,14 +317,9 @@ namespace MKY.Test.Settings
 			/// </remarks>
 			public bool Equals(TestTreeChildLevel1 other)
 			{
-				if (ReferenceEquals(other, null))
-					return (false);
-
-				if (ReferenceEquals(this, other))
-					return (true);
-
-				if (GetType() != other.GetType())
-					return (false);
+				if (ReferenceEquals(other, null)) return (false);
+				if (ReferenceEquals(this, other)) return (true);
+				if (GetType() != other.GetType()) return (false);
 
 				return
 				(
@@ -471,14 +461,9 @@ namespace MKY.Test.Settings
 			/// </remarks>
 			public bool Equals(TestTreeRoot other)
 			{
-				if (ReferenceEquals(other, null))
-					return (false);
-
-				if (ReferenceEquals(this, other))
-					return (true);
-
-				if (GetType() != other.GetType())
-					return (false);
+				if (ReferenceEquals(other, null)) return (false);
+				if (ReferenceEquals(this, other)) return (true);
+				if (GetType() != other.GetType()) return (false);
 
 				return
 				(

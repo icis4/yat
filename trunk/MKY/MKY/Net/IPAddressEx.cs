@@ -33,7 +33,29 @@ namespace MKY.Net
 	public static class IPAddressEx
 	{
 		/// <summary>
-		/// Evaluates whether the given <paramref name="address"/> has the value of <see cref="IPAddress.None"/>.
+		/// Determines whether the specified <see cref="IPAddress"/> instances are considered equal.
+		/// </summary>
+		/// <remarks>
+		/// Convenience method because <see cref="IPAddress"/> does not override the ==/!= operators, thanks Microsoft guys...
+		/// 
+		/// This method is simply a wrapper to <see cref="object.Equals(object, object)"/>.
+		/// It can e.g. be used to implement an overloaded Equals() method.
+		/// 
+		/// Note the logic behind <see cref="object.Equals(object, object)"/>:
+		///  - If both objects represent the same object reference, it returns true.
+		///  - If either or object is <c>null</c>, it returns false.
+		///  - Otherwise, it calls objA.Equals(objB) and returns the result.
+		/// </remarks>
+		/// <param name="addressA">The first <see cref="IPAddress"/> to compare.</param>
+		/// <param name="addressB">The second <see cref="IPAddress"/> to compare.</param>
+		/// <returns><c>true</c> if the instances are equal; otherwise <c>false</c>.</returns>
+		public static bool Equals(IPAddress addressA, IPAddress addressB)
+		{
+			return (object.Equals(addressA, addressB));
+		}
+
+		/// <summary>
+		/// Determines whether the specified <paramref name="address"/> has the value of <see cref="IPAddress.None"/>.
 		/// </summary>
 		/// <remarks>
 		/// Convenience method because <see cref="IPAddress"/> does not override the ==/!= operators, thanks Microsoft guys...
@@ -49,7 +71,7 @@ namespace MKY.Net
 		}
 
 		/// <summary>
-		/// Evaluates whether the given <paramref name="address"/> has a value other than <see cref="IPAddress.None"/>.
+		/// Determines whether the specified <paramref name="address"/> has a value other than <see cref="IPAddress.None"/>.
 		/// </summary>
 		/// <remarks>
 		/// Convenience method because <see cref="IPAddress"/> does not override the ==/!= operators, thanks Microsoft guys...

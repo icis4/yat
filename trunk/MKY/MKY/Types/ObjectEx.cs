@@ -40,11 +40,11 @@ namespace MKY
 		public const int InvalidComparisonResult = -1;
 
 		/// <summary>
-		/// Compares two specified objects.
+		/// Determines whether the specified <see cref="object"/> instances are considered equal.
 		/// </summary>
 		/// <remarks>
 		/// This method is simply a wrapper to <see cref="object.Equals(object, object)"/>. It can
-		/// be used to implement an overloaded Equals() method. Calling this method is preferred
+		/// e.g. be used to implement an overloaded Equals() method. Calling this method is preferred
 		/// over directly calling <see cref="object.Equals(object, object)"/> or the respective base
 		/// method <see cref="System.Object.Equals(object, object)"/> to prevent code check from
 		/// suggesting to simply call <see cref="Equals(object, object)"/> as that could result in
@@ -55,6 +55,9 @@ namespace MKY
 		///  - If either or object is <c>null</c>, it returns false.
 		///  - Otherwise, it calls objA.Equals(objB) and returns the result.
 		/// </remarks>
+		/// <param name="objA">The first <see cref="object"/> to compare.</param>
+		/// <param name="objB">The second <see cref="object"/> to compare.</param>
+		/// <returns><c>true</c> if the instances are equal; otherwise <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "Same naming as 'object.Equals()'.")]
 		public static new bool Equals(object objA, object objB)
 		{

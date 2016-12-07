@@ -350,14 +350,9 @@ namespace YAT/*.<TODO>*/
 		/// </remarks>
 		public bool Equals(TODO other)
 		{
-			if (ReferenceEquals(other, null)) // !!! Remove for value types !!!
-				return (false);
-
-			if (ReferenceEquals(this, other)) // !!! Remove for value types !!!
-				return (true);
-
-			if (GetType() != other.GetType()) // !!! Remove for value types !!!
-				return (false);
+			if (ReferenceEquals(other, null)) return (false); // !!! Remove for value types !!!
+			if (ReferenceEquals(this, other)) return (true);  // !!! Remove for value types !!!
+			if (GetType() != other.GetType()) return (false); // !!! Remove for value types !!!
 
 			return
 			(
@@ -398,9 +393,9 @@ namespace YAT/*.<TODO>*/
 		/// </summary>
 		public static bool operator ==(TODO lhs, TODO rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
+			if (ReferenceEquals(lhs, rhs))  return (true);  // !!! Remove for value types !!!
+			if (ReferenceEquals(lhs, null)) return (false); // !!! Remove for value types !!!
+			if (ReferenceEquals(rhs, null)) return (false); // !!! Remove for value types !!!
 
 			return (lhs.Equals(rhs));
 		}

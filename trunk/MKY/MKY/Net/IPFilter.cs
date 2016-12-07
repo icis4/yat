@@ -116,20 +116,16 @@ namespace MKY.Net
 
 		/// <summary></summary>
 		public IPFilterEx(IPAddress address)
-		{                        // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+		{
+			if (address == null)
+				throw (new ArgumentNullException("address", "An IP address is required!"));
+
+			                    // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 			if      (address.Equals(IPAddress.Any))          { SetUnderlyingEnum(IPFilter.Any);           this.explicitAddress = IPAddress.None; }
 			else if (address.Equals(IPAddress.Loopback))     { SetUnderlyingEnum(IPFilter.Localhost);     this.explicitAddress = IPAddress.None; }
 			else if (address.Equals(IPAddress.IPv6Any))      { SetUnderlyingEnum(IPFilter.IPv6Any);       this.explicitAddress = IPAddress.None; }
 			else if (address.Equals(IPAddress.IPv6Loopback)) { SetUnderlyingEnum(IPFilter.IPv6Localhost); this.explicitAddress = IPAddress.None; }
-			else
-			{
-				if (address == null)
-					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'IPFilter.Explicit' requires an IP address or host name!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "address"));
-
-				SetUnderlyingEnum(IPFilter.Explicit);
-
-				this.explicitAddress = address;
-			}
+			else                                             { SetUnderlyingEnum(IPFilter.Explicit);      this.explicitAddress = address;        }
 
 			// Note that 'IPAddressFilter.IPv4Any|Localhost' cannot be distinguished from 'IPAddressFilter.IPv4Any|Localhost' when 'IPAddress.Any|Loopback' is given.
 		}
@@ -140,7 +136,6 @@ namespace MKY.Net
 		public IPFilterEx(string name)
 		{
 			SetUnderlyingEnum(IPFilter.Explicit);
-
 			this.explicitName = name;
 		}
 
@@ -150,7 +145,6 @@ namespace MKY.Net
 		public IPFilterEx(string name, IPAddress address)
 		{
 			SetUnderlyingEnum(IPFilter.Explicit);
-
 			this.explicitName = name;
 
 			if (address != null) // Keep 'IPAddress.None' otherwise.
@@ -373,14 +367,9 @@ namespace MKY.Net
 		/// </summary>
 		public bool Equals(IPFilterEx other)
 		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (ReferenceEquals(this, other))
-				return (true);
-
-			if (GetType() != other.GetType())
-				return (false);
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
+			if (GetType() != other.GetType()) return (false);
 
 			if ((IPFilter)UnderlyingEnum == IPFilter.Explicit)
 			{
@@ -399,8 +388,8 @@ namespace MKY.Net
 					(
 						base.Equals(other) &&
 					////this.explicitName is not given.
-						this.explicitAddress.Equals(other.explicitAddress) // Explicit address is always given, at least 'IPAdress.None'.
-					);                         // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+						IPAddressEx.Equals(this.explicitAddress, other.explicitAddress)
+					);
 				}
 			}
 			else

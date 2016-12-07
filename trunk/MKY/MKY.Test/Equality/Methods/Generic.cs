@@ -30,7 +30,7 @@ namespace MKY.Test.Equality.Methods
 {
 	internal static class Generic
 	{
-		public static void TestEquals<T>(T objToCompareAgainst, T objEqual, T objNotEqual)
+		public static void TestEquals<T>(T objToEqualAgainst, T objEqual, T objNotEqual)
 		{
 			if (Configuration.TraceCallingSequence) {
 				Trace.Indent();
@@ -47,7 +47,7 @@ namespace MKY.Test.Equality.Methods
 					Trace.Indent();
 				}
 
-				if (!objToCompareAgainst.Equals(objToCompareAgainst))
+				if (!objToEqualAgainst.Equals(objToEqualAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using Equals()");
 
 				if (Configuration.TraceCallingSequence)
@@ -60,7 +60,7 @@ namespace MKY.Test.Equality.Methods
 					Trace.Indent();
 				}
 
-				if (!objToCompareAgainst.Equals(objEqual))
+				if (!objToEqualAgainst.Equals(objEqual))
 					Assert.Fail("Value equal objects are not considered equal using Equals()");
 
 				if (Configuration.TraceCallingSequence)
@@ -73,7 +73,7 @@ namespace MKY.Test.Equality.Methods
 					Trace.Indent();
 				}
 
-				if (objToCompareAgainst.Equals(objNotEqual))
+				if (objToEqualAgainst.Equals(objNotEqual))
 					Assert.Fail("Value not equal objects are considered equal using Equals()");
 
 				if (Configuration.TraceCallingSequence)

@@ -32,7 +32,7 @@ namespace MKY.Net
 	public static class IPEndPointEx
 	{
 		/// <summary>
-		/// Evaluates whether the given <paramref name="port"/> has a valid value.
+		/// Determines whether the specified <paramref name="port"/> has a valid value.
 		/// </summary>
 		/// <param name="port">Port to evaluate.</param>
 		/// <returns><c>true</c> if value is valid, <c>false</c> otherwise.</returns>

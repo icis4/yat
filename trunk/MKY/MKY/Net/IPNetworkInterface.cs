@@ -141,7 +141,6 @@ namespace MKY.Net
 						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'IPNetworkInterface.Explicit' requires an IP address!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 					SetUnderlyingEnum(IPNetworkInterface.Explicit);
-
 					this.explicitDescription = description;
 					this.explicitAddress     = address;
 				}
@@ -294,14 +293,9 @@ namespace MKY.Net
 		/// </summary>
 		public bool Equals(IPNetworkInterfaceEx other)
 		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (ReferenceEquals(this, other))
-				return (true);
-
-			if (GetType() != other.GetType())
-				return (false);
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
+			if (GetType() != other.GetType()) return (false);
 
 			if ((IPNetworkInterface)UnderlyingEnum == IPNetworkInterface.Explicit)
 			{
@@ -309,8 +303,8 @@ namespace MKY.Net
 				(
 					base.Equals(other) &&
 					StringEx.EqualsOrdinalIgnoreCase(this.explicitDescription, other.explicitDescription) &&
-					ObjectEx.Equals(this.explicitAddress, other.explicitAddress) // Explicit address is always given, at least 'IPAdress.None'.
-				);                         // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+					IPAddressEx.Equals              (this.explicitAddress,     other.explicitAddress)
+				);
 			}
 			else
 			{
@@ -327,14 +321,9 @@ namespace MKY.Net
 		/// </summary>
 		public bool EqualsDescription(IPNetworkInterfaceEx other)
 		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (ReferenceEquals(this, other))
-				return (true);
-
-			if (GetType() != other.GetType())
-				return (false);
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
+			if (GetType() != other.GetType()) return (false);
 
 			if ((IPNetworkInterface)UnderlyingEnum == IPNetworkInterface.Explicit)
 			{

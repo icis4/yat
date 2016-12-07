@@ -116,10 +116,6 @@ namespace YAT.Domain
 		/// </summary>
 		public static bool operator ==(TextLineSendDelay lhs, TextLineSendDelay rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
 			return (lhs.Equals(rhs));
 		}
 
@@ -212,10 +208,6 @@ namespace YAT.Domain
 		/// </summary>
 		public static bool operator ==(WaitForResponse lhs, WaitForResponse rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
 			return (lhs.Equals(rhs));
 		}
 

@@ -85,6 +85,10 @@ namespace MKY.Test.Types
 			/// </summary>
 			public override bool Equals(object obj)
 			{
+				if (ReferenceEquals(other, null)) return (false);
+				if (ReferenceEquals(this, other)) return (true);
+				if (GetType() != other.GetType()) return (false);
+
 				return (Equals(obj as SimpleReferenceType));
 			}
 
@@ -97,14 +101,9 @@ namespace MKY.Test.Types
 			/// </remarks>
 			public bool Equals(SimpleReferenceType other)
 			{
-				if (ReferenceEquals(other, null))
-					return (false);
-
-				if (ReferenceEquals(this, other))
-					return (true);
-
-				if (GetType() != other.GetType())
-					return (false);
+				if (ReferenceEquals(other, null)) return (false);
+				if (ReferenceEquals(this, other)) return (true);
+				if (GetType() != other.GetType()) return (false);
 
 				return
 				(
