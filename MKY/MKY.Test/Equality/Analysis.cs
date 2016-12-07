@@ -468,13 +468,7 @@ namespace MKY.Test.Equality
 			Methods.ReferenceTypeObject.TestOperatorsForReferenceEquality(objToEqualAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
 			Methods.ReferenceTypeIEquatableWithOperatorsOfBaseOnly_Derived.TestOperatorsForReferenceEquality(objToEqualAgainst, objEqual, objNotEqual);
-
-			if (!(((b2 == d2) && (b3 != d3) && (d2 != d3)) ||
-			      ((b2 != d2) && (b3 == d3) && (d2 != d3))))
-				Methods.ReferenceTypeIEquatableWithOperatorsOfBaseOnly_Derived.TestOperatorsForValueEquality(objToEqualAgainst, objEqual, objNotEqual);
-			else
-				Assert.Ignore("With base operators only, value equality cannot be determined in cases where only D differs.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			Methods.ReferenceTypeIEquatableWithOperatorsOfBaseOnly_Derived.TestOperatorsForValueEquality    (objToEqualAgainst, objEqual, objNotEqual);
 		}
 
 		/// <summary></summary>
@@ -491,13 +485,7 @@ namespace MKY.Test.Equality
 			Methods.ReferenceTypeObject.TestOperatorsForReferenceEquality(objToEqualAgainst, objEqual, objNotEqual);
 			//// object.operators ==/!= only evaluate reference equality.
 			Methods.ReferenceTypeIEquatableWithOperatorsOfDerivedOnly_DerivedDerived.TestOperatorsForReferenceEquality(objToEqualAgainst, objEqual, objNotEqual);
-
-			if (!(((b2 == d2) && (d2 == dd2) && (b3 == d3) && (d3 != dd3) && (b2 == b3) && (dd2 != dd3)) ||
-			      ((b2 == d2) && (d2 != dd2) && (b3 == d3) && (d3 == dd3) && (b2 == b3) && (dd2 != dd3))))
-				Methods.ReferenceTypeIEquatableWithOperatorsOfDerivedOnly_DerivedDerived.TestOperatorsForValueEquality(objToEqualAgainst, objEqual, objNotEqual);
-			else
-				Assert.Ignore("With derived operators only, value equality cannot be determined in cases where only DD differs.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			Methods.ReferenceTypeIEquatableWithOperatorsOfDerivedOnly_DerivedDerived.TestOperatorsForValueEquality    (objToEqualAgainst, objEqual, objNotEqual);
 		}
 
 		#endregion
