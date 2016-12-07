@@ -277,10 +277,6 @@ namespace YAT.Model.Test
 			/// </summary>
 			public static bool operator ==(TestSet lhs, TestSet rhs)
 			{
-				if (ReferenceEquals(lhs, rhs))  return (true);
-				if (ReferenceEquals(lhs, null)) return (false);
-				if (ReferenceEquals(rhs, null)) return (false);
-
 				return (lhs.Equals(rhs));
 			}
 

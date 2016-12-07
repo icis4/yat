@@ -115,14 +115,9 @@ namespace MKY.Test.Equality.Types
 			}
 			else // Normal implementation:
 			{
-				if (ReferenceEquals(obj, null))
-					return (false);
-
-				if (ReferenceEquals(this, obj))
-					return (true);
-
-				if (GetType() != obj.GetType())
-					return (false);
+				if (ReferenceEquals(obj, null)) return (false);
+				if (ReferenceEquals(this, obj)) return (true);
+				if (GetType() != obj.GetType()) return (false);
 
 				var other = (obj as ReferenceTypeNotIEquatableWithOperators_Base);
 				return (B.Equals(other.B));
@@ -161,7 +156,6 @@ namespace MKY.Test.Equality.Types
 				}
 
 				bool result = lhs.Equals(rhs);
-
 				Trace.WriteLine("Equals() results in " + result);
 				Trace.Unindent();
 				return (result);

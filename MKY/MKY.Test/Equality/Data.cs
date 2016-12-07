@@ -34,7 +34,7 @@ namespace MKY.Test.Equality
 		{
 			get
 			{
-				yield return (new TestCaseData(1, 1, 2).SetName("Base"));
+				yield return (new TestCaseData(1, 1, 2).SetName("Equal : B == B / Not Equal : B != B"));
 			}
 		}
 
@@ -43,18 +43,20 @@ namespace MKY.Test.Equality
 		{
 			get
 			{
-				yield return (new TestCaseData(1, 1, 1, 1, 2, 2).SetName("Equal : Base == Derived / Not Equal : Base == Derived"));
+				yield return (new TestCaseData(1, 1, 1, 1, 2, 2).SetName("Equal : B == D / Not Equal : B == D"));
 
-				yield return (new TestCaseData(1, 1, 1, 1, 1, 2).SetName("Equal : Base == Derived / Not Equal : Base != Derived / A"));
-				yield return (new TestCaseData(1, 1, 1, 1, 2, 1).SetName("Equal : Base == Derived / Not Equal : Base != Derived / B"));
+				yield return (new TestCaseData(1, 1, 1, 1, 1, 2).SetName("Equal : B == D / Not Equal : B != D (D)"));
+				yield return (new TestCaseData(2, 2, 2, 2, 1, 2).SetName("Equal : B == D / Not Equal : B != D (B)"));
+				yield return (new TestCaseData(1, 1, 1, 1, 2, 1).SetName("Equal : B == D / Not Equal : B != D (B)"));
+				yield return (new TestCaseData(2, 2, 2, 2, 2, 1).SetName("Equal : B == D / Not Equal : B != D (D)"));
 
-				yield return (new TestCaseData(1, 2, 1, 2, 1, 1).SetName("Equal : Base != Derived / Not Equal : Base == Derived / AA"));
-				yield return (new TestCaseData(1, 2, 1, 2, 2, 2).SetName("Equal : Base != Derived / Not Equal : Base == Derived / AB"));
-				yield return (new TestCaseData(2, 1, 2, 1, 1, 1).SetName("Equal : Base != Derived / Not Equal : Base == Derived / BA"));
-				yield return (new TestCaseData(2, 1, 2, 1, 2, 2).SetName("Equal : Base != Derived / Not Equal : Base == Derived / BB"));
+				yield return (new TestCaseData(1, 2, 1, 2, 1, 1).SetName("Equal : B != D (D) / Not Equal : B == D"));
+				yield return (new TestCaseData(1, 2, 1, 2, 2, 2).SetName("Equal : B != D (B) / Not Equal : B == D"));
+				yield return (new TestCaseData(2, 1, 2, 1, 1, 1).SetName("Equal : B != D (B) / Not Equal : B == D"));
+				yield return (new TestCaseData(2, 1, 2, 1, 2, 2).SetName("Equal : B != D (D) / Not Equal : B == D"));
 
-				yield return (new TestCaseData(1, 2, 1, 2, 2, 1).SetName("Equal : Base != Derived / Not Equal : Base != Derived / A"));
-				yield return (new TestCaseData(2, 1, 2, 1, 1, 2).SetName("Equal : Base != Derived / Not Equal : Base != Derived / B"));
+				yield return (new TestCaseData(1, 2, 1, 2, 2, 1).SetName("Equal : B != D (D) / Not Equal : B != D (B)"));
+				yield return (new TestCaseData(2, 1, 2, 1, 1, 2).SetName("Equal : B != D (B) / Not Equal : B != D (D)"));
 			}
 		}
 
@@ -63,18 +65,58 @@ namespace MKY.Test.Equality
 		{
 			get
 			{
-				yield return (new TestCaseData(1, 1, 1, 1, 1, 1, 3, 3, 3).SetName("Equal : Base == Derived / Not Equal : Base == Derived"));
+				yield return (new TestCaseData(1, 1, 1, 1, 1, 1, 2, 2, 2).SetName("Equal : B == D == DD / Not Equal : B == D == DD"));
 
-				yield return (new TestCaseData(1, 1, 1, 1, 1, 1, 1, 2, 3).SetName("Equal : Base == Derived / Not Equal : Base != Derived / A"));
-				yield return (new TestCaseData(1, 1, 1, 1, 1, 1, 3, 2, 1).SetName("Equal : Base == Derived / Not Equal : Base != Derived / B"));
+				yield return (new TestCaseData(1, 1, 1, 1, 1, 1, 1, 2, 2).SetName("Equal : B == D == DD / Not Equal : B != D == DD (D)"));
+				yield return (new TestCaseData(2, 2, 2, 2, 2, 2, 1, 2, 2).SetName("Equal : B == D == DD / Not Equal : B != D == DD (B)"));
+				yield return (new TestCaseData(3, 3, 3, 3, 3, 3, 1, 2, 2).SetName("Equal : B == D == DD / Not Equal : B != D == DD (B, D)"));
+				yield return (new TestCaseData(1, 1, 1, 1, 1, 1, 2, 1, 1).SetName("Equal : B == D == DD / Not Equal : B != D == DD (B)"));
+				yield return (new TestCaseData(2, 2, 2, 2, 2, 2, 2, 1, 1).SetName("Equal : B == D == DD / Not Equal : B != D == DD (D)"));
+				yield return (new TestCaseData(3, 3, 3, 3, 3, 3, 2, 1, 1).SetName("Equal : B == D == DD / Not Equal : B != D == DD (B, D)"));
+				yield return (new TestCaseData(1, 1, 1, 1, 1, 1, 1, 1, 2).SetName("Equal : B == D == DD / Not Equal : B == D != DD (DD)"));
+				yield return (new TestCaseData(2, 2, 2, 2, 2, 2, 1, 1, 2).SetName("Equal : B == D == DD / Not Equal : B == D != DD (D)"));
+				yield return (new TestCaseData(3, 3, 3, 3, 3, 3, 1, 1, 2).SetName("Equal : B == D == DD / Not Equal : B == D != DD (D, DD)"));
+				yield return (new TestCaseData(1, 1, 1, 1, 1, 1, 2, 2, 1).SetName("Equal : B == D == DD / Not Equal : B == D != DD (D)"));
+				yield return (new TestCaseData(2, 2, 2, 2, 2, 2, 2, 2, 1).SetName("Equal : B == D == DD / Not Equal : B == D != DD (DD)"));
+				yield return (new TestCaseData(3, 3, 3, 3, 3, 3, 2, 2, 1).SetName("Equal : B == D == DD / Not Equal : B == D != DD (D, DD)"));
+				yield return (new TestCaseData(1, 1, 1, 1, 1, 1, 1, 2, 3).SetName("Equal : B == D == DD / Not Equal : B != D != DD (D, DD)"));
+				yield return (new TestCaseData(2, 2, 2, 2, 2, 2, 1, 2, 3).SetName("Equal : B == D == DD / Not Equal : B != D != DD (B, DD)"));
+				yield return (new TestCaseData(3, 3, 3, 3, 3, 3, 1, 2, 3).SetName("Equal : B == D == DD / Not Equal : B != D != DD (B, D)"));
+				yield return (new TestCaseData(1, 1, 1, 1, 1, 1, 3, 2, 1).SetName("Equal : B == D == DD / Not Equal : B != D != DD (B, D)"));
+				yield return (new TestCaseData(2, 2, 2, 2, 2, 2, 3, 2, 1).SetName("Equal : B == D == DD / Not Equal : B != D != DD (B, DD)"));
+				yield return (new TestCaseData(3, 3, 3, 3, 3, 3, 3, 2, 1).SetName("Equal : B == D == DD / Not Equal : B != D != DD (D, DD)"));
 
-				yield return (new TestCaseData(1, 2, 3, 1, 2, 3, 1, 1, 1).SetName("Equal : Base != Derived / Not Equal : Base == Derived / AA"));
-				yield return (new TestCaseData(1, 2, 3, 1, 2, 3, 3, 3, 3).SetName("Equal : Base != Derived / Not Equal : Base == Derived / AB"));
-				yield return (new TestCaseData(3, 2, 1, 3, 2, 1, 1, 1, 1).SetName("Equal : Base != Derived / Not Equal : Base == Derived / BA"));
-				yield return (new TestCaseData(3, 2, 1, 3, 2, 1, 3, 3, 3).SetName("Equal : Base != Derived / Not Equal : Base == Derived / BB"));
+				yield return (new TestCaseData(1, 2, 2, 1, 2, 2, 1, 1, 1).SetName("Equal : B != D == DD (D)     / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(1, 2, 2, 1, 2, 2, 2, 2, 2).SetName("Equal : B != D == DD (B)     / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(1, 2, 2, 1, 2, 2, 3, 3, 3).SetName("Equal : B != D == DD (B, D)  / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(2, 1, 1, 2, 1, 1, 1, 1, 1).SetName("Equal : B != D == DD (B)     / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(2, 1, 1, 2, 1, 1, 2, 2, 2).SetName("Equal : B != D == DD (D)     / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(2, 1, 1, 2, 1, 1, 3, 3, 3).SetName("Equal : B != D == DD (B, D)  / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(1, 1, 2, 1, 1, 2, 1, 1, 1).SetName("Equal : B == D != DD (DD)    / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(1, 1, 2, 1, 1, 2, 2, 2, 2).SetName("Equal : B == D != DD (D)     / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(1, 1, 2, 1, 1, 2, 3, 3, 3).SetName("Equal : B == D != DD (D, DD) / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(2, 2, 1, 2, 2, 1, 1, 1, 1).SetName("Equal : B == D != DD (D)     / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(2, 2, 1, 2, 2, 1, 2, 2, 2).SetName("Equal : B == D != DD (DD)    / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(2, 2, 1, 2, 2, 1, 3, 3, 3).SetName("Equal : B == D != DD (D, DD) / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(1, 2, 3, 1, 2, 3, 1, 1, 1).SetName("Equal : B != D != DD (D, DD) / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(1, 2, 3, 1, 2, 3, 2, 2, 2).SetName("Equal : B != D != DD (B, DD) / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(1, 2, 3, 1, 2, 3, 3, 3, 3).SetName("Equal : B != D != DD (B, D)  / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(3, 2, 1, 3, 2, 1, 1, 1, 1).SetName("Equal : B != D != DD (B, D)  / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(3, 2, 1, 3, 2, 1, 2, 2, 2).SetName("Equal : B != D != DD (B, DD) / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(3, 2, 1, 3, 2, 1, 3, 3, 3).SetName("Equal : B != D != DD (D, DD) / Not Equal : B == D == DD"));
 
-				yield return (new TestCaseData(1, 2, 3, 1, 2, 3, 3, 2, 1).SetName("Equal : Base != Derived / Not Equal : Base != Derived / A"));
-				yield return (new TestCaseData(3, 2, 1, 3, 2, 1, 1, 2, 3).SetName("Equal : Base != Derived / Not Equal : Base != Derived / B"));
+				yield return (new TestCaseData(1, 2, 2, 1, 2, 2, 3, 3, 3).SetName("Equal : B != D == DD / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(1, 2, 2, 1, 2, 2, 3, 2, 2).SetName("Equal : B != D == DD / Not Equal : B != D == DD"));
+				yield return (new TestCaseData(1, 2, 2, 1, 2, 2, 3, 3, 2).SetName("Equal : B != D == DD / Not Equal : B == D != DD"));
+				yield return (new TestCaseData(1, 2, 2, 1, 2, 2, 3, 2, 1).SetName("Equal : B != D == DD / Not Equal : B != D != DD"));
+				yield return (new TestCaseData(1, 1, 2, 1, 1, 2, 3, 3, 3).SetName("Equal : B == D != DD / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(1, 1, 2, 1, 1, 2, 3, 2, 2).SetName("Equal : B == D != DD / Not Equal : B != D == DD"));
+				yield return (new TestCaseData(1, 1, 2, 1, 1, 2, 3, 3, 2).SetName("Equal : B == D != DD / Not Equal : B == D != DD"));
+				yield return (new TestCaseData(1, 1, 2, 1, 1, 2, 3, 2, 1).SetName("Equal : B == D != DD / Not Equal : B != D != DD"));
+				yield return (new TestCaseData(1, 2, 3, 1, 2, 3, 3, 3, 3).SetName("Equal : B != D != DD / Not Equal : B == D == DD"));
+				yield return (new TestCaseData(1, 2, 3, 1, 2, 3, 3, 2, 2).SetName("Equal : B != D != DD / Not Equal : B != D == DD"));
+				yield return (new TestCaseData(1, 2, 3, 1, 2, 3, 3, 3, 2).SetName("Equal : B != D != DD / Not Equal : B == D != DD"));
+				yield return (new TestCaseData(1, 2, 3, 1, 2, 3, 3, 2, 1).SetName("Equal : B != D != DD / Not Equal : B != D != DD"));
 			}
 		}
 	}

@@ -94,40 +94,13 @@ namespace MKY.Test.Equality.Types
 			{
 				Trace.Indent();
 				TraceEx.WriteLocation();
-
-				if (ReferenceEquals(lhs, rhs))
-				{
-					Trace.WriteLine("ReferenceEquals() results in 'True'");
-					Trace.Unindent();
-					return (true);
-				}
-
-				if (ReferenceEquals(lhs, null))
-				{
-					Trace.WriteLine("ReferenceEquals() results in 'False' since 'lhs' is 'null'");
-					Trace.Unindent();
-					return (false);
-				}
-
-				if (ReferenceEquals(rhs, null))
-				{
-					Trace.WriteLine("ReferenceEquals() results in 'False' since 'rhs' is 'null'");
-					Trace.Unindent();
-					return (false);
-				}
-
 				bool result = lhs.Equals(rhs);
-
 				Trace.WriteLine("Equals() results in " + result);
 				Trace.Unindent();
 				return (result);
 			}
 			else // Normal implementation:
 			{
-				if (ReferenceEquals(lhs, rhs))  return (true);
-				if (ReferenceEquals(lhs, null)) return (false);
-				if (ReferenceEquals(rhs, null)) return (false);
-
 				return (lhs.Equals(rhs));
 			}
 		}

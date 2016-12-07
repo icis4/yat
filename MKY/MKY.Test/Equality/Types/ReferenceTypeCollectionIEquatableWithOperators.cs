@@ -143,7 +143,6 @@ namespace MKY.Test.Equality.Types
 				}
 
 				bool result = lhs.Equals(rhs);
-
 				Trace.WriteLine("Equals() results in " + result);
 				Trace.Unindent();
 				return (result);

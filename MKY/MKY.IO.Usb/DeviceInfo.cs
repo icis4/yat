@@ -521,14 +521,9 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public bool Equals(DeviceInfo other)
 		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (ReferenceEquals(this, other))
-				return (true);
-
-			if (GetType() != other.GetType())
-				return (false);
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
+			if (GetType() != other.GetType()) return (false);
 
 			return (Equals(other.VendorId, other.ProductId, other.Serial));
 
@@ -567,14 +562,9 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
 		public virtual bool EqualsVidPid(DeviceInfo other)
 		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (ReferenceEquals(this, other))
-				return (true);
-
-			if (GetType() != other.GetType())
-				return (false);
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
+			if (GetType() != other.GetType()) return (false);
 
 			return (EqualsVidPid(other.VendorId, other.ProductId));
 

@@ -140,10 +140,6 @@ namespace MKY.Collections
 		/// </summary>
 		public static bool operator ==(StringKeyValuePair lhs, StringKeyValuePair rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
 			return (lhs.Equals(rhs));
 		}
 

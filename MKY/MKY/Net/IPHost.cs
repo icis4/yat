@@ -101,18 +101,14 @@ namespace MKY.Net
 
 		/// <summary></summary>
 		public IPHostEx(IPAddress address)
-		{                        // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+		{
+			if (address == null)
+				throw (new ArgumentNullException("address", "An IP address is required!"));
+
+			                     // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 			if      (address.Equals(IPAddress.Loopback))     { SetUnderlyingEnum(IPHost.Localhost);     this.explicitAddress = IPAddress.None; }
 			else if (address.Equals(IPAddress.IPv6Loopback)) { SetUnderlyingEnum(IPHost.IPv6Localhost); this.explicitAddress = IPAddress.None; }
-			else
-			{
-				if (address == null)
-					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'IPHost.Explicit' requires an IP address or host name!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "address"));
-
-				SetUnderlyingEnum(IPHost.Explicit);
-
-				this.explicitAddress = address;
-			}
+			else                                             { SetUnderlyingEnum(IPHost.Explicit);      this.explicitAddress = address;        }
 
 			// Note that 'IPHost.IPv4Localhost' cannot be distinguished from 'IPHost.Localhost' when 'IPAddress.Loopback' is given.
 		}
@@ -123,7 +119,6 @@ namespace MKY.Net
 		public IPHostEx(string name)
 		{
 			SetUnderlyingEnum(IPHost.Explicit);
-
 			this.explicitName = name;
 		}
 
@@ -133,7 +128,6 @@ namespace MKY.Net
 		public IPHostEx(string name, IPAddress address)
 		{
 			SetUnderlyingEnum(IPHost.Explicit);
-
 			this.explicitName = name;
 
 			if (address != null) // Keep 'IPAddress.None' otherwise.
@@ -344,14 +338,9 @@ namespace MKY.Net
 		/// </summary>
 		public bool Equals(IPHostEx other)
 		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (ReferenceEquals(this, other))
-				return (true);
-
-			if (GetType() != other.GetType())
-				return (false);
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
+			if (GetType() != other.GetType()) return (false);
 
 			if ((IPHost)UnderlyingEnum == IPHost.Explicit)
 			{
@@ -370,8 +359,8 @@ namespace MKY.Net
 					(
 						base.Equals(other) &&
 					////this.explicitName is not given.
-						this.explicitAddress.Equals(other.explicitAddress) // Explicit address is always given, at least 'IPAdress.None'.
-					);                         // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+						IPAddressEx.Equals(this.explicitAddress, other.explicitAddress)
+					);
 				}
 			}
 			else

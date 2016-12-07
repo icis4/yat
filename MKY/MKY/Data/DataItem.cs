@@ -310,11 +310,8 @@ namespace MKY.Data
 		/// </summary>
 		public bool Equals(DataItem other)
 		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (ReferenceEquals(this, other))
-				return (true);
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
 
 			if (GetType() == other.GetType())
 			{

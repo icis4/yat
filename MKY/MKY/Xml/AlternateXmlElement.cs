@@ -120,10 +120,6 @@ namespace MKY.Xml
 		/// </summary>
 		public static bool operator ==(AlternateXmlElement lhs, AlternateXmlElement rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
 			return (lhs.Equals(rhs));
 		}
 

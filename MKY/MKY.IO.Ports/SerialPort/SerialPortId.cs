@@ -466,14 +466,9 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public bool Equals(SerialPortId other)
 		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (ReferenceEquals(this, other))
-				return (true);
-
-			if (GetType() != other.GetType())
-				return (false);
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
+			if (GetType() != other.GetType()) return (false);
 
 			return (EqualsName(other.Name)); // Only 'Name' is relevant. Other properties are for convenience only.
 		}

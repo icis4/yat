@@ -213,14 +213,9 @@ namespace YAT.Model.Types
 		/// </summary>
 		public bool Equals(AutoTriggerEx other)
 		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (ReferenceEquals(this, other))
-				return (true);
-
-			if (GetType() != other.GetType())
-				return (false);
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
+			if (GetType() != other.GetType()) return (false);
 
 			if ((AutoTrigger)UnderlyingEnum == AutoTrigger.Explicit)
 			{

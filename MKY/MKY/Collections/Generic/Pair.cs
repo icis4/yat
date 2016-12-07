@@ -141,10 +141,6 @@ namespace MKY.Collections.Generic
 		/// </summary>
 		public static bool operator ==(Pair<T1, T2> lhs, Pair<T1, T2> rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
 			return (lhs.Equals(rhs));
 		}
 

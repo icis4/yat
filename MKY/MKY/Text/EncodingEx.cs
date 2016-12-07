@@ -873,6 +873,10 @@ namespace MKY.Text
 		/// </summary>
 		public bool Equals(EncodingEx other)
 		{
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
+			if (GetType() != other.GetType()) return (false);
+
 			return (base.Equals(other));
 		}
 

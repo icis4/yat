@@ -207,14 +207,9 @@ namespace YAT.Log
 		/// </summary>
 		public bool Equals(FileNameSeparatorEx other)
 		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (ReferenceEquals(this, other))
-				return (true);
-
-			if (GetType() != other.GetType())
-				return (false);
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
+			if (GetType() != other.GetType()) return (false);
 
 			if ((FileNameSeparator)UnderlyingEnum == FileNameSeparator.Explicit)
 			{

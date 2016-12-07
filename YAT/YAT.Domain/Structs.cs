@@ -120,10 +120,6 @@ namespace YAT.Domain
 		/// </summary>
 		public static bool operator ==(PeriodicSetting lhs, PeriodicSetting rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
 			return (lhs.Equals(rhs));
 		}
 

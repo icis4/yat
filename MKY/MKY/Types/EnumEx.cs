@@ -292,14 +292,9 @@ namespace MKY
 		/// </remarks>
 		public bool Equals(EnumEx other)
 		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (ReferenceEquals(this, other))
-				return (true);
-
-			if (GetType() != other.GetType())
-				return (false);
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
+			if (GetType() != other.GetType()) return (false);
 
 			return ((UnderlyingEnum != null) && (UnderlyingEnum.Equals(other.UnderlyingEnum))); // 'Enum' does not overload the ==/!= operators!
 		}

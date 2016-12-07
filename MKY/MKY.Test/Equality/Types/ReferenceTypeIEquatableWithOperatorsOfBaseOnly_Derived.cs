@@ -30,17 +30,17 @@ using MKY.Diagnostics;
 namespace MKY.Test.Equality.Types
 {
 	/// <summary></summary>
-	public class ReferenceTypeIEquatableWithDerivedOperators_DerivedDerived : ReferenceTypeIEquatableWithOperators_Derived, IEquatable<ReferenceTypeIEquatableWithDerivedOperators_DerivedDerived>
+	public class ReferenceTypeIEquatableWithOperatorsOfBaseOnly_Derived : ReferenceTypeIEquatableWithOperators_Base, IEquatable<ReferenceTypeIEquatableWithOperatorsOfBaseOnly_Derived>
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public readonly int DD; // = 'DerivedDerived'
+		public readonly int D; // = 'Derived'
 
 		/// <summary></summary>
-		public ReferenceTypeIEquatableWithDerivedOperators_DerivedDerived(int b, int d, int dd)
-			: base(b, d)
+		public ReferenceTypeIEquatableWithOperatorsOfBaseOnly_Derived(int b, int d)
+			: base(b)
 		{
-			DD = dd;
+			D = d;
 		}
 
 		#region Object Members
@@ -59,8 +59,8 @@ namespace MKY.Test.Equality.Types
 		{
 			return
 			(
-				Environment.NewLine + "        2:Base = " + base.ToString() +
-				Environment.NewLine + "        2:C    = " + this.DD.ToString(CultureInfo.InvariantCulture)
+				Environment.NewLine + "      1:Base = " + base.ToString() +
+				Environment.NewLine + "      1:D    = " + D.ToString(CultureInfo.InvariantCulture)
 			);
 		}
 
@@ -81,7 +81,7 @@ namespace MKY.Test.Equality.Types
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as ReferenceTypeIEquatableWithDerivedOperators_DerivedDerived));
+			return (Equals(obj as ReferenceTypeIEquatableWithOperatorsOfBaseOnly_Derived));
 		}
 
 		/// <summary>
@@ -91,7 +91,7 @@ namespace MKY.Test.Equality.Types
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(ReferenceTypeIEquatableWithDerivedOperators_DerivedDerived other)
+		public bool Equals(ReferenceTypeIEquatableWithOperatorsOfBaseOnly_Derived other)
 		{
 			if (Configuration.TraceCallingSequence) // Trace the calling sequence:
 			{
@@ -119,7 +119,7 @@ namespace MKY.Test.Equality.Types
 					return (false);
 				}
 
-				bool result = (base.Equals(other) && DD.Equals(other.DD));
+				bool result = (base.Equals(other) && D.Equals(other.D));
 
 				Trace.WriteLine("Results in " + result);
 				Trace.Unindent();
@@ -127,16 +127,11 @@ namespace MKY.Test.Equality.Types
 			}
 			else // Normal implementation:
 			{
-				if (ReferenceEquals(other, null))
-					return (false);
+				if (ReferenceEquals(other, null)) return (false);
+				if (ReferenceEquals(this, other)) return (true);
+				if (GetType() != other.GetType()) return (false);
 
-				if (ReferenceEquals(this, other))
-					return (true);
-
-				if (GetType() != other.GetType())
-					return (false);
-
-				return (base.Equals(other) && DD.Equals(other.DD));
+				return (base.Equals(other) && D.Equals(other.D));
 			}
 		}
 

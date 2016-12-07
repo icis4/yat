@@ -162,14 +162,9 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public bool Equals(BaudRateEx other)
 		{
-			if (ReferenceEquals(other, null))
-				return (false);
-
-			if (ReferenceEquals(this, other))
-				return (true);
-
-			if (GetType() != other.GetType())
-				return (false);
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
+			if (GetType() != other.GetType()) return (false);
 
 			if ((BaudRate)UnderlyingEnum == BaudRate.Explicit)
 			{
