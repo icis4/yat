@@ -308,10 +308,8 @@ namespace MKY
 			if (ReferenceEquals(lhs, null)) return (false);
 			if (ReferenceEquals(rhs, null)) return (false);
 
-			// Ensure that potiential <Derived>.Equals() is called.
-			// Thus, ensure that object.Equals() is called.
-			object obj = (object)lhs;
-			return (obj.Equals(rhs));
+			object obj = (object)lhs; // Operators are not virtual! Calling object.Equals() ensures
+			return (obj.Equals(rhs)); // that the virtual <Derived>.Equals() is called.
 		}
 
 		/// <summary>

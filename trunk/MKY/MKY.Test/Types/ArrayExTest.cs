@@ -42,7 +42,7 @@ namespace MKY.Test.Types
 		// Types
 		//==========================================================================================
 
-		private enum SimpleEnum
+		private enum EnumType
 		{
 			A,
 			B,
@@ -50,7 +50,7 @@ namespace MKY.Test.Types
 			D,
 		}
 
-		private class SimpleReferenceType : IEquatable<SimpleReferenceType>
+		private class EquatableReferenceType : IEquatable<EquatableReferenceType>
 		{
 			/// <summary></summary>
 			public readonly int A;
@@ -59,7 +59,7 @@ namespace MKY.Test.Types
 			public readonly double B;
 
 			/// <summary></summary>
-			public SimpleReferenceType(int a, double b)
+			public EquatableReferenceType(int a, double b)
 			{
 				A = a;
 				B = b;
@@ -76,7 +76,12 @@ namespace MKY.Test.Types
 			{
 				unchecked
 				{
-					return (A.GetHashCode() ^ B.GetHashCode());
+					int hashCode;
+
+					hashCode =                    A;
+					hashCode = (hashCode * 397) ^ B.GetHashCode();
+
+					return (hashCode);
 				}
 			}
 
@@ -85,21 +90,13 @@ namespace MKY.Test.Types
 			/// </summary>
 			public override bool Equals(object obj)
 			{
-				if (ReferenceEquals(other, null)) return (false);
-				if (ReferenceEquals(this, other)) return (true);
-				if (GetType() != other.GetType()) return (false);
-
-				return (Equals(obj as SimpleReferenceType));
+				return (Equals(obj as EquatableReferenceType));
 			}
 
 			/// <summary>
 			/// Determines whether this instance and the specified object have value equality.
 			/// </summary>
-			/// <remarks>
-			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
-			/// properties, i.e. properties with some logic, are also properly handled.
-			/// </remarks>
-			public bool Equals(SimpleReferenceType other)
+			public bool Equals(EquatableReferenceType other)
 			{
 				if (ReferenceEquals(other, null)) return (false);
 				if (ReferenceEquals(this, other)) return (true);
@@ -115,19 +112,20 @@ namespace MKY.Test.Types
 			/// <summary>
 			/// Determines whether the two specified objects have reference or value equality.
 			/// </summary>
-			public static bool operator ==(SimpleReferenceType lhs, SimpleReferenceType rhs)
+			public static bool operator ==(EquatableReferenceType lhs, EquatableReferenceType rhs)
 			{
 				if (ReferenceEquals(lhs, rhs))  return (true);
 				if (ReferenceEquals(lhs, null)) return (false);
 				if (ReferenceEquals(rhs, null)) return (false);
 
-				return (lhs.Equals(rhs));
+				object obj = (object)lhs; // Operators are not virtual! Calling object.Equals() ensures
+				return (obj.Equals(rhs)); // that the virtual <Derived>.Equals() is called.
 			}
 
 			/// <summary>
 			/// Determines whether the two specified objects have reference and value inequality.
 			/// </summary>
-			public static bool operator !=(SimpleReferenceType lhs, SimpleReferenceType rhs)
+			public static bool operator !=(EquatableReferenceType lhs, EquatableReferenceType rhs)
 			{
 				return (!(lhs == rhs));
 			}
@@ -141,48 +139,48 @@ namespace MKY.Test.Types
 		//==========================================================================================
 
 		private static readonly int[][] IntArrays = new int[][]
-			{
-				new int[] { 0, 1, 2 },
-				new int[] { 0, 1, 2 },
-				new int[] { 1, 2, 3 },
-			};
+		{
+			new int[] { 0, 1, 2 },
+			new int[] { 0, 1, 2 },
+			new int[] { 1, 2, 3 },
+		};
 
 		private static readonly string[][] StringArrays = new string[][]
-			{
-				new string[] { "AAA", "BBB", "CCC" },
-				new string[] { "AAA", "BBB", "CCC" },
-				new string[] { "BBB", "CCC", "DDD" },
-			};
+		{
+			new string[] { "AAA", "BBB", "CCC" },
+			new string[] { "AAA", "BBB", "CCC" },
+			new string[] { "BBB", "CCC", "DDD" },
+		};
 
-		private static readonly SimpleEnum[][] EnumArrays = new SimpleEnum[][]
-			{
-				new SimpleEnum[] { SimpleEnum.A, SimpleEnum.B, SimpleEnum.C },
-				new SimpleEnum[] { SimpleEnum.A, SimpleEnum.B, SimpleEnum.C },
-				new SimpleEnum[] { SimpleEnum.B, SimpleEnum.C, SimpleEnum.D },
-			};
+		private static readonly EnumType[][] EnumArrays = new EnumType[][]
+		{
+			new EnumType[] { EnumType.A, EnumType.B, EnumType.C },
+			new EnumType[] { EnumType.A, EnumType.B, EnumType.C },
+			new EnumType[] { EnumType.B, EnumType.C, EnumType.D },
+		};
 
-		private static readonly SimpleReferenceType[][] ObjectArrays = new SimpleReferenceType[][]
-			{
-				new SimpleReferenceType[] { new SimpleReferenceType(0, 1.0), new SimpleReferenceType(1, 1.1), new SimpleReferenceType(2, 1.2) },
-				new SimpleReferenceType[] { new SimpleReferenceType(0, 1.0), new SimpleReferenceType(1, 1.1), new SimpleReferenceType(2, 1.2) },
-				new SimpleReferenceType[] { new SimpleReferenceType(1, 1.1), new SimpleReferenceType(2, 1.2), new SimpleReferenceType(3, 1.3) },
-			};
+		private static readonly EquatableReferenceType[][] ReferenceTypeArrays = new EquatableReferenceType[][]
+		{
+			new EquatableReferenceType[] { new EquatableReferenceType(0, 1.0), new EquatableReferenceType(1, 1.1), new EquatableReferenceType(2, 1.2) },
+			new EquatableReferenceType[] { new EquatableReferenceType(0, 1.0), new EquatableReferenceType(1, 1.1), new EquatableReferenceType(2, 1.2) },
+			new EquatableReferenceType[] { new EquatableReferenceType(1, 1.1), new EquatableReferenceType(2, 1.2), new EquatableReferenceType(3, 1.3) },
+		};
 
 		private static readonly string[][] ArraysWithNull = new string[][]
-			{
-				new string[] { "AAA", "BBB" },
-				new string[] { "AAA", null },
-				new string[] { "AAA", null },
-				new string[] { null, null },
-				new string[] { null, null },
-			};
+		{
+			new string[] { "AAA", "BBB" },
+			new string[] { "AAA", null },
+			new string[] { "AAA", null },
+			new string[] { null, null },
+			new string[] { null, null },
+		};
 
 		private static readonly string[][] ArraysOdd = new string[][]
-			{
-				new string[] { "AAA" },
-				new string[] { "AAA", "BBB" },
-				new string[] { "AAA", "BBB", "CCC" },
-			};
+		{
+			new string[] { "AAA" },
+			new string[] { "AAA", "BBB" },
+			new string[] { "AAA", "BBB", "CCC" },
+		};
 
 		#endregion
 
@@ -208,9 +206,9 @@ namespace MKY.Test.Types
 				yield return (new TestCaseData(EnumArrays[0], EnumArrays[1], true) .SetName("EnumArrays_ElementsEqual"));
 				yield return (new TestCaseData(EnumArrays[0], EnumArrays[2], false).SetName("EnumArrays_Differs"));
 
-				yield return (new TestCaseData(ObjectArrays[0], ObjectArrays[0], true) .SetName("ObjectArrays_ReferenceEquals"));
-				yield return (new TestCaseData(ObjectArrays[0], ObjectArrays[1], true) .SetName("ObjectArrays_ElementsEqual"));
-				yield return (new TestCaseData(ObjectArrays[0], ObjectArrays[2], false).SetName("ObjectArrays_Differs"));
+				yield return (new TestCaseData(ReferenceTypeArrays[0], ReferenceTypeArrays[0], true) .SetName("ReferenceTypeArrays_ReferenceEquals"));
+				yield return (new TestCaseData(ReferenceTypeArrays[0], ReferenceTypeArrays[1], true) .SetName("ReferenceTypeArrays_ElementsEqual"));
+				yield return (new TestCaseData(ReferenceTypeArrays[0], ReferenceTypeArrays[2], false).SetName("ReferenceTypeArrays_Differs"));
 
 				yield return (new TestCaseData(ArraysWithNull[0], ArraysWithNull[0], true) .SetName("ArraysWithNull_ReferenceEquals"));
 				yield return (new TestCaseData(ArraysWithNull[0], ArraysWithNull[1], false).SetName("ArraysWithNull_DiffersInNull"));

@@ -198,7 +198,8 @@ namespace YAT.Domain.Settings
 			if (ReferenceEquals(lhs, null)) return (false);
 			if (ReferenceEquals(rhs, null)) return (false);
 
-			return (lhs.Equals(rhs));
+			object obj = (object)lhs; // Operators are not virtual! Calling object.Equals() ensures
+			return (obj.Equals(rhs)); // that the virtual <Derived>.Equals() is called.
 		}
 
 		/// <summary>

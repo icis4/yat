@@ -49,7 +49,7 @@ using YAT/*.<TODO>*/;
 
 namespace YAT/*.<TODO>*/
 {
-	public class TODO : IEquatable<TODO>
+	public class TODO
 	{
 		#region Types
 		//==========================================================================================
@@ -304,6 +304,30 @@ namespace YAT/*.<TODO>*/
 			return ("TODO");
 		}
 
+		#endregion
+
+		#region Parse
+		//==========================================================================================
+		// Parse
+		//==========================================================================================
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		#endregion
+	}
+
+	public class TODO : IEquatable<TODO>
+	{
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
 		/// <summary>
 		/// Serves as a hash function for a particular type.
 		/// </summary>
@@ -356,9 +380,9 @@ namespace YAT/*.<TODO>*/
 
 			return
 			(
-				// !!! Remove for value types !!!
-				base.Equals(other) && // !!! If derived from other than 'Object', otherwise remove !!!
-				// Do not call 'base.Equals(other)' when deriving from 'Object'.
+			//	!!! Remove for value types !!!
+				base.Equals(other) && // !!! If derived from other than 'object', otherwise replace by comment below !!!
+				// Do not call 'base.Equals(other)' when deriving from 'object'.
 
 				TODO.Equals(other.TODO)
 			//	!!! For value types only !!!
@@ -397,7 +421,11 @@ namespace YAT/*.<TODO>*/
 			if (ReferenceEquals(lhs, null)) return (false); // !!! Remove for value types !!!
 			if (ReferenceEquals(rhs, null)) return (false); // !!! Remove for value types !!!
 
-			return (lhs.Equals(rhs));
+		//	!!! Remove for value types !!!
+			object obj = (object)lhs; // Operators are not virtual! Calling object.Equals() ensures
+			return (obj.Equals(rhs)); // that the virtual <Derived>.Equals() is called.
+		//	!!! For value types only !!!
+		//	return (lhs.Equals(rhs));
 		}
 
 		/// <summary>
@@ -407,20 +435,6 @@ namespace YAT/*.<TODO>*/
 		{
 			return (!(lhs == rhs));
 		}
-
-		#endregion
-
-		#region Parse
-		//==========================================================================================
-		// Parse
-		//==========================================================================================
-
-		#endregion
-
-		#region Debug
-		//==========================================================================================
-		// Debug
-		//==========================================================================================
 
 		#endregion
 	}
