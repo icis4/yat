@@ -109,7 +109,6 @@
     <Compile Include="Equality\Data.cs" />
     <Compile Include="Equality\Configuration.cs" />
     <Compile Include="Equality\Methods\Generic.cs" />
-    <Compile Include="Equality\Methods\Helper.cs" />
     <Compile Include="Equality\Methods\ReferenceTypeCollectionIEquatableWithOperators.cs" />
     <Compile Include="Equality\Methods\ReferenceTypeIEquatableWithOperators_Base.cs" />
     <Compile Include="Equality\Methods\ReferenceTypeIEquatableWithOperatorsOfBaseOnly_Derived.cs" />

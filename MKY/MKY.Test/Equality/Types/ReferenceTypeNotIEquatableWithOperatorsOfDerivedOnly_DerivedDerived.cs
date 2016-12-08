@@ -30,7 +30,7 @@ using MKY.Diagnostics;
 namespace MKY.Test.Equality.Types
 {
 	/// <summary></summary>
-	public class ReferenceTypeNotIEquatableWithOperatorsOfDerivedOnly_DerivedDerived : ReferenceTypeNotIEquatableWithOperators_Derived
+	internal class ReferenceTypeNotIEquatableWithOperatorsOfDerivedOnly_DerivedDerived : ReferenceTypeNotIEquatableWithOperators_Derived
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]

@@ -22,7 +22,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 
 using MKY.Diagnostics;
 
@@ -30,11 +29,11 @@ using NUnit.Framework;
 
 namespace MKY.Test.Equality.Methods
 {
-	internal static class ValueTypeDateTime
+	/// <summary></summary>
+	public static class ValueTypeDateTime
 	{
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEquality(DateTime objToEqualAgainst, DateTime objEqual, DateTime objNotEqual)
+		/// <summary></summary>
+		public static void TestOperatorsForReferenceEquality(DateTime obj)
 		{
 			if (Configuration.TraceCallingSequence) {
 				Trace.Indent();
@@ -53,7 +52,7 @@ namespace MKY.Test.Equality.Methods
 					Trace.Indent();
 				}
 
-				if (!(objToEqualAgainst == objToEqualAgainst))
+				if (!(obj == obj))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
 				if (Configuration.TraceCallingSequence) {
@@ -62,7 +61,7 @@ namespace MKY.Test.Equality.Methods
 					Trace.Indent();
 				}
 
-				if (objToEqualAgainst != objToEqualAgainst)
+				if (obj != obj)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
 				if (Configuration.TraceCallingSequence)
@@ -86,6 +85,7 @@ namespace MKY.Test.Equality.Methods
 			}
 		}
 
+		/// <summary></summary>
 		public static void TestOperatorsForValueEquality(DateTime objToEqualAgainst, DateTime objEqual, DateTime objNotEqual)
 		{
 			if (Configuration.TraceCallingSequence) {

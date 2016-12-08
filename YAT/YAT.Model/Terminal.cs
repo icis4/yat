@@ -2286,7 +2286,15 @@ namespace YAT.Model
 						else // ports.Count == 0
 						{
 							DialogResult dr = ShowNoSerialPortsStartAnywayQuestion(portId);
-							return (dr == DialogResult.Yes);
+							if (dr == DialogResult.Yes)
+							{
+								return (true);
+							}
+							else
+							{
+								OnTimedStatusTextRequest("No serial COM ports available");
+								return (false);
+							}
 						}
 					}
 
@@ -2334,6 +2342,7 @@ namespace YAT.Model
 								}
 								else
 								{
+									OnTimedStatusTextRequest("Previous local network interface currently not available");
 									return (false);
 								}
 							}
@@ -2341,6 +2350,7 @@ namespace YAT.Model
 						else // localInterfaces.Count == 0
 						{
 							ShowNoLocalInterfacesMessage();
+							OnTimedStatusTextRequest("No local network interfaces available");
 							return (false);
 						}
 					}
@@ -2394,13 +2404,29 @@ namespace YAT.Model
 							else
 							{
 								DialogResult dr = ShowUsbSerialHidDeviceNotAvailableStartAnywayQuestion(deviceInfo);
-								return (dr == DialogResult.Yes);
+								if (dr == DialogResult.Yes)
+								{
+									return (true);
+								}
+								else
+								{
+									OnTimedStatusTextRequest("Previous USB HID device currently not available");
+									return (false);
+								}
 							}
 						}
 						else // devices.Count == 0
 						{
 							DialogResult dr = ShowNoUsbSerialHidDevicesStartAnywayQuestion(deviceInfo);
-							return (dr == DialogResult.Yes);
+							if (dr == DialogResult.Yes)
+							{
+								return (true);
+							}
+							else
+							{
+								OnTimedStatusTextRequest("No HID capable USB devices available");
+								return (false);
+							}
 						}
 					}
 
@@ -2519,7 +2545,7 @@ namespace YAT.Model
 		private DialogResult ShowUsbSerialHidDeviceNotAvailableStartAnywayQuestion(string deviceInfoNotAvailable)
 		{
 			string message =
-				"The previous device '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+				"The previous USB HID device '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
 				"Start anyway?";
 
 			DialogResult dr = OnMessageInputRequest
