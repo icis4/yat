@@ -27,7 +27,7 @@ namespace MKY.Test.Equality.Types
 {
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "This test class intentionally doesn't have equality operators.")]
-	public struct ValueTypeNotIEquatableWithoutOperators
+	internal struct ValueTypeNotIEquatableWithoutOperators
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]

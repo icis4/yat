@@ -24,8 +24,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Test.Equality
 {
+	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Internal configuration to enable/disable tracing, must be a field to prevent compilation warnings.")]
-	internal static class Configuration
+	public static class Configuration
 	{
 		/// <summary>
 		/// Choose whether the calling sequence shall be output onto the trace console.

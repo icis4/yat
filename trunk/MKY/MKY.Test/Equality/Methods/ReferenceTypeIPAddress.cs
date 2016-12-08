@@ -21,7 +21,6 @@
 //==================================================================================================
 
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
 using MKY.Diagnostics;
@@ -30,11 +29,11 @@ using NUnit.Framework;
 
 namespace MKY.Test.Equality.Methods
 {
-	internal static class ReferenceTypeIPAddress
+	/// <summary></summary>
+	public static class ReferenceTypeIPAddress
 	{
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = Helper.UnusedParameterSuppressionJustification)]
-		public static void TestOperatorsForReferenceEquality(IPAddress objToEqualAgainst, IPAddress objEqual, IPAddress objNotEqual)
+		/// <summary></summary>
+		public static void TestOperatorsForReferenceEquality(IPAddress obj)
 		{
 			if (Configuration.TraceCallingSequence) {
 				Trace.Indent();
@@ -53,7 +52,7 @@ namespace MKY.Test.Equality.Methods
 					Trace.Indent();
 				}
 
-				if (!(objToEqualAgainst == objToEqualAgainst))
+				if (!(obj == obj))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
 				if (Configuration.TraceCallingSequence) {
@@ -62,7 +61,7 @@ namespace MKY.Test.Equality.Methods
 					Trace.Indent();
 				}
 
-				if (objToEqualAgainst != objToEqualAgainst)
+				if (obj != obj)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
 				if (Configuration.TraceCallingSequence)

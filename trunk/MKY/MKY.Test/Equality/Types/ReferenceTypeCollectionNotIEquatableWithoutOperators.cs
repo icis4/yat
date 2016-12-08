@@ -21,13 +21,11 @@
 //==================================================================================================
 
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Test.Equality.Types
 {
 	/// <typeparam name="T">The type the verify against.</typeparam>
-	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Naming shall be consistent throughout this test module.")]
-	public class ReferenceTypeCollectionNotIEquatableWithoutOperators<T> : List<T>
+	internal class ReferenceTypeCollectionNotIEquatableWithoutOperators<T> : List<T>
 	{
 	}
 }

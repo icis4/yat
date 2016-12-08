@@ -28,8 +28,10 @@ using NUnit.Framework;
 
 namespace MKY.Test.Equality.Methods
 {
-	internal static class Generic
+	/// <summary></summary>
+	public static class Generic
 	{
+		/// <summary></summary>
 		public static void TestEquals<T>(T objToEqualAgainst, T objEqual, T objNotEqual)
 		{
 			if (Configuration.TraceCallingSequence) {
