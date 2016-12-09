@@ -325,7 +325,7 @@ namespace MKY.Settings
 		/// </summary>
 		/// <returns>
 		/// Returns <c>true</c> if settings could be loaded from <see cref="SettingsFilePath"/>,
-		/// return <c>false</c> if they could not be loaded and were set to defaults instead.
+		/// returns <c>false</c> if they could not be loaded and were set to defaults instead.
 		/// </returns>
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be created.

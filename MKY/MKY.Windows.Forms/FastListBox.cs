@@ -76,7 +76,7 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		public override DrawMode DrawMode
 		{
-			get { return base.DrawMode; }
+			get { return (base.DrawMode); }
 			set
 			{
 				if (value == DrawMode.Normal)
