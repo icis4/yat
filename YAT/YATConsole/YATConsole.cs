@@ -32,7 +32,7 @@ namespace YAT
 	/// This class is separated into its own .exe project for those who want to use YAT components
 	/// within their own application context.
 	/// </remarks>
-	/// <remarks>Sealed according to FxCop "CA1052:StaticHolderTypesShouldBeSealed".</remarks>
+	/// <remarks>Sealed to fulfill FxCop "CA1052:StaticHolderTypesShouldBeSealed".</remarks>
 	public sealed class YATConsole
 	{
 		/// <remarks>Prevent FxCop "CA1053:StaticHolderTypesShouldNotHaveConstructors".</remarks>

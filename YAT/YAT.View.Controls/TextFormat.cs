@@ -44,7 +44,7 @@ namespace YAT.View.Controls
 		private SettingControlsHelper isSettingControls;
 
 		private Font font = new Font(Model.Types.FontFormat.NameDefault, Model.Types.FontFormat.SizeDefault, Model.Types.FontFormat.StyleDefault);
-		private Color color = Color.Black;
+		private Color color = Control.DefaultForeColor;
 		private int[] customColors; // = null;
 
 		#endregion
@@ -224,7 +224,9 @@ namespace YAT.View.Controls
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The default is the value of the <see cref="Control.DefaultForeColor"/> property.
+		/// </remarks>
 		[Category("Format")]
 		[Description("The format color.")]
 		public virtual Color FormatColor

@@ -407,9 +407,9 @@ namespace YAT.View.Controls
 
 				MessageBox.Show
 				(
-					this.Parent,
+					Parent,
 					message,
-					"System Error",
+					"Link Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
 				);
