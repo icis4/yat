@@ -171,9 +171,9 @@ namespace YAT.View.Forms
 
 				MessageBox.Show
 				(
-					this.Parent,
+					Parent,
 					message,
-					"System Error",
+					"Folder Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
 				);
