@@ -199,7 +199,7 @@ namespace MKY.IO.Ports.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
 		public virtual bool PortAIsAvailable
 		{
 			get { return (this.portAIsAvailable); }
@@ -207,7 +207,7 @@ namespace MKY.IO.Ports.Test
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
 		public virtual bool PortBIsAvailable
 		{
 			get { return (this.portBIsAvailable); }
@@ -215,7 +215,7 @@ namespace MKY.IO.Ports.Test
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
 		public virtual bool MTSicsDeviceAIsConnected
 		{
 			get { return (this.mtSicsDeviceAIsConnected); }
@@ -223,7 +223,7 @@ namespace MKY.IO.Ports.Test
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
 		public virtual bool MTSicsDeviceBIsConnected
 		{
 			get { return (this.mtSicsDeviceBIsConnected); }
@@ -231,7 +231,7 @@ namespace MKY.IO.Ports.Test
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
 		public virtual bool TILaunchPadDeviceAIsConnected
 		{
 			get { return (this.tiLaunchPadDeviceAIsConnected); }
@@ -239,7 +239,7 @@ namespace MKY.IO.Ports.Test
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
 		public virtual bool TILaunchPadDeviceBIsConnected
 		{
 			get { return (this.tiLaunchPadDeviceBIsConnected); }
@@ -361,27 +361,27 @@ namespace MKY.IO.Ports.Test
 	public static class ConfigurationCategoryStrings
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
 		public static readonly string PortAIsAvailable = "Serial port A '" + ConfigurationProvider.Configuration.PortA + "' is " + (ConfigurationProvider.Configuration.PortAIsAvailable ? "" : "not ") + "available";
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
 		public static readonly string PortBIsAvailable = "Serial port B '" + ConfigurationProvider.Configuration.PortB + "' is " + (ConfigurationProvider.Configuration.PortBIsAvailable ? "" : "not ") + "available";
 
 		/// <remarks>"MT-SICS" is no valid NUnit category string as it contains an '-'.</remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
 		public static readonly string MTSicsDeviceAIsConnected = "Serial port MT SICS device A is " + (ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ? "" : "not ") + "connected to '" + ConfigurationProvider.Configuration.MTSicsDeviceA + "'";
 
 		/// <remarks>"MT-SICS" is no valid NUnit category string as it contains an '-'.</remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
 		public static readonly string MTSicsDeviceBIsConnected = "Serial port MT SICS device B is " + (ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected ? "" : "not ") + "connected to '" + ConfigurationProvider.Configuration.MTSicsDeviceB + "'";
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
 		public static readonly string TILaunchPadDeviceAIsConnected = "Serial port TI LaunchPad device A is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceAIsConnected ? "" : "not ") + "connected to '" + ConfigurationProvider.Configuration.TILaunchPadDeviceA + "'";
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
 		public static readonly string TILaunchPadDeviceBIsConnected = "Serial port TI LaunchPad device B is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsConnected ? "" : "not ") + "connected to '" + ConfigurationProvider.Configuration.TILaunchPadDeviceB + "'";
 
 		/// <summary></summary>
@@ -396,7 +396,7 @@ namespace MKY.IO.Ports.Test
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter")]
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class PortAIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
@@ -408,7 +408,7 @@ namespace MKY.IO.Ports.Test
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter")]
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class PortBIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
