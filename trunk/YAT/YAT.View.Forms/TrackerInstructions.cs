@@ -159,14 +159,18 @@ namespace YAT.View.Forms
 		// Controls Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "YAT is not (yet) capable for RTL")]
+		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "YAT is not (yet) capable for RTL.")]
 		private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			var link = (e.Link.LinkData as string);
 			if (link != null)
 			{
 				Exception ex;
-				if (!MKY.Net.Browser.TryBrowseUri(link, out ex))
+				if (MKY.Net.Browser.TryBrowseUri(link, out ex))
+				{
+					e.Link.Visited = true;
+				}
+				else
 				{
 					string message = "Unable to open link." + Environment.NewLine + Environment.NewLine +
 					                 "System error message:" + Environment.NewLine + ex.Message;
