@@ -87,6 +87,14 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
+YAT 2.0 Gamma 3 Version 1.99.70 :: 2017-xx-xx
+----------------------------------------------------------------------------------------------------
+
+Important changes:
+- Notes and links regarding non-intrusive RS-232 monitor/sniffer/spy cables and devices added to
+  'About' dialog (related to feature requests #152, 198, 288).
+
+
 YAT 2.0 Gamma 2'' Version 1.99.52 :: 2016-09-30
 ----------------------------------------------------------------------------------------------------
 
@@ -119,7 +127,7 @@ New:
    > Dedicated settings for server, client and socket (related to feature request #248).
 - USB Ser/HID can be configured to XOn/XOff flow control (feature request #226).
 - USB Ser/HID discovery improved, serial string may optionally be ignored (feature request #261).
-- Automatic response feature, YAT can automatically respond to a request (feature request #252).
+- Automatic response feature, YAT can automatically respond to a request (feature reqs. #176, #252).
 - Keyword \!(LineInterval) implemented in addition to the existing \!(LineDelay), useful together
   with \!(LineRepeat), line will be sent in more or less accurate interval (feature request #255).
 - Binary terminals now also support to break lines before a sequence (feat. reqs. #76, #140, #180).

@@ -84,16 +84,16 @@ namespace YAT.View.Forms
 			linkLabel_Description.Text = "";
 			textBefore = "YAT is a by-product of the ";
 			textLink   =                            "Swiss federal KTI/CTI";
-			textAfter  =                                                @" project 6542.1 FHS-ET ""BBP - Balance Based Pipetting"" between" + Environment.NewLine;
+			textAfter  =                                                @" project 6542.1 FHS-ET ""BBP - Balance Based Pipetting"" of HSR" + Environment.NewLine;
 			linkLabel_Description.Text += textBefore;
 			linkStart = linkLabel_Description.Text.Length;
 			linkLabel_Description.Text += textLink;
 			linkLabel_Description.Links.Add(linkStart, textLink.Length, "http://www.bbt.admin.ch/kti/");
 			linkLabel_Description.Text += textAfter;
 
-			textBefore = "HSR and ";
-			textLink   =         "Mettler-Toledo";
-			textAfter  =                       ". YAT was initially developed as XTerm232, a response to the lack of a good RS-232 terminal.";
+			textBefore = "and ";
+			textLink   =     "Mettler-Toledo";
+			textAfter  =                   ". YAT was initially developed as XTerm232, a response to the lack of a good RS-232 terminal.";
 			linkLabel_Description.Text += textBefore;
 			linkStart = linkLabel_Description.Text.Length;
 			linkLabel_Description.Text += textLink;
@@ -115,10 +115,36 @@ namespace YAT.View.Forms
 			linkLabel_Monitoring.Links.Add(linkStart, textLink.Length, "http://www.hhdsoftware.com/");
 			linkLabel_Monitoring.Text += textAfter;
 			textLink  =                                                                                                           "free edition";
-			textAfter =                                                                                                                       ".";
+			textAfter =                                                                                                                       "." + Environment.NewLine +
+			            "Alternatively, obtain a non-intrusive monitor/sniffer/spy cable e.g. ";
 			linkStart = linkLabel_Monitoring.Text.Length;
 			linkLabel_Monitoring.Text += textLink;
 			linkLabel_Monitoring.Links.Add(linkStart, textLink.Length, "http://freeserialanalyzer.com/");
+			linkLabel_Monitoring.Text += textAfter;
+			textLink  =                                                                      "EZ-Tap";
+			textAfter =                                                                            ", or, assemble your own cable as described by" + Environment.NewLine +
+			            "e.g. ";
+			linkStart = linkLabel_Monitoring.Text.Length;
+			linkLabel_Monitoring.Text += textLink;
+			linkLabel_Monitoring.Links.Add(linkStart, textLink.Length, "https://www.stratusengineering.com/product/ez-tap/");
+			linkLabel_Monitoring.Text += textAfter;
+			textLink  =      "Henrik Haftmann";
+			textAfter =                     ", ";
+			linkStart = linkLabel_Monitoring.Text.Length;
+			linkLabel_Monitoring.Text += textLink;
+			linkLabel_Monitoring.Links.Add(linkStart, textLink.Length, "https://www-user.tu-chemnitz.de/~heha/basteln/PC/serspy/");
+			linkLabel_Monitoring.Text += textAfter;
+			textLink  =                       "Lammert Bies";
+			textAfter =                                   " or ";
+			linkStart = linkLabel_Monitoring.Text.Length;
+			linkLabel_Monitoring.Text += textLink;
+			linkLabel_Monitoring.Links.Add(linkStart, textLink.Length, "https://www.lammertbies.nl/comm/cable/RS-232-spy-monitor.html");
+			linkLabel_Monitoring.Text += textAfter;
+			textLink  =                                       "CompuPhase";
+			textAfter =                                                 " (bidir or unidir, full or half duplex, with or without control lines).";
+			linkStart = linkLabel_Monitoring.Text.Length;
+			linkLabel_Monitoring.Text += textLink;
+			linkLabel_Monitoring.Links.Add(linkStart, textLink.Length, "http://www.compuphase.com/electronics/rs232split.htm");
 			linkLabel_Monitoring.Text += textAfter;
 
 			// Virtual serial ports:
@@ -321,14 +347,18 @@ namespace YAT.View.Forms
 		// Controls Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "YAT is not (yet) capable for RTL")]
+		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "YAT is not (yet) capable for RTL.")]
 		private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			string link = e.Link.LinkData as string;
+			var link = (e.Link.LinkData as string);
 			if (link != null)
 			{
 				Exception ex;
-				if (!MKY.Net.Browser.TryBrowseUri(link, out ex))
+				if (MKY.Net.Browser.TryBrowseUri(link, out ex))
+				{
+					e.Link.Visited = true;
+				}
+				else
 				{
 					string message = "Unable to open link." + Environment.NewLine + Environment.NewLine +
 					                 "System error message:" + Environment.NewLine + ex.Message;
