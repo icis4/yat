@@ -396,23 +396,35 @@ namespace YAT.View.Controls
 			}
 		}
 
-		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "YAT is not (yet) capable for RTL")]
+		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "YAT is not (yet) capable for RTL.")]
 		private void linkLabel_Info_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			Exception ex;
-			if (!MKY.Net.Browser.TryBrowseUri(MKY.IO.Usb.SerialHidReportFormatPresetEx.TI_Link, out ex))
+			var link = (e.Link.LinkData as string);
+			if (link != null)
 			{
-				string message = "Unable to open link." + Environment.NewLine + Environment.NewLine +
-				                 "System error message:" + Environment.NewLine + ex.Message;
+				Exception ex;
+				if (MKY.Net.Browser.TryBrowseUri(MKY.IO.Usb.SerialHidReportFormatPresetEx.TI_Link, out ex))
+				{
+					e.Link.Visited = true;
+				}
+				else
+				{
+					string message = "Unable to open link." + Environment.NewLine + Environment.NewLine +
+					                 "System error message:" + Environment.NewLine + ex.Message;
 
-				MessageBox.Show
-				(
-					Parent,
-					message,
-					"Link Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning
-				);
+					MessageBox.Show
+					(
+						Parent,
+						message,
+						"Link Error",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+					);
+				}
+			}
+			else
+			{
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Link data is invalid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
