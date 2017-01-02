@@ -235,7 +235,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The value is intended to be limited ")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The value is intended to be limited.")]
 		public static implicit operator double(StopBitsEx bits)
 		{
 			switch ((StopBits)bits.UnderlyingEnum)
