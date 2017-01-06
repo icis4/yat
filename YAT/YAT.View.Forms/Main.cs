@@ -1377,41 +1377,29 @@ namespace YAT.View.Forms
 			{
 				SuspendLayout();
 
-				// Retrieve saved settings.
-				FormWindowState savedWindowState = ApplicationSettings.LocalUserSettings.MainWindow.WindowState;
+				// Window state:
+				WindowState = ApplicationSettings.LocalUserSettings.MainWindow.WindowState;
+
+				// Start position:
 				FormStartPosition savedStartPosition = ApplicationSettings.LocalUserSettings.MainWindow.StartPosition;
+				Point             savedLocation      = ApplicationSettings.LocalUserSettings.MainWindow.Location;
+				Size              savedSize          = ApplicationSettings.LocalUserSettings.MainWindow.Size;
 
-				Point savedLocation = ApplicationSettings.LocalUserSettings.MainWindow.Location;
-				Size savedSize = ApplicationSettings.LocalUserSettings.MainWindow.Size;
 				Rectangle savedBounds = new Rectangle(savedLocation, savedSize);
-
-				bool contains = false;
-				foreach (Screen screen in Screen.AllScreens)
+				bool isWithinBounds = ScreenEx.IsWithinAnyBounds(savedBounds);
+				if (isWithinBounds) // Restore saved settings if within bounds:
 				{
-					// Retrieve current bounds to ensure that main form is displayed within the visible bounds.
-					if (screen.Bounds.Contains(savedBounds))
-					{
-						contains = true;
-						break;
-					}
-				}
-
-				// Keep settings if within bounds. Adjust start position if out of bounds.
-				// Must be adjusted regardless of the window state since the state may be changed by the user.
-				if (contains)
-				{
-					// Set saved settings.
-					WindowState = savedWindowState;
 					StartPosition = savedStartPosition;
-					Location = savedLocation;
-					Size = savedSize;
+					Location      = savedLocation;
+					Size          = savedSize;
 				}
-				else
+				else // Let the operating system adjust the position if out of bounds:
 				{
-					// Let the operating system adjust the bounds.
-					WindowState = savedWindowState;
 					StartPosition = FormStartPosition.WindowsDefaultBounds;
 				}
+
+				// Note that check must be done regardless of the window state, since the state may
+				// be changed by the user at any time after the initial layout.
 
 				ResumeLayout();
 			}
