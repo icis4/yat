@@ -147,6 +147,7 @@
     <Compile Include="Types\SingleEx.cs" />
     <Compile Include="Windows.Forms\ApplicationEx.cs" />
     <Compile Include="Windows.Forms\ContextMenuStripShortcutWorkaround.cs" />
+    <Compile Include="Windows.Forms\ScreenEx.cs" />
     <Compile Include="Windows.Forms\ToolStripMenuItemEx.cs" />
     <Compile Include="Windows.Forms\KeysEx.cs" />
     <Compile Include="Windows.Forms\MessageBoxEx.cs" />
