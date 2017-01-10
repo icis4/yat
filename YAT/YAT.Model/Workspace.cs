@@ -1457,7 +1457,7 @@ namespace YAT.Model
 		/// Opens the terminal file given.
 		/// </summary>
 		/// <param name="filePath">Terminal file.</param>
-		/// <returns><c>true</c> if successfully opened the terminal, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if successfully opened the terminal; otherwise, <c>false</c>.</returns>
 		public virtual bool OpenTerminalFromFile(string filePath)
 		{
 			AssertNotDisposed();

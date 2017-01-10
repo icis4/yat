@@ -61,7 +61,7 @@ namespace MKY.Net
 		/// Convenience method because <see cref="IPAddress"/> does not override the ==/!= operators, thanks Microsoft guys...
 		/// </remarks>
 		/// <param name="address">Address to evaluate.</param>
-		/// <returns><c>true</c> if value is valid, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if value is valid; otherwise, <c>false</c>.</returns>
 		public static bool EqualsNone(IPAddress address)
 		{
 			if (address != null)
@@ -77,7 +77,7 @@ namespace MKY.Net
 		/// Convenience method because <see cref="IPAddress"/> does not override the ==/!= operators, thanks Microsoft guys...
 		/// </remarks>
 		/// <param name="address">Address to evaluate.</param>
-		/// <returns><c>true</c> if value is valid, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if value is valid; otherwise, <c>false</c>.</returns>
 		public static bool NotEqualsNone(IPAddress address)
 		{
 			if (address != null)

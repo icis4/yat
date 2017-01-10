@@ -36,7 +36,7 @@ namespace MKY.Net
 		/// Tries to browse the given URI with the system's default browser.
 		/// </summary>
 		/// <param name="uri">URI to browse.</param>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "Process.Start() requires a string.")]
 		[SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings", Justification = "Process.Start() requires a string.")]
 		public static bool TryBrowseUri(string uri)
@@ -50,7 +50,7 @@ namespace MKY.Net
 		/// </summary>
 		/// <param name="uri">URI to browse.</param>
 		/// <param name="exception">Exception object, in case of failure.</param>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "Process.Start() requires a string.")]
 		public static bool TryBrowseUri(string uri, out Exception exception)
@@ -72,7 +72,7 @@ namespace MKY.Net
 		/// Tries to browse the given URI with the system's default browser.
 		/// </summary>
 		/// <param name="uri">URI to browse.</param>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		public static bool TryBrowseUri(Uri uri)
 		{
 			Exception exception;
@@ -84,7 +84,7 @@ namespace MKY.Net
 		/// </summary>
 		/// <param name="uri">URI to browse.</param>
 		/// <param name="exception">Exception object, in case of failure.</param>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		public static bool TryBrowseUri(Uri uri, out Exception exception)
 		{
 			return (TryBrowseUri(uri.AbsoluteUri, out exception));

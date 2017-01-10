@@ -2248,7 +2248,7 @@ namespace YAT.Model
 		/// already in use, because that may take quite some time and thus unnecessarily delay the
 		/// open/check/start sequence.
 		/// </remarks>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual bool CheckIOAvailability()
 		{
@@ -2587,7 +2587,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Starts the terminal's I/O instance.
 		/// </summary>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		public virtual bool StartIO()
 		{
 			return (StartIO(true));
@@ -2596,7 +2596,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Starts the terminal's I/O instance.
 		/// </summary>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private bool StartIO(bool saveStatus)
 		{
@@ -2651,7 +2651,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Stops the terminal's I/O instance.
 		/// </summary>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		public virtual bool StopIO()
 		{
 			return (StopIO(true));
@@ -2660,7 +2660,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Stops the terminal's I/O instance.
 		/// </summary>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private bool StopIO(bool saveStatus)
 		{
