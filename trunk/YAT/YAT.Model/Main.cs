@@ -317,7 +317,7 @@ namespace YAT.Model
 		/// If still unsuccessful, a new workspace is created.
 		/// </summary>
 		/// <returns>
-		/// Returns <c>true</c> if either operation succeeded, <c>false</c> otherwise.
+		/// Returns <c>true</c> if either operation succeeded; otherwise, <c>false</c>.
 		/// </returns>
 		public virtual MainResult Start()
 		{
@@ -1051,7 +1051,7 @@ namespace YAT.Model
 		/// Opens the workspace or terminal file given.
 		/// </summary>
 		/// <param name="filePath">Workspace or terminal file.</param>
-		/// <returns><c>true</c> if successfully opened the workspace or terminal, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if successfully opened the workspace or terminal; otherwise, <c>false</c>.</returns>
 		public virtual bool OpenFromFile(string filePath)
 		{
 			AssertNotDisposed();

@@ -37,7 +37,7 @@ namespace MKY.Windows.Forms
 		/// </summary>
 		/// <param name="keyData">A <see cref="Keys"/> value that represents a key.</param>
 		/// <param name="functionKey">The according function key value; 0 if no function key.</param>
-		/// <returns><c>true</c> if key data is a function key, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if key data is a function key; otherwise, <c>false</c>.</returns>
 		public static bool TryConvertFunctionKey(Keys keyData, out int functionKey)
 		{
 			Keys keyCode = keyData & Keys.KeyCode;

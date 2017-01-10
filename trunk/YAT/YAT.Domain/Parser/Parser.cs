@@ -612,7 +612,7 @@ namespace YAT.Domain.Parser
 		/// <param name="radix">Numeric radix.</param>
 		/// <param name="result">Array containing the resulting bytes.</param>
 		/// <param name="formatException">Returned if invalid string format.</param>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		/// <exception cref="OverflowException">Thrown if a value cannot be converted into bytes.</exception>
 		internal virtual bool TryParseContiguousRadix(string s, Radix radix, out byte[] result, ref FormatException formatException)
 		{
@@ -927,7 +927,7 @@ namespace YAT.Domain.Parser
 		/// <param name="s">String to be parsed.</param>
 		/// <param name="result">Array containing the results.</param>
 		/// <param name="formatException">Returned if invalid string format.</param>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Non-static for orthogonality with other TryParse() methods.")]
 		internal virtual bool TryParseContiguousKeywords(string s, out Result[] result, ref FormatException formatException)
 		{

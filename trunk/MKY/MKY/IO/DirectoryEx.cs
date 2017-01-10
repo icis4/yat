@@ -38,7 +38,7 @@ namespace MKY.IO
 		/// Tries to open the given path with the system's explorer.
 		/// </summary>
 		/// <param name="directoryPath">File to open.</param>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		public static bool TryOpen(string directoryPath)
 		{
 			Exception exception;
@@ -50,7 +50,7 @@ namespace MKY.IO
 		/// </summary>
 		/// <param name="directoryPath">File to open.</param>
 		/// <param name="exception">Exception object, in case of failure.</param>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static bool TryOpen(string directoryPath, out Exception exception)
 		{
