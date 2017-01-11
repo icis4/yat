@@ -10,10 +10,11 @@
 // ------------------------------------------------------------------------------------------------
 // MKY Version 1.0.9
 // ------------------------------------------------------------------------------------------------
-// See SVN change log for revision details.
 // See release notes for product version details.
+// See SVN change log for file revision details.
+// Author(s): Matthias Klaey
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2007-2016 Matthias Kläy.
+// Copyright © 2007-2017 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.

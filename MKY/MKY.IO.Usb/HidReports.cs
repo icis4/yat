@@ -4,16 +4,17 @@
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
-// $Author$
-// $Date$
 // $Revision$
+// $Date$
+// $Author$
 // ------------------------------------------------------------------------------------------------
 // MKY Version 1.0.17
 // ------------------------------------------------------------------------------------------------
-// See SVN change log for revision details.
 // See release notes for product version details.
+// See SVN change log for file revision details.
+// Author(s): Matthias Klaey
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2010-2016 Matthias Kläy.
+// Copyright © 2010-2017 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.

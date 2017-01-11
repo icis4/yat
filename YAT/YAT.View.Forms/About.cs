@@ -4,17 +4,18 @@
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
-// $Author$
-// $Date$
 // $Revision$
+// $Date$
+// $Author$
 // ------------------------------------------------------------------------------------------------
 // YAT 2.0 Gamma 2'' Version 1.99.52
 // ------------------------------------------------------------------------------------------------
-// See SVN change log for revision details.
 // See release notes for product version details.
+// See SVN change log for file revision details.
+// Author(s): Matthias Klaey
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2016 Matthias Kläy.
+// Copyright © 2003-2017 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -70,7 +71,7 @@ namespace YAT.View.Forms
 			textBefore = "Copyright © 2003-2004 ";
 			textLink   =                       "HSR Hochschule für Technik Rapperswil";
 			textAfter  =                                                            "." + Environment.NewLine +
-			             "Copyright © 2003-2016 Matthias Kläy.";
+			             "Copyright © 2003-2017 Matthias Kläy.";
 			linkLabel_Copyright.Text += textBefore;
 			linkStart = linkLabel_Copyright.Text.Length;
 			linkLabel_Copyright.Text += textLink;
@@ -328,7 +329,7 @@ namespace YAT.View.Forms
 			linkLabel_Home.Text += textAfter;
 
 			// Author:
-			linkLabel_Author.Text = "2016, Matthias Kläy";
+			linkLabel_Author.Text = "2017, Matthias Kläy";
 
 			// License:
 			linkLabel_License.Text = "";
