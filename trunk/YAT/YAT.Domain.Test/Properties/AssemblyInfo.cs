@@ -4,16 +4,17 @@
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
-// $Author$
-// $Date$
 // $Revision$
+// $Date$
+// $Author$
 // ------------------------------------------------------------------------------------------------
 // YAT 2.0 Gamma 2'' Version 1.99.52
 // ------------------------------------------------------------------------------------------------
-// See SVN change log for revision details.
 // See release notes for product version details.
+// See SVN change log for file revision details.
+// Author(s): Matthias Klaey
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2007-2016 Matthias Kläy.
+// Copyright © 2007-2017 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -33,7 +34,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("YAT")]
 [assembly: AssemblyProduct("YAT")]
-[assembly: AssemblyCopyright("Copyright © 2007-2016 Matthias Kläy. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2007-2017 Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
