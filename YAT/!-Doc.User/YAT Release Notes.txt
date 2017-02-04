@@ -90,10 +90,46 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 YAT 2.0 Gamma 3 Version 1.99.70 :: 2017-xx-xx
 ----------------------------------------------------------------------------------------------------
 
+New:
+- 
+
 Important changes:
 - Notes and links regarding non-intrusive RS-232 monitor/sniffer/spy cables and devices added to
   'About' dialog (related to feature requests #152, 198, 288).
 - NUnit framework assemblies placed into solution structure instead of referring to installation.
+
+Fixed bugs:
+- 
+
+Limitations and known issues:
+- x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
+- General imitations of .NET Windows.Forms:
+   > Horizontal auto scroll is not feasible to implement (feature request #163).
+   > System display scaling other than 100% results in partly clipped controls (bugs #85 and #235).
+   > System errors are output in local language, even though YAT is all-English (bug #66).
+- MDI limitations of .NET Windows.Forms:
+   > Issues with frame (bugs #29 and #30).
+   > Issue with window list (bug #31).
+- Serial COM port limitations of .NET:
+   > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
+   > Use of USB/RS-232 converters (USB CDC) while disconnect, undock or sleep without closing the
+     serial COM port may require to reset the converters, i.e. disconnect and reconnect them, or
+     restart the computer. In addition, it may be required to disconnect or reset any device
+     sending continuous data. Otherwise, the related serial COM ports may no longer be opened by
+     an application. Issue is being reported by many users of .NET, but Microsoft seems to have
+     no plans fixing it. If an ObjectDisposedException or UnauthorizedAccessException still occurs,
+     the serial COM port connection monitoring has to be disabled in the terminal settings.
+- Serial COM port break states may not be supported on certain hardware, e.g. USB/RS-232 converters.
+- USB Ser/HID only runs on Windows, use of 'LibUsbDotNet', significant work and the availability of
+  a test environment would be needed to run USB Ser/HID on unixoids (feature request #119).
+- Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #139).
+- Keyword \!(Repeat(<Item>, <Repetitions>, <Delay>)) not yet implemented (feature request #13).
+- Text terminals: Wait for answer line not yet implemented (feature request #19).
+- Breaking while sending files not possible yet (bug #305).
+- Direct mode does not yet support special formats and commands (feature request #10).
+- Running YAT for a long period, or creating many terminals, results in memory leaks, which result
+  in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
+  unknown, could even be a limitation of the memory management within .NET 3.5).
 
 
 YAT 2.0 Gamma 2'' Version 1.99.52 :: 2016-09-30
