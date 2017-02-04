@@ -93,6 +93,7 @@ YAT 2.0 Gamma 3 Version 1.99.70 :: 2017-xx-xx
 Important changes:
 - Notes and links regarding non-intrusive RS-232 monitor/sniffer/spy cables and devices added to
   'About' dialog (related to feature requests #152, 198, 288).
+- NUnit framework assemblies placed into solution structure instead of referring to installation.
 
 
 YAT 2.0 Gamma 2'' Version 1.99.52 :: 2016-09-30
@@ -301,7 +302,7 @@ Important changes:
 - Visual Studio upgraded to 2013 Community Edition, incl. installer (VSI) (feature request #221)
 - Installer split into separate packages for x86 and x64 (feature requests #175 and #191)
 - Installer improved, now using YAT specific banner and texts (related to requests #175 and #191)
-- NUnit updated to 2.64, other development tools (GhostDoc, StyleCop, FxCop) updated too
+- NUnit updated to 2.6.4, other development tools (GhostDoc, StyleCop, FxCop) updated too
 
 Fixed bugs:
 - Duplicated and/or split display representation fixed (bugs #258, #264 and #265)
