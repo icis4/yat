@@ -2,6 +2,16 @@
 NUnit
 -----
 
+Location
+ > Framework assemblies are located at "<WORKSPACE>\NUnit\framework" instead of absolutely referring
+   to the installation directory "C:\<Program Files>\NUnit <Version>\bin\framework" because this...
+    ...ensures that the assemblies required for linking are always available.
+    ...ensures that the desired explict assembly version is used, instead of automatic resolution.
+    ...prevents that <HintPath> is set to the installation directory by Visual Studio.
+    ...is an easy to understand and obvious approach.
+ > Implication of this approach:
+    > Assemblies need to be updated when updating the tool version.
+
 Settings
  > Gui
     > Tree Display
