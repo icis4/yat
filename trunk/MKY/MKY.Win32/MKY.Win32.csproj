@@ -113,7 +113,6 @@
     <Compile Include="Hid.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security.cs" />
-    <Compile Include="Version.cs" />
     <Compile Include="WinUsb.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1230,7 +1230,7 @@ namespace YAT.View.Forms
 		{
 			this.isSettingControls.Enter();
 
-			// Hide all.
+			// Hide all:
 			for (int i = 0; i < Model.Settings.RecentFileSettings.MaxFilePaths; i++)
 			{
 				string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1);
@@ -1238,11 +1238,11 @@ namespace YAT.View.Forms
 				this.menuItems_recent[i].Visible = false;
 			}
 
-			// Show valid.
+			// Show valid:
 			for (int i = 0; i < ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count; i++)
 			{
 				string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1);
-				string file = PathEx.LimitPath(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i].Item, 60);
+				string file = PathEx.Limit(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i].Item, 60);
 				if (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i] != null)
 				{
 					this.menuItems_recent[i].Text = "&" + prefix + file;

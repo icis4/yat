@@ -3037,7 +3037,7 @@ namespace YAT.View.Forms
 			pd.PrinterSettings = new System.Drawing.Printing.PrinterSettings();
 
 			// Note that the PrintDialog class may not work on AMD64 microprocessors unless you set the UseEXDialog property to true (MSDN):
-			if (EnvironmentEx.IsWindows64)
+			if (EnvironmentEx.IsStandardWindows64)
 				pd.UseEXDialog = true;
 
 			if (pd.ShowDialog(this) == DialogResult.OK)

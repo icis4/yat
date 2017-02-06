@@ -176,7 +176,7 @@ namespace MKY.Win32
 		{
 			try
 			{
-				if (Version.IsWindowsVistaOrLater)
+				if (EnvironmentEx.IsWindowsVistaOrLater)
 				{
 					uint l;
 					if (NativeMethods.WinUsb_GetDescriptor(interfaceHandle, DescriptorType.Device, (byte)index, (ushort)languageId, buffer, (uint)buffer.Length, out l))
@@ -206,7 +206,7 @@ namespace MKY.Win32
 		{
 			try
 			{
-				if (Version.IsWindowsVistaOrLater)
+				if (EnvironmentEx.IsWindowsVistaOrLater)
 				{
 					uint l;
 					if (NativeMethods.WinUsb_GetDescriptor(interfaceHandle, DescriptorType.Configuration, (byte)index, (ushort)languageId, buffer, (uint)buffer.Length, out l))
@@ -237,7 +237,7 @@ namespace MKY.Win32
 		{
 			try
 			{
-				if (Version.IsWindowsVistaOrLater)
+				if (EnvironmentEx.IsWindowsVistaOrLater)
 				{
 					StringBuilder s = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
 					uint l;
