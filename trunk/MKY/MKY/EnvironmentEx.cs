@@ -36,6 +36,10 @@ namespace MKY
 		/// Constant string to use 'NewLine' in places where <see cref="Environment.NewLine"/>
 		/// cannot be used, e.g. in case of attribute arguments.
 		/// </summary>
+		/// <remarks>
+		/// "\n" should be sufficient and work in case of Windows ("\r\n") as well as Unixoids and
+		/// Mac since OS X ("\n"). Other operating systems are not supported by this workaround.
+		/// </remarks>
 		public const string NewLineConstWorkaround = "\n";
 
 		/// <summary>
