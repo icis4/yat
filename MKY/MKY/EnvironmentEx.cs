@@ -43,9 +43,33 @@ namespace MKY
 		public const string NewLineConstWorkaround = "\n";
 
 		/// <summary>
-		/// Returns <c>true</c> if operating system is Win32 or Win64 or compatible.
+		/// Returns <c>true</c> if operating system is any Microsoft Windows including CE or Xbox.
 		/// </summary>
 		public static bool IsWindows
+		{
+			get
+			{
+				switch (Environment.OSVersion.Platform)
+				{
+					case PlatformID.Win32S:
+					case PlatformID.Win32Windows:
+					case PlatformID.Win32NT: // Also covers Win64!
+					case PlatformID.WinCE:
+					case PlatformID.Xbox:
+						return (true);
+
+					case PlatformID.Unix:
+					case PlatformID.MacOSX:
+					default:
+						return (false);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Returns <c>true</c> if operating system is Win32 or Win64 or compatible.
+		/// </summary>
+		public static bool IsStandardWindows
 		{
 			get
 			{
@@ -69,11 +93,67 @@ namespace MKY
 		/// <summary>
 		/// Returns <c>true</c> if operating system is Win64 or compatible.
 		/// </summary>
-		public static bool IsWindows64
+		public static bool IsStandardWindows64
 		{
 			get
 			{
-				return (IsWindows && (IntPtr.Size == 8));
+				return (IsStandardWindows && (IntPtr.Size == 8));
+			}
+		}
+
+		/// <summary>
+		/// Returns <c>true</c> if operating system is Windows Vista or later.
+		/// </summary>
+		public static bool IsWindowsVistaOrLater
+		{
+			get
+			{
+				if (!IsStandardWindows)
+					return (false);
+
+				// Windows Vista is version 6.0.
+				Version versionXP = new Version(6, 0);
+
+				Version environmentVersion = Environment.OSVersion.Version;
+				return (environmentVersion >= versionXP);
+			}
+		}
+
+		/// <summary>
+		/// Returns <c>true</c> if operating system is Windows XP or later.
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Xp", Justification = "Would 'IsWindowsXPOrLater' be better? Not really...")]
+		public static bool IsWindowsXpOrLater
+		{
+			get
+			{
+				if (!IsStandardWindows)
+					return (false);
+
+				// Windows XP is version 5.1.
+				Version versionXP = new Version(5, 1);
+
+				Version environmentVersion = Environment.OSVersion.Version;
+				return (environmentVersion >= versionXP);
+			}
+		}
+
+		/// <summary>
+		/// Returns <c>true</c> if operating system is Windows 98 Standard Edition.
+		/// </summary>
+		public static bool IsWindows98Standard
+		{
+			get
+			{
+				if (!IsStandardWindows)
+					return (false);
+
+				// Windows 98 Standard Edition is version 4.10 with a build number less than 2183.
+				Version version98 = new Version(4, 10);
+				Version versionAbove98 = new Version(4, 10, 2183);
+
+				Version environmentVersion = Environment.OSVersion.Version;
+				return ((environmentVersion >= version98) && (environmentVersion < versionAbove98));
 			}
 		}
 

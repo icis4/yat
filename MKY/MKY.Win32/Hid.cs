@@ -926,7 +926,7 @@ namespace MKY.Win32
 		public static bool GetNumberOfInputBuffers(SafeFileHandle deviceHandle, out int numberOfInputBuffers)
 		{
 			bool success = false;
-			if (!Version.IsWindows98Standard)
+			if (!EnvironmentEx.IsWindows98Standard)
 			{
 				uint numberBuffers;
 				success = NativeMethods.HidD_GetNumInputBuffers(deviceHandle, out numberBuffers);
@@ -957,7 +957,7 @@ namespace MKY.Win32
 		/// <returns>True on success. False on failure.</returns>
 		public static bool SetNumberOfInputBuffers(SafeFileHandle deviceHandle, int numberOfInputBuffers)
 		{
-			if (!Version.IsWindows98Standard)
+			if (!EnvironmentEx.IsWindows98Standard)
 				return (NativeMethods.HidD_SetNumInputBuffers(deviceHandle, (uint)numberOfInputBuffers));
 			else
 				return (false); // Not supported under Windows 98 Standard Edition.
@@ -975,7 +975,7 @@ namespace MKY.Win32
 		/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 		public static bool GetInputReport(SafeFileHandle deviceHandle, byte[] reportBuffer)
 		{
-			if (!Version.IsWindowsXpOrLater)
+			if (!EnvironmentEx.IsWindowsXpOrLater)
 				return (NativeMethods.HidD_GetInputReport(deviceHandle, reportBuffer));
 			else
 				return (false); // Not supported before Windows XP.
@@ -993,7 +993,7 @@ namespace MKY.Win32
 		/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 		public static bool SetOutputReport(SafeFileHandle deviceHandle, byte[] reportBuffer)
 		{
-			if (!Version.IsWindowsXpOrLater)
+			if (!EnvironmentEx.IsWindowsXpOrLater)
 				return (NativeMethods.HidD_SetOutputReport(deviceHandle, reportBuffer));
 			else
 				return (false); // Not supported before Windows XP.

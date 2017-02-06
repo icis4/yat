@@ -24,9 +24,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace MKY.IO
@@ -37,76 +39,44 @@ namespace MKY.IO
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class PathEx
 	{
-		#region Is...()
+		#region Platform
 
 		/// <summary>
-		/// Returns whether the directory or file path is defined.
+		/// The comparer dependent on the operating systems policies.
 		/// </summary>
-		public static bool IsDefined(string path)
+		public static StringComparer Comparer
 		{
-			// String validation:
-			if (string.IsNullOrEmpty(path))
-				return (false);
-
-			return (true);
+			get
+			{
+				if (EnvironmentEx.IsWindows)
+					return (StringComparer.OrdinalIgnoreCase);
+				else
+					return (StringComparer.Ordinal);
+			}
 		}
 
 		/// <summary>
-		/// Returns whether the directory or file path is valid.
+		/// The comparison type dependent on the operating systems policies.
 		/// </summary>
-		/// <remarks>
-		/// This method only checks whether the path is valid but not whether it actually exists.
-		/// Use <see cref="Directory.Exists"/> or <see cref="File.Exists"/> to check existence.
-		/// </remarks>
-		public static bool IsValid(string path)
+		public static StringComparison ComparisonType
 		{
-			// String validation:
-			if (string.IsNullOrEmpty(path))
-				return (false);
-
-			// Path validation:
-			return (!string.IsNullOrEmpty(Path.GetFullPath(path)));
-		}
-
-		#endregion
-
-		#region ...Extension()
-
-		/// <summary>
-		/// Normalizes an extension, i.e. prepends a '.' if missing.
-		/// </summary>
-		public static string NormalizeExtension(string extension)
-		{
-			if (string.IsNullOrEmpty(extension))
-				return (extension);
-
-			if (extension[0] == '.') // Already normalized.
-				return (extension);
-
-			// Normalize:
-			return (extension.Insert(0, "."));
+			get
+			{
+				if (EnvironmentEx.IsWindows)
+					return (StringComparison.OrdinalIgnoreCase);
+				else
+					return (StringComparison.Ordinal);
+			}
 		}
 
 		/// <summary>
-		/// Denormalizes an extension, i.e. removes a '.' if apparent.
+		/// Convert non-platform separators according to platform.
 		/// </summary>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Denormalize' is a correct English term.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Denormalize", Justification = "'Denormalize' is a correct English term.")]
-		public static string DenormalizeExtension(string extension)
+		public static string ConvertToPlatform(string path)
 		{
-			if (string.IsNullOrEmpty(extension))
-				return (extension);
-
-			if (extension[0] != '.') // Already denormalized.
-				return (extension);
-
-			// Denormalize:
-			return (extension.TrimStart('.'));
+			// e.g. replace '/' by '\'
+			return (path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar));
 		}
-
-		#endregion
-
-		#region InvalidPathRoot
 
 		/// <summary>
 		/// Returns an invalid path root.
@@ -153,19 +123,6 @@ namespace MKY.IO
 
 		#endregion
 
-		#region ConvertPathToPlatform()
-
-		/// <summary>
-		/// Convert non-platform separators according to platform.
-		/// </summary>
-		public static string ConvertToPlatform(string path)
-		{
-			// e.g. replace '/' by '\'
-			return (path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar));
-		}
-
-		#endregion
-
 		#region Equals()
 
 		/// <summary>
@@ -173,20 +130,76 @@ namespace MKY.IO
 		/// </summary>
 		public static bool Equals(string pathA, string pathB)
 		{
-			switch (Environment.OSVersion.Platform)
-			{
-				case PlatformID.Win32S:
-				case PlatformID.Win32Windows:
-				case PlatformID.Win32NT:
-				case PlatformID.WinCE:
-				case PlatformID.Xbox:
-					return (StringEx.EqualsOrdinalIgnoreCase(pathA, pathB));
+			return (string.Compare(pathA, pathB, ComparisonType) == 0);
+		}
 
-				case PlatformID.Unix:
-				case PlatformID.MacOSX:
-				default:
-					return (StringEx.EqualsOrdinal(pathA, pathB));
-			}
+		#endregion
+
+		#region Is...()
+
+		/// <summary>
+		/// Returns whether the directory or file path is defined.
+		/// </summary>
+		public static bool IsDefined(string path)
+		{
+			// String validation:
+			if (string.IsNullOrEmpty(path))
+				return (false);
+
+			return (true);
+		}
+
+		/// <summary>
+		/// Returns whether the directory or file path is valid, expanding environment variables.
+		/// </summary>
+		/// <remarks>
+		/// This method only checks whether the path is valid but not whether it actually exists.
+		/// Use <see cref="Directory.Exists"/> or <see cref="File.Exists"/> to check existence.
+		/// </remarks>
+		public static bool IsValid(string path)
+		{
+			// String validation:
+			if (string.IsNullOrEmpty(path))
+				return (false);
+
+			// Path validation:
+			return (!string.IsNullOrEmpty(Path.GetFullPath(Environment.ExpandEnvironmentVariables(path))));
+		}
+
+		#endregion
+
+		#region ...Extension()
+
+		/// <summary>
+		/// Normalizes an extension, i.e. prepends a '.' if missing.
+		/// </summary>
+		public static string NormalizeExtension(string extension)
+		{
+			if (string.IsNullOrEmpty(extension))
+				return (extension);
+
+			if (extension[0] == '.') // Already normalized.
+				return (extension);
+
+			// Normalize:
+			return (extension.Insert(0, "."));
+		}
+
+		/// <summary>
+		/// Denormalizes an extension, i.e. removes a '.' if apparent.
+		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Denormalize' is a correct English term.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Denormalize", Justification = "'Denormalize' is a correct English term.")]
+		public static string DenormalizeExtension(string extension)
+		{
+			if (string.IsNullOrEmpty(extension))
+				return (extension);
+
+			if (extension[0] != '.') // Already denormalized.
+				return (extension);
+
+			// Denormalize:
+			return (extension.TrimStart('.'));
 		}
 
 		#endregion
@@ -196,7 +209,10 @@ namespace MKY.IO
 		/// <summary>
 		/// Limits a directory or file path to the specified max length.
 		/// </summary>
-		public static string LimitPath(string path, int length)
+		/// <remarks>
+		/// This function does not expand environment variables.
+		/// </remarks>
+		public static string Limit(string path, int length)
 		{
 			string limitedPath;
 
@@ -233,6 +249,9 @@ namespace MKY.IO
 		/// <summary>
 		/// Appends a directory or file path to the specified max length.
 		/// </summary>
+		/// <remarks>
+		/// This function does not expand environment variables.
+		/// </remarks>
 		/// <example>
 		/// <code>
 		/// string filePath = "C:\\Temp\\MyFile.txt";
@@ -255,30 +274,33 @@ namespace MKY.IO
 		#region Compare...()
 
 		/// <summary>
-		/// Compares <paramref name="directoryPath2"/> relative to <paramref name="directoryPath1"/>
-		/// and returns relative path of <paramref name="directoryPath2"/>.
+		/// Compares <paramref name="directoryPathB"/> relative to <paramref name="directoryPathA"/>
+		/// and returns relative path of <paramref name="directoryPathB"/>, expanding environment variables.
 		/// </summary>
 		/// <remarks>
-		/// Returns <paramref name="directoryPath2"/> if it already is relative.
+		/// Returns <paramref name="directoryPathB"/> if it already is relative.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		public static PathCompareResult CompareDirectoryPaths(string directoryPath1, string directoryPath2)
+		public static PathCompareResult CompareDirectoryPaths(string directoryPathA, string directoryPathB)
 		{
-			if (!Path.IsPathRooted(directoryPath1))
+			directoryPathA = Environment.ExpandEnvironmentVariables(directoryPathA);
+			directoryPathB = Environment.ExpandEnvironmentVariables(directoryPathB);
+
+			if (!Path.IsPathRooted(directoryPathA))
 				return (new PathCompareResult(false));
 
-			if (!Path.IsPathRooted(directoryPath2))
-				return (new PathCompareResult(false, directoryPath2));
+			if (!Path.IsPathRooted(directoryPathB))
+				return (new PathCompareResult(false, directoryPathB));
 
-			return (DoCompareDirectoryPaths(directoryPath1, directoryPath2));
+			return (DoCompareDirectoryPaths(directoryPathA, directoryPathB));
 		}
 
 		/// <summary>
 		/// Compares <paramref name="filePath"/> relative to <paramref name="directoryPath"/> and
-		/// returns relative path of file.
+		/// returns relative path of file, expanding environment variables.
 		/// </summary>
 		/// <remarks>
 		/// Returns <paramref name="filePath"/> if it already is relative.
@@ -289,6 +311,9 @@ namespace MKY.IO
 		/// </remarks>
 		public static PathCompareResult CompareDirectoryAndFilePaths(string directoryPath, string filePath)
 		{
+			directoryPath = Environment.ExpandEnvironmentVariables(directoryPath);
+			filePath      = Environment.ExpandEnvironmentVariables(filePath);
+
 			if (!Path.IsPathRooted(directoryPath))
 				return (new PathCompareResult(false));
 
@@ -303,7 +328,7 @@ namespace MKY.IO
 
 		/// <summary>
 		/// Compares <paramref name="directoryPath"/> relative to <paramref name="filePath"/> and
-		/// returns relative path of <paramref name="directoryPath"/>.
+		/// returns relative path of <paramref name="directoryPath"/>, expanding environment variables.
 		/// </summary>
 		/// <remarks>
 		/// Returns <paramref name="directoryPath"/> if it already is relative.
@@ -314,6 +339,9 @@ namespace MKY.IO
 		/// </remarks>
 		public static PathCompareResult CompareFileAndDirectoryPaths(string filePath, string directoryPath)
 		{
+			filePath      = Environment.ExpandEnvironmentVariables(filePath);
+			directoryPath = Environment.ExpandEnvironmentVariables(directoryPath);
+
 			if (!Path.IsPathRooted(filePath))
 				return (new PathCompareResult(false));
 
@@ -324,26 +352,29 @@ namespace MKY.IO
 		}
 
 		/// <summary>
-		/// Compares <paramref name="filePath2"/> relative to <paramref name="filePath1"/> and
-		/// returns relative path of file2.
+		/// Compares <paramref name="filePathB"/> relative to <paramref name="filePathA"/> and
+		/// returns relative path of file2, expanding environment variables.
 		/// </summary>
 		/// <remarks>
-		/// Returns <paramref name="filePath2"/> if it already is relative.
+		/// Returns <paramref name="filePathB"/> if it already is relative.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		public static PathCompareResult CompareFilePaths(string filePath1, string filePath2)
+		public static PathCompareResult CompareFilePaths(string filePathA, string filePathB)
 		{
-			if (!Path.IsPathRooted(filePath1))
+			filePathA = Environment.ExpandEnvironmentVariables(filePathA);
+			filePathB = Environment.ExpandEnvironmentVariables(filePathB);
+
+			if (!Path.IsPathRooted(filePathA))
 				return (new PathCompareResult(false));
 
-			if (!Path.IsPathRooted(filePath2))
-				return (new PathCompareResult(false, filePath2));
+			if (!Path.IsPathRooted(filePathB))
+				return (new PathCompareResult(false, filePathB));
 
-			string fileName2 = Path.GetFileName(filePath2);
-			PathCompareResult pcr = DoCompareDirectoryPaths(Path.GetDirectoryName(filePath1), Path.GetDirectoryName(filePath2));
+			string fileName2 = Path.GetFileName(filePathB);
+			PathCompareResult pcr = DoCompareDirectoryPaths(Path.GetDirectoryName(filePathA), Path.GetDirectoryName(filePathB));
 			pcr.RelativePath += (Path.DirectorySeparatorChar + fileName2);
 			return (pcr);
 		}
@@ -353,33 +384,36 @@ namespace MKY.IO
 		#region Combine...()
 
 		/// <summary>
-		/// Resolves <paramref name="directoryPath2"/> relative to <paramref name="directoryPath1"/>
-		/// and returns absolute path of <paramref name="directoryPath2"/>.
+		/// Resolves <paramref name="directoryPathB"/> relative to <paramref name="directoryPathA"/>
+		/// and returns absolute path of <paramref name="directoryPathB"/>, expanding environment variables.
 		/// </summary>
 		/// <remarks>
-		/// Returns <paramref name="directoryPath2"/> if it is absolute.
+		/// Returns <paramref name="directoryPathB"/> if it is absolute.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		public static string CombineDirectoryPaths(string directoryPath1, string directoryPath2)
+		public static string CombineDirectoryPaths(string directoryPathA, string directoryPathB)
 		{
-			if (Path.IsPathRooted(directoryPath2))
-				return (directoryPath2);
+			directoryPathA = Environment.ExpandEnvironmentVariables(directoryPathA);
+			directoryPathB = Environment.ExpandEnvironmentVariables(directoryPathB);
 
-			if (!Path.IsPathRooted(directoryPath1))
+			if (Path.IsPathRooted(directoryPathB))
+				return (directoryPathB);
+
+			if (!Path.IsPathRooted(directoryPathA))
 				return (null);
 
-			if (string.IsNullOrEmpty(directoryPath2))
-				return (directoryPath1);
+			if (string.IsNullOrEmpty(directoryPathB))
+				return (directoryPathA);
 
-			return (DoCombineDirectoryPaths(directoryPath1, directoryPath2));
+			return (DoCombineDirectoryPaths(directoryPathA, directoryPathB));
 		}
 
 		/// <summary>
 		/// Resolves <paramref name="filePath"/> relative to <paramref name="directoryPath"/> and
-		/// returns absolute path of file.
+		/// returns absolute path of file, expanding environment variables.
 		/// </summary>
 		/// <remarks>
 		/// Returns <paramref name="filePath"/> if it is absolute.
@@ -390,6 +424,9 @@ namespace MKY.IO
 		/// </remarks>
 		public static string CombineDirectoryAndFilePaths(string directoryPath, string filePath)
 		{
+			directoryPath = Environment.ExpandEnvironmentVariables(directoryPath);
+			filePath      = Environment.ExpandEnvironmentVariables(filePath);
+
 			if (Path.IsPathRooted(filePath))
 				return (filePath);
 
@@ -408,7 +445,7 @@ namespace MKY.IO
 
 		/// <summary>
 		/// Resolves <paramref name="directoryPath"/> relative to <paramref name="filePath"/> and
-		/// returns absolute path of <paramref name="directoryPath"/>.
+		/// returns absolute path of <paramref name="directoryPath"/>, expanding environment variables.
 		/// </summary>
 		/// <remarks>
 		/// Returns <paramref name="directoryPath"/> if it is absolute.
@@ -419,6 +456,9 @@ namespace MKY.IO
 		/// </remarks>
 		public static string CombineFileAndDirectoryPaths(string filePath, string directoryPath)
 		{
+			filePath      = Environment.ExpandEnvironmentVariables(filePath);
+			directoryPath = Environment.ExpandEnvironmentVariables(directoryPath);
+
 			if (Path.IsPathRooted(directoryPath))
 				return (directoryPath);
 
@@ -432,29 +472,32 @@ namespace MKY.IO
 		}
 
 		/// <summary>
-		/// Resolves <paramref name="filePath2"/> relative to <paramref name="filePath1"/> and
-		/// returns absolute path of file2.
+		/// Resolves <paramref name="filePathB"/> relative to <paramref name="filePathA"/> and
+		/// returns absolute path of file2, expanding environment variables.
 		/// </summary>
 		/// <remarks>
-		/// Returns <paramref name="filePath2"/> if it is absolute.
+		/// Returns <paramref name="filePathB"/> if it is absolute.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		public static string CombineFilePaths(string filePath1, string filePath2)
+		public static string CombineFilePaths(string filePathA, string filePathB)
 		{
-			if (Path.IsPathRooted(filePath2))
-				return (filePath2);
+			filePathA = Environment.ExpandEnvironmentVariables(filePathA);
+			filePathB = Environment.ExpandEnvironmentVariables(filePathB);
 
-			if (!Path.IsPathRooted(filePath1))
+			if (Path.IsPathRooted(filePathB))
+				return (filePathB);
+
+			if (!Path.IsPathRooted(filePathA))
 				return (null);
 
-			if (string.IsNullOrEmpty(filePath2))
-				return (filePath1);
+			if (string.IsNullOrEmpty(filePathB))
+				return (filePathA);
 
-			string fileName2 = Path.GetFileName(filePath2);
-			string absolutePath = DoCombineDirectoryPaths(Path.GetDirectoryName(filePath1), Path.GetDirectoryName(filePath2));
+			string fileName2 = Path.GetFileName(filePathB);
+			string absolutePath = DoCombineDirectoryPaths(Path.GetDirectoryName(filePathA), Path.GetDirectoryName(filePathB));
 
 			string combined = Path.Combine(absolutePath, fileName2);
 			return (combined);
@@ -467,7 +510,10 @@ namespace MKY.IO
 		/// <summary>
 		/// Returns relation between the two absolute directory paths.
 		/// </summary>
-		public static PathCompareResult DoCompareDirectoryPaths(string pathA, string pathB)
+		/// <remarks>
+		/// This function does not expand environment variables.
+		/// </remarks>
+		private static PathCompareResult DoCompareDirectoryPaths(string pathA, string pathB)
 		{
 			// Do not check for reference equality because complete result needs to be retrieved anyway.
 
@@ -558,8 +604,10 @@ namespace MKY.IO
 
 						di = di.Parent;
 					}
+
 					return (new PathCompareResult(commonPath, commonDirectoryCount, nearRelativeDirectoryCount, true, nearRelativeDirectoryCount, relativePath.ToString()));
 				}
+
 				if (Equals(commonPath, dirPathB))
 				{
 					int nearRelativeDirectoryCount = 0;
@@ -577,6 +625,7 @@ namespace MKY.IO
 							relativePath.Append("..");
 						}
 					}
+
 					return (new PathCompareResult(commonPath, commonDirectoryCount, nearRelativeDirectoryCount, true, nearRelativeDirectoryCount, relativePath.ToString()));
 				}
 
@@ -596,6 +645,7 @@ namespace MKY.IO
 						relativePath.Append("..");
 					}
 				}
+
 				int commonPartIndex = relativePath.Length;
 				di = dirInfoB;
 				while ((di != null) && (di.FullName != commonPath)) // Step into path B
@@ -619,6 +669,7 @@ namespace MKY.IO
 
 					di = di.Parent;
 				}
+
 				return (new PathCompareResult(commonPath, commonDirectoryCount, farRelativeDirectoryCount, relativePath.ToString()));
 			}
 
@@ -633,7 +684,10 @@ namespace MKY.IO
 		/// Takes the first directory path and combines it with the second directory
 		/// path also taking "." and ".." into account.
 		/// </summary>
-		public static string DoCombineDirectoryPaths(string pathA, string pathB)
+		/// <remarks>
+		/// This function does not expand environment variables.
+		/// </remarks>
+		private static string DoCombineDirectoryPaths(string pathA, string pathB)
 		{
 			// Convert paths to platform if needed:
 			pathA = ConvertToPlatform(pathA);
@@ -730,6 +784,9 @@ namespace MKY.IO
 
 		#region DoPrepareDirectoryPath()
 
+		/// <remarks>
+		/// This function does not expand environment variables.
+		/// </remarks>
 		private static void DoPrepareDirectoryPath(string path, out DirectoryInfo pathInfo, out string dirPath, out DirectoryInfo dirInfo)
 		{
 			try
@@ -767,6 +824,9 @@ namespace MKY.IO
 
 		#region DoPrepareFilePath()
 
+		/// <remarks>
+		/// This function does not expand environment variables.
+		/// </remarks>
 		private static void DoPrepareFilePath(string path, out DirectoryInfo pathInfo, out string dirPath, out DirectoryInfo dirInfo, out string fileName)
 		{
 			try
@@ -799,13 +859,16 @@ namespace MKY.IO
 
 		#endregion
 
-		#region Swap()
+		#region Swap...()
 
 		/// <summary>
-		/// Swaps two existing files.
+		/// Swaps two existing files, expanding environment variables.
 		/// </summary>
 		public static bool SwapExistingFiles(string filePathA, string filePathB)
 		{
+			filePathA = Environment.ExpandEnvironmentVariables(filePathA);
+			filePathB = Environment.ExpandEnvironmentVariables(filePathB);
+
 			if (!File.Exists(filePathA))
 				return (false);
 
@@ -818,6 +881,56 @@ namespace MKY.IO
 			File.Move(filePathB, filePathA);
 			File.Move(filePathTemp, filePathB);
 			return (true);
+		}
+
+		#endregion
+
+		#region Distinct...()
+
+		/// <summary>
+		/// Retrieves the distinct (no duplicate) paths among all given paths, expanding environment variables.
+		/// </summary>
+		public static IEnumerable<string> Distinct(IEnumerable<string> pathsA, IEnumerable<string> pathsB)
+		{
+			var paths = new List<string>(pathsA.Count() + pathsB.Count()); // Preset the initial capacity to improve memory management.
+
+			foreach (string path in pathsA)
+				paths.Add(Environment.ExpandEnvironmentVariables(path));
+
+			foreach (string path in pathsB)
+				paths.Add(Environment.ExpandEnvironmentVariables(path));
+
+			return (paths.Distinct(Comparer));
+		}
+
+		/// <summary>
+		/// Retrieves the distinct (no duplicate) directories of the given paths, expanding environment variables.
+		/// </summary>
+		public static IEnumerable<string> DistinctDirectories(IEnumerable<string> paths)
+		{
+			var directories = new List<string>(paths.Count()); // Preset the initial capacity to improve memory management.
+
+			foreach (string path in paths)
+				directories.Add(Path.GetDirectoryName(Environment.ExpandEnvironmentVariables(path)));
+
+			return (directories.Distinct(Comparer));
+		}
+
+		/// <summary>
+		/// Retrieves the distinct (no duplicate) directories of the given paths, expanding environment variables.
+		/// </summary>
+		/// <remarks>
+		/// Code duplication of <see cref="DistinctDirectories(IEnumerable{string})"/> above
+		/// as <see cref="StringCollection"/> does not implement <see cref="IEnumerable{T}"/>.
+		/// </remarks>
+		public static IEnumerable<string> DistinctDirectories(StringCollection paths)
+		{
+			var directories = new List<string>(paths.Count); // Preset the initial capacity to improve memory management.
+
+			foreach (string path in paths)
+				directories.Add(Path.GetDirectoryName(Environment.ExpandEnvironmentVariables(path)));
+
+			return (directories.Distinct(Comparer));
 		}
 
 		#endregion
