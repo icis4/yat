@@ -32,3 +32,15 @@ Three-tier based settings environment as described in 'MKY.Configuration.Provide
 Categories
  > Add all N/A categories to the 'Selected Categories'
  > Tick 'Exclude these categories'
+
+
+YAT.nunit
+---------
+
+Attention, all potentially referenced assemblies must be listed in the NUnit config file.
+Otherwise, the NUnit application domain will not load all required assemblies and runtime
+loading of them by .NET will fail.
+
+Drawback: The NUnit GUI is spoilt with all non-test assemblies.
+
+Finding on 2017-07-26 after spending quite some time to get Scripting.Test.Files working...

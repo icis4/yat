@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
+using System.Text;
 
 using MKY.Collections.Generic;
 using MKY.CommandLine;
@@ -955,19 +956,28 @@ namespace MKY.Test.CommandLine
 			for (int i = 0; i < 4; i++)
 				di = di.Parent;
 
-			// Set path to "<Root>\MKY\!-Settings\<Directory>\":
-			string assemblyFullName = GetType().Assembly.FullName;
-			string namespaceName    = GetType().Namespace;
+			// Set path to "<Root>\MKY\MKY.Test\CommandLine\":
+			string fullNamespace     = GetType().Namespace;
+			string packageName       = StringEx.Left(fullNamespace, fullNamespace.IndexOf('.'));
+			string assemblyName      = GetType().Assembly.GetName().Name;
+			string relativeNamespace = StringEx.Right(fullNamespace, (fullNamespace.Length - assemblyName.Length)).TrimStart('.');
 
-			string filePath = di.FullName + Path.DirectorySeparatorChar +
-				"MKY" + Path.DirectorySeparatorChar +
-				StringEx.Left(assemblyFullName, (assemblyFullName.IndexOf(','))) + Path.DirectorySeparatorChar + 
-				StringEx.Right(namespaceName, (namespaceName.Length - namespaceName.LastIndexOf('.') - 1)) + Path.DirectorySeparatorChar + 
-				"ExpectedHelpText.txt";
+			StringBuilder sb = new StringBuilder(di.FullName); // <Root>
+
+			if (!string.IsNullOrEmpty(packageName))
+				sb.Append(Path.DirectorySeparatorChar + packageName); // MKY
+
+			if (!string.IsNullOrEmpty(assemblyName))
+				sb.Append(Path.DirectorySeparatorChar + assemblyName); // MKY.Test
+
+			if (!string.IsNullOrEmpty(relativeNamespace))
+				sb.Append(Path.DirectorySeparatorChar + relativeNamespace); // CommandLine
+
+			sb.Append(Path.DirectorySeparatorChar + "ExpectedHelpText.txt");
 
 			// Get the file with the expected help text:
 			string expected;
-			using (StreamReader sr = new StreamReader(filePath))
+			using (StreamReader sr = new StreamReader(sb.ToString()))
 			{
 				expected = sr.ReadToEnd();
 				sr.Close();

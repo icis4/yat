@@ -1,5 +1,5 @@
 
-Search for the following expressions throughout "*.sln;*csproj;*.vcproj;*.vdproj;*.ps1;*.bat;*.txt;*.cs" and update year:
+Search for the following expressions throughout "*.sln;*csproj;*.vcproj;*.vdproj;*.ps1;*.bat;*.cmd;*.txt;*.cs" and update year:
 > "Copyright © 2003-2017 Matthias Kläy."  => 392 replacements
 > "Copyright © 2007-2017 Matthias Kläy."  => 136 replacements
 > "Copyright © 2010-2017 Matthias Kläy."  =>  56 replacements

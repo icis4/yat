@@ -28,7 +28,7 @@
 :: 3) This batch starts the according .vspe settings.
 ::
 :: This workaround is necessary because Windows doesn't allow to enable 'As Admin' on a shortcut
-:: pointing to a .exe/.com/.bin/.bat file.
+:: pointing to a .exe/.com/.bin/.bat/.cmd file.
 :: ------------------------------------------------------------------------------------------------
 
 :: 0) Change into the directory where the batch is located:

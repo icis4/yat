@@ -21,11 +21,11 @@
 :: See http://www.gnu.org/licenses/lgpl.html for license details.
 ::==================================================================================================
 
-CALL CleanAll-Options.bat
-CALL CleanAll-Setup.bat
-CALL CleanAll-Temp.bat
-CALL CleanAll-SCM.bat
-CALL CleanAll-Analyzer.bat
+CALL CleanAll-Options.cmd
+CALL CleanAll-Setup.cmd
+CALL CleanAll-Temp.cmd
+CALL CleanAll-SCM.cmd
+CALL CleanAll-Analyzer.cmd
 
 ::==================================================================================================
 :: End of
