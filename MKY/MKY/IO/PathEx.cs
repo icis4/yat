@@ -892,36 +892,23 @@ namespace MKY.IO
 		/// </summary>
 		public static IEnumerable<string> Distinct(params IEnumerable<string>[] pathArgs)
 		{
-			int capacity = 0;
-			foreach (IEnumerable<string> paths in pathArgs)
-			{
-				capacity += paths.Count();
-			}
-
-			var l = new List<string>(capacity); // Preset the initial capacity to improve memory management.
-			foreach (IEnumerable<string> paths in pathArgs)
-			{
-				foreach (string path in paths)
-					l.Add(Environment.ExpandEnvironmentVariables(path));
-			}
-			return (l.Distinct(Comparer));
+			return (pathArgs.SelectMany(paths => paths.Select(path => Environment.ExpandEnvironmentVariables(path))
+			                                          .Distinct(Comparer)));
 		}
 
 		/// <summary>
-		/// Retrieves the distinct (no duplicate) directories of the given paths, expanding environment variables.
+		/// Retrieves the distinct (no duplicate) directories of the given paths,
+		/// expanding environment variables.
 		/// </summary>
 		public static IEnumerable<string> DistinctDirectories(IEnumerable<string> paths)
 		{
-			var directories = new List<string>(paths.Count()); // Preset the initial capacity to improve memory management.
-
-			foreach (string path in paths)
-				directories.Add(Path.GetDirectoryName(Environment.ExpandEnvironmentVariables(path)));
-
-			return (directories.Distinct(Comparer));
+			return (paths.Select(path => Path.GetDirectoryName(Environment.ExpandEnvironmentVariables(path)))
+			             .Distinct(Comparer));
 		}
 
 		/// <summary>
-		/// Retrieves the distinct (no duplicate) directories of the given paths, expanding environment variables.
+		/// Retrieves the distinct (no duplicate) directories of the given paths,
+		/// expanding environment variables.
 		/// </summary>
 		/// <remarks>
 		/// Code duplication of <see cref="DistinctDirectories(IEnumerable{string})"/> above
@@ -929,12 +916,7 @@ namespace MKY.IO
 		/// </remarks>
 		public static IEnumerable<string> DistinctDirectories(StringCollection paths)
 		{
-			var directories = new List<string>(paths.Count); // Preset the initial capacity to improve memory management.
-
-			foreach (string path in paths)
-				directories.Add(Path.GetDirectoryName(Environment.ExpandEnvironmentVariables(path)));
-
-			return (directories.Distinct(Comparer));
+			return (DistinctDirectories(paths.Cast<string>()));
 		}
 
 		#endregion

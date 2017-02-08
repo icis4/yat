@@ -24,6 +24,8 @@
 
 using System;
 using System.Globalization;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 using System.Text;
 
 namespace MKY.IO.Usb
@@ -50,7 +52,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		protected UsbException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+		protected UsbException(SerializationInfo info, StreamingContext context)
 			: base(info, context)
 		{
 		}
@@ -100,14 +102,14 @@ namespace MKY.IO.Usb
 		#region ISerializable Members
 
 		/// <summary></summary>
-		protected NativeMethodCallUsbException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+		protected NativeMethodCallUsbException(SerializationInfo info, StreamingContext context)
 			: base(info, context)
 		{
 		}
 
 		/// <summary></summary>
-		[System.Security.Permissions.SecurityPermission(System.Security.Permissions.SecurityAction.Demand, SerializationFormatter = true)]
-		public override void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+		[SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+		public override void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			base.GetObjectData(info, context);
 
