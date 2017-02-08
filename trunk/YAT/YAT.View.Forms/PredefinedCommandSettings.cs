@@ -283,9 +283,9 @@ namespace YAT.View.Forms
 
 		#endregion
 
-		#region Private Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Private Methods
+		// Non-Public Methods
 		//==========================================================================================
 
 		private int SelectedPageIndex
@@ -294,9 +294,9 @@ namespace YAT.View.Forms
 			set { this.selectedPage = value + 1; }
 		}
 
-		#region Private Methods > Controls
+		#region Non-Public Methods > Controls
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Controls
+		// Non-Public Methods > Controls
 		//------------------------------------------------------------------------------------------
 
 		private void InitializeControls(bool useExplicitDefaultRadix)
@@ -426,9 +426,9 @@ namespace YAT.View.Forms
 
 		#endregion
 
-		#region Private Methods > Pages
+		#region Non-Public Methods > Pages
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Pages
+		// Non-Public Methods > Pages
 		//------------------------------------------------------------------------------------------
 
 		[ModalBehavior(ModalBehavior.Always)]
@@ -574,9 +574,9 @@ namespace YAT.View.Forms
 
 		#endregion
 
-		#region Private Methods > Selected Page
+		#region Non-Public Methods > Selected Page
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Selected Page
+		// Non-Public Methods > Selected Page
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>

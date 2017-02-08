@@ -1711,14 +1711,14 @@ namespace YAT.Model.Test
 
 		#endregion
 
-		#region Private Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Private Methods
+		// Non-Public Methods
 		//==========================================================================================
 
-		#region Private Methods > Settings, Start
+		#region Non-Public Methods > Settings, Start
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Settings, Start
+		// Non-Public Methods > Settings, Start
 		//------------------------------------------------------------------------------------------
 
 		private static DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler()
@@ -1737,9 +1737,9 @@ namespace YAT.Model.Test
 
 		#endregion
 
-		#region Private Methods > Verify
+		#region Non-Public Methods > Verify
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Verify
+		// Non-Public Methods > Verify
 		//------------------------------------------------------------------------------------------
 
 		private static void VerifyFiles(               Workspace workspace, bool workspaceFileExpected)
@@ -1870,9 +1870,9 @@ namespace YAT.Model.Test
 
 		#endregion
 
-		#region Private Methods > Event Handlers
+		#region Non-Public Methods > Event Handlers
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Event Handlers
+		// Non-Public Methods > Event Handlers
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>Counter can be used to assert that handler indeed was called.</remarks>

@@ -443,17 +443,17 @@ namespace YAT.Controller
 
 		#endregion
 
-		#region Private Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Private Methods
+		// Non-Public Methods
 		//==========================================================================================
 
 		// Note that exceptions are only handled in case of 'Release'.
 		// In case of 'Debug', they shall be handled by the debugger.
 
-		#region Private Methods > RunFullyWithView
+		#region Non-Public Methods > RunFullyWithView
 		//------------------------------------------------------------------------------------------
-		// Private Methods > RunFullyWithView
+		// Non-Public Methods > RunFullyWithView
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
@@ -600,9 +600,9 @@ namespace YAT.Controller
 
 		#endregion
 
-		#region Private Methods > RunWithViewButOutputErrorsOnConsole
+		#region Non-Public Methods > RunWithViewButOutputErrorsOnConsole
 		//------------------------------------------------------------------------------------------
-		// Private Methods > RunWithViewButOutputErrorsOnConsole
+		// Non-Public Methods > RunWithViewButOutputErrorsOnConsole
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
@@ -732,9 +732,9 @@ namespace YAT.Controller
 
 		#endregion
 
-		#region Private Methods > RunFullyFromConsole
+		#region Non-Public Methods > RunFullyFromConsole
 		//------------------------------------------------------------------------------------------
-		// Private Methods > RunFullyFromConsole
+		// Non-Public Methods > RunFullyFromConsole
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -837,9 +837,9 @@ namespace YAT.Controller
 
 		#endregion
 
-		#region Private Methods > RunInvisible
+		#region Non-Public Methods > RunInvisible
 		//------------------------------------------------------------------------------------------
-		// Private Methods > RunInvisible
+		// Non-Public Methods > RunInvisible
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -937,9 +937,9 @@ namespace YAT.Controller
 
 		#endregion
 
-		#region Private Methods > MessageBox
+		#region Non-Public Methods > MessageBox
 		//------------------------------------------------------------------------------------------
-		// Private Methods > MessageBox
+		// Non-Public Methods > MessageBox
 		//------------------------------------------------------------------------------------------
 
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
@@ -966,9 +966,9 @@ namespace YAT.Controller
 
 		#endregion
 
-		#region Private Methods > Console
+		#region Non-Public Methods > Console
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Console
+		// Non-Public Methods > Console
 		//------------------------------------------------------------------------------------------
 
 		private void ShowConsoleHelp(bool showLogo)
@@ -1034,9 +1034,9 @@ namespace YAT.Controller
 
 		#endregion
 
-		#region Private Methods > Result
+		#region Non-Public Methods > Result
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Result
+		// Non-Public Methods > Result
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>

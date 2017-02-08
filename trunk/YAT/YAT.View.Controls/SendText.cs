@@ -732,14 +732,14 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Private Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Private Methods
+		// Non-Public Methods
 		//==========================================================================================
 
-		#region Private Methods > Controls
+		#region Non-Public Methods > Controls
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Controls
+		// Non-Public Methods > Controls
 		//------------------------------------------------------------------------------------------
 
 		private void InitializeControls()
@@ -902,9 +902,9 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Private Methods > Handle Command
+		#region Non-Public Methods > Handle Command
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Handle Command
+		// Non-Public Methods > Handle Command
 		//------------------------------------------------------------------------------------------
 
 		private void ConfirmCommand()
@@ -939,9 +939,9 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Private Methods > Multi-Line Text
+		#region Non-Public Methods > Multi-Line Text
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Multi-Line Text
+		// Non-Public Methods > Multi-Line Text
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
@@ -980,9 +980,9 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Private Methods > Request Send
+		#region Non-Public Methods > Request Send
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Request Send
+		// Non-Public Methods > Request Send
 		//------------------------------------------------------------------------------------------
 
 		private void RequestSendCommand()

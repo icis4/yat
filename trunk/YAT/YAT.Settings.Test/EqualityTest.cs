@@ -114,9 +114,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Private Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Private Methods
+		// Non-Public Methods
 		//==========================================================================================
 
 		private static void TestEqualsWithObjectAndType<T>(T objToEqualAgainst, T objEqual, T objNotEqual)

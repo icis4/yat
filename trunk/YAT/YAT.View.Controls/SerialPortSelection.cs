@@ -260,9 +260,9 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Private Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Private Methods
+		// Non-Public Methods
 		//==========================================================================================
 
 		// MKY.Diagnostics.DebugEx.WriteStack(Type type)

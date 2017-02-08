@@ -130,9 +130,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Private Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Private Methods
+		// Non-Public Methods
 		//==========================================================================================
 
 		private static void SelectiveTestSetUp()

@@ -474,14 +474,14 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Private Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Private Methods
+		// Non-Public Methods
 		//==========================================================================================
 
-		#region Private Methods > Controls
+		#region Non-Public Methods > Controls
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Controls
+		// Non-Public Methods > Controls
 		//------------------------------------------------------------------------------------------
 
 		private void InitializeControls()
@@ -628,9 +628,9 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Private Methods > Handle Command
+		#region Non-Public Methods > Handle Command
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Handle Command
+		// Non-Public Methods > Handle Command
 		//------------------------------------------------------------------------------------------
 
 		private void ConfirmDescription(string description)
@@ -654,9 +654,9 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Private Methods > Multi-Line Text
+		#region Non-Public Methods > Multi-Line Text
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Multi-Line Text
+		// Non-Public Methods > Multi-Line Text
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
@@ -701,9 +701,9 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Private Methods > File
+		#region Non-Public Methods > File
 		//------------------------------------------------------------------------------------------
-		// Private Methods > File
+		// Non-Public Methods > File
 		//------------------------------------------------------------------------------------------
 
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
