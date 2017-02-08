@@ -280,9 +280,9 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Private Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Private Methods
+		// Non-Public Methods
 		//==========================================================================================
 
 		private void InitializeControls()

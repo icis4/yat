@@ -381,14 +381,14 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Private Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Private Methods
+		// Non-Public Methods
 		//==========================================================================================
 
-		#region Private Methods > Controls
+		#region Non-Public Methods > Controls
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Controls
+		// Non-Public Methods > Controls
 		//------------------------------------------------------------------------------------------
 
 		private void InitializeControls()
@@ -514,9 +514,9 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Private Methods > Open File
+		#region Non-Public Methods > Open File
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Open File
+		// Non-Public Methods > Open File
 		//------------------------------------------------------------------------------------------
 
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
@@ -589,9 +589,9 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Private Methods > Handle Command
+		#region Non-Public Methods > Handle Command
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Handle Command
+		// Non-Public Methods > Handle Command
 		//------------------------------------------------------------------------------------------
 
 		private void ConfirmCommand()
@@ -611,9 +611,9 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Private Methods > Request Send
+		#region Non-Public Methods > Request Send
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Request Send
+		// Non-Public Methods > Request Send
 		//------------------------------------------------------------------------------------------
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an explicit user interaction.")]

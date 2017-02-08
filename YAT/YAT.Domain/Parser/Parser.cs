@@ -957,9 +957,9 @@ namespace YAT.Domain.Parser
 
 		#endregion
 
-		#region Private Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Private Methods
+		// Non-Public Methods
 		//==========================================================================================
 
 		/// <summary>

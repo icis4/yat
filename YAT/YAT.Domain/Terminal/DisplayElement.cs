@@ -764,9 +764,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Private Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Private Methods
+		// Non-Public Methods
 		//==========================================================================================
 
 		private static Pair<byte[], string> PerformDeepClone(Pair<byte[], string> originItem)

@@ -809,9 +809,9 @@ namespace YAT.Model.Test
 
 		#endregion
 
-		#region Private Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Private Methods
+		// Non-Public Methods
 		//==========================================================================================
 
 		private static void PrepareMainAndVerifyResult(Main main)

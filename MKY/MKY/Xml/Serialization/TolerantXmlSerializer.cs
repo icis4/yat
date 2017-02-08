@@ -182,9 +182,9 @@ namespace MKY.Xml.Serialization
 
 		#endregion
 
-		#region Private Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Private Methods
+		// Non-Public Methods
 		//==========================================================================================
 
 		/// <summary>

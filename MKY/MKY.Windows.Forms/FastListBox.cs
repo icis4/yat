@@ -154,9 +154,9 @@ namespace MKY.Windows.Forms
 
 		#endregion
 
-		#region Protected Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Private Methods
+		// Non-Public Methods
 		//==========================================================================================
 
 		/// <summary></summary>

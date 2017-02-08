@@ -260,14 +260,14 @@ namespace YAT/*.<TODO>*/
 
 		#endregion
 
-		#region Private Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Private Methods
+		// Non-Public Methods
 		//==========================================================================================
 
-		#region Private Methods > Item
+		#region Non-Public Methods > Item
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Item
+		// Non-Public Methods > Item
 		//------------------------------------------------------------------------------------------
 
 		#endregion
