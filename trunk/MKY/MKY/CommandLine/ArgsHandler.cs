@@ -33,6 +33,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 
 using MKY.Diagnostics;
@@ -116,7 +117,7 @@ namespace MKY.CommandLine
 			}
 
 			/// <summary></summary>
-			protected RuntimeValidationException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+			protected RuntimeValidationException(SerializationInfo info, StreamingContext context)
 				: base(info, context)
 			{
 			}
