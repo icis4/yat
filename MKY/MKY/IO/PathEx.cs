@@ -890,17 +890,21 @@ namespace MKY.IO
 		/// <summary>
 		/// Retrieves the distinct (no duplicate) paths among all given paths, expanding environment variables.
 		/// </summary>
-		public static IEnumerable<string> Distinct(IEnumerable<string> pathsA, IEnumerable<string> pathsB)
+		public static IEnumerable<string> Distinct(params IEnumerable<string>[] pathArgs)
 		{
-			var paths = new List<string>(pathsA.Count() + pathsB.Count()); // Preset the initial capacity to improve memory management.
+			int capacity = 0;
+			foreach (IEnumerable<string> paths in pathArgs)
+			{
+				capacity += paths.Count();
+			}
 
-			foreach (string path in pathsA)
-				paths.Add(Environment.ExpandEnvironmentVariables(path));
-
-			foreach (string path in pathsB)
-				paths.Add(Environment.ExpandEnvironmentVariables(path));
-
-			return (paths.Distinct(Comparer));
+			var l = new List<string>(capacity); // Preset the initial capacity to improve memory management.
+			foreach (IEnumerable<string> paths in pathArgs)
+			{
+				foreach (string path in paths)
+					l.Add(Environment.ExpandEnvironmentVariables(path));
+			}
+			return (l.Distinct(Comparer));
 		}
 
 		/// <summary>
