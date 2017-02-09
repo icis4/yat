@@ -24,12 +24,11 @@
 
 using System;
 using System.IO;
-using System.Text;
 
 namespace MKY.Diagnostics
 {
 	/// <summary>
-	/// Wraps part of the interface of <see cref="System.Console"/> to the common
+	/// Wraps part of the interface of <see cref="Console"/> to the common
 	/// interface <see cref="IDiagnosticsWriter"/>.
 	/// </summary>
 	public class ConsoleWrapper : IDiagnosticsWriter

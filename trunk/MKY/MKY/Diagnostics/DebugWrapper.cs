@@ -27,7 +27,7 @@ using System.Diagnostics;
 namespace MKY.Diagnostics
 {
 	/// <summary>
-	/// Wraps part of the interface of <see cref="System.Diagnostics.Debug"/> to the common
+	/// Wraps part of the interface of <see cref="Debug"/> to the common
 	/// interface <see cref="IDiagnosticsWriter"/>.
 	/// </summary>
 	public class DebugWrapper : IDiagnosticsWriter

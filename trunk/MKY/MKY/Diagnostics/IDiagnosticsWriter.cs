@@ -23,14 +23,13 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 
 namespace MKY.Diagnostics
 {
 	/// <summary>
-	/// Provides a common interface to write to <see cref="System.Diagnostics.Debug"/> and
-	/// <see cref="System.Diagnostics.Trace"/>.
+	/// Provides a common interface to write to <see cref="Debug"/>, <see cref="Trace"/>,
+	/// <see cref="Console"/> and other output writers via <see cref="AnyWriter"/>.
 	/// </summary>
 	public interface IDiagnosticsWriter
 	{

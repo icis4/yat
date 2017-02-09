@@ -27,7 +27,7 @@ using System.Diagnostics;
 namespace MKY.Diagnostics
 {
 	/// <summary>
-	/// Wraps part of the interface of <see cref="System.Diagnostics.Trace"/> to the common
+	/// Wraps part of the interface of <see cref="Trace"/> to the common
 	/// interface <see cref="IDiagnosticsWriter"/>.
 	/// </summary>
 	public class TraceWrapper : IDiagnosticsWriter

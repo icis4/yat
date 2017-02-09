@@ -47,42 +47,33 @@ namespace YAT.View.Forms
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Form indeed deals with exceptions.")]
 	public partial class UnhandledException : Form
 	{
-		private Exception exception;
-		private string title;
-		private string originMessage;
-
-		private string exceptionText;
+		private string multiLineText;
 
 		/// <summary></summary>
 		public UnhandledException(Exception exception, string title, string originMessage)
 		{
 			InitializeComponent();
 
-			// Keep information:
-			this.exception = exception;
-			this.title = title;
-			this.originMessage = originMessage;
-
 			// Set form title/caption:
-			Text = this.title;
+			Text = title;
 
 			// Compose exception text:
 			using (StringWriter sw = new StringWriter(CultureInfo.InvariantCulture))
 			{
-				sw.WriteLine(this.originMessage);
+				sw.WriteLine(originMessage);
 				sw.WriteLine();
 				sw.WriteLine(ApplicationEx.ProductNameAndBuildNameAndVersion);
 				sw.WriteLine();
 
-				AnyWriter.WriteException(sw, null, this.exception);
+				AnyWriter.WriteException(sw, null, exception);
 
-				this.exceptionText = sw.ToString();
+				this.multiLineText = sw.ToString();
 			}
 		}
 
 		private void UnhandledException_Load(object sender, EventArgs e)
 		{
-			textBox_Exception.Text = this.exceptionText;
+			textBox_Exception.Text = this.multiLineText;
 
 			// Don't know why it is necessary to manually deselect the text.
 			// DeselectAll() isn't sufficient, setting the properties works.
@@ -104,7 +95,7 @@ namespace YAT.View.Forms
 			{
 				try
 				{
-					Clipboard.SetDataObject(this.exceptionText, true);
+					Clipboard.SetDataObject(this.multiLineText, true);
 				}
 				catch (ExternalException)
 				{
@@ -165,7 +156,7 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Instructions_Click(object sender, EventArgs e)
 		{
-			View.Forms.TrackerInstructions f = new View.Forms.TrackerInstructions(View.Forms.TrackerType.Bug);
+			TrackerInstructions f = new TrackerInstructions(TrackerType.Bug);
 			f.StartPosition = FormStartPosition.Manual;
 			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
