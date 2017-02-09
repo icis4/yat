@@ -137,19 +137,21 @@ namespace MKY.Diagnostics
 			if (type != null)
 			{
 				writer.Write("Exception in ");
-				writer.WriteLine(type.FullName);
+				writer.Write(type.FullName);
+				writer.WriteLine(":");
+
+				writer.Indent();
+				{
+					WriteLeadMessageLines(writer, leadMessage);
+					WriteExceptionLines(writer, ex);
+				}
+				writer.Unindent();
 			}
 			else
 			{
-				writer.WriteLine("Exception");
-			}
-
-			writer.Indent();
-			{
-				WriteMessageLines(writer, leadMessage);
+				WriteLeadMessageLines(writer, leadMessage);
 				WriteExceptionLines(writer, ex);
 			}
-			writer.Unindent();
 		}
 
 		/// <summary>
@@ -169,19 +171,21 @@ namespace MKY.Diagnostics
 			if (type != null)
 			{
 				writer.Write("Stack trace in ");
-				writer.WriteLine(type.FullName);
+				writer.Write(type.FullName);
+				writer.WriteLine(":");
+
+				writer.Indent();
+				{
+					WriteLeadMessageLines(writer, leadMessage);
+					WriteStackLines(writer, st.ToString());
+				}
+				writer.Unindent();
 			}
 			else
 			{
-				writer.WriteLine("Stack trace");
-			}
-
-			writer.Indent();
-			{
-				WriteMessageLines(writer, leadMessage);
+				WriteLeadMessageLines(writer, leadMessage);
 				WriteStackLines(writer, st.ToString());
 			}
-			writer.Unindent();
 		}
 
 		/// <summary>
@@ -202,19 +206,21 @@ namespace MKY.Diagnostics
 			if (type != null)
 			{
 				writer.Write("Windows.Forms.Message in ");
-				writer.WriteLine(type.FullName);
+				writer.Write(type.FullName);
+				writer.WriteLine(":");
+
+				writer.Indent();
+				{
+					WriteLeadMessageLines(writer, leadMessage);
+					WriteWindowsFormsMessageLines(writer, m);
+				}
+				writer.Unindent();
 			}
 			else
 			{
-				writer.WriteLine("Windows.Forms.Message");
-			}
-
-			writer.Indent();
-			{
-				WriteMessageLines(writer, leadMessage);
+				WriteLeadMessageLines(writer, leadMessage);
 				WriteWindowsFormsMessageLines(writer, m);
 			}
-			writer.Unindent();
 		}
 
 		/// <summary>
@@ -234,19 +240,21 @@ namespace MKY.Diagnostics
 			if (type != null)
 			{
 				writer.Write("FileStream in ");
-				writer.WriteLine(type.FullName);
+				writer.Write(type.FullName);
+				writer.WriteLine(":");
+
+				writer.Indent();
+				{
+					WriteLeadMessageLines(writer, leadMessage);
+					WriteFileStreamLines(writer, fs);
+				}
+				writer.Unindent();
 			}
 			else
 			{
-				writer.WriteLine("FileStream");
-			}
-
-			writer.Indent();
-			{
-				WriteMessageLines(writer, leadMessage);
+				WriteLeadMessageLines(writer, leadMessage);
 				WriteFileStreamLines(writer, fs);
 			}
-			writer.Unindent();
 		}
 
 		#endregion
@@ -275,10 +283,16 @@ namespace MKY.Diagnostics
 					WriteSourceLine  (writer, exception.Source);
 					WriteStackLines  (writer, exception.StackTrace);
 				}
-				writer.Unindent();
+			////writer.Unindent() is done at the end.
 
 				exception = exception.InnerException;
 				exceptionLevel++;
+			}
+
+			while (exceptionLevel > 0)
+			{
+				writer.Unindent();
+				exceptionLevel--;
 			}
 		}
 
@@ -288,6 +302,24 @@ namespace MKY.Diagnostics
 			{
 				writer.Write("Type: ");
 				writer.WriteLine(type.ToString());
+			}
+		}
+
+		private static void WriteLeadMessageLines(IDiagnosticsWriter writer, string leadMessage)
+		{
+			if (!string.IsNullOrEmpty(leadMessage))
+			{
+				using (StringReader sr = new StringReader(leadMessage))
+				{
+					string line;
+					do
+					{
+						line = sr.ReadLine();
+						if (line != null)
+							writer.WriteLine(line);
+					}
+					while (line != null);
+				}
 			}
 		}
 
@@ -318,8 +350,12 @@ namespace MKY.Diagnostics
 		{
 			if (!string.IsNullOrEmpty(source))
 			{
-				writer.Write("Source: ");
-				writer.WriteLine(source);
+				writer.WriteLine("Source:");
+				writer.Indent();
+				{
+					writer.WriteLine(source);
+				}
+				writer.Unindent();
 			}
 		}
 
