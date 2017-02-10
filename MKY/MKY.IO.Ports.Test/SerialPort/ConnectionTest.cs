@@ -106,7 +106,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			// Send something and verify response:
 			port.WriteLine(""); // Perform empty request.
 			Thread.Sleep(WaitForOperation);
-			Assert.AreEqual("ES", port.ReadLine()); // Verify empty request.
+			Assert.That(port.ReadLine(), Is.EqualTo("ES")); // Verify empty request.
 
 			// Close and reopen port. Expected: No exceptions, port can be closed and reopened.
 			Thread.Sleep(WaitForOperation);
@@ -119,14 +119,14 @@ namespace MKY.IO.Ports.Test.SerialPort
 			// Send something and verify response:
 			port.WriteLine(""); // Perform empty request.
 			Thread.Sleep(WaitForOperation);
-			Assert.AreEqual("ES", port.ReadLine()); // Verify empty request.
+			Assert.That(port.ReadLine(), Is.EqualTo("ES")); // Verify empty request.
 
 			// --- Test: Close/Reopen while continuous receiving. ----------------------------------
 
 			// Request continuous data:
 			port.WriteLine("ECHO 2"); // Activate continuous echo mode.
 			Thread.Sleep(WaitForOperation);
-			Assert.AreEqual("ECHO C", port.ReadLine(), "Failed to initiate ECHO mode 2!");
+			Assert.That(port.ReadLine(), Is.EqualTo("ECHO C"), "Failed to initiate ECHO mode 2!");
 			port.WriteLine(CommandToEcho); // Request continuous echo.
 
 			// Close and reopen port. Expected: No exceptions, port can be closed and reopened.
@@ -237,7 +237,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			// Send something and verify response:
 			port.WriteLine(""); // Perform empty request.
 			Thread.Sleep(WaitForOperation);
-			Assert.AreEqual("ES", port.ReadLine()); // Verify empty request.
+			Assert.That(port.ReadLine(), Is.EqualTo("ES")); // Verify empty request.
 
 			// Disconnect USB/RS-232 converter. Expected: No exceptions, port is closed:
 			Assert.That(UsbHubControl.Disable(portOut), Is.True, "Failed to modify USB hub!");
@@ -251,7 +251,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			// Send something and verify response:
 			port.WriteLine(""); // Perform empty request.
 			Thread.Sleep(WaitForOperation);
-			Assert.AreEqual("ES", port.ReadLine()); // Verify empty request.
+			Assert.That(port.ReadLine(), Is.EqualTo("ES")); // Verify empty request.
 
 			// Close and reopen port. Expected: No exceptions, port can be closed and reopened.
 			Thread.Sleep(WaitForOperation);
@@ -264,7 +264,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			// Send something and verify response:
 			port.WriteLine(""); // Perform empty request.
 			Thread.Sleep(WaitForOperation);
-			Assert.AreEqual("ES", port.ReadLine()); // Verify empty request.
+			Assert.That(port.ReadLine(), Is.EqualTo("ES")); // Verify empty request.
 
 			// --- Test: Disconnect/Reconnect while continuous receiving. --------------------------
 
@@ -273,7 +273,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 				// Request continuous data:
 				port.WriteLine("ECHO 2"); // Activate continuous echo mode.
 				Thread.Sleep(WaitForOperation);
-				Assert.AreEqual("ECHO C", port.ReadLine(), "Failed to initiate ECHO mode 2!");
+				Assert.That(port.ReadLine(), Is.EqualTo("ECHO C"), "Failed to initiate ECHO mode 2!");
 				port.WriteLine(CommandToEcho); // Request continuous echo.
 				Thread.Sleep(WaitForOperation);
 

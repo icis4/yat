@@ -108,19 +108,19 @@ namespace MKY.IO.Ports.Test.SerialPort
 			if (standardPortNumber != 0)
 			{
 				port = new SerialPortId(standardPortNumber);
-				Assert.AreEqual(standardPortNumber, port.StandardPortNumber);
-				Assert.AreEqual(portName, port.Name);
+				Assert.That(port.StandardPortNumber, Is.EqualTo(standardPortNumber));
+				Assert.That(port.Name,               Is.EqualTo(portName));
 			}
 
 			port = new SerialPortId(portName);
-			Assert.AreEqual(standardPortNumber, port.StandardPortNumber);
-			Assert.AreEqual(portName, port.Name);
+			Assert.That(port.StandardPortNumber, Is.EqualTo(standardPortNumber));
+			Assert.That(port.Name,               Is.EqualTo(portName));
 
 			foreach (string description in portDescriptions)
 			{
 				port = new SerialPortId(description);
-				Assert.AreEqual(standardPortNumber, port.StandardPortNumber);
-				Assert.AreEqual(portName, port.Name);
+				Assert.That(port.StandardPortNumber, Is.EqualTo(standardPortNumber));
+				Assert.That(port.Name,               Is.EqualTo(portName));
 			}
 		}
 
@@ -145,18 +145,18 @@ namespace MKY.IO.Ports.Test.SerialPort
 
 			// Deserialize from file using different methods and verify the result:
 			idDeserialized = (SerialPortId)XmlSerializerTest.TestDeserializeFromFile(filePath, typeof(SerialPortId));
-			Assert.AreEqual(standardPortNumber, (int)idDeserialized);
-			Assert.AreEqual(portName, (string)idDeserialized);
+			Assert.That(   (int)idDeserialized, Is.EqualTo(standardPortNumber));
+			Assert.That((string)idDeserialized, Is.EqualTo(portName));
 
 			if (portName != "1") // \remind "1" will be treated as byte value by the tolerant deserializer...
 			{
 				idDeserialized = (SerialPortId)XmlSerializerTest.TestTolerantDeserializeFromFile(filePath, typeof(SerialPortId));
-				Assert.AreEqual(standardPortNumber, (int)idDeserialized);
-				Assert.AreEqual(portName, (string)idDeserialized);
+				Assert.That(   (int)idDeserialized, Is.EqualTo(standardPortNumber));
+				Assert.That((string)idDeserialized, Is.EqualTo(portName));
 
 				idDeserialized = (SerialPortId)XmlSerializerTest.TestAlternateTolerantDeserializeFromFile(filePath, typeof(SerialPortId));
-				Assert.AreEqual(standardPortNumber, (int)idDeserialized);
-				Assert.AreEqual(portName, (string)idDeserialized);
+				Assert.That(   (int)idDeserialized, Is.EqualTo(standardPortNumber));
+				Assert.That((string)idDeserialized, Is.EqualTo(portName));
 			}
 		}
 

@@ -925,7 +925,7 @@ namespace YAT.Model.Test
 							(displayLineB.DataCount == expectedDataCount))
 						{
 							for (int j = 0; j < displayLineA.Count; j++)
-								Assert.AreEqual(displayLineA[j].Text, displayLineB[j].Text);
+								Assert.That(displayLineB[j].Text, Is.EqualTo(displayLineA[j].Text));
 						}
 						else
 						{

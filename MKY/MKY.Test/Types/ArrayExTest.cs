@@ -245,7 +245,7 @@ namespace MKY.Test.Types
 		[Test, TestCaseSource(typeof(ArrayExTestData), "TestCases")]
 		public virtual void TestElementsEqual(Array objA, Array objB, bool equals)
 		{
-			Assert.AreEqual(ArrayEx.ElementsEqual(objA, objB), equals);
+			Assert.That(ArrayEx.ElementsEqual(objA, objB), Is.EqualTo(equals));
 		}
 
 		#endregion

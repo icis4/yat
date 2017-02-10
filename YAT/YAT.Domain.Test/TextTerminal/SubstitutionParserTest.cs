@@ -71,7 +71,7 @@ namespace YAT.Domain.Test.TextTerminal
 			using (Domain.Parser.SubstitutionParser p = new Domain.Parser.SubstitutionParser(substitution))
 			{
 				byte[] actualBytes = p.Parse(s);
-				Assert.AreEqual(expectedBytes, actualBytes);
+				Assert.That(actualBytes, Is.EqualTo(expectedBytes));
 			}
 		}
 

@@ -1345,7 +1345,7 @@ namespace YAT.Settings.Test
 
 		private static void VerifySettingsCase01(Model.Terminal terminal)
 		{
-			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1!");
+			Assert.That(terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(1), "Serial port isn't set to COM1!");
 
 			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortA == "COM1")
 			{
@@ -1370,11 +1370,11 @@ namespace YAT.Settings.Test
 
 		private static void VerifySettingsCase02(Model.Terminal terminal, bool ignoreBaudRate)
 		{
-			Assert.AreEqual(Domain.TerminalType.Binary, terminal.SettingsRoot.TerminalType, "Terminal isn't binary!");
-			Assert.AreEqual(2, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM2!");
+			Assert.That(terminal.SettingsRoot.TerminalType, Is.EqualTo(Domain.TerminalType.Binary), "Terminal isn't binary!");
+			Assert.That(terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(2), "Serial port isn't set to COM2!");
 
 			if (!ignoreBaudRate) // Optionally ignore baud rate because it changed from enum to int from 1.99.12 to 1.99.13.
-				Assert.AreEqual(115200, terminal.SettingsRoot.IO.SerialPort.Communication.BaudRate, "Serial port baud rate isn't set to 115200!");
+				Assert.That(terminal.SettingsRoot.IO.SerialPort.Communication.BaudRate, Is.EqualTo(115200), "Serial port baud rate isn't set to 115200!");
 
 			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortB == "COM2")
 			{
@@ -1399,45 +1399,45 @@ namespace YAT.Settings.Test
 
 		private static void VerifySettingsCase03(Model.Terminal terminal)
 		{
-			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1!");
+			Assert.That(terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(1), "Serial port isn't set to COM1!");
 			Assert.That(terminal.IsOpen, Is.False, "Terminal is not closed on COM1!");
 
-			Assert.AreEqual(2, terminal.SettingsRoot.PredefinedCommand.Pages.Count, "Predefined commands do not contain 2 pages!");
+			Assert.That(terminal.SettingsRoot.PredefinedCommand.Pages.Count, Is.EqualTo(2), "Predefined commands do not contain 2 pages!");
 
 			Model.Types.PredefinedCommandPage page;
 			Model.Types.Command command;
 
 			page = terminal.SettingsRoot.PredefinedCommand.Pages[0];
-			Assert.AreEqual("First Page", page.PageName, "First predefined command pages has wrong name!");
-			Assert.AreEqual(4, page.Commands.Count, "First predefined command page doesn't contain 4 commands!");
+			Assert.That(page.PageName, Is.EqualTo("First Page"), "First predefined command pages has wrong name!");
+			Assert.That(page.Commands.Count, Is.EqualTo(4), "First predefined command page doesn't contain 4 commands!");
 			command = page.Commands[0];
-			Assert.AreEqual("1A", command.Description);
-			Assert.AreEqual("1A", command.CommandLines[0]);
+			Assert.That(command.Description,     Is.EqualTo("1A"));
+			Assert.That(command.CommandLines[0], Is.EqualTo("1A"));
 			command = page.Commands[1];
-			Assert.AreEqual("1B", command.Description);
-			Assert.AreEqual("1B", command.CommandLines[0]);
+			Assert.That(command.Description,     Is.EqualTo("1B"));
+			Assert.That(command.CommandLines[0], Is.EqualTo("1B"));
 			command = page.Commands[2];
-			Assert.AreEqual("1C", command.Description);
-			Assert.AreEqual("1C", command.CommandLines[0]);
+			Assert.That(command.Description,     Is.EqualTo("1C"));
+			Assert.That(command.CommandLines[0], Is.EqualTo("1C"));
 			command = page.Commands[3];
-			Assert.AreEqual("1D", command.Description);
-			Assert.AreEqual("1D", command.CommandLines[0]);
+			Assert.That(command.Description,     Is.EqualTo("1D"));
+			Assert.That(command.CommandLines[0], Is.EqualTo("1D"));
 
 			page = terminal.SettingsRoot.PredefinedCommand.Pages[1];
-			Assert.AreEqual("Second Page", page.PageName, "Second predefined command pages has wrong name!");
-			Assert.AreEqual(4, page.Commands.Count, "Second predefined command page doesn't contain 4 commands!");
+			Assert.That(page.PageName, Is.EqualTo("Second Page"), "Second predefined command pages has wrong name!");
+			Assert.That(page.Commands.Count, Is.EqualTo(4), "Second predefined command page doesn't contain 4 commands!");
 			command = page.Commands[0];
-			Assert.AreEqual("21", command.Description); // Ensures that numbers are properly parsed as well.
-			Assert.AreEqual("21", command.CommandLines[0]);
+			Assert.That(command.Description,     Is.EqualTo("21")); // Ensures that numbers are properly parsed as well.
+			Assert.That(command.CommandLines[0], Is.EqualTo("21"));
 			command = page.Commands[1];
-			Assert.AreEqual("22", command.Description);
-			Assert.AreEqual("22", command.CommandLines[0]);
+			Assert.That(command.Description,     Is.EqualTo("22"));
+			Assert.That(command.CommandLines[0], Is.EqualTo("22"));
 			command = page.Commands[2];
-			Assert.AreEqual("23", command.Description);
-			Assert.AreEqual("23", command.CommandLines[0]);
+			Assert.That(command.Description,     Is.EqualTo("23"));
+			Assert.That(command.CommandLines[0], Is.EqualTo("23"));
 			command = page.Commands[3];
-			Assert.AreEqual("24", command.Description);
-			Assert.AreEqual("24", command.CommandLines[0]);
+			Assert.That(command.Description,     Is.EqualTo("24"));
+			Assert.That(command.CommandLines[0], Is.EqualTo("24"));
 		}
 
 		#endregion
@@ -1449,7 +1449,7 @@ namespace YAT.Settings.Test
 
 		private static void VerifySettingsCase04(Model.Workspace workspace)
 		{
-			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals!");
+			Assert.That(workspace.TerminalCount, Is.EqualTo(2), "Workspace doesn't contain 2 terminals!");
 		}
 
 		#endregion
@@ -1461,7 +1461,7 @@ namespace YAT.Settings.Test
 
 		private static void VerifySettingsCase05(Model.Terminal terminal)
 		{
-			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1!");
+			Assert.That(terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(1), "Serial port isn't set to COM1!");
 
 			// \todo:
 			// Add tests that verify that recent contains three commands.
@@ -1477,7 +1477,7 @@ namespace YAT.Settings.Test
 
 		private static void VerifySettingsCase06(Model.Workspace workspace)
 		{
-			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals!");
+			Assert.That(workspace.TerminalCount, Is.EqualTo(2), "Workspace doesn't contain 2 terminals!");
 
 			// \todo:
 			// Add tests that verify that terminals are interconnected.
@@ -1492,7 +1492,7 @@ namespace YAT.Settings.Test
 
 		private static void VerifySettingsCase07(Model.Terminal terminal)
 		{
-			Assert.AreEqual(Domain.IOType.UsbSerialHid, terminal.SettingsRoot.IOType, "Terminal isn't USB Ser/HID!");
+			Assert.That(terminal.SettingsRoot.IOType, Is.EqualTo(Domain.IOType.UsbSerialHid), "Terminal isn't USB Ser/HID!");
 
 			// \todo:
 			// Add tests that verify that USB device info is correct.
@@ -1507,34 +1507,34 @@ namespace YAT.Settings.Test
 
 		private static void VerifySettingsCase08(Model.Workspace workspace)
 		{
-			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals!");
+			Assert.That(workspace.TerminalCount, Is.EqualTo(2), "Workspace doesn't contain 2 terminals!");
 
 			Model.Terminal terminal1 = workspace.Terminals[0];
 			Model.Terminal terminal2 = workspace.Terminals[1];
 
-			Assert.AreEqual(1, terminal1.SettingsRoot.PredefinedCommand.Pages.Count, "Predefined commands do not contain 1 page!");
+			Assert.That(terminal1.SettingsRoot.PredefinedCommand.Pages.Count, Is.EqualTo(1), "Predefined commands do not contain 1 page!");
 
 			Model.Types.PredefinedCommandPage page;
 			Model.Types.Command command;
 
 			page = terminal1.SettingsRoot.PredefinedCommand.Pages[0];
-			Assert.AreEqual("Page 1", page.PageName, "First predefined command pages has wrong name!");
-			Assert.AreEqual(5, page.Commands.Count, "First predefined command page doesn't contain 5 commands!");
+			Assert.That(page.PageName, Is.EqualTo("Page 1"), "First predefined command pages has wrong name!");
+			Assert.That(page.Commands.Count, Is.EqualTo(5), "First predefined command page doesn't contain 5 commands!");
 			command = page.Commands[0];
-			Assert.AreEqual("abc", command.Description);
-			Assert.AreEqual("abc", command.CommandLines[0]);
+			Assert.That(command.Description,     Is.EqualTo("abc"));
+			Assert.That(command.CommandLines[0], Is.EqualTo("abc"));
 			command = page.Commands[1];
-			Assert.AreEqual("äöü", command.Description);
-			Assert.AreEqual("äöü", command.CommandLines[0]);
+			Assert.That(command.Description,     Is.EqualTo("äöü"));
+			Assert.That(command.CommandLines[0], Is.EqualTo("äöü"));
 			command = page.Commands[2];
-			Assert.AreEqual("ÄÖÜ", command.Description);
-			Assert.AreEqual("ÄÖÜ", command.CommandLines[0]);
+			Assert.That(command.Description,     Is.EqualTo("ÄÖÜ"));
+			Assert.That(command.CommandLines[0], Is.EqualTo("ÄÖÜ"));
 			command = page.Commands[3];
-			Assert.AreEqual("$£€", command.Description);
-			Assert.AreEqual("$£€", command.CommandLines[0]);
+			Assert.That(command.Description,     Is.EqualTo("$£€"));
+			Assert.That(command.CommandLines[0], Is.EqualTo("$£€"));
 			command = page.Commands[4];
-			Assert.AreEqual("čěř", command.Description);
-			Assert.AreEqual("čěř", command.CommandLines[0]);
+			Assert.That(command.Description,     Is.EqualTo("čěř"));
+			Assert.That(command.CommandLines[0], Is.EqualTo("čěř"));
 
 			// \todo:
 			// Add tests that verify that terminals are interconnected.

@@ -248,8 +248,8 @@ namespace YAT.Domain.Test.TextTerminal
 			                   " Number of total lines = " + rxTotalLineCount +
 			                   " mismatches expected = " + expectedTotalLineCount + ".";
 
-			Assert.AreEqual(expectedTotalLineCount, txTotalLineCount, txMessage);
-			Assert.AreEqual(expectedTotalLineCount, rxTotalLineCount, rxMessage);
+			Assert.That(txTotalLineCount, Is.EqualTo(expectedTotalLineCount), txMessage);
+			Assert.That(rxTotalLineCount, Is.EqualTo(expectedTotalLineCount), rxMessage);
 		}
 
 		#endregion

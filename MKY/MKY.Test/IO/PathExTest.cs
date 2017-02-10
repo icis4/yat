@@ -481,7 +481,7 @@ namespace MKY.Test.IO
 
 			filePath = PathEx.AppendPostfixToFileName(filePath, postfix);
 
-			Assert.AreEqual(filePathWithPostfix, filePath, "AppendPostfixToFileName() has failed");
+			Assert.That(filePath, Is.EqualTo(filePathWithPostfix), "AppendPostfixToFileName() has failed");
 		}
 
 		#endregion
@@ -508,7 +508,7 @@ namespace MKY.Test.IO
 				case 2:  result = PathEx.CombineFileAndDirectoryPaths(absoluteA, relativeA); break; // FILE vs. DIR.
 				default: result = PathEx.CombineFilePaths            (absoluteA, relativeA); break;
 			}
-			Assert.AreEqual(absoluteB, result, "A absolute combined with A relative doesn't result in B absolute");
+			Assert.That(result, Is.EqualTo(absoluteB), "A absolute combined with A relative doesn't result in B absolute");
 		}
 
 		/// <summary></summary>
@@ -544,7 +544,7 @@ namespace MKY.Test.IO
 				case 2:  result = PathEx.CombineDirectoryAndFilePaths(absoluteB, relativeB); break; // DIR vs. FILE.
 				default: result = PathEx.CombineFilePaths            (absoluteB, relativeB); break;
 			}
-			Assert.AreEqual(absoluteA, result, "B absolute combined with B relative doesn't result in A absolute");
+			Assert.That(result, Is.EqualTo(absoluteA), "B absolute combined with B relative doesn't result in A absolute");
 		}
 
 		/// <summary></summary>
@@ -587,7 +587,7 @@ namespace MKY.Test.IO
 				case 2:  result = PathEx.CompareFileAndDirectoryPaths(absoluteA, absoluteB); break; // FILE vs. DIR.
 				default: result = PathEx.CompareFilePaths            (absoluteA, absoluteB); break;
 			}
-			Assert.AreEqual(relativeA, result.RelativePath, "A absolute compared to B absolute doesn't result in A relative");
+			Assert.That(result.RelativePath, Is.EqualTo(relativeA), "A absolute compared to B absolute doesn't result in A relative");
 
 			// B compared to A results in B relative.
 			switch (testCase)
@@ -597,7 +597,7 @@ namespace MKY.Test.IO
 				case 2:  result = PathEx.CompareDirectoryAndFilePaths(absoluteB, absoluteA); break; // DIR vs. FILE.
 				default: result = PathEx.CompareFilePaths            (absoluteB, absoluteA); break;
 			}
-			Assert.AreEqual(relativeB, result.RelativePath, "B absolute compared to A absolute doesn't result in B relative");
+			Assert.That(result.RelativePath, Is.EqualTo(relativeB), "B absolute compared to A absolute doesn't result in B relative");
 		}
 
 		#endregion

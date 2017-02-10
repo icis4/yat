@@ -81,7 +81,7 @@ namespace MKY.Test.Guid
 			if (GuidEx.TryCreateGuidFromFilePath(filePath, prefix, postfix, out actualGuid))
 			{
 				Assert.That(isValid, Is.True);
-				Assert.AreEqual(expectedGuid, actualGuid);
+				Assert.That(actualGuid, Is.EqualTo(expectedGuid));
 			}
 			else
 			{

@@ -703,8 +703,8 @@ namespace MKY.Test.Settings
 		{
 			VerifySimpleValue(castedToCompareAgainst.SimpleValue, castedEqual.SimpleValue, castedNotEqual.SimpleValue);
 
-			Assert.AreEqual   (settingsToCompareAgainst, settingsEqual);
-			Assert.AreNotEqual(settingsToCompareAgainst, settingsNotEqual);
+			Assert.That(settingsEqual,        Is.EqualTo(settingsToCompareAgainst));
+			Assert.That(settingsNotEqual, Is.Not.EqualTo(settingsToCompareAgainst));
 
 			VerifyLevel1(settingsToCompareAgainst, settingsEqual, settingsNotEqual,
 			             castedToCompareAgainst.ChildLevel1, castedEqual.ChildLevel1, castedNotEqual.ChildLevel1);
@@ -730,8 +730,8 @@ namespace MKY.Test.Settings
 		{
 			VerifySimpleValue(castedToCompareAgainst.SimpleValue, castedEqual.SimpleValue, castedNotEqual.SimpleValue);
 
-			Assert.AreEqual   (settingsToCompareAgainst, settingsEqual);
-			Assert.AreNotEqual(settingsToCompareAgainst, settingsNotEqual);
+			Assert.That(settingsEqual,        Is.EqualTo(settingsToCompareAgainst));
+			Assert.That(settingsNotEqual, Is.Not.EqualTo(settingsToCompareAgainst));
 
 			VerifyLevel2(settingsToCompareAgainst, settingsEqual, settingsNotEqual,
 			             castedToCompareAgainst.ChildLevel2A, castedEqual.ChildLevel2A, castedNotEqual.ChildLevel2A);
@@ -782,8 +782,8 @@ namespace MKY.Test.Settings
 		{
 			VerifySimpleValue(castedToCompareAgainst.SimpleValue, castedEqual.SimpleValue, castedNotEqual.SimpleValue);
 
-			Assert.AreEqual   (settingsToCompareAgainst, settingsEqual);
-			Assert.AreNotEqual(settingsToCompareAgainst, settingsNotEqual);
+			Assert.That(settingsEqual,        Is.EqualTo(settingsToCompareAgainst));
+			Assert.That(settingsNotEqual, Is.Not.EqualTo(settingsToCompareAgainst));
 
 			// Modify simple value and verify base again.
 
@@ -810,8 +810,8 @@ namespace MKY.Test.Settings
 
 		private static void VerifySimpleValue(int castedToCompareAgainst, int castedEqual, int castedNotEqual)
 		{
-			Assert.AreEqual   (castedToCompareAgainst, castedEqual);
-			Assert.AreNotEqual(castedToCompareAgainst, castedNotEqual);
+			Assert.That(castedEqual,        Is.EqualTo(castedToCompareAgainst));
+			Assert.That(castedNotEqual, Is.Not.EqualTo(castedToCompareAgainst));
 		}
 
 		private static void VerifyBase(MKY.Settings.SettingsItem settingsToCompareAgainst, MKY.Settings.SettingsItem settingsEqual, MKY.Settings.SettingsItem settingsNotEqual, int level)
@@ -821,10 +821,10 @@ namespace MKY.Test.Settings
 				messagePostfix = " (after modifying level " + level + ")";
 
 			if (settingsEqual != null)
-				Assert.AreEqual   (settingsToCompareAgainst, settingsEqual,    "Comparing base for equality failed"     + messagePostfix);
+				Assert.That(settingsEqual, Is.EqualTo(settingsToCompareAgainst), "Comparing base for equality failed" + messagePostfix);
 
 			if (settingsNotEqual != null)
-				Assert.AreNotEqual(settingsToCompareAgainst, settingsNotEqual, "Comparing base for non-equality failed" + messagePostfix);
+				Assert.That(settingsNotEqual, Is.Not.EqualTo(settingsToCompareAgainst), "Comparing base for non-equality failed" + messagePostfix);
 		}
 
 		#endregion
@@ -861,8 +861,8 @@ namespace MKY.Test.Settings
 				{
 					v1a = (SettingsEvolutionTestTypeAndData.TestClassV1)objToSerialize;
 					v1b = (SettingsEvolutionTestTypeAndData.TestClassV1)objFromDeserialize;
-					Assert.AreEqual(v1a.Data1, v1b.Data1); // Data 1 must be the one from V1.
-					Assert.AreEqual(v1a.Data2, v1b.Data2); // Data 2 must be the one from V1.
+					Assert.That(v1b.Data1, Is.EqualTo(v1a.Data1)); // Data 1 must be the one from V1.
+					Assert.That(v1b.Data2, Is.EqualTo(v1a.Data2)); // Data 2 must be the one from V1.
 					break;
 				}
 				case SettingsEvolutionTestTypeAndData.TestCaseId._12:
@@ -870,9 +870,9 @@ namespace MKY.Test.Settings
 					v1a = (SettingsEvolutionTestTypeAndData.TestClassV1)objToSerialize;
 					v2a = (SettingsEvolutionTestTypeAndData.TestClassV2)objFromDeserialize;
 					v2b = (SettingsEvolutionTestTypeAndData.TestClassV2)objToTestAgainst;
-					Assert.AreEqual(v2a.Data1, v1a.Data1); // Data 1 must be the one from V1.
-					Assert.AreEqual(v2a.Data2, v1a.Data2); // Data 2 must be the one from V1.
-					Assert.AreEqual(v2a.Data3, v2b.Data3); // Data 3 can only be the one from V2.
+					Assert.That(v1a.Data1, Is.EqualTo(v2a.Data1)); // Data 1 must be the one from V1.
+					Assert.That(v1a.Data2, Is.EqualTo(v2a.Data2)); // Data 2 must be the one from V1.
+					Assert.That(v2b.Data3, Is.EqualTo(v2a.Data3)); // Data 3 can only be the one from V2.
 					break;
 				}
 				case SettingsEvolutionTestTypeAndData.TestCaseId._13:
@@ -880,33 +880,33 @@ namespace MKY.Test.Settings
 					v1a = (SettingsEvolutionTestTypeAndData.TestClassV1)objToSerialize;
 					v3a = (SettingsEvolutionTestTypeAndData.TestClassV3)objFromDeserialize;
 					v3b = (SettingsEvolutionTestTypeAndData.TestClassV3)objToTestAgainst;
-					Assert.AreEqual(v3a.Data1, v1a.Data1); // Data 1 must be the one from V1.
-					Assert.AreEqual(v3a.Data3, v3b.Data3); // Data 3 can only be the one from V3.
+					Assert.That(v1a.Data1, Is.EqualTo(v3a.Data1)); // Data 1 must be the one from V1.
+					Assert.That(v3b.Data3, Is.EqualTo(v3a.Data3)); // Data 3 can only be the one from V3.
 					break;
 				}
 				case SettingsEvolutionTestTypeAndData.TestCaseId._21:
 				{
 					v2a = (SettingsEvolutionTestTypeAndData.TestClassV2)objToSerialize;
 					v1a = (SettingsEvolutionTestTypeAndData.TestClassV1)objFromDeserialize;
-					Assert.AreEqual(v1a.Data1, v2a.Data1); // Data 1 must be the one from V2.
-					Assert.AreEqual(v1a.Data2, v2a.Data2); // Data 2 must be the one from V2.
+					Assert.That(v2a.Data1, Is.EqualTo(v1a.Data1)); // Data 1 must be the one from V2.
+					Assert.That(v2a.Data2, Is.EqualTo(v1a.Data2)); // Data 2 must be the one from V2.
 					break;
 				}
 				case SettingsEvolutionTestTypeAndData.TestCaseId._22:
 				{
 					v2a = (SettingsEvolutionTestTypeAndData.TestClassV2)objToSerialize;
 					v2b = (SettingsEvolutionTestTypeAndData.TestClassV2)objFromDeserialize;
-					Assert.AreEqual(v2a.Data1, v2b.Data1); // Data 1 must be the one from V2.
-					Assert.AreEqual(v2a.Data2, v2b.Data2); // Data 2 must be the one from V2.
-					Assert.AreEqual(v2a.Data3, v2b.Data3); // Data 3 must be the one from V2.
+					Assert.That(v2b.Data1, Is.EqualTo(v2a.Data1)); // Data 1 must be the one from V2.
+					Assert.That(v2b.Data2, Is.EqualTo(v2a.Data2)); // Data 2 must be the one from V2.
+					Assert.That(v2b.Data3, Is.EqualTo(v2a.Data3)); // Data 3 must be the one from V2.
 					break;
 				}
 				case SettingsEvolutionTestTypeAndData.TestCaseId._23:
 				{
 					v2a = (SettingsEvolutionTestTypeAndData.TestClassV2)objToSerialize;
 					v3a = (SettingsEvolutionTestTypeAndData.TestClassV3)objFromDeserialize;
-					Assert.AreEqual(v3a.Data1, v2a.Data1); // Data 1 must be the one from V2.
-					Assert.AreEqual(v3a.Data3, v2a.Data3); // Data 3 must be the one from V2.
+					Assert.That(v2a.Data1, Is.EqualTo(v3a.Data1)); // Data 1 must be the one from V2.
+					Assert.That(v2a.Data3, Is.EqualTo(v3a.Data3)); // Data 3 must be the one from V2.
 					break;
 				}
 				case SettingsEvolutionTestTypeAndData.TestCaseId._31:
@@ -914,8 +914,8 @@ namespace MKY.Test.Settings
 					v3a = (SettingsEvolutionTestTypeAndData.TestClassV3)objToSerialize;
 					v1a = (SettingsEvolutionTestTypeAndData.TestClassV1)objFromDeserialize;
 					v1b = (SettingsEvolutionTestTypeAndData.TestClassV1)objToTestAgainst;
-					Assert.AreEqual(v1a.Data1, v3a.Data1); // Data 1 must be the one from V3.
-					Assert.AreEqual(v1a.Data2, v1b.Data2); // Data 2 can only be the one from V1.
+					Assert.That(v3a.Data1, Is.EqualTo(v1a.Data1)); // Data 1 must be the one from V3.
+					Assert.That(v1b.Data2, Is.EqualTo(v1a.Data2)); // Data 2 can only be the one from V1.
 					break;
 				}
 				case SettingsEvolutionTestTypeAndData.TestCaseId._32:
@@ -923,17 +923,17 @@ namespace MKY.Test.Settings
 					v3a = (SettingsEvolutionTestTypeAndData.TestClassV3)objToSerialize;
 					v2a = (SettingsEvolutionTestTypeAndData.TestClassV2)objFromDeserialize;
 					v2b = (SettingsEvolutionTestTypeAndData.TestClassV2)objToTestAgainst;
-					Assert.AreEqual(v2a.Data1, v3a.Data1); // Data 1 must be the one from V3.
-					Assert.AreEqual(v2a.Data2, v2b.Data2); // Data 2 can only be the one from V2.
-					Assert.AreEqual(v2a.Data3, v3a.Data3); // Data 3 must be the one from V3.
+					Assert.That(v3a.Data1, Is.EqualTo(v2a.Data1)); // Data 1 must be the one from V3.
+					Assert.That(v2b.Data2, Is.EqualTo(v2a.Data2)); // Data 2 can only be the one from V2.
+					Assert.That(v3a.Data3, Is.EqualTo(v2a.Data3)); // Data 3 must be the one from V3.
 					break;
 				}
 				case SettingsEvolutionTestTypeAndData.TestCaseId._33:
 				{
 					v3a = (SettingsEvolutionTestTypeAndData.TestClassV3)objToSerialize;
 					v3b = (SettingsEvolutionTestTypeAndData.TestClassV3)objFromDeserialize;
-					Assert.AreEqual(v3a.Data1, v3b.Data1); // Data 1 must be the one from V3.
-					Assert.AreEqual(v3a.Data3, v3b.Data3); // Data 3 must be the one from V3.
+					Assert.That(v3b.Data1, Is.EqualTo(v3a.Data1)); // Data 1 must be the one from V3.
+					Assert.That(v3b.Data3, Is.EqualTo(v3a.Data3)); // Data 3 must be the one from V3.
 					break;
 				}
 				default:

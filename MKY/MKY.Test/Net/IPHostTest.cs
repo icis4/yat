@@ -113,7 +113,7 @@ namespace MKY.Test.Net
 			if ((ipHostType == IPHost.IPv4Localhost) && (ipHost == IPHost.Localhost))
 				return; // All fine, 'IPv4Localhost' and 'Localhost' are the same.
 
-			Assert.AreEqual(ipHostType, (IPHost)ipHost);
+			Assert.That((IPHost)ipHost, Is.EqualTo(ipHostType));
 		}
 
 		/// <summary></summary>
@@ -121,7 +121,7 @@ namespace MKY.Test.Net
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
 		public virtual void TestHostEqualsAddress(IPHostEx ipHost, IPHost ipHostType, IPAddress ipAddress, string hostString)
 		{
-			Assert.AreEqual(ipAddress, (IPAddress)ipHost);
+			Assert.That((IPAddress)ipHost, Is.EqualTo(ipAddress));
 		}
 
 		/// <summary></summary>
@@ -129,7 +129,7 @@ namespace MKY.Test.Net
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
 		public virtual void TestHostAddressEqualsAddress(IPHostEx ipHost, IPHost ipHostType, IPAddress ipAddress, string hostString)
 		{
-			Assert.AreEqual(ipAddress, ipHost.Address);
+			Assert.That(ipHost.Address, Is.EqualTo(ipAddress));
 		}
 
 		/// <summary></summary>
@@ -137,7 +137,7 @@ namespace MKY.Test.Net
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
 		public virtual void TestHostEqualsHostString(IPHostEx ipHost, IPHost ipHostType, IPAddress ipAddress, string hostString)
 		{
-			Assert.AreEqual(hostString, (string)ipHost);
+			Assert.That((string)ipHost, Is.EqualTo(hostString));
 		}
 
 		#endregion

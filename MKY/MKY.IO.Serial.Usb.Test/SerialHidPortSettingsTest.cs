@@ -88,22 +88,22 @@ namespace MKY.IO.Serial.Usb.Test
 
 				// Deserialize from file using different methods and verify the result:
 				settingsDeserialized = (SerialHidDeviceSettings)XmlSerializerTest.TestDeserializeFromFile(filePath, typeof(SerialHidDeviceSettings));
-				Assert.AreEqual(vendorId, settingsDeserialized.DeviceInfo.VendorId);
-				Assert.AreEqual(productId, settingsDeserialized.DeviceInfo.ProductId);
+				Assert.That(settingsDeserialized.DeviceInfo.VendorId,  Is.EqualTo(vendorId));
+				Assert.That(settingsDeserialized.DeviceInfo.ProductId, Is.EqualTo(productId));
 				if (matchSerial)
-					Assert.AreEqual(serial, settingsDeserialized.DeviceInfo.Serial);
+					Assert.That(settingsDeserialized.DeviceInfo.Serial,Is.EqualTo(serial));
 
 				settingsDeserialized = (SerialHidDeviceSettings)XmlSerializerTest.TestTolerantDeserializeFromFile(filePath, typeof(SerialHidDeviceSettings));
-				Assert.AreEqual(vendorId, settingsDeserialized.DeviceInfo.VendorId);
-				Assert.AreEqual(productId, settingsDeserialized.DeviceInfo.ProductId);
+				Assert.That(settingsDeserialized.DeviceInfo.VendorId,  Is.EqualTo(vendorId));
+				Assert.That(settingsDeserialized.DeviceInfo.ProductId, Is.EqualTo(productId));
 				if (matchSerial)
-					Assert.AreEqual(serial, settingsDeserialized.DeviceInfo.Serial);
+					Assert.That(settingsDeserialized.DeviceInfo.Serial,Is.EqualTo(serial));
 
 				settingsDeserialized = (SerialHidDeviceSettings)XmlSerializerTest.TestAlternateTolerantDeserializeFromFile(filePath, typeof(SerialHidDeviceSettings));
-				Assert.AreEqual(vendorId, settingsDeserialized.DeviceInfo.VendorId);
-				Assert.AreEqual(productId, settingsDeserialized.DeviceInfo.ProductId);
+				Assert.That(settingsDeserialized.DeviceInfo.VendorId,  Is.EqualTo(vendorId));
+				Assert.That(settingsDeserialized.DeviceInfo.ProductId, Is.EqualTo(productId));
 				if (matchSerial)
-					Assert.AreEqual(serial, settingsDeserialized.DeviceInfo.Serial);
+					Assert.That(settingsDeserialized.DeviceInfo.Serial,Is.EqualTo(serial));
 			}
 		}
 

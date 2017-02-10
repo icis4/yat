@@ -331,7 +331,7 @@ namespace YAT.Domain.Test.Parser
 			{
 				byte[] actualBytes;
 				Assert.That(p.TryParse(s, out actualBytes), Is.True);
-				Assert.AreEqual(expectedBytes, actualBytes);
+				Assert.That(actualBytes, Is.EqualTo(expectedBytes));
 			}
 		}
 
@@ -344,7 +344,7 @@ namespace YAT.Domain.Test.Parser
 			{
 				byte[] actualBytes;
 				Assert.That(p.TryParse(s, out actualBytes), Is.True);
-				Assert.AreEqual(expectedBytes, actualBytes);
+				Assert.That(actualBytes, Is.EqualTo(expectedBytes));
 			}
 		}
 
@@ -374,7 +374,7 @@ namespace YAT.Domain.Test.Parser
 					Trace.WriteLine("Actual   " + actualParsed);
 					Trace.WriteLine("Message  " + actualMessage);
 
-					Assert.AreEqual(expectedParsed, actualParsed);
+					Assert.That(actualParsed, Is.EqualTo(expectedParsed));
 				}
 
 				if (!expectedMessage.Equals(actualMessage))
@@ -384,7 +384,7 @@ namespace YAT.Domain.Test.Parser
 					Trace.WriteLine("Actual   " + actualParsed);
 					Trace.WriteLine("Message  " + actualMessage);
 
-					Assert.AreEqual(expectedMessage, actualMessage);
+					Assert.That(actualMessage, Is.EqualTo(expectedMessage));
 				}
 			}
 		}

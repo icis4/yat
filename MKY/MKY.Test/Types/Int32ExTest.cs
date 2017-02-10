@@ -100,10 +100,10 @@ namespace MKY.Test.Types
 			int limited = Int32Ex.Limit(value, min, max);
 
 			if (valueMinimized)
-				Assert.AreEqual(min, limited);
+				Assert.That(limited, Is.EqualTo(min));
 
 			if (valueMaximized)
-				Assert.AreEqual(max, limited);
+				Assert.That(limited, Is.EqualTo(max));
 		}
 
 		#endregion

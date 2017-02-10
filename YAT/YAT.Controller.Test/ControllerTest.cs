@@ -346,7 +346,7 @@ namespace YAT.Controller.Test
 		private static void PrepareMainAndVerifyResult(Main main, MainResult expectedMainResult)
 		{
 			MainResult mainResult = main.PrepareRun();
-			Assert.AreEqual(expectedMainResult, mainResult);
+			Assert.That(mainResult, Is.EqualTo(expectedMainResult));
 		}
 
 		private static void RunAndVerifyApplicationWithView(Main main)
@@ -357,7 +357,7 @@ namespace YAT.Controller.Test
 		private static void RunAndVerifyApplicationWithView(Main main, MainResult expectedMainResult)
 		{
 			MainResult mainResult = main.Run(false, true);
-			Assert.AreEqual(expectedMainResult, mainResult);
+			Assert.That(mainResult, Is.EqualTo(expectedMainResult));
 		}
 
 		private static void RunAndVerifyApplicationWithoutView(Main main)
@@ -368,7 +368,7 @@ namespace YAT.Controller.Test
 		private static void RunAndVerifyApplicationWithoutView(Main main, MainResult expectedMainResult)
 		{
 			MainResult mainResult = main.Run(false, false);
-			Assert.AreEqual(expectedMainResult, mainResult);
+			Assert.That(mainResult, Is.EqualTo(expectedMainResult));
 		}
 
 		#endregion
