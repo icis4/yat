@@ -1163,7 +1163,7 @@ namespace YAT.Settings.Test
 				// Required if COM1 is not available.
 				terminal.MessageInputRequest += terminal_MessageInputRequest;
 
-				Assert.IsTrue(terminal.Start(), @"Failed to start """ + terminal.Caption + @"""");
+				Assert.That(terminal.Start(), Is.True, @"Failed to start """ + terminal.Caption + @"""");
 
 				VerifySettingsCase01(terminal);
 			}
@@ -1191,7 +1191,7 @@ namespace YAT.Settings.Test
 				// Required if COM2 is not available.
 				terminal.MessageInputRequest += terminal_MessageInputRequest;
 
-				Assert.IsTrue(terminal.Start(), @"Failed to start """ + terminal.Caption + @"""");
+				Assert.That(terminal.Start(), Is.True, @"Failed to start """ + terminal.Caption + @"""");
 
 				VerifySettingsCase02(terminal, ignoreBaudRate);
 			}
@@ -1211,7 +1211,7 @@ namespace YAT.Settings.Test
 			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(sh))
 			{
-				Assert.IsTrue(terminal.Start(), @"Failed to start """ + terminal.Caption + @"""");
+				Assert.That(terminal.Start(), Is.True, @"Failed to start """ + terminal.Caption + @"""");
 
 				VerifySettingsCase03(terminal);
 			}
@@ -1253,7 +1253,7 @@ namespace YAT.Settings.Test
 				// Required if COM1 is not available.
 				terminal.MessageInputRequest += terminal_MessageInputRequest;
 
-				Assert.IsTrue(terminal.Start(), @"Failed to start """ + terminal.Caption + @"""");
+				Assert.That(terminal.Start(), Is.True, @"Failed to start """ + terminal.Caption + @"""");
 
 				VerifySettingsCase05(terminal);
 			}
@@ -1292,7 +1292,7 @@ namespace YAT.Settings.Test
 			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(sh))
 			{
-				Assert.IsTrue(terminal.Start(), @"Failed to start """ + terminal.Caption + @"""");
+				Assert.That(terminal.Start(), Is.True, @"Failed to start """ + terminal.Caption + @"""");
 
 				VerifySettingsCase07(terminal);
 			}
@@ -1350,7 +1350,7 @@ namespace YAT.Settings.Test
 			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortA == "COM1")
 			{
 				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortAIsAvailable)
-					Assert.IsTrue(terminal.IsOpen, "Terminal is not open on COM1!");
+					Assert.That(terminal.IsOpen, Is.True, "Terminal is not open on COM1!");
 				else
 					Assert.Ignore("'PortA' is configured to 'COM1' but isn't available on this machine, therefore this test is excluded.");
 					//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -1379,7 +1379,7 @@ namespace YAT.Settings.Test
 			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortB == "COM2")
 			{
 				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortBIsAvailable)
-					Assert.IsTrue(terminal.IsOpen, "Terminal is not open on COM2!");
+					Assert.That(terminal.IsOpen, Is.True, "Terminal is not open on COM2!");
 				else
 					Assert.Ignore("'PortB' is configured to 'COM2' but isn't available on this machine, therefore this test is excluded.");
 					//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -1400,7 +1400,7 @@ namespace YAT.Settings.Test
 		private static void VerifySettingsCase03(Model.Terminal terminal)
 		{
 			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1!");
-			Assert.IsFalse(terminal.IsOpen, "Terminal is not closed on COM1!");
+			Assert.That(terminal.IsOpen, Is.False, "Terminal is not closed on COM1!");
 
 			Assert.AreEqual(2, terminal.SettingsRoot.PredefinedCommand.Pages.Count, "Predefined commands do not contain 2 pages!");
 

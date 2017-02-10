@@ -534,14 +534,14 @@ namespace MKY.Test.CommandLine
 		{
 			CommandLineArgs cla = new CommandLineArgs(commandLineArgs);
 
-			Assert.IsTrue(cla.ProcessAndValidate());
-			Assert.IsTrue(cla.IsValid);
-			Assert.IsFalse(cla.HelpIsRequested);
+			Assert.That(cla.ProcessAndValidate(), Is.True);
+			Assert.That(cla.IsValid,              Is.True);
+			Assert.That(cla.HelpIsRequested,      Is.False);
 
-			Assert.IsTrue(string.IsNullOrEmpty(cla.PureValueArg));
-			Assert.IsTrue(string.IsNullOrEmpty(cla.CombinedValueOptionArg));
-			Assert.IsTrue(string.IsNullOrEmpty(cla.StringValueOption));
-			Assert.IsFalse(cla.BooleanOption);
+			Assert.That(cla.PureValueArg,           Is.Null.Or.Empty);
+			Assert.That(cla.CombinedValueOptionArg, Is.Null.Or.Empty);
+			Assert.That(cla.StringValueOption,      Is.Null.Or.Empty);
+			Assert.That(cla.BooleanOption,          Is.False);
 			Assert.AreEqual(0,      cla.IntValueOption);
 			Assert.AreEqual(0.0,    cla.DoubleValueOption);
 			Assert.AreEqual(0, (int)cla.EnumValueOption);
@@ -580,7 +580,7 @@ namespace MKY.Test.CommandLine
 
 			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
-			Assert.IsFalse(cla.HelpIsRequested);
+			Assert.That(cla.HelpIsRequested, Is.False);
 
 			if (isValid)
 			{
@@ -607,11 +607,11 @@ namespace MKY.Test.CommandLine
 
 			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
-			Assert.IsFalse(cla.HelpIsRequested);
+			Assert.That(cla.HelpIsRequested, Is.False);
 
 			if (isValid)
 			{
-				Assert.IsTrue(cla.OptionIsGiven("svo"));
+				Assert.That(cla.OptionIsGiven("svo"), Is.True);
 				Assert.AreEqual(expectedValue, cla.StringValueOption);
 			}
 		}
@@ -631,11 +631,11 @@ namespace MKY.Test.CommandLine
 
 			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
-			Assert.IsFalse(cla.HelpIsRequested);
+			Assert.That(cla.HelpIsRequested, Is.False);
 
 			if (isValid)
 			{
-				Assert.IsTrue(cla.OptionIsGiven("bo"));
+				Assert.That(cla.OptionIsGiven("bo"), Is.True);
 				Assert.AreEqual(expectedValue, cla.BooleanOption);
 			}
 		}
@@ -655,11 +655,11 @@ namespace MKY.Test.CommandLine
 
 			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
-			Assert.IsFalse(cla.HelpIsRequested);
+			Assert.That(cla.HelpIsRequested, Is.False);
 
 			if (isValid)
 			{
-				Assert.IsTrue(cla.OptionIsGiven("ivo"));
+				Assert.That(cla.OptionIsGiven("ivo"), Is.True);
 				Assert.AreEqual(expectedValue, cla.IntValueOption);
 			}
 		}
@@ -679,11 +679,11 @@ namespace MKY.Test.CommandLine
 
 			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
-			Assert.IsFalse(cla.HelpIsRequested);
+			Assert.That(cla.HelpIsRequested, Is.False);
 
 			if (isValid)
 			{
-				Assert.IsTrue(cla.OptionIsGiven("dvo"));
+				Assert.That(cla.OptionIsGiven("dvo"), Is.True);
 				Assert.AreEqual(expectedValue, cla.DoubleValueOption);
 			}
 		}
@@ -703,11 +703,11 @@ namespace MKY.Test.CommandLine
 
 			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
-			Assert.IsFalse(cla.HelpIsRequested);
+			Assert.That(cla.HelpIsRequested, Is.False);
 
 			if (isValid)
 			{
-				Assert.IsTrue(cla.OptionIsGiven("evo"));
+				Assert.That(cla.OptionIsGiven("evo"), Is.True);
 				Assert.AreEqual(expectedValue, cla.EnumValueOption);
 			}
 		}
@@ -727,7 +727,7 @@ namespace MKY.Test.CommandLine
 
 			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
-			Assert.IsFalse(cla.HelpIsRequested);
+			Assert.That(cla.HelpIsRequested, Is.False);
 
 			if (isValid)
 				Assert.AreEqual(expectedNumberOfOptions, cla.OptionArgsCount);
@@ -748,12 +748,12 @@ namespace MKY.Test.CommandLine
 
 			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
-			Assert.IsFalse(cla.HelpIsRequested);
+			Assert.That(cla.HelpIsRequested, Is.False);
 
 			if (isValid)
 			{
-				Assert.IsTrue(cla.OptionIsGiven("sao"));
-				Assert.IsTrue(ArrayEx.ElementsEqual(expectedArrayOptionArgs, cla.StringArrayOption));
+				Assert.That(cla.OptionIsGiven("sao"), Is.True);
+				Assert.That(ArrayEx.ElementsEqual(expectedArrayOptionArgs, cla.StringArrayOption), Is.True);
 			}
 		}
 
@@ -772,12 +772,12 @@ namespace MKY.Test.CommandLine
 
 			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
-			Assert.IsFalse(cla.HelpIsRequested);
+			Assert.That(cla.HelpIsRequested, Is.False);
 
 			if (isValid)
 			{
-				Assert.IsTrue(cla.OptionIsGiven("iao"));
-				Assert.IsTrue(ArrayEx.ElementsEqual(expectedArrayOptionArgs, cla.IntArrayOption));
+				Assert.That(cla.OptionIsGiven("iao"), Is.True);
+				Assert.That(ArrayEx.ElementsEqual(expectedArrayOptionArgs, cla.IntArrayOption), Is.True);
 			}
 		}
 
@@ -796,7 +796,7 @@ namespace MKY.Test.CommandLine
 
 			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
-			Assert.IsFalse(cla.HelpIsRequested);
+			Assert.That(cla.HelpIsRequested, Is.False);
 
 			if (isValid)
 			{
@@ -821,8 +821,8 @@ namespace MKY.Test.CommandLine
 
 			// Normal case:
 			CommandLineArgs cla = new CommandLineArgs(new string[] { arg });
-			Assert.IsTrue(cla.ProcessAndValidate());
-			Assert.IsTrue(cla.IsValid);
+			Assert.That(cla.ProcessAndValidate(), Is.True);
+			Assert.That(cla.IsValid, Is.True);
 
 			Assert.AreEqual(1, cla.ValueArgsCount);
 			Assert.AreEqual(arg, cla.ValueArgs[0]);
@@ -830,8 +830,8 @@ namespace MKY.Test.CommandLine
 
 			// Override:
 			cla.Override("PureValueArg", argOverride);
-			Assert.IsTrue(cla.ProcessAndValidate());
-			Assert.IsTrue(cla.IsValid);
+			Assert.That(cla.ProcessAndValidate(), Is.True);
+			Assert.That(cla.IsValid, Is.True);
 
 			Assert.AreEqual(1, cla.ValueArgsCount);
 			Assert.AreEqual(arg, cla.ValueArgs[0]); // Arg array must still contain the original arg.
@@ -848,8 +848,8 @@ namespace MKY.Test.CommandLine
 
 			// Normal case:
 			CommandLineArgs cla = new CommandLineArgs(new string[] { arg });
-			Assert.IsTrue(cla.ProcessAndValidate());
-			Assert.IsTrue(cla.IsValid);
+			Assert.That(cla.ProcessAndValidate(), Is.True);
+			Assert.That(cla.IsValid, Is.True);
 
 			Assert.AreEqual(1, cla.OptionArgsCount);
 			Assert.AreEqual(arg, cla.OptionArgs[0]);
@@ -857,8 +857,8 @@ namespace MKY.Test.CommandLine
 
 			// Override:
 			cla.Override("StringValueOption", argValueOverride);
-			Assert.IsTrue(cla.ProcessAndValidate());
-			Assert.IsTrue(cla.IsValid);
+			Assert.That(cla.ProcessAndValidate(), Is.True);
+			Assert.That(cla.IsValid, Is.True);
 
 			Assert.AreEqual(1, cla.OptionArgsCount);
 			Assert.AreEqual(arg, cla.OptionArgs[0]); // Arg array must still contain the original arg.
@@ -875,8 +875,8 @@ namespace MKY.Test.CommandLine
 
 			// Normal case:
 			CommandLineArgs cla = new CommandLineArgs(new string[] { arg });
-			Assert.IsTrue(cla.ProcessAndValidate());
-			Assert.IsTrue(cla.IsValid);
+			Assert.That(cla.ProcessAndValidate(), Is.True);
+			Assert.That(cla.IsValid, Is.True);
 
 			Assert.AreEqual(1, cla.OptionArgsCount);
 			Assert.AreEqual(arg, cla.OptionArgs[0]);
@@ -884,8 +884,8 @@ namespace MKY.Test.CommandLine
 
 			// Override:
 			cla.Override("CombinedValueOptionArg", argValueOverride);
-			Assert.IsTrue(cla.ProcessAndValidate());
-			Assert.IsTrue(cla.IsValid);
+			Assert.That(cla.ProcessAndValidate(), Is.True);
+			Assert.That(cla.IsValid, Is.True);
 
 			Assert.AreEqual(1, cla.OptionArgsCount);
 			Assert.AreEqual(arg, cla.OptionArgs[0]); // Arg array must still contain the original arg.
