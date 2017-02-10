@@ -2,6 +2,9 @@
 NUnit
 -----
 
+Visual Studio > Tools > NuGet > For Solution...
+ > Install NUnit for 'NUnit' and all '...Test' projects
+
 Location
  > Framework assemblies are located at "<WORKSPACE>\NUnit\framework" instead of absolutely referring
    to the installation directory "C:\<Program Files>\NUnit <Version>\bin\framework" because this...

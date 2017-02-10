@@ -96,7 +96,7 @@ New:
 Important changes:
 - Notes and links regarding non-intrusive RS-232 monitor/sniffer/spy cables and devices added to
   'About' dialog (related to feature requests #152, 198, 288).
-- NUnit framework assemblies placed into solution structure instead of referring to installation.
+- Testing environment migrated from NUnit V2 to V3 (feature request #293).
 
 Fixed bugs:
 - 

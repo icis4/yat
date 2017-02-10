@@ -81,8 +81,8 @@ namespace YAT.Model.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SetUp", Justification = "Naming according to NUnit.")]
-		[TestFixtureSetUp]
-		public virtual void TestFixtureSetUp()
+		[OneTimeSetUp]
+		public virtual void OneTimeSetUp()
 		{
 			// Create temporary in-memory application settings for this test run:
 			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
@@ -98,8 +98,8 @@ namespace YAT.Model.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
-		[TestFixtureTearDown]
-		public virtual void TestFixtureTearDown()
+		[OneTimeTearDown]
+		public virtual void OneTimeTearDown()
 		{
 			// Close and dispose of temporary in-memory application settings:
 			ApplicationSettings.CloseAndDispose();
@@ -133,7 +133,7 @@ namespace YAT.Model.Test
 
 				Assert.IsFalse(main.StartArgs.PerformOperationOnRequestedTerminal);
 				Assert.AreEqual(Indices.DefaultDynamicIndex, main.StartArgs.RequestedDynamicTerminalIndex);
-				Assert.IsNullOrEmpty(main.StartArgs.RequestedTransmitFilePath);
+				Assert.That(main.StartArgs.RequestedTransmitFilePath, Is.Null.Or.Empty);
 
 				Assert.IsTrue (main.StartArgs.KeepOpen);
 				Assert.IsTrue (main.StartArgs.KeepOpenOnError);
@@ -422,7 +422,7 @@ namespace YAT.Model.Test
 
 				Assert.IsFalse(main.StartArgs.PerformOperationOnRequestedTerminal);
 				Assert.AreEqual(Indices.DefaultDynamicIndex, main.StartArgs.RequestedDynamicTerminalIndex);
-				Assert.IsNullOrEmpty(main.StartArgs.RequestedTransmitFilePath);
+				Assert.That(main.StartArgs.RequestedTransmitFilePath, Is.Null.Or.Empty);
 
 				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
 
@@ -464,7 +464,7 @@ namespace YAT.Model.Test
 
 				Assert.IsFalse(main.StartArgs.PerformOperationOnRequestedTerminal);
 				Assert.AreEqual(Indices.DefaultDynamicIndex, main.StartArgs.RequestedDynamicTerminalIndex);
-				Assert.IsNullOrEmpty(main.StartArgs.RequestedTransmitFilePath);
+				Assert.That(main.StartArgs.RequestedTransmitFilePath, Is.Null.Or.Empty);
 
 				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
 
@@ -505,7 +505,7 @@ namespace YAT.Model.Test
 
 				Assert.IsFalse(main.StartArgs.PerformOperationOnRequestedTerminal);
 				Assert.AreEqual(Indices.DefaultDynamicIndex, main.StartArgs.RequestedDynamicTerminalIndex);
-				Assert.IsNullOrEmpty(main.StartArgs.RequestedTransmitFilePath);
+				Assert.That(main.StartArgs.RequestedTransmitFilePath, Is.Null.Or.Empty);
 
 				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
 

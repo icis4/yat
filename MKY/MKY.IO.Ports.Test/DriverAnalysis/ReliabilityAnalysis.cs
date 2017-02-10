@@ -240,8 +240,8 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
-		[TestFixtureTearDown]
-		public virtual void TestFixtureTearDown()
+		[OneTimeTearDown]
+		public virtual void OneTimeTearDown()
 		{
 			Temp.CleanTempPath(GetType());
 		}
@@ -321,7 +321,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				this.port.NewLine = "\r\n"; // <CR><LF>
 				this.port.PortName = portName;
 				this.port.Open();
-				Assert.IsTrue(port.IsOpen);
+				Assert.That(port.IsOpen, Is.True);
 
 				// Prepare transmission:
 				Thread.Sleep(WaitForOperation);
@@ -416,7 +416,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				this.port.NewLine = "\r\n"; // <CR><LF>
 				this.port.PortName = portName;
 				this.port.Open();
-				Assert.IsTrue(port.IsOpen);
+				Assert.That(port.IsOpen, Is.True);
 
 				// Prepare transmission:
 				Thread.Sleep(WaitForOperation);

@@ -50,8 +50,8 @@ namespace YAT.Model.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SetUp", Justification = "Naming according to NUnit.")]
-		[TestFixtureSetUp]
-		public virtual void TestFixtureSetUp()
+		[OneTimeSetUp]
+		public virtual void OneTimeSetUp()
 		{
 			// Create temporary in-memory application settings for this test run:
 			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
@@ -62,8 +62,8 @@ namespace YAT.Model.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
-		[TestFixtureTearDown]
-		public virtual void TestFixtureTearDown()
+		[OneTimeTearDown]
+		public virtual void OneTimeTearDown()
 		{
 			// Close and dispose of temporary in-memory application settings:
 			ApplicationSettings.CloseAndDispose();
@@ -94,8 +94,8 @@ namespace YAT.Model.Test
 					Utilities.TestSet testSet;
 
 					// Start and open terminals:
-					Assert.IsTrue(terminalA.Start(), @"Failed to start """ + terminalA.Caption + @"""");
-					Assert.IsTrue(terminalB.Start(), @"Failed to start """ + terminalB.Caption + @"""");
+					Assert.That(terminalA.Start(), Is.True, @"Failed to start """ + terminalA.Caption + @"""");
+					Assert.That(terminalB.Start(), Is.True, @"Failed to start """ + terminalB.Caption + @"""");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					// Create test set to verify transmission:
@@ -145,8 +145,8 @@ namespace YAT.Model.Test
 					Utilities.TestSet testSet;
 
 					// Start and open terminals:
-					Assert.IsTrue(terminalA.Start(), @"Failed to start """ + terminalA.Caption + @"""");
-					Assert.IsTrue(terminalB.Start(), @"Failed to start """ + terminalB.Caption + @"""");
+					Assert.That(terminalA.Start(), Is.True, @"Failed to start """ + terminalA.Caption + @"""");
+					Assert.That(terminalB.Start(), Is.True, @"Failed to start """ + terminalB.Caption + @"""");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					// Create test set to verify transmission:

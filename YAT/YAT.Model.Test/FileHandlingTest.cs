@@ -71,8 +71,8 @@ namespace YAT.Model.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SetUp", Justification = "Naming according to NUnit.")]
-		[TestFixtureSetUp]
-		public virtual void TestFixtureSetUp()
+		[OneTimeSetUp]
+		public virtual void OneTimeSetUp()
 		{
 			// Create 'normal' file-based application settings for this test run.
 			// The 'normal' application settings allow easy check of the settings file.
@@ -89,8 +89,8 @@ namespace YAT.Model.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
-		[TestFixtureTearDown]
-		public virtual void TestFixtureTearDown()
+		[OneTimeTearDown]
+		public virtual void OneTimeTearDown()
 		{
 			// Restore auto-save of workspace settings.
 			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = this.autoOpenWorkspaceToRestore;
@@ -1812,7 +1812,7 @@ namespace YAT.Model.Test
 			// Verify workspace file:
 			if (workspaceFileExpected)
 			{
-				Assert.IsNotNullOrEmpty(workspace.SettingsFilePath, prefix + "Workspace settings file path is empty!");
+				Assert.That(workspace.SettingsFilePath, Is.Not.Null.Or.Empty, prefix + "Workspace settings file path is empty!");
 				Assert.IsTrue(File.Exists(workspace.SettingsFilePath), prefix + "Workspace file doesn't exist!");
 
 				if (workspaceFileAutoExpected)
@@ -1830,7 +1830,7 @@ namespace YAT.Model.Test
 			{
 				if (terminalFileExpected[i])
 				{
-					Assert.IsNotNullOrEmpty(terminal[i].SettingsFilePath, prefix + "Terminal settings file path is empty!");
+					Assert.That(terminal[i].SettingsFilePath, Is.Not.Null.Or.Empty, prefix + "Terminal settings file path is empty!");
 					Assert.IsTrue(File.Exists(terminal[i].SettingsFilePath), prefix + "Terminal file doesn't exist!");
 
 					if (terminalFileAutoExpected[i])
@@ -1851,7 +1851,7 @@ namespace YAT.Model.Test
 				//// Note that the application settings may still contain a former workspace file path.
 				//// This is required to test certain use cases with normal and command line execution.
 				//// Therefore, do not check the local user settings, instead, check that the workspace file path is reset.
-				Assert.IsNullOrEmpty(workspace.SettingsFilePath, prefix + "Workspace file path not reset!");
+				Assert.That(workspace.SettingsFilePath, Is.Null.Or.Empty, prefix + "Workspace file path not reset!");
 
 			// Verify recent settings:
 			if (workspaceFileExpected && (!workspaceFileAutoExpected))
