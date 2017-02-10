@@ -330,7 +330,7 @@ namespace YAT.Domain.Test.Parser
 			using (Domain.Parser.Parser p = new Domain.Parser.Parser())
 			{
 				byte[] actualBytes;
-				Assert.IsTrue(p.TryParse(s, out actualBytes));
+				Assert.That(p.TryParse(s, out actualBytes), Is.True);
 				Assert.AreEqual(expectedBytes, actualBytes);
 			}
 		}
@@ -343,7 +343,7 @@ namespace YAT.Domain.Test.Parser
 			using (Domain.Parser.Parser p = new Domain.Parser.Parser(encoding))
 			{
 				byte[] actualBytes;
-				Assert.IsTrue(p.TryParse(s, out actualBytes));
+				Assert.That(p.TryParse(s, out actualBytes), Is.True);
 				Assert.AreEqual(expectedBytes, actualBytes);
 			}
 		}
@@ -359,7 +359,7 @@ namespace YAT.Domain.Test.Parser
 				string actualParsed;
 
 				Domain.Parser.FormatException formatException = new Domain.Parser.FormatException("");
-				Assert.IsFalse(p.TryParse(s, out actualBytes, out actualParsed, ref formatException));
+				Assert.That(p.TryParse(s, out actualBytes, out actualParsed, ref formatException), Is.False);
 
 				string actualMessage;
 				if (formatException.Message.Contains(Environment.NewLine))

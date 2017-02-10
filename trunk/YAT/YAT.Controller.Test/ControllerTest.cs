@@ -108,8 +108,8 @@ namespace YAT.Controller.Test
 			{
 				PrepareMainAndVerifyResult(main, MainResult.Success);
 
-				Assert.IsTrue (main.CommandLineIsValid);
-				Assert.IsFalse(main.CommandLineHelpIsRequested);
+				Assert.That(main.CommandLineIsValid,         Is.True);
+				Assert.That(main.CommandLineHelpIsRequested, Is.False);
 			}
 		}
 
@@ -128,8 +128,8 @@ namespace YAT.Controller.Test
 			{
 				PrepareMainAndVerifyResult(main, MainResult.Success);
 
-				Assert.IsTrue (main.CommandLineIsValid);
-				Assert.IsFalse(main.CommandLineHelpIsRequested);
+				Assert.That(main.CommandLineIsValid,         Is.True);
+				Assert.That(main.CommandLineHelpIsRequested, Is.False);
 			}
 		}
 
@@ -148,8 +148,8 @@ namespace YAT.Controller.Test
 			{
 				PrepareMainAndVerifyResult(main, MainResult.Success);
 
-				Assert.IsTrue (main.CommandLineIsValid);
-				Assert.IsFalse(main.CommandLineHelpIsRequested);
+				Assert.That(main.CommandLineIsValid,         Is.True);
+				Assert.That(main.CommandLineHelpIsRequested, Is.False);
 			}
 		}
 
@@ -308,9 +308,9 @@ namespace YAT.Controller.Test
 			{
 				PrepareMainAndVerifyResult(main, MainResult.Success);
 
-				Assert.IsTrue (main.CommandLineIsValid);
-				Assert.IsFalse(main.CommandLineHelpIsRequested);
-				Assert.IsTrue (main.CommandLineLogoIsRequested);
+				Assert.That(main.CommandLineIsValid,         Is.True);
+				Assert.That(main.CommandLineHelpIsRequested, Is.False);
+				Assert.That(main.CommandLineLogoIsRequested, Is.True);
 			}
 		}
 
@@ -329,8 +329,8 @@ namespace YAT.Controller.Test
 			{
 				PrepareMainAndVerifyResult(main, MainResult.Success);
 
-				Assert.IsTrue (main.CommandLineIsValid);
-				Assert.IsFalse(main.CommandLineLogoIsRequested);
+				Assert.That(main.CommandLineIsValid,         Is.True);
+				Assert.That(main.CommandLineLogoIsRequested, Is.False);
 			}
 		}
 
