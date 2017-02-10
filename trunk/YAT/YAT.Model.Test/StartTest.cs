@@ -127,8 +127,8 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNull(main.StartArgs.WorkspaceSettingsHandler);
-				Assert.IsNull(main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Null);
 				Assert.That(main.StartArgs.ShowNewTerminalDialog, Is.True);
 
 				Assert.That(main.StartArgs.PerformOperationOnRequestedTerminal, Is.False);
@@ -157,8 +157,8 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNull   (main.StartArgs.WorkspaceSettingsHandler);
-				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Not.Null);
 				Assert.AreEqual (TerminalFilePath, main.StartArgs.TerminalSettingsHandler.SettingsFilePath);
 				Assert.That(main.StartArgs.ShowNewTerminalDialog, Is.False);
 			}
@@ -167,8 +167,8 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNull   (main.StartArgs.WorkspaceSettingsHandler);
-				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Not.Null);
 				Assert.AreEqual (TerminalFilePath, main.StartArgs.TerminalSettingsHandler.SettingsFilePath);
 				Assert.That(main.StartArgs.ShowNewTerminalDialog, Is.False);
 			}
@@ -189,9 +189,9 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNotNull(main.StartArgs.WorkspaceSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Not.Null);
 				Assert.AreEqual (WorkspaceFilePath, main.StartArgs.WorkspaceSettingsHandler.SettingsFilePath);
-				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler); // By default the last terminal in the workspace.
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Not.Null); // By default the last terminal in the workspace.
 				Assert.That(main.StartArgs.ShowNewTerminalDialog, Is.False);
 			}
 
@@ -199,9 +199,9 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNotNull(main.StartArgs.WorkspaceSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Not.Null);
 				Assert.AreEqual (WorkspaceFilePath, main.StartArgs.WorkspaceSettingsHandler.SettingsFilePath);
-				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler); // By default the last terminal in the workspace.
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Not.Null); // By default the last terminal in the workspace.
 				Assert.That(main.StartArgs.ShowNewTerminalDialog, Is.False);
 			}
 		}
@@ -221,8 +221,8 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
 
-				Assert.IsNull (main.StartArgs.WorkspaceSettingsHandler);
-				Assert.IsNull (main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Null);
 				Assert.That(main.StartArgs.ShowNewTerminalDialog, Is.False);
 			}
 
@@ -230,8 +230,8 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
 
-				Assert.IsNull (main.StartArgs.WorkspaceSettingsHandler);
-				Assert.IsNull (main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Null);
 				Assert.That(main.StartArgs.ShowNewTerminalDialog, Is.False);
 			}
 		}
@@ -251,8 +251,8 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
 
-				Assert.IsNull (main.StartArgs.WorkspaceSettingsHandler);
-				Assert.IsNull (main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Null);
 				Assert.That(main.StartArgs.ShowNewTerminalDialog, Is.False);
 			}
 
@@ -260,8 +260,8 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
 
-				Assert.IsNull (main.StartArgs.WorkspaceSettingsHandler);
-				Assert.IsNull (main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Null);
 				Assert.That(main.StartArgs.ShowNewTerminalDialog, Is.False);
 			}
 		}
@@ -282,9 +282,9 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNotNull(main.StartArgs.WorkspaceSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Not.Null);
 				Assert.AreEqual (WorkspaceFilePath, main.StartArgs.WorkspaceSettingsHandler.SettingsFilePath);
-				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler); // By default the last terminal in the workspace.
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Not.Null); // By default the last terminal in the workspace.
 				Assert.That(main.StartArgs.ShowNewTerminalDialog, Is.False);
 			}
 
@@ -293,8 +293,8 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNull   (main.StartArgs.WorkspaceSettingsHandler);
-				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Not.Null);
 				Assert.AreEqual (Terminal1FilePath, main.StartArgs.TerminalSettingsHandler.SettingsFilePath);
 				Assert.That(main.StartArgs.ShowNewTerminalDialog, Is.False);
 			}
@@ -304,8 +304,8 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNull   (main.StartArgs.WorkspaceSettingsHandler);
-				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Not.Null);
 				Assert.AreEqual (Terminal1FilePath, main.StartArgs.TerminalSettingsHandler.SettingsFilePath);
 				Assert.That(main.StartArgs.ShowNewTerminalDialog, Is.False);
 			}
@@ -315,9 +315,9 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNotNull(main.StartArgs.WorkspaceSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Not.Null);
 				Assert.AreEqual (WorkspaceFilePath, main.StartArgs.WorkspaceSettingsHandler.SettingsFilePath);
-				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler); // By default the last terminal in the workspace.
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Not.Null); // By default the last terminal in the workspace.
 				Assert.That(main.StartArgs.ShowNewTerminalDialog, Is.False);
 			}
 
@@ -326,8 +326,8 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNull   (main.StartArgs.WorkspaceSettingsHandler);
-				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Not.Null);
 				Assert.AreEqual (Terminal2FilePath, main.StartArgs.TerminalSettingsHandler.SettingsFilePath);
 				Assert.That(main.StartArgs.ShowNewTerminalDialog, Is.False);
 			}
@@ -338,8 +338,8 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
 
-				Assert.IsNull(main.StartArgs.WorkspaceSettingsHandler);
-				Assert.IsNull(main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Null);
 			}
 		}
 
@@ -398,7 +398,7 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Not.Null);
 
 				Assert.AreEqual(Domain.TerminalType.Binary, main.StartArgs.TerminalSettingsHandler.Settings.TerminalType);
 				Assert.AreEqual(Domain.IOType.SerialPort,   main.StartArgs.TerminalSettingsHandler.Settings.IOType);
@@ -448,7 +448,7 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Not.Null);
 
 				Assert.AreEqual(Domain.TerminalType.Text,    main.StartArgs.TerminalSettingsHandler.Settings.TerminalType);
 				Assert.AreEqual(Domain.IOType.TcpAutoSocket, main.StartArgs.TerminalSettingsHandler.Settings.IOType);
@@ -490,7 +490,7 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Not.Null);
 
 				Assert.AreEqual(Domain.TerminalType.Text,   main.StartArgs.TerminalSettingsHandler.Settings.TerminalType);
 				Assert.AreEqual(Domain.IOType.UsbSerialHid, main.StartArgs.TerminalSettingsHandler.Settings.IOType);
@@ -531,8 +531,8 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNull   (main.StartArgs.WorkspaceSettingsHandler);
-				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Not.Null);
 				Assert.AreEqual (TerminalFilePath, main.StartArgs.TerminalSettingsHandler.SettingsFilePath);
 
 				Assert.AreEqual(19200, main.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.BaudRate);
@@ -562,10 +562,10 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNotNull(                             main.StartArgs.WorkspaceSettingsHandler);
+				Assert.That(                                  main.StartArgs.WorkspaceSettingsHandler, Is.Not.Null);
 				Assert.AreEqual (WorkspaceFilePath,           main.StartArgs.WorkspaceSettingsHandler.SettingsFilePath);
 				Assert.AreEqual (2,                           main.StartArgs.RequestedDynamicTerminalIndex);
-				Assert.IsNotNull(                             main.StartArgs.TerminalSettingsHandler);
+				Assert.That(                                  main.StartArgs.TerminalSettingsHandler, Is.Not.Null);
 				Assert.AreEqual (MKY.IO.Ports.DataBits.Seven, main.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.DataBits);
 
 				Assert.That(main.StartArgs.ShowNewTerminalDialog, Is.False);
@@ -595,8 +595,8 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNull   (main.StartArgs.WorkspaceSettingsHandler);
-				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Not.Null);
 				Assert.AreEqual (TerminalFilePath, main.StartArgs.TerminalSettingsHandler.SettingsFilePath);
 				Assert.AreEqual (text, main.StartArgs.RequestedTransmitText);
 
@@ -627,9 +627,9 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNotNull(main.StartArgs.WorkspaceSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Not.Null);
 				Assert.AreEqual (WorkspaceFilePath, main.StartArgs.WorkspaceSettingsHandler.SettingsFilePath);
-				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Not.Null);
 				Assert.AreEqual (text, main.StartArgs.RequestedTransmitText);
 				Assert.AreEqual (2, main.StartArgs.RequestedDynamicTerminalIndex);
 
@@ -661,8 +661,8 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNull   (main.StartArgs.WorkspaceSettingsHandler);
-				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Not.Null);
 				Assert.AreEqual (TerminalFilePath, main.StartArgs.TerminalSettingsHandler.SettingsFilePath);
 				Assert.AreEqual (filePath, main.StartArgs.RequestedTransmitFilePath);
 
@@ -694,9 +694,9 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNotNull(main.StartArgs.WorkspaceSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Not.Null);
 				Assert.AreEqual (WorkspaceFilePath, main.StartArgs.WorkspaceSettingsHandler.SettingsFilePath);
-				Assert.IsNotNull(main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Not.Null);
 				Assert.AreEqual (filePath, main.StartArgs.RequestedTransmitFilePath);
 				Assert.AreEqual (2, main.StartArgs.RequestedDynamicTerminalIndex);
 
@@ -725,8 +725,8 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNull(main.StartArgs.WorkspaceSettingsHandler);
-				Assert.IsNull(main.StartArgs.TerminalSettingsHandler);
+				Assert.That(main.StartArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(main.StartArgs.TerminalSettingsHandler, Is.Null);
 
 				Assert.That(main.StartArgs.ShowNewTerminalDialog, Is.False);
 

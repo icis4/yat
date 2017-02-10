@@ -302,11 +302,11 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, "Main could not be started!");
 
 				workspace = main.Workspace;
-				Assert.IsNotNull(workspace, "Workspace not opened from file!");
+				Assert.That(workspace, Is.Not.Null, "Workspace not opened from file!");
 				Assert.AreEqual(1, workspace.TerminalCount, "Workspace doesn't contain 1 terminal!");
 
 				terminal = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal, "Terminal not opened from file!");
+				Assert.That(terminal, Is.Not.Null, "Terminal not opened from file!");
 
 				VerifyFiles(workspace, true, terminal, true);
 
@@ -353,7 +353,7 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, uc + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, uc + "Workspace not created!");
 				Assert.AreEqual(0, workspace.TerminalCount, uc + "Workspace doesn't contain 0 terminals!");
 
 				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
@@ -361,7 +361,7 @@ namespace YAT.Model.Test
 				Assert.AreEqual(1, workspace.TerminalCount, uc + "Workspace doesn't contain 1 terminal!");
 
 				Terminal terminal = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal, uc + "Terminal could not be created!");
+				Assert.That(terminal, Is.Not.Null, uc + "Terminal could not be created!");
 
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
@@ -381,11 +381,11 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, uc + "Workspace not opened from file!");
+				Assert.That(workspace, Is.Not.Null, uc + "Workspace not opened from file!");
 				Assert.AreEqual(1, workspace.TerminalCount, uc + "Workspace doesn't contain 1 terminal!");
 
 				Terminal terminal = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal, uc + "Terminal not opened from file!");
+				Assert.That(terminal, Is.Not.Null, uc + "Terminal not opened from file!");
 
 				VerifyFiles(uc, workspace, true, terminal, true);
 
@@ -411,11 +411,11 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, uc + "Workspace not opened from file!");
+				Assert.That(workspace, Is.Not.Null, uc + "Workspace not opened from file!");
 				Assert.AreEqual(1, workspace.TerminalCount, uc + "Workspace doesn't contain 1 terminal!");
 
 				Terminal terminal = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal, uc + "Terminal not opened from file!");
+				Assert.That(terminal, Is.Not.Null, uc + "Terminal not opened from file!");
 
 				VerifyFiles(uc, workspace, true, terminal, true);
 
@@ -443,11 +443,11 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, uc + "Workspace not opened from file!");
+				Assert.That(workspace, Is.Not.Null, uc + "Workspace not opened from file!");
 				Assert.AreEqual(1, workspace.TerminalCount, uc + "Workspace doesn't contain 1 terminal!");
 
 				Terminal terminal1 = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal1, uc + "Terminal 1 not opened from file!");
+				Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
 
 				VerifyFiles(uc, workspace, true, terminal1, true, false);
 				StringAssert.AreEqualIgnoringCase(this.normalTerminal1FilePath, terminal1.SettingsFilePath, uc + "Terminal 1 is not stored at user terminal 1 location!");
@@ -457,13 +457,13 @@ namespace YAT.Model.Test
 				Assert.AreEqual(2, workspace.TerminalCount, uc + "Workspace doesn't contain 2 terminals!");
 
 				Terminal terminal2 = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal2, uc + "Terminal 2 could not be created!");
+				Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 could not be created!");
 
 				Assert.That(workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler()), Is.True, "Terminal 3 could not be created!");
 				Assert.AreEqual(3, workspace.TerminalCount, uc + "Workspace doesn't contain 3 terminals!");
 
 				Terminal terminal3 = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal3, uc + "Terminal 3 could not be created!");
+				Assert.That(terminal3, Is.Not.Null, uc + "Terminal 3 could not be created!");
 
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
@@ -491,15 +491,15 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, uc + "Workspace not opened from file!");
+				Assert.That(workspace, Is.Not.Null, uc + "Workspace not opened from file!");
 				Assert.AreEqual(3, workspace.TerminalCount, uc + "Workspace doesn't contain 3 terminals!");
 
 				Terminal terminal1 = workspace.Terminals[0];
-				Assert.IsNotNull(terminal1, uc + "Terminal 1 not opened from file!");
+				Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
 				Terminal terminal2 = workspace.Terminals[1];
-				Assert.IsNotNull(terminal2, uc + "Terminal 2 not opened from file!");
+				Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
 				Terminal terminal3 = workspace.Terminals[2];
-				Assert.IsNotNull(terminal3, uc + "Terminal 3 not opened from file!");
+				Assert.That(terminal3, Is.Not.Null, uc + "Terminal 3 not opened from file!");
 
 				VerifyFiles
 				(
@@ -543,13 +543,13 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, uc + "Workspace not opened from file!");
+				Assert.That(workspace, Is.Not.Null, uc + "Workspace not opened from file!");
 				Assert.AreEqual(2, workspace.TerminalCount, uc + "Workspace doesn't contain 2 terminals!");
 
 				Terminal terminal1 = workspace.Terminals[0];
-				Assert.IsNotNull(terminal1, uc + "Terminal 1 not opened from file!");
+				Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
 				Terminal terminal2 = workspace.Terminals[1];
-				Assert.IsNotNull(terminal2, uc + "Terminal 2 not opened from file!");
+				Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
 
 				VerifyFiles
 				(
@@ -592,13 +592,13 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, uc + "Workspace not opened from file!");
+				Assert.That(workspace, Is.Not.Null, uc + "Workspace not opened from file!");
 				Assert.AreEqual(2, workspace.TerminalCount, uc + "Workspace doesn't contain 2 terminals!");
 
 				Terminal terminal1 = workspace.Terminals[0];
-				Assert.IsNotNull(terminal1, uc + "Terminal 1 not opened from file!");
+				Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
 				Terminal terminal2 = workspace.Terminals[1];
-				Assert.IsNotNull(terminal2, uc + "Terminal 2 not opened from file!");
+				Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
 
 				VerifyFiles
 				(
@@ -659,13 +659,13 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, uc + "Workspace not opened from file!");
+				Assert.That(workspace, Is.Not.Null, uc + "Workspace not opened from file!");
 				Assert.AreEqual(2, workspace.TerminalCount, uc + "Workspace doesn't contain 2 terminals!");
 
 				Terminal terminal1 = workspace.Terminals[0];
-				Assert.IsNotNull(terminal1, uc + "Terminal 1 not opened from file!");
+				Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
 				Terminal terminal2 = workspace.Terminals[1];
-				Assert.IsNotNull(terminal2, uc + "Terminal 2 not opened from file!");
+				Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
 
 				VerifyFiles
 				(
@@ -683,7 +683,7 @@ namespace YAT.Model.Test
 				Assert.AreEqual(3, workspace.TerminalCount, uc + "Workspace doesn't contain 3 terminals!");
 
 				Terminal terminal3 = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal3, uc + "Terminal 3 could not be created!");
+				Assert.That(terminal3, Is.Not.Null, uc + "Terminal 3 could not be created!");
 
 				// Install callback handler that sets the normal file path for terminal 3:
 				terminal3.SaveAsFileDialogRequest += terminal3_SaveAsFileDialogRequest_SaveAsOK;
@@ -715,15 +715,15 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, uc + "Workspace not opened from file!");
+				Assert.That(workspace, Is.Not.Null, uc + "Workspace not opened from file!");
 				Assert.AreEqual(3, workspace.TerminalCount, uc + "Workspace doesn't contain 3 terminals!");
 
 				Terminal terminal1 = workspace.Terminals[0];
-				Assert.IsNotNull(terminal1, uc + "Terminal 1 not opened from file!");
+				Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
 				Terminal terminal2 = workspace.Terminals[1];
-				Assert.IsNotNull(terminal2, uc + "Terminal 2 not opened from file!");
+				Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
 				Terminal terminal3 = workspace.Terminals[2];
-				Assert.IsNotNull(terminal3, uc + "Terminal 3 not opened from file!");
+				Assert.That(terminal3, Is.Not.Null, uc + "Terminal 3 not opened from file!");
 
 				VerifyFiles
 				(
@@ -788,20 +788,20 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, uc + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, uc + "Workspace not created!");
 				Assert.AreEqual(0, workspace.TerminalCount, uc + "Workspace doesn't contain 0 terminals!");
 
 				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.That(success, Is.True, uc + "Terminal 1 could not be created!");
 				Terminal terminal1 = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal1, uc + "Terminal 1 could not be created!");
+				Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 could not be created!");
 				success = terminal1.SaveAs(this.normalTerminal1FilePath);
 				Assert.That(success, Is.True, uc + "Terminal 1 could not be saved as!");
 
 				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.That(success, Is.True, uc + "Terminal 2 could not be created!");
 				Terminal terminal2 = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal2, uc + "Terminal 2 could not be created!");
+				Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 could not be created!");
 				success = terminal2.SaveAs(this.normalTerminal2FilePath);
 				Assert.That(success, Is.True, uc + "Terminal 2 could not be saved as!");
 
@@ -830,11 +830,11 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, uc + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, uc + "Workspace not created!");
 				Assert.AreEqual(1, workspace.TerminalCount, uc + "Workspace doesn't contain 1 terminal!");
 
 				Terminal terminal = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal, uc + "Terminal could not be opened!");
+				Assert.That(terminal, Is.Not.Null, uc + "Terminal could not be opened!");
 
 				// The auto workspace may still be set to some other workspace. Keep it to compare below.
 				string formerLocalUserAutoWorkspaceFilePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
@@ -862,11 +862,11 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, uc + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, uc + "Workspace not created!");
 				Assert.AreEqual(1, workspace.TerminalCount, uc + "Workspace doesn't contain 1 terminal!");
 
 				Terminal terminal1 = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal1, uc + "Terminal 1 could not be opened!");
+				Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 could not be opened!");
 
 				VerifyFiles(uc, workspace, false, terminal1, true, false);
 
@@ -875,7 +875,7 @@ namespace YAT.Model.Test
 				Assert.AreEqual(2, workspace.TerminalCount, uc + "Workspace doesn't contain 2 terminals!");
 
 				Terminal terminal2 = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal2, uc + "Terminal 2 could not be created!");
+				Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 could not be created!");
 
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
@@ -914,11 +914,11 @@ namespace YAT.Model.Test
 					Assert.That(success, Is.True, uc + "Main 1 could not be started!");
 
 					workspace1 = main1.Workspace;
-					Assert.IsNotNull(workspace1, uc + "Workspace 1 not created!");
+					Assert.That(workspace1, Is.Not.Null, uc + "Workspace 1 not created!");
 					Assert.AreEqual(1, workspace1.TerminalCount, uc + "Workspace 1 doesn't contain 1 terminal!");
 
 					terminal1 = workspace1.ActiveTerminal;
-					Assert.IsNotNull(terminal1, uc + "Terminal 1 could not be opened!");
+					Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 could not be opened!");
 
 					VerifyFiles(uc, workspace1, false, terminal1, true, false);
 				}
@@ -929,11 +929,11 @@ namespace YAT.Model.Test
 					Assert.That(success, Is.True, uc + "Main 2 could not be started!");
 
 					workspace2 = main2.Workspace;
-					Assert.IsNotNull(workspace2, uc + "Workspace 2 not created!");
+					Assert.That(workspace2, Is.Not.Null, uc + "Workspace 2 not created!");
 					Assert.AreEqual(1, workspace2.TerminalCount, uc + "Workspace 2 doesn't contain 1 terminal!");
 
 					terminal2 = workspace2.ActiveTerminal;
-					Assert.IsNotNull(terminal2, uc + "Terminal 2 could not be opened!");
+					Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 could not be opened!");
 
 					VerifyFiles(uc, workspace2, false, terminal2, true, false);
 				}
@@ -973,11 +973,11 @@ namespace YAT.Model.Test
 					Assert.That(success, Is.True, uc + "Main 2 could not be started!");
 
 					workspace2 = main2.Workspace;
-					Assert.IsNotNull(workspace2, uc + "Workspace 2 not created!");
+					Assert.That(workspace2, Is.Not.Null, uc + "Workspace 2 not created!");
 					Assert.AreEqual(1, workspace2.TerminalCount, uc + "Workspace 2 doesn't contain 1 terminal!");
 
 					terminal2 = workspace2.ActiveTerminal;
-					Assert.IsNotNull(terminal2, uc + "Terminal 2 could not be opened!");
+					Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 could not be opened!");
 
 					VerifyFiles(uc, workspace2, true, terminal2, true, false);
 				}
@@ -1026,7 +1026,7 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
 
 				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
@@ -1034,7 +1034,7 @@ namespace YAT.Model.Test
 				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
 
 				Terminal terminal = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal, step + "Terminal could not be created!");
+				Assert.That(terminal, Is.Not.Null, step + "Terminal could not be created!");
 
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
@@ -1079,13 +1079,13 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
 
 				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.That(success, Is.True, step + "Terminal 1 could not be created!");
 				Terminal terminal = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal, step + "Terminal 1 could not be created!");
+				Assert.That(terminal, Is.Not.Null, step + "Terminal 1 could not be created!");
 				success = terminal.SaveAs(this.normalTerminal1FilePath);
 				Assert.That(success, Is.True, step + "Terminal 1 could not be saved as!");
 
@@ -1110,13 +1110,13 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
 
 				success = main.OpenRecent(1);
 				Assert.That(success, Is.True, step + "Recent terminal could not be opened!");
 				Terminal terminal = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal, step + "Recent terminal could not be opened!");
+				Assert.That(terminal, Is.Not.Null, step + "Recent terminal could not be opened!");
 
 				VerifyFiles(step, workspace, false, terminal, true, false);
 
@@ -1158,13 +1158,13 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
 
 				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.That(success, Is.True, step + "Terminal could not be created!");
 				Terminal terminal = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal, step + "Terminal could not be created!");
+				Assert.That(terminal, Is.Not.Null, step + "Terminal could not be created!");
 				success = terminal.SaveAs(this.normalTerminal1FilePath);
 				Assert.That(success, Is.True, step + "Terminal could not be saved as!");
 
@@ -1199,7 +1199,7 @@ namespace YAT.Model.Test
 				Assert.AreNotEqual(countBefore, countAfter, "Workspace 'MessageInputRequest' was not called!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
 			}
 			#endregion
@@ -1234,13 +1234,13 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
 
 				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.That(success, Is.True, step + "Terminal could not be created!");
 				Terminal terminal = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal, step + "Terminal could not be created!");
+				Assert.That(terminal, Is.Not.Null, step + "Terminal could not be created!");
 				success = terminal.SaveAs(this.normalTerminal1FilePath);
 				Assert.That(success, Is.True, step + "Terminal could not be saved as!");
 
@@ -1310,13 +1310,13 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
 
 				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.That(success, Is.True, step + "Terminal could not be created!");
 				Terminal terminal = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal, step + "Terminal could not be created!");
+				Assert.That(terminal, Is.Not.Null, step + "Terminal could not be created!");
 				success = terminal.SaveAs(this.normalTerminal1FilePath);
 				Assert.That(success, Is.True, step + "Terminal could not be saved as!");
 
@@ -1362,11 +1362,11 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
 
 				Terminal terminal = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal, step + "Terminal not opened from file!");
+				Assert.That(terminal, Is.Not.Null, step + "Terminal not opened from file!");
 
 				VerifyFiles(step, workspace, true, false, terminal, true, false);
 
@@ -1394,11 +1394,11 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
 
 				Terminal terminal1 = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal1, step + "Terminal not opened from file!");
+				Assert.That(terminal1, Is.Not.Null, step + "Terminal not opened from file!");
 
 				VerifyFiles(step, workspace, true, false, terminal1, true, false);
 
@@ -1407,7 +1407,7 @@ namespace YAT.Model.Test
 				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.That(success, Is.True, step + "Terminal 2 could not be created!");
 				Terminal terminal2 = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal2, step + "Terminal 2 could not be created!");
+				Assert.That(terminal2, Is.Not.Null, step + "Terminal 2 could not be created!");
 				Assert.AreEqual(2, workspace.TerminalCount, step + "Workspace doesn't contain 2 terminals!");
 
 				// Install callback handler that does not save terminal 2:
@@ -1456,11 +1456,11 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
 
 				Terminal terminal = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal, step + "Terminal not opened from file!");
+				Assert.That(terminal, Is.Not.Null, step + "Terminal not opened from file!");
 
 				VerifyFiles(step, workspace, true, false, terminal, true, false);
 
@@ -1488,11 +1488,11 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
 
 				Terminal terminal1 = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal1, step + "Terminal not opened from file!");
+				Assert.That(terminal1, Is.Not.Null, step + "Terminal not opened from file!");
 
 				VerifyFiles(step, workspace, true, false, terminal1, true, false);
 
@@ -1501,7 +1501,7 @@ namespace YAT.Model.Test
 				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.That(success, Is.True, step + "Terminal 2 could not be created!");
 				Terminal terminal2 = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal2, step + "Terminal 2 could not be created!");
+				Assert.That(terminal2, Is.Not.Null, step + "Terminal 2 could not be created!");
 				success = terminal2.SaveAs(this.normalTerminal2FilePath);
 				Assert.That(success, Is.True, step + "Terminal could not be saved as!");
 
@@ -1536,7 +1536,7 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 				Assert.AreEqual(2, workspace.TerminalCount, step + "Workspace doesn't contain 2 terminals!");
 
 				success = (main.Exit() == MainResult.Success);
@@ -1576,13 +1576,13 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
 
 				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.That(success, Is.True, step + "Terminal 1 could not be created!");
 				Terminal terminal = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal, step + "Terminal 1 could not be created!");
+				Assert.That(terminal, Is.Not.Null, step + "Terminal 1 could not be created!");
 				success = terminal.SaveAs(this.normalTerminal1FilePath);
 				Assert.That(success, Is.True, step + "Terminal 1 could not be saved as!");
 
@@ -1610,7 +1610,7 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
 
 				Assert.AreEqual(Indices.FirstFixedIndex,   workspace.ActiveTerminalFixedIndex,      step + "Fixed index of terminal 1 isn't "   + Indices.FirstFixedIndex + "!");
@@ -1620,14 +1620,14 @@ namespace YAT.Model.Test
 				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.That(success, Is.True, step + "Terminal 2 could not be created!");
 				Terminal terminal2 = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal2, step + "Terminal 2 could not be created!");
+				Assert.That(terminal2, Is.Not.Null, step + "Terminal 2 could not be created!");
 				success = terminal2.SaveAs(this.normalTerminal2FilePath);
 				Assert.That(success, Is.True, step + "Terminal 2 could not be saved as!");
 
 				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.That(success, Is.True, step + "Terminal 3 could not be created!");
 				Terminal terminal3 = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal3, step + "Terminal 3 could not be created!");
+				Assert.That(terminal3, Is.Not.Null, step + "Terminal 3 could not be created!");
 				success = terminal3.SaveAs(this.normalTerminal3FilePath);
 				Assert.That(success, Is.True, step + "Terminal 3 could not be saved as!");
 
@@ -1652,7 +1652,7 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 				Assert.AreEqual(3, workspace.TerminalCount, step + "Workspace doesn't contain 3 terminals!");
 
 				int first = Indices.FirstSequentialIndex;
@@ -1688,7 +1688,7 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 				Assert.AreEqual(2, workspace.TerminalCount, step + "Workspace doesn't contain 2 terminals!");
 
 				workspace.ActivateTerminalBySequentialIndex(1);
