@@ -192,7 +192,7 @@ namespace YAT.View.Test
 			using (Controller.Main main = new Controller.Main(args))
 			{
 				Controller.MainResult mainResult = main.Run();
-				Assert.AreEqual(Controller.MainResult.Success, mainResult);
+				Assert.That(mainResult, Is.EqualTo(Controller.MainResult.Success));
 			}
 		}
 

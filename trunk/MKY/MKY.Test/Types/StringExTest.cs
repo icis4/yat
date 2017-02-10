@@ -322,10 +322,10 @@ namespace MKY.Test.Types
 			bool actual;
 
 			actual = StringEx.EqualsOrdinal(strA, strB);
-			Assert.AreEqual(expected, actual);
+			Assert.That(actual, Is.EqualTo(expected));
 
 			actual = StringEx.EqualsOrdinalIgnoreCase(strA, strB);
-			Assert.AreEqual(expectedIgnoreCase, actual);
+			Assert.That(actual, Is.EqualTo(expectedIgnoreCase));
 		}
 
 		#endregion
@@ -341,7 +341,7 @@ namespace MKY.Test.Types
 		public virtual void IndexOfOutsideDoubleQuotes(string str, string outString, int outIndex, string inString, int inIndex)
 		{
 			int index = StringEx.IndexOfOutsideDoubleQuotes(str, outString, StringComparison.Ordinal);
-			Assert.AreEqual(outIndex, index);
+			Assert.That(index, Is.EqualTo(outIndex));
 		}
 
 		#endregion
@@ -357,7 +357,7 @@ namespace MKY.Test.Types
 		public virtual void CountLeft(string str, int expectedCount, char[] countChars)
 		{
 			int actualCount = StringEx.CountLeft(str, countChars);
-			Assert.AreEqual(expectedCount, actualCount);
+			Assert.That(actualCount, Is.EqualTo(expectedCount));
 		}
 
 		/// <summary></summary>
@@ -366,7 +366,7 @@ namespace MKY.Test.Types
 		public virtual void CountRight(string str, int expectedCount, char[] countChars)
 		{
 			int actualCount = StringEx.CountRight(str, countChars);
-			Assert.AreEqual(expectedCount, actualCount);
+			Assert.That(actualCount, Is.EqualTo(expectedCount));
 		}
 
 		#endregion
@@ -382,12 +382,12 @@ namespace MKY.Test.Types
 		{
 			string[] actualChunks = StringEx.SplitLeft(str, desiredSplitLength);
 
-			Assert.AreEqual(expectedChunks.Length, actualChunks.Length, "Number of chunks mismatch");
+			Assert.That(actualChunks.Length, Is.EqualTo(expectedChunks.Length), "Number of chunks mismatch");
 
 			for (int i = 0; i < expectedChunks.Length; i++)
 			{
-				Assert.AreEqual(expectedChunks[i].Length, actualChunks[i].Length, "Length of chunks mismatch");
-				Assert.AreEqual(expectedChunks[i], actualChunks[i], "Contents of chunks mismatch");
+				Assert.That(actualChunks[i].Length, Is.EqualTo(expectedChunks[i].Length), "Length of chunks mismatch");
+				Assert.That(actualChunks[i],        Is.EqualTo(expectedChunks[i]), "Contents of chunks mismatch");
 			}
 		}
 
@@ -397,12 +397,12 @@ namespace MKY.Test.Types
 		{
 			string[] actualChunks = StringEx.SplitRight(str, desiredSplitLength);
 
-			Assert.AreEqual(expectedChunks.Length, actualChunks.Length, "Number of chunks mismatch");
+			Assert.That(actualChunks.Length, Is.EqualTo(expectedChunks.Length), "Number of chunks mismatch");
 
 			for (int i = 0; i < expectedChunks.Length; i++)
 			{
-				Assert.AreEqual(expectedChunks[i].Length, actualChunks[i].Length, "Length of chunks mismatch");
-				Assert.AreEqual(expectedChunks[i], actualChunks[i], "Contents of chunks mismatch");
+				Assert.That(actualChunks[i].Length, Is.EqualTo(expectedChunks[i].Length), "Length of chunks mismatch");
+				Assert.That(actualChunks[i],        Is.EqualTo(expectedChunks[i]), "Contents of chunks mismatch");
 			}
 		}
 
@@ -413,12 +413,12 @@ namespace MKY.Test.Types
 		{
 			string[] actualChunks = StringEx.SplitLexically(testString, desiredChunkLength);
 
-			Assert.AreEqual(expectedChunks.Length, actualChunks.Length, "Number of chunks mismatch");
+			Assert.That(actualChunks.Length, Is.EqualTo(expectedChunks.Length), "Number of chunks mismatch");
 
 			for (int i = 0; i < expectedChunks.Length; i++)
 			{
-				Assert.AreEqual(expectedChunks[i].Length, actualChunks[i].Length, "Length of chunks mismatch");
-				Assert.AreEqual(expectedChunks[i], actualChunks[i], "Contents of chunks mismatch");
+				Assert.That(actualChunks[i].Length, Is.EqualTo(expectedChunks[i].Length), "Length of chunks mismatch");
+				Assert.That(actualChunks[i],        Is.EqualTo(expectedChunks[i]), "Contents of chunks mismatch");
 			}
 		}
 
@@ -442,7 +442,7 @@ namespace MKY.Test.Types
 			sb.AppendLine("Which was trimmed to:");
 			sb.AppendLine(trim);
 
-			Assert.AreEqual(expectedLength, trim.Length, sb.ToString());
+			Assert.That(trim.Length, Is.EqualTo(expectedLength), sb.ToString());
 		}
 
 		/// <summary></summary>
@@ -458,7 +458,7 @@ namespace MKY.Test.Types
 			sb.AppendLine("Which was trimmed to:");
 			sb.AppendLine(trim);
 
-			Assert.AreEqual(expectedLength, trim.Length, sb.ToString());
+			Assert.That(trim.Length, Is.EqualTo(expectedLength), sb.ToString());
 		}
 
 		#endregion

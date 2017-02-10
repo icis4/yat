@@ -331,7 +331,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				Trace.WriteLine(">> ECHO 1");
 				this.port.WriteLine("ECHO 1"); // Activate single echo mode.
 				Thread.Sleep(WaitForOperation);
-				Assert.AreEqual("ECHO C", this.port.ReadLine(), "Failed to initiate ECHO mode 1!");
+				Assert.That(this.port.ReadLine(), Is.EqualTo("ECHO C"), "Failed to initiate ECHO mode 1!");
 
 				this.port.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
 
@@ -348,8 +348,8 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 
 				this.port.Write(new byte[] { 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
 				Thread.Sleep(WaitForOperation);
-				Assert.AreEqual("",       this.port.ReadLine(), "Failed to quit ECHO mode!");
-				Assert.AreEqual("ECHO A", this.port.ReadLine(), "Failed to quit ECHO mode!");
+				Assert.That(this.port.ReadLine(), Is.EqualTo(""),       "Failed to quit ECHO mode!");
+				Assert.That(this.port.ReadLine(), Is.EqualTo("ECHO A"), "Failed to quit ECHO mode!");
 
 				this.isOngoing = false;
 
@@ -426,7 +426,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				Trace.WriteLine(">> ECHO 2");
 				this.port.WriteLine("ECHO 2"); // Activate continuous echo mode.
 				Thread.Sleep(WaitForOperation);
-				Assert.AreEqual("ECHO C", this.port.ReadLine(), "Failed to initiate ECHO mode 2!");
+				Assert.That(this.port.ReadLine(), Is.EqualTo("ECHO C"), "Failed to initiate ECHO mode 2!");
 
 				this.port.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
 

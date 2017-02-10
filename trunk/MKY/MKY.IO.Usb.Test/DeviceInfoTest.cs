@@ -140,29 +140,29 @@ namespace MKY.IO.Usb.Test
 				if (!matchSerial)
 				{
 					info = new DeviceInfo(vendorId, productId);
-					Assert.AreEqual(vendorId,  info.VendorId);
-					Assert.AreEqual(productId, info.ProductId);
+					Assert.That(info.VendorId,  Is.EqualTo(vendorId));
+					Assert.That(info.ProductId, Is.EqualTo(productId));
 
 					foreach (string descriptor in descriptors)
 					{
 						info = DeviceInfo.ParseFromVidAndPid(descriptor);
-						Assert.AreEqual(vendorId,  info.VendorId);
-						Assert.AreEqual(productId, info.ProductId);
+						Assert.That(info.VendorId,  Is.EqualTo(vendorId));
+						Assert.That(info.ProductId, Is.EqualTo(productId));
 					}
 				}
 				else
 				{
 					info = new DeviceInfo(vendorId, productId, serial);
-					Assert.AreEqual(vendorId,  info.VendorId);
-					Assert.AreEqual(productId, info.ProductId);
-					Assert.AreEqual(serial,    info.Serial);
+					Assert.That(info.VendorId,  Is.EqualTo(vendorId));
+					Assert.That(info.ProductId, Is.EqualTo(productId));
+					Assert.That(info.Serial,    Is.EqualTo(serial));
 
 					foreach (string descriptor in descriptors)
 					{
 						info = DeviceInfo.ParseFromVidAndPidAndSerial(descriptor);
-						Assert.AreEqual(vendorId,  info.VendorId);
-						Assert.AreEqual(productId, info.ProductId);
-						Assert.AreEqual(serial,    info.Serial);
+						Assert.That(info.VendorId,  Is.EqualTo(vendorId));
+						Assert.That(info.ProductId, Is.EqualTo(productId));
+						Assert.That(info.Serial,    Is.EqualTo(serial));
 					}
 				}
 
@@ -248,22 +248,22 @@ namespace MKY.IO.Usb.Test
 
 				// Deserialize from file using different methods and verify the result:
 				infoDeserialized = (DeviceInfo)XmlSerializerTest.TestDeserializeFromFile(filePath, typeof(DeviceInfo));
-				Assert.AreEqual(vendorId,  infoDeserialized.VendorId);
-				Assert.AreEqual(productId, infoDeserialized.ProductId);
+				Assert.That(infoDeserialized.VendorId,  Is.EqualTo(vendorId));
+				Assert.That(infoDeserialized.ProductId, Is.EqualTo(productId));
 				if (matchSerial)
-					Assert.AreEqual(serial, infoDeserialized.Serial);
+					Assert.That(infoDeserialized.Serial, Is.EqualTo(serial));
 
 				infoDeserialized = (DeviceInfo)XmlSerializerTest.TestTolerantDeserializeFromFile(filePath, typeof(DeviceInfo));
-				Assert.AreEqual(vendorId,  infoDeserialized.VendorId);
-				Assert.AreEqual(productId, infoDeserialized.ProductId);
+				Assert.That(infoDeserialized.VendorId,  Is.EqualTo(vendorId));
+				Assert.That(infoDeserialized.ProductId, Is.EqualTo(productId));
 				if (matchSerial)
-					Assert.AreEqual(serial, infoDeserialized.Serial);
+					Assert.That(infoDeserialized.Serial, Is.EqualTo(serial));
 
 				infoDeserialized = (DeviceInfo)XmlSerializerTest.TestAlternateTolerantDeserializeFromFile(filePath, typeof(DeviceInfo));
-				Assert.AreEqual(vendorId,  infoDeserialized.VendorId);
-				Assert.AreEqual(productId, infoDeserialized.ProductId);
+				Assert.That(infoDeserialized.VendorId,  Is.EqualTo(vendorId));
+				Assert.That(infoDeserialized.ProductId, Is.EqualTo(productId));
 				if (matchSerial)
-					Assert.AreEqual(serial, infoDeserialized.Serial);
+					Assert.That(infoDeserialized.Serial, Is.EqualTo(serial));
 			}
 		}
 

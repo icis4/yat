@@ -109,10 +109,10 @@ namespace MKY.Test.Types
 			string decFormat = "D" + decString.Length;
 			string hexFormat = "X" + hexString.Length;
 
-			Assert.AreEqual(binString, UInt64Ex.ConvertToBinaryString(data, max));
-			Assert.AreEqual(octString, UInt64Ex.ConvertToOctalString (data, max));
-			Assert.AreEqual(decString, data.ToString(decFormat, CultureInfo.InvariantCulture));
-			Assert.AreEqual(hexString, data.ToString(hexFormat, CultureInfo.InvariantCulture));
+			Assert.That(UInt64Ex.ConvertToBinaryString(data, max),              Is.EqualTo(binString));
+			Assert.That(UInt64Ex.ConvertToOctalString (data, max),              Is.EqualTo(octString));
+			Assert.That(data.ToString(decFormat, CultureInfo.InvariantCulture), Is.EqualTo(decString));
+			Assert.That(data.ToString(hexFormat, CultureInfo.InvariantCulture), Is.EqualTo(hexString));
 		}
 
 		#endregion
@@ -129,7 +129,7 @@ namespace MKY.Test.Types
 		public virtual void TestToByteArray(ulong data, int boundary, ulong max, bool expandNegative, bool useBigEndian, string binString, string octString, string decString, string hexString, byte[] byteArray)
 		{
 			byte[] convertedByteArray = UInt64Ex.ConvertToByteArray(data, boundary, expandNegative, useBigEndian);
-			Assert.AreEqual(byteArray, convertedByteArray);
+			Assert.That(ArrayEx.ElementsEqual(convertedByteArray, byteArray));
 		}
 
 		#endregion
