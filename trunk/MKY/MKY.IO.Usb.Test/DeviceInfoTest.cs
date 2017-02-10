@@ -110,8 +110,8 @@ namespace MKY.IO.Usb.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
-		[TestFixtureTearDown]
-		public virtual void TestFixtureTearDown()
+		[OneTimeTearDown]
+		public virtual void OneTimeTearDown()
 		{
 			Temp.CleanTempPath(GetType());
 		}
@@ -169,11 +169,11 @@ namespace MKY.IO.Usb.Test
 				// Ensure that ToString() also works if only parts of the info is available
 				string s;
 				s = info.ToString();
-				Assert.IsNotNullOrEmpty(s, "ToString() resulted in invalid string!");
+				Assert.That(s, Is.Not.Null.Or.Empty, "ToString() resulted in invalid string!");
 				s = info.ToShortString();
-				Assert.IsNotNullOrEmpty(s, "ToShortString() resulted in invalid string!");
+				Assert.That(s, Is.Not.Null.Or.Empty, "ToShortString() resulted in invalid string!");
 				s = info.ToLongString();
-				Assert.IsNotNullOrEmpty(s, "ToLongString() resulted in invalid string!");
+				Assert.That(s, Is.Not.Null.Or.Empty, "ToLongString() resulted in invalid string!");
 			}
 			else
 			{

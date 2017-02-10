@@ -113,14 +113,14 @@ namespace YAT.Domain.Test.TextTerminal
 			settingsA.TextTerminal.RxEol = eolBA;
 			using (Domain.TextTerminal terminalA = new Domain.TextTerminal(settingsA))
 			{
-				Assert.IsTrue(terminalA.Start(), "Terminal A could not be started");
+				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
 
 				Settings.TerminalSettings settingsB = Utilities.GetTextTcpAutoSocketOnIPv4LoopbackSettings();
 				settingsB.TextTerminal.TxEol = eolBA;
 				settingsB.TextTerminal.RxEol = eolAB;
 				using (Domain.TextTerminal terminalB = new Domain.TextTerminal(settingsB))
 				{
-					Assert.IsTrue(terminalB.Start(), "Terminal B could not be started");
+					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					int countA = 0;
@@ -190,14 +190,14 @@ namespace YAT.Domain.Test.TextTerminal
 			settingsA.TextTerminal.RxEol = "";
 			using (Domain.TextTerminal terminalA = new Domain.TextTerminal(settingsA))
 			{
-				Assert.IsTrue(terminalA.Start(), "Terminal A could not be started");
+				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
 
 				Settings.TerminalSettings settingsB = Utilities.GetTextTcpAutoSocketOnIPv4LoopbackSettings();
 				settingsB.TextTerminal.TxEol = "";
 				settingsB.TextTerminal.RxEol = "";
 				using (Domain.TextTerminal terminalB = new Domain.TextTerminal(settingsB))
 				{
-					Assert.IsTrue(terminalB.Start(), "Terminal B could not be started");
+					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					terminalA.SendLine("A"); // Line #1 A > B, must not result in line break.
