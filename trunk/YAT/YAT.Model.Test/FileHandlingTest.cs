@@ -71,8 +71,8 @@ namespace YAT.Model.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SetUp", Justification = "Naming according to NUnit.")]
-		[OneTimeSetUp]
-		public virtual void OneTimeSetUp()
+		[TestFixtureSetUp]
+		public virtual void TestFixtureSetUp()
 		{
 			// Create 'normal' file-based application settings for this test run.
 			// The 'normal' application settings allow easy check of the settings file.
@@ -89,8 +89,8 @@ namespace YAT.Model.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
-		[OneTimeTearDown]
-		public virtual void OneTimeTearDown()
+		[TestFixtureTearDown]
+		public virtual void TestFixtureTearDown()
 		{
 			// Restore auto-save of workspace settings.
 			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = this.autoOpenWorkspaceToRestore;
@@ -450,7 +450,7 @@ namespace YAT.Model.Test
 				Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
 
 				VerifyFiles(uc, workspace, true, terminal1, true, false);
-				StringAssert.AreEqualIgnoringCase(this.normalTerminal1FilePath, terminal1.SettingsFilePath, uc + "Terminal 1 is not stored at user terminal 1 location!");
+				Assert.That(PathEx.Equals(terminal1.SettingsFilePath, this.normalTerminal1FilePath), uc + "Terminal 1 is not stored at user terminal 1 location!");
 
 				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.That(success, Is.True, uc + "Terminal 2 could not be created!");
@@ -1846,7 +1846,7 @@ namespace YAT.Model.Test
 
 			// Verify application settings:
 			if (workspaceFileExpected)
-				StringAssert.AreEqualIgnoringCase(workspace.SettingsFilePath, ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath, prefix + "Workspace file path not set!");
+				Assert.That(PathEx.Equals(ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath, workspace.SettingsFilePath), prefix + "Workspace file path not set!");
 			else
 				//// Note that the application settings may still contain a former workspace file path.
 				//// This is required to test certain use cases with normal and command line execution.

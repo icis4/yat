@@ -64,8 +64,8 @@ namespace YAT.Model.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SetUp", Justification = "Naming according to NUnit.")]
-		[OneTimeSetUp]
-		public virtual void OneTimeSetUp()
+		[TestFixtureSetUp]
+		public virtual void TestFixtureSetUp()
 		{
 			// Create temporary in-memory application settings for this test run:
 			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
@@ -76,8 +76,8 @@ namespace YAT.Model.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
-		[OneTimeTearDown]
-		public virtual void OneTimeTearDown()
+		[TestFixtureTearDown]
+		public virtual void TestFixtureTearDown()
 		{
 			// Close and dispose of temporary in-memory application settings:
 			ApplicationSettings.CloseAndDispose();

@@ -638,8 +638,8 @@ namespace MKY.Test.Settings
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
-		[OneTimeTearDown]
-		public virtual void OneTimeTearDown()
+		[TestFixtureTearDown]
+		public virtual void TestFixtureTearDown()
 		{
 			Temp.CleanTempPath(GetType());
 		}

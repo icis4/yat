@@ -194,8 +194,8 @@ namespace YAT.Model.Test.Transmission
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "Don't care, it's for debugging only...")]
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SetUp", Justification = "Naming according to NUnit.")]
-		[OneTimeSetUp]
-		public virtual void OneTimeSetUp()
+		[TestFixtureSetUp]
+		public virtual void TestFixtureSetUp()
 		{
 			// \remind 2016-05-26 / MKY: Should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
 			DialogResult dr = MessageBox.Show
@@ -221,8 +221,8 @@ namespace YAT.Model.Test.Transmission
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
-		[OneTimeTearDown]
-		public virtual void OneTimeTearDown()
+		[TestFixtureTearDown]
+		public virtual void TestFixtureTearDown()
 		{
 			// Close and dispose of temporary in-memory application settings:
 			ApplicationSettings.CloseAndDispose();
