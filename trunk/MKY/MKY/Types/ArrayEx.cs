@@ -102,6 +102,7 @@ namespace MKY
 
 		/// <summary>
 		/// Appends all elements of an array to a string and returns the string.
+		/// Elements that are <c>null</c> are returned as [null].
 		/// </summary>
 		/// <remarks>
 		/// Attention:
@@ -123,7 +124,10 @@ namespace MKY
 				else
 					sb.Append(", ");
 
-				sb.Append(obj.ToString());
+				if (obj != null)
+					sb.Append(obj.ToString());
+				else
+					sb.Append("[null]");
 			}
 
 			return (sb.ToString());
