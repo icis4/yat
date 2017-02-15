@@ -38,49 +38,52 @@ namespace MKY
 	public static class TimeSpanEx
 	{
 		/// <summary>
-		/// Returns time span formatted with "d:hh:mm:ss[.f[f[f]]]".
+		/// Returns the value formatted as "[[[[d days ]h]h:]m]m:ss[.f[f[f]]]".
 		/// </summary>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'hh' and 'ss' just happen to be proper format strings...")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ss' just happens to be a proper format string...")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public static string FormatInvariantTimeSpan(TimeSpan timeSpan, bool tenths = false, bool hundredths = false, bool thousandths = false)
+		public static string FormatInvariantTimeSpan(TimeSpan value, bool tenths = false, bool hundredths = false, bool thousandths = false)
 		{
 			StringBuilder sb = new StringBuilder();
 
 			if (thousandths)
 			{
-				sb.Insert(0, (timeSpan.Milliseconds / 1).ToString("D3", CultureInfo.InvariantCulture));
+				sb.Insert(0, (value.Milliseconds / 1).ToString("D3", CultureInfo.InvariantCulture));
 				sb.Insert(0, ".");
 			}
 			else if (hundredths)
 			{
-				sb.Insert(0, (timeSpan.Milliseconds / 10).ToString("D2", CultureInfo.InvariantCulture));
+				sb.Insert(0, (value.Milliseconds / 10).ToString("D2", CultureInfo.InvariantCulture));
 				sb.Insert(0, ".");
 			}
 			else if (tenths)
 			{
-				sb.Insert(0, (timeSpan.Milliseconds / 100).ToString("D1", CultureInfo.InvariantCulture));
+				sb.Insert(0, (value.Milliseconds / 100).ToString("D1", CultureInfo.InvariantCulture));
 				sb.Insert(0, ".");
 			}
 
-			sb.Insert(0, timeSpan.Seconds.ToString("D2", CultureInfo.InvariantCulture));
-			sb.Insert(0, ":");
-			if (timeSpan.TotalHours < 1)
+			// There shall at least be "0:00" for readability:
+			sb.Insert(0, value.Seconds.ToString("D2", CultureInfo.InvariantCulture));
+
+			if (value.Minutes <= 0)
 			{
-				sb.Insert(0, timeSpan.Minutes);
+				sb.Insert(0, "0:");
 			}
 			else
 			{
-				sb.Insert(0, timeSpan.Minutes.ToString("D2", CultureInfo.InvariantCulture));
 				sb.Insert(0, ":");
-				if (timeSpan.TotalDays < 1)
+				sb.Insert(0, value.Minutes.ToString(CultureInfo.InvariantCulture));
+
+				if (value.Hours > 0)
 				{
-					sb.Insert(0, timeSpan.Hours);
-				}
-				else
-				{
-					sb.Insert(0, timeSpan.Hours.ToString("D2", CultureInfo.InvariantCulture));
-					sb.Insert(0, "days ");
-					sb.Insert(0, timeSpan.Days);
+					sb.Insert(0, ":");
+					sb.Insert(0, value.Hours.ToString(CultureInfo.InvariantCulture));
+
+					if (value.Days > 0)
+					{
+						sb.Insert(0, " days ");
+						sb.Insert(0, value.Days.ToString(CultureInfo.InvariantCulture));
+					}
 				}
 			}
 
