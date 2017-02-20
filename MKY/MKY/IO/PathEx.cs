@@ -286,14 +286,11 @@ namespace MKY.IO
 		/// </remarks>
 		public static PathCompareResult CompareDirectoryPaths(string directoryPathA, string directoryPathB)
 		{
-			directoryPathA = Environment.ExpandEnvironmentVariables(directoryPathA);
-			directoryPathB = Environment.ExpandEnvironmentVariables(directoryPathB);
+			if (!string.IsNullOrEmpty(directoryPathA)) directoryPathA = Environment.ExpandEnvironmentVariables(directoryPathA);
+			if (!string.IsNullOrEmpty(directoryPathB)) directoryPathB = Environment.ExpandEnvironmentVariables(directoryPathB);
 
-			if (!Path.IsPathRooted(directoryPathA))
-				return (new PathCompareResult(false));
-
-			if (!Path.IsPathRooted(directoryPathB))
-				return (new PathCompareResult(false, directoryPathB));
+			if (!Path.IsPathRooted(directoryPathA)) return (new PathCompareResult(false));
+			if (!Path.IsPathRooted(directoryPathB)) return (new PathCompareResult(false, directoryPathB));
 
 			return (DoCompareDirectoryPaths(directoryPathA, directoryPathB));
 		}
@@ -311,14 +308,11 @@ namespace MKY.IO
 		/// </remarks>
 		public static PathCompareResult CompareDirectoryAndFilePaths(string directoryPath, string filePath)
 		{
-			directoryPath = Environment.ExpandEnvironmentVariables(directoryPath);
-			filePath      = Environment.ExpandEnvironmentVariables(filePath);
+			if (!string.IsNullOrEmpty(directoryPath)) directoryPath = Environment.ExpandEnvironmentVariables(directoryPath);
+			if (!string.IsNullOrEmpty(filePath))      filePath      = Environment.ExpandEnvironmentVariables(filePath);
 
-			if (!Path.IsPathRooted(directoryPath))
-				return (new PathCompareResult(false));
-
-			if (!Path.IsPathRooted(filePath))
-				return (new PathCompareResult(false, filePath));
+			if (!Path.IsPathRooted(directoryPath)) return (new PathCompareResult(false));
+			if (!Path.IsPathRooted(filePath))      return (new PathCompareResult(false, filePath));
 
 			string fileName = Path.GetFileName(filePath);
 			PathCompareResult pcr = DoCompareDirectoryPaths(directoryPath, Path.GetDirectoryName(filePath));
@@ -339,14 +333,11 @@ namespace MKY.IO
 		/// </remarks>
 		public static PathCompareResult CompareFileAndDirectoryPaths(string filePath, string directoryPath)
 		{
-			filePath      = Environment.ExpandEnvironmentVariables(filePath);
-			directoryPath = Environment.ExpandEnvironmentVariables(directoryPath);
+			if (!string.IsNullOrEmpty(filePath))      filePath      = Environment.ExpandEnvironmentVariables(filePath);
+			if (!string.IsNullOrEmpty(directoryPath)) directoryPath = Environment.ExpandEnvironmentVariables(directoryPath);
 
-			if (!Path.IsPathRooted(filePath))
-				return (new PathCompareResult(false));
-
-			if (!Path.IsPathRooted(directoryPath))
-				return (new PathCompareResult(false, directoryPath));
+			if (!Path.IsPathRooted(filePath))      return (new PathCompareResult(false));
+			if (!Path.IsPathRooted(directoryPath)) return (new PathCompareResult(false, directoryPath));
 
 			return (DoCompareDirectoryPaths(Path.GetDirectoryName(filePath), directoryPath));
 		}
@@ -364,14 +355,11 @@ namespace MKY.IO
 		/// </remarks>
 		public static PathCompareResult CompareFilePaths(string filePathA, string filePathB)
 		{
-			filePathA = Environment.ExpandEnvironmentVariables(filePathA);
-			filePathB = Environment.ExpandEnvironmentVariables(filePathB);
+			if (!string.IsNullOrEmpty(filePathA)) filePathA = Environment.ExpandEnvironmentVariables(filePathA);
+			if (!string.IsNullOrEmpty(filePathB)) filePathB = Environment.ExpandEnvironmentVariables(filePathB);
 
-			if (!Path.IsPathRooted(filePathA))
-				return (new PathCompareResult(false));
-
-			if (!Path.IsPathRooted(filePathB))
-				return (new PathCompareResult(false, filePathB));
+			if (!Path.IsPathRooted(filePathA)) return (new PathCompareResult(false));
+			if (!Path.IsPathRooted(filePathB)) return (new PathCompareResult(false, filePathB));
 
 			string fileName2 = Path.GetFileName(filePathB);
 			PathCompareResult pcr = DoCompareDirectoryPaths(Path.GetDirectoryName(filePathA), Path.GetDirectoryName(filePathB));
@@ -396,17 +384,13 @@ namespace MKY.IO
 		/// </remarks>
 		public static string CombineDirectoryPaths(string directoryPathA, string directoryPathB)
 		{
-			directoryPathA = Environment.ExpandEnvironmentVariables(directoryPathA);
-			directoryPathB = Environment.ExpandEnvironmentVariables(directoryPathB);
+			if (!string.IsNullOrEmpty(directoryPathA)) directoryPathA = Environment.ExpandEnvironmentVariables(directoryPathA);
+			if (!string.IsNullOrEmpty(directoryPathB)) directoryPathB = Environment.ExpandEnvironmentVariables(directoryPathB);
 
-			if (Path.IsPathRooted(directoryPathB))
-				return (directoryPathB);
+			if ( Path.IsPathRooted(directoryPathB)) return (directoryPathB);
+			if (!Path.IsPathRooted(directoryPathA)) return (null);
 
-			if (!Path.IsPathRooted(directoryPathA))
-				return (null);
-
-			if (string.IsNullOrEmpty(directoryPathB))
-				return (directoryPathA);
+			if (string.IsNullOrEmpty(directoryPathB)) return (directoryPathA);
 
 			return (DoCombineDirectoryPaths(directoryPathA, directoryPathB));
 		}
@@ -424,21 +408,16 @@ namespace MKY.IO
 		/// </remarks>
 		public static string CombineDirectoryAndFilePaths(string directoryPath, string filePath)
 		{
-			directoryPath = Environment.ExpandEnvironmentVariables(directoryPath);
-			filePath      = Environment.ExpandEnvironmentVariables(filePath);
+			if (!string.IsNullOrEmpty(directoryPath)) directoryPath = Environment.ExpandEnvironmentVariables(directoryPath);
+			if (!string.IsNullOrEmpty(filePath))      filePath      = Environment.ExpandEnvironmentVariables(filePath);
 
-			if (Path.IsPathRooted(filePath))
-				return (filePath);
+			if ( Path.IsPathRooted(filePath))      return (filePath);
+			if (!Path.IsPathRooted(directoryPath)) return (null);
 
-			if (!Path.IsPathRooted(directoryPath))
-				return (null);
-
-			if (string.IsNullOrEmpty(filePath))
-				return (directoryPath);
+			if (string.IsNullOrEmpty(filePath)) return (directoryPath);
 
 			string fileName = Path.GetFileName(filePath);
 			string absolutePath = DoCombineDirectoryPaths(directoryPath, Path.GetDirectoryName(filePath));
-
 			string combined = Path.Combine(absolutePath, fileName);
 			return (combined);
 		}
@@ -456,17 +435,13 @@ namespace MKY.IO
 		/// </remarks>
 		public static string CombineFileAndDirectoryPaths(string filePath, string directoryPath)
 		{
-			filePath      = Environment.ExpandEnvironmentVariables(filePath);
-			directoryPath = Environment.ExpandEnvironmentVariables(directoryPath);
+			if (!string.IsNullOrEmpty(filePath))      filePath      = Environment.ExpandEnvironmentVariables(filePath);
+			if (!string.IsNullOrEmpty(directoryPath)) directoryPath = Environment.ExpandEnvironmentVariables(directoryPath);
 
-			if (Path.IsPathRooted(directoryPath))
-				return (directoryPath);
+			if ( Path.IsPathRooted(directoryPath)) return (directoryPath);
+			if (!Path.IsPathRooted(filePath))      return (null);
 
-			if (!Path.IsPathRooted(filePath))
-				return (null);
-
-			if (string.IsNullOrEmpty(directoryPath))
-				return (filePath);
+			if (string.IsNullOrEmpty(directoryPath)) return (filePath);
 
 			return (DoCombineDirectoryPaths(Path.GetDirectoryName(filePath), directoryPath));
 		}
@@ -484,21 +459,16 @@ namespace MKY.IO
 		/// </remarks>
 		public static string CombineFilePaths(string filePathA, string filePathB)
 		{
-			filePathA = Environment.ExpandEnvironmentVariables(filePathA);
-			filePathB = Environment.ExpandEnvironmentVariables(filePathB);
+			if (!string.IsNullOrEmpty(filePathA)) filePathA = Environment.ExpandEnvironmentVariables(filePathA);
+			if (!string.IsNullOrEmpty(filePathB)) filePathB = Environment.ExpandEnvironmentVariables(filePathB);
 
-			if (Path.IsPathRooted(filePathB))
-				return (filePathB);
+			if ( Path.IsPathRooted(filePathB)) return (filePathB);
+			if (!Path.IsPathRooted(filePathA)) return (null);
 
-			if (!Path.IsPathRooted(filePathA))
-				return (null);
-
-			if (string.IsNullOrEmpty(filePathB))
-				return (filePathA);
+			if (string.IsNullOrEmpty(filePathB)) return (filePathA);
 
 			string fileName2 = Path.GetFileName(filePathB);
 			string absolutePath = DoCombineDirectoryPaths(Path.GetDirectoryName(filePathA), Path.GetDirectoryName(filePathB));
-
 			string combined = Path.Combine(absolutePath, fileName2);
 			return (combined);
 		}
@@ -866,14 +836,11 @@ namespace MKY.IO
 		/// </summary>
 		public static bool SwapExistingFiles(string filePathA, string filePathB)
 		{
-			filePathA = Environment.ExpandEnvironmentVariables(filePathA);
-			filePathB = Environment.ExpandEnvironmentVariables(filePathB);
+			if (!string.IsNullOrEmpty(filePathA)) filePathA = Environment.ExpandEnvironmentVariables(filePathA);
+			if (!string.IsNullOrEmpty(filePathB)) filePathB = Environment.ExpandEnvironmentVariables(filePathB);
 
-			if (!File.Exists(filePathA))
-				return (false);
-
-			if (!File.Exists(filePathB))
-				return (false);
+			if (!File.Exists(filePathA)) return (false);
+			if (!File.Exists(filePathB)) return (false);
 
 			// Both files exist, swap them:
 			string filePathTemp = FileEx.MakeUniqueFileName(filePathA);
@@ -888,32 +855,37 @@ namespace MKY.IO
 		#region Distinct...()
 
 		/// <summary>
+		/// Retrieves the distinct (no duplicate) paths among the given paths, expanding environment variables.
+		/// </summary>
+		public static IEnumerable<string> Distinct(IEnumerable<string> paths)
+		{
+			var nonNullOrEmptyPaths = paths.Select(p => p).Where(p => !string.IsNullOrEmpty(p));
+			return (nonNullOrEmptyPaths.Select(p => Environment.ExpandEnvironmentVariables(p))
+			                           .Distinct(Comparer));
+		}
+
+		/// <summary>
 		/// Retrieves the distinct (no duplicate) paths among all given paths, expanding environment variables.
 		/// </summary>
 		public static IEnumerable<string> Distinct(params IEnumerable<string>[] pathArgs)
 		{
-			return (pathArgs.SelectMany(paths => paths.Select(path => Environment.ExpandEnvironmentVariables(path))
-			                                          .Distinct(Comparer)));
+			var nonNullOrEmptyPaths = pathArgs.SelectMany(p => p).Where(p => !string.IsNullOrEmpty(p));
+			return (Distinct(nonNullOrEmptyPaths));
 		}
 
 		/// <summary>
-		/// Retrieves the distinct (no duplicate) directories of the given paths,
-		/// expanding environment variables.
+		/// Retrieves the distinct (no duplicate) directories among the given paths, expanding environment variables.
 		/// </summary>
 		public static IEnumerable<string> DistinctDirectories(IEnumerable<string> paths)
 		{
-			return (paths.Select(path => Path.GetDirectoryName(Environment.ExpandEnvironmentVariables(path)))
-			             .Distinct(Comparer));
+			var nonNullOrEmptyPaths = paths.Select(p => p).Where(p => !string.IsNullOrEmpty(p));
+			return (nonNullOrEmptyPaths.Select(p => Path.GetDirectoryName(Environment.ExpandEnvironmentVariables(p)))
+			                           .Distinct(Comparer));
 		}
 
 		/// <summary>
-		/// Retrieves the distinct (no duplicate) directories of the given paths,
-		/// expanding environment variables.
+		/// Retrieves the distinct (no duplicate) directories among the given paths, expanding environment variables.
 		/// </summary>
-		/// <remarks>
-		/// Code duplication of <see cref="DistinctDirectories(IEnumerable{string})"/> above
-		/// as <see cref="StringCollection"/> does not implement <see cref="IEnumerable{T}"/>.
-		/// </remarks>
 		public static IEnumerable<string> DistinctDirectories(StringCollection paths)
 		{
 			return (DistinctDirectories(paths.Cast<string>()));
