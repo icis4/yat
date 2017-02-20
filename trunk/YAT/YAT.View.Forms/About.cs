@@ -50,6 +50,11 @@ namespace YAT.View.Forms
 	/// <summary></summary>
 	public partial class About : Form
 	{
+		#region Information and Links
+		//------------------------------------------------------------------------------------------
+		// Information and Links
+		//------------------------------------------------------------------------------------------
+
 		/// <summary></summary>
 		public About()
 		{
@@ -343,11 +348,6 @@ namespace YAT.View.Forms
 			linkLabel_License.Text += textAfter;
 		}
 
-		#region Controls Event Handlers
-		//------------------------------------------------------------------------------------------
-		// Controls Event Handlers
-		//------------------------------------------------------------------------------------------
-
 		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "YAT is not (yet) capable for RTL.")]
 		private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
@@ -382,9 +382,9 @@ namespace YAT.View.Forms
 
 		#endregion
 
-		#region Controls Event Handlers > Manual Testing
+		#region Manual Testing
 		//------------------------------------------------------------------------------------------
-		// Controls Event Handlers > Manual Testing
+		// Manual Testing
 		//------------------------------------------------------------------------------------------
 
 		[SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Justification = "Intentionally raising the most general exception to ensure that EVERY exception handler really catches it.")]
@@ -395,16 +395,8 @@ namespace YAT.View.Forms
 				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
 				"Would you like to immediately throw an exception to test that unhandled synchronous exceptions are handled properly?";
 
-			if (MessageBoxEx.Show
-				(
-				this,
-				message,
-				"Execute manual 'Release' test?",
-				MessageBoxButtons.YesNoCancel,
-				MessageBoxIcon.Question,
-				MessageBoxDefaultButton.Button2
-				)
-				== DialogResult.Yes)
+			if (TestExecutionIsIntended(message) &&
+				TestPreconditionIsGiven(typeof(Exception)))
 			{
 				throw (new Exception("Unhandled synchronous exception test :: This is the outer exception.", new Exception("This is the inner exception.")));
 			}
@@ -417,16 +409,8 @@ namespace YAT.View.Forms
 				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
 				"Would you like to start a Windows.Forms timer throwing an exception to test that unhandled asynchronous synchronized exceptions are handled properly?";
 
-			if (MessageBoxEx.Show
-				(
-				this,
-				message,
-				"Execute manual 'Release' test?",
-				MessageBoxButtons.YesNoCancel,
-				MessageBoxIcon.Question,
-				MessageBoxDefaultButton.Button2
-				)
-				== DialogResult.Yes)
+			if (TestExecutionIsIntended(message) &&
+				TestPreconditionIsGiven(typeof(Exception)))
 			{
 				timer_ExecuteManualTest2.Start();
 			}
@@ -444,17 +428,13 @@ namespace YAT.View.Forms
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private System.Threading.Timer timer_ExecuteManualTest3;
+		private System.Threading.Timer timer_ExecuteManualTest3; // Explicitly using 'System.Threading.Timer' to prevent naming conflict with 'System.Windows.Forms.Timer'.
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private object timer_ExecuteManualTest3SyncObj = new object();
 
 		/// <summary>
 		/// Test case 3: Unhandled asynchronous non-synchronized exceptions.
-		/// 
-		/// Test case 3 doesn't work on a System.Threading timer callback directly.
-		/// Such exceptions are not dispatched back onto main thread. Therefore, use
-		/// EventHelper and a separate exception class for this test case.
 		/// </summary>
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void label_ExecuteManualTest3_Click(object sender, EventArgs e)
@@ -463,19 +443,11 @@ namespace YAT.View.Forms
 				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
 				"Would you like to start a System.Threading timer throwing an exception to test that unhandled asynchronous non-synchronized exceptions are handled properly?";
 
-			if (MessageBoxEx.Show
-				(
-				this,
-				message,
-				"Execute manual 'Release' test?",
-				MessageBoxButtons.YesNoCancel,
-				MessageBoxIcon.Question,
-				MessageBoxDefaultButton.Button2
-				)
-				== DialogResult.Yes)
+			if (TestExecutionIsIntended(message) &&
+				TestPreconditionIsGiven(typeof(Exception)))
 			{
 				lock (this.timer_ExecuteManualTest3SyncObj)
-				{
+				{                  // Explicitly using 'System.Threading.Timer' to prevent naming conflict with 'System.Windows.Forms.Timer'.
 					this.timer_ExecuteManualTest3 = new System.Threading.Timer(new System.Threading.TimerCallback(timer_ExecuteManualTest3_Timeout), null, 100, System.Threading.Timeout.Infinite);
 				}
 			}
@@ -501,6 +473,47 @@ namespace YAT.View.Forms
 					this.timer_ExecuteManualTest3 = null;
 				}
 			}
+		}
+
+		private bool TestExecutionIsIntended(string message)
+		{
+			var dr = MessageBoxEx.Show
+				(
+				this,
+				message,
+				"Execute Manual 'Release' Test?",
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Question,
+				MessageBoxDefaultButton.Button2
+				);
+
+			return (dr == DialogResult.Yes);
+		}
+
+		private bool TestPreconditionIsGiven(Type upcomingExceptionType)
+		{
+			if (UnhandledExceptionHandler.ExceptionTypeIsIgnored(upcomingExceptionType))
+			{
+				string precondition =
+					"The precondition for the test is not given. The upcoming exception type is currently being ignored." + Environment.NewLine + Environment.NewLine +
+					"Confirm with [OK] to restore the precondition, or [Cancel] the test.";
+
+				var dr = MessageBox.Show
+					(
+					this,
+					precondition,
+					"Restore Manual 'Release' Test Precondition?",
+					MessageBoxButtons.OKCancel,
+					MessageBoxIcon.Exclamation
+					);
+
+				if (dr != DialogResult.OK)
+					return (false);
+
+				UnhandledExceptionHandler.ResetIgnoredExceptionType();
+			}
+
+			return (true);
 		}
 
 		#endregion

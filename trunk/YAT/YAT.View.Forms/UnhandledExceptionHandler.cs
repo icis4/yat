@@ -68,16 +68,29 @@ namespace YAT.View.Forms
 	/// <summary></summary>
 	public static class UnhandledExceptionHandler
 	{
-		/// <summary>
-		/// Used to prevent that multiple unhandled exceptions also generate multiple unhandled exception dialogs.
-		/// </summary>
-		private static bool staticHandleExceptions = true;
+		private static Type staticExceptionTypeToIgnore; // = null;
 
-		/// <summary></summary>
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		public static UnhandledExceptionResult ProvideExceptionToUser(string originMessage, UnhandledExceptionType exceptionType, bool mayBeContinued)
+		/// <summary>
+		/// Evaluates whether the given <paramref name="type"/> is currently being ignored.
+		/// </summary>
+		/// <remarks>
+		/// Used to prevent that multiple unhandled exceptions also generate multiple unhandled exception dialogs.
+		/// Any exception of the same type of a type that <see cref="Type.IsAssignableFrom(Type)"/> will be ignored.
+		/// </remarks>
+		public static bool ExceptionTypeIsIgnored(Type type)
 		{
-			return (ProvideExceptionToUser(null, null, originMessage, exceptionType, mayBeContinued));
+			if (staticExceptionTypeToIgnore != null)
+				return (staticExceptionTypeToIgnore.IsAssignableFrom(type));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Resets the ignored exception type.
+		/// </summary>
+		public static void ResetIgnoredExceptionType()
+		{
+			staticExceptionTypeToIgnore = null;
 		}
 
 		/// <summary></summary>
@@ -100,6 +113,7 @@ namespace YAT.View.Forms
 					return ((UnhandledExceptionResult)f.Invoke(invoker, owner, exception, originMessage, exceptionType, mayBeContinued));
 				}
 			}
+
 			return (ProvideExceptionToUserInvocation(owner, exception, originMessage, exceptionType, mayBeContinued));
 		}
 
@@ -107,7 +121,7 @@ namespace YAT.View.Forms
 
 		private static UnhandledExceptionResult ProvideExceptionToUserInvocation(IWin32Window owner, Exception exception, string originMessage, UnhandledExceptionType exceptionType, bool mayBeContinued)
 		{
-			if (!staticHandleExceptions)
+			if (exception.GetType().IsAssignableFrom(staticExceptionTypeToIgnore))
 				return (UnhandledExceptionResult.Continue);
 
 			string productName = ApplicationEx.ProductName;
@@ -161,16 +175,16 @@ namespace YAT.View.Forms
 			{
 				string message =
 					"After an unhandled exception you are advised to exit and restart " + productName + "." + Environment.NewLine + Environment.NewLine +
-					"Select cancel/abort to exit " + productName + " now." + Environment.NewLine +
-					"Or would you like to continue/retry anyway?" + Environment.NewLine +
-					"Or would you like to continue but ignore any additional unhandled exceptions?";
+					"Select [Cancel/Abort] to exit " + productName + " now." + Environment.NewLine +
+					"Or would you like to continue and [Retry] anyway?" + Environment.NewLine +
+					"Or would you like to continue but [Ignore] such unhandled exceptions?";
 
 				UnhandledExceptionResult result;
 				switch (MessageBoxEx.Show(owner, message, title, MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Exclamation))
 				{
-					case DialogResult.Retry:                                  result = UnhandledExceptionResult.Continue; break;
-					case DialogResult.Ignore: staticHandleExceptions = false; result = UnhandledExceptionResult.Continue; break; // Intentionally ignore further exceptions.
-					default:                  staticHandleExceptions = false; result = UnhandledExceptionResult.Exit;     break; // Don't care about any exceptions anymore.
+					case DialogResult.Retry:                                                     result = UnhandledExceptionResult.Continue; break;
+					case DialogResult.Ignore: staticExceptionTypeToIgnore = exception.GetType(); result = UnhandledExceptionResult.Continue; break; // Intentionally ignore further exceptions.
+					default:                  staticExceptionTypeToIgnore = typeof(Exception);   result = UnhandledExceptionResult.Exit;     break; // Don't care about any exceptions anymore.
 				}
 
 				if (result == UnhandledExceptionResult.Exit)
@@ -198,7 +212,7 @@ namespace YAT.View.Forms
 					default:               result = UnhandledExceptionResult.Exit;           break;
 				}
 
-				staticHandleExceptions = false; // Ensure that no more exceptions are shown while exiting.
+				staticExceptionTypeToIgnore = typeof(Exception); // Ensure that no more exceptions are shown while exiting.
 				return (result);
 			}
 		}
