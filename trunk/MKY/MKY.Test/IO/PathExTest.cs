@@ -24,6 +24,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 using MKY.IO;
 
@@ -598,6 +599,47 @@ namespace MKY.Test.IO
 				default: result = PathEx.CompareFilePaths            (absoluteB, absoluteA); break;
 			}
 			Assert.That(result.RelativePath, Is.EqualTo(relativeB), "B absolute compared to A absolute doesn't result in B relative");
+		}
+
+		#endregion
+
+		#region Tests > Distinct...()
+		//------------------------------------------------------------------------------------------
+		// Tests > Distinct...()
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestDistinct()
+		{
+			string[] singleDistinctPath =
+			{
+				@"C:\Test",
+				@"C:\test",
+				null,
+				"",
+				@"c:\Test",
+				@"c:\test"
+			};
+
+			string[] fourDistinctPaths =
+			{
+				@"C:\ABC",
+				@"C:\ABCD",
+				null,
+				"",
+				@"c:\ABCDe",
+				@"c:\abcdef"
+			};
+
+			string[] nullAndEmpty =
+			{
+				null,
+				""
+			};
+
+			var distinctPaths = PathEx.Distinct(singleDistinctPath, fourDistinctPaths, nullAndEmpty);
+			Assert.That(distinctPaths.Count(), Is.EqualTo(5));
 		}
 
 		#endregion
