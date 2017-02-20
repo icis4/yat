@@ -3910,6 +3910,36 @@ namespace YAT.Model
 
 				foreach (string filePath in this.log.FilePaths)
 				{
+					if (ExtensionHelper.IsFileTypeThatCanOnlyBeOpenedWhenCompleted(filePath))
+					{
+						string message =
+							@"Log file """ + Path.GetFileName(filePath) + @""" is still incomplete and may not yet be openable. It is recommended to close the log before opening this file." +
+							Environment.NewLine + Environment.NewLine +
+							"Do you still want to open the file?";
+
+						DialogResult dr = OnMessageInputRequest
+						(
+							message,
+							"Log File Warning",
+							MessageBoxButtons.YesNoCancel,
+							MessageBoxIcon.Warning
+						);
+
+						if (dr == DialogResult.No)
+						{
+							success = false;
+							continue; // Continue with next file.
+						}
+
+						if (dr == DialogResult.Cancel)
+						{
+							success = false;
+							break; // Cancel all files.
+						}
+
+						// DialogResult.Yes = still open file.
+					}
+
 					Exception ex;
 					if (!Editor.TryOpenFile(filePath, out ex))
 					{
@@ -3924,7 +3954,7 @@ namespace YAT.Model
 						if (dr == DialogResult.Cancel)
 						{
 							success = false;
-							break;
+							break; // Cancel all files.
 						}
 					}
 				}
