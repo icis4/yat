@@ -49,15 +49,20 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using System.Threading;
-using System.Windows.Forms;
+
+#if (HANDLE_UNHANDLED_EXCEPTIONS)
+	using System.Threading;
+#endif
+
+using System.Windows.Forms; // Note that several locations explicitly use 'System.Windows.Forms' to prevent naming conflicts with 'MKY.Windows.Forms' and 'YAT.Application'.
 
 using MKY;
 using MKY.Diagnostics;
 using MKY.Settings;
-using MKY.Windows.Forms;
+using MKY.Windows.Forms; // Note that several locations explicitly use 'MKY.Windows.Forms' to prevent naming conflicts with 'System.Windows.Forms' and 'YAT.Application'.
 
 using YAT.Settings.Application;
+// Explicitly using 'YAT.View.Forms' to prevent naming conflicts with same-named 'YAT.Controller' classes like 'Main'.
 
 #endregion
 
@@ -496,8 +501,13 @@ namespace YAT.Controller
 						string message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
 						if (View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.Synchronous, true) == View.Forms.UnhandledExceptionResult.ExitAndRestart)
 							System.Windows.Forms.Application.Restart();
+
+						// Ignore exception and continue.
 					}
-					return (MainResult.UnhandledException);
+					else
+					{
+						return (MainResult.UnhandledException);
+					}
 				}
 
 				try
@@ -532,11 +542,12 @@ namespace YAT.Controller
 				{
 					if (this.commandLineArgs.Interactive)
 					{
-						string message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
-						if (View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.Synchronous, true) == View.Forms.UnhandledExceptionResult.ExitAndRestart)
+						string message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + "."; // Synchronous exceptions cannot be continued as the application has already exited.
+						if (View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.Synchronous, false) == View.Forms.UnhandledExceptionResult.ExitAndRestart)
 							System.Windows.Forms.Application.Restart();
 					}
-					return (MainResult.UnhandledException);
+
+					return (MainResult.UnhandledException); // Note that continue is not possible, see comment above.
 				}
 			#endif
 			} // Dispose of model to ensure immediate release of resources.
@@ -547,7 +558,7 @@ namespace YAT.Controller
 
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		/// <remarks>
-		/// In case of an <see cref="System.Windows.Forms.Application.ThreadException"/>, it is possible to continue operation.
+		/// In case of a <see cref="System.Windows.Forms.Application.ThreadException"/>, it is possible to continue operation.
 		/// </remarks>
 		private void RunFullyWithView_Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 		{
@@ -559,7 +570,7 @@ namespace YAT.Controller
 				if (result == View.Forms.UnhandledExceptionResult.ExitAndRestart)
 					System.Windows.Forms.Application.Restart();
 				else if (result == View.Forms.UnhandledExceptionResult.Continue)
-					return; // Ignore, do nothing.
+					return; // Ignore exception and continue.
 				else
 					System.Windows.Forms.Application.Exit();
 			}
@@ -587,7 +598,7 @@ namespace YAT.Controller
 				if (result == View.Forms.UnhandledExceptionResult.ExitAndRestart)
 					System.Windows.Forms.Application.Restart();
 				else if (result == View.Forms.UnhandledExceptionResult.Continue)
-					return; // Ignore, do nothing.
+					return; // Ignore exception and continue.
 				else
 					System.Windows.Forms.Application.Exit();
 			}
@@ -696,7 +707,7 @@ namespace YAT.Controller
 
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		/// <remarks>
-		/// In case of an <see cref="System.Windows.Forms.Application.ThreadException"/>, it is possible to continue operation.
+		/// In case of a <see cref="System.Windows.Forms.Application.ThreadException"/>, it is possible to continue operation.
 		/// </remarks>
 		private void RunWithViewButOutputErrorsOnConsole_Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 		{
