@@ -208,6 +208,12 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <summary></summary>
+		public static bool IsFileTypeThatCanOnlyBeOpenedWhenCompleted(string filePath)
+		{
+			return (IsRtfExtension(filePath) || IsXmlFile(filePath));
+		}
+
+		/// <summary></summary>
 		public static string TextFilesFilter
 		{
 			get
