@@ -220,7 +220,7 @@ namespace YAT.Domain.Settings
 			{
 				if (this.separateTxRxRadix)
 					return (this.rxRadix);
-				else
+				else // Rx redirects to Tx:
 					return (this.txRadix);
 			}
 			set
@@ -230,6 +230,10 @@ namespace YAT.Domain.Settings
 					this.rxRadix = value;
 					SetMyChanged();
 				}
+
+				// Do not redirect on 'set'. this would not be an understandable behaviour.
+				// It could even confuse the user, e.g. when temporarily separating the settings,
+				// and then load them again from XML => temporary settings get lost.
 			}
 		}
 
