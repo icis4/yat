@@ -601,7 +601,7 @@ namespace YAT.View.Forms
 				string message =
 					"To avoid naming conflicts, files must either be named by format or separated into format folders (Raw/Neat) or have different extensions." +
 					Environment.NewLine + Environment.NewLine +
-					"Do you want to name the files by format (Yes) or separate them into folders (No)?" +
+					"Do you want to name the files by format [Yes] or separate them into folders [No]?" +
 					Environment.NewLine + Environment.NewLine +
 					"You may also cancel and set different extensions, or manually change the settings.";
 
@@ -626,7 +626,7 @@ namespace YAT.View.Forms
 				string message =
 					"To avoid naming conflicts, files must either be named by channel or separated into channel folders (Tx/Bidir/Rx)." +
 					Environment.NewLine + Environment.NewLine +
-					"Do you want to name the files by channel (Yes) or separate them into folders (No)?" +
+					"Do you want to name the files by channel [Yes] or separate them into folders [No]?" +
 					Environment.NewLine + Environment.NewLine +
 					"You may also cancel and manually change the settings.";
 

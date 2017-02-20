@@ -400,7 +400,7 @@ namespace YAT.View.Forms
 		{
 			this.isSettingControls.Enter();
 
-			// Start/stop
+			// Start/stop:
 			if (TerminalIsAvailable)
 			{
 				toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = !this.terminal.IsStarted;
@@ -414,7 +414,7 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled = false;
 			}
 
-			// Edit
+			// Edit:
 			bool monitorIsDefined = (this.lastMonitorSelection != Domain.RepositoryType.None);
 			bool editIsNotActive = (!send.EditIsActive);
 			toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Enabled       = (monitorIsDefined && editIsNotActive);
@@ -695,7 +695,7 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 
 			bool logIsEnabled = (this.settingsRoot.Log.Count > 0);
-			bool logIsOn      = this.settingsRoot.LogIsOn;
+			bool logIsOn      =  this.settingsRoot.LogIsOn;
 
 			bool logFileExists = false;
 			if (this.terminal != null)
@@ -2549,6 +2549,11 @@ namespace YAT.View.Forms
 			contextMenuStrip_Monitor_SetMenuItems();
 		}
 
+		private void SetPresetControls()
+		{
+			contextMenuStrip_Preset_SetMenuItems();
+		}
+
 		private void SetPredefinedControls()
 		{
 			contextMenuStrip_Predefined_SetMenuItems(); // Ensure that shortcuts are activated.
@@ -2556,11 +2561,6 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			predefined.TerminalIsReadyToSend = this.terminal.IsReadyToSend;
 			this.isSettingControls.Leave();
-		}
-
-		private void SetPresetControls()
-		{
-			contextMenuStrip_Preset_SetMenuItems();
 		}
 
 		private void SetSendControls()
@@ -3239,7 +3239,8 @@ namespace YAT.View.Forms
 		{
 			if (e.Inner == null)
 			{
-				// Nothing to do.
+				SetTerminalControls();
+				SetLogControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal))
 			{
@@ -3300,8 +3301,7 @@ namespace YAT.View.Forms
 		{
 			if (e.Inner == null)
 			{
-				SetTerminalControls();
-				SetLogControls();
+				// Nothing to do.
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendText))
 			{
@@ -3733,8 +3733,8 @@ namespace YAT.View.Forms
 		private void SetTerminalControls()
 		{
 			// Terminal menu:
-			toolStripMenuItem_TerminalMenu_File_SetMenuItems();
-			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
+			toolStripMenuItem_TerminalMenu_File_SetMenuItems();     // No dedicated methods (yet).
+			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems(); // No dedicated methods (yet).
 
 			// Terminal panel:
 			SetTerminalCaption();
@@ -3742,11 +3742,11 @@ namespace YAT.View.Forms
 			SetIOControlControls();
 			SetMonitorIOStatus();
 
-			// Send:
-			SetSendControls();
-
 			// Predefined:
 			SetPredefinedControls();
+
+			// Send:
+			SetSendControls();
 
 			// Preset:
 			SetPresetControls();
