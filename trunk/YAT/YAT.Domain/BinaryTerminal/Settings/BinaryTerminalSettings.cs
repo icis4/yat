@@ -72,6 +72,7 @@ namespace YAT.Domain.Settings
 			: base(rhs)
 		{
 			SeparateTxRxDisplay = rhs.SeparateTxRxDisplay;
+
 			TxDisplay = new BinaryDisplaySettings(rhs.TxDisplay);
 			RxDisplay = new BinaryDisplaySettings(rhs.RxDisplay);
 
@@ -134,36 +135,23 @@ namespace YAT.Domain.Settings
 			get
 			{
 				if (this.separateTxRxDisplay)
-				{
 					return (this.rxDisplay);
-				}
 				else // Rx redirects to Tx:
-				{
 					return (this.txDisplay);
-				}
 			}
 			set
 			{
-				if (this.separateTxRxDisplay)
+				if (this.rxDisplay != value)
 				{
-					if (this.rxDisplay != value)
-					{
-						var oldNode = this.rxDisplay;
-						this.rxDisplay = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+					var oldNode = this.rxDisplay;
+					this.rxDisplay = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
 
-						AttachOrReplaceOrDetachNode(oldNode, value);
-					}
+					AttachOrReplaceOrDetachNode(oldNode, value);
 				}
-				else // Rx redirects to Tx:
-				{
-					if (this.txDisplay != value)
-					{
-						var oldNode = this.txDisplay;
-						this.txDisplay = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
 
-						AttachOrReplaceOrDetachNode(oldNode, value);
-					}
-				}
+				// Do not redirect on 'set'. this would not be an understandable behaviour.
+				// It could even confuse the user, e.g. when temporarily separating the settings,
+				// and then load them again from XML => temporary settings get lost.
 			}
 		}
 
