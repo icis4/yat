@@ -14,10 +14,6 @@
 // See SVN change log for file revision details.
 // Author(s): Matthias Klaey
 // ------------------------------------------------------------------------------------------------
-// See release notes for product version details.
-// See SVN change log for file revision details.
-// Author(s): Matthias Klaey
-// ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
 // Copyright © 2003-2017 Matthias Kläy.
 // All rights reserved.
