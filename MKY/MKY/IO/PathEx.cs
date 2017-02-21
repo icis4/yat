@@ -892,6 +892,52 @@ namespace MKY.IO
 		}
 
 		#endregion
+
+		#region IsContained()
+		//------------------------------------------------------------------------------------------
+		// IsContained()
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Returns whether <paramref name="str"/> contains the given <paramref name="path"/>. The
+		/// comparison is done in a platform independent way, i.e. any path designation is accepted.
+		/// </summary>
+		/// <remarks>
+		/// Implemented here in <see cref="PathEx"/> and not <see cref="StringEx"/> to keep
+		/// dependencies clean, i.e. the <see cref="System"/> namespace shall not reference the
+		/// <see cref="System.IO"/> namespace. Therefore named 'IsContained' instead of 'Contains'.
+		/// </remarks>
+		/// <remarks>
+		/// Implemented using <see cref="string.IndexOf(string, StringComparison)"/> because
+		/// <see cref="string.Contains(string)"/> does not allow controlling culture and case.
+		/// </remarks>
+		public static bool IsContained(string str, string path)
+		{
+			if (string.IsNullOrEmpty(path))
+				return (false);
+
+			// First try without converting anything:
+			if (str.IndexOf(path, ComparisonType) >= 0)
+				return (true);
+
+			// No success, try to convert 'str' (as 'path' is more likely platform-correct):
+			var strToPlatform = ConvertToPlatform(str);
+			if (strToPlatform.IndexOf(path, ComparisonType) >= 0)
+				return (true);
+
+			// Still no success, try to convert 'path' instead:
+			var pathToPlatform = ConvertToPlatform(path);
+			if (str.IndexOf(pathToPlatform, ComparisonType) >= 0)
+				return (true);
+
+			// Last attempt, both converted:
+			if (strToPlatform.IndexOf(pathToPlatform, ComparisonType) >= 0)
+				return (true);
+
+			return (false);
+		}
+
+		#endregion
 	}
 
 	#region PathCompareResult
