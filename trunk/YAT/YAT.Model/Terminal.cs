@@ -2916,6 +2916,8 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendCommand(Command command)
 		{
+			// AssertNotDisposed() is called by 'Send...' below.
+
 			if (command.IsText)
 				SendText(command);
 			else if (command.IsFilePath)
@@ -2934,6 +2936,8 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendText()
 		{
+			// AssertNotDisposed() is called by 'DoSend...' below.
+
 			DoSendText(this.settingsRoot.SendText.Command);
 
 			// Clear command if desired:
@@ -2946,6 +2950,8 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendPartialTextEol()
 		{
+			// AssertNotDisposed() is called by 'DoSend...' below.
+
 			DoSendText(new Command(true, this.settingsRoot.SendText.Command.DefaultRadix));
 		}
 
@@ -2955,6 +2961,8 @@ namespace YAT.Model
 		/// <param name="c">Text command to be sent.</param>
 		public virtual void SendText(Command c)
 		{
+			// AssertNotDisposed() is called by 'DoSend...' below.
+
 			DoSendText(c);
 		}
 
@@ -2964,6 +2972,8 @@ namespace YAT.Model
 		/// </remarks>
 		protected void DoSendText(Command c)
 		{
+			AssertNotDisposed();
+
 			if (c.IsValidText)
 			{
 				if (c.IsSingleLineText)
@@ -3028,6 +3038,8 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendFile()
 		{
+			// AssertNotDisposed() is called by 'Send...' below.
+
 			SendFile(this.settingsRoot.SendFile.Command);
 		}
 
@@ -3037,6 +3049,8 @@ namespace YAT.Model
 		/// <param name="c">File to be sent.</param>
 		public virtual void SendFile(Command c)
 		{
+			// AssertNotDisposed() is called by 'DoSend...' below.
+
 			DoSendFile(c);
 		}
 
@@ -3047,6 +3061,8 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		protected void DoSendFile(Command c)
 		{
+			AssertNotDisposed();
+
 			if (!c.IsValidFilePath)
 				return;
 
@@ -3145,6 +3161,8 @@ namespace YAT.Model
 		/// <param name="command">Command 1..max.</param>
 		public virtual bool SendPredefined(int page, int command)
 		{
+			AssertNotDisposed();
+
 			// Verify arguments:
 			if (!this.settingsRoot.PredefinedCommand.ValidateWhetherCommandIsDefined(page - 1, command - 1))
 				return (false);
@@ -3183,6 +3201,8 @@ namespace YAT.Model
 		/// <param name="command">Command 1..max.</param>
 		public virtual bool CopyPredefined(int page, int command)
 		{
+			AssertNotDisposed();
+
 			// Verify arguments:
 			if (!this.settingsRoot.PredefinedCommand.ValidateWhetherCommandIsDefined(page - 1, command - 1))
 				return (false);
@@ -3217,6 +3237,8 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void Break()
 		{
+			AssertNotDisposed();
+
 			this.terminal.Break();
 		}
 
@@ -3225,6 +3247,8 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void ResumeBreak()
 		{
+			AssertNotDisposed();
+
 			this.terminal.ResumeBreak();
 		}
 
@@ -3241,6 +3265,7 @@ namespace YAT.Model
 		public virtual void ReloadRepositories()
 		{
 			AssertNotDisposed();
+
 			this.terminal.ReloadRepositories();
 		}
 
@@ -3250,6 +3275,7 @@ namespace YAT.Model
 		public virtual void ReloadRepository(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
+
 			this.terminal.ReloadRepository(repositoryType);
 		}
 
@@ -3259,6 +3285,7 @@ namespace YAT.Model
 		public virtual List<Domain.DisplayElement> RepositoryToDisplayElements(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
+
 			return (this.terminal.RepositoryToDisplayElements(repositoryType));
 		}
 
@@ -3268,6 +3295,7 @@ namespace YAT.Model
 		public virtual List<Domain.DisplayLine> RepositoryToDisplayLines(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
+
 			return (this.terminal.RepositoryToDisplayLines(repositoryType));
 		}
 
@@ -3277,6 +3305,7 @@ namespace YAT.Model
 		public virtual Domain.DisplayLine LastDisplayLineAuxiliary(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
+
 			return (this.terminal.LastDisplayLineAuxiliary(repositoryType));
 		}
 
@@ -3286,6 +3315,7 @@ namespace YAT.Model
 		public virtual void ClearLastDisplayLineAuxiliary(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
+
 			this.terminal.ClearLastDisplayLineAuxiliary(repositoryType);
 		}
 
@@ -3298,6 +3328,7 @@ namespace YAT.Model
 		public virtual string RepositoryToString(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
+
 			return (this.terminal.RepositoryToString(repositoryType));
 		}
 
@@ -3307,6 +3338,7 @@ namespace YAT.Model
 		public virtual void ClearRepository(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
+
 			this.terminal.ClearRepository(repositoryType);
 		}
 
@@ -3316,6 +3348,7 @@ namespace YAT.Model
 		public virtual void ClearRepositories()
 		{
 			AssertNotDisposed();
+
 			this.terminal.ClearRepositories();
 		}
 
@@ -3360,6 +3393,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.activeConnectChrono.TimeSpan);
 			}
 		}
@@ -3370,6 +3404,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.totalConnectChrono.TimeSpan);
 			}
 		}
@@ -3412,6 +3447,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.txByteCount);
 			}
 		}
@@ -3422,6 +3458,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.txLineCount);
 			}
 		}
@@ -3432,6 +3469,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.rxByteCount);
 			}
 		}
@@ -3442,6 +3480,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.rxLineCount);
 			}
 		}
@@ -3452,6 +3491,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.txByteRate.RateValue);
 			}
 		}
@@ -3462,6 +3502,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.txLineRate.RateValue);
 			}
 		}
@@ -3472,6 +3513,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.rxByteRate.RateValue);
 			}
 		}
@@ -3482,6 +3524,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.rxLineRate.RateValue);
 			}
 		}

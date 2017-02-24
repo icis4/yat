@@ -1123,6 +1123,7 @@ namespace YAT.Model
 		public virtual bool OpenRecent(int userIndex)
 		{
 			AssertNotDisposed();
+
 			return (OpenFromFile(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[userIndex - 1].Item));
 		}
 

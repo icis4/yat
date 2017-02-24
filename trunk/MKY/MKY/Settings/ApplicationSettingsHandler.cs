@@ -582,6 +582,7 @@ namespace MKY.Settings
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.commonSettings != null);
 			}
 		}
@@ -594,6 +595,7 @@ namespace MKY.Settings
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.localUserSettings != null);
 			}
 		}
@@ -606,6 +608,7 @@ namespace MKY.Settings
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.roamingUserSettings != null);
 			}
 		}
