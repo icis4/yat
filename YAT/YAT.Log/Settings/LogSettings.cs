@@ -42,22 +42,14 @@ using YAT.Settings.Application;
 
 #endregion
 
+// Placed into a separate '.Settings' namespace for consistency with all other '...Settings' classes.
 namespace YAT.Log.Settings
 {
-	/// <summary></summary>
+	/// <remarks>
+	/// Same naming postfix as all other '...Settings' classes.
+	/// </remarks>
 	public class LogSettings : MKY.Settings.SettingsItem, IEquatable<LogSettings>
 	{
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Type is given by the .NET framework.")]
-		public static readonly Encoding TextEncodingDefault = Encoding.UTF8;
-
-		#endregion
-
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -281,7 +273,7 @@ namespace YAT.Log.Settings
 				default:
 				{
 					if (this.emitEncodingPreamble)
-						return (TextEncodingDefault);
+						return (Encoding.UTF8); // = UTF8Encoding(true, false);
 					else
 						return (new UTF8Encoding(false));
 				}
