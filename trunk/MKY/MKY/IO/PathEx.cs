@@ -829,29 +829,6 @@ namespace MKY.IO
 
 		#endregion
 
-		#region Swap...()
-
-		/// <summary>
-		/// Swaps two existing files, expanding environment variables.
-		/// </summary>
-		public static bool SwapExistingFiles(string filePathA, string filePathB)
-		{
-			if (!string.IsNullOrEmpty(filePathA)) filePathA = Environment.ExpandEnvironmentVariables(filePathA);
-			if (!string.IsNullOrEmpty(filePathB)) filePathB = Environment.ExpandEnvironmentVariables(filePathB);
-
-			if (!File.Exists(filePathA)) return (false);
-			if (!File.Exists(filePathB)) return (false);
-
-			// Both files exist, swap them:
-			string filePathTemp = FileEx.MakeUniqueFileName(filePathA);
-			File.Move(filePathA, filePathTemp);
-			File.Move(filePathB, filePathA);
-			File.Move(filePathTemp, filePathB);
-			return (true);
-		}
-
-		#endregion
-
 		#region Distinct...()
 
 		/// <summary>
@@ -935,6 +912,24 @@ namespace MKY.IO
 				return (true);
 
 			return (false);
+		}
+
+		#endregion
+
+		#region ...Unique...()
+		//------------------------------------------------------------------------------------------
+		// ...Unique...()
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Returns a unique temporary file path, using a new guid (= globally unique).
+		/// </summary>
+		/// <remarks>
+		/// <see cref="FileEx.GetUniqueFilePath"/> offers a similar method keeping the file name.
+		/// </remarks>
+		public static string GetUniqueTempPath()
+		{
+			return (Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()));
 		}
 
 		#endregion

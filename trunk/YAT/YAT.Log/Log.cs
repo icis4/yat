@@ -223,7 +223,7 @@ namespace YAT.Log
 		protected virtual void MakeFilePath()
 		{
 			string desiredFilePath = this.makeFilePath.Invoke();
-			this.filePath = FileEx.MakeUniqueFileName(desiredFilePath);
+			this.filePath = FileEx.GetUniqueFilePath(desiredFilePath);
 		}
 
 		/// <summary></summary>

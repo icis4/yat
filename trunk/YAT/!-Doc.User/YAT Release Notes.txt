@@ -97,6 +97,7 @@ Important changes:
 - Notes and links regarding non-intrusive RS-232 monitor/sniffer/spy cables and devices added to
   'About' dialog (related to feature requests #152, 198, 288).
 - Warning in case of yet incomplete RTF or XML log files (bug #356).
+- Automatically generated backup files are now placed into standard temporary folder (feat. #275).
 - NUnit tests migrated from classic to constraint model (related to feature request #293).
 - Started to migrate test environment from NUnit V2 to V3, but reverted to 2.6.4 again (feat. #293).
 - NUnit framework assemblies placed into solution structure instead of referring to installation.

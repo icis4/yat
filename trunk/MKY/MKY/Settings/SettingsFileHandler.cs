@@ -384,12 +384,10 @@ namespace MKY.Settings
 
 			if (PathEx.IsValid(filePath) && FileEx.IsWritable(filePath))
 			{
-				string backup = filePath + IO.FileEx.BackupFileExtension;
+				string backup = PathEx.GetUniqueTempPath(); // Backup file can be located anywhere.
 
 				try
 				{
-					if (File.Exists(backup))
-						File.Delete(backup);
 					if (File.Exists(filePath))
 						File.Move(filePath, backup);
 				}
@@ -416,9 +414,9 @@ namespace MKY.Settings
 						if (File.Exists(backup))
 							File.Move(backup, filePath);
 					}
-					catch (Exception exBackup)
+					catch (Exception exRestore)
 					{
-						DebugEx.WriteException(GetType(), exBackup, "Exception while restoring backup file!");
+						DebugEx.WriteException(GetType(), exRestore, "Exception while restoring backup file!");
 					}
 
 					throw; // Re-throw!
@@ -430,9 +428,9 @@ namespace MKY.Settings
 						if (File.Exists(backup))
 							File.Delete(backup);
 					}
-					catch (Exception exBackup)
+					catch (Exception exCleanup)
 					{
-						DebugEx.WriteException(GetType(), exBackup, "Exception while removing backup file!");
+						DebugEx.WriteException(GetType(), exCleanup, "Exception while removing backup file!");
 					}
 				}
 			}
