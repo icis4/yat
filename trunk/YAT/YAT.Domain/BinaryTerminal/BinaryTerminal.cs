@@ -942,12 +942,12 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>Ensure that states are completely reset.</remarks>
-		public override bool ReloadRepositories()
+		public override bool RefreshRepositories()
 		{
 			AssertNotDisposed();
 			
 			InitializeStates();
-			return (base.ReloadRepositories());
+			return (base.RefreshRepositories());
 		}
 
 		/// <remarks>Ensure that states are completely reset.</remarks>
@@ -1007,7 +1007,7 @@ namespace YAT.Domain
 
 		private void ApplyBinaryTerminalSettings()
 		{
-			ReloadRepositories();
+			RefreshRepositories();
 		}
 
 		#endregion

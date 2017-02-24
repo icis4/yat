@@ -102,9 +102,10 @@ Important changes:
 - NUnit framework assemblies placed into solution structure instead of referring to installation.
 
 Fixed bugs:
+- Potential application freeze when clearing monitors/repositories fixed (bug #361).
+- Potential 'NullReferenceException' in binary terminal settings fixed (bug #362).
 - Wrong active/inactive state of log menu items fixed (bug #366).
 - Catch-all of unhandled synchronous exceptions fixed (bug #310).
-- Potential 'NullReferenceException' in binary terminal settings fixed (bug #362).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).

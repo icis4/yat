@@ -2281,7 +2281,7 @@ namespace YAT.View.Forms
 		public virtual void RequestRefresh()
 		{
 			if (this.terminal != null)
-				this.terminal.ReloadRepositories();
+				this.terminal.RefreshRepositories();
 		}
 
 		/// <summary></summary>
@@ -2816,7 +2816,7 @@ namespace YAT.View.Forms
 			SetFixedStatusText("Reloading...");
 			Cursor = Cursors.WaitCursor;
 
-			this.terminal.ReloadRepositories();
+			this.terminal.RefreshRepositories();
 
 			Cursor = Cursors.Default;
 			SetTimedStatusText("Reloading done");
@@ -2857,7 +2857,7 @@ namespace YAT.View.Forms
 				case Domain.RepositoryType.Tx:
 				case Domain.RepositoryType.Bidir:
 				case Domain.RepositoryType.Rx:
-					this.terminal.ReloadRepository(repositoryType);
+					this.terminal.RefreshRepository(repositoryType);
 					break;
 
 				default:
@@ -2872,7 +2872,7 @@ namespace YAT.View.Forms
 
 		private void RefreshMonitors()
 		{
-			this.terminal.ReloadRepositories();
+			this.terminal.RefreshRepositories();
 		}
 
 		#endregion
