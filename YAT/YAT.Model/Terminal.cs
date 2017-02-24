@@ -1181,7 +1181,7 @@ namespace YAT.Model
 					AttachTerminalEventHandlers();
 
 					this.settingsRoot.ResumeChangeEvent();
-					this.terminal.ReloadRepositories();
+					this.terminal.RefreshRepositories();
 
 					if (StartIO(false))
 						OnTimedStatusTextRequest("Terminal settings applied.");
@@ -1206,7 +1206,7 @@ namespace YAT.Model
 				AttachTerminalEventHandlers();
 
 				this.settingsRoot.ResumeChangeEvent();
-				this.terminal.ReloadRepositories();
+				this.terminal.RefreshRepositories();
 
 				OnTimedStatusTextRequest("Terminal settings applied.");
 			}
@@ -3260,23 +3260,47 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Forces complete reload of repositories.
+		/// Clears given repository.
 		/// </summary>
-		public virtual void ReloadRepositories()
+		public virtual void ClearRepository(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
-			this.terminal.ReloadRepositories();
+			if (!this.terminal.ClearRepository(repositoryType))
+				OnTimedStatusTextRequest("Clear request has timed out");
 		}
 
 		/// <summary>
-		/// Forces complete reload of given repository.
+		/// Clears all repositories.
 		/// </summary>
-		public virtual void ReloadRepository(Domain.RepositoryType repositoryType)
+		public virtual void ClearRepositories()
 		{
 			AssertNotDisposed();
 
-			this.terminal.ReloadRepository(repositoryType);
+			if (!this.terminal.ClearRepositories())
+				OnTimedStatusTextRequest("Clear request has timed out");
+		}
+
+		/// <summary>
+		/// Forces complete refresh of repositories.
+		/// </summary>
+		public virtual void RefreshRepositories()
+		{
+			AssertNotDisposed();
+
+			if (!this.terminal.RefreshRepositories())
+				OnTimedStatusTextRequest("Refresh request has timed out");
+		}
+
+		/// <summary>
+		/// Forces complete refresh of given repository.
+		/// </summary>
+		public virtual void RefreshRepository(Domain.RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+
+			if (!this.terminal.RefreshRepository(repositoryType))
+				OnTimedStatusTextRequest("Refresh request has timed out");
 		}
 
 		/// <summary>
@@ -3330,26 +3354,6 @@ namespace YAT.Model
 			AssertNotDisposed();
 
 			return (this.terminal.RepositoryToString(repositoryType));
-		}
-
-		/// <summary>
-		/// Clears given repository.
-		/// </summary>
-		public virtual void ClearRepository(Domain.RepositoryType repositoryType)
-		{
-			AssertNotDisposed();
-
-			this.terminal.ClearRepository(repositoryType);
-		}
-
-		/// <summary>
-		/// Clears all repositories.
-		/// </summary>
-		public virtual void ClearRepositories()
-		{
-			AssertNotDisposed();
-
-			this.terminal.ClearRepositories();
 		}
 
 		#endregion

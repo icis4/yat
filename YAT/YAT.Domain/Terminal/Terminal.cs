@@ -212,6 +212,7 @@ namespace YAT.Domain
 		private const string TxBufferFullErrorString     = "TX BUFFER FULL";
 
 		private const int ThreadWaitTimeout = 200;
+		private const int ClearAndRefreshTimeout = 400;
 
 		private const string Undefined = "<Undefined>";
 
@@ -257,7 +258,7 @@ namespace YAT.Domain
 		private DisplayRepository rxRepository;
 		private object repositorySyncObj = new object();
 
-		private object reloadSyncObj = new object();
+		private object clearAndRefreshSyncObj = new object();
 		private bool isReloading;
 
 		private System.Timers.Timer periodicXOnTimer;
@@ -2173,31 +2174,63 @@ namespace YAT.Domain
 		// Methods > Repository Access
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public virtual void ClearRepository(RepositoryType repository)
+		/// <remarks>See remarks in <see cref="RefreshRepositories"/> below.</remarks>
+		public virtual bool ClearRepository(RepositoryType repository)
 		{
 			AssertNotDisposed();
 
-			this.rawTerminal.ClearRepository(repository);
-		}
-
-		/// <summary></summary>
-		public virtual void ClearRepositories()
-		{
-			AssertNotDisposed();
-
-			this.rawTerminal.ClearRepositories();
-		}
-
-		/// <summary></summary>
-		public virtual bool ReloadRepository(RepositoryType repository)
-		{
-			AssertNotDisposed();
-
-			if (Monitor.TryEnter(this.reloadSyncObj, 250)) // Only try for some time, otherwise ignore. This
-			{                                              //   prevents deadlocks among main thread (view)
-				try                                        //   and large amounts of incoming data.
+			if (Monitor.TryEnter(this.clearAndRefreshSyncObj, ClearAndRefreshTimeout))
+			{                                     // Only try for some time, otherwise ignore.
+				try                               // Prevents deadlocks among main thread (view)
+				{                                 //   and large amounts of incoming data.
+					this.rawTerminal.ClearRepository(repository);
+				}
+				finally
 				{
+					Monitor.Exit(this.clearAndRefreshSyncObj);
+				}
+
+				return (true);
+			}
+			else
+			{
+				return (false);
+			}
+		}
+
+		/// <remarks>See remarks in <see cref="RefreshRepositories"/> below.</remarks>
+		public virtual bool ClearRepositories()
+		{
+			AssertNotDisposed();
+
+			if (Monitor.TryEnter(this.clearAndRefreshSyncObj, ClearAndRefreshTimeout))
+			{                                     // Only try for some time, otherwise ignore.
+				try                               // Prevents deadlocks among main thread (view)
+				{                                 //   and large amounts of incoming data.
+					this.rawTerminal.ClearRepositories();
+				}
+				finally
+				{
+					Monitor.Exit(this.clearAndRefreshSyncObj);
+				}
+
+				return (true);
+			}
+			else
+			{
+				return (false);
+			}
+		}
+
+		/// <remarks>See remarks in <see cref="RefreshRepositories"/> below.</remarks>
+		public virtual bool RefreshRepository(RepositoryType repository)
+		{
+			AssertNotDisposed();
+
+			if (Monitor.TryEnter(this.clearAndRefreshSyncObj, ClearAndRefreshTimeout))
+			{                                     // Only try for some time, otherwise ignore.
+				try                               // Prevents deadlocks among main thread (view)
+				{                                 //   and large amounts of incoming data.
 					// Clear repository:
 					ClearMyRepository(repository);
 					OnRepositoryCleared(new EventArgs<RepositoryType>(repository));
@@ -2213,7 +2246,7 @@ namespace YAT.Domain
 				}
 				finally
 				{
-					Monitor.Exit(this.reloadSyncObj);
+					Monitor.Exit(this.clearAndRefreshSyncObj);
 				}
 
 				return (true);
@@ -2224,16 +2257,25 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
-		public virtual bool ReloadRepositories()
+		/// <remarks>
+		/// Alternatively, clear/refresh operations could be implemented asynchronously.
+		/// Advantages:
+		///  > No deadlock possible below.
+		/// Disadvantages:
+		///  > User does not get immediate feedback that a time consuming operation is taking place.
+		///  > User actually cannot trigger any other operation.
+		///  > Other synchronization issues?
+		/// Therefore, decided to keep the implementation synchonous until new issues pop up.
+		/// </remarks>
+		public virtual bool RefreshRepositories()
 		{
 			AssertNotDisposed();
 
-			if (Monitor.TryEnter(this.reloadSyncObj, 250)) // Only try for some time, otherwise ignore. This
-			{                                              //   prevents deadlocks among main thread (view)
-				try                                        //   and large amounts of incoming data.
-				{
-					// Clear repositories
+			if (Monitor.TryEnter(this.clearAndRefreshSyncObj, ClearAndRefreshTimeout))
+			{                                     // Only try for some time, otherwise ignore.
+				try                               // Prevents deadlocks among main thread (view)
+				{                                 //   and large amounts of incoming data.
+					// Clear repositories:
 					ClearMyRepository(RepositoryType.Tx);
 					ClearMyRepository(RepositoryType.Bidir);
 					ClearMyRepository(RepositoryType.Rx);
@@ -2254,7 +2296,7 @@ namespace YAT.Domain
 				}
 				finally
 				{
-					Monitor.Exit(this.reloadSyncObj);
+					Monitor.Exit(this.clearAndRefreshSyncObj);
 				}
 
 				return (true);
@@ -2486,7 +2528,7 @@ namespace YAT.Domain
 		{
 			this.rawTerminal.BufferSettings = this.terminalSettings.Buffer;
 
-			ReloadRepositories();
+			RefreshRepositories();
 		}
 
 		private void ApplyDisplaySettings()
@@ -2495,7 +2537,7 @@ namespace YAT.Domain
 			this.bidirRepository.Capacity = this.terminalSettings.Display.MaxLineCount;
 			this.rxRepository.Capacity    = this.terminalSettings.Display.MaxLineCount;
 
-			ReloadRepositories();
+			RefreshRepositories();
 		}
 
 		private void ApplySendSettings()
@@ -2599,7 +2641,7 @@ namespace YAT.Domain
 
 		private void rawTerminal_IOError(object sender, IOErrorEventArgs e)
 		{
-			lock (this.reloadSyncObj) // Delay processing new raw data until reloading has completed.
+			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
 			{
 				SerialPortErrorEventArgs serialPortErrorEventArgs = (e as SerialPortErrorEventArgs);
 				if (serialPortErrorEventArgs != null)
@@ -2633,7 +2675,7 @@ namespace YAT.Domain
 		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void rawTerminal_RawChunkSent(object sender, EventArgs<RawChunk> e)
 		{
-			lock (this.reloadSyncObj) // Delay processing new raw data until reloading has completed.
+			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
 			{
 				OnRawChunkSent(e);
 				ProcessAndSignalRawChunk(e.Value);
@@ -2643,7 +2685,7 @@ namespace YAT.Domain
 		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void rawTerminal_RawChunkReceived(object sender, EventArgs<RawChunk> e)
 		{
-			lock (this.reloadSyncObj) // Delay processing new raw data until reloading has completed.
+			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
 			{
 				OnRawChunkReceived(e);
 				ProcessAndSignalRawChunk(e.Value);
@@ -2652,7 +2694,7 @@ namespace YAT.Domain
 
 		private void rawTerminal_RepositoryCleared(object sender, EventArgs<RepositoryType> e)
 		{
-			lock (this.reloadSyncObj) // Delay processing new raw data until reloading has completed.
+			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
 			{
 				ClearMyRepository(e.Value);
 				OnRepositoryCleared(e);

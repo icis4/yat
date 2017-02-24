@@ -563,7 +563,7 @@ namespace YAT.View.Controls
 					lines.Add(line);
 			}
 
-			// Clear and perform reload:
+			// Perform reload:
 			Reload(lines);
 		}
 
