@@ -42,32 +42,6 @@ namespace MKY.IO
 		public const string BackupFileExtension = ".bak";
 
 		/// <summary>
-		/// Returns a unique file name for a file specified by path, unique part is separated by separator string.
-		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public static string MakeUniqueFileName(string path, string separator = "")
-		{
-			string dir  = Path.GetDirectoryName(path) + Path.DirectorySeparatorChar;
-			string name = Path.GetFileNameWithoutExtension(path);
-			string ext  = Path.GetExtension(path);
-
-			if (File.Exists(dir + name + ext))
-			{
-				int index = -1; // Initialize to -1 and increment before first use.
-				string unique = "";
-				do
-				{
-					index++; // No need to check for overflow, that is checked by the .NET runtime.
-					unique = index.ToString(CultureInfo.InvariantCulture);
-				}
-				while (File.Exists(dir + name + separator + unique + ext));
-
-				return (dir + name + separator + unique + ext);
-			}
-			return (dir + name + ext);
-		}
-
-		/// <summary>
 		/// Returns the size of the given file.
 		/// </summary>
 		/// <param name="filePath">The file path.</param>
@@ -231,6 +205,64 @@ namespace MKY.IO
 			else
 			{
 				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Swaps two existing files, expanding environment variables.
+		/// </summary>
+		public static bool Swap(string filePathA, string filePathB)
+		{
+			if (!string.IsNullOrEmpty(filePathA)) filePathA = Environment.ExpandEnvironmentVariables(filePathA);
+			if (!string.IsNullOrEmpty(filePathB)) filePathB = Environment.ExpandEnvironmentVariables(filePathB);
+
+			if (!File.Exists(filePathA)) return (false);
+			if (!File.Exists(filePathB)) return (false);
+
+			// Both files exist, swap them:
+			string filePathTemp = PathEx.GetUniqueTempPath(); // No extension needed.
+			File.Move(filePathA, filePathTemp);
+			File.Move(filePathB, filePathA);
+			File.Move(filePathTemp, filePathB);
+			return (true);
+		}
+
+		/// <summary>
+		/// Returns a unique file path for the initial file path specified, unique part is separated by optional separator string.
+		/// </summary>
+		/// <remarks>
+		/// <see cref="PathEx.GetUniqueTempPath"/> offers a similar method using a globally unique file name.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		public static string GetUniqueFilePath(string initialFilePath, string separator = null)
+		{
+			if (File.Exists(initialFilePath)) // Name needs to be changed:
+			{
+				string effectiveSeparator;
+				if (separator != null)
+					effectiveSeparator = separator;
+				else
+					effectiveSeparator = ""; // Allow '+' concatenation below.
+
+				string extension = Path.GetExtension(initialFilePath);
+				string filePathWithoutExtension = Path.ChangeExtension(initialFilePath, null);
+				string uniqueFilePath;
+
+				int i = -1; // Initialize to -1 and increment before first use.
+				string postfix = "";
+				do
+				{
+					i++; // No need to check for overflow, that is checked by the .NET runtime.
+					postfix = i.ToString(CultureInfo.InvariantCulture);
+					uniqueFilePath = filePathWithoutExtension + postfix + extension;
+				}
+				while (File.Exists(uniqueFilePath));
+
+				return (uniqueFilePath);
+			}
+			else // File doesn't exist, name does not need to be changed:
+			{
+				return (initialFilePath);
 			}
 		}
 	}

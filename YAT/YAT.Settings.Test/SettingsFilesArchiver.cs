@@ -197,7 +197,7 @@ namespace YAT.Settings.Test
 							string filePath0 = path + fileName + "-0.xsd";
 							string filePath1 = path + fileName + "-1.xsd";
 
-							PathEx.SwapExistingFiles(filePath0, filePath1);
+							FileEx.Swap(filePath0, filePath1);
 						}
 					}
 				}
