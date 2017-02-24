@@ -54,7 +54,7 @@ namespace YAT.Log.Settings
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Type is given by the .NET framework.")]
-		public static readonly Encoding DefaultTextEncoding = Encoding.UTF8;
+		public static readonly Encoding TextEncodingDefault = Encoding.UTF8;
 
 		#endregion
 
@@ -94,7 +94,8 @@ namespace YAT.Log.Settings
 		private LogFileWriteMode writeMode;
 
 		// Encoding:
-		private LogFileEncoding textEncoding;
+		private TextEncoding textEncoding;
+		private bool emitEncodingPreamble;
 
 		#endregion
 
@@ -149,6 +150,7 @@ namespace YAT.Log.Settings
 			WriteMode     = rhs.WriteMode;
 
 			TextEncoding  = rhs.TextEncoding;
+			EmitEncodingPreamble = rhs.EmitEncodingPreamble;
 
 			ClearChanged();
 		}
@@ -191,7 +193,8 @@ namespace YAT.Log.Settings
 
 			WriteMode     = LogFileWriteMode.Create;
 
-			TextEncoding  = LogFileEncoding.UTF8;
+			TextEncoding  = TextEncoding.UTF8;
+			EmitEncodingPreamble = true;
 		}
 
 		private static string ToFormatString(LogFormat format)
@@ -269,12 +272,19 @@ namespace YAT.Log.Settings
 		{
 			switch (this.textEncoding)
 			{
-				case LogFileEncoding.Terminal:
+				case TextEncoding.Terminal:
+				{
 					return (textTerminalEncoding);
+				}
 
-				case LogFileEncoding.UTF8:
+				case TextEncoding.UTF8:
 				default:
-					return (DefaultTextEncoding);
+				{
+					if (this.emitEncodingPreamble)
+						return (TextEncodingDefault);
+					else
+						return (new UTF8Encoding(false));
+				}
 			}
 		}
 
@@ -799,8 +809,30 @@ namespace YAT.Log.Settings
 		//- Encoding -------------------------------------------------------------
 
 		/// <summary></summary>
+		[XmlIgnore]
+		public bool TextEncodingIsSupported
+		{
+			get
+			{
+				if (AnyNeat)
+				{
+					if      (ExtensionHelper.IsRtfFile(NeatExtension))
+						return (false); // RTF is limited to ANSI/ASCII.
+					else if (ExtensionHelper.IsXmlFile(NeatExtension))
+						return (false); // YAT always uses UTF-8 for XML.
+					else
+						return (true);
+				}
+				else // RawOnly => Not supported.
+				{
+					return (false);
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("TextEncoding")]
-		public virtual LogFileEncoding TextEncoding
+		public virtual TextEncoding TextEncoding
 		{
 			get { return (this.textEncoding); }
 			set
@@ -814,20 +846,17 @@ namespace YAT.Log.Settings
 		}
 
 		/// <summary></summary>
-		public bool TextEncodingIsSupported()
+		[XmlElement("EmitEncodingPreamble")]
+		public virtual bool EmitEncodingPreamble
 		{
-			if (AnyNeat)
+			get { return (this.emitEncodingPreamble); }
+			set
 			{
-				if      (ExtensionHelper.IsRtfFile(NeatExtension))
-					return (false); // RTF is limited to ANSI/ASCII.
-				else if (ExtensionHelper.IsXmlFile(NeatExtension))
-					return (false); // YAT always uses UTF-8 for XML.
-				else
-					return (true);
-			}
-			else // RawOnly => Not supported.
-			{
-				return (false);
+				if (this.emitEncodingPreamble != value)
+				{
+					this.emitEncodingPreamble = value;
+					SetMyChanged();
+				}
 			}
 		}
 
@@ -858,21 +887,25 @@ namespace YAT.Log.Settings
 				hashCode = (hashCode * 397) ^  RawLogBidir                          .GetHashCode();
 				hashCode = (hashCode * 397) ^  RawLogRx                             .GetHashCode();
 				hashCode = (hashCode * 397) ^  RawExtension                         .GetHashCode();
+
 				hashCode = (hashCode * 397) ^  NeatLogTx                            .GetHashCode();
 				hashCode = (hashCode * 397) ^  NeatLogBidir                         .GetHashCode();
 				hashCode = (hashCode * 397) ^  NeatLogRx                            .GetHashCode();
 				hashCode = (hashCode * 397) ^  NeatExtension                        .GetHashCode();
+
 				hashCode = (hashCode * 397) ^  NameFormat                           .GetHashCode();
 				hashCode = (hashCode * 397) ^  NameChannel                          .GetHashCode();
 				hashCode = (hashCode * 397) ^  NameDate                             .GetHashCode();
 				hashCode = (hashCode * 397) ^  NameTime                             .GetHashCode();
-
 				hashCode = (hashCode * 397) ^ (NameSeparator_ForSerialization != null ? NameSeparator_ForSerialization.GetHashCode() : 0);
 
 				hashCode = (hashCode * 397) ^  FolderFormat                         .GetHashCode();
 				hashCode = (hashCode * 397) ^  FolderChannel                        .GetHashCode();
+
 				hashCode = (hashCode * 397) ^  WriteMode                            .GetHashCode();
+
 				hashCode = (hashCode * 397) ^  TextEncoding                         .GetHashCode();
+				hashCode = (hashCode * 397) ^  EmitEncodingPreamble                 .GetHashCode();
 
 				return (hashCode);
 			}
@@ -909,19 +942,25 @@ namespace YAT.Log.Settings
 				RawLogBidir         .Equals(other.RawLogBidir)   &&
 				RawLogRx            .Equals(other.RawLogRx)      &&
 				RawExtension        .Equals(other.RawExtension)  &&
+
 				NeatLogTx           .Equals(other.NeatLogTx)     &&
 				NeatLogBidir        .Equals(other.NeatLogBidir)  &&
 				NeatLogRx           .Equals(other.NeatLogRx)     &&
 				NeatExtension       .Equals(other.NeatExtension) &&
+
 				NameFormat          .Equals(other.NameFormat)    &&
 				NameChannel         .Equals(other.NameChannel)   &&
 				NameDate            .Equals(other.NameDate)      &&
 				NameTime            .Equals(other.NameTime)      &&
 				StringEx.EqualsOrdinalIgnoreCase(NameSeparator_ForSerialization, other.NameSeparator_ForSerialization) &&
+
 				FolderFormat        .Equals(other.FolderFormat)  &&
 				FolderChannel       .Equals(other.FolderChannel) &&
+
 				WriteMode           .Equals(other.WriteMode)     &&
-				TextEncoding        .Equals(other.TextEncoding)
+
+				TextEncoding        .Equals(other.TextEncoding)  &&
+				EmitEncodingPreamble.Equals(other.EmitEncodingPreamble)
 			);
 		}
 

@@ -38,6 +38,7 @@ namespace YAT.View.Forms
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
 			this.groupBox_Options_TextEncoding = new System.Windows.Forms.GroupBox();
+			this.checkBox_Options_EmitEncodingPreamble = new System.Windows.Forms.CheckBox();
 			this.radioButton_Options_TextEncodingTerminal = new System.Windows.Forms.RadioButton();
 			this.radioButton_Options_TextEncodingUTF8 = new System.Windows.Forms.RadioButton();
 			this.button_RootOpen = new System.Windows.Forms.Button();
@@ -131,6 +132,7 @@ namespace YAT.View.Forms
 			// 
 			// groupBox_Options_TextEncoding
 			// 
+			this.groupBox_Options_TextEncoding.Controls.Add(this.checkBox_Options_EmitEncodingPreamble);
 			this.groupBox_Options_TextEncoding.Controls.Add(this.radioButton_Options_TextEncodingTerminal);
 			this.groupBox_Options_TextEncoding.Controls.Add(this.radioButton_Options_TextEncodingUTF8);
 			this.groupBox_Options_TextEncoding.Location = new System.Drawing.Point(342, 350);
@@ -140,13 +142,28 @@ namespace YAT.View.Forms
 			this.groupBox_Options_TextEncoding.TabStop = false;
 			this.groupBox_Options_TextEncoding.Text = "Text File &Encoding";
 			// 
+			// checkBox_Options_EmitEncodingPreamble
+			// 
+			this.checkBox_Options_EmitEncodingPreamble.AutoSize = true;
+			this.checkBox_Options_EmitEncodingPreamble.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkBox_Options_EmitEncodingPreamble.Location = new System.Drawing.Point(61, 22);
+			this.checkBox_Options_EmitEncodingPreamble.Name = "checkBox_Options_EmitEncodingPreamble";
+			this.checkBox_Options_EmitEncodingPreamble.Size = new System.Drawing.Size(72, 17);
+			this.checkBox_Options_EmitEncodingPreamble.TabIndex = 1;
+			this.checkBox_Options_EmitEncodingPreamble.Text = "with BOM";
+			this.toolTip.SetToolTip(this.checkBox_Options_EmitEncodingPreamble, "Chose whether the Unicode BOM (encoding preamble) is emitted to the beginning of " +
+        "log files.\r\nTypically, UTF-8 encoded files contains a BOM. The default setting i" +
+        "s therefore \"with BOM\".");
+			this.checkBox_Options_EmitEncodingPreamble.UseVisualStyleBackColor = true;
+			this.checkBox_Options_EmitEncodingPreamble.CheckedChanged += new System.EventHandler(this.checkBox_Options_EmitEncodingPreamble_CheckedChanged);
+			// 
 			// radioButton_Options_TextEncodingTerminal
 			// 
 			this.radioButton_Options_TextEncodingTerminal.AutoSize = true;
 			this.radioButton_Options_TextEncodingTerminal.Location = new System.Drawing.Point(12, 45);
 			this.radioButton_Options_TextEncodingTerminal.Name = "radioButton_Options_TextEncodingTerminal";
 			this.radioButton_Options_TextEncodingTerminal.Size = new System.Drawing.Size(112, 17);
-			this.radioButton_Options_TextEncodingTerminal.TabIndex = 1;
+			this.radioButton_Options_TextEncodingTerminal.TabIndex = 2;
 			this.radioButton_Options_TextEncodingTerminal.Text = "Terminal encoding";
 			this.toolTip.SetToolTip(this.radioButton_Options_TextEncodingTerminal, "The selected encoding of the terminal. In case of Unicode encodings, the Unicode " +
         "BOM (Byte Order Mark) will be preceeded at the beginning of the file.");
@@ -159,10 +176,10 @@ namespace YAT.View.Forms
 			this.radioButton_Options_TextEncodingUTF8.Checked = true;
 			this.radioButton_Options_TextEncodingUTF8.Location = new System.Drawing.Point(12, 21);
 			this.radioButton_Options_TextEncodingUTF8.Name = "radioButton_Options_TextEncodingUTF8";
-			this.radioButton_Options_TextEncodingUTF8.Size = new System.Drawing.Size(107, 17);
+			this.radioButton_Options_TextEncodingUTF8.Size = new System.Drawing.Size(55, 17);
 			this.radioButton_Options_TextEncodingUTF8.TabIndex = 0;
 			this.radioButton_Options_TextEncodingUTF8.TabStop = true;
-			this.radioButton_Options_TextEncodingUTF8.Text = "UTF-8  with BOM";
+			this.radioButton_Options_TextEncodingUTF8.Text = "UTF-8";
 			this.toolTip.SetToolTip(this.radioButton_Options_TextEncodingUTF8, "UFT-8 is the default encoding. The Unicode BOM (Byte Order Mark) will be preceede" +
         "d at the beginning of the file.");
 			this.radioButton_Options_TextEncodingUTF8.UseVisualStyleBackColor = true;
@@ -235,7 +252,7 @@ namespace YAT.View.Forms
 			this.groupBox_Options_Name.Location = new System.Drawing.Point(8, 268);
 			this.groupBox_Options_Name.Name = "groupBox_Options_Name";
 			this.groupBox_Options_Name.Size = new System.Drawing.Size(495, 76);
-			this.groupBox_Options_Name.TabIndex = 8;
+			this.groupBox_Options_Name.TabIndex = 6;
 			this.groupBox_Options_Name.TabStop = false;
 			this.groupBox_Options_Name.Text = "File &Naming";
 			// 
@@ -309,7 +326,7 @@ namespace YAT.View.Forms
 			this.groupBox_Options_Mode.Location = new System.Drawing.Point(175, 350);
 			this.groupBox_Options_Mode.Name = "groupBox_Options_Mode";
 			this.groupBox_Options_Mode.Size = new System.Drawing.Size(161, 75);
-			this.groupBox_Options_Mode.TabIndex = 6;
+			this.groupBox_Options_Mode.TabIndex = 8;
 			this.groupBox_Options_Mode.TabStop = false;
 			this.groupBox_Options_Mode.Text = "File Write &Mode";
 			// 
@@ -654,5 +671,6 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.GroupBox groupBox_Options_TextEncoding;
 		private System.Windows.Forms.RadioButton radioButton_Options_TextEncodingTerminal;
 		private System.Windows.Forms.RadioButton radioButton_Options_TextEncodingUTF8;
+		private System.Windows.Forms.CheckBox checkBox_Options_EmitEncodingPreamble;
 	}
 }

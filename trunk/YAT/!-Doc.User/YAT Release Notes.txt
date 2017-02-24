@@ -91,7 +91,7 @@ YAT 2.0 Gamma 3 Version 1.99.70 :: 2017-xx-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
-- 
+- Option to disable BOM (Unicode encoding preamble) when logging in UTF8 added (bug #363).
 
 Important changes:
 - Notes and links regarding non-intrusive RS-232 monitor/sniffer/spy cables and devices added to

@@ -375,13 +375,19 @@ namespace YAT.View.Forms
 		private void radioButton_Options_TextEncodingUTF8_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls && radioButton_Options_TextEncodingUTF8.Checked)
-				this.settingsInEdit.TextEncoding = Log.LogFileEncoding.UTF8;
+				this.settingsInEdit.TextEncoding = Log.TextEncoding.UTF8;
 		}
 
 		private void radioButton_Options_TextEncodingTerminal_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls && radioButton_Options_TextEncodingTerminal.Checked)
-				this.settingsInEdit.TextEncoding = Log.LogFileEncoding.Terminal;
+				this.settingsInEdit.TextEncoding = Log.TextEncoding.Terminal;
+		}
+
+		private void checkBox_Options_EmitEncodingPreamble_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settingsInEdit.EmitEncodingPreamble = checkBox_Options_EmitEncodingPreamble.Checked;
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -491,15 +497,19 @@ namespace YAT.View.Forms
 			radioButton_Options_ModeCreate.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Create);
 			radioButton_Options_ModeAppend.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Append);
 
-			if (this.settingsInEdit.TextEncodingIsSupported()) {
-				groupBox_Options_TextEncoding.Enabled            = true;
-				radioButton_Options_TextEncodingUTF8.Checked     = (this.settingsInEdit.TextEncoding == Log.LogFileEncoding.UTF8);
-				radioButton_Options_TextEncodingTerminal.Checked = (this.settingsInEdit.TextEncoding == Log.LogFileEncoding.Terminal);
+			if (this.settingsInEdit.TextEncodingIsSupported) {
+				groupBox_Options_TextEncoding.Enabled            =  true;
+				radioButton_Options_TextEncodingUTF8.Checked     = (this.settingsInEdit.TextEncoding == Log.TextEncoding.UTF8);
+				radioButton_Options_TextEncodingTerminal.Checked = (this.settingsInEdit.TextEncoding == Log.TextEncoding.Terminal);
+				checkBox_Options_EmitEncodingPreamble.Checked    =  this.settingsInEdit.EmitEncodingPreamble;
+				checkBox_Options_EmitEncodingPreamble.Text       = (this.settingsInEdit.EmitEncodingPreamble ? "with BOM" : "without BOM");
 			}
 			else {
 				groupBox_Options_TextEncoding.Enabled            = false;
 				radioButton_Options_TextEncodingUTF8.Checked     = true; // Show default, XML is UTF-8 too, RTF don't care.
 				radioButton_Options_TextEncodingTerminal.Checked = false;
+				checkBox_Options_EmitEncodingPreamble.Checked    = true; // Show default, XML is UTF-8 too, RTF don't care.
+				checkBox_Options_EmitEncodingPreamble.Text       = "with BOM";
 			}
 
 			this.isSettingControls.Leave();

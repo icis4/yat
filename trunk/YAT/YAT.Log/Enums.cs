@@ -82,7 +82,7 @@ namespace YAT.Log
 	}
 
 	/// <summary></summary>
-	public enum LogFileEncoding
+	public enum TextEncoding
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "UTF", Justification = "Same spelling as 'Encoding.UTF8'.")]
