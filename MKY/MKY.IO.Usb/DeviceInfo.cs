@@ -77,13 +77,7 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public const int DefaultProductId = FirstProductId;
 
-		/// <remarks><![CDATA["VID:0ABC / PID:1234"]]></remarks>
-		/// <remarks><![CDATA["VID:0ABC / PID:1234 / SNR:XYZ"]]></remarks>
-		/// <remarks><![CDATA["vid_0ABC & pid_1234"]]></remarks>
-		/// <remarks><![CDATA["vid_0ABC & pid_1234 & snr_xyz"]]></remarks>
-		/// <remarks><![CDATA["Company (VID:0ABC) Product (PID:1234)"]]></remarks>
-		/// <remarks><![CDATA["Company (VID:0ABC) Product (PID:1234) XYZ"]]></remarks>
-		public static readonly Regex VendorIdRegex = new Regex(@"VID[^0-9a-fA-F](?<vendorId>[0-9a-fA-F]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+		private const RegexOptions Options = RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase;
 
 		/// <remarks><![CDATA["VID:0ABC / PID:1234"]]></remarks>
 		/// <remarks><![CDATA["VID:0ABC / PID:1234 / SNR:XYZ"]]></remarks>
@@ -91,14 +85,22 @@ namespace MKY.IO.Usb
 		/// <remarks><![CDATA["vid_0ABC & pid_1234 & snr_xyz"]]></remarks>
 		/// <remarks><![CDATA["Company (VID:0ABC) Product (PID:1234)"]]></remarks>
 		/// <remarks><![CDATA["Company (VID:0ABC) Product (PID:1234) XYZ"]]></remarks>
-		public static readonly Regex ProductIdRegex = new Regex(@"PID[^0-9a-fA-F](?<productId>[0-9a-fA-F]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+		public static readonly Regex VendorIdRegex = new Regex(@"VID[^0-9a-fA-F](?<vendorId>[0-9a-fA-F]+)", Options);
+
+		/// <remarks><![CDATA["VID:0ABC / PID:1234"]]></remarks>
+		/// <remarks><![CDATA["VID:0ABC / PID:1234 / SNR:XYZ"]]></remarks>
+		/// <remarks><![CDATA["vid_0ABC & pid_1234"]]></remarks>
+		/// <remarks><![CDATA["vid_0ABC & pid_1234 & snr_xyz"]]></remarks>
+		/// <remarks><![CDATA["Company (VID:0ABC) Product (PID:1234)"]]></remarks>
+		/// <remarks><![CDATA["Company (VID:0ABC) Product (PID:1234) XYZ"]]></remarks>
+		public static readonly Regex ProductIdRegex = new Regex(@"PID[^0-9a-fA-F](?<productId>[0-9a-fA-F]+)", Options);
 
 		/// <remarks><![CDATA["VID:0ABC / PID:1234 / SNR:XYZ"]]></remarks>
 		/// <remarks><![CDATA["vid_0ABC & pid_1234 & snr_xyz"]]></remarks>
-		public static readonly Regex SerialRegexTag = new Regex(@"SNR[^0-9a-fA-F](?<serial>.+)", RegexOptions.IgnoreCase | RegexOptions.Compiled); // SNR may be any character.
+		public static readonly Regex SerialRegexTag = new Regex(@"SNR[^0-9a-fA-F](?<serial>.+)", Options); // SNR may be any character.
 
 		/// <remarks><![CDATA["Company (VID:0ABC) Product (PID:1234) XYZ"]]></remarks>
-		public static readonly Regex SerialRegexRemainder = new Regex(@"PID[^0-9a-fA-F][0-9a-fA-F]+.\s?(?<serial>.+)", RegexOptions.IgnoreCase | RegexOptions.Compiled); // Everything following the PID pattern.
+		public static readonly Regex SerialRegexRemainder = new Regex(@"PID[^0-9a-fA-F][0-9a-fA-F]+.\s?(?<serial>.+)", Options); // Everything following the PID pattern.
 
 		/// <summary></summary>
 		public const string DefaultSerial = "";
@@ -690,7 +692,7 @@ namespace MKY.IO.Usb
 			}
 
 			// e.g. "VID:0ABC / PID:1234 / SNR:XYZ" or "vid_0ABC & pid_1234 & snr_xyz"
-			Match m = VendorIdRegex.Match(s);
+			var m = VendorIdRegex.Match(s);
 			if (m.Success)
 			{
 				int vendorId;

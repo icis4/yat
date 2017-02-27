@@ -368,7 +368,7 @@ namespace YAT.Model.Types
 			else if (StringEx.StartsWithOrdinalIgnoreCase   (s, PredefinedCommand_string) ||
 			         StringEx.StartsWithAnyOrdinalIgnoreCase(s, PredefinedCommand_stringAlternatives))
 			{
-				Match match = Regex.Match(s, @"\d+");
+				var match = Regex.Match(s, @"\d+");
 				if (match.Success)
 				{
 					int intValue;

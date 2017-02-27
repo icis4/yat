@@ -68,7 +68,7 @@ namespace MKY.IO.Ports
 							if ((obj["Caption"] != null) && (obj["Description"] != null))
 							{
 								// "Caption" contains something like "Serial On USB Port (COM2)":
-								Match m = SerialPortId.StandardPortNameWithParenthesesRegex.Match(obj["Caption"].ToString());
+								var m = SerialPortId.StandardPortNameWithParenthesesRegex.Match(obj["Caption"].ToString());
 								if (m.Success)
 								{
 									int portNumber;
@@ -97,7 +97,7 @@ namespace MKY.IO.Ports
 						if ((obj["AttachedTo"] != null) && (obj["Description"] != null))
 						{
 							// "AttachedTo" contains something like "COM1":
-							Match m = SerialPortId.StandardPortNameOnlyRegex.Match(obj["AttachedTo"].ToString());
+							var m = SerialPortId.StandardPortNameOnlyRegex.Match(obj["AttachedTo"].ToString());
 							if (m.Success)
 							{
 								int portNumber;

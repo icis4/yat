@@ -78,40 +78,19 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public const string DefaultSeparator = " - ";
 
-		/// <summary></summary>
-		public static readonly Regex StandardPortNumberRegex = new Regex
-			(
-			@"(?<portNumber>\d+)",
-			RegexOptions.Compiled
-			);
+		private const RegexOptions Options = RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase;
 
 		/// <summary></summary>
-		public static readonly Regex StandardPortNameRegex = new Regex
-			(
-			StandardPortNamePrefix + @"(?<portNumber>\d+)",
-			RegexOptions.IgnoreCase | RegexOptions.Compiled
-			);
+		public static readonly Regex StandardPortNameRegex = new Regex(StandardPortNamePrefix + @"(?<portNumber>\d+)", Options);
 
 		/// <summary></summary>
-		public static readonly Regex StandardPortNameWithParenthesesRegex = new Regex
-			(
-			@"\(" + StandardPortNamePrefix + @"(?<portNumber>\d+)\)",
-			RegexOptions.IgnoreCase | RegexOptions.Compiled
-			);
+		public static readonly Regex StandardPortNameWithParenthesesRegex = new Regex(@"\(" + StandardPortNamePrefix + @"(?<portNumber>\d+)\)", Options);
 
 		/// <summary></summary>
-		public static readonly Regex StandardPortNameOnlyRegex = new Regex
-			(
-			@"^" + StandardPortNamePrefix + @"(?<portNumber>\d+)$",
-			RegexOptions.IgnoreCase | RegexOptions.Compiled
-			);
+		public static readonly Regex StandardPortNameOnlyRegex = new Regex(@"^" + StandardPortNamePrefix + @"(?<portNumber>\d+)$", Options);
 
 		/// <summary></summary>
-		public static readonly Regex UserPortNameRegex = new Regex
-			(
-			@"(?<portName>\w+)\x20?",
-			RegexOptions.Compiled
-			);
+		public static readonly Regex UserPortNameRegex = new Regex(@"(?<portName>\w+)\x20?", Options);
 
 		#endregion
 
@@ -553,7 +532,7 @@ namespace MKY.IO.Ports
 				return (true);
 
 			// e.g. "ABC"
-			Match m = UserPortNameRegex.Match(s);
+			var m = UserPortNameRegex.Match(s);
 			if (m.Success)
 			{
 				string portName = m.Groups[1].Value;
