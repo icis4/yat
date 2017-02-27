@@ -55,12 +55,12 @@ namespace MKY
 		private const int ListInitialCapacityDefault = 16;
 
 		/// <summary>
-		/// Compares two specified <see cref="System.String"/> objects ignoring culture and case.
+		/// Compares two specified <see cref="string"/> objects ignoring culture and case.
 		/// The method returns an integer that indicates the relationship of the two
-		/// <see cref="System.String"/> objects to one another in the sort order.
+		/// <see cref="string"/> objects to one another in the sort order.
 		/// </summary>
-		/// <param name="strA">The first <see cref="System.String"/> object.</param>
-		/// <param name="strB">The second <see cref="System.String"/> object.</param>
+		/// <param name="strA">The first <see cref="string"/> object.</param>
+		/// <param name="strB">The second <see cref="string"/> object.</param>
 		/// <returns>
 		/// A 32-bit signed integer indicating the lexical relationship between the two comparands.
 		/// Value Condition:
@@ -79,7 +79,7 @@ namespace MKY
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Compares two specified <see cref="System.String"/> objects ignoring culture.
+		/// Compares two specified <see cref="string"/> objects ignoring culture.
 		/// </summary>
 		public static bool EqualsOrdinal(string strA, string strB)
 		{
@@ -102,6 +102,7 @@ namespace MKY
 					if (!EqualsOrdinal(strA[i], strB[i]))
 						return (false);
 				}
+
 				return (true);
 			}
 			else
@@ -111,7 +112,7 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Compares two specified <see cref="System.String"/> objects ignoring culture and case.
+		/// Compares two specified <see cref="string"/> objects ignoring culture and case.
 		/// </summary>
 		public static bool EqualsOrdinalIgnoreCase(string strA, string strB)
 		{
@@ -134,6 +135,7 @@ namespace MKY
 					if (!EqualsOrdinalIgnoreCase(strA[i], strB[i]))
 						return (false);
 				}
+
 				return (true);
 			}
 			else
@@ -143,15 +145,24 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Compares whether the first <see cref="System.String"/> object matches any <see cref="System.String"/> object of the given array.
+		/// Compares whether <paramref name="strA"/> matches any <paramref name="strB"/>.
 		/// </summary>
-		public static bool EqualsAnyOrdinalIgnoreCase(string strA, string[] strB)
+		public static bool EqualsAnyOrdinalIgnoreCase(string strA, params string[] strB)
+		{
+			return (EqualsAnyOrdinalIgnoreCase(strA, (IEnumerable<string>)strB));
+		}
+
+		/// <summary>
+		/// Compares whether <paramref name="strA"/> matches any <paramref name="strB"/>.
+		/// </summary>
+		public static bool EqualsAnyOrdinalIgnoreCase(string strA, IEnumerable<string> strB)
 		{
 			foreach (string str in strB)
 			{
 				if (EqualsOrdinalIgnoreCase(strA, str))
 					return (true);
 			}
+
 			return (false);
 		}
 
@@ -172,64 +183,169 @@ namespace MKY
 
 		#endregion
 
-		#region Index
+		#region StartsWith/EndsWith
 		//------------------------------------------------------------------------------------------
-		// Index
+		// StartsWith/EndsWith
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Reports the index of the first occurrence of the specified string in <paramref name="str"/>.
-		/// Parameters specify the starting search position in the string, the number of characters
-		/// in the current string to search, and the type of search to use for the specified string.
+		/// Determines whether the beginning of <paramref name="str"/> matches the specified <paramref name="value"/>.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Parameter naming as similar string methods.")]
-		public static int IndexOfOutsideDoubleQuotes(string str, string searchString, StringComparison comparisonType)
+		/// <param name="str">The string.</param>
+		/// <param name="value">The string to compare with.</param>
+		/// <returns>true if <paramref name="str"/> matches the beginning of the comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
+		public static bool StartsWithOrdinalIgnoreCase(string str, string value)
 		{
-			return (IndexOfOutsideDoubleQuotes(str, searchString, 0, str.Length, comparisonType));
+			return (str.StartsWith(value, StringComparison.OrdinalIgnoreCase));
 		}
 
 		/// <summary>
-		/// Reports the index of the first occurrence of the specified string in <paramref name="str"/>.
-		/// Parameters specify the starting search position in the string, the number of characters
-		/// in the current string to search, and the type of search to use for the specified string.
+		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified <paramref name="values"/>.
 		/// </summary>
-		/// <param name="str">The <see cref="System.String"/> object to process.</param>
-		/// <param name="searchString">The <see cref="System.String"/> object to seek.</param>
-		/// <param name="startIndex">The search starting position.</param>
-		/// <param name="count">The number of character positions to examine.</param>
-		/// <param name="comparisonType">One of the <see cref="StringComparison"/> values.</param>
-		/// <returns>
-		/// The zero-based index position of the value parameter if that string is found,
-		/// or <see cref="InvalidIndex"/> if it is not. If value is <see cref="String.Empty"/>,
-		/// the return value is <paramref name="startIndex"/>.
-		/// </returns>
-		/// <exception cref="ArgumentNullException">searchString is null.</exception>
-		/// <exception cref="ArgumentOutOfRangeException">count or startIndex is negative.  -or- count plus startIndex specify a position that is not within this instance.</exception>
-		/// <exception cref="ArgumentException">comparisonType is not a valid <see cref="StringComparison"/> value.</exception>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Parameter naming as similar string methods.")]
-		public static int IndexOfOutsideDoubleQuotes(string str, string searchString, int startIndex, int count, StringComparison comparisonType)
+		/// <param name="str">The string.</param>
+		/// <param name="values">The strings to compare with.</param>
+		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
+		public static bool StartsWithAny(string str, params string[] values)
 		{
-			string substring = str.Substring(startIndex, count); // Crop the string as desired.
+			return (StartsWithAny(str, (IEnumerable<string>)values));
+		}
 
-			string rep = substring.Replace(@"\""", @""""); // Replace \" by "" to ease processing below.
+		/// <summary>
+		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified <paramref name="values"/>.
+		/// </summary>
+		/// <param name="str">The string.</param>
+		/// <param name="values">The strings to compare with.</param>
+		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
+		public static bool StartsWithAny(string str, IEnumerable<string> values)
+		{
+			return (StartsWithAny(str, values, false, null));
+		}
 
-			int offset = 0;
-			List<KeyValuePair<int, string>> l = new List<KeyValuePair<int, string>>(ListInitialCapacityDefault); // Preset the initial capacity to improve memory management.
-			foreach (string s in rep.Split('"')) // Split string into chunks between double quotes.
+		/// <summary>
+		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified <paramref name="values"/>
+		/// when compared using the specified comparison type.
+		/// </summary>
+		/// <param name="str">The string.</param>
+		/// <param name="values">The strings to compare with.</param>
+		/// <param name="comparisonType">One of the <see cref="StringComparison"/> values that determines how the strings and the value are compared.</param>
+		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
+		/// <exception cref="ArgumentException">comparisonType is not a <see cref="StringComparison"/> value.</exception>
+		public static bool StartsWithAny(string str, IEnumerable<string> values, StringComparison comparisonType)
+		{
+			foreach (string value in values)
 			{
-				l.Add(new KeyValuePair<int, string>(offset, s));
-				offset += s.Length; // Add the string length to the offset.
-				offset++;           // Correct the offset created by the dropped double quotes.
+				if (str.StartsWith(value, comparisonType))
+					return (true); // Match.
 			}
+			return (false); // No match.
+		}
 
-			for (int i = 0; i < l.Count; i += 2) // Check every second chunk for the first occurance of seachString.
+		/// <summary>
+		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified <paramref name="values"/>
+		/// when compared using the specified culture.
+		/// </summary>
+		/// <param name="str">The string.</param>
+		/// <param name="values">The strings to compare with.</param>
+		/// <param name="ignoreCase">true to ignore case when comparing this string and value; otherwise, false.</param>
+		/// <param name="culture">Cultural information that determines how this string and value are compared. If culture is null, the current culture is used.</param>
+		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
+		public static bool StartsWithAny(string str, IEnumerable<string> values, bool ignoreCase, CultureInfo culture)
+		{
+			foreach (string value in values)
 			{
-				int index = l[i].Value.IndexOf(searchString, comparisonType);
-				if (index >= 0)
-					return (startIndex + l[i].Key + index);
+				if (str.StartsWith(value, ignoreCase, culture))
+					return (true); // Match.
 			}
+			return (false); // No match.
+		}
 
-			return (InvalidIndex);
+		/// <summary>
+		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified <paramref name="values"/>.
+		/// </summary>
+		/// <param name="str">The string.</param>
+		/// <param name="values">The strings to compare with.</param>
+		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
+		public static bool StartsWithAnyOrdinalIgnoreCase(string str, params string[] values)
+		{
+			return (StartsWithAny(str, (IEnumerable<string>)values));
+		}
+
+		/// <summary>
+		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified <paramref name="values"/>.
+		/// </summary>
+		/// <param name="str">The string.</param>
+		/// <param name="values">The strings to compare with.</param>
+		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
+		public static bool StartsWithAnyOrdinalIgnoreCase(string str, IEnumerable<string> values)
+		{
+			return (StartsWithAny(str, values, StringComparison.OrdinalIgnoreCase));
+		}
+
+		/// <summary>
+		/// Determines whether the end of <paramref name="str"/> matches the specified <paramref name="value"/>.
+		/// </summary>
+		/// <param name="str">The string.</param>
+		/// <param name="value">The string to compare with.</param>
+		/// <returns>true if <paramref name="str"/> matches the end of the comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
+		public static bool EndsWithOrdinalIgnoreCase(string str, string value)
+		{
+			return (str.EndsWith(value, StringComparison.OrdinalIgnoreCase));
+		}
+
+		#endregion
+
+		#region Left/Mid/Right
+		//------------------------------------------------------------------------------------------
+		// Left/Mid/Right
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Truncates <paramref name="str"/> to the <paramref name="length"/> leftmost characters.
+		/// </summary>
+		public static string Left(string str, int length)
+		{
+			if (length >= str.Length)
+				return (str);
+			else if (length <= 0)
+				return ("");
+			else
+				return (str.Substring(0, length));
+		}
+
+		/// <summary>
+		/// Truncates <paramref name="str"/> from <paramref name="begin"/> to <paramref name="end"/>.
+		/// </summary>
+		public static string Mid(string str, int begin, int end)
+		{
+			if (begin >= end)
+				return ("");
+			else if ((begin < 0) || (begin >= str.Length) || (end < 0))
+				return ("");
+			else if (end >= str.Length)
+				return (str.Substring(begin));
+			else
+				return (str.Substring(begin, end - begin + 1));
+		}
+
+		/// <summary>
+		/// Truncates <paramref name="str"/> to the <paramref name="length"/> rightmost characters.
+		/// </summary>
+		public static string Right(string str, int length)
+		{
+			if (length >= str.Length)
+				return (str);
+			else if (length <= 0)
+				return ("");
+			else
+				return (str.Substring(str.Length - length, length));
 		}
 
 		#endregion
@@ -313,54 +429,6 @@ namespace MKY
 			{
 				return (0);
 			}
-		}
-
-		#endregion
-
-		#region Left/Mid/Right
-		//------------------------------------------------------------------------------------------
-		// Left/Mid/Right
-		//------------------------------------------------------------------------------------------
-
-		/// <summary>
-		/// Truncates <paramref name="str"/> to the <paramref name="length"/> leftmost characters.
-		/// </summary>
-		public static string Left(string str, int length)
-		{
-			if (length >= str.Length)
-				return (str);
-			else if (length <= 0)
-				return ("");
-			else
-				return (str.Substring(0, length));
-		}
-
-		/// <summary>
-		/// Truncates <paramref name="str"/> from <paramref name="begin"/> to <paramref name="end"/>.
-		/// </summary>
-		public static string Mid(string str, int begin, int end)
-		{
-			if (begin >= end)
-				return ("");
-			else if ((begin < 0) || (begin >= str.Length) || (end < 0))
-				return ("");
-			else if (end >= str.Length)
-				return (str.Substring(begin));
-			else
-				return (str.Substring(begin, end - begin + 1));
-		}
-
-		/// <summary>
-		/// Truncates <paramref name="str"/> to the <paramref name="length"/> rightmost characters.
-		/// </summary>
-		public static string Right(string str, int length)
-		{
-			if (length >= str.Length)
-				return (str);
-			else if (length <= 0)
-				return ("");
-			else
-				return (str.Substring(str.Length - length, length));
 		}
 
 		#endregion
@@ -475,101 +543,6 @@ namespace MKY
 
 		#endregion
 
-		#region Starts/EndsWith
-		//------------------------------------------------------------------------------------------
-		// Starts/EndsWith
-		//------------------------------------------------------------------------------------------
-
-		/// <summary>
-		/// Determines whether the beginning of <paramref name="str"/> matches the specified <paramref name="value"/>.
-		/// </summary>
-		/// <param name="str">The string.</param>
-		/// <param name="value">The string to compare with.</param>
-		/// <returns>true if <paramref name="str"/> matches the beginning of the comparing string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">value is null.</exception>
-		public static bool StartsWithOrdinalIgnoreCase(string str, string value)
-		{
-			return (str.StartsWith(value, StringComparison.OrdinalIgnoreCase));
-		}
-
-		/// <summary>
-		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified <paramref name="values"/>.
-		/// </summary>
-		/// <param name="str">The string.</param>
-		/// <param name="values">The strings to compare with.</param>
-		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">value is null.</exception>
-		public static bool StartsWithAny(string str, string[] values)
-		{
-			return (StartsWithAny(str, values, false, null));
-		}
-
-		/// <summary>
-		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified <paramref name="values"/>
-		/// when compared using the specified comparison type.
-		/// </summary>
-		/// <param name="str">The string.</param>
-		/// <param name="values">The strings to compare with.</param>
-		/// <param name="comparisonType">One of the <see cref="StringComparison"/> values that determines how the strings and the value are compared.</param>
-		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">value is null.</exception>
-		/// <exception cref="ArgumentException">comparisonType is not a <see cref="StringComparison"/> value.</exception>
-		public static bool StartsWithAny(string str, string[] values, StringComparison comparisonType)
-		{
-			foreach (string value in values)
-			{
-				if (str.StartsWith(value, comparisonType))
-					return (true); // Match.
-			}
-			return (false); // No match.
-		}
-
-		/// <summary>
-		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified <paramref name="values"/>
-		/// when compared using the specified culture.
-		/// </summary>
-		/// <param name="str">The string.</param>
-		/// <param name="values">The strings to compare with.</param>
-		/// <param name="ignoreCase">true to ignore case when comparing this string and value; otherwise, false.</param>
-		/// <param name="culture">Cultural information that determines how this string and value are compared. If culture is null, the current culture is used.</param>
-		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">value is null.</exception>
-		public static bool StartsWithAny(string str, string[] values, bool ignoreCase, CultureInfo culture)
-		{
-			foreach (string value in values)
-			{
-				if (str.StartsWith(value, ignoreCase, culture))
-					return (true); // Match.
-			}
-			return (false); // No match.
-		}
-
-		/// <summary>
-		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified <paramref name="values"/>.
-		/// </summary>
-		/// <param name="str">The string.</param>
-		/// <param name="values">The strings to compare with.</param>
-		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">value is null.</exception>
-		public static bool StartsWithAnyOrdinalIgnoreCase(string str, string[] values)
-		{
-			return (StartsWithAny(str, values, StringComparison.OrdinalIgnoreCase));
-		}
-
-		/// <summary>
-		/// Determines whether the end of <paramref name="str"/> matches the specified <paramref name="value"/>.
-		/// </summary>
-		/// <param name="str">The string.</param>
-		/// <param name="value">The string to compare with.</param>
-		/// <returns>true if <paramref name="str"/> matches the end of the comparing string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">value is null.</exception>
-		public static bool EndsWithOrdinalIgnoreCase(string str, string value)
-		{
-			return (str.EndsWith(value, StringComparison.OrdinalIgnoreCase));
-		}
-
-		#endregion
-
 		#region Trim
 		//------------------------------------------------------------------------------------------
 		// Trim
@@ -577,14 +550,14 @@ namespace MKY
 
 		/// <summary>
 		/// Removes up to <paramref name="maxLength"/> leading and trailing occurrences of a set
-		/// of characters specified in an array from the current <see cref="System.String"/> object.
+		/// of characters specified in an array from the current <see cref="string"/> object.
 		/// </summary>
 		/// <param name="str">The string to trim.</param>
 		/// <param name="maxLength">The maximum number of characters to trim at both ends.</param>
 		/// <param name="trimChars">An array of Unicode characters to remove or null.</param>
 		/// <returns>
 		/// The string that remains after all occurrences of the characters in the trimChars
-		/// parameter are removed from the start and end of the current <see cref="System.String"/>
+		/// parameter are removed from the start and end of the current <see cref="string"/>
 		/// object. If <paramref name="trimChars"/> is null, white-space characters are removed
 		/// instead.
 		/// </returns>
@@ -616,7 +589,7 @@ namespace MKY
 
 		/// <summary>
 		/// Removes up to <paramref name="maxLength"/> leading and trailing occurrences of a set
-		/// of characters specified in an array from the current <see cref="System.String"/> object,
+		/// of characters specified in an array from the current <see cref="string"/> object,
 		/// but only if they occur to both ends of the string.
 		/// </summary>
 		/// <param name="str">The string to trim.</param>
@@ -624,7 +597,7 @@ namespace MKY
 		/// <param name="trimChars">An array of Unicode characters to remove or null.</param>
 		/// <returns>
 		/// The string that remains after all occurrences of the characters in the trimChars
-		/// parameter are removed from the start and end of the current <see cref="System.String"/>
+		/// parameter are removed from the start and end of the current <see cref="string"/>
 		/// object. If <paramref name="trimChars"/> is null, white-space characters are removed
 		/// instead.
 		/// </returns>
@@ -653,14 +626,14 @@ namespace MKY
 
 		/// <summary>
 		/// Removes all leading and trailing occurrences of a set of characters specified in an
-		/// array from the current <see cref="System.String"/> object, but only if they occur to
+		/// array from the current <see cref="string"/> object, but only if they occur to
 		/// both ends of the string.
 		/// </summary>
 		/// <param name="str">The string to trim.</param>
 		/// <param name="trimChars">An array of Unicode characters to remove or null.</param>
 		/// <returns>
 		/// The string that remains after all occurrences of the characters in the trimChars
-		/// parameter are removed from the start and end of the current <see cref="System.String"/>
+		/// parameter are removed from the start and end of the current <see cref="string"/>
 		/// object. If <paramref name="trimChars"/> is null, white-space characters are removed
 		/// instead.
 		/// </returns>
@@ -675,6 +648,68 @@ namespace MKY
 			{
 				return (str.Trim());
 			}
+		}
+
+		#endregion
+
+		#region Index
+		//------------------------------------------------------------------------------------------
+		// Index
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Reports the index of the first occurrence of the specified string in <paramref name="str"/>.
+		/// Parameters specify the starting search position in the string, the number of characters
+		/// in the current string to search, and the type of search to use for the specified string.
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Parameter naming as similar string methods.")]
+		public static int IndexOfOutsideDoubleQuotes(string str, string searchString, StringComparison comparisonType)
+		{
+			return (IndexOfOutsideDoubleQuotes(str, searchString, 0, str.Length, comparisonType));
+		}
+
+		/// <summary>
+		/// Reports the index of the first occurrence of the specified string in <paramref name="str"/>.
+		/// Parameters specify the starting search position in the string, the number of characters
+		/// in the current string to search, and the type of search to use for the specified string.
+		/// </summary>
+		/// <param name="str">The <see cref="string"/> object to process.</param>
+		/// <param name="searchString">The <see cref="string"/> object to seek.</param>
+		/// <param name="startIndex">The search starting position.</param>
+		/// <param name="count">The number of character positions to examine.</param>
+		/// <param name="comparisonType">One of the <see cref="StringComparison"/> values.</param>
+		/// <returns>
+		/// The zero-based index position of the value parameter if that string is found,
+		/// or <see cref="InvalidIndex"/> if it is not. If value is <see cref="String.Empty"/>,
+		/// the return value is <paramref name="startIndex"/>.
+		/// </returns>
+		/// <exception cref="ArgumentNullException">searchString is null.</exception>
+		/// <exception cref="ArgumentOutOfRangeException">count or startIndex is negative.  -or- count plus startIndex specify a position that is not within this instance.</exception>
+		/// <exception cref="ArgumentException">comparisonType is not a valid <see cref="StringComparison"/> value.</exception>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Parameter naming as similar string methods.")]
+		public static int IndexOfOutsideDoubleQuotes(string str, string searchString, int startIndex, int count, StringComparison comparisonType)
+		{
+			string substring = str.Substring(startIndex, count); // Crop the string as desired.
+
+			string rep = substring.Replace(@"\""", @""""); // Replace \" by "" to ease processing below.
+
+			int offset = 0;
+			List<KeyValuePair<int, string>> l = new List<KeyValuePair<int, string>>(ListInitialCapacityDefault); // Preset the initial capacity to improve memory management.
+			foreach (string s in rep.Split('"')) // Split string into chunks between double quotes.
+			{
+				l.Add(new KeyValuePair<int, string>(offset, s));
+				offset += s.Length; // Add the string length to the offset.
+				offset++;           // Correct the offset created by the dropped double quotes.
+			}
+
+			for (int i = 0; i < l.Count; i += 2) // Check every second chunk for the first occurance of seachString.
+			{
+				int index = l[i].Value.IndexOf(searchString, comparisonType);
+				if (index >= 0)
+					return (startIndex + l[i].Key + index);
+			}
+
+			return (InvalidIndex);
 		}
 
 		#endregion

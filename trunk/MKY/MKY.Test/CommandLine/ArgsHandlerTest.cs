@@ -980,7 +980,6 @@ namespace MKY.Test.CommandLine
 			using (StreamReader sr = new StreamReader(sb.ToString()))
 			{
 				expected = sr.ReadToEnd();
-				sr.Close();
 			}
 
 			// Get the help text and compare it to the file:

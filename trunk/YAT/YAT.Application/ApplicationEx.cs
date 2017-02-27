@@ -87,6 +87,15 @@ namespace YAT
 			"YAT is licensed under the GNU LGPL.", // Note that source files state "This source code is licensed under the GNU LGPL." to emphasize the context.
 			"See http://www.gnu.org/licenses/lgpl.html for license details."
 		};
+
+		/// <summary>The .NET Framework prerequisite.</summary>
+		public static readonly string PrerequisiteFramework = ".NET Framework 3.5 Service Pack 1";
+
+		/// <summary>The Windows operating system prerequisite.</summary>
+		public static readonly string PrerequisiteWindowsOS = "Windows 2000 and later";
+
+		/// <summary>The other operating system prerequisite.</summary>
+		public static readonly string PrerequisiteOtherOS = "Linux with Mono 3.12.x and later";
 	}
 }
 

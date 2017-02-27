@@ -160,10 +160,19 @@ namespace MKY.IO
 		{
 			// String validation:
 			if (string.IsNullOrEmpty(path))
+			{
 				return (false);
+			}
 
 			// Path validation:
-			return (!string.IsNullOrEmpty(Path.GetFullPath(Environment.ExpandEnvironmentVariables(path))));
+			try
+			{
+				return (!string.IsNullOrEmpty(Path.GetFullPath(Environment.ExpandEnvironmentVariables(path))));
+			}
+			catch // Path.GetFullPath() throws if path is invalid.
+			{
+				return (false);
+			}
 		}
 
 		#endregion
