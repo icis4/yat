@@ -275,10 +275,10 @@ namespace YAT.Model.Utilities
 						FormatDescriptor format;
 						SetFormat(segment.Value1, out format);
 
-						if ((format.FontStyle & System.Drawing.FontStyle.Bold)      == System.Drawing.FontStyle.Bold)      fmt.FontStyle.addStyle(FontStyleFlag.Bold);
-						if ((format.FontStyle & System.Drawing.FontStyle.Italic)    == System.Drawing.FontStyle.Italic)    fmt.FontStyle.addStyle(FontStyleFlag.Italic);
-						if ((format.FontStyle & System.Drawing.FontStyle.Underline) == System.Drawing.FontStyle.Underline) fmt.FontStyle.addStyle(FontStyleFlag.Underline);
-						if ((format.FontStyle & System.Drawing.FontStyle.Strikeout) == System.Drawing.FontStyle.Strikeout) fmt.FontStyle.addStyle(FontStyleFlag.Strike);
+						if ((format.FontStyle & System.Drawing.FontStyle.Bold)      != 0) fmt.FontStyle.addStyle(FontStyleFlag.Bold);
+						if ((format.FontStyle & System.Drawing.FontStyle.Italic)    != 0) fmt.FontStyle.addStyle(FontStyleFlag.Italic);
+						if ((format.FontStyle & System.Drawing.FontStyle.Underline) != 0) fmt.FontStyle.addStyle(FontStyleFlag.Underline);
+						if ((format.FontStyle & System.Drawing.FontStyle.Strikeout) != 0) fmt.FontStyle.addStyle(FontStyleFlag.Strike);
 
 						fmt.FgColor = format.FontColor;
 						fmt.BgColor = format.BackColor;
