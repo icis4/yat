@@ -1014,7 +1014,7 @@ namespace YAT.Model
 			// Ensure to leave application settings untouched:
 			localUserDirectoryFilePaths.Remove(ApplicationSettings.LocalUserSettingsFilePath);
 
-			// Get all active file paths:
+			// Get all active files:
 			List<string> activeFilePaths = new List<string>();
 			if (this.workspace != null)
 			{
@@ -1027,15 +1027,15 @@ namespace YAT.Model
 			}
 
 			// Ensure to leave all active settings untouched:
-			foreach (string afp in activeFilePaths)
+			foreach (string path in activeFilePaths)
 			{
-				localUserDirectoryFilePaths.Remove(afp);
+				localUserDirectoryFilePaths.Remove(path);
 			}
 
-			// Delete all obsolete file paths in default directory:
-			foreach (string ddfp in localUserDirectoryFilePaths)
+			// Delete all obsolete files:
+			foreach (string path in localUserDirectoryFilePaths)
 			{
-				FileEx.TryDelete(ddfp);
+				FileEx.TryDelete(path);
 			}
 		}
 

@@ -248,7 +248,7 @@ namespace YAT.View.Controls
 			}
 
 			// Override if the item is selected:
-			if ((state & DrawItemState.Selected) == DrawItemState.Selected)
+			if ((state & DrawItemState.Selected) != 0)
 			{
 				foreColor = SystemColors.HighlightText;
 				backColor = SystemColors.Highlight;

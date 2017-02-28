@@ -280,7 +280,7 @@ namespace MKY.Settings
 				{
 					// Do not call AssertNotDisposed() in a simple get-property.
 
-					return ((this.effectiveFileAccess & FileAccessFlags.Write) == FileAccessFlags.Write);
+					return ((this.effectiveFileAccess & FileAccessFlags.Write) != 0);
 				}
 			}
 
@@ -303,7 +303,7 @@ namespace MKY.Settings
 			{
 				AssertNotDisposed();
 
-				if ((this.effectiveFileAccess & FileAccessFlags.Read) == FileAccessFlags.Read)
+				if ((this.effectiveFileAccess & FileAccessFlags.Read) != 0)
 				{
 					// Try to open existing file of current version:
 					try
@@ -387,7 +387,7 @@ namespace MKY.Settings
 			{
 				AssertNotDisposed();
 
-				if ((this.effectiveFileAccess & FileAccessFlags.Write) == FileAccessFlags.Write)
+				if ((this.effectiveFileAccess & FileAccessFlags.Write) != 0)
 				{
 					SaveToFile(typeof(TSettings), this.settings);
 					this.settings.ClearChanged();

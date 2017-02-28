@@ -808,7 +808,7 @@ namespace YAT.View.Controls
 					// Handle non-standard background:
 					if (this.formatSettings.BackColor != SystemColors.Window) // Equals FormatSettings.DefaultBackColor
 					{
-						if ((e.State & DrawItemState.Selected) != DrawItemState.Selected) // Change only needed if item is not selected
+						if ((e.State & DrawItemState.Selected) == 0) // Change only needed if item is not selected
 							e = new DrawItemEventArgs(e.Graphics, e.Font, e.Bounds, e.Index, e.State, e.ForeColor, this.formatSettings.BackColor);
 					}
 

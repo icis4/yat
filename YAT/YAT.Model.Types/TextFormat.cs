@@ -103,7 +103,7 @@ namespace YAT.Model.Types
 		[XmlIgnore]
 		public virtual bool Bold
 		{
-			get { return ((this.fontStyle & FontStyle.Bold) == FontStyle.Bold); }
+			get { return ((this.fontStyle & FontStyle.Bold) != 0); }
 			set
 			{
 				if (value)
@@ -117,7 +117,7 @@ namespace YAT.Model.Types
 		[XmlIgnore]
 		public virtual bool Italic
 		{
-			get { return ((this.fontStyle & FontStyle.Italic) == FontStyle.Italic); }
+			get { return ((this.fontStyle & FontStyle.Italic) != 0); }
 			set
 			{
 				if (value)
@@ -131,7 +131,7 @@ namespace YAT.Model.Types
 		[XmlIgnore]
 		public virtual bool Underline
 		{
-			get { return ((this.fontStyle & FontStyle.Underline) == FontStyle.Underline); }
+			get { return ((this.fontStyle & FontStyle.Underline) != 0); }
 			set
 			{
 				if (value)
@@ -145,7 +145,7 @@ namespace YAT.Model.Types
 		[XmlIgnore]
 		public virtual bool Strikeout
 		{
-			get { return ((this.fontStyle & FontStyle.Strikeout) == FontStyle.Strikeout); }
+			get { return ((this.fontStyle & FontStyle.Strikeout) != 0); }
 			set
 			{
 				if (value)
