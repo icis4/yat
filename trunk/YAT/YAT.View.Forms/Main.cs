@@ -375,8 +375,8 @@ namespace YAT.View.Forms
 			{
 				this.workspace.ActivateTerminal(((Terminal)ActiveMdiChild).UnderlyingTerminal);
 
-				// Activate the MDI child, to ensure that shortcuts effect the correct terminal.
-				ActiveMdiChild.BringToFront(); // Fixes bug #2996684>#152.
+				// Activate the MDI child, to ensure that shortcuts effect the desired terminal:
+				ActiveMdiChild.BringToFront();
 
 				if (this.invokeLayout)
 				{

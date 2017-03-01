@@ -1064,7 +1064,7 @@ namespace YAT.Model
 				{
 					this.workspace.StartAllTerminals(); // Don't care about success, workspace itself is fine.
 
-					OnStarted();
+					OnStarted(); // Same as at OpenTerminalFromFile() below.
 					return (true);
 				}
 
@@ -1073,21 +1073,21 @@ namespace YAT.Model
 			else if (ExtensionHelper.IsTerminalFile(extension))
 			{
 				// Create workspace if it doesn't exist yet.
-				bool newWorkspaceSoSignalStarted = false;
+				bool signalStarted = false;
 				if (this.workspace == null)
 				{
 					if (!CreateNewWorkspace())
 						return (false);
 
-					newWorkspaceSoSignalStarted = true;
+					signalStarted = true;
 				}
 
 				if (this.workspace.OpenTerminalFromFile(filePath))
 				{
 					if (this.workspace.ActiveTerminal.Start())
 					{
-						if (newWorkspaceSoSignalStarted)
-							OnStarted();
+						if (signalStarted)
+							OnStarted(); // Same as at OpenWorkspaceFromFile() above.
 						
 						return (true);
 					}
@@ -1341,7 +1341,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler)
+		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler)
 		{
 			Exception exception;
 			return (OpenWorkspaceFromSettings(settingsHandler, Guid.NewGuid(), out exception));
@@ -1518,7 +1518,10 @@ namespace YAT.Model
 		public virtual bool CreateNewTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
 			if (this.workspace == null)
-				CreateNewWorkspace();
+			{
+				if (!CreateNewWorkspace())
+					return (false);
+			}
 
 			return (this.workspace.CreateNewTerminal(settingsHandler));
 		}
@@ -1527,7 +1530,10 @@ namespace YAT.Model
 		public virtual bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
 			if (this.workspace == null)
-				CreateNewWorkspace();
+			{
+				if (!CreateNewWorkspace())
+					return (false);
+			}
 
 			return (this.workspace.OpenTerminalFromSettings(settingsHandler));
 		}

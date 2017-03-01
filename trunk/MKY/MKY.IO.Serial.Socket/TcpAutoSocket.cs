@@ -420,6 +420,16 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
+		/// <remarks>
+		/// Convenience property to combine the <see cref="IsClient"/> and <see cref="IsServer"/>
+		/// properties. It returns <c>true</c> if it is defined whether the AutoSocket indeed is
+		/// a client or server. If it is not yet defined, it returns <c>false</c>.
+		/// </remarks>
+		public virtual bool IsClientOrServer
+		{
+			get { return (IsClient || IsServer); }
+		}
+
 		/// <summary></summary>
 		public virtual object UnderlyingIOInstance
 		{
