@@ -250,7 +250,7 @@ namespace YAT.Settings.Terminal
 			if (ReferenceEquals(rhs, null)) return (false);
 
 			object obj = (object)lhs; // Operators are not virtual! Calling object.Equals() ensures
-			return (obj.Equals(rhs)); // that the virtual <Derived>.Equals() is called.
+			return (obj.Equals(rhs)); // that a potential virtual <Derived>.Equals() is called.
 		}
 
 		/// <summary>

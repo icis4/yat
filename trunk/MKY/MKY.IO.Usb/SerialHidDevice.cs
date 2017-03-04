@@ -961,7 +961,7 @@ namespace MKY.IO.Usb
 			}
 			catch (Exception ex)
 			{
-				StringBuilder sb = new StringBuilder();
+				var sb = new StringBuilder();
 				sb.Append    (@"Error while reading an input report from the USB Ser/HID device """);
 				sb.Append    (ToString());
 				sb.AppendLine(@""".");
@@ -1036,7 +1036,7 @@ namespace MKY.IO.Usb
 		{
 			try
 			{
-				SerialHidOutputReportContainer output = new SerialHidOutputReportContainer(this);
+				var output = new SerialHidOutputReportContainer(this);
 				output.CreateReports(this.reportFormat, payload);
 
 				foreach (byte[] report in output.Reports)
@@ -1046,7 +1046,7 @@ namespace MKY.IO.Usb
 			}
 			catch (Exception ex)
 			{
-				StringBuilder sb = new StringBuilder();
+				var sb = new StringBuilder();
 				sb.Append    (@"Error while writing an output report to the USB Ser/HID device """);
 				sb.Append    (ToString());
 				sb.AppendLine(@""".");
