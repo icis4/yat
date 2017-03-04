@@ -829,6 +829,18 @@ namespace YAT.View.Forms
 			toolStripMenuItem_TerminalMenu_View_BreakCount_ShowCount.Checked  = showBreakCount;
 			toolStripMenuItem_TerminalMenu_View_BreakCount_ResetCount.Enabled = showBreakCount;
 
+			// Format:
+			if (this.settingsRoot.Format.FormattingEnabled)
+			{
+				toolStripMenuItem_TerminalMenu_View_ToggleFormatting.Text = "Disable Forma&tting";
+				toolStripMenuItem_TerminalMenu_View_ToggleFormatting.Image = Properties.Resources.Image_Tool_font_delete_16x16;
+			}
+			else
+			{
+				toolStripMenuItem_TerminalMenu_View_ToggleFormatting.Text = "Enable Forma&tting";
+				toolStripMenuItem_TerminalMenu_View_ToggleFormatting.Image = Properties.Resources.Image_Tool_font_add_16x16;
+			}
+
 			this.isSettingControls.Leave();
 		}
 
@@ -966,6 +978,11 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_TerminalMenu_View_Format_Click(object sender, EventArgs e)
 		{
 			ShowFormatSettings();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_View_ToggleFormatting_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Format.FormattingEnabled = !this.settingsRoot.Format.FormattingEnabled;
 		}
 
 		#endregion
@@ -2827,9 +2844,10 @@ namespace YAT.View.Forms
 			SetFixedStatusText("Reformatting...");
 			Cursor = Cursors.WaitCursor;
 
-			monitor_Tx.FormatSettings    = this.settingsRoot.Format;
-			monitor_Bidir.FormatSettings = this.settingsRoot.Format;
-			monitor_Rx.FormatSettings    = this.settingsRoot.Format;
+			                                // Clone settings to ensure decoupling:
+			monitor_Tx   .FormatSettings = new Model.Settings.FormatSettings(this.settingsRoot.Format);
+			monitor_Bidir.FormatSettings = new Model.Settings.FormatSettings(this.settingsRoot.Format);
+			monitor_Rx   .FormatSettings = new Model.Settings.FormatSettings(this.settingsRoot.Format);
 
 			Cursor = Cursors.Default;
 			SetTimedStatusText("Reformatting done");
@@ -2930,7 +2948,7 @@ namespace YAT.View.Forms
 			sfd.DefaultExt  = PathEx.DenormalizeExtension(initialExtension);
 			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MonitorFiles;
 
-			DialogResult dr = sfd.ShowDialog(this);
+			var dr = sfd.ShowDialog(this);
 			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
 			{
 				Refresh();
@@ -2982,7 +3000,7 @@ namespace YAT.View.Forms
 				{
 					SetFixedStatusText("Selected lines only partially saved!");
 
-					StringBuilder sb = new StringBuilder();
+					var sb = new StringBuilder();
 
 					sb.Append("Selected lines only partially saved to file, only ");
 					sb.Append(savedCount.ToString(CultureInfo.InvariantCulture));
@@ -3668,7 +3686,7 @@ namespace YAT.View.Forms
 			else
 				sfd.FileName = AutoName + PathEx.NormalizeExtension(sfd.DefaultExt); // Note that 'DefaultExt' states "The returned string does not include the period."!
 
-			DialogResult dr = sfd.ShowDialog(this);
+			var dr = sfd.ShowDialog(this);
 			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
 			{
 				Refresh();

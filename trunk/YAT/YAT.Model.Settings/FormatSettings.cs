@@ -55,6 +55,8 @@ namespace YAT.Model.Settings
 
 		private FontFormat font;
 
+		private bool formattingEnabled;
+
 		private TextFormat txDataFormat;
 		private TextFormat txControlFormat;
 		private TextFormat rxDataFormat;
@@ -92,6 +94,8 @@ namespace YAT.Model.Settings
 		{
 			FontFormat        = new FontFormat(rhs.FontFormat);
 
+			FormattingEnabled = rhs.FormattingEnabled;
+
 			TxDataFormat      = new TextFormat(rhs.TxDataFormat);
 			TxControlFormat   = new TextFormat(rhs.TxControlFormat);
 			RxDataFormat      = new TextFormat(rhs.RxDataFormat);
@@ -117,6 +121,8 @@ namespace YAT.Model.Settings
 			base.SetMyDefaults();
 
 			FontFormat        = new FontFormat(FontFormat.NameDefault, FontFormat.SizeDefault, FontFormat.StyleDefault);
+
+			FormattingEnabled = true;
 
 			TxDataFormat      = new TextFormat(TxColorDefault,           true, false, false, false); // Bold.
 			TxControlFormat   = new TextFormat(TxColorDefault,          false, false, false, false);
@@ -163,6 +169,21 @@ namespace YAT.Model.Settings
 				if (this.font.Font != value)
 				{
 					this.font.Font = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("FormattingEnabled")]
+		public bool FormattingEnabled
+		{
+			get { return (this.formattingEnabled); }
+			set
+			{
+				if (this.formattingEnabled != value)
+				{
+					this.formattingEnabled = value;
 					SetMyChanged();
 				}
 			}
@@ -385,6 +406,8 @@ namespace YAT.Model.Settings
 
 				hashCode = (hashCode * 397) ^ (Font              != null ? Font             .GetHashCode() : 0);
 
+				hashCode = (hashCode * 397) ^                              FormattingEnabled.GetHashCode();
+
 				hashCode = (hashCode * 397) ^ (TxDataFormat      != null ? TxDataFormat     .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (TxControlFormat   != null ? TxControlFormat  .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (RxDataFormat      != null ? RxDataFormat     .GetHashCode() : 0);
@@ -428,7 +451,9 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				ObjectEx.Equals(Font, other.Font) &&
+				ObjectEx.Equals(Font,              other.Font) &&
+
+				FormattingEnabled.Equals(          other.FormattingEnabled) &&
 
 				ObjectEx.Equals(TxDataFormat,      other.TxDataFormat)      &&
 				ObjectEx.Equals(TxControlFormat,   other.TxControlFormat)   &&
@@ -442,7 +467,7 @@ namespace YAT.Model.Settings
 				ObjectEx.Equals(WhiteSpacesFormat, other.WhiteSpacesFormat) &&
 				ObjectEx.Equals(ErrorFormat,       other.ErrorFormat)       &&
 
-				ObjectEx.Equals(BackFormat, other.BackFormat)
+				ObjectEx.Equals(BackFormat,        other.BackFormat)
 			);
 		}
 
@@ -456,7 +481,7 @@ namespace YAT.Model.Settings
 			if (ReferenceEquals(rhs, null)) return (false);
 
 			object obj = (object)lhs; // Operators are not virtual! Calling object.Equals() ensures
-			return (obj.Equals(rhs)); // that the virtual <Derived>.Equals() is called.
+			return (obj.Equals(rhs)); // that a potential virtual <Derived>.Equals() is called.
 		}
 
 		/// <summary>
