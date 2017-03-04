@@ -384,9 +384,7 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public virtual string ToString(bool appendCaption, bool appendInUseText)
 		{
-			StringBuilder sb = new StringBuilder();
-
-			sb.Append(Name);                     // "COM10"
+			var sb = new StringBuilder(Name);    // "COM10"
 
 			if (appendCaption && (!string.IsNullOrEmpty(Caption)))
 			{
@@ -475,7 +473,7 @@ namespace MKY.IO.Ports
 			if (ReferenceEquals(rhs, null)) return (false);
 
 			object obj = (object)lhs; // Operators are not virtual! Calling object.Equals() ensures
-			return (obj.Equals(rhs)); // that the virtual <Derived>.Equals() is called.
+			return (obj.Equals(rhs)); // that a potential virtual <Derived>.Equals() is called.
 		}
 
 		/// <summary>

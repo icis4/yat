@@ -514,7 +514,7 @@ namespace YAT.Model.Types
 				}
 				else if (IsMultiLineText)
 				{
-					StringBuilder sb = new StringBuilder();
+					var sb = new StringBuilder();
 					sb.Append("<");
 					sb.Append(MultiLineText.Length.ToString(CultureInfo.CurrentCulture));
 					sb.Append(" lines...>");
@@ -762,7 +762,7 @@ namespace YAT.Model.Types
 			if (ReferenceEquals(rhs, null)) return (false);
 
 			object obj = (object)lhs; // Operators are not virtual! Calling object.Equals() ensures
-			return (obj.Equals(rhs)); // that the virtual <Derived>.Equals() is called.
+			return (obj.Equals(rhs)); // that a potential virtual <Derived>.Equals() is called.
 		}
 
 		/// <summary>

@@ -424,7 +424,7 @@ namespace YAT/*.<TODO>*/
 
 		//	!!! Remove for value types !!!
 			object obj = (object)lhs; // Operators are not virtual! Calling object.Equals() ensures
-			return (obj.Equals(rhs)); // that the virtual <Derived>.Equals() is called.
+			return (obj.Equals(rhs)); // that a potential virtual <Derived>.Equals() is called.
 		//	!!! For value types only !!!
 		//	return (lhs.Equals(rhs));
 		}

@@ -396,7 +396,7 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public virtual string ToString(bool appendIds, bool appendInUseText)
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			if (!string.IsNullOrEmpty(Manufacturer))
 			{
@@ -451,7 +451,7 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public virtual string ToShortString()
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			sb.Append("VID:");
 			sb.Append(ProductIdString);          // "VID:1234"
@@ -477,7 +477,7 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public virtual string ToLongString()
 		{
-			StringBuilder sb = new StringBuilder(ToString());
+			var sb = new StringBuilder(ToString());
 			if (!string.IsNullOrEmpty(Path))
 			{
 				sb.Append(" at ");
@@ -602,7 +602,7 @@ namespace MKY.IO.Usb
 			if (ReferenceEquals(rhs, null)) return (false);
 
 			object obj = (object)lhs; // Operators are not virtual! Calling object.Equals() ensures
-			return (obj.Equals(rhs)); // that the virtual <Derived>.Equals() is called.
+			return (obj.Equals(rhs)); // that a potential virtual <Derived>.Equals() is called.
 		}
 
 		/// <summary>
