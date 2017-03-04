@@ -112,9 +112,10 @@ Fixed bugs:
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
 - General imitations of .NET Windows.Forms:
-   > Horizontal auto scroll is not feasible to implement (feature request #163).
    > System display scaling other than 100% results in partly clipped controls (bugs #85 and #235).
    > System errors are output in local language, even though YAT is all-English (bug #66).
+   > Single chars are compared case insensitively against recent 'Send Text' commands (bug #347).
+   > Horizontal auto scroll is not feasible to implement (feature request #163).
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
@@ -254,9 +255,10 @@ Fixed bugs:
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
 - General imitations of .NET Windows.Forms:
-   > Horizontal auto scroll is not feasible to implement (feature request #163).
    > System display scaling other than 100% results in partly clipped controls (bugs #85 and #235).
    > System errors are output in local language, even though YAT is all-English (bug #66).
+   > Single chars are compared case insensitively against recent 'Send Text' commands (bug #347).
+   > Horizontal auto scroll is not feasible to implement (feature request #163).
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
@@ -377,8 +379,8 @@ Limitations and known issues:
    > If YAT is not the active application, two clicks are required to execute an action. Reason:
      In .NET Windows.Forms the first click only activates the application but doesn't execute
      anything (bug #210)
-   > Horizontal auto scroll is not feasible to implement (feature request #163)
    > System errors are output in local language, even though YAT is all-English (bug #66)
+   > Horizontal auto scroll is not feasible to implement (feature request #163)
 - MDI limitations of .NET Windows.Forms
    > Issues with frame (bugs #29 and #30)
    > Issues with window list (bugs #31, #119, #180 and #213)
