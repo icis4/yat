@@ -620,7 +620,7 @@ namespace YAT.Model
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				StringBuilder sb = new StringBuilder();
+				var sb = new StringBuilder();
 
 				if (this.settingsRoot == null)
 				{
@@ -857,7 +857,7 @@ namespace YAT.Model
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				StringBuilder sb = new StringBuilder();
+				var sb = new StringBuilder();
 
 				if (this.settingsRoot != null)
 				{
@@ -1597,7 +1597,7 @@ namespace YAT.Model
 							"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
 							reason + " Would you like to save the file at another location or cancel?";
 
-						DialogResult dr = OnMessageInputRequest
+						var dr = OnMessageInputRequest
 						(
 							message,
 							"File Error",
@@ -1862,7 +1862,7 @@ namespace YAT.Model
 			// Normal file (w3, w4, t3, t4):
 			if (!success && doSave && !this.settingsRoot.AutoSaved)
 			{
-				DialogResult dr = OnMessageInputRequest
+				var dr = OnMessageInputRequest
 				(
 					"Save terminal?",
 					AutoName,
@@ -2277,7 +2277,7 @@ namespace YAT.Model
 							}
 							else
 							{
-								DialogResult dr = ShowSerialPortNotAvailableSwitchQuestion(portId, ports[0]);
+								var dr = ShowSerialPortNotAvailableSwitchQuestion(portId, ports[0]);
 								if (dr == DialogResult.Yes)
 									this.settingsRoot.IO.SerialPort.PortId = ports[0];
 
@@ -2286,7 +2286,7 @@ namespace YAT.Model
 						}
 						else // ports.Count == 0
 						{
-							DialogResult dr = ShowNoSerialPortsStartAnywayQuestion(portId);
+							var dr = ShowNoSerialPortsStartAnywayQuestion(portId);
 							if (dr == DialogResult.Yes)
 							{
 								return (true);
@@ -2327,7 +2327,7 @@ namespace YAT.Model
 								// A device with same description is available, use that:
 								int sameDescriptionIndex = localInterfaces.FindIndexDescription(localInterface);
 
-								DialogResult dr = ShowLocalInterfaceNotAvailableAlternateQuestion(localInterface, localInterfaces[sameDescriptionIndex]);
+								var dr = ShowLocalInterfaceNotAvailableAlternateQuestion(localInterface, localInterfaces[sameDescriptionIndex]);
 								if (dr == DialogResult.Yes)
 									this.settingsRoot.IO.Socket.LocalInterface = localInterfaces[sameDescriptionIndex];
 
@@ -2335,7 +2335,7 @@ namespace YAT.Model
 							}
 							else
 							{
-								DialogResult dr = ShowLocalInterfaceNotAvailableDefaultQuestion(localInterface, localInterfaces[0]);
+								var dr = ShowLocalInterfaceNotAvailableDefaultQuestion(localInterface, localInterfaces[0]);
 								if (dr == DialogResult.Yes)
 								{
 									this.settingsRoot.IO.Socket.LocalInterface = localInterfaces[0];
@@ -2385,7 +2385,7 @@ namespace YAT.Model
 								// Inform the user if serial is required:
 								if (ApplicationSettings.LocalUserSettings.General.MatchUsbSerial)
 								{
-									DialogResult dr = ShowUsbSerialHidDeviceNotAvailableAlternateQuestion(deviceInfo, devices[sameVidPidIndex]);
+									var dr = ShowUsbSerialHidDeviceNotAvailableAlternateQuestion(deviceInfo, devices[sameVidPidIndex]);
 									if (dr == DialogResult.Yes)
 										this.settingsRoot.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
 
@@ -2404,7 +2404,7 @@ namespace YAT.Model
 							}
 							else
 							{
-								DialogResult dr = ShowUsbSerialHidDeviceNotAvailableStartAnywayQuestion(deviceInfo);
+								var dr = ShowUsbSerialHidDeviceNotAvailableStartAnywayQuestion(deviceInfo);
 								if (dr == DialogResult.Yes)
 								{
 									return (true);
@@ -2418,7 +2418,7 @@ namespace YAT.Model
 						}
 						else // devices.Count == 0
 						{
-							DialogResult dr = ShowNoUsbSerialHidDevicesStartAnywayQuestion(deviceInfo);
+							var dr = ShowNoUsbSerialHidDevicesStartAnywayQuestion(deviceInfo);
 							if (dr == DialogResult.Yes)
 							{
 								return (true);
@@ -2447,7 +2447,7 @@ namespace YAT.Model
 				"There are currently no serial COM ports available." + Environment.NewLine + Environment.NewLine +
 				"Start with " + portIdNotAvailable + " anyway?";
 
-			DialogResult dr = OnMessageInputRequest
+			var dr = OnMessageInputRequest
 			(
 				message,
 				"No serial COM ports available",
@@ -2465,7 +2465,7 @@ namespace YAT.Model
 				"The previous serial port " + portIdNotAvailable + " is currently not available. " +
 				"Switch to " + portIdAlternate + " instead?";
 
-			DialogResult dr = OnMessageInputRequest
+			var dr = OnMessageInputRequest
 			(
 				message,
 				"Switch serial COM port?",
@@ -2497,7 +2497,7 @@ namespace YAT.Model
 				"The previous local network interface '" + localInterfaceNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
 				"Switch to '" + localInterfaceDefaulted + "' (default) instead?";
 
-			DialogResult dr = OnMessageInputRequest
+			var dr = OnMessageInputRequest
 			(
 				message,
 				"Switch interface?",
@@ -2514,7 +2514,7 @@ namespace YAT.Model
 				"The previous local network interface '" + localInterfaceNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
 				"Switch to '" + localInterfaceAlternate + "' (first available interface with same description) instead?";
 
-			DialogResult dr = OnMessageInputRequest
+			var dr = OnMessageInputRequest
 			(
 				message,
 				"Switch interface?",
@@ -2531,7 +2531,7 @@ namespace YAT.Model
 				"There are currently no HID capable USB devices available." + Environment.NewLine + Environment.NewLine +
 				"Start with " + deviceInfoNotAvailable + " anyway?";
 
-			DialogResult dr = OnMessageInputRequest
+			var dr = OnMessageInputRequest
 			(
 				message,
 				"No USB HID devices available",
@@ -2549,7 +2549,7 @@ namespace YAT.Model
 				"The previous USB HID device '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
 				"Start anyway?";
 
-			DialogResult dr = OnMessageInputRequest
+			var dr = OnMessageInputRequest
 			(
 				message,
 				"Previous USB HID device not available",
@@ -2567,7 +2567,7 @@ namespace YAT.Model
 				"The previous device '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
 				"Switch to '" + deviceInfoAlternate + "' (first available device with same VID and PID) instead?";
 
-			DialogResult dr = OnMessageInputRequest
+			var dr = OnMessageInputRequest
 			(
 				message,
 				"Switch USB HID device?",
@@ -3091,8 +3091,8 @@ namespace YAT.Model
 					else
 					{
 						// Text => Send in lines to enable breaking:
-						using (StreamReader sr = new StreamReader(filePath, (EncodingEx)this.settingsRoot.TextTerminal.Encoding, true))
-						{										// Automatically detect encoding from BOM, otherwise use given setting.
+						using (var sr = new StreamReader(filePath, (EncodingEx)this.settingsRoot.TextTerminal.Encoding, true))
+						{                               // Automatically detect encoding from BOM, otherwise use given setting.
 							string line;
 							while (((line = sr.ReadLine()) != null) && (!this.terminal.BreakState))
 								SendLine(line, c.DefaultRadix); // Enable parsing.
@@ -3964,7 +3964,7 @@ namespace YAT.Model
 							Environment.NewLine + Environment.NewLine +
 							"Do you still want to open the file?";
 
-						DialogResult dr = OnMessageInputRequest
+						var dr = OnMessageInputRequest
 						(
 							message,
 							"Log File Warning",
@@ -3990,7 +3990,7 @@ namespace YAT.Model
 					Exception ex;
 					if (!Editor.TryOpenFile(filePath, out ex))
 					{
-						DialogResult dr = OnMessageInputRequest
+						var dr = OnMessageInputRequest
 						(
 							ErrorHelper.ComposeMessage("Unable to open log file", filePath, ex),
 							"Log File Error",

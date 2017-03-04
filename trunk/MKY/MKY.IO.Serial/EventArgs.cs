@@ -81,7 +81,7 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public virtual string ToString(string indent)
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			foreach (byte b in this.data)
 				sb.Append(Convert.ToChar(b));
 

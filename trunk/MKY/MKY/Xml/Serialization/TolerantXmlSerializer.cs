@@ -114,11 +114,11 @@ namespace MKY.Xml.Serialization
 		#endif
 
 			// Retrieve and activate schema within document.
-			using (StringReader sr = new StringReader(inputDocument.OuterXml))
+			using (var sr = new StringReader(inputDocument.OuterXml))
 			{
-				using (XmlReader innerReader = XmlReader.Create(sr))
+				using (var innerReader = XmlReader.Create(sr))
 				{
-					XmlSchemaInference inference = new XmlSchemaInference();
+					var inference = new XmlSchemaInference();
 					inputDocument.Schemas = inference.InferSchema(innerReader);
 					inputDocument.Validate(null);
 				}
@@ -129,7 +129,7 @@ namespace MKY.Xml.Serialization
 		#endif
 
 			// Create output document from default.
-			XmlDocument outputDocument = new XmlDocument();
+			var outputDocument = new XmlDocument();
 			outputDocument.LoadXml(this.defaultDocument.InnerXml);
 			outputDocument.Schemas = this.defaultDocument.Schemas;
 			outputDocument.Validate(null);
@@ -370,7 +370,7 @@ namespace MKY.Xml.Serialization
 		{
 			int n = schemas.Schemas().Count;
 			int i = 0;
-			foreach (XmlSchema schema in schemas.Schemas())
+			foreach (var schema in schemas.Schemas())
 			{
 				string filePath;
 				if (n <= 1)
@@ -378,7 +378,7 @@ namespace MKY.Xml.Serialization
 				else
 					filePath = MKY.IO.Temp.MakeTempFilePath(this.type, name + "-" + i, ".xsd";
 
-				using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
+				using (var sw = new StreamWriter(filePath, false, Encoding.UTF8))
 				{
 					schema.Write(sw);
 				}
@@ -396,7 +396,7 @@ namespace MKY.Xml.Serialization
 		private void WriteDocumentToFile(XmlDocument document, string name)
 		{
 			string filePath = MKY.IO.Temp.MakeTempFilePath(this.type, name, ".xml");
-			using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
+			using (var sw = new StreamWriter(filePath, false, Encoding.UTF8))
 			{
 				document.Save(sw);
 			}

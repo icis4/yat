@@ -81,7 +81,7 @@ namespace YAT.View.Forms
 			textBox_ReleaseNotes.Text = "";
 			if (File.Exists(filePath))
 			{
-				using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
+				using (var sr = new StreamReader(filePath, Encoding.UTF8, true))
 				{
 					if (sr != null)
 						textBox_ReleaseNotes.Text = sr.ReadToEnd();

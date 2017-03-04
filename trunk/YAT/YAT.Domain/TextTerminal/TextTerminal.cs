@@ -467,7 +467,7 @@ namespace YAT.Domain
 							char[] chars = new char[1];
 							if (e.GetDecoder().GetChars(new byte[] { b }, 0, 1, chars, 0, true) == 1)
 							{
-								StringBuilder sb = new StringBuilder();
+								var sb = new StringBuilder();
 								sb.Append(chars, 0, 1);
 
 								switch (d)
@@ -512,7 +512,7 @@ namespace YAT.Domain
 									}
 									else
 									{
-										StringBuilder sb = new StringBuilder();
+										var sb = new StringBuilder();
 										sb.Append(chars, 0, charCount);
 
 										switch (d)
@@ -571,10 +571,10 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		private void ExecuteData(LineState lineState, IODirection d, byte b, DisplayElementCollection elements)
 		{
-			DisplayLinePart lp = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
+			var lp = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
 
 			// Convert data:
-			DisplayElement de = ByteToElement(b, d);
+			var de = ByteToElement(b, d);
 
 			// Evaluate EOL, i.e. check whether EOL is about to start or has already started:
 			lineState.Eol.Enqueue(b);
@@ -589,15 +589,15 @@ namespace YAT.Domain
 					if ((lineState.EolElements.Count == 1) && (lineState.EolElements[0].OriginCount == lineState.Eol.Sequence.Length))
 					{
 						// Unfold the elements into single elements for correct processing:
-						List<DisplayElement> l = new List<DisplayElement>(lineState.EolElements.DataCount); // Preset the required capacity to improve memory management.
-						foreach (DisplayElement item in lineState.EolElements)
+						var l = new List<DisplayElement>(lineState.EolElements.DataCount); // Preset the required capacity to improve memory management.
+						foreach (var item in lineState.EolElements)
 						{
-							foreach (Pair<byte[], string> originItem in item.Origin)
+							foreach (var originItem in item.Origin)
 								l.Add(item.RecreateFromOriginItem(originItem));
 						}
 
 						// Add them as separate items:
-						foreach (DisplayElement item in l)
+						foreach (var item in l)
 						{
 							AddSpaceIfNecessary(lineState, d, lp);
 							lp.Add(item); // No clone needed as all items have just been recreated futher above.
@@ -609,22 +609,22 @@ namespace YAT.Domain
 						// Note that sequence might look like <CR><CR><LF>, only the last two are EOL!
 					
 						// Unfold the elements into single elements for correct processing:
-						List<DisplayElement> l = new List<DisplayElement>(lineState.EolElements.DataCount); // Preset the required capacity to improve memory management.
-						foreach (DisplayElement item in lineState.EolElements)
+						var l = new List<DisplayElement>(lineState.EolElements.DataCount); // Preset the required capacity to improve memory management.
+						foreach (var item in lineState.EolElements)
 						{
-							foreach (Pair<byte[], string> originItem in item.Origin)
+							foreach (var originItem in item.Origin)
 								l.Add(item.RecreateFromOriginItem(originItem));
 						}
 
 						// Count data:
 						int dataCount = 0;
-						foreach (DisplayElement item in l)
+						foreach (var item in l)
 							dataCount += item.DataCount;
 
 						// Mark only true EOL elements as EOL:
 						int firstEolIndex = dataCount - lineState.Eol.Sequence.Length;
 						int currentIndex = 0;
-						foreach (DisplayElement item in l)
+						foreach (var item in l)
 						{
 							currentIndex += item.DataCount;
 

@@ -557,7 +557,7 @@ namespace YAT.View.Forms
 			}
 			else
 			{
-				StringBuilder sb = new StringBuilder(invalid.Length);
+				var sb = new StringBuilder(invalid.Length);
 				sb.Append(title);
 				sb.AppendLine(" contains invalid characters.");
 				sb.AppendLine();

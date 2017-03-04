@@ -626,7 +626,7 @@ namespace YAT.View.Controls
 			}
 			else
 			{
-				DialogResult dr = MessageBoxEx.Show
+				var dr = MessageBoxEx.Show
 				(
 					this,
 					"File does not exist, set file?",

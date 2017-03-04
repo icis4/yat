@@ -245,7 +245,7 @@ namespace YAT.View.Forms
 						{
 							string executableName = Path.GetFileName(System.Windows.Forms.Application.ExecutablePath);
 
-							StringBuilder sb = new StringBuilder();
+							var sb = new StringBuilder();
 							sb.Append(ApplicationEx.ProductName);
 							sb.Append(" could not be started because the given command line is invalid!");
 							sb.AppendLine();
@@ -268,7 +268,7 @@ namespace YAT.View.Forms
 					{
 						if (showErrorModally)
 						{
-							StringBuilder sb = new StringBuilder();
+							var sb = new StringBuilder();
 							sb.Append(ApplicationEx.ProductName);
 							sb.Append(" could not be started with the given settings!");
 
@@ -295,7 +295,7 @@ namespace YAT.View.Forms
 					{
 						if (showErrorModally)
 						{
-							StringBuilder sb = new StringBuilder();
+							var sb = new StringBuilder();
 							sb.Append(ApplicationEx.ProductName);
 							sb.Append(" could not execute the requested operation!");
 
@@ -1794,7 +1794,7 @@ namespace YAT.View.Forms
 			// Other than for terminals, workspace 'Save As' always suggests 'UserName.yaw':
 			sfd.FileName = Environment.UserName + PathEx.NormalizeExtension(sfd.DefaultExt); // Note that 'DefaultExt' states "The returned string does not include the period."!
 
-			DialogResult dr = sfd.ShowDialog(this);
+			var dr = sfd.ShowDialog(this);
 			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
 			{
 				Refresh();

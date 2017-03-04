@@ -45,14 +45,14 @@ namespace MKY.Xml.Serialization
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static void SerializeToFile(string filePath, Type type, object obj)
 		{
-			using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
+			using (var sw = new StreamWriter(filePath, false, Encoding.UTF8))
 			{
-				XmlWriterSettings xws = new XmlWriterSettings();
+				var xws = new XmlWriterSettings();
 				xws.Indent = true;
 
-				using (XmlWriter xw = XmlWriter.Create(sw, xws)) // Use dedicated XML writer to e.g. preserve whitespace!
+				using (var xw = XmlWriter.Create(sw, xws)) // Use dedicated XML writer to e.g. preserve whitespace!
 				{
-					XmlSerializer serializer = new XmlSerializer(type);
+					var serializer = new XmlSerializer(type);
 					serializer.Serialize(xw, obj);
 				}
 			}
@@ -66,11 +66,11 @@ namespace MKY.Xml.Serialization
 		public static object DeserializeFromFile(string filePath, Type type)
 		{
 			object settings = null;
-			using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
+			using (var sr = new StreamReader(filePath, Encoding.UTF8, true))
 			{
-				using (XmlReader xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace!
+				using (var xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace!
 				{
-					XmlSerializer serializer = new XmlSerializer(type);
+					var serializer = new XmlSerializer(type);
 					settings = serializer.Deserialize(xr);
 				}
 			}
@@ -83,11 +83,11 @@ namespace MKY.Xml.Serialization
 		public static object TolerantDeserializeFromFile(string filePath, Type type)
 		{
 			object settings = null;
-			using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
+			using (var sr = new StreamReader(filePath, Encoding.UTF8, true))
 			{
-				using (XmlReader xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace!
+				using (var xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace!
 				{
-					TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
+					var serializer = new TolerantXmlSerializer(type);
 					settings = serializer.Deserialize(xr);
 				}
 			}
@@ -100,11 +100,11 @@ namespace MKY.Xml.Serialization
 		public static object AlternateTolerantDeserializeFromFile(string filePath, Type type, AlternateXmlElement[] alternateXmlElements)
 		{
 			object settings = null;
-			using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
+			using (var sr = new StreamReader(filePath, Encoding.UTF8, true))
 			{
-				using (XmlReader xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace!
+				using (var xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace!
 				{
-					AlternateTolerantXmlSerializer serializer = new AlternateTolerantXmlSerializer(type, alternateXmlElements);
+					var serializer = new AlternateTolerantXmlSerializer(type, alternateXmlElements);
 					settings = serializer.Deserialize(xr);
 				}
 			}

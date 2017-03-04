@@ -135,7 +135,7 @@ namespace YAT.View.Controls
 
 		private void SetStatusText()
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			sb.Append(TimeSpanEx.FormatInvariantTimeSpan(this.activeConnectTime));
 			sb.Append(Environment.NewLine);

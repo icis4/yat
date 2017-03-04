@@ -277,7 +277,7 @@ namespace YAT.View.Controls
 
 		private void SetStatusText()
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			switch (this.repositoryType)
 			{
 				case Domain.RepositoryType.Tx:

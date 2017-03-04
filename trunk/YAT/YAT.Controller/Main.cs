@@ -956,7 +956,7 @@ namespace YAT.Controller
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowMessageBoxHelp(bool showLogo)
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			if (showLogo)
 			{

@@ -72,7 +72,7 @@ namespace YAT.Model.Utilities
 		private static int LinesFromDisplayToTransfer(List<DisplayLine> displayLines, out List<XmlTransferRawLine> transferLines)
 		{
 			transferLines = new List<XmlTransferRawLine>(displayLines.Count); // Preset the required capacity to improve memory management.
-			foreach (DisplayLine dl in displayLines)
+			foreach (var dl in displayLines)
 			{
 				XmlTransferRawLine tl;
 				if (LineFromDisplayToTransfer(dl, out tl))
@@ -95,7 +95,7 @@ namespace YAT.Model.Utilities
 
 			bool success = true;
 
-			List<byte> data = new List<byte>(displayLine.DataCount); // Preset the initial capacity to improve memory management.
+			var data = new List<byte>(displayLine.DataCount); // Preset the initial capacity to improve memory management.
 
 			string dateStr      = "";
 			string timeStr      = "";
@@ -104,11 +104,11 @@ namespace YAT.Model.Utilities
 			bool containsTx = false;
 			bool containsRx = false;
 
-			foreach (DisplayElement e in displayLine)
+			foreach (var de in displayLine)
 			{
 				// Try to cast to the more frequent Tx/Rx elements first, in order to improve speed!
 				{
-					var casted = (e as DisplayElement.TxData);
+					var casted = (de as DisplayElement.TxData);
 					if (casted != null)
 					{
 						foreach (Pair<byte[], string> origin in casted.Origin)
@@ -119,7 +119,7 @@ namespace YAT.Model.Utilities
 					}
 				}
 				{
-					var casted = (e as DisplayElement.TxControl);
+					var casted = (de as DisplayElement.TxControl);
 					if (casted != null)
 					{
 						foreach (Pair<byte[], string> origin in casted.Origin)
@@ -130,7 +130,7 @@ namespace YAT.Model.Utilities
 					}
 				}
 				{
-					var casted = (e as DisplayElement.RxData);
+					var casted = (de as DisplayElement.RxData);
 					if (casted != null)
 					{
 						foreach (Pair<byte[], string> origin in casted.Origin)
@@ -141,7 +141,7 @@ namespace YAT.Model.Utilities
 					}
 				}
 				{
-					var casted = (e as DisplayElement.RxControl);
+					var casted = (de as DisplayElement.RxControl);
 					if (casted != null)
 					{
 						foreach (Pair<byte[], string> origin in casted.Origin)
@@ -154,7 +154,7 @@ namespace YAT.Model.Utilities
 
 				// Then try to cast to the singleton elements:
 				{
-					var casted = (e as DisplayElement.DateInfo);
+					var casted = (de as DisplayElement.DateInfo);
 					if (casted != null)
 					{
 						dateStr = casted.Text;
@@ -162,7 +162,7 @@ namespace YAT.Model.Utilities
 					}
 				}
 				{
-					var casted = (e as DisplayElement.TimeInfo);
+					var casted = (de as DisplayElement.TimeInfo);
 					if (casted != null)
 					{
 						timeStr = casted.Text;
@@ -170,7 +170,7 @@ namespace YAT.Model.Utilities
 					}
 				}
 				{
-					var casted = (e as DisplayElement.DirectionInfo);
+					var casted = (de as DisplayElement.DirectionInfo);
 					if (casted != null)
 					{
 						directionStr = casted.Text;

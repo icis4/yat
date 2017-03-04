@@ -115,7 +115,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public override string ToString(string indent)
 		{
-			using (StringWriter sw = new StringWriter(CultureInfo.InvariantCulture))
+			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
 			{
 				foreach (byte b in this.data)
 					sw.Write(Convert.ToChar(b));
@@ -127,7 +127,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public override string ToDetailedString(string indent)
 		{
-			using (StringWriter sw = new StringWriter(CultureInfo.InvariantCulture))
+			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
 			{
 				bool begin = true;
 				foreach (byte b in this.data)

@@ -159,7 +159,7 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			sb.Append("USB exception while calling ");
 			sb.AppendLine(Method);

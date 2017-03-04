@@ -298,7 +298,7 @@ namespace MKY
 			Diagnostics.DebugEx.WriteException(typeof(EventHelper), ex);
 			Debug.Indent();
 			{
-				StringBuilder sb = new StringBuilder();
+				var sb = new StringBuilder();
 				sb.Append("Event: ");
 				sb.Append(sink.Method.Name);
 				sb.Append(" in ");

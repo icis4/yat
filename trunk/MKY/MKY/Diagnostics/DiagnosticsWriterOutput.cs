@@ -309,7 +309,7 @@ namespace MKY.Diagnostics
 		{
 			if (!string.IsNullOrEmpty(leadMessage))
 			{
-				using (StringReader sr = new StringReader(leadMessage))
+				using (var sr = new StringReader(leadMessage))
 				{
 					string line;
 					do
@@ -330,7 +330,7 @@ namespace MKY.Diagnostics
 				writer.WriteLine("Message:");
 				writer.Indent();
 				{
-					using (StringReader sr = new StringReader(message))
+					using (var sr = new StringReader(message))
 					{
 						string line;
 						do
@@ -367,7 +367,7 @@ namespace MKY.Diagnostics
 
 				// Stack trace is already indented. No need to indent again.
 
-				using (StringReader sr = new StringReader(stackTrace.ToString()))
+				using (var sr = new StringReader(stackTrace.ToString()))
 				{
 					string line;
 					do

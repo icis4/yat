@@ -47,7 +47,7 @@ namespace MKY.IO
 		/// </summary>
 		public static string ToLines(string[] s, IFormatProvider formatProvider, string newLine)
 		{
-			using (StringWriter sw = new StringWriter(formatProvider))
+			using (var sw = new StringWriter(formatProvider))
 			{
 				sw.NewLine = newLine;
 
@@ -71,9 +71,9 @@ namespace MKY.IO
 		/// </summary>
 		public static string[] FromLines(string s)
 		{
-			List<string> lines = new List<string>();
+			var lines = new List<string>();
 
-			using (StringReader sr = new StringReader(s))
+			using (var sr = new StringReader(s))
 			{
 				string line;
 				while ((line = sr.ReadLine()) != null)

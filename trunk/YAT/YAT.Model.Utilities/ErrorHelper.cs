@@ -43,9 +43,7 @@ namespace YAT.Model.Utilities
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static string ComposeMessage(string lead, Exception ex = null, string additionalLead = null, string additionalText = null)
 		{
-			StringBuilder sb = new StringBuilder();
-
-			sb.Append(lead);
+			var sb = new StringBuilder(lead);
 
 			if (ex != null)
 			{
@@ -78,7 +76,7 @@ namespace YAT.Model.Utilities
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static string ComposeMessage(string lead, string text, Exception ex = null, string additionalLead = null, string additionalText = null)
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			sb.AppendLine(lead);
 			sb.Append(text);

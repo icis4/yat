@@ -85,7 +85,7 @@ namespace MKY
 		[CLSCompliant(false)]
 		public static string ConvertToNumericBaseString(int numericBase, ulong value, ulong max)
 		{
-			using (StringWriter to = new StringWriter(CultureInfo.InvariantCulture))
+			using (var to = new StringWriter(CultureInfo.InvariantCulture))
 			{
 				ulong remainder = value; // Cast to double to prevent overflow on ulong.MaxValue.
 				double exactPower = Math.Log((double)max + 1, numericBase);

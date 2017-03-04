@@ -142,7 +142,7 @@ namespace MKY.Win32
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Naming according to naming in the Win32 API.")]
 		public static string GetLastError()
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			sb.Append("API call returned code '");
 			sb.Append(GetLastErrorCode());
 			sb.Append("' meaning '");

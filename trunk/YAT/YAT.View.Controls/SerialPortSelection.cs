@@ -506,7 +506,7 @@ namespace YAT.View.Controls
 
 		private void ShowErrorMessage(Exception ex, string info, string hint)
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			if (!string.IsNullOrEmpty(info))
 				sb.Append(info);

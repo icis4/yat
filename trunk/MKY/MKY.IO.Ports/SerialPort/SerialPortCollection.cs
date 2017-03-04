@@ -228,11 +228,11 @@ namespace MKY.IO.Ports
 		{
 			lock (this)
 			{
-				foreach (SerialPortId portId in this)
+				foreach (var portId in this)
 				{
 					if (portChangedCallback != null)
 					{
-						SerialPortChangedAndCancelEventArgs e = new SerialPortChangedAndCancelEventArgs(portId);
+						var e = new SerialPortChangedAndCancelEventArgs(portId);
 
 						EventHelper.FireSync<SerialPortChangedAndCancelEventArgs>(portChangedCallback, this, e);
 
@@ -240,7 +240,7 @@ namespace MKY.IO.Ports
 							break;
 					}
 
-					using (SerialPortEx p = new SerialPortEx(portId)) // Use SerialPortEx to prevent potential 'ObjectDisposedException'.
+					using (var p = new SerialPortEx(portId)) // Use SerialPortEx to prevent potential 'ObjectDisposedException'.
 					{
 						try
 						{

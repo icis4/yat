@@ -193,7 +193,7 @@ namespace YAT.View.Forms
 			{
 				if (checkBox_ShowPort.Checked && !this.settingsInEdit.Terminal.Display.PortLineBreakEnabled)
 				{
-					DialogResult dr = MessageBoxEx.Show
+					var dr = MessageBoxEx.Show
 					(
 						this,
 						"To enable this setting, lines must be broken when port changes.",
@@ -221,7 +221,7 @@ namespace YAT.View.Forms
 			{
 				if (checkBox_ShowDirection.Checked && !this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled)
 				{
-					DialogResult dr = MessageBoxEx.Show
+					var dr = MessageBoxEx.Show
 					(
 						this,
 						"To enable this setting, lines must be broken when direction changes.",
@@ -279,7 +279,7 @@ namespace YAT.View.Forms
 			{
 				if (!checkBox_PortLineBreak.Checked && this.settingsInEdit.Terminal.Display.ShowPort)
 				{
-					DialogResult dr = MessageBoxEx.Show
+					var dr = MessageBoxEx.Show
 					(
 						this,
 						"To disable this setting, port can no longer be shown.",
@@ -307,7 +307,7 @@ namespace YAT.View.Forms
 			{
 				if (!checkBox_DirectionLineBreak.Checked && this.settingsInEdit.Terminal.Display.ShowDirection)
 				{
-					DialogResult dr = MessageBoxEx.Show
+					var dr = MessageBoxEx.Show
 					(
 						this,
 						"To disable this setting, direction can no longer be shown.",

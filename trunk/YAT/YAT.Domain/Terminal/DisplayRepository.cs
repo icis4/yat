@@ -184,16 +184,16 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1061:DoNotHideBaseClassMethods", Justification = "No clue why Queue<T>.Enqueue(T item) cannot be overridden...")]
 		public virtual void Enqueue(IEnumerable<DisplayElement> collection)
 		{
-			foreach (DisplayElement de in collection)
+			foreach (var de in collection)
 				Enqueue(de);
 		}
 
 		/// <summary></summary>
 		public new DisplayLine Dequeue()
 		{
-			DisplayLine dl = base.Dequeue();
+			var dl = base.Dequeue();
 
-			foreach (DisplayElement de in dl)
+			foreach (var de in dl)
 				this.dataCount -= de.DataCount;
 
 			return (dl);
@@ -218,7 +218,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual List<DisplayLine> ToLines()
 		{
-			List<DisplayLine> lines = new List<DisplayLine>(base.ToArray()); // Using this.ToArray() would result in stack overflow!
+			var lines = new List<DisplayLine>(base.ToArray()); // Using this.ToArray() would result in stack overflow!
 
 			// Add current line if it contains elements:
 			if (this.currentLine.Count > 0)
@@ -283,10 +283,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string LinesToString(string indent)
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			int i = 0;
-			foreach (DisplayLine dl in ToLines())
+			foreach (var dl in ToLines())
 			{
 				sb.Append(indent + "> DisplayLine#" + (i++) + ":" + Environment.NewLine);
 				sb.Append(dl.ToString(indent + "   "));

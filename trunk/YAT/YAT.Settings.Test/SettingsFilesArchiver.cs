@@ -165,7 +165,7 @@ namespace YAT.Settings.Test
 					else
 						filePath = path + fileName + "-" + i + ".xsd";
 
-					using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
+					using (var sw = new StreamWriter(filePath, false, Encoding.UTF8))
 					{
 						schema.Write(sw);
 					}
@@ -215,7 +215,7 @@ namespace YAT.Settings.Test
 			try
 			{
 				string filePath = path + fileName + ".xml";
-				using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
+				using (var sw = new StreamWriter(filePath, false, Encoding.UTF8))
 				{
 					document.Save(sw);
 				}

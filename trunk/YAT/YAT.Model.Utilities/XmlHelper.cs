@@ -49,7 +49,7 @@ namespace YAT.Model.Utilities
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static void SchemaToFile(Type type, string directory, string fileName)
 		{
-			XmlDocument document = XmlDocumentEx.CreateDefaultDocument(type);
+			var document = XmlDocumentEx.CreateDefaultDocument(type);
 			int n = document.Schemas.Schemas().Count;
 			int i = 0;
 			foreach (XmlSchema schema in document.Schemas.Schemas())
@@ -60,7 +60,7 @@ namespace YAT.Model.Utilities
 				else
 					filePath = directory + Path.DirectorySeparatorChar + fileName + "-" + i + ".xsd";
 
-				using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
+				using (var sw = new StreamWriter(filePath, false, Encoding.UTF8))
 				{
 					schema.Write(sw);
 				}

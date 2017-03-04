@@ -114,7 +114,7 @@ namespace MKY
 		/// </returns>
 		public static string ElementsToString(Array array)
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			bool firstElement = true;
 			foreach (object obj in array)

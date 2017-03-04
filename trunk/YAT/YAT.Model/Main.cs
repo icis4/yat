@@ -375,7 +375,7 @@ namespace YAT.Model
 						{
 							OnFixedStatusTextRequest("Error opening workspace!");
 
-							StringBuilder sb = new StringBuilder();
+							var sb = new StringBuilder();
 							sb.AppendLine("Unable to open workspace file");
 							sb.Append(filePath);
 

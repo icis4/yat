@@ -434,9 +434,9 @@ namespace MKY.Test.Types
 		[Test, TestCaseSource(typeof(TrimTestData), "QuoteTestCases")]
 		public virtual void TrimOfQuotes(string str, int expectedLength, char[] trimChars)
 		{
-			string trim = str.Trim(trimChars);
+			var trim = str.Trim(trimChars);
 
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			sb.AppendLine("Test string was:");
 			sb.AppendLine(str);
 			sb.AppendLine("Which was trimmed to:");
@@ -450,9 +450,9 @@ namespace MKY.Test.Types
 		[Test, TestCaseSource(typeof(TrimTestData), "EndWhiteSpaceTestCases")]
 		public virtual void TrimEndOfWhiteSpaces(string str, int expectedLength, char[] trimChars)
 		{
-			string trim = str.TrimEnd(trimChars);
+			var trim = str.TrimEnd(trimChars);
 
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			sb.AppendLine("Test string was:");
 			sb.AppendLine(str);
 			sb.AppendLine("Which was trimmed to:");

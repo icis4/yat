@@ -817,7 +817,7 @@ namespace YAT.Domain
 		/// </remarks>
 		public virtual string ToString(string indent)
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			sb.Append(indent); sb.Append("> Type:         "); sb.AppendLine(GetType().Name);
 			sb.Append(indent); sb.Append("> Direction:    "); sb.AppendLine(Direction.ToString());

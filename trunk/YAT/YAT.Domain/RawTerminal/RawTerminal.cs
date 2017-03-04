@@ -827,7 +827,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			lock (this.repositorySyncObj)
 			{
 				sb.AppendLine(indent + "> TxRepository: ");

@@ -36,7 +36,7 @@ namespace MKY
 		/// </summary>
 		public static string ToHexadecimalString(byte[] values)
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			for (int i = 0; i < values.Length; i++)
 			{
