@@ -27,8 +27,8 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 
@@ -59,194 +59,291 @@ namespace MKY.Windows.Forms.Test
 	/// <summary>
 	/// Test form for <see cref="FastListBox"/>.
 	/// </summary>
-	[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Used in case of 'ENABLE_HORIZONTAL_AUTO_SCROLL'. Not #if-able as this method is created by the designer.")]
 	public partial class WindowsFormsTest : Form
 	{
+		private List<ListBox> listBoxes;
+		private TextFormatFlags formatFlags;
+
 		/// <summary>
-		/// Creates the test form for <see cref="FastListBox"/>.
+		/// Initializes a new instance of the <see cref="WindowsFormsTest"/> class that tests variants of <see cref="ListBox"/>.
 		/// </summary>
 		public WindowsFormsTest()
 		{
 			InitializeComponent();
+
+			this.listBoxes = new List<ListBox>(6); // Preset the required capacity to improve memory management.
+			this.listBoxes.Add(listBox_Normal);
+			this.listBoxes.Add(listBox_OwnerDrawFixed);
+			this.listBoxes.Add(listBoxEx_Normal);
+			this.listBoxes.Add(listBoxEx_OwnerDrawFixed);
+			this.listBoxes.Add(fastListBox_Normal);
+			this.listBoxes.Add(fastListBox_OwnerDrawFixed);
+
+			this.formatFlags  = TextFormatFlags.Default;
+			this.formatFlags |= TextFormatFlags.SingleLine;
+			this.formatFlags |= TextFormatFlags.ExpandTabs;
+			this.formatFlags |= TextFormatFlags.NoPadding;
+			this.formatFlags |= TextFormatFlags.NoPrefix;
 		}
 
-		private void listBoxEx_HorizontalScrolled(object sender, ScrollEventArgs e)
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'counter' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private int listBox_OwnerDrawFixed_DrawItem_counter;
+
+		private void listBox_OwnerDrawFixed_DrawItem(object sender, DrawItemEventArgs e)
 		{
-			label_ListBoxEx_HorizontalScrollPositionOld.Text = e.OldValue.ToString(CultureInfo.CurrentCulture);
-			label_ListBoxEx_HorizontalScrollPositionNew.Text = e.NewValue.ToString(CultureInfo.CurrentCulture);
-			label_ListBoxEx_HorizontalScrollType.Text = e.Type.ToString();
+			unchecked
+			{
+				if (e.Index >= 0)
+					DrawAndMeasureAndSetHorizontalExtent(listBox_OwnerDrawFixed, e);
+
+				listBox_OwnerDrawFixed_DrawItem_counter++;
+				label_ListBox_OwnerDrawFixed_Count.Text = listBox_OwnerDrawFixed_DrawItem_counter.ToString();
+			}
 		}
 
-		private void listBoxEx_VerticalScrolled(object sender, ScrollEventArgs e)
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'counter' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private int listBoxEx_OwnerDrawFixed_DrawItem_counter;
+
+		private void listBoxEx_OwnerDrawFixed_DrawItem(object sender, DrawItemEventArgs e)
 		{
-			label_ListBoxEx_VerticalScrollPositionOld.Text = e.OldValue.ToString(CultureInfo.CurrentCulture);
-			label_ListBoxEx_VerticalScrollPositionNew.Text = e.NewValue.ToString(CultureInfo.CurrentCulture);
-			label_ListBoxEx_VerticalScrollType.Text = e.Type.ToString();
+			unchecked
+			{
+				if (e.Index >= 0)
+					DrawAndMeasureAndSetHorizontalExtent(listBoxEx_OwnerDrawFixed, e);
+
+				listBoxEx_OwnerDrawFixed_DrawItem_counter++;
+				label_ListBoxEx_OwnerDrawFixed_Count.Text = listBoxEx_OwnerDrawFixed_DrawItem_counter.ToString();
+			}
 		}
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'counter' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private int fastListBox_OwnerDrawFixed_DrawItem_counter;
+
+		private void fastListBox_OwnerDrawFixed_DrawItem(object sender, DrawItemEventArgs e)
+		{
+			unchecked
+			{
+				if (e.Index >= 0)
+					DrawAndMeasureAndSetHorizontalExtent(fastListBox_OwnerDrawFixed, e);
+
+				fastListBox_OwnerDrawFixed_DrawItem_counter++;
+				label_FastListBox_OwnerDrawFixed_Count.Text = fastListBox_OwnerDrawFixed_DrawItem_counter.ToString();
+			}
+		}
+
+		private void DrawAndMeasureAndSetHorizontalExtent(ListBox lb, DrawItemEventArgs e)
+		{
+			e.DrawBackground();
+
+			var text = lb.Items[e.Index] as string;
+			TextRenderer.DrawText(e.Graphics, text, e.Font, e.Bounds, e.ForeColor, e.BackColor, this.formatFlags);
+
+			int requestedWidth = TextRenderer.MeasureText(e.Graphics, text, e.Font, e.Bounds.Size, this.formatFlags).Width;
+			if ((requestedWidth > 0) && (requestedWidth > lb.HorizontalExtent))
+				lb.HorizontalExtent = requestedWidth;
+
+			e.DrawFocusRectangle();
+		}
+
+		// \remind MKY 2013-05-25 (related to feature request #163)
+		// No feasible way to implement horizontal auto scroll found. There are Win32 API
+		// functions to move the position of the scroll bar itself, and to scroll rectangles,
+		// but it is not feasible to do the whole translation from .NET Windows.Forms to Win32.
+		// Giving up.
+	////private void listBoxEx_HorizontalScrolled(object sender, ScrollEventArgs e)
+	////{
+	////	label_ListBoxEx_HorizontalScrollPositionOld.Text = e.OldValue.ToString(CultureInfo.CurrentCulture);
+	////	label_ListBoxEx_HorizontalScrollPositionNew.Text = e.NewValue.ToString(CultureInfo.CurrentCulture);
+	////	label_ListBoxEx_HorizontalScrollType.Text = e.Type.ToString();
+	////}
+	////
+	////private void listBoxEx_VerticalScrolled(object sender, ScrollEventArgs e)
+	////{
+	////	label_ListBoxEx_VerticalScrollPositionOld.Text = e.OldValue.ToString(CultureInfo.CurrentCulture);
+	////	label_ListBoxEx_VerticalScrollPositionNew.Text = e.NewValue.ToString(CultureInfo.CurrentCulture);
+	////	label_ListBoxEx_VerticalScrollType.Text = e.Type.ToString();
+	////}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'increment' does start with a lower case letter.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private int button_ListBoxEx_AddChar_Click_increment;
+		private int button_AddChar_Click_increment;
 
-		private void button_ListBoxEx_AddChar_Click(object sender, EventArgs e)
+		private void button_AddChar_Click(object sender, EventArgs e)
 		{
-			ListBoxEx lbe = listBoxEx;
-			lbe.BeginUpdate();
+			foreach (var lb in this.listBoxes)
+			{
+				lb.BeginUpdate();
 
-			string append = button_ListBoxEx_AddChar_Click_increment.ToString(CultureInfo.CurrentCulture);
+				string append = button_AddChar_Click_increment.ToString(CultureInfo.CurrentCulture);
 			
-			button_ListBoxEx_AddChar_Click_increment++;
-			if (button_ListBoxEx_AddChar_Click_increment >= 10)
-				button_ListBoxEx_AddChar_Click_increment = 0;
+				button_AddChar_Click_increment++;
+				if (button_AddChar_Click_increment >= 10)
+					button_AddChar_Click_increment = 0;
 
-			if (lbe.Items.Count > 0)
-			{
-				string item = (lbe.Items[lbe.Items.Count - 1] as string);
-				if (item != null)
+				if (lb.Items.Count > 0)
 				{
-					item += append;
-					lbe.Items[lbe.Items.Count - 1] = item;
+					string item = (lb.Items[lb.Items.Count - 1] as string);
+					if (item != null)
+					{
+						item += append;
+						lb.Items[lb.Items.Count - 1] = item;
+					}
+					else
+					{
+						lb.Items[lb.Items.Count - 1] = append;
+					}
 				}
 				else
 				{
-					lbe.Items[lbe.Items.Count - 1] = append;
+					lb.Items.Add(append);
 				}
-			}
-			else
-			{
-				lbe.Items.Add(append);
-			}
 
-			lbe.EndUpdate();
+				// \remind MKY 2013-05-25 (related to feature request #163)
+				// No feasible way to implement horizontal auto scroll found. There are Win32 API
+				// functions to move the position of the scroll bar itself, and to scroll rectangles,
+				// but it is not feasible to do the whole translation from .NET Windows.Forms to Win32.
+				// Giving up.
+			////lb.HorizontalScrollToEnd();
 
-			// \remind MKY 2013-05-25 (related to feature request #163)
-			// No feasible way to implement horizontal auto scroll found. There are Win32 API
-			// functions to move the position of the scroll bar itself, and to scroll rectangles,
-			// but it is not feasible to do the whole translation from .NET Windows.Forms to Win32.
-			// Giving up.
-		////lbe.HorizontalScrollToEnd();
+				lb.EndUpdate();
+			}
 		}
 
-		private void button_ListBoxEx_AddSeveralChars_Click(object sender, EventArgs e)
+		private void button_AddSomeChars_Click(object sender, EventArgs e)
 		{
-			ListBoxEx lbe = listBoxEx;
-			lbe.BeginUpdate();
-
-			if (lbe.Items.Count > 0)
+			foreach (var lb in this.listBoxes)
 			{
-				string item = (lbe.Items[lbe.Items.Count - 1] as string);
-				if (item != null)
+				lb.BeginUpdate();
+
+				if (lb.Items.Count > 0)
 				{
-					item += "0123456789";
-					lbe.Items[lbe.Items.Count - 1] = item;
+					string item = (lb.Items[lb.Items.Count - 1] as string);
+					if (item != null)
+					{
+						item += "0123456789";
+						lb.Items[lb.Items.Count - 1] = item;
+					}
+					else
+					{
+						lb.Items[lb.Items.Count - 1] = "0123456789";
+					}
 				}
 				else
 				{
-					lbe.Items[lbe.Items.Count - 1] = "0123456789";
+					lb.Items.Add("0123456789");
 				}
+
+				// \remind MKY 2013-05-25 (related to feature request #163)
+				// No feasible way to implement horizontal auto scroll found. There are Win32 API
+				// functions to move the position of the scroll bar itself, and to scroll rectangles,
+				// but it is not feasible to do the whole translation from .NET Windows.Forms to Win32.
+				// Giving up.
+			////lb.HorizontalScrollToEnd();
+
+				lb.EndUpdate();
 			}
-			else
+		}
+
+		private void button_AddLine_Click(object sender, EventArgs e)
+		{
+			foreach (var lb in this.listBoxes)
 			{
-				lbe.Items.Add("0123456789");
+				lb.BeginUpdate();
+
+				lb.Items.Add("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+
+				var lbex = lb as ListBoxEx;
+				if (lbex != null)
+					lbex.VerticalScrollToBottom();
+
+				lb.EndUpdate();
 			}
-
-			lbe.EndUpdate();
-
-			// \remind MKY 2013-05-25 (related to feature request #163)
-			// No feasible way to implement horizontal auto scroll found. There are Win32 API
-			// functions to move the position of the scroll bar itself, and to scroll rectangles,
-			// but it is not feasible to do the whole translation from .NET Windows.Forms to Win32.
-			// Giving up.
-		////lbe.HorizontalScrollToEnd();
 		}
 
-		private void button_ListBoxEx_AddLine_Click(object sender, EventArgs e)
+		private void button_AddSomeLines_Click(object sender, EventArgs e)
 		{
-			ListBoxEx lbe = listBoxEx;
-			lbe.BeginUpdate();
-
-			lbe.Items.Add("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
-
-			lbe.VerticalScrollToBottom();
-			lbe.EndUpdate();
-		}
-
-		private void button_ListBoxEx_AddManyLines_Click(object sender, EventArgs e)
-		{
-			ListBoxEx lbe = listBoxEx;
-			lbe.BeginUpdate();
-
-			for (int i = 0; i < 50; i++)
-				lbe.Items.Add("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
-
-			lbe.VerticalScrollToBottom();
-			lbe.EndUpdate();
-		}
-
-		private void fastListBox_DrawItem(object sender, DrawItemEventArgs e)
-		{
-			if (e.Index >= 0)
+			foreach (var lb in this.listBoxes)
 			{
-				e.DrawBackground();
+				lb.BeginUpdate();
 
-				string s = (string)fastListBox.Items[e.Index];
-				Font font = SystemFonts.DefaultFont;
-				TextFormatFlags flags = TextFormatFlags.Default;
-				flags                |= TextFormatFlags.SingleLine;
-				TextRenderer.DrawText(e.Graphics, s, font, e.Bounds, SystemColors.ControlText, flags);
+				for (int i = 0; i < 10; i++)
+					lb.Items.Add("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
 
-				e.DrawFocusRectangle();
+				var lbex = lb as ListBoxEx;
+				if (lbex != null)
+					lbex.VerticalScrollToBottom();
+
+				lb.EndUpdate();
 			}
 		}
 
-		private void button_FastListBox_AddLine_Click(object sender, EventArgs e)
+		private void button_AddManyLines_Click(object sender, EventArgs e)
 		{
-			FastListBox flb = fastListBox;
-			flb.BeginUpdate();
-
-			flb.Items.Add("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
-
-			flb.VerticalScrollToBottom();
-			flb.EndUpdate();
-		}
-
-		private void button_FastListBox_AddManyLines_Click(object sender, EventArgs e)
-		{
-			FastListBox flb = fastListBox;
-			flb.BeginUpdate();
-
-			for (int i = 0; i < 50; i++)
-				flb.Items.Add("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
-
-			flb.VerticalScrollToBottom();
-			flb.EndUpdate();
-		}
-
-		private void button_FastListBox_RemoveLine_Click(object sender, EventArgs e)
-		{
-			FastListBox flb = fastListBox;
-			flb.BeginUpdate();
-
-			if (flb.Items.Count > 0)
-				flb.Items.RemoveAt(0);
-
-			flb.VerticalScrollToBottom();
-			flb.EndUpdate();
-		}
-
-		private void button_FastListBox_RemoveManyLines_Click(object sender, EventArgs e)
-		{
-			FastListBox flb = fastListBox;
-			flb.BeginUpdate();
-
-			for (int i = 0; i < 50; i++)
+			foreach (var lb in this.listBoxes)
 			{
-				if (flb.Items.Count > 0)
-					flb.Items.RemoveAt(0);
-			}
+				lb.BeginUpdate();
 
-			flb.VerticalScrollToBottom();
-			flb.EndUpdate();
+				for (int i = 0; i < 1000; i++)
+					lb.Items.Add("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+
+				var lbex = lb as ListBoxEx;
+				if (lbex != null)
+					lbex.VerticalScrollToBottom();
+
+				lb.EndUpdate();
+			}
+		}
+
+		private void button_RemoveLine_Click(object sender, EventArgs e)
+		{
+			foreach (var lb in this.listBoxes)
+			{
+				lb.BeginUpdate();
+
+				if (lb.Items.Count > 0)
+					lb.Items.RemoveAt(0);
+
+				var lbex = lb as ListBoxEx;
+				if (lbex != null)
+					lbex.VerticalScrollToBottom();
+
+				lb.EndUpdate();
+			}
+		}
+
+		private void button_RemoveManyLines_Click(object sender, EventArgs e)
+		{
+			foreach (var lb in this.listBoxes)
+			{
+				lb.BeginUpdate();
+
+				for (int i = 0; i < 50; i++)
+				{
+					if (lb.Items.Count > 0)
+						lb.Items.RemoveAt(0);
+				}
+
+				var lbex = lb as ListBoxEx;
+				if (lbex != null)
+					lbex.VerticalScrollToBottom();
+
+				lb.EndUpdate();
+			}
+		}
+
+		private void button_RemoveAllLines_Click(object sender, EventArgs e)
+		{
+			foreach (var lb in this.listBoxes)
+			{
+				lb.BeginUpdate();
+
+				lb.Items.Clear();
+
+				lb.EndUpdate();
+			}
 		}
 	}
 }

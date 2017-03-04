@@ -38,14 +38,14 @@ namespace MKY.Windows.Forms.Test
 		[STAThread]
 		private static void Main()
 		{
-			StringBuilder sb = new StringBuilder();
-			sb.AppendLine("This test application is meant to be used with ENABLE_HORIZONTAL_AUTO_SCROLL enabled in MKY.Windows.Forms.ListBoxEx.");
+			var sb = new StringBuilder();
+			sb.AppendLine("Note that this test application can be used with ENABLE_HORIZONTAL_AUTO_SCROLL enabled in MKY.Windows.Forms.ListBoxEx.");
 			sb.AppendLine();
-			sb.AppendLine("In addition, lines #281 and #282 of MKY.Windows.Forms.Test.WindowsFormsTest.Designer have to be un-commented.");
+			sb.AppendLine("To fully enable ENABLE_HORIZONTAL_AUTO_SCROLL, lines #281 and #282 of MKY.Windows.Forms.Test.WindowsFormsTest.Designer have to be un-commented.");
 			sb.AppendLine();
-			sb.AppendLine("Either confirm this, or cancel to quit.");
+			sb.AppendLine("You may also run this test application without ENABLE_HORIZONTAL_AUTO_SCROLL enabled.");
 
-			DialogResult dr = MessageBox.Show(sb.ToString(), "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+			var dr = MessageBox.Show(sb.ToString(), "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 			if (dr != DialogResult.OK)
 				return;
 

@@ -22,57 +22,31 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-#region Using
-//==================================================================================================
-// Using
-//==================================================================================================
-
 using System;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
-
-#endregion
 
 namespace MKY.Windows.Forms
 {
 	/// <summary>
 	/// Fast implementation of a list box. The original <see cref="ListBox"/> is rather slow if
-	/// there are many consecutive updates/adds.
+	/// there are many consecutive updates/adds. The difference among the different variants is
+	/// demonstrated in the 'MKY.Windows.Forms.Test' test application:
+	///  > The <see cref="ListBox"/> and <see cref="ListBoxEx"/> flicker on vertical scrolling.
+	///  > This <see cref="FastListBox"/> doesn't flicker on vertical scrolling.
 	/// </summary>
 	public class FastListBox : ListBoxEx
 	{
-		#region Fields
-		//==========================================================================================
-		// Fields
-		//==========================================================================================
-
-		private bool normalUserPaintStyle;
-
-		#endregion
-
-		#region Object Lifetime
-		//==========================================================================================
-		// Object Lifetime
-		//==========================================================================================
+		private bool defaultUserPaintStyle;
 
 		/// <summary></summary>
 		public FastListBox()
 		{
+			this.defaultUserPaintStyle = GetStyle(ControlStyles.UserPaint); // Store default setting.
+
 			SetStyle(ControlStyles.AllPaintingInWmPaint, true);
 			SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-
-			StoreNormalPaintStyle();
-			SetUserPaintStyle();
 		}
-
-		#endregion
-
-		#region Overridden Properties
-		//==========================================================================================
-		// Overridden Properties
-		//==========================================================================================
 
 		/// <summary></summary>
 		public override DrawMode DrawMode
@@ -81,31 +55,12 @@ namespace MKY.Windows.Forms
 			set
 			{
 				if (value == DrawMode.Normal)
-					RestoreNormalPaintStyle();
+					SetStyle(ControlStyles.UserPaint, this.defaultUserPaintStyle); // Restore default setting.
 				else
-					SetUserPaintStyle();
+					SetStyle(ControlStyles.UserPaint, true);
 
 				base.DrawMode = value;
 			}
-		}
-
-		#endregion
-
-		#region Overridden Methods
-		//==========================================================================================
-		// Overridden Methods
-		//==========================================================================================
-
-		/// <remarks>
-		/// Is only called if draw mode is <see cref="System.Windows.Forms.DrawMode.OwnerDrawFixed"/>
-		/// or <see cref="System.Windows.Forms.DrawMode.OwnerDrawVariable"/>.
-		/// If draw mode is <see cref="System.Windows.Forms.DrawMode.Normal"/>,
-		/// only ListBox.OnDrawItem() is called.
-		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration", MessageId = "0#", Justification = "Inconsequent naming in .NET.")]
-		protected override void OnPaintBackground(PaintEventArgs e)
-		{
-			base.OnPaintBackground(e);
 		}
 
 		/// <remarks>
@@ -151,33 +106,6 @@ namespace MKY.Windows.Forms
 				OnDrawItem(new DrawItemEventArgs(e.Graphics, Font, bounds, i, state));
 			}
 		}
-
-		#endregion
-
-		#region Non-Public Methods
-		//==========================================================================================
-		// Non-Public Methods
-		//==========================================================================================
-
-		/// <summary></summary>
-		protected virtual void StoreNormalPaintStyle()
-		{
-			this.normalUserPaintStyle = GetStyle(ControlStyles.UserPaint);
-		}
-
-		/// <summary></summary>
-		protected virtual void RestoreNormalPaintStyle()
-		{
-			SetStyle(ControlStyles.UserPaint, this.normalUserPaintStyle);
-		}
-
-		/// <summary></summary>
-		protected virtual void SetUserPaintStyle()
-		{
-			SetStyle(ControlStyles.UserPaint, true);
-		}
-
-		#endregion
 	}
 }
 

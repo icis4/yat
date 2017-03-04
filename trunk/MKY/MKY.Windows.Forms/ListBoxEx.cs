@@ -27,11 +27,8 @@
 // Configuration
 //==================================================================================================
 
-// \remind MKY 2013-05-25 (related to feature request #163)
-// Ideally, the two properties 'HorizontalAutoScroll' and 'VerticalAutoScroll' and the corresponding
-// automatism would be supported by this ListBox extension. However, no feasible implementation has
-// been found. Therefore, it was decided to skip the automatism and simply provide the necessary
-// methods that allow the user of this control to trigger the auto scroll.
+// Enable to continue working/testing an automatically vertically scrolling list box:
+//#define ENABLE_VERTICAL_AUTO_SCROLL
 
 // \todo MKY 2016-09-19 (related to upgrade of ExSim)
 // When enabling 'ENABLE_HORIZONTAL_AUTO_SCROLL', a reference to 'MKY.Win32' and thus Win32 API
@@ -41,7 +38,7 @@
 // introducing 'ENABLE_HORIZONTAL_AUTO_SCROLL', a better solution must be found to deal with any
 // dependencies to the Win32 API.
 
-// Enable to continue working/testing with an automatic horizontally scrolling list box:
+// Enable to continue working/testing an automatically horizontally scrolling list box:
 //#define ENABLE_HORIZONTAL_AUTO_SCROLL
 
 #endregion
@@ -61,7 +58,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 using MKY.Win32;
-#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
+#endif
 
 #endregion
 
@@ -70,6 +67,12 @@ namespace MKY.Windows.Forms
 	/// <summary>
 	/// Provides a list box that extends <see cref="ListBox"/>.
 	/// </summary>
+	/// <remarks>
+	/// Ideally, the two properties 'HorizontalAutoScroll' and 'VerticalAutoScroll' and the
+	/// corresponding automatism would be supported by this ListBox extension. However, no feasible
+	/// implementation has been found. Thus, it was decided to skip the automatism and simply
+	/// provide the necessary methods that allow the control's parent to trigger scrolling.
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public class ListBoxEx : ListBox
 	{
@@ -80,9 +83,11 @@ namespace MKY.Windows.Forms
 
 	#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 		private const bool HorizontalAutoScrollDefault = false;
-	#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
+	#endif
 
+	#if (ENABLE_VERTICAL_AUTO_SCROLL)
 		private const bool VerticalAutoScrollDefault = false;
+	#endif
 
 		#endregion
 
@@ -93,9 +98,11 @@ namespace MKY.Windows.Forms
 
 	#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 		private bool horizontalAutoScroll = HorizontalAutoScrollDefault;
-	#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
+	#endif
 
+	#if (ENABLE_VERTICAL_AUTO_SCROLL)
 		private bool verticalAutoScroll = VerticalAutoScrollDefault;
+	#endif
 
 		#endregion
 
@@ -104,14 +111,14 @@ namespace MKY.Windows.Forms
 		// General
 		//==========================================================================================
 
-#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
+	#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 
 		private bool IsLeftToRight
 		{
 			get { return (RightToLeft == RightToLeft.No); }
 		}
 
-#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
+	#endif
 
 		#endregion
 
@@ -137,12 +144,12 @@ namespace MKY.Windows.Forms
 		// Scroll
 		//==========================================================================================
 
-#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
-
 		#region Scroll > Events
 		//------------------------------------------------------------------------------------------
 		// Scroll > Events
 		//------------------------------------------------------------------------------------------
+
+	#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 
 		/// <summary>
 		/// Occurs when horizontally scrolled.
@@ -150,22 +157,26 @@ namespace MKY.Windows.Forms
 		[Category("Action")]
 		public event ScrollEventHandler HorizontalScrolled;
 
+	#endif
+
+	#if (ENABLE_VERTICAL_AUTO_SCROLL)
+
 		/// <summary>
 		/// Occurs when vertically scrolled.
 		/// </summary>
 		[Category("Action")]
 		public event ScrollEventHandler VerticalScrolled;
 
-		#endregion
+	#endif
 
-#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
+		#endregion
 
 		#region Scroll > Properties
 		//------------------------------------------------------------------------------------------
 		// Scroll > Properties
 		//------------------------------------------------------------------------------------------
 
-#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
+	#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 
 		/// <summary></summary>
 		[Category("Scroll")]
@@ -178,7 +189,7 @@ namespace MKY.Windows.Forms
 			{
 				if (!this.horizontalAutoScroll && value)
 				{
-					DialogResult dr = DialogResult.OK;
+					var dr = DialogResult.OK;
 					if (DesignMode)
 					{
 						dr = MessageBoxEx.Show
@@ -202,7 +213,9 @@ namespace MKY.Windows.Forms
 			}
 		}
 
-#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
+	#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
+
+	#if (ENABLE_VERTICAL_AUTO_SCROLL)
 
 		/// <summary></summary>
 		[Category("Scroll")]
@@ -227,6 +240,8 @@ namespace MKY.Windows.Forms
 			}
 		}
 
+	#endif // ENABLE_VERTICAL_AUTO_SCROLL
+
 		#endregion
 
 		#region Scroll > Methods
@@ -234,7 +249,7 @@ namespace MKY.Windows.Forms
 		// Scroll > Methods
 		//------------------------------------------------------------------------------------------
 
-#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
+	#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 
 		/// <summary>
 		/// Horizontally scroll the list to the beginning of the scroll extent, taking
@@ -317,7 +332,7 @@ namespace MKY.Windows.Forms
 			}
 		}
 
-#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
+	#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
 
 		/// <summary>
 		/// Vertically scroll the list to the bottom.
@@ -378,7 +393,7 @@ namespace MKY.Windows.Forms
 
 		#endregion
 
-#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
+	#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 
 		#region Scroll > Overridden Methods
 		//------------------------------------------------------------------------------------------
@@ -503,7 +518,7 @@ namespace MKY.Windows.Forms
 
 		#endregion
 
-#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
+	#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
 
 		#endregion
 	}
