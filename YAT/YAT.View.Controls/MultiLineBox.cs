@@ -168,16 +168,14 @@ namespace YAT.View.Controls
 		{
 			if (!this.isSettingControls)
 			{
-				List<string> multiLineText = new List<string>();
+				var multiLineText = new List<string>();
 
 				// Retrieve lines from text box with Environment.NewLine:
-				using (StringReader reader = new StringReader(textBox_Lines.Text))
+				using (var reader = new StringReader(textBox_Lines.Text))
 				{
 					string line;
 					while ((line = reader.ReadLine()) != null)
-					{
 						multiLineText.Add(line);
-					}
 				}
 
 				// Validate each line:
@@ -243,7 +241,7 @@ namespace YAT.View.Controls
 			}
 			else
 			{
-				StringBuilder sb = new StringBuilder();
+				var sb = new StringBuilder();
 				for (int i = 0; i < this.commandInEdit.MultiLineText.Length; i++)
 				{
 					sb.Append(this.commandInEdit.MultiLineText[i]);

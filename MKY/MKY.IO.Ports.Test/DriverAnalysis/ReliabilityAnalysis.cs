@@ -373,7 +373,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			bool exact = (receivedBytes == sentBytes);
 
 			// Output summary:
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			sb.AppendLine();
 			sb.AppendLine(@"Summary for """ + portName + @""":");
 			sb.AppendLine("Sent...");
@@ -476,7 +476,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			bool exact = (bplA == bplB);
 
 			// Output summary:
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			sb.AppendLine();
 			sb.AppendLine(@"Summary for """ + portName + @""":");
 			sb.AppendLine("Received...");

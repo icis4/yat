@@ -952,7 +952,7 @@ namespace MKY.Test.CommandLine
 		public virtual void TestHelpText()
 		{
 			// Traverse path from "<Root>\YAT\YAT\bin\[Debug|Release]\YAT.exe" to "<Root>":
-			DirectoryInfo di = new DirectoryInfo(Environment.CurrentDirectory);
+			var di = new DirectoryInfo(Environment.CurrentDirectory);
 			for (int i = 0; i < 4; i++)
 				di = di.Parent;
 
@@ -962,7 +962,7 @@ namespace MKY.Test.CommandLine
 			string assemblyName      = GetType().Assembly.GetName().Name;
 			string relativeNamespace = StringEx.Right(fullNamespace, (fullNamespace.Length - assemblyName.Length)).TrimStart('.');
 
-			StringBuilder sb = new StringBuilder(di.FullName); // <Root>
+			var sb = new StringBuilder(di.FullName); // <Root>
 
 			if (!string.IsNullOrEmpty(packageName))
 				sb.Append(Path.DirectorySeparatorChar + packageName); // MKY
@@ -977,13 +977,13 @@ namespace MKY.Test.CommandLine
 
 			// Get the file with the expected help text:
 			string expected;
-			using (StreamReader sr = new StreamReader(sb.ToString()))
+			using (var sr = new StreamReader(sb.ToString()))
 			{
 				expected = sr.ReadToEnd();
 			}
 
 			// Get the help text and compare it to the file:
-			CommandLineArgs cla = new CommandLineArgs(null);
+			var cla = new CommandLineArgs(null);
 			string actual = cla.GetHelpText(80);
 			Assert.That(actual, Is.EqualTo(expected));
 		}

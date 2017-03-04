@@ -1271,7 +1271,7 @@ namespace YAT.Domain
 		/// <returns>The error message to display.</returns>
 		protected static string CreateParserErrorMessage(string textToParse, string successfullyParsed)
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			sb.Append(@"""");
 			sb.Append(    textToParse);
@@ -1307,7 +1307,7 @@ namespace YAT.Domain
 			}
 			catch (ObjectDisposedException ex)
 			{
-				StringBuilder sb = new StringBuilder();
+				var sb = new StringBuilder();
 				sb.AppendLine("'ObjectDisposedException' while trying to forward data to the underlying RawTerminal.");
 				sb.AppendLine("This exception is ignored as it can happen during closing of the terminal or application.");
 				sb.AppendLine();
@@ -1315,7 +1315,7 @@ namespace YAT.Domain
 			}
 			catch (ThreadAbortException ex)
 			{
-				StringBuilder sb = new StringBuilder();
+				var sb = new StringBuilder();
 				sb.AppendLine("'ThreadAbortException' while trying to forward data to the underlying RawTerminal.");
 				sb.AppendLine("This exception is ignored as it can happen during closing of the terminal or application.");
 				sb.AppendLine();
@@ -1323,7 +1323,7 @@ namespace YAT.Domain
 			}
 			catch (Exception ex)
 			{
-				string leadMessage = "Unable to send data:";
+				var leadMessage = "Unable to send data:";
 				DebugEx.WriteException(GetType(), ex, leadMessage);
 				OnIOError(new IOErrorEventArgs(IOErrorSeverity.Fatal, IODirection.Tx, leadMessage + Environment.NewLine + ex.Message));
 			}
@@ -2113,7 +2113,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void ProcessRawChunk(RawChunk raw, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
-			DisplayLine dl = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+			var dl = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			// Line begin:
 			dl.Add(new DisplayElement.LineStart((Direction)raw.Direction));
@@ -2865,7 +2865,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			lock (this.repositorySyncObj)
 			{
 				sb.AppendLine(indent + "> Settings: " + this.terminalSettings);

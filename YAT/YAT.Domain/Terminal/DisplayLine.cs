@@ -98,7 +98,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public DisplayElementCollection(DisplayElementCollection collection)
 		{
-			foreach (DisplayElement de in collection) // Clone the whole collection.
+			foreach (var de in collection) // Clone the whole collection.
 				Add(de.Clone());
 		}
 
@@ -136,6 +136,21 @@ namespace YAT.Domain
 			get { return (this.dataCount); }
 		}
 
+		/// <summary>
+		/// Appends and returns the text of all display elements.
+		/// </summary>
+		public string Text
+		{
+			get
+			{
+				var sb = new StringBuilder();
+				foreach (var de in this)
+					sb.Append(de.Text);
+
+				return (sb.ToString());
+			}
+		}
+
 		#endregion
 
 		#region Methods
@@ -170,7 +185,7 @@ namespace YAT.Domain
 		/// </remarks>
 		public new void AddRange(IEnumerable<DisplayElement> collection)
 		{
-			foreach (DisplayElement item in collection)
+			foreach (var item in collection)
 				Add(item);
 		}
 
@@ -208,9 +223,9 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual DisplayElementCollection Clone()
 		{
-			DisplayElementCollection c = new DisplayElementCollection(this.Capacity); // Preset the required capacity to improve memory management.
+			var c = new DisplayElementCollection(this.Capacity); // Preset the required capacity to improve memory management.
 
-			foreach (DisplayElement de in this) // Clone the whole collection.
+			foreach (var de in this) // Clone the whole collection.
 				c.Add(de.Clone());
 
 			return (c);
@@ -219,9 +234,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual byte[] ElementsToOrigin()
 		{
-			List<byte> l = new List<byte>(this.DataCount); // Preset the initial capacity to improve memory management.
+			var l = new List<byte>(this.DataCount); // Preset the initial capacity to improve memory management.
 
-			foreach (DisplayElement de in this)
+			foreach (var de in this)
 			{
 				if (de.Origin != null) // Foreach element where origin exists.
 				{
@@ -245,8 +260,8 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder();
-			foreach (DisplayElement de in this)
+			var sb = new StringBuilder();
+			foreach (var de in this)
 				sb.Append(de.ToString());
 
 			return (sb.ToString());
@@ -274,10 +289,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ElementsToString(string indent)
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			int i = 0;
-			foreach (DisplayElement de in this)
+			foreach (var de in this)
 			{
 				sb.Append(indent + "> DisplayElement#" + (i++) + ":" + Environment.NewLine);
 				sb.Append(de.ToString(indent + "   "));
@@ -344,9 +359,9 @@ namespace YAT.Domain
 		/// </summary>
 		public new DisplayLine Clone()
 		{
-			DisplayLine dl = new DisplayLine(this.Capacity); // Preset the required capacity to improve memory management.
+			var dl = new DisplayLine(this.Capacity); // Preset the required capacity to improve memory management.
 
-			foreach (DisplayElement de in this) // Clone the whole collection.
+			foreach (var de in this) // Clone the whole collection.
 				dl.Add(de.Clone());
 
 			return (dl);

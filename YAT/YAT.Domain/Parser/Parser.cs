@@ -891,7 +891,7 @@ namespace YAT.Domain.Parser
 				}
 				else
 				{
-					StringBuilder sb = new StringBuilder();
+					var sb = new StringBuilder();
 
 					if (remaining.Length != s.Length)
 					{

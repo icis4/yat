@@ -203,9 +203,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string QueueToString(string indent)
 		{
-			using (StringWriter sw = new StringWriter(CultureInfo.InvariantCulture))
+			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
 			{
-				foreach (RawChunk re in ToChunks())
+				foreach (var re in ToChunks())
 					sw.Write(re.ToString(indent));
 
 				return (sw.ToString());
@@ -221,7 +221,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string QueueToDetailedString(string indent)
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			int i = 0;
 			foreach (RawChunk re in ToChunks())

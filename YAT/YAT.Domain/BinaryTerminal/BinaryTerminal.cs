@@ -605,8 +605,8 @@ namespace YAT.Domain
 			elementsForNextLine = null;
 
 			// Convert data:
-			DisplayElement de = ByteToElement(b, d);
-			DisplayLinePart lp = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
+			var de = ByteToElement(b, d);
+			var lp = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
 
 			// Evaluate line breaks:
 			//  1. Evaluate the tricky case: Sequence before.
@@ -810,13 +810,13 @@ namespace YAT.Domain
 					{
 						ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elements);
 
-						foreach (DisplayElement de in elementsForNextLine)
+						foreach (var de in elementsForNextLine)
 						{
 							if (de.Origin != null) // Foreach element where origin exists.
 							{
-								foreach (Pair<byte[], string> origin in de.Origin)
+								foreach (var origin in de.Origin)
 								{
-									foreach (byte originByte in origin.Value1)
+									foreach (var originByte in origin.Value1)
 									{
 										List<DisplayElement> elementsForNextLineDummy;
 										ExecuteData(displaySettings, lineState, raw.Direction, originByte, elements, out elementsForNextLineDummy);

@@ -90,9 +90,9 @@ namespace YAT.Model.Utilities
 		public static bool ValidateText(string description, string textToValidate, out string successfullyParsed, out string errorMessage, Domain.Radix defaultRadix = Domain.Radix.String, Domain.Parser.Modes modes = Domain.Parser.Modes.AllExceptKeywords)
 		{
 			bool hasSucceeded;
-			Domain.Parser.FormatException formatException = new Domain.Parser.FormatException("");
+			var formatException = new Domain.Parser.FormatException("");
 
-			using (Domain.Parser.Parser p = new Domain.Parser.Parser(modes))
+			using (var p = new Domain.Parser.Parser(modes))
 				hasSucceeded = p.TryParse(textToValidate, out successfullyParsed, ref formatException, defaultRadix);
 
 			if (hasSucceeded)
@@ -102,7 +102,7 @@ namespace YAT.Model.Utilities
 			}
 			else
 			{
-				StringBuilder sb = new StringBuilder();
+				var sb = new StringBuilder();
 				sb.Append("The ");
 				sb.Append(     description);
 				sb.Append(              @" """);

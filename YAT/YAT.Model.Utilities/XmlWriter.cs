@@ -368,7 +368,7 @@ namespace YAT.Model.Utilities
 			//  3. Select some lines in the monitor.
 			//  4. Select 'Save To File...' and select .xml as file extension.
 
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			sb.Append(@"<XmlTransferRawLine");
 			sb.Append(@" TimeStamp=""");
 			sb.Append(transferLine.TimeStamp.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
@@ -436,7 +436,7 @@ namespace YAT.Model.Utilities
 			//  2. Select some lines in the monitor.
 			//  3. Select 'Save To File...' and select .xml as file extension.
 
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			sb.Append(@"<XmlTransferNeatLine");
 			sb.Append(@" TimeStamp=""");
 			sb.Append(transferLine.TimeStamp.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));

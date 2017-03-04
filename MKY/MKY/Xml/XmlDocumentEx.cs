@@ -58,18 +58,18 @@ namespace MKY.Xml
 		public static object ToObjectTree(XmlDocument document, Type type)
 		{
 			// Save the resulting document into a string:
-			StringBuilder sb = new StringBuilder();
-			using (XmlWriter writer = XmlWriter.Create(sb)) // Unlike file serialization, string serialization will be UTF-16 encoded!
-			{                                               // Use dedicated XML writer to e.g. preserve whitespace!
+			var sb = new StringBuilder();
+			using (var writer = XmlWriter.Create(sb)) // Unlike file serialization, string serialization will be UTF-16 encoded!
+			{                                         // Use dedicated XML writer to e.g. preserve whitespace!
 				document.Save(writer);
 			}
 
 			// Deserialize that string into an object tree:
-			using (StringReader sr = new StringReader(sb.ToString()))
+			using (var sr = new StringReader(sb.ToString()))
 			{
-				using (XmlReader xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace!
+				using (var xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace!
 				{
-					XmlSerializer serializer = new XmlSerializer(type);
+					var serializer = new XmlSerializer(type);
 					return (serializer.Deserialize(xr));
 				}
 			}
@@ -120,28 +120,28 @@ namespace MKY.Xml
 			}
 
 			// Serialize the empty object tree into a string:
-			StringBuilder sb = new StringBuilder();
-			using (XmlWriter xw = XmlWriter.Create(sb)) // Unlike file serialization, string serialization will be UTF-16 encoded!
-			{                                           // Use dedicated XML writer to e.g. preserve whitespace!
-				XmlSerializer serializer = new XmlSerializer(type);
+			var sb = new StringBuilder();
+			using (var xw = XmlWriter.Create(sb)) // Unlike file serialization, string serialization will be UTF-16 encoded!
+			{                                     // Use dedicated XML writer to e.g. preserve whitespace!
+				var serializer = new XmlSerializer(type);
 				serializer.Serialize(xw, obj);
 			}
 
 			// Load that string into an XML document that serves as base for new documents:
-			XmlDocument defaultDocument = new XmlDocument();
+			var defaultDocument = new XmlDocument();
 			defaultDocument.LoadXml(sb.ToString());
 
 			// Retrieve default schema of the given type:
-			XmlReflectionImporter reflectionImporter = new XmlReflectionImporter();
-			XmlTypeMapping typeMapping = reflectionImporter.ImportTypeMapping(type);
-			XmlSchemas schemas = new XmlSchemas();
-			XmlSchemaExporter schemaExporter = new XmlSchemaExporter(schemas);
+			var reflectionImporter = new XmlReflectionImporter();
+			var typeMapping = reflectionImporter.ImportTypeMapping(type);
+			var schemas = new XmlSchemas();
+			var schemaExporter = new XmlSchemaExporter(schemas);
 			schemaExporter.ExportTypeMapping(typeMapping);
 
 			// Add required additional schemas:
 			if (requiredSchema != null)
 			{
-				foreach (XmlSchema s in requiredSchema)
+				foreach (var s in requiredSchema)
 					defaultDocument.Schemas.Add(s);
 			}
 

@@ -68,7 +68,7 @@ namespace YAT.Model.Utilities
 			if (FileEx.Size(filePath) <= 0)
 				throw (new InvalidDataException("File is empty!"));
 
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			// First, try to deserialize from raw XML file:
 			try
@@ -117,7 +117,7 @@ namespace YAT.Model.Utilities
 				{
 					if (rawLine.Data != null)
 					{
-						StringBuilder sb = new StringBuilder();
+						var sb = new StringBuilder();
 						sb.Append(@"\h(");
 						bool isFirst = true;
 						foreach (byte b in rawLine.Data)

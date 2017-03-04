@@ -484,7 +484,7 @@ namespace YAT.Model
 
 				if (ActiveTerminal != null)
 				{
-					StringBuilder sb = new StringBuilder(ActiveTerminal.AutoName);
+					var sb = new StringBuilder(ActiveTerminal.AutoName);
 					sb.Append("/Seq#");
 					sb.Append(ActiveTerminalSequentialIndex);
 					sb.Append("/Dyn#");
@@ -735,7 +735,7 @@ namespace YAT.Model
 						else
 							reason = "The file no longer exists.";
 
-						DialogResult dr = OnMessageInputRequest
+						var dr = OnMessageInputRequest
 						(
 							"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
 							reason + " Would you like to save the file at another location or cancel?",
@@ -1060,7 +1060,7 @@ namespace YAT.Model
 			// Normal file (m3, m4, w3, w4):
 			if (successWithTerminals && !successWithWorkspace && doSaveWorkspace && !this.settingsRoot.AutoSaved)
 			{
-				DialogResult dr = OnMessageInputRequest
+				var dr = OnMessageInputRequest
 				(
 					"Save workspace?",
 					AutoName,
@@ -1667,7 +1667,7 @@ namespace YAT.Model
 			if (fixedIndex >= Indices.FirstFixedIndex)
 				tsi.FixedIndex = fixedIndex;
 
-			tsi.Window = new WindowSettings(terminal.SettingsRoot.Window); // Clone window settings.
+			tsi.Window = new WindowSettings(terminal.SettingsRoot.Window); // Clone window settings to ensure decoupling.
 
 			return (tsi);
 		}

@@ -1031,7 +1031,7 @@ namespace MKY.IO.Serial.Socket
 						}
 						else
 						{
-							StringBuilder sb = new StringBuilder();
+							var sb = new StringBuilder();
 							sb.AppendLine("The socket of this TCP/IP client has fired an exception!");
 							sb.AppendLine();
 							sb.AppendLine("Exception type:");

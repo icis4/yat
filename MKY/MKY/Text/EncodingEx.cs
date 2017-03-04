@@ -844,8 +844,7 @@ namespace MKY.Text
 		/// </remarks>
 		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder();
-			sb.Append(DisplayName + " [" + CodePage + "]");
+			var sb = new StringBuilder(DisplayName + " [" + CodePage + "]");
 
 			if (IsDefault)
 				sb.Append(" (Default)");
@@ -891,7 +890,7 @@ namespace MKY.Text
 			if (ReferenceEquals(rhs, null)) return (false);
 
 			object obj = (object)lhs; // Operators are not virtual! Calling object.Equals() ensures
-			return (obj.Equals(rhs)); // that the virtual <Derived>.Equals() is called.
+			return (obj.Equals(rhs)); // that a potential virtual <Derived>.Equals() is called.
 		}
 
 		/// <summary>

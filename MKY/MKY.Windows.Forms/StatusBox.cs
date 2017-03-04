@@ -284,7 +284,7 @@ namespace MKY.Windows.Forms
 			Initialize(caption, status1, status2, settingText, setting, showCancel, timeout);
 
 			DialogResult dr;
-			using (System.Threading.Timer timer = new System.Threading.Timer(new System.Threading.TimerCallback(timer_Timeout), null, this.timeout, System.Threading.Timeout.Infinite))
+			using (var timer = new System.Threading.Timer(new System.Threading.TimerCallback(timer_Timeout), null, this.timeout, System.Threading.Timeout.Infinite))
 			{
 				this.isShowing = true;
 				dr = ShowDialog(owner);

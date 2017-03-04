@@ -948,7 +948,7 @@ namespace MKY.IO.Serial.Socket
 
 				SetStateSynchronizedAndNotify(SocketState.Error);
 
-				StringBuilder sb = new StringBuilder();
+				var sb = new StringBuilder();
 				sb.AppendLine("The socket of this TCP/IP server has fired an exception!");
 				sb.AppendLine();
 				sb.AppendLine("Exception type:");

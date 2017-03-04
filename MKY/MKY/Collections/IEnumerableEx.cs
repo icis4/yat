@@ -93,7 +93,7 @@ namespace MKY.Collections
 		/// </returns>
 		public static string ElementsToString(IEnumerable array)
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			bool firstElement = true;
 			foreach (object obj in array)

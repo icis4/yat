@@ -178,7 +178,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ToString(string indent)
 		{
-			using (StringWriter sw = new StringWriter(CultureInfo.InvariantCulture))
+			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
 			{
 				foreach (byte b in this.data)
 					sw.Write(Convert.ToChar(b));
@@ -196,7 +196,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ToDetailedString(string indent)
 		{
-			using (StringWriter sw = new StringWriter(CultureInfo.InvariantCulture))
+			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
 			{
 				bool begin = true;
 				foreach (byte b in this.data)
@@ -208,7 +208,7 @@ namespace YAT.Domain
 					sw.Write(b.ToString("X2", CultureInfo.InvariantCulture) + "h");
 				}
 
-				StringBuilder sb = new StringBuilder();
+				var sb = new StringBuilder();
 				sb.AppendLine(indent + "> Data: " + sw);
 				sb.AppendLine(indent + "> TimeStamp: " + this.timeStamp.ToLongTimeString() + "." + StringEx.Left(this.timeStamp.Millisecond.ToString("D3", CultureInfo.InvariantCulture), 2));
 				sb.AppendLine(indent + "> PortStamp: " + this.portStamp);

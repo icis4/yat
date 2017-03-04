@@ -44,7 +44,7 @@ namespace MKY
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static string FormatInvariantTimeSpan(TimeSpan value, bool tenths = false, bool hundredths = false, bool thousandths = false)
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			if (thousandths)
 			{

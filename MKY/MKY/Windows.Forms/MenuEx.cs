@@ -44,7 +44,7 @@ namespace MKY.Windows.Forms
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Prependable' is a correct English term.")]
 		public static string PrependIndex(int index, string text)
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			if ((index >= 1) && (index <= 9))
 			{

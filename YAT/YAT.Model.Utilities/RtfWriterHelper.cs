@@ -102,7 +102,7 @@ namespace YAT.Model.Utilities
 
 		private static void AppendDisplayElements(RichTextBox richTextProvider, List<DisplayElement> elements, Settings.FormatSettings settings)
 		{
-			foreach (DisplayElement de in elements)
+			foreach (var de in elements)
 				AppendDisplayElement(richTextProvider, de, settings);
 		}
 
