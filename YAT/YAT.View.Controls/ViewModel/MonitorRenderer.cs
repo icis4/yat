@@ -114,20 +114,36 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public static void DrawAndMeasureLine(string text, Font font,
+		                                      Graphics g, Rectangle bounds, DrawItemState state,
+		                                      Color foreColor, Color backColor,
+		                                      out int requestedWidth)
+		{
+			if ((state & DrawItemState.Selected) != 0) // Selected.
+				foreColor = SystemColors.HighlightText;
+
+			TextRenderer.DrawText(g, text, font, bounds, foreColor, backColor, staticMonitorFormat);
+
+			Size requestedSize = TextRenderer.MeasureText(g, text, font, bounds.Size, staticMonitorFormat);
+
+			requestedWidth = requestedSize.Width;
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static void DrawAndMeasureLine(Domain.DisplayLine line, Model.Settings.FormatSettings settings,
-		                                      Graphics graphics, Rectangle bounds, DrawItemState state,
-		                                      out int requestedWidth, out int drawnWidth)
+		                                      IDeviceContext dc, Rectangle bounds, DrawItemState state,
+		                                      out int requestedWidth)
 		{
 			requestedWidth = 0;
-			drawnWidth     = 0;
+			int drawnWidth = 0;
 
-			foreach (Domain.DisplayElement de in line)
+			foreach (var de in line)
 			{
 				int requestedElementWidth;
 				int drawnElementWidth;
 
-				DrawAndMeasureElement(de, settings, graphics,
+				DrawAndMeasureElement(de, settings, dc,
 				                      new Rectangle(bounds.X + drawnWidth, bounds.Y, bounds.Width - drawnWidth, bounds.Height),
 				                      state, out requestedElementWidth, out drawnElementWidth);
 
@@ -140,7 +156,7 @@ namespace YAT.View.Controls
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static void DrawAndMeasureElement(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
-		                                         Graphics graphics, Rectangle bounds, DrawItemState state,
+		                                         IDeviceContext dc, Rectangle bounds, DrawItemState state,
 		                                         out int requestedWidth, out int drawnWidth)
 		{
 			if (!string.IsNullOrEmpty(element.Text))
@@ -150,10 +166,10 @@ namespace YAT.View.Controls
 				Color backColor;
 				SetDrawingObjects(element, settings, state, out font, out foreColor, out backColor);
 
-				TextRenderer.DrawText(graphics, element.Text, font, bounds, foreColor, backColor, staticMonitorFormat);
+				TextRenderer.DrawText(dc, element.Text, font, bounds, foreColor, backColor, staticMonitorFormat);
 
-				Size requestedSize = TextRenderer.MeasureText(graphics, element.Text, font, new Size(int.MaxValue, bounds.Height), staticMonitorFormat);
-				Size drawnSize     = TextRenderer.MeasureText(graphics, element.Text, font, bounds.Size, staticMonitorFormat);
+				Size requestedSize = TextRenderer.MeasureText(dc, element.Text, font, new Size(int.MaxValue, bounds.Height), staticMonitorFormat);
+				Size drawnSize     = TextRenderer.MeasureText(dc, element.Text, font, bounds.Size, staticMonitorFormat);
 
 				requestedWidth = requestedSize.Width;
 				drawnWidth     = drawnSize.Width;
@@ -261,7 +277,7 @@ namespace YAT.View.Controls
 
 		private static Font CacheAndAssignIfChanged(ref Font cachedFont, string fontName, float fontSize, FontStyle fontStyle)
 		{
-			// Create the font:
+			// Create and cache the font:
 			if (cachedFont == null)
 			{
 				cachedFont = new Font(fontName, fontSize, fontStyle);

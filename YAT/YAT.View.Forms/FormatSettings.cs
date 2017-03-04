@@ -150,6 +150,15 @@ namespace YAT.View.Forms
 		// Controls Event Handlers
 		//==========================================================================================
 
+		private void checkBox_EnableFormatting_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				formatSettingsInEdit.FormattingEnabled = checkBox_EnableFormatting.Checked;
+				SetControls();
+			}
+		}
+
 		private void textFormat_FormatChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -355,9 +364,11 @@ namespace YAT.View.Forms
 			ClearExamples();
 
 			for (int i = 0; i < this.monitors.Length; i++)
-			{                                   // Clone settings before assigning them to control:
+			{                                      // Clone settings to ensure decoupling:
 				this.monitors[i].FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
 			}
+
+			checkBox_EnableFormatting.Checked = this.formatSettingsInEdit.FormattingEnabled;
 
 			for (int i = 0; i < this.textFormats.Length; i++)
 			{
@@ -373,7 +384,7 @@ namespace YAT.View.Forms
 			SelectionHelper.Select(comboBox_InfoSeparator, this.infoSeparator, this.infoSeparator);
 			SelectionHelper.Select(comboBox_InfoEnclosure, this.infoEnclosure, this.infoEnclosure);
 
-			                               // Clone settings before assigning them to control:
+			                                  // Clone settings to ensure decoupling:
 			monitor_Example.FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
 
 			SetExamples();
@@ -488,7 +499,7 @@ namespace YAT.View.Forms
 					}
 					catch (ArgumentException)
 					{
-						DialogResult dr = MessageBoxEx.Show
+						var dr = MessageBoxEx.Show
 						(
 							this,
 							"Font '" + fd.Font.Name + "' does not support regular style. Select a different font.",

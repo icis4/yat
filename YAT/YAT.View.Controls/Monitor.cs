@@ -263,7 +263,7 @@ namespace YAT.View.Controls
 			{
 				if (this.formatSettings != value)
 				{
-					bool fontHasChanged = (this.formatSettings.Font != value.Font);
+					bool fontHasChanged = (this.formatSettings.Font      != value.Font);
 					bool backHasChanged = (this.formatSettings.BackColor != value.BackColor);
 
 					this.formatSettings = value;
@@ -294,6 +294,10 @@ namespace YAT.View.Controls
 						lb.ItemHeight = f.Height;
 						lb.Invalidate();
 						lb.EndUpdate();
+					}
+					else
+					{
+						fastListBox_Monitor.Invalidate(); // Required e.g. when enabling/disabling formatting.
 					}
 				}
 			}
@@ -728,7 +732,7 @@ namespace YAT.View.Controls
 				////e.DrawFocusRectangle(); is not needed.
 
 					// The item width is handled here.
-					// The item height is set in SetFormatDependentControls().
+					// The item height is set in the 'FormatSettings' property.
 					if ((requestedWidth > 0) && (requestedWidth > EffectiveWidthToRequestedWidth(lb.Width)))
 						ResizeAndRelocateListBoxes(requestedWidth);
 				}
@@ -739,7 +743,7 @@ namespace YAT.View.Controls
 		private int fastListBox_Monitor_DrawItem_lastTopIndex = ControlEx.InvalidIndex;
 
 		/// <remarks>
-		/// Note that the 'MeasureItem' event measures the item height only and is not needed for 'OwnerDrawnFixed'.
+		/// Note that the 'MeasureItem' event is not needed for 'OwnerDrawnFixed' (item height only).
 		/// 
 		/// ListBox
 		/// -------
@@ -784,7 +788,7 @@ namespace YAT.View.Controls
 		/// 1. More sophisticated handling within <see cref="fastListBox_Monitor_DrawItem"/>
 		///    => Doesn't work because list box's back ground has already been drawn before
 		///       this event is invoked, thus it just increases flickering...
-		/// 2. More sophisticated handling within <see cref="FastListBox.OnPaintBackground"/>
+		/// 2. More sophisticated handling within additional 'FastListBox.OnPaintBackground'
 		///    => Doesn't work because list box has already been cleaned to a black background
 		///       before this event is invoked, thus it increases flickering too...
 		/// 3. Temporarily suspending the adding of elements. The elements are then added upon
@@ -803,24 +807,37 @@ namespace YAT.View.Controls
 				{
 					ListBoxEx lb = fastListBox_Monitor;
 					int requestedWidth;
-					int drawnWidth;
 
-					// Handle non-standard background:
-					if (this.formatSettings.BackColor != SystemColors.Window) // Equals FormatSettings.DefaultBackColor
+					if (this.formatSettings.FormattingEnabled)
 					{
-						if ((e.State & DrawItemState.Selected) == 0) // Change only needed if item is not selected
-							e = new DrawItemEventArgs(e.Graphics, e.Font, e.Bounds, e.Index, e.State, e.ForeColor, this.formatSettings.BackColor);
+						// Handle non-standard background:
+						if (this.formatSettings.BackColor != SystemColors.Window) // Equals FormatSettings.DefaultBackColor
+						{
+							if ((e.State & DrawItemState.Selected) == 0) // Change only needed if item is not selected
+								e = new DrawItemEventArgs(e.Graphics, e.Font, e.Bounds, e.Index, e.State, e.ForeColor, this.formatSettings.BackColor);
+						}
+
+						e.DrawBackground();
+
+						MonitorRenderer.DrawAndMeasureLine((lb.Items[e.Index] as Domain.DisplayLine), this.formatSettings,
+						                                   e.Graphics, e.Bounds, e.State, out requestedWidth);
+						e.DrawFocusRectangle();
+					}
+					else
+					{
+						e.DrawBackground();
+
+						MonitorRenderer.DrawAndMeasureLine((lb.Items[e.Index] as Domain.DisplayLine).Text, e.Font,
+						                                   e.Graphics, e.Bounds, e.State, e.ForeColor, e.BackColor, out requestedWidth);
+						e.DrawFocusRectangle();
+
+						// Note that it makes no sense to replace the 'FastListBox' by a standard 'ListBox' or 'ListBoxEx'
+						// to further increase the speed of this view control. Doing so would only reintroduce flickering!
+						// Refer to the 'MKY.Windows.Forms.Test' test application for comparison of the variants.
 					}
 
-					e.DrawBackground();
-
-					MonitorRenderer.DrawAndMeasureLine((lb.Items[e.Index] as Domain.DisplayLine), this.formatSettings,
-					                                   e.Graphics, e.Bounds, e.State, out requestedWidth, out drawnWidth);
-
-					e.DrawFocusRectangle();
-
 					// The item width and horizontal extent is handled here.
-					// The item height is set in SetFormatDependentControls().
+					// The item height is set in the 'FormatSettings' property.
 					if ((requestedWidth > 0) && (requestedWidth > lb.HorizontalExtent))
 						lb.HorizontalExtent = requestedWidth;
 
