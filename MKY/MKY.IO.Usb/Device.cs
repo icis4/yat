@@ -698,7 +698,7 @@ namespace MKY.IO.Usb
 			// Only attach handlers if this is an instance of the general USB device class.
 			// If this instance is e.g. an HID device, handlers must be attached there.
 			if (GetType() == typeof(Device))
-				RegisterAndAttachStaticDeviceEventHandlers(this.classGuid);
+				AttachAndRegisterStaticDeviceEventHandlers(this.classGuid);
 		}
 
 		/// <summary>
@@ -730,7 +730,7 @@ namespace MKY.IO.Usb
 		}
 
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
-		private void RegisterAndAttachStaticDeviceEventHandlers(Guid classGuid)
+		private void AttachAndRegisterStaticDeviceEventHandlers(Guid classGuid)
 		{
 			DeviceConnected    += Device_DeviceConnected;
 			DeviceDisconnected += Device_DeviceDisconnected;
@@ -738,7 +738,7 @@ namespace MKY.IO.Usb
 			RegisterStaticDeviceNotificationHandler(classGuid);
 		}
 
-		private void DetachAndUnregisterStaticDeviceEventHandlers()
+		private void UnregisterAndDetachStaticDeviceEventHandlers()
 		{
 			UnregisterStaticDeviceNotificationHandler();
 
@@ -766,7 +766,7 @@ namespace MKY.IO.Usb
 			if (!this.isDisposed)
 			{
 				// In any case, ensure that the static event handlers get detached:
-				DetachAndUnregisterStaticDeviceEventHandlers();
+				UnregisterAndDetachStaticDeviceEventHandlers();
 
 				// Dispose of managed resources if requested:
 				if (disposing)

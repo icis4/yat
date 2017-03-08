@@ -49,6 +49,11 @@ namespace MKY
 		/// </summary>
 		public const int InvalidIndex = -1;
 
+		/// <summary>
+		/// Text ellipsis which are "..." by definition.
+		/// </summary>
+		public const string Ellipsis = "...";
+
 		/// <remarks>
 		/// 16 is an arbitrary value.
 		/// </remarks>
@@ -164,6 +169,89 @@ namespace MKY
 			}
 
 			return (false);
+		}
+
+		#endregion
+
+		#region Count
+		//------------------------------------------------------------------------------------------
+		// Count
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Counts the number of <paramref name="countChars"/> to the left of <paramref name="str"/>.
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
+		public static int CountLeft(string str, params char[] countChars)
+		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
+			if (countChars != null)
+			{
+				int i = 0;
+				while (i < str.Length)
+				{
+					bool found = false;
+					foreach (char c in countChars)
+					{
+						if (str[i] == c)
+						{
+							found = true;
+							break; // Immediately break once a matching character has been found.
+						}
+					}
+
+					if (found)
+						i++;
+					else
+						break;
+				}
+
+				return (i);
+			}
+			else
+			{
+				return (0);
+			}
+		}
+
+		/// <summary>
+		/// Counts the number of <paramref name="countChars"/> to the right of <paramref name="str"/>.
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
+		public static int CountRight(string str, params char[] countChars)
+		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
+			if (countChars != null)
+			{
+				int i = str.Length;
+				while (i > 0)
+				{
+					bool found = false;
+					foreach (char c in countChars)
+					{
+						if (str[i - 1] == c)
+						{
+							found = true;
+							break; // Immediately break once a matching character has been found.
+						}
+					}
+
+					if (found)
+						i--;
+					else
+						break;
+				}
+
+				return (str.Length - i);
+			}
+			else
+			{
+				return (0);
+			}
 		}
 
 		#endregion
@@ -350,85 +438,18 @@ namespace MKY
 
 		#endregion
 
-		#region Count
-		//------------------------------------------------------------------------------------------
-		// Count
-		//------------------------------------------------------------------------------------------
+		#region Limit()
 
 		/// <summary>
-		/// Counts the number of <paramref name="countChars"/> to the left of <paramref name="str"/>.
+		/// Limits the give string to the specified max length. If the string exceed the max length,
+		/// <see cref="Ellipsis"/> are appended.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
-		public static int CountLeft(string str, params char[] countChars)
+		public static string Limit(string str, int length)
 		{
-			if (str == null)
-				throw (new ArgumentNullException("str"));
-
-			if (countChars != null)
-			{
-				int i = 0;
-				while (i < str.Length)
-				{
-					bool found = false;
-					foreach (char c in countChars)
-					{
-						if (str[i] == c)
-						{
-							found = true;
-							break; // Immediately break once a matching character has been found.
-						}
-					}
-
-					if (found)
-						i++;
-					else
-						break;
-				}
-
-				return (i);
-			}
+			if (str.Length <= length)
+				return (str);
 			else
-			{
-				return (0);
-			}
-		}
-
-		/// <summary>
-		/// Counts the number of <paramref name="countChars"/> to the right of <paramref name="str"/>.
-		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
-		public static int CountRight(string str, params char[] countChars)
-		{
-			if (str == null)
-				throw (new ArgumentNullException("str"));
-
-			if (countChars != null)
-			{
-				int i = str.Length;
-				while (i > 0)
-				{
-					bool found = false;
-					foreach (char c in countChars)
-					{
-						if (str[i - 1] == c)
-						{
-							found = true;
-							break; // Immediately break once a matching character has been found.
-						}
-					}
-
-					if (found)
-						i--;
-					else
-						break;
-				}
-
-				return (str.Length - i);
-			}
-			else
-			{
-				return (0);
-			}
+				return (Left(str, (length - Ellipsis.Length)) + Ellipsis);
 		}
 
 		#endregion
@@ -562,7 +583,7 @@ namespace MKY
 		/// instead.
 		/// </returns>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
-		public static string TrimMaxLength(string str, int maxLength, params char[] trimChars)
+		public static string Trim(string str, int maxLength, params char[] trimChars)
 		{
 			if (trimChars != null)
 			{
@@ -602,7 +623,7 @@ namespace MKY
 		/// instead.
 		/// </returns>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
-		public static string TrimMaxLengthSymmetrical(string str, int maxLength, params char[] trimChars)
+		public static string TrimSymmetrical(string str, int maxLength, params char[] trimChars)
 		{
 			if (trimChars != null)
 			{
@@ -616,7 +637,7 @@ namespace MKY
 
 				// Evaluate the symmetrical portion and trim it:
 				int trimMaxLength = Math.Min(countLeft, countRight);
-				return (TrimMaxLength(str, trimMaxLength, trimChars));
+				return (Trim(str, trimMaxLength, trimChars));
 			}
 			else
 			{
@@ -642,7 +663,7 @@ namespace MKY
 		{
 			if (trimChars != null)
 			{
-				return (TrimMaxLengthSymmetrical(str, int.MaxValue, trimChars));
+				return (TrimSymmetrical(str, int.MaxValue, trimChars));
 			}
 			else
 			{

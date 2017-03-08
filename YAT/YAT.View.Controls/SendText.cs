@@ -964,7 +964,7 @@ namespace YAT.View.Controls
 			formStartupLocation.Y = area.Y + area.Height;
 
 			// Show multi-line box:
-			MultiLineBox f = new MultiLineBox(this.command, formStartupLocation, this.command.DefaultRadix, this.parseMode);
+			var f = new MultiLineBox(this.command, formStartupLocation, this.command.DefaultRadix, this.parseMode);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();

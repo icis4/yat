@@ -126,11 +126,11 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"<cr><lf>",		new byte[] { 0x0D, 0x0A } ).SetName("ASCII <cr><lf>"));
 				yield return (new TestCaseData(@"<cR><Lf>",		new byte[] { 0x0D, 0x0A } ).SetName("ASCII <cR><Lf>"));
 
-				// Parenthesis & Co:
-				yield return (new TestCaseData(@"Hello (par)",				new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x28, 0x70, 0x61, 0x72, 0x29 } ).SetName("Parenthesis"));
-				yield return (new TestCaseData(@"\s(\(par\))",				new byte[] { 0x28, 0x70, 0x61, 0x72, 0x29 }             ).SetName("Parenthesis in string short 1"));
-				yield return (new TestCaseData(@"\s( \(par\) )",			new byte[] { 0x20, 0x28, 0x70, 0x61, 0x72, 0x29, 0x20 } ).SetName("Parenthesis in string short 2"));
-				yield return (new TestCaseData(@"\s(\( par \))",			new byte[] { 0x28, 0x20, 0x70, 0x61, 0x72, 0x20, 0x29 } ).SetName("Parenthesis in string short 3"));
+				// Parentheses & Co:
+				yield return (new TestCaseData(@"Hello (par)",				new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x28, 0x70, 0x61, 0x72, 0x29 } ).SetName("Parentheses"));
+				yield return (new TestCaseData(@"\s(\(par\))",				new byte[] { 0x28, 0x70, 0x61, 0x72, 0x29 }             ).SetName("Parentheses in string short 1"));
+				yield return (new TestCaseData(@"\s( \(par\) )",			new byte[] { 0x20, 0x28, 0x70, 0x61, 0x72, 0x29, 0x20 } ).SetName("Parentheses in string short 2"));
+				yield return (new TestCaseData(@"\s(\( par \))",			new byte[] { 0x28, 0x20, 0x70, 0x61, 0x72, 0x20, 0x29 } ).SetName("Parentheses in string short 3"));
 				yield return (new TestCaseData(@"Hello \<angle\> brackets",	new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x3C, 0x61, 0x6E, 0x67, 0x6C, 0x65, 0x3E, 0x20, 0x62, 0x72, 0x61, 0x63, 0x6B, 0x65, 0x74, 0x73 } ).SetName("Angle brackets"));
 				yield return (new TestCaseData(@"\s(\<angle\>)",			new byte[] { 0x3C, 0x61, 0x6E, 0x67, 0x6C, 0x65, 0x3E }             ).SetName("Angle brackets in string short 1"));
 				yield return (new TestCaseData(@"\s( \<angle\> )",			new byte[] { 0x20, 0x3C, 0x61, 0x6E, 0x67, 0x6C, 0x65, 0x3E, 0x20 } ).SetName("Angle brackets in string short 2"));

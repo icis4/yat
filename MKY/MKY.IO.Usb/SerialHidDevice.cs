@@ -392,10 +392,10 @@ namespace MKY.IO.Usb
 			// Only attach handlers if this is an instance of the USB Ser/HID device class.
 			// If this instance is of a derived class, handlers must be attached there.
 			if (GetType() == typeof(SerialHidDevice))
-				RegisterAndAttachStaticDeviceEventHandlers();
+				AttachAndRegisterStaticDeviceEventHandlers();
 		}
 
-		private void RegisterAndAttachStaticDeviceEventHandlers()
+		private void AttachAndRegisterStaticDeviceEventHandlers()
 		{
 			DeviceConnected    += Device_DeviceConnected;
 			DeviceDisconnected += Device_DeviceDisconnected;
@@ -403,7 +403,7 @@ namespace MKY.IO.Usb
 			RegisterStaticDeviceNotificationHandler();
 		}
 
-		private void DetachAndUnregisterStaticDeviceEventHandlers()
+		private void UnregisterAndDetachStaticDeviceEventHandlers()
 		{
 			UnregisterStaticDeviceNotificationHandler();
 
@@ -423,7 +423,7 @@ namespace MKY.IO.Usb
 
 			if (!IsDisposed)
 			{
-				DetachAndUnregisterStaticDeviceEventHandlers();
+				UnregisterAndDetachStaticDeviceEventHandlers();
 
 				// Dispose of managed resources if requested:
 				if (disposing)

@@ -420,7 +420,7 @@ namespace YAT.View.Forms
 
 			terminalSelection.IOType = ioType;
 
-			serialPortSelection.PortId     = this.settingsInEdit.Terminal.IO.SerialPort.PortId;
+			serialPortSelection.PortId      = this.settingsInEdit.Terminal.IO.SerialPort.PortId;
 
 			serialPortSettings.BaudRate     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.BaudRate;
 			serialPortSettings.DataBits     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.DataBits;
@@ -430,14 +430,14 @@ namespace YAT.View.Forms
 			serialPortSettings.AliveMonitor = this.settingsInEdit.Terminal.IO.SerialPort.AliveMonitor;
 			serialPortSettings.AutoReopen   = this.settingsInEdit.Terminal.IO.SerialPort.AutoReopen;
 
-			socketSelection.SocketType     = (Domain.IOTypeEx)ioType;
-			socketSelection.RemoteHost     = this.settingsInEdit.Terminal.IO.Socket.RemoteHost;
-			socketSelection.RemoteTcpPort  = this.settingsInEdit.Terminal.IO.Socket.RemoteTcpPort;
-			socketSelection.RemoteUdpPort  = this.settingsInEdit.Terminal.IO.Socket.RemoteUdpPort;
-			socketSelection.LocalInterface = this.settingsInEdit.Terminal.IO.Socket.LocalInterface;
-			socketSelection.LocalFilter    = this.settingsInEdit.Terminal.IO.Socket.LocalFilter;
-			socketSelection.LocalTcpPort   = this.settingsInEdit.Terminal.IO.Socket.LocalTcpPort;
-			socketSelection.LocalUdpPort   = this.settingsInEdit.Terminal.IO.Socket.LocalUdpPort;
+			socketSelection.SocketType      = (Domain.IOTypeEx)ioType;
+			socketSelection.RemoteHost      = this.settingsInEdit.Terminal.IO.Socket.RemoteHost;
+			socketSelection.RemoteTcpPort   = this.settingsInEdit.Terminal.IO.Socket.RemoteTcpPort;
+			socketSelection.RemoteUdpPort   = this.settingsInEdit.Terminal.IO.Socket.RemoteUdpPort;
+			socketSelection.LocalInterface  = this.settingsInEdit.Terminal.IO.Socket.LocalInterface;
+			socketSelection.LocalFilter     = this.settingsInEdit.Terminal.IO.Socket.LocalFilter;
+			socketSelection.LocalTcpPort    = this.settingsInEdit.Terminal.IO.Socket.LocalTcpPort;
+			socketSelection.LocalUdpPort    = this.settingsInEdit.Terminal.IO.Socket.LocalUdpPort;
 
 			socketSettings.SocketType               = (Domain.IOTypeEx)ioType;
 			socketSettings.TcpClientAutoReconnect   = this.settingsInEdit.Terminal.IO.Socket.TcpClientAutoReconnect;
@@ -502,7 +502,7 @@ namespace YAT.View.Forms
 			{
 				case Domain.TerminalType.Text:
 				{
-					TextTerminalSettings f = new TextTerminalSettings(this.settingsInEdit.Terminal.TextTerminal);
+					var f = new TextTerminalSettings(this.settingsInEdit.Terminal.TextTerminal);
 					if (f.ShowDialog(this) == DialogResult.OK)
 					{
 						Refresh();
@@ -512,7 +512,7 @@ namespace YAT.View.Forms
 				}
 				case Domain.TerminalType.Binary:
 				{
-					BinaryTerminalSettings f = new BinaryTerminalSettings(this.settingsInEdit.Terminal.BinaryTerminal);
+					var f = new BinaryTerminalSettings(this.settingsInEdit.Terminal.BinaryTerminal);
 					if (f.ShowDialog(this) == DialogResult.OK)
 					{
 						Refresh();
@@ -534,7 +534,7 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowAdvancedSettings()
 		{
-			AdvancedTerminalSettings f = new AdvancedTerminalSettings(this.settingsInEdit);
+			var f = new AdvancedTerminalSettings(this.settingsInEdit);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();

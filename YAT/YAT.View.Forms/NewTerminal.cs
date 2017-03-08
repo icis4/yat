@@ -421,7 +421,7 @@ namespace YAT.View.Forms
 
 			terminalSelection.IOType = ioType;
 
-			serialPortSelection.PortId     = this.newTerminalSettingsInEdit.SerialPortId;
+			serialPortSelection.PortId      = this.newTerminalSettingsInEdit.SerialPortId;
 
 			serialPortSettings.BaudRate     = this.newTerminalSettingsInEdit.SerialPortCommunication.BaudRate;
 			serialPortSettings.DataBits     = this.newTerminalSettingsInEdit.SerialPortCommunication.DataBits;
@@ -431,14 +431,14 @@ namespace YAT.View.Forms
 			serialPortSettings.AliveMonitor = this.newTerminalSettingsInEdit.SerialPortAliveMonitor;
 			serialPortSettings.AutoReopen   = this.newTerminalSettingsInEdit.SerialPortAutoReopen;
 
-			socketSelection.SocketType     = (Domain.IOTypeEx)ioType;
-			socketSelection.RemoteHost     = this.newTerminalSettingsInEdit.SocketRemoteHost;
-			socketSelection.RemoteTcpPort  = this.newTerminalSettingsInEdit.SocketRemoteTcpPort;
-			socketSelection.RemoteUdpPort  = this.newTerminalSettingsInEdit.SocketRemoteUdpPort;
-			socketSelection.LocalInterface = this.newTerminalSettingsInEdit.SocketLocalInterface;
-			socketSelection.LocalFilter    = this.newTerminalSettingsInEdit.SocketLocalFilter;
-			socketSelection.LocalTcpPort   = this.newTerminalSettingsInEdit.SocketLocalTcpPort;
-			socketSelection.LocalUdpPort   = this.newTerminalSettingsInEdit.SocketLocalUdpPort;
+			socketSelection.SocketType      = (Domain.IOTypeEx)ioType;
+			socketSelection.RemoteHost      = this.newTerminalSettingsInEdit.SocketRemoteHost;
+			socketSelection.RemoteTcpPort   = this.newTerminalSettingsInEdit.SocketRemoteTcpPort;
+			socketSelection.RemoteUdpPort   = this.newTerminalSettingsInEdit.SocketRemoteUdpPort;
+			socketSelection.LocalInterface  = this.newTerminalSettingsInEdit.SocketLocalInterface;
+			socketSelection.LocalFilter     = this.newTerminalSettingsInEdit.SocketLocalFilter;
+			socketSelection.LocalTcpPort    = this.newTerminalSettingsInEdit.SocketLocalTcpPort;
+			socketSelection.LocalUdpPort    = this.newTerminalSettingsInEdit.SocketLocalUdpPort;
 
 			socketSettings.SocketType               = (Domain.IOTypeEx)ioType;
 			socketSettings.TcpClientAutoReconnect   = this.newTerminalSettingsInEdit.TcpClientAutoReconnect;
