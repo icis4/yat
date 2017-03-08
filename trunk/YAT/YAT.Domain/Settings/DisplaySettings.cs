@@ -79,7 +79,7 @@ namespace YAT.Domain.Settings
 		public static readonly string InfoSeparatorDefault = " "; // Space for better separability of elements.
 
 		/// <summary></summary>
-		public static readonly string InfoEnclosureDefault = "()"; // Parenthesis for better recognizability of info elements.
+		public static readonly string InfoEnclosureDefault = "()"; // Parentheses for better recognizability of info elements.
 
 		private bool separateTxRxRadix;
 		private Radix txRadix;

@@ -307,7 +307,7 @@ namespace MKY.IO.Ports.Test
 			{
 				// Set which physical items are available on the current machine:
 				SerialPortCollection availablePorts = new SerialPortCollection();
-				availablePorts.FillWithAvailablePorts(false); // No need to get descriptions, thus faster.
+				availablePorts.FillWithAvailablePorts(false); // Explicitly not getting captions, thus faster.
 
 				configuration.PortAIsAvailable = availablePorts.Contains(configuration.PortA);
 				configuration.PortBIsAvailable = availablePorts.Contains(configuration.PortB);

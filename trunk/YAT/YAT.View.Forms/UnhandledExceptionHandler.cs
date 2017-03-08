@@ -155,7 +155,7 @@ namespace YAT.View.Forms
 					)
 					== DialogResult.Yes)
 				{
-					UnhandledException f = new UnhandledException(exception, title, originMessage);
+					var f = new UnhandledException(exception, title, originMessage);
 					f.ShowDialog(owner);
 				}
 			}

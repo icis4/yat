@@ -213,10 +213,12 @@ namespace MKY.IO
 
 		#endregion
 
-		#region Limit...()
+		#region Limit()
 
 		/// <summary>
-		/// Limits a directory or file path to the specified max length.
+		/// Limits a directory or file path to the specified max length. If the path exceed the
+		/// max length, <see cref="StringEx.Ellipsis"/> are added before the last part of the path
+		/// (same behaviour as <see cref="System.Windows.Forms.TextFormatFlags.PathEllipsis"/>).
 		/// </summary>
 		/// <remarks>
 		/// This function does not expand environment variables.
@@ -230,7 +232,7 @@ namespace MKY.IO
 
 			if (path.IndexOf(Path.VolumeSeparatorChar) < 0)
 			{                                          // Local path ?
-				limitedPath = StringEx.Left(path, 3) + "..." +
+				limitedPath = StringEx.Left(path, 3) + StringEx.Ellipsis +
 				              StringEx.Right(path, Math.Max(length - 6, 0));
 			}
 			else                                       // Network path !
@@ -238,12 +240,12 @@ namespace MKY.IO
 				int separatorPosition = path.Substring(4).IndexOf(Path.DirectorySeparatorChar);
 				if ((separatorPosition >= 0) && (separatorPosition < length - 4))
 				{
-					limitedPath = StringEx.Left(path, separatorPosition) + "..." +
+					limitedPath = StringEx.Left(path, separatorPosition) + StringEx.Ellipsis +
 					              StringEx.Right(path, Math.Max(length - 4 - separatorPosition, 0));
 				}
 				else
 				{
-					limitedPath = StringEx.Left(path, 5) + "..." +
+					limitedPath = StringEx.Left(path, 5) + StringEx.Ellipsis +
 					              StringEx.Right(path, Math.Max(length - 8, 0));
 				}
 			}
