@@ -499,8 +499,8 @@ namespace YAT.Model
 			if (this.commandLineArgs.Empty)
 			{
 				this.startArgs.ShowNewTerminalDialog = false;
-				this.startArgs.KeepOpen              = true;
-				this.startArgs.KeepOpenOnError       = true;
+				this.startArgs.KeepOpen              = this.commandLineArgs.KeepOpen;
+				this.startArgs.KeepOpenOnError       = this.commandLineArgs.KeepOpenOnError;
 
 				return (true);
 			}
