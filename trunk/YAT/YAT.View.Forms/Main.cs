@@ -163,7 +163,7 @@ namespace YAT.View.Forms
 			this.main = main;
 			AttachMainEventHandlers();
 
-			Text = this.main.AutoName;
+			Text = this.main.IndicatedName;
 
 			// Link and attach to terminal settings:
 			this.localUserSettingsRoot = ApplicationSettings.LocalUserSettings;
@@ -754,7 +754,7 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_Contents_Click(object sender, EventArgs e)
 		{
-			Form f = new Help();
+			var f = new Help();
 			f.StartPosition = FormStartPosition.Manual;
 			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
@@ -763,7 +763,7 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_ReleaseNotes_Click(object sender, EventArgs e)
 		{
-			Form f = new ReleaseNotes();
+			var f = new ReleaseNotes();
 			f.StartPosition = FormStartPosition.Manual;
 			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
@@ -772,7 +772,7 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_RequestSupport_Click(object sender, EventArgs e)
 		{
-			Form f = new TrackerInstructions(TrackerType.Support);
+			var f = new TrackerInstructions(TrackerType.Support);
 			f.StartPosition = FormStartPosition.Manual;
 			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
@@ -781,7 +781,7 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_RequestFeature_Click(object sender, EventArgs e)
 		{
-			Form f = new TrackerInstructions(TrackerType.Feature);
+			var f = new TrackerInstructions(TrackerType.Feature);
 			f.StartPosition = FormStartPosition.Manual;
 			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
@@ -790,7 +790,7 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_SubmitBug_Click(object sender, EventArgs e)
 		{
-			Form f = new TrackerInstructions(TrackerType.Bug);
+			var f = new TrackerInstructions(TrackerType.Bug);
 			f.StartPosition = FormStartPosition.Manual;
 			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
@@ -799,7 +799,7 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_About_Click(object sender, EventArgs e)
 		{
-			Form f = new About();
+			var f = new About();
 			f.ShowDialog(this);
 		}
 
@@ -1440,7 +1440,7 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowPreferences()
 		{
-			Preferences f = new Preferences(ApplicationSettings.LocalUserSettings);
+			var f = new Preferences(ApplicationSettings.LocalUserSettings);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
@@ -1681,7 +1681,7 @@ namespace YAT.View.Forms
 		{
 			SetFixedStatusText("New terminal...");
 
-			NewTerminal f = new NewTerminal(newTerminalSettings);
+			var f = new NewTerminal(newTerminalSettings);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
