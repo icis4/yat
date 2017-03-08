@@ -129,7 +129,8 @@ namespace YAT.Model
 		private TerminalStartArgs startArgs;
 		private Guid guid;
 		private int sequentialIndex;
-		private string autoName;
+		private string sequentialName;
+		private string fileName;
 
 		// Settings:
 		private DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler;
@@ -280,12 +281,11 @@ namespace YAT.Model
 				this.settingsRoot.ClearChanged();
 				AttachSettingsEventHandlers();
 
-				// Set ID and user name:
+				// Set ID and name(s):
 				this.sequentialIndex = ++staticSequentialIndexCounter;
-				if (!this.settingsHandler.SettingsFilePathIsValid || this.settingsRoot.AutoSaved)
-					this.autoName = TerminalText + this.sequentialIndex.ToString(CultureInfo.CurrentCulture);
-				else
-					AutoNameFromFile = this.settingsHandler.SettingsFilePath;
+				this.sequentialName = TerminalText + this.sequentialIndex.ToString(CultureInfo.CurrentCulture);
+				if (!this.settingsRoot.AutoSaved && this.settingsHandler.SettingsFilePathIsValid)
+					this.fileName = Path.GetFileName(this.settingsHandler.SettingsFilePath);
 
 				// Create underlying terminal:
 				this.terminal = Domain.TerminalFactory.CreateTerminal(this.settingsRoot.Terminal);
@@ -432,25 +432,70 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// This is the automatically assigned terminal name. The name is either an incrementally
-		/// assigned 'Terminal1', 'Terminal2',... or the file name once the terminal has been saved
-		/// by the user, e.g. 'MyTerminal.yat'.
+		/// The name incrementally assigned terminal name 'Terminal1', 'Terminal2',...
 		/// </summary>
-		public virtual string AutoName
+		public virtual string SequentialName
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.autoName);
+				return (this.sequentialName);
 			}
 		}
 
-		private string AutoNameFromFile
+		/// <summary>
+		/// The file name if the user has saved the terminal; otherwise <see cref="string.Empty"/>;
+		/// </summary>
+		public virtual string FileName
 		{
-			set
+			get
 			{
-				this.autoName = Path.GetFileName(value);
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (!string.IsNullOrEmpty(this.fileName))
+					return (this.fileName);
+
+				return ("");
+			}
+		}
+
+		/// <summary>
+		/// The optional user defined terminal name; otherwise <see cref="string.Empty"/>;
+		/// </summary>
+		public virtual string UserName
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.settingsRoot != null)
+				{
+					if (!string.IsNullOrEmpty(this.settingsRoot.UserName))
+						return (this.settingsRoot.UserName);
+				}
+
+				return ("");
+			}
+		}
+
+		/// <summary>
+		/// The indicated name, i.e. either the <see cref="UserName"/>, <see cref="FileName"/>
+		/// or <see cref="SequentialName"/>.
+		/// </summary>
+		public virtual string IndicatedName
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (!string.IsNullOrEmpty(UserName))
+					return (UserName);
+
+				if (!string.IsNullOrEmpty(FileName))
+					return (FileName);
+
+				return (SequentialName);
 			}
 		}
 
@@ -625,32 +670,25 @@ namespace YAT.Model
 				if (this.settingsRoot == null)
 				{
 					sb.Append("[");
-					sb.Append(AutoName);
+					sb.Append(IndicatedName);
 					sb.Append("]");
 				}
 				else
 				{
 					sb.Append("[");
-
-					if (this.settingsHandler.SettingsFileIsReadOnly)
-						sb.Append("#");
-
-					sb.Append(AutoName);
-
-					if (this.settingsHandler.SettingsFileIsReadOnly)
-						sb.Append("#");
-
-					if (this.settingsRoot.ExplicitHaveChanged)
-						sb.Append(" *");
-
-					sb.Append("]");
-
-					string userName = this.settingsRoot.UserName;
-					if (!string.IsNullOrEmpty(userName))
 					{
-						sb.Append(" - ");
-						sb.Append(userName);
+						if (this.settingsHandler.SettingsFileIsReadOnly)
+							sb.Append("#");
+
+						sb.Append(IndicatedName);
+
+						if (this.settingsHandler.SettingsFileIsReadOnly)
+							sb.Append("#");
+
+						if (this.settingsRoot.ExplicitHaveChanged)
+							sb.Append(" *");
 					}
+					sb.Append("]");
 
 					switch (this.settingsRoot.IOType)
 					{
@@ -658,7 +696,7 @@ namespace YAT.Model
 						{
 							MKY.IO.Serial.SerialPort.SerialPortSettings s = this.settingsRoot.IO.SerialPort;
 							sb.Append(" - ");
-							sb.Append(s.PortId.ToString(true, false));
+							sb.Append(s.PortId.ToNameAndCaptionString());
 							sb.Append(" - ");
 							if (IsStarted)
 							{
@@ -867,7 +905,7 @@ namespace YAT.Model
 						{
 							MKY.IO.Serial.SerialPort.SerialPortSettings s = this.settingsRoot.IO.SerialPort;
 							sb.Append("Serial port ");
-							sb.Append(s.PortId.ToString(true, false));
+							sb.Append(s.PortId.ToNameAndCaptionString());
 							sb.Append(" (" + s.Communication + ")");
 							if (IsStarted)
 							{
@@ -1684,7 +1722,7 @@ namespace YAT.Model
 				success = true;
 
 				if (!isAutoSave)
-					AutoNameFromFile = this.settingsHandler.SettingsFilePath;
+					this.fileName = Path.GetFileName(this.settingsHandler.SettingsFilePath);
 
 				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, isAutoSave));
 				OnTimedStatusTextRequest("Terminal saved.");
@@ -1865,7 +1903,7 @@ namespace YAT.Model
 				var dr = OnMessageInputRequest
 				(
 					"Save terminal?",
-					AutoName,
+					IndicatedName,
 					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Question
 				);
@@ -2263,7 +2301,7 @@ namespace YAT.Model
 					if (portId != null)
 					{
 						MKY.IO.Ports.SerialPortCollection ports = new MKY.IO.Ports.SerialPortCollection();
-						ports.FillWithAvailablePorts(false); // No need to get descriptions, thus faster.
+						ports.FillWithAvailablePorts(false); // Explicitly not getting captions, thus faster.
 
 						// Attention:
 						// Similar code exists in View.Controls.SerialPortSelection.SetPortList().

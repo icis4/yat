@@ -287,17 +287,17 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// This is the automatically assigned workspace name. The name is corresponding to the
-		/// name of the currently active terminal.
+		/// This is the indicated workspace name. The name is corresponding to the
+		/// indicated name of the currently active terminal.
 		/// </summary>
-		public virtual string AutoName
+		public virtual string IndicatedName
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (this.activeTerminal != null)
-					return (this.activeTerminal.AutoName);
+					return (this.activeTerminal.IndicatedName);
 				else
 					return (ApplicationEx.ProductName);
 			}
@@ -484,7 +484,7 @@ namespace YAT.Model
 
 				if (ActiveTerminal != null)
 				{
-					var sb = new StringBuilder(ActiveTerminal.AutoName);
+					var sb = new StringBuilder(ActiveTerminal.SequentialName);
 					sb.Append("/Seq#");
 					sb.Append(ActiveTerminalSequentialIndex);
 					sb.Append("/Dyn#");
@@ -1063,7 +1063,7 @@ namespace YAT.Model
 				var dr = OnMessageInputRequest
 				(
 					"Save workspace?",
-					AutoName,
+					IndicatedName,
 					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Question
 				);
@@ -1867,30 +1867,6 @@ namespace YAT.Model
 				return (t);
 			else
 				return (null);
-		}
-
-		/// <summary>
-		/// Returns the terminal with the given user name. The user name can freely be chosen in
-		/// the terminal settings. There are no restrictions on the name. If no terminal with this
-		/// name exists, <c>null</c> is returned.
-		/// </summary>
-		public virtual Terminal GetTerminalByUserName(string userName)
-		{
-			AssertNotDisposed();
-
-			foreach (Terminal t in this.terminals)
-			{
-				if (StringEx.EqualsOrdinal(t.SettingsRoot.UserName, userName))
-					return (t);
-			}
-
-			foreach (Terminal t in this.terminals)
-			{
-				if (StringEx.EqualsOrdinalIgnoreCase(t.SettingsRoot.UserName, userName))
-					return (t);
-			}
-
-			return (null);
 		}
 
 		#endregion

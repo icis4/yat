@@ -2097,12 +2097,15 @@ namespace YAT.View.Forms
 		/// assigned 'Terminal1', 'Terminal2',... or the file name once the terminal has been saved
 		/// by the user, e.g. 'MyTerminal.yat'.
 		/// </summary>
-		public virtual string AutoName
+		/// <remarks>
+		/// Using term "IndicatedName" because <see cref="Control.Name"/> already exists.
+		/// </remarks>
+		public virtual string IndicatedName
 		{
 			get
 			{
 				if (TerminalIsAvailable)
-					return (this.terminal.AutoName);
+					return (this.terminal.IndicatedName);
 				else
 					return ("");
 			}
@@ -2905,7 +2908,7 @@ namespace YAT.View.Forms
 		{
 			int[] customColors = this.settingsRoot.View.CustomColorsToWin32();
 
-			FormatSettings f = new FormatSettings(this.settingsRoot.Format, customColors, this.settingsRoot.Display.InfoSeparator, this.settingsRoot.Display.InfoEnclosure);
+			var f = new FormatSettings(this.settingsRoot.Format, customColors, this.settingsRoot.Display.InfoSeparator, this.settingsRoot.Display.InfoEnclosure);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
@@ -3167,7 +3170,7 @@ namespace YAT.View.Forms
 			{
 				ShowPredefinedCommandSettings_formIsOpen = true;
 
-				PredefinedCommandSettings f = new PredefinedCommandSettings
+				var f = new PredefinedCommandSettings
 					(
 					this.settingsRoot.PredefinedCommand,
 					this.settingsRoot.TerminalType,
@@ -3674,17 +3677,17 @@ namespace YAT.View.Forms
 			SetFixedStatusText("Saving terminal as...");
 
 			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.Title = "Save " + AutoName + " As";
+			sfd.Title = "Save " + IndicatedName + " As";
 			sfd.Filter      = ExtensionHelper.TerminalFilesFilter;
 			sfd.FilterIndex = ExtensionHelper.TerminalFilesFilterDefault;
 			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.TerminalFile);
 			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
 
 			// Check wether the terminal has already been saved as a .yat file.
-			if (StringEx.EndsWithOrdinalIgnoreCase(AutoName, ExtensionHelper.TerminalFile))
-				sfd.FileName = AutoName;
+			if (StringEx.EndsWithOrdinalIgnoreCase(IndicatedName, ExtensionHelper.TerminalFile))
+				sfd.FileName = IndicatedName;
 			else
-				sfd.FileName = AutoName + PathEx.NormalizeExtension(sfd.DefaultExt); // Note that 'DefaultExt' states "The returned string does not include the period."!
+				sfd.FileName = IndicatedName + PathEx.NormalizeExtension(sfd.DefaultExt); // Note that 'DefaultExt' states "The returned string does not include the period."!
 
 			var dr = sfd.ShowDialog(this);
 			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
@@ -3716,7 +3719,7 @@ namespace YAT.View.Forms
 		{
 			SetFixedStatusText("Terminal Settings...");
 
-			TerminalSettings f = new TerminalSettings(this.settingsRoot.Explicit);
+			var f = new TerminalSettings(this.settingsRoot.Explicit);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
@@ -4273,7 +4276,7 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowLogSettings()
 		{
-			LogSettings f = new LogSettings(this.settingsRoot.Log);
+			var f = new LogSettings(this.settingsRoot.Log);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
