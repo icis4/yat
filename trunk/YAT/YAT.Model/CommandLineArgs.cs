@@ -366,15 +366,15 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[OptionArg(Name = "Empty", ShortName = "e", Description = "Start " + ApplicationEx.ProductNameConstWorkaround + " but neither show any dialog nor perform any operation.")]
+		public bool Empty;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "NonInteractive", ShortName = "ni", Description = "Run the " + ApplicationEx.ProductNameConstWorkaround + " application without any user or other interaction, even in case of errors." + EnvironmentEx.NewLineConstWorkaround +
 			"For " + ApplicationEx.ProductNameConstWorkaround + ".exe, interaction is enabled by default." + EnvironmentEx.NewLineConstWorkaround +
 			"For " + ApplicationEx.ProductNameConstWorkaround + "Console.exe, interaction is always disabled, i.e. this option has no effect.")]
 		public bool NonInteractive;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "Empty", ShortName = "e", Description = "Start " + ApplicationEx.ProductNameConstWorkaround + " but neither show any dialog nor perform any operation.")]
-		public bool Empty;
 
 		#endregion
 
