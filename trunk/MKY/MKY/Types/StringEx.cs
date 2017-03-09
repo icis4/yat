@@ -105,14 +105,13 @@ namespace MKY
 				for (int i = 0; i < strA.Length; i++)
 				{
 					if (!EqualsOrdinal(strA[i], strB[i]))
-						return (false);
+						return (false); // No match.
 				}
-
-				return (true);
+				return (true); // Match.
 			}
 			else
 			{
-				return (false);
+				return (false); // No match.
 			}
 		}
 
@@ -138,14 +137,13 @@ namespace MKY
 				for (int i = 0; i < strA.Length; i++)
 				{
 					if (!EqualsOrdinalIgnoreCase(strA[i], strB[i]))
-						return (false);
+						return (false); // No match.
 				}
-
-				return (true);
+				return (true); // Match.
 			}
 			else
 			{
-				return (false);
+				return (false); // No match.
 			}
 		}
 
@@ -165,10 +163,9 @@ namespace MKY
 			foreach (string str in strB)
 			{
 				if (EqualsOrdinalIgnoreCase(strA, str))
-					return (true);
+					return (true); // Match.
 			}
-
-			return (false);
+			return (false); // No match.
 		}
 
 		#endregion
@@ -262,11 +259,40 @@ namespace MKY
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Returns whether <paramref name="str"/> contains any of the <paramref name="anyOf"/>.
+		/// Determines whether <paramref name="str"/> contains any of the <paramref name="anyOf"/>.
 		/// </summary>
 		public static bool ContainsAny(string str, char[] anyOf)
 		{
 			return (str.IndexOfAny(anyOf) >= 0);
+		}
+
+		/// <summary>
+		/// Determines whether <paramref name="str"/> matches one of the specified <paramref name="values"/>.
+		/// </summary>
+		/// <param name="str">The string.</param>
+		/// <param name="values">The strings to compare with.</param>
+		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
+		public static bool ContainsAny(string str, params string[] values)
+		{
+			return (ContainsAny(str, (IEnumerable<string>)values));
+		}
+
+		/// <summary>
+		/// Determines whether <paramref name="str"/> matches one of the specified <paramref name="values"/>.
+		/// </summary>
+		/// <param name="str">The string.</param>
+		/// <param name="values">The strings to compare with.</param>
+		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
+		public static bool ContainsAny(string str, IEnumerable<string> values)
+		{
+			foreach (string v in values)
+			{
+				if (str.Contains(v))
+					return (true); // Match.
+			}
+			return (false); // No match.
 		}
 
 		#endregion
@@ -314,26 +340,6 @@ namespace MKY
 
 		/// <summary>
 		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified <paramref name="values"/>
-		/// when compared using the specified comparison type.
-		/// </summary>
-		/// <param name="str">The string.</param>
-		/// <param name="values">The strings to compare with.</param>
-		/// <param name="comparisonType">One of the <see cref="StringComparison"/> values that determines how the strings and the value are compared.</param>
-		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">value is null.</exception>
-		/// <exception cref="ArgumentException">comparisonType is not a <see cref="StringComparison"/> value.</exception>
-		public static bool StartsWithAny(string str, IEnumerable<string> values, StringComparison comparisonType)
-		{
-			foreach (string value in values)
-			{
-				if (str.StartsWith(value, comparisonType))
-					return (true); // Match.
-			}
-			return (false); // No match.
-		}
-
-		/// <summary>
-		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified <paramref name="values"/>
 		/// when compared using the specified culture.
 		/// </summary>
 		/// <param name="str">The string.</param>
@@ -344,24 +350,32 @@ namespace MKY
 		/// <exception cref="ArgumentNullException">value is null.</exception>
 		public static bool StartsWithAny(string str, IEnumerable<string> values, bool ignoreCase, CultureInfo culture)
 		{
-			foreach (string value in values)
+			foreach (string v in values)
 			{
-				if (str.StartsWith(value, ignoreCase, culture))
+				if (str.StartsWith(v, ignoreCase, culture))
 					return (true); // Match.
 			}
 			return (false); // No match.
 		}
 
 		/// <summary>
-		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified <paramref name="values"/>.
+		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified <paramref name="values"/>
+		/// when compared using the specified comparison type.
 		/// </summary>
 		/// <param name="str">The string.</param>
 		/// <param name="values">The strings to compare with.</param>
+		/// <param name="comparisonType">One of the <see cref="StringComparison"/> values that determines how the strings and the value are compared.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
 		/// <exception cref="ArgumentNullException">value is null.</exception>
-		public static bool StartsWithAnyOrdinalIgnoreCase(string str, params string[] values)
+		/// <exception cref="ArgumentException">comparisonType is not a <see cref="StringComparison"/> value.</exception>
+		public static bool StartsWithAny(string str, IEnumerable<string> values, StringComparison comparisonType)
 		{
-			return (StartsWithAny(str, (IEnumerable<string>)values));
+			foreach (string v in values)
+			{
+				if (str.StartsWith(v, comparisonType))
+					return (true); // Match.
+			}
+			return (false); // No match.
 		}
 
 		/// <summary>
@@ -374,6 +388,18 @@ namespace MKY
 		public static bool StartsWithAnyOrdinalIgnoreCase(string str, IEnumerable<string> values)
 		{
 			return (StartsWithAny(str, values, StringComparison.OrdinalIgnoreCase));
+		}
+
+		/// <summary>
+		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified <paramref name="values"/>.
+		/// </summary>
+		/// <param name="str">The string.</param>
+		/// <param name="values">The strings to compare with.</param>
+		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
+		public static bool StartsWithAnyOrdinalIgnoreCase(string str, params string[] values)
+		{
+			return (StartsWithAnyOrdinalIgnoreCase(str, (IEnumerable<string>)values));
 		}
 
 		/// <summary>
