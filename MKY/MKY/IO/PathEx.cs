@@ -22,6 +22,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -30,6 +35,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+
+#endregion
 
 namespace MKY.IO
 {
@@ -126,11 +133,127 @@ namespace MKY.IO
 		#region Equals()
 
 		/// <summary>
-		/// Compares two specified path string dependent on the operating systems policies.
+		/// Compares two specified path string, dependent on the operating systems policies.
 		/// </summary>
 		public static bool Equals(string pathA, string pathB)
 		{
-			return (string.Compare(pathA, pathB, ComparisonType) == 0);
+			return (string.Compare(pathA, pathB, ComparisonType) == 0); // string.Compare() accepts [null] args.
+		}
+
+		/// <summary>
+		/// Compares whether <paramref name="pathA"/> matches any <paramref name="pathB"/>,
+		/// dependent on the operating systems policies.
+		/// </summary>
+		public static bool EqualsAny(string pathA, params string[] pathB)
+		{
+			return (EqualsAny(pathA, (IEnumerable<string>)pathB));
+		}
+
+		/// <summary>
+		/// Compares whether <paramref name="pathA"/> matches any <paramref name="pathB"/>,
+		/// dependent on the operating systems policies.
+		/// </summary>
+		public static bool EqualsAny(string pathA, IEnumerable<string> pathB)
+		{
+			foreach (string p in pathB)
+			{
+				if (Equals(pathA, p))
+					return (true); // Match.
+			}
+			return (false); // No match.
+		}
+
+		#endregion
+
+		#region Contains
+		//------------------------------------------------------------------------------------------
+		// Contains
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Determines whether <paramref name="path"/> matches one of the specified <paramref name="values"/>,
+		/// dependent on the operating systems policies.
+		/// </summary>
+		/// <param name="path">The string.</param>
+		/// <param name="values">The strings to compare with.</param>
+		/// <returns>true if <paramref name="path"/> matches the beginning of a comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
+		public static bool ContainsAny(string path, params string[] values)
+		{
+			return (ContainsAny(path, (IEnumerable<string>)values));
+		}
+
+		/// <summary>
+		/// Determines whether <paramref name="path"/> matches one of the specified <paramref name="values"/>.
+		/// </summary>
+		/// <param name="path">The string.</param>
+		/// <param name="values">The strings to compare with.</param>
+		/// <returns>true if <paramref name="path"/> matches the beginning of a comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
+		public static bool ContainsAny(string path, IEnumerable<string> values)
+		{
+			if (EnvironmentEx.IsWindows) // OrdinalIgnoreCase.
+			{
+				foreach (string v in values)
+				{
+					if (path.ToLowerInvariant().Contains(v.ToLowerInvariant()))
+						return (true); // Match.
+				}
+			}
+			else
+			{
+				foreach (string v in values)
+				{
+					if (path.Contains(v))
+						return (true); // Match.
+				}
+			}
+			return (false); // No match.
+		}
+
+		#endregion
+
+		#region IsContained()
+		//------------------------------------------------------------------------------------------
+		// IsContained()
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Returns whether <paramref name="str"/> contains the given <paramref name="path"/>. The
+		/// comparison is done in a platform independent way, i.e. any path designation is accepted.
+		/// </summary>
+		/// <remarks>
+		/// Named 'IsContained' instead of 'Contains' as <paramref name="str"/> can be any string,
+		/// not just a path string..
+		/// </remarks>
+		/// <remarks>
+		/// Implemented using <see cref="string.IndexOf(string, StringComparison)"/> because
+		/// <see cref="string.Contains(string)"/> does not allow controlling culture and case.
+		/// </remarks>
+		public static bool IsContained(string str, string path)
+		{
+			if (string.IsNullOrEmpty(path))
+				return (false);
+
+			// First try without converting anything:
+			if (str.IndexOf(path, ComparisonType) >= 0)
+				return (true);
+
+			// No success, try to convert 'str' (as 'path' is more likely platform-correct):
+			var strToPlatform = ConvertToPlatform(str);
+			if (strToPlatform.IndexOf(path, ComparisonType) >= 0)
+				return (true);
+
+			// Still no success, try to convert 'path' instead:
+			var pathToPlatform = ConvertToPlatform(path);
+			if (str.IndexOf(pathToPlatform, ComparisonType) >= 0)
+				return (true);
+
+			// Last attempt, both converted:
+			if (strToPlatform.IndexOf(pathToPlatform, ComparisonType) >= 0)
+				return (true);
+
+			return (false);
 		}
 
 		#endregion
@@ -881,48 +1004,22 @@ namespace MKY.IO
 
 		#endregion
 
-		#region IsContained()
-		//------------------------------------------------------------------------------------------
-		// IsContained()
-		//------------------------------------------------------------------------------------------
+		#region Get...()
 
 		/// <summary>
-		/// Returns whether <paramref name="str"/> contains the given <paramref name="path"/>. The
-		/// comparison is done in a platform independent way, i.e. any path designation is accepted.
+		/// Returns the name of the given path.
 		/// </summary>
 		/// <remarks>
-		/// Implemented here in <see cref="PathEx"/> and not <see cref="StringEx"/> to keep
-		/// dependencies clean, i.e. the <see cref="System"/> namespace shall not reference the
-		/// <see cref="System.IO"/> namespace. Therefore named 'IsContained' instead of 'Contains'.
+		/// Opposed to <see cref="Path.GetDirectoryName"/>, this method returns the directory name
+		/// only, not the full directory path.
 		/// </remarks>
-		/// <remarks>
-		/// Implemented using <see cref="string.IndexOf(string, StringComparison)"/> because
-		/// <see cref="string.Contains(string)"/> does not allow controlling culture and case.
-		/// </remarks>
-		public static bool IsContained(string str, string path)
+		public static string GetDirectoryNameOnly(string path)
 		{
 			if (string.IsNullOrEmpty(path))
-				return (false);
+				return (null);
 
-			// First try without converting anything:
-			if (str.IndexOf(path, ComparisonType) >= 0)
-				return (true);
-
-			// No success, try to convert 'str' (as 'path' is more likely platform-correct):
-			var strToPlatform = ConvertToPlatform(str);
-			if (strToPlatform.IndexOf(path, ComparisonType) >= 0)
-				return (true);
-
-			// Still no success, try to convert 'path' instead:
-			var pathToPlatform = ConvertToPlatform(path);
-			if (str.IndexOf(pathToPlatform, ComparisonType) >= 0)
-				return (true);
-
-			// Last attempt, both converted:
-			if (strToPlatform.IndexOf(pathToPlatform, ComparisonType) >= 0)
-				return (true);
-
-			return (false);
+			var di = new DirectoryInfo(path);
+			return (di.Name);
 		}
 
 		#endregion
