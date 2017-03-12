@@ -118,6 +118,7 @@
     <Compile Include="SerialPort\SerialPortCollection.cs" />
     <Compile Include="SerialPort\SerialPortSearcher.cs" />
     <Compile Include="SerialPort\SerialPortSettings.cs" />
+    <Compile Include="SerialPort\InUseInfo.cs" />
     <Compile Include="SerialPort\Types\BaudRate.cs" />
     <Compile Include="SerialPort\Types\DataBits.cs" />
     <Compile Include="SerialPort\Types\Handshake.cs" />

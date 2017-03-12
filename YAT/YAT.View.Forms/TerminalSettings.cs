@@ -50,6 +50,9 @@ namespace YAT.View.Forms
 
 		private SettingControlsHelper isSettingControls;
 
+		private int terminalId; // = 0;
+		private bool ioIsOpen; // = false;
+
 		private Settings.Terminal.ExplicitSettings settings;
 		private Settings.Terminal.ExplicitSettings settingsInEdit;
 
@@ -81,6 +84,20 @@ namespace YAT.View.Forms
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <summary></summary>
+		public int TerminalId
+		{
+			get { return (this.terminalId); }
+			set { this.terminalId = value;  }
+		}
+
+		/// <summary></summary>
+		public bool IoIsOpen
+		{
+			get { return (this.ioIsOpen); }
+			set { this.ioIsOpen = value;  }
+		}
 
 		/// <summary></summary>
 		public Settings.Terminal.ExplicitSettings SettingsResult
@@ -420,7 +437,14 @@ namespace YAT.View.Forms
 
 			terminalSelection.IOType = ioType;
 
-			serialPortSelection.PortId      = this.settingsInEdit.Terminal.IO.SerialPort.PortId;
+			serialPortSelection.PortId = this.settingsInEdit.Terminal.IO.SerialPort.PortId;
+			serialPortSelection.ActivePortInUseInfo = new MKY.IO.Ports.InUseInfo
+			(
+				this.terminalId,
+				this.settingsInEdit.Terminal.IO.SerialPort.PortId,
+				this.ioIsOpen,
+				(this.ioIsOpen ? "(in use by this terminal)" : "(selected by this terminal)")
+			);
 
 			serialPortSettings.BaudRate     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.BaudRate;
 			serialPortSettings.DataBits     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.DataBits;

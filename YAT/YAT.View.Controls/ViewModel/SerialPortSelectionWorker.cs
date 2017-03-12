@@ -44,6 +44,7 @@ namespace YAT.View.Controls
 
 		private bool retrieveCaptions;
 		private bool detectPortsInUse;
+		private InUseInfo activePortInUseInfo;
 
 		private bool cancel; // = false;
 		private object cancelSyncObj = new object();
@@ -59,10 +60,11 @@ namespace YAT.View.Controls
 		public event EventHandler<EventArgs<string>> Status2Changed;
 		public event EventHandler<EventArgs<DialogResult>> IsDone;
 
-		public SerialPortSelectionWorker(bool retrieveCaptions = true, bool detectPortsInUse = true)
+		public SerialPortSelectionWorker(bool retrieveCaptions, bool detectPortsInUse, InUseInfo thisPortInUseInfo)
 		{
-			this.retrieveCaptions = retrieveCaptions;
-			this.detectPortsInUse = detectPortsInUse;
+			this.retrieveCaptions  = retrieveCaptions;
+			this.detectPortsInUse  = detectPortsInUse;
+			this.activePortInUseInfo = thisPortInUseInfo;
 		}
 
 		public virtual SerialPortCollection Ports
@@ -108,13 +110,14 @@ namespace YAT.View.Controls
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure to handle any case.")]
 		private DialogResult DoWorkWithResult()
 		{
-			OnStatus1Changed(new EventArgs<string>("Retrieving available ports..."));
+			OnStatus1Changed(new EventArgs<string>("Retrieving available serial COM ports..."));
 
 			this.ports = new SerialPortCollection();
+			this.ports.ActivePortInUseInfo = this.activePortInUseInfo;
 
 			try // Exceptions should not happen, but actually sometimes do, e.g. in case of Bluetooth...
 			{
-				this.ports.FillWithAvailablePorts(false); // Descriptions will be retrieved further below.
+				this.ports.FillWithAvailablePorts(false); // Captions will be retrieved further below.
 			}
 			catch (Exception ex)
 			{
@@ -129,7 +132,7 @@ namespace YAT.View.Controls
 
 			if (this.retrieveCaptions && !this.cancel)
 			{
-				OnStatus1Changed(new EventArgs<string>("Retrieving captions from system..."));
+				OnStatus1Changed(new EventArgs<string>("Retrieving serial COM port captions from system..."));
 
 				try
 				{
@@ -138,8 +141,8 @@ namespace YAT.View.Controls
 				catch (Exception ex)
 				{
 					this.exception = ex;
-					this.exceptionLead = "There was an error while retrieving the port captions from the system!";
-					this.exceptionHint = "If the issue cannot be solved, tell YAT to no longer retrieve ports captions by going to 'File > Preferences...' and disable 'retrieve port captions from system'.";
+					this.exceptionLead = "There was an error while retrieving the serial COM port captions from the system!";
+					this.exceptionHint = "If the issue cannot be solved, tell YAT to no longer retrieve port captions by going to 'File > Preferences...' and disable 'retrieve port captions from system'.";
 
 					return (DialogResult.Abort);
 				}
@@ -147,7 +150,7 @@ namespace YAT.View.Controls
 
 			if (this.detectPortsInUse && !this.cancel)
 			{
-				OnStatus1Changed(new EventArgs<string>("Detecting ports that are in use..."));
+				OnStatus1Changed(new EventArgs<string>("Detecting serial COM ports that are in use..."));
 
 				try
 				{
@@ -156,7 +159,7 @@ namespace YAT.View.Controls
 				catch (Exception ex)
 				{
 					this.exception = ex;
-					this.exceptionLead = "There was an error while trying to detect the ports that are in use!";
+					this.exceptionLead = "There was an error while trying to detect the serial COM ports that are in use!";
 					this.exceptionHint = "If the issue cannot be solved, tell YAT to no longer detect ports that are in use by going to 'File > Preferences...' and disable 'detect ports that are in use'.";
 
 					return (DialogResult.Abort);
@@ -181,7 +184,7 @@ namespace YAT.View.Controls
 
 		private void ports_DetectPortsInUseCallback(object sender, SerialPortChangedAndCancelEventArgs e)
 		{
-			OnStatus2Changed(new EventArgs<string>("Scanning " + e.Port + "..."));
+			OnStatus2Changed(new EventArgs<string>("Scanning " + e.Port.ToNameAndCaptionString() + "..."));
 
 			lock (this.cancelSyncObj)
 				e.Cancel = this.cancel;

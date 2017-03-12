@@ -86,6 +86,8 @@ namespace YAT.View.Controls
 		/// </remarks>
 		private SerialPortId portId = PortIdDefault;
 
+		private InUseInfo activePortInUseInfo; // = null;
+
 		private StatusBox showStatusDialog; // = null;
 
 		#endregion
@@ -99,6 +101,11 @@ namespace YAT.View.Controls
 		[Category("Property Changed")]
 		[Description("Event raised when the PortId property is changed.")]
 		public event EventHandler PortIdChanged;
+
+		/// <summary></summary>
+		[Category("Property Changed")]
+		[Description("Event raised when the ActivePortInUseInfo property is changed.")]
+		public event EventHandler ActivePortInUseInfoChanged;
 
 		#endregion
 
@@ -124,7 +131,7 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Category("Serial Port")]
-		[Description("Serial port ID.")]
+		[Description("The serial COM port ID that is selected.")]
 		[DefaultValue(PortIdDefault)]
 		public SerialPortId PortId
 		{
@@ -151,6 +158,24 @@ namespace YAT.View.Controls
 		public bool IsValid
 		{
 			get { return (this.portId != null); }
+		}
+
+		/// <summary></summary>
+		[Category("Serial Port")]
+		[Description(@"The currently active serial COM port indicated as ""this serial port"".")]
+		[DefaultValue(null)]
+		public InUseInfo ActivePortInUseInfo
+		{
+			get { return (this.activePortInUseInfo); }
+			set
+			{
+				if (this.activePortInUseInfo != value)
+				{
+					this.activePortInUseInfo = value;
+					RefreshPortList();
+					OnActivePortInUseInfoChanged(EventArgs.Empty);
+				}
+			}
 		}
 
 		#endregion
@@ -243,7 +268,7 @@ namespace YAT.View.Controls
 					MessageBoxEx.Show
 					(
 						this,
-						"Serial port name is invalid",
+						"Serial COM port name is invalid",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -312,15 +337,15 @@ namespace YAT.View.Controls
 					bool retrieveCaptions = ApplicationSettings.LocalUserSettings.General.RetrieveSerialPortCaptions;
 					bool detectPortsInUse = ApplicationSettings.LocalUserSettings.General.DetectSerialPortsInUse;
 
-					SerialPortSelectionWorker worker = new SerialPortSelectionWorker(retrieveCaptions, detectPortsInUse);
+					var worker = new SerialPortSelectionWorker(retrieveCaptions, detectPortsInUse, this.activePortInUseInfo);
 					worker.Status1Changed += worker_Status1Changed;
 					worker.Status2Changed += worker_Status2Changed;
 					worker.IsDone         += worker_IsDone;
 
-					Thread t = new Thread(new ThreadStart(worker.DoWork));
+					var t = new Thread(new ThreadStart(worker.DoWork));
 					t.Name = GetType() + " Worker Thread";
 
-					DateTime started = DateTime.Now;
+					var started = DateTime.Now;
 					t.Start();
 
 					// Let's work for approx. 150 ms:
@@ -329,7 +354,7 @@ namespace YAT.View.Controls
 						System.Windows.Forms.Application.DoEvents(); // Ensure that application stays responsive!
 						Thread.Sleep(10); // Wait a short time to reduce the CPU load of this thread.
 
-						TimeSpan ongoing = (DateTime.Now - started);
+						var ongoing = (DateTime.Now - started);
 						if (ongoing.TotalMilliseconds > 150)
 							break;
 					}
@@ -575,10 +600,20 @@ namespace YAT.View.Controls
 		// Event Invoking
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Invokes the <see cref="PortIdChanged"/> event.
+		/// </summary>
 		protected virtual void OnPortIdChanged(EventArgs e)
 		{
 			EventHelper.FireSync(PortIdChanged, this, e);
+		}
+
+		/// <summary>
+		/// Invokes the <see cref="ActivePortInUseInfoChanged"/> event.
+		/// </summary>
+		protected virtual void OnActivePortInUseInfoChanged(EventArgs e)
+		{
+			EventHelper.FireSync(ActivePortInUseInfoChanged, this, e);
 		}
 
 		#endregion

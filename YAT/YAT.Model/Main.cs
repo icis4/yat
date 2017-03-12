@@ -116,8 +116,8 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public Main()
+			: this(default(string))
 		{
-			Initialize();
 		}
 
 		/// <summary></summary>
@@ -131,15 +131,9 @@ namespace YAT.Model
 		{
 			this.commandLineArgs = commandLineArgs;
 
-			Initialize();
-		}
-
-		private void Initialize()
-		{
 			DebugMessage("Creating...");
-
 			this.guid = Guid.NewGuid();
-
+			AttachStaticSerialPortCollectionEventHandlers();
 			DebugMessage("...successfully created.");
 		}
 
@@ -178,6 +172,8 @@ namespace YAT.Model
 					// ...dispose of workspace (normally it disposes of itself)...
 					if (this.workspace != null)
 						this.workspace.Dispose();
+
+					DetachStaticSerialPortCollectionEventHandlers();
 				}
 
 				// Set state to disposed:
@@ -255,17 +251,18 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// This is the automatically assigned workspace name. The name is corresponding to the
-		/// name of the currently active terminal.
+		/// This is the indicated main name. The name is corresponding to the indicated name of
+		/// the currently active workspace, which is corresponding to the currently active terminal;
+		/// <see cref="ApplicationEx.ProductName"/> otherwise.
 		/// </summary>
-		public virtual string AutoName
+		public virtual string IndicatedName
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (this.workspace != null)
-					return (this.workspace.AutoName);
+					return (this.workspace.IndicatedName);
 				else
 					return (ApplicationEx.ProductName);
 			}
@@ -1187,6 +1184,52 @@ namespace YAT.Model
 
 				cancel = true;
 				return (this.result);
+			}
+		}
+
+		#endregion
+
+		#region SerialPortCollection
+		//==========================================================================================
+		// SerialPortCollection
+		//==========================================================================================
+
+		private void AttachStaticSerialPortCollectionEventHandlers()
+		{
+			MKY.IO.Ports.SerialPortCollection.InUseLookupRequest += SerialPortCollection_InUseLookupRequest;
+		}
+
+		private void DetachStaticSerialPortCollectionEventHandlers()
+		{
+			MKY.IO.Ports.SerialPortCollection.InUseLookupRequest -= SerialPortCollection_InUseLookupRequest;
+		}
+
+		private void SerialPortCollection_InUseLookupRequest(object sender, MKY.IO.Ports.SerialPortInUseLookupEventArgs e)
+		{
+			if (this.workspace != null)
+			{
+				var terminals = this.workspace.Terminals;
+				if (terminals != null)
+				{
+					var inUseLookup = new List<MKY.IO.Ports.InUseInfo>(terminals.Length); // Preset the initial capacity to improve memory management.
+
+					foreach (var t in this.workspace.Terminals)
+					{
+						var portId = t.IOSerialPortId;
+						if (portId != null)
+						{
+							string inUseText;
+							if (t.IsOpen)
+								inUseText = "(in use by " + t.IndicatedName + ")";
+							else
+								inUseText = "(selected by " + t.IndicatedName + ")";
+
+							inUseLookup.Add(new MKY.IO.Ports.InUseInfo(t.SequentialIndex, portId, t.IsOpen, inUseText));
+						}
+					}
+
+					e.InUseLookup = inUseLookup;
+				}
 			}
 		}
 

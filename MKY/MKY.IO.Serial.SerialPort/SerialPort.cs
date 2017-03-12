@@ -1077,7 +1077,7 @@ namespace MKY.IO.Serial.SerialPort
 					this.sendThreadRunFlag = true;
 					this.sendThreadEvent = new AutoResetEvent(false);
 					this.sendThread = new Thread(new ThreadStart(SendThread));
-					this.sendThread.Name = ToShortPortString() + " Send Thread";
+					this.sendThread.Name = ToNameString() + " Send Thread";
 					this.sendThread.Start();
 				}
 			}
@@ -1089,7 +1089,7 @@ namespace MKY.IO.Serial.SerialPort
 					this.receiveThreadRunFlag = true;
 					this.receiveThreadEvent = new AutoResetEvent(false);
 					this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
-					this.receiveThread.Name = ToShortPortString() + " Receive Thread";
+					this.receiveThread.Name = ToNameString() + " Receive Thread";
 					this.receiveThread.Start();
 				}
 			}
@@ -2135,12 +2135,12 @@ namespace MKY.IO.Serial.SerialPort
 
 				switch (e.EventType)
 				{
-					case System.IO.Ports.SerialError.Frame:    direction = Direction.Input;  message = "Serial port input framing error!";            break;
-					case System.IO.Ports.SerialError.Overrun:  direction = Direction.Input;  message = "Serial port input character buffer overrun!"; break;
-					case System.IO.Ports.SerialError.RXOver:   direction = Direction.Input;  message = "Serial port input buffer overflow!";          break;
-					case System.IO.Ports.SerialError.RXParity: direction = Direction.Input;  message = "Serial port input parity error!";             break;
-					case System.IO.Ports.SerialError.TXFull:   direction = Direction.Output; message = "Serial port output buffer full!";             break;
-					default:   severity = ErrorSeverity.Fatal; direction = Direction.None;   message = "Unknown serial port error!";                  break;
+					case System.IO.Ports.SerialError.Frame:    direction = Direction.Input;  message = "Serial COM port input framing error!";            break;
+					case System.IO.Ports.SerialError.Overrun:  direction = Direction.Input;  message = "Serial COM port input character buffer overrun!"; break;
+					case System.IO.Ports.SerialError.RXOver:   direction = Direction.Input;  message = "Serial COM port input buffer overflow!";          break;
+					case System.IO.Ports.SerialError.RXParity: direction = Direction.Input;  message = "Serial COM port input parity error!";             break;
+					case System.IO.Ports.SerialError.TXFull:   direction = Direction.Output; message = "Serial COM port output buffer full!";             break;
+					default:   severity = ErrorSeverity.Fatal; direction = Direction.None;   message = "Unknown serial COM port error!";                  break;
 				}
 
 				OnIOErrorAsync(new SerialPortErrorEventArgs(severity, direction, message, e.EventType)); // Async! See remarks above.
@@ -2404,15 +2404,15 @@ namespace MKY.IO.Serial.SerialPort
 		/// </summary>
 		public override string ToString()
 		{
-			return (ToShortPortString());
+			return (ToNameString());
 		}
 
 		/// <summary></summary>
-		public virtual string ToShortPortString()
+		public virtual string ToNameString()
 		{
 			Ports.SerialPortId id = PortId;
 			if (id != null)
-				return (id.ToShortString());
+				return (id.Name);
 			else
 				return (Undefined);
 		}
@@ -2437,7 +2437,7 @@ namespace MKY.IO.Serial.SerialPort
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
 					GetType(),
 					"",
-					"[" + ToShortPortString() + "]",
+					"[" + ToNameString() + "]",
 					message
 				)
 			);
