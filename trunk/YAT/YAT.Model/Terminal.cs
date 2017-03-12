@@ -904,7 +904,7 @@ namespace YAT.Model
 						case Domain.IOType.SerialPort:
 						{
 							MKY.IO.Serial.SerialPort.SerialPortSettings s = this.settingsRoot.IO.SerialPort;
-							sb.Append("Serial port ");
+							sb.Append("Serial port "); // Not adding "COM" as the port name will already state that.
 							sb.Append(s.PortId.ToNameAndCaptionString());
 							sb.Append(" (" + s.Communication + ")");
 							if (IsStarted)
@@ -1153,6 +1153,26 @@ namespace YAT.Model
 				}
 
 				return (sb.ToString());
+			}
+		}
+
+		/// <summary>
+		/// Returns the <see cref="MKY.IO.Ports.SerialPortId"/> for <see cref="Domain.IOType.SerialPort"/>,
+		/// <c>null</c> for all other terminal types.
+		/// </summary>
+		public virtual MKY.IO.Ports.SerialPortId IOSerialPortId
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.settingsRoot != null)
+				{
+					if (this.settingsRoot.IOType == Domain.IOType.SerialPort)
+						return (this.settingsRoot.IO.SerialPort.PortId);
+				}
+
+				return (null);
 			}
 		}
 

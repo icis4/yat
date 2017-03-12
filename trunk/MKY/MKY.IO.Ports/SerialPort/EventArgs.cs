@@ -23,6 +23,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.IO.Ports
@@ -103,7 +104,20 @@ namespace MKY.IO.Ports
 		public bool Cancel
 		{
 			get { return (this.cancel); }
-			set { this.cancel = value; }
+			set { this.cancel = value;  }
+		}
+	}
+
+	/// <summary></summary>
+	public class SerialPortInUseLookupEventArgs : EventArgs
+	{
+		private List<InUseInfo> inUseLookup;
+
+		/// <summary></summary>
+		public List<InUseInfo> InUseLookup
+		{
+			get { return (this.inUseLookup); }
+			set { this.inUseLookup = value;  }
 		}
 	}
 

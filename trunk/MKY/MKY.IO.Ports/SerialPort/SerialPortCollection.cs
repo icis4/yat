@@ -45,6 +45,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using System.Xml.Serialization;
 
 #endregion
 
@@ -56,11 +58,19 @@ namespace MKY.IO.Ports
 	[Serializable]
 	public class SerialPortCollection : List<SerialPortId>
 	{
+		/// <summary>
+		/// Occurs when the collection requests the 'InUseText' for the given port.
+		/// </summary>
+		public static event EventHandler<SerialPortInUseLookupEventArgs> InUseLookupRequest;
+
 		private static string[]                   staticPortNamesCache; // = null;
 		private static object                     staticPortNamesCacheSyncObj = new object();
 
 		private static Dictionary<string, string> staticCaptionsCache; // = null;
 		private static object                     staticCaptionsCacheSyncObj = new object();
+
+		private InUseInfo activePortInUseInfo; // = null;
+		private string otherAppInUseText = InUseInfo.OtherAppInUseTextDefault;
 
 		/// <summary></summary>
 		public SerialPortCollection()
@@ -72,6 +82,26 @@ namespace MKY.IO.Ports
 		public SerialPortCollection(IEnumerable<SerialPortId> rhs)
 			: base(rhs)
 		{
+		}
+
+		/// <summary>
+		/// The port that is currently in use, e.g. "(in use by this serial port)" of "COM1 - (in use by this serial port)".
+		/// </summary>
+		[XmlIgnore]
+		public virtual InUseInfo ActivePortInUseInfo
+		{
+			get { return (this.activePortInUseInfo); }
+			set { this.activePortInUseInfo = value;  }
+		}
+
+		/// <summary>
+		/// The text which is shown when port is currently in use, e.g. "(in use by other app)" of "COM1 - (in use by other app)".
+		/// </summary>
+		[XmlIgnore]
+		public virtual string OtherAppInUseText
+		{
+			get { return (this.otherAppInUseText); }
+			set { this.otherAppInUseText = value;  }
 		}
 
 		/// <summary>
@@ -226,6 +256,15 @@ namespace MKY.IO.Ports
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual void DetectPortsInUse(EventHandler<SerialPortChangedAndCancelEventArgs> portChangedCallback = null)
 		{
+			List<InUseInfo> otherPortInUseLookup = null;
+			if (InUseLookupRequest != null)
+			{
+				otherPortInUseLookup = OnInUseLookupRequest();
+
+				if (ActivePortInUseInfo != null)
+					otherPortInUseLookup.RemoveAll(inUse => (inUse.UseId == ActivePortInUseInfo.UseId));
+			}
+
 			lock (this)
 			{
 				foreach (var portId in this)
@@ -233,29 +272,117 @@ namespace MKY.IO.Ports
 					if (portChangedCallback != null)
 					{
 						var e = new SerialPortChangedAndCancelEventArgs(portId);
-
 						EventHelper.FireSync<SerialPortChangedAndCancelEventArgs>(portChangedCallback, this, e);
-
 						if (e.Cancel)
 							break;
 					}
 
-					using (var p = new SerialPortEx(portId)) // Use SerialPortEx to prevent potential 'ObjectDisposedException'.
+					// Lookup current port:
+					bool isInUseByActivePort = false;
+					bool isOpenByActivePort = false;
+					if ((activePortInUseInfo != null) && (activePortInUseInfo.PortId == portId))
 					{
-						try
+						isInUseByActivePort = true;
+						isOpenByActivePort = activePortInUseInfo.IsOpen;
+					}
+
+					List<InUseInfo> otherPortInUseInfo = null;
+					bool isInUseByOtherPort = false;
+					bool isOpenByOtherPort = false;
+					if (otherPortInUseLookup != null)
+					{
+						otherPortInUseInfo = otherPortInUseLookup.FindAll(inUse => (inUse.PortId == portId));
+						if (otherPortInUseInfo != null)
 						{
-							p.Open();
-							p.Close();
-							portId.IsInUse = false;
+							foreach (var statement in otherPortInUseInfo)
+							{
+								isInUseByOtherPort = true;
+
+								if (statement.IsOpen)
+									isOpenByOtherPort = true;
+							}
 						}
-						catch
-						{
-							portId.IsInUse = true;
+					}
+
+					// Evaluate current port:
+					if (isOpenByActivePort || isOpenByOtherPort)
+					{
+						portId.IsInUse = true;
+						portId.InUseText = ComposeInUseText(isInUseByActivePort, ActivePortInUseInfo, otherPortInUseInfo);
+					}
+					else // Not open according to statements, but could still be open, e.g. by external application:
+					{
+						using (var p = new SerialPortEx(portId)) // Use 'SerialPortEx' instead of 'SerialPort' to
+						{                                        // prevent potential 'ObjectDisposedException'.
+							try
+							{
+								p.Open();
+								p.Close();
+
+								// Not open, but could be selected by active or other port:
+								if (isInUseByActivePort || isInUseByOtherPort)
+								{
+									portId.IsInUse = true;
+									portId.InUseText = ComposeInUseText(isInUseByActivePort, ActivePortInUseInfo, otherPortInUseInfo);
+								}
+								else
+								{
+									portId.IsInUse = false;
+								}
+							}
+							catch
+							{
+								portId.IsInUse = true;
+								portId.InUseText = ComposeInUseText(isInUseByActivePort, ActivePortInUseInfo, otherPortInUseInfo, OtherAppInUseText);
+							}
 						}
 					}
 				}
 			}
 		}
+
+		private static string ComposeInUseText(bool isInUseByActivePort, InUseInfo activePortInUseInfo, List<InUseInfo> otherPortInUseInfo, string otherAppInUseText = null)
+		{
+			var inUseText = new StringBuilder();
+
+			if (isInUseByActivePort && (activePortInUseInfo != null))
+				inUseText.Append(activePortInUseInfo.InUseText); // "(in use by this serial port)"
+
+			if ((otherPortInUseInfo != null) && (otherPortInUseInfo.Count > 0))
+			{
+				foreach (var statement in otherPortInUseInfo)
+				{
+					if (!string.IsNullOrEmpty(statement.InUseText))
+					{
+						if (inUseText.Length > 0)
+							inUseText.Append(" ");
+
+						inUseText.Append(statement.InUseText); // "(in use by ...)"
+					}
+				}
+			}
+			else if (!string.IsNullOrEmpty(otherAppInUseText))
+			{
+				inUseText.Append(otherAppInUseText); // "(in use by another application)"
+			}
+
+			return (inUseText.ToString());
+		}
+
+		#region Event Invoking
+		//==========================================================================================
+		// Event Invoking
+		//==========================================================================================
+
+		/// <summary></summary>
+		protected virtual List<InUseInfo> OnInUseLookupRequest()
+		{
+			var e = new SerialPortInUseLookupEventArgs();
+			EventHelper.FireSync<SerialPortInUseLookupEventArgs>(InUseLookupRequest, this, e);
+			return (e.InUseLookup);
+		}
+
+		#endregion
 
 		#region Debug
 		//==========================================================================================

@@ -95,8 +95,10 @@ New:
 - Option to disable BOM (Unicode encoding preamble) when logging in UTF8 added (bug #363).
 
 Important changes:
+- Serial COM port that are in use are no longer simply labelled "(in use)" but rather "(in use by
+  this terminal)", "(... terminal<ID>)" or "(... other application)" (feature requests #201, #207).
 - Notes and links regarding non-intrusive RS-232 monitor/sniffer/spy cables and devices added to
-  'About' dialog (related to feature requests #152, 198, 288).
+  'About' dialog (related to feature requests #152, #198, #288).
 - Warning in case of yet incomplete RTF or XML log files (bug #356).
 - Automatically generated backup files are now placed into standard temporary folder (feat. #275).
 - NUnit tests migrated from classic to constraint model (related to feature request #293).
@@ -135,7 +137,7 @@ Limitations and known issues:
 - Keyword \!(Repeat(<Item>, <Repetitions>, <Delay>)) not yet implemented (feature request #13).
 - Text terminals: Wait for answer line not yet implemented (feature request #19).
 - Breaking while sending files not possible yet (bug #305).
-- Direct mode does not yet support special formats and commands (feature request #10).
+- Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
   unknown, could even be a limitation of the memory management within .NET 3.5).
@@ -278,7 +280,7 @@ Limitations and known issues:
 - Keyword \!(Repeat(<Item>, <Repetitions>, <Delay>)) not yet implemented (feature request #13).
 - Text terminals: Wait for answer line not yet implemented (feature request #19).
 - Breaking while sending files not possible yet (bug #305).
-- Direct mode does not yet support special formats and commands (feature request #10).
+- Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
   unknown, could even be a limitation of the memory management within .NET 3.5).
@@ -402,7 +404,7 @@ Limitations and known issues:
 - Keyword \!(Repeat(<Item>, <Repetitions>, <Delay>)) not yet implemented (feature request #13)
 - Text terminals: Wait for answer line not yet implemented (feature request #19)
 - Breaking while sending files not possible yet (bug #305)
-- Direct mode does not yet support special formats and commands (feature request #10)
+- Direct send text mode does not yet support special formats and commands (feature request #10)
 - Logging is limited to text, RTF format not yet implemented (feature requests #233)
 - XML logging not yet implemented, definition of schema pending (feature requests #26 and #27)
 
@@ -512,7 +514,7 @@ Limitations and known issues:
   a test environment would be needed to run USB Ser/HID on unixoids (feature request #2982052>#119)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478>#139)
 - Text terminals: Wait for answer line not yet implemented (feature request #1808509>#19)
-- Direct mode does not yet support special formats and commands (feature request #1808496>#10)
+- Direct send text mode does not yet support special formats and commands (feature request #1808496>#10)
 - XML logging not yet implemented, definition of schema pending (bugs #1849227>#26 and #1849228>#27)
 
 
@@ -600,7 +602,7 @@ Limitations and known issues:
   of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
 - Text terminals: Wait for answer line not yet implemented (feature request #1808509)
-- Terminal/direct mode does not yet support special formats and commands (feature request #1808496)
+- Direct send text mode does not yet support special formats and commands (feature request #1808496)
 - Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
 
 
@@ -656,7 +658,7 @@ Limitations and known issues:
   of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
 - Text terminals: Wait for answer line not yet implemented (feature request #1808509)
-- Terminal/direct mode does not yet support special formats and commands (feature request #1808496)
+- Direct send text mode does not yet support special formats and commands (feature request #1808496)
 - Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
 - Concurrent instances of YAT are limited in the use of default workspaces and terminals
   (feature request #2842713)
@@ -703,7 +705,7 @@ Limitations and known issues:
 - UTF-16/32 testing pending (bug #1931537)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
 - Text terminals: Wait for answer line not yet implemented (feature request #1808509)
-- Terminal/direct mode does not yet support special formats and commands (feature request #1808496)
+- Direct send text mode does not yet support special formats and commands (feature request #1808496)
 - Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
 - Concurrent instances of YAT are limited in the use of default workspaces and terminals
   (feature request #2842713)
@@ -800,7 +802,7 @@ Limitations and known issues:
 - UTF-16/32 testing pending (bug #1931537)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
 - Text terminals: Wait for answer line not yet implemented (feature request #1808509)
-- Terminal/direct mode does not yet support special formats and commands (feature request #1808496)
+- Direct send text mode does not yet support special formats and commands (feature request #1808496)
 - Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
 - Concurrent instances of YAT are limited in the use of default workspaces and terminals
   (feature request #2842713)

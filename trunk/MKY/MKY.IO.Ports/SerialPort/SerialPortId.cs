@@ -68,15 +68,15 @@ namespace MKY.IO.Ports
 		/// First standard port name as string.
 		/// </summary>
 		/// <remarks>
-		/// Can be used as default string on attributes such as <see cref="System.ComponentModel.DefaultValueAttribute"/>.
+		/// Can be used as default string on attributes such as <see cref="DefaultValueAttribute"/>.
 		/// </remarks>
 		public const string FirstStandardPortName = "COM1";
 
 		/// <summary></summary>
-		public const string DefaultInUseText = "(in use)";
+		public const string InUseTextDefault = "(in use)";
 
 		/// <summary></summary>
-		public const string DefaultSeparator = " - ";
+		public const string SeparatorDefault = " - ";
 
 		private const RegexOptions Options = RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase;
 
@@ -124,7 +124,7 @@ namespace MKY.IO.Ports
 			get
 			{
 				SerialPortCollection l = new SerialPortCollection();
-				l.FillWithAvailablePorts(false); // No need to get descriptions, thus faster.
+				l.FillWithAvailablePorts(false); // Explicitly not getting captions, thus faster.
 
 				if (l.Count > 0)
 					return (new SerialPortId(l[0]));
@@ -147,9 +147,9 @@ namespace MKY.IO.Ports
 		private bool hasCaptionFromSystem;
 
 		private bool isInUse;
-		private string inUseText;
+		private string inUseText = InUseTextDefault;
 
-		private string separator = DefaultSeparator;
+		private string separator = SeparatorDefault;
 
 		#endregion
 
@@ -198,7 +198,7 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 
 		/// <summary>
-		/// Port name (e.g. "COM1").
+		/// Port name, e.g. "COM1".
 		/// </summary>
 		[XmlElement("Name")]
 		public virtual string Name
@@ -224,7 +224,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Port number (e.g. 1).
+		/// Port number, e.g. 1 of "COM1".
 		/// </summary>
 		/// <exception cref="ArgumentOutOfRangeException"> if given value is not standard port number.</exception>
 		[XmlIgnore]
@@ -260,7 +260,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Port caption (e.g. "Serial On USB Port").
+		/// Port caption, e.g. "Serial On USB Port" of "COM1 - Serial On USB Port".
 		/// </summary>
 		[XmlIgnore]
 		public virtual string Caption
@@ -276,7 +276,7 @@ namespace MKY.IO.Ports
 		public virtual bool HasCaptionFromSystem
 		{
 			get { return (this.hasCaptionFromSystem); }
-			set { this.hasCaptionFromSystem = value; }
+			set { this.hasCaptionFromSystem = value;  }
 		}
 
 		/// <summary>
@@ -286,40 +286,31 @@ namespace MKY.IO.Ports
 		public virtual bool IsInUse
 		{
 			get { return (this.isInUse); }
-			set { this.isInUse = value; }
+			set { this.isInUse = value;  }
 		}
 
 		/// <summary>
-		/// The text which is shown when port is currently in use, e.g. "COM1 - (in use)".
+		/// The text which is shown when port is currently in use, e.g. "(in use)" of "COM1 - (in use)".
 		/// </summary>
 		[XmlIgnore]
-		[DefaultValue(DefaultInUseText)]
+		[DefaultValue(InUseTextDefault)]
 		public virtual string InUseText
 		{
-			get
-			{
-				if (!string.IsNullOrEmpty(this.inUseText))
-					return (this.inUseText);
-				else
-					return (DefaultInUseText);
-			}
-			set
-			{
-				this.inUseText = value;
-			}
+			get { return (this.inUseText); }
+			set { this.inUseText = value;  }
 		}
 
 		/// <summary>
-		/// The separator, e.g. "COM1 - Serial On USB Port".
+		/// The separator, e.g. " - " of "COM1 - Serial On USB Port".
 		/// </summary>
 		[XmlIgnore]
-		[DefaultValue(DefaultSeparator)]
+		[DefaultValue(SeparatorDefault)]
 		public virtual string Separator
 		{
 			get
 			{
 				if (this.separator.Length == 0)
-					return (DefaultSeparator);
+					return (SeparatorDefault);
 				else
 					return (this.separator);
 			}
@@ -370,9 +361,25 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
+		/// <remarks>
+		/// Corresponds to calling <see cref="ToString(bool, bool)"/> with
+		/// 'appendCaption' = <c>true</c> and 'appendInUseText' = <c>true</c>.
+		/// </remarks>
 		public override string ToString()
 		{
 			return (ToString(true, true));
+		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Corresponds to calling <see cref="ToString(bool, bool)"/> with
+		/// 'appendCaption' = <c>true</c> and 'appendInUseText' = <c>false</c>.
+		/// </remarks>
+		public virtual string ToNameAndCaptionString()
+		{
+			return (ToString(true, false));
 		}
 
 		/// <summary>
@@ -384,29 +391,21 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public virtual string ToString(bool appendCaption, bool appendInUseText)
 		{
-			var sb = new StringBuilder(Name);    // "COM10"
+			var sb = new StringBuilder(Name); // "COM10"
 
 			if (appendCaption && (!string.IsNullOrEmpty(Caption)))
 			{
-				sb.Append(Separator);            // "COM10 - "
-				sb.Append(Caption);              // "COM10 - Serial On USB Port"
+				sb.Append(Separator);         // "COM10 - "
+				sb.Append(Caption);           // "COM10 - Serial On USB Port"
 			}
 
-			if (appendInUseText && IsInUse)
+			if (appendInUseText && IsInUse && (!string.IsNullOrEmpty(InUseText)))
 			{
-				sb.Append(Separator);            // "COM10 - Serial On USB Port - "
-				sb.Append(InUseText);            // "COM10 - Serial On USB Port - (in use)"
+				sb.Append(Separator);         // "COM10 - Serial On USB Port - "
+				sb.Append(InUseText);         // "COM10 - Serial On USB Port - (in use)"
 			}
 
 			return (sb.ToString());
-		}
-
-		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
-		/// </summary>
-		public virtual string ToShortString()
-		{
-			return (ToString(false, false));
 		}
 
 		/// <summary>

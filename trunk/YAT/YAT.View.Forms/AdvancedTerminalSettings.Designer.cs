@@ -219,7 +219,7 @@
 			this.groupBox_Communication_SerialPorts.Size = new System.Drawing.Size(251, 65);
 			this.groupBox_Communication_SerialPorts.TabIndex = 2;
 			this.groupBox_Communication_SerialPorts.TabStop = false;
-			this.groupBox_Communication_SerialPorts.Text = "Serial COM ports";
+			this.groupBox_Communication_SerialPorts.Text = "Serial COM Ports";
 			// 
 			// checkBox_OutputBreakModifiable
 			// 
@@ -328,7 +328,7 @@
 			this.groupBox_Send_SerialPorts.Size = new System.Drawing.Size(251, 169);
 			this.groupBox_Send_SerialPorts.TabIndex = 8;
 			this.groupBox_Send_SerialPorts.TabStop = false;
-			this.groupBox_Send_SerialPorts.Text = "Serial COM ports";
+			this.groupBox_Send_SerialPorts.Text = "Serial COM Ports";
 			// 
 			// textBox_MaxChunkSize
 			// 

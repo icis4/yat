@@ -3720,6 +3720,10 @@ namespace YAT.View.Forms
 			SetFixedStatusText("Terminal Settings...");
 
 			var f = new TerminalSettings(this.settingsRoot.Explicit);
+
+			f.TerminalId = this.terminal.SequentialIndex;
+			f.IoIsOpen   = this.terminal.IsOpen;
+
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();

@@ -421,7 +421,8 @@ namespace YAT.View.Forms
 
 			terminalSelection.IOType = ioType;
 
-			serialPortSelection.PortId      = this.newTerminalSettingsInEdit.SerialPortId;
+			serialPortSelection.PortId = this.newTerminalSettingsInEdit.SerialPortId;
+		////serialPortSelection.ActivePortInUseInfo is kept at [null] as no port is yet activated/selected.
 
 			serialPortSettings.BaudRate     = this.newTerminalSettingsInEdit.SerialPortCommunication.BaudRate;
 			serialPortSettings.DataBits     = this.newTerminalSettingsInEdit.SerialPortCommunication.DataBits;

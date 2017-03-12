@@ -48,7 +48,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary></summary>
 		public override string PortStamp
 		{
-			get { return (this.portId.ToShortString()); }
+			get { return (this.portId.Name); }
 		}
 	}
 
@@ -73,7 +73,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary></summary>
 		public override string PortStamp
 		{
-			get { return (this.portId.ToShortString()); }
+			get { return (this.portId.Name); }
 		}
 	}
 }

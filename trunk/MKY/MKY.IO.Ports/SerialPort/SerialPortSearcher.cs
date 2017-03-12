@@ -26,7 +26,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Management;
-using System.Text.RegularExpressions;
 
 using MKY.Diagnostics;
 
