@@ -1254,7 +1254,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_SendContextMenu_CopyPredefined,
             this.toolStripMenuItem_SendContextMenu_SendImmediately});
 			this.contextMenuStrip_Send.Name = "contextMenuStrip_Send";
-			this.contextMenuStrip_Send.Size = new System.Drawing.Size(321, 220);
+			this.contextMenuStrip_Send.Size = new System.Drawing.Size(321, 198);
 			this.contextMenuStrip_Send.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Send_Opening);
 			// 
 			// toolStripMenuItem_SendContextMenu_SendText
@@ -1268,7 +1268,7 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_SendContextMenu_SendTextWithoutEol
 			// 
 			this.toolStripMenuItem_SendContextMenu_SendTextWithoutEol.Name = "toolStripMenuItem_SendContextMenu_SendTextWithoutEol";
-			this.toolStripMenuItem_SendContextMenu_SendTextWithoutEol.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F3)));
+			this.toolStripMenuItem_SendContextMenu_SendTextWithoutEol.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F3)));
 			this.toolStripMenuItem_SendContextMenu_SendTextWithoutEol.Size = new System.Drawing.Size(320, 22);
 			this.toolStripMenuItem_SendContextMenu_SendTextWithoutEol.Text = "Send Text w/o EOL";
 			this.toolStripMenuItem_SendContextMenu_SendTextWithoutEol.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_SendTextWithoutEol_Click);
@@ -1690,7 +1690,7 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_TerminalMenu_Send_TextWithoutEol
 			// 
 			this.toolStripMenuItem_TerminalMenu_Send_TextWithoutEol.Name = "toolStripMenuItem_TerminalMenu_Send_TextWithoutEol";
-			this.toolStripMenuItem_TerminalMenu_Send_TextWithoutEol.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F3)));
+			this.toolStripMenuItem_TerminalMenu_Send_TextWithoutEol.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F3)));
 			this.toolStripMenuItem_TerminalMenu_Send_TextWithoutEol.Size = new System.Drawing.Size(320, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_TextWithoutEol.Text = "T&ext w/o EOL";
 			this.toolStripMenuItem_TerminalMenu_Send_TextWithoutEol.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_TextWithoutEol_Click);
@@ -2554,7 +2554,7 @@ namespace YAT.View.Forms
 			this.splitContainer_Terminal.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainer_Terminal.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
 			this.splitContainer_Terminal.IsSplitterFixed = true;
-			this.splitContainer_Terminal.Location = new System.Drawing.Point(0, 0);
+			this.splitContainer_Terminal.Location = new System.Drawing.Point(0, 24);
 			this.splitContainer_Terminal.Name = "splitContainer_Terminal";
 			this.splitContainer_Terminal.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
@@ -2566,8 +2566,8 @@ namespace YAT.View.Forms
 			// 
 			this.splitContainer_Terminal.Panel2.Controls.Add(this.panel_Send);
 			this.splitContainer_Terminal.Panel2MinSize = 97;
-			this.splitContainer_Terminal.Size = new System.Drawing.Size(884, 537);
-			this.splitContainer_Terminal.SplitterDistance = 439;
+			this.splitContainer_Terminal.Size = new System.Drawing.Size(884, 513);
+			this.splitContainer_Terminal.SplitterDistance = 415;
 			this.splitContainer_Terminal.SplitterWidth = 1;
 			this.splitContainer_Terminal.TabIndex = 1;
 			this.splitContainer_Terminal.TabStop = false;
@@ -2587,7 +2587,7 @@ namespace YAT.View.Forms
 			// 
 			this.splitContainer_Predefined.Panel2.Controls.Add(this.panel_Predefined);
 			this.splitContainer_Predefined.Panel2MinSize = 144;
-			this.splitContainer_Predefined.Size = new System.Drawing.Size(884, 439);
+			this.splitContainer_Predefined.Size = new System.Drawing.Size(884, 415);
 			this.splitContainer_Predefined.SplitterDistance = 651;
 			this.splitContainer_Predefined.TabIndex = 0;
 			this.splitContainer_Predefined.TabStop = false;
@@ -2600,7 +2600,7 @@ namespace YAT.View.Forms
 			this.panel_Monitor.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor.Name = "panel_Monitor";
 			this.panel_Monitor.Padding = new System.Windows.Forms.Padding(3, 3, 1, 0);
-			this.panel_Monitor.Size = new System.Drawing.Size(651, 439);
+			this.panel_Monitor.Size = new System.Drawing.Size(651, 415);
 			this.panel_Monitor.TabIndex = 0;
 			// 
 			// groupBox_Monitor
@@ -2611,7 +2611,7 @@ namespace YAT.View.Forms
 			this.groupBox_Monitor.Location = new System.Drawing.Point(3, 3);
 			this.groupBox_Monitor.Name = "groupBox_Monitor";
 			this.groupBox_Monitor.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.groupBox_Monitor.Size = new System.Drawing.Size(647, 436);
+			this.groupBox_Monitor.Size = new System.Drawing.Size(647, 412);
 			this.groupBox_Monitor.TabIndex = 0;
 			this.groupBox_Monitor.TabStop = false;
 			this.groupBox_Monitor.Text = "Monitor";
@@ -2631,7 +2631,7 @@ namespace YAT.View.Forms
 			// 
 			this.splitContainer_TxMonitor.Panel2.Controls.Add(this.splitContainer_RxMonitor);
 			this.splitContainer_TxMonitor.Panel2MinSize = 100;
-			this.splitContainer_TxMonitor.Size = new System.Drawing.Size(641, 420);
+			this.splitContainer_TxMonitor.Size = new System.Drawing.Size(641, 396);
 			this.splitContainer_TxMonitor.SplitterDistance = 209;
 			this.splitContainer_TxMonitor.TabIndex = 0;
 			this.splitContainer_TxMonitor.TabStop = false;
@@ -2644,7 +2644,7 @@ namespace YAT.View.Forms
 			this.panel_Monitor_Tx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Tx.Name = "panel_Monitor_Tx";
 			this.panel_Monitor_Tx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Tx.Size = new System.Drawing.Size(209, 420);
+			this.panel_Monitor_Tx.Size = new System.Drawing.Size(209, 396);
 			this.panel_Monitor_Tx.TabIndex = 0;
 			// 
 			// monitor_Tx
@@ -2655,7 +2655,7 @@ namespace YAT.View.Forms
 			this.monitor_Tx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Tx.Name = "monitor_Tx";
 			this.monitor_Tx.RepositoryType = YAT.Domain.RepositoryType.Tx;
-			this.monitor_Tx.Size = new System.Drawing.Size(203, 417);
+			this.monitor_Tx.Size = new System.Drawing.Size(203, 393);
 			this.monitor_Tx.TabIndex = 0;
 			this.monitor_Tx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Tx.Enter += new System.EventHandler(this.monitor_Tx_Enter);
@@ -2675,7 +2675,7 @@ namespace YAT.View.Forms
 			// 
 			this.splitContainer_RxMonitor.Panel2.Controls.Add(this.panel_Monitor_Rx);
 			this.splitContainer_RxMonitor.Panel2MinSize = 48;
-			this.splitContainer_RxMonitor.Size = new System.Drawing.Size(428, 420);
+			this.splitContainer_RxMonitor.Size = new System.Drawing.Size(428, 396);
 			this.splitContainer_RxMonitor.SplitterDistance = 211;
 			this.splitContainer_RxMonitor.TabIndex = 1;
 			this.splitContainer_RxMonitor.TabStop = false;
@@ -2688,7 +2688,7 @@ namespace YAT.View.Forms
 			this.panel_Monitor_Bidir.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Bidir.Name = "panel_Monitor_Bidir";
 			this.panel_Monitor_Bidir.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(211, 420);
+			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(211, 396);
 			this.panel_Monitor_Bidir.TabIndex = 0;
 			// 
 			// monitor_Bidir
@@ -2699,7 +2699,7 @@ namespace YAT.View.Forms
 			this.monitor_Bidir.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Bidir.Name = "monitor_Bidir";
 			this.monitor_Bidir.RepositoryType = YAT.Domain.RepositoryType.Bidir;
-			this.monitor_Bidir.Size = new System.Drawing.Size(205, 417);
+			this.monitor_Bidir.Size = new System.Drawing.Size(205, 393);
 			this.monitor_Bidir.TabIndex = 0;
 			this.monitor_Bidir.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Bidir.Enter += new System.EventHandler(this.monitor_Bidir_Enter);
@@ -2711,7 +2711,7 @@ namespace YAT.View.Forms
 			this.panel_Monitor_Rx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Rx.Name = "panel_Monitor_Rx";
 			this.panel_Monitor_Rx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Rx.Size = new System.Drawing.Size(213, 420);
+			this.panel_Monitor_Rx.Size = new System.Drawing.Size(213, 396);
 			this.panel_Monitor_Rx.TabIndex = 0;
 			// 
 			// monitor_Rx
@@ -2722,7 +2722,7 @@ namespace YAT.View.Forms
 			this.monitor_Rx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Rx.Name = "monitor_Rx";
 			this.monitor_Rx.RepositoryType = YAT.Domain.RepositoryType.Rx;
-			this.monitor_Rx.Size = new System.Drawing.Size(207, 417);
+			this.monitor_Rx.Size = new System.Drawing.Size(207, 393);
 			this.monitor_Rx.TabIndex = 0;
 			this.monitor_Rx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Rx.Enter += new System.EventHandler(this.monitor_Rx_Enter);
@@ -2734,7 +2734,7 @@ namespace YAT.View.Forms
 			this.panel_Predefined.Location = new System.Drawing.Point(0, 0);
 			this.panel_Predefined.Name = "panel_Predefined";
 			this.panel_Predefined.Padding = new System.Windows.Forms.Padding(1, 3, 3, 0);
-			this.panel_Predefined.Size = new System.Drawing.Size(229, 439);
+			this.panel_Predefined.Size = new System.Drawing.Size(229, 415);
 			this.panel_Predefined.TabIndex = 0;
 			// 
 			// groupBox_Predefined
@@ -2744,7 +2744,7 @@ namespace YAT.View.Forms
 			this.groupBox_Predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox_Predefined.Location = new System.Drawing.Point(1, 3);
 			this.groupBox_Predefined.Name = "groupBox_Predefined";
-			this.groupBox_Predefined.Size = new System.Drawing.Size(225, 436);
+			this.groupBox_Predefined.Size = new System.Drawing.Size(225, 412);
 			this.groupBox_Predefined.TabIndex = 0;
 			this.groupBox_Predefined.TabStop = false;
 			this.groupBox_Predefined.Text = "&Predefined Commands";
@@ -2754,7 +2754,7 @@ namespace YAT.View.Forms
 			this.predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.predefined.Location = new System.Drawing.Point(3, 16);
 			this.predefined.Name = "predefined";
-			this.predefined.Size = new System.Drawing.Size(219, 417);
+			this.predefined.Size = new System.Drawing.Size(219, 393);
 			this.predefined.TabIndex = 0;
 			this.predefined.SelectedPageChanged += new System.EventHandler(this.predefined_SelectedPageChanged);
 			this.predefined.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.predefined_SendCommandRequest);
