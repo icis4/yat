@@ -294,6 +294,26 @@ namespace YAT.View.Forms
 				SaveWindowSettings();
 		}
 
+		/// <remarks>Requires that <see cref="Form.KeyPreview"/> is enabled.</remarks>
+		private void Terminal_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (send != null)
+			{
+				if (send.ContainsFocus)
+					send.NotifyKeyDown(e); // Somewhat ugly workaround...
+			}
+		}
+
+		/// <remarks>Requires that <see cref="Form.KeyPreview"/> is enabled.</remarks>
+		private void Terminal_KeyUp(object sender, KeyEventArgs e)
+		{
+			if (send != null)
+			{
+				if (send.ContainsFocus)
+					send.NotifyKeyUp(e); // Somewhat ugly workaround...
+			}
+		}
+
 		/// <remarks>
 		/// Attention:
 		/// In case of MDI parent/application closing, this FormClosing event is called before
@@ -526,9 +546,10 @@ namespace YAT.View.Forms
 
 			// Set the menu item properties:
 
-			toolStripMenuItem_TerminalMenu_Send_Text.Text    = sendTextText;
-			toolStripMenuItem_TerminalMenu_Send_Text.Enabled = sendTextEnabled && this.terminal.IsReadyToSend;
-			toolStripMenuItem_TerminalMenu_Send_File.Enabled = sendFileEnabled && this.terminal.IsReadyToSend;
+			toolStripMenuItem_TerminalMenu_Send_Text.Text              = sendTextText;
+			toolStripMenuItem_TerminalMenu_Send_Text.Enabled           = sendTextEnabled && this.terminal.IsReadyToSend;
+			toolStripMenuItem_TerminalMenu_Send_TextWithoutEol.Enabled = sendTextEnabled && this.terminal.IsReadyToSend && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.SendImmediately;
+			toolStripMenuItem_TerminalMenu_Send_File.Enabled           = sendFileEnabled && this.terminal.IsReadyToSend;
 
 			toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix.Checked = this.settingsRoot.Send.UseExplicitDefaultRadix;
 			toolStripMenuItem_TerminalMenu_Send_KeepCommand.Checked             = this.settingsRoot.Send.KeepCommand;
@@ -575,6 +596,14 @@ namespace YAT.View.Forms
 				this.terminal.SendText();
 			else
 				this.terminal.SendPartialTextEol();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Send_TextWithoutEol_Click(object sender, EventArgs e)
+		{
+			if (!this.settingsRoot.Send.SendImmediately)
+				this.terminal.SendTextWithoutEol();
+			else
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + @"""Send Text w/o EOL"" is invalid when ""Send Immediately"" is active!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_File_Click(object sender, EventArgs e)
@@ -1733,9 +1762,10 @@ namespace YAT.View.Forms
 
 			// Set the menu item properties:
 
-			toolStripMenuItem_SendContextMenu_SendText.Text    = sendTextText;
-			toolStripMenuItem_SendContextMenu_SendText.Enabled = sendTextEnabled && this.terminal.IsReadyToSend;
-			toolStripMenuItem_SendContextMenu_SendFile.Enabled = sendFileEnabled && this.terminal.IsReadyToSend;
+			toolStripMenuItem_SendContextMenu_SendText.Text              = sendTextText;
+			toolStripMenuItem_SendContextMenu_SendText.Enabled           = sendTextEnabled && this.terminal.IsReadyToSend;
+			toolStripMenuItem_SendContextMenu_SendTextWithoutEol.Enabled = sendTextEnabled && this.terminal.IsReadyToSend && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.SendImmediately;
+			toolStripMenuItem_SendContextMenu_SendFile.Enabled           = sendFileEnabled && this.terminal.IsReadyToSend;
 
 			toolStripMenuItem_SendContextMenu_Panels_SendText.Checked = this.settingsRoot.Layout.SendTextPanelIsVisible;
 			toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = this.settingsRoot.Layout.SendFilePanelIsVisible;
@@ -1759,6 +1789,14 @@ namespace YAT.View.Forms
 				this.terminal.SendText();
 			else
 				this.terminal.SendPartialTextEol();
+		}
+
+		private void toolStripMenuItem_SendContextMenu_SendTextWithoutEol_Click(object sender, EventArgs e)
+		{
+			if (!this.settingsRoot.Send.SendImmediately)
+				this.terminal.SendTextWithoutEol();
+			else
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + @"""Send Text w/o EOL"" is invalid when ""Send Immediately"" is active!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		private void toolStripMenuItem_SendContextMenu_SendFile_Click(object sender, EventArgs e)
@@ -1961,9 +1999,16 @@ namespace YAT.View.Forms
 			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
 		}
 
-		private void send_SendTextCommandRequest(object sender, EventArgs e)
+		private void send_SendTextCommandRequest(object sender, EventArgs<SendTextEventOption> e)
 		{
-			this.terminal.SendText();
+			switch (e.Value)
+			{
+				case SendTextEventOption.Normal:     this.terminal.SendText();           break;
+				case SendTextEventOption.WithoutEol: this.terminal.SendTextWithoutEol(); break;
+
+				default:
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + e.Value.ToString() + "' is an option that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		private void send_FileCommandChanged(object sender, EventArgs e)

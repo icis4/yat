@@ -82,7 +82,7 @@
 			this.sendText.Size = new System.Drawing.Size(706, 27);
 			this.sendText.TabIndex = 0;
 			this.sendText.EditFocusStateChanged += new System.EventHandler(this.sendText_EditFocusStateChanged);
-			this.sendText.SendCommandRequest += new System.EventHandler(this.sendText_SendCommandRequest);
+			this.sendText.SendCommandRequest += new System.EventHandler<MKY.EventArgs<YAT.View.Controls.SendTextEventOption>>(this.sendText_SendCommandRequest);
 			this.sendText.CommandChanged += new System.EventHandler(this.sendText_CommandChanged);
 			// 
 			// groupBox_SendFile

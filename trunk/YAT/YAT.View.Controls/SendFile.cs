@@ -287,7 +287,7 @@ namespace YAT.View.Controls
 		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if (keyData == Keys.Enter)
+			if ((keyData & Keys.KeyCode) == Keys.Enter)
 			{
 				if (button_Send.Enabled)
 				{
@@ -622,7 +622,7 @@ namespace YAT.View.Controls
 			if (this.command.IsValidFilePath)
 			{
 				ConfirmCommand(); // Required to invoke OnCommandChanged().
-				InvokeSendCommandRequest();
+				OnSendCommandRequest(EventArgs.Empty);
 			}
 			else
 			{
@@ -639,14 +639,9 @@ namespace YAT.View.Controls
 				if (dr == DialogResult.Yes)
 				{
 					if (ShowOpenFileDialog()) // ConfirmCommand() gets called here.
-						InvokeSendCommandRequest();
+						OnSendCommandRequest(EventArgs.Empty);
 				}
 			}
-		}
-
-		private void InvokeSendCommandRequest()
-		{
-			OnSendCommandRequest(EventArgs.Empty);
 		}
 
 		#endregion

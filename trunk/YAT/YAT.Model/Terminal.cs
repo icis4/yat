@@ -3004,6 +3004,20 @@ namespace YAT.Model
 		}
 
 		/// <summary>
+		/// Sends text command given by terminal settings.
+		/// </summary>
+		public virtual void SendTextWithoutEol()
+		{
+			// AssertNotDisposed() is called by 'DoSend...' below.
+
+			DoSendTextWithoutEol(this.settingsRoot.SendText.Command);
+
+			// Clear command if desired:
+			if (!this.settingsRoot.Send.KeepCommand)
+				this.settingsRoot.SendText.Command = new Command(this.settingsRoot.SendText.Command.DefaultRadix); // Set command to "".
+		}
+
+		/// <summary>
 		/// Sends partial text EOL.
 		/// </summary>
 		public virtual void SendPartialTextEol()
@@ -3061,26 +3075,69 @@ namespace YAT.Model
 				}
 				else
 				{
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' has an unknown type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' has an invalid type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
-				// Copy line text into recent commands, include compiled partial text:
-				if (c.IsSingleLineText || c.IsMultiLineText /* || do not add c.IsPartialText to recents */ || c.IsPartialTextEol)
+				CopyLineTextIntoRecentCommandsIfNeeded(c);
+			}
+		}
+
+		/// <remarks>
+		/// This method shall not be overridden. All text sending shall be requested using this
+		/// method, to ensure that pending break conditions are resumed.
+		/// </remarks>
+		protected void DoSendTextWithoutEol(Command c)
+		{
+			AssertNotDisposed();
+
+			if (c.IsValidText)
+			{
+				if (c.IsSingleLineText)
 				{
-					// Clone the command for the recent commands collection:
-					Command clone;
-					if (!c.IsPartialTextEol)
-						clone = new Command(c); // 'Normal' case, simply clone the command.
-					else                        // Partial, create an equivalent single line text.
-						clone = new Command(this.partialCommandLine, false, c.DefaultRadix);
-
-					// Put clone into recent history:
-					this.settingsRoot.SendText.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(new RecentItem<Command>(clone));
-					this.settingsRoot.SendText.SetChanged(); // Manual change required because underlying collection is modified.
-
-					// Reset the partial command line:
-					this.partialCommandLine = null;
+					if (SendTextSettings.IsEasterEggCommand(c.SingleLineText))
+						Send(SendTextSettings.EasterEggCommandText, Domain.Radix.String);
+					else
+						Send(c.SingleLineText, c.DefaultRadix);
 				}
+				else if (c.IsPartialText)
+				{
+					Send(c.PartialText, c.DefaultRadix);
+
+					// Compile the partial command line for later use:
+					if (string.IsNullOrEmpty(this.partialCommandLine))
+						this.partialCommandLine = string.Copy(c.PartialText);
+					else
+						this.partialCommandLine += c.PartialText;
+				}
+				else // Covers 'c.IsMultiLineText' and 'c.IsPartialTextEol' which are invalid 'WithoutEol'.
+				{
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' has an invalid type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+
+				CopyLineTextIntoRecentCommandsIfNeeded(c);
+			}
+		}
+
+		/// <remarks>
+		/// Includes compiled partial text.
+		/// </remarks>
+		protected virtual void CopyLineTextIntoRecentCommandsIfNeeded(Command c)
+		{
+			if (c.IsSingleLineText || c.IsMultiLineText /* || do not add c.IsPartialText to recents */ || c.IsPartialTextEol)
+			{
+				// Clone the command for the recent commands collection:
+				Command clone;
+				if (!c.IsPartialTextEol)
+					clone = new Command(c); // 'Normal' case, simply clone the command.
+				else                        // Partial, create an equivalent single line text.
+					clone = new Command(this.partialCommandLine, false, c.DefaultRadix);
+
+				// Put clone into recent history:
+				this.settingsRoot.SendText.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(new RecentItem<Command>(clone));
+				this.settingsRoot.SendText.SetChanged(); // Manual change required because underlying collection is modified.
+
+				// Reset the partial command line:
+				this.partialCommandLine = null;
 			}
 		}
 

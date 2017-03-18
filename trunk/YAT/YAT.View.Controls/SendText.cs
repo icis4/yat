@@ -159,7 +159,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Action")]
 		[Description("Event raised when sending the command is requested.")]
-		public event EventHandler SendCommandRequest;
+		public event EventHandler<EventArgs<SendTextEventOption>> SendCommandRequest;
 
 		#endregion
 
@@ -392,6 +392,20 @@ namespace YAT.View.Controls
 			ValidateChildren(); // Simplest way to invoke comboBox_SingleLineText_Validating().
 		}
 
+		/// <summary></summary>
+		public virtual void NotifyKeyDown(KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Menu) // Menu = AltKey...
+				SetSendControls();
+		}
+
+		/// <summary></summary>
+		public virtual void NotifyKeyUp(KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Menu) // Menu = AltKey...
+				SetSendControls();
+		}
+
 		#endregion
 
 		#region Control Special Keys
@@ -399,13 +413,24 @@ namespace YAT.View.Controls
 		// Control Special Keys
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// In case of pressing a modifier key (e.g. [Shift]), this method is invoked twice! Both
+		/// invocations will state msg=0x100 (WM_KEYDOWN)! See:
+		/// https://msdn.microsoft.com/en-us/library/system.windows.forms.control.processcmdkey.aspx:
+		/// The ProcessCmdKey method first determines whether the control has a ContextMenu, and if
+		/// so, enables the ContextMenu to process the command key. If the command key is not a menu
+		/// shortcut and the control has a parent, the key is passed to the parent's ProcessCmdKey
+		/// method. The net effect is that command keys are "bubbled" up the control hierarchy. In
+		/// addition to the key the user pressed, the key data also indicates which, if any, modifier
+		/// keys were pressed at the same time as the key. Modifier keys include the SHIFT, CTRL, and
+		/// ALT keys.
+		/// </remarks>
 		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			if (EditIsActive)
 			{
-				if (keyData == Keys.Enter)
+				if ((keyData & Keys.KeyCode) == Keys.Enter)
 				{
 					if (button_Send.Enabled)
 					{
@@ -605,7 +630,7 @@ namespace YAT.View.Controls
 					text = "\\h(" + ConvertEx.ToHexadecimalString(Encoding.Unicode.GetBytes(new char[] { e.KeyChar })) + ")";
 
 				ConfirmPartialText(text);
-				InvokeSendCommandRequest();
+				OnSendCommandRequest(new EventArgs<SendTextEventOption>(SendTextEventOption.Normal));
 			}
 
 			DebugCommandLeave();
@@ -867,7 +892,12 @@ namespace YAT.View.Controls
 			//  > YAT.View.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
 			// Changes here may have to be applied there too.
 
-			string text = "Send Text (F3)";
+			string text;
+			if (ModifierKeys != Keys.Alt)
+				text = "Send Text (F3)";
+			else
+				text = "Send Text w/o EOL (Alt+F3)";
+
 			bool enabled = this.terminalIsReadyToSend;
 			if (this.sendImmediately)
 			{
@@ -987,29 +1017,30 @@ namespace YAT.View.Controls
 
 		private void RequestSendCommand()
 		{
+			SendTextEventOption option;
+			if (ModifierKeys != Keys.Alt)
+				option = SendTextEventOption.Normal;
+			else
+				option = SendTextEventOption.WithoutEol;
+
 			if (this.sendImmediately)
 			{
 				ConfirmPartialTextEolCommand();
-				InvokeSendCommandRequest();
+				OnSendCommandRequest(new EventArgs<SendTextEventOption>(option));
 			}
 			else
 			{
 				if (this.isValidated)
 				{
 					ConfirmCommand(); // Required to invoke OnCommandChanged().
-					InvokeSendCommandRequest();
+					OnSendCommandRequest(new EventArgs<SendTextEventOption>(option));
 				}
 				else
 				{
 					if (ValidateChildren()) // ConfirmSingleLineText() gets called here.
-						InvokeSendCommandRequest();
+						OnSendCommandRequest(new EventArgs<SendTextEventOption>(option));
 				}
 			}
-		}
-
-		private void InvokeSendCommandRequest()
-		{
-			OnSendCommandRequest(EventArgs.Empty);
 		}
 
 		#endregion
@@ -1034,7 +1065,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		protected virtual void OnSendCommandRequest(EventArgs e)
+		protected virtual void OnSendCommandRequest(EventArgs<SendTextEventOption> e)
 		{
 			EventHelper.FireSync(SendCommandRequest, this, e);
 		}
