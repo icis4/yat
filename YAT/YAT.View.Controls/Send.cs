@@ -87,7 +87,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Action")]
 		[Description("Event raised when sending the command is requested.")]
-		public event EventHandler SendTextCommandRequest;
+		public event EventHandler<EventArgs<SendTextEventOption>> SendTextCommandRequest;
 
 		/// <summary></summary>
 		[Category("Property Changed")]
@@ -132,6 +132,26 @@ namespace YAT.View.Controls
 		public virtual void ValidateSendTextInput()
 		{
 			sendText.ValidateInput();
+		}
+
+		/// <summary></summary>
+		public virtual void NotifyKeyDown(KeyEventArgs e)
+		{
+			if (sendText != null)
+			{
+				if (sendText.ContainsFocus)
+					sendText.NotifyKeyDown(e); // Somewhat ugly workaround...
+			}
+		}
+
+		/// <summary></summary>
+		public virtual void NotifyKeyUp(KeyEventArgs e)
+		{
+			if (sendText != null)
+			{
+				if (sendText.ContainsFocus)
+					sendText.NotifyKeyUp(e); // Somewhat ugly workaround...
+			}
 		}
 
 		#endregion
@@ -308,7 +328,7 @@ namespace YAT.View.Controls
 			OnEditFocusStateChanged(e);
 		}
 
-		private void sendText_SendCommandRequest(object sender, EventArgs e)
+		private void sendText_SendCommandRequest(object sender, EventArgs<SendTextEventOption> e)
 		{
 			OnSendTextCommandRequest(e);
 		}
@@ -380,7 +400,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		protected virtual void OnSendTextCommandRequest(EventArgs e)
+		protected virtual void OnSendTextCommandRequest(EventArgs<SendTextEventOption> e)
 		{
 			EventHelper.FireSync(SendTextCommandRequest, this, e);
 		}
