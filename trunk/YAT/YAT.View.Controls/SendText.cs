@@ -395,14 +395,14 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		public virtual void NotifyKeyDown(KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.Menu) // Menu = AltKey...
+			if (e.KeyCode == Keys.ControlKey)
 				SetSendControls();
 		}
 
 		/// <summary></summary>
 		public virtual void NotifyKeyUp(KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.Menu) // Menu = AltKey...
+			if (e.KeyCode == Keys.ControlKey)
 				SetSendControls();
 		}
 
@@ -893,10 +893,10 @@ namespace YAT.View.Controls
 			// Changes here may have to be applied there too.
 
 			string text;
-			if (ModifierKeys != Keys.Alt)
+			if (ModifierKeys != Keys.Control)
 				text = "Send Text (F3)";
 			else
-				text = "Send Text w/o EOL (Alt+F3)";
+				text = "Send Text w/o EOL (Ctrl+F3)";
 
 			bool enabled = this.terminalIsReadyToSend;
 			if (this.sendImmediately)
@@ -1018,7 +1018,7 @@ namespace YAT.View.Controls
 		private void RequestSendCommand()
 		{
 			SendTextEventOption option;
-			if (ModifierKeys != Keys.Alt)
+			if (ModifierKeys != Keys.Control)
 				option = SendTextEventOption.Normal;
 			else
 				option = SendTextEventOption.WithoutEol;
