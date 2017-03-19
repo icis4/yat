@@ -1202,7 +1202,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_CopyToSendText.Name = "toolStripMenuItem_PredefinedContextMenu_CopyToSendText";
 			this.toolStripMenuItem_PredefinedContextMenu_CopyToSendText.Size = new System.Drawing.Size(220, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_CopyToSendText.Text = "Copy To Send Text";
+			this.toolStripMenuItem_PredefinedContextMenu_CopyToSendText.Text = "Copy to Send Text";
 			this.toolStripMenuItem_PredefinedContextMenu_CopyToSendText.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_CopyToSendText_Click);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_CopyFromSendText
@@ -1210,14 +1210,14 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Name = "toolStripMenuItem_PredefinedContextMenu_CopyFromSendText";
 			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.ShortcutKeyDisplayString = "";
 			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Size = new System.Drawing.Size(220, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Text = "Copy From Send Text";
+			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Text = "Copy from Send Text";
 			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendText_Click);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Name = "toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile";
 			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Size = new System.Drawing.Size(220, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Text = "Copy From Send File";
+			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Text = "Copy from Send File";
 			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile_Click);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_Separator_4
@@ -2390,7 +2390,7 @@ namespace YAT.View.Forms
 			this.toolStripStatusLabel_TerminalStatus_RFR.Text = "RFR";
 			this.toolStripStatusLabel_TerminalStatus_RFR.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_RFR.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-			this.toolStripStatusLabel_TerminalStatus_RFR.ToolTipText = "Ready For Receiving (Out), also known as RTS (Request To Send)";
+			this.toolStripStatusLabel_TerminalStatus_RFR.ToolTipText = "Ready For Receiving (Out), formerly known as RTS (Request To Send)";
 			this.toolStripStatusLabel_TerminalStatus_RFR.Click += new System.EventHandler(this.toolStripStatusLabel_TerminalStatus_RFR_Click);
 			// 
 			// toolStripStatusLabel_TerminalStatus_CTS

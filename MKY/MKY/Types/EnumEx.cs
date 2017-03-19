@@ -40,7 +40,7 @@ namespace MKY
 	/// <remarks>
 	/// Using a normal enum in a client class has the big advantage that code designers and
 	/// features like IntelliSense can use their built-in enum support.
-	/// As a draw-back, <see cref="EnumEx"/> based types are not serializable because it's abstract
+	/// As a draw-back, <see cref="EnumEx"/> based types are not serializable because it abstract
 	/// underlying type <see cref="Enum"/> isn't.
 	/// </remarks>
 	/// <example>

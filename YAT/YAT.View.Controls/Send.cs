@@ -140,7 +140,7 @@ namespace YAT.View.Controls
 			if (sendText != null)
 			{
 				if (sendText.ContainsFocus)
-					sendText.NotifyKeyDown(e); // Somewhat ugly workaround...
+					sendText.NotifyKeyDown(e); // Somewhat ugly workaround to handle key events...
 			}
 		}
 
@@ -150,7 +150,7 @@ namespace YAT.View.Controls
 			if (sendText != null)
 			{
 				if (sendText.ContainsFocus)
-					sendText.NotifyKeyUp(e); // Somewhat ugly workaround...
+					sendText.NotifyKeyUp(e); // Somewhat ugly workaround to handle key events...
 			}
 		}
 

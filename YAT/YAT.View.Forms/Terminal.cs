@@ -300,7 +300,7 @@ namespace YAT.View.Forms
 			if (send != null)
 			{
 				if (send.ContainsFocus)
-					send.NotifyKeyDown(e); // Somewhat ugly workaround...
+					send.NotifyKeyDown(e); // Somewhat ugly workaround to handle key events...
 			}
 		}
 
@@ -310,7 +310,7 @@ namespace YAT.View.Forms
 			if (send != null)
 			{
 				if (send.ContainsFocus)
-					send.NotifyKeyUp(e); // Somewhat ugly workaround...
+					send.NotifyKeyUp(e); // Somewhat ugly workaround to handle key events...
 			}
 		}
 
@@ -1529,26 +1529,28 @@ namespace YAT.View.Forms
 
 			if (pageCount > 0)
 			{
-				toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled = (predefined.SelectedPage > pages.Count);
-				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled     = (predefined.SelectedPage < pages.Count);
+				toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled  = (predefined.SelectedPage > pageCount);
+				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled      = (predefined.SelectedPage < pageCount);
+				toolStripMenuItem_PredefinedContextMenu_Page_Separator.Visible = true;
 			}
 			else
 			{
-				toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled = false;
-				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled = false;
+				toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled  = false;
+				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled      = false;
+				toolStripMenuItem_PredefinedContextMenu_Page_Separator.Visible = false;
 			}
 
 			for (int i = 0; i < Math.Min(pageCount, menuItems_Predefined_MaxPages); i++)
 			{
-				this.menuItems_Predefined_Pages[i].Text      = MenuEx.PrependIndex(i + 1, pages[i].PageName);
-				this.menuItems_Predefined_Pages[i].Visible   = true;
-				this.menuItems_Predefined_Pages[i].Enabled   = this.terminal.IsOpen;
+				this.menuItems_Predefined_Pages[i].Text    = MenuEx.PrependIndex(i + 1, pages[i].PageName);
+				this.menuItems_Predefined_Pages[i].Visible = true;
+				this.menuItems_Predefined_Pages[i].Enabled = this.terminal.IsOpen;
 			}
 			for (int i = pageCount; i < menuItems_Predefined_MaxPages; i++)
 			{
-				this.menuItems_Predefined_Pages[i].Text      = MenuEx.PrependIndex(i + 1, "<Undefined>");
-				this.menuItems_Predefined_Pages[i].Visible   = false;
-				this.menuItems_Predefined_Pages[i].Enabled   = false;
+				this.menuItems_Predefined_Pages[i].Text    = MenuEx.PrependIndex(i + 1, "<Undefined>");
+				this.menuItems_Predefined_Pages[i].Visible = false;
+				this.menuItems_Predefined_Pages[i].Enabled = false;
 			}
 
 			// Commands:
@@ -1588,6 +1590,7 @@ namespace YAT.View.Forms
 					this.menuItems_Predefined_Commands[i].Enabled = true;
 				}
 			}
+
 			for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage; i++)
 			{
 				if (this.menuItems_Predefined_Commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
@@ -1645,7 +1648,7 @@ namespace YAT.View.Forms
 				// There is a limitaion in Windows.Forms:
 				//  1. Edit command in SendText
 				//  2. Right-click to open the predefined context menu
-				//     => SendText should get validated, but actuall isn't!
+				//     => SendText should get validated, but actually isn't!
 				//
 				// Workaround:
 				send.ValidateSendTextInput();
