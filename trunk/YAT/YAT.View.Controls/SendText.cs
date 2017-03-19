@@ -392,14 +392,14 @@ namespace YAT.View.Controls
 			ValidateChildren(); // Simplest way to invoke comboBox_SingleLineText_Validating().
 		}
 
-		/// <summary></summary>
+		/// <remarks>Somewhat ugly workaround to handle key events...</remarks>
 		public virtual void NotifyKeyDown(KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.ControlKey)
 				SetSendControls();
 		}
 
-		/// <summary></summary>
+		/// <remarks>Somewhat ugly workaround to handle key events...</remarks>
 		public virtual void NotifyKeyUp(KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.ControlKey)
@@ -892,10 +892,8 @@ namespace YAT.View.Controls
 			//  > YAT.View.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
 			// Changes here may have to be applied there too.
 
-			string text;
-			if (ModifierKeys != Keys.Control)
-				text = "Send Text (F3)";
-			else
+			var text = "Send Text (F3)";
+			if (WithoutEolIsRequestedAndAllowed)
 				text = "Send Text w/o EOL (Ctrl+F3)";
 
 			bool enabled = this.terminalIsReadyToSend;
@@ -1005,7 +1003,8 @@ namespace YAT.View.Controls
 				ConfirmCommand();
 			}
 
-			button_Send.Select();
+			SelectInput();
+			SetCursorToEnd();
 		}
 
 		#endregion
@@ -1017,10 +1016,8 @@ namespace YAT.View.Controls
 
 		private void RequestSendCommand()
 		{
-			SendTextEventOption option;
-			if (ModifierKeys != Keys.Control)
-				option = SendTextEventOption.Normal;
-			else
+			var option = SendTextEventOption.Normal;
+			if (WithoutEolIsRequestedAndAllowed)
 				option = SendTextEventOption.WithoutEol;
 
 			if (this.sendImmediately)
@@ -1041,6 +1038,11 @@ namespace YAT.View.Controls
 						OnSendCommandRequest(new EventArgs<SendTextEventOption>(option));
 				}
 			}
+		}
+
+		private bool WithoutEolIsRequestedAndAllowed
+		{
+			get { return ((ModifierKeys == Keys.Control) && !this.command.IsMultiLineText); }
 		}
 
 		#endregion
