@@ -51,7 +51,7 @@ namespace YAT.View.Forms
 		private SettingControlsHelper isSettingControls;
 
 		private int terminalId; // = 0;
-		private bool ioIsOpen; // = false;
+		private bool terminalIsOpen; // = false;
 
 		private Settings.Terminal.ExplicitSettings settings;
 		private Settings.Terminal.ExplicitSettings settingsInEdit;
@@ -93,10 +93,10 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public bool IoIsOpen
+		public bool TerminalIsOpen
 		{
-			get { return (this.ioIsOpen); }
-			set { this.ioIsOpen = value;  }
+			get { return (this.terminalIsOpen); }
+			set { this.terminalIsOpen = value;  }
 		}
 
 		/// <summary></summary>
@@ -442,8 +442,8 @@ namespace YAT.View.Forms
 			(
 				this.terminalId,
 				this.settingsInEdit.Terminal.IO.SerialPort.PortId,
-				this.ioIsOpen,
-				(this.ioIsOpen ? "(in use by this terminal)" : "(selected by this terminal)")
+				this.terminalIsOpen,
+				(this.terminalIsOpen ? "(in use by this terminal)" : "(selected by this terminal)")
 			);
 
 			serialPortSettings.BaudRate     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.BaudRate;

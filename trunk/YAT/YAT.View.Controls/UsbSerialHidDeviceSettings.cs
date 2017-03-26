@@ -400,11 +400,11 @@ namespace YAT.View.Controls
 		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "YAT is not (yet) capable for RTL.")]
 		private void linkLabel_Info_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			var link = (e.Link.LinkData as string);
-			if (link != null)
+			var linkUri = (e.Link.LinkData as string);
+			if (linkUri != null)
 			{
 				Exception ex;
-				if (MKY.Net.Browser.TryBrowseUri(MKY.IO.Usb.SerialHidReportFormatPresetEx.TI_Link, out ex))
+				if (MKY.Net.Browser.TryBrowseUri(linkUri, out ex))
 				{
 					e.Link.Visited = true;
 				}
@@ -508,6 +508,20 @@ namespace YAT.View.Controls
 
 			reportFormatPreview.Format  = this.reportFormat;
 			comboBox_Preset.SelectedItem = (MKY.IO.Usb.SerialHidReportFormatPresetEx)this.reportFormat;
+
+			string linkText;
+			string linkUri;
+			if (MKY.IO.Usb.SerialHidReportFormatPresetEx.TryGetLink((MKY.IO.Usb.SerialHidReportFormatPresetEx)this.reportFormat, out linkText, out linkUri))
+			{
+				linkLabel_Info.Links.Clear();
+				linkLabel_Info.Text = linkText;
+				linkLabel_Info.Links.Add(0, linkText.Length, linkUri);
+				linkLabel_Info.Visible = true;
+			}
+			else
+			{
+				linkLabel_Info.Visible = false;
+			}
 
 			if (Enabled)
 				comboBox_FlowControl.SelectedItem = (MKY.IO.Serial.Usb.SerialHidFlowControlEx)this.flowControl;

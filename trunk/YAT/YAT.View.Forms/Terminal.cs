@@ -3769,8 +3769,8 @@ namespace YAT.View.Forms
 
 			var f = new TerminalSettings(this.settingsRoot.Explicit);
 
-			f.TerminalId = this.terminal.SequentialIndex;
-			f.IoIsOpen   = this.terminal.IsOpen;
+			f.TerminalId     = this.terminal.SequentialIndex;
+			f.TerminalIsOpen = this.terminal.IsOpen;
 
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
