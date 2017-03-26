@@ -163,11 +163,11 @@ namespace YAT.View.Forms
 		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "YAT is not (yet) capable for RTL.")]
 		private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			var link = (e.Link.LinkData as string);
-			if (link != null)
+			var linkUri = (e.Link.LinkData as string);
+			if (linkUri != null)
 			{
 				Exception ex;
-				if (MKY.Net.Browser.TryBrowseUri(link, out ex))
+				if (MKY.Net.Browser.TryBrowseUri(linkUri, out ex))
 				{
 					e.Link.Visited = true;
 				}

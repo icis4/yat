@@ -112,10 +112,16 @@ namespace MKY.IO.Usb
 		public const byte TI_ID = 0x3F;
 
 		/// <summary>
+		/// The TI HID API specification.
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Underscore for improved readability.")]
+		public const string TI_HidApi_LinkText = "TI Application Report SLAA453";
+
+		/// <summary>
 		/// The location of the TI HID API specification.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Underscore for improved readability.")]
-		public const string TI_Link = "http://www.ti.com/lit/an/slaa453/slaa453.pdf";
+		public const string TI_HidApi_LinkUri = "http://www.ti.com/lit/an/slaa453/slaa453.pdf";
 
 		#endregion
 
@@ -263,6 +269,36 @@ namespace MKY.IO.Usb
 			{
 				result = new SerialHidReportFormatPresetEx(); // Default!
 				return (false);
+			}
+		}
+
+		#endregion
+
+		#region Link
+		//==========================================================================================
+		// Link
+		//==========================================================================================
+
+		/// <summary>
+		/// Tries to get link information for the given preset.
+		/// </summary>
+		public static bool TryGetLink(SerialHidReportFormatPreset preset, out string linkText, out string linkUri)
+		{
+			switch (preset)
+			{
+				case SerialHidReportFormatPreset.TI_HidApi:
+				{
+					linkText = TI_HidApi_LinkText;
+					linkUri  = TI_HidApi_LinkUri;
+					return (true);
+				}
+
+				default:
+				{
+					linkText = null;
+					linkUri  = null;
+					return (false);
+				}
 			}
 		}
 
