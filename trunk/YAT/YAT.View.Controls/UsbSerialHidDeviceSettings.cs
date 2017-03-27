@@ -511,7 +511,7 @@ namespace YAT.View.Controls
 
 			string linkText;
 			string linkUri;
-			if (MKY.IO.Usb.SerialHidReportFormatPresetEx.TryGetLink((MKY.IO.Usb.SerialHidReportFormatPresetEx)this.reportFormat, out linkText, out linkUri))
+			if (((MKY.IO.Usb.SerialHidReportFormatPresetEx)this.reportFormat).HasInfoLink(out linkText, out linkUri))
 			{
 				linkLabel_Info.Links.Clear();
 				linkLabel_Info.Text = linkText;
