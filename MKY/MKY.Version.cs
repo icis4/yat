@@ -33,7 +33,8 @@ using System.Reflection;
 //
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
+// [assembly: AssemblyVersion("1.0.*")] => 'Build' will indicate number of days since 2000-01-01.
+//                                      => 'Revision' will indicate number of seconds since midnight divided by two.
 [assembly: AssemblyVersion("1.0.18.*")]
 [assembly: AssemblyFileVersion("1.0.18.0")]
 [assembly: AssemblyInformationalVersion("1.0.18")]
