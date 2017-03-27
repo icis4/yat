@@ -22,8 +22,14 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using System.Xml.Serialization;
 
 using MKY;
@@ -31,6 +37,8 @@ using MKY.Collections;
 using MKY.Recent;
 
 using YAT.Model.Types;
+
+#endregion
 
 namespace YAT.Model.Settings
 {
@@ -114,6 +122,40 @@ namespace YAT.Model.Settings
 				{
 					this.recentCommands = value;
 					SetMyChanged();
+				}
+			}
+		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary>
+		/// Expands the multi-line text of a multi-line command into the corresponding single-line
+		/// text, taking "\!(EOL)" as additional EOL separator.
+		/// </summary>
+		public virtual void ExpandMultiLineText()
+		{
+			if (Command != null)
+			{
+				if (Command.IsMultiLineText)
+				{
+					var singleLine = new StringBuilder();
+					foreach (var line in Command.MultiLineText)
+					{
+						if (singleLine.Length > 0)
+							singleLine.Append(@"\!(EOL)"); // \todo (2017-03-27 / MKY) could be retrieved from 'Domain.Parser' somehow.
+
+						singleLine.Append(line);
+					}
+
+					var c = new Command(Command); // Clone command to ensure decoupling!
+					c.ClearDescription();
+					c.SingleLineText = singleLine.ToString();
+					Command = c;
 				}
 			}
 		}

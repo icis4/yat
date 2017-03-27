@@ -313,8 +313,8 @@ namespace YAT.View.Controls
 		{
 			if (this.command.IsSingleLineText)
 			{
-				string s = this.command.SingleLineText;
-				if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", s, radix, this.parseMode))
+				var text = this.command.SingleLineText;
+				if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", text, radix, this.parseMode))
 				{
 					this.command.DefaultRadix = radix;
 				////this.isValidated is intentionally not set, as the validation above only verifies the changed radix but not the text.
@@ -325,9 +325,9 @@ namespace YAT.View.Controls
 			{
 				bool isValid = true;
 
-				foreach (string s in this.command.MultiLineText)
+				foreach (var text in this.command.MultiLineText)
 				{
-					if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", s, radix, this.parseMode))
+					if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", text, radix, this.parseMode))
 						isValid = false;
 				}
 

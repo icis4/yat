@@ -288,6 +288,8 @@ namespace YAT.Model.Types
 						this.isFilePath = false;
 						this.filePath = "";
 					}
+
+					// Attention, don't modify the description as that can be defined separately!
 				}
 				else
 				{
@@ -316,6 +318,8 @@ namespace YAT.Model.Types
 					this.commandLines = UndefinedCommandLines;
 					this.isPartialText = false;
 					this.isPartialTextEol = false;
+
+					// Attention, don't modify the description as that can be defined separately!
 				}
 				else
 				{
@@ -350,6 +354,8 @@ namespace YAT.Model.Types
 					this.commandLines = UndefinedCommandLines;
 					this.isPartialText = false;
 					this.isPartialTextEol = false;
+
+					// Attention, don't modify the description as that can be defined separately!
 				}
 				else
 				{
@@ -440,6 +446,8 @@ namespace YAT.Model.Types
 					this.isPartialText = false;
 					this.isFilePath = true;
 					this.filePath = "";
+
+					// Attention, don't modify the description as that can be defined separately!
 				}
 				else
 				{
@@ -543,6 +551,8 @@ namespace YAT.Model.Types
 					this.isPartialTextEol = false;
 					this.isFilePath = true;
 					this.filePath = "";
+
+					// Attention, don't modify the description as that can be defined separately!
 				}
 				else
 				{
@@ -572,6 +582,8 @@ namespace YAT.Model.Types
 					this.isPartialTextEol = false;
 					this.isFilePath = true;
 					this.filePath = "";
+
+					// Attention, don't modify the description as that can be defined separately!
 				}
 				else
 				{
@@ -612,8 +624,7 @@ namespace YAT.Model.Types
 					this.isFilePath = true;
 					this.filePath = "";
 
-					// Enforce "<N lines...> [...] [...] ..." description:
-					DescriptionFromSingleLineText();
+					// Attention, don't modify the description as that can be defined separately!
 				}
 				else
 				{
