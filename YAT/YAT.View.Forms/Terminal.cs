@@ -556,6 +556,8 @@ namespace YAT.View.Forms
 			toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked          = this.settingsRoot.Send.CopyPredefined;
 			toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked         = this.settingsRoot.Send.SendImmediately;
 
+			toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText.Enabled = this.settingsRoot.SendText.Command.IsMultiLineText;
+
 			toolStripMenuItem_TerminalMenu_Send_AutoResponse.Checked          = this.settingsRoot.AutoResponse.IsActive;
 			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Checked  = this.settingsRoot.AutoResponse.TriggerIsActive;
 			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Checked = this.settingsRoot.AutoResponse.ResponseIsActive;
@@ -629,6 +631,11 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_TerminalMenu_Send_SendImmediately_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Send.SendImmediately = !this.settingsRoot.Send.SendImmediately;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.SendText.ExpandMultiLineText();
 		}
 
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
@@ -1778,6 +1785,8 @@ namespace YAT.View.Forms
 			toolStripMenuItem_SendContextMenu_CopyPredefined.Checked          = this.settingsRoot.Send.CopyPredefined;
 			toolStripMenuItem_SendContextMenu_SendImmediately.Checked         = this.settingsRoot.Send.SendImmediately;
 
+			toolStripMenuItem_SendContextMenu_ExpandMultiLineText.Enabled = this.settingsRoot.SendText.Command.IsMultiLineText;
+
 			this.isSettingControls.Leave();
 		}
 
@@ -1835,6 +1844,11 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_SendContextMenu_SendImmediately_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Send.SendImmediately = !this.settingsRoot.Send.SendImmediately;
+		}
+
+		private void toolStripMenuItem_SendContextMenu_ExpandMultiLineText_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.SendText.ExpandMultiLineText();
 		}
 
 		#endregion
