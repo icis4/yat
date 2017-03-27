@@ -362,7 +362,7 @@ namespace YAT.Model
 			{
 				if (ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace)
 				{
-					string filePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
+					string filePath = Environment.ExpandEnvironmentVariables(ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath);
 					if (PathEx.IsValid(filePath))
 					{
 						if (File.Exists(filePath))

@@ -209,22 +209,48 @@ namespace MKY.IO
 		}
 
 		/// <summary>
-		/// Swaps two existing files, expanding environment variables.
+		/// Swaps two existing files.
 		/// </summary>
-		public static bool Swap(string filePathA, string filePathB)
+		public static void Swap(string filePathA, string filePathB)
 		{
-			if (!string.IsNullOrEmpty(filePathA)) filePathA = Environment.ExpandEnvironmentVariables(filePathA);
-			if (!string.IsNullOrEmpty(filePathB)) filePathB = Environment.ExpandEnvironmentVariables(filePathB);
-
-			if (!File.Exists(filePathA)) return (false);
-			if (!File.Exists(filePathB)) return (false);
-
-			// Both files exist, swap them:
 			string filePathTemp = PathEx.GetUniqueTempPath(); // No extension needed.
-			File.Move(filePathA, filePathTemp);
-			File.Move(filePathB, filePathA);
-			File.Move(filePathTemp, filePathB);
-			return (true);
+
+			// Step 1 (A => Temp):
+			try
+			{
+				File.Move(filePathA, filePathTemp);
+			}
+			catch
+			{
+				throw; // Simply re-throw, no cleanup needed if step 1 throws.
+			}
+
+			// Step 2 (B => A):
+			try
+			{
+				File.Move(filePathB, filePathA);
+			}
+			catch
+			{
+				// Best-effort cleanup (revert A):
+				try { File.Move(filePathTemp, filePathA); } catch { }
+
+				throw; // Re-throw!
+			}
+
+			// Step 3 (Temp => B):
+			try
+			{
+				File.Move(filePathTemp, filePathB);
+			}
+			catch
+			{
+				// Best-effort cleanup (revert B and A):
+				try { File.Move(filePathA, filePathB); } catch { }
+				try { File.Move(filePathTemp, filePathA); } catch { }
+
+				throw; // Re-throw!
+			}
 		}
 
 		/// <summary>
