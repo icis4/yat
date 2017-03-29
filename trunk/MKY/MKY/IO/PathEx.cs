@@ -137,7 +137,7 @@ namespace MKY.IO
 		/// </summary>
 		public static bool Equals(string pathA, string pathB)
 		{
-			return (string.Compare(pathA, pathB, ComparisonType) == 0); // string.Compare() accepts [null] args.
+			return (string.Compare(pathA, pathB, ComparisonType) == 0); // string.Compare() accepts 'null' args.
 		}
 
 		/// <summary>

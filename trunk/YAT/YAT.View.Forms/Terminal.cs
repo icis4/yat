@@ -2576,14 +2576,14 @@ namespace YAT.View.Forms
 			if (this.settingsRoot.Layout.SendTextPanelIsVisible || this.settingsRoot.Layout.SendFilePanelIsVisible)
 			{
 				splitContainer_Terminal.Panel2Collapsed = false;
-				panel_Monitor.Padding = new System.Windows.Forms.Padding(3, 3, 1, 0);
-				panel_Predefined.Padding = new System.Windows.Forms.Padding(1, 3, 3, 0);
+				panel_Monitor   .Padding = new Padding(3, 3, 1, 0);
+				panel_Predefined.Padding = new Padding(1, 3, 3, 0);
 			}
 			else
 			{
 				splitContainer_Terminal.Panel2Collapsed = true;
-				panel_Monitor.Padding = new System.Windows.Forms.Padding(3, 3, 1, 3);
-				panel_Predefined.Padding = new System.Windows.Forms.Padding(1, 3, 3, 3);
+				panel_Monitor   .Padding = new Padding(3, 3, 1, 3);
+				panel_Predefined.Padding = new Padding(1, 3, 3, 3);
 			}
 
 			// Set send panel size depending on one or two sub-panels:
@@ -2636,6 +2636,10 @@ namespace YAT.View.Forms
 			contextMenuStrip_Preset_SetMenuItems();
 		}
 
+		/// <remarks>
+		/// Only sets those predefined settings that are dependent on the terminal state.
+		/// Pages are set in the settings handler.
+		/// </remarks>
 		private void SetPredefinedControls()
 		{
 			contextMenuStrip_Predefined_SetMenuItems(); // Ensure that shortcuts are activated.

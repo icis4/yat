@@ -33,6 +33,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 using MKY;
+using MKY.Collections;
 
 #endregion
 
@@ -182,13 +183,10 @@ namespace YAT.Model.Types
 				return (false);
 
 			// Compare commands, i.e. contents of page:
-			for (int i = 0; i < Commands.Count; i++)
-			{
-				if (!ObjectEx.Equals(Commands[i], other.Commands[i]))
-					return (false);
-			}
+			if (!Commands.Count.Equals(other.Commands.Count))
+				return (false);
 
-			return (true);
+			return (IEnumerableEx.ElementsEqual(Commands, other.Commands));
 		}
 
 		/// <summary>
