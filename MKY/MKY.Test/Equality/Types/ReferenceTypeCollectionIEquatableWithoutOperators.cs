@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
+using MKY.Collections;
 using MKY.Diagnostics;
 
 namespace MKY.Test.Equality.Types
@@ -81,14 +82,11 @@ namespace MKY.Test.Equality.Types
 					return (false);
 				}
 
-				for (int i = 0; i < Count; i++)
+				if (!IEnumerableEx.ElementsEqual(this, other))
 				{
-					if (!ObjectEx.Equals(this[i], other[i]))
-					{
-						Trace.WriteLine("Results in 'False' since elements don't equal");
-						Trace.Unindent();
-						return (false);
-					}
+					Trace.WriteLine("Results in 'False' since elements don't equal");
+					Trace.Unindent();
+					return (false);
 				}
 
 				Trace.WriteLine("Results in True");
@@ -100,13 +98,7 @@ namespace MKY.Test.Equality.Types
 				if (Count != other.Count)
 					return (false);
 
-				for (int i = 0; i < Count; i++)
-				{
-					if (!ObjectEx.Equals(this[i], other[i]))
-						return (false);
-				}
-
-				return (true);
+				return (IEnumerableEx.ElementsEqual(this, other));
 			}
 		}
 

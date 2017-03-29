@@ -1547,17 +1547,17 @@ namespace YAT.Model.Test
 
 		#endregion
 
-		#region Tests > TestFixedIndexFeatureOfWorkspace
+		#region Tests > TestIndicesWithinWorkspace
 		//------------------------------------------------------------------------------------------
-		// Tests > TestFixedIndexFeatureOfWorkspace
+		// Tests > TestIndicesWithinWorkspace
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// This test verifies the 'DynamicIndex', 'SequentialIndex' and 'FixedIndex' feature of a YAT workspace.
+		/// This test verifies the 'DynamicIndex', 'SequentialIndex' and 'FixedIndex' indices within a workspace.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
 		[Test]
-		public virtual void TestIndicesFeatureOfWorkspace()
+		public virtual void TestIndicesWithinWorkspace()
 		{
 			bool success = false;
 			string step = "";
