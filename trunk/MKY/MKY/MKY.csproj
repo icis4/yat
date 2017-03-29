@@ -89,6 +89,7 @@
     <Compile Include="..\MKY.Version.cs">
       <Link>Properties\MKY.Version.cs</Link>
     </Compile>
+    <Compile Include="Collections\IEnumeratorEx.cs" />
     <Compile Include="Collections\IEnumerableEx.cs" />
     <Compile Include="Diagnostics\DebugFinalization.cs" />
     <Compile Include="Diagnostics\DebugDisposal.cs" />

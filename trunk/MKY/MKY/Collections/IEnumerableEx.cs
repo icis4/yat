@@ -29,7 +29,7 @@ using System.Text;
 namespace MKY.Collections
 {
 	/// <summary>
-	/// Array utility methods.
+	/// <see cref="IEnumerable"/> utility methods.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class IEnumerableEx
@@ -42,13 +42,9 @@ namespace MKY.Collections
 		/// This method has intentionally been called "ElementsEqual()"...
 		/// ...for similar naming as <see cref="object.ReferenceEquals(object, object)"/> and...
 		/// ...to emphasize difference to "IEnumerable.Equals()" which is just "object.Equals()".
-		/// 
-		/// Attention:
-		/// Similar code also exists in <see cref="ArrayEx"/>.
-		/// Changes here may have to be applied there too.
 		/// </remarks>
 		/// <returns>
-		/// True if arrays have value equality, otherwise false.
+		/// True if enumerable objects have value equality, otherwise false.
 		/// </returns>
 		public static bool ElementsEqual(IEnumerable objA, IEnumerable objB)
 		{
@@ -56,32 +52,15 @@ namespace MKY.Collections
 			if (ReferenceEquals(objA, null)) return (false);
 			if (ReferenceEquals(objB, null)) return (false);
 
-			IEnumerator objAEnumerator = objA.GetEnumerator();
-			IEnumerator objBEnumerator = objB.GetEnumerator();
+			// Opposed to ArrayEx.ElementsEqual(), this IEnumerable based implementation
+			// cannot compare the count of the objects.
 
-			// Check element by element:
-			while (objAEnumerator.MoveNext() && objBEnumerator.MoveNext())
-			{
-				if ((objAEnumerator.Current == null) && (objBEnumerator.Current == null))
-					continue; // Both 'null' is equal.
-
-				if ((objAEnumerator.Current == null) || (objBEnumerator.Current == null))
-					return (false); // Only one 'null' is not equal.
-
-				if (!objAEnumerator.Current.Equals(objBEnumerator.Current))
-					return (false);
-			}
-
-			// Check that both enumerators are positioned after the last element:
-			if (!objAEnumerator.MoveNext() && !objBEnumerator.MoveNext())
-				return (true);
-			else
-				return (false);
+			return (IEnumeratorEx.ElementsEqual(objA.GetEnumerator(), objB.GetEnumerator()));
 		}
 
 		/// <summary>
 		/// Appends all elements of an enumerable object to a string and returns the string.
-		/// Elements that are <c>null</c> are returned as [null].
+		/// Elements that are <c>null</c> are returned as "[null]".
 		/// </summary>
 		/// <remarks>
 		/// Attention:

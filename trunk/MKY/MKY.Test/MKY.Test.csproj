@@ -105,6 +105,8 @@
     <Compile Include="..\MKY.Version.cs">
       <Link>Properties\MKY.Version.cs</Link>
     </Compile>
+    <Compile Include="Collections\IEnumerableExTest.cs" />
+    <Compile Include="Collections\ObjectModel\ReadOnlyCollectionExTest.cs" />
     <Compile Include="CommandLine\ArgsHandlerTest.cs" />
     <Compile Include="CommandLine\CommandLineArgs.cs" />
     <Compile Include="CommandLine\InvalidCommandLineArgs.cs" />
@@ -156,6 +158,7 @@
     <Compile Include="Net\IPHostTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\SettingsTest.cs" />
+    <Compile Include="TestTypes.cs" />
     <Compile Include="Types\ArrayExTest.cs" />
     <Compile Include="Types\ByteExTest.cs" />
     <Compile Include="Types\StringExTest.cs" />
