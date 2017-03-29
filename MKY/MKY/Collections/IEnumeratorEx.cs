@@ -22,40 +22,48 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System.Collections.ObjectModel;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
-namespace MKY.Collections.ObjectModel
+namespace MKY.Collections
 {
 	/// <summary>
-	/// <see cref="ReadOnlyCollection{T}"/> utility methods.
+	/// <see cref="IEnumerator"/> utility methods.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
-	public static class ReadOnlyCollectionEx
+	public static class IEnumeratorEx
 	{
 		/// <summary>
-		/// Determines whether the two collections have value equality, i.e. all array elements have
-		/// value equality.
+		/// Determines whether the two enumerated objects have value equality, i.e. contains the
+		/// same number of elements, all elements are equally sequenced and have value equality.
 		/// </summary>
 		/// <remarks>
 		/// This method has intentionally been called "ElementsEqual()"...
 		/// ...for similar naming as <see cref="object.ReferenceEquals(object, object)"/> and...
-		/// ...to emphasize difference to "ReadOnlyCollection.Equals()" which is just "object.Equals()".
+		/// ...to emphasize difference to "IEnumerator.Equals()" which is just "object.Equals()".
 		/// </remarks>
 		/// <returns>
-		/// True if collections have value equality, otherwise false.
+		/// True if enumerated objects have value equality, otherwise false.
 		/// </returns>
-		/// <typeparam name="T">The type of the array's items.</typeparam>
-		public static bool ElementsEqual<T>(ReadOnlyCollection<T> collectionA, ReadOnlyCollection<T> collectionB)
+		public static bool ElementsEqual(IEnumerator enumA, IEnumerator enumB)
 		{
-			if (ReferenceEquals(collectionA, collectionB)) return (true);
-			if (ReferenceEquals(collectionA, null))        return (false);
-			if (ReferenceEquals(collectionB, null))        return (false);
+			while (true)
+			{
+				var enumAIsAtEnd = !enumA.MoveNext(); // Ensure that both enumerators are located
+				var enumBIsAtEnd = !enumB.MoveNext(); // at the same position! This wouldn't be
+				                                      // given in logical || or && condition!
+				if         (enumAIsAtEnd || enumBIsAtEnd)
+					return (enumAIsAtEnd && enumBIsAtEnd);
 
-			if (collectionA.Count != collectionB.Count)
-				return (false);
+				if ((enumA.Current == null) && (enumB.Current == null))
+					continue; // Both 'null' means that this element is equal.
 
-			return (IEnumeratorEx.ElementsEqual(collectionA.GetEnumerator(), collectionB.GetEnumerator()));
+				if ((enumA.Current == null) || (enumB.Current == null))
+					return (false); // Only one 'null' means that enumerations are not equal.
+
+				if (!enumA.Current.Equals(enumB.Current))
+					return (false);
+			}
 		}
 	}
 }
