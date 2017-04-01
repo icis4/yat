@@ -91,24 +91,33 @@ YAT 2.0 Gamma 3 Version 1.99.70 :: 2017-xx-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
-- Option to disable formatting, useful when highest data throughput slows down the view (feat. #39).
-- Option to disable BOM (Unicode encoding preamble) when logging in UTF8 added (bug #363).
 - 'Send Text' without EOL by [Ctrl+Enter] or [Ctrl+F3] (feature requests #281, #283, #285).
+- Option to send data in Unicode notation as "\U+...." or C-style "\u...." or YAT-style "\U(....)
+  as well as option to show data in Unicode notation "U+...." added (feature request #271).
+- Option to disable BOM (Unicode encoding preamble) when logging in UTF8 added (bug #363).
+- Option to disable formatting, useful when highest data throughput slows down the view (feat. #39).
 
 Important changes:
 - Serial COM port that are in use are no longer simply labelled "(in use)" but rather "(in use by
   this terminal)", "(... terminal<ID>)" or "(... other application)" (feature requests #201, #207).
 - Notes and links regarding non-intrusive RS-232 monitor/sniffer/spy cables and devices added to
   'About' dialog (related to feature requests #152, #198, #288).
+
+?!?
+- Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #139).
+- Keyword \!(Repeat(<Item>, <Repetitions>, <Delay>)) not yet implemented (feature request #13).
+?!?
+
 - Warning in case of yet incomplete RTF or XML log files (bug #356).
 - Automatically generated backup files are now placed into standard temporary folder (feat. #275).
-- NUnit tests migrated from classic to constraint model (related to feature request #293).
 - Started to migrate test environment from NUnit V2 to V3, but reverted to 2.6.4 again (feat. #293).
+- NUnit tests migrated from classic to constraint model (related to feature request #293).
 - NUnit framework assemblies placed into solution structure instead of referring to installation.
 
 Fixed bugs:
 - Potential application freeze when clearing monitors/repositories fixed (bug #361).
 - Potential 'NullReferenceException' in binary terminal settings fixed (bug #362).
+- Option to change endianness of multi-byte encoded charactes fixed (bug #343).
 - Wrong active/inactive state of log menu items fixed (bug #366).
 - Catch-all of unhandled synchronous exceptions fixed (bug #310).
 
@@ -134,10 +143,8 @@ Limitations and known issues:
 - Serial COM port break states may not be supported on certain hardware, e.g. USB/RS-232 converters.
 - USB Ser/HID only runs on Windows, use of 'LibUsbDotNet', significant work and the availability of
   a test environment would be needed to run USB Ser/HID on unixoids (feature request #119).
-- Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #139).
-- Keyword \!(Repeat(<Item>, <Repetitions>, <Delay>)) not yet implemented (feature request #13).
 - Wait for answer line (text terminals) not yet implemented (feature request #19).
-- Breaking while sending files not possible yet (bug #305).
+- Breaking while sending files not possible yet (bug #305 and feature request #295).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet

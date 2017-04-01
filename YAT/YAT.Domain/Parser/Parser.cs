@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 using MKY;
@@ -78,6 +79,7 @@ namespace YAT.Domain.Parser
 			@"Character ""\c(O K)""" + Environment.NewLine +
 			@"String ""\s(OK)""" + Environment.NewLine +
 			@"ASCII controls (0x00..0x1F and 0x7F) ""<CR><LF>""" + Environment.NewLine +
+			@"Unicode notation ""\U+20AC"" or ""\U(20AC)""" + Environment.NewLine +
 			Environment.NewLine +
 			@"Format specifiers are case insensitive, e.g. ""\H"" = ""\h"", ""4f"" = ""4F"", ""<lf>"" = ""<LF>""" + Environment.NewLine +
 			@"Formats can also be applied on each value, e.g. ""\d(79)\d(75)""" + Environment.NewLine +
@@ -88,10 +90,11 @@ namespace YAT.Domain.Parser
 			Environment.NewLine +
 			@"In addition, C-style escape sequences are supported:" + Environment.NewLine +
 			@"""\r\n"" alternative to ""<CR><LF>""" + Environment.NewLine +
-			@"""\0"" alternative to ""<NUL>"" or \d(0) or \h(0)" + Environment.NewLine +
-			@"""\01"" alternative to \o(1)" + Environment.NewLine +
-			@"""\12"" alternative to \d(12)" + Environment.NewLine +
-			@"""\0x1A"" or ""\x1A"" alternative to \h(1A)" + Environment.NewLine +
+			@"""\0"" alternative to ""<NUL>"" or ""\d(0)"" or ""\h(0)""" + Environment.NewLine +
+			@"""\01"" alternative to ""\o(1)""" + Environment.NewLine +
+			@"""\12"" alternative to ""\d(12)""" + Environment.NewLine +
+			@"""\0x1A"" or ""\x1A"" alternative to ""\h(1A)""" + Environment.NewLine +
+			@"""\u20AC"" alternative to ""\U+20AC"" or ""\U(20AC)""" + Environment.NewLine +
 			Environment.NewLine +
 			@"Type \\ to send a backspace" + Environment.NewLine +
 			@"Type \< to send an opening angle bracket" + Environment.NewLine +
@@ -522,34 +525,16 @@ namespace YAT.Domain.Parser
 		{
 			AssertNotDisposed();
 
-			InitializeTopLevel(s, defaultRadix, (s.Length <= 1000)); // Inhibit probing in order to keep speed at a decent level...
+			InitializeTopLevel(s, defaultRadix, (s.Length <= 256)); // Inhibit probing in order to keep speed at a decent level...
 
 			while (!HasFinished)
 			{
-				int c = CharEx.InvalidChar; // 'int' is given by Read() below.
-				try
-				{
-					c = this.charReader.Read();
-				}
-				catch (ObjectDisposedException ex)
-				{
-					DebugEx.WriteException(GetType(), ex); // Debug use only.
-				}
-
+				int c = this.charReader.Read();
 				if (!this.state.TryParse(this, c, ref formatException))
 				{
 					CommitPendingBytes();
 
-					string remaining = null;
-					try
-					{
-						remaining = this.charReader.ReadToEnd();
-					}
-					catch (ObjectDisposedException ex)
-					{
-						DebugEx.WriteException(GetType(), ex); // Debug use only.
-					}
-
+					string remaining = this.charReader.ReadToEnd();
 					if (remaining == null)
 					{
 						// Signal that parsing resulted in a severe stream error:
@@ -679,6 +664,7 @@ namespace YAT.Domain.Parser
 				case Radix.Oct:
 				case Radix.Dec:
 				case Radix.Hex:
+				case Radix.Unicode:
 					return (TryParseAndConvertContiguousNumericItem(s, radix, out result, ref formatException));
 
 				default:
@@ -693,7 +679,23 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
 		internal virtual bool TryEncodeStringItem(string s, out byte[] result, ref FormatException formatException)
 		{
-			result = this.encoding.GetBytes(s);
+			if (((EndiannessEx)this.endianness).IsSameAsMachine)
+			{
+				result = this.encoding.GetBytes(s);
+			}
+			else // is not same as machine:
+			{
+				using (MemoryStream bytes = new MemoryStream())
+				{
+					foreach (char c in s)
+					{
+						var a = this.encoding.GetBytes(new char[] { c });
+						a = a.Reverse().ToArray(); // Reverses bytes order.
+						bytes.Write(a, 0, a.Length);
+					}
+					result = bytes.ToArray();
+				}
+			}
 			return (true);
 		}
 
@@ -704,15 +706,18 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
 		internal virtual bool TryEncodeCharItem(string s, out byte[] result, ref FormatException formatException)
 		{
-			char c;
-			if (char.TryParse(s, out c))
+			if (s.Length == 1) // Must be a single character, otherwise something went wrong...
 			{
-				result = this.encoding.GetBytes(new char[] { c });
+				result = this.encoding.GetBytes(new char[] { s[0] });
+
+				if (!((EndiannessEx)this.endianness).IsSameAsMachine)
+					result = result.Reverse().ToArray();
+
 				return (true);
 			}
 			else
 			{
-				formatException = new FormatException(@"""" + s + @""" does not contain a valid single character.");
+				formatException = new FormatException(@"""" + s + @""" does not consist of a single character.");
 				result = new byte[] { };
 				return (false);
 			}
@@ -755,12 +760,12 @@ namespace YAT.Domain.Parser
 							int from = Math.Min(8, remaining.Length);
 							for (int i = from; i >= 1; i--) // Probe the 8-7-...-2-1 left-most characters for a valid binary byte.
 							{
-								ulong tempResult;
-								if (UInt64Ex.TryParseBinary(StringEx.Left(remaining, i), out tempResult))
+								ulong value;
+								if (UInt64Ex.TryParseBinary(StringEx.Left(remaining, i), out value))
 								{
-									if (tempResult <= 0xFF) // i left-most characters are a valid binary byte!
+									if (value <= 0xFF) // i left-most characters are a valid binary byte!
 									{
-										bytes.WriteByte((byte)tempResult);
+										bytes.WriteByte((byte)value);
 
 										remaining = remaining.Remove(0, i);
 										found = true;
@@ -824,14 +829,11 @@ namespace YAT.Domain.Parser
 								byte tempResult;
 								if (byte.TryParse(StringEx.Left(remaining, i), NumberStyles.Integer, CultureInfo.InvariantCulture, out tempResult))
 								{
-									if (tempResult <= 0xFF) // i left-most characters are a valid decimal byte!
-									{
-										bytes.WriteByte(tempResult);
+									bytes.WriteByte(tempResult);
 
-										remaining = remaining.Remove(0, i);
-										found = true;
-										break; // Quit for-loop and continue within remaining string.
-									}
+									remaining = remaining.Remove(0, i);
+									found = true;
+									break; // Quit for-loop and continue within remaining string.
 								}
 							}
 
@@ -857,14 +859,55 @@ namespace YAT.Domain.Parser
 								byte tempResult;
 								if (byte.TryParse(StringEx.Left(remaining, i), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out tempResult))
 								{
-									if (tempResult <= 0xFF) // i left-most characters are a valid hexadecimal byte!
-									{
-										bytes.WriteByte(tempResult);
+									bytes.WriteByte(tempResult);
 
-										remaining = remaining.Remove(0, i);
-										found = true;
-										break; // Quit for-loop and continue within remaining string.
+									remaining = remaining.Remove(0, i);
+									found = true;
+									break; // Quit for-loop and continue within remaining string.
+								}
+							}
+
+							if (!found)
+							{
+								success = false;
+								break; // Quit while-loop.
+							}
+						}
+
+						break; // Break switch-case.
+					}
+
+					case Radix.Unicode:
+					{
+						while (remaining.Length > 0)
+						{
+							bool found = false;
+
+							int from = Math.Min(4, remaining.Length);
+							for (int i = from; i >= 1; i--) // Probe the 4-3-2-1 left-most characters for a valid hexadecimal Unicode value.
+							{
+								ushort tempResult;
+								if (ushort.TryParse(StringEx.Left(remaining, i), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out tempResult))
+								{
+									if (tempResult <= 0xFF)
+									{
+										bytes.WriteByte((byte)tempResult);
 									}
+									else
+									{
+										byte upper = (byte)((tempResult & 0xFF00) >> 8);
+										byte lower = (byte)((tempResult & 0x00FF) >> 0);
+										switch (this.endianness)
+										{
+											case Endianness.BigEndian:    bytes.WriteByte(upper); bytes.WriteByte(lower); break;
+											case Endianness.LittleEndian: bytes.WriteByte(lower); bytes.WriteByte(upper); break;
+											default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.endianness + "' is an unknown endianness!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+										}
+									}
+
+									remaining = remaining.Remove(0, i);
+									found = true;
+									break; // Quit for-loop and continue within remaining string.
 								}
 							}
 
@@ -906,10 +949,11 @@ namespace YAT.Domain.Parser
 
 					switch (radix)
 					{
-						case Radix.Bin: sb.Append("binary");      break;
-						case Radix.Oct: sb.Append("octal");       break;
-						case Radix.Dec: sb.Append("decimal");     break;
-						case Radix.Hex: sb.Append("hexadecimal"); break;
+						case Radix.Bin:     sb.Append("binary");      break;
+						case Radix.Oct:     sb.Append("octal");       break;
+						case Radix.Dec:     sb.Append("decimal");     break;
+						case Radix.Hex:     sb.Append("hexadecimal"); break;
+						case Radix.Unicode: sb.Append("Unicode");     break;
 						default: throw (new ArgumentOutOfRangeException(MessageHelper.InvalidExecutionPreamble + "'" + radix + "' is an invalid radix!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 

@@ -131,6 +131,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Radix_Oct = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Terminal_Radix_Dec = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Terminal_Radix_Hex = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Terminal_Radix_Unicode = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItem_MainTool_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_MainTool_Terminal_AutoResponse_ShowHide = new System.Windows.Forms.ToolStripButton();
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger = new System.Windows.Forms.ToolStripComboBox();
@@ -855,6 +856,7 @@ namespace YAT.View.Forms
             this.toolStripButton_MainTool_Terminal_Radix_Oct,
             this.toolStripButton_MainTool_Terminal_Radix_Dec,
             this.toolStripButton_MainTool_Terminal_Radix_Hex,
+            this.toolStripButton_MainTool_Terminal_Radix_Unicode,
             this.toolStripMenuItem_MainTool_Separator_4,
             this.toolStripButton_MainTool_Terminal_AutoResponse_ShowHide,
             this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger,
@@ -1022,6 +1024,16 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Radix_Hex.TextAlign = System.Drawing.ContentAlignment.BottomRight;
 			this.toolStripButton_MainTool_Terminal_Radix_Hex.ToolTipText = "Radix: Hexadecimal";
 			this.toolStripButton_MainTool_Terminal_Radix_Hex.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Radix_Hex_Click);
+			// 
+			// toolStripButton_MainTool_Terminal_Radix_Unicode
+			// 
+			this.toolStripButton_MainTool_Terminal_Radix_Unicode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton_MainTool_Terminal_Radix_Unicode.Name = "toolStripButton_MainTool_Terminal_Radix_Unicode";
+			this.toolStripButton_MainTool_Terminal_Radix_Unicode.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Terminal_Radix_Unicode.Text = "U+";
+			this.toolStripButton_MainTool_Terminal_Radix_Unicode.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.toolStripButton_MainTool_Terminal_Radix_Unicode.ToolTipText = "Radix: Unicode";
+			this.toolStripButton_MainTool_Terminal_Radix_Unicode.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Radix_Unicode_Click);
 			// 
 			// toolStripMenuItem_MainTool_Separator_4
 			// 
@@ -1330,6 +1342,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_Oct;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_Dec;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_Hex;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_Unicode;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_4;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_Char;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_String;

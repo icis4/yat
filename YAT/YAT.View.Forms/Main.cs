@@ -856,19 +856,21 @@ namespace YAT.View.Forms
 			toolStripButton_MainTool_Terminal_Stop.Enabled     = childIsReady && terminalIsStarted;
 			toolStripButton_MainTool_Terminal_Settings.Enabled = childIsReady;
 
-			toolStripButton_MainTool_Terminal_Radix_String.Enabled = childIsReady && radixIsReady;
-			toolStripButton_MainTool_Terminal_Radix_Char.Enabled   = childIsReady && radixIsReady;
-			toolStripButton_MainTool_Terminal_Radix_Bin.Enabled    = childIsReady && radixIsReady;
-			toolStripButton_MainTool_Terminal_Radix_Oct.Enabled    = childIsReady && radixIsReady;
-			toolStripButton_MainTool_Terminal_Radix_Dec.Enabled    = childIsReady && radixIsReady;
-			toolStripButton_MainTool_Terminal_Radix_Hex.Enabled    = childIsReady && radixIsReady;
+			toolStripButton_MainTool_Terminal_Radix_String.Enabled  = childIsReady && radixIsReady;
+			toolStripButton_MainTool_Terminal_Radix_Char.Enabled    = childIsReady && radixIsReady;
+			toolStripButton_MainTool_Terminal_Radix_Bin.Enabled     = childIsReady && radixIsReady;
+			toolStripButton_MainTool_Terminal_Radix_Oct.Enabled     = childIsReady && radixIsReady;
+			toolStripButton_MainTool_Terminal_Radix_Dec.Enabled     = childIsReady && radixIsReady;
+			toolStripButton_MainTool_Terminal_Radix_Hex.Enabled     = childIsReady && radixIsReady;
+			toolStripButton_MainTool_Terminal_Radix_Unicode.Enabled = childIsReady && radixIsReady;
 
-			toolStripButton_MainTool_Terminal_Radix_String.Checked = (radix == Domain.Radix.String);
-			toolStripButton_MainTool_Terminal_Radix_Char.Checked   = (radix == Domain.Radix.Char);
-			toolStripButton_MainTool_Terminal_Radix_Bin.Checked    = (radix == Domain.Radix.Bin);
-			toolStripButton_MainTool_Terminal_Radix_Oct.Checked    = (radix == Domain.Radix.Oct);
-			toolStripButton_MainTool_Terminal_Radix_Dec.Checked    = (radix == Domain.Radix.Dec);
-			toolStripButton_MainTool_Terminal_Radix_Hex.Checked    = (radix == Domain.Radix.Hex);
+			toolStripButton_MainTool_Terminal_Radix_String.Checked  = (radix == Domain.Radix.String);
+			toolStripButton_MainTool_Terminal_Radix_Char.Checked    = (radix == Domain.Radix.Char);
+			toolStripButton_MainTool_Terminal_Radix_Bin.Checked     = (radix == Domain.Radix.Bin);
+			toolStripButton_MainTool_Terminal_Radix_Oct.Checked     = (radix == Domain.Radix.Oct);
+			toolStripButton_MainTool_Terminal_Radix_Dec.Checked     = (radix == Domain.Radix.Dec);
+			toolStripButton_MainTool_Terminal_Radix_Hex.Checked     = (radix == Domain.Radix.Hex);
+			toolStripButton_MainTool_Terminal_Radix_Unicode.Checked = (radix == Domain.Radix.Unicode);
 
 			bool arVisible = false;
 			bool arEnabled = false;
@@ -1021,6 +1023,11 @@ namespace YAT.View.Forms
 		private void toolStripButton_MainTool_Terminal_Radix_Hex_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Hex);
+		}
+
+		private void toolStripButton_MainTool_Terminal_Radix_Unicode_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Unicode);
 		}
 
 		private void toolStripButton_MainTool_Terminal_AutoResponse_ShowHide_Click(object sender, EventArgs e)

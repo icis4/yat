@@ -1811,33 +1811,9 @@ namespace YAT.Domain
 
 			switch (r)
 			{
-				// Bin/Oct/Dec/Hex:
-				case Radix.Bin:
-				case Radix.Oct:
-				case Radix.Dec:
-				case Radix.Hex:
-				{
-					if (isByteToHide)
-					{
-						// Do nothing, ignore the character, this results in hiding.
-					}
-					else if (isControl)
-					{
-						if (TerminalSettings.CharReplace.ReplaceControlChars)
-							text = ByteToControlCharReplacementString(b, r);
-						else
-							text = ByteToNumericRadixString(b, r); // Current display radix.
-					}
-					else
-					{
-						text = ByteToNumericRadixString(b, r); // Current display radix.
-					}
-					break;
-				}
-
-				// Char/String:
-				case Radix.Char:
+				// String/Char:
 				case Radix.String:
+				case Radix.Char:
 				{
 					if (isByteToHide)
 					{
@@ -1846,7 +1822,7 @@ namespace YAT.Domain
 					else if (isControl)
 					{
 						if (TerminalSettings.CharReplace.ReplaceControlChars)
-							text = ByteToControlCharReplacementString(b, r);
+							text = ByteToControlCharReplacementString(b, TerminalSettings.CharReplace.ControlCharRadix);
 						else
 							text = ByteToCharacterString(b);
 					}
@@ -1860,6 +1836,31 @@ namespace YAT.Domain
 					else
 					{
 						text = ByteToCharacterString(b);
+					}
+					break;
+				}
+
+				// Bin/Oct/Dec/Hex/Unicode:
+				case Radix.Bin:
+				case Radix.Oct:
+				case Radix.Dec:
+				case Radix.Hex:
+				case Radix.Unicode:
+				{
+					if (isByteToHide)
+					{
+						// Do nothing, ignore the character, this results in hiding.
+					}
+					else if (isControl)
+					{
+						if (TerminalSettings.CharReplace.ReplaceControlChars)
+							text = ByteToControlCharReplacementString(b, TerminalSettings.CharReplace.ControlCharRadix);
+						else
+							text = ByteToNumericRadixString(b, r); // Current display radix.
+					}
+					else
+					{
+						text = ByteToNumericRadixString(b, r); // Current display radix.
 					}
 					break;
 				}
@@ -1982,19 +1983,33 @@ namespace YAT.Domain
 					else
 						return (b.ToString("X2", CultureInfo.InvariantCulture));
 				}
+				case Radix.Unicode:
+				{
+					return (UnicodeValueToNumericString(b));
+				}
 				default:
 				{
-					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' is an invalid radix!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' is an invalid numeric radix!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
 
 		/// <summary></summary>
+		[CLSCompliant(false)]
+		protected virtual string UnicodeValueToNumericString(ushort value)
+		{
+			if (this.terminalSettings.Display.ShowRadix)
+				return ("U+" + value.ToString("X4", CultureInfo.InvariantCulture));
+			else
+				return (       value.ToString("X4", CultureInfo.InvariantCulture));
+		}
+
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		protected virtual string ByteToControlCharReplacementString(byte b, Radix r)
+		protected virtual string ByteToControlCharReplacementString(byte b, ControlCharRadix r)
 		{
-			switch (TerminalSettings.CharReplace.ControlCharRadix)
+			switch (r)
 			{
 				case ControlCharRadix.Char:
 					return (ByteToCharacterString(b));
@@ -2008,7 +2023,7 @@ namespace YAT.Domain
 				case ControlCharRadix.AsciiMnemonic:
 					return (ByteToAsciiString(b));
 
-				default:
+				default: // Includes 'String' and 'Unicode' which are not supported for control character replacement.
 					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' is an invalid ASCII control character radix!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
@@ -2031,13 +2046,15 @@ namespace YAT.Domain
 		{
 			switch (r)
 			{
-				case Radix.String: return (false);
-				case Radix.Char:   return (true);
+				case Radix.String:  return (false);
+				case Radix.Char:    return (true);
 
-				case Radix.Bin:    return (true);
-				case Radix.Oct:    return (true);
-				case Radix.Dec:    return (true);
-				case Radix.Hex:    return (true);
+				case Radix.Bin:     return (true);
+				case Radix.Oct:     return (true);
+				case Radix.Dec:     return (true);
+				case Radix.Hex:     return (true);
+
+				case Radix.Unicode: return (true);
 			}
 			throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' is an invalid radix!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}

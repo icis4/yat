@@ -32,7 +32,13 @@ namespace YAT.Domain
 {
 	#region Enum Endianness
 
-	/// <summary></summary>
+	/// <summary>
+	/// Enumeration of the the supported byte endiannesses.
+	/// </summary>
+	/// <remarks>
+	/// Implemented as an enumeration (instead of a simple 'IsBigEndian' flag) to potentially
+	/// support exotic endiannesses (e.g. PDP-11 'MiddleEndian').
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Endianness", Justification = "'Endianness' is a correct English term.")]
 	public enum Endianness
 	{
@@ -79,6 +85,23 @@ namespace YAT.Domain
 		public EndiannessEx(Endianness endianness)
 			: base(endianness)
 		{
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether the endianness of this instance is the same as the
+		/// endianness of the machine, i.e. the computer architecture.
+		/// </summary>
+		public bool IsSameAsMachine
+		{
+			get
+			{
+				switch ((Endianness)UnderlyingEnum)
+				{
+					case Endianness.BigEndian:    return (!BitConverter.IsLittleEndian);
+					case Endianness.LittleEndian: return ( BitConverter.IsLittleEndian);
+				}
+				throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		#region ToString

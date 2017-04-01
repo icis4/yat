@@ -730,8 +730,14 @@ namespace MKY.Text
 		}
 
 		/// <summary></summary>
-		public EncodingEx(SupportedEncoding type)
-			: base(type)
+		public EncodingEx(int codePage)
+			: this((SupportedEncoding)codePage)
+		{
+		}
+
+		/// <summary></summary>
+		public EncodingEx(SupportedEncoding encoding)
+			: base(encoding)
 		{
 		}
 
@@ -814,6 +820,22 @@ namespace MKY.Text
 				// Other encodings:
 				return (Encoding.GetEncoding(CodePage));
 			}
+		}
+
+		/// <summary>
+		/// Returns the encoding object for the given code page.
+		/// </summary>
+		public static Encoding GetEncoding(int codePage)
+		{
+			return (new EncodingEx(codePage).Encoding);
+		}
+
+		/// <summary>
+		/// Returns the encoding object for the given encoding.
+		/// </summary>
+		public static Encoding GetEncoding(SupportedEncoding encoding)
+		{
+			return (new EncodingEx(encoding).Encoding);
 		}
 
 		/// <summary>
@@ -1092,12 +1114,6 @@ namespace MKY.Text
 		// Parse
 		//==========================================================================================
 
-		/// <summary></summary>
-		public static EncodingEx Parse(int codePage)
-		{
-			return (new EncodingEx((SupportedEncoding)codePage));
-		}
-
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
@@ -1113,7 +1129,7 @@ namespace MKY.Text
 		/// <summary></summary>
 		public static EncodingEx Parse(Encoding encoding)
 		{
-			return (Parse(encoding.CodePage));
+			return (new EncodingEx(encoding.CodePage));
 		}
 
 		/// <remarks>
@@ -1199,7 +1215,7 @@ namespace MKY.Text
 		/// <summary></summary>
 		public static implicit operator EncodingEx(int codePage)
 		{
-			return (Parse(codePage));
+			return (new EncodingEx(codePage));
 		}
 
 		/// <summary></summary>

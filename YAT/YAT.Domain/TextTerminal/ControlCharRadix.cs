@@ -63,6 +63,13 @@ namespace YAT.Domain
 		/// <summary></summary>
 		Hex = Radix.Hex,
 
+		/// <remarks>
+		/// Keep this item to ensure that items can 1:1 be mapped to <see cref="Radix"/>
+		/// and that additional items get distinct enum identifiers.
+		/// </remarks>
+		[Obsolete("Unicode makes no sense for control character replacement.")]
+		Unicode = Radix.Unicode,
+
 		/// <summary></summary>
 		AsciiMnemonic,
 	}
@@ -128,7 +135,10 @@ namespace YAT.Domain
 			foreach (RadixEx radix in radices)
 			{
 				if (radix == Radix.String) // String makes no sense for single byte/character replacement.
-					continue;              // See remark for 'ControlCharRadix.Str' for details.
+					continue;              // See remark for 'ControlCharRadix.String' for details.
+
+				if (radix == Radix.Unicode) // Unicode makes no sense for single byte/character replacement.
+					continue;               // See remark for 'ControlCharRadix.Unicode' for details.
 
 				items.Add((Radix)radix);
 			}
