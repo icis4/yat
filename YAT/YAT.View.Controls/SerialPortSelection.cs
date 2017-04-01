@@ -320,8 +320,8 @@ namespace YAT.View.Controls
 		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]
 		private void SetPortList()
 		{
-			// Only scan for ports if control is enabled. This saves some time and prevents issues.
-			if (Enabled && !DesignMode)
+			// Only scan for ports if control is enabled and visible. This saves some time and prevents issues. And refresh makes no sense if not visible.
+			if (Enabled && Visible && !DesignMode)
 			{
 				this.portListIsBeingSetOrIsAlreadySet = true; // Purpose see remarks above.
 
