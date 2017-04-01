@@ -300,7 +300,7 @@ namespace YAT.View.Forms
 			this.radioButton_SubstituteToLower.Name = "radioButton_SubstituteToLower";
 			this.radioButton_SubstituteToLower.Size = new System.Drawing.Size(172, 17);
 			this.radioButton_SubstituteToLower.TabIndex = 2;
-			this.radioButton_SubstituteToLower.Text = "&Lower case (e.g. \"Rst\" -> \"rst\")";
+			this.radioButton_SubstituteToLower.Text = "&Lower case (e.g. \"Abc\" -> \"abc\")";
 			this.radioButton_SubstituteToLower.CheckedChanged += new System.EventHandler(this.radioButton_SubstituteToLower_CheckedChanged);
 			// 
 			// radioButton_SubstituteToUpper
@@ -310,7 +310,7 @@ namespace YAT.View.Forms
 			this.radioButton_SubstituteToUpper.Name = "radioButton_SubstituteToUpper";
 			this.radioButton_SubstituteToUpper.Size = new System.Drawing.Size(183, 17);
 			this.radioButton_SubstituteToUpper.TabIndex = 1;
-			this.radioButton_SubstituteToUpper.Text = "&Upper case (e.g. \"Rst\" -> \"RST\")";
+			this.radioButton_SubstituteToUpper.Text = "&Upper case (e.g. \"Abc\" -> \"ABC\")";
 			this.radioButton_SubstituteToUpper.CheckedChanged += new System.EventHandler(this.radioButton_SubstituteToUpper_CheckedChanged);
 			// 
 			// radioButton_SubstituteNone
@@ -320,7 +320,7 @@ namespace YAT.View.Forms
 			this.radioButton_SubstituteNone.Name = "radioButton_SubstituteNone";
 			this.radioButton_SubstituteNone.Size = new System.Drawing.Size(143, 17);
 			this.radioButton_SubstituteNone.TabIndex = 0;
-			this.radioButton_SubstituteNone.Text = "&None (e.g. \"Rst -> \"Rst\")";
+			this.radioButton_SubstituteNone.Text = "&None (e.g. \"Abc -> \"Abc\")";
 			this.radioButton_SubstituteNone.CheckedChanged += new System.EventHandler(this.radioButton_SubstituteNone_CheckedChanged);
 			// 
 			// checkBox_WaitForResponse

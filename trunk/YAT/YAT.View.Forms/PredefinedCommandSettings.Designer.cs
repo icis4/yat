@@ -442,7 +442,7 @@
 			this.label_ExampleBinary_Data.Name = "label_ExampleBinary_Data";
 			this.label_ExampleBinary_Data.Size = new System.Drawing.Size(66, 13);
 			this.label_ExampleBinary_Data.TabIndex = 33;
-			this.label_ExampleBinary_Data.Text = "\\h(52 53 54)";
+			this.label_ExampleBinary_Data.Text = "\\h(41 42 43)";
 			// 
 			// label_predefinedCommandSettingsSet_1
 			// 
@@ -512,9 +512,9 @@
 			this.label_ExampleText_Data.AutoSize = true;
 			this.label_ExampleText_Data.Location = new System.Drawing.Point(67, 350);
 			this.label_ExampleText_Data.Name = "label_ExampleText_Data";
-			this.label_ExampleText_Data.Size = new System.Drawing.Size(29, 13);
+			this.label_ExampleText_Data.Size = new System.Drawing.Size(28, 13);
 			this.label_ExampleText_Data.TabIndex = 31;
-			this.label_ExampleText_Data.Text = "RST";
+			this.label_ExampleText_Data.Text = "ABC";
 			// 
 			// label_Example
 			// 
