@@ -31,11 +31,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Threading;
 
 using MKY;
-using MKY.Collections.Generic;
 using MKY.Text;
 
 #endregion
@@ -443,9 +443,10 @@ namespace YAT.Domain
 					return (base.ByteToElement(b, d, r));
 				}
 
-				// Char/String:
+				// Char/String/Unicode:
 				case Radix.Char:
 				case Radix.String:
+				case Radix.Unicode:
 				{
 					Encoding e = (EncodingEx)TextTerminalSettings.Encoding;
 					if (e.IsSingleByte)
@@ -464,20 +465,29 @@ namespace YAT.Domain
 						}
 						else
 						{
-							char[] chars = new char[1];
-							if (e.GetDecoder().GetChars(new byte[] { b }, 0, 1, chars, 0, true) == 1)
+							char[] c = new char[1]; // 'IsSingleByte'.
+							if (e.GetDecoder().GetChars(new byte[] { b }, 0, 1, c, 0, true) == 1)
 							{
-								var sb = new StringBuilder();
-								sb.Append(chars, 0, 1);
-
-								switch (d)
+								if (r != Radix.Unicode)
 								{
-									case IODirection.Tx: return (new DisplayElement.TxData(b, sb.ToString()));
-									case IODirection.Rx: return (new DisplayElement.RxData(b, sb.ToString()));
-									default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+									switch (d)
+									{
+										case IODirection.Tx: return (new DisplayElement.TxData(b, c[0].ToString(CultureInfo.InvariantCulture))); // 'IsSingleByte'.
+										case IODirection.Rx: return (new DisplayElement.RxData(b, c[0].ToString(CultureInfo.InvariantCulture))); // 'IsSingleByte'.
+										default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+									}
+								}
+								else // Unicode:
+								{
+									switch (d)
+									{
+										case IODirection.Tx: return (new DisplayElement.TxData(b, UnicodeValueToNumericString(c[0]))); // 'IsSingleByte'.
+										case IODirection.Rx: return (new DisplayElement.RxData(b, UnicodeValueToNumericString(c[0]))); // 'IsSingleByte'.
+										default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+									}
 								}
 							}
-							else // Something went seriously wrong...
+							else // Something went seriously wrong!
 							{
 								throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "byte " + b.ToString("X2", CultureInfo.InvariantCulture) + " is invalid for encoding " + ((EncodingEx)e).ToString() + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
@@ -487,17 +497,20 @@ namespace YAT.Domain
 					{
 						this.rxMultiByteDecodingStream.Add(b);
 						byte[] decodingArray = this.rxMultiByteDecodingStream.ToArray();
+
+						if (!((EndiannessEx)TerminalSettings.IO.Endianness).IsSameAsMachine)
+							decodingArray = decodingArray.Reverse().ToArray();
+
 						int charCount = e.GetCharCount(decodingArray, 0, decodingArray.Length);
 
 						// If decoding array can be decoded into something useful, decode it.
 						if (charCount == 1)
 						{
-							// Char count must be 1, otherwise something went wrong.
-							char[] chars = new char[charCount];
-							if (e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true) == 1)
+							char[] c = new char[1]; // 'charCount' is 1.
+							if (e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, c, 0, true) == 1)
 							{
 								// Ensure that 'unknown' character 0xFFFD is not decoded yet.
-								int code = chars[0];
+								int code = c[0];
 								if (code != 0xFFFD)
 								{
 									this.rxMultiByteDecodingStream.Clear();
@@ -510,16 +523,29 @@ namespace YAT.Domain
 									{
 										return (base.ByteToElement(b, d, r));
 									}
+									else if ((code == 0xFF) && TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF)
+									{
+										return (new DisplayElement.Nonentity()); // Return nothing, ignore the character, this results in hiding.
+									}
 									else
 									{
-										var sb = new StringBuilder();
-										sb.Append(chars, 0, charCount);
-
-										switch (d)
+										if (r != Radix.Unicode)
 										{
-											case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, sb.ToString(), charCount));
-											case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, sb.ToString(), charCount));
-											default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+											switch (d)
+											{                                                                     // 'charCount' is 1.
+												case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, c[0].ToString(CultureInfo.InvariantCulture), decodingArray.Length));
+												case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, c[0].ToString(CultureInfo.InvariantCulture), decodingArray.Length));
+												default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+											}
+										}
+										else // Unicode:
+										{
+											switch (d)
+											{                                                                                                 // 'charCount' is 1.
+												case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, UnicodeValueToNumericString(c[0]), decodingArray.Length));
+												case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, UnicodeValueToNumericString(c[0]), decodingArray.Length));
+												default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+											}
 										}
 									}
 								}

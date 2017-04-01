@@ -57,7 +57,10 @@ namespace YAT.Domain
 		Dec,
 
 		/// <summary></summary>
-		Hex
+		Hex,
+
+		/// <summary></summary>
+		Unicode
 	}
 
 	#endregion
@@ -72,24 +75,30 @@ namespace YAT.Domain
 	{
 		#region String Definitions
 
-		private const string Bin_stringShort  = "B";
-		private const string Bin_stringMiddle = "Bin";
-		private const string Bin_string       = "Binary";
-		private const string Oct_stringShort  = "O";
-		private const string Oct_stringMiddle = "Oct";
-		private const string Oct_string       = "Octal";
-		private const string Dec_stringShort  = "D";
-		private const string Dec_stringMiddle = "Dec";
-		private const string Dec_string       = "Decimal";
-		private const string Hex_stringShort  = "H";
-		private const string Hex_stringMiddle = "Hex";
-		private const string Hex_string       = "Hexadecimal";
-		private const string Char_stringShort  = "C";
-		private const string Char_stringMiddle = "Chr";
-		private const string Char_string       = "Character";
-		private const string String_stringShort  = "S";
-		private const string String_stringMiddle = "Str";
-		private const string String_string       = "String";
+		private const string String_string      = "String";
+		private const string String_stringValue = "Str";
+		private const string String_stringShort = "S";
+
+		private const string Char_string      = "Character";
+		private const string Char_stringValue = "Chr";
+		private const string Char_stringShort = "C";
+
+		private const string Bin_string      = "Binary";
+		private const string Bin_stringShort = "B";
+		private const string Bin_stringValue = "2";
+		private const string Oct_string      = "Octal";
+		private const string Oct_stringShort = "O";
+		private const string Oct_stringValue = "8";
+		private const string Dec_string      = "Decimal";
+		private const string Dec_stringShort = "D";
+		private const string Dec_stringValue = "10";
+		private const string Hex_string      = "Hexadecimal";
+		private const string Hex_stringShort = "H";
+		private const string Hex_stringValue = "16";
+
+		private const string Unicode_string      = "Unicode";
+		private const string Unicode_stringShort = "U";
+		private const string Unicode_stringValue = "U+";
 
 		#endregion
 
@@ -121,12 +130,13 @@ namespace YAT.Domain
 		{
 			switch ((Radix)UnderlyingEnum)
 			{
-				case Radix.Bin:    return (Bin_string);
-				case Radix.Oct:    return (Oct_string);
-				case Radix.Dec:    return (Dec_string);
-				case Radix.Hex:    return (Hex_string);
-				case Radix.Char:   return (Char_string);
-				case Radix.String: return (String_string);
+				case Radix.String:  return (String_string);
+				case Radix.Char:    return (Char_string);
+				case Radix.Bin:     return (Bin_string);
+				case Radix.Oct:     return (Oct_string);
+				case Radix.Dec:     return (Dec_string);
+				case Radix.Hex:     return (Hex_string);
+				case Radix.Unicode: return (Unicode_string);
 			}
 			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -136,27 +146,29 @@ namespace YAT.Domain
 		{
 			switch ((Radix)UnderlyingEnum)
 			{
-				case Radix.Bin:    return (Bin_stringShort);
-				case Radix.Oct:    return (Oct_stringShort);
-				case Radix.Dec:    return (Dec_stringShort);
-				case Radix.Hex:    return (Hex_stringShort);
-				case Radix.Char:   return (Char_stringShort);
-				case Radix.String: return (String_stringShort);
+				case Radix.String:  return (String_stringShort);
+				case Radix.Char:    return (Char_stringShort);
+				case Radix.Bin:     return (Bin_stringShort);
+				case Radix.Oct:     return (Oct_stringShort);
+				case Radix.Dec:     return (Dec_stringShort);
+				case Radix.Hex:     return (Hex_stringShort);
+				case Radix.Unicode: return (Unicode_stringShort);
 			}
 			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
-		public virtual string ToMiddleString()
+		public virtual string ToValueString()
 		{
 			switch ((Radix)UnderlyingEnum)
 			{
-				case Radix.Bin:    return (Bin_stringMiddle);
-				case Radix.Oct:    return (Oct_stringMiddle);
-				case Radix.Dec:    return (Dec_stringMiddle);
-				case Radix.Hex:    return (Hex_stringMiddle);
-				case Radix.Char:   return (Char_stringMiddle);
-				case Radix.String: return (String_stringMiddle);
+				case Radix.String:  return (String_stringValue);
+				case Radix.Char:    return (Char_stringValue);
+				case Radix.Bin:     return (Bin_stringValue);
+				case Radix.Oct:     return (Oct_stringValue);
+				case Radix.Dec:     return (Dec_stringValue);
+				case Radix.Hex:     return (Hex_stringValue);
+				case Radix.Unicode: return (Unicode_stringValue);
 			}
 			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -182,6 +194,8 @@ namespace YAT.Domain
 			a.Add(new RadixEx(Radix.Oct));
 			a.Add(new RadixEx(Radix.Dec));
 			a.Add(new RadixEx(Radix.Hex));
+
+			a.Add(new RadixEx(Radix.Unicode)); // Special radices.
 
 			return (a.ToArray());
 		}
@@ -236,46 +250,53 @@ namespace YAT.Domain
 				result = new RadixEx(); // Default!
 				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, String_stringShort) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, String_stringValue) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, String_string))
+			{
+				result = Radix.String;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Char_stringShort) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Char_stringValue) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Char_string))
+			{
+				result = Radix.Char;
+				return (true);
+			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Bin_stringShort) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Bin_stringMiddle) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Bin_stringValue) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Bin_string))
 			{
 				result = Radix.Bin;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Oct_stringShort) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Oct_stringMiddle) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Oct_stringValue) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Oct_string))
 			{
 				result = Radix.Oct;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Dec_stringShort) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Dec_stringMiddle) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Dec_stringValue) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Dec_string))
 			{
 				result = Radix.Dec;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Hex_stringShort) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Hex_stringMiddle) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Hex_stringValue) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Hex_string))
 			{
 				result = Radix.Hex;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Char_stringShort) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Char_stringMiddle) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Char_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Unicode_stringShort) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Unicode_stringValue) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Unicode_string))
 			{
-				result = Radix.Char;
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, String_stringShort) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, String_stringMiddle) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, String_string))
-			{
-				result = Radix.String;
+				result = Radix.Unicode;
 				return (true);
 			}
 			else // Invalid string!

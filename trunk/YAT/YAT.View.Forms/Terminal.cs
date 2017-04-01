@@ -1326,16 +1326,18 @@ namespace YAT.View.Forms
 
 			bool separateTxRx = this.settingsRoot.Display.SeparateTxRxRadix;
 
-			toolStripMenuItem_RadixContextMenu_String.Visible = !separateTxRx;
-			toolStripMenuItem_RadixContextMenu_Char.Visible   = !separateTxRx;
-			toolStripMenuItem_RadixContextMenu_Bin.Visible    = !separateTxRx;
-			toolStripMenuItem_RadixContextMenu_Oct.Visible    = !separateTxRx;
-			toolStripMenuItem_RadixContextMenu_Dec.Visible    = !separateTxRx;
-			toolStripMenuItem_RadixContextMenu_Hex.Visible    = !separateTxRx;
+			toolStripMenuItem_RadixContextMenu_String.Visible  = !separateTxRx;
+			toolStripMenuItem_RadixContextMenu_Char.Visible    = !separateTxRx;
+			toolStripMenuItem_RadixContextMenu_Bin.Visible     = !separateTxRx;
+			toolStripMenuItem_RadixContextMenu_Oct.Visible     = !separateTxRx;
+			toolStripMenuItem_RadixContextMenu_Dec.Visible     = !separateTxRx;
+			toolStripMenuItem_RadixContextMenu_Hex.Visible     = !separateTxRx;
+			toolStripMenuItem_RadixContextMenu_Unicode.Visible = !separateTxRx;
 
 			toolStripMenuItem_RadixContextMenu_Separator_1.Visible = !separateTxRx;
 			toolStripMenuItem_RadixContextMenu_Separator_2.Visible = !separateTxRx;
-			toolStripMenuItem_RadixContextMenu_Separator_3.Visible = separateTxRx;
+			toolStripMenuItem_RadixContextMenu_Separator_3.Visible = !separateTxRx;
+			toolStripMenuItem_RadixContextMenu_Separator_4.Visible =  separateTxRx;
 
 			toolStripMenuItem_RadixContextMenu_SeparateTxRx.Checked = separateTxRx;
 
@@ -1344,28 +1346,31 @@ namespace YAT.View.Forms
 
 			if (!separateTxRx)
 			{
-				toolStripMenuItem_RadixContextMenu_String.Checked = (this.settingsRoot.Display.TxRadix == Domain.Radix.String);
-				toolStripMenuItem_RadixContextMenu_Char.Checked   = (this.settingsRoot.Display.TxRadix == Domain.Radix.Char);
-				toolStripMenuItem_RadixContextMenu_Bin.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Bin);
-				toolStripMenuItem_RadixContextMenu_Oct.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Oct);
-				toolStripMenuItem_RadixContextMenu_Dec.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Dec);
-				toolStripMenuItem_RadixContextMenu_Hex.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Hex);
+				toolStripMenuItem_RadixContextMenu_String.Checked  = (this.settingsRoot.Display.TxRadix == Domain.Radix.String);
+				toolStripMenuItem_RadixContextMenu_Char.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Char);
+				toolStripMenuItem_RadixContextMenu_Bin.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Bin);
+				toolStripMenuItem_RadixContextMenu_Oct.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Oct);
+				toolStripMenuItem_RadixContextMenu_Dec.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Dec);
+				toolStripMenuItem_RadixContextMenu_Hex.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Hex);
+				toolStripMenuItem_RadixContextMenu_Unicode.Checked = (this.settingsRoot.Display.TxRadix == Domain.Radix.Unicode);
 			}
 			else
 			{
-				toolStripMenuItem_RadixContextMenu_Tx_String.Checked = (this.settingsRoot.Display.TxRadix == Domain.Radix.String);
-				toolStripMenuItem_RadixContextMenu_Tx_Char.Checked   = (this.settingsRoot.Display.TxRadix == Domain.Radix.Char);
-				toolStripMenuItem_RadixContextMenu_Tx_Bin.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Bin);
-				toolStripMenuItem_RadixContextMenu_Tx_Oct.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Oct);
-				toolStripMenuItem_RadixContextMenu_Tx_Dec.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Dec);
-				toolStripMenuItem_RadixContextMenu_Tx_Hex.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Hex);
+				toolStripMenuItem_RadixContextMenu_Tx_String.Checked  = (this.settingsRoot.Display.TxRadix == Domain.Radix.String);
+				toolStripMenuItem_RadixContextMenu_Tx_Char.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Char);
+				toolStripMenuItem_RadixContextMenu_Tx_Bin.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Bin);
+				toolStripMenuItem_RadixContextMenu_Tx_Oct.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Oct);
+				toolStripMenuItem_RadixContextMenu_Tx_Dec.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Dec);
+				toolStripMenuItem_RadixContextMenu_Tx_Hex.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Hex);
+				toolStripMenuItem_RadixContextMenu_Tx_Unicode.Checked = (this.settingsRoot.Display.TxRadix == Domain.Radix.Unicode);
 
-				toolStripMenuItem_RadixContextMenu_Rx_String.Checked = (this.settingsRoot.Display.RxRadix == Domain.Radix.String);
-				toolStripMenuItem_RadixContextMenu_Rx_Char.Checked   = (this.settingsRoot.Display.RxRadix == Domain.Radix.Char);
-				toolStripMenuItem_RadixContextMenu_Rx_Bin.Checked    = (this.settingsRoot.Display.RxRadix == Domain.Radix.Bin);
-				toolStripMenuItem_RadixContextMenu_Rx_Oct.Checked    = (this.settingsRoot.Display.RxRadix == Domain.Radix.Oct);
-				toolStripMenuItem_RadixContextMenu_Rx_Dec.Checked    = (this.settingsRoot.Display.RxRadix == Domain.Radix.Dec);
-				toolStripMenuItem_RadixContextMenu_Rx_Hex.Checked    = (this.settingsRoot.Display.RxRadix == Domain.Radix.Hex);
+				toolStripMenuItem_RadixContextMenu_Rx_String.Checked  = (this.settingsRoot.Display.RxRadix == Domain.Radix.String);
+				toolStripMenuItem_RadixContextMenu_Rx_Char.Checked    = (this.settingsRoot.Display.RxRadix == Domain.Radix.Char);
+				toolStripMenuItem_RadixContextMenu_Rx_Bin.Checked     = (this.settingsRoot.Display.RxRadix == Domain.Radix.Bin);
+				toolStripMenuItem_RadixContextMenu_Rx_Oct.Checked     = (this.settingsRoot.Display.RxRadix == Domain.Radix.Oct);
+				toolStripMenuItem_RadixContextMenu_Rx_Dec.Checked     = (this.settingsRoot.Display.RxRadix == Domain.Radix.Dec);
+				toolStripMenuItem_RadixContextMenu_Rx_Hex.Checked     = (this.settingsRoot.Display.RxRadix == Domain.Radix.Hex);
+				toolStripMenuItem_RadixContextMenu_Rx_Unicode.Checked = (this.settingsRoot.Display.RxRadix == Domain.Radix.Unicode);
 			}
 
 			this.isSettingControls.Leave();
@@ -1406,6 +1411,11 @@ namespace YAT.View.Forms
 			SetMonitorRadix(Domain.Radix.Hex);
 		}
 
+		private void toolStripMenuItem_RadixContextMenu_Unicode_Click(object sender, EventArgs e)
+		{
+			SetMonitorRadix(Domain.Radix.Unicode);
+		}
+
 		private void toolStripMenuItem_RadixContextMenu_SeparateTxRx_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Display.SeparateTxRxRadix = !this.settingsRoot.Display.SeparateTxRxRadix;
@@ -1441,6 +1451,11 @@ namespace YAT.View.Forms
 			SetMonitorRadix(Domain.IODirection.Tx, Domain.Radix.Hex);
 		}
 
+		private void toolStripMenuItem_RadixContextMenu_Tx_Unicode_Click(object sender, EventArgs e)
+		{
+			SetMonitorRadix(Domain.IODirection.Tx, Domain.Radix.Unicode);
+		}
+
 		private void toolStripMenuItem_RadixContextMenu_Rx_String_Click(object sender, EventArgs e)
 		{
 			SetMonitorRadix(Domain.IODirection.Rx, Domain.Radix.String);
@@ -1469,6 +1484,11 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_RadixContextMenu_Rx_Hex_Click(object sender, EventArgs e)
 		{
 			SetMonitorRadix(Domain.IODirection.Rx, Domain.Radix.Hex);
+		}
+
+		private void toolStripMenuItem_RadixContextMenu_Rx_Unicode_Click(object sender, EventArgs e)
+		{
+			SetMonitorRadix(Domain.IODirection.Rx, Domain.Radix.Unicode);
 		}
 
 		#endregion
