@@ -276,6 +276,9 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(Encoding.UTF8, Endianness.BigEndian,    "$£€", new byte[] { 0x24, 0xA3, 0xC2, 0xAC, 0x82, 0xE2 })); // 1-2-3 bytes !!!
 				yield return (new TestCaseData(Encoding.UTF8, Endianness.BigEndian,    "čěř", new byte[] { 0x8D, 0xC4, 0x9B, 0xC4, 0x99, 0xC5 }));
 
+				yield return (new TestCaseData(Encoding.UTF8, Endianness.LittleEndian, @"\0<CR>\n", new byte[] { 0x00, 0x0D, 0x0A }));
+				yield return (new TestCaseData(Encoding.UTF8, Endianness.BigEndian,    @"\0<CR>\n", new byte[] { 0x00, 0x0D, 0x0A }));
+
 				// UTF-16 (little endian, i.e. machine endianness):
 				yield return (new TestCaseData(Encoding.Unicode, Endianness.LittleEndian, "abc", new byte[] { 0x61, 0x00, 0x62, 0x00, 0x63, 0x00 }));
 				yield return (new TestCaseData(Encoding.Unicode, Endianness.LittleEndian, "äöü", new byte[] { 0xE4, 0x00, 0xF6, 0x00, 0xFC, 0x00 }));
@@ -287,6 +290,9 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(Encoding.Unicode, Endianness.BigEndian,    "ÄÖÜ", new byte[] { 0x00, 0xC4, 0x00, 0xD6, 0x00, 0xDC }));
 				yield return (new TestCaseData(Encoding.Unicode, Endianness.BigEndian,    "$£€", new byte[] { 0x00, 0x24, 0x00, 0xA3, 0x20, 0xAC }));
 				yield return (new TestCaseData(Encoding.Unicode, Endianness.BigEndian,    "čěř", new byte[] { 0x01, 0x0D, 0x01, 0x1B, 0x01, 0x59 }));
+
+				yield return (new TestCaseData(Encoding.Unicode, Endianness.LittleEndian, @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x0D, 0x00, 0x0A, 0x00 }));
+				yield return (new TestCaseData(Encoding.Unicode, Endianness.BigEndian,    @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x00, 0x0D, 0x00, 0x0A }));
 
 				// UTF-16 (big endian, i.e. network endianness):
 				yield return (new TestCaseData(Encoding.BigEndianUnicode, Endianness.LittleEndian, "abc", new byte[] { 0x00, 0x61, 0x00, 0x62, 0x00, 0x63 }));
@@ -300,6 +306,9 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(Encoding.BigEndianUnicode, Endianness.BigEndian,    "$£€", new byte[] { 0x24, 0x00, 0xA3, 0x00, 0xAC, 0x20 }));
 				yield return (new TestCaseData(Encoding.BigEndianUnicode, Endianness.BigEndian,    "čěř", new byte[] { 0x0D, 0x01, 0x1B, 0x01, 0x59, 0x01 }));
 
+				yield return (new TestCaseData(Encoding.BigEndianUnicode, Endianness.LittleEndian, @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x00, 0x0D, 0x00, 0x0A }));
+				yield return (new TestCaseData(Encoding.BigEndianUnicode, Endianness.BigEndian,    @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x0D, 0x00, 0x0A, 0x00 }));
+
 				// UTF-32 (little endian, i.e. machine endianness):
 				yield return (new TestCaseData(Encoding.UTF32, Endianness.LittleEndian, "abc", new byte[] { 0x61, 0x00, 0x00, 0x00, 0x62, 0x00, 0x00, 0x00, 0x63, 0x00, 0x00, 0x00 }));
 				yield return (new TestCaseData(Encoding.UTF32, Endianness.LittleEndian, "äöü", new byte[] { 0xE4, 0x00, 0x00, 0x00, 0xF6, 0x00, 0x00, 0x00, 0xFC, 0x00, 0x00, 0x00 }));
@@ -312,6 +321,9 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(Encoding.UTF32, Endianness.BigEndian,    "$£€", new byte[] { 0x00, 0x00, 0x00, 0x24, 0x00, 0x00, 0x00, 0xA3, 0x00, 0x00, 0x20, 0xAC }));
 				yield return (new TestCaseData(Encoding.UTF32, Endianness.BigEndian,    "čěř", new byte[] { 0x00, 0x00, 0x01, 0x0D, 0x00, 0x00, 0x01, 0x1B, 0x00, 0x00, 0x01, 0x59 }));
 
+				yield return (new TestCaseData(Encoding.UTF32, Endianness.LittleEndian, @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00 }));
+				yield return (new TestCaseData(Encoding.UTF32, Endianness.BigEndian,    @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x0A }));
+
 				// UTF-32 (big endian, i.e. network endianness):
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), Endianness.LittleEndian, "abc", new byte[] { 0x00, 0x00, 0x00, 0x61, 0x00, 0x00, 0x00, 0x62, 0x00, 0x00, 0x00, 0x63 }));
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), Endianness.LittleEndian, "äöü", new byte[] { 0x00, 0x00, 0x00, 0xE4, 0x00, 0x00, 0x00, 0xF6, 0x00, 0x00, 0x00, 0xFC }));
@@ -323,6 +335,9 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), Endianness.BigEndian,    "ÄÖÜ", new byte[] { 0xC4, 0x00, 0x00, 0x00, 0xD6, 0x00, 0x00, 0x00, 0xDC, 0x00, 0x00, 0x00 }));
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), Endianness.BigEndian,    "$£€", new byte[] { 0x24, 0x00, 0x00, 0x00, 0xA3, 0x00, 0x00, 0x00, 0xAC, 0x20, 0x00, 0x00 }));
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), Endianness.BigEndian,    "čěř", new byte[] { 0x0D, 0x01, 0x00, 0x00, 0x1B, 0x01, 0x00, 0x00, 0x59, 0x01, 0x00, 0x00 }));
+
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), Endianness.LittleEndian, @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x0A }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), Endianness.BigEndian,    @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00 }));
 			}
 		}
 

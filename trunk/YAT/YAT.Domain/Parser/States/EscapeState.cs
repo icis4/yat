@@ -59,7 +59,8 @@ namespace YAT.Domain.Parser
 						case StreamEx.EndOfStream: // Just "\b" is used for C-style backspace.
 						default:
 						{
-							parser.BytesWriter.WriteByte((byte)'\b');
+							byte[] a = parser.GetBytes('\b');
+							parser.BytesWriter.Write(a, 0, a.Length);
 							parser.CommitPendingBytes();
 							parser.HasFinished = true;
 							ChangeState(parser, null);
@@ -157,8 +158,10 @@ namespace YAT.Domain.Parser
 					else
 					{
 						// Keywords are disabled, therefore return the escape sequence.
-						byte[] b = parser.Encoding.GetBytes(new char[] { '\\', '!' });
-						parser.BytesWriter.Write(b, 0, b.Length);
+						byte[] a = parser.GetBytes('\\');
+						parser.BytesWriter.Write(a, 0, a.Length);
+						       a = parser.GetBytes('!');
+						parser.BytesWriter.Write(a, 0, a.Length);
 						parser.CommitPendingBytes();
 						parser.HasFinished = true;
 						ChangeState(parser, null);
@@ -207,7 +210,8 @@ namespace YAT.Domain.Parser
 						case StreamEx.EndOfStream: // Just "\0" is used for C-style <NUL>.
 						default:
 						{
-							parser.BytesWriter.WriteByte((byte)'\0');
+							byte[] a = parser.GetBytes('\0');
+							parser.BytesWriter.Write(a, 0, a.Length);
 							parser.CommitPendingBytes();
 							parser.HasFinished = true;
 							ChangeState(parser, null);
@@ -219,7 +223,8 @@ namespace YAT.Domain.Parser
 				case 'a': // C-style bell.
 				case 'A':
 				{
-					parser.BytesWriter.WriteByte((byte)'\a');
+					byte[] a = parser.GetBytes('\a');
+					parser.BytesWriter.Write(a, 0, a.Length);
 					parser.CommitPendingBytes();
 					parser.HasFinished = true;
 					ChangeState(parser, null);
@@ -231,7 +236,8 @@ namespace YAT.Domain.Parser
 				case 't': // C-style tab.
 				case 'T':
 				{
-					parser.BytesWriter.WriteByte((byte)'\t');
+					byte[] a = parser.GetBytes('\t');
+					parser.BytesWriter.Write(a, 0, a.Length);
 					parser.CommitPendingBytes();
 					parser.HasFinished = true;
 					ChangeState(parser, null);
@@ -241,7 +247,8 @@ namespace YAT.Domain.Parser
 				case 'v': // C-style vertical tab.
 				case 'V':
 				{
-					parser.BytesWriter.WriteByte((byte)'\v');
+					byte[] a = parser.GetBytes('\v');
+					parser.BytesWriter.Write(a, 0, a.Length);
 					parser.CommitPendingBytes();
 					parser.HasFinished = true;
 					ChangeState(parser, null);
@@ -251,7 +258,8 @@ namespace YAT.Domain.Parser
 				case 'n': // C-style <LF>.
 				case 'N':
 				{
-					parser.BytesWriter.WriteByte((byte)'\n');
+					byte[] a = parser.GetBytes('\n');
+					parser.BytesWriter.Write(a, 0, a.Length);
 					parser.CommitPendingBytes();
 					parser.HasFinished = true;
 					ChangeState(parser, null);
@@ -261,7 +269,8 @@ namespace YAT.Domain.Parser
 				case 'r': // C-style <CR>.
 				case 'R':
 				{
-					parser.BytesWriter.WriteByte((byte)'\r');
+					byte[] a = parser.GetBytes('\r');
+					parser.BytesWriter.Write(a, 0, a.Length);
 					parser.CommitPendingBytes();
 					parser.HasFinished = true;
 					ChangeState(parser, null);
@@ -271,7 +280,8 @@ namespace YAT.Domain.Parser
 				case 'f': // C-style <FF>.
 				case 'F':
 				{
-					parser.BytesWriter.WriteByte((byte)'\f');
+					byte[] a = parser.GetBytes('\f');
+					parser.BytesWriter.Write(a, 0, a.Length);
 					parser.CommitPendingBytes();
 					parser.HasFinished = true;
 					ChangeState(parser, null);
@@ -305,8 +315,8 @@ namespace YAT.Domain.Parser
 
 				case '\\':                              // "\\" results in "\".
 				{
-					byte[] b = parser.Encoding.GetBytes(new char[] { '\\' });
-					parser.BytesWriter.Write(b, 0, b.Length);
+					byte[] a = parser.GetBytes('\\');
+					parser.BytesWriter.Write(a, 0, a.Length);
 					parser.CommitPendingBytes();
 					parser.HasFinished = true;
 					ChangeState(parser, null);
@@ -315,8 +325,8 @@ namespace YAT.Domain.Parser
 
 				case '<':                              // "\<" results in "<".
 				{
-					byte[] b = parser.Encoding.GetBytes(new char[] { '<' });
-					parser.BytesWriter.Write(b, 0, b.Length);
+					byte[] a = parser.GetBytes('<');
+					parser.BytesWriter.Write(a, 0, a.Length);
 					parser.CommitPendingBytes();
 					parser.HasFinished = true;
 					ChangeState(parser, null);
@@ -325,8 +335,8 @@ namespace YAT.Domain.Parser
 
 				case '>':                              // "\>" results in ">".
 				{
-					byte[] b = parser.Encoding.GetBytes(new char[] { '>' });
-					parser.BytesWriter.Write(b, 0, b.Length);
+					byte[] a = parser.GetBytes('>');
+					parser.BytesWriter.Write(a, 0, a.Length);
 					parser.CommitPendingBytes();
 					parser.HasFinished = true;
 					ChangeState(parser, null);
@@ -335,8 +345,8 @@ namespace YAT.Domain.Parser
 
 				case '(':                              // "\(" results in "(".
 				{
-					byte[] b = parser.Encoding.GetBytes(new char[] { '(' });
-					parser.BytesWriter.Write(b, 0, b.Length);
+					byte[] a = parser.GetBytes('(');
+					parser.BytesWriter.Write(a, 0, a.Length);
 					parser.CommitPendingBytes();
 					parser.HasFinished = true;
 					ChangeState(parser, null);
@@ -345,8 +355,8 @@ namespace YAT.Domain.Parser
 
 				case ')':                              // "\)" results in ")".
 				{
-					byte[] b = parser.Encoding.GetBytes(new char[] { ')' });
-					parser.BytesWriter.Write(b, 0, b.Length);
+					byte[] a = parser.GetBytes(')');
+					parser.BytesWriter.Write(a, 0, a.Length);
 					parser.CommitPendingBytes();
 					parser.HasFinished = true;
 					ChangeState(parser, null);

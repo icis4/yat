@@ -627,7 +627,7 @@ namespace YAT.View.Controls
 				else if ((CharEx.TryConvertToByte(e.KeyChar, out asciiCode)) && (Ascii.IsControl(asciiCode)))
 					text = "<" + Ascii.ConvertToMnemonic(asciiCode) + ">";
 				else // Applies to Unicode control characters U+0080..U+009F
-					text = "\\h(" + ConvertEx.ToHexadecimalString(Encoding.Unicode.GetBytes(new char[] { e.KeyChar })) + ")";
+					text = @"\U+" + ((ushort)(e.KeyChar)).ToString("X4", CultureInfo.InvariantCulture);
 
 				ConfirmPartialText(text);
 				OnSendCommandRequest(new EventArgs<SendTextEventOption>(SendTextEventOption.Normal));

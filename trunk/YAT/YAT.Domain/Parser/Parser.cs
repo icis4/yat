@@ -606,10 +606,10 @@ namespace YAT.Domain.Parser
 			{
 				if (radix == Radix.String)
 				{
-					byte[] b;
-					if (TryParseContiguousRadixItem(s, radix, out b, ref formatException))
+					byte[] a;
+					if (TryParseContiguousRadixItem(s, radix, out a, ref formatException))
 					{
-						bytes.Write(b, 0, b.Length);
+						bytes.Write(a, 0, a.Length);
 					}
 					else
 					{
@@ -624,10 +624,10 @@ namespace YAT.Domain.Parser
 					{
 						if (item.Length > 0)
 						{
-							byte[] b;
-							if (TryParseContiguousRadixItem(item, radix, out b, ref formatException))
+							byte[] a;
+							if (TryParseContiguousRadixItem(item, radix, out a, ref formatException))
 							{
-								bytes.Write(b, 0, b.Length);
+								bytes.Write(a, 0, a.Length);
 							}
 							else
 							{
@@ -700,6 +700,19 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary>
+		/// Encodes the given character, taking encoding and endianness into account.
+		/// </summary>
+		public byte[] GetBytes(char c)
+		{
+			byte[] a = this.encoding.GetBytes(new char[] { c });
+
+			if (!((EndiannessEx)this.endianness).IsSameAsMachine)
+				a = a.Reverse().ToArray();
+
+			return (a);
+		}
+
+		/// <summary>
 		/// Encodes <paramref name="s"/> containing a single char item into bytes.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
@@ -708,11 +721,7 @@ namespace YAT.Domain.Parser
 		{
 			if (s.Length == 1) // Must be a single character, otherwise something went wrong...
 			{
-				result = this.encoding.GetBytes(new char[] { s[0] });
-
-				if (!((EndiannessEx)this.endianness).IsSameAsMachine)
-					result = result.Reverse().ToArray();
-
+				result = GetBytes(s[0]);
 				return (true);
 			}
 			else
@@ -793,12 +802,12 @@ namespace YAT.Domain.Parser
 							int from = Math.Min(3, remaining.Length);
 							for (int i = from; i >= 1; i--) // Probe the 3-2-1 left-most characters for a valid octal byte.
 							{
-								ulong tempResult;
-								if (UInt64Ex.TryParseOctal(StringEx.Left(remaining, i), out tempResult))
+								ulong value;
+								if (UInt64Ex.TryParseOctal(StringEx.Left(remaining, i), out value))
 								{
-									if (tempResult <= 0xFF) // i left-most characters are a valid octal byte!
+									if (value <= 0xFF) // i left-most characters are a valid octal byte!
 									{
-										bytes.WriteByte((byte)tempResult);
+										bytes.WriteByte((byte)value);
 
 										remaining = remaining.Remove(0, i);
 										found = true;
@@ -826,10 +835,10 @@ namespace YAT.Domain.Parser
 							int from = Math.Min(3, remaining.Length);
 							for (int i = from; i >= 1; i--) // Probe the 3-2-1 left-most characters for a valid decimal byte.
 							{
-								byte tempResult;
-								if (byte.TryParse(StringEx.Left(remaining, i), NumberStyles.Integer, CultureInfo.InvariantCulture, out tempResult))
+								byte value;
+								if (byte.TryParse(StringEx.Left(remaining, i), NumberStyles.Integer, CultureInfo.InvariantCulture, out value))
 								{
-									bytes.WriteByte(tempResult);
+									bytes.WriteByte(value);
 
 									remaining = remaining.Remove(0, i);
 									found = true;
@@ -856,10 +865,10 @@ namespace YAT.Domain.Parser
 							int from = Math.Min(2, remaining.Length);
 							for (int i = from; i >= 1; i--) // Probe the 2-1 left-most characters for a valid hexadecimal byte.
 							{
-								byte tempResult;
-								if (byte.TryParse(StringEx.Left(remaining, i), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out tempResult))
+								byte value;
+								if (byte.TryParse(StringEx.Left(remaining, i), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out value))
 								{
-									bytes.WriteByte(tempResult);
+									bytes.WriteByte(value);
 
 									remaining = remaining.Remove(0, i);
 									found = true;
@@ -886,17 +895,17 @@ namespace YAT.Domain.Parser
 							int from = Math.Min(4, remaining.Length);
 							for (int i = from; i >= 1; i--) // Probe the 4-3-2-1 left-most characters for a valid hexadecimal Unicode value.
 							{
-								ushort tempResult;
-								if (ushort.TryParse(StringEx.Left(remaining, i), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out tempResult))
+								ushort value;
+								if (ushort.TryParse(StringEx.Left(remaining, i), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out value))
 								{
-									if (tempResult <= 0xFF)
+									if (value <= 0xFF)
 									{
-										bytes.WriteByte((byte)tempResult);
+										bytes.WriteByte((byte)value);
 									}
 									else
 									{
-										byte upper = (byte)((tempResult & 0xFF00) >> 8);
-										byte lower = (byte)((tempResult & 0x00FF) >> 0);
+										byte upper = (byte)((value & 0xFF00) >> 8);
+										byte lower = (byte)((value & 0x00FF) >> 0);
 										switch (this.endianness)
 										{
 											case Endianness.BigEndian:    bytes.WriteByte(upper); bytes.WriteByte(lower); break;
