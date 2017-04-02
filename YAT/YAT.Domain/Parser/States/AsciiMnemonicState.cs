@@ -125,10 +125,10 @@ namespace YAT.Domain.Parser
 				{
 					if (item.Length > 0)
 					{
-						byte[] b;
-						if (TryParseContiguousAsciiMnemonicItem(parser, item, out b, ref formatException))
+						byte[] a;
+						if (TryParseContiguousAsciiMnemonicItem(parser, item, out a, ref formatException))
 						{
-							bytes.Write(b, 0, b.Length);
+							bytes.Write(a, 0, a.Length);
 						}
 						else
 						{
@@ -167,11 +167,7 @@ namespace YAT.Domain.Parser
 						if (Ascii.TryParse(StringEx.Left(remaining, i), out code))
 						{
 							char c = Convert.ToChar(code);
-							byte[] a = parser.Encoding.GetBytes(new char[] { c });
-
-							if (!((EndiannessEx)parser.Endianness).IsSameAsMachine)
-								a = a.Reverse().ToArray();
-
+							byte[] a = parser.GetBytes(c);
 							bytes.Write(a, 0, a.Length);
 
 							remaining = remaining.Remove(0, i);
