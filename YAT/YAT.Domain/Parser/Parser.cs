@@ -441,10 +441,10 @@ namespace YAT.Domain.Parser
 				{
 					foreach (Result r in typedResult)
 					{
-						var bar = (r as ByteArrayResult);
+						var bar = (r as BytesResult);
 						if (bar != null)
 						{
-							byte[] a = bar.ByteArray;
+							byte[] a = bar.Bytes;
 							bytes.Write(a, 0, a.Length);
 						}
 					}
@@ -575,7 +575,7 @@ namespace YAT.Domain.Parser
 			if (this.bytesWriter.Length > 0)
 			{
 				// Commit:
-				this.result.Add(new ByteArrayResult(this.bytesWriter.ToArray()));
+				this.result.Add(new BytesResult(this.bytesWriter.ToArray()));
 
 				// Restart:
 				this.bytesWriter.Dispose();
@@ -584,11 +584,11 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		internal virtual void CommitResult(IEnumerable<Result> result)
+		internal virtual void CommitResult(Result result)
 		{
 			AssertNotDisposed();
 
-			this.result.AddRange(result);
+			this.result.Add(result);
 		}
 
 		/// <summary>
@@ -976,36 +976,27 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary>
-		/// Parses <paramref name="s"/> for keywords.
+		/// Parses <paramref name="s"/> for a keyword.
 		/// </summary>
 		/// <param name="s">String to be parsed.</param>
 		/// <param name="result">Array containing the results.</param>
 		/// <param name="formatException">Returned if invalid string format.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Non-static for orthogonality with other TryParse() methods.")]
-		internal virtual bool TryParseContiguousKeywords(string s, out Result[] result, ref FormatException formatException)
+		internal virtual bool TryParseKeyword(string s, out Result result, ref FormatException formatException)
 		{
-			List<Result> l = new List<Result>();
-			string[] tokens = s.Split(' ');
-			foreach (string token in tokens)
+			Keyword keyword;
+			if (KeywordEx.TryParse(s, out keyword))
 			{
-				if (token.Length == 0)
-					continue;
-
-				Keyword keyword;
-				if (KeywordEx.TryParse(token, out keyword))
-				{
-					l.Add(new KeywordResult(keyword));
-				}
-				else
-				{
-					result = new Result[] { };
-					formatException = new FormatException(@"""" + token + @""" is an invalid keyword.");
-					return (false);
-				}
+				result = new KeywordResult(keyword);
+				return (true);
 			}
-			result = l.ToArray();
-			return (true);
+			else
+			{
+				result = null;
+				formatException = new FormatException(@"""" + s + @""" is an invalid keyword.");
+				return (false);
+			}
 		}
 
 		#endregion

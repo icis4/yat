@@ -149,9 +149,9 @@ namespace YAT.Domain.Parser
 				}
 				else
 				{
-					Result[] result;
+					Result result;
 
-					if (!parser.TryParseContiguousKeywords(contiguousString, out result, ref formatException))
+					if (!parser.TryParseKeyword(contiguousString, out result, ref formatException))
 						return (false);
 
 					if (writeOnSuccess)

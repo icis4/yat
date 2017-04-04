@@ -33,7 +33,7 @@ using MKY;
 // YAT.Domain\Terminal for better separation of the implementation files.
 namespace YAT.Domain
 {
-	#region Enum InfoElementSeparator
+	#region Enum InfoSeparator
 
 	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
 	// warnings for each undocumented member below. Documenting each member makes little sense
@@ -42,7 +42,7 @@ namespace YAT.Domain
 	#pragma warning disable 1591
 
 	/// <summary></summary>
-	public enum InfoElementSeparator
+	public enum InfoSeparator
 	{
 		None,
 
@@ -66,7 +66,7 @@ namespace YAT.Domain
 	#endregion
 
 	/// <summary>
-	/// Extended enum InfoElementSeparatorEx.
+	/// Extended enum InfoSeparatorEx.
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
@@ -74,7 +74,7 @@ namespace YAT.Domain
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	public class InfoElementSeparatorEx : EnumEx, IEquatable<InfoElementSeparatorEx>
+	public class InfoSeparatorEx : EnumEx, IEquatable<InfoSeparatorEx>
 	{
 		#region String Definitions
 
@@ -113,26 +113,26 @@ namespace YAT.Domain
 
 		private string explicitSeparator; // = null;
 
-		/// <summary>Default is <see cref="InfoElementSeparator.None"/>.</summary>
-		public const InfoElementSeparator Default = InfoElementSeparator.None;
+		/// <summary>Default is <see cref="InfoSeparator.None"/>.</summary>
+		public const InfoSeparator Default = InfoSeparator.None;
 
 		/// <summary>Default is <see cref="Default"/>.</summary>
-		public InfoElementSeparatorEx()
+		public InfoSeparatorEx()
 			: this(Default)
 		{
 		}
 
 		/// <summary></summary>
-		public InfoElementSeparatorEx(InfoElementSeparator separator)
+		public InfoSeparatorEx(InfoSeparator separator)
 			: base(separator)
 		{
-			if (separator == InfoElementSeparator.Explicit)
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'InfoElementSeparator.Explicit' requires a separator string, use InfoElementSeparatorEx(string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			if (separator == InfoSeparator.Explicit)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'InfoSeparator.Explicit' requires a separator string, use InfoElementSeparatorEx(string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
-		public InfoElementSeparatorEx(string separator)
-			: this(InfoElementSeparator.Explicit)
+		public InfoSeparatorEx(string separator)
+			: this(InfoSeparator.Explicit)
 		{
 			this.explicitSeparator = separator;
 		}
@@ -145,27 +145,27 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ToSeparator()
 		{
-			switch ((InfoElementSeparator)UnderlyingEnum)
+			switch ((InfoSeparator)UnderlyingEnum)
 			{
-				case InfoElementSeparator.None:                 return (None_stringSeparator);
-				case InfoElementSeparator.Space:                return (Space_stringSeparator);
+				case InfoSeparator.None:                 return (None_stringSeparator);
+				case InfoSeparator.Space:                return (Space_stringSeparator);
 
-				case InfoElementSeparator.Underscore:           return (Underscore_stringSeparator);
-				case InfoElementSeparator.UnderscoreWithSpaces: return (UnderscoreWithSpaces_stringSeparator);
+				case InfoSeparator.Underscore:           return (Underscore_stringSeparator);
+				case InfoSeparator.UnderscoreWithSpaces: return (UnderscoreWithSpaces_stringSeparator);
 
-				case InfoElementSeparator.Dash:                 return (Dash_stringSeparator);
-				case InfoElementSeparator.DashWithSpaces:       return (DashWithSpaces_stringSeparator);
+				case InfoSeparator.Dash:                 return (Dash_stringSeparator);
+				case InfoSeparator.DashWithSpaces:       return (DashWithSpaces_stringSeparator);
 
-				case InfoElementSeparator.Ball:                 return (Ball_stringSeparator);
-				case InfoElementSeparator.BallWithSpaces:       return (BallWithSpaces_stringSeparator);
+				case InfoSeparator.Ball:                 return (Ball_stringSeparator);
+				case InfoSeparator.BallWithSpaces:       return (BallWithSpaces_stringSeparator);
 
-				case InfoElementSeparator.Comma:                return (Comma_stringSeparator);
-				case InfoElementSeparator.CommaWithSpace:       return (CommaWithSpace_stringSeparator);
+				case InfoSeparator.Comma:                return (Comma_stringSeparator);
+				case InfoSeparator.CommaWithSpace:       return (CommaWithSpace_stringSeparator);
 
-				case InfoElementSeparator.Semicolon:            return (Semicolon_stringSeparator);
-				case InfoElementSeparator.SemicolonWithSpace:   return (SemicolonWithSpace_stringSeparator);
+				case InfoSeparator.Semicolon:            return (Semicolon_stringSeparator);
+				case InfoSeparator.SemicolonWithSpace:   return (SemicolonWithSpace_stringSeparator);
 
-				case InfoElementSeparator.Explicit:             return (this.explicitSeparator);
+				case InfoSeparator.Explicit:             return (this.explicitSeparator);
 			}
 			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -173,27 +173,27 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ToDescription()
 		{
-			switch ((InfoElementSeparator)UnderlyingEnum)
+			switch ((InfoSeparator)UnderlyingEnum)
 			{
-				case InfoElementSeparator.None:                 return (None_stringDescription);
-				case InfoElementSeparator.Space:                return (Space_stringDescription);
+				case InfoSeparator.None:                 return (None_stringDescription);
+				case InfoSeparator.Space:                return (Space_stringDescription);
 
-				case InfoElementSeparator.Underscore:           return (Underscore_stringDescription);
-				case InfoElementSeparator.UnderscoreWithSpaces: return (UnderscoreWithSpaces_stringDescription);
+				case InfoSeparator.Underscore:           return (Underscore_stringDescription);
+				case InfoSeparator.UnderscoreWithSpaces: return (UnderscoreWithSpaces_stringDescription);
 
-				case InfoElementSeparator.Dash:                 return (Dash_stringDescription);
-				case InfoElementSeparator.DashWithSpaces:       return (DashWithSpaces_stringDescription);
+				case InfoSeparator.Dash:                 return (Dash_stringDescription);
+				case InfoSeparator.DashWithSpaces:       return (DashWithSpaces_stringDescription);
 
-				case InfoElementSeparator.Ball:                 return (Ball_stringDescription);
-				case InfoElementSeparator.BallWithSpaces:       return (BallWithSpaces_stringDescription);
+				case InfoSeparator.Ball:                 return (Ball_stringDescription);
+				case InfoSeparator.BallWithSpaces:       return (BallWithSpaces_stringDescription);
 
-				case InfoElementSeparator.Comma:                return (Comma_stringDescription);
-				case InfoElementSeparator.CommaWithSpace:       return (CommaWithSpace_stringDescription);
+				case InfoSeparator.Comma:                return (Comma_stringDescription);
+				case InfoSeparator.CommaWithSpace:       return (CommaWithSpace_stringDescription);
 
-				case InfoElementSeparator.Semicolon:            return (Semicolon_stringDescription);
-				case InfoElementSeparator.SemicolonWithSpace:   return (SemicolonWithSpace_stringDescription);
+				case InfoSeparator.Semicolon:            return (Semicolon_stringDescription);
+				case InfoSeparator.SemicolonWithSpace:   return (SemicolonWithSpace_stringDescription);
 
-				case InfoElementSeparator.Explicit:             return (this.explicitSeparator);
+				case InfoSeparator.Explicit:             return (this.explicitSeparator);
 			}
 			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -222,7 +222,7 @@ namespace YAT.Domain
 			{
 				int hashCode = base.GetHashCode();
 
-				if ((InfoElementSeparator)UnderlyingEnum == InfoElementSeparator.Explicit)
+				if ((InfoSeparator)UnderlyingEnum == InfoSeparator.Explicit)
 					hashCode = (hashCode * 397) ^ (this.explicitSeparator != null ? this.explicitSeparator.GetHashCode() : 0);
 
 				return (hashCode);
@@ -234,19 +234,19 @@ namespace YAT.Domain
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as InfoElementSeparatorEx));
+			return (Equals(obj as InfoSeparatorEx));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(InfoElementSeparatorEx other)
+		public bool Equals(InfoSeparatorEx other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
 			if (GetType() != other.GetType()) return (false);
 
-			if ((InfoElementSeparator)UnderlyingEnum == InfoElementSeparator.Explicit)
+			if ((InfoSeparator)UnderlyingEnum == InfoSeparator.Explicit)
 			{
 				return
 				(
@@ -263,7 +263,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(InfoElementSeparatorEx lhs, InfoElementSeparatorEx rhs)
+		public static bool operator ==(InfoSeparatorEx lhs, InfoSeparatorEx rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -276,7 +276,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(InfoElementSeparatorEx lhs, InfoElementSeparatorEx rhs)
+		public static bool operator !=(InfoSeparatorEx lhs, InfoSeparatorEx rhs)
 		{
 			return (!(lhs == rhs));
 		}
@@ -291,21 +291,21 @@ namespace YAT.Domain
 		/// <remarks>
 		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
 		/// </remarks>
-		public static InfoElementSeparatorEx[] GetItems()
+		public static InfoSeparatorEx[] GetItems()
 		{
-			List<InfoElementSeparatorEx> a = new List<InfoElementSeparatorEx>(12); // Preset the required capacity to improve memory management.
-			a.Add(new InfoElementSeparatorEx(InfoElementSeparator.None));
-			a.Add(new InfoElementSeparatorEx(InfoElementSeparator.Space));
-			a.Add(new InfoElementSeparatorEx(InfoElementSeparator.Underscore));
-			a.Add(new InfoElementSeparatorEx(InfoElementSeparator.UnderscoreWithSpaces));
-			a.Add(new InfoElementSeparatorEx(InfoElementSeparator.Dash));
-			a.Add(new InfoElementSeparatorEx(InfoElementSeparator.DashWithSpaces));
-			a.Add(new InfoElementSeparatorEx(InfoElementSeparator.Ball));
-			a.Add(new InfoElementSeparatorEx(InfoElementSeparator.BallWithSpaces));
-			a.Add(new InfoElementSeparatorEx(InfoElementSeparator.Comma));
-			a.Add(new InfoElementSeparatorEx(InfoElementSeparator.CommaWithSpace));
-			a.Add(new InfoElementSeparatorEx(InfoElementSeparator.Semicolon));
-			a.Add(new InfoElementSeparatorEx(InfoElementSeparator.SemicolonWithSpace));
+			List<InfoSeparatorEx> a = new List<InfoSeparatorEx>(12); // Preset the required capacity to improve memory management.
+			a.Add(new InfoSeparatorEx(InfoSeparator.None));
+			a.Add(new InfoSeparatorEx(InfoSeparator.Space));
+			a.Add(new InfoSeparatorEx(InfoSeparator.Underscore));
+			a.Add(new InfoSeparatorEx(InfoSeparator.UnderscoreWithSpaces));
+			a.Add(new InfoSeparatorEx(InfoSeparator.Dash));
+			a.Add(new InfoSeparatorEx(InfoSeparator.DashWithSpaces));
+			a.Add(new InfoSeparatorEx(InfoSeparator.Ball));
+			a.Add(new InfoSeparatorEx(InfoSeparator.BallWithSpaces));
+			a.Add(new InfoSeparatorEx(InfoSeparator.Comma));
+			a.Add(new InfoSeparatorEx(InfoSeparator.CommaWithSpace));
+			a.Add(new InfoSeparatorEx(InfoSeparator.Semicolon));
+			a.Add(new InfoSeparatorEx(InfoSeparator.SemicolonWithSpace));
 			return (a.ToArray());
 		}
 
@@ -320,9 +320,9 @@ namespace YAT.Domain
 		/// Opposed to the convention of the .NET framework, whitespace is NOT
 		/// trimmed from <paramref name="s"/> as certain separators contain spaces.
 		/// </remarks>
-		public static InfoElementSeparatorEx Parse(string s)
+		public static InfoSeparatorEx Parse(string s)
 		{
-			InfoElementSeparatorEx result;
+			InfoSeparatorEx result;
 			if (TryParse(s, out result))
 				return (result);
 			else
@@ -333,9 +333,9 @@ namespace YAT.Domain
 		/// Opposed to the convention of the .NET framework, whitespace is NOT
 		/// trimmed from <paramref name="s"/> as certain separators contain spaces.
 		/// </remarks>
-		public static bool TryParse(string s, out InfoElementSeparatorEx result)
+		public static bool TryParse(string s, out InfoSeparatorEx result)
 		{
-			InfoElementSeparator enumResult;
+			InfoSeparator enumResult;
 			if (TryParse(s, out enumResult))
 			{
 				result = enumResult;
@@ -343,7 +343,7 @@ namespace YAT.Domain
 			}
 			else // Other!
 			{
-				result = new InfoElementSeparatorEx(s);
+				result = new InfoSeparatorEx(s);
 				return (true);
 			}
 		}
@@ -352,90 +352,90 @@ namespace YAT.Domain
 		/// Opposed to the convention of the .NET framework, whitespace is NOT
 		/// trimmed from <paramref name="s"/> as certain separators contain spaces.
 		/// </remarks>
-		public static bool TryParse(string s, out InfoElementSeparator result)
+		public static bool TryParse(string s, out InfoSeparator result)
 		{
 			// Do not s = s.Trim(); due to reason described above.
 
 			if (string.IsNullOrEmpty(s)) // None!
 			{
-				result = InfoElementSeparator.None;
+				result = InfoSeparator.None;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_stringSeparator) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringDescription))
 			{
-				result = InfoElementSeparator.None;
+				result = InfoSeparator.None;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Space_stringSeparator) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Space_stringDescription))
 			{
-				result = InfoElementSeparator.Space;
+				result = InfoSeparator.Space;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Underscore_stringSeparator) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Underscore_stringDescription))
 			{
-				result = InfoElementSeparator.Underscore;
+				result = InfoSeparator.Underscore;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, UnderscoreWithSpaces_stringSeparator) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, UnderscoreWithSpaces_stringDescription))
 			{
-				result = InfoElementSeparator.UnderscoreWithSpaces;
+				result = InfoSeparator.UnderscoreWithSpaces;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Dash_stringSeparator) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Dash_stringDescription))
 			{
-				result = InfoElementSeparator.Dash;
+				result = InfoSeparator.Dash;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, DashWithSpaces_stringSeparator) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, DashWithSpaces_stringDescription))
 			{
-				result = InfoElementSeparator.DashWithSpaces;
+				result = InfoSeparator.DashWithSpaces;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Ball_stringSeparator) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Ball_stringDescription))
 			{
-				result = InfoElementSeparator.Ball;
+				result = InfoSeparator.Ball;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, BallWithSpaces_stringSeparator) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, BallWithSpaces_stringDescription))
 			{
-				result = InfoElementSeparator.BallWithSpaces;
+				result = InfoSeparator.BallWithSpaces;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Comma_stringSeparator) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Comma_stringDescription))
 			{
-				result = InfoElementSeparator.Comma;
+				result = InfoSeparator.Comma;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, CommaWithSpace_stringSeparator) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, CommaWithSpace_stringDescription))
 			{
-				result = InfoElementSeparator.CommaWithSpace;
+				result = InfoSeparator.CommaWithSpace;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Semicolon_stringSeparator) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Semicolon_stringDescription))
 			{
-				result = InfoElementSeparator.Semicolon;
+				result = InfoSeparator.Semicolon;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, SemicolonWithSpace_stringSeparator) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, SemicolonWithSpace_stringDescription))
 			{
-				result = InfoElementSeparator.SemicolonWithSpace;
+				result = InfoSeparator.SemicolonWithSpace;
 				return (true);
 			}
 			else // Invalid string!
 			{
-				result = new InfoElementSeparatorEx(); // Default!
+				result = new InfoSeparatorEx(); // Default!
 				return (false);
 			}
 		}
@@ -448,25 +448,25 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static implicit operator InfoElementSeparator(InfoElementSeparatorEx separator)
+		public static implicit operator InfoSeparator(InfoSeparatorEx separator)
 		{
-			return ((InfoElementSeparator)separator.UnderlyingEnum);
+			return ((InfoSeparator)separator.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator InfoElementSeparatorEx(InfoElementSeparator separator)
+		public static implicit operator InfoSeparatorEx(InfoSeparator separator)
 		{
-			return (new InfoElementSeparatorEx(separator));
+			return (new InfoSeparatorEx(separator));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(InfoElementSeparatorEx separator)
+		public static implicit operator string(InfoSeparatorEx separator)
 		{
 			return (separator.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator InfoElementSeparatorEx(string separator)
+		public static implicit operator InfoSeparatorEx(string separator)
 		{
 			return (Parse(separator));
 		}

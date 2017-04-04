@@ -55,8 +55,8 @@ namespace YAT.View.Forms
 
 		private int[] customColors;
 
-		private Domain.InfoElementSeparatorEx infoSeparator;
-		private Domain.InfoElementEnclosureEx infoEnclosure;
+		private Domain.InfoSeparatorEx infoSeparator;
+		private Domain.InfoEnclosureEx infoEnclosure;
 
 		private Controls.Monitor[] monitors;
 		private Controls.TextFormat[] textFormats;
@@ -69,7 +69,7 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public FormatSettings(Model.Settings.FormatSettings formatSettings, int[] customColors, Domain.InfoElementSeparatorEx infoSeparator, Domain.InfoElementEnclosureEx infoEnclosure)
+		public FormatSettings(Model.Settings.FormatSettings formatSettings, int[] customColors, Domain.InfoSeparatorEx infoSeparator, Domain.InfoEnclosureEx infoEnclosure)
 		{
 			InitializeComponent();
 
@@ -108,13 +108,13 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public Domain.InfoElementSeparatorEx InfoSeparatorResult
+		public Domain.InfoSeparatorEx InfoSeparatorResult
 		{
 			get { return (this.infoSeparator); }
 		}
 
 		/// <summary></summary>
-		public Domain.InfoElementEnclosureEx InfoEnclosureResult
+		public Domain.InfoEnclosureEx InfoEnclosureResult
 		{
 			get { return (this.infoEnclosure); }
 		}
@@ -191,7 +191,7 @@ namespace YAT.View.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				var separator = (comboBox_InfoSeparator.SelectedItem as Domain.InfoElementSeparatorEx);
+				var separator = (comboBox_InfoSeparator.SelectedItem as Domain.InfoSeparatorEx);
 				if (separator != null)
 					this.infoSeparator = separator;
 
@@ -203,8 +203,8 @@ namespace YAT.View.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				Domain.InfoElementSeparatorEx separator;
-				if (Domain.InfoElementSeparatorEx.TryParse(comboBox_InfoSeparator.Text, out separator))
+				Domain.InfoSeparatorEx separator;
+				if (Domain.InfoSeparatorEx.TryParse(comboBox_InfoSeparator.Text, out separator))
 				{
 					this.infoSeparator = separator;
 					SetControls();
@@ -228,7 +228,7 @@ namespace YAT.View.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				var enclosure = (comboBox_InfoEnclosure.SelectedItem as Domain.InfoElementEnclosureEx);
+				var enclosure = (comboBox_InfoEnclosure.SelectedItem as Domain.InfoEnclosureEx);
 				if (enclosure != null)
 					this.infoEnclosure = enclosure;
 
@@ -241,8 +241,8 @@ namespace YAT.View.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				Domain.InfoElementEnclosureEx enclosure;
-				if (Domain.InfoElementEnclosureEx.TryParse(comboBox_InfoEnclosure.Text, out enclosure))
+				Domain.InfoEnclosureEx enclosure;
+				if (Domain.InfoEnclosureEx.TryParse(comboBox_InfoEnclosure.Text, out enclosure))
 				{
 					this.infoEnclosure = enclosure;
 					SetControls();
@@ -321,10 +321,10 @@ namespace YAT.View.Forms
 			};
 
 			comboBox_InfoSeparator.Items.Clear();
-			comboBox_InfoSeparator.Items.AddRange(Domain.InfoElementSeparatorEx.GetItems());
+			comboBox_InfoSeparator.Items.AddRange(Domain.InfoSeparatorEx.GetItems());
 
 			comboBox_InfoEnclosure.Items.Clear();
-			comboBox_InfoEnclosure.Items.AddRange(Domain.InfoElementEnclosureEx.GetItems());
+			comboBox_InfoEnclosure.Items.AddRange(Domain.InfoEnclosureEx.GetItems());
 		}
 
 		private Model.Types.TextFormat GetFormatFromIndex(int index)
@@ -428,41 +428,41 @@ namespace YAT.View.Forms
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
 			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now, infoEnclosureLeft, infoEnclosureRight));
-			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSpace(infoSeparator));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now, infoEnclosureLeft, infoEnclosureRight));
-			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSpace(infoSeparator));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.PortInfo(Domain.Direction.Tx, "COM1", infoEnclosureLeft, infoEnclosureRight));
-			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSpace(infoSeparator));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Tx, infoEnclosureLeft, infoEnclosureRight));
-			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSpace(infoSeparator));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TxData(0x41, "41h"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DataSpace());
 			exampleComplete.Enqueue(new Domain.DisplayElement.TxControl(0x13, "<CR>"));
-			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSpace(infoSeparator));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DataLength(2, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
 			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now, infoEnclosureLeft, infoEnclosureRight));
-			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSpace(infoSeparator));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now, infoEnclosureLeft, infoEnclosureRight));
-			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSpace(infoSeparator));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.PortInfo(Domain.Direction.Rx, "COM1", infoEnclosureLeft, infoEnclosureRight));
-			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSpace(infoSeparator));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Rx, infoEnclosureLeft, infoEnclosureRight));
-			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSpace(infoSeparator));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.RxData(0x42, "42h"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DataSpace());
 			exampleComplete.Enqueue(new Domain.DisplayElement.RxControl(0x10, "<LF>"));
-			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSpace(infoSeparator));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DataLength(2, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
 			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now, infoEnclosureLeft, infoEnclosureRight));
-			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSpace(infoSeparator));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now, infoEnclosureLeft, infoEnclosureRight));
-			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSpace(infoSeparator));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.ErrorInfo("Message"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
 

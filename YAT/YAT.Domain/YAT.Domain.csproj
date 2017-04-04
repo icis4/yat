@@ -130,8 +130,8 @@
     <Compile Include="Structs.cs" />
     <Compile Include="TerminalFactory.cs" />
     <Compile Include="Terminal\DisplayLine.cs" />
-    <Compile Include="Terminal\InfoElementEnclosure.cs" />
-    <Compile Include="Terminal\InfoElementSeparator.cs" />
+    <Compile Include="Terminal\InfoEnclosure.cs" />
+    <Compile Include="Terminal\InfoSeparator.cs" />
     <Compile Include="Terminal\SendItem.cs" />
     <Compile Include="TextTerminal\Settings\EolCommentSettings.cs" />
     <Compile Include="TextTerminal\Structs.cs" />

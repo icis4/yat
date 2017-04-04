@@ -244,7 +244,7 @@ namespace YAT.View.Controls
 			}
 			else if ((element is Domain.DisplayElement.Nonentity) ||
 			         (element is Domain.DisplayElement.DataSpace) ||
-			         (element is Domain.DisplayElement.InfoSpace) ||
+			         (element is Domain.DisplayElement.InfoSeparator) ||
 			         (element is Domain.DisplayElement.LineStart) ||
 			         (element is Domain.DisplayElement.LineBreak))
 			{
