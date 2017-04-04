@@ -613,7 +613,7 @@ namespace YAT.Domain.Parser
 					}
 					else
 					{
-						result = new byte[] { };
+						result = null;
 						return (false);
 					}
 				}
@@ -631,7 +631,7 @@ namespace YAT.Domain.Parser
 							}
 							else
 							{
-								result = new byte[] { };
+								result = null;
 								return (false);
 							}
 						}
@@ -727,7 +727,7 @@ namespace YAT.Domain.Parser
 			else
 			{
 				formatException = new FormatException(@"""" + s + @""" does not consist of a single character.");
-				result = new byte[] { };
+				result = null;
 				return (false);
 			}
 		}
@@ -969,7 +969,7 @@ namespace YAT.Domain.Parser
 					sb.Append(" value.");
 
 					formatException = new FormatException(sb.ToString());
-					result = new byte[] { };
+					result = null;
 					return (false);
 				}
 			} // using (MemoryStream)
@@ -993,8 +993,8 @@ namespace YAT.Domain.Parser
 			}
 			else
 			{
-				result = null;
 				formatException = new FormatException(@"""" + s + @""" is an invalid keyword.");
+				result = null;
 				return (false);
 			}
 		}
