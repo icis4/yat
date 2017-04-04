@@ -132,7 +132,7 @@ namespace YAT.Domain.Parser
 						}
 						else
 						{
-							result = new byte[] { };
+							result = null;
 							return (false);
 						}
 					}
@@ -204,7 +204,7 @@ namespace YAT.Domain.Parser
 					sb.Append(@""" is an invalid ASCII mnemonic.");
 
 					formatException = new FormatException(sb.ToString());
-					result = new byte[] { };
+					result = null;
 					return (false);
 				}
 			} // using (MemoryStream)
