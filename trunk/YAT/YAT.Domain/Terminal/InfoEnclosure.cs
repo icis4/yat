@@ -33,7 +33,7 @@ using MKY;
 // YAT.Domain\Terminal for better separation of the implementation files.
 namespace YAT.Domain
 {
-	#region Enum InfoElementEnclosure
+	#region Enum InfoEnclosure
 
 	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
 	// warnings for each undocumented member below. Documenting each member makes little sense
@@ -42,7 +42,7 @@ namespace YAT.Domain
 	#pragma warning disable 1591
 
 	/// <summary></summary>
-	public enum InfoElementEnclosure
+	public enum InfoEnclosure
 	{
 		None,
 
@@ -58,7 +58,7 @@ namespace YAT.Domain
 	#endregion
 
 	/// <summary>
-	/// Extended enum InfoElementEnclosureEx.
+	/// Extended enum InfoEnclosureEx.
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
@@ -66,7 +66,7 @@ namespace YAT.Domain
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	public class InfoElementEnclosureEx : EnumEx, IEquatable<InfoElementEnclosureEx>
+	public class InfoEnclosureEx : EnumEx, IEquatable<InfoEnclosureEx>
 	{
 		#region String Definitions
 
@@ -92,26 +92,26 @@ namespace YAT.Domain
 
 		private string explicitEnclosure; // = null;
 
-		/// <summary>Default is <see cref="InfoElementEnclosure.None"/>.</summary>
-		public const InfoElementEnclosure Default = InfoElementEnclosure.None;
+		/// <summary>Default is <see cref="InfoEnclosure.None"/>.</summary>
+		public const InfoEnclosure Default = InfoEnclosure.None;
 
 		/// <summary>Default is <see cref="Default"/>.</summary>
-		public InfoElementEnclosureEx()
+		public InfoEnclosureEx()
 			: this(Default)
 		{
 		}
 
 		/// <summary></summary>
-		public InfoElementEnclosureEx(InfoElementEnclosure enclosure)
+		public InfoEnclosureEx(InfoEnclosure enclosure)
 			: base(enclosure)
 		{
-			if (enclosure == InfoElementEnclosure.Explicit)
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'InfoElementEnclosure.Explicit' requires an enclosure string, use InfoElementEnclosureEx(string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			if (enclosure == InfoEnclosure.Explicit)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'InfoEnclosure.Explicit' requires an enclosure string, use InfoElementEnclosureEx(string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
-		public InfoElementEnclosureEx(string enclosure)
-			: this(InfoElementEnclosure.Explicit)
+		public InfoEnclosureEx(string enclosure)
+			: this(InfoEnclosure.Explicit)
 		{
 			this.explicitEnclosure = enclosure;
 		}
@@ -124,15 +124,15 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ToEnclosure()
 		{
-			switch ((InfoElementEnclosure)UnderlyingEnum)
+			switch ((InfoEnclosure)UnderlyingEnum)
 			{
-				case InfoElementEnclosure.None:           return (          None_stringEnclosure);
+				case InfoEnclosure.None:           return (          None_stringEnclosure);
 
-				case InfoElementEnclosure.Parentheses:    return (   Parentheses_stringEnclosure);
-				case InfoElementEnclosure.SquareBrackets: return (SquareBrackets_stringEnclosure);
-				case InfoElementEnclosure.CurlyBraces:    return (   CurlyBraces_stringEnclosure);
+				case InfoEnclosure.Parentheses:    return (   Parentheses_stringEnclosure);
+				case InfoEnclosure.SquareBrackets: return (SquareBrackets_stringEnclosure);
+				case InfoEnclosure.CurlyBraces:    return (   CurlyBraces_stringEnclosure);
 
-				case InfoElementEnclosure.Explicit:       return (        this.explicitEnclosure);
+				case InfoEnclosure.Explicit:       return (        this.explicitEnclosure);
 			}
 			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -140,15 +140,15 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ToEnclosureLeft()
 		{
-			switch ((InfoElementEnclosure)UnderlyingEnum)
+			switch ((InfoEnclosure)UnderlyingEnum)
 			{
-				case InfoElementEnclosure.None:           return (          None_stringEnclosure);
+				case InfoEnclosure.None:           return (          None_stringEnclosure);
 
-				case InfoElementEnclosure.Parentheses:    return (   Parentheses_stringEnclosureLeft);
-				case InfoElementEnclosure.SquareBrackets: return (SquareBrackets_stringEnclosureLeft);
-				case InfoElementEnclosure.CurlyBraces:    return (   CurlyBraces_stringEnclosureLeft);
+				case InfoEnclosure.Parentheses:    return (   Parentheses_stringEnclosureLeft);
+				case InfoEnclosure.SquareBrackets: return (SquareBrackets_stringEnclosureLeft);
+				case InfoEnclosure.CurlyBraces:    return (   CurlyBraces_stringEnclosureLeft);
 
-				case InfoElementEnclosure.Explicit:       return (StringEx.Left(this.explicitEnclosure, (this.explicitEnclosure.Length / 2)));
+				case InfoEnclosure.Explicit:       return (StringEx.Left(this.explicitEnclosure, (this.explicitEnclosure.Length / 2)));
 			}
 			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -156,15 +156,15 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ToEnclosureRight()
 		{
-			switch ((InfoElementEnclosure)UnderlyingEnum)
+			switch ((InfoEnclosure)UnderlyingEnum)
 			{
-				case InfoElementEnclosure.None:           return (          None_stringEnclosure);
+				case InfoEnclosure.None:           return (          None_stringEnclosure);
 
-				case InfoElementEnclosure.Parentheses:    return (   Parentheses_stringEnclosureRight);
-				case InfoElementEnclosure.SquareBrackets: return (SquareBrackets_stringEnclosureRight);
-				case InfoElementEnclosure.CurlyBraces:    return (   CurlyBraces_stringEnclosureRight);
+				case InfoEnclosure.Parentheses:    return (   Parentheses_stringEnclosureRight);
+				case InfoEnclosure.SquareBrackets: return (SquareBrackets_stringEnclosureRight);
+				case InfoEnclosure.CurlyBraces:    return (   CurlyBraces_stringEnclosureRight);
 
-				case InfoElementEnclosure.Explicit:       return (StringEx.Right(this.explicitEnclosure, (this.explicitEnclosure.Length / 2)));
+				case InfoEnclosure.Explicit:       return (StringEx.Right(this.explicitEnclosure, (this.explicitEnclosure.Length / 2)));
 			}
 			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -172,15 +172,15 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ToDescription()
 		{
-			switch ((InfoElementEnclosure)UnderlyingEnum)
+			switch ((InfoEnclosure)UnderlyingEnum)
 			{
-				case InfoElementEnclosure.None:           return (          None_stringDescription);
+				case InfoEnclosure.None:           return (          None_stringDescription);
 
-				case InfoElementEnclosure.Parentheses:    return (   Parentheses_stringDescription);
-				case InfoElementEnclosure.SquareBrackets: return (SquareBrackets_stringDescription);
-				case InfoElementEnclosure.CurlyBraces:    return (   CurlyBraces_stringDescription);
+				case InfoEnclosure.Parentheses:    return (   Parentheses_stringDescription);
+				case InfoEnclosure.SquareBrackets: return (SquareBrackets_stringDescription);
+				case InfoEnclosure.CurlyBraces:    return (   CurlyBraces_stringDescription);
 
-				case InfoElementEnclosure.Explicit:       return (          this.explicitEnclosure);
+				case InfoEnclosure.Explicit:       return (          this.explicitEnclosure);
 			}
 			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -209,7 +209,7 @@ namespace YAT.Domain
 			{
 				int hashCode = base.GetHashCode();
 
-				if ((InfoElementEnclosure)UnderlyingEnum == InfoElementEnclosure.Explicit)
+				if ((InfoEnclosure)UnderlyingEnum == InfoEnclosure.Explicit)
 					hashCode = (hashCode * 397) ^ (this.explicitEnclosure != null ? this.explicitEnclosure.GetHashCode() : 0);
 
 				return (hashCode);
@@ -221,19 +221,19 @@ namespace YAT.Domain
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as InfoElementEnclosureEx));
+			return (Equals(obj as InfoEnclosureEx));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(InfoElementEnclosureEx other)
+		public bool Equals(InfoEnclosureEx other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
 			if (GetType() != other.GetType()) return (false);
 
-			if ((InfoElementEnclosure)UnderlyingEnum == InfoElementEnclosure.Explicit)
+			if ((InfoEnclosure)UnderlyingEnum == InfoEnclosure.Explicit)
 			{
 				return
 				(
@@ -253,7 +253,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(InfoElementEnclosureEx lhs, InfoElementEnclosureEx rhs)
+		public static bool operator ==(InfoEnclosureEx lhs, InfoEnclosureEx rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -266,7 +266,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(InfoElementEnclosureEx lhs, InfoElementEnclosureEx rhs)
+		public static bool operator !=(InfoEnclosureEx lhs, InfoEnclosureEx rhs)
 		{
 			return (!(lhs == rhs));
 		}
@@ -281,13 +281,13 @@ namespace YAT.Domain
 		/// <remarks>
 		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
 		/// </remarks>
-		public static InfoElementEnclosureEx[] GetItems()
+		public static InfoEnclosureEx[] GetItems()
 		{
-			List<InfoElementEnclosureEx> a = new List<InfoElementEnclosureEx>(4); // Preset the required capacity to improve memory management.
-			a.Add(new InfoElementEnclosureEx(InfoElementEnclosure.None));
-			a.Add(new InfoElementEnclosureEx(InfoElementEnclosure.Parentheses));
-			a.Add(new InfoElementEnclosureEx(InfoElementEnclosure.SquareBrackets));
-			a.Add(new InfoElementEnclosureEx(InfoElementEnclosure.CurlyBraces));
+			List<InfoEnclosureEx> a = new List<InfoEnclosureEx>(4); // Preset the required capacity to improve memory management.
+			a.Add(new InfoEnclosureEx(InfoEnclosure.None));
+			a.Add(new InfoEnclosureEx(InfoEnclosure.Parentheses));
+			a.Add(new InfoEnclosureEx(InfoEnclosure.SquareBrackets));
+			a.Add(new InfoEnclosureEx(InfoEnclosure.CurlyBraces));
 			return (a.ToArray());
 		}
 
@@ -301,9 +301,9 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static InfoElementEnclosureEx Parse(string s)
+		public static InfoEnclosureEx Parse(string s)
 		{
-			InfoElementEnclosureEx result;
+			InfoEnclosureEx result;
 			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
@@ -313,9 +313,9 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParse(string s, out InfoElementEnclosureEx result)
+		public static bool TryParse(string s, out InfoEnclosureEx result)
 		{
-			InfoElementEnclosure enumResult;
+			InfoEnclosure enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
 				result = enumResult;
@@ -325,7 +325,7 @@ namespace YAT.Domain
 			{
 				if ((s.Length % 2) == 0) // Valid explicit?
 				{
-					result = new InfoElementEnclosureEx(s);
+					result = new InfoEnclosureEx(s);
 					return (true);
 				}
 				else // Invalid string!
@@ -339,43 +339,43 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParse(string s, out InfoElementEnclosure result)
+		public static bool TryParse(string s, out InfoEnclosure result)
 		{
 			if (s != null)
 				s = s.Trim();
 
 			if (string.IsNullOrEmpty(s)) // None!
 			{
-				result = InfoElementEnclosure.None;
+				result = InfoEnclosure.None;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_stringEnclosure) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringDescription))
 			{
-				result = InfoElementEnclosure.None;
+				result = InfoEnclosure.None;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Parentheses_stringEnclosure) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Parentheses_stringDescription))
 			{
-				result = InfoElementEnclosure.Parentheses;
+				result = InfoEnclosure.Parentheses;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, SquareBrackets_stringEnclosure) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, SquareBrackets_stringDescription))
 			{
-				result = InfoElementEnclosure.SquareBrackets;
+				result = InfoEnclosure.SquareBrackets;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, CurlyBraces_stringEnclosure) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, CurlyBraces_stringDescription))
 			{
-				result = InfoElementEnclosure.CurlyBraces;
+				result = InfoEnclosure.CurlyBraces;
 				return (true);
 			}
 			else // Invalid string!
 			{
-				result = new InfoElementEnclosureEx(); // Default!
+				result = new InfoEnclosureEx(); // Default!
 				return (false);
 			}
 		}
@@ -388,25 +388,25 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static implicit operator InfoElementEnclosure(InfoElementEnclosureEx enclosure)
+		public static implicit operator InfoEnclosure(InfoEnclosureEx enclosure)
 		{
-			return ((InfoElementEnclosure)enclosure.UnderlyingEnum);
+			return ((InfoEnclosure)enclosure.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator InfoElementEnclosureEx(InfoElementEnclosure enclosure)
+		public static implicit operator InfoEnclosureEx(InfoEnclosure enclosure)
 		{
-			return (new InfoElementEnclosureEx(enclosure));
+			return (new InfoEnclosureEx(enclosure));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(InfoElementEnclosureEx enclosure)
+		public static implicit operator string(InfoEnclosureEx enclosure)
 		{
 			return (enclosure.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator InfoElementEnclosureEx(string enclosure)
+		public static implicit operator InfoEnclosureEx(string enclosure)
 		{
 			return (Parse(enclosure));
 		}

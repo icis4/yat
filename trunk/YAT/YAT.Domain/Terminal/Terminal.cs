@@ -1055,23 +1055,23 @@ namespace YAT.Domain
 
 				// --- Process the line/packet ---
 
-				foreach (Parser.Result ri in result)
+				foreach (Parser.Result item in result)
 				{
-					var bar = (ri as Parser.ByteArrayResult);
-					if (bar != null)
+					var bi = (item as Parser.BytesResult);
+					if (bi != null)
 					{
 						// Raise the 'IOChanged' event if a large chunk is about to be sent:
-						if (this.ioChangedEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(bar.ByteArray.Length))
+						if (this.ioChangedEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(bi.Bytes.Length))
 							OnIOChanged(EventArgs.Empty);
 
-						ForwardDataToRawTerminal(bar.ByteArray);
+						ForwardDataToRawTerminal(bi.Bytes);
 					}
 					else // if keyword result (will not occur if keywords are disabled while parsing)
 					{
-						var kr = (ri as Parser.KeywordResult);
-						if (kr != null)
+						var ki = (item as Parser.KeywordResult);
+						if (ki != null)
 						{
-							switch (kr.Keyword)
+							switch (ki.Keyword)
 							{
 								// Process line related keywords:
 								case Parser.Keyword.NoEol: // \remind Only needed for text terminals.
@@ -1101,7 +1101,7 @@ namespace YAT.Domain
 								// Process in-line keywords:
 								default:
 								{
-									ProcessInLineKeywords(kr);
+									ProcessInLineKeywords(ki);
 									break;
 								}
 							}
@@ -2075,7 +2075,7 @@ namespace YAT.Domain
 					lp.Add(new DisplayElement.DateInfo(ts, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
 
 					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-						lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparatorCache));
+						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
 				}
 
 				if (TerminalSettings.Display.ShowTime)
@@ -2083,7 +2083,7 @@ namespace YAT.Domain
 					lp.Add(new DisplayElement.TimeInfo(ts, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
 
 					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-						lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparatorCache));
+						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
 				}
 
 				if (TerminalSettings.Display.ShowPort)
@@ -2091,7 +2091,7 @@ namespace YAT.Domain
 					lp.Add(new DisplayElement.PortInfo(ps, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
 
 					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-						lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparatorCache));
+						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
 				}
 
 				if (TerminalSettings.Display.ShowDirection)
@@ -2099,7 +2099,7 @@ namespace YAT.Domain
 					lp.Add(new DisplayElement.DirectionInfo((Direction)d, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache));
 
 					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-						lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparatorCache));
+						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
 				}
 			}
 			else
@@ -2117,7 +2117,7 @@ namespace YAT.Domain
 				lp = new DisplayLinePart(2); // Preset the required capacity to improve memory management.
 
 				if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-					lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparatorCache));
+					lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
 
 				lp.Add(new DisplayElement.DataLength(dataCount, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache));
 			}

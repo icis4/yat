@@ -160,7 +160,7 @@ namespace YAT.Model.Utilities
 			else if ( element is DisplayElement.DataLength)		{ format = this.lengthFormat; }
 			else if ((element is DisplayElement.Nonentity) ||
 			         (element is DisplayElement.DataSpace) ||
-			         (element is DisplayElement.InfoSpace) ||
+			         (element is DisplayElement.InfoSeparator) ||
 			         (element is DisplayElement.LineStart) ||
 			         (element is DisplayElement.LineBreak))		{ format = this.whiteSpacesFormat; }
 			else if ( element is DisplayElement.ErrorInfo)		{ format = this.errorFormat; }

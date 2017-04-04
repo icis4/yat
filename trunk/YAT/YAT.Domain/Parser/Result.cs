@@ -32,21 +32,21 @@ namespace YAT.Domain.Parser
 	}
 
 	/// <summary></summary>
-	public class ByteArrayResult : Result
+	public class BytesResult : Result
 	{
-		private byte[] byteArray;
+		private byte[] bytes;
 
 		/// <summary></summary>
-		public ByteArrayResult(byte[] byteArray)
+		public BytesResult(byte[] bytes)
 		{
-			this.byteArray = byteArray;
+			this.bytes = bytes;
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Source is an array, sink is an array, this class transports the array from source to sink, there's no purpose to use a ReadOnlyCollection here.")]
-		public byte[] ByteArray
+		public byte[] Bytes
 		{
-			get { return (this.byteArray); }
+			get { return (this.bytes); }
 		}
 	}
 

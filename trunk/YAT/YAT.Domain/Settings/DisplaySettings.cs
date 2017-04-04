@@ -98,8 +98,8 @@ namespace YAT.Domain.Settings
 		private bool portLineBreakEnabled;
 		private bool directionLineBreakEnabled;
 
-		private InfoElementSeparatorEx infoSeparator; // = null;
-		private InfoElementEnclosureEx infoEnclosure; // = null;
+		private InfoSeparatorEx infoSeparator; // = null;
+		private InfoEnclosureEx infoEnclosure; // = null;
 
 		private string infoSeparatorCache;      // = null;
 		private string infoEnclosureLeftCache;  // = null;
@@ -473,7 +473,7 @@ namespace YAT.Domain.Settings
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
-		public InfoElementSeparatorEx InfoSeparator
+		public InfoSeparatorEx InfoSeparator
 		{
 			get { return (this.infoSeparator); }
 			set
@@ -511,7 +511,7 @@ namespace YAT.Domain.Settings
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
-		public InfoElementEnclosureEx InfoEnclosure
+		public InfoEnclosureEx InfoEnclosure
 		{
 			get { return (this.infoEnclosure); }
 			set
