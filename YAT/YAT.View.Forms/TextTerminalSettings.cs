@@ -489,10 +489,16 @@ namespace YAT.View.Forms
 			textBox_DelayInterval.Enabled = delayEnabled;
 			textBox_DelayInterval.Text    = this.settingsInEdit.LineSendDelay.LineInterval.ToString(CultureInfo.CurrentCulture);
 
-			bool waitEnabled                 = this.settingsInEdit.WaitForResponse.Enabled;
-			checkBox_WaitForResponse.Checked = waitEnabled;
-			textBox_WaitForResponse.Enabled  = waitEnabled;
-			textBox_WaitForResponse.Text     = this.settingsInEdit.WaitForResponse.Timeout.ToString(CultureInfo.CurrentCulture);
+			// \remind (2017-04-05 / MKY) feature request #19 and bug #176
+		////bool waitEnabled                 = this.settingsInEdit.WaitForResponse.Enabled;
+		////checkBox_WaitForResponse.Checked = waitEnabled;
+		////textBox_WaitForResponse.Enabled  = waitEnabled;
+		////textBox_WaitForResponse.Text     = this.settingsInEdit.WaitForResponse.Timeout.ToString(CultureInfo.CurrentCulture);
+		////checkBox_WaitForResponse.ToolTip = see designer
+			checkBox_WaitForResponse.Enabled = false;
+			label_WaitForResponse.Enabled    = false;
+			textBox_WaitForResponse.Enabled  = false;
+			label_WaitForResponseUnit.Enabled = false;
 
 			switch (this.settingsInEdit.CharSubstitution)
 			{

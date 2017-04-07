@@ -298,7 +298,7 @@ namespace YAT.View.Forms
 			this.radioButton_SubstituteToLower.AutoSize = true;
 			this.radioButton_SubstituteToLower.Location = new System.Drawing.Point(10, 65);
 			this.radioButton_SubstituteToLower.Name = "radioButton_SubstituteToLower";
-			this.radioButton_SubstituteToLower.Size = new System.Drawing.Size(172, 17);
+			this.radioButton_SubstituteToLower.Size = new System.Drawing.Size(182, 17);
 			this.radioButton_SubstituteToLower.TabIndex = 2;
 			this.radioButton_SubstituteToLower.Text = "&Lower case (e.g. \"Abc\" -> \"abc\")";
 			this.radioButton_SubstituteToLower.CheckedChanged += new System.EventHandler(this.radioButton_SubstituteToLower_CheckedChanged);
@@ -308,7 +308,7 @@ namespace YAT.View.Forms
 			this.radioButton_SubstituteToUpper.AutoSize = true;
 			this.radioButton_SubstituteToUpper.Location = new System.Drawing.Point(10, 42);
 			this.radioButton_SubstituteToUpper.Name = "radioButton_SubstituteToUpper";
-			this.radioButton_SubstituteToUpper.Size = new System.Drawing.Size(183, 17);
+			this.radioButton_SubstituteToUpper.Size = new System.Drawing.Size(185, 17);
 			this.radioButton_SubstituteToUpper.TabIndex = 1;
 			this.radioButton_SubstituteToUpper.Text = "&Upper case (e.g. \"Abc\" -> \"ABC\")";
 			this.radioButton_SubstituteToUpper.CheckedChanged += new System.EventHandler(this.radioButton_SubstituteToUpper_CheckedChanged);
@@ -318,7 +318,7 @@ namespace YAT.View.Forms
 			this.radioButton_SubstituteNone.AutoSize = true;
 			this.radioButton_SubstituteNone.Location = new System.Drawing.Point(10, 19);
 			this.radioButton_SubstituteNone.Name = "radioButton_SubstituteNone";
-			this.radioButton_SubstituteNone.Size = new System.Drawing.Size(143, 17);
+			this.radioButton_SubstituteNone.Size = new System.Drawing.Size(149, 17);
 			this.radioButton_SubstituteNone.TabIndex = 0;
 			this.radioButton_SubstituteNone.Text = "&None (e.g. \"Abc -> \"Abc\")";
 			this.radioButton_SubstituteNone.CheckedChanged += new System.EventHandler(this.radioButton_SubstituteNone_CheckedChanged);
@@ -331,6 +331,8 @@ namespace YAT.View.Forms
 			this.checkBox_WaitForResponse.Size = new System.Drawing.Size(242, 17);
 			this.checkBox_WaitForResponse.TabIndex = 5;
 			this.checkBox_WaitForResponse.Text = "&Wait for response before sending the next line";
+			this.toolTip.SetToolTip(this.checkBox_WaitForResponse, "Not implemented yet. See feature request #19 and bug #176 in online trackers for " +
+        "details.");
 			this.checkBox_WaitForResponse.UseVisualStyleBackColor = true;
 			this.checkBox_WaitForResponse.CheckedChanged += new System.EventHandler(this.checkBox_WaitForResponse_CheckedChanged);
 			// 
