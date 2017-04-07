@@ -22,8 +22,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
 using System.Globalization;
+using System.Text;
 
 using MKY;
 using MKY.IO;
@@ -124,20 +124,14 @@ namespace YAT.Domain.Parser
 
 						case '+': // "\U+...." is used for standard Unicode notation, e.g. "\U+0020".
 						{
-							int thisChar = parser.CharReader.Read(); // Consume '+'.
-							if (thisChar != CharEx.InvalidChar)
-							{
-								parser.SetDefaultRadix(Radix.Unicode);
-								ChangeState(parser, new NumericValueState());
-								return (true);
-							}
-							else // Something went seriously wrong!
-							{
-								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Failed to read '+' from input stream!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-							}
+							parser.CharReader.Read(); // Consume '+'.
+
+							parser.SetDefaultRadix(Radix.Unicode);
+							ChangeState(parser, new NumericValueState());
+							return (true);
 						}
 
-						default: // "\u" with neither "(" nor "+" is used for C-style Unicode notation, e.g. "\u0020"
+						default: // "\u" with neither "(" nor "+" is used for C-style Unicode notation, e.g. "\u0020".
 						{
 							parser.SetDefaultRadix(Radix.Unicode);
 							ChangeState(parser, new NumericValueState());
@@ -157,7 +151,7 @@ namespace YAT.Domain.Parser
 					}
 					else
 					{
-						// Keywords are disabled, therefore return the escape sequence.
+						// Keywords are disabled, therefore ignore the escape sequence and return its characters.
 						byte[] a = parser.GetBytes('\\');
 						parser.BytesWriter.Write(a, 0, a.Length);
 						       a = parser.GetBytes('!');
@@ -191,20 +185,21 @@ namespace YAT.Domain.Parser
 						case 'x': // "\0x.." is used for C-style hexadecimal notation.
 						case 'X':
 						{
-							int thisChar = parser.CharReader.Read(); // Consume 'x' or 'X'.
-							if (thisChar != CharEx.InvalidChar)
-							{
-								parser.SetDefaultRadix(Radix.Hex);
-								ChangeState(parser, new NumericValueState());
-								return (true);
-							}
-							else // Consider it successful if there is just "\0x" without any numeric value.
-							{
-								parser.CommitPendingBytes();
-								parser.HasFinished = true;
-								ChangeState(parser, null);
-								return (true);
-							}
+							parser.CharReader.Read(); // Consume 'x' or 'X'.
+
+							parser.SetDefaultRadix(Radix.Hex);
+							ChangeState(parser, new NumericValueState());
+							return (true);
+						}
+
+						case 'b': // "\0b.." is used for non-standard C-style binary notation.
+						case 'B':
+						{
+							parser.CharReader.Read(); // Consume 'b' or 'B'.
+
+							parser.SetDefaultRadix(Radix.Bin);
+							ChangeState(parser, new NumericValueState());
+							return (true);
 						}
 
 						case StreamEx.EndOfStream: // Just "\0" is used for C-style <NUL>.
@@ -365,21 +360,20 @@ namespace YAT.Domain.Parser
 
 				case CharEx.InvalidChar:
 				{
-					formatException = new FormatException
-					(
-						"Incomplete escape sequence."
-					);
+					formatException = new FormatException("Incomplete escape sequence.");
 					return (false);
 				}
 
 				default:
 				{
-					formatException = new FormatException
-					(
-						@"Character '" + (char)parseChar + "' " +
-						@"(0x" + parseChar.ToString("X", CultureInfo.InvariantCulture) + ") " +
-						@"is an invalid escape character."
-					);
+					var sb = new StringBuilder();
+					sb.Append("Character '");
+					sb.Append((char)parseChar);
+					sb.Append("' (0x");
+					sb.Append(parseChar.ToString("X", CultureInfo.InvariantCulture));
+					sb.Append(") is an invalid escape character.");
+
+					formatException = new FormatException(sb.ToString());
 					return (false);
 				}
 			}

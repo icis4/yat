@@ -50,21 +50,38 @@ namespace YAT.Domain.Parser
 		}
 	}
 
-	/// <summary></summary>
+	/// <remarks>
+	/// So far, this type can only deal with integer values. As soon as floating point, boolean,
+	/// enum or string values are required, this type will have to be extended accordingly.
+	/// </remarks>
 	public class KeywordResult : Result
 	{
 		private Keyword keyword;
+		private int[] args;
 
 		/// <summary></summary>
 		public KeywordResult(Keyword keyword)
+			: this(keyword, null)
+		{
+		}
+
+		/// <summary></summary>
+		public KeywordResult(Keyword keyword, int[] args)
 		{
 			this.keyword = keyword;
+			this.args    = args;
 		}
 
 		/// <summary></summary>
 		public Keyword Keyword
 		{
 			get { return (this.keyword); }
+		}
+
+		/// <summary></summary>
+		public int[] Args
+		{
+			get { return (this.args); }
 		}
 	}
 }

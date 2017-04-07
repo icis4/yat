@@ -37,6 +37,7 @@ using System.Text;
 
 using MKY;
 using MKY.Diagnostics;
+using MKY.Text;
 
 #endregion
 
@@ -94,6 +95,7 @@ namespace YAT.Domain.Parser
 			@"""\01"" alternative to ""\o(1)""" + Environment.NewLine +
 			@"""\12"" alternative to ""\d(12)""" + Environment.NewLine +
 			@"""\0x1A"" or ""\x1A"" alternative to ""\h(1A)""" + Environment.NewLine +
+			@"""\0b01001111"" alternative to ""\b(01001111)""" + Environment.NewLine +
 			@"""\u20AC"" alternative to ""\U+20AC"" or ""\U(20AC)""" + Environment.NewLine +
 			Environment.NewLine +
 			@"Type \\ to send a backspace" + Environment.NewLine +
@@ -568,6 +570,19 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <summary></summary>
+		internal virtual bool IsWhiteSpace(int parseChar)
+		{
+			if (char.IsWhiteSpace((char)parseChar)) // 'official' white space.
+				return (true);
+			
+			if (Int32Ex.IsWithin(parseChar, byte.MinValue, byte.MaxValue) &&
+				Ascii.IsControl((byte)parseChar)) // ASCII control.
+				return (true);
+
+			return (false);
+		}
+
+		/// <summary></summary>
 		internal virtual void CommitPendingBytes()
 		{
 			AssertNotDisposed();
@@ -668,7 +683,7 @@ namespace YAT.Domain.Parser
 					return (TryParseAndConvertContiguousNumericItem(s, radix, out result, ref formatException));
 
 				default:
-					throw (new ArgumentOutOfRangeException("radix", radix, MessageHelper.InvalidExecutionPreamble + "'" + radix + "' is an invalid radix!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("radix", radix, MessageHelper.InvalidExecutionPreamble + "'" + radix + "' radix is missing here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -932,7 +947,7 @@ namespace YAT.Domain.Parser
 
 					default:
 					{
-						throw (new ArgumentOutOfRangeException(MessageHelper.InvalidExecutionPreamble + "'" + radix + "' is an invalid radix!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new ArgumentOutOfRangeException(MessageHelper.InvalidExecutionPreamble + "'" + radix + "' radix is not supported for numeric values!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 
@@ -963,7 +978,7 @@ namespace YAT.Domain.Parser
 						case Radix.Dec:     sb.Append("decimal");     break;
 						case Radix.Hex:     sb.Append("hexadecimal"); break;
 						case Radix.Unicode: sb.Append("Unicode");     break;
-						default: throw (new ArgumentOutOfRangeException(MessageHelper.InvalidExecutionPreamble + "'" + radix + "' is an invalid radix!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						default: throw (new ArgumentOutOfRangeException(MessageHelper.InvalidExecutionPreamble + "'" + radix + "' radix is not supported for numeric values!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 
 					sb.Append(" value.");
@@ -983,7 +998,7 @@ namespace YAT.Domain.Parser
 		/// <param name="formatException">Returned if invalid string format.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Non-static for orthogonality with other TryParse() methods.")]
-		internal virtual bool TryParseKeyword(string s, out Result result, ref FormatException formatException)
+		internal virtual bool TryParseKeyword(string s, out KeywordResult result, ref FormatException formatException)
 		{
 			Keyword keyword;
 			if (KeywordEx.TryParse(s, out keyword))

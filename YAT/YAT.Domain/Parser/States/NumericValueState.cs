@@ -47,15 +47,17 @@ namespace YAT.Domain.Parser
 
 		/// <summary></summary>
 		public NumericValueState()
+			: this(CharEx.InvalidChar)
 		{
-			this.valueWriter = new StringWriter(CultureInfo.InvariantCulture);
 		}
 
 		/// <summary></summary>
 		public NumericValueState(int parseChar)
-			: this()
 		{
-			this.valueWriter.Write((char)parseChar);
+			this.valueWriter = new StringWriter(CultureInfo.InvariantCulture);
+
+			if (parseChar != CharEx.InvalidChar)
+				this.valueWriter.Write((char)parseChar);
 		}
 
 		#region Disposal
@@ -136,11 +138,11 @@ namespace YAT.Domain.Parser
 
 				default:
 				{
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + parser.Radix + "' is an invalid radix!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + parser.Radix + "' radix is not supported for numeric values!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 
-			// No more valid character found, try to process numeric value.
+			// No more valid character found, try to process numeric value:
 			byte[] result;
 			if (parser.TryParseAndConvertContiguousNumericItem(this.valueWriter.ToString(), out result, ref formatException))
 			{
