@@ -48,13 +48,8 @@ namespace YAT.Domain.Test.Parser
 		// Test Cases
 		//==========================================================================================
 
-		#region Test Cases > Parser
-		//------------------------------------------------------------------------------------------
-		// Test Cases > Parser
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
-		public static IEnumerable TestCasesParser
+		public static IEnumerable TestCases
 		{
 			get
 			{
@@ -86,6 +81,11 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\R\N",		new byte[] { 0x0D, 0x0A }).SetName("C-style <CR><LF> capital"));
 				yield return (new TestCaseData(@"\f",		new byte[] { 0x0C } ).SetName("C-style <FF>"));
 				yield return (new TestCaseData(@"C-style\r\nis like\tthis", new byte[] { 0x43, 0x2D, 0x73, 0x74, 0x79, 0x6C, 0x65, 0x0D, 0x0A, 0x69, 0x73, 0x20, 0x6C, 0x69, 0x6B, 0x65, 0x09, 0x74, 0x68, 0x69, 0x73 }).SetName("C-style string"));
+				yield return (new TestCaseData(@"\0b",			new byte[] {      }).SetName("C-style binary value empty"));
+				yield return (new TestCaseData(@"\0b1",			new byte[] { 0x01 }).SetName("C-style binary value 1 digit"));
+				yield return (new TestCaseData(@"\0b11",		new byte[] { 0x03 }).SetName("C-style binary value 2 digits"));
+				yield return (new TestCaseData(@"\0b10101010",	new byte[] { 0xAA }).SetName("C-style binary value 8 digits"));
+				yield return (new TestCaseData(@"\0b1010101000110011", new byte[] { 0xAA, 0x33 }).SetName("C-style binary value 16 digits"));
 				yield return (new TestCaseData(@"\0",			new byte[] { 0x00 }).SetName("C-style octal value empty")); // Must result in zero as this is same as C-style <NUL>!
 				yield return (new TestCaseData(@"\01",			new byte[] {    1 }).SetName("C-style octal value 1 digit")); // Note that C# doesn't support 0... notation!
 				yield return (new TestCaseData(@"\012",			new byte[] {   10 }).SetName("C-style octal value 2 digits"));
@@ -161,6 +161,7 @@ namespace YAT.Domain.Test.Parser
 
 				// Bin:
 				yield return (new TestCaseData(@"\b()",								new byte[] { }).SetName("Bin empty"));
+				yield return (new TestCaseData(@"\b(   )",							new byte[] { }).SetName("Bin still empty"));
 				yield return (new TestCaseData(@"\b(00)",							new byte[] { 0x00 } ).SetName("Bin 00"));
 				yield return (new TestCaseData(@"\b(01)",							new byte[] { 0x01 } ).SetName("Bin 01"));
 				yield return (new TestCaseData(@"\b(00000000)",						new byte[] { 0x00 } ).SetName("Bin 00000000"));
@@ -177,9 +178,13 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\b(00100011 01011101 00100100)",	new byte[] { 0x23, 0x5D, 0x24, } ).SetName("Bin sequence 1"));
 				yield return (new TestCaseData(@"\b(001000110101110100100100)",		new byte[] { 0x23, 0x5D, 0x24, } ).SetName("Bin sequence 2"));
 				yield return (new TestCaseData(@"\b(0010001101011101001001)",		new byte[] { 0x23, 0x5D, 0x09, } ).SetName("Bin sequence 3"));
+				yield return (new TestCaseData(@"\b( 01)",							new byte[] { 0x01 } ).SetName("Bin 01 leading space"));
+				yield return (new TestCaseData(@"\b(01 )",							new byte[] { 0x01 } ).SetName("Bin 01 trailing space"));
+				yield return (new TestCaseData(@"\b(   01   )",						new byte[] { 0x01 } ).SetName("Bin 01 leading and trailing space"));
 
 				// Oct:
 				yield return (new TestCaseData(@"\o()",								new byte[] { }).SetName("Oct empty"));
+				yield return (new TestCaseData(@"\o(   )",							new byte[] { }).SetName("Oct still empty"));
 				yield return (new TestCaseData(@"\o(0)",							new byte[] { 0x00 } ).SetName("Oct 0"));
 				yield return (new TestCaseData(@"\o(1)",							new byte[] { 0x01 } ).SetName("Oct 1"));
 				yield return (new TestCaseData(@"\o(00)",							new byte[] { 0x00 } ).SetName("Oct 00"));
@@ -196,9 +201,13 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\o(43 135 44)",					new byte[] { 0x23, 0x5D, 0x24, } ).SetName("Oct sequence 1"));
 				yield return (new TestCaseData(@"\o(4313544)",						new byte[] { 0x23, 0x5D, 0x24, } ).SetName("Oct sequence 2"));
 				yield return (new TestCaseData(@"\o(4313511)",						new byte[] { 0x23, 0x5D, 0x09, } ).SetName("Oct sequence 3"));
+				yield return (new TestCaseData(@"\o( 01)",							new byte[] { 0x01 } ).SetName("Oct 01 leading space"));
+				yield return (new TestCaseData(@"\o(01 )",							new byte[] { 0x01 } ).SetName("Oct 01 trailing space"));
+				yield return (new TestCaseData(@"\o(   01   )",						new byte[] { 0x01 } ).SetName("Oct 01 leading and trailing space"));
 
 				// Dec:
 				yield return (new TestCaseData(@"\d()",								new byte[] { }).SetName("Dec empty"));
+				yield return (new TestCaseData(@"\d(   )",							new byte[] { }).SetName("Dec still empty"));
 				yield return (new TestCaseData(@"\d(0)",							new byte[] { 0x00 } ).SetName("Dec 0"));
 				yield return (new TestCaseData(@"\d(1)",							new byte[] { 0x01 } ).SetName("Dec 1"));
 				yield return (new TestCaseData(@"\d(00)",							new byte[] { 0x00 } ).SetName("Dec 00"));
@@ -215,9 +224,13 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\d(35 93 36)",						new byte[] { 0x23, 0x5D, 0x24, } ).SetName("Dec sequence 1"));
 				yield return (new TestCaseData(@"\d(359336)",						new byte[] { 0x23, 0x5D, 0x24, } ).SetName("Dec sequence 2"));
 				yield return (new TestCaseData(@"\d(35939)",						new byte[] { 0x23, 0x5D, 0x09, } ).SetName("Dec sequence 3"));
+				yield return (new TestCaseData(@"\d( 01)",							new byte[] { 0x01 } ).SetName("Dec 01 leading space"));
+				yield return (new TestCaseData(@"\d(01 )",							new byte[] { 0x01 } ).SetName("Dec 01 trailing space"));
+				yield return (new TestCaseData(@"\d(   01   )",						new byte[] { 0x01 } ).SetName("Dec 01 leading and trailing space"));
 
 				// Hex:
 				yield return (new TestCaseData(@"\h()",								new byte[] { } ).SetName("Hex empty"));
+				yield return (new TestCaseData(@"\h(   )",							new byte[] { } ).SetName("Hex still empty"));
 				yield return (new TestCaseData(@"\h(00)",							new byte[] { 0x00 } ).SetName("Hex 00"));
 				yield return (new TestCaseData(@"\h(01)",							new byte[] { 0x01 } ).SetName("Hex 01"));
 				yield return (new TestCaseData(@"\h(0A)",							new byte[] { 0x0A } ).SetName("Hex 0A"));
@@ -242,6 +255,9 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\h(235D248120A5)",					new byte[] { 0x23, 0x5D, 0x24, 0x81, 0x20, 0xA5 } ).SetName("Hex sequence 3"));
 				yield return (new TestCaseData(@"\h(235D2)",						new byte[] { 0x23, 0x5D, 0x02 } ).SetName("Hex sequence 4"));
 				yield return (new TestCaseData(@"\h(00 \h(FF) 00)",					new byte[] { 0x00, 0xFF, 0x00 } ).SetName("Hex nested"));
+				yield return (new TestCaseData(@"\h( 01)",							new byte[] { 0x01 } ).SetName("Hex 01 leading space"));
+				yield return (new TestCaseData(@"\h(01 )",							new byte[] { 0x01 } ).SetName("Hex 01 trailing space"));
+				yield return (new TestCaseData(@"\h(   01   )",						new byte[] { 0x01 } ).SetName("Hex 01 leading and trailing space"));
 
 				// EOL:
 				yield return (new TestCaseData(@"A<CR><CR><LF>B<CR><LF><LF>C<CR><LF>D<CR>E<LF>F", new byte[] { 0x41, 0x0D, 0x0D, 0x0A, 0x42, 0x0D, 0x0A, 0x0A, 0x43, 0x0D, 0x0A, 0x44, 0x0D, 0x45, 0x0A, 0x46 } ).SetName("Partial EOL"));
@@ -249,14 +265,18 @@ namespace YAT.Domain.Test.Parser
 		}
 
 		#endregion
+	}
 
-		#region Test Cases > Encoding
-		//------------------------------------------------------------------------------------------
-		// Test Cases > Encoding
-		//------------------------------------------------------------------------------------------
+	/// <summary></summary>
+	public static class EncodingTestData
+	{
+		#region Test Cases
+		//==========================================================================================
+		// Test Cases
+		//==========================================================================================
 
 		/// <summary></summary>
-		public static IEnumerable TestCasesEncoding
+		public static IEnumerable TestCases
 		{
 			get
 			{
@@ -342,14 +362,41 @@ namespace YAT.Domain.Test.Parser
 		}
 
 		#endregion
+	}
 
-		#region Test Cases > Error
-		//------------------------------------------------------------------------------------------
-		// Test Cases > Error
-		//------------------------------------------------------------------------------------------
+	/// <summary></summary>
+	public static class KeywordTestData
+	{
+		#region Test Cases
+		//==========================================================================================
+		// Test Cases
+		//==========================================================================================
 
 		/// <summary></summary>
-		public static IEnumerable TestCasesError
+		public static IEnumerable TestCases
+		{
+			get							// Erroneous input		Expected substring		Expected message
+			{
+				yield return (new TestCaseData(@"A<AAA",		@"A<AA",		@"""AAA"" is an invalid ASCII mnemonic.").SetName("Invalid ASCII"));
+
+				\!(Delay()) "Empty args"
+				\!(Delay( )) "Empty args with space"
+			}
+
+			#endregion
+		}
+	}
+
+	/// <summary></summary>
+	public static class ErrorTestData
+	{
+		#region Test Cases
+		//==========================================================================================
+		// Test Cases
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static IEnumerable TestCases
 		{
 			get							// Erroneous input		Expected substring		Expected message
 			{
@@ -368,8 +415,6 @@ namespace YAT.Domain.Test.Parser
 		}
 
 		#endregion
-
-		#endregion
 	}
 
 	/// <summary></summary>
@@ -383,7 +428,7 @@ namespace YAT.Domain.Test.Parser
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "bytes", Justification = "The naming emphasizes the difference between bytes and other parameters.")]
-		[Test, TestCaseSource(typeof(ParserTestData), "TestCasesParser")]
+		[Test, TestCaseSource(typeof(ParserTestData), "TestCases")]
 		public virtual void TestParser(string s, byte[] expectedBytes)
 		{
 			using (Domain.Parser.Parser p = new Domain.Parser.Parser())
@@ -396,7 +441,7 @@ namespace YAT.Domain.Test.Parser
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "bytes", Justification = "The naming emphasizes the difference between bytes and other parameters.")]
-		[Test, TestCaseSource(typeof(ParserTestData), "TestCasesEncoding")]
+		[Test, TestCaseSource(typeof(EncodingTestData), "TestCases")]
 		public virtual void TestParserEncoding(Encoding encoding, Endianness endianness, string s, byte[] expectedBytes)
 		{
 			using (Domain.Parser.Parser p = new Domain.Parser.Parser(encoding, endianness))
@@ -408,8 +453,13 @@ namespace YAT.Domain.Test.Parser
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "bytes", Justification = "The naming emphasizes the difference between bytes and other parameters.")]
-		[Test, TestCaseSource(typeof(ParserTestData), "TestCasesError")]
+		[Test, TestCaseSource(typeof(KeywordTestData), "TestCases")]
+		public virtual void TestParserKeyword(string s, Keyword expectedKeyword, object[] expectedArgs)
+		{
+		}
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(ErrorTestData), "TestCases")]
 		public virtual void TestParserError(string s, string expectedParsed, string expectedMessage)
 		{
 			using (Domain.Parser.Parser p = new Domain.Parser.Parser())

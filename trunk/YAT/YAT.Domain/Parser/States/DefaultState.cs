@@ -75,7 +75,7 @@ namespace YAT.Domain.Parser
 		{
 			AssertNotDisposed();
 
-			if ((parseChar < 0) ||                   // End of parse string.
+			if ((parseChar < 0) ||                                 // End of parse string.
 				(parseChar == ')' && !parser.IsTopLevel))
 			{
 				if (!TryWriteContiguous(parser, ref formatException))
@@ -84,27 +84,38 @@ namespace YAT.Domain.Parser
 				parser.HasFinished = true;
 				ChangeState(parser, null);
 			}
-			else if (parseChar == '\\')              // Escape sequence.
+			else if (parseChar == '\\' && !parser.IsKeywordParser) // Escape sequence.
 			{
 				if (!TryWriteContiguous(parser, ref formatException))
 					return (false);
 
-				// Commit bytes, create a nested parser and then change state:
+				// Commit bytes, create nested parser and then change state:
 				parser.CommitPendingBytes();
 				parser.NestedParser = parser.GetNestedParser(new EscapeState());
 				ChangeState(parser, new NestedState());
 			}
-			else if (parseChar == '<')               // ASCII mnemonic sequence.
+			else if (parseChar == '<' && !parser.IsKeywordParser) // ASCII mnemonic sequence.
 			{
 				if (!TryWriteContiguous(parser, ref formatException))
 					return (false);
 
-				// Commit bytes, create a nested parser and then change state:
+				// Commit bytes, create nested parser and then change state:
 				parser.CommitPendingBytes();
 				parser.NestedParser = parser.GetNestedParser(new AsciiMnemonicState());
 				ChangeState(parser, new NestedState());
 			}
-			else                                     // Compose contiguous string.
+			else if (parseChar == '(' && parser.IsKeywordParser) // Keyword args.
+			{
+				KeywordResult result;
+
+				if (!TryParseContiguousToKeyword(parser, out result, ref formatException))
+					return (false);
+
+				// Nothing to commit yet, create nested parser and then change state:
+				parser.NestedParser = parser.GetNestedParser(new KeywordArgState(result.Keyword));
+				ChangeState(parser, new NestedState());
+			}
+			else                                                 // Compose contiguous string.
 			{
 				this.contiguousWriter.Write((char)parseChar);
 
@@ -114,49 +125,74 @@ namespace YAT.Domain.Parser
 						return (false);
 				}
 			}
+
 			return (true);
 		}
 
 		private bool TryWriteContiguous(Parser parser, ref FormatException formatException)
 		{
-			return (HandleContiguous(parser, ref formatException, true));
+			return (DoHandleContiguous(parser, ref formatException, true));
 		}
 
 		private bool ProbeContiguous(Parser parser, ref FormatException formatException)
 		{
-			return (HandleContiguous(parser, ref formatException, false));
+			return (DoHandleContiguous(parser, ref formatException, false));
 		}
 
-		private bool HandleContiguous(Parser parser, ref FormatException formatException, bool writeOnSuccess)
+		private bool DoHandleContiguous(Parser parser, ref FormatException formatException, bool writeOnSuccess)
 		{
-			string contiguousString = this.contiguousWriter.ToString();
+			if (!parser.IsKeywordParser)
+			{
+				byte[] result;
+
+				if (!TryParseContiguousToRadix(parser, out result, ref formatException))
+					return (false);
+
+				if (writeOnSuccess)
+				{
+					foreach (byte b in result)
+						parser.BytesWriter.WriteByte(b);
+
+					parser.CommitPendingBytes();
+				}
+			}
+			else // IsKeywordParser
+			{
+				KeywordResult result;
+
+				if (!TryParseContiguousToKeyword(parser, out result, ref formatException))
+					return (false);
+
+				if (writeOnSuccess)
+					parser.CommitResult(result);
+			}
+
+			return (true);
+		}
+
+		private bool TryParseContiguousToRadix(Parser parser, out byte[] result, ref FormatException formatException)
+		{
+			result = null;
+
+			var contiguousString = this.contiguousWriter.ToString();
 			if (contiguousString.Length > 0)
 			{
-				if (!parser.IsKeywordParser)
-				{
-					byte[] result;
+				if (!parser.TryParseContiguousRadix(contiguousString, parser.Radix, out result, ref formatException))
+					return (false);
+			}
 
-					if (!parser.TryParseContiguousRadix(contiguousString, parser.Radix, out result, ref formatException))
-						return (false);
+			return (true);
+		}
 
-					if (writeOnSuccess)
-					{
-						foreach (byte b in result)
-							parser.BytesWriter.WriteByte(b);
+		private bool TryParseContiguousToKeyword(Parser parser, out KeywordResult result, ref FormatException formatException)
+		{
+			result = null;
 
-						parser.CommitPendingBytes();
-					}
-				}
-				else
-				{
-					Result result;
-
-					if (!parser.TryParseKeyword(contiguousString, out result, ref formatException))
-						return (false);
-
-					if (writeOnSuccess)
-						parser.CommitResult(result);
-				}
+			var contiguousString = this.contiguousWriter.ToString();
+			if (contiguousString.Length > 0)
+			{
+				if (!parser.TryParseKeyword(contiguousString, out result, ref formatException))
+					return (false);
 			}
 
 			return (true);

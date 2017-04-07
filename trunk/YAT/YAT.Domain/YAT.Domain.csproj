@@ -108,6 +108,7 @@
     <Compile Include="Endianness.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Eol.cs" />
+    <Compile Include="Parser\States\KeywordArgState.cs" />
     <Compile Include="Parser\States\ParserState.cs" />
     <Compile Include="Parser\States\DefaultState.cs" />
     <Compile Include="Parser\States\NestedState.cs" />

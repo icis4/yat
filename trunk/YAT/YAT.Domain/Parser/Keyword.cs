@@ -25,6 +25,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.RegularExpressions;
 
 using MKY;
 
@@ -81,6 +82,19 @@ namespace YAT.Domain.Parser
 		private const string OutputBreakOn_string     = "OutputBreakOn";
 		private const string OutputBreakOff_string    = "OutputBreakOff";
 		private const string OutputBreakToggle_string = "OutputBreakToggle";
+
+		#endregion
+
+		#region Args/Regex Definitions
+
+		private const Regex  Delay_regex             = new Regex();
+		private const string Delay_validation        = ";
+		private const Regex  LineDelay_regex         = new Regex();
+		private const string LineDelay_validation    = ";
+		private const Regex  LineInterval_regex      = new Regex();
+		private const string LineInterval_validation = ";
+		private const Regex  LineRepeat_regex        = new Regex();
+		private const string LineRepeat_validation   = ";
 
 		#endregion
 
