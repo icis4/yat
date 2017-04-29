@@ -78,6 +78,20 @@ namespace MKY
 		{
 			return ((value % 2) != 0);
 		}
+
+		/// <summary>
+		/// Returns the according numeric suffix like "st", "nd", "rd" or "th".
+		/// </summary>
+		public static string ToEnglishSuffix(int value)
+		{
+			switch (value % 10)
+			{
+				case 1:  return ("st");
+				case 2:  return ("nd");
+				case 3:  return ("rd");
+				default: return ("th");
+			}
+		}
 	}
 }
 
