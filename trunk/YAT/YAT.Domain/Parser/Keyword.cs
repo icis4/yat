@@ -53,6 +53,8 @@ namespace YAT.Domain.Parser
 		OutputBreakOn,
 		OutputBreakOff,
 		OutputBreakToggle,
+
+		ZzForInternalTesting
 	}
 
 	#pragma warning restore 1591
@@ -82,6 +84,9 @@ namespace YAT.Domain.Parser
 		private const string OutputBreakOn_string     = "OutputBreakOn";
 		private const string OutputBreakOff_string    = "OutputBreakOff";
 		private const string OutputBreakToggle_string = "OutputBreakToggle";
+
+		private const string ZzForInternalTesting_string = "ZzForInternalTesting";
+
 
 		#endregion
 
@@ -126,18 +131,18 @@ namespace YAT.Domain.Parser
 		{
 			switch ((Keyword)UnderlyingEnum)
 			{
-				case Keyword.Clear:        return (Clear_string);
-				case Keyword.Delay:        return (Delay_string);
-				case Keyword.LineDelay:    return (LineDelay_string);
-				case Keyword.LineInterval: return (LineInterval_string);
-				case Keyword.LineRepeat:   return (LineRepeat_string);
-
-				case Keyword.Eol:   return (Eol_string);
-				case Keyword.NoEol: return (NoEol_string);
-
+				case Keyword.Clear:             return (Clear_string);
+				case Keyword.Delay:             return (Delay_string);
+				case Keyword.LineDelay:         return (LineDelay_string);
+				case Keyword.LineInterval:      return (LineInterval_string);
+				case Keyword.LineRepeat:        return (LineRepeat_string);
+				case Keyword.Eol:               return (Eol_string);
+				case Keyword.NoEol:             return (NoEol_string);
 				case Keyword.OutputBreakOn:     return (OutputBreakOn_string);
 				case Keyword.OutputBreakOff:    return (OutputBreakOff_string);
 				case Keyword.OutputBreakToggle: return (OutputBreakToggle_string);
+
+				case Keyword.ZzForInternalTesting: return (ZzForInternalTesting_string);
 			}
 			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -155,6 +160,9 @@ namespace YAT.Domain.Parser
 		public static KeywordEx[] GetItems()
 		{
 			List<KeywordEx> a = new List<KeywordEx>(10); // Preset the required capacity to improve memory management.
+
+			// Do not add 'None'.
+
 			a.Add(new KeywordEx(Keyword.Clear));
 			a.Add(new KeywordEx(Keyword.Delay));
 			a.Add(new KeywordEx(Keyword.LineDelay));
@@ -165,6 +173,9 @@ namespace YAT.Domain.Parser
 			a.Add(new KeywordEx(Keyword.OutputBreakOn));
 			a.Add(new KeywordEx(Keyword.OutputBreakOff));
 			a.Add(new KeywordEx(Keyword.OutputBreakToggle));
+
+			// Do not add 'ZzForInternalTesting'.
+
 			return (a.ToArray());
 		}
 
@@ -266,6 +277,11 @@ namespace YAT.Domain.Parser
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, OutputBreakToggle_string))
 			{
 				result = Keyword.OutputBreakToggle;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, ZzForInternalTesting_string))
+			{
+				result = Keyword.ZzForInternalTesting;
 				return (true);
 			}
 			else // Invalid string!

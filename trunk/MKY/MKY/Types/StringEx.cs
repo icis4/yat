@@ -749,7 +749,7 @@ namespace MKY
 				offset++;           // Correct the offset created by the dropped double quotes.
 			}
 
-			for (int i = 0; i < l.Count; i += 2) // Check every second chunk for the first occurance of seachString.
+			for (int i = 0; i < l.Count; i += 2) // Check every second chunk for the first occurance of 'seachString'.
 			{
 				int index = l[i].Value.IndexOf(searchString, comparisonType);
 				if (index >= 0)

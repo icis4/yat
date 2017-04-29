@@ -83,11 +83,13 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"C-style\r\nis like\tthis", new byte[] { 0x43, 0x2D, 0x73, 0x74, 0x79, 0x6C, 0x65, 0x0D, 0x0A, 0x69, 0x73, 0x20, 0x6C, 0x69, 0x6B, 0x65, 0x09, 0x74, 0x68, 0x69, 0x73 }).SetName("C-style string"));
 				yield return (new TestCaseData(@"\0b",			new byte[] {      }).SetName("C-style binary value empty"));
 				yield return (new TestCaseData(@"\0b1",			new byte[] { 0x01 }).SetName("C-style binary value 1 digit"));
+				yield return (new TestCaseData(@"\0b01",		new byte[] { 0x01 }).SetName("C-style binary value 1 digit with additional 0"));
 				yield return (new TestCaseData(@"\0b11",		new byte[] { 0x03 }).SetName("C-style binary value 2 digits"));
 				yield return (new TestCaseData(@"\0b10101010",	new byte[] { 0xAA }).SetName("C-style binary value 8 digits"));
 				yield return (new TestCaseData(@"\0b1010101000110011", new byte[] { 0xAA, 0x33 }).SetName("C-style binary value 16 digits"));
 				yield return (new TestCaseData(@"\0",			new byte[] { 0x00 }).SetName("C-style octal value empty")); // Must result in zero as this is same as C-style <NUL>!
 				yield return (new TestCaseData(@"\01",			new byte[] {    1 }).SetName("C-style octal value 1 digit")); // Note that C# doesn't support 0... notation!
+				yield return (new TestCaseData(@"\001",			new byte[] {    1 }).SetName("C-style octal value 1 digit with additional 0"));
 				yield return (new TestCaseData(@"\012",			new byte[] {   10 }).SetName("C-style octal value 2 digits"));
 				yield return (new TestCaseData(@"\0123",		new byte[] {   83 }).SetName("C-style octal value 3 digits"));
 				yield return (new TestCaseData(@"\01234",		new byte[] {   83, 4 }).SetName("C-style octal value 4 digits"));
@@ -100,9 +102,11 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\12345",		new byte[] {  123, 45 }).SetName("C-style decimal value 5 digits"));
 				yield return (new TestCaseData(@"\123456",		new byte[] {  123, 45, 6 }).SetName("C-style decimal value 6 digits"));
 				yield return (new TestCaseData(@"\0x",			new byte[] {      }).SetName("C-style hexadecimal value 0x empty"));
-				yield return (new TestCaseData(@"\0x1A",		new byte[] { 0x1A }).SetName("C-style hexadecimal value 0x"));
+				yield return (new TestCaseData(@"\0xA",			new byte[] { 0x0A }).SetName("C-style hexadecimal value 0xA"));
+				yield return (new TestCaseData(@"\0x0A",		new byte[] { 0x0A }).SetName("C-style hexadecimal value 0xA with additional 0"));
+				yield return (new TestCaseData(@"\0x1A",		new byte[] { 0x1A }).SetName("C-style hexadecimal value 0x1A"));
 				yield return (new TestCaseData(@"\x",			new byte[] {      }).SetName("C-style hexadecimal value x empty"));
-				yield return (new TestCaseData(@"\x1A",			new byte[] { 0x1A }).SetName("C-style hexadecimal value x"));
+				yield return (new TestCaseData(@"\x1A",			new byte[] { 0x1A }).SetName("C-style hexadecimal value x1A"));
 				yield return (new TestCaseData(@"\x1A2B",		new byte[] { 0x1A, 0x2B }).SetName("C-style hexadecimal value x 16 bits"));
 				yield return (new TestCaseData(@"\x1A2",		new byte[] { 0x1A, 0x2  }).SetName("C-style hexadecimal value x 16 bits odd"));
 				yield return (new TestCaseData(@"\x1A2B3C",		new byte[] { 0x1A, 0x2B, 0x3C }).SetName("C-style hexadecimal value x 24 bits"));
@@ -372,19 +376,76 @@ namespace YAT.Domain.Test.Parser
 		// Test Cases
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// So far, only integer arguments are supported.
+		/// See <see cref="Domain.Parser.KeywordArgState"/> for more details.
+		/// </remarks>
 		public static IEnumerable TestCases
 		{
-			get							// Erroneous input		Expected substring		Expected message
+			get
 			{
-				yield return (new TestCaseData(@"A<AAA",		@"A<AA",		@"""AAA"" is an invalid ASCII mnemonic.").SetName("Invalid ASCII"));
+				// Keywords:
+				yield return (new TestCaseData(@"\!(Clear)",             Domain.Parser.Keyword.Clear,             new int[] { }));
+				yield return (new TestCaseData(@"\!(Delay)",             Domain.Parser.Keyword.Delay,             new int[] { }));
+				yield return (new TestCaseData(@"\!(Delay(10))",         Domain.Parser.Keyword.Delay,             new int[] { 10 }));
+				yield return (new TestCaseData(@"\!(LineDelay)",         Domain.Parser.Keyword.LineDelay,         new int[] { }));
+				yield return (new TestCaseData(@"\!(LineDelay(10))",     Domain.Parser.Keyword.LineDelay,         new int[] { 10 }));
+				yield return (new TestCaseData(@"\!(LineInterval)",      Domain.Parser.Keyword.LineInterval,      new int[] { }));
+				yield return (new TestCaseData(@"\!(LineInterval(10))",  Domain.Parser.Keyword.LineInterval,      new int[] { 10 }));
+				yield return (new TestCaseData(@"\!(LineRepeat)",        Domain.Parser.Keyword.LineRepeat,        new int[] { }));
+				yield return (new TestCaseData(@"\!(LineRepeat(10))",    Domain.Parser.Keyword.LineRepeat,        new int[] { 10 }));
+				yield return (new TestCaseData(@"\!(Eol)",               Domain.Parser.Keyword.Eol,               new int[] { }));
+				yield return (new TestCaseData(@"\!(NoEol)",             Domain.Parser.Keyword.NoEol,             new int[] { }));
+				yield return (new TestCaseData(@"\!(OutputBreakOn)",     Domain.Parser.Keyword.OutputBreakOn,     new int[] { }));
+				yield return (new TestCaseData(@"\!(OutputBreakOff)",    Domain.Parser.Keyword.OutputBreakOff,    new int[] { }));
+				yield return (new TestCaseData(@"\!(OutputBreakToggle)", Domain.Parser.Keyword.OutputBreakToggle, new int[] { }));
 
-				\!(Delay()) "Empty args"
-				\!(Delay( )) "Empty args with space"
+				// Empty:
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting())",          Domain.Parser.Keyword.ZzForInternalTesting, new int[] { }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting ( ) )",       Domain.Parser.Keyword.ZzForInternalTesting, new int[] { }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting   (   )   )", Domain.Parser.Keyword.ZzForInternalTesting, new int[] { }));
+
+				// Single:
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1))",             Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 1 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting ( 1 ) )",         Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 1 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting   (   1   )   )", Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 1 }));
+
+				// Multiple:
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting( 1 , 2 , 3 ))", Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 1, 2, 3 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1 , 2 , 3))",   Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 1, 2, 3 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting( 1 ,2 ,3 ))",   Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 1, 2, 3 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1 ,2 ,3))",     Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 1, 2, 3 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting( 1,2,3 ))",     Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 1, 2, 3 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1,2,3))",       Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 1, 2, 3 }));
+
+				// Radix:
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(0b0))",                                Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0x00 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(0b1))",                                Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0x01 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(0b01))",                               Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0x01 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(0b11))",                               Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0x03 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(0b00000000000000000000000000000001))", Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0x01 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(0b01000000000000000000000000000001))", Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0x40000001 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(0b01111111111111111111111111111111))", Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0x7FFFFFFF }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(00))",                                 Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(01))",                                 Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 1 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(001))",                                Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 1 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(012))",                                Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 10 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(01234567))",                           Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 342391 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(000000000001))",                       Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 1 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(010000000001))",                       Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0x40000001 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(017777777777))",                       Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0x7FFFFFFF }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(0x0))",                                Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0x00 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(0xA))",                                Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0x0A }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(0x0A))",                               Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0x0A }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(0x1A))",                               Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0x1A }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(0x0123CDEF))",                         Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0x0123CDEF }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(0x00000001))",                         Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0x01 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(0x40000001))",                         Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0x40000001 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(0x7FFFFFFF))",                         Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0x7FFFFFFF }));
 			}
-
-			#endregion
 		}
+
+		#endregion
 	}
 
 	/// <summary></summary>
@@ -411,6 +472,48 @@ namespace YAT.Domain.Test.Parser
 
 				yield return (new TestCaseData(@"A\",			@"A",			@"Incomplete escape sequence.").SetName("Incomplete escape sequence 1"));
 				yield return (new TestCaseData(@"A\\\",			@"A\\",			@"Incomplete escape sequence.").SetName("Incomplete escape sequence 2"));
+
+				yield return (new TestCaseData(@"\!(Clear(10))",				@"\!(Clear",				@"Keyword does not support arguments.").SetName("Keyword 'Clear' with arguments"));
+				yield return (new TestCaseData(@"\!(Eol(10))",					@"\!(Eol",					@"Keyword does not support arguments.").SetName("Keyword 'Eol' with arguments"));
+				yield return (new TestCaseData(@"\!(NoEol(10))",				@"\!(NoEol",				@"Keyword does not support arguments.").SetName("Keyword 'NoEol' with arguments"));
+				yield return (new TestCaseData(@"\!(OutputBreakOn(10))",		@"\!(OutputBreakOn",		@"Keyword does not support arguments.").SetName("Keyword 'OutputBreakOn' with arguments"));
+				yield return (new TestCaseData(@"\!(OutputBreakOff(10))",		@"\!(OutputBreakOff",		@"Keyword does not support arguments.").SetName("Keyword 'OutputBreakOff' with arguments"));
+				yield return (new TestCaseData(@"\!(OutputBreakToggle(10))",	@"\!(OutputBreakToggle",	@"Keyword does not support arguments.").SetName("Keyword 'OutputBreakToggle' with arguments"));
+
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1 2 3))",		@"\!(ZzForInternalTesting(1 ",		@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1.2.3))",		@"\!(ZzForInternalTesting(1",		@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1 2, 3))",		@"\!(ZzForInternalTesting(1 ",		@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1.2, 3))",		@"\!(ZzForInternalTesting(1",		@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1, 2 3))",		@"\!(ZzForInternalTesting(1, 2 ",	@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1, 2.3))",		@"\!(ZzForInternalTesting(1, 2",	@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1 23))",		@"\!(ZzForInternalTesting(1 ",		@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1.23))",		@"\!(ZzForInternalTesting(1",		@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(12 3))",		@"\!(ZzForInternalTesting(12 ",		@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(12.3))",		@"\!(ZzForInternalTesting(12",		@"Invalid arguments."));
+
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1, -2, 3))",	@"\!(ZzForInternalTesting(1, ",		@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1, 2, +3))",	@"\!(ZzForInternalTesting(1, 2, ",	@"Invalid arguments."));
+
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1,))",			@"\!(ZzForInternalTesting(1,",		@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1 ,))",		@"\!(ZzForInternalTesting(1 ,",		@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1,2,))",		@"\!(ZzForInternalTesting(1,2,",	@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1,2 ,))",		@"\!(ZzForInternalTesting(1,2 ,",	@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(,2,3))",		@"\!(ZzForInternalTesting(",		@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting( ,2,3))",		@"\!(ZzForInternalTesting( ",		@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1,2,3,))",		@"\!(ZzForInternalTesting(1,2,3",	@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1,2,3 ,))",	@"\!(ZzForInternalTesting(1,2,3 ",	@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1,2,3,4))",	@"\!(ZzForInternalTesting(1,2,3",	@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1,2,3 ,4))",	@"\!(ZzForInternalTesting(1,2,3 ",	@"Invalid arguments."));
+
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(bla))",		@"\!(ZzForInternalTesting(",		@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1,bla))",		@"\!(ZzForInternalTesting(1,",		@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1, bla))",		@"\!(ZzForInternalTesting(1, ",		@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1,2,bla))",	@"\!(ZzForInternalTesting(1,2,",	@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1,2, bla))",	@"\!(ZzForInternalTesting(1,2, ",	@"Invalid arguments."));
+
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(,))",			@"\!(ZzForInternalTesting(",		@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(,,))",			@"\!(ZzForInternalTesting(",		@"Invalid arguments."));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(,,,))",		@"\!(ZzForInternalTesting(",		@"Invalid arguments."));
 			}
 		}
 
@@ -452,10 +555,24 @@ namespace YAT.Domain.Test.Parser
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// So far, only integer arguments are supported.
+		/// See <see cref="Domain.Parser.KeywordArgState"/> for more details.
+		/// </remarks>
 		[Test, TestCaseSource(typeof(KeywordTestData), "TestCases")]
-		public virtual void TestParserKeyword(string s, Keyword expectedKeyword, object[] expectedArgs)
+		public virtual void TestParserKeyword(string s, Domain.Parser.Keyword expectedKeyword, int[] expectedArgs)
 		{
+			using (Domain.Parser.Parser p = new Domain.Parser.Parser())
+			{
+				Domain.Parser.Result[] results;
+				Assert.That(p.TryParse(s, out results), Is.True);
+				Assert.That(results.Length, Is.EqualTo(1));
+				Assert.That(results[0], Is.TypeOf(typeof(Domain.Parser.KeywordResult)));
+
+				var actualKeyword = results[0] as Domain.Parser.KeywordResult;
+				Assert.That(actualKeyword.Keyword, Is.EqualTo(expectedKeyword));
+				Assert.That(actualKeyword.Args,    Is.EqualTo(expectedArgs));
+			}
 		}
 
 		/// <summary></summary>
