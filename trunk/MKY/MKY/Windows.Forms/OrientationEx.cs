@@ -145,12 +145,7 @@ namespace MKY.Windows.Forms
 			if (s != null)
 				s = s.Trim();
 
-			if (string.IsNullOrEmpty(s))
-			{
-				result = new OrientationEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Horizontal_string))
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Horizontal_string))
 			{
 				result = Orientation.Horizontal;
 				return (true);

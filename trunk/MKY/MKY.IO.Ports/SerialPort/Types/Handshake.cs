@@ -179,12 +179,7 @@ namespace MKY.IO.Ports
 			if (s != null)
 				s = s.Trim();
 
-			if (string.IsNullOrEmpty(s))
-			{
-				result = new HandshakeEx(); // Default!
-				return (true); // Default silently, can e.g. happen when deserializing an XML.
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, None_string) ||
+			if      (StringEx.EqualsOrdinalIgnoreCase   (s, None_string) ||
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, None_stringAlternatives))
 			{
 				result = Handshake.None;

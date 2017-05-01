@@ -39,6 +39,18 @@ namespace MKY
 	public static class ArrayEx
 	{
 		/// <summary>
+		/// Indicates whether the specified array is <c>null</c> or empty.
+		/// </summary>
+		/// <param name="value">The array to test.</param>
+		/// <returns>
+		/// <c>true</c> if the value parameter is <c>null</c> or empty; otherwise, <c>false</c>.
+		/// </returns>
+		public static bool IsNullOrEmpty(Array value)
+		{
+			return ((value == null) || (value.Length == 0));
+		}
+
+		/// <summary>
 		/// Creates an array using <see cref="Array.CreateInstance(Type, int)"/> and initializes
 		/// the given number of array elements with the given initial value.
 		/// </summary>
@@ -89,12 +101,12 @@ namespace MKY
 		/// <returns>
 		/// String containing all elements.
 		/// </returns>
-		public static string ElementsToString(Array array)
+		public static string ElementsToString(Array value)
 		{
 			var sb = new StringBuilder();
 
 			bool firstElement = true;
-			foreach (object obj in array)
+			foreach (object obj in value)
 			{
 				if (firstElement)
 					firstElement = false;

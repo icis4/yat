@@ -168,12 +168,7 @@ namespace MKY.IO.Serial.SerialPort
 			if (s != null)
 				s = s.Trim();
 
-			if (string.IsNullOrEmpty(s))
-			{
-				result = new SerialControlPinStateEx(); // Default!
-				return (true); // Default silently, can e.g. happen when deserializing an XML.
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, Automatic_string) ||
+			if      (StringEx.EqualsOrdinalIgnoreCase   (s, Automatic_string) ||
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, Automatic_stringAlternatives))
 			{
 				result = SerialControlPinState.Automatic;

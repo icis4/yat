@@ -259,7 +259,7 @@ namespace YAT.View.Controls
 				{
 					PortId = id;
 				}
-				else if (comboBox_Port.Text.Length == 0)
+				else if (string.IsNullOrEmpty(comboBox_Port.Text))
 				{
 					PortId = null;
 				}

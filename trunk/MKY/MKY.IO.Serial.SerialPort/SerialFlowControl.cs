@@ -208,12 +208,7 @@ namespace MKY.IO.Serial.SerialPort
 			if (s != null)
 				s = s.Trim();
 
-			if (string.IsNullOrEmpty(s))
-			{
-				result = new SerialFlowControlEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ManualHardware_string) ||
+			if      (StringEx.EqualsOrdinalIgnoreCase   (s, ManualHardware_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase   (s, ManualHardware_stringShort) ||
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ManualHardware_stringAlternatives))
 			{
