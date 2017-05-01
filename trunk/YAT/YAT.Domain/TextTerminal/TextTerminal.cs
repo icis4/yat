@@ -365,9 +365,9 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override int ProcessLineDelayOrInterval(bool performLineDelay, bool performLineInterval, DateTime lineBeginTimeStamp, DateTime lineEndTimeStamp)
+		protected override int ProcessLineDelayOrInterval(bool performLineDelay, int lineDelay, bool performLineInterval, int lineInterval, DateTime lineBeginTimeStamp, DateTime lineEndTimeStamp)
 		{
-			int accumulatedLineDelay = base.ProcessLineDelayOrInterval(performLineDelay, performLineInterval, lineBeginTimeStamp, lineEndTimeStamp);
+			int accumulatedLineDelay = base.ProcessLineDelayOrInterval(performLineDelay, lineDelay, performLineInterval, lineInterval, lineBeginTimeStamp, lineEndTimeStamp);
 
 			if (TerminalSettings.TextTerminal.LineSendDelay.Enabled)
 			{

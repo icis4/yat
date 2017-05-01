@@ -108,10 +108,11 @@ namespace YAT.Domain.Parser
 			Environment.NewLine +
 			@"Clear the monitors ""Send something\!(" + (KeywordEx)Keyword.Clear + @")""" + Environment.NewLine +
 			Environment.NewLine +
-			@"Delay ""Send something\!(" + (KeywordEx)Keyword.Delay + @")Send delayed"" according to advanced settings" + Environment.NewLine +
-			@"Delay after ""Send something and then delay\!(" + (KeywordEx)Keyword.LineDelay + @")"" according to advanced settings" + Environment.NewLine +
-			@"Interval ""Send something in interval\!(" + (KeywordEx)Keyword.LineInterval + @")"" according to advanced settings" + Environment.NewLine +
-			@"Repeat ""Send something multiple times\!(" + (KeywordEx)Keyword.LineRepeat + @")"" according to advanced settings" + Environment.NewLine +
+			@"Delay ""Send something\!(" + (KeywordEx)Keyword.Delay + @"(1000))Send delayed"" or without argument according to the advanced settings" + Environment.NewLine +
+			@"Delay after ""Send something and then delay\!(" + (KeywordEx)Keyword.LineDelay + @"(1000))"" or without argument according to the advanced settings" + Environment.NewLine +
+			@"Interval ""Send something in interval\!(" + (KeywordEx)Keyword.LineInterval + @"(1000))"" or without argument according to the advanced settings" + Environment.NewLine +
+			@"Repeat ""Send something multiple times\!(" + (KeywordEx)Keyword.LineRepeat + @"(10))"" or without argument according to the advanced settings" + Environment.NewLine +
+			@"Repeat ""Send something infinitely\!(" + (KeywordEx)Keyword.LineRepeat + @"(-1))"" or without argument according to the advanced settings" + Environment.NewLine +
 			Environment.NewLine +
 			@"Output break state on ""\!(" + (KeywordEx)Keyword.OutputBreakOn + @")""" + Environment.NewLine +
 			@"Output break state off ""\!(" + (KeywordEx)Keyword.OutputBreakOff + @")""" + Environment.NewLine +
