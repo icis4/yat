@@ -219,12 +219,7 @@ namespace YAT.Model.Types
 			if (s != null)
 				s = s.Trim();
 
-			if (string.IsNullOrEmpty(s))
-			{
-				result = new WorkspaceLayoutEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Automatic_string))
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Automatic_string))
 			{
 				result = WorkspaceLayout.Automatic;
 				return (true);

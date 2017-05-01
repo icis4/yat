@@ -1143,12 +1143,6 @@ namespace MKY.Text
 			if (s != null)
 				s = s.Trim();
 
-			if (string.IsNullOrEmpty(s))
-			{
-				result = new EncodingEx(); // Default!
-				return (true); // Default silently, can e.g. happen when deserializing an XML.
-			}
-
 			foreach (EncodingInfoEx info in staticInfos)
 			{
 				if (StringEx.EqualsOrdinalIgnoreCase(s, info.BetterDisplayName))

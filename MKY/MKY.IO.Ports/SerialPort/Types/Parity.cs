@@ -174,12 +174,7 @@ namespace MKY.IO.Ports
 			if (s != null)
 				s = s.Trim();
 
-			if (string.IsNullOrEmpty(s))
-			{
-				result = new ParityEx(); // Default!
-				return (true); // Default silently, can e.g. happen when deserializing an XML.
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Even_string) ||
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Even_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Even_stringShort))
 			{
 				result = Parity.Even;

@@ -248,12 +248,7 @@ namespace YAT.Domain
 			if (s != null)
 				s = s.Trim();
 
-			if (string.IsNullOrEmpty(s))
-			{
-				result = new RadixEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, String_stringShort) ||
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, String_stringShort) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, String_stringValue) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, String_string))
 			{

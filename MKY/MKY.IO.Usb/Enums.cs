@@ -362,12 +362,7 @@ namespace MKY.IO.Usb
 				result = (HidUsagePageEx)intResult;
 				return (true);
 			}
-			else if (string.IsNullOrEmpty(s))
-			{
-				result = new HidUsagePageEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
-			}
-			else // Invalid string!
+			else
 			{
 				result = new HidUsagePageEx(); // Default!
 				return (false);
@@ -527,11 +522,6 @@ namespace MKY.IO.Usb
 			{
 				result = (HidUsageIdEx)intResult;
 				return (true);
-			}
-			else if (string.IsNullOrEmpty(s))
-			{
-				result = new HidUsageIdEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
 			else // Invalid string!
 			{

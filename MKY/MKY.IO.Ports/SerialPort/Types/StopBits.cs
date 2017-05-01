@@ -154,21 +154,10 @@ namespace MKY.IO.Ports
 			{
 				return (TryFrom(doubleResult, out result));
 			}
-			else
+			else // Invalid string!
 			{
-				if (s != null)
-					s = s.Trim();
-
-				if (string.IsNullOrEmpty(s))
-				{
-					result = new StopBitsEx(); // Default!
-					return (true); // Default silently, could e.g. happen when deserializing an XML.
-				}
-				else // Invalid string!
-				{
-					result = new StopBitsEx(); // Default!
-					return (false);
-				}
+				result = new StopBitsEx(); // Default!
+				return (false);
 			}
 		}
 

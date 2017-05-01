@@ -309,7 +309,7 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				if (this.separator.Length == 0)
+				if (string.IsNullOrEmpty(this.separator))
 					return (SeparatorDefault);
 				else
 					return (this.separator);

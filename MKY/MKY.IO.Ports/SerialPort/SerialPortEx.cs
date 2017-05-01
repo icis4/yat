@@ -1301,7 +1301,7 @@ namespace MKY.IO.Ports
 
 		private void DebugWrite(string message, bool writeStack)
 		{
-			if (DebugWrite_portName.Length == 0)
+			if (string.IsNullOrEmpty(DebugWrite_portName))
 				DebugWrite_portName = PortName;
 
 			string completeMessage = DebugWrite_portName + " " + Environment.TickCount + " " + message;

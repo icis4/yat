@@ -266,12 +266,7 @@ namespace YAT.Domain
 			if (s != null)
 				s = s.Trim();
 
-			if (string.IsNullOrEmpty(s))
-			{
-				result = new IOTypeEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, SerialPort_string) ||
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, SerialPort_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, SerialPort_stringShort))
 			{
 				result = IOType.SerialPort;

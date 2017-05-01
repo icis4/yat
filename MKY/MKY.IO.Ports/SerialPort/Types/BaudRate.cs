@@ -292,21 +292,10 @@ namespace MKY.IO.Ports
 			{
 				return (TryFrom(intResult, out result));
 			}
-			else
+			else // Invalid string!
 			{
-				if (s != null)
-					s = s.Trim();
-
-				if (string.IsNullOrEmpty(s))
-				{
-					result = new BaudRateEx(); // Default!
-					return (true); // Default silently, can e.g. happen when deserializing an XML.
-				}
-				else // Invalid string!
-				{
-					result = new BaudRateEx(); // Default!
-					return (false);
-				}
+				result = new BaudRateEx(); // Default!
+				return (false);
 			}
 		}
 

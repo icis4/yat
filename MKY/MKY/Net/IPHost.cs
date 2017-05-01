@@ -480,12 +480,7 @@ namespace MKY.Net
 			if (s != null)
 				s = s.Trim();
 
-			if (string.IsNullOrEmpty(s))
-			{
-				result = new IPHostEx(); // Default!
-				return (true); // Default silently, can e.g. happen when deserializing an XML.
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Localhost_string) ||
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Localhost_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringOld2) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringOld1))
 			{
