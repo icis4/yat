@@ -569,10 +569,13 @@ namespace YAT.Domain.Parser
 		// Protected Methods
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Spelled "WhiteSpace" instead of "Whitespace" for consistency with the
+		/// <see cref="char.IsWhiteSpace(char)"/> method.
+		/// </remarks>
 		internal virtual bool IsWhiteSpace(int parseChar)
 		{
-			if (char.IsWhiteSpace((char)parseChar)) // 'official' white space.
+			if (char.IsWhiteSpace((char)parseChar)) // 'official' whitespace.
 				return (true);
 			
 			if (Int32Ex.IsWithin(parseChar, byte.MinValue, byte.MaxValue) &&
