@@ -76,12 +76,14 @@ namespace MKY.Net
 	{
 		#region String Definitions
 
-		private const string Any_string          = "[Any]";
-		private const string Any_stringOld2      = "<Any>"; // Backward compatibility.
+		/// <remarks>Explicitly using "[any]" instead of "[Any]" same as "[localhost]" and "[loopback]".</remarks>
+		private const string Any_string          = "[any]";
+		private const string Any_stringOld2      = "<any>"; // Backward compatibility.
 		private const string Any_stringOld1      =  "any";  // Backward compatibility.
 
-		private const string Loopback_string     = "[Loopback]";
-		private const string Loopback_stringOld2 = "<Loopback>"; // Backward compatibility.
+		/// <remarks>Explicitly using the more common spelling "[loopback]" instead of "[Loopback]".</remarks>
+		private const string Loopback_string     = "[loopback]";
+		private const string Loopback_stringOld2 = "<loopback>"; // Backward compatibility.
 		private const string Loopback_stringOld1 =  "loopback";  // Backward compatibility.
 
 		private const string IPv4Any_string      = "IPv4 any";
@@ -527,7 +529,7 @@ namespace MKY.Net
 					return (new IPNetworkInterfaceEx(address, networkInterface.Description));
 			}
 
-			// Use default = [Any] in case o invalid interface (required for backward compatibility with old settings).
+			// Use default = [any] in case o invalid interface (required for backward compatibility with old settings).
 			return (new IPNetworkInterfaceEx(IPAddress.Any, networkInterface.Description));
 		}
 

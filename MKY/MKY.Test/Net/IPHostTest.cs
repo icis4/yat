@@ -49,7 +49,7 @@ namespace MKY.Test.Net
 		// Constants
 		//==========================================================================================
 
-		private const string LocalhostString = "[Localhost]";
+		private const string LocalhostString = "[localhost]";
 
 		private const string IPv4LocalhostString = "IPv4 localhost (127.0.0.1)";
 		private const string IPv6LocalhostString = "IPv6 localhost (::1)";
