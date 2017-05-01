@@ -167,8 +167,9 @@ namespace MKY.Net
 					case IPNetworkInterface.IPv6Any:      return (IPAddress.IPv6Any);
 					case IPNetworkInterface.IPv6Loopback: return (IPAddress.IPv6Loopback);
 					case IPNetworkInterface.Explicit:     return (this.explicitAddress);
+
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
-				throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -192,8 +193,9 @@ namespace MKY.Net
 						else
 							return ("");
 					}
+
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
-				throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -256,8 +258,9 @@ namespace MKY.Net
 					else
 						return (this.explicitAddress.ToString()); // Explicit address is always given, at least 'IPAdress.None'.
 				}
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary>

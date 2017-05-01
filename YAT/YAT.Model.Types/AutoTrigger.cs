@@ -181,8 +181,9 @@ namespace YAT.Model.Types
 				case AutoTrigger.PredefinedCommand12: return (PredefinedCommand_string + " 12]");
 				case AutoTrigger.AnyLine:             return (AnyLine_string);
 				case AutoTrigger.Explicit:            return (this.explicitCommandString);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary>

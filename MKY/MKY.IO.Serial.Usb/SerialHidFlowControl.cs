@@ -115,8 +115,9 @@ namespace MKY.IO.Serial.Usb
 				case SerialHidFlowControl.None:           return (None_string);
 				case SerialHidFlowControl.Software:       return (Software_string);
 				case SerialHidFlowControl.ManualSoftware: return (ManualSoftware_string);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -128,8 +129,9 @@ namespace MKY.IO.Serial.Usb
 				case SerialHidFlowControl.None:           return (None_string);
 				case SerialHidFlowControl.Software:       return (Software_stringShort);
 				case SerialHidFlowControl.ManualSoftware: return (ManualSoftware_stringShort);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

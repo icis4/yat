@@ -77,8 +77,9 @@ namespace MKY.Windows.Forms
 			{
 				case Orientation.Horizontal: return (Horizontal_string);
 				case Orientation.Vertical:   return (Vertical_string);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

@@ -94,8 +94,9 @@ namespace MKY.IO.Ports
 				case Handshake.RequestToSend:        return (RfrCts_string);
 				case Handshake.XOnXOff:              return (XOnXOff_string);
 				case Handshake.RequestToSendXOnXOff: return (RfrCtsXOnXOff_string);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -108,8 +109,9 @@ namespace MKY.IO.Ports
 				case Handshake.RequestToSend:        return (RfrCts_stringShort);
 				case Handshake.XOnXOff:              return (XOnXOff_stringShort);
 				case Handshake.RequestToSendXOnXOff: return (RfrCtsXOnXOff_stringShort);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

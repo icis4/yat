@@ -1778,6 +1778,7 @@ namespace YAT.Domain
 			{
 				case IODirection.Tx: return (ByteToElement(b, d, this.terminalSettings.Display.TxRadix));
 				case IODirection.Rx: return (ByteToElement(b, d, this.terminalSettings.Display.RxRadix));
+
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
@@ -1892,6 +1893,7 @@ namespace YAT.Domain
 							{
 								case IODirection.Tx: return (new DisplayElement.TxData(b, text));
 								case IODirection.Rx: return (new DisplayElement.RxData(b, text));
+
 								default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
 						}
@@ -1901,6 +1903,7 @@ namespace YAT.Domain
 							{
 								case IODirection.Tx: return (new DisplayElement.TxControl(b, text));
 								case IODirection.Rx: return (new DisplayElement.RxControl(b, text));
+
 								default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
 						}
@@ -1911,6 +1914,7 @@ namespace YAT.Domain
 						{
 							case IODirection.Tx: return (new DisplayElement.TxData(b, text));
 							case IODirection.Rx: return (new DisplayElement.RxData(b, text));
+
 							default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
 					}
@@ -1921,6 +1925,7 @@ namespace YAT.Domain
 					{
 						case IODirection.Tx: return (new DisplayElement.TxData(b, text));
 						case IODirection.Rx: return (new DisplayElement.RxData(b, text));
+
 						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
@@ -2036,6 +2041,7 @@ namespace YAT.Domain
 			{
 				case IODirection.Tx: return (ElementsAreSeparate(this.terminalSettings.Display.TxRadix));
 				case IODirection.Rx: return (ElementsAreSeparate(this.terminalSettings.Display.RxRadix));
+
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an unknown direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
@@ -2827,6 +2833,7 @@ namespace YAT.Domain
 				{
 					case IODirection.Tx: OnDisplayLinesSent    (new DisplayLinesEventArgs(lines)); break;
 					case IODirection.Rx: OnDisplayLinesReceived(new DisplayLinesEventArgs(lines)); break;
+
 					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}

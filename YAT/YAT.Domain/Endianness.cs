@@ -99,8 +99,9 @@ namespace YAT.Domain
 				{
 					case Endianness.BigEndian:    return (!BitConverter.IsLittleEndian);
 					case Endianness.LittleEndian: return ( BitConverter.IsLittleEndian);
+
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
-				throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -119,8 +120,9 @@ namespace YAT.Domain
 			{
 				case Endianness.BigEndian:    return (BigEndian_string);
 				case Endianness.LittleEndian: return (LittleEndian_string);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

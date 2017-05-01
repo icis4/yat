@@ -99,8 +99,9 @@ namespace MKY.IO.Serial.SerialPort
 				case SerialControlPinState.Automatic: return (Automatic_string);
 				case SerialControlPinState.Disabled:  return (Disabled_string);
 				case SerialControlPinState.Enabled:   return (Enabled_string);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

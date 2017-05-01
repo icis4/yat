@@ -192,8 +192,9 @@ namespace YAT.Domain
 				case IOType.UdpServer:     return (UdpServer_string);
 				case IOType.UdpPairSocket: return (UdpPairSocket_string);
 				case IOType.UsbSerialHid:  return (UsbSerialHid_string);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

@@ -130,8 +130,9 @@ namespace MKY.Media
 				case SystemSounds.Exclamation: return (Exclamation_string);
 				case SystemSounds.Hand:        return (Hand_string);
 				case SystemSounds.Question:    return (Question_string);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown system sound!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown system sound!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion
@@ -299,8 +300,9 @@ namespace MKY.Media
 				case SystemSounds.Exclamation: return (System.Media.SystemSounds.Exclamation);
 				case SystemSounds.Hand:        return (System.Media.SystemSounds.Hand);
 				case SystemSounds.Question:    return (System.Media.SystemSounds.Question);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + sound.ToString() + "' is an unknown system sound!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + sound.ToString() + "' is an unknown system sound!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>

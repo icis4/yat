@@ -156,8 +156,9 @@ namespace MKY.IO.Serial.Socket
 				case SocketType.UdpClient:     return (UdpClient_string);
 				case SocketType.UdpServer:     return (UdpServer_string);
 				case SocketType.UdpPairSocket: return (UdpPairSocket_string);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

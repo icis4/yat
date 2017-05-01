@@ -139,8 +139,9 @@ namespace YAT.Log
 				case FileNameSeparator.BallWithSpaces:       return (BallWithSpaces_stringSeparator);
 
 				case FileNameSeparator.Explicit:             return (this.explicitSeparator);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -160,8 +161,9 @@ namespace YAT.Log
 				case FileNameSeparator.BallWithSpaces:       return (BallWithSpaces_stringDescription);
 
 				case FileNameSeparator.Explicit:             return (this.explicitSeparator);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion
