@@ -96,18 +96,14 @@ New:
   as well as option to show data in Unicode notation "U+...." added (feature request #271).
 - Option to disable BOM (Unicode encoding preamble) when logging in UTF8 added (bug #363).
 - Option to disable formatting, useful when highest data throughput slows down the view (feat. #39).
+- Keywords with arguments \!(Delay(<ms>)), \!(LineDelay(<ms>)), \!(LineInterval(<ms>)) and
+  \!(LineRepeat(<n>)) added (feature requests #13, #139).
 
 Important changes:
 - Serial COM port that are in use are no longer simply labelled "(in use)" but rather "(in use by
   this terminal)", "(... terminal<ID>)" or "(... other application)" (feature requests #201, #207).
 - Notes and links regarding non-intrusive RS-232 monitor/sniffer/spy cables and devices added to
   'About' dialog (related to feature requests #152, #198, #288).
-
-?!?
-- Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #139).
-- Keyword \!(Repeat(<Item>, <Repetitions>, <Delay>)) not yet implemented (feature request #13).
-?!?
-
 - Warning in case of yet incomplete RTF or XML log files (bug #356).
 - Automatically generated backup files are now placed into standard temporary folder (feat. #275).
 - Started to migrate test environment from NUnit V2 to V3, but reverted to 2.6.4 again (feat. #293).
@@ -127,6 +123,7 @@ Limitations and known issues:
    > System display scaling other than 100% results in partly clipped controls (bugs #85 and #235).
    > System errors are output in local language, even though YAT is all-English (bug #66).
    > Single chars are compared case insensitively against recent 'Send Text' commands (bug #347).
+   > Auto completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
    > Horizontal auto scroll is not feasible to implement (feature request #163).
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
@@ -141,8 +138,8 @@ Limitations and known issues:
      no plans fixing it. If an 'ObjectDisposedException' or 'UnauthorizedAccessException' still
      occurs, the serial COM port connection monitoring has to be disabled in the terminal settings.
 - Serial COM port break states may not be supported on certain hardware, e.g. USB/RS-232 converters.
-- USB Ser/HID only runs on Windows, use of 'LibUsbDotNet', significant work and the availability of
-  a test environment would be needed to run USB Ser/HID on unixoids (feature request #119).
+- USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
+  implementation and test environment would be needed to run it on unixoids (feature request #119).
 - Wait for answer line (text terminals) not yet implemented (feature request #19).
 - Breaking while sending files not possible yet (bug #305 and feature request #295).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
@@ -268,6 +265,7 @@ Limitations and known issues:
    > System display scaling other than 100% results in partly clipped controls (bugs #85 and #235).
    > System errors are output in local language, even though YAT is all-English (bug #66).
    > Single chars are compared case insensitively against recent 'Send Text' commands (bug #347).
+   > Auto completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
    > Horizontal auto scroll is not feasible to implement (feature request #163).
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
@@ -282,8 +280,8 @@ Limitations and known issues:
      no plans fixing it. If an 'ObjectDisposedException' or 'UnauthorizedAccessException' still
      occurs, the serial COM port connection monitoring has to be disabled in the terminal settings.
 - Serial COM port break states may not be supported on certain hardware, e.g. USB/RS-232 converters.
-- USB Ser/HID only runs on Windows, use of 'LibUsbDotNet', significant work and the availability of
-  a test environment would be needed to run USB Ser/HID on unixoids (feature request #119).
+- USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
+  implementation and test environment would be needed to run it on unixoids (feature request #119).
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #139).
 - Keyword \!(Repeat(<Item>, <Repetitions>, <Delay>)) not yet implemented (feature request #13).
 - Wait for answer line (text terminals) not yet implemented (feature request #19).
@@ -406,8 +404,8 @@ Limitations and known issues:
   leads to an ObjectDisposedException in the system internal infrastructure (bugs #293 and #316)
 - Use of internal serial COM port may lead to slowdown of the application on certain computers; due
   to superfluous events triggered by the control pins (bugs #271 and #277); root cause yet unknown
-- USB Ser/HID only runs on Windows, use of 'LibUsbDotNet', significant work and the availability of
-  a test environment would be needed to run USB Ser/HID on unixoids (feature request #119)
+- USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
+  implementation and test environment would be needed to run it on unixoids (feature request #119)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #139)
 - Keyword \!(Repeat(<Item>, <Repetitions>, <Delay>)) not yet implemented (feature request #13)
 - Wait for answer line (text terminals) not yet implemented (feature request #19)
@@ -518,8 +516,8 @@ Limitations and known issues:
   'Manual Combined' only, and always on for 'Software' and 'Combined' (bug #3456205>#214)
 - Handling of serial COM port break states (feature #2932691>#109) may not be supported on certain
   hardware, e.g. USB/RS-232 converters
-- USB Ser/HID only runs on Windows, use of 'LibUsbDotNet', significant work and the availability of
-  a test environment would be needed to run USB Ser/HID on unixoids (feature request #2982052>#119)
+- USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
+  implementation and test environment would be needed to run it on unixoids (feature req. #2982052>#119)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478>#139)
 - Wait for answer line (text terminals) not yet implemented (feature request #1808509>#19)
 - Direct send text mode does not yet support special formats and commands (feature request #1808496>#10)
@@ -606,8 +604,8 @@ Limitations and known issues:
   'Manual Combined' only, and always on for 'Software' and 'Combined' (bug #3456205)
 - Handling of serial COM port break states (feature #2932691) may not be supported on certain
   hardware, e.g. USB/RS-232 converters
-- USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
-  of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
+- USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
+  implementation and test environment would be needed to run it on unixoids (feature req. #2982052)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
 - Wait for answer line (text terminals) not yet implemented (feature request #1808509)
 - Direct send text mode does not yet support special formats and commands (feature request #1808496)
@@ -662,8 +660,8 @@ Limitations and known issues:
   (feature request #2848228)
 - Handling of serial COM port break states (feature #2932691) may not be supported on certain
   hardware, e.g. USB/RS-232 converters
-- USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
-  of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
+- USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
+  implementation and test environment would be needed to run it on unixoids (feature req. #2982052)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
 - Wait for answer line (text terminals) not yet implemented (feature request #1808509)
 - Direct send text mode does not yet support special formats and commands (feature request #1808496)
@@ -708,8 +706,8 @@ Limitations and known issues:
   (feature request #2848228)
 - Handling of serial COM port break states (feature #2932691) may not be supported on certain
   hardware, e.g. USB/RS-232 converters
-- USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
-  of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
+- USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
+  implementation and test environment would be needed to run it on unixoids (feature req. #2982052)
 - UTF-16/32 testing pending (bug #1931537)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
 - Wait for answer line (text terminals) not yet implemented (feature request #1808509)
@@ -805,8 +803,8 @@ Limitations and known issues:
   (feature request #2848228)
 - Handling of serial COM port break states (feature #2932691) may not be supported on certain
   hardware, e.g. USB/RS-232 converters
-- USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
-  of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
+- USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
+  implementation and test environment would be needed to run it on unixoids (feature req. #2982052)
 - UTF-16/32 testing pending (bug #1931537)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
 - Wait for answer line (text terminals) not yet implemented (feature request #1808509)

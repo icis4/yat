@@ -1041,17 +1041,20 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		protected virtual void ProcessParserResult(Parser.Result[] result, bool sendEol = false)
 		{
-			bool performLineDelay     = false; // \remind For binary terminals, this is rather a 'PacketDelay'.
-			bool performLineInterval  = false; // \remind For binary terminals, this is rather a 'PacketInterval'.
 			bool performLineRepeat    = false; // \remind For binary terminals, this is rather a 'PacketRepeat'.
 			bool lineRepeatIsInfinite = (TerminalSettings.Send.DefaultLineRepeat == Settings.SendSettings.LineRepeatInfinite);
 			int  lineRepeatRemaining  =  TerminalSettings.Send.DefaultLineRepeat;
+			bool isFirstRepetition    = true;
 
 			do // Process at least once, potentially repeat.
 			{
 				// --- Initialize the line/packet ---
 
-				DateTime lineBeginTimeStamp = DateTime.Now; // \remind For binary terminals, this is rather a 'packetBegin'.
+				DateTime lineBeginTimeStamp = DateTime.Now; // \remind For binary terminals, this is rather a 'PacketBegin'.
+				bool performLineDelay       = false;        // \remind For binary terminals, this is rather a 'PacketDelay'.
+				int lineDelay               = TerminalSettings.Send.DefaultLineDelay;
+				bool performLineInterval    = false;        // \remind For binary terminals, this is rather a 'PacketInterval'.
+				int lineInterval            = TerminalSettings.Send.DefaultLineInterval;
 
 				// --- Process the line/packet ---
 
@@ -1083,18 +1086,36 @@ namespace YAT.Domain
 								case Parser.Keyword.LineDelay: // \remind For binary terminals, this is rather a 'PacketDelay'.
 								{
 									performLineDelay = true;
+
+									if (!ArrayEx.IsNullOrEmpty(ki.Args))
+										lineDelay = ki.Args[0];
+
 									break;
 								}
 
 								case Parser.Keyword.LineInterval: // \remind For binary terminals, this is rather a 'PacketInterval'.
 								{
 									performLineInterval = true;
+
+									if (!ArrayEx.IsNullOrEmpty(ki.Args))
+										lineInterval = ki.Args[0];
+
 									break;
 								}
 
 								case Parser.Keyword.LineRepeat: // \remind For binary terminals, this is rather a 'PacketRepeat'.
 								{
-									performLineRepeat = true;
+									if (isFirstRepetition)
+									{
+										performLineRepeat = true;
+
+										if (!ArrayEx.IsNullOrEmpty(ki.Args))
+										{
+											lineRepeatIsInfinite = (ki.Args[0] == Settings.SendSettings.LineRepeatInfinite);
+											lineRepeatRemaining  =  ki.Args[0];
+										}
+									}
+
 									break;
 								}
 
@@ -1132,7 +1153,7 @@ namespace YAT.Domain
 					}
 				}
 
-				ProcessLineDelayOrInterval(performLineDelay, performLineInterval, lineBeginTimeStamp, lineEndTimeStamp);
+				ProcessLineDelayOrInterval(performLineDelay, lineDelay, performLineInterval, lineInterval, lineBeginTimeStamp, lineEndTimeStamp);
 
 				// Process repeat:
 				if (!lineRepeatIsInfinite)
@@ -1140,6 +1161,8 @@ namespace YAT.Domain
 					if (lineRepeatRemaining > 0)
 						lineRepeatRemaining--;
 				}
+
+				isFirstRepetition = false;
 			}
 			while (performLineRepeat && (lineRepeatIsInfinite || (lineRepeatRemaining > 0)));
 		}
@@ -1163,6 +1186,8 @@ namespace YAT.Domain
 				case Parser.Keyword.Delay:
 				{
 					int delay = this.terminalSettings.Send.DefaultDelay;
+					if (!ArrayEx.IsNullOrEmpty(result.Args))
+						delay = result.Args[0];
 
 					// Raise the 'IOChanged' event if sending is about to be delayed:
 					if (this.ioChangedEventHelper.RaiseEventIfDelayIsAboveThreshold(delay))
@@ -1233,29 +1258,28 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>For binary terminals, this is rather a 'ProcessPacketDelayOrInterval'.</remarks>
-		protected virtual int ProcessLineDelayOrInterval(bool performLineDelay, bool performLineInterval, DateTime lineBeginTimeStamp, DateTime lineEndTimeStamp)
+		protected virtual int ProcessLineDelayOrInterval(bool performLineDelay, int lineDelay, bool performLineInterval, int lineInterval, DateTime lineBeginTimeStamp, DateTime lineEndTimeStamp)
 		{
-			int delay = 0;
+			int effectiveDelay = 0;
 
 			if (performLineInterval) // 'Interval' has precendence over 'Delay' as it requires more accuracy.
 			{
-				int interval = this.terminalSettings.Send.DefaultLineInterval;
 				TimeSpan elapsed = (lineEndTimeStamp - lineBeginTimeStamp);
-				delay = interval - (int)elapsed.TotalMilliseconds;
+				effectiveDelay = lineInterval - (int)elapsed.TotalMilliseconds;
 			}
 			else if (performLineDelay)
 			{
-				delay = this.terminalSettings.Send.DefaultLineDelay;
+				effectiveDelay = lineDelay;
 			}
 
-			if (delay > 0)
+			if (effectiveDelay > 0)
 			{
 				// Raise the 'IOChanged' event if sending is about to be delayed for too long:
-				if (this.ioChangedEventHelper.RaiseEventIfDelayIsAboveThreshold(delay))
+				if (this.ioChangedEventHelper.RaiseEventIfDelayIsAboveThreshold(effectiveDelay))
 					OnIOChanged(EventArgs.Empty);
 
-				Thread.Sleep(delay);
-				return (delay);
+				Thread.Sleep(effectiveDelay);
+				return (effectiveDelay);
 			}
 			else
 			{
