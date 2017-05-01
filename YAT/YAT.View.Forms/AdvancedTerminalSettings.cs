@@ -719,7 +719,7 @@ namespace YAT.View.Forms
 			if (!this.isSettingControls)
 			{
 				int delay;
-				if (int.TryParse(textBox_DefaultDelay.Text, out delay) && (delay >= 1))
+				if (int.TryParse(textBox_DefaultDelay.Text, out delay) && (delay >= 1)) // Attention, a similar validation exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
 				{
 					this.settingsInEdit.Terminal.Send.DefaultDelay = delay;
 				}
@@ -728,7 +728,7 @@ namespace YAT.View.Forms
 					MessageBoxEx.Show
 					(
 						this,
-						"Delay must be at least 1 ms!",
+						"Delay must be at least 1 ms!", // Attention, a similar message exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -745,7 +745,7 @@ namespace YAT.View.Forms
 			if (!this.isSettingControls)
 			{
 				int delay;
-				if (int.TryParse(textBox_DefaultLineDelay.Text, out delay) && (delay >= 1))
+				if (int.TryParse(textBox_DefaultLineDelay.Text, out delay) && (delay >= 1)) // Attention, a similar validation exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
 				{
 					this.settingsInEdit.Terminal.Send.DefaultLineDelay = delay;
 				}
@@ -754,7 +754,7 @@ namespace YAT.View.Forms
 					MessageBoxEx.Show
 					(
 						this,
-						"Delay must be at least 1 ms!",
+						"Delay must be at least 1 ms!", // Attention, a similar message exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -771,7 +771,7 @@ namespace YAT.View.Forms
 			if (!this.isSettingControls)
 			{
 				int interval;
-				if (int.TryParse(textBox_DefaultLineInterval.Text, out interval) && (interval >= 1))
+				if (int.TryParse(textBox_DefaultLineInterval.Text, out interval) && (interval >= 1)) // Attention, a similar validation exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
 				{
 					this.settingsInEdit.Terminal.Send.DefaultLineInterval = interval;
 				}
@@ -780,7 +780,7 @@ namespace YAT.View.Forms
 					MessageBoxEx.Show
 					(
 						this,
-						"Interval must be at least 1 ms!",
+						"Interval must be at least 1 ms!", // Attention, a similar message exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -814,7 +814,7 @@ namespace YAT.View.Forms
 				const int RepeatInfinite = Domain.Settings.SendSettings.LineRepeatInfinite;
 
 				int repeat;
-				if (int.TryParse(textBox_DefaultLineRepeat.Text, out repeat) && ((repeat >= 1) || (repeat == RepeatInfinite)))
+				if (int.TryParse(textBox_DefaultLineRepeat.Text, out repeat) && ((repeat >= 1) || (repeat == RepeatInfinite))) // Attention, a similar validation exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
 				{
 					this.settingsInEdit.Terminal.Send.DefaultLineRepeat = repeat;
 				}
@@ -823,7 +823,7 @@ namespace YAT.View.Forms
 					MessageBoxEx.Show
 					(
 						this,
-						"Repeat must be 1 or more! Or set to " + RepeatInfinite + " for infinite repeating.",
+						"Repeat must be 1 or more! Or " + RepeatInfinite + " for infinite repeating.", // Attention, a similar message exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error

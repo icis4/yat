@@ -87,20 +87,6 @@ namespace YAT.Domain.Parser
 
 		private const string ZzForInternalTesting_string = "ZzForInternalTesting";
 
-
-		#endregion
-
-		#region Args/Regex Definitions
-
-		private const Regex  Delay_regex             = new Regex();
-		private const string Delay_validation        = ";
-		private const Regex  LineDelay_regex         = new Regex();
-		private const string LineDelay_validation    = ";
-		private const Regex  LineInterval_regex      = new Regex();
-		private const string LineInterval_validation = ";
-		private const Regex  LineRepeat_regex        = new Regex();
-		private const string LineRepeat_validation   = ";
-
 		#endregion
 
 		/// <summary>Default is <see cref="Keyword.None"/>.</summary>
@@ -143,15 +129,16 @@ namespace YAT.Domain.Parser
 				case Keyword.OutputBreakToggle: return (OutputBreakToggle_string);
 
 				case Keyword.ZzForInternalTesting: return (ZzForInternalTesting_string);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion
 
-		#region GetItems
+		#region GetItems/Args/Validation
 		//==========================================================================================
-		// GetItems
+		// GetItems/Args/Validation
 		//==========================================================================================
 
 		/// <remarks>
@@ -177,6 +164,88 @@ namespace YAT.Domain.Parser
 			// Do not add 'ZzForInternalTesting'.
 
 			return (a.ToArray());
+		}
+
+		/// <summary>
+		/// Gets the maximum arguments count for this keyword.
+		/// </summary>
+		public virtual int GetMaxArgsCount()
+		{
+			switch ((Keyword)UnderlyingEnum)
+			{
+				case Keyword.Delay:        return (1);
+				case Keyword.LineDelay:    return (1);
+				case Keyword.LineInterval: return (1);
+				case Keyword.LineRepeat:   return (1);
+
+				case Keyword.ZzForInternalTesting: return (3);
+
+				default: return (0);
+			}
+		}
+
+		/// <summary>
+		/// Validates the given value for the given argument index of this keyword.
+		/// </summary>
+		public virtual bool Validate(int argIndex, int argValue)
+		{
+			switch ((Keyword)UnderlyingEnum)
+			{
+				case Keyword.Delay:        return (argValue >= 1); // Attention, a similar validation exists in 'View.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.LineDelay:    return (argValue >= 1); // Attention, a similar validation exists in 'View.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.LineInterval: return (argValue >= 1); // Attention, a similar validation exists in 'View.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.LineRepeat:   return ((argValue >= 1) || (argValue == Settings.SendSettings.LineRepeatInfinite));
+				                                                   // Attention, a similar validation exists in 'View.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.ZzForInternalTesting:
+				{
+					switch (argIndex)
+					{
+						case 0: return (true);
+						case 1: return (true);
+						case 2: return (true);
+
+						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' doesn't support more than 3 arguments!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					}
+				}
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary>
+		/// Gets the validation fragment for the given argument index of this keyword.
+		/// </summary>
+		public virtual string GetValidationFragment(int argIndex)
+		{
+			string NoArgSupportedMessage = "[" + MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' doesn't support arguments! " + MessageHelper.SubmitBug + "]";
+
+			switch ((Keyword)UnderlyingEnum)
+			{
+				case Keyword.Clear:             return (NoArgSupportedMessage);
+				case Keyword.Delay:             return ("an integer value of 1 or more indicating the delay in milliseconds");    // Attention, a similar message exists in 'View.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.LineDelay:         return ("an integer value of 1 or more indicating the delay in milliseconds");    // Attention, a similar message exists in 'View.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.LineInterval:      return ("an integer value of 1 or more indicating the interval in milliseconds"); // Attention, a similar message exists in 'View.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.LineRepeat:        return ("an integer value of 1 or more indicating the number of repetitions, or " + Settings.SendSettings.LineRepeatInfinite + " for infinite repetitions");
+				case Keyword.Eol:               return (NoArgSupportedMessage);                                                   // Attention, a similar message exists in 'View.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.NoEol:             return (NoArgSupportedMessage);
+				case Keyword.OutputBreakOn:     return (NoArgSupportedMessage);
+				case Keyword.OutputBreakOff:    return (NoArgSupportedMessage);
+				case Keyword.OutputBreakToggle: return (NoArgSupportedMessage);
+
+				case Keyword.ZzForInternalTesting:
+				{
+					switch (argIndex)
+					{
+						case 0: return ("an integer value");
+						case 1: return ("an integer value");
+						case 2: return ("an integer value");
+
+						default: return ("[" + MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' doesn't support more than 3 arguments! " + MessageHelper.SubmitBug + "]");
+					}
+				}
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		#endregion
