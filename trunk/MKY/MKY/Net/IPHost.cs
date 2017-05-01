@@ -71,8 +71,9 @@ namespace MKY.Net
 	{
 		#region String Definitions
 
-		private const string Localhost_string     = "[Localhost]";
-		private const string Localhost_stringOld2 = "<Localhost>"; // Backward compatibility.
+		/// <remarks>Explicitly using the more common spelling "[localhost]" instead of "[Localhost]".</remarks>
+		private const string Localhost_string     = "[localhost]";
+		private const string Localhost_stringOld2 = "<localhost>"; // Backward compatibility.
 		private const string Localhost_stringOld1 =  "localhost";  // Backward compatibility.
 
 		private const string IPv4Localhost_string = "IPv4 localhost";

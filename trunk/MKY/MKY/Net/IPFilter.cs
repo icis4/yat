@@ -79,12 +79,14 @@ namespace MKY.Net
 	{
 		#region String Definitions
 
-		private const string Any_string           = "[Any]";
-		private const string Any_stringOld2       = "<Any>"; // Backward compatibility.
+		/// <remarks>Explicitly using "[any]" instead of "[Any]" same as "[localhost]" and "[loopback]".</remarks>
+		private const string Any_string           = "[any]";
+		private const string Any_stringOld2       = "<any>"; // Backward compatibility.
 		private const string Any_stringOld1       =  "any";  // Backward compatibility.
 
-		private const string Localhost_string     = "[Localhost]";
-		private const string Localhost_stringOld2 = "<Localhost>"; // Backward compatibility.
+		/// <remarks>Explicitly using the more common spelling "[localhost]" instead of "[Localhost]".</remarks>
+		private const string Localhost_string     = "[localhost]";
+		private const string Localhost_stringOld2 = "<localhost>"; // Backward compatibility.
 		private const string Localhost_stringOld1 =  "localhost";  // Backward compatibility.
 
 		private const string IPv4Any_string       = "IPv4 any";
