@@ -418,6 +418,10 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(ZzForInternalTesting( 1,2,3 ))",     Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 1, 2, 3 }));
 				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1,2,3))",       Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 1, 2, 3 }));
 
+				// Sign:
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1, -2, 3))", Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 1, -2, 3 }));
+				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1, 2, +3))", Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 1, 2, +3 }));
+
 				// Radix:
 				yield return (new TestCaseData(@"\!(ZzForInternalTesting(0b0))",                                Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0x00 }));
 				yield return (new TestCaseData(@"\!(ZzForInternalTesting(0b1))",                                Domain.Parser.Keyword.ZzForInternalTesting, new int[] { 0x01 }));
@@ -490,9 +494,6 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1.23))",		@"\!(ZzForInternalTesting(1",		@"Invalid arguments."));
 				yield return (new TestCaseData(@"\!(ZzForInternalTesting(12 3))",		@"\!(ZzForInternalTesting(12 ",		@"Invalid arguments."));
 				yield return (new TestCaseData(@"\!(ZzForInternalTesting(12.3))",		@"\!(ZzForInternalTesting(12",		@"Invalid arguments."));
-
-				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1, -2, 3))",	@"\!(ZzForInternalTesting(1, ",		@"Invalid arguments."));
-				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1, 2, +3))",	@"\!(ZzForInternalTesting(1, 2, ",	@"Invalid arguments."));
 
 				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1,))",			@"\!(ZzForInternalTesting(1,",		@"Invalid arguments."));
 				yield return (new TestCaseData(@"\!(ZzForInternalTesting(1 ,))",		@"\!(ZzForInternalTesting(1 ,",		@"Invalid arguments."));

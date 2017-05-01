@@ -142,7 +142,7 @@ namespace YAT.Domain.Parser
 					return (HandleEmptyValue(parser, out formatException));
 
 				int thisArg;
-				if (!TryParse(s, out thisArg, out formatException))
+				if (!TryParseAndValidate(s, out thisArg, out formatException))
 					return (false);
 
 				var l = new List<int>(); // Default capacity of 4 is OK in most cases.
@@ -162,7 +162,7 @@ namespace YAT.Domain.Parser
 					return (HandleEmptyValue(parser, out formatException));
 
 				int thisArg;
-				if (!TryParse(s, out thisArg, out formatException))
+				if (!TryParseAndValidate(s, out thisArg, out formatException))
 					return (false);
 
 				var l = new List<int>(); // Default capacity of 4 is OK in most cases.
@@ -330,7 +330,7 @@ namespace YAT.Domain.Parser
 
 		private bool SubsequentArgIsAllowed(Keyword k, int currentArgsCount, out FormatException ex)
 		{
-			int maxArgsCount = KeywordEx.GetMaxArgsCount(k);
+			int maxArgsCount = ((KeywordEx)k).GetMaxArgsCount();
 
 			if (currentArgsCount < maxArgsCount)
 			{
@@ -351,14 +351,17 @@ namespace YAT.Domain.Parser
 			}
 		}
 
-		private bool TryParse(string s, out int result, out FormatException ex)
+		private bool TryParseAndValidate(string s, out int result, out FormatException ex)
 		{
-			if (!int.TryParse(s, out result))
-			{
-				int i = 0;
-				if (this.previousArgs != null)
-					i = this.previousArgs.Length;
+			var me = (KeywordEx)this.keyword;
 
+			int i = 0;
+			if (this.previousArgs != null)
+				i = this.previousArgs.Length;
+
+			if ((!int.TryParse(s, out result)) &&
+			    (!me.Validate(i, result)))
+			{
 				var sb = new StringBuilder();
 				sb.Append(@"""");
 				sb.Append(s);
@@ -369,7 +372,7 @@ namespace YAT.Domain.Parser
 				sb.Append(" argument for keyword '");
 				sb.Append(this.keyword);
 				sb.Append("'. Argument must be ");
-				sb.Append(KeywordEx.GetValidationFragment(this.keyword, i));
+				sb.Append(me.GetValidationFragment(i));
 				sb.Append(".");
 
 				ex = new FormatException(sb.ToString());
