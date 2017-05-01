@@ -769,6 +769,7 @@ namespace MKY.Text
 					if ((int)((SupportedEncoding)UnderlyingEnum) == info.CodePage)
 						return (info.Name);
 				}
+
 				throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
@@ -785,11 +786,13 @@ namespace MKY.Text
 					if ((SupportedEncoding)UnderlyingEnum == info.SupportedEncoding)
 						return (info.BetterDisplayName);
 				}
+
 				foreach (EncodingInfo info in Encoding.GetEncodings())
 				{
 					if ((int)((SupportedEncoding)UnderlyingEnum) == info.CodePage)
 						return (info.DisplayName);
 				}
+
 				throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}

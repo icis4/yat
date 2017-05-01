@@ -98,8 +98,9 @@ namespace MKY.IO.Serial.Socket
 				case UdpServerSendMode.None:       return (None_string);
 				case UdpServerSendMode.First:      return (First_string);
 				case UdpServerSendMode.MostRecent: return (MostRecent_string);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

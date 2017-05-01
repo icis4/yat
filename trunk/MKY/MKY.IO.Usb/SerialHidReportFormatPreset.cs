@@ -153,8 +153,9 @@ namespace MKY.IO.Usb
 				case SerialHidReportFormatPreset.MT_SerHid: return (MT_SerHid_string);
 				case SerialHidReportFormatPreset.TI_HidApi: return (TI_HidApi_string);
 				case SerialHidReportFormatPreset.YAT:       return (YAT_string);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion
@@ -334,8 +335,9 @@ namespace MKY.IO.Usb
 				case SerialHidReportFormatPreset.MT_SerHid:	return (new SerialHidReportFormat(true,  0x00,               false, true,  true ));
 				case SerialHidReportFormatPreset.TI_HidApi: return (new SerialHidReportFormat(true,  TI_HidApi_ReportId, true,  false, true ));
 				case SerialHidReportFormatPreset.YAT:		return (new SerialHidReportFormat(true,  0x00,               false, false, true )); // = Common.
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>

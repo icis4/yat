@@ -347,6 +347,7 @@ namespace YAT.View.Forms
 			{
 				case Domain.TerminalType.Text:   type = "Text";   break;
 				case Domain.TerminalType.Binary: type = "Binary"; break;
+
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.settingsInEdit.Terminal.TerminalType + "' is an unknown terminal type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 

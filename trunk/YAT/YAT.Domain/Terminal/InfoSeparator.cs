@@ -166,8 +166,9 @@ namespace YAT.Domain
 				case InfoSeparator.SemicolonWithSpace:   return (SemicolonWithSpace_stringSeparator);
 
 				case InfoSeparator.Explicit:             return (this.explicitSeparator);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -194,8 +195,9 @@ namespace YAT.Domain
 				case InfoSeparator.SemicolonWithSpace:   return (SemicolonWithSpace_stringDescription);
 
 				case InfoSeparator.Explicit:             return (this.explicitSeparator);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

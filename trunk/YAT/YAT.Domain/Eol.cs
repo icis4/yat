@@ -136,8 +136,9 @@ namespace YAT.Domain
 				case Eol.Nul:   return (  Nul_stringSequence);
 				case Eol.Tab:   return (  Tab_stringSequence);
 				case Eol.Space: return (Space_stringNice);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <remarks>Named ..String() to emphasize that this is not the binary sequence.</remarks>
@@ -153,8 +154,9 @@ namespace YAT.Domain
 				case Eol.Nul:   return (  Nul_stringSequence);
 				case Eol.Tab:   return (  Tab_stringSequence);
 				case Eol.Space: return (Space_stringSequence);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

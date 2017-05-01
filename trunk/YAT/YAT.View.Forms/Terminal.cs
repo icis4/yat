@@ -2043,8 +2043,7 @@ namespace YAT.View.Forms
 				case SendTextEventOption.Normal:     this.terminal.SendText();           break;
 				case SendTextEventOption.WithoutEol: this.terminal.SendTextWithoutEol(); break;
 
-				default:
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + e.Value.ToString() + "' is an option that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + e.Value.ToString() + "' is an option that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2712,6 +2711,7 @@ namespace YAT.View.Forms
 				case 6: presetString =  "19200, 8, None, 1, Software"; break;
 				case 7: presetString = "115200, 8, None, 1, None";     break;
 				case 8: presetString = "115200, 8, None, 1, Software"; break;
+
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + preset + "' is an invalid preset!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
@@ -2855,6 +2855,7 @@ namespace YAT.View.Forms
 			{
 				case Domain.IODirection.Tx: this.settingsRoot.Display.TxRadix = radix; break;
 				case Domain.IODirection.Rx: this.settingsRoot.Display.RxRadix = radix; break;
+
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}

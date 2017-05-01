@@ -186,8 +186,9 @@ namespace YAT.Model.Types
 				case AutoResponse.SendText:            return (SendText_string);
 				case AutoResponse.SendFile:            return (SendFile_string);
 				case AutoResponse.Explicit:            return (this.explicitCommandString);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary>

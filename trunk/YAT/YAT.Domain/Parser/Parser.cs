@@ -925,6 +925,7 @@ namespace YAT.Domain.Parser
 										{
 											case Endianness.BigEndian:    bytes.WriteByte(upper); bytes.WriteByte(lower); break;
 											case Endianness.LittleEndian: bytes.WriteByte(lower); bytes.WriteByte(upper); break;
+
 											default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.endianness + "' is an unknown endianness!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 										}
 									}

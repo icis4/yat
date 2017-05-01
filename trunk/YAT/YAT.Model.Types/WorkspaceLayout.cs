@@ -146,8 +146,9 @@ namespace YAT.Model.Types
 				case WorkspaceLayout.Manual:         return (Manual_string);
 				case WorkspaceLayout.Minimize:       return (Minimize_string);
 				case WorkspaceLayout.Maximize:       return (Maximize_string);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion
