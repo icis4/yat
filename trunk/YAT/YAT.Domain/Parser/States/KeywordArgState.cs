@@ -111,9 +111,9 @@ namespace YAT.Domain.Parser
 				{
 					case InternalState.AtBeginning:
 					{
-						// Trim leading white space.
+						// Trim leading whitespace (before the argument):
 						while (parser.IsWhiteSpace(parser.CharReader.Peek()))
-							parser.CharReader.Read(); // Consume white space.
+							parser.CharReader.Read(); // Consume whitespace.
 
 						this.internalState = InternalState.AfterLeadingWhiteSpace;
 						return (true);
@@ -121,9 +121,9 @@ namespace YAT.Domain.Parser
 
 					case InternalState.InDigits:
 					{
-						// Trim trailing white space.
+						// Trim trailing whitespace (after the argument):
 						while (parser.IsWhiteSpace(parser.CharReader.Peek()))
-							parser.CharReader.Read(); // Consume white space.
+							parser.CharReader.Read(); // Consume whitespace.
 
 						this.internalState = InternalState.AfterTrailingWhiteSpace;
 						return (true);
@@ -131,22 +131,38 @@ namespace YAT.Domain.Parser
 
 					default: // Something went seriously wrong!
 					{
-						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid internal state '" + this.internalState + "' when parsing white space!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid internal state '" + this.internalState + "' when parsing whitespace!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 			}
 			else if (parseChar == ')') // End of argument(s).
 			{
+				// Trim trailing whitespace (after the closing parenthesis):
+				while (parser.IsWhiteSpace(parser.CharReader.Peek()))
+					parser.CharReader.Read(); // Consume whitespace.
+
 				var s = this.valueWriter.ToString();
 				if (string.IsNullOrEmpty(s))
-					return (HandleEmptyValue(parser, out formatException));
+				{
+					if (ArrayEx.IsNullOrEmpty(this.previousArgs)) // Truly empty arg () is OK.
+					{
+						parser.CommitResult(new KeywordResult(this.keyword));
+						parser.HasFinished = true;
+						return (true);
+					}
+					else
+					{
+						formatException = new FormatException("Empty arguments are no permitted.");
+						return (false);
+					}
+				}
 
 				int thisArg;
-				if (!TryParseAndValidate(s, out thisArg, out formatException))
+				if (!TryParseAndValidate(s, out thisArg, ref formatException))
 					return (false);
 
 				var l = new List<int>(); // Default capacity of 4 is OK in most cases.
-				if (this.previousArgs != null)
+				if (!ArrayEx.IsNullOrEmpty(this.previousArgs))
 					l.AddRange(this.previousArgs);
 
 				l.Add(thisArg);
@@ -159,26 +175,32 @@ namespace YAT.Domain.Parser
 			{
 				var s = this.valueWriter.ToString();
 				if (string.IsNullOrEmpty(s))
-					return (HandleEmptyValue(parser, out formatException));
+				{
+					formatException = new FormatException("Empty arguments are no permitted.");
+					return (false);
+				}
 
 				int thisArg;
-				if (!TryParseAndValidate(s, out thisArg, out formatException))
+				if (!TryParseAndValidate(s, out thisArg, ref formatException))
 					return (false);
 
 				var l = new List<int>(); // Default capacity of 4 is OK in most cases.
-				if (this.previousArgs != null)
+				if (!ArrayEx.IsNullOrEmpty(this.previousArgs))
 					l.AddRange(this.previousArgs);
 
 				l.Add(thisArg);
 
-				if (!SubsequentArgIsAllowed(this.keyword, l.Count, out formatException))
+				if (!ArgIsAllowed(this.keyword, l.Count, ref formatException))
 					return false;
 
 				ChangeState(parser, new KeywordArgState(this.keyword, l.ToArray()));
 				return (true);
 			}
-			else if ((parseChar == '0') && (this.internalState == InternalState.AfterLeadingWhiteSpace)) // Potential beginning of a C-style radix identifier.
+			else if ((parseChar == '0') && (this.internalState != InternalState.InDigits)) // Potential beginning of a C-style radix identifier.
 			{
+				if (!ArgIsAllowed(this.keyword, 0, ref formatException))
+					return false;
+
 				int nextChar = parser.CharReader.Peek();
 				switch (nextChar)
 				{
@@ -229,10 +251,22 @@ namespace YAT.Domain.Parser
 				this.internalState = InternalState.InDigits;
 				return (true);
 			}
+			else if (((parseChar == '+') || (parseChar == '-')) && (this.internalState != InternalState.InDigits)) // Potential inital sign character.
+			{
+				if (!ArgIsAllowed(this.keyword, 0, ref formatException))
+					return false;
+
+				this.valueWriter.Write((char)parseChar);
+				this.internalState = InternalState.InDigits;
+				return (true);
+			}
 			else if ((this.internalState == InternalState.AtBeginning) ||
 			         (this.internalState == InternalState.AfterLeadingWhiteSpace) ||
 			         (this.internalState == InternalState.InDigits))
 			{
+				if (!ArgIsAllowed(this.keyword, 0, ref formatException))
+					return false;
+
 				switch (this.radix)
 				{
 					case Radix.Bin:
@@ -240,6 +274,7 @@ namespace YAT.Domain.Parser
 						if ((parseChar >= '0') && (parseChar <= '1'))
 						{
 							this.valueWriter.Write((char)parseChar);
+							this.internalState = InternalState.InDigits;
 							return (true);
 						}
 						break;
@@ -250,6 +285,7 @@ namespace YAT.Domain.Parser
 						if ((parseChar >= '0') && (parseChar <= '7'))
 						{
 							this.valueWriter.Write((char)parseChar);
+							this.internalState = InternalState.InDigits;
 							return (true);
 						}
 						break;
@@ -260,6 +296,7 @@ namespace YAT.Domain.Parser
 						if ((parseChar >= '0') && (parseChar <= '9'))
 						{
 							this.valueWriter.Write((char)parseChar);
+							this.internalState = InternalState.InDigits;
 							return (true);
 						}
 						break;
@@ -272,6 +309,7 @@ namespace YAT.Domain.Parser
 							((parseChar >= 'a') && (parseChar <= 'f')))
 						{
 							this.valueWriter.Write((char)parseChar);
+							this.internalState = InternalState.InDigits;
 							return (true);
 						}
 						break;
@@ -305,61 +343,64 @@ namespace YAT.Domain.Parser
 				formatException = new FormatException(sb.ToString());
 				return (false);
 			}
+			else if (this.internalState == InternalState.AfterTrailingWhiteSpace)
+			{
+				var sb = new StringBuilder();
+
+				sb.Append("Closing parenthesis expected instead of character '");
+				sb.Append((char)parseChar);
+				sb.Append("' (0x");
+				sb.Append(parseChar.ToString("X", CultureInfo.InvariantCulture));
+				sb.Append(").");
+
+				formatException = new FormatException(sb.ToString());
+				return (false);
+			}
 			else
 			{
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid internal state '" + this.internalState + "' when parsing!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
-		private bool HandleEmptyValue(Parser p, out FormatException ex)
-		{
-			if ((this.previousArgs == null) || (this.previousArgs.Length == 0))
-			{
-				p.CommitResult(new KeywordResult(this.keyword));
-				p.HasFinished = true;
-
-				ex = null;
-				return (true); // Truly empty arg () is OK.
-			}
-			else
-			{
-				ex = new FormatException("Empty interjacent arguments are no permitted.");
-				return (false);
-			}
-		}
-
-		private bool SubsequentArgIsAllowed(Keyword k, int currentArgsCount, out FormatException ex)
+		private bool ArgIsAllowed(Keyword k, int currentArgsCount, ref FormatException ex)
 		{
 			int maxArgsCount = ((KeywordEx)k).GetMaxArgsCount();
 
-			if (currentArgsCount < maxArgsCount)
-			{
-				ex = null;
-				return (true);
-			}
-			else
+			if (currentArgsCount >= maxArgsCount)
 			{
 				var sb = new StringBuilder();
 				sb.Append("Keyword '");
 				sb.Append(this.keyword);
-				sb.Append("' only permits up to ");
-				sb.Append(maxArgsCount.ToString(CultureInfo.InvariantCulture));
-				sb.Append(" arguments.");
+
+				if (currentArgsCount == 0)
+				{
+					sb.Append("' does not support arguments.");
+				}
+				else
+				{
+					sb.Append("' only supports up to ");
+					sb.Append(maxArgsCount.ToString(CultureInfo.InvariantCulture));
+					sb.Append(" arguments.");
+				}
 
 				ex = new FormatException(sb.ToString());
 				return (false);
 			}
+			else
+			{
+				return (true);
+			}
 		}
 
-		private bool TryParseAndValidate(string s, out int result, out FormatException ex)
+		protected virtual bool TryParseAndValidate(string s, out int result, ref FormatException ex)
 		{
 			var me = (KeywordEx)this.keyword;
 
 			int i = 0;
-			if (this.previousArgs != null)
+			if (!ArrayEx.IsNullOrEmpty(this.previousArgs))
 				i = this.previousArgs.Length;
 
-			if ((!int.TryParse(s, out result)) &&
+			if ((!TryParseNumericItem(s, this.radix, out result)) &&
 			    (!me.Validate(i, result)))
 			{
 				var sb = new StringBuilder();
@@ -380,9 +421,94 @@ namespace YAT.Domain.Parser
 			}
 			else
 			{
-				ex = null;
 				return (true);
 			}
+		}
+
+		protected static bool TryParseNumericItem(string s, Radix radix, out int result)
+		{
+			bool isNegative = false;
+
+			switch (s[0])
+			{
+				case '+': s = s.Remove(0, 1);                    break;
+				case '-': s = s.Remove(0, 1); isNegative = true; break;
+			}
+
+			switch (radix)
+			{
+				case Radix.Bin:
+				{
+					ulong value;
+					if (UInt64Ex.TryParseBinary(s, out value))
+					{
+						if (value <= int.MaxValue)
+						{
+							result = (int)value;
+
+							if (isNegative)
+								result = -result;
+
+							return (true);
+						}
+					}
+
+					break;
+				}
+
+				case Radix.Oct:
+				{
+					ulong value;
+					if (UInt64Ex.TryParseOctal(s, out value))
+					{
+						if (value <= int.MaxValue)
+						{
+							result = (int)value;
+
+							if (isNegative)
+								result = -result;
+
+							return (true);
+						}
+					}
+
+					break;
+				}
+
+				case Radix.Dec:
+				{
+					if (int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out result))
+					{
+						if (isNegative)
+							result = -result;
+
+						return (true);
+					}
+
+					break;
+				}
+
+				case Radix.Hex:
+				{
+					if (int.TryParse(s, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out result))
+					{
+						if (isNegative)
+							result = -result;
+
+						return (true);
+					}
+
+					break; // Break switch-case.
+				}
+
+				default:
+				{
+					throw (new ArgumentOutOfRangeException(MessageHelper.InvalidExecutionPreamble + "'" + radix + "' radix is not supported for numeric values!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+
+			result = 0;
+			return (false);
 		}
 	}
 }

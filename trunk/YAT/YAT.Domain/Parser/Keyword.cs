@@ -25,7 +25,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Text.RegularExpressions;
 
 using MKY;
 
@@ -54,7 +53,13 @@ namespace YAT.Domain.Parser
 		OutputBreakOff,
 		OutputBreakToggle,
 
-		ZzForInternalTesting
+		/// <summary>
+		/// A special keyword for internal testing (= FIT).
+		/// </summary>
+		/// <remarks>
+		/// Prepended "Z_" to get it at the bottom of a selection list.
+		/// </remarks>
+		Z_FIT
 	}
 
 	#pragma warning restore 1591
@@ -85,7 +90,7 @@ namespace YAT.Domain.Parser
 		private const string OutputBreakOff_string    = "OutputBreakOff";
 		private const string OutputBreakToggle_string = "OutputBreakToggle";
 
-		private const string ZzForInternalTesting_string = "ZzForInternalTesting";
+		private const string Z_FIT_string = "Z_FIT"; // = for internal testing.
 
 		#endregion
 
@@ -128,7 +133,7 @@ namespace YAT.Domain.Parser
 				case Keyword.OutputBreakOff:    return (OutputBreakOff_string);
 				case Keyword.OutputBreakToggle: return (OutputBreakToggle_string);
 
-				case Keyword.ZzForInternalTesting: return (ZzForInternalTesting_string);
+				case Keyword.Z_FIT: return (Z_FIT_string);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -161,7 +166,7 @@ namespace YAT.Domain.Parser
 			a.Add(new KeywordEx(Keyword.OutputBreakOff));
 			a.Add(new KeywordEx(Keyword.OutputBreakToggle));
 
-			// Do not add 'ZzForInternalTesting'.
+			// Do not add 'Z_FIT' (= for internal testing).
 
 			return (a.ToArray());
 		}
@@ -178,7 +183,7 @@ namespace YAT.Domain.Parser
 				case Keyword.LineInterval: return (1);
 				case Keyword.LineRepeat:   return (1);
 
-				case Keyword.ZzForInternalTesting: return (3);
+				case Keyword.Z_FIT:        return (3); // = for internal testing.
 
 				default: return (0);
 			}
@@ -196,7 +201,7 @@ namespace YAT.Domain.Parser
 				case Keyword.LineInterval: return (argValue >= 1); // Attention, a similar validation exists in 'View.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.LineRepeat:   return ((argValue >= 1) || (argValue == Settings.SendSettings.LineRepeatInfinite));
 				                                                   // Attention, a similar validation exists in 'View.AdvancedTerminalSettings'. Changes here may have to be applied there too.
-				case Keyword.ZzForInternalTesting:
+				case Keyword.Z_FIT: // = for internal testing.
 				{
 					switch (argIndex)
 					{
@@ -232,7 +237,7 @@ namespace YAT.Domain.Parser
 				case Keyword.OutputBreakOff:    return (NoArgSupportedMessage);
 				case Keyword.OutputBreakToggle: return (NoArgSupportedMessage);
 
-				case Keyword.ZzForInternalTesting:
+				case Keyword.Z_FIT: // = for internal testing.
 				{
 					switch (argIndex)
 					{
@@ -293,12 +298,7 @@ namespace YAT.Domain.Parser
 			if (s != null)
 				s = s.Trim();
 
-			if (string.IsNullOrEmpty(s))
-			{
-				result = new KeywordEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Clear_string))
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Clear_string))
 			{
 				result = Keyword.Clear;
 				return (true);
@@ -348,9 +348,9 @@ namespace YAT.Domain.Parser
 				result = Keyword.OutputBreakToggle;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, ZzForInternalTesting_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Z_FIT_string))
 			{
-				result = Keyword.ZzForInternalTesting;
+				result = Keyword.Z_FIT;
 				return (true);
 			}
 			else // Invalid string!

@@ -148,7 +148,7 @@ namespace YAT.Domain.Parser
 				if (!TryParseContiguousToRadix(parser, out result, ref formatException))
 					return (false);
 
-				if (writeOnSuccess)
+				if (writeOnSuccess && (result != null) && (result.Length > 0))
 				{
 					foreach (byte b in result)
 						parser.BytesWriter.WriteByte(b);
@@ -163,7 +163,7 @@ namespace YAT.Domain.Parser
 				if (!TryParseContiguousToKeyword(parser, out result, ref formatException))
 					return (false);
 
-				if (writeOnSuccess)
+				if (writeOnSuccess && (result != null) && (result.Keyword != Keyword.None))
 					parser.CommitResult(result);
 			}
 
