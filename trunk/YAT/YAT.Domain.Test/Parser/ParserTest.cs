@@ -388,12 +388,16 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(Clear)",               Domain.Parser.Keyword.Clear,             null));
 				yield return (new TestCaseData(@"\!(Clear())",             Domain.Parser.Keyword.Clear,             null));
 				yield return (new TestCaseData(@"\!(Delay)",               Domain.Parser.Keyword.Delay,             null));
+				yield return (new TestCaseData(@"\!(Delay())",             Domain.Parser.Keyword.Delay,             null));
 				yield return (new TestCaseData(@"\!(Delay(10))",           Domain.Parser.Keyword.Delay,             new int[] { 10 }));
 				yield return (new TestCaseData(@"\!(LineDelay)",           Domain.Parser.Keyword.LineDelay,         null));
+				yield return (new TestCaseData(@"\!(LineDelay())",         Domain.Parser.Keyword.LineDelay,         null));
 				yield return (new TestCaseData(@"\!(LineDelay(10))",       Domain.Parser.Keyword.LineDelay,         new int[] { 10 }));
 				yield return (new TestCaseData(@"\!(LineInterval)",        Domain.Parser.Keyword.LineInterval,      null));
+				yield return (new TestCaseData(@"\!(LineInterval())",      Domain.Parser.Keyword.LineInterval,      null));
 				yield return (new TestCaseData(@"\!(LineInterval(10))",    Domain.Parser.Keyword.LineInterval,      new int[] { 10 }));
 				yield return (new TestCaseData(@"\!(LineRepeat)",          Domain.Parser.Keyword.LineRepeat,        null));
+				yield return (new TestCaseData(@"\!(LineRepeat())",        Domain.Parser.Keyword.LineRepeat,        null));
 				yield return (new TestCaseData(@"\!(LineRepeat(10))",      Domain.Parser.Keyword.LineRepeat,        new int[] { 10 }));
 				yield return (new TestCaseData(@"\!(Eol)",                 Domain.Parser.Keyword.Eol,               null));
 				yield return (new TestCaseData(@"\!(Eol())",               Domain.Parser.Keyword.Eol,               null));
@@ -405,6 +409,9 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(OutputBreakOff())",    Domain.Parser.Keyword.OutputBreakOff,    null));
 				yield return (new TestCaseData(@"\!(OutputBreakToggle)",   Domain.Parser.Keyword.OutputBreakToggle, null));
 				yield return (new TestCaseData(@"\!(OutputBreakToggle())", Domain.Parser.Keyword.OutputBreakToggle, null));
+				yield return (new TestCaseData(@"\!(ReportID)",            Domain.Parser.Keyword.ReportId,          null));
+				yield return (new TestCaseData(@"\!(ReportID())",          Domain.Parser.Keyword.ReportId,          null));
+				yield return (new TestCaseData(@"\!(ReportID(0xAA))",      Domain.Parser.Keyword.ReportId,          new int[] { 0xAA }));
 
 				// Whitespace:
 				yield return (new TestCaseData(@"\!( Delay)",            Domain.Parser.Keyword.Delay, null));

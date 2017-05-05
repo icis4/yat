@@ -52,6 +52,7 @@ namespace YAT.Domain.Parser
 		OutputBreakOn,
 		OutputBreakOff,
 		OutputBreakToggle,
+		ReportId,
 
 		/// <summary>
 		/// A special keyword for internal testing (= FIT).
@@ -89,6 +90,7 @@ namespace YAT.Domain.Parser
 		private const string OutputBreakOn_string     = "OutputBreakOn";
 		private const string OutputBreakOff_string    = "OutputBreakOff";
 		private const string OutputBreakToggle_string = "OutputBreakToggle";
+		private const string ReportId_string          = "ReportID"; // "ID" instead of "Id" for better readability.
 
 		private const string Z_FIT_string = "Z_FIT"; // = for internal testing.
 
@@ -132,6 +134,7 @@ namespace YAT.Domain.Parser
 				case Keyword.OutputBreakOn:     return (OutputBreakOn_string);
 				case Keyword.OutputBreakOff:    return (OutputBreakOff_string);
 				case Keyword.OutputBreakToggle: return (OutputBreakToggle_string);
+				case Keyword.ReportId:          return (ReportId_string);
 
 				case Keyword.Z_FIT: return (Z_FIT_string);
 
@@ -165,6 +168,7 @@ namespace YAT.Domain.Parser
 			a.Add(new KeywordEx(Keyword.OutputBreakOn));
 			a.Add(new KeywordEx(Keyword.OutputBreakOff));
 			a.Add(new KeywordEx(Keyword.OutputBreakToggle));
+			a.Add(new KeywordEx(Keyword.ReportId));
 
 			// Do not add 'Z_FIT' (= for internal testing).
 
@@ -182,6 +186,7 @@ namespace YAT.Domain.Parser
 				case Keyword.LineDelay:    return (1);
 				case Keyword.LineInterval: return (1);
 				case Keyword.LineRepeat:   return (1);
+				case Keyword.ReportId:     return (1);
 
 				case Keyword.Z_FIT:        return (3); // = for internal testing.
 
@@ -196,11 +201,14 @@ namespace YAT.Domain.Parser
 		{
 			switch ((Keyword)UnderlyingEnum)
 			{
-				case Keyword.Delay:        return (argValue >= 1); // Attention, a similar validation exists in 'View.AdvancedTerminalSettings'. Changes here may have to be applied there too.
-				case Keyword.LineDelay:    return (argValue >= 1); // Attention, a similar validation exists in 'View.AdvancedTerminalSettings'. Changes here may have to be applied there too.
-				case Keyword.LineInterval: return (argValue >= 1); // Attention, a similar validation exists in 'View.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.Delay:        return (argValue >= 1); // Attention, a similar validation exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.LineDelay:    return (argValue >= 1); // Attention, a similar validation exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.LineInterval: return (argValue >= 1); // Attention, a similar validation exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+
 				case Keyword.LineRepeat:   return ((argValue >= 1) || (argValue == Settings.SendSettings.LineRepeatInfinite));
-				                                                   // Attention, a similar validation exists in 'View.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				                                                   // Attention, a similar validation exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.ReportId:     return ((argValue >= 0) && (argValue <= 255));
+				                                                   // Attention, a similar validation exists in 'View.Controls.UsbSerialHidDeviceSettings'. Changes here may have to be applied there too.
 				case Keyword.Z_FIT: // = for internal testing.
 				{
 					switch (argIndex)
@@ -227,15 +235,16 @@ namespace YAT.Domain.Parser
 			switch ((Keyword)UnderlyingEnum)
 			{
 				case Keyword.Clear:             return (NoArgSupportedMessage);
-				case Keyword.Delay:             return ("an integer value of 1 or more indicating the delay in milliseconds");    // Attention, a similar message exists in 'View.AdvancedTerminalSettings'. Changes here may have to be applied there too.
-				case Keyword.LineDelay:         return ("an integer value of 1 or more indicating the delay in milliseconds");    // Attention, a similar message exists in 'View.AdvancedTerminalSettings'. Changes here may have to be applied there too.
-				case Keyword.LineInterval:      return ("an integer value of 1 or more indicating the interval in milliseconds"); // Attention, a similar message exists in 'View.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.Delay:             return ("an integer value of 1 or more indicating the delay in milliseconds");    // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.LineDelay:         return ("an integer value of 1 or more indicating the delay in milliseconds");    // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.LineInterval:      return ("an integer value of 1 or more indicating the interval in milliseconds"); // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.LineRepeat:        return ("an integer value of 1 or more indicating the number of repetitions, or " + Settings.SendSettings.LineRepeatInfinite + " for infinite repetitions");
-				case Keyword.Eol:               return (NoArgSupportedMessage);                                                   // Attention, a similar message exists in 'View.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.Eol:               return (NoArgSupportedMessage);                                                   // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.NoEol:             return (NoArgSupportedMessage);
 				case Keyword.OutputBreakOn:     return (NoArgSupportedMessage);
 				case Keyword.OutputBreakOff:    return (NoArgSupportedMessage);
 				case Keyword.OutputBreakToggle: return (NoArgSupportedMessage);
+				case Keyword.ReportId:          return ("an integer value of 1 or more indicating the interval in milliseconds"); // Attention, a similar message exists in 'View.Controls.UsbSerialHidDeviceSettings'. Changes here may have to be applied there too.
 
 				case Keyword.Z_FIT: // = for internal testing.
 				{
@@ -346,6 +355,11 @@ namespace YAT.Domain.Parser
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, OutputBreakToggle_string))
 			{
 				result = Keyword.OutputBreakToggle;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, ReportId_string))
+			{
+				result = Keyword.ReportId;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Z_FIT_string))

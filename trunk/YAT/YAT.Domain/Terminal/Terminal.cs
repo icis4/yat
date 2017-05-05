@@ -1039,7 +1039,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		protected virtual void ProcessParserResult(Parser.Result[] result, bool sendEol = false)
+		protected virtual void ProcessParserResult(Parser.Result[] results, bool sendEol = false)
 		{
 			bool performLineRepeat    = false; // \remind For binary terminals, this is rather a 'PacketRepeat'.
 			bool lineRepeatIsInfinite = (TerminalSettings.Send.DefaultLineRepeat == Settings.SendSettings.LineRepeatInfinite);
@@ -1058,23 +1058,23 @@ namespace YAT.Domain
 
 				// --- Process the line/packet ---
 
-				foreach (Parser.Result item in result)
+				foreach (Parser.Result result in results)
 				{
-					var bi = (item as Parser.BytesResult);
-					if (bi != null)
+					var byteResult = (result as Parser.BytesResult);
+					if (byteResult != null)
 					{
 						// Raise the 'IOChanged' event if a large chunk is about to be sent:
-						if (this.ioChangedEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(bi.Bytes.Length))
+						if (this.ioChangedEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(byteResult.Bytes.Length))
 							OnIOChanged(EventArgs.Empty);
 
-						ForwardDataToRawTerminal(bi.Bytes);
+						ForwardDataToRawTerminal(byteResult.Bytes);
 					}
 					else // if keyword result (will not occur if keywords are disabled while parsing)
 					{
-						var ki = (item as Parser.KeywordResult);
-						if (ki != null)
+						var keywordResult = (result as Parser.KeywordResult);
+						if (keywordResult != null)
 						{
-							switch (ki.Keyword)
+							switch (keywordResult.Keyword)
 							{
 								// Process line related keywords:
 								case Parser.Keyword.NoEol: // \remind Only needed for text terminals.
@@ -1087,8 +1087,8 @@ namespace YAT.Domain
 								{
 									performLineDelay = true;
 
-									if (!ArrayEx.IsNullOrEmpty(ki.Args))
-										lineDelay = ki.Args[0];
+									if (!ArrayEx.IsNullOrEmpty(keywordResult.Args))
+										lineDelay = keywordResult.Args[0];
 
 									break;
 								}
@@ -1097,8 +1097,8 @@ namespace YAT.Domain
 								{
 									performLineInterval = true;
 
-									if (!ArrayEx.IsNullOrEmpty(ki.Args))
-										lineInterval = ki.Args[0];
+									if (!ArrayEx.IsNullOrEmpty(keywordResult.Args))
+										lineInterval = keywordResult.Args[0];
 
 									break;
 								}
@@ -1109,10 +1109,10 @@ namespace YAT.Domain
 									{
 										performLineRepeat = true;
 
-										if (!ArrayEx.IsNullOrEmpty(ki.Args))
+										if (!ArrayEx.IsNullOrEmpty(keywordResult.Args))
 										{
-											lineRepeatIsInfinite = (ki.Args[0] == Settings.SendSettings.LineRepeatInfinite);
-											lineRepeatRemaining  =  ki.Args[0];
+											lineRepeatIsInfinite = (keywordResult.Args[0] == Settings.SendSettings.LineRepeatInfinite);
+											lineRepeatRemaining  =  keywordResult.Args[0];
 										}
 									}
 
@@ -1122,7 +1122,7 @@ namespace YAT.Domain
 								// Process in-line keywords:
 								default:
 								{
-									ProcessInLineKeywords(ki);
+									ProcessInLineKeywords(keywordResult);
 									break;
 								}
 							}
@@ -1231,6 +1231,24 @@ namespace YAT.Domain
 					{
 						MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.ToggleOutputBreak();
+					}
+					else
+					{
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports"));
+					}
+					break;
+				}
+
+				case Parser.Keyword.ReportId:
+				{
+					if (this.terminalSettings.IO.IOType == IOType.UsbSerialHid)
+					{
+						byte reportId = this.terminalSettings.IO.UsbSerialHidDevice.ReportFormat.Id;
+						if (!ArrayEx.IsNullOrEmpty(result.Args))
+							reportId = (byte)result.Args[0];
+
+						MKY.IO.Usb.SerialHidDevice device = (MKY.IO.Usb.SerialHidDevice)this.UnderlyingIOInstance;
+						//device.SetReportId(reportId); ONGOING
 					}
 					else
 					{
