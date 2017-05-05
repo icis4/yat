@@ -259,7 +259,7 @@ namespace YAT.View.Controls
 			if (!this.isSettingControls)
 			{
 				byte id;
-				if (byte.TryParse(textBox_Id.Text, out id))
+				if (byte.TryParse(textBox_Id.Text, out id)) // Attention, a similar validation exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
 				{
 					this.reportFormat.Id = id;
 					SetControls();
