@@ -93,6 +93,24 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public const bool MatchSerialDefault = true;
 
+		/// <summary></summary>
+		public static readonly SerialHidReportFormat ReportFormatDefault = new SerialHidReportFormat
+		(
+			SerialHidReportFormat.UseIdDefault,
+			SerialHidReportFormat.IdDefault,
+			SerialHidReportFormat.PrependPayloadByteLengthDefault,
+			SerialHidReportFormat.AppendTerminatingZeroDefault,
+			SerialHidReportFormat.FillLastReportDefault
+		);
+
+		/// <summary></summary>
+		public static readonly SerialHidRxIdUsage RxIdUsageDefault = new SerialHidRxIdUsage
+		(
+			SerialHidRxIdUsage.SeparateRxIdDefault,
+			SerialHidRxIdUsage.AnyRxIdDefault,
+			SerialHidRxIdUsage.RxIdDefault
+		);
+
 		/// <summary>
 		/// By default, the USB device is automatically opened as soon as it gets connected to the
 		/// computer, given this device object is up and running.
@@ -300,8 +318,8 @@ namespace MKY.IO.Usb
 
 		private bool matchSerial = MatchSerialDefault;
 
-		private SerialHidReportFormat reportFormat = new SerialHidReportFormat();
-		private SerialHidRxIdUsage    rxIdUsage    = new SerialHidRxIdUsage();
+		private SerialHidReportFormat reportFormat = ReportFormatDefault;
+		private SerialHidRxIdUsage    rxIdUsage    = RxIdUsageDefault;
 
 		private bool autoOpen = AutoOpenDefault;
 
@@ -487,6 +505,23 @@ namespace MKY.IO.Usb
 				AssertNotDisposed();
 
 				this.reportFormat = value;
+			}
+		}
+
+		/// <summary></summary>
+		public virtual byte ActiveReportId
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.reportFormat.Id);
+			}
+			set
+			{
+				AssertNotDisposed();
+
+				this.reportFormat.Id = value;
 			}
 		}
 
