@@ -50,6 +50,12 @@ namespace MKY.IO.Serial.Usb
 		public const bool MatchSerialDefault = IO.Usb.SerialHidDevice.MatchSerialDefault;
 
 		/// <summary></summary>
+		public static readonly SerialHidReportFormat ReportFormatDefault = IO.Usb.SerialHidDevice.ReportFormatDefault;
+
+		/// <summary></summary>
+		public static readonly SerialHidRxIdUsage RxIdUsageDefault = IO.Usb.SerialHidDevice.RxIdUsageDefault;
+
+		/// <summary></summary>
 		public const SerialHidFlowControl FlowControlDefault = SerialHidFlowControl.None;
 
 		/// <summary></summary>
@@ -109,8 +115,8 @@ namespace MKY.IO.Serial.Usb
 
 			MatchSerial  = rhs.MatchSerial;
 
-			ReportFormat = new SerialHidReportFormat(rhs.ReportFormat);
-			RxIdUsage    = new SerialHidRxIdUsage   (rhs.RxIdUsage);
+			ReportFormat = rhs.ReportFormat;
+			RxIdUsage    = rhs.RxIdUsage;
 
 			FlowControl = rhs.FlowControl;
 			AutoOpen    = rhs.AutoOpen;
@@ -128,8 +134,8 @@ namespace MKY.IO.Serial.Usb
 			DeviceInfo   = new DeviceInfo(); // Required for XML serialization.
 			MatchSerial  = MatchSerialDefault;
 
-			ReportFormat = new SerialHidReportFormat();
-			RxIdUsage    = new SerialHidRxIdUsage();
+			ReportFormat = ReportFormatDefault;
+			RxIdUsage    = RxIdUsageDefault;
 
 			FlowControl  = FlowControlDefault;
 			AutoOpen     = AutoOpenDefault;

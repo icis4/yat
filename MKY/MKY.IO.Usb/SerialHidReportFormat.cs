@@ -22,16 +22,9 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-#region Using
-//==================================================================================================
-// Using
-//==================================================================================================
-
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
-
-#endregion
 
 namespace MKY.IO.Usb
 {
@@ -39,7 +32,7 @@ namespace MKY.IO.Usb
 	/// Serial HID report format.
 	/// </summary>
 	[Serializable]
-	public class SerialHidReportFormat : IEquatable<SerialHidReportFormat>
+	public struct SerialHidReportFormat : IEquatable<SerialHidReportFormat>
 	{
 		#region Constants
 		//==========================================================================================
@@ -69,31 +62,30 @@ namespace MKY.IO.Usb
 
 		#endregion
 
-		#region Fields
-		//==========================================================================================
-		// Fields
-		//==========================================================================================
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[XmlElement("UseId")]
+		public bool UseId;
 
-		private bool useId;
-		private byte id;
-		private bool prependPayloadByteLength;
-		private bool appendTerminatingZero;
-		private bool fillLastReport;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[XmlElement("Id")]
+		public byte Id;
 
-		#endregion
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[XmlElement("PrependPayloadByteLength")]
+		public bool PrependPayloadByteLength;
 
-		#region Object Lifetime
-		//==========================================================================================
-		// Object Lifetime
-		//==========================================================================================
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[XmlElement("AppendTerminatingZero")]
+		public bool AppendTerminatingZero;
 
-		/// <summary>
-		/// Creates new format with defaults.
-		/// </summary>
-		public SerialHidReportFormat()
-		{
-			SetDefaults();
-		}
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[XmlElement("FillLastReport")]
+		public bool FillLastReport;
 
 		/// <summary>
 		/// Creates new format with specified arguments.
@@ -115,76 +107,10 @@ namespace MKY.IO.Usb
 			FillLastReport           = fillLastReport;
 		}
 
-		/// <summary>
-		/// Creates new format from <paramref name="rhs"/>.
-		/// </summary>
-		public SerialHidReportFormat(SerialHidReportFormat rhs)
-		{
-			UseId                    = rhs.UseId;
-			Id                       = rhs.Id;
-			PrependPayloadByteLength = rhs.PrependPayloadByteLength;
-			AppendTerminatingZero    = rhs.AppendTerminatingZero;
-			FillLastReport           = rhs.FillLastReport;
-		}
-
-		/// <summary>
-		/// Sets default format.
-		/// </summary>
-		protected void SetDefaults()
-		{
-			UseId                    = UseIdDefault;
-			Id                       = IdDefault;
-			PrependPayloadByteLength = PrependPayloadByteLengthDefault;
-			AppendTerminatingZero    = AppendTerminatingZeroDefault;
-			FillLastReport           = FillLastReportDefault;
-		}
-
-		#endregion
-
 		#region Properties
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
-
-		/// <summary></summary>
-		[XmlElement("UseId")]
-		public bool UseId
-		{
-			get { return (this.useId); }
-			set { this.useId = value;  }
-		}
-
-		/// <summary></summary>
-		[XmlElement("Id")]
-		public byte Id
-		{
-			get { return (this.id); }
-			set { this.id = value;  }
-		}
-
-		/// <summary></summary>
-		[XmlElement("PrependPayloadByteLength")]
-		public bool PrependPayloadByteLength
-		{
-			get { return (this.prependPayloadByteLength); }
-			set { this.prependPayloadByteLength = value;  }
-		}
-
-		/// <summary></summary>
-		[XmlElement("AppendTerminatingZero")]
-		public bool AppendTerminatingZero
-		{
-			get { return (this.appendTerminatingZero); }
-			set { this.appendTerminatingZero = value;  }
-		}
-
-		/// <summary></summary>
-		[XmlElement("FillLastReport")]
-		public bool FillLastReport
-		{
-			get { return (this.fillLastReport); }
-			set { this.fillLastReport = value;  }
-		}
 
 		/// <summary>
 		/// Returns the byte length of the report header, depending on the given settings.
@@ -216,6 +142,25 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override string ToString()
+		{
+			return
+			(
+				UseId                    + ", " +
+				Id                       + ", " +
+				PrependPayloadByteLength + ", " +
+				AppendTerminatingZero    + ", " +
+				FillLastReport
+			);
+		}
+
+		/// <summary>
 		/// Serves as a hash function for a particular type.
 		/// </summary>
 		/// <remarks>
@@ -243,7 +188,10 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as SerialHidReportFormat));
+			if (obj is SerialHidReportFormat)
+				return (Equals((SerialHidReportFormat)obj));
+			else
+				return (false);
 		}
 
 		/// <summary>
@@ -255,10 +203,6 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public bool Equals(SerialHidReportFormat other)
 		{
-			if (ReferenceEquals(other, null)) return (false);
-			if (ReferenceEquals(this, other)) return (true);
-			if (GetType() != other.GetType()) return (false);
-
 			return
 			(
 				UseId                   .Equals(other.UseId                   ) &&
@@ -269,18 +213,17 @@ namespace MKY.IO.Usb
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Determines whether the two specified objects have value equality.
+		/// </summary>
 		public static bool operator ==(SerialHidReportFormat lhs, SerialHidReportFormat rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
-			object obj = (object)lhs; // Operators are not virtual! Calling object.Equals() ensures
-			return (obj.Equals(rhs)); // that a potential virtual <Derived>.Equals() is called.
+			return (lhs.Equals(rhs));
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Determines whether the two specified objects have value inequality.
+		/// </summary>
 		public static bool operator !=(SerialHidReportFormat lhs, SerialHidReportFormat rhs)
 		{
 			return (!(lhs == rhs));

@@ -141,8 +141,7 @@ namespace MKY.CommandLine
 		/// Gets a value indicating whether forward slashes are allowed as option indicator.
 		/// This applies to Windows systems.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Must be readonly to allow evaluation of system specific path chars.")]
-		public readonly bool AllowForwardSlash = (Array.IndexOf(System.IO.Path.GetInvalidPathChars(), '/') < 0);
+		public static readonly bool AllowForwardSlash = (Array.IndexOf(System.IO.Path.GetInvalidPathChars(), '/') < 0);
 
 		#endregion
 

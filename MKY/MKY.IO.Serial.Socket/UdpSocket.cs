@@ -80,8 +80,8 @@ namespace MKY.IO.Serial.Socket
 
 			public AsyncReceiveState(System.Net.IPEndPoint localFilterEndPoint, System.Net.Sockets.UdpClient socket)
 			{
-				this.LocalFilterEndPoint = localFilterEndPoint;
-				this.Socket = socket;
+				LocalFilterEndPoint = localFilterEndPoint;
+				Socket              = socket;
 			}
 		}
 
