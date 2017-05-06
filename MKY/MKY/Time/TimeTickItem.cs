@@ -148,7 +148,7 @@ namespace MKY.Time
 		}
 
 		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
+		/// Determines whether the two specified objects have value equality.
 		/// </summary>
 		public static bool operator ==(TimeTickItem<T> lhs, TimeTickItem<T> rhs)
 		{
@@ -156,7 +156,7 @@ namespace MKY.Time
 		}
 
 		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
+		/// Determines whether the two specified objects have value inequality.
 		/// </summary>
 		public static bool operator !=(TimeTickItem<T> lhs, TimeTickItem<T> rhs)
 		{

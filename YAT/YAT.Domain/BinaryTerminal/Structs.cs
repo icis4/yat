@@ -107,7 +107,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
+		/// Determines whether the two specified objects have value equality.
 		/// </summary>
 		public static bool operator ==(BinaryLengthLineBreak lhs, BinaryLengthLineBreak rhs)
 		{
@@ -115,7 +115,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
+		/// Determines whether the two specified objects have value inequality.
 		/// </summary>
 		public static bool operator !=(BinaryLengthLineBreak lhs, BinaryLengthLineBreak rhs)
 		{
@@ -199,7 +199,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
+		/// Determines whether the two specified objects have value equality.
 		/// </summary>
 		public static bool operator ==(BinarySequenceLineBreak lhs, BinarySequenceLineBreak rhs)
 		{
@@ -207,7 +207,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
+		/// Determines whether the two specified objects have value inequality.
 		/// </summary>
 		public static bool operator !=(BinarySequenceLineBreak lhs, BinarySequenceLineBreak rhs)
 		{
@@ -291,7 +291,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
+		/// Determines whether the two specified objects have value equality.
 		/// </summary>
 		public static bool operator ==(BinaryTimedLineBreak lhs, BinaryTimedLineBreak rhs)
 		{
@@ -299,7 +299,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
+		/// Determines whether the two specified objects have value inequality.
 		/// </summary>
 		public static bool operator !=(BinaryTimedLineBreak lhs, BinaryTimedLineBreak rhs)
 		{

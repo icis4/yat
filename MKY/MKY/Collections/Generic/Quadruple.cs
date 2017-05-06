@@ -175,7 +175,7 @@ namespace MKY.Collections.Generic
 		}
 
 		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
+		/// Determines whether the two specified objects have value equality.
 		/// </summary>
 		public static bool operator ==(Quadruple<T1, T2, T3, T4> lhs, Quadruple<T1, T2, T3, T4> rhs)
 		{
@@ -183,7 +183,7 @@ namespace MKY.Collections.Generic
 		}
 
 		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
+		/// Determines whether the two specified objects have value inequality.
 		/// </summary>
 		public static bool operator !=(Quadruple<T1, T2, T3, T4> lhs, Quadruple<T1, T2, T3, T4> rhs)
 		{

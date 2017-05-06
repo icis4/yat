@@ -146,8 +146,8 @@ namespace YAT.Model.Settings
 
 			UsbSerialHidDeviceInfo   = null;
 			UsbSerialHidMatchSerial  = MKY.IO.Serial.Usb.SerialHidDeviceSettings.MatchSerialDefault;
-			UsbSerialHidReportFormat = new MKY.IO.Usb.SerialHidReportFormat();
-			UsbSerialHidRxIdUsage    = new MKY.IO.Usb.SerialHidRxIdUsage();
+			UsbSerialHidReportFormat = MKY.IO.Serial.Usb.SerialHidDeviceSettings.ReportFormatDefault();
+			UsbSerialHidRxIdUsage    = MKY.IO.Serial.Usb.SerialHidDeviceSettings.RxIdUsageDefault();
 			UsbSerialHidFlowControl  = MKY.IO.Serial.Usb.SerialHidDeviceSettings.FlowControlDefault;
 			UsbSerialHidAutoOpen     = MKY.IO.Serial.Usb.SerialHidDeviceSettings.AutoOpenDefault;
 

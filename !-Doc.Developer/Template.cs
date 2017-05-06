@@ -322,7 +322,7 @@ namespace YAT/*.<TODO>*/
 		#endregion
 	}
 
-	public class TODO : IEquatable<TODO>
+	public class /* or struct */ TODO : IEquatable<TODO>
 	{
 		#region Object Members
 		//==========================================================================================
@@ -414,7 +414,8 @@ namespace YAT/*.<TODO>*/
 		//     and similar performance characteristics."
 		// ----------------------------------------------------------------------------------------
 		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
+		/// Determines whether the two specified objects have reference or value equality. !!! For reference types !!!
+		/// Determines whether the two specified objects have value equality.              !!! For value types !!!
 		/// </summary>
 		public static bool operator ==(TODO lhs, TODO rhs)
 		{
@@ -430,7 +431,8 @@ namespace YAT/*.<TODO>*/
 		}
 
 		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
+		/// Determines whether the two specified objects have reference and value inequality. !!! For reference types !!!
+		/// Determines whether the two specified objects have value inequality.              !!! For value types !!!
 		/// </summary>
 		public static bool operator !=(TODO lhs, TODO rhs)
 		{

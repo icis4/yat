@@ -1206,7 +1206,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports"));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports."));
 					}
 					break;
 				}
@@ -1220,7 +1220,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports"));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports."));
 					}
 					break;
 				}
@@ -1234,7 +1234,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports"));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports."));
 					}
 					break;
 				}
@@ -1248,11 +1248,11 @@ namespace YAT.Domain
 							reportId = (byte)result.Args[0];
 
 						MKY.IO.Usb.SerialHidDevice device = (MKY.IO.Usb.SerialHidDevice)this.UnderlyingIOInstance;
-						//device.SetReportId(reportId); ONGOING
+						device.ActiveReportId = reportId;
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports"));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Report ID can only be used with USB Ser/HID."));
 					}
 					break;
 				}
@@ -1263,7 +1263,7 @@ namespace YAT.Domain
 					if (ElementsAreSeparate(IODirection.Tx))
 						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.DataSpace());
 
-					OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo((Parser.KeywordEx)result.Keyword + " keyword is not yet supported"));
+					OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(MessageHelper.InvalidExecutionPreamble + "The '" + (Parser.KeywordEx)result.Keyword + "' keyword is unknown! " + MessageHelper.SubmitBug));
 					break;
 				}
 			}
