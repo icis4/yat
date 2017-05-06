@@ -36,76 +36,78 @@ namespace YAT.Domain
 	{
 		public static IIOProvider CreateIO(Settings.IOSettings settings)
 		{
+			var clone = new Settings.IOSettings(settings); // Clone settings to ensure decoupling of domain and I/O instance.
+
 			switch (settings.IOType)
 			{
 				case IOType.SerialPort:
 				{
-					return (new SerialPort(settings.SerialPort));
+					return (new SerialPort(clone.SerialPort));
 				}
 
 				case IOType.TcpClient:
 				{
 					return (new TcpClient
-						(
-						settings.Socket.RemoteHost,
-						settings.Socket.RemoteTcpPort,
-						settings.Socket.LocalInterface,
-						settings.Socket.TcpClientAutoReconnect
-						));
+					(
+						clone.Socket.RemoteHost,
+						clone.Socket.RemoteTcpPort,
+						clone.Socket.LocalInterface,
+						clone.Socket.TcpClientAutoReconnect
+					));
 				}
 
 				case IOType.TcpServer:
 				{
 					return (new TcpServer
-						(
-						settings.Socket.LocalInterface,
-						settings.Socket.LocalTcpPort
-						));
+					(
+						clone.Socket.LocalInterface,
+						clone.Socket.LocalTcpPort
+					));
 				}
 
 				case IOType.TcpAutoSocket:
 				{
 					return (new TcpAutoSocket
-						(
-						settings.Socket.RemoteHost,
-						settings.Socket.RemoteTcpPort,
-						settings.Socket.LocalInterface,
-						settings.Socket.LocalTcpPort
-						));
+					(
+						clone.Socket.RemoteHost,
+						clone.Socket.RemoteTcpPort,
+						clone.Socket.LocalInterface,
+						clone.Socket.LocalTcpPort
+					));
 				}
 
 				case IOType.UdpClient:
 				{
 					return (new UdpSocket
-						(
-						settings.Socket.RemoteHost,
-						settings.Socket.RemoteUdpPort
-						));
+					(
+						clone.Socket.RemoteHost,
+						clone.Socket.RemoteUdpPort
+					));
 				}
 
 				case IOType.UdpServer:
 				{
 					return (new UdpSocket
-						(
-						settings.Socket.LocalUdpPort,
-						settings.Socket.LocalFilter,
-						settings.Socket.UdpServerSendMode
-						));
+					(
+						clone.Socket.LocalUdpPort,
+						clone.Socket.LocalFilter,
+						clone.Socket.UdpServerSendMode
+					));
 				}
 
 				case IOType.UdpPairSocket:
 				{
 					return (new UdpSocket
-						(
-						settings.Socket.RemoteHost,
-						settings.Socket.RemoteUdpPort,
-						settings.Socket.LocalUdpPort
-						));
+					(
+						clone.Socket.RemoteHost,
+						clone.Socket.RemoteUdpPort,
+						clone.Socket.LocalUdpPort
+					));
 				}
 
 				case IOType.UsbSerialHid:
 				{
-					return (new SerialHidDevice(settings.UsbSerialHidDevice));
+					return (new SerialHidDevice(clone.UsbSerialHidDevice));
 				}
 
 				default:

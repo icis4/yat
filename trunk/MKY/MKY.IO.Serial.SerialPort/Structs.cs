@@ -117,7 +117,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
+		/// Determines whether the two specified objects have value equality.
 		/// </summary>
 		public static bool operator ==(OutputBufferSize lhs, OutputBufferSize rhs)
 		{
@@ -125,7 +125,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
+		/// Determines whether the two specified objects have value inequality.
 		/// </summary>
 		public static bool operator !=(OutputBufferSize lhs, OutputBufferSize rhs)
 		{
@@ -225,7 +225,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
+		/// Determines whether the two specified objects have value equality.
 		/// </summary>
 		public static bool operator ==(ChunkSize lhs, ChunkSize rhs)
 		{
@@ -233,7 +233,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
+		/// Determines whether the two specified objects have value inequality.
 		/// </summary>
 		public static bool operator !=(ChunkSize lhs, ChunkSize rhs)
 		{
@@ -342,7 +342,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
+		/// Determines whether the two specified objects have value equality.
 		/// </summary>
 		public static bool operator ==(SendRate lhs, SendRate rhs)
 		{
@@ -350,7 +350,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
+		/// Determines whether the two specified objects have value inequality.
 		/// </summary>
 		public static bool operator !=(SendRate lhs, SendRate rhs)
 		{
