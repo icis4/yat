@@ -104,11 +104,11 @@ namespace MKY.IO.Usb
 		);
 
 		/// <summary></summary>
-		public static readonly SerialHidRxIdUsage RxIdUsageDefault = new SerialHidRxIdUsage
+		public static readonly SerialHidRxFilterUsage RxFilterUsageDefault = new SerialHidRxFilterUsage
 		(
-			SerialHidRxIdUsage.SeparateRxIdDefault,
-			SerialHidRxIdUsage.AnyRxIdDefault,
-			SerialHidRxIdUsage.RxIdDefault
+			SerialHidRxFilterUsage.SeparateRxIdDefault,
+			SerialHidRxFilterUsage.AnyRxIdDefault,
+			SerialHidRxFilterUsage.RxIdDefault
 		);
 
 		/// <summary>
@@ -319,7 +319,7 @@ namespace MKY.IO.Usb
 		private bool matchSerial = MatchSerialDefault;
 
 		private SerialHidReportFormat reportFormat = ReportFormatDefault;
-		private SerialHidRxIdUsage    rxIdUsage    = RxIdUsageDefault;
+		private SerialHidRxFilterUsage rxFilterUsage = RxFilterUsageDefault;
 
 		private bool autoOpen = AutoOpenDefault;
 
@@ -529,19 +529,19 @@ namespace MKY.IO.Usb
 		/// Indicates how the ID is used while receiving.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
-		public virtual SerialHidRxIdUsage RxIdUsage
+		public virtual SerialHidRxFilterUsage RxFilterUsage
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.rxIdUsage);
+				return (this.rxFilterUsage);
 			}
 			set
 			{
 				AssertNotDisposed();
 
-				this.rxIdUsage = value;
+				this.rxFilterUsage = value;
 			}
 		}
 
@@ -958,16 +958,16 @@ namespace MKY.IO.Usb
 					bool acceptReport = true;
 					if (this.reportFormat.UseId)
 					{
-						if (!this.rxIdUsage.SeparateRxId) // Common case = Same ID for Tx and Rx.
+						if (!this.rxFilterUsage.SeparateRxId) // Common case = Same ID for Tx and Rx.
 						{
 							acceptReport = (input.Id == this.reportFormat.Id);
 						}
 						else // Special case = Separate ID for Rx.
 						{
-							if (this.rxIdUsage.AnyRxId)
+							if (this.rxFilterUsage.AnyRxId)
 								acceptReport = true;
 							else
-								acceptReport = (input.Id == this.rxIdUsage.RxId);
+								acceptReport = (input.Id == this.rxFilterUsage.RxId);
 						}
 					}
 

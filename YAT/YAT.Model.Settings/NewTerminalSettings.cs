@@ -55,7 +55,7 @@ namespace YAT.Model.Settings
 		private MKY.IO.Usb.DeviceInfo usbSerialHidDeviceInfo;
 		private bool usbSerialHidMatchSerial;
 		private MKY.IO.Usb.SerialHidReportFormat usbSerialHidReportFormat;
-		private MKY.IO.Usb.SerialHidRxIdUsage usbSerialHidRxIdUsage;
+		private MKY.IO.Usb.SerialHidRxFilterUsage usbSerialHidRxFilterUsage;
 		private MKY.IO.Serial.Usb.SerialHidFlowControl usbSerialHidFlowControl;
 		private bool usbSerialHidAutoOpen;
 
@@ -85,32 +85,32 @@ namespace YAT.Model.Settings
 		public NewTerminalSettings(NewTerminalSettings rhs)
 			: base(rhs)
 		{
-			TerminalType             = rhs.TerminalType;
-			IOType                   = rhs.IOType;
+			TerminalType              = rhs.TerminalType;
+			IOType                    = rhs.IOType;
 
-			SerialPortId             = rhs.SerialPortId;
-			SerialPortCommunication  = rhs.SerialPortCommunication;
-			SerialPortAliveMonitor   = rhs.SerialPortAliveMonitor;
-			SerialPortAutoReopen     = rhs.SerialPortAutoReopen;
+			SerialPortId              = rhs.SerialPortId;
+			SerialPortCommunication   = rhs.SerialPortCommunication;
+			SerialPortAliveMonitor    = rhs.SerialPortAliveMonitor;
+			SerialPortAutoReopen      = rhs.SerialPortAutoReopen;
 
-			SocketRemoteHost         = rhs.SocketRemoteHost;
-			SocketRemoteTcpPort      = rhs.SocketRemoteTcpPort;
-			SocketRemoteUdpPort      = rhs.SocketRemoteUdpPort;
-			SocketLocalInterface     = rhs.SocketLocalInterface;
-			SocketLocalFilter        = rhs.SocketLocalFilter;
-			SocketLocalTcpPort       = rhs.SocketLocalTcpPort;
-			SocketLocalUdpPort       = rhs.SocketLocalUdpPort;
-			TcpClientAutoReconnect   = rhs.TcpClientAutoReconnect;
-			UdpServerSendMode        = rhs.UdpServerSendMode;
+			SocketRemoteHost          = rhs.SocketRemoteHost;
+			SocketRemoteTcpPort       = rhs.SocketRemoteTcpPort;
+			SocketRemoteUdpPort       = rhs.SocketRemoteUdpPort;
+			SocketLocalInterface      = rhs.SocketLocalInterface;
+			SocketLocalFilter         = rhs.SocketLocalFilter;
+			SocketLocalTcpPort        = rhs.SocketLocalTcpPort;
+			SocketLocalUdpPort        = rhs.SocketLocalUdpPort;
+			TcpClientAutoReconnect    = rhs.TcpClientAutoReconnect;
+			UdpServerSendMode         = rhs.UdpServerSendMode;
 
-			UsbSerialHidDeviceInfo   = rhs.UsbSerialHidDeviceInfo;
-			UsbSerialHidMatchSerial  = rhs.UsbSerialHidMatchSerial;
-			UsbSerialHidReportFormat = rhs.UsbSerialHidReportFormat;
-			UsbSerialHidRxIdUsage    = rhs.UsbSerialHidRxIdUsage;
-			UsbSerialHidFlowControl  = rhs.UsbSerialHidFlowControl;
-			UsbSerialHidAutoOpen     = rhs.UsbSerialHidAutoOpen;
+			UsbSerialHidDeviceInfo    = rhs.UsbSerialHidDeviceInfo;
+			UsbSerialHidMatchSerial   = rhs.UsbSerialHidMatchSerial;
+			UsbSerialHidReportFormat  = rhs.UsbSerialHidReportFormat;
+			UsbSerialHidRxFilterUsage = rhs.UsbSerialHidRxFilterUsage;
+			UsbSerialHidFlowControl   = rhs.UsbSerialHidFlowControl;
+			UsbSerialHidAutoOpen      = rhs.UsbSerialHidAutoOpen;
 
-			StartTerminal            = rhs.StartTerminal;
+			StartTerminal             = rhs.StartTerminal;
 
 			ClearChanged();
 		}
@@ -126,32 +126,32 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			TerminalType             = Domain.Settings.TerminalSettings.TerminalTypeDefault;
-			IOType                   = Domain.IOType.SerialPort;
+			TerminalType              = Domain.Settings.TerminalSettings.TerminalTypeDefault;
+			IOType                    = Domain.IOType.SerialPort;
 
-			SerialPortId             = MKY.IO.Ports.SerialPortId.FirstStandardPort;
+			SerialPortId              = MKY.IO.Ports.SerialPortId.FirstStandardPort;
 		////SerialPortCommunication is attached as settings object.
-			SerialPortAliveMonitor   = MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorDefault;
-			SerialPortAutoReopen     = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
+			SerialPortAliveMonitor    = MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorDefault;
+			SerialPortAutoReopen      = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
 
-			SocketRemoteHost         = MKY.IO.Serial.Socket.SocketSettings.RemoteHostDefault;
-			SocketRemoteTcpPort      = MKY.IO.Serial.Socket.SocketSettings.RemoteTcpPortDefault;
-			SocketRemoteUdpPort      = MKY.IO.Serial.Socket.SocketSettings.RemoteUdpPortDefault;
-			SocketLocalInterface     = MKY.IO.Serial.Socket.SocketSettings.LocalInterfaceDefault;
-			SocketLocalFilter        = MKY.IO.Serial.Socket.SocketSettings.LocalFilterDefault;
-			SocketLocalTcpPort       = MKY.IO.Serial.Socket.SocketSettings.LocalTcpPortDefault;
-			SocketLocalUdpPort       = MKY.IO.Serial.Socket.SocketSettings.LocalUdpPortDefault;
-			TcpClientAutoReconnect   = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
-			UdpServerSendMode        = MKY.IO.Serial.Socket.SocketSettings.UdpServerSendModeDefault;
+			SocketRemoteHost          = MKY.IO.Serial.Socket.SocketSettings.RemoteHostDefault;
+			SocketRemoteTcpPort       = MKY.IO.Serial.Socket.SocketSettings.RemoteTcpPortDefault;
+			SocketRemoteUdpPort       = MKY.IO.Serial.Socket.SocketSettings.RemoteUdpPortDefault;
+			SocketLocalInterface      = MKY.IO.Serial.Socket.SocketSettings.LocalInterfaceDefault;
+			SocketLocalFilter         = MKY.IO.Serial.Socket.SocketSettings.LocalFilterDefault;
+			SocketLocalTcpPort        = MKY.IO.Serial.Socket.SocketSettings.LocalTcpPortDefault;
+			SocketLocalUdpPort        = MKY.IO.Serial.Socket.SocketSettings.LocalUdpPortDefault;
+			TcpClientAutoReconnect    = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
+			UdpServerSendMode         = MKY.IO.Serial.Socket.SocketSettings.UdpServerSendModeDefault;
 
-			UsbSerialHidDeviceInfo   = null;
-			UsbSerialHidMatchSerial  = MKY.IO.Serial.Usb.SerialHidDeviceSettings.MatchSerialDefault;
-			UsbSerialHidReportFormat = MKY.IO.Serial.Usb.SerialHidDeviceSettings.ReportFormatDefault;
-			UsbSerialHidRxIdUsage    = MKY.IO.Serial.Usb.SerialHidDeviceSettings.RxIdUsageDefault;
-			UsbSerialHidFlowControl  = MKY.IO.Serial.Usb.SerialHidDeviceSettings.FlowControlDefault;
-			UsbSerialHidAutoOpen     = MKY.IO.Serial.Usb.SerialHidDeviceSettings.AutoOpenDefault;
+			UsbSerialHidDeviceInfo    = null;
+			UsbSerialHidMatchSerial   = MKY.IO.Serial.Usb.SerialHidDeviceSettings.MatchSerialDefault;
+			UsbSerialHidReportFormat  = MKY.IO.Serial.Usb.SerialHidDeviceSettings.ReportFormatDefault;
+			UsbSerialHidRxFilterUsage = MKY.IO.Serial.Usb.SerialHidDeviceSettings.RxFilterUsageDefault;
+			UsbSerialHidFlowControl   = MKY.IO.Serial.Usb.SerialHidDeviceSettings.FlowControlDefault;
+			UsbSerialHidAutoOpen      = MKY.IO.Serial.Usb.SerialHidDeviceSettings.AutoOpenDefault;
 
-			StartTerminal            = true;
+			StartTerminal             = true;
 		}
 
 		#region Properties
@@ -510,15 +510,15 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("UsbSerialHidRxIdUsage")]
-		public virtual MKY.IO.Usb.SerialHidRxIdUsage UsbSerialHidRxIdUsage
+		[XmlElement("UsbSerialHidRxFilterUsage")]
+		public virtual MKY.IO.Usb.SerialHidRxFilterUsage UsbSerialHidRxFilterUsage
 		{
-			get { return (this.usbSerialHidRxIdUsage); }
+			get { return (this.usbSerialHidRxFilterUsage); }
 			set
 			{
-				if (this.usbSerialHidRxIdUsage != value)
+				if (this.usbSerialHidRxFilterUsage != value)
 				{
-					this.usbSerialHidRxIdUsage = value;
+					this.usbSerialHidRxFilterUsage = value;
 					SetMyChanged();
 				}
 			}
@@ -610,7 +610,7 @@ namespace YAT.Model.Settings
 				hashCode = (hashCode * 397) ^ (UsbSerialHidDeviceInfo             != null ? UsbSerialHidDeviceInfo            .GetHashCode() : 0); // May be 'null' if no devices are available!
 				hashCode = (hashCode * 397) ^  UsbSerialHidMatchSerial                                                        .GetHashCode();
 				hashCode = (hashCode * 397) ^  UsbSerialHidReportFormat                                                       .GetHashCode();
-				hashCode = (hashCode * 397) ^  UsbSerialHidRxIdUsage                                                          .GetHashCode();
+				hashCode = (hashCode * 397) ^  UsbSerialHidRxFilterUsage                                                      .GetHashCode();
 				hashCode = (hashCode * 397) ^  UsbSerialHidFlowControl                                                        .GetHashCode();
 				hashCode = (hashCode * 397) ^  UsbSerialHidAutoOpen                                                           .GetHashCode();
 
@@ -648,27 +648,27 @@ namespace YAT.Model.Settings
 				TerminalType.Equals(other.TerminalType) &&
 				IOType      .Equals(other.IOType)       &&
 
-				ObjectEx.Equals(SerialPortId, other.SerialPortId)               &&
-				SerialPortCommunication .Equals(other.SerialPortCommunication)  &&
-				SerialPortAliveMonitor  .Equals(other.SerialPortAliveMonitor)   &&
-				SerialPortAutoReopen    .Equals(other.SerialPortAutoReopen)     &&
+				ObjectEx.Equals(SerialPortId, other.SerialPortId)                &&
+				SerialPortCommunication  .Equals(other.SerialPortCommunication)   &&
+				SerialPortAliveMonitor   .Equals(other.SerialPortAliveMonitor)    &&
+				SerialPortAutoReopen     .Equals(other.SerialPortAutoReopen)      &&
 
 				StringEx.EqualsOrdinalIgnoreCase(SocketRemoteHost_ForSerialization, other.SocketRemoteHost_ForSerialization) &&
-				SocketRemoteTcpPort     .Equals(other.SocketRemoteTcpPort)      &&
-				SocketRemoteUdpPort     .Equals(other.SocketRemoteUdpPort)      &&
-				SocketLocalInterface    .Equals(other.SocketLocalInterface)     &&
+				SocketRemoteTcpPort      .Equals(other.SocketRemoteTcpPort)       &&
+				SocketRemoteUdpPort      .Equals(other.SocketRemoteUdpPort)       &&
+				SocketLocalInterface     .Equals(other.SocketLocalInterface)      &&
 				StringEx.EqualsOrdinalIgnoreCase(SocketLocalFilter_ForSerialization, other.SocketLocalFilter_ForSerialization) &&
-				SocketLocalTcpPort      .Equals(other.SocketLocalTcpPort)       &&
-				SocketLocalUdpPort      .Equals(other.SocketLocalUdpPort)       &&
-				TcpClientAutoReconnect  .Equals(other.TcpClientAutoReconnect)   &&
-				UdpServerSendMode       .Equals(other.UdpServerSendMode)        &&
+				SocketLocalTcpPort       .Equals(other.SocketLocalTcpPort)        &&
+				SocketLocalUdpPort       .Equals(other.SocketLocalUdpPort)        &&
+				TcpClientAutoReconnect   .Equals(other.TcpClientAutoReconnect)    &&
+				UdpServerSendMode        .Equals(other.UdpServerSendMode)         &&
 
 				ObjectEx.Equals(UsbSerialHidDeviceInfo, other.UsbSerialHidDeviceInfo) &&
-				UsbSerialHidMatchSerial .Equals(other.UsbSerialHidMatchSerial)  &&
-				UsbSerialHidReportFormat.Equals(other.UsbSerialHidReportFormat) &&
-				UsbSerialHidRxIdUsage   .Equals(other.UsbSerialHidRxIdUsage)    &&
-				UsbSerialHidFlowControl .Equals(other.UsbSerialHidFlowControl)  &&
-				UsbSerialHidAutoOpen    .Equals(other.UsbSerialHidAutoOpen)     &&
+				UsbSerialHidMatchSerial  .Equals(other.UsbSerialHidMatchSerial)   &&
+				UsbSerialHidReportFormat .Equals(other.UsbSerialHidReportFormat)  &&
+				UsbSerialHidRxFilterUsage.Equals(other.UsbSerialHidRxFilterUsage) &&
+				UsbSerialHidFlowControl  .Equals(other.UsbSerialHidFlowControl)   &&
+				UsbSerialHidAutoOpen     .Equals(other.UsbSerialHidAutoOpen)      &&
 
 				StartTerminal.Equals(other.StartTerminal)
 			);

@@ -293,9 +293,9 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.ReportFormat = usbSerialHidDeviceSettings.ReportFormat;
 		}
 
-		private void usbSerialHidDeviceSettings_RxIdUsageChanged(object sender, EventArgs e)
+		private void usbSerialHidDeviceSettings_RxFilterUsageChanged(object sender, EventArgs e)
 		{
-			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.RxIdUsage = usbSerialHidDeviceSettings.RxIdUsage;
+			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.RxFilterUsage = usbSerialHidDeviceSettings.RxFilterUsage;
 		}
 
 		private void usbSerialHidDeviceSettings_FlowControlChanged(object sender, EventArgs e)
@@ -464,17 +464,17 @@ namespace YAT.View.Forms
 			socketSelection.LocalTcpPort    = this.settingsInEdit.Terminal.IO.Socket.LocalTcpPort;
 			socketSelection.LocalUdpPort    = this.settingsInEdit.Terminal.IO.Socket.LocalUdpPort;
 
-			socketSettings.SocketType               = (Domain.IOTypeEx)ioType;
-			socketSettings.TcpClientAutoReconnect   = this.settingsInEdit.Terminal.IO.Socket.TcpClientAutoReconnect;
-			socketSettings.UdpServerSendMode        = this.settingsInEdit.Terminal.IO.Socket.UdpServerSendMode;
+			socketSettings.SocketType             = (Domain.IOTypeEx)ioType;
+			socketSettings.TcpClientAutoReconnect = this.settingsInEdit.Terminal.IO.Socket.TcpClientAutoReconnect;
+			socketSettings.UdpServerSendMode      = this.settingsInEdit.Terminal.IO.Socket.UdpServerSendMode;
 
-			usbSerialHidDeviceSelection.DeviceInfo  = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
+			usbSerialHidDeviceSelection.DeviceInfo = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
 
 			                                      ////this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.MatchSerial is defined by the LocalUserSettings.
-			usbSerialHidDeviceSettings.ReportFormat = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.ReportFormat;
-			usbSerialHidDeviceSettings.RxIdUsage    = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.RxIdUsage;
-			usbSerialHidDeviceSettings.FlowControl  = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.FlowControl;
-			usbSerialHidDeviceSettings.AutoOpen     = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.AutoOpen;
+			usbSerialHidDeviceSettings.ReportFormat  = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.ReportFormat;
+			usbSerialHidDeviceSettings.RxFilterUsage = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.RxFilterUsage;
+			usbSerialHidDeviceSettings.FlowControl   = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.FlowControl;
+			usbSerialHidDeviceSettings.AutoOpen      = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.AutoOpen;
 
 			// Trigger refresh of ports/devices if selection of I/O type has changed:
 			bool isSerialPort   = ((Domain.IOTypeEx)ioType).IsSerialPort;

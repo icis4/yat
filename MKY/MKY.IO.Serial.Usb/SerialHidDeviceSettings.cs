@@ -53,7 +53,7 @@ namespace MKY.IO.Serial.Usb
 		public static readonly SerialHidReportFormat ReportFormatDefault = IO.Usb.SerialHidDevice.ReportFormatDefault;
 
 		/// <summary></summary>
-		public static readonly SerialHidRxIdUsage RxIdUsageDefault = IO.Usb.SerialHidDevice.RxIdUsageDefault;
+		public static readonly SerialHidRxFilterUsage RxFilterUsageDefault = IO.Usb.SerialHidDevice.RxFilterUsageDefault;
 
 		/// <summary></summary>
 		public const SerialHidFlowControl FlowControlDefault = SerialHidFlowControl.None;
@@ -74,7 +74,7 @@ namespace MKY.IO.Serial.Usb
 		private bool matchSerial;
 
 		private SerialHidReportFormat reportFormat;
-		private SerialHidRxIdUsage rxIdUsage;
+		private SerialHidRxFilterUsage rxFilterUsage;
 
 		private SerialHidFlowControl flowControl;
 		private bool autoOpen;
@@ -113,10 +113,10 @@ namespace MKY.IO.Serial.Usb
 			else
 				DeviceInfo = null;
 
-			MatchSerial  = rhs.MatchSerial;
+			MatchSerial = rhs.MatchSerial;
 
-			ReportFormat = rhs.ReportFormat;
-			RxIdUsage    = rhs.RxIdUsage;
+			ReportFormat  = rhs.ReportFormat;
+			RxFilterUsage = rhs.RxFilterUsage;
 
 			FlowControl = rhs.FlowControl;
 			AutoOpen    = rhs.AutoOpen;
@@ -131,14 +131,14 @@ namespace MKY.IO.Serial.Usb
 		{
 			base.SetMyDefaults();
 
-			DeviceInfo   = new DeviceInfo(); // Required for XML serialization.
-			MatchSerial  = MatchSerialDefault;
+			DeviceInfo  = new DeviceInfo(); // Required for XML serialization.
+			MatchSerial = MatchSerialDefault;
 
-			ReportFormat = ReportFormatDefault;
-			RxIdUsage    = RxIdUsageDefault;
+			ReportFormat  = ReportFormatDefault;
+			RxFilterUsage = RxFilterUsageDefault;
 
-			FlowControl  = FlowControlDefault;
-			AutoOpen     = AutoOpenDefault;
+			FlowControl = FlowControlDefault;
+			AutoOpen    = AutoOpenDefault;
 		}
 
 		#endregion
@@ -195,15 +195,15 @@ namespace MKY.IO.Serial.Usb
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
-		[XmlElement("RxIdUsage")]
-		public virtual SerialHidRxIdUsage RxIdUsage
+		[XmlElement("RxFilterUsage")]
+		public virtual SerialHidRxFilterUsage RxFilterUsage
 		{
-			get { return (this.rxIdUsage); }
+			get { return (this.rxFilterUsage); }
 			set
 			{
-				if (this.rxIdUsage != value)
+				if (this.rxFilterUsage != value)
 				{
-					this.rxIdUsage = value;
+					this.rxFilterUsage = value;
 					SetMyChanged();
 				}
 			}
@@ -312,7 +312,7 @@ namespace MKY.IO.Serial.Usb
 				hashCode = (hashCode * 397) ^  MatchSerial                    .GetHashCode();
 
 				hashCode = (hashCode * 397) ^  ReportFormat                   .GetHashCode();
-				hashCode = (hashCode * 397) ^  RxIdUsage                      .GetHashCode();
+				hashCode = (hashCode * 397) ^  RxFilterUsage                      .GetHashCode();
 
 				hashCode = (hashCode * 397) ^  FlowControl                    .GetHashCode();
 				hashCode = (hashCode * 397) ^  AutoOpen                       .GetHashCode();
@@ -350,7 +350,7 @@ namespace MKY.IO.Serial.Usb
 				MatchSerial.Equals(         other.MatchSerial) &&
 
 				ObjectEx.Equals(ReportFormat, other.ReportFormat) &&
-				ObjectEx.Equals(RxIdUsage,    other.RxIdUsage) &&
+				ObjectEx.Equals(RxFilterUsage,    other.RxFilterUsage) &&
 
 				FlowControl.Equals(other.FlowControl) &&
 				AutoOpen.Equals(   other.AutoOpen)

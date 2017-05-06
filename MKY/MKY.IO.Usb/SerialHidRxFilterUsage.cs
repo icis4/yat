@@ -33,7 +33,7 @@ namespace MKY.IO.Usb
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
 	[Serializable]
-	public struct SerialHidRxIdUsage : IEquatable<SerialHidRxIdUsage>
+	public struct SerialHidRxFilterUsage : IEquatable<SerialHidRxFilterUsage>
 	{
 		#region Constants
 		//==========================================================================================
@@ -74,7 +74,7 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
-		public SerialHidRxIdUsage(bool separateRxId, bool anyRxId, byte rxId)
+		public SerialHidRxFilterUsage(bool separateRxId, bool anyRxId, byte rxId)
 		{
 			SeparateRxId = separateRxId;
 			AnyRxId      = anyRxId;
@@ -129,8 +129,8 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is SerialHidRxIdUsage)
-				return (Equals((SerialHidRxIdUsage)obj));
+			if (obj is SerialHidRxFilterUsage)
+				return (Equals((SerialHidRxFilterUsage)obj));
 			else
 				return (false);
 		}
@@ -142,7 +142,7 @@ namespace MKY.IO.Usb
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(SerialHidRxIdUsage other)
+		public bool Equals(SerialHidRxFilterUsage other)
 		{
 			return
 			(
@@ -155,7 +155,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Determines whether the two specified objects have value equality.
 		/// </summary>
-		public static bool operator ==(SerialHidRxIdUsage lhs, SerialHidRxIdUsage rhs)
+		public static bool operator ==(SerialHidRxFilterUsage lhs, SerialHidRxFilterUsage rhs)
 		{
 			return (lhs.Equals(rhs));
 		}
@@ -163,7 +163,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Determines whether the two specified objects have value inequality.
 		/// </summary>
-		public static bool operator !=(SerialHidRxIdUsage lhs, SerialHidRxIdUsage rhs)
+		public static bool operator !=(SerialHidRxFilterUsage lhs, SerialHidRxFilterUsage rhs)
 		{
 			return (!(lhs == rhs));
 		}

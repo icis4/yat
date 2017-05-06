@@ -104,7 +104,7 @@
       <Link>Properties\MKY.Version.cs</Link>
     </Compile>
     <Compile Include="Predicates.cs" />
-    <Compile Include="SerialHidRxIdUsage.cs" />
+    <Compile Include="SerialHidRxFilterUsage.cs" />
     <Compile Include="SerialHidReportFormatPreset.cs" />
     <Compile Include="SerialHidReports.cs" />
     <Compile Include="SerialHidDeviceCollection.cs" />
