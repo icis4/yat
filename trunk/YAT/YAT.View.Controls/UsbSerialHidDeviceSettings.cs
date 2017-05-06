@@ -49,8 +49,8 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
-		private static readonly MKY.IO.Usb.SerialHidReportFormat ReportFormatDefault = MKY.IO.Serial.Usb.SerialHidDeviceSettings.ReportFormatDefault;
-		private static readonly MKY.IO.Usb.SerialHidRxIdUsage    RxIdUsageDefault    = MKY.IO.Serial.Usb.SerialHidDeviceSettings.RxIdUsageDefault;
+		private static readonly MKY.IO.Usb.SerialHidReportFormat  ReportFormatDefault  = MKY.IO.Serial.Usb.SerialHidDeviceSettings.ReportFormatDefault;
+		private static readonly MKY.IO.Usb.SerialHidRxFilterUsage RxFilterUsageDefault = MKY.IO.Serial.Usb.SerialHidDeviceSettings.RxFilterUsageDefault;
 
 		private const MKY.IO.Serial.Usb.SerialHidFlowControl FlowControlDefault = MKY.IO.Serial.Usb.SerialHidFlowControl.None;
 		private const bool AutoOpenDefault                                      = MKY.IO.Serial.Usb.SerialHidDeviceSettings.AutoOpenDefault;
@@ -67,7 +67,7 @@ namespace YAT.View.Controls
 		private SettingControlsHelper isSettingControls;
 
 		private MKY.IO.Usb.SerialHidReportFormat reportFormat = ReportFormatDefault;
-		private MKY.IO.Usb.SerialHidRxIdUsage    rxIdUsage    = RxIdUsageDefault;
+		private MKY.IO.Usb.SerialHidRxFilterUsage    rxFilterUsage    = RxFilterUsageDefault;
 
 		private MKY.IO.Serial.Usb.SerialHidFlowControl flowControl = FlowControlDefault;
 		private bool autoOpen                                      = AutoOpenDefault;
@@ -86,8 +86,8 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Category("Property Changed")]
-		[Description("Event raised when the RxIdUsage property is changed.")]
-		public event EventHandler RxIdUsageChanged;
+		[Description("Event raised when the RxFilterUsage property is changed.")]
+		public event EventHandler RxFilterUsageChanged;
 
 		/// <summary></summary>
 		[Category("Property Changed")]
@@ -148,17 +148,17 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Category("USB Ser/HID")]
-		[Description("The Rx ID usage.")]
-		public MKY.IO.Usb.SerialHidRxIdUsage RxIdUsage
+		[Description("The Rx filter usage.")]
+		public MKY.IO.Usb.SerialHidRxFilterUsage RxFilterUsage
 		{
-			get { return (this.rxIdUsage); }
+			get { return (this.rxFilterUsage); }
 			set
 			{
-				if (this.rxIdUsage != value)
+				if (this.rxFilterUsage != value)
 				{
-					this.rxIdUsage = value;
+					this.rxFilterUsage = value;
 					SetControls();
-					OnRxIdUsageChanged(EventArgs.Empty);
+					OnRxFilterUsageChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -284,7 +284,7 @@ namespace YAT.View.Controls
 		{
 			if (!this.isSettingControls)
 			{
-				this.rxIdUsage.SeparateRxId = checkBox_SeparateRxId.Checked;
+				this.rxFilterUsage.SeparateRxId = checkBox_SeparateRxId.Checked;
 				SetControls();
 				OnReportFormatChanged(EventArgs.Empty);
 			}
@@ -297,8 +297,8 @@ namespace YAT.View.Controls
 				string idText = textBox_RxId.Text;
 				if (idText == AnyIdIndication)
 				{
-					this.rxIdUsage.AnyRxId = true;
-					this.rxIdUsage.RxId = this.reportFormat.Id;
+					this.rxFilterUsage.AnyRxId = true;
+					this.rxFilterUsage.RxId = this.reportFormat.Id;
 					SetControls();
 					OnReportFormatChanged(EventArgs.Empty);
 				}
@@ -307,8 +307,8 @@ namespace YAT.View.Controls
 					byte id;
 					if (byte.TryParse(idText, out id))
 					{
-						this.rxIdUsage.AnyRxId = false;
-						this.rxIdUsage.RxId = id;
+						this.rxFilterUsage.AnyRxId = false;
+						this.rxFilterUsage.RxId = id;
 						SetControls();
 						OnReportFormatChanged(EventArgs.Empty);
 					}
@@ -384,7 +384,7 @@ namespace YAT.View.Controls
 					if (preset != MKY.IO.Usb.SerialHidReportFormatPreset.None)
 					{
 						this.reportFormat = (MKY.IO.Usb.SerialHidReportFormatPresetEx)comboBox_Preset.SelectedItem;
-						this.rxIdUsage = RxIdUsageDefault;
+						this.rxFilterUsage = RxFilterUsageDefault;
 						SetControls();
 						OnReportFormatChanged(EventArgs.Empty);
 					}
@@ -469,21 +469,21 @@ namespace YAT.View.Controls
 				checkBox_SeparateRxId.Text = "Rx I&D:";
 
 				checkBox_UseId.Checked        =  Enabled;
-				checkBox_SeparateRxId.Checked = (Enabled ? this.rxIdUsage.SeparateRxId : false);
+				checkBox_SeparateRxId.Checked = (Enabled ? this.rxFilterUsage.SeparateRxId : false);
 				textBox_Id.Enabled            =  Enabled;
-				textBox_RxId.Enabled          = (Enabled ? this.rxIdUsage.SeparateRxId : false);
+				textBox_RxId.Enabled          = (Enabled ? this.rxFilterUsage.SeparateRxId : false);
 
 				textBox_Id.Text = this.reportFormat.Id.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for report ID!
-				if (!this.rxIdUsage.SeparateRxId) // Typical case = same ID for Tx and Rx.
+				if (!this.rxFilterUsage.SeparateRxId) // Typical case = same ID for Tx and Rx.
 				{
 					textBox_RxId.Text = this.reportFormat.Id.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for report ID!
 				}
 				else // Special case = separate ID for Rx.
 				{
-					if (this.rxIdUsage.AnyRxId)
+					if (this.rxFilterUsage.AnyRxId)
 						textBox_RxId.Text = AnyIdIndication;
 					else
-						textBox_RxId.Text = this.rxIdUsage.RxId.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for report ID!
+						textBox_RxId.Text = this.rxFilterUsage.RxId.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for report ID!
 				}
 			}
 			else
@@ -546,9 +546,9 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRxIdUsageChanged(EventArgs e)
+		protected virtual void OnRxFilterUsageChanged(EventArgs e)
 		{
-			EventHelper.FireSync(RxIdUsageChanged, this, e);
+			EventHelper.FireSync(RxFilterUsageChanged, this, e);
 		}
 
 		/// <summary></summary>

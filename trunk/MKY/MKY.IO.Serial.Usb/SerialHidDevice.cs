@@ -802,10 +802,10 @@ namespace MKY.IO.Serial.Usb
 				{
 					// Ensure to create device info from VID/PID/SNR since system path is not saved.
 					this.device = new IO.Usb.SerialHidDevice(di.VendorId, di.ProductId, di.Serial);
-					this.device.MatchSerial  = this.settings.MatchSerial;
-					this.device.ReportFormat = this.settings.ReportFormat;
-					this.device.RxIdUsage    = this.settings.RxIdUsage;
-					this.device.AutoOpen     = this.settings.AutoOpen;
+					this.device.MatchSerial   = this.settings.MatchSerial;
+					this.device.ReportFormat  = this.settings.ReportFormat;
+					this.device.RxFilterUsage = this.settings.RxFilterUsage;
+					this.device.AutoOpen      = this.settings.AutoOpen;
 
 					this.device.Connected    += device_Connected;
 					this.device.Disconnected += device_Disconnected;

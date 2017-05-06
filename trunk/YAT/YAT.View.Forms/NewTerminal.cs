@@ -289,9 +289,9 @@ namespace YAT.View.Forms
 			this.newTerminalSettingsInEdit.UsbSerialHidReportFormat = usbSerialHidDeviceSettings.ReportFormat;
 		}
 
-		private void usbSerialHidDeviceSettings_RxIdUsageChanged(object sender, EventArgs e)
+		private void usbSerialHidDeviceSettings_RxFilterUsageChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettingsInEdit.UsbSerialHidRxIdUsage = usbSerialHidDeviceSettings.RxIdUsage;
+			this.newTerminalSettingsInEdit.UsbSerialHidRxFilterUsage = usbSerialHidDeviceSettings.RxFilterUsage;
 		}
 
 		private void usbSerialHidDeviceSettings_FlowControlChanged(object sender, EventArgs e)
@@ -345,7 +345,7 @@ namespace YAT.View.Forms
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.DeviceInfo        = this.newTerminalSettings.UsbSerialHidDeviceInfo;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.MatchSerial       = this.newTerminalSettings.UsbSerialHidMatchSerial;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.ReportFormat      = this.newTerminalSettings.UsbSerialHidReportFormat;
-			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.RxIdUsage         = this.newTerminalSettings.UsbSerialHidRxIdUsage;
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.RxFilterUsage     = this.newTerminalSettings.UsbSerialHidRxFilterUsage;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.FlowControl       = this.newTerminalSettings.UsbSerialHidFlowControl;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.AutoOpen          = this.newTerminalSettings.UsbSerialHidAutoOpen;
 
@@ -441,17 +441,17 @@ namespace YAT.View.Forms
 			socketSelection.LocalTcpPort    = this.newTerminalSettingsInEdit.SocketLocalTcpPort;
 			socketSelection.LocalUdpPort    = this.newTerminalSettingsInEdit.SocketLocalUdpPort;
 
-			socketSettings.SocketType               = (Domain.IOTypeEx)ioType;
-			socketSettings.TcpClientAutoReconnect   = this.newTerminalSettingsInEdit.TcpClientAutoReconnect;
-			socketSettings.UdpServerSendMode        = this.newTerminalSettingsInEdit.UdpServerSendMode;
+			socketSettings.SocketType             = (Domain.IOTypeEx)ioType;
+			socketSettings.TcpClientAutoReconnect = this.newTerminalSettingsInEdit.TcpClientAutoReconnect;
+			socketSettings.UdpServerSendMode      = this.newTerminalSettingsInEdit.UdpServerSendMode;
 
-			usbSerialHidDeviceSelection.DeviceInfo  = this.newTerminalSettingsInEdit.UsbSerialHidDeviceInfo;
+			usbSerialHidDeviceSelection.DeviceInfo = this.newTerminalSettingsInEdit.UsbSerialHidDeviceInfo;
 
 			                                      ////this.newTerminalSettingsInEdit.UsbSerialHidMatchSerial is defined by the LocalUserSettings.
-			usbSerialHidDeviceSettings.ReportFormat = this.newTerminalSettingsInEdit.UsbSerialHidReportFormat;
-			usbSerialHidDeviceSettings.RxIdUsage    = this.newTerminalSettingsInEdit.UsbSerialHidRxIdUsage;
-			usbSerialHidDeviceSettings.FlowControl  = this.newTerminalSettingsInEdit.UsbSerialHidFlowControl;
-			usbSerialHidDeviceSettings.AutoOpen     = this.newTerminalSettingsInEdit.UsbSerialHidAutoOpen;
+			usbSerialHidDeviceSettings.ReportFormat  = this.newTerminalSettingsInEdit.UsbSerialHidReportFormat;
+			usbSerialHidDeviceSettings.RxFilterUsage = this.newTerminalSettingsInEdit.UsbSerialHidRxFilterUsage;
+			usbSerialHidDeviceSettings.FlowControl   = this.newTerminalSettingsInEdit.UsbSerialHidFlowControl;
+			usbSerialHidDeviceSettings.AutoOpen      = this.newTerminalSettingsInEdit.UsbSerialHidAutoOpen;
 
 			checkBox_StartTerminal.Checked = this.newTerminalSettingsInEdit.StartTerminal;
 
