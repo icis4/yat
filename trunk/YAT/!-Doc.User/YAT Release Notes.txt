@@ -98,6 +98,8 @@ New:
 - Option to disable formatting, useful when highest data throughput slows down the view (feat. #39).
 - Keywords with arguments \!(Delay(<ms>)), \!(LineDelay(<ms>)), \!(LineInterval(<ms>)) and
   \!(LineRepeat(<n>)) added (feature requests #13, #139).
+- Additional keyword \!(ReportID(<ID>)) that allows changing the USB Ser/HID report ID while sending
+  and thus allows to sequentially write to multiple report IDs (feature request #296).
 
 Important changes:
 - Serial COM port that are in use are no longer simply labelled "(in use)" but rather "(in use by

@@ -120,6 +120,9 @@
   <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <data name="checkBox_FillLastReport.ToolTip" xml:space="preserve">
     <value>Many devices require that all reports are filled, i.e. completed
 to the specified report length.
@@ -127,6 +130,11 @@ to the specified report length.
 This is also a requirement of the Windows HID infrastructure
 for outgoing reports. As a consequence, this option must be
 kept enabled.</value>
+  </data>
+  <data name="textBox_Id.ToolTip" xml:space="preserve">
+    <value>The default ID of outgoing (Tx) reports. A numeric value within 0..255.
+To activate e.g. report ID 1 while sending, use \!(ReportID(1)).
+To revert to the default ID, use \!(ReportID()) or \!(ReportID).</value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>62</value>

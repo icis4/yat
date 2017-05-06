@@ -411,7 +411,11 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(OutputBreakToggle())", Domain.Parser.Keyword.OutputBreakToggle, null));
 				yield return (new TestCaseData(@"\!(ReportID)",            Domain.Parser.Keyword.ReportId,          null));
 				yield return (new TestCaseData(@"\!(ReportID())",          Domain.Parser.Keyword.ReportId,          null));
-				yield return (new TestCaseData(@"\!(ReportID(0xAA))",      Domain.Parser.Keyword.ReportId,          new int[] { 0xAA }));
+				yield return (new TestCaseData(@"\!(ReportID(0))",         Domain.Parser.Keyword.ReportId,          new int[] { 0x00 }));
+				yield return (new TestCaseData(@"\!(ReportID(1))",         Domain.Parser.Keyword.ReportId,          new int[] { 0x01 }));
+				yield return (new TestCaseData(@"\!(ReportID(0x00))",      Domain.Parser.Keyword.ReportId,          new int[] { 0x00 }));
+				yield return (new TestCaseData(@"\!(ReportID(0x3F))",      Domain.Parser.Keyword.ReportId,          new int[] { 0x3F }));
+				yield return (new TestCaseData(@"\!(ReportID(0xFF))",      Domain.Parser.Keyword.ReportId,          new int[] { 0xFF }));
 
 				// Whitespace:
 				yield return (new TestCaseData(@"\!( Delay)",            Domain.Parser.Keyword.Delay, null));
@@ -447,6 +451,11 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(Z_FIT(1 ,2 ,3))",     Domain.Parser.Keyword.Z_FIT, new int[] { 1, 2, 3 }));
 				yield return (new TestCaseData(@"\!(Z_FIT( 1,2,3 ))",     Domain.Parser.Keyword.Z_FIT, new int[] { 1, 2, 3 }));
 				yield return (new TestCaseData(@"\!(Z_FIT(1,2,3))",       Domain.Parser.Keyword.Z_FIT, new int[] { 1, 2, 3 }));
+				yield return (new TestCaseData(@"\!(Z_FIT(0,1,2))",       Domain.Parser.Keyword.Z_FIT, new int[] { 0, 1, 2 }));
+
+				// Partial:
+				yield return (new TestCaseData(@"\!(Z_FIT(1, 2))", Domain.Parser.Keyword.Z_FIT, new int[] { 1, 2 }));
+				yield return (new TestCaseData(@"\!(Z_FIT(0, 1))", Domain.Parser.Keyword.Z_FIT, new int[] { 0, 1 }));
 
 				// Sign:
 				yield return (new TestCaseData(@"\!(Z_FIT(1, -2, 3))", Domain.Parser.Keyword.Z_FIT, new int[] { 1, -2, 3 }));
@@ -525,6 +534,10 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(OutputBreakOn(10))",		@"\!(OutputBreakOn(",		@"Keyword 'OutputBreakOn' does not support arguments.").SetName("Keyword 'OutputBreakOn' with arguments"));
 				yield return (new TestCaseData(@"\!(OutputBreakOff(10))",		@"\!(OutputBreakOff(",		@"Keyword 'OutputBreakOff' does not support arguments.").SetName("Keyword 'OutputBreakOff' with arguments"));
 				yield return (new TestCaseData(@"\!(OutputBreakToggle(10))",	@"\!(OutputBreakToggle(",	@"Keyword 'OutputBreakToggle' does not support arguments.").SetName("Keyword 'OutputBreakToggle' with arguments"));
+
+				yield return (new TestCaseData(@"\!(ReportId(-1))",		@"\!(ReportId(-1",		@"""-1"" is no valid 0th argument for keyword 'ReportId'. Argument must be ID must be a numeric value within 0..255."));
+				yield return (new TestCaseData(@"\!(ReportId(256))",	@"\!(ReportId(256",		@"""256"" is no valid 0th argument for keyword 'ReportId'. Argument must be ID must be a numeric value within 0..255."));
+				yield return (new TestCaseData(@"\!(ReportId(0x100))",	@"\!(ReportId(0x100",	@"""0x100"" is no valid 0th argument for keyword 'ReportId'. Argument must be ID must be a numeric value within 0..255."));
 
 				yield return (new TestCaseData(@"\!(Z_FIT(1 2 3))",		@"\!(Z_FIT(1 ",		@"Closing parenthesis expected instead of character '2' (0x32)."));
 				yield return (new TestCaseData(@"\!(Z_FIT(1.2.3))",		@"\!(Z_FIT(1",		@"Character '.' (0x2E) is invalid for decimal values."));

@@ -244,7 +244,7 @@ namespace YAT.Domain.Parser
 				case Keyword.OutputBreakOn:     return (NoArgSupportedMessage);
 				case Keyword.OutputBreakOff:    return (NoArgSupportedMessage);
 				case Keyword.OutputBreakToggle: return (NoArgSupportedMessage);
-				case Keyword.ReportId:          return ("an integer value of 1 or more indicating the interval in milliseconds"); // Attention, a similar message exists in 'View.Controls.UsbSerialHidDeviceSettings'. Changes here may have to be applied there too.
+				case Keyword.ReportId:          return ("ID must be a numeric value within 0..255"); // Attention, a similar message exists in 'View.Controls.UsbSerialHidDeviceSettings'. Changes here may have to be applied there too.
 
 				case Keyword.Z_FIT: // = for internal testing.
 				{

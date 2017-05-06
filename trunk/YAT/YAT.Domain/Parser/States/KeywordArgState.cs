@@ -237,14 +237,23 @@ namespace YAT.Domain.Parser
 
 					default:
 					{
-						var sb = new StringBuilder();
-						sb.Append(@"Character sequence """);
-						sb.Append(parseChar);
-						sb.Append(nextChar);
-						sb.Append(@""" is not a valid numeric prefix. Valid are ""0"" (octal), ""0x"" (hexadecimal) and ""0b"" (binary).");
+						if ((nextChar == ')') || (nextChar == ',') || parser.IsWhiteSpace(nextChar)) // Just (0) or (0,...) or (0 ) is OK!
+						{
+							this.radix = Radix.Dec;
+							this.valueWriter.Write((char)parseChar);
+							break;
+						}
+						else
+						{
+							var sb = new StringBuilder();
+							sb.Append(@"Character sequence """);
+							sb.Append(parseChar);
+							sb.Append(nextChar);
+							sb.Append(@""" is not a valid numeric prefix. Valid are ""0"" (octal), ""0x"" (hexadecimal) and ""0b"" (binary).");
 
-						formatException = new FormatException(sb.ToString());
-						return (false);
+							formatException = new FormatException(sb.ToString());
+							return (false);
+						}
 					}
 				}
 
@@ -331,10 +340,11 @@ namespace YAT.Domain.Parser
 
 				switch (this.radix)
 				{
-					case Radix.Bin:     sb.Append("binary");      break;
-					case Radix.Oct:     sb.Append("octal");       break;
-					case Radix.Dec:     sb.Append("decimal");     break;
-					case Radix.Hex:     sb.Append("hexadecimal"); break;
+					case Radix.Bin: sb.Append("binary");      break;
+					case Radix.Oct: sb.Append("octal");       break;
+					case Radix.Dec: sb.Append("decimal");     break;
+					case Radix.Hex: sb.Append("hexadecimal"); break;
+
 					default: throw (new ArgumentOutOfRangeException(MessageHelper.InvalidExecutionPreamble + "'" + radix + "' radix is not supported for numeric values!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
@@ -400,11 +410,22 @@ namespace YAT.Domain.Parser
 			if (!ArrayEx.IsNullOrEmpty(this.previousArgs))
 				i = this.previousArgs.Length;
 
-			if ((!TryParseNumericItem(s, this.radix, out result)) &&
+			if ((!TryParseNumericItem(s, this.radix, out result)) ||
 			    (!me.Validate(i, result)))
 			{
 				var sb = new StringBuilder();
 				sb.Append(@"""");
+
+				switch (this.radix)
+				{
+					case Radix.Bin: sb.Append("0b"); break;
+					case Radix.Oct: sb.Append("0");  break;
+					case Radix.Dec: sb.Append("");   break;
+					case Radix.Hex: sb.Append("0x"); break;
+
+					default: throw (new ArgumentOutOfRangeException(MessageHelper.InvalidExecutionPreamble + "'" + radix + "' radix is not supported for numeric values!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+
 				sb.Append(s);
 				sb.Append(@"""");
 				sb.Append(" is no valid ");

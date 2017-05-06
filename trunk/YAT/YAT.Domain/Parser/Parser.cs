@@ -119,7 +119,7 @@ namespace YAT.Domain.Parser
 			@"Output break state toggle ""\!(" + (KeywordEx)Keyword.OutputBreakToggle + @")""" + Environment.NewLine +
 			@"Output break state only applies to serial COM ports" +
 			Environment.NewLine +
-			@"Change USB Ser/HID report ID to 0xAA ""\!(" + (KeywordEx)Keyword.ReportId + @"(0xAA))""" + Environment.NewLine +
+			@"Change USB Ser/HID report ID to 1 ""\!(" + (KeywordEx)Keyword.ReportId + @"(1))""" + Environment.NewLine +
 			@"Report ID only applies to USB Ser/HID";
 
 		#endregion

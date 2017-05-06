@@ -152,7 +152,7 @@
 			this.textBox_Id.TabIndex = 2;
 			this.textBox_Id.Text = "255";
 			this.textBox_Id.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.toolTip.SetToolTip(this.textBox_Id, "The ID of outgoing (Tx) reports. A numeric value within 0..255.");
+			this.toolTip.SetToolTip(this.textBox_Id, resources.GetString("textBox_Id.ToolTip"));
 			this.textBox_Id.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_Id_Validating);
 			// 
 			// checkBox_SeparateRxId
@@ -176,8 +176,8 @@
 			this.textBox_RxId.TabIndex = 4;
 			this.textBox_RxId.Text = "255";
 			this.textBox_RxId.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.toolTip.SetToolTip(this.textBox_RxId, "The ID accepted for incoming (Rx) reports. A numeric value within 0..255 or \'*\' t" +
-        "o accept any ID.");
+			this.toolTip.SetToolTip(this.textBox_RxId, "The ID accepted for incoming (Rx) reports. A numeric value within 0..255 or * (as" +
+        "terisk) to accept any ID.");
 			this.textBox_RxId.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_RxId_Validating);
 			// 
 			// comboBox_Preset
