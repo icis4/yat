@@ -329,12 +329,12 @@ namespace MKY.IO.Usb
 		{
 			switch ((SerialHidReportFormatPreset)UnderlyingEnum)
 			{
-				case SerialHidReportFormatPreset.None:		return (new SerialHidReportFormat(true,  0x00,               false, false, true )); // = Common.
-				case SerialHidReportFormatPreset.Plain:		return (new SerialHidReportFormat(false, 0x00,               false, false, true ));
-				case SerialHidReportFormatPreset.Common:	return (new SerialHidReportFormat(true,  0x00,               false, false, true ));
-				case SerialHidReportFormatPreset.MT_SerHid:	return (new SerialHidReportFormat(true,  0x00,               false, true,  true ));
+				case SerialHidReportFormatPreset.None:      return (new SerialHidReportFormat(true,  0x00,               false, false, true )); // = Common.
+				case SerialHidReportFormatPreset.Plain:     return (new SerialHidReportFormat(false, 0x00,               false, false, true ));
+				case SerialHidReportFormatPreset.Common:    return (new SerialHidReportFormat(true,  0x00,               false, false, true ));
+				case SerialHidReportFormatPreset.MT_SerHid: return (new SerialHidReportFormat(true,  0x00,               false, true,  true ));
 				case SerialHidReportFormatPreset.TI_HidApi: return (new SerialHidReportFormat(true,  TI_HidApi_ReportId, true,  false, true ));
-				case SerialHidReportFormatPreset.YAT:		return (new SerialHidReportFormat(true,  0x00,               false, false, true )); // = Common.
+				case SerialHidReportFormatPreset.YAT:       return (new SerialHidReportFormat(true,  0x00,               false, false, true )); // = Common.
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}

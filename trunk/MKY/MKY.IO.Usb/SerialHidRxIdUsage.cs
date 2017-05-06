@@ -22,16 +22,9 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-#region Using
-//==================================================================================================
-// Using
-//==================================================================================================
-
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
-
-#endregion
 
 namespace MKY.IO.Usb
 {
@@ -40,7 +33,7 @@ namespace MKY.IO.Usb
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
 	[Serializable]
-	public class SerialHidRxIdUsage : IEquatable<SerialHidRxIdUsage>
+	public struct SerialHidRxIdUsage : IEquatable<SerialHidRxIdUsage>
 	{
 		#region Constants
 		//==========================================================================================
@@ -61,33 +54,25 @@ namespace MKY.IO.Usb
 
 		#endregion
 
-		#region Fields
-		//==========================================================================================
-		// Fields
-		//==========================================================================================
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
+		[XmlElement("SeparateRxId")]
+		public bool SeparateRxId;
 
-		private bool separateRxId;
-		private bool anyRxId;
-		private byte rxId;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
+		[XmlElement("AnyRxId")]
+		public bool AnyRxId;
 
-		#endregion
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
+		[XmlElement("RxId")]
+		public byte RxId;
 
-		#region Object Lifetime
-		//==========================================================================================
-		// Object Lifetime
-		//==========================================================================================
-
-		/// <summary>
-		/// Creates new setting with defaults.
-		/// </summary>
-		public SerialHidRxIdUsage()
-		{
-			SetDefaults();
-		}
-
-		/// <summary>
-		/// Creates new setting with specified arguments.
-		/// </summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
 		public SerialHidRxIdUsage(bool separateRxId, bool anyRxId, byte rxId)
 		{
@@ -96,66 +81,27 @@ namespace MKY.IO.Usb
 			RxId         = rxId;
 		}
 
-		/// <summary>
-		/// Creates new setting from <paramref name="rhs"/>.
-		/// </summary>
-		public SerialHidRxIdUsage(SerialHidRxIdUsage rhs)
-		{
-			SeparateRxId = rhs.SeparateRxId;
-			AnyRxId      = rhs.AnyRxId;
-			RxId         = rhs.RxId;
-		}
-
-		/// <summary>
-		/// Sets default setting.
-		/// </summary>
-		protected void SetDefaults()
-		{
-			SeparateRxId = SeparateRxIdDefault;
-			AnyRxId      = AnyRxIdDefault;
-			RxId         = RxIdDefault;
-		}
-
-		#endregion
-
-		#region Properties
-		//==========================================================================================
-		// Properties
-		//==========================================================================================
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
-		[XmlElement("SeparateRxId")]
-		public bool SeparateRxId
-		{
-			get { return (this.separateRxId); }
-			set { this.separateRxId = value;  }
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
-		[XmlElement("AnyRxId")]
-		public bool AnyRxId
-		{
-			get { return (this.anyRxId); }
-			set { this.anyRxId = value;  }
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
-		[XmlElement("RxId")]
-		public byte RxId
-		{
-			get { return (this.rxId); }
-			set { this.rxId = value;  }
-		}
-
-		#endregion
-
 		#region Object Members
 		//==========================================================================================
 		// Object Members
 		//==========================================================================================
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override string ToString()
+		{
+			return
+			(
+				SeparateRxId + ", " +
+				AnyRxId      + ", " +
+				RxId
+			);
+		}
 
 		/// <summary>
 		/// Serves as a hash function for a particular type.
@@ -183,7 +129,10 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as SerialHidRxIdUsage));
+			if (obj is SerialHidRxIdUsage)
+				return (Equals((SerialHidRxIdUsage)obj));
+			else
+				return (false);
 		}
 
 		/// <summary>
@@ -195,10 +144,6 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public bool Equals(SerialHidRxIdUsage other)
 		{
-			if (ReferenceEquals(other, null)) return (false);
-			if (ReferenceEquals(this, other)) return (true);
-			if (GetType() != other.GetType()) return (false);
-
 			return
 			(
 				SeparateRxId.Equals(other.SeparateRxId) &&
@@ -207,18 +152,17 @@ namespace MKY.IO.Usb
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Determines whether the two specified objects have value equality.
+		/// </summary>
 		public static bool operator ==(SerialHidRxIdUsage lhs, SerialHidRxIdUsage rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))  return (true);
-			if (ReferenceEquals(lhs, null)) return (false);
-			if (ReferenceEquals(rhs, null)) return (false);
-
-			object obj = (object)lhs; // Operators are not virtual! Calling object.Equals() ensures
-			return (obj.Equals(rhs)); // that a potential virtual <Derived>.Equals() is called.
+			return (lhs.Equals(rhs));
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Determines whether the two specified objects have value inequality.
+		/// </summary>
 		public static bool operator !=(SerialHidRxIdUsage lhs, SerialHidRxIdUsage rhs)
 		{
 			return (!(lhs == rhs));

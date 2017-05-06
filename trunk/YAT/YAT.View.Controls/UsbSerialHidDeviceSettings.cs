@@ -49,6 +49,9 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
+		private static readonly MKY.IO.Usb.SerialHidReportFormat ReportFormatDefault = MKY.IO.Serial.Usb.SerialHidDeviceSettings.ReportFormatDefault;
+		private static readonly MKY.IO.Usb.SerialHidRxIdUsage    RxIdUsageDefault    = MKY.IO.Serial.Usb.SerialHidDeviceSettings.RxIdUsageDefault;
+
 		private const MKY.IO.Serial.Usb.SerialHidFlowControl FlowControlDefault = MKY.IO.Serial.Usb.SerialHidFlowControl.None;
 		private const bool AutoOpenDefault                                      = MKY.IO.Serial.Usb.SerialHidDeviceSettings.AutoOpenDefault;
 
@@ -63,8 +66,8 @@ namespace YAT.View.Controls
 
 		private SettingControlsHelper isSettingControls;
 
-		private MKY.IO.Usb.SerialHidReportFormat reportFormat = new MKY.IO.Usb.SerialHidReportFormat();
-		private MKY.IO.Usb.SerialHidRxIdUsage    rxIdUsage    = new MKY.IO.Usb.SerialHidRxIdUsage();
+		private MKY.IO.Usb.SerialHidReportFormat reportFormat = ReportFormatDefault;
+		private MKY.IO.Usb.SerialHidRxIdUsage    rxIdUsage    = RxIdUsageDefault;
 
 		private MKY.IO.Serial.Usb.SerialHidFlowControl flowControl = FlowControlDefault;
 		private bool autoOpen                                      = AutoOpenDefault;
@@ -122,8 +125,6 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("USB Ser/HID")]
 		[Description("The report format.")]
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public MKY.IO.Usb.SerialHidReportFormat ReportFormat
 		{
 			get { return (this.reportFormat); }
@@ -148,8 +149,6 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("USB Ser/HID")]
 		[Description("The Rx ID usage.")]
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public MKY.IO.Usb.SerialHidRxIdUsage RxIdUsage
 		{
 			get { return (this.rxIdUsage); }
@@ -385,7 +384,7 @@ namespace YAT.View.Controls
 					if (preset != MKY.IO.Usb.SerialHidReportFormatPreset.None)
 					{
 						this.reportFormat = (MKY.IO.Usb.SerialHidReportFormatPresetEx)comboBox_Preset.SelectedItem;
-						this.rxIdUsage = new MKY.IO.Usb.SerialHidRxIdUsage();
+						this.rxIdUsage = RxIdUsageDefault;
 						SetControls();
 						OnReportFormatChanged(EventArgs.Empty);
 					}
