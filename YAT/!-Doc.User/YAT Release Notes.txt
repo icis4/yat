@@ -99,9 +99,12 @@ New:
 - Keywords with arguments \!(Delay(<ms>)), \!(LineDelay(<ms>)), \!(LineInterval(<ms>)) and
   \!(LineRepeat(<n>)) added (feature requests #13, #139).
 - Additional keyword \!(ReportID(<ID>)) that allows changing the USB Ser/HID report ID while sending
-  and thus allows to sequentially write to multiple report IDs (feature request #296).
+  and thus allows to sequentially write to and read from multiple report IDs (feature request #296).
+- Additional USB Ser/HID preset "Signal 11 HID API" and changed presets "Plain" and "Common" to
+  cover more use cases related to raw binary data (feature request #297 and bug #367).
 
 Important changes:
+- Option to display non-payload USB Ser/HID data (related to feature req. #296, #297 and bug #367).
 - Serial COM port that are in use are no longer simply labelled "(in use)" but rather "(in use by
   this terminal)", "(... terminal<ID>)" or "(... other application)" (feature requests #201, #207).
 - Notes and links regarding non-intrusive RS-232 monitor/sniffer/spy cables and devices added to

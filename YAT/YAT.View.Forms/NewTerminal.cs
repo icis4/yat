@@ -280,7 +280,10 @@ namespace YAT.View.Forms
 			{
 				MKY.IO.Usb.SerialHidReportFormatPresetEx preset;
 				if (MKY.IO.Usb.SerialHidReportFormatPresetEx.TryParse(deviceInfo, out preset))
-					usbSerialHidDeviceSettings.ReportFormat = preset.ToReportFormat();
+				{
+					usbSerialHidDeviceSettings.ReportFormat  = preset.ToReportFormat();
+					usbSerialHidDeviceSettings.RxFilterUsage = preset.ToRxFilterUsage();
+				}
 			}
 		}
 

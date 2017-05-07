@@ -441,6 +441,12 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.CharHide.Hide0xFF = checkBox_Hide0xFF.Checked;
 		}
 
+		private void checkBox_IncludeNonPayloadData_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData = checkBox_IncludeNonPayloadData.Checked;
+		}
+
 		private void comboBox_Endianness_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -895,7 +901,8 @@ namespace YAT.View.Forms
 
 		private void SetControls()
 		{
-			bool isSerialPort = ((Domain.IOTypeEx)this.settingsInEdit.Terminal.IO.IOType).IsSerialPort;
+			bool isSerialPort   = ((Domain.IOTypeEx)this.settingsInEdit.Terminal.IO.IOType).IsSerialPort;
+			bool isUsbSerialHid = ((Domain.IOTypeEx)this.settingsInEdit.Terminal.IO.IOType).IsUsbSerialHid;
 
 			this.isSettingControls.Enter();
 
@@ -943,7 +950,7 @@ namespace YAT.View.Forms
 			checkBox_ReplaceControlCharacters.Checked   = replaceControlChars;
 			comboBox_ControlCharacterRadix.Enabled      = replaceControlChars;
 			comboBox_ControlCharacterRadix.SelectedItem = (Domain.ControlCharRadixEx)this.settingsInEdit.Terminal.CharReplace.ControlCharRadix;
-			bool replaceTabEnabled                      = replaceControlChars && (this.settingsInEdit.Terminal.CharReplace.ControlCharRadix == Domain.ControlCharRadix.AsciiMnemonic);
+			bool replaceTabEnabled                      =  replaceControlChars  &&  (this.settingsInEdit.Terminal.CharReplace.ControlCharRadix == Domain.ControlCharRadix.AsciiMnemonic);
 			checkBox_ReplaceTab.Enabled                 = replaceTabEnabled;
 			checkBox_ReplaceTab.Checked                 = this.settingsInEdit.Terminal.CharReplace.ReplaceTab;
 			label_ReplaceTab.Enabled                    = replaceTabEnabled;
@@ -953,6 +960,9 @@ namespace YAT.View.Forms
 			checkBox_Hide0x00.Checked                   = this.settingsInEdit.Terminal.CharHide.Hide0x00;
 			checkBox_Hide0xFF.Enabled                   = this.settingsInEdit.Terminal.SupportsHide0xFF;
 			checkBox_Hide0xFF.Checked                   = this.settingsInEdit.Terminal.CharHide.Hide0xFF;
+
+			groupBox_Display_UsbSerialHid.Enabled       = isUsbSerialHid;
+			checkBox_IncludeNonPayloadData.Checked      = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData;
 
 			// Communication:
 			comboBox_Endianness.SelectedItem = (Domain.EndiannessEx)this.settingsInEdit.Terminal.IO.Endianness;
@@ -980,7 +990,7 @@ namespace YAT.View.Forms
 			textBox_OutputBufferSize.Enabled                 = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Enabled;
 			textBox_OutputBufferSize.Text                    = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Size.ToString(CultureInfo.CurrentCulture);
 			checkBox_OutputMaxBaudRate.Checked               = this.settingsInEdit.Terminal.IO.SerialPort.OutputMaxBaudRate;
-			checkBox_MaxChunkSizeEnable.Checked                    = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Enabled;
+			checkBox_MaxChunkSizeEnable.Checked              = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Enabled;
 			textBox_MaxChunkSize.Enabled                     = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Enabled;
 			textBox_MaxChunkSize.Text                        = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Size.ToString(CultureInfo.CurrentCulture);
 			checkBox_MaxSendRateEnable.Checked               = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
@@ -1057,6 +1067,9 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.CharReplace.ReplaceSpace        = Domain.Settings.CharReplaceSettings.ReplaceSpaceDefault;
 			this.settingsInEdit.Terminal.CharHide.Hide0x00               = Domain.Settings.CharHideSettings.Hide0x00Default;
 			this.settingsInEdit.Terminal.CharHide.Hide0xFF               = Domain.Settings.CharHideSettings.Hide0xFFDefault;
+
+			// USB Ser/HID:
+			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData = MKY.IO.Serial.Usb.SerialHidDeviceSettings.IncludeNonPayloadDataDefault;
 
 			// Communication:
 			this.settingsInEdit.Terminal.IO.Endianness                        = Domain.Settings.IOSettings.EndiannessDefault;

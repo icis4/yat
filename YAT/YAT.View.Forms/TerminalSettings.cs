@@ -284,7 +284,10 @@ namespace YAT.View.Forms
 			{
 				MKY.IO.Usb.SerialHidReportFormatPresetEx preset;
 				if (MKY.IO.Usb.SerialHidReportFormatPresetEx.TryParse(deviceInfo, out preset))
-					usbSerialHidDeviceSettings.ReportFormat = preset.ToReportFormat();
+				{
+					usbSerialHidDeviceSettings.ReportFormat  = preset.ToReportFormat();
+					usbSerialHidDeviceSettings.RxFilterUsage = preset.ToRxFilterUsage();
+				}
 			}
 		}
 
@@ -596,6 +599,9 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.CharReplace.ReplaceSpace        = f.SettingsResult.Terminal.CharReplace.ReplaceSpace;
 				this.settingsInEdit.Terminal.CharHide.Hide0x00               = f.SettingsResult.Terminal.CharHide.Hide0x00;
 				this.settingsInEdit.Terminal.CharHide.Hide0xFF               = f.SettingsResult.Terminal.CharHide.Hide0xFF;
+
+				// USB Ser/HID:
+				this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData = f.SettingsResult.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData;
 
 				// Communication:
 				this.settingsInEdit.Terminal.IO.Endianness                        = f.SettingsResult.Terminal.IO.Endianness;

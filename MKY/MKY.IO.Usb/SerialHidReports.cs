@@ -66,15 +66,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Sets the ID of a report. The meaning of the ID is given by the report specification.
-		/// </summary>
-		protected void SetId(byte id)
-		{
-			this.id = id;
-		}
-
-		/// <summary>
-		/// Returns the payload that was received via input reports.
+		/// Returns the payload that was received via the input report.
 		/// </summary>
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
 		public byte[] Payload
@@ -94,34 +86,34 @@ namespace MKY.IO.Usb
 
 			// If requested, get the ID which is located in the first byte of the report:
 			if (format.UseId)
-				SetId(report[0]);
+				this.id = report[0];
 
 			// Get report data:
-			List<byte> data = new List<byte>(report.Length); // Preset the initial capacity to improve memory management.
+			List<byte> payload = new List<byte>(report.Length); // Preset the initial capacity to improve memory management.
 			if (format.PrependPayloadByteLength)
 			{
 				// Get the payload by the length which is located in the first or second byte of the report:
-				int payloadLength;
+				byte payloadByteLength;
 				if (!format.UseId)
-					payloadLength = report[0];
+					payloadByteLength = report[0];
 				else
-					payloadLength = report[1];
+					payloadByteLength = report[1];
 
-				for (int i = format.HeaderByteLength; i < (format.HeaderByteLength + payloadLength); i++)
+				for (int i = format.HeaderByteLength; i < (format.HeaderByteLength + payloadByteLength); i++)
 				{
 					if (i >= report.Length)
 						throw (new ArgumentException("The reported payload length exceeds the length of the report!")); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
 
-					data.Add(report[i]);
+					payload.Add(report[i]);
 				}
 			}
-			else if (format.AppendTerminatingZero || format.FillLastReport)
+			else if (format.AppendTerminatingZero)
 			{
-				// Simply read until the terminating zero or the end of the report:
+				// Read until the terminating zero:
 				for (int i = format.HeaderByteLength; i < report.Length; i++)
 				{
 					if (report[i] != 0x00)
-						data.Add(report[i]);
+						payload.Add(report[i]);
 					else
 						break;
 				}
@@ -130,10 +122,14 @@ namespace MKY.IO.Usb
 			{
 				// In any other case, read until the end of the report:
 				for (int i = format.HeaderByteLength; i < report.Length; i++)
-					data.Add(report[i]);
+					payload.Add(report[i]);
+
+				// Note that this is the case if neither length is prepended nor terminating zero
+				// is appended. In such case, there is no way to distiguish 0x00 payload bytes from
+				// 0x00 filler bytes, thus consider the whole report as payload.
 			}
 
-			this.payload = data.ToArray();
+			this.payload = payload.ToArray();
 		}
 	}
 

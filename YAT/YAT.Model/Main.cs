@@ -887,7 +887,8 @@ namespace YAT.Model
 				}
 				if (this.commandLineArgs.OptionIsGiven("FormatPreset"))
 				{
-					terminalSettings.IO.UsbSerialHidDevice.ReportFormat = (MKY.IO.Usb.SerialHidReportFormatPresetEx)this.commandLineArgs.FormatPreset;
+					terminalSettings.IO.UsbSerialHidDevice.ReportFormat  = (MKY.IO.Usb.SerialHidReportFormatPresetEx)this.commandLineArgs.FormatPreset;
+					terminalSettings.IO.UsbSerialHidDevice.RxFilterUsage = (MKY.IO.Usb.SerialHidReportFormatPresetEx)this.commandLineArgs.FormatPreset;
 				}
 				if (this.commandLineArgs.OptionIsGiven("FlowControl"))
 				{

@@ -61,6 +61,9 @@ namespace MKY.IO.Serial.Usb
 		/// <summary></summary>
 		public const bool AutoOpenDefault = IO.Usb.SerialHidDevice.AutoOpenDefault;
 
+		/// <summary></summary>
+		public const bool IncludeNonPayloadDataDefault = IO.Usb.SerialHidDevice.IncludeNonPayloadDataDefault;
+
 		#endregion
 
 		#region Fields
@@ -78,6 +81,8 @@ namespace MKY.IO.Serial.Usb
 
 		private SerialHidFlowControl flowControl;
 		private bool autoOpen;
+
+		private bool includeNonPayloadData;
 
 		#endregion
 
@@ -121,6 +126,8 @@ namespace MKY.IO.Serial.Usb
 			FlowControl = rhs.FlowControl;
 			AutoOpen    = rhs.AutoOpen;
 
+			IncludeNonPayloadData = rhs.IncludeNonPayloadData;
+
 			ClearChanged();
 		}
 
@@ -139,6 +146,8 @@ namespace MKY.IO.Serial.Usb
 
 			FlowControl = FlowControlDefault;
 			AutoOpen    = AutoOpenDefault;
+
+			IncludeNonPayloadData = IncludeNonPayloadDataDefault;
 		}
 
 		#endregion
@@ -279,6 +288,21 @@ namespace MKY.IO.Serial.Usb
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("IncludeNonPayloadData")]
+		public virtual bool IncludeNonPayloadData
+		{
+			get { return (this.includeNonPayloadData); }
+			set
+			{
+				if (this.includeNonPayloadData != value)
+				{
+					this.includeNonPayloadData = value;
+					SetMyChanged();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members
@@ -312,10 +336,12 @@ namespace MKY.IO.Serial.Usb
 				hashCode = (hashCode * 397) ^  MatchSerial                    .GetHashCode();
 
 				hashCode = (hashCode * 397) ^  ReportFormat                   .GetHashCode();
-				hashCode = (hashCode * 397) ^  RxFilterUsage                      .GetHashCode();
+				hashCode = (hashCode * 397) ^  RxFilterUsage                  .GetHashCode();
 
 				hashCode = (hashCode * 397) ^  FlowControl                    .GetHashCode();
 				hashCode = (hashCode * 397) ^  AutoOpen                       .GetHashCode();
+
+				hashCode = (hashCode * 397) ^  IncludeNonPayloadData          .GetHashCode();
 
 				return (hashCode);
 			}
@@ -349,11 +375,13 @@ namespace MKY.IO.Serial.Usb
 				ObjectEx.Equals(DeviceInfo, other.DeviceInfo) &&
 				MatchSerial.Equals(         other.MatchSerial) &&
 
-				ObjectEx.Equals(ReportFormat, other.ReportFormat) &&
-				ObjectEx.Equals(RxFilterUsage,    other.RxFilterUsage) &&
+				ReportFormat .Equals(other.ReportFormat) &&
+				RxFilterUsage.Equals(other.RxFilterUsage) &&
 
 				FlowControl.Equals(other.FlowControl) &&
-				AutoOpen.Equals(   other.AutoOpen)
+				AutoOpen   .Equals(other.AutoOpen) &&
+
+				IncludeNonPayloadData.Equals(other.IncludeNonPayloadData)
 			);
 		}
 

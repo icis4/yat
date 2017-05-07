@@ -67,7 +67,7 @@ namespace YAT.View.Controls
 		private SettingControlsHelper isSettingControls;
 
 		private MKY.IO.Usb.SerialHidReportFormat reportFormat = ReportFormatDefault;
-		private MKY.IO.Usb.SerialHidRxFilterUsage    rxFilterUsage    = RxFilterUsageDefault;
+		private MKY.IO.Usb.SerialHidRxFilterUsage rxFilterUsage = RxFilterUsageDefault;
 
 		private MKY.IO.Serial.Usb.SerialHidFlowControl flowControl = FlowControlDefault;
 		private bool autoOpen                                      = AutoOpenDefault;
@@ -286,7 +286,7 @@ namespace YAT.View.Controls
 			{
 				this.rxFilterUsage.SeparateRxId = checkBox_SeparateRxId.Checked;
 				SetControls();
-				OnReportFormatChanged(EventArgs.Empty);
+				OnRxFilterUsageChanged(EventArgs.Empty);
 			}
 		}
 
@@ -300,7 +300,7 @@ namespace YAT.View.Controls
 					this.rxFilterUsage.AnyRxId = true;
 					this.rxFilterUsage.RxId = this.reportFormat.Id;
 					SetControls();
-					OnReportFormatChanged(EventArgs.Empty);
+					OnRxFilterUsageChanged(EventArgs.Empty);
 				}
 				else
 				{
@@ -310,7 +310,7 @@ namespace YAT.View.Controls
 						this.rxFilterUsage.AnyRxId = false;
 						this.rxFilterUsage.RxId = id;
 						SetControls();
-						OnReportFormatChanged(EventArgs.Empty);
+						OnRxFilterUsageChanged(EventArgs.Empty);
 					}
 					else
 					{
@@ -383,15 +383,20 @@ namespace YAT.View.Controls
 				{
 					if (preset != MKY.IO.Usb.SerialHidReportFormatPreset.None)
 					{
-						this.reportFormat = (MKY.IO.Usb.SerialHidReportFormatPresetEx)comboBox_Preset.SelectedItem;
-						this.rxFilterUsage = RxFilterUsageDefault;
+						this.reportFormat  = preset;
+						this.rxFilterUsage = preset;
 						SetControls();
 						OnReportFormatChanged(EventArgs.Empty);
+						OnRxFilterUsageChanged(EventArgs.Empty);
 					}
 					else
 					{
-						// Ignore 'None', do not change any setting when this preset is selected.
+						SetControls();
 					}
+				}
+				else
+				{
+					SetControls();
 				}
 			}
 		}
@@ -469,6 +474,7 @@ namespace YAT.View.Controls
 				checkBox_SeparateRxId.Text = "Rx I&D:";
 
 				checkBox_UseId.Checked        =  Enabled;
+				checkBox_SeparateRxId.Enabled =  Enabled;
 				checkBox_SeparateRxId.Checked = (Enabled ? this.rxFilterUsage.SeparateRxId : false);
 				textBox_Id.Enabled            =  Enabled;
 				textBox_RxId.Enabled          = (Enabled ? this.rxFilterUsage.SeparateRxId : false);
@@ -491,8 +497,9 @@ namespace YAT.View.Controls
 				checkBox_UseId.Text        = "Use &ID:";
 				checkBox_SeparateRxId.Text = "";
 
-				checkBox_SeparateRxId.Checked = false;
 				checkBox_UseId.Checked        = false;
+				checkBox_SeparateRxId.Enabled = false;
+				checkBox_SeparateRxId.Checked = false;
 				textBox_Id.Enabled            = false;
 				textBox_RxId.Enabled          = false;
 
@@ -506,11 +513,25 @@ namespace YAT.View.Controls
 			checkBox_FillLastReport.Checked           = true; // Windows HID.dll requires that outgoing reports are always filled!
 
 			reportFormatPreview.Format  = this.reportFormat;
-			comboBox_Preset.SelectedItem = (MKY.IO.Usb.SerialHidReportFormatPresetEx)this.reportFormat;
+
+			var preset = MKY.IO.Usb.SerialHidReportFormatPresetEx.FromReportFormatAndRxFilterUsage(this.reportFormat, this.rxFilterUsage);
+
+			if (Enabled)
+			{
+				comboBox_Preset.SelectedItem = (MKY.IO.Usb.SerialHidReportFormatPresetEx)preset;
+
+				// Note that 'DropDownList' requires that an item like "[No preset selected]" is
+				// listed. It is not possible to set the 'SelectedIndex' to 'ControlEx.InvalidIndex'
+				// and then set an arbitrary 'Text';
+			}
+			else
+			{
+				comboBox_Preset.SelectedIndex = ControlEx.InvalidIndex;
+			}
 
 			string linkText;
 			string linkUri;
-			if (((MKY.IO.Usb.SerialHidReportFormatPresetEx)this.reportFormat).HasInfoLink(out linkText, out linkUri))
+			if (((MKY.IO.Usb.SerialHidReportFormatPresetEx)preset).HasInfoLink(out linkText, out linkUri))
 			{
 				linkLabel_Info.Links.Clear();
 				linkLabel_Info.Text = linkText;
@@ -523,9 +544,13 @@ namespace YAT.View.Controls
 			}
 
 			if (Enabled)
+			{
 				comboBox_FlowControl.SelectedItem = (MKY.IO.Serial.Usb.SerialHidFlowControlEx)this.flowControl;
+			}
 			else
+			{
 				comboBox_FlowControl.SelectedIndex = ControlEx.InvalidIndex;
+			}
 
 			checkBox_AutoOpen.Checked = (Enabled ? this.autoOpen : false);
 

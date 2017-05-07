@@ -638,7 +638,6 @@ namespace MKY.IO.Serial.Usb
 							}
 
 							this.device.Send(data);
-							OnDataSent(new SerialDataSentEventArgs(data, DeviceInfo));
 
 							if (this.settings.FlowControlUsesXOnXOff)
 								HandleXOnOrXOffAndNotify(data);
@@ -676,7 +675,6 @@ namespace MKY.IO.Serial.Usb
 		private void SendXOnOrXOffAndNotify(byte b)
 		{
 			this.device.Send(b);
-			OnDataSent(new SerialDataSentEventArgs(b, DeviceInfo));
 
 			if (this.iXOnXOffHelper.XOnOrXOffSent(b))
 				OnIOControlChanged(EventArgs.Empty);
@@ -784,10 +782,6 @@ namespace MKY.IO.Serial.Usb
 			}
 		}
 
-		/// <remarks>
-		/// The <see cref="Usb.SerialHidDevice.DataSent"/> event is not used. Instead, the
-		/// corresponding event is fired in the <see cref="Send(byte[])"/> method.
-		/// </remarks>
 		private bool CreateDevice()
 		{
 			if (this.device != null)
@@ -802,17 +796,18 @@ namespace MKY.IO.Serial.Usb
 				{
 					// Ensure to create device info from VID/PID/SNR since system path is not saved.
 					this.device = new IO.Usb.SerialHidDevice(di.VendorId, di.ProductId, di.Serial);
-					this.device.MatchSerial   = this.settings.MatchSerial;
-					this.device.ReportFormat  = this.settings.ReportFormat;
-					this.device.RxFilterUsage = this.settings.RxFilterUsage;
-					this.device.AutoOpen      = this.settings.AutoOpen;
+					this.device.MatchSerial           = this.settings.MatchSerial;
+					this.device.ReportFormat          = this.settings.ReportFormat;
+					this.device.RxFilterUsage         = this.settings.RxFilterUsage;
+					this.device.AutoOpen              = this.settings.AutoOpen;
+					this.device.IncludeNonPayloadData = this.settings.IncludeNonPayloadData;
 
 					this.device.Connected    += device_Connected;
 					this.device.Disconnected += device_Disconnected;
 					this.device.Opened       += device_Opened;
 					this.device.Closed       += device_Closed;
 					this.device.DataReceived += device_DataReceived;
-				////this.device.DataSent is not used, see remarks above.
+					this.device.DataSent     += Device_DataSent;
 					this.device.IOError      += device_IOError;
 				}
 
@@ -1113,10 +1108,6 @@ namespace MKY.IO.Serial.Usb
 			OnIOChanged(e);
 		}
 
-		/// <remarks>
-		/// The <see cref="Usb.SerialHidDevice.DataSent"/> event is not used. Instead, the
-		/// corresponding event is triggered in the <see cref="Send(byte[])"/> method.
-		/// </remarks>
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "Usb.SerialHidDevice uses a 'ReceiveThread' to invoke this event.")]
 		private void device_DataReceived(object sender, EventArgs e)
 		{
@@ -1242,6 +1233,12 @@ namespace MKY.IO.Serial.Usb
 			}
 
 			DebugThreadStateMessage("ReceiveThread() has terminated.");
+		}
+
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "Usb.SerialHidDevice uses asynchronous 'Write' to invoke this event.")]
+		private void Device_DataSent(object sender, IO.Usb.DataEventArgs e)
+		{
+			OnDataSent(new SerialDataSentEventArgs(e.Data, e.TimeStamp, DeviceInfo));
 		}
 
 		private void device_IOError(object sender, IO.Usb.ErrorEventArgs e)

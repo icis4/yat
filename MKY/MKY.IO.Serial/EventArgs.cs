@@ -44,9 +44,15 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		protected DataEventArgs(byte[] data)
+			: this (data, DateTime.Now)
 		{
-			this.data = data;
-			this.timeStamp = DateTime.Now;
+		}
+
+		/// <summary></summary>
+		protected DataEventArgs(byte[] data, DateTime timeStamp)
+		{
+			this.data      = data;
+			this.timeStamp = timeStamp;
 		}
 
 		/// <summary></summary>
@@ -97,6 +103,12 @@ namespace MKY.IO.Serial
 			: base(data)
 		{
 		}
+
+		/// <summary></summary>
+		protected DataReceivedEventArgs(byte[] data, DateTime timeStamp)
+			: base(data, timeStamp)
+		{
+		}
 	}
 
 	/// <summary></summary>
@@ -105,6 +117,12 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected DataSentEventArgs(byte[] data)
 			: base(data)
+		{
+		}
+
+		/// <summary></summary>
+		protected DataSentEventArgs(byte[] data, DateTime timeStamp)
+			: base(data, timeStamp)
 		{
 		}
 	}

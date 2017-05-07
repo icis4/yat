@@ -21,7 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System.Collections.ObjectModel;
+using System;
 
 using MKY.IO.Usb;
 
@@ -58,14 +58,8 @@ namespace MKY.IO.Serial.Usb
 		private DeviceInfo deviceInfo;
 
 		/// <summary></summary>
-		public SerialDataSentEventArgs(byte data, DeviceInfo deviceInfo)
-			: this(new byte[] { data }, deviceInfo)
-		{
-		}
-
-		/// <summary></summary>
-		public SerialDataSentEventArgs(byte[] data, DeviceInfo deviceInfo)
-			: base(data)
+		public SerialDataSentEventArgs(byte[] data, DateTime timeStamp, DeviceInfo deviceInfo)
+			: base(data, timeStamp)
 		{
 			this.deviceInfo = deviceInfo;
 		}
