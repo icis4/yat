@@ -117,6 +117,12 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public const bool AutoOpenDefault = true;
 
+		/// <summary>
+		/// By default, the USB device hides non-payload data such as the report ID, the optional
+		/// payload length, the optional terminating zero or the filler bytes.
+		/// </summary>
+		public const bool IncludeNonPayloadDataDefault = false;
+
 		private const int ReceiveQueueInitialCapacity = 4096;
 
 		private const int ThreadWaitTimeout = 200;
@@ -323,6 +329,9 @@ namespace MKY.IO.Usb
 
 		private bool autoOpen = AutoOpenDefault;
 
+		private bool includeNonPayloadData = IncludeNonPayloadDataDefault;
+
+
 		/// <remarks>
 		/// It's just a single stream object, but it contains the basically independent input and
 		/// output streams.
@@ -365,7 +374,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Fired after data has completely be sent to the device.
 		/// </summary>
-		public event EventHandler DataSent;
+		public event EventHandler<DataEventArgs> DataSent;
 
 		#endregion
 
@@ -564,6 +573,28 @@ namespace MKY.IO.Usb
 				AssertNotDisposed();
 
 				this.autoOpen = value;
+			}
+		}
+
+		/// <summary>
+		/// Indicates whether the device hides non-payload data.
+		/// </summary>
+		/// <returns>
+		/// <c>true</c> if the device hides non-payload data; otherwise, <c>false</c>.
+		/// </returns>
+		public virtual bool IncludeNonPayloadData
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.includeNonPayloadData);
+			}
+			set
+			{
+				AssertNotDisposed();
+
+				this.includeNonPayloadData = value;
 			}
 		}
 
@@ -976,8 +1007,16 @@ namespace MKY.IO.Usb
 						// Read data on this thread:
 						lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 						{
-							foreach (byte b in input.Payload)
-								this.receiveQueue.Enqueue(b);
+							if (this.includeNonPayloadData)
+							{
+								foreach (byte b in inputReportBuffer) // Include the whole report.
+									this.receiveQueue.Enqueue(b);
+							}
+							else
+							{
+								foreach (byte b in input.Payload) // Only enqueue the retrieved payload.
+									this.receiveQueue.Enqueue(b);
+							}
 						}
 
 						// Signal receive thread:
@@ -990,18 +1029,26 @@ namespace MKY.IO.Usb
 			}
 			catch (IOException ex) // Includes Close().
 			{
-				string message = "Disconnect detected while reading from the USB Ser/HID device.";
+				string message = "Disconnect detected while reading from USB Ser/HID device.";
 				DebugEx.WriteException(GetType(), ex, message);
 				OnDisconnected(EventArgs.Empty);
 			}
 			catch (Exception ex)
 			{
 				var sb = new StringBuilder();
-				sb.Append    (@"Error while reading an input report from the USB Ser/HID device """);
+				sb.Append    (@"Error while reading an input report from USB Ser/HID device """);
 				sb.Append    (ToString());
-				sb.AppendLine(@""".");
+				sb.AppendLine(@""":");
 				sb.AppendLine();
-				sb.AppendLine("You may close and reopen and then try again.");
+
+				if (ex.Message.EndsWith(Environment.NewLine))
+					sb.Append    (ex.Message);
+				else
+					sb.AppendLine(ex.Message);
+
+				sb.AppendLine();
+				sb.AppendLine("Check the report format settings.");
+				sb.Append    ("Then close and reopen and try again.");
 
 				string message = sb.ToString();
 				DebugEx.WriteException(GetType(), ex, message);
@@ -1075,18 +1122,31 @@ namespace MKY.IO.Usb
 				output.CreateReports(this.reportFormat, payload);
 
 				foreach (byte[] report in output.Reports)
+				{
 					this.stream.Write(report, 0, report.Length);
 
-				OnDataSent(EventArgs.Empty);
+					if (this.includeNonPayloadData)
+						OnDataSent(new DataEventArgs(report)); // Include the whole report.
+					else
+						OnDataSent(new DataEventArgs(payload)); // Only include the payload.
+				}
 			}
 			catch (Exception ex)
 			{
 				var sb = new StringBuilder();
-				sb.Append    (@"Error while writing an output report to the USB Ser/HID device """);
+				sb.Append    (@"Error while writing an output report to USB Ser/HID device """);
 				sb.Append    (ToString());
-				sb.AppendLine(@""".");
+				sb.AppendLine(@""":");
 				sb.AppendLine();
-				sb.AppendLine("You may close and reopen and then try again.");
+
+				if (ex.Message.EndsWith(Environment.NewLine))
+					sb.Append    (ex.Message);
+				else
+					sb.AppendLine(ex.Message);
+
+				sb.AppendLine();
+				sb.AppendLine("Check the report format settings.");
+				sb.Append    ("Then close and reopen and try again.");
 
 				string message = sb.ToString();
 				DebugEx.WriteException(GetType(), ex, message);
@@ -1263,7 +1323,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDataSent(EventArgs e)
+		protected virtual void OnDataSent(DataEventArgs e)
 		{
 			EventHelper.FireSync(DataSent, this, e);
 		}

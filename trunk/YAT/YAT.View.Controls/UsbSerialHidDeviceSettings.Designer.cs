@@ -71,7 +71,7 @@
 			// 
 			this.linkLabel_Info.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.linkLabel_Info.AutoSize = true;
-			this.linkLabel_Info.Location = new System.Drawing.Point(54, 191);
+			this.linkLabel_Info.Location = new System.Drawing.Point(50, 191);
 			this.linkLabel_Info.Name = "linkLabel_Info";
 			this.linkLabel_Info.Size = new System.Drawing.Size(203, 13);
 			this.linkLabel_Info.TabIndex = 18;

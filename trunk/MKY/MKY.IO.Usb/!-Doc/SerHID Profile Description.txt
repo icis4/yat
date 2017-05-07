@@ -10,15 +10,12 @@ that this profile doesn't need any driver installation if the USB Host is a pers
 
 References
 ----------
-[1] USB Implementers Forum             http://www.usb.org
-[2] USB Specification 2.0 & 3.0        http://www.usb.org/developers/docs/
-[3] USB Class Specifications           http://www.usb.org/developers/devclass_docs
-[4] USB HID Specification 1.11         http://www.usb.org/developers/devclass_docs/HID1_11.pdf
+[1] USB Implementers Forum           http://www.usb.org
+[2] USB Specification 2.0 & 3.0      http://www.usb.org/developers/docs/
+[3] USB Class Specifications         http://www.usb.org/developers/devclass_docs
+[4] USB HID Specification 1.11       http://www.usb.org/developers/devclass_docs/HID1_11.pdf
 
-[5] Using V-USB and the HID Class
-    http://lackawanna.hackhut.com/2011/10/04/using-v-usb-and-the-hid-class-part-i/
-    http://lackawanna.hackhut.com/2011/10/06/using-v-usb-and-the-hid-class-part-ii/
-    http://lackawanna.hackhut.com/2011/10/06/using-v-usb-and-the-hid-class-part-iiiiii/
+[5] Using V-USB and the HID Class    http://hackaday.com/2012/02/09/learning-to-use-the-v-usb-avr-usb-firmware-library/
 
 
 Pros and Cons of the Ser/HID Device profile

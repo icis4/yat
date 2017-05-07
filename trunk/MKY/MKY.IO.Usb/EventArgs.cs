@@ -23,6 +23,8 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace MKY.IO.Usb
 {
@@ -49,6 +51,62 @@ namespace MKY.IO.Usb
 		public DeviceInfo DeviceInfo
 		{
 			get { return (this.deviceInfo); }
+		}
+	}
+
+	/// <summary>
+	/// Defines event data of an I/O data transfer. In addition to the serial data itself,
+	/// it also contains meta information such as a time stamp.
+	/// </summary>
+	public class DataEventArgs : EventArgs
+	{
+		/// <remarks>
+		/// "Guidelines for Collections": "Do use byte arrays instead of collections of bytes."
+		/// 
+		/// Saying hello to StyleCop ;-.
+		/// </remarks>
+		private byte[] data;
+
+		private DateTime timeStamp;
+
+		/// <summary></summary>
+		public DataEventArgs(byte[] data)
+		{
+			this.data = data;
+			this.timeStamp = DateTime.Now;
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
+		public virtual byte[] Data
+		{
+			get { return (this.data); }
+		}
+
+		/// <summary></summary>
+		public virtual DateTime TimeStamp
+		{
+			get { return (this.timeStamp); }
+		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		public override string ToString()
+		{
+			return (ToString(""));
+		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		public virtual string ToString(string indent)
+		{
+			var sb = new StringBuilder();
+			foreach (byte b in this.data)
+				sb.Append(Convert.ToChar(b));
+
+			return (indent + sb.ToString());
 		}
 	}
 

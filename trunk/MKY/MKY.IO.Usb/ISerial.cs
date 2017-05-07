@@ -61,7 +61,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Fired after data has completely be sent to the device.
 		/// </summary>
-		event EventHandler DataSent;
+		event EventHandler<DataEventArgs> DataSent;
 
 		#endregion
 
