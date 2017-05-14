@@ -139,7 +139,7 @@
 			this.label_Payload2.Name = "label_Payload2";
 			this.label_Payload2.Size = new System.Drawing.Size(110, 15);
 			this.label_Payload2.TabIndex = 5;
-			this.label_Payload2.Text = "P1\'\'  P2\'\'  .........  Pn\'\'";
+			this.label_Payload2.Text = "P1\'\'  P2\'\'  .........  Pm\'\'";
 			this.label_Payload2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// label_TerminatingZero
