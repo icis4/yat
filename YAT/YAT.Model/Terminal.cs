@@ -3193,7 +3193,12 @@ namespace YAT.Model
 						string[] lines;
 						XmlReaderHelper.LinesFromFile(filePath, out lines);
 						foreach (string line in lines)
+						{
+							if (string.IsNullOrEmpty(line) && this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines)
+								continue;
+
 							SendLine(line);
+						}
 					}
 					else if (ExtensionHelper.IsRtfFile(filePath))
 					{
@@ -3201,7 +3206,12 @@ namespace YAT.Model
 						string[] lines;
 						RtfReaderHelper.LinesFromRtfFile(filePath, out lines);
 						foreach (string line in lines)
+						{
+							if (string.IsNullOrEmpty(line) && this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines)
+								continue;
+
 							SendLine(line);
+						}
 					}
 					else
 					{
@@ -3210,7 +3220,12 @@ namespace YAT.Model
 						{                               // Automatically detect encoding from BOM, otherwise use given setting.
 							string line;
 							while (((line = sr.ReadLine()) != null) && (!this.terminal.BreakState))
+							{
+								if (string.IsNullOrEmpty(line) && this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines)
+									continue;
+
 								SendLine(line, c.DefaultRadix); // Enable parsing.
+							}
 						}
 					}
 				}

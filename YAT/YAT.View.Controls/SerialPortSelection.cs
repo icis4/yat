@@ -38,6 +38,7 @@ using MKY;
 using MKY.IO.Ports;
 using MKY.Windows.Forms;
 
+using YAT.Model.Utilities;
 using YAT.Settings.Application;
 
 #endregion
@@ -531,30 +532,7 @@ namespace YAT.View.Controls
 
 		private void ShowErrorMessage(Exception ex, string info, string hint)
 		{
-			var sb = new StringBuilder();
-
-			if (!string.IsNullOrEmpty(info))
-				sb.Append(info);
-
-			if (ex != null)
-			{
-				if (sb.Length > 0)
-				{
-					sb.AppendLine();
-					sb.AppendLine();
-				}
-
-				sb.AppendLine("System error message:");
-				sb.Append(ex.Message);
-
-				if (ex.InnerException != null)
-				{
-					sb.AppendLine();
-					sb.AppendLine();
-					sb.AppendLine("Additional error message:");
-					sb.Append(ex.InnerException.Message);
-				}
-			}
+			var sb = new StringBuilder(ErrorHelper.ComposeMessage(info, ex));
 
 			if (sb.Length > 0)
 			{

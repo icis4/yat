@@ -36,50 +36,23 @@ namespace YAT.Model.Utilities
 		/// <summary></summary>
 		public static string ComposeMessage(string lead, string additionalLead, string additionalText)
 		{
-			return (ComposeMessage(lead, null, additionalLead, additionalText));
+			return (ComposeMessage(lead, null, null, additionalLead, additionalText));
+		}
+
+		/// <summary></summary>
+		public static string ComposeMessage(string lead, Exception ex, string additionalLead = null, string additionalText = null)
+		{
+			return (ComposeMessage(lead, null, null, additionalLead, additionalText));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public static string ComposeMessage(string lead, Exception ex = null, string additionalLead = null, string additionalText = null)
+		public static string ComposeMessage(string lead, string text = null, Exception ex = null, string additionalLead = null, string additionalText = null)
 		{
 			var sb = new StringBuilder(lead);
 
-			if (ex != null)
-			{
-				sb.AppendLine();
-				sb.AppendLine();
-				sb.AppendLine("System error message:");
-				sb.Append(ex.Message);
-
-				if (ex.InnerException != null)
-				{
-					sb.AppendLine();
-					sb.AppendLine();
-					sb.AppendLine("Additional error message:");
-					sb.Append(ex.InnerException.Message);
-				}
-			}
-
-			if (!string.IsNullOrEmpty(additionalLead) && !string.IsNullOrEmpty(additionalText))
-			{
-				sb.AppendLine();
-				sb.AppendLine();
-				sb.AppendLine(additionalLead);
-				sb.Append(additionalText);
-			}
-
-			return (sb.ToString());
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public static string ComposeMessage(string lead, string text, Exception ex = null, string additionalLead = null, string additionalText = null)
-		{
-			var sb = new StringBuilder();
-
-			sb.AppendLine(lead);
-			sb.Append(text);
+			if (!string.IsNullOrEmpty(text))
+				sb.Append(text);
 
 			if (ex is System.Xml.XmlException)
 			{
@@ -92,23 +65,45 @@ namespace YAT.Model.Utilities
 				{
 					sb.AppendLine();
 					sb.AppendLine();
-					sb.AppendLine("File error message:");
+					sb.Append    ("File error message (");
+					sb.Append    (ex.InnerException.GetType());
+					sb.AppendLine(                      "):");
 					sb.Append(ex.InnerException.Message);
+
+					var inner = ex.InnerException.InnerException;
+					while (inner != null)
+					{
+						sb.AppendLine();
+						sb.AppendLine();
+						sb.Append    ("Additional error message (");
+						sb.Append    (inner.GetType());
+						sb.AppendLine(                            "):");
+						sb.Append(inner.Message);
+
+						inner = inner.InnerException;
+					}
 				}
 			}
 			else if (ex != null)
 			{
 				sb.AppendLine();
 				sb.AppendLine();
-				sb.AppendLine("System error message:");
+				sb.Append    ("System error message (");
+				sb.Append    (ex.GetType());
+				sb.AppendLine(                        "):");
 				sb.Append(ex.Message);
 
-				if (ex.InnerException != null)
+				var inner = ex.InnerException.InnerException;
+				while (inner != null)
 				{
 					sb.AppendLine();
 					sb.AppendLine();
-					sb.AppendLine("Additional error message:");
-					sb.Append(ex.InnerException.Message);
+					sb.Append    ("Additional error message (");
+					sb.Append    (inner.GetType());
+					sb.AppendLine(                            "):");
+					sb.Append(inner.Message);
+
+					inner = inner.InnerException;
 				}
 			}
 

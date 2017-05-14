@@ -105,6 +105,7 @@ New:
 
 Important changes:
 - Option to display non-payload USB Ser/HID data (related to feature req. #296, #297 and bug #367).
+- Option to skip empty lines when sending a text file (feature request #298).
 - Serial COM port that are in use are no longer simply labelled "(in use)" but rather "(in use by
   this terminal)", "(... terminal<ID>)" or "(... other application)" (feature requests #201, #207).
 - Notes and links regarding non-intrusive RS-232 monitor/sniffer/spy cables and devices added to
@@ -732,7 +733,7 @@ New:
 - Optional simple terminal/direct mode added to "Send Command" (feature request #1808496)
 - Keyword \!(Clear) added (feature request #2998594)
 - List of first 12 predefined command pages added to menu, with shortcuts (feature request #2914892)
-- Recent history added to "Send File" (feature request #2869575)
+- Recent history added to 'Send File' (feature request #2869575)
 - Text terminals: Line send delay added (feature request #1808508, bug #1963002)
 - ASCII table added to help (feature request #1923555)
 - User defineable terminal name added (related to feature request #3091859)

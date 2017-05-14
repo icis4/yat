@@ -248,6 +248,12 @@ namespace YAT.View.Forms
 				this.settingsInEdit.ShowEol = checkBox_ShowEol.Checked;
 		}
 
+		private void checkBox_SkipEmptyLines_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settingsInEdit.SendFile.SkipEmptyLines = checkBox_SkipEmptyLines.Checked;
+		}
+
 		private void checkBox_Delay_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -482,6 +488,8 @@ namespace YAT.View.Forms
 			checkBox_ShowEol.Checked = this.settingsInEdit.ShowEol;
 
 			// Send:
+			checkBox_SkipEmptyLines.Checked  = this.settingsInEdit.SendFile.SkipEmptyLines;
+
 			bool delayEnabled             = this.settingsInEdit.LineSendDelay.Enabled;
 			checkBox_Delay.Checked        = delayEnabled;
 			textBox_Delay.Enabled         = delayEnabled;

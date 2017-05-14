@@ -519,6 +519,8 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
 		{
+			bool isTextTerminal = (this.settingsRoot.TerminalType == Domain.TerminalType.Text);
+
 			this.isSettingControls.Enter();
 
 			// Prepare the menu item properties based on state and settings.
@@ -535,11 +537,10 @@ namespace YAT.View.Forms
 			bool sendTextEnabled = this.settingsRoot.SendText.Command.IsValidText;
 			if (this.settingsRoot.Send.SendImmediately)
 			{
-				switch (this.settingsRoot.TerminalType)
-				{
-					case Domain.TerminalType.Text: sendTextText = "EOL";    break;
-					default: /* Binary or <New> */ sendTextEnabled = false; break;
-				}
+				if (isTextTerminal)
+					sendTextText = "EOL";
+				else
+					sendTextEnabled = false;
 			}
 
 			bool sendFileEnabled = this.settingsRoot.SendFile.Command.IsValidFilePath;
@@ -552,9 +553,12 @@ namespace YAT.View.Forms
 			toolStripMenuItem_TerminalMenu_Send_File.Enabled           = sendFileEnabled && this.terminal.IsReadyToSend;
 
 			toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix.Checked = this.settingsRoot.Send.UseExplicitDefaultRadix;
-			toolStripMenuItem_TerminalMenu_Send_KeepCommand.Checked             = this.settingsRoot.Send.KeepCommand;
-			toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked          = this.settingsRoot.Send.CopyPredefined;
-			toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked         = this.settingsRoot.Send.SendImmediately;
+
+			toolStripMenuItem_TerminalMenu_Send_KeepCommand.Checked     = this.settingsRoot.Send.KeepCommand;
+			toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked  = this.settingsRoot.Send.CopyPredefined;
+			toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked = this.settingsRoot.Send.SendImmediately;
+			toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Enabled  = isTextTerminal;
+			toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Checked  = this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines;
 
 			toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText.Enabled = this.settingsRoot.SendText.Command.IsMultiLineText;
 
@@ -631,6 +635,11 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_TerminalMenu_Send_SendImmediately_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Send.SendImmediately = !this.settingsRoot.Send.SendImmediately;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines = !this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText_Click(object sender, EventArgs e)
@@ -1765,6 +1774,8 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void contextMenuStrip_Send_SetMenuItems()
 		{
+			bool isTextTerminal = (this.settingsRoot.TerminalType == Domain.TerminalType.Text);
+
 			this.isSettingControls.Enter();
 
 			// Prepare the menu item properties based on state and settings.
@@ -1781,29 +1792,31 @@ namespace YAT.View.Forms
 			bool sendTextEnabled = this.settingsRoot.SendText.Command.IsValidText;
 			if (this.settingsRoot.Send.SendImmediately)
 			{
-				switch (this.settingsRoot.TerminalType)
-				{
-					case Domain.TerminalType.Text: sendTextText = "Send EOL"; break;
-					default: /* Binary or <New> */ sendTextEnabled = false;   break;
-				}
+				if (isTextTerminal)
+					sendTextText = "Send EOL";
+				else
+					sendTextEnabled = false;
 			}
 
 			bool sendFileEnabled = this.settingsRoot.SendFile.Command.IsValidFilePath;
 
 			// Set the menu item properties:
 
+			toolStripMenuItem_SendContextMenu_Panels_SendText.Checked = this.settingsRoot.Layout.SendTextPanelIsVisible;
+			toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = this.settingsRoot.Layout.SendFilePanelIsVisible;
+
 			toolStripMenuItem_SendContextMenu_SendText.Text              = sendTextText;
 			toolStripMenuItem_SendContextMenu_SendText.Enabled           = sendTextEnabled && this.terminal.IsReadyToSend;
 			toolStripMenuItem_SendContextMenu_SendTextWithoutEol.Enabled = sendTextEnabled && this.terminal.IsReadyToSend && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.SendImmediately;
 			toolStripMenuItem_SendContextMenu_SendFile.Enabled           = sendFileEnabled && this.terminal.IsReadyToSend;
 
-			toolStripMenuItem_SendContextMenu_Panels_SendText.Checked = this.settingsRoot.Layout.SendTextPanelIsVisible;
-			toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = this.settingsRoot.Layout.SendFilePanelIsVisible;
-
 			toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix.Checked = this.settingsRoot.Send.UseExplicitDefaultRadix;
-			toolStripMenuItem_SendContextMenu_KeepCommand.Checked             = this.settingsRoot.Send.KeepCommand;
-			toolStripMenuItem_SendContextMenu_CopyPredefined.Checked          = this.settingsRoot.Send.CopyPredefined;
-			toolStripMenuItem_SendContextMenu_SendImmediately.Checked         = this.settingsRoot.Send.SendImmediately;
+
+			toolStripMenuItem_SendContextMenu_KeepCommand.Checked     = this.settingsRoot.Send.KeepCommand;
+			toolStripMenuItem_SendContextMenu_CopyPredefined.Checked  = this.settingsRoot.Send.CopyPredefined;
+			toolStripMenuItem_SendContextMenu_SendImmediately.Checked = this.settingsRoot.Send.SendImmediately;
+			toolStripMenuItem_SendContextMenu_SkipEmptyLines.Enabled  = isTextTerminal;
+			toolStripMenuItem_SendContextMenu_SkipEmptyLines.Checked  = this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines;
 
 			toolStripMenuItem_SendContextMenu_ExpandMultiLineText.Enabled = this.settingsRoot.SendText.Command.IsMultiLineText;
 
@@ -1864,6 +1877,11 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_SendContextMenu_SendImmediately_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Send.SendImmediately = !this.settingsRoot.Send.SendImmediately;
+		}
+
+		private void toolStripMenuItem_SendContextMenu_SkipEmptyLines_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines = !this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines;
 		}
 
 		private void toolStripMenuItem_SendContextMenu_ExpandMultiLineText_Click(object sender, EventArgs e)

@@ -40,11 +40,18 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public static readonly int DefaultEncoding = (EncodingEx)System.Text.Encoding.Default;
 
-		private bool               separateTxRxEol;
-		private string             txEol;
-		private string             rxEol;
-		private int                encoding;
-		private bool               showEol;
+		private bool   separateTxRxEol;
+		private string txEol;
+		private string rxEol;
+		private int    encoding;
+		private bool   showEol;
+
+		/// <remarks>
+		/// Named 'sendFile' even though the type is named 'SendTextFile' because of reason
+		/// documented in the remarks of <see cref="SendTextFileSettings"/>.
+		/// </remarks>
+		private SendTextFileSettings sendFile;
+
 		private TextLineSendDelay  lineSendDelay;
 		private WaitForResponse    waitForResponse;
 		private CharSubstitution   charSubstitution;
@@ -62,6 +69,7 @@ namespace YAT.Domain.Settings
 		{
 			SetMyDefaults();
 
+			SendFile   = new SendTextFileSettings(SettingsType);
 			EolComment = new EolCommentSettings(SettingsType);
 
 			SetNodeDefaults();
@@ -84,6 +92,7 @@ namespace YAT.Domain.Settings
 			WaitForResponse  = rhs.WaitForResponse;
 			CharSubstitution = rhs.CharSubstitution;
 
+			SendFile   = new SendTextFileSettings(rhs.SendFile);
 			EolComment = new EolCommentSettings(rhs.EolComment);
 
 			ClearChanged();
@@ -207,6 +216,26 @@ namespace YAT.Domain.Settings
 				{
 					this.showEol = value;
 					SetMyChanged();
+				}
+			}
+		}
+
+		/// <remarks>
+		/// Named 'SendFile' even though the type is named 'SendTextFile' because of reason
+		/// documented in the remarks of <see cref="SendTextFileSettings"/>.
+		/// </remarks>
+		[XmlElement("SendFile")]
+		public virtual SendTextFileSettings SendFile
+		{
+			get { return (this.sendFile); }
+			set
+			{
+				if (this.sendFile != value)
+				{
+					var oldNode = this.sendFile;
+					this.sendFile = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
 				}
 			}
 		}
