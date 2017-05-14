@@ -2177,7 +2177,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		protected virtual void ProcessRawChunk(RawChunk raw, DisplayElementCollection elements, List<DisplayLine> lines)
-		{
+		{                            // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			var dl = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			// Line begin:
