@@ -882,6 +882,8 @@ namespace YAT.View.Controls
 
 		private void SetSendControls()
 		{
+			bool isTextTerminal = (this.terminalType == Domain.TerminalType.Text);
+
 			this.isSettingControls.Enter();
 
 			// Prepare the button properties based on state and settings.
@@ -899,11 +901,10 @@ namespace YAT.View.Controls
 			bool enabled = this.terminalIsReadyToSend;
 			if (this.sendImmediately)
 			{
-				switch (this.terminalType)
-				{
-					case Domain.TerminalType.Text: text = "Send EOL (F3)"; break;
-					default: /* Binary or <New> */ enabled = false;        break;
-				}
+				if (isTextTerminal)
+					text = "Send EOL (F3)";
+				else
+					enabled = false;
 			}
 
 			string commandText = "";
@@ -913,11 +914,10 @@ namespace YAT.View.Controls
 			string toolTipText = @"Send """ + commandText + @"""";
 			if (this.sendImmediately)
 			{
-				switch (this.terminalType)
-				{
-					case Domain.TerminalType.Text: toolTipText = "Send EOL"; break;
-					default: /* Binary or <New> */ toolTipText = "";         break;
-				}
+				if (isTextTerminal)
+					toolTipText = "Send EOL";
+				else
+					toolTipText = "";
 			}
 
 			// Set the button properties:
