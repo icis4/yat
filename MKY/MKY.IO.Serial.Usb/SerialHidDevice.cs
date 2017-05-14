@@ -1220,7 +1220,7 @@ namespace MKY.IO.Serial.Usb
 								this.receiveQueue.Clear();
 							}
 
-							OnDataReceived(new SerialDataReceivedEventArgs(data, DeviceInfo));
+							OnDataReceived(new SerialDataReceivedEventArgs(data, DeviceInfo, this.device.ReportFormat.UseId, this.device.ActiveReportId));
 
 							// Note the Thread.Sleep(TimeSpan.Zero) above.
 						}
@@ -1238,7 +1238,7 @@ namespace MKY.IO.Serial.Usb
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "Usb.SerialHidDevice uses asynchronous 'Write' to invoke this event.")]
 		private void Device_DataSent(object sender, IO.Usb.DataEventArgs e)
 		{
-			OnDataSent(new SerialDataSentEventArgs(e.Data, e.TimeStamp, DeviceInfo));
+			OnDataSent(new SerialDataSentEventArgs(e.Data, e.TimeStamp, DeviceInfo, this.device.ReportFormat.UseId, this.device.ActiveReportId));
 		}
 
 		private void device_IOError(object sender, IO.Usb.ErrorEventArgs e)

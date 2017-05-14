@@ -22,6 +22,8 @@
 //==================================================================================================
 
 using System;
+using System.Globalization;
+using System.Text;
 
 using MKY.IO.Usb;
 
@@ -31,24 +33,37 @@ namespace MKY.IO.Serial.Usb
 	public class SerialDataReceivedEventArgs : DataReceivedEventArgs
 	{
 		private DeviceInfo deviceInfo;
+		private bool useReportId;
+		private byte reportId;
 
 		/// <summary></summary>
-		public SerialDataReceivedEventArgs(byte data, DeviceInfo deviceInfo)
-			: this(new byte[] { data }, deviceInfo)
+		public SerialDataReceivedEventArgs(byte data, DeviceInfo deviceInfo, bool useReportId, byte reportId)
+			: this(new byte[] { data }, deviceInfo, useReportId, reportId)
 		{
 		}
 
 		/// <summary></summary>
-		public SerialDataReceivedEventArgs(byte[] data, DeviceInfo deviceInfo)
+		public SerialDataReceivedEventArgs(byte[] data, DeviceInfo deviceInfo, bool useReportId, byte reportId)
 			: base(data)
 		{
-			this.deviceInfo = deviceInfo;
+			this.deviceInfo  = deviceInfo;
+			this.useReportId = useReportId;
+			this.reportId    = reportId;
 		}
 
 		/// <summary></summary>
 		public override string PortStamp
 		{
-			get { return (this.deviceInfo.ToShortString()); }
+			get
+			{
+				var sb = new StringBuilder(this.deviceInfo.ToShortString());
+				if (this.useReportId)
+				{
+					sb.Append(" ReportID:");
+					sb.Append(this.reportId.ToString(CultureInfo.InvariantCulture));
+				}
+				return (sb.ToString());
+			}
 		}
 	}
 
@@ -56,18 +71,31 @@ namespace MKY.IO.Serial.Usb
 	public class SerialDataSentEventArgs : DataSentEventArgs
 	{
 		private DeviceInfo deviceInfo;
+		private bool useReportId;
+		private byte reportId;
 
 		/// <summary></summary>
-		public SerialDataSentEventArgs(byte[] data, DateTime timeStamp, DeviceInfo deviceInfo)
+		public SerialDataSentEventArgs(byte[] data, DateTime timeStamp, DeviceInfo deviceInfo, bool useReportId, byte reportId)
 			: base(data, timeStamp)
 		{
-			this.deviceInfo = deviceInfo;
+			this.deviceInfo  = deviceInfo;
+			this.useReportId = useReportId;
+			this.reportId    = reportId;
 		}
 
 		/// <summary></summary>
 		public override string PortStamp
 		{
-			get { return (this.deviceInfo.ToShortString()); }
+			get
+			{
+				var sb = new StringBuilder(this.deviceInfo.ToShortString());
+				if (this.useReportId)
+				{
+					sb.Append(" ReportID:");
+					sb.Append(this.reportId.ToString(CultureInfo.InvariantCulture));
+				}
+				return (sb.ToString());
+			}
 		}
 	}
 }

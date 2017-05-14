@@ -21,8 +21,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System.Collections.ObjectModel;
-
 using MKY.IO.Ports;
 
 namespace MKY.IO.Serial.SerialPort
