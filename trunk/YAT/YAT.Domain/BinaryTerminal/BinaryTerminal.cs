@@ -247,7 +247,7 @@ namespace YAT.Domain
 
 			public LineState(SequenceQueue sequenceAfter, SequenceQueue sequenceBefore, DateTime timeStamp, LineBreakTimer lineBreakTimer)
 			{
-				LinePosition                  = LinePosition.Begin;
+				LinePosition                  = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 				LineElements                  = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				SequenceAfter                 = sequenceAfter;
 				SequenceBefore                = sequenceBefore;
@@ -336,7 +336,7 @@ namespace YAT.Domain
 			{
 				AssertNotDisposed();
 
-				LinePosition                  = LinePosition.Begin;
+				LinePosition                  = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 				LineElements                  = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				SequenceAfter                  .Reset();
 				SequenceBefore                 .Reset();
@@ -578,7 +578,7 @@ namespace YAT.Domain
 		}
 
 		private void ExecuteLineBegin(LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elements)
-		{
+		{                                            // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			DisplayLinePart lp = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			lp.Add(new DisplayElement.LineStart()); // Direction may be both!
@@ -729,7 +729,7 @@ namespace YAT.Domain
 		private void ExecuteLineEnd(LineState lineState, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of TextTerminal for better comparability.
-
+			                                   // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			DisplayLine line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			// Process line content:
