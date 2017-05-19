@@ -967,7 +967,7 @@ namespace YAT.Model
 									}
 									else
 									{
-										sb.Append(" to");
+										sb.Append(" to ");
 										sb.Append(count.ToString(CultureInfo.CurrentCulture));
 										sb.Append(" clients");
 									}

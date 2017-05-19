@@ -66,15 +66,15 @@ namespace MKY.IO.Serial.Socket
 
 		private const string Unknown_string       = "Unknown";
 
-		private const string TcpClient_string     = "TCP/IP Client";
-		private const string TcpServer_string     = "TCP/IP Server";
-		private const string TcpAutoSocket_string = "TCP/IP AutoSocket";
-		private const string Tcp_stringDefault    = "TCP";
-
-		private const string UdpClient_string     = "UDP/IP Client";
-		private const string UdpServer_string     = "UDP/IP Server";
-		private const string UdpPairSocket_string = "UDP/IP PairSocket";
-		private const string Udp_stringDefault    = "UDP";
+		private const string TcpClient_string     = "TCP/IP Client";     // Intentionally using PascalCased
+		private const string TcpServer_string     = "TCP/IP Server";     // "Client" and "Server" instead of
+		private const string TcpAutoSocket_string = "TCP/IP AutoSocket"; // camelCased "client" and "server"
+		private const string Tcp_stringDefault    = "TCP";               // because these strings are kind of
+		                                                                 // a title/caption which in English
+		private const string UdpClient_string     = "UDP/IP Client";     // is typically capitalized.
+		private const string UdpServer_string     = "UDP/IP Server";     // Note that the identifiers will
+		private const string UdpPairSocket_string = "UDP/IP PairSocket"; // rather be written "client" and
+		private const string Udp_stringDefault    = "UDP";               // "server" when inside a sentence.
 
 		#endregion
 
