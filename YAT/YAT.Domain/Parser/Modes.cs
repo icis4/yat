@@ -31,25 +31,28 @@ namespace YAT.Domain.Parser
 	public enum Modes
 	{
 		/// <summary></summary>
-		Radix = 1,
+		NoEscapes = 0,
 
 		/// <summary></summary>
-		Ascii = 2,
+		RadixEscapes = 1,
 
 		/// <summary></summary>
-		AllByteArrayResults = Radix | Ascii,
+		AsciiEscapes = 2,
 
 		/// <summary></summary>
-		AllExceptKeywords = AllByteArrayResults,
+		RadixAndAsciiEscapes = RadixEscapes | AsciiEscapes,
 
 		/// <summary></summary>
-		Keywords = 128,
+		AllEscapesExceptKeywords = RadixAndAsciiEscapes,
 
 		/// <summary></summary>
-		All = AllByteArrayResults | Keywords,
+		KeywordEscapes = 128,
 
 		/// <summary></summary>
-		Default = All,
+		AllEscapes = RadixAndAsciiEscapes | KeywordEscapes,
+
+		/// <summary></summary>
+		Default = AllEscapes,
 	}
 }
 

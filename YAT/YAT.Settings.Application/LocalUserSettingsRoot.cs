@@ -257,7 +257,7 @@ namespace YAT.Settings.Application
 		/// </summary>
 		[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "See comment above.")]
 		private static readonly MKY.Xml.AlternateXmlElement[] StaticAlternateXmlElements =
-		{
+		{                                                // XML path:                  local name of XML element:           alternate local name(s), i.e. former name(s) of XML element:
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "MainFiles",           new string[] { "TerminalFilesPath" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "MainFilesPath",       new string[] { "WorkspaceFilesPath" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "SendFiles",           new string[] { "SendFilesPath" } ),

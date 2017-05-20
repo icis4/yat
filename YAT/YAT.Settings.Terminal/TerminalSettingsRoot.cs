@@ -640,7 +640,7 @@ namespace YAT.Settings.Terminal
 		/// The alternate name (i.e. the old name) should be definable in 'SocketSettings'.
 		/// </remarks>
 		private static readonly MKY.Xml.AlternateXmlElement[] StaticAlternateXmlElements =
-		{
+		{                                                // XML path:                                                                                    local name of XML element:                                               alternate local name(s), i.e. former name(s) of XML element:
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO"                                     }, "Endianness",                                             new string[] { "Endianess" } ),
 		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO"                                     }, new string[] { "SerialPort", "IndicateBreakStates" },     new string[] { "IndicateSerialPortBreakStates" } ),     => Should be moved, but doesn't work because new name is at a deeper level. Should be solved using XML transformation. */
 		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO"                                     }, new string[] { "SerialPort", "OutputBreakIsModifiable" }, new string[] { "SerialPortOutputBreakIsModifiable" } ), => Should be moved, but doesn't work because new name is at a deeper level. Should be solved using XML transformation. */
@@ -655,6 +655,7 @@ namespace YAT.Settings.Terminal
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "Display"                                }, "ShowBufferLineNumbers",                                  new string[] { "ShowLineNumbers" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "Display"                                }, "ShowTime",                                               new string[] { "ShowTimeStamp" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "Display"                                }, "MaxLineCount",                                           new string[] { "TxMaxLineCount" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "Send"                                   }, "DisableEscapes",                                         new string[] { "DisableKeywords" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Format"                                             }, "TimeFormat",                                             new string[] { "TimeStampFormat" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Log"                                                }, "FolderFormat",                                           new string[] { "SubdirectoriesFormat" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Log"                                                }, "FolderChannel",                                          new string[] { "SubdirectoriesChannel" } ),

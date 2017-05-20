@@ -142,7 +142,7 @@ namespace YAT.Domain.Parser
 
 				case '!':
 				{
-					if ((parser.Modes & Modes.Keywords) != 0)
+					if ((parser.Modes & Modes.KeywordEscapes) != 0)
 					{
 						parser.IsKeywordParser = true;
 						parser.DoProbe         = false; // Keywords cannot be probed (yet).

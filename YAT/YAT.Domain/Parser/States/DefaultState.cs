@@ -75,16 +75,23 @@ namespace YAT.Domain.Parser
 		{
 			AssertNotDisposed();
 
-			if ((parseChar < 0) ||                                 // End of parse string.
-				(parseChar == ')' && !parser.IsTopLevel))
+			if (parseChar < 0)     // End of string to parse.
 			{
 				if (!TryWriteContiguous(parser, ref formatException))
 					return (false);
 
 				parser.HasFinished = true;
 				ChangeState(parser, null);
-			}
-			else if (parseChar == '\\' && !parser.IsKeywordParser) // Escape sequence.
+			}                      // End of contiguous string.
+			else if (parseChar == ')' && (parser.Modes != Modes.NoEscapes) && !parser.IsTopLevel)
+			{
+				if (!TryWriteContiguous(parser, ref formatException))
+					return (false);
+
+				parser.HasFinished = true;
+				ChangeState(parser, null);
+			}                      // Escape sequence.
+			else if (parseChar == '\\' && (parser.Modes != Modes.NoEscapes))
 			{
 				if (!TryWriteContiguous(parser, ref formatException))
 					return (false);
@@ -93,8 +100,8 @@ namespace YAT.Domain.Parser
 				parser.CommitPendingBytes();
 				parser.NestedParser = parser.GetNestedParser(new EscapeState());
 				ChangeState(parser, new NestedState());
-			}
-			else if (parseChar == '<' && !parser.IsKeywordParser) // ASCII mnemonic sequence.
+			}                      // ASCII mnemonic sequence.
+			else if (parseChar == '<' && ((parser.Modes & Modes.AsciiEscapes) != 0))
 			{
 				if (!TryWriteContiguous(parser, ref formatException))
 					return (false);
@@ -103,8 +110,8 @@ namespace YAT.Domain.Parser
 				parser.CommitPendingBytes();
 				parser.NestedParser = parser.GetNestedParser(new AsciiMnemonicState());
 				ChangeState(parser, new NestedState());
-			}
-			else if (parseChar == '(' && parser.IsKeywordParser) // Keyword args.
+			}                       // Keyword args.
+			else if (parseChar == '(' && ((parser.Modes & Modes.KeywordEscapes) != 0) && parser.IsKeywordParser)
 			{
 				KeywordResult result;
 
@@ -115,7 +122,7 @@ namespace YAT.Domain.Parser
 				parser.NestedParser = parser.GetNestedParser(new KeywordArgState(result.Keyword));
 				ChangeState(parser, new NestedState());
 			}
-			else                                                 // Compose contiguous string.
+			else                    // Compose contiguous string.
 			{
 				this.contiguousWriter.Write((char)parseChar);
 

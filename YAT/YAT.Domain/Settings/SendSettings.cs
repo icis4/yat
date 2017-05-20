@@ -58,7 +58,7 @@ namespace YAT.Domain.Settings
 		public const int DefaultLineRepeatDefault = LineRepeatInfinite;
 
 		/// <summary></summary>
-		public const bool DisableKeywordsDefault = false;
+		public const bool DisableEscapesDefault = false;
 
 		/// <summary></summary>
 		public const bool SignalXOnBeforeEachTransmissionDefault = false;
@@ -80,7 +80,7 @@ namespace YAT.Domain.Settings
 		private int  defaultLineDelay;
 		private int  defaultLineInterval;
 		private int  defaultLineRepeat;
-		private bool disableKeywords;
+		private bool disableEscapes;
 
 		// Serial port specific send settings. Located here (and not in 'SerialPortSettings) as they are endemic to YAT.
 		private bool signalXOnBeforeEachTransmission;
@@ -115,7 +115,7 @@ namespace YAT.Domain.Settings
 			DefaultLineDelay        = rhs.DefaultLineDelay;
 			DefaultLineInterval     = rhs.DefaultLineInterval;
 			DefaultLineRepeat       = rhs.DefaultLineRepeat;
-			DisableKeywords         = rhs.DisableKeywords;
+			DisableEscapes          = rhs.DisableEscapes;
 
 			SignalXOnBeforeEachTransmission = rhs.SignalXOnBeforeEachTransmission;
 			SignalXOnPeriodically           = rhs.SignalXOnPeriodically;
@@ -138,7 +138,7 @@ namespace YAT.Domain.Settings
 			DefaultLineDelay        = DefaultLineDelayDefault;
 			DefaultLineInterval     = DefaultLineIntervalDefault;
 			DefaultLineRepeat       = DefaultLineRepeatDefault;
-			DisableKeywords         = DisableKeywordsDefault;
+			DisableEscapes          = DisableEscapesDefault;
 
 			SignalXOnBeforeEachTransmission = SignalXOnBeforeEachTransmissionDefault;
 			SignalXOnPeriodically           = SignalXOnPeriodicallyDefault;
@@ -270,15 +270,15 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("DisableKeywords")]
-		public virtual bool DisableKeywords
+		[XmlElement("DisableEscapes")]
+		public virtual bool DisableEscapes
 		{
-			get { return (this.disableKeywords); }
+			get { return (this.disableEscapes); }
 			set
 			{
-				if (this.disableKeywords != value)
+				if (this.disableEscapes != value)
 				{
-					this.disableKeywords = value;
+					this.disableEscapes = value;
 					SetMyChanged();
 				}
 			}
@@ -324,10 +324,10 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public virtual Parser.Modes ToParseMode()
 		{
-			if (DisableKeywords)
-				return (Parser.Modes.AllExceptKeywords);
+			if (DisableEscapes)
+				return (Parser.Modes.NoEscapes);
 			else
-				return (Parser.Modes.All);
+				return (Parser.Modes.AllEscapes);
 		}
 
 		#endregion
@@ -358,7 +358,7 @@ namespace YAT.Domain.Settings
 				hashCode = (hashCode * 397) ^ DefaultLineDelay;
 				hashCode = (hashCode * 397) ^ DefaultLineInterval;
 				hashCode = (hashCode * 397) ^ DefaultLineRepeat;
-				hashCode = (hashCode * 397) ^ DisableKeywords                .GetHashCode();
+				hashCode = (hashCode * 397) ^ DisableEscapes                 .GetHashCode();
 
 				hashCode = (hashCode * 397) ^ SignalXOnBeforeEachTransmission.GetHashCode();
 				hashCode = (hashCode * 397) ^ SignalXOnPeriodically          .GetHashCode();
@@ -400,7 +400,7 @@ namespace YAT.Domain.Settings
 				DefaultLineDelay       .Equals(other.DefaultLineDelay)        &&
 				DefaultLineInterval    .Equals(other.DefaultLineInterval)     &&
 				DefaultLineRepeat      .Equals(other.DefaultLineRepeat)       &&
-				DisableKeywords        .Equals(other.DisableKeywords)         &&
+				DisableEscapes         .Equals(other.DisableEscapes)          &&
 
 				SignalXOnBeforeEachTransmission.Equals(other.SignalXOnBeforeEachTransmission) &&
 				SignalXOnPeriodically          .Equals(other.SignalXOnPeriodically)

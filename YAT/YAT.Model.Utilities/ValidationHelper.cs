@@ -44,7 +44,7 @@ namespace YAT.Model.Utilities
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public static bool ValidateText(string description, string textToValidate, Domain.Radix defaultRadix = Domain.Radix.String, Domain.Parser.Modes modes = Domain.Parser.Modes.AllExceptKeywords)
+		public static bool ValidateText(string description, string textToValidate, Domain.Radix defaultRadix = Domain.Radix.String, Domain.Parser.Modes modes = Domain.Parser.Modes.AllEscapesExceptKeywords)
 		{
 			string errorMessage;
 			return (ValidateText(description, textToValidate, out errorMessage, defaultRadix, modes));
@@ -53,7 +53,7 @@ namespace YAT.Model.Utilities
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public static bool ValidateText(string description, string textToValidate, out string errorMessage, Domain.Radix defaultRadix = Domain.Radix.String, Domain.Parser.Modes modes = Domain.Parser.Modes.AllExceptKeywords)
+		public static bool ValidateText(string description, string textToValidate, out string errorMessage, Domain.Radix defaultRadix = Domain.Radix.String, Domain.Parser.Modes modes = Domain.Parser.Modes.AllEscapesExceptKeywords)
 		{
 			int invalidTextStart;
 			int invalidTextLength;
@@ -65,7 +65,7 @@ namespace YAT.Model.Utilities
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public static bool ValidateText(string description, string textToValidate, out int invalidTextStart, out int invalidTextLength, out string errorMessage, Domain.Radix defaultRadix = Domain.Radix.String, Domain.Parser.Modes modes = Domain.Parser.Modes.AllExceptKeywords)
+		public static bool ValidateText(string description, string textToValidate, out int invalidTextStart, out int invalidTextLength, out string errorMessage, Domain.Radix defaultRadix = Domain.Radix.String, Domain.Parser.Modes modes = Domain.Parser.Modes.AllEscapesExceptKeywords)
 		{
 			string successfullyParsed;
 			if (ValidateText(description, textToValidate, out successfullyParsed, out errorMessage, defaultRadix, modes))
@@ -87,7 +87,7 @@ namespace YAT.Model.Utilities
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
-		public static bool ValidateText(string description, string textToValidate, out string successfullyParsed, out string errorMessage, Domain.Radix defaultRadix = Domain.Radix.String, Domain.Parser.Modes modes = Domain.Parser.Modes.AllExceptKeywords)
+		public static bool ValidateText(string description, string textToValidate, out string successfullyParsed, out string errorMessage, Domain.Radix defaultRadix = Domain.Radix.String, Domain.Parser.Modes modes = Domain.Parser.Modes.AllEscapesExceptKeywords)
 		{
 			bool hasSucceeded;
 			var formatException = new Domain.Parser.FormatException("");
