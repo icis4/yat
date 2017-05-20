@@ -402,7 +402,7 @@ namespace YAT.Domain
 
 			byte[] txEol;
 			byte[] rxEol;
-			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, Parser.Modes.AllByteArrayResults))
+			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, Parser.Modes.RadixAndAsciiEscapes))
 			{
 				if (!p.TryParse(TextTerminalSettings.TxEol, out txEol))
 				{

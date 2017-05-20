@@ -627,7 +627,8 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Send.DefaultLineDelay                = f.SettingsResult.Terminal.Send.DefaultLineDelay;
 				this.settingsInEdit.Terminal.Send.DefaultLineInterval             = f.SettingsResult.Terminal.Send.DefaultLineInterval;
 				this.settingsInEdit.Terminal.Send.DefaultLineRepeat               = f.SettingsResult.Terminal.Send.DefaultLineRepeat;
-				this.settingsInEdit.Terminal.Send.DisableKeywords                 = f.SettingsResult.Terminal.Send.DisableKeywords;
+
+				this.settingsInEdit.Terminal.Send.DisableEscapes                  = f.SettingsResult.Terminal.Send.DisableEscapes;
 
 				this.settingsInEdit.UserName = f.SettingsResult.UserName;
 			}

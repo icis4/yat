@@ -840,10 +840,10 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void checkBox_DisableKeywords_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_DisableEscapes_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Send.DisableKeywords = checkBox_DisableKeywords.Checked;
+				this.settingsInEdit.Terminal.Send.DisableEscapes = checkBox_DisableEscapes.Checked;
 		}
 
 		private void textBox_UserName_TextChanged(object sender, EventArgs e)
@@ -985,41 +985,29 @@ namespace YAT.View.Forms
 			textBox_SignalXOnPeriodicallyInterval.Text       = this.settingsInEdit.Terminal.Send.SignalXOnPeriodically.Interval.ToString(CultureInfo.CurrentCulture);
 			label_SignalXOnPeriodicallyIntervalUnit.Enabled  = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
 
-			groupBox_Send_SerialPorts.Enabled                = isSerialPort;
-			checkBox_OutputBufferSize.Checked                = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Enabled;
-			textBox_OutputBufferSize.Enabled                 = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Enabled;
-			textBox_OutputBufferSize.Text                    = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Size.ToString(CultureInfo.CurrentCulture);
-			checkBox_OutputMaxBaudRate.Checked               = this.settingsInEdit.Terminal.IO.SerialPort.OutputMaxBaudRate;
-			checkBox_MaxChunkSizeEnable.Checked              = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Enabled;
-			textBox_MaxChunkSize.Enabled                     = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Enabled;
-			textBox_MaxChunkSize.Text                        = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Size.ToString(CultureInfo.CurrentCulture);
-			checkBox_MaxSendRateEnable.Checked               = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
-			textBox_MaxSendRateSize.Enabled                  = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
-			textBox_MaxSendRateSize.Text                     = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Size.ToString(CultureInfo.CurrentCulture);
-			textBox_MaxSendRateInterval.Enabled              = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
-			textBox_MaxSendRateInterval.Text                 = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Interval.ToString(CultureInfo.CurrentCulture);
-			checkBox_NoSendOnOutputBreak.Checked             = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak;
-			checkBox_NoSendOnInputBreak.Checked              = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak;
+			groupBox_Send_SerialPorts.Enabled    = isSerialPort;
+			checkBox_OutputBufferSize.Checked    = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Enabled;
+			textBox_OutputBufferSize.Enabled     = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Enabled;
+			textBox_OutputBufferSize.Text        = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Size.ToString(CultureInfo.CurrentCulture);
+			checkBox_OutputMaxBaudRate.Checked   = this.settingsInEdit.Terminal.IO.SerialPort.OutputMaxBaudRate;
+			checkBox_MaxChunkSizeEnable.Checked  = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Enabled;
+			textBox_MaxChunkSize.Enabled         = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Enabled;
+			textBox_MaxChunkSize.Text            = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Size.ToString(CultureInfo.CurrentCulture);
+			checkBox_MaxSendRateEnable.Checked   = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
+			textBox_MaxSendRateSize.Enabled      = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
+			textBox_MaxSendRateSize.Text         = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Size.ToString(CultureInfo.CurrentCulture);
+			textBox_MaxSendRateInterval.Enabled  = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
+			textBox_MaxSendRateInterval.Text     = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Interval.ToString(CultureInfo.CurrentCulture);
+			checkBox_NoSendOnOutputBreak.Checked = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak;
+			checkBox_NoSendOnInputBreak.Checked  = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
-			bool disableKeywords = this.settingsInEdit.Terminal.Send.DisableKeywords;
-			//// Attention: Do not disable the whole groupbox! Keywords could not be enabled anymore!
-			label_DefaultDelay.Enabled            = !disableKeywords;
-			label_DefaultDelayUnit.Enabled        = !disableKeywords;
-			textBox_DefaultDelay.Enabled          = !disableKeywords;
-			textBox_DefaultDelay.Text             = this.settingsInEdit.Terminal.Send.DefaultDelay.ToString(CultureInfo.CurrentCulture);
-			label_DefaultLineDelay.Enabled        = !disableKeywords;
-			label_DefaultLineDelayUnit.Enabled    = !disableKeywords;
-			textBox_DefaultLineDelay.Enabled      = !disableKeywords;
-			textBox_DefaultLineDelay.Text         = this.settingsInEdit.Terminal.Send.DefaultLineDelay.ToString(CultureInfo.CurrentCulture);
-			label_DefaultLineInterval.Enabled     = !disableKeywords;
-			label_DefaultLineIntervalUnit.Enabled = !disableKeywords;
-			textBox_DefaultLineInterval.Enabled   = !disableKeywords;
-			textBox_DefaultLineInterval.Text      = this.settingsInEdit.Terminal.Send.DefaultLineInterval.ToString(CultureInfo.CurrentCulture);
-			label_DefaultLineRepeat.Enabled       = !disableKeywords;
-			label_DefaultLineRepeatUnit.Enabled   = !disableKeywords;
-			textBox_DefaultLineRepeat.Enabled     = !disableKeywords;
-			textBox_DefaultLineRepeat.Text        = this.settingsInEdit.Terminal.Send.DefaultLineRepeat.ToString(CultureInfo.CurrentCulture);
-			checkBox_DisableKeywords.Checked      = disableKeywords;
+			groupBox_Send_Keywords.Enabled   = !this.settingsInEdit.Terminal.Send.DisableEscapes;
+			textBox_DefaultDelay.Text        =  this.settingsInEdit.Terminal.Send.DefaultDelay.ToString(CultureInfo.CurrentCulture);
+			textBox_DefaultLineDelay.Text    =  this.settingsInEdit.Terminal.Send.DefaultLineDelay.ToString(CultureInfo.CurrentCulture);
+			textBox_DefaultLineInterval.Text =  this.settingsInEdit.Terminal.Send.DefaultLineInterval.ToString(CultureInfo.CurrentCulture);
+			textBox_DefaultLineRepeat.Text   =  this.settingsInEdit.Terminal.Send.DefaultLineRepeat.ToString(CultureInfo.CurrentCulture);
+
+			checkBox_DisableEscapes.Checked = this.settingsInEdit.Terminal.Send.DisableEscapes;
 
 			// User:
 			textBox_UserName.Text = this.settingsInEdit.UserName;
@@ -1094,7 +1082,9 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.Send.DefaultDelay                    = Domain.Settings.SendSettings.DefaultDelayDefault;
 			this.settingsInEdit.Terminal.Send.DefaultLineDelay                = Domain.Settings.SendSettings.DefaultLineDelayDefault;
 			this.settingsInEdit.Terminal.Send.DefaultLineInterval             = Domain.Settings.SendSettings.DefaultLineIntervalDefault;
-			this.settingsInEdit.Terminal.Send.DisableKeywords                 = Domain.Settings.SendSettings.DisableKeywordsDefault;
+			this.settingsInEdit.Terminal.Send.DefaultLineRepeat               = Domain.Settings.SendSettings.DefaultLineRepeatDefault;
+
+			this.settingsInEdit.Terminal.Send.DisableEscapes                  = Domain.Settings.SendSettings.DisableEscapesDefault;
 
 			// User:
 			this.settingsInEdit.UserName = Settings.Terminal.ExplicitSettings.UserNameDefault;

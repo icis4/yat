@@ -146,7 +146,7 @@ namespace YAT.Domain.Parser
 		private Encoding encoding = Encoding.Default;
 		private Endianness endianness = Endianness.BigEndian;
 		private Radix defaultRadix = DefaultRadixDefault;
-		private Modes modes = Modes.All;
+		private Modes modes = Modes.AllEscapes;
 
 		private StringReader charReader;
 		private MemoryStream bytesWriter;
@@ -169,7 +169,7 @@ namespace YAT.Domain.Parser
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public Parser(Modes modes = Modes.All)
+		public Parser(Modes modes = Modes.AllEscapes)
 		{
 			this.modes = modes;
 		}
@@ -177,7 +177,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
-		public Parser(Endianness endianness, Modes modes = Modes.All)
+		public Parser(Endianness endianness, Modes modes = Modes.AllEscapes)
 		{
 			this.endianness = endianness;
 			this.modes      = modes;
@@ -186,7 +186,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
-		public Parser(Encoding encoding, Endianness endianness = Endianness.BigEndian, Modes modes = Modes.All)
+		public Parser(Encoding encoding, Endianness endianness = Endianness.BigEndian, Modes modes = Modes.AllEscapes)
 		{
 			this.encoding   = encoding;
 			this.endianness = endianness;

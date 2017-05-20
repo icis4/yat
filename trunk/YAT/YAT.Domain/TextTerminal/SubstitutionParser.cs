@@ -69,7 +69,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
-		public SubstitutionParser(CharSubstitution substitution, Encoding encoding, Endianness endianness = Endianness.BigEndian, Modes modes = Modes.All)
+		public SubstitutionParser(CharSubstitution substitution, Encoding encoding, Endianness endianness = Endianness.BigEndian, Modes modes = Modes.AllEscapes)
 			: base(encoding, endianness, modes)
 		{
 			this.substitution = substitution;
