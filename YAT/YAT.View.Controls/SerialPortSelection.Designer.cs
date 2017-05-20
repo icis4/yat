@@ -33,6 +33,7 @@
 			this.comboBox_Port = new System.Windows.Forms.ComboBox();
 			this.label_Port = new System.Windows.Forms.Label();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.label_OnDialogMessage = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// button_RefreshPorts
@@ -43,7 +44,7 @@
 			this.button_RefreshPorts.Location = new System.Drawing.Point(258, 22);
 			this.button_RefreshPorts.Name = "button_RefreshPorts";
 			this.button_RefreshPorts.Size = new System.Drawing.Size(24, 21);
-			this.button_RefreshPorts.TabIndex = 2;
+			this.button_RefreshPorts.TabIndex = 3;
 			this.toolTip.SetToolTip(this.button_RefreshPorts, "Refresh the list with the serial ports available on the system");
 			this.button_RefreshPorts.Click += new System.EventHandler(this.button_RefreshPorts_Click);
 			// 
@@ -55,7 +56,7 @@
 			this.comboBox_Port.Location = new System.Drawing.Point(6, 22);
 			this.comboBox_Port.Name = "comboBox_Port";
 			this.comboBox_Port.Size = new System.Drawing.Size(251, 21);
-			this.comboBox_Port.TabIndex = 1;
+			this.comboBox_Port.TabIndex = 2;
 			this.toolTip.SetToolTip(this.comboBox_Port, "Either select a port from the list, or fill in \"COM..\" (COM1..COM65535).");
 			this.comboBox_Port.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Port_Validating);
 			// 
@@ -68,10 +69,24 @@
 			this.label_Port.TabIndex = 0;
 			this.label_Port.Text = "&Serial Port:";
 			// 
+			// label_OnDialogMessage
+			// 
+			this.label_OnDialogMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_OnDialogMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_OnDialogMessage.ForeColor = System.Drawing.Color.DarkOrange;
+			this.label_OnDialogMessage.Location = new System.Drawing.Point(67, 6);
+			this.label_OnDialogMessage.Name = "label_OnDialogMessage";
+			this.label_OnDialogMessage.Size = new System.Drawing.Size(216, 13);
+			this.label_OnDialogMessage.TabIndex = 1;
+			this.label_OnDialogMessage.Text = "<Message>";
+			this.label_OnDialogMessage.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// SerialPortSelection
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.label_OnDialogMessage);
 			this.Controls.Add(this.button_RefreshPorts);
 			this.Controls.Add(this.comboBox_Port);
 			this.Controls.Add(this.label_Port);
@@ -90,5 +105,6 @@
 		private System.Windows.Forms.ComboBox comboBox_Port;
 		private System.Windows.Forms.Label label_Port;
 		private System.Windows.Forms.ToolTip toolTip;
+		private System.Windows.Forms.Label label_OnDialogMessage;
 	}
 }

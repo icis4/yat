@@ -123,8 +123,8 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		[Category("USB Ser/HID")]
-		[Description("The report format.")]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public MKY.IO.Usb.SerialHidReportFormat ReportFormat
 		{
 			get { return (this.reportFormat); }
@@ -147,8 +147,8 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("USB Ser/HID")]
-		[Description("The Rx filter usage.")]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public MKY.IO.Usb.SerialHidRxFilterUsage RxFilterUsage
 		{
 			get { return (this.rxFilterUsage); }

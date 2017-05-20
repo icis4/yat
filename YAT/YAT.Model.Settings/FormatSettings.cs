@@ -47,8 +47,8 @@ namespace YAT.Model.Settings
 		/// <remarks>Color.Black = 000000.</remarks>
 		public static readonly Color WhiteSpacesColorDefault = Color.Black;
 
-		/// <remarks>'Orange' predefined by the color dialog = FF8000.</remarks>
-		public static readonly Color ErrorColorDefault = Color.FromArgb(0xFF, 0x80, 0x00);
+		/// <remarks>Color.DarkOrange = FF8C00.</remarks>
+		public static readonly Color ErrorColorDefault = Color.DarkOrange;
 
 		/// <remarks><see cref="SystemColors.Window"/>.</remarks>
 		public static readonly Color BackColorDefault = SystemColors.Window;

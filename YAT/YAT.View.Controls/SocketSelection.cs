@@ -637,6 +637,8 @@ namespace YAT.View.Controls
 		{
 			if (Enabled && !DesignMode)
 			{
+				ResetOnDialogMessage();
+
 				this.localInterfaceListIsBeingSetOrIsAlreadySet = true; // Purpose see remarks above.
 
 				IPNetworkInterfaceCollection localInterfaces = new IPNetworkInterfaceCollection();
@@ -700,20 +702,17 @@ namespace YAT.View.Controls
 			}
 		}
 
+		private void ResetOnDialogMessage()
+		{
+			label_OnDialogMessage.Text = "";
+		}
+
+		/// <remarks>
+		/// Showing this as on dialog message instead of <see cref="MessageBox"/> to reduce the number of potentially annoying popups.
+		/// </remarks>
 		private void ShowNoLocalInterfacesMessage()
 		{
-			string message =
-				"There are currently no local network interfaces available." + Environment.NewLine + Environment.NewLine +
-				"Check the network devices of your system.";
-
-			MessageBoxEx.Show
-			(
-				this,
-				message,
-				"No interfaces available",
-				MessageBoxButtons.OK,
-				MessageBoxIcon.Warning
-			);
+			label_OnDialogMessage.Text = "No local network interfaces currently available";
 		}
 
 		private void ShowNotAvailableDefaultedMessage(string localInterfaceNotAvailable, string localInterfaceDefaulted)
