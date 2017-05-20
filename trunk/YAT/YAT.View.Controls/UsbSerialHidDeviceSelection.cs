@@ -237,6 +237,8 @@ namespace YAT.View.Controls
 			// Only scan for devices if control is enabled. This saves some time and prevents issues.
 			if (Enabled && !DesignMode)
 			{
+				ResetOnDialogMessage();
+
 				this.deviceListIsBeingSetOrIsAlreadySet = true; // Purpose see remarks above.
 
 				SerialHidDeviceCollection devices = new SerialHidDeviceCollection();
@@ -314,20 +316,17 @@ namespace YAT.View.Controls
 			}
 		}
 
+		private void ResetOnDialogMessage()
+		{
+			label_OnDialogMessage.Text = "";
+		}
+
+		/// <remarks>
+		/// Showing this as on dialog message instead of <see cref="MessageBox"/> to reduce the number of potentially annoying popups.
+		/// </remarks>
 		private void ShowNoDevicesMessage()
 		{
-			string message =
-				"There are currently no HID capable USB devices available." + Environment.NewLine + Environment.NewLine +
-				"Check the USB devices of your system.";
-
-			MessageBoxEx.Show
-			(
-				this,
-				message,
-				"No USB HID devices available",
-				MessageBoxButtons.OK,
-				MessageBoxIcon.Warning
-			);
+			label_OnDialogMessage.Text = "No HID capable USB devices currently available";
 		}
 
 		private void ShowNotAvailableDefaultedMessage(string deviceInfoNotAvailable, string deviceInfoDefaulted)

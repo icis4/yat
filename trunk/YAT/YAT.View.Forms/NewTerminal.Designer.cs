@@ -32,12 +32,13 @@ namespace YAT.View.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewTerminal));
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_NewTerminal = new System.Windows.Forms.GroupBox();
 			this.groupBox_PortSettings = new System.Windows.Forms.GroupBox();
-			this.usbSerialHidDeviceSelection = new YAT.View.Controls.UsbSerialHidDeviceSelection();
 			this.socketSelection = new YAT.View.Controls.SocketSelection();
+			this.usbSerialHidDeviceSelection = new YAT.View.Controls.UsbSerialHidDeviceSelection();
 			this.socketSettings = new YAT.View.Controls.SocketSettings();
 			this.serialPortSettings = new YAT.View.Controls.SerialPortSettings();
 			this.serialPortSelection = new YAT.View.Controls.SerialPortSelection();
@@ -93,11 +94,11 @@ namespace YAT.View.Forms
 			this.groupBox_PortSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_PortSettings.Controls.Add(this.usbSerialHidDeviceSelection);
-			this.groupBox_PortSettings.Controls.Add(this.socketSelection);
-			this.groupBox_PortSettings.Controls.Add(this.socketSettings);
 			this.groupBox_PortSettings.Controls.Add(this.serialPortSettings);
 			this.groupBox_PortSettings.Controls.Add(this.serialPortSelection);
+			this.groupBox_PortSettings.Controls.Add(this.socketSelection);
+			this.groupBox_PortSettings.Controls.Add(this.usbSerialHidDeviceSelection);
+			this.groupBox_PortSettings.Controls.Add(this.socketSettings);
 			this.groupBox_PortSettings.Controls.Add(this.usbSerialHidDeviceSettings);
 			this.groupBox_PortSettings.Location = new System.Drawing.Point(6, 79);
 			this.groupBox_PortSettings.Name = "groupBox_PortSettings";
@@ -105,6 +106,22 @@ namespace YAT.View.Forms
 			this.groupBox_PortSettings.TabIndex = 1;
 			this.groupBox_PortSettings.TabStop = false;
 			this.groupBox_PortSettings.Text = "Port Settings";
+			// 
+			// socketSelection
+			// 
+			this.socketSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.socketSelection.Location = new System.Drawing.Point(6, 19);
+			this.socketSelection.Name = "socketSelection";
+			this.socketSelection.Size = new System.Drawing.Size(282, 125);
+			this.socketSelection.TabIndex = 1;
+			this.socketSelection.RemoteHostChanged += new System.EventHandler(this.socketSelection_RemoteHostChanged);
+			this.socketSelection.RemoteTcpPortChanged += new System.EventHandler(this.socketSelection_RemoteTcpPortChanged);
+			this.socketSelection.RemoteUdpPortChanged += new System.EventHandler(this.socketSelection_RemoteUdpPortChanged);
+			this.socketSelection.LocalInterfaceChanged += new System.EventHandler(this.socketSelection_LocalInterfaceChanged);
+			this.socketSelection.LocalFilterChanged += new System.EventHandler(this.socketSelection_LocalFilterChanged);
+			this.socketSelection.LocalTcpPortChanged += new System.EventHandler(this.socketSelection_LocalTcpPortChanged);
+			this.socketSelection.LocalUdpPortChanged += new System.EventHandler(this.socketSelection_LocalUdpPortChanged);
 			// 
 			// usbSerialHidDeviceSelection
 			// 
@@ -117,30 +134,14 @@ namespace YAT.View.Forms
 			this.usbSerialHidDeviceSelection.TabIndex = 0;
 			this.usbSerialHidDeviceSelection.DeviceInfoChanged += new System.EventHandler(this.usbSerialHidDeviceSelection_DeviceInfoChanged);
 			// 
-			// socketSelection
-			// 
-			this.socketSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.socketSelection.Location = new System.Drawing.Point(6, 19);
-			this.socketSelection.Name = "socketSelection";
-			this.socketSelection.Size = new System.Drawing.Size(282, 133);
-			this.socketSelection.TabIndex = 1;
-			this.socketSelection.RemoteHostChanged += new System.EventHandler(this.socketSelection_RemoteHostChanged);
-			this.socketSelection.RemoteTcpPortChanged += new System.EventHandler(this.socketSelection_RemoteTcpPortChanged);
-			this.socketSelection.RemoteUdpPortChanged += new System.EventHandler(this.socketSelection_RemoteUdpPortChanged);
-			this.socketSelection.LocalInterfaceChanged += new System.EventHandler(this.socketSelection_LocalInterfaceChanged);
-			this.socketSelection.LocalFilterChanged += new System.EventHandler(this.socketSelection_LocalFilterChanged);
-			this.socketSelection.LocalTcpPortChanged += new System.EventHandler(this.socketSelection_LocalTcpPortChanged);
-			this.socketSelection.LocalUdpPortChanged += new System.EventHandler(this.socketSelection_LocalUdpPortChanged);
-			// 
 			// socketSettings
 			// 
 			this.socketSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.socketSettings.Location = new System.Drawing.Point(6, 154);
+			this.socketSettings.Location = new System.Drawing.Point(6, 146);
 			this.socketSettings.Name = "socketSettings";
-			this.socketSettings.Size = new System.Drawing.Size(260, 169);
+			this.socketSettings.Size = new System.Drawing.Size(260, 175);
 			this.socketSettings.TabIndex = 3;
 			this.socketSettings.TcpClientAutoReconnectChanged += new System.EventHandler(this.socketSettings_TcpClientAutoReconnectChanged);
 			this.socketSettings.UdpServerSendModeChanged += new System.EventHandler(this.socketSettings_UdpServerSendModeChanged);

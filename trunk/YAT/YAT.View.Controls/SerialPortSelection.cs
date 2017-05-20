@@ -324,6 +324,8 @@ namespace YAT.View.Controls
 			// Only scan for ports if control is enabled and visible. This saves some time and prevents issues. And refresh makes no sense if not visible.
 			if (Enabled && Visible && !DesignMode)
 			{
+				ResetOnDialogMessage();
+
 				this.portListIsBeingSetOrIsAlreadySet = true; // Purpose see remarks above.
 
 				SerialPortCollection ports = null;
@@ -498,20 +500,17 @@ namespace YAT.View.Controls
 				this.showStatusDialog.CloseSynchronized(e.Value);
 		}
 
+		private void ResetOnDialogMessage()
+		{
+			label_OnDialogMessage.Text = "";
+		}
+
+		/// <remarks>
+		/// Showing this as on dialog message instead of <see cref="MessageBox"/> to reduce the number of potentially annoying popups.
+		/// </remarks>
 		private void ShowNoPortsMessage()
 		{
-			string message =
-				"There are currently no serial COM ports available." + Environment.NewLine + Environment.NewLine +
-				"Check the serial COM ports of your system.";
-
-			MessageBoxEx.Show
-			(
-				this,
-				message,
-				"No serial COM ports available",
-				MessageBoxButtons.OK,
-				MessageBoxIcon.Warning
-			);
+			label_OnDialogMessage.Text = "No serial COM ports currently available";
 		}
 
 		private void ShowNotAvailableDefaultedMessage(string portIdNotAvailable, string portIdDefaulted)
