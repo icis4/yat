@@ -211,6 +211,22 @@ namespace YAT.Domain
 				RemoveAtEnd();
 		}
 
+		/// <summary>
+		/// Removes all elements at the end until (and including!) an element of the given type is found.
+		/// </summary>
+		public virtual void RemoveAtEndUntilIncluding(Type type)
+		{
+			while (Count > 0)
+			{
+				bool typeFound = (this[Count - 1].GetType() == type);
+
+				RemoveAtEnd();
+
+				if (typeFound)
+					break;
+			}
+		}
+
 		/// <summary></summary>
 		public new void RemoveRange(int index, int count)
 		{

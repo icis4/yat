@@ -106,6 +106,7 @@ New:
 Important changes:
 - Option to display non-payload USB Ser/HID data (related to feature req. #296, #297 and bug #367).
 - Option to skip empty lines when sending a text file (feature request #298).
+- No longer showing empty lines that had only contained a previous line's hidden EOL (feat. #299).
 - No longer showing a potentially annoying message box if no serial COM ports or no local network
   interfaces or no HID capable USB devices are currently available.
 - Serial COM port that are in use are no longer simply labelled "(in use)" but rather "(in use by

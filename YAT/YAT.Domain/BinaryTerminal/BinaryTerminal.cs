@@ -237,23 +237,23 @@ namespace YAT.Domain
 		{
 			private bool isDisposed;
 
-			public LinePosition         LinePosition;
-			public DisplayLinePart      LineElements;
+			public LinePosition         Position;
+			public DisplayLinePart      Elements;
 			public SequenceQueue        SequenceAfter;
 			public SequenceQueue        SequenceBefore;
 			public List<DisplayElement> PendingSequenceBeforeElements;
 			public DateTime             TimeStamp;
-			public LineBreakTimer       LineBreakTimer;
+			public LineBreakTimer       BreakTimer;
 
-			public LineState(SequenceQueue sequenceAfter, SequenceQueue sequenceBefore, DateTime timeStamp, LineBreakTimer lineBreakTimer)
+			public LineState(SequenceQueue sequenceAfter, SequenceQueue sequenceBefore, DateTime timeStamp, LineBreakTimer breakTimer)
 			{
-				LinePosition                  = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-				LineElements                  = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				Position                      = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+				Elements                      = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				SequenceAfter                 = sequenceAfter;
 				SequenceBefore                = sequenceBefore;
 				PendingSequenceBeforeElements = new List<DisplayElement>();
 				TimeStamp                     = timeStamp;
-				LineBreakTimer                = lineBreakTimer;
+				BreakTimer                    = breakTimer;
 			}
 
 			#region Disposal
@@ -277,19 +277,19 @@ namespace YAT.Domain
 					if (disposing)
 					{
 						// In the 'normal' case, the timer is stopped in ExecuteLineEnd().
-						if (this.LineBreakTimer != null)
+						if (this.BreakTimer != null)
 						{
 							// \remind (2016-09-08 / mky)
 							// Ensure to free referenced resources such as the 'Elapsed' event handler.
 							// Whole timer handling should be encapsulated into the 'LineState' class.
-							EventHandlerHelper.RemoveEventHandler(this.LineBreakTimer, "Elapsed");
+							EventHandlerHelper.RemoveEventHandler(this.BreakTimer, "Elapsed");
 
-							this.LineBreakTimer.Dispose();
+							this.BreakTimer.Dispose();
 						}
 					}
 
 					// Set state to disposed:
-					this.LineBreakTimer = null;
+					this.BreakTimer = null;
 					this.isDisposed = true;
 				}
 			}
@@ -336,8 +336,8 @@ namespace YAT.Domain
 			{
 				AssertNotDisposed();
 
-				LinePosition                  = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-				LineElements                  = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				Position                      = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+				Elements                      = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				SequenceAfter                  .Reset();
 				SequenceBefore                 .Reset();
 				PendingSequenceBeforeElements = new List<DisplayElement>();
@@ -409,21 +409,21 @@ namespace YAT.Domain
 
 				this.txLineState = casted.txLineState;
 				                                             //// \remind (2016-09-08 / mky)
-				if (this.txLineState.LineBreakTimer != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
-					this.txLineState.LineBreakTimer.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
+				if (this.txLineState.BreakTimer != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
+					this.txLineState.BreakTimer.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
 
-				this.txLineState.LineBreakTimer = new LineBreakTimer(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
-				this.txLineState.LineBreakTimer.Elapsed += txTimedLineBreak_Elapsed;
+				this.txLineState.BreakTimer = new LineBreakTimer(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
+				this.txLineState.BreakTimer.Elapsed += txTimedLineBreak_Elapsed;
 
 				// Rx:
 
 				this.rxLineState = casted.rxLineState;
 				                                             //// \remind (2016-09-08 / mky)
-				if (this.rxLineState.LineBreakTimer != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
-					this.rxLineState.LineBreakTimer.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
+				if (this.rxLineState.BreakTimer != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
+					this.rxLineState.BreakTimer.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
 
-				this.rxLineState.LineBreakTimer = new LineBreakTimer(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
-				this.rxLineState.LineBreakTimer.Elapsed += rxTimedLineBreak_Elapsed;
+				this.rxLineState.BreakTimer = new LineBreakTimer(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
+				this.rxLineState.BreakTimer.Elapsed += rxTimedLineBreak_Elapsed;
 
 				this.bidirLineState = new BidirLineState(casted.bidirLineState);
 			}
@@ -507,7 +507,7 @@ namespace YAT.Domain
 					// Add space if necessary:
 					if (ElementsAreSeparate(IODirection.Tx))
 					{
-						if (this.txLineState.LineElements.DataCount > 0)
+						if (this.txLineState.Elements.DataCount > 0)
 							OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.DataSpace());
 					}
 
@@ -591,10 +591,10 @@ namespace YAT.Domain
 				lp.AddRange(info);
 			}
 
-			lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+			lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 			elements.AddRange(lp);
 
-			lineState.LinePosition = LinePosition.Data;
+			lineState.Position = LinePosition.Data;
 			lineState.TimeStamp = ts;
 		}
 
@@ -614,8 +614,8 @@ namespace YAT.Domain
 			//  3. Evaluate the easiest case: Length line break.
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
 
-			if ((displaySettings.SequenceLineBreakBefore.Enabled && (lineState.LineElements.DataCount > 0) &&
-				(lineState.LinePosition != LinePosition.End)))   // Also skip if line has just been brokwn.
+			if ((displaySettings.SequenceLineBreakBefore.Enabled && (lineState.Elements.DataCount > 0) &&
+				(lineState.Position != LinePosition.End)))   // Also skip if line has just been brokwn.
 			{
 				lineState.SequenceBefore.Enqueue(b);
 				if (lineState.SequenceBefore.IsCompleteMatch)
@@ -629,7 +629,7 @@ namespace YAT.Domain
 					foreach (DisplayElement dePending in lineState.PendingSequenceBeforeElements)
 						elementsForNextLine.Add(dePending.Clone());
 
-					lineState.LinePosition = LinePosition.End;
+					lineState.Position = LinePosition.End;
 				}
 				else if (lineState.SequenceBefore.IsPartlyMatchContinued)
 				{
@@ -662,9 +662,9 @@ namespace YAT.Domain
 				lp.Add(de);
 			}
 
-			if (lineState.LinePosition != LinePosition.DataExceeded)
+			if (lineState.Position != LinePosition.DataExceeded)
 			{
-				lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 				elements.AddRange(lp);
 			}
 
@@ -675,30 +675,30 @@ namespace YAT.Domain
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
 
 			if ((displaySettings.SequenceLineBreakAfter.Enabled) &&
-				(lineState.LinePosition != LinePosition.End))
+				(lineState.Position != LinePosition.End))
 			{
 				lineState.SequenceAfter.Enqueue(b);
 				if (lineState.SequenceAfter.IsCompleteMatch) // No need to check for partly matches.
-					lineState.LinePosition = LinePosition.End;
+					lineState.Position = LinePosition.End;
 			}
 
 			if ((displaySettings.LengthLineBreak.Enabled) &&
-				(lineState.LinePosition != LinePosition.End))
+				(lineState.Position != LinePosition.End))
 			{
-				if (lineState.LineElements.DataCount >= displaySettings.LengthLineBreak.Length)
-					lineState.LinePosition = LinePosition.End;
+				if (lineState.Elements.DataCount >= displaySettings.LengthLineBreak.Length)
+					lineState.Position = LinePosition.End;
 			}
 
-			if (lineState.LinePosition != LinePosition.End)
+			if (lineState.Position != LinePosition.End)
 			{
-				if ((lineState.LineElements.DataCount >= TerminalSettings.Display.MaxBytePerLineCount) &&
-					(lineState.LinePosition != LinePosition.DataExceeded))
+				if ((lineState.Elements.DataCount >= TerminalSettings.Display.MaxBytePerLineCount) &&
+					(lineState.Position != LinePosition.DataExceeded))
 				{
-					lineState.LinePosition = LinePosition.DataExceeded;
+					lineState.Position = LinePosition.DataExceeded;
 
 					string message = "Maximal number of bytes per line exceeded! Check the end-of-line settings or increase the limit in the advanced terminal settings.";
-					lineState.LineElements.Add(new DisplayElement.ErrorInfo((Direction)d, message, true));
-					elements.Add              (new DisplayElement.ErrorInfo((Direction)d, message, true));
+					lineState.Elements.Add(new DisplayElement.ErrorInfo((Direction)d, message, true));
+					elements.Add          (new DisplayElement.ErrorInfo((Direction)d, message, true));
 				}
 			}
 		}
@@ -721,7 +721,7 @@ namespace YAT.Domain
 		{
 			if (ElementsAreSeparate(d))
 			{
-				if (lineState.LineElements.DataCount > 0)
+				if (lineState.Elements.DataCount > 0)
 					lp.Add(new DisplayElement.DataSpace());
 			}
 		}
@@ -729,29 +729,30 @@ namespace YAT.Domain
 		private void ExecuteLineEnd(LineState lineState, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of TextTerminal for better comparability.
+
 			                                   // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			DisplayLine line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			// Process line content:
-			line.AddRange(lineState.LineElements.Clone()); // Clone elements to ensure decoupling.
+			line.AddRange(lineState.Elements.Clone()); // Clone elements to ensure decoupling.
 
 			// Process line length:
 			DisplayLinePart lp = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
 			if (TerminalSettings.Display.ShowLength)
 			{
 				DisplayLinePart info;
-				PrepareLineEndInfo(lineState.LineElements.DataCount, out info);
+				PrepareLineEndInfo(lineState.Elements.DataCount, out info);
 				lp.AddRange(info);
 			}
 			lp.Add(new DisplayElement.LineBreak()); // Direction may be both!
-
-			// Reset line state, it is no longer needed:
-			lineState.Reset();
 
 			// Finalize elements and line:
 			elements.AddRange(lp.Clone()); // Clone elements because they are needed again right below.
 			line.AddRange(lp);
 			lines.Add(line);
+
+			// Reset line state:
+			lineState.Reset();
 		}
 
 		/// <summary></summary>
@@ -782,17 +783,17 @@ namespace YAT.Domain
 					ExecuteTimedLineBreakOnReload(displaySettings, lineState, raw.TimeStamp, elements, lines);
 
 				// Line begin and time stamp:
-				if (lineState.LinePosition == LinePosition.Begin)
+				if (lineState.Position == LinePosition.Begin)
 				{
 					ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elements);
 
 					if (displaySettings.TimedLineBreak.Enabled)
-						lineState.LineBreakTimer.Start();
+						lineState.BreakTimer.Start();
 				}
 				else
 				{
 					if (displaySettings.TimedLineBreak.Enabled)
-						lineState.LineBreakTimer.Restart(); // Restart as timeout refers to time after last received byte.
+						lineState.BreakTimer.Restart(); // Restart as timeout refers to time after last received byte.
 				}
 
 				// Data:
@@ -800,10 +801,10 @@ namespace YAT.Domain
 				ExecuteData(displaySettings, lineState, raw.Direction, b, elements, out elementsForNextLine);
 
 				// Line end and length:
-				if (lineState.LinePosition == LinePosition.End)
+				if (lineState.Position == LinePosition.End)
 				{
 					if (displaySettings.TimedLineBreak.Enabled)
-						lineState.LineBreakTimer.Stop();
+						lineState.BreakTimer.Stop();
 
 					ExecuteLineEnd(lineState, elements, lines);
 
@@ -839,7 +840,7 @@ namespace YAT.Domain
 		private void ExecuteTimedLineBreakOnReload(Settings.BinaryDisplaySettings displaySettings, LineState lineState,
 		                                           DateTime ts, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
-			if (lineState.LineElements.Count > 0)
+			if (lineState.Elements.Count > 0)
 			{
 				TimeSpan span = ts - lineState.TimeStamp;
 				if (span.TotalMilliseconds >= displaySettings.TimedLineBreak.Timeout) {
@@ -887,7 +888,7 @@ namespace YAT.Domain
 							}
 						}
 
-						if ((lineState.LineElements != null) && (lineState.LineElements.Count > 0))
+						if ((lineState.Elements != null) && (lineState.Elements.Count > 0))
 						{
 							DisplayElementCollection elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 							List<DisplayLine> lines = new List<DisplayLine>();
@@ -917,7 +918,7 @@ namespace YAT.Domain
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
-			if (lineState.LineElements.Count > 0)
+			if (lineState.Elements.Count > 0)
 			{
 				DisplayElementCollection elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				List<DisplayLine> lines = new List<DisplayLine>();

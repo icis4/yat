@@ -88,25 +88,34 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Private element.")]
 		private class LineState
 		{
-			public LinePosition    LinePosition;
-			public DisplayLinePart LineElements;
+			public LinePosition    Position;
+			public DisplayLinePart Elements;
 			public DisplayLinePart EolElements;
 			public SequenceQueue   Eol;
 
+			public Dictionary<string, bool> EolOfLastLineOfGivenPortWasCompleteMatch;
+
 			public LineState(SequenceQueue eol)
 			{
-				LinePosition = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-				LineElements = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-				EolElements  = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
-				Eol = eol;
+				Position    = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+				Elements    = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				EolElements = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
+				Eol         = eol;
+
+				EolOfLastLineOfGivenPortWasCompleteMatch = new Dictionary<string, bool>(); // Default behavior regarding initial capacity is OK.
 			}
 
-			public virtual void Reset()
+			public virtual void Reset(string portStamp, bool eolOfLastLineWasCompleteMatch)
 			{
-				LinePosition = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-				LineElements = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-				EolElements  = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
+				Position    = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+				Elements    = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				EolElements = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
 				Eol.Reset();
+
+				if (EolOfLastLineOfGivenPortWasCompleteMatch.ContainsKey(portStamp))
+					EolOfLastLineOfGivenPortWasCompleteMatch[portStamp] = eolOfLastLineWasCompleteMatch;
+				else
+					EolOfLastLineOfGivenPortWasCompleteMatch.Add(portStamp, eolOfLastLineWasCompleteMatch);
 			}
 		}
 
@@ -591,10 +600,10 @@ namespace YAT.Domain
 				lp.AddRange(info);
 			}
 
-			lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+			lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 			elements.AddRange(lp);
 
-			lineState.LinePosition = LinePosition.Data;
+			lineState.Position = LinePosition.Data;
 		}
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
@@ -668,7 +677,7 @@ namespace YAT.Domain
 				}
 
 				lineState.EolElements.Clear();
-				lineState.LinePosition = LinePosition.End;
+				lineState.Position = LinePosition.End;
 			}
 			else if (lineState.Eol.IsPartlyMatchContinued)
 			{
@@ -695,23 +704,23 @@ namespace YAT.Domain
 				lp.Add(de); // No clone needed as element has just been created further above.
 			}
 
-			if (lineState.LinePosition != LinePosition.DataExceeded)
+			if (lineState.Position != LinePosition.DataExceeded)
 			{
-				lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 				elements.AddRange(lp);
 			}
 
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
-			if (lineState.LinePosition != LinePosition.End)
+			if (lineState.Position != LinePosition.End)
 			{
-				if ((lineState.LineElements.DataCount >= TerminalSettings.Display.MaxBytePerLineCount) &&
-					(lineState.LinePosition != LinePosition.DataExceeded))
+				if ((lineState.Elements.DataCount >= TerminalSettings.Display.MaxBytePerLineCount) &&
+					(lineState.Position != LinePosition.DataExceeded))
 				{
-					lineState.LinePosition = LinePosition.DataExceeded;
+					lineState.Position = LinePosition.DataExceeded;
 
 					string message = "Maximal number of bytes per line exceeded! Check the end-of-line settings or increase the limit in the advanced terminal settings.";
-					lineState.LineElements.Add(new DisplayElement.ErrorInfo((Direction)d, message, true));
-					elements.Add              (new DisplayElement.ErrorInfo((Direction)d, message, true));
+					lineState.Elements.Add(new DisplayElement.ErrorInfo((Direction)d, message, true));
+					elements.Add          (new DisplayElement.ErrorInfo((Direction)d, message, true));
 				}
 			}
 		}
@@ -720,7 +729,7 @@ namespace YAT.Domain
 		{
 			if (ElementsAreSeparate(d))
 			{
-				if (lineState.LineElements.DataCount > 0)
+				if (lineState.Elements.DataCount > 0)
 					lp.Add(new DisplayElement.DataSpace());
 			}
 		}
@@ -734,9 +743,10 @@ namespace YAT.Domain
 			}
 		}
 
-		private void ExecuteLineEnd(LineState lineState, DisplayElementCollection elements, List<DisplayLine> lines)
+		private void ExecuteLineEnd(LineState lineState, string ps, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of BinaryTerminal for better comparability.
+
 			                                   // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			DisplayLine line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
@@ -744,13 +754,13 @@ namespace YAT.Domain
 			int eolLength = lineState.Eol.Sequence.Length;
 			if (TextTerminalSettings.ShowEol || (eolLength <= 0) || (!lineState.Eol.IsCompleteMatch))
 			{
-				line.AddRange(lineState.LineElements.Clone()); // Clone elements to ensure decoupling.
+				line.AddRange(lineState.Elements.Clone()); // Clone elements to ensure decoupling.
 			}
 			else // Remove EOL:
 			{
 				// Traverse elements reverse and count EOL elements to be removed:
 				int eolCount = 0;
-				DisplayElement[] des = lineState.LineElements.Clone().ToArray(); // Clone elements to ensure decoupling.
+				DisplayElement[] des = lineState.Elements.Clone().ToArray(); // Clone elements to ensure decoupling.
 				for (int i = (des.Length - 1); i >= 0; i--)
 				{
 					if (des[i].IsEol)
@@ -778,13 +788,24 @@ namespace YAT.Domain
 			}
 			lp.Add(new DisplayElement.LineBreak()); // Direction may be both!
 
-			// Reset line state, it is no longer needed:
-			lineState.Reset();
+			// Potentially suppress empty lines that only contain hidden <CR><LF>:
+			bool suppressEmptyLine = ((lineState.Elements.DataCount == 0) &&                    // Empty line.
+			                          (lineState.EolElements.DataCount == 1) &&                 // EOL contained though, as a single data element.
+			                          !lineState.EolOfLastLineOfGivenPortWasCompleteMatch[ps]); // EOL of last line of the current port is still pending.
+			if (suppressEmptyLine)
+			{
+				elements.RemoveAtEndUntilIncluding(typeof(DisplayElement.LineStart));
+			}
+			else
+			{
+				// Finalize elements and line:
+				elements.AddRange(lp.Clone()); // Clone elements because they are needed again right below.
+				line.AddRange(lp);
+				lines.Add(line);
+			}
 
-			// Finalize elements and line:
-			elements.AddRange(lp.Clone()); // Clone elements because they are needed again right below.
-			line.AddRange(lp);
-			lines.Add(line);
+			// Reset line state:
+			lineState.Reset(ps, lineState.Eol.IsCompleteMatch);
 		}
 
 		/// <summary></summary>
@@ -802,15 +823,15 @@ namespace YAT.Domain
 			foreach (byte b in raw.Data)
 			{
 				// Line begin and time stamp:
-				if (lineState.LinePosition == LinePosition.Begin)
+				if (lineState.Position == LinePosition.Begin)
 					ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elements);
 
 				// Data:
 				ExecuteData(lineState, raw.Direction, b, elements);
 
 				// Line end and length:
-				if (lineState.LinePosition == LinePosition.End)
-					ExecuteLineEnd(lineState, elements, lines);
+				if (lineState.Position == LinePosition.End)
+					ExecuteLineEnd(lineState, raw.PortStamp, elements, lines);
 			}
 		}
 
@@ -852,12 +873,12 @@ namespace YAT.Domain
 							}
 						}
 
-						if ((lineState.LineElements != null) && (lineState.LineElements.Count > 0))
+						if ((lineState.Elements != null) && (lineState.Elements.Count > 0))
 						{
 							DisplayElementCollection elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 							List<DisplayLine> lines = new List<DisplayLine>();
 
-							ExecuteLineEnd(lineState, elements, lines);
+							ExecuteLineEnd(lineState, ps, elements, lines);
 
 							OnDisplayElementsProcessed(this.bidirLineState.Direction, elements);
 							OnDisplayLinesProcessed   (this.bidirLineState.Direction, lines);

@@ -28,9 +28,11 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 
 using MKY.Net.Test;
+using MKY.Text;
 
 using NUnit.Framework;
 
@@ -39,7 +41,7 @@ using NUnit.Framework;
 namespace YAT.Domain.Test.TextTerminal
 {
 	/// <summary></summary>
-	public static class EolSequenceTestData
+	public static class ByteSequenceTestData
 	{
 		#region Test Cases
 		//==========================================================================================
@@ -47,7 +49,7 @@ namespace YAT.Domain.Test.TextTerminal
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static IEnumerable<string> Sequences
+		public static IEnumerable<string> SingleByteSequences
 		{
 			get
 			{
@@ -57,7 +59,7 @@ namespace YAT.Domain.Test.TextTerminal
 				yield return ("<TAB>");
 				yield return ("<NUL>");
 
-				// Normal characters:
+				// Visible characters:
 				yield return ("ABC");
 				yield return ("CR");
 				yield return ("X");
@@ -73,18 +75,39 @@ namespace YAT.Domain.Test.TextTerminal
 		}
 
 		/// <summary></summary>
+		public static IEnumerable<string> MultiByteSequences
+		{
+			get
+			{
+				yield return ("ä");
+				yield return ("€");
+			}
+		}
+
+		/// <summary></summary>
 		public static IEnumerable TestCases
 		{
 			get
 			{
-				foreach (string eolAB in Sequences)
+				foreach (string eolAB in SingleByteSequences)
 				{
-					foreach (string eolBA in Sequences)
+					foreach (string eolBA in SingleByteSequences)
 					{
 						if (eolAB == eolBA)
-							yield return (new TestCaseData(eolAB, eolBA).SetName(@"Symmetric """ + eolAB + @""""));
+							yield return (new TestCaseData(Encoding.Default, eolAB, eolBA).SetName(@"Symmetric """ + eolAB + @""""));
 						else
-							yield return (new TestCaseData(eolAB, eolBA).SetName(@"Asymmetric """ + eolAB + @""" | """ + eolBA + @""""));
+							yield return (new TestCaseData(Encoding.Default, eolAB, eolBA).SetName(@"Asymmetric """ + eolAB + @""" | """ + eolBA + @""""));
+					}
+				}
+
+				foreach (string eolAB in MultiByteSequences)
+				{
+					foreach (string eolBA in MultiByteSequences)
+					{
+						if (eolAB == eolBA)
+							yield return (new TestCaseData(Encoding.UTF8, eolAB, eolBA).SetName(@"Symmetric """ + eolAB + @""""));
+						else
+							yield return (new TestCaseData(Encoding.UTF8, eolAB, eolBA).SetName(@"Asymmetric """ + eolAB + @""" | """ + eolBA + @""""));
 					}
 				}
 			}
@@ -103,12 +126,13 @@ namespace YAT.Domain.Test.TextTerminal
 		//==========================================================================================
 
 		/// <summary></summary>
-		[Test, IPv4LoopbackIsAvailableCategory, TestCaseSource(typeof(EolSequenceTestData), "TestCases")]
-		public virtual void TestEolSequence(string eolAB, string eolBA)
+		[Test, IPv4LoopbackIsAvailableCategory, TestCaseSource(typeof(ByteSequenceTestData), "TestCases")]
+		public virtual void TestByteSequence(Encoding encoding, string eolAB, string eolBA)
 		{
 			const int WaitForDisposal = 100;
 
 			Settings.TerminalSettings settingsA = Utilities.GetTextTcpAutoSocketOnIPv4LoopbackSettings();
+			settingsA.TextTerminal.Encoding = (EncodingEx)encoding;
 			settingsA.TextTerminal.TxEol = eolAB;
 			settingsA.TextTerminal.RxEol = eolBA;
 			using (Domain.TextTerminal terminalA = new Domain.TextTerminal(settingsA))
