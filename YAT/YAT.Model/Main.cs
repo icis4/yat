@@ -362,7 +362,7 @@ namespace YAT.Model
 			{
 				if (ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace)
 				{
-					string filePath = Environment.ExpandEnvironmentVariables(ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath);
+					string filePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
 					if (PathEx.IsValid(filePath))
 					{
 						if (File.Exists(filePath))
@@ -1517,14 +1517,14 @@ namespace YAT.Model
 		{
 			try
 			{
-				DocumentSettingsHandler<WorkspaceSettingsRoot> sh = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
-				sh.SettingsFilePath = filePath;
+				var sh = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
+				sh.SettingsFilePath = EnvironmentEx.ResolveLocation(filePath);
 				if (sh.Load())
 				{
 					settingsHandler = sh;
 
 					// Try to retrieve GUID from file path (in case of auto saved workspace files):
-					if (!GuidEx.TryCreateGuidFromFilePath(filePath, Application.Settings.GeneralSettings.AutoSaveWorkspaceFileNamePrefix, out guid))
+					if (!GuidEx.TryParseTolerantly(Path.GetFileNameWithoutExtension(filePath), out guid))
 						guid = Guid.NewGuid();
 
 					exception = null;
@@ -1609,12 +1609,12 @@ namespace YAT.Model
 		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
 		{
 			// Combine absolute workspace path with terminal path if that one is relative:
-			terminalFilePath = PathEx.CombineFilePaths(workspaceFilePath, terminalFilePath);
+			var absoluteTerminalFilePath = PathEx.CombineFilePaths(workspaceFilePath, EnvironmentEx.ResolveLocation(terminalFilePath));
 
 			try
 			{
-				DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
-				sh.SettingsFilePath = terminalFilePath;
+				var sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
+				sh.SettingsFilePath = absoluteTerminalFilePath;
 				if (sh.Load())
 				{
 					settingsHandler = sh;

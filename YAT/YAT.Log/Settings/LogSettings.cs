@@ -354,10 +354,12 @@ namespace YAT.Log.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Builds the absolute or relative path to the log file, expanding environment variables.
+		/// </summary>
 		public virtual string MakeRawTxFilePath()
 		{
-			return (this.rootPath + Path.DirectorySeparatorChar + RawTxRootRelativeFilePath);
+			return (Environment.ExpandEnvironmentVariables(this.rootPath + Path.DirectorySeparatorChar + RawTxRootRelativeFilePath));
 		}
 
 		/// <summary></summary>
@@ -388,10 +390,12 @@ namespace YAT.Log.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Builds the absolute or relative path to the log file, expanding environment variables.
+		/// </summary>
 		public virtual string MakeRawBidirFilePath()
 		{
-			return (this.rootPath + Path.DirectorySeparatorChar + RawBidirRootRelativeFilePath);
+			return (Environment.ExpandEnvironmentVariables(this.rootPath + Path.DirectorySeparatorChar + RawBidirRootRelativeFilePath));
 		}
 
 		/// <summary></summary>
@@ -422,10 +426,12 @@ namespace YAT.Log.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Builds the absolute or relative path to the log file, expanding environment variables.
+		/// </summary>
 		public virtual string MakeRawRxFilePath()
 		{
-			return (this.rootPath + Path.DirectorySeparatorChar + RawRxRootRelativeFilePath);
+			return (Environment.ExpandEnvironmentVariables(this.rootPath + Path.DirectorySeparatorChar + RawRxRootRelativeFilePath));
 		}
 
 		/// <summary></summary>
@@ -473,10 +479,12 @@ namespace YAT.Log.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Builds the absolute or relative path to the log file, expanding environment variables.
+		/// </summary>
 		public virtual string MakeNeatTxFilePath()
 		{
-			return (this.rootPath + Path.DirectorySeparatorChar + NeatTxRootRelativeFilePath);
+			return (Environment.ExpandEnvironmentVariables(this.rootPath + Path.DirectorySeparatorChar + NeatTxRootRelativeFilePath));
 		}
 
 		/// <summary></summary>
@@ -507,10 +515,12 @@ namespace YAT.Log.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Builds the absolute or relative path to the log file, expanding environment variables.
+		/// </summary>
 		public virtual string MakeNeatBidirFilePath()
 		{
-			return (this.rootPath + Path.DirectorySeparatorChar + NeatBidirRootRelativeFilePath);
+			return (Environment.ExpandEnvironmentVariables(this.rootPath + Path.DirectorySeparatorChar + NeatBidirRootRelativeFilePath));
 		}
 
 		/// <summary></summary>
@@ -541,10 +551,12 @@ namespace YAT.Log.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Builds the absolute or relative path to the log file, expanding environment variables.
+		/// </summary>
 		public virtual string MakeNeatRxFilePath()
 		{
-			return (this.rootPath + Path.DirectorySeparatorChar + NeatRxRootRelativeFilePath);
+			return (Environment.ExpandEnvironmentVariables(this.rootPath + Path.DirectorySeparatorChar + NeatRxRootRelativeFilePath));
 		}
 
 		/// <summary></summary>

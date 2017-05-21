@@ -112,7 +112,7 @@ namespace MKY.Settings
 		//==========================================================================================
 
 		/// <summary>
-		/// Complete path to settings file.
+		/// Absolute path to settings file.
 		/// </summary>
 		public virtual string FilePath
 		{

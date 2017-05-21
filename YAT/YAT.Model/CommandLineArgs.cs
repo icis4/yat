@@ -412,14 +412,15 @@ namespace YAT.Model
 
 			// RequestedFilePath:
 			if (!string.IsNullOrEmpty(RequestedFilePath))
-			{
-				if (File.Exists(RequestedFilePath))
+			{                                                                                // May be absolute or relative to current directory.
+				string filePath = Environment.ExpandEnvironmentVariables(RequestedFilePath);
+				if (File.Exists(filePath))
 				{
-					if (!ExtensionHelper.IsWorkspaceFile(RequestedFilePath) &&
-						!ExtensionHelper.IsTerminalFile (RequestedFilePath))
+					if (!ExtensionHelper.IsWorkspaceFile(filePath) &&
+						!ExtensionHelper.IsTerminalFile (filePath))
 					{
 						RequestedFilePath = null;
-						Invalidate("Requested file is no workspace nor terminal file");
+						Invalidate("Requested file is neither a workspace nor a terminal file");
 						BooleanEx.ClearIfSet(ref isValid);
 					}
 				}
@@ -478,8 +479,9 @@ namespace YAT.Model
 
 			// TransmitFile:
 			if (!string.IsNullOrEmpty(RequestedTransmitFilePath))
-			{
-				if (!File.Exists(RequestedTransmitFilePath))
+			{                                                                                        // May be absolute or relative to current directory.
+				string filePath = Environment.ExpandEnvironmentVariables(RequestedTransmitFilePath);
+				if (!File.Exists(filePath))
 				{
 					RequestedTransmitFilePath = null;
 					Invalidate("Requested file does not exist");

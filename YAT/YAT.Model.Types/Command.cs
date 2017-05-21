@@ -329,7 +329,9 @@ namespace YAT.Model.Types
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// The absolute or relative path to the file related to this command.
+		/// </summary>
 		[XmlElement("FilePath")]
 		public virtual string FilePath
 		{
@@ -643,7 +645,7 @@ namespace YAT.Model.Types
 				if (!IsFilePath)
 					return (false);
 
-				return (File.Exists(this.filePath));
+				return (File.Exists(Environment.ExpandEnvironmentVariables(this.filePath)));
 			}
 		}
 

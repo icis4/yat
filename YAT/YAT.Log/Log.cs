@@ -22,6 +22,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -29,6 +34,8 @@ using System.Threading;
 
 using MKY;
 using MKY.IO;
+
+#endregion
 
 namespace YAT.Log
 {
@@ -169,7 +176,9 @@ namespace YAT.Log
 			get { return (File.Exists(this.filePath)); }
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// The absolute path to the log file.
+		/// </summary>
 		public virtual string FilePath
 		{
 			get { return (this.filePath); }

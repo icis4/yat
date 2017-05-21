@@ -29,7 +29,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
+using System.Text.RegularExpressions;
 
 #endregion
 
@@ -43,8 +43,15 @@ namespace MKY
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class GuidEx
 	{
+		private const RegexOptions Options = RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase;
+
 		/// <summary>
-		/// Tries to create and return a GUID from the file path if possible.
+		/// A compiled <see cref="Regex"/> that can be used for parsing a GUID from a string.
+		/// </summary>
+		public static readonly Regex Regex = new Regex(@"^[0-9A-F]{8}[-]?([0-9A-F]{4}[-]?){3}[0-9A-F]{12}$", Options);
+
+		/// <summary>
+		/// Tries to create and return a <see cref="Guid"/> object from the string specified.
 		/// </summary>
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -65,46 +72,19 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Tries to create and return a GUID from the file path if possible.
+		/// Tries to create and return a <see cref="Guid"/> object from the string specified.
 		/// </summary>
-		public static bool TryCreateGuidFromFilePath(string filePath, out Guid guid)
+		/// <remarks>
+		/// To be replaced by .NET 4.0+ "Guid.TryParse()" after upgrading to .NET 4.0+.
+		/// </remarks>
+		public static bool TryParseTolerantly(string s, out Guid guid)
 		{
-			return (TryCreateGuidFromFilePath(filePath, "", "", out guid));
-		}
+			var m = Regex.Match(s);
+			if (m.Success)
+				return (TryParse( m.Groups[1].Value, out guid));
 
-		/// <summary>
-		/// Tries to create and return a GUID from the file path if possible.
-		/// </summary>
-		public static bool TryCreateGuidFromFilePath(string filePath, string prefix, out Guid guid)
-		{
-			return (TryCreateGuidFromFilePath(filePath, prefix, "", out guid));
-		}
-
-		/// <summary>
-		/// Tries to create and return a GUID from the file path if possible.
-		/// </summary>
-		public static bool TryCreateGuidFromFilePath(string filePath, string prefix, string postfix, out Guid guid)
-		{
 			guid = Guid.Empty;
-
-			// File path may look like ".\Prefix-dcf25dde-947a-4470-8567-b0dde2459933-Postfix.ext".
-			//                           Length: ^1     ^8   ^13  ^18  ^23          ^36
-			string fileName = Path.GetFileNameWithoutExtension(filePath);
-			string actualPrefix    = StringEx.Left (fileName, prefix.Length);
-			string actualInbetween = StringEx.Mid  (fileName, prefix.Length, (fileName.Length - postfix.Length - 1));
-			string actualPostfix   = StringEx.Right(fileName, postfix.Length);
-
-			// Do some basic checks to minimize probablity of exception below:
-			if (actualInbetween.Length < 32) // GUID string contains at least 32 chars.
-				return (false);
-
-			if (!StringEx.EqualsOrdinalIgnoreCase(actualPrefix, prefix))
-				return (false);
-
-			if (!StringEx.EqualsOrdinalIgnoreCase(actualPostfix, postfix))
-				return (false);
-
-			return (TryParse(actualInbetween, out guid));
+			return (false);
 		}
 	}
 }
