@@ -52,7 +52,10 @@ namespace YAT.Model.Utilities
 			var sb = new StringBuilder(lead);
 
 			if (!string.IsNullOrEmpty(text))
+			{
+				sb.Append(" ");
 				sb.Append(text);
+			}
 
 			if (ex is System.Xml.XmlException)
 			{

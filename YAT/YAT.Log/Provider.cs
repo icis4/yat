@@ -64,9 +64,9 @@ namespace YAT.Log
 		/// <summary></summary>
 		public Provider(Settings.LogSettings settings, Encoding textTerminalEncoding, Model.Settings.FormatSettings neatFormat)
 		{
-			this.settings = settings;
+			this.settings             = settings;
 			this.textTerminalEncoding = textTerminalEncoding;
-			this.neatFormat = neatFormat;
+			this.neatFormat           = neatFormat;
 
 			this.rawLogs  = new List<Log>(3); // Preset the required capacity to improve memory management.
 			this.rawLogs.Add(this.rawTxLog    = new RawLog(this.settings.RawLogTx,    new Func<string>(this.settings.MakeRawTxFilePath),    this.settings.WriteMode));
