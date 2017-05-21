@@ -676,7 +676,7 @@ namespace YAT.Model
 					autoSaveFilePath.Append(Guid.ToString());
 					autoSaveFilePath.Append(ExtensionHelper.WorkspaceFile);
 
-					this.settingsHandler.SettingsFilePath = autoSaveFilePath.ToString();
+					this.settingsHandler.SettingsFilePath = autoSaveFilePath.ToString(); // Always an absolute file path.
 				}
 				else if (userInteractionIsAllowed)
 				{
@@ -806,13 +806,15 @@ namespace YAT.Model
 			if (!SaveAllTerminals(false, true))
 				return (false);
 
+			var absoluteFilePath = EnvironmentEx.ResolveLocation(filePath);
+
 			// Request the deletion of the obsolete auto saved settings file given the new file is different:
 			string autoSaveFilePathToDelete = null;
-			if (this.settingsRoot.AutoSaved && (!PathEx.Equals(filePath, this.settingsHandler.SettingsFilePath)))
+			if (this.settingsRoot.AutoSaved && (!PathEx.Equals(absoluteFilePath, this.settingsHandler.SettingsFilePath)))
 				autoSaveFilePathToDelete = this.settingsHandler.SettingsFilePath;
 
 			// Set the new file path:
-			this.settingsHandler.SettingsFilePath = filePath;
+			this.settingsHandler.SettingsFilePath = absoluteFilePath;
 
 			// Then, save the workspace itself:
 			return (SaveToFile(false, autoSaveFilePathToDelete));
@@ -1620,12 +1622,12 @@ namespace YAT.Model
 		private bool OpenTerminalFile(string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
 		{
 			// Combine absolute workspace path with terminal path if that one is relative:
-			terminalFilePath = PathEx.CombineFilePaths(this.settingsHandler.SettingsFilePath, terminalFilePath);
+			var absoluteTerminalFilePath = PathEx.CombineFilePaths(this.settingsHandler.SettingsFilePath, EnvironmentEx.ResolveLocation(terminalFilePath));
 
 			try
 			{
-				DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
-				sh.SettingsFilePath = terminalFilePath;
+				var sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
+				sh.SettingsFilePath = absoluteTerminalFilePath;
 				if (sh.Load())
 				{
 					settingsHandler = sh;

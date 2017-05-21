@@ -49,9 +49,9 @@ namespace MKY.Test.Guid
 		{
 			get
 			{
-				yield return (new TestCaseData(true, @".\Prefix-dcf25dde-947a-4470-8567-b0dde2459933-Postfix.ext", "Prefix-", "-Postfix", new System.Guid("dcf25dde-947a-4470-8567-b0dde2459933")));
-				yield return (new TestCaseData(true, @".\Prefix-dcf25dde-947a-4470-8567-b0dde2459933.ext",         "Prefix-", "",         new System.Guid("dcf25dde-947a-4470-8567-b0dde2459933")));
-				yield return (new TestCaseData(true,        @".\dcf25dde-947a-4470-8567-b0dde2459933-Postfix.ext", "",        "-Postfix", new System.Guid("dcf25dde-947a-4470-8567-b0dde2459933")));
+				yield return (new TestCaseData(true, @".\Prefix-dcf25dde-947a-4470-8567-b0dde2459933-Postfix.ext", new System.Guid("dcf25dde-947a-4470-8567-b0dde2459933")));
+				yield return (new TestCaseData(true, @".\Prefix-dcf25dde-947a-4470-8567-b0dde2459933.ext",         new System.Guid("dcf25dde-947a-4470-8567-b0dde2459933")));
+				yield return (new TestCaseData(true,        @".\dcf25dde-947a-4470-8567-b0dde2459933-Postfix.ext", new System.Guid("dcf25dde-947a-4470-8567-b0dde2459933")));
 			}
 		}
 
@@ -75,10 +75,10 @@ namespace MKY.Test.Guid
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		[Test, TestCaseSource(typeof(GuidExTestData), "TestCases")]
-		public virtual void TestTryCreateGuidFromFilePath(bool isValid, string filePath, string prefix, string postfix, System.Guid expectedGuid)
+		public virtual void TestTryParseTolerantly(bool isValid, string s, System.Guid expectedGuid)
 		{
 			System.Guid actualGuid;
-			if (GuidEx.TryCreateGuidFromFilePath(filePath, prefix, postfix, out actualGuid))
+			if (GuidEx.TryParseTolerantly(s, out actualGuid))
 			{
 				Assert.That(isValid, Is.True);
 				Assert.That(actualGuid, Is.EqualTo(expectedGuid));

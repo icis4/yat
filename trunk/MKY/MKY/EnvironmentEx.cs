@@ -26,6 +26,8 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
+using MKY.IO;
+
 namespace MKY
 {
 	/// <summary></summary>
@@ -158,25 +160,38 @@ namespace MKY
 		}
 
 		/// <summary>
+		/// Resolves the absolute location to the given file path.
+		///  - If the path is rooted, simply expand environment variables.
+		///  - If the path is relative, expand environment variables and combine it with the <see cref="Environment.CurrentDirectory"/>.
+		/// </summary>
+		public static string ResolveLocation(string filePath)
+		{
+			if (Path.IsPathRooted(filePath))
+				return (Environment.ExpandEnvironmentVariables(filePath));
+			else
+				return (PathEx.CombineDirectoryAndFilePaths(Environment.CurrentDirectory, Environment.ExpandEnvironmentVariables(filePath)));
+		}
+
+		/// <summary>
 		/// Tries the get value from environment variable.
 		/// </summary>
 		/// <param name="environmentVariableName">Name of the environment variable.</param>
-		/// <param name="value">The value.</param>
-		public static bool TryGetValueFromEnvironmentVariable(string environmentVariableName, out string value)
+		/// <param name="result">The resulting value.</param>
+		public static bool TryGetValueFromEnvironmentVariable(string environmentVariableName, out string result)
 		{
 			string content = Environment.GetEnvironmentVariable(environmentVariableName);
 			if (content != null)
 			{
-				value = content;
+				result = content;
 				return (true);
 			}
 
-			Debug.Write("Environment variable ");
-			Debug.Write(                      environmentVariableName);
-			Debug.WriteLine(                                        " could not be retrieved.");
+			Debug.Write    ("Environment variable ");
+			Debug.Write    (                      environmentVariableName);
+			Debug.WriteLine(                                            " could not be retrieved.");
 			Debug.WriteLine("If environment variable was added after Visual Studio had been started, close and reopen Visual Studio and retry.");
 
-			value = "";
+			result = "";
 			return (false);
 		}
 
@@ -187,20 +202,27 @@ namespace MKY
 		/// <param name="filePath">The file path.</param>
 		public static bool TryGetFilePathFromEnvironmentVariableAndVerify(string environmentVariableName, out string filePath)
 		{
-			string value;
-			if (TryGetValueFromEnvironmentVariable(environmentVariableName, out value))
-			{
-				if (File.Exists(value))
+			string result;
+			if (TryGetValueFromEnvironmentVariable(environmentVariableName, out result))
+			{                                                            // May be absolute or relative to current directory.
+				if (File.Exists(Environment.ExpandEnvironmentVariables(result)))
 				{
-					filePath = value;
+					filePath = result;
 					return (true);
+				}
+				else
+				{
+					Debug.Write    ("Environment variable ");
+					Debug.Write    (                      environmentVariableName);
+					Debug.WriteLine(                                            " could be retrieved but file stated below doesn't exist.");
+					Debug.WriteLine(result);
+
+					filePath = null;
+					return (false);
 				}
 			}
 
-			Debug.Write("Environment variable ");
-			Debug.Write(                      environmentVariableName);
-			Debug.WriteLine(                                        " could not be retrieved.");
-			Debug.WriteLine("If environment variable was added after Visual Studio had been started, close and reopen Visual Studio and retry.");
+			// Debug message already output by TryGetValueFromEnvironmentVariable().
 
 			filePath = null;
 			return (false);

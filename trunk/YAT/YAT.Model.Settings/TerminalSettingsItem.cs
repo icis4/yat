@@ -23,6 +23,7 @@
 //==================================================================================================
 
 using System;
+using System.IO;
 using System.Xml.Serialization;
 
 using MKY;
@@ -122,7 +123,7 @@ namespace YAT.Model.Settings
 				if (PathEx.IsDefined(this.filePath) && (this.guid == Guid.Empty))
 				{
 					Guid guid;
-					if (GuidEx.TryCreateGuidFromFilePath(this.filePath, Application.Settings.GeneralSettings.AutoSaveTerminalFileNamePrefix, out guid))
+					if (GuidEx.TryParseTolerantly(Path.GetFileNameWithoutExtension(this.filePath), out guid))
 						this.guid = guid;
 					else
 						this.guid = Guid.NewGuid();

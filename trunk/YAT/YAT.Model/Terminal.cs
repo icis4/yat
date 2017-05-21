@@ -1592,7 +1592,7 @@ namespace YAT.Model
 					autoSaveFilePath.Append(Guid.ToString());
 					autoSaveFilePath.Append(ExtensionHelper.TerminalFile);
 
-					this.settingsHandler.SettingsFilePath = autoSaveFilePath.ToString();
+					this.settingsHandler.SettingsFilePath = autoSaveFilePath.ToString(); // Always an absolute file path.
 				}
 				else if (userInteractionIsAllowed)
 				{
@@ -1709,13 +1709,15 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
+			var absoluteFilePath = EnvironmentEx.ResolveLocation(filePath);
+
 			// Request the deletion of the obsolete auto saved settings file given the new file is different:
 			string autoSaveFilePathToDelete = null;
-			if (this.settingsRoot.AutoSaved && (!PathEx.Equals(filePath, this.settingsHandler.SettingsFilePath)))
+			if (this.settingsRoot.AutoSaved && (!PathEx.Equals(absoluteFilePath, this.settingsHandler.SettingsFilePath)))
 				autoSaveFilePathToDelete = this.settingsHandler.SettingsFilePath;
 
 			// Set the new file path:
-			this.settingsHandler.SettingsFilePath = filePath;
+			this.settingsHandler.SettingsFilePath = absoluteFilePath;
 
 			return (SaveToFile(false, autoSaveFilePathToDelete));
 		}
@@ -3181,7 +3183,7 @@ namespace YAT.Model
 			if (!c.IsValidFilePath)
 				return;
 
-			string filePath = c.FilePath;
+			string filePath = Environment.ExpandEnvironmentVariables(c.FilePath);
 
 			try
 			{
