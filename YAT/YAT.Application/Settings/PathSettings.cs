@@ -23,6 +23,7 @@
 //==================================================================================================
 
 using System;
+using System.IO;
 using System.Xml.Serialization;
 
 using MKY.IO;
@@ -73,10 +74,12 @@ namespace YAT.Application.Settings
 		{
 			base.SetMyDefaults();
 
-			MainFiles    = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-			SendFiles    = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-			LogFiles     = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-			MonitorFiles = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+			string productSubfolder = Path.DirectorySeparatorChar + ApplicationEx.ProductName;
+
+			MainFiles    = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + productSubfolder;
+			SendFiles    = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + productSubfolder;
+			LogFiles     = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + productSubfolder;
+			MonitorFiles = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + productSubfolder;
 		}
 
 		#region Properties
