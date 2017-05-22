@@ -178,6 +178,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "netrtfwriter", "netrtfwrite
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RtfWriter", "netrtfwriter\RtfWriter\RtfWriter.csproj", "{591BCEB5-6B6F-4368-BE6C-F89F668F7DCB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!!-SolutionItems", "!!-SolutionItems", "{CB08BBFC-24C9-4F66-A715-7E2C75F9F397}"
+	ProjectSection(SolutionItems) = preProject
+		Settings.SourceAnalysis = Settings.SourceAnalysis
+		YAT.nunit = YAT.nunit
+		YAT.Test.config = YAT.Test.config
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
