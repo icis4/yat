@@ -35,7 +35,7 @@
 #else // RELEASE
 
 	// Enable unhandled exception handling:
-	#define HANDLE_UNHANDLED_EXCEPTIONS // Enabled for 'Release' => handled by YAT.
+	#define HANDLE_UNHANDLED_EXCEPTIONS // Enabled for 'Release' => handled by the application.
 
 #endif // DEBUG|RELEASE
 
@@ -481,8 +481,8 @@ namespace YAT.Controller
 				MKY.Windows.Forms.ApplicationEx.EnableVisualStylesAndSetTextRenderingIfNotAlreadyDoneSo();
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				try
-				{
 			#endif
+				{
 					// Application settings must be created and closed on main thread, otherwise
 					// there will be a synchronization exception on exit (settings are closed there):
 					if (!ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadSharedWriteIfOwned))
@@ -492,8 +492,8 @@ namespace YAT.Controller
 					View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen();
 					if (welcomeScreen.ShowDialog() != DialogResult.OK)
 						return (MainResult.ApplicationSettingsError);
-			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				}
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
 					if (this.commandLineArgs.Interactive)
@@ -511,8 +511,8 @@ namespace YAT.Controller
 				}
 
 				try
-				{
 			#endif
+				{
 					// If everything is fine so far, start main application including view:
 					Model.MainResult viewResult;
 					using (View.Forms.Main view = new View.Forms.Main(model))
@@ -536,8 +536,8 @@ namespace YAT.Controller
 						return (MainResult.ApplicationSettingsError);
 
 					return (Convert(viewResult));
-			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				}
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
 					if (this.commandLineArgs.Interactive)
@@ -557,6 +557,7 @@ namespace YAT.Controller
 		}
 
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
+
 		/// <remarks>
 		/// In case of a <see cref="System.Windows.Forms.Application.ThreadException"/>, it is possible to continue operation.
 		/// </remarks>
@@ -607,6 +608,7 @@ namespace YAT.Controller
 				System.Windows.Forms.Application.Exit();
 			}
 		}
+
 	#endif
 
 		#endregion
@@ -636,8 +638,8 @@ namespace YAT.Controller
 				MKY.Windows.Forms.ApplicationEx.EnableVisualStylesAndSetTextRenderingIfNotAlreadyDoneSo();
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				try
-				{
 			#endif
+				{
 					// Application settings must be created and closed on main thread, otherwise
 					// there will be a synchronization exception on exit (settings are closed there):
 					if (!ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadSharedWriteIfOwned))
@@ -647,8 +649,8 @@ namespace YAT.Controller
 					View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen();
 					if (welcomeScreen.ShowDialog() != DialogResult.OK)
 						return (MainResult.ApplicationSettingsError);
-			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				}
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
 					string message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
@@ -661,8 +663,8 @@ namespace YAT.Controller
 				}
 
 				try
-				{
 			#endif
+				{
 					// If everything is fine so far, start main application including view:
 					Model.MainResult viewResult;
 					using (View.Forms.Main view = new View.Forms.Main(model))
@@ -686,8 +688,8 @@ namespace YAT.Controller
 						return (MainResult.ApplicationSettingsError);
 
 					return (Convert(viewResult));
-			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				}
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
 					string message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
@@ -706,6 +708,7 @@ namespace YAT.Controller
 		}
 
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
+
 		/// <remarks>
 		/// In case of a <see cref="System.Windows.Forms.Application.ThreadException"/>, it is possible to continue operation.
 		/// </remarks>
@@ -739,6 +742,7 @@ namespace YAT.Controller
 				}
 			}
 		}
+
 	#endif
 
 		#endregion
@@ -770,8 +774,8 @@ namespace YAT.Controller
 			{
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				try
-				{
 			#endif
+				{
 					if (ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadShared))
 					{
 						ApplicationSettings.Load(); // Don't care about result, either settings have been loaded or settings have been set to defaults.
@@ -782,8 +786,8 @@ namespace YAT.Controller
 					{
 						return (MainResult.ApplicationSettingsError);
 					}
-			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				}
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
 					string message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
@@ -796,8 +800,8 @@ namespace YAT.Controller
 				}
 
 				try
-				{
 			#endif
+				{
 					Model.MainResult modelResult = model.Start();
 					if (modelResult == Model.MainResult.Success)
 						modelResult = model.Exit();
@@ -805,8 +809,8 @@ namespace YAT.Controller
 					ApplicationSettings.CloseAndDispose(); // Don't care about result, as upon creation above.
 
 					return (Convert(modelResult));
-			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				}
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
 					string message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
@@ -824,6 +828,7 @@ namespace YAT.Controller
 		}
 
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
+
 		/// <remarks>
 		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart.
 		/// </remarks>
@@ -844,6 +849,7 @@ namespace YAT.Controller
 				}
 			}
 		}
+
 	#endif
 
 		#endregion
@@ -875,8 +881,8 @@ namespace YAT.Controller
 			{
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				try
-				{
 			#endif
+				{
 					if (ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadShared))
 					{
 						ApplicationSettings.Load(); // Don't care about result, either settings have been loaded or settings have been set to defaults.
@@ -887,8 +893,8 @@ namespace YAT.Controller
 					{
 						return (MainResult.ApplicationSettingsError);
 					}
-			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				}
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
 					string message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
@@ -898,8 +904,8 @@ namespace YAT.Controller
 				}
 
 				try
-				{
 			#endif
+				{
 					Model.MainResult modelResult = model.Start();
 					if (modelResult == Model.MainResult.Success)
 						modelResult = model.Exit();
@@ -924,6 +930,7 @@ namespace YAT.Controller
 		}
 
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
+
 		/// <remarks>
 		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart.
 		/// </remarks>
@@ -944,6 +951,7 @@ namespace YAT.Controller
 				}
 			}
 		}
+
 	#endif
 
 		#endregion
