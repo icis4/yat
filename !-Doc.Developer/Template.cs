@@ -50,7 +50,7 @@ using YAT/*.<TODO>*/;
 
 namespace YAT/*.<TODO>*/
 {
-	public class TODO
+	public /*static*/ class TODO
 	{
 		#region Types
 		//==========================================================================================
