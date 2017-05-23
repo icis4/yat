@@ -41,20 +41,23 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		public bool IsSettingControls
 		{
-			get { return (this.count > 0); }
+			get
+			{
+				return (this.count > 0); // No need to use 'Interlocked.Read()' as access to
+			}                            // 'Windows.Forms' must be synchronized anyway.
 		}
 
 		/// <summary></summary>
 		public void Enter()
 		{
-			this.count++;
-		}
+			this.count++; // No need to use 'Interlocked.Increment()' as access to
+		}                 // 'Windows.Forms' must be synchronized anyway.
 
 		/// <summary></summary>
 		public void Leave()
 		{
-			this.count--;
-
+			this.count--; // No need to use 'Interlocked.Decrement()' as access to
+		                  // 'Windows.Forms' must be synchronized anyway.
 			if (this.count < 0)
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'SettingControlsHelper' count has fallen below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
