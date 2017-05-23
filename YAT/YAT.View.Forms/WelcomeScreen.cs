@@ -58,7 +58,7 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		private bool finishedLoading;
-		private ReaderWriterLockSlim finishedLoadingLock = new ReaderWriterLockSlim();
+		private object finishedLoadingSyncObj = new object();
 
 		#endregion
 
@@ -90,7 +90,7 @@ namespace YAT.View.Forms
 				Width = width;
 
 			label_Status.Text = "Loading settings...";
-			VoidDelegateVoid asyncInvoker = new VoidDelegateVoid(LoadApplicationSettings);
+			VoidDelegateVoid asyncInvoker = new VoidDelegateVoid(LoadApplicationSettingsAsync);
 			asyncInvoker.BeginInvoke(null, null);
 		}
 
@@ -102,10 +102,10 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary>
-		/// Loads the application settings on a concurrent thread.
+		/// Loads the application settings on a separate thread.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private void LoadApplicationSettings()
+		private void LoadApplicationSettingsAsync()
 		{
 			try
 			{
@@ -118,9 +118,8 @@ namespace YAT.View.Forms
 				DialogResult = DialogResult.Abort;
 			}
 
-			this.finishedLoadingLock.EnterWriteLock();
-			this.finishedLoading = true;
-			this.finishedLoadingLock.ExitWriteLock();
+			lock (this.finishedLoadingSyncObj)
+				this.finishedLoading = true;
 		}
 
 		#endregion
@@ -138,9 +137,8 @@ namespace YAT.View.Forms
 		{
 			bool finishedLoading;
 
-			this.finishedLoadingLock.EnterReadLock();
-			finishedLoading = this.finishedLoading;
-			this.finishedLoadingLock.ExitReadLock();
+			lock (this.finishedLoadingSyncObj)
+				finishedLoading = this.finishedLoading;
 
 			// Close welcome screen immediately if application settings have successfully been loaded.
 			// Close welcome screen after opacity transition if application settings could not be loaded successfully.

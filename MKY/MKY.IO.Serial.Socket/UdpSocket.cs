@@ -117,7 +117,7 @@ namespace MKY.IO.Serial.Socket
 		private UdpServerSendMode serverSendMode;
 
 		private SocketState state = SocketState.Closed;
-		private ReaderWriterLockSlim stateLock = new ReaderWriterLockSlim();
+		private object stateSyncObj = new object();
 
 		private System.Net.Sockets.UdpClient socket;
 		private object socketSyncObj = new object();
@@ -310,13 +310,9 @@ namespace MKY.IO.Serial.Socket
 				{
 					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
 					DisposeSocketAndThreads();
-
-					if (this.stateLock != null)
-						this.stateLock.Dispose();
 				}
 
 				// Set state to disposed:
-				this.stateLock = null;
 				this.isDisposed = true;
 
 				DebugMessage("...successfully disposed.");
@@ -804,9 +800,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			SocketState state;
 
-			this.stateLock.EnterReadLock();
-			state = this.state;
-			this.stateLock.ExitReadLock();
+			lock (this.stateSyncObj)
+				state = this.state;
 
 			return (state);
 		}
@@ -814,11 +809,10 @@ namespace MKY.IO.Serial.Socket
 		private void SetStateSynchronizedAndNotify(SocketState state)
 		{
 #if (DEBUG)
-			SocketState oldState = GetStateSynchronized();
+			SocketState oldState = this.state;
 #endif
-			this.stateLock.EnterWriteLock();
-			this.state = state;
-			this.stateLock.ExitWriteLock();
+			lock (this.stateSyncObj)
+				this.state = state;
 #if (DEBUG)
 			if (this.state != oldState)
 				DebugMessage("State has changed from " + oldState + " to " + state + ".");

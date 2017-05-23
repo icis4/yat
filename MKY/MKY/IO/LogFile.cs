@@ -147,7 +147,7 @@ namespace MKY.IO
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+				AssertNotDisposed();
 
 				return (this.writer.BaseStream);
 			}

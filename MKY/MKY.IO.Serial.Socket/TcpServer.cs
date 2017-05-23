@@ -130,13 +130,13 @@ namespace MKY.IO.Serial.Socket
 		private int localPort;
 
 		private SocketState state = SocketState.Reset;
-		private ReaderWriterLockSlim stateLock = new ReaderWriterLockSlim();
+		private object stateSyncObj = new object();
 
 		/// <remarks>
 		/// Required to deal with the issues described in the remarks in the header of this class.
 		/// </remarks>
 		private bool isStoppingAndDisposing;
-		private ReaderWriterLockSlim isStoppingAndDisposingLock = new ReaderWriterLockSlim();
+		private object isStoppingAndDisposingSyncObj = new object();
 
 		private ALAZ.SystemEx.NetEx.SocketsEx.SocketServer socket;
 		private object socketSyncObj = new object();
@@ -399,18 +399,16 @@ namespace MKY.IO.Serial.Socket
 			{
 				bool value;
 
-				this.isStoppingAndDisposingLock.EnterReadLock();
-				value = this.isStoppingAndDisposing;
-				this.isStoppingAndDisposingLock.ExitReadLock();
+				lock (this.isStoppingAndDisposingSyncObj)
+					value = this.isStoppingAndDisposing;
 
 				return (value);
 			}
 
 			set
 			{
-				this.isStoppingAndDisposingLock.EnterWriteLock();
-				this.isStoppingAndDisposing = value;
-				this.isStoppingAndDisposingLock.ExitWriteLock();
+				lock (this.isStoppingAndDisposingSyncObj)
+					this.isStoppingAndDisposing = value;
 			}
 		}
 
@@ -505,9 +503,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			SocketState state;
 
-			this.stateLock.EnterReadLock();
-			state = this.state;
-			this.stateLock.ExitReadLock();
+			lock (this.stateSyncObj)
+				state = this.state;
 
 			return (state);
 		}
@@ -515,11 +512,10 @@ namespace MKY.IO.Serial.Socket
 		private void SetStateSynchronizedAndNotify(SocketState state)
 		{
 #if (DEBUG)
-			SocketState oldState = GetStateSynchronized();
+			SocketState oldState = this.state;
 #endif
-			this.stateLock.EnterWriteLock();
-			this.state = state;
-			this.stateLock.ExitWriteLock();
+			lock (this.stateSyncObj)
+				this.state = state;
 #if (DEBUG)
 			if (this.state != oldState)
 				DebugMessage("State has changed from " + oldState + " to " + state + ".");
