@@ -48,7 +48,7 @@ namespace MKY
 		/// <summary>
 		/// A compiled <see cref="Regex"/> that can be used for parsing a GUID from a string.
 		/// </summary>
-		public static readonly Regex Regex = new Regex(@"^[0-9A-F]{8}[-]?([0-9A-F]{4}[-]?){3}[0-9A-F]{12}$", Options);
+		public static readonly Regex Regex = new Regex(@"[0-9A-F]{8}[-]?([0-9A-F]{4}[-]?){3}[0-9A-F]{12}", Options);
 
 		/// <summary>
 		/// Tries to create and return a <see cref="Guid"/> object from the string specified.
