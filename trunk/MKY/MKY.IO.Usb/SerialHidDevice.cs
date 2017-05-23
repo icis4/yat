@@ -320,7 +320,7 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		private State state = State.Reset;
-		private ReaderWriterLockSlim stateLock = new ReaderWriterLockSlim();
+		private object stateSyncObj = new object();
 
 		private bool matchSerial = MatchSerialDefault;
 
@@ -458,13 +458,7 @@ namespace MKY.IO.Usb
 					// In the 'normal' case, the items have already been disposed of in Close().
 					StopReceiveThread();
 					CloseStream();
-
-					if (this.stateLock != null)
-						this.stateLock.Dispose();
 				}
-
-				// Set state to disposed:
-				this.stateLock = null;
 			}
 
 			base.Dispose(disposing);
@@ -1201,9 +1195,8 @@ namespace MKY.IO.Usb
 		{
 			State state;
 
-			this.stateLock.EnterReadLock();
-			state = this.state;
-			this.stateLock.ExitReadLock();
+			lock (this.stateSyncObj)
+				state = this.state;
 
 			return (state);
 		}
@@ -1213,9 +1206,8 @@ namespace MKY.IO.Usb
 #if (DEBUG)
 			State oldState = this.state;
 #endif
-			this.stateLock.EnterWriteLock();
-			this.state = state;
-			this.stateLock.ExitWriteLock();
+			lock (this.stateSyncObj)
+				this.state = state;
 #if (DEBUG)
 			if (this.state != oldState)
 				DebugMessage("State has changed from " + oldState + " to " + this.state + ".");
