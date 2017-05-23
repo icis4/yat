@@ -24,6 +24,8 @@
 
 using System;
 
+using MKY.Threading;
+
 namespace YAT
 {
 	/// <summary>
@@ -77,6 +79,8 @@ namespace YAT
 		[STAThread]
 		private static int Main(string[] commandLineArgs)
 		{
+			MainThreadHelper.SetCurrentThread();
+
 			Controller.MainResult result;
 
 			using (Controller.Main main = new Controller.Main(commandLineArgs))
