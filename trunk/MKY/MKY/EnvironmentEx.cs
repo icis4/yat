@@ -164,7 +164,7 @@ namespace MKY
 		///  - If the path is rooted, simply expand environment variables.
 		///  - If the path is relative, expand environment variables and combine it with the <see cref="Environment.CurrentDirectory"/>.
 		/// </summary>
-		public static string ResolveLocation(string filePath)
+		public static string ResolveAbsolutePath(string filePath)
 		{
 			if (Path.IsPathRooted(filePath))
 				return (Environment.ExpandEnvironmentVariables(filePath));

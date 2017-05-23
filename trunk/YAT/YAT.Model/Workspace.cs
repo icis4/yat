@@ -806,7 +806,7 @@ namespace YAT.Model
 			if (!SaveAllTerminals(false, true))
 				return (false);
 
-			var absoluteFilePath = EnvironmentEx.ResolveLocation(filePath);
+			var absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(filePath);
 
 			// Request the deletion of the obsolete auto saved settings file given the new file is different:
 			string autoSaveFilePathToDelete = null;
@@ -1347,7 +1347,7 @@ namespace YAT.Model
 			OnCursorRequest(Cursors.WaitCursor);
 
 			int openedTerminalCount = 0;
-			GuidList<TerminalSettingsItem> clone = new GuidList<TerminalSettingsItem>(this.settingsRoot.TerminalSettings);
+			var clone = new GuidList<TerminalSettingsItem>(this.settingsRoot.TerminalSettings);
 			for (int i = 0; i < clone.Count; i++)
 			{
 				TerminalSettingsItem item = clone[i];
@@ -1622,7 +1622,7 @@ namespace YAT.Model
 		private bool OpenTerminalFile(string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
 		{
 			// Combine absolute workspace path with terminal path if that one is relative:
-			var absoluteTerminalFilePath = PathEx.CombineFilePaths(this.settingsHandler.SettingsFilePath, EnvironmentEx.ResolveLocation(terminalFilePath));
+			var absoluteTerminalFilePath = PathEx.CombineFilePaths(this.settingsHandler.SettingsFilePath, terminalFilePath);
 
 			try
 			{

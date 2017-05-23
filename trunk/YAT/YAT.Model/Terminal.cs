@@ -1709,7 +1709,7 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			var absoluteFilePath = EnvironmentEx.ResolveLocation(filePath);
+			var absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(filePath);
 
 			// Request the deletion of the obsolete auto saved settings file given the new file is different:
 			string autoSaveFilePathToDelete = null;

@@ -1518,7 +1518,7 @@ namespace YAT.Model
 			try
 			{
 				var sh = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
-				sh.SettingsFilePath = EnvironmentEx.ResolveLocation(filePath);
+				sh.SettingsFilePath = EnvironmentEx.ResolveAbsolutePath(filePath);
 				if (sh.Load())
 				{
 					settingsHandler = sh;
@@ -1609,7 +1609,7 @@ namespace YAT.Model
 		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
 		{
 			// Combine absolute workspace path with terminal path if that one is relative:
-			var absoluteTerminalFilePath = PathEx.CombineFilePaths(workspaceFilePath, EnvironmentEx.ResolveLocation(terminalFilePath));
+			var absoluteTerminalFilePath = PathEx.CombineFilePaths(EnvironmentEx.ResolveAbsolutePath(workspaceFilePath), terminalFilePath);
 
 			try
 			{
