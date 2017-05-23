@@ -128,7 +128,8 @@ Fixed bugs:
 - Potential 'NullReferenceException' in binary terminal settings fixed (bug #362).
 - Option to change endianness of multi-byte encoded charactes fixed (bug #343).
 - Wrong active/inactive state of log menu items fixed (bug #366).
-- Catch-all of unhandled synchronous exceptions fixed (bug #310).
+- Catch-all of unhandled synchronous exceptions fixed (bug #310) as well as
+  catch-all of unhandled asynchronous exceptions improved (feature request #173).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).

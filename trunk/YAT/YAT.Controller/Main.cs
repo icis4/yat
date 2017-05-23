@@ -472,8 +472,11 @@ namespace YAT.Controller
 			MessageHelper.SubmitBug      =      "Please report this issue as described in 'Help > Submit Bug'.";
 		#if (HANDLE_UNHANDLED_EXCEPTIONS)
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler:
-			AppDomain currentDomain = AppDomain.CurrentDomain;
-			currentDomain.UnhandledException += RunFullyWithView_currentDomain_UnhandledException;
+			AppDomain.CurrentDomain.UnhandledException += RunFullyWithView_CurrentDomain_UnhandledException_Or_EventHelper_UnhandledExceptionOnNonMainThread;
+
+			// Assume unhandled asynchronous exceptions during events and attach the application to the same handler:
+			EventHelper.UnhandledExceptionOnNonMainThread += RunFullyWithView_CurrentDomain_UnhandledException_Or_EventHelper_UnhandledExceptionOnNonMainThread;
+		////EventHelper.UnhandledExceptionOnMainThread is not used as it is handled by the catch-all handler below.
 		#endif
 			// Create model and view and run application:
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
@@ -547,7 +550,7 @@ namespace YAT.Controller
 							System.Windows.Forms.Application.Restart();
 					}
 
-					return (MainResult.UnhandledException); // Note that continue is not possible, see comment above.
+					return (MainResult.UnhandledException);
 				}
 			#endif
 			} // Dispose of model to ensure immediate release of resources.
@@ -559,7 +562,7 @@ namespace YAT.Controller
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 
 		/// <remarks>
-		/// In case of a <see cref="System.Windows.Forms.Application.ThreadException"/>, it is possible to continue operation.
+		/// In case of a <see cref="System.Windows.Forms.Application.ThreadException"/>, it is possible to continue execution.
 		/// </remarks>
 		private void RunFullyWithView_Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 		{
@@ -582,9 +585,9 @@ namespace YAT.Controller
 		}
 
 		/// <remarks>
-		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart.
+		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart if the <see cref="UnhandledExceptionEventArgs.IsTerminating"/> flag is set.
 		/// </remarks>
-		private void RunFullyWithView_currentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		private void RunFullyWithView_CurrentDomain_UnhandledException_Or_EventHelper_UnhandledExceptionOnNonMainThread(object sender, UnhandledExceptionEventArgs e)
 		{
 			if (this.commandLineArgs.Interactive)
 			{
@@ -594,7 +597,7 @@ namespace YAT.Controller
 				if ((ex is ObjectDisposedException) && (ex.Source == "mscorlib") && (ex.Message.Contains("SafeHandle")))
 					message += (Environment.NewLine + Environment.NewLine + ObjectDisposedExceptionInMscorlibMessage);
 
-				View.Forms.UnhandledExceptionResult result = View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.AsynchronousNonSynchronized, false);
+				View.Forms.UnhandledExceptionResult result = View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.AsynchronousNonSynchronized, !e.IsTerminating);
 
 				if (result == View.Forms.UnhandledExceptionResult.ExitAndRestart)
 					System.Windows.Forms.Application.Restart();
@@ -629,8 +632,11 @@ namespace YAT.Controller
 			MessageHelper.SubmitBug      =      "Please report this issue as described in 'Help > Submit Bug'.";
 		#if (HANDLE_UNHANDLED_EXCEPTIONS)
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler:
-			AppDomain currentDomain = AppDomain.CurrentDomain;
-			currentDomain.UnhandledException += RunWithViewButOutputErrorsOnConsole_currentDomain_UnhandledException;
+			AppDomain.CurrentDomain.UnhandledException += RunWithViewButOutputErrorsOnConsole_CurrentDomain_UnhandledException_Or_EventHelper_UnhandledExceptionOnNonMainThread;
+
+			// Assume unhandled asynchronous exceptions during events and attach the application to the same handler:
+			EventHelper.UnhandledExceptionOnNonMainThread += RunWithViewButOutputErrorsOnConsole_CurrentDomain_UnhandledException_Or_EventHelper_UnhandledExceptionOnNonMainThread;
+		////EventHelper.UnhandledExceptionOnMainThread is not used as it is handled by the catch-all handler below.
 		#endif
 			// Create model and view and run application:
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
@@ -710,7 +716,7 @@ namespace YAT.Controller
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 
 		/// <remarks>
-		/// In case of a <see cref="System.Windows.Forms.Application.ThreadException"/>, it is possible to continue operation.
+		/// In case of a <see cref="System.Windows.Forms.Application.ThreadException"/>, it is possible to continue execution.
 		/// </remarks>
 		private void RunWithViewButOutputErrorsOnConsole_Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 		{
@@ -723,9 +729,9 @@ namespace YAT.Controller
 		}
 
 		/// <remarks>
-		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart.
+		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart if the <see cref="UnhandledExceptionEventArgs.IsTerminating"/> flag is set.
 		/// </remarks>
-		private void RunWithViewButOutputErrorsOnConsole_currentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		private void RunWithViewButOutputErrorsOnConsole_CurrentDomain_UnhandledException_Or_EventHelper_UnhandledExceptionOnNonMainThread(object sender, UnhandledExceptionEventArgs e)
 		{
 			string message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
 			Console.Error.WriteLine(message);
@@ -766,8 +772,11 @@ namespace YAT.Controller
 			MessageHelper.SubmitBug =           "Please report this issue at <sourceforge.net/projects/y-a-terminal/bugs/>.";
 		#if (HANDLE_UNHANDLED_EXCEPTIONS)
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler:
-			AppDomain currentDomain = AppDomain.CurrentDomain;
-			currentDomain.UnhandledException += RunFullyFromConsole_currentDomain_UnhandledException;
+			AppDomain.CurrentDomain.UnhandledException += RunFullyFromConsole_CurrentDomain_UnhandledException_Or_EventHelper_UnhandledExceptionOnNonMainThread;
+
+			// Assume unhandled asynchronous exceptions during events and attach the application to the same handler:
+			EventHelper.UnhandledExceptionOnNonMainThread += RunFullyFromConsole_CurrentDomain_UnhandledException_Or_EventHelper_UnhandledExceptionOnNonMainThread;
+		////EventHelper.UnhandledExceptionOnMainThread is not used as it is handled by the catch-all handler below.
 		#endif
 			// Create model and run application:
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
@@ -830,9 +839,9 @@ namespace YAT.Controller
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 
 		/// <remarks>
-		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart.
+		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart if the <see cref="UnhandledExceptionEventArgs.IsTerminating"/> flag is set.
 		/// </remarks>
-		private void RunFullyFromConsole_currentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		private void RunFullyFromConsole_CurrentDomain_UnhandledException_Or_EventHelper_UnhandledExceptionOnNonMainThread(object sender, UnhandledExceptionEventArgs e)
 		{
 			string message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
 			Console.Error.WriteLine(message);
@@ -873,8 +882,11 @@ namespace YAT.Controller
 			MessageHelper.SubmitBug =           "Please report this issue at <sourceforge.net/projects/y-a-terminal/bugs/>.";
 		#if (HANDLE_UNHANDLED_EXCEPTIONS)
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler:
-			AppDomain currentDomain = AppDomain.CurrentDomain;
-			currentDomain.UnhandledException += RunInvisible_currentDomain_UnhandledException;
+			AppDomain.CurrentDomain.UnhandledException += RunInvisible_CurrentDomain_UnhandledException_Or_UnhandledExceptionOnNonMainThread;
+
+			// Assume unhandled asynchronous exceptions during events and attach the application to the same handler:
+			EventHelper.UnhandledExceptionOnNonMainThread += RunInvisible_CurrentDomain_UnhandledException_Or_UnhandledExceptionOnNonMainThread;
+		////EventHelper.UnhandledExceptionOnMainThread is not used as it is handled by the catch-all handler below.
 		#endif
 			// Create model and run application:
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
@@ -913,8 +925,8 @@ namespace YAT.Controller
 					ApplicationSettings.CloseAndDispose(); // Don't care about result, as upon creation above.
 
 					return (Convert(modelResult));
-			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				}
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
 					string message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
@@ -932,9 +944,9 @@ namespace YAT.Controller
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 
 		/// <remarks>
-		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart.
+		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart if the <see cref="UnhandledExceptionEventArgs.IsTerminating"/> flag is set.
 		/// </remarks>
-		private void RunInvisible_currentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		private void RunInvisible_CurrentDomain_UnhandledException_Or_UnhandledExceptionOnNonMainThread(object sender, UnhandledExceptionEventArgs e)
 		{
 			string message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
 			Console.Error.WriteLine(message);
