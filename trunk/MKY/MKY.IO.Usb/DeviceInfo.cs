@@ -695,27 +695,27 @@ namespace MKY.IO.Usb
 			var m = VendorIdRegex.Match(s);
 			if (m.Success)
 			{
-				int vendorId;
+				int vendorId;    // m.Value is e.g. "VID:0ABC" thus [1] is "0ABC".
 				if (int.TryParse(m.Groups[1].Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out vendorId))
 				{
 					m = ProductIdRegex.Match(s);
 					if (m.Success)
 					{
-						int productId;
+						int productId;   // m.Value is e.g. "PID:1234" thus [1] is "1234".
 						if (int.TryParse(m.Groups[1].Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out productId))
 						{
 							if (expectSerial)
 							{
 								m = SerialRegexTag.Match(s); // Try to match against "SNR" tag.
 								if (m.Success)
-								{
+								{                   // m.Value is e.g. "SNR:XYZ" thus [1] is "XYZ".
 									string serial = m.Groups[1].Value;
 									result = new DeviceInfo(vendorId, productId, serial);
 									return (true);
 								}
 								m = SerialRegexRemainder.Match(s); // Try to match against remainder string.
 								if (m.Success)
-								{
+								{                   // m.Value is e.g. "PID:1234 XYZ" thus [1] is "XYZ".
 									string serial = m.Groups[1].Value;
 									result = new DeviceInfo(vendorId, productId, serial);
 									return (true);

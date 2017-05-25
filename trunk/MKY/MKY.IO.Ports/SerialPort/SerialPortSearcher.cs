@@ -70,7 +70,7 @@ namespace MKY.IO.Ports
 								var m = SerialPortId.StandardPortNameWithParenthesesRegex.Match(obj["Caption"].ToString());
 								if (m.Success)
 								{
-									int portNumber;
+									int portNumber;  // m.Value is e.g. "(COM2) thus [1] is "2".
 									if (int.TryParse(m.Groups[1].Value, out portNumber))
 									{
 										// Retrieve description:
@@ -95,11 +95,11 @@ namespace MKY.IO.Ports
 					{
 						if ((obj["AttachedTo"] != null) && (obj["Description"] != null))
 						{
-							// "AttachedTo" contains something like "COM1":
+							// "AttachedTo" contains something like "COM2":
 							var m = SerialPortId.StandardPortNameOnlyRegex.Match(obj["AttachedTo"].ToString());
 							if (m.Success)
 							{
-								int portNumber;
+								int portNumber;  // m.Value is e.g. "COM2 thus [1] is "2".
 								if (int.TryParse(m.Groups[1].Value, out portNumber))
 								{
 									// Retrieve description:
