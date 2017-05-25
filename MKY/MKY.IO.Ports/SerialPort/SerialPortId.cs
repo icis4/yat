@@ -532,7 +532,7 @@ namespace MKY.IO.Ports
 			var m = UserPortNameRegex.Match(s);
 			if (m.Success)
 			{
-				string portName = m.Groups[1].Value;
+				string portName = m.Value;
 				result = new SerialPortId(portName);
 				return (true);
 			}
@@ -564,7 +564,7 @@ namespace MKY.IO.Ports
 			m = StandardPortNameOnlyRegex.Match(s);
 			if (m.Success)
 			{
-				int portNumber;
+				int portNumber;  // m.Value is e.g. "COM2 thus [1] is "2".
 				if (int.TryParse(m.Groups[1].Value, out portNumber))
 				{
 					if (IsStandardPortNumber(portNumber))
@@ -579,7 +579,7 @@ namespace MKY.IO.Ports
 			m = StandardPortNameWithParenthesesRegex.Match(s);
 			if (m.Success)
 			{
-				int portNumber;
+				int portNumber;  // m.Value is e.g. "(COM2) thus [1] is "2".
 				if (int.TryParse(m.Groups[1].Value, out portNumber))
 				{
 					if (IsStandardPortNumber(portNumber))
@@ -594,7 +594,7 @@ namespace MKY.IO.Ports
 			m = StandardPortNameRegex.Match(s);
 			if (m.Success)
 			{
-				int portNumber;
+				int portNumber;  // m.Value is e.g. "COM2 thus [1] is "2".
 				if (int.TryParse(m.Groups[1].Value, out portNumber))
 				{
 					if (IsStandardPortNumber(portNumber))

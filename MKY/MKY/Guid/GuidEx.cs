@@ -75,13 +75,16 @@ namespace MKY
 		/// Tries to create and return a <see cref="Guid"/> object from the string specified.
 		/// </summary>
 		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		/// <remarks>
 		/// To be replaced by .NET 4.0+ "Guid.TryParse()" after upgrading to .NET 4.0+.
 		/// </remarks>
 		public static bool TryParseTolerantly(string s, out Guid guid)
 		{
-			var m = Regex.Match(s);
+			var m = Regex.Match(s.Trim());
 			if (m.Success)
-				return (TryParse( m.Groups[1].Value, out guid));
+				return (TryParse(m.Value, out guid));
 
 			guid = Guid.Empty;
 			return (false);
