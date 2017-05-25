@@ -3183,7 +3183,7 @@ namespace YAT.Model
 			if (!c.IsValidFilePath)
 				return;
 
-			string filePath = Environment.ExpandEnvironmentVariables(c.FilePath);
+			string filePath = EnvironmentEx.ResolveAbsolutePath(c.FilePath);
 
 			try
 			{

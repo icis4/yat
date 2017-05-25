@@ -412,9 +412,9 @@ namespace YAT.Model
 
 			// RequestedFilePath:
 			if (!string.IsNullOrEmpty(RequestedFilePath))
-			{                                                                                // May be absolute or relative to current directory.
+			{
 				string filePath = Environment.ExpandEnvironmentVariables(RequestedFilePath);
-				if (File.Exists(filePath))
+				if (File.Exists(filePath)) // May be absolute or relative to current directory.
 				{
 					if (!ExtensionHelper.IsWorkspaceFile(filePath) &&
 						!ExtensionHelper.IsTerminalFile (filePath))
@@ -479,9 +479,9 @@ namespace YAT.Model
 
 			// TransmitFile:
 			if (!string.IsNullOrEmpty(RequestedTransmitFilePath))
-			{                                                                                        // May be absolute or relative to current directory.
+			{
 				string filePath = Environment.ExpandEnvironmentVariables(RequestedTransmitFilePath);
-				if (!File.Exists(filePath))
+				if (!File.Exists(filePath)) // May be absolute or relative to current directory.
 				{
 					RequestedTransmitFilePath = null;
 					Invalidate("Requested file does not exist");
