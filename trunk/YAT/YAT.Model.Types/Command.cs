@@ -645,7 +645,7 @@ namespace YAT.Model.Types
 				if (!IsFilePath)
 					return (false);
 
-				return (File.Exists(Environment.ExpandEnvironmentVariables(this.filePath)));
+				return (File.Exists(Environment.ExpandEnvironmentVariables(this.filePath))); // May be absolute or relative to current directory.
 			}
 		}
 
