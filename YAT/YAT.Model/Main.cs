@@ -489,18 +489,18 @@ namespace YAT.Model
 				return (false);
 			}
 
-			// Arguments are available and valid, transfer 'NonInteractive' option:
-			this.startArgs.NonInteractive = this.commandLineArgs.NonInteractive;
-
 			// Prio 2 = Empty:
 			if (this.commandLineArgs.Empty)
 			{
 				this.startArgs.ShowNewTerminalDialog = false;
-				this.startArgs.KeepOpen              = this.commandLineArgs.KeepOpen;
-				this.startArgs.KeepOpenOnError       = this.commandLineArgs.KeepOpenOnError;
+				this.startArgs.KeepOpen              = true; // Overriding 'this.commandLineArgs.KeepOpen' as 'Empty' is requested.
+				this.startArgs.KeepOpenOnError       = true; // Overriding 'this.commandLineArgs.KeepOpenOnError' as 'Empty' is requested.
 
 				return (true);
 			}
+
+			// Arguments are available and valid, transfer 'NonInteractive' option:
+			this.startArgs.NonInteractive = this.commandLineArgs.NonInteractive;
 
 			// Prio 3 = Recent:
 			string requestedFilePath = null;
@@ -910,9 +910,13 @@ namespace YAT.Model
 
 			if (this.commandLineArgs.OptionIsGiven("OpenTerminal"))
 				terminalIsStarted = this.commandLineArgs.OpenTerminal;
+			else
+				terminalIsStarted = false;
 
 			if (this.commandLineArgs.OptionIsGiven("LogOn"))
 				logIsOn = this.commandLineArgs.LogOn;
+			else
+				logIsOn = false;
 
 			return (true);
 		}

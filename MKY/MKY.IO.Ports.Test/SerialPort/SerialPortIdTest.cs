@@ -103,24 +103,28 @@ namespace MKY.IO.Ports.Test.SerialPort
 		[Test, TestCaseSource(typeof(SerialPortIdTestData), "TestCases")]
 		public virtual void TestConstructorAndParse(int standardPortNumber, string portName, string[] portDescriptions)
 		{
-			SerialPortId port;
+			SerialPortId id;
 
 			if (standardPortNumber != 0)
 			{
-				port = new SerialPortId(standardPortNumber);
-				Assert.That(port.StandardPortNumber, Is.EqualTo(standardPortNumber));
-				Assert.That(port.Name,               Is.EqualTo(portName));
+				id = new SerialPortId(standardPortNumber);
+				Assert.That(id.StandardPortNumber, Is.EqualTo(standardPortNumber));
+				Assert.That(id.Name,               Is.EqualTo(portName));
 			}
 
-			port = new SerialPortId(portName);
-			Assert.That(port.StandardPortNumber, Is.EqualTo(standardPortNumber));
-			Assert.That(port.Name,               Is.EqualTo(portName));
+			id = new SerialPortId(portName);
+			Assert.That(id.StandardPortNumber, Is.EqualTo(standardPortNumber));
+			Assert.That(id.Name,               Is.EqualTo(portName));
+
+			Assert.That(SerialPortId.TryParse(portName, out id), Is.True);
+			Assert.That(id.StandardPortNumber, Is.EqualTo(standardPortNumber));
+			Assert.That(id.Name,               Is.EqualTo(portName));
 
 			foreach (string description in portDescriptions)
 			{
-				port = new SerialPortId(description);
-				Assert.That(port.StandardPortNumber, Is.EqualTo(standardPortNumber));
-				Assert.That(port.Name,               Is.EqualTo(portName));
+				id = new SerialPortId(description);
+				Assert.That(id.StandardPortNumber, Is.EqualTo(standardPortNumber));
+				Assert.That(id.Name,               Is.EqualTo(portName));
 			}
 		}
 
