@@ -346,6 +346,7 @@ namespace YAT.Model.Test
 			// - Initial start
 			// - Create new terminal
 			//   => Auto workspace with 1 auto terminal
+
 			using (Main main = new Main())
 			{
 				uc = "UC1: ";
@@ -374,6 +375,7 @@ namespace YAT.Model.Test
 			// - Start with auto workspace that contains 1 auto terminal
 			// - Save terminal
 			//   => Auto terminal stays auto
+
 			using (Main main = new Main())
 			{
 				uc = "UC2: ";
@@ -404,6 +406,7 @@ namespace YAT.Model.Test
 			// - Start with auto workspace that contains 1 auto terminal
 			// - Save terminal as
 			//   => Auto terminal becomes normal terminal
+
 			using (Main main = new Main())
 			{
 				uc = "UC2a: ";
@@ -436,6 +439,7 @@ namespace YAT.Model.Test
 			// - Start with auto workspace that contains 1 normal terminal
 			// - Create 2 more terminals
 			//   => Auto workspace with 1 normal and 2 auto terminals
+
 			using (Main main = new Main())
 			{
 				uc = "UC3: ";
@@ -484,6 +488,7 @@ namespace YAT.Model.Test
 			// - Start with auto workspace that contains 1 normal and 2 auto terminals
 			// - Close terminal 3
 			//   => Auto workspace with 1 normal and 1 auto terminal
+
 			using (Main main = new Main())
 			{
 				uc = "UC3a: ";
@@ -536,6 +541,7 @@ namespace YAT.Model.Test
 			// - Start with auto workspace that contains 1 normal and 1 auto terminal
 			// - Save workspace
 			//   => Auto workspace stays auto workspace
+
 			using (Main main = new Main())
 			{
 				uc = "UC4: ";
@@ -585,6 +591,7 @@ namespace YAT.Model.Test
 			// - Save workspace as
 			//   => Auto workspace becomes normal workspace
 			//   => Auto terminal becomes normal terminal
+
 			using (Main main = new Main())
 			{
 				uc = "UC4a: ";
@@ -652,6 +659,7 @@ namespace YAT.Model.Test
 			// - Start with normal workspace that contains 2 normal terminals
 			// - Create new terminal
 			//   => Terminal becomes normal terminal
+
 			using (Main main = new Main())
 			{
 				uc = "UC5: ";
@@ -708,6 +716,7 @@ namespace YAT.Model.Test
 			// - Start with normal workspace that contains 3 normal terminals
 			// - Close terminal 3
 			//   => Normal workspace contains 2 normal terminals but terminal 3 file stays
+
 			using (Main main = new Main())
 			{
 				uc = "UC5a: ";
@@ -781,6 +790,7 @@ namespace YAT.Model.Test
 			// - Create two new terminals
 			// - Save terminals as
 			//   => Auto workspace with 2 normal terminals
+
 			using (Main main = new Main())
 			{
 				uc = "UC6..9prep: ";
@@ -820,41 +830,30 @@ namespace YAT.Model.Test
 			}
 			#endregion
 
-			#region Use case 6
-			// - Start and request normal terminal
-			//   => Auto workspace with 1 normal terminal
-			using (Main main = new Main(this.normalTerminal1FilePath))
+			#region Use case 6 using absolute and relative paths
+
+			// Using absolute path:
+			success = UseCase6and6a("UC6: ", this.normalTerminal1FilePath);
+
+			// Using relative path:
+			string currentDirectoryToRestore = Environment.CurrentDirectory;
+			try
 			{
-				uc = "UC6: ";
-				success = (main.Start() == MainResult.Success);
-				Assert.That(success, Is.True, uc + "Main could not be started!");
-
-				Workspace workspace = main.Workspace;
-				Assert.That(workspace, Is.Not.Null, uc + "Workspace not created!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
-
-				Terminal terminal = workspace.ActiveTerminal;
-				Assert.That(terminal, Is.Not.Null, uc + "Terminal could not be opened!");
-
-				// The auto workspace may still be set to some other workspace. Keep it to compare below.
-				string formerLocalUserAutoWorkspaceFilePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
-				VerifyFiles(uc, workspace, false, terminal, true, false);
-
-				success = (main.Exit() == MainResult.Success);
-				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
-
-				VerifyFiles(uc, workspace, true, terminal, true, false);
-
-				// Ensure that the auto workspace has been changed.
-				string currentLocalUserAutoWorkspaceFilePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
-				Assert.That(currentLocalUserAutoWorkspaceFilePath, Is.Not.EqualTo(formerLocalUserAutoWorkspaceFilePath), uc + "Auto workspace not created new!");
+				Environment.CurrentDirectory = Path.GetDirectoryName(this.normalTerminal1FilePath);
+				success = UseCase6and6a("UC6a: ", Path.GetFileName(this.normalTerminal1FilePath));
 			}
+			finally
+			{
+				Environment.CurrentDirectory = currentDirectoryToRestore;
+			}
+
 			#endregion
 
 			#region Use case 7
 			// - Start and request normal terminal
 			// - Create another terminal
 			//   => Auto workspace with 1 normal and 1 auto terminal
+
 			using (Main main = new Main(this.normalTerminal1FilePath))
 			{
 				uc = "UC7: ";
@@ -897,6 +896,7 @@ namespace YAT.Model.Test
 			// - Start and request normal terminal in another main
 			// - Close first main, then second
 			//   => 2 auto workspaces with 1 normal terminal each
+
 			using (Main main1 = new Main(this.normalTerminal1FilePath),
 			            main2 = new Main(this.normalTerminal2FilePath))
 			{
@@ -908,7 +908,7 @@ namespace YAT.Model.Test
 				Terminal terminal1;
 				Terminal terminal2;
 
-				// Main 1 start.
+				// Main 1 start:
 				{
 					success = (main1.Start() == MainResult.Success);
 					Assert.That(success, Is.True, uc + "Main 1 could not be started!");
@@ -923,7 +923,7 @@ namespace YAT.Model.Test
 					VerifyFiles(uc, workspace1, false, terminal1, true, false);
 				}
 
-				// Main 2 start.
+				// Main 2 start:
 				{
 					success = (main2.Start() == MainResult.Success);
 					Assert.That(success, Is.True, uc + "Main 2 could not be started!");
@@ -938,7 +938,7 @@ namespace YAT.Model.Test
 					VerifyFiles(uc, workspace2, false, terminal2, true, false);
 				}
 
-				// Main 1 exit.
+				// Main 1 exit:
 				{
 					success = (main1.Exit() == MainResult.Success);
 					Assert.That(success, Is.True, uc + "Main 1 could not be exited!");
@@ -946,7 +946,7 @@ namespace YAT.Model.Test
 					VerifyFiles(uc, workspace1, true, terminal1, true, false);
 				}
 
-				// Main 2 exit.
+				// Main 2 exit:
 				{
 					success = (main2.Exit() == MainResult.Success);
 					Assert.That(success, Is.True, uc + "Main 2 could not be exited!");
@@ -959,6 +959,7 @@ namespace YAT.Model.Test
 			#region Use case 9
 			// - Start with auto workspace that contains 1 normal terminal
 			//   => 1 auto workspaces with 1 normal terminal
+
 			using (Main main2 = new Main())
 			{
 				uc = "UC9: ";
@@ -967,7 +968,7 @@ namespace YAT.Model.Test
 
 				Terminal terminal2;
 
-				// Main 2 start.
+				// Main 2 start:
 				{
 					success = (main2.Start() == MainResult.Success);
 					Assert.That(success, Is.True, uc + "Main 2 could not be started!");
@@ -982,7 +983,7 @@ namespace YAT.Model.Test
 					VerifyFiles(uc, workspace2, true, terminal2, true, false);
 				}
 
-				// Main 2 exit.
+				// Main 2 exit:
 				{
 					success = (main2.Exit() == MainResult.Success);
 					Assert.That(success, Is.True, uc + "Main 2 could not be exited!");
@@ -992,6 +993,43 @@ namespace YAT.Model.Test
 			}
 			#endregion
 		}
+
+		#region Use case 6 implementation
+
+		private static bool UseCase6and6a(string uc, string requestedPath)
+		{
+			bool success = false;
+
+			using (Main main = new Main(requestedPath))
+			{
+				success = (main.Start() == MainResult.Success);
+				Assert.That(success, Is.True, uc + "Main could not be started!");
+
+				Workspace workspace = main.Workspace;
+				Assert.That(workspace, Is.Not.Null, uc + "Workspace not created!");
+				Assert.That(workspace.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
+
+				Terminal terminal = workspace.ActiveTerminal;
+				Assert.That(terminal, Is.Not.Null, uc + "Terminal could not be opened!");
+
+				// The auto workspace may still be set to some other workspace. Keep it to compare below.
+				string formerLocalUserAutoWorkspaceFilePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
+				VerifyFiles(uc, workspace, false, terminal, true, false);
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
+
+				VerifyFiles(uc, workspace, true, terminal, true, false);
+
+				// Ensure that the auto workspace has been changed.
+				string currentLocalUserAutoWorkspaceFilePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
+				Assert.That(currentLocalUserAutoWorkspaceFilePath, Is.Not.EqualTo(formerLocalUserAutoWorkspaceFilePath), uc + "Auto workspace not created new!");
+			}
+
+			return (success);
+		}
+
+		#endregion
 
 		#endregion
 

@@ -59,6 +59,7 @@ using System.Windows.Forms; // Note that several locations explicitly use 'Syste
 using MKY;
 using MKY.Diagnostics;
 using MKY.Settings;
+using MKY.Threading;
 using MKY.Windows.Forms; // Note that several locations explicitly use 'MKY.Windows.Forms' to prevent naming conflicts with 'System.Windows.Forms' and 'YAT.Application'.
 
 using YAT.Settings.Application;
@@ -356,7 +357,7 @@ namespace YAT.Controller
 		/// purposes only.
 		/// 
 		/// There are the following use cases to run YAT. This Run() method supports all these
-		/// use cases as also shown below:
+		/// use cases as shown below:
 		/// 
 		/// 1. 'Normal' GUI operation
 		///    > Start YAT from the Windows start menu
@@ -415,6 +416,8 @@ namespace YAT.Controller
 		public virtual MainResult Run(bool runFromConsole, bool runWithView)
 		{
 			AssertNotDisposed();
+
+			MainThreadHelper.SetCurrentThread();
 
 			MainResult result;
 

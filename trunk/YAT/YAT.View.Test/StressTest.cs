@@ -102,6 +102,8 @@ namespace YAT.View.Test
 		[MinuteDurationCategory(1)]
 		public virtual void TestTransmissionDisplay()
 		{
+			// Preparation:
+
 			string workspaceSettingsFilePath = Temp.MakeTempFilePath(GetType(), Guid.NewGuid().ToString(), ExtensionHelper.WorkspaceFile);
 			string terminalSettings1FilePath = Temp.MakeTempFilePath(GetType(), Guid.NewGuid().ToString(), ExtensionHelper.TerminalFile);
 			string terminalSettings2FilePath = Temp.MakeTempFilePath(GetType(), Guid.NewGuid().ToString(), ExtensionHelper.TerminalFile);
@@ -181,6 +183,24 @@ namespace YAT.View.Test
 			Trace.WriteLine(transmitFilePath);
 			Trace.Unindent();
 
+			// Run using absolute path:
+			RunTransmission(workspaceSettingsFilePath, transmitFilePath);
+
+			// Run using relative path:
+			string currentDirectoryToRestore = Environment.CurrentDirectory;
+			try
+			{
+				Environment.CurrentDirectory = Path.GetDirectoryName(transmitFilePath);
+				RunTransmission(workspaceSettingsFilePath, Path.GetFileName(transmitFilePath));
+			}
+			finally
+			{
+				Environment.CurrentDirectory = currentDirectoryToRestore;
+			}
+		}
+
+		private static void RunTransmission(string workspaceSettingsFilePath, string transmitFilePath)
+		{
 			string[] args = new string[]
 			{
 				@"""" + workspaceSettingsFilePath + @"""",

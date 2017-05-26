@@ -461,7 +461,7 @@ namespace YAT.Model
 			// Prio 0 = None:
 			if ((this.commandLineArgs == null) || this.commandLineArgs.NoArgs)
 			{
-				// This is the standard case, the 'New Terminal' dialog will get shown.
+				// This is the standard case, the 'New Terminal' dialog will get shown:
 				if (this.commandLineArgs == null)
 				{
 					this.startArgs.ShowNewTerminalDialog = true;
@@ -470,8 +470,8 @@ namespace YAT.Model
 
 					return (true);
 				}
-				// In case of "YATConsole.exe" the controller will clear the 'Interactive'
-				// option and no 'New Terminal' dialog shall get shown.
+				// In case of "YATConsole.exe" the controller will set the 'NonInteractive' option,
+				// i.e. 'Interactive' will be cleared, and no 'New Terminal' dialog shall get shown:
 				else
 				{
 					this.startArgs.ShowNewTerminalDialog = this.commandLineArgs.Interactive;
@@ -909,13 +909,9 @@ namespace YAT.Model
 
 			if (this.commandLineArgs.OptionIsGiven("OpenTerminal"))
 				terminalIsStarted = this.commandLineArgs.OpenTerminal;
-			else
-				terminalIsStarted = false;
 
 			if (this.commandLineArgs.OptionIsGiven("LogOn"))
 				logIsOn = this.commandLineArgs.LogOn;
-			else
-				logIsOn = false;
 
 			return (true);
 		}
@@ -1611,8 +1607,12 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure to handle any case.")]
 		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
 		{
-			// Combine absolute workspace path with terminal path if that one is relative:
+			// Try to combine the workspace path with terminal path, but only if that is a relative path:
 			var absoluteTerminalFilePath = PathEx.CombineFilePaths(EnvironmentEx.ResolveAbsolutePath(workspaceFilePath), terminalFilePath);
+
+			// Alternatively, try to use terminal file path only:
+			if (string.IsNullOrEmpty(absoluteTerminalFilePath) || !File.Exists(absoluteTerminalFilePath))
+				absoluteTerminalFilePath = EnvironmentEx.ResolveAbsolutePath(terminalFilePath);
 
 			try
 			{
