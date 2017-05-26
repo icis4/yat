@@ -358,7 +358,7 @@ namespace YAT.Model
 				// Thus, they can be used again at the next 'normal' start of YAT.
 			}
 
-			if (!success && ApplicationSettings.LocalUserSettingsAreCurrentlyOwnedByThisInstance)
+			if (!success && ApplicationSettings.LocalUserSettingsAreCurrentlyOwnedByThisInstance && !this.commandLineArgs.Empty)
 			{
 				if (ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace)
 				{
@@ -470,9 +470,8 @@ namespace YAT.Model
 
 					return (true);
 				}
-				// In case of "YATConsole.exe" the controller will set the 'NonInteractive'
-				// option and no 'New Terminal' dialog shall get shown. The behavior will be
-				// the same as with the 'Empty' option.
+				// In case of "YATConsole.exe" the controller will clear the 'Interactive'
+				// option and no 'New Terminal' dialog shall get shown.
 				else
 				{
 					this.startArgs.ShowNewTerminalDialog = this.commandLineArgs.Interactive;
@@ -493,8 +492,8 @@ namespace YAT.Model
 			if (this.commandLineArgs.Empty)
 			{
 				this.startArgs.ShowNewTerminalDialog = false;
-				this.startArgs.KeepOpen              = true; // Overriding 'this.commandLineArgs.KeepOpen' as 'Empty' is requested.
-				this.startArgs.KeepOpenOnError       = true; // Overriding 'this.commandLineArgs.KeepOpenOnError' as 'Empty' is requested.
+				this.startArgs.KeepOpen              = this.commandLineArgs.KeepOpen;
+				this.startArgs.KeepOpenOnError       = this.commandLineArgs.KeepOpenOnError;
 
 				return (true);
 			}

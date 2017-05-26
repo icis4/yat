@@ -730,8 +730,8 @@ namespace YAT.Model.Test
 
 				Assert.That(main.StartArgs.ShowNewTerminalDialog, Is.False);
 
-				Assert.That(main.StartArgs.KeepOpen,        Is.True);
-				Assert.That(main.StartArgs.KeepOpenOnError, Is.True);
+				Assert.That(main.StartArgs.KeepOpen,        Is.False);
+				Assert.That(main.StartArgs.KeepOpenOnError, Is.False);
 				Assert.That(main.StartArgs.TileHorizontal,  Is.False);
 				Assert.That(main.StartArgs.TileVertical,    Is.False);
 			}
