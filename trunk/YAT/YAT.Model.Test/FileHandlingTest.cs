@@ -1812,7 +1812,7 @@ namespace YAT.Model.Test
 			// Verify workspace file:
 			if (workspaceFileExpected)
 			{
-				Assert.That(workspace.SettingsFilePath, Is.Not.Null.Or.Empty, prefix + "Workspace settings file path is empty!");
+				Assert.That(workspace.SettingsFilePath, Is.Not.Null.And.Not.Empty, prefix + "Workspace settings file path is empty!");
 				Assert.That(File.Exists(workspace.SettingsFilePath), Is.True, prefix + "Workspace file doesn't exist!");
 
 				if (workspaceFileAutoExpected)
@@ -1830,7 +1830,7 @@ namespace YAT.Model.Test
 			{
 				if (terminalFileExpected[i])
 				{
-					Assert.That(terminal[i].SettingsFilePath, Is.Not.Null.Or.Empty, prefix + "Terminal settings file path is empty!");
+					Assert.That(terminal[i].SettingsFilePath, Is.Not.Null.And.Not.Empty, prefix + "Terminal settings file path is empty!");
 					Assert.That(File.Exists(terminal[i].SettingsFilePath), Is.True, prefix + "Terminal file doesn't exist!");
 
 					if (terminalFileAutoExpected[i])

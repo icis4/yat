@@ -169,11 +169,11 @@ namespace MKY.IO.Usb.Test
 				// Ensure that ToString() also works if only parts of the info is available
 				string s;
 				s = info.ToString();
-				Assert.That(s, Is.Not.Null.Or.Empty, "ToString() resulted in invalid string!");
+				Assert.That(s, Is.Not.Null.And.Not.Empty, "ToString() resulted in invalid string!");
 				s = info.ToShortString();
-				Assert.That(s, Is.Not.Null.Or.Empty, "ToShortString() resulted in invalid string!");
+				Assert.That(s, Is.Not.Null.And.Not.Empty, "ToShortString() resulted in invalid string!");
 				s = info.ToLongString();
-				Assert.That(s, Is.Not.Null.Or.Empty, "ToLongString() resulted in invalid string!");
+				Assert.That(s, Is.Not.Null.And.Not.Empty, "ToLongString() resulted in invalid string!");
 			}
 			else
 			{
