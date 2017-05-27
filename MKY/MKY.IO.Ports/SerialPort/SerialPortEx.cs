@@ -181,6 +181,11 @@ namespace MKY.IO.Ports
 
 		private bool isDisposed;
 
+		/// <summary>
+		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// </summary>
+		private EventHelper.Item eventHelper = EventHelper.CreateItem();
+
 		private SerialPortControlPinCount controlPinCount;
 
 		private bool inputBreak;
@@ -325,7 +330,7 @@ namespace MKY.IO.Ports
 		[SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Justification = "See remarks.")]
 		~SerialPortEx()
 		{
-			DebugEventManagement.DebugNotifyAllEventRemains(this);
+			DebugEventManagement.DebugWriteAllEventRemains(this);
 
 			Dispose(false);
 
@@ -1213,7 +1218,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnPortChanged(EventArgs e)
 		{
-			EventHelper.FireSync(PortChanged, this, e);
+			this.eventHelper.FireSync(PortChanged, this, e);
 		}
 
 		/// <summary>
@@ -1221,7 +1226,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnPortSettingsChanged(EventArgs e)
 		{
-			EventHelper.FireSync(PortSettingsChanged, this, e);
+			this.eventHelper.FireSync(PortSettingsChanged, this, e);
 		}
 
 		/// <summary>
@@ -1229,7 +1234,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnOpening(EventArgs e)
 		{
-			EventHelper.FireSync(Opening, this, e);
+			this.eventHelper.FireSync(Opening, this, e);
 		}
 
 		/// <summary>
@@ -1237,7 +1242,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnOpened(EventArgs e)
 		{
-			EventHelper.FireSync(Opened, this, e);
+			this.eventHelper.FireSync(Opened, this, e);
 		}
 
 		/// <summary>
@@ -1245,7 +1250,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnClosing(EventArgs e)
 		{
-			EventHelper.FireSync(Closing, this, e);
+			this.eventHelper.FireSync(Closing, this, e);
 		}
 
 		/// <summary>
@@ -1253,7 +1258,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnClosed(EventArgs e)
 		{
-			EventHelper.FireSync(Closed, this, e);
+			this.eventHelper.FireSync(Closed, this, e);
 		}
 
 		/// <summary>
@@ -1261,8 +1266,8 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnDataReceived(SerialDataReceivedEventArgs e)
 		{
-			if (!IsDisposed && IsOpen) // Make sure to propagate event only if port is active.
-				EventHelper.FireSync<SerialDataReceivedEventArgs, SerialDataReceivedEventHandler>(DataReceived, this, e);
+			if (IsOpen) // Make sure to propagate event only if active.
+				this.eventHelper.FireSync<SerialDataReceivedEventArgs, SerialDataReceivedEventHandler>(DataReceived, this, e);
 		}
 
 		/// <summary>
@@ -1270,8 +1275,8 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnErrorReceived(SerialErrorReceivedEventArgs e)
 		{
-			if (!IsDisposed && IsOpen) // Make sure to propagate event only if port is active.
-				EventHelper.FireSync<SerialErrorReceivedEventArgs, SerialErrorReceivedEventHandler>(ErrorReceived, this, e);
+			if (IsOpen) // Make sure to propagate event only if active.
+				this.eventHelper.FireSync<SerialErrorReceivedEventArgs, SerialErrorReceivedEventHandler>(ErrorReceived, this, e);
 		}
 
 		/// <summary>
@@ -1279,8 +1284,8 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnPinChanged(SerialPinChangedEventArgs e)
 		{
-			if (!IsDisposed && IsOpen) // Make sure to propagate event only if port is active.
-				EventHelper.FireSync<SerialPinChangedEventArgs, SerialPinChangedEventHandler>(PinChanged, this, e);
+			if (IsOpen) // Make sure to propagate event only if active.
+				this.eventHelper.FireSync<SerialPinChangedEventArgs, SerialPinChangedEventHandler>(PinChanged, this, e);
 		}
 
 		#endregion

@@ -62,6 +62,11 @@ namespace YAT.Domain
 		{
 			private bool isDisposed;
 
+			/// <summary>
+			/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+			/// </summary>
+			private EventHelper.Item eventHelper = EventHelper.CreateItem();
+
 			private int timeout;
 			private System.Threading.Timer timer;
 			private object timerSyncObj = new object();
@@ -90,10 +95,11 @@ namespace YAT.Domain
 			/// <summary></summary>
 			protected virtual void Dispose(bool disposing)
 			{
-				DebugEventManagement.DebugNotifyAllEventRemains(this);
-
 				if (!this.isDisposed)
 				{
+					DebugEventManagement.DebugWriteAllEventRemains(this);
+					this.eventHelper.DiscardAllEventsAndExceptions();
+
 					// Dispose of managed resources if requested:
 					if (disposing)
 					{
@@ -205,15 +211,14 @@ namespace YAT.Domain
 				}
 
 				Stop();
-				OnTimeout(EventArgs.Empty);
+
+				OnElapsed(EventArgs.Empty);
 			}
 
 			/// <summary></summary>
-			protected virtual void OnTimeout(EventArgs e)
+			protected virtual void OnElapsed(EventArgs e)
 			{
-				AssertNotDisposed();
-
-				EventHelper.FireSync(Elapsed, this, e);
+				this.eventHelper.FireSync(Elapsed, this, e);
 			}
 		}
 
@@ -279,12 +284,11 @@ namespace YAT.Domain
 						// In the 'normal' case, the timer is stopped in ExecuteLineEnd().
 						if (this.BreakTimer != null)
 						{
-							// \remind (2016-09-08 / mky)
-							// Ensure to free referenced resources such as the 'Elapsed' event handler.
-							// Whole timer handling should be encapsulated into the 'LineState' class.
-							EventHandlerHelper.RemoveEventHandler(this.BreakTimer, "Elapsed");
-
 							this.BreakTimer.Dispose();
+							EventHandlerHelper.RemoveAllEventHandlers(this.BreakTimer);
+
+							// \remind (2016-09-08 / mky)
+							// Whole timer handling should be encapsulated into the 'LineState' class.
 						}
 					}
 
@@ -606,7 +610,7 @@ namespace YAT.Domain
 
 			// Convert data:
 			var de = ByteToElement(b, d);
-			var lp = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
+			var lp = new DisplayLinePart(); // Default initial capacity is OK.
 
 			// Evaluate line breaks:
 			//  1. Evaluate the tricky case: Sequence before.
@@ -737,7 +741,7 @@ namespace YAT.Domain
 			line.AddRange(lineState.Elements.Clone()); // Clone elements to ensure decoupling.
 
 			// Process line length:
-			DisplayLinePart lp = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
+			DisplayLinePart lp = new DisplayLinePart(); // Default initial capacity is OK.
 			if (TerminalSettings.Display.ShowLength)
 			{
 				DisplayLinePart info;

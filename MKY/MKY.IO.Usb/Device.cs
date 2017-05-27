@@ -610,6 +610,12 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		private bool isDisposed;
+
+		/// <summary>
+		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// </summary>
+		private EventHelper.Item eventHelper = EventHelper.CreateItem();
+
 		private Guid classGuid;
 		private DeviceInfo deviceInfo;
 		private bool isConnected;
@@ -761,10 +767,11 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			DebugEventManagement.DebugNotifyAllEventRemains(this);
-
 			if (!this.isDisposed)
 			{
+				DebugEventManagement.DebugWriteAllEventRemains(this);
+				this.eventHelper.DiscardAllEventsAndExceptions();
+
 				// In any case, ensure that the static event handlers get detached:
 				UnregisterAndDetachStaticDeviceEventHandlers();
 
@@ -964,20 +971,20 @@ namespace MKY.IO.Usb
 		protected virtual void OnConnected(EventArgs e)
 		{
 			this.isConnected = true;
-			EventHelper.FireSync(Connected, this, e);
+			this.eventHelper.FireSync(Connected, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisconnected(EventArgs e)
 		{
 			this.isConnected = false;
-			EventHelper.FireSync(Disconnected, this, e);
+			this.eventHelper.FireSync(Disconnected, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOError(ErrorEventArgs e)
 		{
-			EventHelper.FireSync<ErrorEventArgs>(IOError, this, e);
+			this.eventHelper.FireSync<ErrorEventArgs>(IOError, this, e);
 		}
 
 		#endregion

@@ -511,7 +511,7 @@ namespace YAT.View.Forms
 				if (dr != DialogResult.OK)
 					return (false);
 
-				UnhandledExceptionHandler.ResetIgnoredExceptionType();
+				UnhandledExceptionHandler.RevertIgnoredExceptionType(upcomingExceptionType);
 			}
 
 			return (true);

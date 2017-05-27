@@ -233,8 +233,14 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private int instanceId;
 		private bool isDisposed;
+
+		/// <summary>
+		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// </summary>
+		private EventHelper.Item eventHelper = EventHelper.CreateItem();
+
+		private int instanceId;
 
 		private Settings.TerminalSettings terminalSettings;
 
@@ -359,10 +365,11 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			DebugEventManagement.DebugNotifyAllEventRemains(this);
-
 			if (!this.isDisposed)
 			{
+				DebugEventManagement.DebugWriteAllEventRemains(this);
+				this.eventHelper.DiscardAllEventsAndExceptions();
+
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
@@ -2216,7 +2223,7 @@ namespace YAT.Domain
 		{
 			// Collection of elements processed, extends over one or multiple lines,
 			// depending on the number of bytes in raw chunk.
-			DisplayElementCollection elements = new DisplayElementCollection(); // Default behavior regarding initial capacity is OK.
+			DisplayElementCollection elements = new DisplayElementCollection(); // Default initial capacity is OK.
 			List<DisplayLine> lines = new List<DisplayLine>();
 
 			ProcessRawChunk(raw, elements, lines);
@@ -2776,31 +2783,31 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			EventHelper.FireSync(IOChanged, this, e);
+			this.eventHelper.FireSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			EventHelper.FireSync(IOControlChanged, this, e);
+			this.eventHelper.FireSync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			EventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
+			this.eventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRawChunkSent(EventArgs<RawChunk> e)
 		{
-			EventHelper.FireSync<EventArgs<RawChunk>>(RawChunkSent, this, e);
+			this.eventHelper.FireSync<EventArgs<RawChunk>>(RawChunkSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRawChunkReceived(EventArgs<RawChunk> e)
 		{
-			EventHelper.FireSync<EventArgs<RawChunk>>(RawChunkReceived, this, e);
+			this.eventHelper.FireSync<EventArgs<RawChunk>>(RawChunkReceived, this, e);
 		}
 
 		/// <summary></summary>
@@ -2855,14 +2862,14 @@ namespace YAT.Domain
 		protected virtual void OnDisplayElementsSent(DisplayElementsEventArgs e)
 		{
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
-				EventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsSent, this, e);
+				this.eventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsReceived(DisplayElementsEventArgs e)
 		{
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
-				EventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
+				this.eventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
 		}
 
 		/// <summary></summary>
@@ -2885,28 +2892,28 @@ namespace YAT.Domain
 		protected virtual void OnDisplayLinesSent(DisplayLinesEventArgs e)
 		{
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
-				EventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesSent, this, e);
+				this.eventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesReceived(DisplayLinesEventArgs e)
 		{
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
-				EventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
+				this.eventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryCleared(EventArgs<RepositoryType> e)
 		{
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
-				EventHelper.FireSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
+				this.eventHelper.FireSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryReloaded(EventArgs<RepositoryType> e)
 		{
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
-				EventHelper.FireSync<EventArgs<RepositoryType>>(RepositoryReloaded, this, e);
+				this.eventHelper.FireSync<EventArgs<RepositoryType>>(RepositoryReloaded, this, e);
 		}
 
 		#endregion
