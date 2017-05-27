@@ -25,6 +25,8 @@
 using System;
 using System.Threading;
 
+using MKY.Diagnostics;
+
 namespace MKY.Threading
 {
 	/// <summary>
@@ -56,10 +58,15 @@ namespace MKY.Threading
 		{
 			get
 			{
-				if (staticMainThreadId == InvalidThreadId)
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'SetCurrentThread()' must be called before 'IsMainThread' can be evaluated!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-
-				return (Thread.CurrentThread.ManagedThreadId == staticMainThreadId);
+				if (staticMainThreadId != InvalidThreadId)
+				{
+					return (Thread.CurrentThread.ManagedThreadId == staticMainThreadId);
+				}
+				else
+				{
+					DebugEx.WriteStack(typeof(MainThreadHelper), "'MainThreadHelper.SetCurrentThread()' should be called before 'MainThreadHelper.IsMainThread' can be evaluated.");
+					return (false);
+				}
 			}
 		}
 	}

@@ -26,6 +26,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 
 using MKY;
+using MKY.Diagnostics;
 using MKY.Settings;
 
 namespace YAT.Settings.Application
@@ -144,8 +145,10 @@ namespace YAT.Settings.Application
 
 				return (true);
 			}
-			catch
+			catch (Exception ex)
 			{
+				DebugEx.WriteException(typeof(ApplicationSettings), ex, "Exception while creating the settings handler!");
+
 				staticSettingsHandler = null;
 
 				return (false);
@@ -188,8 +191,10 @@ namespace YAT.Settings.Application
 
 					return (true);
 				}
-				catch
+				catch (Exception ex)
 				{
+					DebugEx.WriteException(typeof(ApplicationSettings), ex, "Exception while saving the settings!");
+
 					return (false);
 				}
 			}
@@ -213,8 +218,10 @@ namespace YAT.Settings.Application
 				{
 					staticSettingsHandler.Close();
 				}
-				catch
+				catch (Exception ex)
 				{
+					DebugEx.WriteException(typeof(ApplicationSettings), ex, "Exception while closing the settings handler!");
+
 					success = false;
 				}
 
@@ -222,8 +229,10 @@ namespace YAT.Settings.Application
 				{
 					staticSettingsHandler.Dispose();
 				}
-				catch
+				catch (Exception ex)
 				{
+					DebugEx.WriteException(typeof(ApplicationSettings), ex, "Exception while disposing the settings handler!");
+
 					success = false;
 				}
 

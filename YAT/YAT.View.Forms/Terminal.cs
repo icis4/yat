@@ -1961,7 +1961,8 @@ namespace YAT.View.Forms
 				else
 					widthOrHeight = splitContainer_TxMonitor.Height;
 
-				this.settingsRoot.Layout.TxMonitorSplitterRatio = (float)splitContainer_TxMonitor.SplitterDistance / widthOrHeight;
+				if (this.settingsRoot != null)
+					this.settingsRoot.Layout.TxMonitorSplitterRatio = (float)splitContainer_TxMonitor.SplitterDistance / widthOrHeight;
 			}
 		}
 
@@ -1975,14 +1976,18 @@ namespace YAT.View.Forms
 				else
 					widthOrHeight = splitContainer_RxMonitor.Height;
 
-				this.settingsRoot.Layout.RxMonitorSplitterRatio = (float)splitContainer_RxMonitor.SplitterDistance / widthOrHeight;
+				if (this.settingsRoot != null)
+					this.settingsRoot.Layout.RxMonitorSplitterRatio = (float)splitContainer_RxMonitor.SplitterDistance / widthOrHeight;
 			}
 		}
 
 		private void splitContainer_Predefined_SplitterMoved(object sender, SplitterEventArgs e)
 		{
 			if (!IsStartingUp && !this.isSettingControls && !IsAutoLayouting && !IsClosing)
-				this.settingsRoot.Layout.PredefinedSplitterRatio = (float)splitContainer_Predefined.SplitterDistance / splitContainer_Predefined.Width;
+			{
+				if (this.settingsRoot != null)
+					this.settingsRoot.Layout.PredefinedSplitterRatio = (float)splitContainer_Predefined.SplitterDistance / splitContainer_Predefined.Width;
+			}
 		}
 
 		#endregion
@@ -2020,12 +2025,16 @@ namespace YAT.View.Forms
 		private void predefined_SelectedPageChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settingsRoot.Implicit.Predefined.SelectedPage = predefined.SelectedPage;
+			{
+				if (this.settingsRoot != null)
+					this.settingsRoot.Implicit.Predefined.SelectedPage = predefined.SelectedPage;
+			}
 		}
 
 		private void predefined_SendCommandRequest(object sender, PredefinedCommandEventArgs e)
 		{
-			this.terminal.SendPredefined(e.Page, e.Command);
+			if (this.terminal != null)
+				this.terminal.SendPredefined(e.Page, e.Command);
 		}
 
 		private void predefined_DefineCommandRequest(object sender, PredefinedCommandEventArgs e)
@@ -2042,7 +2051,8 @@ namespace YAT.View.Forms
 
 		private void send_TextCommandChanged(object sender, EventArgs e)
 		{
-			this.settingsRoot.Implicit.SendText.Command = send.TextCommand;
+			if (this.settingsRoot != null)
+				this.settingsRoot.Implicit.SendText.Command = send.TextCommand;
 		}
 
 		/// <remarks>
@@ -2056,23 +2066,28 @@ namespace YAT.View.Forms
 
 		private void send_SendTextCommandRequest(object sender, EventArgs<SendTextEventOption> e)
 		{
-			switch (e.Value)
+			if (this.terminal != null)
 			{
-				case SendTextEventOption.Normal:     this.terminal.SendText();           break;
-				case SendTextEventOption.WithoutEol: this.terminal.SendTextWithoutEol(); break;
+				switch (e.Value)
+				{
+					case SendTextEventOption.Normal:     this.terminal.SendText();           break;
+					case SendTextEventOption.WithoutEol: this.terminal.SendTextWithoutEol(); break;
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + e.Value.ToString() + "' is an option that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + e.Value.ToString() + "' is an option that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 			}
 		}
 
 		private void send_FileCommandChanged(object sender, EventArgs e)
 		{
-			this.settingsRoot.Implicit.SendFile.Command = send.FileCommand;
+			if (this.settingsRoot != null)
+				this.settingsRoot.Implicit.SendFile.Command = send.FileCommand;
 		}
 
 		private void send_SendFileCommandRequest(object sender, EventArgs e)
 		{
-			this.terminal.SendFile();
+			if (this.terminal != null)
+				this.terminal.SendFile();
 		}
 
 		private void send_SizeChanged(object sender, EventArgs e)
@@ -2147,7 +2162,8 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void toolStripStatusLabel_TerminalStatus_RFR_Click(object sender, EventArgs e)
 		{
-			this.terminal.RequestToggleRfr();
+			if (this.terminal != null)
+				this.terminal.RequestToggleRfr();
 
 			// Note that label must always be enabled to show the correct pro, and can therefore
 		}
@@ -2159,7 +2175,8 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void toolStripStatusLabel_TerminalStatus_DTR_Click(object sender, EventArgs e)
 		{
-			this.terminal.RequestToggleDtr();
+			if (this.terminal != null)
+				this.terminal.RequestToggleDtr();
 		}
 
 		/// <remarks>
@@ -2169,7 +2186,8 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void toolStripStatusLabel_TerminalStatus_InputXOnXOff_Click(object sender, EventArgs e)
 		{
-			this.terminal.RequestToggleInputXOnXOff();
+			if (this.terminal != null)
+				this.terminal.RequestToggleInputXOnXOff();
 		}
 
 		/// <remarks>
@@ -2179,7 +2197,8 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void toolStripStatusLabel_TerminalStatus_OutputBreak_Click(object sender, EventArgs e)
 		{
-			this.terminal.RequestToggleOutputBreak();
+			if (this.terminal != null)
+				this.terminal.RequestToggleOutputBreak();
 		}
 
 		#endregion
