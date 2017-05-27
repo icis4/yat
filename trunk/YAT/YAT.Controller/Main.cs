@@ -121,11 +121,11 @@ namespace YAT.Controller
 
 		private bool isDisposed;
 
-		// Command line options.
+		// Command line options:
 		private string[] commandLineArgsStrings;
 		private CommandLineArgs commandLineArgs;
 
-#endregion
+		#endregion
 
 		#region Object Lifetime
 		//==========================================================================================

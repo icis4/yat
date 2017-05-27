@@ -21,6 +21,8 @@ namespace MKY.IO.Ports
 			// Modified version of the designer generated Dispose() method:
 			if (!this.isDisposed)
 			{
+				this.eventHelper.DiscardAllEventsAndExceptions();
+
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{

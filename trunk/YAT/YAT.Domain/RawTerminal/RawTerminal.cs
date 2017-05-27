@@ -75,6 +75,11 @@ namespace YAT.Domain
 
 		private bool isDisposed;
 
+		/// <summary>
+		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// </summary>
+		private EventHelper.Item eventHelper = EventHelper.CreateItem();
+
 		private Settings.BufferSettings bufferSettings;
 
 		private RawRepository txRepository;
@@ -159,10 +164,11 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			DebugEventManagement.DebugNotifyAllEventRemains(this);
-
 			if (!this.isDisposed)
 			{
+				DebugEventManagement.DebugWriteAllEventRemains(this);
+				this.eventHelper.DiscardAllEventsAndExceptions();
+
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
@@ -772,37 +778,40 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			EventHelper.FireSync(IOChanged, this, e);
+			this.eventHelper.FireSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			EventHelper.FireSync(IOControlChanged, this, e);
+			this.eventHelper.FireSync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			EventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
+			this.eventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRawChunkSent(EventArgs<RawChunk> e)
 		{
-			EventHelper.FireSync<EventArgs<RawChunk>>(RawChunkSent, this, e);
+			if (IsOpen) // Make sure to propagate event only if active.
+				this.eventHelper.FireSync<EventArgs<RawChunk>>(RawChunkSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRawChunkReceived(EventArgs<RawChunk> e)
 		{
-			EventHelper.FireSync<EventArgs<RawChunk>>(RawChunkReceived, this, e);
+			if (IsOpen) // Make sure to propagate event only if active.
+				this.eventHelper.FireSync<EventArgs<RawChunk>>(RawChunkReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryCleared(EventArgs<RepositoryType> e)
 		{
-			EventHelper.FireSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
+			if (IsOpen) // Make sure to propagate event only if active.
+				this.eventHelper.FireSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
 		}
 
 		#endregion

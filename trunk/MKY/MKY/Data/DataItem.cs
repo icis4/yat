@@ -73,7 +73,8 @@ namespace MKY.Data
 		[SuppressMessage("Microsoft.Performance", "CA1821:RemoveEmptyFinalizers", Justification = "See remarks.")]
 		~DataItem()
 		{
-			Diagnostics.DebugEventManagement.DebugNotifyAllEventRemains(this);
+			Diagnostics.DebugEventManagement.DebugWriteAllEventRemains(this);
+
 			Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 

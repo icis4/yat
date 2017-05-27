@@ -99,17 +99,17 @@ namespace YAT.Domain
 			{
 				Position    = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 				Elements    = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-				EolElements = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
+				EolElements = new DisplayLinePart(); // Default initial capacity is OK.
 				Eol         = eol;
 
-				EolOfLastLineOfGivenPortWasCompleteMatch = new Dictionary<string, bool>(); // Default behavior regarding initial capacity is OK.
+				EolOfLastLineOfGivenPortWasCompleteMatch = new Dictionary<string, bool>(); // Default initial capacity is OK.
 			}
 
 			public virtual void Reset(string portStamp, bool eolOfLastLineWasCompleteMatch)
 			{
 				Position    = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 				Elements    = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-				EolElements = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
+				EolElements = new DisplayLinePart(); // Default initial capacity is OK.
 				Eol.Reset();
 
 				if (EolOfLastLineOfGivenPortWasCompleteMatch.ContainsKey(portStamp))
@@ -610,7 +610,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		private void ExecuteData(LineState lineState, IODirection d, byte b, DisplayElementCollection elements)
 		{
-			var lp = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
+			var lp = new DisplayLinePart(); // Default initial capacity is OK.
 
 			// Convert data:
 			var de = ByteToElement(b, d);
@@ -779,7 +779,7 @@ namespace YAT.Domain
 			}
 
 			// Process line length:
-			DisplayLinePart lp = new DisplayLinePart(); // Default behavior regarding initial capacity is OK.
+			DisplayLinePart lp = new DisplayLinePart(); // Default initial capacity is OK.
 			if (TerminalSettings.Display.ShowLength)
 			{
 				DisplayLinePart info;

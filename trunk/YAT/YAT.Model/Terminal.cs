@@ -126,6 +126,11 @@ namespace YAT.Model
 
 		private bool isDisposed;
 
+		/// <summary>
+		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// </summary>
+		private EventHelper.Item eventHelper = EventHelper.CreateItem();
+
 		private TerminalStartArgs startArgs;
 		private Guid guid;
 		private int sequentialIndex;
@@ -330,10 +335,11 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			DebugEventManagement.DebugNotifyAllEventRemains(this);
-
 			if (!this.isDisposed)
 			{
+				DebugEventManagement.DebugWriteAllEventRemains(this);
+				this.eventHelper.DiscardAllEventsAndExceptions();
+
 				DebugMessage("Disposing...");
 
 				// Dispose of managed resources if requested:
@@ -4344,87 +4350,87 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			EventHelper.FireSync(IOChanged, this, e);
+			this.eventHelper.FireSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			EventHelper.FireSync(IOControlChanged, this, e);
+			this.eventHelper.FireSync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOConnectTimeChanged(TimeSpanEventArgs e)
 		{
-			EventHelper.FireSync<TimeSpanEventArgs>(IOConnectTimeChanged, this, e);
+			this.eventHelper.FireSync<TimeSpanEventArgs>(IOConnectTimeChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOCountChanged(EventArgs e)
 		{
-			EventHelper.FireSync(IOCountChanged, this, e);
+			this.eventHelper.FireSync(IOCountChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIORateChanged(EventArgs e)
 		{
-			EventHelper.FireSync(IORateChanged, this, e);
+			this.eventHelper.FireSync(IORateChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOError(Domain.IOErrorEventArgs e)
 		{
-			EventHelper.FireSync<Domain.IOErrorEventArgs>(IOError, this, e);
+			this.eventHelper.FireSync<Domain.IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsSent(Domain.DisplayElementsEventArgs e)
 		{
-			EventHelper.FireSync<Domain.DisplayElementsEventArgs>(DisplayElementsSent, this, e);
+			this.eventHelper.FireSync<Domain.DisplayElementsEventArgs>(DisplayElementsSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsReceived(Domain.DisplayElementsEventArgs e)
 		{
-			EventHelper.FireSync<Domain.DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
+			this.eventHelper.FireSync<Domain.DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesSent(Domain.DisplayLinesEventArgs e)
 		{
-			EventHelper.FireSync<Domain.DisplayLinesEventArgs>(DisplayLinesSent, this, e);
+			this.eventHelper.FireSync<Domain.DisplayLinesEventArgs>(DisplayLinesSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesReceived(Domain.DisplayLinesEventArgs e)
 		{
-			EventHelper.FireSync<Domain.DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
+			this.eventHelper.FireSync<Domain.DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryCleared(EventArgs<Domain.RepositoryType> e)
 		{
-			EventHelper.FireSync<EventArgs<Domain.RepositoryType>>(RepositoryCleared, this, e);
+			this.eventHelper.FireSync<EventArgs<Domain.RepositoryType>>(RepositoryCleared, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryReloaded(EventArgs<Domain.RepositoryType> e)
 		{
-			EventHelper.FireSync<EventArgs<Domain.RepositoryType>>(RepositoryReloaded, this, e);
+			this.eventHelper.FireSync<EventArgs<Domain.RepositoryType>>(RepositoryReloaded, this, e);
 		}
 
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
-			EventHelper.FireSync<EventArgs<string>>(FixedStatusTextRequest, this, new EventArgs<string>(text));
+			this.eventHelper.FireSync<EventArgs<string>>(FixedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
-			EventHelper.FireSync<EventArgs<string>>(TimedStatusTextRequest, this, new EventArgs<string>(text));
+			this.eventHelper.FireSync<EventArgs<string>>(TimedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
 		/// <summary></summary>
@@ -4443,7 +4449,7 @@ namespace YAT.Model
 				OnCursorReset(); // Just in case...
 
 				MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon, defaultButton);
-				EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
+				this.eventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
 
 				// Ensure that the request is processed!
 				if (e.Result == DialogResult.None)
@@ -4465,7 +4471,7 @@ namespace YAT.Model
 				OnCursorReset(); // Just in case...
 
 				DialogEventArgs e = new DialogEventArgs();
-				EventHelper.FireSync<DialogEventArgs>(SaveAsFileDialogRequest, this, e);
+				this.eventHelper.FireSync<DialogEventArgs>(SaveAsFileDialogRequest, this, e);
 
 				// Ensure that the request is processed!
 				if (e.Result == DialogResult.None)
@@ -4482,7 +4488,7 @@ namespace YAT.Model
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnCursorRequest(Cursor cursor)
 		{
-			EventHelper.FireSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));
+			this.eventHelper.FireSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));
 		}
 
 		/// <summary></summary>
@@ -4494,13 +4500,13 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void OnSaved(SavedEventArgs e)
 		{
-			EventHelper.FireSync<SavedEventArgs>(Saved, this, e);
+			this.eventHelper.FireSync<SavedEventArgs>(Saved, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnClosed(ClosedEventArgs e)
 		{
-			EventHelper.FireSync<ClosedEventArgs>(Closed, this, e);
+			this.eventHelper.FireSync<ClosedEventArgs>(Closed, this, e);
 		}
 
 		#endregion

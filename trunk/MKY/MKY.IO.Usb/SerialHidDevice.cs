@@ -319,6 +319,11 @@ namespace MKY.IO.Usb
 		// Fields
 		//==========================================================================================
 
+		/// <summary>
+		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// </summary>
+		private EventHelper.Item eventHelper = EventHelper.CreateItem();
+
 		private State state = State.Reset;
 		private object stateSyncObj = new object();
 
@@ -330,7 +335,6 @@ namespace MKY.IO.Usb
 		private bool autoOpen = AutoOpenDefault;
 
 		private bool includeNonPayloadData = IncludeNonPayloadDataDefault;
-
 
 		/// <remarks>
 		/// It's just a single stream object, but it contains the basically independent input and
@@ -446,10 +450,11 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected override void Dispose(bool disposing)
 		{
-			DebugEventManagement.DebugNotifyAllEventRemains(this);
-
 			if (!IsDisposed)
 			{
+				DebugEventManagement.DebugWriteAllEventRemains(this);
+				this.eventHelper.DiscardAllEventsAndExceptions();
+
 				UnregisterAndDetachStaticDeviceEventHandlers();
 
 				// Dispose of managed resources if requested:
@@ -1312,25 +1317,27 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected virtual void OnOpened(EventArgs e)
 		{
-			EventHelper.FireSync(Opened, this, e);
+			this.eventHelper.FireSync(Opened, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnClosed(EventArgs e)
 		{
-			EventHelper.FireSync(Closed, this, e);
+			this.eventHelper.FireSync(Closed, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDataReceived(EventArgs e)
 		{
-			EventHelper.FireSync(DataReceived, this, e);
+			if (IsOpen) // Make sure to propagate event only if active.
+				this.eventHelper.FireSync(DataReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDataSent(DataEventArgs e)
 		{
-			EventHelper.FireSync(DataSent, this, e);
+			if (IsOpen) // Make sure to propagate event only if active.
+				this.eventHelper.FireSync(DataSent, this, e);
 		}
 
 		#endregion

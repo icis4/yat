@@ -22,6 +22,25 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable unhandled exception handling:
+////#define RETHROW_UNHANDLED_EXCEPTIONS // Disabled for 'Debug' => only write exception details to debug output.
+
+#else // RELEASE
+
+	// Enable unhandled exception handling:
+	#define RETHROW_UNHANDLED_EXCEPTIONS // Enabled for 'Release' => to be handled by the application's unhandled exception handlers,
+	                                     //                                        or the debugger in case of running 'Release' in debugger.
+#endif // DEBUG|RELEASE
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -52,6 +71,39 @@ namespace MKY
 		//==========================================================================================
 
 		/// <summary>
+		/// Flags to configure the event handling mode of the <see cref="EventHelper"/>.
+		/// </summary>
+		[Flags]
+		public enum EventHandlingMode
+		{
+			/// <summary>
+			/// All events will be invoked.
+			/// </summary>
+			InvokeAll = 0,
+
+			/// <summary>
+			/// Events on the main thread will be discarded.
+			/// </summary>
+			/// <remarks>
+			/// The main thread can be set by <see cref="MainThreadHelper.SetCurrentThread"/>.
+			/// </remarks>
+			DiscardMainThread = 1,
+
+			/// <summary>
+			/// Events on all non-main threads will be discarded.
+			/// </summary>
+			/// <remarks>
+			/// The main thread can be set by <see cref="MainThreadHelper.SetCurrentThread"/>.
+			/// </remarks>
+			DiscardNonMainThread = 2,
+
+			/// <summary>
+			/// All events will be discarded.
+			/// </summary>
+			DiscardAll = DiscardMainThread | DiscardNonMainThread
+		}
+
+		/// <summary>
 		/// Flags to configure the exception handling mode of the <see cref="EventHelper"/>.
 		/// </summary>
 		[Flags]
@@ -77,7 +129,7 @@ namespace MKY
 			/// <remarks>
 			/// The main thread can be set by <see cref="MainThreadHelper.SetCurrentThread"/>.
 			/// </remarks>
-			DiscardMainThreadExceptions = 1,
+			DiscardMainThread = 1,
 
 			/// <summary>
 			/// Exceptions on all non-main threads will be discarded, i.e. will *not* be propagated
@@ -90,7 +142,7 @@ namespace MKY
 			/// <remarks>
 			/// The main thread can be set by <see cref="MainThreadHelper.SetCurrentThread"/>.
 			/// </remarks>
-			DiscardNonMainThreadExceptions = 2,
+			DiscardNonMainThread = 2,
 
 			/// <summary>
 			/// All exceptions will be discarded, i.e. will neither be propagated
@@ -99,8 +151,18 @@ namespace MKY
 			/// <see cref="EventHelper.UnhandledExceptionOnNonMainThread"/> nor
 			/// <see cref="EventHelper.UnhandledExceptionOnMainThread"/> nor catch-all handler.
 			/// </summary>
-			DiscardAll = DiscardMainThreadExceptions | DiscardNonMainThreadExceptions
+			DiscardAll = DiscardMainThread | DiscardNonMainThread
 		}
+
+		/// <summary></summary>
+		public const EventHandlingMode EventHandlingDefault = EventHandlingMode.InvokeAll;
+
+		/// <summary></summary>
+	#if (RETHROW_UNHANDLED_EXCEPTIONS)
+		public const ExceptionHandlingMode ExceptionHandlingDefault = ExceptionHandlingMode.RethrowAll;
+	#else
+		public const ExceptionHandlingMode ExceptionHandlingDefault = ExceptionHandlingMode.DiscardAll;
+	#endif
 
 		#endregion
 
@@ -112,12 +174,13 @@ namespace MKY
 		/// <summary></summary>
 		public class Item
 		{
-			#region Field/Event/Lifetime/Property
+			#region Fields/Events/Lifetime/Properties/Methods
 			//======================================================================================
-			// Field/Event/Lifetime/Property
+			// Fields/Events/Lifetime/Properties/Methods
 			//======================================================================================
 
-			private ExceptionHandlingMode exceptionHandling; // = RethrowAllExceptions;
+			private EventHandlingMode eventHandling = EventHandlingDefault;
+			private ExceptionHandlingMode exceptionHandling = ExceptionHandlingDefault;
 
 			/// <summary></summary>
 			public event EventHandler<UnhandledExceptionEventArgs> UnhandledExceptionOnMainThread;
@@ -126,16 +189,71 @@ namespace MKY
 			public event EventHandler<UnhandledExceptionEventArgs> UnhandledExceptionOnNonMainThread;
 
 			/// <summary></summary>
-			public Item(ExceptionHandlingMode exceptionHandling = ExceptionHandlingMode.RethrowAll)
+			public Item(EventHandlingMode eventHandling = EventHandlingDefault, ExceptionHandlingMode exceptionHandling = ExceptionHandlingDefault)
 			{
+				this.eventHandling = eventHandling;
 				this.exceptionHandling = exceptionHandling;
 			}
 
 			/// <summary></summary>
-			public ExceptionHandlingMode ExceptionHandling
+			public virtual EventHandlingMode EventHandling
+			{
+				get { return (this.eventHandling); }
+				set { this.eventHandling = value;  }
+			}
+
+			/// <summary></summary>
+			public virtual ExceptionHandlingMode ExceptionHandling
 			{
 				get { return (this.exceptionHandling); }
 				set { this.exceptionHandling = value;  }
+			}
+
+			/// <remarks>
+			/// Convenience method, identical to setting <see cref="EventHandling"/> to
+			/// <see cref="EventHandlingMode.DiscardAll"/>. Useful e.g. when disposing or
+			/// closing or shutting down objects or the whole application.
+			/// </remarks>
+			public virtual void DiscardAllEvents()
+			{
+				EventHandling = EventHandlingMode.DiscardAll;
+			}
+
+			/// <remarks>
+			/// Convenience method, identical to setting <see cref="ExceptionHandling"/> to
+			/// <see cref="ExceptionHandlingMode.DiscardAll"/>. Useful e.g. when disposing or
+			/// closing or shutting down objects or the whole application.
+			/// </remarks>
+			public virtual void DiscardAllExceptions()
+			{
+				ExceptionHandling = ExceptionHandlingMode.DiscardAll;
+			}
+
+			/// <remarks>
+			/// Convenience method, identical to calling <see cref="DiscardAllEvents"/> and
+			/// <see cref="DiscardAllExceptions"/>. Useful e.g. when disposing or closing or
+			/// shutting down objects or the whole application.
+			/// </remarks>
+			public virtual void DiscardAllEventsAndExceptions()
+			{
+				DiscardAllEvents();
+				DiscardAllExceptions();
+			}
+
+			private bool DoDiscardEvent(bool isMainThread)
+			{
+				if (isMainThread)
+					return ((EventHandling & EventHandlingMode.DiscardMainThread) != 0);
+				else
+					return ((EventHandling & EventHandlingMode.DiscardNonMainThread) != 0);
+			}
+
+			private bool DoDiscardException(bool isMainThread)
+			{
+				if (isMainThread)
+					return ((ExceptionHandling & ExceptionHandlingMode.DiscardMainThread) != 0);
+				else
+					return ((ExceptionHandling & ExceptionHandlingMode.DiscardNonMainThread) != 0);
 			}
 
 			#endregion
@@ -152,9 +270,12 @@ namespace MKY
 			/// </summary>
 			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event firing.")]
 			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-			public void FireSync(Delegate eventDelegate, params object[] args)
+			public virtual void FireSync(Delegate eventDelegate, params object[] args)
 			{
 				if (eventDelegate == null)
+					return;
+
+				if (DoDiscardEvent(MainThreadHelper.IsMainThread))
 					return;
 
 				Delegate[] sinks = eventDelegate.GetInvocationList();
@@ -177,10 +298,13 @@ namespace MKY
 			[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Haven't found any alternative way to implement a generic event helper.")]
 			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event firing.")]
 			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-			public void FireSync<TEventArgs>(Delegate eventDelegate, params object[] args)
+			public virtual void FireSync<TEventArgs>(Delegate eventDelegate, params object[] args)
 				where TEventArgs : EventArgs
 			{
 				if (eventDelegate == null)
+					return;
+
+				if (DoDiscardEvent(MainThreadHelper.IsMainThread))
 					return;
 
 				Delegate[] sinks = eventDelegate.GetInvocationList();
@@ -206,10 +330,13 @@ namespace MKY
 			/// <typeparam name="TEventHandler">The type of the requested event.</typeparam>
 			[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Haven't found any alternative way to implement a generic event helper.")]
 			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event firing.")]
-			public void FireSync<TEventArgs, TEventHandler>(Delegate eventDelegate, params object[] args)
+			public virtual void FireSync<TEventArgs, TEventHandler>(Delegate eventDelegate, params object[] args)
 				where TEventArgs : EventArgs
 			{
 				if (eventDelegate == null)
+					return;
+
+				if (DoDiscardEvent(MainThreadHelper.IsMainThread))
 					return;
 
 				Delegate[] sinks = eventDelegate.GetInvocationList();
@@ -239,9 +366,12 @@ namespace MKY
 			/// thread pool.
 			/// </summary>
 			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event firing.")]
-			public void FireAsync(Delegate eventDelegate, params object[] args)
+			public virtual void FireAsync(Delegate eventDelegate, params object[] args)
 			{
 				if (eventDelegate == null)
+					return;
+
+				if (DoDiscardEvent(MainThreadHelper.IsMainThread))
 					return;
 
 				Delegate[] sinks = eventDelegate.GetInvocationList();
@@ -270,10 +400,13 @@ namespace MKY
 			[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Haven't found any alternative way to implement a generic event helper.")]
 			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event firing.")]
 			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-			public void FireAsync<TEventArgs>(Delegate eventDelegate, params object[] args)
+			public virtual void FireAsync<TEventArgs>(Delegate eventDelegate, params object[] args)
 				where TEventArgs : EventArgs
 			{
 				if (eventDelegate == null)
+					return;
+
+				if (DoDiscardEvent(MainThreadHelper.IsMainThread))
 					return;
 
 				Delegate[] sinks = eventDelegate.GetInvocationList();
@@ -305,10 +438,13 @@ namespace MKY
 			/// <typeparam name="TEventHandler">The type of the requested event.</typeparam>
 			[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Haven't found any alternative way to implement a generic event helper.")]
 			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event firing.")]
-			public void FireAsync<TEventArgs, TEventHandler>(Delegate eventDelegate, params object[] args)
+			public virtual void FireAsync<TEventArgs, TEventHandler>(Delegate eventDelegate, params object[] args)
 				where TEventArgs : EventArgs
 			{
 				if (eventDelegate == null)
+					return;
+
+				if (DoDiscardEvent(MainThreadHelper.IsMainThread))
 					return;
 
 				Delegate[] sinks = eventDelegate.GetInvocationList();
@@ -344,8 +480,8 @@ namespace MKY
 				}
 				catch (Exception ex)
 				{
-					var isMainThread= MainThreadHelper.IsMainThread;
-					var discard = EvaluateDiscard(isMainThread);
+					var isMainThread = MainThreadHelper.IsMainThread;
+					var discard = DoDiscardException(isMainThread);
 
 					var sb = new StringBuilder();
 
@@ -391,8 +527,8 @@ namespace MKY
 				}
 				catch (Exception ex)
 				{
-					var isMainThread= MainThreadHelper.IsMainThread;
-					var discard = EvaluateDiscard(isMainThread);
+					var isMainThread = MainThreadHelper.IsMainThread;
+					var discard = DoDiscardException(isMainThread);
 
 					// Note that 'discard' is only evaluated *after* the exception occured. This
 					// ensures that exceptions happening inside 'zombie' callbacks, i.e. callbacks
@@ -456,14 +592,6 @@ namespace MKY
 				}
 			}
 
-			private bool EvaluateDiscard(bool isMainThread)
-			{
-				if (isMainThread)
-					return ((ExceptionHandling & ExceptionHandlingMode.DiscardMainThreadExceptions) != 0);
-				else
-					return ((ExceptionHandling & ExceptionHandlingMode.DiscardNonMainThreadExceptions) != 0);
-			}
-
 			#endregion
 
 			#region Debug Output
@@ -502,16 +630,26 @@ namespace MKY
 		// Static Item
 		//==========================================================================================
 
-		#region Field/Event/Lifetime/Property
+		#region Fields/Events/Lifetime/Properties/Methods
 		//==========================================================================================
-		// Field/Event/Lifetime/Property
+		// Fields/Events/Lifetime/Properties/Methods
 		//==========================================================================================
 
-	#if (DEBUG)
-		private static Item staticItem = new Item(ExceptionHandlingMode.DiscardAll); // For 'Debug' => write exception details to debug output.
-	#else // RELEASE
-		private static Item staticItem = new Item(ExceptionHandlingMode.RethrowAll); // For 'Release' => to be handled by the application's unhandled exception handlers,
-	#endif // DEBUG|RELEASE                                                          //                                or the debugger in case of running 'Release' in debugger.
+		private static Item staticItem = CreateItem();
+
+		/// <remarks>
+		/// Creates an <see cref="Item"/> that is typically configured as follows:
+		///  - <see cref="EventHandling"/>:
+		///     - <see cref="EventHandlingMode.InvokeAll"/>.
+		///  - <see cref="ExceptionHandling"/>:
+		///     - <see cref="ExceptionHandlingMode.RethrowAll"/> for "RELEASE" configurations.
+		///     - <see cref="ExceptionHandlingMode.DiscardAll"/> for "DEBUG" configurations.
+		///    The behavior can be configured by the local "RETHROW_UNHANDLED_EXCEPTIONS" definition.
+		/// </remarks>
+		public static Item CreateItem()
+		{
+			return (new Item());
+		}
 
 		/// <summary></summary>
 		public static event EventHandler<UnhandledExceptionEventArgs> UnhandledExceptionOnMainThread
@@ -528,10 +666,48 @@ namespace MKY
 		}
 
 		/// <summary></summary>
+		public virtual EventHandlingMode EventHandling
+		{
+			get { return (staticItem.EventHandling); }
+			set { staticItem.EventHandling = value;  }
+		}
+
+		/// <summary></summary>
 		public static ExceptionHandlingMode ExceptionHandling
 		{
 			get { return (staticItem.ExceptionHandling); }
 			set { staticItem.ExceptionHandling = value;  }
+		}
+
+		/// <remarks>
+		/// Convenience method, identical to setting <see cref="EventHandling"/> to
+		/// <see cref="EventHandlingMode.DiscardAll"/>. Useful e.g. when disposing or
+		/// closing or shutting down objects or the whole application.
+		/// </remarks>
+		public virtual void DiscardAllEvents()
+		{
+			EventHandling = EventHandlingMode.DiscardAll;
+		}
+
+		/// <remarks>
+		/// Convenience method, identical to setting <see cref="ExceptionHandling"/> to
+		/// <see cref="ExceptionHandlingMode.DiscardAll"/>. Useful e.g. when disposing or
+		/// closing or shutting down objects or the whole application.
+		/// </remarks>
+		public virtual void DiscardAllExceptions()
+		{
+			ExceptionHandling = ExceptionHandlingMode.DiscardAll;
+		}
+
+		/// <remarks>
+		/// Convenience method, identical to calling <see cref="DiscardAllEvents"/> and
+		/// <see cref="DiscardAllExceptions"/>. Useful e.g. when disposing or closing or
+		/// shutting down objects or the whole application.
+		/// </remarks>
+		public virtual void DiscardAllEventsAndExceptions()
+		{
+			DiscardAllEvents();
+			DiscardAllExceptions();
 		}
 
 		#endregion

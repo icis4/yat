@@ -118,6 +118,11 @@ namespace MKY.IO.Serial.Socket
 		private int instanceId;
 		private bool isDisposed;
 
+		/// <summary>
+		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// </summary>
+		private EventHelper.Item eventHelper = EventHelper.CreateItem();
+
 		private IPHostEx remoteHost;
 		private int remotePort;
 		private IPNetworkInterfaceEx localInterface;
@@ -195,10 +200,11 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			DebugEventManagement.DebugNotifyAllEventRemains(this);
-
 			if (!this.isDisposed)
 			{
+				DebugEventManagement.DebugWriteAllEventRemains(this);
+				this.eventHelper.DiscardAllEventsAndExceptions();
+
 				DebugMessage("Disposing...");
 
 				// Dispose of managed resources if requested:
@@ -1072,7 +1078,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			EventHelper.FireSync(IOChanged, this, e);
+			this.eventHelper.FireSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
@@ -1085,21 +1091,23 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			EventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
+			this.eventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		protected virtual void OnDataReceived(DataReceivedEventArgs e)
 		{
-			EventHelper.FireSync<DataReceivedEventArgs>(DataReceived, this, e);
+			if (IsOpen) // Make sure to propagate event only if active.
+				this.eventHelper.FireSync<DataReceivedEventArgs>(DataReceived, this, e);
 		}
 
 		/// <summary></summary>
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		protected virtual void OnDataSent(DataSentEventArgs e)
 		{
-			EventHelper.FireSync<DataSentEventArgs>(DataSent, this, e);
+			if (IsOpen) // Make sure to propagate event only if active.
+				this.eventHelper.FireSync<DataSentEventArgs>(DataSent, this, e);
 		}
 
 		#endregion

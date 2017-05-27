@@ -66,6 +66,11 @@ namespace MKY.Time
 
 		private bool isDisposed;
 
+		/// <summary>
+		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// </summary>
+		private EventHelper.Item eventHelper = EventHelper.CreateItem();
+
 		private Rate rate;
 
 		private int updateInterval;
@@ -130,15 +135,19 @@ namespace MKY.Time
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			DebugEventManagement.DebugNotifyAllEventRemains(this);
-
 			if (!this.isDisposed)
 			{
+				DebugEventManagement.DebugWriteAllEventRemains(this);
+				this.eventHelper.DiscardAllEventsAndExceptions();
+
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
 					if (this.updateTicker != null)
+					{
 						this.updateTicker.Dispose();
+						EventHandlerHelper.RemoveAllEventHandlers(this.updateTicker);
+					}
 				}
 
 				// Set state to disposed:
@@ -305,7 +314,7 @@ namespace MKY.Time
 		/// <summary></summary>
 		protected virtual void OnRateChanged(RateEventArgs e)
 		{
-			EventHelper.FireSync<RateEventArgs>(Changed, this, e);
+			this.eventHelper.FireSync<RateEventArgs>(Changed, this, e);
 		}
 
 		#endregion

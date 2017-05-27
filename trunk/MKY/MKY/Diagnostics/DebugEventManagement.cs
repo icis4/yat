@@ -41,16 +41,16 @@ namespace MKY.Diagnostics
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		[Conditional("DEBUG")]
-		public static void DebugNotifyAllEventRemains(object obj)
+		public static void DebugWriteAllEventRemains(object obj)
 		{
-			DebugNotifyEventRemains(obj, null);
+			DebugWriteEventRemains(obj, null);
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		[Conditional("DEBUG")]
-		public static void DebugNotifyEventRemains(object obj, string eventName)
+		public static void DebugWriteEventRemains(object obj, string eventName)
 		{
 			var sinks = EventHandlerHelper.GetEventSinks(obj, eventName);
 			if (sinks.Count > 0)

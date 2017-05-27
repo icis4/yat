@@ -28,6 +28,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
@@ -50,7 +51,7 @@ namespace YAT.View.Forms
 	{
 		Synchronous,
 		AsynchronousSynchronized,
-		AsynchronousNonSynchronized,
+		AsynchronousNonSynchronized
 	}
 
 	/// <summary>
@@ -61,6 +62,7 @@ namespace YAT.View.Forms
 		Exit,
 		ExitAndRestart,
 		Continue,
+		ContinueAndIgnore
 	}
 
 	#pragma warning restore 1591
@@ -68,7 +70,37 @@ namespace YAT.View.Forms
 	/// <summary></summary>
 	public static class UnhandledExceptionHandler
 	{
-		private static Type staticExceptionTypeToIgnore; // = null;
+		private static Dictionary<Type, bool> staticExceptionTypesToIgnore = new Dictionary<Type, bool>(); // Default initial capacity is OK.
+		private static object staticExceptionTypesToIgnoreSyncObj = new object();
+
+		/// <summary>
+		/// Resets the ignored exception type.
+		/// </summary>
+		public static void IgnoreExceptionType(Type type)
+		{
+			lock (staticExceptionTypesToIgnoreSyncObj)
+			{
+				if (staticExceptionTypesToIgnore != null)
+				{
+					if (staticExceptionTypesToIgnore.ContainsKey(type))
+						staticExceptionTypesToIgnore[type] = true;
+					else
+						staticExceptionTypesToIgnore.Add(type, true);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Resets the ignored exception type.
+		/// </summary>
+		public static void RevertIgnoredExceptionType(Type type)
+		{
+			lock (staticExceptionTypesToIgnoreSyncObj)
+			{
+				if (staticExceptionTypesToIgnore != null)
+					staticExceptionTypesToIgnore.Remove(type); // MSDN: "If ... does not contain ... specified key ... no exception is thrown.
+			}
+		}
 
 		/// <summary>
 		/// Evaluates whether the given <paramref name="type"/> is currently being ignored.
@@ -79,18 +111,33 @@ namespace YAT.View.Forms
 		/// </remarks>
 		public static bool ExceptionTypeIsIgnored(Type type)
 		{
-			if (staticExceptionTypeToIgnore != null)
-				return (staticExceptionTypeToIgnore.IsAssignableFrom(type));
-			else
-				return (false);
+			lock (staticExceptionTypesToIgnoreSyncObj)
+			{
+				if (staticExceptionTypesToIgnore != null)
+				{
+					foreach (var typeToIgnore in staticExceptionTypesToIgnore)
+					{
+						if (typeToIgnore.Value)
+						{
+							if (typeToIgnore.Key.IsAssignableFrom(type)) // = base type is assignable from derived type?
+								return (true);
+						}
+					}
+				}
+			}
+
+			return (false);
 		}
 
 		/// <summary>
-		/// Resets the ignored exception type.
+		/// Terminates the exception ignoring, e.g. during shutdown, or if the user requests to disable it.
 		/// </summary>
-		public static void ResetIgnoredExceptionType()
+		public static void TerminateExceptionIgnoring()
 		{
-			staticExceptionTypeToIgnore = null;
+			lock (staticExceptionTypesToIgnoreSyncObj)
+			{
+				staticExceptionTypesToIgnore = null;
+			}
 		}
 
 		/// <summary></summary>
@@ -104,26 +151,59 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static UnhandledExceptionResult ProvideExceptionToUser(IWin32Window owner, Exception exception, string originMessage, UnhandledExceptionType exceptionType, bool mayBeContinued)
 		{
+			// Skip if exception is already being ignored:
+			if (ExceptionTypeIsIgnored(exception.GetType()))
+				return (UnhandledExceptionResult.Continue);
+
+			// Temporarily ignore all exceptions to prevent subsequent messages:
+			IgnoreExceptionType(typeof(Exception));
+
+			// Provide the exception to the user:
+			UnhandledExceptionResult userResult;
 			if (System.Windows.Forms.Application.OpenForms.Count > 0)
 			{
 				Form f = System.Windows.Forms.Application.OpenForms[0];
 				if (f.InvokeRequired)
 				{
 					ProvideExceptionToUserDelegate invoker = new ProvideExceptionToUserDelegate(ProvideExceptionToUserInvocation);
-					return ((UnhandledExceptionResult)f.Invoke(invoker, owner, exception, originMessage, exceptionType, mayBeContinued));
+					userResult = (UnhandledExceptionResult)f.Invoke(invoker, owner, exception, originMessage, exceptionType, mayBeContinued);
+				}
+				else
+				{
+					userResult = ProvideExceptionToUserInvocation(owner, exception, originMessage, exceptionType, mayBeContinued);
 				}
 			}
+			else
+			{
+				userResult = ProvideExceptionToUserInvocation(owner, exception, originMessage, exceptionType, mayBeContinued);
+			}
 
-			return (ProvideExceptionToUserInvocation(owner, exception, originMessage, exceptionType, mayBeContinued));
+			// Evalute the user result:
+			switch (userResult)
+			{
+				case UnhandledExceptionResult.Continue:
+					RevertIgnoredExceptionType(typeof(Exception));
+					break;
+
+				case UnhandledExceptionResult.ContinueAndIgnore:
+					IgnoreExceptionType(exception.GetType()); // Add specific type before reverting general type to prevent glitches.
+					RevertIgnoredExceptionType(typeof(Exception));
+					break;
+
+				case UnhandledExceptionResult.Exit:
+				case UnhandledExceptionResult.ExitAndRestart:
+				default:
+					TerminateExceptionIgnoring();
+					break;
+			}
+
+			return (userResult);
 		}
 
 		private delegate UnhandledExceptionResult ProvideExceptionToUserDelegate(IWin32Window owner, Exception exception, string originMessage, UnhandledExceptionType exceptionType, bool mayBeContinued);
 
 		private static UnhandledExceptionResult ProvideExceptionToUserInvocation(IWin32Window owner, Exception exception, string originMessage, UnhandledExceptionType exceptionType, bool mayBeContinued)
 		{
-			if (exception.GetType().IsAssignableFrom(staticExceptionTypeToIgnore))
-				return (UnhandledExceptionResult.Continue);
-
 			string productName = ApplicationEx.ProductName;
 
 			StringBuilder titleBuilder = new StringBuilder(productName);
@@ -182,9 +262,9 @@ namespace YAT.View.Forms
 				UnhandledExceptionResult result;
 				switch (MessageBoxEx.Show(owner, message, title, MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Exclamation))
 				{
-					case DialogResult.Retry:                                                     result = UnhandledExceptionResult.Continue; break;
-					case DialogResult.Ignore: staticExceptionTypeToIgnore = exception.GetType(); result = UnhandledExceptionResult.Continue; break; // Intentionally ignore further exceptions.
-					default:                  staticExceptionTypeToIgnore = typeof(Exception);   result = UnhandledExceptionResult.Exit;     break; // Don't care about any exceptions anymore.
+					case DialogResult.Retry:  result = UnhandledExceptionResult.Continue;          break;
+					case DialogResult.Ignore: result = UnhandledExceptionResult.ContinueAndIgnore; break; // Intentionally ignore further exceptions.
+					default:                  result = UnhandledExceptionResult.Exit;              break; // Don't care about any exceptions anymore.
 				}
 
 				if (result == UnhandledExceptionResult.Exit)
@@ -212,7 +292,6 @@ namespace YAT.View.Forms
 					default:               result = UnhandledExceptionResult.Exit;           break;
 				}
 
-				staticExceptionTypeToIgnore = typeof(Exception); // Ensure that no more exceptions are shown while exiting.
 				return (result);
 			}
 		}

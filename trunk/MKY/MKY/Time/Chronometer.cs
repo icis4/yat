@@ -49,6 +49,11 @@ namespace MKY.Time
 
 		private bool isDisposed;
 
+		/// <summary>
+		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// </summary>
+		private EventHelper.Item eventHelper = EventHelper.CreateItem();
+
 		private System.Timers.Timer timer;
 
 		private TimeSpan accumulatedTimeSpan = TimeSpan.Zero;
@@ -97,15 +102,19 @@ namespace MKY.Time
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			DebugEventManagement.DebugNotifyAllEventRemains(this);
-
 			if (!this.isDisposed)
 			{
+				DebugEventManagement.DebugWriteAllEventRemains(this);
+				this.eventHelper.DiscardAllEventsAndExceptions();
+
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
 					if (this.timer != null)
+					{
 						this.timer.Dispose();
+						EventHandlerHelper.RemoveAllEventHandlers(this.timer);
+					}
 				}
 
 				// Set state to disposed:
@@ -313,7 +322,7 @@ namespace MKY.Time
 		/// <summary></summary>
 		protected virtual void OnTimeSpanChanged(TimeSpanEventArgs e)
 		{
-			EventHelper.FireSync<TimeSpanEventArgs>(TimeSpanChanged, this, e);
+			this.eventHelper.FireSync<TimeSpanEventArgs>(TimeSpanChanged, this, e);
 		}
 
 		#endregion

@@ -65,6 +65,11 @@ namespace YAT.Model
 
 		private bool isDisposed;
 
+		/// <summary>
+		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// </summary>
+		private EventHelper.Item eventHelper = EventHelper.CreateItem();
+
 		private CommandLineArgs commandLineArgs;
 		private MainStartArgs startArgs;
 		private Guid guid;
@@ -152,10 +157,11 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			DebugEventManagement.DebugNotifyAllEventRemains(this);
-
 			if (!this.isDisposed)
 			{
+				DebugEventManagement.DebugWriteAllEventRemains(this);
+				this.eventHelper.DiscardAllEventsAndExceptions();
+
 				DebugMessage("Disposing...");
 
 				// Dispose of managed resources if requested:
@@ -1917,27 +1923,27 @@ namespace YAT.Model
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnWorkspaceOpened(Workspace workspace)
 		{
-			EventHelper.FireSync<EventArgs<Workspace>>(WorkspaceOpened, this, new EventArgs<Workspace>(workspace));
+			this.eventHelper.FireSync<EventArgs<Workspace>>(WorkspaceOpened, this, new EventArgs<Workspace>(workspace));
 		}
 
 		/// <summary></summary>
 		protected virtual void OnWorkspaceClosed(ClosedEventArgs e)
 		{
-			EventHelper.FireSync<ClosedEventArgs>(WorkspaceClosed, this, e);
+			this.eventHelper.FireSync<ClosedEventArgs>(WorkspaceClosed, this, e);
 		}
 
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
-			EventHelper.FireSync<EventArgs<string>>(FixedStatusTextRequest, this, new EventArgs<string>(text));
+			this.eventHelper.FireSync<EventArgs<string>>(FixedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
-			EventHelper.FireSync<EventArgs<string>>(TimedStatusTextRequest, this, new EventArgs<string>(text));
+			this.eventHelper.FireSync<EventArgs<string>>(TimedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
 		/// <summary></summary>
@@ -1950,7 +1956,7 @@ namespace YAT.Model
 				OnCursorReset(); // Just in case...
 
 				MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
-				EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
+				this.eventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
 
 				// Ensure that the request is processed!
 				if (e.Result == DialogResult.None)
@@ -1967,7 +1973,7 @@ namespace YAT.Model
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnCursorRequest(Cursor cursor)
 		{
-			EventHelper.FireSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));
+			this.eventHelper.FireSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));
 		}
 
 		/// <summary></summary>
@@ -1979,13 +1985,13 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void OnStarted()
 		{
-			EventHelper.FireSync(Started, this, EventArgs.Empty);
+			this.eventHelper.FireSync(Started, this, EventArgs.Empty);
 		}
 
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnExited(MainResult result)
 		{
-			EventHelper.FireSync<EventArgs<MainResult>>(Exited, this, new EventArgs<MainResult>(result));
+			this.eventHelper.FireSync<EventArgs<MainResult>>(Exited, this, new EventArgs<MainResult>(result));
 		}
 
 		#endregion

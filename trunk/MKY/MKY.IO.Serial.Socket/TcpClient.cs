@@ -125,6 +125,11 @@ namespace MKY.IO.Serial.Socket
 		private int instanceId;
 		private bool isDisposed;
 
+		/// <summary>
+		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// </summary>
+		private EventHelper.Item eventHelper = EventHelper.CreateItem();
+
 		private IPHostEx remoteHost;
 		private int remotePort;
 		private IPNetworkInterfaceEx localInterface;
@@ -136,8 +141,8 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// Required to deal with the issues described in the remarks in the header of this class.
 		/// </remarks>
-		private bool isStoppingAndDisposing;
-		private object isStoppingAndDisposingSyncObj = new object();
+		private bool isStoppingAndDisposingSocket;
+		private object isStoppingAndDisposingSocketSyncObj = new object();
 
 		private ALAZ.SystemEx.NetEx.SocketsEx.SocketClient socket;
 		private object socketSyncObj = new object();
@@ -250,10 +255,11 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "isStoppingAndDisposingLock", Justification = "See comments below.")]
 		protected virtual void Dispose(bool disposing)
 		{
-			DebugEventManagement.DebugNotifyAllEventRemains(this);
-
 			if (!this.isDisposed)
 			{
+				DebugEventManagement.DebugWriteAllEventRemains(this);
+				this.eventHelper.DiscardAllEventsAndExceptions();
+
 				DebugMessage("Disposing...");
 
 				// Dispose of managed resources if requested:
@@ -261,7 +267,7 @@ namespace MKY.IO.Serial.Socket
 				{
 					// In the 'normal' case, the items have already been disposed of, e.g. OnDisconnected().
 					StopAndDisposeReconnectTimer();
-					SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThreadAsync();
+					StopAndDisposeSocketAndConnectionsAndThreadAsync();
 
 					// Do not dispose of state and shutdown locks because that will result in null
 					// ref exceptions during closing, due to the fact that ALAZ closes/disconnects
@@ -431,22 +437,22 @@ namespace MKY.IO.Serial.Socket
 			get { return (!IsDisposed && IsStarted && !IsOpen && AutoReconnect.Enabled); } // Check 'IsDisposed' first!
 		}
 
-		private bool IsStoppingAndDisposingSynchronized
+		private bool IsStoppingAndDisposingSocketSynchronized
 		{
 			get
 			{
 				bool value;
 
-				lock (this.isStoppingAndDisposingSyncObj)
-					value = this.isStoppingAndDisposing;
+				lock (this.isStoppingAndDisposingSocketSyncObj)
+					value = this.isStoppingAndDisposingSocket;
 
 				return (value);
 			}
 
 			set
 			{
-				lock (this.isStoppingAndDisposingSyncObj)
-					this.isStoppingAndDisposing = value;
+				lock (this.isStoppingAndDisposingSocketSyncObj)
+					this.isStoppingAndDisposingSocket = value;
 			}
 		}
 
@@ -508,7 +514,7 @@ namespace MKY.IO.Serial.Socket
 				StopAndDisposeReconnectTimer();
 
 				// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
-				SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThreadAsync();
+				StopAndDisposeSocketAndConnectionsAndThreadAsync();
 
 				SetStateSynchronizedAndNotify(SocketState.Reset);
 			}
@@ -584,7 +590,7 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		private void StartSocketAndThread()
 		{
-			IsStoppingAndDisposingSynchronized = false;
+			IsStoppingAndDisposingSocketSynchronized = false;
 
 			SetStateSynchronizedAndNotify(SocketState.Connecting);
 
@@ -616,9 +622,9 @@ namespace MKY.IO.Serial.Socket
 		/// The Stop() method of the ALAZ socket must not be called on the GUI/main thread.
 		/// See remarks of the header of this class for details.
 		/// </remarks>
-		private void SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThreadAsync()
+		private void StopAndDisposeSocketAndConnectionsAndThreadAsync()
 		{
-			IsStoppingAndDisposingSynchronized = true;
+			IsStoppingAndDisposingSocketSynchronized = true;
 
 			VoidDelegateVoid asyncInvoker = new VoidDelegateVoid(StopAndDisposeSocketAndConnectionsAndThread);
 			asyncInvoker.BeginInvoke(null, null);
@@ -943,11 +949,11 @@ namespace MKY.IO.Serial.Socket
 
 			// Note that state and shutdown locks do not get disposed in order to be still able to
 			// access while asynchronously closing/disconnecting. See Dispose() for more details.
-			if (!IsStoppingAndDisposingSynchronized)
+			if (!IsStoppingAndDisposingSocketSynchronized)
 			{
 				// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
 				// Must be called asynchronously! Otherwise, a dead-lock will occur in ALAZ.
-				SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThreadAsync();
+				StopAndDisposeSocketAndConnectionsAndThreadAsync();
 
 				// Attention:
 				// Ensure that exceptions are only handled if the socket is still active. Otherwise,
@@ -993,11 +999,11 @@ namespace MKY.IO.Serial.Socket
 
 			// Note that state and shutdown locks do not get disposed in order to be still able to
 			// access while asynchronously closing/disconnecting. See Dispose() for more details.
-			if (!IsStoppingAndDisposingSynchronized)
+			if (!IsStoppingAndDisposingSocketSynchronized)
 			{
 				// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
 				// Must be called asynchronously! Otherwise, a dead-lock will occur in ALAZ.
-				SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThreadAsync();
+				StopAndDisposeSocketAndConnectionsAndThreadAsync();
 
 				// Attention:
 				// Ensure that exceptions are only handled if the socket is still active. Otherwise,
@@ -1103,7 +1109,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			EventHelper.FireSync(IOChanged, this, e);
+			this.eventHelper.FireSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
@@ -1116,21 +1122,23 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			EventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
+			this.eventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		protected virtual void OnDataReceived(DataReceivedEventArgs e)
 		{
-			EventHelper.FireSync<DataReceivedEventArgs>(DataReceived, this, e);
+			if (IsOpen) // Make sure to propagate event only if active.
+				this.eventHelper.FireSync<DataReceivedEventArgs>(DataReceived, this, e);
 		}
 
 		/// <summary></summary>
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		protected virtual void OnDataSent(DataSentEventArgs e)
 		{
-			EventHelper.FireSync<DataSentEventArgs>(DataSent, this, e);
+			if (IsOpen) // Make sure to propagate event only if active.
+				this.eventHelper.FireSync<DataSentEventArgs>(DataSent, this, e);
 		}
 
 		#endregion
