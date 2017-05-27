@@ -791,6 +791,7 @@ namespace YAT.Domain
 			// Potentially suppress empty lines that only contain hidden <CR><LF>:
 			bool suppressEmptyLine = ((lineState.Elements.DataCount == 0) &&                    // Empty line.
 			                          (lineState.EolElements.DataCount == 1) &&                 // EOL contained though, as a single data element.
+			                           lineState.EolOfLastLineOfGivenPortWasCompleteMatch.ContainsKey(ps) &&
 			                          !lineState.EolOfLastLineOfGivenPortWasCompleteMatch[ps]); // EOL of last line of the current port is still pending.
 			if (suppressEmptyLine)
 			{
