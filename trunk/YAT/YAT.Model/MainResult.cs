@@ -41,6 +41,7 @@ namespace YAT.Model
 		Success,
 		CommandLineError,
 		ApplicationStartError,
+		ApplicationStartCancel,
 		ApplicationRunError,
 		ApplicationExitError,
 		UnhandledException,

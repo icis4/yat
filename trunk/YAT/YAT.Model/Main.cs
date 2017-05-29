@@ -378,22 +378,31 @@ namespace YAT.Model
 						{
 							OnFixedStatusTextRequest("Error opening workspace!");
 
-							var sb = new StringBuilder();
-							sb.AppendLine("Unable to open workspace file");
-							sb.Append(filePath);
-
-							OnMessageInputRequest
+							var errorMessage = ErrorHelper.ComposeMessage
 							(
-								sb.ToString(),
-								"Workspace File Error",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Stop
+								"Unable to open the previous workspace file",
+								filePath,
+								"Confirm with [OK] to create a new empty workspace, or [Cancel] to restore the workspace file and try again."
 							);
 
-							// Do not yet create a new empty workspace, it will be created when
-							// needed. Not creating it now allows the user to exit YAT, restore
-							// the .yaw file, and try again.
-							return (MainResult.ApplicationStartError);
+							var dr = OnMessageInputRequest
+							(
+								errorMessage,
+								"Workspace File Error",
+								MessageBoxButtons.OKCancel,
+								MessageBoxIcon.Warning
+							);
+
+							if (dr == DialogResult.Cancel)
+							{
+								OnTimedStatusTextRequest("Cancelled");
+
+								// Not creating create a new empty workspace allows the user to exit YAT,
+								// restore the .yaw file, and try again.
+								return (MainResult.ApplicationStartCancel);
+							}
+
+							// [OK] => A new empty workspace will be created below.
 						}
 					}
 				}

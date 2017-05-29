@@ -1416,17 +1416,23 @@ namespace YAT.Model
 						if (string.IsNullOrEmpty(errorMessage))
 						{
 							if (!string.IsNullOrEmpty(item.FilePath))
-								errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal", item.FilePath);
+								errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal file", item.FilePath);
 							else
 								errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal!");
 						}
+
+						string caption;
+						if (!string.IsNullOrEmpty(item.FilePath))
+							caption = "Terminal File Error";
+						else
+							caption = "Terminal Error";
 
 						OnCursorReset();
 						OnFixedStatusTextRequest("Error opening terminal!");
 						DialogResult result = OnMessageInputRequest
 						(
 							errorMessage + Environment.NewLine + Environment.NewLine + "Continue loading workspace?",
-							"Terminal Error",
+							caption,
 							MessageBoxButtons.YesNo,
 							MessageBoxIcon.Exclamation
 						);

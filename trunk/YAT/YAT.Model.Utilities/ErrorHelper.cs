@@ -33,28 +33,30 @@ namespace YAT.Model.Utilities
 	/// <summary></summary>
 	public static class ErrorHelper
 	{
-		/// <summary></summary>
-		public static string ComposeMessage(string lead, string additionalLead, string additionalText)
-		{
-			return (ComposeMessage(lead, null, null, additionalLead, additionalText));
-		}
-
-		/// <summary></summary>
-		public static string ComposeMessage(string lead, Exception ex, string additionalLead = null, string additionalText = null)
-		{
-			return (ComposeMessage(lead, null, null, additionalLead, additionalText));
-		}
-
-		/// <summary></summary>
+		/// <remarks>[str] and [str, str] and [str, str, str] and [str, str, str, str]</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public static string ComposeMessage(string lead, string text = null, Exception ex = null, string additionalLead = null, string additionalText = null)
+		public static string ComposeMessage(string lead, string leadAddOn = null, string secondaryLead = null, string secondaryText = null)
+		{
+			return (ComposeMessage(lead, leadAddOn, null, secondaryLead, secondaryText));
+		}
+
+		/// <remarks>[str, ex]</remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		public static string ComposeMessage(string lead, Exception ex, string secondaryLead = null, string secondaryText = null)
+		{
+			return (ComposeMessage(lead, null, ex, secondaryLead, secondaryText));
+		}
+
+		/// <remarks>[str, str, ex]</remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		public static string ComposeMessage(string lead, string leadAddOn, Exception ex, string secondaryLead = null, string secondaryText = null)
 		{
 			var sb = new StringBuilder(lead);
 
-			if (!string.IsNullOrEmpty(text))
+			if (!string.IsNullOrEmpty(leadAddOn))
 			{
 				sb.Append(" ");
-				sb.Append(text);
+				sb.Append(leadAddOn);
 			}
 
 			if (ex is System.Xml.XmlException)
@@ -110,12 +112,17 @@ namespace YAT.Model.Utilities
 				}
 			}
 
-			if (!string.IsNullOrEmpty(additionalLead) && !string.IsNullOrEmpty(additionalText))
+			if (!string.IsNullOrEmpty(secondaryLead))
 			{
 				sb.AppendLine();
 				sb.AppendLine();
-				sb.AppendLine(additionalLead);
-				sb.Append(additionalText);
+				sb.Append(secondaryLead);
+
+				if (!string.IsNullOrEmpty(secondaryText))
+				{
+					sb.AppendLine(); // Line break after secondary lead above.
+					sb.Append(secondaryText);
+				}
 			}
 
 			return (sb.ToString());

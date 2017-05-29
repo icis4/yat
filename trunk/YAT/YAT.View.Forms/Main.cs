@@ -291,6 +291,15 @@ namespace YAT.View.Forms
 						break;
 					}
 
+					case Model.MainResult.ApplicationStartCancel:
+					{
+						if (showErrorModally)
+						{
+							// Nothing to do, user intentionally cancelled.
+						}
+						break;
+					}
+
 					case Model.MainResult.ApplicationRunError:
 					{
 						if (showErrorModally)
@@ -323,7 +332,7 @@ namespace YAT.View.Forms
 				if (!keepOpenOnError)
 					Close();
 			}
-			else // In case of Model.Main.Result.Success.
+			else // Model.MainResult.Success:
 			{
 				if (this.workspace.TerminalCount == 0)
 				{
