@@ -2689,7 +2689,7 @@ namespace YAT.Model
 
 					OnMessageInputRequest
 					(
-						ErrorHelper.ComposeMessage("Terminal could not be started!", yatLead, yatText),
+						ErrorHelper.ComposeMessage("Terminal could not be started!", string.Empty, yatLead, yatText),
 						"Terminal Warning",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Warning

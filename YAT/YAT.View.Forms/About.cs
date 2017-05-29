@@ -479,14 +479,14 @@ namespace YAT.View.Forms
 		private bool TestExecutionIsIntended(string message)
 		{
 			var dr = MessageBoxEx.Show
-				(
+			(
 				this,
 				message,
 				"Execute Manual 'Release' Test?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,
 				MessageBoxDefaultButton.Button2
-				);
+			);
 
 			return (dr == DialogResult.Yes);
 		}
@@ -500,13 +500,13 @@ namespace YAT.View.Forms
 					"Confirm with [OK] to restore the precondition, or [Cancel] the test.";
 
 				var dr = MessageBox.Show
-					(
+				(
 					this,
 					precondition,
 					"Restore Manual 'Release' Test Precondition?",
 					MessageBoxButtons.OKCancel,
 					MessageBoxIcon.Exclamation
-					);
+				);
 
 				if (dr != DialogResult.OK)
 					return (false);
