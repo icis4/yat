@@ -35,19 +35,19 @@ namespace MKY
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class RandomEx
 	{
-		private static Random staticRandom = new Random();
+		private static Random staticRandomSeed = new Random();
 
 		/// <summary>
 		/// This method solves an issue described in the MSDN description of <see cref="Random"/>:
-		/// The default seed value is derived from the system clock and has finite resolution.
-		/// As a result, different Random objects that are created in close succession by a call to
-		/// the default constructor will have identical default seed values and, therefore, will
-		/// produce identical sets of random numbers. This problem can be avoided by using a single
-		/// Random object to generate all random numbers.
+		/// The default seed value is derived from the system clock and has finite resolution. As a
+		/// result, different <see cref="Random"/> objects that are created in close succession by a
+		/// call to the default constructor will have identical default seed values and, therefore,
+		/// will produce identical sets of random numbers. This problem can be avoided by using a
+		/// single <see cref="Random"/> object to generate the seed for all random generators.
 		/// </summary>
 		public static int NextPseudoRandomSeed()
 		{
-			return (staticRandom.Next());
+			return (staticRandomSeed.Next());
 		}
 	}
 }

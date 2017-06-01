@@ -36,7 +36,7 @@ namespace MKY
 	public static class ObjectEx
 	{
 		/// <summary>
-		/// An invalid comparison result is represented by -1.
+		/// -1 is specified as the 'invalid comparison' result in .NET.
 		/// </summary>
 		public const int InvalidComparisonResult = -1;
 
