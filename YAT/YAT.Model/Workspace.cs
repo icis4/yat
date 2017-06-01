@@ -819,10 +819,14 @@ namespace YAT.Model
 			if (this.settingsRoot.AutoSaved && (!PathEx.Equals(absoluteFilePath, this.settingsHandler.SettingsFilePath)))
 				autoSaveFilePathToDelete = this.settingsHandler.SettingsFilePath;
 
-			// Set the new file path:
+			// Set the new file path...
 			this.settingsHandler.SettingsFilePath = absoluteFilePath;
 
-			// Then, save the workspace itself:
+			// ...adjust the potentially relative terminal files paths to the new absolute workspace file path...
+			foreach (Terminal t in this.terminals)
+				ReplaceTerminalInWorkspaceSettings(t);
+
+			// ...and then, save the workspace itself:
 			return (SaveToFile(false, autoSaveFilePathToDelete));
 		}
 
@@ -1144,8 +1148,8 @@ namespace YAT.Model
 				// The workspace shall dispose of itself to free all resources for sure. It must be
 				// done AFTER it fired the 'Closed' event and all subscribers of the event may still
 				// refer to a non-disposed object. This is especially important, as the order of the
-				// subscribers is not fixed, i.e. Model.Main may dispose of the workspace before
-				// View.Main receives the event callback!
+				// subscribers is not fixed, i.e. 'Model.Main' may dispose of the workspace before
+				// 'View.Main' receives the event callback!
 				Dispose();
 
 				return (true);
@@ -1709,7 +1713,15 @@ namespace YAT.Model
 			this.terminals.Replace(terminal);
 			this.activeTerminal = terminal;
 
-			// Replace terminal in workspace settings if the settings have indeed changed:
+			// Replace terminal in workspace settings:
+			ReplaceTerminalInWorkspaceSettings(terminal);
+		}
+
+		/// <summary>
+		/// Replaces terminal in workspace settings if the settings have changed.
+		/// </summary>
+		private void ReplaceTerminalInWorkspaceSettings(Terminal terminal)
+		{
 			TerminalSettingsItem tsiNew = CreateTerminalSettingsItem(terminal, GetFixedIndexByTerminal(terminal));
 			TerminalSettingsItem tsiOld = this.settingsRoot.TerminalSettings.Find(terminal.Guid);
 			if ((tsiOld == null) || (tsiNew != tsiOld))
@@ -1915,17 +1927,22 @@ namespace YAT.Model
 			List<Terminal> clone = new List<Terminal>(this.terminals);
 			foreach (Terminal t in clone)
 			{
-				bool saveIsRequiredForThisTerminal = true;
-				if (!EvaluateWhetherSaveIsFeasibleForThisTerminal(t))
-					saveIsRequiredForThisTerminal = EvaluateWhetherSaveIsRequiredForThisTerminal(t);
-
-				if (saveIsRequiredForThisTerminal)
+				if (EvaluateWhetherSaveIsRequiredForThisTerminal(t))
 				{
-					if (!t.Save(autoSaveIsAllowed, userInteractionIsAllowed))
-						success = false;
+					if (EvaluateWhetherSaveIsFeasibleForThisTerminal(t))
+					{
+						if (!t.Save(autoSaveIsAllowed, userInteractionIsAllowed))
+							success = false;
+					}
+					else
+					{
+						success = false; // Save is required but file e.g. is no longer writable or no longer exists.
+					}
 				}
-
-				// Consider it successful if save is not required.
+				else
+				{
+					// Consider it successful if save is not required.
+				}
 			}
 
 			return (success);
@@ -1955,7 +1972,7 @@ namespace YAT.Model
 
 			// Save is not required if file does no longer exist...
 			// ...and no or only implicit changes would have to be saved:
-			if (t.SettingsFileHasAlreadyBeenNormallySaved && !t.SettingsFileExists)
+			if (t.SettingsFileHasAlreadyBeenNormallySaved && t.SettingsFileExists)
 				return (t.SettingsRoot.ExplicitHaveChanged);
 
 			return (true);
