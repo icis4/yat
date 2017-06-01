@@ -31,11 +31,8 @@ using System.Text;
 namespace MKY.Diagnostics
 {
 	/// <summary>
-	/// Provides static methods to help debugging events.
+	/// Provides static methods to help debugging event handler management.
 	/// </summary>
-	/// <remarks>
-	/// Based on http://www.codeproject.com/Articles/103542/Removing-Event-Handlers-using-Reflection.
-	/// </remarks>
 	public static class DebugEventManagement
 	{
 		/// <summary></summary>
