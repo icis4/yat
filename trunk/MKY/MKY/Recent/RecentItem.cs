@@ -192,7 +192,7 @@ namespace MKY.Recent
 
 		#region IComparable Members / Comparison Methods and Operators
 		//==========================================================================================
-		// IComparable<T> Members
+		// IComparable Members / Comparison Methods and Operators
 		//==========================================================================================
 
 		/// <summary>
