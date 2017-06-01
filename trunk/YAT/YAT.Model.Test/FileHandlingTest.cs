@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
@@ -48,6 +49,45 @@ namespace YAT.Model.Test
 	[TestFixture]
 	public class FileHandlingTest
 	{
+		#region Types
+		//==========================================================================================
+		// Types
+		//==========================================================================================
+
+		private struct FileInfo
+		{
+			public string FilePath;
+			public bool AutoSaved;
+
+			public FileInfo(string filePath, bool autoSaved)
+			{
+				FilePath = filePath;
+				AutoSaved = autoSaved;
+			}
+
+			public static FileInfo From(Workspace workspace)
+			{
+				return (new FileInfo(workspace.SettingsFilePath, workspace.SettingsRoot.AutoSaved));
+			}
+
+			public static FileInfo From(Terminal terminal)
+			{
+				return (new FileInfo(terminal.SettingsFilePath, terminal.SettingsRoot.AutoSaved));
+			}
+
+			public static FileInfo[] From(Terminal[] terminals)
+			{
+				List<FileInfo> l = new List<FileInfo>(terminals.Length); // Preset the required capacity to improve memory management.
+
+				foreach (Terminal t in terminals)
+					l.Add(new FileInfo(t.SettingsFilePath, t.SettingsRoot.AutoSaved));
+
+				return (l.ToArray());
+			}
+		}
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -163,10 +203,13 @@ namespace YAT.Model.Test
 			{
 				bool success = false;
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminalInfo = FileInfo.From(terminal);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, "Main could not be exited successfully!");
 
-				VerifyFiles(workspace, true, terminal, true);
+				VerifyFiles(workspaceInfo, true, terminalInfo, true);
 			}
 		}
 
@@ -192,10 +235,13 @@ namespace YAT.Model.Test
 
 				VerifyFiles(workspace, false, terminal, false);
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminalInfo = FileInfo.From(terminal);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, "Main could not be exited successfully!");
 
-				VerifyFiles(workspace, false, terminal, false);
+				VerifyFiles(workspaceInfo, false, terminalInfo, false);
 			}
 		}
 
@@ -221,10 +267,13 @@ namespace YAT.Model.Test
 
 				VerifyFiles(workspace, false, terminal, false);
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminalInfo = FileInfo.From(terminal);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, "Main could not be exited successfully!");
 
-				VerifyFiles(workspace, true, terminal, false);
+				VerifyFiles(workspaceInfo, true, terminalInfo, false);
 			}
 		}
 
@@ -255,10 +304,13 @@ namespace YAT.Model.Test
 
 				VerifyFiles(workspace, false, terminal, false);
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminalInfo = FileInfo.From(terminal);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, "Main could not be exited successfully!");
 
-				VerifyFiles(workspace, false, terminal, false);
+				VerifyFiles(workspaceInfo, false, terminalInfo, false);
 			}
 		}
 
@@ -288,10 +340,13 @@ namespace YAT.Model.Test
 
 			using (main)
 			{
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminalInfo = FileInfo.From(terminal);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, "Main could not be exited successfully!");
 
-				VerifyFiles(workspace, true, terminal, true);
+				VerifyFiles(workspaceInfo, true, terminalInfo, true);
 			}
 
 			// Consecutive start with auto delete on close of workspace:
@@ -315,10 +370,13 @@ namespace YAT.Model.Test
 
 				VerifyFiles(workspace, false, terminal, false);
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminalInfo = FileInfo.From(terminal);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, "Main could not be exited successfully!");
 
-				VerifyFiles(workspace, false, terminal, false);
+				VerifyFiles(workspaceInfo, false, terminalInfo, false);
 			}
 		}
 
@@ -364,10 +422,13 @@ namespace YAT.Model.Test
 				Terminal terminal = workspace.ActiveTerminal;
 				Assert.That(terminal, Is.Not.Null, uc + "Terminal could not be created!");
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminalInfo = FileInfo.From(terminal);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
-				VerifyFiles(uc, workspace, true, terminal, true);
+				VerifyFiles(uc, workspaceInfo, true, terminalInfo, true);
 			}
 			#endregion
 
@@ -395,10 +456,13 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, uc + "Terminal could not be saved!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminalInfo = FileInfo.From(terminal);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
-				VerifyFiles(uc, workspace, true, terminal, true);
+				VerifyFiles(uc, workspaceInfo, true, terminalInfo, true);
 			}
 			#endregion
 
@@ -428,10 +492,13 @@ namespace YAT.Model.Test
 				Assert.That(workspace.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
 				Assert.That(File.Exists(defaultTerminal1FilePath), Is.False, uc + "Auto terminal file not deleted!");
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminalInfo = FileInfo.From(terminal);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
-				VerifyFiles(uc, workspace, true, terminal, true, false);
+				VerifyFiles(uc, workspaceInfo, true, terminalInfo, true, false);
 			}
 			#endregion
 
@@ -470,17 +537,22 @@ namespace YAT.Model.Test
 				Terminal terminal3 = workspace.ActiveTerminal;
 				Assert.That(terminal3, Is.Not.Null, uc + "Terminal 3 could not be created!");
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminal1Info = FileInfo.From(terminal1);
+				var terminal2Info = FileInfo.From(terminal2);
+				var terminal3Info = FileInfo.From(terminal3);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
 					(
 					uc,
-					workspace,
+					workspaceInfo,
 					true,
-					new Terminal[] { terminal1, terminal2, terminal3 },
-					new bool[]     { true,      true,      true      }, // Exists.
-					new bool[]     { false,     true,      true      }  // Auto.
+					new FileInfo[] { terminal1Info, terminal2Info, terminal3Info },
+					new bool[]     { true,          true,          true          }, // Exists.
+					new bool[]     { false,         true,          true          }  // Auto.
 					);
 
 				var normalTerminal1LastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
@@ -528,17 +600,21 @@ namespace YAT.Model.Test
 				Assert.That(workspace.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
 				Assert.That(File.Exists(autoTerminal3FilePath), Is.False, uc + "Auto terminal 3 file not deleted!");
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminal1Info = FileInfo.From(terminal1);
+				var terminal2Info = FileInfo.From(terminal2);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
 				(
 					uc,
-					workspace,
+					workspaceInfo,
 					true,
-					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // Exists.
-					new bool[]     { false,     true      }  // Auto.
+					new FileInfo[] { terminal1Info, terminal2Info },
+					new bool[]     { true,          true          }, // Exists.
+					new bool[]     { false,         true          }  // Auto.
 				);
 
 				var normalTerminal1LastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
@@ -583,17 +659,21 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, uc + "Workspace could not be saved!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminal1Info = FileInfo.From(terminal1);
+				var terminal2Info = FileInfo.From(terminal2);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
 				(
 					uc,
-					workspace,
+					workspaceInfo,
 					true,
-					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // Exists.
-					new bool[]     { false,     true      }  // Auto.
+					new FileInfo[] { terminal1Info, terminal2Info },
+					new bool[]     { true,          true          }, // Exists.
+					new bool[]     { false,         true          }  // Auto.
 				);
 
 				var normalTerminal1LastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
@@ -659,18 +739,22 @@ namespace YAT.Model.Test
 				var normalTerminal1LastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
 				var normalTerminal2LastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminal2FilePath);
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminal1Info = FileInfo.From(terminal1);
+				var terminal2Info = FileInfo.From(terminal2);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
 				(
 					uc,
-					workspace,
+					workspaceInfo,
 					true,
 					false,
-					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // Exists.
-					new bool[]     { false,     false     }  // Auto.
+					new FileInfo[] { terminal1Info, terminal2Info },
+					new bool[]     { true,          true          }, // Exists.
+					new bool[]     { false,         false         }  // Auto.
 				);
 
 				var normalTerminal1LastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
@@ -721,18 +805,23 @@ namespace YAT.Model.Test
 				// Install callback handler that sets the normal file path for terminal 3:
 				terminal3.SaveAsFileDialogRequest += terminal3_SaveAsFileDialogRequest_SaveAsOK;
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminal1Info = FileInfo.From(terminal1);
+				var terminal2Info = FileInfo.From(terminal2);
+				var terminal3Info = FileInfo.From(terminal3);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
 				(
 					uc,
-					workspace,
+					workspaceInfo,
 					true,
 					false,
-					new Terminal[] { terminal1, terminal2, terminal3 },
-					new bool[]     { true,      true,      true      }, // Exists.
-					new bool[]     { false,     false,     false     }  // Auto.
+					new FileInfo[] { terminal1Info, terminal2Info, terminal3Info },
+					new bool[]     { true,          true,          true          }, // Exists.
+					new bool[]     { false,         false,         false         }  // Auto.
 				);
 			}
 			#endregion
@@ -776,18 +865,23 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, uc + "Terminal 3 could not be closed!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminal1Info = FileInfo.From(terminal1);
+				var terminal2Info = FileInfo.From(terminal2);
+				var terminal3Info = FileInfo.From(terminal3);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
 				(
 					uc,
-					workspace,
+					workspaceInfo,
 					true,
 					false,
-					new Terminal[] { terminal1, terminal2, terminal3 },
-					new bool[]     { true,      true,      true      }, // Exists.
-					new bool[]     { false,     false,     false     }  // Auto.
+					new FileInfo[] { terminal1Info, terminal2Info, terminal3Info },
+					new bool[]     { true,          true,          true          }, // Exists.
+					new bool[]     { false,         false,         false         }  // Auto.
 				);
 
 				var normalTerminal3LastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminal3FilePath);
@@ -845,17 +939,21 @@ namespace YAT.Model.Test
 				success = terminal2.SaveAs(this.normalTerminal2FilePath);
 				Assert.That(success, Is.True, uc + "Terminal 2 could not be saved as!");
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminal1Info = FileInfo.From(terminal1);
+				var terminal2Info = FileInfo.From(terminal2);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
 				(
 					uc,
-					workspace,
+					workspaceInfo,
 					true,
-					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // Exists.
-					new bool[]     { false,     false     }  // Auto.
+					new FileInfo[] { terminal1Info, terminal2Info },
+					new bool[]     { true,          true          }, // Exists.
+					new bool[]     { false,         false         }  // Auto.
 				);
 			}
 			#endregion
@@ -906,17 +1004,21 @@ namespace YAT.Model.Test
 				Terminal terminal2 = workspace.ActiveTerminal;
 				Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 could not be created!");
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminal1Info = FileInfo.From(terminal1);
+				var terminal2Info = FileInfo.From(terminal2);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
 				(
 					uc,
-					workspace,
+					workspaceInfo,
 					true,
-					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // Exists.
-					new bool[]     { false,     true      }  // Auto.
+					new FileInfo[] { terminal1Info, terminal2Info },
+					new bool[]     { true,          true          }, // Exists.
+					new bool[]     { false,         true          }  // Auto.
 				);
 			}
 			#endregion
@@ -970,18 +1072,24 @@ namespace YAT.Model.Test
 
 				// Main 1 exit:
 				{
+					var workspace1Info = FileInfo.From(workspace1);
+					var terminal1Info = FileInfo.From(terminal1);
+
 					success = (main1.Exit() == MainResult.Success);
 					Assert.That(success, Is.True, uc + "Main 1 could not be exited!");
 
-					VerifyFiles(uc, workspace1, true, terminal1, true, false);
+					VerifyFiles(uc, workspace1Info, true, terminal1Info, true, false);
 				}
 
 				// Main 2 exit:
 				{
+					var workspace2Info = FileInfo.From(workspace2);
+					var terminal2Info = FileInfo.From(terminal2);
+
 					success = (main2.Exit() == MainResult.Success);
 					Assert.That(success, Is.True, uc + "Main 2 could not be exited!");
 
-					VerifyFiles(uc, workspace2, true, terminal2, true, false);
+					VerifyFiles(uc, workspace2Info, true, terminal2Info, true, false);
 				}
 			}
 			#endregion
@@ -1015,10 +1123,13 @@ namespace YAT.Model.Test
 
 				// Main 2 exit:
 				{
+					var workspace2Info = FileInfo.From(workspace2);
+					var terminal2Info = FileInfo.From(terminal2);
+
 					success = (main2.Exit() == MainResult.Success);
 					Assert.That(success, Is.True, uc + "Main 2 could not be exited!");
 
-					VerifyFiles(uc, workspace2, true, terminal2, true, false);
+					VerifyFiles(uc, workspace2Info, true, terminal2Info, true, false);
 				}
 			}
 			#endregion
@@ -1046,10 +1157,13 @@ namespace YAT.Model.Test
 				string formerLocalUserAutoWorkspaceFilePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
 				VerifyFiles(uc, workspace, false, terminal, true, false);
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminalInfo = FileInfo.From(terminal);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
-				VerifyFiles(uc, workspace, true, terminal, true, false);
+				VerifyFiles(uc, workspaceInfo, true, terminalInfo, true, false);
 
 				// Ensure that the auto workspace has been changed.
 				string currentLocalUserAutoWorkspaceFilePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
@@ -1104,10 +1218,13 @@ namespace YAT.Model.Test
 				Terminal terminal = workspace.ActiveTerminal;
 				Assert.That(terminal, Is.Not.Null, step + "Terminal could not be created!");
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminalInfo = FileInfo.From(terminal);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
-				VerifyFiles(step, workspace, true, terminal, true);
+				VerifyFiles(step, workspaceInfo, true, terminalInfo, true);
 
 				Assert.That(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count, Is.EqualTo(0), step + "Recent file list is not empty!!");
 			}
@@ -1159,10 +1276,13 @@ namespace YAT.Model.Test
 
 				VerifyFiles(step, workspace, false, terminal, true, false);
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminalInfo = FileInfo.From(terminal);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
-				VerifyFiles(step, workspace, false, terminal, true, false);
+				VerifyFiles(step, workspaceInfo, false, terminalInfo, true, false);
 
 				Assert.That(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count, Is.EqualTo(1), step + "Wrong number of recent file entries!");
 			}
@@ -1188,10 +1308,13 @@ namespace YAT.Model.Test
 
 				VerifyFiles(step, workspace, false, terminal, true, false);
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminalInfo = FileInfo.From(terminal);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
-				VerifyFiles(step, workspace, false, terminal, true, false);
+				VerifyFiles(step, workspaceInfo, false, terminalInfo, true, false);
 
 				Assert.That(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count, Is.EqualTo(1), step + "Wrong number of recent file entries!");
 			}
@@ -1238,10 +1361,13 @@ namespace YAT.Model.Test
 
 				Assert.That(workspace.TerminalCount, Is.EqualTo(1), step + "Workspace doesn't contain 1 terminal!");
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminalInfo = FileInfo.From(terminal);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
-				VerifyFiles(step, workspace, true, terminal, true, false);
+				VerifyFiles(step, workspaceInfo, true, terminalInfo, true, false);
 			}
 			#endregion
 
@@ -1270,10 +1396,12 @@ namespace YAT.Model.Test
 				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(0), step + "Workspace doesn't contain 0 terminals!");
 
+				var workspaceInfo = FileInfo.From(workspace);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
-				VerifyFiles(step, workspace, true);
+				VerifyFiles(step, workspaceInfo, true);
 			}
 			#endregion
 		}
@@ -1321,10 +1449,13 @@ namespace YAT.Model.Test
 				Assert.That(success, Is.True, step + "Workspace could not be saved as!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(1), step + "Workspace doesn't contain 1 terminal!");
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminalInfo = FileInfo.From(terminal);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
-				VerifyFiles(step, workspace, true, false, terminal, true, false);
+				VerifyFiles(step, workspaceInfo, true, false, terminalInfo, true, false);
 			}
 			#endregion
 
@@ -1399,10 +1530,13 @@ namespace YAT.Model.Test
 
 				VerifyFiles(step, workspace, true, false, terminal, true, false);
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminalInfo = FileInfo.From(terminal);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
-				VerifyFiles(step, workspace, true, false, terminal, true, false);
+				VerifyFiles(step, workspaceInfo, true, false, terminalInfo, true, false);
 			}
 			#endregion
 
@@ -1446,10 +1580,13 @@ namespace YAT.Model.Test
 				terminal.StopIO();
 				Assert.That(terminal.IsStarted, Is.False, step + "Terminal not stopped!");
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminalInfo = FileInfo.From(terminal);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
-				VerifyFiles(step, workspace, true, false, terminal, true, false);
+				VerifyFiles(step, workspaceInfo, true, false, terminalInfo, true, false);
 
 				string filePath = this.normalTerminal1FilePath;
 				Assert.That(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) != 0), Is.True, "Terminal file is not write-protected!");
@@ -1483,6 +1620,9 @@ namespace YAT.Model.Test
 				Assert.That(terminal2, Is.Not.Null, step + "Terminal 2 could not be created!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(2), step + "Workspace doesn't contain 2 terminals!");
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminal1Info = FileInfo.From(terminal1);
+
 				// Install callback handler that does not save terminal 2:
 				terminal2.SaveAsFileDialogRequest += terminal2_SaveAsFileDialogRequest_No;
 
@@ -1494,7 +1634,7 @@ namespace YAT.Model.Test
 				int countAfter = this.workspace_MessageInputRequest_No_counter;
 				Assert.That(countAfter, Is.Not.EqualTo(countBefore), "Workspace 'MessageInputRequest' was not called!");
 
-				VerifyFiles(step, workspace, true, false, terminal1, true, false);
+				VerifyFiles(step, workspaceInfo, true, false, terminal1Info, true, false);
 
 				string filePath = this.normalWorkspaceFilePath;
 				Assert.That(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) != 0), Is.True, "Workspace file is not write-protected!");
@@ -1540,10 +1680,13 @@ namespace YAT.Model.Test
 				terminal.StopIO();
 				Assert.That(terminal.IsStarted, Is.False, step + "Terminal not stopped!");
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminalInfo = FileInfo.From(terminal);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
-				VerifyFiles(step, workspace, true, false, terminal, true, false);
+				VerifyFiles(step, workspaceInfo, true, false, terminalInfo, true, false);
 
 				string filePath = this.normalTerminal1FilePath;
 				Assert.That(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) == 0), Is.True, "Workspace file is not writable!");
@@ -1580,18 +1723,22 @@ namespace YAT.Model.Test
 
 				Assert.That(workspace.TerminalCount, Is.EqualTo(2), step + "Workspace doesn't contain 2 terminals!");
 
+				var workspaceInfo = FileInfo.From(workspace);
+				var terminal1Info = FileInfo.From(terminal1);
+				var terminal2Info = FileInfo.From(terminal2);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
 				VerifyFiles
 				(
 					step,
-					workspace,
+					workspaceInfo,
 					true,
 					false,
-					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // Exists.
-					new bool[]     { false,     false     }  // Auto.
+					new FileInfo[] { terminal1Info, terminal2Info },
+					new bool[]     { true,          true          }, // Exists.
+					new bool[]     { false,         false         }  // Auto.
 				);
 
 				string filePath = this.normalWorkspaceFilePath;
@@ -1815,129 +1962,129 @@ namespace YAT.Model.Test
 		// Non-Public Methods > Verify
 		//------------------------------------------------------------------------------------------
 
-		private static void VerifyFiles(               Workspace workspace, bool workspaceFileExpected)
-		{
-			VerifyFiles("", workspace, workspaceFileExpected, new Terminal[] { }, new bool[] { });
-		}
-
-		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected)
-		{
-			VerifyFiles(prefix, workspace, workspaceFileExpected, new Terminal[] { }, new bool[] { });
-		}
+		//--- Signatures using 'Workspace' and 'Terminal' objects: ---------------------------------
 
 		private static void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, Terminal terminal, bool terminalFileExpected)
 		{
-			VerifyFiles("", workspace, workspaceFileExpected, new Terminal[] { terminal }, new bool[] { terminalFileExpected });
+			VerifyFiles(                           "",           workspace,      workspaceFileExpected,          terminal,      terminalFileExpected);
 		}
 
-		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, Terminal terminal, bool terminalFileExpected)
+		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, Terminal terminal, bool terminalFileExpected, bool terminalFileAutoExpected = true)
 		{
-			VerifyFiles(prefix, workspace, workspaceFileExpected, new Terminal[] { terminal }, new bool[] { terminalFileExpected });
-		}
-
-		private static void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, Terminal terminal, bool terminalFileExpected, bool terminalFileAutoExpected)
-		{
-			VerifyFiles("", workspace, workspaceFileExpected, new Terminal[] { terminal }, new bool[] { terminalFileExpected }, new bool[] { terminalFileAutoExpected });
-		}
-
-		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, Terminal terminal, bool terminalFileExpected, bool terminalFileAutoExpected)
-		{
-			VerifyFiles(prefix, workspace, workspaceFileExpected, new Terminal[] { terminal }, new bool[] { terminalFileExpected }, new bool[] { terminalFileAutoExpected });
-		}
-
-		private static void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, bool workspaceFileAutoExpected, Terminal terminal, bool terminalFileExpected, bool terminalFileAutoExpected)
-		{
-			VerifyFiles("", workspace, workspaceFileExpected, workspaceFileAutoExpected, new Terminal[] { terminal }, new bool[] { terminalFileExpected }, new bool[] { terminalFileAutoExpected });
+			VerifyFiles(                       prefix,           workspace,      workspaceFileExpected,                           true,          terminal,      terminalFileExpected,      terminalFileAutoExpected);
 		}
 
 		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, bool workspaceFileAutoExpected, Terminal terminal, bool terminalFileExpected, bool terminalFileAutoExpected)
 		{
-			VerifyFiles(prefix, workspace, workspaceFileExpected, workspaceFileAutoExpected, new Terminal[] { terminal }, new bool[] { terminalFileExpected }, new bool[] { terminalFileAutoExpected });
+			VerifyFiles(                       prefix,           workspace,      workspaceFileExpected,  workspaceFileAutoExpected, new Terminal[] { terminal }, new bool[] { terminalFileExpected }, new bool[] { terminalFileAutoExpected });
 		}
 
-		private static void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, Terminal[] terminal, bool[] terminalFileExpected)
+		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, Terminal[] terminals, bool[] terminalFilesExpected)
 		{
-			VerifyFiles("", workspace, workspaceFileExpected, true, terminal, terminalFileExpected, new bool[] { true });
+			VerifyFiles(                       prefix,           workspace,      workspaceFileExpected,                          true,             terminals,        terminalFilesExpected, new bool[] { true });
 		}
 
-		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, Terminal[] terminal, bool[] terminalFileExpected)
+		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, Terminal[] terminals, bool[] terminalFilesExpected, bool[] terminalFilesAutoExpected)
 		{
-			VerifyFiles(prefix, workspace, workspaceFileExpected, true, terminal, terminalFileExpected, new bool[] { true });
+			VerifyFiles(                       prefix,           workspace,      workspaceFileExpected,                           true,            terminals,        terminalFilesExpected, terminalFilesAutoExpected);
 		}
 
-		private static void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
+		/// <remarks>
+		/// Full signature using <see cref="Workspace"/> and <see cref="Terminal"/> objects.
+		/// </remarks>
+		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, bool workspaceFileAutoExpected, Terminal[] terminals, bool[] terminalFilesExpected, bool[] terminalFilesAutoExpected)
 		{
-			VerifyFiles("", workspace, workspaceFileExpected, true, terminal, terminalFileExpected, terminalFileAutoExpected);
+			VerifyFiles(prefix, FileInfo.From(workspace), workspaceFileExpected, workspaceFileAutoExpected, FileInfo.From(terminals), terminalFilesExpected, terminalFilesAutoExpected);
 		}
 
-		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
+		//--- Signatures using 'FileInfo': ---------------------------------------------------------------
+
+		private static void VerifyFiles(string prefix, FileInfo workspaceInfo, bool workspaceFileExpected = true)
 		{
-			VerifyFiles(prefix, workspace, workspaceFileExpected, true, terminal, terminalFileExpected, terminalFileAutoExpected);
+			VerifyFiles(                       prefix,          workspaceInfo,      workspaceFileExpected, new FileInfo(), false, false);
 		}
 
-		private static void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, bool workspaceFileAutoExpected, Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
+		private static void VerifyFiles(               FileInfo workspaceInfo, bool workspaceFileExpected, FileInfo terminalInfo, bool terminalFileExpected, bool terminalFileAutoExpected = true)
 		{
-			VerifyFiles("", workspace, workspaceFileExpected, workspaceFileAutoExpected, terminal, terminalFileExpected, terminalFileAutoExpected);
+			VerifyFiles(                           "",          workspaceInfo,      workspaceFileExpected,          terminalInfo, terminalFileExpected, terminalFileAutoExpected);
 		}
 
-		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, bool workspaceFileAutoExpected, Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
+		private static void VerifyFiles(string prefix, FileInfo workspaceInfo, bool workspaceFileExpected, FileInfo terminalInfo, bool terminalFileExpected, bool terminalFileAutoExpected = true)
+		{
+			VerifyFiles(                       prefix,          workspaceInfo,      workspaceFileExpected,                          true,           terminalInfo,      terminalFileExpected,      terminalFileAutoExpected);
+		}
+
+		private static void VerifyFiles(string prefix, FileInfo workspaceInfo, bool workspaceFileExpected, bool workspaceFileAutoExpected, FileInfo terminalInfo, bool terminalFileExpected, bool terminalFileAutoExpected = true)
+		{
+			VerifyFiles(                       prefix,          workspaceInfo,      workspaceFileExpected,      workspaceFileAutoExpected, new FileInfo[] { terminalInfo }, new bool[] { terminalFileExpected }, new bool[] { terminalFileAutoExpected });
+		}
+
+		private static void VerifyFiles(string prefix, FileInfo workspaceInfo, bool workspaceFileExpected, FileInfo[] terminalInfos, bool[] terminalFilesExpected, bool[] terminalFilesAutoExpected)
+		{
+			VerifyFiles(                       prefix,          workspaceInfo,      workspaceFileExpected,                           true,            terminalInfos,        terminalFilesExpected,        terminalFilesAutoExpected);
+		}
+
+		/// <remarks>
+		/// Full signature using <see cref="FileInfo"/>.
+		/// </remarks>
+		private static void VerifyFiles(string prefix, FileInfo workspaceInfo, bool workspaceFileExpected, bool workspaceFileAutoExpected, FileInfo[] terminalInfos, bool[] terminalFilesExpected, bool[] terminalFilesAutoExpected)
 		{
 			// Verify workspace file:
 			if (workspaceFileExpected)
 			{
-				Assert.That(workspace.SettingsFilePath, Is.Not.Null.And.Not.Empty, prefix + "Workspace settings file path is empty!");
-				Assert.That(File.Exists(workspace.SettingsFilePath), Is.True, prefix + "Workspace file doesn't exist!");
+				Assert.That(workspaceInfo.FilePath, Is.Not.Null.And.Not.Empty, prefix + "Workspace settings file path is empty!");
+				Assert.That(File.Exists(workspaceInfo.FilePath), Is.True, prefix + "Workspace file doesn't exist!");
 
 				if (workspaceFileAutoExpected)
-					Assert.That(workspace.SettingsRoot.AutoSaved, Is.True, prefix + "Workspace file not auto saved!");
+					Assert.That(workspaceInfo.AutoSaved, Is.True, prefix + "Workspace file not auto saved!");
 				else
-					Assert.That(workspace.SettingsRoot.AutoSaved, Is.False, prefix + "Workspace file must not be auto saved!");
+					Assert.That(workspaceInfo.AutoSaved, Is.False, prefix + "Workspace file must not be auto saved!");
 			}
 			else
 			{
-				Assert.That(File.Exists(workspace.SettingsFilePath), Is.False, prefix + "Workspace file exists unexpectantly!");
+				Assert.That(File.Exists(workspaceInfo.FilePath), Is.False, prefix + "Workspace file exists unexpectantly!");
 			}
 
 			// Verify terminal file(s):
-			for (int i = 0; i < terminal.Length; i++)
+			for (int i = 0; i < terminalInfos.Length; i++)
 			{
-				if (terminalFileExpected[i])
+				if (terminalFilesExpected[i])
 				{
-					Assert.That(terminal[i].SettingsFilePath, Is.Not.Null.And.Not.Empty, prefix + "Terminal settings file path is empty!");
-					Assert.That(File.Exists(terminal[i].SettingsFilePath), Is.True, prefix + "Terminal file doesn't exist!");
+					Assert.That(terminalInfos[i].FilePath, Is.Not.Null.And.Not.Empty, prefix + "Terminal settings file path is empty!");
+					Assert.That(File.Exists(terminalInfos[i].FilePath), Is.True, prefix + "Terminal file doesn't exist!");
 
-					if (terminalFileAutoExpected[i])
-						Assert.That(terminal[i].SettingsRoot.AutoSaved, Is.True, prefix + "Terminal file not auto saved!");
+					if (terminalFilesAutoExpected[i])
+						Assert.That(terminalInfos[i].AutoSaved, Is.True, prefix + "Terminal file not auto saved!");
 					else
-						Assert.That(terminal[i].SettingsRoot.AutoSaved, Is.False, prefix + "Terminal file must not be auto saved!");
+						Assert.That(terminalInfos[i].AutoSaved, Is.False, prefix + "Terminal file must not be auto saved!");
 				}
 				else
 				{
-					Assert.That(File.Exists(terminal[i].SettingsFilePath), Is.False, prefix + "Terminal file exists unexpectantly!");
+					Assert.That(File.Exists(terminalInfos[i].FilePath), Is.False, prefix + "Terminal file exists unexpectantly!");
 				}
 			}
 
 			// Verify application settings:
 			if (workspaceFileExpected)
-				Assert.That(PathEx.Equals(ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath, workspace.SettingsFilePath), prefix + "Workspace file path not set!");
+				Assert.That(PathEx.Equals(ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath, workspaceInfo.FilePath), prefix + "Workspace file path not set!");
 			else
 				//// Note that the application settings may still contain a former workspace file path.
 				//// This is required to test certain use cases with normal and command line execution.
 				//// Therefore, do not check the local user settings, instead, check that the workspace file path is reset.
-				Assert.That(workspace.SettingsFilePath, Is.Null.Or.Empty, prefix + "Workspace file path not reset!");
+				Assert.That(workspaceInfo.FilePath, Is.Null.Or.Empty, prefix + "Workspace file path not reset!");
 
 			// Verify recent settings:
 			if (workspaceFileExpected && (!workspaceFileAutoExpected))
-				Assert.That(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(workspace.SettingsFilePath), Is.True, prefix + "Workspace file path doesn't exist in recent files!");
+				Assert.That(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(workspaceInfo.FilePath), Is.True, prefix + "Workspace file path doesn't exist in recent files!");
 			else
-				Assert.That(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(workspace.SettingsFilePath), Is.False, prefix + "Workspace file path must not be in recent files!");
+				Assert.That(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(workspaceInfo.FilePath), Is.False, prefix + "Workspace file path must not be in recent files!");
 
-			for (int i = 0; i < terminal.Length; i++)
+			for (int i = 0; i < terminalInfos.Length; i++)
 			{
-				if (terminalFileExpected[i] && (!terminalFileAutoExpected[i]))
-					Assert.That(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(terminal[i].SettingsFilePath), Is.True, prefix + "Terminal file path doesn't exist in recent files!");
+				if (terminalFilesExpected[i] && (!terminalFilesAutoExpected[i]))
+					Assert.That(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(terminalInfos[i].FilePath), Is.True, prefix + "Terminal file path doesn't exist in recent files!");
 				else
-					Assert.That(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(terminal[i].SettingsFilePath), Is.False, prefix + "Terminal file path must not be in recent files!");
+					Assert.That(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(terminalInfos[i].FilePath), Is.False, prefix + "Terminal file path must not be in recent files!");
 			}
 		}
 
