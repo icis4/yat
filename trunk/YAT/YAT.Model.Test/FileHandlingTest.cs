@@ -455,6 +455,7 @@ namespace YAT.Model.Test
 
 				VerifyFiles(uc, workspace, true, terminal1, true, false);
 				Assert.That(PathEx.Equals(terminal1.SettingsFilePath, this.normalTerminal1FilePath), uc + "Terminal 1 is not stored at user terminal 1 location!");
+				var normalTerminal1LastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
 
 				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.That(success, Is.True, uc + "Terminal 2 could not be created!");
@@ -481,6 +482,9 @@ namespace YAT.Model.Test
 					new bool[]     { true,      true,      true      }, // Exists.
 					new bool[]     { false,     true,      true      }  // Auto.
 					);
+
+				var normalTerminal1LastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
+				Assert.That(normalTerminal1LastWriteTimeAfterExit, Is.EqualTo(normalTerminal1LastWriteTimeInitially));
 			}
 			#endregion
 
@@ -516,6 +520,8 @@ namespace YAT.Model.Test
 					new bool[]     { false,     true,      true      }  // Auto.
 				);
 
+				var normalTerminal1LastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
+
 				string autoTerminal3FilePath = terminal3.SettingsFilePath;
 				success = terminal3.Close();
 				Assert.That(success, Is.True, uc + "Terminal 3 could not be closed!");
@@ -534,6 +540,9 @@ namespace YAT.Model.Test
 					new bool[]     { true,      true      }, // Exists.
 					new bool[]     { false,     true      }  // Auto.
 				);
+
+				var normalTerminal1LastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
+				Assert.That(normalTerminal1LastWriteTimeAfterExit, Is.EqualTo(normalTerminal1LastWriteTimeInitially));
 			}
 			#endregion
 
@@ -567,6 +576,9 @@ namespace YAT.Model.Test
 					new bool[]     { false,     true      }  // Auto.
 				);
 
+				var normalTerminal1LastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
+				var normalTerminal2LastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminal2FilePath);
+
 				success = workspace.Save();
 				Assert.That(success, Is.True, uc + "Workspace could not be saved!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
@@ -583,6 +595,11 @@ namespace YAT.Model.Test
 					new bool[]     { true,      true      }, // Exists.
 					new bool[]     { false,     true      }  // Auto.
 				);
+
+				var normalTerminal1LastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
+				Assert.That(normalTerminal1LastWriteTimeAfterExit, Is.EqualTo(normalTerminal1LastWriteTimeInitially));
+				var normalTerminal2LastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminal2FilePath);
+				Assert.That(normalTerminal2LastWriteTimeAfterExit, Is.EqualTo(normalTerminal2LastWriteTimeInitially));
 			}
 			#endregion
 
@@ -639,6 +656,9 @@ namespace YAT.Model.Test
 					new bool[]     { false,     false     }  // Auto.
 				);
 
+				var normalTerminal1LastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
+				var normalTerminal2LastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminal2FilePath);
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
@@ -652,6 +672,11 @@ namespace YAT.Model.Test
 					new bool[]     { true,      true      }, // Exists.
 					new bool[]     { false,     false     }  // Auto.
 				);
+
+				var normalTerminal1LastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
+				Assert.That(normalTerminal1LastWriteTimeAfterExit, Is.EqualTo(normalTerminal1LastWriteTimeInitially));
+				var normalTerminal2LastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminal2FilePath);
+				Assert.That(normalTerminal2LastWriteTimeAfterExit, Is.EqualTo(normalTerminal2LastWriteTimeInitially));
 			}
 			#endregion
 
@@ -745,6 +770,8 @@ namespace YAT.Model.Test
 					new bool[]     { false,     false,     false     }  // Auto.
 				);
 
+				var normalTerminal3LastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminal3FilePath);
+
 				success = terminal3.Close();
 				Assert.That(success, Is.True, uc + "Terminal 3 could not be closed!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
@@ -762,6 +789,9 @@ namespace YAT.Model.Test
 					new bool[]     { true,      true,      true      }, // Exists.
 					new bool[]     { false,     false,     false     }  // Auto.
 				);
+
+				var normalTerminal3LastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminal3FilePath);
+				Assert.That(normalTerminal3LastWriteTimeAfterExit, Is.EqualTo(normalTerminal3LastWriteTimeInitially));
 			}
 			#endregion
 		}
@@ -1239,6 +1269,11 @@ namespace YAT.Model.Test
 				Workspace workspace = main.Workspace;
 				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(0), step + "Workspace doesn't contain 0 terminals!");
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
+
+				VerifyFiles(step, workspace, true);
 			}
 			#endregion
 		}
@@ -1307,11 +1342,11 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				step = "Step 3: ";
-				int countBefore = this.main_MessageInputRequest_OK_counter;
-				main.MessageInputRequest += main_MessageInputRequest_OK;
-				success = (main.Start() == MainResult.ApplicationStartError);
+				int countBefore = this.main_MessageInputRequest_Cancel_counter;
+				main.MessageInputRequest += main_MessageInputRequest_Cancel;
+				success = (main.Start() == MainResult.ApplicationStartCancel);
 				Assert.That(success, Is.True, step + "Main could be started even though workspace file is missing!");
-				int countAfter = this.main_MessageInputRequest_OK_counter;
+				int countAfter = this.main_MessageInputRequest_Cancel_counter;
 				Assert.That(countAfter, Is.Not.EqualTo(countBefore), "Workspace 'MessageInputRequest' was not called!");
 			}
 			#endregion
@@ -1921,6 +1956,16 @@ namespace YAT.Model.Test
 		{
 			e.Result = System.Windows.Forms.DialogResult.OK;
 			this.main_MessageInputRequest_OK_counter++;
+		}
+
+		/// <remarks>Counter can be used to assert that handler indeed was called.</remarks>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private int main_MessageInputRequest_Cancel_counter; // = 0;
+
+		private void main_MessageInputRequest_Cancel(object sender, MessageInputEventArgs e)
+		{
+			e.Result = System.Windows.Forms.DialogResult.Cancel;
+			this.main_MessageInputRequest_Cancel_counter++;
 		}
 
 		/// <remarks>Counter can be used to assert that handler indeed was called.</remarks>

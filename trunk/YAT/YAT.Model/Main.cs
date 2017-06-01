@@ -1187,7 +1187,7 @@ namespace YAT.Model
 				// AFTER it fired the 'Exited' event and all subscribers of the event may still
 				// refer to a non-disposed object. This is especially important, as the order of
 				// the subscribers is not fixed, i.e. a subscriber may dispose of the main before
-				// View.Main receives the event callback!
+				// 'View.Main' receives the event callback!
 				Dispose();
 
 				cancel = false;

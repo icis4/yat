@@ -1722,9 +1722,10 @@ namespace YAT.Model
 			if (this.settingsRoot.AutoSaved && (!PathEx.Equals(absoluteFilePath, this.settingsHandler.SettingsFilePath)))
 				autoSaveFilePathToDelete = this.settingsHandler.SettingsFilePath;
 
-			// Set the new file path:
+			// Set the new file path...
 			this.settingsHandler.SettingsFilePath = absoluteFilePath;
 
+			// ...and save the terminal:
 			return (SaveToFile(false, autoSaveFilePathToDelete));
 		}
 
@@ -2011,8 +2012,8 @@ namespace YAT.Model
 				// The terminal shall dispose of itself to free all resources for sure. It must be
 				// done AFTER it fired the 'Closed' event and all subscribers of the event may still
 				// refer to a non-disposed object. This is especially important, as the order of the
-				// subscribers is not fixed, i.e. Model.Workspace may dispose of the terminal
-				// before View.Terminal receives the event callback!
+				// subscribers is not fixed, i.e. 'Model.Workspace' may dispose of the terminal
+				// before 'View.Terminal' receives the event callback!
 				Dispose();
 
 				return (true);

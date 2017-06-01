@@ -115,6 +115,7 @@ Important changes:
   'About' dialog (related to feature requests #152, #198, #288).
 - Option to disable all \!(...) keywords (former feature request #183) has been migrated to an
   option to disable *all* escape sequences, i.e. all "<...>" and "\..." sequences (feat. #302).
+- When nothing has changed in a terminal, its file (.yat) is no longer auto-saved (bug #365).
 - When evaluating relative paths of workspace/terminal/send/log files, the current directory is
   always taken into account (feature request #292).
 - Default file location has been refined from "<User>\Documents" to "<User>\Documents\YAT"
