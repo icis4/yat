@@ -22,10 +22,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
 using System.Threading;
-
-using MKY.Diagnostics;
 
 namespace MKY.Threading
 {
@@ -34,8 +31,21 @@ namespace MKY.Threading
 	/// </summary>
 	public static class MainThreadHelper
 	{
-		private const int InvalidThreadId = -1;
+		/// <summary>
+		/// The value that identifies an invalid thread identifier.
+		/// </summary>
+		public const int InvalidThreadId = -1;
+
 		private static int staticMainThreadId = InvalidThreadId;
+
+		/// <summary>
+		/// Returns the main thread ID if <see cref="SetCurrentThread"/> has been called before;
+		/// otherwise, <see cref="InvalidThreadId"/>.
+		/// </summary>
+		public static int MainThreadId
+		{
+			get { return (staticMainThreadId); }
+		}
 
 		/// <summary>
 		/// Sets the current thread as the main thread.
@@ -46,27 +56,27 @@ namespace MKY.Threading
 		}
 
 		/// <summary>
-		/// Returns whether the current thread is the main thread.
+		/// Returns whether the current thread is the main thread if <see cref="SetCurrentThread"/>
+		/// has been called before; otherwise, <c>false</c>.
 		/// </summary>
 		/// <value>
 		/// <c>true</c> if the current thread is the main thread; otherwise, <c>false</c>.
 		/// </value>
-		/// <exception cref="InvalidOperationException">
-		/// Thrown if <see cref="SetCurrentThread"/> has not been called before getting this property.
-		/// </exception>
 		public static bool IsMainThread
 		{
 			get
 			{
 				if (staticMainThreadId != InvalidThreadId)
-				{
 					return (Thread.CurrentThread.ManagedThreadId == staticMainThreadId);
-				}
 				else
-				{
-					DebugEx.WriteStack(typeof(MainThreadHelper), "'MainThreadHelper.SetCurrentThread()' should be called before 'MainThreadHelper.IsMainThread' can be evaluated.");
 					return (false);
-				}
+
+				// Do neither throw an exception nor output a debug message in case the ID is still
+				// 'InvalidThreadId', because of the following reasons:
+				//  > An application may not have any reason to use this helper, but other utilities
+				//    such as the 'EventHelper' may still access this property.
+				//  > An application may call 'SetCurrentThread()' in the "normal" case, but it
+				//    may not be called by unit or sub-system test code.
 			}
 		}
 	}
