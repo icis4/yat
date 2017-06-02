@@ -102,8 +102,10 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="ConnectionTest.cs" />
+    <Compile Include="FileHandling\Utilities.cs" />
+    <Compile Include="FileHandling\SimpleTest.cs" />
     <Compile Include="StartTest.cs" />
-    <Compile Include="FileHandlingTest.cs" />
+    <Compile Include="FileHandling\UseCaseTest.cs" />
     <Compile Include="StressTest.cs" />
     <Compile Include="Transmission\MTSicsDeviceTest.cs" />
     <Compile Include="Transmission\RepeatingTest.cs" />
@@ -222,6 +224,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
