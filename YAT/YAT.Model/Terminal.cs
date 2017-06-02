@@ -124,6 +124,7 @@ namespace YAT.Model
 		// Fields
 		//==========================================================================================
 
+		private bool doNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification;
 		private bool isDisposed;
 
 		/// <summary>
@@ -360,8 +361,11 @@ namespace YAT.Model
 					DisposeLog();
 
 					// ...and finally dispose of the settings:
-					DetachSettingsEventHandlers();
-					DisposeSettingsHandler();
+					if (!this.doNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification)
+					{
+						DetachSettingsEventHandlers();
+						DisposeSettingsHandler();
+					}
 				}
 
 				// Set state to disposed:
@@ -392,6 +396,28 @@ namespace YAT.Model
 		}
 
 #endif // DEBUG
+
+		/// <summary>
+		/// Workaround to the following issue:
+		/// 
+		/// A test (e.g. 'FileHandlingTest') needs to verify the settings files after calling
+		/// <see cref="Main.Exit()"/>. But at that moment, the settings have already been disposed
+		/// of and can no longer be accessed.
+		/// The first approach was to disable disposal in <see cref="Close()"/>. But that leads to
+		/// remaining resources, resulting in significant slow-down when exiting NUnit.
+		/// The second approach was to retrieve the required information *before* exiting, i.e.
+		/// calling <see cref="Main.Exit()"/>. But that doesn't work at all, since auto-save paths
+		/// are only evaluated *at* <see cref="Main.Exit()"/>.
+		/// 
+		/// This workaround is considered the best option to solve this issue.
+		/// </summary>
+		/// <remarks>
+		/// Note that it is not possible to mark a property with [Conditional("TEST")].
+		/// </remarks>
+		public bool DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification
+		{
+			set { this.doNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = value; }
+		}
 
 		/// <summary></summary>
 		public bool IsDisposed
