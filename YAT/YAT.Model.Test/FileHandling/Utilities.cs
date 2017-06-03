@@ -71,6 +71,92 @@ namespace YAT.Model.Test.FileHandling
 
 		#endregion
 
+		#region File Creation
+		//==========================================================================================
+		// File Creation
+		//==========================================================================================
+
+		/// <summary></summary>
+		internal static void InitialStart(string step, Main main, out Workspace workspace, out Terminal terminal)
+		{
+			InitialStart(step, main, null, out workspace, null, out terminal);
+		}
+
+		/// <summary></summary>
+		internal static void InitialStart(string step, Main main, string workspaceFilePath, out Workspace workspace, out Terminal terminal)
+		{
+			InitialStart(step, main, workspaceFilePath, out workspace, null, out terminal);
+		}
+
+		/// <summary></summary>
+		internal static void InitialStart(string step, Main main, out Workspace workspace, string terminalFilePath, out Terminal terminal)
+		{
+			InitialStart(step, main, null, out workspace, terminalFilePath, out terminal);
+		}
+
+		/// <summary></summary>
+		internal static void InitialStart(string step, Main main, string workspaceFilePath, out Workspace workspace, string terminalFilePath, out Terminal terminal)
+		{
+			bool success = false;
+
+			success = (main.Start() == MainResult.Success);
+			Assert.That(success, Is.True, step + "Main could not be started!");
+
+			workspace = main.Workspace;
+			Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
+			Assert.That(workspace.TerminalCount, Is.EqualTo(0), step + "Workspace doesn't contain 0 terminals!");
+			workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+
+			success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+			Assert.That(success, Is.True, step + "Terminal could not be created!");
+			terminal = workspace.ActiveTerminal;
+			Assert.That(terminal, Is.Not.Null, step + "Terminal could not be created!");
+			terminal.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+
+			bool terminalAutoSaved = true;
+			if (!string.IsNullOrEmpty(terminalFilePath))
+			{
+				success = terminal.SaveAs(terminalFilePath);
+				Assert.That(success, Is.True, step + "Terminal could not be saved as!");
+				terminalAutoSaved = false;
+			}
+
+			bool workspaceAutoSaved = true;
+			if (!string.IsNullOrEmpty(workspaceFilePath))
+			{
+				success = workspace.SaveAs(workspaceFilePath);
+				Assert.That(success, Is.True, step + "Workspace could not be saved as!");
+				workspaceAutoSaved = false;
+			}
+
+			VerifyFiles
+			(
+				step,
+				workspace, !string.IsNullOrEmpty(workspaceFilePath), workspaceAutoSaved,
+				terminal,  !string.IsNullOrEmpty(terminalFilePath),  terminalAutoSaved
+			);
+		}
+
+		/// <summary></summary>
+		internal static void SubsequentStart(string step, Main main, out Workspace workspace, out Terminal terminal)
+		{
+			bool success = false;
+
+			success = (main.Start() == MainResult.Success);
+			Assert.That(success, Is.True, step + "Main could not be started!");
+
+			workspace = main.Workspace;
+			Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
+			Assert.That(workspace.TerminalCount, Is.EqualTo(1), step + "Workspace doesn't contain 1 terminal!");
+			workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+
+			terminal = workspace.ActiveTerminal;
+			Assert.That(terminal, Is.Not.Null, step + "Terminal not opened from file!");
+			terminal.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+		}
+
+		#endregion
+
 		#region File Verification
 		//==========================================================================================
 		// File Verification

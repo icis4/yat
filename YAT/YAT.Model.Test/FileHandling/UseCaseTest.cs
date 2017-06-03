@@ -177,7 +177,6 @@ namespace YAT.Model.Test.FileHandling
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.That(success, Is.True, uc + "Terminal could not be created!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
 
 				Terminal terminal = workspace.ActiveTerminal;
 				Assert.That(terminal, Is.Not.Null, uc + "Terminal could not be created!");
@@ -473,9 +472,9 @@ namespace YAT.Model.Test.FileHandling
 
 				string autoWorkspaceFilePath = workspace.SettingsFilePath;
 				string autoTerminal2FilePath = terminal2.SettingsFilePath;
-				terminal2.SaveAsFileDialogRequest += terminal2_SaveAsFileDialogRequest_SaveAs;
+				terminal2.SaveAsFileDialogRequest += terminal2_SaveAsFileDialogRequest_SaveAsOK;
 				success = workspace.SaveAs(this.normalWorkspaceFilePath);
-				terminal2.SaveAsFileDialogRequest -= terminal2_SaveAsFileDialogRequest_SaveAs;
+				terminal2.SaveAsFileDialogRequest -= terminal2_SaveAsFileDialogRequest_SaveAsOK;
 				Assert.That(success, Is.True, uc + "Workspace could not be saved as!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
 				Assert.That(File.Exists(autoWorkspaceFilePath), Is.False, uc + "Auto workspace file not deleted!");
@@ -921,10 +920,12 @@ namespace YAT.Model.Test.FileHandling
 
 		#endregion
 
+		#endregion
+
 		#region Event Handlers
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Event Handlers
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <remarks>Counter can be used to assert that handler indeed was called.</remarks>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
@@ -956,16 +957,11 @@ namespace YAT.Model.Test.FileHandling
 			this.workspace_MessageInputRequest_No_counter++;
 		}
 
-		private void terminal2_SaveAsFileDialogRequest_SaveAs(object sender, DialogEventArgs e)
+		private void terminal2_SaveAsFileDialogRequest_SaveAsOK(object sender, DialogEventArgs e)
 		{
 			Terminal terminal = (sender as Terminal);
 			Assert.That(terminal.SaveAs(this.normalTerminal2FilePath), Is.True, "Terminal 2 could not be saved as!");
 			e.Result = System.Windows.Forms.DialogResult.OK;
-		}
-
-		private void terminal2_SaveAsFileDialogRequest_No(object sender, DialogEventArgs e)
-		{
-			e.Result = System.Windows.Forms.DialogResult.No;
 		}
 
 		private void terminal3_SaveAsFileDialogRequest_SaveAsOK(object sender, DialogEventArgs e)
@@ -975,7 +971,10 @@ namespace YAT.Model.Test.FileHandling
 			e.Result = System.Windows.Forms.DialogResult.OK;
 		}
 
-		#endregion
+		private void terminal_SaveAsFileDialogRequest_No(object sender, DialogEventArgs e)
+		{
+			e.Result = System.Windows.Forms.DialogResult.No;
+		}
 
 		#endregion
 	}

@@ -229,6 +229,25 @@ namespace MKY.Settings
 			get { return (this.successfullyLoaded); }
 		}
 
+		/// <summary>
+		/// Returns whether settings are feasible to be saved to the settings file.
+		/// </summary>
+		public virtual bool SaveIsFeasible
+		{
+			get
+			{
+				// Save is not feasible for files without valid file path:
+				if (!FilePathIsValid)
+					return (false);
+
+				// Save is not feasible for write-protected files:
+				if (!FileIsWritable)
+					return (false);
+
+				return (true);
+			}
+		}
+
 		#endregion
 
 		#region Methods

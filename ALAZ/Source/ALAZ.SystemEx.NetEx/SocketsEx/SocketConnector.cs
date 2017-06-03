@@ -38,10 +38,10 @@
  */
 
 using System;
-using System.Threading;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
+using System.Threading;
 
 namespace ALAZ.SystemEx.NetEx.SocketsEx
 {
@@ -251,8 +251,19 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                         if (connection != null)
                         {
 
-                            Host.DisposeConnection(connection);
-                            Host.RemoveSocketConnection(connection);
+                            // ----- \remind BEGIN -----
+                            // 2017-06-03 / Matthias Klaey
+                            // Handling exceptions.
+
+                            try
+                            {
+                                Host.DisposeConnection(connection);
+                                Host.RemoveSocketConnection(connection);
+                            }
+                            catch (ObjectDisposedException exInner)
+                            {
+                                DebugException(exInner);
+                            }
 
                             connection = null;
 
@@ -384,6 +395,18 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
         #endregion
 
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		[Conditional("DEBUG_EXCEPTIONS")]
+		private void DebugException(Exception ex)
+		{
+			MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes. It indicates an issue in ALAZ.");
+		}
+
+		#endregion
     }
 
 }

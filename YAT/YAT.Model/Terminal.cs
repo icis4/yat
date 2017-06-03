@@ -1560,23 +1560,10 @@ namespace YAT.Model
 		/// </summary>
 		public virtual bool Save()
 		{
-			return (Save(true, true));
-		}
+			// AssertNotDisposed() is called by 'Save(...)' below.
 
-		/// <summary>
-		/// Saves terminal to file, prompts for file if it doesn't exist yet.
-		/// </summary>
-		/// <param name="autoSaveIsAllowed">
-		/// Auto save means that the settings have been saved at an automatically chosen location,
-		/// without telling the user anything about it.
-		/// </param>
-		/// <param name="userInteractionIsAllowed">Indicates whether user interaction is allowed.</param>
-		public virtual bool Save(bool autoSaveIsAllowed, bool userInteractionIsAllowed)
-		{
-			AssertNotDisposed();
-
-			return (SaveDependentOnState(autoSaveIsAllowed, userInteractionIsAllowed));
-		}
+			return (SaveConsiderately(true, true, true)); // Save even if not changed since saving
+		}                                                 // all terminals was explicitly requested.
 
 		/// <summary>
 		/// This method implements the logic that is needed when saving, opposed to the method
@@ -1587,151 +1574,163 @@ namespace YAT.Model
 		/// without telling the user anything about it.
 		/// </param>
 		/// <param name="userInteractionIsAllowed">Indicates whether user interaction is allowed.</param>
-		private bool SaveDependentOnState(bool autoSaveIsAllowed, bool userInteractionIsAllowed)
+		/// <param name="saveEvenIfNotChanged">Indicates whether save must happen even if not changed.</param>
+		internal virtual bool SaveConsiderately(bool autoSaveIsAllowed, bool userInteractionIsAllowed, bool saveEvenIfNotChanged)
 		{
-			// Evaluate auto save.
-			bool isAutoSave;
-			if (this.settingsHandler.SettingsFilePathIsValid && !this.settingsRoot.AutoSaved)
-				isAutoSave = false;
-			else
-				isAutoSave = autoSaveIsAllowed;
+			AssertNotDisposed();
+
+			autoSaveIsAllowed = EvaluateWhetherAutoSaveIsAllowedIndeed(autoSaveIsAllowed);
 
 			// -------------------------------------------------------------------------------------
-			// Skip auto save if there is no reason to save, in order to increase speed.
+			// Skip save if there is no reason to save:
 			// -------------------------------------------------------------------------------------
 
-			if (isAutoSave && this.settingsHandler.SettingsFileIsUpToDate && !this.settingsRoot.HaveChanged)
-			{
-				// Event must be fired anyway to ensure that dependent objects are updated.
-				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, isAutoSave));
-				OnTimedStatusTextRequest("Terminal has no changes to be saved.");
+			if (ThereIsNoReasonToSave(autoSaveIsAllowed, saveEvenIfNotChanged))
 				return (true);
-			}
 
 			// -------------------------------------------------------------------------------------
-			// Create auto save file path or request manual/normal file path if necessary.
+			// Create auto save file path or request manual/normal file path if necessary:
 			// -------------------------------------------------------------------------------------
 
 			if (!this.settingsHandler.SettingsFilePathIsValid)
 			{
-				if (isAutoSave)
-				{
-					StringBuilder autoSaveFilePath = new StringBuilder();
-
-					autoSaveFilePath.Append(Application.Settings.GeneralSettings.AutoSaveRoot);
-					autoSaveFilePath.Append(Path.DirectorySeparatorChar);
-					autoSaveFilePath.Append(Application.Settings.GeneralSettings.AutoSaveTerminalFileNamePrefix);
-					autoSaveFilePath.Append(Guid.ToString());
-					autoSaveFilePath.Append(ExtensionHelper.TerminalFile);
-
-					this.settingsHandler.SettingsFilePath = autoSaveFilePath.ToString(); // Always an absolute file path.
+				if (autoSaveIsAllowed) {
+					this.settingsHandler.SettingsFilePath = ComposeAbsoluteAutoSaveFilePath();
 				}
-				else if (userInteractionIsAllowed)
-				{
-					// This Save As... request will request the file path from the user and then call
-					// the 'SaveAs()' method below.
-					switch (OnSaveAsFileDialogRequest())
-					{
-						case DialogResult.OK:
-						case DialogResult.Yes:
-							return (true);
-
-						case DialogResult.No:
-							OnTimedStatusTextRequest("Terminal not saved!");
-							return (true);
-
-						default:
-							return (false);
-					}
+				else if (userInteractionIsAllowed) {
+					return (RequestNormalSaveAsFromUser());
 				}
-				else
-				{
-					// Let save fail if the file path is invalid and no user interaction is allowed.
+				else {
+					return (false); // Let save fail if the file path is invalid and no user interaction is allowed
+				}
+			}
+			else if (this.settingsRoot.AutoSaved && !autoSaveIsAllowed)
+			{
+				// Ensure that former auto files are 'Saved As' if auto save is no longer allowed:
+				if (userInteractionIsAllowed) {
+					return (RequestNormalSaveAsFromUser());
+				}
+				else {
 					return (false);
 				}
 			}
-			else // SettingsFilePathIsValid
+
+			// -------------------------------------------------------------------------------------
+			// Handle write-protected or non-existant file:
+			// -------------------------------------------------------------------------------------
+
+			if (!SettingsFileIsWritable || SettingsFileNoLongerExists)
 			{
-				if (userInteractionIsAllowed)
-				{
-					// Ensure that existing former auto files are 'Saved As' if this is no auto save.
-					if (this.settingsRoot.AutoSaved && !isAutoSave)
-					{
-						// This Save As... request will request the file path from the user and then call
-						// the 'SaveAs()' method below.
-						switch (OnSaveAsFileDialogRequest())
-						{
-							case DialogResult.OK:
-							case DialogResult.Yes:
-								return (true);
-
-							case DialogResult.No:
-								OnTimedStatusTextRequest("Terminal not saved!");
-								return (true);
-
-							default:
-								return (false);
-						}
-					}
-
-					// Ensure that normal files which are write-protected or no longer exist are 'Saved As'.
-					if (!SettingsFileIsWritable || SettingsFileNoLongerExists)
-					{
-						string reason;
-						if (!SettingsFileIsWritable)
-							reason = "The file is write-protected.";
-						else
-							reason = "The file no longer exists.";
-
-						string message =
-							"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
-							reason + " Would you like to save the file at another location or cancel?";
-
-						var dr = OnMessageInputRequest
-						(
-							message,
-							"File Error",
-							MessageBoxButtons.YesNoCancel,
-							MessageBoxIcon.Question
-						);
-
-						switch (dr)
-						{
-							case DialogResult.Yes:
-								switch (OnSaveAsFileDialogRequest())
-								{
-									case DialogResult.OK:
-									case DialogResult.Yes:
-										return (true);
-
-									case DialogResult.No:
-										OnTimedStatusTextRequest("Terminal not saved!");
-										return (true);
-
-									default:
-										return (false);
-								}
-
-							case DialogResult.No:
-								OnTimedStatusTextRequest("Terminal not saved!");
-								return (true);
-
-							default:
-								OnTimedStatusTextRequest("Cancelled!");
-								return (false);
-						}
-					}
+				if (!this.settingsRoot.ExplicitHaveChanged) {
+					return (true); // Skip save of implicit settings as it is currently not feasible.
+				}
+				else if (userInteractionIsAllowed) {
+					return (RequestRestrictedSaveAsFromUser());
+				}
+				else {
+					return (false); // Let save fail if file is restricted.
 				}
 			}
 
 			// -------------------------------------------------------------------------------------
-			// Save if allowed so.
+			// Save is feasible:
 			// -------------------------------------------------------------------------------------
 
-			if (this.settingsHandler.SettingsFileIsWritable)
-				return (SaveToFile(isAutoSave, null));
+			return (SaveToFile(autoSaveIsAllowed, null));
+		}
+
+		/// <summary></summary>
+		protected virtual bool EvaluateWhetherAutoSaveIsAllowedIndeed(bool autoSaveIsAllowed)
+		{
+			// Do not auto save if file already exists but isn't auto saved:
+			if (autoSaveIsAllowed && this.settingsHandler.SettingsFilePathIsValid && !this.settingsRoot.AutoSaved)
+				return (false);
+
+			return (autoSaveIsAllowed);
+		}
+
+		/// <summary></summary>
+		protected virtual bool ThereIsNoReasonToSave(bool autoSaveIsAllowed, bool saveEvenIfNotChanged)
+		{
+			if (saveEvenIfNotChanged)
+				return (false);
+
+			// Ensure that former auto files are 'Saved As' if auto save is no longer allowed:
+			if (this.settingsRoot.AutoSaved && !autoSaveIsAllowed)
+				return (false);
+
+			// No need to save if settings are up to date:
+			return (this.settingsHandler.SettingsFileIsUpToDate && !this.settingsRoot.HaveChanged);
+		}
+
+		/// <summary></summary>
+		protected virtual string ComposeAbsoluteAutoSaveFilePath()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append(Application.Settings.GeneralSettings.AutoSaveRoot);
+			sb.Append(Path.DirectorySeparatorChar);
+			sb.Append(Application.Settings.GeneralSettings.AutoSaveTerminalFileNamePrefix);
+			sb.Append(Guid.ToString());
+			sb.Append(ExtensionHelper.TerminalFile);
+
+			return (sb.ToString());
+		}
+
+		/// <summary></summary>
+		protected virtual bool RequestNormalSaveAsFromUser()
+		{
+			switch (OnSaveAsFileDialogRequest())
+			{
+				case DialogResult.OK:
+				case DialogResult.Yes:
+					return (true);
+
+				case DialogResult.No:
+					OnTimedStatusTextRequest("Terminal not saved!");
+					return (true);
+
+				default:
+					return (false);
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual bool RequestRestrictedSaveAsFromUser()
+		{
+			string reason;
+			if (!SettingsFileIsWritable)
+				reason = "The file is write-protected.";
+			else if (SettingsFileNoLongerExists)
+				reason = "The file no longer exists.";
 			else
-				return (false); // Let save fail if file shall not be written.
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'SaveAs'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+			string message =
+				"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
+				reason + " Would you like to save the file at another location or cancel?";
+
+			var dr = OnMessageInputRequest
+			(
+				message,
+				"File Error",
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Question
+			);
+
+			switch (dr)
+			{
+				case DialogResult.Yes:
+					return (RequestNormalSaveAsFromUser());
+
+				case DialogResult.No:
+					OnTimedStatusTextRequest("Terminal not saved!");
+					return (true);
+
+				default:
+					OnTimedStatusTextRequest("Cancelled!");
+					return (false);
+			}
 		}
 
 		/// <summary>
@@ -1764,7 +1763,7 @@ namespace YAT.Model
 		/// be stored in the new location.
 		/// </param>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private bool SaveToFile(bool isAutoSave, string autoSaveFilePathToDelete)
+		protected virtual bool SaveToFile(bool isAutoSave, string autoSaveFilePathToDelete)
 		{
 			OnFixedStatusTextRequest("Saving terminal...");
 
@@ -1877,7 +1876,7 @@ namespace YAT.Model
 				formerExistingAutoFilePath = this.settingsHandler.SettingsFilePath;
 
 			// -------------------------------------------------------------------------------------
-			// Evaluate save requirements.
+			// Evaluate save requirements:
 			// -------------------------------------------------------------------------------------
 
 			bool success = false;
@@ -1942,14 +1941,14 @@ namespace YAT.Model
 			}
 
 			// -------------------------------------------------------------------------------------
-			// Try auto save if allowed.
+			// Try auto save if allowed:
 			// -------------------------------------------------------------------------------------
 
 			if (!success && doSave)
-				success = SaveDependentOnState(autoSaveIsAllowed, false); // Try auto save, i.e. no user interaction.
+				success = SaveConsiderately(autoSaveIsAllowed, false, false); // Try auto save, i.e. no user interaction.
 
 			// -------------------------------------------------------------------------------------
-			// If not successfully saved so far, evaluate next step according to rules above.
+			// If not successfully saved so far, evaluate next step according to rules above:
 			// -------------------------------------------------------------------------------------
 
 			// Normal file (w3, w4, t3, t4):
@@ -1964,9 +1963,9 @@ namespace YAT.Model
 				);
 
 				switch (dr)
-				{                                    // Do normal/manual save.
-					case DialogResult.Yes: success = SaveDependentOnState(true, true); break;
-					case DialogResult.No:  success = true;                             break;
+				{
+					case DialogResult.Yes: success = SaveConsiderately(true, true, true); break;
+					case DialogResult.No:  success = true;                                break;
 
 					default:
 						success = false; break; // Also covers 'DialogResult.Cancel'.
@@ -2011,7 +2010,7 @@ namespace YAT.Model
 			}
 
 			// -------------------------------------------------------------------------------------
-			// Stop the underlying items.
+			// Stop the underlying items:
 			// -------------------------------------------------------------------------------------
 
 			if (success && this.terminal.IsStarted)
@@ -2025,7 +2024,7 @@ namespace YAT.Model
 			}
 
 			// -------------------------------------------------------------------------------------
-			// Finally, cleanup and signal state.
+			// Finally, cleanup and signal state:
 			// -------------------------------------------------------------------------------------
 
 			if (success)
@@ -4490,7 +4489,10 @@ namespace YAT.Model
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Requests to show the 'SaveAs' dialog to let the user chose a file path.
+		/// If confirmed, the file will be saved to that path.
+		/// </summary>
 		protected virtual DialogResult OnSaveAsFileDialogRequest()
 		{
 			if (this.startArgs.Interactive)
