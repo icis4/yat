@@ -44,6 +44,7 @@ using YAT.Settings.Application;
 namespace YAT.Model.Test.FileHandling
 {
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1123:DoNotPlaceRegionsWithinElements", Justification = "Group use cases into regions.")]
 	[TestFixture]
 	public class SimpleTest
 	{
@@ -57,6 +58,7 @@ namespace YAT.Model.Test.FileHandling
 		private string workspaceFilePathToRestore;
 
 		private readonly string normalWorkspaceFilePath = Temp.MakeTempFilePath(typeof(SimpleTest), "NormalWorkspace", ExtensionHelper.WorkspaceFile);
+		private readonly string normalTerminalFilePath  = Temp.MakeTempFilePath(typeof(SimpleTest), "NormalTerminal",  ExtensionHelper.TerminalFile);
 		private readonly string normalTerminal1FilePath = Temp.MakeTempFilePath(typeof(SimpleTest), "NormalTerminal1", ExtensionHelper.TerminalFile);
 		private readonly string normalTerminal2FilePath = Temp.MakeTempFilePath(typeof(SimpleTest), "NormalTerminal2", ExtensionHelper.TerminalFile);
 		private readonly string normalTerminal3FilePath = Temp.MakeTempFilePath(typeof(SimpleTest), "NormalTerminal3", ExtensionHelper.TerminalFile);
@@ -275,6 +277,187 @@ namespace YAT.Model.Test.FileHandling
 
 		#endregion
 
+		#region Tests > TestAutoSave
+		//------------------------------------------------------------------------------------------
+		// Tests > TestAutoSave
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestAutoSaveNoChanges()
+		{
+			bool success = false;
+			string step = "";
+			DateTime terminalLastWriteTimeInitially;
+
+			#region Preparation
+			// - Initial start
+			// - Create new terminal
+			using (Main main = new Main())
+			{
+				Workspace workspace;
+				Terminal terminal;
+				Utilities.InitialStart("Preparation: ", main, out workspace, this.normalTerminalFilePath, out terminal);
+
+				terminalLastWriteTimeInitially = File.GetLastWriteTimeUtc(terminal.SettingsFilePath);
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
+
+				Utilities.VerifyFiles(step, workspace, true, true, terminal, true, false);
+
+				var terminalLastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminalFilePath);
+				Assert.That(terminalLastWriteTimeAfterExit, Is.EqualTo(terminalLastWriteTimeInitially));
+			}
+			#endregion
+
+			#region Step 1
+			// - Subsequent start
+			// - No changes on terminal settings
+			using (Main main = new Main())
+			{
+				Workspace workspace;
+				Terminal terminal;
+				Utilities.SubsequentStart("Step 1: ", main, out workspace, out terminal);
+
+				Utilities.VerifyFiles(step, workspace, true, true, terminal, true, false);
+
+				var normalTerminalLastWriteTimeAfterStart = File.GetLastWriteTimeUtc(this.normalTerminalFilePath);
+				Assert.That(normalTerminalLastWriteTimeAfterStart, Is.EqualTo(terminalLastWriteTimeInitially));
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
+
+				Utilities.VerifyFiles(step, workspace, true, true, terminal, true, false);
+
+				var terminalLastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminalFilePath);
+				Assert.That(terminalLastWriteTimeAfterExit, Is.EqualTo(terminalLastWriteTimeInitially));
+			}
+			#endregion
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestAutoSaveImplicitChange()
+		{
+			bool success = false;
+			string step = "";
+			DateTime terminalLastWriteTimeInitially;
+
+			#region Preparation
+			// - Initial start
+			// - Create new terminal
+			using (Main main = new Main())
+			{
+				Workspace workspace;
+				Terminal terminal;
+				Utilities.InitialStart("Preparation: ", main, out workspace, this.normalTerminalFilePath, out terminal);
+
+				terminalLastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminalFilePath);
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
+
+				Utilities.VerifyFiles(step, workspace, true, true, terminal, true, false);
+
+				var terminalLastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminalFilePath);
+				Assert.That(terminalLastWriteTimeAfterExit, Is.EqualTo(terminalLastWriteTimeInitially));
+			}
+			#endregion
+
+			#region Step 1
+			// - Subsequent start
+			// - Implicit change on terminal settings
+			using (Main main = new Main())
+			{
+				Workspace workspace;
+				Terminal terminal;
+				Utilities.SubsequentStart("Step 1: ", main, out workspace, out terminal);
+
+				Utilities.VerifyFiles(step, workspace, true, true, terminal, true, false);
+
+				var normalTerminalLastWriteTimeAfterStart = File.GetLastWriteTimeUtc(this.normalTerminalFilePath);
+				Assert.That(normalTerminalLastWriteTimeAfterStart, Is.EqualTo(terminalLastWriteTimeInitially));
+
+				terminal.SettingsRoot.SendText.Command = new Types.Command(Guid.NewGuid().ToString()); // Implicit change.
+				Assert.That(terminal.SettingsRoot.ExplicitHaveChanged, Is.False, step + "Settings have explicitly changed!");
+
+				var terminalLastWriteTimeAfterChange = File.GetLastWriteTimeUtc(this.normalTerminalFilePath);
+				Assert.That(terminalLastWriteTimeAfterChange, Is.EqualTo(terminalLastWriteTimeInitially));
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
+
+				Utilities.VerifyFiles(step, workspace, true, true, terminal, true, false);
+
+				var terminalLastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminalFilePath);
+				Assert.That(terminalLastWriteTimeAfterExit, Is.Not.EqualTo(terminalLastWriteTimeInitially));
+			}
+			#endregion
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestAutoSaveExplicitChange()
+		{
+			bool success = false;
+			string step = "";
+			DateTime terminalLastWriteTimeInitially;
+
+			#region Preparation
+			// - Initial start
+			// - Create new terminal
+			using (Main main = new Main())
+			{
+				Workspace workspace;
+				Terminal terminal;
+				Utilities.InitialStart("Preparation: ", main, out workspace, this.normalTerminalFilePath, out terminal);
+
+				terminalLastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminalFilePath);
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
+
+				Utilities.VerifyFiles(step, workspace, true, true, terminal, true, false);
+
+				var terminalLastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminalFilePath);
+				Assert.That(terminalLastWriteTimeAfterExit, Is.EqualTo(terminalLastWriteTimeInitially));
+			}
+			#endregion
+
+			#region Step 1
+			// - Subsequent start
+			// - Explicit change on terminal settings
+			using (Main main = new Main())
+			{
+				Workspace workspace;
+				Terminal terminal;
+				Utilities.SubsequentStart("Step 1: ", main, out workspace, out terminal);
+
+				Utilities.VerifyFiles(step, workspace, true, true, terminal, true, false);
+
+				var normalTerminalLastWriteTimeAfterStart = File.GetLastWriteTimeUtc(this.normalTerminalFilePath);
+				Assert.That(normalTerminalLastWriteTimeAfterStart, Is.EqualTo(terminalLastWriteTimeInitially));
+
+				terminal.SettingsRoot.UserName = Guid.NewGuid().ToString(); // Explicit change.
+				Assert.That(terminal.SettingsRoot.ExplicitHaveChanged, Is.True, step + "Settings have not explicitly changed!");
+
+				var terminalLastWriteTimeAfterChange = File.GetLastWriteTimeUtc(this.normalTerminalFilePath);
+				Assert.That(terminalLastWriteTimeAfterChange, Is.EqualTo(terminalLastWriteTimeInitially));
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
+
+				Utilities.VerifyFiles(step, workspace, true, true, terminal, true, false);
+
+				var terminalLastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminalFilePath);
+				Assert.That(terminalLastWriteTimeAfterExit, Is.Not.EqualTo(terminalLastWriteTimeInitially));
+			}
+			#endregion
+		}
+
+		#endregion
+
 		#region Tests > TestAutoDeleteOnClose
 		//------------------------------------------------------------------------------------------
 		// Tests > TestAutoDeleteOnClose
@@ -308,7 +491,7 @@ namespace YAT.Model.Test.FileHandling
 				Utilities.VerifyFiles(workspace, true, terminal, true);
 			}
 
-			// Consecutive start with auto delete on close of workspace:
+			// Subsequent start with auto delete on close of workspace:
 
 			using (main = new Main())
 			{
@@ -375,7 +558,6 @@ namespace YAT.Model.Test.FileHandling
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.That(success, Is.True, step + "Terminal could not be created!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(1), step + "Workspace doesn't contain 1 terminal!");
 
 				Terminal terminal = workspace.ActiveTerminal;
 				Assert.That(terminal, Is.Not.Null, step + "Terminal could not be created!");
@@ -434,7 +616,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(terminal, Is.Not.Null, step + "Terminal 1 could not be created!");
 				terminal.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				success = terminal.SaveAs(this.normalTerminal1FilePath);
+				success = terminal.SaveAs(this.normalTerminalFilePath);
 				Assert.That(success, Is.True, step + "Terminal 1 could not be saved as!");
 
 				Utilities.VerifyFiles(step, workspace, false, terminal, true, false);
@@ -518,10 +700,8 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(terminal, Is.Not.Null, step + "Terminal could not be created!");
 				terminal.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				success = terminal.SaveAs(this.normalTerminal1FilePath);
+				success = terminal.SaveAs(this.normalTerminalFilePath);
 				Assert.That(success, Is.True, step + "Terminal could not be saved as!");
-
-				Assert.That(workspace.TerminalCount, Is.EqualTo(1), step + "Workspace doesn't contain 1 terminal!");
 
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
@@ -534,7 +714,7 @@ namespace YAT.Model.Test.FileHandling
 			// - Delete the terminal file
 			{
 				step = "Step 2: ";
-				File.Delete(this.normalTerminal1FilePath);
+				File.Delete(this.normalTerminalFilePath);
 			}
 			#endregion
 
@@ -605,12 +785,11 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(terminal, Is.Not.Null, step + "Terminal could not be created!");
 				terminal.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				success = terminal.SaveAs(this.normalTerminal1FilePath);
+				success = terminal.SaveAs(this.normalTerminalFilePath);
 				Assert.That(success, Is.True, step + "Terminal could not be saved as!");
 
 				success = workspace.SaveAs(this.normalWorkspaceFilePath);
 				Assert.That(success, Is.True, step + "Workspace could not be saved as!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(1), step + "Workspace doesn't contain 1 terminal!");
 
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
@@ -663,48 +842,28 @@ namespace YAT.Model.Test.FileHandling
 			DateTime workspaceTS;
 			DateTime terminalTS;
 
-			#region Step 1
+			#region Preparation
 			// - Initial start
 			// - Create new terminal
 			// - Save terminal as
 			// - Save workspace as
 			using (Main main = new Main())
 			{
-				step = "Step 1: ";
-				success = (main.Start() == MainResult.Success);
-				Assert.That(success, Is.True, step + "Main could not be started!");
-
-				Workspace workspace = main.Workspace;
-				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(0), step + "Workspace doesn't contain 0 terminals!");
-				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
-
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
-				Assert.That(success, Is.True, step + "Terminal could not be created!");
-				Terminal terminal = workspace.ActiveTerminal;
-				Assert.That(terminal, Is.Not.Null, step + "Terminal could not be created!");
-				terminal.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
-
-				success = terminal.SaveAs(this.normalTerminal1FilePath);
-				Assert.That(success, Is.True, step + "Terminal could not be saved as!");
-
-				success = workspace.SaveAs(this.normalWorkspaceFilePath);
-				Assert.That(success, Is.True, step + "Workspace could not be saved as!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(1), step + "Workspace doesn't contain 1 terminal!");
-
-				Utilities.VerifyFiles(step, workspace, true, false, terminal, true, false);
+				Workspace workspace;
+				Terminal terminal1;
+				Utilities.InitialStart("Preparation: ", main, this.normalWorkspaceFilePath, out workspace, this.normalTerminal1FilePath, out terminal1);
 
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
-				Utilities.VerifyFiles(step, workspace, true, false, terminal, true, false);
+				Utilities.VerifyFiles(step, workspace, true, false, terminal1, true, false);
 			}
 			#endregion
 
-			#region Step 2
+			#region Step 1
 			// - Make files write-protected
 			{
-				step = "Step 2: ";
+				step = "Step 1: ";
 				{
 					string filePath = this.normalWorkspaceFilePath;
 					File.SetAttributes(filePath, FileAttributes.ReadOnly);
@@ -714,82 +873,94 @@ namespace YAT.Model.Test.FileHandling
 				{
 					string filePath = this.normalTerminal1FilePath;
 					File.SetAttributes(filePath, FileAttributes.ReadOnly);
-					Assert.That(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) != 0), Is.True, "Terminal file is not write-protected!");
+					Assert.That(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) != 0), Is.True, "Terminal 1 file is not write-protected!");
 					terminalTS = File.GetLastWriteTimeUtc(filePath);
 				}
 			}
 			#endregion
 
-			#region Step 3
+			#region Step 2
 			// - Subsequent start on write-protected files
-			//   => Implicit changes to terminal must not be written
+			//   => Implicit change to terminal must not be written
 			using (Main main = new Main())
 			{
-				step = "Step 3: ";
-				success = (main.Start() == MainResult.Success);
-				Assert.That(success, Is.True, step + "Main could not be started!");
+				Workspace workspace;
+				Terminal terminal1;
+				Utilities.SubsequentStart("Step 2: ", main, out workspace, out terminal1);
 
-				Workspace workspace = main.Workspace;
-				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(1), step + "Workspace doesn't contain 1 terminal!");
-				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				Utilities.VerifyFiles(step, workspace, true, false, terminal1, true, false);
 
-				Terminal terminal = workspace.ActiveTerminal;
-				Assert.That(terminal, Is.Not.Null, step + "Terminal not opened from file!");
-				terminal.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
-
-				Utilities.VerifyFiles(step, workspace, true, false, terminal, true, false);
-
-				terminal.StopIO();
-				Assert.That(terminal.IsStarted, Is.False, step + "Terminal not stopped!");
+				terminal1.SettingsRoot.SendText.Command = new Types.Command(Guid.NewGuid().ToString()); // Implicit change.
+				Assert.That(terminal1.SettingsRoot.ExplicitHaveChanged, Is.False, step + "Settings have explicitly changed!");
 
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
-				Utilities.VerifyFiles(step, workspace, true, false, terminal, true, false);
+				Utilities.VerifyFiles(step, workspace, true, false, terminal1, true, false);
 
 				string filePath = this.normalTerminal1FilePath;
-				Assert.That(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) != 0), Is.True, "Terminal file is not write-protected!");
-				Assert.That((terminalTS == File.GetLastWriteTimeUtc(filePath)), Is.True, "Terminal file time stamp mismatches!");
+				Assert.That(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) != 0), Is.True, "Terminal 1 file is not write-protected!");
+				Assert.That((terminalTS == File.GetLastWriteTimeUtc(filePath)), Is.True, "Terminal 1 file time stamp mismatches!");
+			}
+			#endregion
+
+			#region Step 3
+			// - Subsequent start on write-protected files
+			//   => Explicit change to terminal must not be written
+			using (Main main = new Main())
+			{
+				Workspace workspace;
+				Terminal terminal1;
+				Utilities.SubsequentStart("Step 3: ", main, out workspace, out terminal1);
+
+				Utilities.VerifyFiles(step, workspace, true, false, terminal1, true, false);
+
+				terminal1.SettingsRoot.UserName = Guid.NewGuid().ToString(); // Explicit change.
+				Assert.That(terminal1.SettingsRoot.ExplicitHaveChanged, Is.True, step + "Settings have not explicitly changed!");
+
+				int countBefore = this.terminal_MessageInputRequest_No_counter;
+				terminal1.MessageInputRequest += terminal_MessageInputRequest_No; // Ignore the "remaining event sink" message that will be output during Exit() below.
+				success = (main.Exit() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
+				int countAfter = this.terminal_MessageInputRequest_No_counter;
+				Assert.That(countAfter, Is.Not.EqualTo(countBefore), "Terminal 1 'MessageInputRequest' was not called!");
+
+				Utilities.VerifyFiles(step, workspace, true, false, terminal1, true, false);
+
+				string filePath = this.normalTerminal1FilePath;
+				Assert.That(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) != 0), Is.True, "Terminal 1 file is not write-protected!");
+				Assert.That((terminalTS == File.GetLastWriteTimeUtc(filePath)), Is.True, "Terminal 1 file time stamp mismatches!");
 			}
 			#endregion
 
 			#region Step 4
 			// - Subsequent start on write-protected files
-			//   => Explicit changes to workspace must not be written
+			//   => Explicit change to workspace must not be written
 			using (Main main = new Main())
 			{
-				step = "Step 4: ";
-				success = (main.Start() == MainResult.Success);
-				Assert.That(success, Is.True, step + "Main could not be started!");
-
-				Workspace workspace = main.Workspace;
-				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(1), step + "Workspace doesn't contain 1 terminal!");
-				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
-
-				Terminal terminal1 = workspace.ActiveTerminal;
-				Assert.That(terminal1, Is.Not.Null, step + "Terminal not opened from file!");
-				terminal1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				Workspace workspace;
+				Terminal terminal1;
+				Utilities.SubsequentStart("Step 4: ", main, out workspace, out terminal1);
 
 				Utilities.VerifyFiles(step, workspace, true, false, terminal1, true, false);
-
-				Assert.That(terminal1.IsStarted, Is.True, step + "Terminal is no longer started!");
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.That(success, Is.True, step + "Terminal 2 could not be created!");
 				Terminal terminal2 = workspace.ActiveTerminal;
 				Assert.That(terminal2, Is.Not.Null, step + "Terminal 2 could not be created!");
+				terminal2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 				Assert.That(workspace.TerminalCount, Is.EqualTo(2), step + "Workspace doesn't contain 2 terminals!");
 
-				// Workspace also has to be saved:
-				int countBefore = this.workspace_MessageInputRequest_No_counter;
-				workspace.MessageInputRequest += workspace_MessageInputRequest_No;         // Ignore the "remaining event sink" message that will be output during Exit() below.
-				terminal2.SaveAsFileDialogRequest += terminal2_SaveAsFileDialogRequest_No; // Ignore the "remaining event sink" message that will be output during Exit() below.
+				int workspaceCountBefore = this.workspace_MessageInputRequest_No_counter;
+				workspace.MessageInputRequest += workspace_MessageInputRequest_No; // Ignore the "remaining event sink" message that will be output during Exit() below.
+				int terminalCountBefore = this.terminal_SaveAsFileDialogRequest_No_counter;
+				terminal2.SaveAsFileDialogRequest += terminal_SaveAsFileDialogRequest_No; // Ignore the "remaining event sink" message that will be output during Exit() below.
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
-				int countAfter = this.workspace_MessageInputRequest_No_counter;
-				Assert.That(countAfter, Is.Not.EqualTo(countBefore), "Workspace 'MessageInputRequest' was not called!");
+				int terminalCountAfter = this.workspace_MessageInputRequest_No_counter;
+				Assert.That(terminalCountAfter, Is.Not.EqualTo(terminalCountBefore), "Terminal 1 'SaveAsFileDialogRequest' was not called!");
+				int workspaceCountAfter = this.workspace_MessageInputRequest_No_counter;
+				Assert.That(workspaceCountAfter, Is.Not.EqualTo(workspaceCountBefore), "Workspace 'MessageInputRequest' was not called!");
 
 				Utilities.VerifyFiles(step, workspace, true, false, terminal1, true, false);
 
@@ -800,7 +971,7 @@ namespace YAT.Model.Test.FileHandling
 			#endregion
 
 			#region Step 5
-			// - Make files writable again and then perform steps 3 and 4 again
+			// - Make files writable again and then perform steps 2 through 4 again
 			{
 				step = "Step 5: ";
 				{
@@ -811,77 +982,81 @@ namespace YAT.Model.Test.FileHandling
 				{
 					string filePath = this.normalTerminal1FilePath;
 					File.SetAttributes(filePath, FileAttributes.Normal);
-					Assert.That(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) == 0), Is.True, "Terminal file is not writable!");
+					Assert.That(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) == 0), Is.True, "Terminal 1 file is not writable!");
 				}
 			}
 			#endregion
 
 			#region Step 6
 			// - Subsequent start on writable files
-			//   => Implicit changes to terminal must be written again
+			//   => Implicit change to terminal must be written again
 			using (Main main = new Main())
 			{
-				step = "Step 6: ";
-				success = (main.Start() == MainResult.Success);
-				Assert.That(success, Is.True, step + "Main could not be started!");
+				Workspace workspace;
+				Terminal terminal1;
+				Utilities.SubsequentStart("Step 6: ", main, out workspace, out terminal1);
 
-				Workspace workspace = main.Workspace;
-				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(1), step + "Workspace doesn't contain 1 terminal!");
-				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				Utilities.VerifyFiles(step, workspace, true, false, terminal1, true, false);
 
-				Terminal terminal = workspace.ActiveTerminal;
-				Assert.That(terminal, Is.Not.Null, step + "Terminal not opened from file!");
-				terminal.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
-
-				Utilities.VerifyFiles(step, workspace, true, false, terminal, true, false);
-
-				terminal.StopIO();
-				Assert.That(terminal.IsStarted, Is.False, step + "Terminal not stopped!");
+				terminal1.SettingsRoot.SendText.Command = new Types.Command(Guid.NewGuid().ToString()); // Implicit change.
+				Assert.That(terminal1.SettingsRoot.ExplicitHaveChanged, Is.False, step + "Settings have explicitly changed!");
 
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
-				Utilities.VerifyFiles(step, workspace, true, false, terminal, true, false);
+				Utilities.VerifyFiles(step, workspace, true, false, terminal1, true, false);
 
 				string filePath = this.normalTerminal1FilePath;
-				Assert.That(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) == 0), Is.True, "Workspace file is not writable!");
-				Assert.That((terminalTS != File.GetLastWriteTimeUtc(filePath)), Is.True, "Terminal file time stamp still unchanged!");
+				Assert.That(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) == 0), Is.True, "Terminal 1 file is not writable!");
+				Assert.That((terminalTS != File.GetLastWriteTimeUtc(filePath)), Is.True, "Terminal 1 file time stamp still unchanged!");
 			}
 			#endregion
 
 			#region Step 7
 			// - Subsequent start on writable files
-			//   => Explicit changes to workspace must be written again
+			//   => Explicit change to terminal must be written again
 			using (Main main = new Main())
 			{
-				step = "Step 7: ";
-				success = (main.Start() == MainResult.Success);
-				Assert.That(success, Is.True, step + "Main could not be started!");
-
-				Workspace workspace = main.Workspace;
-				Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(1), step + "Workspace doesn't contain 1 terminal!");
-				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
-
-				Terminal terminal1 = workspace.ActiveTerminal;
-				Assert.That(terminal1, Is.Not.Null, step + "Terminal not opened from file!");
-				terminal1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				Workspace workspace;
+				Terminal terminal1;
+				Utilities.SubsequentStart("Step 7: ", main, out workspace, out terminal1);
 
 				Utilities.VerifyFiles(step, workspace, true, false, terminal1, true, false);
 
-				Assert.That(terminal1.IsStarted, Is.False, step + "Terminal is started but should be stopped!");
+				terminal1.SettingsRoot.UserName = Guid.NewGuid().ToString(); // Explicit change.
+				Assert.That(terminal1.SettingsRoot.ExplicitHaveChanged, Is.True, step + "Settings have not explicitly changed!");
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
+
+				Utilities.VerifyFiles(step, workspace, true, false, terminal1, true, false);
+
+				string filePath = this.normalTerminal1FilePath;
+				Assert.That(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) == 0), Is.True, "Terminal 1 file is not writable!");
+				Assert.That((workspaceTS != File.GetLastWriteTimeUtc(filePath)), Is.True, "Terminal 1 file time stamp still unchanged!");
+			}
+			#endregion
+
+			#region Step 8
+			// - Subsequent start on writable files
+			//   => Explicit change to workspace must be written again
+			using (Main main = new Main())
+			{
+				Workspace workspace;
+				Terminal terminal1;
+				Utilities.SubsequentStart("Step 8: ", main, out workspace, out terminal1);
+
+				Utilities.VerifyFiles(step, workspace, true, false, terminal1, true, false);
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.That(success, Is.True, step + "Terminal 2 could not be created!");
 				Terminal terminal2 = workspace.ActiveTerminal;
 				Assert.That(terminal2, Is.Not.Null, step + "Terminal 2 could not be created!");
 				terminal2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				Assert.That(workspace.TerminalCount, Is.EqualTo(2), step + "Workspace doesn't contain 2 terminals!");
 
 				success = terminal2.SaveAs(this.normalTerminal2FilePath);
 				Assert.That(success, Is.True, step + "Terminal could not be saved as!");
-
-				Assert.That(workspace.TerminalCount, Is.EqualTo(2), step + "Workspace doesn't contain 2 terminals!");
 
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
@@ -903,11 +1078,11 @@ namespace YAT.Model.Test.FileHandling
 			}
 			#endregion
 
-			#region Step 8
+			#region Step 9
 			// - Final start for verification
 			using (Main main = new Main())
 			{
-				step = "Step 8: ";
+				step = "Step 9: ";
 				success = (main.Start() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be started!");
 
@@ -957,15 +1132,14 @@ namespace YAT.Model.Test.FileHandling
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.That(success, Is.True, step + "Terminal 1 could not be created!");
-				Terminal terminal = workspace.ActiveTerminal;
-				Assert.That(terminal, Is.Not.Null, step + "Terminal 1 could not be created!");
+				Terminal terminal1 = workspace.ActiveTerminal;
+				Assert.That(terminal1, Is.Not.Null, step + "Terminal 1 could not be created!");
 
-				success = terminal.SaveAs(this.normalTerminal1FilePath);
+				success = terminal1.SaveAs(this.normalTerminal1FilePath);
 				Assert.That(success, Is.True, step + "Terminal 1 could not be saved as!");
 
 				success = workspace.SaveAs(this.normalWorkspaceFilePath);
 				Assert.That(success, Is.True, step + "Workspace could not be saved as!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(1), step + "Workspace doesn't contain 1 terminal!");
 
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
@@ -1089,10 +1263,12 @@ namespace YAT.Model.Test.FileHandling
 
 		#endregion
 
+		#endregion
+
 		#region Event Handlers
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Event Handlers
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <remarks>Counter can be used to assert that handler indeed was called.</remarks>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
@@ -1124,12 +1300,25 @@ namespace YAT.Model.Test.FileHandling
 			this.workspace_MessageInputRequest_No_counter++;
 		}
 
-		private void terminal2_SaveAsFileDialogRequest_No(object sender, DialogEventArgs e)
+		/// <remarks>Counter can be used to assert that handler indeed was called.</remarks>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private int terminal_MessageInputRequest_No_counter; // = 0;
+
+		private void terminal_MessageInputRequest_No(object sender, MessageInputEventArgs e)
 		{
 			e.Result = System.Windows.Forms.DialogResult.No;
+			this.terminal_MessageInputRequest_No_counter++;
 		}
 
-		#endregion
+		/// <remarks>Counter can be used to assert that handler indeed was called.</remarks>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private int terminal_SaveAsFileDialogRequest_No_counter; // = 0;
+
+		private void terminal_SaveAsFileDialogRequest_No(object sender, DialogEventArgs e)
+		{
+			e.Result = System.Windows.Forms.DialogResult.No;
+			this.terminal_SaveAsFileDialogRequest_No_counter++;
+		}
 
 		#endregion
 	}
