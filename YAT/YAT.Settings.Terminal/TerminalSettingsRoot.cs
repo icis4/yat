@@ -186,8 +186,8 @@ namespace YAT.Settings.Terminal
 		[XmlIgnore]
 		public virtual bool TerminalIsStarted
 		{
-			get { return (this.explicit_.TerminalIsStarted); }
-			set { this.explicit_.TerminalIsStarted = value;  }
+			get { return (this.implicit_.TerminalIsStarted); }
+			set { this.implicit_.TerminalIsStarted = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
@@ -664,8 +664,8 @@ namespace YAT.Settings.Terminal
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "LogIsOn",                                                new string[] { "LogIsStarted" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "SendText",                                               new string[] { "SendCommand" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit", "Layout"                                             }, "SendTextPanelIsVisible",                                 new string[] { "SendCommandPanelIsVisible" } )
-		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings"                                                                   }, new string[] { "Explicit", "TerminalIsStarted" },         new string[] { "Implicit", "TerminalIsStarted" } ), => Should be moved, but doesn't work because new name is at a deeper level. Should be solved using XML transformation. */
-		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings"                                                                   }, new string[] { "Explicit", "LogIsOn" },                   new string[] { "Implicit", "LogIsOn" } ),           => Should be moved, but doesn't work because new name is at a deeper level. Should be solved using XML transformation. */
+		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings"                                                                   }, new string[] { "Implicit", "TerminalIsStarted" },         new string[] { "Explicit", "TerminalIsStarted" } ), => Should be moved, but doesn't work because names are at a deeper level. Should be solved using XML transformation. */
+		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings"                                                                   }, new string[] { "Explicit", "LogIsOn" },                   new string[] { "Implicit", "LogIsOn" } ),           => Should be moved, but doesn't work because names are at a deeper level. Should be solved using XML transformation. */
 		};
 
 		/// <summary></summary>
