@@ -30,7 +30,7 @@ using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Net.Sockets;
+// Explicitly using 'System.Net' as well as 'ALAZ.SystemEx.NetEx' for clarity.
 using System.Threading;
 
 using MKY.Contracts;
@@ -692,7 +692,7 @@ namespace MKY.IO.Serial.Socket
 							startIsOngoing = this.server.Start(); // Server will be started asynchronously.
 					}
 				}
-				catch (SocketException)
+				catch (System.Net.Sockets.SocketException)
 				{
 					// A 'SocketException' can occur in the call stack shown below, in case another
 					// AutoSocket or server tries to bind the given end point at the same time. In
