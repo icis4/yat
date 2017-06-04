@@ -33,15 +33,11 @@ namespace YAT.Settings.Terminal
 	public class ExplicitSettings : MKY.Settings.SettingsItem, IEquatable<ExplicitSettings>
 	{
 		/// <summary></summary>
-		public const bool TerminalIsStartedDefault = true;
-
-		/// <summary></summary>
 		public const bool LogIsOnDefault = false;
 
 		/// <summary></summary>
 		public const string UserNameDefault = "";
 
-		private bool terminalIsStarted;
 		private bool logIsOn;
 		private string userName;
 
@@ -79,9 +75,8 @@ namespace YAT.Settings.Terminal
 		public ExplicitSettings(ExplicitSettings rhs)
 			: base(rhs)
 		{
-			TerminalIsStarted = rhs.TerminalIsStarted;
-			LogIsOn           = rhs.LogIsOn;
-			UserName          = rhs.UserName;
+			LogIsOn  = rhs.LogIsOn;
+			UserName = rhs.UserName;
 
 			Terminal          = new Domain.Settings.TerminalSettings(rhs.Terminal);
 			PredefinedCommand = new Model.Settings.PredefinedCommandSettings(rhs.PredefinedCommand);
@@ -99,9 +94,8 @@ namespace YAT.Settings.Terminal
 		{
 			base.SetMyDefaults();
 
-			TerminalIsStarted = TerminalIsStartedDefault;
-			LogIsOn           = LogIsOnDefault;
-			UserName          = UserNameDefault;
+			LogIsOn  = LogIsOnDefault;
+			UserName = UserNameDefault;
 		}
 
 		#region Properties
@@ -109,22 +103,18 @@ namespace YAT.Settings.Terminal
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
-		[XmlElement("TerminalIsStarted")]
-		public virtual bool TerminalIsStarted
-		{
-			get { return (this.terminalIsStarted); }
-			set
-			{
-				if (this.terminalIsStarted != value)
-				{
-					this.terminalIsStarted = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
+		/// <remarks>
+		/// This property is intentionally located in 'explicit' for the following reasons:
+		///  > The decision whether or not to log something is something explicit.
+		///  > Opposed to <see cref="ImplicitSettings.TerminalIsStarted"/>, logging produces data.
+		///  > Logging is coupled to the terminal state, so it will only become active then the
+		///    terminal is started.
+		/// 
+		/// Note that this setting as well as <see cref="ImplicitSettings.TerminalIsStarted"/> both
+		/// used to be 'implicit' up to 1.99.34 and then got moved to 'explicit' for 1.99.50/51/52.
+		/// But, as described in <see cref="ImplicitSettings.TerminalIsStarted"/>, that setting got
+		/// reverted for 1.99.70+ while this settings is kept here for the above stated reasons.
+		/// </remarks>
 		[XmlElement("LogIsOn")]
 		public virtual bool LogIsOn
 		{
@@ -259,7 +249,6 @@ namespace YAT.Settings.Terminal
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^  TerminalIsStarted          .GetHashCode();
 				hashCode = (hashCode * 397) ^  LogIsOn                    .GetHashCode();
 				hashCode = (hashCode * 397) ^ (UserName != null ? UserName.GetHashCode() : 0);
 
@@ -292,8 +281,7 @@ namespace YAT.Settings.Terminal
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				TerminalIsStarted.Equals(other.TerminalIsStarted) &&
-				LogIsOn          .Equals(other.LogIsOn)           &&
+				LogIsOn .Equals                           (other.LogIsOn) &&
 				StringEx.EqualsOrdinalIgnoreCase(UserName, other.UserName)
 			);
 		}

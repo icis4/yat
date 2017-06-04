@@ -30,6 +30,11 @@ namespace YAT.Settings.Terminal
 	/// <summary></summary>
 	public class ImplicitSettings : MKY.Settings.SettingsItem, IEquatable<ImplicitSettings>
 	{
+		/// <summary></summary>
+		public const bool TerminalIsStartedDefault = true;
+
+		private bool terminalIsStarted;
+
 		private Model.Settings.SendTextSettings sendText;
 		private Model.Settings.SendFileSettings sendFile;
 		private Model.Settings.PredefinedSettings predefined;
@@ -49,12 +54,12 @@ namespace YAT.Settings.Terminal
 		{
 			SetMyDefaults();
 
-			SendText     = new Model.Settings.SendTextSettings(SettingsType);
-			SendFile     = new Model.Settings.SendFileSettings(SettingsType);
-			Predefined   = new Model.Settings.PredefinedSettings(SettingsType);
-			Window       = new Model.Settings.WindowSettings(SettingsType);
-			Layout       = new Model.Settings.LayoutSettings(SettingsType);
-			View         = new Model.Settings.ViewSettings(SettingsType);
+			SendText   = new Model.Settings.SendTextSettings(SettingsType);
+			SendFile   = new Model.Settings.SendFileSettings(SettingsType);
+			Predefined = new Model.Settings.PredefinedSettings(SettingsType);
+			Window     = new Model.Settings.WindowSettings(SettingsType);
+			Layout     = new Model.Settings.LayoutSettings(SettingsType);
+			View       = new Model.Settings.ViewSettings(SettingsType);
 
 			ClearChanged();
 		}
@@ -66,12 +71,14 @@ namespace YAT.Settings.Terminal
 		public ImplicitSettings(ImplicitSettings rhs)
 			: base(rhs)
 		{
-			SendText     = new Model.Settings.SendTextSettings(rhs.SendText);
-			SendFile     = new Model.Settings.SendFileSettings(rhs.SendFile);
-			Predefined   = new Model.Settings.PredefinedSettings(rhs.Predefined);
-			Window       = new Model.Settings.WindowSettings(rhs.Window);
-			Layout       = new Model.Settings.LayoutSettings(rhs.Layout);
-			View         = new Model.Settings.ViewSettings(rhs.View);
+			TerminalIsStarted = rhs.TerminalIsStarted;
+
+			SendText   = new Model.Settings.SendTextSettings(rhs.SendText);
+			SendFile   = new Model.Settings.SendFileSettings(rhs.SendFile);
+			Predefined = new Model.Settings.PredefinedSettings(rhs.Predefined);
+			Window     = new Model.Settings.WindowSettings(rhs.Window);
+			Layout     = new Model.Settings.LayoutSettings(rhs.Layout);
+			View       = new Model.Settings.ViewSettings(rhs.View);
 
 			ClearChanged();
 		}
@@ -82,12 +89,40 @@ namespace YAT.Settings.Terminal
 		protected override void SetMyDefaults()
 		{
 			base.SetMyDefaults();
+
+			TerminalIsStarted = TerminalIsStartedDefault;
 		}
 
 		#region Properties
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <remarks>
+		/// This property is intentionally located in 'implicit' for the following reasons:
+		///  > The action of starting/stopping or opening/closing is something temporary. A user may
+		///    do this several times during a session. Such changes shall not be indicated.
+		///  > A port that has previously been available may not be available right now. Such change
+		///    shall neither be indicated.
+		/// 
+		/// Note that this setting as well as <see cref="ExplicitSettings.LogIsOn"/> both used to
+		/// be 'implicit' up to 1.99.34 and then got moved to 'explicit' for 1.99.50/51/52. But,
+		/// this just leads to too many occasions where a user is asked for "Save Terminal?" where
+		/// it just doesn't make much sense. So it was decided to revert that change for 1.99.70+.
+		/// </remarks>
+		[XmlElement("TerminalIsStarted")]
+		public virtual bool TerminalIsStarted
+		{
+			get { return (this.terminalIsStarted); }
+			set
+			{
+				if (this.terminalIsStarted != value)
+				{
+					this.terminalIsStarted = value;
+					SetMyChanged();
+				}
+			}
+		}
 
 		/// <summary></summary>
 		[XmlElement("SendText")]
@@ -209,7 +244,11 @@ namespace YAT.Settings.Terminal
 		{
 			unchecked
 			{
-				return (base.GetHashCode()); // Get hash code of all settings nodes.
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+
+				hashCode = (hashCode * 397) ^ TerminalIsStarted .GetHashCode();
+
+				return (hashCode);
 			}
 		}
 
@@ -236,7 +275,9 @@ namespace YAT.Settings.Terminal
 
 			return
 			(
-				base.Equals(other) // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
+
+				TerminalIsStarted.Equals(other.TerminalIsStarted)
 			);
 		}
 
