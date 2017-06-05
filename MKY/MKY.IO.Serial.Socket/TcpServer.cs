@@ -206,7 +206,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			if (localInterface == null) throw (new ArgumentNullException("localInterface"));
 
-			this.instanceId = instanceId;
+			this.instanceId     = instanceId;
 
 			this.localInterface = localInterface;
 			this.localPort      = localPort;
