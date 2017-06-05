@@ -2337,7 +2337,7 @@ namespace YAT.Domain
 		///  > User does not get immediate feedback that a time consuming operation is taking place.
 		///  > User actually cannot trigger any other operation.
 		///  > Other synchronization issues?
-		/// Therefore, decided to keep the implementation synchonous until new issues pop up.
+		/// Therefore, decided to keep the implementation synchronous until new issues pop up.
 		/// </remarks>
 		public virtual bool RefreshRepositories()
 		{

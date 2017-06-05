@@ -42,6 +42,7 @@ namespace MKY
 		/// "\n" should be sufficient and work in case of Windows ("\r\n") as well as Unixoids and
 		/// Mac since OS X ("\n"). Other operating systems are not supported by this workaround.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Unixoids' is a proper technical term.")]
 		public const string NewLineConstWorkaround = "\n";
 
 		/// <summary>

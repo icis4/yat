@@ -383,7 +383,7 @@ namespace YAT/*.<TODO>*/
 			(
 			//	!!! Remove for value types !!!
 				base.Equals(other) && // !!! If derived from other than 'object', otherwise replace by comment below !!!
-				// Do not call 'base.Equals(other)' when deriving from 'object'.
+			////base.Equals(other) is not required when deriving from 'object'.
 
 				TODO.Equals(other.TODO)
 			//	!!! For value types only !!!

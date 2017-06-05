@@ -26,6 +26,7 @@
 // Using
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 using MKY.IO;
@@ -95,6 +96,8 @@ namespace YAT.Model.Test.FileHandling
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Improved readability.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Improved readability.")]
 		internal static void InitialStart(string step, Main main, string workspaceFilePath, out Workspace workspace, string terminalFilePath, out Terminal terminal)
 		{
 			bool success = false;

@@ -32,7 +32,7 @@ namespace MKY.Test.Equality.Methods
 	/// <summary></summary>
 	public static class Generic
 	{
-		/// <summary></summary>
+		/// <typeparam name="T">The type being tested.</typeparam>
 		public static void TestEquals<T>(T objToEqualAgainst, T objEqual, T objNotEqual)
 		{
 			if (Configuration.TraceCallingSequence) {

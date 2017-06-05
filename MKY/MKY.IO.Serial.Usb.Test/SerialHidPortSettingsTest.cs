@@ -88,22 +88,23 @@ namespace MKY.IO.Serial.Usb.Test
 
 				// Deserialize from file using different methods and verify the result:
 				settingsDeserialized = (SerialHidDeviceSettings)XmlSerializerTest.TestDeserializeFromFile(filePath, typeof(SerialHidDeviceSettings));
-				Assert.That(settingsDeserialized.DeviceInfo.VendorId,  Is.EqualTo(vendorId));
-				Assert.That(settingsDeserialized.DeviceInfo.ProductId, Is.EqualTo(productId));
-				if (matchSerial)
-					Assert.That(settingsDeserialized.DeviceInfo.Serial,Is.EqualTo(serial));
-
+				Assert.That(settingsDeserialized.DeviceInfo.VendorId,   Is.EqualTo(vendorId));
+				Assert.That(settingsDeserialized.DeviceInfo.ProductId,  Is.EqualTo(productId));
+				if (matchSerial) {
+					Assert.That(settingsDeserialized.DeviceInfo.Serial, Is.EqualTo(serial));
+				}
 				settingsDeserialized = (SerialHidDeviceSettings)XmlSerializerTest.TestTolerantDeserializeFromFile(filePath, typeof(SerialHidDeviceSettings));
-				Assert.That(settingsDeserialized.DeviceInfo.VendorId,  Is.EqualTo(vendorId));
-				Assert.That(settingsDeserialized.DeviceInfo.ProductId, Is.EqualTo(productId));
-				if (matchSerial)
-					Assert.That(settingsDeserialized.DeviceInfo.Serial,Is.EqualTo(serial));
-
+				Assert.That(settingsDeserialized.DeviceInfo.VendorId,   Is.EqualTo(vendorId));
+				Assert.That(settingsDeserialized.DeviceInfo.ProductId,  Is.EqualTo(productId));
+				if (matchSerial) {
+					Assert.That(settingsDeserialized.DeviceInfo.Serial, Is.EqualTo(serial));
+				}
 				settingsDeserialized = (SerialHidDeviceSettings)XmlSerializerTest.TestAlternateTolerantDeserializeFromFile(filePath, typeof(SerialHidDeviceSettings));
-				Assert.That(settingsDeserialized.DeviceInfo.VendorId,  Is.EqualTo(vendorId));
-				Assert.That(settingsDeserialized.DeviceInfo.ProductId, Is.EqualTo(productId));
-				if (matchSerial)
-					Assert.That(settingsDeserialized.DeviceInfo.Serial,Is.EqualTo(serial));
+				Assert.That(settingsDeserialized.DeviceInfo.VendorId,   Is.EqualTo(vendorId));
+				Assert.That(settingsDeserialized.DeviceInfo.ProductId,  Is.EqualTo(productId));
+				if (matchSerial) {
+					Assert.That(settingsDeserialized.DeviceInfo.Serial, Is.EqualTo(serial));
+				}
 			}
 		}
 

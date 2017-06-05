@@ -341,7 +341,7 @@ namespace MKY.IO
 		/// <summary>
 		/// Limits a directory or file path to the specified max length. If the path exceed the
 		/// max length, <see cref="StringEx.Ellipsis"/> are added before the last part of the path
-		/// (same behaviour as <see cref="System.Windows.Forms.TextFormatFlags.PathEllipsis"/>).
+		/// (same behavior as <see cref="System.Windows.Forms.TextFormatFlags.PathEllipsis"/>).
 		/// </summary>
 		/// <remarks>
 		/// This function does not expand environment variables.
