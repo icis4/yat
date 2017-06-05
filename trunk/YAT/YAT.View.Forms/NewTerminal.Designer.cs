@@ -32,16 +32,15 @@ namespace YAT.View.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewTerminal));
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_NewTerminal = new System.Windows.Forms.GroupBox();
 			this.groupBox_PortSettings = new System.Windows.Forms.GroupBox();
+			this.serialPortSettings = new YAT.View.Controls.SerialPortSettings();
+			this.serialPortSelection = new YAT.View.Controls.SerialPortSelection();
 			this.socketSelection = new YAT.View.Controls.SocketSelection();
 			this.usbSerialHidDeviceSelection = new YAT.View.Controls.UsbSerialHidDeviceSelection();
 			this.socketSettings = new YAT.View.Controls.SocketSettings();
-			this.serialPortSettings = new YAT.View.Controls.SerialPortSettings();
-			this.serialPortSelection = new YAT.View.Controls.SerialPortSelection();
 			this.usbSerialHidDeviceSettings = new YAT.View.Controls.UsbSerialHidDeviceSettings();
 			this.terminalSelection = new YAT.View.Controls.TerminalSelection();
 			this.checkBox_StartTerminal = new System.Windows.Forms.CheckBox();
@@ -107,45 +106,6 @@ namespace YAT.View.Forms
 			this.groupBox_PortSettings.TabStop = false;
 			this.groupBox_PortSettings.Text = "Port Settings";
 			// 
-			// socketSelection
-			// 
-			this.socketSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.socketSelection.Location = new System.Drawing.Point(6, 19);
-			this.socketSelection.Name = "socketSelection";
-			this.socketSelection.Size = new System.Drawing.Size(282, 125);
-			this.socketSelection.TabIndex = 1;
-			this.socketSelection.RemoteHostChanged += new System.EventHandler(this.socketSelection_RemoteHostChanged);
-			this.socketSelection.RemoteTcpPortChanged += new System.EventHandler(this.socketSelection_RemoteTcpPortChanged);
-			this.socketSelection.RemoteUdpPortChanged += new System.EventHandler(this.socketSelection_RemoteUdpPortChanged);
-			this.socketSelection.LocalInterfaceChanged += new System.EventHandler(this.socketSelection_LocalInterfaceChanged);
-			this.socketSelection.LocalFilterChanged += new System.EventHandler(this.socketSelection_LocalFilterChanged);
-			this.socketSelection.LocalTcpPortChanged += new System.EventHandler(this.socketSelection_LocalTcpPortChanged);
-			this.socketSelection.LocalUdpPortChanged += new System.EventHandler(this.socketSelection_LocalUdpPortChanged);
-			// 
-			// usbSerialHidDeviceSelection
-			// 
-			this.usbSerialHidDeviceSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.usbSerialHidDeviceSelection.DeviceInfo = null;
-			this.usbSerialHidDeviceSelection.Location = new System.Drawing.Point(6, 19);
-			this.usbSerialHidDeviceSelection.Name = "usbSerialHidDeviceSelection";
-			this.usbSerialHidDeviceSelection.Size = new System.Drawing.Size(285, 46);
-			this.usbSerialHidDeviceSelection.TabIndex = 0;
-			this.usbSerialHidDeviceSelection.DeviceInfoChanged += new System.EventHandler(this.usbSerialHidDeviceSelection_DeviceInfoChanged);
-			// 
-			// socketSettings
-			// 
-			this.socketSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.socketSettings.Location = new System.Drawing.Point(6, 146);
-			this.socketSettings.Name = "socketSettings";
-			this.socketSettings.Size = new System.Drawing.Size(260, 175);
-			this.socketSettings.TabIndex = 3;
-			this.socketSettings.TcpClientAutoReconnectChanged += new System.EventHandler(this.socketSettings_TcpClientAutoReconnectChanged);
-			this.socketSettings.UdpServerSendModeChanged += new System.EventHandler(this.socketSettings_UdpServerSendModeChanged);
-			// 
 			// serialPortSettings
 			// 
 			this.serialPortSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -173,6 +133,45 @@ namespace YAT.View.Forms
 			this.serialPortSelection.Size = new System.Drawing.Size(285, 46);
 			this.serialPortSelection.TabIndex = 0;
 			this.serialPortSelection.PortIdChanged += new System.EventHandler(this.serialPortSelection_PortIdChanged);
+			// 
+			// socketSelection
+			// 
+			this.socketSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.socketSelection.Location = new System.Drawing.Point(6, 19);
+			this.socketSelection.Name = "socketSelection";
+			this.socketSelection.Size = new System.Drawing.Size(282, 152);
+			this.socketSelection.TabIndex = 1;
+			this.socketSelection.RemoteHostChanged += new System.EventHandler(this.socketSelection_RemoteHostChanged);
+			this.socketSelection.RemoteTcpPortChanged += new System.EventHandler(this.socketSelection_RemoteTcpPortChanged);
+			this.socketSelection.RemoteUdpPortChanged += new System.EventHandler(this.socketSelection_RemoteUdpPortChanged);
+			this.socketSelection.LocalInterfaceChanged += new System.EventHandler(this.socketSelection_LocalInterfaceChanged);
+			this.socketSelection.LocalFilterChanged += new System.EventHandler(this.socketSelection_LocalFilterChanged);
+			this.socketSelection.LocalTcpPortChanged += new System.EventHandler(this.socketSelection_LocalTcpPortChanged);
+			this.socketSelection.LocalUdpPortChanged += new System.EventHandler(this.socketSelection_LocalUdpPortChanged);
+			// 
+			// usbSerialHidDeviceSelection
+			// 
+			this.usbSerialHidDeviceSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.usbSerialHidDeviceSelection.DeviceInfo = null;
+			this.usbSerialHidDeviceSelection.Location = new System.Drawing.Point(6, 19);
+			this.usbSerialHidDeviceSelection.Name = "usbSerialHidDeviceSelection";
+			this.usbSerialHidDeviceSelection.Size = new System.Drawing.Size(285, 46);
+			this.usbSerialHidDeviceSelection.TabIndex = 0;
+			this.usbSerialHidDeviceSelection.DeviceInfoChanged += new System.EventHandler(this.usbSerialHidDeviceSelection_DeviceInfoChanged);
+			// 
+			// socketSettings
+			// 
+			this.socketSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.socketSettings.Location = new System.Drawing.Point(6, 173);
+			this.socketSettings.Name = "socketSettings";
+			this.socketSettings.Size = new System.Drawing.Size(260, 148);
+			this.socketSettings.TabIndex = 3;
+			this.socketSettings.TcpClientAutoReconnectChanged += new System.EventHandler(this.socketSettings_TcpClientAutoReconnectChanged);
+			this.socketSettings.UdpServerSendModeChanged += new System.EventHandler(this.socketSettings_UdpServerSendModeChanged);
 			// 
 			// usbSerialHidDeviceSettings
 			// 

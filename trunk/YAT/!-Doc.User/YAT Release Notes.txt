@@ -87,7 +87,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.0 Gamma 3 Version 1.99.70 :: 2017-xx-xx
+YAT 2.0 Gamma 3 Version 1.99.70 :: 2017-06-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -129,6 +129,7 @@ Important changes:
 - NUnit framework assemblies placed into solution structure instead of referring to installation.
 
 Fixed bugs:
+- UDP/IP PairSocket enabled to communicate with a remote computer (bug #368).
 - Potential application freeze when clearing monitors/repositories fixed (bug #361).
 - Potential 'NullReferenceException' in binary terminal settings fixed (bug #362).
 - Option to change endianness of multi-byte encoded charactes fixed (bug #343).
@@ -164,7 +165,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management within .NET 3.5).
+  unknown, could even be a limitation of the memory management of the .NET runtime).
 
 
 YAT 2.0 Gamma 2'' Version 1.99.52 :: 2016-09-30
@@ -308,7 +309,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management within .NET 3.5).
+  unknown, could even be a limitation of the memory management of the .NET runtime).
 
 
 YAT 2.0 Gamma 1'' Version 1.99.34 :: 2015-06-13

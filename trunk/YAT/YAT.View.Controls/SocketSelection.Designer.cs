@@ -35,12 +35,13 @@
 			this.comboBox_RemoteHost = new System.Windows.Forms.ComboBox();
 			this.textBox_LocalPort = new System.Windows.Forms.TextBox();
 			this.label_LocalPort = new System.Windows.Forms.Label();
-			this.label_LocalAddress = new System.Windows.Forms.Label();
+			this.label_LocalInterface = new System.Windows.Forms.Label();
 			this.comboBox_LocalInterface = new System.Windows.Forms.ComboBox();
 			this.button_RefreshLocalInterfaces = new System.Windows.Forms.Button();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.comboBox_LocalFilter = new System.Windows.Forms.ComboBox();
 			this.label_OnDialogMessage = new System.Windows.Forms.Label();
+			this.label_LocalFilter = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label_RemoteHost
@@ -85,36 +86,35 @@
 			// 
 			// textBox_LocalPort
 			// 
-			this.textBox_LocalPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.textBox_LocalPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox_LocalPort.Location = new System.Drawing.Point(101, 102);
 			this.textBox_LocalPort.Name = "textBox_LocalPort";
 			this.textBox_LocalPort.Size = new System.Drawing.Size(156, 20);
-			this.textBox_LocalPort.TabIndex = 10;
+			this.textBox_LocalPort.TabIndex = 9;
 			this.textBox_LocalPort.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_LocalPort_Validating);
 			// 
 			// label_LocalPort
 			// 
-			this.label_LocalPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_LocalPort.AutoSize = true;
 			this.label_LocalPort.Location = new System.Drawing.Point(3, 105);
 			this.label_LocalPort.Name = "label_LocalPort";
 			this.label_LocalPort.Size = new System.Drawing.Size(82, 13);
-			this.label_LocalPort.TabIndex = 9;
+			this.label_LocalPort.TabIndex = 8;
 			this.label_LocalPort.Text = "&Local TCP Port:";
 			// 
-			// label_LocalAddress
+			// label_LocalInterface
 			// 
-			this.label_LocalAddress.AutoSize = true;
-			this.label_LocalAddress.Location = new System.Drawing.Point(3, 59);
-			this.label_LocalAddress.Name = "label_LocalAddress";
-			this.label_LocalAddress.Size = new System.Drawing.Size(81, 13);
-			this.label_LocalAddress.TabIndex = 4;
-			this.label_LocalAddress.Text = "Local &Interface:";
+			this.label_LocalInterface.AutoSize = true;
+			this.label_LocalInterface.Location = new System.Drawing.Point(3, 59);
+			this.label_LocalInterface.Name = "label_LocalInterface";
+			this.label_LocalInterface.Size = new System.Drawing.Size(81, 13);
+			this.label_LocalInterface.TabIndex = 4;
+			this.label_LocalInterface.Text = "Local &Interface:";
 			// 
 			// comboBox_LocalInterface
 			// 
-			this.comboBox_LocalInterface.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.comboBox_LocalInterface.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_LocalInterface.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_LocalInterface.Location = new System.Drawing.Point(6, 75);
@@ -125,23 +125,23 @@
 			// 
 			// button_RefreshLocalInterfaces
 			// 
-			this.button_RefreshLocalInterfaces.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_RefreshLocalInterfaces.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_RefreshLocalInterfaces.Image = global::YAT.View.Controls.Properties.Resources.Image_Tool_arrow_refresh_small_16x16;
 			this.button_RefreshLocalInterfaces.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.button_RefreshLocalInterfaces.Location = new System.Drawing.Point(258, 75);
 			this.button_RefreshLocalInterfaces.Name = "button_RefreshLocalInterfaces";
 			this.button_RefreshLocalInterfaces.Size = new System.Drawing.Size(24, 21);
-			this.button_RefreshLocalInterfaces.TabIndex = 8;
+			this.button_RefreshLocalInterfaces.TabIndex = 7;
 			this.button_RefreshLocalInterfaces.Click += new System.EventHandler(this.button_RefreshLocalInterfaces_Click);
 			// 
 			// comboBox_LocalFilter
 			// 
-			this.comboBox_LocalFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.comboBox_LocalFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.comboBox_LocalFilter.Location = new System.Drawing.Point(101, 75);
+			this.comboBox_LocalFilter.Location = new System.Drawing.Point(101, 128);
 			this.comboBox_LocalFilter.Name = "comboBox_LocalFilter";
 			this.comboBox_LocalFilter.Size = new System.Drawing.Size(156, 21);
-			this.comboBox_LocalFilter.TabIndex = 7;
+			this.comboBox_LocalFilter.TabIndex = 11;
 			this.toolTip.SetToolTip(this.comboBox_LocalFilter, "Either select a preset from the list, or fill in any IPv4 or IPv6 address.\r\n\r\nCon" +
         "tact YAT via \"Help > Request Feature\" to request additional presets.");
 			this.comboBox_LocalFilter.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_LocalFilter_Validating);
@@ -159,10 +159,20 @@
 			this.label_OnDialogMessage.Text = "<Message>";
 			this.label_OnDialogMessage.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// label_LocalFilter
+			// 
+			this.label_LocalFilter.AutoSize = true;
+			this.label_LocalFilter.Location = new System.Drawing.Point(3, 131);
+			this.label_LocalFilter.Name = "label_LocalFilter";
+			this.label_LocalFilter.Size = new System.Drawing.Size(61, 13);
+			this.label_LocalFilter.TabIndex = 10;
+			this.label_LocalFilter.Text = "Local &Filter:";
+			// 
 			// SocketSelection
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.label_LocalFilter);
 			this.Controls.Add(this.label_OnDialogMessage);
 			this.Controls.Add(this.comboBox_LocalFilter);
 			this.Controls.Add(this.button_RefreshLocalInterfaces);
@@ -172,10 +182,10 @@
 			this.Controls.Add(this.comboBox_RemoteHost);
 			this.Controls.Add(this.label_LocalPort);
 			this.Controls.Add(this.label_RemotePort);
-			this.Controls.Add(this.label_LocalAddress);
+			this.Controls.Add(this.label_LocalInterface);
 			this.Controls.Add(this.label_RemoteHost);
 			this.Name = "SocketSelection";
-			this.Size = new System.Drawing.Size(285, 125);
+			this.Size = new System.Drawing.Size(285, 156);
 			this.EnabledChanged += new System.EventHandler(this.SocketSelection_EnabledChanged);
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.SocketSelection_Paint);
 			this.ResumeLayout(false);
@@ -191,11 +201,12 @@
 		private System.Windows.Forms.ComboBox comboBox_RemoteHost;
 		private System.Windows.Forms.TextBox textBox_LocalPort;
 		private System.Windows.Forms.Label label_LocalPort;
-		private System.Windows.Forms.Label label_LocalAddress;
+		private System.Windows.Forms.Label label_LocalInterface;
 		private System.Windows.Forms.ComboBox comboBox_LocalInterface;
 		private System.Windows.Forms.Button button_RefreshLocalInterfaces;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.ComboBox comboBox_LocalFilter;
 		private System.Windows.Forms.Label label_OnDialogMessage;
+		private System.Windows.Forms.Label label_LocalFilter;
 	}
 }

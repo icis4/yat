@@ -160,7 +160,7 @@ namespace MKY.IO.Serial.Socket.Test
 		internal static void StartUdpPairSocket(out UdpSocket pairSocket, int remotePort, int localPort)
 		{
 			// Create socket and initiate asych start:
-			pairSocket = new UdpSocket(IPAddress.Loopback, remotePort, localPort);
+			pairSocket = new UdpSocket(IPAddress.Loopback, remotePort, IPAddress.Any, localPort);
 			if (!pairSocket.Start())
 				Assert.Fail("UDP/IP PairSocket could not be started!");
 		}

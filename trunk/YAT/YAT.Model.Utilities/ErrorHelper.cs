@@ -59,23 +59,49 @@ namespace YAT.Model.Utilities
 				sb.Append(leadAddOn);
 			}
 
-			if (ex is System.Xml.XmlException)
+			if (ex != null)
 			{
-				sb.AppendLine();
-				sb.AppendLine();
-				sb.AppendLine("XML error message:");
-				sb.Append(ex.Message);
-
-				if (ex.InnerException != null)
+				if (ex is System.Xml.XmlException)
 				{
 					sb.AppendLine();
 					sb.AppendLine();
-					sb.Append    ("File error message (");
-					sb.Append    (ex.InnerException.GetType());
-					sb.AppendLine(                      "):");
-					sb.Append(ex.InnerException.Message);
+					sb.AppendLine("XML error message:");
+					sb.Append    (ex.Message);
 
-					var inner = ex.InnerException.InnerException;
+					var inner = ex.InnerException;
+					if (inner != null)
+					{
+						sb.AppendLine();
+						sb.AppendLine();
+						sb.Append    ("File error message (");
+						sb.Append    (ex.InnerException.GetType());
+						sb.AppendLine(                      "):");
+						sb.Append    (ex.InnerException.Message);
+
+						inner = inner.InnerException;
+						while (inner != null)
+						{
+							sb.AppendLine();
+							sb.AppendLine();
+							sb.Append    ("Additional error message (");
+							sb.Append    (inner.GetType());
+							sb.AppendLine(                            "):");
+							sb.Append    (inner.Message);
+
+							inner = inner.InnerException;
+						}
+					}
+				}
+				else
+				{
+					sb.AppendLine();
+					sb.AppendLine();
+					sb.Append    ("System error message (");
+					sb.Append    (ex.GetType());
+					sb.AppendLine(                        "):");
+					sb.Append    (ex.Message);
+
+					var inner = ex.InnerException;
 					while (inner != null)
 					{
 						sb.AppendLine();
@@ -83,32 +109,10 @@ namespace YAT.Model.Utilities
 						sb.Append    ("Additional error message (");
 						sb.Append    (inner.GetType());
 						sb.AppendLine(                            "):");
-						sb.Append(inner.Message);
+						sb.Append    (inner.Message);
 
 						inner = inner.InnerException;
 					}
-				}
-			}
-			else if (ex != null)
-			{
-				sb.AppendLine();
-				sb.AppendLine();
-				sb.Append    ("System error message (");
-				sb.Append    (ex.GetType());
-				sb.AppendLine(                        "):");
-				sb.Append(ex.Message);
-
-				var inner = ex.InnerException.InnerException;
-				while (inner != null)
-				{
-					sb.AppendLine();
-					sb.AppendLine();
-					sb.Append    ("Additional error message (");
-					sb.Append    (inner.GetType());
-					sb.AppendLine(                            "):");
-					sb.Append(inner.Message);
-
-					inner = inner.InnerException;
 				}
 			}
 
@@ -116,12 +120,12 @@ namespace YAT.Model.Utilities
 			{
 				sb.AppendLine();
 				sb.AppendLine();
-				sb.Append(secondaryLead);
+				sb.Append    (secondaryLead);
 
 				if (!string.IsNullOrEmpty(secondaryText))
 				{
 					sb.AppendLine(); // Line break after secondary lead above.
-					sb.Append(secondaryText);
+					sb.Append    (secondaryText);
 				}
 			}
 
