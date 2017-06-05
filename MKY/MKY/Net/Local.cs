@@ -22,37 +22,69 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
+
+using MKY.Diagnostics;
 
 namespace MKY.Net
 {
 	/// <summary>
-	/// LocalHost utility methods.
+	/// Local utility methods.
 	/// </summary>
-	public static class LocalHost
+	public static class Local
 	{
 		/// <summary>
-		/// Gets an available TCP port chosen by the system or the system's TCP stack.
+		/// Finds an available TCP port chosen by the system or the system's TCP stack.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public static int AvailableTcpPort
+		public static bool TryFindAvailableTcpPort(out int result)
 		{
-			get
+			const int Attempts = 7; // Should be sufficient...
+
+			Exception exInner = null;
+
+			for (int i = 1; i <= Attempts; i++)
 			{
 				try
 				{
 					TcpListener listener = new TcpListener(IPAddress.Loopback, 0);
 					listener.Start();
-					int port = ((IPEndPoint)listener.LocalEndpoint).Port;
+					result = ((IPEndPoint)listener.LocalEndpoint).Port;
 					listener.Stop();
-					return (port);
+					return (true);
 				}
-				catch
+				catch (Exception ex)
 				{
-					return (0);
+					StringBuilder sb = new StringBuilder();
+
+					sb.Append(i);
+					sb.Append(Int32Ex.ToEnglishSuffix(i));
+					sb.Append(" attempt to retrieve an available TCP port has failed");
+
+					if (i < Attempts)
+						sb.Append(", trying again...");
+
+					DebugEx.WriteException(typeof(Local), ex, sb.ToString());
+
+					exInner = ex;
 				}
+			}
+
+			// Local scope for dedicated 'StringBuilder':
+			{
+				StringBuilder sb = new StringBuilder();
+
+				sb.Append(Attempts);
+				sb.Append(" attempt to retrieve an available TCP port have failed");
+
+				DebugEx.WriteException(typeof(Local), exInner, sb.ToString());
+
+				result = 0;
+				return (false);
 			}
 		}
 	}

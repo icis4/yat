@@ -61,6 +61,7 @@ namespace MKY.Diagnostics
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
 		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static void WriteLocation(IDiagnosticsWriter writer, StackTrace st, int index, string message, bool appendLineBreak = true)
 		{
 			StackFrame sf = st.GetFrame(index);
@@ -97,6 +98,7 @@ namespace MKY.Diagnostics
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
 		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static void WriteTimeStamp(IDiagnosticsWriter writer, StackTrace st, int index, string message, bool appendLineBreak = true)
 		{
 			writer.Write(DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo));
@@ -235,6 +237,7 @@ namespace MKY.Diagnostics
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
 		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "StreamLines", Justification = "What's the problem...")]
 		public static void WriteFileStreamLines(IDiagnosticsWriter writer, Type type, FileStream fs, string leadMessage)
 		{
 			if (type != null)

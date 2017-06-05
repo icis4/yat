@@ -45,6 +45,7 @@ namespace MKY
 		/// will produce identical sets of random numbers. This problem can be avoided by using a
 		/// single <see cref="Random"/> object to generate the seed for all random generators.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "PseudoRandom", Justification = "What's the problem...")]
 		public static int NextPseudoRandomSeed()
 		{
 			return (staticRandomSeed.Next());

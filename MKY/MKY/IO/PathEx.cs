@@ -196,7 +196,7 @@ namespace MKY.IO
 			{
 				foreach (string v in values)
 				{
-					if (path.ToLowerInvariant().Contains(v.ToLowerInvariant()))
+					if (path.ToUpperInvariant().Contains(v.ToUpperInvariant()))
 						return (true); // Match.
 				}
 			}
@@ -279,6 +279,7 @@ namespace MKY.IO
 		/// This method only checks whether the path is valid but not whether it actually exists.
 		/// Use <see cref="Directory.Exists"/> or <see cref="File.Exists"/> to check existence.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Required for validation.")]
 		public static bool IsValid(string path)
 		{
 			// String validation:
@@ -1008,6 +1009,7 @@ namespace MKY.IO
 		/// <remarks>
 		/// <see cref="FileEx.GetUniqueFilePath"/> offers a similar method keeping the file name.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Naming same as 'Path.GetTempPath()'.")]
 		public static string GetUniqueTempPath()
 		{
 			return (Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()));

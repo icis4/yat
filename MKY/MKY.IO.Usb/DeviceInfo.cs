@@ -561,8 +561,6 @@ namespace MKY.IO.Usb
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
 		public virtual bool EqualsVidPid(DeviceInfo other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
@@ -626,8 +624,6 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
 		public static DeviceInfo ParseFromVidAndPid(string s)
 		{
 			DeviceInfo result;
@@ -643,8 +639,6 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
 		public static DeviceInfo ParseFromVidAndPidAndSerial(string s)
 		{
 			DeviceInfo result;
@@ -660,8 +654,6 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
 		public static bool TryParseFromVidAndPid(string s, out DeviceInfo result)
 		{
 			return (TryParse(s, false, out result));
@@ -673,8 +665,6 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
 		public static bool TryParseFromVidAndPidAndSerial(string s, out DeviceInfo result)
 		{
 			return (TryParse(s, true, out result));

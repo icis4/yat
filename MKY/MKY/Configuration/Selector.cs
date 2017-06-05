@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Configuration
 {
@@ -47,6 +48,7 @@ namespace MKY.Configuration
 		/// <param name="c">The configuration.</param>
 		/// <param name="groupName">Name of the group.</param>
 		/// <param name="selectedConfigurationName">Name of the selected configuration.</param>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "c", Justification = "Short and obvious.")]
 		public static bool TryGetSelectedConfigurationName(System.Configuration.Configuration c, string groupName, out string selectedConfigurationName)
 		{
 			ConfigurationSectionGroup selectionGroup = c.GetSectionGroup(groupName);
@@ -71,6 +73,7 @@ namespace MKY.Configuration
 		/// <param name="groupName">Name of the group.</param>
 		/// <param name="selectedConfigurationName">Name of the selected configuration.</param>
 		/// <param name="selectedConfiguration">The selected configuration.</param>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "c", Justification = "Short and obvious.")]
 		public static bool TryGetSelectedConfigurationSection<T>(System.Configuration.Configuration c, string groupName, string selectedConfigurationName, out T selectedConfiguration)
 			where T : ConfigurationSection
 		{
@@ -100,6 +103,7 @@ namespace MKY.Configuration
 		/// <param name="configurationGroupName">Name of the configuration group.</param>
 		/// <param name="configurationsGroupName">Name of the configurations group.</param>
 		/// <param name="selectedConfiguration">The selected configuration.</param>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "c", Justification = "Short and obvious.")]
 		public static bool TryGetSelectedConfiguration<T>(System.Configuration.Configuration c, string configurationGroupName, string configurationsGroupName, out T selectedConfiguration)
 			where T : ConfigurationSection
 		{

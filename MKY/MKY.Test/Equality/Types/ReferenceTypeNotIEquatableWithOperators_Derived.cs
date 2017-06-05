@@ -84,6 +84,7 @@ namespace MKY.Test.Equality.Types
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Performance is not an issue here, readability is...")]
 		public override bool Equals(object obj)
 		{
 			if (Configuration.TraceCallingSequence) // Trace the calling sequence:

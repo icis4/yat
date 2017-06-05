@@ -52,6 +52,7 @@ using Microsoft.Win32.SafeHandles;
 // Justification = "Naming is defined by the Win32 API."
 [module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Handle+NativeMethods.#DuplicateHandle(System.IntPtr,Microsoft.Win32.SafeHandles.SafeFileHandle,System.IntPtr,Microsoft.Win32.SafeHandles.SafeFileHandle&,System.UInt32,System.Boolean,MKY.Win32.Handle+NativeTypes+Options)", MessageId = "dw")]
 [module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Handle+NativeMethods.#DuplicateHandle(System.IntPtr,Microsoft.Win32.SafeHandles.SafeFileHandle,System.IntPtr,Microsoft.Win32.SafeHandles.SafeFileHandle&,System.UInt32,System.Boolean,MKY.Win32.Handle+NativeTypes+Options)", MessageId = "h")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Handle+NativeMethods.#DuplicateHandle(System.IntPtr,Microsoft.Win32.SafeHandles.SafeFileHandle,System.IntPtr,Microsoft.Win32.SafeHandles.SafeFileHandle&,System.UInt32,System.Boolean,MKY.Win32.Handle+NativeTypes+Options)", MessageId = "b")]
 [module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Handle+NativeMethods.#CloseHandle(Microsoft.Win32.SafeHandles.SafeFileHandle)", MessageId = "h")]
 
 // Justification = "Naming is defined by the Win32 API."

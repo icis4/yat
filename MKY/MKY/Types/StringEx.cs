@@ -323,7 +323,7 @@ namespace MKY
 		/// <exception cref="ArgumentNullException">value is null.</exception>
 		public static bool StartsWithAny(string str, params string[] values)
 		{
-			return (StartsWithAny(str, (IEnumerable<string>)values));
+			return (StartsWithAny(str, (IEnumerable<string>)values, false, null));
 		}
 
 		/// <summary>

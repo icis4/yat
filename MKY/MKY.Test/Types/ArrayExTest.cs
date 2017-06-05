@@ -37,13 +37,13 @@ namespace MKY.Test.Types
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static readonly int[] EmptyArray = new int[] { };
+		private static readonly int[] EmptyArray = new int[] { };
 
 		/// <summary></summary>
-		public static readonly int[] SingleItem = new int[] { 1 };
+		private static readonly int[] SingleItem = new int[] { 1 };
 
 		/// <summary></summary>
-		public static readonly int[][] IntArrays = new int[][]
+		internal static readonly int[][] IntArrays = new int[][]
 		{
 			new int[] { 0, 1, 2 },
 			new int[] { 0, 1, 2 },
@@ -51,7 +51,7 @@ namespace MKY.Test.Types
 		};
 
 		/// <summary></summary>
-		public static readonly EnumType[][] EnumArrays = new EnumType[][]
+		internal static readonly EnumType[][] EnumArrays = new EnumType[][]
 		{
 			new EnumType[] { EnumType.A, EnumType.B, EnumType.C },
 			new EnumType[] { EnumType.A, EnumType.B, EnumType.C },
@@ -59,7 +59,7 @@ namespace MKY.Test.Types
 		};
 
 		/// <summary></summary>
-		public static readonly EquatableReferenceType[][] ReferenceTypeArrays = new EquatableReferenceType[][]
+		internal static readonly EquatableReferenceType[][] ReferenceTypeArrays = new EquatableReferenceType[][]
 		{
 			new EquatableReferenceType[] { new EquatableReferenceType(0, 1.0), new EquatableReferenceType(1, 1.1), new EquatableReferenceType(2, 1.2) },
 			new EquatableReferenceType[] { new EquatableReferenceType(0, 1.0), new EquatableReferenceType(1, 1.1), new EquatableReferenceType(2, 1.2) },
@@ -67,7 +67,7 @@ namespace MKY.Test.Types
 		};
 
 		/// <summary></summary>
-		public static readonly string[][] StringArrays = new string[][]
+		internal static readonly string[][] StringArrays = new string[][]
 		{
 			new string[] { "AAA", "BBB", "CCC" },
 			new string[] { "AAA", "BBB", "CCC" },
@@ -75,7 +75,7 @@ namespace MKY.Test.Types
 		};
 
 		/// <summary></summary>
-		public static readonly string[][] ArraysWithNull = new string[][]
+		internal static readonly string[][] ArraysWithNull = new string[][]
 		{
 			new string[] { "AAA", "BBB" },
 			new string[] { "AAA", null },
@@ -85,7 +85,7 @@ namespace MKY.Test.Types
 		};
 
 		/// <summary></summary>
-		public static readonly string[][] ArraysOdd = new string[][]
+		internal static readonly string[][] ArraysOdd = new string[][]
 		{
 			new string[] { "AAA" },
 			new string[] { "AAA", "BBB" },

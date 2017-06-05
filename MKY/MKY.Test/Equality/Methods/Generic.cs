@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 using MKY.Diagnostics;
 
@@ -30,6 +31,7 @@ using NUnit.Framework;
 namespace MKY.Test.Equality.Methods
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public static class Generic
 	{
 		/// <typeparam name="T">The type being tested.</typeparam>

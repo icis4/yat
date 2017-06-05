@@ -207,6 +207,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Returns link information if available.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public bool HasInfoLink(out string linkUri)
 		{
 			string linkText;
@@ -216,6 +217,8 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Returns link information if available.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public bool HasInfoLink(out string linkText, out string linkUri)
 		{
 			switch ((SerialHidReportFormatPreset)UnderlyingEnum)

@@ -41,6 +41,7 @@ namespace MKY.Test.CommandLine
 	public enum CommandLineEnum
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "A", Justification = "Who cares, it's OK for testing.")]
 		A,
 
 		/// <summary></summary>

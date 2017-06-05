@@ -120,7 +120,7 @@
     <Compile Include="IO\DirectoryEx.cs" />
     <Compile Include="IO\StreamEx.cs" />
     <Compile Include="IO\Temp.cs" />
-    <Compile Include="Net\LocalHost.cs" />
+    <Compile Include="Net\Local.cs" />
     <Compile Include="Net\IPAddressEx.cs" />
     <Compile Include="Net\IPFilter.cs" />
     <Compile Include="Net\IPNetworkInterfaceDescriptorPair.cs" />

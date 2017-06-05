@@ -131,12 +131,14 @@ namespace MKY.IO.Usb.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		public virtual string MTSicsDeviceA
 		{
 			get { return ((string)this["MTSicsDeviceA"]); }
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		public virtual string MTSicsDeviceB
 		{
 			get { return ((string)this["MTSicsDeviceB"]); }
@@ -178,6 +180,7 @@ namespace MKY.IO.Usb.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
 		public virtual bool MTSicsDeviceAIsConnected
 		{
@@ -186,6 +189,7 @@ namespace MKY.IO.Usb.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
 		public virtual bool MTSicsDeviceBIsConnected
 		{
@@ -310,10 +314,12 @@ namespace MKY.IO.Usb.Test
 		public static readonly string DeviceBIsAvailable = "USB Ser/HID device B '" + ConfigurationProvider.Configuration.DeviceB + "' is " + (ConfigurationProvider.Configuration.DeviceBIsAvailable ? "" : "not ") + "available";
 
 		/// <remarks>"MT-SICS" is no valid NUnit category string as it contains an '-'.</remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
 		public static readonly string MTSicsDeviceAIsConnected = "USB Ser/HID MT SICS device A '" + ConfigurationProvider.Configuration.MTSicsDeviceA + "' is " + (ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ? "" : "not ") + "connected";
 
 		/// <remarks>"MT-SICS" is no valid NUnit category string as it contains an '-'.</remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
 		public static readonly string MTSicsDeviceBIsConnected = "USB Ser/HID MT SICS device B '" + ConfigurationProvider.Configuration.MTSicsDeviceB + "' is " + (ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected ? "" : "not ") + "connected";
 
@@ -351,6 +357,7 @@ namespace MKY.IO.Usb.Test
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class MTSicsDeviceAIsConnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
@@ -363,6 +370,7 @@ namespace MKY.IO.Usb.Test
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class MTSicsDeviceBIsConnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
