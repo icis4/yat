@@ -375,6 +375,7 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Event requires to retrieve a collection.")]
 		protected virtual List<InUseInfo> OnInUseLookupRequest()
 		{
 			var e = new SerialPortInUseLookupEventArgs();

@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 using MKY.Diagnostics;
 
@@ -33,6 +34,7 @@ namespace MKY.Test.Equality.Methods
 	public static class ReferenceTypeObject
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static void TestOperatorsForReferenceEquality(object obj)
 		{
 			if (Configuration.TraceCallingSequence) {

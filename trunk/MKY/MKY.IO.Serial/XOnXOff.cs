@@ -21,6 +21,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace MKY.IO.Serial
 {
 	/// <summary></summary>
@@ -41,6 +43,7 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Returns whether the given byte is an XOn or XOff byte.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and obvious.")]
 		public static bool IsXOnOrXOffByte(byte b)
 		{
 			return ((b == XOnByte) || (b == XOffByte));

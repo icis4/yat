@@ -27,6 +27,7 @@ namespace MKY.Test.Equality
 {
 	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Internal configuration to enable/disable tracing, must be a field to prevent compilation warnings.")]
+	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public static class Configuration
 	{
 		/// <summary>
@@ -35,6 +36,7 @@ namespace MKY.Test.Equality
 		/// <remarks>
 		/// Must be a variable to prevent "Unreachable code detected" warnings where used.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible", Justification = "Internal configuration to enable/disable tracing, must be a field to prevent compilation warnings.")]
 		public static bool TraceCallingSequence = false;
 	}
 }

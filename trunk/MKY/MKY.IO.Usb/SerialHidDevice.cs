@@ -537,7 +537,6 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Indicates how the ID is used while receiving.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
 		public virtual SerialHidRxFilterUsage RxFilterUsage
 		{
 			get
@@ -1041,7 +1040,7 @@ namespace MKY.IO.Usb
 				sb.AppendLine(@""":");
 				sb.AppendLine();
 
-				if (ex.Message.EndsWith(Environment.NewLine))
+				if (ex.Message.EndsWith(Environment.NewLine, StringComparison.OrdinalIgnoreCase))
 					sb.Append    (ex.Message);
 				else
 					sb.AppendLine(ex.Message);
@@ -1140,7 +1139,7 @@ namespace MKY.IO.Usb
 				sb.AppendLine(@""":");
 				sb.AppendLine();
 
-				if (ex.Message.EndsWith(Environment.NewLine))
+				if (ex.Message.EndsWith(Environment.NewLine, StringComparison.OrdinalIgnoreCase))
 					sb.Append    (ex.Message);
 				else
 					sb.AppendLine(ex.Message);

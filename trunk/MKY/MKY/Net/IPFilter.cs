@@ -332,12 +332,12 @@ namespace MKY.Net
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
 		[SuppressMessage("Microsoft.Design", "CA1055:UriReturnValuesShouldNotBeStrings", Justification = "What's wrong with a variant of ToString() ?!?")]
-		public static string ToEndpointAddressString(IPAddress a)
+		public static string ToEndpointAddressString(IPAddress address)
 		{
-			switch (a.AddressFamily)
+			switch (address.AddressFamily)
 			{
-				case AddressFamily.InterNetworkV6: return ("[" + a.ToString() + "]");
-				default:                           return (      a.ToString()      );
+				case AddressFamily.InterNetworkV6: return ("[" + address.ToString() + "]");
+				default:                           return (      address.ToString()      );
 			}
 		}
 

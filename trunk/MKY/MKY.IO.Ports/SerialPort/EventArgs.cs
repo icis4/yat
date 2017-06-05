@@ -114,6 +114,8 @@ namespace MKY.IO.Ports
 		private List<InUseInfo> inUseLookup;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Event requires to retrieve a collection.")]
+		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Event requires to retrieve a collection.")]
 		public List<InUseInfo> InUseLookup
 		{
 			get { return (this.inUseLookup); }

@@ -114,8 +114,6 @@ namespace MKY.IO.Usb
 		/// <returns>
 		/// <c>true</c> if item is found in the collection; otherwise, <c>false</c>.
 		/// </returns>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
 		public virtual bool ContainsVidPid(DeviceInfo item)
 		{
 			lock (this)
@@ -140,8 +138,6 @@ namespace MKY.IO.Usb
 		/// <returns>
 		/// The first element that matches the <paramref name="item"/>, if found; otherwise, –1.
 		/// </returns>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
 		public virtual DeviceInfo FindVidPid(DeviceInfo item)
 		{
 			lock (this)
@@ -162,8 +158,6 @@ namespace MKY.IO.Usb
 		/// The zero-based index of the first occurrence of an element that matches the
 		/// <paramref name="item"/>, if found; otherwise, –1.
 		/// </returns>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
 		public virtual int FindIndexVidPid(DeviceInfo item)
 		{
 			lock (this)

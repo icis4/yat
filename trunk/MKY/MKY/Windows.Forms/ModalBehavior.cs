@@ -23,6 +23,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Windows.Forms
 {
@@ -38,7 +39,10 @@ namespace MKY.Windows.Forms
 	{
 		Never,
 		Always,
+
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "NonUser", Justification = "What's the problem...")]
 		InCaseOfNonUserError,
+
 		OnlyInCaseOfUserInteraction,
 	}
 

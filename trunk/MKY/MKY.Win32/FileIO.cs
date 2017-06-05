@@ -69,7 +69,9 @@ using Microsoft.Win32.SafeHandles;
 
 // Justification = "Naming is defined by the Win32 API."
 [module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#GetOverlappedResult(Microsoft.Win32.SafeHandles.SafeFileHandle,System.IntPtr,System.Int32&,System.Boolean)", MessageId = "h")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#GetOverlappedResult(Microsoft.Win32.SafeHandles.SafeFileHandle,System.IntPtr,System.Int32&,System.Boolean)", MessageId = "b")]
 [module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#CancelIo(Microsoft.Win32.SafeHandles.SafeFileHandle)", MessageId = "h")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#CreateEvent(System.IntPtr,System.Boolean,System.Boolean,System.String)", MessageId = "b")]
 [module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#WaitForSingleObject(System.IntPtr,System.UInt32)", MessageId = "dw")]
 [module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#WaitForSingleObject(System.IntPtr,System.UInt32)", MessageId = "h")]
 [module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#WriteFile(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte[],System.Int32&,System.Threading.NativeOverlapped&)", MessageId = "h")]

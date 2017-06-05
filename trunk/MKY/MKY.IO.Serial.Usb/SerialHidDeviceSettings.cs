@@ -204,7 +204,6 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
 		[XmlElement("RxFilterUsage")]
 		public virtual SerialHidRxFilterUsage RxFilterUsage
 		{

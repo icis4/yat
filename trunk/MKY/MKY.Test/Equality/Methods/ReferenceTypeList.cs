@@ -23,6 +23,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 using MKY.Diagnostics;
 
@@ -34,9 +35,11 @@ namespace MKY.Test.Equality.Methods
 	public static class ReferenceTypeList
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "A list is required for testing a reference type list...")]
 		public static void TestOperatorsForReferenceEquality(List<int> obj)
 		{
-			if (Configuration.TraceCallingSequence) {
+			if (Configuration.TraceCallingSequence)
+			{
 				Trace.Indent();
 				TraceEx.WriteLocation();
 				Trace.Indent();
@@ -48,38 +51,48 @@ namespace MKY.Test.Equality.Methods
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
-				if (Configuration.TraceCallingSequence) {
+				if (Configuration.TraceCallingSequence)
+				{
 					Trace.WriteLine("Reference equal using operator ==()");
 					Trace.Indent();
 				}
 
 				if (!(obj == obj))
+				{
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
+				}
 
-				if (Configuration.TraceCallingSequence) {
+				if (Configuration.TraceCallingSequence)
+				{
 					Trace.Unindent();
 					Trace.WriteLine("Reference equal using operator !=()");
 					Trace.Indent();
 				}
 
 				if (obj != obj)
+				{
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
+				}
 
-				if (Configuration.TraceCallingSequence)
+				if (Configuration.TraceCallingSequence) {
 					Trace.Unindent();
+				}
 
 				#pragma warning restore 1718
 			}
 			catch (AssertionException)
 			{
 				if (Configuration.TraceCallingSequence)
+				{
 					Trace.Unindent();
+				}
 
 				throw; // Re-throw!
 			}
 			finally
 			{
-				if (Configuration.TraceCallingSequence) {
+				if (Configuration.TraceCallingSequence)
+				{
 					Trace.Unindent();
 					Trace.Unindent();
 				}

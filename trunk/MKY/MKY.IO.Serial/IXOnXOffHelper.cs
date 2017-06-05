@@ -22,6 +22,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace MKY.IO.Serial
@@ -150,6 +151,7 @@ namespace MKY.IO.Serial
 		/// <returns>
 		/// Returns <c>true</c> if XOn/XOff state has changed, <c>false</c> if state remains.
 		/// </returns>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and obvious.")]
 		public virtual bool XOnOrXOffSent(byte b)
 		{
 			if (b == XOnXOff.XOnByte)
@@ -215,6 +217,7 @@ namespace MKY.IO.Serial
 		/// <returns>
 		/// Returns <c>true</c> if XOn/XOff state has changed, <c>false</c> if state remains.
 		/// </returns>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and obvious.")]
 		public virtual bool XOnOrXOffReceived(byte b)
 		{
 			if (b == XOnXOff.XOnByte)

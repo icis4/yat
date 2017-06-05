@@ -57,12 +57,12 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <typeparam name="T">The (simple) settings type.</typeparam>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasizing the 'utility' nature of this delegate.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize the 'utility' nature of this delegate.")]
 		[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Why not?")]
 		public delegate TerminalSettingsRoot TerminalSettingsDelegate<T>(T arg);
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasizing the 'utility' nature of this class.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize the 'utility' nature of this class.")]
 		public static class TransmissionSettings
 		{
 			/// <summary></summary>

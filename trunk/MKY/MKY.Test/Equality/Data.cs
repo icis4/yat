@@ -22,15 +22,18 @@
 //==================================================================================================
 
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 using NUnit.Framework;
 
 namespace MKY.Test.Equality
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public static class Data
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the hierarchy.")]
 		public static IEnumerable TestCases_Base
 		{
 			get
@@ -40,6 +43,7 @@ namespace MKY.Test.Equality
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the hierarchy.")]
 		public static IEnumerable TestCases_Derived
 		{
 			get
@@ -62,6 +66,7 @@ namespace MKY.Test.Equality
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the hierarchy.")]
 		public static IEnumerable TestCases_DerivedDerived
 		{
 			get

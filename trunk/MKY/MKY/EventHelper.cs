@@ -73,6 +73,9 @@ namespace MKY
 		/// <summary>
 		/// Flags to configure the event handling mode of the <see cref="EventHelper"/>.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "'InvokeAll' actually means 'DiscardNone' but is more obvious.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize that this type belongs to the 'EventHelper'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Well, there are exceptions to the rules...")]
 		[Flags]
 		public enum EventHandlingMode
 		{
@@ -106,6 +109,9 @@ namespace MKY
 		/// <summary>
 		/// Flags to configure the exception handling mode of the <see cref="EventHelper"/>.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "'RethrowAll' actually means 'DiscardNone' but is more obvious.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize that this type belongs to the 'EventHelper'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Well, there are exceptions to the rules...")]
 		[Flags]
 		public enum ExceptionHandlingMode
 		{
@@ -172,6 +178,7 @@ namespace MKY
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize that this type belongs to the 'EventHelper'.")]
 		public class Item
 		{
 			#region Fields/Events/Lifetime/Properties/Methods
@@ -189,6 +196,7 @@ namespace MKY
 			public event EventHandler<UnhandledExceptionEventArgs> UnhandledExceptionOnNonMainThread;
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 			public Item(EventHandlingMode eventHandling = EventHandlingDefault, ExceptionHandlingMode exceptionHandling = ExceptionHandlingDefault)
 			{
 				this.eventHandling = eventHandling;

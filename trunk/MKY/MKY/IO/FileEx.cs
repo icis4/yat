@@ -211,6 +211,7 @@ namespace MKY.IO
 		/// <summary>
 		/// Swaps two existing files.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static void Swap(string filePathA, string filePathB)
 		{
 			string filePathTemp = PathEx.GetUniqueTempPath(); // No extension needed.
@@ -246,7 +247,7 @@ namespace MKY.IO
 			catch
 			{
 				// Best-effort cleanup (revert B and A):
-				try { File.Move(filePathA, filePathB); } catch { }
+				try { File.Move(filePathA,    filePathB); } catch { }
 				try { File.Move(filePathTemp, filePathA); } catch { }
 
 				throw; // Re-throw!
@@ -264,11 +265,8 @@ namespace MKY.IO
 		{
 			if (File.Exists(initialFilePath)) // Name needs to be changed:
 			{
-				string effectiveSeparator;
-				if (separator != null)
-					effectiveSeparator = separator;
-				else
-					effectiveSeparator = ""; // Allow '+' concatenation below.
+				if (separator == null)
+					separator = ""; // Allow '+' concatenation below.
 
 				string extension = Path.GetExtension(initialFilePath);
 				string filePathWithoutExtension = Path.ChangeExtension(initialFilePath, null);
@@ -280,7 +278,7 @@ namespace MKY.IO
 				{
 					i++; // No need to check for overflow, that is checked by the .NET runtime.
 					postfix = i.ToString(CultureInfo.InvariantCulture);
-					uniqueFilePath = filePathWithoutExtension + postfix + extension;
+					uniqueFilePath = filePathWithoutExtension + separator + postfix + extension;
 				}
 				while (File.Exists(uniqueFilePath));
 
