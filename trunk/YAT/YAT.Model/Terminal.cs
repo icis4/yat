@@ -477,7 +477,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// The file name if the user has saved the terminal; otherwise <see cref="string.Empty"/>;
+		/// The file name if the user has saved the terminal; otherwise <see cref="string.Empty"/>.
 		/// </summary>
 		public virtual string FileName
 		{
@@ -493,7 +493,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// The optional user defined terminal name; otherwise <see cref="string.Empty"/>;
+		/// The optional user defined terminal name; otherwise <see cref="string.Empty"/>.
 		/// </summary>
 		public virtual string UserName
 		{

@@ -39,7 +39,7 @@ namespace MKY.Data
 	/// Note the additional YAT feature request #159 "Consider replacing SettingsItem/​DataItem
 	/// with attributes" and feature request #286 "Consider upgrade from XML serialization to
 	/// .NET 3.0 DataContract serialization" to switch to that serialization, the preferred way
-	/// to handle persistance since the .NET 3.0 framework version.
+	/// to handle persistence since the .NET 3.0 framework version.
 	/// 
 	/// Also note that this class intentionally doesn't implement <see cref="IDisposable"/>. That
 	/// would unnecessarily complicate the handling of settings item, e.g. in a settings dialog,

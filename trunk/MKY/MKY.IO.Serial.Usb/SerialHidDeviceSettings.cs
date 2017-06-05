@@ -38,6 +38,7 @@ using MKY.IO.Usb;
 namespace MKY.IO.Serial.Usb
 {
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
 	[Serializable]
 	public class SerialHidDeviceSettings : Settings.SettingsItem, IEquatable<SerialHidDeviceSettings>
 	{

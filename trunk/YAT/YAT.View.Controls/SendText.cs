@@ -425,6 +425,7 @@ namespace YAT.View.Controls
 		/// keys were pressed at the same time as the key. Modifier keys include the SHIFT, CTRL, and
 		/// ALT keys.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{

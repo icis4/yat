@@ -63,7 +63,7 @@ using MKY.Threading;
 using MKY.Windows.Forms; // Note that several locations explicitly use 'MKY.Windows.Forms' to prevent naming conflicts with 'System.Windows.Forms' and 'YAT.Application'.
 
 using YAT.Settings.Application;
-// Explicitly using 'YAT.View.Forms' to prevent naming conflicts with same-named 'YAT.Controller' classes like 'Main'.
+//// 'YAT.View.Forms' is explicitly used to prevent naming conflicts with same-named 'YAT.Controller' classes like 'Main'.
 
 #endregion
 

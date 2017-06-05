@@ -28,9 +28,10 @@ using System.Xml.Serialization;
 namespace MKY.IO.Ports
 {
 	/// <remarks>
-	/// 'class' instead of 'struct' to allow a paremeterless constructor, i.e. initializing
+	/// 'class' instead of 'struct' to allow a parameterless constructor, i.e. initializing
 	/// <see cref="PortId"/> and <see cref="InUseText"/> to other value than 0 and "".
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Parameterless' is a correct English term.")]
 	[Serializable]
 	public class InUseInfo : IEquatable<InUseInfo>
 	{
@@ -41,21 +42,25 @@ namespace MKY.IO.Ports
 		public const string OtherAppInUseTextDefault = "(in use by another application)";
 
 		/// <summary>A unique ID of the item/client that uses the stated serial port.</summary>
+		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("UseId")]
 		public int UseId; // = 0;
 
 		/// <summary>The ID of the stated serial port.</summary>
+		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("PortId")]
 		public int PortId = SerialPortId.FirstStandardPortNumber;
 
 		/// <summary>Indicates whether the serial port is open.</summary>
+		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("IsOpen")]
 		public bool IsOpen; // = false
 
 		/// <summary>Contains the in use statement text.</summary>
+		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("IsOpen")]
 		public string InUseText = ActivePortInUseTextDefault;
@@ -138,7 +143,7 @@ namespace MKY.IO.Ports
 
 			return
 			(
-				// Do not call 'base.Equals(other)' when deriving from 'object'.
+			////base.Equals(other) is not required when deriving from 'object'.
 
 				UseId .Equals(other.UseId) &&
 				PortId.Equals(other.PortId)

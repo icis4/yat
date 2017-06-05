@@ -60,7 +60,7 @@ namespace YAT.Domain.Parser
 		/// <remarks>
 		/// Prepended "Z_" to get it at the bottom of a selection list.
 		/// </remarks>
-		Z_FIT
+		ZZZ_FIT
 	}
 
 	#pragma warning restore 1591
@@ -92,7 +92,7 @@ namespace YAT.Domain.Parser
 		private const string OutputBreakToggle_string = "OutputBreakToggle";
 		private const string ReportId_string          = "ReportID"; // "ID" instead of "Id" for better readability.
 
-		private const string Z_FIT_string = "Z_FIT"; // = for internal testing.
+		private const string ZZZ_FIT_string = "ZZZ_FIT"; // = for internal testing.
 
 		#endregion
 
@@ -136,7 +136,7 @@ namespace YAT.Domain.Parser
 				case Keyword.OutputBreakToggle: return (OutputBreakToggle_string);
 				case Keyword.ReportId:          return (ReportId_string);
 
-				case Keyword.Z_FIT: return (Z_FIT_string);
+				case Keyword.ZZZ_FIT: return (ZZZ_FIT_string);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -170,7 +170,7 @@ namespace YAT.Domain.Parser
 			a.Add(new KeywordEx(Keyword.OutputBreakToggle));
 			a.Add(new KeywordEx(Keyword.ReportId));
 
-			// Do not add 'Z_FIT' (= for internal testing).
+			// Do not add 'ZZZ_FIT' (= for internal testing).
 
 			return (a.ToArray());
 		}
@@ -188,7 +188,7 @@ namespace YAT.Domain.Parser
 				case Keyword.LineRepeat:   return (1);
 				case Keyword.ReportId:     return (1);
 
-				case Keyword.Z_FIT:        return (3); // = for internal testing.
+				case Keyword.ZZZ_FIT:        return (3); // = for internal testing.
 
 				default: return (0);
 			}
@@ -204,12 +204,12 @@ namespace YAT.Domain.Parser
 				case Keyword.Delay:        return (argValue >= 1); // Attention, a similar validation exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.LineDelay:    return (argValue >= 1); // Attention, a similar validation exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.LineInterval: return (argValue >= 1); // Attention, a similar validation exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
-
+				                                                  //// Attention, a similar validation exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.LineRepeat:   return ((argValue >= 1) || (argValue == Settings.SendSettings.LineRepeatInfinite));
-				                                                   // Attention, a similar validation exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				                                                  //// Attention, a similar validation exists in 'View.Controls.UsbSerialHidDeviceSettings'. Changes here may have to be applied there too.
 				case Keyword.ReportId:     return ((argValue >= 0) && (argValue <= 255));
-				                                                   // Attention, a similar validation exists in 'View.Controls.UsbSerialHidDeviceSettings'. Changes here may have to be applied there too.
-				case Keyword.Z_FIT: // = for internal testing.
+
+				case Keyword.ZZZ_FIT: // = for internal testing.
 				{
 					switch (argIndex)
 					{
@@ -230,23 +230,23 @@ namespace YAT.Domain.Parser
 		/// </summary>
 		public virtual string GetValidationFragment(int argIndex)
 		{
-			string NoArgSupportedMessage = "[" + MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' doesn't support arguments! " + MessageHelper.SubmitBug + "]";
+			string noArgSupportedMessage = "[" + MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' doesn't support arguments! " + MessageHelper.SubmitBug + "]";
 
 			switch ((Keyword)UnderlyingEnum)
 			{
-				case Keyword.Clear:             return (NoArgSupportedMessage);
+				case Keyword.Clear:             return (noArgSupportedMessage);
 				case Keyword.Delay:             return ("an integer value of 1 or more indicating the delay in milliseconds");    // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.LineDelay:         return ("an integer value of 1 or more indicating the delay in milliseconds");    // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.LineInterval:      return ("an integer value of 1 or more indicating the interval in milliseconds"); // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.LineRepeat:        return ("an integer value of 1 or more indicating the number of repetitions, or " + Settings.SendSettings.LineRepeatInfinite + " for infinite repetitions");
-				case Keyword.Eol:               return (NoArgSupportedMessage);                                                   // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
-				case Keyword.NoEol:             return (NoArgSupportedMessage);
-				case Keyword.OutputBreakOn:     return (NoArgSupportedMessage);
-				case Keyword.OutputBreakOff:    return (NoArgSupportedMessage);
-				case Keyword.OutputBreakToggle: return (NoArgSupportedMessage);
+				case Keyword.Eol:               return (noArgSupportedMessage);                                                   // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.NoEol:             return (noArgSupportedMessage);
+				case Keyword.OutputBreakOn:     return (noArgSupportedMessage);
+				case Keyword.OutputBreakOff:    return (noArgSupportedMessage);
+				case Keyword.OutputBreakToggle: return (noArgSupportedMessage);
 				case Keyword.ReportId:          return ("ID must be a numeric value within 0..255"); // Attention, a similar message exists in 'View.Controls.UsbSerialHidDeviceSettings'. Changes here may have to be applied there too.
 
-				case Keyword.Z_FIT: // = for internal testing.
+				case Keyword.ZZZ_FIT: // = for internal testing.
 				{
 					switch (argIndex)
 					{
@@ -362,9 +362,9 @@ namespace YAT.Domain.Parser
 				result = Keyword.ReportId;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Z_FIT_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, ZZZ_FIT_string))
 			{
-				result = Keyword.Z_FIT;
+				result = Keyword.ZZZ_FIT;
 				return (true);
 			}
 			else // Invalid string!

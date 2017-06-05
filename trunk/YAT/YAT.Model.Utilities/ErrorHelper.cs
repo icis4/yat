@@ -33,21 +33,21 @@ namespace YAT.Model.Utilities
 	/// <summary></summary>
 	public static class ErrorHelper
 	{
-		/// <remarks>[str] and [str, str] and [str, str, str] and [str, str, str, str]</remarks>
+		/// <remarks>Provides [str] and [str, str] and [str, str, str] and [str, str, str, str].</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static string ComposeMessage(string lead, string leadAddOn = null, string secondaryLead = null, string secondaryText = null)
 		{
 			return (ComposeMessage(lead, leadAddOn, null, secondaryLead, secondaryText));
 		}
 
-		/// <remarks>[str, ex]</remarks>
+		/// <remarks>Provides [str, ex].</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static string ComposeMessage(string lead, Exception ex, string secondaryLead = null, string secondaryText = null)
 		{
 			return (ComposeMessage(lead, null, ex, secondaryLead, secondaryText));
 		}
 
-		/// <remarks>[str, str, ex]</remarks>
+		/// <remarks>Provides [str, str, ex].</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static string ComposeMessage(string lead, string leadAddOn, Exception ex, string secondaryLead = null, string secondaryText = null)
 		{

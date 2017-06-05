@@ -440,51 +440,51 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(Delay   (   )   )", Domain.Parser.Keyword.Delay, null));
 
 				// Single:
-				yield return (new TestCaseData(@"\!(Z_FIT(1))",             Domain.Parser.Keyword.Z_FIT, new int[] { 1 }));
-				yield return (new TestCaseData(@"\!(Z_FIT ( 1 ) )",         Domain.Parser.Keyword.Z_FIT, new int[] { 1 }));
-				yield return (new TestCaseData(@"\!(Z_FIT   (   1   )   )", Domain.Parser.Keyword.Z_FIT, new int[] { 1 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1))",             Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT ( 1 ) )",         Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT   (   1   )   )", Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1 }));
 
 				// Multiple:
-				yield return (new TestCaseData(@"\!(Z_FIT( 1 , 2 , 3 ))", Domain.Parser.Keyword.Z_FIT, new int[] { 1, 2, 3 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(1 , 2 , 3))",   Domain.Parser.Keyword.Z_FIT, new int[] { 1, 2, 3 }));
-				yield return (new TestCaseData(@"\!(Z_FIT( 1 ,2 ,3 ))",   Domain.Parser.Keyword.Z_FIT, new int[] { 1, 2, 3 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(1 ,2 ,3))",     Domain.Parser.Keyword.Z_FIT, new int[] { 1, 2, 3 }));
-				yield return (new TestCaseData(@"\!(Z_FIT( 1,2,3 ))",     Domain.Parser.Keyword.Z_FIT, new int[] { 1, 2, 3 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(1,2,3))",       Domain.Parser.Keyword.Z_FIT, new int[] { 1, 2, 3 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(0,1,2))",       Domain.Parser.Keyword.Z_FIT, new int[] { 0, 1, 2 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT( 1 , 2 , 3 ))", Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1, 2, 3 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1 , 2 , 3))",   Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1, 2, 3 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT( 1 ,2 ,3 ))",   Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1, 2, 3 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1 ,2 ,3))",     Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1, 2, 3 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT( 1,2,3 ))",     Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1, 2, 3 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1,2,3))",       Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1, 2, 3 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0,1,2))",       Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0, 1, 2 }));
 
 				// Partial:
-				yield return (new TestCaseData(@"\!(Z_FIT(1, 2))", Domain.Parser.Keyword.Z_FIT, new int[] { 1, 2 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(0, 1))", Domain.Parser.Keyword.Z_FIT, new int[] { 0, 1 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1, 2))", Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1, 2 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0, 1))", Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0, 1 }));
 
 				// Sign:
-				yield return (new TestCaseData(@"\!(Z_FIT(1, -2, 3))", Domain.Parser.Keyword.Z_FIT, new int[] { 1, -2, 3 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(1, 2, +3))", Domain.Parser.Keyword.Z_FIT, new int[] { 1, 2, +3 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1, -2, 3))", Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1, -2, 3 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1, 2, +3))", Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1, 2, +3 }));
 
 				// Radix:
-				yield return (new TestCaseData(@"\!(Z_FIT(0b0))",                                Domain.Parser.Keyword.Z_FIT, new int[] { 0x00 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(0b1))",                                Domain.Parser.Keyword.Z_FIT, new int[] { 0x01 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(0b01))",                               Domain.Parser.Keyword.Z_FIT, new int[] { 0x01 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(0b11))",                               Domain.Parser.Keyword.Z_FIT, new int[] { 0x03 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(0b00000000000000000000000000000001))", Domain.Parser.Keyword.Z_FIT, new int[] { 0x01 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(0b01000000000000000000000000000001))", Domain.Parser.Keyword.Z_FIT, new int[] { 0x40000001 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(0b01111111111111111111111111111111))", Domain.Parser.Keyword.Z_FIT, new int[] { 0x7FFFFFFF }));
-				yield return (new TestCaseData(@"\!(Z_FIT(00))",                                 Domain.Parser.Keyword.Z_FIT, new int[] { 0 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(01))",                                 Domain.Parser.Keyword.Z_FIT, new int[] { 1 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(001))",                                Domain.Parser.Keyword.Z_FIT, new int[] { 1 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(012))",                                Domain.Parser.Keyword.Z_FIT, new int[] { 10 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(01234567))",                           Domain.Parser.Keyword.Z_FIT, new int[] { 342391 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(000000000001))",                       Domain.Parser.Keyword.Z_FIT, new int[] { 1 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(010000000001))",                       Domain.Parser.Keyword.Z_FIT, new int[] { 0x40000001 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(017777777777))",                       Domain.Parser.Keyword.Z_FIT, new int[] { 0x7FFFFFFF }));
-				yield return (new TestCaseData(@"\!(Z_FIT(0x0))",                                Domain.Parser.Keyword.Z_FIT, new int[] { 0x00 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(0xA))",                                Domain.Parser.Keyword.Z_FIT, new int[] { 0x0A }));
-				yield return (new TestCaseData(@"\!(Z_FIT(0x0A))",                               Domain.Parser.Keyword.Z_FIT, new int[] { 0x0A }));
-				yield return (new TestCaseData(@"\!(Z_FIT(0x1A))",                               Domain.Parser.Keyword.Z_FIT, new int[] { 0x1A }));
-				yield return (new TestCaseData(@"\!(Z_FIT(0x0123CDEF))",                         Domain.Parser.Keyword.Z_FIT, new int[] { 0x0123CDEF }));
-				yield return (new TestCaseData(@"\!(Z_FIT(0x00000001))",                         Domain.Parser.Keyword.Z_FIT, new int[] { 0x01 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(0x40000001))",                         Domain.Parser.Keyword.Z_FIT, new int[] { 0x40000001 }));
-				yield return (new TestCaseData(@"\!(Z_FIT(0x7FFFFFFF))",                         Domain.Parser.Keyword.Z_FIT, new int[] { 0x7FFFFFFF }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0b0))",                                Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x00 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0b1))",                                Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x01 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0b01))",                               Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x01 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0b11))",                               Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x03 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0b00000000000000000000000000000001))", Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x01 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0b01000000000000000000000000000001))", Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x40000001 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0b01111111111111111111111111111111))", Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x7FFFFFFF }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(00))",                                 Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(01))",                                 Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(001))",                                Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(012))",                                Domain.Parser.Keyword.ZZZ_FIT, new int[] { 10 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(01234567))",                           Domain.Parser.Keyword.ZZZ_FIT, new int[] { 342391 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(000000000001))",                       Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(010000000001))",                       Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x40000001 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(017777777777))",                       Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x7FFFFFFF }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0x0))",                                Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x00 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0xA))",                                Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x0A }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0x0A))",                               Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x0A }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0x1A))",                               Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x1A }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0x0123CDEF))",                         Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x0123CDEF }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0x00000001))",                         Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x01 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0x40000001))",                         Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x40000001 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0x7FFFFFFF))",                         Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x7FFFFFFF }));
 			}
 		}
 
@@ -539,37 +539,37 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(ReportId(256))",	@"\!(ReportId(256",		@"""256"" is no valid 0th argument for keyword 'ReportId'. Argument must be ID must be a numeric value within 0..255."));
 				yield return (new TestCaseData(@"\!(ReportId(0x100))",	@"\!(ReportId(0x100",	@"""0x100"" is no valid 0th argument for keyword 'ReportId'. Argument must be ID must be a numeric value within 0..255."));
 
-				yield return (new TestCaseData(@"\!(Z_FIT(1 2 3))",		@"\!(Z_FIT(1 ",		@"Closing parenthesis expected instead of character '2' (0x32)."));
-				yield return (new TestCaseData(@"\!(Z_FIT(1.2.3))",		@"\!(Z_FIT(1",		@"Character '.' (0x2E) is invalid for decimal values."));
-				yield return (new TestCaseData(@"\!(Z_FIT(1 2, 3))",	@"\!(Z_FIT(1 ",		@"Closing parenthesis expected instead of character '2' (0x32)."));
-				yield return (new TestCaseData(@"\!(Z_FIT(1.2, 3))",	@"\!(Z_FIT(1",		@"Character '.' (0x2E) is invalid for decimal values."));
-				yield return (new TestCaseData(@"\!(Z_FIT(1, 2 3))",	@"\!(Z_FIT(1, 2 ",	@"Closing parenthesis expected instead of character '3' (0x33)."));
-				yield return (new TestCaseData(@"\!(Z_FIT(1, 2.3))",	@"\!(Z_FIT(1, 2",	@"Character '.' (0x2E) is invalid for decimal values."));
-				yield return (new TestCaseData(@"\!(Z_FIT(1 23))",		@"\!(Z_FIT(1 ",		@"Closing parenthesis expected instead of character '2' (0x32)."));
-				yield return (new TestCaseData(@"\!(Z_FIT(1.23))",		@"\!(Z_FIT(1",		@"Character '.' (0x2E) is invalid for decimal values."));
-				yield return (new TestCaseData(@"\!(Z_FIT(12 3))",		@"\!(Z_FIT(12 ",	@"Closing parenthesis expected instead of character '3' (0x33)."));
-				yield return (new TestCaseData(@"\!(Z_FIT(12.3))",		@"\!(Z_FIT(12",		@"Character '.' (0x2E) is invalid for decimal values."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1 2 3))",		@"\!(ZZZ_FIT(1 ",		@"Closing parenthesis expected instead of character '2' (0x32)."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1.2.3))",		@"\!(ZZZ_FIT(1",		@"Character '.' (0x2E) is invalid for decimal values."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1 2, 3))",		@"\!(ZZZ_FIT(1 ",		@"Closing parenthesis expected instead of character '2' (0x32)."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1.2, 3))",		@"\!(ZZZ_FIT(1",		@"Character '.' (0x2E) is invalid for decimal values."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1, 2 3))",		@"\!(ZZZ_FIT(1, 2 ",	@"Closing parenthesis expected instead of character '3' (0x33)."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1, 2.3))",		@"\!(ZZZ_FIT(1, 2",		@"Character '.' (0x2E) is invalid for decimal values."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1 23))",		@"\!(ZZZ_FIT(1 ",		@"Closing parenthesis expected instead of character '2' (0x32)."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1.23))",		@"\!(ZZZ_FIT(1",		@"Character '.' (0x2E) is invalid for decimal values."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(12 3))",		@"\!(ZZZ_FIT(12 ",		@"Closing parenthesis expected instead of character '3' (0x33)."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(12.3))",		@"\!(ZZZ_FIT(12",		@"Character '.' (0x2E) is invalid for decimal values."));
 
-				yield return (new TestCaseData(@"\!(Z_FIT(1,))",		@"\!(Z_FIT(1,",		@"Empty arguments are no permitted."));
-				yield return (new TestCaseData(@"\!(Z_FIT(1 ,))",		@"\!(Z_FIT(1 ,",	@"Empty arguments are no permitted."));
-				yield return (new TestCaseData(@"\!(Z_FIT(1,2,))",		@"\!(Z_FIT(1,2,",	@"Empty arguments are no permitted."));
-				yield return (new TestCaseData(@"\!(Z_FIT(1,2 ,))",		@"\!(Z_FIT(1,2 ,",	@"Empty arguments are no permitted."));
-				yield return (new TestCaseData(@"\!(Z_FIT(,2,3))",		@"\!(Z_FIT(",		@"Empty arguments are no permitted."));
-				yield return (new TestCaseData(@"\!(Z_FIT( ,2,3))",		@"\!(Z_FIT( ",		@"Empty arguments are no permitted."));
-				yield return (new TestCaseData(@"\!(Z_FIT(1,2,3,))",	@"\!(Z_FIT(1,2,3",	@"Keyword 'Z_FIT' only supports up to 3 arguments."));
-				yield return (new TestCaseData(@"\!(Z_FIT(1,2,3 ,))",	@"\!(Z_FIT(1,2,3 ",	@"Keyword 'Z_FIT' only supports up to 3 arguments."));
-				yield return (new TestCaseData(@"\!(Z_FIT(1,2,3,4))",	@"\!(Z_FIT(1,2,3",	@"Keyword 'Z_FIT' only supports up to 3 arguments."));
-				yield return (new TestCaseData(@"\!(Z_FIT(1,2,3 ,4))",	@"\!(Z_FIT(1,2,3 ",	@"Keyword 'Z_FIT' only supports up to 3 arguments."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1,))",			@"\!(ZZZ_FIT(1,",		@"Empty arguments are no permitted."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1 ,))",			@"\!(ZZZ_FIT(1 ,",		@"Empty arguments are no permitted."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1,2,))",		@"\!(ZZZ_FIT(1,2,",		@"Empty arguments are no permitted."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1,2 ,))",		@"\!(ZZZ_FIT(1,2 ,",	@"Empty arguments are no permitted."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(,2,3))",		@"\!(ZZZ_FIT(",			@"Empty arguments are no permitted."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT( ,2,3))",		@"\!(ZZZ_FIT( ",		@"Empty arguments are no permitted."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1,2,3,))",		@"\!(ZZZ_FIT(1,2,3",	@"Keyword 'ZZZ_FIT' only supports up to 3 arguments."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1,2,3 ,))",		@"\!(ZZZ_FIT(1,2,3 ",	@"Keyword 'ZZZ_FIT' only supports up to 3 arguments."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1,2,3,4))",		@"\!(ZZZ_FIT(1,2,3",	@"Keyword 'ZZZ_FIT' only supports up to 3 arguments."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1,2,3 ,4))",	@"\!(ZZZ_FIT(1,2,3 ",	@"Keyword 'ZZZ_FIT' only supports up to 3 arguments."));
 
-				yield return (new TestCaseData(@"\!(Z_FIT(bla))",		@"\!(Z_FIT(",		@"Character 'b' (0x62) is invalid for decimal values."));
-				yield return (new TestCaseData(@"\!(Z_FIT(1,bla))",		@"\!(Z_FIT(1,",		@"Character 'b' (0x62) is invalid for decimal values."));
-				yield return (new TestCaseData(@"\!(Z_FIT(1, bla))",	@"\!(Z_FIT(1, ",	@"Character 'b' (0x62) is invalid for decimal values."));
-				yield return (new TestCaseData(@"\!(Z_FIT(1,2,bla))",	@"\!(Z_FIT(1,2,",	@"Character 'b' (0x62) is invalid for decimal values."));
-				yield return (new TestCaseData(@"\!(Z_FIT(1,2, bla))",	@"\!(Z_FIT(1,2, ",	@"Character 'b' (0x62) is invalid for decimal values."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(bla))",			@"\!(ZZZ_FIT(",			@"Character 'b' (0x62) is invalid for decimal values."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1,bla))",		@"\!(ZZZ_FIT(1,",		@"Character 'b' (0x62) is invalid for decimal values."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1, bla))",		@"\!(ZZZ_FIT(1, ",		@"Character 'b' (0x62) is invalid for decimal values."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1,2,bla))",		@"\!(ZZZ_FIT(1,2,",		@"Character 'b' (0x62) is invalid for decimal values."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1,2, bla))",	@"\!(ZZZ_FIT(1,2, ",	@"Character 'b' (0x62) is invalid for decimal values."));
 
-				yield return (new TestCaseData(@"\!(Z_FIT(,))",			@"\!(Z_FIT(",		@"Empty arguments are no permitted."));
-				yield return (new TestCaseData(@"\!(Z_FIT(,,))",		@"\!(Z_FIT(",		@"Empty arguments are no permitted."));
-				yield return (new TestCaseData(@"\!(Z_FIT(,,,))",		@"\!(Z_FIT(",		@"Empty arguments are no permitted."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(,))",			@"\!(ZZZ_FIT(",			@"Empty arguments are no permitted."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(,,))",			@"\!(ZZZ_FIT(",			@"Empty arguments are no permitted."));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(,,,))",			@"\!(ZZZ_FIT(",			@"Empty arguments are no permitted."));
 			}
 		}
 

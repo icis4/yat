@@ -48,6 +48,18 @@ namespace YAT.Model.Test.FileHandling
 	[TestFixture]
 	public class UseCaseTest
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private readonly string normalWorkspaceFilePath = Temp.MakeTempFilePath(typeof(UseCaseTest), "NormalWorkspace", ExtensionHelper.WorkspaceFile);
+		private readonly string normalTerminal1FilePath = Temp.MakeTempFilePath(typeof(UseCaseTest), "NormalTerminal1", ExtensionHelper.TerminalFile);
+		private readonly string normalTerminal2FilePath = Temp.MakeTempFilePath(typeof(UseCaseTest), "NormalTerminal2", ExtensionHelper.TerminalFile);
+		private readonly string normalTerminal3FilePath = Temp.MakeTempFilePath(typeof(UseCaseTest), "NormalTerminal3", ExtensionHelper.TerminalFile);
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -56,11 +68,6 @@ namespace YAT.Model.Test.FileHandling
 		private bool autoOpenWorkspaceToRestore;
 		private bool autoSaveWorkspaceToRestore;
 		private string workspaceFilePathToRestore;
-
-		private readonly string normalWorkspaceFilePath = Temp.MakeTempFilePath(typeof(UseCaseTest), "NormalWorkspace", ExtensionHelper.WorkspaceFile);
-		private readonly string normalTerminal1FilePath = Temp.MakeTempFilePath(typeof(UseCaseTest), "NormalTerminal1", ExtensionHelper.TerminalFile);
-		private readonly string normalTerminal2FilePath = Temp.MakeTempFilePath(typeof(UseCaseTest), "NormalTerminal2", ExtensionHelper.TerminalFile);
-		private readonly string normalTerminal3FilePath = Temp.MakeTempFilePath(typeof(UseCaseTest), "NormalTerminal3", ExtensionHelper.TerminalFile);
 
 		#endregion
 

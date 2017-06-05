@@ -45,7 +45,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-// Explicitly using 'System.Net' as well as 'ALAZ.SystemEx.NetEx' for clarity.
+//// 'System.Net' as well as 'ALAZ.SystemEx.NetEx' are explicitly used for more obvious distinction.
 using System.Text;
 using System.Threading;
 

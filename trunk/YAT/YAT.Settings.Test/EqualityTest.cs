@@ -37,8 +37,8 @@ using MKY.Test.Equality.Methods;
 
 using NUnit.Framework;
 
-using YAT.Settings.Terminal;
 using YAT.Settings.Application;
+using YAT.Settings.Terminal;
 
 #endregion
 

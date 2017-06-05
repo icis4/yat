@@ -39,6 +39,7 @@ namespace YAT.Domain
 	/// Implemented as an enumeration (instead of a simple 'IsBigEndian' flag) to potentially
 	/// support exotic endiannesses (e.g. PDP-11 'MiddleEndian').
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Endianness' is a correct English term and 'Endiannesses' seems the obvious plural.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Endianness", Justification = "'Endianness' is a correct English term.")]
 	public enum Endianness
 	{
