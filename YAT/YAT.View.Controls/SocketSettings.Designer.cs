@@ -148,9 +148,9 @@
 			this.label_UdpServerSendMode.AutoSize = true;
 			this.label_UdpServerSendMode.Location = new System.Drawing.Point(3, 3);
 			this.label_UdpServerSendMode.Name = "label_UdpServerSendMode";
-			this.label_UdpServerSendMode.Size = new System.Drawing.Size(65, 13);
+			this.label_UdpServerSendMode.Size = new System.Drawing.Size(99, 13);
 			this.label_UdpServerSendMode.TabIndex = 0;
-			this.label_UdpServerSendMode.Text = "Send Mode:";
+			this.label_UdpServerSendMode.Text = "Server Send Mode:";
 			// 
 			// SocketSettings
 			// 

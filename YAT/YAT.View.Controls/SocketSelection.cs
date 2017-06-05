@@ -788,93 +788,31 @@ namespace YAT.View.Controls
 				textBox_RemotePort.Text = "";
 			}
 
-			// Local interface/filter label:
-			if (Enabled && ((SocketTypeEx)this.socketType).IsUdp)
-				label_LocalAddress.Text = "Local &Filter:";
-			else
-				label_LocalAddress.Text = "Local &Interface:";
-
 			// Local interface:
-			if (!DesignMode && Enabled && ((SocketTypeEx)this.socketType).IsTcp)
+			comboBox_LocalInterface.Visible = true;
+			comboBox_LocalInterface.Enabled = true;
+			if (comboBox_LocalInterface.Items.Count > 0)
 			{
-				comboBox_LocalInterface.Visible = true;
-				comboBox_LocalInterface.Enabled = true;
-				if (comboBox_LocalInterface.Items.Count > 0)
+				if (this.socketType != SocketType.UdpClient)
 				{
 					if (this.localInterface != null)
 						comboBox_LocalInterface.SelectedItem = this.localInterface;
 					else
-						comboBox_LocalInterface.SelectedItem = (IPNetworkInterfaceEx)IPNetworkInterface.Any;
+						comboBox_LocalInterface.SelectedItem = (IPNetworkInterfaceEx)IPNetworkInterfaceEx.Default;
 				}
 				else
 				{
-					comboBox_LocalInterface.SelectedIndex = ControlEx.InvalidIndex;
+					comboBox_LocalInterface.Enabled = false;
+					SelectionHelper.Deselect(comboBox_LocalInterface, (IPNetworkInterfaceEx)IPNetworkInterfaceEx.Default);
 				}
-
-				button_RefreshLocalInterfaces.Visible = true;
-				button_RefreshLocalInterfaces.Enabled = true;
 			}
 			else
 			{
-				comboBox_LocalInterface.Visible = false;
-				comboBox_LocalInterface.Enabled = false;
 				comboBox_LocalInterface.SelectedIndex = ControlEx.InvalidIndex;
-
-				button_RefreshLocalInterfaces.Visible = false;
-				button_RefreshLocalInterfaces.Enabled = false;
 			}
 
-			// Local filter:
-			if (!DesignMode && Enabled && ((SocketTypeEx)this.socketType).IsUdp)
-			{
-				comboBox_LocalFilter.Visible = true;
-				switch (this.socketType)
-				{
-					case SocketType.UdpClient:
-					{
-						comboBox_LocalFilter.Enabled = false;
-						SelectionHelper.Deselect(comboBox_LocalFilter, this.localFilter);
-						break;
-					}
-
-					case SocketType.UdpServer:
-					{
-						comboBox_LocalFilter.Enabled = true;
-						if (comboBox_LocalFilter.Items.Count > 0)
-						{
-							if (this.localFilter != null)
-								comboBox_LocalFilter.SelectedItem = this.localFilter;
-							else
-								comboBox_LocalFilter.SelectedItem = (IPFilterEx)IPFilter.Any;
-						}
-						else
-						{
-							comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
-						}
-
-						break;
-					}
-
-					case SocketType.UdpPairSocket:
-					{
-						comboBox_LocalFilter.Enabled = false;
-						SelectionHelper.Deselect(comboBox_LocalFilter, this.localFilter);
-						break;
-					}
-
-					default:
-					{
-						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.socketType + "' is invalid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-					}
-				}
-			}
-			else
-			{
-				comboBox_LocalFilter.Visible = false;
-				comboBox_LocalFilter.Enabled = false;
-				comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
-				comboBox_LocalFilter.Text = "";
-			}
+			button_RefreshLocalInterfaces.Visible = true;
+			button_RefreshLocalInterfaces.Enabled = true;
 
 			// Local port label:
 			if (Enabled && ((SocketTypeEx)this.socketType).IsUdp)
@@ -897,6 +835,58 @@ namespace YAT.View.Controls
 			{
 				textBox_LocalPort.Enabled = false;
 				textBox_LocalPort.Text = "";
+			}
+
+			// Local filter:
+			if (!DesignMode && Enabled && ((SocketTypeEx)this.socketType).IsUdp)
+			{
+				comboBox_LocalFilter.Visible = true;
+				switch (this.socketType)
+				{
+					case SocketType.UdpClient:
+					{
+						comboBox_LocalFilter.Enabled = false;
+						SelectionHelper.Deselect(comboBox_LocalFilter, (IPFilterEx)IPFilterEx.Default);
+						break;
+					}
+
+					case SocketType.UdpServer:
+					{
+						comboBox_LocalFilter.Enabled = true;
+						if (comboBox_LocalFilter.Items.Count > 0)
+						{
+							if (this.localFilter != null)
+								comboBox_LocalFilter.SelectedItem = this.localFilter;
+							else
+								comboBox_LocalFilter.SelectedItem = (IPFilterEx)IPFilterEx.Default;
+						}
+						else
+						{
+							comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
+						}
+
+						break;
+					}
+
+					case SocketType.UdpPairSocket:
+					{
+						comboBox_LocalFilter.Enabled = false;
+						SelectionHelper.Deselect(comboBox_LocalFilter, (IPFilterEx)IPFilterEx.Default);
+						break;
+					}
+
+					default:
+					{
+						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.socketType + "' is invalid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					}
+				}
+			}
+			else
+			{
+				comboBox_LocalFilter.Visible = false;
+				comboBox_LocalFilter.Enabled = false;
+				comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
+				comboBox_LocalFilter.Text = "";
 			}
 
 			this.isSettingControls.Leave();
