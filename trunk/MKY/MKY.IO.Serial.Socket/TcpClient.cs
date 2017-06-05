@@ -229,7 +229,7 @@ namespace MKY.IO.Serial.Socket
 			if (remoteHost == null)     throw (new ArgumentNullException("remoteHost"));
 			if (localInterface == null) throw (new ArgumentNullException("localInterface"));
 
-			this.instanceId = instanceId;
+			this.instanceId     = instanceId;
 
 			this.remoteHost     = remoteHost;
 			this.remotePort     = remotePort;

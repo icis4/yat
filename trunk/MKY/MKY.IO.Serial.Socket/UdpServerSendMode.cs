@@ -38,8 +38,8 @@ namespace MKY.IO.Serial.Socket
 	/// <summary></summary>
 	public enum UdpServerSendMode
 	{
-		None,
-		First,
+		None  = 0,
+		First = 1,
 		MostRecent,
 	}
 
