@@ -85,13 +85,12 @@ namespace YAT.Domain
 			End
 		}
 
-		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Private element.")]
 		private class LineState
 		{
-			public LinePosition    Position;
-			public DisplayLinePart Elements;
-			public DisplayLinePart EolElements;
-			public SequenceQueue   Eol;
+			public LinePosition    Position    { get; set; }
+			public DisplayLinePart Elements    { get; set; }
+			public DisplayLinePart EolElements { get; set; }
+			public SequenceQueue   Eol         { get; set; }
 
 			public Dictionary<string, bool> EolOfLastLineOfGivenPortWasCompleteMatch;
 
@@ -119,12 +118,11 @@ namespace YAT.Domain
 			}
 		}
 
-		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Private element.")]
 		private class BidirLineState
 		{
-			public bool IsFirstLine;
-			public string PortStamp;
-			public IODirection Direction;
+			public bool IsFirstLine      { get; set; }
+			public string PortStamp      { get; set; }
+			public IODirection Direction { get; set; }
 
 			public BidirLineState()
 			{
@@ -148,10 +146,9 @@ namespace YAT.Domain
 		// Types > Line Send Delay
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Private element.")]
 		private class LineSendDelayState
 		{
-			public int LineCount;
+			public int LineCount { get; set; }
 
 			public LineSendDelayState()
 			{

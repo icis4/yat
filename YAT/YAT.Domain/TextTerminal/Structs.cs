@@ -23,7 +23,6 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
@@ -36,19 +35,16 @@ namespace YAT.Domain
 	public struct TextLineSendDelay : IEquatable<TextLineSendDelay>
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("Enabled")]
-		public bool Enabled;
+		public bool Enabled { get; set; }
 
 		/// <summary>Delay in milliseconds.</summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("Delay")]
-		public int Delay;
+		public int Delay { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("LineInterval")]
-		public int LineInterval;
+		public int LineInterval { get; set; }
 
 		/// <summary></summary>
 		public TextLineSendDelay(bool enabled, int delay, int lineInterval)
@@ -136,14 +132,12 @@ namespace YAT.Domain
 	public struct WaitForResponse : IEquatable<WaitForResponse>
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("Enabled")]
-		public bool Enabled;
+		public bool Enabled { get; set; }
 
 		/// <summary>Wait timeout in milliseconds.</summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("Timeout")]
-		public int Timeout;
+		public int Timeout { get; set; }
 
 		/// <summary></summary>
 		public WaitForResponse(bool enabled, int timeout)

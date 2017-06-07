@@ -22,7 +22,6 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace MKY.IO.Serial.SerialPort
@@ -32,14 +31,12 @@ namespace MKY.IO.Serial.SerialPort
 	public struct OutputBufferSize : IEquatable<OutputBufferSize>
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("Enabled")]
-		public bool Enabled;
+		public bool Enabled { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("Size")]
-		public int Size;
+		public int Size { get; set; }
 
 		/// <summary></summary>
 		public OutputBufferSize(bool enabled, int size)
@@ -140,14 +137,12 @@ namespace MKY.IO.Serial.SerialPort
 	public struct ChunkSize : IEquatable<ChunkSize>
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("Enabled")]
-		public bool Enabled;
+		public bool Enabled { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("Size")]
-		public int Size;
+		public int Size { get; set; }
 
 		/// <summary></summary>
 		public ChunkSize(bool enabled, int size)
@@ -248,19 +243,16 @@ namespace MKY.IO.Serial.SerialPort
 	public struct SendRate : IEquatable<SendRate>
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("Enabled")]
-		public bool Enabled;
+		public bool Enabled { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("Size")]
-		public int Size;
+		public int Size { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("Interval")]
-		public int Interval;
+		public int Interval { get; set; }
 
 		/// <summary></summary>
 		public SendRate(bool enabled, int size, int interval)

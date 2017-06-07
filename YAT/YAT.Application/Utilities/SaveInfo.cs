@@ -23,7 +23,6 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 using MKY;
@@ -35,20 +34,18 @@ namespace YAT.Application.Utilities
 	public struct SaveInfo : IEquatable<SaveInfo>
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("TimeStamp")]
-		public DateTime TimeStamp;
+		public DateTime TimeStamp { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("UserName")]
-		public string UserName;
+		public string UserName { get; set; }
 
 		/// <summary></summary>
 		public SaveInfo(DateTime timeStamp, string userName)
 		{
 			TimeStamp = timeStamp;
-			UserName = userName;
+			UserName  = userName;
 		}
 
 		#region Object Members

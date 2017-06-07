@@ -63,29 +63,24 @@ namespace MKY.IO.Usb
 		#endregion
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("UseId")]
-		public bool UseId;
+		public bool UseId { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("Id")]
-		public byte Id;
+		public byte Id { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("PrependPayloadByteLength")]
-		public bool PrependPayloadByteLength;
+		public bool PrependPayloadByteLength { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("AppendTerminatingZero")]
-		public bool AppendTerminatingZero;
+		public bool AppendTerminatingZero { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("FillLastReport")]
-		public bool FillLastReport;
+		public bool FillLastReport { get; set; }
 
 		/// <summary>
 		/// Creates new format with specified arguments.

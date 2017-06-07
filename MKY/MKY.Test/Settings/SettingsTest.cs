@@ -83,9 +83,7 @@ namespace MKY.Test.Settings
 		public class TestTreeChildLevel2 : MKY.Settings.SettingsItem, IEquatable<TestTreeChildLevel2>
 		{
 			/// <summary></summary>
-			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
-			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-			public int SimpleValue = SimpleValueEqual;
+			public int SimpleValue { get; set; } = SimpleValueEqual;
 
 			/// <summary></summary>
 			public TestTreeChildLevel2()
@@ -194,9 +192,7 @@ namespace MKY.Test.Settings
 		public class TestTreeChildLevel1 : MKY.Settings.SettingsItem, IEquatable<TestTreeChildLevel1>
 		{
 			/// <summary></summary>
-			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
-			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-			public int SimpleValue = SimpleValueEqual;
+			public int SimpleValue { get; set; } = SimpleValueEqual;
 
 			/// <summary></summary>
 			private TestTreeChildLevel2 childLevel2A;
@@ -362,9 +358,7 @@ namespace MKY.Test.Settings
 		public class TestTreeRoot : MKY.Settings.SettingsItem, IEquatable<TestTreeRoot>
 		{
 			/// <summary></summary>
-			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
-			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-			public int SimpleValue = SimpleValueEqual;
+			public int SimpleValue { get; set; } = SimpleValueEqual;
 
 			/// <summary></summary>
 			private TestTreeChildLevel1 childLevel1;
@@ -544,14 +538,10 @@ namespace MKY.Test.Settings
 		public class TestClassV1
 		{
 			/// <summary></summary>
-			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
-			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-			public int Data1 = TestCaseId._11;
+			public int Data1 { get; set; } = TestCaseId._11;
 
 			/// <summary></summary>
-			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
-			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-			public int Data2 = TestCaseId._12;
+			public int Data2 { get; set; } = TestCaseId._12;
 		}
 
 		/// <summary>
@@ -563,19 +553,13 @@ namespace MKY.Test.Settings
 		public class TestClassV2
 		{
 			/// <summary></summary>
-			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
-			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-			public int Data1 = TestCaseId._21;
+			public int Data1 { get; set; } = TestCaseId._21;
 
 			/// <summary></summary>
-			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
-			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-			public int Data2 = TestCaseId._22;
+			public int Data2 { get; set; } = TestCaseId._22;
 
 			/// <summary></summary>
-			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
-			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-			public int Data3 = TestCaseId._23;
+			public int Data3 { get; set; } = TestCaseId._23;
 		}
 
 		/// <summary>
@@ -587,14 +571,10 @@ namespace MKY.Test.Settings
 		public class TestClassV3
 		{
 			/// <summary></summary>
-			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
-			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-			public int Data1 = TestCaseId._31;
+			public int Data1 { get; set; } = TestCaseId._31;
 
 			/// <summary></summary>
-			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
-			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-			public int Data3 = TestCaseId._33;
+			public int Data3 { get; set; } = TestCaseId._33;
 		}
 
 		#endregion

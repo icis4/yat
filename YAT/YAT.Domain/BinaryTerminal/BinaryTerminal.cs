@@ -237,18 +237,17 @@ namespace YAT.Domain
 			End
 		}
 
-		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Private class.")]
 		private class LineState : IDisposable
 		{
 			private bool isDisposed;
 
-			public LinePosition         Position;
-			public DisplayLinePart      Elements;
-			public SequenceQueue        SequenceAfter;
-			public SequenceQueue        SequenceBefore;
-			public List<DisplayElement> PendingSequenceBeforeElements;
-			public DateTime             TimeStamp;
-			public LineBreakTimer       BreakTimer;
+			public LinePosition         Position                      { get; set; }
+			public DisplayLinePart      Elements                      { get; set; }
+			public SequenceQueue        SequenceAfter                 { get; set; }
+			public SequenceQueue        SequenceBefore                { get; set; }
+			public List<DisplayElement> PendingSequenceBeforeElements { get; set; }
+			public DateTime             TimeStamp                     { get; set; }
+			public LineBreakTimer       BreakTimer                    { get; set; }
 
 			public LineState(SequenceQueue sequenceAfter, SequenceQueue sequenceBefore, DateTime timeStamp, LineBreakTimer breakTimer)
 			{
@@ -349,12 +348,11 @@ namespace YAT.Domain
 			}
 		}
 
-		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Private class.")]
 		private class BidirLineState
 		{
-			public bool IsFirstLine;
-			public string PortStamp;
-			public IODirection Direction;
+			public bool IsFirstLine      { get; set; }
+			public string PortStamp      { get; set; }
+			public IODirection Direction { get; set; }
 
 			public BidirLineState()
 			{

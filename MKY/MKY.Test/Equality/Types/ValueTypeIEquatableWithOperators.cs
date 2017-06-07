@@ -23,7 +23,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 using MKY.Diagnostics;
@@ -34,8 +33,7 @@ namespace MKY.Test.Equality.Types
 	internal struct ValueTypeIEquatableWithOperators : IEquatable<ValueTypeIEquatableWithOperators>
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public readonly int B; // = 'Base'
+		public int B { get; } // = 'Base'
 
 		/// <summary></summary>
 		public ValueTypeIEquatableWithOperators(int b)

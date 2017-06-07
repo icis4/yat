@@ -23,7 +23,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 using MKY.Diagnostics;
@@ -34,8 +33,7 @@ namespace MKY.Test.Equality.Types
 	internal class ReferenceTypeIEquatableWithOperatorsOfDerivedOnly_DerivedDerived : ReferenceTypeIEquatableWithOperators_Derived, IEquatable<ReferenceTypeIEquatableWithOperatorsOfDerivedOnly_DerivedDerived>
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public readonly int DD; // = 'DerivedDerived'
+		public int DD { get; set; } // = 'DerivedDerived'
 
 		/// <summary></summary>
 		public ReferenceTypeIEquatableWithOperatorsOfDerivedOnly_DerivedDerived(int b, int d, int dd)

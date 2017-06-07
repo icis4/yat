@@ -23,7 +23,6 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace MKY.IO.Usb
@@ -51,19 +50,16 @@ namespace MKY.IO.Usb
 		#endregion
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("SeparateRxId")]
-		public bool SeparateRxId;
+		public bool SeparateRxId { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("AnyRxId")]
-		public bool AnyRxId;
+		public bool AnyRxId { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("RxId")]
-		public byte RxId;
+		public byte RxId { get; set; }
 
 		/// <summary></summary>
 		public SerialHidRxFilterUsage(bool separateRxId, bool anyRxId, byte rxId)

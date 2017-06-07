@@ -22,7 +22,6 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace YAT.Domain
@@ -32,14 +31,12 @@ namespace YAT.Domain
 	public struct PeriodicSetting : IEquatable<PeriodicSetting>
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("Enabled")]
-		public bool Enabled;
+		public bool Enabled { get; set; }
 
 		/// <summary>Interval of reconnect in milliseconds.</summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("Interval")]
-		public int Interval;
+		public int Interval { get; set; }
 
 		/// <summary></summary>
 		public PeriodicSetting(bool enabled, int interval)
