@@ -22,35 +22,27 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace MKY.Windows.Forms
 {
 	/// <remarks>
 	/// Must be a reference type to ease handling within the layout dictionary.
 	/// </remarks>
-	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "The fields are public for the ease of the implementation.")]
 	public class LayoutInfo
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public float Left;
+		public float Left { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public float Top;
+		public float Top { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public float Width;
+		public float Width { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public float Height;
+		public float Height { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public float FontSize;
+		public float FontSize { get; set; }
 
 		/// <summary></summary>
 		public LayoutInfo()
@@ -60,9 +52,9 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		public LayoutInfo(float left, float top, float width, float height, float fontSize)
 		{
-			Left = left;
-			Top = top;
-			Width = width;
+			Left   = left;
+			Top    = top;
+			Width  = width;
 			Height = height;
 
 			FontSize = fontSize;

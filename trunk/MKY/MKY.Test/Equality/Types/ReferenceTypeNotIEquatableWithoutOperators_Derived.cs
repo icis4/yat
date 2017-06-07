@@ -34,8 +34,7 @@ namespace MKY.Test.Equality.Types
 	internal class ReferenceTypeNotIEquatableWithoutOperators_Derived : ReferenceTypeNotIEquatableWithoutOperators_Base
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public readonly int D; // = 'Derived'
+		public int D { get; } // = 'Derived'
 
 		/// <summary></summary>
 		public ReferenceTypeNotIEquatableWithoutOperators_Derived(int b, int d)

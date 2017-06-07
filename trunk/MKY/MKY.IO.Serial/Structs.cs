@@ -22,7 +22,6 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace MKY.IO.Serial
@@ -32,14 +31,12 @@ namespace MKY.IO.Serial
 	public struct AutoInterval : IEquatable<AutoInterval>
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("Enabled")]
-		public bool Enabled;
+		public bool Enabled { get; set; }
 
 		/// <summary>Interval of reconnect in milliseconds.</summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("Interval")]
-		public int Interval;
+		public int Interval { get; set; }
 
 		/// <summary></summary>
 		public AutoInterval(bool enabled, int interval)

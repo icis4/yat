@@ -23,7 +23,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 using MKY.Diagnostics;
@@ -34,8 +33,7 @@ namespace MKY.Test.Equality.Types
 	internal class ReferenceTypeIEquatableWithoutOperators_Base : IEquatable<ReferenceTypeIEquatableWithoutOperators_Base>
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public readonly int B; // = 'Base'
+		public int B { get; set; } // = 'Base'
 
 		/// <summary></summary>
 		public ReferenceTypeIEquatableWithoutOperators_Base(int b)

@@ -42,28 +42,20 @@ namespace MKY.IO.Ports
 		public const string OtherAppInUseTextDefault = "(in use by another application)";
 
 		/// <summary>A unique ID of the item/client that uses the stated serial port.</summary>
-		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("UseId")]
-		public int UseId; // = 0;
+		public int UseId { get; set; } // = 0;
 
 		/// <summary>The ID of the stated serial port.</summary>
-		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("PortId")]
-		public int PortId = SerialPortId.FirstStandardPortNumber;
+		public int PortId { get; set; } = SerialPortId.FirstStandardPortNumber;
 
 		/// <summary>Indicates whether the serial port is open.</summary>
-		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("IsOpen")]
-		public bool IsOpen; // = false
+		public bool IsOpen { get; set; } // = false
 
 		/// <summary>Contains the in use statement text.</summary>
-		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("IsOpen")]
-		public string InUseText = ActivePortInUseTextDefault;
+		public string InUseText { get; set; } = ActivePortInUseTextDefault;
 
 		/// <summary></summary>
 		public InUseInfo(int useId, int portId, bool isOpen, string inUseText)

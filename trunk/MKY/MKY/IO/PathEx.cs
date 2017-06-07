@@ -1026,42 +1026,34 @@ namespace MKY.IO
 	public struct PathCompareResult : IEquatable<PathCompareResult>
 	{
 		/// <summary>True if directories share a common path, i.e. also a common root.</summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public bool HaveCommon;
+		public bool HaveCommon { get; set; }
 
 		/// <summary>Common path, e.g. "C:\MyDir".</summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Dir'...")]
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public string CommonPath;
+		public string CommonPath { get; set; }
 
 		/// <summary>Number of common directories, e.g. "C:\MyDir" results in 1.</summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Dir'...")]
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public int CommonDirectoryCount;
+		public int CommonDirectoryCount { get; set; }
 
 		/// <summary>True if directories are relative, e.g. "C:\MyDir\MySubDir1" and "C:\MyDir\MySubDir2".</summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Dir'...")]
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public bool AreRelative;
+		public bool AreRelative { get; set; }
 
 		/// <summary>Number of relative directories, e.g. "C:\MyDir\MySubDir1" and "C:\MyDir\MySubDir2" results in 2.</summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Dir'...")]
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public int RelativeDirectoryCount;
+		public int RelativeDirectoryCount { get; set; }
 
 		/// <summary>True if directories are near relative, e.g. "C:\MyDir" and "C:\MyDir\MySubDir".</summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Dir'...")]
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public bool AreNearRelative;
+		public bool AreNearRelative { get; set; }
 
 		/// <summary>Number of near relative directories, e.g. "C:\MyDir" and "C:\MyDir\MySubDir" results in 1.</summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Dir'...")]
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public int NearRelativeDirectoryCount;
+		public int NearRelativeDirectoryCount { get; set; }
 
 		/// <summary>Relative path between the two.</summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		public string RelativePath;
+		public string RelativePath { get; set; }
 
 		/// <summary>Creates a directory info compare result structure.</summary>
 		public PathCompareResult(bool haveCommon)
@@ -1072,14 +1064,14 @@ namespace MKY.IO
 		/// <summary>Creates a directory info compare result structure.</summary>
 		public PathCompareResult(bool haveCommon, string relativePath)
 		{
-			HaveCommon = haveCommon;
-			CommonPath = null;
-			CommonDirectoryCount = 0;
-			AreRelative = false;
-			RelativeDirectoryCount = 0;
-			AreNearRelative = false;
+			HaveCommon                 = haveCommon;
+			CommonPath                 = null;
+			CommonDirectoryCount       = 0;
+			AreRelative                = false;
+			RelativeDirectoryCount     = 0;
+			AreNearRelative            = false;
 			NearRelativeDirectoryCount = 0;
-			RelativePath = relativePath;
+			RelativePath               = relativePath;
 		}
 
 		/// <summary>Creates a directory info compare result structure.</summary>
@@ -1091,14 +1083,14 @@ namespace MKY.IO
 		/// <summary>Creates a directory info compare result structure.</summary>
 		public PathCompareResult(string commonPath, int commonDirectoryCount, int relativeDirectoryCount, bool areNearRelative, int nearRelativeDirectoryCount, string relativePath)
 		{
-			HaveCommon = true;
-			CommonPath = commonPath;
-			CommonDirectoryCount = commonDirectoryCount;
-			AreRelative = true;
-			RelativeDirectoryCount = relativeDirectoryCount;
-			AreNearRelative = areNearRelative;
+			HaveCommon                 = true;
+			CommonPath                 = commonPath;
+			CommonDirectoryCount       = commonDirectoryCount;
+			AreRelative                = true;
+			RelativeDirectoryCount     = relativeDirectoryCount;
+			AreNearRelative            = areNearRelative;
 			NearRelativeDirectoryCount = nearRelativeDirectoryCount;
-			RelativePath = relativePath;
+			RelativePath               = relativePath;
 		}
 
 		#region Object Members

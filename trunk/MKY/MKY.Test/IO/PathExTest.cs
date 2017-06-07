@@ -46,15 +46,14 @@ namespace MKY.Test.IO
 		// Test Case Data Set
 		//==========================================================================================
 
-		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "This is a private test data container.")]
 		private class TestCaseDataSet
 		{
-			public int TestSet;
-			public int TestCase;
-			public string AbsoluteA;
-			public string AbsoluteB;
-			public string RelativeA;
-			public string RelativeB;
+			public int TestSet      { get; set; }
+			public int TestCase     { get; set; }
+			public string AbsoluteA { get; set; }
+			public string AbsoluteB { get; set; }
+			public string RelativeA { get; set; }
+			public string RelativeB { get; set; }
 
 			public TestCaseDataSet(int testSet, int testCase, string absoluteA, string absoluteB, string relativeA, string relativeB)
 			{

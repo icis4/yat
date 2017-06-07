@@ -22,7 +22,6 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace MKY.Net
@@ -32,14 +31,12 @@ namespace MKY.Net
 	public struct IPNetworkInterfaceDescriptorPair : IEquatable<IPNetworkInterfaceDescriptorPair>
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("Description")]
-		public string Description;
+		public string Description { get; set; }
 
 		/// <summary>Interval of reconnect in milliseconds.</summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("Address")]
-		public string Address;
+		public string Address { get; set; }
 
 		/// <summary></summary>
 		public IPNetworkInterfaceDescriptorPair(string description, string address)
