@@ -45,11 +45,6 @@ namespace MKY.IO.Ports.Test
 		// Fields
 		//==========================================================================================
 
-		#region Fields > Configuration
-		//------------------------------------------------------------------------------------------
-		// Fields > Configuration
-		//------------------------------------------------------------------------------------------
-
 		private ConfigurationPropertyCollection properties = new ConfigurationPropertyCollection();
 
 		private ConfigurationProperty portA = new ConfigurationProperty("PortA", typeof(string), "COM1");
@@ -66,24 +61,44 @@ namespace MKY.IO.Ports.Test
 
 		#endregion
 
-		#region Fields > Auxiliary
-		//------------------------------------------------------------------------------------------
-		// Fields > Auxiliary
-		//------------------------------------------------------------------------------------------
+		#region Auto-Properties
+		//==========================================================================================
+		// Auto-Properties
+		//==========================================================================================
 
-		private bool portAIsAvailable;
-		private bool portBIsAvailable;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
+		public bool PortAIsAvailable { get; set; }
 
-		private bool mtSicsDeviceAIsConnected;
-		private bool mtSicsDeviceBIsConnected;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
+		public bool PortBIsAvailable { get; set; }
 
-		private bool tiLaunchPadDeviceAIsConnected;
-		private bool tiLaunchPadDeviceBIsConnected;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
+		public bool MTSicsDeviceAIsConnected { get; set; }
 
-		private bool[] loopbackPairIsAvailable;
-		private bool[] loopbackSelfIsAvailable;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
+		public bool MTSicsDeviceBIsConnected { get; set; }
 
-		#endregion
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
+		public bool TILaunchPadDeviceAIsConnected { get; set; }
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
+		public bool TILaunchPadDeviceBIsConnected { get; set; }
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
+		public bool[] LoopbackPairIsAvailable { get; set; }
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
+		public bool[] LoopbackSelfIsAvailable { get; set; }
 
 		#endregion
 
@@ -125,11 +140,6 @@ namespace MKY.IO.Ports.Test
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
-
-		#region Properties > Configuration
-		//------------------------------------------------------------------------------------------
-		// Properties > Configuration
-		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		protected override ConfigurationPropertyCollection Properties
@@ -193,81 +203,6 @@ namespace MKY.IO.Ports.Test
 		{
 			get { return (LoopbackPairs.Count + LoopbackSelfs.Count); }
 		}
-
-		#endregion
-
-		#region Properties > Auxiliary
-		//------------------------------------------------------------------------------------------
-		// Properties > Auxiliary
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
-		public virtual bool PortAIsAvailable
-		{
-			get { return (this.portAIsAvailable); }
-			set { this.portAIsAvailable = value;  }
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
-		public virtual bool PortBIsAvailable
-		{
-			get { return (this.portBIsAvailable); }
-			set { this.portBIsAvailable = value;  }
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
-		public virtual bool MTSicsDeviceAIsConnected
-		{
-			get { return (this.mtSicsDeviceAIsConnected); }
-			set { this.mtSicsDeviceAIsConnected = value;  }
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
-		public virtual bool MTSicsDeviceBIsConnected
-		{
-			get { return (this.mtSicsDeviceBIsConnected); }
-			set { this.mtSicsDeviceBIsConnected = value;  }
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
-		public virtual bool TILaunchPadDeviceAIsConnected
-		{
-			get { return (this.tiLaunchPadDeviceAIsConnected); }
-			set { this.tiLaunchPadDeviceAIsConnected = value;  }
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
-		public virtual bool TILaunchPadDeviceBIsConnected
-		{
-			get { return (this.tiLaunchPadDeviceBIsConnected); }
-			set { this.tiLaunchPadDeviceBIsConnected = value;  }
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
-		public virtual bool[] LoopbackPairIsAvailable
-		{
-			get { return (this.loopbackPairIsAvailable); }
-			set { this.loopbackPairIsAvailable = value; }
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
-		public virtual bool[] LoopbackSelfIsAvailable
-		{
-			get { return (this.loopbackSelfIsAvailable); }
-			set { this.loopbackSelfIsAvailable = value; }
-		}
-
-		#endregion
 
 		#endregion
 	}

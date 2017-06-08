@@ -31,96 +31,65 @@ namespace MKY.IO.Ports
 	/// <summary></summary>
 	public class SerialDataReceivedEventArgs : EventArgs
 	{
-		private System.IO.Ports.SerialData eventType;
+		/// <summary></summary>
+		public System.IO.Ports.SerialData EventType { get; }
 
 		/// <summary></summary>
 		public SerialDataReceivedEventArgs(System.IO.Ports.SerialData eventType)
 		{
-			this.eventType = eventType;
-		}
-
-		/// <summary></summary>
-		public System.IO.Ports.SerialData EventType
-		{
-			get { return (this.eventType); }
+			EventType = eventType;
 		}
 	}
 
 	/// <summary></summary>
 	public class SerialErrorReceivedEventArgs : EventArgs
 	{
-		private System.IO.Ports.SerialError eventType;
+		/// <summary></summary>
+		public System.IO.Ports.SerialError EventType { get; }
 
 		/// <summary></summary>
 		public SerialErrorReceivedEventArgs(System.IO.Ports.SerialError eventType)
 		{
-			this.eventType = eventType;
-		}
-
-		/// <summary></summary>
-		public System.IO.Ports.SerialError EventType
-		{
-			get { return (this.eventType); }
+			EventType = eventType;
 		}
 	}
 
 	/// <summary></summary>
 	public class SerialPinChangedEventArgs : EventArgs
 	{
-		private MKY.IO.Ports.SerialPinChange eventType;
+		/// <summary></summary>
+		public MKY.IO.Ports.SerialPinChange EventType { get; }
 
 		/// <summary></summary>
 		public SerialPinChangedEventArgs(MKY.IO.Ports.SerialPinChange eventType)
 		{
-			this.eventType = eventType;
-		}
-
-		/// <summary></summary>
-		public MKY.IO.Ports.SerialPinChange EventType
-		{
-			get { return (this.eventType); }
+			EventType = eventType;
 		}
 	}
 
 	/// <summary></summary>
 	public class SerialPortChangedAndCancelEventArgs : EventArgs
 	{
-		private SerialPortId port;
-		private bool cancel;
+		/// <summary></summary>
+		public SerialPortId Port { get; }
+
+		/// <summary></summary>
+		public bool Cancel { get; set; }
 
 		/// <summary></summary>
 		public SerialPortChangedAndCancelEventArgs(SerialPortId port)
 		{
-			this.port = port;
-		}
-
-		/// <summary></summary>
-		public SerialPortId Port
-		{
-			get { return (this.port); }
-		}
-
-		/// <summary></summary>
-		public bool Cancel
-		{
-			get { return (this.cancel); }
-			set { this.cancel = value;  }
+			Port = port;
 		}
 	}
 
 	/// <summary></summary>
 	public class SerialPortInUseLookupEventArgs : EventArgs
 	{
-		private List<InUseInfo> inUseLookup;
-
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Event requires to retrieve a collection.")]
 		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Event requires to retrieve a collection.")]
-		public List<InUseInfo> InUseLookup
-		{
-			get { return (this.inUseLookup); }
-			set { this.inUseLookup = value;  }
-		}
+		public List<InUseInfo> InUseLookup { get; set; }
 	}
 
 	/// <summary></summary>

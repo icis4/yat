@@ -35,7 +35,13 @@ namespace MKY.Collections
 	[Serializable]
 	public class NamedStringDictionary
 	{
-		private string name;
+		/// <summary>
+		/// Gets or sets the name.
+		/// </summary>
+		/// <value>The name.</value>
+		[XmlElement("Name")]
+		public string Name { get; set; }
+
 		private Dictionary<string, string> dictionary;
 
 		/// <summary>
@@ -52,19 +58,9 @@ namespace MKY.Collections
 		/// <param name="name">The name.</param>
 		public NamedStringDictionary(string name)
 		{
-			this.name = name;
-			this.dictionary = new Dictionary<string, string>();
-		}
+			Name = name;
 
-		/// <summary>
-		/// Gets or sets the name.
-		/// </summary>
-		/// <value>The name.</value>
-		[XmlElement("Name")]
-		public string Name
-		{
-			get { return (this.name); }
-			set { this.name = value;  }
+			this.dictionary = new Dictionary<string, string>();
 		}
 
 		/// <summary>

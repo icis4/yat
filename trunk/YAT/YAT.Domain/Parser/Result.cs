@@ -34,19 +34,14 @@ namespace YAT.Domain.Parser
 	/// <summary></summary>
 	public class BytesResult : Result
 	{
-		private byte[] bytes;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
+		public byte[] Bytes { get; }
 
 		/// <summary></summary>
 		public BytesResult(byte[] bytes)
 		{
-			this.bytes = bytes;
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Source is an array, sink is an array, this class transports the array from source to sink, there's no purpose to use a ReadOnlyCollection here.")]
-		public byte[] Bytes
-		{
-			get { return (this.bytes); }
+			Bytes = bytes;
 		}
 	}
 
@@ -56,8 +51,12 @@ namespace YAT.Domain.Parser
 	/// </remarks>
 	public class KeywordResult : Result
 	{
-		private Keyword keyword;
-		private int[] args;
+		/// <summary></summary>
+		public Keyword Keyword { get; }
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and ease of use is...")]
+		public int[] Args { get; }
 
 		/// <summary></summary>
 		public KeywordResult(Keyword keyword)
@@ -68,20 +67,8 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public KeywordResult(Keyword keyword, int[] args)
 		{
-			this.keyword = keyword;
-			this.args    = args;
-		}
-
-		/// <summary></summary>
-		public Keyword Keyword
-		{
-			get { return (this.keyword); }
-		}
-
-		/// <summary></summary>
-		public int[] Args
-		{
-			get { return (this.args); }
+			Keyword = keyword;
+			Args    = args;
 		}
 	}
 }

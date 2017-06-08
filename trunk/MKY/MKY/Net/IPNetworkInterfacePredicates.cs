@@ -28,19 +28,13 @@ namespace MKY.Net
 	/// <summary></summary>
 	public class EqualsDescription
 	{
-		private IPNetworkInterfaceEx networkInterface;
+		/// <summary></summary>
+		public IPNetworkInterfaceEx NetworkInterface { get; set; }
 
 		/// <summary></summary>
 		public EqualsDescription(IPNetworkInterfaceEx networkInterface)
 		{
-			this.networkInterface = networkInterface;
-		}
-
-		/// <summary></summary>
-		public IPNetworkInterfaceEx NetworkInterface
-		{
-			get { return (this.networkInterface); }
-			set { this.networkInterface = value;  }
+			NetworkInterface = networkInterface;
 		}
 
 		/// <summary></summary>
@@ -51,7 +45,7 @@ namespace MKY.Net
 
 		private bool IsMatch(IPNetworkInterfaceEx other)
 		{
-			return (this.networkInterface.EqualsDescription(other));
+			return (NetworkInterface.EqualsDescription(other));
 		}
 	}
 }

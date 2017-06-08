@@ -142,30 +142,42 @@ namespace YAT.Model.Test
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This struct really belongs to these test utilities only.")]
 		public struct TestSet : IEquatable<TestSet>
 		{
-			private Types.Command command;
-			private int   expectedLineCount;
-			private int[] expectedElementCounts;
-			private int[] expectedDataCounts;
+			/// <summary>The test command.</summary>
+			public Types.Command Command { get; }
 
-			/// <remarks>Using 'A' instead of 'Tx' as some tests perform two-way-transmission.</remarks>
-			private bool  expectedAlsoApplyToA;
+			/// <summary>The expected number of lines as returned by <see cref="Terminal.RxLineCount"/> and <see cref="Terminal.TxLineCount"/>.</summary>
+			public int ExpectedLineCount { get; }
+
+			/// <summary>The expected number of display elements per display line.</summary>
+			[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
+			public int[] ExpectedElementCounts { get; }
+
+			/// <summary>The expected number of raw data bytes per display line.</summary>
+			[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
+			public int[] ExpectedDataCounts { get; }
+
+			/// <summary>Flag indicating that expected values not only apply to B but also A.</summary>
+			/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
+			public bool ExpectedAlsoApplyToA { get; }
+
 
 			/// <summary></summary>
 			/// <param name="command">The test command.</param>
 			public TestSet(Types.Command command)
 			{
-				this.command = command;
-				this.expectedLineCount = command.CommandLines.Length;
+				Command = command;
 
-				this.expectedElementCounts = new int[this.expectedLineCount];
-				this.expectedDataCounts    = new int[this.expectedLineCount];
-				for (int i = 0; i < this.expectedLineCount; i++)
+				ExpectedLineCount = command.CommandLines.Length;
+
+				ExpectedElementCounts = new int[ExpectedLineCount];
+				ExpectedDataCounts    = new int[ExpectedLineCount];
+				for (int i = 0; i < ExpectedLineCount; i++)
 				{
-					this.expectedElementCounts[i] = 3; // LineStart + 1 data element + LineBreak.
-					this.expectedDataCounts[i]    = command.CommandLines[i].Length;
+					ExpectedElementCounts[i] = 3; // LineStart + 1 data element + LineBreak.
+					ExpectedDataCounts[i]    = command.CommandLines[i].Length;
 				}
 
-				this.expectedAlsoApplyToA = true;
+				ExpectedAlsoApplyToA = true;
 			}
 
 			/// <summary></summary>
@@ -176,44 +188,12 @@ namespace YAT.Model.Test
 			/// <param name="expectedAlsoApplyToA">Flag indicating that expected values not only apply to B but also A.</param>
 			public TestSet(Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedDataCounts, bool expectedAlsoApplyToA)
 			{
-				this.command = command;
-				this.expectedLineCount     = expectedLineCount;
-				this.expectedElementCounts = expectedElementCounts;
-				this.expectedDataCounts    = expectedDataCounts;
-				this.expectedAlsoApplyToA  = expectedAlsoApplyToA;
-			}
+				Command = command;
 
-			/// <summary>The test command.</summary>
-			public Types.Command Command
-			{
-				get { return (this.command); }
-			}
-
-			/// <summary>The expected number of lines as returned by <see cref="Terminal.RxLineCount"/> and <see cref="Terminal.TxLineCount"/>.</summary>
-			public int ExpectedLineCount
-			{
-				get { return (this.expectedLineCount); }
-			}
-
-			/// <summary>The expected number of display elements per display line.</summary>
-			[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
-			public int[] ExpectedElementCounts
-			{
-				get { return (this.expectedElementCounts); }
-			}
-
-			/// <summary>The expected number of raw data bytes per display line.</summary>
-			[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
-			public int[] ExpectedDataCounts
-			{
-				get { return (this.expectedDataCounts); }
-			}
-
-			/// <summary>Flag indicating that expected values not only apply to B but also A.</summary>
-			/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
-			public bool ExpectedAlsoApplyToA
-			{
-				get { return (this.expectedAlsoApplyToA); }
+				ExpectedLineCount     = expectedLineCount;
+				ExpectedElementCounts = expectedElementCounts;
+				ExpectedDataCounts    = expectedDataCounts;
+				ExpectedAlsoApplyToA  = expectedAlsoApplyToA;
 			}
 
 			#region Object Members

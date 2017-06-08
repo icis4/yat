@@ -122,10 +122,17 @@ namespace YAT.Settings.Test
 	/// <summary></summary>
 	public class SettingsFilePaths
 	{
-		private string path;
-		private Dictionary<LocalUserSettingsTestCase, string> localUserFilePaths;
-		private Dictionary<TerminalSettingsTestCase, string>  terminalFilePaths;
-		private Dictionary<WorkspaceSettingsTestCase, string> workspaceFilePaths;
+		/// <summary></summary>
+		public string Path { get; }
+
+		/// <summary></summary>
+		public Dictionary<LocalUserSettingsTestCase, string> LocalUserFilePaths { get; }
+
+		/// <summary></summary>
+		public Dictionary<TerminalSettingsTestCase, string> TerminalFilePaths { get; }
+
+		/// <summary></summary>
+		public Dictionary<WorkspaceSettingsTestCase, string> WorkspaceFilePaths { get; }
 
 		/// <summary></summary>
 		public SettingsFilePaths()
@@ -143,55 +150,31 @@ namespace YAT.Settings.Test
 
 			// Set path to "<Root>\!-Settings\" or "<Root>\!-Settings\<Directory>\".
 			if (string.IsNullOrEmpty(directory))
-				this.path = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-Settings" + System.IO.Path.DirectorySeparatorChar;
+				Path = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-Settings" + System.IO.Path.DirectorySeparatorChar;
 			else
-				this.path = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-Settings" + System.IO.Path.DirectorySeparatorChar + directory + System.IO.Path.DirectorySeparatorChar;
+				Path = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-Settings" + System.IO.Path.DirectorySeparatorChar + directory + System.IO.Path.DirectorySeparatorChar;
 
-			this.localUserFilePaths = new Dictionary<LocalUserSettingsTestCase, string>();
-			this.terminalFilePaths  = new Dictionary<TerminalSettingsTestCase,  string>();
-			this.workspaceFilePaths = new Dictionary<WorkspaceSettingsTestCase, string>();
-		}
-
-		/// <summary></summary>
-		public string Path
-		{
-			get { return (this.path); }
-		}
-
-		/// <summary></summary>
-		public Dictionary<LocalUserSettingsTestCase, string> LocalUserFilePaths
-		{
-			get { return (this.localUserFilePaths); }
-		}
-
-		/// <summary></summary>
-		public Dictionary<TerminalSettingsTestCase, string> TerminalFilePaths
-		{
-			get { return (this.terminalFilePaths); }
-		}
-
-		/// <summary></summary>
-		public Dictionary<WorkspaceSettingsTestCase, string> WorkspaceFilePaths
-		{
-			get { return (this.workspaceFilePaths); }
+			LocalUserFilePaths = new Dictionary<LocalUserSettingsTestCase, string>();
+			TerminalFilePaths  = new Dictionary<TerminalSettingsTestCase,  string>();
+			WorkspaceFilePaths = new Dictionary<WorkspaceSettingsTestCase, string>();
 		}
 
 		/// <summary></summary>
 		public void AddLocalUserFileName(LocalUserSettingsTestCase fileKey, string fileName)
 		{
-			this.localUserFilePaths.Add(fileKey, Path + fileName);
+			LocalUserFilePaths.Add(fileKey, Path + fileName);
 		}
 
 		/// <summary></summary>
 		public void AddTerminalFileName(TerminalSettingsTestCase fileKey, string fileName)
 		{
-			this.terminalFilePaths.Add(fileKey, Path + fileName);
+			TerminalFilePaths.Add(fileKey, Path + fileName);
 		}
 
 		/// <summary></summary>
 		public void AddWorkspaceFileName(WorkspaceSettingsTestCase fileKey, string fileName)
 		{
-			this.workspaceFilePaths.Add(fileKey, Path + fileName);
+			WorkspaceFilePaths.Add(fileKey, Path + fileName);
 		}
 	}
 

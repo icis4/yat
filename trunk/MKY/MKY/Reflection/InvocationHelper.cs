@@ -40,26 +40,17 @@ namespace MKY.Reflection
 		[AttributeUsage(AttributeTargets.Class)]
 		public sealed class StaticPropertyAttribute : Attribute
 		{
-			private string propertyName;
-			private Type propertyType;
+			/// <summary></summary>
+			public string PropertyName { get; }
+
+			/// <summary></summary>
+			public Type PropertyType { get; }
 
 			/// <summary></summary>
 			public StaticPropertyAttribute(string propertyName, Type propertyType)
 			{
-				this.propertyName = propertyName;
-				this.propertyType = propertyType;
-			}
-
-			/// <summary></summary>
-			public string PropertyName
-			{
-				get { return (this.propertyName); }
-			}
-
-			/// <summary></summary>
-			public Type PropertyType
-			{
-				get { return (this.propertyType); }
+				PropertyName = propertyName;
+				PropertyType = propertyType;
 			}
 		}
 

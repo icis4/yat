@@ -39,18 +39,13 @@ namespace MKY.Time
 	/// <summary></summary>
 	public class RateEventArgs : EventArgs
 	{
-		private int rate;
+		/// <summary></summary>
+		public int Rate { get; }
 
 		/// <summary></summary>
 		public RateEventArgs(int rate)
 		{
-			this.rate = rate;
-		}
-
-		/// <summary></summary>
-		public int Rate
-		{
-			get { return (this.rate); }
+			Rate = rate;
 		}
 	}
 

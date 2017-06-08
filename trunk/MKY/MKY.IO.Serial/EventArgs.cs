@@ -33,14 +33,15 @@ namespace MKY.IO.Serial
 	/// </summary>
 	public abstract class DataEventArgs : EventArgs
 	{
-		/// <remarks>
-		/// "Guidelines for Collections": "Do use byte arrays instead of collections of bytes."
-		/// 
-		/// Saying hello to StyleCop ;-.
-		/// </remarks>
-		private byte[] data;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
+		public byte[] Data { get; }
 
-		private DateTime timeStamp;
+		/// <summary></summary>
+		public DateTime TimeStamp { get; }
+
+		/// <summary></summary>
+		public abstract string PortStamp { get; }
 
 		/// <summary></summary>
 		protected DataEventArgs(byte[] data)
@@ -51,27 +52,8 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected DataEventArgs(byte[] data, DateTime timeStamp)
 		{
-			this.data      = data;
-			this.timeStamp = timeStamp;
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
-		public virtual byte[] Data
-		{
-			get { return (this.data); }
-		}
-
-		/// <summary></summary>
-		public virtual DateTime TimeStamp
-		{
-			get { return (this.timeStamp); }
-		}
-
-		/// <summary></summary>
-		public abstract string PortStamp
-		{
-			get;
+			Data      = data;
+			TimeStamp = timeStamp;
 		}
 
 		/// <summary>
@@ -88,7 +70,7 @@ namespace MKY.IO.Serial
 		public virtual string ToString(string indent)
 		{
 			var sb = new StringBuilder();
-			foreach (byte b in this.data)
+			foreach (byte b in Data)
 				sb.Append(Convert.ToChar(b));
 
 			return (indent + sb.ToString());

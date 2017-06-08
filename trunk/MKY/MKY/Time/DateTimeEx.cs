@@ -31,18 +31,13 @@ namespace MKY
 	/// <summary></summary>
 	public class DateTimeEventArgs : EventArgs
 	{
-		private DateTime dateTime;
+		/// <summary></summary>
+		public DateTime DateTime { get; }
 
 		/// <summary></summary>
 		public DateTimeEventArgs(DateTime dateTime)
 		{
-			this.dateTime = dateTime;
-		}
-
-		/// <summary></summary>
-		public DateTime DateTime
-		{
-			get { return (this.dateTime); }
+			DateTime = dateTime;
 		}
 	}
 }

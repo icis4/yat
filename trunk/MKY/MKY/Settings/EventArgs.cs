@@ -29,32 +29,23 @@ namespace MKY.Settings
 	/// <summary></summary>
 	public class SettingsEventArgs : EventArgs
 	{
-		private SettingsItem source;
-		private SettingsEventArgs inner;
+		/// <summary></summary>
+		public SettingsItem Source { get; }
+
+		/// <summary></summary>
+		public SettingsEventArgs Inner { get; }
 
 		/// <summary></summary>
 		public SettingsEventArgs(SettingsItem source)
 		{
-			this.source = source;
+			Source = source;
 		}
 
 		/// <summary></summary>
 		public SettingsEventArgs(SettingsItem source, SettingsEventArgs inner)
 		{
-			this.source = source;
-			this.inner = inner;
-		}
-
-		/// <summary></summary>
-		public SettingsItem Source
-		{
-			get { return (this.source); }
-		}
-
-		/// <summary></summary>
-		public SettingsEventArgs Inner
-		{
-			get { return (this.inner); }
+			Source = source;
+			Inner = inner;
 		}
 	}
 }

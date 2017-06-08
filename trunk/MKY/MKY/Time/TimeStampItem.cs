@@ -34,8 +34,19 @@ namespace MKY.Time
 	[Serializable]
 	public struct TimeStampItem<T> : IEquatable<TimeStampItem<T>>
 	{
-		private DateTime timeStamp;
-		private T item;
+		/// <summary>
+		/// Gets or sets the time stamp.
+		/// </summary>
+		/// <value>The time stamp.</value>
+		[XmlElement("TimeStamp")]
+		public DateTime TimeStamp { get; set; }
+
+		/// <summary>
+		/// Gets or sets the item.
+		/// </summary>
+		/// <value>The item.</value>
+		[XmlElement("Item")]
+		public T Item { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:TimeStampItem`1"/> struct.
@@ -53,30 +64,8 @@ namespace MKY.Time
 		/// <param name="item">The second value.</param>
 		public TimeStampItem(DateTime timeStamp, T item)
 		{
-			this.timeStamp = timeStamp;
-			this.item = item;
-		}
-
-		/// <summary>
-		/// Gets or sets the time stamp.
-		/// </summary>
-		/// <value>The time stamp.</value>
-		[XmlElement("TimeStamp")]
-		public DateTime TimeStamp
-		{
-			get { return (this.timeStamp); }
-			set { this.timeStamp = value;  }
-		}
-
-		/// <summary>
-		/// Gets or sets the item.
-		/// </summary>
-		/// <value>The item.</value>
-		[XmlElement("Item")]
-		public T Item
-		{
-			get { return (this.item); }
-			set { this.item = value;  }
+			TimeStamp = timeStamp;
+			Item      = item;
 		}
 
 		#region Object Members

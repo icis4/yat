@@ -32,18 +32,13 @@ namespace MKY
 	/// <typeparam name="T">(Simple) type of the event args.</typeparam>
 	public class EventArgs<T> : EventArgs
 	{
-		private T value;
+		/// <summary></summary>
+		public T Value { get; }
 
 		/// <summary></summary>
 		public EventArgs(T value)
 		{
-			this.value = value;
-		}
-
-		/// <summary></summary>
-		public T Value
-		{
-			get { return (this.value); }
+			Value = value;
 		}
 	}
 }

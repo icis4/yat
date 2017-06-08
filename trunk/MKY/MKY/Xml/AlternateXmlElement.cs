@@ -30,36 +30,23 @@ namespace MKY.Xml
 	/// <summary></summary>
 	public struct AlternateXmlElement : IEquatable<AlternateXmlElement>
 	{
-		private string[] xmlPath;
-		private string   localName;
-		private string[] alternateLocalNames;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and ease of use is...")]
+		public string[] XmlPath;
+
+		/// <summary></summary>
+		public string LocalName;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and ease of use is...")]
+		public string[] AlternateLocalNames;
 
 		/// <summary></summary>
 		public AlternateXmlElement(string[] xmlPath, string localName, string[] alternateLocalNames)
 		{
-			this.xmlPath = xmlPath;
-			this.localName = localName;
-			this.alternateLocalNames = alternateLocalNames;
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and ease of use is...")]
-		public string[] XmlPath
-		{
-			get { return (this.xmlPath); }
-		}
-
-		/// <summary></summary>
-		public string LocalName
-		{
-			get { return (this.localName); }
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and ease of use is...")]
-		public string[] AlternateLocalNames
-		{
-			get { return (this.alternateLocalNames); }
+			XmlPath = xmlPath;
+			LocalName = localName;
+			AlternateLocalNames = alternateLocalNames;
 		}
 
 		#region Object Members

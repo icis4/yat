@@ -62,9 +62,14 @@ namespace MKY.IO.Usb
 	[Serializable]
 	public class NativeMethodCallUsbException : UsbException
 	{
-		private string method;
-		private int errorCode;
-		private string nativeMessage;
+		/// <summary></summary>
+		public string Method { get; }
+
+		/// <summary></summary>
+		public int ErrorCode { get; }
+
+		/// <summary></summary>
+		public string NativeMessage { get; }
 
 		/// <summary></summary>
 		public NativeMethodCallUsbException()
@@ -94,9 +99,9 @@ namespace MKY.IO.Usb
 		public NativeMethodCallUsbException(string message, Exception innerException, string method)
 			: base(message, innerException)
 		{
-			this.method        = method;
-			this.errorCode     = Win32.WinError.GetLastErrorCode();
-			this.nativeMessage = Win32.WinError.GetLastErrorMessage();
+			Method        = method;
+			ErrorCode     = Win32.WinError.GetLastErrorCode();
+			NativeMessage = Win32.WinError.GetLastErrorMessage();
 		}
 
 		#region ISerializable Members
@@ -113,34 +118,9 @@ namespace MKY.IO.Usb
 		{
 			base.GetObjectData(info, context);
 
-			info.AddValue("Method", this.method);
-			info.AddValue("ErrorCode", this.errorCode);
-			info.AddValue("NativeMessage", this.nativeMessage);
-		}
-
-		#endregion
-
-		#region Properties
-		//==========================================================================================
-		// Properties
-		//==========================================================================================
-
-		/// <summary></summary>
-		public string Method
-		{
-			get { return (this.method); }
-		}
-
-		/// <summary></summary>
-		public int ErrorCode
-		{
-			get { return (this.errorCode); }
-		}
-
-		/// <summary></summary>
-		public string NativeMessage
-		{
-			get { return (this.nativeMessage); }
+			info.AddValue("Method", Method);
+			info.AddValue("ErrorCode", ErrorCode);
+			info.AddValue("NativeMessage", NativeMessage);
 		}
 
 		#endregion

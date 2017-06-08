@@ -36,8 +36,19 @@ namespace MKY.Collections
 	[Serializable]
 	public struct StringKeyValuePair : IEquatable<StringKeyValuePair>
 	{
-		private string key;
-		private string value;
+		/// <summary>
+		/// Gets or sets the key.
+		/// </summary>
+		/// <value>The key.</value>
+		[XmlElement("Key")]
+		public string Key { get; set; }
+
+		/// <summary>
+		/// Gets or sets the value.
+		/// </summary>
+		/// <value>The value.</value>
+		[XmlElement("Value")]
+		public string Value { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StringKeyValuePair"/> struct.
@@ -46,30 +57,8 @@ namespace MKY.Collections
 		/// <param name="value">The value.</param>
 		public StringKeyValuePair(string key, string value)
 		{
-			this.key = key;
-			this.value = value;
-		}
-
-		/// <summary>
-		/// Gets or sets the key.
-		/// </summary>
-		/// <value>The key.</value>
-		[XmlElement("Key")]
-		public string Key
-		{
-			get { return (this.key); }
-			set { this.key = value;  }
-		}
-
-		/// <summary>
-		/// Gets or sets the value.
-		/// </summary>
-		/// <value>The value.</value>
-		[XmlElement("Value")]
-		public string Value
-		{
-			get { return (this.value); }
-			set { this.value = value;  }
+			Key = key;
+			Value = value;
 		}
 
 		#region Object Members

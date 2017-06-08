@@ -30,9 +30,14 @@ namespace YAT.Domain
 	/// <summary></summary>
 	public class IOErrorEventArgs : EventArgs
 	{
-		private IOErrorSeverity severity;
-		private IODirection direction;
-		private string message;
+		/// <summary></summary>
+		public IOErrorSeverity Severity { get; }
+
+		/// <summary></summary>
+		public IODirection Direction { get; }
+
+		/// <summary></summary>
+		public string Message { get; }
 
 		/// <summary></summary>
 		public IOErrorEventArgs(string message)
@@ -49,82 +54,49 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public IOErrorEventArgs(IOErrorSeverity severity, IODirection direction, string message)
 		{
-			this.severity  = severity;
-			this.direction = direction;
-			this.message   = message;
-		}
-
-		/// <summary></summary>
-		public IOErrorSeverity Severity
-		{
-			get { return (this.severity); }
-		}
-
-		/// <summary></summary>
-		public IODirection Direction
-		{
-			get { return (this.direction); }
-		}
-
-		/// <summary></summary>
-		public string Message
-		{
-			get { return (this.message); }
+			Severity  = severity;
+			Direction = direction;
+			Message   = message;
 		}
 	}
 
 	/// <summary></summary>
 	public class SerialPortErrorEventArgs : IOErrorEventArgs
 	{
-		private System.IO.Ports.SerialError serialPortError;
+		/// <summary></summary>
+		public System.IO.Ports.SerialError SerialPortError { get; }
 
 		/// <summary></summary>
 		public SerialPortErrorEventArgs(string message, System.IO.Ports.SerialError serialPortError)
 			: base(message)
 		{
-			this.serialPortError = serialPortError;
-		}
-
-		/// <summary></summary>
-		public System.IO.Ports.SerialError SerialPortError
-		{
-			get { return (this.serialPortError); }
+			SerialPortError = serialPortError;
 		}
 	}
 
 	/// <summary></summary>
 	public class DisplayElementsEventArgs : EventArgs
 	{
-		private DisplayElementCollection elements;
+		/// <summary></summary>
+		public DisplayElementCollection Elements { get; }
 
 		/// <summary></summary>
 		public DisplayElementsEventArgs(DisplayElementCollection elements)
 		{
-			this.elements = elements;
-		}
-
-		/// <summary></summary>
-		public DisplayElementCollection Elements
-		{
-			get { return (this.elements); }
+			Elements = elements;
 		}
 	}
 
 	/// <summary></summary>
 	public class DisplayLinesEventArgs : EventArgs
 	{
-		private List<DisplayLine> lines;
+		/// <summary></summary>
+		public List<DisplayLine> Lines { get; }
 
 		/// <summary></summary>
 		public DisplayLinesEventArgs(List<DisplayLine> lines)
 		{
-			this.lines = lines;
-		}
-
-		/// <summary></summary>
-		public List<DisplayLine> Lines
-		{
-			get { return (this.lines); }
+			Lines = lines;
 		}
 	}
 }

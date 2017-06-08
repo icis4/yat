@@ -69,8 +69,17 @@ namespace MKY.IO.Ports
 		private static Dictionary<string, string> staticCaptionsCache; // = null;
 		private static object                     staticCaptionsCacheSyncObj = new object();
 
-		private InUseInfo activePortInUseInfo; // = null;
-		private string otherAppInUseText = InUseInfo.OtherAppInUseTextDefault;
+		/// <summary>
+		/// The port that is currently in use, e.g. "(in use by this serial port)" of "COM1 - (in use by this serial port)".
+		/// </summary>
+		[XmlIgnore]
+		public InUseInfo ActivePortInUseInfo { get; set; } // = null;
+
+		/// <summary>
+		/// The text which is shown when port is currently in use, e.g. "(in use by other app)" of "COM1 - (in use by other app)".
+		/// </summary>
+		[XmlIgnore]
+		public string OtherAppInUseText { get; set; } = InUseInfo.OtherAppInUseTextDefault;
 
 		/// <summary></summary>
 		public SerialPortCollection()
@@ -82,26 +91,6 @@ namespace MKY.IO.Ports
 		public SerialPortCollection(IEnumerable<SerialPortId> rhs)
 			: base(rhs)
 		{
-		}
-
-		/// <summary>
-		/// The port that is currently in use, e.g. "(in use by this serial port)" of "COM1 - (in use by this serial port)".
-		/// </summary>
-		[XmlIgnore]
-		public virtual InUseInfo ActivePortInUseInfo
-		{
-			get { return (this.activePortInUseInfo); }
-			set { this.activePortInUseInfo = value;  }
-		}
-
-		/// <summary>
-		/// The text which is shown when port is currently in use, e.g. "(in use by other app)" of "COM1 - (in use by other app)".
-		/// </summary>
-		[XmlIgnore]
-		public virtual string OtherAppInUseText
-		{
-			get { return (this.otherAppInUseText); }
-			set { this.otherAppInUseText = value;  }
 		}
 
 		/// <summary>
@@ -280,10 +269,10 @@ namespace MKY.IO.Ports
 					// Lookup current port:
 					bool isInUseByActivePort = false;
 					bool isOpenByActivePort = false;
-					if ((activePortInUseInfo != null) && (activePortInUseInfo.PortId == portId))
+					if ((ActivePortInUseInfo != null) && (ActivePortInUseInfo.PortId == portId))
 					{
 						isInUseByActivePort = true;
-						isOpenByActivePort = activePortInUseInfo.IsOpen;
+						isOpenByActivePort = ActivePortInUseInfo.IsOpen;
 					}
 
 					List<InUseInfo> otherPortInUseInfo = null;

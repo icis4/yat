@@ -29,32 +29,23 @@ namespace MKY.Data
 	/// <summary></summary>
 	public class DataEventArgs : EventArgs
 	{
-		private DataItem source;
-		private DataEventArgs inner;
+		/// <summary></summary>
+		public DataItem Source { get; }
+
+		/// <summary></summary>
+		public DataEventArgs Inner { get; }
 
 		/// <summary></summary>
 		public DataEventArgs(DataItem source)
 		{
-			this.source = source;
+			Source = source;
 		}
 
 		/// <summary></summary>
 		public DataEventArgs(DataItem source, DataEventArgs inner)
 		{
-			this.source = source;
-			this.inner = inner;
-		}
-
-		/// <summary></summary>
-		public DataItem Source
-		{
-			get { return (this.source); }
-		}
-
-		/// <summary></summary>
-		public DataEventArgs Inner
-		{
-			get { return (this.inner); }
+			Source = source;
+			Inner = inner;
 		}
 	}
 }

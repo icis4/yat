@@ -158,13 +158,8 @@ namespace MKY
 	/// <code>
 	/// public class EnumExClient
 	/// {
-	///     private Mode mode = Mode.Fast;         // Mode is a normal enum
+	///     public Mode mode { get; set; } = Mode.Fast; // Mode is a normal enum
 	///     ...
-	///     public Mode.Mode
-	///     {
-	///         get { return (this.mode); }
-	///         set { this.mode = value;  }
-	///     }
 	/// }
 	/// </code>
 	/// </example>

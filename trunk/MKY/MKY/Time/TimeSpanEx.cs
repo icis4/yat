@@ -94,18 +94,13 @@ namespace MKY
 	/// <summary></summary>
 	public class TimeSpanEventArgs : EventArgs
 	{
-		private TimeSpan timeSpan;
+		/// <summary></summary>
+		public TimeSpan TimeSpan { get; }
 
 		/// <summary></summary>
 		public TimeSpanEventArgs(TimeSpan timeSpan)
 		{
-			this.timeSpan = timeSpan;
-		}
-
-		/// <summary></summary>
-		public TimeSpan TimeSpan
-		{
-			get { return (this.timeSpan); }
+			TimeSpan = timeSpan;
 		}
 	}
 }

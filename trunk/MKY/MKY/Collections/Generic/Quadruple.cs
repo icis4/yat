@@ -42,10 +42,33 @@ namespace MKY.Collections.Generic
 	[Serializable]
 	public struct Quadruple<T1, T2, T3, T4> : IEquatable<Quadruple<T1, T2, T3, T4>>
 	{
-		private T1 value1;
-		private T2 value2;
-		private T3 value3;
-		private T4 value4;
+		/// <summary>
+		/// Gets or sets the first value.
+		/// </summary>
+		/// <value>The first value.</value>
+		[XmlElement("Value1")]
+		public T1 Value1 { get; set; }
+
+		/// <summary>
+		/// Gets or sets the second value.
+		/// </summary>
+		/// <value>The second value.</value>
+		[XmlElement("Value2")]
+		public T2 Value2 { get; set; }
+
+		/// <summary>
+		/// Gets or sets the third value.
+		/// </summary>
+		/// <value>The third value.</value>
+		[XmlElement("Value3")]
+		public T3 Value3 { get; set; }
+
+		/// <summary>
+		/// Gets or sets the forth value.
+		/// </summary>
+		/// <value>The forth value.</value>
+		[XmlElement("Value4")]
+		public T4 Value4 { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:ValueQuadruple`1"/> struct.
@@ -56,54 +79,10 @@ namespace MKY.Collections.Generic
 		/// <param name="value4">The forth value.</param>
 		public Quadruple(T1 value1, T2 value2, T3 value3, T4 value4)
 		{
-			this.value1 = value1;
-			this.value2 = value2;
-			this.value3 = value3;
-			this.value4 = value4;
-		}
-
-		/// <summary>
-		/// Gets or sets the first value.
-		/// </summary>
-		/// <value>The first value.</value>
-		[XmlElement("Value1")]
-		public T1 Value1
-		{
-			get { return (this.value1); }
-			set { this.value1 = value;  }
-		}
-
-		/// <summary>
-		/// Gets or sets the second value.
-		/// </summary>
-		/// <value>The second value.</value>
-		[XmlElement("Value2")]
-		public T2 Value2
-		{
-			get { return (this.value2); }
-			set { this.value2 = value;  }
-		}
-
-		/// <summary>
-		/// Gets or sets the third value.
-		/// </summary>
-		/// <value>The third value.</value>
-		[XmlElement("Value3")]
-		public T3 Value3
-		{
-			get { return (this.value3); }
-			set { this.value3 = value;  }
-		}
-
-		/// <summary>
-		/// Gets or sets the forth value.
-		/// </summary>
-		/// <value>The forth value.</value>
-		[XmlElement("Value4")]
-		public T4 Value4
-		{
-			get { return (this.value4); }
-			set { this.value4 = value;  }
+			Value1 = value1;
+			Value2 = value2;
+			Value3 = value3;
+			Value4 = value4;
 		}
 
 		#region Object Members
