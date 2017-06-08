@@ -46,11 +46,6 @@ namespace MKY.Net.Test
 		// Fields
 		//==========================================================================================
 
-		#region Fields > Configuration
-		//------------------------------------------------------------------------------------------
-		// Fields > Configuration
-		//------------------------------------------------------------------------------------------
-
 		private ConfigurationPropertyCollection properties;
 
 		private ConfigurationProperty ipv4SpecificInterface = new ConfigurationProperty("IPv4SpecificInterface", typeof(string), "TAP-Win32 Adapter");
@@ -60,18 +55,27 @@ namespace MKY.Net.Test
 
 		#endregion
 
-		#region Fields > Auxiliary
-		//------------------------------------------------------------------------------------------
-		// Fields > Auxiliary
-		//------------------------------------------------------------------------------------------
+		#region Auto-Properties
+		//==========================================================================================
+		// Auto-Properties
+		//==========================================================================================
 
-		private bool ipv4SpecificInterfaceIsAvailable;
-		private bool ipv6SpecificInterfaceIsAvailable;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
+		public virtual bool IPv4SpecificInterfaceIsAvailable { get; set; }
 
-		private bool mtSicsDeviceIsAvailable;
-		private int mtSicsDeviceTcpPortAsInt;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
+		public virtual bool IPv6SpecificInterfaceIsAvailable { get; set; }
 
-		#endregion
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		public virtual bool MTSicsDeviceIsAvailable { get; set; }
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "int", Justification = "Work arond naming conflict.")]
+		public virtual int MTSicsDeviceTcpPortAsInt { get; set; }
 
 		#endregion
 
@@ -100,11 +104,6 @@ namespace MKY.Net.Test
 		// Properties
 		//==========================================================================================
 
-		#region Properties > Configuration
-		//------------------------------------------------------------------------------------------
-		// Properties > Configuration
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
 		protected override ConfigurationPropertyCollection Properties
 		{
@@ -131,48 +130,6 @@ namespace MKY.Net.Test
 		{
 			get { return ((string)this["MTSicsDeviceTcpPort"]); }
 		}
-
-		#endregion
-
-		#region Properties > Auxiliary
-		//------------------------------------------------------------------------------------------
-		// Properties > Auxiliary
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
-		public virtual bool IPv4SpecificInterfaceIsAvailable
-		{
-			get { return (this.ipv4SpecificInterfaceIsAvailable); }
-			set { this.ipv4SpecificInterfaceIsAvailable = value;  }
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
-		public virtual bool IPv6SpecificInterfaceIsAvailable
-		{
-			get { return (this.ipv6SpecificInterfaceIsAvailable); }
-			set { this.ipv6SpecificInterfaceIsAvailable = value;  }
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
-		public virtual bool MTSicsDeviceIsAvailable
-		{
-			get { return (this.mtSicsDeviceIsAvailable); }
-			set { this.mtSicsDeviceIsAvailable = value;  }
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "int", Justification = "Work arond naming conflict.")]
-		public virtual int MTSicsDeviceTcpPortAsInt
-		{
-			get { return (this.mtSicsDeviceTcpPortAsInt); }
-			set { this.mtSicsDeviceTcpPortAsInt = value;  }
-		}
-
-		#endregion
 
 		#endregion
 	}

@@ -29,8 +29,11 @@ namespace YAT.Model.Types
 	/// <summary></summary>
 	public class PredefinedCommandEventArgs : EventArgs
 	{
-		private int page;
-		private int command;
+		/// <summary></summary>
+		public int Page { get; }
+
+		/// <summary></summary>
+		public int Command { get; }
 
 		/// <summary></summary>
 		public PredefinedCommandEventArgs(int command)
@@ -41,20 +44,8 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public PredefinedCommandEventArgs(int page, int command)
 		{
-			this.page = page;
-			this.command = command;
-		}
-
-		/// <summary></summary>
-		public int Page
-		{
-			get { return (this.page); }
-		}
-
-		/// <summary></summary>
-		public int Command
-		{
-			get { return (this.command); }
+			Page    = page;
+			Command = command;
 		}
 	}
 }

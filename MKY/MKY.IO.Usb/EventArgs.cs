@@ -31,26 +31,17 @@ namespace MKY.IO.Usb
 	/// <summary></summary>
 	public class DeviceEventArgs : EventArgs
 	{
-		private DeviceClass deviceClass;
-		private DeviceInfo deviceInfo;
+		/// <summary></summary>
+		public DeviceClass DeviceClass { get; }
+
+		/// <summary></summary>
+		public DeviceInfo DeviceInfo { get; }
 
 		/// <summary></summary>
 		public DeviceEventArgs(DeviceClass deviceClass, DeviceInfo deviceInfo)
 		{
-			this.deviceClass = deviceClass;
-			this.deviceInfo  = deviceInfo;
-		}
-
-		/// <summary></summary>
-		public DeviceClass DeviceClass
-		{
-			get { return (this.deviceClass); }
-		}
-
-		/// <summary></summary>
-		public DeviceInfo DeviceInfo
-		{
-			get { return (this.deviceInfo); }
+			DeviceClass = deviceClass;
+			DeviceInfo  = deviceInfo;
 		}
 	}
 
@@ -60,33 +51,18 @@ namespace MKY.IO.Usb
 	/// </summary>
 	public class DataEventArgs : EventArgs
 	{
-		/// <remarks>
-		/// "Guidelines for Collections": "Do use byte arrays instead of collections of bytes."
-		/// 
-		/// Saying hello to StyleCop ;-.
-		/// </remarks>
-		private byte[] data;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
+		public byte[] Data { get; }
 
-		private DateTime timeStamp;
+		/// <summary></summary>
+		public DateTime TimeStamp { get; }
 
 		/// <summary></summary>
 		public DataEventArgs(byte[] data)
 		{
-			this.data = data;
-			this.timeStamp = DateTime.Now;
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
-		public virtual byte[] Data
-		{
-			get { return (this.data); }
-		}
-
-		/// <summary></summary>
-		public virtual DateTime TimeStamp
-		{
-			get { return (this.timeStamp); }
+			Data      = data;
+			TimeStamp = DateTime.Now;
 		}
 
 		/// <summary>
@@ -103,7 +79,7 @@ namespace MKY.IO.Usb
 		public virtual string ToString(string indent)
 		{
 			var sb = new StringBuilder();
-			foreach (byte b in this.data)
+			foreach (byte b in Data)
 				sb.Append(Convert.ToChar(b));
 
 			return (indent + sb.ToString());

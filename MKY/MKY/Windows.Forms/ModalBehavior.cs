@@ -61,26 +61,16 @@ namespace MKY.Windows.Forms
 	[AttributeUsage(AttributeTargets.Method)]
 	public sealed class ModalBehaviorAttribute : Attribute
 	{
-		private ModalBehavior behavior;
-		private string approval;
+		/// <summary></summary>
+		public ModalBehavior Behavior { get; }
+
+		/// <summary></summary>
+		public string Approval { get; set; }
 
 		/// <summary></summary>
 		public ModalBehaviorAttribute(ModalBehavior behavior)
 		{
-			this.behavior = behavior;
-		}
-
-		/// <summary></summary>
-		public ModalBehavior Behavior
-		{
-			get { return (this.behavior); }
-		}
-
-		/// <summary></summary>
-		public string Approval
-		{
-			get { return (this.approval); }
-			set { this.approval = value;  }
+			Behavior = behavior;
 		}
 	}
 }

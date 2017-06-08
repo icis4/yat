@@ -57,20 +57,23 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Fields
+		#region Properties
 		//==========================================================================================
-		// Fields
+		// Properties
 		//==========================================================================================
 
-		/// <remarks>
-		/// "Guidelines for Collections": "Do use byte arrays instead of collections of bytes."
-		/// 
-		/// Saying hello to StyleCop ;-.
-		/// </remarks>
-		private byte[]      data;
-		private DateTime    timeStamp;
-		private string      portStamp;
-		private IODirection direction;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
+		public byte[] Data { get; }
+
+		/// <summary></summary>
+		public DateTime TimeStamp { get; }
+
+		/// <summary></summary>
+		public string PortStamp { get; }
+
+		/// <summary></summary>
+		public IODirection Direction { get; }
 
 		#endregion
 
@@ -94,10 +97,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public RawChunk(byte[] data, DateTime timeStamp, string portStamp, IODirection direction)
 		{
-			this.data      = data;
-			this.timeStamp = timeStamp;
-			this.portStamp = portStamp;
-			this.direction = direction;
+			Data      = data;
+			TimeStamp = timeStamp;
+			PortStamp = portStamp;
+			Direction = direction;
 		}
 
 #if (DEBUG)
@@ -115,38 +118,6 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Properties
-		//==========================================================================================
-		// Properties
-		//==========================================================================================
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
-		public virtual byte[] Data
-		{
-			get { return (this.data); }
-		}
-
-		/// <summary></summary>
-		public virtual DateTime TimeStamp
-		{
-			get { return (this.timeStamp); }
-		}
-
-		/// <summary></summary>
-		public virtual string PortStamp
-		{
-			get { return (this.portStamp); }
-		}
-
-		/// <summary></summary>
-		public virtual IODirection Direction
-		{
-			get { return (this.direction); }
-		}
-
-		#endregion
-
 		#region Methods
 		//==========================================================================================
 		// Methods
@@ -157,7 +128,7 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual RawChunk Clone()
 		{
-			return (new RawChunk((byte[])this.data.Clone(), this.timeStamp, this.portStamp, this.direction));
+			return (new RawChunk((byte[])Data.Clone(), TimeStamp, PortStamp, Direction));
 		}
 
 		#endregion
@@ -180,7 +151,7 @@ namespace YAT.Domain
 		{
 			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
 			{
-				foreach (byte b in this.data)
+				foreach (byte b in Data)
 					sw.Write(Convert.ToChar(b));
 
 				return (indent + sw.ToString());
@@ -199,7 +170,7 @@ namespace YAT.Domain
 			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
 			{
 				bool begin = true;
-				foreach (byte b in this.data)
+				foreach (byte b in Data)
 				{
 					if (!begin)
 						sw.Write(" ");
@@ -210,9 +181,9 @@ namespace YAT.Domain
 
 				var sb = new StringBuilder();
 				sb.AppendLine(indent + "> Data: " + sw);
-				sb.AppendLine(indent + "> TimeStamp: " + this.timeStamp.ToLongTimeString() + "." + StringEx.Left(this.timeStamp.Millisecond.ToString("D3", CultureInfo.InvariantCulture), 2));
-				sb.AppendLine(indent + "> PortStamp: " + this.portStamp);
-				sb.AppendLine(indent + "> Direction: " + this.direction);
+				sb.AppendLine(indent + "> TimeStamp: " + TimeStamp.ToLongTimeString() + "." + StringEx.Left(TimeStamp.Millisecond.ToString("D3", CultureInfo.InvariantCulture), 2));
+				sb.AppendLine(indent + "> PortStamp: " + PortStamp);
+				sb.AppendLine(indent + "> Direction: " + Direction);
 				return (sb.ToString());
 			}
 		}

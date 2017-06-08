@@ -22,26 +22,19 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.IO.Usb
 {
 	/// <summary></summary>
 	public class EqualsVidPid
 	{
-		private DeviceInfo deviceInfo;
+		/// <summary></summary>
+		public DeviceInfo DeviceInfo { get; set; }
 
 		/// <summary></summary>
 		public EqualsVidPid(DeviceInfo deviceInfo)
 		{
-			this.deviceInfo = deviceInfo;
-		}
-
-		/// <summary></summary>
-		public DeviceInfo DeviceInfo
-		{
-			get { return (this.deviceInfo); }
-			set { this.deviceInfo = value;  }
+			DeviceInfo = deviceInfo;
 		}
 
 		/// <summary></summary>
@@ -52,7 +45,7 @@ namespace MKY.IO.Usb
 
 		private bool IsMatch(DeviceInfo other)
 		{
-			return (this.deviceInfo.EqualsVidPid(other));
+			return (DeviceInfo.EqualsVidPid(other));
 		}
 	}
 }

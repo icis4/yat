@@ -40,9 +40,26 @@ namespace MKY.Collections.Generic
 	[Serializable]
 	public struct Triple<T1, T2, T3> : IEquatable<Triple<T1, T2, T3>>
 	{
-		private T1 value1;
-		private T2 value2;
-		private T3 value3;
+		/// <summary>
+		/// Gets or sets the first value.
+		/// </summary>
+		/// <value>The first value.</value>
+		[XmlElement("Value1")]
+		public T1 Value1 { get; set; }
+
+		/// <summary>
+		/// Gets or sets the second value.
+		/// </summary>
+		/// <value>The second value.</value>
+		[XmlElement("Value2")]
+		public T2 Value2 { get; set; }
+
+		/// <summary>
+		/// Gets or sets the third value.
+		/// </summary>
+		/// <value>The third value.</value>
+		[XmlElement("Value3")]
+		public T3 Value3 { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:ValueTriple`1"/> struct.
@@ -52,42 +69,9 @@ namespace MKY.Collections.Generic
 		/// <param name="value3">The third value.</param>
 		public Triple(T1 value1, T2 value2, T3 value3)
 		{
-			this.value1 = value1;
-			this.value2 = value2;
-			this.value3 = value3;
-		}
-
-		/// <summary>
-		/// Gets or sets the first value.
-		/// </summary>
-		/// <value>The first value.</value>
-		[XmlElement("Value1")]
-		public T1 Value1
-		{
-			get { return (this.value1); }
-			set { this.value1 = value;  }
-		}
-
-		/// <summary>
-		/// Gets or sets the second value.
-		/// </summary>
-		/// <value>The second value.</value>
-		[XmlElement("Value2")]
-		public T2 Value2
-		{
-			get { return (this.value2); }
-			set { this.value2 = value;  }
-		}
-
-		/// <summary>
-		/// Gets or sets the third value.
-		/// </summary>
-		/// <value>The third value.</value>
-		[XmlElement("Value3")]
-		public T3 Value3
-		{
-			get { return (this.value3); }
-			set { this.value3 = value;  }
+			Value1 = value1;
+			Value2 = value2;
+			Value3 = value3;
 		}
 
 		#region Object Members

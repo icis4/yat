@@ -37,8 +37,19 @@ namespace MKY.Collections.Generic
 	[Serializable]
 	public struct Pair<T1, T2> : IEquatable<Pair<T1, T2>>
 	{
-		private T1 value1;
-		private T2 value2;
+		/// <summary>
+		/// Gets or sets the first value.
+		/// </summary>
+		/// <value>The first value.</value>
+		[XmlElement("Value1")]
+		public T1 Value1 { get; set; }
+
+		/// <summary>
+		/// Gets or sets the second value.
+		/// </summary>
+		/// <value>The second value.</value>
+		[XmlElement("Value2")]
+		public T2 Value2 { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:ValuePair`1"/> struct.
@@ -47,30 +58,8 @@ namespace MKY.Collections.Generic
 		/// <param name="value2">The second value.</param>
 		public Pair(T1 value1, T2 value2)
 		{
-			this.value1 = value1;
-			this.value2 = value2;
-		}
-
-		/// <summary>
-		/// Gets or sets the first value.
-		/// </summary>
-		/// <value>The first value.</value>
-		[XmlElement("Value1")]
-		public T1 Value1
-		{
-			get { return (this.value1); }
-			set { this.value1 = value;  }
-		}
-
-		/// <summary>
-		/// Gets or sets the second value.
-		/// </summary>
-		/// <value>The second value.</value>
-		[XmlElement("Value2")]
-		public T2 Value2
-		{
-			get { return (this.value2); }
-			set { this.value2 = value;  }
+			Value1 = value1;
+			Value2 = value2;
 		}
 
 		#region Object Members

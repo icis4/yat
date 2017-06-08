@@ -35,8 +35,23 @@ namespace MKY.Recent
 	[Serializable]
 	public class RecentItem<T> : IEquatable<RecentItem<T>>, IComparable<RecentItem<T>>
 	{
-		private T item;
-		private DateTime timeStamp;
+		/// <summary>
+		/// The recent item.
+		/// </summary>
+		/// <remarks>
+		/// Set is needed for XML serialization.
+		/// </remarks>
+		[XmlElement("Item")]
+		public T Item { get; set; }
+
+		/// <summary>
+		/// The time stamp to the recent item.
+		/// </summary>
+		/// <remarks>
+		/// Set is needed for XML serialization.
+		/// </remarks>
+		[XmlElement("TimeStamp")]
+		public DateTime TimeStamp { get; set; }
 
 		/// <remarks>
 		/// Needed for XML serialization.
@@ -55,42 +70,9 @@ namespace MKY.Recent
 		/// <summary></summary>
 		public RecentItem(T item, DateTime timeStamp)
 		{
-			this.item = item;
-			this.timeStamp = timeStamp;
+			Item = item;
+			TimeStamp = timeStamp;
 		}
-
-		#region Properties
-		//==========================================================================================
-		// Properties
-		//==========================================================================================
-
-		/// <summary>
-		/// The recent item.
-		/// </summary>
-		/// <remarks>
-		/// Set property needed for XML serialization.
-		/// </remarks>
-		[XmlElement("Item")]
-		public T Item
-		{
-			get { return (this.item); }
-			set { this.item = value;  }
-		}
-
-		/// <summary>
-		/// The time stamp to the recent item.
-		/// </summary>
-		/// <remarks>
-		/// Set property needed for XML serialization.
-		/// </remarks>
-		[XmlElement("TimeStamp")]
-		public DateTime TimeStamp
-		{
-			get { return (this.timeStamp); }
-			set { this.timeStamp = value;  }
-		}
-
-		#endregion
 
 		#region Methods
 		//==========================================================================================
@@ -102,7 +84,7 @@ namespace MKY.Recent
 		/// </summary>
 		public virtual bool IsValid
 		{
-			get { return (this.item != null); }
+			get { return (Item != null); }
 		}
 
 		#endregion
@@ -201,7 +183,7 @@ namespace MKY.Recent
 		/// </summary>
 		public virtual int CompareTo(RecentItem<T> other)
 		{
-			return (-(this.timeStamp.CompareTo(other.timeStamp))); // Sort inverse.
+			return (-(TimeStamp.CompareTo(other.TimeStamp))); // Sort inverse.
 		}
 
 		/// <summary></summary>

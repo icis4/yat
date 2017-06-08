@@ -44,11 +44,6 @@ namespace MKY.IO.Usb.Test
 		// Fields
 		//==========================================================================================
 
-		#region Fields > Configuration
-		//------------------------------------------------------------------------------------------
-		// Fields > Configuration
-		//------------------------------------------------------------------------------------------
-
 		private ConfigurationPropertyCollection properties = new ConfigurationPropertyCollection();
 
 		private ConfigurationProperty deviceA = new ConfigurationProperty("DeviceA", typeof(string), "VID:0ABC PID:1234 SNR:XYZ");
@@ -62,21 +57,36 @@ namespace MKY.IO.Usb.Test
 
 		#endregion
 
-		#region Fields > Auxiliary
-		//------------------------------------------------------------------------------------------
-		// Fields > Auxiliary
-		//------------------------------------------------------------------------------------------
+		#region Auto-Properties
+		//==========================================================================================
+		// Auto-Properties
+		//==========================================================================================
 
-		private bool deviceAIsAvailable;
-		private bool deviceBIsAvailable;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Device is named with a single letter")]
+		public virtual bool DeviceAIsAvailable { get; set; }
 
-		private bool mtSicsDeviceAIsConnected;
-		private bool mtSicsDeviceBIsConnected;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Device is named with a single letter")]
+		public virtual bool DeviceBIsAvailable { get; set; }
 
-		private bool tiLaunchPadDeviceAIsConnected;
-		private bool tiLaunchPadDeviceBIsConnected;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
+		public virtual bool MTSicsDeviceAIsConnected { get; set; }
 
-		#endregion
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
+		public virtual bool MTSicsDeviceBIsConnected { get; set; }
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
+		public virtual bool TILaunchPadDeviceAIsConnected { get; set; }
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
+		public virtual bool TILaunchPadDeviceBIsConnected { get; set; }
 
 		#endregion
 
@@ -106,11 +116,6 @@ namespace MKY.IO.Usb.Test
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
-
-		#region Properties > Configuration
-		//------------------------------------------------------------------------------------------
-		// Properties > Configuration
-		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		protected override ConfigurationPropertyCollection Properties
@@ -155,65 +160,6 @@ namespace MKY.IO.Usb.Test
 		{
 			get { return ((string)this["TILaunchPadDeviceB"]); }
 		}
-
-		#endregion
-
-		#region Properties > Auxiliary
-		//------------------------------------------------------------------------------------------
-		// Properties > Auxiliary
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Device is named with a single letter")]
-		public virtual bool DeviceAIsAvailable
-		{
-			get { return (this.deviceAIsAvailable); }
-			set { this.deviceAIsAvailable = value;  }
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Device is named with a single letter")]
-		public virtual bool DeviceBIsAvailable
-		{
-			get { return (this.deviceBIsAvailable); }
-			set { this.deviceBIsAvailable = value;  }
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
-		public virtual bool MTSicsDeviceAIsConnected
-		{
-			get { return (this.mtSicsDeviceAIsConnected); }
-			set { this.mtSicsDeviceAIsConnected = value; }
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
-		public virtual bool MTSicsDeviceBIsConnected
-		{
-			get { return (this.mtSicsDeviceBIsConnected); }
-			set { this.mtSicsDeviceBIsConnected = value; }
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
-		public virtual bool TILaunchPadDeviceAIsConnected
-		{
-			get { return (this.tiLaunchPadDeviceAIsConnected); }
-			set { this.tiLaunchPadDeviceAIsConnected = value; }
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
-		public virtual bool TILaunchPadDeviceBIsConnected
-		{
-			get { return (this.tiLaunchPadDeviceBIsConnected); }
-			set { this.tiLaunchPadDeviceBIsConnected = value; }
-		}
-
-		#endregion
 
 		#endregion
 	}

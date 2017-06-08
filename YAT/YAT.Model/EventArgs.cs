@@ -31,126 +31,80 @@ namespace YAT.Model
 	/// <summary></summary>
 	public class SavedEventArgs : EventArgs
 	{
-		private string filePath;
-		private bool isAutoSave;
-
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public SavedEventArgs(string filePath, bool isAutoSave = false)
-		{
-			this.filePath = filePath;
-			this.isAutoSave = isAutoSave;
-		}
-
-		/// <summary></summary>
-		public string FilePath
-		{
-			get { return (this.filePath); }
-		}
+		public string FilePath { get; }
 
 		/// <summary>
 		/// Auto save means that the settings have been saved at an automatically chosen location,
 		/// without telling the user anything about it.
 		/// </summary>
-		public bool IsAutoSave
+		public bool IsAutoSave { get; }
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		public SavedEventArgs(string filePath, bool isAutoSave = false)
 		{
-			get { return (this.isAutoSave); }
+			FilePath = filePath;
+			IsAutoSave = isAutoSave;
 		}
 	}
 
 	/// <summary></summary>
 	public class ClosedEventArgs : EventArgs
 	{
-		private bool isParentClose;
+		/// <summary></summary>
+		public bool IsParentClose { get; }
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public ClosedEventArgs(bool isParentClose = false)
 		{
-			this.isParentClose = isParentClose;
-		}
-
-		/// <summary></summary>
-		public bool IsParentClose
-		{
-			get { return (this.isParentClose); }
+			IsParentClose = isParentClose;
 		}
 	}
 
 	/// <summary></summary>
 	public class MessageInputEventArgs : EventArgs
 	{
-		private string text;
-		private string caption;
-		private MessageBoxButtons buttons;
-		private MessageBoxIcon icon;
-		private MessageBoxDefaultButton defaultButton;
-		private DialogResult result;
+		/// <summary></summary>
+		public string Text { get; }
+
+		/// <summary></summary>
+		public string Caption { get; }
+
+		/// <summary></summary>
+		public MessageBoxButtons Buttons { get; }
+
+		/// <summary></summary>
+		public MessageBoxIcon Icon { get; }
+
+		/// <summary></summary>
+		public MessageBoxDefaultButton DefaultButton { get; }
+
+		/// <summary></summary>
+		public DialogResult Result { get; set; }
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public MessageInputEventArgs(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
 		{
-			this.text = text;
-			this.caption = caption;
-			this.buttons = buttons;
-			this.icon = icon;
-			this.defaultButton = defaultButton;
-		}
-
-		/// <summary></summary>
-		public string Text
-		{
-			get { return (this.text); }
-		}
-
-		/// <summary></summary>
-		public string Caption
-		{
-			get { return (this.caption); }
-		}
-
-		/// <summary></summary>
-		public MessageBoxButtons Buttons
-		{
-			get { return (this.buttons); }
-		}
-
-		/// <summary></summary>
-		public MessageBoxIcon Icon
-		{
-			get { return (this.icon); }
-		}
-
-		/// <summary></summary>
-		public MessageBoxDefaultButton DefaultButton
-		{
-			get { return (this.defaultButton); }
-		}
-
-		/// <summary></summary>
-		public DialogResult Result
-		{
-			get { return (this.result); }
-			set { this.result = value;  }
+			Text = text;
+			Caption = caption;
+			Buttons  = buttons;
+			Icon = icon;
+			DefaultButton = defaultButton;
 		}
 	}
 
 	/// <summary></summary>
 	public class DialogEventArgs : EventArgs
 	{
-		private DialogResult result;
+		/// <summary></summary>
+		public DialogResult Result { get; set; }
 
 		/// <summary></summary>
 		public DialogEventArgs()
 		{
-		}
-
-		/// <summary></summary>
-		public DialogResult Result
-		{
-			get { return (this.result); }
-			set { this.result = value;  }
 		}
 	}
 }

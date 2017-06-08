@@ -186,8 +186,11 @@ namespace MKY
 			// Fields/Events/Lifetime/Properties/Methods
 			//======================================================================================
 
-			private EventHandlingMode eventHandling = EventHandlingDefault;
-			private ExceptionHandlingMode exceptionHandling = ExceptionHandlingDefault;
+			/// <summary></summary>
+			public EventHandlingMode EventHandling { get; set; } = EventHandlingDefault;
+
+			/// <summary></summary>
+			public ExceptionHandlingMode ExceptionHandling { get; set; } = ExceptionHandlingDefault;
 
 			/// <summary></summary>
 			public event EventHandler<UnhandledExceptionEventArgs> UnhandledExceptionOnMainThread;
@@ -199,22 +202,8 @@ namespace MKY
 			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 			public Item(EventHandlingMode eventHandling = EventHandlingDefault, ExceptionHandlingMode exceptionHandling = ExceptionHandlingDefault)
 			{
-				this.eventHandling = eventHandling;
-				this.exceptionHandling = exceptionHandling;
-			}
-
-			/// <summary></summary>
-			public virtual EventHandlingMode EventHandling
-			{
-				get { return (this.eventHandling); }
-				set { this.eventHandling = value;  }
-			}
-
-			/// <summary></summary>
-			public virtual ExceptionHandlingMode ExceptionHandling
-			{
-				get { return (this.exceptionHandling); }
-				set { this.exceptionHandling = value;  }
+				EventHandling = eventHandling;
+				ExceptionHandling = exceptionHandling;
 			}
 
 			/// <remarks>

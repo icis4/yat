@@ -92,19 +92,14 @@ namespace YAT.Domain
 	/// </summary>
 	public class RawSendItem : SendItem
 	{
-		private byte[] data;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Source is an array, sink is an array, this class transports the array from source to sink, there's no purpose to use a ReadOnlyCollection here.")]
+		public byte[] Data { get; }
 
 		/// <summary></summary>
 		public RawSendItem(byte[] data)
 		{
-			this.data = data;
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Source is an array, sink is an array, this class transports the array from source to sink, there's no purpose to use a ReadOnlyCollection here.")]
-		public virtual byte[] Data
-		{
-			get { return (this.data); }
+			Data = data;
 		}
 
 		#region Object Members
@@ -117,7 +112,7 @@ namespace YAT.Domain
 		{
 			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
 			{
-				foreach (byte b in this.data)
+				foreach (byte b in Data)
 					sw.Write(Convert.ToChar(b));
 
 				return (indent + sw.ToString());
@@ -130,7 +125,7 @@ namespace YAT.Domain
 			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
 			{
 				bool begin = true;
-				foreach (byte b in this.data)
+				foreach (byte b in Data)
 				{
 					if (!begin)
 						sw.Write(" ");
@@ -152,35 +147,22 @@ namespace YAT.Domain
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Parsable", Justification = "'Parsable' is a correct English term.")]
 	public class ParsableSendItem : SendItem
 	{
-		private string data;
-		private Radix defaultRadix;
-		private bool isLine;
+		/// <summary></summary>
+		public string Data { get; }
+
+		/// <summary></summary>
+		public Radix DefaultRadix { get; }
+
+		/// <summary></summary>
+		public bool IsLine { get; }
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public ParsableSendItem(string data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault, bool isLine = false)
 		{
-			this.data = data;
-			this.defaultRadix = defaultRadix;
-			this.isLine = isLine;
-		}
-
-		/// <summary></summary>
-		public virtual string Data
-		{
-			get { return (this.data); }
-		}
-
-		/// <summary></summary>
-		public virtual Radix DefaultRadix
-		{
-			get { return (this.defaultRadix); }
-		}
-
-		/// <summary></summary>
-		public virtual bool IsLine
-		{
-			get { return (this.isLine); }
+			Data         = data;
+			DefaultRadix = defaultRadix;
+			IsLine       = isLine;
 		}
 
 		#region Object Members
@@ -191,15 +173,15 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public override string ToString(string indent)
 		{
-			return (indent + this.data);
+			return (indent + Data);
 		}
 
 		/// <summary></summary>
 		public override string ToDetailedString(string indent)
 		{
-			return (indent + "> Data         : " + this.data         + Environment.NewLine +
-					indent + "> DefaultRadix : " + this.defaultRadix + Environment.NewLine +
-					indent + "> IsLine       : " + this.isLine       + Environment.NewLine);
+			return (indent + "> Data         : " + Data         + Environment.NewLine +
+					indent + "> DefaultRadix : " + DefaultRadix + Environment.NewLine +
+					indent + "> IsLine       : " + IsLine       + Environment.NewLine);
 		}
 
 		#endregion

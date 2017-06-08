@@ -35,8 +35,19 @@ namespace MKY.Time
 	[Serializable]
 	public struct TimeTickItem<T> : IEquatable<TimeTickItem<T>>
 	{
-		private long timeTick;
-		private T item;
+		/// <summary>
+		/// Gets or sets the time tick.
+		/// </summary>
+		/// <value>The time tick.</value>
+		[XmlElement("TimeTick")]
+		public long TimeTick { get; set; }
+
+		/// <summary>
+		/// Gets or sets the item.
+		/// </summary>
+		/// <value>The item.</value>
+		[XmlElement("Item")]
+		public T Item { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:TimeTickItem`1"/> struct.
@@ -54,30 +65,8 @@ namespace MKY.Time
 		/// <param name="item">The second value.</param>
 		public TimeTickItem(long timeTick, T item)
 		{
-			this.timeTick = timeTick;
-			this.item = item;
-		}
-
-		/// <summary>
-		/// Gets or sets the time tick.
-		/// </summary>
-		/// <value>The time tick.</value>
-		[XmlElement("TimeTick")]
-		public long TimeTick
-		{
-			get { return (this.timeTick); }
-			set { this.timeTick = value;  }
-		}
-
-		/// <summary>
-		/// Gets or sets the item.
-		/// </summary>
-		/// <value>The item.</value>
-		[XmlElement("Item")]
-		public T Item
-		{
-			get { return (this.item); }
-			set { this.item = value;  }
+			TimeTick = timeTick;
+			Item     = item;
 		}
 
 		#region Object Members
