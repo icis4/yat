@@ -12,7 +12,9 @@
 	Select all configurations
 	Enable Build > XML documentation file
 	Tick Build > Advanced > Check for under/overflow
-	Sign the assembly
+
+	Note that there is no need to sign a test assembly
+	It's actually an advantage not signing, as there will be a build warning in case a test assembly is accidentally referenced
 
 5.	Open "AssemblyInfo"
 	Update according to "AssemblyInfo" of existing test projects
