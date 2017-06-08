@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.Developer", "!-Doc.Developer", "{E3E1764C-1358-495F-839F-721D4D307DF8}"
 	ProjectSection(SolutionItems) = preProject
 		!-Doc.Developer\Guidelines.txt = !-Doc.Developer\Guidelines.txt
+		!-Doc.Developer\HowToAddProject.txt = !-Doc.Developer\HowToAddProject.txt
 		!-Doc.Developer\HowToAddTestProject.txt = !-Doc.Developer\HowToAddTestProject.txt
 		!-Doc.Developer\HowToExportArgoUML.txt = !-Doc.Developer\HowToExportArgoUML.txt
 		!-Doc.Developer\HowToRunAndDebugNUnitTests.txt = !-Doc.Developer\HowToRunAndDebugNUnitTests.txt
