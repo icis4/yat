@@ -85,6 +85,7 @@ namespace MKY.IO.Serial.Socket
 	/// Also note that a very similar issue existed when stopping two <see cref="TcpAutoSocket"/>
 	/// that were interconnected with each other. See remarks of this class for details.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Azevedo' is a name.")]
 	public class TcpServer : IIOProvider, IDisposable, ALAZ.SystemEx.NetEx.SocketsEx.ISocketService
 	{
 		#region Types

@@ -160,7 +160,6 @@ namespace YAT.Model.Test
 			/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
 			public bool ExpectedAlsoApplyToA { get; }
 
-
 			/// <summary></summary>
 			/// <param name="command">The test command.</param>
 			public TestSet(Types.Command command)
