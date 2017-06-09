@@ -92,7 +92,7 @@ namespace YAT.Domain
 			public DisplayLinePart EolElements { get; set; }
 			public SequenceQueue   Eol         { get; set; }
 
-			public Dictionary<string, bool> EolOfLastLineOfGivenPortWasCompleteMatch;
+			public Dictionary<string, bool> EolOfLastLineOfGivenPortWasCompleteMatch { get; set; }
 
 			public LineState(SequenceQueue eol)
 			{
