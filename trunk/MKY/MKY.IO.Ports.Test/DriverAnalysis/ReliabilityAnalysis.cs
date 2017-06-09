@@ -135,8 +135,6 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 		// Fields
 		//==========================================================================================
 
-		private bool isDisposed;
-
 		private System.IO.Ports.SerialPort port;
 		private StreamWriter file;
 
@@ -164,6 +162,9 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		public bool IsDisposed { get; protected set; }
+
+		/// <summary></summary>
 		public void Dispose()
 		{
 			Dispose(true);
@@ -173,7 +174,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!this.isDisposed)
+			if (!IsDisposed)
 			{
 				// Dispose of managed resources:
 				if (disposing)
@@ -196,11 +197,11 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				this.file = null;
 				this.receivedDataLock = null;
 				this.receivedErrorLock = null;
-				this.isDisposed = true;
+				IsDisposed = true;
 			}
 		}
 
-#if (DEBUG)
+	#if (DEBUG)
 
 		/// <remarks>
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
@@ -220,12 +221,12 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			MKY.Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
-#endif // DEBUG
+	#endif // DEBUG
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (this.isDisposed)
+			if (IsDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 

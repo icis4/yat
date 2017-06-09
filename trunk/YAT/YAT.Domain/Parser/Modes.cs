@@ -23,10 +23,12 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace YAT.Domain.Parser
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "'NoEscapes' actually means 'None' but is more obvious.")]
 	[Flags]
 	public enum Modes
 	{

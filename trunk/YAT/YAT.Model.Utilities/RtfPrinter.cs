@@ -45,8 +45,6 @@ namespace YAT.Model.Utilities
 	/// </summary>
 	public class RtfPrinter : IDisposable
 	{
-		private bool isDisposed;
-
 		private PrinterSettings settings;
 		private RichTextBox richTextProvider;
 		private StringReader reader;
@@ -68,6 +66,9 @@ namespace YAT.Model.Utilities
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		public bool IsDisposed { get; protected set; }
+
+		/// <summary></summary>
 		public void Dispose()
 		{
 			Dispose(true);
@@ -77,7 +78,7 @@ namespace YAT.Model.Utilities
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!this.isDisposed)
+			if (!IsDisposed)
 			{
 				// Dispose of managed resources if requested:
 				if (disposing)
@@ -92,11 +93,11 @@ namespace YAT.Model.Utilities
 				// Set state to disposed:
 				this.richTextProvider = null;
 				this.reader = null;
-				this.isDisposed = true;
+				IsDisposed = true;
 			}
 		}
 
-#if (DEBUG)
+	#if (DEBUG)
 
 		/// <remarks>
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
@@ -116,18 +117,12 @@ namespace YAT.Model.Utilities
 			MKY.Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
-#endif // DEBUG
-
-		/// <summary></summary>
-		public bool IsDisposed
-		{
-			get { return (this.isDisposed); }
-		}
+	#endif // DEBUG
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (this.isDisposed)
+			if (IsDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 

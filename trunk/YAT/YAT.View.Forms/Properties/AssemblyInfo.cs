@@ -53,7 +53,7 @@ using System.Runtime.InteropServices;
 [assembly: CLSCompliant(true)]
 
 // Resources.
-[assembly: NeutralResourcesLanguageAttribute("en")]
+[assembly: NeutralResourcesLanguage("en")]
 
 //==================================================================================================
 // End of

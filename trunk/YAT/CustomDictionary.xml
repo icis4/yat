@@ -15,15 +15,12 @@
       <Word>Transmissive</Word>
       <Word>Chrono</Word>
       <Word>Eol</Word>
-      <Word>Cr</Word>
-      <Word>Lf</Word>
       <Word>Rx</Word>
       <Word>Tx</Word>
       <Word>Bidir</Word>
     </Recognized>
     <DiscreteExceptions>
       <Term>InCase</Term>
-      <Term>MultiLine</Term>
       <Term>TimeStamp</Term>
     </DiscreteExceptions>
   </Words>

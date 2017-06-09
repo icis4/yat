@@ -77,6 +77,7 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		public bool EnqueueAndMatch(byte b)
 		{
 			lock (this)

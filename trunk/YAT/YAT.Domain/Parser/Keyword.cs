@@ -58,8 +58,11 @@ namespace YAT.Domain.Parser
 		/// A special keyword for internal testing (= FIT).
 		/// </summary>
 		/// <remarks>
-		/// Prepended "Z_" to get it at the bottom of a selection list.
+		/// Prepended "ZZZ_" to get it at the bottom of a selection list.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "See remarks above.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ZZZ", Justification = "See remarks above.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "FIT", Justification = "See remarks above.")]
 		ZZZ_FIT
 	}
 
@@ -178,6 +181,7 @@ namespace YAT.Domain.Parser
 		/// <summary>
 		/// Gets the maximum arguments count for this keyword.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Naming same as 'GetItems()'.")]
 		public virtual int GetMaxArgsCount()
 		{
 			switch ((Keyword)UnderlyingEnum)
@@ -188,7 +192,7 @@ namespace YAT.Domain.Parser
 				case Keyword.LineRepeat:   return (1);
 				case Keyword.ReportId:     return (1);
 
-				case Keyword.ZZZ_FIT:        return (3); // = for internal testing.
+				case Keyword.ZZZ_FIT:      return (3); // = for internal testing.
 
 				default: return (0);
 			}

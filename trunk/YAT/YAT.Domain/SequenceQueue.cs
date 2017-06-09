@@ -147,6 +147,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		public virtual void Enqueue(byte b)
 		{
 			// Reset queue if it previously matched:

@@ -96,25 +96,11 @@ namespace MKY.Settings
 			// Fields
 			//======================================================================================
 
-			[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "This is a bug in FxCop 1.36.")]
-			private bool isDisposed;
-
-			[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "This is a bug in FxCop 1.36.")]
 			private string name;
-
-			[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "This is a bug in FxCop 1.36.")]
 			private TSettings settings;
-
-			[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "This is a bug in FxCop 1.36.")]
 			private AlternateXmlElement[] alternateXmlElements;
-
-			[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "This is a bug in FxCop 1.36.")]
 			private ApplicationSettingsFileAccess desiredFileAccess;
-
-			[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "This is a bug in FxCop 1.36.")]
 			private FileAccessFlags effectiveFileAccess;
-
-			[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "This is a bug in FxCop 1.36.")]
 			private Mutex mutex;
 
 			#endregion
@@ -178,6 +164,9 @@ namespace MKY.Settings
 			//------------------------------------------------------------------------------------------
 
 			/// <summary></summary>
+			public bool IsDisposed { get; protected set; }
+
+			/// <summary></summary>
 			public void Dispose()
 			{
 				Dispose(true);
@@ -187,7 +176,7 @@ namespace MKY.Settings
 			/// <summary></summary>
 			protected virtual void Dispose(bool disposing)
 			{
-				if (!this.isDisposed)
+				if (!IsDisposed)
 				{
 					// The mutex must be closed and released by the application because it would
 					// be called from the wrong process if it was closed by the garbage collector.
@@ -201,7 +190,7 @@ namespace MKY.Settings
 
 					// Set state to disposed:
 					this.mutex = null;
-					this.isDisposed = true;
+					IsDisposed = true;
 				}
 			}
 
@@ -228,15 +217,9 @@ namespace MKY.Settings
 #endif // DEBUG
 
 			/// <summary></summary>
-			public bool IsDisposed
-			{
-				get { return (this.isDisposed); }
-			}
-
-			/// <summary></summary>
 			protected void AssertNotDisposed()
 			{
-				if (this.isDisposed)
+				if (IsDisposed)
 					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 			}
 
@@ -436,8 +419,6 @@ namespace MKY.Settings
 		// Fields
 		//==========================================================================================
 
-		private bool isDisposed;
-
 		private Handler<TCommonSettings> commonSettings;
 		private Handler<TLocalUserSettings> localUserSettings;
 		private Handler<TRoamingUserSettings> roamingUserSettings;
@@ -497,6 +478,9 @@ namespace MKY.Settings
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		public bool IsDisposed { get; protected set; }
+
+		/// <summary></summary>
 		public void Dispose()
 		{
 			Dispose(true);
@@ -506,7 +490,7 @@ namespace MKY.Settings
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!this.isDisposed)
+			if (!IsDisposed)
 			{
 				// Dispose of managed resources if requested:
 				if (disposing)
@@ -526,11 +510,11 @@ namespace MKY.Settings
 				this.commonSettings = null;
 				this.localUserSettings = null;
 				this.roamingUserSettings = null;
-				this.isDisposed = true;
+				IsDisposed = true;
 			}
 		}
 
-#if (DEBUG)
+	#if (DEBUG)
 
 		/// <remarks>
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
@@ -550,18 +534,12 @@ namespace MKY.Settings
 			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
-#endif // DEBUG
-
-		/// <summary></summary>
-		public bool IsDisposed
-		{
-			get { return (this.isDisposed); }
-		}
+	#endif // DEBUG
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (this.isDisposed)
+			if (IsDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 

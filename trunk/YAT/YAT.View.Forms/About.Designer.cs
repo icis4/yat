@@ -7,8 +7,6 @@
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
-		private bool isDisposed;
-
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
@@ -16,7 +14,7 @@
 		protected override void Dispose(bool disposing)
 		{
 			// Modified version of the designer generated Dispose() method:
-			if (!this.isDisposed)
+			if (!IsDisposed)
 			{
 				// Dispose of managed resources if requested:
 				if (disposing)
@@ -29,9 +27,6 @@
 				{
 					components.Dispose();
 				}
-
-				// Set state to disposed:
-				this.isDisposed = true;
 			}
 
 			base.Dispose(disposing);

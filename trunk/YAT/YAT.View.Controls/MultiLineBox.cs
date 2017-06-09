@@ -46,6 +46,7 @@ using YAT.Model.Types;
 namespace YAT.View.Controls
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "MultiLine", Justification = "What's wrong with 'MultiLine'?")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
 	public partial class MultiLineBox : Form
 	{

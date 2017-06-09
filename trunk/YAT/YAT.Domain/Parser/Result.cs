@@ -39,6 +39,7 @@ namespace YAT.Domain.Parser
 		public byte[] Bytes { get; }
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "bytes", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
 		public BytesResult(byte[] bytes)
 		{
 			Bytes = bytes;
@@ -55,7 +56,7 @@ namespace YAT.Domain.Parser
 		public Keyword Keyword { get; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and ease of use is...")]
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, simplicity and ease of use is...")]
 		public int[] Args { get; }
 
 		/// <summary></summary>

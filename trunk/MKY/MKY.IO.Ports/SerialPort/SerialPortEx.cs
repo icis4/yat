@@ -179,8 +179,6 @@ namespace MKY.IO.Ports
 		// Fields
 		//==========================================================================================
 
-		private bool isDisposed;
-
 		/// <summary>
 		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
 		/// </summary>
@@ -314,7 +312,10 @@ namespace MKY.IO.Ports
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-#if (DEBUG)
+		/// <summary></summary>
+		public bool IsDisposed { get; protected set; }
+
+	#if (DEBUG)
 
 		/// <remarks>
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
@@ -337,22 +338,12 @@ namespace MKY.IO.Ports
 			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
-#endif // DEBUG
-
-		/// <summary>
-		/// Returns whether the object has already been disposed.
-		/// </summary>
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public bool IsDisposed
-		{
-			get { return (this.isDisposed); }
-		}
+	#endif // DEBUG
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (this.isDisposed)
+			if (IsDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 

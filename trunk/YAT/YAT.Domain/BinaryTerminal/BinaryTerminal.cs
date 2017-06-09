@@ -60,8 +60,6 @@ namespace YAT.Domain
 		/// <summary></summary>
 		private class LineBreakTimer : IDisposable
 		{
-			private bool isDisposed;
-
 			/// <summary>
 			/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
 			/// </summary>
@@ -86,6 +84,9 @@ namespace YAT.Domain
 			//--------------------------------------------------------------------------------------
 
 			/// <summary></summary>
+			public bool IsDisposed { get; protected set; }
+
+			/// <summary></summary>
 			public void Dispose()
 			{
 				Dispose(true);
@@ -95,7 +96,7 @@ namespace YAT.Domain
 			/// <summary></summary>
 			protected virtual void Dispose(bool disposing)
 			{
-				if (!this.isDisposed)
+				if (!IsDisposed)
 				{
 					DebugEventManagement.DebugWriteAllEventRemains(this);
 					this.eventHelper.DiscardAllEventsAndExceptions();
@@ -108,11 +109,11 @@ namespace YAT.Domain
 					}
 
 					// Set state to disposed:
-					this.isDisposed = true;
+					IsDisposed = true;
 				}
 			}
 
-#if (DEBUG)
+		#if (DEBUG)
 
 			/// <remarks>
 			/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
@@ -132,19 +133,12 @@ namespace YAT.Domain
 				DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 			}
 
-#endif // DEBUG
-
-			/// <summary></summary>
-			[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Implemented the same as every other IDisposable implementation.")]
-			public bool IsDisposed
-			{
-				get { return (this.isDisposed); }
-			}
+		#endif // DEBUG
 
 			/// <summary></summary>
 			protected void AssertNotDisposed()
 			{
-				if (this.isDisposed)
+				if (IsDisposed)
 					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 			}
 
@@ -206,7 +200,7 @@ namespace YAT.Domain
 
 				lock (this.timerSyncObj)
 				{
-					if ((this.timer == null) || (this.isDisposed))
+					if ((this.timer == null) || (IsDisposed))
 						return; // Handle overdue event callbacks.
 				}
 
@@ -239,8 +233,6 @@ namespace YAT.Domain
 
 		private class LineState : IDisposable
 		{
-			private bool isDisposed;
-
 			public LinePosition         Position                      { get; set; }
 			public DisplayLinePart      Elements                      { get; set; }
 			public SequenceQueue        SequenceAfter                 { get; set; }
@@ -266,6 +258,9 @@ namespace YAT.Domain
 			//--------------------------------------------------------------------------------------
 
 			/// <summary></summary>
+			public bool IsDisposed { get; protected set; }
+
+			/// <summary></summary>
 			public void Dispose()
 			{
 				Dispose(true);
@@ -275,7 +270,7 @@ namespace YAT.Domain
 			/// <summary></summary>
 			protected virtual void Dispose(bool disposing)
 			{
-				if (!this.isDisposed)
+				if (!IsDisposed)
 				{
 					// Dispose of managed resources if requested:
 					if (disposing)
@@ -293,11 +288,11 @@ namespace YAT.Domain
 
 					// Set state to disposed:
 					this.BreakTimer = null;
-					this.isDisposed = true;
+					IsDisposed = true;
 				}
 			}
 
-#if (DEBUG)
+		#if (DEBUG)
 
 			/// <remarks>
 			/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
@@ -317,19 +312,12 @@ namespace YAT.Domain
 				DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 			}
 
-#endif // DEBUG
-
-			/// <summary></summary>
-			[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Implemented the same as every other IDisposable implementation.")]
-			public bool IsDisposed
-			{
-				get { return (this.isDisposed); }
-			}
+		#endif // DEBUG
 
 			/// <summary></summary>
 			protected void AssertNotDisposed()
 			{
-				if (this.isDisposed)
+				if (IsDisposed)
 					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 			}
 

@@ -47,6 +47,7 @@ using YAT.Settings.Terminal;
 namespace YAT.Model.Test.Transmission
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 	public static class MTSicsDeviceTestData
 	{
 		#region Constants
@@ -183,6 +184,7 @@ namespace YAT.Model.Test.Transmission
 	/// located here because line counts and rates are calculated in <see cref="YAT.Model.Terminal"/>
 	/// and required when evaluating the test result.
 	/// </remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 	[TestFixture]
 	public class MTSicsDeviceTest
 	{
