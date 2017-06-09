@@ -19,7 +19,7 @@ namespace MKY.IO.Ports
 		protected override void Dispose(bool disposing)
 		{
 			// Modified version of the designer generated Dispose() method:
-			if (!this.isDisposed)
+			if (!IsDisposed)
 			{
 				this.eventHelper.DiscardAllEventsAndExceptions();
 
@@ -51,7 +51,7 @@ namespace MKY.IO.Ports
 				}
 
 				// Set state to disposed:
-				this.isDisposed = true;
+				IsDisposed = true;
 			}
 
 			try

@@ -57,7 +57,7 @@ using YAT.Settings.Terminal;
 // Module-level FxCop suppressions
 //==================================================================================================
 
-[module: SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "YAT.View.Forms.Main.#toolTip", Justification = "This is a bug in FxCop 1.36.")]
+[module: SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "YAT.View.Forms.Main.#toolTip", Justification = "This is a bug in FxCop.")]
 
 #endregion
 

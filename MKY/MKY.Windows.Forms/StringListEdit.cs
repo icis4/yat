@@ -80,7 +80,7 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and ease of use is...")]
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, simplicity and ease of use is...")]
 		public string[] StringList
 		{
 			get

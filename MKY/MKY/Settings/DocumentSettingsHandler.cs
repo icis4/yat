@@ -50,8 +50,6 @@ namespace MKY.Settings
 		// Fields
 		//==========================================================================================
 
-		private bool isDisposed;
-
 		private SettingsFileHandler fileHandler;
 
 		private TSettings settings; // = null;
@@ -97,6 +95,9 @@ namespace MKY.Settings
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		public bool IsDisposed { get; protected set; }
+
+		/// <summary></summary>
 		public void Dispose()
 		{
 			Dispose(true);
@@ -106,7 +107,7 @@ namespace MKY.Settings
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!this.isDisposed)
+			if (!IsDisposed)
 			{
 				// Dispose of managed resources:
 				if (disposing)
@@ -114,11 +115,11 @@ namespace MKY.Settings
 				}
 
 				// Set state to disposed:
-				this.isDisposed = true;
+				IsDisposed = true;
 			}
 		}
 
-#if (DEBUG)
+	#if (DEBUG)
 
 		/// <remarks>
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
@@ -138,18 +139,12 @@ namespace MKY.Settings
 			Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
-#endif // DEBUG
-
-		/// <summary></summary>
-		public bool IsDisposed
-		{
-			get { return (this.isDisposed); }
-		}
+	#endif // DEBUG
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (this.isDisposed)
+			if (IsDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 

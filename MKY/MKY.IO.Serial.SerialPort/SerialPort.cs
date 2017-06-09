@@ -121,8 +121,6 @@ namespace MKY.IO.Serial.SerialPort
 		// Fields
 		//==========================================================================================
 
-		private bool isDisposed;
-
 		/// <summary>
 		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
 		/// </summary>
@@ -223,6 +221,9 @@ namespace MKY.IO.Serial.SerialPort
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		public bool IsDisposed { get; protected set; }
+
+		/// <summary></summary>
 		public void Dispose()
 		{
 			Dispose(true);
@@ -233,7 +234,7 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "port", Justification = "Actually is disposed of asynchronously in ResetPortAndThreadsAndNotify().")]
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!this.isDisposed)
+			if (!IsDisposed)
 			{
 				DebugEventManagement.DebugWriteAllEventRemains(this);
 
@@ -247,11 +248,11 @@ namespace MKY.IO.Serial.SerialPort
 				}
 
 				// Set state to disposed:
-				this.isDisposed = true;
+				IsDisposed = true;
 			}
 		}
 
-#if (DEBUG)
+	#if (DEBUG)
 
 		/// <remarks>
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
@@ -271,18 +272,12 @@ namespace MKY.IO.Serial.SerialPort
 			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
-#endif // DEBUG
-
-		/// <summary></summary>
-		public bool IsDisposed
-		{
-			get { return (this.isDisposed); }
-		}
+	#endif // DEBUG
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (this.isDisposed)
+			if (IsDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 

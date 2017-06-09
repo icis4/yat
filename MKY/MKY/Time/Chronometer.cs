@@ -47,8 +47,6 @@ namespace MKY.Time
 		// Fields
 		//==========================================================================================
 
-		private bool isDisposed;
-
 		/// <summary>
 		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
 		/// </summary>
@@ -93,6 +91,9 @@ namespace MKY.Time
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		public bool IsDisposed { get; protected set; }
+
+		/// <summary></summary>
 		public void Dispose()
 		{
 			Dispose(true);
@@ -102,7 +103,7 @@ namespace MKY.Time
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!this.isDisposed)
+			if (!IsDisposed)
 			{
 				DebugEventManagement.DebugWriteAllEventRemains(this);
 				this.eventHelper.DiscardAllEventsAndExceptions();
@@ -119,11 +120,11 @@ namespace MKY.Time
 
 				// Set state to disposed:
 				this.timer = null;
-				this.isDisposed = true;
+				IsDisposed = true;
 			}
 		}
 
-#if (DEBUG)
+	#if (DEBUG)
 
 		/// <remarks>
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
@@ -143,18 +144,12 @@ namespace MKY.Time
 			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
-#endif // DEBUG
-
-		/// <summary></summary>
-		public bool IsDisposed
-		{
-			get { return (this.isDisposed); }
-		}
+	#endif // DEBUG
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (this.isDisposed)
+			if (IsDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
@@ -300,7 +295,7 @@ namespace MKY.Time
 				try
 				{
 					// Ensure not to forward events during closing anymore:
-					if (!this.isDisposed && (this.timer != null) && this.timer.Enabled)
+					if (!IsDisposed && (this.timer != null) && this.timer.Enabled)
 					{
 						OnTimeSpanChanged(new TimeSpanEventArgs(CalculateTimeSpan(e.SignalTime)));
 					}

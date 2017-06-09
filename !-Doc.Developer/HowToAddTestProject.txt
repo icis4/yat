@@ -14,7 +14,7 @@
 	Tick Build > Advanced > Check for under/overflow
 
 	Note that there is no need to sign a test assembly
-	It's actually an advantage not signing, as there will be a build warning in case a test assembly is accidentally referenced
+	It's actually an advantage not signing, as there will be a warning when accidentally referencing it from a 'normal' assembly
 
 5.	Open "AssemblyInfo"
 	Update according to "AssemblyInfo" of existing test projects

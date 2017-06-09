@@ -233,8 +233,6 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private bool isDisposed;
-
 		/// <summary>
 		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
 		/// </summary>
@@ -356,6 +354,9 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		public bool IsDisposed { get; protected set; }
+
+		/// <summary></summary>
 		public void Dispose()
 		{
 			Dispose(true);
@@ -365,7 +366,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!this.isDisposed)
+			if (!IsDisposed)
 			{
 				DebugEventManagement.DebugWriteAllEventRemains(this);
 				this.eventHelper.DiscardAllEventsAndExceptions();
@@ -386,11 +387,11 @@ namespace YAT.Domain
 				}
 
 				// Set state to disposed:
-				this.isDisposed = true;
+				IsDisposed = true;
 			}
 		}
 
-#if (DEBUG)
+	#if (DEBUG)
 
 		/// <remarks>
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
@@ -410,18 +411,12 @@ namespace YAT.Domain
 			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
-#endif // DEBUG
-
-		/// <summary></summary>
-		public bool IsDisposed
-		{
-			get { return (this.isDisposed); }
-		}
+	#endif // DEBUG
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (this.isDisposed)
+			if (IsDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
@@ -1175,6 +1170,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "InLine", Justification = "It's 'in line' and not inline!")]
 		protected virtual void ProcessInLineKeywords(Parser.KeywordResult result)
 		{
 			switch (result.Keyword)
@@ -1801,7 +1797,7 @@ namespace YAT.Domain
 				try
 				{
 					// Ensure not to forward events during closing anymore:
-					if (!this.isDisposed && IsReadyToSend_Internal)
+					if (!IsDisposed && IsReadyToSend_Internal)
 						RequestSignalInputXOn();
 				}
 				finally

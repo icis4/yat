@@ -106,8 +106,6 @@ namespace YAT/*.<TODO>*/
 		// Fields
 		//==========================================================================================
 
-		private bool isDisposed;
-
 		private int todo;
 
 		#endregion
@@ -137,6 +135,9 @@ namespace YAT/*.<TODO>*/
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		public bool IsDisposed { get; protected set; }
+
+		/// <summary></summary>
 		public void Dispose()
 		{
 			Dispose(true);
@@ -146,7 +147,7 @@ namespace YAT/*.<TODO>*/
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!this.isDisposed)
+			if (!IsDisposed)
 			{
 				// Dispose of managed resources if requested:
 				if (disposing)
@@ -156,11 +157,23 @@ namespace YAT/*.<TODO>*/
 				// Release unmanaged resources:
 
 				// Set state to disposed:
-				this.isDisposed = true;
+				IsDisposed = true;
 			}
 		}
 
-		/// <summary></summary>
+	#if (DEBUG)
+
+		/// <remarks>
+		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
+		/// "Types that declare disposable members should also implement IDisposable. If the type
+		///  does not own any unmanaged resources, do not implement a finalizer on it."
+		/// 
+		/// Well, true for best performance on finalizing. However, it's not easy to find missing
+		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
+		/// is kept for DEBUG, indicating missing calls.
+		/// 
+		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
+		/// </remarks>
 		~TODO()
 		{
 			Dispose(false);
@@ -168,16 +181,12 @@ namespace YAT/*.<TODO>*/
 			MKY.Diagnostics.DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
-		/// <summary></summary>
-		public bool IsDisposed
-		{
-			get { return (this.isDisposed); }
-		}
+	#endif // DEBUG
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (this.isDisposed)
+			if (IsDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 

@@ -35,8 +35,6 @@ namespace MKY.IO
 	/// </summary>
 	public class LogFile : IDisposable
 	{
-		private bool isDisposed;
-
 		private string filePath;
 		private StreamWriter writer;
 
@@ -64,6 +62,9 @@ namespace MKY.IO
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		public bool IsDisposed { get; protected set; }
+
+		/// <summary></summary>
 		public void Dispose()
 		{
 			Dispose(true);
@@ -73,7 +74,7 @@ namespace MKY.IO
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!this.isDisposed)
+			if (!IsDisposed)
 			{
 				// Dispose of managed resources if requested:
 				if (disposing)
@@ -84,11 +85,11 @@ namespace MKY.IO
 
 				// Set state to disposed:
 				this.writer = null;
-				this.isDisposed = true;
+				IsDisposed = true;
 			}
 		}
 
-#if (DEBUG)
+	#if (DEBUG)
 
 		/// <remarks>
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
@@ -108,18 +109,12 @@ namespace MKY.IO
 			Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
-#endif // DEBUG
-
-		/// <summary></summary>
-		public bool IsDisposed
-		{
-			get { return (this.isDisposed); }
-		}
+	#endif // DEBUG
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (this.isDisposed)
+			if (IsDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 

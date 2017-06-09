@@ -68,8 +68,6 @@ namespace YAT.Model.Utilities
 			}
 		}
 
-		private bool isDisposed;
-
 		private RtfDocument document;
 		private Align alignment;
 
@@ -176,6 +174,9 @@ namespace YAT.Model.Utilities
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		public bool IsDisposed { get; protected set; }
+
+		/// <summary></summary>
 		public void Dispose()
 		{
 			Dispose(true);
@@ -185,7 +186,7 @@ namespace YAT.Model.Utilities
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!this.isDisposed)
+			if (!IsDisposed)
 			{
 				// Dispose of managed resources:
 				if (disposing)
@@ -196,11 +197,11 @@ namespace YAT.Model.Utilities
 
 				// Set state to disposed:
 				this.writer = null;
-				this.isDisposed = true;
+				IsDisposed = true;
 			}
 		}
 
-#if (DEBUG)
+	#if (DEBUG)
 
 		/// <remarks>
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
@@ -220,18 +221,12 @@ namespace YAT.Model.Utilities
 			MKY.Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
-#endif // DEBUG
-
-		/// <summary></summary>
-		public bool IsDisposed
-		{
-			get { return (this.isDisposed); }
-		}
+	#endif // DEBUG
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (this.isDisposed)
+			if (IsDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 

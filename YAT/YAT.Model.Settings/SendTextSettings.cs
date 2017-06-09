@@ -137,6 +137,8 @@ namespace YAT.Model.Settings
 		/// Expands the multi-line text of a multi-line command into the corresponding single-line
 		/// text, taking "\!(EOL)" as additional EOL separator.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "MultiLine", Justification = "What's wrong with 'MultiLine'?")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
 		public virtual void ExpandMultiLineText()
 		{
 			if (Command != null)

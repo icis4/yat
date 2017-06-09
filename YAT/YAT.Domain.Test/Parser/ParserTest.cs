@@ -615,6 +615,7 @@ namespace YAT.Domain.Test.Parser
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "bytes", Justification = "The naming emphasizes the difference between bytes and other parameters.")]
 		[Test, TestCaseSource(typeof(EncodingTestData), "TestCases")]
 		public virtual void TestParserEncoding(Encoding encoding, Endianness endianness, string s, byte[] expectedBytes)

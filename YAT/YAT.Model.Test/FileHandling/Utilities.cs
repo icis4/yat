@@ -41,7 +41,8 @@ using YAT.Settings.Application;
 namespace YAT.Model.Test.FileHandling
 {
 	/// <summary></summary>
-	public class Utilities
+	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
+	public static class Utilities
 	{
 		#region Settings
 		//==========================================================================================
@@ -78,12 +79,14 @@ namespace YAT.Model.Test.FileHandling
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static void InitialStart(string step, Main main, out Workspace workspace, out Terminal terminal)
 		{
 			InitialStart(step, main, null, out workspace, null, out terminal);
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static void InitialStart(string step, Main main, string workspaceFilePath, out Workspace workspace, out Terminal terminal)
 		{
 			InitialStart(step, main, workspaceFilePath, out workspace, null, out terminal);

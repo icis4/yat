@@ -124,8 +124,24 @@ namespace YAT.Model
 		// Fields
 		//==========================================================================================
 
-		private bool doNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification;
-		private bool isDisposed;
+		/// <summary>
+		/// Workaround to the following issue:
+		/// 
+		/// A test (e.g. 'FileHandlingTest') needs to verify the settings files after calling
+		/// <see cref="Main.Exit()"/>. But at that moment, the settings have already been disposed
+		/// of and can no longer be accessed.
+		/// The first approach was to disable disposal in <see cref="Close()"/>. But that leads to
+		/// remaining resources, resulting in significant slow-down when exiting NUnit.
+		/// The second approach was to retrieve the required information *before* exiting, i.e.
+		/// calling <see cref="Main.Exit()"/>. But that doesn't work at all, since auto-save paths
+		/// are only evaluated *at* <see cref="Main.Exit()"/>.
+		/// 
+		/// This workaround is considered the best option to solve this issue.
+		/// </summary>
+		/// <remarks>
+		/// Note that it is not possible to mark a property with [Conditional("TEST")].
+		/// </remarks>
+		public bool DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification { get; set; }
 
 		/// <summary>
 		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
@@ -327,6 +343,9 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		public bool IsDisposed { get; protected set; }
+
+		/// <summary></summary>
 		public void Dispose()
 		{
 			Dispose(true);
@@ -336,7 +355,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!this.isDisposed)
+			if (!IsDisposed)
 			{
 				DebugEventManagement.DebugWriteAllEventRemains(this);
 				this.eventHelper.DiscardAllEventsAndExceptions();
@@ -361,7 +380,7 @@ namespace YAT.Model
 					DisposeLog();
 
 					// ...and finally dispose of the settings:
-					if (!this.doNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification)
+					if (!DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification)
 					{
 						DetachSettingsEventHandlers();
 						DisposeSettingsHandler();
@@ -369,13 +388,13 @@ namespace YAT.Model
 				}
 
 				// Set state to disposed:
-				this.isDisposed = true;
+				IsDisposed = true;
 
 				DebugMessage("...successfully disposed.");
 			}
 		}
 
-#if (DEBUG)
+	#if (DEBUG)
 
 		/// <remarks>
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
@@ -395,40 +414,12 @@ namespace YAT.Model
 			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
-#endif // DEBUG
-
-		/// <summary>
-		/// Workaround to the following issue:
-		/// 
-		/// A test (e.g. 'FileHandlingTest') needs to verify the settings files after calling
-		/// <see cref="Main.Exit()"/>. But at that moment, the settings have already been disposed
-		/// of and can no longer be accessed.
-		/// The first approach was to disable disposal in <see cref="Close()"/>. But that leads to
-		/// remaining resources, resulting in significant slow-down when exiting NUnit.
-		/// The second approach was to retrieve the required information *before* exiting, i.e.
-		/// calling <see cref="Main.Exit()"/>. But that doesn't work at all, since auto-save paths
-		/// are only evaluated *at* <see cref="Main.Exit()"/>.
-		/// 
-		/// This workaround is considered the best option to solve this issue.
-		/// </summary>
-		/// <remarks>
-		/// Note that it is not possible to mark a property with [Conditional("TEST")].
-		/// </remarks>
-		public bool DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification
-		{
-			set { this.doNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = value; }
-		}
-
-		/// <summary></summary>
-		public bool IsDisposed
-		{
-			get { return (this.isDisposed); }
-		}
+	#endif // DEBUG
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (this.isDisposed)
+			if (IsDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
@@ -3797,7 +3788,7 @@ namespace YAT.Model
 
 		private void rate_Changed(object sender, RateEventArgs e)
 		{
-			if (!this.isDisposed)
+			if (!IsDisposed)
 				OnIORateChanged(e);
 		}
 

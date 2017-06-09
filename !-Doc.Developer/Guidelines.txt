@@ -137,7 +137,7 @@ Base class
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!this.isDisposed)
+			if (!IsDisposed)
 			{
 				// Dispose of managed resources:
 				if (disposing)
@@ -154,7 +154,7 @@ Base class
 
 				// Set state to disposed:
 				this.FIELD = null;
-				this.isDisposed = true;
+				IsDisposed = true;
 			}
 		}
 
@@ -189,7 +189,7 @@ Base class
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (this.isDisposed)
+			if (IsDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 

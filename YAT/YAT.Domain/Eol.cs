@@ -42,11 +42,24 @@ namespace YAT.Domain
 	public enum Eol
 	{
 		None,
-		Cr,
-		Lf,
-		CrLf,
-		LfCr,
+
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "CR", Justification = "<CR> is an ASCII mnemonic.")]
+		CR,
+
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "LF", Justification = "<LF> is an ASCII mnemonic.")]
+		LF,
+
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "CRLF", Justification = "<CR><LF> are ASCII mnemonics.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "CRLF", Justification = "Same as above.")]
+		CRLF,
+
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "LFCR", Justification = "<LF><CR> are ASCII mnemonics.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "LFCR", Justification = "Same as above.")]
+		LFCR,
+
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Nul", Justification = "<NUL> is an ASCII mnemonic.")]
 		Nul,
+
 		Tab,
 		Space
 	}
@@ -76,17 +89,17 @@ namespace YAT.Domain
 		private const string None_stringOld1 =  "None";
 		private const string None_stringSequence = "";
 
-		private const string Cr_stringSequence = "<CR>";
-		private const string Cr_stringNative = "\r";
+		private const string CR_stringSequence = "<CR>";
+		private const string CR_stringNative = "\r";
 
-		private const string Lf_stringSequence = "<LF>";
-		private const string Lf_stringNative = "\n";
+		private const string LF_stringSequence = "<LF>";
+		private const string LF_stringNative = "\n";
 
-		private const string CrLf_stringSequence = "<CR><LF>";
-		private const string CrLf_stringNative = "\r\n";
+		private const string CRLF_stringSequence = "<CR><LF>";
+		private const string CRLF_stringNative = "\r\n";
 		
-		private const string LfCr_stringSequence = "<LF><CR>";
-		private const string LfCr_stringNative = "\n\r";
+		private const string LFCR_stringSequence = "<LF><CR>";
+		private const string LFCR_stringNative = "\n\r";
 		
 		private const string Nul_stringSequence = "<NUL>";
 		private const string Nul_stringNative = "\0";
@@ -100,8 +113,8 @@ namespace YAT.Domain
 		
 		#endregion
 
-		/// <summary>Default is <see cref="Eol.CrLf"/>.</summary>
-		public const Eol Default = Eol.CrLf;
+		/// <summary>Default is <see cref="Eol.CRLF"/>.</summary>
+		public const Eol Default = Eol.CRLF;
 
 		/// <summary>Default is <see cref="Default"/>.</summary>
 		public EolEx()
@@ -129,10 +142,10 @@ namespace YAT.Domain
 			switch ((Eol)UnderlyingEnum)
 			{
 				case Eol.None:  return ( None_stringNice);
-				case Eol.Cr:    return (   Cr_stringSequence);
-				case Eol.Lf:    return (   Lf_stringSequence);
-				case Eol.CrLf:  return ( CrLf_stringSequence);
-				case Eol.LfCr:  return ( LfCr_stringSequence);
+				case Eol.CR:    return (   CR_stringSequence);
+				case Eol.LF:    return (   LF_stringSequence);
+				case Eol.CRLF:  return ( CRLF_stringSequence);
+				case Eol.LFCR:  return ( LFCR_stringSequence);
 				case Eol.Nul:   return (  Nul_stringSequence);
 				case Eol.Tab:   return (  Tab_stringSequence);
 				case Eol.Space: return (Space_stringNice);
@@ -147,10 +160,10 @@ namespace YAT.Domain
 			switch ((Eol)UnderlyingEnum)
 			{
 				case Eol.None:  return ( None_stringSequence);
-				case Eol.Cr:    return (   Cr_stringSequence);
-				case Eol.Lf:    return (   Lf_stringSequence);
-				case Eol.CrLf:  return ( CrLf_stringSequence);
-				case Eol.LfCr:  return ( LfCr_stringSequence);
+				case Eol.CR:    return (   CR_stringSequence);
+				case Eol.LF:    return (   LF_stringSequence);
+				case Eol.CRLF:  return ( CRLF_stringSequence);
+				case Eol.LFCR:  return ( LFCR_stringSequence);
 				case Eol.Nul:   return (  Nul_stringSequence);
 				case Eol.Tab:   return (  Tab_stringSequence);
 				case Eol.Space: return (Space_stringSequence);
@@ -173,10 +186,10 @@ namespace YAT.Domain
 		{
 			List<EolEx> a = new List<EolEx>(8); // Preset the required capacity to improve memory management.
 			a.Add(new EolEx(Eol.None));
-			a.Add(new EolEx(Eol.Cr));
-			a.Add(new EolEx(Eol.Lf));
-			a.Add(new EolEx(Eol.CrLf));
-			a.Add(new EolEx(Eol.LfCr));
+			a.Add(new EolEx(Eol.CR));
+			a.Add(new EolEx(Eol.LF));
+			a.Add(new EolEx(Eol.CRLF));
+			a.Add(new EolEx(Eol.LFCR));
 			a.Add(new EolEx(Eol.Nul));
 			a.Add(new EolEx(Eol.Tab));
 			a.Add(new EolEx(Eol.Space));
@@ -241,28 +254,28 @@ namespace YAT.Domain
 				result = Eol.None;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Cr_stringSequence) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Cr_stringNative))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, CR_stringSequence) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, CR_stringNative))
 			{
-				result = Eol.Cr;
+				result = Eol.CR;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Lf_stringSequence) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Lf_stringNative))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, LF_stringSequence) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, LF_stringNative))
 			{
-				result = Eol.Lf;
+				result = Eol.LF;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, CrLf_stringSequence) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, CrLf_stringNative))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, CRLF_stringSequence) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, CRLF_stringNative))
 			{
-				result = Eol.CrLf;
+				result = Eol.CRLF;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, LfCr_stringSequence) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, LfCr_stringNative))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, LFCR_stringSequence) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, LFCR_stringNative))
 			{
-				result = Eol.LfCr;
+				result = Eol.LFCR;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Nul_stringSequence) ||

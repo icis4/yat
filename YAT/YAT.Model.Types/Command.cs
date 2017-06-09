@@ -66,6 +66,7 @@ namespace YAT.Model.Types
 		public const string EnterTextText = "<Enter text...>";
 
 		/// <remarks>'TextText' as it is the text of a multi-line text command.</remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "MultiLine", Justification = "What's wrong with 'MultiLine'?")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
 		public const string MultiLineTextText = "<Multi-line...>";
 
@@ -473,6 +474,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "MultiLine", Justification = "What's wrong with 'MultiLine'?")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
 		[XmlIgnore]
 		public virtual bool IsMultiLineText
@@ -597,6 +599,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "MultiLine", Justification = "What's wrong with 'MultiLine'?")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "The multi-line text shall be of the same type as the command lines, thus an array.")]
 		[XmlIgnore]
