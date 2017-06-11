@@ -59,7 +59,7 @@
           <DeviceInfo>
             <VendorId>3768</VendorId>
             <ProductId>8963</ProductId>
-            <SerialNumber>YAT.8</SerialNumber>
+            <SerialNumber>YAT.8_SerHID</SerialNumber>
           </DeviceInfo>
           <ReportFormat>
             <UseId>true</UseId>

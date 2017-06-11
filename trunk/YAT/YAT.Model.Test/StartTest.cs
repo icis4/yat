@@ -394,7 +394,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestNewSerialPortOptionsPrepare()
 		{
-			using (Main main = new Main(new CommandLineArgs(new string[] { "--New", "--TerminalType=Binary", "--SerialPort=5", "--DataBits=7", "--Parity=E", "--FlowControl=Software" })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "--New", "--TerminalType=Binary", "--SerialPort=5", "--DataBits=7", "--Parity=E", "--FlowControl=Software", "--LogOn" })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -417,8 +417,8 @@ namespace YAT.Model.Test
 				Assert.That(main.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.AutoReopen.Enabled,  Is.EqualTo(MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault.Enabled));
 				Assert.That(main.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.AutoReopen.Interval, Is.EqualTo(MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault.Interval));
 
-				Assert.That(main.StartArgs.TerminalSettingsHandler.Settings.TerminalIsStarted, Is.False);
-				Assert.That(main.StartArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.False);
+				Assert.That(main.StartArgs.TerminalSettingsHandler.Settings.TerminalIsStarted, Is.True);
+				Assert.That(main.StartArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
 
 				Assert.That(main.StartArgs.PerformOperationOnRequestedTerminal, Is.False);
 				Assert.That(main.StartArgs.RequestedDynamicTerminalIndex,       Is.EqualTo(Indices.DefaultDynamicIndex));
@@ -444,7 +444,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestNewTcpAutoSocketOptionsPrepare()
 		{
-			using (Main main = new Main(new CommandLineArgs(new string[] { "--New", "--IOType=TCPAutoSocket", "--RemotePort=12345", "--LocalPort=56789", "--OpenTerminal", "--LogOn" })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "--New", "--IOType=TCPAutoSocket", "--RemotePort=12345", "--LocalPort=56789", "--LogOn" })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -486,7 +486,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestNewUsbSerialHidOptionsPrepare()
 		{
-			using (Main main = new Main(new CommandLineArgs(new string[] { "--New", "--IOType=USBSerHID", "--VendorID=1234", "--ProductID=ABCD", "--NoUsbAutoOpen" })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "--New", "--IOType=USBSerHID", "--VendorID=1234", "--ProductID=ABCD", "--NoUsbAutoOpen", "--LogOn" })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -500,8 +500,8 @@ namespace YAT.Model.Test
 				Assert.That(main.StartArgs.TerminalSettingsHandler.Settings.IO.UsbSerialHidDevice.FlowControl,                Is.EqualTo(MKY.IO.Serial.Usb.SerialHidFlowControl.None));
 				Assert.That(main.StartArgs.TerminalSettingsHandler.Settings.IO.UsbSerialHidDevice.AutoOpen,                   Is.False);
 
-				Assert.That(main.StartArgs.TerminalSettingsHandler.Settings.TerminalIsStarted, Is.False);
-				Assert.That(main.StartArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.False);
+				Assert.That(main.StartArgs.TerminalSettingsHandler.Settings.TerminalIsStarted, Is.True);
+				Assert.That(main.StartArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
 
 				Assert.That(main.StartArgs.PerformOperationOnRequestedTerminal, Is.False);
 				Assert.That(main.StartArgs.RequestedDynamicTerminalIndex,       Is.EqualTo(Indices.DefaultDynamicIndex));

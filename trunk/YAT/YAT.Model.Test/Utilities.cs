@@ -301,7 +301,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTextSerialPortSettings(MKY.IO.Ports.SerialPortId portId)
 		{
-			TerminalSettingsRoot settings = new TerminalSettingsRoot();
+			var settings = new TerminalSettingsRoot();
 			settings.TerminalType = Domain.TerminalType.Text;
 			settings.Terminal.IO.IOType = Domain.IOType.SerialPort;
 			settings.Terminal.IO.SerialPort.PortId = portId;
@@ -351,11 +351,8 @@ namespace YAT.Model.Test
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
 			{
-				TerminalSettingsRoot settings = GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceA);
-
-				// MT-SICS devices use XOn/XOff by default:
-				settings.Terminal.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software;
-
+				var settings = GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceA);
+				ConfigureMTSicsSettings(settings);
 				return (settings);
 			}
 
@@ -375,11 +372,8 @@ namespace YAT.Model.Test
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
 			{
-				TerminalSettingsRoot settings = GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceB);
-
-				// MT-SICS devices use XOn/XOff by default:
-				settings.Terminal.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software;
-
+				var settings = GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceB);
+				ConfigureMTSicsSettings(settings);
 				return (settings);
 			}
 		
@@ -409,7 +403,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketSettings(IPNetworkInterfaceEx networkInterface)
 		{
-			TerminalSettingsRoot settings = new TerminalSettingsRoot();
+			var settings = new TerminalSettingsRoot();
 			settings.TerminalType = Domain.TerminalType.Text;
 			settings.Terminal.IO.IOType = Domain.IOType.TcpAutoSocket;
 			settings.Terminal.IO.Socket.LocalInterface = networkInterface;
@@ -479,7 +473,7 @@ namespace YAT.Model.Test
 			{
 				int port = MKY.Net.Test.ConfigurationProvider.Configuration.MTSicsDeviceTcpPortAsInt;
 
-				TerminalSettingsRoot settings = GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings();
+				var settings = GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings();
 				settings.IO.Socket.LocalTcpPort = port;
 				settings.IO.Socket.RemoteTcpPort = port;
 				return (settings);
@@ -511,7 +505,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.DeviceInfo deviceInfo)
 		{
-			TerminalSettingsRoot settings = new TerminalSettingsRoot();
+			var settings = new TerminalSettingsRoot();
 			settings.TerminalType = Domain.TerminalType.Text;
 			settings.Terminal.IO.IOType = Domain.IOType.UsbSerialHid;
 			settings.Terminal.IO.UsbSerialHidDevice.DeviceInfo = deviceInfo;
@@ -561,11 +555,8 @@ namespace YAT.Model.Test
 		{
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
 			{
-				TerminalSettingsRoot settings = GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceA);
-
-				// MT-SICS devices use XOn/XOff by default:
-				settings.Terminal.IO.UsbSerialHidDevice.FlowControl = SerialHidFlowControl.Software;
-
+				var settings = GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceA);
+				ConfigureMTSicsSettings(settings);
 				return (settings);
 			}
 
@@ -585,11 +576,8 @@ namespace YAT.Model.Test
 		{
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
 			{
-				TerminalSettingsRoot settings = GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceB);
-	
-				// MT-SICS devices use XOn/XOff by default:
-				settings.Terminal.IO.UsbSerialHidDevice.FlowControl = SerialHidFlowControl.Software;
-
+				var settings = GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceB);
+				ConfigureMTSicsSettings(settings);
 				return (settings);
 			}
 
@@ -603,6 +591,25 @@ namespace YAT.Model.Test
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
 			return (GetStartedTextUsbSerialHidMTSicsDeviceBSettings());
+		}
+
+		#endregion
+
+		#region Settings > MT-SICS
+		//------------------------------------------------------------------------------------------
+		// Settings > MT-SICS
+		//------------------------------------------------------------------------------------------
+
+		private static void ConfigureMTSicsSettings(TerminalSettingsRoot settings)
+		{
+			// MT-SICS devices use XOn/XOff by default:
+			settings.Terminal.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software;
+			settings.Terminal.IO.UsbSerialHidDevice.FlowControl = SerialHidFlowControl.Software;
+
+			// Set required USB Ser/HID format:
+			var deviceFormat = (MKY.IO.Usb.SerialHidReportFormatPresetEx)MKY.IO.Usb.SerialHidReportFormatPreset.MT_SerHid;
+			settings.Terminal.IO.UsbSerialHidDevice.ReportFormat = deviceFormat.ToReportFormat();
+			settings.Terminal.IO.UsbSerialHidDevice.RxFilterUsage = deviceFormat.ToRxFilterUsage();
 		}
 
 		#endregion
