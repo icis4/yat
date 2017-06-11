@@ -2752,7 +2752,8 @@ namespace YAT.View.Forms
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + preset + "' is an invalid preset!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
-			MKY.IO.Serial.SerialPort.SerialCommunicationSettings scs = this.settingsRoot.Terminal.IO.SerialPort.Communication;
+			ExplicitSettings sre = this.settingsRoot.Explicit;
+			MKY.IO.Serial.SerialPort.SerialCommunicationSettings scs = sre.Terminal.IO.SerialPort.Communication;
 			scs.SuspendChangeEvent();
 			switch (preset)
 			{
@@ -2829,9 +2830,19 @@ namespace YAT.View.Forms
 					break;
 				}
 			}
-			scs.ResumeChangeEvent(true); // Force event!
 
-			SetTimedStatusText("Terminal settings set to " + presetString + ".");
+			SuspendHandlingTerminalSettings();
+			scs.ResumeChangeEvent();
+			if (scs.HaveChanged)
+			{
+				this.terminal.SetSettings(sre);
+				SetTimedStatusText("Terminal settings set to " + presetString + ".");
+			}
+			else
+			{
+				SetTimedStatusText("Terminal settings not changed.");
+			}
+			ResumeHandlingTerminalSettings();
 		}
 
 		#endregion
