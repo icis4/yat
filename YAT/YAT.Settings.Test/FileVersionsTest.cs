@@ -64,8 +64,20 @@ namespace YAT.Settings.Test
 			// \remind 2016-05-26 / MKY: Should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
 			var dr = MessageBox.Show
 				(
-				"This test requires open serial ports COM1 and COM2." + Environment.NewLine +
+				"This test requires open serial ports 'COM1' and 'COM2'." + Environment.NewLine +
 				"Ensure that VSPE is running and providing these ports.",
+				"Precondition",
+				MessageBoxButtons.OKCancel,
+				MessageBoxIcon.Information
+				);
+
+			if (dr != DialogResult.OK)
+				Assert.Fail("User cancel!");
+
+			dr = MessageBox.Show
+				(
+				"This test requires connected USB Ser/HID device 'VID:0EB8 PID:2303 SNR:YAT.8_SerHID'." + Environment.NewLine +
+				"Ensure that device is connected.",
 				"Precondition",
 				MessageBoxButtons.OKCancel,
 				MessageBoxIcon.Information
@@ -1345,7 +1357,7 @@ namespace YAT.Settings.Test
 
 		private static void VerifySettingsCase01(Model.Terminal terminal)
 		{
-			Assert.That(terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(1), "Serial port isn't set to COM1!");
+			Assert.That((int)terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(1), "Serial port isn't set to COM1!");
 
 			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortA == "COM1")
 			{
@@ -1371,7 +1383,7 @@ namespace YAT.Settings.Test
 		private static void VerifySettingsCase02(Model.Terminal terminal, bool ignoreBaudRate)
 		{
 			Assert.That(terminal.SettingsRoot.TerminalType, Is.EqualTo(Domain.TerminalType.Binary), "Terminal isn't binary!");
-			Assert.That(terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(2), "Serial port isn't set to COM2!");
+			Assert.That((int)terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(2), "Serial port isn't set to COM2!");
 
 			if (!ignoreBaudRate) // Optionally ignore baud rate because it changed from enum to int from 1.99.12 to 1.99.13.
 				Assert.That(terminal.SettingsRoot.IO.SerialPort.Communication.BaudRate, Is.EqualTo(115200), "Serial port baud rate isn't set to 115200!");
@@ -1399,7 +1411,7 @@ namespace YAT.Settings.Test
 
 		private static void VerifySettingsCase03(Model.Terminal terminal)
 		{
-			Assert.That(terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(1), "Serial port isn't set to COM1!");
+			Assert.That((int)terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(1), "Serial port isn't set to COM1!");
 			Assert.That(terminal.IsOpen, Is.False, "Terminal is not closed on COM1!");
 
 			Assert.That(terminal.SettingsRoot.PredefinedCommand.Pages.Count, Is.EqualTo(2), "Predefined commands do not contain 2 pages!");
@@ -1461,7 +1473,7 @@ namespace YAT.Settings.Test
 
 		private static void VerifySettingsCase05(Model.Terminal terminal)
 		{
-			Assert.That(terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(1), "Serial port isn't set to COM1!");
+			Assert.That((int)terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(1), "Serial port isn't set to COM1!");
 
 			// \todo:
 			// Add tests that verify that recent contains three commands.

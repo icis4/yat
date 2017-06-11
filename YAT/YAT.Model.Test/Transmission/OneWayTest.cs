@@ -161,7 +161,7 @@ namespace YAT.Model.Test.Transmission
 				yield return (new TestCaseData(TripleLine,   3).SetName("_TripleLineTriple"));
 
 				yield return (new TestCaseData(MultiLine,    1).SetName("_MultiLine"));
-				yield return (new TestCaseData(MultiLine, TestTextLines.Length).SetName("_MultiLineMulti"));
+				yield return (new TestCaseData(MultiLine,    5).SetName("_MultiLineMulti"));
 
 				yield return (new TestCaseData(MultiEol,     1).SetName("_MultiEol"));
 				yield return (new TestCaseData(MixedEol,     1).SetName("_MixedEol"));

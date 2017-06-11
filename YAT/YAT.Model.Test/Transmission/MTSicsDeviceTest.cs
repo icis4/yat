@@ -86,7 +86,13 @@ namespace YAT.Model.Test.Transmission
 		{
 			get
 			{
-				string category01m = new NUnit.MinuteDurationCategoryAttribute( 1).Name;
+				// An additional test set of MinuteDurationCategoryAttribute(1) makes little sense.
+				// That just prolongs a test run of MTSicsDeviceTest.PerformTransmission() to
+				// approx. 15 minutes at little to no additional test coverage. Such test set of
+				// MinuteDurationCategoryAttribute(1) resulted in 400 or 480 loops. Thus, the sets
+				// were e.g. 1/10/400/4000/24000/576000 loops. Instead of such long set, the 10
+				// loops test was replaced by sets of 2/5/20 which should give better test coverage.
+
 				string category10m = new NUnit.MinuteDurationCategoryAttribute(10).Name;
 				string category60m = new NUnit.MinuteDurationCategoryAttribute(60).Name;
 				string category24h = new NUnit.HourDurationCategoryAttribute(24).Name;
@@ -98,14 +104,14 @@ namespace YAT.Model.Test.Transmission
 					string expected = c.Value1.Value2;
 
 					// Calculate number of transmissions based on the expected time available/required:
-					int loops01m = (int)((       60.0 * 1000) / c.Value2.TotalMilliseconds);
 					int loops10m = (int)((      600.0 * 1000) / c.Value2.TotalMilliseconds);
 					int loops60m = (int)((     3600.0 * 1000) / c.Value2.TotalMilliseconds);
 					int loops24h = (int)((24 * 3600.0 * 1000) / c.Value2.TotalMilliseconds);
 
 					yield return (new KeyValuePair<TestCaseData, string>(new TestCaseData(stimulus, expected,        1).SetName(stimulus +  "_1"), null));
-					yield return (new KeyValuePair<TestCaseData, string>(new TestCaseData(stimulus, expected,       10).SetName(stimulus + "_10"), null));
-					yield return (new KeyValuePair<TestCaseData, string>(new TestCaseData(stimulus, expected, loops01m).SetName(stimulus + "_" + loops01m), category01m));
+					yield return (new KeyValuePair<TestCaseData, string>(new TestCaseData(stimulus, expected,        2).SetName(stimulus +  "_2"), null));
+					yield return (new KeyValuePair<TestCaseData, string>(new TestCaseData(stimulus, expected,        5).SetName(stimulus +  "_5"), null));
+					yield return (new KeyValuePair<TestCaseData, string>(new TestCaseData(stimulus, expected,       20).SetName(stimulus + "_20"), null));
 					yield return (new KeyValuePair<TestCaseData, string>(new TestCaseData(stimulus, expected, loops10m).SetName(stimulus + "_" + loops10m), category10m));
 					yield return (new KeyValuePair<TestCaseData, string>(new TestCaseData(stimulus, expected, loops60m).SetName(stimulus + "_" + loops60m), category60m));
 					yield return (new KeyValuePair<TestCaseData, string>(new TestCaseData(stimulus, expected, loops24h).SetName(stimulus + "_" + loops24h), category24h));

@@ -82,7 +82,7 @@ namespace MKY.IO.Usb
 		{
 			switch (deviceClass)
 			{
-				case DeviceClass.Hid: return (SerialHidDevice.HidGuid);
+				case DeviceClass.Hid: return (HidDevice.HidGuid);
 				default:              return (Guid.Empty);
 			}
 		}
