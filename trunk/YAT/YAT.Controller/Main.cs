@@ -47,6 +47,7 @@
 //==================================================================================================
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
@@ -122,6 +123,9 @@ namespace YAT.Controller
 		// Command line options:
 		private string[] commandLineArgsStrings;
 		private CommandLineArgs commandLineArgs;
+
+		// Invocation synchronization object:
+		private ISynchronizeInvoke mainThreadSyncObj;
 
 		#endregion
 
@@ -474,7 +478,7 @@ namespace YAT.Controller
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler:
 			AppDomain.CurrentDomain.UnhandledException += RunFullyWithView_CurrentDomain_UnhandledException_Or_EventHelper_UnhandledExceptionOnNonMainThread;
 
-			// Assume unhandled asynchronous exceptions during events and attach the application to the same handler:
+			// Assume unhandled asynchronous non-synchronized exceptions during events and attach the application to the same handler:
 			EventHelper.UnhandledExceptionOnNonMainThread += RunFullyWithView_CurrentDomain_UnhandledException_Or_EventHelper_UnhandledExceptionOnNonMainThread;
 		////EventHelper.UnhandledExceptionOnMainThread is not used as it is handled by the catch-all handler below.
 		#endif
@@ -492,18 +496,24 @@ namespace YAT.Controller
 						return (MainResult.ApplicationSettingsError);
 
 					// Application settings are loaded while showing the welcome screen:
-					View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen();
-					if (welcomeScreen.ShowDialog() != DialogResult.OK)
-						return (MainResult.ApplicationSettingsError);
+					using (View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen())
+					{
+						this.mainThreadSyncObj = welcomeScreen;
+						bool isError = (welcomeScreen.ShowDialog() != DialogResult.OK);
+						this.mainThreadSyncObj = null;
+
+						if (isError)
+							return (MainResult.ApplicationSettingsError);
+					}
 				}
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
 					if (this.commandLineArgs.Interactive)
 					{
-						string message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
+						var message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
 						if (View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.Synchronous, true) == View.Forms.UnhandledExceptionResult.ExitAndRestart)
-							System.Windows.Forms.Application.Restart();
+							System.Windows.Forms.Application.Restart(); // Is synchronous => OK to call Restart().
 
 						// Ignore exception and continue.
 					}
@@ -520,6 +530,7 @@ namespace YAT.Controller
 					Model.MainResult viewResult;
 					using (View.Forms.Main view = new View.Forms.Main(model))
 					{
+						this.mainThreadSyncObj = view;
 					#if (HANDLE_UNHANDLED_EXCEPTIONS)
 						// Assume unhandled asynchronous synchronized exceptions and attach the application to the respective handler:
 						System.Windows.Forms.Application.ThreadException += RunFullyWithView_Application_ThreadException;
@@ -533,6 +544,7 @@ namespace YAT.Controller
 						System.Windows.Forms.Application.ThreadException -= RunFullyWithView_Application_ThreadException;
 					#endif
 						viewResult = view.Result;
+						this.mainThreadSyncObj = null;
 					}
 
 					if (!ApplicationSettings.CloseAndDispose())
@@ -545,9 +557,9 @@ namespace YAT.Controller
 				{
 					if (this.commandLineArgs.Interactive)
 					{
-						string message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + "."; // Synchronous exceptions cannot be continued as the application has already exited.
+						var message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + "."; // Synchronous exceptions cannot be continued as the application has already exited.
 						if (View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.Synchronous, false) == View.Forms.UnhandledExceptionResult.ExitAndRestart)
-							System.Windows.Forms.Application.Restart();
+							System.Windows.Forms.Application.Restart(); // Is synchronous => OK to call Restart().
 					}
 
 					return (MainResult.UnhandledException);
@@ -568,19 +580,27 @@ namespace YAT.Controller
 		{
 			if (this.commandLineArgs.Interactive)
 			{
-				string message = "An unhandled asynchronous synchronized exception occurred while running " + ApplicationEx.ProductName + ".";
-				View.Forms.UnhandledExceptionResult result = View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(e.Exception, message, View.Forms.UnhandledExceptionType.AsynchronousSynchronized, true);
+				var message = "An unhandled asynchronous synchronized exception occurred while running " + ApplicationEx.ProductName + ".";
+				var result = View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(e.Exception, message, View.Forms.UnhandledExceptionType.AsynchronousSynchronized, true);
+				switch (result)
+				{
+					case View.Forms.UnhandledExceptionResult.Continue:
+					case View.Forms.UnhandledExceptionResult.ContinueAndIgnore:
+						return; // Ignore exception and continue.
 
-				if (result == View.Forms.UnhandledExceptionResult.ExitAndRestart)
-					System.Windows.Forms.Application.Restart();
-				else if (result == View.Forms.UnhandledExceptionResult.Continue)
-					return; // Ignore exception and continue.
-				else
-					System.Windows.Forms.Application.Exit();
+					case View.Forms.UnhandledExceptionResult.ExitAndRestart:
+						System.Windows.Forms.Application.Restart(); // Is synchronized => OK to call Restart().
+						break;
+
+					case View.Forms.UnhandledExceptionResult.Exit:
+					default:
+						System.Windows.Forms.Application.Exit(); // Is synchronized => OK to call Exit().
+						break;
+				}
 			}
 			else
 			{
-				System.Windows.Forms.Application.Exit();
+				System.Windows.Forms.Application.Exit(); // Is synchronized => OK to call Exit().
 			}
 		}
 
@@ -591,25 +611,50 @@ namespace YAT.Controller
 		{
 			if (this.commandLineArgs.Interactive)
 			{
-				Exception ex = (e.ExceptionObject as Exception);
-				string message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
+				var ex = (e.ExceptionObject as Exception);
+				var message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
 
-				if ((ex is ObjectDisposedException) && (ex.Source == "mscorlib") && (ex.Message.Contains("SafeHandle")))
+				if (IsObjectDisposedExceptionInMscorlib(ex))
 					message += (Environment.NewLine + Environment.NewLine + ObjectDisposedExceptionInMscorlibMessage);
 
-				View.Forms.UnhandledExceptionResult result = View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.AsynchronousNonSynchronized, !e.IsTerminating);
+				var result = View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.AsynchronousNonSynchronized, !e.IsTerminating);
+				switch (result)
+				{
+					case View.Forms.UnhandledExceptionResult.Continue:
+					case View.Forms.UnhandledExceptionResult.ContinueAndIgnore:
+						return; // Ignore exception and continue.
 
-				if (result == View.Forms.UnhandledExceptionResult.ExitAndRestart)
-					System.Windows.Forms.Application.Restart();
-				else if (result == View.Forms.UnhandledExceptionResult.Continue)
-					return; // Ignore exception and continue.
-				else
-					System.Windows.Forms.Application.Exit();
+					case View.Forms.UnhandledExceptionResult.ExitAndRestart:
+						InvokeRestart(); // Is *not* synchronized => Invoke Restart() !!!
+						break;
+
+					case View.Forms.UnhandledExceptionResult.Exit:
+					default:
+						InvokeExit(); // Is *not* synchronized => Invoke Exit() !!!
+						break;
+				}
+
 			}
 			else
 			{
-				System.Windows.Forms.Application.Exit();
+				InvokeExit(); // Is *not* synchronized => Invoke Exit() !!!
 			}
+		}
+
+		private void InvokeRestart()
+		{
+			if ((this.mainThreadSyncObj != null) && (this.mainThreadSyncObj.InvokeRequired))
+				this.mainThreadSyncObj.BeginInvoke(new Action(System.Windows.Forms.Application.Restart), null);
+			else
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid thread state, invoke is always required for non-synchronized callbacks!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
+
+		private void InvokeExit()
+		{
+			if ((this.mainThreadSyncObj != null) && (this.mainThreadSyncObj.InvokeRequired))
+				this.mainThreadSyncObj.BeginInvoke(new Action(System.Windows.Forms.Application.Exit), null);
+			else
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid thread state, invoke is always required for non-synchronized callbacks!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 	#endif
@@ -634,7 +679,7 @@ namespace YAT.Controller
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler:
 			AppDomain.CurrentDomain.UnhandledException += RunWithViewButOutputErrorsOnConsole_CurrentDomain_UnhandledException_Or_EventHelper_UnhandledExceptionOnNonMainThread;
 
-			// Assume unhandled asynchronous exceptions during events and attach the application to the same handler:
+			// Assume unhandled asynchronous non-synchronized exceptions during events and attach the application to the same handler:
 			EventHelper.UnhandledExceptionOnNonMainThread += RunWithViewButOutputErrorsOnConsole_CurrentDomain_UnhandledException_Or_EventHelper_UnhandledExceptionOnNonMainThread;
 		////EventHelper.UnhandledExceptionOnMainThread is not used as it is handled by the catch-all handler below.
 		#endif
@@ -652,14 +697,20 @@ namespace YAT.Controller
 						return (MainResult.ApplicationSettingsError);
 
 					// Application settings are loaded while showing the welcome screen:
-					View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen();
-					if (welcomeScreen.ShowDialog() != DialogResult.OK)
-						return (MainResult.ApplicationSettingsError);
+					using (View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen())
+					{
+						this.mainThreadSyncObj = welcomeScreen;
+						bool isError = (welcomeScreen.ShowDialog() != DialogResult.OK);
+						this.mainThreadSyncObj = null;
+
+						if (isError)
+							return (MainResult.ApplicationSettingsError);
+					}
 				}
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
+					var message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
 					Console.Error.WriteLine(message);
 
 					if (ex != null)
@@ -675,6 +726,7 @@ namespace YAT.Controller
 					Model.MainResult viewResult;
 					using (View.Forms.Main view = new View.Forms.Main(model))
 					{
+						this.mainThreadSyncObj = view;
 					#if (HANDLE_UNHANDLED_EXCEPTIONS)
 						// Assume unhandled asynchronous synchronized exceptions and attach the application to the respective handler:
 						System.Windows.Forms.Application.ThreadException += RunWithViewButOutputErrorsOnConsole_Application_ThreadException;
@@ -688,6 +740,7 @@ namespace YAT.Controller
 						System.Windows.Forms.Application.ThreadException -= new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
 					#endif
 						viewResult = view.Result;
+						this.mainThreadSyncObj = null;
 					}
 
 					if (!ApplicationSettings.CloseAndDispose())
@@ -698,7 +751,7 @@ namespace YAT.Controller
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
+					var message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
 					Console.Error.WriteLine(message);
 
 					if (ex != null)
@@ -720,10 +773,10 @@ namespace YAT.Controller
 		/// </remarks>
 		private void RunWithViewButOutputErrorsOnConsole_Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 		{
-			string message = "An unhandled asynchronous synchronized exception occurred while running " + ApplicationEx.ProductName + ".";
+			var message = "An unhandled asynchronous synchronized exception occurred while running " + ApplicationEx.ProductName + ".";
 			Console.Error.WriteLine(message);
 
-			Exception ex = e.Exception;
+			var ex = e.Exception;
 			if (ex != null)
 				ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 		}
@@ -733,15 +786,15 @@ namespace YAT.Controller
 		/// </remarks>
 		private void RunWithViewButOutputErrorsOnConsole_CurrentDomain_UnhandledException_Or_EventHelper_UnhandledExceptionOnNonMainThread(object sender, UnhandledExceptionEventArgs e)
 		{
-			string message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
+			var message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
 			Console.Error.WriteLine(message);
 
-			Exception ex = (e.ExceptionObject as Exception);
+			var ex = (e.ExceptionObject as Exception);
 			if (ex != null)
 			{
 				ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
-				if ((ex is ObjectDisposedException) && (ex.Source == "mscorlib") && (ex.Message.Contains("SafeHandle")))
+				if (IsObjectDisposedExceptionInMscorlib(ex))
 				{
 					Console.Error.WriteLine();
 					Console.Error.WriteLine(ObjectDisposedExceptionInMscorlibMessage);
@@ -774,7 +827,7 @@ namespace YAT.Controller
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler:
 			AppDomain.CurrentDomain.UnhandledException += RunFullyFromConsole_CurrentDomain_UnhandledException_Or_EventHelper_UnhandledExceptionOnNonMainThread;
 
-			// Assume unhandled asynchronous exceptions during events and attach the application to the same handler:
+			// Assume unhandled asynchronous non-synchronized exceptions during events and attach the application to the same handler:
 			EventHelper.UnhandledExceptionOnNonMainThread += RunFullyFromConsole_CurrentDomain_UnhandledException_Or_EventHelper_UnhandledExceptionOnNonMainThread;
 		////EventHelper.UnhandledExceptionOnMainThread is not used as it is handled by the catch-all handler below.
 		#endif
@@ -799,7 +852,7 @@ namespace YAT.Controller
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
+					var message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
 					Console.Error.WriteLine(message);
 
 					if (ex != null)
@@ -811,7 +864,7 @@ namespace YAT.Controller
 				try
 			#endif
 				{
-					Model.MainResult modelResult = model.Start();
+					var modelResult = model.Start();
 					if (modelResult == Model.MainResult.Success)
 						modelResult = model.Exit();
 
@@ -822,7 +875,7 @@ namespace YAT.Controller
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
+					var message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
 					Console.Error.WriteLine(message);
 
 					ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
@@ -843,15 +896,15 @@ namespace YAT.Controller
 		/// </remarks>
 		private void RunFullyFromConsole_CurrentDomain_UnhandledException_Or_EventHelper_UnhandledExceptionOnNonMainThread(object sender, UnhandledExceptionEventArgs e)
 		{
-			string message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
+			var message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
 			Console.Error.WriteLine(message);
 
-			Exception ex = (e.ExceptionObject as Exception);
+			var ex = (e.ExceptionObject as Exception);
 			if (ex != null)
 			{
 				ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
-				if ((ex is ObjectDisposedException) && (ex.Source == "mscorlib") && (ex.Message.Contains("SafeHandle")))
+				if (IsObjectDisposedExceptionInMscorlib(ex))
 				{
 					Console.Error.WriteLine();
 					Console.Error.WriteLine(ObjectDisposedExceptionInMscorlibMessage);
@@ -884,7 +937,7 @@ namespace YAT.Controller
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler:
 			AppDomain.CurrentDomain.UnhandledException += RunInvisible_CurrentDomain_UnhandledException_Or_UnhandledExceptionOnNonMainThread;
 
-			// Assume unhandled asynchronous exceptions during events and attach the application to the same handler:
+			// Assume unhandled asynchronous non-synchronized exceptions during events and attach the application to the same handler:
 			EventHelper.UnhandledExceptionOnNonMainThread += RunInvisible_CurrentDomain_UnhandledException_Or_UnhandledExceptionOnNonMainThread;
 		////EventHelper.UnhandledExceptionOnMainThread is not used as it is handled by the catch-all handler below.
 		#endif
@@ -909,7 +962,7 @@ namespace YAT.Controller
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
+					var message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
 					ConsoleEx.Error.WriteException(GetType(), ex, message);
 
 					return (MainResult.UnhandledException);
@@ -918,7 +971,7 @@ namespace YAT.Controller
 				try
 			#endif
 				{
-					Model.MainResult modelResult = model.Start();
+					var modelResult = model.Start();
 					if (modelResult == Model.MainResult.Success)
 						modelResult = model.Exit();
 
@@ -929,7 +982,7 @@ namespace YAT.Controller
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
+					var message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
 					ConsoleEx.Error.WriteException(GetType(), ex, message);
 
 					return (MainResult.UnhandledException);
@@ -948,15 +1001,15 @@ namespace YAT.Controller
 		/// </remarks>
 		private void RunInvisible_CurrentDomain_UnhandledException_Or_UnhandledExceptionOnNonMainThread(object sender, UnhandledExceptionEventArgs e)
 		{
-			string message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
+			var message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
 			Console.Error.WriteLine(message);
 
-			Exception ex = (e.ExceptionObject as Exception);
+			var ex = (e.ExceptionObject as Exception);
 			if (ex != null)
 			{
 				ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
-				if ((ex is ObjectDisposedException) && (ex.Source == "mscorlib") && (ex.Message.Contains("SafeHandle")))
+				if (IsObjectDisposedExceptionInMscorlib(ex))
 				{
 					Console.Error.WriteLine();
 					Console.Error.WriteLine(ObjectDisposedExceptionInMscorlibMessage);
@@ -1082,6 +1135,18 @@ namespace YAT.Controller
 				case Model.MainResult.ApplicationExitError:  return (MainResult.ApplicationExitError);
 				default:                                     return (MainResult.UnhandledException); // Covers 'Model.MainResult.UnhandledException'.
 			}
+		}
+
+		#endregion
+
+		#region Non-Public Methods > Exceptions
+		//------------------------------------------------------------------------------------------
+		// Non-Public Methods > Exceptions
+		//------------------------------------------------------------------------------------------
+
+		private static bool IsObjectDisposedExceptionInMscorlib(Exception ex)
+		{
+			return ((ex is ObjectDisposedException) && (ex.Source == "mscorlib") && (ex.Message.Contains("SafeHandle")));
 		}
 
 		#endregion
