@@ -80,7 +80,7 @@ namespace MKY.IO.Serial.SerialPort
 				int hashCode;
 
 				hashCode =                    Enabled.GetHashCode();
-				hashCode = (hashCode * 397) ^ Size   .GetHashCode();
+				hashCode = (hashCode * 397) ^ Size;
 
 				return (hashCode);
 			}
@@ -186,7 +186,7 @@ namespace MKY.IO.Serial.SerialPort
 				int hashCode;
 
 				hashCode =                    Enabled.GetHashCode();
-				hashCode = (hashCode * 397) ^ Size   .GetHashCode();
+				hashCode = (hashCode * 397) ^ Size;
 
 				return (hashCode);
 			}
@@ -297,9 +297,9 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				int hashCode;
 
-				hashCode =                    Enabled .GetHashCode();
-				hashCode = (hashCode * 397) ^ Size    .GetHashCode();
-				hashCode = (hashCode * 397) ^ Interval.GetHashCode();
+				hashCode =                    Enabled.GetHashCode();
+				hashCode = (hashCode * 397) ^ Size;
+				hashCode = (hashCode * 397) ^ Interval;
 
 				return (hashCode);
 			}
