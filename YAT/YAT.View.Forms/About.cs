@@ -422,7 +422,11 @@ namespace YAT.View.Forms
 			if (TestExecutionIsIntended(message) &&
 				TestPreconditionIsGiven(typeof(Exception)))
 			{
-				throw (new Exception("Unhandled synchronous exception test :: This is the outer exception.", new Exception("This is the inner exception.")));
+				throw (new InvalidOperationException("Unhandled synchronous exception test :: This is the outer exception.", new InvalidOperationException("This is the inner exception.")));
+
+				// Using explicit exception types...
+				// ...since no general exceptions should ever be thrown...
+				// ...and since exception handling uses the general exception type to prevent subsequent exceptions.
 			}
 		}
 
@@ -448,7 +452,11 @@ namespace YAT.View.Forms
 		private void timer_ExecuteManualTest2_Tick(object sender, EventArgs e)
 		{
 			timer_ExecuteManualTest2.Stop();
-			throw (new Exception("Unhandled asynchronous synchronized exception test :: This is the outer exception.", new Exception("This is the inner exception.")));
+			throw (new InvalidOperationException("Unhandled asynchronous synchronized exception test :: This is the outer exception.", new InvalidOperationException("This is the inner exception.")));
+
+			// Using explicit exception types...
+			// ...since no general exceptions should ever be thrown...
+			// ...and since exception handling uses the general exception type to prevent subsequent exceptions.
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
@@ -484,7 +492,11 @@ namespace YAT.View.Forms
 			// There is no need to synchronize callbacks to this event handler.
 
 			timer_ExecuteManualTest3_Dispose();
-			throw (new Exception("Unhandled asynchronous non-synchronized exception test :: This is the outer exception.", new Exception("This is the inner exception.")));
+			throw (new InvalidOperationException("Unhandled asynchronous non-synchronized exception test :: This is the outer exception.", new InvalidOperationException("This is the inner exception.")));
+
+			// Using explicit exception types...
+			// ...since no general exceptions should ever be thrown...
+			// ...and since exception handling uses the general exception type to prevent subsequent exceptions.
 		}
 
 		private void timer_ExecuteManualTest3_Dispose()

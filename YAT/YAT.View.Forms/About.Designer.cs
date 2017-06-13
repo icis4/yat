@@ -265,7 +265,7 @@
 			// label_ExecuteManualTest1
 			// 
 			this.label_ExecuteManualTest1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_ExecuteManualTest1.Location = new System.Drawing.Point(611, 61);
+			this.label_ExecuteManualTest1.Location = new System.Drawing.Point(611, 56);
 			this.label_ExecuteManualTest1.Name = "label_ExecuteManualTest1";
 			this.label_ExecuteManualTest1.Size = new System.Drawing.Size(16, 16);
 			this.label_ExecuteManualTest1.TabIndex = 16;
@@ -274,7 +274,7 @@
 			// label_ExecuteManualTest2
 			// 
 			this.label_ExecuteManualTest2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_ExecuteManualTest2.Location = new System.Drawing.Point(611, 135);
+			this.label_ExecuteManualTest2.Location = new System.Drawing.Point(611, 142);
 			this.label_ExecuteManualTest2.Name = "label_ExecuteManualTest2";
 			this.label_ExecuteManualTest2.Size = new System.Drawing.Size(16, 16);
 			this.label_ExecuteManualTest2.TabIndex = 17;
@@ -283,7 +283,7 @@
 			// label_ExecuteManualTest3
 			// 
 			this.label_ExecuteManualTest3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_ExecuteManualTest3.Location = new System.Drawing.Point(611, 222);
+			this.label_ExecuteManualTest3.Location = new System.Drawing.Point(611, 255);
 			this.label_ExecuteManualTest3.Name = "label_ExecuteManualTest3";
 			this.label_ExecuteManualTest3.Size = new System.Drawing.Size(16, 16);
 			this.label_ExecuteManualTest3.TabIndex = 18;
