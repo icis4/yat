@@ -381,7 +381,7 @@ namespace YAT.View.Controls
 					}
 
 					// Clean up:
-					if (t.Join(150)) // Allow some time to let the worker thread get terminated.
+					if (t.Join(250)) // Allow some time to let the worker thread get terminated.
 					{
 						switch (result)
 						{
@@ -390,6 +390,7 @@ namespace YAT.View.Controls
 							case DialogResult.Cancel:
 							{
 								scanSuccess = true;
+
 								ports = worker.Ports;
 								break;
 							}
@@ -397,6 +398,7 @@ namespace YAT.View.Controls
 							case DialogResult.Abort:
 							{
 								scanSuccess = false;
+
 								errorException   = worker.Exception;
 								errorMessageLead = worker.ExceptionLead;
 								errorMessageHint = worker.ExceptionHint;
@@ -405,7 +407,9 @@ namespace YAT.View.Controls
 
 							default:
 							{
-								scanSuccess = true; // Ignore resulting ports.
+								scanSuccess = true;
+
+								// Ignore resulting ports.
 								break;
 							}
 						}
@@ -417,12 +421,15 @@ namespace YAT.View.Controls
 						if (result != DialogResult.Cancel)
 						{
 							scanSuccess = false;
+
 							errorMessageLead = "Timeout while scanning the ports!";
 							errorMessageHint = "If the issue cannot be solved, tell YAT to differently scan the ports by going to 'File > Preferences...' and change the port related settings.";
 						}
 						else
 						{
 							scanSuccess = true;
+
+							ports = worker.Ports;
 						}
 					}
 
