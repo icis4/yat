@@ -370,7 +370,8 @@ namespace YAT/*.<TODO>*/
 		}
 
 		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
+		/// Determines whether this instance and the specified object have reference or value equality. !!! For reference types !!!
+		/// Determines whether this instance and the specified object have value equality.              !!! For value types !!!
 		/// </summary>
 		public override bool Equals(object obj)
 		{
@@ -383,7 +384,8 @@ namespace YAT/*.<TODO>*/
 		}
 
 		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
+		/// Determines whether this instance and the specified object have reference or value equality. !!! For reference types !!!
+		/// Determines whether this instance and the specified object have value equality.              !!! For value types !!!
 		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
@@ -448,7 +450,7 @@ namespace YAT/*.<TODO>*/
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality. !!! For reference types !!!
-		/// Determines whether the two specified objects have value inequality.              !!! For value types !!!
+		/// Determines whether the two specified objects have value inequality.               !!! For value types !!!
 		/// </summary>
 		public static bool operator !=(TODO lhs, TODO rhs)
 		{

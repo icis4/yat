@@ -363,7 +363,7 @@ namespace MKY.Net
 		}
 
 		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
+		/// Determines whether this instance and the specified object have reference or value equality.
 		/// </summary>
 		public override bool Equals(object obj)
 		{
@@ -371,7 +371,7 @@ namespace MKY.Net
 		}
 
 		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
+		/// Determines whether this instance and the specified object have reference or value equality.
 		/// </summary>
 		public bool Equals(IPFilterEx other)
 		{
