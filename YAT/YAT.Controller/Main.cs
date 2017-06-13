@@ -124,8 +124,9 @@ namespace YAT.Controller
 		private string[] commandLineArgsStrings;
 		private CommandLineArgs commandLineArgs;
 
-		// Invocation synchronization object:
-		private ISynchronizeInvoke mainThreadSyncObj;
+		// Invocation synchronization objects:
+		private ISynchronizeInvoke mainThreadSynchronizer;
+		private object mainThreadSynchronizerSyncObj = new object();
 
 		#endregion
 
@@ -498,11 +499,7 @@ namespace YAT.Controller
 					// Application settings are loaded while showing the welcome screen:
 					using (View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen())
 					{
-						this.mainThreadSyncObj = welcomeScreen;
-						bool isError = (welcomeScreen.ShowDialog() != DialogResult.OK);
-						this.mainThreadSyncObj = null;
-
-						if (isError)
+						if (welcomeScreen.ShowDialog() != DialogResult.OK)
 							return (MainResult.ApplicationSettingsError);
 					}
 				}
@@ -530,7 +527,9 @@ namespace YAT.Controller
 					Model.MainResult viewResult;
 					using (View.Forms.Main view = new View.Forms.Main(model))
 					{
-						this.mainThreadSyncObj = view;
+						lock (this.mainThreadSynchronizerSyncObj)
+							this.mainThreadSynchronizer = view;
+
 					#if (HANDLE_UNHANDLED_EXCEPTIONS)
 						// Assume unhandled asynchronous synchronized exceptions and attach the application to the respective handler:
 						System.Windows.Forms.Application.ThreadException += RunFullyWithView_Application_ThreadException;
@@ -544,7 +543,9 @@ namespace YAT.Controller
 						System.Windows.Forms.Application.ThreadException -= RunFullyWithView_Application_ThreadException;
 					#endif
 						viewResult = view.Result;
-						this.mainThreadSyncObj = null;
+
+						lock (this.mainThreadSynchronizerSyncObj)
+							this.mainThreadSynchronizer = null;
 					}
 
 					if (!ApplicationSettings.CloseAndDispose())
@@ -625,36 +626,40 @@ namespace YAT.Controller
 						return; // Ignore exception and continue.
 
 					case View.Forms.UnhandledExceptionResult.ExitAndRestart:
-						InvokeRestart(); // Is *not* synchronized => Invoke Restart() !!!
+						TrySynchronize(new Action(System.Windows.Forms.Application.Restart)); // Is *not* synchronized => Try to synchronize Restart() !!!
 						break;
 
 					case View.Forms.UnhandledExceptionResult.Exit:
 					default:
-						InvokeExit(); // Is *not* synchronized => Invoke Exit() !!!
+						TrySynchronize(new Action(System.Windows.Forms.Application.Exit)); // Is *not* synchronized => Try to synchronize Exit() !!!
 						break;
 				}
-
 			}
 			else
 			{
-				InvokeExit(); // Is *not* synchronized => Invoke Exit() !!!
+				TrySynchronize(new Action(System.Windows.Forms.Application.Exit)); // Is *not* synchronized => Try to synchronize Exit() !!!
 			}
 		}
 
-		private void InvokeRestart()
+		/// <remarks>
+		/// Using <see cref="ISynchronizeInvoke.Invoke"/> and not
+		/// <see cref="ISynchronizeInvoke.BeginInvoke"/> since calling
+		/// <see cref="System.Windows.Forms.Application.Exit()"/> or
+		/// <see cref="System.Windows.Forms.Application.Restart()"/> are also a synchronous calls.
+		/// </remarks>
+		private void TrySynchronize(Action action)
 		{
-			if ((this.mainThreadSyncObj != null) && (this.mainThreadSyncObj.InvokeRequired))
-				this.mainThreadSyncObj.BeginInvoke(new Action(System.Windows.Forms.Application.Restart), null);
-			else
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid thread state, invoke is always required for non-synchronized callbacks!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-		}
+			ISynchronizeInvoke invoker = null;
+			lock (this.mainThreadSynchronizerSyncObj)
+			{
+				if ((this.mainThreadSynchronizer != null) && (this.mainThreadSynchronizer.InvokeRequired))
+					invoker = this.mainThreadSynchronizer;
+			}
 
-		private void InvokeExit()
-		{
-			if ((this.mainThreadSyncObj != null) && (this.mainThreadSyncObj.InvokeRequired))
-				this.mainThreadSyncObj.BeginInvoke(new Action(System.Windows.Forms.Application.Exit), null);
+			if (invoker != null)
+				invoker.Invoke(action, null);
 			else
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid thread state, invoke is always required for non-synchronized callbacks!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				action();
 		}
 
 	#endif
@@ -699,11 +704,7 @@ namespace YAT.Controller
 					// Application settings are loaded while showing the welcome screen:
 					using (View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen())
 					{
-						this.mainThreadSyncObj = welcomeScreen;
-						bool isError = (welcomeScreen.ShowDialog() != DialogResult.OK);
-						this.mainThreadSyncObj = null;
-
-						if (isError)
+						if (welcomeScreen.ShowDialog() != DialogResult.OK)
 							return (MainResult.ApplicationSettingsError);
 					}
 				}
@@ -726,7 +727,9 @@ namespace YAT.Controller
 					Model.MainResult viewResult;
 					using (View.Forms.Main view = new View.Forms.Main(model))
 					{
-						this.mainThreadSyncObj = view;
+						lock (this.mainThreadSynchronizerSyncObj)
+							this.mainThreadSynchronizer = view;
+
 					#if (HANDLE_UNHANDLED_EXCEPTIONS)
 						// Assume unhandled asynchronous synchronized exceptions and attach the application to the respective handler:
 						System.Windows.Forms.Application.ThreadException += RunWithViewButOutputErrorsOnConsole_Application_ThreadException;
@@ -740,7 +743,9 @@ namespace YAT.Controller
 						System.Windows.Forms.Application.ThreadException -= new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
 					#endif
 						viewResult = view.Result;
-						this.mainThreadSyncObj = null;
+
+						lock (this.mainThreadSynchronizerSyncObj)
+							this.mainThreadSynchronizer = null;
 					}
 
 					if (!ApplicationSettings.CloseAndDispose())
