@@ -74,9 +74,9 @@
 			this.label_DefaultDelayUnit = new System.Windows.Forms.Label();
 			this.textBox_DefaultDelay = new System.Windows.Forms.TextBox();
 			this.label_DefaultDelay = new System.Windows.Forms.Label();
-			this.checkBox_DisableEscapes = new System.Windows.Forms.CheckBox();
 			this.checkBox_SignalXOnPeriodicallyEnable = new System.Windows.Forms.CheckBox();
 			this.checkBox_SignalXOnBeforeEachTransmission = new System.Windows.Forms.CheckBox();
+			this.checkBox_DisableEscapes = new System.Windows.Forms.CheckBox();
 			this.checkBox_SendImmediately = new System.Windows.Forms.CheckBox();
 			this.checkBox_CopyPredefined = new System.Windows.Forms.CheckBox();
 			this.checkBox_KeepCommand = new System.Windows.Forms.CheckBox();
@@ -339,7 +339,7 @@
 			// 
 			// textBox_MaxChunkSize
 			// 
-			this.textBox_MaxChunkSize.Location = new System.Drawing.Point(136, 66);
+			this.textBox_MaxChunkSize.Location = new System.Drawing.Point(136, 68);
 			this.textBox_MaxChunkSize.Name = "textBox_MaxChunkSize";
 			this.textBox_MaxChunkSize.Size = new System.Drawing.Size(48, 20);
 			this.textBox_MaxChunkSize.TabIndex = 5;
@@ -350,7 +350,7 @@
 			// checkBox_OutputMaxBaudRate
 			// 
 			this.checkBox_OutputMaxBaudRate.AutoSize = true;
-			this.checkBox_OutputMaxBaudRate.Location = new System.Drawing.Point(6, 45);
+			this.checkBox_OutputMaxBaudRate.Location = new System.Drawing.Point(6, 47);
 			this.checkBox_OutputMaxBaudRate.Name = "checkBox_OutputMaxBaudRate";
 			this.checkBox_OutputMaxBaudRate.Size = new System.Drawing.Size(207, 17);
 			this.checkBox_OutputMaxBaudRate.TabIndex = 3;
@@ -361,7 +361,7 @@
 			// 
 			// textBox_MaxSendRateSize
 			// 
-			this.textBox_MaxSendRateSize.Location = new System.Drawing.Point(78, 89);
+			this.textBox_MaxSendRateSize.Location = new System.Drawing.Point(78, 91);
 			this.textBox_MaxSendRateSize.Name = "textBox_MaxSendRateSize";
 			this.textBox_MaxSendRateSize.Size = new System.Drawing.Size(48, 20);
 			this.textBox_MaxSendRateSize.TabIndex = 8;
@@ -371,7 +371,7 @@
 			// 
 			// textBox_MaxSendRateInterval
 			// 
-			this.textBox_MaxSendRateInterval.Location = new System.Drawing.Point(178, 89);
+			this.textBox_MaxSendRateInterval.Location = new System.Drawing.Point(178, 91);
 			this.textBox_MaxSendRateInterval.Name = "textBox_MaxSendRateInterval";
 			this.textBox_MaxSendRateInterval.Size = new System.Drawing.Size(48, 20);
 			this.textBox_MaxSendRateInterval.TabIndex = 10;
@@ -412,7 +412,7 @@
 			// checkBox_MaxChunkSizeEnable
 			// 
 			this.checkBox_MaxChunkSizeEnable.AutoSize = true;
-			this.checkBox_MaxChunkSizeEnable.Location = new System.Drawing.Point(6, 68);
+			this.checkBox_MaxChunkSizeEnable.Location = new System.Drawing.Point(6, 70);
 			this.checkBox_MaxChunkSizeEnable.Name = "checkBox_MaxChunkSizeEnable";
 			this.checkBox_MaxChunkSizeEnable.Size = new System.Drawing.Size(133, 17);
 			this.checkBox_MaxChunkSizeEnable.TabIndex = 4;
@@ -425,7 +425,7 @@
 			// label_MaxChunkSizeUnit
 			// 
 			this.label_MaxChunkSizeUnit.AutoSize = true;
-			this.label_MaxChunkSizeUnit.Location = new System.Drawing.Point(186, 69);
+			this.label_MaxChunkSizeUnit.Location = new System.Drawing.Point(186, 71);
 			this.label_MaxChunkSizeUnit.Name = "label_MaxChunkSizeUnit";
 			this.label_MaxChunkSizeUnit.Size = new System.Drawing.Size(32, 13);
 			this.label_MaxChunkSizeUnit.TabIndex = 6;
@@ -435,7 +435,7 @@
 			// checkBox_MaxSendRateEnable
 			// 
 			this.checkBox_MaxSendRateEnable.AutoSize = true;
-			this.checkBox_MaxSendRateEnable.Location = new System.Drawing.Point(6, 91);
+			this.checkBox_MaxSendRateEnable.Location = new System.Drawing.Point(6, 93);
 			this.checkBox_MaxSendRateEnable.Name = "checkBox_MaxSendRateEnable";
 			this.checkBox_MaxSendRateEnable.Size = new System.Drawing.Size(76, 17);
 			this.checkBox_MaxSendRateEnable.TabIndex = 7;
@@ -448,7 +448,7 @@
 			// label_MaxSendRateIntervalUnit1
 			// 
 			this.label_MaxSendRateIntervalUnit1.AutoSize = true;
-			this.label_MaxSendRateIntervalUnit1.Location = new System.Drawing.Point(128, 92);
+			this.label_MaxSendRateIntervalUnit1.Location = new System.Drawing.Point(128, 94);
 			this.label_MaxSendRateIntervalUnit1.Name = "label_MaxSendRateIntervalUnit1";
 			this.label_MaxSendRateIntervalUnit1.Size = new System.Drawing.Size(50, 13);
 			this.label_MaxSendRateIntervalUnit1.TabIndex = 9;
@@ -458,7 +458,7 @@
 			// label_MaxSendRateIntervalUnit2
 			// 
 			this.label_MaxSendRateIntervalUnit2.AutoSize = true;
-			this.label_MaxSendRateIntervalUnit2.Location = new System.Drawing.Point(228, 92);
+			this.label_MaxSendRateIntervalUnit2.Location = new System.Drawing.Point(228, 94);
 			this.label_MaxSendRateIntervalUnit2.Name = "label_MaxSendRateIntervalUnit2";
 			this.label_MaxSendRateIntervalUnit2.Size = new System.Drawing.Size(20, 13);
 			this.label_MaxSendRateIntervalUnit2.TabIndex = 11;
@@ -639,18 +639,6 @@
 			this.label_DefaultDelay.Text = "Default of \\!(Delay) is\r\n";
 			this.label_DefaultDelay.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// checkBox_DisableEscapes
-			// 
-			this.checkBox_DisableEscapes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.checkBox_DisableEscapes.AutoSize = true;
-			this.checkBox_DisableEscapes.Location = new System.Drawing.Point(12, 450);
-			this.checkBox_DisableEscapes.Name = "checkBox_DisableEscapes";
-			this.checkBox_DisableEscapes.Size = new System.Drawing.Size(229, 17);
-			this.checkBox_DisableEscapes.TabIndex = 10;
-			this.checkBox_DisableEscapes.Text = "Disable all <...> and \\... escape sequences";
-			this.checkBox_DisableEscapes.UseVisualStyleBackColor = true;
-			this.checkBox_DisableEscapes.CheckedChanged += new System.EventHandler(this.checkBox_DisableEscapes_CheckedChanged);
-			// 
 			// checkBox_SignalXOnPeriodicallyEnable
 			// 
 			this.checkBox_SignalXOnPeriodicallyEnable.AutoSize = true;
@@ -672,6 +660,18 @@
 			this.checkBox_SignalXOnBeforeEachTransmission.Text = "Send XOn before each &transmission";
 			this.checkBox_SignalXOnBeforeEachTransmission.UseVisualStyleBackColor = true;
 			this.checkBox_SignalXOnBeforeEachTransmission.CheckedChanged += new System.EventHandler(this.checkBox_SignalXOnBeforeEachTransmission_CheckedChanged);
+			// 
+			// checkBox_DisableEscapes
+			// 
+			this.checkBox_DisableEscapes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.checkBox_DisableEscapes.AutoSize = true;
+			this.checkBox_DisableEscapes.Location = new System.Drawing.Point(12, 450);
+			this.checkBox_DisableEscapes.Name = "checkBox_DisableEscapes";
+			this.checkBox_DisableEscapes.Size = new System.Drawing.Size(229, 17);
+			this.checkBox_DisableEscapes.TabIndex = 10;
+			this.checkBox_DisableEscapes.Text = "Disable all <...> and \\... escape sequences";
+			this.checkBox_DisableEscapes.UseVisualStyleBackColor = true;
+			this.checkBox_DisableEscapes.CheckedChanged += new System.EventHandler(this.checkBox_DisableEscapes_CheckedChanged);
 			// 
 			// checkBox_SendImmediately
 			// 
