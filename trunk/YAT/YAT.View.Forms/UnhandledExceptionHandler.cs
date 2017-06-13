@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Windows.Forms;
 
@@ -83,9 +84,15 @@ namespace YAT.View.Forms
 				if (staticExceptionTypesToIgnore != null)
 				{
 					if (staticExceptionTypesToIgnore.ContainsKey(type))
+					{
 						staticExceptionTypesToIgnore[type] = true;
+						Trace.WriteLine(type + " activated/re-activated in list of ignored exceptions.");
+					}
 					else
+					{
 						staticExceptionTypesToIgnore.Add(type, true);
+						Trace.WriteLine(type + " added to list of ignored exceptions.");
+					}
 				}
 			}
 		}
@@ -98,7 +105,10 @@ namespace YAT.View.Forms
 			lock (staticExceptionTypesToIgnoreSyncObj)
 			{
 				if (staticExceptionTypesToIgnore != null)
-					staticExceptionTypesToIgnore.Remove(type); // MSDN: "If ... does not contain ... specified key ... no exception is thrown.
+				{
+					if (staticExceptionTypesToIgnore.Remove(type)) // MSDN: "If ... does not contain ... specified key ... no exception is thrown.
+						Trace.WriteLine(type + " removed from list of ignored exceptions.");
+				}
 			}
 		}
 
@@ -117,15 +127,19 @@ namespace YAT.View.Forms
 				{
 					foreach (var typeToIgnore in staticExceptionTypesToIgnore)
 					{
-						if (typeToIgnore.Value)
+						if (typeToIgnore.Value) // = type is activated.
 						{
 							if (typeToIgnore.Key.IsAssignableFrom(type)) // = base type is assignable from derived type?
+							{
+								Trace.WriteLine(type + " is being ignored.");
 								return (true);
+							}
 						}
 					}
 				}
 			}
 
+			Trace.WriteLine(type + " is not being ignored (yet).");
 			return (false);
 		}
 
@@ -137,6 +151,7 @@ namespace YAT.View.Forms
 			lock (staticExceptionTypesToIgnoreSyncObj)
 			{
 				staticExceptionTypesToIgnore = null;
+				Trace.WriteLine("No longer ignoring exceptions.");
 			}
 		}
 
@@ -255,7 +270,7 @@ namespace YAT.View.Forms
 			{
 				string message =
 					"After this unhandled exception you are advised to exit and restart " + productName + "." + Environment.NewLine + Environment.NewLine +
-					"Select [Cancel/Abort] to exit " + productName + " now." + Environment.NewLine +
+					"Select [Cancel/Abort] to exit and restart " + productName + " now." + Environment.NewLine +
 					"Or would you like to continue and [Retry] anyway?" + Environment.NewLine +
 					"Or would you like to continue but [Ignore] such unhandled exceptions?";
 
@@ -269,7 +284,7 @@ namespace YAT.View.Forms
 
 				if (result == UnhandledExceptionResult.Exit)
 				{
-					message = "Would you like to restart " + productName + " after exit?";
+					message = "Would you like to restart " + productName + " right away?";
 					switch (MessageBoxEx.Show(owner, message, productName + " Restart", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
 					{
 						case DialogResult.Yes: result = UnhandledExceptionResult.ExitAndRestart; break;
