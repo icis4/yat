@@ -72,7 +72,7 @@ namespace MKY.Test.Equality.Types
 		}
 
 		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
+		/// Determines whether this instance and the specified object have reference or value equality.
 		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
