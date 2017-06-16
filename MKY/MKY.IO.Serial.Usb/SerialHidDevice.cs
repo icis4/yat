@@ -66,7 +66,7 @@ namespace MKY.IO.Serial.Usb
 		private const int SendQueueFixedCapacity      = 4096;
 		private const int ReceiveQueueInitialCapacity = 4096;
 
-		private const int ThreadWaitTimeout = 200;
+		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
 
 		private const string Undefined = "<Undefined>";
 
@@ -89,7 +89,7 @@ namespace MKY.IO.Serial.Usb
 		/// <summary>
 		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem();
+		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(SerialHidDevice).FullName);
 
 		private SerialHidDeviceSettings settings;
 
@@ -544,114 +544,129 @@ namespace MKY.IO.Serial.Usb
 
 			DebugThreadStateMessage("SendThread() has started.");
 
-			// Outer loop, processes data after a signal was received:
-			while (!IsDisposed && this.sendThreadRunFlag) // Check 'IsDisposed' first!
+			try
 			{
-				try
+				// Outer loop, processes data after a signal was received:
+				while (!IsDisposed && this.sendThreadRunFlag) // Check 'IsDisposed' first!
 				{
-					// WaitOne() will wait forever if the underlying I/O provider has crashed, or
-					// if the overlying client isn't able or forgets to call Stop() or Dispose().
-					// Therefore, only wait for a certain period and then poll the run flag again.
-					// The period can be quite long, as an event trigger will immediately resume.
-					if (!this.sendThreadEvent.WaitOne(staticRandom.Next(50, 200)))
-						continue;
-				}
-				catch (AbandonedMutexException ex)
-				{
-					// The mutex should never be abandoned, but in case it nevertheless happens,
-					// at least output a debug message and gracefully exit the thread.
-					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendThread()!");
-					break;
-				}
-
-				// Inner loop, runs as long as there is data in the send queue.
-				// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
-				while (!IsDisposed && this.sendThreadRunFlag && IsTransmissive && (this.sendQueue.Count > 0))
-				{                                                              // No lock required, just checking for empty.
-					// Initially, yield to other threads before starting to read the queue, since it is very
-					// likely that more data is to be enqueued, thus resulting in larger chunks processed.
-					// Subsequently, yield to other threads to allow processing the data.
-					Thread.Sleep(TimeSpan.Zero);
-
-					// Handle XOff state:
-					if (this.settings.FlowControlUsesXOnXOff && !OutputIsXOn)
+					try
 					{
-						// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
-						// Changes here must most likely be applied there too.
-
-						// Control bytes must be sent even in case of XOff! XOn has precedence over XOff.
-						if (this.sendQueue.Contains(XOnXOff.XOnByte)) // No lock required, not modifying anything.
-						{
-							SendXOnOrXOffAndNotify(XOnXOff.XOnByte);
-
-							lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
-							{
-								if (this.sendQueue.Peek() == XOnXOff.XOnByte) // If XOn is upfront...
-									this.sendQueue.Dequeue();                 // ...acknowlege it's gone.
-							}
-
-							break; // Let other threads do their job and wait until signaled again.
-						}
-						else if (this.sendQueue.Contains(XOnXOff.XOffByte)) // No lock required, not modifying anything.
-						{
-							SendXOnOrXOffAndNotify(XOnXOff.XOffByte);
-
-							lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
-							{
-								if (this.sendQueue.Peek() == XOnXOff.XOffByte) // If XOff is upfront...
-									this.sendQueue.Dequeue();                  // ...acknowlege it's gone.
-							}
-
-							break; // Let other threads do their job and wait until signaled again.
-						}
-						else
-						{
-							if (!isXOffStateOldAndErrorHasBeenSignaled)
-							{
-								InvokeXOffErrorEvent();
-								isXOffStateOldAndErrorHasBeenSignaled = true;
-							}
-
-							break; // Let other threads do their job and wait until signaled again.
-						}
-
-						// Control bytes must be sent even in case of XOff!
+						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+						// if the overlying client isn't able or forgets to call Stop() or Dispose().
+						// Therefore, only wait for a certain period and then poll the run flag again.
+						// The period can be quite long, as an event trigger will immediately resume.
+						if (!this.sendThreadEvent.WaitOne(staticRandom.Next(50, 200)))
+							continue;
+					}
+					catch (AbandonedMutexException ex)
+					{
+						// The mutex should never be abandoned, but in case it nevertheless happens,
+						// at least output a debug message and gracefully exit the thread.
+						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendThread()!");
+						break;
 					}
 
-					// --- No XOff state, ready to send: ---
+					// Inner loop, runs as long as there is data in the send queue.
+					// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
+					while (!IsDisposed && this.sendThreadRunFlag && IsTransmissive && (this.sendQueue.Count > 0))
+					{                                                              // No lock required, just checking for empty.
+						// Initially, yield to other threads before starting to read the queue, since it is very
+						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
+						// Subsequently, yield to other threads to allow processing the data.
+						Thread.Sleep(TimeSpan.Zero);
 
-					// Synchronize the send/receive events to prevent mix-ups at the event
-					// sinks, i.e. the send/receive operations shall be synchronized with
-					// signaling of them.
-					// But attention, do not simply lock() the 'dataSyncObj'. Instead, just
-					// try to get the lock or try again later. The thread = direction that
-					// get's the lock first, shall also be the one to signal first:
-
-					if (Monitor.TryEnter(this.dataEventSyncObj))
-					{
-						try
+						// Handle XOff state:
+						if (this.settings.FlowControlUsesXOnXOff && !OutputIsXOn)
 						{
-							byte[] data;
-							lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+							// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
+							// Changes here must most likely be applied there too.
+
+							// Control bytes must be sent even in case of XOff! XOn has precedence over XOff.
+							if (this.sendQueue.Contains(XOnXOff.XOnByte)) // No lock required, not modifying anything.
 							{
-								data = this.sendQueue.ToArray();
-								this.sendQueue.Clear();
+								SendXOnOrXOffAndNotify(XOnXOff.XOnByte);
+
+								lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+								{
+									if (this.sendQueue.Peek() == XOnXOff.XOnByte) // If XOn is upfront...
+										this.sendQueue.Dequeue();                 // ...acknowlege it's gone.
+								}
+
+								break; // Let other threads do their job and wait until signaled again.
+							}
+							else if (this.sendQueue.Contains(XOnXOff.XOffByte)) // No lock required, not modifying anything.
+							{
+								SendXOnOrXOffAndNotify(XOnXOff.XOffByte);
+
+								lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+								{
+									if (this.sendQueue.Peek() == XOnXOff.XOffByte) // If XOff is upfront...
+										this.sendQueue.Dequeue();                  // ...acknowlege it's gone.
+								}
+
+								break; // Let other threads do their job and wait until signaled again.
+							}
+							else
+							{
+								if (!isXOffStateOldAndErrorHasBeenSignaled)
+								{
+									InvokeXOffErrorEvent();
+									isXOffStateOldAndErrorHasBeenSignaled = true;
+								}
+
+								break; // Let other threads do their job and wait until signaled again.
 							}
 
-							this.device.Send(data);
-
-							if (this.settings.FlowControlUsesXOnXOff)
-								HandleXOnOrXOffAndNotify(data);
-
-							// Note the Thread.Sleep(TimeSpan.Zero) above.
+							// Control bytes must be sent even in case of XOff!
 						}
-						finally
+
+						// --- No XOff state, ready to send: ---
+
+						// Synchronize the send/receive events to prevent mix-ups at the event
+						// sinks, i.e. the send/receive operations shall be synchronized with
+						// signaling of them.
+						// But attention, do not simply lock() the 'dataSyncObj'. Instead, just
+						// try to get the lock or try again later. The thread = direction that
+						// get's the lock first, shall also be the one to signal first:
+
+						if (Monitor.TryEnter(this.dataEventSyncObj))
 						{
-							Monitor.Exit(this.dataEventSyncObj);
-						}
-					} // Monitor.TryEnter()
-				} // Inner loop
-			} // Outer loop
+							try
+							{
+								byte[] data;
+								lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+								{
+									data = this.sendQueue.ToArray();
+									this.sendQueue.Clear();
+								}
+
+								this.device.Send(data);
+
+								if (this.settings.FlowControlUsesXOnXOff)
+									HandleXOnOrXOffAndNotify(data);
+
+								// Note the Thread.Sleep(TimeSpan.Zero) above.
+							}
+							finally
+							{
+								Monitor.Exit(this.dataEventSyncObj);
+							}
+						} // Monitor.TryEnter()
+					} // Inner loop
+				} // Outer loop
+			}
+			catch (ThreadAbortException ex)
+			{
+				DebugEx.WriteException(GetType(), ex, "SendThread() has been aborted!");
+
+				// Should only happen when failing to 'friendly' join the thread on stopping!
+				// Don't try to set and notify a state change, or even restart the device!
+
+				// But reset the abort request, as 'ThreadAbortException' is a special exception
+				// that would be rethrown at the end of the catch block otherwise!
+
+				Thread.ResetAbort();
+			}
 
 			DebugThreadStateMessage("SendThread() has terminated.");
 		}
@@ -992,6 +1007,7 @@ namespace MKY.IO.Serial.Usb
 					{
 						Debug.Assert(this.sendThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
 
+						bool isAborting = false;
 						int accumulatedTimeout = 0;
 						int interval = 0; // Use a relatively short random interval to trigger the thread:
 						while (!this.sendThread.Join(interval = staticRandom.Next(5, 20)))
@@ -1003,14 +1019,17 @@ namespace MKY.IO.Serial.Usb
 							{
 								DebugThreadStateMessage("...failed! Aborting...");
 								DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
-								this.sendThread.Abort();
+
+								isAborting = true;       // Thread.Abort() must not be used whenever possible!
+								this.sendThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
 							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 
-						DebugThreadStateMessage("...successfully stopped.");
+						if (!isAborting)
+							DebugThreadStateMessage("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -1042,6 +1061,7 @@ namespace MKY.IO.Serial.Usb
 					{
 						Debug.Assert(this.receiveThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
 
+						bool isAborting = false;
 						int accumulatedTimeout = 0;
 						int interval = 0; // Use a relatively short random interval to trigger the thread:
 						while (!this.receiveThread.Join(interval = staticRandom.Next(5, 20)))
@@ -1053,14 +1073,17 @@ namespace MKY.IO.Serial.Usb
 							{
 								DebugThreadStateMessage("...failed! Aborting...");
 								DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
-								this.receiveThread.Abort();
+
+								isAborting = true;          // Thread.Abort() must not be used whenever possible!
+								this.receiveThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
 							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 
-						DebugThreadStateMessage("...successfully stopped.");
+						if (!isAborting)
+							DebugThreadStateMessage("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -1181,56 +1204,71 @@ namespace MKY.IO.Serial.Usb
 		{
 			DebugThreadStateMessage("ReceiveThread() has started.");
 
-			// Outer loop, processes data after a signal was received:
-			while (!IsDisposed && this.receiveThreadRunFlag) // Check 'IsDisposed' first!
+			try
 			{
-				try
+				// Outer loop, processes data after a signal was received:
+				while (!IsDisposed && this.receiveThreadRunFlag) // Check 'IsDisposed' first!
 				{
-					// WaitOne() will wait forever if the underlying I/O provider has crashed, or
-					// if the overlying client isn't able or forgets to call Stop() or Dispose().
-					// Therefore, only wait for a certain period and then poll the run flag again.
-					// The period can be quite long, as an event trigger will immediately resume.
-					if (!this.receiveThreadEvent.WaitOne(staticRandom.Next(50, 200)))
-						continue;
-				}
-				catch (AbandonedMutexException ex)
-				{
-					// The mutex should never be abandoned, but in case it nevertheless happens,
-					// at least output a debug message and gracefully exit the thread.
-					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in ReceiveThread()!");
-					break;
-				}
-
-				// Inner loop, runs as long as there is data in the receive queue.
-				// Ensure not to forward events during disposing anymore. Check 'IsDisposed' first!
-				while (!IsDisposed && this.receiveThreadRunFlag && (this.receiveQueue.Count > 0))
-				{                                               // No lock required, just checking for empty.
-					// Initially, yield to other threads before starting to read the queue, since it is very
-					// likely that more data is to be enqueued, thus resulting in larger chunks processed.
-					// Subsequently, yield to other threads to allow processing the data.
-					Thread.Sleep(TimeSpan.Zero);
-
-					if (Monitor.TryEnter(this.dataEventSyncObj))
+					try
 					{
-						try
+						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+						// if the overlying client isn't able or forgets to call Stop() or Dispose().
+						// Therefore, only wait for a certain period and then poll the run flag again.
+						// The period can be quite long, as an event trigger will immediately resume.
+						if (!this.receiveThreadEvent.WaitOne(staticRandom.Next(50, 200)))
+							continue;
+					}
+					catch (AbandonedMutexException ex)
+					{
+						// The mutex should never be abandoned, but in case it nevertheless happens,
+						// at least output a debug message and gracefully exit the thread.
+						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in ReceiveThread()!");
+						break;
+					}
+
+					// Inner loop, runs as long as there is data in the receive queue.
+					// Ensure not to forward events during disposing anymore. Check 'IsDisposed' first!
+					while (!IsDisposed && this.receiveThreadRunFlag && (this.receiveQueue.Count > 0))
+					{                                               // No lock required, just checking for empty.
+						// Initially, yield to other threads before starting to read the queue, since it is very
+						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
+						// Subsequently, yield to other threads to allow processing the data.
+						Thread.Sleep(TimeSpan.Zero);
+
+						if (Monitor.TryEnter(this.dataEventSyncObj))
 						{
-							byte[] data;
-							lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+							try
 							{
-								data = this.receiveQueue.ToArray();
-								this.receiveQueue.Clear();
+								byte[] data;
+								lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+								{
+									data = this.receiveQueue.ToArray();
+									this.receiveQueue.Clear();
+								}
+
+								OnDataReceived(new SerialDataReceivedEventArgs(data, DeviceInfo, this.device.ReportFormat.UseId, this.device.ActiveReportId));
+
+								// Note the Thread.Sleep(TimeSpan.Zero) above.
 							}
+							finally
+							{
+								Monitor.Exit(this.dataEventSyncObj);
+							}
+						} // Monitor.TryEnter()
+					} // while (!IsDisposed && ...)
+				}
+			}
+			catch (ThreadAbortException ex)
+			{
+				DebugEx.WriteException(GetType(), ex, "ReceiveThread() has been aborted!");
 
-							OnDataReceived(new SerialDataReceivedEventArgs(data, DeviceInfo, this.device.ReportFormat.UseId, this.device.ActiveReportId));
+				// Should only happen when failing to 'friendly' join the thread on stopping!
+				// Don't try to set and notify a state change, or even restart the device!
 
-							// Note the Thread.Sleep(TimeSpan.Zero) above.
-						}
-						finally
-						{
-							Monitor.Exit(this.dataEventSyncObj);
-						}
-					} // Monitor.TryEnter()
-				} // while (!IsDisposed && ...)
+				// But reset the abort request, as 'ThreadAbortException' is a special exception
+				// that would be rethrown at the end of the catch block otherwise!
+
+				Thread.ResetAbort();
 			}
 
 			DebugThreadStateMessage("ReceiveThread() has terminated.");

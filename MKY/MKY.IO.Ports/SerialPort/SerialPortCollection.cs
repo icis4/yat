@@ -70,6 +70,11 @@ namespace MKY.IO.Ports
 		private static object                     staticCaptionsCacheSyncObj = new object();
 
 		/// <summary>
+		/// A dedicated event helper to allow ignoring the 'ThreadAbortException' when cancelling.
+		/// </summary>
+		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(SerialPortCollection).FullName);
+
+		/// <summary>
 		/// The port that is currently in use, e.g. "(in use by this serial port)" of "COM1 - (in use by this serial port)".
 		/// </summary>
 		[XmlIgnore]
@@ -261,7 +266,7 @@ namespace MKY.IO.Ports
 					if (portChangedCallback != null)
 					{
 						var e = new SerialPortChangedAndCancelEventArgs(portId);
-						EventHelper.FireSync<SerialPortChangedAndCancelEventArgs>(portChangedCallback, this, e);
+						this.eventHelper.FireSync<SerialPortChangedAndCancelEventArgs>(portChangedCallback, this, e);
 						if (e.Cancel)
 							break;
 					}
@@ -358,6 +363,14 @@ namespace MKY.IO.Ports
 			return (inUseText.ToString());
 		}
 
+		/// <summary>
+		/// Notifies the worker that a thread abort is about to happen soon.
+		/// </summary>
+		public virtual void NotifyThreadAbortWillHappen()
+		{
+			this.eventHelper.DiscardAllExceptions();
+		}
+
 		#region Event Invoking
 		//==========================================================================================
 		// Event Invoking
@@ -368,7 +381,7 @@ namespace MKY.IO.Ports
 		protected virtual List<InUseInfo> OnInUseLookupRequest()
 		{
 			var e = new SerialPortInUseLookupEventArgs();
-			EventHelper.FireSync<SerialPortInUseLookupEventArgs>(InUseLookupRequest, this, e);
+			this.eventHelper.FireSync<SerialPortInUseLookupEventArgs>(InUseLookupRequest, this, e);
 			return (e.InUseLookup);
 		}
 

@@ -115,7 +115,7 @@ namespace MKY.IO.Serial.Socket
 
 		private const int DataSentQueueInitialCapacity = 4096;
 
-		private const int ThreadWaitTimeout = 200;
+		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
 
 		#endregion
 
@@ -129,7 +129,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>
 		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem();
+		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(TcpClient).FullName);
 
 		private IPHostEx remoteHost;
 		private int remotePort;
@@ -731,6 +731,7 @@ namespace MKY.IO.Serial.Socket
 					{
 						Debug.Assert(this.dataSentThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
 
+						bool isAborting = false;
 						int accumulatedTimeout = 0;
 						int interval = 0; // Use a relatively short random interval to trigger the thread:
 						while (!this.dataSentThread.Join(interval = SocketBase.Random.Next(5, 20)))
@@ -742,14 +743,17 @@ namespace MKY.IO.Serial.Socket
 							{
 								DebugThreadStateMessage("...failed! Aborting...");
 								DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
-								this.dataSentThread.Abort();
+
+								isAborting = true;           // Thread.Abort() must not be used whenever possible!
+								this.dataSentThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
 							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 
-						DebugThreadStateMessage("...successfully stopped.");
+						if (!isAborting)
+							DebugThreadStateMessage("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -871,66 +875,81 @@ namespace MKY.IO.Serial.Socket
 
 			DebugThreadStateMessage("SendThread() has started.");
 
-			// Outer loop, processes data after a signal was received:
-			while (!IsDisposed && this.dataSentThreadRunFlag) // Check 'IsDisposed' first!
+			try
 			{
-				try
+				// Outer loop, processes data after a signal was received:
+				while (!IsDisposed && this.dataSentThreadRunFlag) // Check 'IsDisposed' first!
 				{
-					// WaitOne() will wait forever if the underlying I/O provider has crashed, or
-					// if the overlying client isn't able or forgets to call Stop() or Dispose().
-					// Therefore, only wait for a certain period and then poll the run flag again.
-					// The period can be quite long, as an event trigger will immediately resume.
-					if (!this.dataSentThreadEvent.WaitOne(SocketBase.Random.Next(50, 200)))
-						continue;
-				}
-				catch (AbandonedMutexException ex)
-				{
-					// The mutex should never be abandoned, but in case it nevertheless happens,
-					// at least output a debug message and gracefully exit the thread.
-					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in DataSentThread()!");
-					break;
-				}
-
-				// Inner loop, runs as long as there is data to be handled.
-				// Ensure not to forward events during disposing anymore. Check 'IsDisposed' first!
-				while (!IsDisposed && this.dataSentThreadRunFlag && (this.dataSentQueue.Count > 0))
-				{                                                // No lock required, just checking for empty.
-					// Initially, yield to other threads before starting to read the queue, since it is very
-					// likely that more data is to be enqueued, thus resulting in larger chunks processed.
-					// Subsequently, yield to other threads to allow processing the data.
-					Thread.Sleep(TimeSpan.Zero);
-
-					// Synchronize the send/receive events to prevent mix-ups at the event
-					// sinks, i.e. the send/receive operations shall be synchronized with
-					// signaling of them.
-					// But attention, do not simply lock() the sync obj. Instead, just try
-					// to get the lock or try again later. The thread = direction that get's
-					// the lock first, shall also be the one to signal first:
-
-					if (Monitor.TryEnter(this.dataEventSyncObj))
+					try
 					{
-						try
+						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+						// if the overlying client isn't able or forgets to call Stop() or Dispose().
+						// Therefore, only wait for a certain period and then poll the run flag again.
+						// The period can be quite long, as an event trigger will immediately resume.
+						if (!this.dataSentThreadEvent.WaitOne(SocketBase.Random.Next(50, 200)))
+							continue;
+					}
+					catch (AbandonedMutexException ex)
+					{
+						// The mutex should never be abandoned, but in case it nevertheless happens,
+						// at least output a debug message and gracefully exit the thread.
+						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in DataSentThread()!");
+						break;
+					}
+
+					// Inner loop, runs as long as there is data to be handled.
+					// Ensure not to forward events during disposing anymore. Check 'IsDisposed' first!
+					while (!IsDisposed && this.dataSentThreadRunFlag && (this.dataSentQueue.Count > 0))
+					{                                                // No lock required, just checking for empty.
+						// Initially, yield to other threads before starting to read the queue, since it is very
+						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
+						// Subsequently, yield to other threads to allow processing the data.
+						Thread.Sleep(TimeSpan.Zero);
+
+						// Synchronize the send/receive events to prevent mix-ups at the event
+						// sinks, i.e. the send/receive operations shall be synchronized with
+						// signaling of them.
+						// But attention, do not simply lock() the sync obj. Instead, just try
+						// to get the lock or try again later. The thread = direction that get's
+						// the lock first, shall also be the one to signal first:
+
+						if (Monitor.TryEnter(this.dataEventSyncObj))
 						{
-							byte[] data;
-							lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
+							try
 							{
-								data = this.dataSentQueue.ToArray();
-								this.dataSentQueue.Clear();
+								byte[] data;
+								lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
+								{
+									data = this.dataSentQueue.ToArray();
+									this.dataSentQueue.Clear();
+								}
+
+								OnDataSent(new SocketDataSentEventArgs(data, remoteEndPoint));
 							}
+							finally
+							{
+								Monitor.Exit(this.dataEventSyncObj);
+							}
+						} // Monitor.TryEnter()
 
-							OnDataSent(new SocketDataSentEventArgs(data, remoteEndPoint));
-						}
-						finally
-						{
-							Monitor.Exit(this.dataEventSyncObj);
-						}
-					} // Monitor.TryEnter()
+						// Note the Thread.Sleep(TimeSpan.Zero) above.
 
-					// Note the Thread.Sleep(TimeSpan.Zero) above.
+						// Saying hello to StyleCop ;-.
+					} // Inner loop
+				} // Outer loop
+			}
+			catch (ThreadAbortException ex)
+			{
+				DebugEx.WriteException(GetType(), ex, "DataSentThread() has been aborted!");
 
-					// Saying hello to StyleCop ;-.
-				} // Inner loop
-			} // Outer loop
+				// Should only happen when failing to 'friendly' join the thread on stopping!
+				// Don't try to set and notify a state change, or even restart the socket!
+
+				// But reset the abort request, as 'ThreadAbortException' is a special exception
+				// that would be rethrown at the end of the catch block otherwise!
+
+				Thread.ResetAbort();
+			}
 
 			DebugThreadStateMessage("SendThread() has terminated.");
 		}

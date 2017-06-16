@@ -381,7 +381,7 @@ namespace YAT.View.Controls
 					}
 
 					// Clean up:
-					if (t.Join(250)) // Allow some time to let the worker thread get terminated.
+					if (t.Join(250)) // Allow some (not really noticable) time to let the worker thread get terminated.
 					{
 						switch (result)
 						{
@@ -414,10 +414,11 @@ namespace YAT.View.Controls
 							}
 						}
 					}
-					else
+					else // t.Join() has timed out!
 					{
-						t.Abort(); // Terminate non-joinable threads!
-
+						worker.NotifyThreadAbortWillHappen();
+						t.Abort(); // Thread.Abort() must not be used whenever possible!
+						           // This is only the fall-back in case joining fails for too long.
 						if (result != DialogResult.Cancel)
 						{
 							scanSuccess = false;
@@ -492,13 +493,13 @@ namespace YAT.View.Controls
 		private void worker_Status1Changed(object sender, EventArgs<string> e)
 		{
 			this.showStatusDialog.SetStatus1Synchronized(e.Value);
-		////IsShowing is not check for, as status box may get shown after this event.
+		////IsShowing is not checked for, as status box may get shown after this event.
 		}
 
 		private void worker_Status2Changed(object sender, EventArgs<string> e)
 		{
 			this.showStatusDialog.SetStatus2Synchronized(e.Value);
-		////IsShowing is not check for, as status box may get shown after this event.
+		////IsShowing is not checked for, as status box may get shown after this event.
 		}
 
 		private void worker_IsDone(object sender, EventArgs<DialogResult> e)
