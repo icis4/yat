@@ -1003,7 +1003,7 @@ namespace YAT.Domain
 			}
 			catch (ThreadAbortException ex)
 			{
-				DebugEx.WriteException(GetType(), ex, "SendThread() has been aborted!");
+				DebugEx.WriteException(GetType(), ex, "SendThread() has been aborted! Confirming the abort, i.e. Thread.ResetAbort() will be called.");
 
 				// Should only happen when failing to 'friendly' join the thread on stopping!
 				// Don't try to set and notify a state change, or even restart the terminal!
@@ -1378,13 +1378,14 @@ namespace YAT.Domain
 				// But reset the abort request, as 'ThreadAbortException' is a special exception
 				// that would be rethrown at the end of the catch block otherwise!
 
-				Thread.ResetAbort();
-
 				var sb = new StringBuilder();
 				sb.AppendLine("'ThreadAbortException' while trying to forward data to the underlying RawTerminal.");
 				sb.AppendLine("This exception is ignored as it can happen during closing of the terminal or application.");
+				sb.AppendLine("Confirming the abort, i.e. Thread.ResetAbort() will be called.");
 				sb.AppendLine();
 				DebugEx.WriteException(GetType(), ex, sb.ToString());
+
+				Thread.ResetAbort();
 			}
 			catch (ObjectDisposedException ex)
 			{
