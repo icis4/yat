@@ -24,9 +24,11 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Diagnostics;
 using MKY.IO.Ports;
 
 // This code is intentionally placed into the YAT.View.Controls namespace even though the file is
@@ -40,6 +42,11 @@ namespace YAT.View.Controls
 	/// </remarks>
 	internal class SerialPortSelectionWorker
 	{
+		/// <summary>
+		/// A dedicated event helper to allow ignoring the 'ThreadAbortException' when cancelling.
+		/// </summary>
+		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(SerialPortSelectionWorker).FullName);
+
 		private SerialPortCollection ports;
 
 		private bool retrieveCaptions;
@@ -97,14 +104,27 @@ namespace YAT.View.Controls
 			get { return (this.exceptionHint); }
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual void DoWork()
 		{
-			this.isBusy = true;
-			this.result = DoWorkWithResult();
-			this.isBusy = false;
+			try
+			{
+				this.isBusy = true;
+				this.result = DoWorkWithResult();
+				this.isBusy = false;
 
-			OnIsDone(new EventArgs<DialogResult>(result));
+				OnIsDone(new EventArgs<DialogResult>(result));
+			}
+			catch (ThreadAbortException ex)
+			{
+				// Will happen when failing to 'friendly' join the thread on cancel.
+
+				DebugEx.WriteException(GetType(), ex, "Worker thread has been aborted, confirming = resetting the abort.");
+
+				// Reset the abort request, as 'ThreadAbortException' is a special exception
+				// that would be rethrown at the end of the catch block otherwise!
+
+				Thread.ResetAbort();
+			}
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure to handle any case.")]
@@ -182,6 +202,16 @@ namespace YAT.View.Controls
 				this.cancel = true;
 		}
 
+		/// <summary>
+		/// Notifies the worker that a thread abort is about to happen soon.
+		/// </summary>
+		public virtual void NotifyThreadAbortWillHappen()
+		{
+			this.eventHelper.DiscardAllExceptions();
+
+			this.ports.NotifyThreadAbortWillHappen();
+		}
+
 		private void ports_DetectPortsInUseCallback(object sender, SerialPortChangedAndCancelEventArgs e)
 		{
 			OnStatus2Changed(new EventArgs<string>("Scanning " + e.Port.ToNameAndCaptionString() + "..."));
@@ -195,7 +225,7 @@ namespace YAT.View.Controls
 		/// </summary>
 		protected virtual void OnStatus1Changed(EventArgs<string> e)
 		{
-			EventHelper.FireSync<EventArgs<string>>(Status1Changed, this, e);
+			this.eventHelper.FireSync<EventArgs<string>>(Status1Changed, this, e);
 		}
 
 		/// <summary>
@@ -203,7 +233,7 @@ namespace YAT.View.Controls
 		/// </summary>
 		protected virtual void OnStatus2Changed(EventArgs<string> e)
 		{
-			EventHelper.FireSync<EventArgs<string>>(Status2Changed, this, e);
+			this.eventHelper.FireSync<EventArgs<string>>(Status2Changed, this, e);
 		}
 
 		/// <summary>
@@ -211,7 +241,7 @@ namespace YAT.View.Controls
 		/// </summary>
 		protected virtual void OnIsDone(EventArgs<DialogResult> e)
 		{
-			EventHelper.FireAsync<EventArgs<DialogResult>>(IsDone, this, e); // Fire async! Worker thread termination must not delayed by sync callbacks!
+			this.eventHelper.FireAsync<EventArgs<DialogResult>>(IsDone, this, e); // Fire async! Worker thread termination must not delayed by sync callbacks!
 		}
 	}
 }

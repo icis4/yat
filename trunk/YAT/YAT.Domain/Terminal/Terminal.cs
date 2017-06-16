@@ -211,7 +211,7 @@ namespace YAT.Domain
 		private const string RxParityErrorString         = "RX PARITY ERROR";
 		private const string TxBufferFullErrorString     = "TX BUFFER FULL";
 
-		private const int ThreadWaitTimeout = 200;
+		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
 		private const int ClearAndRefreshTimeout = 400;
 
 		private const string Undefined = "<Undefined>";
@@ -236,7 +236,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem();
+		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName);
 
 		private int instanceId;
 
@@ -492,6 +492,7 @@ namespace YAT.Domain
 					{
 						Debug.Assert(this.sendThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
 
+						bool isAborting = false;
 						int accumulatedTimeout = 0;
 						int interval = 0; // Use a relatively short random interval to trigger the thread:
 						while (!this.sendThread.Join(interval = staticRandom.Next(5, 20)))
@@ -503,14 +504,17 @@ namespace YAT.Domain
 							{
 								DebugThreadStateMessage("...failed! Aborting...");
 								DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
-								this.sendThread.Abort();
+
+								isAborting = true;       // Thread.Abort() must not be used whenever possible!
+								this.sendThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
 							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 
-						DebugThreadStateMessage("...successfully stopped.");
+						if (!isAborting)
+							DebugThreadStateMessage("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -523,12 +527,13 @@ namespace YAT.Domain
 
 					this.sendThread = null;
 				}
-#if (DEBUG)
-				else
+			#if (DEBUG)
+				else // (this.sendThread == null)
 				{
 					DebugThreadStateMessage("...not necessary as it doesn't exist anymore.");
 				}
-#endif
+			#endif
+
 				if (this.sendThreadEvent != null)
 				{
 					try     { this.sendThreadEvent.Close(); }
@@ -926,73 +931,88 @@ namespace YAT.Domain
 		{
 			DebugThreadStateMessage("SendThread() has started.");
 
-			// Outer loop, processes data after a signal was received:
-			while (!IsDisposed && this.sendThreadRunFlag) // Check 'IsDisposed' first!
+			try
 			{
-				try
+				// Outer loop, processes data after a signal was received:
+				while (!IsDisposed && this.sendThreadRunFlag) // Check 'IsDisposed' first!
 				{
-					// WaitOne() will wait forever if the underlying I/O provider has crashed, or
-					// if the overlying client isn't able or forgets to call Stop() or Dispose().
-					// Therefore, only wait for a certain period and then poll the run flag again.
-					// The period can be quite long, as an event trigger will immediately resume.
-					if (!this.sendThreadEvent.WaitOne(staticRandom.Next(50, 200)))
-						continue;
-				}
-				catch (AbandonedMutexException ex)
-				{
-					// The mutex should never be abandoned, but in case it nevertheless happens,
-					// at least output a debug message and gracefully exit the thread.
-					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendThread()!");
-					break;
-				}
-
-				// Inner loop, runs as long as there is data in the send queue.
-				// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
-				while (!IsDisposed && this.sendThreadRunFlag && IsReadyToSend_Internal && (this.sendQueue.Count > 0))
-				{                                                                      // No lock required, just checking for empty.
-					// Initially, yield to other threads before starting to read the queue, since it is very
-					// likely that more data is to be enqueued, thus resulting in larger chunks processed.
-					// Subsequently, yield to other threads to allow processing the data.
-					Thread.Sleep(TimeSpan.Zero);
-
-					SendItem[] pendingItems;
-					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+					try
 					{
-						pendingItems = this.sendQueue.ToArray();
-						this.sendQueue.Clear();
+						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+						// if the overlying client isn't able or forgets to call Stop() or Dispose().
+						// Therefore, only wait for a certain period and then poll the run flag again.
+						// The period can be quite long, as an event trigger will immediately resume.
+						if (!this.sendThreadEvent.WaitOne(staticRandom.Next(50, 200)))
+							continue;
+					}
+					catch (AbandonedMutexException ex)
+					{
+						// The mutex should never be abandoned, but in case it nevertheless happens,
+						// at least output a debug message and gracefully exit the thread.
+						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendThread()!");
+						break;
 					}
 
-					if (pendingItems.Length > 0)
-					{
-						this.ioChangedEventHelper.Initialize();
-						this.sendingIsOngoing = true;
+					// Inner loop, runs as long as there is data in the send queue.
+					// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
+					while (!IsDisposed && this.sendThreadRunFlag && IsReadyToSend_Internal && (this.sendQueue.Count > 0))
+					{                                                                      // No lock required, just checking for empty.
+						// Initially, yield to other threads before starting to read the queue, since it is very
+						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
+						// Subsequently, yield to other threads to allow processing the data.
+						Thread.Sleep(TimeSpan.Zero);
 
-						foreach (SendItem si in pendingItems)
+						SendItem[] pendingItems;
+						lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 						{
-							DebugMessage(@"Processing item """ + si.ToString() + @""" of " + pendingItems.Length + " send item(s)...");
+							pendingItems = this.sendQueue.ToArray();
+							this.sendQueue.Clear();
+						}
 
-							ProcessSendItem(si);
+						if (pendingItems.Length > 0)
+						{
+							this.ioChangedEventHelper.Initialize();
+							this.sendingIsOngoing = true;
 
-							if (this.ioChangedEventHelper.TotalTimeLagIsAboveThreshold())
+							foreach (SendItem si in pendingItems)
 							{
-								// Break if requested or terminal has stopped or closed!
-								lock (this.breakStateSyncObj)
+								DebugMessage(@"Processing item """ + si.ToString() + @""" of " + pendingItems.Length + " send item(s)...");
+
+								ProcessSendItem(si);
+
+								if (this.ioChangedEventHelper.TotalTimeLagIsAboveThreshold())
 								{
-									if (this.breakState || !(!IsDisposed && this.sendThreadRunFlag && IsTransmissive)) // Check 'IsDisposed' first!
+									// Break if requested or terminal has stopped or closed!
+									lock (this.breakStateSyncObj)
 									{
-										this.breakState = false;
-										break;
+										if (this.breakState || !(!IsDisposed && this.sendThreadRunFlag && IsTransmissive)) // Check 'IsDisposed' first!
+										{
+											this.breakState = false;
+											break;
+										}
 									}
 								}
 							}
-						}
 
-						this.sendingIsOngoing = false;
-						if (this.ioChangedEventHelper.EventMustBeRaised)
-							OnIOChanged(EventArgs.Empty); // Again raise the event to indicate that
-					}                                     //   sending is no longer ongoing.
-				} // Inner loop
-			} // Outer loop
+							this.sendingIsOngoing = false;
+							if (this.ioChangedEventHelper.EventMustBeRaised)
+								OnIOChanged(EventArgs.Empty); // Again raise the event to indicate that
+						}                                     //   sending is no longer ongoing.
+					} // Inner loop
+				} // Outer loop
+			}
+			catch (ThreadAbortException ex)
+			{
+				DebugEx.WriteException(GetType(), ex, "SendThread() has been aborted!");
+
+				// Should only happen when failing to 'friendly' join the thread on stopping!
+				// Don't try to set and notify a state change, or even restart the terminal!
+
+				// But reset the abort request, as 'ThreadAbortException' is a special exception
+				// that would be rethrown at the end of the catch block otherwise!
+
+				Thread.ResetAbort();
+			}
 
 			DebugThreadStateMessage("SendThread() has terminated.");
 		}
@@ -1350,18 +1370,26 @@ namespace YAT.Domain
 			{
 				this.rawTerminal.Send(data);
 			}
-			catch (ObjectDisposedException ex)
+			catch (ThreadAbortException ex)
 			{
+				// Should only happen when failing to 'friendly' join the thread on stopping!
+				// Don't try to set and notify a state change, or even restart the terminal!
+
+				// But reset the abort request, as 'ThreadAbortException' is a special exception
+				// that would be rethrown at the end of the catch block otherwise!
+
+				Thread.ResetAbort();
+
 				var sb = new StringBuilder();
-				sb.AppendLine("'ObjectDisposedException' while trying to forward data to the underlying RawTerminal.");
+				sb.AppendLine("'ThreadAbortException' while trying to forward data to the underlying RawTerminal.");
 				sb.AppendLine("This exception is ignored as it can happen during closing of the terminal or application.");
 				sb.AppendLine();
 				DebugEx.WriteException(GetType(), ex, sb.ToString());
 			}
-			catch (ThreadAbortException ex)
+			catch (ObjectDisposedException ex)
 			{
 				var sb = new StringBuilder();
-				sb.AppendLine("'ThreadAbortException' while trying to forward data to the underlying RawTerminal.");
+				sb.AppendLine("'ObjectDisposedException' while trying to forward data to the underlying RawTerminal.");
 				sb.AppendLine("This exception is ignored as it can happen during closing of the terminal or application.");
 				sb.AppendLine();
 				DebugEx.WriteException(GetType(), ex, sb.ToString());

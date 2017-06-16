@@ -126,7 +126,7 @@ namespace MKY.IO.Usb
 
 		private const int ReceiveQueueInitialCapacity = 4096;
 
-		private const int ThreadWaitTimeout = 200;
+		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
 
 		#endregion
 
@@ -323,7 +323,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem();
+		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(SerialHidDevice).FullName);
 
 		private State state = State.Reset;
 		private object stateSyncObj = new object();
@@ -894,6 +894,7 @@ namespace MKY.IO.Usb
 					{
 						Debug.Assert(this.receiveThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
 
+						bool isAborting = false;
 						int accumulatedTimeout = 0;
 						int interval = 0; // Use a relatively short random interval to trigger the thread:
 						while (!this.receiveThread.Join(interval = staticRandom.Next(5, 20)))
@@ -905,14 +906,17 @@ namespace MKY.IO.Usb
 							{
 								DebugThreadStateMessage("...failed! Aborting...");
 								DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
-								this.receiveThread.Abort();
+
+								isAborting = true;          // Thread.Abort() must not be used whenever possible!
+								this.receiveThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
 							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 
-						DebugThreadStateMessage("...successfully stopped.");
+						if (!isAborting)
+							DebugThreadStateMessage("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -1075,40 +1079,55 @@ namespace MKY.IO.Usb
 		{
 			DebugThreadStateMessage("ReceiveThread() has started.");
 
-			// Outer loop, processes data after a signal was received:
-			while (this.receiveThreadRunFlag && !IsDisposed) // Check 'IsDisposed' first!
+			try
 			{
-				try
+				// Outer loop, processes data after a signal was received:
+				while (this.receiveThreadRunFlag && !IsDisposed) // Check 'IsDisposed' first!
 				{
-					// WaitOne() will wait forever if the underlying I/O provider has crashed, or
-					// if the overlying client isn't able or forgets to call Stop() or Dispose().
-					// Therefore, only wait for a certain period and then poll the run flag again.
-					// The period can be quite long, as an event trigger will immediately resume.
-					if (!this.receiveThreadEvent.WaitOne(staticRandom.Next(50, 200)))
-						continue;
-				}
-				catch (AbandonedMutexException ex)
-				{
-					// The mutex should never be abandoned, but in case it nevertheless happens,
-					// at least output a debug message and gracefully exit the thread.
-					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in ReceiveThread()!");
-					break;
-				}
+					try
+					{
+						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+						// if the overlying client isn't able or forgets to call Stop() or Dispose().
+						// Therefore, only wait for a certain period and then poll the run flag again.
+						// The period can be quite long, as an event trigger will immediately resume.
+						if (!this.receiveThreadEvent.WaitOne(staticRandom.Next(50, 200)))
+							continue;
+					}
+					catch (AbandonedMutexException ex)
+					{
+						// The mutex should never be abandoned, but in case it nevertheless happens,
+						// at least output a debug message and gracefully exit the thread.
+						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in ReceiveThread()!");
+						break;
+					}
 
-				// Inner loop, runs as long as there is data in the receive queue.
-				// Ensure not to forward events during disposing anymore. Check 'IsDisposed' first!
-				while (!IsDisposed && this.receiveThreadRunFlag && (BytesAvailable > 0))
-				{
-					// Initially, yield to other threads before starting to read the queue, since it is very
-					// likely that more data is to be enqueued, thus resulting in larger chunks processed.
-					// Subsequently, yield to other threads to allow processing the data.
-					Thread.Sleep(TimeSpan.Zero);
+					// Inner loop, runs as long as there is data in the receive queue.
+					// Ensure not to forward events during disposing anymore. Check 'IsDisposed' first!
+					while (!IsDisposed && this.receiveThreadRunFlag && (BytesAvailable > 0))
+					{
+						// Initially, yield to other threads before starting to read the queue, since it is very
+						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
+						// Subsequently, yield to other threads to allow processing the data.
+						Thread.Sleep(TimeSpan.Zero);
 
-					OnDataReceived(EventArgs.Empty);
+						OnDataReceived(EventArgs.Empty);
 
-					// Note the Thread.Sleep(TimeSpan.Zero) above.
-				} // Inner loop
-			} // Outer loop
+						// Note the Thread.Sleep(TimeSpan.Zero) above.
+					} // Inner loop
+				} // Outer loop
+			}
+			catch (ThreadAbortException ex)
+			{
+				DebugEx.WriteException(GetType(), ex, "SendThread() has been aborted!");
+
+				// Should only happen when failing to 'friendly' join the thread on stopping!
+				// Don't try to set and notify a state change, or even restart the device!
+
+				// But reset the abort request, as 'ThreadAbortException' is a special exception
+				// that would be rethrown at the end of the catch block otherwise!
+
+				Thread.ResetAbort();
+			}
 
 			DebugThreadStateMessage("ReceiveThread() has terminated.");
 		}
