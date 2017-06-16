@@ -29,10 +29,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY;
 using MKY.Windows.Forms;
 
 #endregion
@@ -71,45 +71,27 @@ namespace YAT.View.Forms
 	/// <summary></summary>
 	public static class UnhandledExceptionHandler
 	{
-		private static Dictionary<Type, bool> staticExceptionTypesToIgnore = new Dictionary<Type, bool>(); // Default initial capacity is OK.
-		private static object staticExceptionTypesToIgnoreSyncObj = new object();
+		#region ExceptionHelper
+		//==========================================================================================
+		// ExceptionHelper
+		//==========================================================================================
+
+		private static ExceptionHelper staticExceptionHelper = new ExceptionHelper(typeof(UnhandledExceptionHandler).FullName);
 
 		/// <summary>
-		/// Resets the ignored exception type.
+		/// Ignores the given exception type.
 		/// </summary>
 		public static void IgnoreExceptionType(Type type)
 		{
-			lock (staticExceptionTypesToIgnoreSyncObj)
-			{
-				if (staticExceptionTypesToIgnore != null)
-				{
-					if (staticExceptionTypesToIgnore.ContainsKey(type))
-					{
-						staticExceptionTypesToIgnore[type] = true;
-						Trace.WriteLine(type + " activated/re-activated in list of ignored exceptions.");
-					}
-					else
-					{
-						staticExceptionTypesToIgnore.Add(type, true);
-						Trace.WriteLine(type + " added to list of ignored exceptions.");
-					}
-				}
-			}
+			staticExceptionHelper.IgnoreExceptionType(type);
 		}
 
 		/// <summary>
-		/// Resets the ignored exception type.
+		/// No longer ignores the given exception type.
 		/// </summary>
 		public static void RevertIgnoredExceptionType(Type type)
 		{
-			lock (staticExceptionTypesToIgnoreSyncObj)
-			{
-				if (staticExceptionTypesToIgnore != null)
-				{
-					if (staticExceptionTypesToIgnore.Remove(type)) // MSDN: "If ... does not contain ... specified key ... no exception is thrown.
-						Trace.WriteLine(type + " removed from list of ignored exceptions.");
-				}
-			}
+			staticExceptionHelper.RevertIgnoredExceptionType(type);
 		}
 
 		/// <summary>
@@ -121,26 +103,7 @@ namespace YAT.View.Forms
 		/// </remarks>
 		public static bool ExceptionTypeIsIgnored(Type type)
 		{
-			lock (staticExceptionTypesToIgnoreSyncObj)
-			{
-				if (staticExceptionTypesToIgnore != null)
-				{
-					foreach (var typeToIgnore in staticExceptionTypesToIgnore)
-					{
-						if (typeToIgnore.Value) // = type is activated.
-						{
-							if (typeToIgnore.Key.IsAssignableFrom(type)) // = base type is assignable from derived type?
-							{
-								Trace.WriteLine(type + " is being ignored.");
-								return (true);
-							}
-						}
-					}
-				}
-			}
-
-			Trace.WriteLine(type + " is not being ignored (yet).");
-			return (false);
+			return (staticExceptionHelper.ExceptionTypeIsIgnored(type));
 		}
 
 		/// <summary>
@@ -148,12 +111,10 @@ namespace YAT.View.Forms
 		/// </summary>
 		public static void TerminateExceptionIgnoring()
 		{
-			lock (staticExceptionTypesToIgnoreSyncObj)
-			{
-				staticExceptionTypesToIgnore = null;
-				Trace.WriteLine("No longer ignoring exceptions.");
-			}
+			staticExceptionHelper.TerminateExceptionIgnoring();
 		}
+
+		#endregion
 
 		/// <summary></summary>
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]

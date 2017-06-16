@@ -74,9 +74,9 @@ namespace YAT.View.Forms
 	public partial class About : Form
 	{
 		#region Information and Links
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Information and Links
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary></summary>
 		public About()
@@ -407,9 +407,9 @@ namespace YAT.View.Forms
 		#endregion
 
 		#region Manual Testing
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Manual Testing
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		[SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Justification = "Intentionally raising the most general exception to ensure that EVERY exception handler really catches it.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
