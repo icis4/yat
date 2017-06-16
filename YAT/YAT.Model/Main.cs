@@ -66,7 +66,7 @@ namespace YAT.Model
 		/// <summary>
 		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem();
+		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Main).FullName);
 
 		private CommandLineArgs commandLineArgs;
 		private MainStartArgs startArgs;
