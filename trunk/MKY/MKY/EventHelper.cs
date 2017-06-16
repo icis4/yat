@@ -187,6 +187,9 @@ namespace MKY
 			//======================================================================================
 
 			/// <summary></summary>
+			public string Owner { get; protected set; } // = null;
+
+			/// <summary></summary>
 			public EventHandlingMode EventHandling { get; set; } = EventHandlingDefault;
 
 			/// <summary></summary>
@@ -198,10 +201,37 @@ namespace MKY
 			/// <summary></summary>
 			public event EventHandler<UnhandledExceptionEventArgs> UnhandledExceptionOnNonMainThread;
 
-			/// <summary></summary>
+			/// <summary>
+			/// Initializes a new instance of the <see cref="Item"/> class that is by default configured as follows:
+			///  - <see cref="EventHandling"/>:
+			///     - <see cref="EventHandlingMode.InvokeAll"/>.
+			///  - <see cref="ExceptionHandling"/>:
+			///     - <see cref="ExceptionHandlingMode.RethrowAll"/> for "RELEASE" configurations.
+			///     - <see cref="ExceptionHandlingMode.DiscardAll"/> for "DEBUG" configurations.
+			///    The behavior can be configured by the local "RETHROW_UNHANDLED_EXCEPTIONS" definition.
+			/// </summary>
 			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 			public Item(EventHandlingMode eventHandling = EventHandlingDefault, ExceptionHandlingMode exceptionHandling = ExceptionHandlingDefault)
+				: this(null, eventHandling, exceptionHandling)
 			{
+			}
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="Item"/> class that is by default configured as follows:
+			///  - <see cref="EventHandling"/>:
+			///     - <see cref="EventHandlingMode.InvokeAll"/>.
+			///  - <see cref="ExceptionHandling"/>:
+			///     - <see cref="ExceptionHandlingMode.RethrowAll"/> for "RELEASE" configurations.
+			///     - <see cref="ExceptionHandlingMode.DiscardAll"/> for "DEBUG" configurations.
+			///    The behavior can be configured by the local "RETHROW_UNHANDLED_EXCEPTIONS" definition.
+			/// </summary>
+			/// <remarks>
+			/// Could be extended such that <paramref name="owner"/> could also be provided as callback method.
+			/// </remarks>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+			public Item(string owner, EventHandlingMode eventHandling = EventHandlingDefault, ExceptionHandlingMode exceptionHandling = ExceptionHandlingDefault)
+			{
+				Owner = owner;
 				EventHandling = eventHandling;
 				ExceptionHandling = exceptionHandling;
 			}
@@ -482,6 +512,14 @@ namespace MKY
 
 					var sb = new StringBuilder();
 
+					if (!string.IsNullOrEmpty(Owner))
+					{
+						sb.Append(typeof(EventHelper).Name);
+						sb.Append(" owned by ");
+						sb.Append(Owner);
+						sb.Append(": ");
+					}
+
 					if (isMainThread)
 						sb.Append("Exception in event callback synchronized from main thread!");
 					else
@@ -539,6 +577,14 @@ namespace MKY
 					// 5. The 'EventHelper' discards the exception.
 
 					var sb = new StringBuilder();
+
+					if (!string.IsNullOrEmpty(Owner))
+					{
+						sb.Append(typeof(EventHelper).Name);
+						sb.Append(" owned by ");
+						sb.Append(Owner);
+						sb.Append(": ");
+					}
 
 					if (isMainThread)
 						sb.Append("Exception in synchronous event callback on main thread!");
@@ -635,7 +681,7 @@ namespace MKY
 		private static Item staticItem = CreateItem();
 
 		/// <remarks>
-		/// Creates an <see cref="Item"/> that is typically configured as follows:
+		/// Creates an <see cref="Item"/> that is by default configured as follows:
 		///  - <see cref="EventHandling"/>:
 		///     - <see cref="EventHandlingMode.InvokeAll"/>.
 		///  - <see cref="ExceptionHandling"/>:
@@ -643,9 +689,26 @@ namespace MKY
 		///     - <see cref="ExceptionHandlingMode.DiscardAll"/> for "DEBUG" configurations.
 		///    The behavior can be configured by the local "RETHROW_UNHANDLED_EXCEPTIONS" definition.
 		/// </remarks>
-		public static Item CreateItem()
+		public static Item CreateItem(EventHandlingMode eventHandling = EventHandlingDefault, ExceptionHandlingMode exceptionHandling = ExceptionHandlingDefault)
 		{
-			return (new Item());
+			return (CreateItem(typeof(EventHelper).FullName, eventHandling, exceptionHandling));
+		}
+
+		/// <remarks>
+		/// Creates an <see cref="Item"/> that is by default configured as follows:
+		///  - <see cref="EventHandling"/>:
+		///     - <see cref="EventHandlingMode.InvokeAll"/>.
+		///  - <see cref="ExceptionHandling"/>:
+		///     - <see cref="ExceptionHandlingMode.RethrowAll"/> for "RELEASE" configurations.
+		///     - <see cref="ExceptionHandlingMode.DiscardAll"/> for "DEBUG" configurations.
+		///    The behavior can be configured by the local "RETHROW_UNHANDLED_EXCEPTIONS" definition.
+		/// </remarks>
+		/// <remarks>
+		/// Could be extended such that <paramref name="owner"/> could also be provided as callback method.
+		/// </remarks>
+		public static Item CreateItem(string owner, EventHandlingMode eventHandling = EventHandlingDefault, ExceptionHandlingMode exceptionHandling = ExceptionHandlingDefault)
+		{
+			return (new Item(owner, eventHandling, exceptionHandling));
 		}
 
 		/// <summary></summary>

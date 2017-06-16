@@ -602,7 +602,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem();
+		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Device).FullName);
 
 		private Guid classGuid;
 		private DeviceInfo deviceInfo;
