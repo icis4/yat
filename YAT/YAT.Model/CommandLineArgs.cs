@@ -490,7 +490,7 @@ namespace YAT.Model
 			}
 
 			// Tile:
-			if ((TileHorizontal == true) && (TileVertical == true)) // Must be mutual exclusive.
+			if (TileHorizontal && TileVertical) // Must be mutual exclusive.
 			{
 				TileHorizontal = false;
 				TileVertical   = false;
