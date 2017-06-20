@@ -545,7 +545,7 @@ namespace MKY.Win32
 			int bufferSize = 0;
 			IntPtr pDetailDataBuffer = IntPtr.Zero;
 			IntPtr pDeviceInfoSet = new IntPtr();
-			bool lastDevice = false;
+			bool isLastDevice = false;
 			int memberIndex = 0;
 			NativeTypes.SP_DEVICE_INTERFACE_DATA deviceInterfaceData = new NativeTypes.SP_DEVICE_INTERFACE_DATA();
 			List<string> devicePaths = new List<string>();
@@ -585,11 +585,11 @@ namespace MKY.Win32
 					}
 					else
 					{
-						lastDevice = true;
+						isLastDevice = true;
 					}
 					memberIndex++;
 				}
-				while (!((lastDevice == true)));
+				while (!isLastDevice);
 			}
 			catch
 			{
