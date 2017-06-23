@@ -89,7 +89,7 @@ namespace YAT.Model.Utilities
 		/// <summary></summary>
 		public RtfWriter(FileStream stream, FormatSettings settings)
 		{
-			CultureInfo ci = CultureInfo.CurrentCulture; // Do not use the UICulture as people are likely to use English on non-US computers too.
+			var ci = CultureInfo.CurrentCulture; // Do not use the UICulture as people are likely to use English on non-US computers too.
 
 			PaperSize paper;
 			if      (StringEx.EndsWithOrdinalIgnoreCase  (ci.Name, "-US"))		paper = PaperSize.Letter;
@@ -126,19 +126,19 @@ namespace YAT.Model.Utilities
 			this.errorFormat       = new FormatDescriptor(settings.ErrorFormat.FontStyle,       this.document.createColor(settings.ErrorFormat.Color),       this.document.createColor(settings.BackColor));
 
 			// Header:
-			RtfParagraph header = this.document.Header.addParagraph();
+			var header = this.document.Header.addParagraph();
 			header.Alignment = Align.Center;
 			header.setText("YAT Log");
 
 			// Footer:
-			RtfParagraph footer = this.document.Footer.addParagraph();
+			var footer = this.document.Footer.addParagraph();
 			footer.Alignment = Align.Center;
 			footer.setText(" / "); // First space is required! 0 inserts AFTER the character at index 0!
 			footer.addControlWord(0, RtfFieldControlWord.FieldType.Page);
 			footer.addControlWord(1, RtfFieldControlWord.FieldType.NumPages);
 
 			// Render the RTF beginning:
-			string rtf = this.document.renderBeginning();
+			var rtf = this.document.renderBeginning();
 
 			// Write the RTF beginning into the file:
 			this.writer = new StreamWriter(stream, Encoding.ASCII);
@@ -242,7 +242,7 @@ namespace YAT.Model.Utilities
 			{
 				// Analyze the line and split it into segments:
 				int position = 0;
-				StringBuilder text = new StringBuilder();
+				var text = new StringBuilder();
 				var segments = new List<Pair<DisplayElement, Pair<int, int>>>(line.Count); // Preset the required capacity to improve memory management.
 				foreach (DisplayElement element in line)
 				{
@@ -258,7 +258,7 @@ namespace YAT.Model.Utilities
 				try
 				{
 					// Set the paragraph text:
-					RtfParagraph par = this.document.addParagraph();
+					var par = this.document.addParagraph();
 					par.Alignment = this.alignment;
 					par.setText(text.ToString());
 
@@ -280,7 +280,7 @@ namespace YAT.Model.Utilities
 					}
 
 					// Render and write the RTF line into the file:
-					string rtf = this.document.renderContent();
+					var rtf = this.document.renderContent();
 					this.writer.Write(rtf);
 
 					// Remove the content from the RTF document:
@@ -315,7 +315,7 @@ namespace YAT.Model.Utilities
 			lock (writerSyncObj)
 			{
 				// Render and write the RTF ending into the file:
-				string rtf = this.document.renderEnding();
+				var rtf = this.document.renderEnding();
 				this.writer.Write(rtf);
 
 				// Close the file:

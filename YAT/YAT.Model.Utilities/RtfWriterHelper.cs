@@ -65,7 +65,7 @@ namespace YAT.Model.Utilities
 		/// </remarks>
 		public static int LinesToClipboard(List<DisplayLine> lines, Settings.FormatSettings settings)
 		{
-			RichTextBox richTextProvider = LinesToRichTextBox(lines, settings);
+			var richTextProvider = LinesToRichTextBox(lines, settings);
 			richTextProvider.SelectAll();
 			richTextProvider.Copy();
 
@@ -77,7 +77,7 @@ namespace YAT.Model.Utilities
 		/// </remarks>
 		public static int LinesToFile(List<DisplayLine> lines, string filePath, Settings.FormatSettings settings)
 		{
-			RichTextBox richTextProvider = LinesToRichTextBox(lines, settings);
+			var richTextProvider = LinesToRichTextBox(lines, settings);
 			richTextProvider.SaveFile(filePath, RichTextBoxStreamType.RichText);
 
 			return (lines.Count); // Assume success, an exception should otherwise be thrown above.
@@ -86,7 +86,8 @@ namespace YAT.Model.Utilities
 		/// <summary></summary>
 		internal static RichTextBox LinesToRichTextBox(List<DisplayLine> lines, Settings.FormatSettings settings)
 		{
-			RichTextBox richTextProvider = new RichTextBox();
+			var richTextProvider = new RichTextBox();
+			richTextProvider.Font      = settings.Font;
 			richTextProvider.BackColor = settings.BackColor;
 
 			foreach (DisplayLine line in lines)

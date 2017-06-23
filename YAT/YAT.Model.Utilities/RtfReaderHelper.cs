@@ -44,7 +44,7 @@ namespace YAT.Model.Utilities
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static int LinesFromRtfFile(string filePath, out string[] lines)
 		{
-			RichTextBox richTextProvider = new RichTextBox();
+			var richTextProvider = new RichTextBox();
 			using (FileStream fs = File.OpenRead(filePath))
 			{
 				richTextProvider.LoadFile(fs, RichTextBoxStreamType.RichText);

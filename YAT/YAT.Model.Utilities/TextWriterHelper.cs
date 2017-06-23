@@ -46,7 +46,7 @@ namespace YAT.Model.Utilities
 		/// </remarks>
 		public static int LinesToFile(List<DisplayLine> lines, string filePath, Settings.FormatSettings formatSettings)
 		{
-			RichTextBox richTextProvider = RtfWriterHelper.LinesToRichTextBox(lines, formatSettings);
+			var richTextProvider = RtfWriterHelper.LinesToRichTextBox(lines, formatSettings);
 			richTextProvider.SaveFile(filePath, RichTextBoxStreamType.UnicodePlainText);
 
 			return (lines.Count); // Assume success, an exception should otherwise be thrown above.
