@@ -936,16 +936,17 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			AssertNotDisposed();
-			
+			// See below why AssertNotDisposed() is not called on such basic method!
+
 			return (ToString(""));
 		}
 
 		/// <summary></summary>
 		public override string ToString(string indent)
 		{
-			AssertNotDisposed();
-			
+			if (IsDisposed)
+				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+
 			return (indent + "> Type: TextTerminal" + Environment.NewLine + base.ToString(indent));
 		}
 

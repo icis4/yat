@@ -269,7 +269,8 @@ namespace MKY.Time
 		/// </remarks>
 		public override string ToString()
 		{
-			AssertNotDisposed();
+			if (IsDisposed)
+				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
 
 			return (TimeSpanEx.FormatInvariantTimeSpan(TimeSpan, true, true));
 		}

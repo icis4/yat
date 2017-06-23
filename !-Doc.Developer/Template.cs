@@ -318,6 +318,9 @@ namespace YAT/*.<TODO>*/
 		/// </remarks>
 		public override string ToString()
 		{
+			if (IsDisposed)
+				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+
 			return ("TODO");
 		}
 

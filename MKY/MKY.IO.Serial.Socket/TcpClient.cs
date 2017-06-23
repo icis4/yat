@@ -1170,6 +1170,8 @@ namespace MKY.IO.Serial.Socket
 		/// </summary>
 		public override string ToString()
 		{
+			// See below why AssertNotDisposed() is not called on such basic method!
+
 			return (ToShortEndPointString());
 		}
 
@@ -1180,6 +1182,9 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
 		public virtual string ToShortEndPointString()
 		{
+			if (IsDisposed)
+				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+
 			return (this.remoteHost.ToEndpointAddressString() + ":" + this.remotePort);
 		}
 
