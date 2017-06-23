@@ -45,6 +45,8 @@ namespace YAT.Model.Utilities
 	/// </summary>
 	public class RtfPrinter : IDisposable
 	{
+		private Brush foreColorBrush;
+
 		private PrinterSettings settings;
 		private RichTextBox richTextProvider;
 		private StringReader reader;
@@ -138,13 +140,15 @@ namespace YAT.Model.Utilities
 		/// </exception>
 		public virtual void Print(List<DisplayLine> lines, Settings.FormatSettings formatSettings)
 		{
+			this.foreColorBrush = new SolidBrush(formatSettings.PortFormat.Color);
+
 			Print(RtfWriterHelper.LinesToRichTextBox(lines, formatSettings));
 		}
 
 		/// <remarks>
 		/// Pragmatic implementation of printing RTF. 'netrtfwriter' is only used for stream-based logging.
 		/// </remarks>
-		/// <exception cref="System.Drawing.Printing.InvalidPrinterException">
+		/// <exception cref="InvalidPrinterException">
 		/// The printer named in the <see cref="PrinterSettings.PrinterName"/> property does not exist.
 		/// </exception>
 		public virtual void Print(RichTextBox richTextProvider)
@@ -153,7 +157,7 @@ namespace YAT.Model.Utilities
 
 			this.reader = new StringReader(this.richTextProvider.Text);
 			try // This try-finally is an explicit "using (this.reader)", including resetting the field to null.
-			{
+			{   // Field is required because document_PrintPage must be able to access the reader object.
 				using (PrintDocument document = new PrintDocument())
 				{
 					document.PrintPage += new PrintPageEventHandler(document_PrintPage);
@@ -163,23 +167,25 @@ namespace YAT.Model.Utilities
 			}
 			finally
 			{
-				this.reader.Close();
+				this.reader.Close(); // MSDN: "Close() calls the Dispose() method passing a true value."
 				this.reader = null;
 			}
 		}
 
 		private void document_PrintPage(object sender, PrintPageEventArgs e)
 		{
+			float fontHeight = this.richTextProvider.Font.GetHeight(e.Graphics);
+
 			// Calculate the number of lines per page:
-			int linesPerPage = (int)(e.MarginBounds.Height / this.richTextProvider.Font.GetHeight(e.Graphics));
+			int linesPerPage = (int)(e.MarginBounds.Height / fontHeight);
 			int lineCount = 0;
 
 			// Print each line of the file:
 			string line = null;
 			while ((lineCount < linesPerPage) && ((line = this.reader.ReadLine()) != null))
 			{
-				float y = e.MarginBounds.Top + (lineCount * this.richTextProvider.Font.GetHeight(e.Graphics));
-				e.Graphics.DrawString(line, this.richTextProvider.Font, Brushes.Black, e.MarginBounds.Left, y, new StringFormat());
+				float y = e.MarginBounds.Top + (lineCount * fontHeight);
+				e.Graphics.DrawString(line, this.richTextProvider.Font, this.foreColorBrush, e.MarginBounds.Left, y, new StringFormat());
 				lineCount++;
 			}
 
