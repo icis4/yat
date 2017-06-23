@@ -690,7 +690,7 @@ namespace YAT.Model
 
 				var sb = new StringBuilder();
 
-				if (this.settingsRoot == null)
+				if ((this.settingsHandler == null) || (this.settingsRoot == null))
 				{
 					sb.Append("[");
 					sb.Append(IndicatedName);
@@ -2022,6 +2022,12 @@ namespace YAT.Model
 			{
 				// Status text request must be before closed event, closed event may close the view:
 				OnTimedStatusTextRequest("Terminal successfully closed.");
+
+				// Discard potential exceptions already before signalling the close! Required to
+				// prevent exceptions on still ongoing asynchronous callbacks trying to synchronize
+				// event callbacks onto the terminal form which is going to be closed/disposed by
+				// the handler of the 'Closed' event below!
+				this.eventHelper.DiscardAllExceptions();
 
 				OnClosed(new ClosedEventArgs(isWorkspaceClose));
 
@@ -4541,7 +4547,8 @@ namespace YAT.Model
 		/// </summary>
 		public override string ToString()
 		{
-			AssertNotDisposed();
+			if (IsDisposed)
+				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
 
 			return (Caption);
 		}

@@ -1175,6 +1175,12 @@ namespace YAT.Model
 			{
 				OnFixedStatusTextRequest("Exiting " + ApplicationEx.ProductName + "...");
 
+				// Discard potential exceptions already before signalling the close! Required to
+				// prevent exceptions on still ongoing asynchronous callbacks trying to synchronize
+				// event callbacks onto the main form which is going to be closed/disposed by
+				// the handler of the 'Exited' event below!
+				this.eventHelper.DiscardAllExceptions();
+
 				// Signal the exit:
 				OnExited(this.result);
 
