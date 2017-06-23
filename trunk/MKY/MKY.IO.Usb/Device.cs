@@ -985,6 +985,9 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public override string ToString()
 		{
+			if (IsDisposed)
+				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+
 			return (this.deviceInfo.ToString());
 		}
 
@@ -993,6 +996,9 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public virtual string ToShortString()
 		{
+			if (IsDisposed)
+				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+
 			return (this.deviceInfo.ToShortString());
 		}
 

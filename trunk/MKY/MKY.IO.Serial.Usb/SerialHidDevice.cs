@@ -1348,18 +1348,25 @@ namespace MKY.IO.Serial.Usb
 		/// </summary>
 		public override string ToString()
 		{
+			// See below why AssertNotDisposed() is not called on such basic method!
+
 			return (ToDeviceInfoString());
 		}
 
 		/// <summary></summary>
 		public virtual string ToShortString()
 		{
+			// See below why AssertNotDisposed() is not called on such basic method!
+
 			return (ToShortDeviceInfoString());
 		}
 
 		/// <summary></summary>
 		public virtual string ToDeviceInfoString()
 		{
+			if (IsDisposed)
+				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+
 			IO.Usb.DeviceInfo di = DeviceInfo;
 			if (di != null)
 				return (di.ToString());
@@ -1370,6 +1377,9 @@ namespace MKY.IO.Serial.Usb
 		/// <summary></summary>
 		public virtual string ToShortDeviceInfoString()
 		{
+			if (IsDisposed)
+				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+
 			IO.Usb.DeviceInfo di = DeviceInfo;
 			if (di != null)
 				return (di.ToShortString());

@@ -2459,12 +2459,17 @@ namespace MKY.IO.Serial.SerialPort
 		/// </summary>
 		public override string ToString()
 		{
+			// See below why AssertNotDisposed() is not called on such basic method!
+
 			return (ToNameString());
 		}
 
 		/// <summary></summary>
 		public virtual string ToNameString()
 		{
+			if (IsDisposed)
+				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+
 			Ports.SerialPortId id = PortId;
 			if (id != null)
 				return (id.Name);

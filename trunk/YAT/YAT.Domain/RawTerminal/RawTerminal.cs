@@ -821,7 +821,7 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			AssertNotDisposed();
+			// See below why AssertNotDisposed() is not called on such basic method!
 
 			return (ToString(""));
 		}
@@ -829,7 +829,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ToString(string indent)
 		{
-			AssertNotDisposed();
+			if (IsDisposed)
+				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
 
 			var sb = new StringBuilder();
 			lock (this.repositorySyncObj)
@@ -851,6 +852,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ToShortIOString()
 		{
+			if (IsDisposed)
+				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+
 			if      (this.io != null)
 				return (this.io.ToString());
 			else if (this.ioSettings != null)
