@@ -64,12 +64,12 @@ namespace MKY
 					if (exceptionTypesToIgnore.ContainsKey(type))
 					{
 						exceptionTypesToIgnore[type] = true;
-						TraceMessage(type + " activated/re-activated in list of ignored exceptions.");
+						DebugMessage(type + " activated/re-activated in list of ignored exceptions.");
 					}
 					else
 					{
 						exceptionTypesToIgnore.Add(type, true);
-						TraceMessage(type + " added to list of ignored exceptions.");
+						DebugMessage(type + " added to list of ignored exceptions.");
 					}
 				}
 			}
@@ -85,7 +85,7 @@ namespace MKY
 				if (exceptionTypesToIgnore != null)
 				{
 					if (exceptionTypesToIgnore.Remove(type)) // MSDN: "If ... does not contain ... specified key ... no exception is thrown.
-						TraceMessage(type + " removed from list of ignored exceptions.");
+						DebugMessage(type + " removed from list of ignored exceptions.");
 				}
 			}
 		}
@@ -109,7 +109,7 @@ namespace MKY
 						{
 							if (typeToIgnore.Key.IsAssignableFrom(type)) // = base type is assignable from derived type?
 							{
-								TraceMessage(type + " is being ignored.");
+								DebugMessage(type + " is being ignored.");
 								return (true);
 							}
 						}
@@ -117,7 +117,7 @@ namespace MKY
 				}
 			}
 
-			TraceMessage(type + " is not being ignored (yet).");
+			DebugMessage(type + " is not being ignored (yet).");
 			return (false);
 		}
 
@@ -129,14 +129,14 @@ namespace MKY
 			lock (exceptionTypesToIgnoreSyncObj)
 			{
 				exceptionTypesToIgnore = null;
-				TraceMessage("No longer ignoring exceptions.");
+				DebugMessage("No longer ignoring exceptions.");
 			}
 		}
 
-		[Conditional("TRACE")]
-		private void TraceMessage(string message)
+		[Conditional("DEBUG")]
+		private void DebugMessage(string message)
 		{
-			Trace.WriteLine
+			Debug.WriteLine
 			(
 				string.Format
 				(
