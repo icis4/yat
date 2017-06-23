@@ -1175,6 +1175,14 @@ namespace YAT.Model
 				else
 					OnTimedStatusTextRequest("Workspace successfully closed.");
 
+				// Discard potential exceptions already before signalling the close! Required to
+				// prevent exceptions on still ongoing asynchronous callbacks trying to synchronize
+				// event callbacks onto the workspace form which is going to be closed/disposed by
+				// the handler of the 'Closed' event below!
+				// Note there so far is no "workspace" form. Still be prepared for potential future
+				// changes, or applications that implement a different view.
+				this.eventHelper.DiscardAllExceptions();
+
 				OnClosed(new ClosedEventArgs(isMainExit));
 
 				// The workspace shall dispose of itself to free all resources for sure. It must be
