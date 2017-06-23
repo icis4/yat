@@ -480,7 +480,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				AssertNotDisposed();
 
-				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
 					return (this.iXOnXOffHelper.InputIsXOn);
 				else
 					return (true);
@@ -496,7 +496,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				AssertNotDisposed();
 
-				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
 					return (this.iXOnXOffHelper.OutputIsXOn);
 				else
 					return (true);
@@ -512,7 +512,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				AssertNotDisposed();
 
-				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
 					return (this.iXOnXOffHelper.SentXOnCount);
 				else
 					return (0);
@@ -528,7 +528,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				AssertNotDisposed();
 
-				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
 					return (this.iXOnXOffHelper.SentXOffCount);
 				else
 					return (0);
@@ -544,7 +544,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				AssertNotDisposed();
 
-				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
 					return (this.iXOnXOffHelper.ReceivedXOnCount);
 				else
 					return (0);
@@ -560,7 +560,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				AssertNotDisposed();
 
-				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
 					return (this.iXOnXOffHelper.ReceivedXOffCount);
 				else
 					return (0);
@@ -1374,7 +1374,7 @@ namespace MKY.IO.Serial.SerialPort
 						}
 
 						// Handle XOff state:
-						if (this.settings.Communication.FlowControlUsesXOnXOff && !OutputIsXOn)
+						if (this.settings.Communication.FlowControlManagesXOnXOffManually && !OutputIsXOn) // XOn/XOff information is not available for 'Software' or 'Combined'!
 						{
 							// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.Usb.SerialHidDevice too!
 							// Changes here must most likely be applied there too.
@@ -1517,8 +1517,16 @@ namespace MKY.IO.Serial.SerialPort
 									isCtsInactiveOldAndErrorHasBeenSignaled = true;
 								}
 							}
-							else if (this.settings.Communication.FlowControlUsesXOnXOff && !OutputIsXOn)
+							else if (this.settings.Communication.FlowControlManagesXOnXOffManually && !OutputIsXOn)
 							{
+								if (!isXOffStateOldAndErrorHasBeenSignaled)
+								{
+									InvokeXOffErrorEvent();
+									isXOffStateOldAndErrorHasBeenSignaled = true;
+								}
+							}
+							else if (this.settings.Communication.FlowControlUsesXOnXOff) // Handle independent on '!OutputIsXOn' because XOn/XOff
+							{                                                            // information not available for 'Software' or 'Combined'!
 								if (!isXOffStateOldAndErrorHasBeenSignaled)
 								{
 									InvokeXOffErrorEvent();
@@ -1531,7 +1539,7 @@ namespace MKY.IO.Serial.SerialPort
 								// Such may happen when too much data is sent too quickly.
 							}
 						}
-						else
+						else // !isWriteTimeout
 						{
 							isCtsInactiveOldAndErrorHasBeenSignaled = false;
 							  isXOffStateOldAndErrorHasBeenSignaled = false;
@@ -1631,7 +1639,7 @@ namespace MKY.IO.Serial.SerialPort
 				DebugTransmissionMessage("...writing done.");
 
 				// Handle XOn/XOff if required:
-				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
 				{
 					if (XOnXOff.IsXOnOrXOffByte(b))
 					{
@@ -1644,6 +1652,9 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				DebugEx.WriteException(GetType(), ex, "Timeout while writing to port!");
 				isWriteTimeout = true;
+
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
+					this.iXOnXOffHelper.OutputIsXOn = false;
 			}
 			catch (InvalidOperationException ex)
 			{
@@ -1727,7 +1738,7 @@ namespace MKY.IO.Serial.SerialPort
 						effectiveChunkData.Add(b);
 
 						// Handle XOn/XOff if required:
-						if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
+						if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
 						{
 							if (XOnXOff.IsXOnOrXOffByte(b))
 							{
@@ -1746,6 +1757,9 @@ namespace MKY.IO.Serial.SerialPort
 				DebugEx.WriteException(GetType(), ex, "Timeout while writing to port!");
 				effectiveChunkData = null;
 				isWriteTimeout = true;
+
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
+					this.iXOnXOffHelper.OutputIsXOn = false;
 			}
 			catch (InvalidOperationException ex)
 			{
@@ -1907,7 +1921,7 @@ namespace MKY.IO.Serial.SerialPort
 							this.receiveQueue.Enqueue(b);
 
 							// Handle output XOn/XOff state:
-							if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
+							if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
 							{
 								if (b == XOnXOff.XOnByte)
 								{
