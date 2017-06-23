@@ -46,7 +46,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using System.Threading;
 using System.Xml.Serialization;
+
+using MKY.Diagnostics;
 
 #endregion
 
@@ -323,6 +326,16 @@ namespace MKY.IO.Ports
 								{
 									portId.IsInUse = false;
 								}
+							}
+							catch (ThreadAbortException ex)
+							{
+								DebugEx.WriteException(this.GetType(), ex, "DetectPortsInUse() has detected a thread exception. It is ignored here but re-thrown.");
+
+								// Do not activate 'InUse', as a thread abort doesn't indicate that a port is in use.
+								// An abort may happen when e.g. cancelling the 'SelectionWorker.DoWork()' method.
+								// In such a case, re-throw so it can be handled by that method.
+
+								throw; // Re-throw!
 							}
 							catch
 							{
