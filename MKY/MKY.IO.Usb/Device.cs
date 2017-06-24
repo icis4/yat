@@ -817,7 +817,12 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected virtual string Path
 		{
-			get { return (this.deviceInfo.Path); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.deviceInfo.Path);
+			}
 		}
 
 		#region Properties > IDeviceInfo
@@ -831,7 +836,12 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public virtual DeviceInfo Info
 		{
-			get { return (this.deviceInfo); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.deviceInfo);
+			}
 		}
 
 		/// <summary>
@@ -840,49 +850,89 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public virtual string InfoString
 		{
-			get { return (this.deviceInfo.ToString()); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.deviceInfo.ToString());
+			}
 		}
 
 		/// <summary></summary>
 		public virtual int VendorId
 		{
-			get { return (this.deviceInfo.VendorId); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.deviceInfo.VendorId);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual string VendorIdString
 		{
-			get { return (this.deviceInfo.VendorIdString); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.deviceInfo.VendorIdString);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual int ProductId
 		{
-			get { return (this.deviceInfo.ProductId); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.deviceInfo.ProductId);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual string ProductIdString
 		{
-			get { return (this.deviceInfo.ProductIdString); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.deviceInfo.ProductIdString);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual string Manufacturer
 		{
-			get { return (this.deviceInfo.Manufacturer); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.deviceInfo.Manufacturer);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual string Product
 		{
-			get { return (this.deviceInfo.Product); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.deviceInfo.Product);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual string Serial
 		{
-			get { return (this.deviceInfo.Serial); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.deviceInfo.Serial);
+			}
 		}
 
 		#endregion
@@ -906,7 +956,12 @@ namespace MKY.IO.Usb
 		/// </returns>
 		public bool IsConnected
 		{
-			get { return (this.isConnected); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.isConnected);
+			}
 		}
 
 		#endregion
