@@ -377,7 +377,7 @@ namespace YAT.Model
 							(
 								"Unable to open the previous workspace file",
 								filePath,
-								"Confirm with [OK] to create a new empty workspace, or [Cancel] to restore the workspace file and try again."
+								"Confirm with [OK] to create a new empty workspace, or [Cancel] to let you restore the workspace file and try again."
 							);
 
 							var dr = OnMessageInputRequest

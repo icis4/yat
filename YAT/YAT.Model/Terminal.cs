@@ -1553,8 +1553,18 @@ namespace YAT.Model
 		{
 			// AssertNotDisposed() is called by 'Save(...)' below.
 
-			return (SaveConsiderately(true, true, true)); // Save even if not changed since saving
-		}                                                 // all terminals was explicitly requested.
+			bool isCancelled;
+			return (SaveConsiderately(true, true, true, false, out isCancelled)); // Save even if not changed since saving
+		}                                                                         // all terminals was explicitly requested.
+
+		/// <summary>
+		/// Sliently tries to save terminal to file, i.e. without any user interaction.
+		/// </summary>
+		public virtual bool TrySaveConsideratelyWithoutUserInteraction(bool autoSaveIsAllowed)
+		{
+			bool isCancelled;
+			return (SaveConsiderately(autoSaveIsAllowed, false, false, false, out isCancelled));
+		}
 
 		/// <summary>
 		/// This method implements the logic that is needed when saving, opposed to the method
@@ -1566,9 +1576,13 @@ namespace YAT.Model
 		/// </param>
 		/// <param name="userInteractionIsAllowed">Indicates whether user interaction is allowed.</param>
 		/// <param name="saveEvenIfNotChanged">Indicates whether save must happen even if not changed.</param>
-		internal virtual bool SaveConsiderately(bool autoSaveIsAllowed, bool userInteractionIsAllowed, bool saveEvenIfNotChanged)
+		/// <param name="canBeCancelled">Indicates whether save can be cancelled.</param>
+		/// <param name="isCancelled">Indicates whether save has been cancelled.</param>
+		public virtual bool SaveConsiderately(bool autoSaveIsAllowed, bool userInteractionIsAllowed, bool saveEvenIfNotChanged, bool canBeCancelled, out bool isCancelled)
 		{
 			AssertNotDisposed();
+
+			isCancelled = false;
 
 			autoSaveIsAllowed = EvaluateWhetherAutoSaveIsAllowedIndeed(autoSaveIsAllowed);
 
@@ -1612,15 +1626,12 @@ namespace YAT.Model
 
 			if (!SettingsFileIsWritable || SettingsFileNoLongerExists)
 			{
-				if (!this.settingsRoot.ExplicitHaveChanged) {
-					return (true); // Skip save of implicit settings as it is currently not feasible.
-				}
-				else if (userInteractionIsAllowed) {
-					return (RequestRestrictedSaveAsFromUser());
+				if (userInteractionIsAllowed) {
+					return (RequestRestrictedSaveAsFromUser(canBeCancelled, out isCancelled));
 				}
 				else {
-					return (false); // Let save fail if file is restricted.
-				}
+					return (this.settingsRoot.ExplicitHaveChanged); // Let save of explicit change fail if file is restricted.
+				}                                                   // Skip save of implicit change as save is currently not feasible.
 			}
 
 			// -------------------------------------------------------------------------------------
@@ -1687,8 +1698,10 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual bool RequestRestrictedSaveAsFromUser()
+		protected virtual bool RequestRestrictedSaveAsFromUser(bool canBeCancelled, out bool isCancelled)
 		{
+			isCancelled = false;
+
 			string reason;
 			if (!SettingsFileIsWritable)
 				reason = "The file is write-protected.";
@@ -1697,15 +1710,17 @@ namespace YAT.Model
 			else
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'SaveAs'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
-			string message =
-				"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
-				reason + " Would you like to save the file at another location or cancel?";
+			var message = new StringBuilder();
+			message.AppendLine("Unable to save file");
+			message.AppendLine(this.settingsHandler.SettingsFilePath);
+			message.AppendLine();
+			message.Append    (reason + " Would you like to save the file at another location?");
 
 			var dr = OnMessageInputRequest
 			(
-				message,
+				message.ToString(),
 				"File Error",
-				MessageBoxButtons.YesNoCancel,
+				(canBeCancelled ? MessageBoxButtons.YesNoCancel : MessageBoxButtons.YesNo),
 				MessageBoxIcon.Question
 			);
 
@@ -1719,7 +1734,8 @@ namespace YAT.Model
 					return (true);
 
 				default:
-					OnTimedStatusTextRequest("Cancelled!");
+					// No need for TextRequest("Cancelled!") as parent will handle cancel.
+					isCancelled = true;
 					return (false);
 			}
 		}
@@ -1936,7 +1952,7 @@ namespace YAT.Model
 			// -------------------------------------------------------------------------------------
 
 			if (!success && doSave)
-				success = SaveConsiderately(autoSaveIsAllowed, false, false); // Try auto save, i.e. no user interaction.
+				success = TrySaveConsideratelyWithoutUserInteraction(autoSaveIsAllowed); // Try auto save.
 
 			// -------------------------------------------------------------------------------------
 			// If not successfully saved so far, evaluate next step according to rules above:
@@ -1955,8 +1971,8 @@ namespace YAT.Model
 
 				switch (dr)
 				{
-					case DialogResult.Yes: success = SaveConsiderately(true, true, true); break;
-					case DialogResult.No:  success = true;                                break;
+					case DialogResult.Yes: success = Save(); break;
+					case DialogResult.No:  success = true;   break;
 
 					default:
 						success = false; break; // Also covers 'DialogResult.Cancel'.
