@@ -482,95 +482,170 @@ namespace MKY.IO.Usb
 		[CLSCompliant(false)]
 		public virtual HidUsagePage UsagePage
 		{
-			get { return (this.usagePage); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.usagePage);
+			}
 		}
 
 		/// <summary></summary>
 		[CLSCompliant(false)]
 		public virtual HidUsageId UsageId
 		{
-			get { return (this.usageId); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.usageId);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual int InputReportByteLength
 		{
-			get { return (this.inputReportByteLength); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.inputReportByteLength);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual int OutputReportByteLength
 		{
-			get { return (this.outputReportByteLength); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.outputReportByteLength);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual int FeatureReportByteLength
 		{
-			get { return (this.featureReportByteLength); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.featureReportByteLength);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual int LinkCollectionNodes
 		{
-			get { return (this.linkCollectionNodes); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.linkCollectionNodes);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual int InputButtonCaps
 		{
-			get { return (this.inputButtonCaps); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.inputButtonCaps);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual int InputValueCaps
 		{
-			get { return (this.inputValueCaps); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.inputValueCaps);
+			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
 		public virtual int InputDataIndices
 		{
-			get { return (this.inputDataIndices); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.inputDataIndices);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual int OutputButtonCaps
 		{
-			get { return (this.outputButtonCaps); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.outputButtonCaps);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual int OutputValueCaps
 		{
-			get { return (this.outputValueCaps); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.outputValueCaps);
+			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
 		public virtual int OutputDataIndices
 		{
-			get { return (this.outputDataIndices); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.outputDataIndices);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual int FeatureButtonCaps
 		{
-			get { return (this.featureButtonCaps); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.featureButtonCaps);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual int FeatureValueCaps
 		{
-			get { return (this.featureValueCaps); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.featureValueCaps);
+			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
 		public virtual int FeatureDataIndices
 		{
-			get { return (this.featureDataIndices); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.featureDataIndices);
+			}
 		}
 
 		#endregion
