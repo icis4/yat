@@ -22,7 +22,10 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
+using System.IO;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization.Formatters.Binary;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
 // MKY.Types for consistency with the System namespace.
@@ -63,6 +66,23 @@ namespace MKY
 		public static new bool Equals(object objA, object objB)
 		{
 			return (object.Equals(objA, objB));
+		}
+
+		/// <summary>
+		/// Returns a deep-cloned instance of the given object.
+		/// </summary>
+		/// <typeparam name="T">
+		/// The type of the object, must be decorated with the <see cref="SerializableAttribute"/>.
+		/// </typeparam>
+		public static T CreateDeepCloneOfSerializableItem<T>(T obj)
+		{
+			using (var ms = new MemoryStream())
+			{
+				var bf = new BinaryFormatter();
+				bf.Serialize(ms, obj);
+				ms.Position = 0;
+				return ((T)bf.Deserialize(ms));
+			}
 		}
 	}
 }
