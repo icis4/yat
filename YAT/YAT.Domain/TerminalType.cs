@@ -155,7 +155,7 @@ namespace YAT.Domain
 			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" is an invalid terminal type string! String must one of the underlying enumeration designations."));
+				throw (new FormatException(@"""" + s + @""" is an invalid terminal type string! String must be one of the underlying enumeration designations."));
 		}
 
 		/// <remarks>

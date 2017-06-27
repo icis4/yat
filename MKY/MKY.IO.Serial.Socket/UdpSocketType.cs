@@ -141,7 +141,7 @@ namespace MKY.IO.Serial.Socket
 			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" is an invalid socket host type string! String must one of the underlying enumeration designations."));
+				throw (new FormatException(@"""" + s + @""" is an invalid socket host type string! String must be one of the underlying enumeration designations."));
 		}
 
 		/// <remarks>

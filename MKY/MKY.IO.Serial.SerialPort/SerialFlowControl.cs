@@ -179,7 +179,7 @@ namespace MKY.IO.Serial.SerialPort
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" is an invalid serial flow control string! String must one of the underlying enumeration designations."));
+				throw (new FormatException(@"""" + s + @""" is an invalid serial flow control string! String must be one of the underlying enumeration designations."));
 		}
 
 		/// <remarks>

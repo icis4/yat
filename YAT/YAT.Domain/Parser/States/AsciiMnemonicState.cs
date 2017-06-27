@@ -119,7 +119,7 @@ namespace YAT.Domain.Parser
 		{
 			using (MemoryStream bytes = new MemoryStream())
 			{
-				string[] items = s.Split(' ');
+				string[] items = s.Split();
 				foreach (string item in items)
 				{
 					if (item.Length > 0)
