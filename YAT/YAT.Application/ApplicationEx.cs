@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Gamma 3 Development Version 1.99.53
+// YAT 2.0 Gamma 3 Version 1.99.70
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -42,17 +42,20 @@ namespace YAT
 		/// <summary>The product name.</summary>
 		public static readonly string ProductName = System.Windows.Forms.Application.ProductName;
 
-		/////// <summary>The product name postfix that describes the build.</summary>
-		////public static readonly string ProductBuildName = " Final";
+	/////// <summary>The product name postfix that describes the build.</summary>
+	////public static readonly string ProductBuildName = " Final";
 
 		/// <summary>The product name postfix that describes the build.</summary>
-		////public static readonly string ProductBuildName = " Gamma 3''";
+		public static readonly string ProductBuildName = " Gamma 3";
 
-		/////// <summary>The product name postfix that describes the build.</summary>
-		public static readonly string ProductBuildName = " Gamma 3 Development";
+	/////// <summary>The product name postfix that describes the build.</summary>
+	////public static readonly string ProductBuildName = " Gamma 3''";
 
-		/////// <summary>The product name postfix that describes the build.</summary>
-		////public static readonly string ProductBuildName = " Gamma 3 Preliminary";
+	/////// <summary>The product name postfix that describes the build.</summary>
+	////public static readonly string ProductBuildName = " Gamma 3 Development";
+
+	/////// <summary>The product name postfix that describes the build.</summary>
+	////public static readonly string ProductBuildName = " Gamma 3 Preliminary";
 
 		/// <summary>The product name including the build description.</summary>
 		public static readonly string ProductNameAndBuildName = ProductName + ProductBuildName;
@@ -92,10 +95,10 @@ namespace YAT
 		public static readonly string PrerequisiteFramework = ".NET Framework 3.5 Service Pack 1";
 
 		/// <summary>The Windows operating system prerequisite.</summary>
-		public static readonly string PrerequisiteWindowsOS = "Windows 2000 and later";
+		public static readonly string PrerequisiteWindowsOS = "Windows 2000 or later";
 
 		/// <summary>The other operating system prerequisite.</summary>
-		public static readonly string PrerequisiteOtherOS = "Linux with Mono 3.12.x and later";
+		public static readonly string PrerequisiteOtherOS = "Linux with Mono 3.12.x or later";
 	}
 }
 
