@@ -2133,7 +2133,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_85412467A78144FA8CF14E8C7F099701"
             {
-            "SourcePath" = "8:Resources\\Banner.bmp"
+            "SourcePath" = "8:!-Graphics\\Banner.bmp"
             "TargetName" = "8:Banner.bmp"
             "Tag" = "8:"
             "Folder" = "8:_496FC97D37D54E46A255B3AF89EF605E"

@@ -38,7 +38,7 @@ InstallAware
 
 WiX
  + Likely to be very powerful
- - Steep learning curve, XML, XML, XML... => NOT REALLY AN OPTION
+ - Steep learning curve, XML, XML, XML...
 
 WiX Edit
  + Looks promising at first
