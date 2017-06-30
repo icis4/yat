@@ -165,7 +165,7 @@
 			// label_ExplicitDefaultRadix
 			// 
 			this.label_ExplicitDefaultRadix.AutoSize = true;
-			this.label_ExplicitDefaultRadix.Location = new System.Drawing.Point(8, 16);
+			this.label_ExplicitDefaultRadix.Location = new System.Drawing.Point(13, 16);
 			this.label_ExplicitDefaultRadix.Name = "label_ExplicitDefaultRadix";
 			this.label_ExplicitDefaultRadix.Size = new System.Drawing.Size(74, 13);
 			this.label_ExplicitDefaultRadix.TabIndex = 0;
@@ -318,7 +318,7 @@
 			// label_File
 			// 
 			this.label_File.AutoSize = true;
-			this.label_File.Location = new System.Drawing.Point(84, 16);
+			this.label_File.Location = new System.Drawing.Point(87, 16);
 			this.label_File.Name = "label_File";
 			this.label_File.Size = new System.Drawing.Size(48, 13);
 			this.label_File.TabIndex = 1;
@@ -478,7 +478,7 @@
 			// label_Data
 			// 
 			this.label_Data.AutoSize = true;
-			this.label_Data.Location = new System.Drawing.Point(134, 16);
+			this.label_Data.Location = new System.Drawing.Point(135, 16);
 			this.label_Data.Name = "label_Data";
 			this.label_Data.Size = new System.Drawing.Size(52, 13);
 			this.label_Data.TabIndex = 2;
@@ -489,7 +489,7 @@
 			// 
 			this.label_Description.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Description.AutoSize = true;
-			this.label_Description.Location = new System.Drawing.Point(402, 16);
+			this.label_Description.Location = new System.Drawing.Point(401, 16);
 			this.label_Description.Name = "label_Description";
 			this.label_Description.Size = new System.Drawing.Size(63, 13);
 			this.label_Description.TabIndex = 3;

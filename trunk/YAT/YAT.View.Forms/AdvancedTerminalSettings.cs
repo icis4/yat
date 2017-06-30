@@ -935,9 +935,9 @@ namespace YAT.View.Forms
 			checkBox_ShowConnectTime.Checked       = this.settingsInEdit.Terminal.Status.ShowConnectTime;
 			checkBox_ShowCountAndRate.Checked      = this.settingsInEdit.Terminal.Status.ShowCountAndRate;
 
-			checkBox_ShowFlowControlCount.Enabled = isSerialPort;
+			checkBox_ShowFlowControlCount.Enabled = this.settingsInEdit.Terminal.IO.FlowControlIsInUse;
 			checkBox_ShowFlowControlCount.Checked = this.settingsInEdit.Terminal.Status.ShowFlowControlCount;
-			checkBox_ShowBreakCount.Enabled       = isSerialPort;
+			checkBox_ShowBreakCount.Enabled       = (isSerialPort && this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates);
 			checkBox_ShowBreakCount.Checked       = this.settingsInEdit.Terminal.Status.ShowBreakCount;
 
 			checkBox_PortLineBreak.Checked      = this.settingsInEdit.Terminal.Display.PortLineBreakEnabled;

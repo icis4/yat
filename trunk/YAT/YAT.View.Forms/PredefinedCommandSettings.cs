@@ -301,7 +301,18 @@ namespace YAT.View.Forms
 
 		private void InitializeControls(bool useExplicitDefaultRadix)
 		{
-			label_ExplicitDefaultRadix.Visible = useExplicitDefaultRadix;
+			if (!useExplicitDefaultRadix) // Default
+			{
+				label_ExplicitDefaultRadix.Visible = false;
+				label_File.Left = 6;
+				label_Data.Left = 54;
+			}
+			else
+			{
+				label_ExplicitDefaultRadix.Visible = true;
+				label_File.Left = 87;
+				label_Data.Left = 135;
+			}
 
 			this.predefinedCommandSettingsSetLabels = new List<Label>(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); // Preset the required capacity to improve memory management.
 			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_1);
