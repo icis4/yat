@@ -4090,18 +4090,10 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool SwitchLogOff()
 		{
-			return SwitchLogOff(true);
-		}
-
-		/// <summary></summary>
-		public virtual bool SwitchLogOff(bool saveStatus)
-		{
 			try
 			{
 				this.log.SwitchOff();
-
-				if (saveStatus)
-					this.settingsRoot.LogIsOn = false;
+				this.settingsRoot.LogIsOn = false;
 
 				return (true);
 			}
@@ -4134,12 +4126,12 @@ namespace YAT.Model
 
 				foreach (string filePath in this.log.FilePaths)
 				{
-					if (ExtensionHelper.IsFileTypeThatCanOnlyBeOpenedWhenCompleted(filePath))
+					if (this.log.IsOn && ExtensionHelper.IsFileTypeThatCanOnlyBeOpenedWhenCompleted(filePath))
 					{
 						string message =
-							@"Log file """ + Path.GetFileName(filePath) + @""" is still incomplete and may not yet be openable. It is recommended to close the log before opening this file." +
+							@"Log is still on and """ + Path.GetFileName(filePath) + @""" is incomplete." +
 							Environment.NewLine + Environment.NewLine +
-							"Do you still want to open the file?";
+							"Shall the log be switched off before opening the file? [recommended]";
 
 						var dr = OnMessageInputRequest
 						(
@@ -4149,19 +4141,18 @@ namespace YAT.Model
 							MessageBoxIcon.Warning
 						);
 
-						if (dr == DialogResult.No)
+						if (dr == DialogResult.Yes)
 						{
-							success = false;
-							continue; // Continue with next file.
+							SwitchLogOff();
 						}
+
+						// dr == DialogResult.No => Open the incomplete file anyway.
 
 						if (dr == DialogResult.Cancel)
 						{
 							success = false;
 							break; // Cancel all files.
 						}
-
-						// DialogResult.Yes = still open file.
 					}
 
 					Exception ex;

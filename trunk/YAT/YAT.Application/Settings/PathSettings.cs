@@ -33,6 +33,18 @@ namespace YAT.Application.Settings
 	/// <summary></summary>
 	public class PathSettings : MKY.Settings.SettingsItem, IEquatable<PathSettings>
 	{
+		/// <summary></summary>
+		public static readonly string MainFilesDefault    = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + Path.DirectorySeparatorChar + ApplicationEx.ProductName;
+
+		/// <summary></summary>
+		public static readonly string SendFilesDefault    = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + Path.DirectorySeparatorChar + ApplicationEx.ProductName;
+
+		/// <summary></summary>
+		public static readonly string LogFilesDefault     = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + Path.DirectorySeparatorChar + ApplicationEx.ProductName;
+
+		/// <summary></summary>
+		public static readonly string MonitorFilesDefault = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + Path.DirectorySeparatorChar + ApplicationEx.ProductName;
+
 		private string mainFiles;
 		private string sendFiles;
 		private string logFiles;
@@ -74,12 +86,10 @@ namespace YAT.Application.Settings
 		{
 			base.SetMyDefaults();
 
-			string productSubfolder = Path.DirectorySeparatorChar + ApplicationEx.ProductName;
-
-			MainFiles    = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + productSubfolder;
-			SendFiles    = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + productSubfolder;
-			LogFiles     = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + productSubfolder;
-			MonitorFiles = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + productSubfolder;
+			MainFiles    = MainFilesDefault;
+			SendFiles    = SendFilesDefault;
+			LogFiles     = LogFilesDefault;
+			MonitorFiles = MonitorFilesDefault;
 		}
 
 		#region Properties
