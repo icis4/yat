@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Gamma 3 Development Version 1.99.53
+// YAT 2.0 Gamma 3 Version 1.99.70
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -130,7 +130,7 @@ namespace YAT.View.Forms
 			linkLabel_Description.Text += textAfter;
 
 			// Platform:
-			linkLabel_Platform.Text = "For " + ApplicationEx.PrerequisiteFramework + " on " + ApplicationEx.PrerequisiteWindowsOS + " or " + ApplicationEx.PrerequisiteOtherOS +  "." + Environment.NewLine +
+			linkLabel_Platform.Text = "For " + ApplicationEx.PrerequisiteFramework + " on " + ApplicationEx.PrerequisiteWindowsOS + /* " or " + ApplicationEx.PrerequisiteOtherOS + */ "." + Environment.NewLine +
 			                          "Currently running on .NET Runtime " + Environment.Version + " (CLR version).";
 
 			// Serial monitoring:
