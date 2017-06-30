@@ -161,6 +161,8 @@ namespace YAT.Log.Settings
 		{
 			base.SetMyDefaults();
 
+			ApplicationSettings.LocalUserSettings.Paths.LogFiles = Application.Settings.PathSettings.LogFilesDefault;
+
 			RootPath     = ApplicationSettings.LocalUserSettings.Paths.LogFiles;
 			RootFileName = ApplicationEx.ProductName + "-Log";
 
