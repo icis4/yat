@@ -1172,7 +1172,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_folder_explorer_16x16;
 			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.Name = "toolStripButton_MainTool_Terminal_Log_OpenDirectory";
 			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.Text = "Open log folder in explorer...";
+			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.Text = "Open log folder in file browser...";
 			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Log_OpenDirectory_Click);
 			// 
 			// toolStripMenuItem_MainTool_Separator_7
