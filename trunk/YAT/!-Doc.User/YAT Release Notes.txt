@@ -33,31 +33,28 @@ Contents
 1. Installation
 ====================================================================================================
 
-Compact (.msi) -vs- with .NET runtime (.zip) package
-----------------------------------------------------------------------------------------------------
+YAT uses .NET 3.5 SP1. The YAT installer verifies that .NET is installed on the target computer.
+The YAT installer also verifies that Windows Installer 4.5 is installed on the target computer.
 
-YAT uses the .NET Framework 3.5 SP1. The installer verifies .NET is installed on the computer.
+First, chose the most appropriate package:
+ > For up-to-date systems, use the compact package "...(32-bit).zip" or "...(64-bit).zip".
+   (Windows Installer and .NET are already installed on up-to-date systems.)
+ > For offline installation, use a full package "..._with_.NET...zip".
+   (Windows Installer and .NET are included for installation.)
+ > For Windows XP, use a binary distribution.
+   (The YAT installer is no longer compatible with Windows XP.)
 
-A) If .NET is already installed, run "YAT-...(32-bit).msi" or "YAT-...(64-bit).msi":
-    > Installer verifies .NET is installed.
-    > Installer installs YAT, older versions of YAT are automatically replaced.
+Unzip the package to a temporary location.
 
-B) If .NET is not yet installed and the computer is online, run "YAT-...(32-bit).msi"
-   or "YAT-...(64-bit).msi" to download and install .NET from Microsoft's online servers:
-    > Installer downloads and installs .NET.
-    > Installer installs YAT, older versions of YAT are automatically replaced.
+Then, run the ".msi" if Windows Installer is installed, otherwise "setup.exe".
+ > Installer checks prerequisites and installs what is missing.
+ > Installer installs YAT. Older versions of YAT are automatically replaced.
 
-C) If .NET and/or Windows Installer is not yet installed, download one of the .zip packages and
-   install the required components from offline resources contained in the .zip package:
-    1. Unzip the package to a temporary location.
-    2. Run .msi if Windows Installer is installed on the computer, otherwise "setup.exe".
-        > Installer checks whether .NET is installed and installs if necessary.
-        > Installer installs YAT, older versions of YAT are automatically replaced.
+For installation of a binary distribution, refer to the instructions inside that package.
 
-You can also download .NET from Microsoft at <https://www.microsoft.com/en-us/download> or by
-googling for "Microsoft Download .Net Framework 3.5 SP1 Full".
-
-Installing .NET requires administrator permissions.
+You can also download .NET and/or Windows Installer from <https://www.microsoft.com/en-us/download>
+or by googling for "Microsoft Download .NET Framework 3.5 SP1 Full" or "Windows Installer 4.5".
+Installing .NET and/or Windows Installer requires administrator permissions.
 
 
 x86 (32-bit) -vs- x64 (64-bit)
@@ -124,15 +121,19 @@ Important changes:
 - Automatically generated backup files are now placed into standard temporary folder (feat. #275).
 - Internal event handling refined, resulting in increased stability on stopping/closing/exiting
   (related to feature request #173 and bugs #310, #339).
+- SourceForge file structure simplified, split into "Current" and "Previous" (feature request #278).
+- Binary distribution added because installer is no longer compatible with Win XP (bugs #318, #369).
 - Started to migrate test environment from NUnit V2 to V3, but reverted to 2.6.4 again (feat. #293).
 - NUnit tests migrated from classic to constraint model (related to feature request #293).
 - NUnit framework assemblies placed into solution structure instead of referring to installation.
 
 Fixed bugs:
 - UDP/IP PairSocket enabled to communicate with a remote computer (bug #368).
+- TCP/IP sockets no longer block when exiting too quickly (bug #341).
 - Potential application freeze when clearing monitors/repositories fixed (bug #361).
 - Potential 'NullReferenceException' in binary terminal settings fixed (bug #362).
 - Option to change endianness of multi-byte encoded charactes fixed (bug #343).
+- Presets of serial COM port settings work again (bug #372).
 - Wrong active/inactive state of log menu items fixed (bug #366).
 - Catch-all of unhandled synchronous exceptions fixed (bug #310) as well as
   catch-all of unhandled asynchronous exceptions improved (feature request #173).
