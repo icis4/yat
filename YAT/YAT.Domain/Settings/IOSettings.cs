@@ -232,6 +232,21 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlIgnore]
+		public virtual bool FlowControlIsInUse
+		{
+			get
+			{
+				switch (this.ioType)
+				{
+					case IOType.SerialPort:   return (this.serialPort.Communication.FlowControlIsInUse);
+					case IOType.UsbSerialHid: return (this.usbSerialHidDevice.FlowControlIsInUse);
+					default:                  return (false);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
 		public virtual bool FlowControlUsesXOnXOff
 		{
 			get

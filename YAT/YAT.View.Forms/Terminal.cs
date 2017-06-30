@@ -864,7 +864,7 @@ namespace YAT.View.Forms
 
 			// Flow control count:
 			bool showFlowControlCount = this.settingsRoot.Status.ShowFlowControlCount;
-			toolStripMenuItem_TerminalMenu_View_FlowControlCount.Enabled            = (isSerialPort || (isUsbSerialHid && this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff));
+			toolStripMenuItem_TerminalMenu_View_FlowControlCount.Enabled            = this.settingsRoot.Terminal.IO.FlowControlIsInUse;
 			toolStripMenuItem_TerminalMenu_View_FlowControlCount_ShowCount.Checked  = showFlowControlCount;
 			toolStripMenuItem_TerminalMenu_View_FlowControlCount_ResetCount.Enabled = showFlowControlCount;
 
@@ -1904,7 +1904,7 @@ namespace YAT.View.Forms
 			bool isUsbSerialHid = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsUsbSerialHid;
 
 			// Flow control count:
-			bool showFlowControlOptions = (isSerialPort || (isUsbSerialHid && this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff));
+			bool showFlowControlOptions = this.settingsRoot.Terminal.IO.FlowControlIsInUse;
 			bool showFlowControlCount = this.settingsRoot.Status.ShowFlowControlCount;
 			contextMenuStrip_Status_FlowControlCount.Enabled            = showFlowControlOptions;
 			contextMenuStrip_Status_FlowControlCount_ShowCount.Visible  = showFlowControlOptions; // Workaround to .NET Windows.Forms bug (child items visible even when parent item is disabled).

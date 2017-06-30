@@ -269,22 +269,14 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// Returns <c>true</c> if flow control is active, i.e. the receiver can pause the sender.
+		/// Returns <c>true</c> if flow control is in use.
 		/// </summary>
-		public virtual bool FlowControlIsActive
-		{
-			get { return (!FlowControlIsInactive); }
-		}
-
-		/// <summary>
-		/// Returns <c>true</c> if flow control is inactive, i.e. the receiver cannot pause the sender.
-		/// </summary>
-		public virtual bool FlowControlIsInactive
+		public virtual bool FlowControlIsInUse
 		{
 			get
 			{
-				return ((this.flowControl == SerialFlowControl.None) ||
-						(this.flowControl == SerialFlowControl.RS485));
+				return ((this.flowControl != SerialFlowControl.None) &&
+						(this.flowControl != SerialFlowControl.RS485));
 			}
 		}
 

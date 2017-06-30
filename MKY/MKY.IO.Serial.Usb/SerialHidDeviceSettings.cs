@@ -234,19 +234,11 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary>
-		/// Returns <c>true</c> if flow control is active, i.e. the receiver can pause the sender.
+		/// Returns <c>true</c> if flow control is in use.
 		/// </summary>
-		public virtual bool FlowControlIsActive
+		public virtual bool FlowControlIsInUse
 		{
-			get { return (!FlowControlIsInactive); }
-		}
-
-		/// <summary>
-		/// Returns <c>true</c> if flow control is inactive, i.e. the receiver cannot pause the sender.
-		/// </summary>
-		public virtual bool FlowControlIsInactive
-		{
-			get { return (this.flowControl == SerialHidFlowControl.None); }
+			get { return (this.flowControl != SerialHidFlowControl.None); }
 		}
 
 		/// <summary>
