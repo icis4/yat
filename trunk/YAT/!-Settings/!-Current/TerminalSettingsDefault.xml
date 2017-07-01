@@ -125,8 +125,7 @@
         <MaxBytePerLineCount>1000</MaxBytePerLineCount>
         <PortLineBreakEnabled>true</PortLineBreakEnabled>
         <DirectionLineBreakEnabled>true</DirectionLineBreakEnabled>
-        <InfoSeparator>
-        </InfoSeparator>
+        <InfoSeparator> </InfoSeparator>
         <InfoEnclosure>()</InfoEnclosure>
       </Display>
       <CharReplace>
@@ -284,7 +283,7 @@
       </BackFormat>
     </Format>
     <Log>
-      <RootPath>C:\Users\Matthias\Documents</RootPath>
+      <RootPath>C:\Users\Matthias\Documents\YAT</RootPath>
       <RootFileName>YAT-Log</RootFileName>
       <RawLogTx>false</RawLogTx>
       <RawLogBidir>false</RawLogBidir>
