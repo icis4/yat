@@ -50,7 +50,7 @@ namespace MKY.Xml.Serialization
 				var xws = new XmlWriterSettings();
 				xws.Indent = true;
 
-				using (var xw = XmlWriter.Create(sw, xws)) // Use dedicated XML writer to e.g. preserve whitespace!
+				using (var xw = XmlWriter.Create(sw, xws)) // Use dedicated XML writer to e.g. preserve whitespace in XML content!
 				{
 					var serializer = new XmlSerializer(type);
 					serializer.Serialize(xw, obj);
@@ -68,7 +68,7 @@ namespace MKY.Xml.Serialization
 			object settings = null;
 			using (var sr = new StreamReader(filePath, Encoding.UTF8, true))
 			{
-				using (var xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace!
+				using (var xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace in XML content!
 				{
 					var serializer = new XmlSerializer(type);
 					settings = serializer.Deserialize(xr);
@@ -85,7 +85,7 @@ namespace MKY.Xml.Serialization
 			object settings = null;
 			using (var sr = new StreamReader(filePath, Encoding.UTF8, true))
 			{
-				using (var xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace!
+				using (var xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace in XML content!
 				{
 					var serializer = new TolerantXmlSerializer(type);
 					settings = serializer.Deserialize(xr);
@@ -102,7 +102,7 @@ namespace MKY.Xml.Serialization
 			object settings = null;
 			using (var sr = new StreamReader(filePath, Encoding.UTF8, true))
 			{
-				using (var xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace!
+				using (var xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace in XML content!
 				{
 					var serializer = new AlternateTolerantXmlSerializer(type, alternateXmlElements);
 					settings = serializer.Deserialize(xr);

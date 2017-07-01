@@ -368,6 +368,8 @@ namespace MKY.Xml.Serialization
 #if (WRITE_SCHEMAS_TO_FILES)
 		private void WriteSchemasToFiles(XmlSchemaSet schemas, string name)
 		{
+			=> Migrate to XmlSchemaEx.ToFile() when using this code the next time.
+
 			int n = schemas.Schemas().Count;
 			int i = 0;
 			foreach (var schema in schemas.Schemas())
@@ -395,6 +397,9 @@ namespace MKY.Xml.Serialization
 #if (WRITE_DOCUMENTS_TO_FILES)
 		private void WriteDocumentToFile(XmlDocument document, string name)
 		{
+			=> Migrate to XmlDocumentEx.ToFile() when using this code the next time.
+			=> Attention! No way found to preserve whitespace in XML content when writing a type-unspecified XML document! See XmlDocumentEx.ToFile() for details!
+
 			string filePath = MKY.IO.Temp.MakeTempFilePath(this.type, name, ".xml");
 			using (var sw = new StreamWriter(filePath, false, Encoding.UTF8))
 			{
