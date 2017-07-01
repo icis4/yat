@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.19
+// YAT 2.0 Gamma 3 Version 1.99.70
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -22,14 +22,16 @@
 //==================================================================================================
 
 using System;
-using System.Text;
 using System.Windows.Forms;
 
-namespace MKY.Windows.Forms.Test
+namespace YAT.Test
 {
 	/// <summary>
-	/// Test application for <see cref="MKY.Windows.Forms"/>.
+	/// This is the test main dummy for the YAT test projects.
 	/// </summary>
+	/// <remarks>
+	/// See "!-ReadMe.txt" for more information.
+	/// </remarks>
 	public static class TestMain
 	{
 		/// <summary>
@@ -38,20 +40,13 @@ namespace MKY.Windows.Forms.Test
 		[STAThread]
 		private static void Main()
 		{
-			var sb = new StringBuilder();
-			sb.AppendLine("Note that this test application can be used with ENABLE_HORIZONTAL_AUTO_SCROLL enabled in MKY.Windows.Forms.ListBoxEx.");
-			sb.AppendLine();
-			sb.AppendLine("To fully enable ENABLE_HORIZONTAL_AUTO_SCROLL, lines #281 and #282 of MKY.Windows.Forms.Test.WindowsFormsTest.Designer have to be un-commented.");
-			sb.AppendLine();
-			sb.AppendLine("You may also run this test application without ENABLE_HORIZONTAL_AUTO_SCROLL enabled.");
-
-			var dr = MessageBox.Show(sb.ToString(), "Warning related to ENABLE_HORIZONTAL_AUTO_SCROLL", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-			if (dr != DialogResult.OK)
-				return;
-
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new WindowsFormsTest());
+			MessageBox.Show
+			(
+				@"Note that this application is only a dummy for testing purposes. See ""!-ReadMe.txt"" for more information.",
+				"Information",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information
+			);
 		}
 	}
 }
