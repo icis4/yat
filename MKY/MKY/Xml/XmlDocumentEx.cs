@@ -23,7 +23,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
@@ -59,30 +58,20 @@ namespace MKY.Xml
 		{
 			// Save the resulting document into a string:
 			var sb = new StringBuilder();
-			using (var writer = XmlWriter.Create(sb)) // Unlike file serialization, string serialization will be UTF-16 encoded!
-			{                                         // Use dedicated XML writer to e.g. preserve whitespace!
-				document.Save(writer);
+			using (var xw = XmlWriter.Create(sb)) // Unlike file serialization, string serialization will be UTF-16 encoded!
+			{                                     // Use dedicated XML writer to e.g. preserve whitespace in XML content!
+				document.Save(xw);
 			}
 
 			// Deserialize that string into an object tree:
 			using (var sr = new StringReader(sb.ToString()))
 			{
-				using (var xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace!
+				using (var xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace in XML content!
 				{
 					var serializer = new XmlSerializer(type);
 					return (serializer.Deserialize(xr));
 				}
 			}
-		}
-
-		/// <summary>
-		/// Creates and returns the default document of the given type.
-		/// </summary>
-		/// <param name="type">The type to be used.</param>
-		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Emphasize type.")]
-		public static XmlDocument CreateDefaultDocument(Type type)
-		{
-			return (CreateDefaultDocument(type, null));
 		}
 
 		/// <summary>
@@ -122,7 +111,7 @@ namespace MKY.Xml
 			// Serialize the empty object tree into a string:
 			var sb = new StringBuilder();
 			using (var xw = XmlWriter.Create(sb)) // Unlike file serialization, string serialization will be UTF-16 encoded!
-			{                                     // Use dedicated XML writer to e.g. preserve whitespace!
+			{                                     // Use dedicated XML writer to e.g. preserve whitespace in XML content!
 				var serializer = new XmlSerializer(type);
 				serializer.Serialize(xw, obj);
 			}
@@ -153,6 +142,34 @@ namespace MKY.Xml
 			defaultDocument.Validate(null);
 
 			return (defaultDocument);
+		}
+
+		/// <summary>
+		/// Writes the given XML document to the given path and file name.
+		/// 
+		/// !!! ATTENTION !!!
+		/// 
+		/// No way found to preserve whitespace in XML content when writing a type-unspecified XML document!
+		/// Thus, opposed to <see cref="Serialization.XmlSerializerEx.SerializeToFile"/>,
+		/// this method does *NOT* preserve whitespace in XML content!
+		/// </summary>
+		/// <param name="document">The document.</param>
+		/// <param name="path">The path.</param>
+		/// <param name="fileNameWithoutExtension">Name of the intended file.</param>
+		/// <param name="fileExtension">Extension of the file.</param>
+		public static void ToFile(XmlDocument document, string path, string fileNameWithoutExtension, string fileExtension = ".xml")
+		{
+			string filePath = path + fileNameWithoutExtension + (!string.IsNullOrEmpty(fileExtension) ? fileExtension : "");
+			using (var sw = new StreamWriter(filePath, false, Encoding.UTF8))
+			{
+				var xws = new XmlWriterSettings();
+				xws.Indent = true;
+
+				using (var xw = XmlWriter.Create(sw, xws)) // Use dedicated XML writer to e.g. preserve whitespace in XML content!
+				{
+					document.Save(xw);
+				}
+			}
 		}
 	}
 }

@@ -125,7 +125,7 @@
         <MaxBytePerLineCount>1000</MaxBytePerLineCount>
         <PortLineBreakEnabled>true</PortLineBreakEnabled>
         <DirectionLineBreakEnabled>true</DirectionLineBreakEnabled>
-        <InfoSeparator> </InfoSeparator>
+        <InfoSeparator> </InfoSeparator><!-- Attention! No way found to preserve whitespace in XML content when writing a type-unspecified XML document! See XmlDocumentEx.ToFile() for details! -->
         <InfoEnclosure>()</InfoEnclosure>
       </Display>
       <CharReplace>

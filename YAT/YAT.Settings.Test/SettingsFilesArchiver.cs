@@ -74,9 +74,9 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void ArchiveLocalUserSettings()
 		{
-			XmlDocument document = XmlDocumentEx.CreateDefaultDocument(typeof(LocalUserSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
-			ArchiveSchema (StaticPaths.Path, "LocalUserSettingsSchema",  document);
-			ArchiveDefault(StaticPaths.Path, "LocalUserSettingsDefault", document);
+			var document = XmlDocumentEx.CreateDefaultDocument(typeof(LocalUserSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
+			ArchiveSchema (document, StaticPaths.Path, "LocalUserSettingsSchema");
+			ArchiveDefault(document, StaticPaths.Path, "LocalUserSettingsDefault");
 		}
 
 		/// <summary></summary>
@@ -86,9 +86,9 @@ namespace YAT.Settings.Test
 			// Terminal settings may rely on properly loaded applications settings.
 			SelectiveTestSetUp();
 
-			XmlDocument document = XmlDocumentEx.CreateDefaultDocument(typeof(TerminalSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
-			ArchiveSchema (StaticPaths.Path, "TerminalSettingsSchema",  document);
-			ArchiveDefault(StaticPaths.Path, "TerminalSettingsDefault", document);
+			var document = XmlDocumentEx.CreateDefaultDocument(typeof(TerminalSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
+			ArchiveSchema (document, StaticPaths.Path, "TerminalSettingsSchema");
+			ArchiveDefault(document, StaticPaths.Path, "TerminalSettingsDefault");
 
 			SelectiveTestTearDown();
 		}
@@ -100,9 +100,9 @@ namespace YAT.Settings.Test
 			// Workspace settings may rely on properly loaded applications settings.
 			SelectiveTestSetUp();
 
-			XmlDocument document = XmlDocumentEx.CreateDefaultDocument(typeof(WorkspaceSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
-			ArchiveSchema (StaticPaths.Path, "WorkspaceSettingsSchema",  document);
-			ArchiveDefault(StaticPaths.Path, "WorkspaceSettingsDefault", document);
+			var document = XmlDocumentEx.CreateDefaultDocument(typeof(WorkspaceSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
+			ArchiveSchema (document, StaticPaths.Path, "WorkspaceSettingsSchema");
+			ArchiveDefault(document, StaticPaths.Path, "WorkspaceSettingsDefault");
 
 			SelectiveTestTearDown();
 		}
@@ -129,86 +129,38 @@ namespace YAT.Settings.Test
 			ApplicationSettings.CloseAndDispose();
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private static void ArchiveSchema(string path, string fileName, XmlDocument document)
+		private static void ArchiveSchema(XmlDocument document, string path, string intendedFileNameWithoutExtension)
 		{
-			try
+			XmlSchemaEx.ToFile(document, path, intendedFileNameWithoutExtension);
+
+			// Attention:
+			// All YAT settings schema consists of two schemas:
+			//  > A GUID extension to http://microsoft.com/wsdl/types/ (~ 1 kB)
+			//  > The settings schema itself (>> 1 kB)
+			// However, the order of the archived schemas is random! Therefore, a size check
+			// is done here, and the files are swapped if needed. This ensures that file commits
+			// to SVN will not result in unnecessary diffs.
+			if (document.Schemas.Schemas().Count >= 2)
 			{
-				int n = document.Schemas.Schemas().Count;
-				int i = 0;
-				foreach (XmlSchema schema in document.Schemas.Schemas())
+				DirectoryInfo di = new DirectoryInfo(path);
+				FileInfo[] fis = di.GetFiles(intendedFileNameWithoutExtension + "-?.xsd");
+
+				if (fis.Length >= 2)
 				{
-					string filePath;
-					if (n <= 1)
-						filePath = path + fileName + ".xsd";
-					else
-						filePath = path + fileName + "-" + i + ".xsd";
-
-					using (var sw = new StreamWriter(filePath, false, Encoding.UTF8))
+					if (fis[0].Length > fis[1].Length)
 					{
-						schema.Write(sw);
-					}
-					Trace.WriteLine
-					(
-						"For archiving purposes, schema written to" + Environment.NewLine +
-						@"""" + filePath + @""""
-					);
+						string filePath0 = path + intendedFileNameWithoutExtension + "-0.xsd";
+						string filePath1 = path + intendedFileNameWithoutExtension + "-1.xsd";
 
-					i++;
-				}
-
-				// Attention:
-				// All YAT settings schema consists of two schemas:
-				//  > A GUID extension to http://microsoft.com/wsdl/types/ (~ 1 kB)
-				//  > The settings schema itself (>> 1 kB)
-				// However, the order of the archived schemas is random! Therefore, a size check
-				// is done here, and the files are swapped if needed. This ensures that file commits
-				// to SVN will not result in unnecessary diffs.
-				if (n >= 2)
-				{
-					DirectoryInfo di = new DirectoryInfo(path);
-					FileInfo[] fis = di.GetFiles(fileName + "-?.xsd");
-
-					if (fis.Length >= 2)
-					{
-						if (fis[0].Length > fis[1].Length)
-						{
-							string filePath0 = path + fileName + "-0.xsd";
-							string filePath1 = path + fileName + "-1.xsd";
-
-							FileEx.Swap(filePath0, filePath1);
-						}
+						FileEx.Swap(filePath0, filePath1);
 					}
 				}
-			}
-			catch (Exception ex)
-			{
-				TraceEx.WriteException(typeof(SettingsFilesArchiver), ex);
-				Assert.Fail("XML serialize error: " + ex.Message);
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private static void ArchiveDefault(string path, string fileName, XmlDocument document)
+		private static void ArchiveDefault(XmlDocument document, string path, string fileName)
 		{
-			try
-			{
-				string filePath = path + fileName + ".xml";
-				using (var sw = new StreamWriter(filePath, false, Encoding.UTF8))
-				{
-					document.Save(sw);
-				}
-				Trace.WriteLine
-				(
-					"For archiving purposes, default written to" + Environment.NewLine +
-					@"""" + filePath + @""""
-				);
-			}
-			catch (Exception ex)
-			{
-				TraceEx.WriteException(typeof(SettingsFilesArchiver), ex);
-				Assert.Fail("XML serialize error: " + ex.Message);
-			}
+			XmlDocumentEx.ToFile(document, path, fileName);
 		}
 
 		#endregion
