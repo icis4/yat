@@ -118,7 +118,9 @@ namespace MKY.Xml
 
 			// Load that string into an XML document that serves as base for new documents:
 			var defaultDocument = new XmlDocument();
+			defaultDocument.PreserveWhitespace = true;
 			defaultDocument.LoadXml(sb.ToString());
+			defaultDocument.PreserveWhitespace = false;
 
 			// Retrieve default schema of the given type:
 			var reflectionImporter = new XmlReflectionImporter();
@@ -146,12 +148,6 @@ namespace MKY.Xml
 
 		/// <summary>
 		/// Writes the given XML document to the given path and file name.
-		/// 
-		/// !!! ATTENTION !!!
-		/// 
-		/// No way found to preserve whitespace in XML content when writing a type-unspecified XML document!
-		/// Thus, opposed to <see cref="Serialization.XmlSerializerEx.SerializeToFile"/>,
-		/// this method does *NOT* preserve whitespace in XML content!
 		/// </summary>
 		/// <param name="document">The document.</param>
 		/// <param name="path">The path.</param>

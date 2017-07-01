@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Text;
 using System.Windows.Forms;
 
 namespace YAT.Test
@@ -40,13 +41,12 @@ namespace YAT.Test
 		[STAThread]
 		private static void Main()
 		{
-			MessageBox.Show
-			(
-				@"Note that this application is only a dummy for testing purposes. See ""!-ReadMe.txt"" for more information.",
-				"Information",
-				MessageBoxButtons.OK,
-				MessageBoxIcon.Information
-			);
+			var sb = new StringBuilder();
+			sb.AppendLine("Note that this console application is only a dummy for testing purposes.");
+			sb.AppendLine();
+			sb.Append    (@"See ""!-ReadMe.txt"" for more information.");
+
+			MessageBox.Show(sb.ToString(), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 	}
 }

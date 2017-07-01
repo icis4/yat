@@ -43,7 +43,7 @@ namespace MKY.Windows.Forms.Test
 			sb.AppendLine();
 			sb.AppendLine("To fully enable ENABLE_HORIZONTAL_AUTO_SCROLL, lines #281 and #282 of MKY.Windows.Forms.Test.WindowsFormsTest.Designer have to be un-commented.");
 			sb.AppendLine();
-			sb.AppendLine("You may also run this test application without ENABLE_HORIZONTAL_AUTO_SCROLL enabled.");
+			sb.Append    ("You may also run this test application without ENABLE_HORIZONTAL_AUTO_SCROLL enabled.");
 
 			var dr = MessageBox.Show(sb.ToString(), "Warning related to ENABLE_HORIZONTAL_AUTO_SCROLL", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 			if (dr != DialogResult.OK)
