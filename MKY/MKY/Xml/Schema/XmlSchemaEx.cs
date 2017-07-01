@@ -25,6 +25,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Text;
+using System.Xml;
 using System.Xml.Schema;
 
 namespace MKY.Xml.Schema
@@ -79,6 +81,76 @@ namespace MKY.Xml.Schema
 		{
 			if (args.Severity == XmlSeverityType.Error)
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Validation of the XML schema for a GUID should never have failed!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
+
+		/// <summary>
+		/// Writes the XML schema of the default document of the given XML document to the given path and file name.
+		/// </summary>
+		/// <remarks>
+		/// If the document contains multiple schemas, multiple files will be saved.
+		/// </remarks>
+		/// <param name="type">The type.</param>
+		/// <param name="path">The path.</param>
+		/// <param name="intendedFileNameWithoutExtension">Name of the intended file.</param>
+		/// <param name="fileExtension">Extension of the file.</param>
+		public static void ToFile(Type type, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
+		{
+			var document = XmlDocumentEx.CreateDefaultDocument(type);
+			ToFile(document, path, intendedFileNameWithoutExtension, fileExtension);
+		}
+
+		/// <summary>
+		/// Writes the XML schema of the given XML document to the given path and file name.
+		/// </summary>
+		/// <remarks>
+		/// If the document contains multiple schemas, multiple files will be saved.
+		/// </remarks>
+		/// <param name="document">The document.</param>
+		/// <param name="path">The path.</param>
+		/// <param name="intendedFileNameWithoutExtension">Name of the intended file.</param>
+		/// <param name="fileExtension">Extension of the file.</param>
+		public static void ToFile(XmlDocument document, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
+		{
+			int n = document.Schemas.Schemas().Count;
+			int i = 0;
+			foreach (XmlSchema schema in document.Schemas.Schemas())
+			{
+				ToFile(schema, path, intendedFileNameWithoutExtension, n, i, fileExtension);
+
+				i++;
+			}
+		}
+
+		/// <summary>
+		/// Writes the given XML schema to the given path and file name.
+		/// </summary>
+		/// <remarks>
+		/// If the number of schemas is greater than 1, the effective file name will be postfixed with <paramref name="i"/>.
+		/// </remarks>
+		/// <param name="schema">The schema.</param>
+		/// <param name="path">The path.</param>
+		/// <param name="intendedFileNameWithoutExtension">Name of the intended file.</param>
+		/// <param name="n">The number of schemas to save in total.</param>
+		/// <param name="i">The index of the current schema to save.</param>
+		/// <param name="fileExtension">Extension of the file.</param>
+		public static void ToFile(XmlSchema schema, string path, string intendedFileNameWithoutExtension, int n = 1, int i = 0, string fileExtension = ".xsd")
+		{
+			string effectiveFilePath;
+			if (n <= 1)
+				effectiveFilePath = path + Path.DirectorySeparatorChar + intendedFileNameWithoutExtension + (!string.IsNullOrEmpty(fileExtension) ? fileExtension : "");
+			else
+				effectiveFilePath = path + Path.DirectorySeparatorChar + intendedFileNameWithoutExtension + "-" + i + (!string.IsNullOrEmpty(fileExtension) ? fileExtension : "");
+
+			using (var sw = new StreamWriter(effectiveFilePath, false, Encoding.UTF8))
+			{
+				var xws = new XmlWriterSettings();
+				xws.Indent = true;
+
+				using (var xw = XmlWriter.Create(sw, xws)) // Use dedicated XML writer to e.g. preserve whitespace in XML content!
+				{
+					schema.Write(xw);
+				}
+			}
 		}
 	}
 }

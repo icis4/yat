@@ -34,6 +34,8 @@ using System.IO;
 using System.Text;
 using System.Threading;
 
+using MKY.Xml.Schema;
+
 using YAT.Domain;
 
 #endregion
@@ -340,7 +342,7 @@ namespace YAT.Model.Utilities
 				Type type = typeof(List<XmlTransferRawLine>);
 				string directory = Path.GetDirectoryName(schemaFilePath);
 				string fileName = Path.GetFileNameWithoutExtension(schemaFilePath);
-				XmlHelper.SchemaToFile(type, directory, fileName);
+				XmlSchemaEx.ToFile(type, directory, fileName);
 			}
 		}
 
@@ -407,7 +409,7 @@ namespace YAT.Model.Utilities
 				Type type = typeof(List<XmlTransferNeatLine>);
 				string directory = Path.GetDirectoryName(schemaFilePath);
 				string fileName = Path.GetFileNameWithoutExtension(schemaFilePath);
-				XmlHelper.SchemaToFile(type, directory, fileName);
+				XmlSchemaEx.ToFile(type, directory, fileName);
 			}
 		}
 
