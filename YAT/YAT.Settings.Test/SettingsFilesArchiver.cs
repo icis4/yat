@@ -70,11 +70,6 @@ namespace YAT.Settings.Test
 		// Archive
 		//==========================================================================================
 
-		#region Archive > LocalUserSettings
-		//------------------------------------------------------------------------------------------
-		// Archive > LocalUserSettings
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
 		[Test]
 		public virtual void ArchiveLocalUserSettings()
@@ -83,13 +78,6 @@ namespace YAT.Settings.Test
 			ArchiveSchema (StaticPaths.Path, "LocalUserSettingsSchema",  document);
 			ArchiveDefault(StaticPaths.Path, "LocalUserSettingsDefault", document);
 		}
-
-		#endregion
-
-		#region Archive > TerminalSettings
-		//------------------------------------------------------------------------------------------
-		// Archive > TerminalSettings
-		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		[Test]
@@ -105,13 +93,6 @@ namespace YAT.Settings.Test
 			SelectiveTestTearDown();
 		}
 
-		#endregion
-
-		#region Archive > WorkspaceSettings
-		//------------------------------------------------------------------------------------------
-		// Archive > WorkspaceSettings
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
 		[Test]
 		public virtual void ArchiveWorkspaceSettings()
@@ -125,8 +106,6 @@ namespace YAT.Settings.Test
 
 			SelectiveTestTearDown();
 		}
-
-		#endregion
 
 		#endregion
 
