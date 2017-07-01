@@ -117,7 +117,7 @@ namespace YAT.Domain.Settings
 
 		/// <remarks>
 		/// No other way has yet been found to properly set defaults of a list of settings. Before
-		/// this solution, the issue #3581368 "EOL comment indicators always contain the defaults"
+		/// this solution, bug #3581368>#244 "EOL comment indicators always contain the defaults"
 		/// existed. With this solution, the underlying node itself does no longer know any default,
 		/// and default deserialization properly deserializes the settings into the underlying node.
 		/// </remarks>
@@ -127,7 +127,16 @@ namespace YAT.Domain.Settings
 
 			EolComment.Indicators.Clear();
 			EolComment.Indicators.Add("//");
-			EolComment.Indicators.Add("REM");
+			EolComment.Indicators.Add("/*");
+			EolComment.Indicators.Add("<!--"); // XML
+			EolComment.Indicators.Add("<#");   // PowerShell
+			EolComment.Indicators.Add("REM");  // Batch/Command
+
+			// FR #307 Add beginning-of-line comment indicators.
+			// Consider to merge both but allow Regex instead of simple text only.
+		////BolComment.Indicators.Clear();
+		////BolComment.Indicators.Add("#");  // PowerShell
+		////BolComment.Indicators.Add("::"); // Batch/Command
 		}
 
 		#region Properties

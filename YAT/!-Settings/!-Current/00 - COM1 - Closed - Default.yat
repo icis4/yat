@@ -178,6 +178,9 @@
           <SkipComment>false</SkipComment>
           <SkipWhiteSpace>true</SkipWhiteSpace>
           <Indicators>//</Indicators>
+          <Indicators>/*</Indicators>
+          <Indicators>&lt;!--</Indicators>
+          <Indicators>&lt;#</Indicators>
           <Indicators>REM</Indicators>
         </EolComment>
       </TextTerminal>
