@@ -125,8 +125,7 @@
         <MaxBytePerLineCount>1000</MaxBytePerLineCount>
         <PortLineBreakEnabled>true</PortLineBreakEnabled>
         <DirectionLineBreakEnabled>true</DirectionLineBreakEnabled>
-        <InfoSeparator>
-        </InfoSeparator>
+        <InfoSeparator> </InfoSeparator>
         <InfoEnclosure>()</InfoEnclosure>
       </Display>
       <CharReplace>
@@ -388,7 +387,7 @@
       <TxMonitorSplitterRatio>0.333333343</TxMonitorSplitterRatio>
       <RxMonitorSplitterRatio>0.5</RxMonitorSplitterRatio>
       <PredefinedPanelIsVisible>true</PredefinedPanelIsVisible>
-      <PredefinedSplitterRatio>0.6042781</PredefinedSplitterRatio>
+      <PredefinedSplitterRatio>0.75</PredefinedSplitterRatio>
       <SendTextPanelIsVisible>true</SendTextPanelIsVisible>
       <SendFilePanelIsVisible>true</SendFilePanelIsVisible>
     </Layout>
