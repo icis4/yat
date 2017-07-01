@@ -214,7 +214,7 @@
       <TxMonitorSplitterRatio>0.333333343</TxMonitorSplitterRatio>
       <RxMonitorSplitterRatio>0.5</RxMonitorSplitterRatio>
       <PredefinedPanelIsVisible>true</PredefinedPanelIsVisible>
-      <PredefinedSplitterRatio>0.749206364</PredefinedSplitterRatio>
+      <PredefinedSplitterRatio>0.75</PredefinedSplitterRatio>
       <SendCommandPanelIsVisible>true</SendCommandPanelIsVisible>
       <SendFilePanelIsVisible>true</SendFilePanelIsVisible>
     </Layout>
