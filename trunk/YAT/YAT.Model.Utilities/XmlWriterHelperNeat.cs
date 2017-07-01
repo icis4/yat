@@ -33,6 +33,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 
+using MKY.Xml.Schema;
 using MKY.Xml.Serialization;
 
 using YAT.Domain;
@@ -57,7 +58,7 @@ namespace YAT.Model.Utilities
 				XmlSerializerEx.SerializeToFile(filePath, type, transferLines);
 
 				if (addSchema)
-					XmlHelper.SchemaToFile(type, Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
+					XmlSchemaEx.ToFile(type, Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
 
 				return (count);
 			}
