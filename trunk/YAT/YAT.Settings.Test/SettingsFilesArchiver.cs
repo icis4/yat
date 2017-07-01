@@ -26,15 +26,10 @@
 // Using
 //==================================================================================================
 
-using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Text;
 using System.Xml;
-using System.Xml.Schema;
 
-using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Settings;
 using MKY.Xml;
