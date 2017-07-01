@@ -21,21 +21,23 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 using MKY.Configuration;
 
+using NUnit.Framework;
+
 namespace YAT.Test
 {
-	/// <summary>
-	/// Creates the defaults of the overall test configuration file.
-	/// </summary>
-	public static class TestSettingsDefaults
+	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Defaulter", Justification = "'Defaulter' is a correct English term.")]
+	[TestFixture, Explicit("This test fixture has the sole purpose to perform storing of settings schemas and defaults to the YAT settings archive")]
+	public class ConfigurationFilesDefaulter
 	{
 		/// <summary></summary>
-		[STAThread]
-		public static void Main()
+		[Test]
+		public virtual void DefaultConfigurationFiles()
 		{
 			// Create the overall configuration object:
 
