@@ -125,6 +125,7 @@
       <xs:enumeration value="Oct" />
       <xs:enumeration value="Dec" />
       <xs:enumeration value="Hex" />
+      <xs:enumeration value="Unicode" />
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="RecentItemOfCommand">
@@ -147,6 +148,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
         <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="TerminalIsStarted" type="xs:boolean" />
           <xs:element minOccurs="0" maxOccurs="1" name="SendText" type="SendTextSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="SendFile" type="SendFileSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="Predefined" type="PredefinedSettings" />
@@ -179,7 +181,8 @@
           <xs:element minOccurs="1" maxOccurs="1" name="FolderFormat" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="FolderChannel" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="WriteMode" type="LogFileWriteMode" />
-          <xs:element minOccurs="1" maxOccurs="1" name="TextEncoding" type="LogFileEncoding" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TextEncoding" type="TextEncoding" />
+          <xs:element minOccurs="1" maxOccurs="1" name="EmitEncodingPreamble" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -190,7 +193,7 @@
       <xs:enumeration value="Append" />
     </xs:restriction>
   </xs:simpleType>
-  <xs:simpleType name="LogFileEncoding">
+  <xs:simpleType name="TextEncoding">
     <xs:restriction base="xs:string">
       <xs:enumeration value="UTF8" />
       <xs:enumeration value="Terminal" />
@@ -201,6 +204,7 @@
       <xs:extension base="SettingsItem">
         <xs:sequence>
           <xs:element minOccurs="0" maxOccurs="1" name="Font" type="FontFormat" />
+          <xs:element minOccurs="1" maxOccurs="1" name="FormattingEnabled" type="xs:boolean" />
           <xs:element minOccurs="0" maxOccurs="1" name="TxDataFormat" type="TextFormat" />
           <xs:element minOccurs="0" maxOccurs="1" name="TxControlFormat" type="TextFormat" />
           <xs:element minOccurs="0" maxOccurs="1" name="RxDataFormat" type="TextFormat" />
@@ -326,6 +330,15 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
+  <xs:complexType name="SendTextFileSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="SkipEmptyLines" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
   <xs:complexType name="TextTerminalSettings">
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
@@ -335,6 +348,7 @@
           <xs:element minOccurs="0" maxOccurs="1" name="RxEol" type="xs:string" />
           <xs:element minOccurs="1" maxOccurs="1" name="Encoding" type="xs:int" />
           <xs:element minOccurs="1" maxOccurs="1" name="ShowEol" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SendFile" type="SendTextFileSettings" />
           <xs:element minOccurs="1" maxOccurs="1" name="LineSendDelay" type="TextLineSendDelay" />
           <xs:element minOccurs="1" maxOccurs="1" name="WaitForResponse" type="WaitForResponse" />
           <xs:element minOccurs="1" maxOccurs="1" name="CharSubstitution" type="CharSubstitution" />
@@ -375,7 +389,7 @@
           <xs:element minOccurs="1" maxOccurs="1" name="DefaultLineDelay" type="xs:int" />
           <xs:element minOccurs="1" maxOccurs="1" name="DefaultLineInterval" type="xs:int" />
           <xs:element minOccurs="1" maxOccurs="1" name="DefaultLineRepeat" type="xs:int" />
-          <xs:element minOccurs="1" maxOccurs="1" name="DisableKeywords" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DisableEscapes" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="SignalXOnBeforeEachTransmission" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="SignalXOnPeriodically" type="PeriodicSetting" />
         </xs:sequence>
@@ -475,10 +489,11 @@
         <xs:sequence>
           <xs:element minOccurs="0" maxOccurs="1" name="DeviceInfo" type="DeviceInfo" />
           <xs:element minOccurs="1" maxOccurs="1" name="MatchSerial" type="xs:boolean" />
-          <xs:element minOccurs="0" maxOccurs="1" name="ReportFormat" type="SerialHidReportFormat" />
-          <xs:element minOccurs="0" maxOccurs="1" name="RxIdUsage" type="SerialHidRxIdUsage" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ReportFormat" type="SerialHidReportFormat" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RxFilterUsage" type="SerialHidRxFilterUsage" />
           <xs:element minOccurs="1" maxOccurs="1" name="FlowControl" type="SerialHidFlowControl" />
           <xs:element minOccurs="1" maxOccurs="1" name="AutoOpen" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="IncludeNonPayloadData" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -499,7 +514,7 @@
       <xs:element minOccurs="1" maxOccurs="1" name="FillLastReport" type="xs:boolean" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="SerialHidRxIdUsage">
+  <xs:complexType name="SerialHidRxFilterUsage">
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="SeparateRxId" type="xs:boolean" />
       <xs:element minOccurs="1" maxOccurs="1" name="AnyRxId" type="xs:boolean" />
@@ -724,7 +739,6 @@
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
         <xs:sequence>
-          <xs:element minOccurs="1" maxOccurs="1" name="TerminalIsStarted" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="LogIsOn" type="xs:boolean" />
           <xs:element minOccurs="0" maxOccurs="1" name="UserName" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="Terminal" type="TerminalSettings" />

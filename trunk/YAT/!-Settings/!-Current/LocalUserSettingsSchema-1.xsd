@@ -118,8 +118,8 @@
           <xs:element minOccurs="1" maxOccurs="1" name="UdpServerSendMode" type="UdpServerSendMode" />
           <xs:element minOccurs="0" maxOccurs="1" name="UsbSerialHidDeviceInfo" type="DeviceInfo" />
           <xs:element minOccurs="1" maxOccurs="1" name="UsbSerialHidMatchSerial" type="xs:boolean" />
-          <xs:element minOccurs="0" maxOccurs="1" name="UsbSerialHidReportFormat" type="SerialHidReportFormat" />
-          <xs:element minOccurs="0" maxOccurs="1" name="UsbSerialHidRxIdUsage" type="SerialHidRxIdUsage" />
+          <xs:element minOccurs="1" maxOccurs="1" name="UsbSerialHidReportFormat" type="SerialHidReportFormat" />
+          <xs:element minOccurs="1" maxOccurs="1" name="UsbSerialHidRxFilterUsage" type="SerialHidRxFilterUsage" />
           <xs:element minOccurs="1" maxOccurs="1" name="UsbSerialHidFlowControl" type="SerialHidFlowControl" />
           <xs:element minOccurs="1" maxOccurs="1" name="UsbSerialHidAutoOpen" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="StartTerminal" type="xs:boolean" />
@@ -186,7 +186,7 @@
       <xs:element minOccurs="1" maxOccurs="1" name="FillLastReport" type="xs:boolean" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="SerialHidRxIdUsage">
+  <xs:complexType name="SerialHidRxFilterUsage">
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="SeparateRxId" type="xs:boolean" />
       <xs:element minOccurs="1" maxOccurs="1" name="AnyRxId" type="xs:boolean" />
