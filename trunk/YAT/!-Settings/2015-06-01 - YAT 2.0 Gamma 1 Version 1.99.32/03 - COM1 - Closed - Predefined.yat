@@ -276,7 +276,7 @@
       </ErrorFormat>
     </Format>
     <Log>
-      <RootPath>C:\Dokumente und Einstellungen\Matthias\Eigene Dateien</RootPath>
+      <RootPath>C:\Users\Matthias\Documents</RootPath>
       <RootFileName>YAT-Log</RootFileName>
       <RawLogTx>false</RawLogTx>
       <RawLogBidir>false</RawLogBidir>
