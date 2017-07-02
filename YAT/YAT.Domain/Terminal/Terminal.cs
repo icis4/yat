@@ -114,7 +114,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Struct to improve performance as a struct only needs to be created once.
 		/// </remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds...")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds but StyleCop isn't able to deal with such abbreviations...")]
 		private struct IOChangedEventHelper
 		{
 			/// <summary></summary>

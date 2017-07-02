@@ -309,7 +309,6 @@ namespace YAT.Settings.Test
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic in the constructor, and anyway, performance isn't an issue here.")]
 		static SettingsFilesProvider()
 		{
-
 			// Empty
 			FilePaths_Empty = new SettingsFilePaths("!-Empty");
 

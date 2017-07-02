@@ -25,6 +25,8 @@ using System;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Windows.Forms;
+
 namespace YAT.Test
 {
 	/// <summary>
@@ -46,7 +48,7 @@ namespace YAT.Test
 			sb.AppendLine();
 			sb.Append    (@"See ""!-ReadMe.txt"" for more information.");
 
-			MessageBox.Show(sb.ToString(), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			MessageBoxEx.Show(sb.ToString(), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 	}
 }

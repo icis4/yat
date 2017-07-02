@@ -179,6 +179,7 @@ namespace MKY
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize that this type belongs to the 'EventHelper'.")]
+		[Serializable]
 		public class Item
 		{
 			#region Fields/Events/Lifetime/Properties/Methods
@@ -689,6 +690,7 @@ namespace MKY
 		///     - <see cref="ExceptionHandlingMode.DiscardAll"/> for "DEBUG" configurations.
 		///    The behavior can be configured by the local "RETHROW_UNHANDLED_EXCEPTIONS" definition.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static Item CreateItem(EventHandlingMode eventHandling = EventHandlingDefault, ExceptionHandlingMode exceptionHandling = ExceptionHandlingDefault)
 		{
 			return (CreateItem(typeof(EventHelper).FullName, eventHandling, exceptionHandling));
@@ -706,6 +708,7 @@ namespace MKY
 		/// <remarks>
 		/// Could be extended such that <paramref name="owner"/> could also be provided as callback method.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static Item CreateItem(string owner, EventHandlingMode eventHandling = EventHandlingDefault, ExceptionHandlingMode exceptionHandling = ExceptionHandlingDefault)
 		{
 			return (new Item(owner, eventHandling, exceptionHandling));

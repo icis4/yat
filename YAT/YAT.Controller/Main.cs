@@ -124,9 +124,13 @@ namespace YAT.Controller
 		private string[] commandLineArgsStrings;
 		private CommandLineArgs commandLineArgs;
 
+	#if (HANDLE_UNHANDLED_EXCEPTIONS)
+
 		// Invocation synchronization objects:
 		private ISynchronizeInvoke mainThreadSynchronizer;
 		private object mainThreadSynchronizerSyncObj = new object();
+
+	#endif
 
 		#endregion
 
@@ -527,10 +531,10 @@ namespace YAT.Controller
 					Model.MainResult viewResult;
 					using (View.Forms.Main view = new View.Forms.Main(model))
 					{
+					#if (HANDLE_UNHANDLED_EXCEPTIONS)
 						lock (this.mainThreadSynchronizerSyncObj)
 							this.mainThreadSynchronizer = view;
 
-					#if (HANDLE_UNHANDLED_EXCEPTIONS)
 						// Assume unhandled asynchronous synchronized exceptions and attach the application to the respective handler:
 						System.Windows.Forms.Application.ThreadException += RunFullyWithView_Application_ThreadException;
 					#endif
@@ -544,8 +548,10 @@ namespace YAT.Controller
 					#endif
 						viewResult = view.Result;
 
+					#if (HANDLE_UNHANDLED_EXCEPTIONS)
 						lock (this.mainThreadSynchronizerSyncObj)
 							this.mainThreadSynchronizer = null;
+					#endif
 					}
 
 					if (!ApplicationSettings.CloseAndDispose())
@@ -727,10 +733,10 @@ namespace YAT.Controller
 					Model.MainResult viewResult;
 					using (View.Forms.Main view = new View.Forms.Main(model))
 					{
+					#if (HANDLE_UNHANDLED_EXCEPTIONS)
 						lock (this.mainThreadSynchronizerSyncObj)
 							this.mainThreadSynchronizer = view;
 
-					#if (HANDLE_UNHANDLED_EXCEPTIONS)
 						// Assume unhandled asynchronous synchronized exceptions and attach the application to the respective handler:
 						System.Windows.Forms.Application.ThreadException += RunWithViewButOutputErrorsOnConsole_Application_ThreadException;
 					#endif
@@ -744,8 +750,10 @@ namespace YAT.Controller
 					#endif
 						viewResult = view.Result;
 
+					#if (HANDLE_UNHANDLED_EXCEPTIONS)
 						lock (this.mainThreadSynchronizerSyncObj)
 							this.mainThreadSynchronizer = null;
+					#endif
 					}
 
 					if (!ApplicationSettings.CloseAndDispose())
@@ -1149,10 +1157,14 @@ namespace YAT.Controller
 		// Non-Public Methods > Exceptions
 		//------------------------------------------------------------------------------------------
 
+	#if (HANDLE_UNHANDLED_EXCEPTIONS)
+
 		private static bool IsObjectDisposedExceptionInMscorlib(Exception ex)
 		{
 			return ((ex is ObjectDisposedException) && (ex.Source == "mscorlib") && (ex.Message.Contains("SafeHandle")));
 		}
+
+	#endif
 
 		#endregion
 

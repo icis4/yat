@@ -23,8 +23,8 @@
 //==================================================================================================
 
 using System;
-using System.IO;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
