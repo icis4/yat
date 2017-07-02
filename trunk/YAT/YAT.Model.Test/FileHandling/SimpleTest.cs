@@ -900,8 +900,12 @@ namespace YAT.Model.Test.FileHandling
 				terminal1.SettingsRoot.SendText.Command = new Types.Command(Guid.NewGuid().ToString()); // Implicit change.
 				Assert.That(terminal1.SettingsRoot.ExplicitHaveChanged, Is.False, step + "Settings have explicitly changed!");
 
+				int countBefore = this.terminal_MessageInputRequest_No_counter;
+				terminal1.MessageInputRequest += terminal_MessageInputRequest_No; // Ignore the "remaining event sink" message that will be output during Exit() below.
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
+				int countAfter = this.terminal_MessageInputRequest_No_counter;
+				Assert.That(countAfter, Is.Not.EqualTo(countBefore), "Terminal 1 'MessageInputRequest' was not called!");
 
 				Utilities.VerifyFiles(step, workspace, true, false, terminal1, true, false);
 
@@ -964,8 +968,8 @@ namespace YAT.Model.Test.FileHandling
 				terminal2.SaveAsFileDialogRequest += terminal_SaveAsFileDialogRequest_No; // Ignore the "remaining event sink" message that will be output during Exit() below.
 				success = (main.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
-				int terminalCountAfter = this.workspace_MessageInputRequest_No_counter;
-				Assert.That(terminalCountAfter, Is.Not.EqualTo(terminalCountBefore), "Terminal 1 'SaveAsFileDialogRequest' was not called!");
+				int terminalCountAfter = this.terminal_SaveAsFileDialogRequest_No_counter;
+				Assert.That(terminalCountAfter, Is.Not.EqualTo(terminalCountBefore), "Terminal 2 'SaveAsFileDialogRequest' was not called!");
 				int workspaceCountAfter = this.workspace_MessageInputRequest_No_counter;
 				Assert.That(workspaceCountAfter, Is.Not.EqualTo(workspaceCountBefore), "Workspace 'MessageInputRequest' was not called!");
 
