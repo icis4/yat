@@ -728,8 +728,8 @@ namespace YAT.Model
 					return (RequestRestrictedSaveAsFromUser(canBeCanceled, out isCanceled));
 				}
 				else {
-					return (this.settingsRoot.ExplicitHaveChanged); // Let save of explicit change fail if file is restricted.
-				}                                                   // Skip save of implicit change as save is currently not feasible.
+					return (!this.settingsRoot.ExplicitHaveChanged); // Let save of explicit change fail if file is restricted.
+				}                                                    // Skip save of implicit change as save is currently not feasible.
 			}
 
 			// -------------------------------------------------------------------------------------
