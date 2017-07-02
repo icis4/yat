@@ -813,10 +813,9 @@ namespace YAT.View.Forms
 		{
 			this.isSettingControls.Enter();
 
-			bool isText         = ((Domain.TerminalTypeEx)this.settingsRoot.TerminalType).IsText;
+			bool isText       = ((Domain.TerminalTypeEx)this.settingsRoot.TerminalType).IsText;
 
-			bool isSerialPort   = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
-			bool isUsbSerialHid = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsUsbSerialHid;
+			bool isSerialPort = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
 
 			// Layout, disable monitor item if the other monitors are hidden:
 			toolStripMenuItem_TerminalMenu_View_Panels_Tx.Enabled    = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
@@ -1900,8 +1899,7 @@ namespace YAT.View.Forms
 		{
 			this.isSettingControls.Enter();
 
-			bool isSerialPort   = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
-			bool isUsbSerialHid = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsUsbSerialHid;
+			bool isSerialPort = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
 
 			// Flow control count:
 			bool showFlowControlOptions = this.settingsRoot.Terminal.IO.FlowControlIsInUse;

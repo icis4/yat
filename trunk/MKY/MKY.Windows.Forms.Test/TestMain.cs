@@ -25,6 +25,8 @@ using System;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Windows.Forms;
+
 namespace MKY.Windows.Forms.Test
 {
 	/// <summary>
@@ -45,7 +47,7 @@ namespace MKY.Windows.Forms.Test
 			sb.AppendLine();
 			sb.Append    ("You may also run this test application without ENABLE_HORIZONTAL_AUTO_SCROLL enabled.");
 
-			var dr = MessageBox.Show(sb.ToString(), "Warning related to ENABLE_HORIZONTAL_AUTO_SCROLL", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+			var dr = MessageBoxEx.Show(sb.ToString(), "Warning related to ENABLE_HORIZONTAL_AUTO_SCROLL", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 			if (dr != DialogResult.OK)
 				return;
 

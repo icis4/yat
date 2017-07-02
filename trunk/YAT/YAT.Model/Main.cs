@@ -390,7 +390,7 @@ namespace YAT.Model
 
 							if (dr == DialogResult.Cancel)
 							{
-								OnTimedStatusTextRequest("Cancelled");
+								OnTimedStatusTextRequest("Canceled");
 
 								// Not creating create a new empty workspace allows the user to exit YAT,
 								// restore the .yaw file, and try again.
@@ -1196,7 +1196,7 @@ namespace YAT.Model
 			}
 			else
 			{
-				OnTimedStatusTextRequest("Exit cancelled.");
+				OnTimedStatusTextRequest("Exit canceled.");
 
 				cancel = true;
 				return (this.result);

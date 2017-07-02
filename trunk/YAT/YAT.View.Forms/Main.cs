@@ -295,7 +295,7 @@ namespace YAT.View.Forms
 					{
 						if (showErrorModally)
 						{
-							// Nothing to do, user intentionally cancelled.
+							// Nothing to do, user intentionally canceled.
 						}
 						break;
 					}

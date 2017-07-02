@@ -104,6 +104,7 @@ namespace MKY.Win32
 			private const string KERNEL_DLL = "kernel32.dll";
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 			public static bool AttachConsoleToProcess(int dwProcessId)
 			{
 				return (AttachConsole((UInt32)dwProcessId));
@@ -121,6 +122,7 @@ namespace MKY.Win32
 			private static extern Boolean AttachConsole([In] UInt32 dwProcessId);
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 			public static bool FreeConsoleFromProcess(int dwProcessId)
 			{
 				return (FreeConsole((UInt32)dwProcessId));

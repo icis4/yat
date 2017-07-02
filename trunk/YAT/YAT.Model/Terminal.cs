@@ -1553,17 +1553,17 @@ namespace YAT.Model
 		{
 			// AssertNotDisposed() is called by 'Save(...)' below.
 
-			bool isCancelled;
-			return (SaveConsiderately(true, true, true, false, out isCancelled)); // Save even if not changed since saving
-		}                                                                         // all terminals was explicitly requested.
+			bool isCanceled;
+			return (SaveConsiderately(true, true, true, false, out isCanceled)); // Save even if not changed since saving
+		}                                                                        // all terminals was explicitly requested.
 
 		/// <summary>
-		/// Sliently tries to save terminal to file, i.e. without any user interaction.
+		/// Silently tries to save terminal to file, i.e. without any user interaction.
 		/// </summary>
 		public virtual bool TrySaveConsideratelyWithoutUserInteraction(bool autoSaveIsAllowed)
 		{
-			bool isCancelled;
-			return (SaveConsiderately(autoSaveIsAllowed, false, false, false, out isCancelled));
+			bool isCanceled;
+			return (SaveConsiderately(autoSaveIsAllowed, false, false, false, out isCanceled));
 		}
 
 		/// <summary>
@@ -1576,13 +1576,14 @@ namespace YAT.Model
 		/// </param>
 		/// <param name="userInteractionIsAllowed">Indicates whether user interaction is allowed.</param>
 		/// <param name="saveEvenIfNotChanged">Indicates whether save must happen even if not changed.</param>
-		/// <param name="canBeCancelled">Indicates whether save can be cancelled.</param>
-		/// <param name="isCancelled">Indicates whether save has been cancelled.</param>
-		public virtual bool SaveConsiderately(bool autoSaveIsAllowed, bool userInteractionIsAllowed, bool saveEvenIfNotChanged, bool canBeCancelled, out bool isCancelled)
+		/// <param name="canBeCanceled">Indicates whether save can be canceled.</param>
+		/// <param name="isCanceled">Indicates whether save has been canceled.</param>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public virtual bool SaveConsiderately(bool autoSaveIsAllowed, bool userInteractionIsAllowed, bool saveEvenIfNotChanged, bool canBeCanceled, out bool isCanceled)
 		{
 			AssertNotDisposed();
 
-			isCancelled = false;
+			isCanceled = false;
 
 			autoSaveIsAllowed = EvaluateWhetherAutoSaveIsAllowedIndeed(autoSaveIsAllowed);
 
@@ -1627,7 +1628,7 @@ namespace YAT.Model
 			if (!SettingsFileIsWritable || SettingsFileNoLongerExists)
 			{
 				if (userInteractionIsAllowed) {
-					return (RequestRestrictedSaveAsFromUser(canBeCancelled, out isCancelled));
+					return (RequestRestrictedSaveAsFromUser(canBeCanceled, out isCanceled));
 				}
 				else {
 					return (this.settingsRoot.ExplicitHaveChanged); // Let save of explicit change fail if file is restricted.
@@ -1698,9 +1699,10 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual bool RequestRestrictedSaveAsFromUser(bool canBeCancelled, out bool isCancelled)
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		protected virtual bool RequestRestrictedSaveAsFromUser(bool canBeCanceled, out bool isCanceled)
 		{
-			isCancelled = false;
+			isCanceled = false;
 
 			string reason;
 			if (!SettingsFileIsWritable)
@@ -1720,7 +1722,7 @@ namespace YAT.Model
 			(
 				message.ToString(),
 				"File Error",
-				(canBeCancelled ? MessageBoxButtons.YesNoCancel : MessageBoxButtons.YesNo),
+				(canBeCanceled ? MessageBoxButtons.YesNoCancel : MessageBoxButtons.YesNo),
 				MessageBoxIcon.Question
 			);
 
@@ -1734,8 +1736,8 @@ namespace YAT.Model
 					return (true);
 
 				default:
-					// No need for TextRequest("Cancelled!") as parent will handle cancel.
-					isCancelled = true;
+					// No need for TextRequest("Canceled!") as parent will handle cancel.
+					isCanceled = true;
 					return (false);
 			}
 		}

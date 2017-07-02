@@ -54,11 +54,12 @@ namespace YAT.Domain.Test
 
 		/// <remarks>
 		/// Timeout of 200 ms is a bit too short, especially when debugger is connected, e.g.
-		///  > SingleLine often takes longer than 200 ms...
-		///  > DoubleLine often takes longer than 400 ms...
-		///  > TripleLine takes around 500 ms (where timeout is 600 ms)
-		///  > MultiLine takes around 4000..5000 ms (where timeout is 5200 ms)
+		///  > SingleLine often takes longer than 200 ms.
+		///  > DoubleLine often takes longer than 400 ms.
+		///  > TripleLine takes around 500 ms (where timeout is 600 ms).
+		///  > MultiLine takes around 4000..5000 ms (where timeout is 5200 ms).
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds but StyleCop isn't able to deal with such abbreviations...")]
 		public const int WaitTimeoutForLineTransmission = 300;
 
 		/// <summary></summary>

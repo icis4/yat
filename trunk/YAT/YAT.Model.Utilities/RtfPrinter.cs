@@ -45,6 +45,7 @@ namespace YAT.Model.Utilities
 	/// </summary>
 	public class RtfPrinter : IDisposable
 	{
+		private Color foreColorBrushColor;
 		private Brush foreColorBrush;
 
 		private PrinterSettings settings;
@@ -85,6 +86,9 @@ namespace YAT.Model.Utilities
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
+					if (this.foreColorBrush != null)
+						this.foreColorBrush.Dispose();
+
 					if (this.richTextProvider != null)
 						this.richTextProvider.Dispose();
 
@@ -140,7 +144,15 @@ namespace YAT.Model.Utilities
 		/// </exception>
 		public virtual void Print(List<DisplayLine> lines, Settings.FormatSettings formatSettings)
 		{
-			this.foreColorBrush = new SolidBrush(formatSettings.PortFormat.Color);
+			if (this.foreColorBrushColor != formatSettings.PortFormat.Color)
+			{
+				this.foreColorBrushColor = formatSettings.PortFormat.Color;
+
+				if (this.foreColorBrush != null)
+					this.foreColorBrush.Dispose();
+
+				this.foreColorBrush = new SolidBrush(formatSettings.PortFormat.Color);
+			}
 
 			Print(RtfWriterHelper.LinesToRichTextBox(lines, formatSettings));
 		}

@@ -274,6 +274,7 @@ namespace MKY.IO.Ports.Test
 		/// Execution requires approx 3 seconds.
 		/// </remarks>
 		/// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
+		[SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Justification = "That's OK, this method is only used for testing.")]
 		private static bool ExecuteControl(UsbHubSettings setting)
 		{
 			string mask = ToBinaryString(setting);

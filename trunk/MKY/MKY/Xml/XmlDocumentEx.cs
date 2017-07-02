@@ -153,6 +153,8 @@ namespace MKY.Xml
 		/// <param name="path">The path.</param>
 		/// <param name="fileNameWithoutExtension">Name of the intended file.</param>
 		/// <param name="fileExtension">Extension of the file.</param>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
 		public static void ToFile(XmlDocument document, string path, string fileNameWithoutExtension, string fileExtension = ".xml")
 		{
 			string filePath = path + fileNameWithoutExtension + (!string.IsNullOrEmpty(fileExtension) ? fileExtension : "");

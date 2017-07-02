@@ -36,6 +36,7 @@ using System.Windows.Forms;
 using MKY;
 using MKY.Collections.Generic;
 using MKY.Settings;
+using MKY.Windows.Forms;
 
 using NUnit.Framework;
 
@@ -206,7 +207,7 @@ namespace YAT.Model.Test.Transmission
 		public virtual void TestFixtureSetUp()
 		{
 			// \remind 2016-05-26 / MKY: Should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
-			var dr = MessageBox.Show
+			var dr = MessageBoxEx.Show
 				(
 				"This test requires a weighing MT-SICS device:" + Environment.NewLine +
 				" > Serial COM Port: Start weight simulation if no load cell connected." + Environment.NewLine +

@@ -93,6 +93,7 @@ namespace MKY.Xml.Schema
 		/// <param name="path">The path.</param>
 		/// <param name="intendedFileNameWithoutExtension">Name of the intended file.</param>
 		/// <param name="fileExtension">Extension of the file.</param>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static void ToFile(Type type, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
 		{
 			var document = XmlDocumentEx.CreateDefaultDocument(type);
@@ -109,15 +110,17 @@ namespace MKY.Xml.Schema
 		/// <param name="path">The path.</param>
 		/// <param name="intendedFileNameWithoutExtension">Name of the intended file.</param>
 		/// <param name="fileExtension">Extension of the file.</param>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
 		public static void ToFile(XmlDocument document, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
 		{
-			int n = document.Schemas.Schemas().Count;
-			int i = 0;
+			int count = document.Schemas.Schemas().Count;
+			int index = 0;
 			foreach (XmlSchema schema in document.Schemas.Schemas())
 			{
-				ToFile(schema, path, intendedFileNameWithoutExtension, n, i, fileExtension);
+				ToFile(schema, path, intendedFileNameWithoutExtension, count, index, fileExtension);
 
-				i++;
+				index++;
 			}
 		}
 
@@ -125,21 +128,23 @@ namespace MKY.Xml.Schema
 		/// Writes the given XML schema to the given path and file name.
 		/// </summary>
 		/// <remarks>
-		/// If the number of schemas is greater than 1, the effective file name will be postfixed with <paramref name="i"/>.
+		/// If the number of schemas is greater than 1, the effective file name will be postfixed with <paramref name="index"/>.
 		/// </remarks>
 		/// <param name="schema">The schema.</param>
 		/// <param name="path">The path.</param>
 		/// <param name="intendedFileNameWithoutExtension">Name of the intended file.</param>
-		/// <param name="n">The number of schemas to save in total.</param>
-		/// <param name="i">The index of the current schema to save.</param>
+		/// <param name="count">The number of schemas to save in total.</param>
+		/// <param name="index">The index of the current schema to save.</param>
 		/// <param name="fileExtension">Extension of the file.</param>
-		public static void ToFile(XmlSchema schema, string path, string intendedFileNameWithoutExtension, int n = 1, int i = 0, string fileExtension = ".xsd")
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'postfix' is a correct English term and 'postfixed' seems the obvious participle.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		public static void ToFile(XmlSchema schema, string path, string intendedFileNameWithoutExtension, int count = 1, int index = 0, string fileExtension = ".xsd")
 		{
 			string effectiveFilePath;
-			if (n <= 1)
+			if (count <= 1)
 				effectiveFilePath = path + Path.DirectorySeparatorChar + intendedFileNameWithoutExtension + (!string.IsNullOrEmpty(fileExtension) ? fileExtension : "");
 			else
-				effectiveFilePath = path + Path.DirectorySeparatorChar + intendedFileNameWithoutExtension + "-" + i + (!string.IsNullOrEmpty(fileExtension) ? fileExtension : "");
+				effectiveFilePath = path + Path.DirectorySeparatorChar + intendedFileNameWithoutExtension + "-" + index + (!string.IsNullOrEmpty(fileExtension) ? fileExtension : "");
 
 			using (var sw = new StreamWriter(effectiveFilePath, false, Encoding.UTF8))
 			{

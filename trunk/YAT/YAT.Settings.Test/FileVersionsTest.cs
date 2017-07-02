@@ -32,6 +32,7 @@ using System.Windows.Forms;
 
 using MKY;
 using MKY.Settings;
+using MKY.Windows.Forms;
 
 using NUnit.Framework;
 
@@ -62,7 +63,7 @@ namespace YAT.Settings.Test
 		public virtual void TestFixtureSetUp()
 		{
 			// \remind 2016-05-26 / MKY: Should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
-			var dr = MessageBox.Show
+			var dr = MessageBoxEx.Show
 				(
 				"This test requires open serial ports 'COM1' and 'COM2'." + Environment.NewLine +
 				"Ensure that VSPE is running and providing these ports.",
@@ -74,7 +75,7 @@ namespace YAT.Settings.Test
 			if (dr != DialogResult.OK)
 				Assert.Fail("User cancel!");
 
-			dr = MessageBox.Show
+			dr = MessageBoxEx.Show
 				(
 				"This test requires connected USB Ser/HID device 'VID:0EB8 PID:2303 SNR:YAT.8_SerHID'." + Environment.NewLine +
 				"Ensure that device is connected.",

@@ -32,14 +32,14 @@ namespace MKY.Xml
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, simplicity and ease of use is...")]
-		public string[] XmlPath;
+		public string[] XmlPath { get; }
 
 		/// <summary></summary>
-		public string LocalName;
+		public string LocalName { get; }
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, simplicity and ease of use is...")]
-		public string[] AlternateLocalNames;
+		public string[] AlternateLocalNames { get; }
 
 		/// <summary></summary>
 		public AlternateXmlElement(string[] xmlPath, string localName, string[] alternateLocalNames)
