@@ -302,39 +302,39 @@ namespace MKY.IO.Ports.Test
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
-		public static readonly string PortAIsAvailable = "Serial port A '" + ConfigurationProvider.Configuration.PortA + "' is " + (ConfigurationProvider.Configuration.PortAIsAvailable ? "" : "not ") + "available" + (ConfigurationProvider.Configuration.PortAIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
+		public static readonly string PortAIsAvailable = "Serial port A '" + ConfigurationProvider.Configuration.PortA + "' is " + (ConfigurationProvider.Configuration.PortAIsAvailable ? "" : "*NOT* ") + "available" + (ConfigurationProvider.Configuration.PortAIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
-		public static readonly string PortBIsAvailable = "Serial port B '" + ConfigurationProvider.Configuration.PortB + "' is " + (ConfigurationProvider.Configuration.PortBIsAvailable ? "" : "not ") + "available" + (ConfigurationProvider.Configuration.PortBIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
+		public static readonly string PortBIsAvailable = "Serial port B '" + ConfigurationProvider.Configuration.PortB + "' is " + (ConfigurationProvider.Configuration.PortBIsAvailable ? "" : "*NOT* ") + "available" + (ConfigurationProvider.Configuration.PortBIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <remarks>"MT-SICS" is no valid NUnit category string as it contains an '-'.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
-		public static readonly string MTSicsDeviceAIsConnected = "Serial port MT SICS device A is " + (ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ? "" : "not ") + "connected to '" + ConfigurationProvider.Configuration.MTSicsDeviceA + "'" + (ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
+		public static readonly string MTSicsDeviceAIsConnected = "Serial port MT SICS device A is " + (ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ? "" : "*NOT* ") + "connected to '" + ConfigurationProvider.Configuration.MTSicsDeviceA + "'" + (ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <remarks>"MT-SICS" is no valid NUnit category string as it contains an '-'.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
-		public static readonly string MTSicsDeviceBIsConnected = "Serial port MT SICS device B is " + (ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected ? "" : "not ") + "connected to '" + ConfigurationProvider.Configuration.MTSicsDeviceB + "'" + (ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
+		public static readonly string MTSicsDeviceBIsConnected = "Serial port MT SICS device B is " + (ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected ? "" : "*NOT* ") + "connected to '" + ConfigurationProvider.Configuration.MTSicsDeviceB + "'" + (ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
-		public static readonly string TILaunchPadDeviceAIsConnected = "Serial port TI LaunchPad device A is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceAIsConnected ? "" : "not ") + "connected to '" + ConfigurationProvider.Configuration.TILaunchPadDeviceA + "'" + (ConfigurationProvider.Configuration.TILaunchPadDeviceAIsConnected ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
+		public static readonly string TILaunchPadDeviceAIsConnected = "Serial port TI LaunchPad device A is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceAIsConnected ? "" : "*NOT* ") + "connected to '" + ConfigurationProvider.Configuration.TILaunchPadDeviceA + "'" + (ConfigurationProvider.Configuration.TILaunchPadDeviceAIsConnected ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
-		public static readonly string TILaunchPadDeviceBIsConnected = "Serial port TI LaunchPad device B is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsConnected ? "" : "not ") + "connected to '" + ConfigurationProvider.Configuration.TILaunchPadDeviceB + "'" + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsConnected ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
+		public static readonly string TILaunchPadDeviceBIsConnected = "Serial port TI LaunchPad device B is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsConnected ? "" : "*NOT* ") + "connected to '" + ConfigurationProvider.Configuration.TILaunchPadDeviceB + "'" + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsConnected ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <summary></summary>
-		public static readonly string LoopbackPairsAreAvailable = "Serial port loopback pair" + ((ConfigurationProvider.Configuration.LoopbackPairs.Count > 0) ? ((ConfigurationProvider.Configuration.LoopbackPairs.Count > 1) ? "s are " : " is ") : " is not ") + "available" + ((ConfigurationProvider.Configuration.LoopbackPairs.Count > 0) ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
+		public static readonly string LoopbackPairsAreAvailable = "Serial port loopback pair" + ((ConfigurationProvider.Configuration.LoopbackPairs.Count > 0) ? ((ConfigurationProvider.Configuration.LoopbackPairs.Count > 1) ? "s are " : " is ") : "*NOT* ") + "available" + ((ConfigurationProvider.Configuration.LoopbackPairs.Count > 0) ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
-		public static readonly string LoopbackSelfsAreAvailable = "Serial port loopback self" + ((ConfigurationProvider.Configuration.LoopbackSelfs.Count > 0) ? ((ConfigurationProvider.Configuration.LoopbackSelfs.Count > 1) ? "s are " : " is ") : " is not ") + "available" + ((ConfigurationProvider.Configuration.LoopbackSelfs.Count > 0) ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
+		public static readonly string LoopbackSelfsAreAvailable = "Serial port loopback self" + ((ConfigurationProvider.Configuration.LoopbackSelfs.Count > 0) ? ((ConfigurationProvider.Configuration.LoopbackSelfs.Count > 1) ? "s are " : " is ") : "*NOT* ") + "available" + ((ConfigurationProvider.Configuration.LoopbackSelfs.Count > 0) ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <summary></summary>
-		public static readonly string LoopbacksAreAvailable = "Serial port loopback" + ((ConfigurationProvider.Configuration.LoopbackCount > 0) ? ((ConfigurationProvider.Configuration.LoopbackCount > 1) ? "s are " : " is ") : " is not ") + "available" + ((ConfigurationProvider.Configuration.LoopbackCount > 0) ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
+		public static readonly string LoopbacksAreAvailable = "Serial port loopback" + ((ConfigurationProvider.Configuration.LoopbackCount > 0) ? ((ConfigurationProvider.Configuration.LoopbackCount > 1) ? "s are " : " is ") : "*NOT* ") + "available" + ((ConfigurationProvider.Configuration.LoopbackCount > 0) ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>

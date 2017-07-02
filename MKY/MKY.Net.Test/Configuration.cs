@@ -237,16 +237,16 @@ namespace MKY.Net.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
-		public static readonly string IPv4SpecificInterfaceIsAvailable = "IPv4 specific interface '" + ConfigurationProvider.Configuration.IPv4SpecificInterface + "' is " + (ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable ? "" : "not ") + "available" + (ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
+		public static readonly string IPv4SpecificInterfaceIsAvailable = "IPv4 specific interface '" + ConfigurationProvider.Configuration.IPv4SpecificInterface + "' is " + (ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable ? "" : "*NOT* ") + "available" + (ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
-		public static readonly string IPv6SpecificInterfaceIsAvailable = "IPv6 specific interface '" + ConfigurationProvider.Configuration.IPv6SpecificInterface + "' is " + (ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable ? "" : "not ") + "available" + (ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
+		public static readonly string IPv6SpecificInterfaceIsAvailable = "IPv6 specific interface '" + ConfigurationProvider.Configuration.IPv6SpecificInterface + "' is " + (ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable ? "" : "*NOT* ") + "available" + (ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <remarks>"MT-SICS" is no valid NUnit category string as it contains an '-'.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
-		public static readonly string MTSicsDeviceIsAvailable = "MT SICS device is " + (ConfigurationProvider.Configuration.MTSicsDeviceIsAvailable ? "" : "not ") + "available on TCP port " + ConfigurationProvider.Configuration.MTSicsDeviceTcpPort + (ConfigurationProvider.Configuration.MTSicsDeviceIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
+		public static readonly string MTSicsDeviceIsAvailable = "MT SICS device is " + (ConfigurationProvider.Configuration.MTSicsDeviceIsAvailable ? "" : "*NOT* ") + "available on TCP port " + ConfigurationProvider.Configuration.MTSicsDeviceTcpPort + (ConfigurationProvider.Configuration.MTSicsDeviceIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
