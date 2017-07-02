@@ -196,82 +196,22 @@ namespace YAT.Settings.Test
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
-		public static readonly SettingsFilePaths FilePaths_V1_99_12;
+		public static readonly SettingsFilePaths FilePaths_Empty;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
-		public static readonly SettingsFilePaths FilePaths_V1_99_13;
+		public static readonly SettingsFilePaths FilePaths_Current;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
-		public static readonly SettingsFilePaths FilePaths_V1_99_17;
+		public static readonly SettingsFilePaths FilePaths_V1_99_70;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
-		public static readonly SettingsFilePaths FilePaths_V1_99_18;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
-		public static readonly SettingsFilePaths FilePaths_V1_99_19;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
-		public static readonly SettingsFilePaths FilePaths_V1_99_20;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
-		public static readonly SettingsFilePaths FilePaths_V1_99_22;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
-		public static readonly SettingsFilePaths FilePaths_V1_99_24;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
-		public static readonly SettingsFilePaths FilePaths_V1_99_25;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
-		public static readonly SettingsFilePaths FilePaths_V1_99_26;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
-		public static readonly SettingsFilePaths FilePaths_V1_99_28;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
-		public static readonly SettingsFilePaths FilePaths_V1_99_30;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
-		public static readonly SettingsFilePaths FilePaths_V1_99_32;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
-		public static readonly SettingsFilePaths FilePaths_V1_99_33;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
-		public static readonly SettingsFilePaths FilePaths_V1_99_34;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
-		public static readonly SettingsFilePaths FilePaths_V1_99_50;
+		public static readonly SettingsFilePaths FilePaths_V1_99_52;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
@@ -281,18 +221,82 @@ namespace YAT.Settings.Test
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
-		public static readonly SettingsFilePaths FilePaths_V1_99_52;
-
-		/// <summary></summary>
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
-		public static readonly SettingsFilePaths FilePaths_Current;
+		public static readonly SettingsFilePaths FilePaths_V1_99_50;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
-		public static readonly SettingsFilePaths FilePaths_Empty;
+		public static readonly SettingsFilePaths FilePaths_V1_99_34;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
+		public static readonly SettingsFilePaths FilePaths_V1_99_33;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
+		public static readonly SettingsFilePaths FilePaths_V1_99_32;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
+		public static readonly SettingsFilePaths FilePaths_V1_99_30;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
+		public static readonly SettingsFilePaths FilePaths_V1_99_28;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
+		public static readonly SettingsFilePaths FilePaths_V1_99_26;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
+		public static readonly SettingsFilePaths FilePaths_V1_99_25;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
+		public static readonly SettingsFilePaths FilePaths_V1_99_24;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
+		public static readonly SettingsFilePaths FilePaths_V1_99_22;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
+		public static readonly SettingsFilePaths FilePaths_V1_99_20;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
+		public static readonly SettingsFilePaths FilePaths_V1_99_19;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
+		public static readonly SettingsFilePaths FilePaths_V1_99_18;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
+		public static readonly SettingsFilePaths FilePaths_V1_99_17;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
+		public static readonly SettingsFilePaths FilePaths_V1_99_13;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
+		public static readonly SettingsFilePaths FilePaths_V1_99_12;
 
 		#endregion
 
@@ -305,205 +309,12 @@ namespace YAT.Settings.Test
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic in the constructor, and anyway, performance isn't an issue here.")]
 		static SettingsFilesProvider()
 		{
-			// V1.99.12
-			FilePaths_V1_99_12 = new SettingsFilePaths("2007-04-15 - YAT 2.0 Beta 1 Version 1.99.12");
 
-			FilePaths_V1_99_12.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default,       "01 - COM1 - Open - Default.yat");
-			FilePaths_V1_99_12.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			FilePaths_V1_99_12.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined,  "03 - COM1 - Closed - Predefined.yat");
+			// Empty
+			FilePaths_Empty = new SettingsFilePaths("!-Empty");
 
-			// V1.99.13
-			FilePaths_V1_99_13 = new SettingsFilePaths("2007-08-30 - YAT 2.0 Beta 2 Preliminary Version 1.99.13");
-
-			FilePaths_V1_99_13.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default,       "01 - COM1 - Open - Default.yat");
-			FilePaths_V1_99_13.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			FilePaths_V1_99_13.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined,  "03 - COM1 - Closed - Predefined.yat");
-
-			FilePaths_V1_99_13.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
-
-			// V1.99.17
-			FilePaths_V1_99_17 = new SettingsFilePaths("2008-02-11 - YAT 2.0 Beta 2 Candidate 1 Version 1.99.17");
-
-			FilePaths_V1_99_17.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open - Default.yat");
-			FilePaths_V1_99_17.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			FilePaths_V1_99_17.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
-			FilePaths_V1_99_17.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
-
-			// V1.99.18
-			FilePaths_V1_99_18 = new SettingsFilePaths("2008-03-17 - YAT 2.0 Beta 2 Candidate 2 Version 1.99.18");
-
-			FilePaths_V1_99_18.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open - Default.yat");
-			FilePaths_V1_99_18.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			FilePaths_V1_99_18.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
-			FilePaths_V1_99_18.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
-
-			// V1.99.19
-			FilePaths_V1_99_19 = new SettingsFilePaths("2008-04-01 - YAT 2.0 Beta 2 Candidate 3 Version 1.99.19");
-
-			FilePaths_V1_99_19.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open - Default.yat");
-			FilePaths_V1_99_19.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			FilePaths_V1_99_19.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
-			FilePaths_V1_99_19.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
-
-			// V1.99.20
-			FilePaths_V1_99_20 = new SettingsFilePaths("2008-07-18 - YAT 2.0 Beta 2 Candidate 4 Version 1.99.20");
-
-			FilePaths_V1_99_20.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
-			FilePaths_V1_99_20.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			FilePaths_V1_99_20.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
-			FilePaths_V1_99_20.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
-
-			// V1.99.22
-			FilePaths_V1_99_22 = new SettingsFilePaths("2009-09-08 - YAT 2.0 Beta 3 Candidate 1 Version 1.99.22");
-
-			FilePaths_V1_99_22.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
-			FilePaths_V1_99_22.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			FilePaths_V1_99_22.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
-			FilePaths_V1_99_22.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
-
-			// V1.99.24
-			FilePaths_V1_99_24 = new SettingsFilePaths("2010-11-11 - YAT 2.0 Beta 3 Candidate 2 Version 1.99.24");
-
-			FilePaths_V1_99_24.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
-			FilePaths_V1_99_24.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			FilePaths_V1_99_24.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
-			FilePaths_V1_99_24.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
-			FilePaths_V1_99_24.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
-
-			// V1.99.25
-			FilePaths_V1_99_25 = new SettingsFilePaths("2010-11-28 - YAT 2.0 Beta 3 Candidate 3 Version 1.99.25");
-
-			FilePaths_V1_99_25.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
-			FilePaths_V1_99_25.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			FilePaths_V1_99_25.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
-			FilePaths_V1_99_25.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
-			FilePaths_V1_99_25.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
-			FilePaths_V1_99_25.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
-			FilePaths_V1_99_25.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
-
-			// V1.99.26
-			FilePaths_V1_99_26 = new SettingsFilePaths("2011-04-25 - YAT 2.0 Beta 3 Candidate 4 Version 1.99.26");
-
-			FilePaths_V1_99_26.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
-			FilePaths_V1_99_26.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			FilePaths_V1_99_26.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
-			FilePaths_V1_99_26.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
-			FilePaths_V1_99_26.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
-			FilePaths_V1_99_26.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
-			FilePaths_V1_99_26.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
-			FilePaths_V1_99_26.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
-
-			// V1.99.28
-			FilePaths_V1_99_28 = new SettingsFilePaths("2011-12-05 - YAT 2.0 Beta 4 Candidate 1 Version 1.99.28");
-
-			FilePaths_V1_99_28.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM1_Closed_Default, "00 - COM1 - Closed - Default.yat");
-			FilePaths_V1_99_28.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM2_Closed_Default, "00 - COM2 - Closed - Default.yat");
-			FilePaths_V1_99_28.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
-			FilePaths_V1_99_28.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			FilePaths_V1_99_28.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
-			FilePaths_V1_99_28.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
-			FilePaths_V1_99_28.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
-			FilePaths_V1_99_28.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
-			FilePaths_V1_99_28.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
-			FilePaths_V1_99_28.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
-
-			// V1.99.30
-			FilePaths_V1_99_30 = new SettingsFilePaths("2013-02-02 - YAT 2.0 Beta 4 Candidate 2 Version 1.99.30");
-
-			FilePaths_V1_99_30.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM1_Closed_Default, "00 - COM1 - Closed - Default.yat");
-			FilePaths_V1_99_30.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM2_Closed_Default, "00 - COM2 - Closed - Default.yat");
-			FilePaths_V1_99_30.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
-			FilePaths_V1_99_30.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			FilePaths_V1_99_30.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
-			FilePaths_V1_99_30.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
-			FilePaths_V1_99_30.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
-			FilePaths_V1_99_30.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
-			FilePaths_V1_99_30.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
-			FilePaths_V1_99_30.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
-
-			// V1.99.32
-			FilePaths_V1_99_32 = new SettingsFilePaths("2015-06-01 - YAT 2.0 Gamma 1 Version 1.99.32");
-
-			FilePaths_V1_99_32.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM1_Closed_Default, "00 - COM1 - Closed - Default.yat");
-			FilePaths_V1_99_32.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM2_Closed_Default, "00 - COM2 - Closed - Default.yat");
-			FilePaths_V1_99_32.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
-			FilePaths_V1_99_32.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			FilePaths_V1_99_32.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
-			FilePaths_V1_99_32.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
-			FilePaths_V1_99_32.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
-			FilePaths_V1_99_32.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
-			FilePaths_V1_99_32.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
-			FilePaths_V1_99_32.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
-
-			// V1.99.33
-			FilePaths_V1_99_33 = new SettingsFilePaths("2015-06-07 - YAT 2.0 Gamma 1' Version 1.99.33");
-
-			FilePaths_V1_99_33.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM1_Closed_Default, "00 - COM1 - Closed - Default.yat");
-			FilePaths_V1_99_33.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM2_Closed_Default, "00 - COM2 - Closed - Default.yat");
-			FilePaths_V1_99_33.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
-			FilePaths_V1_99_33.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			FilePaths_V1_99_33.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
-			FilePaths_V1_99_33.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
-			FilePaths_V1_99_33.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
-			FilePaths_V1_99_33.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
-			FilePaths_V1_99_33.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
-			FilePaths_V1_99_33.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
-
-			// V1.99.34
-			FilePaths_V1_99_34 = new SettingsFilePaths("2015-06-13 - YAT 2.0 Gamma 1'' Version 1.99.34");
-
-			FilePaths_V1_99_34.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM1_Closed_Default, "00 - COM1 - Closed - Default.yat");
-			FilePaths_V1_99_34.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM2_Closed_Default, "00 - COM2 - Closed - Default.yat");
-			FilePaths_V1_99_34.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
-			FilePaths_V1_99_34.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			FilePaths_V1_99_34.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
-			FilePaths_V1_99_34.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
-			FilePaths_V1_99_34.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
-			FilePaths_V1_99_34.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
-			FilePaths_V1_99_34.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
-			FilePaths_V1_99_34.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
-
-			// V1.99.50
-			FilePaths_V1_99_50 = new SettingsFilePaths("2016-09-16 - YAT 2.0 Gamma 2 Version 1.99.50");
-
-			FilePaths_V1_99_50.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM1_Closed_Default, "00 - COM1 - Closed - Default.yat");
-			FilePaths_V1_99_50.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM2_Closed_Default, "00 - COM2 - Closed - Default.yat");
-			FilePaths_V1_99_50.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
-			FilePaths_V1_99_50.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			FilePaths_V1_99_50.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
-			FilePaths_V1_99_50.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
-			FilePaths_V1_99_50.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
-			FilePaths_V1_99_50.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
-			FilePaths_V1_99_50.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
-			FilePaths_V1_99_50.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
-
-			// V1.99.51
-			FilePaths_V1_99_51 = new SettingsFilePaths("2016-09-17 - YAT 2.0 Gamma 2' Version 1.99.51");
-
-			FilePaths_V1_99_51.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM1_Closed_Default, "00 - COM1 - Closed - Default.yat");
-			FilePaths_V1_99_51.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM2_Closed_Default, "00 - COM2 - Closed - Default.yat");
-			FilePaths_V1_99_51.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
-			FilePaths_V1_99_51.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			FilePaths_V1_99_51.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
-			FilePaths_V1_99_51.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
-			FilePaths_V1_99_51.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
-			FilePaths_V1_99_51.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
-			FilePaths_V1_99_51.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
-			FilePaths_V1_99_51.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
-
-			// V1.99.52
-			FilePaths_V1_99_52 = new SettingsFilePaths("2016-09-30 - YAT 2.0 Gamma 2'' Version 1.99.52");
-
-			FilePaths_V1_99_52.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM1_Closed_Default, "00 - COM1 - Closed - Default.yat");
-			FilePaths_V1_99_52.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM2_Closed_Default, "00 - COM2 - Closed - Default.yat");
-			FilePaths_V1_99_52.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
-			FilePaths_V1_99_52.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			FilePaths_V1_99_52.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
-			FilePaths_V1_99_52.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
-			FilePaths_V1_99_52.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
-			FilePaths_V1_99_52.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
-			FilePaths_V1_99_52.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
-			FilePaths_V1_99_52.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
+			FilePaths_Empty.AddTerminalFileName(TerminalSettingsTestCase.T_Empty, "Empty.yat");
+			FilePaths_Empty.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_Empty, "Empty.yaw");
 
 			// Current
 			FilePaths_Current = new SettingsFilePaths("!-Current");
@@ -519,11 +330,219 @@ namespace YAT.Settings.Test
 			FilePaths_Current.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
 			FilePaths_Current.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
 
-			// Empty
-			FilePaths_Empty = new SettingsFilePaths("!-Empty");
+			// V1.99.70
+			FilePaths_V1_99_70 = new SettingsFilePaths("2017-07-03 - YAT 2.0 Gamma 3 Version 1.99.70");
 
-			FilePaths_Empty.AddTerminalFileName(TerminalSettingsTestCase.T_Empty, "Empty.yat");
-			FilePaths_Empty.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_Empty, "Empty.yaw");
+			FilePaths_V1_99_70.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM1_Closed_Default, "00 - COM1 - Closed - Default.yat");
+			FilePaths_V1_99_70.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM2_Closed_Default, "00 - COM2 - Closed - Default.yat");
+			FilePaths_V1_99_70.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
+			FilePaths_V1_99_70.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_70.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
+			FilePaths_V1_99_70.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
+			FilePaths_V1_99_70.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
+			FilePaths_V1_99_70.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
+			FilePaths_V1_99_70.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
+			FilePaths_V1_99_70.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
+
+			// V1.99.52
+			FilePaths_V1_99_52 = new SettingsFilePaths("2016-09-30 - YAT 2.0 Gamma 2'' Version 1.99.52");
+
+			FilePaths_V1_99_52.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM1_Closed_Default, "00 - COM1 - Closed - Default.yat");
+			FilePaths_V1_99_52.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM2_Closed_Default, "00 - COM2 - Closed - Default.yat");
+			FilePaths_V1_99_52.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
+			FilePaths_V1_99_52.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_52.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
+			FilePaths_V1_99_52.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
+			FilePaths_V1_99_52.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
+			FilePaths_V1_99_52.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
+			FilePaths_V1_99_52.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
+			FilePaths_V1_99_52.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
+
+			// V1.99.51
+			FilePaths_V1_99_51 = new SettingsFilePaths("2016-09-17 - YAT 2.0 Gamma 2' Version 1.99.51");
+
+			FilePaths_V1_99_51.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM1_Closed_Default, "00 - COM1 - Closed - Default.yat");
+			FilePaths_V1_99_51.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM2_Closed_Default, "00 - COM2 - Closed - Default.yat");
+			FilePaths_V1_99_51.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
+			FilePaths_V1_99_51.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_51.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
+			FilePaths_V1_99_51.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
+			FilePaths_V1_99_51.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
+			FilePaths_V1_99_51.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
+			FilePaths_V1_99_51.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
+			FilePaths_V1_99_51.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
+
+			// V1.99.50
+			FilePaths_V1_99_50 = new SettingsFilePaths("2016-09-16 - YAT 2.0 Gamma 2 Version 1.99.50");
+
+			FilePaths_V1_99_50.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM1_Closed_Default, "00 - COM1 - Closed - Default.yat");
+			FilePaths_V1_99_50.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM2_Closed_Default, "00 - COM2 - Closed - Default.yat");
+			FilePaths_V1_99_50.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
+			FilePaths_V1_99_50.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_50.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
+			FilePaths_V1_99_50.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
+			FilePaths_V1_99_50.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
+			FilePaths_V1_99_50.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
+			FilePaths_V1_99_50.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
+			FilePaths_V1_99_50.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
+
+			// V1.99.34
+			FilePaths_V1_99_34 = new SettingsFilePaths("2015-06-13 - YAT 2.0 Gamma 1'' Version 1.99.34");
+
+			FilePaths_V1_99_34.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM1_Closed_Default, "00 - COM1 - Closed - Default.yat");
+			FilePaths_V1_99_34.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM2_Closed_Default, "00 - COM2 - Closed - Default.yat");
+			FilePaths_V1_99_34.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
+			FilePaths_V1_99_34.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_34.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
+			FilePaths_V1_99_34.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
+			FilePaths_V1_99_34.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
+			FilePaths_V1_99_34.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
+			FilePaths_V1_99_34.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
+			FilePaths_V1_99_34.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
+
+			// V1.99.33
+			FilePaths_V1_99_33 = new SettingsFilePaths("2015-06-07 - YAT 2.0 Gamma 1' Version 1.99.33");
+
+			FilePaths_V1_99_33.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM1_Closed_Default, "00 - COM1 - Closed - Default.yat");
+			FilePaths_V1_99_33.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM2_Closed_Default, "00 - COM2 - Closed - Default.yat");
+			FilePaths_V1_99_33.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
+			FilePaths_V1_99_33.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_33.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
+			FilePaths_V1_99_33.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
+			FilePaths_V1_99_33.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
+			FilePaths_V1_99_33.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
+			FilePaths_V1_99_33.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
+			FilePaths_V1_99_33.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
+
+			// V1.99.32
+			FilePaths_V1_99_32 = new SettingsFilePaths("2015-06-01 - YAT 2.0 Gamma 1 Version 1.99.32");
+
+			FilePaths_V1_99_32.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM1_Closed_Default, "00 - COM1 - Closed - Default.yat");
+			FilePaths_V1_99_32.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM2_Closed_Default, "00 - COM2 - Closed - Default.yat");
+			FilePaths_V1_99_32.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
+			FilePaths_V1_99_32.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_32.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
+			FilePaths_V1_99_32.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
+			FilePaths_V1_99_32.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
+			FilePaths_V1_99_32.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
+			FilePaths_V1_99_32.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
+			FilePaths_V1_99_32.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
+
+			// V1.99.30
+			FilePaths_V1_99_30 = new SettingsFilePaths("2013-02-02 - YAT 2.0 Beta 4 Candidate 2 Version 1.99.30");
+
+			FilePaths_V1_99_30.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM1_Closed_Default, "00 - COM1 - Closed - Default.yat");
+			FilePaths_V1_99_30.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM2_Closed_Default, "00 - COM2 - Closed - Default.yat");
+			FilePaths_V1_99_30.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
+			FilePaths_V1_99_30.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_30.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
+			FilePaths_V1_99_30.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
+			FilePaths_V1_99_30.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
+			FilePaths_V1_99_30.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
+			FilePaths_V1_99_30.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
+			FilePaths_V1_99_30.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
+
+			// V1.99.28
+			FilePaths_V1_99_28 = new SettingsFilePaths("2011-12-05 - YAT 2.0 Beta 4 Candidate 1 Version 1.99.28");
+
+			FilePaths_V1_99_28.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM1_Closed_Default, "00 - COM1 - Closed - Default.yat");
+			FilePaths_V1_99_28.AddTerminalFileName(TerminalSettingsTestCase.T_00_COM2_Closed_Default, "00 - COM2 - Closed - Default.yat");
+			FilePaths_V1_99_28.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
+			FilePaths_V1_99_28.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_28.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
+			FilePaths_V1_99_28.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
+			FilePaths_V1_99_28.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
+			FilePaths_V1_99_28.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
+			FilePaths_V1_99_28.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
+			FilePaths_V1_99_28.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
+
+			// V1.99.26
+			FilePaths_V1_99_26 = new SettingsFilePaths("2011-04-25 - YAT 2.0 Beta 3 Candidate 4 Version 1.99.26");
+
+			FilePaths_V1_99_26.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
+			FilePaths_V1_99_26.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_26.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
+			FilePaths_V1_99_26.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
+			FilePaths_V1_99_26.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
+			FilePaths_V1_99_26.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
+			FilePaths_V1_99_26.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
+			FilePaths_V1_99_26.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
+
+			// V1.99.25
+			FilePaths_V1_99_25 = new SettingsFilePaths("2010-11-28 - YAT 2.0 Beta 3 Candidate 3 Version 1.99.25");
+
+			FilePaths_V1_99_25.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
+			FilePaths_V1_99_25.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_25.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
+			FilePaths_V1_99_25.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
+			FilePaths_V1_99_25.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
+			FilePaths_V1_99_25.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
+			FilePaths_V1_99_25.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2303) YAT.8 - Closed.yat");
+
+			// V1.99.24
+			FilePaths_V1_99_24 = new SettingsFilePaths("2010-11-11 - YAT 2.0 Beta 3 Candidate 2 Version 1.99.24");
+
+			FilePaths_V1_99_24.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
+			FilePaths_V1_99_24.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_24.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
+			FilePaths_V1_99_24.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
+			FilePaths_V1_99_24.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
+
+			// V1.99.22
+			FilePaths_V1_99_22 = new SettingsFilePaths("2009-09-08 - YAT 2.0 Beta 3 Candidate 1 Version 1.99.22");
+
+			FilePaths_V1_99_22.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
+			FilePaths_V1_99_22.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_22.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
+			FilePaths_V1_99_22.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
+
+			// V1.99.20
+			FilePaths_V1_99_20 = new SettingsFilePaths("2008-07-18 - YAT 2.0 Beta 2 Candidate 4 Version 1.99.20");
+
+			FilePaths_V1_99_20.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
+			FilePaths_V1_99_20.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_20.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
+			FilePaths_V1_99_20.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
+
+			// V1.99.19
+			FilePaths_V1_99_19 = new SettingsFilePaths("2008-04-01 - YAT 2.0 Beta 2 Candidate 3 Version 1.99.19");
+
+			FilePaths_V1_99_19.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open - Default.yat");
+			FilePaths_V1_99_19.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_19.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
+			FilePaths_V1_99_19.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
+
+			// V1.99.18
+			FilePaths_V1_99_18 = new SettingsFilePaths("2008-03-17 - YAT 2.0 Beta 2 Candidate 2 Version 1.99.18");
+
+			FilePaths_V1_99_18.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open - Default.yat");
+			FilePaths_V1_99_18.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_18.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
+			FilePaths_V1_99_18.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
+
+			// V1.99.17
+			FilePaths_V1_99_17 = new SettingsFilePaths("2008-02-11 - YAT 2.0 Beta 2 Candidate 1 Version 1.99.17");
+
+			FilePaths_V1_99_17.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default, "01 - COM1 - Open - Default.yat");
+			FilePaths_V1_99_17.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_17.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
+			FilePaths_V1_99_17.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
+
+			// V1.99.13
+			FilePaths_V1_99_13 = new SettingsFilePaths("2007-08-30 - YAT 2.0 Beta 2 Preliminary Version 1.99.13");
+
+			FilePaths_V1_99_13.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default,       "01 - COM1 - Open - Default.yat");
+			FilePaths_V1_99_13.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_13.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined,  "03 - COM1 - Closed - Predefined.yat");
+
+			FilePaths_V1_99_13.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
+
+			// V1.99.12
+			FilePaths_V1_99_12 = new SettingsFilePaths("2007-04-15 - YAT 2.0 Beta 1 Version 1.99.12");
+
+			FilePaths_V1_99_12.AddTerminalFileName(TerminalSettingsTestCase.T_01_COM1_Open_Default,       "01 - COM1 - Open - Default.yat");
+			FilePaths_V1_99_12.AddTerminalFileName(TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_12.AddTerminalFileName(TerminalSettingsTestCase.T_03_COM1_Closed_Predefined,  "03 - COM1 - Closed - Predefined.yat");
 		}
 
 		#endregion
