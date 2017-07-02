@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.0 Gamma 3 Version 1.99.70 :: 2017-07-03
+YAT 2.0 Gamma 3 Version 1.99.70 :: 2017-07-04
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -1156,14 +1156,14 @@ XTerm232 1.0.0 :: 2003-10-14
 5. Roadmap
 ====================================================================================================
 
-YAT 2.0 Final :: Expected in 2016/2017
+YAT 2.0 Final :: Expected in 2017
 ----------------------------------------------------------------------------------------------------
 YAT 2.0 Final will be released once all bugs and feature requests of priority 7 and above have been
 resolved. This state is expected to be reached by the next or next-next version of YAT. For details
 regarding the items, see bugs and feature requests at http://sourceforge.net/projects/y-a-terminal/.
 
 
-YAT 2.1 :: Expected in 2017/2018
+YAT 4.0 with Scripting :: Expected in 2018
 ----------------------------------------------------------------------------------------------------
 The next major step for YAT will be the integration of a scripting environment. Scripting will allow
 executing any kind of automatic procedures from within YAT.
