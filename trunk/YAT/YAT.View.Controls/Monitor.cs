@@ -1417,7 +1417,7 @@ namespace YAT.View.Controls
 		[Conditional("DEBUG_UPDATE")]
 		protected virtual void DebugUpdateMessage(string message)
 		{
-			Debug.Write(message);
+			Debug.WriteLine(message);
 		}
 
 		#endregion
