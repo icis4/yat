@@ -253,29 +253,29 @@ namespace MKY.IO.Usb.Test
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Device is named with a single letter")]
-		public static readonly string DeviceAIsAvailable = "USB Ser/HID device A '" + ConfigurationProvider.Configuration.DeviceA + "' is " + (ConfigurationProvider.Configuration.DeviceAIsAvailable ? "" : "not ") + "available";
+		public static readonly string DeviceAIsAvailable = "USB Ser/HID device A '" + ConfigurationProvider.Configuration.DeviceA + "' is " + (ConfigurationProvider.Configuration.DeviceAIsAvailable ? "" : "not ") + "available" + (ConfigurationProvider.Configuration.DeviceAIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Device is named with a single letter")]
-		public static readonly string DeviceBIsAvailable = "USB Ser/HID device B '" + ConfigurationProvider.Configuration.DeviceB + "' is " + (ConfigurationProvider.Configuration.DeviceBIsAvailable ? "" : "not ") + "available";
+		public static readonly string DeviceBIsAvailable = "USB Ser/HID device B '" + ConfigurationProvider.Configuration.DeviceB + "' is " + (ConfigurationProvider.Configuration.DeviceBIsAvailable ? "" : "not ") + "available" + (ConfigurationProvider.Configuration.DeviceBIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <remarks>"MT-SICS" is no valid NUnit category string as it contains an '-'.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
-		public static readonly string MTSicsDeviceAIsConnected = "USB Ser/HID MT SICS device A '" + ConfigurationProvider.Configuration.MTSicsDeviceA + "' is " + (ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ? "" : "not ") + "connected";
+		public static readonly string MTSicsDeviceAIsConnected = "USB Ser/HID MT SICS device A '" + ConfigurationProvider.Configuration.MTSicsDeviceA + "' is " + (ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ? "" : "not ") + "connected" + (ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <remarks>"MT-SICS" is no valid NUnit category string as it contains an '-'.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
-		public static readonly string MTSicsDeviceBIsConnected = "USB Ser/HID MT SICS device B '" + ConfigurationProvider.Configuration.MTSicsDeviceB + "' is " + (ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected ? "" : "not ") + "connected";
+		public static readonly string MTSicsDeviceBIsConnected = "USB Ser/HID MT SICS device B '" + ConfigurationProvider.Configuration.MTSicsDeviceB + "' is " + (ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected ? "" : "not ") + "connected" + (ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
-		public static readonly string TILaunchPadDeviceAIsConnected = "USB Ser/HID TI LaunchPad device A '" + ConfigurationProvider.Configuration.TILaunchPadDeviceA + "' is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceAIsConnected ? "" : "not ") + "connected";
+		public static readonly string TILaunchPadDeviceAIsConnected = "USB Ser/HID TI LaunchPad device A '" + ConfigurationProvider.Configuration.TILaunchPadDeviceA + "' is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceAIsConnected ? "" : "not ") + "connected" + (ConfigurationProvider.Configuration.TILaunchPadDeviceAIsConnected ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
-		public static readonly string TILaunchPadDeviceBIsConnected = "USB Ser/HID TI LaunchPad device B '" + ConfigurationProvider.Configuration.TILaunchPadDeviceB + "' is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsConnected ? "" : "not ") + "connected";
+		public static readonly string TILaunchPadDeviceBIsConnected = "USB Ser/HID TI LaunchPad device B '" + ConfigurationProvider.Configuration.TILaunchPadDeviceB + "' is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsConnected ? "" : "not ") + "connected" + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsConnected ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
