@@ -44,9 +44,9 @@ First, chose the most appropriate package:
  > For Windows XP, use a binary distribution.
    (The YAT installer is no longer compatible with Windows XP.)
 
-Unzip the package to a temporary location.
+It is recommended to unzip this package to a temporary location before starting installation.
 
-Then, run the ".msi" if Windows Installer is installed, otherwise "setup.exe".
+Run the ".msi" if Windows Installer is installed, otherwise "setup.exe".
  > Installer checks prerequisites and installs what is missing.
  > Installer installs YAT. Older versions of YAT are automatically replaced.
 
