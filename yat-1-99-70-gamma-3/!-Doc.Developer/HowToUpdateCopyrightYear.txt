@@ -1,0 +1,10 @@
+
+Search for the following expressions throughout "*.sln;*csproj;*.vcproj;*.vdproj;*.ps1;*.bat;*.cmd;*.txt;*.cs" and update year:
+> "Copyright © 2003-2017 Matthias Kläy."  => 392 replacements
+> "Copyright © 2007-2017 Matthias Kläy."  => 136 replacements
+> "Copyright © 2010-2017 Matthias Kläy."  =>  56 replacements
+> "2017, Matthias Kläy"                   =>   2 replacements
+
+Then, verify throughtout "*.*" and there should be no hits except within SVN and other explainable locations:
+> "2016<space>", where year = 2016 is the 'old' year
+> "201[^7] Matthias Kläy" using RegEx, where year = 2017 is already the 'new' year

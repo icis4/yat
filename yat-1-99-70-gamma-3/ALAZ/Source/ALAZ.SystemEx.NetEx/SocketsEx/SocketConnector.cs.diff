@@ -1,0 +1,39 @@
+@@ -41 +41 @@ using System;
+-using System.Diagnostics;
++using System.Threading;
+@@ -44 +44 @@ using System.Net.Sockets;
+-using System.Threading;
++using System.Text;
+@@ -173 +173 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+-                FSocket = new Socket(InternalLocalEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
++                FSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+@@ -254,3 +254,2 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+-                            // ----- \remind BEGIN -----
+-                            // 2017-06-03 / Matthias Klaey
+-                            // Handling exceptions.
++                            Host.DisposeConnection(connection);
++                            Host.RemoveSocketConnection(connection);
+@@ -258,10 +256,0 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+-                            try
+-                            {
+-                                Host.DisposeConnection(connection);
+-                                Host.RemoveSocketConnection(connection);
+-                            }
+-                            catch (ObjectDisposedException exInner)
+-                            {
+-                                DebugException(exInner);
+-                            }
+-
+@@ -398,12 +386,0 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+-		#region Debug
+-		//==========================================================================================
+-		// Debug
+-		//==========================================================================================
+-
+-		[Conditional("DEBUG_EXCEPTIONS")]
+-		private void DebugException(Exception ex)
+-		{
+-			MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes. It indicates an issue in ALAZ.");
+-		}
+-
+-		#endregion

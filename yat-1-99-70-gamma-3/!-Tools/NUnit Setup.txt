@@ -1,0 +1,76 @@
+﻿
+NUnit 2.6.4
+-----------
+
+Location
+ > Framework assemblies are located at "<WORKSPACE>\NUnit\framework" instead of absolutely referring
+   to the installation directory "C:\<Program Files>\NUnit <Version>\bin\framework" because this...
+    ...ensures that the assemblies required for linking are always available.
+    ...ensures that the desired explict assembly version is used, instead of automatic resolution.
+    ...prevents that <HintPath> is set to the installation directory by Visual Studio.
+    ...is an easy to understand and obvious approach.
+ > Implication of this approach:
+    > Assemblies need to be updated when updating the tool version.
+
+Settings
+ > Gui
+    > Tree Display
+       > Tree Images = Visual Studio
+       > Show Checkboxes
+    > Text Output
+       > Enable Trace Output
+ > IDE Support
+    > Visual Studio
+       > Enable = true
+
+
+YAT test suite
+--------------
+
+Three-tier based settings environment as described in 'MKY.Configuration.Provider'
+
+Categories
+ > Add all N/A categories to the 'Selected Categories'
+ > Tick 'Exclude these categories'
+
+
+YAT.nunit
+---------
+
+Attention, all potentially referenced assemblies must be listed in the NUnit config file.
+Otherwise, the NUnit application domain will not load all required assemblies and runtime
+loading of them by .NET will fail.
+
+Drawback: The NUnit GUI is spoilt with all non-test assemblies.
+
+Finding on 2017-01-26 after spending quite some time to get Scripting.Test.Files working...
+
+
+
+
+= = = = = = =
+ F U T U R E
+= = = = = = =
+
+
+NUnit 3.x
+---------
+
+Visual Studio > Tools > NuGet > For Solution...
+ > Install
+    > NUnit for 'NUnit' and all '...Test' projects
+
+Visual Studio > Tools > Extensions and Updates...
+ > Install
+    > NUnit Templates
+    > NUnit 3 Test Adapter
+        + Integrates into Visual Studio > Test
+        + Test Explorer can group the tests to Class / Duration / Outcome / Traits / Project
+       -- Test Explorer displays the tests in a linear sequence only, no tree view
+
+NUnit-GUI 3.x
+-------------
+Origin = https://github.com/nunit/nunit-gui/releases
+InstallTo = D:\Programme\NUnit-Gui (v0.3)
+
+-- Neither YAT.sln nor YAT.nunit is openable
