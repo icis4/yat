@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.19
+// MKY Version 1.0.20
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -209,7 +209,19 @@ namespace MKY.IO.Serial.SerialPort
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SerialPort"/> class with
+		/// default values of the <see cref="SerialPortSettings"/>.
+		/// </summary>
+		public SerialPort()
+			: this(new SerialPortSettings())
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SerialPort"/> class with
+		/// the given <see cref="SerialPortSettings"/>.
+		/// </summary>
 		public SerialPort(SerialPortSettings settings)
 		{
 			this.settings = settings;
@@ -298,6 +310,22 @@ namespace MKY.IO.Serial.SerialPort
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				return (this.settings);
+			}
+			set
+			{
+				// AssertNotDisposed() is called by 'IsStopped' below.
+
+				if (IsStopped)
+				{
+					if (value != null)
+						this.settings = value;
+					else
+						throw (new ArgumentNullException("value", "Settings cannot be changed to 'null'!"));
+				}
+				else
+				{
+					throw (new NotSupportedException("Settings cannot be changed while the port is open!"));
+				}
 			}
 		}
 
