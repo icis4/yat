@@ -140,6 +140,7 @@
     <Compile Include="Time\TimeTickItem.cs" />
     <Compile Include="Time\TimeStampItem.cs" />
     <Compile Include="Time\RateProvider.cs" />
+    <Compile Include="Types\BitConverterEx.cs" />
     <Compile Include="Types\BooleanEx.cs" />
     <Compile Include="Types\CharEx.cs" />
     <Compile Include="Types\ObjectEx.cs" />
