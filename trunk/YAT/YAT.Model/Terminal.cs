@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Gamma 3 Version 1.99.70
+// YAT 2.0 Delta Version 1.99.80
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -1235,30 +1235,26 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Sets terminal settings.
+		/// Applies new terminal settings.
 		/// </summary>
-		public virtual void SetSettings(ExplicitSettings settings)
+		public virtual void ApplySettings(Domain.Settings.TerminalSettings settings)
 		{
 			AssertNotDisposed();
 
-			// Settings have changed, recreate terminal with new settings:
-			if (this.terminal.IsStarted)
+			if (this.terminal.IsStarted) // Terminal is started, stop and restart it with the new settings:
 			{
-				// \todo
-				// The code below could be improved such that the I/O is only restarted/recreated
-				// in case the I/O settings have changed (but not e.g. 'ShowPort'). This could be
-				// done along with FR#251 "Migrate settings to tabbed dialog".
+				// Note that the whole terminal will be recreated. Thus, it must also be recreated if non-IO settings have changed.
 
-				// Terminal is open, close and re-open it with the new settings:
 				if (StopIO(false))
 				{
 					this.settingsRoot.SuspendChangeEvent();
-					this.settingsRoot.Explicit = settings;
+					this.settingsRoot.Explicit.Terminal = settings;
 
 					DetachTerminalEventHandlers();
-					Domain.Terminal oldTerminal = this.terminal;
-					this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
-					oldTerminal.Dispose();
+					using (var oldTerminal = this.terminal)
+					{
+						this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
+					}
 					AttachTerminalEventHandlers();
 
 					this.settingsRoot.ResumeChangeEvent();
@@ -1274,16 +1270,16 @@ namespace YAT.Model
 					OnTimedStatusTextRequest("Terminal settings not applied!");
 				}
 			}
-			else
+			else // Terminal is closed, simply set the new settings:
 			{
-				// Terminal is closed, simply set the new settings:
 				this.settingsRoot.SuspendChangeEvent();
-				this.settingsRoot.Explicit = settings;
+				this.settingsRoot.Explicit.Terminal = settings;
 
 				DetachTerminalEventHandlers();
-				Domain.Terminal oldTerminal = this.terminal;
-				this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
-				oldTerminal.Dispose();
+				using (var oldTerminal = this.terminal)
+				{
+					this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
+				}
 				AttachTerminalEventHandlers();
 
 				this.settingsRoot.ResumeChangeEvent();
@@ -1397,6 +1393,8 @@ namespace YAT.Model
 
 		private void HandleTerminalSettings(SettingsEventArgs e)
 		{
+			// \ToDo: ApplySettings should be called here => FR#309.
+
 			if (e.Inner == null)
 			{
 				if (settingsRoot_Changed_terminalTypeOld != this.settingsRoot.TerminalType) {
@@ -1406,27 +1404,27 @@ namespace YAT.Model
 					UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 				}
 			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.IO))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal.IO))
 			{
-				if (settingsRoot_Changed_endianessOld != this.settingsRoot.IO.Endianness) {
-					settingsRoot_Changed_endianessOld = this.settingsRoot.IO.Endianness;
+				if (settingsRoot_Changed_endianessOld != this.settingsRoot.Terminal.IO.Endianness) {
+					settingsRoot_Changed_endianessOld = this.settingsRoot.Terminal.IO.Endianness;
 
 					// Endianess has changed, recreate the auto response:
 					UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 				}
 			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Send))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal.Send))
 			{
-				if (settingsRoot_Changed_sendImmediatelyOld != this.settingsRoot.Send.SendImmediately) {
-					settingsRoot_Changed_sendImmediatelyOld = this.settingsRoot.Send.SendImmediately;
+				if (settingsRoot_Changed_sendImmediatelyOld != this.settingsRoot.Terminal.Send.SendImmediately) {
+					settingsRoot_Changed_sendImmediatelyOld = this.settingsRoot.Terminal.Send.SendImmediately;
 
 					// Send immediately has changed, reset the last command:
 					this.settingsRoot.SendText.Command.Clear();
 				}
 			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.TextTerminal))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal.TextTerminal))
 			{
-				this.log.TextTerminalEncoding = (EncodingEx)this.settingsRoot.TextTerminal.Encoding;
+				this.log.TextTerminalEncoding = (EncodingEx)this.settingsRoot.Terminal.TextTerminal.Encoding;
 
 				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 			}
@@ -2366,7 +2364,7 @@ namespace YAT.Model
 			{
 				case Domain.IOType.SerialPort:
 				{
-					MKY.IO.Ports.SerialPortId portId = this.settingsRoot.IO.SerialPort.PortId;
+					MKY.IO.Ports.SerialPortId portId = this.settingsRoot.Terminal.IO.SerialPort.PortId;
 					if (portId != null)
 					{
 						MKY.IO.Ports.SerialPortCollection ports = new MKY.IO.Ports.SerialPortCollection();
@@ -2384,11 +2382,43 @@ namespace YAT.Model
 							}
 							else
 							{
-								var dr = ShowSerialPortNotAvailableSwitchQuestion(portId, ports[0]);
-								if (dr == DialogResult.Yes)
-									this.settingsRoot.IO.SerialPort.PortId = ports[0];
+								// Try to retrieve detailed information:
+								try
+								{
+									ports.RetrieveCaptions();
+									ports.DetectPortsInUse();
+								}
+								catch (Exception ex)
+								{
+									DebugEx.WriteException(GetType(), ex, "Failed to retrieve detailed port information");
+								}
 
-								return (true); // Return 'true' in any case, device may not yet be available but 'AutoOpen'.
+								// Select the first available port that is not in use:
+								MKY.IO.Ports.SerialPortId portIdOfFirstPortThatIsNotInUse = null;
+								foreach (var port in ports)
+								{
+									if (!port.IsInUse)
+									{
+										portIdOfFirstPortThatIsNotInUse = port;
+										break;
+									}
+								}
+
+								if (portIdOfFirstPortThatIsNotInUse != null)
+								{
+									var dr = ShowSerialPortNotAvailableSwitchQuestion(portId, portIdOfFirstPortThatIsNotInUse);
+									if (dr == DialogResult.Yes)
+									{
+										this.settingsRoot.Terminal.IO.SerialPort.PortId = portIdOfFirstPortThatIsNotInUse;
+										ApplySettings(this.settingsRoot.Terminal); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+									}
+
+									return (true); // Return 'true' in any case, device may not yet be available but 'AutoOpen'.
+								}
+								else
+								{
+									return (false);
+								}
 							}
 						}
 						else // ports.Count == 0
@@ -2413,7 +2443,7 @@ namespace YAT.Model
 				case Domain.IOType.TcpServer:
 				case Domain.IOType.TcpAutoSocket:
 				{
-					MKY.Net.IPNetworkInterfaceEx localInterface = this.settingsRoot.IO.Socket.LocalInterface;
+					MKY.Net.IPNetworkInterfaceEx localInterface = this.settingsRoot.Terminal.IO.Socket.LocalInterface;
 					if (localInterface != null)
 					{
 						MKY.Net.IPNetworkInterfaceCollection localInterfaces = new MKY.Net.IPNetworkInterfaceCollection();
@@ -2436,7 +2466,10 @@ namespace YAT.Model
 
 								var dr = ShowLocalInterfaceNotAvailableAlternateQuestion(localInterface, localInterfaces[sameDescriptionIndex]);
 								if (dr == DialogResult.Yes)
-									this.settingsRoot.IO.Socket.LocalInterface = localInterfaces[sameDescriptionIndex];
+								{
+									this.settingsRoot.Terminal.IO.Socket.LocalInterface = localInterfaces[sameDescriptionIndex];
+									ApplySettings(this.settingsRoot.Terminal); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+								}
 
 								return (true); // Return 'true' in any case, device may not yet be available but 'AutoOpen'.
 							}
@@ -2445,7 +2478,8 @@ namespace YAT.Model
 								var dr = ShowLocalInterfaceNotAvailableDefaultQuestion(localInterface, localInterfaces[0]);
 								if (dr == DialogResult.Yes)
 								{
-									this.settingsRoot.IO.Socket.LocalInterface = localInterfaces[0];
+									this.settingsRoot.Terminal.IO.Socket.LocalInterface = localInterfaces[0];
+									ApplySettings(this.settingsRoot.Terminal); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
 									return (true);
 								}
 								else
@@ -2468,7 +2502,7 @@ namespace YAT.Model
 
 				case Domain.IOType.UsbSerialHid:
 				{
-					MKY.IO.Usb.DeviceInfo deviceInfo = this.settingsRoot.IO.UsbSerialHidDevice.DeviceInfo;
+					MKY.IO.Usb.DeviceInfo deviceInfo = this.settingsRoot.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
 					if (deviceInfo != null)
 					{
 						MKY.IO.Usb.SerialHidDeviceCollection devices = new MKY.IO.Usb.SerialHidDeviceCollection();
@@ -2494,17 +2528,22 @@ namespace YAT.Model
 								{
 									var dr = ShowUsbSerialHidDeviceNotAvailableAlternateQuestion(deviceInfo, devices[sameVidPidIndex]);
 									if (dr == DialogResult.Yes)
-										this.settingsRoot.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
+									{
+										this.settingsRoot.Terminal.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
+										ApplySettings(this.settingsRoot.Terminal); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+									}
 
 									return (true); // Return 'true' in any case, device may not yet be available but 'AutoOpen'.
 								}
 								else
 								{
 									// Clear the 'Changed' flag in case of automatically changing settings:
-									bool haveAlreadyBeenChanged = this.settingsRoot.IO.UsbSerialHidDevice.HaveChanged;
-									this.settingsRoot.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
-									if (!haveAlreadyBeenChanged)
-										this.settingsRoot.IO.UsbSerialHidDevice.ClearChanged();
+									bool hadAlreadyBeenChanged = this.settingsRoot.Terminal.IO.UsbSerialHidDevice.HaveChanged;
+									this.settingsRoot.Terminal.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
+									if (!hadAlreadyBeenChanged)
+										this.settingsRoot.Terminal.IO.UsbSerialHidDevice.ClearChanged();
+
+									ApplySettings(this.settingsRoot.Terminal); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
 
 									return (true); // Return 'true' in any case, device may not yet be available but 'AutoOpen'.
 								}
@@ -2570,7 +2609,7 @@ namespace YAT.Model
 		{
 			string message =
 				"The previous serial port " + portIdNotAvailable + " is currently not available. " +
-				"Switch to " + portIdAlternate + " instead?";
+				"Switch to " + portIdAlternate + " (first available port that is not in use) instead?";
 
 			var dr = OnMessageInputRequest
 			(

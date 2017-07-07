@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Gamma 3 Version 1.99.70
+// YAT 2.0 Delta Version 1.99.80
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -63,7 +63,17 @@ namespace YAT.View.Forms
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TerminalSettings"/> class.
+		/// </summary>
+		/// <remarks>
+		/// Using <see cref="Settings.Terminal.ExplicitSettings"/> instead of simply using
+		/// <see cref="Domain.Settings.TerminalSettings"/> for two reasons:
+		/// <list type="bullet">
+		/// <item><description>Handling of <see cref="Settings.Terminal.ExplicitSettings.UserName"/>.</description></item>
+		/// <item><description>Prepared for future migration to tree view dialog containing all settings.</description></item>
+		/// </list>
+		/// </remarks>
 		public TerminalSettings(Settings.Terminal.ExplicitSettings settings)
 		{
 			InitializeComponent();

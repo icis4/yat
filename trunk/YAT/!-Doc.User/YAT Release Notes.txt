@@ -84,6 +84,18 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
+YAT 2.0 Delta Preliminary Version 1.99.75 :: 2017-07-07
+----------------------------------------------------------------------------------------------------
+
+Important changes:
+- Additional workaround has been applied to prevent 'ObjectDisposedException' when restarting or
+  disconnecting USB/RS-232 converters (USB CDC) without closing the serial COM port. Workaround also
+  applies when undocking or hibernating a computer running YAT without closing the serial COM port.
+
+Fixed bugs:
+- Serial COM port switching again properly works (bug #376).
+
+
 YAT 2.0 Gamma 3 Version 1.99.70 :: 2017-07-04
 ----------------------------------------------------------------------------------------------------
 
@@ -151,9 +163,9 @@ Limitations and known issues:
    > Issue with window list (bug #31).
 - Serial COM port limitations of .NET:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
-   > Use of USB/RS-232 converters (USB CDC) while disconnect, undock or sleep without closing the
-     serial COM port may require to reset the converters, i.e. disconnect and reconnect them, or
-     restart the computer. In addition, it may be required to disconnect or reset any device
+   > Use of USB/RS-232 converters (USB CDC) while disconnect, undock or hibernate without closing
+     the serial COM port may require to reset the converters, i.e. disconnect and reconnect them,
+     or restart the computer. In addition, it may be required to disconnect or reset any device
      sending continuous data. Otherwise, the related serial COM ports may no longer be opened by
      an application. Issue is being reported by many users of .NET, but Microsoft seems to have
      no plans fixing it. If an 'ObjectDisposedException' or 'UnauthorizedAccessException' still
@@ -258,7 +270,7 @@ Important changes:
 - Test board (serial COM ports, USB devices,...) created and test cases adapted accordingly.
 
 Fixed bugs:
-- Use of USB/RS-232 converters (USB CDC) while disconnect, undock or sleep without closing the
+- Use of USB/RS-232 converters (USB CDC) while disconnect, undock or hibernate without closing the
   serial COM port no longer leads to an ObjectDisposedException or UnauthorizedAccessException in
   in most cases (bugs #224, #254, #293, #316 and #345). However, it is still required to reset the
   converters, i.e. disconnect and reconnect them, or restart the computer. In addition, it may be
@@ -293,9 +305,9 @@ Limitations and known issues:
    > Issue with window list (bug #31).
 - Serial COM port limitations of .NET:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
-   > Use of USB/RS-232 converters (USB CDC) while disconnect, undock or sleep without closing the
-     serial COM port may require to reset the converters, i.e. disconnect and reconnect them, or
-     restart the computer. In addition, it may be required to disconnect or reset any device
+   > Use of USB/RS-232 converters (USB CDC) while disconnect, undock or hibernate without closing
+     the serial COM port may require to reset the converters, i.e. disconnect and reconnect them,
+     or restart the computer. In addition, it may be required to disconnect or reset any device
      sending continuous data. Otherwise, the related serial COM ports may no longer be opened by
      an application. Issue is being reported by many users of .NET, but Microsoft seems to have
      no plans fixing it. If an 'ObjectDisposedException' or 'UnauthorizedAccessException' still
@@ -421,8 +433,8 @@ Limitations and known issues:
    > Manual RFR/CTS flow control 'Manual Hardware' and 'Manual Hardware Combined' may not be
      supported on Win7/64 (bug #254)
    > Handling of serial COM port break states may not be supported (feature request #109)
-- Use of USB/RS-232 converters (USB CDC) while sleep or undock without closing the serial COM port
-  leads to an ObjectDisposedException in the system internal infrastructure (bugs #293 and #316)
+- Use of USB/RS-232 converters (USB CDC) while hibernate or undock without closing the serial COM
+  port leads to ObjectDisposedException in the system internal infrastructure (bugs #293 and #316)
 - Use of internal serial COM port may lead to slowdown of the application on certain computers; due
   to superfluous events triggered by the control pins (bugs #271 and #277); root cause yet unknown
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of

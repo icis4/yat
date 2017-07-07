@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Gamma 3 Version 1.99.70
+// YAT 2.0 Delta Version 1.99.80
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -2750,8 +2750,8 @@ namespace YAT.View.Forms
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + preset + "' is an invalid preset!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
-			ExplicitSettings sre = this.settingsRoot.Explicit;
-			MKY.IO.Serial.SerialPort.SerialCommunicationSettings scs = sre.Terminal.IO.SerialPort.Communication;
+			var ts = this.settingsRoot.Explicit.Terminal;
+			var scs = ts.IO.SerialPort.Communication;
 			scs.SuspendChangeEvent();
 			switch (preset)
 			{
@@ -2833,7 +2833,7 @@ namespace YAT.View.Forms
 			scs.ResumeChangeEvent();
 			if (scs.HaveChanged)
 			{
-				this.terminal.SetSettings(sre);
+				this.terminal.ApplySettings(ts);
 				SetTimedStatusText("Terminal settings set to " + presetString + ".");
 			}
 			else
@@ -3861,11 +3861,11 @@ namespace YAT.View.Forms
 			{
 				Refresh();
 
-				ExplicitSettings fsr = f.SettingsResult;
+				var fsr = f.SettingsResult;
 				if (fsr.HaveChanged)
 				{
 					SuspendHandlingTerminalSettings();
-					this.terminal.SetSettings(fsr);
+					this.terminal.ApplySettings(fsr.Terminal);
 					ResumeHandlingTerminalSettings();
 				}
 				else
