@@ -329,7 +329,7 @@ namespace MKY.IO.Ports
 							}
 							catch (ThreadAbortException ex)
 							{
-								DebugEx.WriteException(this.GetType(), ex, "DetectPortsInUse() has detected a thread exception. It is ignored here but re-thrown.");
+								DebugEx.WriteException(GetType(), ex, "DetectPortsInUse() has detected a thread exception. It is ignored here but re-thrown.");
 
 								// Do not activate 'InUse', as a thread abort doesn't indicate that a port is in use.
 								// An abort may happen when e.g. cancelling the 'SelectionWorker.DoWork()' method.
