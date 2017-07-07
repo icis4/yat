@@ -2394,22 +2394,22 @@ namespace YAT.Model
 								}
 
 								// Select the first available port that is not in use:
-								MKY.IO.Ports.SerialPortId portIdOfFirstPortThatIsNotInUse = null;
+								MKY.IO.Ports.SerialPortId portIdAlternate = null;
 								foreach (var port in ports)
 								{
 									if (!port.IsInUse)
 									{
-										portIdOfFirstPortThatIsNotInUse = port;
+										portIdAlternate = port;
 										break;
 									}
 								}
 
-								if (portIdOfFirstPortThatIsNotInUse != null)
+								if (portIdAlternate != null)
 								{
-									var dr = ShowSerialPortNotAvailableSwitchQuestion(portId, portIdOfFirstPortThatIsNotInUse);
+									var dr = ShowSerialPortNotAvailableSwitchQuestion(portId, portIdAlternate);
 									if (dr == DialogResult.Yes)
 									{
-										this.settingsRoot.Terminal.IO.SerialPort.PortId = portIdOfFirstPortThatIsNotInUse;
+										this.settingsRoot.Terminal.IO.SerialPort.PortId = portIdAlternate;
 										ApplySettings(this.settingsRoot.Terminal); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
 									}
 
@@ -2608,8 +2608,8 @@ namespace YAT.Model
 		private DialogResult ShowSerialPortNotAvailableSwitchQuestion(string portIdNotAvailable, string portIdAlternate)
 		{
 			string message =
-				"The previous serial port " + portIdNotAvailable + " is currently not available. " +
-				"Switch to " + portIdAlternate + " (first available port that is not in use) instead?";
+				"The previous serial port " + portIdNotAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
+				"Switch to " + portIdAlternate + " (first available port that is currently not in use) instead?";
 
 			var dr = OnMessageInputRequest
 			(
