@@ -953,18 +953,19 @@ namespace YAT.View.Forms
 				toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Enabled = false;
 			}
 
-			toolStripButton_MainTool_Terminal_Clear.Enabled           = childIsReady;
-			toolStripButton_MainTool_Terminal_Refresh.Enabled         = childIsReady;
-			toolStripButton_MainTool_Terminal_CopyToClipboard.Enabled = childIsReady;
-			toolStripButton_MainTool_Terminal_SaveToFile.Enabled      = childIsReady;
-			toolStripButton_MainTool_Terminal_Print.Enabled           = childIsReady;
+			toolStripButton_MainTool_Terminal_Clear.Enabled             = childIsReady;
+			toolStripButton_MainTool_Terminal_Refresh.Enabled           = childIsReady;
+			toolStripButton_MainTool_Terminal_CopyToClipboard.Enabled   = childIsReady;
+			toolStripButton_MainTool_Terminal_SaveToFile.Enabled        = childIsReady;
+			toolStripButton_MainTool_Terminal_Print.Enabled             = childIsReady;
 
-			toolStripButton_MainTool_Terminal_Log_Settings.Enabled    = childIsReady;
-			toolStripButton_MainTool_Terminal_Log_On.Enabled          = childIsReady && !logIsOn;
-			toolStripButton_MainTool_Terminal_Log_Off.Enabled         = childIsReady &&  logIsOn;
-			toolStripButton_MainTool_Terminal_Log_OpenFile.Enabled    = childIsReady &&  logFileExists;
+			toolStripButton_MainTool_Terminal_Log_Settings.Enabled      = childIsReady;
+			toolStripButton_MainTool_Terminal_Log_On.Enabled            = childIsReady && !logIsOn;
+			toolStripButton_MainTool_Terminal_Log_Off.Enabled           = childIsReady &&  logIsOn;
+			toolStripButton_MainTool_Terminal_Log_OpenFile.Enabled      = childIsReady &&  logFileExists;
+			toolStripButton_MainTool_Terminal_Log_OpenDirectory.Enabled = childIsReady;
 
-			toolStripButton_MainTool_Terminal_Format.Enabled          = childIsReady;
+			toolStripButton_MainTool_Terminal_Format.Enabled            = childIsReady;
 
 			this.isSettingControls.Leave();
 		}
