@@ -103,7 +103,7 @@ namespace MKY.Win32.DotNET
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(this.GetType(), ex, "Failed to initialize serial port handle!");
+				DebugEx.WriteException(GetType(), ex, "Failed to initialize serial port handle!");
 
 				hFile.Close();
 				this.handle = null;
