@@ -26,22 +26,9 @@ namespace MKY.IO.Ports
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					try
-					{
-						// This fixes the deadlock issue described in the header of this class.
-						// Attention, the base stream is only available if the port is open!
-						if ((this.IsOpen) && (this.BaseStream != null))
-						{
-							// Attention, do not call BaseStream.Flush() !!!
-							// It will block if the device is no longer available !!!
-
-							this.BaseStream.Close();
-
-							// Attention, do not call BaseStream.Dispose() !!!
-							// It can throw after a call to Close() !!!
-						}
-					}
-					catch (Exception) { } // May be 'IOException' or 'ObjectDisposedException' or ...
+					// Try to patch some of the issues described in the ".\!-Doc\*.txt" files:
+					TryToApplyEventLoopHandlerPatchAndCloseBaseStream(this.baseStreamReferenceForCloseSafely);
+					this.baseStreamReferenceForCloseSafely = null;
 				}
 
 				// Dispose designer generated managed resources if requested:
@@ -56,7 +43,7 @@ namespace MKY.IO.Ports
 
 			try
 			{
-				// This fixes a result of the deadlock issue described in the header of this class.
+				// Try to patch some of the issues described in the ".\!-Doc\*.txt" files:
 				base.Dispose(disposing);
 			}
 			catch (Exception) { } // May be 'UnauthorizedAccessException' or ...

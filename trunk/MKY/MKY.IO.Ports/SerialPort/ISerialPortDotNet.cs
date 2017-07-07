@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.19
+// MKY Version 1.0.20
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -567,6 +567,7 @@ namespace MKY.IO.Ports
 		/// <exception cref="System.InvalidOperationException">
 		/// The specified port is not open.
 		/// </exception>
+		[Obsolete("This standard variant of Close() doesn't know the cirumstances. Use ISerialPortEx.CloseNormally() or ISerialPortEx.CloseAfterException() instead.")]
 		void Close();
 
 		/// <summary>
