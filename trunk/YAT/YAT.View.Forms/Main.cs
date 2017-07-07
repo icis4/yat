@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Gamma 3 Version 1.99.70
+// YAT 2.0 Delta Version 1.99.80
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -676,12 +676,12 @@ namespace YAT.View.Forms
 
 			this.isSettingControls.Leave();
 
-			// This is a work-around to the following bugs:
+			// This is a workaround to the following bugs:
 			//  > #119 "MDI child list isn't always updated"
 			//  > #180 "Menu update of the terminal settings"
 			//  > #213 "Wrong indication 'COM 1 - Closed'"
 			//
-			// Attention, only apply the work-around in case of the event below!
+			// Attention, only apply the workaround in case of the event below!
 			// Otherwise, ActivateMdiChild(f) -> SetChildControls() will recurse here!
 			if (isDropDownOpening)
 			{

@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Gamma 3 Version 1.99.70
+// YAT 2.0 Delta Version 1.99.80
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -433,7 +433,7 @@ namespace YAT.Domain
 		{
 			lock (this.sendThreadSyncObj)
 			{
-				DebugThreadStateMessage("SendThread() gets created...");
+				DebugThreadState("SendThread() gets created...");
 
 				if (this.sendThread == null)
 				{
@@ -443,12 +443,12 @@ namespace YAT.Domain
 					this.sendThread.Name = "Terminal [" + (1000 + this.instanceId) + "] Send Thread";
 					this.sendThread.Start(); // Offset with 1000 to distinguish this ID from the 'real' terminal ID.
 
-					DebugThreadStateMessage("...successfully created.");
+					DebugThreadState("...successfully created.");
 				}
 #if (DEBUG)
 				else
 				{
-					DebugThreadStateMessage("...failed as it already exists.");
+					DebugThreadState("...failed as it already exists.");
 				}
 #endif
 			}
@@ -483,7 +483,7 @@ namespace YAT.Domain
 			{
 				if (this.sendThread != null)
 				{
-					DebugThreadStateMessage("SendThread() gets stopped...");
+					DebugThreadState("SendThread() gets stopped...");
 
 					this.sendThreadRunFlag = false;
 
@@ -502,19 +502,19 @@ namespace YAT.Domain
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
-								DebugThreadStateMessage("...failed! Aborting...");
-								DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								DebugThreadState("...failed! Aborting...");
+								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
 
 								isAborting = true;       // Thread.Abort() must not be used whenever possible!
 								this.sendThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
-							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
+							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 
 						if (!isAborting)
-							DebugThreadStateMessage("...successfully stopped.");
+							DebugThreadState("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -522,7 +522,7 @@ namespace YAT.Domain
 						// "Thread cannot be aborted" as it just needs to be ensured that the thread
 						// has or will be terminated for sure.
 
-						DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.sendThread = null;
@@ -530,7 +530,7 @@ namespace YAT.Domain
 			#if (DEBUG)
 				else // (this.sendThread == null)
 				{
-					DebugThreadStateMessage("...not necessary as it doesn't exist anymore.");
+					DebugThreadState("...not necessary as it doesn't exist anymore.");
 				}
 			#endif
 
@@ -929,7 +929,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void SendThread()
 		{
-			DebugThreadStateMessage("SendThread() has started.");
+			DebugThreadState("SendThread() has started.");
 
 			try
 			{
@@ -1014,7 +1014,7 @@ namespace YAT.Domain
 				Thread.ResetAbort();
 			}
 
-			DebugThreadStateMessage("SendThread() has terminated.");
+			DebugThreadState("SendThread() has terminated.");
 		}
 
 		/// <summary></summary>
@@ -3024,7 +3024,7 @@ namespace YAT.Domain
 		}
 
 		[Conditional("DEBUG_THREAD_STATE")]
-		private void DebugThreadStateMessage(string message)
+		private void DebugThreadState(string message)
 		{
 			DebugMessage(message);
 		}
