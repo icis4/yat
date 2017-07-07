@@ -144,6 +144,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="SerialPort\!-Doc\Verification of 1.99.75 on Win7.txt" />
+    <Content Include="SerialPort\!-Doc\Verification of 1.99.70 on Win7.txt" />
     <Content Include="SerialPort\!-Doc\UnauthorizedAccssException and deadlock issue.txt" />
     <Content Include="SerialPort\!-Doc\IOException issue.txt" />
     <Content Include="SerialPort\!-Doc\ObjectDisposedException issue.txt" />

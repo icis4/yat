@@ -27,7 +27,7 @@ namespace MKY.IO.Ports
 				if (disposing)
 				{
 					// Try to patch some of the issues described in the ".\!-Doc\*.txt" files:
-					TryToApplyEventLoopHandlerPatchAndCloseBaseStream(this.baseStreamReferenceForCloseSafely);
+					TryToApplyEventLoopHandlerPatchAndCloseBaseStreamSafely(this.baseStreamReferenceForCloseSafely);
 					this.baseStreamReferenceForCloseSafely = null;
 				}
 
