@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.19
+// MKY Version 1.0.20
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -590,9 +590,9 @@ namespace MKY.IO.Serial.Socket
 				{
 					try
 					{
-						DebugSocketShutdownMessage("Stopping socket...");
+						DebugSocketShutdown("Stopping socket...");
 						this.socket.Stop(); // Attention: ALAZ sockets don't properly stop on Dispose().
-						DebugSocketShutdownMessage("...successfully stopped.");
+						DebugSocketShutdown("...successfully stopped.");
 					}
 					catch (Exception ex)
 					{
@@ -601,9 +601,9 @@ namespace MKY.IO.Serial.Socket
 
 					try
 					{
-						DebugSocketShutdownMessage("Disposing socket...");
+						DebugSocketShutdown("Disposing socket...");
 						this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose().
-						DebugSocketShutdownMessage("...successfully disposed.");
+						DebugSocketShutdown("...successfully disposed.");
 					}
 					catch (Exception ex)
 					{
@@ -675,7 +675,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				if (this.dataSentThread != null)
 				{
-					DebugThreadStateMessage("DataSentThread() gets stopped...");
+					DebugThreadState("DataSentThread() gets stopped...");
 
 					this.dataSentThreadRunFlag = false;
 
@@ -694,19 +694,19 @@ namespace MKY.IO.Serial.Socket
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
-								DebugThreadStateMessage("...failed! Aborting...");
-								DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								DebugThreadState("...failed! Aborting...");
+								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
 
 								isAborting = true;           // Thread.Abort() must not be used whenever possible!
 								this.dataSentThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
-							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
+							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 
 						if (!isAborting)
-							DebugThreadStateMessage("...successfully stopped.");
+							DebugThreadState("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -714,7 +714,7 @@ namespace MKY.IO.Serial.Socket
 						// "Thread cannot be aborted" as it just needs to be ensured that the thread
 						// has or will be terminated for sure.
 
-						DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.dataSentThread = null;
@@ -929,7 +929,7 @@ namespace MKY.IO.Serial.Socket
 		/// </param>
 		public virtual void OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
-			DebugSocketShutdownMessage("Socket 'OnDisconnected' event!");
+			DebugSocketShutdown("Socket 'OnDisconnected' event!");
 
 			bool isConnected = false;
 			lock (this.socketConnections)
@@ -955,7 +955,7 @@ namespace MKY.IO.Serial.Socket
 		/// </param>
 		public virtual void OnException(ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs e)
 		{
-			DebugSocketShutdownMessage("Socket 'OnException' event!");
+			DebugSocketShutdown("Socket 'OnException' event!");
 
 			// Note that state and shutdown locks do not get disposed in order to be still able to
 			// access while asynchronously closing/disconnecting. See Dispose() for more details.
@@ -1081,13 +1081,13 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		[Conditional("DEBUG_THREAD_STATE")]
-		private void DebugThreadStateMessage(string message)
+		private void DebugThreadState(string message)
 		{
 			DebugMessage(message);
 		}
 
 		[Conditional("DEBUG_SOCKET_SHUTDOWN")]
-		private void DebugSocketShutdownMessage(string message)
+		private void DebugSocketShutdown(string message)
 		{
 			DebugMessage(message);
 		}

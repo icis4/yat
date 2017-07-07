@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.19
+// MKY Version 1.0.20
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -885,7 +885,7 @@ namespace MKY.IO.Usb
 			{
 				if (this.receiveThread != null)
 				{
-					DebugThreadStateMessage("ReceiveThread() gets stopped...");
+					DebugThreadState("ReceiveThread() gets stopped...");
 
 					this.receiveThreadRunFlag = false;
 
@@ -904,19 +904,19 @@ namespace MKY.IO.Usb
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
-								DebugThreadStateMessage("...failed! Aborting...");
-								DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								DebugThreadState("...failed! Aborting...");
+								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
 
 								isAborting = true;          // Thread.Abort() must not be used whenever possible!
 								this.receiveThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
-							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
+							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 
 						if (!isAborting)
-							DebugThreadStateMessage("...successfully stopped.");
+							DebugThreadState("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -924,7 +924,7 @@ namespace MKY.IO.Usb
 						// "Thread cannot be aborted" as it just needs to be ensured that the thread
 						// has or will be terminated for sure.
 
-						DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.receiveThread = null;
@@ -1077,7 +1077,7 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void ReceiveThread()
 		{
-			DebugThreadStateMessage("ReceiveThread() has started.");
+			DebugThreadState("ReceiveThread() has started.");
 
 			try
 			{
@@ -1129,7 +1129,7 @@ namespace MKY.IO.Usb
 				Thread.ResetAbort();
 			}
 
-			DebugThreadStateMessage("ReceiveThread() has terminated.");
+			DebugThreadState("ReceiveThread() has terminated.");
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
@@ -1386,7 +1386,7 @@ namespace MKY.IO.Usb
 		}
 
 		[Conditional("DEBUG_THREAD_STATE")]
-		private void DebugThreadStateMessage(string message)
+		private void DebugThreadState(string message)
 		{
 			DebugMessage(message);
 		}

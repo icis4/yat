@@ -372,9 +372,9 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                 if (connections != null)
                 {
 
-                    DebugShutdownMessage("Resetting 'FWaitConnectionsDisposing'...");
+                    DebugShutdown("Resetting 'FWaitConnectionsDisposing'...");
                     FWaitConnectionsDisposing.Reset();
-                    DebugShutdownMessage("...'FWaitConnectionsDisposing' reset.");
+                    DebugShutdown("...'FWaitConnectionsDisposing' reset.");
 
                     int loopSleep = 0;
 
@@ -386,9 +386,9 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
                     if (connections.Length > 0)
                     {
-                        DebugShutdownMessage("Waiting 'FWaitConnectionsDisposing'...");
+                        DebugShutdown("Waiting 'FWaitConnectionsDisposing'...");
                         FWaitConnectionsDisposing.WaitOne(Timeout.Infinite, false);
-                        DebugShutdownMessage("...'FWaitConnectionsDisposing' waited.");
+                        DebugShutdown("...'FWaitConnectionsDisposing' waited.");
                     }
 
                 }
@@ -1807,9 +1807,9 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                       {
                           if (FSocketConnections.Count <= 0)
                           {
-                              DebugShutdownMessage("Setting 'FWaitConnectionsDisposing'...");
+                              DebugShutdown("Setting 'FWaitConnectionsDisposing'...");
                               FWaitConnectionsDisposing.Set();
-                              DebugShutdownMessage("...'FWaitConnectionsDisposing' set.");
+                              DebugShutdown("...'FWaitConnectionsDisposing' set.");
                           }
                       }
                       catch (NullReferenceException ex)
@@ -2758,7 +2758,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 		}
 
 		[Conditional("DEBUG_SHUTDOWN")]
-		private void DebugShutdownMessage(string message)
+		private void DebugShutdown(string message)
 		{
 			Debug.WriteLine
 			(

@@ -107,7 +107,7 @@ Use MKY.Diagnostics.FinalizationHelper
 
 Disposal
 --------
-Use MKY.Diagnostics.DisposalHelper
+Use MKY.Diagnostics.DebugDisposal
 
 Base class
 
