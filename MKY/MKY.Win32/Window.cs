@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.19
+// MKY Version 1.0.20
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -405,7 +405,7 @@ namespace MKY.Win32
 			/// region), COMPLEXREGION (nonrectangular invalidated region; overlapping rectangles),
 			/// or NULLREGION (no invalidated region).
 			/// If the function fails, the return value is ERROR. To get extended error information,
-			/// call <see cref="WinError.GetLastError"/>.
+			/// call <see cref="WinError.LastErrorToString"/>.
 			/// </returns>
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Function signature is given by the Win32 API.")]

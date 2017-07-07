@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.19
+// MKY Version 1.0.20
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -504,7 +504,7 @@ namespace MKY.Win32
 			/// <param name="lpNumberOfBytesTransferred">A pointer to a variable to hold the number of bytes read.</param>
 			/// <param name="bWait">False to return immediately.</param>
 			/// <returns>Non-zero on success and the number of bytes read.</returns>
-			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool GetOverlappedResult(SafeFileHandle hFile, IntPtr lpOverlapped, out int lpNumberOfBytesTransferred, bool bWait)
 			{
 				UInt32 bytesTransferred;
@@ -533,7 +533,7 @@ namespace MKY.Win32
 			/// <param name="lpNumberOfBytesRead">A pointer to a variable that will hold the number of bytes read.</param>
 			/// <param name="lpOverlapped">An overlapped structure whose hEvent member is set to an event object.</param>
 			/// <returns>The report in ReadBuffer.</returns>
-			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool ReadFile(SafeFileHandle hFile, IntPtr lpBuffer, int nNumberOfBytesToRead, out int lpNumberOfBytesRead, ref NativeOverlapped lpOverlapped)
 			{
@@ -567,7 +567,7 @@ namespace MKY.Win32
 			/// <param name="lpNumberOfBytesWritten">An integer to hold the number of bytes written.</param>
 			/// <param name="lpOverlapped">An overlapped structure whose hEvent member is set to an event object.</param>
 			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
-			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool WriteFile(SafeFileHandle hFile, byte[] lpBuffer, out int lpNumberOfBytesWritten, ref NativeOverlapped lpOverlapped)
 			{

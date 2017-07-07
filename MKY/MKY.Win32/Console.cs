@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.19
+// MKY Version 1.0.20
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -167,7 +167,7 @@ namespace MKY.Win32
 			/// GENERIC_READ and GENERIC_WRITE access rights, unless the application has used
 			/// SetStdHandle to set a standard handle with lesser access.
 			/// If the function fails, the return value is INVALID_HANDLE_VALUE. To get extended
-			/// error information, call <see cref="WinError.GetLastError"/>.
+			/// error information, call <see cref="WinError.LastErrorToString"/>.
 			/// If an application does not have associated standard handles, such as a service
 			/// running on an interactive desktop, and has not redirected them, the return value
 			/// is NULL.
@@ -215,7 +215,7 @@ namespace MKY.Win32
 			/// <returns>
 			/// If the function succeeds, the return value is nonzero.
 			/// If the function fails, the return value is zero.
-			/// To get extended error information, call <see cref="WinError.GetLastError"/>.
+			/// To get extended error information, call <see cref="WinError.LastErrorToString"/>.
 			/// </returns>
 			/// <remarks>
 			/// The standard handles of a process may have been redirected by a call to SetStdHandle,
