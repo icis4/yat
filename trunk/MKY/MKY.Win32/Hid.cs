@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.19
+// MKY Version 1.0.20
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -462,7 +462,7 @@ namespace MKY.Win32
 			public static extern void HidD_GetHidGuid([In, Out] ref Guid HidGuid);
 
 			/// <summary></summary>
-			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool HidD_GetIndexedString(SafeFileHandle HidDeviceObject, int StringIndex, out string IndexedString)
 			{
 				StringBuilder s = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
@@ -502,7 +502,7 @@ namespace MKY.Win32
 			private static extern Boolean HidD_GetInputReport([In] SafeFileHandle HidDeviceObject, [In, Out] byte[] ReportBuffer, [In] UInt32 ReportBufferLength);
 
 			/// <summary></summary>
-			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool HidD_GetManufacturerString(SafeFileHandle HidDeviceObject, out string Manufacturer)
 			{
 				StringBuilder s = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
@@ -567,7 +567,7 @@ namespace MKY.Win32
 			public static extern Boolean HidD_GetPreparsedData([In] SafeFileHandle HidDeviceObject, [Out] out IntPtr PreparsedData);
 
 			/// <summary></summary>
-			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool HidD_GetProductString(SafeFileHandle HidDeviceObject, out string Product)
 			{
 				StringBuilder s = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
@@ -591,7 +591,7 @@ namespace MKY.Win32
 			/// 
 			/// Saying hello to StyleCop ;-.
 			/// </remarks>
-			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool HidD_GetSerialString(SafeFileHandle HidDeviceObject, out string Serial)
 			{
 				StringBuilder s = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
@@ -776,7 +776,7 @@ namespace MKY.Win32
 			Debug.WriteLine("USB HID couldn't create shared device query handle:");
 			Debug.Indent();
 			Debug.WriteLine("Path = " + devicePath);
-			Debug.WriteLine(WinError.GetLastError());
+			Debug.WriteLine(WinError.LastErrorToString());
 			Debug.Unindent();
 
 			deviceHandle = null;
@@ -809,7 +809,7 @@ namespace MKY.Win32
 			Debug.WriteLine("USB HID couldn't create shared device read/write handle.");
 			Debug.Indent();
 			Debug.WriteLine("Path = " + devicePath);
-			Debug.WriteLine(WinError.GetLastError());
+			Debug.WriteLine(WinError.LastErrorToString());
 			Debug.Unindent();
 
 			readHandle = null;
@@ -817,40 +817,40 @@ namespace MKY.Win32
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 		public static bool GetManufacturerString(SafeFileHandle deviceHandle, out string manufacturer)
 		{
-			DebugStringAccessMessageBox("Retrieving manufacturer string via hid.dll::HidD_GetManufacturerString...");
+			DebugStringAccessMessageBoxes("Retrieving manufacturer string via hid.dll::HidD_GetManufacturerString...");
 
 			bool success = GetString(deviceHandle, NativeMethods.HidD_GetManufacturerString, out manufacturer);
 
-			DebugStringAccessMessageBox(success, @"...successfully retrieved """ + manufacturer + @""".", "...failed to retrieve manufacturer string.");
+			DebugStringAccessMessageBoxes(success, @"...successfully retrieved """ + manufacturer + @""".", "...failed to retrieve manufacturer string.");
 
 			return (success);
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 		public static bool GetProductString(SafeFileHandle deviceHandle, out string product)
 		{
-			DebugStringAccessMessageBox("Retrieving product string via hid.dll::HidD_GetProductString...");
+			DebugStringAccessMessageBoxes("Retrieving product string via hid.dll::HidD_GetProductString...");
 
 			bool success = GetString(deviceHandle, NativeMethods.HidD_GetProductString, out product);
 
-			DebugStringAccessMessageBox(success, @"...successfully retrieved """ + product + @""".", "...failed to retrieve product string.");
+			DebugStringAccessMessageBoxes(success, @"...successfully retrieved """ + product + @""".", "...failed to retrieve product string.");
 
 			return (success);
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 		public static bool GetSerialString(SafeFileHandle deviceHandle, out string serial)
 		{
-			DebugStringAccessMessageBox("Retrieving serial string via hid.dll::HidD_GetSerialString...");
+			DebugStringAccessMessageBoxes("Retrieving serial string via hid.dll::HidD_GetSerialString...");
 
 			bool success = GetString(deviceHandle, NativeMethods.HidD_GetSerialString, out serial);
 
-			DebugStringAccessMessageBox(success, @"...successfully retrieved """ + serial + @""".", "...failed to retrieve serial string.");
+			DebugStringAccessMessageBoxes(success, @"...successfully retrieved """ + serial + @""".", "...failed to retrieve serial string.");
 
 			return (success);
 		}
@@ -886,14 +886,14 @@ namespace MKY.Win32
 						if (!string.IsNullOrEmpty(contentString) &&
 							(contentString != languageString)) // Looks like a proper invariant string.
 						{
-							DebugStringAccessMessage(@"USB device string """ + contentString + @""" successfully retrieved.");
+							DebugStringAccess(@"USB device string """ + contentString + @""" successfully retrieved.");
 
 							hidString = contentString;
 							return (true);
 						}
 						else // contentString == languageString means that content isn't available and index 0 has be retrieved.
 						{
-							DebugStringAccessMessage(@"USB device string is not available on this device.");
+							DebugStringAccess(@"USB device string is not available on this device.");
 
 							hidString = "";
 							return (true);
@@ -902,7 +902,7 @@ namespace MKY.Win32
 				}
 			}
 
-			DebugStringAccessMessage(@"USB device string could not be retrieved!");
+			DebugStringAccess(@"USB device string could not be retrieved!");
 
 			hidString = "";
 			return (false);
@@ -1067,25 +1067,25 @@ namespace MKY.Win32
 		//==========================================================================================
 
 		[Conditional("DEBUG_STRING_ACCESS")]
-		private static void DebugStringAccessMessage(string message)
+		private static void DebugStringAccess(string message)
 		{
 			Debug.WriteLine(message);
 		}
 
 		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "Don't care, it's for debugging only...")]
 		[Conditional("DEBUG_STRING_ACCESS_MESSAGEBOXES")]
-		private static void DebugStringAccessMessageBox(string message)
+		private static void DebugStringAccessMessageBoxes(string message)
 		{
 			MessageBox.Show(message);
 		}
 
 		[Conditional("DEBUG_STRING_ACCESS_MESSAGEBOXES")]
-		private static void DebugStringAccessMessageBox(bool condition, string messageIf, string messageElse)
+		private static void DebugStringAccessMessageBoxes(bool condition, string messageIf, string messageElse)
 		{
 			if (condition)
-				DebugStringAccessMessageBox(messageIf);
+				DebugStringAccessMessageBoxes(messageIf);
 			else
-				DebugStringAccessMessageBox(messageElse);
+				DebugStringAccessMessageBoxes(messageElse);
 		}
 
 		#endregion

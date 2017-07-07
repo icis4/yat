@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.19
+// MKY Version 1.0.20
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -159,7 +159,7 @@ namespace MKY.Win32
 		/// can retrieve the logged error by calling <see cref="WinError.GetLastErrorCode"/> or
 		/// <see cref="WinError.GetLastErrorMessage"/>.
 		/// </returns>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 		public static bool InitializeInterfaceHandle(SafeFileHandle deviceHandle, out SafeFileHandle interfaceHandle)
 		{
 			return (NativeMethods.WinUsb_Initialize(deviceHandle, out interfaceHandle));
@@ -171,7 +171,7 @@ namespace MKY.Win32
 		/// <remarks>
 		/// Supported under Windows Vista and later only. Applies to all methods of WinUsb.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Function signature is given by the Win32 API.")]
 		public static bool GetDeviceDescriptor(SafeFileHandle interfaceHandle, int index, int languageId, byte[] buffer, out int lengthTransferred)
 		{
 			try
@@ -201,7 +201,7 @@ namespace MKY.Win32
 		/// <remarks>
 		/// Supported under Windows Vista and later only. Applies to all methods of WinUsb.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Function signature is given by the Win32 API.")]
 		public static bool GetConfigurationDescriptor(SafeFileHandle interfaceHandle, int index, int languageId, byte[] buffer, out int lengthTransferred)
 		{
 			try
@@ -231,8 +231,8 @@ namespace MKY.Win32
 		/// <remarks>
 		/// Supported under Windows Vista and later only. Applies to all methods of WinUsb.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Function signature is given by the Win32 API.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Function signature is given by the Win32 API.")]
 		public static bool GetStringDescriptor(SafeFileHandle interfaceHandle, int index, int languageId, out string buffer, out int lengthTransferred)
 		{
 			try

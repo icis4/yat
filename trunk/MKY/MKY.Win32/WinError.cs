@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.19
+// MKY Version 1.0.20
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -29,6 +29,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -108,8 +109,7 @@ namespace MKY.Win32
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Naming according to naming in the Win32 API.")]
 		public static int GetLastErrorCode()
 		{
-			// Get the error code for the last API call.
-			return (System.Runtime.InteropServices.Marshal.GetLastWin32Error());
+			return (Marshal.GetLastWin32Error());
 		}
 
 		/// <summary>
@@ -119,15 +119,22 @@ namespace MKY.Win32
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Naming according to naming in the Win32 API.")]
 		public static string GetLastErrorMessage()
 		{
-			// Get the error code for the last API call.
-			int errorCode = GetLastErrorCode();
+			return (GetErrorMessage(GetLastErrorCode()));
+		}
 
-			// Get the result message that corresponds to the code.
+		/// <summary>
+		/// Get message that describes the error of an API call.
+		/// </summary>
+		/// <returns>The resulting message.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Naming according to naming in the Win32 API.")]
+		public static string GetErrorMessage(int errorCode)
+		{
+			// Get the result message that corresponds to the code:
 			long temp = 0;
 			StringBuilder message = new StringBuilder(256);
 			int bytes = NativeMethods.FormatMessage(NativeConstants.FORMAT_MESSAGE_FROM_SYSTEM, ref temp, errorCode, 0, message, message.Capacity, IntPtr.Zero);
 
-			// Subtract two characters from the message to strip EOL.
+			// Subtract two characters from the message to strip EOL:
 			int eolLength = Environment.NewLine.Length;
 			if (bytes > eolLength)
 				message = message.Remove(bytes - eolLength, eolLength);
@@ -140,15 +147,33 @@ namespace MKY.Win32
 		/// </summary>
 		/// <returns>The resulting string.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Naming according to naming in the Win32 API.")]
-		public static string GetLastError()
+		public static string LastErrorToString()
 		{
+			var errorCode = GetLastErrorCode();
+
 			var sb = new StringBuilder();
 			sb.Append("API call returned code '");
-			sb.Append(GetLastErrorCode());
+			sb.Append(errorCode);
 			sb.Append("' meaning '");
-			sb.Append(GetLastErrorMessage());
+			sb.Append(GetErrorMessage(errorCode));
 			sb.Append("'.");
 			return (sb.ToString());
+		}
+
+		/// <summary>
+		/// Get exception object that describes the error of an API call.
+		/// </summary>
+		public static IOException LastErrorToIOException()
+		{
+			var errorCode = WinError.GetLastErrorCode();
+			var message = WinError.GetErrorMessage(errorCode);
+			var hresult = HResultFromErrorCode(errorCode);
+			return (new IOException(message, hresult));
+		}
+
+		private static int HResultFromErrorCode(int errorCode)
+		{
+			return ((int)(0x80070000 | (uint)errorCode));
 		}
 
 		#endregion

@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.19
+// MKY Version 1.0.20
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -682,7 +682,7 @@ namespace MKY.Win32
 		/// SP_DEVICE_INTERFACE_DETAIL_DATA structure.
 		/// </param>
 		/// <returns>True if the conversion succeeded, False if not.</returns>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 		public static bool DeviceChangeMessageToDevicePath(Message deviceChangeMessage, out string devicePath)
 		{
 			try
