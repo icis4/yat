@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.19
+// MKY Version 1.0.20
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -43,8 +43,12 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
 using System.Threading;
 
 using MKY.Contracts;
@@ -54,118 +58,32 @@ using MKY.Diagnostics;
 
 namespace MKY.IO.Ports
 {
-	// =============================================================================================
-	// Some detailed information on .NET implementation can be found at Kim Hamilton's post at
-	// http://www.innovatic.dk/knowledg/SerialCOM/SerialCOM.htm.
-	// 
-	// Note, there is a serious deadlock issue in <see cref="System.IO.Ports.SerialPort"/>.
-	// 
-	// Google for...
-	//  > [UnauthorizedAccessException "access to the port"]
-	//  > [ObjectDisposedException "safe handle has been closed"]
-	// ...for additional information and suggested workarounds.
-	// 
-	// This issue can be reproduced by 'TestDisconnectReconnectSerialPortExWithContinuousSending'
-	// implemented in 'MKY.IO.Ports.Test.SerialPort.ConnectionTest'. Note this is an 'Explicit'
-	// test as it requires to manually reset the sending device beause it will remain in continuous
-	// mode as well as the port device because it cannot be opened until disconnected/reconnected!
-	// 
-	// =============================================================================================
-	// Source: http://msdn.microsoft.com/en-us/library/system.io.ports.serialport_methods.aspx (3.5)
-	// Author: Dan Randolph
-	// 
-	// There is a deadlock problem with the internal close operation of System.IO.Ports.SerialPort.
-	// Use BeginInvoke instead of Invoke from the DataReceived event handler to start the method
-	// that reads from the SerialPort buffer and it will solve the problem. I finally tracked down
-	// the problem to the Close method by putting a start/stop button on the form. Then I was able
-	// to lock up the application and found that Close was the culpret. I'm pretty sure that
-	// components.Dispose() will end up calling the SerialPort Close method if it is open.
-	// 
-	// In my application, the user can change the baud rate and the port. In order to do
-	// this, the SerialPort must be closed fist and this caused a random deadlock in my
-	// application. Microsoft should document this better!
-	// =============================================================================================
-	// 
-	// Use case 1: Open/close a single time from GUI
-	// ---------------------------------------------
-	// 1. Start YAT
-	// 2. Open port
-	// 3. Close port
-	// 4. Exit YAT
-	// 
-	// Use case 2: Close/open multiple times from GUI
-	// ----------------------------------------------
-	// 1. Start YAT
-	// 2. Open port
-	// 3. Close port
-	// 4. Open port
-	// 5. Repeat close/open multiple times
-	// 6. Exit YAT
-	// 
-	// Use case 3: Close/disconnect/reconnect/open multiple times
-	// ----------------------------------------------------------
-	// 1. Start YAT
-	// 2. Open port
-	// 3. Close port
-	// 4. Disconnect USB-to-serial adapter
-	// 5. Reconnect USB-to-serial adapter
-	// 6. Open port
-	// 7. Repeat close/disconnect/reconnect/open multiple times
-	// 8. Exit YAT
-	// 
-	// Use case 4: Disconnect/reconnect multiple times
-	// -----------------------------------------------
-	// 1. Start YAT
-	// 2. Open port
-	// 3. Disconnect USB-to-serial adapter
-	// 4. Reconnect USB-to-serial adapter
-	//    => System.UnauthorizedAccssException("Access is denied.")
-	//       @ System.IO.Ports.InternalResources.WinIOError(int errorCode, string str)
-	//       @ System.IO.Ports.SerialStream.Dispose(bool disposing)
-	//       @ System.IO.Ports.SerialStream.Finalize()
-	// 5. Repeat disconnect/reconnect multiple times
-	// 6. Exit YAT
-	// 
-	// =============================================================================================
-	// (from above)
-	// 
-	// Use cases 1 through 3 work fine. But use case 4 results in an exception. Workarounds tried
-	// in May 2008:
-	// - Async close
-	// - Async DataReceived event
-	// - Immediate async read
-	// - Dispatch of all open/close operations onto Windows.Forms main thread using OnRequest event
-	// - try GC.Collect(forced) => no exceptions on GC, exception gets fired afterwards
-	// 
-	// --------------------------------------------------------------------------------------------
-	// 
-	// October 2011:
-	// Issue fixed by adding the DisposeBaseStream_SerialPortBugFix() to MKY.IO.Ports.SerialPortEx()
-	// 
-	// (see below)
-	// =============================================================================================
-	// Source: http://msdn.microsoft.com/en-us/library/system.io.ports.serialport_methods.aspx (3.5)
-	// Author: jmatos1
-	// 
-	// I suspect that adding a Dispose() call on the internalSerialStream might be a good change.
-	// =============================================================================================
-
-	/// Saying hello to StyleCop ;-.
 	/// <summary>
 	/// Serial port component based on <see cref="System.IO.Ports.SerialPort"/>.
 	/// </summary>
 	/// <remarks>
-	/// Remarks see above (out of doc tag due to words not recognized by StyleCop).
+	/// See ".\!-Doc\*.txt" files.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	[ToolboxBitmap(typeof(System.IO.Ports.SerialPort))]
 	[DefaultProperty("PortName")]
 	public partial class SerialPortEx : System.IO.Ports.SerialPort, ISerialPort
 	{
+		#region Static Fields
+		//==========================================================================================
+		// Static Fields
+		//==========================================================================================
+
+		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
+
+		#endregion
+
 		#region Constants
 		//==========================================================================================
 		// Constants
 		//==========================================================================================
+
+		private const string Undefined = "<Undefined>";
 
 		private const string PortNameDefault = SerialPortId.FirstStandardPortName;
 		private const int    PortIdDefault   = SerialPortId.FirstStandardPortNumber;
@@ -183,6 +101,11 @@ namespace MKY.IO.Ports
 		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
 		/// </summary>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(SerialPortEx).FullName);
+
+		/// <remarks>
+		/// Required for patches to the 'ObjectDisposedException' issue described in <see cref="Close"/>.
+		/// </remarks>
+		private Stream baseStreamReferenceForCloseSafely;
 
 		private SerialPortControlPinCount controlPinCount;
 
@@ -912,40 +835,63 @@ namespace MKY.IO.Ports
 			{
 				OnOpening(EventArgs.Empty);
 
-#if (DEBUG_OPEN_CLOSE)
 				try
 				{
-					DebugWrite("Trying base.Open()...", true);
+					DebugOpenClose("Trying base.Open()...");
 					base.Open();
-					DebugWrite("...OK.");
+					DebugOpenClose("...done");
 				}
 				catch (Exception ex)
 				{
-					DebugWrite("...exception!");
-					DebugWrite(ex.Message);
+					DebugEx.WriteException(GetType(), ex, "...failed!");
 					throw; // Re-throw!
 				}
-#else
-				base.Open();
-#endif
-				// This is a fix to the 'ObjectDisposedException' issue described in several locations:
-				// http://stackoverflow.com/questions/3808885/net-4-serial-port-objectdisposedexception-on-windows-7-only
-				// http://stackoverflow.com/questions/3230311/problem-with-serialport
-				//
-				// Details on this exception:
-				// Type: System.ObjectDisposedException
-				// Message: Safe handle has been closed
-				// Source: mscorlib
-				// Stack:
-				//    at System.StubHelpers.StubHelpers.SafeHandleC2NHelper(Object pThis, IntPtr pCleanupWorkList)
-				//    at Microsoft.Win32.UnsafeNativeMethods.GetOverlappedResult(SafeFileHandle hFile, NativeOverlapped * lpOverlapped, Int32 & lpNumberOfBytesTransferred, Boolean bWait)
-				//    at System.IO.Ports.SerialStream.EventLoopRunner.WaitForCommEvent()
-				//    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-				//    at System.Threading.ThreadHelper.ThreadStart()
-				//
-				// It suppresses finalization of the underlying base stream while the port is open.
-				// It will later safely be re-registered by Close().
-				GC.SuppressFinalize(this.BaseStream);
+
+				// --------------------------------------------------------------------------------
+				// Patches to the 'ObjectDisposedException' issue described in the ".\!-Doc\*.txt".
+				// --------------------------------------------------------------------------------
+
+				// Immediately try to access the underlying stream:
+				try
+				{
+					this.baseStreamReferenceForCloseSafely = BaseStream;
+
+					DiscardInBuffer();
+					DiscardOutBuffer();
+				}
+				catch (Exception ex)
+				{
+					if (this.baseStreamReferenceForCloseSafely == null)
+					{
+						var field = typeof(System.IO.Ports.SerialPort).GetField("internalSerialStream", BindingFlags.Instance | BindingFlags.NonPublic);
+						if (field == null) // This will happen if the SerialPort class is changed in future versions of the .NET Framework.
+						{
+							DebugEx.WriteException(GetType(), ex, "Serious issue when trying to open the port! No longer able to retrieve internal stream using reflection!");
+						}
+						else
+						{
+							DebugEx.WriteException(GetType(), ex, "Failed to access the port! Safely disposing the internal stream using reflection.");
+							TryToApplyEventLoopHandlerPatchAndCloseBaseStreamSafely((Stream)field.GetValue(this));
+						////this.baseStreamReferenceForCloseSafely is already null.
+						}
+					}
+					else
+					{
+						DebugEx.WriteException(GetType(), ex, "Failed to access the port! Safely disposing the internal stream.");
+						TryToApplyEventLoopHandlerPatchAndCloseBaseStreamSafely(this.baseStreamReferenceForCloseSafely);
+						this.baseStreamReferenceForCloseSafely = null;
+					}
+
+					throw; // Re-throw!
+				}
+
+				// Port successfully opened. Still suppress finalization of the underlying stream
+				// while the port is open. It will later safely be re-registered by Close().
+				GC.SuppressFinalize(BaseStream);
+
+				// --------------------------------------------------------------------------------
+				// End of patches to the 'ObjectDisposedException' issue.
+				// --------------------------------------------------------------------------------
 
 				// Invoke the additional events implemented by this class:
 				OnOpened(EventArgs.Empty);
@@ -995,62 +941,215 @@ namespace MKY.IO.Ports
 		/// <exception cref="System.InvalidOperationException">
 		/// The specified port is not open.
 		/// </exception>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[Obsolete("This standard variant of Close() doesn't know the cirumstances. Use CloseNormally() or CloseAfterException() instead.")]
 		public new void Close()
+		{
+			// AssertNotDisposed() is called by 'CloseAfterException()' below.
+
+			CloseAfterException();
+		}
+
+		/// <summary>
+		/// Closes the port according to documentation of <see cref="Close"/>.
+		/// </summary>
+		/// <remarks>
+		/// This variant of <see cref="Close"/> shall be used when closing the port after a port
+		/// related exception has happened, e.g. a <see cref="System.IO.IOException"/> after a
+		/// device got physically disconnected. When closing the port intentionally in a
+		/// "look-forward" manner, use <see cref="CloseNormally"/> instead.
+		/// </remarks>
+		public void CloseAfterException()
+		{
+			// AssertNotDisposed() is called by 'DoClose()' below.
+
+			DoClose(true);
+		}
+
+		/// <summary>
+		/// Closes the port according to documentation of <see cref="Close"/>.
+		/// </summary>
+		/// <remarks>
+		/// This variant of <see cref="Close"/> shall be used when closing intentionally in a
+		/// "look-forward" manner. When closing the port after a port related exception has
+		/// happened, e.g. a <see cref="System.IO.IOException"/> after a device got physically
+		/// disconnected, use <see cref="CloseAfterException"/> instead.
+		/// </remarks>
+		public void CloseNormally()
+		{
+			// AssertNotDisposed() is called by 'DoClose()' below.
+
+			DoClose(false);
+		}
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		private void DoClose(bool isAfterException)
 		{
 			AssertNotDisposed();
 
-			if (IsOpen)
+			if (IsOpen || isAfterException)
 			{
 				OnClosing(EventArgs.Empty);
 
-				// This is a fix to the 'ObjectDisposedException' issue described in several locations:
-				// http://stackoverflow.com/questions/3808885/net-4-serial-port-objectdisposedexception-on-windows-7-only
-				// http://stackoverflow.com/questions/3230311/problem-with-serialport
-				//
-				// Details on this exception:
-				// Type: System.ObjectDisposedException
-				// Message: SafeHandle has been closed
-				// Source: mscorlib
-				// Stack:
-				//    at System.StubHelpers.StubHelpers.SafeHandleC2NHelper(Object pThis, IntPtr pCleanupWorkList)
-				//    at Microsoft.Win32.UnsafeNativeMethods.GetOverlappedResult(SafeFileHandle hFile, NativeOverlapped * lpOverlapped, Int32 & lpNumberOfBytesTransferred, Boolean bWait)
-				//    at System.IO.Ports.SerialStream.EventLoopRunner.WaitForCommEvent()
-				//    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-				//    at System.Threading.ThreadHelper.ThreadStart()
-				//
-				// It suppresses finalization of the underlying base stream while the port is open.
-				// It is here safely re-registered.
+				// --------------------------------------------------------------------------------
+				// Patches to the 'ObjectDisposedException' issue described in the ".\!-Doc\*.txt".
+				// --------------------------------------------------------------------------------
+
+				// Safely re-register finalization of the underlying stream:
 				try
 				{
-					GC.ReRegisterForFinalize(this.BaseStream);
+					GC.ReRegisterForFinalize(BaseStream);
 				}
 				catch (Exception ex)
 				{
 					DebugEx.WriteException(GetType(), ex);
 				}
 
-#if (DEBUG_OPEN_CLOSE)
+				// Apply patch:
+				TryToApplyEventLoopHandlerPatchAndCloseBaseStreamSafely(this.baseStreamReferenceForCloseSafely);
+				this.baseStreamReferenceForCloseSafely = null;
+
+				// Note that the patch must be applied in any case because:
+				//  - With the Microsoft driver, a device disconnect is not detected, thus the user
+				//    will have to manually = intentionally close the port!
+				//    (corresponds to verification # 3.2. and 4.3.)
+
+				// --------------------------------------------------------------------------------
+				// End of patches to the 'ObjectDisposedException' issue.
+				// --------------------------------------------------------------------------------
+
 				try
 				{
-					DebugWrite("Trying base.Close()...", true);
+					DebugOpenClose("Trying base.Close()...");
 					base.Close();
-					DebugWrite("...OK.");
+					DebugOpenClose("...done");
 				}
-				catch (Exception ex)
+				catch (Exception ex) // May be 'IOException' or 'ObjectDisposedException' or ...
 				{
-					DebugWrite("...exception!");
-					DebugWrite(ex.Message);
-					throw; // Re-throw!
+					DebugEx.WriteException(GetType(), ex, "...failed!");
+
+					if (!isAfterException) // CloseNormally() shall be notified about exceptions.
+						throw; // Re-throw!
+					else
+						Debug.WriteLine("Suppressing exception as 'isAfterException' has been signalled.");
 				}
-#else
-				base.Close();
-#endif
+
 				// Invoke the additional events implemented by this class:
 				OnClosed(EventArgs.Empty);
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.OutputBreak));
+			}
+		}
+
+		/// <summary>
+		/// Safely disposes of the underlying stream even if a USB serial interface was physically
+		/// removed from the system in a reliable manner based on https://pastebin.com/KmKEVzR8.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="System.IO.Ports.SerialPort"/> class has 3 different problems in disposal
+		/// in case of a USB serial device that is physically removed:
+		/// 
+		/// 1. The eventLoopRunner is asked to stop and <see cref="System.IO.Ports.SerialPort.IsOpen"/> 
+		/// returns false. Upon disposal this property is checked and closing  the internal serial
+		/// stream is skipped, thus keeping the original handle open indefinitely (until the finalizer
+		/// runs which leads to the next problem).
+		/// 
+		/// The solution for this one is to manually close the internal serial stream. We can get
+		/// its reference by <see cref="System.IO.Ports.SerialPort.BaseStream" /> before the
+		/// exception has happened or by reflection and getting the "internalSerialStream" field.
+		/// 
+		/// 2. Closing the internal serial stream throws an exception and closes the internal handle
+		/// without waiting for its eventLoopRunner thread to finish, causing an uncatchable
+		/// ObjectDisposedException from it later on when the finalizer runs (which oddly avoids
+		/// throwing the exception but still fails to wait for the eventLoopRunner).
+		/// 
+		/// The solution is to manually ask the event loop runner thread to shutdown
+		/// (via reflection) and waiting for it before closing the internal serial stream.
+		/// 
+		/// 3. Since Dispose throws exceptions, the finalizer is not suppressed.
+		/// 
+		/// The solution is to suppress their finalizers at the beginning.
+		/// </remarks>
+		protected static void TryToApplyEventLoopHandlerPatchAndCloseBaseStreamSafely(Stream baseStreamReference)
+		{
+			TryToShutdownBaseStreamEventLoopHandler(baseStreamReference);
+
+			CloseBaseStreamSafely(baseStreamReference);
+		}
+
+		/// <summary></summary>
+		protected static void CloseBaseStreamSafely(Stream baseStreamReference)
+		{
+			try
+			{
+				// Attention, the base stream is only available while the port is open!
+
+				if (baseStreamReference != null)
+				{
+					// Attention, do not call Flush() !!!
+					// It will block if the device is no longer available !!!
+
+					baseStreamReference.Close();
+
+					// Attention, do not call Dispose() !!!
+					// It can throw after a call to Close() !!!
+				}
+			}
+			catch (Exception ex) // May be 'IOException' or 'ObjectDisposedException' or ...
+			{
+				DebugEx.WriteException(typeof(SerialPortEx), ex, "Failed to close the underlying stream!");
+			}
+		}
+
+		/// <summary></summary>
+		protected static void TryToShutdownBaseStreamEventLoopHandler(Stream baseStreamReference)
+		{
+			if (baseStreamReference != null)
+			{
+				try
+				{
+					var eventRunnerField = baseStreamReference.GetType().GetField("eventRunner", BindingFlags.NonPublic | BindingFlags.Instance);
+					if (eventRunnerField == null)
+					{
+						Debug.WriteLine("'System.IO.Ports.SerialPort' workaround has failed! Application may crash due to an 'ObjectDisposedException' in 'mscorlib'!");
+					}
+					else
+					{
+						var eventRunner = eventRunnerField.GetValue(baseStreamReference);
+						var eventRunnerType = eventRunner.GetType();
+
+						var endEventLoopFieldInfo            = eventRunnerType.GetField("endEventLoop", BindingFlags.Instance | BindingFlags.NonPublic);
+						var eventLoopEndedSignalFieldInfo    = eventRunnerType.GetField("eventLoopEndedSignal", BindingFlags.Instance | BindingFlags.NonPublic);
+						var waitCommEventWaitHandleFieldInfo = eventRunnerType.GetField("waitCommEventWaitHandle", BindingFlags.Instance | BindingFlags.NonPublic);
+
+						if ((endEventLoopFieldInfo == null) ||
+							(eventLoopEndedSignalFieldInfo == null) ||
+							(waitCommEventWaitHandleFieldInfo == null))
+						{
+							Debug.WriteLine("'System.IO.Ports.SerialPort' workaround has failed! Unable to retrieve the 'EventLoopRunner'! Application may crash due to an 'ObjectDisposedException' in 'mscorlib'!");
+						}
+						else
+						{
+							var eventLoopEndedWaitHandle = (WaitHandle)eventLoopEndedSignalFieldInfo.GetValue(eventRunner);
+							var waitCommEventWaitHandle = (ManualResetEvent)waitCommEventWaitHandleFieldInfo.GetValue(eventRunner);
+							endEventLoopFieldInfo.SetValue(eventRunner, true);
+
+							// Wait for the EventLoopRunner thread to finish. But sometimes the handler
+							// resets the wait handle before exiting the loop and hangs (in case of USB
+							// disconnect). In case it takes too long, brute-force it out of its wait by
+							// setting the handle again and again:
+							do
+							{
+								waitCommEventWaitHandle.Set();
+							}
+							while (!eventLoopEndedWaitHandle.WaitOne(staticRandom.Next(50, 200)));
+						}
+					}
+				}
+				catch (Exception ex)
+				{
+					DebugEx.WriteException(typeof(SerialPortEx), ex, "'System.IO.Ports.SerialPort' workaround has failed! Application may crash due to an 'ObjectDisposedException' in 'mscorlib'!");
+				}
 			}
 		}
 
@@ -1281,34 +1380,65 @@ namespace MKY.IO.Ports
 
 		#endregion
 
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		public override string ToString()
+		{
+			// See below why AssertNotDisposed() is not called on such basic method!
+
+			return (ToPortName());
+		}
+
+		/// <summary></summary>
+		public virtual string ToPortName()
+		{
+			if (IsDisposed)
+				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+
+			SerialPortId id = PortId;
+			if (id != null)
+				return (id.Name);
+			else
+				return (Undefined);
+		}
+
+		#endregion
+
 		#region Debug
 		//==========================================================================================
 		// Debug
 		//==========================================================================================
 
-#if (DEBUG_OPEN_CLOSE)
-
-		private string DebugWrite_portName = "";
-
-		private void DebugWrite(string message)
+		[Conditional("DEBUG")]
+		private void DebugMessage(string message)
 		{
-			DebugWrite(message, false);
+			Debug.WriteLine
+			(
+				string.Format
+				(
+					CultureInfo.InvariantCulture,
+					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+					GetType(),
+					"",
+					"[" + ToPortName() + "]",
+					message
+				)
+			);
 		}
 
-		private void DebugWrite(string message, bool writeStack)
+		[Conditional("DEBUG_OPEN_CLOSE")]
+		private void DebugOpenClose(string message)
 		{
-			if (string.IsNullOrEmpty(DebugWrite_portName))
-				DebugWrite_portName = PortName;
-
-			string completeMessage = DebugWrite_portName + " " + Environment.TickCount + " " + message;
-
-			if (writeStack)
-				DebugEx.WriteStack(this, completeMessage);
-			else
-				DebugEx.WriteLine(this, completeMessage);
+			DebugMessage(message);
 		}
-
-#endif // DEBUG_OPEN_CLOSE
 
 		#endregion
 	}

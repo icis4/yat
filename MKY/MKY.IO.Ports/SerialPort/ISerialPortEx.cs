@@ -74,6 +74,28 @@ namespace MKY.IO.Ports
 		SerialPortSettings PortSettings { get; set; }
 
 		/// <summary>
+		/// Closes the port according to documentation of <see cref="ISerialPortDotNet.Close"/>.
+		/// </summary>
+		/// <remarks>
+		/// This variant of <see cref="ISerialPortDotNet.Close"/> shall be used when closing
+		/// intentionally in a "look-forward" manner. When closing the port after a port related
+		/// exception has happened, e.g. a <see cref="System.IO.IOException"/> after a device got
+		/// physically disconnected, use <see cref="CloseAfterException"/> instead.
+		/// </remarks>
+		void CloseNormally();
+
+		/// <summary>
+		/// Closes the port according to documentation of <see cref="ISerialPortDotNet.Close"/>.
+		/// </summary>
+		/// <remarks>
+		/// This variant of <see cref="ISerialPortDotNet.Close"/> shall be used when closing the
+		/// port after a port related exception has happened, e.g. a <see cref="System.IO.IOException"/>
+		/// after a device got physically disconnected. When closing the port intentionally in a
+		/// "look-forward" manner, use <see cref="CloseNormally"/> instead.
+		/// </remarks>
+		void CloseAfterException();
+
+		/// <summary>
 		/// Gets or sets a value indicating whether the RFR (Ready For Receiving) signal
 		/// is enabled during serial communication.
 		/// </summary>
