@@ -1,0 +1,16 @@
+﻿
+Described in several locations:
+http://stackoverflow.com/questions/3808885/net-4-serial-port-objectdisposedexception-on-windows-7-only
+http://stackoverflow.com/questions/3230311/problem-with-serialport
+https://pastebin.com/KmKEVzR8
+
+Details on this exception:
+Type: System.ObjectDisposedException
+Message: SafeHandle has been closed
+Source: mscorlib
+Stack:
+   at System.StubHelpers.StubHelpers.SafeHandleC2NHelper(Object pThis, IntPtr pCleanupWorkList)
+   at Microsoft.Win32.UnsafeNativeMethods.GetOverlappedResult(SafeFileHandle hFile, NativeOverlapped * lpOverlapped, Int32 & lpNumberOfBytesTransferred, Boolean bWait)
+   at System.IO.Ports.SerialStream.EventLoopRunner.WaitForCommEvent()
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()

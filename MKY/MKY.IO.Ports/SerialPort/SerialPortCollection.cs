@@ -314,7 +314,7 @@ namespace MKY.IO.Ports
 							try
 							{
 								p.Open();
-								p.Close();
+								p.CloseNormally();
 
 								// Not open, but could be selected by active or other port:
 								if (isInUseByActivePort || isInUseByOtherPort)

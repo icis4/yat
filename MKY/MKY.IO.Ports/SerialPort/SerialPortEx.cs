@@ -1008,10 +1008,10 @@ namespace MKY.IO.Ports
 				TryToApplyEventLoopHandlerPatchAndCloseBaseStreamSafely(this.baseStreamReferenceForCloseSafely);
 				this.baseStreamReferenceForCloseSafely = null;
 
-				// Note that the patch must be applied in any case because:
-				//  - With the Microsoft driver, a device disconnect is not detected, thus the user
-				//    will have to manually = intentionally close the port!
-				//    (corresponds to verification # 3.2. and 4.3.)
+				// Note that the patch must be applied in any case. Because with e.g. the Microsoft
+				// driver, a device disconnect is not detected by .NET/YAT, and the user will have
+				// to manually = intentionally close the port.
+				// Corresponds to verification # 3.2. and 4.3. in ".\!-Doc\*.txt".
 
 				// --------------------------------------------------------------------------------
 				// End of patches to the 'ObjectDisposedException' issue.

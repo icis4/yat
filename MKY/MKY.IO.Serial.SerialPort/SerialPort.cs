@@ -256,7 +256,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (disposing)
 				{
 					// In the 'normal' case, the items have already been disposed of in e.g. Stop().
-					ResetPortAndThreadsAndNotify(false); // Suppress notifications during disposal!
+					ResetPortAndThreadsWithoutNotify(false); // Suppress notifications during disposal!
 				}
 
 				// Set state to disposed:
@@ -662,7 +662,7 @@ namespace MKY.IO.Serial.SerialPort
 				}
 				catch
 				{
-					ResetPortAndThreadsAndNotify();
+					ResetPortAndThreadsAndNotify(true);
 					throw; // Re-throw!
 				}
 			}
@@ -681,7 +681,7 @@ namespace MKY.IO.Serial.SerialPort
 			if (IsStarted)
 			{
 				DebugMessage("Stopping...");
-				ResetPortAndThreadsAndNotify();
+				ResetPortAndThreadsAndNotify(false);
 			}
 			else
 			{
@@ -920,7 +920,7 @@ namespace MKY.IO.Serial.SerialPort
 			lock (this.portSyncObj)
 			{
 				if (this.port != null)
-					CloseAndDisposePort();
+					CloseAndDisposePort(false);
 
 				this.port = new MKY.IO.Ports.SerialPortEx();
 				this.port.WriteTimeout = 50; // By default 'Timeout.Infinite', but that leads to
@@ -948,7 +948,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private void CloseAndDisposePort()
+		private void CloseAndDisposePort(bool isAfterException)
 		{
 			lock (this.portSyncObj)
 			{
@@ -956,8 +956,10 @@ namespace MKY.IO.Serial.SerialPort
 				{
 					try
 					{
-						if (this.port.IsOpen)
-							this.port.Close();
+						if (isAfterException)
+							this.port.CloseAfterException();
+						else if (this.port.IsOpen)
+							this.port.CloseNormally();
 					}
 					finally
 					{
@@ -1019,7 +1021,17 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
-		private void RestartOrResetPortAndThreadsAndNotify(bool withNotify = true)
+		private void RestartOrResetPortAndThreadsAfterExceptionAndNotify()
+		{
+			DoRestartOrResetPortAndThreadsAfterException(true);
+		}
+
+		private void RestartOrResetPortAndThreadsAfterExceptionWithoutNotify()
+		{
+			DoRestartOrResetPortAndThreadsAfterException(false);
+		}
+
+		private void DoRestartOrResetPortAndThreadsAfterException(bool withNotify)
 		{
 			if (this.settings.AutoReopen.Enabled)
 			{
@@ -1038,7 +1050,7 @@ namespace MKY.IO.Serial.SerialPort
 				// by invoking the code below with a timeout, i.e. terminate the async worker in case it
 				// does not complete within a second or two.
 
-				CloseAndDisposePort();
+				CloseAndDisposePort(true); // This method is always called 'AfterException'.
 				ClearQueues();
 
 				SetStateSynchronizedAndNotify(State.Closed, withNotify); // Notification must succeed here, do not try/catch.
@@ -1049,12 +1061,22 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			else
 			{
-				ResetPortAndThreadsAndNotify();
+				ResetPortAndThreadsAndNotify(true); // This method is always called 'AfterException'.
 			}
 		}
 
+		private void ResetPortAndThreadsAndNotify(bool isAfterException)
+		{
+			DoResetPortAndThreads(isAfterException, true);
+		}
+
+		private void ResetPortAndThreadsWithoutNotify(bool isAfterException)
+		{
+			DoResetPortAndThreads(isAfterException, false);
+		}
+
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private void ResetPortAndThreadsAndNotify(bool withNotify = true)
+		private void DoResetPortAndThreads(bool isAfterException, bool withNotify)
 		{
 			StopAndDisposeReopenTimeout();
 			StopAndDisposeAliveMonitor();
@@ -1071,7 +1093,7 @@ namespace MKY.IO.Serial.SerialPort
 			// by invoking the code below with a timeout, i.e. terminate the async worker in case it
 			// does not complete within a second or two.
 
-			CloseAndDisposePort();
+			CloseAndDisposePort(isAfterException);
 			ClearQueues();
 
 			try
@@ -1603,12 +1625,12 @@ namespace MKY.IO.Serial.SerialPort
 			catch (IOException ex) // The best way to detect a disconnected device is handling this exception...
 			{
 				DebugEx.WriteException(GetType(), ex, "SendThread() has detected shutdown of port.");
-				RestartOrResetPortAndThreadsAndNotify();
+				RestartOrResetPortAndThreadsAfterExceptionAndNotify();
 			}
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(GetType(), ex, "SendThread() has caught an unexpected exception! Restarting the port to try fixing the issue...");
-				RestartOrResetPortAndThreadsAndNotify();
+				RestartOrResetPortAndThreadsAfterExceptionAndNotify();
 			}
 
 			DebugThreadState("SendThread() has terminated.");
@@ -1985,12 +2007,12 @@ namespace MKY.IO.Serial.SerialPort
 			catch (IOException ex) // The best way to detect a disconnected device is handling this exception...
 			{
 				DebugEx.WriteException(GetType(), ex, "DataReceived() has detected shutdown of port as it is no longer accessible.");
-				RestartOrResetPortAndThreadsAndNotify();
+				RestartOrResetPortAndThreadsAfterExceptionAndNotify();
 			}
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(GetType(), ex, "DataReceived() has has caught an unexpected exception! Restarting the port to try fixing the issue...");
-				RestartOrResetPortAndThreadsAndNotify();
+				RestartOrResetPortAndThreadsAfterExceptionAndNotify();
 			}
 		}
 
@@ -2137,12 +2159,12 @@ namespace MKY.IO.Serial.SerialPort
 			catch (IOException ex) // The best way to detect a disconnected device is handling this exception...
 			{
 				DebugEx.WriteException(GetType(), ex, "PinChanged() has detected shutdown of port as it is no longer accessible.");
-				RestartOrResetPortAndThreadsAndNotify();
+				RestartOrResetPortAndThreadsAfterExceptionAndNotify();
 			}
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(GetType(), ex, "PinChanged() has caught an unexpected exception! Restarting the port to try fixing the issue...");
-				RestartOrResetPortAndThreadsAndNotify();
+				RestartOrResetPortAndThreadsAfterExceptionAndNotify();
 			}
 		}
 
@@ -2291,7 +2313,7 @@ namespace MKY.IO.Serial.SerialPort
 						if (!Ports.SerialPortCollection.IsAvailable(PortId))
 						{
 							DebugMessage("AliveMonitorElapsed() has detected shutdown of port as it is no longer available.");
-							RestartOrResetPortAndThreadsAndNotify();
+							RestartOrResetPortAndThreadsAfterExceptionAndNotify();
 						}
 
 						// Note that the AliveMonitor is AutoReset = true.
@@ -2373,7 +2395,7 @@ namespace MKY.IO.Serial.SerialPort
 							catch // Do not output exception onto debug console, console would get spoilt with useless information.
 							{
 								DebugMessage("ReopenTimerElapsed() has failed to reopen the port.");
-								RestartOrResetPortAndThreadsAndNotify(false); // Cleanup and restart. No notifications.
+								RestartOrResetPortAndThreadsAfterExceptionWithoutNotify(); // Cleanup and restart. No notifications.
 							}
 						}
 						else
