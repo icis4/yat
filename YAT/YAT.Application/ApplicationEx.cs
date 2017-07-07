@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Gamma 3 Version 1.99.70
+// YAT 2.0 Delta Version 1.99.80
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -46,16 +46,16 @@ namespace YAT
 	////public static readonly string ProductBuildName = " Final";
 
 		/// <summary>The product name postfix that describes the build.</summary>
-		public static readonly string ProductBuildName = " Gamma 3";
+	////public static readonly string ProductBuildName = " Delta";
 
 	/////// <summary>The product name postfix that describes the build.</summary>
-	////public static readonly string ProductBuildName = " Gamma 3''";
+	////public static readonly string ProductBuildName = " Delta'";
 
 	/////// <summary>The product name postfix that describes the build.</summary>
-	////public static readonly string ProductBuildName = " Gamma 3 Development";
+	////public static readonly string ProductBuildName = " Delta Development";
 
 	/////// <summary>The product name postfix that describes the build.</summary>
-	////public static readonly string ProductBuildName = " Gamma 3 Preliminary";
+		public static readonly string ProductBuildName = " Delta Preliminary";
 
 		/// <summary>The product name including the build description.</summary>
 		public static readonly string ProductNameAndBuildName = ProductName + ProductBuildName;
