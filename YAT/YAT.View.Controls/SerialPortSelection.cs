@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Gamma 3 Version 1.99.70
+// YAT 2.0 Delta Version 1.99.80
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -464,14 +464,39 @@ namespace YAT.View.Controls
 						// Get the 'NotAvailable' string BEFORE defaulting!
 						string portIdNotAvailable = this.portId;
 
-						// Ensure that the settings item is defaulted and shown by SetControls().
-						// Set property instead of member to ensure that changed event is fired.
-						PortId = ports[0];
-
+						SerialPortId portIdAlternate = null;
 						if (scanSuccess)
-							ShowNotAvailableDefaultedMessage(portIdNotAvailable, ports[0]);
+						{
+							// Select the first available port that is not in use:
+							foreach (var port in ports)
+							{
+								if (!port.IsInUse)
+								{
+									portIdAlternate = port;
+									break;
+								}
+							}
+						}
+
+						if (scanSuccess && (portIdAlternate != null))
+						{
+							// Ensure that the settings item is defaulted and shown by SetControls().
+							// Set property instead of member to ensure that changed event is fired.
+							PortId = portIdAlternate;
+
+							ShowNotAvailableSwitchMessage(portIdNotAvailable, portIdAlternate);
+						}
 						else
-							ShowErrorMessage(errorException, errorMessageLead, errorMessageHint);
+						{
+							// Ensure that the settings item is defaulted and shown by SetControls().
+							// Set property instead of member to ensure that changed event is fired.
+							PortId = ports[0];
+
+							if (scanSuccess)
+								ShowNotAvailableDefaultedMessage(portIdNotAvailable, ports[0]);
+							else
+								ShowErrorMessage(errorException, errorMessageLead, errorMessageHint);
+						}
 					}
 				}
 				else // ports.Count == 0
@@ -521,11 +546,27 @@ namespace YAT.View.Controls
 			label_OnDialogMessage.Text = "No serial COM ports currently available";
 		}
 
+		private void ShowNotAvailableSwitchMessage(string portIdNotAvailable, string portIdAlternate)
+		{
+			string message =
+				"The previous serial port " + portIdNotAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
+				"The selection has been switched to " + portIdAlternate + " (first available port that is currently not in use).";
+
+			MessageBoxEx.Show
+			(
+				this,
+				message,
+				"Previous serial COM port not available",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information
+			);
+		}
+
 		private void ShowNotAvailableDefaultedMessage(string portIdNotAvailable, string portIdDefaulted)
 		{
 			string message =
 				"The previous serial port " + portIdNotAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
-				"The selection has been defaulted to the first available port '" + portIdDefaulted + "'.";
+				"The selection has been defaulted to " + portIdDefaulted + " (first available port).";
 
 			MessageBoxEx.Show
 			(
