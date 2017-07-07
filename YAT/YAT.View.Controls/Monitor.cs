@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Gamma 3 Version 1.99.70
+// YAT 2.0 Delta Version 1.99.80
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -898,7 +898,7 @@ namespace YAT.View.Controls
 			int averageValue = ((currentValue + timer_ProcessorLoad_Tick_LastValue) / 2);
 			timer_ProcessorLoad_Tick_LastValue = currentValue;
 
-			DebugUpdateMessage("CPU load = " + averageValue.ToString(CultureInfo.InvariantCulture) + "% resulting in ");
+			DebugUpdate("CPU load = " + averageValue.ToString(CultureInfo.InvariantCulture) + "% resulting in ");
 			CalculateUpdateRates(averageValue);
 		}
 
@@ -1312,14 +1312,14 @@ namespace YAT.View.Controls
 				this.monitorUpdateTickInterval = StopwatchEx.TimeToTicks(LowerInterval);
 				this.performImmediateUpdate = true;
 
-				DebugUpdateMessage("minimum update interval of ");
+				DebugUpdate("minimum update interval of ");
 			}
 			else if (processorLoadPercentage > UpperLoad)
 			{
 				this.monitorUpdateTickInterval = StopwatchEx.TimeToTicks(UpperInterval);
 				this.performImmediateUpdate = false;
 
-				DebugUpdateMessage("maximum update interval of ");
+				DebugUpdate("maximum update interval of ");
 			}
 			else
 			{
@@ -1331,12 +1331,12 @@ namespace YAT.View.Controls
 				this.monitorUpdateTickInterval = StopwatchEx.TimeToTicks(y);
 				this.performImmediateUpdate = false;
 
-				DebugUpdateMessage("calculated update interval of ");
+				DebugUpdate("calculated update interval of ");
 			}
 
-			DebugUpdateMessage(this.monitorUpdateTickInterval.ToString(CultureInfo.InvariantCulture) + " ticks = ");
-			DebugUpdateMessage(StopwatchEx.TicksToTime(this.monitorUpdateTickInterval).ToString(CultureInfo.InvariantCulture) + " ms");
-			DebugUpdateMessage(Environment.NewLine);
+			DebugUpdate(this.monitorUpdateTickInterval.ToString(CultureInfo.InvariantCulture) + " ticks = ");
+			DebugUpdate(StopwatchEx.TicksToTime(this.monitorUpdateTickInterval).ToString(CultureInfo.InvariantCulture) + " ms");
+			DebugUpdate(Environment.NewLine);
 		}
 
 		/// <summary>
@@ -1415,7 +1415,7 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Conditional("DEBUG_UPDATE")]
-		protected virtual void DebugUpdateMessage(string message)
+		protected virtual void DebugUpdate(string message)
 		{
 			Debug.WriteLine(message);
 		}
