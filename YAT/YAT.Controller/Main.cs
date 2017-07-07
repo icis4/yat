@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Gamma 3 Version 1.99.70
+// YAT 2.0 Delta Version 1.99.80
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -102,15 +102,18 @@ namespace YAT.Controller
 
 		#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		private static readonly string ObjectDisposedExceptionInMscorlibMessage = 
-			"This 'ObjectDisposedException' exception in 'mscorlib' may happen when a serial COM " +
-			"port gets physically disconnected while it is open. It happens due to a bug in the " +
-			".NET 'SerialPort' class for which Microsoft seems to have no plans fixing. The issue " +
-			"is known for e.g. internal ports using the Microsoft serial COM port driver, external " +
-			"USB/COM ports using the Microsoft USB CDC/ACM (virtual serial port) driver, as well as " +
-			"Microchip MCP2221 USB-to-UART/I2C bridges." +
+			"Such 'ObjectDisposedException' in 'mscorlib' is an exeption that YAT is aware " +
+			"of but cannot properly handle. It can happen when a serial COM port gets physically " +
+			"disconnected while it is open. It happens due to a bug in the .NET 'SerialPort' " +
+			"class for which Microsoft seems to have no plans fixing. The issue is known for " +
+			"internal ports using the Microsoft serial COM port driver, external USB/COM ports " +
+			"using the Microsoft USB CDC/ACM (virtual serial port) driver as well as Microchip " +
+			"MCP2221 USB-to-UART/I2C bridges. The issue is referred to by dozens of online blogs " +
+			"and articles. YAT is applying several patches to try working around the issue, but " +
+			"apparently all of them have failed in the current situation." +
 			Environment.NewLine + Environment.NewLine +
-			"To prevent this issue, refrain from disconnecting a port while it is open. Or, manually " +
-			"close the port after it got disconnected.";
+			"To prevent this issue, refrain from disconnecting a device while its port is open. " +
+			"Or, manually close the port after the device got disconnected.";
 		#endif
 
 		#endregion
@@ -512,7 +515,7 @@ namespace YAT.Controller
 				{
 					if (this.commandLineArgs.Interactive)
 					{
-						var message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
+						var message = ToSynchronousExceptionMessage(ex, "preparing");
 						if (View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.Synchronous, true) == View.Forms.UnhandledExceptionResult.ExitAndRestart)
 							System.Windows.Forms.Application.Restart(); // Is synchronous => OK to call Restart().
 
@@ -564,7 +567,7 @@ namespace YAT.Controller
 				{
 					if (this.commandLineArgs.Interactive)
 					{
-						var message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + "."; // Synchronous exceptions cannot be continued as the application has already exited.
+						var message = ToSynchronousExceptionMessage(ex, "running");                                                                   // Synchronous exceptions cannot be continued as the application has already exited.
 						if (View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.Synchronous, false) == View.Forms.UnhandledExceptionResult.ExitAndRestart)
 							System.Windows.Forms.Application.Restart(); // Is synchronous => OK to call Restart().
 					}
@@ -587,7 +590,7 @@ namespace YAT.Controller
 		{
 			if (this.commandLineArgs.Interactive)
 			{
-				var message = "An unhandled asynchronous synchronized exception occurred while running " + ApplicationEx.ProductName + ".";
+				var message = ToThreadExceptionMessage(e.Exception);
 				var result = View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(e.Exception, message, View.Forms.UnhandledExceptionType.AsynchronousSynchronized, true);
 				switch (result)
 				{
@@ -619,12 +622,12 @@ namespace YAT.Controller
 			if (this.commandLineArgs.Interactive)
 			{
 				var ex = (e.ExceptionObject as Exception);
-				var message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
 
+				var message = new StringBuilder(ToUnhandledExceptionMessage(ex));
 				if (IsObjectDisposedExceptionInMscorlib(ex))
-					message += (Environment.NewLine + Environment.NewLine + ObjectDisposedExceptionInMscorlibMessage);
+					message.Append(Environment.NewLine + Environment.NewLine + ObjectDisposedExceptionInMscorlibMessage);
 
-				var result = View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.AsynchronousNonSynchronized, !e.IsTerminating);
+				var result = View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message.ToString(), View.Forms.UnhandledExceptionType.AsynchronousNonSynchronized, !e.IsTerminating);
 				switch (result)
 				{
 					case View.Forms.UnhandledExceptionResult.Continue:
@@ -717,11 +720,8 @@ namespace YAT.Controller
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
-					var message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
-					Console.Error.WriteLine(message);
-
-					if (ex != null)
-						ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
+					Console.Error.WriteLine(ToSynchronousExceptionMessage(ex, "preparing"));
+					ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
 					return (MainResult.UnhandledException);
 				}
@@ -764,11 +764,8 @@ namespace YAT.Controller
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
-					var message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
-					Console.Error.WriteLine(message);
-
-					if (ex != null)
-						ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
+					Console.Error.WriteLine(ToSynchronousExceptionMessage(ex, "running"));
+					ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
 					return (MainResult.UnhandledException);
 				}
@@ -786,12 +783,14 @@ namespace YAT.Controller
 		/// </remarks>
 		private void RunWithViewButOutputErrorsOnConsole_Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 		{
-			var message = "An unhandled asynchronous synchronized exception occurred while running " + ApplicationEx.ProductName + ".";
-			Console.Error.WriteLine(message);
-
 			var ex = e.Exception;
+
+			Console.Error.WriteLine(ToThreadExceptionMessage(ex));
+
 			if (ex != null)
+			{
 				ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
+			}
 		}
 
 		/// <remarks>
@@ -799,10 +798,10 @@ namespace YAT.Controller
 		/// </remarks>
 		private void RunWithViewButOutputErrorsOnConsole_CurrentDomain_UnhandledException_Or_EventHelper_UnhandledExceptionOnNonMainThread(object sender, UnhandledExceptionEventArgs e)
 		{
-			var message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
-			Console.Error.WriteLine(message);
-
 			var ex = (e.ExceptionObject as Exception);
+
+			Console.Error.WriteLine(ToUnhandledExceptionMessage(ex));
+
 			if (ex != null)
 			{
 				ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
@@ -865,11 +864,8 @@ namespace YAT.Controller
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
-					var message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
-					Console.Error.WriteLine(message);
-
-					if (ex != null)
-						ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
+					Console.Error.WriteLine(ToSynchronousExceptionMessage(ex, "preparing"));
+					ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
 					return (MainResult.UnhandledException);
 				}
@@ -888,9 +884,7 @@ namespace YAT.Controller
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
-					var message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
-					Console.Error.WriteLine(message);
-
+					Console.Error.WriteLine(ToSynchronousExceptionMessage(ex, "running"));
 					ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
 					return (MainResult.UnhandledException);
@@ -909,10 +903,10 @@ namespace YAT.Controller
 		/// </remarks>
 		private void RunFullyFromConsole_CurrentDomain_UnhandledException_Or_EventHelper_UnhandledExceptionOnNonMainThread(object sender, UnhandledExceptionEventArgs e)
 		{
-			var message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
-			Console.Error.WriteLine(message);
-
 			var ex = (e.ExceptionObject as Exception);
+
+			Console.Error.WriteLine(ToUnhandledExceptionMessage(ex));
+
 			if (ex != null)
 			{
 				ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
@@ -975,8 +969,7 @@ namespace YAT.Controller
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
-					var message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
-					ConsoleEx.Error.WriteException(GetType(), ex, message);
+					ConsoleEx.Error.WriteException(GetType(), ex, ToSynchronousExceptionMessage(ex, "preparing"));
 
 					return (MainResult.UnhandledException);
 				}
@@ -995,8 +988,7 @@ namespace YAT.Controller
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
-					var message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
-					ConsoleEx.Error.WriteException(GetType(), ex, message);
+					ConsoleEx.Error.WriteException(GetType(), ex, ToSynchronousExceptionMessage(ex, "running"));
 
 					return (MainResult.UnhandledException);
 				}
@@ -1014,10 +1006,10 @@ namespace YAT.Controller
 		/// </remarks>
 		private void RunInvisible_CurrentDomain_UnhandledException_Or_UnhandledExceptionOnNonMainThread(object sender, UnhandledExceptionEventArgs e)
 		{
-			var message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
-			Console.Error.WriteLine(message);
-
 			var ex = (e.ExceptionObject as Exception);
+
+			Console.Error.WriteLine(ToUnhandledExceptionMessage(ex));
+
 			if (ex != null)
 			{
 				ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
@@ -1158,6 +1150,41 @@ namespace YAT.Controller
 		//------------------------------------------------------------------------------------------
 
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
+
+		private static string ToSynchronousExceptionMessage(Exception ex, string state)
+		{
+			var message = new StringBuilder();
+			message.Append("An unhandled synchronous ");
+			message.Append(ToName(ex));           // "preparing" or "running"
+			message.Append(" occurred while " + state + " " + System.Windows.Forms.Application.ProductName + ".");
+			return (message.ToString());
+		}
+
+		private static string ToThreadExceptionMessage(Exception ex)
+		{
+			var message = new StringBuilder();
+			message.Append("An unhandled asynchronous synchronized ");
+			message.Append(ToName(ex));
+			message.Append(" occurred while running " + System.Windows.Forms.Application.ProductName + ".");
+			return (message.ToString());
+		}
+
+		private static string ToUnhandledExceptionMessage(Exception ex)
+		{
+			var message = new StringBuilder();
+			message.Append("An unhandled asynchronous non-synchronized ");
+			message.Append(ToName(ex));
+			message.Append(" occurred while running " + System.Windows.Forms.Application.ProductName + ".");
+			return (message.ToString());
+		}
+
+		private static string ToName(Exception ex)
+		{
+			if (ex != null)
+				return ("'" + ex.GetType().Name + "'");
+			else
+				return ("exception");
+		}
 
 		private static bool IsObjectDisposedExceptionInMscorlib(Exception ex)
 		{
