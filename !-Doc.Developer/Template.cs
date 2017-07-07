@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Gamma 3 Version 1.99.70
+// YAT 2.0 Delta Version 1.99.80
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -154,7 +154,7 @@ namespace YAT/*.<TODO>*/
 				{
 				}
 
-				// Release unmanaged resources:
+				// Release of unmanaged resources:
 
 				// Set state to disposed:
 				IsDisposed = true;
@@ -178,7 +178,7 @@ namespace YAT/*.<TODO>*/
 		{
 			Dispose(false);
 
-			MKY.Diagnostics.DisposalHelper.DebugNotifyFinalizerInsteadOfDispose(this);
+			MKY.Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
 
 	#endif // DEBUG

@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.19
+// MKY Version 1.0.20
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -726,7 +726,7 @@ namespace MKY.IO.Serial.Socket
 			lock (this.socketSyncObj)
 				remoteEndPoint = new System.Net.IPEndPoint(this.remoteHost, this.remotePort);
 
-			DebugThreadStateMessage("SendThread() has started.");
+			DebugThreadState("SendThread() has started.");
 
 			try
 			{
@@ -834,7 +834,7 @@ namespace MKY.IO.Serial.Socket
 				Thread.ResetAbort();
 			}
 
-			DebugThreadStateMessage("SendThread() has terminated.");
+			DebugThreadState("SendThread() has terminated.");
 		}
 
 		#endregion
@@ -988,7 +988,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				if (this.sendThread != null)
 				{
-					DebugThreadStateMessage("SendThread() gets stopped...");
+					DebugThreadState("SendThread() gets stopped...");
 
 					// Ensure that send thread has stopped after the stop request:
 					try
@@ -1005,19 +1005,19 @@ namespace MKY.IO.Serial.Socket
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
-								DebugThreadStateMessage("...failed! Aborting...");
-								DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								DebugThreadState("...failed! Aborting...");
+								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
 
 								isAborting = true;       // Thread.Abort() must not be used whenever possible!
 								this.sendThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
-							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
+							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 
 						if (!isAborting)
-							DebugThreadStateMessage("...successfully stopped.");
+							DebugThreadState("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -1025,7 +1025,7 @@ namespace MKY.IO.Serial.Socket
 						// "Thread cannot be aborted" as it just needs to be ensured that the thread
 						// has or will be terminated for sure.
 
-						DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.sendThread = null;
@@ -1053,7 +1053,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				if (this.receiveThread != null)
 				{
-					DebugThreadStateMessage("ReceiveThread() gets stopped...");
+					DebugThreadState("ReceiveThread() gets stopped...");
 
 					// Ensure that receive thread has stopped after the stop request:
 					try
@@ -1070,19 +1070,19 @@ namespace MKY.IO.Serial.Socket
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
-								DebugThreadStateMessage("...failed! Aborting...");
-								DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								DebugThreadState("...failed! Aborting...");
+								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
 
 								isAborting = true;          // Thread.Abort() must not be used whenever possible!
 								this.receiveThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
-							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
+							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 
 						if (!isAborting)
-							DebugThreadStateMessage("...successfully stopped.");
+							DebugThreadState("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -1090,7 +1090,7 @@ namespace MKY.IO.Serial.Socket
 						// "Thread cannot be aborted" as it just needs to be ensured that the thread
 						// has or will be terminated for sure.
 
-						DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.receiveThread = null;
@@ -1223,7 +1223,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void ReceiveThread()
 		{
-			DebugThreadStateMessage("ReceiveThread() has started.");
+			DebugThreadState("ReceiveThread() has started.");
 
 			try
 			{
@@ -1312,7 +1312,7 @@ namespace MKY.IO.Serial.Socket
 				Thread.ResetAbort();
 			}
 
-			DebugThreadStateMessage("ReceiveThread() has terminated.");
+			DebugThreadState("ReceiveThread() has terminated.");
 		}
 
 		private void SocketError()
@@ -1420,7 +1420,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		[Conditional("DEBUG_THREAD_STATE")]
-		private void DebugThreadStateMessage(string message)
+		private void DebugThreadState(string message)
 		{
 			DebugMessage(message);
 		}
