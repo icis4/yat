@@ -62,7 +62,13 @@ namespace MKY.IO.Ports
 	/// Serial port component based on <see cref="System.IO.Ports.SerialPort"/>.
 	/// </summary>
 	/// <remarks>
-	/// See ".\!-Doc\*.txt" files.
+	/// There are several issues with <see cref="System.IO.Ports.SerialPort"/>:
+	/// <list type="bullet">
+	/// <item><description>IOException issue</description></item>
+	/// <item><description>ObjectDisposedException issue</description></item>
+	/// <item><description>UnauthorizedAccssException and deadlock issue</description></item>
+	/// </list>
+	/// See ".\!-Doc\*.txt" for details.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	[ToolboxBitmap(typeof(System.IO.Ports.SerialPort))]
