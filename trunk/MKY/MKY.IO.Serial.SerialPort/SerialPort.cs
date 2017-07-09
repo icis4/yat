@@ -66,7 +66,18 @@ using MKY.Time;
 
 namespace MKY.IO.Serial.SerialPort
 {
-	/// <summary></summary>
+	/// <summary>
+	/// Implements the <see cref="IIOProvider"/> interface for serial COM ports.
+	/// </summary>
+	/// <remarks>
+	/// In addition, this class...
+	/// <list type="bullet">
+	/// <item><description>...wraps <see cref="Ports.SerialPortEx"/> with send/receive FIFOs.</description></item>
+	/// <item><description>...adds advanced connection management (alive ticker, reopen timer).</description></item>
+	/// <item><description>...adds advanced flow control management (manual flow control).</description></item>
+	/// <item><description>...adds advanced break management.</description></item>
+	/// </list>
+	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Different root namespace.")]
 	public class SerialPort : IIOProvider, IXOnXOffHandler, IDisposable

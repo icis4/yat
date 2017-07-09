@@ -42,10 +42,10 @@ using MKY.Net;
 namespace MKY.IO.Serial.Socket
 {
 	/// <summary>
-	/// This TCP/IP AutoSocket automatically determines whether to run as client or server. On start,
-	/// it tries to connect to a remote server and run as client. If this fails, it tries to run as
-	/// server. Retry cycles and random wait times ensure proper operation even when two AutoSockets
-	/// are interconnected to each other.
+	/// Implements the <see cref="IIOProvider"/> interface for an automatic TCP/IP client or server.
+	/// On startup, an AutoSocket tries to connect to a remote server and run as client. If this
+	/// fails, it tries to run as server. Retry cycles and random wait times ensure proper operation
+	/// even when multiple AutoSockets try to interconnected to each other.
 	/// </summary>
 	/// <remarks>
 	/// Initially, YAT AutoSockets with the original ALAZ implementation created a deadlock on
