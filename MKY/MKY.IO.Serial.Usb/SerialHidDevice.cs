@@ -55,7 +55,16 @@ using MKY.Diagnostics;
 
 namespace MKY.IO.Serial.Usb
 {
-	/// <summary></summary>
+	/// <summary>
+	/// Implements the <see cref="IIOProvider"/> interface for serial COM ports.
+	/// </summary>
+	/// <remarks>
+	/// In addition, this class...
+	/// <list type="bullet">
+	/// <item><description>...wraps <see cref="IO.Usb.SerialHidDevice"/> with send/receive FIFOs.</description></item>
+	/// <item><description>...adds software flow control (XOn/XOff).</description></item>
+	/// </list>
+	/// </remarks>
 	public class SerialHidDevice : IIOProvider, IXOnXOffHandler, IDisposable
 	{
 		#region Constants

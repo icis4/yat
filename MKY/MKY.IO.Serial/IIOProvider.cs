@@ -38,7 +38,7 @@ using MKY.Contracts;
 namespace MKY.IO.Serial
 {
 	/// <summary>
-	/// Generic I/O provider that is used for serial port and socket communication.
+	/// Generic I/O interface that is usable for any kind of serial communication.
 	/// </summary>
 	public interface IIOProvider : IDisposable
 	{

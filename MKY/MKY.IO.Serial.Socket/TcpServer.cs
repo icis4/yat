@@ -61,6 +61,9 @@ using MKY.Net;
 
 namespace MKY.IO.Serial.Socket
 {
+	/// <summary>
+	/// Implements the <see cref="IIOProvider"/> interface for a TCP/IP server.
+	/// </summary>
 	/// <remarks>
 	/// In case of YAT with the original ALAZ implementation, TCP/IP clients and servers created a
 	/// deadlock on shutdown. The situation:
