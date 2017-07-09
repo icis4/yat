@@ -174,7 +174,7 @@ namespace YAT.View.Controls
 
 				try
 				{
-					this.ports.DetectPortsInUse(ports_DetectPortsInUseCallback);
+					this.ports.DetectPortsThatAreInUse(ports_DetectPortsInUseCallback);
 				}
 				catch (Exception ex)
 				{

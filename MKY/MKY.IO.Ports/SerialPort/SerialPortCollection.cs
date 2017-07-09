@@ -234,26 +234,11 @@ namespace MKY.IO.Ports
 			}
 		}
 
-		/// <summary>
-		/// Checks all ports whether they are currently in use and marks them.
-		/// </summary>
-		/// <remarks>
-		/// In .NET, no class provides a method to retrieve whether a port is currently in use or
-		/// not. Therefore, this method actively tries to open every port! This may take quite some
-		/// time, depending on the available ports.
-		/// <remarks>
-		/// </remarks>
-		/// </remarks>
-		/// <param name="portChangedCallback">
-		/// Callback delegate, can be used to get an event each time a new port is being tried to
-		/// be opened. Set the <see cref="SerialPortChangedAndCancelEventArgs.Cancel"/> property
-		/// to <c>true</c> to cancel port scanning.
-		/// </param>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public virtual void DetectPortsInUse(EventHandler<SerialPortChangedAndCancelEventArgs> portChangedCallback = null)
+		/// <summary></summary>
+		protected virtual List<InUseInfo> RetrieveOtherPortInUseLookup()
 		{
 			List<InUseInfo> otherPortInUseLookup = null;
+
 			if (InUseLookupRequest != null)
 			{
 				otherPortInUseLookup = OnInUseLookupRequest();
@@ -262,10 +247,32 @@ namespace MKY.IO.Ports
 					otherPortInUseLookup.RemoveAll(inUse => (inUse.UseId == ActivePortInUseInfo.UseId));
 			}
 
+			return (otherPortInUseLookup);
+		}
+
+		/// <summary>
+		/// Checks all ports whether they are currently in use and marks them.
+		/// </summary>
+		/// <remarks>
+		/// In .NET, no class provides a method to retrieve whether a port is currently in use or
+		/// not. Therefore, this method actively tries to open every port! This may take quite some
+		/// time, depending on the available ports.
+		/// </remarks>
+		/// <param name="portChangedCallback">
+		/// Callback delegate, can be used to get an event each time a new port is being tried to
+		/// be opened. Set the <see cref="SerialPortChangedAndCancelEventArgs.Cancel"/> property
+		/// to <c>true</c> to cancel port scanning.
+		/// </param>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		public virtual void DetectPortsThatAreInUse(EventHandler<SerialPortChangedAndCancelEventArgs> portChangedCallback = null)
+		{
+			var otherPortInUseLookup = RetrieveOtherPortInUseLookup();
+
 			lock (this)
 			{
 				foreach (var portId in this)
 				{
+					// Handle callback for current port:
 					if (portChangedCallback != null)
 					{
 						var e = new SerialPortChangedAndCancelEventArgs(portId);
@@ -274,81 +281,118 @@ namespace MKY.IO.Ports
 							break;
 					}
 
-					// Lookup current port:
-					bool isInUseByActivePort = false;
-					bool isOpenByActivePort = false;
-					if ((ActivePortInUseInfo != null) && (ActivePortInUseInfo.PortId == portId))
-					{
-						isInUseByActivePort = true;
-						isOpenByActivePort = ActivePortInUseInfo.IsOpen;
-					}
-
-					List<InUseInfo> otherPortInUseInfo = null;
-					bool isInUseByOtherPort = false;
-					bool isOpenByOtherPort = false;
-					if (otherPortInUseLookup != null)
-					{
-						otherPortInUseInfo = otherPortInUseLookup.FindAll(inUse => (inUse.PortId == portId));
-						if (otherPortInUseInfo != null)
-						{
-							foreach (var statement in otherPortInUseInfo)
-							{
-								isInUseByOtherPort = true;
-
-								if (statement.IsOpen)
-									isOpenByOtherPort = true;
-							}
-						}
-					}
-
-					// Evaluate current port:
-					if (isOpenByActivePort || isOpenByOtherPort)
-					{
-						portId.IsInUse = true;
-						portId.InUseText = ComposeInUseText(isInUseByActivePort, ActivePortInUseInfo, otherPortInUseInfo);
-					}
-					else // Not open according to statements, but could still be open, e.g. by external application:
-					{
-						using (var p = new SerialPortEx(portId)) // Use 'SerialPortEx' instead of 'SerialPort' to
-						{                                        // prevent potential 'ObjectDisposedException'.
-							try
-							{
-								p.Open();
-								p.CloseNormally();
-
-								// Not open, but could be selected by active or other port:
-								if (isInUseByActivePort || isInUseByOtherPort)
-								{
-									portId.IsInUse = true;
-									portId.InUseText = ComposeInUseText(isInUseByActivePort, ActivePortInUseInfo, otherPortInUseInfo);
-								}
-								else
-								{
-									portId.IsInUse = false;
-								}
-							}
-							catch (ThreadAbortException ex)
-							{
-								DebugEx.WriteException(GetType(), ex, "DetectPortsInUse() has detected a thread exception. It is ignored here but re-thrown.");
-
-								// Do not activate 'InUse', as a thread abort doesn't indicate that a port is in use.
-								// An abort may happen when e.g. cancelling the 'SelectionWorker.DoWork()' method.
-								// In such a case, re-throw so it can be handled by that method.
-
-								throw; // Re-throw!
-							}
-							catch
-							{
-								portId.IsInUse = true;
-								portId.InUseText = ComposeInUseText(isInUseByActivePort, ActivePortInUseInfo, otherPortInUseInfo, OtherAppInUseText);
-							}
-						}
-					}
+					// Lookup and evaluate current port:
+					DetectWhetherPortIsInUse(portId, otherPortInUseLookup);
 				}
 			}
 		}
 
-		private static string ComposeInUseText(bool isInUseByActivePort, InUseInfo activePortInUseInfo, List<InUseInfo> otherPortInUseInfo, string otherAppInUseText = null)
+		/// <summary>
+		/// Checks the port whether it is currently in use and marks it.
+		/// </summary>
+		/// <remarks>
+		/// In .NET, no class provides a method to retrieve whether a port is currently in use or
+		/// not. Therefore, this method actively tries to open every port! This may take quite some
+		/// time, depending on the available ports.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		public virtual void DetectWhetherPortIsInUse(SerialPortId portId)
+		{
+			var otherPortInUseLookup = RetrieveOtherPortInUseLookup();
+			DetectWhetherPortIsInUse(portId, otherPortInUseLookup);
+		}
+
+		/// <summary>
+		/// Detects whether the port is in use.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		protected virtual void DetectWhetherPortIsInUse(SerialPortId portId, List<InUseInfo> otherPortInUseLookup)
+		{
+			// Lookup:
+			bool isInUseByActivePort = false;
+			bool isOpenByActivePort = false;
+			if ((ActivePortInUseInfo != null) && (ActivePortInUseInfo.PortId == portId))
+			{
+				isInUseByActivePort = true;
+				isOpenByActivePort = ActivePortInUseInfo.IsOpen;
+			}
+
+			List<InUseInfo> otherPortInUseInfo = null;
+			bool isInUseByOtherPort = false;
+			bool isOpenByOtherPort = false;
+			if (otherPortInUseLookup != null)
+			{
+				otherPortInUseInfo = otherPortInUseLookup.FindAll(inUse => (inUse.PortId == portId));
+				if (otherPortInUseInfo != null)
+				{
+					foreach (var statement in otherPortInUseInfo)
+					{
+						isInUseByOtherPort = true;
+
+						if (statement.IsOpen)
+							isOpenByOtherPort = true;
+					}
+				}
+			}
+
+			// Evaluate:
+			if (isOpenByActivePort || isOpenByOtherPort)
+			{
+				portId.IsInUse = true;
+				portId.InUseText = ComposeInUseText(isInUseByActivePort, ActivePortInUseInfo, otherPortInUseInfo);
+			}
+			else // Not open according to statements, but could still be open, e.g. by external application:
+			{
+				DetectWhetherPortIsInUse(portId, isInUseByActivePort, ActivePortInUseInfo, isInUseByOtherPort, otherPortInUseInfo, OtherAppInUseText);
+			}
+		}
+
+		/// <summary>
+		/// Detects whether the port is in use and marks the port ID accordingly.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		protected static void DetectWhetherPortIsInUse(SerialPortId portId, bool isInUseByActivePort, InUseInfo activePortInUseInfo, bool isInUseByOtherPort, List<InUseInfo> otherPortInUseInfo, string otherAppInUseText = null)
+		{
+			using (var p = new SerialPortEx(portId)) // Use 'SerialPortEx' instead of 'SerialPort' to
+			{                                        // prevent potential 'ObjectDisposedException'.
+				try
+				{
+					p.Open();
+					p.CloseNormally();
+
+					// Could be opened, but could be selected by active or other port:
+					if (isInUseByActivePort || isInUseByOtherPort)
+					{
+						portId.IsInUse = true;
+						portId.InUseText = ComposeInUseText(isInUseByActivePort, activePortInUseInfo, otherPortInUseInfo);
+					}
+					else
+					{
+						portId.IsInUse = false;
+					}
+				}
+				catch (ThreadAbortException ex)
+				{
+					DebugEx.WriteException(typeof(SerialPortCollection), ex, "DetectWhetherPortIsInUse() has detected a thread exception. It is ignored here but re-thrown.");
+
+					// Do not activate 'InUse', as a thread abort doesn't indicate that a port is in use.
+					// An abort may happen when e.g. cancelling the 'SelectionWorker.DoWork()' method.
+					// In such a case, re-throw so it can be handled by that method.
+
+					throw; // Re-throw!
+				}
+				catch
+				{
+					portId.IsInUse = true;
+					portId.InUseText = ComposeInUseText(isInUseByActivePort, activePortInUseInfo, otherPortInUseInfo, otherAppInUseText);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Composes the 'InUse' text.
+		/// </summary>
+		protected static string ComposeInUseText(bool isInUseByActivePort, InUseInfo activePortInUseInfo, List<InUseInfo> otherPortInUseInfo, string otherAppInUseText = null)
 		{
 			var inUseText = new StringBuilder();
 
