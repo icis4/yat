@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.19
+// MKY Version 1.0.20
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -35,9 +35,9 @@ using System.Reflection;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")] => 'Build' will indicate number of days since 2000-01-01.
 //                                      => 'Revision' will indicate number of seconds since midnight divided by two.
-[assembly: AssemblyVersion("1.0.19.*")]
-[assembly: AssemblyFileVersion("1.0.19.0")]
-[assembly: AssemblyInformationalVersion("1.0.19")]
+[assembly: AssemblyVersion("1.0.20.*")]
+[assembly: AssemblyFileVersion("1.0.20.0")]
+[assembly: AssemblyInformationalVersion("1.0.20")]
 
 //==================================================================================================
 // End of
