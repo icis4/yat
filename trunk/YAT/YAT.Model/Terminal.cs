@@ -2364,10 +2364,10 @@ namespace YAT.Model
 			{
 				case Domain.IOType.SerialPort:
 				{
-					MKY.IO.Ports.SerialPortId portId = this.settingsRoot.Terminal.IO.SerialPort.PortId;
+					var portId = this.settingsRoot.Terminal.IO.SerialPort.PortId;
 					if (portId != null)
 					{
-						MKY.IO.Ports.SerialPortCollection ports = new MKY.IO.Ports.SerialPortCollection();
+						var ports = new MKY.IO.Ports.SerialPortCollection();
 						ports.FillWithAvailablePorts(false); // Explicitly not getting captions, thus faster.
 
 						// Attention:
@@ -2382,29 +2382,8 @@ namespace YAT.Model
 							}
 							else
 							{
-								// Try to retrieve detailed information:
-								try
-								{
-									ports.RetrieveCaptions();
-									ports.DetectPortsInUse();
-								}
-								catch (Exception ex)
-								{
-									DebugEx.WriteException(GetType(), ex, "Failed to retrieve detailed port information");
-								}
-
-								// Select the first available port that is not in use:
-								MKY.IO.Ports.SerialPortId portIdAlternate = null;
-								foreach (var port in ports)
-								{
-									if (!port.IsInUse)
-									{
-										portIdAlternate = port;
-										break;
-									}
-								}
-
-								if (portIdAlternate != null)
+								MKY.IO.Ports.SerialPortId portIdAlternate;
+								if (TryGetSerialPortAlternate(ports, out portIdAlternate))
 								{
 									var dr = ShowSerialPortNotAvailableSwitchQuestion(portId, portIdAlternate);
 									if (dr == DialogResult.Yes)
@@ -2585,6 +2564,49 @@ namespace YAT.Model
 					return (true); // Return 'true' in all 'non-handled' cases.
 				}
 			}
+		}
+
+		private bool TryGetSerialPortAlternate(MKY.IO.Ports.SerialPortCollection ports, out MKY.IO.Ports.SerialPortId portIdAlternate)
+		{
+			// If not allowed to detect 'InUse', no reliable alternate can be evaluted:
+			if (!ApplicationSettings.LocalUserSettings.General.DetectSerialPortsInUse)
+			{
+				portIdAlternate = null;
+				return (false);
+			}
+
+			// If allowed, try to retrieve captions:
+			if (ApplicationSettings.LocalUserSettings.General.RetrieveSerialPortCaptions)
+			{
+				// Done once for all ports because:
+				//  > Underlying operation is relatively fast.
+				//  > Underlying operation needs to retrieve *all* captions anyway.
+
+				try
+				{
+					ports.RetrieveCaptions();
+				}
+				catch (Exception ex)
+				{
+					DebugEx.WriteException(GetType(), ex, "Failed to retrieve serial COM port captions!");
+				}
+			}
+
+			// Select the first available port that is not 'InUse':
+			foreach (var port in ports)
+			{
+				ports.DetectWhetherPortIsInUse(port);
+
+				if (!port.IsInUse)
+				{
+					portIdAlternate = port;
+					return (true);
+				}
+			}
+
+			// No alternate that is not 'InUse':
+			portIdAlternate = null;
+			return (false);
 		}
 
 		private DialogResult ShowNoSerialPortsStartAnywayQuestion(string portIdNotAvailable)

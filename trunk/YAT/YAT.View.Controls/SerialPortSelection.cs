@@ -464,21 +464,8 @@ namespace YAT.View.Controls
 						// Get the 'NotAvailable' string BEFORE defaulting!
 						string portIdNotAvailable = this.portId;
 
-						SerialPortId portIdAlternate = null;
-						if (scanSuccess)
-						{
-							// Select the first available port that is not in use:
-							foreach (var port in ports)
-							{
-								if (!port.IsInUse)
-								{
-									portIdAlternate = port;
-									break;
-								}
-							}
-						}
-
-						if (scanSuccess && (portIdAlternate != null))
+						SerialPortId portIdAlternate;
+						if (scanSuccess && TryGetAlternate(ports, out portIdAlternate))
 						{
 							// Ensure that the settings item is defaulted and shown by SetControls().
 							// Set property instead of member to ensure that changed event is fired.
@@ -536,6 +523,23 @@ namespace YAT.View.Controls
 		private void ResetOnDialogMessage()
 		{
 			label_OnDialogMessage.Text = "";
+		}
+
+		private bool TryGetAlternate(SerialPortCollection ports, out SerialPortId portIdAlternate)
+		{
+			// Select the first available port that is not in use:
+			foreach (var port in ports)
+			{
+				if (!port.IsInUse)
+				{
+					portIdAlternate = port;
+					return (true);
+				}
+			}
+
+			// No alternate that is not 'InUse':
+			portIdAlternate = null;
+			return (false);
 		}
 
 		/// <remarks>
