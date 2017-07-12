@@ -3,7 +3,7 @@
 ================================================================================
 
 
-#	Stimuli											Microsoft driver										Thesycon driver 2.15								ToriLogic driver 1.24.0								
+#	Stimuli											Microsoft driver 5.1.2600.5512							Thesycon driver 2.15								ToriLogic driver 1.24.0								
 													<RB>\USB\tools\SerCDC-Driver\Microsoft					<RB>\USB\tools\SerCDC-Driver\Thesycon\.._signed		<RB>\USB\tools\SerCDC-Driver\ToriLogic\generic_..	
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
