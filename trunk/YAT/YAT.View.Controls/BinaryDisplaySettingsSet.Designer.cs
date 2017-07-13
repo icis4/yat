@@ -54,7 +54,6 @@
 			// 
 			// textBox_SequenceLineBreakAfterSequence
 			// 
-			this.textBox_SequenceLineBreakAfterSequence.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.textBox_SequenceLineBreakAfterSequence.Enabled = false;
 			this.textBox_SequenceLineBreakAfterSequence.Location = new System.Drawing.Point(163, 47);
 			this.textBox_SequenceLineBreakAfterSequence.Name = "textBox_SequenceLineBreakAfterSequence";
@@ -77,7 +76,6 @@
 			// 
 			// checkBox_SequenceLineBreakAfter
 			// 
-			this.checkBox_SequenceLineBreakAfter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBox_SequenceLineBreakAfter.AutoSize = true;
 			this.checkBox_SequenceLineBreakAfter.Location = new System.Drawing.Point(3, 49);
 			this.checkBox_SequenceLineBreakAfter.Name = "checkBox_SequenceLineBreakAfter";
@@ -98,7 +96,6 @@
 			// 
 			// label_TimedLineBreakUnit
 			// 
-			this.label_TimedLineBreakUnit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_TimedLineBreakUnit.AutoSize = true;
 			this.label_TimedLineBreakUnit.Location = new System.Drawing.Point(212, 73);
 			this.label_TimedLineBreakUnit.Name = "label_TimedLineBreakUnit";
@@ -109,7 +106,6 @@
 			// 
 			// textBox_TimedLineBreakTimeout
 			// 
-			this.textBox_TimedLineBreakTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.textBox_TimedLineBreakTimeout.Enabled = false;
 			this.textBox_TimedLineBreakTimeout.Location = new System.Drawing.Point(163, 70);
 			this.textBox_TimedLineBreakTimeout.Name = "textBox_TimedLineBreakTimeout";
@@ -120,7 +116,6 @@
 			// 
 			// checkBox_TimedLineBreak
 			// 
-			this.checkBox_TimedLineBreak.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBox_TimedLineBreak.AutoSize = true;
 			this.checkBox_TimedLineBreak.Location = new System.Drawing.Point(3, 72);
 			this.checkBox_TimedLineBreak.Name = "checkBox_TimedLineBreak";
@@ -131,7 +126,6 @@
 			// 
 			// textBox_SequenceLineBreakBeforeSequence
 			// 
-			this.textBox_SequenceLineBreakBeforeSequence.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.textBox_SequenceLineBreakBeforeSequence.Enabled = false;
 			this.textBox_SequenceLineBreakBeforeSequence.Location = new System.Drawing.Point(163, 24);
 			this.textBox_SequenceLineBreakBeforeSequence.Name = "textBox_SequenceLineBreakBeforeSequence";
