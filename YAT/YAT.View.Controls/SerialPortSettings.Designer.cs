@@ -154,7 +154,6 @@
 			// 
 			// label_AutoReopenIntervalUnit
 			// 
-			this.label_AutoReopenIntervalUnit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_AutoReopenIntervalUnit.AutoSize = true;
 			this.label_AutoReopenIntervalUnit.Location = new System.Drawing.Point(205, 239);
 			this.label_AutoReopenIntervalUnit.Name = "label_AutoReopenIntervalUnit";
@@ -165,7 +164,6 @@
 			// 
 			// textBox_AutoReopenInterval
 			// 
-			this.textBox_AutoReopenInterval.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.textBox_AutoReopenInterval.Enabled = false;
 			this.textBox_AutoReopenInterval.Location = new System.Drawing.Point(151, 236);
 			this.textBox_AutoReopenInterval.Name = "textBox_AutoReopenInterval";
@@ -176,7 +174,6 @@
 			// 
 			// checkBox_AutoReopen
 			// 
-			this.checkBox_AutoReopen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBox_AutoReopen.AutoSize = true;
 			this.checkBox_AutoReopen.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
 			this.checkBox_AutoReopen.Location = new System.Drawing.Point(6, 219);
@@ -190,7 +187,6 @@
 			// 
 			// checkBox_AliveMonitor
 			// 
-			this.checkBox_AliveMonitor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBox_AliveMonitor.AutoSize = true;
 			this.checkBox_AliveMonitor.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
 			this.checkBox_AliveMonitor.Location = new System.Drawing.Point(6, 177);
@@ -204,7 +200,6 @@
 			// 
 			// textBox_AliveMonitorInterval
 			// 
-			this.textBox_AliveMonitorInterval.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.textBox_AliveMonitorInterval.Enabled = false;
 			this.textBox_AliveMonitorInterval.Location = new System.Drawing.Point(151, 193);
 			this.textBox_AliveMonitorInterval.Name = "textBox_AliveMonitorInterval";
@@ -215,7 +210,6 @@
 			// 
 			// label_AliveMonitorIntervalUnit
 			// 
-			this.label_AliveMonitorIntervalUnit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_AliveMonitorIntervalUnit.AutoSize = true;
 			this.label_AliveMonitorIntervalUnit.Location = new System.Drawing.Point(205, 196);
 			this.label_AliveMonitorIntervalUnit.Name = "label_AliveMonitorIntervalUnit";

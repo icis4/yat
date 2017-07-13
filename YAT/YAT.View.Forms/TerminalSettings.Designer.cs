@@ -256,7 +256,6 @@ namespace YAT.View.Forms
 			this.Controls.Add(this.button_Cancel);
 			this.Controls.Add(this.button_OK);
 			this.MaximizeBox = false;
-			this.MaximumSize = new System.Drawing.Size(1024, 475);
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(580, 475);
 			this.Name = "TerminalSettings";
