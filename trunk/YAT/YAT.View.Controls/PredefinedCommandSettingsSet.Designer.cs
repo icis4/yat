@@ -136,7 +136,6 @@
 			this.button_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Delete.Image = global::YAT.View.Controls.Properties.Resources.Image_Tool_lightning_16x16;
-			this.button_Delete.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.button_Delete.Location = new System.Drawing.Point(476, 0);
 			this.button_Delete.Name = "button_Delete";
 			this.button_Delete.Size = new System.Drawing.Size(24, 21);
@@ -185,8 +184,7 @@
 			// 
 			// PredefinedCommandSettingsSet
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
 			this.Controls.Add(this.splitContainer_ExplicitDefaultRadix);
 			this.Name = "PredefinedCommandSettingsSet";
 			this.Size = new System.Drawing.Size(584, 21);
