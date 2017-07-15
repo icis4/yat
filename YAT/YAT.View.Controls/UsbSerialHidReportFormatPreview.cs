@@ -30,6 +30,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
 
 using MKY;
@@ -63,8 +64,8 @@ namespace YAT.View.Controls
 
 		private SettingControlsHelper isSettingControls;
 		private Dictionary<Control, int> initialLeftOffset;
-		private Dictionary<int, string> payload1Text;
-		private Dictionary<int, string> fillerBytesText;
+		private Lookup<int, string> payload1Text;
+		private Lookup<int, string> fillerBytesText;
 
 		private bool useId                    = UseIdDefault;
 		private bool prependPayloadByteLength = PrependPayloadByteLengthDefault;
@@ -295,26 +296,22 @@ namespace YAT.View.Controls
 			this.initialLeftOffset.Add(label_TerminatingZeroRemarks, label_TerminatingZeroRemarks.Left - label_TerminatingZero.Left);
 			this.initialLeftOffset.Add(label_FillerBytesRemarks,     label_FillerBytesRemarks.Left     - label_FillerBytes.Left);
 
-			int widthOffset = label_Id1.Width;
-			if (label_Id1.Width != label_Length1.Width)
-				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Labels must have equal width, but are " + label_Id1.Width + " and " + label_Length1.Width + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			var l = new List<KeyValuePair<int, string>>(3); // Preset the required capacity to improve memory management.
+			l.Add(new KeyValuePair<int, string>(0,                     "P1'  P2'  ...........................................................  Pn'"));
+			l.Add(new KeyValuePair<int, string>(label_Id1.Width,               "P1'  P2'  ...................................................  Pn'"));
+			l.Add(new KeyValuePair<int, string>(label_Id1.Width + label_Length1.Width, "P1'  P2'  ...........................................  Pn'"));
+			this.payload1Text = (Lookup<int, string>)l.ToLookup(kvp => kvp.Key, kvp => kvp.Value);
 
-			this.payload1Text = new Dictionary<int, string>(3); // Preset the required capacity to improve memory management.
-			this.payload1Text.Add((widthOffset * 0), "P1'  P2'  ...........................................................  Pn'");
-			this.payload1Text.Add((widthOffset * 1), "P1'  P2'  ...................................................  Pn'");
-			this.payload1Text.Add((widthOffset * 2), "P1'  P2'  ...........................................  Pn'");
-
-			widthOffset = label_Id2.Width;
-			if (label_Id2.Width != label_Length2.Width)
-				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Labels must have equal width, but are " + label_Id2.Width + " and " + label_Length2.Width + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			if (label_Id2.Width != label_TerminatingZero.Width)
-				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Labels must have equal width, but are " + label_Id2.Width + " and " + label_TerminatingZero.Width + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-
-			this.fillerBytesText = new Dictionary<int, string>(4); // Preset the required capacity to improve memory management.
-			this.fillerBytesText.Add((widthOffset * 0) + label_Payload2.Width, "0  ..................................  0");
-			this.fillerBytesText.Add((widthOffset * 1) + label_Payload2.Width, "0  ..........................  0");
-			this.fillerBytesText.Add((widthOffset * 2) + label_Payload2.Width, "0  ..................  0");
-			this.fillerBytesText.Add((widthOffset * 3) + label_Payload2.Width, "0  ..........  0");
+			l = new List<KeyValuePair<int, string>>(8); // Preset the required capacity to improve memory management.
+			l.Add(new KeyValuePair<int, string>(                                        label_Payload2.Width,                               "0  ..................................  0"));
+			l.Add(new KeyValuePair<int, string>(label_Id2.Width +                       label_Payload2.Width,                               "0  ..........................  0"));
+			l.Add(new KeyValuePair<int, string>(                  label_Length2.Width + label_Payload2.Width,                               "0  ..........................  0"));
+			l.Add(new KeyValuePair<int, string>(                                        label_Payload2.Width + label_TerminatingZero.Width, "0  ..........................  0"));
+			l.Add(new KeyValuePair<int, string>(label_Id2.Width + label_Length2.Width + label_Payload2.Width,                               "0  ..................  0"));
+			l.Add(new KeyValuePair<int, string>(label_Id2.Width +                       label_Payload2.Width + label_TerminatingZero.Width, "0  ..................  0"));
+			l.Add(new KeyValuePair<int, string>(                  label_Length2.Width + label_Payload2.Width + label_TerminatingZero.Width, "0  ..................  0"));
+			l.Add(new KeyValuePair<int, string>(label_Id2.Width + label_Length2.Width + label_Payload2.Width + label_TerminatingZero.Width, "0  ..........  0"));
+			this.fillerBytesText = (Lookup<int, string>)l.ToLookup(kvp => kvp.Key, kvp => kvp.Value);
 		}
 
 		private void SetControls()
@@ -372,7 +369,7 @@ namespace YAT.View.Controls
 
 			label_Payload1.Left = offset;
 			label_Payload1.Width = Width - offset;
-			label_Payload1.Text = this.payload1Text[offset];
+			label_Payload1.Text = ExactOrNearest(this.payload1Text, offset);
 			label_Payload2.Left = offset;
 			label_PayloadRemarks.Left = offset + this.initialLeftOffset[label_PayloadRemarks];
 
@@ -387,12 +384,44 @@ namespace YAT.View.Controls
 
 			label_FillerBytes.Left = offset;
 			label_FillerBytes.Width = Width - offset;
-			label_FillerBytes.Text = this.fillerBytesText[offset];
+			label_FillerBytes.Text = ExactOrNearest(this.fillerBytesText, offset);
 			label_FillerBytesRemarks.Left = offset + this.initialLeftOffset[label_FillerBytesRemarks];
 
 			ResumeLayout();
 
 			this.isSettingControls.Leave();
+		}
+
+		/// <summary>
+		/// Evaluates the exact or nearest match.
+		/// </summary>
+		/// <remarks>
+		/// Required because scaling may lead to slightly off values.
+		/// </remarks>
+		private string ExactOrNearest(Lookup<int, string> lookup, int key)
+		{
+			// Exact?
+			if (lookup.Contains(key))
+				return (lookup[key].First());
+
+			// Nearest?
+			int nearestDiff = int.MaxValue;
+			IGrouping<int, string> nearest = null;
+			foreach (var group in lookup)
+			{
+				int currentDiff = Math.Abs(group.Key - key);
+				if (nearestDiff > currentDiff)
+				{
+					nearestDiff = currentDiff;
+					nearest = group;
+				}
+			}
+
+			if (nearest != null)
+				return (nearest.First());
+
+			// Nothing!
+			return ("");
 		}
 
 		#endregion
