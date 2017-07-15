@@ -127,7 +127,6 @@
 			// 
 			this.button_RefreshLocalInterfaces.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_RefreshLocalInterfaces.Image = global::YAT.View.Controls.Properties.Resources.Image_Tool_arrow_refresh_small_16x16;
-			this.button_RefreshLocalInterfaces.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.button_RefreshLocalInterfaces.Location = new System.Drawing.Point(258, 75);
 			this.button_RefreshLocalInterfaces.Name = "button_RefreshLocalInterfaces";
 			this.button_RefreshLocalInterfaces.Size = new System.Drawing.Size(24, 21);
@@ -170,8 +169,7 @@
 			// 
 			// SocketSelection
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
 			this.Controls.Add(this.label_LocalFilter);
 			this.Controls.Add(this.label_OnDialogMessage);
 			this.Controls.Add(this.comboBox_LocalFilter);

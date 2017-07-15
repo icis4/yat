@@ -81,9 +81,9 @@
 			// 
 			// listBox_StringList
 			// 
-			this.listBox_StringList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.listBox_StringList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.listBox_StringList.FormattingEnabled = true;
 			this.listBox_StringList.Location = new System.Drawing.Point(3, 3);
 			this.listBox_StringList.Name = "listBox_StringList";
@@ -95,8 +95,7 @@
 			// 
 			// StringListEdit
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
 			this.Controls.Add(this.button_MoveDown);
 			this.Controls.Add(this.button_MoveUp);
 			this.Controls.Add(this.button_Delete);
