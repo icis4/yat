@@ -29,14 +29,16 @@
 		private void InitializeComponent()
 		{
 			this.splitContainer_Commands = new System.Windows.Forms.SplitContainer();
-			this.label_Shortcut = new System.Windows.Forms.Label();
+			this.label_Shortcuts = new System.Windows.Forms.Label();
 			this.splitContainer_Lower = new System.Windows.Forms.SplitContainer();
 			this.panel_Commands = new System.Windows.Forms.Panel();
-			this.pageButtons = new YAT.View.Controls.PredefinedCommandPageButtons();
 			this.label_Page = new System.Windows.Forms.Label();
 			this.button_PageNext = new System.Windows.Forms.Button();
 			this.button_PagePrevious = new System.Windows.Forms.Button();
 			this.comboBox_Pages = new System.Windows.Forms.ComboBox();
+			this.panel_Shortcuts = new System.Windows.Forms.Panel();
+			this.panel_Navigation = new System.Windows.Forms.Panel();
+			this.pageButtons = new YAT.View.Controls.PredefinedCommandPageButtons();
 			this.splitContainer_Commands.Panel1.SuspendLayout();
 			this.splitContainer_Commands.Panel2.SuspendLayout();
 			this.splitContainer_Commands.SuspendLayout();
@@ -44,6 +46,8 @@
 			this.splitContainer_Lower.Panel2.SuspendLayout();
 			this.splitContainer_Lower.SuspendLayout();
 			this.panel_Commands.SuspendLayout();
+			this.panel_Shortcuts.SuspendLayout();
+			this.panel_Navigation.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// splitContainer_Commands
@@ -57,7 +61,7 @@
 			// 
 			// splitContainer_Commands.Panel1
 			// 
-			this.splitContainer_Commands.Panel1.Controls.Add(this.label_Shortcut);
+			this.splitContainer_Commands.Panel1.Controls.Add(this.panel_Shortcuts);
 			this.splitContainer_Commands.Panel1MinSize = 26;
 			// 
 			// splitContainer_Commands.Panel2
@@ -68,17 +72,17 @@
 			this.splitContainer_Commands.TabIndex = 0;
 			this.splitContainer_Commands.TabStop = false;
 			// 
-			// label_Shortcut
+			// label_Shortcuts
 			// 
-			this.label_Shortcut.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label_Shortcut.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label_Shortcut.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_Shortcut.Location = new System.Drawing.Point(0, 0);
-			this.label_Shortcut.Name = "label_Shortcut";
-			this.label_Shortcut.Size = new System.Drawing.Size(144, 26);
-			this.label_Shortcut.TabIndex = 0;
-			this.label_Shortcut.Text = "Shift+F1..F12  to send\r\nAlt+Shift+F1..F12  to copy";
-			this.label_Shortcut.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label_Shortcuts.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.label_Shortcuts.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_Shortcuts.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.label_Shortcuts.Location = new System.Drawing.Point(0, 0);
+			this.label_Shortcuts.Name = "label_Shortcuts";
+			this.label_Shortcuts.Size = new System.Drawing.Size(144, 26);
+			this.label_Shortcuts.TabIndex = 0;
+			this.label_Shortcuts.Text = "Shift+F1..F12  to send\r\nAlt+Shift+F1..F12  to copy";
+			this.label_Shortcuts.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// splitContainer_Lower
 			// 
@@ -95,10 +99,7 @@
 			// 
 			// splitContainer_Lower.Panel2
 			// 
-			this.splitContainer_Lower.Panel2.Controls.Add(this.label_Page);
-			this.splitContainer_Lower.Panel2.Controls.Add(this.button_PageNext);
-			this.splitContainer_Lower.Panel2.Controls.Add(this.button_PagePrevious);
-			this.splitContainer_Lower.Panel2.Controls.Add(this.comboBox_Pages);
+			this.splitContainer_Lower.Panel2.Controls.Add(this.panel_Navigation);
 			this.splitContainer_Lower.Panel2MinSize = 48;
 			this.splitContainer_Lower.Size = new System.Drawing.Size(144, 340);
 			this.splitContainer_Lower.SplitterDistance = 291;
@@ -116,24 +117,13 @@
 			this.panel_Commands.Size = new System.Drawing.Size(144, 291);
 			this.panel_Commands.TabIndex = 0;
 			// 
-			// pageButtons
-			// 
-			this.pageButtons.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.pageButtons.Location = new System.Drawing.Point(3, 0);
-			this.pageButtons.Margin = new System.Windows.Forms.Padding(3, 2, 3, 3);
-			this.pageButtons.Name = "pageButtons";
-			this.pageButtons.Size = new System.Drawing.Size(138, 291);
-			this.pageButtons.TabIndex = 2;
-			this.pageButtons.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
-			this.pageButtons.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
-			// 
 			// label_Page
 			// 
 			this.label_Page.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_Page.Location = new System.Drawing.Point(30, 3);
+			this.label_Page.Location = new System.Drawing.Point(29, 6);
 			this.label_Page.Name = "label_Page";
-			this.label_Page.Size = new System.Drawing.Size(84, 15);
+			this.label_Page.Size = new System.Drawing.Size(86, 15);
 			this.label_Page.TabIndex = 1;
 			this.label_Page.Text = "Page 99/99";
 			this.label_Page.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -141,7 +131,7 @@
 			// button_PageNext
 			// 
 			this.button_PageNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_PageNext.Location = new System.Drawing.Point(121, 0);
+			this.button_PageNext.Location = new System.Drawing.Point(121, 3);
 			this.button_PageNext.Name = "button_PageNext";
 			this.button_PageNext.Size = new System.Drawing.Size(20, 21);
 			this.button_PageNext.TabIndex = 2;
@@ -151,7 +141,7 @@
 			// 
 			// button_PagePrevious
 			// 
-			this.button_PagePrevious.Location = new System.Drawing.Point(3, 0);
+			this.button_PagePrevious.Location = new System.Drawing.Point(3, 3);
 			this.button_PagePrevious.Name = "button_PagePrevious";
 			this.button_PagePrevious.Size = new System.Drawing.Size(20, 21);
 			this.button_PagePrevious.TabIndex = 0;
@@ -171,6 +161,38 @@
 			this.comboBox_Pages.TabIndex = 3;
 			this.comboBox_Pages.SelectedIndexChanged += new System.EventHandler(this.comboBox_Pages_SelectedIndexChanged);
 			// 
+			// panel_Shortcuts
+			// 
+			this.panel_Shortcuts.Controls.Add(this.label_Shortcuts);
+			this.panel_Shortcuts.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel_Shortcuts.Location = new System.Drawing.Point(0, 0);
+			this.panel_Shortcuts.Name = "panel_Shortcuts";
+			this.panel_Shortcuts.Size = new System.Drawing.Size(144, 26);
+			this.panel_Shortcuts.TabIndex = 1;
+			// 
+			// panel_Navigation
+			// 
+			this.panel_Navigation.Controls.Add(this.comboBox_Pages);
+			this.panel_Navigation.Controls.Add(this.label_Page);
+			this.panel_Navigation.Controls.Add(this.button_PagePrevious);
+			this.panel_Navigation.Controls.Add(this.button_PageNext);
+			this.panel_Navigation.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel_Navigation.Location = new System.Drawing.Point(0, 0);
+			this.panel_Navigation.Name = "panel_Navigation";
+			this.panel_Navigation.Size = new System.Drawing.Size(144, 48);
+			this.panel_Navigation.TabIndex = 0;
+			// 
+			// pageButtons
+			// 
+			this.pageButtons.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pageButtons.Location = new System.Drawing.Point(3, 0);
+			this.pageButtons.Margin = new System.Windows.Forms.Padding(3, 2, 3, 3);
+			this.pageButtons.Name = "pageButtons";
+			this.pageButtons.Size = new System.Drawing.Size(138, 291);
+			this.pageButtons.TabIndex = 0;
+			this.pageButtons.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
+			this.pageButtons.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
+			// 
 			// PredefinedCommands
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
@@ -184,6 +206,8 @@
 			this.splitContainer_Lower.Panel2.ResumeLayout(false);
 			this.splitContainer_Lower.ResumeLayout(false);
 			this.panel_Commands.ResumeLayout(false);
+			this.panel_Shortcuts.ResumeLayout(false);
+			this.panel_Navigation.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -191,7 +215,7 @@
 		#endregion
 
 		private System.Windows.Forms.SplitContainer splitContainer_Commands;
-		private System.Windows.Forms.Label label_Shortcut;
+		private System.Windows.Forms.Label label_Shortcuts;
 		private System.Windows.Forms.SplitContainer splitContainer_Lower;
 		private System.Windows.Forms.ComboBox comboBox_Pages;
 		private System.Windows.Forms.Button button_PageNext;
@@ -199,5 +223,7 @@
 		private System.Windows.Forms.Label label_Page;
 		private System.Windows.Forms.Panel panel_Commands;
 		private PredefinedCommandPageButtons pageButtons;
+		private System.Windows.Forms.Panel panel_Shortcuts;
+		private System.Windows.Forms.Panel panel_Navigation;
 	}
 }
