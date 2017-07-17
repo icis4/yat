@@ -36,12 +36,18 @@
 			this.comboBox_ExplicitDefaultRadix = new System.Windows.Forms.ComboBox();
 			this.splitContainer_Send = new System.Windows.Forms.SplitContainer();
 			this.splitContainer_ExplicitDefaultRadix = new System.Windows.Forms.SplitContainer();
+			this.panel_Send = new System.Windows.Forms.Panel();
+			this.panel_Selection = new System.Windows.Forms.Panel();
+			this.panel_ExplicitDefaultRadix = new System.Windows.Forms.Panel();
 			this.splitContainer_Send.Panel1.SuspendLayout();
 			this.splitContainer_Send.Panel2.SuspendLayout();
 			this.splitContainer_Send.SuspendLayout();
 			this.splitContainer_ExplicitDefaultRadix.Panel1.SuspendLayout();
 			this.splitContainer_ExplicitDefaultRadix.Panel2.SuspendLayout();
 			this.splitContainer_ExplicitDefaultRadix.SuspendLayout();
+			this.panel_Send.SuspendLayout();
+			this.panel_Selection.SuspendLayout();
+			this.panel_ExplicitDefaultRadix.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button_SetMultiLineText
@@ -115,7 +121,7 @@
 			// 
 			// splitContainer_Send.Panel2
 			// 
-			this.splitContainer_Send.Panel2.Controls.Add(this.button_Send);
+			this.splitContainer_Send.Panel2.Controls.Add(this.panel_Send);
 			this.splitContainer_Send.Size = new System.Drawing.Size(540, 27);
 			this.splitContainer_Send.SplitterDistance = 356;
 			this.splitContainer_Send.SplitterWidth = 1;
@@ -131,16 +137,43 @@
 			// 
 			// splitContainer_ExplicitDefaultRadix.Panel1
 			// 
-			this.splitContainer_ExplicitDefaultRadix.Panel1.Controls.Add(this.comboBox_ExplicitDefaultRadix);
+			this.splitContainer_ExplicitDefaultRadix.Panel1.Controls.Add(this.panel_ExplicitDefaultRadix);
 			// 
 			// splitContainer_ExplicitDefaultRadix.Panel2
 			// 
-			this.splitContainer_ExplicitDefaultRadix.Panel2.Controls.Add(this.comboBox_SingleLineText);
-			this.splitContainer_ExplicitDefaultRadix.Panel2.Controls.Add(this.button_SetMultiLineText);
+			this.splitContainer_ExplicitDefaultRadix.Panel2.Controls.Add(this.panel_Selection);
 			this.splitContainer_ExplicitDefaultRadix.Size = new System.Drawing.Size(356, 27);
 			this.splitContainer_ExplicitDefaultRadix.SplitterDistance = 80;
 			this.splitContainer_ExplicitDefaultRadix.SplitterWidth = 1;
 			this.splitContainer_ExplicitDefaultRadix.TabIndex = 0;
+			// 
+			// panel_Send
+			// 
+			this.panel_Send.Controls.Add(this.button_Send);
+			this.panel_Send.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel_Send.Location = new System.Drawing.Point(0, 0);
+			this.panel_Send.Name = "panel_Send";
+			this.panel_Send.Size = new System.Drawing.Size(183, 27);
+			this.panel_Send.TabIndex = 1;
+			// 
+			// panel_Selection
+			// 
+			this.panel_Selection.Controls.Add(this.button_SetMultiLineText);
+			this.panel_Selection.Controls.Add(this.comboBox_SingleLineText);
+			this.panel_Selection.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel_Selection.Location = new System.Drawing.Point(0, 0);
+			this.panel_Selection.Name = "panel_Selection";
+			this.panel_Selection.Size = new System.Drawing.Size(275, 27);
+			this.panel_Selection.TabIndex = 2;
+			// 
+			// panel_ExplicitDefaultRadix
+			// 
+			this.panel_ExplicitDefaultRadix.Controls.Add(this.comboBox_ExplicitDefaultRadix);
+			this.panel_ExplicitDefaultRadix.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel_ExplicitDefaultRadix.Location = new System.Drawing.Point(0, 0);
+			this.panel_ExplicitDefaultRadix.Name = "panel_ExplicitDefaultRadix";
+			this.panel_ExplicitDefaultRadix.Size = new System.Drawing.Size(80, 27);
+			this.panel_ExplicitDefaultRadix.TabIndex = 1;
 			// 
 			// SendText
 			// 
@@ -157,6 +190,9 @@
 			this.splitContainer_ExplicitDefaultRadix.Panel1.ResumeLayout(false);
 			this.splitContainer_ExplicitDefaultRadix.Panel2.ResumeLayout(false);
 			this.splitContainer_ExplicitDefaultRadix.ResumeLayout(false);
+			this.panel_Send.ResumeLayout(false);
+			this.panel_Selection.ResumeLayout(false);
+			this.panel_ExplicitDefaultRadix.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -170,5 +206,8 @@
 		private System.Windows.Forms.ComboBox comboBox_SingleLineText;
 		private System.Windows.Forms.SplitContainer splitContainer_ExplicitDefaultRadix;
 		private System.Windows.Forms.ComboBox comboBox_ExplicitDefaultRadix;
+		private System.Windows.Forms.Panel panel_Selection;
+		private System.Windows.Forms.Panel panel_Send;
+		private System.Windows.Forms.Panel panel_ExplicitDefaultRadix;
 	}
 }
