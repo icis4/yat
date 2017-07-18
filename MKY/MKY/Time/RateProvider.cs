@@ -109,7 +109,7 @@ namespace MKY.Time
 			this.updateTicker = new System.Timers.Timer();
 			this.updateTicker.AutoReset = true;
 			this.updateTicker.Interval = this.updateInterval;
-			this.updateTicker.Elapsed += new System.Timers.ElapsedEventHandler(updateTicker_Elapsed);
+			this.updateTicker.Elapsed += updateTicker_Elapsed;
 			this.updateTicker.Start();
 		}
 

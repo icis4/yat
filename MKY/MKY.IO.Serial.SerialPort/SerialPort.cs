@@ -2194,7 +2194,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				this.ioControlEventTimeout = new System.Timers.Timer(IOControlChangedTimeout * 2); // Synchronous event shall have precedence over timeout.
 				this.ioControlEventTimeout.AutoReset = false;
-				this.ioControlEventTimeout.Elapsed += new System.Timers.ElapsedEventHandler(this.ioControlEventTimeout_Elapsed);
+				this.ioControlEventTimeout.Elapsed += ioControlEventTimeout_Elapsed;
 			}
 			this.ioControlEventTimeout.Start();
 		}
@@ -2290,7 +2290,7 @@ namespace MKY.IO.Serial.SerialPort
 				{
 					this.aliveMonitor = new System.Timers.Timer(this.settings.AliveMonitor.Interval);
 					this.aliveMonitor.AutoReset = true;
-					this.aliveMonitor.Elapsed += new System.Timers.ElapsedEventHandler(this.aliveMonitor_Elapsed);
+					this.aliveMonitor.Elapsed += aliveMonitor_Elapsed;
 					this.aliveMonitor.Start();
 				}
 				else
@@ -2364,7 +2364,7 @@ namespace MKY.IO.Serial.SerialPort
 				{
 					this.reopenTimeout = new System.Timers.Timer(this.settings.AutoReopen.Interval);
 					this.reopenTimeout.AutoReset = false;
-					this.reopenTimeout.Elapsed += new System.Timers.ElapsedEventHandler(this.reopenTimeout_Elapsed);
+					this.reopenTimeout.Elapsed += this.reopenTimeout_Elapsed;
 				}
 				else
 				{

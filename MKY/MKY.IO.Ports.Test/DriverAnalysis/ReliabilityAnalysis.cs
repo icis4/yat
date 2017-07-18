@@ -319,7 +319,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			{
 				// Open port:
 				this.port = new System.IO.Ports.SerialPort();
-				this.port.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
+				this.port.ErrorReceived += port_ErrorReceived;
 				this.port.NewLine = "\r\n"; // <CR><LF>
 				this.port.PortName = portName;
 				this.port.Open();
@@ -335,7 +335,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				Thread.Sleep(WaitForOperation);
 				Assert.That(this.port.ReadLine(), Is.EqualTo("ECHO C"), "Failed to initiate ECHO mode 1!");
 
-				this.port.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
+				this.port.DataReceived += port_DataReceived;
 
 				// Perform ECHO:
 				for (int i = 0; i < linesToTransmit; i++)
@@ -346,7 +346,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				Thread.Sleep(WaitForOperation);
 
 				// Terminate transmission:
-				this.port.DataReceived -= new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
+				this.port.DataReceived -= port_DataReceived;
 
 				this.port.Write(new byte[] { 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
 				Thread.Sleep(WaitForOperation);

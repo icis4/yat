@@ -231,9 +231,9 @@ namespace MKY.IO.Ports
 
 		private void Initialize()
 		{
-			base.DataReceived  += new System.IO.Ports.SerialDataReceivedEventHandler (base_DataReceived);
-			base.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(base_ErrorReceived);
-			base.PinChanged    += new System.IO.Ports.SerialPinChangedEventHandler   (base_PinChanged);
+			base.DataReceived  += base_DataReceived;
+			base.ErrorReceived += base_ErrorReceived;
+			base.PinChanged    += base_PinChanged;
 		}
 
 		#region Disposal

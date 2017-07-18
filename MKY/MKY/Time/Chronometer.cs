@@ -82,7 +82,7 @@ namespace MKY.Time
 			this.timer = new System.Timers.Timer();
 			this.timer.AutoReset = true;
 			this.timer.Interval = 1000;
-			this.timer.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);
+			this.timer.Elapsed += timer_Elapsed;
 		}
 
 		#region Disposal
