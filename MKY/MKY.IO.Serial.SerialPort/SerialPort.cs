@@ -1363,10 +1363,18 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void SendThread()
 		{
-			const int Interval = 50; // Keep interval rather narrow to ensure being inside the limits.
-			Rate maxBaudRatePerInterval = new Rate(Interval);
-			int maxFramesPerInterval = (int)((1.0 / this.settings.Communication.FrameTime) * Interval * 0.75); // 25% safety margin.
+			// Calculate maximum baud defined send rate:
+			double frameTime   = this.settings.Communication.FrameTime;
+			int    frameTime10 = (int)Math.Ceiling(frameTime * 10);
 
+			int interval = 50;          // Interval shall be rather narrow to ensure being inside
+			if (interval < frameTime10) // the limits, but ensure that interval is at least 10 times
+				interval = frameTime10; // the frame time.
+
+			Rate maxBaudRatePerInterval = new Rate(interval);
+			int maxFramesPerInterval = (int)Math.Ceiling(((1.0 / frameTime) * interval * 0.75)); // 25% safety margin.
+
+			// Calculate maximum user defined send rate:
 			Rate maxSendRate = new Rate(this.settings.MaxSendRate.Interval);
 
 			bool isOutputBreakOldAndErrorHasBeenSignaled = false;
