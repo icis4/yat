@@ -113,19 +113,13 @@ Base class
 
 		class Class : IDisposable
 
-		#region Fields
-		//==========================================================================================
-		// Fields
-		//==========================================================================================
-
-		private bool isDisposed;
-
-		#endregion
-
 		#region Disposal
 		//------------------------------------------------------------------------------------------
 		// Disposal
 		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public bool IsDisposed { get; protected set; }
 
 		/// <summary></summary>
 		public void Dispose()
@@ -179,12 +173,6 @@ Base class
 		}
 
 #endif // DEBUG
-
-((		/// <summary></summary>
-		public bool IsDisposed
-		{
-			get { return (this.isDisposed); }
-))		}
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
