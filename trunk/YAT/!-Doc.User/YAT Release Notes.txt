@@ -94,6 +94,7 @@ Important changes:
 
 Fixed bugs:
 - Serial COM port switching again properly works (bug #376).
+- Sending at very low baud rates again properly works (bug #379, related to limiting to baud rate).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
