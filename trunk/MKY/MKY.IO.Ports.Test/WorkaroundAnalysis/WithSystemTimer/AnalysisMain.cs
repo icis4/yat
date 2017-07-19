@@ -37,11 +37,10 @@ namespace MKY.IO.Ports.Test.WorkaroundAnalysis.WithSystemTimer
 			if ((args.Length > 0) && (args[0].StartsWith("COM")))
 				portName = args[0];
 
-			Console.WriteLine("This application analyzes/demonstrates issues with the .NET " + Environment.Version);
-			Console.WriteLine("System.IO.Ports.SerialPort class and known workarounds, using " + portName);
-			Console.WriteLine("on Win " + Environment.OSVersion);
-
-			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+			Console.WriteLine("This is " + typeof(AnalysisMain).FullName);
+			Console.WriteLine("that analyzes/demonstrates issues with the .NET " + Environment.Version);
+			Console.WriteLine("System.IO.Ports.SerialPort class and known workarounds, using");
+			Console.WriteLine(portName + "on Win " + Environment.OSVersion);
 
 			try
 			{
@@ -67,15 +66,6 @@ namespace MKY.IO.Ports.Test.WorkaroundAnalysis.WithSystemTimer
 				Console.ReadLine();
 			}
 		}
-
-		private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-		{
-			Console.WriteLine("An unhandled asynchronous non-synchronized exception occurred!");
-
-			var ex = (e.ExceptionObject as Exception);
-			if (ex != null)
-				Diagnostics.WriteErrorDetailsToConsole(ex);
-		}
 	}
 
 	public class ConnectionWrapper
@@ -92,7 +82,7 @@ namespace MKY.IO.Ports.Test.WorkaroundAnalysis.WithSystemTimer
 		{
 			while (!connection.TryOpenPort())
 			{
-			////Console.WriteLine("Trying to open " + connection.PortName + "... Connect device or [Ctrl+C/Break] to terminate");
+				Console.WriteLine("Trying to open " + connection.PortName + "... Connect device or [Ctrl+C/Break] to terminate");
 
 				Thread.Sleep(1000);
 			}
@@ -121,7 +111,7 @@ namespace MKY.IO.Ports.Test.WorkaroundAnalysis.WithSystemTimer
 				{
 					if (this.connection.PortIsAvailable())
 					{
-					////Console.WriteLine(this.connection.PortName + " is available, probing... Disconnect device or [Ctrl+C/Break] to terminate");
+						Console.WriteLine(this.connection.PortName + " is available, probing... Disconnect device or [Ctrl+C/Break] to terminate");
 
 						if (!this.connection.TryProbePort())
 						{
@@ -131,7 +121,7 @@ namespace MKY.IO.Ports.Test.WorkaroundAnalysis.WithSystemTimer
 					}
 					else
 					{
-					////Console.WriteLine(this.connection.PortName + " is no longer available!");
+						Console.WriteLine(this.connection.PortName + " is no longer available!");
 
 						this.aliveMonitor.Stop();
 						this.connection.TryClosePort();

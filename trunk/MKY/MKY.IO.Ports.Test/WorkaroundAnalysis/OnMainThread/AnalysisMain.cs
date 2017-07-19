@@ -35,11 +35,11 @@ namespace MKY.IO.Ports.Test.WorkaroundAnalysis.OnMainThread
 			if ((args.Length > 0) && (args[0].StartsWith("COM")))
 				portName = args[0];
 
-			Console.WriteLine("This application analyzes/demonstrates issues with the .NET " + Environment.Version);
-			Console.WriteLine("System.IO.Ports.SerialPort class and known workarounds, using " + portName);
-			Console.WriteLine("on Win " + Environment.OSVersion);
+			Console.WriteLine("This is " + typeof(AnalysisMain).FullName);
+			Console.WriteLine("that analyzes/demonstrates issues with the .NET " + Environment.Version);
+			Console.WriteLine("System.IO.Ports.SerialPort class and known workarounds, using");
+			Console.WriteLine(portName + "on Win " + Environment.OSVersion);
 
-			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
 			try
 			{
@@ -79,15 +79,6 @@ namespace MKY.IO.Ports.Test.WorkaroundAnalysis.OnMainThread
 				Console.WriteLine("Press [Enter] to exit");
 				Console.ReadLine();
 			}
-		}
-
-		private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-		{
-			Console.WriteLine("An unhandled asynchronous non-synchronized exception occurred!");
-
-			var ex = (e.ExceptionObject as Exception);
-			if (ex != null)
-				Diagnostics.WriteErrorDetailsToConsole(ex);
 		}
 	}
 }
