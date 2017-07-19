@@ -135,7 +135,7 @@ namespace YAT.View.Forms
 
 			// Serial monitoring:
 			linkLabel_Monitoring.Text = "";
-			textBefore = "YAT is a terminal (connection endpoint). If you're looking for a tool to monitor serial data between an application and" + Environment.NewLine +
+			textBefore = "YAT is a terminal (connection endpoint). If you are looking for a tool to monitor serial data between an application and" + Environment.NewLine +
 			             "a device, or between two devices, check out ";
 			textLink   =                                             "HHD Monitoring Studio";
 			textAfter  =                                                                  ". It's worth the bucks. Or download the ";
@@ -152,26 +152,26 @@ namespace YAT.View.Forms
 			linkLabel_Monitoring.Links.Add(linkStart, textLink.Length, "http://freeserialanalyzer.com/");
 			linkLabel_Monitoring.Text += textAfter;
 			textLink  =                                                                      "EZ-Tap";
-			textAfter =                                                                            ", or, assemble your own cable as described by" + Environment.NewLine +
-			            "e.g. ";
+			textAfter =                                                                            ", or, assemble your own cable as described" + Environment.NewLine +
+			            "by e.g. ";
 			linkStart = linkLabel_Monitoring.Text.Length;
 			linkLabel_Monitoring.Text += textLink;
 			linkLabel_Monitoring.Links.Add(linkStart, textLink.Length, "https://www.stratusengineering.com/product/ez-tap/");
 			linkLabel_Monitoring.Text += textAfter;
-			textLink  =      "Henrik Haftmann";
-			textAfter =                     ", ";
+			textLink  =         "Henrik Haftmann";
+			textAfter =                        ", ";
 			linkStart = linkLabel_Monitoring.Text.Length;
 			linkLabel_Monitoring.Text += textLink;
 			linkLabel_Monitoring.Links.Add(linkStart, textLink.Length, "https://www-user.tu-chemnitz.de/~heha/basteln/PC/serspy/");
 			linkLabel_Monitoring.Text += textAfter;
-			textLink  =                       "Lammert Bies";
-			textAfter =                                   " or ";
+			textLink  =                          "Lammert Bies";
+			textAfter =                                      " or ";
 			linkStart = linkLabel_Monitoring.Text.Length;
 			linkLabel_Monitoring.Text += textLink;
 			linkLabel_Monitoring.Links.Add(linkStart, textLink.Length, "https://www.lammertbies.nl/comm/cable/RS-232-spy-monitor.html");
 			linkLabel_Monitoring.Text += textAfter;
-			textLink  =                                       "CompuPhase";
-			textAfter =                                                 " (bidir or unidir, full or half duplex, with or without control lines).";
+			textLink  =                                          "CompuPhase";
+			textAfter =                                                    " (bidir or unidir, full or half duplex, with or without control lines).";
 			linkStart = linkLabel_Monitoring.Text.Length;
 			linkLabel_Monitoring.Text += textLink;
 			linkLabel_Monitoring.Links.Add(linkStart, textLink.Length, "http://www.compuphase.com/electronics/rs232split.htm");
@@ -201,6 +201,18 @@ namespace YAT.View.Forms
 			linkLabel_VirtualPorts.Text += textLink;
 			linkLabel_VirtualPorts.Links.Add(linkStart, textLink.Length, "https://sourceforge.net/projects/com0com/");
 			linkLabel_VirtualPorts.Text += textAfter;
+
+			// Terminal emulator:
+			linkLabel_TerminalEmulator.Text = "";
+			textBefore = "YAT is optimized for simple command sets of e.g. embedded systems. If you are looking for a classic terminal emulator," + Environment.NewLine +
+			             "rather go for ";
+			textLink   =               "PuTTy";
+			textAfter  =                    " or the like.";
+			linkLabel_TerminalEmulator.Text += textBefore;
+			linkStart = linkLabel_TerminalEmulator.Text.Length;
+			linkLabel_TerminalEmulator.Text += textLink;
+			linkLabel_TerminalEmulator.Links.Add(linkStart, textLink.Length, "http://www.putty.org/");
+			linkLabel_TerminalEmulator.Text += textAfter;
 
 			// Environment:
 			linkLabel_Environment.Text = "YAT is developed with..." + Environment.NewLine;
