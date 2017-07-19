@@ -27,7 +27,6 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
-////using System.Text;
 
 namespace MKY.IO.Ports.Test.WorkaroundAnalysis
 {
@@ -95,8 +94,6 @@ namespace MKY.IO.Ports.Test.WorkaroundAnalysis
 				lock (this.portSynObj)
 				{
 					this.port = new SerialPort(PortName);
-				////this.port.DataReceived += Port_DataReceived;
-				////this.port.Handshake = Handshake.XOnXOff; // Default of MT-SICS devices.
 					this.port.Open();
 				}
 				Console.WriteLine();
@@ -115,29 +112,6 @@ namespace MKY.IO.Ports.Test.WorkaroundAnalysis
 				return (false);
 			}
 		}
-
-	////private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
-	////{
-	////	string data;
-	////	lock (this.portSynObj)
-	////		data = this.port.ReadExisting();
-	////
-	////	var sb = new StringBuilder();
-	////	foreach (char c in data)
-	////	{
-	////		if (!char.IsControl(c))
-	////		{
-	////			sb.Append(c);
-	////		}
-	////		else
-	////		{
-	////			foreach (byte b in Encoding.ASCII.GetBytes(new char[]{ c }))
-	////				sb.AppendFormat("<{0:X2}>", b);
-	////		}
-	////	}
-	////
-	////	Console.WriteLine(@"Received """ + sb.ToString() + @"""");
-	////}
 
 		public virtual bool TryClosePort()
 		{
@@ -185,25 +159,6 @@ namespace MKY.IO.Ports.Test.WorkaroundAnalysis
 			}
 
 			return (true);
-
-		////try
-		////{
-		////	lock (this.portSynObj)
-		////	{
-		////		this.port.WriteLine(""); // Sending an empty line will result in "ES" for MT-SICS devices.
-		////	}
-		////	return (true);
-		////}
-		////catch (IOException) // ex)
-		////{
-		////////Diagnostics.WriteErrorDetailsToConsole(ex, false);
-		////	return (false);
-		////}
-		////catch (Exception ex)
-		////{
-		////	Diagnostics.WriteErrorDetailsToConsole(ex, "Failed to write to " + PortName + " for unknown reasons!");
-		////	return (false);
-		////}
 		}
 	}
 }
