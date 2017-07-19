@@ -2613,7 +2613,7 @@ namespace YAT.Model
 		{
 			string message =
 				"There are currently no serial COM ports available." + Environment.NewLine + Environment.NewLine +
-				"Start with " + portIdNotAvailable + " anyway?";
+				"Start " + portIdNotAvailable + " anyway?";
 
 			var dr = OnMessageInputRequest
 			(
@@ -2697,7 +2697,7 @@ namespace YAT.Model
 		{
 			string message =
 				"There are currently no HID capable USB devices available." + Environment.NewLine + Environment.NewLine +
-				"Start with " + deviceInfoNotAvailable + " anyway?";
+				"Start " + deviceInfoNotAvailable + " anyway?";
 
 			var dr = OnMessageInputRequest
 			(
