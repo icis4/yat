@@ -24,32 +24,23 @@
 using System;
 using System.Threading;
 
-namespace MKY.IO.Ports.Test.WorkaroundAnalysis.OnOneWorkerThread
+namespace MKY.IO.Ports.Test.WorkaroundAnalysis
 {
 	public static class AnalysisMain
 	{
-		private static string portName;
-
 		[STAThread]
 		private static void Main(string[] args)
 		{
-			portName = "COM1";
+			var portName = "COM1";
 			if ((args.Length > 0) && (args[0].StartsWith("COM")))
 				portName = args[0];
 
 			Console.WriteLine("This is " + typeof(AnalysisMain).FullName);
 			Console.WriteLine("that analyzes/demonstrates issues with the .NET " + Environment.Version);
 			Console.WriteLine("System.IO.Ports.SerialPort class and known workarounds, using");
-			Console.WriteLine(portName + "on Win " + Environment.OSVersion);
+			Console.WriteLine(portName + " on Win " + Environment.OSVersion);
 
-			var t = new Thread(new ThreadStart(AnalysisWorkerThread));
-			t.Name = typeof(AnalysisMain).FullName;
-			t.Start();
-			t.Join();
-		}
 
-		private static void AnalysisWorkerThread()
-		{
 			try
 			{
 				for (;;) // forever until [Ctrl+C] or [Ctrl+Break]:

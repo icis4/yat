@@ -40,7 +40,7 @@ namespace MKY.IO.Ports.Test.WorkaroundAnalysis.OnTwoWorkerThreads
 			Console.WriteLine("This is " + typeof(AnalysisMain).FullName);
 			Console.WriteLine("that analyzes/demonstrates issues with the .NET " + Environment.Version);
 			Console.WriteLine("System.IO.Ports.SerialPort class and known workarounds, using");
-			Console.WriteLine(portName + "on Win " + Environment.OSVersion);
+			Console.WriteLine(portName + " on Win " + Environment.OSVersion);
 
 			try
 			{
