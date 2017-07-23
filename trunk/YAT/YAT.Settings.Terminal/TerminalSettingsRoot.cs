@@ -627,7 +627,7 @@ namespace YAT.Settings.Terminal
 		/// in a future version. Such approach would be beneficial in terms of modularity because the
 		/// XML path wouldn't need to be considered, i.e. changes in the path could be handled. This is
 		/// not the case currently.
-		/// \remind (2011-10-09 / mky) (No Euro2012 games with Switzerland :-(
+		/// \remind (2011-10-09 / mky) (no Euro2012 games with Switzerland :-(
 		/// Cannot alternate 'Display.ShowConnectTime|ShowCounters' to 'Status.ShowConnectTime|ShowCountAndRate'
 		/// due to limitation described above.
 		/// \remind (2012-10-29 / mky)

@@ -400,7 +400,7 @@ namespace YAT.Model.Test
 					Assert.That(terminal.IsOpen,        Is.False);
 					Assert.That(terminal.IsReadyToSend, Is.False);
 
-					// \Remind: The underlying port should be closed here. However, this doesn't
+					// \remind: The underlying port should be closed here. However, this doesn't
 					// work due to the issue documented in the header of 'SerialPortEx'. Still, a
 					// YAT terminal shall handle this situation without any exceptions!
 
