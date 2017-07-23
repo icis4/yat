@@ -159,7 +159,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Action")]
 		[Description("Event raised when sending the command is requested.")]
-		public event EventHandler<EventArgs<SendTextEventOption>> SendCommandRequest;
+		public event EventHandler<SendTextOptionEventArgs> SendCommandRequest;
 
 		#endregion
 
@@ -631,7 +631,7 @@ namespace YAT.View.Controls
 					text = @"\U+" + ((ushort)(e.KeyChar)).ToString("X4", CultureInfo.InvariantCulture);
 
 				ConfirmPartialText(text);
-				OnSendCommandRequest(new EventArgs<SendTextEventOption>(SendTextEventOption.Normal));
+				OnSendCommandRequest(new SendTextOptionEventArgs(SendTextOption.Normal));
 			}
 
 			DebugCommandLeave();
@@ -1017,26 +1017,26 @@ namespace YAT.View.Controls
 
 		private void RequestSendCommand()
 		{
-			var option = SendTextEventOption.Normal;
+			var option = SendTextOption.Normal;
 			if (WithoutEolIsRequestedAndAllowed)
-				option = SendTextEventOption.WithoutEol;
+				option = SendTextOption.WithoutEol;
 
 			if (this.sendImmediately)
 			{
 				ConfirmPartialTextEolCommand();
-				OnSendCommandRequest(new EventArgs<SendTextEventOption>(option));
+				OnSendCommandRequest(new SendTextOptionEventArgs(option));
 			}
 			else
 			{
 				if (this.isValidated)
 				{
 					ConfirmCommand(); // Required to invoke OnCommandChanged().
-					OnSendCommandRequest(new EventArgs<SendTextEventOption>(option));
+					OnSendCommandRequest(new SendTextOptionEventArgs(option));
 				}
 				else
 				{
 					if (ValidateChildren()) // ConfirmSingleLineText() gets called here.
-						OnSendCommandRequest(new EventArgs<SendTextEventOption>(option));
+						OnSendCommandRequest(new SendTextOptionEventArgs(option));
 				}
 			}
 		}
@@ -1068,7 +1068,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		protected virtual void OnSendCommandRequest(EventArgs<SendTextEventOption> e)
+		protected virtual void OnSendCommandRequest(SendTextOptionEventArgs e)
 		{
 			EventHelper.FireSync(SendCommandRequest, this, e);
 		}

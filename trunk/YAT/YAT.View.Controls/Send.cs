@@ -87,7 +87,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Action")]
 		[Description("Event raised when sending the command is requested.")]
-		public event EventHandler<EventArgs<SendTextEventOption>> SendTextCommandRequest;
+		public event EventHandler<SendTextOptionEventArgs> SendTextCommandRequest;
 
 		/// <summary></summary>
 		[Category("Property Changed")]
@@ -328,7 +328,7 @@ namespace YAT.View.Controls
 			OnEditFocusStateChanged(e);
 		}
 
-		private void sendText_SendCommandRequest(object sender, EventArgs<SendTextEventOption> e)
+		private void sendText_SendCommandRequest(object sender, SendTextOptionEventArgs e)
 		{
 			OnSendTextCommandRequest(e);
 		}
@@ -400,7 +400,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		protected virtual void OnSendTextCommandRequest(EventArgs<SendTextEventOption> e)
+		protected virtual void OnSendTextCommandRequest(SendTextOptionEventArgs e)
 		{
 			EventHelper.FireSync(SendTextCommandRequest, this, e);
 		}

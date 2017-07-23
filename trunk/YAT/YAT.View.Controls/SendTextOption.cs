@@ -25,7 +25,7 @@
 namespace YAT.View.Controls
 {
 	/// <summary></summary>
-	public enum SendTextEventOption
+	public enum SendTextOption
 	{
 		/// <summary></summary>
 		Normal,

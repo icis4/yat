@@ -105,7 +105,8 @@
     <Compile Include="BinaryDisplaySettingsSet.Designer.cs">
       <DependentUpon>BinaryDisplaySettingsSet.cs</DependentUpon>
     </Compile>
-    <Compile Include="SendTextEventOption.cs" />
+    <Compile Include="SendTextOptionEventArgs.cs" />
+    <Compile Include="SendTextOption.cs" />
     <Compile Include="UsbSerialHidDeviceSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
