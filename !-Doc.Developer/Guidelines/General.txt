@@ -265,49 +265,6 @@ http://stackoverflow.com/questions/7634797/why-threadabortexception-does-not-thr
 http://msdn.microsoft.com/en-us/library/5b50fdsz.aspx
 
 
-Windows.Forms
--------------
-- 'StatusStrip' items do not show tool tip by default, 'ShowItemToolTips' must be manually set to 'True'.
-- Use the 'Shown' event to initially set controls of a form:
-
-		/// <summary>
-		/// Initially set controls and validate its contents where needed.
-		/// </summary>
-		/// <remarks>
-		/// The 'Shown' event is only raised the first time a form is displayed; subsequently
-		/// minimizing, maximizing, restoring, hiding, showing, or invalidating and repainting will
-		/// not raise this event again.
-		/// Note that the 'Shown' event is raised after the 'Load' event and will also be raised if
-		/// the application is started minimized. Also note that operations called in the 'Shown'
-		/// event can depend on a properly drawn form, as the 'Paint' event of this form and its
-		/// child controls has been raised before this 'Shown' event.
-		/// </remarks>
-		private void <Form>_Shown(object sender, EventArgs e)
-		{
-
-- Use the 'StartUp-And-Properly-Show-UserControl-Controls' pattern to initially set controls of a user control:
-
-		/// <summary>
-		/// Startup flag only used in the following event handler.
-		/// </summary>
-		private bool isStartingUp = true;
-
-		/// <summary>
-		/// Initially set controls and validate its contents where needed.
-		/// </summary>
-		/// <remarks>
-		/// Use paint event to ensure that message boxes in case of errors (e.g. validation errors)
-		/// are shown on top of a properly painted control or form.
-		/// </remarks>
-		private void <UserControl>_Paint(object sender, PaintEventArgs e)
-		{
-			if (this.isStartingUp)
-			{
-				this.isStartingUp = false;
-
-- For more details on events of Windows.Forms, see the MKY > SequenceOfFormAndControlEvents demo project.
-
-
 Known issues
 ------------
 - Die ReadLine() Methode der .NET Komponente funktioniert nicht zuverlässig mit USB-RS232 Konvertern

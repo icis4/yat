@@ -5,7 +5,6 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.Developer", "!-Doc.Developer", "{E3E1764C-1358-495F-839F-721D4D307DF8}"
 	ProjectSection(SolutionItems) = preProject
-		!-Doc.Developer\Guidelines.txt = !-Doc.Developer\Guidelines.txt
 		!-Doc.Developer\HowToAddProject.txt = !-Doc.Developer\HowToAddProject.txt
 		!-Doc.Developer\HowToAddTestProject.txt = !-Doc.Developer\HowToAddTestProject.txt
 		!-Doc.Developer\HowToExportArgoUML.txt = !-Doc.Developer\HowToExportArgoUML.txt
@@ -185,6 +184,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!!-SolutionItems", "!!-Solu
 		Settings.SourceAnalysis = Settings.SourceAnalysis
 		YAT.nunit = YAT.nunit
 		YAT.Test.config = YAT.Test.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Guidelines", "Guidelines", "{ACF6882A-643D-4E4F-9D46-44C1A9552AEC}"
+	ProjectSection(SolutionItems) = preProject
+		!-Doc.Developer\Guidelines\General.txt = !-Doc.Developer\Guidelines\General.txt
+		!-Doc.Developer\Guidelines\Windows.Forms.txt = !-Doc.Developer\Guidelines\Windows.Forms.txt
 	EndProjectSection
 EndProject
 Global
@@ -1550,5 +1555,6 @@ Global
 		{54F71988-3626-43F1-88C9-6A49EF275417} = {3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}
 		{D33931A1-0F8B-4524-A5D1-3891B88C21E5} = {3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}
 		{591BCEB5-6B6F-4368-BE6C-F89F668F7DCB} = {5DE02EAE-E609-4D95-9498-DC45AB2271FE}
+		{ACF6882A-643D-4E4F-9D46-44C1A9552AEC} = {E3E1764C-1358-495F-839F-721D4D307DF8}
 	EndGlobalSection
 EndGlobal
