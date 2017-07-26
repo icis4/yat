@@ -98,7 +98,7 @@ namespace MKY.Settings
 
 			private string name;
 			private TSettings settings;
-			private AlternateXmlElement[] alternateXmlElements;
+			private IEnumerable<AlternateXmlElement> alternateXmlElements;
 			private ApplicationSettingsFileAccess desiredFileAccess;
 			private FileAccessFlags effectiveFileAccess;
 			private Mutex mutex;

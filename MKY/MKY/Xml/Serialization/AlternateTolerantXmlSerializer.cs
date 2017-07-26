@@ -32,6 +32,8 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.XPath;
 
+using MKY.Collections;
+
 #endregion
 
 namespace MKY.Xml.Serialization
@@ -47,7 +49,7 @@ namespace MKY.Xml.Serialization
 		// Fields
 		//==========================================================================================
 
-		private AlternateXmlElement[] alternates;
+		private IEnumerable<AlternateXmlElement> alternates;
 
 		#endregion
 
@@ -57,7 +59,7 @@ namespace MKY.Xml.Serialization
 		//==========================================================================================
 
 		/// <summary></summary>
-		public AlternateTolerantXmlSerializer(Type type, AlternateXmlElement[] alternates)
+		public AlternateTolerantXmlSerializer(Type type, IEnumerable<AlternateXmlElement> alternates)
 			: base(type)
 		{
 			this.alternates = alternates;
@@ -146,14 +148,14 @@ namespace MKY.Xml.Serialization
 			return (xmlPath.ToArray());
 		}
 
-		private static string GetLocalNameAlternateTolerant(string[] standardXmlPath, string localName, AlternateXmlElement[] alternates)
+		private static string GetLocalNameAlternateTolerant(IEnumerable<string> standardXmlPath, string localName, IEnumerable<AlternateXmlElement> alternates)
 		{
 			if (alternates != null)
 			{
 				foreach (AlternateXmlElement element in alternates)
 				{
 					// Compare XML path:
-					if (ArrayEx.ElementsEqual(element.XmlPath, standardXmlPath))
+					if (IEnumerableEx.ElementsEqual(element.XmlPath, standardXmlPath))
 					{
 						// Compare alternates to given local name:
 						foreach (string alternateLocalName in element.AlternateLocalNames)

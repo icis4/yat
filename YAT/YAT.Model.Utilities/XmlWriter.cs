@@ -56,9 +56,9 @@ namespace YAT.Model.Utilities
 		private StreamWriter writer;
 		private object writerSyncObj = new object();
 
-		private int indentSize = 2;
+		private int    indentSize = 2;
 		private string indentString = new string(' ', 2);
-		private int indentLevel; // = 0;
+		private int    indentLevel; // = 0;
 		private ReaderWriterLockSlim indentSyncObj = new ReaderWriterLockSlim();
 
 		/// <summary></summary>
@@ -254,11 +254,12 @@ namespace YAT.Model.Utilities
 
 			lock (writerSyncObj)
 			{
-				int indentLevel;
+				int    indentLevel;
 				string indentString;
+
 				this.indentSyncObj.EnterReadLock();
 				{
-					indentLevel = this.indentLevel;
+					indentLevel  = this.indentLevel;
 					indentString = this.indentString;
 				}
 				this.indentSyncObj.ExitReadLock();

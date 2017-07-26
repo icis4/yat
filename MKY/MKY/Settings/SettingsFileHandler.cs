@@ -28,6 +28,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
@@ -271,7 +272,7 @@ namespace MKY.Settings
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be created.
 		/// </exception>
-		public object LoadFromFile(Type type, AlternateXmlElement[] alternateXmlElements)
+		public object LoadFromFile(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements)
 		{
 			return (LoadFromFile(this.filePath, type, alternateXmlElements));
 		}
@@ -306,7 +307,7 @@ namespace MKY.Settings
 		/// Thrown if settings could not be created.
 		/// </exception>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public object LoadFromFile(string filePath, Type type, AlternateXmlElement[] alternateXmlElements)
+		public object LoadFromFile(string filePath, Type type, IEnumerable<AlternateXmlElement> alternateXmlElements)
 		{
 			bool success = false;
 			object result = null; // If not successful, return <c>null</c>.

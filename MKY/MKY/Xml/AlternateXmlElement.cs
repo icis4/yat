@@ -23,6 +23,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Xml
@@ -32,17 +33,17 @@ namespace MKY.Xml
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, simplicity and ease of use is...")]
-		public string[] XmlPath { get; }
+		public IEnumerable<string> XmlPath { get; }
 
 		/// <summary></summary>
 		public string LocalName { get; }
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, simplicity and ease of use is...")]
-		public string[] AlternateLocalNames { get; }
+		public IEnumerable<string> AlternateLocalNames { get; }
 
 		/// <summary></summary>
-		public AlternateXmlElement(string[] xmlPath, string localName, string[] alternateLocalNames)
+		public AlternateXmlElement(IEnumerable<string> xmlPath, string localName, IEnumerable<string> alternateLocalNames)
 		{
 			XmlPath = xmlPath;
 			LocalName = localName;
@@ -97,9 +98,9 @@ namespace MKY.Xml
 		{
 			return
 			(	// XML is case insensitive!
-				(StringEx.EqualsOrdinalIgnoreCase(XmlPath,             other.XmlPath)) &&
-				(StringEx.EqualsOrdinalIgnoreCase(LocalName,           other.LocalName)) &&
-				(StringEx.EqualsOrdinalIgnoreCase(AlternateLocalNames, other.AlternateLocalNames))
+				(StringEx.ElementsEqualOrdinalIgnoreCase(XmlPath,             other.XmlPath)) &&
+				(StringEx       .EqualsOrdinalIgnoreCase(LocalName,           other.LocalName)) &&
+				(StringEx.ElementsEqualOrdinalIgnoreCase(AlternateLocalNames, other.AlternateLocalNames))
 			);
 		}
 
@@ -132,7 +133,7 @@ namespace MKY.Xml
 		/// Alternate XML elements. Applies to any kind of XML nodes.
 		/// </summary>
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, simplicity and ease of use is...")]
-		AlternateXmlElement[] AlternateXmlElements { get; }
+		IEnumerable<AlternateXmlElement> AlternateXmlElements { get; }
 	}
 }
 

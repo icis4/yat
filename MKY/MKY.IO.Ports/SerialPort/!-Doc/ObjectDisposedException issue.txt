@@ -14,3 +14,6 @@ Stack:
    at System.IO.Ports.SerialStream.EventLoopRunner.WaitForCommEvent()
    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
    at System.Threading.ThreadHelper.ThreadStart()
+
+Findings by ToriLogic in July 2017:
+"Unser Code Review des aktuellen .net 4.7 Codes auf github hat ergeben, dass die Implementierung des EventLoopRunners nach wie vor "kaputt" ist. Microsoft müsste das mal reparieren."

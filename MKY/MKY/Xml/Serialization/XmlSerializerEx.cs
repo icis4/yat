@@ -23,6 +23,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
@@ -97,7 +98,7 @@ namespace MKY.Xml.Serialization
 		/// <remarks>
 		/// For details on tolerant serialization <see cref="AlternateTolerantXmlSerializer"/>.
 		/// </remarks>
-		public static object AlternateTolerantDeserializeFromFile(string filePath, Type type, AlternateXmlElement[] alternateXmlElements)
+		public static object AlternateTolerantDeserializeFromFile(string filePath, Type type, IEnumerable<AlternateXmlElement> alternateXmlElements)
 		{
 			object settings = null;
 			using (var sr = new StreamReader(filePath, Encoding.UTF8, true))

@@ -107,6 +107,7 @@ namespace YAT/*.<TODO>*/
 		//==========================================================================================
 
 		private int todo;
+		private IDisposable toDo;
 
 		#endregion
 
@@ -152,11 +153,14 @@ namespace YAT/*.<TODO>*/
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
+					if (this.toDo != null)
+						this.toDo.Dispose();
 				}
 
 				// Release of unmanaged resources:
 
 				// Set state to disposed:
+				this.toDo = null
 				IsDisposed = true;
 			}
 		}
