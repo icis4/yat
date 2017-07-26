@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 
 #endregion
 
@@ -92,9 +93,13 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Compares two specified string arrays ignoring culture.
+		/// Compares two specified <see cref="string"/> arrays ignoring culture.
 		/// </summary>
-		public static bool EqualsOrdinal(string[] strA, string[] strB)
+		/// <remarks>
+		/// There are overloads for <see cref="string"/> arrays as well as
+		/// <see cref="IEnumerable{T}"/> for optimal performance.
+		/// </remarks>
+		public static bool ElementsEqualOrdinal(string[] strA, string[] strB)
 		{
 			if (ReferenceEquals(strA, strB)) return (true);
 			if (ReferenceEquals(strA, null)) return (false);
@@ -116,6 +121,34 @@ namespace MKY
 		}
 
 		/// <summary>
+		/// Compares two specified <see cref="string"/> enumerables ignoring culture.
+		/// </summary>
+		/// <remarks>
+		/// There are overloads for <see cref="string"/> arrays as well as
+		/// <see cref="IEnumerable{T}"/> for optimal performance.
+		/// </remarks>
+		public static bool ElementsEqualOrdinal(IEnumerable<string> strA, IEnumerable<string> strB)
+		{
+			if (ReferenceEquals(strA, strB)) return (true);
+			if (ReferenceEquals(strA, null)) return (false);
+			if (ReferenceEquals(strB, null)) return (false);
+
+			if (strA.Count() == strB.Count())
+			{
+				for (int i = 0; i < strA.Count(); i++)
+				{
+					if (!EqualsOrdinal(strA.ElementAt(i), strB.ElementAt(i)))
+						return (false); // No match.
+				}
+				return (true); // Match.
+			}
+			else
+			{
+				return (false); // No match.
+			}
+		}
+
+		/// <summary>
 		/// Compares two specified <see cref="string"/> objects ignoring culture and case.
 		/// </summary>
 		public static bool EqualsOrdinalIgnoreCase(string strA, string strB)
@@ -124,9 +157,13 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Compares two specified string arrays ignoring culture and case.
+		/// Compares two specified <see cref="string"/> arrays ignoring culture and case.
 		/// </summary>
-		public static bool EqualsOrdinalIgnoreCase(string[] strA, string[] strB)
+		/// <remarks>
+		/// There are overloads for <see cref="string"/> arrays as well as
+		/// <see cref="IEnumerable{T}"/> for optimal performance.
+		/// </remarks>
+		public static bool ElementsEqualOrdinalIgnoreCase(string[] strA, string[] strB)
 		{
 			if (ReferenceEquals(strA, strB)) return (true);
 			if (ReferenceEquals(strA, null)) return (false);
@@ -137,6 +174,34 @@ namespace MKY
 				for (int i = 0; i < strA.Length; i++)
 				{
 					if (!EqualsOrdinalIgnoreCase(strA[i], strB[i]))
+						return (false); // No match.
+				}
+				return (true); // Match.
+			}
+			else
+			{
+				return (false); // No match.
+			}
+		}
+
+		/// <summary>
+		/// Compares two specified <see cref="string"/> enumerables ignoring culture and case.
+		/// </summary>
+		/// <remarks>
+		/// There are overloads for <see cref="string"/> arrays as well as
+		/// <see cref="IEnumerable{T}"/> for optimal performance.
+		/// </remarks>
+		public static bool ElementsEqualOrdinalIgnoreCase(IEnumerable<string> strA, IEnumerable<string> strB)
+		{
+			if (ReferenceEquals(strA, strB)) return (true);
+			if (ReferenceEquals(strA, null)) return (false);
+			if (ReferenceEquals(strB, null)) return (false);
+
+			if (strA.Count() == strB.Count())
+			{
+				for (int i = 0; i < strA.Count(); i++)
+				{
+					if (!EqualsOrdinalIgnoreCase(strA.ElementAt(i), strB.ElementAt(i)))
 						return (false); // No match.
 				}
 				return (true); // Match.

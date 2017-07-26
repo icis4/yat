@@ -28,10 +28,9 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 
-using MKY.IO;
 using MKY.Xml;
 
 #endregion
@@ -53,7 +52,7 @@ namespace MKY.Settings
 		private SettingsFileHandler fileHandler;
 
 		private TSettings settings; // = null;
-		private AlternateXmlElement[] alternateXmlElements; // = null;
+		private IEnumerable<AlternateXmlElement> alternateXmlElements; // = null;
 
 		#endregion
 

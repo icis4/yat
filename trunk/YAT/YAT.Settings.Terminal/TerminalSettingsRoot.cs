@@ -22,6 +22,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -30,6 +35,8 @@ using System.Xml.Serialization;
 using MKY;
 
 using YAT.Application.Utilities;
+
+#endregion
 
 namespace YAT.Settings.Terminal
 {
@@ -670,7 +677,7 @@ namespace YAT.Settings.Terminal
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public virtual MKY.Xml.AlternateXmlElement[] AlternateXmlElements
+		public virtual IEnumerable<MKY.Xml.AlternateXmlElement> AlternateXmlElements
 		{
 			get { return (StaticAlternateXmlElements); }
 		}
