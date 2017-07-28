@@ -37,7 +37,7 @@
 			this.splitContainer_Send = new System.Windows.Forms.SplitContainer();
 			this.splitContainer_ExplicitDefaultRadix = new System.Windows.Forms.SplitContainer();
 			this.panel_ExplicitDefaultRadix = new System.Windows.Forms.Panel();
-			this.panel_Selection = new System.Windows.Forms.Panel();
+			this.panel_Command = new System.Windows.Forms.Panel();
 			this.panel_Send = new System.Windows.Forms.Panel();
 			this.splitContainer_Send.Panel1.SuspendLayout();
 			this.splitContainer_Send.Panel2.SuspendLayout();
@@ -46,7 +46,7 @@
 			this.splitContainer_ExplicitDefaultRadix.Panel2.SuspendLayout();
 			this.splitContainer_ExplicitDefaultRadix.SuspendLayout();
 			this.panel_ExplicitDefaultRadix.SuspendLayout();
-			this.panel_Selection.SuspendLayout();
+			this.panel_Command.SuspendLayout();
 			this.panel_Send.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -135,7 +135,7 @@
 			// 
 			// splitContainer_ExplicitDefaultRadix.Panel2
 			// 
-			this.splitContainer_ExplicitDefaultRadix.Panel2.Controls.Add(this.panel_Selection);
+			this.splitContainer_ExplicitDefaultRadix.Panel2.Controls.Add(this.panel_Command);
 			this.splitContainer_ExplicitDefaultRadix.Size = new System.Drawing.Size(356, 27);
 			this.splitContainer_ExplicitDefaultRadix.SplitterDistance = 80;
 			this.splitContainer_ExplicitDefaultRadix.SplitterWidth = 1;
@@ -150,15 +150,15 @@
 			this.panel_ExplicitDefaultRadix.Size = new System.Drawing.Size(80, 27);
 			this.panel_ExplicitDefaultRadix.TabIndex = 0;
 			// 
-			// panel_Selection
+			// panel_Command
 			// 
-			this.panel_Selection.Controls.Add(this.pathComboBox_FilePath);
-			this.panel_Selection.Controls.Add(this.button_OpenFile);
-			this.panel_Selection.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel_Selection.Location = new System.Drawing.Point(0, 0);
-			this.panel_Selection.Name = "panel_Selection";
-			this.panel_Selection.Size = new System.Drawing.Size(275, 27);
-			this.panel_Selection.TabIndex = 0;
+			this.panel_Command.Controls.Add(this.pathComboBox_FilePath);
+			this.panel_Command.Controls.Add(this.button_OpenFile);
+			this.panel_Command.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel_Command.Location = new System.Drawing.Point(0, 0);
+			this.panel_Command.Name = "panel_Command";
+			this.panel_Command.Size = new System.Drawing.Size(275, 27);
+			this.panel_Command.TabIndex = 0;
 			// 
 			// panel_Send
 			// 
@@ -183,7 +183,7 @@
 			this.splitContainer_ExplicitDefaultRadix.Panel2.ResumeLayout(false);
 			this.splitContainer_ExplicitDefaultRadix.ResumeLayout(false);
 			this.panel_ExplicitDefaultRadix.ResumeLayout(false);
-			this.panel_Selection.ResumeLayout(false);
+			this.panel_Command.ResumeLayout(false);
 			this.panel_Send.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -200,6 +200,6 @@
 		private System.Windows.Forms.ComboBox comboBox_ExplicitDefaultRadix;
 		private System.Windows.Forms.Panel panel_ExplicitDefaultRadix;
 		private System.Windows.Forms.Panel panel_Send;
-		private System.Windows.Forms.Panel panel_Selection;
+		private System.Windows.Forms.Panel panel_Command;
 	}
 }

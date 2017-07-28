@@ -3,19 +3,37 @@ Allow proper system scaling for values other than 100%
 ------------------------------------------------------
 
 For forms and user controls:
- > Avoid setting 'MaximumSize'
+ > Avoid setting 'MaximumSize'.
    ('MinimumSize' won't cause problems, but may not be as restrictive as expected, but 'MaximumSize' may limit 'Size's scaling, which can cause problems.)
 
 For forms:
  > Use the 'MKY.Windows.Forms.SplitContainerScaler' to let all contained split containers be scaled.
 
 For user controls:
- > Set 'AutoScaleMode' to 'Inherit' (default is 'Font')
- > Do not anchor 'Right' or 'Bottom' to a user control, instead use a panel with 'Dock' = 'Fill'
+ > Set 'AutoScaleMode' to 'Inherit' (default is 'Font').
+ > Do not anchor 'Right' or 'Bottom' to a user control, instead use a panel with 'Dock' = 'Fill'.
 
 Based on:
  > "Resolution" @ https://support.microsoft.com/en-us/help/967578/child-controls-on-a-usercontrol-may-get-clipped-in-a-system-with-a-low
  > "Design Guidelines" @ https://stackoverflow.com/questions/22735174/how-to-write-winforms-code-that-auto-scales-to-system-font-and-dpi-settings
+
+Additional information:
+ > Scaling behavior on Win 7 and before is leading to issues described above.
+ > Scaling behavior on Win 8 is similar to Win 10. However:
+    > Win 8:
+       > Default = normal
+       > Additional settings = smaller + larger
+       > WinForms/YAT is fully "sharp" with setting = smaller (which probably relates to 100% of Win 10), some blurring otherwise
+    > Win 10:
+       > Default = 100%
+       > Additional settings = 125%, 150%, 175%
+       > WinForms/YAT is fully "sharp" with 100%, some blurring otherwise
+ > Pendings requests:
+    > #310 "Improve high DPI scaling for Win8+" https://sourceforge.net/p/y-a-terminal/feature-requests/310/
+ > Former bugs:
+    > #375 "Some controls are difficult to click on a 1920x1200 screen on Windows 7" https://sourceforge.net/p/y-a-terminal/bugs/85/
+    > #235 "Controls clipped " https://sourceforge.net/p/y-a-terminal/bugs/235/
+    > #85 "Improper UI scaling for 120 dpi on Win Vista" https://sourceforge.net/p/y-a-terminal/bugs/85/
 
 
 StatusStrip

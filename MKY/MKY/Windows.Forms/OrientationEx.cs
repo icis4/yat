@@ -25,6 +25,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace MKY.Windows.Forms
@@ -160,6 +161,40 @@ namespace MKY.Windows.Forms
 				result = new OrientationEx(); // Default!
 				return (false);
 			}
+		}
+
+		#endregion
+
+		#region WidthOrHeight
+		//==========================================================================================
+		// WidthOrHeight
+		//==========================================================================================
+
+		/// <summary>
+		/// Gets <see cref="Control.Width"/> or <see cref="Control.Height"/> of <paramref name="control"/>,
+		/// depending on <see cref="SplitContainer.Orientation"/> of <paramref name="orientation"/>.
+		/// </summary>
+		public static int SizeToWidthOrHeight(Control control, Orientation orientation)
+		{
+			return (SizeToWidthOrHeight(control.Size, orientation));
+		}
+
+		/// <summary>
+		/// Gets <see cref="Size.Width"/> or <see cref="Size.Height"/> of <paramref name="size"/>,
+		/// depending on <see cref="SplitContainer.Orientation"/> of <paramref name="orientation"/>.
+		/// </summary>
+		public static int SizeToWidthOrHeight(Size size, Orientation orientation)
+		{
+			return ((orientation == Orientation.Vertical) ? size.Width : size.Height);
+		}
+
+		/// <summary>
+		/// Gets <see cref="SizeF.Width"/> or <see cref="SizeF.Height"/> of <paramref name="size"/>,
+		/// depending on <see cref="SplitContainer.Orientation"/> of <paramref name="orientation"/>.
+		/// </summary>
+		public static float SizeToWidthOrHeight(SizeF size, Orientation orientation)
+		{
+			return ((orientation == Orientation.Vertical) ? size.Width : size.Height);
 		}
 
 		#endregion

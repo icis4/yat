@@ -22,8 +22,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -35,12 +33,12 @@ namespace MKY.Windows.Forms
 	/// <remarks>
 	/// Based on https://www.codeproject.com/Tips/786170/Proper-Resizing-of-SplitterContainer-Controls-at-a.
 	/// </remarks>
-	public class SplitContainerScaler
+	public class SplitContainerHelper
 	{
 		/// <summary>
 		/// Gets or sets the current scale.
 		/// </summary>
-		public SizeF Scale { get; protected set; } = new SizeF(1.0f, 1.0f);
+		protected SizeF Scale { get; set; } = new SizeF(1.0f, 1.0f);
 
 		/// <summary>
 		/// Adjusts the scale by the given factor.
@@ -60,7 +58,15 @@ namespace MKY.Windows.Forms
 				var sc = child as SplitContainer;
 				if (sc != null)
 				{
-					PerformScaling(sc);
+					// Adjust splitter distance:
+					int scaledDistance = CalculateScaledDistanceFromUnscaled(sc, sc.SplitterDistance);
+					if (sc.SplitterDistance != scaledDistance)
+					{
+						int widthOrHeight = OrientationEx.SizeToWidthOrHeight(sc, sc.Orientation);
+						sc.SplitterDistance = Int32Ex.Limit(scaledDistance, 0, (widthOrHeight - 1));
+					}
+
+					// Continue with the panels:
 					PerformScaling(sc.Panel1);
 					PerformScaling(sc.Panel2);
 				}
@@ -72,21 +78,48 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary>
-		/// Scales the specified <see cref="SplitContainer"/>.
+		/// Calculates the scaled splitter distance from the unscaled splitter distance.
 		/// </summary>
-		protected virtual void PerformScaling(SplitContainer sc)
+		public virtual int CalculateScaledDistanceFromUnscaled(SplitContainer sc, int unscaledDistance)
 		{
-			float scaleOfContainer = ((sc.Orientation == Orientation.Vertical) ? Scale.Width : Scale.Height);
+			float scaleOfContainer = OrientationEx.SizeToWidthOrHeight(Scale, sc.Orientation);
 
 			if (sc.FixedPanel == FixedPanel.Panel1)
 			{
-				sc.SplitterDistance = (int)Math.Round(sc.SplitterDistance * scaleOfContainer);
+				return ((int)((unscaledDistance * scaleOfContainer) + 0.5f)); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
 			}
 			else if (sc.FixedPanel == FixedPanel.Panel2)
 			{
-				int dimensionOfPanel2 = ((sc.Orientation == Orientation.Vertical) ? sc.Panel2.ClientSize.Width : sc.Panel2.ClientSize.Height);
-				int dimensionOffset = (int)(dimensionOfPanel2 * scaleOfContainer);
-				sc.SplitterDistance -= (dimensionOffset - dimensionOfPanel2);
+				int widthOrHeightOfPanel2 = OrientationEx.SizeToWidthOrHeight(sc.Panel2.ClientSize, sc.Orientation);
+				int widthOrHeightOffset = (int)((widthOrHeightOfPanel2 * scaleOfContainer) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+				return (unscaledDistance - (widthOrHeightOffset - widthOrHeightOfPanel2));
+			}
+			else // No fixed panel:
+			{
+				return (unscaledDistance);
+			}
+		}
+
+		/// <summary>
+		/// Calculates the scaled splitter distance from the unscaled splitter distance.
+		/// </summary>
+		public virtual int CalculateUnscaledDistanceFromScaled(SplitContainer sc, int scaledDistance)
+		{
+			float scaleOfContainer = OrientationEx.SizeToWidthOrHeight(Scale, sc.Orientation);
+
+			if (sc.FixedPanel == FixedPanel.Panel1)
+			{
+				return ((int)((scaledDistance / scaleOfContainer) + 0.5f)); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+			}
+			else if (sc.FixedPanel == FixedPanel.Panel2)
+			{
+				int widthOrHeightOfPanel2 = OrientationEx.SizeToWidthOrHeight(sc.Panel2.ClientSize, sc.Orientation);
+				int widthOrHeightOffset = (int)((widthOrHeightOfPanel2 / scaleOfContainer) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+				return (scaledDistance - (widthOrHeightOffset - widthOrHeightOfPanel2));
+			}
+			else // No fixed panel:
+			{
+				return (scaledDistance);
 			}
 		}
 	}
