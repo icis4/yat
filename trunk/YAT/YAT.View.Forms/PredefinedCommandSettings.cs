@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.Security.Permissions;
 using System.Windows.Forms;
@@ -71,6 +72,8 @@ namespace YAT.View.Forms
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
+
+		private SizeF scale = new SizeF(1.0f, 1.0f);
 
 		private StartupControl startupControl = new StartupControl(1, 1);
 		private SettingControlsHelper isSettingControls;
@@ -134,6 +137,21 @@ namespace YAT.View.Forms
 		public int SelectedPage
 		{
 			get { return (this.selectedPage); }
+		}
+
+		#endregion
+
+		#region Form Scaling
+		//==========================================================================================
+		// Form Special Keys
+		//==========================================================================================
+
+		/// <summary></summary>
+		protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
+		{
+			this.scale = new SizeF(this.scale.Width * factor.Width, this.scale.Height * factor.Height);
+
+			base.ScaleControl(factor, specified);
 		}
 
 		#endregion
@@ -304,14 +322,14 @@ namespace YAT.View.Forms
 			if (!useExplicitDefaultRadix) // Default
 			{
 				label_ExplicitDefaultRadix.Visible = false;
-				label_File.Left = 6;
-				label_Data.Left = 54;
+				label_File.Left = (int)((this.scale.Width *   6) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+				label_Data.Left = (int)((this.scale.Width *  54) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
 			}
 			else
 			{
 				label_ExplicitDefaultRadix.Visible = true;
-				label_File.Left = 87;
-				label_Data.Left = 135;
+				label_File.Left = (int)((this.scale.Width *  87) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+				label_Data.Left = (int)((this.scale.Width * 135) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
 			}
 
 			this.predefinedCommandSettingsSetLabels = new List<Label>(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); // Preset the required capacity to improve memory management.

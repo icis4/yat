@@ -148,7 +148,7 @@
     <Compile Include="Windows.Forms\ApplicationEx.cs" />
     <Compile Include="Windows.Forms\ContextMenuStripShortcutWorkaround.cs" />
     <Compile Include="Windows.Forms\ScreenEx.cs" />
-    <Compile Include="Windows.Forms\SplitContainerScaler.cs" />
+    <Compile Include="Windows.Forms\SplitContainerHelper.cs" />
     <Compile Include="Windows.Forms\ToolStripMenuItemEx.cs" />
     <Compile Include="Windows.Forms\KeysEx.cs" />
     <Compile Include="Windows.Forms\MessageBoxEx.cs" />

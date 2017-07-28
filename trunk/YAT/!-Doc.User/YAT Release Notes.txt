@@ -88,18 +88,23 @@ YAT 2.0 Delta Version 1.99.80 :: 2017-0x-xx
 ----------------------------------------------------------------------------------------------------
 
 Important changes:
-- Additional workaround has been applied to prevent 'ObjectDisposedException' when restarting or
-  disconnecting USB/RS-232 converters (USB CDC) without closing the serial COM port. Workaround also
-  applies when undocking or hibernating a computer running YAT without closing the serial COM port.
+- Additional workaround applied to prevent 'ObjectDisposedException' when disconnecting USB/RS-232
+  converters (USB CDC) without closing the serial COM port (bug #382). Workaround also applies when
+  undocking or hibernating a computer running YAT without closing the serial COM port, as well as
+  when restaring devices that implement a virtual serial COM port (USB CDC).
 
 Fixed bugs:
 - Serial COM port switching again properly works (bug #376).
 - Sending at very low baud rates again properly works (bug #379, related to limiting to baud rate).
+- Erroneous error message when changing log file separator fixed (bug #378).
+- System display scaling other than 100% mostly fixed for Win 7 and before (bugs #85, #235, #375).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
 - General imitations of .NET Windows.Forms:
-   > System display scaling other than 100% results in partly clipped controls (bugs #85 and #235).
+   > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
+     before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
+     The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
    > System errors are output in local language, even though YAT is all-English (bug #66).
    > Single chars are compared case insensitively against recent 'Send Text' commands (bug #347).
    > Auto completion for e.g. 'Send Text' is not feasible to implement (feature request #227).

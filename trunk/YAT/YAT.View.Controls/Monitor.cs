@@ -184,6 +184,8 @@ namespace YAT.View.Controls
 			this.timeStatusHelper.StatusTextChanged += timeStatusHelper_StatusTextChanged;
 			this.dataStatusHelper.StatusTextChanged += dataStatusHelper_StatusTextChanged;
 
+			ApplyFontToListBoxes(); // Required to initialize 'ListBox.ItemHeight', e.g. with scale != 100% (96 DPI).
+
 			// Attention:
 			// Since the line number list box will display the vertical scroll bar automatically,
 			// the line number list box is placed underneath the monitor list box and sized larger
@@ -272,33 +274,9 @@ namespace YAT.View.Controls
 						fastListBox_Monitor.BackColor = this.formatSettings.BackColor;
 
 					if (fontHasChanged)
-					{
-						// Directly apply the new settings to the list boxes. This ensures that
-						// update is only done when required, as the update leads to move of list
-						// box to top, and re-drawing. Both takes time, and impacts the monitor
-						// behavior. Thus, only update if really needed.
-
-						ListBox lb;
-						Font f = this.formatSettings.Font;
-
-						lb = fastListBox_LineNumbers;
-						lb.BeginUpdate();
-						lb.Font = (Font)f.Clone();
-						lb.ItemHeight = f.Height;
-						lb.Invalidate();
-						lb.EndUpdate();
-
-						lb = fastListBox_Monitor;
-						lb.BeginUpdate();
-						lb.Font = (Font)f.Clone();
-						lb.ItemHeight = f.Height;
-						lb.Invalidate();
-						lb.EndUpdate();
-					}
+						ApplyFontToListBoxes();
 					else
-					{
 						fastListBox_Monitor.Invalidate(); // Required e.g. when enabling/disabling formatting.
-					}
 				}
 			}
 		}
@@ -963,6 +941,34 @@ namespace YAT.View.Controls
 		//==========================================================================================
 		// Non-Public Methods
 		//==========================================================================================
+
+		/// <summary>
+		/// Applies the font to the list boxes.
+		/// </summary>
+		/// <remarks>
+		/// Directly apply the new settings to the list boxes. This ensures that update is only done
+		/// done when required, as the update leads to move of list box to top, and re-drawing. Both
+		/// takes time and impacts the monitor behavior. Thus, only update if really needed.
+		/// </remarks>
+		private void ApplyFontToListBoxes()
+		{
+			ListBox lb;
+			Font f = this.formatSettings.Font;
+
+			lb = fastListBox_LineNumbers;
+			lb.BeginUpdate();
+			lb.Font = (Font)f.Clone();
+			lb.ItemHeight = f.Height;
+			lb.Invalidate();
+			lb.EndUpdate();
+
+			lb = fastListBox_Monitor;
+			lb.BeginUpdate();
+			lb.Font = (Font)f.Clone();
+			lb.ItemHeight = f.Height;
+			lb.Invalidate();
+			lb.EndUpdate();
+		}
 
 		private void SetControls()
 		{
