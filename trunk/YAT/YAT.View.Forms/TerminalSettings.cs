@@ -366,7 +366,8 @@ namespace YAT.View.Forms
 
 			string message =
 				"Reset all settings to default values?" + Environment.NewLine +
-				type + " and extended settings will also be reset!";
+				type + " and advanced settings will also be reset!";
+				// Actually text and binary are reset. But only one of both is in use anyway...
 
 			if (MessageBoxEx.Show
 				(
