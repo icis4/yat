@@ -210,6 +210,7 @@ namespace YAT.Domain
 		public static IOTypeEx[] GetItems()
 		{
 			List<IOTypeEx> a = new List<IOTypeEx>(8); // Preset the required capacity to improve memory management.
+
 			a.Add(new IOTypeEx(IOType.SerialPort));
 			a.Add(new IOTypeEx(IOType.TcpClient));
 			a.Add(new IOTypeEx(IOType.TcpServer));
@@ -217,7 +218,10 @@ namespace YAT.Domain
 			a.Add(new IOTypeEx(IOType.UdpClient));
 			a.Add(new IOTypeEx(IOType.UdpServer));
 			a.Add(new IOTypeEx(IOType.UdpPairSocket));
-			a.Add(new IOTypeEx(IOType.UsbSerialHid));
+
+			if (EnvironmentEx.IsStandardWindows)
+				a.Add(new IOTypeEx(IOType.UsbSerialHid)); // Requires Windows "HID.dll".
+
 			return (a.ToArray());
 		}
 
