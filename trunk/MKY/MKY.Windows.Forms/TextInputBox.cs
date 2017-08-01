@@ -170,9 +170,9 @@ namespace MKY.Windows.Forms
 		[ModalBehavior(ModalBehavior.Always)]
 		public static DialogResult Show(IWin32Window owner, string text, string caption, string initialInputText, out string inputText)
 		{
-			TextInputBox tib = new TextInputBox(text, caption, initialInputText);
+			var tib = new TextInputBox(text, caption, initialInputText);
 
-			DialogResult dialogResult = tib.ShowDialog(owner);
+			var dialogResult = tib.ShowDialog(owner); // Showing multiple dialogs in parallel is OK here. No need to prevent multiple invocations.
 			if (dialogResult == DialogResult.OK)
 				inputText = tib.InputText;
 			else

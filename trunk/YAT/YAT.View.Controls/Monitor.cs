@@ -642,7 +642,19 @@ namespace YAT.View.Controls
 		// Control Special Keys
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// In case of pressing a modifier key (e.g. [Shift]), this method is invoked twice! Both
+		/// invocations will state msg=0x100 (WM_KEYDOWN)! See:
+		/// https://msdn.microsoft.com/en-us/library/system.windows.forms.control.processcmdkey.aspx:
+		/// The ProcessCmdKey method first determines whether the control has a ContextMenu, and if
+		/// so, enables the ContextMenu to process the command key. If the command key is not a menu
+		/// shortcut and the control has a parent, the key is passed to the parent's ProcessCmdKey
+		/// method. The net effect is that command keys are "bubbled" up the control hierarchy. In
+		/// addition to the key the user pressed, the key data also indicates which, if any, modifier
+		/// keys were pressed at the same time as the key. Modifier keys include the SHIFT, CTRL, and
+		/// ALT keys.
+		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{

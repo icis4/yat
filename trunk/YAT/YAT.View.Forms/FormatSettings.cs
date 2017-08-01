@@ -469,8 +469,39 @@ namespace YAT.View.Forms
 			monitor_Example.AddLines(exampleComplete.ToLines());
 		}
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'formIsOpen' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private bool ShowFontDialog_dialogIsOpen; // = false;
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowFontDialog()
+		{
+			// Ensure that dialog is only shown once at a time. Because if this method is invoked
+			// again while the dialog is still open (possible e.g. if this method is invoked by a
+			// shortcut process in 'ProcessCmdKey()'), multiple dialogs would be shown in parallel!
+			// 
+			// A simple boolean flag without any interlocked or monitor protection is sufficient,
+			// as this method will always have to be synchonized onto the main thread.
+			// 
+			// For the same reason, 'Monitor.TryEnter()' cannot be used as that would always be
+			// successful on the main thread.
+			if (!ShowFontDialog_dialogIsOpen)
+			{
+				ShowFontDialog_dialogIsOpen = true;
+				try
+				{
+					DoShowFontDialog();
+				}
+				finally
+				{
+					ShowFontDialog_dialogIsOpen; // = false;
+				}
+			}
+		}
+
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void DoShowFontDialog()
 		{
 			FontDialog fd;
 			Font f = this.formatSettingsInEdit.Font;
@@ -524,8 +555,39 @@ namespace YAT.View.Forms
 			}
 		}
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'formIsOpen' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private bool ShowBackgroundColorDialog_dialogIsOpen; // = false;
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowBackgroundColorDialog()
+		{
+			// Ensure that dialog is only shown once at a time. Because if this method is invoked
+			// again while the dialog is still open (possible e.g. if this method is invoked by a
+			// shortcut process in 'ProcessCmdKey()'), multiple dialogs would be shown in parallel!
+			// 
+			// A simple boolean flag without any interlocked or monitor protection is sufficient,
+			// as this method will always have to be synchonized onto the main thread.
+			// 
+			// For the same reason, 'Monitor.TryEnter()' cannot be used as that would always be
+			// successful on the main thread.
+			if (!ShowBackgroundColorDialog_dialogIsOpen)
+			{
+				ShowBackgroundColorDialog_dialogIsOpen = true;
+				try
+				{
+					DoShowBackgroundColorDialog();
+				}
+				finally
+				{
+					ShowBackgroundColorDialog_dialogIsOpen; // = false;
+				}
+			}
+		}
+
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void DoShowBackgroundColorDialog()
 		{
 			colorDialog.CustomColors = this.customColors;
 			colorDialog.Color        = this.formatSettingsInEdit.BackColor;

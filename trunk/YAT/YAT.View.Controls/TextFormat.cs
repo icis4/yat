@@ -300,8 +300,39 @@ namespace YAT.View.Controls
 				Strikeout = checkBox_Strikeout.Checked;
 		}
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'formIsOpen' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private bool button_Color_Click_dialogIsOpen; // = false;
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Color_Click(object sender, EventArgs e)
+		{
+			// Ensure that dialog is only shown once at a time. Because if this method is invoked
+			// again while the dialog is still open (possible e.g. if this method is invoked by a
+			// shortcut process in 'ProcessCmdKey()'), multiple dialogs would be shown in parallel!
+			// 
+			// A simple boolean flag without any interlocked or monitor protection is sufficient,
+			// as this method will always have to be synchonized onto the main thread.
+			// 
+			// For the same reason, 'Monitor.TryEnter()' cannot be used as that would always be
+			// successful on the main thread.
+			if (!button_Color_Click_dialogIsOpen)
+			{
+				button_Color_Click_dialogIsOpen = true;
+				try
+				{
+					button_Color_DoClick(sender, e);
+				}
+				finally
+				{
+					button_Color_Click_dialogIsOpen; // = false;
+				}
+			}
+		}
+
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void button_Color_DoClick(object sender, EventArgs e)
 		{
 			colorDialog.CustomColors = CustomColors;
 			colorDialog.Color        = FormatColor;

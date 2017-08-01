@@ -281,17 +281,17 @@ namespace MKY.Windows.Forms
 		[ModalBehavior(ModalBehavior.Always)]
 		public DialogResult ShowDialog(IWin32Window owner, string caption, string status1, string status2, string settingText, ref bool setting, bool showCancel = true, int timeout = System.Threading.Timeout.Infinite)
 		{
+			DialogResult dr;
 			Initialize(caption, status1, status2, settingText, setting, showCancel, timeout);
 
-			DialogResult dr;
 			using (var timer = new System.Threading.Timer(new System.Threading.TimerCallback(timer_Timeout), null, this.timeout, System.Threading.Timeout.Infinite))
 			{
 				this.isShowing = true;
-				dr = ShowDialog(owner);
+				dr = ShowDialog(owner); // Showing multiple dialogs in parallel is OK here. No need to prevent multiple invocations.
 				this.isShowing = false;
 			}
-			setting = Setting;
 
+			setting = Setting;
 			return (dr);
 		}
 

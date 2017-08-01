@@ -232,7 +232,19 @@ namespace YAT.View.Forms
 		// Form Special Keys
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// In case of pressing a modifier key (e.g. [Shift]), this method is invoked twice! Both
+		/// invocations will state msg=0x100 (WM_KEYDOWN)! See:
+		/// https://msdn.microsoft.com/en-us/library/system.windows.forms.control.processcmdkey.aspx:
+		/// The ProcessCmdKey method first determines whether the control has a ContextMenu, and if
+		/// so, enables the ContextMenu to process the command key. If the command key is not a menu
+		/// shortcut and the control has a parent, the key is passed to the parent's ProcessCmdKey
+		/// method. The net effect is that command keys are "bubbled" up the control hierarchy. In
+		/// addition to the key the user pressed, the key data also indicates which, if any, modifier
+		/// keys were pressed at the same time as the key. Modifier keys include the SHIFT, CTRL, and
+		/// ALT keys.
+		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
@@ -1614,6 +1626,7 @@ namespace YAT.View.Forms
 				this.menuItems_Predefined_Pages[i].Visible = true;
 				this.menuItems_Predefined_Pages[i].Enabled = this.terminal.IsOpen;
 			}
+
 			for (int i = pageCount; i < menuItems_Predefined_MaxPages; i++)
 			{
 				this.menuItems_Predefined_Pages[i].Text    = MenuEx.PrependIndex(i + 1, "<Undefined>");
@@ -3089,8 +3102,39 @@ namespace YAT.View.Forms
 		// Monitor Panels > Methods
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'formIsOpen' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private bool ShowFormatSettings_dialogIsOpen; // = false;
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowFormatSettings()
+		{
+			// Ensure that dialog is only shown once at a time. Because if this method is invoked
+			// again while the dialog is still open (possible e.g. if this method is invoked by a
+			// shortcut process in 'ProcessCmdKey()'), multiple dialogs would be shown in parallel!
+			// 
+			// A simple boolean flag without any interlocked or monitor protection is sufficient,
+			// as this method will always have to be synchonized onto the main thread.
+			// 
+			// For the same reason, 'Monitor.TryEnter()' cannot be used as that would always be
+			// successful on the main thread.
+			if (!ShowFormatSettings_dialogIsOpen)
+			{
+				ShowFormatSettings_dialogIsOpen = true;
+				try
+				{
+					DoShowFormatSettings();
+				}
+				finally
+				{
+					ShowFormatSettings_dialogIsOpen; // = false;
+				}
+			}
+		}
+
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void DoShowFormatSettings()
 		{
 			int[] customColors = this.settingsRoot.View.CustomColorsToWin32();
 
@@ -3124,14 +3168,46 @@ namespace YAT.View.Forms
 			SetTimedStatusText("Data copied to clipboard");
 		}
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'formIsOpen' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private bool ShowSaveMonitorDialog_dialogIsOpen; // = false;
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowSaveMonitorDialog(Controls.Monitor monitor)
 		{
+			// Ensure that dialog is only shown once at a time. Because if this method is invoked
+			// again while the dialog is still open (possible e.g. if this method is invoked by a
+			// shortcut process in 'ProcessCmdKey()'), multiple dialogs would be shown in parallel!
+			// 
+			// A simple boolean flag without any interlocked or monitor protection is sufficient,
+			// as this method will always have to be synchonized onto the main thread.
+			// 
+			// For the same reason, 'Monitor.TryEnter()' cannot be used as that would always be
+			// successful on the main thread.
+			if (!ShowSaveMonitorDialog_dialogIsOpen)
+			{
+				ShowSaveMonitorDialog_dialogIsOpen = true;
+				try
+				{
+					DoShowSaveMonitorDialog(monitor);
+				}
+				finally
+				{
+					ShowSaveMonitorDialog_dialogIsOpen; // = false;
+				}
+			}
+		}
+
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void DoShowSaveMonitorDialog(Controls.Monitor monitor)
+		{
 			SetFixedStatusText("Preparing to save data...");
 
-			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.Title = "Save As";
 			string initialExtension = ApplicationSettings.LocalUserSettings.Extensions.MonitorFiles;
+
+			var sfd = new SaveFileDialog();
+			sfd.Title = "Save As";
 			sfd.Filter      = ExtensionHelper.TextFilesFilter;
 			sfd.FilterIndex = ExtensionHelper.TextFilesFilterHelper(initialExtension);
 			sfd.DefaultExt  = PathEx.DenormalizeExtension(initialExtension);
@@ -3166,11 +3242,11 @@ namespace YAT.View.Forms
 
 				if (ExtensionHelper.IsXmlFile(filePath))
 				{
-#if FALSE // Enable to use the raw instead of neat XML export schema, useful for development purposes of the raw XML schema.
+				#if FALSE // Enable to use the raw instead of neat XML export schema, useful for development purposes of the raw XML schema.
 					savedCount = Model.Utilities.XmlWriterHelperRaw.LinesToFile(monitor.SelectedLines, filePath, true);
-#else
+				#else
 					savedCount = Model.Utilities.XmlWriterHelperNeat.LinesToFile(monitor.SelectedLines, filePath, true);
-#endif
+				#endif
 				}
 				else if (ExtensionHelper.IsRtfFile(filePath))
 				{
@@ -3235,12 +3311,43 @@ namespace YAT.View.Forms
 			}
 		}
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'formIsOpen' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private bool ShowPrintMonitorDialog_dialogIsOpen; // = false;
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowPrintMonitorDialog(Controls.Monitor monitor)
 		{
+			// Ensure that dialog is only shown once at a time. Because if this method is invoked
+			// again while the dialog is still open (possible e.g. if this method is invoked by a
+			// shortcut process in 'ProcessCmdKey()'), multiple dialogs would be shown in parallel!
+			// 
+			// A simple boolean flag without any interlocked or monitor protection is sufficient,
+			// as this method will always have to be synchonized onto the main thread.
+			// 
+			// For the same reason, 'Monitor.TryEnter()' cannot be used as that would always be
+			// successful on the main thread.
+			if (!ShowPrintMonitorDialog_dialogIsOpen)
+			{
+				ShowPrintMonitorDialog_dialogIsOpen = true;
+				try
+				{
+					DoShowPrintMonitorDialog(monitor);
+				}
+				finally
+				{
+					ShowPrintMonitorDialog_dialogIsOpen; // = false;
+				}
+			}
+		}
+
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void DoShowPrintMonitorDialog(Controls.Monitor monitor)
+		{
 			SetFixedStatusText("Preparing to print data...");
 
-			PrintDialog pd = new PrintDialog();
+			var pd = new PrintDialog();
 			pd.PrinterSettings = new System.Drawing.Printing.PrinterSettings();
 
 			// Note that the PrintDialog class may not work on AMD64 microprocessors unless you set the UseEXDialog property to true (MSDN):
@@ -3331,49 +3438,57 @@ namespace YAT.View.Forms
 			}
 		}
 
-		/// <summary>
-		/// Fixes issue described in bug #300 "Modal forms can be opened multiple times":
-		/// When no commands were defined yet, pressing Shift+F1 opens the 'Predefined' form, so far so good.
-		/// However, when pressing Shift+F1 again (while the 'Predefined' form is still open), the form opens a second time!
-		/// 
-		/// Saying hello to StyleCop ;-.
-		/// </summary>
-		/// <remarks>
-		/// Simple bool without any interlocked or monitor protection is totally sufficient,
-		/// as this method will always be called from the main thread.
-		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'formIsOpen' does start with a lower case letter.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Boolean just *is* 'bool'...")]
-		private bool ShowPredefinedCommandSettings_formIsOpen = false;
+		private bool ShowPredefinedCommandSettings_dialogIsOpen; // = false;
 
 		/// <param name="page">Page 1..max.</param>
 		/// <param name="command">Command 1..max.</param>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowPredefinedCommandSettings(int page, int command)
 		{
-			if (!ShowPredefinedCommandSettings_formIsOpen)
+			// Ensure that dialog is only shown once at a time. Because if this method is invoked
+			// again while the dialog is still open (possible e.g. if this method is invoked by a
+			// shortcut process in 'ProcessCmdKey()'), multiple dialogs would be shown in parallel!
+			// 
+			// A simple boolean flag without any interlocked or monitor protection is sufficient,
+			// as this method will always have to be synchonized onto the main thread.
+			// 
+			// For the same reason, 'Monitor.TryEnter()' cannot be used as that would always be
+			// successful on the main thread.
+			if (!ShowPredefinedCommandSettings_dialogIsOpen)
 			{
-				ShowPredefinedCommandSettings_formIsOpen = true;
-
-				var f = new PredefinedCommandSettings
-					(
-					this.settingsRoot.PredefinedCommand,
-					this.settingsRoot.TerminalType,
-					this.settingsRoot.Send.UseExplicitDefaultRadix,
-					this.settingsRoot.Send.ToParseMode(),
-					page,
-					command
-					);
-
-				if (f.ShowDialog(this) == DialogResult.OK)
+				ShowPredefinedCommandSettings_dialogIsOpen = true;
+				try
 				{
-					Refresh();
-					this.settingsRoot.PredefinedCommand = f.SettingsResult;
-					this.settingsRoot.Predefined.SelectedPage = f.SelectedPage;
+					DoShowPredefinedCommandSettings(page, command);
 				}
+				finally
+				{
+					ShowPredefinedCommandSettings_dialogIsOpen; // = false;
+				}
+			}
+		}
 
-				ShowPredefinedCommandSettings_formIsOpen = false;
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void DoShowPredefinedCommandSettings(int page, int command)
+		{
+			var f = new PredefinedCommandSettings
+			(
+				this.settingsRoot.PredefinedCommand,
+				this.settingsRoot.TerminalType,
+				this.settingsRoot.Send.UseExplicitDefaultRadix,
+				this.settingsRoot.Send.ToParseMode(),
+				page,
+				command
+			);
+
+			if (f.ShowDialog(this) == DialogResult.OK)
+			{
+				Refresh();
+				this.settingsRoot.PredefinedCommand = f.SettingsResult;
+				this.settingsRoot.Predefined.SelectedPage = f.SelectedPage;
 			}
 		}
 
@@ -3857,12 +3972,47 @@ namespace YAT.View.Forms
 		// Terminal > Methods
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'formIsOpen' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private bool ShowSaveTerminalAsFileDialog_dialogIsOpen; // = false;
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private DialogResult ShowSaveTerminalAsFileDialog()
 		{
+			var dr = DialogResult.None;
+
+			// Ensure that dialog is only shown once at a time. Because if this method is invoked
+			// again while the dialog is still open (possible e.g. if this method is invoked by a
+			// shortcut process in 'ProcessCmdKey()'), multiple dialogs would be shown in parallel!
+			// 
+			// A simple boolean flag without any interlocked or monitor protection is sufficient,
+			// as this method will always have to be synchonized onto the main thread.
+			// 
+			// For the same reason, 'Monitor.TryEnter()' cannot be used as that would always be
+			// successful on the main thread.
+			if (!ShowSaveTerminalAsFileDialog_dialogIsOpen)
+			{
+				ShowSaveTerminalAsFileDialog_dialogIsOpen = true;
+				try
+				{
+					dr = DoShowSaveTerminalAsFileDialog();
+				}
+				finally
+				{
+					ShowSaveTerminalAsFileDialog_dialogIsOpen; // = false;
+				}
+			}
+
+			return (dr);
+		}
+
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private DialogResult DoShowSaveTerminalAsFileDialog()
+		{
 			SetFixedStatusText("Saving terminal as...");
 
-			SaveFileDialog sfd = new SaveFileDialog();
+			var sfd = new SaveFileDialog();
 			sfd.Title = "Save " + IndicatedName + " As";
 			sfd.Filter      = ExtensionHelper.TerminalFilesFilter;
 			sfd.FilterIndex = ExtensionHelper.TerminalFilesFilterDefault;
@@ -3889,7 +4039,9 @@ namespace YAT.View.Forms
 			{
 				ResetStatusText();
 			}
+
 			SelectSendTextInput();
+
 			return (dr);
 		}
 
@@ -3900,8 +4052,39 @@ namespace YAT.View.Forms
 		// Terminal > Settings
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'formIsOpen' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private bool ShowTerminalSettings_dialogIsOpen; // = false;
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowTerminalSettings()
+		{
+			// Ensure that dialog is only shown once at a time. Because if this method is invoked
+			// again while the dialog is still open (possible e.g. if this method is invoked by a
+			// shortcut process in 'ProcessCmdKey()'), multiple dialogs would be shown in parallel!
+			// 
+			// A simple boolean flag without any interlocked or monitor protection is sufficient,
+			// as this method will always have to be synchonized onto the main thread.
+			// 
+			// For the same reason, 'Monitor.TryEnter()' cannot be used as that would always be
+			// successful on the main thread.
+			if (!ShowTerminalSettings_dialogIsOpen)
+			{
+				ShowTerminalSettings_dialogIsOpen = true;
+				try
+				{
+					DoShowTerminalSettings();
+				}
+				finally
+				{
+					ShowTerminalSettings_dialogIsOpen; // = false;
+				}
+			}
+		}
+
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void DoShowTerminalSettings()
 		{
 			SetFixedStatusText("Terminal Settings...");
 
@@ -4463,8 +4646,39 @@ namespace YAT.View.Forms
 			toolStripMenuItem_TerminalMenu_Log_SetMenuItems();
 		}
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'formIsOpen' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private bool ShowLogSettings_dialogIsOpen; // = false;
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowLogSettings()
+		{
+			// Ensure that dialog is only shown once at a time. Because if this method is invoked
+			// again while the dialog is still open (possible e.g. if this method is invoked by a
+			// shortcut process in 'ProcessCmdKey()'), multiple dialogs would be shown in parallel!
+			// 
+			// A simple boolean flag without any interlocked or monitor protection is sufficient,
+			// as this method will always have to be synchonized onto the main thread.
+			// 
+			// For the same reason, 'Monitor.TryEnter()' cannot be used as that would always be
+			// successful on the main thread.
+			if (!ShowLogSettings_dialogIsOpen)
+			{
+				ShowLogSettings_dialogIsOpen = true;
+				try
+				{
+					DoShowLogSettings();
+				}
+				finally
+				{
+					ShowLogSettings_dialogIsOpen; // = false;
+				}
+			}
+		}
+
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void DoShowLogSettings()
 		{
 			var f = new LogSettings(this.settingsRoot.Log);
 			if (f.ShowDialog(this) == DialogResult.OK)

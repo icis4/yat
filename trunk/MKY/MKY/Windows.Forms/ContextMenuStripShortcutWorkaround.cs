@@ -35,7 +35,7 @@ namespace MKY.Windows.Forms
 	/// Then, the shortcuts can manually be handled in the <see cref="Form.ProcessCmdKey"/> method.
 	/// </summary>
 	/// <remarks>
-	/// To improve performance, the items are compiled into a dictionary, taking the shortcut keys
+	/// To improve performance, the items are collected in a dictionary, taking the shortcut keys
 	/// as lookup key. Thus, this workaround object needs to be re-created in case shortcut keys
 	/// are changed in a context menu.
 	/// </remarks>
