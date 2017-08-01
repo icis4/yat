@@ -659,11 +659,42 @@ namespace YAT.View.Controls
 		// Non-Public Methods > Multi-Line Text
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'formIsOpen' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private bool ShowMultiLineBox_dialogIsOpen; // = false;
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void ShowMultiLineBox(Control requestingControl)
+		{
+			// Ensure that dialog is only shown once at a time. Because if this method is invoked
+			// again while the dialog is still open (possible e.g. if this method is invoked by a
+			// shortcut process in 'ProcessCmdKey()'), multiple dialogs would be shown in parallel!
+			// 
+			// A simple boolean flag without any interlocked or monitor protection is sufficient,
+			// as this method will always have to be synchonized onto the main thread.
+			// 
+			// For the same reason, 'Monitor.TryEnter()' cannot be used as that would always be
+			// successful on the main thread.
+			if (!ShowMultiLineBox_dialogIsOpen)
+			{
+				ShowMultiLineBox_dialogIsOpen = true;
+				try
+				{
+					DoShowMultiLineBox(requestingControl);
+				}
+				finally
+				{
+					ShowMultiLineBox_dialogIsOpen; // = false;
+				}
+			}
+		}
+
 		/// <remarks>
 		/// Almost duplicated code in <see cref="SendText.ShowMultiLineBox"/>.
 		/// </remarks>
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void ShowMultiLineBox(Control requestingControl)
+		private void DoShowMultiLineBox(Control requestingControl)
 		{
 			// Indicate multi-line text:
 			this.isSettingControls.Enter();
@@ -698,7 +729,6 @@ namespace YAT.View.Controls
 
 			textBox_Description.Select();
 		}
-
 		#endregion
 
 		#region Non-Public Methods > File
@@ -706,10 +736,41 @@ namespace YAT.View.Controls
 		// Non-Public Methods > File
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'formIsOpen' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private bool ShowOpenFileDialog_dialogIsOpen; // = false;
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowOpenFileDialog()
 		{
-			OpenFileDialog ofd = new OpenFileDialog();
+			// Ensure that dialog is only shown once at a time. Because if this method is invoked
+			// again while the dialog is still open (possible e.g. if this method is invoked by a
+			// shortcut process in 'ProcessCmdKey()'), multiple dialogs would be shown in parallel!
+			// 
+			// A simple boolean flag without any interlocked or monitor protection is sufficient,
+			// as this method will always have to be synchonized onto the main thread.
+			// 
+			// For the same reason, 'Monitor.TryEnter()' cannot be used as that would always be
+			// successful on the main thread.
+			if (!ShowOpenFileDialog_dialogIsOpen)
+			{
+				ShowOpenFileDialog_dialogIsOpen = true;
+				try
+				{
+					DoShowOpenFileDialog();
+				}
+				finally
+				{
+					ShowOpenFileDialog_dialogIsOpen; // = false;
+				}
+			}
+		}
+
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void DoShowOpenFileDialog()
+		{
+			var ofd = new OpenFileDialog();
 			ofd.Title = "Set File";
 
 			string initialExtension;

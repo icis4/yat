@@ -283,7 +283,19 @@ namespace YAT.View.Controls
 		// Control Special Keys
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// In case of pressing a modifier key (e.g. [Shift]), this method is invoked twice! Both
+		/// invocations will state msg=0x100 (WM_KEYDOWN)! See:
+		/// https://msdn.microsoft.com/en-us/library/system.windows.forms.control.processcmdkey.aspx:
+		/// The ProcessCmdKey method first determines whether the control has a ContextMenu, and if
+		/// so, enables the ContextMenu to process the command key. If the command key is not a menu
+		/// shortcut and the control has a parent, the key is passed to the parent's ProcessCmdKey
+		/// method. The net effect is that command keys are "bubbled" up the control hierarchy. In
+		/// addition to the key the user pressed, the key data also indicates which, if any, modifier
+		/// keys were pressed at the same time as the key. Modifier keys include the SHIFT, CTRL, and
+		/// ALT keys.
+		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
@@ -519,10 +531,45 @@ namespace YAT.View.Controls
 		// Non-Public Methods > Open File
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'formIsOpen' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private bool ShowOpenFileDialog_dialogIsOpen; // = false;
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private bool ShowOpenFileDialog()
 		{
-			OpenFileDialog ofd = new OpenFileDialog();
+			bool success = false;
+
+			// Ensure that dialog is only shown once at a time. Because if this method is invoked
+			// again while the dialog is still open (possible e.g. if this method is invoked by a
+			// shortcut process in 'ProcessCmdKey()'), multiple dialogs would be shown in parallel!
+			// 
+			// A simple boolean flag without any interlocked or monitor protection is sufficient,
+			// as this method will always have to be synchonized onto the main thread.
+			// 
+			// For the same reason, 'Monitor.TryEnter()' cannot be used as that would always be
+			// successful on the main thread.
+			if (!ShowOpenFileDialog_dialogIsOpen)
+			{
+				ShowOpenFileDialog_dialogIsOpen = true;
+				try
+				{
+					success = DoShowOpenFileDialog();
+				}
+				finally
+				{
+					ShowOpenFileDialog_dialogIsOpen; // = false;
+				}
+			}
+
+			return (success);
+		}
+
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private bool DoShowOpenFileDialog()
+		{
+			var ofd = new OpenFileDialog();
 			ofd.Title = "Set File";
 
 			string initialExtension;
@@ -551,7 +598,7 @@ namespace YAT.View.Controls
 			ofd.DefaultExt = PathEx.DenormalizeExtension(initialExtension);
 			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.SendFiles;
 
-			bool success = ((ofd.ShowDialog(this) == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)));
+			var success = ((ofd.ShowDialog(this) == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)));
 			if (success)
 			{
 				Refresh();
@@ -584,6 +631,7 @@ namespace YAT.View.Controls
 			}
 
 			button_Send.Select();
+
 			return (success);
 		}
 

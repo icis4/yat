@@ -28,7 +28,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
@@ -212,7 +211,7 @@ namespace YAT.View.Forms
 					== DialogResult.Yes)
 				{
 					var f = new UnhandledException(exception, title, originMessage);
-					f.ShowDialog(owner);
+					f.ShowDialog(owner); // Showing multiple dialogs in parallel is OK here. No need to prevent multiple invocations.
 				}
 			}
 			else
