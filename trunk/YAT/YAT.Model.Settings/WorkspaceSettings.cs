@@ -36,6 +36,9 @@ namespace YAT.Model.Settings
 	/// <summary></summary>
 	public class WorkspaceSettings : MKY.Settings.SettingsItem, IEquatable<WorkspaceSettings>
 	{
+		/// <summary></summary>
+		public const WorkspaceLayout LayoutDefault = WorkspaceLayout.Automatic;
+
 		private bool alwaysOnTop;
 		private WorkspaceLayout layout;
 		private GuidList<TerminalSettingsItem> terminalSettings;
@@ -75,7 +78,7 @@ namespace YAT.Model.Settings
 			base.SetMyDefaults();
 
 			AlwaysOnTop      = false;
-			Layout           = WorkspaceLayout.Automatic;
+			Layout           = LayoutDefault;
 			TerminalSettings = new GuidList<TerminalSettingsItem>();
 		}
 

@@ -122,7 +122,7 @@ namespace YAT.View.Forms
 		// Startup/Update/Closing:
 		private bool isStartingUp = true;
 		private SettingControlsHelper isSettingControls;
-		private bool isAutoLayouting = false;
+		private bool isIntegralMdiLayouting = false;
 		private ClosingState closingState = ClosingState.None;
 
 		// MDI:
@@ -304,13 +304,26 @@ namespace YAT.View.Forms
 
 		private void Terminal_LocationChanged(object sender, EventArgs e)
 		{
-			if (!IsStartingUp && !IsAutoLayouting && !IsClosing)
+			if (!IsStartingUp && !IsIntegraMdiLayouting && !IsClosing)
 				SaveWindowSettings();
 		}
 
 		private void Terminal_SizeChanged(object sender, EventArgs e)
 		{
-			if (!IsStartingUp && !IsAutoLayouting && !IsClosing)
+			if (!IsStartingUp && !IsIntegraMdiLayouting && !IsClosing)
+				SaveWindowSettings();
+		}
+
+		/// <summary>
+		/// Notifies the terminal that its <see cref="FormWindowState"/> has changed.
+		/// </summary>
+		/// <remarks>
+		/// Neither the 'LocationChanged' nor 'SizeChanged' event is invoked when only
+		/// the <see cref="FormWindowState"/> has changed but no resizes occurs.
+		/// </remarks>
+		public void NotifyWindowStateChanged()
+		{
+			if (!IsStartingUp && !IsIntegraMdiLayouting && !IsClosing)
 				SaveWindowSettings();
 		}
 
@@ -1971,7 +1984,7 @@ namespace YAT.View.Forms
 
 		private void splitContainer_TxMonitor_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!IsStartingUp && !this.isSettingControls && !IsAutoLayouting && !IsClosing)
+			if (!IsStartingUp && !this.isSettingControls && !IsIntegraMdiLayouting && !IsClosing)
 			{
 				// No need to 'splitContainerHelper.CalculateUnscaledDistanceFromScaled()' since no
 				// panel of 'splitContainer_TxMonitor' is fixed. Code if this was the case:
@@ -1987,7 +2000,7 @@ namespace YAT.View.Forms
 
 		private void splitContainer_RxMonitor_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!IsStartingUp && !this.isSettingControls && !IsAutoLayouting && !IsClosing)
+			if (!IsStartingUp && !this.isSettingControls && !IsIntegraMdiLayouting && !IsClosing)
 			{
 				// No need to 'splitContainerHelper.CalculateUnscaledDistanceFromScaled()' since no
 				// panel of 'splitContainer_RxMonitor' is fixed. Code if this was the case:
@@ -2003,7 +2016,7 @@ namespace YAT.View.Forms
 
 		private void splitContainer_Predefined_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!IsStartingUp && !this.isSettingControls && !IsAutoLayouting && !IsClosing)
+			if (!IsStartingUp && !this.isSettingControls && !IsIntegraMdiLayouting && !IsClosing)
 			{
 				// No need to 'splitContainerHelper.CalculateUnscaledDistanceFromScaled()' since no
 				// panel of 'splitContainer_Predefined' is fixed. Code if this was the case:
@@ -2321,16 +2334,16 @@ namespace YAT.View.Forms
 			get { return (this.isStartingUp); }
 		}
 
-		private bool IsAutoLayouting
+		private bool IsIntegraMdiLayouting
 		{
-			get { return (this.isAutoLayouting); }
+			get { return (this.isIntegralMdiLayouting); }
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Layouting", Justification = "'Layouting' is a correct English term.")]
-		public virtual void NotifyAutoLayouting(bool isAutoLayouting)
+		public virtual void NotifyIntegralMdiLayouting(bool isLayouting)
 		{
-			this.isAutoLayouting = isAutoLayouting;
+			this.isIntegralMdiLayouting = isLayouting;
 		}
 
 		private bool IsClosing

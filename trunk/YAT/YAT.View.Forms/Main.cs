@@ -92,8 +92,7 @@ namespace YAT.View.Forms
 		// Constants
 		//==========================================================================================
 
-		// Status
-		private const string DefaultStatusText = "Ready";
+		// Status:
 		private const int TimedStatusInterval = 2000;
 
 		#endregion
@@ -398,6 +397,13 @@ namespace YAT.View.Forms
 			}
 			else
 			{
+				if (this.invokeLayout)
+				{
+					this.invokeLayout = false;
+					ResetTerminalLayout(); // Closing all terminals shall reset the layout to 'Automatic'.
+				}
+
+			////SetTimedStatus(Status.ChildClosed) is called by 'terminalMdiChild_FormClosed()'.
 				SetTerminalText("");
 			}
 
@@ -1849,6 +1855,11 @@ namespace YAT.View.Forms
 			}
 		}
 
+		private void ResetTerminalLayout()
+		{
+			SetTerminalLayout(Model.Settings.WorkspaceSettings.LayoutDefault);
+		}
+
 		private void ResizeWorkspace()
 		{
 			// Simply forward the resize request to the MDI layout engine:
@@ -1859,7 +1870,7 @@ namespace YAT.View.Forms
 		/// Performs the layout operation on the workspace, i.e. the terminals.
 		/// </summary>
 		/// <remarks>
-		/// Uses the MDI functionality Windows.Forms environment to perform the layout.
+		/// Uses the MDI functionality of the Windows.Forms environment to perform the layout.
 		/// </remarks>
 		private void LayoutWorkspace()
 		{
@@ -1872,7 +1883,7 @@ namespace YAT.View.Forms
 		/// This method does not notify the workspace.
 		/// </summary>
 		/// <remarks>
-		/// Uses the MDI functionality Windows.Forms environment to perform the layout.
+		/// Uses the MDI functionality of the Windows.Forms environment to perform the layout.
 		/// </remarks>
 		private void LayoutWorkspace(WorkspaceLayout layout)
 		{
@@ -1884,6 +1895,7 @@ namespace YAT.View.Forms
 						MaximizeActiveMdiChild();
 					else
 						LayoutMdi(MdiLayout.TileVertical);
+
 					break;
 
 				case WorkspaceLayout.Cascade:
@@ -1893,7 +1905,7 @@ namespace YAT.View.Forms
 					break;
 
 				case WorkspaceLayout.Manual:
-					// Nothing to do. Manual layout is kept as is.
+					NotifyManualLayoutingToMdi();
 					break;
 
 				case WorkspaceLayout.Minimize:
@@ -1906,6 +1918,16 @@ namespace YAT.View.Forms
 
 				default:
 					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + layout + "' is an invalid workspace layout!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		private void NotifyManualLayoutingToMdi()
+		{
+			foreach (var f in this.MdiChildren)
+			{
+				var t = (f as Terminal);
+				if (t != null)
+					t.NotifyWindowStateChanged();
 			}
 		}
 
@@ -1922,10 +1944,20 @@ namespace YAT.View.Forms
 		protected new void LayoutMdi(MdiLayout value)
 		{
 			this.isLayoutingMdi = true;
-			NotifyAutoLayoutingToMdi(true);
+			NotifyIntegralMdiLayoutingToMdiChildren(true);
 			base.LayoutMdi(value);
-			NotifyAutoLayoutingToMdi(false);
+			NotifyIntegralMdiLayoutingToMdiChildren(false);
 			this.isLayoutingMdi = false;
+		}
+
+		private void NotifyIntegralMdiLayoutingToMdiChildren(bool isLayouting)
+		{
+			foreach (var f in this.MdiChildren)
+			{
+				var t = (f as Terminal);
+				if (t != null)
+					t.NotifyIntegralMdiLayouting(isLayouting);
+			}
 		}
 
 		private void MinimizeActiveMdiChild()
@@ -1945,16 +1977,6 @@ namespace YAT.View.Forms
 				this.isLayoutingMdi = true;
 				ActiveMdiChild.WindowState = FormWindowState.Maximized;
 				this.isLayoutingMdi = false;
-			}
-		}
-
-		private void NotifyAutoLayoutingToMdi(bool isAutoLayouting)
-		{
-			foreach (var f in this.MdiChildren)
-			{
-				var t = (f as Terminal);
-				if (t != null)
-					t.NotifyAutoLayouting(isAutoLayouting);
 			}
 		}
 
@@ -2026,9 +2048,9 @@ namespace YAT.View.Forms
 			AttachTerminalEventHandlersAndMdiChildToParent(mdiChild);
 
 			this.isLayoutingMdi = true;
-			NotifyAutoLayoutingToMdi(true);
+			NotifyIntegralMdiLayoutingToMdiChildren(true);
 			mdiChild.Show(); // MDI children must be shown without reference to 'this'.
-			NotifyAutoLayoutingToMdi(false);
+			NotifyIntegralMdiLayoutingToMdiChildren(false);
 			this.isLayoutingMdi = false;
 
 			LayoutWorkspace();
@@ -2135,7 +2157,7 @@ namespace YAT.View.Forms
 
 		private void terminalMdiChild_Changed(object sender, EventArgs e)
 		{
-			SetTimedStatus(Status.ChildChanged);
+		////SetTimedStatus(Status.ChildChanged) is no longer used to limit information.
 
 			SetChildControls();
 		}
@@ -2197,8 +2219,8 @@ namespace YAT.View.Forms
 		private enum Status
 		{
 			ChildActivated,
-			ChildActive,
-			ChildChanged,
+		////ChildActive is no longer used to limit information.
+		////ChildChanged is no longer used to limit information. Used to display "childText + " changed"" but that results in such messages each time a command is sent (due to the 'IsReadyToSend' changes). In order to get this again, 'IsReadyToSend' changes would have to be separated from the 'IOChanged' event.
 			ChildSaved,
 			ChildClosed,
 			Default,
@@ -2212,13 +2234,12 @@ namespace YAT.View.Forms
 				switch (status)
 				{
 					case Status.ChildActivated: return (childText + " activated");
-					case Status.ChildActive:    return (""); // Display nothing to limit information.
-					case Status.ChildChanged:   return (""); // Display nothing to limit information. Used to display "childText + " changed"" but that results in such messages each time a command is sent (due to the 'IsReadyToSend' changes). In order to get this again, 'IsReadyToSend' changes would have to be separated from the 'IOChanged' event.
 					case Status.ChildSaved:     return (childText + " saved");
 					case Status.ChildClosed:    return (childText + " closed");
 				}
 			}
-			return (DefaultStatusText);
+
+			return ("");
 		}
 
 		private void SetFixedStatusText(string text)
@@ -2247,10 +2268,7 @@ namespace YAT.View.Forms
 
 		private void ResetStatusText()
 		{
-			if (ActiveMdiChild != null)
-				SetFixedStatus(Status.ChildActive);
-			else
-				SetFixedStatus(Status.Default);
+			SetFixedStatus(Status.Default);
 		}
 
 		/// <remarks>
