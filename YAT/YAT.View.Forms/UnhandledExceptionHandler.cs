@@ -211,7 +211,7 @@ namespace YAT.View.Forms
 					== DialogResult.Yes)
 				{
 					var f = new UnhandledException(exception, title, originMessage);
-					f.ShowDialog(owner); // Showing multiple dialogs in parallel is OK here. No need to prevent multiple invocations.
+					f.ShowDialog(owner);
 				}
 			}
 			else
