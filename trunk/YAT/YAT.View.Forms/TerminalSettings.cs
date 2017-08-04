@@ -533,40 +533,8 @@ namespace YAT.View.Forms
 			usbSerialHidDeviceSettings.Visible  = isUsbSerialHid;
 		}
 
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'formIsOpen' does start with a lower case letter.")]
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private bool ShowTextOrBinarySettings_dialogIsOpen; // = false;
-
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowTextOrBinarySettings()
-		{
-			// Ensure that dialog is only shown once at a time. Because if this method is invoked
-			// again while the dialog is still open (possible e.g. if this method is invoked by a
-			// shortcut process in 'ProcessCmdKey()'), multiple dialogs would be shown in parallel!
-			// 
-			// A simple boolean flag without any interlocked or monitor protection is sufficient,
-			// as this method will always have to be synchonized onto the main thread.
-			// 
-			// For the same reason, 'Monitor.TryEnter()' cannot be used as that would always be
-			// successful on the main thread.
-			if (!ShowTextOrBinarySettings_dialogIsOpen)
-			{
-				ShowTextOrBinarySettings_dialogIsOpen = true;
-				try
-				{
-					DoShowTextOrBinarySettings();
-				}
-				finally
-				{
-					ShowTextOrBinarySettings_dialogIsOpen; // = false;
-				}
-			}
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void DoShowTextOrBinarySettings()
 		{
 			var tt = this.settingsInEdit.Terminal.TerminalType;
 			switch (tt)
@@ -600,43 +568,12 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'formIsOpen' does start with a lower case letter.")]
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private bool ShowAdvancedSettings_dialogIsOpen; // = false;
-
 		/// <remarks>
 		/// The following list must handle the same properties as
 		/// <see cref="View.Forms.AdvancedTerminalSettings.SetDefaults()"/> defaults.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowAdvancedSettings()
-		{
-			// Ensure that dialog is only shown once at a time. Because if this method is invoked
-			// again while the dialog is still open (possible e.g. if this method is invoked by a
-			// shortcut process in 'ProcessCmdKey()'), multiple dialogs would be shown in parallel!
-			// 
-			// A simple boolean flag without any interlocked or monitor protection is sufficient,
-			// as this method will always have to be synchonized onto the main thread.
-			// 
-			// For the same reason, 'Monitor.TryEnter()' cannot be used as that would always be
-			// successful on the main thread.
-			if (!ShowAdvancedSettings_dialogIsOpen)
-			{
-				ShowAdvancedSettings_dialogIsOpen = true;
-				try
-				{
-					DoShowAdvancedSettings();
-				}
-				finally
-				{
-					ShowAdvancedSettings_dialogIsOpen; // = false;
-				}
-			}
-		}
-
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void DoShowAdvancedSettings()
 		{
 			var f = new AdvancedTerminalSettings(this.settingsInEdit);
 			if (f.ShowDialog(this) == DialogResult.OK)

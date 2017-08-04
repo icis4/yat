@@ -287,7 +287,7 @@ namespace MKY.Windows.Forms
 			using (var timer = new System.Threading.Timer(new System.Threading.TimerCallback(timer_Timeout), null, this.timeout, System.Threading.Timeout.Infinite))
 			{
 				this.isShowing = true;
-				dr = ShowDialog(owner); // Showing multiple dialogs in parallel is OK here. No need to prevent multiple invocations.
+				dr = ShowDialog(owner);
 				this.isShowing = false;
 			}
 

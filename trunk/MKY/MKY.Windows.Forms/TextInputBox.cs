@@ -172,7 +172,7 @@ namespace MKY.Windows.Forms
 		{
 			var tib = new TextInputBox(text, caption, initialInputText);
 
-			var dialogResult = tib.ShowDialog(owner); // Showing multiple dialogs in parallel is OK here. No need to prevent multiple invocations.
+			var dialogResult = tib.ShowDialog(owner);
 			if (dialogResult == DialogResult.OK)
 				inputText = tib.InputText;
 			else
