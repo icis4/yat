@@ -203,9 +203,15 @@ namespace YAT.View.Forms
 			// Force settings changed event to set all controls.
 			// For improved performance, manually suspend/resume handler for terminal settings:
 			SuspendHandlingTerminalSettings();
-			this.settingsRoot.ClearChanged();
-			this.settingsRoot.ForceChangeEvent();
-			ResumeHandlingTerminalSettings();
+			try
+			{
+				this.settingsRoot.ClearChanged();
+				this.settingsRoot.ForceChangeEvent();
+			}
+			finally
+			{
+				ResumeHandlingTerminalSettings();
+			}
 
 			DebugMessage("...successfully created.");
 		}
@@ -729,8 +735,14 @@ namespace YAT.View.Forms
 					if (!this.isSettingControls)
 					{
 						this.terminalMenuValidationWorkaround_UpdateIsSuspended = true;
-						this.settingsRoot.AutoResponse.Trigger = triggerText;
-						this.terminalMenuValidationWorkaround_UpdateIsSuspended = false;
+						try
+						{
+							this.settingsRoot.AutoResponse.Trigger = triggerText;
+						}
+						finally
+						{
+							this.terminalMenuValidationWorkaround_UpdateIsSuspended = false;
+						}
 					}
 				}
 				else
@@ -765,8 +777,14 @@ namespace YAT.View.Forms
 					if (!this.isSettingControls)
 					{
 						this.terminalMenuValidationWorkaround_UpdateIsSuspended = true;
-						this.settingsRoot.AutoResponse.Response = responseText;
-						this.terminalMenuValidationWorkaround_UpdateIsSuspended = false;
+						try
+						{
+							this.settingsRoot.AutoResponse.Response = responseText;
+						}
+						finally
+						{
+							this.terminalMenuValidationWorkaround_UpdateIsSuspended = false;
+						}
 					}
 				}
 				else
@@ -3109,97 +3127,109 @@ namespace YAT.View.Forms
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + preset + "' is an invalid preset!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
-			var ts = this.settingsRoot.Explicit.Terminal;
-			var scs = ts.IO.SerialPort.Communication;
-			scs.SuspendChangeEvent();
-			switch (preset)
-			{
-				case 1: // "2400, 7, Even, 1, None"
-				{
-					scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud002400;
-					scs.DataBits    = MKY.IO.Ports.DataBits.Seven;
-					scs.Parity      = System.IO.Ports.Parity.Even;
-					scs.StopBits    = System.IO.Ports.StopBits.One;
-					scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
-					break;
-				}
-				case 2: // "2400, 7, Even, 1, Software"
-				{
-					scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud002400;
-					scs.DataBits    = MKY.IO.Ports.DataBits.Seven;
-					scs.Parity      = System.IO.Ports.Parity.Even;
-					scs.StopBits    = System.IO.Ports.StopBits.One;
-					scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.Software;
-					break;
-				}
-				case 3: // "9600, 8, None, 1, None"
-				{
-					scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud009600;
-					scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
-					scs.Parity      = System.IO.Ports.Parity.None;
-					scs.StopBits    = System.IO.Ports.StopBits.One;
-					scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
-					break;
-				}
-				case 4: // "9600, 8, None, 1, Software"
-				{
-					scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud009600;
-					scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
-					scs.Parity      = System.IO.Ports.Parity.None;
-					scs.StopBits    = System.IO.Ports.StopBits.One;
-					scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.Software;
-					break;
-				}
-				case 5: // "19200, 8, None, 1, None"
-				{
-					scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud019200;
-					scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
-					scs.Parity      = System.IO.Ports.Parity.None;
-					scs.StopBits    = System.IO.Ports.StopBits.One;
-					scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
-					break;
-				}
-				case 6: // "19200, 8, None, 1, Software"
-				{
-					scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud019200;
-					scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
-					scs.Parity      = System.IO.Ports.Parity.None;
-					scs.StopBits    = System.IO.Ports.StopBits.One;
-					scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.Software;
-					break;
-				}
-				case 7: // "115200, 8, None, 1, None"
-				{
-					scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud115200;
-					scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
-					scs.Parity      = System.IO.Ports.Parity.None;
-					scs.StopBits    = System.IO.Ports.StopBits.One;
-					scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
-					break;
-				}
-				case 8: // "115200, 8, None, 1, Software"
-				{
-					scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud115200;
-					scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
-					scs.Parity      = System.IO.Ports.Parity.None;
-					scs.StopBits    = System.IO.Ports.StopBits.One;
-					scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.Software;
-					break;
-				}
-			}
-
 			SuspendHandlingTerminalSettings();
-			scs.ResumeChangeEvent();
-			if (scs.HaveChanged)
+			try
 			{
-				this.terminal.ApplySettings(ts);
-				SetTimedStatusText("Terminal settings set to " + presetString + ".");
+				var ts = this.settingsRoot.Explicit.Terminal;
+				var scs = ts.IO.SerialPort.Communication;
+				scs.SuspendChangeEvent();
+				try
+				{
+					switch (preset)
+					{
+						case 1: // "2400, 7, Even, 1, None"
+						{
+							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud002400;
+							scs.DataBits    = MKY.IO.Ports.DataBits.Seven;
+							scs.Parity      = System.IO.Ports.Parity.Even;
+							scs.StopBits    = System.IO.Ports.StopBits.One;
+							scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
+							break;
+						}
+						case 2: // "2400, 7, Even, 1, Software"
+						{
+							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud002400;
+							scs.DataBits    = MKY.IO.Ports.DataBits.Seven;
+							scs.Parity      = System.IO.Ports.Parity.Even;
+							scs.StopBits    = System.IO.Ports.StopBits.One;
+							scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.Software;
+							break;
+						}
+						case 3: // "9600, 8, None, 1, None"
+						{
+							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud009600;
+							scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
+							scs.Parity      = System.IO.Ports.Parity.None;
+							scs.StopBits    = System.IO.Ports.StopBits.One;
+							scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
+							break;
+						}
+						case 4: // "9600, 8, None, 1, Software"
+						{
+							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud009600;
+							scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
+							scs.Parity      = System.IO.Ports.Parity.None;
+							scs.StopBits    = System.IO.Ports.StopBits.One;
+							scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.Software;
+							break;
+						}
+						case 5: // "19200, 8, None, 1, None"
+						{
+							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud019200;
+							scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
+							scs.Parity      = System.IO.Ports.Parity.None;
+							scs.StopBits    = System.IO.Ports.StopBits.One;
+							scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
+							break;
+						}
+						case 6: // "19200, 8, None, 1, Software"
+						{
+							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud019200;
+							scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
+							scs.Parity      = System.IO.Ports.Parity.None;
+							scs.StopBits    = System.IO.Ports.StopBits.One;
+							scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.Software;
+							break;
+						}
+						case 7: // "115200, 8, None, 1, None"
+						{
+							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud115200;
+							scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
+							scs.Parity      = System.IO.Ports.Parity.None;
+							scs.StopBits    = System.IO.Ports.StopBits.One;
+							scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
+							break;
+						}
+						case 8: // "115200, 8, None, 1, Software"
+						{
+							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud115200;
+							scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
+							scs.Parity      = System.IO.Ports.Parity.None;
+							scs.StopBits    = System.IO.Ports.StopBits.One;
+							scs.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.Software;
+							break;
+						}
+					}
+				}
+				finally
+				{
+					scs.ResumeChangeEvent();
+				}
+
+				if (scs.HaveChanged)
+				{
+					this.terminal.ApplySettings(ts);
+					SetTimedStatusText("Terminal settings set to " + presetString + ".");
+				}
+				else
+				{
+					SetTimedStatusText("Terminal settings not changed.");
+				}
 			}
-			else
+			finally
 			{
-				SetTimedStatusText("Terminal settings not changed.");
+				ResumeHandlingTerminalSettings();
 			}
-			ResumeHandlingTerminalSettings();
 		}
 
 		#endregion
@@ -4216,8 +4246,14 @@ namespace YAT.View.Forms
 				if (fsr.HaveChanged)
 				{
 					SuspendHandlingTerminalSettings();
-					this.terminal.ApplySettings(fsr.Terminal);
-					ResumeHandlingTerminalSettings();
+					try
+					{
+						this.terminal.ApplySettings(fsr.Terminal);
+					}
+					finally
+					{
+						ResumeHandlingTerminalSettings();
+					}
 				}
 				else
 				{

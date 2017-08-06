@@ -1097,8 +1097,14 @@ namespace YAT.View.Forms
 					if (!this.isSettingControls)
 					{
 						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
-						((Terminal)ActiveMdiChild).RequestAutoResponseTrigger(triggerText);
-						this.mainToolValidationWorkaround_UpdateIsSuspended = false;
+						try
+						{
+							((Terminal)ActiveMdiChild).RequestAutoResponseTrigger(triggerText);
+						}
+						finally
+						{
+							this.mainToolValidationWorkaround_UpdateIsSuspended = false;
+						}
 					}
 				}
 				else
@@ -1133,8 +1139,14 @@ namespace YAT.View.Forms
 					if (!this.isSettingControls)
 					{
 						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
-						((Terminal)ActiveMdiChild).RequestAutoResponseResponse(responseText);
-						this.mainToolValidationWorkaround_UpdateIsSuspended = false;
+						try
+						{
+							((Terminal)ActiveMdiChild).RequestAutoResponseResponse(responseText);
+						}
+						finally
+						{
+							this.mainToolValidationWorkaround_UpdateIsSuspended = false;
+						}
 					}
 				}
 				else

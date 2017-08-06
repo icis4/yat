@@ -190,11 +190,15 @@ namespace YAT.Model.Settings
 		public void Deactivate()
 		{
 			SuspendChangeEvent();
-
-			Trigger  = AutoTrigger.None;
-			Response = AutoResponse.None;
-
-			ResumeChangeEvent(true); // Force event.
+			try
+			{
+				Trigger  = AutoTrigger.None;
+				Response = AutoResponse.None;
+			}
+			finally
+			{
+				ResumeChangeEvent(true); // Force event.
+			}
 		}
 
 		#endregion

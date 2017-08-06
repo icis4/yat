@@ -1096,74 +1096,78 @@ namespace YAT.View.Forms
 		private void SetDefaults()
 		{
 			this.settingsInEdit.SuspendChangeEvent();
+			try
+			{
+				// Radix:
+				this.settingsInEdit.Terminal.Display.SeparateTxRxRadix = Domain.Settings.DisplaySettings.SeparateTxRxRadixDefault;
+				this.settingsInEdit.Terminal.Display.TxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
+				this.settingsInEdit.Terminal.Display.RxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
 
-			// Radix:
-			this.settingsInEdit.Terminal.Display.SeparateTxRxRadix = Domain.Settings.DisplaySettings.SeparateTxRxRadixDefault;
-			this.settingsInEdit.Terminal.Display.TxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
-			this.settingsInEdit.Terminal.Display.RxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
+				// Display:
+				this.settingsInEdit.Terminal.Display.ShowRadix             = Domain.Settings.DisplaySettings.ShowRadixDefault;
+				this.settingsInEdit.Terminal.Display.ShowBufferLineNumbers = Domain.Settings.DisplaySettings.ShowBufferLineNumbersDefault;
+				this.settingsInEdit.Terminal.Display.ShowTotalLineNumbers  = Domain.Settings.DisplaySettings.ShowTotalLineNumbersDefault;
+				this.settingsInEdit.Terminal.Display.ShowDate              = Domain.Settings.DisplaySettings.ShowDateDefault;
+				this.settingsInEdit.Terminal.Display.ShowTime              = Domain.Settings.DisplaySettings.ShowTimeDefault;
+				this.settingsInEdit.Terminal.Display.ShowPort              = Domain.Settings.DisplaySettings.ShowPortDefault;
+				this.settingsInEdit.Terminal.Display.ShowDirection         = Domain.Settings.DisplaySettings.ShowDirectionDefault;
+				this.settingsInEdit.Terminal.Display.ShowLength            = Domain.Settings.DisplaySettings.ShowLengthDefault;
+				this.settingsInEdit.Terminal.Status.ShowConnectTime        = Domain.Settings.StatusSettings.ShowConnectTimeDefault;
+				this.settingsInEdit.Terminal.Status.ShowCountAndRate       = Domain.Settings.StatusSettings.ShowCountAndRateDefault;
+				this.settingsInEdit.Terminal.Status.ShowFlowControlCount   = Domain.Settings.StatusSettings.ShowFlowControlCountDefault;
+				this.settingsInEdit.Terminal.Status.ShowBreakCount         = Domain.Settings.StatusSettings.ShowBreakCountDefault;
 
-			// Display:
-			this.settingsInEdit.Terminal.Display.ShowRadix             = Domain.Settings.DisplaySettings.ShowRadixDefault;
-			this.settingsInEdit.Terminal.Display.ShowBufferLineNumbers = Domain.Settings.DisplaySettings.ShowBufferLineNumbersDefault;
-			this.settingsInEdit.Terminal.Display.ShowTotalLineNumbers  = Domain.Settings.DisplaySettings.ShowTotalLineNumbersDefault;
-			this.settingsInEdit.Terminal.Display.ShowDate              = Domain.Settings.DisplaySettings.ShowDateDefault;
-			this.settingsInEdit.Terminal.Display.ShowTime              = Domain.Settings.DisplaySettings.ShowTimeDefault;
-			this.settingsInEdit.Terminal.Display.ShowPort              = Domain.Settings.DisplaySettings.ShowPortDefault;
-			this.settingsInEdit.Terminal.Display.ShowDirection         = Domain.Settings.DisplaySettings.ShowDirectionDefault;
-			this.settingsInEdit.Terminal.Display.ShowLength            = Domain.Settings.DisplaySettings.ShowLengthDefault;
-			this.settingsInEdit.Terminal.Status.ShowConnectTime        = Domain.Settings.StatusSettings.ShowConnectTimeDefault;
-			this.settingsInEdit.Terminal.Status.ShowCountAndRate       = Domain.Settings.StatusSettings.ShowCountAndRateDefault;
-			this.settingsInEdit.Terminal.Status.ShowFlowControlCount   = Domain.Settings.StatusSettings.ShowFlowControlCountDefault;
-			this.settingsInEdit.Terminal.Status.ShowBreakCount         = Domain.Settings.StatusSettings.ShowBreakCountDefault;
+				this.settingsInEdit.Terminal.Display.PortLineBreakEnabled      = Domain.Settings.DisplaySettings.PortLineBreakEnabledDefault;
+				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = Domain.Settings.DisplaySettings.DirectionLineBreakEnabledDefault;
+				this.settingsInEdit.Terminal.Display.MaxLineCount              = Domain.Settings.DisplaySettings.MaxLineCountDefault;
+				this.settingsInEdit.Terminal.Display.MaxBytePerLineCount       = Domain.Settings.DisplaySettings.MaxBytePerLineCountDefault;
 
-			this.settingsInEdit.Terminal.Display.PortLineBreakEnabled      = Domain.Settings.DisplaySettings.PortLineBreakEnabledDefault;
-			this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = Domain.Settings.DisplaySettings.DirectionLineBreakEnabledDefault;
-			this.settingsInEdit.Terminal.Display.MaxLineCount              = Domain.Settings.DisplaySettings.MaxLineCountDefault;
-			this.settingsInEdit.Terminal.Display.MaxBytePerLineCount       = Domain.Settings.DisplaySettings.MaxBytePerLineCountDefault;
+				// Char replace:
+				this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsDefault;
+				this.settingsInEdit.Terminal.CharReplace.ControlCharRadix    = Domain.Settings.CharReplaceSettings.ControlCharRadixDefault;
+				this.settingsInEdit.Terminal.CharReplace.ReplaceTab          = Domain.Settings.CharReplaceSettings.ReplaceTabDefault;
+				this.settingsInEdit.Terminal.CharHide.HideXOnXOff            = Domain.Settings.CharHideSettings.HideXOnXOffDefault;
+				this.settingsInEdit.Terminal.CharReplace.ReplaceSpace        = Domain.Settings.CharReplaceSettings.ReplaceSpaceDefault;
+				this.settingsInEdit.Terminal.CharHide.Hide0x00               = Domain.Settings.CharHideSettings.Hide0x00Default;
+				this.settingsInEdit.Terminal.CharHide.Hide0xFF               = Domain.Settings.CharHideSettings.Hide0xFFDefault;
 
-			// Char replace:
-			this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsDefault;
-			this.settingsInEdit.Terminal.CharReplace.ControlCharRadix    = Domain.Settings.CharReplaceSettings.ControlCharRadixDefault;
-			this.settingsInEdit.Terminal.CharReplace.ReplaceTab          = Domain.Settings.CharReplaceSettings.ReplaceTabDefault;
-			this.settingsInEdit.Terminal.CharHide.HideXOnXOff            = Domain.Settings.CharHideSettings.HideXOnXOffDefault;
-			this.settingsInEdit.Terminal.CharReplace.ReplaceSpace        = Domain.Settings.CharReplaceSettings.ReplaceSpaceDefault;
-			this.settingsInEdit.Terminal.CharHide.Hide0x00               = Domain.Settings.CharHideSettings.Hide0x00Default;
-			this.settingsInEdit.Terminal.CharHide.Hide0xFF               = Domain.Settings.CharHideSettings.Hide0xFFDefault;
+				// USB Ser/HID:
+				this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData = MKY.IO.Serial.Usb.SerialHidDeviceSettings.IncludeNonPayloadDataDefault;
 
-			// USB Ser/HID:
-			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData = MKY.IO.Serial.Usb.SerialHidDeviceSettings.IncludeNonPayloadDataDefault;
+				// Communication:
+				this.settingsInEdit.Terminal.IO.Endianness                        = Domain.Settings.IOSettings.EndiannessDefault;
+				this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates     = Domain.Settings.IOSettings.IndicateSerialPortBreakStatesDefault;
+				this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable = Domain.Settings.IOSettings.SerialPortOutputBreakIsModifiableDefault;
 
-			// Communication:
-			this.settingsInEdit.Terminal.IO.Endianness                        = Domain.Settings.IOSettings.EndiannessDefault;
-			this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates     = Domain.Settings.IOSettings.IndicateSerialPortBreakStatesDefault;
-			this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable = Domain.Settings.IOSettings.SerialPortOutputBreakIsModifiableDefault;
+				// Send:
+				this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix         = Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault;
+				this.settingsInEdit.Terminal.Send.KeepCommand                     = Domain.Settings.SendSettings.KeepCommandDefault;
+				this.settingsInEdit.Terminal.Send.CopyPredefined                  = Domain.Settings.SendSettings.CopyPredefinedDefault;
+				this.settingsInEdit.Terminal.Send.SendImmediately                 = Domain.Settings.SendSettings.SendImmediatelyDefault;
 
-			// Send:
-			this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix         = Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault;
-			this.settingsInEdit.Terminal.Send.KeepCommand                     = Domain.Settings.SendSettings.KeepCommandDefault;
-			this.settingsInEdit.Terminal.Send.CopyPredefined                  = Domain.Settings.SendSettings.CopyPredefinedDefault;
-			this.settingsInEdit.Terminal.Send.SendImmediately                 = Domain.Settings.SendSettings.SendImmediatelyDefault;
+				this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission = Domain.Settings.SendSettings.SignalXOnBeforeEachTransmissionDefault;
+				this.settingsInEdit.Terminal.Send.SignalXOnPeriodically           = Domain.Settings.SendSettings.SignalXOnPeriodicallyDefault;
+				this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize       = MKY.IO.Serial.SerialPort.SerialPortSettings.OutputBufferSizeDefault;
+				this.settingsInEdit.Terminal.IO.SerialPort.OutputMaxBaudRate      = MKY.IO.Serial.SerialPort.SerialPortSettings.OutputMaxBaudRateDefault;
+				this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize           = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxChunkSizeDefault;
+				this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate            = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxSendRateDefault;
+				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak    = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnOutputBreakDefault;
+				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak     = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnInputBreakDefault;
 
-			this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission = Domain.Settings.SendSettings.SignalXOnBeforeEachTransmissionDefault;
-			this.settingsInEdit.Terminal.Send.SignalXOnPeriodically           = Domain.Settings.SendSettings.SignalXOnPeriodicallyDefault;
-			this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize       = MKY.IO.Serial.SerialPort.SerialPortSettings.OutputBufferSizeDefault;
-			this.settingsInEdit.Terminal.IO.SerialPort.OutputMaxBaudRate      = MKY.IO.Serial.SerialPort.SerialPortSettings.OutputMaxBaudRateDefault;
-			this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize           = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxChunkSizeDefault;
-			this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate            = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxSendRateDefault;
-			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak    = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnOutputBreakDefault;
-			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak     = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnInputBreakDefault;
+				this.settingsInEdit.Terminal.Send.DefaultDelay                    = Domain.Settings.SendSettings.DefaultDelayDefault;
+				this.settingsInEdit.Terminal.Send.DefaultLineDelay                = Domain.Settings.SendSettings.DefaultLineDelayDefault;
+				this.settingsInEdit.Terminal.Send.DefaultLineInterval             = Domain.Settings.SendSettings.DefaultLineIntervalDefault;
+				this.settingsInEdit.Terminal.Send.DefaultLineRepeat               = Domain.Settings.SendSettings.DefaultLineRepeatDefault;
 
-			this.settingsInEdit.Terminal.Send.DefaultDelay                    = Domain.Settings.SendSettings.DefaultDelayDefault;
-			this.settingsInEdit.Terminal.Send.DefaultLineDelay                = Domain.Settings.SendSettings.DefaultLineDelayDefault;
-			this.settingsInEdit.Terminal.Send.DefaultLineInterval             = Domain.Settings.SendSettings.DefaultLineIntervalDefault;
-			this.settingsInEdit.Terminal.Send.DefaultLineRepeat               = Domain.Settings.SendSettings.DefaultLineRepeatDefault;
+				this.settingsInEdit.Terminal.Send.DisableEscapes                  = Domain.Settings.SendSettings.DisableEscapesDefault;
 
-			this.settingsInEdit.Terminal.Send.DisableEscapes                  = Domain.Settings.SendSettings.DisableEscapesDefault;
-
-			// User:
-			this.settingsInEdit.UserName = Settings.Terminal.ExplicitSettings.UserNameDefault;
-
-			this.settingsInEdit.ResumeChangeEvent(true); // Force event.
+				// User:
+				this.settingsInEdit.UserName = Settings.Terminal.ExplicitSettings.UserNameDefault;
+			}
+			finally
+			{
+				this.settingsInEdit.ResumeChangeEvent(true); // Force event.
+			}
 		}
 
 		#endregion
