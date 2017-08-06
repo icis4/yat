@@ -509,21 +509,21 @@ namespace YAT.View.Controls
 
 		private void comboBox_ExplicitDefaultRadix_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
+			if (this.isSettingControls)
+				return;
+
+			Domain.Radix radix = this.command.DefaultRadix;
+			Domain.RadixEx selectedItem = comboBox_ExplicitDefaultRadix.SelectedItem as Domain.RadixEx;
+			if (selectedItem != null) // Can be 'null' when validating all controls before an item got selected.
+				radix = selectedItem;
+
+			if (!ValidateAndConfirmRadix(radix))
 			{
-				Domain.Radix radix = this.command.DefaultRadix;
-				Domain.RadixEx selectedItem = comboBox_ExplicitDefaultRadix.SelectedItem as Domain.RadixEx;
-				if (selectedItem != null) // Can be 'null' when validating all controls before an item got selected.
-					radix = selectedItem;
+				e.Cancel = true;
 
-				if (!ValidateAndConfirmRadix(radix))
-				{
-					e.Cancel = true;
-
-					// Automatically reset the radix for convenience:
-					comboBox_ExplicitDefaultRadix.SelectedItem = this.command.DefaultRadix;
-					SetCommandControls();
-				}
+				// Automatically reset the radix for convenience:
+				comboBox_ExplicitDefaultRadix.SelectedItem = this.command.DefaultRadix;
+				SetCommandControls();
 			}
 		}
 
@@ -645,17 +645,17 @@ namespace YAT.View.Controls
 
 		private void comboBox_SingleLineText_TextChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			if (!this.isSettingControls)
-			{
-				if (this.sendImmediately)
-					comboBox_SingleLineText.Text = ""; // Instantly reset the text.
-				else
-					this.isValidated = false; // Reset the validation flag.
+			if (this.sendImmediately)
+				comboBox_SingleLineText.Text = ""; // Instantly reset the text.
+			else
+				this.isValidated = false; // Reset the validation flag.
 
-				SetSendControls();
-			}
+			SetSendControls();
 
 			DebugCommandLeave();
 		}
@@ -674,81 +674,81 @@ namespace YAT.View.Controls
 		/// </remarks>
 		private void comboBox_SingleLineText_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
+			if (this.isSettingControls)
+				return;
+
+			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
+			if (!this.isValidated)
 			{
-				DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
-
-				if (!this.isValidated)
+				// Postpone validation if focus is leaving the parent!
+				// Validation will again be done after re-entering edit.
+				if (this.editFocusState != EditFocusState.IsLeavingParent)
 				{
-					// Postpone validation if focus is leaving the parent!
-					// Validation will again be done after re-entering edit.
-					if (this.editFocusState != EditFocusState.IsLeavingParent)
+					// Easter egg ;-)
+					if (SendTextSettings.IsEasterEggCommand(comboBox_SingleLineText.Text))
 					{
-						// Easter egg ;-)
-						if (SendTextSettings.IsEasterEggCommand(comboBox_SingleLineText.Text))
-						{
-							this.isValidated = true;
+						this.isValidated = true;
 
-							if (this.editFocusState == EditFocusState.IsLeavingEdit)
-								SetEditFocusState(EditFocusState.EditIsInactive);
+						if (this.editFocusState == EditFocusState.IsLeavingEdit)
+							SetEditFocusState(EditFocusState.EditIsInactive);
 
-							ConfirmSingleLineText(comboBox_SingleLineText.Text);
+						ConfirmSingleLineText(comboBox_SingleLineText.Text);
 
-							DebugCommandLeave();
-							return;
-						}
-
-						// Single line => Validate!
-						int invalidTextStart;
-						int invalidTextLength;
-						if (Utilities.ValidationHelper.ValidateText(this, "text", comboBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, this.command.DefaultRadix, this.parseMode))
-						{
-							this.isValidated = true;
-
-							if (this.editFocusState == EditFocusState.IsLeavingEdit)
-								SetEditFocusState(EditFocusState.EditIsInactive);
-
-							ConfirmSingleLineText(comboBox_SingleLineText.Text);
-
-							DebugCommandLeave();
-							return;
-						}
-
-						SetEditFocusState(EditFocusState.EditHasFocus);
-						comboBox_SingleLineText.Select(invalidTextStart, invalidTextLength);
-						e.Cancel = true;
+						DebugCommandLeave();
+						return;
 					}
-					else // EditFocusState.IsLeavingParent
+
+					// Single line => Validate!
+					int invalidTextStart;
+					int invalidTextLength;
+					if (Utilities.ValidationHelper.ValidateText(this, "text", comboBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, this.command.DefaultRadix, this.parseMode))
 					{
-						SetEditFocusState(EditFocusState.EditIsInactive);
+						this.isValidated = true;
+
+						if (this.editFocusState == EditFocusState.IsLeavingEdit)
+							SetEditFocusState(EditFocusState.EditIsInactive);
+
+						ConfirmSingleLineText(comboBox_SingleLineText.Text);
+
+						DebugCommandLeave();
+						return;
 					}
+
+					SetEditFocusState(EditFocusState.EditHasFocus);
+					comboBox_SingleLineText.Select(invalidTextStart, invalidTextLength);
+					e.Cancel = true;
 				}
-
-				DebugCommandLeave();
+				else // EditFocusState.IsLeavingParent
+				{
+					SetEditFocusState(EditFocusState.EditIsInactive);
+				}
 			}
+
+			DebugCommandLeave();
 		}
 
 		private void comboBox_SingleLineText_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
+			if (this.isSettingControls)
+				return;
+
+			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
+			this.isValidated = true; // Commands in history have already been validated.
+
+			if (comboBox_SingleLineText.SelectedItem != null)
 			{
-				DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
-
-				this.isValidated = true; // Commands in history have already been validated.
-
-				if (comboBox_SingleLineText.SelectedItem != null)
+				var ri = (comboBox_SingleLineText.SelectedItem as RecentItem<Command>);
+				if (ri != null)
 				{
-					var ri = (comboBox_SingleLineText.SelectedItem as RecentItem<Command>);
-					if (ri != null)
-					{
-						this.command = ri.Item;
+					this.command = ri.Item;
 
-						ConfirmCommand();
-					}
+					ConfirmCommand();
 				}
-
-				DebugCommandLeave();
 			}
+
+			DebugCommandLeave();
 		}
 		
 		private void button_SetMultiLineText_Click(object sender, EventArgs e)

@@ -131,50 +131,66 @@ namespace YAT.View.Forms
 
 		private void checkBox_ShowTerminalInfo_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.MainWindow.ShowTerminalInfo = checkBox_ShowTerminalInfo.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.MainWindow.ShowTerminalInfo = checkBox_ShowTerminalInfo.Checked;
 		}
 
 		private void checkBox_ShowChrono_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.MainWindow.ShowChrono = checkBox_ShowChrono.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.MainWindow.ShowChrono = checkBox_ShowChrono.Checked;
 		}
 
 		private void checkBox_AutoOpenWorkspace_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.General.AutoOpenWorkspace = checkBox_AutoOpenWorkspace.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.General.AutoOpenWorkspace = checkBox_AutoOpenWorkspace.Checked;
 		}
 
 		private void checkBox_AutoSaveWorkspace_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.General.AutoSaveWorkspace = checkBox_AutoSaveWorkspace.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.General.AutoSaveWorkspace = checkBox_AutoSaveWorkspace.Checked;
 		}
 
 		private void checkBox_UseRelativePaths_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.General.UseRelativePaths = checkBox_UseRelativePaths.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.General.UseRelativePaths = checkBox_UseRelativePaths.Checked;
 		}
 
 		private void checkBox_RetrieveSerialPortCaptions_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.General.RetrieveSerialPortCaptions = checkBox_RetrieveSerialPortCaptions.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.General.RetrieveSerialPortCaptions = checkBox_RetrieveSerialPortCaptions.Checked;
 		}
 
 		private void checkBox_DetectSerialPortsInUse_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.General.DetectSerialPortsInUse = checkBox_DetectSerialPortsInUse.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.General.DetectSerialPortsInUse = checkBox_DetectSerialPortsInUse.Checked;
 		}
 
 		private void checkBox_MatchUsbSerial_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.General.MatchUsbSerial = checkBox_MatchUsbSerial.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.General.MatchUsbSerial = checkBox_MatchUsbSerial.Checked;
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)

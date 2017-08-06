@@ -307,8 +307,10 @@ namespace YAT.View.Controls
 		/// </summary>
 		private void SerialPortSettings_EnabledChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				SetControls();
+			if (this.isSettingControls)
+				return;
+
+			SetControls();
 		}
 
 		#endregion
@@ -320,134 +322,144 @@ namespace YAT.View.Controls
 
 		private void comboBox_BaudRate_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				BaudRate = (MKY.IO.Ports.BaudRateEx)comboBox_BaudRate.SelectedItem;
+			if (this.isSettingControls)
+				return;
+
+			BaudRate = (MKY.IO.Ports.BaudRateEx)comboBox_BaudRate.SelectedItem;
 		}
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_BaudRate_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				// Attention:
-				// Do not assume that the selected item maches the actual text in the box
-				//   because SelectedItem is also set if text has changed in the meantime.
+			if (this.isSettingControls)
+				return;
 
-				int intBaudRate;
-				if (int.TryParse(comboBox_BaudRate.Text, out intBaudRate) && (intBaudRate > 0))
-				{
-					BaudRate = (MKY.IO.Ports.BaudRateEx)intBaudRate;
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"Baud rate must be a positive number!",
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
-					e.Cancel = true;
-				}
+			// Attention:
+			// Do not assume that the selected item maches the actual text in the box
+			//   because SelectedItem is also set if text has changed in the meantime.
+
+			int intBaudRate;
+			if (int.TryParse(comboBox_BaudRate.Text, out intBaudRate) && (intBaudRate > 0))
+			{
+				BaudRate = (MKY.IO.Ports.BaudRateEx)intBaudRate;
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Baud rate must be a positive number!",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+				e.Cancel = true;
 			}
 		}
 
 		private void comboBox_DataBits_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				DataBits = (MKY.IO.Ports.DataBitsEx)comboBox_DataBits.SelectedItem;
+			if (this.isSettingControls)
+				return;
+
+			DataBits = (MKY.IO.Ports.DataBitsEx)comboBox_DataBits.SelectedItem;
 		}
 
 		private void comboBox_Parity_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				Parity = (MKY.IO.Ports.ParityEx)comboBox_Parity.SelectedItem;
+			if (this.isSettingControls)
+				return;
+
+			Parity = (MKY.IO.Ports.ParityEx)comboBox_Parity.SelectedItem;
 		}
 
 		private void comboBox_StopBits_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				StopBits = (MKY.IO.Ports.StopBitsEx)comboBox_StopBits.SelectedItem;
+			if (this.isSettingControls)
+				return;
+
+			StopBits = (MKY.IO.Ports.StopBitsEx)comboBox_StopBits.SelectedItem;
 		}
 
 		private void comboBox_FlowControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				FlowControl = (MKY.IO.Serial.SerialPort.SerialFlowControlEx)comboBox_FlowControl.SelectedItem;
+			if (this.isSettingControls)
+				return;
+
+			FlowControl = (MKY.IO.Serial.SerialPort.SerialFlowControlEx)comboBox_FlowControl.SelectedItem;
 		}
 
 		private void checkBox_AliveMonitor_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				MKY.IO.Serial.AutoInterval ar = AliveMonitor;
-				ar.Enabled = checkBox_AliveMonitor.Checked;
-				AliveMonitor = ar;
-			}
+			if (this.isSettingControls)
+				return;
+
+			var ai = AliveMonitor;
+			ai.Enabled = checkBox_AliveMonitor.Checked;
+			AliveMonitor = ai;
 		}
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_AliveMonitorInterval_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
+			if (this.isSettingControls)
+				return;
+
+			int interval;
+			if (int.TryParse(textBox_AliveMonitorInterval.Text, out interval) && (interval >= MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorMinInterval))
 			{
-				int interval;
-				if (int.TryParse(textBox_AliveMonitorInterval.Text, out interval) && (interval >= MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorMinInterval))
-				{
-					MKY.IO.Serial.AutoInterval ar = AliveMonitor;
-					ar.Interval = interval;
-					AliveMonitor = ar;
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"Monitoring interval must be at least " + MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorMinInterval + " ms!",
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
-					e.Cancel = true;
-				}
+				var ai = AliveMonitor;
+				ai.Interval = interval;
+				AliveMonitor = ai;
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Monitoring interval must be at least " + MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorMinInterval + " ms!",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+				e.Cancel = true;
 			}
 		}
 
 		private void checkBox_AutoReopen_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				MKY.IO.Serial.AutoInterval ar = AutoReopen;
-				ar.Enabled = checkBox_AutoReopen.Checked;
-				AutoReopen = ar;
-			}
+			if (this.isSettingControls)
+				return;
+
+			var ar = AutoReopen;
+			ar.Enabled = checkBox_AutoReopen.Checked;
+			AutoReopen = ar;
 		}
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_AutoReopenInterval_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
+			if (this.isSettingControls)
+				return;
+
+			int interval;
+			if (int.TryParse(textBox_AutoReopenInterval.Text, out interval) && (interval >= MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenMinInterval))
 			{
-				int interval;
-				if (int.TryParse(textBox_AutoReopenInterval.Text, out interval) && (interval >= MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenMinInterval))
-				{
-					MKY.IO.Serial.AutoInterval ar = AutoReopen;
-					ar.Interval = interval;
-					AutoReopen = ar;
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"Reopen interval must be at least " + MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenMinInterval + " ms!",
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
-					e.Cancel = true;
-				}
+				var ai = AutoReopen;
+				ai.Interval = interval;
+				AutoReopen = ai;
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Reopen interval must be at least " + MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenMinInterval + " ms!",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+				e.Cancel = true;
 			}
 		}
 

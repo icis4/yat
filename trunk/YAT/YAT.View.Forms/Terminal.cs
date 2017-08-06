@@ -706,12 +706,12 @@ namespace YAT.View.Forms
 
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				var trigger = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
-				if (trigger != null)
-					this.settingsRoot.AutoResponse.Trigger = trigger;
-			}
+			if (this.isSettingControls)
+				return;
+
+			var trigger = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
+			if (trigger != null)
+				this.settingsRoot.AutoResponse.Trigger = trigger;
 		}
 
 		/// <remarks>
@@ -742,12 +742,12 @@ namespace YAT.View.Forms
 
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				var response = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedItem as AutoResponseEx);
-				if (response != null)
-					this.settingsRoot.AutoResponse.Response = response;
-			}
+			if (this.isSettingControls)
+				return;
+
+			var response = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedItem as AutoResponseEx);
+			if (response != null)
+				this.settingsRoot.AutoResponse.Response = response;
 		}
 
 		/// <remarks>
@@ -979,8 +979,10 @@ namespace YAT.View.Forms
 
 		private void toolStripComboBox_TerminalMenu_View_Panels_Orientation_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				SetMonitorOrientation((OrientationEx)toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem);
+			if (this.isSettingControls)
+				return;
+
+			SetMonitorOrientation((OrientationEx)toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem);
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Panels_Predefined_Click(object sender, EventArgs e)
@@ -1286,8 +1288,10 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			if (!this.isSettingControls)
-				SetMonitorOrientation((OrientationEx)toolStripComboBox_MonitorContextMenu_Panels_Orientation.SelectedItem);
+			if (this.isSettingControls)
+				return;
+
+			SetMonitorOrientation((OrientationEx)toolStripComboBox_MonitorContextMenu_Panels_Orientation.SelectedItem);
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Hide_Click(object sender, EventArgs e)
@@ -2348,11 +2352,11 @@ namespace YAT.View.Forms
 
 		private void predefined_SelectedPageChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				if (this.settingsRoot != null)
-					this.settingsRoot.Implicit.Predefined.SelectedPage = predefined.SelectedPage;
-			}
+			if (this.isSettingControls)
+				return;
+
+			if (this.settingsRoot != null)
+				this.settingsRoot.Implicit.Predefined.SelectedPage = predefined.SelectedPage;
 		}
 
 		private void predefined_SendCommandRequest(object sender, PredefinedCommandEventArgs e)

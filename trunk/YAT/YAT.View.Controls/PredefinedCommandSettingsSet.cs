@@ -291,21 +291,21 @@ namespace YAT.View.Controls
 
 		private void comboBox_ExplicitDefaultRadix_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
+			if (this.isSettingControls)
+				return;
+
+			Domain.Radix radix = this.command.DefaultRadix;
+			Domain.RadixEx selectedItem = comboBox_ExplicitDefaultRadix.SelectedItem as Domain.RadixEx;
+			if (selectedItem != null) // Can be 'null' when validating all controls before an item got selected.
+				radix = selectedItem;
+
+			if (!ValidateAndConfirmRadix(radix))
 			{
-				Domain.Radix radix = this.command.DefaultRadix;
-				Domain.RadixEx selectedItem = comboBox_ExplicitDefaultRadix.SelectedItem as Domain.RadixEx;
-				if (selectedItem != null) // Can be 'null' when validating all controls before an item got selected.
-					radix = selectedItem;
+				e.Cancel = true;
 
-				if (!ValidateAndConfirmRadix(radix))
-				{
-					e.Cancel = true;
-
-					// Automatically reset the radix for convenience:
-					comboBox_ExplicitDefaultRadix.SelectedItem = this.command.DefaultRadix;
-					SetControls();
-				}
+				// Automatically reset the radix for convenience:
+				comboBox_ExplicitDefaultRadix.SelectedItem = this.command.DefaultRadix;
+				SetControls();
 			}
 		}
 
@@ -349,18 +349,18 @@ namespace YAT.View.Controls
 
 		private void checkBox_IsFile_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
+			if (this.isSettingControls)
+				return;
+
+			if (checkBox_IsFile.Checked && !this.command.IsValidFilePath)
 			{
-				if (checkBox_IsFile.Checked && !this.command.IsValidFilePath)
-				{
-					ShowOpenFileDialog();
-				}
-				else
-				{
-					this.command.IsFilePath = checkBox_IsFile.Checked;
-					SetControls();
-					OnCommandChanged(EventArgs.Empty);
-				}
+				ShowOpenFileDialog();
+			}
+			else
+			{
+				this.command.IsFilePath = checkBox_IsFile.Checked;
+				SetControls();
+				OnCommandChanged(EventArgs.Empty);
 			}
 		}
 
@@ -404,8 +404,10 @@ namespace YAT.View.Controls
 
 		private void textBox_SingleLineText_TextChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.isValidated = false;
+			if (this.isSettingControls)
+				return;
+
+			this.isValidated = false;
 		}
 
 		/// <remarks>
@@ -417,37 +419,37 @@ namespace YAT.View.Controls
 		/// </remarks>
 		private void textBox_SingleLineText_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
+			if (this.isSettingControls)
+				return;
+
+			if (Model.Settings.SendTextSettings.IsEasterEggCommand(textBox_SingleLineText.Text))
 			{
-				if (Model.Settings.SendTextSettings.IsEasterEggCommand(textBox_SingleLineText.Text))
-				{
-					this.isValidated = true;
+				this.isValidated = true;
 
-					if (this.editFocusState == EditFocusState.IsLeavingEdit)
-								SetEditFocusState(EditFocusState.EditIsInactive);
+				if (this.editFocusState == EditFocusState.IsLeavingEdit)
+							SetEditFocusState(EditFocusState.EditIsInactive);
 
-					ConfirmSingleLineText(textBox_SingleLineText.Text);
-					return;
-				}
-
-				// Single line => Validate!
-				int invalidTextStart;
-				int invalidTextLength;
-				if (Utilities.ValidationHelper.ValidateText(this, "text", textBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, this.command.DefaultRadix, this.parseMode))
-				{
-					this.isValidated = true;
-
-					if (this.editFocusState == EditFocusState.IsLeavingEdit)
-						SetEditFocusState(EditFocusState.EditIsInactive);
-
-					ConfirmSingleLineText(textBox_SingleLineText.Text);
-					return;
-				}
-
-				SetEditFocusState(EditFocusState.EditHasFocus);
-				textBox_SingleLineText.Select(invalidTextStart, invalidTextLength);
-				e.Cancel = true;
+				ConfirmSingleLineText(textBox_SingleLineText.Text);
+				return;
 			}
+
+			// Single line => Validate!
+			int invalidTextStart;
+			int invalidTextLength;
+			if (Utilities.ValidationHelper.ValidateText(this, "text", textBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, this.command.DefaultRadix, this.parseMode))
+			{
+				this.isValidated = true;
+
+				if (this.editFocusState == EditFocusState.IsLeavingEdit)
+					SetEditFocusState(EditFocusState.EditIsInactive);
+
+				ConfirmSingleLineText(textBox_SingleLineText.Text);
+				return;
+			}
+
+			SetEditFocusState(EditFocusState.EditHasFocus);
+			textBox_SingleLineText.Select(invalidTextStart, invalidTextLength);
+			e.Cancel = true;
 		}
 
 		private void pathLabel_FilePath_Click(object sender, EventArgs e)
@@ -467,8 +469,10 @@ namespace YAT.View.Controls
 
 		private void textBox_Description_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
-				ConfirmDescription(textBox_Description.Text);
+			if (this.isSettingControls)
+				return;
+
+			ConfirmDescription(textBox_Description.Text);
 		}
 
 		private void button_Delete_Click(object sender, EventArgs e)

@@ -1078,12 +1078,12 @@ namespace YAT.View.Forms
 
 		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				var trigger = (toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
-				if (trigger != null)
-					((Terminal)ActiveMdiChild).RequestAutoResponseTrigger(trigger);
-			}
+			if (this.isSettingControls)
+				return;
+
+			var trigger = (toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
+			if (trigger != null)
+				((Terminal)ActiveMdiChild).RequestAutoResponseTrigger(trigger);
 		}
 
 		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger_TextChanged(object sender, EventArgs e)
@@ -1110,12 +1110,12 @@ namespace YAT.View.Forms
 
 		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Response_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				var response = (toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedItem as AutoResponseEx);
-				if (response != null)
-					((Terminal)ActiveMdiChild).RequestAutoResponseResponse(response);
-			}
+			if (this.isSettingControls)
+				return;
+
+			var response = (toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedItem as AutoResponseEx);
+			if (response != null)
+				((Terminal)ActiveMdiChild).RequestAutoResponseResponse(response);
 		}
 
 		/// <remarks>
@@ -1371,20 +1371,20 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_StatusContextMenu_ShowTerminalInfo_Click(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo = !ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo;
-				ApplicationSettings.Save();
-			}
+			if (this.isSettingControls)
+				return;
+
+			ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo = !ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo;
+			ApplicationSettings.Save();
 		}
 
 		private void toolStripMenuItem_StatusContextMenu_ShowChrono_Click(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono = !ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono;
-				ApplicationSettings.Save();
-			}
+			if (this.isSettingControls)
+				return;
+
+			ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono = !ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono;
+			ApplicationSettings.Save();
 		}
 
 		private void toolStripMenuItem_StatusContextMenu_Preferences_Click(object sender, EventArgs e)

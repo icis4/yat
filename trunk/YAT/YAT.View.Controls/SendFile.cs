@@ -351,34 +351,34 @@ namespace YAT.View.Controls
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
 		private void comboBox_ExplicitDefaultRadix_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				Domain.Radix radix = this.command.DefaultRadix;
-				Domain.RadixEx selectedItem = comboBox_ExplicitDefaultRadix.SelectedItem as Domain.RadixEx;
-				if (selectedItem != null) // Can be 'null' when validating all controls before an item got selected.
-					radix = selectedItem;
+			if (this.isSettingControls)
+				return;
 
-				// No need to validate the radix, simply set and confirm it:
-				this.command.DefaultRadix = radix;
-				ConfirmCommand();
-			}
+			Domain.Radix radix = this.command.DefaultRadix;
+			Domain.RadixEx selectedItem = comboBox_ExplicitDefaultRadix.SelectedItem as Domain.RadixEx;
+			if (selectedItem != null) // Can be 'null' when validating all controls before an item got selected.
+				radix = selectedItem;
+
+			// No need to validate the radix, simply set and confirm it:
+			this.command.DefaultRadix = radix;
+			ConfirmCommand();
 		}
 
 		private void pathComboBox_FilePath_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
+			if (this.isSettingControls)
+				return;
+
+			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
+			if (pathComboBox_FilePath.SelectedItem != null)
 			{
-				DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
-
-				if (pathComboBox_FilePath.SelectedItem != null)
-				{
-					var ri = (pathComboBox_FilePath.SelectedItem as RecentItem<Command>);
-					if (ri != null)
-						ConfirmCommand(ri.Item.FilePath);
-				}
-
-				DebugCommandLeave();
+				var ri = (pathComboBox_FilePath.SelectedItem as RecentItem<Command>);
+				if (ri != null)
+					ConfirmCommand(ri.Item.FilePath);
 			}
+
+			DebugCommandLeave();
 		}
 
 		private void button_OpenFile_Click(object sender, EventArgs e)

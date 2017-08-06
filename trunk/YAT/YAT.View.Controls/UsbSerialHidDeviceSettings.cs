@@ -233,8 +233,10 @@ namespace YAT.View.Controls
 		/// </summary>
 		private void UsbSerialHidDeviceSettings_EnabledChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				SetControls();
+			if (this.isSettingControls)
+				return;
+
+			SetControls();
 		}
 
 		#endregion
@@ -246,31 +248,80 @@ namespace YAT.View.Controls
 
 		private void checkBox_UseId_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				this.reportFormat.UseId = checkBox_UseId.Checked;
-				SetControls();
-				OnReportFormatChanged(EventArgs.Empty);
-			}
+			if (this.isSettingControls)
+				return;
+
+			this.reportFormat.UseId = checkBox_UseId.Checked;
+			SetControls();
+			OnReportFormatChanged(EventArgs.Empty);
 		}
 
 		private void textBox_Id_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
+			if (this.isSettingControls)
+				return;
+
+			byte id;
+			if (byte.TryParse(textBox_Id.Text, out id)) // Attention, a similar validation exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
+			{
+				this.reportFormat.Id = id;
+				SetControls();
+				OnReportFormatChanged(EventArgs.Empty);
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"ID must be a numeric value within 0..255!",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
+			}
+		}
+
+		private void checkBox_SeparateRxId_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.rxFilterUsage.SeparateRxId = checkBox_SeparateRxId.Checked;
+			SetControls();
+			OnRxFilterUsageChanged(EventArgs.Empty);
+		}
+
+		private void textBox_RxId_Validating(object sender, CancelEventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			string idText = textBox_RxId.Text;
+			if (idText == AnyIdIndication)
+			{
+				this.rxFilterUsage.AnyRxId = true;
+				this.rxFilterUsage.RxId = this.reportFormat.Id;
+				SetControls();
+				OnRxFilterUsageChanged(EventArgs.Empty);
+			}
+			else
 			{
 				byte id;
-				if (byte.TryParse(textBox_Id.Text, out id)) // Attention, a similar validation exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
+				if (byte.TryParse(idText, out id))
 				{
-					this.reportFormat.Id = id;
+					this.rxFilterUsage.AnyRxId = false;
+					this.rxFilterUsage.RxId = id;
 					SetControls();
-					OnReportFormatChanged(EventArgs.Empty);
+					OnRxFilterUsageChanged(EventArgs.Empty);
 				}
 				else
 				{
 					MessageBoxEx.Show
 					(
 						this,
-						"ID must be a numeric value within 0..255!",
+						"ID must be a numeric value within 0..255 or enter '" + AnyIdIndication + "' to accept any ID.",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -281,124 +332,75 @@ namespace YAT.View.Controls
 			}
 		}
 
-		private void checkBox_SeparateRxId_CheckedChanged(object sender, EventArgs e)
-		{
-			if (!this.isSettingControls)
-			{
-				this.rxFilterUsage.SeparateRxId = checkBox_SeparateRxId.Checked;
-				SetControls();
-				OnRxFilterUsageChanged(EventArgs.Empty);
-			}
-		}
-
-		private void textBox_RxId_Validating(object sender, CancelEventArgs e)
-		{
-			if (!this.isSettingControls)
-			{
-				string idText = textBox_RxId.Text;
-				if (idText == AnyIdIndication)
-				{
-					this.rxFilterUsage.AnyRxId = true;
-					this.rxFilterUsage.RxId = this.reportFormat.Id;
-					SetControls();
-					OnRxFilterUsageChanged(EventArgs.Empty);
-				}
-				else
-				{
-					byte id;
-					if (byte.TryParse(idText, out id))
-					{
-						this.rxFilterUsage.AnyRxId = false;
-						this.rxFilterUsage.RxId = id;
-						SetControls();
-						OnRxFilterUsageChanged(EventArgs.Empty);
-					}
-					else
-					{
-						MessageBoxEx.Show
-						(
-							this,
-							"ID must be a numeric value within 0..255 or enter '" + AnyIdIndication + "' to accept any ID.",
-							"Invalid Input",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Error
-						);
-
-						e.Cancel = true;
-					}
-				}
-			}
-		}
-
 		private void checkBox_PrependPayloadByteLength_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				this.reportFormat.PrependPayloadByteLength = checkBox_PrependPayloadByteLength.Checked;
-				SetControls();
-				OnReportFormatChanged(EventArgs.Empty);
-			}
+			if (this.isSettingControls)
+				return;
+
+			this.reportFormat.PrependPayloadByteLength = checkBox_PrependPayloadByteLength.Checked;
+			SetControls();
+			OnReportFormatChanged(EventArgs.Empty);
 		}
 
 		private void checkBox_AppendTerminatingZero_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				this.reportFormat.AppendTerminatingZero = checkBox_AppendTerminatingZero.Checked;
-				SetControls();
-				OnReportFormatChanged(EventArgs.Empty);
-			}
+			if (this.isSettingControls)
+				return;
+
+			this.reportFormat.AppendTerminatingZero = checkBox_AppendTerminatingZero.Checked;
+			SetControls();
+			OnReportFormatChanged(EventArgs.Empty);
 		}
 
 		private void checkBox_FillLastReport_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				string message =
-					"The Windows HID infrastructure requires that outgoing reports are always filled. " +
-					"As a consequence, this option must be kept enabled.";
+			if (this.isSettingControls)
+				return;
 
-				// Windows HID.dll requires that outgoing reports are always filled!
-				// Still, enable the check box in order to make tool tip visible to the user.
-				MessageBoxEx.Show
-				(
-					this,
-					message,
-					"Limitation of Windows HID",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information
-				);
+			string message =
+				"The Windows HID infrastructure requires that outgoing reports are always filled. " +
+				"As a consequence, this option must be kept enabled.";
 
-			////this.reportFormat.FillLastReport = checkBox_FillLastReport.Checked;
-				SetControls();
-			////OnReportFormatChanged(EventArgs.Empty);
-			}
+			// Windows HID.dll requires that outgoing reports are always filled!
+			// Still, enable the check box in order to make tool tip visible to the user.
+			MessageBoxEx.Show
+			(
+				this,
+				message,
+				"Limitation of Windows HID",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information
+			);
+
+		////this.reportFormat.FillLastReport = checkBox_FillLastReport.Checked;
+			SetControls();
+		////OnReportFormatChanged(EventArgs.Empty);
 		}
 
 		private void comboBox_Preset_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
+			if (this.isSettingControls)
+				return;
+
+			var preset = (comboBox_Preset.SelectedItem as MKY.IO.Usb.SerialHidReportFormatPresetEx);
+			if (preset != null)
 			{
-				var preset = (comboBox_Preset.SelectedItem as MKY.IO.Usb.SerialHidReportFormatPresetEx);
-				if (preset != null)
+				if (preset != MKY.IO.Usb.SerialHidReportFormatPreset.None)
 				{
-					if (preset != MKY.IO.Usb.SerialHidReportFormatPreset.None)
-					{
-						this.reportFormat  = preset;
-						this.rxFilterUsage = preset;
-						SetControls();
-						OnReportFormatChanged(EventArgs.Empty);
-						OnRxFilterUsageChanged(EventArgs.Empty);
-					}
-					else
-					{
-						SetControls();
-					}
+					this.reportFormat  = preset;
+					this.rxFilterUsage = preset;
+					SetControls();
+					OnReportFormatChanged(EventArgs.Empty);
+					OnRxFilterUsageChanged(EventArgs.Empty);
 				}
 				else
 				{
 					SetControls();
 				}
+			}
+			else
+			{
+				SetControls();
 			}
 		}
 
@@ -436,14 +438,18 @@ namespace YAT.View.Controls
 
 		private void comboBox_FlowControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				FlowControl = (MKY.IO.Serial.Usb.SerialHidFlowControlEx)comboBox_FlowControl.SelectedItem;
+			if (this.isSettingControls)
+				return;
+
+			FlowControl = (MKY.IO.Serial.Usb.SerialHidFlowControlEx)comboBox_FlowControl.SelectedItem;
 		}
 
 		private void checkBox_AutoOpen_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				AutoOpen = checkBox_AutoOpen.Checked;
+			if (this.isSettingControls)
+				return;
+
+			AutoOpen = checkBox_AutoOpen.Checked;
 		}
 
 		#endregion

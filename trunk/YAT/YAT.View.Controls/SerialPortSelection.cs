@@ -231,8 +231,10 @@ namespace YAT.View.Controls
 		/// </summary>
 		private void SerialPortSelection_EnabledChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				SetPortSelection();
+			if (this.isSettingControls)
+				return;
+
+			SetPortSelection();
 		}
 
 		#endregion
@@ -245,37 +247,37 @@ namespace YAT.View.Controls
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_Port_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				// Attention:
-				// Do not assume that the selected item maches the actual text in the box
-				//   because SelectedItem is also set if text has changed in the meantime.
+			if (this.isSettingControls)
+				return;
 
-				var id = comboBox_Port.SelectedItem as SerialPortId;
-				if ((id != null) && id.EqualsName(comboBox_Port.Text))
-				{
-					PortId = id;
-				}
-				else if (SerialPortId.TryParse(comboBox_Port.Text, out id))
-				{
-					PortId = id;
-				}
-				else if (string.IsNullOrEmpty(comboBox_Port.Text))
-				{
-					PortId = null;
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"Serial COM port name is invalid",
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
-					e.Cancel = true;
-				}
+			// Attention:
+			// Do not assume that the selected item maches the actual text in the box
+			//   because SelectedItem is also set if text has changed in the meantime.
+
+			var id = comboBox_Port.SelectedItem as SerialPortId;
+			if ((id != null) && id.EqualsName(comboBox_Port.Text))
+			{
+				PortId = id;
+			}
+			else if (SerialPortId.TryParse(comboBox_Port.Text, out id))
+			{
+				PortId = id;
+			}
+			else if (string.IsNullOrEmpty(comboBox_Port.Text))
+			{
+				PortId = null;
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Serial COM port name is invalid",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+				e.Cancel = true;
 			}
 		}
 

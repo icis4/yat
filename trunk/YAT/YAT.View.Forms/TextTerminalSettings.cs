@@ -142,27 +142,31 @@ namespace YAT.View.Forms
 
 		private void comboBox_Encoding_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Encoding = (EncodingEx)comboBox_Encoding.SelectedItem;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Encoding = (EncodingEx)comboBox_Encoding.SelectedItem;
 		}
 
 		private void checkBox_SeparateTxRxEol_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.SeparateTxRxEol = checkBox_SeparateTxRxEol.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.SeparateTxRxEol = checkBox_SeparateTxRxEol.Checked;
 		}
 
 		private void comboBox_TxEol_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				var eol = (comboBox_TxEol.SelectedItem as Domain.EolEx);
-				if (eol != null)
-					this.settingsInEdit.TxEol = eol.ToSequenceString();
+			if (this.isSettingControls)
+				return;
 
-				if (!this.settingsInEdit.SeparateTxRxEol)
-					this.settingsInEdit.RxEol = this.settingsInEdit.TxEol;
-			}
+			var eol = (comboBox_TxEol.SelectedItem as Domain.EolEx);
+			if (eol != null)
+				this.settingsInEdit.TxEol = eol.ToSequenceString();
+
+			if (!this.settingsInEdit.SeparateTxRxEol)
+				this.settingsInEdit.RxEol = this.settingsInEdit.TxEol;
 		}
 
 		private void comboBox_TxEol_Validating(object sender, CancelEventArgs e)
@@ -207,12 +211,12 @@ namespace YAT.View.Forms
 
 		private void comboBox_RxEol_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				var eol = (comboBox_RxEol.SelectedItem as Domain.EolEx);
-				if (eol != null)
-					this.settingsInEdit.RxEol = eol.ToSequenceString();
-			}
+			if (this.isSettingControls)
+				return;
+
+			var eol = (comboBox_RxEol.SelectedItem as Domain.EolEx);
+			if (eol != null)
+				this.settingsInEdit.RxEol = eol.ToSequenceString();
 		}
 
 		private void comboBox_RxEol_Validating(object sender, CancelEventArgs e)
@@ -244,51 +248,55 @@ namespace YAT.View.Forms
 
 		private void checkBox_ShowEol_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.ShowEol = checkBox_ShowEol.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.ShowEol = checkBox_ShowEol.Checked;
 		}
 
 		private void checkBox_SkipEmptyLines_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.SendFile.SkipEmptyLines = checkBox_SkipEmptyLines.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.SendFile.SkipEmptyLines = checkBox_SkipEmptyLines.Checked;
 		}
 
 		private void checkBox_Delay_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				Domain.TextLineSendDelay lsd = this.settingsInEdit.LineSendDelay;
-				lsd.Enabled = checkBox_Delay.Checked;
-				this.settingsInEdit.LineSendDelay = lsd;
-			}
+			if (this.isSettingControls)
+				return;
+
+			var lsd = this.settingsInEdit.LineSendDelay;
+			lsd.Enabled = checkBox_Delay.Checked;
+			this.settingsInEdit.LineSendDelay = lsd;
 		}
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_Delay_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				int delay;
-				if (int.TryParse(textBox_Delay.Text, out delay) && (delay >= 1))
-				{
-					Domain.TextLineSendDelay lsd = this.settingsInEdit.LineSendDelay;
-					lsd.Delay = delay;
-					this.settingsInEdit.LineSendDelay = lsd;
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"Delay must be at least 1 ms!",
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
+			if (this.isSettingControls)
+				return;
 
-					e.Cancel = true;
-				}
+			int delay;
+			if (int.TryParse(textBox_Delay.Text, out delay) && (delay >= 1))
+			{
+				var lsd = this.settingsInEdit.LineSendDelay;
+				lsd.Delay = delay;
+				this.settingsInEdit.LineSendDelay = lsd;
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Delay must be at least 1 ms!",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
 			}
 		}
 
@@ -304,103 +312,118 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_DelayInterval_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				int interval;
-				if (int.TryParse(textBox_DelayInterval.Text, out interval) || (interval >= 1))
-				{
-					Domain.TextLineSendDelay lsd = this.settingsInEdit.LineSendDelay;
-					lsd.LineInterval = interval;
-					this.settingsInEdit.LineSendDelay = lsd;
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"Line interval must be at least 1 line!",
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
+			if (this.isSettingControls)
+				return;
 
-					e.Cancel = true;
-				}
+			int interval;
+			if (int.TryParse(textBox_DelayInterval.Text, out interval) || (interval >= 1))
+			{
+				var lsd = this.settingsInEdit.LineSendDelay;
+				lsd.LineInterval = interval;
+				this.settingsInEdit.LineSendDelay = lsd;
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Line interval must be at least 1 line!",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
 			}
 		}
 
 		private void checkBox_WaitForResponse_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				Domain.WaitForResponse wfr = this.settingsInEdit.WaitForResponse;
-				wfr.Enabled = checkBox_WaitForResponse.Checked;
-				this.settingsInEdit.WaitForResponse = wfr;
-			}
+			if (this.isSettingControls)
+				return;
+
+			var wfr = this.settingsInEdit.WaitForResponse;
+			wfr.Enabled = checkBox_WaitForResponse.Checked;
+			this.settingsInEdit.WaitForResponse = wfr;
 		}
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_WaitForResponse_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				int timeout;
-				if (int.TryParse(textBox_WaitForResponse.Text, out timeout) && (timeout >= 1))
-				{
-					Domain.WaitForResponse wfr = this.settingsInEdit.WaitForResponse;
-					wfr.Timeout = timeout;
-					this.settingsInEdit.WaitForResponse = wfr;
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"Timeout must be at least 1 ms!",
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
+			if (this.isSettingControls)
+				return;
 
-					e.Cancel = true;
-				}
+			int timeout;
+			if (int.TryParse(textBox_WaitForResponse.Text, out timeout) && (timeout >= 1))
+			{
+				var wfr = this.settingsInEdit.WaitForResponse;
+				wfr.Timeout = timeout;
+				this.settingsInEdit.WaitForResponse = wfr;
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Timeout must be at least 1 ms!",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
 			}
 		}
 
 		private void radioButton_SubstituteNone_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls && radioButton_SubstituteNone.Checked)
+			if (this.isSettingControls)
+				return;
+
+			if (radioButton_SubstituteNone.Checked)
 				this.settingsInEdit.CharSubstitution = Domain.CharSubstitution.None;
 		}
 
 		private void radioButton_SubstituteToUpper_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls && radioButton_SubstituteToUpper.Checked)
+			if (this.isSettingControls)
+				return;
+
+			if (radioButton_SubstituteToUpper.Checked)
 				this.settingsInEdit.CharSubstitution = Domain.CharSubstitution.ToUpper;
 		}
 
 		private void radioButton_SubstituteToLower_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls && radioButton_SubstituteToLower.Checked)
+			if (this.isSettingControls)
+				return;
+
+			if (radioButton_SubstituteToLower.Checked)
 				this.settingsInEdit.CharSubstitution = Domain.CharSubstitution.ToLower;
 		}
 
 		private void checkBox_SkipEolComment_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.EolComment.SkipComment = checkBox_SkipEolComment.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.EolComment.SkipComment = checkBox_SkipEolComment.Checked;
 		}
 
 		private void stringListEdit_EolCommentIndicators_StringListChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.EolComment.Indicators = new List<string>(stringListEdit_EolCommentIndicators.StringList);
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.EolComment.Indicators = new List<string>(stringListEdit_EolCommentIndicators.StringList);
 		}
 
 		private void checkBox_SkipEolCommentWhiteSpace_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.EolComment.SkipWhiteSpace = checkBox_SkipEolCommentWhiteSpace.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.EolComment.SkipWhiteSpace = checkBox_SkipEolCommentWhiteSpace.Checked;
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)

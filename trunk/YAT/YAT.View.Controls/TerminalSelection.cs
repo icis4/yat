@@ -212,8 +212,10 @@ namespace YAT.View.Controls
 		/// </summary>
 		private void TerminalSelection_EnabledChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				SetControls();
+			if (this.isSettingControls)
+				return;
+
+			SetControls();
 		}
 
 		#endregion
@@ -225,14 +227,18 @@ namespace YAT.View.Controls
 
 		private void comboBox_TerminalType_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				TerminalType = (Domain.TerminalTypeEx)comboBox_TerminalType.SelectedItem;
+			if (this.isSettingControls)
+				return;
+
+			TerminalType = (Domain.TerminalTypeEx)comboBox_TerminalType.SelectedItem;
 		}
 
 		private void comboBox_IOType_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				IOType = (Domain.IOTypeEx)comboBox_IOType.SelectedItem;
+			if (this.isSettingControls)
+				return;
+
+			IOType = (Domain.IOTypeEx)comboBox_IOType.SelectedItem;
 		}
 
 		#endregion

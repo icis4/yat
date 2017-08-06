@@ -107,8 +107,10 @@ namespace MKY.Windows.Forms
 
 		private void listBox_StringList_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				SetControls();
+			if (this.isSettingControls)
+				return;
+
+			SetControls();
 		}
 
 		[ModalBehavior(ModalBehavior.Always)]

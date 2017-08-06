@@ -183,8 +183,10 @@ namespace YAT.View.Forms
 
 		private void checkBox_Raw_Tx_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.RawLogTx = checkBox_Raw_Tx.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.RawLogTx = checkBox_Raw_Tx.Checked;
 		}
 
 		private void pathLabel_Raw_Tx_Click(object sender, EventArgs e)
@@ -194,8 +196,10 @@ namespace YAT.View.Forms
 
 		private void checkBox_Raw_Bidir_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.RawLogBidir = checkBox_Raw_Bidir.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.RawLogBidir = checkBox_Raw_Bidir.Checked;
 		}
 
 		private void pathLabel_Raw_Bidir_Click(object sender, EventArgs e)
@@ -205,8 +209,10 @@ namespace YAT.View.Forms
 
 		private void checkBox_Raw_Rx_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.RawLogRx = checkBox_Raw_Rx.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.RawLogRx = checkBox_Raw_Rx.Checked;
 		}
 
 		private void pathLabel_Raw_Rx_Click(object sender, EventArgs e)
@@ -221,6 +227,7 @@ namespace YAT.View.Forms
 				e.Cancel = true;
 				return;
 			}
+
 			if ((this.settingsInEdit.BothRawAndNeat && (comboBox_Raw_Extension.Text == this.settingsInEdit.NeatExtension)) &&
 			    (!(this.settingsInEdit.FolderFormat || this.settingsInEdit.NameFormat)))
 			{
@@ -228,19 +235,24 @@ namespace YAT.View.Forms
 				e.Cancel = true;
 				return;
 			}
+
 			SetControls();
 		}
 
 		private void comboBox_Raw_Extension_TextChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.RawExtension = comboBox_Raw_Extension.Text;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.RawExtension = comboBox_Raw_Extension.Text;
 		}
 
 		private void checkBox_Neat_Tx_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.NeatLogTx = checkBox_Neat_Tx.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.NeatLogTx = checkBox_Neat_Tx.Checked;
 		}
 
 		private void pathLabel_Neat_Tx_Click(object sender, EventArgs e)
@@ -250,8 +262,10 @@ namespace YAT.View.Forms
 
 		private void checkBox_Neat_Bidir_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.NeatLogBidir = checkBox_Neat_Bidir.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.NeatLogBidir = checkBox_Neat_Bidir.Checked;
 		}
 
 		private void pathLabel_Neat_Bidir_Click(object sender, EventArgs e)
@@ -261,8 +275,10 @@ namespace YAT.View.Forms
 
 		private void checkBox_Neat_Rx_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.NeatLogRx = checkBox_Neat_Rx.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.NeatLogRx = checkBox_Neat_Rx.Checked;
 		}
 
 		private void pathLabel_Neat_Rx_Click(object sender, EventArgs e)
@@ -277,6 +293,7 @@ namespace YAT.View.Forms
 				e.Cancel = true;
 				return;
 			}
+
 			if ((this.settingsInEdit.BothRawAndNeat && (comboBox_Neat_Extension.Text == this.settingsInEdit.RawExtension)) &&
 			    (!(this.settingsInEdit.FolderFormat || this.settingsInEdit.NameFormat)))
 			{
@@ -284,77 +301,93 @@ namespace YAT.View.Forms
 				e.Cancel = true;
 				return;
 			}
+
 			SetControls();
 		}
 
 		private void comboBox_Neat_Extension_TextChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.NeatExtension = comboBox_Neat_Extension.Text;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.NeatExtension = comboBox_Neat_Extension.Text;
 		}
 
 		private void checkBox_Options_NameFormat_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.NameFormat = checkBox_Options_NameFormat.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.NameFormat = checkBox_Options_NameFormat.Checked;
 		}
 
 		private void checkBox_Options_NameChannel_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.NameChannel = checkBox_Options_NameChannel.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.NameChannel = checkBox_Options_NameChannel.Checked;
 		}
 
 		private void checkBox_Options_NameDate_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.NameDate = checkBox_Options_NameDate.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.NameDate = checkBox_Options_NameDate.Checked;
 		}
 
 		private void checkBox_Options_NameTime_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.NameTime = checkBox_Options_NameTime.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.NameTime = checkBox_Options_NameTime.Checked;
 		}
 
 		private void comboBox_Options_NameSeparator_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				var enclosure = (comboBox_Options_NameSeparator.SelectedItem as Log.FileNameSeparatorEx);
-				if (enclosure != null)
-					this.settingsInEdit.NameSeparator = enclosure;
-			}
+			if (this.isSettingControls)
+				return;
+
+			var enclosure = (comboBox_Options_NameSeparator.SelectedItem as Log.FileNameSeparatorEx);
+			if (enclosure != null)
+				this.settingsInEdit.NameSeparator = enclosure;
 		}
 
 		private void comboBox_Options_NameSeparator_Validating(object sender, CancelEventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			if (ValidateFileNamePart(comboBox_Options_NameSeparator.Text, "Separator"))
-			{
-				if (!this.isSettingControls)
-					this.settingsInEdit.NameSeparator = comboBox_Options_NameSeparator.Text;
-			}
+				this.settingsInEdit.NameSeparator = comboBox_Options_NameSeparator.Text;
 			else
-			{
 				e.Cancel = true;
-			}
 		}
 
 		private void checkBox_Options_FolderFormat_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.FolderFormat = checkBox_Options_FolderFormat.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.FolderFormat = checkBox_Options_FolderFormat.Checked;
 		}
 
 		private void checkBox_Options_FolderChannel_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.FolderChannel = checkBox_Options_FolderChannel.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.FolderChannel = checkBox_Options_FolderChannel.Checked;
 		}
 
 		private void radioButton_Options_ModeCreate_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls && radioButton_Options_ModeCreate.Checked)
+			if (this.isSettingControls)
+				return;
+
+			if (radioButton_Options_ModeCreate.Checked)
 			{
 				this.settingsInEdit.WriteMode = Log.LogFileWriteMode.Create;
 				this.settingsInEdit.NameDate = this.settings.NameDate;
@@ -364,7 +397,10 @@ namespace YAT.View.Forms
 
 		private void radioButton_Options_ModeAppend_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls && radioButton_Options_ModeAppend.Checked)
+			if (this.isSettingControls)
+				return;
+
+			if (radioButton_Options_ModeAppend.Checked)
 			{
 				this.settingsInEdit.WriteMode = Log.LogFileWriteMode.Append;
 				this.settingsInEdit.NameDate = false;
@@ -374,20 +410,28 @@ namespace YAT.View.Forms
 
 		private void radioButton_Options_TextEncodingUTF8_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls && radioButton_Options_TextEncodingUTF8.Checked)
+			if (this.isSettingControls)
+				return;
+
+			if (radioButton_Options_TextEncodingUTF8.Checked)
 				this.settingsInEdit.TextEncoding = Log.TextEncoding.UTF8;
 		}
 
 		private void radioButton_Options_TextEncodingTerminal_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls && radioButton_Options_TextEncodingTerminal.Checked)
+			if (this.isSettingControls)
+				return;
+
+			if (radioButton_Options_TextEncodingTerminal.Checked)
 				this.settingsInEdit.TextEncoding = Log.TextEncoding.Terminal;
 		}
 
 		private void checkBox_Options_EmitEncodingPreamble_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.EmitEncodingPreamble = checkBox_Options_EmitEncodingPreamble.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.EmitEncodingPreamble = checkBox_Options_EmitEncodingPreamble.Checked;
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)

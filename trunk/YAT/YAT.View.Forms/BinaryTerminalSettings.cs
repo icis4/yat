@@ -137,20 +137,26 @@ namespace YAT.View.Forms
 
 		private void binaryTerminalSettingsSet_Tx_SettingsChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.TxDisplay = binaryTerminalSettingsSet_Tx.Settings;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.TxDisplay = binaryTerminalSettingsSet_Tx.Settings;
 		}
 
 		private void checkBox_SeparateTxRxDisplay_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.SeparateTxRxDisplay = checkBox_SeparateTxRxDisplay.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.SeparateTxRxDisplay = checkBox_SeparateTxRxDisplay.Checked;
 		}
 
 		private void binaryTerminalSettingsSet_Rx_SettingsChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.RxDisplay = binaryTerminalSettingsSet_Rx.Settings;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.RxDisplay = binaryTerminalSettingsSet_Rx.Settings;
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
