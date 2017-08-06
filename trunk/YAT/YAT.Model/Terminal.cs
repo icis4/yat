@@ -1248,16 +1248,21 @@ namespace YAT.Model
 				if (StopIO(false))
 				{
 					this.settingsRoot.SuspendChangeEvent();
-					this.settingsRoot.Explicit.Terminal = settings;
-
-					DetachTerminalEventHandlers();
-					using (var oldTerminal = this.terminal)
+					try
 					{
-						this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
-					}
-					AttachTerminalEventHandlers();
+						this.settingsRoot.Explicit.Terminal = settings;
 
-					this.settingsRoot.ResumeChangeEvent();
+						DetachTerminalEventHandlers();
+						using (var oldTerminal = this.terminal)
+						{
+							this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
+						}
+						AttachTerminalEventHandlers();
+					}
+					finally
+					{
+						this.settingsRoot.ResumeChangeEvent();
+					}
 					this.terminal.RefreshRepositories();
 
 					if (StartIO(false))
@@ -1273,16 +1278,21 @@ namespace YAT.Model
 			else // Terminal is closed, simply set the new settings:
 			{
 				this.settingsRoot.SuspendChangeEvent();
-				this.settingsRoot.Explicit.Terminal = settings;
-
-				DetachTerminalEventHandlers();
-				using (var oldTerminal = this.terminal)
+				try
 				{
-					this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
-				}
-				AttachTerminalEventHandlers();
+					this.settingsRoot.Explicit.Terminal = settings;
 
-				this.settingsRoot.ResumeChangeEvent();
+					DetachTerminalEventHandlers();
+					using (var oldTerminal = this.terminal)
+					{
+						this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
+					}
+					AttachTerminalEventHandlers();
+				}
+				finally
+				{
+					this.settingsRoot.ResumeChangeEvent();
+				}
 				this.terminal.RefreshRepositories();
 
 				OnTimedStatusTextRequest("Terminal settings applied.");
