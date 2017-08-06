@@ -122,6 +122,7 @@ namespace YAT.View.Forms
 		// Startup/Update/Closing:
 		private bool isStartingUp = true;
 		private SettingControlsHelper isSettingControls;
+		private SettingControlsHelper isUpdatingSplitterRatio;
 		private bool isIntegralMdiLayouting = false;
 		private ClosingState closingState = ClosingState.None;
 
@@ -2300,7 +2301,17 @@ namespace YAT.View.Forms
 				int widthOrHeight = OrientationEx.SizeToWidthOrHeight(splitContainer_TxMonitor, this.settingsRoot.Layout.MonitorOrientation);
 
 				if (this.settingsRoot != null)
-					this.settingsRoot.Layout.TxMonitorSplitterRatio = (float)distance / widthOrHeight;
+				{
+					this.isUpdatingSplitterRatio.Enter();
+					try
+					{
+						this.settingsRoot.Layout.TxMonitorSplitterRatio = (float)distance / widthOrHeight;
+					}
+					finally
+					{
+						this.isUpdatingSplitterRatio.Leave();
+					}
+				}
 			}
 		}
 
@@ -2316,7 +2327,17 @@ namespace YAT.View.Forms
 				int widthOrHeight = OrientationEx.SizeToWidthOrHeight(splitContainer_RxMonitor, this.settingsRoot.Layout.MonitorOrientation);
 
 				if (this.settingsRoot != null)
-					this.settingsRoot.Layout.RxMonitorSplitterRatio = (float)distance / widthOrHeight;
+				{
+					this.isUpdatingSplitterRatio.Enter();
+					try
+					{
+						this.settingsRoot.Layout.RxMonitorSplitterRatio = (float)distance / widthOrHeight;
+					}
+					finally
+					{
+						this.isUpdatingSplitterRatio.Leave();
+					}
+				}
 			}
 		}
 
@@ -2332,7 +2353,17 @@ namespace YAT.View.Forms
 				int width = splitContainer_Predefined.Width;
 
 				if (this.settingsRoot != null)
-					this.settingsRoot.Layout.PredefinedSplitterRatio = (float)distance / width;
+				{
+					this.isUpdatingSplitterRatio.Enter();
+					try
+					{
+						this.settingsRoot.Layout.PredefinedSplitterRatio = (float)distance / width;
+					}
+					finally
+					{
+						this.isUpdatingSplitterRatio.Leave();
+					}
+				}
 			}
 		}
 
@@ -2910,85 +2941,88 @@ namespace YAT.View.Forms
 			{
 				SuspendLayout();
 
-				// splitContainer_Predefined:
-				if (this.settingsRoot.Layout.PredefinedPanelIsVisible)
+				if (!this.isUpdatingSplitterRatio) // Required to prevent recursion/reverting of predefined splitter distance due to rounding errors.
 				{
-					splitContainer_Predefined.Panel2Collapsed = false;
-
-					// No need to 'splitContainerHelper.CalculateScaledDistanceFromUnscaled()' since no
-					// panel of 'splitContainer_Predefined' is fixed. Code if this was the case:
-				////int unscaledDistance = (int)((this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
-				////int scaledDistance = this.splitContainerHelper.CalculateScaledDistanceFromUnscaled(splitContainer_Predefined, unscaledDistance);
-
-					int distance = (int)((this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
-
-					splitContainer_Predefined.SplitterDistance = Int32Ex.Limit(distance, 0, (splitContainer_Predefined.Width - 1));
-				}
-				else
-				{
-					splitContainer_Predefined.Panel2Collapsed = true;
-				}
-
-				// splitContainer_Tx/RxMonitor:
-				// One of the panels MUST be visible, if none is visible, then bidir is shown anyway.
-				bool txIsVisible    = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
-				bool bidirIsVisible = this.settingsRoot.Layout.BidirMonitorPanelIsVisible || (!this.settingsRoot.Layout.TxMonitorPanelIsVisible && !this.settingsRoot.Layout.RxMonitorPanelIsVisible);
-				bool rxIsVisible    = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
-
-				// Orientation:
-				var orientation = this.settingsRoot.Layout.MonitorOrientation;
-				splitContainer_TxMonitor.Orientation = orientation;
-				splitContainer_RxMonitor.Orientation = orientation;
-
-				// Tx split contains Tx and Bidir+Rx:
-				if (txIsVisible)
-				{
-					splitContainer_TxMonitor.Panel1Collapsed = false;
-
-					if (bidirIsVisible || rxIsVisible)
+					// splitContainer_Predefined:
+					if (this.settingsRoot.Layout.PredefinedPanelIsVisible)
 					{
-						int widthOrHeight = OrientationEx.SizeToWidthOrHeight(splitContainer_TxMonitor, orientation);
+						splitContainer_Predefined.Panel2Collapsed = false;
 
 						// No need to 'splitContainerHelper.CalculateScaledDistanceFromUnscaled()' since no
-						// panel of 'splitContainer_TxMonitor' is fixed. Code if this was the case:
-					////int unscaledDistance = (int)((this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
-					////int scaledDistance = this.splitContainerHelper.CalculateScaledDistanceFromUnscaled(splitContainer_TxMonitor, unscaledDistance);
+						// panel of 'splitContainer_Predefined' is fixed. Code if this was the case:
+					////int unscaledDistance = (int)((this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+					////int scaledDistance = this.splitContainerHelper.CalculateScaledDistanceFromUnscaled(splitContainer_Predefined, unscaledDistance);
 
-						int distance = (int)((this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+						int distance = (int)((this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
 
-						splitContainer_TxMonitor.SplitterDistance = Int32Ex.Limit(distance, 0, (widthOrHeight - 1));
+						splitContainer_Predefined.SplitterDistance = Int32Ex.Limit(distance, 0, (splitContainer_Predefined.Width - 1));
 					}
-				}
-				else
-				{
-					splitContainer_TxMonitor.Panel1Collapsed = true;
-				}
-				splitContainer_TxMonitor.Panel2Collapsed = !(bidirIsVisible || rxIsVisible);
-
-				// Rx split contains Bidir and Rx:
-				if (bidirIsVisible)
-				{
-					splitContainer_RxMonitor.Panel1Collapsed = false;
-
-					if (rxIsVisible)
+					else
 					{
-						int widthOrHeight = OrientationEx.SizeToWidthOrHeight(splitContainer_RxMonitor, orientation);
-
-						// No need to 'splitContainerHelper.CalculateScaledDistanceFromUnscaled()' since no
-						// panel of 'splitContainer_RxMonitor' is fixed. Code if this was the case:
-					////int unscaledDistance = (int)((this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
-					////int scaledDistance = this.splitContainerHelper.CalculateScaledDistanceFromUnscaled(splitContainer_RxMonitor, unscaledDistance);
-
-						int distance = (int)((this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
-
-						splitContainer_RxMonitor.SplitterDistance = Int32Ex.Limit(distance, 0, (widthOrHeight - 1));
+						splitContainer_Predefined.Panel2Collapsed = true;
 					}
+
+					// splitContainer_Tx/RxMonitor:
+					// One of the panels MUST be visible, if none is visible, then bidir is shown anyway.
+					bool txIsVisible    = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
+					bool bidirIsVisible = this.settingsRoot.Layout.BidirMonitorPanelIsVisible || (!this.settingsRoot.Layout.TxMonitorPanelIsVisible && !this.settingsRoot.Layout.RxMonitorPanelIsVisible);
+					bool rxIsVisible    = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
+
+					// Orientation:
+					var orientation = this.settingsRoot.Layout.MonitorOrientation;
+					splitContainer_TxMonitor.Orientation = orientation;
+					splitContainer_RxMonitor.Orientation = orientation;
+
+					// Tx split contains Tx and Bidir+Rx:
+					if (txIsVisible)
+					{
+						splitContainer_TxMonitor.Panel1Collapsed = false;
+
+						if (bidirIsVisible || rxIsVisible)
+						{
+							int widthOrHeight = OrientationEx.SizeToWidthOrHeight(splitContainer_TxMonitor, orientation);
+
+							// No need to 'splitContainerHelper.CalculateScaledDistanceFromUnscaled()' since no
+							// panel of 'splitContainer_TxMonitor' is fixed. Code if this was the case:
+						////int unscaledDistance = (int)((this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+						////int scaledDistance = this.splitContainerHelper.CalculateScaledDistanceFromUnscaled(splitContainer_TxMonitor, unscaledDistance);
+
+							int distance = (int)((this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+
+							splitContainer_TxMonitor.SplitterDistance = Int32Ex.Limit(distance, 0, (widthOrHeight - 1));
+						}
+					}
+					else
+					{
+						splitContainer_TxMonitor.Panel1Collapsed = true;
+					}
+					splitContainer_TxMonitor.Panel2Collapsed = !(bidirIsVisible || rxIsVisible);
+
+					// Rx split contains Bidir and Rx:
+					if (bidirIsVisible)
+					{
+						splitContainer_RxMonitor.Panel1Collapsed = false;
+
+						if (rxIsVisible)
+						{
+							int widthOrHeight = OrientationEx.SizeToWidthOrHeight(splitContainer_RxMonitor, orientation);
+
+							// No need to 'splitContainerHelper.CalculateScaledDistanceFromUnscaled()' since no
+							// panel of 'splitContainer_RxMonitor' is fixed. Code if this was the case:
+						////int unscaledDistance = (int)((this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+						////int scaledDistance = this.splitContainerHelper.CalculateScaledDistanceFromUnscaled(splitContainer_RxMonitor, unscaledDistance);
+
+							int distance = (int)((this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+
+							splitContainer_RxMonitor.SplitterDistance = Int32Ex.Limit(distance, 0, (widthOrHeight - 1));
+						}
+					}
+					else
+					{
+						splitContainer_RxMonitor.Panel1Collapsed = true;
+					}
+					splitContainer_RxMonitor.Panel2Collapsed = !rxIsVisible;
 				}
-				else
-				{
-					splitContainer_RxMonitor.Panel1Collapsed = true;
-				}
-				splitContainer_RxMonitor.Panel2Collapsed = !rxIsVisible;
 
 				// splitContainer_Terminal and splitContainer_Send:
 				if (this.settingsRoot.Layout.SendTextPanelIsVisible || this.settingsRoot.Layout.SendFilePanelIsVisible)
@@ -3246,11 +3280,11 @@ namespace YAT.View.Forms
 
 		private Domain.RepositoryType GetMonitorType(Control source)
 		{
-			if ((source == monitor_Tx) || (source == panel_Monitor_Tx))
+			if ((source == monitor_Tx)    || (source == panel_Monitor_Tx))
 				return (Domain.RepositoryType.Tx);
 			if ((source == monitor_Bidir) || (source == panel_Monitor_Bidir))
 				return (Domain.RepositoryType.Bidir);
-			if ((source == monitor_Rx) || (source == panel_Monitor_Rx))
+			if ((source == monitor_Rx)    || (source == panel_Monitor_Rx))
 				return (Domain.RepositoryType.Rx);
 
 			return (Domain.RepositoryType.None);
@@ -3600,7 +3634,7 @@ namespace YAT.View.Forms
 		{
 			SetFixedStatusText("Printing data...");
 
-			using (Model.Utilities.RtfPrinter printer = new Model.Utilities.RtfPrinter(settings))
+			using (var printer = new Model.Utilities.RtfPrinter(settings))
 			{
 				try
 				{

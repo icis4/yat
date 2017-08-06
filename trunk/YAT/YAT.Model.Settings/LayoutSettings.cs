@@ -26,6 +26,8 @@ using System;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
+using MKY;
+
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
@@ -174,7 +176,7 @@ namespace YAT.Model.Settings
 			get { return (this.txMonitorSplitterRatio); }
 			set
 			{
-				if (this.txMonitorSplitterRatio != value)
+				if (SingleEx.RatherNotEquals(this.txMonitorSplitterRatio, value, 3)) // ~‰ is way good enough.
 				{
 					this.txMonitorSplitterRatio = value;
 					SetMyChanged();
@@ -189,7 +191,7 @@ namespace YAT.Model.Settings
 			get { return (this.rxMonitorSplitterRatio); }
 			set
 			{
-				if (this.rxMonitorSplitterRatio != value)
+				if (SingleEx.RatherNotEquals(this.rxMonitorSplitterRatio, value, 3)) // ~‰ is way good enough.
 				{
 					this.rxMonitorSplitterRatio = value;
 					SetMyChanged();
@@ -219,7 +221,7 @@ namespace YAT.Model.Settings
 			get { return (this.predefinedSplitterRatio); }
 			set
 			{
-				if (this.predefinedSplitterRatio != value)
+				if (SingleEx.RatherNotEquals(this.predefinedSplitterRatio, value, 3)) // ~‰ is way good enough.
 				{
 					this.predefinedSplitterRatio = value;
 					SetMyChanged();

@@ -22,6 +22,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
@@ -68,6 +69,44 @@ namespace MKY
 				return (max);
 
 			return (value);
+		}
+
+		/// <summary>
+		/// Evaluates whether the two given values are almost equal,
+		/// taking the given number of digits into account.
+		/// </summary>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// <paramref name="digits"/> is less than 0 or greater than 7.
+		/// </exception>
+		public static bool AlmostEquals(float lhs, float rhs, int digits)
+		{
+			float diff = Math.Abs(lhs - rhs);
+
+			switch (digits)
+			{
+				case  0: return (diff < 1.0f);
+				case  1: return (diff < 0.1f);
+				case  2: return (diff < 0.01f);
+				case  3: return (diff < 0.001f);
+				case  4: return (diff < 0.0001f);
+				case  5: return (diff < 0.00001f);
+				case  6: return (diff < 0.000001f);
+				case  7: return (diff < 0.0000001f);
+
+				default: throw (new ArgumentOutOfRangeException("digits", digits, MessageHelper.InvalidExecutionPreamble + "Value must be from 0 to 7 but is " + digits + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary>
+		/// Evaluates whether the two given values are rather not equal,
+		/// taking the given number of digits into account.
+		/// </summary>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// <paramref name="digits"/> is less than 0 or greater than 7.
+		/// </exception>
+		public static bool RatherNotEquals(float lhs, float rhs, int digits)
+		{
+			return (!AlmostEquals(lhs, rhs, digits));
 		}
 	}
 }
