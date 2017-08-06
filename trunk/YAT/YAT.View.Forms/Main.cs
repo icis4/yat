@@ -815,7 +815,7 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_MainMenu_Help_About_Click(object sender, EventArgs e)
 		{
 			var f = new About();
-			f.ShowDialog(this);
+			ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this);
 		}
 
 		#endregion
@@ -1464,7 +1464,7 @@ namespace YAT.View.Forms
 		private void ShowPreferences()
 		{
 			var f = new Preferences(ApplicationSettings.LocalUserSettings);
-			if (f.ShowDialog(this) == DialogResult.OK)
+			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
 				Refresh();
 
@@ -1705,7 +1705,7 @@ namespace YAT.View.Forms
 			SetFixedStatusText("New terminal...");
 
 			var f = new NewTerminal(newTerminalSettings);
-			if (f.ShowDialog(this) == DialogResult.OK)
+			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
 				Refresh();
 

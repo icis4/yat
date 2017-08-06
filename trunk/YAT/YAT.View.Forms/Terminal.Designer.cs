@@ -2405,14 +2405,14 @@ namespace YAT.View.Forms
 			this.contextMenuStrip_Status_FlowControlCount_ShowCount.Name = "contextMenuStrip_Status_FlowControlCount_ShowCount";
 			this.contextMenuStrip_Status_FlowControlCount_ShowCount.Size = new System.Drawing.Size(139, 22);
 			this.contextMenuStrip_Status_FlowControlCount_ShowCount.Text = "&Show Count";
-			this.contextMenuStrip_Status_FlowControlCount_ShowCount.Click += new System.EventHandler(this.contextMenuStrip_Status_FlowControlCount_ShowCount_Click);
+			this.contextMenuStrip_Status_FlowControlCount_ShowCount.Click += new System.EventHandler(this.toolStripMenuItem_StatusContextMenu_FlowControlCount_ShowCount_Click);
 			// 
 			// contextMenuStrip_Status_FlowControlCount_ResetCount
 			// 
 			this.contextMenuStrip_Status_FlowControlCount_ResetCount.Name = "contextMenuStrip_Status_FlowControlCount_ResetCount";
 			this.contextMenuStrip_Status_FlowControlCount_ResetCount.Size = new System.Drawing.Size(139, 22);
 			this.contextMenuStrip_Status_FlowControlCount_ResetCount.Text = "&Reset Count";
-			this.contextMenuStrip_Status_FlowControlCount_ResetCount.Click += new System.EventHandler(this.contextMenuStrip_Status_FlowControlCount_ResetCount_Click);
+			this.contextMenuStrip_Status_FlowControlCount_ResetCount.Click += new System.EventHandler(this.toolStripMenuItem_StatusContextMenu_FlowControlCount_ResetCount_Click);
 			// 
 			// contextMenuStrip_Status_BreakCount
 			// 
@@ -2428,14 +2428,14 @@ namespace YAT.View.Forms
 			this.contextMenuStrip_Status_BreakCount_ShowCount.Name = "contextMenuStrip_Status_BreakCount_ShowCount";
 			this.contextMenuStrip_Status_BreakCount_ShowCount.Size = new System.Drawing.Size(139, 22);
 			this.contextMenuStrip_Status_BreakCount_ShowCount.Text = "&Show Count";
-			this.contextMenuStrip_Status_BreakCount_ShowCount.Click += new System.EventHandler(this.contextMenuStrip_Status_BreakCount_ShowCount_Click);
+			this.contextMenuStrip_Status_BreakCount_ShowCount.Click += new System.EventHandler(this.toolStripMenuItem_StatusContextMenu_BreakCount_ShowCount_Click);
 			// 
 			// contextMenuStrip_Status_BreakCount_ResetCount
 			// 
 			this.contextMenuStrip_Status_BreakCount_ResetCount.Name = "contextMenuStrip_Status_BreakCount_ResetCount";
 			this.contextMenuStrip_Status_BreakCount_ResetCount.Size = new System.Drawing.Size(139, 22);
 			this.contextMenuStrip_Status_BreakCount_ResetCount.Text = "&Reset Count";
-			this.contextMenuStrip_Status_BreakCount_ResetCount.Click += new System.EventHandler(this.contextMenuStrip_Status_BreakCount_ResetCount_Click);
+			this.contextMenuStrip_Status_BreakCount_ResetCount.Click += new System.EventHandler(this.toolStripMenuItem_StatusContextMenu_BreakCount_ResetCount_Click);
 			// 
 			// toolStripStatusLabel_TerminalStatus_Status
 			// 

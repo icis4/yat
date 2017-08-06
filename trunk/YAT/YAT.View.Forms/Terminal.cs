@@ -127,7 +127,7 @@ namespace YAT.View.Forms
 
 		// MDI:
 		private Form mdiParent;
-		private ContextMenuStripShortcutWorkaround contextMenuStripShortcutWorkaround;
+		private ContextMenuStripShortcutTargetWorkaround contextMenuStripShortcutTargetWorkaround;
 
 		// Terminal:
 		private Model.Terminal terminal;
@@ -248,7 +248,7 @@ namespace YAT.View.Forms
 		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if (this.contextMenuStripShortcutWorkaround.ProcessShortcut(keyData))
+			if (this.contextMenuStripShortcutTargetWorkaround.ProcessCmdKey(keyData))
 				return (true);
 
 			// In addition to predefined shortcuts in the menus, the shortcut Alt+Shift+F1..F12
@@ -1122,6 +1122,9 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_PresetContextMenu_Preset_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			RequestPreset(ToolStripMenuItemEx.TagToIndex(sender)); // Attention, 'ToolStripMenuItem' is no 'Control'!
 		}
 
@@ -1220,27 +1223,42 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_MonitorContextMenu_Panels_Tx_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Layout.TxMonitorPanelIsVisible = !this.settingsRoot.Layout.TxMonitorPanelIsVisible;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Panels_Bidir_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Layout.BidirMonitorPanelIsVisible = !this.settingsRoot.Layout.BidirMonitorPanelIsVisible;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Panels_Rx_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Layout.RxMonitorPanelIsVisible = !this.settingsRoot.Layout.RxMonitorPanelIsVisible;
 		}
 
 		private void toolStripComboBox_MonitorContextMenu_Panels_Orientation_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			if (!this.isSettingControls)
 				SetMonitorOrientation((OrientationEx)toolStripComboBox_MonitorContextMenu_Panels_Orientation.SelectedItem);
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Hide_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			switch (GetMonitorType(contextMenuStrip_Monitor.SourceControl))
 			{
 				case Domain.RepositoryType.Tx:    this.settingsRoot.Layout.TxMonitorPanelIsVisible    = false; break;
@@ -1251,76 +1269,121 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_MonitorContextMenu_Format_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			ShowFormatSettings();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowRadix_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Display.ShowRadix = !this.settingsRoot.Display.ShowRadix;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Display.ShowBufferLineNumbers = !this.settingsRoot.Display.ShowBufferLineNumbers;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Display.ShowTotalLineNumbers = !this.settingsRoot.Display.ShowTotalLineNumbers;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowDate_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Display.ShowDate = !this.settingsRoot.Display.ShowDate;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowTime_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Display.ShowTime = !this.settingsRoot.Display.ShowTime;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowPort_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Display.ShowPort = !this.settingsRoot.Display.ShowPort;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowDirection_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Display.ShowDirection = !this.settingsRoot.Display.ShowDirection;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowEol_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.TextTerminal.ShowEol = !this.settingsRoot.TextTerminal.ShowEol;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowLength_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Display.ShowLength = !this.settingsRoot.Display.ShowLength;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowConnectTime_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Status.ShowConnectTime = !this.settingsRoot.Status.ShowConnectTime;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ResetConnectTime_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.terminal.ResetConnectTime();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowCountAndRate_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Status.ShowCountAndRate = !this.settingsRoot.Status.ShowCountAndRate;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ResetCount_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.terminal.ResetIOCountAndRate();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Clear_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			Domain.RepositoryType repositoryType = GetMonitorType(contextMenuStrip_Monitor.SourceControl);
 			if (repositoryType != Domain.RepositoryType.None)
 				ClearMonitor(repositoryType);
@@ -1330,6 +1393,9 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_MonitorContextMenu_Refresh_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			Domain.RepositoryType repositoryType = GetMonitorType(contextMenuStrip_Monitor.SourceControl);
 			if (repositoryType != Domain.RepositoryType.None)
 				RefreshMonitor(repositoryType);
@@ -1339,26 +1405,41 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_MonitorContextMenu_SelectAll_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			GetMonitor(contextMenuStrip_Monitor.SourceControl).SelectAll();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_SelectNone_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			GetMonitor(contextMenuStrip_Monitor.SourceControl).SelectNone();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_SaveToFile_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			ShowSaveMonitorDialog(GetMonitor(contextMenuStrip_Monitor.SourceControl));
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_CopyToClipboard_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			CopyMonitorToClipboard(GetMonitor(contextMenuStrip_Monitor.SourceControl));
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Print_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			ShowPrintMonitorDialog(GetMonitor(contextMenuStrip_Monitor.SourceControl));
 		}
 
@@ -1436,111 +1517,177 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_RadixContextMenu_String_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.Radix.String);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Char_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.Radix.Char);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Bin_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.Radix.Bin);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Oct_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.Radix.Oct);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Dec_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.Radix.Dec);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Hex_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.Radix.Hex);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Unicode_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.Radix.Unicode);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_SeparateTxRx_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Display.SeparateTxRxRadix = !this.settingsRoot.Display.SeparateTxRxRadix;
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Tx_String_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.IODirection.Tx, Domain.Radix.String);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Tx_Char_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.IODirection.Tx, Domain.Radix.Char);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Tx_Bin_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.IODirection.Tx, Domain.Radix.Bin);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Tx_Oct_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.IODirection.Tx, Domain.Radix.Oct);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Tx_Dec_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.IODirection.Tx, Domain.Radix.Dec);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Tx_Hex_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.IODirection.Tx, Domain.Radix.Hex);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Tx_Unicode_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.IODirection.Tx, Domain.Radix.Unicode);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Rx_String_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.IODirection.Rx, Domain.Radix.String);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Rx_Char_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.IODirection.Rx, Domain.Radix.Char);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Rx_Bin_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.IODirection.Rx, Domain.Radix.Bin);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Rx_Oct_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.IODirection.Rx, Domain.Radix.Oct);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Rx_Dec_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.IODirection.Rx, Domain.Radix.Dec);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Rx_Hex_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.IODirection.Rx, Domain.Radix.Hex);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Rx_Unicode_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SetMonitorRadix(Domain.IODirection.Rx, Domain.Radix.Unicode);
 		}
 
@@ -1609,7 +1756,7 @@ namespace YAT.View.Forms
 
 			if (pageCount > 0)
 			{
-				toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled  = (predefined.SelectedPage > pageCount);
+				toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled  = (predefined.SelectedPage > 0);
 				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled      = (predefined.SelectedPage < pageCount);
 				toolStripMenuItem_PredefinedContextMenu_Page_Separator.Visible = true;
 			}
@@ -1753,26 +1900,41 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_PredefinedContextMenu_Command_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			SendPredefined(ToolStripMenuItemEx.TagToIndex(sender)); // Attention, 'ToolStripMenuItem' is no 'Control'!
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Page_Next_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			predefined.NextPage();
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Page_Previous_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			predefined.PreviousPage();
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Page_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			predefined.SelectedPage = ToolStripMenuItemEx.TagToIndex(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Define_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			if (contextMenuStrip_Predefined_SelectedCommand != 0)
 				ShowPredefinedCommandSettings(predefined.SelectedPage, contextMenuStrip_Predefined_SelectedCommand);
 			else
@@ -1781,6 +1943,9 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_PredefinedContextMenu_CopyToSendText_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			Command c = contextMenuStrip_Predefined_CopyToSendText;
 			if (c != null)
 			{
@@ -1793,16 +1958,25 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_PredefinedContextMenu_CopyFromSendText_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommand - 1, this.settingsRoot.SendText.Command);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommand - 1, this.settingsRoot.SendFile.Command);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Hide_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Layout.PredefinedPanelIsVisible = false;
 		}
 
@@ -1875,6 +2049,9 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_SendContextMenu_SendText_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			if (!this.settingsRoot.Send.SendImmediately)
 				this.terminal.SendText();
 			else
@@ -1883,6 +2060,9 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_SendContextMenu_SendTextWithoutEol_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			if (!this.settingsRoot.Send.SendImmediately)
 				this.terminal.SendTextWithoutEol();
 			else
@@ -1891,46 +2071,73 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_SendContextMenu_SendFile_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.terminal.SendFile();
 		}
 
 		private void toolStripMenuItem_SendContextMenu_Panels_SendText_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Layout.SendTextPanelIsVisible = !this.settingsRoot.Layout.SendTextPanelIsVisible;
 		}
 
 		private void toolStripMenuItem_SendContextMenu_Panels_SendFile_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Layout.SendFilePanelIsVisible = !this.settingsRoot.Layout.SendFilePanelIsVisible;
 		}
 
 		private void toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Send.UseExplicitDefaultRadix = !this.settingsRoot.Send.UseExplicitDefaultRadix;
 		}
 
 		private void toolStripMenuItem_SendContextMenu_KeepCommand_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Send.KeepCommand = !this.settingsRoot.Send.KeepCommand;
 		}
 
 		private void toolStripMenuItem_SendContextMenu_CopyPredefined_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Send.CopyPredefined = !this.settingsRoot.Send.CopyPredefined;
 		}
 
 		private void toolStripMenuItem_SendContextMenu_SendImmediately_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Send.SendImmediately = !this.settingsRoot.Send.SendImmediately;
 		}
 
 		private void toolStripMenuItem_SendContextMenu_SkipEmptyLines_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines = !this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines;
 		}
 
 		private void toolStripMenuItem_SendContextMenu_ExpandMultiLineText_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.SendText.ExpandMultiLineText();
 		}
 
@@ -1968,23 +2175,35 @@ namespace YAT.View.Forms
 			this.isSettingControls.Leave();
 		}
 
-		private void contextMenuStrip_Status_FlowControlCount_ShowCount_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_StatusContextMenu_FlowControlCount_ShowCount_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Status.ShowFlowControlCount = !this.settingsRoot.Status.ShowFlowControlCount;
 		}
 
-		private void contextMenuStrip_Status_FlowControlCount_ResetCount_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_StatusContextMenu_FlowControlCount_ResetCount_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.terminal.ResetFlowControlCount();
 		}
 
-		private void contextMenuStrip_Status_BreakCount_ShowCount_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_StatusContextMenu_BreakCount_ShowCount_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.settingsRoot.Status.ShowBreakCount = !this.settingsRoot.Status.ShowBreakCount;
 		}
 
-		private void contextMenuStrip_Status_BreakCount_ResetCount_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_StatusContextMenu_BreakCount_ResetCount_Click(object sender, EventArgs e)
 		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
 			this.terminal.ResetBreakCount();
 		}
 
@@ -2543,11 +2762,11 @@ namespace YAT.View.Forms
 		private void FixContextMenus()
 		{
 			var strips = new List<ContextMenuStrip>(6); // Preset the required capacity to improve memory management.
-			strips.Add(contextMenuStrip_Send);
-			strips.Add(contextMenuStrip_Radix);
-			strips.Add(contextMenuStrip_Monitor);
-			strips.Add(contextMenuStrip_Predefined);
 			strips.Add(contextMenuStrip_Preset);
+			strips.Add(contextMenuStrip_Monitor);
+			strips.Add(contextMenuStrip_Radix);
+			strips.Add(contextMenuStrip_Predefined);
+			strips.Add(contextMenuStrip_Send);
 			strips.Add(contextMenuStrip_Status);
 
 			// Makes sure that context menus are at the right position upon first drop down. This is
@@ -2565,9 +2784,9 @@ namespace YAT.View.Forms
 			foreach (ContextMenuStrip strip in strips)
 				itemCount += strip.Items.Count;
 
-			this.contextMenuStripShortcutWorkaround = new ContextMenuStripShortcutWorkaround(itemCount); // Preset the required capacity to improve memory management.
+			this.contextMenuStripShortcutTargetWorkaround = new ContextMenuStripShortcutTargetWorkaround(itemCount); // Preset the required capacity to improve memory management.
 			foreach (ContextMenuStrip strip in strips)
-				this.contextMenuStripShortcutWorkaround.Add(strip);
+				this.contextMenuStripShortcutTargetWorkaround.Add(strip);
 		}
 
 		private void InitializeControls()
@@ -3108,7 +3327,7 @@ namespace YAT.View.Forms
 			int[] customColors = this.settingsRoot.View.CustomColorsToWin32();
 
 			var f = new FormatSettings(this.settingsRoot.Format, customColors, this.settingsRoot.Display.InfoSeparator, this.settingsRoot.Display.InfoEnclosure);
-			if (f.ShowDialog(this) == DialogResult.OK)
+			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
 				Refresh();
 				this.settingsRoot.Format = f.FormatSettingsResult;
@@ -3360,7 +3579,7 @@ namespace YAT.View.Forms
 				command
 			);
 
-			if (f.ShowDialog(this) == DialogResult.OK)
+			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
 				Refresh();
 				this.settingsRoot.PredefinedCommand = f.SettingsResult;
@@ -3903,7 +4122,7 @@ namespace YAT.View.Forms
 			f.TerminalId     = this.terminal.SequentialIndex;
 			f.TerminalIsOpen = this.terminal.IsOpen;
 
-			if (f.ShowDialog(this) == DialogResult.OK)
+			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
 				Refresh();
 
@@ -4460,7 +4679,7 @@ namespace YAT.View.Forms
 		private void ShowLogSettings()
 		{
 			var f = new LogSettings(this.settingsRoot.Log);
-			if (f.ShowDialog(this) == DialogResult.OK)
+			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
 				Refresh();
 				this.settingsRoot.Log = f.SettingsResult;

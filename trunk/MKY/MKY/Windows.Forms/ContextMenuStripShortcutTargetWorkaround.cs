@@ -22,6 +22,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -29,8 +30,8 @@ namespace MKY.Windows.Forms
 {
 	/// <summary>
 	/// Implementation of a workaround to fix a bug in Windows.Forms. The bug appears in MDI forms
-	/// when using shortcuts in context menus. Such shortcuts are always passed to first MDI child
-	/// instead of the active child.
+	/// when using shortcuts in context menus. Such shortcuts are always passed to the first MDI
+	/// child instead of the active child.
 	/// To workaround this bug, all potential shortcuts shall be collected when creating the form.
 	/// Then, the shortcuts can manually be handled in the <see cref="Form.ProcessCmdKey"/> method.
 	/// </summary>
@@ -39,30 +40,30 @@ namespace MKY.Windows.Forms
 	/// as lookup key. Thus, this workaround object needs to be re-created in case shortcut keys
 	/// are changed in a context menu.
 	/// </remarks>
-	public class ContextMenuStripShortcutWorkaround
+	public class ContextMenuStripShortcutTargetWorkaround
 	{
 		private Dictionary<Keys, ToolStripMenuItem> shortcutItems = new Dictionary<Keys, ToolStripMenuItem>();
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ContextMenuStripShortcutWorkaround"/>
+		/// Initializes a new instance of the <see cref="ContextMenuStripShortcutTargetWorkaround"/>
 		/// class that is empty and has the default initial capacity.
 		/// </summary>
-		public ContextMenuStripShortcutWorkaround()
+		public ContextMenuStripShortcutTargetWorkaround()
 		{
 			this.shortcutItems = new Dictionary<Keys, ToolStripMenuItem>();
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ContextMenuStripShortcutWorkaround"/>
+		/// Initializes a new instance of the <see cref="ContextMenuStripShortcutTargetWorkaround"/>
 		/// class that is empty and has the specified initial capacity.
 		/// </summary>
 		/// <param name="capacity">
 		/// The initial number of elements that the underlying collection can contain.
 		/// </param>
-		/// <exception cref="System.ArgumentOutOfRangeException">
+		/// <exception cref="ArgumentOutOfRangeException">
 		/// <paramref name="capacity"/>capacity is less than 0.
 		/// </exception>
-		public ContextMenuStripShortcutWorkaround(int capacity)
+		public ContextMenuStripShortcutTargetWorkaround(int capacity)
 		{
 			this.shortcutItems = new Dictionary<Keys, ToolStripMenuItem>(capacity);
 		}
@@ -74,7 +75,7 @@ namespace MKY.Windows.Forms
 		{
 			foreach (ToolStripItem tsi in strip.Items)
 			{
-				ToolStripMenuItem item = tsi as ToolStripMenuItem;
+				var item = tsi as ToolStripMenuItem;
 				if ((item != null) && (item.ShortcutKeys != Keys.None))
 					this.shortcutItems.Add(item.ShortcutKeys, item);
 			}
@@ -98,9 +99,13 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary>
-		/// Optionally, add an additional menu item.
+		/// Evaluates the shortcuts and invokes the assigned event if a shortcut is
+		/// assigned to the <paramref name="keyData"/>.
 		/// </summary>
-		public bool ProcessShortcut(Keys keyData)
+		/// <returns>
+		/// <c>true</c> if a shortcut has been invoked; otherwise, <c>false</c>.
+		/// </returns>
+		public bool ProcessCmdKey(Keys keyData)
 		{
 			ToolStripMenuItem item;
 			if (this.shortcutItems.TryGetValue(keyData, out item))

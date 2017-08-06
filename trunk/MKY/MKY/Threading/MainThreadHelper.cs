@@ -56,6 +56,21 @@ namespace MKY.Threading
 		}
 
 		/// <summary>
+		/// Returns whether this helper has been fully initialized, i.e. the main thread has been
+		/// set by calling <see cref="SetCurrentThread"/>.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if the helper has been fully initialized; otherwise, <c>false</c>.
+		/// </value>
+		public static bool IsInitialized
+		{
+			get
+			{
+				return (staticMainThreadId != InvalidThreadId);
+			}
+		}
+
+		/// <summary>
 		/// Returns whether the current thread is the main thread if <see cref="SetCurrentThread"/>
 		/// has been called before; otherwise, <c>false</c>.
 		/// </summary>

@@ -146,7 +146,8 @@
     <Compile Include="Types\ObjectEx.cs" />
     <Compile Include="Types\SingleEx.cs" />
     <Compile Include="Windows.Forms\ApplicationEx.cs" />
-    <Compile Include="Windows.Forms\ContextMenuStripShortcutWorkaround.cs" />
+    <Compile Include="Windows.Forms\ContextMenuStripShortcutModalFormWorkaround.cs" />
+    <Compile Include="Windows.Forms\ContextMenuStripShortcutTargetWorkaround.cs" />
     <Compile Include="Windows.Forms\ScreenEx.cs" />
     <Compile Include="Windows.Forms\SplitContainerHelper.cs" />
     <Compile Include="Windows.Forms\ToolStripMenuItemEx.cs" />

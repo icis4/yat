@@ -680,7 +680,7 @@ namespace YAT.View.Controls
 
 			// Show multi-line box:
 			var f = new MultiLineBox(this.command, formStartupLocation, this.command.DefaultRadix, this.parseMode);
-			if (f.ShowDialog(this) == DialogResult.OK)
+			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
 				Refresh();
 
