@@ -27,7 +27,7 @@ using System;
 namespace YAT.View.Controls
 {
 	/// <remarks>
-	/// \remind (2017-07-23 / mky)
+	/// \remind (2017-07-23 / MKY)
 	/// <see cref="MKY.EventArgs{T}"/> could be used instead of this class. However, the VS2015
 	/// designer cannot cope with generic event args! Findings:
 	///  > Designer cannot display the 'SendCommandRequest' of 'SendText' as well as 'Send'.

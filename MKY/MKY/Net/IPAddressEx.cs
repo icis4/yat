@@ -49,7 +49,7 @@ namespace MKY.Net
 		/// </remarks>
 		/// <param name="addressA">The first <see cref="IPAddress"/> to compare.</param>
 		/// <param name="addressB">The second <see cref="IPAddress"/> to compare.</param>
-		/// <returns><c>true</c> if the instances are equal; otherwise <c>false</c>.</returns>
+		/// <returns><c>true</c> if the instances are equal; otherwise, <c>false</c>.</returns>
 		public static bool Equals(IPAddress addressA, IPAddress addressB)
 		{
 			return (object.Equals(addressA, addressB));

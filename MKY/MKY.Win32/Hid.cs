@@ -859,7 +859,7 @@ namespace MKY.Win32
 		/// Gets one of the standard strings (manufacturer, product, serial).
 		/// </summary>
 		/// <remarks>
-		/// \fixme (2010-03-14 / mky):
+		/// \fixme (2010-03-14 / MKY):
 		/// Don't know how to retrieve culture specific strings based on language ID. Simply return "".
 		/// Seems like HID.dll doesn't support to retrieve culture specific strings. WinUSB.dll does,
 		/// however, WinUSB.dll can only be used in combination with devices that provide a WinUSB.dll
@@ -1048,7 +1048,7 @@ namespace MKY.Win32
 			Debug.WriteLine("Number of feature data indices:  " + capabilities.NumberFeatureDataIndices);
 			Debug.Unindent();
 
-			// \remind (2010-03-21 / mky):
+			// \remind (2010-03-21 / MKY):
 			// The following two lines demonstrate how the device's value capabilities can be retrieved.
 			// However, due to some reaseon HidP_GetValueCaps() overwrites 'deviceHandle'.
 			// Before making use of the following lines, ensure that 'deviceHandle' isn't overwritten anymore.

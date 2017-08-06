@@ -30,7 +30,7 @@ namespace MKY
 	/// Generic event args with a (simple) type.
 	/// </summary>
 	/// <remarks>
-	/// \remind (2017-07-23 / mky)
+	/// \remind (2017-07-23 / MKY)
 	/// Attention, do not use this generic type with WinForms controls and forms up to at least
 	/// VS2015 as its designer cannot cope with generic event args! Findings:
 	///  > Designer cannot display the 'SendCommandRequest' of 'SendText' as well as 'Send'.
