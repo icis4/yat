@@ -61,7 +61,7 @@ namespace MKY
 		/// </remarks>
 		/// <param name="objA">The first <see cref="object"/> to compare.</param>
 		/// <param name="objB">The second <see cref="object"/> to compare.</param>
-		/// <returns><c>true</c> if the instances are equal; otherwise <c>false</c>.</returns>
+		/// <returns><c>true</c> if the instances are equal; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "Same naming as 'object.Equals()'.")]
 		public static new bool Equals(object objA, object objB)
 		{

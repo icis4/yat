@@ -254,7 +254,7 @@ namespace MKY.Windows.Forms
 		/// Notifies a control that it is the default button so that its appearance and behavior is adjusted accordingly.
 		/// </summary>
 		/// <param name="value">
-		/// <c>true</c> if the control should behave as a default button; otherwise <c>false</c>.
+		/// <c>true</c> if the control should behave as a default button; otherwise, <c>false</c>.
 		/// </param>
 		public void NotifyDefault(bool value)
 		{

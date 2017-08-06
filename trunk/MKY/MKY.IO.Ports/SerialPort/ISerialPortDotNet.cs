@@ -361,7 +361,7 @@ namespace MKY.IO.Ports
 		/// transmitted between the port and the receive buffer.
 		/// </summary>
 		/// <value>
-		/// <c>true</c> if null bytes are ignored; otherwise <c>false</c>.
+		/// <c>true</c> if null bytes are ignored; otherwise, <c>false</c>.
 		/// The default is <c>false</c>.
 		/// </value>
 		/// <exception cref="System.InvalidOperationException">

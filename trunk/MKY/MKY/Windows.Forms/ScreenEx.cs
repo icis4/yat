@@ -38,7 +38,7 @@ namespace MKY.Windows.Forms
 		/// Evaluates whether the given <paramref name="bounds"/> are within the bounds of any of the screens.
 		/// </summary>
 		/// <param name="bounds">The bounds to be evaluated.</param>
-		/// <returns><c>true</c> if within; otherwise <c>false</c>.</returns>
+		/// <returns><c>true</c> if within; otherwise, <c>false</c>.</returns>
 		public static bool IsWithinAnyBounds(Rectangle bounds)
 		{
 			foreach (Screen screen in Screen.AllScreens)

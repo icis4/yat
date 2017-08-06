@@ -281,7 +281,7 @@ namespace YAT.Domain
 							this.BreakTimer.Dispose();
 							EventHandlerHelper.RemoveAllEventHandlers(this.BreakTimer);
 
-							// \remind (2016-09-08 / mky)
+							// \remind (2016-09-08 / MKY)
 							// Whole timer handling should be encapsulated into the 'LineState' class.
 						}
 					}
@@ -398,7 +398,7 @@ namespace YAT.Domain
 				// Tx:
 
 				this.txLineState = casted.txLineState;
-				                                             //// \remind (2016-09-08 / mky)
+				                                             //// \remind (2016-09-08 / MKY)
 				if (this.txLineState.BreakTimer != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
 					this.txLineState.BreakTimer.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
 
@@ -408,7 +408,7 @@ namespace YAT.Domain
 				// Rx:
 
 				this.rxLineState = casted.rxLineState;
-				                                             //// \remind (2016-09-08 / mky)
+				                                             //// \remind (2016-09-08 / MKY)
 				if (this.rxLineState.BreakTimer != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
 					this.rxLineState.BreakTimer.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
 
