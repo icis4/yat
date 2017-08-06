@@ -421,94 +421,98 @@ namespace YAT.View.Forms
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
-
-			Domain.TerminalType tt = this.settingsInEdit.Terminal.TerminalType;
-			terminalSelection.TerminalType = tt;
-
-			string button = "&";
-			string toolTipCaption = "";
-			switch (tt)
+			try
 			{
-				case Domain.TerminalType.Text:
-					button += "Text";
-					toolTipCaption = "Text terminal dependent settings such as encoding, end-of-line and comments.";
-					break;
+				var tt = this.settingsInEdit.Terminal.TerminalType;
+				terminalSelection.TerminalType = tt;
 
-				case Domain.TerminalType.Binary:
-					button += "Binary";
-					toolTipCaption = "Binary terminal dependent settings such as sequence and timeout line breaks.";
-					break;
+				string button = "&";
+				string toolTipCaption = "";
+				switch (tt)
+				{
+					case Domain.TerminalType.Text:
+						button += "Text";
+						toolTipCaption = "Text terminal dependent settings such as encoding, end-of-line and comments.";
+						break;
 
-				default:
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + tt + "' is an invalid terminal type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					case Domain.TerminalType.Binary:
+						button += "Binary";
+						toolTipCaption = "Binary terminal dependent settings such as sequence and timeout line breaks.";
+						break;
+
+					default:
+						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + tt + "' is an invalid terminal type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+				button += " Settings...";
+				button_TextOrBinarySettings.Text = button;
+				toolTip.SetToolTip(button_TextOrBinarySettings, toolTipCaption);
+
+				var ioType = this.settingsInEdit.Terminal.IO.IOType;
+
+				SetControlsVisibiliy(ioType);
+
+				terminalSelection.IOType = ioType;
+
+				serialPortSelection.PortId = this.settingsInEdit.Terminal.IO.SerialPort.PortId;
+				serialPortSelection.ActivePortInUseInfo = new MKY.IO.Ports.InUseInfo
+				(
+					this.terminalId,
+					this.settingsInEdit.Terminal.IO.SerialPort.PortId,
+					this.terminalIsOpen,
+					(this.terminalIsOpen ? "(in use by this terminal)" : "(selected by this terminal)")
+				);
+
+				serialPortSettings.BaudRate     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.BaudRate;
+				serialPortSettings.DataBits     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.DataBits;
+				serialPortSettings.Parity       = this.settingsInEdit.Terminal.IO.SerialPort.Communication.Parity;
+				serialPortSettings.StopBits     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.StopBits;
+				serialPortSettings.FlowControl  = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControl;
+				serialPortSettings.AliveMonitor = this.settingsInEdit.Terminal.IO.SerialPort.AliveMonitor;
+				serialPortSettings.AutoReopen   = this.settingsInEdit.Terminal.IO.SerialPort.AutoReopen;
+
+				socketSelection.SocketType      = (Domain.IOTypeEx)ioType;
+				socketSelection.RemoteHost      = this.settingsInEdit.Terminal.IO.Socket.RemoteHost;
+				socketSelection.RemoteTcpPort   = this.settingsInEdit.Terminal.IO.Socket.RemoteTcpPort;
+				socketSelection.RemoteUdpPort   = this.settingsInEdit.Terminal.IO.Socket.RemoteUdpPort;
+				socketSelection.LocalInterface  = this.settingsInEdit.Terminal.IO.Socket.LocalInterface;
+				socketSelection.LocalFilter     = this.settingsInEdit.Terminal.IO.Socket.LocalFilter;
+				socketSelection.LocalTcpPort    = this.settingsInEdit.Terminal.IO.Socket.LocalTcpPort;
+				socketSelection.LocalUdpPort    = this.settingsInEdit.Terminal.IO.Socket.LocalUdpPort;
+
+				socketSettings.SocketType             = (Domain.IOTypeEx)ioType;
+				socketSettings.TcpClientAutoReconnect = this.settingsInEdit.Terminal.IO.Socket.TcpClientAutoReconnect;
+				socketSettings.UdpServerSendMode      = this.settingsInEdit.Terminal.IO.Socket.UdpServerSendMode;
+
+				usbSerialHidDeviceSelection.DeviceInfo = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
+
+													  ////this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.MatchSerial is defined by the LocalUserSettings.
+				usbSerialHidDeviceSettings.ReportFormat  = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.ReportFormat;
+				usbSerialHidDeviceSettings.RxFilterUsage = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.RxFilterUsage;
+				usbSerialHidDeviceSettings.FlowControl   = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.FlowControl;
+				usbSerialHidDeviceSettings.AutoOpen      = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.AutoOpen;
+
+				// Trigger refresh of ports/devices if selection of I/O type has changed:
+				bool isSerialPort   = ((Domain.IOTypeEx)ioType).IsSerialPort;
+				bool isSocket       = ((Domain.IOTypeEx)ioType).IsSocket;
+				bool isUsbSerialHid = ((Domain.IOTypeEx)ioType).IsUsbSerialHid;
+
+				bool wasSerialPort   = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsSerialPort;
+				bool wasSocket       = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsSocket;
+				bool wasUsbSerialHid = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsUsbSerialHid;
+
+				if      (isSerialPort   && !wasSerialPort)
+					serialPortSelection        .RefreshPortList();
+				else if (isSocket       && !wasSocket)
+					socketSelection            .RefreshLocalInterfaceList();
+				else if (isUsbSerialHid && !wasUsbSerialHid)
+					usbSerialHidDeviceSelection.RefreshDeviceList();
+
+				this.SetControls_ioTypeOld = ioType;
 			}
-			button += " Settings...";
-			button_TextOrBinarySettings.Text = button;
-			toolTip.SetToolTip(button_TextOrBinarySettings, toolTipCaption);
-
-			Domain.IOType ioType = this.settingsInEdit.Terminal.IO.IOType;
-
-			SetControlsVisibiliy(ioType);
-
-			terminalSelection.IOType = ioType;
-
-			serialPortSelection.PortId = this.settingsInEdit.Terminal.IO.SerialPort.PortId;
-			serialPortSelection.ActivePortInUseInfo = new MKY.IO.Ports.InUseInfo
-			(
-				this.terminalId,
-				this.settingsInEdit.Terminal.IO.SerialPort.PortId,
-				this.terminalIsOpen,
-				(this.terminalIsOpen ? "(in use by this terminal)" : "(selected by this terminal)")
-			);
-
-			serialPortSettings.BaudRate     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.BaudRate;
-			serialPortSettings.DataBits     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.DataBits;
-			serialPortSettings.Parity       = this.settingsInEdit.Terminal.IO.SerialPort.Communication.Parity;
-			serialPortSettings.StopBits     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.StopBits;
-			serialPortSettings.FlowControl  = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControl;
-			serialPortSettings.AliveMonitor = this.settingsInEdit.Terminal.IO.SerialPort.AliveMonitor;
-			serialPortSettings.AutoReopen   = this.settingsInEdit.Terminal.IO.SerialPort.AutoReopen;
-
-			socketSelection.SocketType      = (Domain.IOTypeEx)ioType;
-			socketSelection.RemoteHost      = this.settingsInEdit.Terminal.IO.Socket.RemoteHost;
-			socketSelection.RemoteTcpPort   = this.settingsInEdit.Terminal.IO.Socket.RemoteTcpPort;
-			socketSelection.RemoteUdpPort   = this.settingsInEdit.Terminal.IO.Socket.RemoteUdpPort;
-			socketSelection.LocalInterface  = this.settingsInEdit.Terminal.IO.Socket.LocalInterface;
-			socketSelection.LocalFilter     = this.settingsInEdit.Terminal.IO.Socket.LocalFilter;
-			socketSelection.LocalTcpPort    = this.settingsInEdit.Terminal.IO.Socket.LocalTcpPort;
-			socketSelection.LocalUdpPort    = this.settingsInEdit.Terminal.IO.Socket.LocalUdpPort;
-
-			socketSettings.SocketType             = (Domain.IOTypeEx)ioType;
-			socketSettings.TcpClientAutoReconnect = this.settingsInEdit.Terminal.IO.Socket.TcpClientAutoReconnect;
-			socketSettings.UdpServerSendMode      = this.settingsInEdit.Terminal.IO.Socket.UdpServerSendMode;
-
-			usbSerialHidDeviceSelection.DeviceInfo = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
-
-			                                      ////this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.MatchSerial is defined by the LocalUserSettings.
-			usbSerialHidDeviceSettings.ReportFormat  = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.ReportFormat;
-			usbSerialHidDeviceSettings.RxFilterUsage = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.RxFilterUsage;
-			usbSerialHidDeviceSettings.FlowControl   = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.FlowControl;
-			usbSerialHidDeviceSettings.AutoOpen      = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.AutoOpen;
-
-			// Trigger refresh of ports/devices if selection of I/O type has changed:
-			bool isSerialPort   = ((Domain.IOTypeEx)ioType).IsSerialPort;
-			bool isSocket       = ((Domain.IOTypeEx)ioType).IsSocket;
-			bool isUsbSerialHid = ((Domain.IOTypeEx)ioType).IsUsbSerialHid;
-
-			bool wasSerialPort   = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsSerialPort;
-			bool wasSocket       = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsSocket;
-			bool wasUsbSerialHid = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsUsbSerialHid;
-
-			if      (isSerialPort   && !wasSerialPort)
-				serialPortSelection        .RefreshPortList();
-			else if (isSocket       && !wasSocket)
-				socketSelection            .RefreshLocalInterfaceList();
-			else if (isUsbSerialHid && !wasUsbSerialHid)
-				usbSerialHidDeviceSelection.RefreshDeviceList();
-
-			this.SetControls_ioTypeOld = ioType;
-
-			this.isSettingControls.Leave();
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		/// <remarks>

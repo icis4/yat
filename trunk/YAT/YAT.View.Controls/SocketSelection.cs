@@ -595,16 +595,20 @@ namespace YAT.View.Controls
 		private void InitializeControls()
 		{
 			this.isSettingControls.Enter();
+			try
+			{
+				// Remote host:
+				comboBox_RemoteHost.Items.Clear();
+				comboBox_RemoteHost.Items.AddRange(IPHostEx.GetItems());
 
-			// Remote host:
-			comboBox_RemoteHost.Items.Clear();
-			comboBox_RemoteHost.Items.AddRange(IPHostEx.GetItems());
-
-			// Local filter:
-			comboBox_LocalFilter.Items.Clear();
-			comboBox_LocalFilter.Items.AddRange(IPFilterEx.GetItems());
-
-			this.isSettingControls.Leave();
+				// Local filter:
+				comboBox_LocalFilter.Items.Clear();
+				comboBox_LocalFilter.Items.AddRange(IPFilterEx.GetItems());
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		// MKY.Diagnostics.DebugEx.WriteStack(Type type)
@@ -649,56 +653,60 @@ namespace YAT.View.Controls
 				// Changes here may have to be applied there too!
 
 				this.isSettingControls.Enter();
-
-				comboBox_LocalInterface.Items.Clear();
-
-				if (localInterfaces.Count > 0)
+				try
 				{
-					comboBox_LocalInterface.Items.AddRange(localInterfaces.ToArray());
+					comboBox_LocalInterface.Items.Clear();
 
-					if ((this.localInterface != null) && (localInterfaces.Contains(this.localInterface)))
+					if (localInterfaces.Count > 0)
 					{
-						// Nothing has changed, just restore the selected item:
-						comboBox_LocalInterface.SelectedItem = this.localInterface;
+						comboBox_LocalInterface.Items.AddRange(localInterfaces.ToArray());
+
+						if ((this.localInterface != null) && (localInterfaces.Contains(this.localInterface)))
+						{
+							// Nothing has changed, just restore the selected item:
+							comboBox_LocalInterface.SelectedItem = this.localInterface;
+						}
+						else if ((this.localInterface != null) && (localInterfaces.ContainsDescription(this.localInterface)))
+						{
+							// A device with same description is available, use that:
+							int sameDescriptionIndex = localInterfaces.FindIndexDescription(this.localInterface);
+
+							// Get the 'NotAvailable' string BEFORE defaulting!
+							string localInterfaceNotAvailable = null;
+							if (this.localInterface != null)
+								localInterfaceNotAvailable = this.localInterface;
+
+							// Ensure that the settings item is switched and shown by SetControls().
+							// Set property instead of member to ensure that changed event is fired.
+							LocalInterface = localInterfaces[sameDescriptionIndex];
+
+							ShowNotAvailableSwitchedMessage(localInterfaceNotAvailable, localInterfaces[sameDescriptionIndex]);
+						}
+						else
+						{
+							// Get the 'NotAvailable' string BEFORE defaulting!
+							string localInterfaceNotAvailable = this.localInterface;
+
+							// Ensure that the settings item is defaulted and shown by SetControls().
+							// Set property instead of member to ensure that changed event is fired.
+							LocalInterface = localInterfaces[0];
+
+							ShowNotAvailableDefaultedMessage(localInterfaceNotAvailable, localInterfaces[0]);
+						}
 					}
-					else if ((this.localInterface != null) && (localInterfaces.ContainsDescription(this.localInterface)))
+					else // localInterfaces.Count == 0
 					{
-						// A device with same description is available, use that:
-						int sameDescriptionIndex = localInterfaces.FindIndexDescription(this.localInterface);
-
-						// Get the 'NotAvailable' string BEFORE defaulting!
-						string localInterfaceNotAvailable = null;
-						if (this.localInterface != null)
-							localInterfaceNotAvailable = this.localInterface;
-
-						// Ensure that the settings item is switched and shown by SetControls().
+						// Ensure that the settings item is nulled and reset by SetControls().
 						// Set property instead of member to ensure that changed event is fired.
-						LocalInterface = localInterfaces[sameDescriptionIndex];
+						LocalInterface = null;
 
-						ShowNotAvailableSwitchedMessage(localInterfaceNotAvailable, localInterfaces[sameDescriptionIndex]);
-					}
-					else
-					{
-						// Get the 'NotAvailable' string BEFORE defaulting!
-						string localInterfaceNotAvailable = this.localInterface;
-
-						// Ensure that the settings item is defaulted and shown by SetControls().
-						// Set property instead of member to ensure that changed event is fired.
-						LocalInterface = localInterfaces[0];
-
-						ShowNotAvailableDefaultedMessage(localInterfaceNotAvailable, localInterfaces[0]);
+						ShowNoLocalInterfacesMessage();
 					}
 				}
-				else // localInterfaces.Count == 0
+				finally
 				{
-					// Ensure that the settings item is nulled and reset by SetControls().
-					// Set property instead of member to ensure that changed event is fired.
-					LocalInterface = null;
-
-					ShowNoLocalInterfacesMessage();
+					this.isSettingControls.Leave();
 				}
-
-				this.isSettingControls.Leave();
 			}
 		}
 
@@ -750,146 +758,150 @@ namespace YAT.View.Controls
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
-
-			// Remote host address:
-			if (!DesignMode && Enabled && (this.remoteHost != null) &&
-				((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket) ||
-				 (this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpPairSocket)))
+			try
 			{
-				comboBox_RemoteHost.Enabled = true;
-				SelectionHelper.Select(comboBox_RemoteHost, this.remoteHost, this.remoteHost);
-			}
-			else
-			{
-				comboBox_RemoteHost.Enabled = false;
-				SelectionHelper.Deselect(comboBox_RemoteHost);
-			}
-
-			// Remote port label:
-			if (Enabled && ((SocketTypeEx)this.socketType).IsUdp)
-				label_RemotePort.Text = "Remote UDP port:";
-			else
-				label_RemotePort.Text = "Remote TCP port:";
-
-			// Remote port:
-			if (!DesignMode && Enabled && ((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket)))
-			{
-				textBox_RemotePort.Enabled = true;
-				textBox_RemotePort.Text = this.remoteTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
-			}
-			else if (!DesignMode && Enabled && ((this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpPairSocket)))
-			{
-				textBox_RemotePort.Enabled = true;
-				textBox_RemotePort.Text = this.remoteUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
-			}
-			else
-			{
-				textBox_RemotePort.Enabled = false;
-				textBox_RemotePort.Text = "";
-			}
-
-			// Local interface:
-			comboBox_LocalInterface.Visible = true;
-			comboBox_LocalInterface.Enabled = true;
-			if (comboBox_LocalInterface.Items.Count > 0)
-			{
-				if (this.socketType != SocketType.UdpClient)
+				// Remote host address:
+				if (!DesignMode && Enabled && (this.remoteHost != null) &&
+					((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket) ||
+					 (this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpPairSocket)))
 				{
-					if (this.localInterface != null)
-						comboBox_LocalInterface.SelectedItem = this.localInterface;
-					else
-						comboBox_LocalInterface.SelectedItem = (IPNetworkInterfaceEx)IPNetworkInterfaceEx.Default;
+					comboBox_RemoteHost.Enabled = true;
+					SelectionHelper.Select(comboBox_RemoteHost, this.remoteHost, this.remoteHost);
 				}
 				else
 				{
-					comboBox_LocalInterface.Enabled = false;
-					SelectionHelper.Deselect(comboBox_LocalInterface, (IPNetworkInterfaceEx)IPNetworkInterfaceEx.Default);
+					comboBox_RemoteHost.Enabled = false;
+					SelectionHelper.Deselect(comboBox_RemoteHost);
 				}
-			}
-			else
-			{
-				comboBox_LocalInterface.SelectedIndex = ControlEx.InvalidIndex;
-			}
 
-			button_RefreshLocalInterfaces.Visible = true;
-			button_RefreshLocalInterfaces.Enabled = true;
+				// Remote port label:
+				if (Enabled && ((SocketTypeEx)this.socketType).IsUdp)
+					label_RemotePort.Text = "Remote UDP port:";
+				else
+					label_RemotePort.Text = "Remote TCP port:";
 
-			// Local port label:
-			if (Enabled && ((SocketTypeEx)this.socketType).IsUdp)
-				label_LocalPort.Text = "Local UDP port:";
-			else
-				label_LocalPort.Text = "Local TCP port:";
-
-			// Local port:
-			if (Enabled && ((this.socketType == SocketType.TcpServer) || (this.socketType == SocketType.TcpAutoSocket)))
-			{
-				textBox_LocalPort.Enabled = true;
-				textBox_LocalPort.Text = this.localTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
-			}
-			else if (Enabled && ((this.socketType == SocketType.UdpServer) || (this.socketType == SocketType.UdpPairSocket)))
-			{
-				textBox_LocalPort.Enabled = true;
-				textBox_LocalPort.Text = this.localUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
-			}
-			else
-			{
-				textBox_LocalPort.Enabled = false;
-				textBox_LocalPort.Text = "";
-			}
-
-			// Local filter:
-			if (!DesignMode && Enabled && ((SocketTypeEx)this.socketType).IsUdp)
-			{
-				comboBox_LocalFilter.Visible = true;
-				switch (this.socketType)
+				// Remote port:
+				if (!DesignMode && Enabled && ((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket)))
 				{
-					case SocketType.UdpClient:
-					{
-						comboBox_LocalFilter.Enabled = false;
-						SelectionHelper.Deselect(comboBox_LocalFilter, (IPFilterEx)IPFilterEx.Default);
-						break;
-					}
+					textBox_RemotePort.Enabled = true;
+					textBox_RemotePort.Text = this.remoteTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
+				}
+				else if (!DesignMode && Enabled && ((this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpPairSocket)))
+				{
+					textBox_RemotePort.Enabled = true;
+					textBox_RemotePort.Text = this.remoteUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
+				}
+				else
+				{
+					textBox_RemotePort.Enabled = false;
+					textBox_RemotePort.Text = "";
+				}
 
-					case SocketType.UdpServer:
+				// Local interface:
+				comboBox_LocalInterface.Visible = true;
+				comboBox_LocalInterface.Enabled = true;
+				if (comboBox_LocalInterface.Items.Count > 0)
+				{
+					if (this.socketType != SocketType.UdpClient)
 					{
-						comboBox_LocalFilter.Enabled = true;
-						if (comboBox_LocalFilter.Items.Count > 0)
-						{
-							if (this.localFilter != null)
-								comboBox_LocalFilter.SelectedItem = this.localFilter;
-							else
-								comboBox_LocalFilter.SelectedItem = (IPFilterEx)IPFilterEx.Default;
-						}
+						if (this.localInterface != null)
+							comboBox_LocalInterface.SelectedItem = this.localInterface;
 						else
-						{
-							comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
-						}
-
-						break;
+							comboBox_LocalInterface.SelectedItem = (IPNetworkInterfaceEx)IPNetworkInterfaceEx.Default;
 					}
-
-					case SocketType.UdpPairSocket:
+					else
 					{
-						comboBox_LocalFilter.Enabled = false;
-						SelectionHelper.Deselect(comboBox_LocalFilter, (IPFilterEx)IPFilterEx.Default);
-						break;
-					}
-
-					default:
-					{
-						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.socketType + "' is invalid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						comboBox_LocalInterface.Enabled = false;
+						SelectionHelper.Deselect(comboBox_LocalInterface, (IPNetworkInterfaceEx)IPNetworkInterfaceEx.Default);
 					}
 				}
-			}
-			else
-			{
-				comboBox_LocalFilter.Visible = false;
-				comboBox_LocalFilter.Enabled = false;
-				comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
-				comboBox_LocalFilter.Text = "";
-			}
+				else
+				{
+					comboBox_LocalInterface.SelectedIndex = ControlEx.InvalidIndex;
+				}
 
-			this.isSettingControls.Leave();
+				button_RefreshLocalInterfaces.Visible = true;
+				button_RefreshLocalInterfaces.Enabled = true;
+
+				// Local port label:
+				if (Enabled && ((SocketTypeEx)this.socketType).IsUdp)
+					label_LocalPort.Text = "Local UDP port:";
+				else
+					label_LocalPort.Text = "Local TCP port:";
+
+				// Local port:
+				if (Enabled && ((this.socketType == SocketType.TcpServer) || (this.socketType == SocketType.TcpAutoSocket)))
+				{
+					textBox_LocalPort.Enabled = true;
+					textBox_LocalPort.Text = this.localTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
+				}
+				else if (Enabled && ((this.socketType == SocketType.UdpServer) || (this.socketType == SocketType.UdpPairSocket)))
+				{
+					textBox_LocalPort.Enabled = true;
+					textBox_LocalPort.Text = this.localUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
+				}
+				else
+				{
+					textBox_LocalPort.Enabled = false;
+					textBox_LocalPort.Text = "";
+				}
+
+				// Local filter:
+				if (!DesignMode && Enabled && ((SocketTypeEx)this.socketType).IsUdp)
+				{
+					comboBox_LocalFilter.Visible = true;
+					switch (this.socketType)
+					{
+						case SocketType.UdpClient:
+						{
+							comboBox_LocalFilter.Enabled = false;
+							SelectionHelper.Deselect(comboBox_LocalFilter, (IPFilterEx)IPFilterEx.Default);
+							break;
+						}
+
+						case SocketType.UdpServer:
+						{
+							comboBox_LocalFilter.Enabled = true;
+							if (comboBox_LocalFilter.Items.Count > 0)
+							{
+								if (this.localFilter != null)
+									comboBox_LocalFilter.SelectedItem = this.localFilter;
+								else
+									comboBox_LocalFilter.SelectedItem = (IPFilterEx)IPFilterEx.Default;
+							}
+							else
+							{
+								comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
+							}
+
+							break;
+						}
+
+						case SocketType.UdpPairSocket:
+						{
+							comboBox_LocalFilter.Enabled = false;
+							SelectionHelper.Deselect(comboBox_LocalFilter, (IPFilterEx)IPFilterEx.Default);
+							break;
+						}
+
+						default:
+						{
+							throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.socketType + "' is invalid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+					}
+				}
+				else
+				{
+					comboBox_LocalFilter.Visible = false;
+					comboBox_LocalFilter.Enabled = false;
+					comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
+					comboBox_LocalFilter.Text = "";
+				}
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		#endregion

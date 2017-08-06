@@ -461,67 +461,75 @@ namespace YAT.View.Controls
 		private void InitializeControls()
 		{
 			this.isSettingControls.Enter();
-
-			comboBox_BaudRate.Items.AddRange   (MKY.IO.Ports.BaudRateEx.GetItems());
-			comboBox_DataBits.Items.AddRange   (MKY.IO.Ports.DataBitsEx.GetItems());
-			comboBox_Parity.Items.AddRange     (MKY.IO.Ports.ParityEx.GetItems());
-			comboBox_StopBits.Items.AddRange   (MKY.IO.Ports.StopBitsEx.GetItems());
-			comboBox_FlowControl.Items.AddRange(MKY.IO.Serial.SerialPort.SerialFlowControlEx.GetItems());
-
-			this.isSettingControls.Leave();
+			try
+			{
+				comboBox_BaudRate.Items.AddRange   (MKY.IO.Ports.BaudRateEx.GetItems());
+				comboBox_DataBits.Items.AddRange   (MKY.IO.Ports.DataBitsEx.GetItems());
+				comboBox_Parity.Items.AddRange     (MKY.IO.Ports.ParityEx.GetItems());
+				comboBox_StopBits.Items.AddRange   (MKY.IO.Ports.StopBitsEx.GetItems());
+				comboBox_FlowControl.Items.AddRange(MKY.IO.Serial.SerialPort.SerialFlowControlEx.GetItems());
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
-
-			MKY.IO.Ports.BaudRateEx baudRate = this.baudRate;
-			if (Enabled && (baudRate == MKY.IO.Ports.BaudRate.Explicit))
-				comboBox_BaudRate.Text = baudRate;
-			else if (Enabled)
-				comboBox_BaudRate.SelectedItem = baudRate;
-			else
-				comboBox_BaudRate.SelectedIndex = ControlEx.InvalidIndex;
-
-			if (Enabled)
+			try
 			{
-				comboBox_DataBits.SelectedItem    = (MKY.IO.Ports.DataBitsEx)this.dataBits;
-				comboBox_Parity.SelectedItem      = (MKY.IO.Ports.ParityEx)this.parity;
-				comboBox_StopBits.SelectedItem    = (MKY.IO.Ports.StopBitsEx)this.stopBits;
-				comboBox_FlowControl.SelectedItem = (MKY.IO.Serial.SerialPort.SerialFlowControlEx)this.flowControl;
+				MKY.IO.Ports.BaudRateEx baudRate = this.baudRate;
+				if (Enabled && (baudRate == MKY.IO.Ports.BaudRate.Explicit))
+					comboBox_BaudRate.Text = baudRate;
+				else if (Enabled)
+					comboBox_BaudRate.SelectedItem = baudRate;
+				else
+					comboBox_BaudRate.SelectedIndex = ControlEx.InvalidIndex;
+
+				if (Enabled)
+				{
+					comboBox_DataBits.SelectedItem    = (MKY.IO.Ports.DataBitsEx)this.dataBits;
+					comboBox_Parity.SelectedItem      = (MKY.IO.Ports.ParityEx)this.parity;
+					comboBox_StopBits.SelectedItem    = (MKY.IO.Ports.StopBitsEx)this.stopBits;
+					comboBox_FlowControl.SelectedItem = (MKY.IO.Serial.SerialPort.SerialFlowControlEx)this.flowControl;
+				}
+				else
+				{
+					comboBox_DataBits.SelectedIndex    = ControlEx.InvalidIndex;
+					comboBox_Parity.SelectedIndex      = ControlEx.InvalidIndex;
+					comboBox_StopBits.SelectedIndex    = ControlEx.InvalidIndex;
+					comboBox_FlowControl.SelectedIndex = ControlEx.InvalidIndex;
+				}
+
+				if (Enabled)
+				{
+					bool aliveMonitorEnabled             = this.aliveMonitor.Enabled;
+					checkBox_AliveMonitor.Checked        = aliveMonitorEnabled;
+					textBox_AliveMonitorInterval.Enabled = aliveMonitorEnabled;
+					textBox_AliveMonitorInterval.Text    = this.aliveMonitor.Interval.ToString(CultureInfo.CurrentCulture);
+
+					bool autoReopenEnabled             = this.autoReopen.Enabled;
+					checkBox_AutoReopen.Checked        = autoReopenEnabled;
+					textBox_AutoReopenInterval.Enabled = autoReopenEnabled;
+					textBox_AutoReopenInterval.Text    = this.autoReopen.Interval.ToString(CultureInfo.CurrentCulture);
+				}
+				else
+				{
+					checkBox_AliveMonitor.Checked        = false;
+					textBox_AliveMonitorInterval.Enabled = false;
+					textBox_AliveMonitorInterval.Text    = "";
+
+					checkBox_AutoReopen.Checked        = false;
+					textBox_AutoReopenInterval.Enabled = false;
+					textBox_AutoReopenInterval.Text    = "";
+				}
 			}
-			else
+			finally
 			{
-				comboBox_DataBits.SelectedIndex    = ControlEx.InvalidIndex;
-				comboBox_Parity.SelectedIndex      = ControlEx.InvalidIndex;
-				comboBox_StopBits.SelectedIndex    = ControlEx.InvalidIndex;
-				comboBox_FlowControl.SelectedIndex = ControlEx.InvalidIndex;
+				this.isSettingControls.Leave();
 			}
-
-			if (Enabled)
-			{
-				bool aliveMonitorEnabled             = this.aliveMonitor.Enabled;
-				checkBox_AliveMonitor.Checked        = aliveMonitorEnabled;
-				textBox_AliveMonitorInterval.Enabled = aliveMonitorEnabled;
-				textBox_AliveMonitorInterval.Text    = this.aliveMonitor.Interval.ToString(CultureInfo.CurrentCulture);
-
-				bool autoReopenEnabled             = this.autoReopen.Enabled;
-				checkBox_AutoReopen.Checked        = autoReopenEnabled;
-				textBox_AutoReopenInterval.Enabled = autoReopenEnabled;
-				textBox_AutoReopenInterval.Text    = this.autoReopen.Interval.ToString(CultureInfo.CurrentCulture);
-			}
-			else
-			{
-				checkBox_AliveMonitor.Checked        = false;
-				textBox_AliveMonitorInterval.Enabled = false;
-				textBox_AliveMonitorInterval.Text    = "";
-
-				checkBox_AutoReopen.Checked        = false;
-				textBox_AutoReopenInterval.Enabled = false;
-				textBox_AutoReopenInterval.Text    = "";
-			}
-
-			this.isSettingControls.Leave();
 		}
 
 		#endregion

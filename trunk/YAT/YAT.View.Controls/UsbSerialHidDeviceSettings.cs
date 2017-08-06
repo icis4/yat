@@ -456,106 +456,114 @@ namespace YAT.View.Controls
 		private void InitializeControls()
 		{
 			this.isSettingControls.Enter();
-
-			comboBox_Preset.Items.AddRange     (MKY.IO.Usb.SerialHidReportFormatPresetEx.GetItems());
-			comboBox_FlowControl.Items.AddRange(MKY.IO.Serial.Usb.SerialHidFlowControlEx.GetItems());
-
-			this.isSettingControls.Leave();
+			try
+			{
+				comboBox_Preset.Items.AddRange     (MKY.IO.Usb.SerialHidReportFormatPresetEx.GetItems());
+				comboBox_FlowControl.Items.AddRange(MKY.IO.Serial.Usb.SerialHidFlowControlEx.GetItems());
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
-
-			label_ReportFormat.Enabled = Enabled;
-
-			if (this.reportFormat.UseId)
+			try
 			{
-				checkBox_UseId.Text        = "Tx &ID:";
-				checkBox_SeparateRxId.Text = "Rx I&D:";
+				label_ReportFormat.Enabled = Enabled;
 
-				checkBox_UseId.Checked        =  Enabled;
-				checkBox_SeparateRxId.Enabled =  Enabled;
-				checkBox_SeparateRxId.Checked = (Enabled ? this.rxFilterUsage.SeparateRxId : false);
-				textBox_Id.Enabled            =  Enabled;
-				textBox_RxId.Enabled          = (Enabled ? this.rxFilterUsage.SeparateRxId : false);
-
-				textBox_Id.Text = this.reportFormat.Id.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for report ID!
-				if (!this.rxFilterUsage.SeparateRxId) // Typical case = same ID for Tx and Rx.
+				if (this.reportFormat.UseId)
 				{
-					textBox_RxId.Text = this.reportFormat.Id.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for report ID!
+					checkBox_UseId.Text        = "Tx &ID:";
+					checkBox_SeparateRxId.Text = "Rx I&D:";
+
+					checkBox_UseId.Checked        =  Enabled;
+					checkBox_SeparateRxId.Enabled =  Enabled;
+					checkBox_SeparateRxId.Checked = (Enabled ? this.rxFilterUsage.SeparateRxId : false);
+					textBox_Id.Enabled            =  Enabled;
+					textBox_RxId.Enabled          = (Enabled ? this.rxFilterUsage.SeparateRxId : false);
+
+					textBox_Id.Text = this.reportFormat.Id.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for report ID!
+					if (!this.rxFilterUsage.SeparateRxId) // Typical case = same ID for Tx and Rx.
+					{
+						textBox_RxId.Text = this.reportFormat.Id.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for report ID!
+					}
+					else // Special case = separate ID for Rx.
+					{
+						if (this.rxFilterUsage.AnyRxId)
+							textBox_RxId.Text = AnyIdIndication;
+						else
+							textBox_RxId.Text = this.rxFilterUsage.RxId.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for report ID!
+					}
 				}
-				else // Special case = separate ID for Rx.
+				else
 				{
-					if (this.rxFilterUsage.AnyRxId)
-						textBox_RxId.Text = AnyIdIndication;
-					else
-						textBox_RxId.Text = this.rxFilterUsage.RxId.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for report ID!
+					checkBox_UseId.Text        = "Use &ID:";
+					checkBox_SeparateRxId.Text = "";
+
+					checkBox_UseId.Checked        = false;
+					checkBox_SeparateRxId.Enabled = false;
+					checkBox_SeparateRxId.Checked = false;
+					textBox_Id.Enabled            = false;
+					textBox_RxId.Enabled          = false;
+
+					textBox_Id.Text   = "";
+					textBox_RxId.Text = "";
 				}
+
+				checkBox_PrependPayloadByteLength.Checked = (Enabled ? this.reportFormat.PrependPayloadByteLength : false);
+				checkBox_AppendTerminatingZero.Checked    = (Enabled ? this.reportFormat.AppendTerminatingZero : false);
+			////checkBox_FillLastReport.Checked           = (Enabled ? this.reportFormat.FillLastReport : false);
+				checkBox_FillLastReport.Checked           = true; // Windows HID.dll requires that outgoing reports are always filled!
+
+				reportFormatPreview.Format  = this.reportFormat;
+
+				var preset = MKY.IO.Usb.SerialHidReportFormatPresetEx.FromReportFormatAndRxFilterUsage(this.reportFormat, this.rxFilterUsage);
+
+				if (Enabled)
+				{
+					comboBox_Preset.SelectedItem = (MKY.IO.Usb.SerialHidReportFormatPresetEx)preset;
+
+					// Note that 'DropDownList' requires that an item like "[No preset selected]" is
+					// listed. It is not possible to set the 'SelectedIndex' to 'ControlEx.InvalidIndex'
+					// and then set an arbitrary 'Text';
+				}
+				else
+				{
+					comboBox_Preset.SelectedIndex = ControlEx.InvalidIndex;
+				}
+
+				string linkText;
+				string linkUri;
+				if (((MKY.IO.Usb.SerialHidReportFormatPresetEx)preset).HasInfoLink(out linkText, out linkUri))
+				{
+					linkLabel_Info.Links.Clear();
+					linkLabel_Info.Text = linkText;
+					linkLabel_Info.Links.Add(0, linkText.Length, linkUri);
+					linkLabel_Info.Visible = true;
+				}
+				else
+				{
+					linkLabel_Info.Visible = false;
+				}
+
+				if (Enabled)
+				{
+					comboBox_FlowControl.SelectedItem = (MKY.IO.Serial.Usb.SerialHidFlowControlEx)this.flowControl;
+				}
+				else
+				{
+					comboBox_FlowControl.SelectedIndex = ControlEx.InvalidIndex;
+				}
+
+				checkBox_AutoOpen.Checked = (Enabled ? this.autoOpen : false);
 			}
-			else
+			finally
 			{
-				checkBox_UseId.Text        = "Use &ID:";
-				checkBox_SeparateRxId.Text = "";
-
-				checkBox_UseId.Checked        = false;
-				checkBox_SeparateRxId.Enabled = false;
-				checkBox_SeparateRxId.Checked = false;
-				textBox_Id.Enabled            = false;
-				textBox_RxId.Enabled          = false;
-
-				textBox_Id.Text   = "";
-				textBox_RxId.Text = "";
+				this.isSettingControls.Leave();
 			}
-
-			checkBox_PrependPayloadByteLength.Checked = (Enabled ? this.reportFormat.PrependPayloadByteLength : false);
-			checkBox_AppendTerminatingZero.Checked    = (Enabled ? this.reportFormat.AppendTerminatingZero : false);
-		////checkBox_FillLastReport.Checked           = (Enabled ? this.reportFormat.FillLastReport : false);
-			checkBox_FillLastReport.Checked           = true; // Windows HID.dll requires that outgoing reports are always filled!
-
-			reportFormatPreview.Format  = this.reportFormat;
-
-			var preset = MKY.IO.Usb.SerialHidReportFormatPresetEx.FromReportFormatAndRxFilterUsage(this.reportFormat, this.rxFilterUsage);
-
-			if (Enabled)
-			{
-				comboBox_Preset.SelectedItem = (MKY.IO.Usb.SerialHidReportFormatPresetEx)preset;
-
-				// Note that 'DropDownList' requires that an item like "[No preset selected]" is
-				// listed. It is not possible to set the 'SelectedIndex' to 'ControlEx.InvalidIndex'
-				// and then set an arbitrary 'Text';
-			}
-			else
-			{
-				comboBox_Preset.SelectedIndex = ControlEx.InvalidIndex;
-			}
-
-			string linkText;
-			string linkUri;
-			if (((MKY.IO.Usb.SerialHidReportFormatPresetEx)preset).HasInfoLink(out linkText, out linkUri))
-			{
-				linkLabel_Info.Links.Clear();
-				linkLabel_Info.Text = linkText;
-				linkLabel_Info.Links.Add(0, linkText.Length, linkUri);
-				linkLabel_Info.Visible = true;
-			}
-			else
-			{
-				linkLabel_Info.Visible = false;
-			}
-
-			if (Enabled)
-			{
-				comboBox_FlowControl.SelectedItem = (MKY.IO.Serial.Usb.SerialHidFlowControlEx)this.flowControl;
-			}
-			else
-			{
-				comboBox_FlowControl.SelectedIndex = ControlEx.InvalidIndex;
-			}
-
-			checkBox_AutoOpen.Checked = (Enabled ? this.autoOpen : false);
-
-			this.isSettingControls.Leave();
 		}
 
 		#endregion

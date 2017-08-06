@@ -575,10 +575,16 @@ namespace YAT.View.Controls
 			if ((this.editFocusState == EditFocusState.EditIsInactive) && !this.command.IsText)
 			{
 				this.isSettingControls.Enter();
-				comboBox_SingleLineText.Text      = "";
-				comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
-				comboBox_SingleLineText.Font      = SystemFonts.DefaultFont;
-				this.isSettingControls.Leave();
+				try
+				{
+					comboBox_SingleLineText.Text      = "";
+					comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
+					comboBox_SingleLineText.Font      = SystemFonts.DefaultFont;
+				}
+				finally
+				{
+					this.isSettingControls.Leave();
+				}
 			}
 
 			SetEditFocusState(EditFocusState.EditHasFocus);
@@ -771,45 +777,57 @@ namespace YAT.View.Controls
 		private void InitializeControls()
 		{
 			this.isSettingControls.Enter();
-
-			comboBox_ExplicitDefaultRadix.Items.Clear();
-			comboBox_ExplicitDefaultRadix.Items.AddRange(Domain.RadixEx.GetItems());
-
-			this.isSettingControls.Leave();
+			try
+			{
+				comboBox_ExplicitDefaultRadix.Items.Clear();
+				comboBox_ExplicitDefaultRadix.Items.AddRange(Domain.RadixEx.GetItems());
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void SetExplicitDefaultRadixControls()
 		{
 			this.isSettingControls.Enter();
-
-			splitContainer_ExplicitDefaultRadix.Panel1Collapsed = !this.useExplicitDefaultRadix;
-
-			this.isSettingControls.Leave();
+			try
+			{
+				splitContainer_ExplicitDefaultRadix.Panel1Collapsed = !this.useExplicitDefaultRadix;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void SetRecentControls()
 		{
 			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			this.isSettingControls.Enter();
+			try
+			{
+				// Keep text field because Items.Clear() will reset this:
+				string text         = comboBox_SingleLineText.Text;
+				int selectionStart  = comboBox_SingleLineText.SelectionStart;
+				int selectionLength = comboBox_SingleLineText.SelectionLength;
 
-			// Keep text field because Items.Clear() will reset this:
-			string text         = comboBox_SingleLineText.Text;
-			int selectionStart  = comboBox_SingleLineText.SelectionStart;
-			int selectionLength = comboBox_SingleLineText.SelectionLength;
+				comboBox_SingleLineText.Items.Clear();
+				if ((this.recent != null) && (this.recent.Count > 0))
+					comboBox_SingleLineText.Items.AddRange(this.recent.ToArray());
 
-			comboBox_SingleLineText.Items.Clear();
-			if ((this.recent != null) && (this.recent.Count > 0))
-				comboBox_SingleLineText.Items.AddRange(this.recent.ToArray());
+				// Immediately update the updated item list:
+				comboBox_SingleLineText.Refresh();
 
-			// Immediately update the updated item list:
-			comboBox_SingleLineText.Refresh();
-
-			// Restore text field:
-			comboBox_SingleLineText.Text            = text;
-			comboBox_SingleLineText.SelectionStart  = selectionStart;
-			comboBox_SingleLineText.SelectionLength = selectionLength;
-
-			this.isSettingControls.Leave();
+				// Restore text field:
+				comboBox_SingleLineText.Text            = text;
+				comboBox_SingleLineText.SelectionStart  = selectionStart;
+				comboBox_SingleLineText.SelectionLength = selectionLength;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 			DebugCommandLeave();
 		}
 
@@ -820,15 +838,37 @@ namespace YAT.View.Controls
 		{
 			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			this.isSettingControls.Enter();
-
-			if (this.useExplicitDefaultRadix)
-				SelectionHelper.Select(comboBox_ExplicitDefaultRadix, (Domain.RadixEx)this.command.DefaultRadix, (Domain.RadixEx)this.command.DefaultRadix);
-			else
-				SelectionHelper.Deselect(comboBox_ExplicitDefaultRadix);
-
-			if (this.editFocusState == EditFocusState.EditIsInactive)
+			try
 			{
-				if (this.command.IsText)
+				if (this.useExplicitDefaultRadix)
+					SelectionHelper.Select(comboBox_ExplicitDefaultRadix, (Domain.RadixEx)this.command.DefaultRadix, (Domain.RadixEx)this.command.DefaultRadix);
+				else
+					SelectionHelper.Deselect(comboBox_ExplicitDefaultRadix);
+
+				if (this.editFocusState == EditFocusState.EditIsInactive)
+				{
+					if (this.command.IsText)
+					{
+						if (comboBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
+							comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
+
+						if (comboBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
+							comboBox_SingleLineText.Font = SystemFonts.DefaultFont;
+
+						comboBox_SingleLineText.Text = this.command.SingleLineText;
+					}
+					else
+					{
+						if (comboBox_SingleLineText.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+							comboBox_SingleLineText.ForeColor = SystemColors.GrayText;
+
+						if (comboBox_SingleLineText.Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
+							comboBox_SingleLineText.Font = DrawingEx.DefaultFontItalic;
+
+						comboBox_SingleLineText.Text = Command.EnterTextText;
+					}
+				}
+				else
 				{
 					if (comboBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
 						comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
@@ -836,37 +876,19 @@ namespace YAT.View.Controls
 					if (comboBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
 						comboBox_SingleLineText.Font = SystemFonts.DefaultFont;
 
-					comboBox_SingleLineText.Text = this.command.SingleLineText;
+					if (this.command.IsText && !this.command.IsPartialText)
+						comboBox_SingleLineText.Text = this.command.SingleLineText;
+					else
+						comboBox_SingleLineText.Text = "";
 				}
-				else
-				{
-					if (comboBox_SingleLineText.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-						comboBox_SingleLineText.ForeColor = SystemColors.GrayText;
 
-					if (comboBox_SingleLineText.Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
-						comboBox_SingleLineText.Font = DrawingEx.DefaultFontItalic;
-
-					comboBox_SingleLineText.Text = Command.EnterTextText;
-				}
+				SetCursorToEnd();
+				SetSendControls();
 			}
-			else
+			finally
 			{
-				if (comboBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-					comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
-
-				if (comboBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-					comboBox_SingleLineText.Font = SystemFonts.DefaultFont;
-
-				if (this.command.IsText && !this.command.IsPartialText)
-					comboBox_SingleLineText.Text = this.command.SingleLineText;
-				else
-					comboBox_SingleLineText.Text = "";
+				this.isSettingControls.Leave();
 			}
-
-			SetCursorToEnd();
-			SetSendControls();
-
-			this.isSettingControls.Leave();
 			DebugCommandLeave();
 		}
 
@@ -874,10 +896,14 @@ namespace YAT.View.Controls
 		{
 			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			this.isSettingControls.Enter();
-
-			comboBox_SingleLineText.SelectionStart = comboBox_SingleLineText.Text.Length;
-
-			this.isSettingControls.Leave();
+			try
+			{
+				comboBox_SingleLineText.SelectionStart = comboBox_SingleLineText.Text.Length;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 			DebugCommandLeave();
 		}
 
@@ -886,47 +912,51 @@ namespace YAT.View.Controls
 			bool isTextTerminal = (this.terminalType == Domain.TerminalType.Text);
 
 			this.isSettingControls.Enter();
-
-			// Prepare the button properties based on state and settings.
-			//
-			// Attention:
-			// Similar code exists in the following locations:
-			//  > YAT.View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
-			//  > YAT.View.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
-			// Changes here may have to be applied there too.
-
-			var text = "Send Text (F3)";
-			if (WithoutEolIsRequestedAndAllowed)
-				text = "Send Text w/o EOL (Ctrl+F3)";
-
-			bool enabled = this.terminalIsReadyToSend;
-			if (this.sendImmediately)
+			try
 			{
-				if (isTextTerminal)
-					text = "Send EOL (F3)";
-				else
-					enabled = false;
+				// Prepare the button properties based on state and settings.
+				//
+				// Attention:
+				// Similar code exists in the following locations:
+				//  > YAT.View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
+				//  > YAT.View.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
+				// Changes here may have to be applied there too.
+
+				var text = "Send Text (F3)";
+				if (WithoutEolIsRequestedAndAllowed)
+					text = "Send Text w/o EOL (Ctrl+F3)";
+
+				bool enabled = this.terminalIsReadyToSend;
+				if (this.sendImmediately)
+				{
+					if (isTextTerminal)
+						text = "Send EOL (F3)";
+					else
+						enabled = false;
+				}
+
+				string commandText = "";
+				if (!string.IsNullOrEmpty(comboBox_SingleLineText.Text))
+					commandText = comboBox_SingleLineText.Text;
+
+				string toolTipText = @"Send """ + commandText + @"""";
+				if (this.sendImmediately)
+				{
+					if (isTextTerminal)
+						toolTipText = "Send EOL";
+					else
+						toolTipText = "";
+				}
+
+				// Set the button properties:
+				button_Send.Text = text;
+				button_Send.Enabled = enabled;
+				toolTip.SetToolTip(button_Send, toolTipText);
 			}
-
-			string commandText = "";
-			if (!string.IsNullOrEmpty(comboBox_SingleLineText.Text))
-				commandText = comboBox_SingleLineText.Text;
-
-			string toolTipText = @"Send """ + commandText + @"""";
-			if (this.sendImmediately)
+			finally
 			{
-				if (isTextTerminal)
-					toolTipText = "Send EOL";
-				else
-					toolTipText = "";
+				this.isSettingControls.Leave();
 			}
-
-			// Set the button properties:
-			button_Send.Text = text;
-			button_Send.Enabled = enabled;
-			toolTip.SetToolTip(button_Send, toolTipText);
-
-			this.isSettingControls.Leave();
 		}
 
 		#endregion
@@ -981,10 +1011,16 @@ namespace YAT.View.Controls
 		{
 			// Indicate multi-line text:
 			this.isSettingControls.Enter();
-			comboBox_SingleLineText.Text      = Command.MultiLineTextText;
-			comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
-			comboBox_SingleLineText.Font      = SystemFonts.DefaultFont;
-			this.isSettingControls.Leave();
+			try
+			{
+				comboBox_SingleLineText.Text      = Command.MultiLineTextText;
+				comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
+				comboBox_SingleLineText.Font      = SystemFonts.DefaultFont;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 
 			// Calculate startup location:
 			Rectangle area = requestingControl.RectangleToScreen(requestingControl.DisplayRectangle);

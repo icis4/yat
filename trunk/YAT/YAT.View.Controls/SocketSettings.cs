@@ -272,39 +272,41 @@ namespace YAT.View.Controls
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
+			try
+			{
+				// TCP/IP client:
+				bool isTcp = ((MKY.IO.Serial.Socket.SocketTypeEx)this.socketType).IsTcp;
+				bool enabledAndTcpClient = (Enabled && (this.socketType == MKY.IO.Serial.Socket.SocketType.TcpClient));
+				bool autoReconnectEnabled = TcpClientAutoReconnect.Enabled;
 
-			// --- TCP/IP Client ---
+				panel_Tcp.Visible = isTcp;
 
-			bool isTcp = ((MKY.IO.Serial.Socket.SocketTypeEx)this.socketType).IsTcp;
-			bool enabledAndTcpClient = (Enabled && (this.socketType == MKY.IO.Serial.Socket.SocketType.TcpClient));
-			bool autoReconnectEnabled = TcpClientAutoReconnect.Enabled;
+				checkBox_TcpClientAutoReconnect.Enabled = enabledAndTcpClient;
+				checkBox_TcpClientAutoReconnect.Checked = autoReconnectEnabled;
 
-			panel_Tcp.Visible = isTcp;
+				textBox_TcpClientAutoReconnectInterval.Enabled = (enabledAndTcpClient && autoReconnectEnabled);
+				textBox_TcpClientAutoReconnectInterval.Text    = TcpClientAutoReconnect.Interval.ToString(CultureInfo.CurrentCulture);
 
-			checkBox_TcpClientAutoReconnect.Enabled = enabledAndTcpClient;
-			checkBox_TcpClientAutoReconnect.Checked = autoReconnectEnabled;
+				label_TcpClientAutoReconnectInterval.Enabled     = enabledAndTcpClient;
+				label_TcpClientAutoReconnectIntervalUnit.Enabled = enabledAndTcpClient;
 
-			textBox_TcpClientAutoReconnectInterval.Enabled = (enabledAndTcpClient && autoReconnectEnabled);
-			textBox_TcpClientAutoReconnectInterval.Text    = TcpClientAutoReconnect.Interval.ToString(CultureInfo.CurrentCulture);
+				// UDP/IP server:
+				bool isUdp = ((MKY.IO.Serial.Socket.SocketTypeEx)this.socketType).IsUdp;
+				bool enabledAndUdpServer = (Enabled && (this.socketType == MKY.IO.Serial.Socket.SocketType.UdpServer));
 
-			label_TcpClientAutoReconnectInterval.Enabled     = enabledAndTcpClient;
-			label_TcpClientAutoReconnectIntervalUnit.Enabled = enabledAndTcpClient;
+				panel_Udp.Visible = isUdp;
 
-			// --- UDP/IP Server ---
-
-			bool isUdp = ((MKY.IO.Serial.Socket.SocketTypeEx)this.socketType).IsUdp;
-			bool enabledAndUdpServer = (Enabled && (this.socketType == MKY.IO.Serial.Socket.SocketType.UdpServer));
-
-			panel_Udp.Visible = isUdp;
-
-			radioButton_UdpServerSendMode_MostRecent.Enabled = enabledAndUdpServer;
-			radioButton_UdpServerSendMode_MostRecent.Checked = (UdpServerSendMode == MKY.IO.Serial.Socket.UdpServerSendMode.MostRecent);
-			radioButton_UdpServerSendMode_First.Enabled      = enabledAndUdpServer;
-			radioButton_UdpServerSendMode_First.Checked      = (UdpServerSendMode == MKY.IO.Serial.Socket.UdpServerSendMode.First);
-			radioButton_UdpServerSendMode_None.Enabled       = enabledAndUdpServer;
-			radioButton_UdpServerSendMode_None.Checked       = (UdpServerSendMode == MKY.IO.Serial.Socket.UdpServerSendMode.None);
-
-			this.isSettingControls.Leave();
+				radioButton_UdpServerSendMode_MostRecent.Enabled = enabledAndUdpServer;
+				radioButton_UdpServerSendMode_MostRecent.Checked = (UdpServerSendMode == MKY.IO.Serial.Socket.UdpServerSendMode.MostRecent);
+				radioButton_UdpServerSendMode_First.Enabled      = enabledAndUdpServer;
+				radioButton_UdpServerSendMode_First.Checked      = (UdpServerSendMode == MKY.IO.Serial.Socket.UdpServerSendMode.First);
+				radioButton_UdpServerSendMode_None.Enabled       = enabledAndUdpServer;
+				radioButton_UdpServerSendMode_None.Checked       = (UdpServerSendMode == MKY.IO.Serial.Socket.UdpServerSendMode.None);
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		#endregion

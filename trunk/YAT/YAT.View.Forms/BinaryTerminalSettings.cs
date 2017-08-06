@@ -191,19 +191,23 @@ namespace YAT.View.Forms
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
+			try
+			{
+				if (this.settingsInEdit.SeparateTxRxDisplay)
+					groupBox_TxDisplay.Text = "&Tx and Rx";
+				else
+					groupBox_TxDisplay.Text = "&Tx";
 
-			if (this.settingsInEdit.SeparateTxRxDisplay)
-				groupBox_TxDisplay.Text = "&Tx and Rx";
-			else
-				groupBox_TxDisplay.Text = "&Tx";
+				binaryTerminalSettingsSet_Tx.Settings = this.settingsInEdit.TxDisplay;
 
-			binaryTerminalSettingsSet_Tx.Settings = this.settingsInEdit.TxDisplay;
-
-			checkBox_SeparateTxRxDisplay.Checked = this.settingsInEdit.SeparateTxRxDisplay;
-			groupBox_RxDisplay.Enabled = this.settingsInEdit.SeparateTxRxDisplay;
-			binaryTerminalSettingsSet_Rx.Settings = this.settingsInEdit.RxDisplay;
-
-			this.isSettingControls.Leave();
+				checkBox_SeparateTxRxDisplay.Checked = this.settingsInEdit.SeparateTxRxDisplay;
+				groupBox_RxDisplay.Enabled = this.settingsInEdit.SeparateTxRxDisplay;
+				binaryTerminalSettingsSet_Rx.Settings = this.settingsInEdit.RxDisplay;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		#endregion

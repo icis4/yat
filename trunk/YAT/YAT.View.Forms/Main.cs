@@ -486,12 +486,16 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_MainMenu_File_SetChildMenuItems()
 		{
 			this.isSettingControls.Enter();
-
-			bool childIsReady = (ActiveMdiChild != null);
-			toolStripMenuItem_MainMenu_File_CloseAll.Enabled = childIsReady;
-			toolStripMenuItem_MainMenu_File_SaveAll.Enabled  = childIsReady;
-
-			this.isSettingControls.Leave();
+			try
+			{
+				bool childIsReady = (ActiveMdiChild != null);
+				toolStripMenuItem_MainMenu_File_CloseAll.Enabled = childIsReady;
+				toolStripMenuItem_MainMenu_File_SaveAll.Enabled  = childIsReady;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		/// <remarks>
@@ -503,10 +507,14 @@ namespace YAT.View.Forms
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ValidateAll();
 
 			this.isSettingControls.Enter();
-
-			toolStripMenuItem_MainMenu_File_Recent.Enabled = (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count > 0);
-
-			this.isSettingControls.Leave();
+			try
+			{
+				toolStripMenuItem_MainMenu_File_Recent.Enabled = (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count > 0);
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void toolStripMenuItem_MainMenu_File_DropDownOpening(object sender, EventArgs e)
@@ -547,18 +555,22 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_MainMenu_File_Workspace_SetMenuItems()
 		{
 			this.isSettingControls.Enter();
+			try
+			{
+				bool workspaceIsReady = (this.workspace != null);
 
-			bool workspaceIsReady = (this.workspace != null);
+				bool workspaceFileIsWritable = false;
+				if (workspaceIsReady)
+					workspaceFileIsWritable = this.workspace.SettingsFileIsWritable;
 
-			bool workspaceFileIsWritable = false;
-			if (workspaceIsReady)
-				workspaceFileIsWritable = this.workspace.SettingsFileIsWritable;
-
-			toolStripMenuItem_MainMenu_File_Workspace_Close.Enabled  = workspaceIsReady;
-			toolStripMenuItem_MainMenu_File_Workspace_Save.Enabled   = workspaceIsReady && workspaceFileIsWritable;
-			toolStripMenuItem_MainMenu_File_Workspace_SaveAs.Enabled = workspaceIsReady;
-
-			this.isSettingControls.Leave();
+				toolStripMenuItem_MainMenu_File_Workspace_Close.Enabled  = workspaceIsReady;
+				toolStripMenuItem_MainMenu_File_Workspace_Save.Enabled   = workspaceIsReady && workspaceFileIsWritable;
+				toolStripMenuItem_MainMenu_File_Workspace_SaveAs.Enabled = workspaceIsReady;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void toolStripMenuItem_MainMenu_File_Workspace_DropDownOpening(object sender, EventArgs e)
@@ -617,13 +629,17 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_MainMenu_Log_SetMenuItems()
 		{
 			this.isSettingControls.Enter();
-
-			bool childIsReady = (ActiveMdiChild != null);
-			toolStripMenuItem_MainMenu_Log_AllOn.Enabled    = childIsReady;
-			toolStripMenuItem_MainMenu_Log_AllOff.Enabled   = childIsReady;
-			toolStripMenuItem_MainMenu_Log_AllClear.Enabled = childIsReady;
-
-			this.isSettingControls.Leave();
+			try
+			{
+				bool childIsReady = (ActiveMdiChild != null);
+				toolStripMenuItem_MainMenu_Log_AllOn.Enabled    = childIsReady;
+				toolStripMenuItem_MainMenu_Log_AllOff.Enabled   = childIsReady;
+				toolStripMenuItem_MainMenu_Log_AllClear.Enabled = childIsReady;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void toolStripMenuItem_MainMenu_Log_DropDownOpening(object sender, EventArgs e)
@@ -664,23 +680,28 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_MainMenu_Window_SetChildMenuItems(bool isDropDownOpening)
 		{
-			this.isSettingControls.Enter();
-
-			bool workspaceIsReady = (this.workspace != null);
-			toolStripMenuItem_MainMenu_Window_AlwaysOnTop.Enabled = workspaceIsReady;
-
-			bool alwaysOnTop = ((this.workspace != null) ? this.workspace.SettingsRoot.Workspace.AlwaysOnTop : false);
-			toolStripMenuItem_MainMenu_Window_AlwaysOnTop.Checked = alwaysOnTop;
-
 			bool childIsReady = (ActiveMdiChild != null);
-			toolStripMenuItem_MainMenu_Window_Automatic.Enabled      = childIsReady;
-			toolStripMenuItem_MainMenu_Window_Cascade.Enabled        = childIsReady;
-			toolStripMenuItem_MainMenu_Window_TileHorizontal.Enabled = childIsReady;
-			toolStripMenuItem_MainMenu_Window_TileVertical.Enabled   = childIsReady;
-			toolStripMenuItem_MainMenu_Window_Minimize.Enabled       = childIsReady;
-			toolStripMenuItem_MainMenu_Window_Maximize.Enabled       = childIsReady;
 
-			this.isSettingControls.Leave();
+			this.isSettingControls.Enter();
+			try
+			{
+				bool workspaceIsReady = (this.workspace != null);
+				toolStripMenuItem_MainMenu_Window_AlwaysOnTop.Enabled = workspaceIsReady;
+
+				bool alwaysOnTop = ((this.workspace != null) ? this.workspace.SettingsRoot.Workspace.AlwaysOnTop : false);
+				toolStripMenuItem_MainMenu_Window_AlwaysOnTop.Checked = alwaysOnTop;
+
+				toolStripMenuItem_MainMenu_Window_Automatic.Enabled      = childIsReady;
+				toolStripMenuItem_MainMenu_Window_Cascade.Enabled        = childIsReady;
+				toolStripMenuItem_MainMenu_Window_TileHorizontal.Enabled = childIsReady;
+				toolStripMenuItem_MainMenu_Window_TileVertical.Enabled   = childIsReady;
+				toolStripMenuItem_MainMenu_Window_Minimize.Enabled       = childIsReady;
+				toolStripMenuItem_MainMenu_Window_Maximize.Enabled       = childIsReady;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 
 			// This is a workaround to the following bugs:
 			//  > #119 "MDI child list isn't always updated"
@@ -697,7 +718,7 @@ namespace YAT.View.Forms
 					ActivateMdiChild(null);
 					ActivateMdiChild(f);
 				}
-#if (FALSE)
+			#if (FALSE)
 				// \fixme:
 				// I don't know how to fix bug #31 "MDI window list invisible if no MDI children".
 				// The following code doesn't fix it. Probably a .NET bug... Added to limitations.
@@ -715,7 +736,7 @@ namespace YAT.View.Forms
 					- and/or -
 					ActivateMdiChild(null);
 				}
-#endif
+			#endif
 			}
 		}
 
@@ -830,150 +851,154 @@ namespace YAT.View.Forms
 		private void toolStripButton_MainTool_SetControls()
 		{
 			this.isSettingControls.Enter();
-
-			bool childIsReady = (ActiveMdiChild != null);
-
-			bool terminalFileIsWritable = false;
-			if (childIsReady)
-				terminalFileIsWritable = ((Terminal)ActiveMdiChild).SettingsFileIsWritable;
-
-			bool terminalIsStopped = false;
-			if (childIsReady)
-				terminalIsStopped = ((Terminal)ActiveMdiChild).IsStopped;
-
-			bool terminalIsStarted = false;
-			if (childIsReady)
-				terminalIsStarted = ((Terminal)ActiveMdiChild).IsStarted;
-
-			bool radixIsReady = false;
-			Domain.Radix radix = Domain.Radix.None;
-			if (childIsReady)
+			try
 			{
-				Model.Terminal terminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
-				if ((terminal != null) && (!terminal.IsDisposed))
+				bool childIsReady = (ActiveMdiChild != null);
+
+				bool terminalFileIsWritable = false;
+				if (childIsReady)
+					terminalFileIsWritable = ((Terminal)ActiveMdiChild).SettingsFileIsWritable;
+
+				bool terminalIsStopped = false;
+				if (childIsReady)
+					terminalIsStopped = ((Terminal)ActiveMdiChild).IsStopped;
+
+				bool terminalIsStarted = false;
+				if (childIsReady)
+					terminalIsStarted = ((Terminal)ActiveMdiChild).IsStarted;
+
+				bool radixIsReady = false;
+				var radix = Domain.Radix.None;
+				if (childIsReady)
 				{
-					radixIsReady = !(terminal.SettingsRoot.Display.SeparateTxRxRadix);
-					if (radixIsReady)
-						radix = terminal.SettingsRoot.Display.TxRadix;
+					Model.Terminal terminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+					if ((terminal != null) && (!terminal.IsDisposed))
+					{
+						radixIsReady = !(terminal.SettingsRoot.Display.SeparateTxRxRadix);
+						if (radixIsReady)
+							radix = terminal.SettingsRoot.Display.TxRadix;
+					}
 				}
-			}
 
-			bool logIsOn = false;
-			if (childIsReady)
-				logIsOn = ((Terminal)ActiveMdiChild).LogIsOn;
+				bool logIsOn = false;
+				if (childIsReady)
+					logIsOn = ((Terminal)ActiveMdiChild).LogIsOn;
 
-			bool logFileExists = false;
-			if (childIsReady)
-				logFileExists = ((Terminal)ActiveMdiChild).LogFileExists;
+				bool logFileExists = false;
+				if (childIsReady)
+					logFileExists = ((Terminal)ActiveMdiChild).LogFileExists;
 
-			toolStripButton_MainTool_File_Save.Enabled         = childIsReady && terminalFileIsWritable;
-			toolStripButton_MainTool_Terminal_Start.Enabled    = childIsReady && terminalIsStopped;
-			toolStripButton_MainTool_Terminal_Stop.Enabled     = childIsReady && terminalIsStarted;
-			toolStripButton_MainTool_Terminal_Settings.Enabled = childIsReady;
+				toolStripButton_MainTool_File_Save.Enabled         = childIsReady && terminalFileIsWritable;
+				toolStripButton_MainTool_Terminal_Start.Enabled    = childIsReady && terminalIsStopped;
+				toolStripButton_MainTool_Terminal_Stop.Enabled     = childIsReady && terminalIsStarted;
+				toolStripButton_MainTool_Terminal_Settings.Enabled = childIsReady;
 
-			toolStripButton_MainTool_Terminal_Radix_String.Enabled  = childIsReady && radixIsReady;
-			toolStripButton_MainTool_Terminal_Radix_Char.Enabled    = childIsReady && radixIsReady;
-			toolStripButton_MainTool_Terminal_Radix_Bin.Enabled     = childIsReady && radixIsReady;
-			toolStripButton_MainTool_Terminal_Radix_Oct.Enabled     = childIsReady && radixIsReady;
-			toolStripButton_MainTool_Terminal_Radix_Dec.Enabled     = childIsReady && radixIsReady;
-			toolStripButton_MainTool_Terminal_Radix_Hex.Enabled     = childIsReady && radixIsReady;
-			toolStripButton_MainTool_Terminal_Radix_Unicode.Enabled = childIsReady && radixIsReady;
+				toolStripButton_MainTool_Terminal_Radix_String.Enabled  = childIsReady && radixIsReady;
+				toolStripButton_MainTool_Terminal_Radix_Char.Enabled    = childIsReady && radixIsReady;
+				toolStripButton_MainTool_Terminal_Radix_Bin.Enabled     = childIsReady && radixIsReady;
+				toolStripButton_MainTool_Terminal_Radix_Oct.Enabled     = childIsReady && radixIsReady;
+				toolStripButton_MainTool_Terminal_Radix_Dec.Enabled     = childIsReady && radixIsReady;
+				toolStripButton_MainTool_Terminal_Radix_Hex.Enabled     = childIsReady && radixIsReady;
+				toolStripButton_MainTool_Terminal_Radix_Unicode.Enabled = childIsReady && radixIsReady;
 
-			toolStripButton_MainTool_Terminal_Radix_String.Checked  = (radix == Domain.Radix.String);
-			toolStripButton_MainTool_Terminal_Radix_Char.Checked    = (radix == Domain.Radix.Char);
-			toolStripButton_MainTool_Terminal_Radix_Bin.Checked     = (radix == Domain.Radix.Bin);
-			toolStripButton_MainTool_Terminal_Radix_Oct.Checked     = (radix == Domain.Radix.Oct);
-			toolStripButton_MainTool_Terminal_Radix_Dec.Checked     = (radix == Domain.Radix.Dec);
-			toolStripButton_MainTool_Terminal_Radix_Hex.Checked     = (radix == Domain.Radix.Hex);
-			toolStripButton_MainTool_Terminal_Radix_Unicode.Checked = (radix == Domain.Radix.Unicode);
+				toolStripButton_MainTool_Terminal_Radix_String.Checked  = (radix == Domain.Radix.String);
+				toolStripButton_MainTool_Terminal_Radix_Char.Checked    = (radix == Domain.Radix.Char);
+				toolStripButton_MainTool_Terminal_Radix_Bin.Checked     = (radix == Domain.Radix.Bin);
+				toolStripButton_MainTool_Terminal_Radix_Oct.Checked     = (radix == Domain.Radix.Oct);
+				toolStripButton_MainTool_Terminal_Radix_Dec.Checked     = (radix == Domain.Radix.Dec);
+				toolStripButton_MainTool_Terminal_Radix_Hex.Checked     = (radix == Domain.Radix.Hex);
+				toolStripButton_MainTool_Terminal_Radix_Unicode.Checked = (radix == Domain.Radix.Unicode);
 
-			bool arVisible = false;
-			bool arEnabled = false;
+				bool arVisible = false;
+				bool arEnabled = false;
 
-			AutoTriggerEx[] arTriggerItems = AutoTriggerEx.GetFixedItems();
-			AutoTriggerEx   arTrigger      = AutoTrigger.None;
+				AutoTriggerEx[] arTriggerItems = AutoTriggerEx.GetFixedItems();
+				AutoTriggerEx   arTrigger      = AutoTrigger.None;
 
-			AutoResponseEx[] arResponseItems = AutoResponseEx.GetFixedItems();
-			AutoResponseEx   arResponse      = AutoResponse.None;
+				AutoResponseEx[] arResponseItems = AutoResponseEx.GetFixedItems();
+				AutoResponseEx   arResponse      = AutoResponse.None;
 
-			if (childIsReady)
-			{
-				Model.Terminal terminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
-				if ((terminal != null) && (!terminal.IsDisposed))
+				if (childIsReady)
 				{
-					arVisible       = terminal.SettingsRoot.AutoResponse.Visible;
-					arEnabled       = terminal.SettingsRoot.AutoResponse.IsActive;
+					Model.Terminal terminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+					if ((terminal != null) && (!terminal.IsDisposed))
+					{
+						arVisible       = terminal.SettingsRoot.AutoResponse.Visible;
+						arEnabled       = terminal.SettingsRoot.AutoResponse.IsActive;
 
-					arTriggerItems  = terminal.SettingsRoot.GetValidAutoResponseTriggerItems();
-					arTrigger       = terminal.SettingsRoot.AutoResponse.Trigger;
+						arTriggerItems  = terminal.SettingsRoot.GetValidAutoResponseTriggerItems();
+						arTrigger       = terminal.SettingsRoot.AutoResponse.Trigger;
 
-					arResponseItems = terminal.SettingsRoot.GetValidAutoResponseResponseItems();
-					arResponse      = terminal.SettingsRoot.AutoResponse.Response;
+						arResponseItems = terminal.SettingsRoot.GetValidAutoResponseResponseItems();
+						arResponse      = terminal.SettingsRoot.AutoResponse.Response;
+					}
 				}
-			}
 
-			toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Enabled = childIsReady;
+				toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Enabled = childIsReady;
 
-			if (arVisible)
-			{
-				toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Hide AutoResponse command";
-
-				// Attention:
-				// Similar code exists in the following location:
-				//  > View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
-				// Changes here may have to be applied there too.
-
-				if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
+				if (arVisible)
 				{
-					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Visible = true;
-					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Enabled = childIsReady;
+					toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Hide AutoResponse command";
+
+					// Attention:
+					// Similar code exists in the following location:
+					//  > View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
+					// Changes here may have to be applied there too.
+
+					if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
+					{
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Visible = true;
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Enabled = childIsReady;
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.Clear();
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.AddRange(arTriggerItems);
+
+						SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger, arTrigger, new Command(arTrigger).SingleLineText); // No explicit default radix available (yet).
+
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Visible = true;
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Enabled = childIsReady;
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.Clear();
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.AddRange(arResponseItems);
+
+						SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_AutoResponse_Response, arResponse, new Command(arResponse).SingleLineText); // No explicit default radix available (yet).
+					}
+
+					toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Visible = true;
+					toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Enabled = arEnabled;
+				}
+				else
+				{
+					toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Show AutoResponse command";
+
+					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Visible = false;
+					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Enabled = false;
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.Clear();
-					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.AddRange(arTriggerItems);
 
-					SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger, arTrigger, new Command(arTrigger).SingleLineText); // No explicit default radix available (yet).
-
-					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Visible = true;
-					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Enabled = childIsReady;
+					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Visible = false;
+					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Enabled = false;
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.Clear();
-					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.AddRange(arResponseItems);
 
-					SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_AutoResponse_Response, arResponse, new Command(arResponse).SingleLineText); // No explicit default radix available (yet).
+					toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Visible = false;
+					toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Enabled = false;
 				}
 
-				toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Visible = true;
-				toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Enabled = arEnabled;
+				toolStripButton_MainTool_Terminal_Clear.Enabled             = childIsReady;
+				toolStripButton_MainTool_Terminal_Refresh.Enabled           = childIsReady;
+				toolStripButton_MainTool_Terminal_CopyToClipboard.Enabled   = childIsReady;
+				toolStripButton_MainTool_Terminal_SaveToFile.Enabled        = childIsReady;
+				toolStripButton_MainTool_Terminal_Print.Enabled             = childIsReady;
+
+				toolStripButton_MainTool_Terminal_Log_Settings.Enabled      = childIsReady;
+				toolStripButton_MainTool_Terminal_Log_On.Enabled            = childIsReady && !logIsOn;
+				toolStripButton_MainTool_Terminal_Log_Off.Enabled           = childIsReady &&  logIsOn;
+				toolStripButton_MainTool_Terminal_Log_OpenFile.Enabled      = childIsReady &&  logFileExists;
+				toolStripButton_MainTool_Terminal_Log_OpenDirectory.Enabled = childIsReady;
+
+				toolStripButton_MainTool_Terminal_Format.Enabled            = childIsReady;
 			}
-			else
+			finally
 			{
-				toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Show AutoResponse command";
-
-				toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Visible = false;
-				toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Enabled = false;
-				toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.Clear();
-
-				toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Visible = false;
-				toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Enabled = false;
-				toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.Clear();
-
-				toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Visible = false;
-				toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Enabled = false;
+				this.isSettingControls.Leave();
 			}
-
-			toolStripButton_MainTool_Terminal_Clear.Enabled             = childIsReady;
-			toolStripButton_MainTool_Terminal_Refresh.Enabled           = childIsReady;
-			toolStripButton_MainTool_Terminal_CopyToClipboard.Enabled   = childIsReady;
-			toolStripButton_MainTool_Terminal_SaveToFile.Enabled        = childIsReady;
-			toolStripButton_MainTool_Terminal_Print.Enabled             = childIsReady;
-
-			toolStripButton_MainTool_Terminal_Log_Settings.Enabled      = childIsReady;
-			toolStripButton_MainTool_Terminal_Log_On.Enabled            = childIsReady && !logIsOn;
-			toolStripButton_MainTool_Terminal_Log_Off.Enabled           = childIsReady &&  logIsOn;
-			toolStripButton_MainTool_Terminal_Log_OpenFile.Enabled      = childIsReady &&  logFileExists;
-			toolStripButton_MainTool_Terminal_Log_OpenDirectory.Enabled = childIsReady;
-
-			toolStripButton_MainTool_Terminal_Format.Enabled            = childIsReady;
-
-			this.isSettingControls.Leave();
 		}
 
 		private void toolStripButton_MainTool_File_New_Click(object sender, EventArgs e)
@@ -1197,9 +1222,16 @@ namespace YAT.View.Forms
 
 			// Update and show recent files:
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ValidateAll();
+
 			this.isSettingControls.Enter();
-			toolStripMenuItem_MainContextMenu_File_Recent.Enabled = (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count > 0);
-			this.isSettingControls.Leave();
+			try
+			{
+				toolStripMenuItem_MainContextMenu_File_Recent.Enabled = (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count > 0);
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void toolStripMenuItem_MainContextMenu_File_New_Click(object sender, EventArgs e)
@@ -1252,34 +1284,38 @@ namespace YAT.View.Forms
 		private void contextMenuStrip_FileRecent_SetRecentMenuItems()
 		{
 			this.isSettingControls.Enter();
-
-			// Hide all:
-			for (int i = 0; i < Model.Settings.RecentFileSettings.MaxFilePaths; i++)
+			try
 			{
-				string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1);
-				this.menuItems_recent[i].Text = "&" + prefix;
-				this.menuItems_recent[i].Visible = false;
-			}
-
-			// Show valid:
-			for (int i = 0; i < ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count; i++)
-			{
-				string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1);
-				string file = PathEx.Limit(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i].Item, 60);
-				if (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i] != null)
+				// Hide all:
+				for (int i = 0; i < Model.Settings.RecentFileSettings.MaxFilePaths; i++)
 				{
-					this.menuItems_recent[i].Text = "&" + prefix + file;
-					this.menuItems_recent[i].Enabled = true;
-				}
-				else
-				{
+					string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1);
 					this.menuItems_recent[i].Text = "&" + prefix;
-					this.menuItems_recent[i].Enabled = false;
+					this.menuItems_recent[i].Visible = false;
 				}
-				this.menuItems_recent[i].Visible = true;
-			}
 
-			this.isSettingControls.Leave();
+				// Show valid:
+				for (int i = 0; i < ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count; i++)
+				{
+					string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1);
+					string file = PathEx.Limit(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i].Item, 60);
+					if (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i] != null)
+					{
+						this.menuItems_recent[i].Text = "&" + prefix + file;
+						this.menuItems_recent[i].Enabled = true;
+					}
+					else
+					{
+						this.menuItems_recent[i].Text = "&" + prefix;
+						this.menuItems_recent[i].Enabled = false;
+					}
+					this.menuItems_recent[i].Visible = true;
+				}
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		/// <summary>
@@ -1655,11 +1691,15 @@ namespace YAT.View.Forms
 		private void SetMainControls()
 		{
 			this.isSettingControls.Enter();
-
-			toolStripStatusLabel_MainStatus_TerminalInfo.Visible = ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo;
-			toolStripStatusLabel_MainStatus_Chrono.Visible       = ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono;
-
-			this.isSettingControls.Leave();
+			try
+			{
+				toolStripStatusLabel_MainStatus_TerminalInfo.Visible = ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo;
+				toolStripStatusLabel_MainStatus_Chrono.Visible       = ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void SetChildControls()

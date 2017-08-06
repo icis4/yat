@@ -406,122 +406,138 @@ namespace YAT.View.Controls
 		private void InitializeControls()
 		{
 			this.isSettingControls.Enter();
-
-			comboBox_ExplicitDefaultRadix.Items.Clear();
-			comboBox_ExplicitDefaultRadix.Items.AddRange(Domain.RadixEx.GetItems());
-
-			this.isSettingControls.Leave();
+			try
+			{
+				comboBox_ExplicitDefaultRadix.Items.Clear();
+				comboBox_ExplicitDefaultRadix.Items.AddRange(Domain.RadixEx.GetItems());
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void SetExplicitDefaultRadixControls()
 		{
 			this.isSettingControls.Enter();
-
-			splitContainer_ExplicitDefaultRadix.Panel1Collapsed = !this.useExplicitDefaultRadix;
-
-			this.isSettingControls.Leave();
+			try
+			{
+				splitContainer_ExplicitDefaultRadix.Panel1Collapsed = !this.useExplicitDefaultRadix;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void SetRecentAndCommandControls()
 		{
 			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			this.isSettingControls.Enter();
-
-			if (this.useExplicitDefaultRadix)
-				SelectionHelper.Select(comboBox_ExplicitDefaultRadix, (Domain.RadixEx)this.command.DefaultRadix, (Domain.RadixEx)this.command.DefaultRadix);
-			else
-				SelectionHelper.Deselect(comboBox_ExplicitDefaultRadix);
-
-			pathComboBox_FilePath.Items.Clear();
-
-			// Fill the drop down list, depending on the amount of recent files:
-			if ((this.recent != null) && (this.recent.Count > 0))
+			try
 			{
-				// Add the current command, or "<Set a file...>", to the top of the list:
-				if (this.command.IsFilePath)
+				if (this.useExplicitDefaultRadix)
+					SelectionHelper.Select(comboBox_ExplicitDefaultRadix, (Domain.RadixEx)this.command.DefaultRadix, (Domain.RadixEx)this.command.DefaultRadix);
+				else
+					SelectionHelper.Deselect(comboBox_ExplicitDefaultRadix);
+
+				pathComboBox_FilePath.Items.Clear();
+
+				// Fill the drop down list, depending on the amount of recent files:
+				if ((this.recent != null) && (this.recent.Count > 0))
 				{
-					// Add the current command only if not already contained in recent files:
-					if (!this.recent.Contains(this.command))
+					// Add the current command, or "<Set a file...>", to the top of the list:
+					if (this.command.IsFilePath)
+					{
+						// Add the current command only if not already contained in recent files:
+						if (!this.recent.Contains(this.command))
+							pathComboBox_FilePath.Items.Add(this.command);
+					}
+					else
+					{
+						pathComboBox_FilePath.Items.Add(Command.UndefinedFilePathText);
+					}
+
+					// Add the recent files:
+					pathComboBox_FilePath.Items.AddRange(this.recent.ToArray());
+				}
+				else
+				{
+					if (this.command.IsFilePath)
 						pathComboBox_FilePath.Items.Add(this.command);
-				}
-				else
-				{
-					pathComboBox_FilePath.Items.Add(Command.UndefinedFilePathText);
+					else
+						pathComboBox_FilePath.Items.Add(Command.UndefinedFilePathText);
 				}
 
-				// Add the recent files:
-				pathComboBox_FilePath.Items.AddRange(this.recent.ToArray());
-			}
-			else
-			{
+				// Restore the current command and set the combo box' properties:
+				int selectedIndex = ControlEx.InvalidIndex;
+
 				if (this.command.IsFilePath)
-					pathComboBox_FilePath.Items.Add(this.command);
-				else
-					pathComboBox_FilePath.Items.Add(Command.UndefinedFilePathText);
-			}
-
-			// Restore the current command and set the combo box' properties:
-			int selectedIndex = ControlEx.InvalidIndex;
-
-			if (this.command.IsFilePath)
-			{
-				for (int i = 0; i < pathComboBox_FilePath.Items.Count; i++)
 				{
-					var c = (pathComboBox_FilePath.Items[i] as Command);
-					if ((c != null) && (c == this.command))
+					for (int i = 0; i < pathComboBox_FilePath.Items.Count; i++)
 					{
-						selectedIndex = i;
-						break;
-					}
+						var c = (pathComboBox_FilePath.Items[i] as Command);
+						if ((c != null) && (c == this.command))
+						{
+							selectedIndex = i;
+							break;
+						}
 
-					var r = (pathComboBox_FilePath.Items[i] as RecentItem<Command>);
-					if ((r != null) && (r.Item == this.command))
-					{
-						selectedIndex = i;
-						break;
+						var r = (pathComboBox_FilePath.Items[i] as RecentItem<Command>);
+						if ((r != null) && (r.Item == this.command))
+						{
+							selectedIndex = i;
+							break;
+						}
 					}
 				}
-			}
 
-			if (selectedIndex != ControlEx.InvalidIndex)
+				if (selectedIndex != ControlEx.InvalidIndex)
+				{
+					if (pathComboBox_FilePath.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
+						pathComboBox_FilePath.ForeColor = SystemColors.ControlText;
+
+					if (pathComboBox_FilePath.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
+						pathComboBox_FilePath.Font = SystemFonts.DefaultFont;
+
+					if (pathComboBox_FilePath.SelectedIndex != selectedIndex) // Improve performance by only assigning if different.
+						pathComboBox_FilePath.SelectedIndex = selectedIndex;
+				}
+				else
+				{
+					if (pathComboBox_FilePath.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+						pathComboBox_FilePath.ForeColor = SystemColors.GrayText;
+
+					if (pathComboBox_FilePath.Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
+						pathComboBox_FilePath.Font = DrawingEx.DefaultFontItalic;
+
+					if (pathComboBox_FilePath.SelectedIndex != 0) // Improve performance by only assigning if different.
+						pathComboBox_FilePath.SelectedIndex = 0; // Results in Command.UndefinedFilePathText.
+				}
+
+				SetSendControls();
+			}
+			finally
 			{
-				if (pathComboBox_FilePath.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-					pathComboBox_FilePath.ForeColor = SystemColors.ControlText;
-
-				if (pathComboBox_FilePath.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-					pathComboBox_FilePath.Font = SystemFonts.DefaultFont;
-
-				if (pathComboBox_FilePath.SelectedIndex != selectedIndex) // Improve performance by only assigning if different.
-					pathComboBox_FilePath.SelectedIndex = selectedIndex;
+				this.isSettingControls.Leave();
 			}
-			else
-			{
-				if (pathComboBox_FilePath.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-					pathComboBox_FilePath.ForeColor = SystemColors.GrayText;
-
-				if (pathComboBox_FilePath.Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
-					pathComboBox_FilePath.Font = DrawingEx.DefaultFontItalic;
-
-				if (pathComboBox_FilePath.SelectedIndex != 0) // Improve performance by only assigning if different.
-					pathComboBox_FilePath.SelectedIndex = 0; // Results in Command.UndefinedFilePathText.
-			}
-
-			SetSendControls();
-
-			this.isSettingControls.Leave();
 			DebugCommandLeave();
 		}
 
 		private void SetSendControls()
 		{
 			this.isSettingControls.Enter();
-
-			if (this.command.IsValidFilePath)
-				button_Send.Enabled = this.terminalIsReadyToSend;
-			else
-				button_Send.Enabled = false;
-
-			this.isSettingControls.Leave();
+			try
+			{
+				if (this.command.IsValidFilePath)
+					button_Send.Enabled = this.terminalIsReadyToSend;
+				else
+					button_Send.Enabled = false;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		#endregion

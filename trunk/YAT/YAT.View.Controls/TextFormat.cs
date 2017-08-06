@@ -316,13 +316,17 @@ namespace YAT.View.Controls
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
-
-			checkBox_Bold.Checked      = Bold;
-			checkBox_Italic.Checked    = Italic;
-			checkBox_Underline.Checked = Underline;
-			checkBox_Strikeout.Checked = Strikeout;
-
-			this.isSettingControls.Leave();
+			try
+			{
+				checkBox_Bold.Checked      = Bold;
+				checkBox_Italic.Checked    = Italic;
+				checkBox_Underline.Checked = Underline;
+				checkBox_Strikeout.Checked = Strikeout;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		#endregion

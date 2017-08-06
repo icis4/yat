@@ -178,10 +178,16 @@ namespace MKY.Windows.Forms
 			if ((oldIndex != ControlEx.InvalidIndex) && (item != null))
 			{
 				this.isSettingControls.Enter();
-				listBox_StringList.Items.RemoveAt(oldIndex);
-				listBox_StringList.Items.Insert(newIndex, item);
-				listBox_StringList.SelectedIndex = newIndex;
-				this.isSettingControls.Leave();
+				try
+				{
+					listBox_StringList.Items.RemoveAt(oldIndex);
+					listBox_StringList.Items.Insert(newIndex, item);
+					listBox_StringList.SelectedIndex = newIndex;
+				}
+				finally
+				{
+					this.isSettingControls.Leave();
+				}
 
 				SetControls();
 				OnStringListChanged(EventArgs.Empty);
@@ -199,10 +205,16 @@ namespace MKY.Windows.Forms
 			if ((oldIndex != ControlEx.InvalidIndex) && (item != null))
 			{
 				this.isSettingControls.Enter();
-				listBox_StringList.Items.RemoveAt(oldIndex);
-				listBox_StringList.Items.Insert(newIndex, item);
-				listBox_StringList.SelectedIndex = newIndex;
-				this.isSettingControls.Leave();
+				try
+				{
+					listBox_StringList.Items.RemoveAt(oldIndex);
+					listBox_StringList.Items.Insert(newIndex, item);
+					listBox_StringList.SelectedIndex = newIndex;
+				}
+				finally
+				{
+					this.isSettingControls.Leave();
+				}
 
 				SetControls();
 				OnStringListChanged(EventArgs.Empty);
@@ -219,16 +231,20 @@ namespace MKY.Windows.Forms
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
+			try
+			{
+				int itemCount = listBox_StringList.Items.Count;
+				int selectedItemsCount = listBox_StringList.SelectedIndices.Count;
+				int selectedItemIndex  = listBox_StringList.SelectedIndex;
 
-			int itemCount = listBox_StringList.Items.Count;
-			int selectedItemsCount = listBox_StringList.SelectedIndices.Count;
-			int selectedItemIndex  = listBox_StringList.SelectedIndex;
-
-			button_Delete.Enabled   = (selectedItemsCount > 0);
-			button_MoveUp.Enabled   = (selectedItemsCount == 1) && (selectedItemIndex > 0);
-			button_MoveDown.Enabled = (selectedItemsCount == 1) && (selectedItemIndex < (itemCount - 1));
-
-			this.isSettingControls.Leave();
+				button_Delete.Enabled   = (selectedItemsCount > 0);
+				button_MoveUp.Enabled   = (selectedItemsCount == 1) && (selectedItemIndex > 0);
+				button_MoveDown.Enabled = (selectedItemsCount == 1) && (selectedItemIndex < (itemCount - 1));
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		#endregion

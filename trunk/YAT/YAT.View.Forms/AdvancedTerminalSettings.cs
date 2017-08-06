@@ -890,13 +890,17 @@ namespace YAT.View.Forms
 		private void InitializeControls()
 		{
 			this.isSettingControls.Enter();
-
-			comboBox_TxRadix.Items.AddRange(Domain.RadixEx.GetItems());
-			comboBox_RxRadix.Items.AddRange(Domain.RadixEx.GetItems());
-			comboBox_Endianness.Items.AddRange(Domain.EndiannessEx.GetItems());
-			comboBox_ControlCharacterRadix.Items.AddRange(Domain.ControlCharRadixEx.GetItems());
-
-			this.isSettingControls.Leave();
+			try
+			{
+				comboBox_TxRadix.Items.AddRange(Domain.RadixEx.GetItems());
+				comboBox_RxRadix.Items.AddRange(Domain.RadixEx.GetItems());
+				comboBox_Endianness.Items.AddRange(Domain.EndiannessEx.GetItems());
+				comboBox_ControlCharacterRadix.Items.AddRange(Domain.ControlCharRadixEx.GetItems());
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void SetControls()
@@ -905,114 +909,118 @@ namespace YAT.View.Forms
 			bool isUsbSerialHid = ((Domain.IOTypeEx)this.settingsInEdit.Terminal.IO.IOType).IsUsbSerialHid;
 
 			this.isSettingControls.Enter();
+			try
+			{
+				// Radix:
+				bool separateRadix = this.settingsInEdit.Terminal.Display.SeparateTxRxRadix;
+				if (!separateRadix)
+					label_TxRadix.Text = "R&adix:";
+				else
+					label_TxRadix.Text = "&Tx Radix:";
 
-			// Radix:
-			bool separateRadix = this.settingsInEdit.Terminal.Display.SeparateTxRxRadix;
-			if (!separateRadix)
-				label_TxRadix.Text = "R&adix:";
-			else
-				label_TxRadix.Text = "&Tx Radix:";
+				comboBox_TxRadix.SelectedItem      = (Domain.RadixEx)this.settingsInEdit.Terminal.Display.TxRadix;
+				checkBox_SeparateTxRxRadix.Checked = separateRadix;
+				label_RxRadix.Enabled              = separateRadix;
+				comboBox_RxRadix.Enabled           = separateRadix;
+				comboBox_RxRadix.SelectedItem      = (Domain.RadixEx)this.settingsInEdit.Terminal.Display.RxRadix;
 
-			comboBox_TxRadix.SelectedItem      = (Domain.RadixEx)this.settingsInEdit.Terminal.Display.TxRadix;
-			checkBox_SeparateTxRxRadix.Checked = separateRadix;
-			label_RxRadix.Enabled              = separateRadix;
-			comboBox_RxRadix.Enabled           = separateRadix;
-			comboBox_RxRadix.SelectedItem      = (Domain.RadixEx)this.settingsInEdit.Terminal.Display.RxRadix;
+				bool isShowable = ((this.settingsInEdit.Terminal.Display.TxRadixIsShowable) ||
+								   (this.settingsInEdit.Terminal.Display.RxRadixIsShowable));
+				checkBox_ShowRadix.Enabled = isShowable; // Attention, same code in two locations in 'View.Forms.Terminal'.
+				checkBox_ShowRadix.Checked = isShowable && this.settingsInEdit.Terminal.Display.ShowRadix;
 
-			bool isShowable = ((this.settingsInEdit.Terminal.Display.TxRadixIsShowable) ||
-			                   (this.settingsInEdit.Terminal.Display.RxRadixIsShowable));
-			checkBox_ShowRadix.Enabled = isShowable; // Attention, same code in two locations in 'View.Forms.Terminal'.
-			checkBox_ShowRadix.Checked = isShowable && this.settingsInEdit.Terminal.Display.ShowRadix;
+				// Display:
+				checkBox_ShowBufferLineNumbers.Checked = this.settingsInEdit.Terminal.Display.ShowBufferLineNumbers;
+				checkBox_ShowTotalLineNumbers.Checked  = this.settingsInEdit.Terminal.Display.ShowTotalLineNumbers;
+				checkBox_ShowDate.Checked              = this.settingsInEdit.Terminal.Display.ShowDate;
+				checkBox_ShowTime.Checked              = this.settingsInEdit.Terminal.Display.ShowTime;
+				checkBox_ShowPort.Checked              = this.settingsInEdit.Terminal.Display.ShowPort;
+				checkBox_ShowDirection.Checked         = this.settingsInEdit.Terminal.Display.ShowDirection;
+				checkBox_ShowLength.Checked            = this.settingsInEdit.Terminal.Display.ShowLength;
+				checkBox_ShowConnectTime.Checked       = this.settingsInEdit.Terminal.Status.ShowConnectTime;
+				checkBox_ShowCountAndRate.Checked      = this.settingsInEdit.Terminal.Status.ShowCountAndRate;
 
-			// Display:
-			checkBox_ShowBufferLineNumbers.Checked = this.settingsInEdit.Terminal.Display.ShowBufferLineNumbers;
-			checkBox_ShowTotalLineNumbers.Checked  = this.settingsInEdit.Terminal.Display.ShowTotalLineNumbers;
-			checkBox_ShowDate.Checked              = this.settingsInEdit.Terminal.Display.ShowDate;
-			checkBox_ShowTime.Checked              = this.settingsInEdit.Terminal.Display.ShowTime;
-			checkBox_ShowPort.Checked              = this.settingsInEdit.Terminal.Display.ShowPort;
-			checkBox_ShowDirection.Checked         = this.settingsInEdit.Terminal.Display.ShowDirection;
-			checkBox_ShowLength.Checked            = this.settingsInEdit.Terminal.Display.ShowLength;
-			checkBox_ShowConnectTime.Checked       = this.settingsInEdit.Terminal.Status.ShowConnectTime;
-			checkBox_ShowCountAndRate.Checked      = this.settingsInEdit.Terminal.Status.ShowCountAndRate;
+				checkBox_ShowFlowControlCount.Enabled = this.settingsInEdit.Terminal.IO.FlowControlIsInUse;
+				checkBox_ShowFlowControlCount.Checked = this.settingsInEdit.Terminal.Status.ShowFlowControlCount;
+				checkBox_ShowBreakCount.Enabled       = (isSerialPort && this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates);
+				checkBox_ShowBreakCount.Checked       = this.settingsInEdit.Terminal.Status.ShowBreakCount;
 
-			checkBox_ShowFlowControlCount.Enabled = this.settingsInEdit.Terminal.IO.FlowControlIsInUse;
-			checkBox_ShowFlowControlCount.Checked = this.settingsInEdit.Terminal.Status.ShowFlowControlCount;
-			checkBox_ShowBreakCount.Enabled       = (isSerialPort && this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates);
-			checkBox_ShowBreakCount.Checked       = this.settingsInEdit.Terminal.Status.ShowBreakCount;
+				checkBox_PortLineBreak.Checked      = this.settingsInEdit.Terminal.Display.PortLineBreakEnabled;
+				checkBox_DirectionLineBreak.Checked = this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled;
+				textBox_MaxLineCount.Text           = this.settingsInEdit.Terminal.Display.MaxLineCount.ToString(CultureInfo.CurrentCulture);
+				textBox_MaxBytePerLineCount.Text    = this.settingsInEdit.Terminal.Display.MaxBytePerLineCount.ToString(CultureInfo.CurrentCulture);
 
-			checkBox_PortLineBreak.Checked      = this.settingsInEdit.Terminal.Display.PortLineBreakEnabled;
-			checkBox_DirectionLineBreak.Checked = this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled;
-			textBox_MaxLineCount.Text           = this.settingsInEdit.Terminal.Display.MaxLineCount.ToString(CultureInfo.CurrentCulture);
-			textBox_MaxBytePerLineCount.Text    = this.settingsInEdit.Terminal.Display.MaxBytePerLineCount.ToString(CultureInfo.CurrentCulture);
+				// Char replace:
+				bool replaceControlChars                    = this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars;
+				checkBox_ReplaceControlCharacters.Checked   = replaceControlChars;
+				comboBox_ControlCharacterRadix.Enabled      = replaceControlChars;
+				comboBox_ControlCharacterRadix.SelectedItem = (Domain.ControlCharRadixEx)this.settingsInEdit.Terminal.CharReplace.ControlCharRadix;
+				bool replaceTabEnabled                      =  replaceControlChars  &&  (this.settingsInEdit.Terminal.CharReplace.ControlCharRadix == Domain.ControlCharRadix.AsciiMnemonic);
+				checkBox_ReplaceTab.Enabled                 = replaceTabEnabled;
+				checkBox_ReplaceTab.Checked                 = this.settingsInEdit.Terminal.CharReplace.ReplaceTab;
+				label_ReplaceTab.Enabled                    = replaceTabEnabled;
+				checkBox_HideXOnXOff.Enabled                = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
+				checkBox_HideXOnXOff.Checked                = this.settingsInEdit.Terminal.CharHide.HideXOnXOff;
+				checkBox_ReplaceSpace.Checked               = this.settingsInEdit.Terminal.CharReplace.ReplaceSpace;
+				checkBox_Hide0x00.Checked                   = this.settingsInEdit.Terminal.CharHide.Hide0x00;
+				checkBox_Hide0xFF.Enabled                   = this.settingsInEdit.Terminal.SupportsHide0xFF;
+				checkBox_Hide0xFF.Checked                   = this.settingsInEdit.Terminal.CharHide.Hide0xFF;
 
-			// Char replace:
-			bool replaceControlChars                    = this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars;
-			checkBox_ReplaceControlCharacters.Checked   = replaceControlChars;
-			comboBox_ControlCharacterRadix.Enabled      = replaceControlChars;
-			comboBox_ControlCharacterRadix.SelectedItem = (Domain.ControlCharRadixEx)this.settingsInEdit.Terminal.CharReplace.ControlCharRadix;
-			bool replaceTabEnabled                      =  replaceControlChars  &&  (this.settingsInEdit.Terminal.CharReplace.ControlCharRadix == Domain.ControlCharRadix.AsciiMnemonic);
-			checkBox_ReplaceTab.Enabled                 = replaceTabEnabled;
-			checkBox_ReplaceTab.Checked                 = this.settingsInEdit.Terminal.CharReplace.ReplaceTab;
-			label_ReplaceTab.Enabled                    = replaceTabEnabled;
-			checkBox_HideXOnXOff.Enabled                = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
-			checkBox_HideXOnXOff.Checked                = this.settingsInEdit.Terminal.CharHide.HideXOnXOff;
-			checkBox_ReplaceSpace.Checked               = this.settingsInEdit.Terminal.CharReplace.ReplaceSpace;
-			checkBox_Hide0x00.Checked                   = this.settingsInEdit.Terminal.CharHide.Hide0x00;
-			checkBox_Hide0xFF.Enabled                   = this.settingsInEdit.Terminal.SupportsHide0xFF;
-			checkBox_Hide0xFF.Checked                   = this.settingsInEdit.Terminal.CharHide.Hide0xFF;
+				groupBox_Display_UsbSerialHid.Enabled       = isUsbSerialHid;
+				checkBox_IncludeNonPayloadData.Checked      = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData;
 
-			groupBox_Display_UsbSerialHid.Enabled       = isUsbSerialHid;
-			checkBox_IncludeNonPayloadData.Checked      = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData;
+				// Communication:
+				comboBox_Endianness.SelectedItem = (Domain.EndiannessEx)this.settingsInEdit.Terminal.IO.Endianness;
 
-			// Communication:
-			comboBox_Endianness.SelectedItem = (Domain.EndiannessEx)this.settingsInEdit.Terminal.IO.Endianness;
+				groupBox_Communication_SerialPorts.Enabled = isSerialPort;
+				checkBox_IndicateBreakStates.Checked       = this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates;
+				checkBox_OutputBreakModifiable.Checked     = this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable;
 
-			groupBox_Communication_SerialPorts.Enabled = isSerialPort;
-			checkBox_IndicateBreakStates.Checked       = this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates;
-			checkBox_OutputBreakModifiable.Checked     = this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable;
+				// Send:
+				checkBox_UseExplicitDefaultRadix.Checked = this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix;
+				checkBox_KeepCommand.Checked             = this.settingsInEdit.Terminal.Send.KeepCommand;
+				checkBox_CopyPredefined.Checked          = this.settingsInEdit.Terminal.Send.CopyPredefined;
+				checkBox_SendImmediately.Checked         = this.settingsInEdit.Terminal.Send.SendImmediately;
 
-			// Send:
-			checkBox_UseExplicitDefaultRadix.Checked = this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix;
-			checkBox_KeepCommand.Checked             = this.settingsInEdit.Terminal.Send.KeepCommand;
-			checkBox_CopyPredefined.Checked          = this.settingsInEdit.Terminal.Send.CopyPredefined;
-			checkBox_SendImmediately.Checked         = this.settingsInEdit.Terminal.Send.SendImmediately;
+				checkBox_SignalXOnBeforeEachTransmission.Enabled = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
+				checkBox_SignalXOnBeforeEachTransmission.Checked = this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission;
+				checkBox_SignalXOnPeriodicallyEnable.Enabled     = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
+				checkBox_SignalXOnPeriodicallyEnable.Checked     = this.settingsInEdit.Terminal.Send.SignalXOnPeriodically.Enabled;
+				textBox_SignalXOnPeriodicallyInterval.Enabled    = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
+				textBox_SignalXOnPeriodicallyInterval.Text       = this.settingsInEdit.Terminal.Send.SignalXOnPeriodically.Interval.ToString(CultureInfo.CurrentCulture);
+				label_SignalXOnPeriodicallyIntervalUnit.Enabled  = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
 
-			checkBox_SignalXOnBeforeEachTransmission.Enabled = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
-			checkBox_SignalXOnBeforeEachTransmission.Checked = this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission;
-			checkBox_SignalXOnPeriodicallyEnable.Enabled     = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
-			checkBox_SignalXOnPeriodicallyEnable.Checked     = this.settingsInEdit.Terminal.Send.SignalXOnPeriodically.Enabled;
-			textBox_SignalXOnPeriodicallyInterval.Enabled    = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
-			textBox_SignalXOnPeriodicallyInterval.Text       = this.settingsInEdit.Terminal.Send.SignalXOnPeriodically.Interval.ToString(CultureInfo.CurrentCulture);
-			label_SignalXOnPeriodicallyIntervalUnit.Enabled  = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
+				groupBox_Send_SerialPorts.Enabled    = isSerialPort;
+				checkBox_OutputBufferSize.Checked    = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Enabled;
+				textBox_OutputBufferSize.Enabled     = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Enabled;
+				textBox_OutputBufferSize.Text        = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Size.ToString(CultureInfo.CurrentCulture);
+				checkBox_OutputMaxBaudRate.Checked   = this.settingsInEdit.Terminal.IO.SerialPort.OutputMaxBaudRate;
+				checkBox_MaxChunkSizeEnable.Checked  = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Enabled;
+				textBox_MaxChunkSize.Enabled         = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Enabled;
+				textBox_MaxChunkSize.Text            = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Size.ToString(CultureInfo.CurrentCulture);
+				checkBox_MaxSendRateEnable.Checked   = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
+				textBox_MaxSendRateSize.Enabled      = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
+				textBox_MaxSendRateSize.Text         = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Size.ToString(CultureInfo.CurrentCulture);
+				textBox_MaxSendRateInterval.Enabled  = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
+				textBox_MaxSendRateInterval.Text     = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Interval.ToString(CultureInfo.CurrentCulture);
+				checkBox_NoSendOnOutputBreak.Checked = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak;
+				checkBox_NoSendOnInputBreak.Checked  = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
-			groupBox_Send_SerialPorts.Enabled    = isSerialPort;
-			checkBox_OutputBufferSize.Checked    = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Enabled;
-			textBox_OutputBufferSize.Enabled     = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Enabled;
-			textBox_OutputBufferSize.Text        = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Size.ToString(CultureInfo.CurrentCulture);
-			checkBox_OutputMaxBaudRate.Checked   = this.settingsInEdit.Terminal.IO.SerialPort.OutputMaxBaudRate;
-			checkBox_MaxChunkSizeEnable.Checked  = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Enabled;
-			textBox_MaxChunkSize.Enabled         = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Enabled;
-			textBox_MaxChunkSize.Text            = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Size.ToString(CultureInfo.CurrentCulture);
-			checkBox_MaxSendRateEnable.Checked   = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
-			textBox_MaxSendRateSize.Enabled      = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
-			textBox_MaxSendRateSize.Text         = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Size.ToString(CultureInfo.CurrentCulture);
-			textBox_MaxSendRateInterval.Enabled  = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
-			textBox_MaxSendRateInterval.Text     = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Interval.ToString(CultureInfo.CurrentCulture);
-			checkBox_NoSendOnOutputBreak.Checked = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak;
-			checkBox_NoSendOnInputBreak.Checked  = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak;
+				groupBox_Send_Keywords.Enabled   = !this.settingsInEdit.Terminal.Send.DisableEscapes;
+				textBox_DefaultDelay.Text        =  this.settingsInEdit.Terminal.Send.DefaultDelay.ToString(CultureInfo.CurrentCulture);
+				textBox_DefaultLineDelay.Text    =  this.settingsInEdit.Terminal.Send.DefaultLineDelay.ToString(CultureInfo.CurrentCulture);
+				textBox_DefaultLineInterval.Text =  this.settingsInEdit.Terminal.Send.DefaultLineInterval.ToString(CultureInfo.CurrentCulture);
+				textBox_DefaultLineRepeat.Text   =  this.settingsInEdit.Terminal.Send.DefaultLineRepeat.ToString(CultureInfo.CurrentCulture);
 
-			groupBox_Send_Keywords.Enabled   = !this.settingsInEdit.Terminal.Send.DisableEscapes;
-			textBox_DefaultDelay.Text        =  this.settingsInEdit.Terminal.Send.DefaultDelay.ToString(CultureInfo.CurrentCulture);
-			textBox_DefaultLineDelay.Text    =  this.settingsInEdit.Terminal.Send.DefaultLineDelay.ToString(CultureInfo.CurrentCulture);
-			textBox_DefaultLineInterval.Text =  this.settingsInEdit.Terminal.Send.DefaultLineInterval.ToString(CultureInfo.CurrentCulture);
-			textBox_DefaultLineRepeat.Text   =  this.settingsInEdit.Terminal.Send.DefaultLineRepeat.ToString(CultureInfo.CurrentCulture);
+				checkBox_DisableEscapes.Checked = this.settingsInEdit.Terminal.Send.DisableEscapes;
 
-			checkBox_DisableEscapes.Checked = this.settingsInEdit.Terminal.Send.DisableEscapes;
-
-			// User:
-			textBox_UserName.Text = this.settingsInEdit.UserName;
-
-			this.isSettingControls.Leave();
+				// User:
+				textBox_UserName.Text = this.settingsInEdit.UserName;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		/// <remarks>

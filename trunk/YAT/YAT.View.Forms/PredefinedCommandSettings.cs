@@ -383,86 +383,98 @@ namespace YAT.View.Forms
 		private void SetPagesControls()
 		{
 			this.isSettingControls.Enter();
-
-			int pageCount = this.settingsInEdit.Pages.Count;
-			bool pageIsSelected = (this.selectedPage != 0);
-
-			// Page list:
-			if (pageCount > 0)
+			try
 			{
-				listBox_Pages.Enabled = true;
-				listBox_Pages.Items.Clear();
+				int pageCount = this.settingsInEdit.Pages.Count;
+				bool pageIsSelected = (this.selectedPage != 0);
 
-				foreach (Model.Types.PredefinedCommandPage p in this.settingsInEdit.Pages)
-					listBox_Pages.Items.Add(p.PageName);
+				// Page list:
+				if (pageCount > 0)
+				{
+					listBox_Pages.Enabled = true;
+					listBox_Pages.Items.Clear();
 
+					foreach (Model.Types.PredefinedCommandPage p in this.settingsInEdit.Pages)
+						listBox_Pages.Items.Add(p.PageName);
+
+					if (pageIsSelected)
+						listBox_Pages.SelectedIndex = SelectedPageIndex;
+				}
+				else
+				{
+					listBox_Pages.Enabled = false;
+					listBox_Pages.Items.Clear();
+				}
+
+				// Page list buttons:
+				button_NamePage.Enabled = pageIsSelected;
+				button_InsertPage.Enabled = pageIsSelected;
+				button_AddPage.Enabled = true;
+				button_CopyPage.Enabled = pageIsSelected;
+				button_DeletePage.Enabled = pageIsSelected;
+				button_MovePageUp.Enabled = pageIsSelected && (this.selectedPage > 1);
+				button_MovePageDown.Enabled = pageIsSelected && (this.selectedPage < pageCount);
+				button_DeletePages.Enabled = (pageCount > 0);
+
+				// Selected page:
 				if (pageIsSelected)
-					listBox_Pages.SelectedIndex = SelectedPageIndex;
+					groupBox_Page.Text = this.settingsInEdit.Pages[SelectedPageIndex].PageName;
+				else
+					groupBox_Page.Text = "<No Page Selected>";
 			}
-			else
+			finally
 			{
-				listBox_Pages.Enabled = false;
-				listBox_Pages.Items.Clear();
+				this.isSettingControls.Leave();
 			}
-
-			// Page list buttons:
-			button_NamePage.Enabled = pageIsSelected;
-			button_InsertPage.Enabled = pageIsSelected;
-			button_AddPage.Enabled = true;
-			button_CopyPage.Enabled = pageIsSelected;
-			button_DeletePage.Enabled = pageIsSelected;
-			button_MovePageUp.Enabled = pageIsSelected && (this.selectedPage > 1);
-			button_MovePageDown.Enabled = pageIsSelected && (this.selectedPage < pageCount);
-			button_DeletePages.Enabled = (pageCount > 0);
-
-			// Selected page:
-			if (pageIsSelected)
-				groupBox_Page.Text = this.settingsInEdit.Pages[SelectedPageIndex].PageName;
-			else
-				groupBox_Page.Text = "<No Page Selected>";
-
-			this.isSettingControls.Leave();
 		}
 
 		private void SetPageControls()
 		{
 			this.isSettingControls.Enter();
-
-			if (this.selectedPage != 0)
+			try
 			{
-				groupBox_Page.Enabled = true;
+				if (this.selectedPage != 0)
+				{
+					groupBox_Page.Enabled = true;
 
-				int pageCount = this.settingsInEdit.Pages.Count;
-				int commandCount = 0;
-				if (pageCount >= this.selectedPage)
-					commandCount = this.settingsInEdit.Pages[SelectedPageIndex].Commands.Count;
+					int pageCount = this.settingsInEdit.Pages.Count;
+					int commandCount = 0;
+					if (pageCount >= this.selectedPage)
+						commandCount = this.settingsInEdit.Pages[SelectedPageIndex].Commands.Count;
 
-				for (int i = 0; i < commandCount; i++)
-					this.predefinedCommandSettingsSets[i].Command = this.settingsInEdit.Pages[SelectedPageIndex].Commands[i];
+					for (int i = 0; i < commandCount; i++)
+						this.predefinedCommandSettingsSets[i].Command = this.settingsInEdit.Pages[SelectedPageIndex].Commands[i];
 
-				for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage; i++)
-					this.predefinedCommandSettingsSets[i].Command = new Model.Types.Command();
+					for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage; i++)
+						this.predefinedCommandSettingsSets[i].Command = new Model.Types.Command();
+				}
+				else
+				{
+					groupBox_Page.Enabled = true;
+				}
 			}
-			else
+			finally
 			{
-				groupBox_Page.Enabled = true;
+				this.isSettingControls.Leave();
 			}
-
-			this.isSettingControls.Leave();
 		}
 
 		private void SetClearControls()
 		{
 			this.isSettingControls.Enter();
+			try
+			{
+				int pageCount = this.settingsInEdit.Pages.Count;
+				int commandCount = 0;
+				if (pageCount >= this.selectedPage)
+					commandCount = this.settingsInEdit.Pages[SelectedPageIndex].Commands.Count;
 
-			int pageCount = this.settingsInEdit.Pages.Count;
-			int commandCount = 0;
-			if (pageCount >= this.selectedPage)
-				commandCount = this.settingsInEdit.Pages[SelectedPageIndex].Commands.Count;
-
-			button_ClearPage.Enabled = (commandCount > 0);
-
-			this.isSettingControls.Leave();
+				button_ClearPage.Enabled = (commandCount > 0);
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		#endregion

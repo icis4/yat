@@ -23,7 +23,11 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Windows.Forms;
+
+using MKY.Threading;
 
 namespace MKY.Windows.Forms
 {
@@ -36,37 +40,64 @@ namespace MKY.Windows.Forms
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Boolean just *is* 'bool'...")]
 	public struct SettingControlsHelper : IEquatable<SettingControlsHelper>
 	{
-		private int count;
+		private int count; // = 0;
 
-		/// <summary></summary>
-		public bool IsSettingControls
+		/// <summary>
+		/// Gets a value indicating whether the parent of this instance is currently setting the
+		/// values of its <see cref="Control"/> objects.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if the parent of this instance is setting controls; otherwise, <c>false</c>.
+		/// </value>
+		private bool IsSettingControls
 		{
 			get
 			{
+				DebugAssertIsMainThread("Property called from non-main thread!");
+
 				return (this.count > 0); // No need to use 'Interlocked.Read()' as access to
 			}                            // 'Windows.Forms' must be synchronized anyway.
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// To be called each time before setting the values of the <see cref="Control"/> objects
+		/// of the parent of this instance.
+		/// </summary>
 		public void Enter()
 		{
+			DebugAssertIsMainThread("Method called from non-main thread!");
+
 			this.count++; // No need to use 'Interlocked.Increment()' as access to
 		}                 // 'Windows.Forms' must be synchronized anyway.
 
-		/// <summary></summary>
+		/// <summary>
+		/// To be called each time after setting the values of the <see cref="Control"/> objects
+		/// of the parent of this instance.
+		/// </summary>
 		public void Leave()
 		{
+			DebugAssertIsMainThread("Method called from non-main thread!");
+
 			this.count--; // No need to use 'Interlocked.Decrement()' as access to
-		                  // 'Windows.Forms' must be synchronized anyway.
+			              // 'Windows.Forms' must be synchronized anyway.
 			if (this.count < 0)
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'SettingControlsHelper' count has fallen below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Count has fallen below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Usage", "CA2225:OperatorOverloadsHaveNamedAlternates", Justification = "Special operator for much easier use of this helper class.")]
-		public static implicit operator bool(SettingControlsHelper isSettingControls)
+		public static implicit operator bool(SettingControlsHelper rhs)
 		{
-			return (isSettingControls.IsSettingControls);
+			return (rhs.IsSettingControls);
+		}
+
+		[Conditional("Debug")]
+		private static void DebugAssertIsMainThread(string message)
+		{
+			if (MainThreadHelper.IsInitialized)
+				Debug.Assert(MainThreadHelper.IsMainThread, message, "This helper requires that it is always called on the main thread, because no thread-synchronization is done.");
+		////else
+			////There is no way to assert whether this is the main thread.
 		}
 
 		#region Object Members

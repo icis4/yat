@@ -444,61 +444,65 @@ namespace YAT.View.Controls
 				// Changes here may have to be applied there too!
 
 				this.isSettingControls.Enter();
-
-				comboBox_Port.Items.Clear();
-
-				if ((ports != null) && (ports.Count > 0))
+				try
 				{
-					comboBox_Port.Items.AddRange(ports.ToArray());
+					comboBox_Port.Items.Clear();
 
-					if ((this.portId != null) && (ports.Contains(this.portId)))
+					if ((ports != null) && (ports.Count > 0))
 					{
-						// Nothing has changed, just restore the selected item:
-						comboBox_Port.SelectedItem = this.portId;
+						comboBox_Port.Items.AddRange(ports.ToArray());
 
-						if (!scanSuccess)
-							ShowErrorMessage(errorException, errorMessageLead, errorMessageHint);
-					}
-					else
-					{
-						// Get the 'NotAvailable' string BEFORE defaulting!
-						string portIdNotAvailable = this.portId;
-
-						SerialPortId portIdAlternate;
-						if (scanSuccess && TryGetAlternate(ports, out portIdAlternate))
+						if ((this.portId != null) && (ports.Contains(this.portId)))
 						{
-							// Ensure that the settings item is defaulted and shown by SetControls().
-							// Set property instead of member to ensure that changed event is fired.
-							PortId = portIdAlternate;
+							// Nothing has changed, just restore the selected item:
+							comboBox_Port.SelectedItem = this.portId;
 
-							ShowNotAvailableSwitchMessage(portIdNotAvailable, portIdAlternate);
+							if (!scanSuccess)
+								ShowErrorMessage(errorException, errorMessageLead, errorMessageHint);
 						}
 						else
 						{
-							// Ensure that the settings item is defaulted and shown by SetControls().
-							// Set property instead of member to ensure that changed event is fired.
-							PortId = ports[0];
+							// Get the 'NotAvailable' string BEFORE defaulting!
+							string portIdNotAvailable = this.portId;
 
-							if (scanSuccess)
-								ShowNotAvailableDefaultedMessage(portIdNotAvailable, ports[0]);
+							SerialPortId portIdAlternate;
+							if (scanSuccess && TryGetAlternate(ports, out portIdAlternate))
+							{
+								// Ensure that the settings item is defaulted and shown by SetControls().
+								// Set property instead of member to ensure that changed event is fired.
+								PortId = portIdAlternate;
+
+								ShowNotAvailableSwitchMessage(portIdNotAvailable, portIdAlternate);
+							}
 							else
-								ShowErrorMessage(errorException, errorMessageLead, errorMessageHint);
+							{
+								// Ensure that the settings item is defaulted and shown by SetControls().
+								// Set property instead of member to ensure that changed event is fired.
+								PortId = ports[0];
+
+								if (scanSuccess)
+									ShowNotAvailableDefaultedMessage(portIdNotAvailable, ports[0]);
+								else
+									ShowErrorMessage(errorException, errorMessageLead, errorMessageHint);
+							}
 						}
 					}
+					else // ports.Count == 0
+					{
+						// Ensure that the settings item is nulled and reset by SetControls().
+						// Set property instead of member to ensure that changed event is fired.
+						PortId = null;
+
+						if (scanSuccess)
+							ShowNoPortsMessage();
+						else
+							ShowErrorMessage(errorException, errorMessageLead, errorMessageHint);
+					}
 				}
-				else // ports.Count == 0
+				finally
 				{
-					// Ensure that the settings item is nulled and reset by SetControls().
-					// Set property instead of member to ensure that changed event is fired.
-					PortId = null;
-
-					if (scanSuccess)
-						ShowNoPortsMessage();
-					else
-						ShowErrorMessage(errorException, errorMessageLead, errorMessageHint);
+					this.isSettingControls.Leave();
 				}
-
-				this.isSettingControls.Leave();
 			}
 		}
 
@@ -614,13 +618,17 @@ namespace YAT.View.Controls
 		private void SetPortSelection()
 		{
 			this.isSettingControls.Enter();
-
-			if (!DesignMode && Enabled && (this.portId != null))
-				SelectionHelper.Select(comboBox_Port, this.portId, this.portId);
-			else
-				SelectionHelper.Deselect(comboBox_Port);
-
-			this.isSettingControls.Leave();
+			try
+			{
+				if (!DesignMode && Enabled && (this.portId != null))
+					SelectionHelper.Select(comboBox_Port, this.portId, this.portId);
+				else
+					SelectionHelper.Deselect(comboBox_Port);
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		#endregion

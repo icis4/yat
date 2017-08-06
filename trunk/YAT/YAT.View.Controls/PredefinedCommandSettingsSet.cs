@@ -370,10 +370,16 @@ namespace YAT.View.Controls
 			if ((this.editFocusState == EditFocusState.EditIsInactive) && !this.command.IsText)
 			{
 				this.isSettingControls.Enter();
-				textBox_SingleLineText.Text      = "";
-				textBox_SingleLineText.ForeColor = SystemColors.ControlText;
-				textBox_SingleLineText.Font      = SystemFonts.DefaultFont;
-				this.isSettingControls.Leave();
+				try
+				{
+					textBox_SingleLineText.Text      = "";
+					textBox_SingleLineText.ForeColor = SystemColors.ControlText;
+					textBox_SingleLineText.Font      = SystemFonts.DefaultFont;
+				}
+				finally
+				{
+					this.isSettingControls.Leave();
+				}
 			}
 
 			SetEditFocusState(EditFocusState.EditHasFocus);
@@ -487,143 +493,159 @@ namespace YAT.View.Controls
 		private void InitializeControls()
 		{
 			this.isSettingControls.Enter();
-
-			comboBox_ExplicitDefaultRadix.Items.Clear();
-			comboBox_ExplicitDefaultRadix.Items.AddRange(Domain.RadixEx.GetItems());
-
-			this.isSettingControls.Leave();
+			try
+			{
+				comboBox_ExplicitDefaultRadix.Items.Clear();
+				comboBox_ExplicitDefaultRadix.Items.AddRange(Domain.RadixEx.GetItems());
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void SetExplicitDefaultRadixControls()
 		{
 			this.isSettingControls.Enter();
-
-			splitContainer_ExplicitDefaultRadix.Panel1Collapsed = !this.useExplicitDefaultRadix;
-
-			this.isSettingControls.Leave();
+			try
+			{
+				splitContainer_ExplicitDefaultRadix.Panel1Collapsed = !this.useExplicitDefaultRadix;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
-
-			if (this.useExplicitDefaultRadix)
-				SelectionHelper.Select(comboBox_ExplicitDefaultRadix, (Domain.RadixEx)this.command.DefaultRadix, (Domain.RadixEx)this.command.DefaultRadix);
-			else
-				SelectionHelper.Deselect(comboBox_ExplicitDefaultRadix);
-
-			// Description:
-			textBox_Description.Text = this.command.Description;
-
-			if (this.command.IsText)
+			try
 			{
-				// Command:
-				textBox_SingleLineText.Visible = true;
-				if (this.editFocusState == EditFocusState.EditIsInactive)
+				if (this.useExplicitDefaultRadix)
+					SelectionHelper.Select(comboBox_ExplicitDefaultRadix, (Domain.RadixEx)this.command.DefaultRadix, (Domain.RadixEx)this.command.DefaultRadix);
+				else
+					SelectionHelper.Deselect(comboBox_ExplicitDefaultRadix);
+
+				// Description:
+				textBox_Description.Text = this.command.Description;
+
+				if (this.command.IsText)
 				{
-					if (textBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-						textBox_SingleLineText.ForeColor = SystemColors.ControlText;
+					// Command:
+					textBox_SingleLineText.Visible = true;
+					if (this.editFocusState == EditFocusState.EditIsInactive)
+					{
+						if (textBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
+							textBox_SingleLineText.ForeColor = SystemColors.ControlText;
 
-					if (textBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-						textBox_SingleLineText.Font = SystemFonts.DefaultFont;
+						if (textBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
+							textBox_SingleLineText.Font = SystemFonts.DefaultFont;
 
-					textBox_SingleLineText.Text = this.command.SingleLineText;
+						textBox_SingleLineText.Text = this.command.SingleLineText;
+					}
+
+					// Buttons:
+					button_SetMultiLineText.Visible = true;
+					button_SetMultiLineText.Enabled = true;
+					button_SetFile.Visible = false;
+					button_SetFile.Enabled = false;
+
+					// File path:
+					pathLabel_FilePath.Visible = false;
+					pathLabel_FilePath.Text = "";
+					checkBox_IsFile.Checked = false;
+
+					// Delete:
+					button_Delete.Enabled = true;
 				}
-
-				// Buttons:
-				button_SetMultiLineText.Visible = true;
-				button_SetMultiLineText.Enabled = true;
-				button_SetFile.Visible = false;
-				button_SetFile.Enabled = false;
-
-				// File path:
-				pathLabel_FilePath.Visible = false;
-				pathLabel_FilePath.Text = "";
-				checkBox_IsFile.Checked = false;
-
-				// Delete:
-				button_Delete.Enabled = true;
-			}
-			else if (this.command.IsFilePath)
-			{
-				// Command:
-				textBox_SingleLineText.Visible = false;
-				textBox_SingleLineText.Text = "";
-
-				// Buttons:
-				button_SetMultiLineText.Visible = false;
-				button_SetMultiLineText.Enabled = false;
-				button_SetFile.Visible = true;
-				button_SetFile.Enabled = true;
-
-				// File path:
-				pathLabel_FilePath.Visible = true;
-				if (this.command.IsFilePath)
+				else if (this.command.IsFilePath)
 				{
-					if (pathLabel_FilePath.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-						pathLabel_FilePath.ForeColor = SystemColors.ControlText;
+					// Command:
+					textBox_SingleLineText.Visible = false;
+					textBox_SingleLineText.Text = "";
 
-					if (pathLabel_FilePath.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-						pathLabel_FilePath.Font = SystemFonts.DefaultFont;
+					// Buttons:
+					button_SetMultiLineText.Visible = false;
+					button_SetMultiLineText.Enabled = false;
+					button_SetFile.Visible = true;
+					button_SetFile.Enabled = true;
 
-					pathLabel_FilePath.Text = this.command.FilePath;
+					// File path:
+					pathLabel_FilePath.Visible = true;
+					if (this.command.IsFilePath)
+					{
+						if (pathLabel_FilePath.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
+							pathLabel_FilePath.ForeColor = SystemColors.ControlText;
+
+						if (pathLabel_FilePath.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
+							pathLabel_FilePath.Font = SystemFonts.DefaultFont;
+
+						pathLabel_FilePath.Text = this.command.FilePath;
+					}
+					else
+					{
+						if (pathLabel_FilePath.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+							pathLabel_FilePath.ForeColor = SystemColors.GrayText;
+
+						if (pathLabel_FilePath.Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
+							pathLabel_FilePath.Font = DrawingEx.DefaultFontItalic;
+
+						pathLabel_FilePath.Text = Command.UndefinedFilePathText;
+					}
+
+					checkBox_IsFile.Checked = true;
+
+					// Delete:
+					button_Delete.Enabled = true;
 				}
 				else
 				{
-					if (pathLabel_FilePath.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-						pathLabel_FilePath.ForeColor = SystemColors.GrayText;
+					// Command:
+					textBox_SingleLineText.Visible = true;
+					if (this.editFocusState == EditFocusState.EditIsInactive)
+					{
+						if (textBox_SingleLineText.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+							textBox_SingleLineText.ForeColor = SystemColors.GrayText;
 
-					if (pathLabel_FilePath.Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
-						pathLabel_FilePath.Font = DrawingEx.DefaultFontItalic;
+						if (textBox_SingleLineText.Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
+							textBox_SingleLineText.Font = DrawingEx.DefaultFontItalic;
 
-					pathLabel_FilePath.Text = Command.UndefinedFilePathText;
+						textBox_SingleLineText.Text = Command.EnterTextText;
+					}
+
+					// Buttons:
+					button_SetMultiLineText.Visible = true;
+					button_SetMultiLineText.Enabled = true;
+					button_SetFile.Visible = false;
+					button_SetFile.Enabled = false;
+
+					// File path:
+					pathLabel_FilePath.Visible = false;
+					pathLabel_FilePath.Text = "";
+					checkBox_IsFile.Checked = false;
+
+					// Delete:
+					button_Delete.Enabled = false;
 				}
-
-				checkBox_IsFile.Checked = true;
-
-				// Delete:
-				button_Delete.Enabled = true;
 			}
-			else
+			finally
 			{
-				// Command:
-				textBox_SingleLineText.Visible = true;
-				if (this.editFocusState == EditFocusState.EditIsInactive)
-				{
-					if (textBox_SingleLineText.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-						textBox_SingleLineText.ForeColor = SystemColors.GrayText;
-
-					if (textBox_SingleLineText.Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
-						textBox_SingleLineText.Font = DrawingEx.DefaultFontItalic;
-
-					textBox_SingleLineText.Text = Command.EnterTextText;
-				}
-
-				// Buttons:
-				button_SetMultiLineText.Visible = true;
-				button_SetMultiLineText.Enabled = true;
-				button_SetFile.Visible = false;
-				button_SetFile.Enabled = false;
-
-				// File path:
-				pathLabel_FilePath.Visible = false;
-				pathLabel_FilePath.Text = "";
-				checkBox_IsFile.Checked = false;
-
-				// Delete:
-				button_Delete.Enabled = false;
+				this.isSettingControls.Leave();
 			}
-
-			this.isSettingControls.Leave();
 		}
 
 		private void SetCursorToEnd()
 		{
 			this.isSettingControls.Enter();
-
-			textBox_SingleLineText.SelectionStart = textBox_SingleLineText.Text.Length;
-
-			this.isSettingControls.Leave();
+			try
+			{
+				textBox_SingleLineText.SelectionStart = textBox_SingleLineText.Text.Length;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		#endregion
@@ -667,10 +689,16 @@ namespace YAT.View.Controls
 		{
 			// Indicate multi-line text:
 			this.isSettingControls.Enter();
-			textBox_SingleLineText.Text      = Command.MultiLineTextText;
-			textBox_SingleLineText.ForeColor = SystemColors.ControlText;
-			textBox_SingleLineText.Font      = SystemFonts.DefaultFont;
-			this.isSettingControls.Leave();
+			try
+			{
+				textBox_SingleLineText.Text      = Command.MultiLineTextText;
+				textBox_SingleLineText.ForeColor = SystemColors.ControlText;
+				textBox_SingleLineText.Font      = SystemFonts.DefaultFont;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 
 			// Calculate startup location:
 			Rectangle area = requestingControl.RectangleToScreen(requestingControl.DisplayRectangle);
