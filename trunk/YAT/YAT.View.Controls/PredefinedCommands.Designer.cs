@@ -29,24 +29,24 @@
 		private void InitializeComponent()
 		{
 			this.splitContainer_Commands = new System.Windows.Forms.SplitContainer();
+			this.panel_Shortcuts = new System.Windows.Forms.Panel();
 			this.label_Shortcuts = new System.Windows.Forms.Label();
 			this.splitContainer_Lower = new System.Windows.Forms.SplitContainer();
 			this.panel_Commands = new System.Windows.Forms.Panel();
-			this.label_Page = new System.Windows.Forms.Label();
-			this.button_PageNext = new System.Windows.Forms.Button();
-			this.button_PagePrevious = new System.Windows.Forms.Button();
-			this.comboBox_Pages = new System.Windows.Forms.ComboBox();
-			this.panel_Shortcuts = new System.Windows.Forms.Panel();
 			this.panel_Navigation = new System.Windows.Forms.Panel();
+			this.comboBox_Pages = new System.Windows.Forms.ComboBox();
+			this.label_Page = new System.Windows.Forms.Label();
+			this.button_PagePrevious = new System.Windows.Forms.Button();
+			this.button_PageNext = new System.Windows.Forms.Button();
 			this.pageButtons = new YAT.View.Controls.PredefinedCommandPageButtons();
 			this.splitContainer_Commands.Panel1.SuspendLayout();
 			this.splitContainer_Commands.Panel2.SuspendLayout();
 			this.splitContainer_Commands.SuspendLayout();
+			this.panel_Shortcuts.SuspendLayout();
 			this.splitContainer_Lower.Panel1.SuspendLayout();
 			this.splitContainer_Lower.Panel2.SuspendLayout();
 			this.splitContainer_Lower.SuspendLayout();
 			this.panel_Commands.SuspendLayout();
-			this.panel_Shortcuts.SuspendLayout();
 			this.panel_Navigation.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -71,6 +71,15 @@
 			this.splitContainer_Commands.SplitterDistance = 26;
 			this.splitContainer_Commands.TabIndex = 0;
 			this.splitContainer_Commands.TabStop = false;
+			// 
+			// panel_Shortcuts
+			// 
+			this.panel_Shortcuts.Controls.Add(this.label_Shortcuts);
+			this.panel_Shortcuts.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel_Shortcuts.Location = new System.Drawing.Point(0, 0);
+			this.panel_Shortcuts.Name = "panel_Shortcuts";
+			this.panel_Shortcuts.Size = new System.Drawing.Size(144, 26);
+			this.panel_Shortcuts.TabIndex = 1;
 			// 
 			// label_Shortcuts
 			// 
@@ -100,9 +109,9 @@
 			// splitContainer_Lower.Panel2
 			// 
 			this.splitContainer_Lower.Panel2.Controls.Add(this.panel_Navigation);
-			this.splitContainer_Lower.Panel2MinSize = 48;
+			this.splitContainer_Lower.Panel2MinSize = 52;
 			this.splitContainer_Lower.Size = new System.Drawing.Size(144, 340);
-			this.splitContainer_Lower.SplitterDistance = 291;
+			this.splitContainer_Lower.SplitterDistance = 287;
 			this.splitContainer_Lower.SplitterWidth = 1;
 			this.splitContainer_Lower.TabIndex = 0;
 			this.splitContainer_Lower.TabStop = false;
@@ -114,61 +123,8 @@
 			this.panel_Commands.Location = new System.Drawing.Point(0, 0);
 			this.panel_Commands.Name = "panel_Commands";
 			this.panel_Commands.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
-			this.panel_Commands.Size = new System.Drawing.Size(144, 291);
+			this.panel_Commands.Size = new System.Drawing.Size(144, 287);
 			this.panel_Commands.TabIndex = 0;
-			// 
-			// label_Page
-			// 
-			this.label_Page.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_Page.Location = new System.Drawing.Point(29, 6);
-			this.label_Page.Name = "label_Page";
-			this.label_Page.Size = new System.Drawing.Size(86, 15);
-			this.label_Page.TabIndex = 1;
-			this.label_Page.Text = "Page 99/99";
-			this.label_Page.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// button_PageNext
-			// 
-			this.button_PageNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_PageNext.Location = new System.Drawing.Point(121, 3);
-			this.button_PageNext.Name = "button_PageNext";
-			this.button_PageNext.Size = new System.Drawing.Size(20, 21);
-			this.button_PageNext.TabIndex = 2;
-			this.button_PageNext.Text = ">";
-			this.button_PageNext.UseVisualStyleBackColor = true;
-			this.button_PageNext.Click += new System.EventHandler(this.button_PageNext_Click);
-			// 
-			// button_PagePrevious
-			// 
-			this.button_PagePrevious.Location = new System.Drawing.Point(3, 3);
-			this.button_PagePrevious.Name = "button_PagePrevious";
-			this.button_PagePrevious.Size = new System.Drawing.Size(20, 21);
-			this.button_PagePrevious.TabIndex = 0;
-			this.button_PagePrevious.Text = "<";
-			this.button_PagePrevious.UseVisualStyleBackColor = true;
-			this.button_PagePrevious.Click += new System.EventHandler(this.button_PagePrevious_Click);
-			// 
-			// comboBox_Pages
-			// 
-			this.comboBox_Pages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.comboBox_Pages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox_Pages.FormattingEnabled = true;
-			this.comboBox_Pages.Location = new System.Drawing.Point(3, 24);
-			this.comboBox_Pages.Name = "comboBox_Pages";
-			this.comboBox_Pages.Size = new System.Drawing.Size(138, 21);
-			this.comboBox_Pages.TabIndex = 3;
-			this.comboBox_Pages.SelectedIndexChanged += new System.EventHandler(this.comboBox_Pages_SelectedIndexChanged);
-			// 
-			// panel_Shortcuts
-			// 
-			this.panel_Shortcuts.Controls.Add(this.label_Shortcuts);
-			this.panel_Shortcuts.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel_Shortcuts.Location = new System.Drawing.Point(0, 0);
-			this.panel_Shortcuts.Name = "panel_Shortcuts";
-			this.panel_Shortcuts.Size = new System.Drawing.Size(144, 26);
-			this.panel_Shortcuts.TabIndex = 1;
 			// 
 			// panel_Navigation
 			// 
@@ -179,8 +135,52 @@
 			this.panel_Navigation.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel_Navigation.Location = new System.Drawing.Point(0, 0);
 			this.panel_Navigation.Name = "panel_Navigation";
-			this.panel_Navigation.Size = new System.Drawing.Size(144, 48);
+			this.panel_Navigation.Size = new System.Drawing.Size(144, 52);
 			this.panel_Navigation.TabIndex = 0;
+			// 
+			// comboBox_Pages
+			// 
+			this.comboBox_Pages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_Pages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_Pages.FormattingEnabled = true;
+			this.comboBox_Pages.Location = new System.Drawing.Point(3, 27);
+			this.comboBox_Pages.Name = "comboBox_Pages";
+			this.comboBox_Pages.Size = new System.Drawing.Size(138, 21);
+			this.comboBox_Pages.TabIndex = 3;
+			this.comboBox_Pages.SelectedIndexChanged += new System.EventHandler(this.comboBox_Pages_SelectedIndexChanged);
+			// 
+			// label_Page
+			// 
+			this.label_Page.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_Page.Location = new System.Drawing.Point(29, 7);
+			this.label_Page.Name = "label_Page";
+			this.label_Page.Size = new System.Drawing.Size(86, 15);
+			this.label_Page.TabIndex = 1;
+			this.label_Page.Text = "Page 99/99";
+			this.label_Page.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// button_PagePrevious
+			// 
+			this.button_PagePrevious.Location = new System.Drawing.Point(3, 3);
+			this.button_PagePrevious.Name = "button_PagePrevious";
+			this.button_PagePrevious.Size = new System.Drawing.Size(20, 22);
+			this.button_PagePrevious.TabIndex = 0;
+			this.button_PagePrevious.Text = "<";
+			this.button_PagePrevious.UseVisualStyleBackColor = true;
+			this.button_PagePrevious.Click += new System.EventHandler(this.button_PagePrevious_Click);
+			// 
+			// button_PageNext
+			// 
+			this.button_PageNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_PageNext.Location = new System.Drawing.Point(121, 3);
+			this.button_PageNext.Name = "button_PageNext";
+			this.button_PageNext.Size = new System.Drawing.Size(20, 22);
+			this.button_PageNext.TabIndex = 2;
+			this.button_PageNext.Text = ">";
+			this.button_PageNext.UseVisualStyleBackColor = true;
+			this.button_PageNext.Click += new System.EventHandler(this.button_PageNext_Click);
 			// 
 			// pageButtons
 			// 
@@ -188,7 +188,7 @@
 			this.pageButtons.Location = new System.Drawing.Point(3, 0);
 			this.pageButtons.Margin = new System.Windows.Forms.Padding(3, 2, 3, 3);
 			this.pageButtons.Name = "pageButtons";
-			this.pageButtons.Size = new System.Drawing.Size(138, 291);
+			this.pageButtons.Size = new System.Drawing.Size(138, 287);
 			this.pageButtons.TabIndex = 0;
 			this.pageButtons.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
 			this.pageButtons.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
@@ -202,11 +202,11 @@
 			this.splitContainer_Commands.Panel1.ResumeLayout(false);
 			this.splitContainer_Commands.Panel2.ResumeLayout(false);
 			this.splitContainer_Commands.ResumeLayout(false);
+			this.panel_Shortcuts.ResumeLayout(false);
 			this.splitContainer_Lower.Panel1.ResumeLayout(false);
 			this.splitContainer_Lower.Panel2.ResumeLayout(false);
 			this.splitContainer_Lower.ResumeLayout(false);
 			this.panel_Commands.ResumeLayout(false);
-			this.panel_Shortcuts.ResumeLayout(false);
 			this.panel_Navigation.ResumeLayout(false);
 			this.ResumeLayout(false);
 
