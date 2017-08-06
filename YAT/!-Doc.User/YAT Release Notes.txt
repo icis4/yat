@@ -99,6 +99,7 @@ Fixed bugs:
 - Erroneous error message when changing log file separator fixed (bug #378).
 - Context menu shortcuts are no longer executed when a dialog is open (bug #300).
 - Predefined command page navigation shortcuts fixed (related to bug #300).
+- Predefined command panel width change issue in case Tx or Rx panel is shown fixed (bug #384).
 - Saving and restoring the location in case of manual terminal layout fixed (bug #252).
 - System display scaling other than 100% mostly fixed for Win 7 and before (bugs #85, #235, #375).
 
