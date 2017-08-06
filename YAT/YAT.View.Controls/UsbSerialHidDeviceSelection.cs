@@ -249,70 +249,74 @@ namespace YAT.View.Controls
 				// Changes here may have to be applied there too!
 
 				this.isSettingControls.Enter();
-
-				comboBox_Device.Items.Clear();
-
-				if (devices.Count > 0)
+				try
 				{
-					comboBox_Device.Items.AddRange(devices.ToArray());
+					comboBox_Device.Items.Clear();
 
-					if ((this.deviceInfo != null) && (devices.Contains(this.deviceInfo)))
+					if (devices.Count > 0)
 					{
-						// Nothing has changed, just restore the selected item:
-						comboBox_Device.SelectedItem = this.deviceInfo;
-					}
-					else if ((this.deviceInfo != null) && (devices.ContainsVidPid(this.deviceInfo)))
-					{
-						// A device with same VID/PID is available, use that:
-						int sameVidPidIndex = devices.FindIndexVidPid(this.deviceInfo);
+						comboBox_Device.Items.AddRange(devices.ToArray());
 
-						// Inform the user if serial is required:
-						if (ApplicationSettings.LocalUserSettings.General.MatchUsbSerial)
+						if ((this.deviceInfo != null) && (devices.Contains(this.deviceInfo)))
+						{
+							// Nothing has changed, just restore the selected item:
+							comboBox_Device.SelectedItem = this.deviceInfo;
+						}
+						else if ((this.deviceInfo != null) && (devices.ContainsVidPid(this.deviceInfo)))
+						{
+							// A device with same VID/PID is available, use that:
+							int sameVidPidIndex = devices.FindIndexVidPid(this.deviceInfo);
+
+							// Inform the user if serial is required:
+							if (ApplicationSettings.LocalUserSettings.General.MatchUsbSerial)
+							{
+								// Get the 'NotAvailable' string BEFORE defaulting!
+								string deviceInfoNotAvailable = null;
+								if (this.deviceInfo != null)
+									deviceInfoNotAvailable = this.deviceInfo;
+
+								// Ensure that the settings item is switched and shown by SetControls().
+								// Set property instead of member to ensure that changed event is fired.
+								DeviceInfo = devices[sameVidPidIndex];
+
+								if (!string.IsNullOrEmpty(deviceInfoNotAvailable))
+									ShowNotAvailableSwitchedMessage(deviceInfoNotAvailable, devices[sameVidPidIndex]);
+							}
+							else
+							{
+								// Ensure that the settings item is defaulted and shown by SetControls().
+								// Set property instead of member to ensure that changed event is fired.
+								DeviceInfo = devices[sameVidPidIndex];
+							}
+						}
+						else // devices.Count == 0
 						{
 							// Get the 'NotAvailable' string BEFORE defaulting!
 							string deviceInfoNotAvailable = null;
 							if (this.deviceInfo != null)
 								deviceInfoNotAvailable = this.deviceInfo;
 
-							// Ensure that the settings item is switched and shown by SetControls().
-							// Set property instead of member to ensure that changed event is fired.
-							DeviceInfo = devices[sameVidPidIndex];
-
-							if (!string.IsNullOrEmpty(deviceInfoNotAvailable))
-								ShowNotAvailableSwitchedMessage(deviceInfoNotAvailable, devices[sameVidPidIndex]);
-						}
-						else
-						{
 							// Ensure that the settings item is defaulted and shown by SetControls().
 							// Set property instead of member to ensure that changed event is fired.
-							DeviceInfo = devices[sameVidPidIndex];
+							DeviceInfo = devices[0];
+
+							if (!string.IsNullOrEmpty(deviceInfoNotAvailable))
+								ShowNotAvailableDefaultedMessage(deviceInfoNotAvailable, devices[0]);
 						}
 					}
-					else // devices.Count == 0
+					else
 					{
-						// Get the 'NotAvailable' string BEFORE defaulting!
-						string deviceInfoNotAvailable = null;
-						if (this.deviceInfo != null)
-							deviceInfoNotAvailable = this.deviceInfo;
-
-						// Ensure that the settings item is defaulted and shown by SetControls().
+						// Ensure that the settings item is nulled and reset by SetControls().
 						// Set property instead of member to ensure that changed event is fired.
-						DeviceInfo = devices[0];
+						DeviceInfo = null;
 
-						if (!string.IsNullOrEmpty(deviceInfoNotAvailable))
-							ShowNotAvailableDefaultedMessage(deviceInfoNotAvailable, devices[0]);
+						ShowNoDevicesMessage();
 					}
 				}
-				else
+				finally
 				{
-					// Ensure that the settings item is nulled and reset by SetControls().
-					// Set property instead of member to ensure that changed event is fired.
-					DeviceInfo = null;
-
-					ShowNoDevicesMessage();
+					this.isSettingControls.Leave();
 				}
-
-				this.isSettingControls.Leave();
 			}
 		}
 
@@ -364,13 +368,17 @@ namespace YAT.View.Controls
 		private void SetDeviceSelection()
 		{
 			this.isSettingControls.Enter();
-
-			if (!DesignMode && Enabled && (this.deviceInfo != null))
-				SelectionHelper.Select(comboBox_Device, this.deviceInfo, this.deviceInfo);
-			else
-				SelectionHelper.Deselect(comboBox_Device);
-
-			this.isSettingControls.Leave();
+			try
+			{
+				if (!DesignMode && Enabled && (this.deviceInfo != null))
+					SelectionHelper.Select(comboBox_Device, this.deviceInfo, this.deviceInfo);
+				else
+					SelectionHelper.Deselect(comboBox_Device);
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		#endregion

@@ -415,77 +415,81 @@ namespace YAT.View.Forms
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
-
-			terminalSelection.TerminalType = this.newTerminalSettingsInEdit.TerminalType;
-
-			Domain.IOType ioType = this.newTerminalSettingsInEdit.IOType;
-
-			SetControlsVisibiliy(ioType);
-
-			terminalSelection.IOType = ioType;
-
-			serialPortSelection.PortId = this.newTerminalSettingsInEdit.SerialPortId;
-		////serialPortSelection.ActivePortInUseInfo is kept at 'null' as no port is yet activated/selected.
-
-			serialPortSettings.BaudRate     = this.newTerminalSettingsInEdit.SerialPortCommunication.BaudRate;
-			serialPortSettings.DataBits     = this.newTerminalSettingsInEdit.SerialPortCommunication.DataBits;
-			serialPortSettings.Parity       = this.newTerminalSettingsInEdit.SerialPortCommunication.Parity;
-			serialPortSettings.StopBits     = this.newTerminalSettingsInEdit.SerialPortCommunication.StopBits;
-			serialPortSettings.FlowControl  = this.newTerminalSettingsInEdit.SerialPortCommunication.FlowControl;
-			serialPortSettings.AliveMonitor = this.newTerminalSettingsInEdit.SerialPortAliveMonitor;
-			serialPortSettings.AutoReopen   = this.newTerminalSettingsInEdit.SerialPortAutoReopen;
-
-			socketSelection.SocketType      = (Domain.IOTypeEx)ioType;
-			socketSelection.RemoteHost      = this.newTerminalSettingsInEdit.SocketRemoteHost;
-			socketSelection.RemoteTcpPort   = this.newTerminalSettingsInEdit.SocketRemoteTcpPort;
-			socketSelection.RemoteUdpPort   = this.newTerminalSettingsInEdit.SocketRemoteUdpPort;
-			socketSelection.LocalInterface  = this.newTerminalSettingsInEdit.SocketLocalInterface;
-			socketSelection.LocalFilter     = this.newTerminalSettingsInEdit.SocketLocalFilter;
-			socketSelection.LocalTcpPort    = this.newTerminalSettingsInEdit.SocketLocalTcpPort;
-			socketSelection.LocalUdpPort    = this.newTerminalSettingsInEdit.SocketLocalUdpPort;
-
-			socketSettings.SocketType             = (Domain.IOTypeEx)ioType;
-			socketSettings.TcpClientAutoReconnect = this.newTerminalSettingsInEdit.TcpClientAutoReconnect;
-			socketSettings.UdpServerSendMode      = this.newTerminalSettingsInEdit.UdpServerSendMode;
-
-			usbSerialHidDeviceSelection.DeviceInfo = this.newTerminalSettingsInEdit.UsbSerialHidDeviceInfo;
-
-			                                      ////this.newTerminalSettingsInEdit.UsbSerialHidMatchSerial is defined by the LocalUserSettings.
-			usbSerialHidDeviceSettings.ReportFormat  = this.newTerminalSettingsInEdit.UsbSerialHidReportFormat;
-			usbSerialHidDeviceSettings.RxFilterUsage = this.newTerminalSettingsInEdit.UsbSerialHidRxFilterUsage;
-			usbSerialHidDeviceSettings.FlowControl   = this.newTerminalSettingsInEdit.UsbSerialHidFlowControl;
-			usbSerialHidDeviceSettings.AutoOpen      = this.newTerminalSettingsInEdit.UsbSerialHidAutoOpen;
-
-			checkBox_StartTerminal.Checked = this.newTerminalSettingsInEdit.StartTerminal;
-
-			// Trigger refresh of ports/devices if selection of I/O type has changed:
-			bool isSerialPort   = ((Domain.IOTypeEx)ioType).IsSerialPort;
-			bool isSocket       = ((Domain.IOTypeEx)ioType).IsSocket;
-			bool isUsbSerialHid = ((Domain.IOTypeEx)ioType).IsUsbSerialHid;
-
-			bool wasSerialPort   = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsSerialPort;
-			bool wasSocket       = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsSocket;
-			bool wasUsbSerialHid = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsUsbSerialHid;
-
-			if      (isSerialPort   && !wasSerialPort)
-				serialPortSelection        .RefreshPortList();
-			else if (isSocket       && !wasSocket)
-				socketSelection            .RefreshLocalInterfaceList();
-			else if (isUsbSerialHid && !wasUsbSerialHid)
-				usbSerialHidDeviceSelection.RefreshDeviceList();
-
-			this.SetControls_ioTypeOld = ioType;
-
-			// Finally, enable OK button if port/device is valid:
-			bool isValid = true;
-			switch (ioType)
+			try
 			{
-				case Domain.IOType.SerialPort:   isValid = serialPortSelection.IsValid;         break;
-				case Domain.IOType.UsbSerialHid: isValid = usbSerialHidDeviceSelection.IsValid; break;
-			}
-			button_OK.Enabled = isValid;
+				terminalSelection.TerminalType = this.newTerminalSettingsInEdit.TerminalType;
 
-			this.isSettingControls.Leave();
+				Domain.IOType ioType = this.newTerminalSettingsInEdit.IOType;
+
+				SetControlsVisibiliy(ioType);
+
+				terminalSelection.IOType = ioType;
+
+				serialPortSelection.PortId = this.newTerminalSettingsInEdit.SerialPortId;
+			////serialPortSelection.ActivePortInUseInfo is kept at 'null' as no port is yet activated/selected.
+
+				serialPortSettings.BaudRate     = this.newTerminalSettingsInEdit.SerialPortCommunication.BaudRate;
+				serialPortSettings.DataBits     = this.newTerminalSettingsInEdit.SerialPortCommunication.DataBits;
+				serialPortSettings.Parity       = this.newTerminalSettingsInEdit.SerialPortCommunication.Parity;
+				serialPortSettings.StopBits     = this.newTerminalSettingsInEdit.SerialPortCommunication.StopBits;
+				serialPortSettings.FlowControl  = this.newTerminalSettingsInEdit.SerialPortCommunication.FlowControl;
+				serialPortSettings.AliveMonitor = this.newTerminalSettingsInEdit.SerialPortAliveMonitor;
+				serialPortSettings.AutoReopen   = this.newTerminalSettingsInEdit.SerialPortAutoReopen;
+
+				socketSelection.SocketType      = (Domain.IOTypeEx)ioType;
+				socketSelection.RemoteHost      = this.newTerminalSettingsInEdit.SocketRemoteHost;
+				socketSelection.RemoteTcpPort   = this.newTerminalSettingsInEdit.SocketRemoteTcpPort;
+				socketSelection.RemoteUdpPort   = this.newTerminalSettingsInEdit.SocketRemoteUdpPort;
+				socketSelection.LocalInterface  = this.newTerminalSettingsInEdit.SocketLocalInterface;
+				socketSelection.LocalFilter     = this.newTerminalSettingsInEdit.SocketLocalFilter;
+				socketSelection.LocalTcpPort    = this.newTerminalSettingsInEdit.SocketLocalTcpPort;
+				socketSelection.LocalUdpPort    = this.newTerminalSettingsInEdit.SocketLocalUdpPort;
+
+				socketSettings.SocketType             = (Domain.IOTypeEx)ioType;
+				socketSettings.TcpClientAutoReconnect = this.newTerminalSettingsInEdit.TcpClientAutoReconnect;
+				socketSettings.UdpServerSendMode      = this.newTerminalSettingsInEdit.UdpServerSendMode;
+
+				usbSerialHidDeviceSelection.DeviceInfo = this.newTerminalSettingsInEdit.UsbSerialHidDeviceInfo;
+
+													  ////this.newTerminalSettingsInEdit.UsbSerialHidMatchSerial is defined by the LocalUserSettings.
+				usbSerialHidDeviceSettings.ReportFormat  = this.newTerminalSettingsInEdit.UsbSerialHidReportFormat;
+				usbSerialHidDeviceSettings.RxFilterUsage = this.newTerminalSettingsInEdit.UsbSerialHidRxFilterUsage;
+				usbSerialHidDeviceSettings.FlowControl   = this.newTerminalSettingsInEdit.UsbSerialHidFlowControl;
+				usbSerialHidDeviceSettings.AutoOpen      = this.newTerminalSettingsInEdit.UsbSerialHidAutoOpen;
+
+				checkBox_StartTerminal.Checked = this.newTerminalSettingsInEdit.StartTerminal;
+
+				// Trigger refresh of ports/devices if selection of I/O type has changed:
+				bool isSerialPort   = ((Domain.IOTypeEx)ioType).IsSerialPort;
+				bool isSocket       = ((Domain.IOTypeEx)ioType).IsSocket;
+				bool isUsbSerialHid = ((Domain.IOTypeEx)ioType).IsUsbSerialHid;
+
+				bool wasSerialPort   = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsSerialPort;
+				bool wasSocket       = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsSocket;
+				bool wasUsbSerialHid = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsUsbSerialHid;
+
+				if      (isSerialPort   && !wasSerialPort)
+					serialPortSelection        .RefreshPortList();
+				else if (isSocket       && !wasSocket)
+					socketSelection            .RefreshLocalInterfaceList();
+				else if (isUsbSerialHid && !wasUsbSerialHid)
+					usbSerialHidDeviceSelection.RefreshDeviceList();
+
+				this.SetControls_ioTypeOld = ioType;
+
+				// Finally, enable OK button if port/device is valid:
+				bool isValid = true;
+				switch (ioType)
+				{
+					case Domain.IOType.SerialPort:   isValid = serialPortSelection.IsValid;         break;
+					case Domain.IOType.UsbSerialHid: isValid = usbSerialHidDeviceSelection.IsValid; break;
+				}
+				button_OK.Enabled = isValid;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		/// <remarks>

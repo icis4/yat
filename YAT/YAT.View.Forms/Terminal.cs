@@ -421,13 +421,17 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_TerminalMenu_File_SetMenuItems()
 		{
 			this.isSettingControls.Enter();
-
-			if (TerminalIsAvailable)
-				toolStripMenuItem_TerminalMenu_File_Save.Enabled = this.terminal.SettingsFileIsWritable;
-			else
-				toolStripMenuItem_TerminalMenu_File_Save.Enabled = false;
-
-			this.isSettingControls.Leave();
+			try
+			{
+				if (TerminalIsAvailable)
+					toolStripMenuItem_TerminalMenu_File_Save.Enabled = this.terminal.SettingsFileIsWritable;
+				else
+					toolStripMenuItem_TerminalMenu_File_Save.Enabled = false;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void toolStripMenuItem_TerminalMenu_File_DropDownOpening(object sender, EventArgs e)
@@ -464,31 +468,35 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems()
 		{
 			this.isSettingControls.Enter();
-
-			// Start/stop:
-			if (TerminalIsAvailable)
+			try
 			{
-				toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = !this.terminal.IsStarted;
-				toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled  =  this.terminal.IsStarted;
-				toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled =  this.terminal.IsBusy;
+				// Start/stop:
+				if (TerminalIsAvailable)
+				{
+					toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = !this.terminal.IsStarted;
+					toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled  =  this.terminal.IsStarted;
+					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled =  this.terminal.IsBusy;
+				}
+				else
+				{
+					toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = false;
+					toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled  = false;
+					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled = false;
+				}
+
+				// Edit:
+				bool monitorIsDefined = (this.lastMonitorSelection != Domain.RepositoryType.None);
+				bool editIsNotActive = (!send.EditIsActive);
+				toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Enabled       = (monitorIsDefined && editIsNotActive);
+				toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Enabled      = (monitorIsDefined && editIsNotActive);
+				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = (monitorIsDefined && editIsNotActive);
+				toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Enabled      =  monitorIsDefined;
+				toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled           =  monitorIsDefined;
 			}
-			else
+			finally
 			{
-				toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = false;
-				toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled  = false;
-				toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled = false;
+				this.isSettingControls.Leave();
 			}
-
-			// Edit:
-			bool monitorIsDefined = (this.lastMonitorSelection != Domain.RepositoryType.None);
-			bool editIsNotActive = (!send.EditIsActive);
-			toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Enabled       = (monitorIsDefined && editIsNotActive);
-			toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Enabled      = (monitorIsDefined && editIsNotActive);
-			toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = (monitorIsDefined && editIsNotActive);
-			toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Enabled      =  monitorIsDefined;
-			toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled           =  monitorIsDefined;
-
-			this.isSettingControls.Leave();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_DropDownOpening(object sender, EventArgs e)
@@ -567,73 +575,77 @@ namespace YAT.View.Forms
 			bool isTextTerminal = (this.settingsRoot.TerminalType == Domain.TerminalType.Text);
 
 			this.isSettingControls.Enter();
-
-			// Prepare the menu item properties based on state and settings.
-			//
-			// Attention:
-			// Similar code exists in the following locations:
-			//  > View.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
-			//  > View.Controls.SendText.SetControls()
-			// Changes here may have to be applied there too.
-			//
-			// Main and context menu are separated as there are subtle differences between them.
-
-			string sendTextText = "Text";
-			bool sendTextEnabled = this.settingsRoot.SendText.Command.IsValidText;
-			if (this.settingsRoot.Send.SendImmediately)
+			try
 			{
-				if (isTextTerminal)
-					sendTextText = "EOL";
-				else
-					sendTextEnabled = false;
+				// Prepare the menu item properties based on state and settings.
+				//
+				// Attention:
+				// Similar code exists in the following locations:
+				//  > View.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
+				//  > View.Controls.SendText.SetControls()
+				// Changes here may have to be applied there too.
+				//
+				// Main and context menu are separated as there are subtle differences between them.
+
+				string sendTextText = "Text";
+				bool sendTextEnabled = this.settingsRoot.SendText.Command.IsValidText;
+				if (this.settingsRoot.Send.SendImmediately)
+				{
+					if (isTextTerminal)
+						sendTextText = "EOL";
+					else
+						sendTextEnabled = false;
+				}
+
+				bool sendFileEnabled = this.settingsRoot.SendFile.Command.IsValidFilePath;
+
+				// Set the menu item properties:
+
+				toolStripMenuItem_TerminalMenu_Send_Text.Text              = sendTextText;
+				toolStripMenuItem_TerminalMenu_Send_Text.Enabled           = sendTextEnabled && this.terminal.IsReadyToSend;
+				toolStripMenuItem_TerminalMenu_Send_TextWithoutEol.Enabled = sendTextEnabled && this.terminal.IsReadyToSend && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.SendImmediately;
+				toolStripMenuItem_TerminalMenu_Send_File.Enabled           = sendFileEnabled && this.terminal.IsReadyToSend;
+
+				toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix.Checked = this.settingsRoot.Send.UseExplicitDefaultRadix;
+
+				toolStripMenuItem_TerminalMenu_Send_KeepCommand.Checked     = this.settingsRoot.Send.KeepCommand;
+				toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked  = this.settingsRoot.Send.CopyPredefined;
+				toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked = this.settingsRoot.Send.SendImmediately;
+				toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Enabled  = isTextTerminal;
+				toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Checked  = this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines;
+
+				toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText.Enabled = this.settingsRoot.SendText.Command.IsMultiLineText;
+
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse.Checked          = this.settingsRoot.AutoResponse.IsActive;
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Checked  = this.settingsRoot.AutoResponse.TriggerIsActive;
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Checked = this.settingsRoot.AutoResponse.ResponseIsActive;
+
+				// Attention:
+				// Similar code exists in the following location:
+				//  > View.Forms.Main.toolStripButton_MainTool_SetControls()
+				// Changes here may have to be applied there too.
+
+				if (!this.terminalMenuValidationWorkaround_UpdateIsSuspended)
+				{
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.Clear();
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoResponseTriggerItems());
+
+					AutoTriggerEx trigger = this.settingsRoot.AutoResponse.Trigger;
+					SelectionHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
+
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Clear();
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.GetValidAutoResponseResponseItems());
+
+					AutoResponseEx response = this.settingsRoot.AutoResponse.Response;
+					SelectionHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
+				}
+
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Enabled = this.settingsRoot.AutoResponse.IsActive;
 			}
-
-			bool sendFileEnabled = this.settingsRoot.SendFile.Command.IsValidFilePath;
-
-			// Set the menu item properties:
-
-			toolStripMenuItem_TerminalMenu_Send_Text.Text              = sendTextText;
-			toolStripMenuItem_TerminalMenu_Send_Text.Enabled           = sendTextEnabled && this.terminal.IsReadyToSend;
-			toolStripMenuItem_TerminalMenu_Send_TextWithoutEol.Enabled = sendTextEnabled && this.terminal.IsReadyToSend && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.SendImmediately;
-			toolStripMenuItem_TerminalMenu_Send_File.Enabled           = sendFileEnabled && this.terminal.IsReadyToSend;
-
-			toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix.Checked = this.settingsRoot.Send.UseExplicitDefaultRadix;
-
-			toolStripMenuItem_TerminalMenu_Send_KeepCommand.Checked     = this.settingsRoot.Send.KeepCommand;
-			toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked  = this.settingsRoot.Send.CopyPredefined;
-			toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked = this.settingsRoot.Send.SendImmediately;
-			toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Enabled  = isTextTerminal;
-			toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Checked  = this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines;
-
-			toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText.Enabled = this.settingsRoot.SendText.Command.IsMultiLineText;
-
-			toolStripMenuItem_TerminalMenu_Send_AutoResponse.Checked          = this.settingsRoot.AutoResponse.IsActive;
-			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Checked  = this.settingsRoot.AutoResponse.TriggerIsActive;
-			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Checked = this.settingsRoot.AutoResponse.ResponseIsActive;
-
-			// Attention:
-			// Similar code exists in the following location:
-			//  > View.Forms.Main.toolStripButton_MainTool_SetControls()
-			// Changes here may have to be applied there too.
-
-			if (!this.terminalMenuValidationWorkaround_UpdateIsSuspended)
+			finally
 			{
-				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.Clear();
-				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoResponseTriggerItems());
-
-				AutoTriggerEx trigger = this.settingsRoot.AutoResponse.Trigger;
-				SelectionHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
-
-				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Clear();
-				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.GetValidAutoResponseResponseItems());
-
-				AutoResponseEx response = this.settingsRoot.AutoResponse.Response;
-				SelectionHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
+				this.isSettingControls.Leave();
 			}
-
-			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Enabled = this.settingsRoot.AutoResponse.IsActive;
-
-			this.isSettingControls.Leave();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_DropDownOpening(object sender, EventArgs e)
@@ -783,20 +795,24 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_TerminalMenu_Log_SetMenuItems()
 		{
 			this.isSettingControls.Enter();
+			try
+			{
+				bool logIsEnabled = (this.settingsRoot.Log.Count > 0);
+				bool logIsOn      =  this.settingsRoot.LogIsOn;
 
-			bool logIsEnabled = (this.settingsRoot.Log.Count > 0);
-			bool logIsOn      =  this.settingsRoot.LogIsOn;
+				bool logFileExists = false;
+				if (this.terminal != null)
+					logFileExists = this.terminal.LogFileExists;
 
-			bool logFileExists = false;
-			if (this.terminal != null)
-				logFileExists = this.terminal.LogFileExists;
-
-			toolStripMenuItem_TerminalMenu_Log_On.Enabled       = logIsEnabled && !logIsOn;
-			toolStripMenuItem_TerminalMenu_Log_Off.Enabled      = logIsEnabled &&  logIsOn;
-			toolStripMenuItem_TerminalMenu_Log_OpenFile.Enabled = logIsEnabled &&  logFileExists;
-			toolStripMenuItem_TerminalMenu_Log_Clear.Enabled    = logIsEnabled && (logIsOn || logFileExists);
-
-			this.isSettingControls.Leave();
+				toolStripMenuItem_TerminalMenu_Log_On.Enabled       = logIsEnabled && !logIsOn;
+				toolStripMenuItem_TerminalMenu_Log_Off.Enabled      = logIsEnabled &&  logIsOn;
+				toolStripMenuItem_TerminalMenu_Log_OpenFile.Enabled = logIsEnabled &&  logFileExists;
+				toolStripMenuItem_TerminalMenu_Log_Clear.Enabled    = logIsEnabled && (logIsOn || logFileExists);
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Log_DropDownOpening(object sender, EventArgs e)
@@ -844,10 +860,14 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_TerminalMenu_View_Initialize()
 		{
 			this.isSettingControls.Enter();
-
-			toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.AddRange(OrientationEx.GetItems());
-
-			this.isSettingControls.Leave();
+			try
+			{
+				toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.AddRange(OrientationEx.GetItems());
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		/// <remarks>
@@ -857,80 +877,84 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_TerminalMenu_View_SetMenuItems()
 		{
 			this.isSettingControls.Enter();
-
-			bool isText       = ((Domain.TerminalTypeEx)this.settingsRoot.TerminalType).IsText;
-
-			bool isSerialPort = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
-
-			// Layout, disable monitor item if the other monitors are hidden:
-			toolStripMenuItem_TerminalMenu_View_Panels_Tx.Enabled    = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
-			toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Enabled = (this.settingsRoot.Layout.TxMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
-			toolStripMenuItem_TerminalMenu_View_Panels_Rx.Enabled    = (this.settingsRoot.Layout.TxMonitorPanelIsVisible || this.settingsRoot.Layout.BidirMonitorPanelIsVisible);
-
-			toolStripMenuItem_TerminalMenu_View_Panels_Tx.Checked    = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
-			toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Checked = this.settingsRoot.Layout.BidirMonitorPanelIsVisible;
-			toolStripMenuItem_TerminalMenu_View_Panels_Rx.Checked    = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
-
-			toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem = (OrientationEx)this.settingsRoot.Layout.MonitorOrientation;
-
-			toolStripMenuItem_TerminalMenu_View_Panels_SendText.Checked = this.settingsRoot.Layout.SendTextPanelIsVisible;
-			toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Checked    = this.settingsRoot.Layout.SendFilePanelIsVisible;
-
-			toolStripMenuItem_TerminalMenu_View_Panels_Predefined.Checked = this.settingsRoot.Layout.PredefinedPanelIsVisible;
-
-			// Connect time:
-			bool showConnectTime = this.settingsRoot.Status.ShowConnectTime;
-			toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Checked  = showConnectTime;
-			toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime.Enabled = showConnectTime;
-
-			// Counters:
-			bool showCountAndRate = this.settingsRoot.Status.ShowCountAndRate;
-			toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate.Checked = showCountAndRate;
-			toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount.Enabled = showCountAndRate;
-
-			// Display:
-			bool isShowable = ((this.settingsRoot.Display.TxRadixIsShowable) ||
-			                   (this.settingsRoot.Display.RxRadixIsShowable));
-			toolStripMenuItem_TerminalMenu_View_ShowRadix.Enabled = isShowable; // Attention, same code further below as well as in 'View.Forms.AdvancedTerminalSettings'.
-			toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked = isShowable && this.settingsRoot.Display.ShowRadix;
-
-			toolStripMenuItem_TerminalMenu_View_ShowBufferLineNumbers.Checked = this.settingsRoot.Display.ShowBufferLineNumbers;
-			toolStripMenuItem_TerminalMenu_View_ShowTotalLineNumbers.Checked  = this.settingsRoot.Display.ShowTotalLineNumbers;
-			toolStripMenuItem_TerminalMenu_View_ShowDate.Checked              = this.settingsRoot.Display.ShowDate;
-			toolStripMenuItem_TerminalMenu_View_ShowTime.Checked              = this.settingsRoot.Display.ShowTime;
-			toolStripMenuItem_TerminalMenu_View_ShowPort.Checked              = this.settingsRoot.Display.ShowPort;
-			toolStripMenuItem_TerminalMenu_View_ShowDirection.Checked         = this.settingsRoot.Display.ShowDirection;
-
-			toolStripMenuItem_TerminalMenu_View_ShowEol.Enabled = (isText);
-			toolStripMenuItem_TerminalMenu_View_ShowEol.Checked = (isText && this.settingsRoot.TextTerminal.ShowEol);
-
-			toolStripMenuItem_TerminalMenu_View_ShowLength.Checked = this.settingsRoot.Display.ShowLength;
-
-			// Flow control count:
-			bool showFlowControlCount = this.settingsRoot.Status.ShowFlowControlCount;
-			toolStripMenuItem_TerminalMenu_View_FlowControlCount.Enabled            = this.settingsRoot.Terminal.IO.FlowControlIsInUse;
-			toolStripMenuItem_TerminalMenu_View_FlowControlCount_ShowCount.Checked  = showFlowControlCount;
-			toolStripMenuItem_TerminalMenu_View_FlowControlCount_ResetCount.Enabled = showFlowControlCount;
-
-			// Break count:
-			bool showBreakCount = this.settingsRoot.Status.ShowBreakCount;
-			toolStripMenuItem_TerminalMenu_View_BreakCount.Enabled            = (isSerialPort && this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates);
-			toolStripMenuItem_TerminalMenu_View_BreakCount_ShowCount.Checked  = showBreakCount;
-			toolStripMenuItem_TerminalMenu_View_BreakCount_ResetCount.Enabled = showBreakCount;
-
-			// Format:
-			if (this.settingsRoot.Format.FormattingEnabled)
+			try
 			{
-				toolStripMenuItem_TerminalMenu_View_ToggleFormatting.Text = "Disable Forma&tting";
-				toolStripMenuItem_TerminalMenu_View_ToggleFormatting.Image = Properties.Resources.Image_Tool_font_delete_16x16;
-			}
-			else
-			{
-				toolStripMenuItem_TerminalMenu_View_ToggleFormatting.Text = "Enable Forma&tting";
-				toolStripMenuItem_TerminalMenu_View_ToggleFormatting.Image = Properties.Resources.Image_Tool_font_add_16x16;
-			}
+				bool isText       = ((Domain.TerminalTypeEx)this.settingsRoot.TerminalType).IsText;
 
-			this.isSettingControls.Leave();
+				bool isSerialPort = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
+
+				// Layout, disable monitor item if the other monitors are hidden:
+				toolStripMenuItem_TerminalMenu_View_Panels_Tx.Enabled    = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
+				toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Enabled = (this.settingsRoot.Layout.TxMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
+				toolStripMenuItem_TerminalMenu_View_Panels_Rx.Enabled    = (this.settingsRoot.Layout.TxMonitorPanelIsVisible || this.settingsRoot.Layout.BidirMonitorPanelIsVisible);
+
+				toolStripMenuItem_TerminalMenu_View_Panels_Tx.Checked    = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
+				toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Checked = this.settingsRoot.Layout.BidirMonitorPanelIsVisible;
+				toolStripMenuItem_TerminalMenu_View_Panels_Rx.Checked    = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
+
+				toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem = (OrientationEx)this.settingsRoot.Layout.MonitorOrientation;
+
+				toolStripMenuItem_TerminalMenu_View_Panels_SendText.Checked = this.settingsRoot.Layout.SendTextPanelIsVisible;
+				toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Checked    = this.settingsRoot.Layout.SendFilePanelIsVisible;
+
+				toolStripMenuItem_TerminalMenu_View_Panels_Predefined.Checked = this.settingsRoot.Layout.PredefinedPanelIsVisible;
+
+				// Connect time:
+				bool showConnectTime = this.settingsRoot.Status.ShowConnectTime;
+				toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Checked  = showConnectTime;
+				toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime.Enabled = showConnectTime;
+
+				// Counters:
+				bool showCountAndRate = this.settingsRoot.Status.ShowCountAndRate;
+				toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate.Checked = showCountAndRate;
+				toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount.Enabled = showCountAndRate;
+
+				// Display:
+				bool isShowable = ((this.settingsRoot.Display.TxRadixIsShowable) ||
+								   (this.settingsRoot.Display.RxRadixIsShowable));
+				toolStripMenuItem_TerminalMenu_View_ShowRadix.Enabled = isShowable; // Attention, same code further below as well as in 'View.Forms.AdvancedTerminalSettings'.
+				toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked = isShowable && this.settingsRoot.Display.ShowRadix;
+
+				toolStripMenuItem_TerminalMenu_View_ShowBufferLineNumbers.Checked = this.settingsRoot.Display.ShowBufferLineNumbers;
+				toolStripMenuItem_TerminalMenu_View_ShowTotalLineNumbers.Checked  = this.settingsRoot.Display.ShowTotalLineNumbers;
+				toolStripMenuItem_TerminalMenu_View_ShowDate.Checked              = this.settingsRoot.Display.ShowDate;
+				toolStripMenuItem_TerminalMenu_View_ShowTime.Checked              = this.settingsRoot.Display.ShowTime;
+				toolStripMenuItem_TerminalMenu_View_ShowPort.Checked              = this.settingsRoot.Display.ShowPort;
+				toolStripMenuItem_TerminalMenu_View_ShowDirection.Checked         = this.settingsRoot.Display.ShowDirection;
+
+				toolStripMenuItem_TerminalMenu_View_ShowEol.Enabled = (isText);
+				toolStripMenuItem_TerminalMenu_View_ShowEol.Checked = (isText && this.settingsRoot.TextTerminal.ShowEol);
+
+				toolStripMenuItem_TerminalMenu_View_ShowLength.Checked = this.settingsRoot.Display.ShowLength;
+
+				// Flow control count:
+				bool showFlowControlCount = this.settingsRoot.Status.ShowFlowControlCount;
+				toolStripMenuItem_TerminalMenu_View_FlowControlCount.Enabled            = this.settingsRoot.Terminal.IO.FlowControlIsInUse;
+				toolStripMenuItem_TerminalMenu_View_FlowControlCount_ShowCount.Checked  = showFlowControlCount;
+				toolStripMenuItem_TerminalMenu_View_FlowControlCount_ResetCount.Enabled = showFlowControlCount;
+
+				// Break count:
+				bool showBreakCount = this.settingsRoot.Status.ShowBreakCount;
+				toolStripMenuItem_TerminalMenu_View_BreakCount.Enabled            = (isSerialPort && this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates);
+				toolStripMenuItem_TerminalMenu_View_BreakCount_ShowCount.Checked  = showBreakCount;
+				toolStripMenuItem_TerminalMenu_View_BreakCount_ResetCount.Enabled = showBreakCount;
+
+				// Format:
+				if (this.settingsRoot.Format.FormattingEnabled)
+				{
+					toolStripMenuItem_TerminalMenu_View_ToggleFormatting.Text = "Disable Forma&tting";
+					toolStripMenuItem_TerminalMenu_View_ToggleFormatting.Image = Properties.Resources.Image_Tool_font_delete_16x16;
+				}
+				else
+				{
+					toolStripMenuItem_TerminalMenu_View_ToggleFormatting.Text = "Enable Forma&tting";
+					toolStripMenuItem_TerminalMenu_View_ToggleFormatting.Image = Properties.Resources.Image_Tool_font_add_16x16;
+				}
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_DropDownOpening(object sender, EventArgs e)
@@ -1106,13 +1130,17 @@ namespace YAT.View.Forms
 		private void contextMenuStrip_Preset_SetMenuItems()
 		{
 			this.isSettingControls.Enter();
+			try
+			{
+				bool isSerialPort = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
 
-			bool isSerialPort = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
-
-			foreach (ToolStripMenuItem item in this.menuItems_preset)
-				item.Enabled = isSerialPort;
-
-			this.isSettingControls.Leave();
+				foreach (ToolStripMenuItem item in this.menuItems_preset)
+					item.Enabled = isSerialPort;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void contextMenuStrip_Preset_Opening(object sender, CancelEventArgs e)
@@ -1138,10 +1166,14 @@ namespace YAT.View.Forms
 		private void contextMenuStrip_Monitor_Initialize()
 		{
 			this.isSettingControls.Enter();
-
-			toolStripComboBox_MonitorContextMenu_Panels_Orientation.Items.AddRange(OrientationEx.GetItems());
-
-			this.isSettingControls.Leave();
+			try
+			{
+				toolStripComboBox_MonitorContextMenu_Panels_Orientation.Items.AddRange(OrientationEx.GetItems());
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void contextMenuStrip_Monitor_Opening(object sender, CancelEventArgs e)
@@ -1156,69 +1188,73 @@ namespace YAT.View.Forms
 		private void contextMenuStrip_Monitor_SetMenuItems()
 		{
 			this.isSettingControls.Enter();
-
-			Domain.TerminalType terminalType = this.settingsRoot.TerminalType;
-			Domain.RepositoryType monitorType = GetMonitorType(contextMenuStrip_Monitor.SourceControl);
-			bool isMonitor = (monitorType != Domain.RepositoryType.None);
-
-			toolStripMenuItem_MonitorContextMenu_Panels_Tx.Checked    = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
-			toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Checked = this.settingsRoot.Layout.BidirMonitorPanelIsVisible;
-			toolStripMenuItem_MonitorContextMenu_Panels_Rx.Checked    = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
-
-			// Disable "Monitor" item if the other monitors are hidden
-			toolStripMenuItem_MonitorContextMenu_Panels_Tx.Enabled    = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
-			toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Enabled = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
-			toolStripMenuItem_MonitorContextMenu_Panels_Rx.Enabled    = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.BidirMonitorPanelIsVisible);
-
-			toolStripComboBox_MonitorContextMenu_Panels_Orientation.SelectedItem = (OrientationEx)this.settingsRoot.Layout.MonitorOrientation;
-
-			// Hide "Hide" item if only this monitor is visible
-			bool hideIsAllowed = false;
-			switch (monitorType)
+			try
 			{
-				case Domain.RepositoryType.Tx:    hideIsAllowed = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);    break;
-				case Domain.RepositoryType.Bidir: hideIsAllowed = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.RxMonitorPanelIsVisible);    break;
-				case Domain.RepositoryType.Rx:    hideIsAllowed = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.BidirMonitorPanelIsVisible); break;
+				var terminalType = this.settingsRoot.TerminalType;
+				var monitorType = GetMonitorType(contextMenuStrip_Monitor.SourceControl);
+				var isMonitor = (monitorType != Domain.RepositoryType.None);
+
+				toolStripMenuItem_MonitorContextMenu_Panels_Tx.Checked    = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
+				toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Checked = this.settingsRoot.Layout.BidirMonitorPanelIsVisible;
+				toolStripMenuItem_MonitorContextMenu_Panels_Rx.Checked    = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
+
+				// Disable "Monitor" item if the other monitors are hidden
+				toolStripMenuItem_MonitorContextMenu_Panels_Tx.Enabled    = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
+				toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Enabled = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
+				toolStripMenuItem_MonitorContextMenu_Panels_Rx.Enabled    = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.BidirMonitorPanelIsVisible);
+
+				toolStripComboBox_MonitorContextMenu_Panels_Orientation.SelectedItem = (OrientationEx)this.settingsRoot.Layout.MonitorOrientation;
+
+				// Hide "Hide" item if only this monitor is visible
+				bool hideIsAllowed = false;
+				switch (monitorType)
+				{
+					case Domain.RepositoryType.Tx:    hideIsAllowed = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);    break;
+					case Domain.RepositoryType.Bidir: hideIsAllowed = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.RxMonitorPanelIsVisible);    break;
+					case Domain.RepositoryType.Rx:    hideIsAllowed = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.BidirMonitorPanelIsVisible); break;
+				}
+				toolStripMenuItem_MonitorContextMenu_Hide.Visible = hideIsAllowed;
+				toolStripMenuItem_MonitorContextMenu_Hide.Enabled = isMonitor && hideIsAllowed;
+
+				bool isShowable = ((this.settingsRoot.Display.TxRadixIsShowable) ||
+								   (this.settingsRoot.Display.RxRadixIsShowable));
+				toolStripMenuItem_MonitorContextMenu_ShowRadix.Enabled = isShowable; // Attention, same code further above as well as in 'View.Forms.AdvancedTerminalSettings'.
+				toolStripMenuItem_MonitorContextMenu_ShowRadix.Checked = isShowable && this.settingsRoot.Display.ShowRadix;
+
+				toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers.Checked = this.settingsRoot.Display.ShowBufferLineNumbers;
+				toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers.Checked  = this.settingsRoot.Display.ShowTotalLineNumbers;
+				toolStripMenuItem_MonitorContextMenu_ShowDate.Checked              = this.settingsRoot.Display.ShowDate;
+				toolStripMenuItem_MonitorContextMenu_ShowTime.Checked              = this.settingsRoot.Display.ShowTime;
+				toolStripMenuItem_MonitorContextMenu_ShowPort.Checked              = this.settingsRoot.Display.ShowPort;
+				toolStripMenuItem_MonitorContextMenu_ShowDirection.Checked         = this.settingsRoot.Display.ShowDirection;
+
+				bool isText = ((Domain.TerminalTypeEx)terminalType).IsText;
+				toolStripMenuItem_MonitorContextMenu_ShowEol.Enabled = isText;
+				toolStripMenuItem_MonitorContextMenu_ShowEol.Checked = isText && this.settingsRoot.TextTerminal.ShowEol;
+
+				toolStripMenuItem_MonitorContextMenu_ShowLength.Checked = this.settingsRoot.Display.ShowLength;
+
+				bool showConnectTime = this.settingsRoot.Status.ShowConnectTime;
+				toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Checked  = showConnectTime;
+				toolStripMenuItem_MonitorContextMenu_ResetConnectTime.Enabled = showConnectTime;
+
+				bool showCountAndRate = this.settingsRoot.Status.ShowCountAndRate;
+				toolStripMenuItem_MonitorContextMenu_ShowCountAndRate.Checked  = showCountAndRate;
+				toolStripMenuItem_MonitorContextMenu_ResetCount.Enabled        = showCountAndRate;
+
+				toolStripMenuItem_MonitorContextMenu_Clear.Enabled = isMonitor;
+
+				toolStripMenuItem_MonitorContextMenu_SelectAll.Enabled  = isMonitor;
+				toolStripMenuItem_MonitorContextMenu_SelectNone.Enabled = isMonitor;
+
+				toolStripMenuItem_MonitorContextMenu_SaveToFile.Enabled      = isMonitor;
+				toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Enabled = isMonitor;
+				toolStripMenuItem_MonitorContextMenu_Print.Enabled           = isMonitor;
 			}
-			toolStripMenuItem_MonitorContextMenu_Hide.Visible = hideIsAllowed;
-			toolStripMenuItem_MonitorContextMenu_Hide.Enabled = isMonitor && hideIsAllowed;
-
-			bool isShowable = ((this.settingsRoot.Display.TxRadixIsShowable) ||
-			                   (this.settingsRoot.Display.RxRadixIsShowable));
-			toolStripMenuItem_MonitorContextMenu_ShowRadix.Enabled = isShowable; // Attention, same code further above as well as in 'View.Forms.AdvancedTerminalSettings'.
-			toolStripMenuItem_MonitorContextMenu_ShowRadix.Checked = isShowable && this.settingsRoot.Display.ShowRadix;
-
-			toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers.Checked = this.settingsRoot.Display.ShowBufferLineNumbers;
-			toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers.Checked  = this.settingsRoot.Display.ShowTotalLineNumbers;
-			toolStripMenuItem_MonitorContextMenu_ShowDate.Checked              = this.settingsRoot.Display.ShowDate;
-			toolStripMenuItem_MonitorContextMenu_ShowTime.Checked              = this.settingsRoot.Display.ShowTime;
-			toolStripMenuItem_MonitorContextMenu_ShowPort.Checked              = this.settingsRoot.Display.ShowPort;
-			toolStripMenuItem_MonitorContextMenu_ShowDirection.Checked         = this.settingsRoot.Display.ShowDirection;
-
-			bool isText = ((Domain.TerminalTypeEx)terminalType).IsText;
-			toolStripMenuItem_MonitorContextMenu_ShowEol.Enabled = isText;
-			toolStripMenuItem_MonitorContextMenu_ShowEol.Checked = isText && this.settingsRoot.TextTerminal.ShowEol;
-
-			toolStripMenuItem_MonitorContextMenu_ShowLength.Checked = this.settingsRoot.Display.ShowLength;
-
-			bool showConnectTime = this.settingsRoot.Status.ShowConnectTime;
-			toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Checked  = showConnectTime;
-			toolStripMenuItem_MonitorContextMenu_ResetConnectTime.Enabled = showConnectTime;
-
-			bool showCountAndRate = this.settingsRoot.Status.ShowCountAndRate;
-			toolStripMenuItem_MonitorContextMenu_ShowCountAndRate.Checked  = showCountAndRate;
-			toolStripMenuItem_MonitorContextMenu_ResetCount.Enabled        = showCountAndRate;
-
-			toolStripMenuItem_MonitorContextMenu_Clear.Enabled = isMonitor;
-
-			toolStripMenuItem_MonitorContextMenu_SelectAll.Enabled  = isMonitor;
-			toolStripMenuItem_MonitorContextMenu_SelectNone.Enabled = isMonitor;
-
-			toolStripMenuItem_MonitorContextMenu_SaveToFile.Enabled      = isMonitor;
-			toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Enabled = isMonitor;
-			toolStripMenuItem_MonitorContextMenu_Print.Enabled           = isMonitor;
-
-			this.isSettingControls.Leave();
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Panels_Tx_Click(object sender, EventArgs e)
@@ -1457,57 +1493,61 @@ namespace YAT.View.Forms
 		private void contextMenuStrip_Radix_SetMenuItems()
 		{
 			this.isSettingControls.Enter();
-
-			bool separateTxRx = this.settingsRoot.Display.SeparateTxRxRadix;
-
-			toolStripMenuItem_RadixContextMenu_String.Visible  = !separateTxRx;
-			toolStripMenuItem_RadixContextMenu_Char.Visible    = !separateTxRx;
-			toolStripMenuItem_RadixContextMenu_Bin.Visible     = !separateTxRx;
-			toolStripMenuItem_RadixContextMenu_Oct.Visible     = !separateTxRx;
-			toolStripMenuItem_RadixContextMenu_Dec.Visible     = !separateTxRx;
-			toolStripMenuItem_RadixContextMenu_Hex.Visible     = !separateTxRx;
-			toolStripMenuItem_RadixContextMenu_Unicode.Visible = !separateTxRx;
-
-			toolStripMenuItem_RadixContextMenu_Separator_1.Visible = !separateTxRx;
-			toolStripMenuItem_RadixContextMenu_Separator_2.Visible = !separateTxRx;
-			toolStripMenuItem_RadixContextMenu_Separator_3.Visible = !separateTxRx;
-			toolStripMenuItem_RadixContextMenu_Separator_4.Visible =  separateTxRx;
-
-			toolStripMenuItem_RadixContextMenu_SeparateTxRx.Checked = separateTxRx;
-
-			toolStripMenuItem_RadixContextMenu_TxRadix.Visible = separateTxRx;
-			toolStripMenuItem_RadixContextMenu_RxRadix.Visible = separateTxRx;
-
-			if (!separateTxRx)
+			try
 			{
-				toolStripMenuItem_RadixContextMenu_String.Checked  = (this.settingsRoot.Display.TxRadix == Domain.Radix.String);
-				toolStripMenuItem_RadixContextMenu_Char.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Char);
-				toolStripMenuItem_RadixContextMenu_Bin.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Bin);
-				toolStripMenuItem_RadixContextMenu_Oct.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Oct);
-				toolStripMenuItem_RadixContextMenu_Dec.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Dec);
-				toolStripMenuItem_RadixContextMenu_Hex.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Hex);
-				toolStripMenuItem_RadixContextMenu_Unicode.Checked = (this.settingsRoot.Display.TxRadix == Domain.Radix.Unicode);
+				bool separateTxRx = this.settingsRoot.Display.SeparateTxRxRadix;
+
+				toolStripMenuItem_RadixContextMenu_String.Visible  = !separateTxRx;
+				toolStripMenuItem_RadixContextMenu_Char.Visible    = !separateTxRx;
+				toolStripMenuItem_RadixContextMenu_Bin.Visible     = !separateTxRx;
+				toolStripMenuItem_RadixContextMenu_Oct.Visible     = !separateTxRx;
+				toolStripMenuItem_RadixContextMenu_Dec.Visible     = !separateTxRx;
+				toolStripMenuItem_RadixContextMenu_Hex.Visible     = !separateTxRx;
+				toolStripMenuItem_RadixContextMenu_Unicode.Visible = !separateTxRx;
+
+				toolStripMenuItem_RadixContextMenu_Separator_1.Visible = !separateTxRx;
+				toolStripMenuItem_RadixContextMenu_Separator_2.Visible = !separateTxRx;
+				toolStripMenuItem_RadixContextMenu_Separator_3.Visible = !separateTxRx;
+				toolStripMenuItem_RadixContextMenu_Separator_4.Visible =  separateTxRx;
+
+				toolStripMenuItem_RadixContextMenu_SeparateTxRx.Checked = separateTxRx;
+
+				toolStripMenuItem_RadixContextMenu_TxRadix.Visible = separateTxRx;
+				toolStripMenuItem_RadixContextMenu_RxRadix.Visible = separateTxRx;
+
+				if (!separateTxRx)
+				{
+					toolStripMenuItem_RadixContextMenu_String.Checked  = (this.settingsRoot.Display.TxRadix == Domain.Radix.String);
+					toolStripMenuItem_RadixContextMenu_Char.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Char);
+					toolStripMenuItem_RadixContextMenu_Bin.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Bin);
+					toolStripMenuItem_RadixContextMenu_Oct.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Oct);
+					toolStripMenuItem_RadixContextMenu_Dec.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Dec);
+					toolStripMenuItem_RadixContextMenu_Hex.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Hex);
+					toolStripMenuItem_RadixContextMenu_Unicode.Checked = (this.settingsRoot.Display.TxRadix == Domain.Radix.Unicode);
+				}
+				else
+				{
+					toolStripMenuItem_RadixContextMenu_Tx_String.Checked  = (this.settingsRoot.Display.TxRadix == Domain.Radix.String);
+					toolStripMenuItem_RadixContextMenu_Tx_Char.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Char);
+					toolStripMenuItem_RadixContextMenu_Tx_Bin.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Bin);
+					toolStripMenuItem_RadixContextMenu_Tx_Oct.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Oct);
+					toolStripMenuItem_RadixContextMenu_Tx_Dec.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Dec);
+					toolStripMenuItem_RadixContextMenu_Tx_Hex.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Hex);
+					toolStripMenuItem_RadixContextMenu_Tx_Unicode.Checked = (this.settingsRoot.Display.TxRadix == Domain.Radix.Unicode);
+
+					toolStripMenuItem_RadixContextMenu_Rx_String.Checked  = (this.settingsRoot.Display.RxRadix == Domain.Radix.String);
+					toolStripMenuItem_RadixContextMenu_Rx_Char.Checked    = (this.settingsRoot.Display.RxRadix == Domain.Radix.Char);
+					toolStripMenuItem_RadixContextMenu_Rx_Bin.Checked     = (this.settingsRoot.Display.RxRadix == Domain.Radix.Bin);
+					toolStripMenuItem_RadixContextMenu_Rx_Oct.Checked     = (this.settingsRoot.Display.RxRadix == Domain.Radix.Oct);
+					toolStripMenuItem_RadixContextMenu_Rx_Dec.Checked     = (this.settingsRoot.Display.RxRadix == Domain.Radix.Dec);
+					toolStripMenuItem_RadixContextMenu_Rx_Hex.Checked     = (this.settingsRoot.Display.RxRadix == Domain.Radix.Hex);
+					toolStripMenuItem_RadixContextMenu_Rx_Unicode.Checked = (this.settingsRoot.Display.RxRadix == Domain.Radix.Unicode);
+				}
 			}
-			else
+			finally
 			{
-				toolStripMenuItem_RadixContextMenu_Tx_String.Checked  = (this.settingsRoot.Display.TxRadix == Domain.Radix.String);
-				toolStripMenuItem_RadixContextMenu_Tx_Char.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Char);
-				toolStripMenuItem_RadixContextMenu_Tx_Bin.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Bin);
-				toolStripMenuItem_RadixContextMenu_Tx_Oct.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Oct);
-				toolStripMenuItem_RadixContextMenu_Tx_Dec.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Dec);
-				toolStripMenuItem_RadixContextMenu_Tx_Hex.Checked     = (this.settingsRoot.Display.TxRadix == Domain.Radix.Hex);
-				toolStripMenuItem_RadixContextMenu_Tx_Unicode.Checked = (this.settingsRoot.Display.TxRadix == Domain.Radix.Unicode);
-
-				toolStripMenuItem_RadixContextMenu_Rx_String.Checked  = (this.settingsRoot.Display.RxRadix == Domain.Radix.String);
-				toolStripMenuItem_RadixContextMenu_Rx_Char.Checked    = (this.settingsRoot.Display.RxRadix == Domain.Radix.Char);
-				toolStripMenuItem_RadixContextMenu_Rx_Bin.Checked     = (this.settingsRoot.Display.RxRadix == Domain.Radix.Bin);
-				toolStripMenuItem_RadixContextMenu_Rx_Oct.Checked     = (this.settingsRoot.Display.RxRadix == Domain.Radix.Oct);
-				toolStripMenuItem_RadixContextMenu_Rx_Dec.Checked     = (this.settingsRoot.Display.RxRadix == Domain.Radix.Dec);
-				toolStripMenuItem_RadixContextMenu_Rx_Hex.Checked     = (this.settingsRoot.Display.RxRadix == Domain.Radix.Hex);
-				toolStripMenuItem_RadixContextMenu_Rx_Unicode.Checked = (this.settingsRoot.Display.RxRadix == Domain.Radix.Unicode);
+				this.isSettingControls.Leave();
 			}
-
-			this.isSettingControls.Leave();
 		}
 
 		private void contextMenuStrip_Radix_Opening(object sender, CancelEventArgs e)
@@ -1746,67 +1786,81 @@ namespace YAT.View.Forms
 		private void contextMenuStrip_Predefined_SetMenuItems()
 		{
 			this.isSettingControls.Enter();
-
-			// Pages:
-			List<PredefinedCommandPage> pages = this.settingsRoot.PredefinedCommand.Pages;
-
-			int pageCount = 0;
-			if (pages != null)
-				pageCount = pages.Count;
-
-			if (pageCount > 0)
+			try
 			{
-				toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled  = (predefined.SelectedPage > 0);
-				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled      = (predefined.SelectedPage < pageCount);
-				toolStripMenuItem_PredefinedContextMenu_Page_Separator.Visible = true;
-			}
-			else
-			{
-				toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled  = false;
-				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled      = false;
-				toolStripMenuItem_PredefinedContextMenu_Page_Separator.Visible = false;
-			}
+				// Pages:
+				var pages = this.settingsRoot.PredefinedCommand.Pages;
 
-			for (int i = 0; i < Math.Min(pageCount, menuItems_Predefined_MaxPages); i++)
-			{
-				this.menuItems_Predefined_Pages[i].Text    = MenuEx.PrependIndex(i + 1, pages[i].PageName);
-				this.menuItems_Predefined_Pages[i].Visible = true;
-				this.menuItems_Predefined_Pages[i].Enabled = this.terminal.IsOpen;
-			}
+				int pageCount = 0;
+				if (pages != null)
+					pageCount = pages.Count;
 
-			for (int i = pageCount; i < menuItems_Predefined_MaxPages; i++)
-			{
-				this.menuItems_Predefined_Pages[i].Text    = MenuEx.PrependIndex(i + 1, "<Undefined>");
-				this.menuItems_Predefined_Pages[i].Visible = false;
-				this.menuItems_Predefined_Pages[i].Enabled = false;
-			}
-
-			// Commands:
-			List<Command> commands = null;
-			if (pageCount > 0)
-				commands = this.settingsRoot.PredefinedCommand.Pages[predefined.SelectedPage - 1].Commands;
-
-			int commandCount = 0;
-			if (commands != null)
-				commandCount = commands.Count;
-
-			for (int i = 0; i < Math.Min(commandCount, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); i++)
-			{
-				bool isDefined = ((commands[i] != null) && commands[i].IsDefined);
-				bool isValid = (isDefined && commands[i].IsValid && this.terminal.IsReadyToSend);
-
-				if (isDefined)
+				if (pageCount > 0)
 				{
-					if (this.menuItems_Predefined_Commands[i].ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-						this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.ControlText;
-
-					if (this.menuItems_Predefined_Commands[i].Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-						this.menuItems_Predefined_Commands[i].Font = SystemFonts.DefaultFont;
-
-					this.menuItems_Predefined_Commands[i].Text = MenuEx.PrependIndex(i + 1, commands[i].Description);
-					this.menuItems_Predefined_Commands[i].Enabled = isValid;
+					toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled  = (predefined.SelectedPage > 0);
+					toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled      = (predefined.SelectedPage < pageCount);
+					toolStripMenuItem_PredefinedContextMenu_Page_Separator.Visible = true;
 				}
 				else
+				{
+					toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled  = false;
+					toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled      = false;
+					toolStripMenuItem_PredefinedContextMenu_Page_Separator.Visible = false;
+				}
+
+				for (int i = 0; i < Math.Min(pageCount, menuItems_Predefined_MaxPages); i++)
+				{
+					this.menuItems_Predefined_Pages[i].Text    = MenuEx.PrependIndex(i + 1, pages[i].PageName);
+					this.menuItems_Predefined_Pages[i].Visible = true;
+					this.menuItems_Predefined_Pages[i].Enabled = this.terminal.IsOpen;
+				}
+
+				for (int i = pageCount; i < menuItems_Predefined_MaxPages; i++)
+				{
+					this.menuItems_Predefined_Pages[i].Text    = MenuEx.PrependIndex(i + 1, "<Undefined>");
+					this.menuItems_Predefined_Pages[i].Visible = false;
+					this.menuItems_Predefined_Pages[i].Enabled = false;
+				}
+
+				// Commands:
+				List<Command> commands = null;
+				if (pageCount > 0)
+					commands = this.settingsRoot.PredefinedCommand.Pages[predefined.SelectedPage - 1].Commands;
+
+				int commandCount = 0;
+				if (commands != null)
+					commandCount = commands.Count;
+
+				for (int i = 0; i < Math.Min(commandCount, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); i++)
+				{
+					bool isDefined = ((commands[i] != null) && commands[i].IsDefined);
+					bool isValid = (isDefined && commands[i].IsValid && this.terminal.IsReadyToSend);
+
+					if (isDefined)
+					{
+						if (this.menuItems_Predefined_Commands[i].ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
+							this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.ControlText;
+
+						if (this.menuItems_Predefined_Commands[i].Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
+							this.menuItems_Predefined_Commands[i].Font = SystemFonts.DefaultFont;
+
+						this.menuItems_Predefined_Commands[i].Text = MenuEx.PrependIndex(i + 1, commands[i].Description);
+						this.menuItems_Predefined_Commands[i].Enabled = isValid;
+					}
+					else
+					{
+						if (this.menuItems_Predefined_Commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+							this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.GrayText;
+
+						if (this.menuItems_Predefined_Commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
+							this.menuItems_Predefined_Commands[i].Font = DrawingEx.DefaultFontItalic;
+
+						this.menuItems_Predefined_Commands[i].Text = MenuEx.PrependIndex(i + 1, Command.DefineCommandText);
+						this.menuItems_Predefined_Commands[i].Enabled = true;
+					}
+				}
+
+				for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage; i++)
 				{
 					if (this.menuItems_Predefined_Commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 						this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.GrayText;
@@ -1818,20 +1872,10 @@ namespace YAT.View.Forms
 					this.menuItems_Predefined_Commands[i].Enabled = true;
 				}
 			}
-
-			for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage; i++)
+			finally
 			{
-				if (this.menuItems_Predefined_Commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-					this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.GrayText;
-
-				if (this.menuItems_Predefined_Commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
-					this.menuItems_Predefined_Commands[i].Font = DrawingEx.DefaultFontItalic;
-
-				this.menuItems_Predefined_Commands[i].Text = MenuEx.PrependIndex(i + 1, Command.DefineCommandText);
-				this.menuItems_Predefined_Commands[i].Enabled = true;
+				this.isSettingControls.Leave();
 			}
-
-			this.isSettingControls.Leave();
 		}
 
 		/// <summary>
@@ -1996,50 +2040,54 @@ namespace YAT.View.Forms
 			bool isTextTerminal = (this.settingsRoot.TerminalType == Domain.TerminalType.Text);
 
 			this.isSettingControls.Enter();
-
-			// Prepare the menu item properties based on state and settings.
-			//
-			// Attention:
-			// Similar code exists in the following locations:
-			//  > View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
-			//  > View.Controls.SendText.SetControls()
-			// Changes here may have to be applied there too.
-			//
-			// Context and main menu are separated as there are subtle differences between them.
-
-			string sendTextText = "Send Text";
-			bool sendTextEnabled = this.settingsRoot.SendText.Command.IsValidText;
-			if (this.settingsRoot.Send.SendImmediately)
+			try
 			{
-				if (isTextTerminal)
-					sendTextText = "Send EOL";
-				else
-					sendTextEnabled = false;
+				// Prepare the menu item properties based on state and settings.
+				//
+				// Attention:
+				// Similar code exists in the following locations:
+				//  > View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
+				//  > View.Controls.SendText.SetControls()
+				// Changes here may have to be applied there too.
+				//
+				// Context and main menu are separated as there are subtle differences between them.
+
+				string sendTextText = "Send Text";
+				bool sendTextEnabled = this.settingsRoot.SendText.Command.IsValidText;
+				if (this.settingsRoot.Send.SendImmediately)
+				{
+					if (isTextTerminal)
+						sendTextText = "Send EOL";
+					else
+						sendTextEnabled = false;
+				}
+
+				bool sendFileEnabled = this.settingsRoot.SendFile.Command.IsValidFilePath;
+
+				// Set the menu item properties:
+
+				toolStripMenuItem_SendContextMenu_Panels_SendText.Checked = this.settingsRoot.Layout.SendTextPanelIsVisible;
+				toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = this.settingsRoot.Layout.SendFilePanelIsVisible;
+
+				toolStripMenuItem_SendContextMenu_SendText.Text              = sendTextText;
+				toolStripMenuItem_SendContextMenu_SendText.Enabled           = sendTextEnabled && this.terminal.IsReadyToSend;
+				toolStripMenuItem_SendContextMenu_SendTextWithoutEol.Enabled = sendTextEnabled && this.terminal.IsReadyToSend && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.SendImmediately;
+				toolStripMenuItem_SendContextMenu_SendFile.Enabled           = sendFileEnabled && this.terminal.IsReadyToSend;
+
+				toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix.Checked = this.settingsRoot.Send.UseExplicitDefaultRadix;
+
+				toolStripMenuItem_SendContextMenu_KeepCommand.Checked     = this.settingsRoot.Send.KeepCommand;
+				toolStripMenuItem_SendContextMenu_CopyPredefined.Checked  = this.settingsRoot.Send.CopyPredefined;
+				toolStripMenuItem_SendContextMenu_SendImmediately.Checked = this.settingsRoot.Send.SendImmediately;
+				toolStripMenuItem_SendContextMenu_SkipEmptyLines.Enabled  = isTextTerminal;
+				toolStripMenuItem_SendContextMenu_SkipEmptyLines.Checked  = this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines;
+
+				toolStripMenuItem_SendContextMenu_ExpandMultiLineText.Enabled = this.settingsRoot.SendText.Command.IsMultiLineText;
 			}
-
-			bool sendFileEnabled = this.settingsRoot.SendFile.Command.IsValidFilePath;
-
-			// Set the menu item properties:
-
-			toolStripMenuItem_SendContextMenu_Panels_SendText.Checked = this.settingsRoot.Layout.SendTextPanelIsVisible;
-			toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = this.settingsRoot.Layout.SendFilePanelIsVisible;
-
-			toolStripMenuItem_SendContextMenu_SendText.Text              = sendTextText;
-			toolStripMenuItem_SendContextMenu_SendText.Enabled           = sendTextEnabled && this.terminal.IsReadyToSend;
-			toolStripMenuItem_SendContextMenu_SendTextWithoutEol.Enabled = sendTextEnabled && this.terminal.IsReadyToSend && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.SendImmediately;
-			toolStripMenuItem_SendContextMenu_SendFile.Enabled           = sendFileEnabled && this.terminal.IsReadyToSend;
-
-			toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix.Checked = this.settingsRoot.Send.UseExplicitDefaultRadix;
-
-			toolStripMenuItem_SendContextMenu_KeepCommand.Checked     = this.settingsRoot.Send.KeepCommand;
-			toolStripMenuItem_SendContextMenu_CopyPredefined.Checked  = this.settingsRoot.Send.CopyPredefined;
-			toolStripMenuItem_SendContextMenu_SendImmediately.Checked = this.settingsRoot.Send.SendImmediately;
-			toolStripMenuItem_SendContextMenu_SkipEmptyLines.Enabled  = isTextTerminal;
-			toolStripMenuItem_SendContextMenu_SkipEmptyLines.Checked  = this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines;
-
-			toolStripMenuItem_SendContextMenu_ExpandMultiLineText.Enabled = this.settingsRoot.SendText.Command.IsMultiLineText;
-
-			this.isSettingControls.Leave();
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void contextMenuStrip_Send_Opening(object sender, CancelEventArgs e)
@@ -2151,28 +2199,32 @@ namespace YAT.View.Forms
 		private void contextMenuStrip_Status_Opening(object sender, CancelEventArgs e)
 		{
 			this.isSettingControls.Enter();
+			try
+			{
+				bool isSerialPort = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
 
-			bool isSerialPort = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
+				// Flow control count:
+				bool showFlowControlOptions = this.settingsRoot.Terminal.IO.FlowControlIsInUse;
+				bool showFlowControlCount = this.settingsRoot.Status.ShowFlowControlCount;
+				contextMenuStrip_Status_FlowControlCount.Enabled            = showFlowControlOptions;
+				contextMenuStrip_Status_FlowControlCount_ShowCount.Visible  = showFlowControlOptions; // Workaround to .NET Windows.Forms bug (child items visible even when parent item is disabled).
+				contextMenuStrip_Status_FlowControlCount_ShowCount.Checked  = showFlowControlCount;
+				contextMenuStrip_Status_FlowControlCount_ResetCount.Visible = showFlowControlOptions; // Workaround to .NET Windows.Forms bug (child items visible even when parent item is disabled).
+				contextMenuStrip_Status_FlowControlCount_ResetCount.Enabled = showFlowControlCount;
 
-			// Flow control count:
-			bool showFlowControlOptions = this.settingsRoot.Terminal.IO.FlowControlIsInUse;
-			bool showFlowControlCount = this.settingsRoot.Status.ShowFlowControlCount;
-			contextMenuStrip_Status_FlowControlCount.Enabled            = showFlowControlOptions;
-			contextMenuStrip_Status_FlowControlCount_ShowCount.Visible  = showFlowControlOptions; // Workaround to .NET Windows.Forms bug (child items visible even when parent item is disabled).
-			contextMenuStrip_Status_FlowControlCount_ShowCount.Checked  = showFlowControlCount;
-			contextMenuStrip_Status_FlowControlCount_ResetCount.Visible = showFlowControlOptions; // Workaround to .NET Windows.Forms bug (child items visible even when parent item is disabled).
-			contextMenuStrip_Status_FlowControlCount_ResetCount.Enabled = showFlowControlCount;
-
-			// Break count:
-			bool showBreakOptions = (isSerialPort && this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates);
-			bool showBreakCount = this.settingsRoot.Status.ShowBreakCount;
-			contextMenuStrip_Status_BreakCount.Enabled            = showBreakOptions;
-			contextMenuStrip_Status_BreakCount_ShowCount.Visible  = showBreakOptions; // Workaround to .NET Windows.Forms bug (child items visible even when parent item is disabled).
-			contextMenuStrip_Status_BreakCount_ShowCount.Checked  = showBreakCount;
-			contextMenuStrip_Status_BreakCount_ResetCount.Visible = showBreakOptions; // Workaround to .NET Windows.Forms bug (child items visible even when parent item is disabled).
-			contextMenuStrip_Status_BreakCount_ResetCount.Enabled = showBreakCount;
-
-			this.isSettingControls.Leave();
+				// Break count:
+				bool showBreakOptions = (isSerialPort && this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates);
+				bool showBreakCount = this.settingsRoot.Status.ShowBreakCount;
+				contextMenuStrip_Status_BreakCount.Enabled            = showBreakOptions;
+				contextMenuStrip_Status_BreakCount_ShowCount.Visible  = showBreakOptions; // Workaround to .NET Windows.Forms bug (child items visible even when parent item is disabled).
+				contextMenuStrip_Status_BreakCount_ShowCount.Checked  = showBreakCount;
+				contextMenuStrip_Status_BreakCount_ResetCount.Visible = showBreakOptions; // Workaround to .NET Windows.Forms bug (child items visible even when parent item is disabled).
+				contextMenuStrip_Status_BreakCount_ResetCount.Enabled = showBreakCount;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void toolStripMenuItem_StatusContextMenu_FlowControlCount_ShowCount_Click(object sender, EventArgs e)
@@ -2832,120 +2884,126 @@ namespace YAT.View.Forms
 		private void LayoutTerminal()
 		{
 			this.isSettingControls.Enter();
-			SuspendLayout();
-
-			// splitContainer_Predefined:
-			if (this.settingsRoot.Layout.PredefinedPanelIsVisible)
+			try
 			{
-				splitContainer_Predefined.Panel2Collapsed = false;
+				SuspendLayout();
 
-				// No need to 'splitContainerHelper.CalculateScaledDistanceFromUnscaled()' since no
-				// panel of 'splitContainer_Predefined' is fixed. Code if this was the case:
-			////int unscaledDistance = (int)((this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
-			////int scaledDistance = this.splitContainerHelper.CalculateScaledDistanceFromUnscaled(splitContainer_Predefined, unscaledDistance);
-
-				int distance = (int)((this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
-
-				splitContainer_Predefined.SplitterDistance = Int32Ex.Limit(distance, 0, (splitContainer_Predefined.Width - 1));
-			}
-			else
-			{
-				splitContainer_Predefined.Panel2Collapsed = true;
-			}
-
-			// splitContainer_Tx/RxMonitor:
-			// One of the panels MUST be visible, if none is visible, then bidir is shown anyway.
-			bool txIsVisible    = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
-			bool bidirIsVisible = this.settingsRoot.Layout.BidirMonitorPanelIsVisible || (!this.settingsRoot.Layout.TxMonitorPanelIsVisible && !this.settingsRoot.Layout.RxMonitorPanelIsVisible);
-			bool rxIsVisible    = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
-
-			// Orientation:
-			var orientation = this.settingsRoot.Layout.MonitorOrientation;
-			splitContainer_TxMonitor.Orientation = orientation;
-			splitContainer_RxMonitor.Orientation = orientation;
-
-			// Tx split contains Tx and Bidir+Rx:
-			if (txIsVisible)
-			{
-				splitContainer_TxMonitor.Panel1Collapsed = false;
-
-				if (bidirIsVisible || rxIsVisible)
+				// splitContainer_Predefined:
+				if (this.settingsRoot.Layout.PredefinedPanelIsVisible)
 				{
-					int widthOrHeight = OrientationEx.SizeToWidthOrHeight(splitContainer_TxMonitor, orientation);
+					splitContainer_Predefined.Panel2Collapsed = false;
 
 					// No need to 'splitContainerHelper.CalculateScaledDistanceFromUnscaled()' since no
-					// panel of 'splitContainer_TxMonitor' is fixed. Code if this was the case:
-				////int unscaledDistance = (int)((this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
-				////int scaledDistance = this.splitContainerHelper.CalculateScaledDistanceFromUnscaled(splitContainer_TxMonitor, unscaledDistance);
+					// panel of 'splitContainer_Predefined' is fixed. Code if this was the case:
+				////int unscaledDistance = (int)((this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+				////int scaledDistance = this.splitContainerHelper.CalculateScaledDistanceFromUnscaled(splitContainer_Predefined, unscaledDistance);
 
-					int distance = (int)((this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+					int distance = (int)((this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
 
-					splitContainer_TxMonitor.SplitterDistance = Int32Ex.Limit(distance, 0, (widthOrHeight - 1));
+					splitContainer_Predefined.SplitterDistance = Int32Ex.Limit(distance, 0, (splitContainer_Predefined.Width - 1));
 				}
-			}
-			else
-			{
-				splitContainer_TxMonitor.Panel1Collapsed = true;
-			}
-			splitContainer_TxMonitor.Panel2Collapsed = !(bidirIsVisible || rxIsVisible);
-
-			// Rx split contains Bidir and Rx:
-			if (bidirIsVisible)
-			{
-				splitContainer_RxMonitor.Panel1Collapsed = false;
-
-				if (rxIsVisible)
+				else
 				{
-					int widthOrHeight = OrientationEx.SizeToWidthOrHeight(splitContainer_RxMonitor, orientation);
-
-					// No need to 'splitContainerHelper.CalculateScaledDistanceFromUnscaled()' since no
-					// panel of 'splitContainer_RxMonitor' is fixed. Code if this was the case:
-				////int unscaledDistance = (int)((this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
-				////int scaledDistance = this.splitContainerHelper.CalculateScaledDistanceFromUnscaled(splitContainer_RxMonitor, unscaledDistance);
-
-					int distance = (int)((this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
-
-					splitContainer_RxMonitor.SplitterDistance = Int32Ex.Limit(distance, 0, (widthOrHeight - 1));
+					splitContainer_Predefined.Panel2Collapsed = true;
 				}
+
+				// splitContainer_Tx/RxMonitor:
+				// One of the panels MUST be visible, if none is visible, then bidir is shown anyway.
+				bool txIsVisible    = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
+				bool bidirIsVisible = this.settingsRoot.Layout.BidirMonitorPanelIsVisible || (!this.settingsRoot.Layout.TxMonitorPanelIsVisible && !this.settingsRoot.Layout.RxMonitorPanelIsVisible);
+				bool rxIsVisible    = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
+
+				// Orientation:
+				var orientation = this.settingsRoot.Layout.MonitorOrientation;
+				splitContainer_TxMonitor.Orientation = orientation;
+				splitContainer_RxMonitor.Orientation = orientation;
+
+				// Tx split contains Tx and Bidir+Rx:
+				if (txIsVisible)
+				{
+					splitContainer_TxMonitor.Panel1Collapsed = false;
+
+					if (bidirIsVisible || rxIsVisible)
+					{
+						int widthOrHeight = OrientationEx.SizeToWidthOrHeight(splitContainer_TxMonitor, orientation);
+
+						// No need to 'splitContainerHelper.CalculateScaledDistanceFromUnscaled()' since no
+						// panel of 'splitContainer_TxMonitor' is fixed. Code if this was the case:
+					////int unscaledDistance = (int)((this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+					////int scaledDistance = this.splitContainerHelper.CalculateScaledDistanceFromUnscaled(splitContainer_TxMonitor, unscaledDistance);
+
+						int distance = (int)((this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+
+						splitContainer_TxMonitor.SplitterDistance = Int32Ex.Limit(distance, 0, (widthOrHeight - 1));
+					}
+				}
+				else
+				{
+					splitContainer_TxMonitor.Panel1Collapsed = true;
+				}
+				splitContainer_TxMonitor.Panel2Collapsed = !(bidirIsVisible || rxIsVisible);
+
+				// Rx split contains Bidir and Rx:
+				if (bidirIsVisible)
+				{
+					splitContainer_RxMonitor.Panel1Collapsed = false;
+
+					if (rxIsVisible)
+					{
+						int widthOrHeight = OrientationEx.SizeToWidthOrHeight(splitContainer_RxMonitor, orientation);
+
+						// No need to 'splitContainerHelper.CalculateScaledDistanceFromUnscaled()' since no
+						// panel of 'splitContainer_RxMonitor' is fixed. Code if this was the case:
+					////int unscaledDistance = (int)((this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+					////int scaledDistance = this.splitContainerHelper.CalculateScaledDistanceFromUnscaled(splitContainer_RxMonitor, unscaledDistance);
+
+						int distance = (int)((this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+
+						splitContainer_RxMonitor.SplitterDistance = Int32Ex.Limit(distance, 0, (widthOrHeight - 1));
+					}
+				}
+				else
+				{
+					splitContainer_RxMonitor.Panel1Collapsed = true;
+				}
+				splitContainer_RxMonitor.Panel2Collapsed = !rxIsVisible;
+
+				// splitContainer_Terminal and splitContainer_Send:
+				if (this.settingsRoot.Layout.SendTextPanelIsVisible || this.settingsRoot.Layout.SendFilePanelIsVisible)
+				{
+					splitContainer_Terminal.Panel2Collapsed = false;
+					panel_Monitor   .Padding = new Padding(3, 3, 1, 0);
+					panel_Predefined.Padding = new Padding(1, 3, 3, 0);
+				}
+				else
+				{
+					splitContainer_Terminal.Panel2Collapsed = true;
+					panel_Monitor   .Padding = new Padding(3, 3, 1, 3);
+					panel_Predefined.Padding = new Padding(1, 3, 3, 3);
+				}
+
+				send.TextPanelIsVisible = this.settingsRoot.Layout.SendTextPanelIsVisible;
+				send.FilePanelIsVisible = this.settingsRoot.Layout.SendFilePanelIsVisible;
+
+				// Adjust send panel size depending on one or two sub-panels:
+				if (splitContainer_Terminal.Panel2MinSize != panel_Send.Height)
+					splitContainer_Terminal.Panel2MinSize = panel_Send.Height;
+
+				// Local scope for 'distance':
+				{
+					int distance = splitContainer_Terminal.Height - panel_Send.Height - splitContainer_Terminal.SplitterWidth;
+					if (splitContainer_Terminal.SplitterDistance != distance)
+						splitContainer_Terminal.SplitterDistance = Int32Ex.Limit(distance, 0, (splitContainer_Terminal.Height - 1));
+				}
+
+				LayoutSend();
+
+				ResumeLayout();
 			}
-			else
+			finally
 			{
-				splitContainer_RxMonitor.Panel1Collapsed = true;
+				this.isSettingControls.Leave();
 			}
-			splitContainer_RxMonitor.Panel2Collapsed = !rxIsVisible;
-
-			// splitContainer_Terminal and splitContainer_Send:
-			if (this.settingsRoot.Layout.SendTextPanelIsVisible || this.settingsRoot.Layout.SendFilePanelIsVisible)
-			{
-				splitContainer_Terminal.Panel2Collapsed = false;
-				panel_Monitor   .Padding = new Padding(3, 3, 1, 0);
-				panel_Predefined.Padding = new Padding(1, 3, 3, 0);
-			}
-			else
-			{
-				splitContainer_Terminal.Panel2Collapsed = true;
-				panel_Monitor   .Padding = new Padding(3, 3, 1, 3);
-				panel_Predefined.Padding = new Padding(1, 3, 3, 3);
-			}
-
-			send.TextPanelIsVisible = this.settingsRoot.Layout.SendTextPanelIsVisible;
-			send.FilePanelIsVisible = this.settingsRoot.Layout.SendFilePanelIsVisible;
-
-			// Adjust send panel size depending on one or two sub-panels:
-			if (splitContainer_Terminal.Panel2MinSize != panel_Send.Height)
-				splitContainer_Terminal.Panel2MinSize = panel_Send.Height;
-
-			// Local scope for 'distance':
-			{
-				int distance = splitContainer_Terminal.Height - panel_Send.Height - splitContainer_Terminal.SplitterWidth;
-				if (splitContainer_Terminal.SplitterDistance != distance)
-					splitContainer_Terminal.SplitterDistance = Int32Ex.Limit(distance, 0, (splitContainer_Terminal.Height - 1));
-			}
-
-			LayoutSend();
-
-			ResumeLayout();
-			this.isSettingControls.Leave();
 		}
 
 		private void LayoutSend()
@@ -2984,8 +3042,14 @@ namespace YAT.View.Forms
 			contextMenuStrip_Predefined_SetMenuItems(); // Ensure that shortcuts are activated.
 
 			this.isSettingControls.Enter();
-			predefined.TerminalIsReadyToSend = this.terminal.IsReadyToSend;
-			this.isSettingControls.Leave();
+			try
+			{
+				predefined.TerminalIsReadyToSend = this.terminal.IsReadyToSend;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void SetSendControls()
@@ -2994,16 +3058,22 @@ namespace YAT.View.Forms
 			contextMenuStrip_Send_SetMenuItems();
 
 			this.isSettingControls.Enter();
-			send.TextCommand             = this.settingsRoot.SendText.Command;
-			send.RecentTextCommands      = this.settingsRoot.SendText.RecentCommands;
-			send.FileCommand             = this.settingsRoot.SendFile.Command;
-			send.RecentFileCommands      = this.settingsRoot.SendFile.RecentCommands;
-			send.TerminalType            = this.settingsRoot.TerminalType;
-			send.UseExplicitDefaultRadix = this.settingsRoot.Send.UseExplicitDefaultRadix;
-			send.ParseMode               = this.settingsRoot.Send.ToParseMode();
-			send.SendTextImmediately     = this.settingsRoot.Send.SendImmediately;
-			send.TerminalIsReadyToSend   = this.terminal.IsReadyToSend;
-			this.isSettingControls.Leave();
+			try
+			{
+				send.TextCommand             = this.settingsRoot.SendText.Command;
+				send.RecentTextCommands      = this.settingsRoot.SendText.RecentCommands;
+				send.FileCommand             = this.settingsRoot.SendFile.Command;
+				send.RecentFileCommands      = this.settingsRoot.SendFile.RecentCommands;
+				send.TerminalType            = this.settingsRoot.TerminalType;
+				send.UseExplicitDefaultRadix = this.settingsRoot.Send.UseExplicitDefaultRadix;
+				send.ParseMode               = this.settingsRoot.Send.ToParseMode();
+				send.SendTextImmediately     = this.settingsRoot.Send.SendImmediately;
+				send.TerminalIsReadyToSend   = this.terminal.IsReadyToSend;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		#endregion
@@ -3666,8 +3736,14 @@ namespace YAT.View.Forms
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.PredefinedCommand))
 			{
 				this.isSettingControls.Enter();
-				predefined.Pages = this.settingsRoot.PredefinedCommand.Pages;
-				this.isSettingControls.Leave();
+				try
+				{
+					predefined.Pages = this.settingsRoot.PredefinedCommand.Pages;
+				}
+				finally
+				{
+					this.isSettingControls.Leave();
+				}
 
 				SetPredefinedControls();
 			}
@@ -3731,8 +3807,14 @@ namespace YAT.View.Forms
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Predefined))
 			{
 				this.isSettingControls.Enter();
-				predefined.SelectedPage = this.settingsRoot.Predefined.SelectedPage;
-				this.isSettingControls.Leave();
+				try
+				{
+					predefined.SelectedPage = this.settingsRoot.Predefined.SelectedPage;
+				}
+				finally
+				{
+					this.isSettingControls.Leave();
+				}
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Window))
 			{

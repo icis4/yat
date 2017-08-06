@@ -441,88 +441,96 @@ namespace YAT.View.Forms
 		private void InitializeControls()
 		{
 			this.isSettingControls.Enter();
+			try
+			{
+				comboBox_TxEol.Items.Clear();
+				comboBox_TxEol.Items.AddRange(Domain.EolEx.GetItems());
 
-			comboBox_TxEol.Items.Clear();
-			comboBox_TxEol.Items.AddRange(Domain.EolEx.GetItems());
+				comboBox_RxEol.Items.Clear();
+				comboBox_RxEol.Items.AddRange(Domain.EolEx.GetItems());
 
-			comboBox_RxEol.Items.Clear();
-			comboBox_RxEol.Items.AddRange(Domain.EolEx.GetItems());
-
-			comboBox_Encoding.Items.Clear();
-			comboBox_Encoding.Items.AddRange(EncodingEx.GetItems());
-
-			this.isSettingControls.Leave();
+				comboBox_Encoding.Items.Clear();
+				comboBox_Encoding.Items.AddRange(EncodingEx.GetItems());
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
-
-			// Encoding:
-			comboBox_Encoding.SelectedItem = (EncodingEx)this.settingsInEdit.Encoding;
-
-			// EOL:
-			bool separateEol = this.settingsInEdit.SeparateTxRxEol;
-			if (!separateEol)
-				label_TxEol.Text = "E&OL sequence:";
-			else
-				label_TxEol.Text = "&Tx EOL sequence:";
-
-			checkBox_SeparateTxRxEol.Checked = separateEol;
-			label_RxEol.Enabled              = separateEol;
-			comboBox_RxEol.Enabled           = separateEol;
-
-			Domain.EolEx eol;
-
-			if (Domain.EolEx.TryParse(this.settingsInEdit.TxEol, out eol))
-				comboBox_TxEol.SelectedItem = eol;
-			else
-				comboBox_TxEol.Text = this.settingsInEdit.TxEol;
-
-			if (Domain.EolEx.TryParse(this.settingsInEdit.RxEol, out eol))
-				comboBox_RxEol.SelectedItem = eol;
-			else
-				comboBox_RxEol.Text = this.settingsInEdit.RxEol;
-
-			// Display:
-			checkBox_ShowEol.Checked = this.settingsInEdit.ShowEol;
-
-			// Send:
-			checkBox_SkipEmptyLines.Checked  = this.settingsInEdit.SendFile.SkipEmptyLines;
-
-			bool delayEnabled             = this.settingsInEdit.LineSendDelay.Enabled;
-			checkBox_Delay.Checked        = delayEnabled;
-			textBox_Delay.Enabled         = delayEnabled;
-			textBox_Delay.Text            = this.settingsInEdit.LineSendDelay.Delay.ToString(CultureInfo.CurrentCulture);
-			textBox_DelayInterval.Enabled = delayEnabled;
-			textBox_DelayInterval.Text    = this.settingsInEdit.LineSendDelay.LineInterval.ToString(CultureInfo.CurrentCulture);
-
-			// \remind (2017-04-05 / MKY) feature request #19 and bug #176
-		////bool waitEnabled                 = this.settingsInEdit.WaitForResponse.Enabled;
-		////checkBox_WaitForResponse.Checked = waitEnabled;
-		////textBox_WaitForResponse.Enabled  = waitEnabled;
-		////textBox_WaitForResponse.Text     = this.settingsInEdit.WaitForResponse.Timeout.ToString(CultureInfo.CurrentCulture);
-		////checkBox_WaitForResponse.ToolTip = see designer
-			checkBox_WaitForResponse.Enabled = false;
-			label_WaitForResponse.Enabled    = false;
-			textBox_WaitForResponse.Enabled  = false;
-			label_WaitForResponseUnit.Enabled = false;
-
-			switch (this.settingsInEdit.CharSubstitution)
+			try
 			{
-				case Domain.CharSubstitution.ToUpper: radioButton_SubstituteToUpper.Checked = true; break;
-				case Domain.CharSubstitution.ToLower: radioButton_SubstituteToLower.Checked = true; break;
-				default:                              radioButton_SubstituteNone.Checked    = true; break;
+				// Encoding:
+				comboBox_Encoding.SelectedItem = (EncodingEx)this.settingsInEdit.Encoding;
+
+				// EOL:
+				bool separateEol = this.settingsInEdit.SeparateTxRxEol;
+				if (!separateEol)
+					label_TxEol.Text = "E&OL sequence:";
+				else
+					label_TxEol.Text = "&Tx EOL sequence:";
+
+				checkBox_SeparateTxRxEol.Checked = separateEol;
+				label_RxEol.Enabled              = separateEol;
+				comboBox_RxEol.Enabled           = separateEol;
+
+				Domain.EolEx eol;
+
+				if (Domain.EolEx.TryParse(this.settingsInEdit.TxEol, out eol))
+					comboBox_TxEol.SelectedItem = eol;
+				else
+					comboBox_TxEol.Text = this.settingsInEdit.TxEol;
+
+				if (Domain.EolEx.TryParse(this.settingsInEdit.RxEol, out eol))
+					comboBox_RxEol.SelectedItem = eol;
+				else
+					comboBox_RxEol.Text = this.settingsInEdit.RxEol;
+
+				// Display:
+				checkBox_ShowEol.Checked = this.settingsInEdit.ShowEol;
+
+				// Send:
+				checkBox_SkipEmptyLines.Checked  = this.settingsInEdit.SendFile.SkipEmptyLines;
+
+				bool delayEnabled             = this.settingsInEdit.LineSendDelay.Enabled;
+				checkBox_Delay.Checked        = delayEnabled;
+				textBox_Delay.Enabled         = delayEnabled;
+				textBox_Delay.Text            = this.settingsInEdit.LineSendDelay.Delay.ToString(CultureInfo.CurrentCulture);
+				textBox_DelayInterval.Enabled = delayEnabled;
+				textBox_DelayInterval.Text    = this.settingsInEdit.LineSendDelay.LineInterval.ToString(CultureInfo.CurrentCulture);
+
+				// \remind (2017-04-05 / MKY) feature request #19 and bug #176
+			////bool waitEnabled                 = this.settingsInEdit.WaitForResponse.Enabled;
+			////checkBox_WaitForResponse.Checked = waitEnabled;
+			////textBox_WaitForResponse.Enabled  = waitEnabled;
+			////textBox_WaitForResponse.Text     = this.settingsInEdit.WaitForResponse.Timeout.ToString(CultureInfo.CurrentCulture);
+			////checkBox_WaitForResponse.ToolTip = see designer
+				checkBox_WaitForResponse.Enabled = false;
+				label_WaitForResponse.Enabled    = false;
+				textBox_WaitForResponse.Enabled  = false;
+				label_WaitForResponseUnit.Enabled = false;
+
+				switch (this.settingsInEdit.CharSubstitution)
+				{
+					case Domain.CharSubstitution.ToUpper: radioButton_SubstituteToUpper.Checked = true; break;
+					case Domain.CharSubstitution.ToLower: radioButton_SubstituteToLower.Checked = true; break;
+					default:                              radioButton_SubstituteNone.Checked    = true; break;
+				}
+
+				bool doSkip = this.settingsInEdit.EolComment.SkipComment;
+				checkBox_SkipEolComment.Checked                = doSkip;
+				stringListEdit_EolCommentIndicators.Enabled    = doSkip;
+				stringListEdit_EolCommentIndicators.StringList = this.settingsInEdit.EolComment.Indicators.ToArray();
+				checkBox_SkipEolCommentWhiteSpace.Enabled      = doSkip;
+				checkBox_SkipEolCommentWhiteSpace.Checked      = this.settingsInEdit.EolComment.SkipWhiteSpace;
 			}
-
-			bool doSkip = this.settingsInEdit.EolComment.SkipComment;
-			checkBox_SkipEolComment.Checked                = doSkip;
-			stringListEdit_EolCommentIndicators.Enabled    = doSkip;
-			stringListEdit_EolCommentIndicators.StringList = this.settingsInEdit.EolComment.Indicators.ToArray();
-			checkBox_SkipEolCommentWhiteSpace.Enabled      = doSkip;
-			checkBox_SkipEolCommentWhiteSpace.Checked      = this.settingsInEdit.EolComment.SkipWhiteSpace;
-
-			this.isSettingControls.Leave();
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		#endregion

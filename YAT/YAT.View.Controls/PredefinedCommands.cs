@@ -260,38 +260,42 @@ namespace YAT.View.Controls
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
-
-			pageButtons.TerminalIsReadyToSend = this.terminalIsReadyToSend;
-
-			if ((this.pages != null) && (this.pages.Count > 0) && (this.selectedPage >= 1) && (this.selectedPage <= this.pages.Count))
+			try
 			{
-				pageButtons.Commands = this.pages[SelectedPageIndex].Commands;
+				pageButtons.TerminalIsReadyToSend = this.terminalIsReadyToSend;
 
-				button_PagePrevious.Enabled = (this.selectedPage > 1);
-				button_PageNext.Enabled = (this.selectedPage < this.pages.Count);
+				if ((this.pages != null) && (this.pages.Count > 0) && (this.selectedPage >= 1) && (this.selectedPage <= this.pages.Count))
+				{
+					pageButtons.Commands = this.pages[SelectedPageIndex].Commands;
 
-				label_Page.Enabled = true;
-				label_Page.Text = "Page " + this.selectedPage + "/" + this.pages.Count;
+					button_PagePrevious.Enabled = (this.selectedPage > 1);
+					button_PageNext.Enabled = (this.selectedPage < this.pages.Count);
 
-				comboBox_Pages.Enabled = true;
-				comboBox_Pages.Items.Clear();
-				foreach (PredefinedCommandPage p in this.pages)
-					comboBox_Pages.Items.Add(p.PageName);
-				comboBox_Pages.SelectedIndex = SelectedPageIndex;
-			}
-			else
-			{
-				button_PagePrevious.Enabled = false;
-				button_PageNext.Enabled = false;
+					label_Page.Enabled = true;
+					label_Page.Text = "Page " + this.selectedPage + "/" + this.pages.Count;
+
+					comboBox_Pages.Enabled = true;
+					comboBox_Pages.Items.Clear();
+					foreach (PredefinedCommandPage p in this.pages)
+						comboBox_Pages.Items.Add(p.PageName);
+					comboBox_Pages.SelectedIndex = SelectedPageIndex;
+				}
+				else
+				{
+					button_PagePrevious.Enabled = false;
+					button_PageNext.Enabled = false;
 				
-				label_Page.Enabled = false;
-				label_Page.Text = "<No Pages>";
+					label_Page.Enabled = false;
+					label_Page.Text = "<No Pages>";
 
-				comboBox_Pages.Enabled = false;
-				comboBox_Pages.Items.Clear();
+					comboBox_Pages.Enabled = false;
+					comboBox_Pages.Items.Clear();
+				}
 			}
-
-			this.isSettingControls.Leave();
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void RequestSendCommand(int command)

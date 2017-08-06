@@ -434,85 +434,93 @@ namespace YAT.View.Forms
 		private void InitializeControls()
 		{
 			this.isSettingControls.Enter();
+			try
+			{
+				comboBox_Raw_Extension.Items.Clear();
+				foreach (string s in ExtensionHelper.BinaryFilesWithDot)
+					comboBox_Raw_Extension.Items.Add(s);
 
-			comboBox_Raw_Extension.Items.Clear();
-			foreach (string s in ExtensionHelper.BinaryFilesWithDot)
-				comboBox_Raw_Extension.Items.Add(s);
+				comboBox_Neat_Extension.Items.Clear();
+				foreach (string s in ExtensionHelper.TextFilesWithDot)
+					comboBox_Neat_Extension.Items.Add(s);
 
-			comboBox_Neat_Extension.Items.Clear();
-			foreach (string s in ExtensionHelper.TextFilesWithDot)
-				comboBox_Neat_Extension.Items.Add(s);
-
-			comboBox_Options_NameSeparator.Items.Clear();
-			foreach (string s in Log.FileNameSeparatorEx.GetItems())
-				comboBox_Options_NameSeparator.Items.Add(s);
-
-			this.isSettingControls.Leave();
+				comboBox_Options_NameSeparator.Items.Clear();
+				foreach (string s in Log.FileNameSeparatorEx.GetItems())
+					comboBox_Options_NameSeparator.Items.Add(s);
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
+			try
+			{
+				if (!string.IsNullOrEmpty(this.settingsInEdit.RootPath))
+					pathLabel_Root.Text = this.settingsInEdit.RootPath + Path.DirectorySeparatorChar + this.settingsInEdit.RootFileName;
+				else
+					pathLabel_Root.Text = "<Set a root file...>";
 
-			if (!string.IsNullOrEmpty(this.settingsInEdit.RootPath))
-				pathLabel_Root.Text = this.settingsInEdit.RootPath + Path.DirectorySeparatorChar + this.settingsInEdit.RootFileName;
-			else
-				pathLabel_Root.Text = "<Set a root file...>";
+				checkBox_Raw_Tx.Checked    = this.settingsInEdit.RawLogTx;
+				checkBox_Raw_Bidir.Checked = this.settingsInEdit.RawLogBidir;
+				checkBox_Raw_Rx.Checked    = this.settingsInEdit.RawLogRx;
 
-			checkBox_Raw_Tx.Checked    = this.settingsInEdit.RawLogTx;
-			checkBox_Raw_Bidir.Checked = this.settingsInEdit.RawLogBidir;
-			checkBox_Raw_Rx.Checked    = this.settingsInEdit.RawLogRx;
+				pathLabel_Raw_Tx.Text    = this.settingsInEdit.RawTxRootRelativeFilePath;
+				pathLabel_Raw_Bidir.Text = this.settingsInEdit.RawBidirRootRelativeFilePath;
+				pathLabel_Raw_Rx.Text    = this.settingsInEdit.RawRxRootRelativeFilePath;
 
-			pathLabel_Raw_Tx.Text    = this.settingsInEdit.RawTxRootRelativeFilePath;
-			pathLabel_Raw_Bidir.Text = this.settingsInEdit.RawBidirRootRelativeFilePath;
-			pathLabel_Raw_Rx.Text    = this.settingsInEdit.RawRxRootRelativeFilePath;
+				comboBox_Raw_Extension.Text = this.settingsInEdit.RawExtension;
 
-			comboBox_Raw_Extension.Text = this.settingsInEdit.RawExtension;
+				checkBox_Neat_Tx.Checked    = this.settingsInEdit.NeatLogTx;
+				checkBox_Neat_Bidir.Checked = this.settingsInEdit.NeatLogBidir;
+				checkBox_Neat_Rx.Checked    = this.settingsInEdit.NeatLogRx;
 
-			checkBox_Neat_Tx.Checked    = this.settingsInEdit.NeatLogTx;
-			checkBox_Neat_Bidir.Checked = this.settingsInEdit.NeatLogBidir;
-			checkBox_Neat_Rx.Checked    = this.settingsInEdit.NeatLogRx;
+				pathLabel_Neat_Tx.Text    = this.settingsInEdit.NeatTxRootRelativeFilePath;
+				pathLabel_Neat_Bidir.Text = this.settingsInEdit.NeatBidirRootRelativeFilePath;
+				pathLabel_Neat_Rx.Text    = this.settingsInEdit.NeatRxRootRelativeFilePath;
 
-			pathLabel_Neat_Tx.Text    = this.settingsInEdit.NeatTxRootRelativeFilePath;
-			pathLabel_Neat_Bidir.Text = this.settingsInEdit.NeatBidirRootRelativeFilePath;
-			pathLabel_Neat_Rx.Text    = this.settingsInEdit.NeatRxRootRelativeFilePath;
+				comboBox_Neat_Extension.Text = this.settingsInEdit.NeatExtension;
 
-			comboBox_Neat_Extension.Text = this.settingsInEdit.NeatExtension;
+				checkBox_Options_NameFormat.Checked  = this.settingsInEdit.NameFormat;
+				checkBox_Options_NameChannel.Checked = this.settingsInEdit.NameChannel;
+				checkBox_Options_NameDate.Checked    = this.settingsInEdit.NameDate;
+				checkBox_Options_NameTime.Checked    = this.settingsInEdit.NameTime;
 
-			checkBox_Options_NameFormat.Checked  = this.settingsInEdit.NameFormat;
-			checkBox_Options_NameChannel.Checked = this.settingsInEdit.NameChannel;
-			checkBox_Options_NameDate.Checked    = this.settingsInEdit.NameDate;
-			checkBox_Options_NameTime.Checked    = this.settingsInEdit.NameTime;
+				Log.FileNameSeparatorEx separator = this.settingsInEdit.NameSeparator;
+				SelectionHelper.Select(comboBox_Options_NameSeparator, separator, separator);
 
-			Log.FileNameSeparatorEx separator = this.settingsInEdit.NameSeparator;
-			SelectionHelper.Select(comboBox_Options_NameSeparator, separator, separator);
+				bool dateTimeEnabled = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Create);
+				checkBox_Options_NameDate.Enabled = dateTimeEnabled;
+				checkBox_Options_NameTime.Enabled = dateTimeEnabled;
 
-			bool dateTimeEnabled = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Create);
-			checkBox_Options_NameDate.Enabled = dateTimeEnabled;
-			checkBox_Options_NameTime.Enabled = dateTimeEnabled;
+				checkBox_Options_FolderFormat.Checked  = this.settingsInEdit.FolderFormat;
+				checkBox_Options_FolderChannel.Checked = this.settingsInEdit.FolderChannel;
 
-			checkBox_Options_FolderFormat.Checked  = this.settingsInEdit.FolderFormat;
-			checkBox_Options_FolderChannel.Checked = this.settingsInEdit.FolderChannel;
+				radioButton_Options_ModeCreate.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Create);
+				radioButton_Options_ModeAppend.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Append);
 
-			radioButton_Options_ModeCreate.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Create);
-			radioButton_Options_ModeAppend.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Append);
-
-			if (this.settingsInEdit.TextEncodingIsSupported) {
-				groupBox_Options_TextEncoding.Enabled            =  true;
-				radioButton_Options_TextEncodingUTF8.Checked     = (this.settingsInEdit.TextEncoding == Log.TextEncoding.UTF8);
-				radioButton_Options_TextEncodingTerminal.Checked = (this.settingsInEdit.TextEncoding == Log.TextEncoding.Terminal);
-				checkBox_Options_EmitEncodingPreamble.Checked    =  this.settingsInEdit.EmitEncodingPreamble;
-				checkBox_Options_EmitEncodingPreamble.Text       = (this.settingsInEdit.EmitEncodingPreamble ? "with BOM" : "without BOM");
+				if (this.settingsInEdit.TextEncodingIsSupported) {
+					groupBox_Options_TextEncoding.Enabled            =  true;
+					radioButton_Options_TextEncodingUTF8.Checked     = (this.settingsInEdit.TextEncoding == Log.TextEncoding.UTF8);
+					radioButton_Options_TextEncodingTerminal.Checked = (this.settingsInEdit.TextEncoding == Log.TextEncoding.Terminal);
+					checkBox_Options_EmitEncodingPreamble.Checked    =  this.settingsInEdit.EmitEncodingPreamble;
+					checkBox_Options_EmitEncodingPreamble.Text       = (this.settingsInEdit.EmitEncodingPreamble ? "with BOM" : "without BOM");
+				}
+				else {
+					groupBox_Options_TextEncoding.Enabled            = false;
+					radioButton_Options_TextEncodingUTF8.Checked     = true; // Show default, XML is UTF-8 too, RTF don't care.
+					radioButton_Options_TextEncodingTerminal.Checked = false;
+					checkBox_Options_EmitEncodingPreamble.Checked    = true; // Show default, XML is UTF-8 too, RTF don't care.
+					checkBox_Options_EmitEncodingPreamble.Text       = "with BOM";
+				}
 			}
-			else {
-				groupBox_Options_TextEncoding.Enabled            = false;
-				radioButton_Options_TextEncodingUTF8.Checked     = true; // Show default, XML is UTF-8 too, RTF don't care.
-				radioButton_Options_TextEncodingTerminal.Checked = false;
-				checkBox_Options_EmitEncodingPreamble.Checked    = true; // Show default, XML is UTF-8 too, RTF don't care.
-				checkBox_Options_EmitEncodingPreamble.Text       = "with BOM";
+			finally
+			{
+				this.isSettingControls.Leave();
 			}
-
-			this.isSettingControls.Leave();
 		}
 
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]

@@ -274,28 +274,32 @@ namespace YAT.View.Controls
 			bool enabled;
 
 			this.isSettingControls.Enter();
+			try
+			{
+				enabled = this.settings.LengthLineBreak.Enabled;
+				checkBox_LengthLineBreak.Checked = enabled;
+				textBox_LengthLineBreak.Enabled = enabled;
+				textBox_LengthLineBreak.Text = this.settings.LengthLineBreak.Length.ToString(CultureInfo.CurrentCulture);
 
-			enabled = this.settings.LengthLineBreak.Enabled;
-			checkBox_LengthLineBreak.Checked = enabled;
-			textBox_LengthLineBreak.Enabled = enabled;
-			textBox_LengthLineBreak.Text = this.settings.LengthLineBreak.Length.ToString(CultureInfo.CurrentCulture);
+				enabled = this.settings.SequenceLineBreakBefore.Enabled;
+				checkBox_SequenceLineBreakBefore.Checked = enabled;
+				textBox_SequenceLineBreakBeforeSequence.Enabled = enabled;
+				textBox_SequenceLineBreakBeforeSequence.Text = this.settings.SequenceLineBreakBefore.Sequence;
 
-			enabled = this.settings.SequenceLineBreakBefore.Enabled;
-			checkBox_SequenceLineBreakBefore.Checked = enabled;
-			textBox_SequenceLineBreakBeforeSequence.Enabled = enabled;
-			textBox_SequenceLineBreakBeforeSequence.Text = this.settings.SequenceLineBreakBefore.Sequence;
+				enabled = this.settings.SequenceLineBreakAfter.Enabled;
+				checkBox_SequenceLineBreakAfter.Checked = enabled;
+				textBox_SequenceLineBreakAfterSequence.Enabled = enabled;
+				textBox_SequenceLineBreakAfterSequence.Text = this.settings.SequenceLineBreakAfter.Sequence;
 
-			enabled = this.settings.SequenceLineBreakAfter.Enabled;
-			checkBox_SequenceLineBreakAfter.Checked = enabled;
-			textBox_SequenceLineBreakAfterSequence.Enabled = enabled;
-			textBox_SequenceLineBreakAfterSequence.Text = this.settings.SequenceLineBreakAfter.Sequence;
-
-			enabled = this.settings.TimedLineBreak.Enabled;
-			checkBox_TimedLineBreak.Checked = enabled;
-			textBox_TimedLineBreakTimeout.Enabled = enabled;
-			textBox_TimedLineBreakTimeout.Text = this.settings.TimedLineBreak.Timeout.ToString(CultureInfo.CurrentCulture);
-
-			this.isSettingControls.Leave();
+				enabled = this.settings.TimedLineBreak.Enabled;
+				checkBox_TimedLineBreak.Checked = enabled;
+				textBox_TimedLineBreakTimeout.Enabled = enabled;
+				textBox_TimedLineBreakTimeout.Text = this.settings.TimedLineBreak.Timeout.ToString(CultureInfo.CurrentCulture);
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		#endregion

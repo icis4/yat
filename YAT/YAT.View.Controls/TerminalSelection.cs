@@ -245,19 +245,23 @@ namespace YAT.View.Controls
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
-
-			if (Enabled)
+			try
 			{
-				comboBox_TerminalType.SelectedItem = (Domain.TerminalTypeEx)this.terminalType;
-				comboBox_IOType.SelectedItem       = (Domain.IOTypeEx)this.ioType;
+				if (Enabled)
+				{
+					comboBox_TerminalType.SelectedItem = (Domain.TerminalTypeEx)this.terminalType;
+					comboBox_IOType.SelectedItem       = (Domain.IOTypeEx)this.ioType;
+				}
+				else
+				{
+					comboBox_TerminalType.SelectedIndex = ControlEx.InvalidIndex;
+					comboBox_IOType.SelectedIndex       = ControlEx.InvalidIndex;
+				}
 			}
-			else
+			finally
 			{
-				comboBox_TerminalType.SelectedIndex = ControlEx.InvalidIndex;
-				comboBox_IOType.SelectedIndex       = ControlEx.InvalidIndex;
+				this.isSettingControls.Leave();
 			}
-
-			this.isSettingControls.Leave();
 		}
 
 		#endregion

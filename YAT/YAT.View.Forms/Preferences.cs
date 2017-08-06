@@ -215,29 +215,37 @@ namespace YAT.View.Forms
 		private void InitializeControls()
 		{
 			this.isSettingControls.Enter();
-
-			// Nothing to do yet.
-
-			this.isSettingControls.Leave();
+			try
+			{
+				// Nothing to do yet.
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
+			try
+			{
+				checkBox_ShowTerminalInfo.Checked = this.settingsInEdit.MainWindow.ShowTerminalInfo;
+				checkBox_ShowChrono.Checked       = this.settingsInEdit.MainWindow.ShowChrono;
 
-			checkBox_ShowTerminalInfo.Checked = this.settingsInEdit.MainWindow.ShowTerminalInfo;
-			checkBox_ShowChrono.Checked       = this.settingsInEdit.MainWindow.ShowChrono;
+				checkBox_AutoOpenWorkspace.Checked = this.settingsInEdit.General.AutoOpenWorkspace;
+				checkBox_AutoSaveWorkspace.Checked = this.settingsInEdit.General.AutoSaveWorkspace;
+				checkBox_UseRelativePaths.Checked  = this.settingsInEdit.General.UseRelativePaths;
 
-			checkBox_AutoOpenWorkspace.Checked = this.settingsInEdit.General.AutoOpenWorkspace;
-			checkBox_AutoSaveWorkspace.Checked = this.settingsInEdit.General.AutoSaveWorkspace;
-			checkBox_UseRelativePaths.Checked  = this.settingsInEdit.General.UseRelativePaths;
+				checkBox_RetrieveSerialPortCaptions.Checked = this.settingsInEdit.General.RetrieveSerialPortCaptions;
+				checkBox_DetectSerialPortsInUse.Checked     = this.settingsInEdit.General.DetectSerialPortsInUse;
 
-			checkBox_RetrieveSerialPortCaptions.Checked = this.settingsInEdit.General.RetrieveSerialPortCaptions;
-			checkBox_DetectSerialPortsInUse.Checked     = this.settingsInEdit.General.DetectSerialPortsInUse;
-
-			checkBox_MatchUsbSerial.Checked = this.settingsInEdit.General.MatchUsbSerial;
-
-			this.isSettingControls.Leave();
+				checkBox_MatchUsbSerial.Checked = this.settingsInEdit.General.MatchUsbSerial;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		#endregion

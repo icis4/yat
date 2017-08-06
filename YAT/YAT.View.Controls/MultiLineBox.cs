@@ -248,24 +248,28 @@ namespace YAT.View.Controls
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
-
-			if (this.commandInEdit.IsSingleLineText)
+			try
 			{
-				textBox_Lines.Text = this.commandInEdit.SingleLineText;
-			}
-			else
-			{
-				var sb = new StringBuilder();
-				for (int i = 0; i < this.commandInEdit.MultiLineText.Length; i++)
+				if (this.commandInEdit.IsSingleLineText)
 				{
-					sb.Append(this.commandInEdit.MultiLineText[i]);
-					if (i < (this.commandInEdit.MultiLineText.Length - 1))
-						sb.AppendLine();
+					textBox_Lines.Text = this.commandInEdit.SingleLineText;
 				}
-				textBox_Lines.Text = sb.ToString();
+				else
+				{
+					var sb = new StringBuilder();
+					for (int i = 0; i < this.commandInEdit.MultiLineText.Length; i++)
+					{
+						sb.Append(this.commandInEdit.MultiLineText[i]);
+						if (i < (this.commandInEdit.MultiLineText.Length - 1))
+							sb.AppendLine();
+					}
+					textBox_Lines.Text = sb.ToString();
+				}
 			}
-
-			this.isSettingControls.Leave();
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void AcceptAndClose()

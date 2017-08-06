@@ -360,36 +360,40 @@ namespace YAT.View.Forms
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
-
-			ClearExamples();
-
-			for (int i = 0; i < this.monitors.Length; i++)
-			{                                      // Clone settings to ensure decoupling:
-				this.monitors[i].FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
-			}
-
-			checkBox_EnableFormatting.Checked = this.formatSettingsInEdit.FormattingEnabled;
-
-			for (int i = 0; i < this.textFormats.Length; i++)
+			try
 			{
-				this.textFormats[i].FormatFontWithoutStyle = this.formatSettingsInEdit.Font;
+				ClearExamples();
 
-				Model.Types.TextFormat tf = GetFormatFromIndex(i);
-				this.textFormats[i].FormatFontStyle = tf.FontStyle;
-				this.textFormats[i].FormatColor     = tf.Color;
+				for (int i = 0; i < this.monitors.Length; i++)
+				{                                      // Clone settings to ensure decoupling:
+					this.monitors[i].FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
+				}
 
-				this.textFormats[i].CustomColors = this.customColors;
+				checkBox_EnableFormatting.Checked = this.formatSettingsInEdit.FormattingEnabled;
+
+				for (int i = 0; i < this.textFormats.Length; i++)
+				{
+					this.textFormats[i].FormatFontWithoutStyle = this.formatSettingsInEdit.Font;
+
+					Model.Types.TextFormat tf = GetFormatFromIndex(i);
+					this.textFormats[i].FormatFontStyle = tf.FontStyle;
+					this.textFormats[i].FormatColor     = tf.Color;
+
+					this.textFormats[i].CustomColors = this.customColors;
+				}
+
+				SelectionHelper.Select(comboBox_InfoSeparator, this.infoSeparator, this.infoSeparator);
+				SelectionHelper.Select(comboBox_InfoEnclosure, this.infoEnclosure, this.infoEnclosure);
+
+												  // Clone settings to ensure decoupling:
+				monitor_Example.FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
+
+				SetExamples();
 			}
-
-			SelectionHelper.Select(comboBox_InfoSeparator, this.infoSeparator, this.infoSeparator);
-			SelectionHelper.Select(comboBox_InfoEnclosure, this.infoEnclosure, this.infoEnclosure);
-
-			                                  // Clone settings to ensure decoupling:
-			monitor_Example.FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
-
-			SetExamples();
-
-			this.isSettingControls.Leave();
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void ClearExamples()
@@ -402,13 +406,13 @@ namespace YAT.View.Forms
 
 		private void SetExamples()
 		{
-			DateTime now = DateTime.Now;
+			var now = DateTime.Now;
 
-			string infoSeparator      = this.infoSeparator.ToSeparator();
-			string infoEnclosureLeft  = this.infoEnclosure.ToEnclosureLeft();
-			string infoEnclosureRight = this.infoEnclosure.ToEnclosureRight();
+			var infoSeparator      = this.infoSeparator.ToSeparator();
+			var infoEnclosureLeft  = this.infoEnclosure.ToEnclosureLeft();
+			var infoEnclosureRight = this.infoEnclosure.ToEnclosureRight();
 
-			List<Domain.DisplayLine> exampleLines = new List<Domain.DisplayLine>(10); // Preset the required capacity to improve memory management.
+			var exampleLines = new List<Domain.DisplayLine>(10); // Preset the required capacity to improve memory management.
 
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxData(0x41, "41h")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxControl(0x13, "<CR>")));
@@ -424,7 +428,7 @@ namespace YAT.View.Forms
 			for (int i = 0; i < this.monitors.Length; i++)
 				this.monitors[i].AddLine(exampleLines[i]);
 
-			Domain.DisplayRepository exampleComplete = new Domain.DisplayRepository(37); // Preset the required capacity to improve memory management.
+			var exampleComplete = new Domain.DisplayRepository(37); // Preset the required capacity to improve memory management.
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
 			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now, infoEnclosureLeft, infoEnclosureRight));

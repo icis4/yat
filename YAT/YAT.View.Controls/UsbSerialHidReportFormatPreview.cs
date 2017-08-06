@@ -317,79 +317,83 @@ namespace YAT.View.Controls
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
+			try
+			{
+				SuspendLayout();
 
-			SuspendLayout();
+				label_Id1.Enabled = Enabled;
+				label_Id2.Enabled = Enabled;
+				label_IdLine.Visible = Enabled;
+				label_IdRemarks.Visible = Enabled;
+				label_Length1.Enabled = Enabled;
+				label_Length2.Enabled = Enabled;
+				label_LengthLine.Enabled = Enabled;
+				label_LengthRemarks.Enabled = Enabled;
+				label_Payload1.Enabled = Enabled;
+				label_Payload2.Enabled = Enabled;
+				label_PayloadRemarks.Enabled = Enabled;
+				label_TerminatingZero.Enabled = Enabled;
+				label_TerminatingZeroLine.Enabled = Enabled;
+				label_TerminatingZeroRemarks.Enabled = Enabled;
+				label_FillerBytes.Enabled = Enabled;
+				label_FillerBytesRemarks.Enabled = Enabled;
 
-			label_Id1.Enabled = Enabled;
-			label_Id2.Enabled = Enabled;
-			label_IdLine.Visible = Enabled;
-			label_IdRemarks.Visible = Enabled;
-			label_Length1.Enabled = Enabled;
-			label_Length2.Enabled = Enabled;
-			label_LengthLine.Enabled = Enabled;
-			label_LengthRemarks.Enabled = Enabled;
-			label_Payload1.Enabled = Enabled;
-			label_Payload2.Enabled = Enabled;
-			label_PayloadRemarks.Enabled = Enabled;
-			label_TerminatingZero.Enabled = Enabled;
-			label_TerminatingZeroLine.Enabled = Enabled;
-			label_TerminatingZeroRemarks.Enabled = Enabled;
-			label_FillerBytes.Enabled = Enabled;
-			label_FillerBytesRemarks.Enabled = Enabled;
+				label_Id1.Visible = this.useId;
+				label_Id2.Visible = this.useId;
+				label_IdLine.Visible = this.useId;
+				label_IdRemarks.Visible = this.useId;
+				label_Length1.Visible = this.prependPayloadByteLength;
+				label_Length2.Visible = this.prependPayloadByteLength;
+				label_LengthLine.Visible = this.prependPayloadByteLength;
+				label_LengthRemarks.Visible = this.prependPayloadByteLength;
+				label_TerminatingZero.Visible = this.appendTerminatingZero;
+				label_TerminatingZeroLine.Visible = this.appendTerminatingZero;
+				label_TerminatingZeroRemarks.Visible = this.appendTerminatingZero;
+			////label_FillerBytes.Visible = this.fillLastReport;
+			////label_FillerBytesRemarks.Visible = this.fillLastReport;
 
-			label_Id1.Visible = this.useId;
-			label_Id2.Visible = this.useId;
-			label_IdLine.Visible = this.useId;
-			label_IdRemarks.Visible = this.useId;
-			label_Length1.Visible = this.prependPayloadByteLength;
-			label_Length2.Visible = this.prependPayloadByteLength;
-			label_LengthLine.Visible = this.prependPayloadByteLength;
-			label_LengthRemarks.Visible = this.prependPayloadByteLength;
-			label_TerminatingZero.Visible = this.appendTerminatingZero;
-			label_TerminatingZeroLine.Visible = this.appendTerminatingZero;
-			label_TerminatingZeroRemarks.Visible = this.appendTerminatingZero;
-		////label_FillerBytes.Visible = this.fillLastReport;
-		////label_FillerBytesRemarks.Visible = this.fillLastReport;
+				// Windows HID.dll requires that outgoing reports are always filled!
+				label_FillerBytes.Visible = true;
+				label_FillerBytesRemarks.Visible = true;
 
-			// Windows HID.dll requires that outgoing reports are always filled!
-			label_FillerBytes.Visible = true;
-			label_FillerBytesRemarks.Visible = true;
+				int offset = 0;
+				if (this.useId)
+					offset += label_Id1.Width;
 
-			int offset = 0;
-			if (this.useId)
-				offset += label_Id1.Width;
+				label_Length1.Left = offset;
+				label_Length2.Left = offset;
+				label_LengthLine.Left = offset + this.initialLeftOffset[label_LengthLine];
+				label_LengthRemarks.Left = offset + this.initialLeftOffset[label_LengthRemarks];
 
-			label_Length1.Left = offset;
-			label_Length2.Left = offset;
-			label_LengthLine.Left = offset + this.initialLeftOffset[label_LengthLine];
-			label_LengthRemarks.Left = offset + this.initialLeftOffset[label_LengthRemarks];
+				if (this.prependPayloadByteLength)
+					offset += label_Length1.Width;
 
-			if (this.prependPayloadByteLength)
-				offset += label_Length1.Width;
+				label_Payload1.Left = offset;
+				label_Payload1.Width = Width - offset;
+				label_Payload1.Text = ExactOrNearest(this.payload1Text, offset);
+				label_Payload2.Left = offset;
+				label_PayloadRemarks.Left = offset + this.initialLeftOffset[label_PayloadRemarks];
 
-			label_Payload1.Left = offset;
-			label_Payload1.Width = Width - offset;
-			label_Payload1.Text = ExactOrNearest(this.payload1Text, offset);
-			label_Payload2.Left = offset;
-			label_PayloadRemarks.Left = offset + this.initialLeftOffset[label_PayloadRemarks];
+				offset += label_Payload2.Width;
 
-			offset += label_Payload2.Width;
+				label_TerminatingZero.Left = offset;
+				label_TerminatingZeroLine.Left = offset + this.initialLeftOffset[label_TerminatingZeroLine];
+				label_TerminatingZeroRemarks.Left = offset + this.initialLeftOffset[label_TerminatingZeroRemarks];
 
-			label_TerminatingZero.Left = offset;
-			label_TerminatingZeroLine.Left = offset + this.initialLeftOffset[label_TerminatingZeroLine];
-			label_TerminatingZeroRemarks.Left = offset + this.initialLeftOffset[label_TerminatingZeroRemarks];
+				if (this.appendTerminatingZero)
+					offset += label_TerminatingZero.Width;
 
-			if (this.appendTerminatingZero)
-				offset += label_TerminatingZero.Width;
+				label_FillerBytes.Left = offset;
+				label_FillerBytes.Width = Width - offset;
+				label_FillerBytes.Text = ExactOrNearest(this.fillerBytesText, offset);
+				label_FillerBytesRemarks.Left = offset + this.initialLeftOffset[label_FillerBytesRemarks];
 
-			label_FillerBytes.Left = offset;
-			label_FillerBytes.Width = Width - offset;
-			label_FillerBytes.Text = ExactOrNearest(this.fillerBytesText, offset);
-			label_FillerBytesRemarks.Left = offset + this.initialLeftOffset[label_FillerBytesRemarks];
-
-			ResumeLayout();
-
-			this.isSettingControls.Leave();
+				ResumeLayout();
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		/// <summary>
