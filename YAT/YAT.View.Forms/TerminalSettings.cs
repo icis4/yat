@@ -153,20 +153,20 @@ namespace YAT.View.Forms
 
 		private void terminalSelection_TerminalTypeChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				this.settingsInEdit.Terminal.TerminalType = terminalSelection.TerminalType;
-				SetControls();
-			}
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.TerminalType = terminalSelection.TerminalType;
+			SetControls();
 		}
 
 		private void terminalSelection_IOTypeChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				this.settingsInEdit.Terminal.IO.IOType = terminalSelection.IOType;
-				SetControls();
-			}
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.IO.IOType = terminalSelection.IOType;
+			SetControls();
 		}
 
 		private void button_TextOrBinarySettings_Click(object sender, EventArgs e)

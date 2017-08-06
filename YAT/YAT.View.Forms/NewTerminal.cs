@@ -138,21 +138,21 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void terminalSelection_TerminalTypeChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				Domain.TerminalType tt = terminalSelection.TerminalType;
-				this.newTerminalSettingsInEdit.TerminalType = tt;
-				SetControls();
-			}
+			if (this.isSettingControls)
+				return;
+
+			var tt = terminalSelection.TerminalType;
+			this.newTerminalSettingsInEdit.TerminalType = tt;
+			SetControls();
 		}
 
 		private void terminalSelection_IOTypeChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				this.newTerminalSettingsInEdit.IOType = terminalSelection.IOType;
-				SetControls();
-			}
+			if (this.isSettingControls)
+				return;
+
+			this.newTerminalSettingsInEdit.IOType = terminalSelection.IOType;
+			SetControls();
 		}
 
 		private void checkBox_StartTerminal_CheckedChanged(object sender, EventArgs e)

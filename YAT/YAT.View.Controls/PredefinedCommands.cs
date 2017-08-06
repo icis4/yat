@@ -241,8 +241,10 @@ namespace YAT.View.Controls
 
 		private void comboBox_Pages_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				SelectedPage = comboBox_Pages.SelectedIndex + 1;
+			if (this.isSettingControls)
+				return;
+
+			SelectedPage = comboBox_Pages.SelectedIndex + 1;
 		}
 
 		#endregion

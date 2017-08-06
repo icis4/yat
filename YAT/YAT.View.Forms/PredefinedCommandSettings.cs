@@ -235,11 +235,11 @@ namespace YAT.View.Forms
 
 		private void listBox_Pages_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				SelectedPageIndex = listBox_Pages.SelectedIndex;
-				SetControls();
-			}
+			if (this.isSettingControls)
+				return;
+
+			SelectedPageIndex = listBox_Pages.SelectedIndex;
+			SetControls();
 		}
 
 		private void button_NamePage_Click(object sender, EventArgs e)
@@ -284,11 +284,11 @@ namespace YAT.View.Forms
 
 		private void predefinedCommandSettingsSet_CommandChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				GetCommandFromSettingsSet(ControlEx.TagToIndex(sender));
-				SetClearControls();
-			}
+			if (this.isSettingControls)
+				return;
+
+			GetCommandFromSettingsSet(ControlEx.TagToIndex(sender));
+			SetClearControls();
 		}
 
 		private void button_ClearPage_Click(object sender, EventArgs e)

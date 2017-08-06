@@ -275,8 +275,10 @@ namespace YAT.View.Controls
 
 		private void UsbSerialHidReportFormatPreview_EnabledChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				SetControls();
+			if (this.isSettingControls)
+				return;
+
+			SetControls();
 		}
 
 		#endregion

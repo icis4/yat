@@ -339,8 +339,10 @@ namespace YAT.View.Controls
 		/// </summary>
 		private void SocketSelection_EnabledChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				SetControls();
+			if (this.isSettingControls)
+				return;
+
+			SetControls();
 		}
 
 		#endregion
@@ -353,141 +355,33 @@ namespace YAT.View.Controls
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_RemoteHost_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
+			if (this.isSettingControls)
+				return;
+
+			// Attention:
+			// Do not assume that the selected item maches the actual text in the box
+			//   because SelectedItem is also set if text has changed in the meantime.
+
+			var remoteHost = (comboBox_RemoteHost.SelectedItem as IPHostEx);
+			if ((remoteHost != null) && (IPAddressEx.NotEqualsNone(remoteHost.Address)) &&
+				StringEx.EqualsOrdinalIgnoreCase(remoteHost.ToString(), comboBox_RemoteHost.Text))
 			{
-				// Attention:
-				// Do not assume that the selected item maches the actual text in the box
-				//   because SelectedItem is also set if text has changed in the meantime.
-
-				var remoteHost = (comboBox_RemoteHost.SelectedItem as IPHostEx);
-				if ((remoteHost != null) && (IPAddressEx.NotEqualsNone(remoteHost.Address)) &&
-					StringEx.EqualsOrdinalIgnoreCase(remoteHost.ToString(), comboBox_RemoteHost.Text))
-				{
-					RemoteHost = remoteHost;
-				}
-				else
-				{
-					// Immediately try to resolve the corresponding remote IP address:
-					IPHostEx ipHost;
-					if (IPHostEx.TryParseAndResolve(comboBox_RemoteHost.Text, out ipHost))
-					{
-						RemoteHost = ipHost;
-					}
-					else
-					{
-						MessageBoxEx.Show
-						(
-							this,
-							"Remote host name or address is invalid!",
-							"Invalid Input",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Error
-						);
-
-						e.Cancel = true;
-					}
-				}
+				RemoteHost = remoteHost;
 			}
-		}
-
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
-		private void comboBox_LocalFilter_Validating(object sender, CancelEventArgs e)
-		{
-			if (!this.isSettingControls)
+			else
 			{
-				// Attention:
-				// Do not assume that the selected item maches the actual text in the box
-				//   because SelectedItem is also set if text has changed in the meantime.
-
-				var localFilter = (comboBox_LocalFilter.SelectedItem as IPFilterEx);
-				if ((localFilter != null) && (IPAddressEx.NotEqualsNone(localFilter.Address)) &&
-					StringEx.EqualsOrdinalIgnoreCase(localFilter.ToString(), comboBox_LocalFilter.Text))
+				// Immediately try to resolve the corresponding remote IP address:
+				IPHostEx ipHost;
+				if (IPHostEx.TryParseAndResolve(comboBox_RemoteHost.Text, out ipHost))
 				{
-					LocalFilter = localFilter;
+					RemoteHost = ipHost;
 				}
 				else
 				{
-					// Immediately try to resolve the corresponding IP address:
-					IPFilterEx ipAddressFilter;
-					if (IPFilterEx.TryParseAndResolve(comboBox_LocalFilter.Text, out ipAddressFilter))
-					{
-						LocalFilter = ipAddressFilter;
-					}
-					else
-					{
-						MessageBoxEx.Show
-						(
-							this,
-							"Address filter is invalid!",
-							"Invalid Input",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Error
-						);
-
-						e.Cancel = true;
-					}
-				}
-			}
-		}
-
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Table-style coding.")]
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
-		private void textBox_RemotePort_Validating(object sender, CancelEventArgs e)
-		{
-			if (!this.isSettingControls)
-			{
-				int port;
-				if (int.TryParse(textBox_RemotePort.Text, out port) && IPEndPointEx.IsValidPort(port))
-				{
-					if ((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket))
-					{
-						RemoteTcpPort = port;
-
-						// Also set the local port:
-						//  > For client:     Same port, makes it easier setting the server settings for a same connection.
-						//  > For AutoSocket: Typically using same port for client and server.
-						LocalTcpPort = port;
-					}
-					else if ((this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpPairSocket))
-					{
-						RemoteUdpPort = port;
-
-						// Also set the local port:
-						//  > For client: Same port, makes it easier setting the server settings for a same connection.
-						//  > For socket:
-						//     > On local host, typically using adjecent ports for client and server.
-						//     > On remote host, typically using same port for client and server.
-						if (this.socketType == SocketType.UdpClient)
-						{
-							LocalUdpPort = port;
-						}
-						else
-						{
-							if (RemoteHost.IsLocalhost)
-							{
-								if (port < IPEndPoint.MaxPort)
-									LocalUdpPort = port + 1;
-								else
-									LocalUdpPort = IPEndPoint.MaxPort - 1;
-							}
-							else
-							{
-								LocalUdpPort = port;
-							}
-						}
-					}
-				}
-				else
-				{
-					string message =
-						"Remote port is invalid, valid values are numbers from " +
-						IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture) + " to " +
-						IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + "."; // 'InvariantCulture' for TCP and UDP ports!
-
 					MessageBoxEx.Show
 					(
 						this,
-						message,
+						"Remote host name or address is invalid!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -498,10 +392,120 @@ namespace YAT.View.Controls
 			}
 		}
 
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		private void comboBox_LocalFilter_Validating(object sender, CancelEventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			// Attention:
+			// Do not assume that the selected item maches the actual text in the box
+			//   because SelectedItem is also set if text has changed in the meantime.
+
+			var localFilter = (comboBox_LocalFilter.SelectedItem as IPFilterEx);
+			if ((localFilter != null) && (IPAddressEx.NotEqualsNone(localFilter.Address)) &&
+				StringEx.EqualsOrdinalIgnoreCase(localFilter.ToString(), comboBox_LocalFilter.Text))
+			{
+				LocalFilter = localFilter;
+			}
+			else
+			{
+				// Immediately try to resolve the corresponding IP address:
+				IPFilterEx ipAddressFilter;
+				if (IPFilterEx.TryParseAndResolve(comboBox_LocalFilter.Text, out ipAddressFilter))
+				{
+					LocalFilter = ipAddressFilter;
+				}
+				else
+				{
+					MessageBoxEx.Show
+					(
+						this,
+						"Address filter is invalid!",
+						"Invalid Input",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+					);
+
+					e.Cancel = true;
+				}
+			}
+		}
+
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Table-style coding.")]
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		private void textBox_RemotePort_Validating(object sender, CancelEventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			int port;
+			if (int.TryParse(textBox_RemotePort.Text, out port) && IPEndPointEx.IsValidPort(port))
+			{
+				if ((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket))
+				{
+					RemoteTcpPort = port;
+
+					// Also set the local port:
+					//  > For client:     Same port, makes it easier setting the server settings for a same connection.
+					//  > For AutoSocket: Typically using same port for client and server.
+					LocalTcpPort = port;
+				}
+				else if ((this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpPairSocket))
+				{
+					RemoteUdpPort = port;
+
+					// Also set the local port:
+					//  > For client: Same port, makes it easier setting the server settings for a same connection.
+					//  > For socket:
+					//     > On local host, typically using adjecent ports for client and server.
+					//     > On remote host, typically using same port for client and server.
+					if (this.socketType == SocketType.UdpClient)
+					{
+						LocalUdpPort = port;
+					}
+					else
+					{
+						if (RemoteHost.IsLocalhost)
+						{
+							if (port < IPEndPoint.MaxPort)
+								LocalUdpPort = port + 1;
+							else
+								LocalUdpPort = IPEndPoint.MaxPort - 1;
+						}
+						else
+						{
+							LocalUdpPort = port;
+						}
+					}
+				}
+			}
+			else
+			{
+				string message =
+					"Remote port is invalid, valid values are numbers from " +
+					IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture) + " to " +
+					IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + "."; // 'InvariantCulture' for TCP and UDP ports!
+
+				MessageBoxEx.Show
+				(
+					this,
+					message,
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
+			}
+		}
+
 		private void comboBox_LocalInterface_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				LocalInterface = (comboBox_LocalInterface.SelectedItem as IPNetworkInterfaceEx);
+			if (this.isSettingControls)
+				return;
+
+			LocalInterface = (comboBox_LocalInterface.SelectedItem as IPNetworkInterfaceEx);
 		}
 
 		private void button_RefreshLocalInterfaces_Click(object sender, EventArgs e)
@@ -513,62 +517,62 @@ namespace YAT.View.Controls
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_LocalPort_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
+			if (this.isSettingControls)
+				return;
+
+			int port;
+			if (int.TryParse(textBox_LocalPort.Text, out port) && IPEndPointEx.IsValidPort(port))
 			{
-				int port;
-				if (int.TryParse(textBox_LocalPort.Text, out port) && IPEndPointEx.IsValidPort(port))
+				if ((this.socketType == SocketType.TcpServer) || (this.socketType == SocketType.TcpAutoSocket))
 				{
-					if ((this.socketType == SocketType.TcpServer) || (this.socketType == SocketType.TcpAutoSocket))
-					{
-						LocalTcpPort = port;
+					LocalTcpPort = port;
 
-						// Also set the remote port:
-						//  > For server: Same port, makes it easier setting the client settings for a same connection.
-						if (this.socketType == SocketType.TcpServer)
-							RemoteTcpPort = port;
-					}
-					else if ((this.socketType == SocketType.UdpServer) || (this.socketType == SocketType.UdpPairSocket))
-					{
-						LocalUdpPort = port;
+					// Also set the remote port:
+					//  > For server: Same port, makes it easier setting the client settings for a same connection.
+					if (this.socketType == SocketType.TcpServer)
+						RemoteTcpPort = port;
+				}
+				else if ((this.socketType == SocketType.UdpServer) || (this.socketType == SocketType.UdpPairSocket))
+				{
+					LocalUdpPort = port;
 
-						// Also set the remote port:
-						//  > For server:
-						//     > On local host, typically using adjecent ports for client and server.
-						//     > On remote host, typically using same port for client and server.
-						if (this.socketType == SocketType.UdpServer)
+					// Also set the remote port:
+					//  > For server:
+					//     > On local host, typically using adjecent ports for client and server.
+					//     > On remote host, typically using same port for client and server.
+					if (this.socketType == SocketType.UdpServer)
+					{
+						if (RemoteHost.IsLocalhost)
 						{
-							if (RemoteHost.IsLocalhost)
-							{
-								if (port > IPEndPoint.MinPort)
-									RemoteUdpPort = port - 1;
-								else
-									RemoteUdpPort = IPEndPoint.MinPort + 1;
-							}
+							if (port > IPEndPoint.MinPort)
+								RemoteUdpPort = port - 1;
 							else
-							{
-								RemoteUdpPort = port;
-							}
+								RemoteUdpPort = IPEndPoint.MinPort + 1;
+						}
+						else
+						{
+							RemoteUdpPort = port;
 						}
 					}
 				}
-				else
-				{
-					string message =
-						"Local port is invalid, valid values are numbers from " +
-						IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture) + " to " +
-						IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + "."; // 'InvariantCulture' for TCP and UDP ports!
+			}
+			else
+			{
+				string message =
+					"Local port is invalid, valid values are numbers from " +
+					IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture) + " to " +
+					IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + "."; // 'InvariantCulture' for TCP and UDP ports!
 
-					MessageBoxEx.Show
-					(
-						this,
-						message,
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
+				MessageBoxEx.Show
+				(
+					this,
+					message,
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
 
-					e.Cancel = true;
-				}
+				e.Cancel = true;
 			}
 		}
 

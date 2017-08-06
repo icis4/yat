@@ -179,46 +179,46 @@ namespace YAT.View.Controls
 
 		private void textBox_Lines_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
+			if (this.isSettingControls)
+				return;
+
+			var multiLineText = new List<string>();
+
+			// Retrieve lines from text box with Environment.NewLine:
+			using (var reader = new StringReader(textBox_Lines.Text))
 			{
-				var multiLineText = new List<string>();
+				string line;
+				while ((line = reader.ReadLine()) != null)
+					multiLineText.Add(line);
+			}
 
-				// Retrieve lines from text box with Environment.NewLine:
-				using (var reader = new StringReader(textBox_Lines.Text))
+			// Validate each line:
+			bool isValid = true;
+			int textLength = 0;
+			foreach (string s in multiLineText)
+			{
+				int invalidTextStart;
+				int invalidTextLength;
+				if (!Utilities.ValidationHelper.ValidateText(this, "text", s, out invalidTextStart, out invalidTextLength, this.defaultRadix, this.parseMode))
 				{
-					string line;
-					while ((line = reader.ReadLine()) != null)
-						multiLineText.Add(line);
+					invalidTextStart += textLength;
+					invalidTextLength = textBox_Lines.Text.Length - invalidTextStart;
+					textBox_Lines.Select(invalidTextStart, invalidTextLength);
+					isValid = false;
+					break;
 				}
+				textLength += s.Length + Environment.NewLine.Length;
+			}
 
-				// Validate each line:
-				bool isValid = true;
-				int textLength = 0;
-				foreach (string s in multiLineText)
-				{
-					int invalidTextStart;
-					int invalidTextLength;
-					if (!Utilities.ValidationHelper.ValidateText(this, "text", s, out invalidTextStart, out invalidTextLength, this.defaultRadix, this.parseMode))
-					{
-						invalidTextStart += textLength;
-						invalidTextLength = textBox_Lines.Text.Length - invalidTextStart;
-						textBox_Lines.Select(invalidTextStart, invalidTextLength);
-						isValid = false;
-						break;
-					}
-					textLength += s.Length + Environment.NewLine.Length;
-				}
-
-				if (isValid)
-				{
-					this.commandInEdit.MultiLineText = multiLineText.ToArray();
-					this.commandInEdit.DescriptionFromSingleLineText(); // Enforce "<N lines...> [...] [...] ..." description:
-					SetControls();
-				}
-				else
-				{
-					e.Cancel = true;
-				}
+			if (isValid)
+			{
+				this.commandInEdit.MultiLineText = multiLineText.ToArray();
+				this.commandInEdit.DescriptionFromSingleLineText(); // Enforce "<N lines...> [...] [...] ..." description:
+				SetControls();
+			}
+			else
+			{
+				e.Cancel = true;
 			}
 		}
 

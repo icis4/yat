@@ -176,8 +176,10 @@ namespace YAT.View.Controls
 		/// </summary>
 		private void UsbSerialHidDeviceSelection_EnabledChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				SetDeviceSelection();
+			if (this.isSettingControls)
+				return;
+
+			SetDeviceSelection();
 		}
 
 		#endregion
@@ -189,8 +191,10 @@ namespace YAT.View.Controls
 
 		private void comboBox_Device_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				DeviceInfo = (comboBox_Device.SelectedItem as DeviceInfo);
+			if (this.isSettingControls)
+				return;
+
+			DeviceInfo = (comboBox_Device.SelectedItem as DeviceInfo);
 		}
 
 		private void button_RefreshPorts_Click(object sender, EventArgs e)

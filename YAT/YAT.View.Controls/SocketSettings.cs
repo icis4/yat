@@ -195,8 +195,10 @@ namespace YAT.View.Controls
 		/// </summary>
 		private void SocketSettings_EnabledChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				SetControls();
+			if (this.isSettingControls)
+				return;
+
+			SetControls();
 		}
 
 		#endregion
@@ -208,58 +210,64 @@ namespace YAT.View.Controls
 
 		private void checkBox_TcpClientAutoReconnect_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				MKY.IO.Serial.AutoInterval ar = TcpClientAutoReconnect;
-				ar.Enabled = checkBox_TcpClientAutoReconnect.Checked;
-				TcpClientAutoReconnect = ar;
-			}
+			if (this.isSettingControls)
+				return;
+
+			var ai = TcpClientAutoReconnect;
+			ai.Enabled = checkBox_TcpClientAutoReconnect.Checked;
+			TcpClientAutoReconnect = ai;
 		}
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_TcpClientAutoReconnectInterval_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				int interval;
-				if (int.TryParse(textBox_TcpClientAutoReconnectInterval.Text, out interval) && (interval >= MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectMinInterval))
-				{
-					MKY.IO.Serial.AutoInterval ar = TcpClientAutoReconnect;
-					ar.Interval = interval;
-					TcpClientAutoReconnect = ar;
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"Reconnect interval must be at least " + MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectMinInterval + " ms!",
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
+			if (this.isSettingControls)
+				return;
 
-					e.Cancel = true;
-				}
+			int interval;
+			if (int.TryParse(textBox_TcpClientAutoReconnectInterval.Text, out interval) && (interval >= MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectMinInterval))
+			{
+				var ai = TcpClientAutoReconnect;
+				ai.Interval = interval;
+				TcpClientAutoReconnect = ai;
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Reconnect interval must be at least " + MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectMinInterval + " ms!",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
 			}
 		}
 
 		private void radioButton_UdpServerSendMode_MostRecent_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				UdpServerSendMode = MKY.IO.Serial.Socket.UdpServerSendMode.MostRecent;
+			if (this.isSettingControls)
+				return;
+
+			UdpServerSendMode = MKY.IO.Serial.Socket.UdpServerSendMode.MostRecent;
 		}
 
 		private void radioButton_UdpServerSendMode_First_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				UdpServerSendMode = MKY.IO.Serial.Socket.UdpServerSendMode.First;
+			if (this.isSettingControls)
+				return;
+
+			UdpServerSendMode = MKY.IO.Serial.Socket.UdpServerSendMode.First;
 		}
 
 		private void radioButton_UdpServerSendMode_None_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				UdpServerSendMode = MKY.IO.Serial.Socket.UdpServerSendMode.None;
+			if (this.isSettingControls)
+				return;
+
+			UdpServerSendMode = MKY.IO.Serial.Socket.UdpServerSendMode.None;
 		}
 
 		#endregion

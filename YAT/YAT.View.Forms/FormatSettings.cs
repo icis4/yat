@@ -152,29 +152,29 @@ namespace YAT.View.Forms
 
 		private void checkBox_EnableFormatting_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				formatSettingsInEdit.FormattingEnabled = checkBox_EnableFormatting.Checked;
-				SetControls();
-			}
+			if (this.isSettingControls)
+				return;
+
+			formatSettingsInEdit.FormattingEnabled = checkBox_EnableFormatting.Checked;
+			SetControls();
 		}
 
 		private void textFormat_FormatChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				GetFormatFromControl(ControlEx.TagToIndex(sender));
-				SetControls();
-			}
+			if (this.isSettingControls)
+				return;
+
+			GetFormatFromControl(ControlEx.TagToIndex(sender));
+			SetControls();
 		}
 
 		private void textFormat_CustomColorsChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				GetCustomColorsFromControl(ControlEx.TagToIndex(sender));
-				SetControls();
-			}
+			if (this.isSettingControls)
+				return;
+
+			GetCustomColorsFromControl(ControlEx.TagToIndex(sender));
+			SetControls();
 		}
 
 		private void button_Font_Click(object sender, EventArgs e)
@@ -189,76 +189,76 @@ namespace YAT.View.Forms
 
 		private void comboBox_InfoSeparator_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				var separator = (comboBox_InfoSeparator.SelectedItem as Domain.InfoSeparatorEx);
-				if (separator != null)
-					this.infoSeparator = separator;
+			if (this.isSettingControls)
+				return;
 
-				SetControls();
-			}
+			var separator = (comboBox_InfoSeparator.SelectedItem as Domain.InfoSeparatorEx);
+			if (separator != null)
+				this.infoSeparator = separator;
+
+			SetControls();
 		}
 
 		private void comboBox_InfoSeparator_Validating(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
+			if (this.isSettingControls)
+				return;
+
+			Domain.InfoSeparatorEx separator;
+			if (Domain.InfoSeparatorEx.TryParse(comboBox_InfoSeparator.Text, out separator))
 			{
-				Domain.InfoSeparatorEx separator;
-				if (Domain.InfoSeparatorEx.TryParse(comboBox_InfoSeparator.Text, out separator))
-				{
-					this.infoSeparator = separator;
-					SetControls();
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"This separator is not supported!",
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
-					e.Cancel = true;
-				}
+				this.infoSeparator = separator;
+				SetControls();
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"This separator is not supported!",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+				e.Cancel = true;
 			}
 		}
 
 		private void comboBox_InfoEnclosure_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				var enclosure = (comboBox_InfoEnclosure.SelectedItem as Domain.InfoEnclosureEx);
-				if (enclosure != null)
-					this.infoEnclosure = enclosure;
+			if (this.isSettingControls)
+				return;
 
-				SetControls();
-			}
+			var enclosure = (comboBox_InfoEnclosure.SelectedItem as Domain.InfoEnclosureEx);
+			if (enclosure != null)
+				this.infoEnclosure = enclosure;
+
+			SetControls();
 		}
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_InfoEnclosure_Validating(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
+			if (this.isSettingControls)
+				return;
+
+			Domain.InfoEnclosureEx enclosure;
+			if (Domain.InfoEnclosureEx.TryParse(comboBox_InfoEnclosure.Text, out enclosure))
 			{
-				Domain.InfoEnclosureEx enclosure;
-				if (Domain.InfoEnclosureEx.TryParse(comboBox_InfoEnclosure.Text, out enclosure))
-				{
-					this.infoEnclosure = enclosure;
-					SetControls();
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"Enclosure string must be an even number of characters (e.g. 2 or 4 characters)!",
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
-					e.Cancel = true;
-				}
+				this.infoEnclosure = enclosure;
+				SetControls();
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Enclosure string must be an even number of characters (e.g. 2 or 4 characters)!",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+				e.Cancel = true;
 			}
 		}
 

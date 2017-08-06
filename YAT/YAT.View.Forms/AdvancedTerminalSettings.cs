@@ -141,191 +141,217 @@ namespace YAT.View.Forms
 
 		private void checkBox_SeparateTxRxRadix_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Display.SeparateTxRxRadix = checkBox_SeparateTxRxRadix.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Display.SeparateTxRxRadix = checkBox_SeparateTxRxRadix.Checked;
 		}
 
 		private void comboBox_TxRadix_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Display.TxRadix = (Domain.RadixEx)comboBox_TxRadix.SelectedItem;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Display.TxRadix = (Domain.RadixEx)comboBox_TxRadix.SelectedItem;
 		}
 
 		private void comboBox_RxRadix_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Display.RxRadix = (Domain.RadixEx)comboBox_RxRadix.SelectedItem;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Display.RxRadix = (Domain.RadixEx)comboBox_RxRadix.SelectedItem;
 		}
 
 		private void checkBox_ShowRadix_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Display.ShowRadix = checkBox_ShowRadix.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Display.ShowRadix = checkBox_ShowRadix.Checked;
 		}
 
 		private void checkBox_ShowBufferLineNumbers_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Display.ShowBufferLineNumbers = checkBox_ShowBufferLineNumbers.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Display.ShowBufferLineNumbers = checkBox_ShowBufferLineNumbers.Checked;
 		}
 
 		private void checkBox_ShowTotalLineNumbers_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Display.ShowTotalLineNumbers = checkBox_ShowTotalLineNumbers.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Display.ShowTotalLineNumbers = checkBox_ShowTotalLineNumbers.Checked;
 		}
 
 		private void checkBox_ShowDate_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Display.ShowDate = checkBox_ShowDate.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Display.ShowDate = checkBox_ShowDate.Checked;
 		}
 
 		private void checkBox_ShowTime_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Display.ShowTime = checkBox_ShowTime.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Display.ShowTime = checkBox_ShowTime.Checked;
 		}
 
 		private void checkBox_ShowPort_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				if (checkBox_ShowPort.Checked && !this.settingsInEdit.Terminal.Display.PortLineBreakEnabled)
-				{
-					var dr = MessageBoxEx.Show
-					(
-						this,
-						"To enable this setting, lines must be broken when port changes.",
-						"Incompatible Setting",
-						MessageBoxButtons.OKCancel,
-						MessageBoxIcon.Information
-					);
+			if (this.isSettingControls)
+				return;
 
-					if (dr == DialogResult.OK)
-					{
-						this.settingsInEdit.Terminal.Display.PortLineBreakEnabled = true;
-						this.settingsInEdit.Terminal.Display.ShowPort = true;
-					}
-				}
-				else
+			if (checkBox_ShowPort.Checked && !this.settingsInEdit.Terminal.Display.PortLineBreakEnabled)
+			{
+				var dr = MessageBoxEx.Show
+				(
+					this,
+					"To enable this setting, lines must be broken when port changes.",
+					"Incompatible Setting",
+					MessageBoxButtons.OKCancel,
+					MessageBoxIcon.Information
+				);
+
+				if (dr == DialogResult.OK)
 				{
-					this.settingsInEdit.Terminal.Display.ShowPort = checkBox_ShowPort.Checked;
+					this.settingsInEdit.Terminal.Display.PortLineBreakEnabled = true;
+					this.settingsInEdit.Terminal.Display.ShowPort = true;
 				}
+			}
+			else
+			{
+				this.settingsInEdit.Terminal.Display.ShowPort = checkBox_ShowPort.Checked;
 			}
 		}
 
 		private void checkBox_ShowDirection_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				if (checkBox_ShowDirection.Checked && !this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled)
-				{
-					var dr = MessageBoxEx.Show
-					(
-						this,
-						"To enable this setting, lines must be broken when direction changes.",
-						"Incompatible Setting",
-						MessageBoxButtons.OKCancel,
-						MessageBoxIcon.Information
-					);
+			if (this.isSettingControls)
+				return;
 
-					if (dr == DialogResult.OK)
-					{
-						this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = true;
-						this.settingsInEdit.Terminal.Display.ShowDirection = true;
-					}
-				}
-				else
+			if (checkBox_ShowDirection.Checked && !this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled)
+			{
+				var dr = MessageBoxEx.Show
+				(
+					this,
+					"To enable this setting, lines must be broken when direction changes.",
+					"Incompatible Setting",
+					MessageBoxButtons.OKCancel,
+					MessageBoxIcon.Information
+				);
+
+				if (dr == DialogResult.OK)
 				{
-					this.settingsInEdit.Terminal.Display.ShowDirection = checkBox_ShowDirection.Checked;
+					this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = true;
+					this.settingsInEdit.Terminal.Display.ShowDirection = true;
 				}
+			}
+			else
+			{
+				this.settingsInEdit.Terminal.Display.ShowDirection = checkBox_ShowDirection.Checked;
 			}
 		}
 
 		private void checkBox_ShowLength_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Display.ShowLength = checkBox_ShowLength.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Display.ShowLength = checkBox_ShowLength.Checked;
 		}
 
 		private void checkBox_ShowConnectTime_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Status.ShowConnectTime = checkBox_ShowConnectTime.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Status.ShowConnectTime = checkBox_ShowConnectTime.Checked;
 		}
 
 		private void checkBox_ShowCountAndRate_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Status.ShowCountAndRate = checkBox_ShowCountAndRate.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Status.ShowCountAndRate = checkBox_ShowCountAndRate.Checked;
 		}
 
 		private void checkBox_ShowFlowControlCount_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Status.ShowFlowControlCount = checkBox_ShowFlowControlCount.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Status.ShowFlowControlCount = checkBox_ShowFlowControlCount.Checked;
 		}
 
 		private void checkBox_ShowBreakCount_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Status.ShowBreakCount = checkBox_ShowBreakCount.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Status.ShowBreakCount = checkBox_ShowBreakCount.Checked;
 		}
 
 		private void checkBox_PortLineBreak_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				if (!checkBox_PortLineBreak.Checked && this.settingsInEdit.Terminal.Display.ShowPort)
-				{
-					var dr = MessageBoxEx.Show
-					(
-						this,
-						"To disable this setting, port can no longer be shown.",
-						"Incompatible Setting",
-						MessageBoxButtons.OKCancel,
-						MessageBoxIcon.Information
-					);
+			if (this.isSettingControls)
+				return;
 
-					if (dr == DialogResult.OK)
-					{
-						this.settingsInEdit.Terminal.Display.ShowPort = false;
-						this.settingsInEdit.Terminal.Display.PortLineBreakEnabled = false;
-					}
-				}
-				else
+			if (!checkBox_PortLineBreak.Checked && this.settingsInEdit.Terminal.Display.ShowPort)
+			{
+				var dr = MessageBoxEx.Show
+				(
+					this,
+					"To disable this setting, port can no longer be shown.",
+					"Incompatible Setting",
+					MessageBoxButtons.OKCancel,
+					MessageBoxIcon.Information
+				);
+
+				if (dr == DialogResult.OK)
 				{
-					this.settingsInEdit.Terminal.Display.PortLineBreakEnabled = checkBox_PortLineBreak.Checked;
+					this.settingsInEdit.Terminal.Display.ShowPort = false;
+					this.settingsInEdit.Terminal.Display.PortLineBreakEnabled = false;
 				}
+			}
+			else
+			{
+				this.settingsInEdit.Terminal.Display.PortLineBreakEnabled = checkBox_PortLineBreak.Checked;
 			}
 		}
 
 		private void checkBox_DirectionLineBreak_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				if (!checkBox_DirectionLineBreak.Checked && this.settingsInEdit.Terminal.Display.ShowDirection)
-				{
-					var dr = MessageBoxEx.Show
-					(
-						this,
-						"To disable this setting, direction can no longer be shown.",
-						"Incompatible Setting",
-						MessageBoxButtons.OKCancel,
-						MessageBoxIcon.Information
-					);
+			if (this.isSettingControls)
+				return;
 
-					if (dr == DialogResult.OK)
-					{
-						this.settingsInEdit.Terminal.Display.ShowDirection = false;
-						this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = false;
-					}
-				}
-				else
+			if (!checkBox_DirectionLineBreak.Checked && this.settingsInEdit.Terminal.Display.ShowDirection)
+			{
+				var dr = MessageBoxEx.Show
+				(
+					this,
+					"To disable this setting, direction can no longer be shown.",
+					"Incompatible Setting",
+					MessageBoxButtons.OKCancel,
+					MessageBoxIcon.Information
+				);
+
+				if (dr == DialogResult.OK)
 				{
-					this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = checkBox_DirectionLineBreak.Checked;
+					this.settingsInEdit.Terminal.Display.ShowDirection = false;
+					this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = false;
 				}
+			}
+			else
+			{
+				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = checkBox_DirectionLineBreak.Checked;
 			}
 		}
 
@@ -341,26 +367,26 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_MaxLineCount_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				int count;
-				if (int.TryParse(textBox_MaxLineCount.Text, out count) && (count >= 1))
-				{
-					this.settingsInEdit.Terminal.Display.MaxLineCount = count;
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"There must be at least 1 line displayed!",
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
+			if (this.isSettingControls)
+				return;
 
-					e.Cancel = true;
-				}
+			int count;
+			if (int.TryParse(textBox_MaxLineCount.Text, out count) && (count >= 1))
+			{
+				this.settingsInEdit.Terminal.Display.MaxLineCount = count;
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"There must be at least 1 line displayed!",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
 			}
 		}
 
@@ -376,176 +402,208 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_MaxBytePerLineCount_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				int count;
-				if (int.TryParse(textBox_MaxBytePerLineCount.Text, out count) && (count >= 1))
-				{
-					this.settingsInEdit.Terminal.Display.MaxBytePerLineCount = count;
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"There must be at least 1 byte displayed!",
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
+			if (this.isSettingControls)
+				return;
 
-					e.Cancel = true;
-				}
+			int count;
+			if (int.TryParse(textBox_MaxBytePerLineCount.Text, out count) && (count >= 1))
+			{
+				this.settingsInEdit.Terminal.Display.MaxBytePerLineCount = count;
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"There must be at least 1 byte displayed!",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
 			}
 		}
 
 		private void checkBox_ReplaceControlCharacters_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = checkBox_ReplaceControlCharacters.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = checkBox_ReplaceControlCharacters.Checked;
 		}
 
 		private void comboBox_ControlCharacterRadix_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.CharReplace.ControlCharRadix = (Domain.ControlCharRadixEx)comboBox_ControlCharacterRadix.SelectedItem;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.CharReplace.ControlCharRadix = (Domain.ControlCharRadixEx)comboBox_ControlCharacterRadix.SelectedItem;
 		}
 
 		private void checkBox_ReplaceTab_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.CharReplace.ReplaceTab = checkBox_ReplaceTab.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.CharReplace.ReplaceTab = checkBox_ReplaceTab.Checked;
 		}
 
 		private void checkBox_HideXOnXOff_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.CharHide.HideXOnXOff = checkBox_HideXOnXOff.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.CharHide.HideXOnXOff = checkBox_HideXOnXOff.Checked;
 		}
 
 		private void checkBox_ReplaceSpace_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.CharReplace.ReplaceSpace = checkBox_ReplaceSpace.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.CharReplace.ReplaceSpace = checkBox_ReplaceSpace.Checked;
 		}
 
 		private void checkBox_Hide0x00_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.CharHide.Hide0x00 = checkBox_Hide0x00.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.CharHide.Hide0x00 = checkBox_Hide0x00.Checked;
 		}
 
 		private void checkBox_Hide0xFF_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.CharHide.Hide0xFF = checkBox_Hide0xFF.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.CharHide.Hide0xFF = checkBox_Hide0xFF.Checked;
 		}
 
 		private void checkBox_IncludeNonPayloadData_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData = checkBox_IncludeNonPayloadData.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData = checkBox_IncludeNonPayloadData.Checked;
 		}
 
 		private void comboBox_Endianness_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.IO.Endianness = (Domain.EndiannessEx)comboBox_Endianness.SelectedItem;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.IO.Endianness = (Domain.EndiannessEx)comboBox_Endianness.SelectedItem;
 		}
 
 		private void checkBox_IndicateBreakStates_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates = checkBox_IndicateBreakStates.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates = checkBox_IndicateBreakStates.Checked;
 		}
 
 		private void checkBox_OutputBreakModifiable_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable = checkBox_OutputBreakModifiable.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable = checkBox_OutputBreakModifiable.Checked;
 		}
 
 		private void checkBox_UseExplicitDefaultRadix_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix = checkBox_UseExplicitDefaultRadix.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix = checkBox_UseExplicitDefaultRadix.Checked;
 		}
 
 		private void checkBox_KeepCommand_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Send.KeepCommand = checkBox_KeepCommand.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Send.KeepCommand = checkBox_KeepCommand.Checked;
 		}
 
 		private void checkBox_CopyPredefined_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Send.CopyPredefined = checkBox_CopyPredefined.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Send.CopyPredefined = checkBox_CopyPredefined.Checked;
 		}
 
 		private void checkBox_SendImmediately_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Send.SendImmediately = checkBox_SendImmediately.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Send.SendImmediately = checkBox_SendImmediately.Checked;
 		}
 
 		private void checkBox_OutputBufferSize_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				MKY.IO.Serial.SerialPort.OutputBufferSize lob = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize;
-				lob.Enabled = checkBox_OutputBufferSize.Checked;
-				this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize = lob;
-			}
+			if (this.isSettingControls)
+				return;
+
+			var lob = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize;
+			lob.Enabled = checkBox_OutputBufferSize.Checked;
+			this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize = lob;
 		}
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_OutputBufferSize_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
+			if (this.isSettingControls)
+				return;
+
+			int size;
+			if (int.TryParse(textBox_OutputBufferSize.Text, out size) && Int32Ex.IsEven(size) && (size >= 2))
 			{
-				int size;
-				if (int.TryParse(textBox_OutputBufferSize.Text, out size) && Int32Ex.IsEven(size) && (size >= 2))
-				{
-					MKY.IO.Serial.SerialPort.OutputBufferSize lob = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize;
-					lob.Size = size;
-					this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize = lob;
-				}
-				else
-				{
-					string message =
-						"Size must be an even value and at least 2 bytes!" + Environment.NewLine + Environment.NewLine +
-						"Recommended values are powers of two (e.g. 64, 512, 4096). " + Environment.NewLine +
-						"The system's default value is 2048.";
+				var lob = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize;
+				lob.Size = size;
+				this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize = lob;
+			}
+			else
+			{
+				string message =
+					"Size must be an even value and at least 2 bytes!" + Environment.NewLine + Environment.NewLine +
+					"Recommended values are powers of two (e.g. 64, 512, 4096). " + Environment.NewLine +
+					"The system's default value is 2048.";
 
-					MessageBoxEx.Show
-					(
-						this,
-						message,
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
+				MessageBoxEx.Show
+				(
+					this,
+					message,
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
 
-					e.Cancel = true;
-				}
+				e.Cancel = true;
 			}
 		}
 
 		private void checkBox_OutputMaxBaudRate_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.IO.SerialPort.OutputMaxBaudRate = checkBox_OutputMaxBaudRate.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.IO.SerialPort.OutputMaxBaudRate = checkBox_OutputMaxBaudRate.Checked;
 		}
 
 		private void checkBox_MaxChunkSizeEnable_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				MKY.IO.Serial.SerialPort.ChunkSize cs = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize;
-				cs.Enabled = checkBox_MaxChunkSizeEnable.Checked;
-				this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize = cs;
-			}
+			if (this.isSettingControls)
+				return;
+
+			var cs = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize;
+			cs.Enabled = checkBox_MaxChunkSizeEnable.Checked;
+			this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize = cs;
 		}
 
 		private void textBox_MaxChunkSize_TextChanged(object sender, EventArgs e)
@@ -560,40 +618,40 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_MaxChunkSize_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				int maxSize = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSizeMaxSize;
-				int size;
-				if (int.TryParse(textBox_MaxChunkSize.Text, out size) && (size >= 1) && (size <= maxSize))
-				{
-					MKY.IO.Serial.SerialPort.ChunkSize sr = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize;
-					sr.Size = size;
-					this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize = sr;
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"Size must be between 1 and " + maxSize + " bytes!",
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
+			if (this.isSettingControls)
+				return;
 
-					e.Cancel = true;
-				}
+			int maxSize = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSizeMaxSize;
+			int size;
+			if (int.TryParse(textBox_MaxChunkSize.Text, out size) && (size >= 1) && (size <= maxSize))
+			{
+				MKY.IO.Serial.SerialPort.ChunkSize sr = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize;
+				sr.Size = size;
+				this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize = sr;
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Size must be between 1 and " + maxSize + " bytes!",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
 			}
 		}
 
 		private void checkBox_MaxSendRateEnable_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				MKY.IO.Serial.SerialPort.SendRate sr = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate;
-				sr.Enabled = checkBox_MaxSendRateEnable.Checked;
-				this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate = sr;
-			}
+			if (this.isSettingControls)
+				return;
+
+			var sr = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate;
+			sr.Enabled = checkBox_MaxSendRateEnable.Checked;
+			this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate = sr;
 		}
 
 		private void textBox_MaxSendRateSize_TextChanged(object sender, EventArgs e)
@@ -608,192 +666,198 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_MaxSendRateSize_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				int size;
-				if (int.TryParse(textBox_MaxSendRateSize.Text, out size) && (size >= 1))
-				{
-					MKY.IO.Serial.SerialPort.SendRate sr = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate;
-					sr.Size = size;
-					this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate = sr;
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"Rate must be at least 1 byte per interval!",
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
+			if (this.isSettingControls)
+				return;
 
-					e.Cancel = true;
-				}
+			int size;
+			if (int.TryParse(textBox_MaxSendRateSize.Text, out size) && (size >= 1))
+			{
+				var sr = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate;
+				sr.Size = size;
+				this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate = sr;
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Rate must be at least 1 byte per interval!",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
 			}
 		}
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_MaxSendRateInterval_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
+			if (this.isSettingControls)
+				return;
+
+			const int MaxInterval = MKY.IO.Serial.SerialPort.SerialPortSettings.SendRateMaxInterval;
+
+			int interval;
+			if (int.TryParse(textBox_MaxSendRateInterval.Text, out interval) &&
+				(interval >= 1) && (interval <= MaxInterval))
 			{
-				const int MaxInterval = MKY.IO.Serial.SerialPort.SerialPortSettings.SendRateMaxInterval;
+				var sr = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate;
+				sr.Interval = interval;
+				this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate = sr;
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Interval must be from 1 to " + MaxInterval.ToString(CultureInfo.CurrentCulture) + " ms!",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
 
-				int interval;
-				if (int.TryParse(textBox_MaxSendRateInterval.Text, out interval) &&
-					(interval >= 1) && (interval <= MaxInterval))
-				{
-					MKY.IO.Serial.SerialPort.SendRate sr = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate;
-					sr.Interval = interval;
-					this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate = sr;
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"Interval must be from 1 to " + MaxInterval.ToString(CultureInfo.CurrentCulture) + " ms!",
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
-
-					e.Cancel = true;
-				}
+				e.Cancel = true;
 			}
 		}
 
 		private void checkBox_SignalXOnBeforeEachTransmission_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission = checkBox_SignalXOnBeforeEachTransmission.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission = checkBox_SignalXOnBeforeEachTransmission.Checked;
 		}
 
 		private void checkBox_SignalXOnPeriodicallyEnable_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				Domain.PeriodicSetting ps = this.settingsInEdit.Terminal.Send.SignalXOnPeriodically;
-				ps.Enabled = checkBox_SignalXOnPeriodicallyEnable.Checked;
-				this.settingsInEdit.Terminal.Send.SignalXOnPeriodically = ps;
-			}
+			if (this.isSettingControls)
+				return;
+
+			var ps = this.settingsInEdit.Terminal.Send.SignalXOnPeriodically;
+			ps.Enabled = checkBox_SignalXOnPeriodicallyEnable.Checked;
+			this.settingsInEdit.Terminal.Send.SignalXOnPeriodically = ps;
 		}
 
 		private void textBox_SignalXOnPeriodicallyInterval_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				int interval;
-				if (int.TryParse(textBox_SignalXOnPeriodicallyInterval.Text, out interval) && (interval >= 1))
-				{
-					Domain.PeriodicSetting ps = this.settingsInEdit.Terminal.Send.SignalXOnPeriodically;
-					ps.Interval = interval;
-					this.settingsInEdit.Terminal.Send.SignalXOnPeriodically = ps;
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"Interval must be at least 1 ms!",
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
+			if (this.isSettingControls)
+				return;
 
-					e.Cancel = true;
-				}
+			int interval;
+			if (int.TryParse(textBox_SignalXOnPeriodicallyInterval.Text, out interval) && (interval >= 1))
+			{
+				var ps = this.settingsInEdit.Terminal.Send.SignalXOnPeriodically;
+				ps.Interval = interval;
+				this.settingsInEdit.Terminal.Send.SignalXOnPeriodically = ps;
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Interval must be at least 1 ms!",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
 			}
 		}
 
 		private void checkBox_NoSendOnOutputBreak_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak = checkBox_NoSendOnOutputBreak.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak = checkBox_NoSendOnOutputBreak.Checked;
 		}
 
 		private void checkBox_NoSendOnInputBreak_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak = checkBox_NoSendOnInputBreak.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak = checkBox_NoSendOnInputBreak.Checked;
 		}
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_DefaultDelay_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				int delay;
-				if (int.TryParse(textBox_DefaultDelay.Text, out delay) && (delay >= 1)) // Attention, a similar validation exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
-				{
-					this.settingsInEdit.Terminal.Send.DefaultDelay = delay;
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"Delay must be at least 1 ms!", // Attention, a similar message exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
+			if (this.isSettingControls)
+				return;
 
-					e.Cancel = true;
-				}
+			int delay;
+			if (int.TryParse(textBox_DefaultDelay.Text, out delay) && (delay >= 1)) // Attention, a similar validation exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
+			{
+				this.settingsInEdit.Terminal.Send.DefaultDelay = delay;
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Delay must be at least 1 ms!", // Attention, a similar message exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
 			}
 		}
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_DefaultLineDelay_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				int delay;
-				if (int.TryParse(textBox_DefaultLineDelay.Text, out delay) && (delay >= 1)) // Attention, a similar validation exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
-				{
-					this.settingsInEdit.Terminal.Send.DefaultLineDelay = delay;
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"Delay must be at least 1 ms!", // Attention, a similar message exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
+			if (this.isSettingControls)
+				return;
 
-					e.Cancel = true;
-				}
+			int delay;
+			if (int.TryParse(textBox_DefaultLineDelay.Text, out delay) && (delay >= 1)) // Attention, a similar validation exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
+			{
+				this.settingsInEdit.Terminal.Send.DefaultLineDelay = delay;
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Delay must be at least 1 ms!", // Attention, a similar message exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
 			}
 		}
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_DefaultLineInterval_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				int interval;
-				if (int.TryParse(textBox_DefaultLineInterval.Text, out interval) && (interval >= 1)) // Attention, a similar validation exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
-				{
-					this.settingsInEdit.Terminal.Send.DefaultLineInterval = interval;
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"Interval must be at least 1 ms!", // Attention, a similar message exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
+			if (this.isSettingControls)
+				return;
 
-					e.Cancel = true;
-				}
+			int interval;
+			if (int.TryParse(textBox_DefaultLineInterval.Text, out interval) && (interval >= 1)) // Attention, a similar validation exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
+			{
+				this.settingsInEdit.Terminal.Send.DefaultLineInterval = interval;
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Interval must be at least 1 ms!", // Attention, a similar message exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
 			}
 		}
 
@@ -815,35 +879,37 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_DefaultLineRepeat_Validating(object sender, CancelEventArgs e)
 		{
-			if (!this.isSettingControls)
+			if (this.isSettingControls)
+				return;
+
+			const int RepeatInfinite = Domain.Settings.SendSettings.LineRepeatInfinite;
+
+			int repeat;
+			if (int.TryParse(textBox_DefaultLineRepeat.Text, out repeat) && ((repeat >= 1) || (repeat == RepeatInfinite))) // Attention, a similar validation exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
 			{
-				const int RepeatInfinite = Domain.Settings.SendSettings.LineRepeatInfinite;
+				this.settingsInEdit.Terminal.Send.DefaultLineRepeat = repeat;
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Repeat must be 1 or more! Or " + RepeatInfinite + " for infinite repeating.", // Attention, a similar message exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
 
-				int repeat;
-				if (int.TryParse(textBox_DefaultLineRepeat.Text, out repeat) && ((repeat >= 1) || (repeat == RepeatInfinite))) // Attention, a similar validation exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
-				{
-					this.settingsInEdit.Terminal.Send.DefaultLineRepeat = repeat;
-				}
-				else
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						"Repeat must be 1 or more! Or " + RepeatInfinite + " for infinite repeating.", // Attention, a similar message exists in 'Domain.Parser.KeywordEx'. Changes here may have to be applied there too.
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
-
-					e.Cancel = true;
-				}
+				e.Cancel = true;
 			}
 		}
 
 		private void checkBox_DisableEscapes_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Send.DisableEscapes = checkBox_DisableEscapes.Checked;
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Send.DisableEscapes = checkBox_DisableEscapes.Checked;
 		}
 
 		private void textBox_UserName_TextChanged(object sender, EventArgs e)

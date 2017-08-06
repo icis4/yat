@@ -278,26 +278,34 @@ namespace YAT.View.Controls
 
 		private void checkBox_Bold_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				Bold = checkBox_Bold.Checked;
+			if (this.isSettingControls)
+				return;
+
+			Bold = checkBox_Bold.Checked;
 		}
 
 		private void checkBox_Italic_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				Italic = checkBox_Italic.Checked;
+			if (this.isSettingControls)
+				return;
+
+			Italic = checkBox_Italic.Checked;
 		}
 
 		private void checkBox_Underline_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				Underline = checkBox_Underline.Checked;
+			if (this.isSettingControls)
+				return;
+
+			Underline = checkBox_Underline.Checked;
 		}
 
 		private void checkBox_Strikeout_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				Strikeout = checkBox_Strikeout.Checked;
+			if (this.isSettingControls)
+				return;
+
+			Strikeout = checkBox_Strikeout.Checked;
 		}
 
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
