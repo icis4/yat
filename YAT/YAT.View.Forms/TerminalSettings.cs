@@ -542,7 +542,7 @@ namespace YAT.View.Forms
 				case Domain.TerminalType.Text:
 				{
 					var f = new TextTerminalSettings(this.settingsInEdit.Terminal.TextTerminal);
-					if (f.ShowDialog(this) == DialogResult.OK)
+					if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 					{
 						Refresh();
 						this.settingsInEdit.Terminal.TextTerminal = f.SettingsResult;
@@ -553,7 +553,7 @@ namespace YAT.View.Forms
 				case Domain.TerminalType.Binary:
 				{
 					var f = new BinaryTerminalSettings(this.settingsInEdit.Terminal.BinaryTerminal);
-					if (f.ShowDialog(this) == DialogResult.OK)
+					if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 					{
 						Refresh();
 						this.settingsInEdit.Terminal.BinaryTerminal = f.SettingsResult;
@@ -576,7 +576,7 @@ namespace YAT.View.Forms
 		private void ShowAdvancedSettings()
 		{
 			var f = new AdvancedTerminalSettings(this.settingsInEdit);
-			if (f.ShowDialog(this) == DialogResult.OK)
+			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
 				Refresh();
 

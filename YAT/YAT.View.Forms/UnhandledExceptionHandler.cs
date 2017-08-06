@@ -211,7 +211,7 @@ namespace YAT.View.Forms
 					== DialogResult.Yes)
 				{
 					var f = new UnhandledException(exception, title, originMessage);
-					f.ShowDialog(owner);
+					ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, owner);
 				}
 			}
 			else

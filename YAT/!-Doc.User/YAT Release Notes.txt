@@ -97,8 +97,9 @@ Fixed bugs:
 - Serial COM port switching again properly works (bug #376).
 - Sending at very low baud rates again properly works (bug #379, related to limiting to baud rate).
 - Erroneous error message when changing log file separator fixed (bug #378).
+- Context menu shortcuts are no longer executed when a dialog is open (bug #300).
+- Predefined command page navigation shortcuts fixed (related to bug #300).
 - Saving and restoring the location in case of manual terminal layout fixed (bug #252).
-- No longer possible to invoke manually processed shortcuts multiple time in parallel (bug #300).
 - System display scaling other than 100% mostly fixed for Win 7 and before (bugs #85, #235, #375).
 
 Limitations and known issues:

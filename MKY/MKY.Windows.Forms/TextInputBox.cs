@@ -170,15 +170,25 @@ namespace MKY.Windows.Forms
 		[ModalBehavior(ModalBehavior.Always)]
 		public static DialogResult Show(IWin32Window owner, string text, string caption, string initialInputText, out string inputText)
 		{
+			DialogResult dr;
 			var tib = new TextInputBox(text, caption, initialInputText);
 
-			var dialogResult = tib.ShowDialog(owner);
-			if (dialogResult == DialogResult.OK)
+			ContextMenuStripShortcutModalFormWorkaround.EnterModalForm();
+			try
+			{
+				dr = tib.ShowDialog(owner);
+			}
+			finally
+			{
+				ContextMenuStripShortcutModalFormWorkaround.LeaveModalForm();
+			}
+
+			if (dr == DialogResult.OK)
 				inputText = tib.InputText;
 			else
 				inputText = "";
 			
-			return (dialogResult);
+			return (dr);
 		}
 
 		#endregion

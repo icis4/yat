@@ -27,6 +27,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
+using MKY;
 using MKY.Diagnostics;
 
 namespace MKY.Windows.Forms
@@ -287,7 +288,17 @@ namespace MKY.Windows.Forms
 			using (var timer = new System.Threading.Timer(new System.Threading.TimerCallback(timer_Timeout), null, this.timeout, System.Threading.Timeout.Infinite))
 			{
 				this.isShowing = true;
-				dr = ShowDialog(owner);
+
+				ContextMenuStripShortcutModalFormWorkaround.EnterModalForm();
+				try
+				{
+					dr = ShowDialog(owner);
+				}
+				finally
+				{
+					ContextMenuStripShortcutModalFormWorkaround.LeaveModalForm();
+				}
+
 				this.isShowing = false;
 			}
 
