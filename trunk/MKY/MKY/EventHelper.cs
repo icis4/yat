@@ -268,7 +268,7 @@ namespace MKY
 				DiscardAllExceptions();
 			}
 
-			private bool DoDiscardEvent(bool isMainThread)
+			private bool EventHasToBeDiscarded(bool isMainThread)
 			{
 				if (isMainThread)
 					return ((EventHandling & EventHandlingMode.DiscardMainThread) != 0);
@@ -276,7 +276,7 @@ namespace MKY
 					return ((EventHandling & EventHandlingMode.DiscardNonMainThread) != 0);
 			}
 
-			private bool DoDiscardException(bool isMainThread)
+			private bool ExceptionHasToBeDiscarded(bool isMainThread)
 			{
 				if (isMainThread)
 					return ((ExceptionHandling & ExceptionHandlingMode.DiscardMainThread) != 0);
@@ -303,7 +303,7 @@ namespace MKY
 				if (eventDelegate == null)
 					return;
 
-				if (DoDiscardEvent(MainThreadHelper.IsMainThread))
+				if (EventHasToBeDiscarded(MainThreadHelper.IsMainThread))
 					return;
 
 				Delegate[] sinks = eventDelegate.GetInvocationList();
@@ -332,7 +332,7 @@ namespace MKY
 				if (eventDelegate == null)
 					return;
 
-				if (DoDiscardEvent(MainThreadHelper.IsMainThread))
+				if (EventHasToBeDiscarded(MainThreadHelper.IsMainThread))
 					return;
 
 				Delegate[] sinks = eventDelegate.GetInvocationList();
@@ -364,7 +364,7 @@ namespace MKY
 				if (eventDelegate == null)
 					return;
 
-				if (DoDiscardEvent(MainThreadHelper.IsMainThread))
+				if (EventHasToBeDiscarded(MainThreadHelper.IsMainThread))
 					return;
 
 				Delegate[] sinks = eventDelegate.GetInvocationList();
@@ -399,7 +399,7 @@ namespace MKY
 				if (eventDelegate == null)
 					return;
 
-				if (DoDiscardEvent(MainThreadHelper.IsMainThread))
+				if (EventHasToBeDiscarded(MainThreadHelper.IsMainThread))
 					return;
 
 				Delegate[] sinks = eventDelegate.GetInvocationList();
@@ -434,7 +434,7 @@ namespace MKY
 				if (eventDelegate == null)
 					return;
 
-				if (DoDiscardEvent(MainThreadHelper.IsMainThread))
+				if (EventHasToBeDiscarded(MainThreadHelper.IsMainThread))
 					return;
 
 				Delegate[] sinks = eventDelegate.GetInvocationList();
@@ -472,7 +472,7 @@ namespace MKY
 				if (eventDelegate == null)
 					return;
 
-				if (DoDiscardEvent(MainThreadHelper.IsMainThread))
+				if (EventHasToBeDiscarded(MainThreadHelper.IsMainThread))
 					return;
 
 				Delegate[] sinks = eventDelegate.GetInvocationList();
@@ -509,7 +509,7 @@ namespace MKY
 				catch (Exception ex)
 				{
 					var isMainThread = MainThreadHelper.IsMainThread;
-					var discard = DoDiscardException(isMainThread);
+					var discard = ExceptionHasToBeDiscarded(isMainThread);
 
 					var sb = new StringBuilder();
 
@@ -564,7 +564,7 @@ namespace MKY
 				catch (Exception ex)
 				{
 					var isMainThread = MainThreadHelper.IsMainThread;
-					var discard = DoDiscardException(isMainThread);
+					var discard = ExceptionHasToBeDiscarded(isMainThread);
 
 					// Note that 'discard' is only evaluated *after* the exception occured. This
 					// ensures that exceptions happening inside 'zombie' callbacks, i.e. callbacks
