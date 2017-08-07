@@ -674,7 +674,7 @@ namespace MKY.IO.Serial.SerialPort
 				catch
 				{
 					ResetPortAndThreadsAndNotify(true);
-					throw; // Re-throw!
+					throw; // Rethrow!
 				}
 			}
 			else

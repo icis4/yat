@@ -344,7 +344,7 @@ namespace MKY.Settings
 						catch (Exception exTolerant)
 						{
 							DebugEx.WriteException(this.parentType, exTolerant, "Tolerant deserialization has failed!");
-							rethrow = true; // Re-throw! But use the standard error message, as that output line/char numbers and not just the char at line 1.
+							rethrow = true; // Rethrow! But use the standard error message, as that output line/char numbers and not just the char at line 1.
 						}
 					}
 					else
@@ -358,12 +358,12 @@ namespace MKY.Settings
 						catch (Exception exAlternateTolerant)
 						{
 							DebugEx.WriteException(this.parentType, exAlternateTolerant, "Alternate-tolerant deserialization has failed!");
-							rethrow = true; // Re-throw! But use the standard error message, as that output line/char numbers and not just the char at line 1.
+							rethrow = true; // Rethrow! But use the standard error message, as that output line/char numbers and not just the char at line 1.
 						}
 					}
 
 					if (rethrow)
-						throw; // Re-throw!
+						throw; // Rethrow!
 				}
 			}
 
@@ -439,7 +439,7 @@ namespace MKY.Settings
 						DebugEx.WriteException(GetType(), exRestore, "Exception while restoring backup file!");
 					}
 
-					throw; // Re-throw!
+					throw; // Rethrow!
 				}
 				finally
 				{

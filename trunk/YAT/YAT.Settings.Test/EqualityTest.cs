@@ -171,7 +171,7 @@ namespace YAT.Settings.Test
 				if (Configuration.TraceCallingSequence)
 					Trace.Unindent();
 
-				throw; // Re-throw!
+				throw; // Rethrow!
 			}
 			finally
 			{
@@ -227,7 +227,7 @@ namespace YAT.Settings.Test
 			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw; // Re-throw!
+				throw; // Rethrow!
 			}
 			finally
 			{

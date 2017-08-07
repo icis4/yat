@@ -850,7 +850,7 @@ namespace MKY.IO.Ports
 				catch (Exception ex)
 				{
 					DebugEx.WriteException(GetType(), ex, "...failed!");
-					throw; // Re-throw!
+					throw; // Rethrow!
 				}
 
 				// --------------------------------------------------------------------------------
@@ -888,7 +888,7 @@ namespace MKY.IO.Ports
 						this.baseStreamReferenceForCloseSafely = null;
 					}
 
-					throw; // Re-throw!
+					throw; // Rethrow!
 				}
 
 				// Port successfully opened. Still suppress finalization of the underlying stream
@@ -1034,7 +1034,7 @@ namespace MKY.IO.Ports
 					DebugEx.WriteException(GetType(), ex, "...failed!");
 
 					if (!isAfterException) // CloseNormally() shall be notified about exceptions.
-						throw; // Re-throw!
+						throw; // Rethrow!
 					else
 						Debug.WriteLine("Suppressing exception as 'isAfterException' has been signalled.");
 				}

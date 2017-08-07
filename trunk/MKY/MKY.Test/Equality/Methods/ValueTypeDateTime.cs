@@ -75,7 +75,7 @@ namespace MKY.Test.Equality.Methods
 				if (Configuration.TraceCallingSequence)
 					Trace.Unindent();
 
-				throw; // Re-throw!
+				throw; // Rethrow!
 			}
 			finally
 			{
@@ -146,7 +146,7 @@ namespace MKY.Test.Equality.Methods
 				if (Configuration.TraceCallingSequence)
 					Trace.Unindent();
 
-				throw; // Re-throw!
+				throw; // Rethrow!
 			}
 			finally
 			{
