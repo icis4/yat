@@ -116,7 +116,7 @@ namespace MKY
 		public enum ExceptionHandlingMode
 		{
 			/// <summary>
-			/// All exceptions will be re-thrown, i.e. may be handled by
+			/// All exceptions will be rethrown, i.e. may be handled by
 			/// a <see cref="AppDomain.UnhandledException"/> or
 			/// <see cref="System.Windows.Forms.Application.ThreadException"/> or
 			/// <see cref="EventHelper.UnhandledExceptionOnNonMainThread"/> or
@@ -127,7 +127,7 @@ namespace MKY
 			/// <summary>
 			/// Exceptions on the main thread will be discarded, i.e. will *not* be propagated to
 			/// a <see cref="EventHelper.UnhandledExceptionOnMainThread"/> or catch-all handler.
-			/// Exceptions on all other threads will be re-thrown, i.e. may be handled by
+			/// Exceptions on all other threads will be rethrown, i.e. may be handled by
 			/// a <see cref="EventHelper.UnhandledExceptionOnNonMainThread"/> or
 			/// <see cref="System.Windows.Forms.Application.ThreadException"/> or
 			/// <see cref="AppDomain.UnhandledException"/> handler.
@@ -142,7 +142,7 @@ namespace MKY
 			/// to a <see cref="AppDomain.UnhandledException"/> or
 			/// <see cref="System.Windows.Forms.Application.ThreadException"/> or
 			/// <see cref="EventHelper.UnhandledExceptionOnNonMainThread"/> handler.
-			/// Exceptions on the main thread will be re-thrown, i.e. may be handled by
+			/// Exceptions on the main thread will be rethrown, i.e. may be handled by
 			/// a <see cref="EventHelper.UnhandledExceptionOnMainThread"/> or catch-all handler.
 			/// </summary>
 			/// <remarks>
@@ -529,7 +529,7 @@ namespace MKY
 					if (discard)
 						sb.Append(" Exception is being discarded...");
 					else
-						sb.Append(" Exception will be re-thrown...");
+						sb.Append(" Exception will be rethrown...");
 
 					WriteExceptionAndEventToDebugOutput(ex, sink, sb.ToString());
 
@@ -540,14 +540,14 @@ namespace MKY
 							if (UnhandledExceptionOnMainThread != null)
 								FireSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnMainThread, this, new UnhandledExceptionEventArgs(ex, false));
 							else
-								throw; // Re-throw!
+								throw; // Rethrow!
 						}
 						else
 						{
 							if (UnhandledExceptionOnNonMainThread != null)
 								FireSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnNonMainThread, this, new UnhandledExceptionEventArgs(ex, false));
 							else
-								throw; // Re-throw!
+								throw; // Rethrow!
 						}
 					}
 				}
@@ -595,7 +595,7 @@ namespace MKY
 					if (discard)
 						sb.Append(" Exception is being discarded...");
 					else
-						sb.Append(" Exception will be re-thrown...");
+						sb.Append(" Exception will be rethrown...");
 
 					WriteExceptionAndEventToDebugOutput(ex, sink, sb.ToString());
 
@@ -606,14 +606,14 @@ namespace MKY
 							if (UnhandledExceptionOnMainThread != null)
 								FireSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnMainThread, this, new UnhandledExceptionEventArgs(ex, false));
 							else
-								throw; // Re-throw!
+								throw; // Rethrow!
 						}
 						else
 						{
 							if (UnhandledExceptionOnNonMainThread != null)
 								FireSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnNonMainThread, this, new UnhandledExceptionEventArgs(ex, false));
 							else
-								throw; // Re-throw!
+								throw; // Rethrow!
 						}
 					}
 
@@ -625,7 +625,7 @@ namespace MKY
 					//  handlers for the Elapsed event. This behavior is subject to change in future
 					//  releases of the .NET Framework."
 					//
-					// As a consequence, an exception re-thrown above will not be propagated to the
+					// As a consequence, an exception rethrown above will not be propagated to the
 					// application's 'UnhandledException' handler, but rather be discarded by the
 					// timer's 'Elapsed' event. Pretty particular, positively spoken...
 					// The issue doesn't happen if the timer's 'SynchronizationObject' is set, i.e.

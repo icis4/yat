@@ -373,13 +373,13 @@ namespace MKY.IO.Ports
 				}
 				catch (ThreadAbortException ex)
 				{
-					DebugEx.WriteException(typeof(SerialPortCollection), ex, "DetectWhetherPortIsInUse() has detected a thread exception. It is ignored here but re-thrown.");
+					DebugEx.WriteException(typeof(SerialPortCollection), ex, "DetectWhetherPortIsInUse() has detected a thread exception. It is ignored here but rethrown.");
 
 					// Do not activate 'InUse', as a thread abort doesn't indicate that a port is in use.
 					// An abort may happen when e.g. cancelling the 'SelectionWorker.DoWork()' method.
 					// In such a case, re-throw so it can be handled by that method.
 
-					throw; // Re-throw!
+					throw; // Rethrow!
 				}
 				catch
 				{

@@ -236,7 +236,7 @@ namespace MKY.IO
 				// Best-effort cleanup (revert A):
 				try { File.Move(filePathTemp, filePathA); } catch { }
 
-				throw; // Re-throw!
+				throw; // Rethrow!
 			}
 
 			// Step 3 (Temp => B):
@@ -250,7 +250,7 @@ namespace MKY.IO
 				try { File.Move(filePathA,    filePathB); } catch { }
 				try { File.Move(filePathTemp, filePathA); } catch { }
 
-				throw; // Re-throw!
+				throw; // Rethrow!
 			}
 		}
 

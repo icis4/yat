@@ -198,7 +198,7 @@ namespace YAT.Model
 				DebugEx.WriteException(GetType(), ex);
 
 				Dispose(); // Immediately call Dispose() to ensure no zombies remain!
-				throw; // Re-throw!
+				throw; // Rethrow!
 			}
 		}
 
