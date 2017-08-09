@@ -68,7 +68,7 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		protected XmlWriter(FileStream stream, string[] initialLinesAfterHeader)
+		protected XmlWriter(FileStream stream, IEnumerable<string> initialLinesAfterHeader)
 		{
 			// Create the stream writer and add the XML header:
 			this.writer = new StreamWriter(stream, Encoding.UTF8);

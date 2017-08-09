@@ -195,11 +195,11 @@ namespace YAT.View.Controls
 			// Validate each line:
 			bool isValid = true;
 			int textLength = 0;
-			foreach (string s in multiLineText)
+			foreach (string line in multiLineText)
 			{
 				int invalidTextStart;
 				int invalidTextLength;
-				if (!Utilities.ValidationHelper.ValidateText(this, "text", s, out invalidTextStart, out invalidTextLength, this.defaultRadix, this.parseMode))
+				if (!Utilities.ValidationHelper.ValidateText(this, "text", line, out invalidTextStart, out invalidTextLength, this.defaultRadix, this.parseMode))
 				{
 					invalidTextStart += textLength;
 					invalidTextLength = textBox_Lines.Text.Length - invalidTextStart;
@@ -207,7 +207,7 @@ namespace YAT.View.Controls
 					isValid = false;
 					break;
 				}
-				textLength += s.Length + Environment.NewLine.Length;
+				textLength += line.Length + Environment.NewLine.Length;
 			}
 
 			if (isValid)

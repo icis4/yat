@@ -451,7 +451,7 @@ namespace MKY.Windows.Forms
 
 			if (!Window.NativeMethods.GetScrollInfo(Handle, sb, ref si))
 			{
-				StringBuilder message = new StringBuilder();
+				var message = new StringBuilder();
 				message.AppendLine("Unable to retrieve scroll info from system:");
 				message.AppendLine();
 				message.AppendLine(WinError.GetLastError());
@@ -486,7 +486,7 @@ namespace MKY.Windows.Forms
 			int result = Window.NativeMethods.ScrollWindowEx(Handle, dx, 0, ref prcScroll, ref prcClip, IntPtr.Zero, out prcUpdate, Window.NativeConstants.SW_INVALIDATE);
 			if (result != WinError.Success)
 			{
-				StringBuilder message = new StringBuilder();
+				var message = new StringBuilder();
 				message.AppendLine("Unable to retrieve scroll info from system:");
 				message.AppendLine();
 				message.AppendLine(WinError.GetLastError());

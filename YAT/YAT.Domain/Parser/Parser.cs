@@ -438,7 +438,7 @@ namespace YAT.Domain.Parser
 			Result[] typedResult;
 			if (TryParse(s, out typedResult, out successfullyParsed, ref formatException, defaultRadix))
 			{
-				using (MemoryStream bytes = new MemoryStream())
+				using (var bytes = new MemoryStream())
 				{
 					foreach (Result r in typedResult)
 					{
@@ -619,7 +619,7 @@ namespace YAT.Domain.Parser
 		/// <exception cref="OverflowException">Thrown if a value cannot be converted into bytes.</exception>
 		internal virtual bool TryParseContiguousRadix(string s, Radix radix, out byte[] result, ref FormatException formatException)
 		{
-			using (MemoryStream bytes = new MemoryStream())
+			using (var bytes = new MemoryStream())
 			{
 				if (radix == Radix.String)
 				{
@@ -636,8 +636,7 @@ namespace YAT.Domain.Parser
 				}
 				else
 				{
-					string[] items = s.Split();
-					foreach (string item in items)
+					foreach (string item in s.Split())
 					{
 						if (item.Length > 0)
 						{
@@ -702,7 +701,7 @@ namespace YAT.Domain.Parser
 			}
 			else // is not same as machine:
 			{
-				using (MemoryStream bytes = new MemoryStream())
+				using (var bytes = new MemoryStream())
 				{
 					foreach (char c in s)
 					{
@@ -770,7 +769,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for recursion.")]
 		internal virtual bool TryParseAndConvertContiguousNumericItem(string s, Radix radix, out byte[] result, ref FormatException formatException)
 		{
-			using (MemoryStream bytes = new MemoryStream())
+			using (var bytes = new MemoryStream())
 			{
 				string remaining = s;
 				bool success = true;

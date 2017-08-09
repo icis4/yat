@@ -364,11 +364,11 @@ namespace MKY.CommandLine
 		/// </summary>
 		protected virtual bool MatchesName(FieldInfo field, string name)
 		{
-			foreach (OptionArgAttribute att in GetOptionArgAttributes(field))
+			foreach (var att in GetOptionArgAttributes(field))
 			{
-				foreach (string s in att.Names)
+				foreach (var attName in att.Names)
 				{
-					if (StringEx.EqualsOrdinalIgnoreCase(s, name))
+					if (StringEx.EqualsOrdinalIgnoreCase(attName, name))
 						return (true);
 				}
 			}
@@ -380,11 +380,11 @@ namespace MKY.CommandLine
 		/// </summary>
 		protected virtual bool MatchesShortName(FieldInfo field, string name)
 		{
-			foreach (OptionArgAttribute att in GetOptionArgAttributes(field))
+			foreach (var att in GetOptionArgAttributes(field))
 			{
-				foreach (string s in att.ShortNames)
+				foreach (var attShortName in att.ShortNames)
 				{
-					if (StringEx.EqualsOrdinalIgnoreCase(s, name))
+					if (StringEx.EqualsOrdinalIgnoreCase(attShortName, name))
 						return (true);
 				}
 			}
@@ -720,7 +720,7 @@ namespace MKY.CommandLine
 			List<string> optionStrings = new List<string>();
 			foreach (FieldInfo field in GetMemberFields())
 			{
-				foreach (OptionArgAttribute att in GetOptionArgAttributes(field))
+				foreach (var att in GetOptionArgAttributes(field))
 				{
 					if (!SupportOptionArgs)
 					{
@@ -736,31 +736,31 @@ namespace MKY.CommandLine
 						throw (new RuntimeValidationException(message));
 					}
 
-					foreach (string s in att.ShortNames)
+					foreach (var attShortName in att.ShortNames)
 					{
-						if (optionStrings.Contains(s))
+						if (optionStrings.Contains(attShortName))
 						{
-							string message = "Duplicate command line argument " + s;
+							string message = "Duplicate command line argument " + attShortName;
 							Debug.WriteLine("Runtime validation failed for " + GetType() + message);
 							throw (new RuntimeValidationException(message));
 						}
 						else
 						{
-							optionStrings.Add(s);
+							optionStrings.Add(attShortName);
 						}
 					}
 
-					foreach (string s in att.Names)
+					foreach (var attName in att.Names)
 					{
-						if (optionStrings.Contains(s))
+						if (optionStrings.Contains(attName))
 						{
-							string message = "Duplicate command line argument " + s;
+							string message = "Duplicate command line argument " + attName;
 							Debug.WriteLine("Runtime validation failed for " + GetType() + message);
 							throw (new RuntimeValidationException(message));
 						}
 						else
 						{
-							optionStrings.Add(s);
+							optionStrings.Add(attName);
 						}
 					}
 				}
@@ -1031,7 +1031,7 @@ namespace MKY.CommandLine
 		/// <summary></summary>
 		public virtual string SplitIntoLines(int maxWidth, int indent, string text)
 		{
-			StringBuilder lines = new StringBuilder();
+			var lines = new StringBuilder();
 
 			int width = (maxWidth - indent);
 			foreach (string line in StringEx.SplitLexically(text, width))
@@ -1063,17 +1063,17 @@ namespace MKY.CommandLine
 			// do not lead to an empty line (due to the NewLine which is added).
 			maxWidth--;
 
-			StringBuilder helpText = new StringBuilder();
-			FieldInfo[] fields = GetMemberFields();
+			var helpText = new StringBuilder();
+			var fields = GetMemberFields();
 
 			if (this.supportValueArgs)
 			{
 				helpText.AppendLine();
 				helpText.AppendLine("Value arguments:");
 				helpText.AppendLine();
-				foreach (FieldInfo field in fields)
+				foreach (var field in fields)
 				{
-					foreach (ValueArgAttribute att in GetValueArgAttributes(field))
+					foreach (var att in GetValueArgAttributes(field))
 					{
 						if (!string.IsNullOrEmpty(att.Description))
 						{
@@ -1111,7 +1111,7 @@ namespace MKY.CommandLine
 							valueTypeString = "=STR";
 					}
 
-					foreach (OptionArgAttribute att in GetOptionArgAttributes(field))
+					foreach (var att in GetOptionArgAttributes(field))
 					{
 						//-----------------------------------------------------------------------------------
 						// Example:
@@ -1126,14 +1126,14 @@ namespace MKY.CommandLine
 						// 0 3       10                                                                    80
 						//-----------------------------------------------------------------------------------
 
-						StringBuilder names = new StringBuilder();
+						var names = new StringBuilder();
 
 						// Short name(s):
 						if (att.ShortNames != null)
 						{
-							foreach (string shortName in att.ShortNames)
+							foreach (var attShortName in att.ShortNames)
 							{
-								string option = shortName.ToLowerInvariant(); // Short names shall be lower case.
+								string option = attShortName.ToLowerInvariant(); // Short names shall be lower case.
 
 								if (names.Length > 0)
 									names.Append(", ");

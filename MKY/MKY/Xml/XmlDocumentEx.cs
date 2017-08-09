@@ -132,8 +132,8 @@ namespace MKY.Xml
 			// Add required additional schemas:
 			if (requiredSchema != null)
 			{
-				foreach (var s in requiredSchema)
-					defaultDocument.Schemas.Add(s);
+				foreach (var schema in requiredSchema)
+					defaultDocument.Schemas.Add(schema);
 			}
 
 			// Add schema of the given type:

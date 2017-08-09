@@ -766,7 +766,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual string ComposeAbsoluteAutoSaveFilePath()
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			sb.Append(Application.Settings.GeneralSettings.AutoSaveRoot);
 			sb.Append(Path.DirectorySeparatorChar);

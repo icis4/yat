@@ -174,8 +174,8 @@ namespace YAT.View.Test
 
 				for (int i = 0; i < 500; i++)
 				{
-					foreach (string s in contents)
-						transmitFile.WriteLine(s);
+					foreach (string content in contents)
+						transmitFile.WriteLine(content);
 				}
 			}
 			Trace.WriteLine("Transmit file created:");

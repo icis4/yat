@@ -619,11 +619,11 @@ namespace MKY.IO
 					return (new PathCompareResult(false));
 
 				// Get common directory, make sure only directory part is used:
-				List<string> dirInfosA = new List<string>();
-				List<string> dirInfosB = new List<string>();
+				var dirInfosA = new List<string>();
+				var dirInfosB = new List<string>();
 
-				DirectoryInfo tempDirInfoA = dirInfoA;
-				DirectoryInfo tempDirInfoB = dirInfoB;
+				var tempDirInfoA = dirInfoA;
+				var tempDirInfoB = dirInfoB;
 
 				while (tempDirInfoA != null)
 				{
@@ -654,15 +654,15 @@ namespace MKY.IO
 				if (commonDirectoryCount > 0)
 					commonPath = dirInfosA[commonDirectoryCount - 1];
 
-				DirectoryInfo commonDI = new DirectoryInfo(commonPath);
+				var commonDI = new DirectoryInfo(commonPath);
 
 				// Check whether both paths are equal:
 				if (Equals(dirPathA, dirPathB))
 					return (new PathCompareResult(commonPath, commonDirectoryCount, 0, true, 0, "."));
 
 				// Check whether one of the two is the others subdirectory:
-				DirectoryInfo di = commonDI;
-				StringBuilder relativePath = new StringBuilder();
+				var di = commonDI;
+				var relativePath = new StringBuilder();
 				if (Equals(commonPath, dirPathA))
 				{
 					int nearRelativeDirectoryCount = 0;
