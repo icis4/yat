@@ -45,7 +45,7 @@ namespace YAT.Model.Utilities
 		public static int LinesFromRtfFile(string filePath, out string[] lines)
 		{
 			var richTextProvider = new RichTextBox();
-			using (FileStream fs = File.OpenRead(filePath))
+			using (var fs = File.OpenRead(filePath))
 			{
 				richTextProvider.LoadFile(fs, RichTextBoxStreamType.RichText);
 			}

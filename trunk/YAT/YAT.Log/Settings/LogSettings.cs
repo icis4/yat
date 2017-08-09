@@ -214,8 +214,8 @@ namespace YAT.Log.Settings
 
 		private string ToFileNamePostFixString(LogFormat format, LogChannelType channelType)
 		{
-			DateTime now = DateTime.Now;
-			StringBuilder postFix = new StringBuilder();
+			var now = DateTime.Now;
+			var postFix = new StringBuilder();
 
 			if (this.nameFormat)
 			{
@@ -246,7 +246,7 @@ namespace YAT.Log.Settings
 
 		private string ToDirectoryString(LogFormat format, LogChannelType channelType)
 		{
-			StringBuilder folders = new StringBuilder();
+			var folders = new StringBuilder();
 
 			if (this.folderFormat)
 			{

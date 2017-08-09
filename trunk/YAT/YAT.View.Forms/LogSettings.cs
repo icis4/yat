@@ -481,16 +481,16 @@ namespace YAT.View.Forms
 			try
 			{
 				comboBox_Raw_Extension.Items.Clear();
-				foreach (string s in ExtensionHelper.BinaryFilesWithDot)
-					comboBox_Raw_Extension.Items.Add(s);
+				foreach (string ext in ExtensionHelper.BinaryFilesWithDot)
+					comboBox_Raw_Extension.Items.Add(ext);
 
 				comboBox_Neat_Extension.Items.Clear();
-				foreach (string s in ExtensionHelper.TextFilesWithDot)
-					comboBox_Neat_Extension.Items.Add(s);
+				foreach (string ext in ExtensionHelper.TextFilesWithDot)
+					comboBox_Neat_Extension.Items.Add(ext);
 
 				comboBox_Options_NameSeparator.Items.Clear();
-				foreach (string s in Log.FileNameSeparatorEx.GetItems())
-					comboBox_Options_NameSeparator.Items.Add(s);
+				foreach (string ext in Log.FileNameSeparatorEx.GetItems())
+					comboBox_Options_NameSeparator.Items.Add(ext);
 			}
 			finally
 			{

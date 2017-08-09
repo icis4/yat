@@ -51,7 +51,7 @@ namespace MKY.Net
 			{
 				try
 				{
-					TcpListener listener = new TcpListener(IPAddress.Loopback, 0);
+					var listener = new TcpListener(IPAddress.Loopback, 0);
 					listener.Start();
 					result = ((IPEndPoint)listener.LocalEndpoint).Port;
 					listener.Stop();
@@ -59,7 +59,7 @@ namespace MKY.Net
 				}
 				catch (Exception ex)
 				{
-					StringBuilder sb = new StringBuilder();
+					var sb = new StringBuilder();
 
 					sb.Append(i);
 					sb.Append(Int32Ex.ToEnglishSuffix(i));
@@ -76,7 +76,7 @@ namespace MKY.Net
 
 			// Local scope for dedicated 'StringBuilder':
 			{
-				StringBuilder sb = new StringBuilder();
+				var sb = new StringBuilder();
 
 				sb.Append(Attempts);
 				sb.Append(" attempt to retrieve an available TCP port have failed");

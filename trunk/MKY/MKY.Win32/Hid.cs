@@ -465,10 +465,10 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool HidD_GetIndexedString(SafeFileHandle HidDeviceObject, int StringIndex, out string IndexedString)
 			{
-				StringBuilder s = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
-				if (HidD_GetIndexedString(HidDeviceObject, (UInt32)StringIndex, s, (UInt32)s.Capacity))
+				var sb = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
+				if (HidD_GetIndexedString(HidDeviceObject, (UInt32)StringIndex, sb, (UInt32)sb.Capacity))
 				{
-					IndexedString = s.ToString();
+					IndexedString = sb.ToString();
 					return (true);
 				}
 				IndexedString = "";
@@ -505,10 +505,10 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool HidD_GetManufacturerString(SafeFileHandle HidDeviceObject, out string Manufacturer)
 			{
-				StringBuilder s = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
-				if (HidD_GetManufacturerString(HidDeviceObject, s, (UInt32)s.Capacity))
+				var sb = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
+				if (HidD_GetManufacturerString(HidDeviceObject, sb, (UInt32)sb.Capacity))
 				{
-					Manufacturer = s.ToString();
+					Manufacturer = sb.ToString();
 					return (true);
 				}
 				Manufacturer = "";
@@ -570,10 +570,10 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool HidD_GetProductString(SafeFileHandle HidDeviceObject, out string Product)
 			{
-				StringBuilder s = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
-				if (HidD_GetProductString(HidDeviceObject, s, (UInt32)s.Capacity))
+				var sb = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
+				if (HidD_GetProductString(HidDeviceObject, sb, (UInt32)sb.Capacity))
 				{
-					Product = s.ToString();
+					Product = sb.ToString();
 					return (true);
 				}
 				Product = "";
@@ -594,10 +594,10 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool HidD_GetSerialString(SafeFileHandle HidDeviceObject, out string Serial)
 			{
-				StringBuilder s = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
-				if (HidD_GetSerialNumberString(HidDeviceObject, s, (UInt32)s.Capacity))
+				var sb = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
+				if (HidD_GetSerialNumberString(HidDeviceObject, sb, (UInt32)sb.Capacity))
 				{
-					Serial = s.ToString();
+					Serial = sb.ToString();
 					return (true);
 				}
 				Serial = "";

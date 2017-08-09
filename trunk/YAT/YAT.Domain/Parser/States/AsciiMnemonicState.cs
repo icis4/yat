@@ -117,10 +117,9 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
 		private static bool TryParseContiguousAsciiMnemonic(Parser parser, string s, out byte[] result, ref FormatException formatException)
 		{
-			using (MemoryStream bytes = new MemoryStream())
+			using (var bytes = new MemoryStream())
 			{
-				string[] items = s.Split();
-				foreach (string item in items)
+				foreach (string item in s.Split())
 				{
 					if (item.Length > 0)
 					{
@@ -150,7 +149,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for recursion.")]
 		private static bool TryParseContiguousAsciiMnemonicItem(Parser parser, string s, out byte[] result, ref FormatException formatException)
 		{
-			using (MemoryStream bytes = new MemoryStream())
+			using (var bytes = new MemoryStream())
 			{
 				string remaining = s;
 				bool success = true;

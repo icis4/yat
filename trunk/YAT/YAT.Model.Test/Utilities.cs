@@ -872,7 +872,7 @@ namespace YAT.Model.Test
 			// Compare the expected line count at the receiver side:
 			if (displayLinesB.Count != expectedTotalDisplayLineCountB)
 			{
-				StringBuilder sbB = new StringBuilder();
+				var sbB = new StringBuilder();
 				foreach (Domain.DisplayLine displayLineB in displayLinesB)
 					sbB.Append(ArrayEx.ElementsToString(displayLineB.ToArray()));
 
@@ -940,11 +940,11 @@ namespace YAT.Model.Test
 				}
 				else
 				{
-					StringBuilder sbA = new StringBuilder();
+					var sbA = new StringBuilder();
 					foreach (Domain.DisplayLine displayLineA in displayLinesA)
 						sbA.Append(ArrayEx.ElementsToString(displayLineA.ToArray()));
 
-					StringBuilder sbB = new StringBuilder();
+					var sbB = new StringBuilder();
 					foreach (Domain.DisplayLine displayLineB in displayLinesB)
 						sbB.Append(ArrayEx.ElementsToString(displayLineB.ToArray()));
 

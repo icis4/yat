@@ -66,7 +66,7 @@ namespace MKY.CommandLine
 					return (this.names[0]);
 
 				// else
-				StringBuilder singleLine = new StringBuilder();
+				var singleLine = new StringBuilder();
 				for (int i = 0; i < this.names.Length; i++)
 				{
 					singleLine.Append(this.names[i]);
@@ -108,7 +108,7 @@ namespace MKY.CommandLine
 					return (this.shortNames[0]);
 
 				// else
-				StringBuilder singleLine = new StringBuilder();
+				var singleLine = new StringBuilder();
 				for (int i = 0; i < this.shortNames.Length; i++)
 				{
 					singleLine.Append(this.shortNames[i]);

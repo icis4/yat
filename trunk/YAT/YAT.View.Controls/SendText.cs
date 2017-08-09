@@ -544,9 +544,9 @@ namespace YAT.View.Controls
 			{
 				bool isValid = true;
 
-				foreach (string s in this.command.MultiLineText)
+				foreach (string line in this.command.MultiLineText)
 				{
-					if (!Utilities.ValidationHelper.ValidateRadix(this, "default radix", s, radix, this.parseMode))
+					if (!Utilities.ValidationHelper.ValidateRadix(this, "default radix", line, radix, this.parseMode))
 						isValid = false;
 				}
 

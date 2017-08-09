@@ -1677,7 +1677,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual string ComposeAbsoluteAutoSaveFilePath()
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			sb.Append(Application.Settings.GeneralSettings.AutoSaveRoot);
 			sb.Append(Path.DirectorySeparatorChar);
@@ -2987,8 +2987,8 @@ namespace YAT.Model
 
 		private void PrepareIOErrorMessageInputRequest(out string text, out string title)
 		{
-			StringBuilder textBuilder = new StringBuilder();
-			StringBuilder titleBuilder = new StringBuilder();
+			var textBuilder = new StringBuilder();
+			var titleBuilder = new StringBuilder();
 
 			textBuilder.Append("Unable to write to ");
 			switch (this.settingsRoot.IOType)
