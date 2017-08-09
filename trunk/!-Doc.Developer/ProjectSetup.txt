@@ -4,11 +4,13 @@ See below for details on 'Any CPU' as well as x86 and x64.
 
 
 Project > Build > General
-	@ Debug
+	@ Debug (all platforms)
 		CODE_ANALYSIS
+		(@ Test projects = CODE_ANALYSIS;TEST (no space!))
 		Define DEBUG
 		Define TRACE
-	@ Release
+	@ Release (all platforms)
+		(@ Test projects = TEST)
 		Define TRACE
 		Optimize code
 
