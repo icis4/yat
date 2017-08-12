@@ -115,12 +115,14 @@ namespace YAT.Model.Types
 		public AutoResponseEx(AutoResponse autoResponse)
 			: base(autoResponse)
 		{
+			if (autoResponse == AutoResponse.Explicit)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'AutoResponse.Explicit' requires a response command string, use AutoResponseEx(string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "The naming emphasizes the difference between string and enum parameters.")]
 		public AutoResponseEx(string explicitCommandString)
-			: this(AutoResponse.Explicit)
+			: base(AutoResponse.Explicit) // Do not call this(...) above since that would result in exception above!
 		{
 			this.explicitCommandString = explicitCommandString;
 		}

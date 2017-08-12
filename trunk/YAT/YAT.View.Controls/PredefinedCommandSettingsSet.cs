@@ -289,6 +289,9 @@ namespace YAT.View.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
+	////private void comboBox_ExplicitDefaultRadix_SelectedIndexChanged(object sender, EventArgs e)
+	////is not required since           "         _Validating() below gets called anyway.
+
 		private void comboBox_ExplicitDefaultRadix_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)

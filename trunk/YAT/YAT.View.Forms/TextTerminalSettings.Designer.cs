@@ -158,7 +158,6 @@ namespace YAT.View.Forms
 			this.toolTip.SetToolTip(this.comboBox_RxEol, "Either select a preset from the list, or fill in any sequence of bytes, e.g. <ETB" +
         "><NUL> or \\h(17 00).\r\n\r\nContact YAT via \"Help > Request Feature\" to request addi" +
         "tional presets.");
-			this.comboBox_RxEol.SelectedIndexChanged += new System.EventHandler(this.comboBox_RxEol_SelectedIndexChanged);
 			this.comboBox_RxEol.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_RxEol_Validating);
 			// 
 			// label_RxEol
@@ -181,7 +180,6 @@ namespace YAT.View.Forms
 			this.toolTip.SetToolTip(this.comboBox_TxEol, "Either select a preset from the list, or fill in any sequence of bytes, e.g. <ETB" +
         "><NUL> or \\h(17 00).\r\n\r\nContact YAT via \"Help > Request Feature\" to request addi" +
         "tional presets.");
-			this.comboBox_TxEol.SelectedIndexChanged += new System.EventHandler(this.comboBox_TxEol_SelectedIndexChanged);
 			this.comboBox_TxEol.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_TxEol_Validating);
 			// 
 			// label_TxEol

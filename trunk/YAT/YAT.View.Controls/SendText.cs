@@ -507,6 +507,9 @@ namespace YAT.View.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
+	////private void comboBox_ExplicitDefaultRadix_SelectedIndexChanged(object sender, EventArgs e)
+	////is not required since          "          _Validating() below gets called anyway.
+
 		private void comboBox_ExplicitDefaultRadix_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -661,6 +664,34 @@ namespace YAT.View.Controls
 		}
 
 		/// <remarks>
+		/// This _SelectedIndexChanged() handler is useful even though
+		///      _ExplicitDefaultRadix_Validating() below gets called anyway.
+		/// because <see cref="isValidated"/> gets set here.
+		/// </remarks>
+		private void comboBox_SingleLineText_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
+			this.isValidated = true; // Commands in history have already been validated.
+
+			if (comboBox_SingleLineText.SelectedItem != null)
+			{
+				var ri = (comboBox_SingleLineText.SelectedItem as RecentItem<Command>);
+				if (ri != null)
+				{
+					this.command = ri.Item;
+
+					ConfirmCommand();
+				}
+			}
+
+			DebugCommandLeave();
+		}
+		
+		/// <remarks>
 		/// Event sequence when focus is leaving, e.g. TAB is pressed.
 		/// 1. ComboBox.Leave()
 		/// 2. ComboBox.Validating()
@@ -728,29 +759,6 @@ namespace YAT.View.Controls
 			DebugCommandLeave();
 		}
 
-		private void comboBox_SingleLineText_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
-
-			this.isValidated = true; // Commands in history have already been validated.
-
-			if (comboBox_SingleLineText.SelectedItem != null)
-			{
-				var ri = (comboBox_SingleLineText.SelectedItem as RecentItem<Command>);
-				if (ri != null)
-				{
-					this.command = ri.Item;
-
-					ConfirmCommand();
-				}
-			}
-
-			DebugCommandLeave();
-		}
-		
 		private void button_SetMultiLineText_Click(object sender, EventArgs e)
 		{
 			ShowMultiLineBox(button_SetMultiLineText);

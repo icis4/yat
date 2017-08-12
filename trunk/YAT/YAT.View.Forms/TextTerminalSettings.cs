@@ -156,24 +156,15 @@ namespace YAT.View.Forms
 			this.settingsInEdit.SeparateTxRxEol = checkBox_SeparateTxRxEol.Checked;
 		}
 
-		private void comboBox_TxEol_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
+	////private void comboBox_TxEol_SelectedIndexChanged(object sender, EventArgs e)
+	////is not required since   "  _Validating() below gets called anyway.
 
-			var eol = (comboBox_TxEol.SelectedItem as Domain.EolEx);
-			if (eol != null)
-				this.settingsInEdit.TxEol = eol.ToSequenceString();
-
-			if (!this.settingsInEdit.SeparateTxRxEol)
-				this.settingsInEdit.RxEol = this.settingsInEdit.TxEol;
-		}
-
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_TxEol_Validating(object sender, CancelEventArgs e)
 		{
-			Domain.EolEx eol;
 			string eolString = comboBox_TxEol.Text;
 
+			Domain.EolEx eol;
 			if (Domain.EolEx.TryParse(eolString, out eol))
 			{
 				this.settingsInEdit.TxEol = eol.ToSequenceString();
@@ -209,21 +200,15 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void comboBox_RxEol_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
+	////private void comboBox_RxEol_SelectedIndexChanged(object sender, EventArgs e)
+	////is not required since   "  _Validating() below gets called anyway.
 
-			var eol = (comboBox_RxEol.SelectedItem as Domain.EolEx);
-			if (eol != null)
-				this.settingsInEdit.RxEol = eol.ToSequenceString();
-		}
-
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_RxEol_Validating(object sender, CancelEventArgs e)
 		{
-			Domain.EolEx eol;
 			string eolString = comboBox_RxEol.Text;
 
+			Domain.EolEx eol;
 			if (Domain.EolEx.TryParse(eolString, out eol))
 			{
 				this.settingsInEdit.RxEol = eol.ToSequenceString();

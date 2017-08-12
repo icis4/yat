@@ -347,6 +347,9 @@ namespace YAT.View.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
+	////private void comboBox_ExplicitDefaultRadix_SelectedIndexChanged(object sender, EventArgs e)
+	////is not required since          "          _Validating() below gets called anyway.
+
 		/// <remarks>Using 'Validation' instead of 'SelectedIndexChanged' for symmetricity with <see cref="SendText"/>.</remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
 		private void comboBox_ExplicitDefaultRadix_Validating(object sender, CancelEventArgs e)
