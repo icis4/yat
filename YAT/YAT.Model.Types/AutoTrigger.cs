@@ -111,12 +111,14 @@ namespace YAT.Model.Types
 		public AutoTriggerEx(AutoTrigger trigger)
 			: base(trigger)
 		{
+			if (trigger == AutoTrigger.Explicit)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'AutoTrigger.Explicit' requires a trigger command string, use AutoTriggerEx(string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "The naming emphasizes the difference between string and enum parameters.")]
 		public AutoTriggerEx(string explicitCommandString)
-			: this(AutoTrigger.Explicit)
+			: base(AutoTrigger.Explicit) // Do not call this(...) above since that would result in exception above!
 		{
 			this.explicitCommandString = explicitCommandString;
 		}

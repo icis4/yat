@@ -97,11 +97,13 @@ namespace MKY.IO.Ports
 		public BaudRateEx(BaudRate baudRate)
 			: base(baudRate)
 		{
+			if (baudRate == BaudRate.Explicit)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'BaudRate.Explicit' requires a baud rate value, use BaudRateEx(int) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <exception cref="ArgumentOutOfRangeException"> if given value is no potentially valid baud rate value.</exception>
 		public BaudRateEx(int baudRate)
-			: this(BaudRate.Explicit)
+			: base(BaudRate.Explicit) // Do not call this(...) above since that would result in exception above!
 		{
 			if (IsPotentiallyValidBaudRate(baudRate))
 			{

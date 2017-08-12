@@ -127,12 +127,12 @@ namespace YAT.Domain
 			: base(separator)
 		{
 			if (separator == InfoSeparator.Explicit)
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'InfoSeparator.Explicit' requires a separator string, use InfoElementSeparatorEx(string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'InfoSeparator.Explicit' requires a separator string, use InfoSeparatorEx(string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
 		public InfoSeparatorEx(string separator)
-			: this(InfoSeparator.Explicit)
+			: base(InfoSeparator.Explicit) // Do not call this(...) above since that would result in exception above!
 		{
 			this.explicitSeparator = separator;
 		}

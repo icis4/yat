@@ -97,6 +97,8 @@ Fixed bugs:
 - Serial COM port switching again properly works (bug #376).
 - Sending at very low baud rates again properly works (bug #379, related to limiting to baud rate).
 - Erroneous error message when changing log file separator fixed (bug #378).
+- InvalidOperationException when defining user defined log file separator or monitor format
+  enclosure or separator fixed (partly related to bug #378).
 - Context menu shortcuts are no longer executed when a dialog is open (bug #300).
 - Predefined command page navigation shortcuts fixed (related to bug #300).
 - Predefined command panel width change issue in case Tx or Rx panel is shown fixed (bug #384).

@@ -244,6 +244,9 @@ namespace YAT.View.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
+	////private void comboBox_Port_SelectedIndexChanged(object sender, EventArgs e)
+	////is not required since  "  _Validating() below gets called anyway.
+
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_Port_Validating(object sender, CancelEventArgs e)
 		{
@@ -251,8 +254,8 @@ namespace YAT.View.Controls
 				return;
 
 			// Attention:
-			// Do not assume that the selected item maches the actual text in the box
-			//   because SelectedItem is also set if text has changed in the meantime.
+			// Do not assume that the selected item matches the actual text in the box
+			//   because 'SelectedItem' is kept even if text has changed in the meantime.
 
 			var id = comboBox_Port.SelectedItem as SerialPortId;
 			if ((id != null) && id.EqualsName(comboBox_Port.Text))

@@ -106,12 +106,12 @@ namespace YAT.Domain
 			: base(enclosure)
 		{
 			if (enclosure == InfoEnclosure.Explicit)
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'InfoEnclosure.Explicit' requires an enclosure string, use InfoElementEnclosureEx(string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'InfoEnclosure.Explicit' requires an enclosure string, use InfoEnclosureEx(string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
 		public InfoEnclosureEx(string enclosure)
-			: this(InfoEnclosure.Explicit)
+			: base(InfoEnclosure.Explicit) // Do not call this(...) above since that would result in exception above!
 		{
 			this.explicitEnclosure = enclosure;
 		}

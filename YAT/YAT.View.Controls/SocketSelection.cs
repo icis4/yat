@@ -352,6 +352,9 @@ namespace YAT.View.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
+	////private void comboBox_RemoteHost_SelectedIndexChanged(object sender, EventArgs e)
+	////is not required since      "    _Validating() below gets called anyway.
+
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_RemoteHost_Validating(object sender, CancelEventArgs e)
 		{
@@ -359,8 +362,8 @@ namespace YAT.View.Controls
 				return;
 
 			// Attention:
-			// Do not assume that the selected item maches the actual text in the box
-			//   because SelectedItem is also set if text has changed in the meantime.
+			// Do not assume that the selected item matches the actual text in the box
+			//   because 'SelectedItem' is kept even if text has changed in the meantime.
 
 			var remoteHost = (comboBox_RemoteHost.SelectedItem as IPHostEx);
 			if ((remoteHost != null) && (IPAddressEx.NotEqualsNone(remoteHost.Address)) &&
@@ -392,6 +395,9 @@ namespace YAT.View.Controls
 			}
 		}
 
+	////private void comboBox_LocalFilter_SelectedIndexChanged(object sender, EventArgs e)
+	////is not required since      "     _Validating() below gets called anyway.
+
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_LocalFilter_Validating(object sender, CancelEventArgs e)
 		{
@@ -399,8 +405,8 @@ namespace YAT.View.Controls
 				return;
 
 			// Attention:
-			// Do not assume that the selected item maches the actual text in the box
-			//   because SelectedItem is also set if text has changed in the meantime.
+			// Do not assume that the selected item matches the actual text in the box
+			//   because 'SelectedItem' is kept even if text has changed in the meantime.
 
 			var localFilter = (comboBox_LocalFilter.SelectedItem as IPFilterEx);
 			if ((localFilter != null) && (IPAddressEx.NotEqualsNone(localFilter.Address)) &&

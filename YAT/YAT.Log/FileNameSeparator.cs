@@ -112,7 +112,7 @@ namespace YAT.Log
 
 		/// <summary></summary>
 		public FileNameSeparatorEx(string separator)
-			: this(FileNameSeparator.Explicit)
+			: base(FileNameSeparator.Explicit) // Do not call this(...) above since that would result in exception above!
 		{
 			this.explicitSeparator = separator;
 		}

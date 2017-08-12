@@ -320,23 +320,14 @@ namespace YAT.View.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		private void comboBox_BaudRate_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			BaudRate = (MKY.IO.Ports.BaudRateEx)comboBox_BaudRate.SelectedItem;
-		}
+	////private void comboBox_BaudRate_SelectedIndexChanged(object sender, EventArgs e)
+	////is not required since    "   _Validating() below gets called anyway.
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_BaudRate_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
-
-			// Attention:
-			// Do not assume that the selected item maches the actual text in the box
-			//   because SelectedItem is also set if text has changed in the meantime.
 
 			int intBaudRate;
 			if (int.TryParse(comboBox_BaudRate.Text, out intBaudRate) && (intBaudRate > 0))

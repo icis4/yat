@@ -220,6 +220,10 @@ namespace YAT.View.Forms
 			this.settingsInEdit.RawLogRx = !this.settingsInEdit.RawLogRx;
 		}
 
+	////private void comboBox_Raw_Extension_SelectedIndexChanged(object sender, EventArgs e)
+	////is not required since       "      _Validating() below gets called anyway.
+
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_Raw_Extension_Validating(object sender, CancelEventArgs e)
 		{
 			if (!ValidateFileNamePart(comboBox_Raw_Extension.Text, "Extension"))
@@ -286,6 +290,10 @@ namespace YAT.View.Forms
 			this.settingsInEdit.NeatLogRx = !this.settingsInEdit.NeatLogRx;
 		}
 
+	////private void comboBox_Neat_Extension_SelectedIndexChanged(object sender, EventArgs e)
+	////is not required since        "      _Validating() below gets called anyway.
+
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_Neat_Extension_Validating(object sender, CancelEventArgs e)
 		{
 			if (!ValidateFileNamePart(comboBox_Neat_Extension.Text, "Extension"))
@@ -345,25 +353,27 @@ namespace YAT.View.Forms
 			this.settingsInEdit.NameTime = checkBox_Options_NameTime.Checked;
 		}
 
-		private void comboBox_Options_NameSeparator_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
+	////private void comboBox_Options_NameSeparator_SelectedIndexChanged(object sender, EventArgs e)
+	////is not required since           "          _Validating() below gets called anyway.
 
-			var enclosure = (comboBox_Options_NameSeparator.SelectedItem as Log.FileNameSeparatorEx);
-			if (enclosure != null)
-				this.settingsInEdit.NameSeparator = enclosure;
-		}
-
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_Options_NameSeparator_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			if (ValidateFileNamePart(comboBox_Options_NameSeparator.Text, "Separator"))
-				this.settingsInEdit.NameSeparator = comboBox_Options_NameSeparator.Text;
+			Log.FileNameSeparatorEx separator;
+			if (Log.FileNameSeparatorEx.TryParse(comboBox_Options_NameSeparator.Text, out separator))
+			{
+				this.settingsInEdit.NameSeparator = separator;
+			}
 			else
-				e.Cancel = true;
+			{
+				if (ValidateFileNamePart(comboBox_Options_NameSeparator.Text, "Separator"))
+					this.settingsInEdit.NameSeparator = comboBox_Options_NameSeparator.Text;
+				else
+					e.Cancel = true;
+			}
 		}
 
 		private void checkBox_Options_FolderFormat_CheckedChanged(object sender, EventArgs e)
