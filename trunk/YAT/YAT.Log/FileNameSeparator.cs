@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
@@ -102,12 +103,14 @@ namespace YAT.Log
 		{
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Do not use with <see cref="FileNameSeparator.Explicit"/> because that selection requires
+		/// a separator string. Use <see cref="FileNameSeparatorEx(string)"/> instead.
+		/// </remarks>
 		public FileNameSeparatorEx(FileNameSeparator separator)
 			: base(separator)
 		{
-			if (separator == FileNameSeparator.Explicit)
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'FileNameSeparator.Explicit' requires a separator string, use FileNameSeparatorEx(string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			Debug.Assert((separator != FileNameSeparator.Explicit), "'FileNameSeparator.Explicit' requires a separator string, use 'FileNameSeparatorEx(string)' instead!");
 		}
 
 		/// <summary></summary>
@@ -301,7 +304,7 @@ namespace YAT.Log
 			FileNameSeparator enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = enumResult;
+				result = new FileNameSeparatorEx(enumResult);
 				return (true);
 			}
 			else

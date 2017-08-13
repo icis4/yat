@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
@@ -107,12 +108,14 @@ namespace YAT.Model.Types
 		{
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Do not use with <see cref="AutoTrigger.Explicit"/> because that selection requires
+		/// a trigger command string. Use <see cref="AutoTriggerEx(string)"/> instead.
+		/// </remarks>
 		public AutoTriggerEx(AutoTrigger trigger)
 			: base(trigger)
 		{
-			if (trigger == AutoTrigger.Explicit)
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'AutoTrigger.Explicit' requires a trigger command string, use AutoTriggerEx(string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			Debug.Assert((trigger != AutoTrigger.Explicit), "'AutoTrigger.Explicit' requires a trigger command string, use 'AutoTriggerEx(string)' instead!");
 		}
 
 		/// <summary></summary>
@@ -163,7 +166,7 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public override string ToString()
 		{
 			switch ((AutoTrigger)UnderlyingEnum)
@@ -332,7 +335,7 @@ namespace YAT.Model.Types
 				if (enumResult == AutoTrigger.Explicit)
 					result = new AutoTriggerEx(s);
 				else
-					result = enumResult;
+					result = new AutoTriggerEx(enumResult);
 
 				return (true);
 			}

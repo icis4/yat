@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 using MKY;
@@ -122,12 +123,14 @@ namespace YAT.Domain
 		{
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Do not use with <see cref="InfoSeparator.Explicit"/> because that selection requires
+		/// a separator string. Use <see cref="InfoSeparatorEx(string)"/> instead.
+		/// </remarks>
 		public InfoSeparatorEx(InfoSeparator separator)
 			: base(separator)
 		{
-			if (separator == InfoSeparator.Explicit)
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'InfoSeparator.Explicit' requires a separator string, use InfoSeparatorEx(string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			Debug.Assert((separator != InfoSeparator.Explicit), "'InfoSeparator.Explicit' requires a separator string, use 'InfoSeparatorEx(string)' instead!");
 		}
 
 		/// <summary></summary>
@@ -340,7 +343,7 @@ namespace YAT.Domain
 			InfoSeparator enumResult;
 			if (TryParse(s, out enumResult))
 			{
-				result = enumResult;
+				result = new InfoSeparatorEx(enumResult);
 				return (true);
 			}
 			else // Other!
