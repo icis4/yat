@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
@@ -93,12 +94,14 @@ namespace MKY.IO.Ports
 		{
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Do not use with <see cref="BaudRate.Explicit"/> because that selection requires
+		/// a baud rate value. Use <see cref="BaudRateEx(int)"/> instead.
+		/// </remarks>
 		public BaudRateEx(BaudRate baudRate)
 			: base(baudRate)
 		{
-			if (baudRate == BaudRate.Explicit)
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'BaudRate.Explicit' requires a baud rate value, use BaudRateEx(int) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			Debug.Assert((baudRate != BaudRate.Explicit), "'BaudRate.Explicit' requires a baud rate value, use 'BaudRateEx(int)' instead!");
 		}
 
 		/// <exception cref="ArgumentOutOfRangeException"> if given value is no potentially valid baud rate value.</exception>
@@ -130,7 +133,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public override string ToString()
 		{
-			if (this == BaudRate.Explicit)
+			if ((BaudRate)UnderlyingEnum == BaudRate.Explicit)
 				return (this.explicitBaudRate.ToString(CultureInfo.InvariantCulture));
 			else
 				return (UnderlyingEnum.GetHashCode().ToString(CultureInfo.InvariantCulture));
@@ -274,7 +277,7 @@ namespace MKY.IO.Ports
 			BaudRate enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = enumResult;
+				result = new BaudRateEx(enumResult);
 				return (true);
 			}
 			else
@@ -363,7 +366,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static implicit operator int(BaudRateEx baudRate)
 		{
-			if (baudRate == BaudRate.Explicit)
+			if ((BaudRate)baudRate.UnderlyingEnum == BaudRate.Explicit)
 				return (baudRate.explicitBaudRate);
 			else
 				return (baudRate.GetHashCode());
