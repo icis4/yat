@@ -73,7 +73,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public override string ToString()
 		{
 			switch ((StopBits)UnderlyingEnum)
@@ -83,7 +83,7 @@ namespace MKY.IO.Ports
 				case StopBits.OnePointFive: return (OnePointFive_double.ToString(CultureInfo.InvariantCulture));
 				case StopBits.Two:          return (Two_double         .ToString(CultureInfo.InvariantCulture));
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -134,7 +134,7 @@ namespace MKY.IO.Ports
 			StopBits enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = enumResult;
+				result = new StopBitsEx(enumResult);
 				return (true);
 			}
 			else
@@ -226,7 +226,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The value is intended to be limited.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public static implicit operator double(StopBitsEx bits)
 		{
 			switch ((StopBits)bits.UnderlyingEnum)
@@ -235,8 +235,9 @@ namespace MKY.IO.Ports
 				case StopBits.One:          return (One_double);
 				case StopBits.OnePointFive: return (OnePointFive_double);
 				case StopBits.Two:          return (Two_double);
+
+				default: throw (new ArgumentOutOfRangeException("bits", MessageHelper.InvalidExecutionPreamble + "'" + bits.UnderlyingEnum.ToString() + "' is an unknown stop bit value!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new NotSupportedException("Program execution should never get here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>

@@ -85,7 +85,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public override string ToString()
 		{
 			switch ((Handshake)UnderlyingEnum)
@@ -95,12 +95,12 @@ namespace MKY.IO.Ports
 				case Handshake.XOnXOff:              return (XOnXOff_string);
 				case Handshake.RequestToSendXOnXOff: return (RfrCtsXOnXOff_string);
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public virtual string ToShortString()
 		{
 			switch ((Handshake)UnderlyingEnum)
@@ -110,7 +110,7 @@ namespace MKY.IO.Ports
 				case Handshake.XOnXOff:              return (XOnXOff_stringShort);
 				case Handshake.RequestToSendXOnXOff: return (RfrCtsXOnXOff_stringShort);
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -161,7 +161,7 @@ namespace MKY.IO.Ports
 			Handshake enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = enumResult;
+				result = new HandshakeEx(enumResult);
 				return (true);
 			}
 			else

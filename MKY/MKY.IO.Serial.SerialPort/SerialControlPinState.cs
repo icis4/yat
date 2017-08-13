@@ -91,7 +91,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public override string ToString()
 		{
 			switch ((SerialControlPinState)UnderlyingEnum)
@@ -100,7 +100,7 @@ namespace MKY.IO.Serial.SerialPort
 				case SerialControlPinState.Disabled:  return (Disabled_string);
 				case SerialControlPinState.Enabled:   return (Enabled_string);
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -150,7 +150,7 @@ namespace MKY.IO.Serial.SerialPort
 			SerialControlPinState enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = enumResult;
+				result = new SerialControlPinStateEx(enumResult);
 				return (true);
 			}
 			else

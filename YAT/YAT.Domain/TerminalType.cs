@@ -109,7 +109,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public override string ToString()
 		{
 			switch ((TerminalType)UnderlyingEnum)
@@ -166,7 +166,7 @@ namespace YAT.Domain
 			TerminalType enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = enumResult;
+				result = new TerminalTypeEx(enumResult);
 				return (true);
 			}
 			else

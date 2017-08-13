@@ -134,7 +134,7 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public override string ToString()
 		{
 			switch ((WorkspaceLayout)UnderlyingEnum)
@@ -147,7 +147,7 @@ namespace YAT.Model.Types
 				case WorkspaceLayout.Minimize:       return (Minimize_string);
 				case WorkspaceLayout.Maximize:       return (Maximize_string);
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -201,7 +201,7 @@ namespace YAT.Model.Types
 			WorkspaceLayout enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = enumResult;
+				result = new WorkspaceLayoutEx(enumResult);
 				return (true);
 			}
 			else
@@ -293,24 +293,24 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public static implicit operator MdiLayout(WorkspaceLayoutEx layout)
 		{
 			switch ((WorkspaceLayout)layout.UnderlyingEnum)
 			{
-				case WorkspaceLayout.Automatic:      throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'Automatic' is not supported by 'Windows.Forms.MdiLayout'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				case WorkspaceLayout.Automatic:      throw (new NotSupportedException(                MessageHelper.InvalidExecutionPreamble + "'Automatic' is not supported by 'Windows.Forms.MdiLayout'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				case WorkspaceLayout.Cascade:        return (MdiLayout.Cascade);
 				case WorkspaceLayout.TileHorizontal: return (MdiLayout.TileHorizontal);
 				case WorkspaceLayout.TileVertical:   return (MdiLayout.TileVertical);
-				case WorkspaceLayout.Manual:         throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'Manual' is not supported by 'Windows.Forms.MdiLayout'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				case WorkspaceLayout.Minimize:       throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'Minimize' is not supported by 'Windows.Forms.MdiLayout'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				case WorkspaceLayout.Maximize:       throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'Maximize' is not supported by 'Windows.Forms.MdiLayout'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                             throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + (WorkspaceLayout)layout.UnderlyingEnum + "' is an unknown workspace layout!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				case WorkspaceLayout.Manual:         throw (new NotSupportedException(                MessageHelper.InvalidExecutionPreamble + "'Manual' is not supported by 'Windows.Forms.MdiLayout'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				case WorkspaceLayout.Minimize:       throw (new NotSupportedException(                MessageHelper.InvalidExecutionPreamble + "'Minimize' is not supported by 'Windows.Forms.MdiLayout'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				case WorkspaceLayout.Maximize:       throw (new NotSupportedException(                MessageHelper.InvalidExecutionPreamble + "'Maximize' is not supported by 'Windows.Forms.MdiLayout'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                             throw (new ArgumentOutOfRangeException("layout", MessageHelper.InvalidExecutionPreamble + "'" + (WorkspaceLayout)layout.UnderlyingEnum + "' is an unknown workspace layout!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public static implicit operator WorkspaceLayoutEx(MdiLayout layout)
 		{
 			switch (layout)
@@ -318,8 +318,8 @@ namespace YAT.Model.Types
 				case MdiLayout.Cascade:        return (new WorkspaceLayoutEx(WorkspaceLayout.Cascade));
 				case MdiLayout.TileHorizontal: return (new WorkspaceLayoutEx(WorkspaceLayout.TileHorizontal));
 				case MdiLayout.TileVertical:   return (new WorkspaceLayoutEx(WorkspaceLayout.TileVertical));
-				case MdiLayout.ArrangeIcons:   throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'ArrangeIcons' is not supported by " + ApplicationEx.ProductName + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                       throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + layout + "' is an unknown workspace layout!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				case MdiLayout.ArrangeIcons:   throw (new NotSupportedException(                MessageHelper.InvalidExecutionPreamble + "'ArrangeIcons' is not supported by " + ApplicationEx.ProductName + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                       throw (new ArgumentOutOfRangeException("layout", MessageHelper.InvalidExecutionPreamble + "'" + layout + "' is an unknown workspace layout!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

@@ -137,7 +137,7 @@ namespace MKY.IO.Ports
 			DataBits enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = enumResult;
+				result = new DataBitsEx(enumResult);
 				return (true);
 			}
 			else

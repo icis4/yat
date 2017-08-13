@@ -190,7 +190,7 @@ namespace MKY.IO.Serial.SerialPort
 			SerialFlowControl enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = enumResult;
+				result = new SerialFlowControlEx(enumResult);
 				return (true);
 			}
 			else
