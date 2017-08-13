@@ -340,7 +340,7 @@ namespace MKY.IO.Usb
 			HidUsagePage enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = enumResult;
+				result = new HidUsagePageEx(enumResult);
 				return (true);
 			}
 			else
@@ -501,7 +501,7 @@ namespace MKY.IO.Usb
 			HidUsageId enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = enumResult;
+				result = new HidUsageIdEx(enumResult);
 				return (true);
 			}
 			else

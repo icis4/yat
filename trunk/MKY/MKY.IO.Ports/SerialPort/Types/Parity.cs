@@ -78,7 +78,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public override string ToString()
 		{
 			switch ((Parity)UnderlyingEnum)
@@ -89,7 +89,7 @@ namespace MKY.IO.Ports
 				case Parity.Mark:  return (Mark_string);
 				case Parity.Space: return (Space_string);
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -98,13 +98,13 @@ namespace MKY.IO.Ports
 		{
 			switch ((Parity)UnderlyingEnum)
 			{
-				case Parity.Even: return (Even_stringShort);
-				case Parity.Odd: return (Odd_stringShort);
-				case Parity.None: return (None_stringShort);
-				case Parity.Mark: return (Mark_stringShort);
+				case Parity.Even:  return (Even_stringShort);
+				case Parity.Odd:   return (Odd_stringShort);
+				case Parity.None:  return (None_stringShort);
+				case Parity.Mark:  return (Mark_stringShort);
 				case Parity.Space: return (Space_stringShort);
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -156,7 +156,7 @@ namespace MKY.IO.Ports
 			Parity enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = enumResult;
+				result = new ParityEx(enumResult);
 				return (true);
 			}
 			else

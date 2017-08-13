@@ -101,10 +101,9 @@ namespace MKY.Media
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public virtual void Play()
 		{
-			SystemSounds sound = (SystemSounds)UnderlyingEnum;
+			var sound = (SystemSounds)UnderlyingEnum;
 			if (sound != SystemSounds.None)
 				((System.Media.SystemSound)((SystemSoundsEx)sound)).Play();
 		}
@@ -119,7 +118,7 @@ namespace MKY.Media
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public override string ToString()
 		{
 			switch ((SystemSounds)UnderlyingEnum)
@@ -131,7 +130,7 @@ namespace MKY.Media
 				case SystemSounds.Hand:        return (Hand_string);
 				case SystemSounds.Question:    return (Question_string);
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an unknown system sound!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is a system sound that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -184,7 +183,7 @@ namespace MKY.Media
 			SystemSounds enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = enumResult;
+				result = new SystemSoundsEx(enumResult);
 				return (true);
 			}
 			else
@@ -289,7 +288,7 @@ namespace MKY.Media
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public static implicit operator System.Media.SystemSound(SystemSoundsEx sound)
 		{
 			switch ((SystemSounds)sound)
@@ -301,12 +300,12 @@ namespace MKY.Media
 				case SystemSounds.Hand:        return (System.Media.SystemSounds.Hand);
 				case SystemSounds.Question:    return (System.Media.SystemSounds.Question);
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + sound.ToString() + "' is an unknown system sound!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("sound", MessageHelper.InvalidExecutionPreamble + "'" + sound.ToString() + "' is an unknown system sound!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public static implicit operator SystemSoundsEx(System.Media.SystemSound sound)
 		{
 			if      (sound == System.Media.SystemSounds.Asterisk)
@@ -320,7 +319,7 @@ namespace MKY.Media
 			else if (sound == System.Media.SystemSounds.Question)
 				return (SystemSounds.Question);
 			else
-				throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + sound.ToString() + "' is an unknown system sound!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new ArgumentOutOfRangeException("sound", MessageHelper.InvalidExecutionPreamble + "'" + sound.ToString() + "' is an unknown system sound!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

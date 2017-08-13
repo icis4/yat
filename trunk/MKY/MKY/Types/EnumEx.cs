@@ -92,7 +92,7 @@ namespace MKY
 	///         Mode enumResult;
 	///         if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 	///         {
-	///             result = enumResult;
+	///             result = new ModeEx(enumResult);
 	///             return (true);
 	///         }
 	///         else

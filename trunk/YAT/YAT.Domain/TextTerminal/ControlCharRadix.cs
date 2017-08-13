@@ -140,7 +140,7 @@ namespace YAT.Domain
 				if (radix == Radix.Unicode) // Unicode makes no sense for single byte/character replacement.
 					continue;               // See remark for 'ControlCharRadix.Unicode' for details.
 
-				items.Add((Radix)radix);
+				items.Add((ControlCharRadixEx)radix);
 			}
 
 			// Add additional items:
@@ -176,7 +176,7 @@ namespace YAT.Domain
 			ControlCharRadix enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = enumResult;
+				result = new ControlCharRadixEx(enumResult);
 				return (true);
 			}
 			else
@@ -241,7 +241,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public static implicit operator ControlCharRadixEx(Radix radix)
+		public static explicit operator ControlCharRadixEx(Radix radix)
 		{
 			return (new ControlCharRadixEx((ControlCharRadix)radix));
 		}
