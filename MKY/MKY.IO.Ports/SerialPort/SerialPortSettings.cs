@@ -195,8 +195,8 @@ namespace MKY.IO.Ports
 		{
 			return
 			(
-				((BaudRateEx)this.baudRate).ToString() + ", " +
-				((DataBitsEx)this.dataBits).ToString() + ", " +
+				((BaudRateEx)this.baudRate) + ", " +
+				((DataBitsEx)this.dataBits) + ", " +
 				((ParityEx)  this.parity)  .ToShortString()
 			);
 		}
