@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
@@ -111,12 +112,14 @@ namespace YAT.Model.Types
 		{
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Do not use with <see cref="AutoResponse.Explicit"/> because that selection requires
+		/// a response command string. Use <see cref="AutoResponseEx(string)"/> instead.
+		/// </remarks>
 		public AutoResponseEx(AutoResponse autoResponse)
 			: base(autoResponse)
 		{
-			if (autoResponse == AutoResponse.Explicit)
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'AutoResponse.Explicit' requires a response command string, use AutoResponseEx(string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			Debug.Assert((autoResponse != AutoResponse.Explicit), "'AutoResponse.Explicit' requires a response command string, use 'AutoResponseEx(string)' instead!");
 		}
 
 		/// <summary></summary>
@@ -167,7 +170,7 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public override string ToString()
 		{
 			switch ((AutoResponse)UnderlyingEnum)
@@ -335,10 +338,10 @@ namespace YAT.Model.Types
 			AutoResponse enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				if (enumResult == AutoResponse.Explicit)
+				if (enumResult != AutoResponse.Explicit)
 					result = new AutoResponseEx(s);
 				else
-					result = enumResult;
+					result = new AutoResponseEx(enumResult);
 
 				return (true);
 			}

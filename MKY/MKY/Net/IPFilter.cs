@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
@@ -109,12 +110,15 @@ namespace MKY.Net
 		{
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Do not use with <see cref="IPFilter.Explicit"/> because that selection requires
+		/// an IP address or host name. Use <see cref="IPFilterEx(IPAddress)"/> or
+		/// <see cref="IPFilterEx(string, IPAddress)"/> instead.
+		/// </remarks>
 		public IPFilterEx(IPFilter addressFilter)
 			: base(addressFilter)
 		{
-			if (addressFilter == IPFilter.Explicit)
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'IPFilter.Explicit' requires an IP address or host name, use IPFilterEx(IPAddress) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			Debug.Assert((addressFilter != IPFilter.Explicit), "'IPFilter.Explicit' requires an IP address or host name, use 'IPFilterEx(IPAddress)' or 'IPFilterEx(string, IPAddress)' instead!");
 		}
 
 		/// <summary></summary>
@@ -134,18 +138,9 @@ namespace MKY.Net
 		}
 
 		/// <summary>
-		/// Creates an explicit <see cref="IPFilterEx"/> object, using the provided host name.
+		/// Creates an explicit <see cref="IPFilterEx"/> object, using the provided host name and optional address.
 		/// </summary>
-		public IPFilterEx(string name)
-		{
-			SetUnderlyingEnum(IPFilter.Explicit);
-			this.explicitName = name;
-		}
-
-		/// <summary>
-		/// Creates an explicit <see cref="IPFilterEx"/> object, using the provided host name and address.
-		/// </summary>
-		public IPFilterEx(string name, IPAddress address)
+		public IPFilterEx(string name, IPAddress address = null)
 		{
 			SetUnderlyingEnum(IPFilter.Explicit);
 			this.explicitName = name;
@@ -233,7 +228,7 @@ namespace MKY.Net
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public override string ToString()
 		{
 			switch ((IPFilter)UnderlyingEnum)
@@ -261,7 +256,7 @@ namespace MKY.Net
 		/// - For predefined filters, the predefined string is returned.
 		/// - For explicit filters, the host name or address is returned.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public string ToCompactString()
 		{
 			switch ((IPFilter)UnderlyingEnum)
@@ -298,7 +293,7 @@ namespace MKY.Net
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
 		[SuppressMessage("Microsoft.Design", "CA1055:UriReturnValuesShouldNotBeStrings", Justification = "What's wrong with a variant of ToString() ?!?")]
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public string ToEndpointAddressString()
 		{
 			switch ((IPFilter)UnderlyingEnum)
@@ -477,7 +472,7 @@ namespace MKY.Net
 			IPFilter enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = enumResult;
+				result = new IPFilterEx(enumResult);
 				return (true);
 			}
 			else

@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
@@ -105,12 +106,15 @@ namespace MKY.Net
 		{
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Do not use with <see cref="IPNetworkInterface.Explicit"/> because that selection
+		/// requires an IP address or interface description.
+		/// Use <see cref="IPNetworkInterfaceEx(IPAddress, string)"/> instead.
+		/// </remarks>
 		public IPNetworkInterfaceEx(IPNetworkInterface networkInterface)
 			: base(networkInterface)
 		{
-			if (networkInterface == IPNetworkInterface.Explicit)
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'IPNetworkInterface.Explicit' requires an IP address or interface description, use IPNetworkInterfaceEx(IPAddress, string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			Debug.Assert((networkInterface != IPNetworkInterface.Explicit), "'IPNetworkInterface.Explicit' requires an IP address or interface description, use 'IPNetworkInterfaceEx(IPAddress, string)' instead!");
 		}
 
 		/// <summary></summary>
@@ -242,7 +246,7 @@ namespace MKY.Net
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public override string ToString()
 		{
 			switch ((IPNetworkInterface)UnderlyingEnum)
@@ -419,7 +423,7 @@ namespace MKY.Net
 			IPNetworkInterface enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = enumResult;
+				result = new IPNetworkInterfaceEx(enumResult);
 				return (true);
 			}
 			else

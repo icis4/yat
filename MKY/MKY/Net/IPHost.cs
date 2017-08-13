@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
@@ -93,12 +94,15 @@ namespace MKY.Net
 		{
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Do not use with <see cref="IPHost.Explicit"/> because that selection requires
+		/// an IP address or host name. Use <see cref="IPHostEx(IPAddress)"/> or
+		/// or <see cref="IPHostEx(string, IPAddress)"/> instead.
+		/// </remarks>
 		public IPHostEx(IPHost host)
 			: base(host)
 		{
-			if (host == IPHost.Explicit)
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'IPHost.Explicit' requires an IP address or host name, use IPHostEx(IPAddress) or IPHostEx(string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			Debug.Assert((host != IPHost.Explicit), "'IPHost.Explicit' requires an IP address or host name, use 'IPHostEx(IPAddress)' or 'IPHostEx(string, IPAddress)' instead!");
 		}
 
 		/// <summary></summary>
@@ -116,18 +120,9 @@ namespace MKY.Net
 		}
 
 		/// <summary>
-		/// Creates an explicit <see cref="IPHostEx"/> object, using the provided host name.
+		/// Creates an explicit <see cref="IPHostEx"/> object, using the provided host name and optional address.
 		/// </summary>
-		public IPHostEx(string name)
-		{
-			SetUnderlyingEnum(IPHost.Explicit);
-			this.explicitName = name;
-		}
-
-		/// <summary>
-		/// Creates an explicit <see cref="IPHostEx"/> object, using the provided host name and address.
-		/// </summary>
-		public IPHostEx(string name, IPAddress address)
+		public IPHostEx(string name, IPAddress address = null)
 		{
 			SetUnderlyingEnum(IPHost.Explicit);
 			this.explicitName = name;
@@ -209,7 +204,7 @@ namespace MKY.Net
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public override string ToString()
 		{
 			switch ((IPHost)UnderlyingEnum)
@@ -234,7 +229,7 @@ namespace MKY.Net
 		/// - For predefined hosts, the predefined string is returned.
 		/// - For explicit hosts, the host name or address is returned.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public string ToCompactString()
 		{
 			switch ((IPHost)UnderlyingEnum)
@@ -268,7 +263,7 @@ namespace MKY.Net
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
 		[SuppressMessage("Microsoft.Design", "CA1055:UriReturnValuesShouldNotBeStrings", Justification = "What's wrong with a variant of ToString() ?!?")]
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public string ToEndpointAddressString()
 		{
 			switch ((IPHost)UnderlyingEnum)
@@ -444,7 +439,7 @@ namespace MKY.Net
 			IPHost enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = enumResult;
+				result = new IPHostEx(enumResult);
 				return (true);
 			}
 			else

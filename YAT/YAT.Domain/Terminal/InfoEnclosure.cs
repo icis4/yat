@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 using MKY;
@@ -101,12 +102,14 @@ namespace YAT.Domain
 		{
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Do not use with <see cref="InfoEnclosure.Explicit"/> because that selection requires
+		/// an enclosure string. Use <see cref="InfoEnclosureEx(string)"/> instead.
+		/// </remarks>
 		public InfoEnclosureEx(InfoEnclosure enclosure)
 			: base(enclosure)
 		{
-			if (enclosure == InfoEnclosure.Explicit)
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'InfoEnclosure.Explicit' requires an enclosure string, use InfoEnclosureEx(string) instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			Debug.Assert((enclosure != InfoEnclosure.Explicit), "'InfoEnclosure.Explicit' requires an enclosure string, use 'InfoEnclosureEx(string)' instead!");
 		}
 
 		/// <summary></summary>
@@ -322,7 +325,7 @@ namespace YAT.Domain
 			InfoEnclosure enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = enumResult;
+				result = new InfoEnclosureEx(enumResult);
 				return (true);
 			}
 			else
