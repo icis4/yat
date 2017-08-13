@@ -361,7 +361,7 @@ namespace YAT.View.Forms
 				case Domain.TerminalType.Text:   type = "Text";   break;
 				case Domain.TerminalType.Binary: type = "Binary"; break;
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.settingsInEdit.Terminal.TerminalType + "' is an unknown terminal type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.settingsInEdit.Terminal.TerminalType + "' is a terminal type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			string message =
@@ -441,7 +441,7 @@ namespace YAT.View.Forms
 						break;
 
 					default:
-						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + tt + "' is an invalid terminal type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + tt + "' is a terminal type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 				button += " Settings...";
 				button_TextOrBinarySettings.Text = button;
@@ -567,7 +567,7 @@ namespace YAT.View.Forms
 
 				default:
 				{
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + tt + "' is an invalid terminal type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + tt + "' is a terminal type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}

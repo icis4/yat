@@ -481,7 +481,7 @@ namespace YAT.Domain
 										case IODirection.Tx: return (new DisplayElement.TxData(b, c[0].ToString(CultureInfo.InvariantCulture))); // 'IsSingleByte'.
 										case IODirection.Rx: return (new DisplayElement.RxData(b, c[0].ToString(CultureInfo.InvariantCulture))); // 'IsSingleByte'.
 
-										default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+										default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 									}
 								}
 								else // Unicode:
@@ -491,7 +491,7 @@ namespace YAT.Domain
 										case IODirection.Tx: return (new DisplayElement.TxData(b, UnicodeValueToNumericString(c[0]))); // 'IsSingleByte'.
 										case IODirection.Rx: return (new DisplayElement.RxData(b, UnicodeValueToNumericString(c[0]))); // 'IsSingleByte'.
 
-										default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+										default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 									}
 								}
 							}
@@ -544,7 +544,7 @@ namespace YAT.Domain
 												case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, c[0].ToString(CultureInfo.InvariantCulture), decodingArray.Length));
 												case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, c[0].ToString(CultureInfo.InvariantCulture), decodingArray.Length));
 
-												default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+												default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 											}
 										}
 										else // Unicode:
@@ -554,7 +554,7 @@ namespace YAT.Domain
 												case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, UnicodeValueToNumericString(c[0]), decodingArray.Length));
 												case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, UnicodeValueToNumericString(c[0]), decodingArray.Length));
 
-												default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+												default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 											}
 										}
 									}
@@ -815,7 +815,7 @@ namespace YAT.Domain
 				case IODirection.Tx: lineState = this.txLineState; break;
 				case IODirection.Rx: lineState = this.rxLineState; break;
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + raw.Direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + raw.Direction + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			foreach (byte b in raw.Data)
@@ -857,7 +857,7 @@ namespace YAT.Domain
 								case IODirection.Tx: lineState = this.txLineState; break;
 								case IODirection.Rx: lineState = this.rxLineState; break;
 
-								default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+								default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
 						}
 						else // Attention: Direction changed => Use opposite state.
@@ -867,7 +867,7 @@ namespace YAT.Domain
 								case IODirection.Tx: lineState = this.rxLineState; break; // Reversed!
 								case IODirection.Rx: lineState = this.txLineState; break;
 
-								default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+								default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
 						}
 
