@@ -483,11 +483,11 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
-				MKY.IO.Ports.BaudRateEx baudRate = this.baudRate;
+				var baudRate = (MKY.IO.Ports.BaudRate)this.baudRate;
 				if (Enabled && (baudRate == MKY.IO.Ports.BaudRate.Explicit))
-					comboBox_BaudRate.Text = baudRate;
+					comboBox_BaudRate.Text = new MKY.IO.Ports.BaudRateEx(baudRate);
 				else if (Enabled)
-					comboBox_BaudRate.SelectedItem = baudRate;
+					comboBox_BaudRate.SelectedItem = new MKY.IO.Ports.BaudRateEx(baudRate);
 				else
 					comboBox_BaudRate.SelectedIndex = ControlEx.InvalidIndex;
 
