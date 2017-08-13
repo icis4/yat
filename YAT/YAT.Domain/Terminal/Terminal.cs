@@ -1031,7 +1031,7 @@ namespace YAT.Domain
 				if (psi != null)
 					ProcessParsableSendItem(psi);
 				else
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + item.GetType() + "' is an invalid send item type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + item.GetType() + "' is a send item type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -1853,7 +1853,7 @@ namespace YAT.Domain
 				case IODirection.Tx: return (ByteToElement(b, d, this.terminalSettings.Display.TxRadix));
 				case IODirection.Rx: return (ByteToElement(b, d, this.terminalSettings.Display.RxRadix));
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -1968,7 +1968,7 @@ namespace YAT.Domain
 								case IODirection.Tx: return (new DisplayElement.TxData(b, text));
 								case IODirection.Rx: return (new DisplayElement.RxData(b, text));
 
-								default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+								default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
 						}
 						else
@@ -1978,7 +1978,7 @@ namespace YAT.Domain
 								case IODirection.Tx: return (new DisplayElement.TxControl(b, text));
 								case IODirection.Rx: return (new DisplayElement.RxControl(b, text));
 
-								default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+								default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
 						}
 					}
@@ -1989,7 +1989,7 @@ namespace YAT.Domain
 							case IODirection.Tx: return (new DisplayElement.TxData(b, text));
 							case IODirection.Rx: return (new DisplayElement.RxData(b, text));
 
-							default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
 					}
 				}
@@ -2000,7 +2000,7 @@ namespace YAT.Domain
 						case IODirection.Tx: return (new DisplayElement.TxData(b, text));
 						case IODirection.Rx: return (new DisplayElement.RxData(b, text));
 
-						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 			}
@@ -2068,7 +2068,7 @@ namespace YAT.Domain
 				}
 				default:
 				{
-					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' is an invalid numeric radix!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' is a numeric radix that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -2103,7 +2103,7 @@ namespace YAT.Domain
 					return (ByteToAsciiString(b));
 
 				default: // Includes 'String' and 'Unicode' which are not supported for control character replacement.
-					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' is an invalid ASCII control character radix!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' is an ASCII control character radix that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2416,7 +2416,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    this.txRepository   .Clear(); break;
 					case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
 					case RepositoryType.Rx:    this.rxRepository   .Clear(); break;
-					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is an invalid repository!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -2434,7 +2434,7 @@ namespace YAT.Domain
 					case RepositoryType.Bidir: return (this.bidirRepository.DataCount);
 					case RepositoryType.Rx:    return (this.rxRepository   .DataCount);
 				}
-				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is an invalid repository!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2451,7 +2451,7 @@ namespace YAT.Domain
 					case RepositoryType.Bidir: return (this.bidirRepository.Count);
 					case RepositoryType.Rx:    return (this.rxRepository   .Count);
 				}
-				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is an invalid repository!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2468,7 +2468,7 @@ namespace YAT.Domain
 					case RepositoryType.Bidir: return (this.bidirRepository.ToElements());
 					case RepositoryType.Rx:    return (this.rxRepository   .ToElements());
 				}
-				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is an invalid repository!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2485,7 +2485,7 @@ namespace YAT.Domain
 					case RepositoryType.Bidir: return (this.bidirRepository.ToLines());
 					case RepositoryType.Rx:    return (this.rxRepository   .ToLines());
 				}
-				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is an invalid repository!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2502,7 +2502,7 @@ namespace YAT.Domain
 					case RepositoryType.Bidir: return (this.bidirRepository.LastLineAuxiliary());
 					case RepositoryType.Rx:    return (this.rxRepository   .LastLineAuxiliary());
 				}
-				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is an invalid repository!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2518,7 +2518,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    this.txRepository.   ClearLastLineAuxiliary(); break;
 					case RepositoryType.Bidir: this.bidirRepository.ClearLastLineAuxiliary(); break;
 					case RepositoryType.Rx:    this.rxRepository   .ClearLastLineAuxiliary(); break;
-					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is an invalid repository!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -2542,7 +2542,7 @@ namespace YAT.Domain
 					case RepositoryType.Bidir: return (this.bidirRepository.ToString(indent));
 					case RepositoryType.Rx:    return (this.rxRepository   .ToString(indent));
 				}
-				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is an invalid repository!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2878,7 +2878,7 @@ namespace YAT.Domain
 
 				default:
 				{
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -2908,7 +2908,7 @@ namespace YAT.Domain
 					case IODirection.Tx: OnDisplayLinesSent    (new DisplayLinesEventArgs(lines)); break;
 					case IODirection.Rx: OnDisplayLinesReceived(new DisplayLinesEventArgs(lines)); break;
 
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}

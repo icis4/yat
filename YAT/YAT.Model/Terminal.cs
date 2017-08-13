@@ -902,7 +902,7 @@ namespace YAT.Model
 
 						default:
 						{
-							throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.settingsRoot.IOType + "' is an invalid I/O type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.settingsRoot.IOType + "' is an I/O type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
 					} // switch (I/O type)
 				} // if (settings available)
@@ -3014,7 +3014,7 @@ namespace YAT.Model
 					break;
 
 				default:
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.settingsRoot.IOType + "' is an invalid I/O type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.settingsRoot.IOType + "' is an I/O type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 			textBuilder.Append(":");
 			titleBuilder.Append(" Error!");

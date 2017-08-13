@@ -260,7 +260,7 @@ namespace YAT.View.Controls
 			}
 			else
 			{
-				throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + element.GetType() + "' is an invalid display element!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + element.GetType() + "' is a display element that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			// Override if the item is selected:
