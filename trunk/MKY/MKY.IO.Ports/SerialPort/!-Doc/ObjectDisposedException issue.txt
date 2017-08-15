@@ -17,3 +17,7 @@ Stack:
 
 Findings by ToriLogic in July 2017:
 "Unser Code Review des aktuellen .net 4.7 Codes auf github hat ergeben, dass die Implementierung des EventLoopRunners nach wie vor "kaputt" ist. Microsoft müsste das mal reparieren."
+
+Information by Microsoft in August 2017:
+"There is a fix in progress that is scheduled to be included in the next version of the .NET Framework that should resolve the issue where applications using the SerialPort fail due to an unhandled ObjectDisposedException exception that is thrown when the device is disconnected."
+"There are no plans to address this issue in .NET 4.7 or earlier. The updated SerialPort code is scheduled to be included in .NET 4.7.1."
