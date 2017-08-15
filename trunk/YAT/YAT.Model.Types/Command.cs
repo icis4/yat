@@ -74,7 +74,7 @@ namespace YAT.Model.Types
 		public const string UndefinedFilePathText = "<Set a file...>";
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
-		private readonly string[] UndefinedCommandLines = new string[] { "" };
+		private readonly string[] UndefinedTextLines = new string[] { "" };
 
 		#endregion
 
@@ -88,7 +88,7 @@ namespace YAT.Model.Types
 
 		private string       description;
 		private Domain.Radix defaultRadix;
-		private string[]     commandLines;
+		private string[]     textLines;
 		private bool         isPartialText;
 		private bool         isPartialTextEol;
 		private bool         isFilePath;
@@ -117,50 +117,57 @@ namespace YAT.Model.Types
 		/// <remarks>Note that command is initialized as 'not defined'.</remarks>
 		private void Initialize(Domain.Radix defaultRadix = DefaultRadixDefault)
 		{
-			Initialize(false, "", UndefinedCommandLines, defaultRadix, false, false, false, "");
+			Initialize(false, "", UndefinedTextLines, defaultRadix, false, false, false, "");
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public Command(string commandLine, bool isPartialText = false, Domain.Radix defaultRadix = DefaultRadixDefault)
+		public Command(string textLine, bool isPartialText = false, Domain.Radix defaultRadix = DefaultRadixDefault)
+			: this("", textLine, isPartialText, defaultRadix)
 		{
-			Initialize(true, "", new string[] { commandLine }, defaultRadix, isPartialText, false, false, "");
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		public Command(string description, string textLine, bool isPartialText = false, Domain.Radix defaultRadix = DefaultRadixDefault)
+		{
+			Initialize(true, description, new string[] { textLine }, defaultRadix, isPartialText, false, false, "");
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public Command(bool isPartialTextEol, Domain.Radix defaultRadix = DefaultRadixDefault)
 		{
-			Initialize(true, "", UndefinedCommandLines, defaultRadix, false, isPartialTextEol, false, "");
+			Initialize(true, "", UndefinedTextLines, defaultRadix, false, isPartialTextEol, false, "");
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public Command(string[] commandLines, Domain.Radix defaultRadix = DefaultRadixDefault)
-			: this("", commandLines, defaultRadix)
+		public Command(string[] textLines, Domain.Radix defaultRadix = DefaultRadixDefault)
+			: this("", textLines, defaultRadix)
 		{
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public Command(string description, string[] commandLines, Domain.Radix defaultRadix = DefaultRadixDefault)
+		public Command(string description, string[] textLines, Domain.Radix defaultRadix = DefaultRadixDefault)
 		{
-			Initialize(true, description, commandLines, defaultRadix, false, false, false, "");
+			Initialize(true, description, textLines, defaultRadix, false, false, false, "");
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public Command(string description, bool isFilePath, string filePath, Domain.Radix defaultRadix = DefaultRadixDefault)
 		{
-			Initialize(true, description, UndefinedCommandLines, defaultRadix, false, false, isFilePath, filePath);
+			Initialize(true, description, UndefinedTextLines, defaultRadix, false, false, isFilePath, filePath);
 		}
 
-		private void Initialize(bool isDefined, string description, string[] commandLines, Domain.Radix defaultRadix, bool isPartialText, bool isPartialTextEol, bool isFilePath, string filePath)
+		private void Initialize(bool isDefined, string description, string[] textLines, Domain.Radix defaultRadix, bool isPartialText, bool isPartialTextEol, bool isFilePath, string filePath)
 		{
 			this.isDefined        = isDefined;
 			this.description      = description;
 			this.defaultRadix     = defaultRadix;
-			this.commandLines     = commandLines;
+			this.textLines        = textLines;
 			this.isPartialText    = isPartialText;
 			this.isPartialTextEol = isPartialTextEol;
 			this.isFilePath       = isFilePath;
@@ -173,7 +180,7 @@ namespace YAT.Model.Types
 			this.isDefined        = rhs.isDefined;
 			this.description      = rhs.description;
 			this.defaultRadix     = rhs.defaultRadix;
-			this.commandLines     = rhs.commandLines;
+			this.textLines        = rhs.textLines;
 			this.isPartialText    = rhs.isPartialText;
 			this.isPartialTextEol = rhs.isPartialTextEol;
 			this.isFilePath       = rhs.isFilePath;
@@ -250,36 +257,40 @@ namespace YAT.Model.Types
 		public virtual Domain.Radix DefaultRadix
 		{
 			get { return (this.defaultRadix); }
-			set { this.defaultRadix = value; }
+			set { this.defaultRadix = value;  }
 		}
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "The command lines shall be serialized/deserialized as an array.")]
+		/// <remarks>
+		/// XML tag is "CommandLines" for back-ward compatibility.
+		/// May be changed to "TextLines" once bugs #232 "Issues with TolerantXmlSerializer"
+		/// and #246 "Issues with AlternateTolerantXmlSerializer" have been fixed.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "The text lines shall be serialized/deserialized as an array.")]
 		[XmlElement("CommandLines")]
-		public virtual string[] CommandLines
+		public virtual string[] TextLines
 		{
 			get
 			{
 				if (IsDefined)
-					return (this.commandLines);
+					return (this.textLines);
 				else
-					return (UndefinedCommandLines);
+					return (UndefinedTextLines);
 			}
 			set
 			{
-				// Ensure that commandLines never become 'null'!
+				// Ensure that 'textLines' never become 'null'!
 
 				if ((value != null) && (value.Length >= 1) && (value[0] != null))
 				{
 					if (!string.IsNullOrEmpty(value[0]))
 					{
 						this.isDefined = true;
-						this.commandLines = value;
+						this.textLines = value;
 					}
 					else // Empty string! Either explicitly defined by the user, or result of XML deserialization!
 					{
 						// Do not set isDefined = true since it could be the result of the of XML deserialization!
-						this.commandLines = value;
+						this.textLines = value;
 					}
 
 					// Reset the other fields:
@@ -295,7 +306,7 @@ namespace YAT.Model.Types
 				else
 				{
 					// Reset the own fields:
-					this.commandLines = UndefinedCommandLines;
+					this.textLines = UndefinedTextLines;
 					this.isPartialText = false;
 				}
 			}
@@ -316,11 +327,11 @@ namespace YAT.Model.Types
 				if (value)
 				{
 					// Reset the other fields:
-					this.commandLines = UndefinedCommandLines;
+					this.textLines = UndefinedTextLines;
 					this.isPartialText = false;
 					this.isPartialTextEol = false;
 
-					// Attention, don't modify the description as that can be defined separately!
+					// Attention, do not modify the description as that can be defined separately!
 				}
 				else
 				{
@@ -354,7 +365,7 @@ namespace YAT.Model.Types
 					this.filePath = value;
 
 					// Reset the other fields:
-					this.commandLines = UndefinedCommandLines;
+					this.textLines = UndefinedTextLines;
 					this.isPartialText = false;
 					this.isPartialTextEol = false;
 
@@ -410,9 +421,9 @@ namespace YAT.Model.Types
 				(
 					IsDefined &&
 					!IsFilePath &&
-					(this.commandLines != null) &&
-					(this.commandLines.Length >= 1) &&
-					(this.commandLines[0] != null)
+					(this.textLines != null) &&
+					(this.textLines.Length >= 1) &&
+					(this.textLines[0] != null)
 				);
 			}
 		}
@@ -445,7 +456,7 @@ namespace YAT.Model.Types
 					this.isPartialTextEol = true;
 
 					// Reset the other fields:
-					this.commandLines = UndefinedCommandLines;
+					this.textLines = UndefinedTextLines;
 					this.isPartialText = false;
 					this.isFilePath = true;
 					this.filePath = "";
@@ -467,7 +478,7 @@ namespace YAT.Model.Types
 			get
 			{
 				if (IsText && !IsPartialText && !IsPartialTextEol)
-					return ((this.commandLines.Length == 1));
+					return ((this.textLines.Length == 1));
 				else
 					return (false);
 			}
@@ -482,7 +493,7 @@ namespace YAT.Model.Types
 			get
 			{
 				if (IsText && !IsPartialText && !IsPartialTextEol)
-					return ((this.commandLines.Length > 1));
+					return ((this.textLines.Length > 1));
 				else
 					return (false);
 			}
@@ -499,7 +510,7 @@ namespace YAT.Model.Types
 
 				using (Domain.Parser.Parser p = new Domain.Parser.Parser())
 				{
-					foreach (string commandLine in this.commandLines)
+					foreach (string commandLine in this.textLines)
 					{
 						if (!p.TryParse(commandLine, this.defaultRadix))
 							return (false);
@@ -518,11 +529,11 @@ namespace YAT.Model.Types
 			{
 				if      (IsSingleLineText)
 				{
-					return (this.commandLines[0]);
+					return (this.textLines[0]);
 				}
 				else if (IsPartialText)
 				{
-					return (this.commandLines[0]);
+					return (this.textLines[0]);
 				}
 				else if (IsMultiLineText)
 				{
@@ -548,7 +559,7 @@ namespace YAT.Model.Types
 				if (value != null)
 				{
 					this.isDefined = true;
-					this.commandLines = new string[] { value };
+					this.textLines = new string[] { value };
 
 					// Reset the other fields:
 					this.isPartialText = false;
@@ -561,7 +572,7 @@ namespace YAT.Model.Types
 				else
 				{
 					// Reset the own fields:
-					this.commandLines = UndefinedCommandLines;
+					this.textLines = UndefinedTextLines;
 				}
 			}
 		}
@@ -579,7 +590,7 @@ namespace YAT.Model.Types
 				if (value != null)
 				{
 					this.isDefined = true;
-					this.commandLines = new string[] { value };
+					this.textLines = new string[] { value };
 					this.isPartialText = true;
 
 					// Reset the other fields:
@@ -592,7 +603,7 @@ namespace YAT.Model.Types
 				else
 				{
 					// Reset the own fields:
-					this.commandLines = UndefinedCommandLines;
+					this.textLines = UndefinedTextLines;
 					this.isPartialText = false;
 				}
 			}
@@ -612,16 +623,16 @@ namespace YAT.Model.Types
 				else if (IsPartialText)
 					return (new string[] { SingleLineText });
 				else if (IsMultiLineText)
-					return (CommandLines);
+					return (TextLines);
 				else // includes IsPartialTextEol
-					return (UndefinedCommandLines);
+					return (UndefinedTextLines);
 			}
 			set
 			{
 				if ((value != null) && (value.Length >= 1) && (value[0] != null))
 				{
 					this.isDefined = true;
-					this.commandLines = value;
+					this.textLines = value;
 
 					// Reset the other fields:
 					this.isPartialText = false;
@@ -634,7 +645,7 @@ namespace YAT.Model.Types
 				else
 				{
 					// Reset the own fields:
-					this.commandLines = UndefinedCommandLines;
+					this.textLines = UndefinedTextLines;
 				}
 			}
 		}
@@ -724,7 +735,7 @@ namespace YAT.Model.Types
 				int hashCode;
 
 				hashCode =                     IsDefined                      .GetHashCode();
-				hashCode = (hashCode * 397) ^  CommandLines                   .GetHashCode();
+				hashCode = (hashCode * 397) ^  TextLines                      .GetHashCode();
 				hashCode = (hashCode * 397) ^  DefaultRadix                   .GetHashCode();
 				hashCode = (hashCode * 397) ^  IsFilePath                     .GetHashCode();
 				hashCode = (hashCode * 397) ^ (FilePath     != null ? FilePath.GetHashCode() : 0);
@@ -758,11 +769,11 @@ namespace YAT.Model.Types
 
 			return
 			(
-				IsDefined                   .Equals(other.IsDefined) &&
-				ArrayEx.ElementsEqual(CommandLines, other.CommandLines) &&
-				DefaultRadix                .Equals(other.DefaultRadix) &&
-				IsFilePath                  .Equals(other.IsFilePath) &&
-				PathEx.Equals(FilePath,             other.FilePath)
+				IsDefined                .Equals(other.IsDefined) &&
+				ArrayEx.ElementsEqual(TextLines, other.TextLines) &&
+				DefaultRadix             .Equals(other.DefaultRadix) &&
+				IsFilePath               .Equals(other.IsFilePath) &&
+				PathEx.Equals(FilePath,          other.FilePath)
 			);
 
 			// Do not consider 'Description' as it does not define the command.
