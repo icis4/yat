@@ -102,6 +102,7 @@
     <Compile Include="..\YAT.Version.cs">
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
+    <Compile Include="CommandTest.cs" />
     <Compile Include="ConnectionTest.cs" />
     <Compile Include="FileHandling\Utilities.cs" />
     <Compile Include="FileHandling\SimpleTest.cs" />

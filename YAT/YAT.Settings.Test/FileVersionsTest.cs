@@ -1268,33 +1268,33 @@ namespace YAT.Settings.Test
 			Assert.That(page.PageName, Is.EqualTo("First Page"), "First predefined command pages has wrong name!");
 			Assert.That(page.Commands.Count, Is.EqualTo(4), "First predefined command page doesn't contain 4 commands!");
 			command = page.Commands[0];
-			Assert.That(command.Description,     Is.EqualTo("1A"));
-			Assert.That(command.CommandLines[0], Is.EqualTo("1A"));
+			Assert.That(command.Description,  Is.EqualTo("1A"));
+			Assert.That(command.TextLines[0], Is.EqualTo("1A"));
 			command = page.Commands[1];
-			Assert.That(command.Description,     Is.EqualTo("1B"));
-			Assert.That(command.CommandLines[0], Is.EqualTo("1B"));
+			Assert.That(command.Description,  Is.EqualTo("1B"));
+			Assert.That(command.TextLines[0], Is.EqualTo("1B"));
 			command = page.Commands[2];
-			Assert.That(command.Description,     Is.EqualTo("1C"));
-			Assert.That(command.CommandLines[0], Is.EqualTo("1C"));
+			Assert.That(command.Description,  Is.EqualTo("1C"));
+			Assert.That(command.TextLines[0], Is.EqualTo("1C"));
 			command = page.Commands[3];
-			Assert.That(command.Description,     Is.EqualTo("1D"));
-			Assert.That(command.CommandLines[0], Is.EqualTo("1D"));
+			Assert.That(command.Description,  Is.EqualTo("1D"));
+			Assert.That(command.TextLines[0], Is.EqualTo("1D"));
 
 			page = terminal.SettingsRoot.PredefinedCommand.Pages[1];
 			Assert.That(page.PageName, Is.EqualTo("Second Page"), "Second predefined command pages has wrong name!");
 			Assert.That(page.Commands.Count, Is.EqualTo(4), "Second predefined command page doesn't contain 4 commands!");
 			command = page.Commands[0];
-			Assert.That(command.Description,     Is.EqualTo("21")); // Ensures that numbers are properly parsed as well.
-			Assert.That(command.CommandLines[0], Is.EqualTo("21"));
+			Assert.That(command.Description,  Is.EqualTo("21")); // Ensures that numbers are properly parsed as well.
+			Assert.That(command.TextLines[0], Is.EqualTo("21"));
 			command = page.Commands[1];
-			Assert.That(command.Description,     Is.EqualTo("22"));
-			Assert.That(command.CommandLines[0], Is.EqualTo("22"));
+			Assert.That(command.Description,  Is.EqualTo("22"));
+			Assert.That(command.TextLines[0], Is.EqualTo("22"));
 			command = page.Commands[2];
-			Assert.That(command.Description,     Is.EqualTo("23"));
-			Assert.That(command.CommandLines[0], Is.EqualTo("23"));
+			Assert.That(command.Description,  Is.EqualTo("23"));
+			Assert.That(command.TextLines[0], Is.EqualTo("23"));
 			command = page.Commands[3];
-			Assert.That(command.Description,     Is.EqualTo("24"));
-			Assert.That(command.CommandLines[0], Is.EqualTo("24"));
+			Assert.That(command.Description,  Is.EqualTo("24"));
+			Assert.That(command.TextLines[0], Is.EqualTo("24"));
 		}
 
 		#endregion
@@ -1378,20 +1378,20 @@ namespace YAT.Settings.Test
 			Assert.That(page.PageName, Is.EqualTo("Page 1"), "First predefined command pages has wrong name!");
 			Assert.That(page.Commands.Count, Is.EqualTo(5), "First predefined command page doesn't contain 5 commands!");
 			command = page.Commands[0];
-			Assert.That(command.Description,     Is.EqualTo("abc"));
-			Assert.That(command.CommandLines[0], Is.EqualTo("abc"));
+			Assert.That(command.Description,  Is.EqualTo("abc"));
+			Assert.That(command.TextLines[0], Is.EqualTo("abc"));
 			command = page.Commands[1];
-			Assert.That(command.Description,     Is.EqualTo("äöü"));
-			Assert.That(command.CommandLines[0], Is.EqualTo("äöü"));
+			Assert.That(command.Description,  Is.EqualTo("äöü"));
+			Assert.That(command.TextLines[0], Is.EqualTo("äöü"));
 			command = page.Commands[2];
-			Assert.That(command.Description,     Is.EqualTo("ÄÖÜ"));
-			Assert.That(command.CommandLines[0], Is.EqualTo("ÄÖÜ"));
+			Assert.That(command.Description,  Is.EqualTo("ÄÖÜ"));
+			Assert.That(command.TextLines[0], Is.EqualTo("ÄÖÜ"));
 			command = page.Commands[3];
-			Assert.That(command.Description,     Is.EqualTo("$£€"));
-			Assert.That(command.CommandLines[0], Is.EqualTo("$£€"));
+			Assert.That(command.Description,  Is.EqualTo("$£€"));
+			Assert.That(command.TextLines[0], Is.EqualTo("$£€"));
 			command = page.Commands[4];
-			Assert.That(command.Description,     Is.EqualTo("čěř"));
-			Assert.That(command.CommandLines[0], Is.EqualTo("čěř"));
+			Assert.That(command.Description,  Is.EqualTo("čěř"));
+			Assert.That(command.TextLines[0], Is.EqualTo("čěř"));
 
 			// \todo:
 			// Add tests that verify that terminals are interconnected.

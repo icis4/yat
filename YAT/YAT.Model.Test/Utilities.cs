@@ -166,14 +166,14 @@ namespace YAT.Model.Test
 			{
 				Command = command;
 
-				ExpectedLineCount = command.CommandLines.Length;
+				ExpectedLineCount = command.TextLines.Length;
 
 				ExpectedElementCounts = new int[ExpectedLineCount];
 				ExpectedDataCounts    = new int[ExpectedLineCount];
 				for (int i = 0; i < ExpectedLineCount; i++)
 				{
 					ExpectedElementCounts[i] = 3; // LineStart + 1 data element + LineBreak.
-					ExpectedDataCounts[i]    = command.CommandLines[i].Length;
+					ExpectedDataCounts[i]    = command.TextLines[i].Length;
 				}
 
 				ExpectedAlsoApplyToA = true;
