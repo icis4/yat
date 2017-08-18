@@ -207,13 +207,12 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void PredefinedCommandSettings_Shown(object sender, EventArgs e)
 		{
-			// Create a page if no pages exist yet:
 			int pageCount = this.settingsInEdit.Pages.Count;
 			if (pageCount > 0)
 			{
 				this.selectedPage = Int32Ex.Limit(this.startupControl.RequestedPage, 1, pageCount);
 			}
-			else
+			else // Create a page if no page exists yet:
 			{
 				this.settingsInEdit.CreateDefaultPage();
 				this.selectedPage = 1;
@@ -222,8 +221,10 @@ namespace YAT.View.Forms
 			// Initially set controls and validate its contents where needed:
 			SetControls();
 
-			int selectedCommand = Int32Ex.Limit(this.startupControl.RequestedCommand, 1, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage);
-			this.predefinedCommandSettingsSetLabels[selectedCommand - 1].Select();
+			int requestedCommand = Int32Ex.Limit(this.startupControl.RequestedCommand, 1, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage);
+			var requestedControl = this.predefinedCommandSettingsSets[requestedCommand - 1];
+			requestedControl.Select();
+			requestedControl.PrepareUserInput();
 		}
 
 		#endregion

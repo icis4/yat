@@ -48,8 +48,8 @@ using YAT.Settings.Application;
 namespace YAT.View.Controls
 {
 	/// <summary>
-	/// Provides command edit. Control keeps track of the edit state to properly
-	/// react on all possible edit states.
+	/// Provides command edit. Control keeps track of the edit state to properly react on all
+	/// possible edit states.
 	/// </summary>
 	/// <remarks>
 	/// On focus enter, edit state is always reset.
@@ -647,6 +647,23 @@ namespace YAT.View.Controls
 			try
 			{
 				textBox_SingleLineText.SelectionStart = textBox_SingleLineText.Text.Length;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		/// <summary></summary>
+		public virtual void PrepareUserInput()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				if (this.command.IsFilePath)
+					button_SetFile.Select();
+				else // includes IsText
+					textBox_SingleLineText.Select();
 			}
 			finally
 			{
