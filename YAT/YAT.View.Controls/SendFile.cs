@@ -635,7 +635,6 @@ namespace YAT.View.Controls
 		private void ConfirmCommand(string filePath)
 		{
 			this.command.FilePath = filePath;
-			this.command.DescriptionFromSingleLineText(); // Enforce file path description.
 
 			SetRecentAndCommandControls();
 			OnCommandChanged(EventArgs.Empty);

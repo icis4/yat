@@ -99,6 +99,7 @@ Fixed bugs:
 - Erroneous error message when changing log file separator fixed (bug #378).
 - InvalidOperationException when defining user defined log file separator or monitor format
   enclosure or separator fixed (partly related to bug #378).
+- Description of predefined commands can be changed again (bug #377).
 - Context menu shortcuts are no longer executed when a dialog is open (bug #300).
 - Predefined command page navigation shortcuts fixed (related to bug #300).
 - Predefined command panel width change issue in case Tx or Rx panel is shown fixed (bug #384).

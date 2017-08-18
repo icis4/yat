@@ -429,7 +429,7 @@ namespace YAT.View.Controls
 				this.isValidated = true;
 
 				if (this.editFocusState == EditFocusState.IsLeavingEdit)
-							SetEditFocusState(EditFocusState.EditIsInactive);
+					SetEditFocusState(EditFocusState.EditIsInactive);
 
 				ConfirmSingleLineText(textBox_SingleLineText.Text);
 				return;
@@ -482,6 +482,30 @@ namespace YAT.View.Controls
 			this.command.Clear();
 			SetControls();
 			OnCommandChanged(EventArgs.Empty);
+		}
+
+		#endregion
+
+		#region Public Methods
+		//==========================================================================================
+		// Public Methods
+		//==========================================================================================
+
+		/// <summary></summary>
+		public virtual void PrepareUserInput()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				if (this.command.IsFilePath)
+					button_SetFile.Select();
+				else // inc. IsText
+					textBox_SingleLineText.Select();
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		#endregion
@@ -654,23 +678,6 @@ namespace YAT.View.Controls
 			}
 		}
 
-		/// <summary></summary>
-		public virtual void PrepareUserInput()
-		{
-			this.isSettingControls.Enter();
-			try
-			{
-				if (this.command.IsFilePath)
-					button_SetFile.Select();
-				else // includes IsText
-					textBox_SingleLineText.Select();
-			}
-			finally
-			{
-				this.isSettingControls.Leave();
-			}
-		}
-
 		#endregion
 
 		#region Non-Public Methods > Handle Command
@@ -749,6 +756,7 @@ namespace YAT.View.Controls
 
 			textBox_Description.Select();
 		}
+
 		#endregion
 
 		#region Non-Public Methods > File
@@ -811,8 +819,8 @@ namespace YAT.View.Controls
 				ApplicationSettings.LocalUserSettings.Paths.SendFiles = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
-				this.command.IsFilePath = true;
 				this.command.FilePath = ofd.FileName;
+
 				OnCommandChanged(EventArgs.Empty);
 			}
 
