@@ -135,12 +135,12 @@ namespace YAT.Model.Settings
 			SerialPortAutoReopen      = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
 
 			SocketRemoteHost          = MKY.IO.Serial.Socket.SocketSettings.RemoteHostDefault;
-			SocketRemoteTcpPort       = MKY.IO.Serial.Socket.SocketSettings.RemoteTcpPortDefault;
-			SocketRemoteUdpPort       = MKY.IO.Serial.Socket.SocketSettings.RemoteUdpPortDefault;
+			SocketRemoteTcpPort       = MKY.IO.Serial.Socket.SocketSettings.RemotePortDefault;
+			SocketRemoteUdpPort       = MKY.IO.Serial.Socket.SocketSettings.RemotePortDefault;
 			SocketLocalInterface      = MKY.IO.Serial.Socket.SocketSettings.LocalInterfaceDefault;
 			SocketLocalFilter         = MKY.IO.Serial.Socket.SocketSettings.LocalFilterDefault;
-			SocketLocalTcpPort        = MKY.IO.Serial.Socket.SocketSettings.LocalTcpPortDefault;
-			SocketLocalUdpPort        = MKY.IO.Serial.Socket.SocketSettings.LocalUdpPortDefault;
+			SocketLocalTcpPort        = MKY.IO.Serial.Socket.SocketSettings.LocalPortDefault;
+			SocketLocalUdpPort        = MKY.IO.Serial.Socket.SocketSettings.LocalPortDefault;
 			TcpClientAutoReconnect    = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
 			UdpServerSendMode         = MKY.IO.Serial.Socket.SocketSettings.UdpServerSendModeDefault;
 

@@ -56,13 +56,11 @@ namespace YAT.View.Controls
 		private const SocketType SocketTypeDefault                         = SocketTypeEx.Default;
 
 		private static readonly IPHostEx RemoteHostDefault                 = MKY.IO.Serial.Socket.SocketSettings.RemoteHostDefault;
-		private const int RemoteTcpPortDefault                             = MKY.IO.Serial.Socket.SocketSettings.RemoteTcpPortDefault;
-		private const int RemoteUdpPortDefault                             = MKY.IO.Serial.Socket.SocketSettings.RemoteUdpPortDefault;
+		private const int                RemotePortDefault                 = MKY.IO.Serial.Socket.SocketSettings.RemotePortDefault;
 
 		private static readonly IPNetworkInterfaceEx LocalInterfaceDefault = MKY.IO.Serial.Socket.SocketSettings.LocalInterfaceDefault;
-		private static readonly IPFilterEx LocalFilterDefault              = MKY.IO.Serial.Socket.SocketSettings.LocalFilterDefault;
-		private const int LocalTcpPortDefault                              = MKY.IO.Serial.Socket.SocketSettings.LocalTcpPortDefault;
-		private const int LocalUdpPortDefault                              = MKY.IO.Serial.Socket.SocketSettings.LocalUdpPortDefault;
+		private static readonly IPFilterEx           LocalFilterDefault    = MKY.IO.Serial.Socket.SocketSettings.LocalFilterDefault;
+		private const int                            LocalPortDefault      = MKY.IO.Serial.Socket.SocketSettings.LocalPortDefault;
 
 		#endregion
 
@@ -82,13 +80,13 @@ namespace YAT.View.Controls
 		private SocketType socketType               = SocketTypeDefault;
 
 		private IPHostEx remoteHost                 = RemoteHostDefault;
-		private int remoteTcpPort                   = RemoteTcpPortDefault;
-		private int remoteUdpPort                   = RemoteUdpPortDefault;
+		private int remoteTcpPort                   = RemotePortDefault;
+		private int remoteUdpPort                   = RemotePortDefault;
 
 		private IPNetworkInterfaceEx localInterface = LocalInterfaceDefault;
 		private IPFilterEx localFilter              = LocalFilterDefault;
-		private int localTcpPort                    = LocalTcpPortDefault;
-		private int localUdpPort                    = LocalUdpPortDefault;
+		private int localTcpPort                    = LocalPortDefault;
+		private int localUdpPort                    = LocalPortDefault;
 
 		#endregion
 
@@ -194,7 +192,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Socket")]
 		[Description("The remote TCP port.")]
-		[DefaultValue(RemoteTcpPortDefault)]
+		[DefaultValue(RemotePortDefault)]
 		public virtual int RemoteTcpPort
 		{
 			get { return (this.remoteTcpPort); }
@@ -212,7 +210,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Socket")]
 		[Description("The remote UDP port.")]
-		[DefaultValue(RemoteUdpPortDefault)]
+		[DefaultValue(RemotePortDefault)]
 		public virtual int RemoteUdpPort
 		{
 			get { return (this.remoteUdpPort); }
@@ -266,7 +264,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Socket")]
 		[Description("The local TCP port.")]
-		[DefaultValue(LocalTcpPortDefault)]
+		[DefaultValue(LocalPortDefault)]
 		public virtual int LocalTcpPort
 		{
 			get { return (this.localTcpPort); }
@@ -284,7 +282,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Socket")]
 		[Description("The local UDP port.")]
-		[DefaultValue(LocalUdpPortDefault)]
+		[DefaultValue(LocalPortDefault)]
 		public virtual int LocalUdpPort
 		{
 			get { return (this.localUdpPort); }

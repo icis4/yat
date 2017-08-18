@@ -66,19 +66,10 @@ namespace MKY.IO.Serial.Socket
 		public static readonly IPFilterEx LocalFilterDefault = new IPFilterEx(IPFilter.Any);
 
 		/// <summary></summary>
-		public const int PortDefault = 10000;
+		public const int RemotePortDefault = 10000;
 
 		/// <summary></summary>
-		public const int RemoteTcpPortDefault = PortDefault;
-
-		/// <summary></summary>
-		public const int RemoteUdpPortDefault = PortDefault;
-
-		/// <summary></summary>
-		public const int LocalTcpPortDefault = PortDefault;
-
-		/// <summary></summary>
-		public const int LocalUdpPortDefault = PortDefault + 1;
+		public const int LocalPortDefault = 10000;
 
 		/// <remarks>
 		/// Must be implemented as property that creates a new object on each call to ensure that
@@ -202,13 +193,13 @@ namespace MKY.IO.Serial.Socket
 			Type           = SocketType.TcpAutoSocket;
 
 			RemoteHost     = RemoteHostDefault;
-			RemoteTcpPort  = RemoteTcpPortDefault;
-			RemoteUdpPort  = RemoteUdpPortDefault;
+			RemoteTcpPort  = RemotePortDefault;
+			RemoteUdpPort  = RemotePortDefault;
 
 			LocalInterface = LocalInterfaceDefault;
 			LocalFilter    = LocalFilterDefault;
-			LocalTcpPort   = LocalTcpPortDefault;
-			LocalUdpPort   = LocalUdpPortDefault;
+			LocalTcpPort   = LocalPortDefault;
+			LocalUdpPort   = LocalPortDefault;
 
 			TcpClientAutoReconnect = TcpClientAutoReconnectDefault;
 			UdpServerSendMode      = UdpServerSendModeDefault;

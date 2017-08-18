@@ -140,7 +140,7 @@ namespace YAT.Domain
 				if (radix == Radix.Unicode) // Unicode makes no sense for single byte/character replacement.
 					continue;               // See remark for 'ControlCharRadix.Unicode' for details.
 
-				items.Add((ControlCharRadixEx)radix);
+				items.Add((ControlCharRadixEx)((Radix)radix));
 			}
 
 			// Add additional items:
@@ -204,7 +204,7 @@ namespace YAT.Domain
 				RadixEx radix;
 				if (TryParse(s, out radix))
 				{
-					result = (ControlCharRadixEx)radix;
+					result = (ControlCharRadixEx)((Radix)radix);
 					return (true);
 				}
 				else // Invalid string!
