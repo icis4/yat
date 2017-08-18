@@ -67,7 +67,7 @@ namespace YAT.Model.Types
 
 		/// <remarks>'TextText' as it is the text of a multi-line text command.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "MultiLine", Justification = "What's wrong with 'MultiLine'?")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi",     Justification = "What's wrong with 'MultiLine'?")]
 		public const string MultiLineTextText = "<Multi-line...>";
 
 		/// <summary></summary>
@@ -75,6 +75,9 @@ namespace YAT.Model.Types
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
 		private readonly string[] UndefinedTextLines = new string[] { "" };
+
+		/// <remarks>Explicitly using "[empty]" instead of "[Empty]" same as e.g. "[any]" or "[localhost]".</remarks>
+		private const string EmptyTextDescription = "[empty]";
 
 		#endregion
 
@@ -230,13 +233,25 @@ namespace YAT.Model.Types
 				if (IsDefined)
 				{
 					if (!string.IsNullOrEmpty(this.description))
+					{
 						return (this.description);
+					}
 					else if (IsText)
-						return (SingleLineText);
+					{
+						var slt = SingleLineText;
+						if (!string.IsNullOrEmpty(slt))
+							return (slt);
+						else
+							return (EmptyTextDescription);
+					}
 					else if (IsFilePath)
+					{
 						return (Path.GetFileName(FilePath)); // Only use file name for better readability!
+					}
 					else
+					{
 						return ("");
+					}
 				}
 				else
 				{
@@ -549,7 +564,7 @@ namespace YAT.Model.Types
 					}
 					return (sb.ToString());
 				}
-				else // includes IsPartialTextEol
+				else // incl. IsPartialTextEol
 				{
 					return ("");
 				}
@@ -624,7 +639,7 @@ namespace YAT.Model.Types
 					return (new string[] { SingleLineText });
 				else if (IsMultiLineText)
 					return (TextLines);
-				else // includes IsPartialTextEol
+				else // incl. IsPartialTextEol
 					return (UndefinedTextLines);
 			}
 			set
