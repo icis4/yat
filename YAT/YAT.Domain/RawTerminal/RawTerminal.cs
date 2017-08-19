@@ -686,7 +686,7 @@ namespace YAT.Domain
 
 		private void io_IOError(object sender, MKY.IO.Serial.IOErrorEventArgs e)
 		{
-			MKY.IO.Serial.SerialPortErrorEventArgs serialPortErrorEventArgs = (e as MKY.IO.Serial.SerialPortErrorEventArgs);
+			var serialPortErrorEventArgs = (e as MKY.IO.Serial.SerialPortErrorEventArgs);
 			if (serialPortErrorEventArgs == null)
 				OnIOError(new IOErrorEventArgs((IOErrorSeverity)e.Severity, (IODirection)e.Direction, e.Message));
 			else

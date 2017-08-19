@@ -918,11 +918,11 @@ namespace YAT.View.Controls
 						this.imageOpacityState = OpacityState.Incrementing;
 					}
 				}
-#if (FALSE)
+			#if (FALSE)
 				// \fixme:
 				// Don't know how to alter image opacity yet.
 				pictureBox_Monitor.Image.Opacity = this.imageOpacity
-#endif
+			#endif
 				if (this.imageOpacity >= ((MaxImageOpacity - MinImageOpacity) / 2))
 					pictureBox_Monitor.Image = this.imageActive;
 				else

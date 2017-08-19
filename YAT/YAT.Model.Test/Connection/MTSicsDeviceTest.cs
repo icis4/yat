@@ -177,9 +177,9 @@ namespace YAT.Model.Test.Connection
 				// --- Test: Close/Reopen while continuous receiving. ----------------------------------
 
 				// Request continuous data:
-				terminal.SendText(new Types.Command("ECHO 2")); // Activate continuous echo mode.
+				terminal.SendText("ECHO 2"); // Activate continuous echo mode.
 				Thread.Sleep(WaitForOperation);
-				terminal.SendText(new Types.Command(CommandToEcho)); // Request continuous echo.
+				terminal.SendText(CommandToEcho); // Request continuous echo.
 				Thread.Sleep(WaitForOperation);
 
 				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
@@ -194,7 +194,7 @@ namespace YAT.Model.Test.Connection
 				Assert.That(terminal.IsReadyToSend, Is.True);
 
 				// Stop continuous data:
-				terminal.SendText(new Types.Command("<ESC>")); // <ESC> to quit ECHO mode.
+				terminal.SendText("<ESC>"); // <ESC> to quit ECHO mode.
 				Thread.Sleep(WaitForOperation);
 
 				// Close terminal. Expected: No exceptions, terminal can be closed.
@@ -388,9 +388,9 @@ namespace YAT.Model.Test.Connection
 				if (testWithContinuousReceiving) // See comments in MKY.IO.Ports.Test.TestDisconnectReconnect().
 				{
 					// Request continuous data:
-					terminal.SendText(new Types.Command("ECHO 2")); // Activate continuous echo mode.
+					terminal.SendText("ECHO 2"); // Activate continuous echo mode.
 					Thread.Sleep(WaitForOperation);
-					terminal.SendText(new Types.Command(CommandToEcho)); // Request continuous echo.
+					terminal.SendText(CommandToEcho); // Request continuous echo.
 					Thread.Sleep(WaitForOperation);
 
 					// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
@@ -412,7 +412,7 @@ namespace YAT.Model.Test.Connection
 					Assert.That(terminal.IsReadyToSend, Is.True);
 
 					// Stop continuous data:
-					terminal.SendText(new Types.Command("<ESC>")); // <ESC> to quit ECHO mode.
+					terminal.SendText("<ESC>"); // <ESC> to quit ECHO mode.
 					Thread.Sleep(WaitForOperation);
 				}
 
