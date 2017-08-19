@@ -323,7 +323,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				this.port.NewLine = "\r\n"; // <CR><LF>
 				this.port.PortName = portName;
 				this.port.Open();
-				Assert.That(port.IsOpen, Is.True);
+				Assert.That(port.IsOpen);
 
 				// Prepare transmission:
 				Thread.Sleep(WaitForOperation);
@@ -419,7 +419,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				this.port.NewLine = "\r\n"; // <CR><LF>
 				this.port.PortName = portName;
 				this.port.Open();
-				Assert.That(port.IsOpen, Is.True);
+				Assert.That(port.IsOpen);
 
 				// Prepare transmission:
 				Thread.Sleep(WaitForOperation);
