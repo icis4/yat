@@ -103,6 +103,7 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="CommandTest.cs" />
+    <Compile Include="Connection\DisconnectTest.cs" />
     <Compile Include="Connection\MTSicsDeviceTest.cs" />
     <Compile Include="FileHandling\Utilities.cs" />
     <Compile Include="FileHandling\SimpleTest.cs" />

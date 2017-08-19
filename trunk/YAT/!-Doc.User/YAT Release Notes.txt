@@ -92,10 +92,12 @@ Important changes:
   converters (USB CDC) without closing the serial COM port (bug #382). Workaround also applies when
   undocking or hibernating a computer running YAT without closing the serial COM port, as well as
   when restaring devices that implement a virtual serial COM port (USB CDC).
+- Auto-reconnect of TCP/IP client terminals enabled by default.
 
 Fixed bugs:
 - Serial COM port switching again properly works (bug #376).
-- Sending at very low baud rates again properly works (bug #379, related to limiting to baud rate).
+- Serial COM port sending at very low baud rates again properly works (bug #379).
+- Issue with UDP/IP server after connection reset fixed, automatically receiving again (bug #381).
 - Erroneous error message when changing log file separator fixed (bug #378).
 - InvalidOperationException when defining user defined log file separator or monitor format
   enclosure or separator fixed (partly related to bug #378).

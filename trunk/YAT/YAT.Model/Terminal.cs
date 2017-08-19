@@ -534,6 +534,20 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public virtual Domain.IOType IOType
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.settingsRoot != null)
+					return (this.settingsRoot.IOType);
+				else
+					return (Domain.IOType.Unknown);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool IsStopped
 		{
 			get
@@ -3145,6 +3159,17 @@ namespace YAT.Model
 			// AssertNotDisposed() is called by 'DoSend...' below.
 
 			DoSendText(new Command(true, this.settingsRoot.SendText.Command.DefaultRadix));
+		}
+
+		/// <summary>
+		/// Sends given text.
+		/// </summary>
+		/// <param name="text">Text to be sent.</param>
+		public virtual void SendText(string text)
+		{
+			// AssertNotDisposed() is called by 'DoSend...' below.
+
+			DoSendText(new Command(text));
 		}
 
 		/// <summary>

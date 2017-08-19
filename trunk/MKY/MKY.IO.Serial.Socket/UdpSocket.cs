@@ -895,6 +895,11 @@ namespace MKY.IO.Serial.Socket
 
 		private void CreateSocketAndThreads()
 		{
+			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+			{
+				this.receiveQueue.Clear();
+			}
+
 			// First, create and start receive thread to be ready when socket first receives data:
 			lock (this.receiveThreadSyncObj)
 			{
@@ -936,6 +941,11 @@ namespace MKY.IO.Serial.Socket
 				{
 					// The remote address will be set to the sender of the first or most recently received data.
 				}
+			}
+
+			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+			{
+				this.sendQueue.Clear();
 			}
 
 			// Finally, create and start send thread:
@@ -1054,7 +1064,7 @@ namespace MKY.IO.Serial.Socket
 				}
 			} // sendThreadSyncObj
 
-			lock (this.sendQueue)
+			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 			{
 				this.sendQueue.Clear();
 			}
@@ -1124,7 +1134,7 @@ namespace MKY.IO.Serial.Socket
 				}
 			} // lock (receiveThreadSyncObj)
 
-			lock (this.receiveQueue)
+			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 			{
 				this.receiveQueue.Clear();
 			}
@@ -1158,7 +1168,6 @@ namespace MKY.IO.Serial.Socket
 			// Ensure that async receive is discarded after close/dispose:
 			if (!IsDisposed && (state.Socket != null) && (GetStateSynchronized() == SocketState.Opened)) // Check 'IsDisposed' first!
 			{
-				IOErrorEventArgs signalErrorArgs = null;
 				var remoteEndPoint = state.LocalFilterEndPoint;
 				byte[] data;
 				try
@@ -1172,13 +1181,13 @@ namespace MKY.IO.Serial.Socket
 					{
 						if (socketException.SocketErrorCode == System.Net.Sockets.SocketError.ConnectionReset)
 						{
-						////SocketError() or SocketReset() is not required.
-							signalErrorArgs = new IOErrorEventArgs(ErrorSeverity.Acceptable, ex.Message);
+							SocketReset(); // Required after this exception!
+							OnIOError(new IOErrorEventArgs(ErrorSeverity.Acceptable, Direction.Input, ex.Message));
 						}
 						else
 						{
 							SocketError();
-							signalErrorArgs = new IOErrorEventArgs(ErrorSeverity.Fatal, ex.Message);
+							OnIOError(new IOErrorEventArgs(ErrorSeverity.Fatal, ex.Message));
 						}
 					}
 					else if ((ex is ObjectDisposedException) ||
@@ -1205,7 +1214,6 @@ namespace MKY.IO.Serial.Socket
 				}
 
 				// Handle data:
-				bool signalReceiveThread = false;
 				if (data != null)
 				{
 					lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
@@ -1218,8 +1226,7 @@ namespace MKY.IO.Serial.Socket
 						// mostly be called with rather low numbers of bytes.
 					}
 
-					// Signal data notification to receive thread:
-					signalReceiveThread = true;
+					SignalReceiveThreadSafely();
 				}
 
 				// Handle server connection:
@@ -1260,17 +1267,7 @@ namespace MKY.IO.Serial.Socket
 					}
 				} // if (IsServer)
 
-				if (signalErrorArgs == null) // Continue receiving:
-				{
-					BeginReceiveIfEnabled();
-
-					if (signalReceiveThread)
-						SignalReceiveThreadSafely();
-				}
-				else
-				{
-					OnIOError(signalErrorArgs);
-				}
+				BeginReceiveIfEnabled(); // Continue receiving in case the socket is still ready or ready again.
 			} // if (!IsDisposed && ...)
 		}
 
@@ -1380,6 +1377,15 @@ namespace MKY.IO.Serial.Socket
 			}
 
 			DebugThreadState("ReceiveThread() has terminated.");
+		}
+
+		private void SocketReset()
+		{
+			SetStateSynchronizedAndNotify(SocketState.Closing);
+			DisposeSocketAndThreads();
+			SetStateSynchronizedAndNotify(SocketState.Opening);
+			CreateSocketAndThreads();
+			SetStateSynchronizedAndNotify(SocketState.Opened);
 		}
 
 		private void SocketError()
