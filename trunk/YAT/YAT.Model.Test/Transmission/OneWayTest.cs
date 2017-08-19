@@ -193,13 +193,13 @@ namespace YAT.Model.Test.Transmission
 		/// </param>
 		private static IEnumerable<TestCaseData> TestCases(Quadruple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string[]> loopbackSettings)
 		{
-			foreach (TestCaseData commandData in TestCasesCommandData) // TestCaseData(Utilities.TestSet command, int transmissionCount).
+			foreach (var commandData in TestCasesCommandData) // TestCaseData(Utilities.TestSet command, int transmissionCount).
 			{
 				// Arguments:
-				List<object> args = new List<object>(commandData.Arguments);
+				var args = new List<object>(commandData.Arguments);
 				args.Insert(0, loopbackSettings.Value1); // Insert the settings descriptor A at the beginning.
 				args.Insert(1, loopbackSettings.Value2); // Insert the settings descriptor B at second.
-				TestCaseData tcd = new TestCaseData(args.ToArray()); // TestCaseData(Pair settingsDescriptorA, Pair settingsDescriptorB, Utilities.TestSet command, int transmissionCount).
+				var tcd = new TestCaseData(args.ToArray()); // TestCaseData(Pair settingsDescriptorA, Pair settingsDescriptorB, Utilities.TestSet command, int transmissionCount).
 
 				// Name:
 				tcd.SetName(loopbackSettings.Value3 + commandData.TestName);
@@ -217,9 +217,9 @@ namespace YAT.Model.Test.Transmission
 		{
 			get
 			{
-				foreach (Quadruple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string[]> loopbackSettings in Utilities.TransmissionSettings.SerialPortLoopbackPairs)
+				foreach (var loopbackSettings in Utilities.TransmissionSettings.SerialPortLoopbackPairs)
 				{
-					foreach (TestCaseData testCase in TestCases(loopbackSettings))
+					foreach (var testCase in TestCases(loopbackSettings))
 						yield return (testCase);
 				}
 			}
@@ -231,9 +231,9 @@ namespace YAT.Model.Test.Transmission
 		{
 			get
 			{
-				foreach (Quadruple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string[]> loopbackSettings in Utilities.TransmissionSettings.SerialPortLoopbackSelfs)
+				foreach (var loopbackSettings in Utilities.TransmissionSettings.SerialPortLoopbackSelfs)
 				{
-					foreach (TestCaseData testCase in TestCases(loopbackSettings))
+					foreach (var testCase in TestCases(loopbackSettings))
 						yield return (testCase);
 				}
 			}
@@ -244,9 +244,9 @@ namespace YAT.Model.Test.Transmission
 		{
 			get
 			{
-				foreach (Quadruple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string[]> loopbackSettings in Utilities.TransmissionSettings.IPLoopbackPairs)
+				foreach (var loopbackSettings in Utilities.TransmissionSettings.IPLoopbackPairs)
 				{
-					foreach (TestCaseData testCase in TestCases(loopbackSettings))
+					foreach (var testCase in TestCases(loopbackSettings))
 						yield return (testCase);
 				}
 			}
@@ -258,9 +258,9 @@ namespace YAT.Model.Test.Transmission
 		{
 			get
 			{
-				foreach (Quadruple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string[]> loopbackSettings in Utilities.TransmissionSettings.IPLoopbackSelfs)
+				foreach (var loopbackSettings in Utilities.TransmissionSettings.IPLoopbackSelfs)
 				{
-					foreach (TestCaseData testCase in TestCases(loopbackSettings))
+					foreach (var testCase in TestCases(loopbackSettings))
 						yield return (testCase);
 				}
 			}
@@ -356,7 +356,7 @@ namespace YAT.Model.Test.Transmission
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too many values to verify.")]
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
-		[Test, TestCaseSource(typeof(TwoWayTestData), "TestCasesIPLoopbackSelfs")]
+		[Test, TestCaseSource(typeof(OneWayTestData), "TestCasesIPLoopbackSelfs")]
 		public static void IPLoopbackSelfs(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
 		                                   Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                   Utilities.TestSet testSet, int transmissionCount)
@@ -371,8 +371,8 @@ namespace YAT.Model.Test.Transmission
 		                                        Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                        Utilities.TestSet testSet, int transmissionCount)
 		{
-			TerminalSettingsRoot settingsA = settingsDescriptorA.Value1(settingsDescriptorA.Value2);
-			using (Terminal terminalA = new Terminal(settingsA))
+			var settingsA = settingsDescriptorA.Value1(settingsDescriptorA.Value2);
+			using (var terminalA = new Terminal(settingsA))
 			{
 				terminalA.MessageInputRequest += Utilities.TerminalMessageInputRequest;
 				if (!terminalA.Start())
@@ -389,8 +389,8 @@ namespace YAT.Model.Test.Transmission
 
 				if (settingsDescriptorB.Value1 != null) // Loopback pair.
 				{
-					TerminalSettingsRoot settingsB = settingsDescriptorB.Value1(settingsDescriptorB.Value2);
-					using (Terminal terminalB = new Terminal(settingsB))
+					var settingsB = settingsDescriptorB.Value1(settingsDescriptorB.Value2);
+					using (var terminalB = new Terminal(settingsB))
 					{
 						terminalB.MessageInputRequest += Utilities.TerminalMessageInputRequest;
 						if (!terminalB.Start())

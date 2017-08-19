@@ -98,7 +98,7 @@ namespace YAT.Model.Test.Transmission
 				string category60m = new NUnit.MinuteDurationCategoryAttribute(60).Name;
 				string category24h = new NUnit.HourDurationCategoryAttribute(24).Name;
 
-				foreach (Pair<Pair<string, string>, TimeSpan> c in Commands)
+				foreach (var c in Commands)
 				{
 					// Get stimulus and expected:
 					string stimulus = c.Value1.Value1;
@@ -125,48 +125,48 @@ namespace YAT.Model.Test.Transmission
 		{
 			get
 			{
-				List<Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>> devs = new List<Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>>();
+				var devs = new List<Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>>();
 
 				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ||
 					!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected) // Add 'A' if neither device is available => 'Ignore' is issued in that case.
 				{
-					Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextSerialPortMTSicsDeviceASettings, null);
+					var settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextSerialPortMTSicsDeviceASettings, null);
 					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsConnected, "SerialPort_MTSicsDeviceA_"));
 				}
 
 				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
 				{
-					Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextSerialPortMTSicsDeviceBSettings, null);
+					var settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextSerialPortMTSicsDeviceBSettings, null);
 					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsConnected, "SerialPort_MTSicsDeviceB_"));
 				}
 
 				// Add device in any case => 'Ignore' is issued if device is not available.
 				{
-					Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextTcpAutoSocketMTSicsDeviceSettings, null);
+					var settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextTcpAutoSocketMTSicsDeviceSettings, null);
 					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.Net.Test.ConfigurationCategoryStrings.MTSicsDeviceIsAvailable, "TcpAutoSocket_MTSicsDevice_"));
 				}
 
 				if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ||
 					!MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected) // Add 'A' if neither device is available => 'Ignore' is issued in that case.
 				{
-					Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextUsbSerialHidMTSicsDeviceASettings, null);
+					var settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextUsbSerialHidMTSicsDeviceASettings, null);
 					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Usb.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsConnected, "UsbSerialHid_MTSicsDeviceA_"));
 				}
 
 				if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
 				{
-					Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextUsbSerialHidMTSicsDeviceBSettings, null);
+					var settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextUsbSerialHidMTSicsDeviceBSettings, null);
 					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Usb.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsConnected, "UsbSerialHid_MTSicsDeviceB_"));
 				}
 
-				foreach (Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string> dev in devs)
+				foreach (var dev in devs)
 				{
-					foreach (KeyValuePair<TestCaseData, string> kvp in TestCasesWithDurationCategory)
+					foreach (var kvp in TestCasesWithDurationCategory)
 					{
 						// Arguments:
-						List<object> args = new List<object>(kvp.Key.Arguments);
+						var args = new List<object>(kvp.Key.Arguments);
 						args.Insert(0, dev.Value1); // Insert the settings delegate at the beginning.
-						TestCaseData tcd = new TestCaseData(args.ToArray());
+						var tcd = new TestCaseData(args.ToArray());
 
 						// Category:
 						tcd.SetCategory(dev.Value2); // Set device category.

@@ -94,13 +94,13 @@ namespace YAT.Model.Test.Transmission
 		/// </param>
 		private static IEnumerable<TestCaseData> TestCases(Quadruple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string[]> loopbackSettings)
 		{
-			foreach (TestCaseData commandData in TestCasesCommandData) // TestCaseData(int repeatCount, bool doTwoWay, bool executeBreak).
+			foreach (var commandData in TestCasesCommandData) // TestCaseData(int repeatCount, bool doTwoWay, bool executeBreak).
 			{
 				// Arguments:
-				List<object> args = new List<object>(commandData.Arguments);
+				var args = new List<object>(commandData.Arguments);
 				args.Insert(0, loopbackSettings.Value1); // Insert the settings descriptor A at the beginning.
 				args.Insert(1, loopbackSettings.Value2); // Insert the settings descriptor B at second.
-				TestCaseData tcd = new TestCaseData(args.ToArray()); // TestCaseData(Pair settingsDescriptorA, Pair settingsDescriptorB, int repeatCount, bool doTwoWay, bool executeBreak).
+				var tcd = new TestCaseData(args.ToArray()); // TestCaseData(Pair settingsDescriptorA, Pair settingsDescriptorB, int repeatCount, bool doTwoWay, bool executeBreak).
 
 				// Name:
 				tcd.SetName(loopbackSettings.Value3 + commandData.TestName);
@@ -118,9 +118,9 @@ namespace YAT.Model.Test.Transmission
 		{
 			get
 			{
-				foreach (Quadruple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string[]> loopbackSettings in Utilities.TransmissionSettings.SerialPortLoopbackPairs)
+				foreach (var loopbackSettings in Utilities.TransmissionSettings.SerialPortLoopbackPairs)
 				{
-					foreach (TestCaseData testCase in TestCases(loopbackSettings))
+					foreach (var testCase in TestCases(loopbackSettings))
 						yield return (testCase);
 				}
 			}
@@ -132,9 +132,9 @@ namespace YAT.Model.Test.Transmission
 		{
 			get
 			{
-				foreach (Quadruple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string[]> loopbackSettings in Utilities.TransmissionSettings.SerialPortLoopbackSelfs)
+				foreach (var loopbackSettings in Utilities.TransmissionSettings.SerialPortLoopbackSelfs)
 				{
-					foreach (TestCaseData testCase in TestCases(loopbackSettings))
+					foreach (var testCase in TestCases(loopbackSettings))
 						yield return (testCase);
 				}
 			}
@@ -145,9 +145,9 @@ namespace YAT.Model.Test.Transmission
 		{
 			get
 			{
-				foreach (Quadruple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string[]> loopbackSettings in Utilities.TransmissionSettings.IPLoopbackPairs)
+				foreach (var loopbackSettings in Utilities.TransmissionSettings.IPLoopbackPairs)
 				{
-					foreach (TestCaseData testCase in TestCases(loopbackSettings))
+					foreach (var testCase in TestCases(loopbackSettings))
 						yield return (testCase);
 				}
 			}
@@ -159,9 +159,9 @@ namespace YAT.Model.Test.Transmission
 		{
 			get
 			{
-				foreach (Quadruple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string[]> loopbackSettings in Utilities.TransmissionSettings.IPLoopbackSelfs)
+				foreach (var loopbackSettings in Utilities.TransmissionSettings.IPLoopbackSelfs)
 				{
-					foreach (TestCaseData testCase in TestCases(loopbackSettings))
+					foreach (var testCase in TestCases(loopbackSettings))
 						yield return (testCase);
 				}
 			}
@@ -272,9 +272,9 @@ namespace YAT.Model.Test.Transmission
 		                                        Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                        int repeatCount, bool doTwoWay, bool executeBreak)
 		{
-			TerminalSettingsRoot settingsA = settingsDescriptorA.Value1(settingsDescriptorA.Value2);
+			var settingsA = settingsDescriptorA.Value1(settingsDescriptorA.Value2);
 			settingsA.Send.DefaultLineRepeat = repeatCount; // Set settings to the desired repeat count.
-			using (Terminal terminalA = new Terminal(settingsA))
+			using (var terminalA = new Terminal(settingsA))
 			{
 				terminalA.MessageInputRequest += Utilities.TerminalMessageInputRequest;
 				if (!terminalA.Start())
@@ -291,9 +291,9 @@ namespace YAT.Model.Test.Transmission
 
 				if (settingsDescriptorB.Value1 != null) // Loopback pair.
 				{
-					TerminalSettingsRoot settingsB = settingsDescriptorB.Value1(settingsDescriptorB.Value2);
+					var settingsB = settingsDescriptorB.Value1(settingsDescriptorB.Value2);
 					settingsB.Send.DefaultLineRepeat = repeatCount; // Set settings to the desired repeat count.
-					using (Terminal terminalB = new Terminal(settingsB))
+					using (var terminalB = new Terminal(settingsB))
 					{
 						terminalB.MessageInputRequest += Utilities.TerminalMessageInputRequest;
 						if (!terminalB.Start())
@@ -323,7 +323,7 @@ namespace YAT.Model.Test.Transmission
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too many values to verify.")]
 		private static void PerformTransmission(Terminal terminalA, Terminal terminalB, int repeatCount, bool doTwoWay, bool executeBreak)
 		{
-			Types.Command command = new Types.Command(RepeatingTestData.TestCommand);
+			var command = new Types.Command(RepeatingTestData.TestCommand);
 
 			terminalA.SendText(command);
 			if (doTwoWay)
@@ -331,13 +331,13 @@ namespace YAT.Model.Test.Transmission
 
 			if (repeatCount >= 0) // Finite count.
 			{
-				Utilities.TestSet testSet = new Utilities.TestSet
-					(
+				var testSet = new Utilities.TestSet
+				(
 					command, repeatCount,
 					ArrayEx.CreateAndInitializeInstance<int>(repeatCount, 2), // Data + EOL
 					ArrayEx.CreateAndInitializeInstance<int>(repeatCount, RepeatingTestData.TestString.Length),
 					false
-					);
+				);
 
 				Utilities.WaitForTransmission(terminalA, terminalB, repeatCount); // Expected line count equals repeat count.
 				if (doTwoWay)
@@ -354,7 +354,7 @@ namespace YAT.Model.Test.Transmission
 			}
 			else // Random count.
 			{
-				Random r = new Random(RandomEx.NextPseudoRandomSeed());
+				var r = new Random(RandomEx.NextPseudoRandomSeed());
 				Thread.Sleep(r.Next(100, 10000)); // Something between 0.1..10 seconds to keep test execution fast.
 
 				// Break or stop:

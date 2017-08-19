@@ -2740,7 +2740,7 @@ namespace YAT.Domain
 		{
 			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
 			{
-				SerialPortErrorEventArgs serialPortErrorEventArgs = (e as SerialPortErrorEventArgs);
+				var serialPortErrorEventArgs = (e as SerialPortErrorEventArgs);
 				if (serialPortErrorEventArgs != null)
 				{
 					// Handle serial port errors whenever possible.

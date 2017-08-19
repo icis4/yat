@@ -144,7 +144,7 @@ namespace MKY.Test.Xml.Serialization
 		[Test]
 		public virtual void TestSimpleEnumExSerialization()
 		{
-#if (FALSE) // See 'summary' above.
+		#if (FALSE) // See 'summary' above.
 			string filePath;
 			OrientationEx x;
 
@@ -155,7 +155,7 @@ namespace MKY.Test.Xml.Serialization
 			filePath = Temp.MakeTempFilePath(GetType(), "SimpleEnumEx_1_Vertical", FileExtension);
 			x = (OrientationEx)Orientation.Vertical;
 			TestSerializationChain(filePath, typeof(OrientationEx), x);
-#endif
+		#endif
 		}
 
 		#endregion
@@ -174,7 +174,7 @@ namespace MKY.Test.Xml.Serialization
 		[Test]
 		public virtual void TestComplexEnumSerialization()
 		{
-#if (FALSE) // See 'summary' above.
+		#if (FALSE) // See 'summary' above.
 			string filePath;
 			SupportedEncoding e;
 
@@ -189,7 +189,7 @@ namespace MKY.Test.Xml.Serialization
 			filePath = Temp.MakeTempFilePath(GetType(), "ComplexEnum_UTF8_65001", FileExtension);
 			e = SupportedEncoding.UTF8;
 			TestSerializationChain(filePath, typeof(SupportedEncoding), e);
-#endif
+		#endif
 		}
 
 		#endregion
@@ -205,7 +205,7 @@ namespace MKY.Test.Xml.Serialization
 		[Test]
 		public virtual void TestComplexEnumExSerialization()
 		{
-#if (FALSE) // See 'summary' above.
+		#if (FALSE) // See 'summary' above.
 			string filePath;
 			EncodingEx x;
 
@@ -220,7 +220,7 @@ namespace MKY.Test.Xml.Serialization
 			filePath = Temp.MakeTempFilePath(GetType(), "ComplexEnumEx_UTF8_65001", FileExtension);
 			x = (EncodingEx)SupportedEncoding.UTF8;
 			TestSerializationChain(filePath, typeof(EncodingEx), x);
-#endif
+		#endif
 		}
 
 		#endregion
@@ -243,7 +243,7 @@ namespace MKY.Test.Xml.Serialization
 			filePath = Temp.MakeTempFilePath(GetType(), "ArrayEmpty", FileExtension);
 			string[] ae = new string[] { };
 			TestSerializationChain(filePath, typeof(string[]), ae);
-#if (FALSE)
+		#if (FALSE)
 			// Doesn't work, not supported for serialization.
 			filePath = Temp.MakeTempFilePath(GetType(), "MultiArray", FileExtension);
 			string[,] ma = new string[,]
@@ -252,7 +252,7 @@ namespace MKY.Test.Xml.Serialization
 						{ "B", "BB" },
 					};
 			TestSerialization(filePath, typeof(string[,]), ma);
-#endif
+		#endif
 			filePath = Temp.MakeTempFilePath(GetType(), "ArrayOfArraysOnInit", FileExtension);
 			string[][] aai = new string[][]
 					{
@@ -296,22 +296,22 @@ namespace MKY.Test.Xml.Serialization
 			filePath = Temp.MakeTempFilePath(GetType(), "ListEmpty", FileExtension);
 			List<string> le = new List<string>();
 			TestSerializationChain(filePath, typeof(List<string>), le);
-#if (FALSE)
+		#if (FALSE)
 			// Doesn't work, not supported for serialization.
 			filePath = Temp.MakeTempFilePath(GetType(), "ListOfArrays", FileExtension);
 			List<string[]> la = new List<string[]>(2); // Preset the required capacity to improve memory management.
 			la.Add(new string[] { "A", "AA" });
 			la.Add(new string[] { "B", "BB" });
 			Test_Serialization(filePath, typeof(List<string>), la);
-#endif
-#if (FALSE)
+		#endif
+		#if (FALSE)
 			// Doesn't work, not supported for serialization.
 			filePath = Temp.MakeTempFilePath(GetType(), "ListOfLists", FileExtension);
 			List<List<string>> ll = new List<List<string>>(2); // Preset the required capacity to improve memory management.
 			ll.Add(l);
 			ll.Add(l);
 			Test_Serialization(filePath, typeof(List<string>), ll);
-#endif
+		#endif
 		}
 
 		#endregion
@@ -327,22 +327,22 @@ namespace MKY.Test.Xml.Serialization
 		{
 			int i = 0;
 			string filePath;
-#if (FALSE)
+		#if (FALSE)
 			// Doesn't work, not supported for serialization.
 			filePath = Temp.MakeTempFilePath(GetType(), "Dictionary", FileExtension);
 			Dictionary<string, string> l = new Dictionary<string, string>(2); // Preset the required capacity to improve memory management.
 			l.Add("1", "A");
 			l.Add("2", "B");
 			TestSerialization(filePath, typeof(Dictionary<string, string>), l);
-#endif
-#if (FALSE)
+		#endif
+		#if (FALSE)
 			// Doesn't work, not supported for serialization.
 			filePath = Temp.MakeTempFilePath(GetType(), "DictionaryEmpty", FileExtension);
 			Dictionary<string, string> le = new Dictionary<string, string>(2); // Preset the required capacity to improve memory management.
 			l.Add("1", "A");
 			l.Add("2", "B");
 			TestSerialization(filePath, typeof(Dictionary<string, string>), le);
-#endif
+		#endif
 			filePath = Temp.MakeTempFilePath(GetType(), "DictionaryToArrayOfArrays", FileExtension);
 			Dictionary<string, string> l = new Dictionary<string, string>(2); // Preset the required capacity to improve memory management.
 			l.Add("1", "A");
