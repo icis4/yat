@@ -42,11 +42,11 @@ using YAT.Settings.Terminal;
 
 #endregion
 
-namespace YAT.Model.Test
+namespace YAT.Model.Test.Connection
 {
 	/// <summary></summary>
 	[TestFixture]
-	public class ConnectionTest
+	public class MTSicsDeviceTest
 	{
 		#region Constants
 		//==========================================================================================
@@ -97,7 +97,7 @@ namespace YAT.Model.Test
 
 		/// <summary></summary>
 		[Test, MTSicsDeviceAIsConnectedCategory]
-		public virtual void TestCloseReopenSerialPort()
+		public virtual void TestCloseReopen()
 		{
 			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
 				Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
@@ -214,14 +214,14 @@ namespace YAT.Model.Test
 
 		/// <summary></summary>
 		[Test, MTSicsDeviceAIsConnectedCategory, MinuteDurationCategory(1)]
-		public virtual void TestDisconnectReconnectSerialPort()
+		public virtual void TestDisconnectReconnect()
 		{
 			TestDisconnectReconnect(false); // See comments in MKY.IO.Ports.Test.TestDisconnectReconnect().
 		}
 
 		/// <summary></summary>
 		[Test, MTSicsDeviceAIsConnectedCategory, MinuteDurationCategory(1), Explicit("This test requires to manually reset the sending device beause it will remain in continuous mode as well as the port device because it cannot be opened until disconnected/reconnected!")]
-		public virtual void TestDisconnectReconnectSerialPortWithContinuousReceiving()
+		public virtual void TestDisconnectReconnectWithContinuousReceiving()
 		{
 			TestDisconnectReconnect(true); // See comments in MKY.IO.Ports.Test.TestDisconnectReconnect().
 		}
