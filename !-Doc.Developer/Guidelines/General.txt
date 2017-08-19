@@ -52,20 +52,14 @@ Use
 to permanently disable blocks of code.
 FALSE is never defined in C#, #if (FALSE) clearly states that block isn't in use.
 
-Write
-#if (FALSE)
-			<Block>
-#endif
-at column 0 to keep code structure clear of disabled block.
-
 Use
-#if (!DEBUG)
+#if (DEFINE | !DEFINE)
 			try
 			{
 #endif
 to enable or disable blocks of code depending on configuration switches or write preprocessor
 statements one level out of normal code structure to clearly show that these statements
-		#if (!DEBUG)
+		#if (DEFINE | !DEFINE)
 			try
 			{
 		#endif
