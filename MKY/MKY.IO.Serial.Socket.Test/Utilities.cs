@@ -155,41 +155,36 @@ namespace MKY.IO.Serial.Socket.Test
 
 		internal static void StartTcpServer(out TcpServer server, out int localPort)
 		{
-			// Create server and initiate asych start:
 			localPort = AvailableLocalTcpPort;
 			server = new TcpServer(IPNetworkInterface.Any, localPort);
-			if (!server.Start())
+			if (!server.Start()) // <= is initiated async!
 				Assert.Fail("TCP/IP server could not be started!");
 		}
 
 		internal static void StartTcpClient(out TcpClient client, int remotePort)
 		{
-			// Create client and initiate asych start:
 			client = new TcpClient(IPHost.Localhost, remotePort, IPNetworkInterface.Any);
-			if (!client.Start())
+			if (!client.Start()) // <= is initiated async!
 				Assert.Fail("TCP/IP client could not be started!");
 		}
 
 		internal static void StartTcpAutoSocketAsServer(out TcpAutoSocket autoSocket, out int localPort)
 		{
-			// Create AutoSocket and initiate asych start:
 			localPort = AvailableLocalTcpPort;
 			autoSocket = new TcpAutoSocket(IPHost.Localhost, localPort, IPNetworkInterface.Any, localPort);
-			if (!autoSocket.Start())
+			if (!autoSocket.Start()) // <= is initiated async!
 				Assert.Fail("TCP/IP AutoSocket could not be started!");
 		}
 
 		internal static void StartTcpAutoSocketAsClient(out TcpAutoSocket autoSocket, int remotePort)
 		{
-			// Create AutoSocket and initiate asych start:
 			autoSocket = new TcpAutoSocket(IPHost.Localhost, remotePort, IPNetworkInterface.Any, remotePort);
-			if (!autoSocket.Start())
+			if (!autoSocket.Start()) // <= is initiated async!
 				Assert.Fail("TCP/IP AutoSocket could not be started!");
 		}
 
 		internal static void StartUdpServer(out UdpSocket server, int localPort)
 		{
-			// Create socket and initiate asych start:
 			server = new UdpSocket(IPNetworkInterface.Any, localPort);
 			if (!server.Start())
 				Assert.Fail("UDP/IP server could not be started!");
@@ -197,7 +192,6 @@ namespace MKY.IO.Serial.Socket.Test
 
 		internal static void StartUdpClient(out UdpSocket client, int remotePort)
 		{
-			// Create socket and initiate asych start:
 			client = new UdpSocket(IPHost.Localhost, remotePort);
 			if (!client.Start())
 				Assert.Fail("UDP/IP client could not be started!");
@@ -205,7 +199,6 @@ namespace MKY.IO.Serial.Socket.Test
 
 		internal static void StartUdpPairSocket(out UdpSocket pairSocket, int remotePort, int localPort)
 		{
-			// Create socket and initiate asych start:
 			pairSocket = new UdpSocket(IPHost.Localhost, remotePort, IPNetworkInterface.Any, localPort);
 			if (!pairSocket.Start())
 				Assert.Fail("UDP/IP PairSocket could not be started!");
@@ -213,25 +206,21 @@ namespace MKY.IO.Serial.Socket.Test
 
 		internal static void StopTcpServer(TcpServer server)
 		{
-			// Initiate async stop:
-			server.Stop();
+			server.Stop(); // <= is initiated async!
 		}
 
 		internal static void StopTcpClient(TcpClient client)
 		{
-			// Initiate async stop:
-			client.Stop();
+			client.Stop(); // <= is initiated async!
 		}
 
 		internal static void StopTcpAutoSocket(TcpAutoSocket autoSocket)
 		{
-			// Initiate async stop:
-			autoSocket.Stop();
+			autoSocket.Stop(); // <= is initiated async!
 		}
 
 		internal static void StopUdpSocket(UdpSocket socket)
 		{
-			// Initiate async stop:
 			socket.Stop();
 		}
 
