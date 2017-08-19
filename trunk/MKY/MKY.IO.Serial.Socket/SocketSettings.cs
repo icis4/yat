@@ -77,7 +77,7 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		public static AutoInterval TcpClientAutoReconnectDefault
 		{
-			get { return (new AutoInterval(false, 500)); }
+			get { return (new AutoInterval(true, 500)); }
 		}
 
 		/// <summary></summary>
