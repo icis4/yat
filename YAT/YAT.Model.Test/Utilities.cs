@@ -296,12 +296,12 @@ namespace YAT.Model.Test
 			{
 				unchecked
 				{
-					int hashCode = Command.GetHashCode();
+					int hashCode = (Command != null ? Command.GetHashCode() : 0);
 
-					hashCode = (hashCode * 397) ^  ExpectedLineCount    .GetHashCode();
-					hashCode = (hashCode * 397) ^  ExpectedElementCounts.GetHashCode();
-					hashCode = (hashCode * 397) ^  ExpectedDataCounts   .GetHashCode();
-					hashCode = (hashCode * 397) ^  ExpectedAlsoApplyToA .GetHashCode();
+					hashCode = (hashCode * 397) ^  ExpectedLineCount                                    .GetHashCode();
+					hashCode = (hashCode * 397) ^ (ExpectedElementCounts != null ? ExpectedElementCounts.GetHashCode() : 0);
+					hashCode = (hashCode * 397) ^ (ExpectedDataCounts    != null ? ExpectedDataCounts   .GetHashCode() : 0);
+					hashCode = (hashCode * 397) ^  ExpectedAlsoApplyToA                                 .GetHashCode();
 
 					return (hashCode);
 				}
