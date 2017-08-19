@@ -21,14 +21,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Threading;
-
-using MKY.IO.Serial.Socket;
-
 using NUnit;
 using NUnit.Framework;
 
@@ -43,56 +35,108 @@ namespace MKY.IO.Serial.Socket.Test
 		// Tests
 		//==========================================================================================
 
-		#region Tests > ConsecutiveConnectAndShutdown()
+		#region Tests > ConsecutiveServerClientConnectAndShutdown()
 		//------------------------------------------------------------------------------------------
-		// Tests > ConsecutiveConnectAndShutdown()
+		// Tests > ConsecutiveServerClientConnectAndShutdown()
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
 		/// <remarks>
 		/// A cycle takes around 5 seconds. 10 cycles around a minute.
 		/// </remarks>
 		[Test]
 		[Repeat(10)]
 		[EnduranceCategory, MinuteDurationCategory(1)]
-		public virtual void TestConsecutiveConnectAndShutdownEndurance01Minute()
+		public virtual void TestConsecutiveServerClientConnectAndShutdownEndurance01Minute()
 		{
-			SimpleUdpConnectionTest t = new SimpleUdpConnectionTest();
-			t.TestConnectAndShutdown();
-			t.TestConnectAndShutdown();
-			t.TestConnectAndShutdown();
-			t.TestConnectAndShutdown();
-			t.TestConnectAndShutdown();
-			t.TestConnectAndShutdown();
-			t.TestConnectAndShutdown();
-			t.TestConnectAndShutdown();
+			var t = new SimpleUdpConnectionTest();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndClientShutdown();
 		}
 
 		/// <summary></summary>
 		[Test]
 		[Repeat(10)]
 		[EnduranceCategory, MinuteDurationCategory(10)]
-		public virtual void TestConsecutiveConnectAndShutdownEndurance10Minutes()
+		public virtual void TestConsecutiveServerClientConnectAndShutdownEndurance10Minutes()
 		{
-			TestConsecutiveConnectAndShutdownEndurance01Minute();
+			TestConsecutiveServerClientConnectAndShutdownEndurance01Minute();
 		}
 
 		/// <summary></summary>
 		[Test]
 		[Repeat(6)]
 		[EnduranceCategory, MinuteDurationCategory(60)]
-		public virtual void TestConsecutiveConnectAndShutdownEndurance60Minutes()
+		public virtual void TestConsecutiveServerClientConnectAndShutdownEndurance60Minutes()
 		{
-			TestConsecutiveConnectAndShutdownEndurance10Minutes();
+			TestConsecutiveServerClientConnectAndShutdownEndurance10Minutes();
 		}
 
 		/// <summary></summary>
 		[Test]
 		[Repeat(int.MaxValue)]
 		[EnduranceCategory, InfiniteDurationCategory]
-		public virtual void TestConsecutiveConnectAndShutdownEnduranceForever()
+		public virtual void TestConsecutiveServerClientConnectAndShutdownEnduranceForever()
 		{
-			TestConsecutiveConnectAndShutdownEndurance60Minutes();
+			TestConsecutiveServerClientConnectAndShutdownEndurance60Minutes();
+		}
+
+		#endregion
+
+		#region Tests > ConsecutivePairSocketPairSocketConnectAndShutdown()
+		//------------------------------------------------------------------------------------------
+		// Tests > ConsecutivePairSocketPairSocketConnectAndShutdown()
+		//------------------------------------------------------------------------------------------
+
+		/// <remarks>
+		/// A cycle takes around 5 seconds. 10 cycles around a minute.
+		/// </remarks>
+		[Test]
+		[Repeat(10)]
+		[EnduranceCategory, MinuteDurationCategory(1)]
+		public virtual void TestConsecutivePairSocketPairSocketConnectAndShutdownEndurance01Minute()
+		{
+			var t = new SimpleUdpConnectionTest();
+			t.TestPairSocketPairSocketConnectAndPairSocketBShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketAShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketAShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketBShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketBShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketAShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketAShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketBShutdown();
+		}
+
+		/// <summary></summary>
+		[Test]
+		[Repeat(10)]
+		[EnduranceCategory, MinuteDurationCategory(10)]
+		public virtual void TestConsecutivePairSocketPairSocketConnectAndShutdownEndurance10Minutes()
+		{
+			TestConsecutivePairSocketPairSocketConnectAndShutdownEndurance01Minute();
+		}
+
+		/// <summary></summary>
+		[Test]
+		[Repeat(6)]
+		[EnduranceCategory, MinuteDurationCategory(60)]
+		public virtual void TestConsecutivePairSocketPairSocketConnectAndShutdownEndurance60Minutes()
+		{
+			TestConsecutivePairSocketPairSocketConnectAndShutdownEndurance10Minutes();
+		}
+
+		/// <summary></summary>
+		[Test]
+		[Repeat(int.MaxValue)]
+		[EnduranceCategory, InfiniteDurationCategory]
+		public virtual void TestConsecutivePairSocketPairSocketConnectAndShutdownEnduranceForever()
+		{
+			TestConsecutivePairSocketPairSocketConnectAndShutdownEndurance60Minutes();
 		}
 
 		#endregion
