@@ -857,6 +857,7 @@ namespace YAT.View.Controls
 				// Local filter:
 				if (!DesignMode && Enabled && ((SocketTypeEx)this.socketType).IsUdp)
 				{
+					label_LocalFilter.Visible = true;
 					comboBox_LocalFilter.Visible = true;
 					switch (this.socketType)
 					{
@@ -900,6 +901,7 @@ namespace YAT.View.Controls
 				}
 				else
 				{
+					label_LocalFilter.Visible = false;
 					comboBox_LocalFilter.Visible = false;
 					comboBox_LocalFilter.Enabled = false;
 					comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
