@@ -1207,7 +1207,7 @@ namespace YAT.Settings.Test
 			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortA == "COM1")
 			{
 				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortAIsAvailable)
-					Assert.That(terminal.IsOpen, Is.True, "Terminal is not open on COM1!");
+					Assert.That(terminal.IsOpen, "Terminal is not open on COM1!");
 				else
 					Assert.Ignore("'PortA' is configured to 'COM1' but isn't available on this machine, therefore this test is excluded.");
 					//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -1236,7 +1236,7 @@ namespace YAT.Settings.Test
 			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortB == "COM2")
 			{
 				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortBIsAvailable)
-					Assert.That(terminal.IsOpen, Is.True, "Terminal is not open on COM2!");
+					Assert.That(terminal.IsOpen, "Terminal is not open on COM2!");
 				else
 					Assert.Ignore("'PortB' is configured to 'COM2' but isn't available on this machine, therefore this test is excluded.");
 					//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.

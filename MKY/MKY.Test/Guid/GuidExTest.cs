@@ -80,12 +80,12 @@ namespace MKY.Test.Guid
 			System.Guid actualGuid;
 			if (GuidEx.TryParseTolerantly(s, out actualGuid))
 			{
-				Assert.That(isValid, Is.True);
+				Assert.That(isValid);
 				Assert.That(actualGuid, Is.EqualTo(expectedGuid));
 			}
 			else
 			{
-				Assert.That(isValid, Is.False);
+				Assert.That(!isValid);
 			}
 		}
 

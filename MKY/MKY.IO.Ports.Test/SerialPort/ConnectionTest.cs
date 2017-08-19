@@ -89,17 +89,17 @@ namespace MKY.IO.Ports.Test.SerialPort
 			port.NewLine = "\r\n"; // <CR><LF>
 			port.PortName = portName;
 			port.Open();
-			Assert.That(port.IsOpen, Is.True);
+			Assert.That(port.IsOpen);
 
 			// --- Test: Close/Reopen without sending. ---------------------------------------------
 
 			// Close and reopen port. Expected: No exceptions, port can be closed and reopened.
 			Thread.Sleep(WaitForOperation);
 			port.Close();
-			Assert.That(port.IsOpen, Is.False);
+			Assert.That(!port.IsOpen);
 			Thread.Sleep(WaitForOperation);
 			port.Open();
-			Assert.That(port.IsOpen, Is.True);
+			Assert.That(port.IsOpen);
 
 			// --- Test: Close/Reopen with previous and subsequent sending. ------------------------
 
@@ -111,10 +111,10 @@ namespace MKY.IO.Ports.Test.SerialPort
 			// Close and reopen port. Expected: No exceptions, port can be closed and reopened.
 			Thread.Sleep(WaitForOperation);
 			port.Close();
-			Assert.That(port.IsOpen, Is.False);
+			Assert.That(!port.IsOpen);
 			Thread.Sleep(WaitForOperation);
 			port.Open();
-			Assert.That(port.IsOpen, Is.True);
+			Assert.That(port.IsOpen);
 
 			// Send something and verify response:
 			port.WriteLine(""); // Perform empty request.
@@ -132,10 +132,10 @@ namespace MKY.IO.Ports.Test.SerialPort
 			// Close and reopen port. Expected: No exceptions, port can be closed and reopened.
 			Thread.Sleep(WaitForOperation);
 			port.Close();
-			Assert.That(port.IsOpen, Is.False);
+			Assert.That(!port.IsOpen);
 			Thread.Sleep(WaitForOperation);
 			port.Open();
-			Assert.That(port.IsOpen, Is.True);
+			Assert.That(port.IsOpen);
 
 			// Stop continuous data:
 			port.Write(new byte[] { 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
@@ -145,7 +145,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			// Close and dispose port. Expected: No exceptions, port can be closed and disposed.
 			Thread.Sleep(WaitForOperation);
 			port.Close();
-			Assert.That(port.IsOpen, Is.False);
+			Assert.That(!port.IsOpen);
 			port.Dispose();
 			Thread.Sleep(WaitForOperation); // Wait to prevent issues in subsequent test cases.
 		}
@@ -211,26 +211,26 @@ namespace MKY.IO.Ports.Test.SerialPort
 			port.NewLine = "\r\n"; // <CR><LF>
 			port.PortName = portName;
 			port.Open();
-			Assert.That(port.IsOpen, Is.True);
+			Assert.That(port.IsOpen);
 
 			// --- Test: Disconnect/Reconnect without sending. -------------------------------------
 
 			// Disconnect USB/RS-232 converter. Expected: No exceptions, port is closed:
 			Assert.That(UsbHubControl.Set(UsbHubSettings.None), Is.True, "Failed to modify USB hub!"); // Disabling all outputs is used to improve speed when enabling single outputs below. See comments in implementation of 'UsbHubControl' for explanation.
-			Assert.That(port.IsOpen, Is.False);
+			Assert.That(!port.IsOpen);
 
 			// Reconnect USB/RS-232 converter. Expected: No exceptions, port can be reopened.
 			Assert.That(UsbHubControl.Enable(portOut), Is.True, "Failed to modify USB hub!");
 			port.Open();
-			Assert.That(port.IsOpen, Is.True);
+			Assert.That(port.IsOpen);
 
 			// Close and reopen port. Expected: No exceptions, port can be closed and reopened.
 			Thread.Sleep(WaitForOperation);
 			port.Close();
-			Assert.That(port.IsOpen, Is.False);
+			Assert.That(!port.IsOpen);
 			Thread.Sleep(WaitForOperation);
 			port.Open();
-			Assert.That(port.IsOpen, Is.True);
+			Assert.That(port.IsOpen);
 
 			// --- Test: Disconnect/Reconnect with previous and subsequent sending. ----------------
 
@@ -241,12 +241,12 @@ namespace MKY.IO.Ports.Test.SerialPort
 
 			// Disconnect USB/RS-232 converter. Expected: No exceptions, port is closed:
 			Assert.That(UsbHubControl.Disable(portOut), Is.True, "Failed to modify USB hub!");
-			Assert.That(port.IsOpen, Is.False);
+			Assert.That(!port.IsOpen);
 
 			// Reconnect USB/RS-232 converter. Expected: No exceptions, port can be reopened.
 			Assert.That(UsbHubControl.Enable(portOut), Is.True, "Failed to modify USB hub!");
 			port.Open();
-			Assert.That(port.IsOpen, Is.True);
+			Assert.That(port.IsOpen);
 
 			// Send something and verify response:
 			port.WriteLine(""); // Perform empty request.
@@ -256,10 +256,10 @@ namespace MKY.IO.Ports.Test.SerialPort
 			// Close and reopen port. Expected: No exceptions, port can be closed and reopened.
 			Thread.Sleep(WaitForOperation);
 			port.Close();
-			Assert.That(port.IsOpen, Is.False);
+			Assert.That(!port.IsOpen);
 			Thread.Sleep(WaitForOperation);
 			port.Open();
-			Assert.That(port.IsOpen, Is.True);
+			Assert.That(port.IsOpen);
 
 			// Send something and verify response:
 			port.WriteLine(""); // Perform empty request.
@@ -279,7 +279,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 
 				// Disconnect USB/RS-232 converter. Expected: No exceptions, port is closed:
 				Assert.That(UsbHubControl.Disable(portOut), Is.True, "Failed to modify USB hub!");
-			////Assert.That(port.IsOpen, Is.False);
+			////Assert.That(!port.IsOpen);
 
 				// \remind: The port should be closed here. However, this doesn't work due to the 
 				// issue documented in the header of 'SerialPortEx'. The assertion above actually
@@ -300,7 +300,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 				// Reconnect USB/RS-232 converter. Expected: No exceptions, port can be reopened.
 				Assert.That(UsbHubControl.Enable(portOut), Is.True, "Failed to modify USB hub!");
 				port.Open();
-				Assert.That(port.IsOpen, Is.True);
+				Assert.That(port.IsOpen);
 
 				// Stop continuous data:
 				port.Write(new byte[] { 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
@@ -311,7 +311,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			// Close and dispose port. Expected: No exceptions, port can be closed and disposed.
 			Thread.Sleep(WaitForOperation);
 			port.Close();
-			Assert.That(port.IsOpen, Is.False);
+			Assert.That(!port.IsOpen);
 			port.Dispose();
 			Thread.Sleep(WaitForOperation); // Wait to prevent issues in subsequent test cases.
 
