@@ -63,12 +63,16 @@ namespace MKY.IO.Serial.Socket.Test
 			Utilities.StartTcpClient(out client, serverPort);
 			Utilities.WaitForStart(client, "TCP/IP client could not be started!");
 			Utilities.WaitForConnect(client, server, "TCP/IP client could not be connected to server!");
+			Utilities.AssertStartedAndTransmissive(client);
+			Utilities.AssertStartedAndTransmissive(server);
 
 			Utilities.StopTcpClient(client);
 			Utilities.WaitForDisconnect(server, client, "TCP/IP server is not disconnected!");
 			Utilities.WaitForStop(client, "TCP/IP client could not be stopped!");
+			Utilities.AssertStopped(client);
 			Utilities.StopTcpServer(server);
 			Utilities.WaitForStop(server, "TCP/IP server could not be stopped!");
+			Utilities.AssertStopped(server);
 		}
 
 		#endregion
@@ -91,12 +95,16 @@ namespace MKY.IO.Serial.Socket.Test
 			Utilities.StartTcpClient(out client, serverPort);
 			Utilities.WaitForStart(client, "TCP/IP client could not be started!");
 			Utilities.WaitForConnect(client, server, "TCP/IP client could not be connected to server!");
+			Utilities.AssertStartedAndTransmissive(client);
+			Utilities.AssertStartedAndTransmissive(server);
 
 			Utilities.StopTcpServer(server);
 			Utilities.WaitForDisconnect(client, server, "TCP/IP client is not disconnected!");
 			Utilities.WaitForStop(server, "TCP/IP server could not be stopped!");
+			Utilities.AssertStopped(server);
 			Utilities.StopTcpClient(client);
 			Utilities.WaitForStop(client, "TCP/IP client could not be stopped!");
+			Utilities.AssertStopped(client);
 		}
 
 		#endregion
@@ -119,12 +127,16 @@ namespace MKY.IO.Serial.Socket.Test
 			Utilities.StartTcpAutoSocketAsClient(out autoSocket, serverPort);
 			Utilities.WaitForStart(autoSocket, "TCP/IP AutoSocket could not be started!");
 			Utilities.WaitForConnect(autoSocket, server, "TCP/IP AutoSocket could not be connected to server!");
+			Utilities.AssertStartedAndTransmissive(autoSocket);
+			Utilities.AssertStartedAndTransmissive(server);
 
 			Utilities.StopTcpAutoSocket(autoSocket);
 			Utilities.WaitForDisconnect(server, autoSocket, "TCP/IP server is not disconnected!");
 			Utilities.WaitForStop(autoSocket, "TCP/IP AutoSocket could not be stopped!");
+			Utilities.AssertStopped(autoSocket);
 			Utilities.StopTcpServer(server);
 			Utilities.WaitForStop(server, "TCP/IP server could not be stopped!");
+			Utilities.AssertStopped(server);
 		}
 
 		#endregion
@@ -147,12 +159,16 @@ namespace MKY.IO.Serial.Socket.Test
 			Utilities.StartTcpAutoSocketAsClient(out autoSocket, serverPort);
 			Utilities.WaitForStart(autoSocket, "TCP/IP AutoSocket could not be started!");
 			Utilities.WaitForConnect(autoSocket, server, "TCP/IP AutoSocket could not be connected to server!");
+			Utilities.AssertStartedAndTransmissive(autoSocket);
+			Utilities.AssertStartedAndTransmissive(server);
 
 			Utilities.StopTcpServer(server);
 			Utilities.WaitForDisconnect(autoSocket, server, "TCP/IP AutoSocket is not disconnected!");
 			Utilities.WaitForStop(server, "TCP/IP server could not be stopped!");
+			Utilities.AssertStopped(server);
 			Utilities.StopTcpAutoSocket(autoSocket);
 			Utilities.WaitForStop(autoSocket, "TCP/IP AutoSocket could not be stopped!");
+			Utilities.AssertStopped(autoSocket);
 		}
 
 		#endregion
@@ -176,12 +192,16 @@ namespace MKY.IO.Serial.Socket.Test
 			Utilities.StartTcpClient(out client, serverPort);
 			Utilities.WaitForStart(client, "TCP/IP client could not be started!");
 			Utilities.WaitForConnect(client, autoSocket, "TCP/IP client could not be connected to server!");
+			Utilities.AssertStartedAndTransmissive(client);
+			Utilities.AssertStartedAndTransmissive(autoSocket);
 
 			Utilities.StopTcpClient(client);
 			Utilities.WaitForDisconnect(autoSocket, client, "TCP/IP AutoSocket is not disconnected!");
 			Utilities.WaitForStop(client, "TCP/IP client could not be stopped!");
+			Utilities.AssertStopped(client);
 			Utilities.StopTcpAutoSocket(autoSocket);
 			Utilities.WaitForStop(autoSocket, "TCP/IP AutoSocket could not be stopped!");
+			Utilities.AssertStopped(autoSocket);
 		}
 
 		#endregion
@@ -205,12 +225,16 @@ namespace MKY.IO.Serial.Socket.Test
 			Utilities.StartTcpClient(out client, serverPort);
 			Utilities.WaitForStart(client, "TCP/IP client could not be started!");
 			Utilities.WaitForConnect(client, autoSocket, "TCP/IP client could not be connected to server");
+			Utilities.AssertStartedAndTransmissive(client);
+			Utilities.AssertStartedAndTransmissive(autoSocket);
 
 			Utilities.StopTcpAutoSocket(autoSocket);
 			Utilities.WaitForDisconnect(client, autoSocket, "TCP/IP client is not disconnected!");
 			Utilities.WaitForStop(autoSocket, "TCP/IP AutoSocket could not be stopped!");
+			Utilities.AssertStopped(autoSocket);
 			Utilities.StopTcpClient(client);
 			Utilities.WaitForStop(client, "TCP/IP client could not be stopped!");
+			Utilities.AssertStopped(client);
 		}
 
 		#endregion
@@ -233,12 +257,16 @@ namespace MKY.IO.Serial.Socket.Test
 			Utilities.StartTcpAutoSocketAsClient(out autoSocketB, serverPort);
 			Utilities.WaitForStart(autoSocketB, "TCP/IP AutoSocket B could not be started!");
 			Utilities.WaitForConnect(autoSocketB, autoSocketA, "TCP/IP AutoSocket B could not be connected to AutoSocket A!");
+			Utilities.AssertStartedAndTransmissive(autoSocketB);
+			Utilities.AssertStartedAndTransmissive(autoSocketA);
 
 			Utilities.StopTcpAutoSocket(autoSocketB);
 			Utilities.WaitForDisconnect(autoSocketA, autoSocketB, "TCP/IP AutoSocket A is not disconnected!");
 			Utilities.WaitForStop(autoSocketB, "TCP/IP AutoSocket B could not be stopped!");
+			Utilities.AssertStopped(autoSocketB);
 			Utilities.StopTcpAutoSocket(autoSocketA);
 			Utilities.WaitForStop(autoSocketA, "TCP/IP AutoSocket A could not be stopped!");
+			Utilities.AssertStopped(autoSocketA);
 		}
 
 		#endregion
@@ -261,12 +289,16 @@ namespace MKY.IO.Serial.Socket.Test
 			Utilities.StartTcpAutoSocketAsClient(out autoSocketB, serverPort);
 			Utilities.WaitForStart(autoSocketB, "TCP/IP AutoSocket B could not be started!");
 			Utilities.WaitForConnect(autoSocketB, autoSocketA, "TCP/IP AutoSocket B could not be connected to AutoSocket A!");
+			Utilities.AssertStartedAndTransmissive(autoSocketB);
+			Utilities.AssertStartedAndTransmissive(autoSocketA);
 
 			Utilities.StopTcpAutoSocket(autoSocketA);
 			Utilities.WaitForDisconnect(autoSocketB, autoSocketA, "TCP/IP AutoSocket B is not disconnected!");
 			Utilities.WaitForStop(autoSocketA, "TCP/IP AutoSocket A could not be stopped!");
+			Utilities.AssertStopped(autoSocketA);
 			Utilities.StopTcpAutoSocket(autoSocketB);
 			Utilities.WaitForStop(autoSocketB, "TCP/IP AutoSocket B could not be stopped!");
+			Utilities.AssertStopped(autoSocketB);
 		}
 
 		#endregion

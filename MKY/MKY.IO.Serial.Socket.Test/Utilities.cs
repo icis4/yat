@@ -27,6 +27,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading;
 
+using MKY.Net;
 using NUnit.Framework;
 
 namespace MKY.IO.Serial.Socket.Test
@@ -78,6 +79,35 @@ namespace MKY.IO.Serial.Socket.Test
 			}
 		}
 
+		internal static int AvailableLocalUdpPort
+		{
+			get
+			{
+				IPGlobalProperties properties = IPGlobalProperties.GetIPGlobalProperties();
+				IPEndPoint[] listeners = properties.GetActiveUdpListeners();
+
+				int port;
+				for (port = 10000; port <= IPEndPoint.MaxPort; port++)
+				{
+					bool found = false;
+					foreach (IPEndPoint ep in listeners)
+					{
+						if (ep.Port == port)
+						{
+							found = true;
+							break;
+						}
+					}
+
+					if (!found)
+						return (port);
+				}
+
+				throw (new OverflowException("No local UDP ports available within range of 10000 through " + IPEndPoint.MaxPort + "!"));
+			}
+		}
+
+		/// <remarks>Separate method needed to ensure that two separate ports are found.</remarks>
 		internal static void GetAvailableLocalUdpPorts(out int portA, out int portB)
 		{
 			portA = 0;
@@ -127,7 +157,7 @@ namespace MKY.IO.Serial.Socket.Test
 		{
 			// Create server and initiate asych start:
 			localPort = AvailableLocalTcpPort;
-			server = new TcpServer(IPAddress.Loopback, localPort);
+			server = new TcpServer(IPNetworkInterface.Any, localPort);
 			if (!server.Start())
 				Assert.Fail("TCP/IP server could not be started!");
 		}
@@ -135,7 +165,7 @@ namespace MKY.IO.Serial.Socket.Test
 		internal static void StartTcpClient(out TcpClient client, int remotePort)
 		{
 			// Create client and initiate asych start:
-			client = new TcpClient(IPAddress.Loopback, remotePort, IPAddress.Any);
+			client = new TcpClient(IPHost.Localhost, remotePort, IPNetworkInterface.Any);
 			if (!client.Start())
 				Assert.Fail("TCP/IP client could not be started!");
 		}
@@ -144,7 +174,7 @@ namespace MKY.IO.Serial.Socket.Test
 		{
 			// Create AutoSocket and initiate asych start:
 			localPort = AvailableLocalTcpPort;
-			autoSocket = new TcpAutoSocket(IPAddress.Loopback, localPort, IPAddress.Any, localPort);
+			autoSocket = new TcpAutoSocket(IPHost.Localhost, localPort, IPNetworkInterface.Any, localPort);
 			if (!autoSocket.Start())
 				Assert.Fail("TCP/IP AutoSocket could not be started!");
 		}
@@ -152,15 +182,31 @@ namespace MKY.IO.Serial.Socket.Test
 		internal static void StartTcpAutoSocketAsClient(out TcpAutoSocket autoSocket, int remotePort)
 		{
 			// Create AutoSocket and initiate asych start:
-			autoSocket = new TcpAutoSocket(IPAddress.Loopback, remotePort, IPAddress.Any, remotePort);
+			autoSocket = new TcpAutoSocket(IPHost.Localhost, remotePort, IPNetworkInterface.Any, remotePort);
 			if (!autoSocket.Start())
 				Assert.Fail("TCP/IP AutoSocket could not be started!");
+		}
+
+		internal static void StartUdpServer(out UdpSocket server, int localPort)
+		{
+			// Create socket and initiate asych start:
+			server = new UdpSocket(IPNetworkInterface.Any, localPort);
+			if (!server.Start())
+				Assert.Fail("UDP/IP server could not be started!");
+		}
+
+		internal static void StartUdpClient(out UdpSocket client, int remotePort)
+		{
+			// Create socket and initiate asych start:
+			client = new UdpSocket(IPHost.Localhost, remotePort);
+			if (!client.Start())
+				Assert.Fail("UDP/IP client could not be started!");
 		}
 
 		internal static void StartUdpPairSocket(out UdpSocket pairSocket, int remotePort, int localPort)
 		{
 			// Create socket and initiate asych start:
-			pairSocket = new UdpSocket(IPAddress.Loopback, remotePort, IPAddress.Any, localPort);
+			pairSocket = new UdpSocket(IPHost.Localhost, remotePort, IPNetworkInterface.Any, localPort);
 			if (!pairSocket.Start())
 				Assert.Fail("UDP/IP PairSocket could not be started!");
 		}
@@ -196,7 +242,7 @@ namespace MKY.IO.Serial.Socket.Test
 		// Wait
 		//==========================================================================================
 
-		internal static void WaitForStart(IO.Serial.IIOProvider io, string message)
+		internal static void WaitForStart(IIOProvider io, string message)
 		{
 			int timeout = 0;
 			do
@@ -224,7 +270,7 @@ namespace MKY.IO.Serial.Socket.Test
 			while (!(io.IsStarted && io.IsServer));
 		}
 
-		internal static void WaitForConnect(IO.Serial.IIOProvider ioA, IO.Serial.IIOProvider ioB, string message)
+		internal static void WaitForConnect(IIOProvider ioA, IIOProvider ioB, string message)
 		{
 			int timeout = 0;
 			do
@@ -238,7 +284,7 @@ namespace MKY.IO.Serial.Socket.Test
 			while (!ioA.IsConnected && !ioB.IsConnected);
 		}
 
-		internal static void WaitForDisconnect(IO.Serial.IIOProvider ioA, IO.Serial.IIOProvider ioB, string message)
+		internal static void WaitForDisconnect(IIOProvider ioA, IIOProvider ioB, string message)
 		{
 			int timeout = 0;
 			do
@@ -252,7 +298,7 @@ namespace MKY.IO.Serial.Socket.Test
 			while (ioA.IsConnected || ioB.IsConnected);
 		}
 
-		internal static void WaitForStop(IO.Serial.IIOProvider io, string message)
+		internal static void WaitForStop(IIOProvider io, string message)
 		{
 			int timeout = 0;
 			do
@@ -264,6 +310,36 @@ namespace MKY.IO.Serial.Socket.Test
 					Assert.Fail(message);
 			}
 			while (io.IsStarted);
+		}
+
+		#endregion
+
+		#region Assert
+		//==========================================================================================
+		// Assert
+		//==========================================================================================
+
+		internal static void AssertStartedAndConnected(IIOProvider io)
+		{
+			Assert.That(io.IsStarted);
+			Assert.That(io.IsOpen);
+			Assert.That(io.IsConnected);
+		}
+
+		internal static void AssertStartedAndTransmissive(IIOProvider io)
+		{
+			Assert.That(io.IsStarted);
+			Assert.That(io.IsOpen);
+			Assert.That(io.IsConnected);
+			Assert.That(io.IsTransmissive);
+		}
+
+		internal static void AssertStopped(IIOProvider io)
+		{
+			Assert.That(io.IsStopped);
+			Assert.That(!io.IsOpen);
+			Assert.That(!io.IsConnected);
+			Assert.That(!io.IsTransmissive);
 		}
 
 		#endregion

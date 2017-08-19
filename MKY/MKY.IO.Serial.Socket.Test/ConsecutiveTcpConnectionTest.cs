@@ -21,14 +21,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Threading;
-
-using MKY.IO.Serial.Socket;
-
 using NUnit;
 using NUnit.Framework;
 
@@ -48,7 +40,6 @@ namespace MKY.IO.Serial.Socket.Test
 		// Tests > ConsecutiveServerClientConnectAndShutdown()
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
 		/// <remarks>
 		/// A cycle takes around 15 seconds. 4 cycles around a minute.
 		/// </remarks>
@@ -57,7 +48,7 @@ namespace MKY.IO.Serial.Socket.Test
 		[EnduranceCategory, MinuteDurationCategory(1)]
 		public virtual void TestConsecutiveServerClientConnectAndShutdownEndurance01Minute()
 		{
-			SimpleTcpConnectionTest t = new SimpleTcpConnectionTest();
+			var t = new SimpleTcpConnectionTest();
 			t.TestServerClientConnectAndClientShutdown();
 			t.TestServerClientConnectAndServerShutdown();
 			t.TestServerClientConnectAndServerShutdown();
@@ -102,7 +93,6 @@ namespace MKY.IO.Serial.Socket.Test
 		// Tests > ConsecutiveAutoSocketAutoSocketConnectAndShutdown()
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
 		/// <remarks>
 		/// A cycle takes around 15 seconds. 4 cycles around a minute.
 		/// </remarks>
@@ -111,7 +101,7 @@ namespace MKY.IO.Serial.Socket.Test
 		[EnduranceCategory, MinuteDurationCategory(1)]
 		public virtual void TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEndurance01Minute()
 		{
-			SimpleTcpConnectionTest t = new SimpleTcpConnectionTest();
+			var t = new SimpleTcpConnectionTest();
 			t.TestAutoSocketAutoSocketConnectAndAutoSocketBShutdown();
 			t.TestAutoSocketAutoSocketConnectAndAutoSocketAShutdown();
 			t.TestAutoSocketAutoSocketConnectAndAutoSocketAShutdown();
