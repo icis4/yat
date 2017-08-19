@@ -73,9 +73,9 @@ namespace YAT.Model.Test
 				{
 					foreach (MKY.IO.Ports.Test.SerialPortPairConfigurationElement ce in MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackPairs)
 					{
-						TerminalSettingsDelegate<string> tsm = new TerminalSettingsDelegate<string>(GetStartedTextSerialPortSettings);
-						Pair<TerminalSettingsDelegate<string>, string> pA = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortA);
-						Pair<TerminalSettingsDelegate<string>, string> pB = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortB);
+						var tsm = new TerminalSettingsDelegate<string>(GetStartedTextSerialPortSettings);
+						var pA = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortA);
+						var pB = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortB);
 						string name = "SerialPortLoopbackPairs_" + ce.PortA + "_" + ce.PortB;
 						string[] cats = { MKY.IO.Ports.Test.ConfigurationCategoryStrings.LoopbackPairsAreAvailable };
 						yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>(pA, pB, name, cats));
@@ -92,9 +92,9 @@ namespace YAT.Model.Test
 				{
 					foreach (MKY.IO.Ports.Test.SerialPortConfigurationElement ce in MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackSelfs)
 					{
-						TerminalSettingsDelegate<string> tsm = new TerminalSettingsDelegate<string>(GetStartedTextSerialPortSettings);
-						Pair<TerminalSettingsDelegate<string>, string> pA = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.Port);
-						Pair<TerminalSettingsDelegate<string>, string> pB = new Pair<TerminalSettingsDelegate<string>, string>(null, null);
+						var tsm = new TerminalSettingsDelegate<string>(GetStartedTextSerialPortSettings);
+						var pA = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.Port);
+						var pB = new Pair<TerminalSettingsDelegate<string>, string>(null, null);
 						string name = "SerialPortLoopbackSelf_" + ce.Port;
 						string[] cats = { MKY.IO.Ports.Test.ConfigurationCategoryStrings.LoopbackSelfsAreAvailable };
 						yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>(pA, pB, name, cats));
@@ -102,34 +102,119 @@ namespace YAT.Model.Test
 				}
 			}
 
+			/// <summary>
+			/// Returns settings tuples for TCP/IP and UDP/IP Client/Server as well as AutoSocket.
+			/// </summary>
+			/// <remarks>
+			/// TCP/IP combinations Server/AutoSocket and AutoSocket/Client are skipped as they don't really offer additional test coverage.
+			/// UPD/IP PairSocket is also skipped as that would require additional settings with different ports, and they are tested further below anyway.
+			/// </remarks>
+			[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too many values to verify.")]
+			[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
+			[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too many values to verify.")]
+			[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
+			public static IEnumerable<Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>> IPLoopbackPairs
+			{
+				get
+				{
+					// TCP/IP Client/Server
+
+					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpClientOnIPv4LoopbackSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpServerOnIPv4LoopbackSettings, null),
+					              "TcpClientServer_IPv4Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4LoopbackIsAvailable }));
+
+					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpClientOnIPv6LoopbackSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpServerOnIPv6LoopbackSettings, null),
+					              "TcpClientServer_IPv6Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6LoopbackIsAvailable }));
+
+					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpClientOnIPv4SpecificInterfaceSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpServerOnIPv4SpecificInterfaceSettings, null),
+					              "TcpClientServer_IPv4SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4SpecificInterfaceIsAvailable }));
+
+					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpClientOnIPv6SpecificInterfaceSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpServerOnIPv6SpecificInterfaceSettings, null),
+					              "TcpClientServer_IPv6SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable }));
+
+					// TCP/IP AutoSocket
+
+					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings, null),
+					              "TcpAutoSocket_IPv4Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4LoopbackIsAvailable }));
+
+					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings, null),
+					              "TcpAutoSocket_IPv6Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6LoopbackIsAvailable }));
+
+					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings, null),
+					              "TcpAutoSocket_IPv4SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4SpecificInterfaceIsAvailable }));
+
+					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings, null),
+					              "TcpAutoSocket_IPv6SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable }));
+
+					// UDP/IP Client/Server
+
+					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpClientOnIPv4LoopbackSettings, null), // Client must be the first as that is used for sending first.
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpServerOnIPv4LoopbackSettings, null),
+					              "UdpClientServer_IPv4Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4LoopbackIsAvailable }));
+
+					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpClientOnIPv6LoopbackSettings, null), // Client must be the first as that is used for sending first.
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpServerOnIPv6LoopbackSettings, null),
+					              "UdpClientServer_IPv6Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6LoopbackIsAvailable }));
+
+					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpClientOnIPv4SpecificInterfaceSettings, null), // Client must be the first as that is used for sending first.
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpServerOnIPv4SpecificInterfaceSettings, null),
+					              "UdpClientServer_IPv4SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4SpecificInterfaceIsAvailable }));
+
+					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpClientOnIPv6SpecificInterfaceSettings, null), // Client must be the first as that is used for sending first.
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpServerOnIPv6SpecificInterfaceSettings, null),
+					              "UdpClientServer_IPv6SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable }));
+				}
+			}
+
+
 			/// <summary></summary>
 			[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too many values to verify.")]
 			[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
 			[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too many values to verify.")]
 			[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
-			public static IEnumerable<Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>> IPLoopbacks
+			[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
+			public static IEnumerable<Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>> IPLoopbackSelfs
 			{
 				get
 				{
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings, null),
-					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings, null),
-					              "IPv4Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4LoopbackIsAvailable }));
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpPairSocketOnIPv4LoopbackSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(null, null),
+					              "UdpPairSocket_IPv4Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4LoopbackIsAvailable }));
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings, null),
-					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings, null),
-					              "IPv6Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6LoopbackIsAvailable }));
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpPairSocketOnIPv6LoopbackSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(null, null),
+					              "UdpPairSocket_IPv6Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6LoopbackIsAvailable }));
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings, null),
-					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings, null),
-					              "IPv4SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4SpecificInterfaceIsAvailable }));
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpPairSocketOnIPv4SpecificInterfaceSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(null, null),
+					              "UdpPairSocket_IPv4SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4SpecificInterfaceIsAvailable }));
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings, null),
-					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings, null),
-					              "IPv6SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable }));
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpPairSocketOnIPv6SpecificInterfaceSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(null, null),
+					              "UdpPairSocket_IPv6SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable }));
 				}
 			}
 		}
@@ -396,24 +481,155 @@ namespace YAT.Model.Test
 		// Settings > Socket
 		//------------------------------------------------------------------------------------------
 
-		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketSettings(string networkInterface)
+		internal static TerminalSettingsRoot GetStartedTextSettings(Domain.IOType type, string networkInterface)
 		{
-			return (GetStartedTextTcpAutoSocketSettings((IPNetworkInterfaceEx)networkInterface));
+			return (GetStartedTextSettings(type, (IPNetworkInterfaceEx)networkInterface));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketSettings(IPNetworkInterfaceEx networkInterface)
+		internal static TerminalSettingsRoot GetStartedTextSettings(Domain.IOType type, IPNetworkInterfaceEx networkInterface)
 		{
 			var settings = new TerminalSettingsRoot();
 			settings.TerminalType = Domain.TerminalType.Text;
-			settings.Terminal.IO.IOType = Domain.IOType.TcpAutoSocket;
+			settings.Terminal.IO.IOType = type;
 			settings.Terminal.IO.Socket.LocalInterface = networkInterface;
 			settings.TerminalIsStarted = true;
 			return (settings);
 		}
 
+		#region Settings > Socket > TCP/IP Client
+		//------------------------------------------------------------------------------------------
+		// Settings > Socket > TCP/IP Client
+		//------------------------------------------------------------------------------------------
+
+		internal static TerminalSettingsRoot GetStartedTextTcpClientOnIPv4LoopbackSettings()
+		{
+			return (GetStartedTextSettings(Domain.IOType.TcpClient, IPNetworkInterface.IPv4Loopback));
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpClientOnIPv4LoopbackSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextTcpClientOnIPv4LoopbackSettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpClientOnIPv6LoopbackSettings()
+		{
+			return (GetStartedTextSettings(Domain.IOType.TcpClient, IPNetworkInterface.IPv6Loopback));
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpClientOnIPv6LoopbackSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextTcpClientOnIPv6LoopbackSettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpClientOnIPv4SpecificInterfaceSettings()
+		{
+			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
+				return (GetStartedTextSettings(Domain.IOType.TcpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
+
+			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			return (null);
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpClientOnIPv4SpecificInterfaceSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextTcpClientOnIPv4SpecificInterfaceSettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpClientOnIPv6SpecificInterfaceSettings()
+		{
+			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
+				return (GetStartedTextSettings(Domain.IOType.TcpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
+
+			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			return (null);
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpClientOnIPv6SpecificInterfaceSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextTcpClientOnIPv6SpecificInterfaceSettings());
+		}
+
+		#endregion
+
+		#region Settings > Socket > TCP/IP Server
+		//------------------------------------------------------------------------------------------
+		// Settings > Socket > TCP/IP Server
+		//------------------------------------------------------------------------------------------
+
+		internal static TerminalSettingsRoot GetStartedTextTcpServerOnIPv4LoopbackSettings()
+		{
+			return (GetStartedTextSettings(Domain.IOType.TcpServer, IPNetworkInterface.IPv4Loopback));
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpServerOnIPv4LoopbackSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextTcpServerOnIPv4LoopbackSettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpServerOnIPv6LoopbackSettings()
+		{
+			return (GetStartedTextSettings(Domain.IOType.TcpServer, IPNetworkInterface.IPv6Loopback));
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpServerOnIPv6LoopbackSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextTcpServerOnIPv6LoopbackSettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpServerOnIPv4SpecificInterfaceSettings()
+		{
+			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
+				return (GetStartedTextSettings(Domain.IOType.TcpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
+
+			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			return (null);
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpServerOnIPv4SpecificInterfaceSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextTcpServerOnIPv4SpecificInterfaceSettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpServerOnIPv6SpecificInterfaceSettings()
+		{
+			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
+				return (GetStartedTextSettings(Domain.IOType.TcpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
+
+			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			return (null);
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpServerOnIPv6SpecificInterfaceSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextTcpServerOnIPv6SpecificInterfaceSettings());
+		}
+
+		#endregion
+
+		#region Settings > Socket > TCP/IP AutoSocket
+		//------------------------------------------------------------------------------------------
+		// Settings > Socket > TCP/IP AutoSocket
+		//------------------------------------------------------------------------------------------
+
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings()
 		{
-			return (GetStartedTextTcpAutoSocketSettings(IPNetworkInterface.IPv4Loopback));
+			return (GetStartedTextSettings(Domain.IOType.TcpAutoSocket, IPNetworkInterface.IPv4Loopback));
 		}
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings(string dummy)
@@ -424,7 +640,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings()
 		{
-			return (GetStartedTextTcpAutoSocketSettings(IPNetworkInterface.IPv6Loopback));
+			return (GetStartedTextSettings(Domain.IOType.TcpAutoSocket, IPNetworkInterface.IPv6Loopback));
 		}
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings(string dummy)
@@ -436,7 +652,7 @@ namespace YAT.Model.Test
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings()
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
-				return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
+				return (GetStartedTextSettings(Domain.IOType.TcpAutoSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
 
 			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -453,7 +669,7 @@ namespace YAT.Model.Test
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings()
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
-				return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
+				return (GetStartedTextSettings(Domain.IOType.TcpAutoSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
 
 			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -490,6 +706,197 @@ namespace YAT.Model.Test
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
 			return (GetStartedTextTcpAutoSocketMTSicsDeviceSettings());
 		}
+
+		#endregion
+
+		#region Settings > Socket > UDP/IP Client
+		//------------------------------------------------------------------------------------------
+		// Settings > Socket > UDP/IP Client
+		//------------------------------------------------------------------------------------------
+
+		internal static TerminalSettingsRoot GetStartedTextUdpClientOnIPv4LoopbackSettings()
+		{
+			return (GetStartedTextSettings(Domain.IOType.UdpClient, IPNetworkInterface.IPv4Loopback));
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpClientOnIPv4LoopbackSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextUdpClientOnIPv4LoopbackSettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpClientOnIPv6LoopbackSettings()
+		{
+			return (GetStartedTextSettings(Domain.IOType.UdpClient, IPNetworkInterface.IPv6Loopback));
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpClientOnIPv6LoopbackSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextUdpClientOnIPv6LoopbackSettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpClientOnIPv4SpecificInterfaceSettings()
+		{
+			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
+				return (GetStartedTextSettings(Domain.IOType.UdpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
+
+			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			return (null);
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpClientOnIPv4SpecificInterfaceSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextUdpClientOnIPv4SpecificInterfaceSettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpClientOnIPv6SpecificInterfaceSettings()
+		{
+			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
+				return (GetStartedTextSettings(Domain.IOType.UdpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
+
+			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			return (null);
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpClientOnIPv6SpecificInterfaceSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextUdpClientOnIPv6SpecificInterfaceSettings());
+		}
+
+		#endregion
+
+		#region Settings > Socket > UDP/IP Server
+		//------------------------------------------------------------------------------------------
+		// Settings > Socket > UDP/IP Server
+		//------------------------------------------------------------------------------------------
+
+		internal static TerminalSettingsRoot GetStartedTextUdpServerOnIPv4LoopbackSettings()
+		{
+			return (GetStartedTextSettings(Domain.IOType.UdpServer, IPNetworkInterface.IPv4Loopback));
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpServerOnIPv4LoopbackSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextUdpServerOnIPv4LoopbackSettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpServerOnIPv6LoopbackSettings()
+		{
+			return (GetStartedTextSettings(Domain.IOType.UdpServer, IPNetworkInterface.IPv6Loopback));
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpServerOnIPv6LoopbackSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextUdpServerOnIPv6LoopbackSettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpServerOnIPv4SpecificInterfaceSettings()
+		{
+			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
+				return (GetStartedTextSettings(Domain.IOType.UdpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
+
+			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			return (null);
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpServerOnIPv4SpecificInterfaceSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextUdpServerOnIPv4SpecificInterfaceSettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpServerOnIPv6SpecificInterfaceSettings()
+		{
+			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
+				return (GetStartedTextSettings(Domain.IOType.UdpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
+
+			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			return (null);
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpServerOnIPv6SpecificInterfaceSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextUdpServerOnIPv6SpecificInterfaceSettings());
+		}
+
+		#endregion
+
+		#region Settings > Socket > UDP/IP PairSocket
+		//------------------------------------------------------------------------------------------
+		// Settings > Socket > UDP/IP PairSocket
+		//------------------------------------------------------------------------------------------
+
+		internal static TerminalSettingsRoot GetStartedTextUdpPairSocketOnIPv4LoopbackSettings()
+		{
+			return (GetStartedTextSettings(Domain.IOType.UdpPairSocket, IPNetworkInterface.IPv4Loopback));
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpPairSocketOnIPv4LoopbackSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextUdpPairSocketOnIPv4LoopbackSettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpPairSocketOnIPv6LoopbackSettings()
+		{
+			return (GetStartedTextSettings(Domain.IOType.UdpPairSocket, IPNetworkInterface.IPv6Loopback));
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpPairSocketOnIPv6LoopbackSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextUdpPairSocketOnIPv6LoopbackSettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpPairSocketOnIPv4SpecificInterfaceSettings()
+		{
+			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
+				return (GetStartedTextSettings(Domain.IOType.UdpPairSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
+
+			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			return (null);
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpPairSocketOnIPv4SpecificInterfaceSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextUdpPairSocketOnIPv4SpecificInterfaceSettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpPairSocketOnIPv6SpecificInterfaceSettings()
+		{
+			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
+				return (GetStartedTextSettings(Domain.IOType.UdpPairSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
+
+			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			return (null);
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUdpPairSocketOnIPv6SpecificInterfaceSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextUdpPairSocketOnIPv6SpecificInterfaceSettings());
+		}
+
+		#endregion
 
 		#endregion
 

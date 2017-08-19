@@ -76,8 +76,8 @@ namespace MKY.IO.Serial.Socket
 
 		private class AsyncReceiveState
 		{
-			public readonly System.Net.IPEndPoint LocalFilterEndPoint;
-			public readonly System.Net.Sockets.UdpClient Socket;
+			public System.Net.IPEndPoint        LocalFilterEndPoint { get; protected set; }
+			public System.Net.Sockets.UdpClient Socket              { get; protected set; }
 
 			public AsyncReceiveState(System.Net.IPEndPoint localFilterEndPoint, System.Net.Sockets.UdpClient socket)
 			{
@@ -212,6 +212,22 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public UdpSocket(int instanceId, int localPort, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
 			: this(instanceId, UdpSocketType.Server, System.Net.IPAddress.None, 0, System.Net.IPAddress.Any, localPort, System.Net.IPAddress.Any, serverSendMode)
+		{
+		}
+
+		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.Server"/>.</summary>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		public UdpSocket(IPNetworkInterfaceEx localInterface, int localPort, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
+			: this(SocketBase.NextInstanceId, localInterface, localPort, System.Net.IPAddress.Any, serverSendMode)
+		{
+		}
+
+		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.Server"/>.</summary>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		public UdpSocket(int instanceId, IPNetworkInterfaceEx localInterface, int localPort, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
+			: this(instanceId, UdpSocketType.Server, System.Net.IPAddress.None, 0, localInterface, localPort, System.Net.IPAddress.Any, serverSendMode)
 		{
 		}
 
@@ -808,7 +824,7 @@ namespace MKY.IO.Serial.Socket
 
 							lock (this.socketSyncObj)
 							{
-								System.Net.IPEndPoint localEndPoint = (System.Net.IPEndPoint)this.socket.Client.LocalEndPoint;
+								var localEndPoint = (System.Net.IPEndPoint)this.socket.Client.LocalEndPoint;
 								if (this.localPort != localEndPoint.Port) {
 									this.localPort = localEndPoint.Port;
 									hasChanged = true;
@@ -1036,6 +1052,11 @@ namespace MKY.IO.Serial.Socket
 					try     { this.sendThreadEvent.Close(); }
 					finally { this.sendThreadEvent = null; }
 				}
+			} // sendThreadSyncObj
+
+			lock (this.sendQueue)
+			{
+				this.sendQueue.Clear();
 			}
 
 			// Then, close and dispose socket:
@@ -1101,7 +1122,12 @@ namespace MKY.IO.Serial.Socket
 					try     { this.receiveThreadEvent.Close(); }
 					finally { this.receiveThreadEvent = null; }
 				}
-			} // lock (sendThreadSyncObj)
+			} // lock (receiveThreadSyncObj)
+
+			lock (this.receiveQueue)
+			{
+				this.receiveQueue.Clear();
+			}
 		}
 
 		#endregion
@@ -1118,9 +1144,8 @@ namespace MKY.IO.Serial.Socket
 				// Ensure that async receive is no longer initiated after close/dispose:
 				if (!IsDisposed && (GetStateSynchronized() == SocketState.Opened)) // Check 'IsDisposed' first!
 				{
-					System.Net.IPEndPoint localFilterEndPoint = new System.Net.IPEndPoint(this.localFilter, this.localPort);
-
-					AsyncReceiveState state = new AsyncReceiveState(localFilterEndPoint, this.socket);
+					var localFilterEndPoint = new System.Net.IPEndPoint(this.localFilter, this.localPort);
+					var state = new AsyncReceiveState(localFilterEndPoint, this.socket);
 					this.socket.BeginReceive(new AsyncCallback(ReceiveCallback), state);
 				}
 			}
@@ -1128,27 +1153,61 @@ namespace MKY.IO.Serial.Socket
 
 		private void ReceiveCallback(IAsyncResult ar)
 		{
-			AsyncReceiveState state = (AsyncReceiveState)(ar.AsyncState);
+			var state = (AsyncReceiveState)(ar.AsyncState);
 
 			// Ensure that async receive is discarded after close/dispose:
 			if (!IsDisposed && (state.Socket != null) && (GetStateSynchronized() == SocketState.Opened)) // Check 'IsDisposed' first!
 			{
-				System.Net.IPEndPoint remoteEndPoint = state.LocalFilterEndPoint;
+				IOErrorEventArgs signalErrorArgs = null;
+				var remoteEndPoint = state.LocalFilterEndPoint;
 				byte[] data;
 				try
 				{
 					data = state.Socket.EndReceive(ar, ref remoteEndPoint);
 				}
-				catch (System.Net.Sockets.SocketException ex)
+				catch (Exception ex)
 				{
+					var socketException = ex as System.Net.Sockets.SocketException;
+					if (socketException != null)
+					{
+						if (socketException.SocketErrorCode == System.Net.Sockets.SocketError.ConnectionReset)
+						{
+						////SocketError() or SocketReset() is not required.
+							signalErrorArgs = new IOErrorEventArgs(ErrorSeverity.Acceptable, ex.Message);
+						}
+						else
+						{
+							SocketError();
+							signalErrorArgs = new IOErrorEventArgs(ErrorSeverity.Fatal, ex.Message);
+						}
+					}
+					else if ((ex is ObjectDisposedException) ||
+					         (ex is NullReferenceException))
+					{
+						if (ex is ObjectDisposedException)
+							DebugEx.WriteException(this.GetType(), ex, "The underlying UDP/IP socket has been disposed in the meantime.");
+
+						if (ex is NullReferenceException)
+							DebugEx.WriteException(this.GetType(), ex, "The underlying UDP/IP socket no longer exists in the meantime.");
+
+						SocketError();
+					////signalErrorArgs is not required as Stop() or Dispose() must have been invoked intentionally.
+					}
+					else
+					{
+						throw; // Rethrow!
+					}
+
+					// Reset receive state for further processing:
 					data = null;
-					SocketError();
-					OnIOError(new IOErrorEventArgs(ErrorSeverity.Fatal, ex.Message));
+					remoteEndPoint.Address = System.Net.IPAddress.None;
+					remoteEndPoint.Port    = System.Net.IPEndPoint.MinPort;
 				}
 
+				// Handle data:
+				bool signalReceiveThread = false;
 				if (data != null)
 				{
-					// Handle data:
 					lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 					{
 						foreach (byte b in data)
@@ -1159,51 +1218,59 @@ namespace MKY.IO.Serial.Socket
 						// mostly be called with rather low numbers of bytes.
 					}
 
-					// Handle connection:
-					if (this.socketType == UdpSocketType.Server)
+					// Signal data notification to receive thread:
+					signalReceiveThread = true;
+				}
+
+				// Handle server connection:
+				if (this.socketType == UdpSocketType.Server)
+				{
+					// Set the remote end point to the sender of the first or most recently received data, depending on send mode:
+
+					bool hasChanged = false;
+
+					lock (this.socketSyncObj)
 					{
-						// Set the remote end point to the sender of the first or most recently received data, depending on send mode:
+						bool updateRemoteEndPoint = false;
 
-						bool hasChanged = false;
-
-						lock (this.socketSyncObj)
+						switch (this.serverSendMode)
 						{
-							bool updateRemoteEndPoint = false;
-
-							switch (this.serverSendMode)
-							{
-								case UdpServerSendMode.None:                                                             /* Do nothing. */           break;
-								case UdpServerSendMode.First:      if (IPAddressEx.EqualsNone(this.remoteHost.Address)) updateRemoteEndPoint = true; break;
-								case UdpServerSendMode.MostRecent:                                                      updateRemoteEndPoint = true; break;
-								default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.serverSendMode.ToString() + "' is a UDP/IP server send mode that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-							}
-
-							if (updateRemoteEndPoint)
-							{
-								if (!this.remoteHost.Equals(remoteEndPoint.Address)) // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-								{
-									this.remoteHost = remoteEndPoint.Address;
-									hasChanged = true;
-								}
-
-								if (this.remotePort != remoteEndPoint.Port)
-								{
-									this.remotePort = remoteEndPoint.Port;
-									hasChanged = true;
-								}
-							}
+							case UdpServerSendMode.None:                                                                   /* Do nothing. */     break;
+							case UdpServerSendMode.First:      if (IPAddressEx.EqualsNone(this.remoteHost.Address)) updateRemoteEndPoint = true; break;
+							case UdpServerSendMode.MostRecent:                                                      updateRemoteEndPoint = true; break;
+							default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.serverSendMode.ToString() + "' is a UDP/IP server send mode that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
 
-						if (hasChanged)
-							OnIOChanged(EventArgs.Empty);
-					} // Server
+						if (updateRemoteEndPoint)
+						{
+							if (!this.remoteHost.Equals(remoteEndPoint.Address)) { // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+								this.remoteHost = remoteEndPoint.Address;
+								hasChanged = true;
+							}
 
-					// Signal data notification to receive thread:
-					SignalReceiveThreadSafely();
-				} // if (data != null)
+							if (this.remotePort != remoteEndPoint.Port) {
+								this.remotePort = remoteEndPoint.Port;
+								hasChanged = true;
+							}
+						}
+					}
 
-				// Continue receiving:
-				BeginReceiveIfEnabled();
+					if (hasChanged) {
+						OnIOChanged(EventArgs.Empty);
+					}
+				} // if (IsServer)
+
+				if (signalErrorArgs == null) // Continue receiving:
+				{
+					BeginReceiveIfEnabled();
+
+					if (signalReceiveThread)
+						SignalReceiveThreadSafely();
+				}
+				else
+				{
+					OnIOError(signalErrorArgs);
+				}
 			} // if (!IsDisposed && ...)
 		}
 

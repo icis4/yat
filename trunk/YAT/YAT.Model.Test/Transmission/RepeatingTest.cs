@@ -141,11 +141,25 @@ namespace YAT.Model.Test.Transmission
 		}
 
 		/// <summary></summary>
-		public static IEnumerable TestCasesIPLoopbacks
+		public static IEnumerable TestCasesIPLoopbackPairs
 		{
 			get
 			{
-				foreach (Quadruple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string[]> loopbackSettings in Utilities.TransmissionSettings.IPLoopbacks)
+				foreach (Quadruple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string[]> loopbackSettings in Utilities.TransmissionSettings.IPLoopbackPairs)
+				{
+					foreach (TestCaseData testCase in TestCases(loopbackSettings))
+						yield return (testCase);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
+		public static IEnumerable TestCasesIPLoopbackSelfs
+		{
+			get
+			{
+				foreach (Quadruple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string[]> loopbackSettings in Utilities.TransmissionSettings.IPLoopbackSelfs)
 				{
 					foreach (TestCaseData testCase in TestCases(loopbackSettings))
 						yield return (testCase);
@@ -158,7 +172,7 @@ namespace YAT.Model.Test.Transmission
 
 	/// <remarks>
 	/// It can be argued that this test would be better located in YAT.Domain.Test. It currently is
-	/// located here because line counts and rates are calculated in <see cref="YAT.Model.Terminal"/>
+	/// located here because line counts and rates are calculated in <see cref="Terminal"/>
 	/// and required when evaluating the test result.
 	/// </remarks>
 	[TestFixture]
@@ -229,10 +243,24 @@ namespace YAT.Model.Test.Transmission
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too many values to verify.")]
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
-		[Test, TestCaseSource(typeof(RepeatingTestData), "TestCasesIPLoopbacks")]
-		public virtual void IPLoopbacks(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
-		                                Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
-		                                int repeatCount, bool doTwoWay, bool executeBreak)
+		[Test, TestCaseSource(typeof(RepeatingTestData), "TestCasesIPLoopbackPairs")]
+		public virtual void IPLoopbackPairs(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
+		                                    Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
+		                                    int repeatCount, bool doTwoWay, bool executeBreak)
+		{
+			PerformTransmission(settingsDescriptorA, settingsDescriptorB, repeatCount, doTwoWay, executeBreak);
+		}
+
+		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too many values to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too many values to verify.")]
+		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
+		[Test, TestCaseSource(typeof(TwoWayTestData), "TestCasesIPLoopbackSelfs")]
+		public static void IPLoopbackSelfs(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
+		                                   Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
+		                                   int repeatCount, bool doTwoWay, bool executeBreak)
 		{
 			PerformTransmission(settingsDescriptorA, settingsDescriptorB, repeatCount, doTwoWay, executeBreak);
 		}
