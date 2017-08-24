@@ -162,7 +162,7 @@ namespace MKY.Time
 			{
 				while (this.queue.Count > 0)
 				{
-					TimeStampItem<int> tsi = this.queue.Peek();
+					var tsi = this.queue.Peek();
 					if (tsi.TimeStamp < beginningOfWindow)
 						this.queue.Dequeue();
 					else
@@ -184,8 +184,8 @@ namespace MKY.Time
 			else
 			{
 				// Count number of items within each interval:
-				int numberOfIntervals = (int)(this.window / this.interval);
-				int[] valuePerInterval = ArrayEx.CreateAndInitializeInstance<int>(numberOfIntervals, 0);
+				int numberOfIntervals = (this.window / this.interval);
+				int[] valuePerInterval = ArrayEx.CreateAndInitializeInstance(numberOfIntervals, 0);
 				DateTime now = DateTime.Now;
 
 				TimeStampItem<int>[] qa;
@@ -211,7 +211,7 @@ namespace MKY.Time
 				}
 
 				// Evaluate the rate:
-				newValue = (int)((double)weighedSum / sumOfWeights);
+				newValue = (int)Math.Round((double)weighedSum / sumOfWeights);
 			}
 
 			if (newValue != oldValue)
