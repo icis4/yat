@@ -805,8 +805,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnRepositoryCleared(EventArgs<RepositoryType> e)
 		{
-			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.FireSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
+			this.eventHelper.FireSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
 		}
 
 		#endregion
