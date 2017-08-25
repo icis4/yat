@@ -121,25 +121,25 @@ namespace YAT.Model.Test.Transmission
 			DoubleLine   = new Utilities.TestSet(new Types.Command(new string[] { TestTextLines[0], TestTextLines[1] } ));
 			TripleLine   = new Utilities.TestSet(new Types.Command(new string[] { TestTextLines[0], TestTextLines[1], TestTextLines[2] }));
 			MultiLine    = new Utilities.TestSet(new Types.Command(TestTextLines));
-			                                                                                      //// Note that LineStart+LineBreak result in two more elements than obvious.
-			MultiEol     = new Utilities.TestSet(new Types.Command(@"A\!(EOL)B<CR><LF>C<CR><LF>D"), 4, new int[] { 3, 3, 3, 3 }, new int[] { 1, 1, 1, 1 }, true);
-			MixedEol     = new Utilities.TestSet(new Types.Command(@"A\!(EOL)BC<CR><LF>D"),         3, new int[] { 3, 3, 3    }, new int[] { 1, 2, 1    }, true);
+			                                                                                                       // LineStart + EOL + LineBreak result in three more elements.
+			MultiEol     = new Utilities.TestSet(new Types.Command(@"A\!(EOL)B<CR><LF>C<CR><LF>D"), 4, new int[] { 4, 4, 4, 4 }, new int[] { 3, 3, 3, 3 }, true);
+			MixedEol     = new Utilities.TestSet(new Types.Command(@"A\!(EOL)BC<CR><LF>D"),         3, new int[] { 4, 4, 4    }, new int[] { 3, 4, 3    }, true);
 
-			EolParts     = new Utilities.TestSet(new Types.Command(@"A<CR><CR><LF>B<CR><LF><LF>C<CR><LF>D<CR>E<LF>F"), 4, new int[] { 4, 3, 4, 7 }, new int[] { 2, 1, 2, 5 }, true);
-			EolOnly      = new Utilities.TestSet(new Types.Command(new string[] { "A", "B", "", "C" }),                4, new int[] { 3, 3, 2, 3 }, new int[] { 1, 1, 0, 1 }, true);
+			EolParts     = new Utilities.TestSet(new Types.Command(@"A<CR><CR><LF>B<CR><LF><LF>C<CR><LF>D<CR>E<LF>F"), 4, new int[] { 4, 4, 5, 8 }, new int[] { 4, 3, 4, 7 }, true);
+			EolOnly      = new Utilities.TestSet(new Types.Command(new string[] { "A", "B", "", "C" }),                4, new int[] { 4, 4, 3, 4 }, new int[] { 3, 3, 2, 3 }, true);
 
 			SingleNoEol  = new Utilities.TestSet(new Types.Command(@"A\!(NoEOL)"),                                 0, new int[] { 2 },    new int[] { 1 },    true); // 1st line will not get completed.
 			DoubleNoEol  = new Utilities.TestSet(new Types.Command(new string[] { @"A\!(NoEOL)", @"B\!(NoEOL)" }), 0, new int[] { 2 },    new int[] { 2 },    true); // 1st line will not get completed.
-			StillEol1    = new Utilities.TestSet(new Types.Command(@"<CR><LF>\!(NoEOL)"),                          1, new int[] { 2 },    new int[] { 0 },    true);
-			StillEol2    = new Utilities.TestSet(new Types.Command(@"A<CR><LF>\!(NoEOL)"),                         1, new int[] { 3 },    new int[] { 1 },    true);
-			StillEol3    = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B\!(NoEOL)"),                        1, new int[] { 3, 2 }, new int[] { 1, 1 }, true); // 2nd line will not get completed.
+			StillEol1    = new Utilities.TestSet(new Types.Command(@"<CR><LF>\!(NoEOL)"),                          1, new int[] { 3 },    new int[] { 2 },    true); // 2nd line will be empty.
+			StillEol2    = new Utilities.TestSet(new Types.Command(@"A<CR><LF>\!(NoEOL)"),                         1, new int[] { 4 },    new int[] { 3 },    true); // 2nd line will be empty.
+			StillEol3    = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B\!(NoEOL)"),                        1, new int[] { 4, 2 }, new int[] { 3, 1 }, true); // 2nd line will not get completed.
 
-			ControlChar1 = new Utilities.TestSet(new Types.Command(@"\h(00)<CR><LF>\h(00)A<CR><LF>A\h(00)<CR><LF>A\h(00)A"), 4, new int[] { 3, 4, 4, 5 }, new int[] { 1, 2, 2, 3 }, true);
-			ControlChar2 = new Utilities.TestSet(new Types.Command(@"\h(7F)<CR><LF>\h(7F)A<CR><LF>A\h(7F)<CR><LF>A\h(7F)A"), 4, new int[] { 3, 4, 4, 5 }, new int[] { 1, 2, 2, 3 }, true);
-			ControlChar3 = new Utilities.TestSet(new Types.Command(@"\h(FF)<CR><LF>\h(FF)A<CR><LF>A\h(FF)<CR><LF>A\h(FF)A"), 4, new int[] { 3, 3, 3, 3 }, new int[] { 1, 2, 2, 3 }, true); // A non-breaking space isn't a control character.
+			ControlChar1 = new Utilities.TestSet(new Types.Command(@"\h(00)<CR><LF>\h(00)A<CR><LF>A\h(00)<CR><LF>A\h(00)A"), 4, new int[] { 3, 5, 4, 6 }, new int[] { 3, 4, 4, 5 }, true);
+			ControlChar2 = new Utilities.TestSet(new Types.Command(@"\h(7F)<CR><LF>\h(7F)A<CR><LF>A\h(7F)<CR><LF>A\h(7F)A"), 4, new int[] { 3, 5, 4, 6 }, new int[] { 3, 4, 4, 5 }, true);
+			ControlChar3 = new Utilities.TestSet(new Types.Command(@"\h(FF)<CR><LF>\h(FF)A<CR><LF>A\h(FF)<CR><LF>A\h(FF)A"), 4, new int[] { 4, 4, 4, 4 }, new int[] { 3, 4, 4, 5 }, true); // A non-breaking space isn't a control character.
 
-			Clear1       = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B<CR><LF>C\!(Clear)"),          3, new int[] { 2, 2, 2 }, new int[] { 0 }, false);
-			Clear2       = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B<CR><LF>C\!(Clear)\!(NoEOL)"), 2, new int[] { 2, 2, 2 }, new int[] { 0 }, false);
+			Clear1       = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B<CR><LF>C\!(Clear)"),          3, new int[] { 4, 4, 4 }, new int[] { 3, 3, 3 }, false, true);
+			Clear2       = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B<CR><LF>C\!(Clear)\!(NoEOL)"), 2, new int[] { 4, 4, 3 }, new int[] { 3, 3, 1 }, false, true);
 		}
 
 		#endregion
@@ -387,7 +387,7 @@ namespace YAT.Model.Test.Transmission
 				}
 				Utilities.WaitForStart(terminalA);
 
-				if (settingsDescriptorB.Value1 != null) // Loopback pair.
+				if (settingsDescriptorB.Value1 != null) // Loopback pair:
 				{
 					var settingsB = settingsDescriptorB.Value1(settingsDescriptorB.Value2);
 					using (var terminalB = new Terminal(settingsB))
@@ -408,7 +408,7 @@ namespace YAT.Model.Test.Transmission
 						PerformTransmission(terminalA, terminalB, testSet, transmissionCount);
 					}
 				}
-				else // Loopback self.
+				else // Loopback self:
 				{
 					PerformTransmission(terminalA, terminalA, testSet, transmissionCount);
 				}
@@ -424,7 +424,7 @@ namespace YAT.Model.Test.Transmission
 			{
 				// Send test command:
 				terminalA.SendText(testSet.Command);
-				Utilities.WaitForTransmission(terminalA, terminalB, testSet.ExpectedLineCount, cycle);
+				Utilities.WaitForTransmission(terminalA, terminalB, testSet.ExpectedTotalByteCount, testSet.ExpectedLineCount, cycle);
 
 				// Verify transmission:
 				Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),

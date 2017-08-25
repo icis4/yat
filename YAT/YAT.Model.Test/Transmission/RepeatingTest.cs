@@ -289,7 +289,7 @@ namespace YAT.Model.Test.Transmission
 				}
 				Utilities.WaitForStart(terminalA);
 
-				if (settingsDescriptorB.Value1 != null) // Loopback pair.
+				if (settingsDescriptorB.Value1 != null) // Loopback pair:
 				{
 					var settingsB = settingsDescriptorB.Value1(settingsDescriptorB.Value2);
 					settingsB.Send.DefaultLineRepeat = repeatCount; // Set settings to the desired repeat count.
@@ -311,7 +311,7 @@ namespace YAT.Model.Test.Transmission
 						PerformTransmission(terminalA, terminalB, repeatCount, doTwoWay, executeBreak);
 					}
 				}
-				else // Loopback self.
+				else // Loopback self:
 				{
 					PerformTransmission(terminalA, terminalA, repeatCount, doTwoWay, executeBreak);
 				}
@@ -326,33 +326,37 @@ namespace YAT.Model.Test.Transmission
 			var command = new Types.Command(RepeatingTestData.TestCommand);
 
 			terminalA.SendText(command);
-			if (doTwoWay)
+			if (doTwoWay) {
 				terminalB.SendText(command);
+			}
 
-			if (repeatCount >= 0) // Finite count.
+			if (repeatCount >= 0) // Finite count:
 			{
 				var testSet = new Utilities.TestSet
 				(
 					command, repeatCount,
-					ArrayEx.CreateAndInitializeInstance<int>(repeatCount, 2), // Data + EOL
-					ArrayEx.CreateAndInitializeInstance<int>(repeatCount, RepeatingTestData.TestString.Length),
+					ArrayEx.CreateAndInitializeInstance(repeatCount, 2), // Data + EOL
+					ArrayEx.CreateAndInitializeInstance(repeatCount, RepeatingTestData.TestString.Length),
 					false
 				);
 
-				Utilities.WaitForTransmission(terminalA, terminalB, repeatCount); // Expected line count equals repeat count.
-				if (doTwoWay)
-					Utilities.WaitForTransmission(terminalB, terminalA, repeatCount); // Expected line count equals repeat count.
+				var expectedByteCount = (repeatCount * RepeatingTestData.TestString.Length);
+				Utilities.WaitForTransmission(terminalA, terminalB, expectedByteCount, repeatCount);
+				if (doTwoWay) {
+					Utilities.WaitForTransmission(terminalB, terminalA, expectedByteCount, repeatCount);
+				}
 
 				// Verify transmission:
 				Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 				                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
 				                      testSet);
-				if (doTwoWay)
+				if (doTwoWay) {
 					Utilities.VerifyLines(terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 					                      terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
 					                      testSet);
+				}
 			}
-			else // Random count.
+			else // Random count:
 			{
 				var r = new Random(RandomEx.NextPseudoRandomSeed());
 				Thread.Sleep(r.Next(100, 10000)); // Something between 0.1..10 seconds to keep test execution fast.

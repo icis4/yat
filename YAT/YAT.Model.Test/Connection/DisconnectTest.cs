@@ -33,6 +33,7 @@ using System.Threading;
 
 using MKY.Collections.Generic;
 using MKY.Settings;
+using MKY.Text;
 
 using NUnit.Framework;
 
@@ -192,7 +193,7 @@ namespace YAT.Model.Test.Connection
 				}
 				Utilities.WaitForStart(terminalA);
 
-				if (settingsDescriptorB.Value1 != null) // Loopback pair.
+				if (settingsDescriptorB.Value1 != null) // Loopback pair:
 				{
 					var settingsB = settingsDescriptorB.Value1(settingsDescriptorB.Value2);
 					using (var terminalB = new Terminal(settingsB))
@@ -210,25 +211,41 @@ namespace YAT.Model.Test.Connection
 						}
 						Utilities.WaitForConnection(terminalA, terminalB);
 
-						PerformTransmissionAndDisconnect(terminalA, terminalB, disconnectIdentifier, 1);
+						PerformTransmissionAndDisconnect(terminalA, terminalB, disconnectIdentifier, false);
 					}
 				}
-				else // Loopback self.
+				else // Loopback self:
 				{
-					PerformTransmissionAndDisconnect(terminalA, terminalA, disconnectIdentifier, 2);
+					PerformTransmissionAndDisconnect(terminalA, terminalA, disconnectIdentifier, true);
 				}
 			}
 		}
 
-		private static void PerformTransmissionAndDisconnect(Terminal terminalA, Terminal terminalB, char disconnectIdentifier, int lineCountPerTransmission)
+		private static void PerformTransmissionAndDisconnect(Terminal terminalA, Terminal terminalB, char disconnectIdentifier, bool isSameTerminal)
 		{
-			// Send initial A >> B:
-			terminalA.SendText("A >> B");
-			Utilities.WaitForTransmission(terminalA, terminalB, lineCountPerTransmission);
+			var encoding = ((EncodingEx)terminalA.SettingsRoot.TextTerminal.Encoding).Encoding;
 
-			// Send response B >> A:
-			terminalB.SendText("B >> A");
-			Utilities.WaitForTransmission(terminalB, terminalA, lineCountPerTransmission);
+			string text;
+			int expectedTotalByteCountA = 0;
+			int expectedTotalLineCountA = 0;
+			int expectedTotalByteCountB = 0;
+			int expectedTotalLineCountB = 0;
+
+			text = "A >> B"; // Initial A >> B
+			terminalA.SendText(text);
+			expectedTotalByteCountA += (encoding.GetByteCount(text) + 2); // 2 = EOL which is fixed to <CR><LF> for this test.
+			expectedTotalLineCountA++;
+			Utilities.WaitForTransmission(terminalA, terminalB, expectedTotalByteCountA, expectedTotalLineCountA);
+
+			text = "B >> A"; // Response B >> A
+			terminalB.SendText(text);
+			expectedTotalByteCountB += (encoding.GetByteCount(text) + 2); // 2 = EOL which is fixed to <CR><LF> for this test.
+			expectedTotalLineCountB++;
+			if (isSameTerminal) {
+				expectedTotalByteCountB *= 2;
+				expectedTotalLineCountB *= 2;
+			}
+			Utilities.WaitForTransmission(terminalB, terminalA, expectedTotalByteCountB, expectedTotalLineCountB);
 
 			if (disconnectIdentifier == 'A')
 			{
@@ -237,6 +254,7 @@ namespace YAT.Model.Test.Connection
 				Thread.Sleep(333); // = approx. 30 lines.
 				terminalA.StopIO();
 				Utilities.WaitForDisconnection(terminalA);
+				Thread.Sleep(100); // Make sure that B has finished processing too.
 
 				terminalA.ClearRepositories();
 				terminalB.ClearRepositories();
@@ -253,6 +271,7 @@ namespace YAT.Model.Test.Connection
 				Thread.Sleep(333); // = approx. 30 lines.
 				terminalB.StopIO();
 				Utilities.WaitForDisconnection(terminalB);
+				Thread.Sleep(100); // Make sure that A has finished processing too.
 
 				terminalB.ClearRepositories();
 				terminalA.ClearRepositories();
@@ -263,13 +282,26 @@ namespace YAT.Model.Test.Connection
 				Utilities.WaitForConnection(terminalB, terminalA);
 			}
 
-			// Send subsequent A >> B:
-			terminalA.SendText("A >> B");
-			Utilities.WaitForTransmission(terminalA, terminalB, lineCountPerTransmission);
+			expectedTotalByteCountA = 0;
+			expectedTotalLineCountA = 0;
+			expectedTotalByteCountB = 0;
+			expectedTotalLineCountB = 0;
 
-			// Send response B >> A:
-			terminalB.SendText("B >> A");
-			Utilities.WaitForTransmission(terminalB, terminalA, lineCountPerTransmission);
+			text = "A >> B"; // Subsequent A >> B
+			terminalA.SendText(text);
+			expectedTotalByteCountA += (encoding.GetByteCount(text) + 2); // 2 = EOL which is fixed to <CR><LF> for this test.
+			expectedTotalLineCountA++;
+			Utilities.WaitForTransmission(terminalA, terminalB, expectedTotalByteCountA, expectedTotalLineCountA);
+
+			text = "B >> A"; // Response B >> A
+			terminalB.SendText(text);
+			expectedTotalByteCountB += (encoding.GetByteCount(text) + 2); // 2 = EOL which is fixed to <CR><LF> for this test.
+			expectedTotalLineCountB++;
+			if (isSameTerminal) {
+				expectedTotalByteCountB *= 2;
+				expectedTotalLineCountB *= 2;
+			}
+			Utilities.WaitForTransmission(terminalB, terminalA, expectedTotalByteCountB, expectedTotalLineCountB);
 		}
 
 		#endregion
