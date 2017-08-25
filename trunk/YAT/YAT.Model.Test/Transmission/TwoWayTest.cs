@@ -65,7 +65,7 @@ namespace YAT.Model.Test.Transmission
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic in the constructor, and anyway, performance isn't an issue here.")]
 		static TwoWayTestData()
 		{
-			PingPongCommand = new Utilities.TestSet(new Types.Command(@"ABC DE F"), 1, new int[] { 3 }, new int[] { 8 }, true); // LineStart+LineBreak result in two more elements.
+			PingPongCommand = new Utilities.TestSet(new Types.Command(@"ABC DE F"), 1, new int[] { 4 }, new int[] { 10 }, true); // LineStart + EOL + LineBreak result in three more elements.
 		}
 
 		#endregion
@@ -291,7 +291,7 @@ namespace YAT.Model.Test.Transmission
 				}
 				Utilities.WaitForStart(terminalA);
 
-				if (settingsDescriptorB.Value1 != null) // Loopback pair.
+				if (settingsDescriptorB.Value1 != null) // Loopback pair:
 				{
 					var settingsB = settingsDescriptorB.Value1(settingsDescriptorB.Value2);
 					using (var terminalB = new Terminal(settingsB))
@@ -312,7 +312,7 @@ namespace YAT.Model.Test.Transmission
 						PerformTransmission(terminalA, terminalB, testSet, transmissionCount);
 					}
 				}
-				else // Loopback self.
+				else // Loopback self:
 				{
 					PerformTransmission(terminalA, terminalA, testSet, transmissionCount);
 				}
@@ -328,7 +328,7 @@ namespace YAT.Model.Test.Transmission
 			{
 				// Send 'Ping' test command A >> B:
 				terminalA.SendText(testSet.Command);
-				Utilities.WaitForTransmission(terminalA, terminalB, testSet.ExpectedLineCount, cycle);
+				Utilities.WaitForTransmission(terminalA, terminalB, testSet.ExpectedTotalByteCount, testSet.ExpectedLineCount, cycle);
 
 				// Verify transmission:
 				Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
@@ -337,7 +337,7 @@ namespace YAT.Model.Test.Transmission
 
 				// Send 'Pong' test command B >> A:
 				terminalB.SendText(testSet.Command);
-				Utilities.WaitForTransmission(terminalB, terminalA, testSet.ExpectedLineCount, cycle);
+				Utilities.WaitForTransmission(terminalB, terminalA, testSet.ExpectedTotalByteCount, testSet.ExpectedLineCount, cycle);
 
 				// Verify transmission:
 				Utilities.VerifyLines(terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Tx),

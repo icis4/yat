@@ -103,7 +103,7 @@ namespace YAT.Model.Test.Connection
 				Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
 				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			TerminalSettingsRoot settings = Utilities.GetStartedTextSerialPortMTSicsDeviceASettings();
+			TerminalSettingsRoot settings = Utilities.GetStartedSerialPortMTSicsDeviceATextSettings();
 
 			// Create terminals from settings:
 			using (Terminal terminal = new Terminal(settings))
@@ -155,7 +155,7 @@ namespace YAT.Model.Test.Connection
 				terminal.SendText(emptyCommand);
 				expectedTotalLineCount++;
 				expectedTotalByteCount += emptyCommandExpected.Length;
-				Utilities.WaitForReceiving(terminal, expectedTotalLineCount, expectedTotalByteCount);
+				Utilities.WaitForReceiving(terminal, expectedTotalByteCount, expectedTotalLineCount);
 
 				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
 				Assert.That(terminal.StopIO(),      Is.True);
@@ -172,7 +172,7 @@ namespace YAT.Model.Test.Connection
 				terminal.SendText(emptyCommand);
 				expectedTotalLineCount++;
 				expectedTotalByteCount += emptyCommandExpected.Length;
-				Utilities.WaitForReceiving(terminal, expectedTotalLineCount, expectedTotalByteCount);
+				Utilities.WaitForReceiving(terminal, expectedTotalByteCount, expectedTotalLineCount);
 
 				// --- Test: Close/Reopen while continuous receiving. ----------------------------------
 
@@ -256,7 +256,7 @@ namespace YAT.Model.Test.Connection
 
 			// --- Precondition: USB hub is set to its defaults, i.e. all outputs are enabled. -----
 
-			TerminalSettingsRoot settings = Utilities.GetStartedTextSerialPortMTSicsDeviceASettings();
+			TerminalSettingsRoot settings = Utilities.GetStartedSerialPortMTSicsDeviceATextSettings();
 
 			// Create terminals from settings:
 			using (Terminal terminal = new Terminal(settings))
@@ -330,7 +330,7 @@ namespace YAT.Model.Test.Connection
 				terminal.SendText(emptyCommand);
 				expectedTotalLineCount++;
 				expectedTotalByteCount += emptyCommandExpected.Length;
-				Utilities.WaitForReceiving(terminal, expectedTotalLineCount, expectedTotalByteCount);
+				Utilities.WaitForReceiving(terminal, expectedTotalByteCount, expectedTotalLineCount);
 
 				// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
 				Assert.That(UsbHubControl.Disable(portOut), Is.True, "Failed to modify USB hub!");
@@ -350,7 +350,7 @@ namespace YAT.Model.Test.Connection
 				terminal.SendText(emptyCommand);
 				expectedTotalLineCount++;
 				expectedTotalByteCount += emptyCommandExpected.Length;
-				Utilities.WaitForReceiving(terminal, expectedTotalLineCount, expectedTotalByteCount);
+				Utilities.WaitForReceiving(terminal, expectedTotalByteCount, expectedTotalLineCount);
 
 				// Verify that subsequently calling StartIO() also works:
 				Assert.That(terminal.StartIO(),     Is.True);
@@ -362,7 +362,7 @@ namespace YAT.Model.Test.Connection
 				terminal.SendText(emptyCommand);
 				expectedTotalLineCount++;
 				expectedTotalByteCount += emptyCommandExpected.Length;
-				Utilities.WaitForReceiving(terminal, expectedTotalLineCount, expectedTotalByteCount);
+				Utilities.WaitForReceiving(terminal, expectedTotalByteCount, expectedTotalLineCount);
 
 				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
 				Assert.That(terminal.StopIO(),      Is.True);
@@ -381,7 +381,7 @@ namespace YAT.Model.Test.Connection
 				terminal.SendText(emptyCommand);
 				expectedTotalLineCount++;
 				expectedTotalByteCount += emptyCommandExpected.Length;
-				Utilities.WaitForReceiving(terminal, expectedTotalLineCount, expectedTotalByteCount);
+				Utilities.WaitForReceiving(terminal, expectedTotalByteCount, expectedTotalLineCount);
 
 				// --- Test: Disconnect/Reconnect while continuous receiving. ----------------------
 

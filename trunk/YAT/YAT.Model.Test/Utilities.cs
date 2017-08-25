@@ -73,7 +73,7 @@ namespace YAT.Model.Test
 				{
 					foreach (MKY.IO.Ports.Test.SerialPortPairConfigurationElement ce in MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackPairs)
 					{
-						var tsm = new TerminalSettingsDelegate<string>(GetStartedTextSerialPortSettings);
+						var tsm = new TerminalSettingsDelegate<string>(GetStartedSerialPortTextSettings);
 						var pA = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortA);
 						var pB = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortB);
 						string name = "SerialPortLoopbackPairs_" + ce.PortA + "_" + ce.PortB;
@@ -92,7 +92,7 @@ namespace YAT.Model.Test
 				{
 					foreach (MKY.IO.Ports.Test.SerialPortConfigurationElement ce in MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackSelfs)
 					{
-						var tsm = new TerminalSettingsDelegate<string>(GetStartedTextSerialPortSettings);
+						var tsm = new TerminalSettingsDelegate<string>(GetStartedSerialPortTextSettings);
 						var pA = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.Port);
 						var pB = new Pair<TerminalSettingsDelegate<string>, string>(null, null);
 						string name = "SerialPortLoopbackSelf_" + ce.Port;
@@ -120,67 +120,67 @@ namespace YAT.Model.Test
 					// TCP/IP Client/Server
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpClientOnIPv4LoopbackSettings, null),
-					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpServerOnIPv4LoopbackSettings, null),
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTcpClientOnIPv4LoopbackTextSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTcpServerOnIPv4LoopbackTextSettings, null),
 					              "TcpClientServer_IPv4Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4LoopbackIsAvailable }));
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpClientOnIPv6LoopbackSettings, null),
-					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpServerOnIPv6LoopbackSettings, null),
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTcpClientOnIPv6LoopbackTextSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTcpServerOnIPv6LoopbackTextSettings, null),
 					              "TcpClientServer_IPv6Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6LoopbackIsAvailable }));
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpClientOnIPv4SpecificInterfaceSettings, null),
-					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpServerOnIPv4SpecificInterfaceSettings, null),
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTcpClientOnIPv4SpecificInterfaceTextSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTcpServerOnIPv4SpecificInterfaceTextSettings, null),
 					              "TcpClientServer_IPv4SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4SpecificInterfaceIsAvailable }));
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpClientOnIPv6SpecificInterfaceSettings, null),
-					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpServerOnIPv6SpecificInterfaceSettings, null),
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTcpClientOnIPv6SpecificInterfaceTextSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTcpServerOnIPv6SpecificInterfaceTextSettings, null),
 					              "TcpClientServer_IPv6SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable }));
 
 					// TCP/IP AutoSocket
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings, null),
-					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings, null),
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings, null),
 					              "TcpAutoSocket_IPv4Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4LoopbackIsAvailable }));
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings, null),
-					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings, null),
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTcpAutoSocketOnIPv6LoopbackTextSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTcpAutoSocketOnIPv6LoopbackTextSettings, null),
 					              "TcpAutoSocket_IPv6Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6LoopbackIsAvailable }));
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings, null),
-					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings, null),
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTcpAutoSocketOnIPv4SpecificInterfaceTextSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTcpAutoSocketOnIPv4SpecificInterfaceTextSettings, null),
 					              "TcpAutoSocket_IPv4SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4SpecificInterfaceIsAvailable }));
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings, null),
-					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings, null),
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTcpAutoSocketOnIPv6SpecificInterfaceTextSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTcpAutoSocketOnIPv6SpecificInterfaceTextSettings, null),
 					              "TcpAutoSocket_IPv6SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable }));
 
 					// UDP/IP Client/Server
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpClientOnIPv4LoopbackSettings, null), // Client must be the first as that is used for sending first.
-					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpServerOnIPv4LoopbackSettings, null),
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedUdpClientOnIPv4LoopbackTextSettings, null), // Client must be the first as that is used for sending first.
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedUdpServerOnIPv4LoopbackTextSettings, null),
 					              "UdpClientServer_IPv4Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4LoopbackIsAvailable }));
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpClientOnIPv6LoopbackSettings, null), // Client must be the first as that is used for sending first.
-					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpServerOnIPv6LoopbackSettings, null),
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedUdpClientOnIPv6LoopbackTextSettings, null), // Client must be the first as that is used for sending first.
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedUdpServerOnIPv6LoopbackTextSettings, null),
 					              "UdpClientServer_IPv6Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6LoopbackIsAvailable }));
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpClientOnIPv4SpecificInterfaceSettings, null), // Client must be the first as that is used for sending first.
-					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpServerOnIPv4SpecificInterfaceSettings, null),
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedUdpClientOnIPv4SpecificInterfaceTextSettings, null), // Client must be the first as that is used for sending first.
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedUdpServerOnIPv4SpecificInterfaceTextSettings, null),
 					              "UdpClientServer_IPv4SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4SpecificInterfaceIsAvailable }));
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpClientOnIPv6SpecificInterfaceSettings, null), // Client must be the first as that is used for sending first.
-					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpServerOnIPv6SpecificInterfaceSettings, null),
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedUdpClientOnIPv6SpecificInterfaceTextSettings, null), // Client must be the first as that is used for sending first.
+					              new Pair<TerminalSettingsDelegate<string>, string>(GetStartedUdpServerOnIPv6SpecificInterfaceTextSettings, null),
 					              "UdpClientServer_IPv6SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable }));
 				}
 			}
@@ -197,22 +197,22 @@ namespace YAT.Model.Test
 				get
 				{
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpPairSocketOnIPv4LoopbackSettings, null),
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedUdpPairSocketOnIPv4LoopbackTextSettings, null),
 					              new Pair<TerminalSettingsDelegate<string>, string>(null, null),
 					              "UdpPairSocket_IPv4Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4LoopbackIsAvailable }));
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpPairSocketOnIPv6LoopbackSettings, null),
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedUdpPairSocketOnIPv6LoopbackTextSettings, null),
 					              new Pair<TerminalSettingsDelegate<string>, string>(null, null),
 					              "UdpPairSocket_IPv6Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6LoopbackIsAvailable }));
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpPairSocketOnIPv4SpecificInterfaceSettings, null),
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedUdpPairSocketOnIPv4SpecificInterfaceTextSettings, null),
 					              new Pair<TerminalSettingsDelegate<string>, string>(null, null),
 					              "UdpPairSocket_IPv4SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4SpecificInterfaceIsAvailable }));
 
 					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
-					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextUdpPairSocketOnIPv6SpecificInterfaceSettings, null),
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedUdpPairSocketOnIPv6SpecificInterfaceTextSettings, null),
 					              new Pair<TerminalSettingsDelegate<string>, string>(null, null),
 					              "UdpPairSocket_IPv6SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable }));
 				}
@@ -237,13 +237,16 @@ namespace YAT.Model.Test
 			[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
 			public int[] ExpectedElementCounts { get; }
 
-			/// <summary>The expected number of raw data bytes per display line.</summary>
+			/// <summary>The expected number of raw data bytes per display line, including potentially hidden EOL or control bytes.</summary>
 			[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
-			public int[] ExpectedDataCounts { get; }
+			public int[] ExpectedByteCounts { get; }
 
 			/// <summary>Flag indicating that expected values not only apply to B but also A.</summary>
 			/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
 			public bool ExpectedAlsoApplyToA { get; }
+
+			/// <summary>Flag indicating that cleared terminals are expected in the end.</summary>
+			public bool ClearedIsExpectedInTheEnd { get; }
 
 			/// <summary></summary>
 			/// <param name="command">The test command.</param>
@@ -254,30 +257,59 @@ namespace YAT.Model.Test
 				ExpectedLineCount = command.TextLines.Length;
 
 				ExpectedElementCounts = new int[ExpectedLineCount];
-				ExpectedDataCounts    = new int[ExpectedLineCount];
+				ExpectedByteCounts    = new int[ExpectedLineCount];
 				for (int i = 0; i < ExpectedLineCount; i++)
 				{
-					ExpectedElementCounts[i] = 3; // LineStart + 1 data element + LineBreak.
-					ExpectedDataCounts[i]    = command.TextLines[i].Length;
+					ExpectedElementCounts[i] = 4; // LineStart + Data + EOL + LineBreak.
+					ExpectedByteCounts[i]    = command.TextLines[i].Length + 2; // Content + EOL.
 				}
 
 				ExpectedAlsoApplyToA = true;
+				ClearedIsExpectedInTheEnd = false;
 			}
 
 			/// <summary></summary>
 			/// <param name="command">The test command.</param>
 			/// <param name="expectedLineCount">The expected number of lines as returned by <see cref="Terminal.RxLineCount"/> and <see cref="Terminal.TxLineCount"/>.</param>
 			/// <param name="expectedElementCounts">The expected number of display elements per display line.</param>
-			/// <param name="expectedDataCounts">The expected number of raw data bytes per display line.</param>
+			/// <param name="expectedByteCounts">The expected number of raw data bytes per display line, including potentially hidden EOL or control bytes.</param>
 			/// <param name="expectedAlsoApplyToA">Flag indicating that expected values not only apply to B but also A.</param>
-			public TestSet(Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedDataCounts, bool expectedAlsoApplyToA)
+			/// <param name="clearedIsExpectedInTheEnd">Flag indicating that cleared terminals are expected in the end.</param>
+			public TestSet(Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedByteCounts, bool expectedAlsoApplyToA, bool clearedIsExpectedInTheEnd = false)
 			{
 				Command = command;
 
-				ExpectedLineCount     = expectedLineCount;
-				ExpectedElementCounts = expectedElementCounts;
-				ExpectedDataCounts    = expectedDataCounts;
-				ExpectedAlsoApplyToA  = expectedAlsoApplyToA;
+				ExpectedLineCount         = expectedLineCount;
+				ExpectedElementCounts     = expectedElementCounts;
+				ExpectedByteCounts        = expectedByteCounts;
+				ExpectedAlsoApplyToA      = expectedAlsoApplyToA;
+				ClearedIsExpectedInTheEnd = clearedIsExpectedInTheEnd;
+			}
+
+			/// <summary>The expected number of display elements in total.</summary>
+			public int ExpectedTotalElementCount
+			{
+				get
+				{
+					int totalCount = 0;
+					foreach (int count in ExpectedElementCounts)
+						totalCount += count;
+
+					return (totalCount);
+				}
+			}
+
+			/// <summary>The expected number of raw data bytes in total.</summary>
+			public int ExpectedTotalByteCount
+			{
+				get
+				{
+					int totalCount = 0;
+					foreach (int count in ExpectedByteCounts)
+						totalCount += count;
+
+					return (totalCount);
+				}
 			}
 
 			#region Object Members
@@ -300,7 +332,7 @@ namespace YAT.Model.Test
 
 					hashCode = (hashCode * 397) ^  ExpectedLineCount                                    .GetHashCode();
 					hashCode = (hashCode * 397) ^ (ExpectedElementCounts != null ? ExpectedElementCounts.GetHashCode() : 0);
-					hashCode = (hashCode * 397) ^ (ExpectedDataCounts    != null ? ExpectedDataCounts   .GetHashCode() : 0);
+					hashCode = (hashCode * 397) ^ (ExpectedByteCounts    != null ? ExpectedByteCounts   .GetHashCode() : 0);
 					hashCode = (hashCode * 397) ^  ExpectedAlsoApplyToA                                 .GetHashCode();
 
 					return (hashCode);
@@ -332,7 +364,7 @@ namespace YAT.Model.Test
 					ObjectEx            .Equals(Command,               other.Command) &&
 					ExpectedLineCount   .Equals(                       other.ExpectedLineCount) &&
 					ArrayEx     .ElementsEqual( ExpectedElementCounts, other.ExpectedElementCounts) &&
-					ArrayEx     .ElementsEqual( ExpectedDataCounts,    other.ExpectedDataCounts) &&
+					ArrayEx     .ElementsEqual( ExpectedByteCounts,    other.ExpectedByteCounts) &&
 					ExpectedAlsoApplyToA.Equals(                       other.ExpectedAlsoApplyToA)
 				);
 			}
@@ -363,9 +395,11 @@ namespace YAT.Model.Test
 		// Constants
 		//==========================================================================================
 
-		private const int WaitTimeoutForConnectionChange = Domain.Test.Utilities.WaitTimeoutForConnectionChange;
-		private const int WaitTimeoutForLineTransmission = Domain.Test.Utilities.WaitTimeoutForLineTransmission;
-		private const int WaitInterval                   = Domain.Test.Utilities.WaitInterval;
+		private const int WaitTimeoutForStateChange  = Domain.Test.Utilities.WaitTimeoutForStateChange;
+		private const int WaitIntervalForStateChange = Domain.Test.Utilities.WaitIntervalForStateChange;
+
+		private const int WaitTimeoutForLineTransmission  = Domain.Test.Utilities.WaitTimeoutForLineTransmission;
+		private const int WaitIntervalForLineTransmission = Domain.Test.Utilities.WaitIntervalForLineTransmission;
 
 		#endregion
 
@@ -374,31 +408,38 @@ namespace YAT.Model.Test
 		// Settings
 		//==========================================================================================
 
+		internal static TerminalSettingsRoot GetTextSettings()
+		{
+			var settings = new TerminalSettingsRoot();
+			settings.TerminalType = Domain.TerminalType.Text;
+			settings.Terminal.TextTerminal.ShowEol = true; // Required for easier test verification (byte count).
+			return (settings);
+		}
+
 		#region Settings > SerialPort
 		//------------------------------------------------------------------------------------------
 		// Settings > SerialPort
 		//------------------------------------------------------------------------------------------
 
-		internal static TerminalSettingsRoot GetStartedTextSerialPortSettings(string portId)
+		internal static TerminalSettingsRoot GetStartedSerialPortTextSettings(MKY.IO.Ports.SerialPortId portId)
 		{
-			return (GetStartedTextSerialPortSettings((MKY.IO.Ports.SerialPortId)portId));
-		}
-
-		internal static TerminalSettingsRoot GetStartedTextSerialPortSettings(MKY.IO.Ports.SerialPortId portId)
-		{
-			var settings = new TerminalSettingsRoot();
-			settings.TerminalType = Domain.TerminalType.Text;
+			var settings = GetTextSettings();
 			settings.Terminal.IO.IOType = Domain.IOType.SerialPort;
 			settings.Terminal.IO.SerialPort.PortId = portId;
 			settings.TerminalIsStarted = true;
 			return (settings);
 		}
 
+		internal static TerminalSettingsRoot GetStartedSerialPortTextSettings(string portId)
+		{
+			return (GetStartedSerialPortTextSettings((MKY.IO.Ports.SerialPortId)portId));
+		}
+
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static TerminalSettingsRoot GetStartedTextSerialPortASettings()
+		internal static TerminalSettingsRoot GetStartedSerialPortATextSettings()
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortAIsAvailable)
-				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortA));
+				return (GetStartedSerialPortTextSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortA));
 
 			Assert.Ignore("'PortA' is not available, therefore this test is excluded. Ensure that 'PortA' is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -407,17 +448,17 @@ namespace YAT.Model.Test
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static TerminalSettingsRoot GetStartedTextSerialPortASettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedSerialPortATextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextSerialPortASettings());
+			return (GetStartedSerialPortATextSettings());
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static TerminalSettingsRoot GetStartedTextSerialPortBSettings()
+		internal static TerminalSettingsRoot GetStartedSerialPortBTextSettings()
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortBIsAvailable)
-				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortB));
+				return (GetStartedSerialPortTextSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortB));
 
 			Assert.Ignore("'PortB' is not available, therefore this test is excluded. Ensure that 'PortB' is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -426,17 +467,17 @@ namespace YAT.Model.Test
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static TerminalSettingsRoot GetStartedTextSerialPortBSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedSerialPortBTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextSerialPortBSettings());
+			return (GetStartedSerialPortBTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextSerialPortMTSicsDeviceASettings()
+		internal static TerminalSettingsRoot GetStartedSerialPortMTSicsDeviceATextSettings()
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
 			{
-				var settings = GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceA);
+				var settings = GetStartedSerialPortTextSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceA);
 				ConfigureMTSicsSettings(settings);
 				return (settings);
 			}
@@ -447,17 +488,17 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextSerialPortMTSicsDeviceASettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedSerialPortMTSicsDeviceATextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextSerialPortMTSicsDeviceASettings());
+			return (GetStartedSerialPortMTSicsDeviceATextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextSerialPortMTSicsDeviceBSettings()
+		internal static TerminalSettingsRoot GetStartedSerialPortMTSicsDeviceBTextSettings()
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
 			{
-				var settings = GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceB);
+				var settings = GetStartedSerialPortTextSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceB);
 				ConfigureMTSicsSettings(settings);
 				return (settings);
 			}
@@ -468,10 +509,10 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextSerialPortMTSicsDeviceBSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedSerialPortMTSicsDeviceBTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextSerialPortMTSicsDeviceBSettings());
+			return (GetStartedSerialPortMTSicsDeviceBTextSettings());
 		}
 
 		#endregion
@@ -488,8 +529,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTextSettings(Domain.IOType type, IPNetworkInterfaceEx networkInterface)
 		{
-			var settings = new TerminalSettingsRoot();
-			settings.TerminalType = Domain.TerminalType.Text;
+			var settings = GetTextSettings();
 			settings.Terminal.IO.IOType = type;
 			settings.Terminal.IO.Socket.LocalInterface = networkInterface;
 			settings.TerminalIsStarted = true;
@@ -501,29 +541,29 @@ namespace YAT.Model.Test
 		// Settings > Socket > TCP/IP Client
 		//------------------------------------------------------------------------------------------
 
-		internal static TerminalSettingsRoot GetStartedTextTcpClientOnIPv4LoopbackSettings()
+		internal static TerminalSettingsRoot GetStartedTcpClientOnIPv4LoopbackTextSettings()
 		{
 			return (GetStartedTextSettings(Domain.IOType.TcpClient, IPNetworkInterface.IPv4Loopback));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpClientOnIPv4LoopbackSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedTcpClientOnIPv4LoopbackTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextTcpClientOnIPv4LoopbackSettings());
+			return (GetStartedTcpClientOnIPv4LoopbackTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpClientOnIPv6LoopbackSettings()
+		internal static TerminalSettingsRoot GetStartedTcpClientOnIPv6LoopbackTextSettings()
 		{
 			return (GetStartedTextSettings(Domain.IOType.TcpClient, IPNetworkInterface.IPv6Loopback));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpClientOnIPv6LoopbackSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedTcpClientOnIPv6LoopbackTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextTcpClientOnIPv6LoopbackSettings());
+			return (GetStartedTcpClientOnIPv6LoopbackTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpClientOnIPv4SpecificInterfaceSettings()
+		internal static TerminalSettingsRoot GetStartedTcpClientOnIPv4SpecificInterfaceTextSettings()
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
 				return (GetStartedTextSettings(Domain.IOType.TcpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
@@ -534,13 +574,13 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpClientOnIPv4SpecificInterfaceSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedTcpClientOnIPv4SpecificInterfaceTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextTcpClientOnIPv4SpecificInterfaceSettings());
+			return (GetStartedTcpClientOnIPv4SpecificInterfaceTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpClientOnIPv6SpecificInterfaceSettings()
+		internal static TerminalSettingsRoot GetStartedTcpClientOnIPv6SpecificInterfaceTextSettings()
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
 				return (GetStartedTextSettings(Domain.IOType.TcpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
@@ -551,10 +591,10 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpClientOnIPv6SpecificInterfaceSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedTcpClientOnIPv6SpecificInterfaceTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextTcpClientOnIPv6SpecificInterfaceSettings());
+			return (GetStartedTcpClientOnIPv6SpecificInterfaceTextSettings());
 		}
 
 		#endregion
@@ -564,29 +604,29 @@ namespace YAT.Model.Test
 		// Settings > Socket > TCP/IP Server
 		//------------------------------------------------------------------------------------------
 
-		internal static TerminalSettingsRoot GetStartedTextTcpServerOnIPv4LoopbackSettings()
+		internal static TerminalSettingsRoot GetStartedTcpServerOnIPv4LoopbackTextSettings()
 		{
 			return (GetStartedTextSettings(Domain.IOType.TcpServer, IPNetworkInterface.IPv4Loopback));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpServerOnIPv4LoopbackSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedTcpServerOnIPv4LoopbackTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextTcpServerOnIPv4LoopbackSettings());
+			return (GetStartedTcpServerOnIPv4LoopbackTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpServerOnIPv6LoopbackSettings()
+		internal static TerminalSettingsRoot GetStartedTcpServerOnIPv6LoopbackTextSettings()
 		{
 			return (GetStartedTextSettings(Domain.IOType.TcpServer, IPNetworkInterface.IPv6Loopback));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpServerOnIPv6LoopbackSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedTcpServerOnIPv6LoopbackTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextTcpServerOnIPv6LoopbackSettings());
+			return (GetStartedTcpServerOnIPv6LoopbackTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpServerOnIPv4SpecificInterfaceSettings()
+		internal static TerminalSettingsRoot GetStartedTcpServerOnIPv4SpecificInterfaceTextSettings()
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
 				return (GetStartedTextSettings(Domain.IOType.TcpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
@@ -597,13 +637,13 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpServerOnIPv4SpecificInterfaceSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedTcpServerOnIPv4SpecificInterfaceTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextTcpServerOnIPv4SpecificInterfaceSettings());
+			return (GetStartedTcpServerOnIPv4SpecificInterfaceTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpServerOnIPv6SpecificInterfaceSettings()
+		internal static TerminalSettingsRoot GetStartedTcpServerOnIPv6SpecificInterfaceTextSettings()
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
 				return (GetStartedTextSettings(Domain.IOType.TcpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
@@ -614,10 +654,10 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpServerOnIPv6SpecificInterfaceSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedTcpServerOnIPv6SpecificInterfaceTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextTcpServerOnIPv6SpecificInterfaceSettings());
+			return (GetStartedTcpServerOnIPv6SpecificInterfaceTextSettings());
 		}
 
 		#endregion
@@ -627,29 +667,29 @@ namespace YAT.Model.Test
 		// Settings > Socket > TCP/IP AutoSocket
 		//------------------------------------------------------------------------------------------
 
-		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings()
+		internal static TerminalSettingsRoot GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings()
 		{
 			return (GetStartedTextSettings(Domain.IOType.TcpAutoSocket, IPNetworkInterface.IPv4Loopback));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings());
+			return (GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings()
+		internal static TerminalSettingsRoot GetStartedTcpAutoSocketOnIPv6LoopbackTextSettings()
 		{
 			return (GetStartedTextSettings(Domain.IOType.TcpAutoSocket, IPNetworkInterface.IPv6Loopback));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedTcpAutoSocketOnIPv6LoopbackTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings());
+			return (GetStartedTcpAutoSocketOnIPv6LoopbackTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings()
+		internal static TerminalSettingsRoot GetStartedTcpAutoSocketOnIPv4SpecificInterfaceTextSettings()
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
 				return (GetStartedTextSettings(Domain.IOType.TcpAutoSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
@@ -660,13 +700,13 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedTcpAutoSocketOnIPv4SpecificInterfaceTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings());
+			return (GetStartedTcpAutoSocketOnIPv4SpecificInterfaceTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings()
+		internal static TerminalSettingsRoot GetStartedTcpAutoSocketOnIPv6SpecificInterfaceTextSettings()
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
 				return (GetStartedTextSettings(Domain.IOType.TcpAutoSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
@@ -677,19 +717,19 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedTcpAutoSocketOnIPv6SpecificInterfaceTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings());
+			return (GetStartedTcpAutoSocketOnIPv6SpecificInterfaceTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketMTSicsDeviceSettings()
+		internal static TerminalSettingsRoot GetStartedTcpAutoSocketMTSicsDeviceTextSettings()
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.MTSicsDeviceIsAvailable)
 			{
 				int port = MKY.Net.Test.ConfigurationProvider.Configuration.MTSicsDeviceTcpPortAsInt;
 
-				var settings = GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings();
+				var settings = GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings();
 				settings.IO.Socket.LocalTcpPort = port;
 				settings.IO.Socket.RemoteTcpPort = port;
 				return (settings);
@@ -701,10 +741,10 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketMTSicsDeviceSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedTcpAutoSocketMTSicsDeviceTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextTcpAutoSocketMTSicsDeviceSettings());
+			return (GetStartedTcpAutoSocketMTSicsDeviceTextSettings());
 		}
 
 		#endregion
@@ -714,29 +754,29 @@ namespace YAT.Model.Test
 		// Settings > Socket > UDP/IP Client
 		//------------------------------------------------------------------------------------------
 
-		internal static TerminalSettingsRoot GetStartedTextUdpClientOnIPv4LoopbackSettings()
+		internal static TerminalSettingsRoot GetStartedUdpClientOnIPv4LoopbackTextSettings()
 		{
 			return (GetStartedTextSettings(Domain.IOType.UdpClient, IPNetworkInterface.IPv4Loopback));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpClientOnIPv4LoopbackSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedUdpClientOnIPv4LoopbackTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextUdpClientOnIPv4LoopbackSettings());
+			return (GetStartedUdpClientOnIPv4LoopbackTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpClientOnIPv6LoopbackSettings()
+		internal static TerminalSettingsRoot GetStartedUdpClientOnIPv6LoopbackTextSettings()
 		{
 			return (GetStartedTextSettings(Domain.IOType.UdpClient, IPNetworkInterface.IPv6Loopback));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpClientOnIPv6LoopbackSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedUdpClientOnIPv6LoopbackTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextUdpClientOnIPv6LoopbackSettings());
+			return (GetStartedUdpClientOnIPv6LoopbackTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpClientOnIPv4SpecificInterfaceSettings()
+		internal static TerminalSettingsRoot GetStartedUdpClientOnIPv4SpecificInterfaceTextSettings()
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
 				return (GetStartedTextSettings(Domain.IOType.UdpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
@@ -747,13 +787,13 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpClientOnIPv4SpecificInterfaceSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedUdpClientOnIPv4SpecificInterfaceTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextUdpClientOnIPv4SpecificInterfaceSettings());
+			return (GetStartedUdpClientOnIPv4SpecificInterfaceTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpClientOnIPv6SpecificInterfaceSettings()
+		internal static TerminalSettingsRoot GetStartedUdpClientOnIPv6SpecificInterfaceTextSettings()
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
 				return (GetStartedTextSettings(Domain.IOType.UdpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
@@ -764,10 +804,10 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpClientOnIPv6SpecificInterfaceSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedUdpClientOnIPv6SpecificInterfaceTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextUdpClientOnIPv6SpecificInterfaceSettings());
+			return (GetStartedUdpClientOnIPv6SpecificInterfaceTextSettings());
 		}
 
 		#endregion
@@ -777,29 +817,29 @@ namespace YAT.Model.Test
 		// Settings > Socket > UDP/IP Server
 		//------------------------------------------------------------------------------------------
 
-		internal static TerminalSettingsRoot GetStartedTextUdpServerOnIPv4LoopbackSettings()
+		internal static TerminalSettingsRoot GetStartedUdpServerOnIPv4LoopbackTextSettings()
 		{
 			return (GetStartedTextSettings(Domain.IOType.UdpServer, IPNetworkInterface.IPv4Loopback));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpServerOnIPv4LoopbackSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedUdpServerOnIPv4LoopbackTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextUdpServerOnIPv4LoopbackSettings());
+			return (GetStartedUdpServerOnIPv4LoopbackTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpServerOnIPv6LoopbackSettings()
+		internal static TerminalSettingsRoot GetStartedUdpServerOnIPv6LoopbackTextSettings()
 		{
 			return (GetStartedTextSettings(Domain.IOType.UdpServer, IPNetworkInterface.IPv6Loopback));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpServerOnIPv6LoopbackSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedUdpServerOnIPv6LoopbackTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextUdpServerOnIPv6LoopbackSettings());
+			return (GetStartedUdpServerOnIPv6LoopbackTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpServerOnIPv4SpecificInterfaceSettings()
+		internal static TerminalSettingsRoot GetStartedUdpServerOnIPv4SpecificInterfaceTextSettings()
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
 				return (GetStartedTextSettings(Domain.IOType.UdpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
@@ -810,13 +850,13 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpServerOnIPv4SpecificInterfaceSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedUdpServerOnIPv4SpecificInterfaceTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextUdpServerOnIPv4SpecificInterfaceSettings());
+			return (GetStartedUdpServerOnIPv4SpecificInterfaceTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpServerOnIPv6SpecificInterfaceSettings()
+		internal static TerminalSettingsRoot GetStartedUdpServerOnIPv6SpecificInterfaceTextSettings()
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
 				return (GetStartedTextSettings(Domain.IOType.UdpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
@@ -827,10 +867,10 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpServerOnIPv6SpecificInterfaceSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedUdpServerOnIPv6SpecificInterfaceTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextUdpServerOnIPv6SpecificInterfaceSettings());
+			return (GetStartedUdpServerOnIPv6SpecificInterfaceTextSettings());
 		}
 
 		#endregion
@@ -840,29 +880,29 @@ namespace YAT.Model.Test
 		// Settings > Socket > UDP/IP PairSocket
 		//------------------------------------------------------------------------------------------
 
-		internal static TerminalSettingsRoot GetStartedTextUdpPairSocketOnIPv4LoopbackSettings()
+		internal static TerminalSettingsRoot GetStartedUdpPairSocketOnIPv4LoopbackTextSettings()
 		{
 			return (GetStartedTextSettings(Domain.IOType.UdpPairSocket, IPNetworkInterface.IPv4Loopback));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpPairSocketOnIPv4LoopbackSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedUdpPairSocketOnIPv4LoopbackTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextUdpPairSocketOnIPv4LoopbackSettings());
+			return (GetStartedUdpPairSocketOnIPv4LoopbackTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpPairSocketOnIPv6LoopbackSettings()
+		internal static TerminalSettingsRoot GetStartedUdpPairSocketOnIPv6LoopbackTextSettings()
 		{
 			return (GetStartedTextSettings(Domain.IOType.UdpPairSocket, IPNetworkInterface.IPv6Loopback));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpPairSocketOnIPv6LoopbackSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedUdpPairSocketOnIPv6LoopbackTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextUdpPairSocketOnIPv6LoopbackSettings());
+			return (GetStartedUdpPairSocketOnIPv6LoopbackTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpPairSocketOnIPv4SpecificInterfaceSettings()
+		internal static TerminalSettingsRoot GetStartedUdpPairSocketOnIPv4SpecificInterfaceTextSettings()
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
 				return (GetStartedTextSettings(Domain.IOType.UdpPairSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
@@ -873,13 +913,13 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpPairSocketOnIPv4SpecificInterfaceSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedUdpPairSocketOnIPv4SpecificInterfaceTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextUdpPairSocketOnIPv4SpecificInterfaceSettings());
+			return (GetStartedUdpPairSocketOnIPv4SpecificInterfaceTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpPairSocketOnIPv6SpecificInterfaceSettings()
+		internal static TerminalSettingsRoot GetStartedUdpPairSocketOnIPv6SpecificInterfaceTextSettings()
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
 				return (GetStartedTextSettings(Domain.IOType.UdpPairSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
@@ -890,10 +930,10 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUdpPairSocketOnIPv6SpecificInterfaceSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedUdpPairSocketOnIPv6SpecificInterfaceTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextUdpPairSocketOnIPv6SpecificInterfaceSettings());
+			return (GetStartedUdpPairSocketOnIPv6SpecificInterfaceTextSettings());
 		}
 
 		#endregion
@@ -905,15 +945,14 @@ namespace YAT.Model.Test
 		// Settings > USB Ser/HID
 		//------------------------------------------------------------------------------------------
 
-		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidSettings(string deviceInfo)
+		internal static TerminalSettingsRoot GetStartedUsbSerialHidTextSettings(string deviceInfo)
 		{
-			return (GetStartedTextUsbSerialHidSettings((MKY.IO.Usb.DeviceInfo)deviceInfo));
+			return (GetStartedUsbSerialHidTextSettings((MKY.IO.Usb.DeviceInfo)deviceInfo));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.DeviceInfo deviceInfo)
+		internal static TerminalSettingsRoot GetStartedUsbSerialHidTextSettings(MKY.IO.Usb.DeviceInfo deviceInfo)
 		{
-			var settings = new TerminalSettingsRoot();
-			settings.TerminalType = Domain.TerminalType.Text;
+			var settings = GetTextSettings();
 			settings.Terminal.IO.IOType = Domain.IOType.UsbSerialHid;
 			settings.Terminal.IO.UsbSerialHidDevice.DeviceInfo = deviceInfo;
 			settings.TerminalIsStarted = true;
@@ -921,10 +960,10 @@ namespace YAT.Model.Test
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidDeviceASettings()
+		internal static TerminalSettingsRoot GetStartedUsbSerialHidDeviceATextSettings()
 		{
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceAIsAvailable)
-				return (GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceA));
+				return (GetStartedUsbSerialHidTextSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceA));
 
 			Assert.Ignore("'DeviceA' is not available, therefore this test is excluded. Ensure that 'DeviceA' is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -933,17 +972,17 @@ namespace YAT.Model.Test
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidDeviceASettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedUsbSerialHidDeviceATextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextUsbSerialHidDeviceASettings());
+			return (GetStartedUsbSerialHidDeviceATextSettings());
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidDeviceBSettings()
+		internal static TerminalSettingsRoot GetStartedUsbSerialHidDeviceBTextSettings()
 		{
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceBIsAvailable)
-				return (GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceB));
+				return (GetStartedUsbSerialHidTextSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceB));
 
 			Assert.Ignore("'DeviceB' is not available, therefore this test is excluded. Ensure that 'DeviceB' is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -952,17 +991,17 @@ namespace YAT.Model.Test
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidDeviceBSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedUsbSerialHidDeviceBTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextUsbSerialHidDeviceBSettings());
+			return (GetStartedUsbSerialHidDeviceBTextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidMTSicsDeviceASettings()
+		internal static TerminalSettingsRoot GetStartedUsbSerialHidMTSicsDeviceATextSettings()
 		{
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
 			{
-				var settings = GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceA);
+				var settings = GetStartedUsbSerialHidTextSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceA);
 				ConfigureMTSicsSettings(settings);
 				return (settings);
 			}
@@ -973,17 +1012,17 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidMTSicsDeviceASettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedUsbSerialHidMTSicsDeviceATextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextUsbSerialHidMTSicsDeviceASettings());
+			return (GetStartedUsbSerialHidMTSicsDeviceATextSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidMTSicsDeviceBSettings()
+		internal static TerminalSettingsRoot GetStartedUsbSerialHidMTSicsDeviceBTextSettings()
 		{
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
 			{
-				var settings = GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceB);
+				var settings = GetStartedUsbSerialHidTextSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceB);
 				ConfigureMTSicsSettings(settings);
 				return (settings);
 			}
@@ -994,10 +1033,10 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidMTSicsDeviceBSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedUsbSerialHidMTSicsDeviceBTextSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextUsbSerialHidMTSicsDeviceBSettings());
+			return (GetStartedUsbSerialHidMTSicsDeviceBTextSettings());
 		}
 
 		#endregion
@@ -1037,13 +1076,14 @@ namespace YAT.Model.Test
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
-				Thread.Sleep(WaitInterval);
-				waitTime += WaitInterval;
+				Thread.Sleep(WaitIntervalForStateChange);
+				waitTime += WaitIntervalForStateChange;
 
-				Console.Out.WriteLine("Waiting for start, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForConnectionChange + " ms...");
+				Console.Out.WriteLine("Waiting for start, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
-				if (waitTime >= WaitTimeoutForConnectionChange)
+				if (waitTime >= WaitTimeoutForStateChange) {
 					Assert.Fail("Start timeout!");
+				}
 			}
 			while (!terminal.IsStarted);
 
@@ -1059,13 +1099,14 @@ namespace YAT.Model.Test
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
-				Thread.Sleep(WaitInterval);
-				waitTime += WaitInterval;
+				Thread.Sleep(WaitIntervalForStateChange);
+				waitTime += WaitIntervalForStateChange;
 
-				Console.Out.WriteLine("Waiting for open, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForConnectionChange + " ms...");
+				Console.Out.WriteLine("Waiting for open, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
-				if (waitTime >= WaitTimeoutForConnectionChange)
+				if (waitTime >= WaitTimeoutForStateChange) {
 					Assert.Fail("Open timeout!");
+				}
 			}
 			while (!terminal.IsOpen);
 
@@ -1082,13 +1123,14 @@ namespace YAT.Model.Test
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
-				Thread.Sleep(WaitInterval);
-				waitTime += WaitInterval;
+				Thread.Sleep(WaitIntervalForStateChange);
+				waitTime += WaitIntervalForStateChange;
 
-				Console.Out.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForConnectionChange + " ms...");
+				Console.Out.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
-				if (waitTime >= WaitTimeoutForConnectionChange)
+				if (waitTime >= WaitTimeoutForStateChange) {
 					Assert.Fail("Connect timeout!");
+				}
 			}
 			while (!terminal.IsConnected);
 
@@ -1104,13 +1146,14 @@ namespace YAT.Model.Test
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
-				Thread.Sleep(WaitInterval);
-				waitTime += WaitInterval;
+				Thread.Sleep(WaitIntervalForStateChange);
+				waitTime += WaitIntervalForStateChange;
 
-				Console.Out.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForConnectionChange + " ms...");
+				Console.Out.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
-				if (waitTime >= WaitTimeoutForConnectionChange)
+				if (waitTime >= WaitTimeoutForStateChange) {
 					Assert.Fail("Connect timeout!");
+				}
 			}
 			while (!terminalA.IsConnected && !terminalB.IsConnected);
 
@@ -1126,13 +1169,14 @@ namespace YAT.Model.Test
 			int waitTime = 0;
 			while (terminal.IsOpen)
 			{
-				Thread.Sleep(WaitInterval);
-				waitTime += WaitInterval;
+				Thread.Sleep(WaitIntervalForStateChange);
+				waitTime += WaitIntervalForStateChange;
 
-				Console.Out.WriteLine("Waiting for close, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForConnectionChange + " ms...");
+				Console.Out.WriteLine("Waiting for close, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
-				if (waitTime >= WaitTimeoutForConnectionChange)
+				if (waitTime >= WaitTimeoutForStateChange) {
 					Assert.Fail("Close timeout!");
+				}
 			}
 
 			Console.Out.WriteLine("...done");
@@ -1148,13 +1192,14 @@ namespace YAT.Model.Test
 			int waitTime = 0;
 			while (terminal.IsConnected)
 			{
-				Thread.Sleep(WaitInterval);
-				waitTime += WaitInterval;
+				Thread.Sleep(WaitIntervalForStateChange);
+				waitTime += WaitIntervalForStateChange;
 
-				Console.Out.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForConnectionChange + " ms...");
+				Console.Out.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
-				if (waitTime >= WaitTimeoutForConnectionChange)
+				if (waitTime >= WaitTimeoutForStateChange) {
 					Assert.Fail("Disconnect timeout!");
+				}
 			}
 
 			Console.Out.WriteLine("...done");
@@ -1162,21 +1207,22 @@ namespace YAT.Model.Test
 
 		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, TestSet testSet)
 		{
-			WaitForTransmission(terminalTx, terminalRx, testSet.ExpectedLineCount, 1); // Single cycle.
+			WaitForTransmission(terminalTx, terminalRx, testSet.ExpectedTotalByteCount, testSet.ExpectedLineCount, 1); // Single cycle.
 		}
 
-		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedPerCycleLineCount)
+		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
-			WaitForTransmission(terminalTx, terminalRx, expectedPerCycleLineCount, 1); // Single cycle.
+			WaitForTransmission(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, 1); // Single cycle.
 		}
 
 		/// <remarks>
 		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedPerCycleLineCount, int cycle)
+		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedPerCycleByteCount, int expectedPerCycleLineCount, int cycle)
 		{
-			// Calculate total expected line count at the receiver side:
+			// Calculate total expected counts at the receiver side:
+			int expectedTotalByteCount = (expectedPerCycleByteCount * cycle);
 			int expectedTotalLineCount = (expectedPerCycleLineCount * cycle);
 
 			// Calculate timeout factor per line, taking cases with 0 lines into account:
@@ -1188,22 +1234,28 @@ namespace YAT.Model.Test
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
-				Thread.Sleep(WaitInterval);
-				waitTime += WaitInterval;
+				Thread.Sleep(WaitIntervalForLineTransmission);
+				waitTime += WaitIntervalForLineTransmission;
 
 				Console.Out.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 
-				if (waitTime >= timeout)
-					Assert.Fail("Transmission timeout! Not enough lines received within expected interval.");
+				if (waitTime >= timeout) {
+					Assert.Fail("Transmission timeout! Not enough data received within expected interval.");
+				}
 
-				if (terminalRx.RxLineCount > expectedTotalLineCount) // Break in case of too much data to improve speed of test.
+				if (terminalRx.RxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
-						" Number of received lines = " + terminalRx.RxLineCount +
-						" mismatches expected = " + expectedTotalLineCount + ".");
+					            " Number of received bytes = " + terminalRx.RxByteCount +
+					            " mismatches expected = " + expectedTotalByteCount + ".");
+				}
+
+				if (terminalRx.RxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+					Assert.Fail("Transmission error!" +
+					            " Number of received lines = " + terminalRx.RxLineCount +
+					            " mismatches expected = " + expectedTotalLineCount + ".");
+				}
 			}
-			while ((terminalRx.RxLineCount != expectedTotalLineCount) ||
-			       (terminalRx.RxLineCount != terminalTx.TxLineCount) ||
-			       (terminalRx.RxByteCount != terminalTx.TxByteCount));
+			while ((terminalRx.RxByteCount != expectedTotalByteCount) || (terminalRx.RxLineCount != expectedTotalLineCount));
 
 			// Attention: Terminal line count is not always equal to display line count!
 			//  > Terminal line count = number of *completed* lines in terminal
@@ -1217,7 +1269,7 @@ namespace YAT.Model.Test
 		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForReceiving(Terminal terminalRx, int expectedTotalLineCount, int expectedTotalByteCount)
+		internal static void WaitForReceiving(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
 			// Calculate timeout:
 			int timeout = (WaitTimeoutForLineTransmission * expectedTotalLineCount);
@@ -1225,22 +1277,28 @@ namespace YAT.Model.Test
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
-				Thread.Sleep(WaitInterval);
-				waitTime += WaitInterval;
+				Thread.Sleep(WaitIntervalForLineTransmission);
+				waitTime += WaitIntervalForLineTransmission;
 
 				Console.Out.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 
-				if (waitTime >= timeout)
-					Assert.Fail("Transmission timeout! Not enough lines received within expected interval.");
+				if (waitTime >= timeout) {
+					Assert.Fail("Transmission timeout! Not enough data received within expected interval.");
+				}
 
-				if ((terminalRx.RxLineCount > expectedTotalLineCount) ||
-					(terminalRx.RxByteCount > expectedTotalByteCount)) // Break in case of too much data to improve speed of test.
+				if (terminalRx.RxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
-						" Number of received lines = " + terminalRx.RxLineCount + " / bytes = " + terminalRx.RxByteCount +
-						" mismatches expected = " + expectedTotalLineCount + " / " + expectedTotalByteCount + ".");
+					            " Number of received bytes = " + terminalRx.RxByteCount +
+					            " mismatches expected = " + expectedTotalByteCount + ".");
+				}
+
+				if (terminalRx.RxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+					Assert.Fail("Transmission error!" +
+					            " Number of received lines = " + terminalRx.RxLineCount +
+					            " mismatches expected = " + expectedTotalLineCount + ".");
+				}
 			}
-			while ((terminalRx.RxLineCount != expectedTotalLineCount) ||
-			       (terminalRx.RxByteCount != expectedTotalByteCount));
+			while ((terminalRx.RxByteCount != expectedTotalByteCount) || (terminalRx.RxLineCount != expectedTotalLineCount));
 
 			// Attention: Terminal line count is not always equal to display line count!
 			//  > Terminal line count = number of *completed* lines in terminal
@@ -1299,7 +1357,7 @@ namespace YAT.Model.Test
 
 			// If both sides are expected to show the same line count, compare the counts,
 			// otherwise, ignore the comparision:
-			if (testSet.ExpectedAlsoApplyToA)
+			if (testSet.ExpectedAlsoApplyToA && !testSet.ClearedIsExpectedInTheEnd)
 			{
 				if (displayLinesB.Count == displayLinesA.Count)
 				{
@@ -1307,15 +1365,15 @@ namespace YAT.Model.Test
 					{
 						int index                = i % testSet.ExpectedElementCounts.Length;
 						int expectedElementCount =     testSet.ExpectedElementCounts[index];
-						int expectedDataCount    =     testSet.ExpectedDataCounts[index];
+						int expectedByteCount    =     testSet.ExpectedByteCounts[index];
 
-						Domain.DisplayLine displayLineA = displayLinesA[i];
-						Domain.DisplayLine displayLineB = displayLinesB[i];
+						var displayLineA = displayLinesA[i];
+						var displayLineB = displayLinesB[i];
 
 						if ((displayLineB.Count     == displayLineA.Count) &&
 							(displayLineB.Count     == expectedElementCount) &&
-							(displayLineB.DataCount == displayLineA.DataCount) &&
-							(displayLineB.DataCount == expectedDataCount))
+							(displayLineB.ByteCount == displayLineA.ByteCount) &&
+							(displayLineB.ByteCount == expectedByteCount))
 						{
 							for (int j = 0; j < displayLineA.Count; j++)
 								Assert.That(displayLineB[j].Text, Is.EqualTo(displayLineA[j].Text));
@@ -1337,9 +1395,9 @@ namespace YAT.Model.Test
 								"Expected = " + expectedElementCount + " element(s), " +
 								"A = " + displayLineA.Count + " element(s), " +
 								"B = " + displayLineB.Count + " element(s)," + Environment.NewLine +
-								"Expected = " + expectedDataCount + " data, " +
-								"A = " + displayLineA.DataCount + " data, " +
-								"B = " + displayLineB.DataCount + " data." + Environment.NewLine +
+								"Expected = " + expectedByteCount + " byte(s), " +
+								"A = " + displayLineA.ByteCount + " byte(s), " +
+								"B = " + displayLineB.ByteCount + " byte(s)." + Environment.NewLine +
 								@"See ""Output"" for details."
 							);
 						}

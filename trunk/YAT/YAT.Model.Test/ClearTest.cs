@@ -87,9 +87,9 @@ namespace YAT.Model.Test
 		public virtual void TestClearCompleteLine()
 		{
 			// Create terminals from settings and check whether B receives from A
-			using (var terminalA = new Terminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings()))
+			using (var terminalA = new Terminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings()))
 			{
-				using (var terminalB = new Terminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings()))
+				using (var terminalB = new Terminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings()))
 				{
 					Utilities.TestSet testSet;
 
@@ -99,7 +99,7 @@ namespace YAT.Model.Test
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					// Create test set to verify transmission:
-					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 3 }, new int[] { 1 }, true); // LineStart+LineBreak result in two more elements.
+					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 4 }, new int[] { 3 }, true); // LineStart + EOL + LineBreak result in three more elements.
 
 					// Send test command:
 					terminalA.SendText(testSet.Command);
@@ -138,9 +138,9 @@ namespace YAT.Model.Test
 		public virtual void TestClearIncompleteLine()
 		{
 			// Create terminals from settings and check whether B receives from A
-			using (var terminalA = new Terminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings()))
+			using (var terminalA = new Terminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings()))
 			{
-				using (var terminalB = new Terminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings()))
+				using (var terminalB = new Terminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings()))
 				{
 					Utilities.TestSet testSet;
 
@@ -150,7 +150,7 @@ namespace YAT.Model.Test
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					// Create test set to verify transmission:
-					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 3 }, new int[] { 1 }, true); // LineStart+LineBreak result in two more elements.
+					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 4 }, new int[] { 3 }, true); // LineStart + EOL + LineBreak result in three more elements.
 
 					// Send test command:
 					terminalA.SendText(testSet.Command);
