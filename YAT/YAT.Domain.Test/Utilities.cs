@@ -50,15 +50,16 @@ namespace YAT.Domain.Test
 		//==========================================================================================
 
 		/// <summary></summary>
-		public const int WaitTimeoutForConnectionChange = 3000;
+		public const int WaitTimeoutForStateChange = 3000;
 
 		/// <remarks>
 		/// Shorter interval increases debug output.
 		/// </remarks>
-		public const int WaitIntervalForConnectionChange = 200;
+		public const int WaitIntervalForStateChange = 100;
 
 		/// <remarks>
-		/// Timeout of 200 ms is a bit too short, especially when debugger is connected, e.g.
+		/// Timeout of 200 ms is a bit too short for serial COM port at 9600 baud,
+		/// especially when debugger is connected:
 		///  > SingleLine often takes longer than 200 ms.
 		///  > DoubleLine often takes longer than 400 ms.
 		///  > TripleLine takes around 500 ms (where timeout would be 600 ms).
@@ -70,7 +71,7 @@ namespace YAT.Domain.Test
 		/// <remarks>
 		/// Shorter interval decreases test.
 		/// </remarks>
-		public const int WaitIntervalForLineTransmission = 25;
+		public const int WaitIntervalForLineTransmission = 20;
 
 		#endregion
 
@@ -79,18 +80,25 @@ namespace YAT.Domain.Test
 		// Settings
 		//==========================================================================================
 
-		internal static TerminalSettings GetTextTcpAutoSocketOnIPv4LoopbackSettings()
+		internal static TerminalSettings GetTextSettings()
 		{
-			return (GetTextTcpAutoSocketSettings(IPNetworkInterface.IPv4Loopback));
+			var settings = new TerminalSettings();
+			settings.TerminalType = TerminalType.Text;
+			settings.TextTerminal.ShowEol = true; // Required for easier test verification (byte count).
+			return (settings);
 		}
 
-		internal static TerminalSettings GetTextTcpAutoSocketSettings(IPNetworkInterfaceEx networkInterface)
+		internal static TerminalSettings GetTcpAutoSocketTextSettings(IPNetworkInterfaceEx networkInterface)
 		{
-			TerminalSettings settings = new TerminalSettings();
-			settings.TerminalType = TerminalType.Text;
+			var settings = GetTextSettings();
 			settings.IO.IOType = IOType.TcpAutoSocket;
 			settings.IO.Socket.LocalInterface = networkInterface;
 			return (settings);
+		}
+
+		internal static TerminalSettings GetTcpAutoSocketOnIPv4LoopbackTextSettings()
+		{
+			return (GetTcpAutoSocketTextSettings(IPNetworkInterface.IPv4Loopback));
 		}
 
 		#endregion
@@ -109,12 +117,12 @@ namespace YAT.Domain.Test
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
-				Thread.Sleep(WaitIntervalForConnectionChange);
-				waitTime += WaitIntervalForConnectionChange;
+				Thread.Sleep(WaitIntervalForStateChange);
+				waitTime += WaitIntervalForStateChange;
 
-				Console.Out.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForConnectionChange + " ms...");
+				Console.Out.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
-				if (waitTime >= WaitTimeoutForConnectionChange) {
+				if (waitTime >= WaitTimeoutForStateChange) {
 					Assert.Fail("Connect timeout!");
 				}
 			}
@@ -132,12 +140,12 @@ namespace YAT.Domain.Test
 			int waitTime = 0;
 			while (terminal.IsConnected)
 			{
-				Thread.Sleep(WaitIntervalForConnectionChange);
-				waitTime += WaitIntervalForConnectionChange;
+				Thread.Sleep(WaitIntervalForStateChange);
+				waitTime += WaitIntervalForStateChange;
 
-				Console.Out.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForConnectionChange + " ms...");
+				Console.Out.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
-				if (waitTime >= WaitTimeoutForConnectionChange) {
+				if (waitTime >= WaitTimeoutForStateChange) {
 					Assert.Fail("Disconnect timeout!");
 				}
 			}
@@ -182,7 +190,7 @@ namespace YAT.Domain.Test
 					            " mismatches expected = " + expectedTotalLineCount + ".");
 				}
 			}
-			while ((byteCountTx != expectedTotalByteCount) && (lineCountTx != expectedTotalLineCount));
+			while ((byteCountTx != expectedTotalByteCount) || (lineCountTx != expectedTotalLineCount));
 
 			Console.Out.WriteLine("...done");
 		}
@@ -226,7 +234,7 @@ namespace YAT.Domain.Test
 					            " mismatches expected = " + expectedTotalLineCount + ".");
 				}
 
-				byteCountRx = terminalTx.GetRepositoryByteCount(RepositoryType.Rx);
+				byteCountRx = terminalRx.GetRepositoryByteCount(RepositoryType.Rx);
 				if (byteCountRx > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
 					            " Number of received bytes = " + byteCountRx +
@@ -240,8 +248,8 @@ namespace YAT.Domain.Test
 					            " mismatches expected = " + expectedTotalLineCount + ".");
 				}
 			}
-			while ((byteCountTx != expectedTotalByteCount) && (lineCountTx != expectedTotalLineCount) &&
-			       (byteCountRx != expectedTotalByteCount) && (lineCountRx != expectedTotalLineCount));
+			while ((byteCountTx != expectedTotalByteCount) || (lineCountTx != expectedTotalLineCount) ||
+			       (byteCountRx != expectedTotalByteCount) || (lineCountRx != expectedTotalLineCount));
 
 			Console.Out.WriteLine("...done");
 		}
