@@ -86,7 +86,7 @@ namespace YAT.Domain
 			this.lastLineAuxiliary = new DisplayLine(rhs.lastLineAuxiliary.Clone());
 		}
 
-#if (DEBUG)
+	#if (DEBUG)
 
 		/// <remarks>
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
@@ -97,7 +97,7 @@ namespace YAT.Domain
 			MKY.Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 
-#endif // DEBUG
+	#endif // DEBUG
 
 		#endregion
 
@@ -168,8 +168,7 @@ namespace YAT.Domain
 		{
 			// Add element to current line:
 			this.currentLine.Add(item);
-			if (item.IsData)
-				this.byteCount += item.ByteCount;
+			this.byteCount += item.ByteCount;
 
 			// Check whether a line break is needed:
 			if (item is DisplayElement.LineBreak)
