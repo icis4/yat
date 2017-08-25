@@ -523,7 +523,7 @@ namespace YAT.Domain
 
 		private void InitializeStates()
 		{
-			using (Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianness))
+			using (var p = new Parser.Parser(TerminalSettings.IO.Endianness))
 			{
 				LineBreakTimer t;
 

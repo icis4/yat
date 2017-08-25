@@ -823,7 +823,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public virtual bool TryParse(string s, out byte[] result, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
-			using (Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianness, TerminalSettings.Send.ToParseMode()))
+			using (var p = new Parser.Parser(TerminalSettings.IO.Endianness, TerminalSettings.Send.ToParseMode()))
 				return (p.TryParse(s, out result, defaultRadix));
 		}
 
@@ -906,7 +906,7 @@ namespace YAT.Domain
 			// Enqueue the items for sending:
 			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 			{
-				foreach (SendItem item in items)
+				foreach (var item in items)
 					this.sendQueue.Enqueue(item);
 			}
 
@@ -974,11 +974,11 @@ namespace YAT.Domain
 							this.ioChangedEventHelper.Initialize();
 							this.sendingIsOngoing = true;
 
-							foreach (SendItem si in pendingItems)
+							foreach (var item in pendingItems)
 							{
-								DebugMessage(@"Processing item """ + si.ToString() + @""" of " + pendingItems.Length + " send item(s)...");
+								DebugMessage(@"Processing item """ + item.ToString() + @""" of " + pendingItems.Length + " send item(s)...");
 
-								ProcessSendItem(si);
+								ProcessSendItem(item);
 
 								if (this.ioChangedEventHelper.TotalTimeLagIsAboveThreshold())
 								{
@@ -1050,7 +1050,7 @@ namespace YAT.Domain
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
 
-			using (Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianness, TerminalSettings.Send.ToParseMode()))
+			using (var p = new Parser.Parser(TerminalSettings.IO.Endianness, TerminalSettings.Send.ToParseMode()))
 				hasSucceeded = p.TryParse(item.Data, out parseResult, out textSuccessfullyParsed, item.DefaultRadix);
 
 			if (hasSucceeded)
@@ -1080,7 +1080,7 @@ namespace YAT.Domain
 
 				// --- Process the line/packet ---
 
-				foreach (Parser.Result result in results)
+				foreach (var result in results)
 				{
 					var byteResult = (result as Parser.BytesResult);
 					if (byteResult != null)
@@ -1224,7 +1224,7 @@ namespace YAT.Domain
 				{
 					if (this.terminalSettings.IO.IOType == IOType.SerialPort)
 					{
-						MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
+						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.OutputBreak = true;
 					}
 					else
@@ -1238,7 +1238,7 @@ namespace YAT.Domain
 				{
 					if (this.terminalSettings.IO.IOType == IOType.SerialPort)
 					{
-						MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
+						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.OutputBreak = false;
 					}
 					else
@@ -1252,7 +1252,7 @@ namespace YAT.Domain
 				{
 					if (this.terminalSettings.IO.IOType == IOType.SerialPort)
 					{
-						MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
+						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.ToggleOutputBreak();
 					}
 					else
@@ -1270,7 +1270,7 @@ namespace YAT.Domain
 						if (!ArrayEx.IsNullOrEmpty(result.Args))
 							reportId = (byte)result.Args[0];
 
-						MKY.IO.Usb.SerialHidDevice device = (MKY.IO.Usb.SerialHidDevice)this.UnderlyingIOInstance;
+						var device = (MKY.IO.Usb.SerialHidDevice)this.UnderlyingIOInstance;
 						device.ActiveReportId = reportId;
 					}
 					else
@@ -1305,7 +1305,7 @@ namespace YAT.Domain
 
 			if (performLineInterval) // 'Interval' has precendence over 'Delay' as it requires more accuracy.
 			{
-				TimeSpan elapsed = (lineEndTimeStamp - lineBeginTimeStamp);
+				var elapsed = (lineEndTimeStamp - lineBeginTimeStamp);
 				effectiveDelay = lineInterval - (int)elapsed.TotalMilliseconds;
 			}
 			else if (performLineDelay)

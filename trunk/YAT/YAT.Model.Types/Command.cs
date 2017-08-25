@@ -190,7 +190,7 @@ namespace YAT.Model.Types
 			this.filePath         = rhs.filePath;
 		}
 
-#if (DEBUG)
+	#if (DEBUG)
 
 		/// <remarks>
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
@@ -201,7 +201,7 @@ namespace YAT.Model.Types
 			MKY.Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 
-#endif // DEBUG
+	#endif // DEBUG
 
 		#endregion
 
@@ -523,7 +523,7 @@ namespace YAT.Model.Types
 				if (!IsText)
 					return (false);
 
-				using (Domain.Parser.Parser p = new Domain.Parser.Parser())
+				using (var p = new Domain.Parser.Parser())
 				{
 					foreach (string commandLine in this.textLines)
 					{

@@ -108,7 +108,7 @@ namespace YAT.Domain
 			Add(displayElement.Clone()); // Clone the element.
 		}
 
-#if (DEBUG)
+	#if (DEBUG)
 
 		/// <remarks>
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
@@ -119,7 +119,7 @@ namespace YAT.Domain
 			MKY.Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 
-#endif // DEBUG
+	#endif // DEBUG
 
 		#endregion
 
