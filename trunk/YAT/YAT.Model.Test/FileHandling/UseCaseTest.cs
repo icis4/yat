@@ -182,7 +182,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(workspace.TerminalCount, Is.EqualTo(0), uc + "Workspace doesn't contain 0 terminals!");
 				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True, uc + "Terminal could not be created!");
 
 				Terminal terminal = workspace.ActiveTerminal;
@@ -288,7 +288,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(PathEx.Equals(terminal1.SettingsFilePath, this.normalTerminal1FilePath), uc + "Terminal 1 is not stored at user terminal 1 location!");
 				var normalTerminal1LastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True, uc + "Terminal 2 could not be created!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
 
@@ -296,7 +296,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 could not be created!");
 				terminal2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				Assert.That(workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler()), Is.True, "Terminal 3 could not be created!");
+				Assert.That(workspace.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler()), Is.True, "Terminal 3 could not be created!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(3), uc + "Workspace doesn't contain 3 terminals!");
 
 				Terminal terminal3 = workspace.ActiveTerminal;
@@ -556,7 +556,7 @@ namespace YAT.Model.Test.FileHandling
 					new bool[]     { false,     false     }  // Auto.
 				);
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True, uc + "Terminal 3 could not be created!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(3), uc + "Workspace doesn't contain 3 terminals!");
 
@@ -680,7 +680,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(workspace.TerminalCount, Is.EqualTo(0), uc + "Workspace doesn't contain 0 terminals!");
 				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True, uc + "Terminal 1 could not be created!");
 				Terminal terminal1 = workspace.ActiveTerminal;
 				Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 could not be created!");
@@ -689,7 +689,7 @@ namespace YAT.Model.Test.FileHandling
 				success = terminal1.SaveAs(this.normalTerminal1FilePath);
 				Assert.That(success, Is.True, uc + "Terminal 1 could not be saved as!");
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True, uc + "Terminal 2 could not be created!");
 				Terminal terminal2 = workspace.ActiveTerminal;
 				Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 could not be created!");
@@ -754,7 +754,7 @@ namespace YAT.Model.Test.FileHandling
 
 				Utilities.VerifyFiles(uc, workspace, false, terminal1, true, false);
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True, uc + "Terminal 2 could not be created!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
 
