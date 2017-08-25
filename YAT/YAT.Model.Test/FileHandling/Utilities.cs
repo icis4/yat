@@ -49,9 +49,9 @@ namespace YAT.Model.Test.FileHandling
 		// Settings
 		//==========================================================================================
 
-		internal static DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler()
+		internal static DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler()
 		{
-			return (new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>(Test.Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings()));
+			return (new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>(Test.Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings()));
 		}
 
 		#endregion
@@ -67,7 +67,7 @@ namespace YAT.Model.Test.FileHandling
 			main = new Main();
 			main.Start();              // Creates empty workspace
 			workspace = main.Workspace;
-			workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+			workspace.CreateNewTerminal(GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 			terminal = workspace.ActiveTerminal;
 		}
 
@@ -113,7 +113,7 @@ namespace YAT.Model.Test.FileHandling
 			Assert.That(workspace.TerminalCount, Is.EqualTo(0), step + "Workspace doesn't contain 0 terminals!");
 			workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-			success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+			success = workspace.CreateNewTerminal(GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 			Assert.That(success, Is.True, step + "Terminal could not be created!");
 			terminal = workspace.ActiveTerminal;
 			Assert.That(terminal, Is.Not.Null, step + "Terminal could not be created!");
