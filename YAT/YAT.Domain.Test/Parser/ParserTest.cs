@@ -605,7 +605,7 @@ namespace YAT.Domain.Test.Parser
 		[Test, TestCaseSource(typeof(ParserTestData), "TestCases")]
 		public virtual void TestParser(string s, byte[] expectedBytes)
 		{
-			using (Domain.Parser.Parser p = new Domain.Parser.Parser())
+			using (var p = new Domain.Parser.Parser())
 			{
 				byte[] actualBytes;
 				string successfullyParsed;
@@ -620,7 +620,7 @@ namespace YAT.Domain.Test.Parser
 		[Test, TestCaseSource(typeof(EncodingTestData), "TestCases")]
 		public virtual void TestParserEncoding(Encoding encoding, Endianness endianness, string s, byte[] expectedBytes)
 		{
-			using (Domain.Parser.Parser p = new Domain.Parser.Parser(encoding, endianness))
+			using (var p = new Domain.Parser.Parser(encoding, endianness))
 			{
 				byte[] actualBytes;
 				string successfullyParsed;
@@ -636,7 +636,7 @@ namespace YAT.Domain.Test.Parser
 		[Test, TestCaseSource(typeof(KeywordTestData), "TestCases")]
 		public virtual void TestParserKeyword(string s, Domain.Parser.Keyword expectedKeyword, int[] expectedArgs)
 		{
-			using (Domain.Parser.Parser p = new Domain.Parser.Parser())
+			using (var p = new Domain.Parser.Parser())
 			{
 				Domain.Parser.Result[] results;
 				string successfullyParsed;
@@ -654,7 +654,7 @@ namespace YAT.Domain.Test.Parser
 		[Test, TestCaseSource(typeof(ErrorTestData), "TestCases")]
 		public virtual void TestParserError(string s, string expectedParsed, string expectedMessage)
 		{
-			using (Domain.Parser.Parser p = new Domain.Parser.Parser())
+			using (var p = new Domain.Parser.Parser())
 			{
 				byte[] actualBytes;
 				string actualParsed;
