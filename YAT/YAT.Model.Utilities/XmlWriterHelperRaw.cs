@@ -96,7 +96,7 @@ namespace YAT.Model.Utilities
 
 			bool success = true;
 
-			var data = new List<byte>(displayLine.DataCount); // Preset the initial capacity to improve memory management.
+			var data = new List<byte>(displayLine.ByteCount); // Preset the initial capacity to improve memory management.
 
 			string dateStr      = "";
 			string timeStr      = "";

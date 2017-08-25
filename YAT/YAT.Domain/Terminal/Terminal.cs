@@ -2190,7 +2190,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		protected virtual void PrepareLineEndInfo(int dataCount, out DisplayLinePart lp)
+		protected virtual void PrepareLineEndInfo(int byteCount, out DisplayLinePart lp)
 		{
 			if (TerminalSettings.Display.ShowLength)
 			{
@@ -2199,7 +2199,7 @@ namespace YAT.Domain
 				if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
 					lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
 
-				lp.Add(new DisplayElement.DataLength(dataCount, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache));
+				lp.Add(new DisplayElement.DataLength(byteCount, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache));
 			}
 			else
 			{
@@ -2421,8 +2421,12 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
-		public virtual int GetRepositoryDataCount(RepositoryType repository)
+		/// <remarks>
+		/// Note that this value reflects the byte count of the elements contained in the repository,
+		/// i.e. the byte count of the elements shown. The value thus not necessarily reflects the
+		/// total byte count of a sent or received sequence.
+		/// </remarks>
+		public virtual int GetRepositoryByteCount(RepositoryType repository)
 		{
 			AssertNotDisposed();
 
@@ -2430,9 +2434,9 @@ namespace YAT.Domain
 			{
 				switch (repository)
 				{
-					case RepositoryType.Tx:    return (this.txRepository   .DataCount);
-					case RepositoryType.Bidir: return (this.bidirRepository.DataCount);
-					case RepositoryType.Rx:    return (this.rxRepository   .DataCount);
+					case RepositoryType.Tx:    return (this.txRepository   .ByteCount);
+					case RepositoryType.Bidir: return (this.bidirRepository.ByteCount);
+					case RepositoryType.Rx:    return (this.rxRepository   .ByteCount);
 				}
 				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
