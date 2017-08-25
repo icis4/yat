@@ -75,7 +75,7 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private int dataCount; // = 0;
+		private int byteCount; // = 0;
 
 		#endregion
 
@@ -129,11 +129,16 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary>
-		/// Returns number of data elements within repository.
+		/// Returns number of raw data bytes within collection.
 		/// </summary>
-		public virtual int DataCount
+		/// <remarks>
+		/// Note that this value reflects the byte count of the elements contained in the collection,
+		/// i.e. the byte count of the elements shown. The value thus not necessarily reflects the
+		/// total byte count of a sent or received sequence.
+		/// </remarks>
+		public virtual int ByteCount
 		{
-			get { return (this.dataCount); }
+			get { return (this.byteCount); }
 		}
 
 		/// <summary>
@@ -175,7 +180,7 @@ namespace YAT.Domain
 					base.Add(item);
 			}
 
-			this.dataCount += item.DataCount;
+			this.byteCount += item.ByteCount;
 		}
 
 		/// <remarks>
@@ -193,7 +198,7 @@ namespace YAT.Domain
 		public new void RemoveAt(int index)
 		{
 			if (this[index].IsData)
-				this.dataCount -= this[index].DataCount;
+				this.byteCount -= this[index].ByteCount;
 
 			base.RemoveAt(index);
 		}
@@ -250,7 +255,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual byte[] ElementsToOrigin()
 		{
-			var l = new List<byte>(this.DataCount); // Preset the initial capacity to improve memory management.
+			var l = new List<byte>(this.ByteCount); // Preset the initial capacity to improve memory management.
 
 			foreach (var de in this)
 			{
@@ -292,7 +297,7 @@ namespace YAT.Domain
 		public virtual string ToString(string indent)
 		{
 			return (indent + "> ElementCount: " +       Count.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
-					indent + "> DataCount: " + this.dataCount.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
+					indent + "> ByteCount: " + this.byteCount.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
 					indent + "> Elements: " + Environment.NewLine + ElementsToString(indent + "   "));
 		}
 

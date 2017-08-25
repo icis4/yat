@@ -53,7 +53,7 @@ namespace YAT.Domain
 
 		private int capacity; // = 0;
 		private DisplayLinePart currentLine; // = null;
-		private int dataCount; // = 0;
+		private int byteCount; // = 0;
 
 		private DisplayLine lastLineAuxiliary; // = null;
 
@@ -81,7 +81,7 @@ namespace YAT.Domain
 		{
 			this.capacity    = rhs.capacity;
 			this.currentLine = new DisplayLinePart(rhs.currentLine.Clone());
-			this.dataCount   = rhs.dataCount;
+			this.byteCount   = rhs.byteCount;
 
 			this.lastLineAuxiliary = new DisplayLine(rhs.lastLineAuxiliary.Clone());
 		}
@@ -143,11 +143,16 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Returns number of data elements within repository.
+		/// Returns number of raw data bytes within repository.
 		/// </summary>
-		public virtual int DataCount
+		/// <remarks>
+		/// Note that this value reflects the byte count of the elements contained in the repository,
+		/// i.e. the byte count of the elements shown. The value thus not necessarily reflects the
+		/// total byte count of a sent or received sequence.
+		/// </remarks>
+		public virtual int ByteCount
 		{
-			get { return (this.dataCount); }
+			get { return (this.byteCount); }
 		}
 
 		#endregion
@@ -164,7 +169,7 @@ namespace YAT.Domain
 			// Add element to current line:
 			this.currentLine.Add(item);
 			if (item.IsData)
-				this.dataCount += item.DataCount;
+				this.byteCount += item.ByteCount;
 
 			// Check whether a line break is needed:
 			if (item is DisplayElement.LineBreak)
@@ -194,7 +199,7 @@ namespace YAT.Domain
 			var dl = base.Dequeue();
 
 			foreach (var de in dl)
-				this.dataCount -= de.DataCount;
+				this.byteCount -= de.ByteCount;
 
 			return (dl);
 		}
@@ -204,7 +209,7 @@ namespace YAT.Domain
 		{
 			base.Clear();
 			this.currentLine.Clear();
-			this.dataCount = 0;
+			this.byteCount = 0;
 
 			this.lastLineAuxiliary.Clear();
 		}
@@ -270,7 +275,7 @@ namespace YAT.Domain
 		{
 			return (indent + "> LineCapacity: " +    Capacity.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
 					indent + "> LineCount: " +          Count.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
-					indent + "> DataCount: " + this.dataCount.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
+					indent + "> ByteCount: " + this.byteCount.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
 					indent + "> Lines: " + Environment.NewLine + LinesToString(indent + "   "));
 		}
 

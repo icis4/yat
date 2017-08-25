@@ -120,8 +120,8 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public TxData(byte[] origin, string text, int dataCount)
-				: base(Direction.Tx, origin, text, dataCount)
+			public TxData(byte[] origin, string text, int byteCount)
+				: base(Direction.Tx, origin, text, byteCount)
 			{
 			}
 		}
@@ -143,8 +143,8 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public TxControl(byte[] origin, string text, int dataCount)
-				: base(Direction.Tx, origin, text, dataCount)
+			public TxControl(byte[] origin, string text, int byteCount)
+				: base(Direction.Tx, origin, text, byteCount)
 			{
 			}
 		}
@@ -166,8 +166,8 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public RxData(byte[] origin, string text, int dataCount)
-				: base(Direction.Rx, origin, text, dataCount)
+			public RxData(byte[] origin, string text, int byteCount)
+				: base(Direction.Rx, origin, text, byteCount)
 			{
 			}
 		}
@@ -189,8 +189,8 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public RxControl(byte[] origin, string text, int dataCount)
-				: base(Direction.Rx, origin, text, dataCount)
+			public RxControl(byte[] origin, string text, int byteCount)
+				: base(Direction.Rx, origin, text, byteCount)
 			{
 			}
 		}
@@ -317,14 +317,14 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public DataLength(int length, string enclosureLeft, string enclosureRight)
-				: this(Direction.None, length, enclosureLeft, enclosureRight)
+			public DataLength(int byteCount, string enclosureLeft, string enclosureRight)
+				: this(Direction.None, byteCount, enclosureLeft, enclosureRight)
 			{
 			}
 
 			/// <summary></summary>
-			public DataLength(Direction direction, int length, string enclosureLeft, string enclosureRight)
-				: base(direction, enclosureLeft + length.ToString(CultureInfo.InvariantCulture) + enclosureRight)
+			public DataLength(Direction direction, int byteCount, string enclosureLeft, string enclosureRight)
+				: base(direction, enclosureLeft + byteCount.ToString(CultureInfo.InvariantCulture) + enclosureRight)
 			{
 			}
 		}
@@ -471,7 +471,7 @@ namespace YAT.Domain
 		private Direction direction;
 		private List<Pair<byte[], string>> origin;
 		private string text;
-		private int dataCount;
+		private int byteCount;
 		private ElementAttributes attributes;
 
 		#endregion
@@ -506,23 +506,23 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		private DisplayElement(Direction direction, byte[] origin, string text, int dataCount)
+		private DisplayElement(Direction direction, byte[] origin, string text, int byteCount)
 		{
-			List<Pair<byte[], string>> l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+			var l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 			l.Add(new Pair<byte[], string>(origin, text));
-			Initialize(direction, l, text, dataCount, ElementAttributes.Data);
+			Initialize(direction, l, text, byteCount, ElementAttributes.Data);
 		}
 
-		private void Initialize(Direction direction, List<Pair<byte[], string>> origin, string text, int dataCount, ElementAttributes attributes)
+		private void Initialize(Direction direction, List<Pair<byte[], string>> origin, string text, int byteCount, ElementAttributes attributes)
 		{
 			this.direction  = direction;
 			this.origin     = origin;
 			this.text       = text;
-			this.dataCount  = dataCount;
+			this.byteCount  = byteCount;
 			this.attributes = attributes;
 		}
 
-#if (DEBUG)
+	#if (DEBUG)
 
 		/// <remarks>
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
@@ -533,7 +533,7 @@ namespace YAT.Domain
 			MKY.Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 
-#endif // DEBUG
+	#endif // DEBUG
 
 		#endregion
 
@@ -580,11 +580,11 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[XmlAttribute("DataCount")]
-		public virtual int DataCount
+		[XmlAttribute("ByteCount")]
+		public virtual int ByteCount
 		{
-			get { return (this.dataCount); }
-			set { this.dataCount = value;  }
+			get { return (this.byteCount); }
+			set { this.byteCount = value;  }
 		}
 
 		/// <summary></summary>
@@ -677,7 +677,7 @@ namespace YAT.Domain
 			clone.direction  = this.direction;
 			clone.origin     = PerformDeepClone(this.origin);
 			clone.text       = this.text;
-			clone.dataCount  = this.dataCount;
+			clone.byteCount  = this.byteCount;
 			clone.attributes = this.attributes;
 
 			return (clone);
@@ -686,15 +686,15 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual DisplayElement RecreateFromOriginItem(Pair<byte[], string> originItem)
 		{
-			DisplayElement clone = Clone(); // Ensure to recreate the proper type.
+			var clone = Clone(); // Ensure to recreate the proper type.
 
 			// Keep direction, isData and isEol.
 
-			// Replace origin and dataCount.
-			List<Pair<byte[], string>> clonedOrigin = new List<Pair<byte[], string>>(1); // Preset the required capacity to improve memory management.
+			// Replace origin and byteCount.
+			var clonedOrigin = new List<Pair<byte[], string>>(1); // Preset the required capacity to improve memory management.
 			clonedOrigin.Add(PerformDeepClone(originItem));
 			clone.origin = clonedOrigin;
-			clone.dataCount = 1;
+			clone.byteCount = 1;
 
 			// Replace text.
 			string text = originItem.Value2;
@@ -751,7 +751,7 @@ namespace YAT.Domain
 				if (this.text != null)
 					this.text += other.text;
 
-				this.dataCount += other.dataCount;
+				this.byteCount += other.byteCount;
 			}
 			catch (ArgumentException ex)
 			{
@@ -820,7 +820,7 @@ namespace YAT.Domain
 			sb.Append(indent); sb.Append("> Direction:    "); sb.AppendLine(Direction.ToString());
 			sb.Append(indent); sb.Append("> Origin:       "); sb.AppendLine(Origin != null ? Origin.ToString() : "'null'");
 			sb.Append(indent); sb.Append("> Text:         "); sb.AppendLine(Text   != null ? Text              :    ""   );
-			sb.Append(indent); sb.Append("> DataCount:    "); sb.AppendLine(DataCount.ToString(CultureInfo.InvariantCulture));
+			sb.Append(indent); sb.Append("> ByteCount:    "); sb.AppendLine(ByteCount.ToString(CultureInfo.InvariantCulture));
 			sb.Append(indent); sb.Append("> Flags:        "); sb.AppendLine(Attributes.ToString());
 
 			return (sb.ToString());

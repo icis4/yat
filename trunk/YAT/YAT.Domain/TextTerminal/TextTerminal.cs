@@ -625,7 +625,7 @@ namespace YAT.Domain
 					if ((lineState.EolElements.Count == 1) && (lineState.EolElements[0].OriginCount == lineState.Eol.Sequence.Length))
 					{
 						// Unfold the elements into single elements for correct processing:
-						var l = new List<DisplayElement>(lineState.EolElements.DataCount); // Preset the required capacity to improve memory management.
+						var l = new List<DisplayElement>(lineState.EolElements.ByteCount); // Preset the required capacity to improve memory management.
 						foreach (var item in lineState.EolElements)
 						{
 							foreach (var originItem in item.Origin)
@@ -645,7 +645,7 @@ namespace YAT.Domain
 						// Note that sequence might look like <CR><CR><LF>, only the last two are EOL!
 					
 						// Unfold the elements into single elements for correct processing:
-						var l = new List<DisplayElement>(lineState.EolElements.DataCount); // Preset the required capacity to improve memory management.
+						var l = new List<DisplayElement>(lineState.EolElements.ByteCount); // Preset the required capacity to improve memory management.
 						foreach (var item in lineState.EolElements)
 						{
 							foreach (var originItem in item.Origin)
@@ -653,16 +653,16 @@ namespace YAT.Domain
 						}
 
 						// Count data:
-						int dataCount = 0;
+						int byteCount = 0;
 						foreach (var item in l)
-							dataCount += item.DataCount;
+							byteCount += item.ByteCount;
 
 						// Mark only true EOL elements as EOL:
-						int firstEolIndex = dataCount - lineState.Eol.Sequence.Length;
+						int firstEolIndex = byteCount - lineState.Eol.Sequence.Length;
 						int currentIndex = 0;
 						foreach (var item in l)
 						{
-							currentIndex += item.DataCount;
+							currentIndex += item.ByteCount;
 
 							if (currentIndex > firstEolIndex)
 								item.IsEol = true;
@@ -710,7 +710,7 @@ namespace YAT.Domain
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
 			if (lineState.Position != LinePosition.End)
 			{
-				if ((lineState.Elements.DataCount >= TerminalSettings.Display.MaxBytePerLineCount) &&
+				if ((lineState.Elements.ByteCount >= TerminalSettings.Display.MaxBytePerLineCount) &&
 					(lineState.Position != LinePosition.DataExceeded))
 				{
 					lineState.Position = LinePosition.DataExceeded;
@@ -726,7 +726,7 @@ namespace YAT.Domain
 		{
 			if (ElementsAreSeparate(d))
 			{
-				if (lineState.Elements.DataCount > 0)
+				if (lineState.Elements.ByteCount > 0)
 					lp.Add(new DisplayElement.DataSpace());
 			}
 		}
@@ -780,14 +780,14 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.ShowLength)
 			{
 				DisplayLinePart info;
-				PrepareLineEndInfo(line.DataCount, out info);
+				PrepareLineEndInfo(line.ByteCount, out info);
 				lp.AddRange(info);
 			}
 			lp.Add(new DisplayElement.LineBreak()); // Direction may be both!
 
 			// Potentially suppress empty lines that only contain hidden <CR><LF>:
-			bool suppressEmptyLine = ((lineState.Elements.DataCount == 0) &&                    // Empty line.
-			                          (lineState.EolElements.DataCount == 1) &&                 // EOL contained though, as a single data element.
+			bool suppressEmptyLine = ((lineState.Elements.ByteCount == 0) &&                    // Empty line.
+			                          (lineState.EolElements.ByteCount == 1) &&                 // EOL contained though, as a single data element.
 			                           lineState.EolOfLastLineOfGivenPortWasCompleteMatch.ContainsKey(ps) &&
 			                          !lineState.EolOfLastLineOfGivenPortWasCompleteMatch[ps]); // EOL of last line of the current port is still pending.
 			if (suppressEmptyLine)

@@ -497,7 +497,7 @@ namespace YAT.Domain
 					// Add space if necessary:
 					if (ElementsAreSeparate(IODirection.Tx))
 					{
-						if (this.txLineState.Elements.DataCount > 0)
+						if (this.txLineState.Elements.ByteCount > 0)
 							OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.DataSpace());
 					}
 
@@ -604,7 +604,7 @@ namespace YAT.Domain
 			//  3. Evaluate the easiest case: Length line break.
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
 
-			if ((displaySettings.SequenceLineBreakBefore.Enabled && (lineState.Elements.DataCount > 0) &&
+			if ((displaySettings.SequenceLineBreakBefore.Enabled && (lineState.Elements.ByteCount > 0) &&
 				(lineState.Position != LinePosition.End)))   // Also skip if line has just been brokwn.
 			{
 				lineState.SequenceBefore.Enqueue(b);
@@ -675,13 +675,13 @@ namespace YAT.Domain
 			if ((displaySettings.LengthLineBreak.Enabled) &&
 				(lineState.Position != LinePosition.End))
 			{
-				if (lineState.Elements.DataCount >= displaySettings.LengthLineBreak.Length)
+				if (lineState.Elements.ByteCount >= displaySettings.LengthLineBreak.Length)
 					lineState.Position = LinePosition.End;
 			}
 
 			if (lineState.Position != LinePosition.End)
 			{
-				if ((lineState.Elements.DataCount >= TerminalSettings.Display.MaxBytePerLineCount) &&
+				if ((lineState.Elements.ByteCount >= TerminalSettings.Display.MaxBytePerLineCount) &&
 					(lineState.Position != LinePosition.DataExceeded))
 				{
 					lineState.Position = LinePosition.DataExceeded;
@@ -711,7 +711,7 @@ namespace YAT.Domain
 		{
 			if (ElementsAreSeparate(d))
 			{
-				if (lineState.Elements.DataCount > 0)
+				if (lineState.Elements.ByteCount > 0)
 					lp.Add(new DisplayElement.DataSpace());
 			}
 		}
@@ -731,7 +731,7 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.ShowLength)
 			{
 				DisplayLinePart info;
-				PrepareLineEndInfo(lineState.Elements.DataCount, out info);
+				PrepareLineEndInfo(lineState.Elements.ByteCount, out info);
 				lp.AddRange(info);
 			}
 			lp.Add(new DisplayElement.LineBreak()); // Direction may be both!
