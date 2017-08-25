@@ -53,17 +53,24 @@ namespace YAT.Domain.Test
 		public const int WaitTimeoutForConnectionChange = 3000;
 
 		/// <remarks>
+		/// Shorter interval increases debug output.
+		/// </remarks>
+		public const int WaitIntervalForConnectionChange = 200;
+
+		/// <remarks>
 		/// Timeout of 200 ms is a bit too short, especially when debugger is connected, e.g.
 		///  > SingleLine often takes longer than 200 ms.
 		///  > DoubleLine often takes longer than 400 ms.
-		///  > TripleLine takes around 500 ms (where timeout is 600 ms).
-		///  > MultiLine takes around 4000..5000 ms (where timeout is 5200 ms).
+		///  > TripleLine takes around 500 ms (where timeout would be 600 ms).
+		///  > MultiLine takes around 4000..5000 ms (where timeout would be 5200 ms).
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds but StyleCop isn't able to deal with such abbreviations...")]
 		public const int WaitTimeoutForLineTransmission = 300;
 
-		/// <summary></summary>
-		public const int WaitInterval = 100;
+		/// <remarks>
+		/// Shorter interval decreases test.
+		/// </remarks>
+		public const int WaitIntervalForLineTransmission = 25;
 
 		#endregion
 
@@ -102,13 +109,14 @@ namespace YAT.Domain.Test
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
-				Thread.Sleep(WaitInterval);
-				waitTime += WaitInterval;
+				Thread.Sleep(WaitIntervalForConnectionChange);
+				waitTime += WaitIntervalForConnectionChange;
 
 				Console.Out.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForConnectionChange + " ms...");
 
-				if (waitTime >= WaitTimeoutForConnectionChange)
+				if (waitTime >= WaitTimeoutForConnectionChange) {
 					Assert.Fail("Connect timeout!");
+				}
 			}
 			while (!terminalA.IsConnected && !terminalB.IsConnected);
 
@@ -124,13 +132,14 @@ namespace YAT.Domain.Test
 			int waitTime = 0;
 			while (terminal.IsConnected)
 			{
-				Thread.Sleep(WaitInterval);
-				waitTime += WaitInterval;
+				Thread.Sleep(WaitIntervalForConnectionChange);
+				waitTime += WaitIntervalForConnectionChange;
 
 				Console.Out.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForConnectionChange + " ms...");
 
-				if (waitTime >= WaitTimeoutForConnectionChange)
+				if (waitTime >= WaitTimeoutForConnectionChange) {
 					Assert.Fail("Disconnect timeout!");
+				}
 			}
 
 			Console.Out.WriteLine("...done");
@@ -140,70 +149,99 @@ namespace YAT.Domain.Test
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int currentLineCount, int expectedTotalLineCount)
+		internal static void WaitForSending(Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
 			// Calculate timeout:
-			int timeout = (WaitTimeoutForLineTransmission * currentLineCount);
+			int timeout = WaitTimeoutForLineTransmission;
 
-			int txLineCount = 0;
-			int rxLineCount = 0;
-			int waitTime = 0;
-			do                         // Initially wait to allow async send,
-			{                          //   therefore, use do-while.
-				Thread.Sleep(WaitInterval);
-				waitTime += WaitInterval;
-
-				Console.Out.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
-
-				if (waitTime >= timeout)
-					Assert.Fail("Transmission timeout! Not enough lines received within expected interval.");
-
-				txLineCount = terminalTx.GetRepositoryLineCount(RepositoryType.Tx);
-				if (txLineCount > expectedTotalLineCount) // Break in case of too much data to improve speed of test.
-					Assert.Fail("Transmission error!" +
-						" Number of received lines = " + txLineCount +
-						" mismatches expected = " + expectedTotalLineCount + ".");
-
-				rxLineCount = terminalRx.GetRepositoryLineCount(RepositoryType.Rx);
-				if (rxLineCount > expectedTotalLineCount) // Break in case of too much data to improve speed of test.
-					Assert.Fail("Transmission error!" +
-						" Number of received lines = " + rxLineCount +
-						" mismatches expected = " + expectedTotalLineCount + ".");
-			}
-			while ((txLineCount != expectedTotalLineCount) &&
-			       (rxLineCount != expectedTotalLineCount));
-
-			Console.Out.WriteLine("...done");
-		}
-
-		/// <remarks>
-		/// There are similar utility methods in 'Model.Test.Utilities'.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
-		internal static void WaitForSending(Terminal terminalTx, int currentLineCount, int expectedTotalLineCount)
-		{
-			// Calculate timeout:
-			int timeout = (WaitTimeoutForLineTransmission * currentLineCount);
-
+			int byteCountTx = 0;
 			int lineCountTx = 0;
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
-				Thread.Sleep(WaitInterval);
-				waitTime += WaitInterval;
+				Thread.Sleep(WaitIntervalForLineTransmission);
+				waitTime += WaitIntervalForLineTransmission;
+
+				Console.Out.WriteLine("Waiting for sending, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+
+				if (waitTime >= timeout) {
+					Assert.Fail("Transmission timeout! Not enough data sent within expected interval.");
+				}
+
+				byteCountTx = terminalTx.GetRepositoryByteCount(RepositoryType.Tx);
+				if (byteCountTx > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
+					Assert.Fail("Transmission error!" +
+					            " Number of sent bytes = " + byteCountTx +
+					            " mismatches expected = " + expectedTotalByteCount + ".");
+				}
+
+				lineCountTx = terminalTx.GetRepositoryLineCount(RepositoryType.Tx);
+				if (lineCountTx > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+					Assert.Fail("Transmission error!" +
+					            " Number of sent lines = " + lineCountTx +
+					            " mismatches expected = " + expectedTotalLineCount + ".");
+				}
+			}
+			while ((byteCountTx != expectedTotalByteCount) && (lineCountTx != expectedTotalLineCount));
+
+			Console.Out.WriteLine("...done");
+		}
+
+		/// <remarks>
+		/// There are similar utility methods in 'Model.Test.Utilities'.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
+		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
+		{
+			// Calculate timeout:
+			int timeout = WaitTimeoutForLineTransmission;
+
+			int byteCountTx = 0;
+			int lineCountTx = 0;
+			int byteCountRx = 0;
+			int lineCountRx = 0;
+			int waitTime = 0;
+			do                         // Initially wait to allow async send,
+			{                          //   therefore, use do-while.
+				Thread.Sleep(WaitIntervalForLineTransmission);
+				waitTime += WaitIntervalForLineTransmission;
 
 				Console.Out.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 
-				if (waitTime >= timeout)
-					Assert.Fail("Transmission timeout! Not enough lines received within expected interval.");
+				if (waitTime >= timeout) {
+					Assert.Fail("Transmission timeout! Not enough data transmitted within expected interval.");
+				}
+
+				byteCountTx = terminalTx.GetRepositoryByteCount(RepositoryType.Tx);
+				if (byteCountTx > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
+					Assert.Fail("Transmission error!" +
+					            " Number of sent bytes = " + byteCountTx +
+					            " mismatches expected = " + expectedTotalByteCount + ".");
+				}
 
 				lineCountTx = terminalTx.GetRepositoryLineCount(RepositoryType.Tx);
-				if (lineCountTx > expectedTotalLineCount) // Break in case of too much data to improve speed of test.
+				if (lineCountTx > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
-						" Number of sent lines = " + lineCountTx +
-						" mismatches expected = " + expectedTotalLineCount + ".");
+					            " Number of sent lines = " + lineCountTx +
+					            " mismatches expected = " + expectedTotalLineCount + ".");
+				}
+
+				byteCountRx = terminalTx.GetRepositoryByteCount(RepositoryType.Rx);
+				if (byteCountRx > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
+					Assert.Fail("Transmission error!" +
+					            " Number of received bytes = " + byteCountRx +
+					            " mismatches expected = " + expectedTotalByteCount + ".");
+				}
+
+				lineCountRx = terminalRx.GetRepositoryLineCount(RepositoryType.Rx);
+				if (lineCountRx > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+					Assert.Fail("Transmission error!" +
+					            " Number of received lines = " + lineCountRx +
+					            " mismatches expected = " + expectedTotalLineCount + ".");
+				}
 			}
-			while (lineCountTx != expectedTotalLineCount);
+			while ((byteCountTx != expectedTotalByteCount) && (lineCountTx != expectedTotalLineCount) &&
+			       (byteCountRx != expectedTotalByteCount) && (lineCountRx != expectedTotalLineCount));
 
 			Console.Out.WriteLine("...done");
 		}

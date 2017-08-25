@@ -56,7 +56,7 @@ namespace YAT.Domain.Test.TextTerminal
 			{
 				// Control characters:
 				yield return ("<CR><LF>");
-				yield return ("<LF>"); // Note that <LF><CR> and <CR> cannot be used because it is used in the test implementation further below.
+				yield return ("<LF>"); // Note that <LF><CR> and <CR> cannot be used because they are used in the test implementation further below.
 				yield return ("<TAB>");
 				yield return ("<NUL>");
 
@@ -133,56 +133,80 @@ namespace YAT.Domain.Test.TextTerminal
 		{
 			const int WaitForDisposal = 100;
 
-			Settings.TerminalSettings settingsA = Utilities.GetTextTcpAutoSocketOnIPv4LoopbackSettings();
+			var eolByteCountAB = encoding.GetByteCount(eolAB);
+			var eolByteCountBA = encoding.GetByteCount(eolBA);
+			var eolIsSymmetric = (eolAB == eolBA);
+
+			var settingsA = Utilities.GetTextTcpAutoSocketOnIPv4LoopbackSettings();
 			settingsA.TextTerminal.Encoding = (EncodingEx)encoding;
 			settingsA.TextTerminal.TxEol = eolAB;
 			settingsA.TextTerminal.RxEol = eolBA;
-			using (Domain.TextTerminal terminalA = new Domain.TextTerminal(settingsA))
+			using (var terminalA = new Domain.TextTerminal(settingsA))
 			{
 				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
 
-				Settings.TerminalSettings settingsB = Utilities.GetTextTcpAutoSocketOnIPv4LoopbackSettings();
+				var settingsB = Utilities.GetTextTcpAutoSocketOnIPv4LoopbackSettings();
+				settingsB.TextTerminal.Encoding = (EncodingEx)encoding;
 				settingsB.TextTerminal.TxEol = eolBA;
 				settingsB.TextTerminal.RxEol = eolAB;
-				using (Domain.TextTerminal terminalB = new Domain.TextTerminal(settingsB))
+				using (var terminalB = new Domain.TextTerminal(settingsB))
 				{
 					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
-					int countA = 0;
-					int countB = 0;
+					string text;
+					int expectedTotalByteCountA = 0;
+					int expectedTotalByteCountB = 0;
+					int expectedTotalLineCountA = 0;
+					int expectedTotalLineCountB = 0;
 
-					terminalA.SendLine(""); // A#1
-					countA++;
-					Verify(terminalA, terminalB, eolAB, eolBA, 1, countA);
+					text = ""; // A#1
+					terminalA.SendLine(text);
+					expectedTotalByteCountA += (encoding.GetByteCount(text) + eolByteCountAB);
+					expectedTotalLineCountA++;
+					Verify(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
-					terminalA.SendLine("AA"); // A#2
-					countA++;
-					Verify(terminalA, terminalB, eolAB, eolBA, 1, countA);
+					text = "AA"; // A#2
+					terminalA.SendLine(text);
+					expectedTotalByteCountA += (encoding.GetByteCount(text) + eolByteCountAB);
+					expectedTotalLineCountA++;
+					Verify(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
-					terminalA.SendLine("ABABAB"); // A#3
-					countA++;
-					Verify(terminalA, terminalB, eolAB, eolBA, 1, countA);
+					text = "ABABAB"; // A#3
+					terminalA.SendLine(text);
+					expectedTotalByteCountA += (encoding.GetByteCount(text) + eolByteCountAB);
+					expectedTotalLineCountA++;
+					Verify(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
-					terminalB.SendLine("<CR>"); // B#1
-					countB++;
-					Verify(terminalB, terminalA, eolBA, eolAB, 1, countB);
+					text = "<CR>"; // B#1
+					terminalB.SendLine(text);
+					expectedTotalByteCountB += (encoding.GetByteCount(text) + eolByteCountBA);
+					expectedTotalLineCountB++;
+					Verify(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
-					terminalB.SendLine("<CR><CR>"); // B#2
-					countB++;
-					Verify(terminalB, terminalA, eolBA, eolAB, 1, countB);
+					text = "<CR><CR>"; // B#2
+					terminalB.SendLine(text);
+					expectedTotalByteCountB += (encoding.GetByteCount(text) + eolByteCountBA);
+					expectedTotalLineCountB++;
+					Verify(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
-					terminalB.SendLine("<CR><CR><ESC>"); // B#3
-					countB++;
-					Verify(terminalB, terminalA, eolBA, eolAB, 1, countB);
+					text = "<CR><CR><ESC>"; // B#3
+					terminalB.SendLine(text);
+					expectedTotalByteCountB += (encoding.GetByteCount(text) + eolByteCountBA);
+					expectedTotalLineCountB++;
+					Verify(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
-					terminalA.SendLine("<ESC>"); // A#4
-					countA++;
-					Verify(terminalA, terminalB, eolAB, eolBA, 1, countA);
+					text = "<ESC>"; // A#4
+					terminalA.SendLine(text);
+					expectedTotalByteCountA += (encoding.GetByteCount(text) + eolByteCountAB);
+					expectedTotalLineCountA++;
+					Verify(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
-					terminalB.SendLine("BBBB"); // B#4
-					countB++;
-					Verify(terminalB, terminalA, eolBA, eolAB, 1, countB);
+					text = "BBBB"; // B#4
+					terminalB.SendLine(text);
+					expectedTotalByteCountB += (encoding.GetByteCount(text) + eolByteCountBA);
+					expectedTotalLineCountB++;
+					Verify(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
 					terminalB.Stop();
 					Utilities.WaitForDisconnection(terminalB);
@@ -195,13 +219,12 @@ namespace YAT.Domain.Test.TextTerminal
 			Thread.Sleep(WaitForDisposal);
 		}
 
-		/// <remarks>Verification simply waits for transmission. If line count mismatches, a timeout assertion will get thrown.</remarks>
-		private static void Verify(Domain.TextTerminal terminalTx, Domain.TextTerminal terminalRx, string eolTx, string eolRx, int currentLineCount, int expectedTotalLineCount)
+		private static void Verify(Domain.TextTerminal terminalTx, Domain.TextTerminal terminalRx, bool eolIsSymmetric, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
-			if (eolTx == eolRx)
-				Utilities.WaitForTransmission(terminalTx, terminalRx, currentLineCount, expectedTotalLineCount);
+			if (eolIsSymmetric)
+				Utilities.WaitForTransmission(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 			else
-				Utilities.WaitForSending(terminalTx, currentLineCount, expectedTotalLineCount);
+				Utilities.WaitForSending(terminalTx, expectedTotalByteCount, expectedTotalLineCount);
 		}
 
 		/// <summary></summary>
@@ -211,17 +234,17 @@ namespace YAT.Domain.Test.TextTerminal
 			const int WaitForOperation = 100;
 			const int WaitForDisposal = 100;
 
-			Settings.TerminalSettings settingsA = Utilities.GetTextTcpAutoSocketOnIPv4LoopbackSettings();
+			var settingsA = Utilities.GetTextTcpAutoSocketOnIPv4LoopbackSettings();
 			settingsA.TextTerminal.TxEol = "";
 			settingsA.TextTerminal.RxEol = "";
-			using (Domain.TextTerminal terminalA = new Domain.TextTerminal(settingsA))
+			using (var terminalA = new Domain.TextTerminal(settingsA))
 			{
 				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
 
-				Settings.TerminalSettings settingsB = Utilities.GetTextTcpAutoSocketOnIPv4LoopbackSettings();
+				var settingsB = Utilities.GetTextTcpAutoSocketOnIPv4LoopbackSettings();
 				settingsB.TextTerminal.TxEol = "";
 				settingsB.TextTerminal.RxEol = "";
-				using (Domain.TextTerminal terminalB = new Domain.TextTerminal(settingsB))
+				using (var terminalB = new Domain.TextTerminal(settingsB))
 				{
 					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started");
 					Utilities.WaitForConnection(terminalA, terminalB);
