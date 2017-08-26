@@ -126,7 +126,7 @@ namespace YAT.Model.Settings
 
 			if ((pageIndex >= 0) && (pageIndex < this.pages.Count))
 			{
-				PredefinedCommandPage page = this.pages[pageIndex];
+				var page = this.pages[pageIndex];
 				if ((commandIndex >= 0) && (commandIndex < MaxCommandsPerPage))
 				{
 					page.SetCommand(commandIndex, command);
@@ -160,7 +160,7 @@ namespace YAT.Model.Settings
 				return (false);
 
 			// Validate page:
-			List<Command> commands = this.pages[pageIndex].Commands;
+			var commands = this.pages[pageIndex].Commands;
 			if (commands == null)
 				return (false);
 
@@ -169,7 +169,7 @@ namespace YAT.Model.Settings
 				return (false);
 
 			// Validate command:
-			Command command = commands[commandIndex];
+			var command = commands[commandIndex];
 			if (command == null)
 				return (false);
 
