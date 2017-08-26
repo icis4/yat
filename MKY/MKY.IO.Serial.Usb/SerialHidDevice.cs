@@ -638,8 +638,8 @@ namespace MKY.IO.Serial.Usb
 						// try to get the lock or try again later. The thread = direction that
 						// get's the lock first, shall also be the one to signal first:
 
-						if (Monitor.TryEnter(this.dataEventSyncObj))
-						{
+						if (Monitor.TryEnter(this.dataEventSyncObj, 10)) // Allow a short time to enter, as receiving
+						{                                                // could be busy mostly locking the object.
 							try
 							{
 								byte[] data;
@@ -1244,8 +1244,8 @@ namespace MKY.IO.Serial.Usb
 						// Subsequently, yield to other threads to allow processing the data.
 						Thread.Sleep(TimeSpan.Zero);
 
-						if (Monitor.TryEnter(this.dataEventSyncObj))
-						{
+						if (Monitor.TryEnter(this.dataEventSyncObj, 10)) // Allow a short time to enter, as sending
+						{                                                // could be busy mostly locking the object.
 							try
 							{
 								byte[] data;

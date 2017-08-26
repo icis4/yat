@@ -865,8 +865,8 @@ namespace MKY.IO.Serial.Socket
 						// to get the lock or try again later. The thread = direction that get's
 						// the lock first, shall also be the one to signal first:
 
-						if (Monitor.TryEnter(this.dataEventSyncObj))
-						{
+						if (Monitor.TryEnter(this.dataEventSyncObj, 10)) // Allow a short time to enter, as receiving
+						{                                                // could be busy mostly locking the object.
 							try
 							{
 								System.Net.IPEndPoint remoteEndPoint = null;
