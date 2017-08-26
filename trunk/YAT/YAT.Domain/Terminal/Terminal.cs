@@ -1137,6 +1137,10 @@ namespace YAT.Domain
 											lineRepeatRemaining  =  keywordResult.Args[0];
 										}
 									}
+									else
+									{
+										Thread.Sleep(TimeSpan.Zero); // Make sure the application stays responsive while repeating.
+									}
 
 									break;
 								}
@@ -1160,7 +1164,7 @@ namespace YAT.Domain
 
 				ProcessLineEnd(sendEol);
 
-				DateTime lineEndTimeStamp = DateTime.Now; // \remind For binary terminals, this is rather a 'packetEnd'.
+				DateTime lineEndTimeStamp = DateTime.Now; // \remind For binary terminals, this is rather a 'packetEndTimeStamp'.
 
 				// --- Perform line/packet related post-processing ---
 
@@ -2248,8 +2252,8 @@ namespace YAT.Domain
 		{
 			// Collection of elements processed, extends over one or multiple lines,
 			// depending on the number of bytes in raw chunk.
-			DisplayElementCollection elements = new DisplayElementCollection(); // Default initial capacity is OK.
-			List<DisplayLine> lines = new List<DisplayLine>();
+			var elements = new DisplayElementCollection(); // Default initial capacity is OK.
+			var lines = new List<DisplayLine>();
 
 			ProcessRawChunk(raw, elements, lines);
 
@@ -2842,7 +2846,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayElementProcessed(IODirection direction, DisplayElement element)
 		{
-			DisplayElementCollection elements = new DisplayElementCollection(1); // Preset the required capacity to improve memory management.
+			var elements = new DisplayElementCollection(1); // Preset the required capacity to improve memory management.
 			elements.Add(element); // No clone needed as the element must be created when calling this event method.
 			OnDisplayElementsProcessed(direction, elements);
 		}
