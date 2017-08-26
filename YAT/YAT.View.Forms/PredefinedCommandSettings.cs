@@ -637,7 +637,7 @@ namespace YAT.View.Forms
 		/// <param name="command">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
 		private void GetCommandFromSettingsSet(int command)
 		{
-			Model.Types.PredefinedCommandPage page = this.settingsInEdit.Pages[SelectedPageIndex];
+			var page = this.settingsInEdit.Pages[SelectedPageIndex];
 			page.SetCommand(command - 1, this.predefinedCommandSettingsSets[command - 1].Command);
 		}
 

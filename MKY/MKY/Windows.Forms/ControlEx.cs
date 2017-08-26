@@ -56,10 +56,10 @@ namespace MKY.Windows.Forms
 		/// </remarks>
 		public static int TagToIndex(object sender)
 		{
-			Control control = sender as Control;
+			var control = sender as Control;
 			if (control != null)
 			{
-				string tag = control.Tag as string;
+				var tag = control.Tag as string;
 				if (tag != null)
 				{
 					int index;
@@ -95,7 +95,7 @@ namespace MKY.Windows.Forms
 		/// <returns><c>true</c> if focus was set or forwarded, <c>false</c> if failed.</returns>
 		public static bool SetOrForwardFocus(object sender)
 		{
-			Control control = sender as Control;
+			var control = sender as Control;
 			if (control != null)
 			{
 				if (control.Focus())
