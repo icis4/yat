@@ -92,10 +92,12 @@ namespace YAT.Model.Types
 		private string       description;
 		private Domain.Radix defaultRadix;
 		private string[]     textLines;
-		private bool         isPartialText;
-		private bool         isPartialTextEol;
 		private bool         isFilePath;
 		private string       filePath;
+
+		// Transitory properties:
+		private bool         isPartialText;
+		private bool         isPartialTextEol;
 
 		#endregion
 
@@ -749,13 +751,12 @@ namespace YAT.Model.Types
 			{
 				int hashCode;
 
-				hashCode =                     IsDefined                      .GetHashCode();
-				hashCode = (hashCode * 397) ^  TextLines                      .GetHashCode();
-				hashCode = (hashCode * 397) ^  DefaultRadix                   .GetHashCode();
-				hashCode = (hashCode * 397) ^  IsFilePath                     .GetHashCode();
-				hashCode = (hashCode * 397) ^ (FilePath     != null ? FilePath.GetHashCode() : 0);
-
-				// Do not consider 'Description' as it does not define the command.
+				hashCode =                     IsDefined                        .GetHashCode();
+				hashCode = (hashCode * 397) ^ (Description != null ? Description.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  DefaultRadix                     .GetHashCode();
+				hashCode = (hashCode * 397) ^ (TextLines   != null ?   TextLines.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  IsFilePath                       .GetHashCode();
+				hashCode = (hashCode * 397) ^ (FilePath    != null ?    FilePath.GetHashCode() : 0);
 
 				return (hashCode);
 			}
@@ -784,14 +785,13 @@ namespace YAT.Model.Types
 
 			return
 			(
-				IsDefined                .Equals(other.IsDefined) &&
-				ArrayEx.ElementsEqual(TextLines, other.TextLines) &&
-				DefaultRadix             .Equals(other.DefaultRadix) &&
-				IsFilePath               .Equals(other.IsFilePath) &&
-				PathEx.Equals(FilePath,          other.FilePath)
+				IsDefined.Equals(                   other.IsDefined)    &&
+				StringEx.EqualsOrdinal(Description, other.Description)  &&
+				DefaultRadix.Equals(                other.DefaultRadix) &&
+				ArrayEx.ElementsEqual(TextLines,    other.TextLines)    &&
+				IsFilePath.Equals(                  other.IsFilePath)   &&
+				PathEx.Equals(FilePath,             other.FilePath)
 			);
-
-			// Do not consider 'Description' as it does not define the command.
 		}
 
 		/// <summary>
