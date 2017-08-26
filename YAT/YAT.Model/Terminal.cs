@@ -4668,6 +4668,9 @@ namespace YAT.Model
 		[Conditional("DEBUG")]
 		private void DebugMessage(string message)
 		{
+			if ((message == "Sending...") || (message == "Receiving..."))
+				return; // Skip messages not useful for debugging.
+
 			Debug.WriteLine
 			(
 				string.Format

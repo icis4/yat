@@ -62,8 +62,7 @@ namespace YAT.Domain
 			Environment.NewLine +
 			@"Send EOL sequence ""OK\!(" + (Parser.KeywordEx)Parser.Keyword.Eol + @")""" + Environment.NewLine +
 			@"Do not send EOL ""OK\!(" + (Parser.KeywordEx)Parser.Keyword.NoEol + @")""" + Environment.NewLine +
-			@"""\!(" + (Parser.KeywordEx)Parser.Keyword.NoEol + @")"" is useful if your text protocol does have an EOL sequence" + Environment.NewLine +
-			@"  except for a few special commands (e.g. synchronization commands).";
+			@"""\!(" + (Parser.KeywordEx)Parser.Keyword.NoEol + @")"" is useful if your text protocol does have an EOL sequence except for a few special commands (e.g. synchronization commands).";
 
 		#endregion
 
@@ -873,8 +872,8 @@ namespace YAT.Domain
 
 						if ((lineState.Elements != null) && (lineState.Elements.Count > 0))
 						{
-							DisplayElementCollection elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-							List<DisplayLine> lines = new List<DisplayLine>();
+							var elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+							var lines = new List<DisplayLine>();
 
 							ExecuteLineEnd(lineState, ps, elements, lines);
 

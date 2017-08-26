@@ -86,8 +86,8 @@ namespace YAT.Domain.Parser
 			@"Formats can also be applied on each value, e.g. ""\d(79)\d(75)""" + Environment.NewLine +
 			@"Formats can be nested, e.g. ""\d(79 \h(4B) 79)""" + Environment.NewLine +
 			@"Three letter radix identifiers are also allowed, e.g. ""\hex"" alternative to ""\h""" + Environment.NewLine +
-			@"+/- signs are not allowed, neither are decimal points nor separators such as the apostroph" + Environment.NewLine +
-			@"Enable ""Explicit Default Radix"" to switch default radix to a different setting than string" + Environment.NewLine +
+			@"+/- signs are not allowed, neither are decimal points nor separators such as the apostroph." + Environment.NewLine +
+			@"Enable ""Explicit Default Radix"" to switch default radix to a different setting than string." + Environment.NewLine +
 			Environment.NewLine +
 			@"In addition, C-style escape sequences are supported:" + Environment.NewLine +
 			@"""\r\n"" alternative to ""<CR><LF>""" + Environment.NewLine +
@@ -98,9 +98,9 @@ namespace YAT.Domain.Parser
 			@"""\0b01001111"" alternative to ""\b(01001111)""" + Environment.NewLine +
 			@"""\u20AC"" alternative to ""\U+20AC"" or ""\U(20AC)""" + Environment.NewLine +
 			Environment.NewLine +
-			@"Type \\ to send a backspace" + Environment.NewLine +
-			@"Type \< to send an opening angle bracket" + Environment.NewLine +
-			@"Type \) to send a closing parenthesis";
+			@"Type \\ to send a backspace." + Environment.NewLine +
+			@"Type \< to send an opening angle bracket." + Environment.NewLine +
+			@"Type \) to send a closing parenthesis.";
 
 		/// <summary></summary>
 		public static readonly string KeywordHelp =
@@ -108,19 +108,21 @@ namespace YAT.Domain.Parser
 			Environment.NewLine +
 			@"Clear the monitors ""Send something\!(" + (KeywordEx)Keyword.Clear + @")""" + Environment.NewLine +
 			Environment.NewLine +
-			@"Delay ""Send something\!(" + (KeywordEx)Keyword.Delay + @"(1000))Send delayed"" or without argument according to the advanced settings" + Environment.NewLine +
-			@"Delay after ""Send something and then delay\!(" + (KeywordEx)Keyword.LineDelay + @"(1000))"" or without argument according to the advanced settings" + Environment.NewLine +
-			@"Interval ""Send something in interval\!(" + (KeywordEx)Keyword.LineInterval + @"(1000))"" or without argument according to the advanced settings" + Environment.NewLine +
-			@"Repeat ""Send something multiple times\!(" + (KeywordEx)Keyword.LineRepeat + @"(10))"" or without argument according to the advanced settings" + Environment.NewLine +
-			@"Repeat ""Send something infinitely\!(" + (KeywordEx)Keyword.LineRepeat + @"(-1))"" or without argument according to the advanced settings" + Environment.NewLine +
+			@"Delay ""Send something\!(" + (KeywordEx)Keyword.Delay + @"(1000))Send delayed"" or without argument according to the advanced settings." + Environment.NewLine +
+			@"Delay after ""Send something and then delay\!(" + (KeywordEx)Keyword.LineDelay + @"(1000))"" or without argument according to the advanced settings." + Environment.NewLine +
+			@"Interval ""Send something in interval\!(" + (KeywordEx)Keyword.LineInterval + @"(1000))"" or without argument according to the advanced settings." + Environment.NewLine +
+			@"Repeat ""Send something multiple times\!(" + (KeywordEx)Keyword.LineRepeat + @"(10))"" or without argument according to the advanced settings." + Environment.NewLine +
+			@"Repeat ""Send something infinitely\!(" + (KeywordEx)Keyword.LineRepeat + @"(-1))"" or without argument according to the advanced settings." + Environment.NewLine +
+			@"Note that ""\!(" + (KeywordEx)Keyword.LineRepeat + @")"" will repeat as fast as possible, thus resulting in 100% load of the CPU core in use. To prevent this, use this keyword combined with a delay or interval keyword, e.g. ""\!(" + (KeywordEx)Keyword.LineRepeat + @")\!(" + (KeywordEx)Keyword.LineInterval + @")""." + Environment.NewLine +
+			@"Use [Ctrl+B] to break an ongoing ""\!(" + (KeywordEx)Keyword.LineRepeat + @")"" operation." + Environment.NewLine +
 			Environment.NewLine +
 			@"Output break state on ""\!(" + (KeywordEx)Keyword.OutputBreakOn + @")""" + Environment.NewLine +
 			@"Output break state off ""\!(" + (KeywordEx)Keyword.OutputBreakOff + @")""" + Environment.NewLine +
 			@"Output break state toggle ""\!(" + (KeywordEx)Keyword.OutputBreakToggle + @")""" + Environment.NewLine +
-			@"Output break state only applies to serial COM ports" +
+			@"Output break state only applies to serial COM ports." +
 			Environment.NewLine +
 			@"Change USB Ser/HID report ID to 1 ""\!(" + (KeywordEx)Keyword.ReportId + @"(1))""" + Environment.NewLine +
-			@"Report ID can only be used with USB Ser/HID";
+			@"Report ID can only be used with USB Ser/HID.";
 
 		#endregion
 

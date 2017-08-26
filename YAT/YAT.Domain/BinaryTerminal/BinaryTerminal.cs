@@ -880,8 +880,8 @@ namespace YAT.Domain
 
 						if ((lineState.Elements != null) && (lineState.Elements.Count > 0))
 						{
-							DisplayElementCollection elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-							List<DisplayLine> lines = new List<DisplayLine>();
+							var elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+							var lines = new List<DisplayLine>();
 
 							ExecuteLineEnd(lineState, elements, lines);
 
@@ -910,8 +910,8 @@ namespace YAT.Domain
 
 			if (lineState.Elements.Count > 0)
 			{
-				DisplayElementCollection elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-				List<DisplayLine> lines = new List<DisplayLine>();
+				var elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				var lines = new List<DisplayLine>();
 
 				ExecuteLineEnd(lineState, elements, lines);
 
