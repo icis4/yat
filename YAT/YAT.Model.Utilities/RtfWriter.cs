@@ -244,7 +244,7 @@ namespace YAT.Model.Utilities
 				int position = 0;
 				var text = new StringBuilder();
 				var segments = new List<Pair<DisplayElement, Pair<int, int>>>(line.Count); // Preset the required capacity to improve memory management.
-				foreach (DisplayElement element in line)
+				foreach (var element in line)
 				{
 					if (!string.IsNullOrEmpty(element.Text))
 					{

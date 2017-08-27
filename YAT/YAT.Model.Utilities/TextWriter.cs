@@ -145,7 +145,7 @@ namespace YAT.Model.Utilities
 
 			lock (writerSyncObj)
 			{
-				foreach (DisplayElement element in line)
+				foreach (var element in line)
 				{
 					// Handle line break according to current system:
 					if (element is DisplayElement.LineBreak)
