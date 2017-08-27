@@ -1094,27 +1094,27 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnCommandChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(CommandChanged, this, e);
+			EventHelper.RaiseSync(CommandChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnEditFocusStateChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(EditFocusStateChanged, this, e);
+			EventHelper.RaiseSync(EditFocusStateChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnSendCommandRequest(SendTextOptionEventArgs e)
 		{
-			EventHelper.InvokeSync(SendCommandRequest, this, e);
+			EventHelper.RaiseSync(SendCommandRequest, this, e);
 		}
 
 		#endregion

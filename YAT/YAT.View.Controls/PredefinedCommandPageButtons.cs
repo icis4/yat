@@ -317,21 +317,21 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnSendCommandRequest(PredefinedCommandEventArgs e)
 		{
-			EventHelper.InvokeSync<PredefinedCommandEventArgs>(SendCommandRequest, this, e);
+			EventHelper.RaiseSync<PredefinedCommandEventArgs>(SendCommandRequest, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDefineCommandRequest(PredefinedCommandEventArgs e)
 		{
-			EventHelper.InvokeSync<PredefinedCommandEventArgs>(DefineCommandRequest, this, e);
+			EventHelper.RaiseSync<PredefinedCommandEventArgs>(DefineCommandRequest, this, e);
 		}
 
 		#endregion

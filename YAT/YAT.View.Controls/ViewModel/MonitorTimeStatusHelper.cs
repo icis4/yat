@@ -148,15 +148,15 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnStatusTextChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(StatusTextChanged, this, e);
+			EventHelper.RaiseSync(StatusTextChanged, this, e);
 		}
 
 		#endregion

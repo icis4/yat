@@ -123,10 +123,10 @@ namespace YAT.Model
 		// Events
 		//==========================================================================================
 
-		/// <summary>Fired when a new terminal was added to the workspace.</summary>
+		/// <summary>Event raised when a new terminal was added to the workspace.</summary>
 		public event EventHandler<EventArgs<Terminal>> TerminalAdded;
 
-		/// <summary>Fired when a terminal was removed from the workspace.</summary>
+		/// <summary>Event raised when a terminal was removed from the workspace.</summary>
 		public event EventHandler<EventArgs<Terminal>> TerminalRemoved;
 
 		/// <summary></summary>
@@ -1204,7 +1204,7 @@ namespace YAT.Model
 				OnClosed(new ClosedEventArgs(isMainExit));
 
 				// The workspace shall dispose of itself to free all resources for sure. It must be
-				// done AFTER it invoked the 'Closed' event and all subscribers of the event may still
+				// done AFTER it raised the 'Closed' event and all subscribers of the event may still
 				// refer to a non-disposed object. This is especially important, as the order of the
 				// subscribers is not fixed, i.e. 'Model.Main' may dispose of the workspace before
 				// 'View.Main' receives the event callback!
@@ -2199,35 +2199,35 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnTerminalAdded(Terminal terminal)
 		{
-			this.eventHelper.InvokeSync<EventArgs<Terminal>>(TerminalAdded, this, new EventArgs<Terminal>(terminal));
+			this.eventHelper.RaiseSync<EventArgs<Terminal>>(TerminalAdded, this, new EventArgs<Terminal>(terminal));
 		}
 
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnTerminalRemoved(Terminal terminal)
 		{
-			this.eventHelper.InvokeSync<EventArgs<Terminal>>(TerminalRemoved, this, new EventArgs<Terminal>(terminal));
+			this.eventHelper.RaiseSync<EventArgs<Terminal>>(TerminalRemoved, this, new EventArgs<Terminal>(terminal));
 		}
 
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
-			this.eventHelper.InvokeSync<EventArgs<string>>(FixedStatusTextRequest, this, new EventArgs<string>(text));
+			this.eventHelper.RaiseSync<EventArgs<string>>(FixedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
-			this.eventHelper.InvokeSync<EventArgs<string>>(TimedStatusTextRequest, this, new EventArgs<string>(text));
+			this.eventHelper.RaiseSync<EventArgs<string>>(TimedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
 		/// <summary></summary>
@@ -2240,7 +2240,7 @@ namespace YAT.Model
 				OnCursorReset(); // Just in case...
 
 				MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
-				this.eventHelper.InvokeSync<MessageInputEventArgs>(MessageInputRequest, this, e);
+				this.eventHelper.RaiseSync<MessageInputEventArgs>(MessageInputRequest, this, e);
 
 				// Ensure that the request is processed!
 				if (e.Result == DialogResult.None)
@@ -2265,7 +2265,7 @@ namespace YAT.Model
 				OnCursorReset(); // Just in case...
 
 				DialogEventArgs e = new DialogEventArgs();
-				this.eventHelper.InvokeSync<DialogEventArgs>(SaveAsFileDialogRequest, this, e);
+				this.eventHelper.RaiseSync<DialogEventArgs>(SaveAsFileDialogRequest, this, e);
 
 				// Ensure that the request is processed!
 				if (e.Result == DialogResult.None)
@@ -2282,7 +2282,7 @@ namespace YAT.Model
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnCursorRequest(Cursor cursor)
 		{
-			this.eventHelper.InvokeSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));
+			this.eventHelper.RaiseSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));
 		}
 
 		/// <summary></summary>
@@ -2294,13 +2294,13 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void OnSaved(SavedEventArgs e)
 		{
-			this.eventHelper.InvokeSync<SavedEventArgs>(Saved, this, e);
+			this.eventHelper.RaiseSync<SavedEventArgs>(Saved, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnClosed(ClosedEventArgs e)
 		{
-			this.eventHelper.InvokeSync<ClosedEventArgs>(Closed, this, e);
+			this.eventHelper.RaiseSync<ClosedEventArgs>(Closed, this, e);
 		}
 
 		#endregion

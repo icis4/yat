@@ -304,15 +304,15 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnSettingsChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(SettingsChanged, this, e);
+			EventHelper.RaiseSync(SettingsChanged, this, e);
 		}
 
 		#endregion

@@ -48,12 +48,12 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary>
-		/// Fired after the I/O provider's state has changed, e.g. started or stopped.
+		/// Event raised after the I/O provider's state has changed, e.g. started or stopped.
 		/// </summary>
 		event EventHandler IOChanged;
 
 		/// <summary>
-		/// Fired after the I/O provider's control state has changed.
+		/// Event raised after the I/O provider's control state has changed.
 		/// </summary>
 		/// <remarks>
 		/// For serial COM ports, this event indicates a change of the serial control pins.
@@ -61,12 +61,12 @@ namespace MKY.IO.Serial
 		event EventHandler IOControlChanged;
 
 		/// <summary>
-		/// Fired after an I/O error has occurred.
+		/// Event raised after an I/O error has occurred.
 		/// </summary>
 		event EventHandler<IOErrorEventArgs> IOError;
 
 		/// <summary>
-		/// Fired after the I/O provider has received data.
+		/// Event raised after the I/O provider has received data.
 		/// </summary>
 		/// <remarks>
 		/// Opposed to the interface of <see cref="System.IO.Ports.SerialPort"/>, i.e. a method
@@ -83,7 +83,7 @@ namespace MKY.IO.Serial
 		event EventHandler<DataReceivedEventArgs> DataReceived;
 
 		/// <summary>
-		/// Fired after the I/O provider has sent data.
+		/// Event raised after the I/O provider has sent data.
 		/// </summary>
 		/// <remarks>
 		/// Send related code is located after receive related code since I/O is a common term

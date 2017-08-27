@@ -1930,7 +1930,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// -----------------------------------
 		/// Another improvement suggested by Marco Stroppel on 2011-02-17 doesn't work with YAT.
 		/// 
-		/// Suggestion: The while(BytesAvailable > 0) fires endless events, because I did not call
+		/// Suggestion: The while(BytesAvailable > 0) raises endless events, because I did not call
 		/// the Receive() method. That was, because I receive only the data when the other port to
 		/// write the data is opened. So the BytesAvailable got never zero. My idea was (not knowing
 		/// if this is good) to do something like:
@@ -1943,7 +1943,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// 
 		/// This suggestions doesn't work because YAT shall show every single byte as soon as it
 		/// get's received. If 3 bytes are received while 5 bytes are taken out of the receive
-		/// queue, no more event gets fired. Thus, the 3 bytes do not get shown until new data
+		/// queue, no more event gets raised. Thus, the 3 bytes do not get shown until new data
 		/// arrives. This is not acceptable.
 		/// </remarks>
 		/// <remarks>
@@ -2137,7 +2137,7 @@ namespace MKY.IO.Serial.SerialPort
 					int byteToReadDummy = this.port.BytesToRead; // Force e.g. 'IOException', details see alive timer.
 					UnusedLocal.PreventAnalysisWarning(byteToReadDummy);
 
-					// Invoke events:
+					// Raise events:
 					switch (e.EventType)
 					{
 						case MKY.IO.Ports.SerialPinChange.InputBreak:
@@ -2150,7 +2150,7 @@ namespace MKY.IO.Serial.SerialPort
 							break;
 
 						default:
-							// Do not fire general 'IOChanged' event.
+							// Do not raise general 'IOChanged' event.
 							break;
 					}
 
@@ -2438,30 +2438,30 @@ namespace MKY.IO.Serial.SerialPort
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(IOChanged, this, e);
+			this.eventHelper.RaiseSync(IOChanged, this, e);
 		}
 
 		/// <remarks>See remarks on top of MKY.IO.Ports.SerialPort.SerialPortEx why asynchronously is required.</remarks>
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOChangedAsync(EventArgs e)
 		{
-			this.eventHelper.InvokeAsync(IOChanged, this, e);
+			this.eventHelper.RaiseAsync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(IOControlChanged, this, e);
+			this.eventHelper.RaiseSync(IOControlChanged, this, e);
 
 			SetNextControlChangedTickStamp();
 		}
@@ -2470,7 +2470,7 @@ namespace MKY.IO.Serial.SerialPort
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOControlChangedAsync(EventArgs e)
 		{
-			this.eventHelper.InvokeAsync(IOControlChanged, this, e);
+			this.eventHelper.RaiseAsync(IOControlChanged, this, e);
 
 			SetNextControlChangedTickStamp();
 		}
@@ -2490,14 +2490,14 @@ namespace MKY.IO.Serial.SerialPort
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			this.eventHelper.InvokeSync<IOErrorEventArgs>(IOError, this, e);
+			this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <remarks>See remarks on top of MKY.IO.Ports.SerialPort.SerialPortEx why asynchronously is required.</remarks>
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOErrorAsync(IOErrorEventArgs e)
 		{
-			this.eventHelper.InvokeAsync<IOErrorEventArgs>(IOError, this, e);
+			this.eventHelper.RaiseAsync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
@@ -2505,7 +2505,7 @@ namespace MKY.IO.Serial.SerialPort
 		protected virtual void OnDataReceived(DataReceivedEventArgs e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.InvokeSync<DataReceivedEventArgs>(DataReceived, this, e);
+				this.eventHelper.RaiseSync<DataReceivedEventArgs>(DataReceived, this, e);
 		}
 
 		/// <summary></summary>
@@ -2513,7 +2513,7 @@ namespace MKY.IO.Serial.SerialPort
 		protected virtual void OnDataSent(DataSentEventArgs e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.InvokeSync<DataSentEventArgs>(DataSent, this, e);
+				this.eventHelper.RaiseSync<DataSentEventArgs>(DataSent, this, e);
 		}
 
 		#endregion

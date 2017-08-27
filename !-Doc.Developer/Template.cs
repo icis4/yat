@@ -301,9 +301,9 @@ namespace YAT/*.<TODO>*/
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		#endregion

@@ -44,22 +44,22 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary>
-		/// Fired after port successfully opened.
+		/// Event raised after port successfully opened.
 		/// </summary>
 		event EventHandler Opened;
 
 		/// <summary>
-		/// Fired after port successfully closed.
+		/// Event raised after port successfully closed.
 		/// </summary>
 		event EventHandler Closed;
 
 		/// <summary>
-		/// Fired after data has been received from the device.
+		/// Event raised after data has been received from the device.
 		/// </summary>
 		event EventHandler DataReceived;
 
 		/// <summary>
-		/// Fired after data has completely be sent to the device.
+		/// Event raised after data has completely be sent to the device.
 		/// </summary>
 		event EventHandler<DataEventArgs> DataSent;
 

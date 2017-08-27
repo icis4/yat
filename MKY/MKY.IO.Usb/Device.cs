@@ -552,7 +552,7 @@ namespace MKY.IO.Usb
 							Debug.WriteLine("Info = " + e.DeviceInfo);
 							Debug.Unindent();
 
-							EventHelper.InvokeAsync(DeviceConnected, typeof(Device), e);
+							EventHelper.RaiseAsync(DeviceConnected, typeof(Device), e);
 							break;
 						}
 
@@ -565,7 +565,7 @@ namespace MKY.IO.Usb
 							Debug.WriteLine("Path = " + devicePath);
 							Debug.Unindent();
 
-							EventHelper.InvokeAsync(DeviceDisconnected, typeof(Device), e);
+							EventHelper.RaiseAsync(DeviceDisconnected, typeof(Device), e);
 							break;
 						}
 					}
@@ -616,17 +616,17 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary>
-		/// Fired after the device has been connected or reconnected.
+		/// Event raised after the device has been connected or reconnected.
 		/// </summary>
 		public event EventHandler Connected;
 
 		/// <summary>
-		/// Fired after the device has been disconnected.
+		/// Event raised after the device has been disconnected.
 		/// </summary>
 		public event EventHandler Disconnected;
 
 		/// <summary>
-		/// Fired after an I/O error has occurred.
+		/// Event raised after an I/O error has occurred.
 		/// </summary>
 		public event EventHandler<ErrorEventArgs> IOError;
 
@@ -947,7 +947,7 @@ namespace MKY.IO.Usb
 		/// is connected to both computer and device.
 		/// </summary>
 		/// <remarks>
-		/// The Win32 API 'RegisterDeviceNotification' invokes 'Connected' or 'Disconnected' events
+		/// The Win32 API 'RegisterDeviceNotification' raises 'Connected' or 'Disconnected' events
 		/// in case a device is attached or removed from the computer. The <see cref="IsConnected"/>
 		/// property relates to the state of these events.
 		/// </remarks>
@@ -1002,29 +1002,29 @@ namespace MKY.IO.Usb
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnConnected(EventArgs e)
 		{
 			this.isConnected = true;
-			this.eventHelper.InvokeSync(Connected, this, e);
+			this.eventHelper.RaiseSync(Connected, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisconnected(EventArgs e)
 		{
 			this.isConnected = false;
-			this.eventHelper.InvokeSync(Disconnected, this, e);
+			this.eventHelper.RaiseSync(Disconnected, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOError(ErrorEventArgs e)
 		{
-			this.eventHelper.InvokeSync<ErrorEventArgs>(IOError, this, e);
+			this.eventHelper.RaiseSync<ErrorEventArgs>(IOError, this, e);
 		}
 
 		#endregion

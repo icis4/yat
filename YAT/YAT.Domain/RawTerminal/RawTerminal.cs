@@ -765,47 +765,47 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(IOChanged, this, e);
+			this.eventHelper.RaiseSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(IOControlChanged, this, e);
+			this.eventHelper.RaiseSync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			this.eventHelper.InvokeSync<IOErrorEventArgs>(IOError, this, e);
+			this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRawChunkSent(EventArgs<RawChunk> e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.InvokeSync<EventArgs<RawChunk>>(RawChunkSent, this, e);
+				this.eventHelper.RaiseSync<EventArgs<RawChunk>>(RawChunkSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRawChunkReceived(EventArgs<RawChunk> e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.InvokeSync<EventArgs<RawChunk>>(RawChunkReceived, this, e);
+				this.eventHelper.RaiseSync<EventArgs<RawChunk>>(RawChunkReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryCleared(EventArgs<RepositoryType> e)
 		{
-			this.eventHelper.InvokeSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
+			this.eventHelper.RaiseSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
 		}
 
 		#endregion

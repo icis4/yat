@@ -290,7 +290,7 @@ namespace MKY.IO.Usb
 							Debug.WriteLine("Info = " + e.DeviceInfo);
 							Debug.Unindent();
 
-							EventHelper.InvokeAsync(DeviceConnected, typeof(SerialHidDevice), e);
+							EventHelper.RaiseAsync(DeviceConnected, typeof(SerialHidDevice), e);
 							break;
 						}
 
@@ -303,7 +303,7 @@ namespace MKY.IO.Usb
 							Debug.WriteLine("Path = " + devicePath);
 							Debug.Unindent();
 
-							EventHelper.InvokeAsync(DeviceDisconnected, typeof(SerialHidDevice), e);
+							EventHelper.RaiseAsync(DeviceDisconnected, typeof(SerialHidDevice), e);
 							break;
 						}
 					}
@@ -362,22 +362,22 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary>
-		/// Fired after port successfully opened.
+		/// Event raised after port successfully opened.
 		/// </summary>
 		public event EventHandler Opened;
 
 		/// <summary>
-		/// Fired after port successfully closed.
+		/// Event raised after port successfully closed.
 		/// </summary>
 		public event EventHandler Closed;
 
 		/// <summary>
-		/// Fired after data has been received from the device.
+		/// Event raised after data has been received from the device.
 		/// </summary>
 		public event EventHandler DataReceived;
 
 		/// <summary>
-		/// Fired after data has completely be sent to the device.
+		/// Event raised after data has completely be sent to the device.
 		/// </summary>
 		public event EventHandler<DataEventArgs> DataSent;
 
@@ -787,7 +787,7 @@ namespace MKY.IO.Usb
 		{
 			AssertNotDisposed();
 
-			// OnDataReceived has been invoked before.
+			// OnDataReceived has been called before.
 
 			int bytesReceived = 0;
 			if (IsOpen)
@@ -828,7 +828,7 @@ namespace MKY.IO.Usb
 		{
 			AssertNotDisposed();
 
-			// OnDataSent is invoked by 'Write()' below.
+			// OnDataSent is called by 'Write()' below.
 
 			if (IsOpen)
 				Write(data);
@@ -1308,9 +1308,9 @@ namespace MKY.IO.Usb
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -1336,27 +1336,27 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected virtual void OnOpened(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(Opened, this, e);
+			this.eventHelper.RaiseSync(Opened, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnClosed(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(Closed, this, e);
+			this.eventHelper.RaiseSync(Closed, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDataReceived(EventArgs e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.InvokeSync(DataReceived, this, e);
+				this.eventHelper.RaiseSync(DataReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDataSent(DataEventArgs e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.InvokeSync(DataSent, this, e);
+				this.eventHelper.RaiseSync(DataSent, this, e);
 		}
 
 		#endregion

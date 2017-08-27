@@ -2808,39 +2808,39 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(IOChanged, this, e);
+			this.eventHelper.RaiseSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(IOControlChanged, this, e);
+			this.eventHelper.RaiseSync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			this.eventHelper.InvokeSync<IOErrorEventArgs>(IOError, this, e);
+			this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRawChunkSent(EventArgs<RawChunk> e)
 		{
-			this.eventHelper.InvokeSync<EventArgs<RawChunk>>(RawChunkSent, this, e);
+			this.eventHelper.RaiseSync<EventArgs<RawChunk>>(RawChunkSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRawChunkReceived(EventArgs<RawChunk> e)
 		{
-			this.eventHelper.InvokeSync<EventArgs<RawChunk>>(RawChunkReceived, this, e);
+			this.eventHelper.RaiseSync<EventArgs<RawChunk>>(RawChunkReceived, this, e);
 		}
 
 		/// <summary></summary>
@@ -2864,7 +2864,7 @@ namespace YAT.Domain
 						this.bidirRepository.Enqueue(elements.Clone()); // Clone elements because they are needed again below.
 					}
 
-					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
+					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 						OnDisplayElementsSent(new DisplayElementsEventArgs(elements)); // No clone needed as the elements must be created when calling this event method.
 
 					break;
@@ -2878,7 +2878,7 @@ namespace YAT.Domain
 						this.rxRepository   .Enqueue(elements.Clone()); // Clone elements because they are needed again below.
 					}
 
-					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
+					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 						OnDisplayElementsReceived(new DisplayElementsEventArgs(elements)); // No clone needed as the elements must be created when calling this event method.
 
 					break;
@@ -2894,22 +2894,22 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsSent(DisplayElementsEventArgs e)
 		{
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
-				this.eventHelper.InvokeSync<DisplayElementsEventArgs>(DisplayElementsSent, this, e);
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsReceived(DisplayElementsEventArgs e)
 		{
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
-				this.eventHelper.InvokeSync<DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		protected virtual void OnDisplayLinesProcessed(IODirection d, List<DisplayLine> lines)
 		{
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 			{
 				switch (d)
 				{
@@ -2924,29 +2924,29 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesSent(DisplayLinesEventArgs e)
 		{
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
-				this.eventHelper.InvokeSync<DisplayLinesEventArgs>(DisplayLinesSent, this, e);
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesReceived(DisplayLinesEventArgs e)
 		{
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
-				this.eventHelper.InvokeSync<DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryCleared(EventArgs<RepositoryType> e)
 		{
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
-				this.eventHelper.InvokeSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryReloaded(EventArgs<RepositoryType> e)
 		{
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
-				this.eventHelper.InvokeSync<EventArgs<RepositoryType>>(RepositoryReloaded, this, e);
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync<EventArgs<RepositoryType>>(RepositoryReloaded, this, e);
 		}
 
 		#endregion

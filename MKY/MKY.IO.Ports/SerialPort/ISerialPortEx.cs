@@ -34,32 +34,32 @@ namespace MKY.IO.Ports
 	public interface ISerialPort : ISerialPortDotNet
 	{
 		/// <summary>
-		/// Fired after port changed.
+		/// Event raised after port changed.
 		/// </summary>
 		event EventHandler PortChanged;
 
 		/// <summary>
-		/// Fired after port settings changed.
+		/// Event raised after port settings changed.
 		/// </summary>
 		event EventHandler PortSettingsChanged;
 
 		/// <summary>
-		/// Fired before port is being opened.
+		/// Event raised before port is being opened.
 		/// </summary>
 		event EventHandler Opening;
 
 		/// <summary>
-		/// Fired after port successfully opened.
+		/// Event raised after port successfully opened.
 		/// </summary>
 		event EventHandler Opened;
 
 		/// <summary>
-		/// Fired before port is being closed.
+		/// Event raised before port is being closed.
 		/// </summary>
 		event EventHandler Closing;
 
 		/// <summary>
-		/// Fired after port successfully closed.
+		/// Event raised after port successfully closed.
 		/// </summary>
 		event EventHandler Closed;
 

@@ -370,7 +370,7 @@ namespace YAT.Model
 					// ...detach event handlers to ensure that no more events are received...
 					DetachTerminalEventHandlers();
 
-					// ...ensure that timed objects are stopped and do not invoke events anymore...
+					// ...ensure that timed objects are stopped and do not raise events anymore...
 					DisposeRates();
 					DisposeChronos();
 					DisposeAutoResponse();
@@ -2072,7 +2072,7 @@ namespace YAT.Model
 				OnClosed(new ClosedEventArgs(isWorkspaceClose));
 
 				// The terminal shall dispose of itself to free all resources for sure. It must be
-				// done AFTER it invoked the 'Closed' event and all subscribers of the event may still
+				// done AFTER it raised the 'Closed' event and all subscribers of the event may still
 				// refer to a non-disposed object. This is especially important, as the order of the
 				// subscribers is not fixed, i.e. 'Model.Workspace' may dispose of the terminal
 				// before 'View.Terminal' receives the event callback!
@@ -4052,9 +4052,9 @@ namespace YAT.Model
 
 			// Note, this user requested change of the current settings is handled here,
 			// and not in the 'terminal_IOControlChanged' event handler, for two reasons:
-			//  1. The event will be invoked after any change of the control pins, separating
+			//  1. The event will be raised after any change of the control pins, separating
 			//     user indended and other events would be cumbersome.
-			//  2. The event will be invoked asynchronously, accessing the settings here
+			//  2. The event will be raised asynchronously, accessing the settings here
 			//     synchronously is the better option.
 			//  3. Here, it is obvious that the user indeed wants to change a pin setting,
 			//     and therefore expects the setting to be modified.
@@ -4078,9 +4078,9 @@ namespace YAT.Model
 
 			// Note, this user requested change of the current settings is handled here,
 			// and not in the 'terminal_IOControlChanged' event handler, for two reasons:
-			//  1. The event will be invoked after any change of the control pins, separating
+			//  1. The event will be raised after any change of the control pins, separating
 			//     user indended and other events would be cumbersome.
-			//  2. The event will be invoked asynchronously, accessing the settings here
+			//  2. The event will be raised asynchronously, accessing the settings here
 			//     synchronously is the better option.
 			//  3. Here, it is obvious that the user indeed wants to change a pin setting,
 			//     and therefore expects the setting to be modified.
@@ -4470,95 +4470,95 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(IOChanged, this, e);
+			this.eventHelper.RaiseSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(IOControlChanged, this, e);
+			this.eventHelper.RaiseSync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOConnectTimeChanged(TimeSpanEventArgs e)
 		{
-			this.eventHelper.InvokeSync<TimeSpanEventArgs>(IOConnectTimeChanged, this, e);
+			this.eventHelper.RaiseSync<TimeSpanEventArgs>(IOConnectTimeChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOCountChanged(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(IOCountChanged, this, e);
+			this.eventHelper.RaiseSync(IOCountChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIORateChanged(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(IORateChanged, this, e);
+			this.eventHelper.RaiseSync(IORateChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOError(Domain.IOErrorEventArgs e)
 		{
-			this.eventHelper.InvokeSync<Domain.IOErrorEventArgs>(IOError, this, e);
+			this.eventHelper.RaiseSync<Domain.IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsSent(Domain.DisplayElementsEventArgs e)
 		{
-			this.eventHelper.InvokeSync<Domain.DisplayElementsEventArgs>(DisplayElementsSent, this, e);
+			this.eventHelper.RaiseSync<Domain.DisplayElementsEventArgs>(DisplayElementsSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsReceived(Domain.DisplayElementsEventArgs e)
 		{
-			this.eventHelper.InvokeSync<Domain.DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
+			this.eventHelper.RaiseSync<Domain.DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesSent(Domain.DisplayLinesEventArgs e)
 		{
-			this.eventHelper.InvokeSync<Domain.DisplayLinesEventArgs>(DisplayLinesSent, this, e);
+			this.eventHelper.RaiseSync<Domain.DisplayLinesEventArgs>(DisplayLinesSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesReceived(Domain.DisplayLinesEventArgs e)
 		{
-			this.eventHelper.InvokeSync<Domain.DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
+			this.eventHelper.RaiseSync<Domain.DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryCleared(EventArgs<Domain.RepositoryType> e)
 		{
-			this.eventHelper.InvokeSync<EventArgs<Domain.RepositoryType>>(RepositoryCleared, this, e);
+			this.eventHelper.RaiseSync<EventArgs<Domain.RepositoryType>>(RepositoryCleared, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryReloaded(EventArgs<Domain.RepositoryType> e)
 		{
-			this.eventHelper.InvokeSync<EventArgs<Domain.RepositoryType>>(RepositoryReloaded, this, e);
+			this.eventHelper.RaiseSync<EventArgs<Domain.RepositoryType>>(RepositoryReloaded, this, e);
 		}
 
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
-			this.eventHelper.InvokeSync<EventArgs<string>>(FixedStatusTextRequest, this, new EventArgs<string>(text));
+			this.eventHelper.RaiseSync<EventArgs<string>>(FixedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
-			this.eventHelper.InvokeSync<EventArgs<string>>(TimedStatusTextRequest, this, new EventArgs<string>(text));
+			this.eventHelper.RaiseSync<EventArgs<string>>(TimedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
 		/// <summary></summary>
@@ -4577,7 +4577,7 @@ namespace YAT.Model
 				OnCursorReset(); // Just in case...
 
 				MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon, defaultButton);
-				this.eventHelper.InvokeSync<MessageInputEventArgs>(MessageInputRequest, this, e);
+				this.eventHelper.RaiseSync<MessageInputEventArgs>(MessageInputRequest, this, e);
 
 				// Ensure that the request is processed!
 				if (e.Result == DialogResult.None)
@@ -4602,7 +4602,7 @@ namespace YAT.Model
 				OnCursorReset(); // Just in case...
 
 				DialogEventArgs e = new DialogEventArgs();
-				this.eventHelper.InvokeSync<DialogEventArgs>(SaveAsFileDialogRequest, this, e);
+				this.eventHelper.RaiseSync<DialogEventArgs>(SaveAsFileDialogRequest, this, e);
 
 				// Ensure that the request is processed!
 				if (e.Result == DialogResult.None)
@@ -4619,7 +4619,7 @@ namespace YAT.Model
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnCursorRequest(Cursor cursor)
 		{
-			this.eventHelper.InvokeSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));
+			this.eventHelper.RaiseSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));
 		}
 
 		/// <summary></summary>
@@ -4631,13 +4631,13 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void OnSaved(SavedEventArgs e)
 		{
-			this.eventHelper.InvokeSync<SavedEventArgs>(Saved, this, e);
+			this.eventHelper.RaiseSync<SavedEventArgs>(Saved, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnClosed(ClosedEventArgs e)
 		{
-			this.eventHelper.InvokeSync<ClosedEventArgs>(Closed, this, e);
+			this.eventHelper.RaiseSync<ClosedEventArgs>(Closed, this, e);
 		}
 
 		#endregion

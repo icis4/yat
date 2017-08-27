@@ -337,7 +337,7 @@ namespace YAT.View.Forms
 		/// Notifies the terminal that its <see cref="FormWindowState"/> has changed.
 		/// </summary>
 		/// <remarks>
-		/// Neither the 'LocationChanged' nor 'SizeChanged' event is invoked when only
+		/// Neither the 'LocationChanged' nor 'SizeChanged' event is raised when only
 		/// the <see cref="FormWindowState"/> has changed but no resizes occurs.
 		/// </remarks>
 		public void NotifyWindowStateChanged()
@@ -4846,21 +4846,21 @@ namespace YAT.View.Forms
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnTerminalChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(Changed, this, e);
+			EventHelper.RaiseSync(Changed, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnTerminalSaved(Model.SavedEventArgs e)
 		{
-			EventHelper.InvokeSync<Model.SavedEventArgs>(Saved, this, e);
+			EventHelper.RaiseSync<Model.SavedEventArgs>(Saved, this, e);
 		}
 
 		#endregion
