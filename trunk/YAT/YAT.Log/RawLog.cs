@@ -155,7 +155,7 @@ namespace YAT.Log
 						case FileType.Binary:
 						default:
 						{
-							this.binaryWriter.Write(chunk.Data);
+							this.binaryWriter.Write(chunk.Content);
 							break;
 						}
 					}

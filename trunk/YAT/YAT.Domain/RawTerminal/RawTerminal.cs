@@ -45,7 +45,7 @@ using MKY.IO.Serial;
 namespace YAT.Domain
 {
 	/// <summary>
-	/// Defines a buffered serial interface. The buffers contain raw byte data,
+	/// Defines a buffered serial interface. The buffers contain raw byte content,
 	/// no formatting is done.
 	/// </summary>
 	public class RawTerminal : IDisposable

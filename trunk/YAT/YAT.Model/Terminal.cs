@@ -2217,11 +2217,11 @@ namespace YAT.Model
 			OnTimedStatusTextRequest("Sending...");
 
 			// Count:
-			this.txByteCount += e.Value.Data.Length;
+			this.txByteCount += e.Value.Content.Length;
 			OnIOCountChanged(EventArgs.Empty);
 
 			// Rate:
-			if (this.txByteRate.Update(e.Value.Data.Length))
+			if (this.txByteRate.Update(e.Value.Content.Length))
 				OnIORateChanged(EventArgs.Empty);
 
 			// Log:
@@ -2238,11 +2238,11 @@ namespace YAT.Model
 			OnTimedStatusTextRequest("Receiving...");
 
 			// Count:
-			this.rxByteCount += e.Value.Data.Length;
+			this.rxByteCount += e.Value.Content.Length;
 			OnIOCountChanged(EventArgs.Empty);
 
 			// Rate:
-			if (this.rxByteRate.Update(e.Value.Data.Length))
+			if (this.rxByteRate.Update(e.Value.Content.Length))
 				OnIORateChanged(EventArgs.Empty);
 
 			// Log:
@@ -2257,7 +2257,7 @@ namespace YAT.Model
 			{
 				bool isMatch = false;
 
-				foreach (byte b in e.Value.Data)
+				foreach (byte b in e.Value.Content)
 				{
 					lock (this.autoResponseHelperSyncObj)
 					{

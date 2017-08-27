@@ -137,6 +137,8 @@ namespace YAT.Domain.Settings
 
 					if (CharReplace != null) {
 						CharReplace.ReplaceControlChars = (!isBinary);
+						CharReplace.ReplaceTab          = (!isBinary);
+						CharReplace.ReplaceSpace        = (!isBinary);
 					}
 
 					SetMyChanged();

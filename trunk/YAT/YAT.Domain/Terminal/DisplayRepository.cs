@@ -143,7 +143,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Returns number of raw data bytes within repository.
+		/// Returns number of raw byte content within repository.
 		/// </summary>
 		/// <remarks>
 		/// Note that this value reflects the byte count of the elements contained in the repository,
@@ -234,9 +234,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual List<DisplayElement> ToElements()
 		{
-			List<DisplayElement> elements = new List<DisplayElement>(256); // Preset the initial capacity to improve memory management, 256 is an arbitrary value.
+			var elements = new List<DisplayElement>(256); // Preset the initial capacity to improve memory management, 256 is an arbitrary value.
 
-			foreach (DisplayLine line in ToLines())
+			foreach (var line in ToLines())
 				elements.AddRange(line.ToArray());
 
 			return (elements);

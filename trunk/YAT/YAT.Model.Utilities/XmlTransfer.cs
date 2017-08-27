@@ -81,7 +81,7 @@ namespace YAT.Model.Utilities
 	[Serializable]
 	public class XmlTransferRawLine : XmlTransferLine
 	{
-		private byte[] data;
+		private byte[] content;
 
 		/// <summary></summary>
 		public XmlTransferRawLine()
@@ -89,27 +89,27 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		public XmlTransferRawLine(DateTime timeStamp, Direction direction, byte[] data)
+		public XmlTransferRawLine(DateTime timeStamp, Direction direction, byte[] content)
 			: base(timeStamp, direction)
 		{
-			this.data = data;
+			this.content = content;
 		}
 
 		/// <remarks>Data byte array is converted to Base64 encoded string.</remarks>
 		[XmlAttribute("DataAsBase64")]
 		public virtual string DataAsBase64
 		{
-			get { return (Convert.ToBase64String(this.data));  }
-			set { this.data = Convert.FromBase64String(value); }
+			get { return (Convert.ToBase64String(this.content));  }
+			set { this.content = Convert.FromBase64String(value); }
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
 		[XmlIgnore]
-		public virtual byte[] Data
+		public virtual byte[] Content
 		{
-			get { return (this.data); }
-			set { this.data = value;  }
+			get { return (this.content); }
+			set { this.content = value;  }
 		}
 	}
 

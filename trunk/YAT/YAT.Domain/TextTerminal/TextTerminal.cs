@@ -583,8 +583,8 @@ namespace YAT.Domain
 		}
 
 		private void ExecuteLineBegin(LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elements)
-		{                                            // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-			DisplayLinePart lp = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+		{                                             // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+			var lp = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			lp.Add(new DisplayElement.LineStart()); // Direction may be both!
 
@@ -604,12 +604,11 @@ namespace YAT.Domain
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		private void ExecuteData(LineState lineState, IODirection d, byte b, DisplayElementCollection elements)
+		private void ExecuteContent(LineState lineState, IODirection d, byte b, DisplayElementCollection elements)
 		{
-			var lp = new DisplayLinePart(); // Default initial capacity is OK.
-
-			// Convert data:
+			// Convert content:
 			var de = ByteToElement(b, d);
+			var lp = new DisplayLinePart(); // Default initial capacity is OK.
 
 			// Evaluate EOL, i.e. check whether EOL is about to start or has already started:
 			lineState.Eol.Enqueue(b);
@@ -617,7 +616,7 @@ namespace YAT.Domain
 			{
 				if (TextTerminalSettings.ShowEol)
 				{
-					if (de.IsData)
+					if (de.IsContent)
 						lineState.EolElements.Add(de); // No clone needed as element has just been created.
 
 					// Normal case, EOL consists of a single sequence of control characters:
@@ -651,7 +650,7 @@ namespace YAT.Domain
 								l.Add(item.RecreateFromOriginItem(originItem));
 						}
 
-						// Count data:
+						// Count content:
 						int byteCount = 0;
 						foreach (var item in l)
 							byteCount += item.ByteCount;
@@ -678,7 +677,7 @@ namespace YAT.Domain
 			else if (lineState.Eol.IsPartlyMatchContinued)
 			{
 				// Keep EOL elements and delay them until EOL is complete:
-				if (de.IsData)
+				if (de.IsContent)
 					lineState.EolElements.Add(de); // No clone needed as element has just been created further above.
 			}
 			else if (lineState.Eol.IsPartlyMatchBeginning)
@@ -687,7 +686,7 @@ namespace YAT.Domain
 				TreatEolAsNormal(lineState, lp);
 
 				// Keep EOL elements and delay them until EOL is complete:
-				if (de.IsData)
+				if (de.IsContent)
 					lineState.EolElements.Add(de); // No clone needed as element has just been created further above.
 			}
 			else
@@ -771,11 +770,11 @@ namespace YAT.Domain
 
 				// Finally, remove EOL from elements:
 				if (elements.Count >= eolCount)
-					elements.RemoveAtEnd(eolCount);
+					elements.RemoveRangeAtEnd(eolCount);
 			}
 
 			// Process line length:
-			DisplayLinePart lp = new DisplayLinePart(); // Default initial capacity is OK.
+			var lp = new DisplayLinePart(); // Default initial capacity is OK.
 			if (TerminalSettings.Display.ShowLength)
 			{
 				DisplayLinePart info;
@@ -786,7 +785,7 @@ namespace YAT.Domain
 
 			// Potentially suppress empty lines that only contain hidden <CR><LF>:
 			bool suppressEmptyLine = ((lineState.Elements.ByteCount == 0) &&                    // Empty line.
-			                          (lineState.EolElements.ByteCount == 1) &&                 // EOL contained though, as a single data element.
+			                          (lineState.EolElements.ByteCount == 1) &&                 // EOL contained though, as a single content element.
 			                           lineState.EolOfLastLineOfGivenPortWasCompleteMatch.ContainsKey(ps) &&
 			                          !lineState.EolOfLastLineOfGivenPortWasCompleteMatch[ps]); // EOL of last line of the current port is still pending.
 			if (suppressEmptyLine)
@@ -817,14 +816,14 @@ namespace YAT.Domain
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + raw.Direction + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
-			foreach (byte b in raw.Data)
+			foreach (byte b in raw.Content)
 			{
 				// Line begin and time stamp:
 				if (lineState.Position == LinePosition.Begin)
 					ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elements);
 
-				// Data:
-				ExecuteData(lineState, raw.Direction, b, elements);
+				// Content:
+				ExecuteContent(lineState, raw.Direction, b, elements);
 
 				// Line end and length:
 				if (lineState.Position == LinePosition.End)

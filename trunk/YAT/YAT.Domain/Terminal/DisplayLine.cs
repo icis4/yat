@@ -61,7 +61,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Can be use to preset the initial capacity of collections. The value reflects typical
 		/// maximum settings in case of string radix:
-		/// date, sep, time, sep, port, sep, direction, sep, data, eol, sep, length, linebreak = 13
+		/// date, sep, time, sep, port, sep, direction, sep, content, eol, sep, length, linebreak = 13
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
@@ -129,7 +129,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary>
-		/// Returns number of raw data bytes within collection.
+		/// Returns number of raw byte content within collection.
 		/// </summary>
 		/// <remarks>
 		/// Note that this value reflects the byte count of the elements contained in the collection,
@@ -186,7 +186,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Required because <see cref="T:List`1.AddRange"/> doesn't call <see cref="Add"/>
 		/// method above because it is 'new'. Call to <see cref="Add"/> method above is
-		/// required to properly perform data counting.
+		/// required to properly perform content counting.
 		/// </remarks>
 		public new void AddRange(IEnumerable<DisplayElement> collection)
 		{
@@ -197,23 +197,22 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public new void RemoveAt(int index)
 		{
-			if (this[index].IsData)
+			if (this[index].IsContent)
 				this.byteCount -= this[index].ByteCount;
 
 			base.RemoveAt(index);
 		}
 
 		/// <summary></summary>
-		public virtual void RemoveAtEnd()
+		public virtual void RemoveOneAtEnd()
 		{
 			RemoveAt(Count - 1);
 		}
 
 		/// <summary></summary>
-		public virtual void RemoveAtEnd(int count)
+		public virtual void RemoveRangeAtEnd(int count)
 		{
-			for (int i = 0; i < count; i++)
-				RemoveAtEnd();
+			RemoveRange(Count - count, count);
 		}
 
 		/// <summary>
@@ -225,7 +224,7 @@ namespace YAT.Domain
 			{
 				bool typeFound = (this[Count - 1].GetType() == type);
 
-				RemoveAtEnd();
+				RemoveOneAtEnd();
 
 				if (typeFound)
 					break;

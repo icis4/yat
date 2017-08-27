@@ -143,7 +143,7 @@ namespace YAT.Domain
 			{
 				to = new List<byte>(this.queue.Count);
 				foreach (RawChunk re in this.queue.ToArray())
-					to.AddRange(re.Data);
+					to.AddRange(re.Content);
 			}
 			return (to.ToArray());
 		}

@@ -107,20 +107,20 @@ namespace YAT.Model.Utilities
 
 		private static int LinesFromRawFile(string filePath, out string[] lines)
 		{
-			Type type = typeof(List<XmlTransferRawLine>);
-			object deserializedLines = XmlSerializerEx.TolerantDeserializeFromFile(filePath, type);
+			var type = typeof(List<XmlTransferRawLine>);
+			var deserializedLines = XmlSerializerEx.TolerantDeserializeFromFile(filePath, type);
 			var rawLines = (deserializedLines as List<XmlTransferRawLine>);
 			if (rawLines != null)
 			{
-				List<string> l = new List<string>(rawLines.Count); // Preset the required capacity to improve memory management.
-				foreach (XmlTransferRawLine rawLine in rawLines)
+				var l = new List<string>(rawLines.Count); // Preset the required capacity to improve memory management.
+				foreach (var rawLine in rawLines)
 				{
-					if (rawLine.Data != null)
+					if (rawLine.Content != null)
 					{
 						var sb = new StringBuilder();
 						sb.Append(@"\h(");
 						bool isFirst = true;
-						foreach (byte b in rawLine.Data)
+						foreach (byte b in rawLine.Content)
 						{
 							if (isFirst)
 								isFirst = false;
@@ -145,13 +145,13 @@ namespace YAT.Model.Utilities
 
 		private static int LinesFromNeatFile(string filePath, out string[] lines)
 		{
-			Type type = typeof(List<XmlTransferNeatLine>);
-			object deserializedLines = XmlSerializerEx.TolerantDeserializeFromFile(filePath, type);
+			var type = typeof(List<XmlTransferNeatLine>);
+			var deserializedLines = XmlSerializerEx.TolerantDeserializeFromFile(filePath, type);
 			var neatLines = (deserializedLines as List<XmlTransferNeatLine>);
 			if (neatLines != null)
 			{
-				List<string> l = new List<string>(neatLines.Count); // Preset the required capacity to improve memory management.
-				foreach (XmlTransferNeatLine neatLine in neatLines)
+				var l = new List<string>(neatLines.Count); // Preset the required capacity to improve memory management.
+				foreach (var neatLine in neatLines)
 				{
 					if (neatLine.Text != null)
 						l.Add(neatLine.Text);

@@ -96,7 +96,7 @@ namespace YAT.Model.Utilities
 
 			bool success = true;
 
-			var data = new List<byte>(displayLine.ByteCount); // Preset the initial capacity to improve memory management.
+			var content = new List<byte>(displayLine.ByteCount); // Preset the initial capacity to improve memory management.
 
 			string dateStr      = "";
 			string timeStr      = "";
@@ -113,7 +113,7 @@ namespace YAT.Model.Utilities
 					if (casted != null)
 					{
 						foreach (Pair<byte[], string> origin in casted.Origin)
-							data.AddRange(origin.Value1);
+							content.AddRange(origin.Value1);
 
 						containsTx = true;
 						continue; // Immediately continue, makes no sense to also try other types!
@@ -124,7 +124,7 @@ namespace YAT.Model.Utilities
 					if (casted != null)
 					{
 						foreach (Pair<byte[], string> origin in casted.Origin)
-							data.AddRange(origin.Value1);
+							content.AddRange(origin.Value1);
 
 						containsTx = true;
 						continue; // Immediately continue, makes no sense to also try other types!
@@ -135,7 +135,7 @@ namespace YAT.Model.Utilities
 					if (casted != null)
 					{
 						foreach (Pair<byte[], string> origin in casted.Origin)
-							data.AddRange(origin.Value1);
+							content.AddRange(origin.Value1);
 
 						containsRx = true;
 						continue; // Immediately continue, makes no sense to also try other types!
@@ -146,7 +146,7 @@ namespace YAT.Model.Utilities
 					if (casted != null)
 					{
 						foreach (Pair<byte[], string> origin in casted.Origin)
-							data.AddRange(origin.Value1);
+							content.AddRange(origin.Value1);
 
 						containsRx = true;
 						continue; // Immediately continue, makes no sense to also try other types!
@@ -241,7 +241,7 @@ namespace YAT.Model.Utilities
 					direction = Direction.None;
 			}
 
-			transferLine = new XmlTransferRawLine(timeStamp, direction, data.ToArray());
+			transferLine = new XmlTransferRawLine(timeStamp, direction, content.ToArray());
 
 			return (success);
 		}

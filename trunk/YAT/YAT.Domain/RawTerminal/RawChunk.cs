@@ -43,8 +43,8 @@ using MKY;
 namespace YAT.Domain
 {
 	/// <summary>
-	/// Defines an element received from or sent to a serial interface. In addition to the serial
-	/// data itself, it also contains interface and time information.
+	/// Defines an element received from or sent to a serial interface. In addition to the raw byte
+	/// content itself, it also contains interface and time information.
 	/// </summary>
 	public class RawChunk
 	{
@@ -64,7 +64,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
-		public byte[] Data { get; }
+		public byte[] Content { get; }
 
 		/// <summary></summary>
 		public DateTime TimeStamp { get; }
@@ -83,21 +83,21 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public RawChunk(byte[] data, IODirection direction)
-			: this(data, Undefined, direction)
+		public RawChunk(byte[] content, IODirection direction)
+			: this(content, Undefined, direction)
 		{
 		}
 
 		/// <summary></summary>
-		public RawChunk(byte[] data, string portStamp, IODirection direction)
-			: this(data, DateTime.Now, portStamp, direction)
+		public RawChunk(byte[] content, string portStamp, IODirection direction)
+			: this(content, DateTime.Now, portStamp, direction)
 		{
 		}
 
 		/// <summary></summary>
-		public RawChunk(byte[] data, DateTime timeStamp, string portStamp, IODirection direction)
+		public RawChunk(byte[] content, DateTime timeStamp, string portStamp, IODirection direction)
 		{
-			Data      = data;
+			Content   = content;
 			TimeStamp = timeStamp;
 			PortStamp = portStamp;
 			Direction = direction;
@@ -128,7 +128,7 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual RawChunk Clone()
 		{
-			return (new RawChunk((byte[])Data.Clone(), TimeStamp, PortStamp, Direction));
+			return (new RawChunk((byte[])Content.Clone(), TimeStamp, PortStamp, Direction));
 		}
 
 		#endregion
@@ -151,7 +151,7 @@ namespace YAT.Domain
 		{
 			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
 			{
-				foreach (byte b in Data)
+				foreach (byte b in Content)
 					sw.Write(Convert.ToChar(b));
 
 				return (indent + sw.ToString());
@@ -170,7 +170,7 @@ namespace YAT.Domain
 			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
 			{
 				bool begin = true;
-				foreach (byte b in Data)
+				foreach (byte b in Content)
 				{
 					if (!begin)
 						sw.Write(" ");
