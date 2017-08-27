@@ -320,19 +320,19 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		protected virtual void OnSelectedPageChanged(EventArgs e)
 		{
-			EventHelper.FireSync(SelectedPageChanged, this, e);
+			EventHelper.InvokeSync(SelectedPageChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnSendCommandRequest(PredefinedCommandEventArgs e)
 		{
-			EventHelper.FireSync<PredefinedCommandEventArgs>(SendCommandRequest, this, e);
+			EventHelper.InvokeSync<PredefinedCommandEventArgs>(SendCommandRequest, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDefineCommandRequest(PredefinedCommandEventArgs e)
 		{
-			EventHelper.FireSync<PredefinedCommandEventArgs>(DefineCommandRequest, this, e);
+			EventHelper.InvokeSync<PredefinedCommandEventArgs>(DefineCommandRequest, this, e);
 		}
 
 		#endregion

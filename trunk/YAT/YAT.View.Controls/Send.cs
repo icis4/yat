@@ -390,31 +390,31 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		protected virtual void OnTextCommandChanged(EventArgs e)
 		{
-			EventHelper.FireSync(TextCommandChanged, this, e);
+			EventHelper.InvokeSync(TextCommandChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnEditFocusStateChanged(EventArgs e)
 		{
-			EventHelper.FireSync(EditFocusStateChanged, this, e);
+			EventHelper.InvokeSync(EditFocusStateChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnSendTextCommandRequest(SendTextOptionEventArgs e)
 		{
-			EventHelper.FireSync(SendTextCommandRequest, this, e);
+			EventHelper.InvokeSync(SendTextCommandRequest, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnFileCommandChanged(EventArgs e)
 		{
-			EventHelper.FireSync(FileCommandChanged, this, e);
+			EventHelper.InvokeSync(FileCommandChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnSendFileCommandRequest(EventArgs e)
 		{
-			EventHelper.FireSync(SendFileCommandRequest, this, e);
+			EventHelper.InvokeSync(SendFileCommandRequest, this, e);
 		}
 
 		#endregion

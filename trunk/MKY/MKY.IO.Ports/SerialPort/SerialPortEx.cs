@@ -1314,7 +1314,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnPortChanged(EventArgs e)
 		{
-			this.eventHelper.FireSync(PortChanged, this, e);
+			this.eventHelper.InvokeSync(PortChanged, this, e);
 		}
 
 		/// <summary>
@@ -1322,7 +1322,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnPortSettingsChanged(EventArgs e)
 		{
-			this.eventHelper.FireSync(PortSettingsChanged, this, e);
+			this.eventHelper.InvokeSync(PortSettingsChanged, this, e);
 		}
 
 		/// <summary>
@@ -1330,7 +1330,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnOpening(EventArgs e)
 		{
-			this.eventHelper.FireSync(Opening, this, e);
+			this.eventHelper.InvokeSync(Opening, this, e);
 		}
 
 		/// <summary>
@@ -1338,7 +1338,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnOpened(EventArgs e)
 		{
-			this.eventHelper.FireSync(Opened, this, e);
+			this.eventHelper.InvokeSync(Opened, this, e);
 		}
 
 		/// <summary>
@@ -1346,7 +1346,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnClosing(EventArgs e)
 		{
-			this.eventHelper.FireSync(Closing, this, e);
+			this.eventHelper.InvokeSync(Closing, this, e);
 		}
 
 		/// <summary>
@@ -1354,7 +1354,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnClosed(EventArgs e)
 		{
-			this.eventHelper.FireSync(Closed, this, e);
+			this.eventHelper.InvokeSync(Closed, this, e);
 		}
 
 		/// <summary>
@@ -1363,7 +1363,7 @@ namespace MKY.IO.Ports
 		protected virtual void OnDataReceived(SerialDataReceivedEventArgs e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.FireSync<SerialDataReceivedEventArgs, SerialDataReceivedEventHandler>(DataReceived, this, e);
+				this.eventHelper.InvokeSync<SerialDataReceivedEventArgs, SerialDataReceivedEventHandler>(DataReceived, this, e);
 		}
 
 		/// <summary>
@@ -1372,7 +1372,7 @@ namespace MKY.IO.Ports
 		protected virtual void OnErrorReceived(SerialErrorReceivedEventArgs e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.FireSync<SerialErrorReceivedEventArgs, SerialErrorReceivedEventHandler>(ErrorReceived, this, e);
+				this.eventHelper.InvokeSync<SerialErrorReceivedEventArgs, SerialErrorReceivedEventHandler>(ErrorReceived, this, e);
 		}
 
 		/// <summary>
@@ -1381,7 +1381,7 @@ namespace MKY.IO.Ports
 		protected virtual void OnPinChanged(SerialPinChangedEventArgs e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.FireSync<SerialPinChangedEventArgs, SerialPinChangedEventHandler>(PinChanged, this, e);
+				this.eventHelper.InvokeSync<SerialPinChangedEventArgs, SerialPinChangedEventHandler>(PinChanged, this, e);
 		}
 
 		#endregion

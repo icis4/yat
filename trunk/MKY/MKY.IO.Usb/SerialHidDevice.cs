@@ -290,7 +290,7 @@ namespace MKY.IO.Usb
 							Debug.WriteLine("Info = " + e.DeviceInfo);
 							Debug.Unindent();
 
-							EventHelper.FireAsync(DeviceConnected, typeof(SerialHidDevice), e);
+							EventHelper.InvokeAsync(DeviceConnected, typeof(SerialHidDevice), e);
 							break;
 						}
 
@@ -303,7 +303,7 @@ namespace MKY.IO.Usb
 							Debug.WriteLine("Path = " + devicePath);
 							Debug.Unindent();
 
-							EventHelper.FireAsync(DeviceDisconnected, typeof(SerialHidDevice), e);
+							EventHelper.InvokeAsync(DeviceDisconnected, typeof(SerialHidDevice), e);
 							break;
 						}
 					}
@@ -787,7 +787,7 @@ namespace MKY.IO.Usb
 		{
 			AssertNotDisposed();
 
-			// OnDataReceived has been fired before.
+			// OnDataReceived has been invoked before.
 
 			int bytesReceived = 0;
 			if (IsOpen)
@@ -828,7 +828,7 @@ namespace MKY.IO.Usb
 		{
 			AssertNotDisposed();
 
-			// OnDataSent is fired by Write.
+			// OnDataSent is invoked by 'Write()' below.
 
 			if (IsOpen)
 				Write(data);
@@ -1336,27 +1336,27 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected virtual void OnOpened(EventArgs e)
 		{
-			this.eventHelper.FireSync(Opened, this, e);
+			this.eventHelper.InvokeSync(Opened, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnClosed(EventArgs e)
 		{
-			this.eventHelper.FireSync(Closed, this, e);
+			this.eventHelper.InvokeSync(Closed, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDataReceived(EventArgs e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.FireSync(DataReceived, this, e);
+				this.eventHelper.InvokeSync(DataReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDataSent(DataEventArgs e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.FireSync(DataSent, this, e);
+				this.eventHelper.InvokeSync(DataSent, this, e);
 		}
 
 		#endregion

@@ -327,13 +327,13 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		protected virtual void OnTcpClientAutoReconnectChanged(EventArgs e)
 		{
-			EventHelper.FireSync(TcpClientAutoReconnectChanged, this, e);
+			EventHelper.InvokeSync(TcpClientAutoReconnectChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnUdpServerSendModeChanged(EventArgs e)
 		{
-			EventHelper.FireSync(UdpServerSendModeChanged, this, e);
+			EventHelper.InvokeSync(UdpServerSendModeChanged, this, e);
 		}
 
 		#endregion

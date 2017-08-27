@@ -383,15 +383,15 @@ namespace MKY.Data
 		/// <summary></summary>
 		protected virtual void OnChanged(DataEventArgs e)
 		{
-			bool fire = false;
+			bool doInvoke = false;
 
 			lock (this.changeEventSuspendedCountSyncObj)
 			{
-				fire = (this.changeEventSuspendedCount == 0);
+				doInvoke = (this.changeEventSuspendedCount == 0);
 			}
 
-			if (fire)
-				EventHelper.FireSync<DataEventArgs>(Changed, this, e);
+			if (doInvoke)
+				EventHelper.InvokeSync<DataEventArgs>(Changed, this, e);
 		}
 
 		#endregion

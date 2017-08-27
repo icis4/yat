@@ -1185,7 +1185,7 @@ namespace YAT.Model
 				OnExited(this.result);
 
 				// The main shall dispose of itself to free all resources for sure. It must be done
-				// AFTER it fired the 'Exited' event and all subscribers of the event may still
+				// AFTER it invoked the 'Exited' event and all subscribers of the event may still
 				// refer to a non-disposed object. This is especially important, as the order of
 				// the subscribers is not fixed, i.e. a subscriber may dispose of the main before
 				// 'View.Main' receives the event callback!
@@ -1933,27 +1933,27 @@ namespace YAT.Model
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnWorkspaceOpened(Workspace workspace)
 		{
-			this.eventHelper.FireSync<EventArgs<Workspace>>(WorkspaceOpened, this, new EventArgs<Workspace>(workspace));
+			this.eventHelper.InvokeSync<EventArgs<Workspace>>(WorkspaceOpened, this, new EventArgs<Workspace>(workspace));
 		}
 
 		/// <summary></summary>
 		protected virtual void OnWorkspaceClosed(ClosedEventArgs e)
 		{
-			this.eventHelper.FireSync<ClosedEventArgs>(WorkspaceClosed, this, e);
+			this.eventHelper.InvokeSync<ClosedEventArgs>(WorkspaceClosed, this, e);
 		}
 
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
-			this.eventHelper.FireSync<EventArgs<string>>(FixedStatusTextRequest, this, new EventArgs<string>(text));
+			this.eventHelper.InvokeSync<EventArgs<string>>(FixedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
-			this.eventHelper.FireSync<EventArgs<string>>(TimedStatusTextRequest, this, new EventArgs<string>(text));
+			this.eventHelper.InvokeSync<EventArgs<string>>(TimedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
 		/// <summary></summary>
@@ -1966,7 +1966,7 @@ namespace YAT.Model
 				OnCursorReset(); // Just in case...
 
 				MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
-				this.eventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
+				this.eventHelper.InvokeSync<MessageInputEventArgs>(MessageInputRequest, this, e);
 
 				// Ensure that the request is processed!
 				if (e.Result == DialogResult.None)
@@ -1983,7 +1983,7 @@ namespace YAT.Model
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnCursorRequest(Cursor cursor)
 		{
-			this.eventHelper.FireSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));
+			this.eventHelper.InvokeSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));
 		}
 
 		/// <summary></summary>
@@ -1995,13 +1995,13 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void OnStarted()
 		{
-			this.eventHelper.FireSync(Started, this, EventArgs.Empty);
+			this.eventHelper.InvokeSync(Started, this, EventArgs.Empty);
 		}
 
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnExited(MainResult result)
 		{
-			this.eventHelper.FireSync<EventArgs<MainResult>>(Exited, this, new EventArgs<MainResult>(result));
+			this.eventHelper.InvokeSync<EventArgs<MainResult>>(Exited, this, new EventArgs<MainResult>(result));
 		}
 
 		#endregion

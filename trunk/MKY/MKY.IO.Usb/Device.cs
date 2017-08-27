@@ -552,7 +552,7 @@ namespace MKY.IO.Usb
 							Debug.WriteLine("Info = " + e.DeviceInfo);
 							Debug.Unindent();
 
-							EventHelper.FireAsync(DeviceConnected, typeof(Device), e);
+							EventHelper.InvokeAsync(DeviceConnected, typeof(Device), e);
 							break;
 						}
 
@@ -565,7 +565,7 @@ namespace MKY.IO.Usb
 							Debug.WriteLine("Path = " + devicePath);
 							Debug.Unindent();
 
-							EventHelper.FireAsync(DeviceDisconnected, typeof(Device), e);
+							EventHelper.InvokeAsync(DeviceDisconnected, typeof(Device), e);
 							break;
 						}
 					}
@@ -947,7 +947,7 @@ namespace MKY.IO.Usb
 		/// is connected to both computer and device.
 		/// </summary>
 		/// <remarks>
-		/// The Win32 API 'RegisterDeviceNotification' fires 'Connected' or 'Disconnected' events
+		/// The Win32 API 'RegisterDeviceNotification' invokes 'Connected' or 'Disconnected' events
 		/// in case a device is attached or removed from the computer. The <see cref="IsConnected"/>
 		/// property relates to the state of these events.
 		/// </remarks>
@@ -1011,20 +1011,20 @@ namespace MKY.IO.Usb
 		protected virtual void OnConnected(EventArgs e)
 		{
 			this.isConnected = true;
-			this.eventHelper.FireSync(Connected, this, e);
+			this.eventHelper.InvokeSync(Connected, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisconnected(EventArgs e)
 		{
 			this.isConnected = false;
-			this.eventHelper.FireSync(Disconnected, this, e);
+			this.eventHelper.InvokeSync(Disconnected, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOError(ErrorEventArgs e)
 		{
-			this.eventHelper.FireSync<ErrorEventArgs>(IOError, this, e);
+			this.eventHelper.InvokeSync<ErrorEventArgs>(IOError, this, e);
 		}
 
 		#endregion

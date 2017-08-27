@@ -474,7 +474,7 @@ namespace YAT.View.Controls
 							if (scanSuccess && TryGetAlternate(ports, out portIdAlternate))
 							{
 								// Ensure that the settings item is defaulted and shown by SetControls().
-								// Set property instead of member to ensure that changed event is fired.
+								// Set property instead of member to ensure that changed event is invoked.
 								PortId = portIdAlternate;
 
 								ShowNotAvailableSwitchMessage(portIdNotAvailable, portIdAlternate);
@@ -482,7 +482,7 @@ namespace YAT.View.Controls
 							else
 							{
 								// Ensure that the settings item is defaulted and shown by SetControls().
-								// Set property instead of member to ensure that changed event is fired.
+								// Set property instead of member to ensure that changed event is invoked.
 								PortId = ports[0];
 
 								if (scanSuccess)
@@ -495,7 +495,7 @@ namespace YAT.View.Controls
 					else // ports.Count == 0
 					{
 						// Ensure that the settings item is nulled and reset by SetControls().
-						// Set property instead of member to ensure that changed event is fired.
+						// Set property instead of member to ensure that changed event is invoked.
 						PortId = null;
 
 						if (scanSuccess)
@@ -648,7 +648,7 @@ namespace YAT.View.Controls
 		/// </summary>
 		protected virtual void OnPortIdChanged(EventArgs e)
 		{
-			EventHelper.FireSync(PortIdChanged, this, e);
+			EventHelper.InvokeSync(PortIdChanged, this, e);
 		}
 
 		/// <summary>
@@ -656,7 +656,7 @@ namespace YAT.View.Controls
 		/// </summary>
 		protected virtual void OnActivePortInUseInfoChanged(EventArgs e)
 		{
-			EventHelper.FireSync(ActivePortInUseInfoChanged, this, e);
+			EventHelper.InvokeSync(ActivePortInUseInfoChanged, this, e);
 		}
 
 		#endregion

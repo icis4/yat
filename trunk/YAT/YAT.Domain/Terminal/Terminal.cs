@@ -2816,31 +2816,31 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			this.eventHelper.FireSync(IOChanged, this, e);
+			this.eventHelper.InvokeSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			this.eventHelper.FireSync(IOControlChanged, this, e);
+			this.eventHelper.InvokeSync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			this.eventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
+			this.eventHelper.InvokeSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRawChunkSent(EventArgs<RawChunk> e)
 		{
-			this.eventHelper.FireSync<EventArgs<RawChunk>>(RawChunkSent, this, e);
+			this.eventHelper.InvokeSync<EventArgs<RawChunk>>(RawChunkSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRawChunkReceived(EventArgs<RawChunk> e)
 		{
-			this.eventHelper.FireSync<EventArgs<RawChunk>>(RawChunkReceived, this, e);
+			this.eventHelper.InvokeSync<EventArgs<RawChunk>>(RawChunkReceived, this, e);
 		}
 
 		/// <summary></summary>
@@ -2895,14 +2895,14 @@ namespace YAT.Domain
 		protected virtual void OnDisplayElementsSent(DisplayElementsEventArgs e)
 		{
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
-				this.eventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsSent, this, e);
+				this.eventHelper.InvokeSync<DisplayElementsEventArgs>(DisplayElementsSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsReceived(DisplayElementsEventArgs e)
 		{
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
-				this.eventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
+				this.eventHelper.InvokeSync<DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
 		}
 
 		/// <summary></summary>
@@ -2925,28 +2925,28 @@ namespace YAT.Domain
 		protected virtual void OnDisplayLinesSent(DisplayLinesEventArgs e)
 		{
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
-				this.eventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesSent, this, e);
+				this.eventHelper.InvokeSync<DisplayLinesEventArgs>(DisplayLinesSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesReceived(DisplayLinesEventArgs e)
 		{
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
-				this.eventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
+				this.eventHelper.InvokeSync<DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryCleared(EventArgs<RepositoryType> e)
 		{
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
-				this.eventHelper.FireSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
+				this.eventHelper.InvokeSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryReloaded(EventArgs<RepositoryType> e)
 		{
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be invoked after completion.
-				this.eventHelper.FireSync<EventArgs<RepositoryType>>(RepositoryReloaded, this, e);
+				this.eventHelper.InvokeSync<EventArgs<RepositoryType>>(RepositoryReloaded, this, e);
 		}
 
 		#endregion

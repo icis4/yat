@@ -3937,18 +3937,18 @@ namespace YAT.View.Forms
 		{
 			if (this.terminal != null)
 			{
-				this.terminal.IOChanged            += terminal_IOChanged;
-				this.terminal.IOControlChanged     += terminal_IOControlChanged;
-				this.terminal.IOConnectTimeChanged += terminal_IOConnectTimeChanged;
-				this.terminal.IOCountChanged       += terminal_IOCountChanged;
-				this.terminal.IORateChanged        += terminal_IORateChanged;
-				this.terminal.IOError              += terminal_IOError;
+				this.terminal.IOChanged               += terminal_IOChanged;
+				this.terminal.IOControlChanged        += terminal_IOControlChanged;
+				this.terminal.IOConnectTimeChanged    += terminal_IOConnectTimeChanged;
+				this.terminal.IOCountChanged          += terminal_IOCountChanged;
+				this.terminal.IORateChanged           += terminal_IORateChanged;
+				this.terminal.IOError                 += terminal_IOError;
 
 				this.terminal.DisplayElementsSent     += terminal_DisplayElementsSent;
 				this.terminal.DisplayElementsReceived += terminal_DisplayElementsReceived;
 
-				this.terminal.RepositoryCleared  += terminal_RepositoryCleared;
-				this.terminal.RepositoryReloaded += terminal_RepositoryReloaded;
+				this.terminal.RepositoryCleared       += terminal_RepositoryCleared;
+				this.terminal.RepositoryReloaded      += terminal_RepositoryReloaded;
 
 				this.terminal.TimedStatusTextRequest  += terminal_TimedStatusTextRequest;
 				this.terminal.FixedStatusTextRequest  += terminal_FixedStatusTextRequest;
@@ -3956,8 +3956,8 @@ namespace YAT.View.Forms
 				this.terminal.SaveAsFileDialogRequest += terminal_SaveAsFileDialogRequest;
 				this.terminal.CursorRequest           += terminal_CursorRequest;
 
-				this.terminal.Saved  += terminal_Saved;
-				this.terminal.Closed += terminal_Closed;
+				this.terminal.Saved                   += terminal_Saved;
+				this.terminal.Closed                  += terminal_Closed;
 			}
 		}
 
@@ -3965,18 +3965,18 @@ namespace YAT.View.Forms
 		{
 			if (this.terminal != null)
 			{
-				this.terminal.IOChanged            -= terminal_IOChanged;
-				this.terminal.IOControlChanged     -= terminal_IOControlChanged;
-				this.terminal.IOConnectTimeChanged -= terminal_IOConnectTimeChanged;
-				this.terminal.IOCountChanged       -= terminal_IOCountChanged;
-				this.terminal.IORateChanged        -= terminal_IORateChanged;
-				this.terminal.IOError              -= terminal_IOError;
+				this.terminal.IOChanged               -= terminal_IOChanged;
+				this.terminal.IOControlChanged        -= terminal_IOControlChanged;
+				this.terminal.IOConnectTimeChanged    -= terminal_IOConnectTimeChanged;
+				this.terminal.IOCountChanged          -= terminal_IOCountChanged;
+				this.terminal.IORateChanged           -= terminal_IORateChanged;
+				this.terminal.IOError                 -= terminal_IOError;
 
 				this.terminal.DisplayElementsSent     -= terminal_DisplayElementsSent;
 				this.terminal.DisplayElementsReceived -= terminal_DisplayElementsReceived;
 
-				this.terminal.RepositoryCleared  -= terminal_RepositoryCleared;
-				this.terminal.RepositoryReloaded -= terminal_RepositoryReloaded;
+				this.terminal.RepositoryCleared       -= terminal_RepositoryCleared;
+				this.terminal.RepositoryReloaded      -= terminal_RepositoryReloaded;
 
 				this.terminal.TimedStatusTextRequest  -= terminal_TimedStatusTextRequest;
 				this.terminal.FixedStatusTextRequest  -= terminal_FixedStatusTextRequest;
@@ -3984,8 +3984,8 @@ namespace YAT.View.Forms
 				this.terminal.SaveAsFileDialogRequest -= terminal_SaveAsFileDialogRequest;
 				this.terminal.CursorRequest           -= terminal_CursorRequest;
 
-				this.terminal.Saved  -= terminal_Saved;
-				this.terminal.Closed -= terminal_Closed;
+				this.terminal.Saved                   -= terminal_Saved;
+				this.terminal.Closed                  -= terminal_Closed;
 			}
 		}
 
@@ -4854,13 +4854,13 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void OnTerminalChanged(EventArgs e)
 		{
-			EventHelper.FireSync(Changed, this, e);
+			EventHelper.InvokeSync(Changed, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnTerminalSaved(Model.SavedEventArgs e)
 		{
-			EventHelper.FireSync<Model.SavedEventArgs>(Saved, this, e);
+			EventHelper.InvokeSync<Model.SavedEventArgs>(Saved, this, e);
 		}
 
 		#endregion

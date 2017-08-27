@@ -318,7 +318,7 @@ namespace MKY.Time
 		/// <summary></summary>
 		protected virtual void OnTimeSpanChanged(TimeSpanEventArgs e)
 		{
-			this.eventHelper.FireSync<TimeSpanEventArgs>(TimeSpanChanged, this, e);
+			this.eventHelper.InvokeSync<TimeSpanEventArgs>(TimeSpanChanged, this, e);
 		}
 
 		#endregion

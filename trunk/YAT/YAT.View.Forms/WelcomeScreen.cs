@@ -90,7 +90,7 @@ namespace YAT.View.Forms
 				Width = width;
 
 			label_Status.Text = "Loading settings...";
-			VoidDelegateVoid asyncInvoker = new VoidDelegateVoid(LoadApplicationSettingsAsync);
+			var asyncInvoker = new VoidDelegateVoid(LoadApplicationSettingsAsync);
 			asyncInvoker.BeginInvoke(null, null);
 		}
 

@@ -304,7 +304,7 @@ namespace MKY.Time
 		/// <summary></summary>
 		protected virtual void OnRateChanged(RateEventArgs e)
 		{
-			this.eventHelper.FireSync<RateEventArgs>(Changed, this, e);
+			this.eventHelper.InvokeSync<RateEventArgs>(Changed, this, e);
 		}
 
 		#endregion
