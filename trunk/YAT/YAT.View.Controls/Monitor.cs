@@ -293,6 +293,10 @@ namespace YAT.View.Controls
 				if (this.showBufferLineNumbers != value)
 				{
 					this.showBufferLineNumbers = value;
+
+					if (this.showBufferLineNumbers) // This option keeps the offset at 0.
+						this.lineNumberOffset = 0;
+
 					SetLineNumbersControls();
 				}
 			}
@@ -325,6 +329,10 @@ namespace YAT.View.Controls
 			if (this.showBufferLineNumbers != showBufferLineNumbers)
 			{
 				this.showBufferLineNumbers = showBufferLineNumbers;
+
+				if (this.showBufferLineNumbers) // This option keeps the offset at 0.
+					this.lineNumberOffset = 0;
+
 				hasChanged = true;
 			}
 
@@ -335,7 +343,9 @@ namespace YAT.View.Controls
 			}
 
 			if (hasChanged)
+			{
 				SetLineNumbersControls();
+			}
 		}
 
 		/// <summary></summary>
@@ -526,7 +536,6 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		public virtual void Clear()
 		{
-			this.lineNumberOffset = 0;
 			this.pendingElementsAndLines.Clear();
 			ClearAndResetListBoxes();
 		}
@@ -534,10 +543,10 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		protected virtual void Reload()
 		{
-			ListBox lb = fastListBox_Monitor;
+			var lb = fastListBox_Monitor;
 
 			// Retrieve lines from list box:
-			List<Domain.DisplayLine> lines = new List<Domain.DisplayLine>(lb.Items.Count); // Preset the required capacity to improve memory management.
+			var lines = new List<Domain.DisplayLine>(lb.Items.Count); // Preset the required capacity to improve memory management.
 			foreach (object item in lb.Items)
 			{
 				var line = (item as Domain.DisplayLine);
@@ -559,7 +568,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		public virtual void SelectAll()
 		{
-			ListBoxEx lb = fastListBox_Monitor;
+			var lb = fastListBox_Monitor;
 			lb.BeginUpdate();
 			lb.SelectAllIndices();
 			lb.EndUpdate();
@@ -568,7 +577,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		public virtual void SelectNone()
 		{
-			ListBox lb = fastListBox_Monitor;
+			var lb = fastListBox_Monitor;
 			lb.BeginUpdate();
 			lb.ClearSelected();
 			lb.EndUpdate();
@@ -585,9 +594,9 @@ namespace YAT.View.Controls
 		{
 			get
 			{
-				ListBox lb = fastListBox_Monitor;
+				var lb = fastListBox_Monitor;
 
-				List<Domain.DisplayLine> selectedLines = new List<Domain.DisplayLine>(32); // Preset the initial capacity to improve memory management, 32 is an arbitrary value.
+				var selectedLines = new List<Domain.DisplayLine>(32); // Preset the initial capacity to improve memory management, 32 is an arbitrary value.
 				if (lb.SelectedItems.Count > 0)
 				{
 					foreach (int i in lb.SelectedIndices)
@@ -619,6 +628,12 @@ namespace YAT.View.Controls
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
 		public virtual void SetDataCountStatus(int txByteCount, int txLineCount, int rxByteCount, int rxLineCount)
 		{
+			if ((txLineCount <= 0) && (rxLineCount <= 0))
+			{
+				this.lineNumberOffset = 0;
+				SetLineNumbersControls();
+			}
+
 			this.dataStatusHelper.SetCount(txByteCount, txLineCount, rxByteCount, rxLineCount);
 		}
 
@@ -713,7 +728,7 @@ namespace YAT.View.Controls
 				{
 					string lineNumberString = ((this.lineNumberOffset + e.Index + 1).ToString(CultureInfo.CurrentCulture));
 
-					ListBox lb = fastListBox_LineNumbers;
+					var lb = fastListBox_LineNumbers;
 					int requestedWidth;
 
 				////e.DrawBackground(); is not needed and actually draws a white background.
@@ -1175,13 +1190,16 @@ namespace YAT.View.Controls
 							lblin.Items.RemoveAt(0);
 							lbmon.Items.RemoveAt(0);
 
-							unchecked
+							if (!this.showBufferLineNumbers) // This option keeps the offset at 0.
 							{
-								this.lineNumberOffset++; // Overflow is OK.
-							}
+								// Increment the offset independent on 'showTotalLineNumbers' to
+								// have the indeed total value when the user enables the setting.
 
-							// Note the offset is incremented independent on 'showTotalLineNumbers'
-							// to have the indeed total value when the user enables the setting.
+								unchecked
+								{
+									this.lineNumberOffset++; // Overflow is OK.
+								}
+							}
 						}
 
 						// Add element to a new line:
