@@ -32,7 +32,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using MKY;
-using MKY.Collections.Generic;
 using MKY.Diagnostics;
 
 #endregion
@@ -568,8 +567,8 @@ namespace YAT.Domain
 		}
 
 		private void ExecuteLineBegin(LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elements)
-		{                                            // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-			DisplayLinePart lp = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+		{                                             // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+			var lp = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			lp.Add(new DisplayElement.LineStart()); // Direction may be both!
 
@@ -590,11 +589,11 @@ namespace YAT.Domain
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		private void ExecuteData(Settings.BinaryDisplaySettings displaySettings, LineState lineState, IODirection d, byte b, DisplayElementCollection elements, out List<DisplayElement> elementsForNextLine)
+		private void ExecuteContent(Settings.BinaryDisplaySettings displaySettings, LineState lineState, IODirection d, byte b, DisplayElementCollection elements, out List<DisplayElement> elementsForNextLine)
 		{
 			elementsForNextLine = null;
 
-			// Convert data:
+			// Convert content:
 			var de = ByteToElement(b, d);
 			var lp = new DisplayLinePart(); // Default initial capacity is OK.
 
@@ -720,14 +719,14 @@ namespace YAT.Domain
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of TextTerminal for better comparability.
 
-			                                   // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-			DisplayLine line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+			                                    // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+			var line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			// Process line content:
 			line.AddRange(lineState.Elements.Clone()); // Clone elements to ensure decoupling.
 
 			// Process line length:
-			DisplayLinePart lp = new DisplayLinePart(); // Default initial capacity is OK.
+			var lp = new DisplayLinePart(); // Default initial capacity is OK.
 			if (TerminalSettings.Display.ShowLength)
 			{
 				DisplayLinePart info;
@@ -766,7 +765,7 @@ namespace YAT.Domain
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + raw.Direction + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
-			foreach (byte b in raw.Data)
+			foreach (byte b in raw.Content)
 			{
 				// In case of reload, timed line breaks are executed here:
 				if (IsReloading && displaySettings.TimedLineBreak.Enabled)
@@ -786,9 +785,9 @@ namespace YAT.Domain
 						lineState.BreakTimer.Restart(); // Restart as timeout refers to time after last received byte.
 				}
 
-				// Data:
+				// Content:
 				List<DisplayElement> elementsForNextLine;
-				ExecuteData(displaySettings, lineState, raw.Direction, b, elements, out elementsForNextLine);
+				ExecuteContent(displaySettings, lineState, raw.Direction, b, elements, out elementsForNextLine);
 
 				// Line end and length:
 				if (lineState.Position == LinePosition.End)
@@ -812,7 +811,7 @@ namespace YAT.Domain
 									foreach (var originByte in origin.Value1)
 									{
 										List<DisplayElement> elementsForNextLineDummy;
-										ExecuteData(displaySettings, lineState, raw.Direction, originByte, elements, out elementsForNextLineDummy);
+										ExecuteContent(displaySettings, lineState, raw.Direction, originByte, elements, out elementsForNextLineDummy);
 
 										// Note that 're.Direction' above is OK, this function is processing all in the same direction.
 									}

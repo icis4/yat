@@ -1967,7 +1967,7 @@ namespace YAT.Domain
 						// thus resulting in misaligned tab stops.
 						if ((b == '\t') && !TerminalSettings.CharReplace.ReplaceTab)
 						{
-							switch (d) // Keep tab if desired:
+							switch (d) // Keep tab:
 							{
 								case IODirection.Tx: return (new DisplayElement.TxData(b, text));
 								case IODirection.Rx: return (new DisplayElement.RxData(b, text));
@@ -2227,8 +2227,8 @@ namespace YAT.Domain
 				dl.AddRange(info);
 			}
 
-			// Data:
-			foreach (byte b in raw.Data)
+			// Content:
+			foreach (byte b in raw.Content)
 			{
 				dl.Add(ByteToElement(b, raw.Direction));
 			}
@@ -2237,7 +2237,7 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.ShowLength)
 			{
 				DisplayLinePart info;
-				PrepareLineEndInfo(raw.Data.Length, out info);
+				PrepareLineEndInfo(raw.Content.Length, out info);
 				dl.AddRange(info);
 			}
 

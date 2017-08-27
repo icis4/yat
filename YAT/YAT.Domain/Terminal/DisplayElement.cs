@@ -82,7 +82,7 @@ namespace YAT.Domain
 		public enum ElementAttributes
 		{
 			None      =  0,
-			Data      =  1,
+			Content   =  1,
 			Eol       =  2,
 			Inline    =  4,
 			Info      =  8,
@@ -109,7 +109,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public TxData()
-				: base(ElementAttributes.Data)
+				: base(ElementAttributes.Content)
 			{
 			}
 
@@ -132,7 +132,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public TxControl()
-				: base(ElementAttributes.Data)
+				: base(ElementAttributes.Content)
 			{
 			}
 
@@ -155,7 +155,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public RxData()
-				: base(ElementAttributes.Data)
+				: base(ElementAttributes.Content)
 			{
 			}
 
@@ -178,7 +178,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public RxControl()
-				: base(ElementAttributes.Data)
+				: base(ElementAttributes.Content)
 			{
 			}
 
@@ -510,7 +510,7 @@ namespace YAT.Domain
 		{
 			var l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 			l.Add(new Pair<byte[], string>(origin, text));
-			Initialize(direction, l, text, byteCount, ElementAttributes.Data);
+			Initialize(direction, l, text, byteCount, ElementAttributes.Content);
 		}
 
 		private void Initialize(Direction direction, List<Pair<byte[], string>> origin, string text, int byteCount, ElementAttributes attributes)
@@ -597,9 +597,9 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public virtual bool IsData
+		public virtual bool IsContent
 		{
-			get { return ((this.attributes & ElementAttributes.Data) != 0); }
+			get { return ((this.attributes & ElementAttributes.Content) != 0); }
 		}
 
 		/// <summary></summary>
@@ -717,7 +717,7 @@ namespace YAT.Domain
 			if (GetType() != other.GetType())
 				return (false);
 
-			if (!IsData || !other.IsData) // Disallow non-data elements.
+			if (!IsContent || !other.IsContent) // Disallow non-content elements.
 				return (false);
 
 			if (this.direction != other.direction) // Self-explaining.
