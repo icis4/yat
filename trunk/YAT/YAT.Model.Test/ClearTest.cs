@@ -166,7 +166,7 @@ namespace YAT.Model.Test
 					Utilities.WaitForTransmission(terminalA, terminalB, testSet);
 
 					// Verify incomplete line:
-					List<Domain.DisplayLine> lines = terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx);
+					var lines = terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx);
 					if (lines.Count != 2)
 						Assert.Fail("Incomplete line not received!");
 

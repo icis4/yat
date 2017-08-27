@@ -101,7 +101,7 @@ Fixed bugs:
 - Serial COM port sending at very low baud rates again properly works (bug #379).
 - Issue with UDP/IP server after connection reset fixed, automatically receiving again (bug #381).
 - Monitor can again be cleared when terminal is closed (bug #380).
-- Calculation of buffer line numbers fixed.
+- Calculation of buffer line numbers fixed (related to bug #380).
 - Erroneous error message when changing log file separator fixed (bug #378).
 - InvalidOperationException when defining user defined log file separator or monitor format
   enclosure or separator fixed (partly related to bug #378).
