@@ -27,7 +27,7 @@
 // Configuration
 //==================================================================================================
 
-// \remind MKY 2013-05-25 (related to feature request #163)
+// \remind (MKY 2013-05-25) (related to feature request #163)
 // No feasible way to implement horizontal auto scroll found. There are Win32 API functions to move
 // the position of the scroll bar itself, and to scroll rectangles, but it is not feasible to do the
 // whole translation from .NET Windows.Forms to Win32. Giving up.

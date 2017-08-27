@@ -510,7 +510,7 @@ namespace YAT.View.Forms
 				textBox_DelayInterval.Enabled = delayEnabled;
 				textBox_DelayInterval.Text    = this.settingsInEdit.LineSendDelay.LineInterval.ToString(CultureInfo.CurrentCulture);
 
-				// \remind (2017-04-05 / MKY) feature request #19 and bug #176
+				// \remind (2017-04-05 / MKY) (feature request #19 and bug #176)
 			////bool waitEnabled                 = this.settingsInEdit.WaitForResponse.Enabled;
 			////checkBox_WaitForResponse.Checked = waitEnabled;
 			////textBox_WaitForResponse.Enabled  = waitEnabled;
