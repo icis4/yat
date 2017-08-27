@@ -2211,17 +2211,44 @@ namespace YAT.Model
 			OnIOError(e);
 		}
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
+		private readonly long TimedStatusTextRequestTickInterval = StopwatchEx.TimeToTicks(500); // Can be quite long, as first request will not be impacted.
+		private long terminal_RawChunkSent_nextTimedStatusTextRequestTickStamp; // = 0;
+		private long terminal_RawChunkReceived_nextTimedStatusTextRequestTickStamp; // = 0;
+
+		/// <remarks>
+		/// \remind (2017-08-27 / MKY) (bug #383 freeze while receiving a lot of fast data)
+		/// In case of a lot of fast data, this event is raised very often. Unfortunately, this
+		/// handler itself raises up to three event again, thus leading to a sequence of event
+		/// synchronizations onto the main thread! In order to improve this situation a bit, the
+		/// events are only called when the feature is enabled, or tried to be called less often.
+		/// The true solution would be to implement an update decimation in the montior, same as
+		/// done for list box updates. But that would require to no longer synchronize the events,
+		/// but rather do that in the monitor. This could be considered when redoing the event
+		/// raising/receiving when merging YAT with Albatros.
+		/// </remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_RawChunkSent(object sender, EventArgs<Domain.RawChunk> e)
 		{
-			OnTimedStatusTextRequest("Sending...");
+			var currenctTickStamp = Stopwatch.GetTimestamp();
+			if (currenctTickStamp >= this.terminal_RawChunkSent_nextTimedStatusTextRequestTickStamp)
+			{
+				OnTimedStatusTextRequest("Sending...");
 
-			// Count:
+				unchecked // Calculate tick stamp of next request:
+				{
+					this.terminal_RawChunkSent_nextTimedStatusTextRequestTickStamp = (currenctTickStamp + TimedStatusTextRequestTickInterval); // Loop-around is OK.
+				}
+			}
+
+			// Count/Rate:
+			bool doRaise = this.settingsRoot.Terminal.Status.ShowCountAndRate;
+
 			this.txByteCount += e.Value.Content.Length;
-			OnIOCountChanged(EventArgs.Empty);
+			if (doRaise)
+				OnIOCountChanged(EventArgs.Empty);
 
-			// Rate:
-			if (this.txByteRate.Update(e.Value.Content.Length))
+			if (this.txByteRate.Update(e.Value.Content.Length) && doRaise) // Update shall be calculated in any case, so Update() must be called first!
 				OnIORateChanged(EventArgs.Empty);
 
 			// Log:
@@ -2232,17 +2259,39 @@ namespace YAT.Model
 			}
 		}
 
+		/// <remarks>
+		/// \remind (2017-08-27 / MKY) (bug #383 freeze while receiving a lot of fast data)
+		/// In case of a lot of fast data, this event is raised very often. Unfortunately, this
+		/// handler itself raises up to three event again, thus leading to a sequence of event
+		/// synchronizations onto the main thread! In order to improve this situation a bit, the
+		/// events are only called when the feature is enabled, or tried to be called less often.
+		/// The true solution would be to implement an update decimation in the montior, same as
+		/// done for list box updates. But that would require to no longer synchronize the events,
+		/// but rather do that in the monitor. This could be considered when redoing the event
+		/// raising/receiving when merging YAT with Albatros.
+		/// </remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_RawChunkReceived(object sender, EventArgs<Domain.RawChunk> e)
 		{
-			OnTimedStatusTextRequest("Receiving...");
+			var currenctTickStamp = Stopwatch.GetTimestamp();
+			if (currenctTickStamp >= this.terminal_RawChunkReceived_nextTimedStatusTextRequestTickStamp)
+			{
+				OnTimedStatusTextRequest("Receiving...");
 
-			// Count:
+				unchecked // Calculate tick stamp of next request:
+				{
+					this.terminal_RawChunkReceived_nextTimedStatusTextRequestTickStamp = (currenctTickStamp + TimedStatusTextRequestTickInterval); // Loop-around is OK.
+				}
+			}
+
+			// Count/Rate:
+			bool doRaise = this.settingsRoot.Terminal.Status.ShowCountAndRate;
+
 			this.rxByteCount += e.Value.Content.Length;
-			OnIOCountChanged(EventArgs.Empty);
+			if (doRaise)
+				OnIOCountChanged(EventArgs.Empty);
 
-			// Rate:
-			if (this.rxByteRate.Update(e.Value.Content.Length))
+			if (this.rxByteRate.Update(e.Value.Content.Length) && doRaise) // Update shall be calculated in any case, so Update() must be called first!
 				OnIORateChanged(EventArgs.Empty);
 
 			// Log:
