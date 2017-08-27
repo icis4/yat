@@ -537,51 +537,51 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnBaudRateChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(BaudRateChanged, this, e);
+			EventHelper.RaiseSync(BaudRateChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDataBitsChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(DataBitsChanged, this, e);
+			EventHelper.RaiseSync(DataBitsChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnParityChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(ParityChanged, this, e);
+			EventHelper.RaiseSync(ParityChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnStopBitsChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(StopBitsChanged, this, e);
+			EventHelper.RaiseSync(StopBitsChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnFlowControlChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(FlowControlChanged, this, e);
+			EventHelper.RaiseSync(FlowControlChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnAliveMonitorChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(AliveMonitorChanged, this, e);
+			EventHelper.RaiseSync(AliveMonitorChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnAutoReopenChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(AutoReopenChanged, this, e);
+			EventHelper.RaiseSync(AutoReopenChanged, this, e);
 		}
 
 		#endregion

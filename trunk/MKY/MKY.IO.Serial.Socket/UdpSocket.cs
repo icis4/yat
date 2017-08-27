@@ -1396,15 +1396,15 @@ namespace MKY.IO.Serial.Socket
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(IOChanged, this, e);
+			this.eventHelper.RaiseSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
@@ -1417,7 +1417,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			this.eventHelper.InvokeSync<IOErrorEventArgs>(IOError, this, e);
+			this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
@@ -1425,7 +1425,7 @@ namespace MKY.IO.Serial.Socket
 		protected virtual void OnDataReceived(DataReceivedEventArgs e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.InvokeSync<DataReceivedEventArgs>(DataReceived, this, e);
+				this.eventHelper.RaiseSync<DataReceivedEventArgs>(DataReceived, this, e);
 		}
 
 		/// <summary></summary>
@@ -1433,7 +1433,7 @@ namespace MKY.IO.Serial.Socket
 		protected virtual void OnDataSent(DataSentEventArgs e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.InvokeSync<DataSentEventArgs>(DataSent, this, e);
+				this.eventHelper.RaiseSync<DataSentEventArgs>(DataSent, this, e);
 		}
 
 		#endregion

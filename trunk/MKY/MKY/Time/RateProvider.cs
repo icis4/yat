@@ -296,15 +296,15 @@ namespace MKY.Time
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnRateChanged(RateEventArgs e)
 		{
-			this.eventHelper.InvokeSync<RateEventArgs>(Changed, this, e);
+			this.eventHelper.RaiseSync<RateEventArgs>(Changed, this, e);
 		}
 
 		#endregion

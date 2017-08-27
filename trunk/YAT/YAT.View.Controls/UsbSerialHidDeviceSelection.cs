@@ -280,7 +280,7 @@ namespace YAT.View.Controls
 									deviceInfoNotAvailable = this.deviceInfo;
 
 								// Ensure that the settings item is switched and shown by SetControls().
-								// Set property instead of member to ensure that changed event is invoked.
+								// Set property instead of member to ensure that changed event is raised.
 								DeviceInfo = devices[sameVidPidIndex];
 
 								if (!string.IsNullOrEmpty(deviceInfoNotAvailable))
@@ -289,7 +289,7 @@ namespace YAT.View.Controls
 							else
 							{
 								// Ensure that the settings item is defaulted and shown by SetControls().
-								// Set property instead of member to ensure that changed event is invoked.
+								// Set property instead of member to ensure that changed event is raised.
 								DeviceInfo = devices[sameVidPidIndex];
 							}
 						}
@@ -301,7 +301,7 @@ namespace YAT.View.Controls
 								deviceInfoNotAvailable = this.deviceInfo;
 
 							// Ensure that the settings item is defaulted and shown by SetControls().
-							// Set property instead of member to ensure that changed event is invoked.
+							// Set property instead of member to ensure that changed event is raised.
 							DeviceInfo = devices[0];
 
 							if (!string.IsNullOrEmpty(deviceInfoNotAvailable))
@@ -311,7 +311,7 @@ namespace YAT.View.Controls
 					else
 					{
 						// Ensure that the settings item is nulled and reset by SetControls().
-						// Set property instead of member to ensure that changed event is invoked.
+						// Set property instead of member to ensure that changed event is raised.
 						DeviceInfo = null;
 
 						ShowNoDevicesMessage();
@@ -387,15 +387,15 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnDeviceInfoChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(DeviceInfoChanged, this, e);
+			EventHelper.RaiseSync(DeviceInfoChanged, this, e);
 		}
 
 		#endregion

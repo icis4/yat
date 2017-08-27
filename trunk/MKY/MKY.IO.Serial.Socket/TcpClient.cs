@@ -66,7 +66,7 @@ namespace MKY.IO.Serial.Socket
 	/// 
 	/// 1. <see cref="Stop()"/> is called from a GUI/main thread.
 	/// 2. 'ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.StopConnections()' blocks.
-	/// 3. The 'OnDisconnected' event is invoked.
+	/// 3. The 'OnDisconnected' event is raised.
 	/// 4. FireOnDisconnected() is blocked when trying to synchronize Invoke() onto the GUI/main
 	///    thread and a deadlock happens.
 	/// 
@@ -786,7 +786,7 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <summary>
-		/// Fired when connected.
+		/// Event raised when connected.
 		/// </summary>
 		/// <param name="e">
 		/// Information about the connection.
@@ -803,7 +803,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary>
-		/// Fired when data arrives.
+		/// Event raised when data arrives.
 		/// </summary>
 		/// <param name="e">
 		/// Information about the Message.
@@ -829,7 +829,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary>
-		/// Fired when data has been sent.
+		/// Event raised when data has been sent.
 		/// </summary>
 		/// <param name="e">
 		/// Information about the data that has been sent.
@@ -840,7 +840,7 @@ namespace MKY.IO.Serial.Socket
 		/// </param>
 		public virtual void OnSent(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
-			// No clue why the 'Sent' event is invoked once before actual data is being sent...
+			// No clue why the 'Sent' event is raised once before actual data is being sent...
 			if ((e.Buffer != null) && (e.Buffer.Length > 0))
 			{
 				lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
@@ -958,7 +958,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary>
-		/// Fired when disconnected.
+		/// Event raised when disconnected.
 		/// </summary>
 		/// <param name="e">
 		/// Information about the connection.
@@ -1002,11 +1002,11 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary>
-		/// Fired when exception occurs.
+		/// Event raised when exception occurs.
 		/// </summary>
 		/// <remarks>
 		/// Attention:
-		/// This event is also invoked on reconnect attempts of auto-reconnect!
+		/// This event is also raised on reconnect attempts of auto-reconnect!
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
@@ -1121,15 +1121,15 @@ namespace MKY.IO.Serial.Socket
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(IOChanged, this, e);
+			this.eventHelper.RaiseSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
@@ -1142,7 +1142,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			this.eventHelper.InvokeSync<IOErrorEventArgs>(IOError, this, e);
+			this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
@@ -1150,7 +1150,7 @@ namespace MKY.IO.Serial.Socket
 		protected virtual void OnDataReceived(DataReceivedEventArgs e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.InvokeSync<DataReceivedEventArgs>(DataReceived, this, e);
+				this.eventHelper.RaiseSync<DataReceivedEventArgs>(DataReceived, this, e);
 		}
 
 		/// <summary></summary>
@@ -1158,7 +1158,7 @@ namespace MKY.IO.Serial.Socket
 		protected virtual void OnDataSent(DataSentEventArgs e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.InvokeSync<DataSentEventArgs>(DataSent, this, e);
+				this.eventHelper.RaiseSync<DataSentEventArgs>(DataSent, this, e);
 		}
 
 		#endregion

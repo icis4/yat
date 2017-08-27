@@ -276,7 +276,7 @@ namespace MKY.IO.Ports
 					if (portChangedCallback != null)
 					{
 						var e = new SerialPortChangedAndCancelEventArgs(portId);
-						this.eventHelper.InvokeSync<SerialPortChangedAndCancelEventArgs>(portChangedCallback, this, e);
+						this.eventHelper.RaiseSync<SerialPortChangedAndCancelEventArgs>(portChangedCallback, this, e);
 						if (e.Cancel)
 							break;
 					}
@@ -428,9 +428,9 @@ namespace MKY.IO.Ports
 			this.eventHelper.DiscardAllExceptions();
 		}
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -438,7 +438,7 @@ namespace MKY.IO.Ports
 		protected virtual List<InUseInfo> OnInUseLookupRequest()
 		{
 			var e = new SerialPortInUseLookupEventArgs();
-			this.eventHelper.InvokeSync<SerialPortInUseLookupEventArgs>(InUseLookupRequest, this, e);
+			this.eventHelper.RaiseSync<SerialPortInUseLookupEventArgs>(InUseLookupRequest, this, e);
 			return (e.InUseLookup);
 		}
 

@@ -574,33 +574,33 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnReportFormatChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(ReportFormatChanged, this, e);
+			EventHelper.RaiseSync(ReportFormatChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRxFilterUsageChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(RxFilterUsageChanged, this, e);
+			EventHelper.RaiseSync(RxFilterUsageChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnFlowControlChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(FlowControlChanged, this, e);
+			EventHelper.RaiseSync(FlowControlChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnAutoOpenChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(AutoOpenChanged, this, e);
+			EventHelper.RaiseSync(AutoOpenChanged, this, e);
 		}
 
 		#endregion

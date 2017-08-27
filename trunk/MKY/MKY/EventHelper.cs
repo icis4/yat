@@ -73,16 +73,16 @@ namespace MKY
 		/// <summary>
 		/// Flags to configure the event handling mode of the <see cref="EventHelper"/>.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "'InvokeAll' actually means 'DiscardNone' but is more obvious.")]
+		[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "'RaiseAll' actually means 'DiscardNone' but is more obvious.")]
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize that this type belongs to the 'EventHelper'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Well, there are exceptions to the rules...")]
 		[Flags]
 		public enum EventHandlingMode
 		{
 			/// <summary>
-			/// All events will be invoked.
+			/// All events will be raised.
 			/// </summary>
-			InvokeAll = 0,
+			RaiseAll = 0,
 
 			/// <summary>
 			/// Events on the main thread will be discarded.
@@ -161,7 +161,7 @@ namespace MKY
 		}
 
 		/// <summary></summary>
-		public const EventHandlingMode EventHandlingDefault = EventHandlingMode.InvokeAll;
+		public const EventHandlingMode EventHandlingDefault = EventHandlingMode.RaiseAll;
 
 		/// <summary></summary>
 	#if (RETHROW_UNHANDLED_EXCEPTIONS)
@@ -205,7 +205,7 @@ namespace MKY
 			/// <summary>
 			/// Initializes a new instance of the <see cref="Item"/> class that is by default configured as follows:
 			///  - <see cref="EventHandling"/>:
-			///     - <see cref="EventHandlingMode.InvokeAll"/>.
+			///     - <see cref="EventHandlingMode.RaiseAll"/>.
 			///  - <see cref="ExceptionHandling"/>:
 			///     - <see cref="ExceptionHandlingMode.RethrowAll"/> for "RELEASE" configurations.
 			///     - <see cref="ExceptionHandlingMode.DiscardAll"/> for "DEBUG" configurations.
@@ -220,7 +220,7 @@ namespace MKY
 			/// <summary>
 			/// Initializes a new instance of the <see cref="Item"/> class that is by default configured as follows:
 			///  - <see cref="EventHandling"/>:
-			///     - <see cref="EventHandlingMode.InvokeAll"/>.
+			///     - <see cref="EventHandlingMode.RaiseAll"/>.
 			///  - <see cref="ExceptionHandling"/>:
 			///     - <see cref="ExceptionHandlingMode.RethrowAll"/> for "RELEASE" configurations.
 			///     - <see cref="ExceptionHandlingMode.DiscardAll"/> for "DEBUG" configurations.
@@ -292,14 +292,14 @@ namespace MKY
 			//======================================================================================
 
 			/// <summary>
-			/// Invokes event with supplied arguments synchronously. Event is invoked safely,
+			/// Raises event with supplied arguments synchronously. Event is raised safely,
 			/// exceptions are caught. If an event sink implements <see cref="ISynchronizeInvoke"/>,
 			/// the event is invoked on that thread. Otherwise, the event is invoked on the current
 			/// thread.
 			/// </summary>
-			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event invocation.")]
+			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event raising.")]
 			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-			public virtual void InvokeSync(Delegate eventDelegate, params object[] args)
+			public virtual void RaiseSync(Delegate eventDelegate, params object[] args)
 			{
 				if (eventDelegate == null)
 					return;
@@ -319,16 +319,16 @@ namespace MKY
 			}
 
 			/// <summary>
-			/// Invokes event with supplied arguments synchronously. Event is invoked safely,
+			/// Raises event with supplied arguments synchronously. Event is raised safely,
 			/// exceptions are caught. If an event sink implements <see cref="ISynchronizeInvoke"/>,
 			/// the event is invoked on that thread. Otherwise, the event is invoked on the current
 			/// thread.
 			/// </summary>
 			/// <typeparam name="TEventArgs">The type of the EventArgs of the requested event.</typeparam>
 			[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Haven't found any alternative way to implement a generic event helper.")]
-			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event invocation.")]
+			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event raising.")]
 			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-			public virtual void InvokeSync<TEventArgs>(Delegate eventDelegate, params object[] args)
+			public virtual void RaiseSync<TEventArgs>(Delegate eventDelegate, params object[] args)
 				where TEventArgs : EventArgs
 			{
 				if (eventDelegate == null)
@@ -349,7 +349,7 @@ namespace MKY
 			}
 
 			/// <summary>
-			/// Invokes event with supplied arguments synchronously. Event is invoked safely,
+			/// Raises event with supplied arguments synchronously. Event is raised safely,
 			/// exceptions are caught. If an event sink implements <see cref="ISynchronizeInvoke"/>,
 			/// the event is invoked on that thread. Otherwise, the event is invoked on the current
 			/// thread.
@@ -360,8 +360,8 @@ namespace MKY
 			/// <typeparam name="TEventArgs">The type of the EventArgs of the requested event.</typeparam>
 			/// <typeparam name="TEventHandler">The type of the requested event.</typeparam>
 			[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Haven't found any alternative way to implement a generic event helper.")]
-			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event invocation.")]
-			public virtual void InvokeSync<TEventArgs, TEventHandler>(Delegate eventDelegate, params object[] args)
+			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event raising.")]
+			public virtual void RaiseSync<TEventArgs, TEventHandler>(Delegate eventDelegate, params object[] args)
 				where TEventArgs : EventArgs
 			{
 				if (eventDelegate == null)
@@ -391,13 +391,13 @@ namespace MKY
 			private delegate void AsyncInvokeDelegate(Delegate eventDelegate, object[] args);
 
 			/// <summary>
-			/// Invokes event with supplied arguments asynchronously. Event is invoked safely,
+			/// Raises event with supplied arguments asynchronously. Event is raised safely,
 			/// exceptions are caught. If an event sink implements <see cref="ISynchronizeInvoke"/>,
 			/// the event is invoked on that thread. Otherwise, the event is invoked on a thread
 			/// from the thread pool.
 			/// </summary>
-			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event invocation.")]
-			public virtual void InvokeAsync(Delegate eventDelegate, params object[] args)
+			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event raising.")]
+			public virtual void RaiseAsync(Delegate eventDelegate, params object[] args)
 			{
 				if (eventDelegate == null)
 					return;
@@ -422,16 +422,16 @@ namespace MKY
 			}
 
 			/// <summary>
-			/// Invokes event with supplied arguments asynchronously. Event is invoked safely,
+			/// Raises event with supplied arguments asynchronously. Event is raised safely,
 			/// exceptions are caught. If an event sink implements <see cref="ISynchronizeInvoke"/>,
 			/// the event is invoked on that thread. Otherwise, the event is invoked on a thread
 			/// from the thread pool.
 			/// </summary>
 			/// <typeparam name="TEventArgs">The type of the EventArgs of the requested event.</typeparam>
 			[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Haven't found any alternative way to implement a generic event helper.")]
-			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event invocation.")]
+			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event raising.")]
 			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-			public virtual void InvokeAsync<TEventArgs>(Delegate eventDelegate, params object[] args)
+			public virtual void RaiseAsync<TEventArgs>(Delegate eventDelegate, params object[] args)
 				where TEventArgs : EventArgs
 			{
 				if (eventDelegate == null)
@@ -457,7 +457,7 @@ namespace MKY
 			}
 
 			/// <summary>
-			/// Invokes event with supplied arguments asynchronously. Event is invoked safely,
+			/// Raises event with supplied arguments asynchronously. Event is raised safely,
 			/// exceptions are caught. If an event sink implements <see cref="ISynchronizeInvoke"/>,
 			/// the event is invoked on that thread. Otherwise, the event is invoked on a thread
 			/// from the thread pool.
@@ -468,8 +468,8 @@ namespace MKY
 			/// <typeparam name="TEventArgs">The type of the EventArgs of the requested event.</typeparam>
 			/// <typeparam name="TEventHandler">The type of the requested event.</typeparam>
 			[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Haven't found any alternative way to implement a generic event helper.")]
-			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event invocation.")]
-			public virtual void InvokeAsync<TEventArgs, TEventHandler>(Delegate eventDelegate, params object[] args)
+			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event raising.")]
+			public virtual void RaiseAsync<TEventArgs, TEventHandler>(Delegate eventDelegate, params object[] args)
 				where TEventArgs : EventArgs
 			{
 				if (eventDelegate == null)
@@ -541,14 +541,14 @@ namespace MKY
 						if (isMainThread)
 						{
 							if (UnhandledExceptionOnMainThread != null)
-								InvokeSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnMainThread, this, new UnhandledExceptionEventArgs(ex, false));
+								RaiseSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnMainThread, this, new UnhandledExceptionEventArgs(ex, false));
 							else
 								throw; // Rethrow!
 						}
 						else
 						{
 							if (UnhandledExceptionOnNonMainThread != null)
-								InvokeSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnNonMainThread, this, new UnhandledExceptionEventArgs(ex, false));
+								RaiseSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnNonMainThread, this, new UnhandledExceptionEventArgs(ex, false));
 							else
 								throw; // Rethrow!
 						}
@@ -607,14 +607,14 @@ namespace MKY
 						if (isMainThread)
 						{
 							if (UnhandledExceptionOnMainThread != null)
-								InvokeSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnMainThread, this, new UnhandledExceptionEventArgs(ex, false));
+								RaiseSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnMainThread, this, new UnhandledExceptionEventArgs(ex, false));
 							else
 								throw; // Rethrow!
 						}
 						else
 						{
 							if (UnhandledExceptionOnNonMainThread != null)
-								InvokeSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnNonMainThread, this, new UnhandledExceptionEventArgs(ex, false));
+								RaiseSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnNonMainThread, this, new UnhandledExceptionEventArgs(ex, false));
 							else
 								throw; // Rethrow!
 						}
@@ -687,7 +687,7 @@ namespace MKY
 		/// <remarks>
 		/// Creates an <see cref="Item"/> that is by default configured as follows:
 		///  - <see cref="EventHandling"/>:
-		///     - <see cref="EventHandlingMode.InvokeAll"/>.
+		///     - <see cref="EventHandlingMode.RaiseAll"/>.
 		///  - <see cref="ExceptionHandling"/>:
 		///     - <see cref="ExceptionHandlingMode.RethrowAll"/> for "RELEASE" configurations.
 		///     - <see cref="ExceptionHandlingMode.DiscardAll"/> for "DEBUG" configurations.
@@ -702,7 +702,7 @@ namespace MKY
 		/// <remarks>
 		/// Creates an <see cref="Item"/> that is by default configured as follows:
 		///  - <see cref="EventHandling"/>:
-		///     - <see cref="EventHandlingMode.InvokeAll"/>.
+		///     - <see cref="EventHandlingMode.RaiseAll"/>.
 		///  - <see cref="ExceptionHandling"/>:
 		///     - <see cref="ExceptionHandlingMode.RethrowAll"/> for "RELEASE" configurations.
 		///     - <see cref="ExceptionHandlingMode.DiscardAll"/> for "DEBUG" configurations.
@@ -784,34 +784,34 @@ namespace MKY
 		//==========================================================================================
 
 		/// <summary>
-		/// Invokes event with supplied arguments synchronously. Event is invoked safely,
+		/// Raises event with supplied arguments synchronously. Event is raised safely,
 		/// exceptions are caught. If an event sink implements <see cref="ISynchronizeInvoke"/>,
 		/// the event is invoked on that thread. Otherwise, the event is invoked on the current
 		/// thread.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event invocation.")]
-		public static void InvokeSync(Delegate eventDelegate, params object[] args)
+		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event raising.")]
+		public static void RaiseSync(Delegate eventDelegate, params object[] args)
 		{
-			staticItem.InvokeSync(eventDelegate, args);
+			staticItem.RaiseSync(eventDelegate, args);
 		}
 
 		/// <summary>
-		/// Invokes event with supplied arguments synchronously. Event is invoked safely,
+		/// Raises event with supplied arguments synchronously. Event is raised safely,
 		/// exceptions are caught. If an event sink implements <see cref="ISynchronizeInvoke"/>,
 		/// the event is invoked on that thread. Otherwise, the event is invoked on the current
 		/// thread.
 		/// </summary>
 		/// <typeparam name="TEventArgs">The type of the EventArgs of the requested event.</typeparam>
 		[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Haven't found any alternative way to implement a generic event helper.")]
-		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event invocation.")]
-		public static void InvokeSync<TEventArgs>(Delegate eventDelegate, params object[] args)
+		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event raising.")]
+		public static void RaiseSync<TEventArgs>(Delegate eventDelegate, params object[] args)
 			where TEventArgs : EventArgs
 		{
-			staticItem.InvokeSync<TEventArgs>(eventDelegate, args);
+			staticItem.RaiseSync<TEventArgs>(eventDelegate, args);
 		}
 
 		/// <summary>
-		/// Invokes event with supplied arguments synchronously. Event is invoked safely,
+		/// Raises event with supplied arguments synchronously. Event is raised safely,
 		/// exceptions are caught. If an event sink implements <see cref="ISynchronizeInvoke"/>,
 		/// the event is invoked on that thread. Otherwise, the event is invoked on the current
 		/// thread.
@@ -822,11 +822,11 @@ namespace MKY
 		/// <typeparam name="TEventArgs">The type of the EventArgs of the requested event.</typeparam>
 		/// <typeparam name="TEventHandler">The type of the requested event.</typeparam>
 		[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Haven't found any alternative way to implement a generic event helper.")]
-		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event invocation.")]
-		public static void InvokeSync<TEventArgs, TEventHandler>(Delegate eventDelegate, params object[] args)
+		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event raising.")]
+		public static void RaiseSync<TEventArgs, TEventHandler>(Delegate eventDelegate, params object[] args)
 			where TEventArgs : EventArgs
 		{
-			staticItem.InvokeSync<TEventArgs, TEventHandler>(eventDelegate, args);
+			staticItem.RaiseSync<TEventArgs, TEventHandler>(eventDelegate, args);
 		}
 
 		#endregion
@@ -837,34 +837,34 @@ namespace MKY
 		//==========================================================================================
 
 		/// <summary>
-		/// Invokes event with supplied arguments asynchronously. Event is invoked safely,
+		/// Raises event with supplied arguments asynchronously. Event is raised safely,
 		/// exceptions are caught. If an event sink implements <see cref="ISynchronizeInvoke"/>,
 		/// the event is invoked on that thread. Otherwise, the event is invoked on a thread from
 		/// the thread pool.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event invocation.")]
-		public static void InvokeAsync(Delegate eventDelegate, params object[] args)
+		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event raising.")]
+		public static void RaiseAsync(Delegate eventDelegate, params object[] args)
 		{
-			staticItem.InvokeAsync(eventDelegate, args);
+			staticItem.RaiseAsync(eventDelegate, args);
 		}
 
 		/// <summary>
-		/// Invokes event with supplied arguments asynchronously. Event is invoked safely,
+		/// Raises event with supplied arguments asynchronously. Event is raised safely,
 		/// exceptions are caught. If an event sink implements <see cref="ISynchronizeInvoke"/>,
 		/// the event is invoked on that thread. Otherwise, the event is invoked on a thread from
 		/// the thread pool.
 		/// </summary>
 		/// <typeparam name="TEventArgs">The type of the EventArgs of the requested event.</typeparam>
 		[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Haven't found any alternative way to implement a generic event helper.")]
-		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event invocation.")]
-		public static void InvokeAsync<TEventArgs>(Delegate eventDelegate, params object[] args)
+		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event raising.")]
+		public static void RaiseAsync<TEventArgs>(Delegate eventDelegate, params object[] args)
 			where TEventArgs : EventArgs
 		{
-			staticItem.InvokeAsync<TEventArgs>(eventDelegate, args);
+			staticItem.RaiseAsync<TEventArgs>(eventDelegate, args);
 		}
 
 		/// <summary>
-		/// Invokes event with supplied arguments asynchronously. Event is invoked safely,
+		/// Raises event with supplied arguments asynchronously. Event is raised safely,
 		/// exceptions are caught. If an event sink implements <see cref="ISynchronizeInvoke"/>,
 		/// the event is invoked on that thread. Otherwise, the event is invoked on a thread from
 		/// the thread pool.
@@ -875,11 +875,11 @@ namespace MKY
 		/// <typeparam name="TEventArgs">The type of the EventArgs of the requested event.</typeparam>
 		/// <typeparam name="TEventHandler">The type of the requested event.</typeparam>
 		[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Haven't found any alternative way to implement a generic event helper.")]
-		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event invocation.")]
-		public static void InvokeAsync<TEventArgs, TEventHandler>(Delegate eventDelegate, params object[] args)
+		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event raising.")]
+		public static void RaiseAsync<TEventArgs, TEventHandler>(Delegate eventDelegate, params object[] args)
 			where TEventArgs : EventArgs
 		{
-			staticItem.InvokeAsync<TEventArgs, TEventHandler>(eventDelegate, args);
+			staticItem.RaiseAsync<TEventArgs, TEventHandler>(eventDelegate, args);
 		}
 
 		#endregion

@@ -272,21 +272,21 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnTerminalTypeChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(TerminalTypeChanged, this, e);
+			EventHelper.RaiseSync(TerminalTypeChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOTypeChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(IOTypeChanged, this, e);
+			EventHelper.RaiseSync(IOTypeChanged, this, e);
 		}
 
 		#endregion

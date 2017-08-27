@@ -211,7 +211,7 @@ namespace YAT.Domain
 			/// <summary></summary>
 			protected virtual void OnElapsed(EventArgs e)
 			{
-				this.eventHelper.InvokeSync(Elapsed, this, e);
+				this.eventHelper.RaiseSync(Elapsed, this, e);
 			}
 		}
 

@@ -225,7 +225,7 @@ namespace YAT.View.Controls
 		/// </summary>
 		protected virtual void OnStatus1Changed(EventArgs<string> e)
 		{
-			this.eventHelper.InvokeSync<EventArgs<string>>(Status1Changed, this, e);
+			this.eventHelper.RaiseSync<EventArgs<string>>(Status1Changed, this, e);
 		}
 
 		/// <summary>
@@ -233,7 +233,7 @@ namespace YAT.View.Controls
 		/// </summary>
 		protected virtual void OnStatus2Changed(EventArgs<string> e)
 		{
-			this.eventHelper.InvokeSync<EventArgs<string>>(Status2Changed, this, e);
+			this.eventHelper.RaiseSync<EventArgs<string>>(Status2Changed, this, e);
 		}
 
 		/// <summary>
@@ -241,7 +241,7 @@ namespace YAT.View.Controls
 		/// </summary>
 		protected virtual void OnIsDone(EventArgs<DialogResult> e)
 		{
-			this.eventHelper.InvokeAsync<EventArgs<DialogResult>>(IsDone, this, e); // Fire async! Worker thread termination must not delayed by sync callbacks!
+			this.eventHelper.RaiseAsync<EventArgs<DialogResult>>(IsDone, this, e); // Raise async! Worker thread termination must not delayed by a sync callbacks!
 		}
 	}
 }

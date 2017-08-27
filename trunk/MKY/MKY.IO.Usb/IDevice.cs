@@ -37,17 +37,17 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary>
-		/// Fired after the device has been connected or reconnected.
+		/// Event raised after the device has been connected or reconnected.
 		/// </summary>
 		event EventHandler Connected;
 
 		/// <summary>
-		/// Fired after the device has been disconnected.
+		/// Event raised after the device has been disconnected.
 		/// </summary>
 		event EventHandler Disconnected;
 
 		/// <summary>
-		/// Fired after an I/O error has occurred.
+		/// Event raised after an I/O error has occurred.
 		/// </summary>
 		event EventHandler<ErrorEventArgs> IOError;
 

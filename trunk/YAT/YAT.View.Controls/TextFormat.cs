@@ -339,21 +339,21 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnFormatChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(FormatChanged, this, e);
+			EventHelper.RaiseSync(FormatChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnCustomColorsChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(CustomColorsChanged, this, e);
+			EventHelper.RaiseSync(CustomColorsChanged, this, e);
 		}
 
 		#endregion

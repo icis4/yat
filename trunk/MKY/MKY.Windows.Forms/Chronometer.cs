@@ -193,15 +193,15 @@ namespace MKY.Windows.Forms
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnTimeSpanChanged(TimeSpanEventArgs e)
 		{
-			EventHelper.InvokeSync<TimeSpanEventArgs>(TimeSpanChanged, this, e);
+			EventHelper.RaiseSync<TimeSpanEventArgs>(TimeSpanChanged, this, e);
 		}
 
 		#endregion

@@ -685,7 +685,7 @@ namespace YAT.View.Controls
 								localInterfaceNotAvailable = this.localInterface;
 
 							// Ensure that the settings item is switched and shown by SetControls().
-							// Set property instead of member to ensure that changed event is invoked.
+							// Set property instead of member to ensure that changed event is raised.
 							LocalInterface = localInterfaces[sameDescriptionIndex];
 
 							ShowNotAvailableSwitchedMessage(localInterfaceNotAvailable, localInterfaces[sameDescriptionIndex]);
@@ -696,7 +696,7 @@ namespace YAT.View.Controls
 							string localInterfaceNotAvailable = this.localInterface;
 
 							// Ensure that the settings item is defaulted and shown by SetControls().
-							// Set property instead of member to ensure that changed event is invoked.
+							// Set property instead of member to ensure that changed event is raised.
 							LocalInterface = localInterfaces[0];
 
 							ShowNotAvailableDefaultedMessage(localInterfaceNotAvailable, localInterfaces[0]);
@@ -705,7 +705,7 @@ namespace YAT.View.Controls
 					else // localInterfaces.Count == 0
 					{
 						// Ensure that the settings item is nulled and reset by SetControls().
-						// Set property instead of member to ensure that changed event is invoked.
+						// Set property instead of member to ensure that changed event is raised.
 						LocalInterface = null;
 
 						ShowNoLocalInterfacesMessage();
@@ -916,51 +916,51 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnRemoteHostChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(RemoteHostChanged, this, e);
+			EventHelper.RaiseSync(RemoteHostChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRemoteTcpPortChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(RemoteTcpPortChanged, this, e);
+			EventHelper.RaiseSync(RemoteTcpPortChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRemoteUdpPortChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(RemoteUdpPortChanged, this, e);
+			EventHelper.RaiseSync(RemoteUdpPortChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnLocalInterfaceChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(LocalInterfaceChanged, this, e);
+			EventHelper.RaiseSync(LocalInterfaceChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnLocalFilterChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(LocalFilterChanged, this, e);
+			EventHelper.RaiseSync(LocalFilterChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnLocalTcpPortChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(LocalTcpPortChanged, this, e);
+			EventHelper.RaiseSync(LocalTcpPortChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnLocalUdpPortChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(LocalUdpPortChanged, this, e);
+			EventHelper.RaiseSync(LocalUdpPortChanged, this, e);
 		}
 
 		#endregion

@@ -375,23 +375,23 @@ namespace MKY.Data
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//------------------------------------------------------------------------------------------
-		// Event Invoking
+		// Event Raising
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		protected virtual void OnChanged(DataEventArgs e)
 		{
-			bool doInvoke = false;
+			bool doRaise = false;
 
 			lock (this.changeEventSuspendedCountSyncObj)
 			{
-				doInvoke = (this.changeEventSuspendedCount == 0);
+				doRaise = (this.changeEventSuspendedCount == 0);
 			}
 
-			if (doInvoke)
-				EventHelper.InvokeSync<DataEventArgs>(Changed, this, e);
+			if (doRaise)
+				EventHelper.RaiseSync<DataEventArgs>(Changed, this, e);
 		}
 
 		#endregion
@@ -460,7 +460,7 @@ namespace MKY.Data
 
 		/// <summary>
 		/// Forces a change event on the settings and all nodes of the settings tree.
-		/// The event is fired even if the settings have not changed.
+		/// The event is raised even if the settings have not changed.
 		/// </summary>
 		public virtual void ForceChangeEvent()
 		{

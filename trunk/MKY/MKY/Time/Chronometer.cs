@@ -310,15 +310,15 @@ namespace MKY.Time
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnTimeSpanChanged(TimeSpanEventArgs e)
 		{
-			this.eventHelper.InvokeSync<TimeSpanEventArgs>(TimeSpanChanged, this, e);
+			this.eventHelper.RaiseSync<TimeSpanEventArgs>(TimeSpanChanged, this, e);
 		}
 
 		#endregion

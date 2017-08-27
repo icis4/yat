@@ -252,7 +252,7 @@ namespace MKY.IO.Usb
 							Debug.WriteLine("Info = " + e.DeviceInfo);
 							Debug.Unindent();
 
-							EventHelper.InvokeAsync(DeviceConnected, typeof(HidDevice), e);
+							EventHelper.RaiseAsync(DeviceConnected, typeof(HidDevice), e);
 							break;
 						}
 
@@ -265,7 +265,7 @@ namespace MKY.IO.Usb
 							Debug.WriteLine("Path = " + devicePath);
 							Debug.Unindent();
 
-							EventHelper.InvokeAsync(DeviceDisconnected, typeof(HidDevice), e);
+							EventHelper.RaiseAsync(DeviceDisconnected, typeof(HidDevice), e);
 							break;
 						}
 					}

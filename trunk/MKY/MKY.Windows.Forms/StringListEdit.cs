@@ -251,15 +251,15 @@ namespace MKY.Windows.Forms
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnStringListChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(StringListChanged, this, e);
+			EventHelper.RaiseSync(StringListChanged, this, e);
 		}
 
 		#endregion

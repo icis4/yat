@@ -585,7 +585,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
     public interface ISocketService
     {
         /// <summary>
-        /// Fired when connected.
+        /// Event raised when connected.
         /// </summary>
         /// <param name="e">
         /// Information about the connection.
@@ -593,7 +593,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
         void OnConnected(ConnectionEventArgs e);
 
         /// <summary>
-        /// Fired when data arrives.
+        /// Event raised when data arrives.
         /// </summary>
         /// <param name="e">
         /// Information about the Message.
@@ -601,7 +601,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
         void OnReceived(MessageEventArgs e);
 
         /// <summary>
-        /// Fired when data is sent.
+        /// Event raised when data is sent.
         /// </summary>
         /// <param name="e">
         /// Information about the Message.
@@ -609,7 +609,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
         void OnSent(MessageEventArgs e);
 
         /// <summary>
-        /// Fired when disconnected.
+        /// Event raised when disconnected.
         /// </summary>
         /// <param name="e">
         /// Information about the connection.
@@ -617,7 +617,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
         void OnDisconnected(ConnectionEventArgs e);
 
         /// <summary>
-        /// Fired when exception occurs.
+        /// Event raised when exception occurs.
         /// </summary>
         /// <param name="e">
         /// Information about the exception and connection.
@@ -637,7 +637,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
     {
         
         /// <summary>
-        /// Fired when symmetric encryption is used.
+        /// Event raised when symmetric encryption is used.
         /// </summary>
         /// <param name="serverKey">
         /// The RSA provider used to encrypt symmetric IV and Key.
@@ -645,7 +645,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
         void OnSymmetricAuthenticate(ISocketConnection connection, out RSACryptoServiceProvider serverKey);
 
         /// <summary>
-        /// Fired when SSL encryption is used in client host.
+        /// Event raised when SSL encryption is used in client host.
         /// </summary>
         /// <param name="ServerName">
         /// The host name in certificate.
@@ -669,7 +669,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
         void OnSSLClientValidateServerCertificate(X509Certificate serverCertificate, X509Chain chain, SslPolicyErrors sslPolicyErrors, out bool acceptCertificate);
 
         /// <summary>
-        /// Fired when SSL encryption is used in server host.
+        /// Event raised when SSL encryption is used in server host.
         /// </summary>
         /// <param name="certificate">
         /// The certificate to be used.

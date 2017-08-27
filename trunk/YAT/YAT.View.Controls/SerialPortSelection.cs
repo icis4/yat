@@ -474,7 +474,7 @@ namespace YAT.View.Controls
 							if (scanSuccess && TryGetAlternate(ports, out portIdAlternate))
 							{
 								// Ensure that the settings item is defaulted and shown by SetControls().
-								// Set property instead of member to ensure that changed event is invoked.
+								// Set property instead of member to ensure that changed event is raised.
 								PortId = portIdAlternate;
 
 								ShowNotAvailableSwitchMessage(portIdNotAvailable, portIdAlternate);
@@ -482,7 +482,7 @@ namespace YAT.View.Controls
 							else
 							{
 								// Ensure that the settings item is defaulted and shown by SetControls().
-								// Set property instead of member to ensure that changed event is invoked.
+								// Set property instead of member to ensure that changed event is raised.
 								PortId = ports[0];
 
 								if (scanSuccess)
@@ -495,7 +495,7 @@ namespace YAT.View.Controls
 					else // ports.Count == 0
 					{
 						// Ensure that the settings item is nulled and reset by SetControls().
-						// Set property instead of member to ensure that changed event is invoked.
+						// Set property instead of member to ensure that changed event is raised.
 						PortId = null;
 
 						if (scanSuccess)
@@ -638,9 +638,9 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary>
@@ -648,7 +648,7 @@ namespace YAT.View.Controls
 		/// </summary>
 		protected virtual void OnPortIdChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(PortIdChanged, this, e);
+			EventHelper.RaiseSync(PortIdChanged, this, e);
 		}
 
 		/// <summary>
@@ -656,7 +656,7 @@ namespace YAT.View.Controls
 		/// </summary>
 		protected virtual void OnActivePortInUseInfoChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(ActivePortInUseInfoChanged, this, e);
+			EventHelper.RaiseSync(ActivePortInUseInfoChanged, this, e);
 		}
 
 		#endregion

@@ -432,39 +432,39 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnUseIdChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(UseIdChanged, this, e);
+			EventHelper.RaiseSync(UseIdChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnPrependPayloadByteLengthChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(PrependPayloadByteLengthChanged, this, e);
+			EventHelper.RaiseSync(PrependPayloadByteLengthChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnAppendTerminatingZeroChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(AppendTerminatingZeroChanged, this, e);
+			EventHelper.RaiseSync(AppendTerminatingZeroChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnFillLastReportChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(FillLastReportChanged, this, e);
+			EventHelper.RaiseSync(FillLastReportChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnFormatChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(FormatChanged, this, e);
+			EventHelper.RaiseSync(FormatChanged, this, e);
 		}
 
 		#endregion

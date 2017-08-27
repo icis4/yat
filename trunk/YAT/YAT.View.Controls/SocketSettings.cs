@@ -319,21 +319,21 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary></summary>
 		protected virtual void OnTcpClientAutoReconnectChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(TcpClientAutoReconnectChanged, this, e);
+			EventHelper.RaiseSync(TcpClientAutoReconnectChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnUdpServerSendModeChanged(EventArgs e)
 		{
-			EventHelper.InvokeSync(UdpServerSendModeChanged, this, e);
+			EventHelper.RaiseSync(UdpServerSendModeChanged, this, e);
 		}
 
 		#endregion

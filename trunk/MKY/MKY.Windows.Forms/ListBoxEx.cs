@@ -425,7 +425,7 @@ namespace MKY.Windows.Forms
 						// Get scroll info (errors will be handled there):
 						GetScrollInfo(sb, ref si);
 
-						// Fire event:
+						// Raise event:
 						if (m.Msg == Window.NativeConstants.WM_HSCROLL)
 							OnHorizontalScrolledAsync(new ScrollEventArgs(ScrollEventType.EndScroll, si.nPos, ScrollOrientation.HorizontalScroll));
 						else

@@ -159,32 +159,32 @@ namespace MKY.IO.Ports
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Fired after port changed.
+		/// Event raised after port changed.
 		/// </summary>
 		public event EventHandler PortChanged;
 
 		/// <summary>
-		/// Fired after port settings changed.
+		/// Event raised after port settings changed.
 		/// </summary>
 		public event EventHandler PortSettingsChanged;
 
 		/// <summary>
-		/// Fired before connection is being opened.
+		/// Event raised before connection is being opened.
 		/// </summary>
 		public event EventHandler Opening;
 
 		/// <summary>
-		/// Fired after connection successfully opened.
+		/// Event raised after connection successfully opened.
 		/// </summary>
 		public event EventHandler Opened;
 
 		/// <summary>
-		/// Fired before connection is being closed.
+		/// Event raised before connection is being closed.
 		/// </summary>
 		public event EventHandler Closing;
 
 		/// <summary>
-		/// Fired after connection successfully closed.
+		/// Event raised after connection successfully closed.
 		/// </summary>
 		public event EventHandler Closed;
 
@@ -1219,7 +1219,7 @@ namespace MKY.IO.Ports
 
 				OnPinChanged(new SerialPinChangedEventArgs((SerialPinChange)e.EventType));
 
-				// Note that this event is invoked synchronously even though there is the deadlock
+				// Note that this event is raised synchronously even though there is the deadlock
 				// issue documented on top. Reason: This SerialPortEx shall behave the same as the
 				// base implementation SerialPort. To work around the issue, a client class shall
 				// ensure that these event are handled asynchronously.
@@ -1227,7 +1227,7 @@ namespace MKY.IO.Ports
 
 			OnDataReceived(new SerialDataReceivedEventArgs(e.EventType));
 
-			// Note that this event is invoked synchronously even though there is the deadlock
+			// Note that this event is raised synchronously even though there is the deadlock
 			// issue documented on top. Reason: This SerialPortEx shall behave the same as the
 			// base implementation SerialPort. To work around the issue, a client class shall
 			// ensure that these event are handled asynchronously.
@@ -1286,7 +1286,7 @@ namespace MKY.IO.Ports
 
 			OnPinChanged(new SerialPinChangedEventArgs((SerialPinChange)e.EventType));
 
-			// Note that this event is invoked synchronously even though there is the deadlock
+			// Note that this event is raised synchronously even though there is the deadlock
 			// issue documented on top. Reason: This SerialPortEx shall behave the same as the
 			// base implementation SerialPort. To work around the issue, a client class shall
 			// ensure that these event are handled asynchronously.
@@ -1296,7 +1296,7 @@ namespace MKY.IO.Ports
 		{
 			OnErrorReceived(new SerialErrorReceivedEventArgs(e.EventType));
 
-			// Note that this event is invoked synchronously even though there is the deadlock
+			// Note that this event is raised synchronously even though there is the deadlock
 			// issue documented on top. Reason: This SerialPortEx shall behave the same as the
 			// base implementation SerialPort. To work around the issue, a client class shall
 			// ensure that these event are handled asynchronously.
@@ -1304,9 +1304,9 @@ namespace MKY.IO.Ports
 
 		#endregion
 
-		#region Event Invoking
+		#region Event Raising
 		//==========================================================================================
-		// Event Invoking
+		// Event Raising
 		//==========================================================================================
 
 		/// <summary>
@@ -1314,7 +1314,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnPortChanged(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(PortChanged, this, e);
+			this.eventHelper.RaiseSync(PortChanged, this, e);
 		}
 
 		/// <summary>
@@ -1322,7 +1322,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnPortSettingsChanged(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(PortSettingsChanged, this, e);
+			this.eventHelper.RaiseSync(PortSettingsChanged, this, e);
 		}
 
 		/// <summary>
@@ -1330,7 +1330,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnOpening(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(Opening, this, e);
+			this.eventHelper.RaiseSync(Opening, this, e);
 		}
 
 		/// <summary>
@@ -1338,7 +1338,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnOpened(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(Opened, this, e);
+			this.eventHelper.RaiseSync(Opened, this, e);
 		}
 
 		/// <summary>
@@ -1346,7 +1346,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnClosing(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(Closing, this, e);
+			this.eventHelper.RaiseSync(Closing, this, e);
 		}
 
 		/// <summary>
@@ -1354,7 +1354,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnClosed(EventArgs e)
 		{
-			this.eventHelper.InvokeSync(Closed, this, e);
+			this.eventHelper.RaiseSync(Closed, this, e);
 		}
 
 		/// <summary>
@@ -1363,7 +1363,7 @@ namespace MKY.IO.Ports
 		protected virtual void OnDataReceived(SerialDataReceivedEventArgs e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.InvokeSync<SerialDataReceivedEventArgs, SerialDataReceivedEventHandler>(DataReceived, this, e);
+				this.eventHelper.RaiseSync<SerialDataReceivedEventArgs, SerialDataReceivedEventHandler>(DataReceived, this, e);
 		}
 
 		/// <summary>
@@ -1372,7 +1372,7 @@ namespace MKY.IO.Ports
 		protected virtual void OnErrorReceived(SerialErrorReceivedEventArgs e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.InvokeSync<SerialErrorReceivedEventArgs, SerialErrorReceivedEventHandler>(ErrorReceived, this, e);
+				this.eventHelper.RaiseSync<SerialErrorReceivedEventArgs, SerialErrorReceivedEventHandler>(ErrorReceived, this, e);
 		}
 
 		/// <summary>
@@ -1381,7 +1381,7 @@ namespace MKY.IO.Ports
 		protected virtual void OnPinChanged(SerialPinChangedEventArgs e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.InvokeSync<SerialPinChangedEventArgs, SerialPinChangedEventHandler>(PinChanged, this, e);
+				this.eventHelper.RaiseSync<SerialPinChangedEventArgs, SerialPinChangedEventHandler>(PinChanged, this, e);
 		}
 
 		#endregion
