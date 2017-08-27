@@ -62,7 +62,7 @@ namespace YAT.Settings.Test
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
-			// \remind 2016-05-26 / MKY: Should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
+			// \remind (2016-05-26 / MKY) Should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
 			var dr = MessageBoxEx.Show
 				(
 				"This test requires open serial ports 'COM1' and 'COM2'." + Environment.NewLine +

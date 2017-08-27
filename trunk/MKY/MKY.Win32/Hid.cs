@@ -1048,7 +1048,7 @@ namespace MKY.Win32
 			Debug.WriteLine("Number of feature data indices:  " + capabilities.NumberFeatureDataIndices);
 			Debug.Unindent();
 
-			// \remind (2010-03-21 / MKY):
+			// \remind (2010-03-21 / MKY)
 			// The following two lines demonstrate how the device's value capabilities can be retrieved.
 			// However, due to some reaseon HidP_GetValueCaps() overwrites 'deviceHandle'.
 			// Before making use of the following lines, ensure that 'deviceHandle' isn't overwritten anymore.

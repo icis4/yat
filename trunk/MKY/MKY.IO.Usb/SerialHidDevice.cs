@@ -172,7 +172,7 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static new DeviceInfo[] GetDevices(bool retrieveStringsFromDevice = true)
 		{
-			// \remind MKY 2013-06-08:
+			// \remind (MKY 2013-06-08)
 			// It is not possible to limit this list/array to true Ser/HID devices, as there is no
 			// standardized way to retrieve whether a device is Ser/HID capable. However, this list
 			// could be limited to vendor-specific usages. Feature request #195 "USB Ser/HID device
