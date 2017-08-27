@@ -339,7 +339,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		protected virtual void OnStatusTextChanged(EventArgs e)
 		{
-			EventHelper.FireSync(StatusTextChanged, this, e);
+			EventHelper.InvokeSync(StatusTextChanged, this, e);
 		}
 
 		#endregion

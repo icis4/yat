@@ -72,7 +72,7 @@ Workarounds tried in May 2008:
 - Async DataReceived event
 - Immediate async read
 - Dispatch of all open/close operations onto Windows.Forms main thread using OnRequest event
-- try GC.Collect(forced) => no exceptions on GC, exception gets fired afterwards
+- try GC.Collect(forced) => no exceptions on GC, exception gets thrown afterwards
 
 October 2011:
 - Issue fixed by adding the base stream close/dispose fix to Dispose()

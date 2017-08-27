@@ -201,7 +201,7 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		protected virtual void OnTimeSpanChanged(TimeSpanEventArgs e)
 		{
-			EventHelper.FireSync<TimeSpanEventArgs>(TimeSpanChanged, this, e);
+			EventHelper.InvokeSync<TimeSpanEventArgs>(TimeSpanChanged, this, e);
 		}
 
 		#endregion

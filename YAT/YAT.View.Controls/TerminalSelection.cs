@@ -280,13 +280,13 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		protected virtual void OnTerminalTypeChanged(EventArgs e)
 		{
-			EventHelper.FireSync(TerminalTypeChanged, this, e);
+			EventHelper.InvokeSync(TerminalTypeChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOTypeChanged(EventArgs e)
 		{
-			EventHelper.FireSync(IOTypeChanged, this, e);
+			EventHelper.InvokeSync(IOTypeChanged, this, e);
 		}
 
 		#endregion

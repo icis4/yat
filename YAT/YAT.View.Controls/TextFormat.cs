@@ -347,13 +347,13 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		protected virtual void OnFormatChanged(EventArgs e)
 		{
-			EventHelper.FireSync(FormatChanged, this, e);
+			EventHelper.InvokeSync(FormatChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnCustomColorsChanged(EventArgs e)
 		{
-			EventHelper.FireSync(CustomColorsChanged, this, e);
+			EventHelper.InvokeSync(CustomColorsChanged, this, e);
 		}
 
 		#endregion

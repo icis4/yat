@@ -2447,21 +2447,21 @@ namespace MKY.IO.Serial.SerialPort
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			this.eventHelper.FireSync(IOChanged, this, e);
+			this.eventHelper.InvokeSync(IOChanged, this, e);
 		}
 
 		/// <remarks>See remarks on top of MKY.IO.Ports.SerialPort.SerialPortEx why asynchronously is required.</remarks>
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOChangedAsync(EventArgs e)
 		{
-			this.eventHelper.FireAsync(IOChanged, this, e);
+			this.eventHelper.InvokeAsync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			this.eventHelper.FireSync(IOControlChanged, this, e);
+			this.eventHelper.InvokeSync(IOControlChanged, this, e);
 
 			SetNextControlChangedTickStamp();
 		}
@@ -2470,7 +2470,7 @@ namespace MKY.IO.Serial.SerialPort
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOControlChangedAsync(EventArgs e)
 		{
-			this.eventHelper.FireAsync(IOControlChanged, this, e);
+			this.eventHelper.InvokeAsync(IOControlChanged, this, e);
 
 			SetNextControlChangedTickStamp();
 		}
@@ -2490,14 +2490,14 @@ namespace MKY.IO.Serial.SerialPort
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			this.eventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
+			this.eventHelper.InvokeSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <remarks>See remarks on top of MKY.IO.Ports.SerialPort.SerialPortEx why asynchronously is required.</remarks>
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOErrorAsync(IOErrorEventArgs e)
 		{
-			this.eventHelper.FireAsync<IOErrorEventArgs>(IOError, this, e);
+			this.eventHelper.InvokeAsync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
@@ -2505,7 +2505,7 @@ namespace MKY.IO.Serial.SerialPort
 		protected virtual void OnDataReceived(DataReceivedEventArgs e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.FireSync<DataReceivedEventArgs>(DataReceived, this, e);
+				this.eventHelper.InvokeSync<DataReceivedEventArgs>(DataReceived, this, e);
 		}
 
 		/// <summary></summary>
@@ -2513,7 +2513,7 @@ namespace MKY.IO.Serial.SerialPort
 		protected virtual void OnDataSent(DataSentEventArgs e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.FireSync<DataSentEventArgs>(DataSent, this, e);
+				this.eventHelper.InvokeSync<DataSentEventArgs>(DataSent, this, e);
 		}
 
 		#endregion

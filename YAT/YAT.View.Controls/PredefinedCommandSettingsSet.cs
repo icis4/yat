@@ -842,7 +842,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		protected virtual void OnCommandChanged(EventArgs e)
 		{
-			EventHelper.FireSync(CommandChanged, this, e);
+			EventHelper.InvokeSync(CommandChanged, this, e);
 		}
 
 		#endregion

@@ -446,15 +446,15 @@ namespace MKY.Settings
 		/// <summary></summary>
 		protected virtual void OnChanged(SettingsEventArgs e)
 		{
-			bool fire = false;
+			bool doInvoke = false;
 
 			lock (this.changeEventSuspendedCountSyncObj)
 			{
-				fire = (this.changeEventSuspendedCount == 0);
+				doInvoke = (this.changeEventSuspendedCount == 0);
 			}
 
-			if (fire)
-				EventHelper.FireSync<SettingsEventArgs>(Changed, this, e);
+			if (doInvoke)
+				EventHelper.InvokeSync<SettingsEventArgs>(Changed, this, e);
 		}
 
 		#endregion

@@ -582,25 +582,25 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		protected virtual void OnReportFormatChanged(EventArgs e)
 		{
-			EventHelper.FireSync(ReportFormatChanged, this, e);
+			EventHelper.InvokeSync(ReportFormatChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRxFilterUsageChanged(EventArgs e)
 		{
-			EventHelper.FireSync(RxFilterUsageChanged, this, e);
+			EventHelper.InvokeSync(RxFilterUsageChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnFlowControlChanged(EventArgs e)
 		{
-			EventHelper.FireSync(FlowControlChanged, this, e);
+			EventHelper.InvokeSync(FlowControlChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnAutoOpenChanged(EventArgs e)
 		{
-			EventHelper.FireSync(AutoOpenChanged, this, e);
+			EventHelper.InvokeSync(AutoOpenChanged, this, e);
 		}
 
 		#endregion

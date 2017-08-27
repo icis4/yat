@@ -440,31 +440,31 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		protected virtual void OnUseIdChanged(EventArgs e)
 		{
-			EventHelper.FireSync(UseIdChanged, this, e);
+			EventHelper.InvokeSync(UseIdChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnPrependPayloadByteLengthChanged(EventArgs e)
 		{
-			EventHelper.FireSync(PrependPayloadByteLengthChanged, this, e);
+			EventHelper.InvokeSync(PrependPayloadByteLengthChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnAppendTerminatingZeroChanged(EventArgs e)
 		{
-			EventHelper.FireSync(AppendTerminatingZeroChanged, this, e);
+			EventHelper.InvokeSync(AppendTerminatingZeroChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnFillLastReportChanged(EventArgs e)
 		{
-			EventHelper.FireSync(FillLastReportChanged, this, e);
+			EventHelper.InvokeSync(FillLastReportChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnFormatChanged(EventArgs e)
 		{
-			EventHelper.FireSync(FormatChanged, this, e);
+			EventHelper.InvokeSync(FormatChanged, this, e);
 		}
 
 		#endregion

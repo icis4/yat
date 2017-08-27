@@ -687,13 +687,13 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		protected virtual void OnCommandChanged(EventArgs e)
 		{
-			EventHelper.FireSync(CommandChanged, this, e);
+			EventHelper.InvokeSync(CommandChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnSendCommandRequest(EventArgs e)
 		{
-			EventHelper.FireSync(SendCommandRequest, this, e);
+			EventHelper.InvokeSync(SendCommandRequest, this, e);
 		}
 
 		#endregion

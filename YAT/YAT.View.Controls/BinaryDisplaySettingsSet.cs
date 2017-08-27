@@ -312,7 +312,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		protected virtual void OnSettingsChanged(EventArgs e)
 		{
-			EventHelper.FireSync(SettingsChanged, this, e);
+			EventHelper.InvokeSync(SettingsChanged, this, e);
 		}
 
 		#endregion

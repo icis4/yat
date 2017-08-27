@@ -259,7 +259,7 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		protected virtual void OnStringListChanged(EventArgs e)
 		{
-			EventHelper.FireSync(StringListChanged, this, e);
+			EventHelper.InvokeSync(StringListChanged, this, e);
 		}
 
 		#endregion

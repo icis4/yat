@@ -545,43 +545,43 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		protected virtual void OnBaudRateChanged(EventArgs e)
 		{
-			EventHelper.FireSync(BaudRateChanged, this, e);
+			EventHelper.InvokeSync(BaudRateChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDataBitsChanged(EventArgs e)
 		{
-			EventHelper.FireSync(DataBitsChanged, this, e);
+			EventHelper.InvokeSync(DataBitsChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnParityChanged(EventArgs e)
 		{
-			EventHelper.FireSync(ParityChanged, this, e);
+			EventHelper.InvokeSync(ParityChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnStopBitsChanged(EventArgs e)
 		{
-			EventHelper.FireSync(StopBitsChanged, this, e);
+			EventHelper.InvokeSync(StopBitsChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnFlowControlChanged(EventArgs e)
 		{
-			EventHelper.FireSync(FlowControlChanged, this, e);
+			EventHelper.InvokeSync(FlowControlChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnAliveMonitorChanged(EventArgs e)
 		{
-			EventHelper.FireSync(AliveMonitorChanged, this, e);
+			EventHelper.InvokeSync(AliveMonitorChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnAutoReopenChanged(EventArgs e)
 		{
-			EventHelper.FireSync(AutoReopenChanged, this, e);
+			EventHelper.InvokeSync(AutoReopenChanged, this, e);
 		}
 
 		#endregion

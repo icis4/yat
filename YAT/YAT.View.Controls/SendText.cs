@@ -1102,19 +1102,19 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		protected virtual void OnCommandChanged(EventArgs e)
 		{
-			EventHelper.FireSync(CommandChanged, this, e);
+			EventHelper.InvokeSync(CommandChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnEditFocusStateChanged(EventArgs e)
 		{
-			EventHelper.FireSync(EditFocusStateChanged, this, e);
+			EventHelper.InvokeSync(EditFocusStateChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnSendCommandRequest(SendTextOptionEventArgs e)
 		{
-			EventHelper.FireSync(SendCommandRequest, this, e);
+			EventHelper.InvokeSync(SendCommandRequest, this, e);
 		}
 
 		#endregion
