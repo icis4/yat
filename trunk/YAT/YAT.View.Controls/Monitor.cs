@@ -1088,7 +1088,7 @@ namespace YAT.View.Controls
 					var elements = (obj as List<Domain.DisplayElement>);
 					if (elements != null)
 					{
-						foreach (Domain.DisplayElement element in elements)
+						foreach (var element in elements)
 							AddElementToListBox(element);
 
 						continue;
@@ -1098,7 +1098,7 @@ namespace YAT.View.Controls
 					var line = (obj as Domain.DisplayLine);
 					if (line != null)
 					{
-						foreach (Domain.DisplayElement element in line)
+						foreach (var element in line)
 							AddElementToListBox(element);
 
 						continue;
@@ -1108,8 +1108,8 @@ namespace YAT.View.Controls
 					var lines = (obj as List<Domain.DisplayLine>);
 					if (lines != null)
 					{
-						foreach (Domain.DisplayLine line in lines)
-							foreach (Domain.DisplayElement element in line)
+						foreach (var line in lines)
+							foreach (var element in line)
 								AddElementToListBox(element);
 
 						continue;

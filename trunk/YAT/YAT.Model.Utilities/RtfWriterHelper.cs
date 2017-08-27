@@ -90,7 +90,7 @@ namespace YAT.Model.Utilities
 			richTextProvider.Font      = settings.Font;
 			richTextProvider.BackColor = settings.BackColor;
 
-			foreach (DisplayLine line in lines)
+			foreach (var line in lines)
 				AppendDisplayLine(richTextProvider, line, settings);
 
 			return (richTextProvider);

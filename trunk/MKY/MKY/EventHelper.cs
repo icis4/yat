@@ -306,8 +306,8 @@ namespace MKY
 				if (EventHasToBeDiscarded(MainThreadHelper.IsMainThread))
 					return;
 
-				Delegate[] sinks = eventDelegate.GetInvocationList();
-				foreach (Delegate sink in sinks)
+				var sinks = eventDelegate.GetInvocationList();
+				foreach (var sink in sinks)
 				{
 					var sinkTarget = (sink.Target as ISynchronizeInvoke);
 					if ((sinkTarget != null) && (sinkTarget.InvokeRequired))
@@ -335,8 +335,8 @@ namespace MKY
 				if (EventHasToBeDiscarded(MainThreadHelper.IsMainThread))
 					return;
 
-				Delegate[] sinks = eventDelegate.GetInvocationList();
-				foreach (Delegate sink in sinks)
+				var sinks = eventDelegate.GetInvocationList();
+				foreach (var sink in sinks)
 				{
 					var sinkTarget = (sink.Target as ISynchronizeInvoke);
 					if ((sinkTarget != null) && (sinkTarget.InvokeRequired))
@@ -367,8 +367,8 @@ namespace MKY
 				if (EventHasToBeDiscarded(MainThreadHelper.IsMainThread))
 					return;
 
-				Delegate[] sinks = eventDelegate.GetInvocationList();
-				foreach (Delegate sink in sinks)
+				var sinks = eventDelegate.GetInvocationList();
+				foreach (var sink in sinks)
 				{
 					var sinkTarget = (sink.Target as ISynchronizeInvoke);
 					if ((sinkTarget != null) && (sinkTarget.InvokeRequired))
@@ -402,8 +402,8 @@ namespace MKY
 				if (EventHasToBeDiscarded(MainThreadHelper.IsMainThread))
 					return;
 
-				Delegate[] sinks = eventDelegate.GetInvocationList();
-				foreach (Delegate sink in sinks)
+				var sinks = eventDelegate.GetInvocationList();
+				foreach (var sink in sinks)
 				{
 					var sinkTarget = (sink.Target as ISynchronizeInvoke);
 					if (sinkTarget != null)          // No need to check for InvokeRequired,
@@ -437,8 +437,8 @@ namespace MKY
 				if (EventHasToBeDiscarded(MainThreadHelper.IsMainThread))
 					return;
 
-				Delegate[] sinks = eventDelegate.GetInvocationList();
-				foreach (Delegate sink in sinks)
+				var sinks = eventDelegate.GetInvocationList();
+				foreach (var sink in sinks)
 				{
 					var sinkTarget = (sink.Target as ISynchronizeInvoke);
 					if (sinkTarget != null)          // No need to check for InvokeRequired,
@@ -475,8 +475,8 @@ namespace MKY
 				if (EventHasToBeDiscarded(MainThreadHelper.IsMainThread))
 					return;
 
-				Delegate[] sinks = eventDelegate.GetInvocationList();
-				foreach (Delegate sink in sinks)
+				var sinks = eventDelegate.GetInvocationList();
+				foreach (var sink in sinks)
 				{
 					var sinkTarget = (sink.Target as ISynchronizeInvoke);
 					if (sinkTarget != null)          // No need to check for InvokeRequired,
