@@ -106,6 +106,7 @@ Fixed bugs:
 - Erroneous error message when changing log file separator fixed (bug #378).
 - InvalidOperationException when defining user defined log file separator or monitor format
   enclosure or separator fixed (partly related to bug #378).
+- Minor issues with predefined and send commands fixed (parts of bug #308).
 - Description of predefined commands can be changed again (bugs #377 and #386).
 - Context menu shortcuts are no longer executed when a dialog is open (bug #300).
 - Predefined command page navigation shortcuts fixed (related to bug #300).
