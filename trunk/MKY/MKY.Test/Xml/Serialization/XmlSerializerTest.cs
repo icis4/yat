@@ -33,9 +33,9 @@ using System.Windows.Forms;
 
 using MKY.Collections;
 using MKY.Collections.Generic;
+using MKY.Collections.Specialized;
 using MKY.Diagnostics;
 using MKY.IO;
-using MKY.Recent;
 using MKY.Xml.Serialization;
 
 using NUnit.Framework;

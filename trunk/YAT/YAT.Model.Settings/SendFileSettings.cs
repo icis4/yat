@@ -28,7 +28,7 @@ using System.Xml.Serialization;
 
 using MKY;
 using MKY.Collections;
-using MKY.Recent;
+using MKY.Collections.Specialized;
 
 using YAT.Model.Types;
 

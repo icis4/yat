@@ -29,8 +29,8 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
+using MKY.Collections.Specialized;
 using MKY.IO;
-using MKY.Recent;
 using MKY.Settings;
 
 using NUnit.Framework;

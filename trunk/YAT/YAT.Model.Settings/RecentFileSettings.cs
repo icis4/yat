@@ -27,7 +27,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 using MKY.Collections;
-using MKY.Recent;
+using MKY.Collections.Specialized;
 
 namespace YAT.Model.Settings
 {
