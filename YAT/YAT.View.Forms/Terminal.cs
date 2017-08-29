@@ -3940,12 +3940,14 @@ namespace YAT.View.Forms
 				this.terminal.IOChanged               += terminal_IOChanged;
 				this.terminal.IOControlChanged        += terminal_IOControlChanged;
 				this.terminal.IOConnectTimeChanged    += terminal_IOConnectTimeChanged;
-				this.terminal.IOCountChanged          += terminal_IOCountChanged;
-				this.terminal.IORateChanged           += terminal_IORateChanged;
+			////this.terminal.IOCountChanged          += terminal_IOCountChanged; // See further below for reason.
+			////this.terminal.IORateChanged           += terminal_IORateChanged;  // See further below for reason.
 				this.terminal.IOError                 += terminal_IOError;
 
 				this.terminal.DisplayElementsSent     += terminal_DisplayElementsSent;
 				this.terminal.DisplayElementsReceived += terminal_DisplayElementsReceived;
+				this.terminal.DisplayLinesSent        += terminal_DisplayLinesSent;
+				this.terminal.DisplayLinesReceived    += terminal_DisplayLinesReceived;
 
 				this.terminal.RepositoryCleared       += terminal_RepositoryCleared;
 				this.terminal.RepositoryReloaded      += terminal_RepositoryReloaded;
@@ -3968,12 +3970,14 @@ namespace YAT.View.Forms
 				this.terminal.IOChanged               -= terminal_IOChanged;
 				this.terminal.IOControlChanged        -= terminal_IOControlChanged;
 				this.terminal.IOConnectTimeChanged    -= terminal_IOConnectTimeChanged;
-				this.terminal.IOCountChanged          -= terminal_IOCountChanged;
-				this.terminal.IORateChanged           -= terminal_IORateChanged;
+			////this.terminal.IOCountChanged          -= terminal_IOCountChanged; // See further below for reason.
+			////this.terminal.IORateChanged           -= terminal_IORateChanged;  // See further below for reason.
 				this.terminal.IOError                 -= terminal_IOError;
 
 				this.terminal.DisplayElementsSent     -= terminal_DisplayElementsSent;
 				this.terminal.DisplayElementsReceived -= terminal_DisplayElementsReceived;
+				this.terminal.DisplayLinesSent        -= terminal_DisplayLinesSent;
+				this.terminal.DisplayLinesReceived    -= terminal_DisplayLinesReceived;
 
 				this.terminal.RepositoryCleared       -= terminal_RepositoryCleared;
 				this.terminal.RepositoryReloaded      -= terminal_RepositoryReloaded;
@@ -4019,8 +4023,7 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_IOConnectTimeChanged(object sender, TimeSpanEventArgs e)
 		{
-			// Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
-			if (!IsDisposed && TerminalIsAvailable)
+			if (!IsDisposed && TerminalIsAvailable) // Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
 			{
 				TimeSpan activeConnectTime;
 				TimeSpan totalConnectTime;
@@ -4033,43 +4036,8 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
-		private void terminal_IOCountChanged(object sender, EventArgs e)
-		{
-			// Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
-			if (!IsDisposed && TerminalIsAvailable)
-			{
-				int txByteCount = 0;
-				int txLineCount = 0;
-				int rxByteCount = 0;
-				int rxLineCount = 0;
-
-				this.terminal.GetDataCount(out txByteCount, out txLineCount, out rxByteCount, out rxLineCount);
-
-				monitor_Tx   .SetDataCountStatus(txByteCount, txLineCount, rxByteCount, rxLineCount);
-				monitor_Bidir.SetDataCountStatus(txByteCount, txLineCount, rxByteCount, rxLineCount);
-				monitor_Rx   .SetDataCountStatus(txByteCount, txLineCount, rxByteCount, rxLineCount);
-			}
-		}
-
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
-		private void terminal_IORateChanged(object sender, EventArgs e)
-		{
-			// Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
-			if (!IsDisposed && TerminalIsAvailable)
-			{
-				int txByteRate = 0;
-				int txLineRate = 0;
-				int rxByteRate = 0;
-				int rxLineRate = 0;
-
-				this.terminal.GetDataRate(out txByteRate, out txLineRate, out rxByteRate, out rxLineRate);
-
-				monitor_Tx   .SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
-				monitor_Bidir.SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
-				monitor_Rx   .SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
-			}
-		}
+		// 'terminal_IOCount/RateChanged' are not used because of the reasons described in the remarks of 'terminal_RawChunkSent/Received'.
+		// Instead, the update is done by the 'terminal_DisplayElementsSent/Received' and 'terminal_DisplayLinesSent/Received' handlers further below.
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
@@ -4117,20 +4085,78 @@ namespace YAT.View.Forms
 			}
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "See event handlers below.")]
+		private void SetSentDataCountStatus()
+		{
+			int txByteCount = 0;
+			int txLineCount = 0;
+			int rxByteCount = 0;
+			int rxLineCount = 0;
+
+			this.terminal.GetDataCount(out txByteCount, out txLineCount, out rxByteCount, out rxLineCount);
+
+			monitor_Tx   .SetDataCountStatus(txByteCount, txLineCount, rxByteCount, rxLineCount);
+			monitor_Bidir.SetDataCountStatus(txByteCount, txLineCount, rxByteCount, rxLineCount);
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "See event handlers below.")]
+		private void SetReceivedDataCountStatus()
+		{
+			int txByteCount = 0;
+			int txLineCount = 0;
+			int rxByteCount = 0;
+			int rxLineCount = 0;
+
+			this.terminal.GetDataCount(out txByteCount, out txLineCount, out rxByteCount, out rxLineCount);
+
+			monitor_Bidir.SetDataCountStatus(txByteCount, txLineCount, rxByteCount, rxLineCount);
+			monitor_Rx   .SetDataCountStatus(txByteCount, txLineCount, rxByteCount, rxLineCount);
+		}
+
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			monitor_Tx   .AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
-			monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+			if (!IsDisposed && TerminalIsAvailable) // Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
+			{
+				monitor_Tx   .AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+				monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+
+				SetSentDataCountStatus();
+			}
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
-			monitor_Rx   .AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+			if (!IsDisposed && TerminalIsAvailable) // Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
+			{
+				monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+				monitor_Rx   .AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+
+				SetReceivedDataCountStatus();
+			}
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
+		{
+			if (!IsDisposed && TerminalIsAvailable) // Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
+			{
+				SetSentDataCountStatus();
+			}
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
+		{
+			if (!IsDisposed && TerminalIsAvailable) // Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
+			{
+				SetReceivedDataCountStatus();
+			}
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
@@ -4202,8 +4228,7 @@ namespace YAT.View.Forms
 			DetachSettingsEventHandlers();
 			this.settingsRoot = null;
 
-			// Prevent multiple calls to Close():
-			if (this.closingState == ClosingState.None)
+			if (this.closingState == ClosingState.None) // Prevent multiple calls to Close().
 			{
 				this.closingState = ClosingState.IsClosingFromModel;
 				Close();

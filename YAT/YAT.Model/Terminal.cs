@@ -38,10 +38,10 @@ using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Collections.Specialized;
 using MKY.Contracts;
 using MKY.Diagnostics;
 using MKY.IO;
-using MKY.Recent;
 using MKY.Settings;
 using MKY.Text;
 using MKY.Time;
@@ -2211,21 +2211,28 @@ namespace YAT.Model
 			OnIOError(e);
 		}
 
+		/// <remarks>
+		/// Interval can be quite long, because...
+		/// ...first request will be done immediately.
+		/// ...timed requests will be shown for 2 seconds.
+		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
-		private readonly long TimedStatusTextRequestTickInterval = StopwatchEx.TimeToTicks(500); // Can be quite long, as first request will not be impacted.
+		private readonly long TimedStatusTextRequestTickInterval = StopwatchEx.TimeToTicks(757); // = prime number around 750 milliseconds.
 		private long terminal_RawChunkSent_nextTimedStatusTextRequestTickStamp; // = 0;
 		private long terminal_RawChunkReceived_nextTimedStatusTextRequestTickStamp; // = 0;
 
 		/// <remarks>
 		/// \remind (2017-08-27 / MKY) (bug #383 freeze while receiving a lot of fast data)
-		/// In case of a lot of fast data, this event is raised very often. Unfortunately, this
-		/// handler itself raises up to three event again, thus leading to a sequence of event
-		/// synchronizations onto the main thread! In order to improve this situation a bit, the
-		/// events are only called when the feature is enabled, or tried to be called less often.
-		/// The true solution would be to implement an update decimation in the montior, same as
-		/// done for list box updates. But that would require to no longer synchronize the events,
-		/// but rather do that in the monitor. This could be considered when redoing the event
-		/// raising/receiving when merging YAT with Albatros.
+		/// In case of a lot of fast data, this event is raised very often. This handler itself
+		/// raises up to three events, thus leading to a sequence of events. If these events need
+		/// to be synchronized onto the main thread, this likely results in poor performance. This
+		/// situation is anticipated in two ways:
+		///  > The <see cref="TimedStatusTextRequest"/> will only be raised
+		///    each <see cref="TimedStatusTextRequestTickInterval"/> milliseconds.
+		///  > The <see cref="IOCountChanged"/> and <see cref="IORateChanged"/> events will not be
+		///    used by the terminal form. Instead, the values will synchronously be retrieved when
+		///    processing <see cref="DisplayElementsSent"/>, <see cref="DisplayElementsReceived"/>,
+		///    <see cref="DisplayLinesSent"/> and <see cref="DisplayLinesReceived"/> events.
 		/// </remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_RawChunkSent(object sender, EventArgs<Domain.RawChunk> e)
@@ -2241,14 +2248,12 @@ namespace YAT.Model
 				}
 			}
 
-			// Count/Rate:
-			bool doRaise = this.settingsRoot.Terminal.Status.ShowCountAndRate;
-
+			// Count:
 			this.txByteCount += e.Value.Content.Length;
-			if (doRaise)
-				OnIOCountChanged(EventArgs.Empty);
+			OnIOCountChanged(EventArgs.Empty);
 
-			if (this.txByteRate.Update(e.Value.Content.Length) && doRaise) // Update shall be calculated in any case, so Update() must be called first!
+			// Rate:
+			if (this.txByteRate.Update(e.Value.Content.Length))
 				OnIORateChanged(EventArgs.Empty);
 
 			// Log:
@@ -2261,14 +2266,16 @@ namespace YAT.Model
 
 		/// <remarks>
 		/// \remind (2017-08-27 / MKY) (bug #383 freeze while receiving a lot of fast data)
-		/// In case of a lot of fast data, this event is raised very often. Unfortunately, this
-		/// handler itself raises up to three event again, thus leading to a sequence of event
-		/// synchronizations onto the main thread! In order to improve this situation a bit, the
-		/// events are only called when the feature is enabled, or tried to be called less often.
-		/// The true solution would be to implement an update decimation in the montior, same as
-		/// done for list box updates. But that would require to no longer synchronize the events,
-		/// but rather do that in the monitor. This could be considered when redoing the event
-		/// raising/receiving when merging YAT with Albatros.
+		/// In case of a lot of fast data, this event is raised very often. This handler itself
+		/// raises up to three events, thus leading to a sequence of events. If these events need
+		/// to be synchronized onto the main thread, this likely results in poor performance. This
+		/// situation is anticipated in two ways:
+		///  > The <see cref="TimedStatusTextRequest"/> will only be raised
+		///    each <see cref="TimedStatusTextRequestTickInterval"/> milliseconds.
+		///  > The <see cref="IOCountChanged"/> and <see cref="IORateChanged"/> events will not be
+		///    used by the terminal form. Instead, the values will synchronously be retrieved when
+		///    processing <see cref="DisplayElementsSent"/>, <see cref="DisplayElementsReceived"/>,
+		///    <see cref="DisplayLinesSent"/> and <see cref="DisplayLinesReceived"/> events.
 		/// </remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_RawChunkReceived(object sender, EventArgs<Domain.RawChunk> e)
@@ -2284,14 +2291,12 @@ namespace YAT.Model
 				}
 			}
 
-			// Count/Rate:
-			bool doRaise = this.settingsRoot.Terminal.Status.ShowCountAndRate;
-
+			// Rate:
 			this.rxByteCount += e.Value.Content.Length;
-			if (doRaise)
-				OnIOCountChanged(EventArgs.Empty);
+			OnIOCountChanged(EventArgs.Empty);
 
-			if (this.rxByteRate.Update(e.Value.Content.Length) && doRaise) // Update shall be calculated in any case, so Update() must be called first!
+			// Rate:
+			if (this.rxByteRate.Update(e.Value.Content.Length))
 				OnIORateChanged(EventArgs.Empty);
 
 			// Log:
@@ -2362,7 +2367,7 @@ namespace YAT.Model
 			OnDisplayLinesSent(e);
 
 			// Log:
-			foreach (Domain.DisplayLine de in e.Lines)
+			foreach (var de in e.Lines)
 			{
 				if (this.log.IsOn)
 				{
@@ -2387,7 +2392,7 @@ namespace YAT.Model
 			OnDisplayLinesReceived(e);
 
 			// Log:
-			foreach (Domain.DisplayLine de in e.Lines)
+			foreach (var de in e.Lines)
 			{
 				if (this.log.IsOn)
 				{

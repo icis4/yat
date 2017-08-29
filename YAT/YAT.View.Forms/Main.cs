@@ -1648,8 +1648,7 @@ namespace YAT.View.Forms
 			DetachLocalUserSettingsEventHandlers();
 			this.localUserSettingsRoot = null;
 
-			// Prevent multiple calls to Close():
-			if (this.closingState == ClosingState.None)
+			if (this.closingState == ClosingState.None) // Prevent multiple calls to Close().
 			{
 				this.closingState = ClosingState.IsClosingFromModel;
 				Close();
