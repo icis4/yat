@@ -51,9 +51,10 @@ using System.Security.Permissions;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Collections;
+using MKY.Collections.Specialized;
 using MKY.Drawing;
 using MKY.IO;
-using MKY.Recent;
 using MKY.Windows.Forms;
 
 using YAT.Application.Utilities;
@@ -183,14 +184,15 @@ namespace YAT.View.Controls
 		{
 			set
 			{
-				DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+				if (!IEnumerableEx.ElementsEqual(this.recent, value))
+				{
+					DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-				// Do not check if (this.recent != value) because the collection will always be the same!
+					this.recent = new RecentItemCollection<Command>(value); // Clone collection to ensure decoupling.
+					SetRecentAndCommandControls(); // Recent must immediately be updated, otherwise order will be wrong on arrow-up/down.
 
-				this.recent = value;
-				SetRecentAndCommandControls(); // Recent must immediately be updated, otherwise order will be wrong on arrow-up/down.
-
-				DebugCommandLeave();
+					DebugCommandLeave();
+				}
 			}
 		}
 

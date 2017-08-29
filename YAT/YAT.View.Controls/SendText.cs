@@ -48,12 +48,12 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Security.Permissions;
-using System.Text;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Collections;
+using MKY.Collections.Specialized;
 using MKY.Drawing;
-using MKY.Recent;
 using MKY.Text;
 using MKY.Windows.Forms;
 
@@ -226,14 +226,15 @@ namespace YAT.View.Controls
 		{
 			set
 			{
-				DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+				if (!IEnumerableEx.ElementsEqual(this.recent, value))
+				{
+					DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-				// Do not check if (this.recent != value) because the collection will always be the same!
+					this.recent = new RecentItemCollection<Command>(value); // Clone collection to ensure decoupling.
+					SetRecentControls(); // Recent must immediately be updated, otherwise order will be wrong on arrow-up/down.
 
-				this.recent = value;
-				SetRecentControls(); // Recent must immediately be updated, otherwise order will be wrong on arrow-up/down.
-
-				DebugCommandLeave();
+					DebugCommandLeave();
+				}
 			}
 		}
 
@@ -510,6 +511,10 @@ namespace YAT.View.Controls
 	////private void comboBox_ExplicitDefaultRadix_SelectedIndexChanged(object sender, EventArgs e)
 	////is not required since          "          _Validating() below gets called anyway.
 
+		/// <remarks>
+		/// Attention, similar code exists in <see cref="PredefinedCommandSettingsSet.comboBox_ExplicitDefaultRadix_Validating"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		private void comboBox_ExplicitDefaultRadix_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -530,6 +535,10 @@ namespace YAT.View.Controls
 			}
 		}
 
+		/// <remarks>
+		/// Attention, similar code exists in <see cref="PredefinedCommandSettingsSet.ValidateAndConfirmRadix"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		private bool ValidateAndConfirmRadix(Domain.Radix radix)
 		{
 			if (this.command.IsSingleLineText)
@@ -570,6 +579,10 @@ namespace YAT.View.Controls
 			return (false);
 		}
 
+		/// <remarks>
+		/// Attention, similar code exists in <see cref="PredefinedCommandSettingsSet.textBox_SingleLineText_Enter"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		private void comboBox_SingleLineText_Enter(object sender, EventArgs e)
 		{
 			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
@@ -609,6 +622,10 @@ namespace YAT.View.Controls
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
+		/// <remarks>
+		/// Attention, similar code exists in <see cref="PredefinedCommandSettingsSet.textBox_SingleLineText_Leave"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		private void comboBox_SingleLineText_Leave(object sender, EventArgs e)
 		{
 			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
@@ -646,6 +663,10 @@ namespace YAT.View.Controls
 			DebugCommandLeave();
 		}
 
+		/// <remarks>
+		/// Attention, similar code exists in <see cref="PredefinedCommandSettingsSet.textBox_SingleLineText_TextChanged"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		private void comboBox_SingleLineText_TextChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -702,6 +723,10 @@ namespace YAT.View.Controls
 		/// 3. ComboBox.Validating()
 		/// 
 		/// Saying hello to StyleCop ;-.
+		/// </remarks>
+		/// <remarks>
+		/// Attention, similar code exists in <see cref="PredefinedCommandSettingsSet.textBox_SingleLineText_Validating"/>.
+		/// Changes here may have to be applied there too.
 		/// </remarks>
 		private void comboBox_SingleLineText_Validating(object sender, CancelEventArgs e)
 		{
