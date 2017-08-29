@@ -34,7 +34,7 @@ using System.Xml.Serialization;
 
 using MKY;
 using MKY.Collections;
-using MKY.Recent;
+using MKY.Collections.Specialized;
 
 using YAT.Model.Types;
 
@@ -154,7 +154,7 @@ namespace YAT.Model.Settings
 						singleLine.Append(line);
 					}
 
-					var c = new Command(Command); // Clone command to ensure decoupling!
+					var c = new Command(Command); // Clone command to ensure decoupling.
 					c.ClearDescription();
 					c.SingleLineText = singleLine.ToString();
 					Command = c;

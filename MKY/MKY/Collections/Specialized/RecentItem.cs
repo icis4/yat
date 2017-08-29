@@ -26,7 +26,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-namespace MKY.Recent
+namespace MKY.Collections.Specialized
 {
 	/// <summary>
 	/// Item for collections like recent files, encapsulates an item with a time stamp.

@@ -33,7 +33,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
 using MKY;
-using MKY.Recent;
+using MKY.Collections.Specialized;
 
 using YAT.Model.Types;
 

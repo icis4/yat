@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace MKY.Recent
+namespace MKY.Collections.Specialized
 {
 	/// <summary>
 	/// Collection for recent items like recent files, provides methods to handle the recent items.
@@ -66,7 +66,7 @@ namespace MKY.Recent
 		/// </summary>
 		public virtual bool Contains(T item)
 		{
-			foreach (RecentItem<T> ri in this)
+			foreach (var ri in this)
 			{
 				if (ri.Item.Equals(item))
 					return (true);
@@ -102,7 +102,7 @@ namespace MKY.Recent
 		{
 			if (Count > 0)
 			{
-				List<RecentItem<T>> sorted = new List<RecentItem<T>>(this);
+				var sorted = new List<RecentItem<T>>(this);
 				sorted.Sort();
 				return (Remove(sorted[sorted.Count - 1])); // Remove the last item in the collection.
 			}
@@ -127,7 +127,7 @@ namespace MKY.Recent
 			// If there are indeed duplicates, take the long way to remove the recent ones...
 			while (this.Distinct().ToList().Count < Count)
 			{
-				List<RecentItem<T>> duplicates = new List<RecentItem<T>>(Count); // Preset the initial capacity to improve memory management.
+				var duplicates = new List<RecentItem<T>>(Count); // Preset the initial capacity to improve memory management.
 
 				// Traverse the collection and search for duplicates:
 				for (int outer = 0; outer < (Count - 1); outer++)
@@ -159,15 +159,15 @@ namespace MKY.Recent
 		/// </summary>
 		public virtual void ValidateAll()
 		{
-			List<RecentItem<T>> invalids = new List<RecentItem<T>>(Count); // Preset the initial capacity to improve memory management.
+			var invalids = new List<RecentItem<T>>(Count); // Preset the initial capacity to improve memory management.
 
-			foreach (RecentItem<T> ri in this)
+			foreach (var ri in this)
 			{
 				if (!ri.IsValid)
 					invalids.Add(ri);
 			}
 
-			foreach (RecentItem<T> ri in invalids)
+			foreach (var ri in invalids)
 			{
 				Remove(ri);
 			}
@@ -178,9 +178,9 @@ namespace MKY.Recent
 		/// </summary>
 		public virtual T[] ToItemArray()
 		{
-			List<T> items = new List<T>(Count); // Preset the initial capacity to improve memory management.
+			var items = new List<T>(Count); // Preset the initial capacity to improve memory management.
 
-			foreach (RecentItem<T> ri in this)
+			foreach (var ri in this)
 				items.Add(ri.Item);
 
 			return (items.ToArray());
