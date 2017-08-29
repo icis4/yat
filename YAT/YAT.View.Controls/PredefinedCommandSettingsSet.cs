@@ -291,6 +291,10 @@ namespace YAT.View.Controls
 	////private void comboBox_ExplicitDefaultRadix_SelectedIndexChanged(object sender, EventArgs e)
 	////is not required since           "         _Validating() below gets called anyway.
 
+		/// <remarks>
+		/// Attention, similar code exists in <see cref="SendText.comboBox_ExplicitDefaultRadix_Validating"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		private void comboBox_ExplicitDefaultRadix_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -311,6 +315,10 @@ namespace YAT.View.Controls
 			}
 		}
 
+		/// <remarks>
+		/// Attention, similar code exists in <see cref="SendText.ValidateAndConfirmRadix"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		private bool ValidateAndConfirmRadix(Domain.Radix radix)
 		{
 			if (this.command.IsSingleLineText)
@@ -320,6 +328,7 @@ namespace YAT.View.Controls
 				{
 					this.command.DefaultRadix = radix;
 				////this.isValidated is intentionally not set, as the validation above only verifies the changed radix but not the text.
+				////ConfirmSingleLineText() is intentionally not called, as that may confirm the command with not yet updated text on ValidateChildren().
 					return (true);
 				}
 			}
@@ -337,6 +346,7 @@ namespace YAT.View.Controls
 				{
 					this.command.DefaultRadix = radix;
 				////this.isValidated is intentionally not set, as the validation above only verifies the changed radix but not the text.
+				////ConfirmSingleLineText() is intentionally not called, as that may confirm the command with not yet updated text on ValidateChildren().
 					return (true);
 				}
 			}
@@ -366,6 +376,10 @@ namespace YAT.View.Controls
 			}
 		}
 
+		/// <remarks>
+		/// Attention, similar code exists in <see cref="SendText.comboBox_SingleLineText_Enter"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		private void textBox_SingleLineText_Enter(object sender, EventArgs e)
 		{
 			// Clear "<Enter a command...>" if needed.
@@ -391,10 +405,14 @@ namespace YAT.View.Controls
 
 		/// <remarks>
 		/// Event sequence when focus is leaving, e.g. TAB is pressed.
-		/// 1. ComboBox.Leave()
-		/// 2. ComboBox.Validating()
+		/// 1. TextBox.Leave()
+		/// 2. TextBox.Validating()
 		/// 
 		/// Saying hello to StyleCop ;-.
+		/// </remarks>
+		/// <remarks>
+		/// Attention, similar code exists in <see cref="SendText.comboBox_SingleLineText_Leave"/>.
+		/// Changes here may have to be applied there too.
 		/// </remarks>
 		private void textBox_SingleLineText_Leave(object sender, EventArgs e)
 		{
@@ -404,6 +422,10 @@ namespace YAT.View.Controls
 				SetEditFocusState(EditFocusState.IsLeavingEdit);
 		}
 
+		/// <remarks>
+		/// Attention, similar code exists in <see cref="SendText.comboBox_SingleLineText_TextChanged"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		private void textBox_SingleLineText_TextChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -414,44 +436,52 @@ namespace YAT.View.Controls
 
 		/// <remarks>
 		/// Event sequence when focus is leaving, e.g. TAB is pressed.
-		/// 1. ComboBox.Leave()
-		/// 2. ComboBox.Validating()
+		/// 1. TextBox.Leave()
+		/// 2. TextBox.Validating()
 		/// 
 		/// Saying hello to StyleCop ;-.
+		/// </remarks>
+		/// <remarks>
+		/// Attention, similar code exists in <see cref="SendText.comboBox_SingleLineText_Validating"/>.
+		/// Changes here may have to be applied there too.
 		/// </remarks>
 		private void textBox_SingleLineText_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			if (Model.Settings.SendTextSettings.IsEasterEggCommand(textBox_SingleLineText.Text))
+			if (!this.isValidated)
 			{
-				this.isValidated = true;
+				// Easter egg ;-)
+				if (Model.Settings.SendTextSettings.IsEasterEggCommand(textBox_SingleLineText.Text))
+				{
+					this.isValidated = true;
 
-				if (this.editFocusState == EditFocusState.IsLeavingEdit)
-					SetEditFocusState(EditFocusState.EditIsInactive);
+					if (this.editFocusState == EditFocusState.IsLeavingEdit)
+						SetEditFocusState(EditFocusState.EditIsInactive);
 
-				ConfirmSingleLineText(textBox_SingleLineText.Text);
-				return;
+					ConfirmSingleLineText(textBox_SingleLineText.Text);
+					return;
+				}
+
+				// Single line => Validate!
+				int invalidTextStart;
+				int invalidTextLength;
+				if (Utilities.ValidationHelper.ValidateText(this, "text", textBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, this.command.DefaultRadix, this.parseMode))
+				{
+					this.isValidated = true;
+
+					if (this.editFocusState == EditFocusState.IsLeavingEdit)
+						SetEditFocusState(EditFocusState.EditIsInactive);
+
+					ConfirmSingleLineText(textBox_SingleLineText.Text);
+					return;
+				}
+
+				SetEditFocusState(EditFocusState.EditHasFocus);
+				textBox_SingleLineText.Select(invalidTextStart, invalidTextLength);
+				e.Cancel = true;
 			}
-
-			// Single line => Validate!
-			int invalidTextStart;
-			int invalidTextLength;
-			if (Utilities.ValidationHelper.ValidateText(this, "text", textBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, this.command.DefaultRadix, this.parseMode))
-			{
-				this.isValidated = true;
-
-				if (this.editFocusState == EditFocusState.IsLeavingEdit)
-					SetEditFocusState(EditFocusState.EditIsInactive);
-
-				ConfirmSingleLineText(textBox_SingleLineText.Text);
-				return;
-			}
-
-			SetEditFocusState(EditFocusState.EditHasFocus);
-			textBox_SingleLineText.Select(invalidTextStart, invalidTextLength);
-			e.Cancel = true;
 		}
 
 		private void pathLabel_FilePath_Click(object sender, EventArgs e)
