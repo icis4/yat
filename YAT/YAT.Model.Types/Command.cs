@@ -712,12 +712,6 @@ namespace YAT.Model.Types
 			this.description = "";
 		}
 
-		/// <summary></summary>
-		public virtual void DescriptionFromSingleLineText()
-		{
-			this.description = SingleLineText;
-		}
-
 		#endregion
 
 		#region Object Members
