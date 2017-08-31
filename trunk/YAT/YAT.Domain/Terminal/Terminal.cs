@@ -2120,7 +2120,7 @@ namespace YAT.Domain
 				case IODirection.Tx: return (ElementsAreSeparate(this.terminalSettings.Display.TxRadix));
 				case IODirection.Rx: return (ElementsAreSeparate(this.terminalSettings.Display.RxRadix));
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an unknown direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
