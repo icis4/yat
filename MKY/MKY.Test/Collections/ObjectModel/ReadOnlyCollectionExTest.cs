@@ -144,12 +144,13 @@ namespace MKY.Test.Collections.ObjectModel
 		// Test Cases
 		//==========================================================================================
 
-		/// <remarks>
-		/// Similar code exists in <see cref="ArrayExTestData.TestCases"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
+		/// <summary></summary>
 		public static IEnumerable TestCasesInt
 		{
+			// Attention:
+			// Similar code exists in ArrayExTestData.TestCases.
+			// Changes here may have to be applied there too.
+
 			get
 			{
 				yield return (new TestCaseData(EmptyCollection, SingleItem,      false).SetName("1stIsEmpty"));
@@ -166,12 +167,13 @@ namespace MKY.Test.Collections.ObjectModel
 			}
 		}
 
-		/// <remarks>
-		/// Similar code exists in <see cref="ArrayExTestData.TestCases"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
+		/// <summary></summary>
 		public static IEnumerable TestCasesEnum
 		{
+			// Attention:
+			// Similar code exists in ArrayExTestData.TestCases.
+			// Changes here may have to be applied there too.
+
 			get
 			{
 				yield return (new TestCaseData(EnumCollections[0], EnumCollections[0], true) .SetName("EnumCollections_ReferenceEquals"));
@@ -180,12 +182,13 @@ namespace MKY.Test.Collections.ObjectModel
 			}
 		}
 
-		/// <remarks>
-		/// Similar code exists in <see cref="ArrayExTestData.TestCases"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
+		/// <summary></summary>
 		public static IEnumerable TestCasesReferenceType
 		{
+			// Attention:
+			// Similar code exists in ArrayExTestData.TestCases.
+			// Changes here may have to be applied there too.
+
 			get
 			{
 				yield return (new TestCaseData(ReferenceTypeCollections[0], ReferenceTypeCollections[0], true) .SetName("ReferenceTypeCollections_ReferenceEquals"));
@@ -194,12 +197,13 @@ namespace MKY.Test.Collections.ObjectModel
 			}
 		}
 
-		/// <remarks>
-		/// Similar code exists in <see cref="ArrayExTestData.TestCases"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
+		/// <summary></summary>
 		public static IEnumerable TestCasesString
 		{
+			// Attention:
+			// Similar code exists in ArrayExTestData.TestCases.
+			// Changes here may have to be applied there too.
+
 			get
 			{
 				yield return (new TestCaseData(StringCollections[0], StringCollections[0], true) .SetName("StringCollections_ReferenceEquals"));
