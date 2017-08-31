@@ -185,12 +185,36 @@ namespace YAT.View.Forms
 			this.settingsInEdit.General.DetectSerialPortsInUse = checkBox_DetectSerialPortsInUse.Checked;
 		}
 
+		private void checkBox_AskForAlternateSerialPort_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.General.AskForAlternateSerialPort = checkBox_AskForAlternateSerialPort.Checked;
+		}
+
+		private void checkBox_AskForAlternateNetworkInterface_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.General.AskForAlternateNetworkInterface = checkBox_AskForAlternateNetworkInterface.Checked;
+		}
+
 		private void checkBox_MatchUsbSerial_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
 			this.settingsInEdit.General.MatchUsbSerial = checkBox_MatchUsbSerial.Checked;
+		}
+
+		private void checkBox_AskForAlternateUsbDevice_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.General.AskForAlternateUsbDevice = checkBox_AskForAlternateUsbDevice.Checked;
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -246,8 +270,8 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				checkBox_ShowTerminalInfo.Checked = this.settingsInEdit.MainWindow.ShowTerminalInfo;
-				checkBox_ShowChrono.Checked       = this.settingsInEdit.MainWindow.ShowChrono;
+				checkBox_ShowTerminalInfo.Checked  = this.settingsInEdit.MainWindow.ShowTerminalInfo;
+				checkBox_ShowChrono.Checked        = this.settingsInEdit.MainWindow.ShowChrono;
 
 				checkBox_AutoOpenWorkspace.Checked = this.settingsInEdit.General.AutoOpenWorkspace;
 				checkBox_AutoSaveWorkspace.Checked = this.settingsInEdit.General.AutoSaveWorkspace;
@@ -255,8 +279,12 @@ namespace YAT.View.Forms
 
 				checkBox_RetrieveSerialPortCaptions.Checked = this.settingsInEdit.General.RetrieveSerialPortCaptions;
 				checkBox_DetectSerialPortsInUse.Checked     = this.settingsInEdit.General.DetectSerialPortsInUse;
+				checkBox_AskForAlternateSerialPort.Checked  = this.settingsInEdit.General.AskForAlternateSerialPort;
 
-				checkBox_MatchUsbSerial.Checked = this.settingsInEdit.General.MatchUsbSerial;
+				checkBox_AskForAlternateNetworkInterface.Checked = this.settingsInEdit.General.AskForAlternateNetworkInterface;
+
+				checkBox_MatchUsbSerial.Checked             = this.settingsInEdit.General.MatchUsbSerial;
+				checkBox_AskForAlternateUsbDevice.Checked   = this.settingsInEdit.General.AskForAlternateUsbDevice;
 			}
 			finally
 			{

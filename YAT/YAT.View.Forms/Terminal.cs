@@ -3952,8 +3952,9 @@ namespace YAT.View.Forms
 				this.terminal.RepositoryCleared       += terminal_RepositoryCleared;
 				this.terminal.RepositoryReloaded      += terminal_RepositoryReloaded;
 
-				this.terminal.TimedStatusTextRequest  += terminal_TimedStatusTextRequest;
 				this.terminal.FixedStatusTextRequest  += terminal_FixedStatusTextRequest;
+				this.terminal.TimedStatusTextRequest  += terminal_TimedStatusTextRequest;
+				this.terminal.ResetStatusTextRequest  += terminal_ResetStatusTextRequest;
 				this.terminal.MessageInputRequest     += terminal_MessageInputRequest;
 				this.terminal.SaveAsFileDialogRequest += terminal_SaveAsFileDialogRequest;
 				this.terminal.CursorRequest           += terminal_CursorRequest;
@@ -3982,8 +3983,9 @@ namespace YAT.View.Forms
 				this.terminal.RepositoryCleared       -= terminal_RepositoryCleared;
 				this.terminal.RepositoryReloaded      -= terminal_RepositoryReloaded;
 
-				this.terminal.TimedStatusTextRequest  -= terminal_TimedStatusTextRequest;
 				this.terminal.FixedStatusTextRequest  -= terminal_FixedStatusTextRequest;
+				this.terminal.TimedStatusTextRequest  -= terminal_TimedStatusTextRequest;
+				this.terminal.ResetStatusTextRequest  -= terminal_ResetStatusTextRequest;
 				this.terminal.MessageInputRequest     -= terminal_MessageInputRequest;
 				this.terminal.SaveAsFileDialogRequest -= terminal_SaveAsFileDialogRequest;
 				this.terminal.CursorRequest           -= terminal_CursorRequest;
@@ -4182,15 +4184,21 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		private void terminal_FixedStatusTextRequest(object sender, EventArgs<string> e)
+		{
+			SetFixedStatusText(e.Value);
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_TimedStatusTextRequest(object sender, EventArgs<string> e)
 		{
 			SetTimedStatusText(e.Value);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
-		private void terminal_FixedStatusTextRequest(object sender, EventArgs<string> e)
+		private void terminal_ResetStatusTextRequest(object sender, EventArgs e)
 		{
-			SetFixedStatusText(e.Value);
+			ResetStatusText();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
