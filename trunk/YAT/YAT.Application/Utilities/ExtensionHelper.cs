@@ -246,7 +246,7 @@ namespace YAT.Application.Utilities
 		{
 			get
 			{
-				List<string> l = new List<string>(5); // Preset the required capacity to improve memory management.
+				var l = new List<string>(5); // Preset the required capacity to improve memory management.
 				l.Add(".txt");
 				l.Add(".text");
 				l.Add(".log");
@@ -297,7 +297,7 @@ namespace YAT.Application.Utilities
 		{
 			get
 			{
-				List<string> l = new List<string>(4); // Preset the required capacity to improve memory management.
+				var l = new List<string>(4); // Preset the required capacity to improve memory management.
 				l.Add(".dat");
 				l.Add(".bin");
 				l.Add(".binary");

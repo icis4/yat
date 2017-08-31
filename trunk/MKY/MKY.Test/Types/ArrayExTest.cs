@@ -99,12 +99,13 @@ namespace MKY.Test.Types
 		// Test Cases
 		//==========================================================================================
 
-		/// <remarks>
-		/// Similar code exists in <see cref="Collections.ObjectModel.ReadOnlyCollectionExTestData"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
+		/// <summary></summary>
 		public static IEnumerable TestCases
 		{
+			// Attention:
+			// Similar code exists in Collections.ObjectModel.ReadOnlyCollectionExTestData.
+			// Changes here may have to be applied there too.
+
 			get
 			{
 				yield return (new TestCaseData(EmptyArray, SingleItem, false).SetName("1stIsEmpty"));
