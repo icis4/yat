@@ -61,35 +61,6 @@ namespace MKY
 				return (false);
 			}
 		}
-
-		/// <summary>
-		/// Indicates whether the character at the specified position in a specified string
-		/// is categorized as one of the stated character classes.
-		/// </summary>
-		/// <param name="s">A string.</param>
-		/// <param name="index">The character position in s.</param>
-		/// <returns>
-		/// <c>true</c> if the character at position <paramref name="index"/> in <paramref name="s"/>
-		/// is categorized as one of the stated character classes; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool IsWhiteSpaceOrPunctuationOrSymbol(string s, int index)
-		{
-			return (IsWhiteSpaceOrPunctuationOrSymbol(s[index]));
-		}
-
-		/// <summary>
-		/// Indicates whether the specified Unicode character
-		/// is categorized as one of the stated character classes.
-		/// </summary>
-		/// <param name="value">A Unicode character.</param>
-		/// <returns>
-		/// <c>true</c> if <paramref name="value"/>
-		/// is categorized as one of the stated character classes; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool IsWhiteSpaceOrPunctuationOrSymbol(char value)
-		{
-			return (char.IsWhiteSpace(value) || char.IsPunctuation(value) || char.IsSymbol(value));
-		}
 	}
 }
 
