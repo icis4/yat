@@ -236,7 +236,7 @@ namespace MKY.IO.Ports
 				case StopBits.OnePointFive: return (OnePointFive_double);
 				case StopBits.Two:          return (Two_double);
 
-				default: throw (new ArgumentOutOfRangeException("bits", MessageHelper.InvalidExecutionPreamble + "'" + bits.UnderlyingEnum.ToString() + "' is an unknown stop bit value!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("bits", MessageHelper.InvalidExecutionPreamble + "'" + bits.UnderlyingEnum.ToString() + "' is a stop bit value that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

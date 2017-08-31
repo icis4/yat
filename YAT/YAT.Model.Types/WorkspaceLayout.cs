@@ -299,13 +299,16 @@ namespace YAT.Model.Types
 			switch ((WorkspaceLayout)layout.UnderlyingEnum)
 			{
 				case WorkspaceLayout.Automatic:      throw (new NotSupportedException(                MessageHelper.InvalidExecutionPreamble + "'Automatic' is not supported by 'Windows.Forms.MdiLayout'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
 				case WorkspaceLayout.Cascade:        return (MdiLayout.Cascade);
 				case WorkspaceLayout.TileHorizontal: return (MdiLayout.TileHorizontal);
 				case WorkspaceLayout.TileVertical:   return (MdiLayout.TileVertical);
+
 				case WorkspaceLayout.Manual:         throw (new NotSupportedException(                MessageHelper.InvalidExecutionPreamble + "'Manual' is not supported by 'Windows.Forms.MdiLayout'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				case WorkspaceLayout.Minimize:       throw (new NotSupportedException(                MessageHelper.InvalidExecutionPreamble + "'Minimize' is not supported by 'Windows.Forms.MdiLayout'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				case WorkspaceLayout.Maximize:       throw (new NotSupportedException(                MessageHelper.InvalidExecutionPreamble + "'Maximize' is not supported by 'Windows.Forms.MdiLayout'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                             throw (new ArgumentOutOfRangeException("layout", MessageHelper.InvalidExecutionPreamble + "'" + (WorkspaceLayout)layout.UnderlyingEnum + "' is an unknown workspace layout!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+				default:                             throw (new ArgumentOutOfRangeException("layout", MessageHelper.InvalidExecutionPreamble + "'" + (WorkspaceLayout)layout.UnderlyingEnum + "' is a workspace layout that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -318,8 +321,10 @@ namespace YAT.Model.Types
 				case MdiLayout.Cascade:        return (new WorkspaceLayoutEx(WorkspaceLayout.Cascade));
 				case MdiLayout.TileHorizontal: return (new WorkspaceLayoutEx(WorkspaceLayout.TileHorizontal));
 				case MdiLayout.TileVertical:   return (new WorkspaceLayoutEx(WorkspaceLayout.TileVertical));
+
 				case MdiLayout.ArrangeIcons:   throw (new NotSupportedException(                MessageHelper.InvalidExecutionPreamble + "'ArrangeIcons' is not supported by " + ApplicationEx.ProductName + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                       throw (new ArgumentOutOfRangeException("layout", MessageHelper.InvalidExecutionPreamble + "'" + layout + "' is an unknown workspace layout!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+				default:                       throw (new ArgumentOutOfRangeException("layout", MessageHelper.InvalidExecutionPreamble + "'" + layout + "' is a workspace layout that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
