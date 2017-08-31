@@ -315,12 +315,12 @@ namespace YAT.View.Controls
 			}
 		}
 
-		/// <remarks>
-		/// Attention, similar code exists in <see cref="SendText.ValidateAndConfirmRadix"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
 		private bool ValidateAndConfirmRadix(Domain.Radix radix)
 		{
+			// Attention:
+			// Similar code exists in SendText.ValidateAndConfirmRadix().
+			// Changes here may have to be applied there too.
+
 			if (this.command.IsSingleLineText)
 			{
 				var text = this.command.SingleLineText;
@@ -376,12 +376,12 @@ namespace YAT.View.Controls
 			}
 		}
 
-		/// <remarks>
-		/// Attention, similar code exists in <see cref="SendText.comboBox_SingleLineText_Enter"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
 		private void textBox_SingleLineText_Enter(object sender, EventArgs e)
 		{
+			// Attention:
+			// Similar code exists in SendText.comboBox_SingleLineText_Enter().
+			// Changes here may have to be applied there too.
+
 			// Clear "<Enter a command...>" if needed.
 			if ((this.editFocusState == EditFocusState.EditIsInactive) && !this.command.IsText)
 			{
@@ -410,26 +410,26 @@ namespace YAT.View.Controls
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		/// <remarks>
-		/// Attention, similar code exists in <see cref="SendText.comboBox_SingleLineText_Leave"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
 		private void textBox_SingleLineText_Leave(object sender, EventArgs e)
 		{
+			// Attention:
+			// Similar code exists in SendText.comboBox_SingleLineText_Leave().
+			// Changes here may have to be applied there too.
+
 			if (this.isValidated)
 				SetEditFocusState(EditFocusState.EditIsInactive);
 			else
 				SetEditFocusState(EditFocusState.IsLeavingEdit);
 		}
 
-		/// <remarks>
-		/// Attention, similar code exists in <see cref="SendText.comboBox_SingleLineText_TextChanged"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
 		private void textBox_SingleLineText_TextChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
+
+			// Attention:
+			// Similar code exists in SendText.comboBox_SingleLineText_TextChanged().
+			// Changes here may have to be applied there too.
 
 			this.isValidated = false;
 		}
@@ -441,14 +441,14 @@ namespace YAT.View.Controls
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		/// <remarks>
-		/// Attention, similar code exists in <see cref="SendText.comboBox_SingleLineText_Validating"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
 		private void textBox_SingleLineText_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
+
+			// Attention:
+			// Similar code exists in SendText.comboBox_SingleLineText_Validating().
+			// Changes here may have to be applied there too.
 
 			if (!this.isValidated)
 			{

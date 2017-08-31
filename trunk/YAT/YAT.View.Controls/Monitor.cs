@@ -810,7 +810,11 @@ namespace YAT.View.Controls
 			{
 				if (e.Index >= 0)
 				{
+				#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 					ListBoxEx lb = fastListBox_Monitor;
+				#else
+					ListBox lb = fastListBox_Monitor;
+				#endif
 					int requestedWidth;
 
 					if (this.formatSettings.FormattingEnabled)
@@ -846,11 +850,11 @@ namespace YAT.View.Controls
 					if ((requestedWidth > 0) && (requestedWidth > lb.HorizontalExtent))
 						lb.HorizontalExtent = requestedWidth;
 
-#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
+				#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 					// Perform horizontal auto scroll, but only on the last item.
 					if (e.Index == (lb.Items.Count - 1))
 						lb.HorizontalScrollToPosition(requestedWidth - e.Bounds.Width);
-#endif
+				#endif
 					// Check whether the top index has changed, if so, also scroll the line numbers.
 					// This especially is the case when the monitor gets cleared, the top index will
 					// become 0.
@@ -1172,7 +1176,7 @@ namespace YAT.View.Controls
 			{
 				// Get current line:
 				int lastLineIndex = lbmon.Items.Count - 1;
-				Domain.DisplayLine current = (lbmon.Items[lastLineIndex] as Domain.DisplayLine);
+				var current = lbmon.Items[lastLineIndex] as Domain.DisplayLine;
 
 				// If first element, add element to line:
 				if (current.Count <= 0)

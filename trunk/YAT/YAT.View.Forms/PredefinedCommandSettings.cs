@@ -491,11 +491,11 @@ namespace YAT.View.Forms
 			string pageName;
 			if (TextInputBox.Show
 				(
-				this,
-				"Enter page name:",
-				"Page Name",
-				this.settingsInEdit.Pages[SelectedPageIndex].PageName,
-				out pageName
+					this,
+					"Enter page name:",
+					"Page Name",
+					this.settingsInEdit.Pages[SelectedPageIndex].PageName,
+					out pageName
 				)
 				== DialogResult.OK)
 			{
@@ -511,11 +511,11 @@ namespace YAT.View.Forms
 			string pageName;
 			if (TextInputBox.Show
 				(
-				this,
-				"Enter name of inserted page:",
-				"Page Name",
-				"Page " + pageNumber,
-				out pageName
+					this,
+					"Enter name of inserted page:",
+					"Page Name",
+					"Page " + pageNumber,
+					out pageName
 				)
 				== DialogResult.OK)
 			{
@@ -532,11 +532,11 @@ namespace YAT.View.Forms
 			string pageName;
 			if (TextInputBox.Show
 				(
-				this,
-				"Enter name of added page:",
-				"Page Name",
-				"Page " + pageNumber,
-				out pageName
+					this,
+					"Enter name of added page:",
+					"Page Name",
+					"Page " + pageNumber,
+					out pageName
 				)
 				== DialogResult.OK)
 			{
@@ -553,11 +553,11 @@ namespace YAT.View.Forms
 			string pageName;
 			if (TextInputBox.Show
 				(
-				this,
-				"Enter name of copy:",
-				"Page Name",
-				this.settingsInEdit.Pages[SelectedPageIndex].PageName + " (copy)",
-				out pageName
+					this,
+					"Enter name of copy:",
+					"Page Name",
+					this.settingsInEdit.Pages[SelectedPageIndex].PageName + " (copy)",
+					out pageName
 				)
 				== DialogResult.OK)
 			{
@@ -573,12 +573,12 @@ namespace YAT.View.Forms
 		{
 			if (MessageBoxEx.Show
 				(
-				this,
-				"Delete page '" + this.settingsInEdit.Pages[SelectedPageIndex].PageName + "'?",
-				"Delete?",
-				MessageBoxButtons.YesNoCancel,
-				MessageBoxIcon.Question,
-				MessageBoxDefaultButton.Button2
+					this,
+					"Delete page '" + this.settingsInEdit.Pages[SelectedPageIndex].PageName + "'?",
+					"Delete?",
+					MessageBoxButtons.YesNoCancel,
+					MessageBoxIcon.Question,
+					MessageBoxDefaultButton.Button2
 				)
 				== DialogResult.Yes)
 			{

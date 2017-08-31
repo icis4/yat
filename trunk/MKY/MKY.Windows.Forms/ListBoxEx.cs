@@ -65,7 +65,11 @@ using MKY.Win32;
 namespace MKY.Windows.Forms
 {
 	/// <summary>
-	/// Provides a list box that extends <see cref="ListBox"/>.
+	/// An improved <see cref="ListBox"/> that additionally provides:
+	/// <list type="bullet">
+	/// <item><description>The <see cref="SelectAllIndices"/> method.</description></item>
+	/// <item><description>Several "VerticalScroll...()" methods.</description></item>
+	/// </list>
 	/// </summary>
 	/// <remarks>
 	/// Ideally, the two properties 'HorizontalAutoScroll' and 'VerticalAutoScroll' and the
@@ -393,12 +397,12 @@ namespace MKY.Windows.Forms
 
 		#endregion
 
-	#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
-
 		#region Scroll > Overridden Methods
 		//------------------------------------------------------------------------------------------
 		// Scroll > Overridden Methods
 		//------------------------------------------------------------------------------------------
+
+	#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 
 		/// <summary>
 		/// The list's window procedure.
@@ -437,12 +441,16 @@ namespace MKY.Windows.Forms
 			base.WndProc(ref m);
 		}
 
+	#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
+
 		#endregion
 
 		#region Scroll > Private Methods
 		//------------------------------------------------------------------------------------------
 		// Scroll > Private Methods
 		//------------------------------------------------------------------------------------------
+
+	#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 
 		private void GetScrollInfo(int sb, ref Window.NativeTypes.SCROLLINFO si)
 		{
@@ -497,12 +505,16 @@ namespace MKY.Windows.Forms
 			}
 		}
 
+	#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
+
 		#endregion
 
 		#region Scroll > Event Invoking
 		//------------------------------------------------------------------------------------------
 		// Scroll > Event Invoking
 		//------------------------------------------------------------------------------------------
+
+	#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 
 		/// <summary></summary>
 		protected virtual void OnHorizontalScrolledAsync(ScrollEventArgs e)
@@ -516,9 +528,9 @@ namespace MKY.Windows.Forms
 			EventHelper.FireAsync<ScrollEventArgs>(VerticalScrolled, this, e);
 		}
 
-		#endregion
-
 	#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
+
+		#endregion
 
 		#endregion
 	}

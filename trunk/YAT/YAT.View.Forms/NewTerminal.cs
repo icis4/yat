@@ -134,7 +134,7 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// Attention:
 		/// Same code exists in YAT.View.Forms.TerminalSettings.terminalSelection_TerminalTypeChanged().
-		/// Changes here may have to be applied there too.
+		/// Changes here will have to be applied there too.
 		/// </remarks>
 		private void terminalSelection_TerminalTypeChanged(object sender, EventArgs e)
 		{

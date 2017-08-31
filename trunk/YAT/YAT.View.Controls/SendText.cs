@@ -511,14 +511,14 @@ namespace YAT.View.Controls
 	////private void comboBox_ExplicitDefaultRadix_SelectedIndexChanged(object sender, EventArgs e)
 	////is not required since          "          _Validating() below gets called anyway.
 
-		/// <remarks>
-		/// Attention, similar code exists in <see cref="PredefinedCommandSettingsSet.comboBox_ExplicitDefaultRadix_Validating"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
 		private void comboBox_ExplicitDefaultRadix_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
+
+			// Attention:
+			// Similar code exists in PredefinedCommandSettingsSet.comboBox_ExplicitDefaultRadix_Validating().
+			// Changes here may have to be applied there too.
 
 			Domain.Radix radix = this.command.DefaultRadix;
 			Domain.RadixEx selectedItem = comboBox_ExplicitDefaultRadix.SelectedItem as Domain.RadixEx;
@@ -535,12 +535,12 @@ namespace YAT.View.Controls
 			}
 		}
 
-		/// <remarks>
-		/// Attention, similar code exists in <see cref="PredefinedCommandSettingsSet.ValidateAndConfirmRadix"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
 		private bool ValidateAndConfirmRadix(Domain.Radix radix)
 		{
+			// Attention
+			// Similar code exists in PredefinedCommandSettingsSet.ValidateAndConfirmRadix().
+			// Changes here may have to be applied there too.
+
 			if (this.command.IsSingleLineText)
 			{
 				string s = this.command.SingleLineText;
@@ -579,13 +579,13 @@ namespace YAT.View.Controls
 			return (false);
 		}
 
-		/// <remarks>
-		/// Attention, similar code exists in <see cref="PredefinedCommandSettingsSet.textBox_SingleLineText_Enter"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
 		private void comboBox_SingleLineText_Enter(object sender, EventArgs e)
 		{
 			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
+			// Attention:
+			// Similar code exists in PredefinedCommandSettingsSet.textBox_SingleLineText_Enter().
+			// Changes here may have to be applied there too.
 
 			// Clear "<Enter a command...>" if needed.
 			if ((this.editFocusState == EditFocusState.EditIsInactive) && !this.command.IsText)
@@ -622,13 +622,13 @@ namespace YAT.View.Controls
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		/// <remarks>
-		/// Attention, similar code exists in <see cref="PredefinedCommandSettingsSet.textBox_SingleLineText_Leave"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
 		private void comboBox_SingleLineText_Leave(object sender, EventArgs e)
 		{
 			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
+			// Attention:
+			// Similar code exists in PredefinedCommandSettingsSet.textBox_SingleLineText_Leave().
+			// Changes here may have to be applied there too.
 
 			if (this.isValidated)
 				SetEditFocusState(EditFocusState.EditIsInactive);
@@ -663,16 +663,16 @@ namespace YAT.View.Controls
 			DebugCommandLeave();
 		}
 
-		/// <remarks>
-		/// Attention, similar code exists in <see cref="PredefinedCommandSettingsSet.textBox_SingleLineText_TextChanged"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
 		private void comboBox_SingleLineText_TextChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
 			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
+			// Attention:
+			// Similar code exists in PredefinedCommandSettingsSet.textBox_SingleLineText_TextChanged().
+			// Changes here may have to be applied there too.
 
 			if (this.sendImmediately)
 				comboBox_SingleLineText.Text = ""; // Instantly reset the text.
@@ -724,16 +724,16 @@ namespace YAT.View.Controls
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		/// <remarks>
-		/// Attention, similar code exists in <see cref="PredefinedCommandSettingsSet.textBox_SingleLineText_Validating"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
 		private void comboBox_SingleLineText_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
 			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
+			// Attention:
+			// Similar code exists in PredefinedCommandSettingsSet.textBox_SingleLineText_Validating().
+			// Changes here may have to be applied there too.
 
 			if (!this.isValidated)
 			{
