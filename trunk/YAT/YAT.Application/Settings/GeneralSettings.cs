@@ -47,8 +47,12 @@ namespace YAT.Application.Settings
 
 		private bool retrieveSerialPortCaptions;
 		private bool detectSerialPortsInUse;
+		private bool askForAlternateSerialPort;
+
+		private bool askForAlternateNetworkInterface;
 
 		private bool matchUsbSerial;
+		private bool askForAlternateUsbDevice;
 
 		/// <summary></summary>
 		public GeneralSettings()
@@ -77,8 +81,12 @@ namespace YAT.Application.Settings
 
 			RetrieveSerialPortCaptions = rhs.RetrieveSerialPortCaptions;
 			DetectSerialPortsInUse     = rhs.DetectSerialPortsInUse;
+			AskForAlternateSerialPort  = rhs.AskForAlternateSerialPort;
+
+			AskForAlternateNetworkInterface = rhs.AskForAlternateNetworkInterface;
 
 			MatchUsbSerial             = rhs.MatchUsbSerial;
+			AskForAlternateUsbDevice   = rhs.AskForAlternateUsbDevice;
 
 			ClearChanged();
 		}
@@ -96,8 +104,12 @@ namespace YAT.Application.Settings
 
 			RetrieveSerialPortCaptions = true;
 			DetectSerialPortsInUse     = true;
+			AskForAlternateSerialPort  = true;
+
+			AskForAlternateNetworkInterface = true;
 
 			MatchUsbSerial             = true;
+			AskForAlternateUsbDevice   = true;
 		}
 
 		#region Properties
@@ -188,6 +200,36 @@ namespace YAT.Application.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("AskForAlternateSerialPort")]
+		public virtual bool AskForAlternateSerialPort
+		{
+			get { return (this.askForAlternateSerialPort); }
+			set
+			{
+				if (this.askForAlternateSerialPort != value)
+				{
+					this.askForAlternateSerialPort = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("AskForAlternateNetworkInterface")]
+		public virtual bool AskForAlternateNetworkInterface
+		{
+			get { return (this.askForAlternateNetworkInterface); }
+			set
+			{
+				if (this.askForAlternateNetworkInterface != value)
+				{
+					this.askForAlternateNetworkInterface = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("MatchUsbSerial")]
 		public virtual bool MatchUsbSerial
 		{
@@ -197,6 +239,21 @@ namespace YAT.Application.Settings
 				if (this.matchUsbSerial != value)
 				{
 					this.matchUsbSerial = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("AskForAlternateUsbDevice")]
+		public virtual bool AskForAlternateUsbDevice
+		{
+			get { return (this.askForAlternateUsbDevice); }
+			set
+			{
+				if (this.askForAlternateUsbDevice != value)
+				{
+					this.askForAlternateUsbDevice = value;
 					SetMyChanged();
 				}
 			}
@@ -228,8 +285,12 @@ namespace YAT.Application.Settings
 
 				hashCode = (hashCode * 397) ^ RetrieveSerialPortCaptions.GetHashCode();
 				hashCode = (hashCode * 397) ^ DetectSerialPortsInUse    .GetHashCode();
+				hashCode = (hashCode * 397) ^ AskForAlternateSerialPort .GetHashCode();
+
+				hashCode = (hashCode * 397) ^ AskForAlternateNetworkInterface.GetHashCode();
 
 				hashCode = (hashCode * 397) ^ MatchUsbSerial            .GetHashCode();
+				hashCode = (hashCode * 397) ^ AskForAlternateUsbDevice  .GetHashCode();
 
 				return (hashCode);
 			}
@@ -266,8 +327,12 @@ namespace YAT.Application.Settings
 
 				RetrieveSerialPortCaptions.Equals(other.RetrieveSerialPortCaptions) &&
 				DetectSerialPortsInUse    .Equals(other.DetectSerialPortsInUse)     &&
+				AskForAlternateSerialPort .Equals(other.AskForAlternateSerialPort)  &&
 
-				MatchUsbSerial            .Equals(other.MatchUsbSerial)
+				AskForAlternateNetworkInterface.Equals(other.AskForAlternateNetworkInterface)  &&
+
+				MatchUsbSerial            .Equals(other.MatchUsbSerial) &&
+				AskForAlternateUsbDevice  .Equals(other.AskForAlternateUsbDevice)
 			);
 		}
 

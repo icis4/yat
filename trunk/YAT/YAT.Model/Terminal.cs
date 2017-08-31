@@ -237,6 +237,9 @@ namespace YAT.Model
 		public event EventHandler<EventArgs<string>> TimedStatusTextRequest;
 
 		/// <summary></summary>
+		public event EventHandler ResetStatusTextRequest;
+
+		/// <summary></summary>
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
 
 		/// <summary></summary>
@@ -1223,6 +1226,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Starts terminal, i.e. starts log and opens I/O.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public virtual bool Start()
 		{
 			AssertNotDisposed();
@@ -1238,11 +1242,15 @@ namespace YAT.Model
 			if (this.settingsRoot.TerminalIsStarted)
 			{
 				// Check availability of I/O before starting:
-				if (!CheckIOAvailability())
-					return (false);
+				var result = CheckIOAvailability();
+				switch (result)
+				{
+					case CheckResult.OK:     return (StartIO());
+					case CheckResult.Cancel: return (false);
+					case CheckResult.Ignore: return (true);
 
-				if (!StartIO())
-					return (false);
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + result.ToString() + "' is a result that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 			}
 
 			return (true);
@@ -2424,8 +2432,8 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Checks the terminal's I/O port availability. If I/O port is not available, user is asked
-		/// whether to change to a different I/O port.
+		/// Checks the terminal's I/O port availability. If I/O port is not available, and settings
+		/// allow so, user is asked whether to change to a different I/O port.
 		/// </summary>
 		/// <remarks>
 		/// Note that only the availability of the I/O port is checked, not whether the port is
@@ -2434,66 +2442,17 @@ namespace YAT.Model
 		/// </remarks>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public virtual bool CheckIOAvailability()
+		public virtual CheckResult CheckIOAvailability()
 		{
-			OnFixedStatusTextRequest("Checking terminal...");
-
 			switch (this.settingsRoot.IOType)
 			{
 				case Domain.IOType.SerialPort:
 				{
 					var portId = this.settingsRoot.Terminal.IO.SerialPort.PortId;
 					if (portId != null)
-					{
-						var ports = new MKY.IO.Ports.SerialPortCollection();
-						ports.FillWithAvailablePorts(false); // Explicitly not getting captions, thus faster.
-
-						// Attention:
-						// Similar code exists in View.Controls.SerialPortSelection.SetPortList().
-						// Changes here may have to be applied there too!
-
-						if (ports.Count > 0)
-						{
-							if (ports.Contains(portId))
-							{
-								return (true);
-							}
-							else
-							{
-								MKY.IO.Ports.SerialPortId portIdAlternate;
-								if (TryGetSerialPortAlternate(ports, out portIdAlternate))
-								{
-									var dr = ShowSerialPortNotAvailableSwitchQuestion(portId, portIdAlternate);
-									if (dr == DialogResult.Yes)
-									{
-										this.settingsRoot.Terminal.IO.SerialPort.PortId = portIdAlternate;
-										ApplySettings(this.settingsRoot.Terminal); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
-									}
-
-									return (true); // Return 'true' in any case, device may not yet be available but 'AutoOpen'.
-								}
-								else
-								{
-									return (false);
-								}
-							}
-						}
-						else // ports.Count == 0
-						{
-							var dr = ShowNoSerialPortsStartAnywayQuestion(portId);
-							if (dr == DialogResult.Yes)
-							{
-								return (true);
-							}
-							else
-							{
-								OnTimedStatusTextRequest("No serial COM ports available");
-								return (false);
-							}
-						}
-					}
-
-					return (true); // Return 'true' in all 'non-handled' cases => still try to start I/O to force the underlying exception message.
+						return (CheckSerialPortAvailability(portId));
+					else
+						return (CheckResult.Ignore);
 				}
 
 				case Domain.IOType.TcpClient:
@@ -2502,144 +2461,276 @@ namespace YAT.Model
 				{
 					MKY.Net.IPNetworkInterfaceEx localInterface = this.settingsRoot.Terminal.IO.Socket.LocalInterface;
 					if (localInterface != null)
-					{
-						MKY.Net.IPNetworkInterfaceCollection localInterfaces = new MKY.Net.IPNetworkInterfaceCollection();
-						localInterfaces.FillWithAvailableLocalInterfaces();
-
-						// Attention:
-						// Similar code exists in View.Controls.SocketSelection.SetLocalInterfaceList().
-						// Changes here may have to be applied there too!
-
-						if (localInterfaces.Count > 0)
-						{
-							if (localInterfaces.Contains(localInterface))
-							{
-								return (true);
-							}
-							else if (localInterfaces.ContainsDescription(localInterface))
-							{
-								// A device with same description is available, use that:
-								int sameDescriptionIndex = localInterfaces.FindIndexDescription(localInterface);
-
-								var dr = ShowLocalInterfaceNotAvailableAlternateQuestion(localInterface, localInterfaces[sameDescriptionIndex]);
-								if (dr == DialogResult.Yes)
-								{
-									this.settingsRoot.Terminal.IO.Socket.LocalInterface = localInterfaces[sameDescriptionIndex];
-									ApplySettings(this.settingsRoot.Terminal); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
-								}
-
-								return (true); // Return 'true' in any case, device may not yet be available but 'AutoOpen'.
-							}
-							else
-							{
-								var dr = ShowLocalInterfaceNotAvailableDefaultQuestion(localInterface, localInterfaces[0]);
-								if (dr == DialogResult.Yes)
-								{
-									this.settingsRoot.Terminal.IO.Socket.LocalInterface = localInterfaces[0];
-									ApplySettings(this.settingsRoot.Terminal); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
-									return (true);
-								}
-								else
-								{
-									OnTimedStatusTextRequest("Previous local network interface currently not available");
-									return (false);
-								}
-							}
-						}
-						else // localInterfaces.Count == 0
-						{
-							ShowNoLocalInterfacesMessage();
-							OnTimedStatusTextRequest("No local network interfaces available");
-							return (false);
-						}
-					}
-
-					return (true); // Return 'true' in all 'non-handled' cases => still try to start I/O to force the underlying exception message.
+						return (CheckLocalInterfaceAvailability(localInterface));
+					else
+						return (CheckResult.Ignore);
 				}
 
 				case Domain.IOType.UsbSerialHid:
 				{
-					MKY.IO.Usb.DeviceInfo deviceInfo = this.settingsRoot.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
+					var deviceInfo = this.settingsRoot.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
 					if (deviceInfo != null)
-					{
-						MKY.IO.Usb.SerialHidDeviceCollection devices = new MKY.IO.Usb.SerialHidDeviceCollection();
-						devices.FillWithAvailableDevices(true); // Retrieve strings from devices in order to get serial strings.
-
-						// Attention:
-						// Similar code exists in View.Controls.UsbSerialHidDeviceSelection.SetDeviceList().
-						// Changes here may have to be applied there too!
-
-						if (devices.Count > 0)
-						{
-							if (devices.Contains(deviceInfo))
-							{
-								return (true);
-							}
-							else if (devices.ContainsVidPid(deviceInfo))
-							{
-								// A device with same VID/PID is available, use that:
-								int sameVidPidIndex = devices.FindIndexVidPid(deviceInfo);
-
-								// Inform the user if serial is required:
-								if (ApplicationSettings.LocalUserSettings.General.MatchUsbSerial)
-								{
-									var dr = ShowUsbSerialHidDeviceNotAvailableAlternateQuestion(deviceInfo, devices[sameVidPidIndex]);
-									if (dr == DialogResult.Yes)
-									{
-										this.settingsRoot.Terminal.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
-										ApplySettings(this.settingsRoot.Terminal); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
-									}
-
-									return (true); // Return 'true' in any case, device may not yet be available but 'AutoOpen'.
-								}
-								else
-								{
-									// Clear the 'Changed' flag in case of automatically changing settings:
-									bool hadAlreadyBeenChanged = this.settingsRoot.Terminal.IO.UsbSerialHidDevice.HaveChanged;
-									this.settingsRoot.Terminal.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
-									if (!hadAlreadyBeenChanged)
-										this.settingsRoot.Terminal.IO.UsbSerialHidDevice.ClearChanged();
-
-									ApplySettings(this.settingsRoot.Terminal); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
-
-									return (true); // Return 'true' in any case, device may not yet be available but 'AutoOpen'.
-								}
-							}
-							else
-							{
-								var dr = ShowUsbSerialHidDeviceNotAvailableStartAnywayQuestion(deviceInfo);
-								if (dr == DialogResult.Yes)
-								{
-									return (true);
-								}
-								else
-								{
-									OnTimedStatusTextRequest("Previous USB HID device currently not available");
-									return (false);
-								}
-							}
-						}
-						else // devices.Count == 0
-						{
-							var dr = ShowNoUsbSerialHidDevicesStartAnywayQuestion(deviceInfo);
-							if (dr == DialogResult.Yes)
-							{
-								return (true);
-							}
-							else
-							{
-								OnTimedStatusTextRequest("No HID capable USB devices available");
-								return (false);
-							}
-						}
-					}
-
-					return (true); // Return 'true' in all 'non-handled' cases => still try to start I/O to force the underlying exception message.
+						return (CheckUsbDeviceAvailability(deviceInfo));
+					else
+						return (CheckResult.Ignore);
 				}
 
 				default: // Not (yet) useful for UDP/IP sockets.
 				{
-					return (true); // Return 'true' in all 'non-handled' cases.
+					return (CheckResult.OK); // All 'non-handled' cases.
+				}
+			}
+		}
+
+		private CheckResult CheckSerialPortAvailability(MKY.IO.Ports.SerialPortId portId)
+		{
+			OnFixedStatusTextRequest("Checking availability of " + portId +  "...");
+
+			var ports = new MKY.IO.Ports.SerialPortCollection();
+			ports.FillWithAvailablePorts(false); // Explicitly not getting captions, thus faster.
+
+			// Attention:
+			// Similar code exists in View.Controls.SerialPortSelection.SetPortList().
+			// Changes here may have to be applied there too!
+
+			if (ports.Count > 0)
+			{
+				if (ports.Contains(portId))
+				{
+					return (CheckResult.OK);
+				}
+				else
+				{
+					if (ApplicationSettings.LocalUserSettings.General.AskForAlternateSerialPort)
+					{
+						MKY.IO.Ports.SerialPortId portIdAlternate;
+						if (TryGetSerialPortAlternate(ports, out portIdAlternate))
+						{
+							var dr = ShowSerialPortNotAvailableSwitchQuestionYesNo(portId, portIdAlternate);
+							if (dr == DialogResult.Yes)
+							{
+								this.settingsRoot.Terminal.IO.SerialPort.PortId = portIdAlternate;
+								ApplySettings(this.settingsRoot.Terminal); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+							}
+
+							return (CheckResult.OK); // Device may not yet be available but 'AutoOpen'.
+						}
+						else
+						{
+							OnTimedStatusTextRequest(portId + " currently not available");
+							return (CheckResult.Cancel);
+						}
+					}
+					else
+					{
+						OnResetStatusTextRequest();
+						return (CheckResult.Ignore); // Silently ignore.
+					}
+				}
+			}
+			else // ports.Count == 0
+			{
+				if (ApplicationSettings.LocalUserSettings.General.AskForAlternateSerialPort)
+				{
+					var dr = ShowNoSerialPortsStartAnywayQuestionYesNo(portId);
+					if (dr == DialogResult.Yes)
+					{
+						return (CheckResult.OK);
+					}
+					else
+					{
+						OnTimedStatusTextRequest("No serial COM ports available");
+						return (CheckResult.Cancel);
+					}
+				}
+				else
+				{
+					OnResetStatusTextRequest();
+					return (CheckResult.Ignore); // Silently ignore.
+				}
+			}
+		}
+
+		private CheckResult CheckLocalInterfaceAvailability(MKY.Net.IPNetworkInterfaceEx localInterface)
+		{
+			OnFixedStatusTextRequest("Checking availability of '" + localInterface + "'...");
+
+			var localInterfaces = new MKY.Net.IPNetworkInterfaceCollection();
+			localInterfaces.FillWithAvailableLocalInterfaces();
+
+			// Attention:
+			// Similar code exists in View.Controls.SocketSelection.SetLocalInterfaceList().
+			// Changes here may have to be applied there too!
+
+			if (localInterfaces.Count > 0)
+			{
+				if (localInterfaces.Contains(localInterface))
+				{
+					return (CheckResult.OK);
+				}
+				else if (localInterfaces.ContainsDescription(localInterface))
+				{
+					// A device with same description is available, use that:
+					int sameDescriptionIndex = localInterfaces.FindIndexDescription(localInterface);
+
+					if (ApplicationSettings.LocalUserSettings.General.AskForAlternateNetworkInterface)
+					{
+						var dr = ShowLocalInterfaceNotAvailableAlternateQuestionYesNo(localInterface, localInterfaces[sameDescriptionIndex]);
+						if (dr == DialogResult.Yes)
+						{
+							this.settingsRoot.Terminal.IO.Socket.LocalInterface = localInterfaces[sameDescriptionIndex];
+							ApplySettings(this.settingsRoot.Terminal); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+							return (CheckResult.OK);
+						}
+						else
+						{
+							OnResetStatusTextRequest();
+							return (CheckResult.Cancel);
+						}
+					}
+					else // Silently switch interface:
+					{
+						this.settingsRoot.Terminal.IO.Socket.LocalInterface = localInterfaces[sameDescriptionIndex];
+						ApplySettings(this.settingsRoot.Terminal); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+						return (CheckResult.OK);
+					}
+				}
+				else
+				{
+					if (ApplicationSettings.LocalUserSettings.General.AskForAlternateNetworkInterface)
+					{
+						var dr = ShowLocalInterfaceNotAvailableDefaultQuestionYesNo(localInterface, localInterfaces[0]);
+						if (dr == DialogResult.Yes)
+						{
+							this.settingsRoot.Terminal.IO.Socket.LocalInterface = localInterfaces[0];
+							ApplySettings(this.settingsRoot.Terminal); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+							return (CheckResult.OK);
+						}
+						else
+						{
+							OnTimedStatusTextRequest("'" + localInterface + "' currently not available");
+							return (CheckResult.Cancel);
+						}
+					}
+					else
+					{
+						OnResetStatusTextRequest();
+						return (CheckResult.Ignore); // Silently ignore.
+					}
+				}
+			}
+			else // localInterfaces.Count == 0
+			{
+				if (ApplicationSettings.LocalUserSettings.General.AskForAlternateNetworkInterface)
+				{
+					ShowNoLocalInterfacesMessageOK();
+					OnTimedStatusTextRequest("No local network interfaces available");
+					return (CheckResult.Cancel);
+				}
+				else
+				{
+					OnResetStatusTextRequest();
+					return (CheckResult.Ignore); // Silently ignore.
+				}
+			}
+		}
+
+		private CheckResult CheckUsbDeviceAvailability(MKY.IO.Usb.DeviceInfo deviceInfo)
+		{
+			OnFixedStatusTextRequest("Checking availability of '" + deviceInfo + "'...");
+
+			var devices = new MKY.IO.Usb.SerialHidDeviceCollection();
+			devices.FillWithAvailableDevices(true); // Retrieve strings from devices in order to get serial strings.
+
+			// Attention:
+			// Similar code exists in View.Controls.UsbSerialHidDeviceSelection.SetDeviceList().
+			// Changes here may have to be applied there too!
+
+			if (devices.Count > 0)
+			{
+				if (devices.Contains(deviceInfo))
+				{
+					return (CheckResult.OK);
+				}
+				else if (devices.ContainsVidPid(deviceInfo))
+				{
+					// A device with same VID/PID is available, use that:
+					int sameVidPidIndex = devices.FindIndexVidPid(deviceInfo);
+
+					// Inform the user if serial is required:
+					if (ApplicationSettings.LocalUserSettings.General.MatchUsbSerial)
+					{
+						if (ApplicationSettings.LocalUserSettings.General.AskForAlternateUsbDevice)
+						{
+							var dr = ShowUsbSerialHidDeviceNotAvailableAlternateQuestionYesNo(deviceInfo, devices[sameVidPidIndex]);
+							if (dr == DialogResult.Yes)
+							{
+								this.settingsRoot.Terminal.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
+								ApplySettings(this.settingsRoot.Terminal); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+							}
+
+							return (CheckResult.OK); // Device may not yet be available but 'AutoOpen'.
+						}
+						else
+						{
+							OnResetStatusTextRequest();
+							return (CheckResult.Ignore); // Silently ignore.
+						}
+					}
+					else
+					{
+						// Clear the 'Changed' flag in case of automatically changing settings:
+						bool hadAlreadyBeenChanged = this.settingsRoot.Terminal.IO.UsbSerialHidDevice.HaveChanged;
+						this.settingsRoot.Terminal.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
+						if (!hadAlreadyBeenChanged)
+							this.settingsRoot.Terminal.IO.UsbSerialHidDevice.ClearChanged();
+
+						ApplySettings(this.settingsRoot.Terminal); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+
+						return (CheckResult.OK); // Device may not yet be available but 'AutoOpen'.
+					}
+				}
+				else
+				{
+					if (ApplicationSettings.LocalUserSettings.General.AskForAlternateUsbDevice)
+					{
+						var dr = ShowUsbSerialHidDeviceNotAvailableStartAnywayQuestionYesNo(deviceInfo);
+						if (dr == DialogResult.Yes)
+						{
+							return (CheckResult.OK);
+						}
+						else
+						{
+							OnTimedStatusTextRequest("'" + deviceInfo + "' currently not available");
+							return (CheckResult.Cancel);
+						}
+					}
+					else
+					{
+						OnResetStatusTextRequest();
+						return (CheckResult.Ignore); // Silently ignore.
+					}
+				}
+			}
+			else // devices.Count == 0
+			{
+				if (ApplicationSettings.LocalUserSettings.General.AskForAlternateUsbDevice)
+				{
+					var dr = ShowNoUsbSerialHidDevicesStartAnywayQuestionYesNo(deviceInfo);
+					if (dr == DialogResult.Yes)
+					{
+						return (CheckResult.OK);
+					}
+					else
+					{
+						OnTimedStatusTextRequest("No HID capable USB devices available");
+						return (CheckResult.Cancel);
+					}
+				}
+				else
+				{
+					OnResetStatusTextRequest();
+					return (CheckResult.Ignore); // Silently ignore.
 				}
 			}
 		}
@@ -2687,7 +2778,7 @@ namespace YAT.Model
 			return (false);
 		}
 
-		private DialogResult ShowNoSerialPortsStartAnywayQuestion(string portIdNotAvailable)
+		private DialogResult ShowNoSerialPortsStartAnywayQuestionYesNo(string portIdNotAvailable)
 		{
 			string message =
 				"There are currently no serial COM ports available." + Environment.NewLine + Environment.NewLine +
@@ -2705,7 +2796,7 @@ namespace YAT.Model
 			return (dr);
 		}
 
-		private DialogResult ShowSerialPortNotAvailableSwitchQuestion(string portIdNotAvailable, string portIdAlternate)
+		private DialogResult ShowSerialPortNotAvailableSwitchQuestionYesNo(string portIdNotAvailable, string portIdAlternate)
 		{
 			string message =
 				"The previous serial port " + portIdNotAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
@@ -2722,7 +2813,7 @@ namespace YAT.Model
 			return (dr);
 		}
 
-		private void ShowNoLocalInterfacesMessage()
+		private void ShowNoLocalInterfacesMessageOK()
 		{
 			string message =
 				"There are currently no local network interfaces available." + Environment.NewLine + Environment.NewLine +
@@ -2737,7 +2828,7 @@ namespace YAT.Model
 			);
 		}
 
-		private DialogResult ShowLocalInterfaceNotAvailableDefaultQuestion(string localInterfaceNotAvailable, string localInterfaceDefaulted)
+		private DialogResult ShowLocalInterfaceNotAvailableDefaultQuestionYesNo(string localInterfaceNotAvailable, string localInterfaceDefaulted)
 		{
 			string message =
 				"The previous local network interface '" + localInterfaceNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
@@ -2754,7 +2845,7 @@ namespace YAT.Model
 			return (dr);
 		}
 
-		private DialogResult ShowLocalInterfaceNotAvailableAlternateQuestion(string localInterfaceNotAvailable, string localInterfaceAlternate)
+		private DialogResult ShowLocalInterfaceNotAvailableAlternateQuestionYesNo(string localInterfaceNotAvailable, string localInterfaceAlternate)
 		{
 			string message =
 				"The previous local network interface '" + localInterfaceNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
@@ -2771,7 +2862,7 @@ namespace YAT.Model
 			return (dr);
 		}
 
-		private DialogResult ShowNoUsbSerialHidDevicesStartAnywayQuestion(string deviceInfoNotAvailable)
+		private DialogResult ShowNoUsbSerialHidDevicesStartAnywayQuestionYesNo(string deviceInfoNotAvailable)
 		{
 			string message =
 				"There are currently no HID capable USB devices available." + Environment.NewLine + Environment.NewLine +
@@ -2789,7 +2880,7 @@ namespace YAT.Model
 			return (dr);
 		}
 
-		private DialogResult ShowUsbSerialHidDeviceNotAvailableStartAnywayQuestion(string deviceInfoNotAvailable)
+		private DialogResult ShowUsbSerialHidDeviceNotAvailableStartAnywayQuestionYesNo(string deviceInfoNotAvailable)
 		{
 			string message =
 				"The previous USB HID device '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
@@ -2807,7 +2898,7 @@ namespace YAT.Model
 			return (dr);
 		}
 
-		private DialogResult ShowUsbSerialHidDeviceNotAvailableAlternateQuestion(string deviceInfoNotAvailable, string deviceInfoAlternate)
+		private DialogResult ShowUsbSerialHidDeviceNotAvailableAlternateQuestionYesNo(string deviceInfoNotAvailable, string deviceInfoAlternate)
 		{
 			string message =
 				"The previous device '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
@@ -4601,18 +4692,24 @@ namespace YAT.Model
 			this.eventHelper.RaiseSync<EventArgs<Domain.RepositoryType>>(RepositoryReloaded, this, e);
 		}
 
-		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		/// <remarks>Using item parameter instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
 			this.eventHelper.RaiseSync<EventArgs<string>>(FixedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
-		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		/// <remarks>Using item parameter instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
 			this.eventHelper.RaiseSync<EventArgs<string>>(TimedStatusTextRequest, this, new EventArgs<string>(text));
+		}
+
+		/// <remarks>Not using event args parameter for simplicity.</remarks>
+		protected virtual void OnResetStatusTextRequest()
+		{
+			this.eventHelper.RaiseSync(ResetStatusTextRequest, this, EventArgs.Empty);
 		}
 
 		/// <summary></summary>

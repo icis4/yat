@@ -31,17 +31,13 @@ namespace YAT.Model
 	#pragma warning disable 1591
 
 	/// <summary>
-	/// Enumeration of all the main result return codes.
+	/// Enumeration of the I/O availability check results.
 	/// </summary>
-	public enum MainResult
+	public enum CheckResult
 	{
-		Success,
-		CommandLineError,
-		ApplicationStartError,
-		ApplicationStartCancel,
-		ApplicationRunError,
-		ApplicationExitError,
-		UnhandledException
+		OK,
+		Cancel,
+		Ignore
 	}
 
 	#pragma warning restore 1591

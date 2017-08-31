@@ -92,6 +92,8 @@ Important changes:
   converters (USB CDC) without closing the serial COM port (bug #382). Workaround also applies when
   undocking or hibernating a computer running YAT without closing the serial COM port, as well as
   when restaring devices that implement a virtual serial COM port (USB CDC).
+- Option to disable user interaction question when a serial COM port, a local network interface or
+  a USB Ser/HID device is no longer available; terminal will silently stay closed (feat. req. #316).
 - Improved speed when sending or receiving, preventing application freeze on fast data (bug #383).
 - Improved responsiveness to send requests while receiving a lot of fast data, as well as
   responsiveness to receive data while sending a lot of fast data (rel. to bugs #305, #380, #383).
