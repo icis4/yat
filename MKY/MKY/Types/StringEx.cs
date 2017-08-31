@@ -864,7 +864,7 @@ namespace MKY
 			{
 				for (/* i */; i >= 0; i--)
 				{
-					if (CharEx.IsWhiteSpaceOrPunctuationOrSymbol(str, i))
+					if (char.IsWhiteSpace(str, i) || char.IsPunctuation(str, i) || char.IsSymbol(str, i))
 						return (i + 1);
 				}
 			}
