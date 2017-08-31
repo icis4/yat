@@ -34,7 +34,7 @@
 			this.panel_Tcp = new System.Windows.Forms.Panel();
 			this.label_TcpClientAutoReconnectInterval = new System.Windows.Forms.Label();
 			this.label_TcpClientAutoReconnectIntervalUnit = new System.Windows.Forms.Label();
-			this.textBox_TcpClientAutoReconnectInterval = new System.Windows.Forms.TextBox();
+			this.textBox_TcpClientAutoReconnectInterval = new MKY.Windows.Forms.TextBoxEx();
 			this.checkBox_TcpClientAutoReconnect = new System.Windows.Forms.CheckBox();
 			this.panel_Udp = new System.Windows.Forms.Panel();
 			this.label_UdpServerSendMode = new System.Windows.Forms.Label();
@@ -178,7 +178,7 @@
 		private System.Windows.Forms.Label label_UdpServerSendMode;
 		private System.Windows.Forms.Label label_TcpClientAutoReconnectInterval;
 		private System.Windows.Forms.Label label_TcpClientAutoReconnectIntervalUnit;
-		private System.Windows.Forms.TextBox textBox_TcpClientAutoReconnectInterval;
+		private MKY.Windows.Forms.TextBoxEx textBox_TcpClientAutoReconnectInterval;
 		private System.Windows.Forms.CheckBox checkBox_TcpClientAutoReconnect;
 	}
 }

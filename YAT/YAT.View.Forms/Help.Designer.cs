@@ -37,11 +37,11 @@ namespace YAT.View.Forms
 			this.groupBox_ParserHelp = new System.Windows.Forms.GroupBox();
 			this.splitContainer_Help = new System.Windows.Forms.SplitContainer();
 			this.splitContainer_Upper = new System.Windows.Forms.SplitContainer();
-			this.textBox_ParserFormat = new System.Windows.Forms.TextBox();
-			this.textBox_ParserKeyword = new System.Windows.Forms.TextBox();
+			this.textBox_ParserFormat = new MKY.Windows.Forms.TextBoxEx();
+			this.textBox_ParserKeyword = new MKY.Windows.Forms.TextBoxEx();
 			this.splitContainer_Lower = new System.Windows.Forms.SplitContainer();
-			this.textBox_TextTerminalKeyword = new System.Windows.Forms.TextBox();
-			this.textBox_SerialPort = new System.Windows.Forms.TextBox();
+			this.textBox_TextTerminalKeyword = new MKY.Windows.Forms.TextBoxEx();
+			this.textBox_SerialPort = new MKY.Windows.Forms.TextBoxEx();
 			this.label_ParserExplanations = new System.Windows.Forms.Label();
 			this.button_Close = new System.Windows.Forms.Button();
 			this.label_Explanations = new System.Windows.Forms.Label();
@@ -359,9 +359,9 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.Button button_Close;
 		private System.Windows.Forms.Label label_Explanations;
 		private System.Windows.Forms.Label label_ParserExplanations;
-		private System.Windows.Forms.TextBox textBox_ParserFormat;
-		private System.Windows.Forms.TextBox textBox_TextTerminalKeyword;
-		private System.Windows.Forms.TextBox textBox_ParserKeyword;
+		private MKY.Windows.Forms.TextBoxEx textBox_ParserFormat;
+		private MKY.Windows.Forms.TextBoxEx textBox_TextTerminalKeyword;
+		private MKY.Windows.Forms.TextBoxEx textBox_ParserKeyword;
 		private System.Windows.Forms.GroupBox groupBox_AsciiTable;
 		private System.Windows.Forms.DataGridView dataGridView_AsciiTable;
 		private System.Windows.Forms.BindingSource bindingSource_AsciiTable;
@@ -370,7 +370,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.DataGridViewTextBoxColumn mnemonicDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn escDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn descriptionDataGridViewTextBoxColumn;
-		private System.Windows.Forms.TextBox textBox_SerialPort;
+		private MKY.Windows.Forms.TextBoxEx textBox_SerialPort;
 		private System.Windows.Forms.SplitContainer splitContainer_Help;
 		private System.Windows.Forms.SplitContainer splitContainer_Upper;
 		private System.Windows.Forms.SplitContainer splitContainer_Lower;

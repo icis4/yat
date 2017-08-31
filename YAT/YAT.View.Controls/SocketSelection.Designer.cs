@@ -31,15 +31,15 @@
 			this.components = new System.ComponentModel.Container();
 			this.label_RemoteHost = new System.Windows.Forms.Label();
 			this.label_RemotePort = new System.Windows.Forms.Label();
-			this.textBox_RemotePort = new System.Windows.Forms.TextBox();
-			this.comboBox_RemoteHost = new System.Windows.Forms.ComboBox();
-			this.textBox_LocalPort = new System.Windows.Forms.TextBox();
+			this.textBox_RemotePort = new MKY.Windows.Forms.TextBoxEx();
+			this.comboBox_RemoteHost = new MKY.Windows.Forms.ComboBoxEx();
+			this.textBox_LocalPort = new MKY.Windows.Forms.TextBoxEx();
 			this.label_LocalPort = new System.Windows.Forms.Label();
 			this.label_LocalInterface = new System.Windows.Forms.Label();
-			this.comboBox_LocalInterface = new System.Windows.Forms.ComboBox();
+			this.comboBox_LocalInterface = new MKY.Windows.Forms.ComboBoxEx();
 			this.button_RefreshLocalInterfaces = new System.Windows.Forms.Button();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.comboBox_LocalFilter = new System.Windows.Forms.ComboBox();
+			this.comboBox_LocalFilter = new MKY.Windows.Forms.ComboBoxEx();
 			this.label_OnDialogMessage = new System.Windows.Forms.Label();
 			this.label_LocalFilter = new System.Windows.Forms.Label();
 			this.SuspendLayout();
@@ -195,15 +195,15 @@
 
 		private System.Windows.Forms.Label label_RemoteHost;
 		private System.Windows.Forms.Label label_RemotePort;
-		private System.Windows.Forms.TextBox textBox_RemotePort;
-		private System.Windows.Forms.ComboBox comboBox_RemoteHost;
-		private System.Windows.Forms.TextBox textBox_LocalPort;
+		private MKY.Windows.Forms.TextBoxEx textBox_RemotePort;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_RemoteHost;
+		private MKY.Windows.Forms.TextBoxEx textBox_LocalPort;
 		private System.Windows.Forms.Label label_LocalPort;
 		private System.Windows.Forms.Label label_LocalInterface;
-		private System.Windows.Forms.ComboBox comboBox_LocalInterface;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_LocalInterface;
 		private System.Windows.Forms.Button button_RefreshLocalInterfaces;
 		private System.Windows.Forms.ToolTip toolTip;
-		private System.Windows.Forms.ComboBox comboBox_LocalFilter;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_LocalFilter;
 		private System.Windows.Forms.Label label_OnDialogMessage;
 		private System.Windows.Forms.Label label_LocalFilter;
 	}

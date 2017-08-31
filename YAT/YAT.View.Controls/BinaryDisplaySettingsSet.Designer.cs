@@ -30,15 +30,15 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.label_LengthLineBreakUnit = new System.Windows.Forms.Label();
-			this.textBox_SequenceLineBreakAfterSequence = new System.Windows.Forms.TextBox();
-			this.textBox_LengthLineBreak = new System.Windows.Forms.TextBox();
+			this.textBox_SequenceLineBreakAfterSequence = new MKY.Windows.Forms.TextBoxEx();
+			this.textBox_LengthLineBreak = new MKY.Windows.Forms.TextBoxEx();
 			this.checkBox_SequenceLineBreakAfter = new System.Windows.Forms.CheckBox();
 			this.checkBox_LengthLineBreak = new System.Windows.Forms.CheckBox();
 			this.label_TimedLineBreakUnit = new System.Windows.Forms.Label();
-			this.textBox_TimedLineBreakTimeout = new System.Windows.Forms.TextBox();
+			this.textBox_TimedLineBreakTimeout = new MKY.Windows.Forms.TextBoxEx();
 			this.checkBox_TimedLineBreak = new System.Windows.Forms.CheckBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.textBox_SequenceLineBreakBeforeSequence = new System.Windows.Forms.TextBox();
+			this.textBox_SequenceLineBreakBeforeSequence = new MKY.Windows.Forms.TextBoxEx();
 			this.checkBox_SequenceLineBreakBefore = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
@@ -168,15 +168,15 @@
 		#endregion
 
 		private System.Windows.Forms.Label label_LengthLineBreakUnit;
-		private System.Windows.Forms.TextBox textBox_SequenceLineBreakAfterSequence;
-		private System.Windows.Forms.TextBox textBox_LengthLineBreak;
+		private MKY.Windows.Forms.TextBoxEx textBox_SequenceLineBreakAfterSequence;
+		private MKY.Windows.Forms.TextBoxEx textBox_LengthLineBreak;
 		private System.Windows.Forms.CheckBox checkBox_SequenceLineBreakAfter;
 		private System.Windows.Forms.CheckBox checkBox_LengthLineBreak;
 		private System.Windows.Forms.Label label_TimedLineBreakUnit;
-		private System.Windows.Forms.TextBox textBox_TimedLineBreakTimeout;
+		private MKY.Windows.Forms.TextBoxEx textBox_TimedLineBreakTimeout;
 		private System.Windows.Forms.CheckBox checkBox_TimedLineBreak;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.CheckBox checkBox_SequenceLineBreakBefore;
-		private System.Windows.Forms.TextBox textBox_SequenceLineBreakBeforeSequence;
+		private MKY.Windows.Forms.TextBoxEx textBox_SequenceLineBreakBeforeSequence;
 	}
 }

@@ -33,14 +33,14 @@
 			this.checkBox_IsFile = new System.Windows.Forms.CheckBox();
 			this.button_SetMultiLineText = new System.Windows.Forms.Button();
 			this.label_Shortcut = new System.Windows.Forms.Label();
-			this.textBox_Description = new System.Windows.Forms.TextBox();
-			this.textBox_SingleLineText = new System.Windows.Forms.TextBox();
+			this.textBox_Description = new MKY.Windows.Forms.TextBoxEx();
+			this.textBox_SingleLineText = new MKY.Windows.Forms.TextBoxEx();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.button_SetFile = new System.Windows.Forms.Button();
 			this.button_Delete = new System.Windows.Forms.Button();
 			this.splitContainer_ExplicitDefaultRadix = new System.Windows.Forms.SplitContainer();
 			this.panel_ExplicitDefaultRadix = new System.Windows.Forms.Panel();
-			this.comboBox_ExplicitDefaultRadix = new System.Windows.Forms.ComboBox();
+			this.comboBox_ExplicitDefaultRadix = new MKY.Windows.Forms.ComboBoxEx();
 			this.panel_Command = new System.Windows.Forms.Panel();
 			this.splitContainer_ExplicitDefaultRadix.Panel1.SuspendLayout();
 			this.splitContainer_ExplicitDefaultRadix.Panel2.SuspendLayout();
@@ -225,13 +225,13 @@
 		private System.Windows.Forms.CheckBox checkBox_IsFile;
 		private System.Windows.Forms.Button button_SetMultiLineText;
 		private System.Windows.Forms.Label label_Shortcut;
-		private System.Windows.Forms.TextBox textBox_Description;
-		private System.Windows.Forms.TextBox textBox_SingleLineText;
+		private MKY.Windows.Forms.TextBoxEx textBox_Description;
+		private MKY.Windows.Forms.TextBoxEx textBox_SingleLineText;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.Button button_SetFile;
 		private System.Windows.Forms.Button button_Delete;
 		private System.Windows.Forms.SplitContainer splitContainer_ExplicitDefaultRadix;
-		private System.Windows.Forms.ComboBox comboBox_ExplicitDefaultRadix;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_ExplicitDefaultRadix;
 		private System.Windows.Forms.Panel panel_ExplicitDefaultRadix;
 		private System.Windows.Forms.Panel panel_Command;
 	}

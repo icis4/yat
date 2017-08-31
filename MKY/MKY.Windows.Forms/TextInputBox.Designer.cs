@@ -31,7 +31,7 @@
 			this.label_Text = new System.Windows.Forms.Label();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.button_Cancel = new System.Windows.Forms.Button();
-			this.textBox_InputText = new System.Windows.Forms.TextBox();
+			this.textBox_InputText = new MKY.Windows.Forms.TextBoxEx();
 			this.SuspendLayout();
 			// 
 			// label_Text
@@ -109,6 +109,6 @@
 		private System.Windows.Forms.Label label_Text;
 		private System.Windows.Forms.Button button_OK;
 		private System.Windows.Forms.Button button_Cancel;
-		private System.Windows.Forms.TextBox textBox_InputText;
+		private MKY.Windows.Forms.TextBoxEx textBox_InputText;
 	}
 }

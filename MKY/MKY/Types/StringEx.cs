@@ -558,7 +558,7 @@ namespace MKY
 			string left = Left(str, length);
 			string right = Right(str, (str.Length - left.Length));
 
-			List<string> l = new List<string>(2); // Preset the required capacity to improve memory management.
+			var l = new List<string>(2); // Preset the required capacity to improve memory management.
 			l.Add(left);
 			l.Add(right);
 			return (l.ToArray());
@@ -572,7 +572,7 @@ namespace MKY
 			string right = Right(str, length);
 			string left = Left(str, (str.Length - right.Length));
 
-			List<string> l = new List<string>(2); // Preset the required capacity to improve memory management.
+			var l = new List<string>(2); // Preset the required capacity to improve memory management.
 			l.Add(left);
 			l.Add(right);
 			return (l.ToArray());
@@ -583,7 +583,7 @@ namespace MKY
 		/// </summary>
 		public static string[] SplitFixedLength(string str, int desiredChunkLength)
 		{
-			List<string> l = new List<string>(str.Length); // Preset the required capacity to improve memory management.
+			var l = new List<string>(str.Length); // Preset the required capacity to improve memory management.
 			for (int i = 0; i < str.Length; i += desiredChunkLength)
 			{
 				int effectiveChunkLength = Int32Ex.Limit(desiredChunkLength, 0, str.Length - i);
@@ -609,7 +609,7 @@ namespace MKY
 
 		private static string[] SplitLexicallyWithoutTakingNewLineIntoAccount(string str, int desiredChunkLength)
 		{
-			List<int> spaces = new List<int>(ListInitialCapacityDefault); // Preset the initial capacity to improve memory management.
+			var spaces = new List<int>(ListInitialCapacityDefault); // Preset the initial capacity to improve memory management.
 
 			// Retrieve all spaces within the string:
 			int i = 0;
@@ -619,12 +619,12 @@ namespace MKY
 				i++;
 			}
 
-			// Add an extra space at the end of the string to ensure that the last chunk is split properly:
+			// Add an extra spaces at the end of the string to ensure that the last chunk is split properly:
 			spaces.Add(str.Length);
 
 			// Split the string into the desired chunk size taking word boundaries into account:
 			int startIndex = 0;
-			List<string> chunks = new List<string>(ListInitialCapacityDefault); // Preset the initial capacity to improve memory management.
+			var chunks = new List<string>(ListInitialCapacityDefault); // Preset the initial capacity to improve memory management.
 			while (startIndex < str.Length)
 			{
 				// Find the furthermost split position:
@@ -806,7 +806,7 @@ namespace MKY
 			string rep = substring.Replace(@"\""", @""""); // Replace \" by "" to ease processing below.
 
 			int offset = 0;
-			List<KeyValuePair<int, string>> l = new List<KeyValuePair<int, string>>(ListInitialCapacityDefault); // Preset the initial capacity to improve memory management.
+			var l = new List<KeyValuePair<int, string>>(ListInitialCapacityDefault); // Preset the initial capacity to improve memory management.
 			foreach (string s in rep.Split('"')) // Split string into chunks between double quotes.
 			{
 				l.Add(new KeyValuePair<int, string>(offset, s));
@@ -822,6 +822,54 @@ namespace MKY
 			}
 
 			return (InvalidIndex);
+		}
+
+		/// <summary>
+		/// Returns the start index of the same character class.
+		/// </summary>
+		/// <param name="str">The <see cref="string"/> object to process.</param>
+		/// <param name="startIndex">The search starting position.</param>
+		/// <returns>
+		/// The zero-based index position of the start of the same character class in the string.
+		/// </returns>
+		public static int StartIndexOfSameCharacterClass(string str, int startIndex)
+		{
+			int i = startIndex;
+
+			if (char.IsWhiteSpace(str, i)) // Includes 'IsSeparator' (Unicode space/line/paragraph
+			{                              // separators) as well as 'IsControl' (<CR>, <LF>,...).
+				for (/* i */; i >= 0; i--)
+				{
+					if (!char.IsWhiteSpace(str, i))
+						return (i + 1);
+				}
+			}
+			else if (char.IsPunctuation(str, i))
+			{
+				for (/* i */; i >= 0; i--)
+				{
+					if (!char.IsPunctuation(str, i))
+						return (i + 1);
+				}
+			}
+			else if (char.IsSymbol(str, i))
+			{
+				for (/* i */; i >= 0; i--)
+				{
+					if (!char.IsSymbol(str, i))
+						return (i + 1);
+				}
+			}
+			else
+			{
+				for (/* i */; i >= 0; i--)
+				{
+					if (CharEx.IsWhiteSpaceOrPunctuationOrSymbol(str, i))
+						return (i + 1);
+				}
+			}
+
+			return (0);
 		}
 
 		#endregion

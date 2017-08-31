@@ -76,8 +76,8 @@ namespace YAT.View.Forms
 			this.groupBox_Options = new System.Windows.Forms.GroupBox();
 			this.label_InfoEnclosure = new System.Windows.Forms.Label();
 			this.label_InfoSeparator = new System.Windows.Forms.Label();
-			this.comboBox_InfoEnclosure = new System.Windows.Forms.ComboBox();
-			this.comboBox_InfoSeparator = new System.Windows.Forms.ComboBox();
+			this.comboBox_InfoEnclosure = new MKY.Windows.Forms.ComboBoxEx();
+			this.comboBox_InfoSeparator = new MKY.Windows.Forms.ComboBoxEx();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.colorDialog = new System.Windows.Forms.ColorDialog();
 			this.checkBox_EnableFormatting = new System.Windows.Forms.CheckBox();
@@ -713,8 +713,8 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.GroupBox groupBox_Options;
 		private System.Windows.Forms.Label label_InfoEnclosure;
 		private System.Windows.Forms.Label label_InfoSeparator;
-		private System.Windows.Forms.ComboBox comboBox_InfoEnclosure;
-		private System.Windows.Forms.ComboBox comboBox_InfoSeparator;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_InfoEnclosure;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_InfoSeparator;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.ColorDialog colorDialog;
 		private System.Windows.Forms.CheckBox checkBox_EnableFormatting;

@@ -48,7 +48,7 @@ namespace YAT.View.Forms
 			this.checkBox_Options_FolderChannel = new System.Windows.Forms.CheckBox();
 			this.groupBox_Options_Name = new System.Windows.Forms.GroupBox();
 			this.checkBox_Options_NameFormat = new System.Windows.Forms.CheckBox();
-			this.comboBox_Options_NameSeparator = new System.Windows.Forms.ComboBox();
+			this.comboBox_Options_NameSeparator = new MKY.Windows.Forms.ComboBoxEx();
 			this.checkBox_Options_NameChannel = new System.Windows.Forms.CheckBox();
 			this.checkBox_Options_NameTime = new System.Windows.Forms.CheckBox();
 			this.checkBox_Options_NameDate = new System.Windows.Forms.CheckBox();
@@ -64,7 +64,7 @@ namespace YAT.View.Forms
 			this.pathLabel_Raw_Tx = new MKY.Windows.Forms.PathLabel();
 			this.checkBox_Raw_Bidir = new System.Windows.Forms.CheckBox();
 			this.label_Raw_Extension = new System.Windows.Forms.Label();
-			this.comboBox_Raw_Extension = new System.Windows.Forms.ComboBox();
+			this.comboBox_Raw_Extension = new MKY.Windows.Forms.ComboBoxEx();
 			this.checkBox_Raw_Rx = new System.Windows.Forms.CheckBox();
 			this.checkBox_Raw_Tx = new System.Windows.Forms.CheckBox();
 			this.groupBox_Neat = new System.Windows.Forms.GroupBox();
@@ -72,7 +72,7 @@ namespace YAT.View.Forms
 			this.pathLabel_Neat_Bidir = new MKY.Windows.Forms.PathLabel();
 			this.pathLabel_Neat_Tx = new MKY.Windows.Forms.PathLabel();
 			this.label_Neat_Extension = new System.Windows.Forms.Label();
-			this.comboBox_Neat_Extension = new System.Windows.Forms.ComboBox();
+			this.comboBox_Neat_Extension = new MKY.Windows.Forms.ComboBoxEx();
 			this.checkBox_Neat_Rx = new System.Windows.Forms.CheckBox();
 			this.checkBox_Neat_Bidir = new System.Windows.Forms.CheckBox();
 			this.checkBox_Neat_Tx = new System.Windows.Forms.CheckBox();
@@ -628,7 +628,7 @@ namespace YAT.View.Forms
 		#endregion
 
 		private System.Windows.Forms.GroupBox groupBox_Raw;
-		private System.Windows.Forms.ComboBox comboBox_Options_NameSeparator;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_Options_NameSeparator;
 		private System.Windows.Forms.CheckBox checkBox_Options_NameChannel;
 		private System.Windows.Forms.CheckBox checkBox_Options_NameTime;
 		private System.Windows.Forms.CheckBox checkBox_Options_NameDate;
@@ -640,13 +640,13 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.GroupBox groupBox_Options_Name;
 		private System.Windows.Forms.GroupBox groupBox_Options_Folders;
 		private System.Windows.Forms.Label label_Raw_Extension;
-		private System.Windows.Forms.ComboBox comboBox_Raw_Extension;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_Raw_Extension;
 		private System.Windows.Forms.CheckBox checkBox_Raw_Rx;
 		private System.Windows.Forms.CheckBox checkBox_Raw_Tx;
 		private System.Windows.Forms.GroupBox groupBox_Neat;
 		private System.Windows.Forms.CheckBox checkBox_Raw_Bidir;
 		private System.Windows.Forms.GroupBox groupBox_Settings;
-		private System.Windows.Forms.ComboBox comboBox_Neat_Extension;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_Neat_Extension;
 		private System.Windows.Forms.Label label_Neat_Extension;
 		private System.Windows.Forms.CheckBox checkBox_Neat_Tx;
 		private System.Windows.Forms.CheckBox checkBox_Neat_Bidir;
