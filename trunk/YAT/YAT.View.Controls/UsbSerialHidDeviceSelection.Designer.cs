@@ -30,7 +30,7 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.button_RefreshPorts = new System.Windows.Forms.Button();
-			this.comboBox_Device = new System.Windows.Forms.ComboBox();
+			this.comboBox_Device = new MKY.Windows.Forms.ComboBoxEx();
 			this.label_Device = new System.Windows.Forms.Label();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.label_OnDialogMessage = new System.Windows.Forms.Label();
@@ -100,7 +100,7 @@
 		#endregion
 
 		private System.Windows.Forms.Button button_RefreshPorts;
-		private System.Windows.Forms.ComboBox comboBox_Device;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_Device;
 		private System.Windows.Forms.Label label_Device;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.Label label_OnDialogMessage;

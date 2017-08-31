@@ -30,22 +30,22 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SerialPortSettings));
-			this.comboBox_StopBits = new System.Windows.Forms.ComboBox();
-			this.comboBox_FlowControl = new System.Windows.Forms.ComboBox();
-			this.comboBox_Parity = new System.Windows.Forms.ComboBox();
-			this.comboBox_DataBits = new System.Windows.Forms.ComboBox();
-			this.comboBox_BaudRate = new System.Windows.Forms.ComboBox();
+			this.comboBox_StopBits = new MKY.Windows.Forms.ComboBoxEx();
+			this.comboBox_FlowControl = new MKY.Windows.Forms.ComboBoxEx();
+			this.comboBox_Parity = new MKY.Windows.Forms.ComboBoxEx();
+			this.comboBox_DataBits = new MKY.Windows.Forms.ComboBoxEx();
+			this.comboBox_BaudRate = new MKY.Windows.Forms.ComboBoxEx();
 			this.label_FlowControl = new System.Windows.Forms.Label();
 			this.label_StopBits = new System.Windows.Forms.Label();
 			this.label_Parity = new System.Windows.Forms.Label();
 			this.label_DataBits = new System.Windows.Forms.Label();
 			this.label_BaudRate = new System.Windows.Forms.Label();
 			this.label_AutoReopenIntervalUnit = new System.Windows.Forms.Label();
-			this.textBox_AutoReopenInterval = new System.Windows.Forms.TextBox();
+			this.textBox_AutoReopenInterval = new MKY.Windows.Forms.TextBoxEx();
 			this.checkBox_AutoReopen = new System.Windows.Forms.CheckBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.checkBox_AliveMonitor = new System.Windows.Forms.CheckBox();
-			this.textBox_AliveMonitorInterval = new System.Windows.Forms.TextBox();
+			this.textBox_AliveMonitorInterval = new MKY.Windows.Forms.TextBoxEx();
 			this.label_AliveMonitorIntervalUnit = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
@@ -247,22 +247,22 @@
 
 		#endregion
 
-		private System.Windows.Forms.ComboBox comboBox_StopBits;
-		private System.Windows.Forms.ComboBox comboBox_FlowControl;
-		private System.Windows.Forms.ComboBox comboBox_Parity;
-		private System.Windows.Forms.ComboBox comboBox_DataBits;
-		private System.Windows.Forms.ComboBox comboBox_BaudRate;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_StopBits;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_FlowControl;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_Parity;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_DataBits;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_BaudRate;
 		private System.Windows.Forms.Label label_FlowControl;
 		private System.Windows.Forms.Label label_StopBits;
 		private System.Windows.Forms.Label label_Parity;
 		private System.Windows.Forms.Label label_DataBits;
 		private System.Windows.Forms.Label label_BaudRate;
 		private System.Windows.Forms.Label label_AutoReopenIntervalUnit;
-		private System.Windows.Forms.TextBox textBox_AutoReopenInterval;
+		private MKY.Windows.Forms.TextBoxEx textBox_AutoReopenInterval;
 		private System.Windows.Forms.CheckBox checkBox_AutoReopen;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.CheckBox checkBox_AliveMonitor;
-		private System.Windows.Forms.TextBox textBox_AliveMonitorInterval;
+		private MKY.Windows.Forms.TextBoxEx textBox_AliveMonitorInterval;
 		private System.Windows.Forms.Label label_AliveMonitorIntervalUnit;
 	}
 }

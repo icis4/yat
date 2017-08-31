@@ -32,8 +32,8 @@
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.button_SetMultiLineText = new System.Windows.Forms.Button();
 			this.button_Send = new System.Windows.Forms.Button();
-			this.comboBox_SingleLineText = new System.Windows.Forms.ComboBox();
-			this.comboBox_ExplicitDefaultRadix = new System.Windows.Forms.ComboBox();
+			this.comboBox_SingleLineText = new MKY.Windows.Forms.ComboBoxEx();
+			this.comboBox_ExplicitDefaultRadix = new MKY.Windows.Forms.ComboBoxEx();
 			this.splitContainer_Send = new System.Windows.Forms.SplitContainer();
 			this.splitContainer_ExplicitDefaultRadix = new System.Windows.Forms.SplitContainer();
 			this.panel_ExplicitDefaultRadix = new System.Windows.Forms.Panel();
@@ -200,9 +200,9 @@
 		private System.Windows.Forms.SplitContainer splitContainer_Send;
 		private System.Windows.Forms.Button button_SetMultiLineText;
 		private System.Windows.Forms.Button button_Send;
-		private System.Windows.Forms.ComboBox comboBox_SingleLineText;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_SingleLineText;
 		private System.Windows.Forms.SplitContainer splitContainer_ExplicitDefaultRadix;
-		private System.Windows.Forms.ComboBox comboBox_ExplicitDefaultRadix;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_ExplicitDefaultRadix;
 		private System.Windows.Forms.Panel panel_Command;
 		private System.Windows.Forms.Panel panel_Send;
 		private System.Windows.Forms.Panel panel_ExplicitDefaultRadix;

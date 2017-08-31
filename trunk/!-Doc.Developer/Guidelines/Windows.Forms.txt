@@ -1,4 +1,19 @@
 ﻿
+Enable Ctrl+Backspace and Ctrl+A
+--------------------------------
+
+By default, Ctrl+Backspace is not activated in...
+ ...System.Windows.Forms.TextBox
+ ...System.Windows.Forms.ComboBox
+
+By default, Ctrl+A is not activated in...
+ ...System.Windows.Forms.TextBox if Multiline = true
+
+To activate, use...
+ ...MKY.Windows.Forms.TextBoxEx
+ ...MKY.Windows.Forms.ComboBoxEx
+
+
 Allow proper system scaling for values other than 100%
 ------------------------------------------------------
 

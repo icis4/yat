@@ -33,7 +33,7 @@
 			this.button_OpenFile = new System.Windows.Forms.Button();
 			this.button_Send = new System.Windows.Forms.Button();
 			this.pathComboBox_FilePath = new MKY.Windows.Forms.PathComboBox();
-			this.comboBox_ExplicitDefaultRadix = new System.Windows.Forms.ComboBox();
+			this.comboBox_ExplicitDefaultRadix = new MKY.Windows.Forms.ComboBoxEx();
 			this.splitContainer_Send = new System.Windows.Forms.SplitContainer();
 			this.splitContainer_ExplicitDefaultRadix = new System.Windows.Forms.SplitContainer();
 			this.panel_ExplicitDefaultRadix = new System.Windows.Forms.Panel();
@@ -197,7 +197,7 @@
 		private System.Windows.Forms.Button button_Send;
 		private MKY.Windows.Forms.PathComboBox pathComboBox_FilePath;
 		private System.Windows.Forms.SplitContainer splitContainer_ExplicitDefaultRadix;
-		private System.Windows.Forms.ComboBox comboBox_ExplicitDefaultRadix;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_ExplicitDefaultRadix;
 		private System.Windows.Forms.Panel panel_ExplicitDefaultRadix;
 		private System.Windows.Forms.Panel panel_Send;
 		private System.Windows.Forms.Panel panel_Command;

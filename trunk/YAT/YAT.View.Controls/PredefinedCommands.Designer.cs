@@ -34,7 +34,7 @@
 			this.splitContainer_Lower = new System.Windows.Forms.SplitContainer();
 			this.panel_Commands = new System.Windows.Forms.Panel();
 			this.panel_Navigation = new System.Windows.Forms.Panel();
-			this.comboBox_Pages = new System.Windows.Forms.ComboBox();
+			this.comboBox_Pages = new MKY.Windows.Forms.ComboBoxEx();
 			this.label_Page = new System.Windows.Forms.Label();
 			this.button_PagePrevious = new System.Windows.Forms.Button();
 			this.button_PageNext = new System.Windows.Forms.Button();
@@ -217,7 +217,7 @@
 		private System.Windows.Forms.SplitContainer splitContainer_Commands;
 		private System.Windows.Forms.Label label_Shortcuts;
 		private System.Windows.Forms.SplitContainer splitContainer_Lower;
-		private System.Windows.Forms.ComboBox comboBox_Pages;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_Pages;
 		private System.Windows.Forms.Button button_PageNext;
 		private System.Windows.Forms.Button button_PagePrevious;
 		private System.Windows.Forms.Label label_Page;

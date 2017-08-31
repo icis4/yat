@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.textBox_Lines = new System.Windows.Forms.TextBox();
+			this.textBox_Lines = new MKY.Windows.Forms.TextBoxEx();
 			this.label_Remarks = new System.Windows.Forms.Label();
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
@@ -114,7 +114,7 @@
 
 		#endregion
 
-		private System.Windows.Forms.TextBox textBox_Lines;
+		private MKY.Windows.Forms.TextBoxEx textBox_Lines;
 		private System.Windows.Forms.Label label_Remarks;
 		private System.Windows.Forms.Button button_Cancel;
 		private System.Windows.Forms.Button button_OK;

@@ -34,7 +34,7 @@ namespace YAT.View.Forms
 		{
             this.button_Close = new System.Windows.Forms.Button();
             this.groupBox_Exception = new System.Windows.Forms.GroupBox();
-            this.textBox_Exception = new System.Windows.Forms.TextBox();
+            this.textBox_Exception = new MKY.Windows.Forms.TextBoxEx();
             this.button_CopyToClipboard = new System.Windows.Forms.Button();
             this.button_Instructions = new System.Windows.Forms.Button();
             this.groupBox_Message = new System.Windows.Forms.GroupBox();
@@ -161,7 +161,7 @@ namespace YAT.View.Forms
 
 		private System.Windows.Forms.Button button_Close;
 		private System.Windows.Forms.GroupBox groupBox_Exception;
-		private System.Windows.Forms.TextBox textBox_Exception;
+		private MKY.Windows.Forms.TextBoxEx textBox_Exception;
 		private System.Windows.Forms.Button button_CopyToClipboard;
 		private System.Windows.Forms.Button button_Instructions;
 		private System.Windows.Forms.GroupBox groupBox_Message;
