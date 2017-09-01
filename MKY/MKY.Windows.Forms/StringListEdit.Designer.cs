@@ -38,7 +38,7 @@
 			// button_MoveDown
 			// 
 			this.button_MoveDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_MoveDown.Location = new System.Drawing.Point(69, 90);
+			this.button_MoveDown.Location = new System.Drawing.Point(69, 89);
 			this.button_MoveDown.Name = "button_MoveDown";
 			this.button_MoveDown.Size = new System.Drawing.Size(60, 23);
 			this.button_MoveDown.TabIndex = 4;
@@ -49,7 +49,7 @@
 			// button_MoveUp
 			// 
 			this.button_MoveUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_MoveUp.Location = new System.Drawing.Point(69, 61);
+			this.button_MoveUp.Location = new System.Drawing.Point(69, 60);
 			this.button_MoveUp.Name = "button_MoveUp";
 			this.button_MoveUp.Size = new System.Drawing.Size(60, 23);
 			this.button_MoveUp.TabIndex = 3;
@@ -60,7 +60,7 @@
 			// button_Delete
 			// 
 			this.button_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Delete.Location = new System.Drawing.Point(69, 32);
+			this.button_Delete.Location = new System.Drawing.Point(69, 31);
 			this.button_Delete.Name = "button_Delete";
 			this.button_Delete.Size = new System.Drawing.Size(60, 23);
 			this.button_Delete.TabIndex = 2;
@@ -71,7 +71,7 @@
 			// button_Add
 			// 
 			this.button_Add.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Add.Location = new System.Drawing.Point(69, 3);
+			this.button_Add.Location = new System.Drawing.Point(69, 2);
 			this.button_Add.Name = "button_Add";
 			this.button_Add.Size = new System.Drawing.Size(60, 23);
 			this.button_Add.TabIndex = 1;

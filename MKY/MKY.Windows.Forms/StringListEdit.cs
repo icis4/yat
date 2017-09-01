@@ -32,6 +32,8 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
+using MKY.ComponentModel;
+
 #endregion
 
 namespace MKY.Windows.Forms
@@ -57,7 +59,10 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public event EventHandler StringListChanged;
+		new public event EventHandler<StringCancelEventArgs> Validating;
+
+		/// <summary></summary>
+		public event EventHandler ListChanged;
 
 		#endregion
 
@@ -121,11 +126,12 @@ namespace MKY.Windows.Forms
 			{
 				if (TextInputBox.Show
 					(
-					this,
-					"Edit item:",
-					"Edit Item",
-					item,
-					out item
+						this,
+						"Item text:",
+						"Edit Item",
+						item,
+						TextInputBox_Validating,
+						out item
 					)
 					== DialogResult.OK)
 				{
@@ -135,17 +141,22 @@ namespace MKY.Windows.Forms
 			}
 		}
 
+		private void TextInputBox_Validating(object sender, StringCancelEventArgs e)
+		{
+			OnValidating(e);
+		}
+
 		[ModalBehavior(ModalBehavior.Always)]
 		private void button_Add_Click(object sender, EventArgs e)
 		{
 			string item;
 			if (TextInputBox.Show
 				(
-				this,
-				"Enter the items text:",
-				"Add Item",
-				"",
-				out item
+					this,
+					"Item text:",
+					"Add Item",
+					"",
+					out item
 				)
 				== DialogResult.OK)
 			{
@@ -257,9 +268,15 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
+		protected virtual void OnValidating(StringCancelEventArgs e)
+		{
+			EventHelper.RaiseSync(Validating, this, e);
+		}
+
+		/// <summary></summary>
 		protected virtual void OnStringListChanged(EventArgs e)
 		{
-			EventHelper.RaiseSync(StringListChanged, this, e);
+			EventHelper.RaiseSync(ListChanged, this, e);
 		}
 
 		#endregion
