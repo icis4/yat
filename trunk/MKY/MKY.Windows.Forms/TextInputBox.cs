@@ -27,6 +27,8 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
+using MKY.ComponentModel;
+
 namespace MKY.Windows.Forms
 {
 	/// <summary>
@@ -41,6 +43,16 @@ namespace MKY.Windows.Forms
 
 		private string inputText = "";
 		private string inputTextInEdit = "";
+
+		#endregion
+
+		#region Events
+		//==========================================================================================
+		// Events
+		//==========================================================================================
+
+		/// <summary></summary>
+		public event EventHandler<StringCancelEventArgs> Validating;
 
 		#endregion
 
@@ -112,7 +124,15 @@ namespace MKY.Windows.Forms
 
 		private void textBox_InputText_Validating(object sender, CancelEventArgs e)
 		{
-			this.inputTextInEdit = textBox_InputText.Text;
+			var text = textBox_InputText.Text;
+			var args = new StringCancelEventArgs(text);
+
+			OnValidating(args);
+
+			if (args.Cancel)
+				e.Cancel = true;
+			else
+				this.inputTextInEdit = text;
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -170,16 +190,54 @@ namespace MKY.Windows.Forms
 		[ModalBehavior(ModalBehavior.Always)]
 		public static DialogResult Show(IWin32Window owner, string text, string caption, string initialInputText, out string inputText)
 		{
+			return (Show(owner, text, caption, initialInputText, null, out inputText));
+		}
+
+		/// <summary>
+		/// Displays a input box in front of the specified object and with the specified
+		/// text and caption and returns the result.
+		/// </summary>
+		/// <param name="owner">
+		/// An implementation of System.Windows.Forms.IWin32Window that will own the modal dialog box.
+		/// </param>
+		/// <param name="text">
+		/// The text to display in the input box.
+		/// </param>
+		/// <param name="caption">
+		/// The text to display in the title bar of the input box.
+		/// </param>
+		/// <param name="initialInputText">
+		/// The initial text that is in the input box.
+		/// </param>
+		/// <param name="inputValidationCallback">
+		/// Input validation callback.
+		/// </param>
+		/// <param name="inputText">
+		/// The text that was entered in the input box.
+		/// </param>
+		/// <returns>
+		/// One of the System.Windows.Forms.DialogResult values.
+		/// </returns>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Text that is input needs to be returned in addition to the dialog result.")]
+		[ModalBehavior(ModalBehavior.Always)]
+		public static DialogResult Show(IWin32Window owner, string text, string caption, string initialInputText, EventHandler<StringCancelEventArgs> inputValidationCallback, out string inputText)
+		{
 			DialogResult dr;
 			var tib = new TextInputBox(text, caption, initialInputText);
 
 			ContextMenuStripShortcutModalFormWorkaround.EnterModalForm();
 			try
 			{
+				if (inputValidationCallback != null)
+					tib.Validating += inputValidationCallback;
+
 				dr = tib.ShowDialog(owner);
 			}
 			finally
 			{
+				if (inputValidationCallback != null)
+					tib.Validating -= inputValidationCallback;
+
 				ContextMenuStripShortcutModalFormWorkaround.LeaveModalForm();
 			}
 
@@ -189,6 +247,19 @@ namespace MKY.Windows.Forms
 				inputText = "";
 			
 			return (dr);
+		}
+
+		#endregion
+
+		#region Event Raising
+		//==========================================================================================
+		// Event Raising
+		//==========================================================================================
+
+		/// <summary></summary>
+		protected virtual void OnValidating(StringCancelEventArgs e)
+		{
+			EventHelper.RaiseSync(Validating, this, e);
 		}
 
 		#endregion
