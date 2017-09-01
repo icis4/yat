@@ -102,6 +102,7 @@ namespace MKY.Settings
 			private ApplicationSettingsFileAccess desiredFileAccess;
 			private FileAccessFlags effectiveFileAccess;
 			private Mutex mutex;
+			private bool mutexCreatedNew;
 
 			#endregion
 
@@ -133,10 +134,9 @@ namespace MKY.Settings
 						// immediately, and once only, and the success is stored in a boolean variable. This
 						// mechanism ensures that once an instance 'owns' the settings, it keeps it. And does
 						// so until it exits. Then the mutex is released by the destructor of this class.
-						bool createdNew;
-						this.mutex = new Mutex(true, Application.ProductName + "." + this.name, out createdNew);
+						this.mutex = new Mutex(true, Application.ProductName + "." + this.name, out this.mutexCreatedNew);
 
-						if (createdNew)
+						if (this.mutexCreatedNew)
 							this.effectiveFileAccess = FileAccessFlags.ReadWrite;
 						else
 							this.effectiveFileAccess = FileAccessFlags.Read;
@@ -194,7 +194,7 @@ namespace MKY.Settings
 				}
 			}
 
-#if (DEBUG)
+		#if (DEBUG)
 
 			/// <remarks>
 			/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
@@ -214,7 +214,7 @@ namespace MKY.Settings
 				DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 			}
 
-#endif // DEBUG
+		#endif // DEBUG
 
 			/// <summary></summary>
 			protected void AssertNotDisposed()
@@ -386,7 +386,9 @@ namespace MKY.Settings
 
 				if (this.mutex != null)
 				{
-					this.mutex.ReleaseMutex();
+					if (this.mutexCreatedNew)
+						this.mutex.ReleaseMutex();
+
 					this.mutex.Close();
 					this.mutex = null;
 				}

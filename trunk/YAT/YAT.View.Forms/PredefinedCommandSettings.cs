@@ -519,7 +519,7 @@ namespace YAT.View.Forms
 				)
 				== DialogResult.OK)
 			{
-				Model.Types.PredefinedCommandPage pcp = new Model.Types.PredefinedCommandPage(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage, pageName);
+				var pcp = new Model.Types.PredefinedCommandPage(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage, pageName);
 				this.settingsInEdit.Pages.Insert(SelectedPageIndex, pcp);
 				SetControls();
 			}
@@ -540,7 +540,7 @@ namespace YAT.View.Forms
 				)
 				== DialogResult.OK)
 			{
-				Model.Types.PredefinedCommandPage pcp = new Model.Types.PredefinedCommandPage(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage, pageName);
+				var pcp = new Model.Types.PredefinedCommandPage(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage, pageName);
 				this.settingsInEdit.Pages.Add(pcp);
 				this.selectedPage = this.settingsInEdit.Pages.Count;
 				SetControls();
@@ -561,7 +561,7 @@ namespace YAT.View.Forms
 				)
 				== DialogResult.OK)
 			{
-				Model.Types.PredefinedCommandPage pcp = new Model.Types.PredefinedCommandPage(this.settingsInEdit.Pages[SelectedPageIndex]);
+				var pcp = new Model.Types.PredefinedCommandPage(this.settingsInEdit.Pages[SelectedPageIndex]);
 				pcp.PageName = pageName;
 				this.settingsInEdit.Pages.Insert(SelectedPageIndex + 1, pcp);
 				SetControls();
@@ -590,7 +590,7 @@ namespace YAT.View.Forms
 
 		private void MovePageUp()
 		{
-			Model.Types.PredefinedCommandPage pcp = this.settingsInEdit.Pages[SelectedPageIndex];
+			var pcp = this.settingsInEdit.Pages[SelectedPageIndex];
 			this.settingsInEdit.Pages.RemoveAt(SelectedPageIndex);
 			this.selectedPage--;
 			this.settingsInEdit.Pages.Insert(SelectedPageIndex, pcp);
@@ -599,7 +599,7 @@ namespace YAT.View.Forms
 
 		private void MovePageDown()
 		{
-			Model.Types.PredefinedCommandPage pcp = this.settingsInEdit.Pages[SelectedPageIndex];
+			var pcp = this.settingsInEdit.Pages[SelectedPageIndex];
 			this.settingsInEdit.Pages.RemoveAt(SelectedPageIndex);
 			this.selectedPage++;
 			this.settingsInEdit.Pages.Insert(SelectedPageIndex, pcp);
