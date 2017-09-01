@@ -30,9 +30,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
+using MKY;
+using MKY.ComponentModel;
 using MKY.Text;
 using MKY.Windows.Forms;
 
@@ -392,23 +396,70 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.EolComment.SkipComment = checkBox_SkipEolComment.Checked;
+			this.settingsInEdit.TextExclusion.Enabled = checkBox_Exclude.Checked;
 		}
 
-		private void stringListEdit_EolCommentIndicators_StringListChanged(object sender, EventArgs e)
+		private void stringListEdit_ExcludePatterns_Validating(object sender, StringCancelEventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.EolComment.Indicators = new List<string>(stringListEdit_EolCommentIndicators.StringList);
+			try
+			{
+				var regex = new Regex(e.Value);
+			}
+			catch (ArgumentException ex)
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					ex.Message,
+					"Invalid Regex",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+				e.Cancel = true;
+			}
 		}
 
-		private void checkBox_SkipEolCommentWhiteSpace_CheckedChanged(object sender, EventArgs e)
+		private void stringListEdit_ExcludePatterns_ListChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.EolComment.SkipWhiteSpace = checkBox_SkipEolCommentWhiteSpace.Checked;
+			this.settingsInEdit.TextExclusion.Patterns = new List<string>(stringListEdit_ExcludePatterns.StringList);
+		}
+
+		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "YAT is not (yet) capable for RTL.")]
+		private void linkLabel_Regex_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			var linkUri = (e.Link.LinkData as string);
+			if (linkUri != null)
+			{
+				Exception ex;
+				if (MKY.Net.Browser.TryBrowseUri(linkUri, out ex))
+				{
+					e.Link.Visited = true;
+				}
+				else
+				{
+					string message = "Unable to open link." + Environment.NewLine + Environment.NewLine +
+					                 "System error message:" + Environment.NewLine + ex.Message;
+
+					MessageBox.Show
+					(
+						Parent,
+						message,
+						"Link Error",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+					);
+				}
+			}
+			else
+			{
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Link data is invalid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -459,6 +510,13 @@ namespace YAT.View.Forms
 
 				comboBox_Encoding.Items.Clear();
 				comboBox_Encoding.Items.AddRange(EncodingEx.GetItems());
+
+				var linkText = ".NET Regex Quick Reference";
+				var linkUri = @"https://docs.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference";
+				linkLabel_Regex.Links.Clear();
+				linkLabel_Regex.Text = linkText;
+				linkLabel_Regex.Links.Add(0, linkText.Length, linkUri);
+				linkLabel_Regex.Visible = true;
 			}
 			finally
 			{
@@ -528,12 +586,10 @@ namespace YAT.View.Forms
 					default:                              radioButton_SubstituteNone.Checked    = true; break;
 				}
 
-				bool doSkip = this.settingsInEdit.EolComment.SkipComment;
-				checkBox_SkipEolComment.Checked                = doSkip;
-				stringListEdit_EolCommentIndicators.Enabled    = doSkip;
-				stringListEdit_EolCommentIndicators.StringList = this.settingsInEdit.EolComment.Indicators.ToArray();
-				checkBox_SkipEolCommentWhiteSpace.Enabled      = doSkip;
-				checkBox_SkipEolCommentWhiteSpace.Checked      = this.settingsInEdit.EolComment.SkipWhiteSpace;
+				bool enabled = this.settingsInEdit.TextExclusion.Enabled;
+				checkBox_Exclude.Checked               = enabled;
+				stringListEdit_ExcludePatterns.Enabled = enabled;
+				stringListEdit_ExcludePatterns.StringList = this.settingsInEdit.TextExclusion.Patterns.ToArray();
 			}
 			finally
 			{

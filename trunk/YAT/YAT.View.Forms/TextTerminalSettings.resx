@@ -120,9 +120,17 @@
   <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
+  <data name="stringListEdit_ExcludePatterns.ToolTip" xml:space="preserve">
+    <value>By default, some standard comment indicators are prepared:
+"//..." and "/*...*/"
+XML "&lt;!--...--&gt;"
+Shell "#..." and "&lt;#...#&gt;"
+DOS/Batch "REM..." and "::..."
+
+All patterns omit surrounding whitespace characters by adding "\s*".
+To request additional default patters or suggestions on how to improve the patterns, please contact YAT.
+Visit the given link to find detailed information about the regex syntax.</value>
+  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>52</value>
   </metadata>

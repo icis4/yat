@@ -130,7 +130,7 @@
     <Compile Include="Terminal\InfoSeparator.cs" />
     <Compile Include="Terminal\SendItem.cs" />
     <Compile Include="TextTerminal\Settings\SendTextFileSettings.cs" />
-    <Compile Include="TextTerminal\Settings\EolCommentSettings.cs" />
+    <Compile Include="TextTerminal\Settings\TextExclusionSettings.cs" />
     <Compile Include="TextTerminal\Structs.cs" />
     <Compile Include="Terminal\Radix.cs" />
     <Compile Include="Terminal\DisplayElement.cs" />

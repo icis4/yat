@@ -46,16 +46,16 @@ namespace YAT.Domain.Settings
 		private int    encoding;
 		private bool   showEol;
 
+		private TextLineSendDelay  lineSendDelay;
+		private WaitForResponse    waitForResponse;
+		private CharSubstitution   charSubstitution;
+
 		/// <remarks>
 		/// Named 'sendFile' even though the type is named 'SendTextFile' because of reason
 		/// documented in the remarks of <see cref="SendTextFileSettings"/>.
 		/// </remarks>
 		private SendTextFileSettings sendFile;
-
-		private TextLineSendDelay  lineSendDelay;
-		private WaitForResponse    waitForResponse;
-		private CharSubstitution   charSubstitution;
-		private EolCommentSettings eolComment;
+		private TextExclusionSettings textExclusion;
 
 		/// <summary></summary>
 		public TextTerminalSettings()
@@ -70,7 +70,7 @@ namespace YAT.Domain.Settings
 			SetMyDefaults();
 
 			SendFile   = new SendTextFileSettings(SettingsType);
-			EolComment = new EolCommentSettings(SettingsType);
+			TextExclusion = new TextExclusionSettings(SettingsType);
 
 			SetNodeDefaults();
 			ClearChanged();
@@ -92,8 +92,8 @@ namespace YAT.Domain.Settings
 			WaitForResponse  = rhs.WaitForResponse;
 			CharSubstitution = rhs.CharSubstitution;
 
-			SendFile   = new SendTextFileSettings(rhs.SendFile);
-			EolComment = new EolCommentSettings(rhs.EolComment);
+			SendFile      = new SendTextFileSettings(rhs.SendFile);
+			TextExclusion = new TextExclusionSettings(rhs.TextExclusion);
 
 			ClearChanged();
 		}
@@ -125,18 +125,14 @@ namespace YAT.Domain.Settings
 		{
 			base.SetNodeDefaults();
 
-			EolComment.Indicators.Clear();
-			EolComment.Indicators.Add("//");
-			EolComment.Indicators.Add("/*");
-			EolComment.Indicators.Add("<!--"); // XML
-			EolComment.Indicators.Add("<#");   // PowerShell
-			EolComment.Indicators.Add("REM");  // Batch/Command
-
-			// FR #307 Add beginning-of-line comment indicators.
-			// Consider to merge both but allow Regex instead of simple text only.
-		////BolComment.Indicators.Clear();
-		////BolComment.Indicators.Add("#");  // PowerShell
-		////BolComment.Indicators.Add("::"); // Batch/Command
+			TextExclusion.Patterns.Clear();
+			TextExclusion.Patterns.Add(@"\s*//.*$");        // C++       //...
+			TextExclusion.Patterns.Add(@"\s*/\*.*\*/\s*");  // C         /*...*/
+			TextExclusion.Patterns.Add(@"\s*<!--.*-->\s*"); // XML       <!--...-->
+			TextExclusion.Patterns.Add(@"\s*#.*$");         // *Shell    #...
+			TextExclusion.Patterns.Add(@"\s*<#.*#>\s*");    // *Shell    <#...#>
+			TextExclusion.Patterns.Add(@"\s*REM.*$");       // DOS/Batch REM...
+			TextExclusion.Patterns.Add(@"\s*::.*$");        // DOS/Batch ::...
 		}
 
 		#region Properties
@@ -296,15 +292,15 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("EolComment")]
-		public virtual EolCommentSettings EolComment
+		public virtual TextExclusionSettings TextExclusion
 		{
-			get { return (this.eolComment); }
+			get { return (this.textExclusion); }
 			set
 			{
-				if (this.eolComment != value)
+				if (this.textExclusion != value)
 				{
-					var oldNode = this.eolComment;
-					this.eolComment = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+					var oldNode = this.textExclusion;
+					this.textExclusion = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
 
 					AttachOrReplaceOrDetachNode(oldNode, value);
 				}
