@@ -33,20 +33,19 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class EolCommentSettings : MKY.Settings.SettingsItem, IEquatable<EolCommentSettings>
+	public class TextExclusionSettings : MKY.Settings.SettingsItem, IEquatable<TextExclusionSettings>
 	{
-		private bool skipComment;
-		private bool skipWhiteSpace;
-		private List<string> indicators;
+		private bool enabled;
+		private List<string> patterns;
 
 		/// <summary></summary>
-		public EolCommentSettings()
+		public TextExclusionSettings()
 			: this(MKY.Settings.SettingsType.Explicit)
 		{
 		}
 
 		/// <summary></summary>
-		public EolCommentSettings(MKY.Settings.SettingsType settingsType)
+		public TextExclusionSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -57,12 +56,11 @@ namespace YAT.Domain.Settings
 		/// Set fields through properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public EolCommentSettings(EolCommentSettings rhs)
+		public TextExclusionSettings(TextExclusionSettings rhs)
 			: base(rhs)
 		{
-			SkipComment    = rhs.SkipComment;
-			SkipWhiteSpace = rhs.SkipWhiteSpace;
-			Indicators     = new List<string>(rhs.Indicators);
+			Enabled  = rhs.Enabled;
+			Patterns = new List<string>(rhs.Patterns);
 
 			ClearChanged();
 		}
@@ -74,9 +72,8 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			SkipComment    = false;
-			SkipWhiteSpace = true;
-			Indicators     = new List<string>();
+			Enabled  = false;
+			Patterns = new List<string>();
 		}
 
 		#region Properties
@@ -85,30 +82,15 @@ namespace YAT.Domain.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("SkipComment")]
-		public virtual bool SkipComment
+		[XmlElement("Enabled")]
+		public virtual bool Enabled
 		{
-			get { return (this.skipComment); }
+			get { return (this.enabled); }
 			set
 			{
-				if (this.skipComment != value)
+				if (this.enabled != value)
 				{
-					this.skipComment = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("SkipWhiteSpace")]
-		public virtual bool SkipWhiteSpace
-		{
-			get { return (this.skipWhiteSpace); }
-			set
-			{
-				if (this.skipWhiteSpace != value)
-				{
-					this.skipWhiteSpace = value;
+					this.enabled = value;
 					SetMyChanged();
 				}
 			}
@@ -117,15 +99,15 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
 		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
-		[XmlElement("Indicators")]
-		public virtual List<string> Indicators
+		[XmlElement("Patterns")]
+		public virtual List<string> Patterns
 		{
-			get { return (this.indicators); }
+			get { return (this.patterns); }
 			set
 			{
-				if (this.indicators != value)
+				if (this.patterns != value)
 				{
-					this.indicators = value;
+					this.patterns = value;
 					SetMyChanged();
 				}
 			}
@@ -151,9 +133,8 @@ namespace YAT.Domain.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ SkipComment   .GetHashCode();
-				hashCode = (hashCode * 397) ^ SkipWhiteSpace.GetHashCode();
-				hashCode = (hashCode * 397) ^ Indicators    .GetHashCode();
+				hashCode = (hashCode * 397) ^ Enabled .GetHashCode();
+				hashCode = (hashCode * 397) ^ Patterns.GetHashCode();
 
 				return (hashCode);
 			}
@@ -164,7 +145,7 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as EolCommentSettings));
+			return (Equals(obj as TextExclusionSettings));
 		}
 
 		/// <summary>
@@ -174,7 +155,7 @@ namespace YAT.Domain.Settings
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(EolCommentSettings other)
+		public bool Equals(TextExclusionSettings other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
@@ -184,16 +165,15 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				SkipComment   .Equals(                  other.SkipComment)    &&
-				SkipWhiteSpace.Equals(                  other.SkipWhiteSpace) &&
-				IEnumerableEx.ElementsEqual(Indicators, other.Indicators)
+				Enabled              .Equals(         other.Enabled) &&
+				IEnumerableEx.ElementsEqual(Patterns, other.Patterns)
 			);
 		}
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(EolCommentSettings lhs, EolCommentSettings rhs)
+		public static bool operator ==(TextExclusionSettings lhs, TextExclusionSettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -206,7 +186,7 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(EolCommentSettings lhs, EolCommentSettings rhs)
+		public static bool operator !=(TextExclusionSettings lhs, TextExclusionSettings rhs)
 		{
 			return (!(lhs == rhs));
 		}

@@ -33,6 +33,7 @@ namespace YAT.View.Forms
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TextTerminalSettings));
 			this.button_OK = new System.Windows.Forms.Button();
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
@@ -45,11 +46,11 @@ namespace YAT.View.Forms
 			this.label_TxEol = new System.Windows.Forms.Label();
 			this.comboBox_Encoding = new MKY.Windows.Forms.ComboBoxEx();
 			this.groupBox_Send = new System.Windows.Forms.GroupBox();
-			this.groupBox_Comments = new System.Windows.Forms.GroupBox();
-			this.checkBox_SkipEolCommentWhiteSpace = new System.Windows.Forms.CheckBox();
-			this.stringListEdit_EolCommentIndicators = new MKY.Windows.Forms.StringListEdit();
-			this.label_CommentIndicators = new System.Windows.Forms.Label();
-			this.checkBox_SkipEolComment = new System.Windows.Forms.CheckBox();
+			this.checkBox_SkipEmptyLines = new System.Windows.Forms.CheckBox();
+			this.groupBox_Exclude = new System.Windows.Forms.GroupBox();
+			this.linkLabel_Regex = new System.Windows.Forms.LinkLabel();
+			this.stringListEdit_ExcludePatterns = new MKY.Windows.Forms.StringListEdit();
+			this.checkBox_Exclude = new System.Windows.Forms.CheckBox();
 			this.groupBox_Substitute = new System.Windows.Forms.GroupBox();
 			this.radioButton_SubstituteToLower = new System.Windows.Forms.RadioButton();
 			this.radioButton_SubstituteToUpper = new System.Windows.Forms.RadioButton();
@@ -66,11 +67,10 @@ namespace YAT.View.Forms
 			this.label_Encoding = new System.Windows.Forms.Label();
 			this.button_Defaults = new System.Windows.Forms.Button();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.checkBox_SkipEmptyLines = new System.Windows.Forms.CheckBox();
 			this.groupBox_Settings.SuspendLayout();
 			this.groupBox_Eol.SuspendLayout();
 			this.groupBox_Send.SuspendLayout();
-			this.groupBox_Comments.SuspendLayout();
+			this.groupBox_Exclude.SuspendLayout();
 			this.groupBox_Substitute.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -107,7 +107,7 @@ namespace YAT.View.Forms
 			this.groupBox_Settings.Controls.Add(this.label_Encoding);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
-			this.groupBox_Settings.Size = new System.Drawing.Size(284, 592);
+			this.groupBox_Settings.Size = new System.Drawing.Size(284, 594);
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
@@ -121,7 +121,7 @@ namespace YAT.View.Forms
 			this.groupBox_Eol.Controls.Add(this.label_TxEol);
 			this.groupBox_Eol.Location = new System.Drawing.Point(6, 59);
 			this.groupBox_Eol.Name = "groupBox_Eol";
-			this.groupBox_Eol.Size = new System.Drawing.Size(272, 122);
+			this.groupBox_Eol.Size = new System.Drawing.Size(272, 119);
 			this.groupBox_Eol.TabIndex = 2;
 			this.groupBox_Eol.TabStop = false;
 			this.groupBox_Eol.Text = "EOL (end-of-line) sequence";
@@ -129,7 +129,7 @@ namespace YAT.View.Forms
 			// checkBox_ShowEol
 			// 
 			this.checkBox_ShowEol.AutoSize = true;
-			this.checkBox_ShowEol.Location = new System.Drawing.Point(11, 96);
+			this.checkBox_ShowEol.Location = new System.Drawing.Point(11, 93);
 			this.checkBox_ShowEol.Name = "checkBox_ShowEol";
 			this.checkBox_ShowEol.Size = new System.Drawing.Size(155, 17);
 			this.checkBox_ShowEol.TabIndex = 5;
@@ -139,7 +139,7 @@ namespace YAT.View.Forms
 			// checkBox_SeparateTxRxEol
 			// 
 			this.checkBox_SeparateTxRxEol.AutoSize = true;
-			this.checkBox_SeparateTxRxEol.Location = new System.Drawing.Point(11, 46);
+			this.checkBox_SeparateTxRxEol.Location = new System.Drawing.Point(11, 45);
 			this.checkBox_SeparateTxRxEol.Name = "checkBox_SeparateTxRxEol";
 			this.checkBox_SeparateTxRxEol.Size = new System.Drawing.Size(217, 17);
 			this.checkBox_SeparateTxRxEol.TabIndex = 2;
@@ -151,7 +151,7 @@ namespace YAT.View.Forms
 			// 
 			this.comboBox_RxEol.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_RxEol.Enabled = false;
-			this.comboBox_RxEol.Location = new System.Drawing.Point(113, 69);
+			this.comboBox_RxEol.Location = new System.Drawing.Point(113, 67);
 			this.comboBox_RxEol.Name = "comboBox_RxEol";
 			this.comboBox_RxEol.Size = new System.Drawing.Size(153, 21);
 			this.comboBox_RxEol.TabIndex = 4;
@@ -164,7 +164,7 @@ namespace YAT.View.Forms
 			// 
 			this.label_RxEol.AutoSize = true;
 			this.label_RxEol.Enabled = false;
-			this.label_RxEol.Location = new System.Drawing.Point(8, 72);
+			this.label_RxEol.Location = new System.Drawing.Point(8, 70);
 			this.label_RxEol.Name = "label_RxEol";
 			this.label_RxEol.Size = new System.Drawing.Size(97, 13);
 			this.label_RxEol.TabIndex = 3;
@@ -209,7 +209,7 @@ namespace YAT.View.Forms
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Send.Controls.Add(this.checkBox_SkipEmptyLines);
-			this.groupBox_Send.Controls.Add(this.groupBox_Comments);
+			this.groupBox_Send.Controls.Add(this.groupBox_Exclude);
 			this.groupBox_Send.Controls.Add(this.groupBox_Substitute);
 			this.groupBox_Send.Controls.Add(this.checkBox_WaitForResponse);
 			this.groupBox_Send.Controls.Add(this.textBox_DelayInterval);
@@ -220,72 +220,77 @@ namespace YAT.View.Forms
 			this.groupBox_Send.Controls.Add(this.textBox_Delay);
 			this.groupBox_Send.Controls.Add(this.label_DelayIntervalUnit);
 			this.groupBox_Send.Controls.Add(this.checkBox_Delay);
-			this.groupBox_Send.Location = new System.Drawing.Point(6, 187);
+			this.groupBox_Send.Location = new System.Drawing.Point(6, 184);
 			this.groupBox_Send.Name = "groupBox_Send";
-			this.groupBox_Send.Size = new System.Drawing.Size(272, 398);
+			this.groupBox_Send.Size = new System.Drawing.Size(272, 404);
 			this.groupBox_Send.TabIndex = 3;
 			this.groupBox_Send.TabStop = false;
 			this.groupBox_Send.Text = "Send Settings";
 			// 
-			// groupBox_Comments
+			// checkBox_SkipEmptyLines
 			// 
-			this.groupBox_Comments.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.checkBox_SkipEmptyLines.AutoSize = true;
+			this.checkBox_SkipEmptyLines.Location = new System.Drawing.Point(12, 21);
+			this.checkBox_SkipEmptyLines.Name = "checkBox_SkipEmptyLines";
+			this.checkBox_SkipEmptyLines.Size = new System.Drawing.Size(192, 17);
+			this.checkBox_SkipEmptyLines.TabIndex = 0;
+			this.checkBox_SkipEmptyLines.Text = "&Skip empty lines when sending files";
+			this.checkBox_SkipEmptyLines.UseVisualStyleBackColor = true;
+			this.checkBox_SkipEmptyLines.CheckedChanged += new System.EventHandler(this.checkBox_SkipEmptyLines_CheckedChanged);
+			// 
+			// groupBox_Exclude
+			// 
+			this.groupBox_Exclude.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Comments.Controls.Add(this.checkBox_SkipEolCommentWhiteSpace);
-			this.groupBox_Comments.Controls.Add(this.stringListEdit_EolCommentIndicators);
-			this.groupBox_Comments.Controls.Add(this.label_CommentIndicators);
-			this.groupBox_Comments.Controls.Add(this.checkBox_SkipEolComment);
-			this.groupBox_Comments.Location = new System.Drawing.Point(6, 209);
-			this.groupBox_Comments.Name = "groupBox_Comments";
-			this.groupBox_Comments.Size = new System.Drawing.Size(259, 183);
-			this.groupBox_Comments.TabIndex = 11;
-			this.groupBox_Comments.TabStop = false;
-			this.groupBox_Comments.Text = "Comments";
+			this.groupBox_Exclude.Controls.Add(this.linkLabel_Regex);
+			this.groupBox_Exclude.Controls.Add(this.stringListEdit_ExcludePatterns);
+			this.groupBox_Exclude.Controls.Add(this.checkBox_Exclude);
+			this.groupBox_Exclude.Location = new System.Drawing.Point(6, 209);
+			this.groupBox_Exclude.Name = "groupBox_Exclude";
+			this.groupBox_Exclude.Size = new System.Drawing.Size(259, 189);
+			this.groupBox_Exclude.TabIndex = 11;
+			this.groupBox_Exclude.TabStop = false;
+			this.groupBox_Exclude.Text = "Text Exclusion";
 			// 
-			// checkBox_SkipEolCommentWhiteSpace
+			// linkLabel_Regex
 			// 
-			this.checkBox_SkipEolCommentWhiteSpace.AutoSize = true;
-			this.checkBox_SkipEolCommentWhiteSpace.Location = new System.Drawing.Point(10, 160);
-			this.checkBox_SkipEolCommentWhiteSpace.Name = "checkBox_SkipEolCommentWhiteSpace";
-			this.checkBox_SkipEolCommentWhiteSpace.Size = new System.Drawing.Size(190, 17);
-			this.checkBox_SkipEolCommentWhiteSpace.TabIndex = 3;
-			this.checkBox_SkipEolCommentWhiteSpace.Text = "Omit w&hitespaces before indicators";
-			this.checkBox_SkipEolCommentWhiteSpace.CheckedChanged += new System.EventHandler(this.checkBox_SkipEolCommentWhiteSpace_CheckedChanged);
+			this.linkLabel_Regex.AutoSize = true;
+			this.linkLabel_Regex.Location = new System.Drawing.Point(24, 167);
+			this.linkLabel_Regex.Name = "linkLabel_Regex";
+			this.linkLabel_Regex.Size = new System.Drawing.Size(150, 13);
+			this.linkLabel_Regex.TabIndex = 2;
+			this.linkLabel_Regex.TabStop = true;
+			this.linkLabel_Regex.Text = ".NET Regex Quick Reference";
+			this.linkLabel_Regex.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_Regex_LinkClicked);
 			// 
-			// stringListEdit_EolCommentIndicators
+			// stringListEdit_ExcludePatterns
 			// 
-			this.stringListEdit_EolCommentIndicators.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.stringListEdit_ExcludePatterns.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.stringListEdit_EolCommentIndicators.Location = new System.Drawing.Point(107, 38);
-			this.stringListEdit_EolCommentIndicators.MinimumSize = new System.Drawing.Size(132, 116);
-			this.stringListEdit_EolCommentIndicators.Name = "stringListEdit_EolCommentIndicators";
-			this.stringListEdit_EolCommentIndicators.Size = new System.Drawing.Size(146, 116);
-			this.stringListEdit_EolCommentIndicators.StringList = new string[0];
-			this.stringListEdit_EolCommentIndicators.TabIndex = 2;
-			this.stringListEdit_EolCommentIndicators.StringListChanged += new System.EventHandler(this.stringListEdit_EolCommentIndicators_StringListChanged);
+			this.stringListEdit_ExcludePatterns.Location = new System.Drawing.Point(10, 38);
+			this.stringListEdit_ExcludePatterns.MinimumSize = new System.Drawing.Size(132, 116);
+			this.stringListEdit_ExcludePatterns.Name = "stringListEdit_ExcludePatterns";
+			this.stringListEdit_ExcludePatterns.Size = new System.Drawing.Size(243, 129);
+			this.stringListEdit_ExcludePatterns.StringList = new string[0];
+			this.stringListEdit_ExcludePatterns.TabIndex = 1;
+			this.toolTip.SetToolTip(this.stringListEdit_ExcludePatterns, resources.GetString("stringListEdit_ExcludePatterns.ToolTip"));
+			this.stringListEdit_ExcludePatterns.Validating += new System.EventHandler<MKY.ComponentModel.StringCancelEventArgs>(this.stringListEdit_ExcludePatterns_Validating);
+			this.stringListEdit_ExcludePatterns.ListChanged += new System.EventHandler(this.stringListEdit_ExcludePatterns_ListChanged);
 			// 
-			// label_CommentIndicators
+			// checkBox_Exclude
 			// 
-			this.label_CommentIndicators.AutoSize = true;
-			this.label_CommentIndicators.Location = new System.Drawing.Point(7, 42);
-			this.label_CommentIndicators.Name = "label_CommentIndicators";
-			this.label_CommentIndicators.Size = new System.Drawing.Size(102, 13);
-			this.label_CommentIndicators.TabIndex = 1;
-			this.label_CommentIndicators.Text = "Comment &indicators:";
-			// 
-			// checkBox_SkipEolComment
-			// 
-			this.checkBox_SkipEolComment.AutoSize = true;
-			this.checkBox_SkipEolComment.Location = new System.Drawing.Point(10, 19);
-			this.checkBox_SkipEolComment.Name = "checkBox_SkipEolComment";
-			this.checkBox_SkipEolComment.Size = new System.Drawing.Size(233, 17);
-			this.checkBox_SkipEolComment.TabIndex = 0;
-			this.checkBox_SkipEolComment.Text = "Do not send text that is marked as &comment";
-			this.checkBox_SkipEolComment.CheckedChanged += new System.EventHandler(this.checkBox_SkipEolComment_CheckedChanged);
+			this.checkBox_Exclude.AutoSize = true;
+			this.checkBox_Exclude.Location = new System.Drawing.Point(10, 19);
+			this.checkBox_Exclude.Name = "checkBox_Exclude";
+			this.checkBox_Exclude.Size = new System.Drawing.Size(232, 17);
+			this.checkBox_Exclude.TabIndex = 0;
+			this.checkBox_Exclude.Text = "Do not send text with the following patterns:";
+			this.checkBox_Exclude.CheckedChanged += new System.EventHandler(this.checkBox_SkipEolComment_CheckedChanged);
 			// 
 			// groupBox_Substitute
 			// 
-			this.groupBox_Substitute.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.groupBox_Substitute.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Substitute.Controls.Add(this.radioButton_SubstituteToLower);
 			this.groupBox_Substitute.Controls.Add(this.radioButton_SubstituteToUpper);
@@ -295,7 +300,7 @@ namespace YAT.View.Forms
 			this.groupBox_Substitute.Size = new System.Drawing.Size(260, 88);
 			this.groupBox_Substitute.TabIndex = 10;
 			this.groupBox_Substitute.TabStop = false;
-			this.groupBox_Substitute.Text = "Substitute Characters";
+			this.groupBox_Substitute.Text = "Character Substitution";
 			// 
 			// radioButton_SubstituteToLower
 			// 
@@ -329,7 +334,6 @@ namespace YAT.View.Forms
 			// 
 			// checkBox_WaitForResponse
 			// 
-			this.checkBox_WaitForResponse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBox_WaitForResponse.AutoSize = true;
 			this.checkBox_WaitForResponse.Location = new System.Drawing.Point(12, 69);
 			this.checkBox_WaitForResponse.Name = "checkBox_WaitForResponse";
@@ -343,7 +347,6 @@ namespace YAT.View.Forms
 			// 
 			// textBox_DelayInterval
 			// 
-			this.textBox_DelayInterval.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.textBox_DelayInterval.Location = new System.Drawing.Point(195, 43);
 			this.textBox_DelayInterval.Name = "textBox_DelayInterval";
 			this.textBox_DelayInterval.Size = new System.Drawing.Size(40, 20);
@@ -354,7 +357,6 @@ namespace YAT.View.Forms
 			// 
 			// label_WaitForResponse
 			// 
-			this.label_WaitForResponse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_WaitForResponse.AutoSize = true;
 			this.label_WaitForResponse.Location = new System.Drawing.Point(27, 89);
 			this.label_WaitForResponse.Name = "label_WaitForResponse";
@@ -365,7 +367,6 @@ namespace YAT.View.Forms
 			// 
 			// label_WaitForResponseUnit
 			// 
-			this.label_WaitForResponseUnit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_WaitForResponseUnit.AutoSize = true;
 			this.label_WaitForResponseUnit.Location = new System.Drawing.Point(162, 89);
 			this.label_WaitForResponseUnit.Name = "label_WaitForResponseUnit";
@@ -376,7 +377,6 @@ namespace YAT.View.Forms
 			// 
 			// label_DelayUnit
 			// 
-			this.label_DelayUnit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_DelayUnit.AutoSize = true;
 			this.label_DelayUnit.Location = new System.Drawing.Point(148, 46);
 			this.label_DelayUnit.Name = "label_DelayUnit";
@@ -387,7 +387,6 @@ namespace YAT.View.Forms
 			// 
 			// textBox_WaitForResponse
 			// 
-			this.textBox_WaitForResponse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.textBox_WaitForResponse.Location = new System.Drawing.Point(111, 86);
 			this.textBox_WaitForResponse.Name = "textBox_WaitForResponse";
 			this.textBox_WaitForResponse.Size = new System.Drawing.Size(51, 20);
@@ -397,7 +396,6 @@ namespace YAT.View.Forms
 			// 
 			// textBox_Delay
 			// 
-			this.textBox_Delay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.textBox_Delay.Location = new System.Drawing.Point(97, 43);
 			this.textBox_Delay.Name = "textBox_Delay";
 			this.textBox_Delay.Size = new System.Drawing.Size(51, 20);
@@ -407,7 +405,6 @@ namespace YAT.View.Forms
 			// 
 			// label_DelayIntervalUnit
 			// 
-			this.label_DelayIntervalUnit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_DelayIntervalUnit.AutoSize = true;
 			this.label_DelayIntervalUnit.Location = new System.Drawing.Point(235, 46);
 			this.label_DelayIntervalUnit.Name = "label_DelayIntervalUnit";
@@ -418,7 +415,6 @@ namespace YAT.View.Forms
 			// 
 			// checkBox_Delay
 			// 
-			this.checkBox_Delay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBox_Delay.AutoSize = true;
 			this.checkBox_Delay.Location = new System.Drawing.Point(12, 45);
 			this.checkBox_Delay.Name = "checkBox_Delay";
@@ -446,24 +442,13 @@ namespace YAT.View.Forms
 			this.button_Defaults.Text = "&Defaults...";
 			this.button_Defaults.Click += new System.EventHandler(this.button_Defaults_Click);
 			// 
-			// checkBox_SkipEmptyLines
-			// 
-			this.checkBox_SkipEmptyLines.AutoSize = true;
-			this.checkBox_SkipEmptyLines.Location = new System.Drawing.Point(12, 21);
-			this.checkBox_SkipEmptyLines.Name = "checkBox_SkipEmptyLines";
-			this.checkBox_SkipEmptyLines.Size = new System.Drawing.Size(192, 17);
-			this.checkBox_SkipEmptyLines.TabIndex = 0;
-			this.checkBox_SkipEmptyLines.Text = "&Skip empty lines when sending files";
-			this.checkBox_SkipEmptyLines.UseVisualStyleBackColor = true;
-			this.checkBox_SkipEmptyLines.CheckedChanged += new System.EventHandler(this.checkBox_SkipEmptyLines_CheckedChanged);
-			// 
 			// TextTerminalSettings
 			// 
 			this.AcceptButton = this.button_OK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(399, 616);
+			this.ClientSize = new System.Drawing.Size(399, 618);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.groupBox_Settings);
 			this.Controls.Add(this.button_Cancel);
@@ -482,8 +467,8 @@ namespace YAT.View.Forms
 			this.groupBox_Eol.PerformLayout();
 			this.groupBox_Send.ResumeLayout(false);
 			this.groupBox_Send.PerformLayout();
-			this.groupBox_Comments.ResumeLayout(false);
-			this.groupBox_Comments.PerformLayout();
+			this.groupBox_Exclude.ResumeLayout(false);
+			this.groupBox_Exclude.PerformLayout();
 			this.groupBox_Substitute.ResumeLayout(false);
 			this.groupBox_Substitute.PerformLayout();
 			this.ResumeLayout(false);
@@ -519,12 +504,11 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.Label label_RxEol;
 		private MKY.Windows.Forms.ComboBoxEx comboBox_TxEol;
 		private System.Windows.Forms.Label label_TxEol;
-		private System.Windows.Forms.GroupBox groupBox_Comments;
-		private System.Windows.Forms.Label label_CommentIndicators;
-		private System.Windows.Forms.CheckBox checkBox_SkipEolComment;
-		private MKY.Windows.Forms.StringListEdit stringListEdit_EolCommentIndicators;
-		private System.Windows.Forms.CheckBox checkBox_SkipEolCommentWhiteSpace;
+		private System.Windows.Forms.GroupBox groupBox_Exclude;
+		private System.Windows.Forms.CheckBox checkBox_Exclude;
+		private MKY.Windows.Forms.StringListEdit stringListEdit_ExcludePatterns;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.CheckBox checkBox_SkipEmptyLines;
+		private System.Windows.Forms.LinkLabel linkLabel_Regex;
 	}
 }

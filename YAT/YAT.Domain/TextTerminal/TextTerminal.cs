@@ -314,16 +314,16 @@ namespace YAT.Domain
 			string textToParse = item.Data;
 
 			// Check for EOL comment indicators:
-			if (TextTerminalSettings.EolComment.SkipComment)
+			if (TextTerminalSettings.TextExclusion.Enabled)
 			{
-				foreach (string marker in TextTerminalSettings.EolComment.Indicators)
+				foreach (string marker in TextTerminalSettings.TextExclusion.Patterns)
 				{
 					int index = StringEx.IndexOfOutsideDoubleQuotes(textToParse, marker, StringComparison.Ordinal);
 					if (index >= 0)
 					{
 						textToParse = StringEx.Left(textToParse, index);
 
-						if (TextTerminalSettings.EolComment.SkipWhiteSpace)
+//						if (TextTerminalSettings.EolComment.SkipWhiteSpace)
 							textToParse = textToParse.TrimEnd(null); // 'null' means white-spaces.
 					}
 				}
