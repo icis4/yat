@@ -126,12 +126,12 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
 		public static DeviceInfo[] GetDevicesFromGuid(Guid classGuid, bool retrieveStringsFromDevice = true)
 		{
-			string[] paths = Win32.DeviceManagement.GetDevicesFromGuid(classGuid);
-			List<DeviceInfo> l = new List<DeviceInfo>(paths.Length); // Preset the initial capacity to improve memory management.
+			var paths = Win32.DeviceManagement.GetDevicesFromGuid(classGuid);
+			var l = new List<DeviceInfo>(paths.Length); // Preset the initial capacity to improve memory management.
 
-			foreach (string path in paths)
+			foreach (var path in paths)
 			{
-				DeviceInfo device = GetDeviceInfoFromPath(path, retrieveStringsFromDevice);
+				var device = GetDeviceInfoFromPath(path, retrieveStringsFromDevice);
 				if (device != null)
 					l.Add(device);
 			}

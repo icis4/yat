@@ -68,7 +68,7 @@ namespace MKY.Usb
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "The parameter shall clearly state what it represents.")]
 		public static CultureInfo[] GetCultureInfoFromLanguageString(string languageString)
 		{
-			List<CultureInfo> l = new List<CultureInfo>(languageString.Length); // Preset the initial capacity to improve memory management.
+			var l = new List<CultureInfo>(languageString.Length); // Preset the initial capacity to improve memory management.
 			foreach (char c in languageString)
 			{
 				int culture = (int)c;

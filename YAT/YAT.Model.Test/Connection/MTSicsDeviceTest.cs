@@ -142,7 +142,7 @@ namespace YAT.Model.Test.Connection
 
 				// Prepare stimulus and expected:
 				Types.Command emptyCommand = new Types.Command("");
-				List<byte> l = new List<byte>(4); // Preset the required capacity to improve memory management.
+				var l = new List<byte>(4); // Preset the required capacity to improve memory management.
 				l.Add(0x45); // 'E'
 				l.Add(0x53); // 'S'
 				l.Add(0x0D); // <CR>
@@ -317,7 +317,7 @@ namespace YAT.Model.Test.Connection
 
 				// Prepare stimulus and expected:
 				Types.Command emptyCommand = new Types.Command("");
-				List<byte> l = new List<byte>(4); // Preset the required capacity to improve memory management.
+				var l = new List<byte>(4); // Preset the required capacity to improve memory management.
 				l.Add(0x45); // 'E'
 				l.Add(0x53); // 'S'
 				l.Add(0x0D); // <CR>

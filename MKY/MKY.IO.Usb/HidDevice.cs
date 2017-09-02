@@ -103,12 +103,12 @@ namespace MKY.IO.Usb
 		[CLSCompliant(false)]
 		public static DeviceInfo[] GetDevices(HidUsagePage usagePage, bool retrieveStringsFromDevice = true)
 		{
-			DeviceInfo[] dis = GetDevices(retrieveStringsFromDevice);
-			List<DeviceInfo> l = new List<DeviceInfo>(dis.Length); // Preset the required capacity to improve memory management.
+			var dis = GetDevices(retrieveStringsFromDevice);
+			var l = new List<DeviceInfo>(dis.Length); // Preset the required capacity to improve memory management.
 
-			foreach (DeviceInfo di in dis)
+			foreach (var di in dis)
 			{
-				using (HidDevice device = new HidDevice(di))
+				using (var device = new HidDevice(di))
 				{
 					if (device.UsagePage == usagePage)
 						l.Add(di);
@@ -126,12 +126,12 @@ namespace MKY.IO.Usb
 		[CLSCompliant(false)]
 		public static DeviceInfo[] GetDevices(HidUsagePage usagePage, HidUsageId usageId, bool retrieveStringsFromDevice = true)
 		{
-			DeviceInfo[] dis = GetDevices(retrieveStringsFromDevice);
-			List<DeviceInfo> l = new List<DeviceInfo>(dis.Length); // Preset the required capacity to improve memory management.
+			var dis = GetDevices(retrieveStringsFromDevice);
+			var l = new List<DeviceInfo>(dis.Length); // Preset the required capacity to improve memory management.
 
-			foreach (DeviceInfo di in dis)
+			foreach (var di in dis)
 			{
-				using (HidDevice device = new HidDevice(di))
+				using (var device = new HidDevice(di))
 				{
 					if (device.UsagePage == usagePage)
 						if (device.UsageId == usageId)
