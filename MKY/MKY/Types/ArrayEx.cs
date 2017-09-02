@@ -93,33 +93,54 @@ namespace MKY
 		/// Appends all elements of an array to a string and returns the string.
 		/// Elements that are <c>null</c> are returned as "[null]".
 		/// </summary>
-		/// <remarks>
-		/// Attention:
-		/// Similar code also exists in <see cref="IEnumerableEx"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
 		/// <returns>
 		/// String containing all elements.
 		/// </returns>
 		public static string ElementsToString(Array value)
 		{
+			// Attention:
+			// Similar code exists in IEnumerableEx.ElementsToString().
+			// Changes here may have to be applied there too.
+
 			var sb = new StringBuilder();
 
 			bool firstElement = true;
-			foreach (object obj in value)
+			foreach (object item in value)
 			{
 				if (firstElement)
 					firstElement = false;
 				else
 					sb.Append(", ");
 
-				if (obj != null)
-					sb.Append(obj.ToString());
+				if (item != null)
+					sb.Append(item.ToString());
 				else
 					sb.Append("[null]");
 			}
 
 			return (sb.ToString());
+		}
+
+		/// <summary>
+		/// Serves as a hash function that iterates over all items within the given array.
+		/// </summary>
+		public static int ElementsToHashCode(Array value)
+		{
+			// Attention:
+			// Similar code exists in IEnumerableEx.ElementsToHashCode().
+			// Changes here may have to be applied there too.
+
+			int hashCode = 0;
+
+			foreach (object item in value)
+			{
+				unchecked
+				{
+					hashCode = (hashCode * 397) ^ (item != null ? item.GetHashCode() : 0);
+				}
+			}
+
+			return (hashCode);
 		}
 	}
 }
