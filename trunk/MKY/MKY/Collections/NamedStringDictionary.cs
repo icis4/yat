@@ -74,7 +74,7 @@ namespace MKY.Collections
 		{
 			get
 			{
-				List<StringKeyValuePair> l = new List<StringKeyValuePair>(this.dictionary.Count);
+				var l = new List<StringKeyValuePair>(this.dictionary.Count);
 				if (this.dictionary != null)
 				{
 					foreach (KeyValuePair<string, string> kvp in this.dictionary)

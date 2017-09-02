@@ -1,0 +1,34 @@
+
+ // X
+A // X
+BB // X
+C C // X
+
+ /* X */ D
+E /* X */ E
+FF /* X */ F
+G G /* X */ G
+
+ # X
+H # X
+II # X
+J J # X
+
+ REM X
+ :: X
+
+ K & REM X
+ L & :: X
+
+ %= X =% M
+N %= X =% N
+OO %= X =% O
+P P %= X =% P
+
+"// A"
+"// B" // X
+"// C" // "// X"
+
+"/* D */"
+"/* E */" /* X */
+"/* F */" /* "/* X */" */

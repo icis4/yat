@@ -391,7 +391,7 @@ namespace YAT.View.Forms
 				this.settingsInEdit.CharSubstitution = Domain.CharSubstitution.ToLower;
 		}
 
-		private void checkBox_SkipEolComment_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_Exclude_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
@@ -569,14 +569,14 @@ namespace YAT.View.Forms
 				textBox_DelayInterval.Text    = this.settingsInEdit.LineSendDelay.LineInterval.ToString(CultureInfo.CurrentCulture);
 
 				// \remind (2017-04-05 / MKY) (feature request #19 and bug #176)
-			////bool waitEnabled                 = this.settingsInEdit.WaitForResponse.Enabled;
-			////checkBox_WaitForResponse.Checked = waitEnabled;
-			////textBox_WaitForResponse.Enabled  = waitEnabled;
-			////textBox_WaitForResponse.Text     = this.settingsInEdit.WaitForResponse.Timeout.ToString(CultureInfo.CurrentCulture);
-			////checkBox_WaitForResponse.ToolTip = see designer
-				checkBox_WaitForResponse.Enabled = false;
-				label_WaitForResponse.Enabled    = false;
-				textBox_WaitForResponse.Enabled  = false;
+			////bool waitEnabled                  = this.settingsInEdit.WaitForResponse.Enabled;
+			////checkBox_WaitForResponse.Checked  = waitEnabled;
+			////textBox_WaitForResponse.Enabled   = waitEnabled;
+			////textBox_WaitForResponse.Text      = this.settingsInEdit.WaitForResponse.Timeout.ToString(CultureInfo.CurrentCulture);
+			////checkBox_WaitForResponse.ToolTip  = see designer
+				checkBox_WaitForResponse.Enabled  = false;
+				label_WaitForResponse.Enabled     = false;
+				textBox_WaitForResponse.Enabled   = false;
 				label_WaitForResponseUnit.Enabled = false;
 
 				switch (this.settingsInEdit.CharSubstitution)
@@ -590,6 +590,7 @@ namespace YAT.View.Forms
 				checkBox_Exclude.Checked               = enabled;
 				stringListEdit_ExcludePatterns.Enabled = enabled;
 				stringListEdit_ExcludePatterns.StringList = this.settingsInEdit.TextExclusion.Patterns.ToArray();
+				linkLabel_Regex.Enabled                = enabled;
 			}
 			finally
 			{

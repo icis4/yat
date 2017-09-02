@@ -100,7 +100,9 @@ Important changes:
 - Auto-reconnect of TCP/IP client terminals enabled by default.
 - Text input now supports the [Ctrl+Backspace] shortcut and multi-line text input also the [Ctrl+A]
   shortcut (feature request #317 as workaround to limitation of .NET Windows.Forms).
-- "Comment" exclusion on sending migrated to "Pattern" exclusion supporting regex (feat. req. #307).
+- "Comments" exclusion on sending has been migrated to "Text" exclusion that is now supporting
+  regex patterns instead of plain strings (feature request #307). The change adds the possibility
+  to omit empty lines. Attention, former "Comment indicators" settings will have to be reapplied.
 
 Fixed bugs:
 - Serial COM port switching again properly works (bug #376).

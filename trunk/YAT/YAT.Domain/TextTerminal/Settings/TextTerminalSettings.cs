@@ -128,11 +128,14 @@ namespace YAT.Domain.Settings
 			TextExclusion.Patterns.Clear();
 			TextExclusion.Patterns.Add(@"\s*//.*$");        // C++       //...
 			TextExclusion.Patterns.Add(@"\s*/\*.*\*/\s*");  // C         /*...*/
-			TextExclusion.Patterns.Add(@"\s*<!--.*-->\s*"); // XML       <!--...-->
+		////TextExclusion.Patterns.Add(@"\s*<!--.*-->\s*"); // XML       <!--...--> has been excluded as pattern conflicts with YAT <> tags.
 			TextExclusion.Patterns.Add(@"\s*#.*$");         // *Shell    #...
-			TextExclusion.Patterns.Add(@"\s*<#.*#>\s*");    // *Shell    <#...#>
-			TextExclusion.Patterns.Add(@"\s*REM.*$");       // DOS/Batch REM...
-			TextExclusion.Patterns.Add(@"\s*::.*$");        // DOS/Batch ::...
+		////TextExclusion.Patterns.Add(@"\s*<#.*#>\s*");    // *Shell    <#...#>    has been excluded as pattern conflicts with YAT <> tags.
+			TextExclusion.Patterns.Add(@"^\s*REM\s.*$");    // DOS/Batch REM ...
+			TextExclusion.Patterns.Add(@"\s*&\s*REM\s.*$"); // DOS/Batch & REM ...
+			TextExclusion.Patterns.Add(@"^\s*::.*$");       // DOS/Batch ::...
+			TextExclusion.Patterns.Add(@"\s*&\s*::.*$");    // DOS/Batch & ::...
+			TextExclusion.Patterns.Add(@"\s*%=.*=%\s*");    // DOS/Batch %=...=%
 		}
 
 		#region Properties
@@ -291,7 +294,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("EolComment")]
+		[XmlElement("TextExclusion")]
 		public virtual TextExclusionSettings TextExclusion
 		{
 			get { return (this.textExclusion); }
