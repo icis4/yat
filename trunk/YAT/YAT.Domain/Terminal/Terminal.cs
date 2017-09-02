@@ -853,11 +853,11 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public virtual void SendLine(string data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
+		public virtual void SendLine(string dataLine, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
 			// AssertNotDisposed() is called by Send() below.
 
-			DoSend(new ParsableSendItem(data, defaultRadix, true));
+			DoSend(new ParsableSendItem(dataLine, defaultRadix, true));
 		}
 
 		/// <remarks>
@@ -869,13 +869,13 @@ namespace YAT.Domain
 		///     and so on, mix-up among sent and received lines...
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public virtual void SendLines(string[] data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
+		public virtual void SendLines(string[] dataLines, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
 			// AssertNotDisposed() is called by Send() below.
 
-			List<ParsableSendItem> l = new List<ParsableSendItem>(data.Length);
-			foreach (string line in data)
-				l.Add(new ParsableSendItem(line, defaultRadix, true));
+			var l = new List<ParsableSendItem>(dataLines.Length);
+			foreach (string dataLine in dataLines)
+				l.Add(new ParsableSendItem(dataLine, defaultRadix, true));
 
 			DoSend(l.ToArray());
 		}

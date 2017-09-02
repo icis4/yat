@@ -40,7 +40,7 @@ namespace MKY.Globalization
 		public static CultureInfo GetMostAppropriateCulture(IEnumerable<CultureInfo> items)
 		{
 			CultureInfo ci;
-			List<CultureInfo> l = new List<CultureInfo>(items);
+			var l = new List<CultureInfo>(items);
 
 			// Verify that list contains items
 			if (l.Count <= 0)
@@ -71,7 +71,7 @@ namespace MKY.Globalization
 		public static CultureInfo GetMostAppropriateUICulture(IEnumerable<CultureInfo> items)
 		{
 			CultureInfo ci;
-			List<CultureInfo> l = new List<CultureInfo>(items);
+			var l = new List<CultureInfo>(items);
 
 			// Verify that list contains items
 			if (l.Count <= 0)

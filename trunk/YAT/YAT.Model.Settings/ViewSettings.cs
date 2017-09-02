@@ -106,7 +106,7 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public int[] CustomColorsToWin32()
 		{
-			List<int> l = new List<int>(this.customColors.Count);
+			var l = new List<int>(this.customColors.Count);
 
 			foreach (RecentItem<string> ri in this.customColors)
 			{
