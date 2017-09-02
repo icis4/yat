@@ -107,7 +107,7 @@ namespace YAT.View.Forms
 			this.groupBox_Settings.Controls.Add(this.label_Encoding);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
-			this.groupBox_Settings.Size = new System.Drawing.Size(284, 594);
+			this.groupBox_Settings.Size = new System.Drawing.Size(284, 581);
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
@@ -222,7 +222,7 @@ namespace YAT.View.Forms
 			this.groupBox_Send.Controls.Add(this.checkBox_Delay);
 			this.groupBox_Send.Location = new System.Drawing.Point(6, 184);
 			this.groupBox_Send.Name = "groupBox_Send";
-			this.groupBox_Send.Size = new System.Drawing.Size(272, 404);
+			this.groupBox_Send.Size = new System.Drawing.Size(272, 391);
 			this.groupBox_Send.TabIndex = 3;
 			this.groupBox_Send.TabStop = false;
 			this.groupBox_Send.Text = "Send Settings";
@@ -248,15 +248,17 @@ namespace YAT.View.Forms
 			this.groupBox_Exclude.Controls.Add(this.checkBox_Exclude);
 			this.groupBox_Exclude.Location = new System.Drawing.Point(6, 209);
 			this.groupBox_Exclude.Name = "groupBox_Exclude";
-			this.groupBox_Exclude.Size = new System.Drawing.Size(259, 189);
+			this.groupBox_Exclude.Size = new System.Drawing.Size(259, 176);
 			this.groupBox_Exclude.TabIndex = 11;
 			this.groupBox_Exclude.TabStop = false;
 			this.groupBox_Exclude.Text = "Text Exclusion";
+			this.toolTip.SetToolTip(this.groupBox_Exclude, resources.GetString("groupBox_Exclude.ToolTip"));
 			// 
 			// linkLabel_Regex
 			// 
+			this.linkLabel_Regex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel_Regex.AutoSize = true;
-			this.linkLabel_Regex.Location = new System.Drawing.Point(24, 167);
+			this.linkLabel_Regex.Location = new System.Drawing.Point(24, 154);
 			this.linkLabel_Regex.Name = "linkLabel_Regex";
 			this.linkLabel_Regex.Size = new System.Drawing.Size(150, 13);
 			this.linkLabel_Regex.TabIndex = 2;
@@ -266,15 +268,15 @@ namespace YAT.View.Forms
 			// 
 			// stringListEdit_ExcludePatterns
 			// 
-			this.stringListEdit_ExcludePatterns.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.stringListEdit_ExcludePatterns.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.stringListEdit_ExcludePatterns.Location = new System.Drawing.Point(10, 38);
 			this.stringListEdit_ExcludePatterns.MinimumSize = new System.Drawing.Size(132, 116);
 			this.stringListEdit_ExcludePatterns.Name = "stringListEdit_ExcludePatterns";
-			this.stringListEdit_ExcludePatterns.Size = new System.Drawing.Size(243, 129);
+			this.stringListEdit_ExcludePatterns.Size = new System.Drawing.Size(243, 116);
 			this.stringListEdit_ExcludePatterns.StringList = new string[0];
 			this.stringListEdit_ExcludePatterns.TabIndex = 1;
-			this.toolTip.SetToolTip(this.stringListEdit_ExcludePatterns, resources.GetString("stringListEdit_ExcludePatterns.ToolTip"));
 			this.stringListEdit_ExcludePatterns.Validating += new System.EventHandler<MKY.ComponentModel.StringCancelEventArgs>(this.stringListEdit_ExcludePatterns_Validating);
 			this.stringListEdit_ExcludePatterns.ListChanged += new System.EventHandler(this.stringListEdit_ExcludePatterns_ListChanged);
 			// 
@@ -286,7 +288,7 @@ namespace YAT.View.Forms
 			this.checkBox_Exclude.Size = new System.Drawing.Size(232, 17);
 			this.checkBox_Exclude.TabIndex = 0;
 			this.checkBox_Exclude.Text = "Do not send text with the following patterns:";
-			this.checkBox_Exclude.CheckedChanged += new System.EventHandler(this.checkBox_SkipEolComment_CheckedChanged);
+			this.checkBox_Exclude.CheckedChanged += new System.EventHandler(this.checkBox_Exclude_CheckedChanged);
 			// 
 			// groupBox_Substitute
 			// 
@@ -347,7 +349,7 @@ namespace YAT.View.Forms
 			// 
 			// textBox_DelayInterval
 			// 
-			this.textBox_DelayInterval.Location = new System.Drawing.Point(195, 43);
+			this.textBox_DelayInterval.Location = new System.Drawing.Point(193, 43);
 			this.textBox_DelayInterval.Name = "textBox_DelayInterval";
 			this.textBox_DelayInterval.Size = new System.Drawing.Size(40, 20);
 			this.textBox_DelayInterval.TabIndex = 4;
@@ -378,7 +380,7 @@ namespace YAT.View.Forms
 			// label_DelayUnit
 			// 
 			this.label_DelayUnit.AutoSize = true;
-			this.label_DelayUnit.Location = new System.Drawing.Point(148, 46);
+			this.label_DelayUnit.Location = new System.Drawing.Point(146, 46);
 			this.label_DelayUnit.Name = "label_DelayUnit";
 			this.label_DelayUnit.Size = new System.Drawing.Size(47, 13);
 			this.label_DelayUnit.TabIndex = 3;
@@ -396,7 +398,7 @@ namespace YAT.View.Forms
 			// 
 			// textBox_Delay
 			// 
-			this.textBox_Delay.Location = new System.Drawing.Point(97, 43);
+			this.textBox_Delay.Location = new System.Drawing.Point(95, 43);
 			this.textBox_Delay.Name = "textBox_Delay";
 			this.textBox_Delay.Size = new System.Drawing.Size(51, 20);
 			this.textBox_Delay.TabIndex = 2;
@@ -406,7 +408,7 @@ namespace YAT.View.Forms
 			// label_DelayIntervalUnit
 			// 
 			this.label_DelayIntervalUnit.AutoSize = true;
-			this.label_DelayIntervalUnit.Location = new System.Drawing.Point(235, 46);
+			this.label_DelayIntervalUnit.Location = new System.Drawing.Point(233, 46);
 			this.label_DelayIntervalUnit.Name = "label_DelayIntervalUnit";
 			this.label_DelayIntervalUnit.Size = new System.Drawing.Size(23, 13);
 			this.label_DelayIntervalUnit.TabIndex = 5;
@@ -448,7 +450,7 @@ namespace YAT.View.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(399, 618);
+			this.ClientSize = new System.Drawing.Size(399, 605);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.groupBox_Settings);
 			this.Controls.Add(this.button_Cancel);

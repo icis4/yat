@@ -33,6 +33,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 using MKY;
@@ -308,24 +309,26 @@ namespace YAT.Domain
 		// Methods > Send
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <remarks>
+		/// \remind (2017-09-02 / MKY) there is a limitation in this implementation:
+		/// This method will be called per item, not per complete line. But, regexes below are
+		/// likely using beginning or end of line anchors ("^" and "$"). Well, a limitation.
+		/// </remarks>
 		protected override void ProcessParsableSendItem(ParsableSendItem item)
 		{
 			string textToParse = item.Data;
 
-			// Check for EOL comment indicators:
+			// Check for text exclusion patterns:
 			if (TextTerminalSettings.TextExclusion.Enabled)
 			{
-				foreach (string marker in TextTerminalSettings.TextExclusion.Patterns)
+				foreach (Regex r in TextTerminalSettings.TextExclusion.Regexes)
 				{
-					int index = StringEx.IndexOfOutsideDoubleQuotes(textToParse, marker, StringComparison.Ordinal);
-					if (index >= 0)
-					{
-						textToParse = StringEx.Left(textToParse, index);
+					Match m = r.Match(textToParse);
+					if (m.Success)
+						textToParse = textToParse.Remove(m.Index, m.Length);
 
-//						if (TextTerminalSettings.EolComment.SkipWhiteSpace)
-							textToParse = textToParse.TrimEnd(null); // 'null' means white-spaces.
-					}
+					if (TextTerminalSettings.SendFile.SkipEmptyLines && string.IsNullOrEmpty(textToParse))
+						return;
 				}
 			}
 

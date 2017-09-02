@@ -24,10 +24,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 using MKY.Collections;
+using MKY.Diagnostics;
 
 namespace YAT.Domain.Settings
 {
@@ -35,8 +38,11 @@ namespace YAT.Domain.Settings
 	[Serializable]
 	public class TextExclusionSettings : MKY.Settings.SettingsItem, IEquatable<TextExclusionSettings>
 	{
-		private bool enabled;
-		private List<string> patterns;
+		private bool enabled; // = false;
+		private List<string> patterns; // = null;
+
+		private int regexesUpdatePatternsHashCode; // = 0;
+		private ReadOnlyCollection<Regex> regexes; // = null;
 
 		/// <summary></summary>
 		public TextExclusionSettings()
@@ -107,9 +113,47 @@ namespace YAT.Domain.Settings
 			{
 				if (this.patterns != value)
 				{
-					this.patterns = value;
-					SetMyChanged();
+					this.patterns = value; // Attention: The update below only works when the whole collection
+					UpdateRegexes();       //            gets replaced, but not if items are added or removed
+					SetMyChanged();        //            by Add()/Remove()/Clear()! See below for workaround.
 				}
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void UpdateRegexes()
+		{
+			if (this.patterns != null)
+			{
+				var l = new List<Regex>(this.patterns.Count); // Preset the required capacity to improve memory management.
+
+				foreach (var pattern in this.patterns)
+				{
+					try
+					{
+						l.Add(new Regex(pattern));
+					}
+					catch (ArgumentException ex)
+					{
+						TraceEx.WriteException(this.GetType(), ex, string.Format(@"Failed to create regex object for pattern ""{0}""!", pattern));
+					}
+				}
+
+				this.regexesUpdatePatternsHashCode = IEnumerableEx.ElementsToHashCode(this.patterns); // Workaround for issue described in Patterns{set} above.
+				this.regexes = new ReadOnlyCollection<Regex>(l);                                      // Not a 100% solution but close enough to such.
+			}
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual ReadOnlyCollection<Regex> Regexes
+		{
+			get
+			{
+				if (this.regexesUpdatePatternsHashCode != IEnumerableEx.ElementsToHashCode(this.patterns)) // Workaround for issue described in Patterns{set} above.
+					UpdateRegexes();                                                                       // Not a 100% solution but close enough to such.
+
+				return (this.regexes);
 			}
 		}
 
