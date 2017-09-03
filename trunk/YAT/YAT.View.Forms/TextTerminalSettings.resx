@@ -121,15 +121,14 @@
     <value>17, 17</value>
   </metadata>
   <data name="groupBox_Exclude.ToolTip" xml:space="preserve">
-    <value>By default, some standard patters are prepared:
- &gt; "//..." and "/*...*/" (C/C++/C#/Java/... comments)
- &gt; "&lt;!--...--&gt;" (XML comments)
- &gt; "#..." and "&lt;#...#&gt;" (Shell comments)
- &gt; "REM..." and "::..." and "%=...=%" (DOS/Batch comments)
+    <value>By default, some common patters are prepared:
+ &gt; //... and /*...*/ (C/C++/C#/Java/...-style comments)
+ &gt; #... (Shell-style comments)
+ &gt; REM... or ::... and %=...=% (DOS-style comments)
 
-All patterns omit surrounding whitespace characters by adding "\s*".
-If feasible, patterns are limited to the beginning or end of line by adding "^" or "$".
-All default patterns apply a negative lookbehind to prevent accepting the pattern inside quoted strings.
+End-of-line patterns omit leading whitespace by prepending "\s*".
+Inline patters do not include surrounding whitespace, unless the pattern spans over the whole line "^\s*" ... "\s*$".
+All patterns apply a positive lookahead to prevent accepting the pattern inside quoted strings, though allowing escapes.
 To request additional default patters or suggestions on how to improve the patterns, please contact YAT.
 Visit the given link to find detailed information about the .NET regex syntax.</value>
   </data>

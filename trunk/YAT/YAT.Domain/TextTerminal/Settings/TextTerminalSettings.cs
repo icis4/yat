@@ -27,6 +27,7 @@ using System.Xml.Serialization;
 
 using MKY;
 using MKY.Text;
+using MKY.Text.RegularExpressions;
 
 namespace YAT.Domain.Settings
 {
@@ -126,16 +127,17 @@ namespace YAT.Domain.Settings
 			base.SetNodeDefaults();
 
 			TextExclusion.Patterns.Clear();
-			TextExclusion.Patterns.Add(@"\s*//.*$");        // C++       //...
-			TextExclusion.Patterns.Add(@"\s*/\*.*\*/\s*");  // C         /*...*/
-		////TextExclusion.Patterns.Add(@"\s*<!--.*-->\s*"); // XML       <!--...--> has been excluded as pattern conflicts with YAT <> tags.
-			TextExclusion.Patterns.Add(@"\s*#.*$");         // *Shell    #...
-		////TextExclusion.Patterns.Add(@"\s*<#.*#>\s*");    // *Shell    <#...#>    has been excluded as pattern conflicts with YAT <> tags.
-			TextExclusion.Patterns.Add(@"^\s*REM\s.*$");    // DOS/Batch REM ...
-			TextExclusion.Patterns.Add(@"\s*&\s*REM\s.*$"); // DOS/Batch & REM ...
-			TextExclusion.Patterns.Add(@"^\s*::.*$");       // DOS/Batch ::...
-			TextExclusion.Patterns.Add(@"\s*&\s*::.*$");    // DOS/Batch & ::...
-			TextExclusion.Patterns.Add(@"\s*%=.*=%\s*");    // DOS/Batch %=...=%
+			TextExclusion.Patterns.Add(          @"\s*//" + CommonPatterns.PositiveLookaheadOutsideQuotes +  ".*$");       // C/C++/C#/Java/...-style comments: From // until the end of the line, including leading whitespace.
+			TextExclusion.Patterns.Add(            @"/\*" + CommonPatterns.PositiveLookaheadOutsideQuotes + @".*\*/");     // C/C++/C#/Java/...-style comments: From /* until */, not including surrounding whitespace.
+			TextExclusion.Patterns.Add(        @"^\s*/\*" + CommonPatterns.PositiveLookaheadOutsideQuotes + @".*\*/\s*$"); // C/C++/C#/Java/...-style comments: Lines only consisting of /**/, including surrounding whitespace.
+		////TextExclusion.Patterns.Add(            "<!--" + CommonPatterns.PositiveLookaheadOutsideQuotes +  ".*-->");     // XML style comments <!--...--> has been excluded as pattern conflicts with YAT <> tags.
+		////TextExclusion.Patterns.Add(       @"^\s*<!--" + CommonPatterns.PositiveLookaheadOutsideQuotes + @".*-->\s*$");
+			TextExclusion.Patterns.Add(           @"\s*#" + CommonPatterns.PositiveLookaheadOutsideQuotes +  ".*$");       // Shell-style comments: From # until the end of the line, including leading whitespace.
+		////TextExclusion.Patterns.Add(              "<#" + CommonPatterns.PositiveLookaheadOutsideQuotes +  ".*#>");      // Shell-style comments <#...#> has been excluded as pattern conflicts with YAT <> tags.
+		////TextExclusion.Patterns.Add(         @"^\s*<#" + CommonPatterns.PositiveLookaheadOutsideQuotes + @".*#>\s*$");
+			TextExclusion.Patterns.Add(   @"^\s*(REM|::)" + CommonPatterns.PositiveLookaheadOutsideQuotes + @"\s*.*$");    // DOS-style comments: Lines starting with REM or ::, including leading whitespace.
+			TextExclusion.Patterns.Add(@"\s*&\s*(REM|::)" + CommonPatterns.PositiveLookaheadOutsideQuotes + @"\s*.*$");    // DOS-style comments: From & REM or :: until the end of the line, including leading whitespace.
+			TextExclusion.Patterns.Add(             @"%=" + CommonPatterns.PositiveLookaheadOutsideQuotes + @".*=%");      // DOS-style comments: From %= until =%, not including surrounding whitespace.
 		}
 
 		#region Properties
