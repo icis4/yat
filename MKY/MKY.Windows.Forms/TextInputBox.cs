@@ -52,7 +52,7 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public event EventHandler<StringCancelEventArgs> Validating;
+		public new event EventHandler<StringCancelEventArgs> Validating;
 
 		#endregion
 
