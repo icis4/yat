@@ -712,7 +712,7 @@ namespace MKY.IO.Serial.Socket
 					}
 				}
 
-				// Signal send thread:
+				// Signal thread:
 				SignalSendThreadSafely();
 
 				return (true);

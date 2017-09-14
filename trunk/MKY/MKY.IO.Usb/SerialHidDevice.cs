@@ -1022,7 +1022,7 @@ namespace MKY.IO.Usb
 							}
 						}
 
-						// Signal receive thread:
+						// Signal thread:
 						SignalReceiveThreadSafely();
 					}
 
