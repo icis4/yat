@@ -118,7 +118,7 @@ namespace YAT.View.Controls
 			{
 				// Will happen when failing to 'friendly' join the thread on cancel.
 
-				DebugEx.WriteException(GetType(), ex, "Worker thread has been aborted. Confirming the abort, i.e. Thread.ResetAbort() will be called.");
+				DebugEx.WriteException(GetType(), ex, "Worker thread has been aborted. Confirming the abort, i.e. Thread.ResetAbort() will be called...");
 
 				// Reset the abort request, as 'ThreadAbortException' is a special exception
 				// that would be rethrown at the end of the catch block otherwise!
