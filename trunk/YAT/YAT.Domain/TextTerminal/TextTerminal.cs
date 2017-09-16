@@ -800,7 +800,7 @@ namespace YAT.Domain
 					(lineState.Position != LinePosition.DataExceeded))
 				{
 					lineState.Position = LinePosition.DataExceeded;
-					                                      // Using "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
+					                                     //// Using "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
 					string message = "Maximal number of bytes per line exceeded! Check the end-of-line settings or increase the limit in the advanced terminal settings.";
 					lineState.Elements.Add(new DisplayElement.ErrorInfo((Direction)d, message, true));
 					elements.Add          (new DisplayElement.ErrorInfo((Direction)d, message, true));

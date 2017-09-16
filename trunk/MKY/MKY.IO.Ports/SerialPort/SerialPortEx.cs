@@ -66,10 +66,11 @@ namespace MKY.IO.Ports
 	/// <list type="bullet">
 	/// <item><description>IOException issue</description></item>
 	/// <item><description>ObjectDisposedException issue</description></item>
-	/// <item><description>UnauthorizedAccssException and deadlock issue</description></item>
+	/// <item><description>UnauthorizedAccessException and deadlock issue</description></item>
 	/// </list>
 	/// See ".\!-Doc\*.txt" for details.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	[ToolboxBitmap(typeof(System.IO.Ports.SerialPort))]
 	[DefaultProperty("PortName")]
@@ -1076,6 +1077,7 @@ namespace MKY.IO.Ports
 		/// 
 		/// The solution is to suppress their finalizers at the beginning.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 		protected static void TryToApplyEventLoopHandlerPatchAndCloseBaseStreamSafely(Stream baseStreamReference)
 		{
 			TryToShutdownBaseStreamEventLoopHandler(baseStreamReference);

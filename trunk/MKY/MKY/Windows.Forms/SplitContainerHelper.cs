@@ -22,6 +22,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -80,6 +81,7 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Calculates the scaled splitter distance from the unscaled splitter distance.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'unscaled' is a correct English term.")]
 		public virtual int CalculateScaledDistanceFromUnscaled(SplitContainer sc, int unscaledDistance)
 		{
 			float scaleOfContainer = OrientationEx.SizeToWidthOrHeight(Scale, sc.Orientation);
@@ -103,6 +105,7 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Calculates the scaled splitter distance from the unscaled splitter distance.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'unscaled' is a correct English term.")]
 		public virtual int CalculateUnscaledDistanceFromScaled(SplitContainer sc, int scaledDistance)
 		{
 			float scaleOfContainer = OrientationEx.SizeToWidthOrHeight(Scale, sc.Orientation);

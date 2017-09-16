@@ -50,6 +50,7 @@ namespace MKY.Win32
 	/// <summary>
 	/// Encapsulates parts of the Win32 error API.
 	/// </summary>
+	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
 	public static class WinBase
 	{
 		#region Native
@@ -76,7 +77,7 @@ namespace MKY.Win32
 			#pragma warning disable 1591
 
 			/// <summary>
-			/// Flags bitfield for the <see cref="COMSTAT"/> structure.
+			/// Flags bit field for the <see cref="COMSTAT"/> structure.
 			/// </summary>
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
@@ -116,7 +117,7 @@ namespace MKY.Win32
 			}
 
 			/// <summary>
-			/// Flags bitfield for the <see cref="DCB"/> structure.
+			/// Flags bit field for the <see cref="DCB"/> structure.
 			/// </summary>
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]

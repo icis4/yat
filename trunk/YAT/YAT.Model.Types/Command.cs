@@ -48,6 +48,7 @@ namespace YAT.Model.Types
 	/// This class intentionally combines all three command types in a single class to allow
 	/// co-existence of a line and a file command.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
 	[Serializable]
 	public class Command : IEquatable<Command>, IComparable
 	{

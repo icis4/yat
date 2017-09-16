@@ -59,7 +59,7 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		new public event EventHandler<StringCancelEventArgs> Validating;
+		public new event EventHandler<StringCancelEventArgs> Validating;
 
 		/// <summary></summary>
 		public event EventHandler ListChanged;

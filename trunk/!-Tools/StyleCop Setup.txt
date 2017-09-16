@@ -57,8 +57,10 @@ Disable the following rules
   > File headers and their tags aren't processed by the .NET documentation. Makes not much sense to add documentation then.
 - C# > Layout > Curly Brackets > CurlyBracketsForMultiLineStatementsMustNotShareLine (SA1500)
   > Allow properties' get/set to be written on a single line.
-- C# > Layout > Curly Brackets > StatementsMustNotBeOnSingleLine (SA1501)
+- C# > Layout > Curly Brackets > StatementMustNotBeOnSingleLine (SA1501)
   > Prevents certain compact table-like implementations of try-catch.
+- C# > Layout > Curly Brackets > ElementMustNotBeOnSingleLine (SA1502)
+  > Allow properties' get/set to be written on a single line.
 - C# > Layout > Curly Brackets > CurlyBracketsMustNotBeOmitted (SA1503)
   > Allow single statements (e.g. within 'if') to be implemented without curly bracktes.
 - C# > Layout > Curly Brackets > AllAccessorsMustBeMultiLineOrSingleLine (SA1504)
@@ -104,6 +106,8 @@ Disable the following rules
   > Prevents readable implementation of multi-argument methods.
 - C# > Spacing > ClosingParenthesisMustBeSpacedCorrectly (SA1009)
   > Prevents readable implementation of multi-argument methods.
+- C# > Spacing > OpeningSquareBracketsMustBeSpacedCorrectly (SA1010)
+  > Prevents readable implementation of incrementing items.
 - C# > Spacing > ClosingCurlyBracketsMustBeSpacedCorrectly (SA1013)
   > Prevents implementation of table-style aligned code.
 - C# > Spacing > ClosingGenericBracketsMustBeSpacedCorrectly (SA1015)

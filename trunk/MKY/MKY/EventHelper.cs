@@ -122,6 +122,7 @@ namespace MKY
 			/// <see cref="EventHelper.UnhandledExceptionOnNonMainThread"/> or
 			/// <see cref="EventHelper.UnhandledExceptionOnMainThread"/> or catch-all handler.
 			/// </summary>
+			[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'rethrown' is a correct English term.")]
 			RethrowAll = 0,
 
 			/// <summary>
@@ -135,6 +136,7 @@ namespace MKY
 			/// <remarks>
 			/// The main thread can be set by <see cref="MainThreadHelper.SetCurrentThread"/>.
 			/// </remarks>
+			[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'rethrown' is a correct English term.")]
 			DiscardMainThread = 1,
 
 			/// <summary>
@@ -148,6 +150,7 @@ namespace MKY
 			/// <remarks>
 			/// The main thread can be set by <see cref="MainThreadHelper.SetCurrentThread"/>.
 			/// </remarks>
+			[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'rethrown' is a correct English term.")]
 			DiscardNonMainThread = 2,
 
 			/// <summary>

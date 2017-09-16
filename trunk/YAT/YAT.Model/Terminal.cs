@@ -2226,7 +2226,11 @@ namespace YAT.Model
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
 		private readonly long TimedStatusTextRequestTickInterval = StopwatchEx.TimeToTicks(757); // = prime number around 750 milliseconds.
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private long terminal_RawChunkSent_nextTimedStatusTextRequestTickStamp; // = 0;
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private long terminal_RawChunkReceived_nextTimedStatusTextRequestTickStamp; // = 0;
 
 		/// <remarks>
@@ -3266,6 +3270,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Argument of this protected method named "c" for compactness.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'symmetricity' is a correct English term.")]
 		protected virtual void DoSendFile(Command c)
 		{
 			AssertNotDisposed();
