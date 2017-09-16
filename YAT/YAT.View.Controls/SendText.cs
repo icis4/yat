@@ -1112,7 +1112,7 @@ namespace YAT.View.Controls
 
 		private bool WithoutEolIsRequestedAndAllowed
 		{
-			get { return ((ModifierKeys == Keys.Control) && !this.command.IsMultiLineText); }
+			get { return (ContainsFocus && (ModifierKeys == Keys.Control) && !this.command.IsMultiLineText); }
 		}
 
 		#endregion
