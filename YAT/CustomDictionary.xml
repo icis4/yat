@@ -18,10 +18,13 @@
       <Word>Rx</Word>
       <Word>Tx</Word>
       <Word>Bidir</Word>
+      <Word>Lookahead</Word>
+      <Word>Prepending</Word>
     </Recognized>
     <DiscreteExceptions>
       <Term>InCase</Term>
       <Term>TimeStamp</Term>
+      <Term>whitespace</Term>
     </DiscreteExceptions>
   </Words>
   <Acronyms>

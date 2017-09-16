@@ -878,7 +878,7 @@ namespace YAT.Domain
 		/// Stop the terminal. To start it again, call <see cref="Start()"/>.
 		/// Or call <see cref="Close()"/> to definitely close the terminal.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]
+		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "'Stop' is a common term to start/stop something.")]
 		public virtual void Stop()
 		{
 			AssertNotDisposed();
@@ -1668,6 +1668,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		protected virtual void ProcessSendFileItem(FileSendItem item)
 		{
 			try
@@ -1922,7 +1923,7 @@ namespace YAT.Domain
 		/// <c>true</c> if the request has been executed; otherwise, <c>false</c>.
 		/// </returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "'RFR' is a common term for serial ports.")]
 		public virtual bool RequestToggleRfr(out MKY.IO.Serial.SerialPort.SerialControlPinState pinState)
 		{
 			AssertNotDisposed();
@@ -1958,7 +1959,7 @@ namespace YAT.Domain
 		/// <c>true</c> if the request has been executed; otherwise, <c>false</c>.
 		/// </returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "'DTR' is a common term for serial ports.")]
 		public virtual bool RequestToggleDtr(out MKY.IO.Serial.SerialPort.SerialControlPinState pinState)
 		{
 			AssertNotDisposed();
@@ -2482,6 +2483,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
 		protected virtual void PrepareLineEndInfo(int byteCount, out DisplayLinePart lp)
 		{
 			if (TerminalSettings.Display.ShowLength)

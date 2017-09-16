@@ -534,7 +534,7 @@ namespace YAT.View.Controls
 			label_OnDialogMessage.Text = "";
 		}
 
-		private bool TryGetAlternate(SerialPortCollection ports, out SerialPortId portIdAlternate)
+		private static bool TryGetAlternate(SerialPortCollection ports, out SerialPortId portIdAlternate)
 		{
 			// Select the first available port that is not in use:
 			foreach (var port in ports)

@@ -99,8 +99,8 @@
     </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="Console.cs" />
-    <Compile Include="FileAPI.cs" />
-    <Compile Include="DotNET\SerialPortPatcher.cs" />
+    <Compile Include="FileApi.cs" />
+    <Compile Include="DotNet\SerialPortPatcher.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Window.cs" />
     <Compile Include="WinBase.cs" />

@@ -54,6 +54,7 @@ namespace MKY
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "Directly referring to given object for performance reasons.")]
 		[CLSCompliant(false)]
 		public static void FromUInt32(ref BitVector32 bits, uint value, int bit)
 		{
@@ -61,6 +62,7 @@ namespace MKY
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "Directly referring to given object for performance reasons.")]
 		[CLSCompliant(false)]
 		public static void FromUInt32(ref BitVector32 bits, uint value, int bit1, int bit2)
 		{

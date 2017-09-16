@@ -31,7 +31,7 @@ using Microsoft.Win32.SafeHandles;
 
 using MKY.Diagnostics;
 
-namespace MKY.Win32.DotNET
+namespace MKY.Win32.DotNet
 {
 	/// <summary>
 	/// Implements a workaround to the <see cref="IOException"/> issue in <see cref="SerialPort"/>
@@ -51,6 +51,7 @@ namespace MKY.Win32.DotNET
 	/// uses this approach, in order to not depend upon Win32 specifics.
 	/// </summary>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Patcher", Justification = "What's wrong with 'Patcher'?")]
 	public class SerialPortPatcher : IDisposable
 	{
 		/// <summary>
@@ -86,11 +87,11 @@ namespace MKY.Win32.DotNET
 
 			try
 			{
-				var fileType = FileAPI.NativeMethods.GetFileType_(h);
+				var fileType = FileApi.NativeMethods.GetFileType_(h);
 				switch (fileType)
 				{
-					case FileAPI.NativeTypes.FileType.FILE_TYPE_CHAR:
-					case FileAPI.NativeTypes.FileType.FILE_TYPE_UNKNOWN:
+					case FileApi.NativeTypes.FileType.FILE_TYPE_CHAR:
+					case FileApi.NativeTypes.FileType.FILE_TYPE_UNKNOWN:
 					{
 						InitializeDCB(h);
 						this.handle = h;
@@ -112,6 +113,7 @@ namespace MKY.Win32.DotNET
 				throw;
 			}
 		}
+
 		private static void InitializeDCB(SafeFileHandle handle)
 		{
 			WinBase.NativeTypes.DCB dcb;

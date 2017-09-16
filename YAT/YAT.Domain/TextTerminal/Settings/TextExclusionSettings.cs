@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
@@ -121,6 +122,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Regexes", Justification = "What else is the plural of 'Regex'?")]
 		protected virtual void UpdateRegexes()
 		{
 			if (this.patterns != null)
@@ -135,7 +137,7 @@ namespace YAT.Domain.Settings
 					}
 					catch (ArgumentException ex)
 					{
-						TraceEx.WriteException(this.GetType(), ex, string.Format(@"Failed to create regex object for pattern ""{0}""!", pattern));
+						TraceEx.WriteException(this.GetType(), ex, string.Format(CultureInfo.CurrentCulture, @"Failed to create regex object for pattern ""{0}""!", pattern));
 					}
 				}
 
@@ -145,6 +147,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Regexes", Justification = "What else is the plural of 'Regex'?")]
 		[XmlIgnore]
 		public virtual ReadOnlyCollection<Regex> Regexes
 		{

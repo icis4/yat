@@ -42,6 +42,15 @@ using MKY.Windows.Forms;
 
 #endregion
 
+#region Module-level FxCop suppressions
+//==================================================================================================
+// Module-level FxCop suppressions
+//==================================================================================================
+
+[module: SuppressMessage("Microsoft.Naming", "CA1701:ResourceStringCompoundWordsShouldBeCasedCorrectly", Scope = "resource", Target = "YAT.View.Forms.TextTerminalSettings.resources", MessageId = "whitespace", Justification = "'whitespace' is a common term in programming.")]
+
+#endregion
+
 namespace YAT.View.Forms
 {
 	/// <summary></summary>
@@ -407,6 +416,7 @@ namespace YAT.View.Forms
 			try
 			{
 				var regex = new Regex(e.Value);
+				UnusedLocal.PreventAnalysisWarning(regex);
 			}
 			catch (ArgumentException ex)
 			{

@@ -45,6 +45,7 @@ using YAT.Settings.Terminal;
 namespace YAT.Model.Test.Connection
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 	[TestFixture]
 	public class MTSicsDeviceTest
 	{

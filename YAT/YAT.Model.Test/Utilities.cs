@@ -274,6 +274,7 @@ namespace YAT.Model.Test
 			/// <param name="expectedByteCounts">The expected number of raw byte content per display line, including potentially hidden EOL or control bytes.</param>
 			/// <param name="expectedAlsoApplyToA">Flag indicating that expected values not only apply to B but also A.</param>
 			/// <param name="clearedIsExpectedInTheEnd">Flag indicating that cleared terminals are expected in the end.</param>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 			public TestSet(Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedByteCounts, bool expectedAlsoApplyToA, bool clearedIsExpectedInTheEnd = false)
 			{
 				Command = command;
@@ -1240,6 +1241,18 @@ namespace YAT.Model.Test
 
 				if (waitTime >= timeout) {
 					Assert.Fail("Transmission timeout! Not enough data received within expected interval.");
+				}
+
+				if (terminalTx.TxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
+					Assert.Fail("Transmission error!" +
+					            " Number of sent bytes = " + terminalTx.TxByteCount +
+					            " mismatches expected = " + expectedTotalByteCount + ".");
+				}
+
+				if (terminalTx.TxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+					Assert.Fail("Transmission error!" +
+					            " Number of sent lines = " + terminalTx.TxLineCount +
+					            " mismatches expected = " + expectedTotalLineCount + ".");
 				}
 
 				if (terminalRx.RxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.

@@ -1086,6 +1086,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		protected static void CloseBaseStreamSafely(Stream baseStreamReference)
 		{
 			try
@@ -1110,6 +1111,8 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		protected static void TryToShutdownBaseStreamEventLoopHandler(Stream baseStreamReference)
 		{
 			if (baseStreamReference != null)

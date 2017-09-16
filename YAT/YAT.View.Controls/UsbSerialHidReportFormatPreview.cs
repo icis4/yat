@@ -404,7 +404,7 @@ namespace YAT.View.Controls
 		/// <remarks>
 		/// Required because scaling may lead to slightly off values.
 		/// </remarks>
-		private string ExactOrNearest(Lookup<int, string> lookup, int key)
+		private static string ExactOrNearest(Lookup<int, string> lookup, int key)
 		{
 			// Exact?
 			if (lookup.Contains(key))

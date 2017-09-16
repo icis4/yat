@@ -120,6 +120,7 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
 			public TxData(byte[] origin, string text, int byteCount)
 				: base(Direction.Tx, origin, text, byteCount)
 			{
@@ -143,6 +144,7 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
 			public TxControl(byte[] origin, string text, int byteCount)
 				: base(Direction.Tx, origin, text, byteCount)
 			{
@@ -166,6 +168,7 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
 			public RxData(byte[] origin, string text, int byteCount)
 				: base(Direction.Rx, origin, text, byteCount)
 			{
@@ -189,6 +192,7 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
 			public RxControl(byte[] origin, string text, int byteCount)
 				: base(Direction.Rx, origin, text, byteCount)
 			{
@@ -317,12 +321,14 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
 			public DataLength(int byteCount, string enclosureLeft, string enclosureRight)
 				: this(Direction.None, byteCount, enclosureLeft, enclosureRight)
 			{
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
 			public DataLength(Direction direction, int byteCount, string enclosureLeft, string enclosureRight)
 				: base(direction, enclosureLeft + byteCount.ToString(CultureInfo.InvariantCulture) + enclosureRight)
 			{

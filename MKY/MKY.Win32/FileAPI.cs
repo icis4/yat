@@ -45,12 +45,44 @@ using Microsoft.Win32.SafeHandles;
 
 #endregion
 
+#region Module-level FxCop suppressions
+//==================================================================================================
+// Module-level FxCop suppressions
+//==================================================================================================
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_UNKNOWN")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_DISK")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_PIPE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_CHAR")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_REMOTE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileApi+NativeMethods.#GetFileType_(Microsoft.Win32.SafeHandles.SafeFileHandle)")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_UNKNOWN", MessageId = "TYPE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_UNKNOWN", MessageId = "FILE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_UNKNOWN", MessageId = "UNKNOWN")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_DISK", MessageId = "TYPE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_DISK", MessageId = "FILE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_DISK", MessageId = "DISK")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_PIPE", MessageId = "PIPE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_PIPE", MessageId = "TYPE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_PIPE", MessageId = "FILE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_CHAR", MessageId = "TYPE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_CHAR", MessageId = "FILE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_CHAR", MessageId = "CHAR")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_REMOTE", MessageId = "TYPE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_REMOTE", MessageId = "FILE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileApi+NativeTypes+FileType.#FILE_TYPE_REMOTE", MessageId = "REMOTE")]
+
+#endregion
+
 namespace MKY.Win32
 {
 	/// <summary>
 	/// Encapsulates parts of the Win32 API relating to the file API.
 	/// </summary>
-	public static class FileAPI
+	public static class FileApi
 	{
 		#region Native
 		//==========================================================================================
@@ -78,13 +110,14 @@ namespace MKY.Win32
 			/// <summary>
 			/// Encapsulates Win32 FILE_TYPE_ file access flags into a C# flag enum.
 			/// </summary>
+			[SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags", Justification = "Well, this is no flags enumeration...")]
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[CLSCompliant(false)]
 			public enum FileType : ushort
 			{
-				FILE_TYPE_CHAR    = 0x0002,
 				FILE_TYPE_DISK    = 0x0001,
+				FILE_TYPE_CHAR    = 0x0002,
 				FILE_TYPE_PIPE    = 0x0003,
 				FILE_TYPE_REMOTE  = 0x8000,
 
@@ -112,12 +145,12 @@ namespace MKY.Win32
 			/// <summary>
 			/// Retrieves the file type of the specified file.
 			/// </summary>
-			/// <param name="hFile">A handle to the file.</param>
+			/// <param name="fileHandle">A handle to the file.</param>
 			/// <returns>One of the <see cref="NativeTypes.FileType"/> values.</returns>
 			[CLSCompliant(false)]
-			public static NativeTypes.FileType GetFileType_(SafeFileHandle hFile)
+			public static NativeTypes.FileType GetFileType_(SafeFileHandle fileHandle)
 			{
-				return ((NativeTypes.FileType)GetFileType(hFile));
+				return ((NativeTypes.FileType)GetFileType(fileHandle));
 			}
 
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]

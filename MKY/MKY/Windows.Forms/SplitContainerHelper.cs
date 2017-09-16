@@ -82,6 +82,8 @@ namespace MKY.Windows.Forms
 		/// Calculates the scaled splitter distance from the unscaled splitter distance.
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'unscaled' is a correct English term.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Unscaled", Justification = "'unscaled' is a correct English term.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "unscaled", Justification = "'unscaled' is a correct English term.")]
 		public virtual int CalculateScaledDistanceFromUnscaled(SplitContainer sc, int unscaledDistance)
 		{
 			float scaleOfContainer = OrientationEx.SizeToWidthOrHeight(Scale, sc.Orientation);
@@ -106,6 +108,7 @@ namespace MKY.Windows.Forms
 		/// Calculates the scaled splitter distance from the unscaled splitter distance.
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'unscaled' is a correct English term.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Unscaled", Justification = "'unscaled' is a correct English term.")]
 		public virtual int CalculateUnscaledDistanceFromScaled(SplitContainer sc, int scaledDistance)
 		{
 			float scaleOfContainer = OrientationEx.SizeToWidthOrHeight(Scale, sc.Orientation);

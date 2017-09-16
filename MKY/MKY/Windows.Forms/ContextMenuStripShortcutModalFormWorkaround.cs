@@ -130,14 +130,14 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Invokes <see cref="Form.Show(IWin32Window)"/> on the given form.
 		/// </summary>
-		public static DialogResult InvokeShowDialog(Form f, IWin32Window owner)
+		public static DialogResult InvokeShowDialog(Form form, IWin32Window owner)
 		{
 			DialogResult dr;
 
 			EnterModalForm();
 			try
 			{
-				dr = f.ShowDialog(owner);
+				dr = form.ShowDialog(owner);
 			}
 			finally
 			{

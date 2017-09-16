@@ -350,6 +350,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Detects whether the port is in use and marks the port ID accordingly.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		protected static void DetectWhetherPortIsInUse(SerialPortId portId, bool isInUseByActivePort, InUseInfo activePortInUseInfo, bool isInUseByOtherPort, List<InUseInfo> otherPortInUseInfo, string otherAppInUseText = null)
 		{
@@ -392,6 +393,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Composes the 'InUse' text.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		protected static string ComposeInUseText(bool isInUseByActivePort, InUseInfo activePortInUseInfo, List<InUseInfo> otherPortInUseInfo, string otherAppInUseText = null)
 		{
 			var inUseText = new StringBuilder();

@@ -38,6 +38,7 @@ namespace MKY.Text.RegularExpressions
 		/// Source: https://stackoverflow.com/questions/11502598/how-to-match-something-with-regex-that-is-not-between-two-special-characters.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Lookahead", Justification = "'Lookahead' is a common term for regular expressions.")]
 		public const string PositiveLookaheadOutsideQuotes = @"(?=(?:(?:\\.|[^""\\])*""(?:\\.|[^""\\])*"")*(?:\\.|[^""\\])*$)";
 
 		// (?=          Only if item is followed by...
