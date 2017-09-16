@@ -40,7 +40,7 @@ namespace MKY.ComponentModel
 	/// \todo
 	/// Check again with VS2017+.
 	/// </remarks>
-	public class StringCancelEventArgs: CancelEventArgs
+	public class StringCancelEventArgs : CancelEventArgs
 	{
 		/// <summary></summary>
 		public string Value { get; }

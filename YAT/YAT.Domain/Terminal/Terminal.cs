@@ -491,7 +491,6 @@ namespace YAT.Domain
 		/// </remarks>
 		private void StopSendThreads()
 		{
-
 			lock (this.sendFileThreadSyncObj)
 			{
 				if (this.sendFileThread != null)

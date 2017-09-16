@@ -23,6 +23,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Ports;
 
@@ -49,6 +50,7 @@ namespace MKY.Win32.DotNET
 	/// <see cref="SerialPort.BaseStream"/>. The implementation in 'MKY.IO.Ports.SerialPort'
 	/// uses this approach, in order to not depend upon Win32 specifics.
 	/// </summary>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 	public class SerialPortPatcher : IDisposable
 	{
 		/// <summary>
@@ -68,7 +70,7 @@ namespace MKY.Win32.DotNET
 			if (string.IsNullOrEmpty(portName) || !portName.StartsWith("COM", StringComparison.OrdinalIgnoreCase))
 				throw (new ArgumentException(@"Invalid serial port name, must be ""COM...""!", "portName"));
 
-			SafeFileHandle hFile = FileIO.NativeMethods.CreateFile
+			SafeFileHandle h = FileIO.NativeMethods.CreateFile
 			(
 				@"\\.\" + portName,
 				FileIO.NativeTypes.Access.GENERIC_READ_WRITE,
@@ -79,19 +81,19 @@ namespace MKY.Win32.DotNET
 				IntPtr.Zero
 			);
 
-			if (hFile.IsInvalid)
+			if (h.IsInvalid)
 				throw (WinError.LastErrorToIOException());
 
 			try
 			{
-				var fileType = FileAPI.NativeMethods.GetFileType_(hFile);
+				var fileType = FileAPI.NativeMethods.GetFileType_(h);
 				switch (fileType)
 				{
 					case FileAPI.NativeTypes.FileType.FILE_TYPE_CHAR:
 					case FileAPI.NativeTypes.FileType.FILE_TYPE_UNKNOWN:
 					{
-						InitializeDCB(hFile);
-						this.handle = hFile;
+						InitializeDCB(h);
+						this.handle = h;
 						break;
 					}
 
@@ -105,7 +107,7 @@ namespace MKY.Win32.DotNET
 			{
 				DebugEx.WriteException(GetType(), ex, "Failed to initialize serial port handle!");
 
-				hFile.Close();
+				h.Close();
 				this.handle = null;
 				throw;
 			}

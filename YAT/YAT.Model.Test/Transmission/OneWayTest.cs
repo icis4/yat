@@ -121,7 +121,7 @@ namespace YAT.Model.Test.Transmission
 			DoubleLine   = new Utilities.TestSet(new Types.Command(new string[] { TestTextLines[0], TestTextLines[1] } ));
 			TripleLine   = new Utilities.TestSet(new Types.Command(new string[] { TestTextLines[0], TestTextLines[1], TestTextLines[2] }));
 			MultiLine    = new Utilities.TestSet(new Types.Command(TestTextLines));
-			                                                                                                       // LineStart + EOL + LineBreak result in three more elements.
+			                                                                                                       //// LineStart + EOL + LineBreak result in three more elements.
 			MultiEol     = new Utilities.TestSet(new Types.Command(@"A\!(EOL)B<CR><LF>C<CR><LF>D"), 4, new int[] { 4, 4, 4, 4 }, new int[] { 3, 3, 3, 3 }, true);
 			MixedEol     = new Utilities.TestSet(new Types.Command(@"A\!(EOL)BC<CR><LF>D"),         3, new int[] { 4, 4, 4    }, new int[] { 3, 4, 3    }, true);
 
