@@ -190,21 +190,21 @@ namespace MKY.Win32
 			private static extern SafeFileHandle GetStdHandle([In] NativeTypes.STD_HANDLE nStdHandle);
 
 			/// <summary></summary>
-			public static bool SetStandardInputHandle(SafeFileHandle hHandle)
+			public static bool SetStandardInputHandle(SafeFileHandle fileHandle)
 			{
-				return (SetStdHandle(NativeTypes.STD_HANDLE.STD_INPUT_HANDLE, hHandle));
+				return (SetStdHandle(NativeTypes.STD_HANDLE.STD_INPUT_HANDLE, fileHandle));
 			}
 
 			/// <summary></summary>
-			public static bool SetStandardOutputHandle(SafeFileHandle hHandle)
+			public static bool SetStandardOutputHandle(SafeFileHandle fileHandle)
 			{
-				return (SetStdHandle(NativeTypes.STD_HANDLE.STD_OUTPUT_HANDLE, hHandle));
+				return (SetStdHandle(NativeTypes.STD_HANDLE.STD_OUTPUT_HANDLE, fileHandle));
 			}
 
 			/// <summary></summary>
-			public static bool SetStandardErrorHandle(SafeFileHandle hHandle)
+			public static bool SetStandardErrorHandle(SafeFileHandle fileHandle)
 			{
-				return (SetStdHandle(NativeTypes.STD_HANDLE.STD_ERROR_HANDLE, hHandle));
+				return (SetStdHandle(NativeTypes.STD_HANDLE.STD_ERROR_HANDLE, fileHandle));
 			}
 
 			/// <summary>

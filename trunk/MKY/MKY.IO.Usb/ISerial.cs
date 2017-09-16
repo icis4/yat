@@ -117,7 +117,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Stops the device.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]
+		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "'Stop' is a common term to start/stop something.")]
 		void Stop();
 
 		/// <summary>

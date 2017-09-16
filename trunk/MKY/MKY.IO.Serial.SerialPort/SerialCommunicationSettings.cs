@@ -85,8 +85,8 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Creates new port settings with specified arguments.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "rfr", Justification = "RFR is a common term for serial ports.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "dtr", Justification = "DTR is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "rfr", Justification = "'RFR' is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "dtr", Justification = "'DTR' is a common term for serial ports.")]
 		public SerialCommunicationSettings(int baudRate, MKY.IO.Ports.DataBits dataBits, System.IO.Ports.Parity parity, System.IO.Ports.StopBits stopBits, SerialFlowControl flowControl, SerialControlPinState rfrPin, SerialControlPinState dtrPin)
 		{
 			BaudRate    = baudRate;
@@ -284,8 +284,8 @@ namespace MKY.IO.Serial.SerialPort
 		/// Returns <c>true</c> if the RFR/CTS lines are use, i.e. if one or the other kind of
 		/// hardware flow control is active.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cts", Justification = "CTS is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "'RFR' is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cts", Justification = "'CTS' is a common term for serial ports.")]
 		public virtual bool FlowControlUsesRfrCts
 		{
 			get
@@ -300,8 +300,8 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Returns <c>true</c> if the RFR/CTS control pins are managed automatically.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cts", Justification = "CTS is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "'RFR' is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cts", Justification = "'CTS' is a common term for serial ports.")]
 		public virtual bool FlowControlManagesRfrCtsAutomatically
 		{
 			get
@@ -314,8 +314,8 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Returns <c>true</c> if the DTR/DSR control pins are managed automatically.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dsr", Justification = "DSR is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "'DTR' is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dsr", Justification = "'DSR' is a common term for serial ports.")]
 		public virtual bool FlowControlManagesDtrDsrAutomatically
 		{
 			get { return (false); } // Not given for any of the supported settings.
@@ -349,7 +349,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "'RFR' is a common term for serial ports.")]
 		[XmlElement("RfrPin")]
 		public virtual SerialControlPinState RfrPin
 		{
@@ -365,7 +365,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "'DTR' is a common term for serial ports.")]
 		[XmlElement("DtrPin")]
 		public virtual SerialControlPinState DtrPin
 		{
@@ -388,7 +388,7 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "'RFR' is a common term for serial ports.")]
 		public static SerialControlPinState ToRfrPinDefault(SerialFlowControl flowControl)
 		{
 			switch (flowControl)
@@ -410,7 +410,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "'DTR' is a common term for serial ports.")]
 		public static SerialControlPinState ToDtrPinDefault(SerialFlowControl flowControl)
 		{
 			switch (flowControl)

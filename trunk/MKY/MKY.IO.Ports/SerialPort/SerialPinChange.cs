@@ -46,28 +46,28 @@ namespace MKY.IO.Ports
 		/// <remarks>
 		/// This signal was formerly called RTS (Request To Send).
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "'RFR' is a common term for serial ports.")]
 		Rfr = 2,
 
 		/// <summary>
 		/// The CTS (Clear To Send) signal changed state. This signal is used to indicate
 		/// whether data can be sent over the serial port.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cts", Justification = "CTS is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cts", Justification = "'CTS' is a common term for serial ports.")]
 		Cts = System.IO.Ports.SerialPinChange.CtsChanged,
 
 		/// <summary>
 		/// The DTR (Data Terminal Ready) signal changed state. This signal is used to indicate
 		/// whether this serial port host is ready to operate.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "'DTR' is a common term for serial ports.")]
 		Dtr = 4,
 
 		/// <summary>
 		/// The DSR (Data Set Ready) signal changed state. This signal is used to indicate
 		/// whether the device on the serial port is ready to operate.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dsr", Justification = "DSR is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dsr", Justification = "'DSR' is a common term for serial ports.")]
 		Dsr = System.IO.Ports.SerialPinChange.DsrChanged,
 
 		/// <summary>
@@ -75,7 +75,7 @@ namespace MKY.IO.Ports
 		/// whether a modem is connected to a working phone line and a data carrier signal
 		/// is detected.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dcd", Justification = "DCD is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dcd", Justification = "'DCD' is a common term for serial ports.")]
 		Dcd = System.IO.Ports.SerialPinChange.CDChanged,
 
 		/// <summary>

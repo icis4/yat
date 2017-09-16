@@ -21,6 +21,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 using NUnit.Framework;
 
 using YAT.Model.Types;
@@ -65,6 +67,7 @@ namespace YAT.Model.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void AssertSingleLineText(Command c, string text, string description = null)
 		{
 			Assert.That(c.IsDefined,        Is.True);

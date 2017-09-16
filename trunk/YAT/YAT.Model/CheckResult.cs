@@ -22,6 +22,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace YAT.Model
 {
 	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
@@ -35,6 +37,7 @@ namespace YAT.Model
 	/// </summary>
 	public enum CheckResult
 	{
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "OK", Justification = "Same spelling as 'DialogResult.OK'.")]
 		OK,
 		Cancel,
 		Ignore

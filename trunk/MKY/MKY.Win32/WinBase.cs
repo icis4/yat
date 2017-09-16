@@ -45,6 +45,72 @@ using Microsoft.Win32.SafeHandles;
 
 #endregion
 
+#region Module-level FxCop suppressions
+//==================================================================================================
+// Module-level FxCop suppressions
+//==================================================================================================
+
+// Justification = "Type is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#wReserved1")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#EvtChar")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#XonChar")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#XonLim")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#ByteSize")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#wReserved")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#XoffLim")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#XoffChar")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#StopBits")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#Parity")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#BaudRate")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#DCBlength")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#ErrorChar")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#EofChar")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#Flags")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+COMSTAT.#cbOutQue")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+COMSTAT.#Flags")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+COMSTAT.#cbInQue")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCBFlags.#RtsControl", MessageId = "Rts")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCBFlags.#DtrControl", MessageId = "Dtr")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCBFlags.#OutxCtsFlow", MessageId = "Outx")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCBFlags.#DsrSensitivity", MessageId = "Dsr")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCBFlags.#TXContinueOnXoff", MessageId = "Xoff")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCBFlags.#OutxDsrFlow", MessageId = "Outx")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCBFlags.#OutxDsrFlow", MessageId = "Dsr")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+COMSTATFlags.#RlsdHold", MessageId = "Rlsd")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+COMSTATFlags.#Eof", MessageId = "Eof")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+COMSTATFlags.#XoffSent", MessageId = "Xoff")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+COMSTATFlags.#Txim", MessageId = "Txim")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+COMSTATFlags.#DsrHold", MessageId = "Dsr")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+COMSTATFlags.#XoffHold", MessageId = "Xoff")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase.#GetCommState(Microsoft.Win32.SafeHandles.SafeFileHandle,MKY.Win32.WinBase+NativeTypes+DCB&)", MessageId = "Comm")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase.#GetCommState(Microsoft.Win32.SafeHandles.SafeFileHandle,MKY.Win32.WinBase+NativeTypes+DCB&)", MessageId = "dcb")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase.#SetCommState(Microsoft.Win32.SafeHandles.SafeFileHandle,MKY.Win32.WinBase+NativeTypes+DCB&)", MessageId = "Comm")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#EvtChar", MessageId = "Evt")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#XonChar", MessageId = "Xon")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#XonLim", MessageId = "Xon")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#XoffLim", MessageId = "Xoff")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#XoffChar", MessageId = "Xoff")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#DCBlength", MessageId = "Blength")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#EofChar", MessageId = "Eof")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+COMSTAT.#cbOutQue", MessageId = "Que")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+COMSTAT.#cbOutQue", MessageId = "cb")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+COMSTAT.#cbInQue", MessageId = "Que")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+COMSTAT.#cbInQue", MessageId = "cb")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.WinBase+NativeTypes+DCBFlags", MessageId = "DCB")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.WinBase+NativeTypes+COMSTATFlags", MessageId = "COMSTAT")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", Scope = "type", Target = "MKY.Win32.WinBase+NativeTypes+DCBFlags", MessageId = "Flags")]
+[module: SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", Scope = "type", Target = "MKY.Win32.WinBase+NativeTypes+COMSTATFlags", MessageId = "Flags")]
+[module: SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+DCB.#Flags", MessageId = "Flags")]
+[module: SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", Scope = "member", Target = "MKY.Win32.WinBase+NativeTypes+COMSTAT.#Flags", MessageId = "Flags")]
+
+#endregion
+
 namespace MKY.Win32
 {
 	/// <summary>
@@ -82,6 +148,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Type name is given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Dont' care.")]
 			[CLSCompliant(false)]
 			public struct COMSTATFlags
 			{
@@ -94,6 +161,10 @@ namespace MKY.Win32
 				public bool XoffSent { get { return (this.flags[4]); } set { this.flags[4] = value; } }
 				public bool Eof      { get { return (this.flags[5]); } set { this.flags[5] = value; } }
 				public bool Txim     { get { return (this.flags[6]); } set { this.flags[6] = value; } }
+
+				[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations" , Justification = "See exception message...")]
+				[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "value", Justification = "Symmetricity with other flags.")]
+				[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Symmetricity with other flags.")]
 				public uint Reserved                             // [7]...[32] (25 bits)
 				{
 					get { throw (new NotImplementedException("Access to 'Reserved' bits not implemented (yet)")); }
@@ -106,6 +177,7 @@ namespace MKY.Win32
 			/// This structure is filled by the <see cref="NativeMethods.ClearCommError"/> function.
 			/// </summary>
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
+			[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "COMSTAT", Justification = "Naming is defined by the Win32 API.")]
 			[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Dont' care.")]
 			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
@@ -122,6 +194,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Type name is given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Dont' care.")]
 			[CLSCompliant(false)]
 			public struct DCBFlags
 			{
@@ -148,6 +221,10 @@ namespace MKY.Win32
 					set {         BitConverterEx.FromUInt32(ref this.flags, value, 12, 13);  }
 				}
 				public bool AbortOnError     { get { return (this.flags[14]); } set { this.flags[14] = value; } }
+
+				[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations" , Justification = "See exception message...")]
+				[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "value", Justification = "Symmetricity with other flags.")]
+				[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Symmetricity with other flags.")]
 				public uint Dummy2                                       // [15]...[31] (17 bits)
 				{
 					get { throw (new NotImplementedException("Access to 'Dummy2' bits not implemented (yet)")); }
@@ -159,6 +236,7 @@ namespace MKY.Win32
 			/// Defines the control setting for a serial communications device.
 			/// </summary>
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
+			[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "DCB", Justification = "Naming is defined by the Win32 API.")]
 			[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Dont' care.")]
 			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
@@ -240,6 +318,8 @@ namespace MKY.Win32
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "dcb", Justification = "Naming according to the Win32 API.")]
 		[CLSCompliant(false)]
 		public static void GetCommState(SafeFileHandle handle, out NativeTypes.DCB dcb)
 		{
@@ -260,8 +340,10 @@ namespace MKY.Win32
 		}
  
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "dcb", Justification = "Naming according to the Win32 API.")]
 		[CLSCompliant(false)]
-		public static void SetCommState(SafeFileHandle handle, ref NativeTypes.DCB lpDCB)
+		public static void SetCommState(SafeFileHandle handle, ref NativeTypes.DCB dcb)
 		{
 			for (int i = 0; i < CommStateRetries; i++)
 			{
@@ -270,7 +352,7 @@ namespace MKY.Win32
 				if (!NativeMethods.ClearCommError(handle, out errors, out stat))
 					break;
 
-				if (NativeMethods.SetCommState(handle, ref lpDCB))
+				if (NativeMethods.SetCommState(handle, ref dcb))
 					return;
 			}
 

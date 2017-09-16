@@ -166,7 +166,7 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]
+			[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "'Stop' is a common term to start/stop something.")]
 			public virtual void Stop()
 			{
 				AssertNotDisposed();
@@ -526,6 +526,7 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		protected override void ProcessSendFileItem(FileSendItem item)
 		{
 			try

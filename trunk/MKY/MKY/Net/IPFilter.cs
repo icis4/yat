@@ -98,7 +98,7 @@ namespace MKY.Net
 
 		#endregion
 
-		private string    explicitName = null;
+		private string    explicitName; // = null;
 		private IPAddress explicitAddress  = IPAddress.None;
 
 		/// <summary>Default is <see cref="IPFilter.Any"/>.</summary>
@@ -140,6 +140,7 @@ namespace MKY.Net
 		/// <summary>
 		/// Creates an explicit <see cref="IPFilterEx"/> object, using the provided host name and optional address.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public IPFilterEx(string name, IPAddress address = null)
 		{
 			SetUnderlyingEnum(IPFilter.Explicit);

@@ -2739,6 +2739,7 @@ namespace YAT.Model
 			}
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private bool TryGetSerialPortAlternate(MKY.IO.Ports.SerialPortCollection ports, out MKY.IO.Ports.SerialPortId portIdAlternate)
 		{
 			// If not allowed to detect 'InUse', no reliable alternate can be evaluted:
@@ -3920,7 +3921,7 @@ namespace YAT.Model
 		/// <returns>
 		/// <c>true</c> if the request has been executed; otherwise, <c>false</c>.
 		/// </returns>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "'RFR' is a common term for serial ports.")]
 		public virtual bool RequestToggleRfr()
 		{
 			AssertNotDisposed();
@@ -3946,7 +3947,7 @@ namespace YAT.Model
 		/// <returns>
 		/// <c>true</c> if the request has been executed; otherwise, <c>false</c>.
 		/// </returns>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "'DTR' is a common term for serial ports.")]
 		public virtual bool RequestToggleDtr()
 		{
 			AssertNotDisposed();

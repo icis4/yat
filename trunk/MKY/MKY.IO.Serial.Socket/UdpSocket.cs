@@ -664,7 +664,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]
+		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "'Stop' is a common term to start/stop something.")]
 		public virtual void Stop()
 		{
 			// AssertNotDisposed() is called by 'IsStarted' below.
@@ -1161,6 +1161,7 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Partially same code for multiple exceptions.")]
 		private void ReceiveCallback(IAsyncResult ar)
 		{
 			var state = (AsyncReceiveState)(ar.AsyncState);

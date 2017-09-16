@@ -99,7 +99,7 @@ namespace MKY.IO.Ports
 		/// Gets or sets a value indicating whether the RFR (Ready For Receiving) signal
 		/// is enabled during serial communication.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "'RFR' is a common term for serial ports.")]
 		bool RfrEnable { get; set; }
 
 		/// <summary>
@@ -108,7 +108,7 @@ namespace MKY.IO.Ports
 		/// <returns>
 		/// The new state of the RFR control pin.
 		/// </returns>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "'RFR' is a common term for serial ports.")]
 		bool ToggleRfr();
 
 		/// <summary>
@@ -117,7 +117,7 @@ namespace MKY.IO.Ports
 		/// <returns>
 		/// The new state of the DTR control pin.
 		/// </returns>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "'DTR' is a common term for serial ports.")]
 		bool ToggleDtr();
 
 		/// <summary>
