@@ -423,6 +423,7 @@ namespace YAT.View.Forms
 			this.checkBox_Delay.Size = new System.Drawing.Size(85, 17);
 			this.checkBox_Delay.TabIndex = 1;
 			this.checkBox_Delay.Text = "Add dela&y of";
+			this.toolTip.SetToolTip(this.checkBox_Delay, resources.GetString("checkBox_Delay.ToolTip"));
 			this.checkBox_Delay.CheckedChanged += new System.EventHandler(this.checkBox_Delay_CheckedChanged);
 			// 
 			// label_Encoding
