@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -38,6 +39,9 @@ using System.Threading;
 
 using MKY;
 using MKY.Text;
+
+using YAT.Application.Utilities;
+using YAT.Domain.Utilities;
 
 #endregion
 
@@ -304,9 +308,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Methods > Send
+		#region Methods > Send Data
 		//------------------------------------------------------------------------------------------
-		// Methods > Send
+		// Methods > Send Data
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
@@ -314,7 +318,7 @@ namespace YAT.Domain
 		/// This method will be called per item, not per complete line. But, regexes below are
 		/// likely using beginning or end of line anchors ("^" and "$"). Well, a limitation.
 		/// </remarks>
-		protected override void ProcessParsableSendItem(ParsableSendItem item)
+		protected override void ProcessParsableSendItem(ParsableDataSendItem item)
 		{
 			string textToParse = item.Data;
 
@@ -395,6 +399,87 @@ namespace YAT.Domain
 			}
 
 			return (accumulatedLineDelay);
+		}
+
+		#endregion
+
+		#region Methods > Send File
+		//------------------------------------------------------------------------------------------
+		// Methods > Send File
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		protected override void ProcessSendFileItem(FileSendItem item)
+		{
+			try
+			{
+				if (ExtensionHelper.IsXmlFile(item.FilePath))
+				{
+					string[] lines;
+					XmlReaderHelper.LinesFromFile(item.FilePath, out lines); // Read all at once for simplicity.
+					foreach (string line in lines)
+					{
+						if (string.IsNullOrEmpty(line) && TextTerminalSettings.SendFile.SkipEmptyLines)
+							continue;
+
+						SendLine(line);
+
+						if (BreakSendFile)
+						{
+							OnIOChanged(EventArgs.Empty); // Raise the event to indicate that sending is no longer ongoing.
+							break;
+						}
+
+						Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
+					}
+				}
+				else if (ExtensionHelper.IsRtfFile(item.FilePath))
+				{
+					string[] lines;
+					RtfReaderHelper.LinesFromRtfFile(item.FilePath, out lines); // Read all at once for simplicity.
+					foreach (string line in lines)
+					{
+						if (string.IsNullOrEmpty(line) && TextTerminalSettings.SendFile.SkipEmptyLines)
+							continue;
+
+						SendLine(line);
+
+						if (BreakSendFile)
+						{
+							OnIOChanged(EventArgs.Empty); // Raise the event to indicate that sending is no longer ongoing.
+							break;
+						}
+
+						Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
+					}
+				}
+				else
+				{
+					using (var sr = new StreamReader(item.FilePath, (EncodingEx)TextTerminalSettings.Encoding, true))
+					{                             // Automatically detect encoding from BOM, otherwise use given setting.
+						string line;
+						while ((line = sr.ReadLine()) != null)
+						{
+							if (string.IsNullOrEmpty(line) && TextTerminalSettings.SendFile.SkipEmptyLines)
+								continue;
+
+							SendLine(line, item.DefaultRadix);
+
+							if (BreakSendFile)
+							{
+								OnIOChanged(EventArgs.Empty); // Raise the event to indicate that sending is no longer ongoing.
+								break;
+							}
+
+							Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, @"Error reading file """ + item.FilePath + @""": " + ex.Message));
+			}
 		}
 
 		#endregion

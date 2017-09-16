@@ -2245,14 +2245,14 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_RawChunkSent(object sender, EventArgs<Domain.RawChunk> e)
 		{
-			var currenctTickStamp = Stopwatch.GetTimestamp();
-			if (currenctTickStamp >= this.terminal_RawChunkSent_nextTimedStatusTextRequestTickStamp)
+			var currentTickStamp = Stopwatch.GetTimestamp();
+			if (currentTickStamp >= this.terminal_RawChunkSent_nextTimedStatusTextRequestTickStamp)
 			{
 				OnTimedStatusTextRequest("Sending...");
 
 				unchecked // Calculate tick stamp of next request:
 				{
-					this.terminal_RawChunkSent_nextTimedStatusTextRequestTickStamp = (currenctTickStamp + TimedStatusTextRequestTickInterval); // Loop-around is OK.
+					this.terminal_RawChunkSent_nextTimedStatusTextRequestTickStamp = (currentTickStamp + TimedStatusTextRequestTickInterval); // Loop-around is OK.
 				}
 			}
 
@@ -2288,14 +2288,14 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_RawChunkReceived(object sender, EventArgs<Domain.RawChunk> e)
 		{
-			var currenctTickStamp = Stopwatch.GetTimestamp();
-			if (currenctTickStamp >= this.terminal_RawChunkReceived_nextTimedStatusTextRequestTickStamp)
+			var currentTickStamp = Stopwatch.GetTimestamp();
+			if (currentTickStamp >= this.terminal_RawChunkReceived_nextTimedStatusTextRequestTickStamp)
 			{
 				OnTimedStatusTextRequest("Receiving...");
 
 				unchecked // Calculate tick stamp of next request:
 				{
-					this.terminal_RawChunkReceived_nextTimedStatusTextRequestTickStamp = (currenctTickStamp + TimedStatusTextRequestTickInterval); // Loop-around is OK.
+					this.terminal_RawChunkReceived_nextTimedStatusTextRequestTickStamp = (currentTickStamp + TimedStatusTextRequestTickInterval); // Loop-around is OK.
 				}
 			}
 
@@ -3033,216 +3033,6 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Send
-		//------------------------------------------------------------------------------------------
-		// Terminal > Send
-		//------------------------------------------------------------------------------------------
-
-		private void Send(byte[] data)
-		{
-			try
-			{
-				this.terminal.Send(data);
-			}
-			catch (IOException ex)
-			{
-				// Attention:
-				// Similar code can be found in functions below!
-				// Changes here may have to be applied there too!
-
-				string dataText = "";
-				if (data != null)
-				{
-					if (data.Length == 1)
-						dataText = data.Length.ToString(CultureInfo.InvariantCulture) + " byte";
-					else
-						dataText = data.Length.ToString(CultureInfo.InvariantCulture) + " bytes";
-				}
-
-				string lead;
-				string title;
-				PrepareIOErrorMessageInputRequest(out lead, out title);
-
-				OnFixedStatusTextRequest("Error sending " + dataText + "!");
-				OnMessageInputRequest
-				(
-					ErrorHelper.ComposeMessage(lead, ex),
-					title,
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-				);
-				OnTimedStatusTextRequest(dataText + " not sent!");
-			}
-		}
-
-		private void Send(string data, Domain.Radix defaultRadix = Domain.Parser.Parser.DefaultRadixDefault)
-		{
-			Send(data, defaultRadix, false);
-		}
-
-		private void SendEol()
-		{
-			Send("", Domain.Radix.String, true);
-		}
-
-		private void SendLine(string line, Domain.Radix defaultRadix = Domain.Parser.Parser.DefaultRadixDefault)
-		{
-			Send(line, defaultRadix, true);
-		}
-
-		private void Send(string data, Domain.Radix defaultRadix, bool isLine)
-		{
-			try
-			{
-				DebugMessage(@"Sending """ + (!string.IsNullOrEmpty(data) ? data : "") + @"""...");
-
-				if (isLine)
-					this.terminal.SendLine(data, defaultRadix);
-				else
-					this.terminal.Send(data, defaultRadix);
-			}
-			catch (IOException ex)
-			{
-				// Attention:
-				// Similar code can be found in functions above and below!
-				// Changes here may have to be applied there too!
-
-				string dataText = (!string.IsNullOrEmpty(data) ? @"""" + data + @"""" : "");
-
-				string lead;
-				string title;
-				PrepareIOErrorMessageInputRequest(out lead, out title);
-
-				OnFixedStatusTextRequest("Error sending " + dataText + "!");
-				OnMessageInputRequest
-				(
-					ErrorHelper.ComposeMessage(lead, ex),
-					title,
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-				);
-				OnTimedStatusTextRequest(dataText + " not sent!");
-			}
-			catch (Domain.Parser.FormatException ex)
-			{
-				// Attention:
-				// Similar code can be found in functions below!
-				// Changes here may have to be applied there too!
-
-				string dataText = (!string.IsNullOrEmpty(data) ? @"""" + data + @"""" : "");
-
-				OnFixedStatusTextRequest("Error sending " + dataText + "!");
-				OnMessageInputRequest
-				(
-					"Bad data format:" + Environment.NewLine +
-					ex.Message,
-					"Format Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-				);
-				OnTimedStatusTextRequest(dataText + " not sent!");
-			}
-		}
-
-		private void PrepareIOErrorMessageInputRequest(out string text, out string title)
-		{
-			var textBuilder = new StringBuilder();
-			var titleBuilder = new StringBuilder();
-
-			textBuilder.Append("Unable to write to ");
-			switch (this.settingsRoot.IOType)
-			{
-				case Domain.IOType.SerialPort:
-					textBuilder.Append("port");
-					titleBuilder.Append("Serial COM Port");
-					break;
-
-				case Domain.IOType.TcpClient:
-				case Domain.IOType.TcpServer:
-				case Domain.IOType.TcpAutoSocket:
-				case Domain.IOType.UdpClient:
-				case Domain.IOType.UdpServer:
-				case Domain.IOType.UdpPairSocket:
-					textBuilder.Append("socket");
-					titleBuilder.Append("Socket");
-					break;
-
-				case Domain.IOType.UsbSerialHid:
-					textBuilder.Append("device");
-					titleBuilder.Append("Device");
-					break;
-
-				default:
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.settingsRoot.IOType + "' is an I/O type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
-			textBuilder.Append(":");
-			titleBuilder.Append(" Error!");
-
-			text = textBuilder.ToString();
-			title = titleBuilder.ToString();
-		}
-
-		/// <remarks>
-		/// Required to allow sending multi-line commands in a single operation. Otherwise, using
-		/// <see cref="SendLine"/>, sending gets mixed-up because of the following sequence:
-		///  1. First line gets sent/enqueued.
-		///  2. Second line gets sent/enqueued.
-		///  3. Response to first line is received and displayed
-		///     and so on, mix-up among sent and received lines...
-		/// </remarks>
-		private void SendMultiLine(string[] multiLineText, Domain.Radix defaultRadix, string singleLineText)
-		{
-			try
-			{
-				DebugMessage(@"Sending """ + (!string.IsNullOrEmpty(singleLineText) ? singleLineText : "") + @"""...");
-
-				this.terminal.SendLines(multiLineText, defaultRadix);
-			}
-			catch (IOException ex)
-			{
-				// Attention:
-				// Similar code can be found in functions above!
-				// Changes here may have to be applied there too!
-
-				string dataText = (!string.IsNullOrEmpty(singleLineText) ? @"""" + singleLineText + @"""" : "");
-
-				string lead;
-				string title;
-				PrepareIOErrorMessageInputRequest(out lead, out title);
-
-				OnFixedStatusTextRequest("Error sending " + dataText + "!");
-				OnMessageInputRequest
-				(
-					ErrorHelper.ComposeMessage(lead, ex),
-					title,
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-				);
-				OnTimedStatusTextRequest(dataText + " not sent!");
-			}
-			catch (Domain.Parser.FormatException ex)
-			{
-				// Attention:
-				// Similar code can be found in functions above!
-				// Changes here may have to be applied there too!
-
-				string dataText = (!string.IsNullOrEmpty(singleLineText) ? @"""" + singleLineText + @"""" : "");
-
-				OnFixedStatusTextRequest("Error sending " + dataText + "!");
-				OnMessageInputRequest
-				(
-					"Bad data format:" + Environment.NewLine +
-					ex.Message,
-					"Format Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-				);
-				OnTimedStatusTextRequest(dataText + " not sent!");
-			}
-		}
-
-		#endregion
-
 		#region Terminal > Send Command
 		//------------------------------------------------------------------------------------------
 		// Terminal > Send Command
@@ -3259,6 +3049,8 @@ namespace YAT.Model
 				SendText(command);
 			else if (command.IsFilePath)
 				SendFile(command);
+			else
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Command '" + command + "' does not specify a known command type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "command"));
 		}
 
 		#endregion
@@ -3320,19 +3112,18 @@ namespace YAT.Model
 		/// <summary>
 		/// Sends given text command.
 		/// </summary>
-		/// <param name="c">Text command to be sent.</param>
-		public virtual void SendText(Command c)
+		/// <param name="command">Text command to be sent.</param>
+		public virtual void SendText(Command command)
 		{
 			// AssertNotDisposed() is called by 'DoSend...' below.
 
-			DoSendText(c);
+			DoSendText(command);
 		}
 
 		/// <remarks>
-		/// This method shall not be overridden. All text sending shall be requested using this
-		/// method, to ensure that pending break conditions are resumed.
+		/// Argument of this protected method named "c" for compactness.
 		/// </remarks>
-		protected void DoSendText(Command c)
+		protected virtual void DoSendText(Command c)
 		{
 			AssertNotDisposed();
 
@@ -3341,17 +3132,17 @@ namespace YAT.Model
 				if (c.IsSingleLineText)
 				{
 					if (SendTextSettings.IsEasterEggCommand(c.SingleLineText))
-						SendLine(SendTextSettings.EasterEggCommandText, Domain.Radix.String);
+						this.terminal.SendLine(SendTextSettings.EasterEggCommandText, Domain.Radix.String);
 					else
-						SendLine(c.SingleLineText, c.DefaultRadix);
+						this.terminal.SendLine(c.SingleLineText, c.DefaultRadix);
 				}
 				else if (c.IsMultiLineText)
 				{
-					SendMultiLine(c.MultiLineText, c.DefaultRadix, c.SingleLineText);
+					this.terminal.SendLines(c.MultiLineText, c.DefaultRadix);
 				}
 				else if (c.IsPartialText)
 				{
-					Send(c.PartialText, c.DefaultRadix);
+					this.terminal.Send(c.PartialText, c.DefaultRadix);
 
 					// Compile the partial command line for later use:
 					if (string.IsNullOrEmpty(this.partialCommandLine))
@@ -3361,22 +3152,25 @@ namespace YAT.Model
 				}
 				else if (c.IsPartialTextEol)
 				{
-					SendEol();
+					this.terminal.SendLine("", Domain.Radix.String);
 				}
 				else
 				{
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' has an invalid type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' does not specify a known text command type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "c"));
 				}
 
-				CopyLineTextIntoRecentCommandsIfNeeded(c);
+				CopyIntoRecentTextCommandsIfNeeded(c);
+			}
+			else
+			{
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' does not specify a valid text command!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "c"));
 			}
 		}
 
 		/// <remarks>
-		/// This method shall not be overridden. All text sending shall be requested using this
-		/// method, to ensure that pending break conditions are resumed.
+		/// Argument of this protected method named "c" for compactness.
 		/// </remarks>
-		protected void DoSendTextWithoutEol(Command c)
+		protected virtual void DoSendTextWithoutEol(Command c)
 		{
 			AssertNotDisposed();
 
@@ -3385,13 +3179,13 @@ namespace YAT.Model
 				if (c.IsSingleLineText)
 				{
 					if (SendTextSettings.IsEasterEggCommand(c.SingleLineText))
-						Send(SendTextSettings.EasterEggCommandText, Domain.Radix.String);
+						this.terminal.Send(SendTextSettings.EasterEggCommandText, Domain.Radix.String);
 					else
-						Send(c.SingleLineText, c.DefaultRadix);
+						this.terminal.Send(c.SingleLineText, c.DefaultRadix);
 				}
 				else if (c.IsPartialText)
 				{
-					Send(c.PartialText, c.DefaultRadix);
+					this.terminal.Send(c.PartialText, c.DefaultRadix);
 
 					// Compile the partial command line for later use:
 					if (string.IsNullOrEmpty(this.partialCommandLine))
@@ -3401,17 +3195,24 @@ namespace YAT.Model
 				}
 				else // Covers 'c.IsMultiLineText' and 'c.IsPartialTextEol' which are invalid 'WithoutEol'.
 				{
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' has an invalid type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' does not specify a known text command type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "c"));
 				}
 
-				CopyLineTextIntoRecentCommandsIfNeeded(c);
+				CopyIntoRecentTextCommandsIfNeeded(c);
+			}
+			else
+			{
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' does not specify a valid text command!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "c"));
 			}
 		}
 
 		/// <remarks>
 		/// Includes compiled partial text.
 		/// </remarks>
-		protected virtual void CopyLineTextIntoRecentCommandsIfNeeded(Command c)
+		/// <remarks>
+		/// Argument of this protected method named "c" for compactness.
+		/// </remarks>
+		protected virtual void CopyIntoRecentTextCommandsIfNeeded(Command c)
 		{
 			if (c.IsSingleLineText || c.IsMultiLineText /* || do not add c.IsPartialText to recents */ || c.IsPartialTextEol)
 			{
@@ -3451,116 +3252,45 @@ namespace YAT.Model
 		/// <summary>
 		/// Sends given file.
 		/// </summary>
-		/// <param name="c">File to be sent.</param>
-		public virtual void SendFile(Command c)
+		/// <param name="command">File to be sent.</param>
+		public virtual void SendFile(Command command)
 		{
 			// AssertNotDisposed() is called by 'DoSend...' below.
 
-			DoSendFile(c);
+			DoSendFile(command);
 		}
 
 		/// <remarks>
-		/// This method shall not be overridden. All file sending shall be requested using this
-		/// method, to ensure that pending break conditions are resumed.
+		/// Separate "Do...()" method for symmetricity with "DoSendText...()".
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		protected void DoSendFile(Command c)
+		/// <remarks>
+		/// Argument of this protected method named "c" for compactness.
+		/// </remarks>
+		protected virtual void DoSendFile(Command c)
 		{
 			AssertNotDisposed();
 
-			if (!c.IsValidFilePath)
-				return;
-
-			string filePath = EnvironmentEx.ResolveAbsolutePath(c.FilePath);
-
-			try
+			if (c.IsValidFilePath)
 			{
-				if (this.terminal is Domain.TextTerminal)
-				{
-					if (ExtensionHelper.IsXmlFile(filePath))
-					{
-						// XML => Read all at once for simplicity:
-						string[] lines;
-						XmlReaderHelper.LinesFromFile(filePath, out lines);
-						foreach (string line in lines)
-						{
-							if (string.IsNullOrEmpty(line) && this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines)
-								continue;
+				string filePath = EnvironmentEx.ResolveAbsolutePath(c.FilePath);
 
-							SendLine(line);
-						}
-					}
-					else if (ExtensionHelper.IsRtfFile(filePath))
-					{
-						// RTF => Read all at once for simplicity:
-						string[] lines;
-						RtfReaderHelper.LinesFromRtfFile(filePath, out lines);
-						foreach (string line in lines)
-						{
-							if (string.IsNullOrEmpty(line) && this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines)
-								continue;
+				this.terminal.SendFile(filePath, c.DefaultRadix);
 
-							SendLine(line);
-						}
-					}
-					else
-					{
-						// Text => Send in lines to enable breaking:
-						using (var sr = new StreamReader(filePath, (EncodingEx)this.settingsRoot.TextTerminal.Encoding, true))
-						{                               // Automatically detect encoding from BOM, otherwise use given setting.
-							string line;
-							while (((line = sr.ReadLine()) != null) && (!this.terminal.BreakState))
-							{
-								if (string.IsNullOrEmpty(line) && this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines)
-									continue;
-
-								SendLine(line, c.DefaultRadix); // Enable parsing.
-							}
-						}
-					}
-				}
-				else
-				{
-					if (ExtensionHelper.IsXmlFile(filePath))
-					{
-						// XML => Read all at once for simplicity:
-						string[] lines;
-						XmlReaderHelper.LinesFromFile(filePath, out lines);
-						foreach (string line in lines)
-							SendLine(line);
-					}
-					else
-					{
-						// Binary => Send in chunks to enable breaking:
-						using (FileStream fs = File.OpenRead(filePath))
-						{
-							long remaining = fs.Length;
-							while ((remaining > 0) && (!this.terminal.BreakState))
-							{
-								byte[] a = new byte[1024]; // 1 KB chunks.
-								int n = fs.Read(a, 0, a.Length);
-								Array.Resize<byte>(ref a, n);
-								Send(a);
-								remaining -= n;
-							}
-						}
-					}
-				}
+				CopyIntoRecentFileCommands(c);
 			}
-			catch (Exception ex)
+			else
 			{
-				OnMessageInputRequest
-				(
-					"Error reading file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
-					ex.Message,
-					"File Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-				);
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' does not specify a valid file command!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "c"));
 			}
+		}
 
+		/// <remarks>
+		/// Argument of this protected method named "c" for compactness.
+		/// </remarks>
+		protected virtual void CopyIntoRecentFileCommands(Command c)
+		{
 			// Clone the command for the recent commands collection:
-			Command clone = new Command(c);
+			var clone = new Command(c);
 
 			// Put clone into recent history:
 			this.settingsRoot.SendFile.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(new RecentItem<Command>(clone));

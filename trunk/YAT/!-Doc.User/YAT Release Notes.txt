@@ -97,6 +97,7 @@ Important changes:
 - Improved speed on sending and receiving, preventing application freeze on fast data (bug #383).
 - Improved responsiveness to send requests while receiving a lot of fast data, as well as
   responsiveness to receive data while sending a lot of fast data (rel. to bugs #305, #380, #383).
+- Break [Ctrl+B] can now also be used to break sending a file (bug #305 and feature request #295).
 - Auto-reconnect of TCP/IP client terminals enabled by default.
 - Text input now supports the [Ctrl+Backspace] shortcut and multi-line text input also the [Ctrl+A]
   shortcut (feature request #317 as workaround to limitation of .NET Windows.Forms).

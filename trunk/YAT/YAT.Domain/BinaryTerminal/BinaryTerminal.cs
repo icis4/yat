@@ -30,9 +30,14 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Threading;
 
 using MKY;
 using MKY.Diagnostics;
+
+using YAT.Application.Utilities;
+using YAT.Domain.Utilities;
 
 #endregion
 
@@ -479,9 +484,9 @@ namespace YAT.Domain
 		// Methods
 		//==========================================================================================
 
-		#region Methods > Send
+		#region Methods > Send Data
 		//------------------------------------------------------------------------------------------
-		// Methods > Send
+		// Methods > Send Data
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
@@ -510,6 +515,65 @@ namespace YAT.Domain
 					base.ProcessInLineKeywords(result);
 					break;
 				}
+			}
+		}
+
+		#endregion
+
+		#region Methods > Send File
+		//------------------------------------------------------------------------------------------
+		// Methods > Send File
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		protected override void ProcessSendFileItem(FileSendItem item)
+		{
+			try
+			{
+				if (ExtensionHelper.IsXmlFile(item.FilePath))
+				{
+					string[] lines;
+					XmlReaderHelper.LinesFromFile(item.FilePath, out lines); // Read all at once for simplicity.
+					foreach (string line in lines)
+					{
+						SendLine(line);
+
+						if (BreakSendFile)
+						{
+							OnIOChanged(EventArgs.Empty); // Raise the event to indicate that sending is no longer ongoing.
+							break;
+						}
+
+						Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
+					}
+				}
+				else
+				{
+					using (FileStream fs = File.OpenRead(item.FilePath))
+					{
+						long remaining = fs.Length;
+						while (remaining > 0)
+						{
+							byte[] a = new byte[1024]; // 1 KB chunks.
+							int n = fs.Read(a, 0, a.Length);
+							Array.Resize<byte>(ref a, n);
+							Send(a);
+							remaining -= n;
+
+							if (BreakSendFile)
+							{
+								OnIOChanged(EventArgs.Empty); // Raise the event to indicate that sending is no longer ongoing.
+								break;
+							}
+
+							Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, @"Error reading file """ + item.FilePath + @""": " + ex.Message));
 			}
 		}
 
