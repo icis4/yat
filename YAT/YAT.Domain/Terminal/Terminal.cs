@@ -46,6 +46,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
 using System.Text;
 using System.Threading;
 
@@ -120,15 +121,19 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public const int ThresholdMs = 400; // 400 Bytes @ 9600 Baud ~= 400 ms
 
-			/// <summary></summary>
-			public bool EventMustBeRaised;
-
+			private bool eventMustBeRaised;
 			private DateTime initialTimeStamp;
+
+			/// <summary></summary>
+			public bool EventMustBeRaised
+			{
+				get { return (this.eventMustBeRaised); }
+			}
 
 			/// <summary></summary>
 			public void Initialize()
 			{
-				this.EventMustBeRaised = false;
+				this.eventMustBeRaised = false;
 				this.initialTimeStamp = DateTime.Now;
 			}
 
@@ -141,10 +146,10 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public bool RaiseEventIfChunkSizeIsAboveThreshold(int chunkSize)
 			{
-				// Only let the event get raised if it has'nt been yet:
-				if (!this.EventMustBeRaised && ChunkSizeIsAboveThreshold(chunkSize))
+				// Only let the event get raised if it hasn't been yet:
+				if (!this.eventMustBeRaised && ChunkSizeIsAboveThreshold(chunkSize))
 				{
-					this.EventMustBeRaised = true;
+					this.eventMustBeRaised = true;
 					return (true);
 				}
 
@@ -160,10 +165,10 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public bool RaiseEventIfDelayIsAboveThreshold(int delay)
 			{
-				// Only let the event get raised if it has'nt been yet:
-				if (!this.EventMustBeRaised && DelayIsAboveThreshold(delay))
+				// Only let the event get raised if it hasn't been yet:
+				if (!this.eventMustBeRaised && DelayIsAboveThreshold(delay))
 				{
-					this.EventMustBeRaised = true;
+					this.eventMustBeRaised = true;
 					return (true);
 				}
 
@@ -180,11 +185,10 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public bool RaiseEventIfTotalTimeLagIsAboveThreshold()
 			{
-				// Let the event get raised in any case. This ensures the terminal
-				// state gets properly updated during an ongoing long delay:
-				if (TotalTimeLagIsAboveThreshold())
+				// Only let the event get raised if it hasn't been yet:
+				if (!this.eventMustBeRaised && TotalTimeLagIsAboveThreshold())
 				{
-					this.EventMustBeRaised = true;
+					this.eventMustBeRaised = true;
 					return (true);
 				}
 
@@ -194,7 +198,7 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public void EventMustBeRaisedBecauseStatusHasBeenAccessed()
 			{
-				this.EventMustBeRaised = true;
+				this.eventMustBeRaised = true;
 			}
 		}
 
@@ -244,12 +248,17 @@ namespace YAT.Domain
 
 		private RawTerminal rawTerminal;
 
-		private Queue<SendItem> sendQueue = new Queue<SendItem>();
+		private Queue<DataSendItem> sendDataQueue = new Queue<DataSendItem>();
+		private bool sendDataThreadRunFlag;
+		private AutoResetEvent sendDataThreadEvent;
+		private Thread sendDataThread;
+		private object sendDataThreadSyncObj = new object();
 
-		private bool sendThreadRunFlag;
-		private AutoResetEvent sendThreadEvent;
-		private Thread sendThread;
-		private object sendThreadSyncObj = new object();
+		private Queue<FileSendItem> sendFileQueue = new Queue<FileSendItem>();
+		private bool sendFileThreadRunFlag;
+		private AutoResetEvent sendFileThreadEvent;
+		private Thread sendFileThread;
+		private object sendFileThreadSyncObj = new object();
 
 		private bool sendingIsOngoing;
 		private IOChangedEventHelper ioChangedEventHelper;
@@ -328,7 +337,7 @@ namespace YAT.Domain
 
 		////this.isReloading has been initialized to false.
 
-			CreateAndStartSendThread();
+			CreateAndStartSendThreads();
 		}
 
 		/// <summary></summary>
@@ -345,7 +354,7 @@ namespace YAT.Domain
 
 			this.isReloading = terminal.isReloading;
 
-			CreateAndStartSendThread();
+			CreateAndStartSendThreads();
 		}
 
 		#region Disposal
@@ -378,7 +387,7 @@ namespace YAT.Domain
 					DisposePeriodicXOnTimer();
 
 					// ...and the send thread will already have been stopped in Close()...
-					StopSendThread();
+					StopSendThreads();
 
 					// ...and objects will already have been detached and disposed of in Close():
 					DetachTerminalSettings();
@@ -424,80 +433,84 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Send Thread
+		#region Send Threads
 		//------------------------------------------------------------------------------------------
-		// Send Thread
+		// Send Threads
 		//------------------------------------------------------------------------------------------
 
-		private void CreateAndStartSendThread()
+		private void CreateAndStartSendThreads()
 		{
-			lock (this.sendThreadSyncObj)
+			lock (this.sendDataThreadSyncObj)
 			{
-				DebugThreadState("SendThread() gets created...");
+				DebugThreadState("SendDataThread() gets created...");
 
-				if (this.sendThread == null)
+				if (this.sendDataThread == null)
 				{
-					this.sendThreadRunFlag = true;
-					this.sendThreadEvent = new AutoResetEvent(false);
-					this.sendThread = new Thread(new ThreadStart(SendThread));
-					this.sendThread.Name = "Terminal [" + (1000 + this.instanceId) + "] Send Thread";
-					this.sendThread.Start(); // Offset with 1000 to distinguish this ID from the 'real' terminal ID.
+					this.sendDataThreadRunFlag = true;
+					this.sendDataThreadEvent = new AutoResetEvent(false);
+					this.sendDataThread = new Thread(new ThreadStart(SendDataThread));
+					this.sendDataThread.Name = "Terminal [" + (1000 + this.instanceId) + "] Send Data Thread";
+					this.sendDataThread.Start();  // Offset of 1000 to distinguish this ID from the 'real' terminal ID.
 
 					DebugThreadState("...successfully created.");
 				}
-#if (DEBUG)
+			#if (DEBUG)
 				else
 				{
 					DebugThreadState("...failed as it already exists.");
 				}
-#endif
+			#endif
 			}
-		}
 
-		/// <remarks>
-		/// Especially useful during potentially dangerous creation and disposal sequence.
-		/// </remarks>
-		private void SignalSendThreadSafely()
-		{
-			try
+			lock (this.sendFileThreadSyncObj)
 			{
-				if (this.sendThreadEvent != null)
-					this.sendThreadEvent.Set();
-			}
-			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
-			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+				DebugThreadState("SendFileThread() gets created...");
 
-			// Catch 'NullReferenceException' for the unlikely case that the event has just been
-			// disposed after the if-check. This way, the event doesn't need to be locked (which
-			// is a relatively time-consuming operation). Still keep the if-check for the normal
-			// cases.
+				if (this.sendFileThread == null)
+				{
+					this.sendFileThreadRunFlag = true;
+					this.sendFileThreadEvent = new AutoResetEvent(false);
+					this.sendFileThread = new Thread(new ThreadStart(SendFileThread));
+					this.sendFileThread.Name = "Terminal [" + (1000 + this.instanceId) + "] Send File Thread";
+					this.sendFileThread.Start();  // Offset of 1000 to distinguish this ID from the 'real' terminal ID.
+
+					DebugThreadState("...successfully created.");
+				}
+			#if (DEBUG)
+				else
+				{
+					DebugThreadState("...failed as it already exists.");
+				}
+			#endif
+			}
 		}
 
 		/// <remarks>
 		/// Using 'Stop' instead of 'Terminate' to emphasize graceful termination, i.e. trying
 		/// to join first, then abort if not successfully joined.
 		/// </remarks>
-		private void StopSendThread()
+		private void StopSendThreads()
 		{
-			lock (this.sendThreadSyncObj)
-			{
-				if (this.sendThread != null)
-				{
-					DebugThreadState("SendThread() gets stopped...");
 
-					this.sendThreadRunFlag = false;
+			lock (this.sendFileThreadSyncObj)
+			{
+				if (this.sendFileThread != null)
+				{
+					DebugThreadState("SendFileThread() gets stopped...");
+
+					this.sendFileThreadRunFlag = false;
 
 					// Ensure that send thread has stopped after the stop request:
 					try
 					{
-						Debug.Assert(this.sendThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
+						Debug.Assert(this.sendFileThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
 
 						bool isAborting = false;
 						int accumulatedTimeout = 0;
 						int interval = 0; // Use a relatively short random interval to trigger the thread:
-						while (!this.sendThread.Join(interval = staticRandom.Next(5, 20)))
+						while (!this.sendFileThread.Join(interval = staticRandom.Next(5, 20)))
 						{
-							SignalSendThreadSafely();
+							SignalSendFileThreadSafely();
 
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
@@ -506,7 +519,7 @@ namespace YAT.Domain
 								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
 
 								isAborting = true;       // Thread.Abort() must not be used whenever possible!
-								this.sendThread.Abort(); // This is only the fall-back in case joining fails for too long.
+								this.sendFileThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
@@ -525,21 +538,121 @@ namespace YAT.Domain
 						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
-					this.sendThread = null;
+					this.sendFileThread = null;
 				}
 			#if (DEBUG)
-				else // (this.sendThread == null)
+				else // (this.sendFileThread == null)
 				{
 					DebugThreadState("...not necessary as it doesn't exist anymore.");
 				}
 			#endif
 
-				if (this.sendThreadEvent != null)
+				if (this.sendFileThreadEvent != null)
 				{
-					try     { this.sendThreadEvent.Close(); }
-					finally { this.sendThreadEvent = null; }
+					try     { this.sendFileThreadEvent.Close(); }
+					finally { this.sendFileThreadEvent = null; }
 				}
-			} // lock (sendThreadSyncObj)
+			} // lock (sendFileThreadSyncObj)
+
+			lock (this.sendDataThreadSyncObj)
+			{
+				if (this.sendDataThread != null)
+				{
+					DebugThreadState("SendDataThread() gets stopped...");
+
+					this.sendDataThreadRunFlag = false;
+
+					// Ensure that send thread has stopped after the stop request:
+					try
+					{
+						Debug.Assert(this.sendDataThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
+
+						bool isAborting = false;
+						int accumulatedTimeout = 0;
+						int interval = 0; // Use a relatively short random interval to trigger the thread:
+						while (!this.sendDataThread.Join(interval = staticRandom.Next(5, 20)))
+						{
+							SignalSendDataThreadSafely();
+
+							accumulatedTimeout += interval;
+							if (accumulatedTimeout >= ThreadWaitTimeout)
+							{
+								DebugThreadState("...failed! Aborting...");
+								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+
+								isAborting = true;       // Thread.Abort() must not be used whenever possible!
+								this.sendDataThread.Abort(); // This is only the fall-back in case joining fails for too long.
+								break;
+							}
+
+							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
+						}
+
+						if (!isAborting)
+							DebugThreadState("...successfully stopped.");
+					}
+					catch (ThreadStateException)
+					{
+						// Ignore thread state exceptions such as "Thread has not been started" and
+						// "Thread cannot be aborted" as it just needs to be ensured that the thread
+						// has or will be terminated for sure.
+
+						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+					}
+
+					this.sendDataThread = null;
+				}
+			#if (DEBUG)
+				else // (this.sendDataThread == null)
+				{
+					DebugThreadState("...not necessary as it doesn't exist anymore.");
+				}
+			#endif
+
+				if (this.sendDataThreadEvent != null)
+				{
+					try     { this.sendDataThreadEvent.Close(); }
+					finally { this.sendDataThreadEvent = null; }
+				}
+			} // lock (sendDataThreadSyncObj)
+		}
+
+		/// <remarks>
+		/// Especially useful during potentially dangerous creation and disposal sequence.
+		/// </remarks>
+		private void SignalSendDataThreadSafely()
+		{
+			try
+			{
+				if (this.sendDataThreadEvent != null)
+					this.sendDataThreadEvent.Set();
+			}
+			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+
+			// Catch 'NullReferenceException' for the unlikely case that the event has just been
+			// disposed after the if-check. This way, the event doesn't need to be locked (which
+			// is a relatively time-consuming operation). Still keep the if-check for the normal
+			// cases.
+		}
+
+		/// <remarks>
+		/// Especially useful during potentially dangerous creation and disposal sequence.
+		/// </remarks>
+		private void SignalSendFileThreadSafely()
+		{
+			try
+			{
+				if (this.sendFileThreadEvent != null)
+					this.sendFileThreadEvent.Set();
+			}
+			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+
+			// Catch 'NullReferenceException' for the unlikely case that the event has just been
+			// disposed after the if-check. This way, the event doesn't need to be locked (which
+			// is a relatively time-consuming operation). Still keep the if-check for the normal
+			// cases.
 		}
 
 		#endregion
@@ -785,10 +898,11 @@ namespace YAT.Domain
 
 				this.rawTerminal.Stop();
 
-				lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
-				{
-					this.sendQueue.Clear();
-				}
+				lock (this.sendDataQueue) // Lock is required because Queue<T> is not synchronized.
+					this.sendDataQueue.Clear();
+
+				lock (this.sendFileQueue) // Lock is required because Queue<T> is not synchronized.
+					this.sendFileQueue.Clear();
 			}
 		}
 
@@ -803,7 +917,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			StopSendThread();
+			StopSendThreads();
 			this.rawTerminal.Close();
 			DetachAndDisposeRawTerminal();
 			DisposeRepositories();
@@ -829,35 +943,35 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Methods > Send
+		#region Methods > Send Data
 		//------------------------------------------------------------------------------------------
-		// Methods > Send
+		// Methods > Send Data
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		public virtual void Send(byte[] data)
 		{
-			// AssertNotDisposed() is called by Send() below.
+			// AssertNotDisposed() is called by DoSend() below.
 
-			DoSend(new RawSendItem(data));
+			DoSend(new RawDataSendItem(data));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void Send(string data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by Send() below.
+			// AssertNotDisposed() is called by DoSend() below.
 
-			DoSend(new ParsableSendItem(data, defaultRadix));
+			DoSend(new ParsableDataSendItem(data, defaultRadix));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void SendLine(string dataLine, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by Send() below.
+			// AssertNotDisposed() is called by DoSend() below.
 
-			DoSend(new ParsableSendItem(dataLine, defaultRadix, true));
+			DoSend(new ParsableDataSendItem(dataLine, defaultRadix, true));
 		}
 
 		/// <remarks>
@@ -871,29 +985,29 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void SendLines(string[] dataLines, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by Send() below.
+			// AssertNotDisposed() is called by DoSend() below.
 
-			var l = new List<ParsableSendItem>(dataLines.Length);
+			var l = new List<ParsableDataSendItem>(dataLines.Length);
 			foreach (string dataLine in dataLines)
-				l.Add(new ParsableSendItem(dataLine, defaultRadix, true));
+				l.Add(new ParsableDataSendItem(dataLine, defaultRadix, true));
 
 			DoSend(l.ToArray());
 		}
 
 		/// <remarks>
 		/// This method shall not be overridden. All send items shall be enqueued using this
-		/// method, but inheriting terminals can override <see cref="ProcessSendItem"/> instead.
+		/// method, but inheriting terminals can override <see cref="ProcessSendDataItem"/> instead.
 		/// </remarks>
-		protected void DoSend(SendItem item)
+		protected void DoSend(DataSendItem item)
 		{
-			DoSend(new SendItem[] { item });
+			DoSend(new DataSendItem[] { item });
 		}
 
 		/// <remarks>
 		/// This method shall not be overridden. All send items shall be enqueued using this
-		/// method, but inheriting terminals can override <see cref="ProcessSendItem"/> instead.
+		/// method, but inheriting terminals can override <see cref="ProcessSendDataItem"/> instead.
 		/// </remarks>
-		protected void DoSend(IEnumerable<SendItem> items)
+		protected void DoSend(IEnumerable<DataSendItem> items)
 		{
 			AssertNotDisposed();
 
@@ -904,14 +1018,14 @@ namespace YAT.Domain
 				RequestSignalInputXOn();
 
 			// Enqueue the items for sending:
-			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+			lock (this.sendDataQueue) // Lock is required because Queue<T> is not synchronized.
 			{
 				foreach (var item in items)
-					this.sendQueue.Enqueue(item);
+					this.sendDataQueue.Enqueue(item);
 			}
 
-			// Signal send thread:
-			SignalSendThreadSafely();
+			// Signal thread:
+			SignalSendDataThreadSafely();
 		}
 
 		/// <summary>
@@ -924,17 +1038,17 @@ namespace YAT.Domain
 		/// events are invoked, instead, outgoing data is buffered.
 		/// </summary>
 		/// <remarks>
-		/// Will be signaled by the DoSend() methods above.
+		/// Will be signaled by <see cref="DoSend(IEnumerable{DataSendItem})"/> above.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
-		private void SendThread()
+		private void SendDataThread()
 		{
-			DebugThreadState("SendThread() has started.");
+			DebugThreadState("SendDataThread() has started.");
 
 			try
 			{
 				// Outer loop, processes data after a signal was received:
-				while (!IsDisposed && this.sendThreadRunFlag) // Check 'IsDisposed' first!
+				while (!IsDisposed && this.sendDataThreadRunFlag) // Check 'IsDisposed' first!
 				{
 					try
 					{
@@ -942,31 +1056,31 @@ namespace YAT.Domain
 						// if the overlying client isn't able or forgets to call Stop() or Dispose().
 						// Therefore, only wait for a certain period and then poll the run flag again.
 						// The period can be quite long, as an event trigger will immediately resume.
-						if (!this.sendThreadEvent.WaitOne(staticRandom.Next(50, 200)))
+						if (!this.sendDataThreadEvent.WaitOne(staticRandom.Next(50, 200)))
 							continue;
 					}
 					catch (AbandonedMutexException ex)
 					{
 						// The mutex should never be abandoned, but in case it nevertheless happens,
 						// at least output a debug message and gracefully exit the thread.
-						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendThread()!");
+						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendDataThread()!");
 						break;
 					}
 
 					// Inner loop, runs as long as there is data in the send queue.
 					// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
-					while (!IsDisposed && this.sendThreadRunFlag && IsReadyToSend_Internal && (this.sendQueue.Count > 0))
-					{                                                                      // No lock required, just checking for empty.
+					while (!IsDisposed && this.sendDataThreadRunFlag && IsReadyToSend_Internal && (this.sendDataQueue.Count > 0))
+					{                                                                          // No lock required, just checking for empty.
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.
 						Thread.Sleep(TimeSpan.Zero);
 
-						SendItem[] pendingItems;
-						lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+						DataSendItem[] pendingItems;
+						lock (this.sendDataQueue) // Lock is required because Queue<T> is not synchronized.
 						{
-							pendingItems = this.sendQueue.ToArray();
-							this.sendQueue.Clear();
+							pendingItems = this.sendDataQueue.ToArray();
+							this.sendDataQueue.Clear();
 						}
 
 						if (pendingItems.Length > 0)
@@ -978,32 +1092,35 @@ namespace YAT.Domain
 							{
 								DebugMessage(@"Processing item """ + item.ToString() + @""" of " + pendingItems.Length + " send item(s)...");
 
-								ProcessSendItem(item);
+								ProcessSendDataItem(item);
 
-								if (this.ioChangedEventHelper.TotalTimeLagIsAboveThreshold())
+								if (BreakSendData)
 								{
-									// Break if requested or terminal has stopped or closed!
-									lock (this.breakStateSyncObj)
-									{
-										if (this.breakState || !(!IsDisposed && this.sendThreadRunFlag && IsTransmissive)) // Check 'IsDisposed' first!
-										{
-											this.breakState = false;
-											break;
-										}
-									}
+									if (this.ioChangedEventHelper.EventMustBeRaised)
+										OnIOChanged(EventArgs.Empty); // Raise the event to indicate that sending is no longer ongoing.
+
+									break;
 								}
-							}
+
+								// \remind (2017-09-16 / MKY) related to FR #262 "IIOProvider should be..."
+								// In case of many pending items, 'EventMustBeRaised' will become 'true',
+								// e.g. due to RaiseEventIfTotalTimeLagIsAboveThreshold(). This indicates
+								// that there are really many pending items, and this foreach-loop would
+								// result in kind of freezing all other threads => Yield!
+								if (this.ioChangedEventHelper.EventMustBeRaised)
+									Thread.Sleep(1); // Yield to other threads to e.g. allow refreshing of view.
+							}                        // Note that Thread.Sleep(TimeSpan.Zero) is not sufficient.
 
 							this.sendingIsOngoing = false;
 							if (this.ioChangedEventHelper.EventMustBeRaised)
-								OnIOChanged(EventArgs.Empty); // Again raise the event to indicate that
-						}                                     //   sending is no longer ongoing.
+								OnIOChanged(EventArgs.Empty); // Raise the event to indicate that sending is no longer ongoing.
+						}
 					} // Inner loop
 				} // Outer loop
 			}
 			catch (ThreadAbortException ex)
 			{
-				DebugEx.WriteException(GetType(), ex, "SendThread() has been aborted! Confirming the abort, i.e. Thread.ResetAbort() will be called.");
+				DebugEx.WriteException(GetType(), ex, "SendDataThread() has been aborted! Confirming the abort, i.e. Thread.ResetAbort() will be called...");
 
 				// Should only happen when failing to 'friendly' join the thread on stopping!
 				// Don't try to set and notify a state change, or even restart the terminal!
@@ -1014,20 +1131,31 @@ namespace YAT.Domain
 				Thread.ResetAbort();
 			}
 
-			DebugThreadState("SendThread() has terminated.");
+			DebugThreadState("SendDataThread() has terminated.");
+		}
+
+		/// <remarks>
+		/// Break if requested or terminal has stopped or closed.
+		/// </remarks>
+		protected virtual bool BreakSendData
+		{
+			get
+			{
+				return (BreakState || !(!IsDisposed && this.sendDataThreadRunFlag && IsTransmissive)); // Check 'IsDisposed' first!
+			}
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessSendItem(SendItem item)
+		protected virtual void ProcessSendDataItem(DataSendItem item)
 		{
-			var rsi = (item as RawSendItem);
+			var rsi = (item as RawDataSendItem);
 			if (rsi != null)
 			{
 				ProcessRawSendItem(rsi);
 			}
 			else
 			{
-				var psi = (item as ParsableSendItem);
+				var psi = (item as ParsableDataSendItem);
 				if (psi != null)
 					ProcessParsableSendItem(psi);
 				else
@@ -1036,15 +1164,14 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessRawSendItem(RawSendItem item)
+		protected virtual void ProcessRawSendItem(RawDataSendItem item)
 		{
-			// Nothing to further process, simply forward:
-			ForwardDataToRawTerminal(item.Data);
+			ForwardDataToRawTerminal(item.Data); // Nothing for further processing, simply forward.
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Parsable", Justification = "'Parsable' is a correct English term.")]
-		protected virtual void ProcessParsableSendItem(ParsableSendItem item)
+		protected virtual void ProcessParsableSendItem(ParsableDataSendItem item)
 		{
 			bool hasSucceeded;
 			Parser.Result[] parseResult;
@@ -1168,16 +1295,10 @@ namespace YAT.Domain
 
 				// --- Perform line/packet related post-processing ---
 
-				// Break if requested or terminal has stopped or closed! Note that breaking is
-				// done prior to a potential Sleep() or repeat.
-				lock (this.breakStateSyncObj)
-				{
-					if (this.breakState || !(!IsDisposed && this.sendThreadRunFlag && IsTransmissive)) // Check 'IsDisposed' first!
-					{
-						this.breakState = false;
-						break;
-					}
-				}
+				// Break if requested or terminal has stopped or closed!
+				// Note that breaking is done prior to a potential Sleep() or repeat.
+				if (BreakState || !(!IsDisposed && this.sendDataThreadRunFlag && IsTransmissive)) // Check 'IsDisposed' first!
+					break;
 
 				ProcessLineDelayOrInterval(performLineDelay, lineDelay, performLineInterval, lineInterval, lineBeginTimeStamp, lineEndTimeStamp);
 
@@ -1385,7 +1506,7 @@ namespace YAT.Domain
 				var sb = new StringBuilder();
 				sb.AppendLine("'ThreadAbortException' while trying to forward data to the underlying RawTerminal.");
 				sb.AppendLine("This exception is ignored as it can happen during closing of the terminal or application.");
-				sb.AppendLine("Confirming the abort, i.e. Thread.ResetAbort() will be called.");
+				sb.AppendLine("Confirming the abort, i.e. Thread.ResetAbort() will be called...");
 				sb.AppendLine();
 				DebugEx.WriteException(GetType(), ex, sb.ToString());
 
@@ -1404,6 +1525,174 @@ namespace YAT.Domain
 				var leadMessage = "Unable to send data:";
 				DebugEx.WriteException(GetType(), ex, leadMessage);
 				OnIOError(new IOErrorEventArgs(IOErrorSeverity.Fatal, IODirection.Tx, leadMessage + Environment.NewLine + ex.Message));
+			}
+		}
+
+		#endregion
+
+		#region Methods > Send File
+		//------------------------------------------------------------------------------------------
+		// Methods > Send File
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		public virtual void SendFile(string filePath, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
+		{
+			// AssertNotDisposed() is called by DoSend() below.
+
+			DoSend(filePath, defaultRadix);
+		}
+
+		/// <remarks>
+		/// This method shall not be overridden. All send items shall be enqueued using this
+		/// method, but inheriting terminals can override <see cref="ProcessSendFileItem"/> instead.
+		/// </remarks>
+		/// <remarks>
+		/// Separate "Do...()" method for symmetricity with <see cref="DoSend(IEnumerable{DataSendItem})"/>.
+		/// </remarks>
+		protected void DoSend(string filePath, Radix defaultRadix)
+		{
+			AssertNotDisposed();
+
+			// Enqueue the items for sending:
+			lock (this.sendFileQueue) // Lock is required because Queue<T> is not synchronized.
+			{
+				this.sendFileQueue.Enqueue(new FileSendItem(filePath, defaultRadix));
+			}
+
+			// Signal thread:
+			SignalSendFileThreadSafely();
+		}
+
+		/// <remarks>
+		/// Will be signaled by <see cref="DoSend(string, Radix)"/> above.
+		/// </remarks>
+		/// <remarks>
+		/// Separate thread (and not integrated into <see cref="SendDataThread"/>) because that
+		/// thread queues <see cref="ParsableDataSendItem"/> objects, thus some kind of a two-level
+		/// infrastructure is required (SendFile => SendData). The considered \!(SendFile("..."))
+		/// keyword doesn't help either since the file may again contain keywords, thus again some
+		/// kind of a two-level infrastructure is required.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
+		private void SendFileThread()
+		{
+			DebugThreadState("SendFileThread() has started.");
+
+			try
+			{
+				// Outer loop, processes data after a signal was received:
+				while (!IsDisposed && this.sendFileThreadRunFlag) // Check 'IsDisposed' first!
+				{
+					try
+					{
+						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+						// if the overlying client isn't able or forgets to call Stop() or Dispose().
+						// Therefore, only wait for a certain period and then poll the run flag again.
+						// The period can be quite long, as an event trigger will immediately resume.
+						if (!this.sendFileThreadEvent.WaitOne(staticRandom.Next(50, 200)))
+							continue;
+					}
+					catch (AbandonedMutexException ex)
+					{
+						// The mutex should never be abandoned, but in case it nevertheless happens,
+						// at least output a debug message and gracefully exit the thread.
+						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendFileThread()!");
+						break;
+					}
+
+					// Inner loop, runs as long as there is data in the send queue.
+					// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
+					while (!IsDisposed && this.sendFileThreadRunFlag && IsReadyToSend_Internal && (this.sendFileQueue.Count > 0))
+					{                                                                      // No lock required, just checking for empty.
+						// Initially, yield to other threads before starting to read the queue, since it is very
+						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
+						// Subsequently, yield to other threads to allow processing the data.
+						Thread.Sleep(TimeSpan.Zero);
+
+						FileSendItem[] pendingItems;
+						lock (this.sendFileQueue) // Lock is required because Queue<T> is not synchronized.
+						{
+							pendingItems = this.sendFileQueue.ToArray();
+							this.sendFileQueue.Clear();
+						}
+
+						if (pendingItems.Length > 0)
+						{
+							foreach (var item in pendingItems)
+							{
+								DebugMessage(@"Processing item """ + item.ToString() + @""" of " + pendingItems.Length + " send item(s)...");
+
+								ProcessSendFileItem(item);
+
+								if (BreakSendFile)
+								{
+									OnIOChanged(EventArgs.Empty); // Raise the event to indicate that sending is no longer ongoing.
+									break;
+								}
+
+								// \remind (2017-09-16 / MKY) related to FR #262 "IIOProvider should be..."
+								// No need to yield here (like done in SendDataThread()) since...
+								// ...it is very unlikely that very many files are sent at once.
+								// ...and the for-loop in ProcessSendFileItem() already yields.
+							}
+						}
+					} // Inner loop
+				} // Outer loop
+			}
+			catch (ThreadAbortException ex)
+			{
+				DebugEx.WriteException(GetType(), ex, "SendFileThread() has been aborted! Confirming the abort, i.e. Thread.ResetAbort() will be called...");
+
+				// Should only happen when failing to 'friendly' join the thread on stopping!
+				// Don't try to set and notify a state change, or even restart the terminal!
+
+				// But reset the abort request, as 'ThreadAbortException' is a special exception
+				// that would be rethrown at the end of the catch block otherwise!
+
+				Thread.ResetAbort();
+			}
+
+			DebugThreadState("SendFileThread() has terminated.");
+		}
+
+		/// <remarks>
+		/// Break if requested or terminal has stopped or closed.
+		/// </remarks>
+		protected virtual bool BreakSendFile
+		{
+			get
+			{
+				return (BreakState || !(!IsDisposed && this.sendFileThreadRunFlag && IsTransmissive)); // Check 'IsDisposed' first!
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void ProcessSendFileItem(FileSendItem item)
+		{
+			try
+			{
+				using (var sr = new StreamReader(item.FilePath))
+				{
+					string line;
+					while ((line = sr.ReadLine()) != null)
+					{
+						SendLine(line, item.DefaultRadix);
+
+						if (BreakSendFile)
+						{
+							OnIOChanged(EventArgs.Empty); // Raise the event to indicate that sending is no longer ongoing.
+							break;
+						}
+
+						Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, @"Error reading file """ + item.FilePath + @""": " + ex.Message));
 			}
 		}
 
@@ -1433,7 +1722,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Resumes all currently ongoing operations in the terminal.
+		/// Returns the current break state.
 		/// </summary>
 		public virtual bool BreakState
 		{

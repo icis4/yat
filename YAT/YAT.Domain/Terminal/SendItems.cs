@@ -42,9 +42,9 @@ using MKY;
 namespace YAT.Domain
 {
 	/// <summary>
-	/// Defines an item that shall be sent by the terminal.
+	/// Defines a data item that shall be sent by the terminal.
 	/// </summary>
-	public abstract class SendItem
+	public abstract class DataSendItem
 	{
 	#if (DEBUG)
 
@@ -52,7 +52,7 @@ namespace YAT.Domain
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		[SuppressMessage("Microsoft.Performance", "CA1821:RemoveEmptyFinalizers", Justification = "See remarks.")]
-		~SendItem()
+		~DataSendItem()
 		{
 			MKY.Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
@@ -88,16 +88,16 @@ namespace YAT.Domain
 	}
 
 	/// <summary>
-	/// Defines a binary item that shall be sent by the terminal.
+	/// Defines a binary raw data item that shall be sent by the terminal.
 	/// </summary>
-	public class RawSendItem : SendItem
+	public class RawDataSendItem : DataSendItem
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Source is an array, sink is an array, this class transports the array from source to sink, there's no purpose to use a ReadOnlyCollection here.")]
 		public byte[] Data { get; }
 
 		/// <summary></summary>
-		public RawSendItem(byte[] data)
+		public RawDataSendItem(byte[] data)
 		{
 			Data = data;
 		}
@@ -142,10 +142,10 @@ namespace YAT.Domain
 	}
 
 	/// <summary>
-	/// Defines a text item that shall be sent by the terminal.
+	/// Defines a text data item that shall be sent by the terminal.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Parsable", Justification = "'Parsable' is a correct English term.")]
-	public class ParsableSendItem : SendItem
+	public class ParsableDataSendItem : DataSendItem
 	{
 		/// <summary></summary>
 		public string Data { get; }
@@ -158,7 +158,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public ParsableSendItem(string data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault, bool isLine = false)
+		public ParsableDataSendItem(string data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault, bool isLine = false)
 		{
 			Data         = data;
 			DefaultRadix = defaultRadix;
@@ -182,6 +182,46 @@ namespace YAT.Domain
 			return (indent + "> Data         : " + Data         + Environment.NewLine +
 					indent + "> DefaultRadix : " + DefaultRadix + Environment.NewLine +
 					indent + "> IsLine       : " + IsLine       + Environment.NewLine);
+		}
+
+		#endregion
+	}
+
+	/// <summary>
+	/// Defines a file item that shall be sent by the terminal.
+	/// </summary>
+	public class FileSendItem
+	{
+		/// <summary></summary>
+		public string FilePath { get; }
+
+		/// <summary></summary>
+		public Radix DefaultRadix { get; }
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		public FileSendItem(string filePath, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
+		{
+			FilePath     = filePath;
+			DefaultRadix = defaultRadix;
+		}
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary></summary>
+		public virtual string ToString(string indent)
+		{
+			return (indent + FilePath);
+		}
+
+		/// <summary></summary>
+		public virtual string ToDetailedString(string indent)
+		{
+			return (indent + "> FilePath     : " + FilePath     + Environment.NewLine +
+					indent + "> DefaultRadix : " + DefaultRadix + Environment.NewLine);
 		}
 
 		#endregion
