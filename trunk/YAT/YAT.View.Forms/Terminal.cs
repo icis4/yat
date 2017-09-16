@@ -4087,7 +4087,7 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "See event handlers below.")]
-		private void SetSentDataCountStatus()
+		private void SetSentDataCountAndRateStatus()
 		{
 			int txByteCount = 0;
 			int txLineCount = 0;
@@ -4098,10 +4098,20 @@ namespace YAT.View.Forms
 
 			monitor_Tx   .SetDataCountStatus(txByteCount, txLineCount, rxByteCount, rxLineCount);
 			monitor_Bidir.SetDataCountStatus(txByteCount, txLineCount, rxByteCount, rxLineCount);
+
+			int txByteRate = 0;
+			int txLineRate = 0;
+			int rxByteRate = 0;
+			int rxLineRate = 0;
+
+			this.terminal.GetDataRate(out txByteRate, out txLineRate, out rxByteRate, out rxLineRate);
+
+			monitor_Tx   .SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
+			monitor_Bidir.SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "See event handlers below.")]
-		private void SetReceivedDataCountStatus()
+		private void SetReceivedDataCountAndRateStatus()
 		{
 			int txByteCount = 0;
 			int txLineCount = 0;
@@ -4112,6 +4122,16 @@ namespace YAT.View.Forms
 
 			monitor_Bidir.SetDataCountStatus(txByteCount, txLineCount, rxByteCount, rxLineCount);
 			monitor_Rx   .SetDataCountStatus(txByteCount, txLineCount, rxByteCount, rxLineCount);
+
+			int txByteRate = 0;
+			int txLineRate = 0;
+			int rxByteRate = 0;
+			int rxLineRate = 0;
+
+			this.terminal.GetDataRate(out txByteRate, out txLineRate, out rxByteRate, out rxLineRate);
+
+			monitor_Bidir.SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
+			monitor_Rx   .SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
@@ -4123,7 +4143,7 @@ namespace YAT.View.Forms
 				monitor_Tx   .AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 				monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 
-				SetSentDataCountStatus();
+				SetSentDataCountAndRateStatus();
 			}
 		}
 
@@ -4136,7 +4156,7 @@ namespace YAT.View.Forms
 				monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 				monitor_Rx   .AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 
-				SetReceivedDataCountStatus();
+				SetReceivedDataCountAndRateStatus();
 			}
 		}
 
@@ -4146,7 +4166,7 @@ namespace YAT.View.Forms
 		{
 			if (!IsDisposed && TerminalIsAvailable) // Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
 			{
-				SetSentDataCountStatus();
+				SetSentDataCountAndRateStatus();
 			}
 		}
 
@@ -4156,7 +4176,7 @@ namespace YAT.View.Forms
 		{
 			if (!IsDisposed && TerminalIsAvailable) // Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
 			{
-				SetReceivedDataCountStatus();
+				SetReceivedDataCountAndRateStatus();
 			}
 		}
 
