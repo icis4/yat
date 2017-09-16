@@ -39,7 +39,7 @@ using MKY.Xml.Serialization;
 
 #endregion
 
-namespace YAT.Model.Utilities
+namespace YAT.Domain.Utilities
 {
 	/// <summary>
 	/// Static utility class providing XML reader functionality for YAT.

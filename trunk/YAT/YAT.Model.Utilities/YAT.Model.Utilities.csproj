@@ -100,7 +100,6 @@
     </Compile>
     <Compile Include="AutoResponseHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RtfReaderHelper.cs" />
     <Compile Include="RtfPrinter.cs" />
     <Compile Include="ErrorHelper.cs" />
     <Compile Include="ValidationHelper.cs" />
@@ -109,8 +108,6 @@
     <Compile Include="TextWriter.cs" />
     <Compile Include="TextWriterHelper.cs" />
     <Compile Include="RtfWriterHelper.cs" />
-    <Compile Include="XmlTransfer.cs" />
-    <Compile Include="XmlReaderHelper.cs" />
     <Compile Include="XmlWriterHelperRaw.cs" />
     <Compile Include="XmlWriterHelperNeat.cs" />
   </ItemGroup>

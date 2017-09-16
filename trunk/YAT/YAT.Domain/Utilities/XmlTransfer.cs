@@ -31,11 +31,9 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-using YAT.Domain;
-
 #endregion
 
-namespace YAT.Model.Utilities
+namespace YAT.Domain.Utilities
 {
 	/// <summary>
 	/// A line's XML object model for import/export transfers.

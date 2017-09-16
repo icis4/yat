@@ -37,6 +37,7 @@ using System.Threading;
 using MKY.Xml.Schema;
 
 using YAT.Domain;
+using YAT.Domain.Utilities;
 
 #endregion
 

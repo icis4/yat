@@ -128,7 +128,7 @@
     <Compile Include="Terminal\DisplayLine.cs" />
     <Compile Include="Terminal\InfoEnclosure.cs" />
     <Compile Include="Terminal\InfoSeparator.cs" />
-    <Compile Include="Terminal\SendItem.cs" />
+    <Compile Include="Terminal\SendItems.cs" />
     <Compile Include="TextTerminal\Settings\SendTextFileSettings.cs" />
     <Compile Include="TextTerminal\Settings\TextExclusionSettings.cs" />
     <Compile Include="TextTerminal\Structs.cs" />
@@ -154,6 +154,9 @@
     <Compile Include="Terminal\RepositoryType.cs" />
     <Compile Include="TextTerminal\TextTerminal.cs" />
     <Compile Include="TextTerminal\ControlCharRadix.cs" />
+    <Compile Include="Utilities\RtfReaderHelper.cs" />
+    <Compile Include="Utilities\XmlReaderHelper.cs" />
+    <Compile Include="Utilities\XmlTransfer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\YAT.snk" />
@@ -197,6 +200,10 @@
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY</Name>
     </ProjectReference>
+    <ProjectReference Include="..\YAT.Application\YAT.Application.csproj">
+      <Project>{a3e80010-9146-47ef-87b0-138a60406a9e}</Project>
+      <Name>YAT.Application</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -210,6 +217,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

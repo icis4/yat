@@ -37,6 +37,7 @@ using MKY.Xml.Schema;
 using MKY.Xml.Serialization;
 
 using YAT.Domain;
+using YAT.Domain.Utilities;
 
 #endregion
 

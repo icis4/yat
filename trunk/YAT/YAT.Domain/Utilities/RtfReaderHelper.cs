@@ -33,7 +33,7 @@ using System.Windows.Forms;
 
 #endregion
 
-namespace YAT.Model.Utilities
+namespace YAT.Domain.Utilities
 {
 	/// <summary>
 	/// Static utility class providing RTF reader functionality for YAT.
