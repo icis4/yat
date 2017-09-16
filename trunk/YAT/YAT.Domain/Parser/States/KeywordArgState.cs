@@ -41,7 +41,8 @@ namespace YAT.Domain.Parser
 	/// </summary>
 	/// <remarks>
 	/// So far, this state can only deal with integer values. As soon as floating point, boolean,
-	/// enum or string values are required, this state will have to be extended accordingly.
+	/// enum or string values are required, this state will have to be extended accordingly. Ideas
+	/// for implementing support for string values: AllowEscape, ExpectFilePath.
 	/// 
 	/// Note that it was considered to implement this keyword argument handling using Regex, either
 	/// a Regex per argument, or a Regex per keyword. However, the big advantage of the YAT-style
