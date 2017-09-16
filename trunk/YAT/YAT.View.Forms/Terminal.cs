@@ -4012,7 +4012,6 @@ namespace YAT.View.Forms
 		{
 			SetTerminalControls();
 
-			ResetStatusText();
 			OnTerminalChanged(EventArgs.Empty);
 		}
 
