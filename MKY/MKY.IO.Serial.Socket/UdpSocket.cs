@@ -839,7 +839,7 @@ namespace MKY.IO.Serial.Socket
 			}
 			catch (ThreadAbortException ex)
 			{
-				DebugEx.WriteException(GetType(), ex, "SendThread() has been aborted! Confirming the abort, i.e. Thread.ResetAbort() will be called.");
+				DebugEx.WriteException(GetType(), ex, "SendThread() has been aborted! Confirming the abort, i.e. Thread.ResetAbort() will be called...");
 
 				// Should only happen when failing to 'friendly' join the thread on stopping!
 				// Don't try to set and notify a state change, or even restart the socket!
@@ -1365,7 +1365,7 @@ namespace MKY.IO.Serial.Socket
 			}
 			catch (ThreadAbortException ex)
 			{
-				DebugEx.WriteException(GetType(), ex, "ReceiveThread() has been aborted! Confirming the abort, i.e. Thread.ResetAbort() will be called.");
+				DebugEx.WriteException(GetType(), ex, "ReceiveThread() has been aborted! Confirming the abort, i.e. Thread.ResetAbort() will be called...");
 
 				// Should only happen when failing to 'friendly' join the thread on stopping!
 				// Don't try to set and notify a state change, or even restart the socket!
