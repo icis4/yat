@@ -94,12 +94,12 @@ namespace YAT.View.Forms
 			// splitContainer_Help.Panel1
 			// 
 			this.splitContainer_Help.Panel1.Controls.Add(this.splitContainer_Upper);
-			this.splitContainer_Help.Panel1MinSize = 164;
+			this.splitContainer_Help.Panel1MinSize = 100;
 			// 
 			// splitContainer_Help.Panel2
 			// 
 			this.splitContainer_Help.Panel2.Controls.Add(this.splitContainer_Lower);
-			this.splitContainer_Help.Panel2MinSize = 164;
+			this.splitContainer_Help.Panel2MinSize = 100;
 			this.splitContainer_Help.Size = new System.Drawing.Size(443, 433);
 			this.splitContainer_Help.SplitterDistance = 265;
 			this.splitContainer_Help.TabIndex = 5;
@@ -114,12 +114,12 @@ namespace YAT.View.Forms
 			// splitContainer_Upper.Panel1
 			// 
 			this.splitContainer_Upper.Panel1.Controls.Add(this.textBox_ParserFormat);
-			this.splitContainer_Upper.Panel1MinSize = 80;
+			this.splitContainer_Upper.Panel1MinSize = 48;
 			// 
 			// splitContainer_Upper.Panel2
 			// 
 			this.splitContainer_Upper.Panel2.Controls.Add(this.textBox_ParserKeyword);
-			this.splitContainer_Upper.Panel2MinSize = 80;
+			this.splitContainer_Upper.Panel2MinSize = 48;
 			this.splitContainer_Upper.Size = new System.Drawing.Size(443, 265);
 			this.splitContainer_Upper.SplitterDistance = 181;
 			this.splitContainer_Upper.TabIndex = 0;
@@ -158,12 +158,12 @@ namespace YAT.View.Forms
 			// splitContainer_Lower.Panel1
 			// 
 			this.splitContainer_Lower.Panel1.Controls.Add(this.textBox_TextTerminalKeyword);
-			this.splitContainer_Lower.Panel1MinSize = 80;
+			this.splitContainer_Lower.Panel1MinSize = 48;
 			// 
 			// splitContainer_Lower.Panel2
 			// 
 			this.splitContainer_Lower.Panel2.Controls.Add(this.textBox_SerialPort);
-			this.splitContainer_Lower.Panel2MinSize = 80;
+			this.splitContainer_Lower.Panel2MinSize = 48;
 			this.splitContainer_Lower.Size = new System.Drawing.Size(443, 164);
 			this.splitContainer_Lower.SplitterDistance = 80;
 			this.splitContainer_Lower.TabIndex = 0;
