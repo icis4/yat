@@ -71,23 +71,23 @@ namespace YAT.Domain
 	{
 		#region String Definitions
 
-		private const string None_stringEnclosure                = "";
-		private const string None_stringDescription              = "[None]";
+		private const string None_enclosure                = "";
+		private const string None_description              = "[None]";
 
-		private const string Parentheses_stringEnclosure         = "()";
-		private const string Parentheses_stringEnclosureLeft     = "(";
-		private const string Parentheses_stringEnclosureRight    = ")";
-		private const string Parentheses_stringDescription       = "Parentheses ()";
+		private const string Parentheses_enclosure         = "()";
+		private const string Parentheses_enclosureLeft     = "(";
+		private const string Parentheses_enclosureRight    = ")";
+		private const string Parentheses_description       = "Parentheses ()";
 
-		private const string SquareBrackets_stringEnclosure      = "[]";
-		private const string SquareBrackets_stringEnclosureLeft  = "[";
-		private const string SquareBrackets_stringEnclosureRight = "]";
-		private const string SquareBrackets_stringDescription    = "Brackets []";
+		private const string SquareBrackets_enclosure      = "[]";
+		private const string SquareBrackets_enclosureLeft  = "[";
+		private const string SquareBrackets_enclosureRight = "]";
+		private const string SquareBrackets_description    = "Brackets []";
 
-		private const string CurlyBraces_stringEnclosure         = "{}";
-		private const string CurlyBraces_stringEnclosureLeft     = "{";
-		private const string CurlyBraces_stringEnclosureRight    = "}";
-		private const string CurlyBraces_stringDescription       = "Braces {}";
+		private const string CurlyBraces_enclosure         = "{}";
+		private const string CurlyBraces_enclosureLeft     = "{";
+		private const string CurlyBraces_enclosureRight    = "}";
+		private const string CurlyBraces_description       = "Braces {}";
 
 		#endregion
 
@@ -129,11 +129,11 @@ namespace YAT.Domain
 		{
 			switch ((InfoEnclosure)UnderlyingEnum)
 			{
-				case InfoEnclosure.None:           return (          None_stringEnclosure);
+				case InfoEnclosure.None:           return (          None_enclosure);
 
-				case InfoEnclosure.Parentheses:    return (   Parentheses_stringEnclosure);
-				case InfoEnclosure.SquareBrackets: return (SquareBrackets_stringEnclosure);
-				case InfoEnclosure.CurlyBraces:    return (   CurlyBraces_stringEnclosure);
+				case InfoEnclosure.Parentheses:    return (   Parentheses_enclosure);
+				case InfoEnclosure.SquareBrackets: return (SquareBrackets_enclosure);
+				case InfoEnclosure.CurlyBraces:    return (   CurlyBraces_enclosure);
 
 				case InfoEnclosure.Explicit:       return (        this.explicitEnclosure);
 
@@ -146,11 +146,11 @@ namespace YAT.Domain
 		{
 			switch ((InfoEnclosure)UnderlyingEnum)
 			{
-				case InfoEnclosure.None:           return (          None_stringEnclosure);
+				case InfoEnclosure.None:           return (          None_enclosure);
 
-				case InfoEnclosure.Parentheses:    return (   Parentheses_stringEnclosureLeft);
-				case InfoEnclosure.SquareBrackets: return (SquareBrackets_stringEnclosureLeft);
-				case InfoEnclosure.CurlyBraces:    return (   CurlyBraces_stringEnclosureLeft);
+				case InfoEnclosure.Parentheses:    return (   Parentheses_enclosureLeft);
+				case InfoEnclosure.SquareBrackets: return (SquareBrackets_enclosureLeft);
+				case InfoEnclosure.CurlyBraces:    return (   CurlyBraces_enclosureLeft);
 
 				case InfoEnclosure.Explicit:       return (StringEx.Left(this.explicitEnclosure, (this.explicitEnclosure.Length / 2)));
 
@@ -163,11 +163,11 @@ namespace YAT.Domain
 		{
 			switch ((InfoEnclosure)UnderlyingEnum)
 			{
-				case InfoEnclosure.None:           return (          None_stringEnclosure);
+				case InfoEnclosure.None:           return (          None_enclosure);
 
-				case InfoEnclosure.Parentheses:    return (   Parentheses_stringEnclosureRight);
-				case InfoEnclosure.SquareBrackets: return (SquareBrackets_stringEnclosureRight);
-				case InfoEnclosure.CurlyBraces:    return (   CurlyBraces_stringEnclosureRight);
+				case InfoEnclosure.Parentheses:    return (   Parentheses_enclosureRight);
+				case InfoEnclosure.SquareBrackets: return (SquareBrackets_enclosureRight);
+				case InfoEnclosure.CurlyBraces:    return (   CurlyBraces_enclosureRight);
 
 				case InfoEnclosure.Explicit:       return (StringEx.Right(this.explicitEnclosure, (this.explicitEnclosure.Length / 2)));
 
@@ -180,16 +180,39 @@ namespace YAT.Domain
 		{
 			switch ((InfoEnclosure)UnderlyingEnum)
 			{
-				case InfoEnclosure.None:           return (          None_stringDescription);
+				case InfoEnclosure.None:           return (          None_description);
 
-				case InfoEnclosure.Parentheses:    return (   Parentheses_stringDescription);
-				case InfoEnclosure.SquareBrackets: return (SquareBrackets_stringDescription);
-				case InfoEnclosure.CurlyBraces:    return (   CurlyBraces_stringDescription);
+				case InfoEnclosure.Parentheses:    return (   Parentheses_description);
+				case InfoEnclosure.SquareBrackets: return (SquareBrackets_description);
+				case InfoEnclosure.CurlyBraces:    return (   CurlyBraces_description);
 
 				case InfoEnclosure.Explicit:       return (          this.explicitEnclosure);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
+		}
+
+		/// <summary>
+		/// Removes the enclosure strings from the given <see cref="string"/> object.
+		/// </summary>
+		/// <param name="str">The string to trim.</param>
+		/// <returns>
+		/// The string that remains after the enclosure has been removed from the given
+		/// <see cref="string"/> object.
+		/// </returns>
+		public virtual string Trim(string str)
+		{
+			string enclosure;
+
+			enclosure = ToEnclosureLeft();
+			if (str.StartsWith(enclosure))
+				str = str.Substring(enclosure.Length);
+
+			enclosure = ToEnclosureRight();
+			if (str.EndsWith(enclosure))
+				str = str.Substring(0, (str.Length - enclosure.Length));
+
+			return (str);
 		}
 
 		#endregion
@@ -356,26 +379,26 @@ namespace YAT.Domain
 				result = InfoEnclosure.None;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_stringEnclosure) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_enclosure) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, None_description))
 			{
 				result = InfoEnclosure.None;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Parentheses_stringEnclosure) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Parentheses_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Parentheses_enclosure) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Parentheses_description))
 			{
 				result = InfoEnclosure.Parentheses;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, SquareBrackets_stringEnclosure) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, SquareBrackets_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, SquareBrackets_enclosure) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, SquareBrackets_description))
 			{
 				result = InfoEnclosure.SquareBrackets;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, CurlyBraces_stringEnclosure) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, CurlyBraces_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, CurlyBraces_enclosure) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, CurlyBraces_description))
 			{
 				result = InfoEnclosure.CurlyBraces;
 				return (true);

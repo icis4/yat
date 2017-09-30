@@ -79,36 +79,36 @@ namespace YAT.Domain
 	{
 		#region String Definitions
 
-		private const string None_stringSeparator                   = "";
-		private const string None_stringDescription                 = "[None]";
+		private const string None_separator                   = "";
+		private const string None_description                 = "[None]";
 
-		private const string Space_stringSeparator                  = " ";
-		private const string Space_stringDescription                = "[Space]";
+		private const string Space_separator                  = " ";
+		private const string Space_description                = "[Space]";
 
-		private const string Underscore_stringSeparator             =             "_";
-		private const string Underscore_stringDescription           = "Underscore |_|";
-		private const string UnderscoreWithSpaces_stringSeparator   =                         " _ ";
-		private const string UnderscoreWithSpaces_stringDescription = "Underscore with spaces | _ |";
+		private const string Underscore_separator             =             "_";
+		private const string Underscore_description           = "Underscore |_|";
+		private const string UnderscoreWithSpaces_separator   =                         " _ ";
+		private const string UnderscoreWithSpaces_description = "Underscore with spaces | _ |";
 
-		private const string Dash_stringSeparator                   =       "-";
-		private const string Dash_stringDescription                 = "Dash |-|";
-		private const string DashWithSpaces_stringSeparator         =                   " - ";
-		private const string DashWithSpaces_stringDescription       = "Dash with spaces | - |";
+		private const string Dash_separator                   =       "-";
+		private const string Dash_description                 = "Dash |-|";
+		private const string DashWithSpaces_separator         =                   " - ";
+		private const string DashWithSpaces_description       = "Dash with spaces | - |";
 
-		private const string Ball_stringSeparator                   =       "°";
-		private const string Ball_stringDescription                 = "Ball |°|";
-		private const string BallWithSpaces_stringSeparator         =                   " ° ";
-		private const string BallWithSpaces_stringDescription       = "Ball with spaces | ° |";
+		private const string Ball_separator                   =       "°";
+		private const string Ball_description                 = "Ball |°|";
+		private const string BallWithSpaces_separator         =                   " ° ";
+		private const string BallWithSpaces_description       = "Ball with spaces | ° |";
 
-		private const string Comma_stringSeparator                  =        ",";
-		private const string Comma_stringDescription                = "Comma |,|";
-		private const string CommaWithSpace_stringSeparator         =                   ", ";
-		private const string CommaWithSpace_stringDescription       = "Comma with space |, |";
+		private const string Comma_separator                  =        ",";
+		private const string Comma_description                = "Comma |,|";
+		private const string CommaWithSpace_separator         =                   ", ";
+		private const string CommaWithSpace_description       = "Comma with space |, |";
 
-		private const string Semicolon_stringSeparator              =            ";";
-		private const string Semicolon_stringDescription            = "Semicolon |;|";
-		private const string SemicolonWithSpace_stringSeparator     =                       "; ";
-		private const string SemicolonWithSpace_stringDescription   = "Semicolon with space |; |";
+		private const string Semicolon_separator              =            ";";
+		private const string Semicolon_description            = "Semicolon |;|";
+		private const string SemicolonWithSpace_separator     =                       "; ";
+		private const string SemicolonWithSpace_description   = "Semicolon with space |; |";
 
 		#endregion
 
@@ -150,23 +150,23 @@ namespace YAT.Domain
 		{
 			switch ((InfoSeparator)UnderlyingEnum)
 			{
-				case InfoSeparator.None:                 return (None_stringSeparator);
-				case InfoSeparator.Space:                return (Space_stringSeparator);
+				case InfoSeparator.None:                 return (None_separator);
+				case InfoSeparator.Space:                return (Space_separator);
 
-				case InfoSeparator.Underscore:           return (Underscore_stringSeparator);
-				case InfoSeparator.UnderscoreWithSpaces: return (UnderscoreWithSpaces_stringSeparator);
+				case InfoSeparator.Underscore:           return (Underscore_separator);
+				case InfoSeparator.UnderscoreWithSpaces: return (UnderscoreWithSpaces_separator);
 
-				case InfoSeparator.Dash:                 return (Dash_stringSeparator);
-				case InfoSeparator.DashWithSpaces:       return (DashWithSpaces_stringSeparator);
+				case InfoSeparator.Dash:                 return (Dash_separator);
+				case InfoSeparator.DashWithSpaces:       return (DashWithSpaces_separator);
 
-				case InfoSeparator.Ball:                 return (Ball_stringSeparator);
-				case InfoSeparator.BallWithSpaces:       return (BallWithSpaces_stringSeparator);
+				case InfoSeparator.Ball:                 return (Ball_separator);
+				case InfoSeparator.BallWithSpaces:       return (BallWithSpaces_separator);
 
-				case InfoSeparator.Comma:                return (Comma_stringSeparator);
-				case InfoSeparator.CommaWithSpace:       return (CommaWithSpace_stringSeparator);
+				case InfoSeparator.Comma:                return (Comma_separator);
+				case InfoSeparator.CommaWithSpace:       return (CommaWithSpace_separator);
 
-				case InfoSeparator.Semicolon:            return (Semicolon_stringSeparator);
-				case InfoSeparator.SemicolonWithSpace:   return (SemicolonWithSpace_stringSeparator);
+				case InfoSeparator.Semicolon:            return (Semicolon_separator);
+				case InfoSeparator.SemicolonWithSpace:   return (SemicolonWithSpace_separator);
 
 				case InfoSeparator.Explicit:             return (this.explicitSeparator);
 
@@ -179,23 +179,23 @@ namespace YAT.Domain
 		{
 			switch ((InfoSeparator)UnderlyingEnum)
 			{
-				case InfoSeparator.None:                 return (None_stringDescription);
-				case InfoSeparator.Space:                return (Space_stringDescription);
+				case InfoSeparator.None:                 return (None_description);
+				case InfoSeparator.Space:                return (Space_description);
 
-				case InfoSeparator.Underscore:           return (Underscore_stringDescription);
-				case InfoSeparator.UnderscoreWithSpaces: return (UnderscoreWithSpaces_stringDescription);
+				case InfoSeparator.Underscore:           return (Underscore_description);
+				case InfoSeparator.UnderscoreWithSpaces: return (UnderscoreWithSpaces_description);
 
-				case InfoSeparator.Dash:                 return (Dash_stringDescription);
-				case InfoSeparator.DashWithSpaces:       return (DashWithSpaces_stringDescription);
+				case InfoSeparator.Dash:                 return (Dash_description);
+				case InfoSeparator.DashWithSpaces:       return (DashWithSpaces_description);
 
-				case InfoSeparator.Ball:                 return (Ball_stringDescription);
-				case InfoSeparator.BallWithSpaces:       return (BallWithSpaces_stringDescription);
+				case InfoSeparator.Ball:                 return (Ball_description);
+				case InfoSeparator.BallWithSpaces:       return (BallWithSpaces_description);
 
-				case InfoSeparator.Comma:                return (Comma_stringDescription);
-				case InfoSeparator.CommaWithSpace:       return (CommaWithSpace_stringDescription);
+				case InfoSeparator.Comma:                return (Comma_description);
+				case InfoSeparator.CommaWithSpace:       return (CommaWithSpace_description);
 
-				case InfoSeparator.Semicolon:            return (Semicolon_stringDescription);
-				case InfoSeparator.SemicolonWithSpace:   return (SemicolonWithSpace_stringDescription);
+				case InfoSeparator.Semicolon:            return (Semicolon_description);
+				case InfoSeparator.SemicolonWithSpace:   return (SemicolonWithSpace_description);
 
 				case InfoSeparator.Explicit:             return (this.explicitSeparator);
 
@@ -366,74 +366,74 @@ namespace YAT.Domain
 				result = InfoSeparator.None;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_separator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, None_description))
 			{
 				result = InfoSeparator.None;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Space_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Space_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Space_separator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Space_description))
 			{
 				result = InfoSeparator.Space;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Underscore_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Underscore_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Underscore_separator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Underscore_description))
 			{
 				result = InfoSeparator.Underscore;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, UnderscoreWithSpaces_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, UnderscoreWithSpaces_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, UnderscoreWithSpaces_separator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, UnderscoreWithSpaces_description))
 			{
 				result = InfoSeparator.UnderscoreWithSpaces;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Dash_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Dash_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Dash_separator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Dash_description))
 			{
 				result = InfoSeparator.Dash;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, DashWithSpaces_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, DashWithSpaces_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, DashWithSpaces_separator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, DashWithSpaces_description))
 			{
 				result = InfoSeparator.DashWithSpaces;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Ball_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Ball_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Ball_separator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Ball_description))
 			{
 				result = InfoSeparator.Ball;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, BallWithSpaces_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, BallWithSpaces_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, BallWithSpaces_separator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, BallWithSpaces_description))
 			{
 				result = InfoSeparator.BallWithSpaces;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Comma_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Comma_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Comma_separator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Comma_description))
 			{
 				result = InfoSeparator.Comma;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, CommaWithSpace_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, CommaWithSpace_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, CommaWithSpace_separator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, CommaWithSpace_description))
 			{
 				result = InfoSeparator.CommaWithSpace;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Semicolon_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Semicolon_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Semicolon_separator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Semicolon_description))
 			{
 				result = InfoSeparator.Semicolon;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, SemicolonWithSpace_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, SemicolonWithSpace_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, SemicolonWithSpace_separator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, SemicolonWithSpace_description))
 			{
 				result = InfoSeparator.SemicolonWithSpace;
 				return (true);
