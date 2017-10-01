@@ -351,7 +351,7 @@ namespace YAT.Model.Utilities
 		/// <summary></summary>
 		public void WriteLine(RawChunk chunk)
 		{
-			WriteLine(new XmlTransferRawLine(chunk.TimeStamp, (Direction)chunk.Direction, chunk.Content));
+			WriteLine(new XmlTransferRawLine(chunk.TimeStamp, chunk.PortStamp, (Direction)chunk.Direction, chunk.Content));
 		}
 
 		private void WriteLine(XmlTransferRawLine transferLine)
@@ -359,7 +359,9 @@ namespace YAT.Model.Utilities
 			// AssertNotDisposed() is called by WriteLine() further below.
 
 			// Example (without indentation):
-			// <XmlTransferRawLine TimeStamp="2001-12-23T12:34:56.789" Direction="Tx" DataAsBase64="QUJDRA==" />
+			// <XmlTransferRawLine TimeStamp="2001-12-23T12:34:56.789-01:00" Port="COM1" Direction="Tx" DataAsBase64="QUJDRA==" />
+
+			// Neither outputting time span nor time delta since that can be calculated from time stamp.
 
 			// To recreate this example and validate the schema implemented below:
 			//  1. Enable raw export in View.Forms.Terminal.SaveMonitor().
@@ -371,8 +373,10 @@ namespace YAT.Model.Utilities
 			sb.Append(@"<XmlTransferRawLine");
 			sb.Append(@" TimeStamp=""");
 			sb.Append(transferLine.TimeStamp.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
-			sb.Append(@"T");
-			sb.Append(transferLine.TimeStamp.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture));
+			sb.Append(@"T"); // Note that time stamp format is fixed to standard XML format.
+			sb.Append(transferLine.TimeStamp.ToString("HH:mm:ss.fffzzz", CultureInfo.InvariantCulture));
+			sb.Append(@""" Port=""");
+			sb.Append(transferLine.Port);
 			sb.Append(@""" Direction=""");
 			sb.Append(transferLine.Direction.ToString()); // Default is "G".
 			sb.Append(@""" DataAsBase64=""");
@@ -428,7 +432,9 @@ namespace YAT.Model.Utilities
 			// AssertNotDisposed() is called by WriteLine() further below.
 
 			// Example (without indentation):
-			// <XmlTransferNeatLine TimeStamp="2001-12-23T12:34:56.789" Direction="Tx" Text="ABCD" ErrorText="" Length="4" />
+			// <XmlTransferNeatLine TimeStamp="2001-12-23T12:34:56.789-01:00" Port="COM1" Direction="Tx" Text="ABCD" ErrorText="" Length="4" />
+
+			// Neither outputting time span nor time delta since that can be calculated from time stamp.
 
 			// To recreate this example and validate the schema implemented below:
 			//  1. Send some data
@@ -439,8 +445,8 @@ namespace YAT.Model.Utilities
 			sb.Append(@"<XmlTransferNeatLine");
 			sb.Append(@" TimeStamp=""");
 			sb.Append(transferLine.TimeStamp.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
-			sb.Append(@"T");
-			sb.Append(transferLine.TimeStamp.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture));
+			sb.Append(@"T"); // Note that time stamp format is fixed to standard XML format.
+			sb.Append(transferLine.TimeStamp.ToString("HH:mm:ss.fffzzz", CultureInfo.InvariantCulture));
 			sb.Append(@""" Port=""");
 			sb.Append(transferLine.Port);
 			sb.Append(@""" Direction=""");

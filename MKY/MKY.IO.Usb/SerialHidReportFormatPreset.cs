@@ -259,6 +259,7 @@ namespace MKY.IO.Usb
 		public static SerialHidReportFormatPresetEx[] GetItems()
 		{
 			List<SerialHidReportFormatPresetEx> a = new List<SerialHidReportFormatPresetEx>(8); // Preset the required capacity to improve memory management.
+
 			a.Add(new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.None));
 			a.Add(new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.Plain));
 			a.Add(new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.Common));
@@ -268,6 +269,7 @@ namespace MKY.IO.Usb
 			a.Add(new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.Signal11_HidApi));
 			a.Add(new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.TI_HidApi));
 			a.Add(new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.YAT));
+
 			return (a.ToArray());
 		}
 

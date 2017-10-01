@@ -96,14 +96,14 @@ namespace YAT.Model.Utilities
 
 			bool success = true;
 
-			string textStr      = "";
-			string errorStr     = "";
+			string textStr = "";
+			string errorStr = "";
 
-			string dateStr      = "";
-			string timeStr      = "";
-			string portStr      = "";
-			string directionStr = "";
-			string lengthStr    = "";
+			DateTime timeStamp = DateTime.MinValue;
+			TimeSpan timeSpan  = TimeSpan.MinValue;
+			TimeSpan timeDelta = TimeSpan.MinValue;
+			string portStr = "";
+			int lengthByteCount = 0;
 
 			bool containsTx = false;
 			bool containsRx = false;
@@ -158,18 +158,26 @@ namespace YAT.Model.Utilities
 
 				// Then try to cast to the singleton elements:
 				{
-					var casted = (de as DisplayElement.DateInfo);
+					var casted = (de as DisplayElement.TimeStampInfo);
 					if (casted != null)
 					{
-						dateStr = casted.Text;
+						timeStamp = casted.TimeStamp;
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
 				}
 				{
-					var casted = (de as DisplayElement.TimeInfo);
+					var casted = (de as DisplayElement.TimeSpanInfo);
 					if (casted != null)
 					{
-						timeStr = casted.Text;
+						timeSpan = casted.TimeSpan;
+						continue; // Immediately continue, makes no sense to also try other types!
+					}
+				}
+				{
+					var casted = (de as DisplayElement.TimeDeltaInfo);
+					if (casted != null)
+					{
+						timeDelta = casted.TimeDelta;
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
 				}
@@ -182,92 +190,30 @@ namespace YAT.Model.Utilities
 					}
 				}
 				{
-					var casted = (de as DisplayElement.DirectionInfo);
-					if (casted != null)
-					{
-						directionStr = casted.Text;
-						continue; // Immediately continue, makes no sense to also try other types!
-					}
-				}
-				{
 					var casted = (de as DisplayElement.DataLength);
 					if (casted != null)
 					{
-						lengthStr = casted.Text;
+						lengthByteCount = casted.LengthByteCount;
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
 				}
 
 				// All white-space elements do not need to be processed.
+				// 'DirectionInfo' is handled below.
 			}
 
-			// Trim () from the singleton elements and try to create strongly-typed elements:
+			Direction direction;
 
-			DateTime timeStamp = DateTime.MinValue;
-			Direction direction = Direction.None;
-			int length = -1;
-
-			if (!string.IsNullOrEmpty(dateStr) || !string.IsNullOrEmpty(timeStr))
-			{
-				if (!string.IsNullOrEmpty(dateStr)) {
-					dateStr = dateStr.TrimStart('(');
-					dateStr = dateStr.TrimEnd(')');
-				}
-
-				if (!string.IsNullOrEmpty(timeStr)) {
-					timeStr = timeStr.TrimStart('(');
-					timeStr = timeStr.TrimEnd(')');
-				}
-
-				string mergedStr = "";
-				string mergedFmt = "";
-				if (!string.IsNullOrEmpty(dateStr)) {
-					mergedStr += dateStr;
-					mergedFmt += DisplayElement.DateInfo.Format;
-				}
-				if (!string.IsNullOrEmpty(mergedStr)) {
-					mergedStr += " ";
-					mergedFmt += " ";
-				}
-				if (!string.IsNullOrEmpty(timeStr)) {
-					mergedStr += timeStr;
-					mergedFmt += DisplayElement.TimeInfo.Format;
-				}
-
-				if (!DateTime.TryParseExact(mergedStr, mergedFmt, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out timeStamp))
-					success = false;
-			}
-
-			if (!string.IsNullOrEmpty(directionStr))
-			{
-				directionStr = directionStr.TrimStart('(');
-				directionStr = directionStr.TrimEnd(')');
-
-				if (!DirectionEx.TryParse(directionStr, out direction))
-					success = false;
-			}
+			if (containsTx && containsRx)
+				direction = Direction.Bidir;
+			else if (containsTx)
+				direction = Direction.Tx;
+			else if (containsRx)
+				direction = Direction.Rx;
 			else
-			{
-				if (containsTx && containsRx)
-					direction = Direction.Bidir;
-				else if (containsTx)
-					direction = Direction.Tx;
-				else if (containsRx)
-					direction = Direction.Rx;
-				else
-					direction = Direction.None;
-			}
+				direction = Direction.None;
 
-			if (!string.IsNullOrEmpty(lengthStr))
-			{
-				lengthStr = lengthStr.TrimStart('(');
-				lengthStr = lengthStr.TrimEnd(')');
-
-				if (!int.TryParse(lengthStr, out length))
-					success = false;
-			}
-
-			transferLine = new XmlTransferNeatLine(timeStamp, portStr, direction, textStr, errorStr, length);
+			transferLine = new XmlTransferNeatLine(timeStamp, portStr, direction, textStr, errorStr, lengthByteCount);
 
 			return (success);
 		}

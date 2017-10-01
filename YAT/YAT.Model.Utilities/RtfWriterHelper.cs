@@ -52,8 +52,9 @@ namespace YAT.Model.Utilities
 		private static Font txControlFont;
 		private static Font rxDataFont;
 		private static Font rxControlFont;
-		private static Font dateFont;
-		private static Font timeFont;
+		private static Font timeStampFont;
+		private static Font timeSpanFont;
+		private static Font timeDeltaFont;
 		private static Font portFont;
 		private static Font directionFont;
 		private static Font lengthFont;
@@ -152,17 +153,23 @@ namespace YAT.Model.Utilities
 				color     = settings.RxControlFormat.Color;
 				font      = CacheAndAssignIfChanged(ref rxControlFont, fontName, fontSize, fontStyle);
 			}
-			else if (element is DisplayElement.DateInfo)
+			else if (element is DisplayElement.TimeStampInfo)
 			{
-				fontStyle = settings.DateFormat.FontStyle;
-				color     = settings.DateFormat.Color;
-				font      = CacheAndAssignIfChanged(ref dateFont, fontName, fontSize, fontStyle);
+				fontStyle = settings.TimeStampFormat.FontStyle;
+				color     = settings.TimeStampFormat.Color;
+				font      = CacheAndAssignIfChanged(ref timeStampFont, fontName, fontSize, fontStyle);
 			}
-			else if (element is DisplayElement.TimeInfo)
+			else if (element is DisplayElement.TimeSpanInfo)
 			{
-				fontStyle = settings.TimeFormat.FontStyle;
-				color     = settings.TimeFormat.Color;
-				font      = CacheAndAssignIfChanged(ref timeFont, fontName, fontSize, fontStyle);
+				fontStyle = settings.TimeSpanFormat.FontStyle;
+				color     = settings.TimeSpanFormat.Color;
+				font      = CacheAndAssignIfChanged(ref timeSpanFont, fontName, fontSize, fontStyle);
+			}
+			else if (element is DisplayElement.TimeDeltaInfo)
+			{
+				fontStyle = settings.TimeDeltaFormat.FontStyle;
+				color     = settings.TimeDeltaFormat.Color;
+				font      = CacheAndAssignIfChanged(ref timeDeltaFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.PortInfo)
 			{

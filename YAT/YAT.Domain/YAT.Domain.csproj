@@ -127,6 +127,9 @@
     <Compile Include="TerminalFactory.cs" />
     <Compile Include="Terminal\DisplayLine.cs" />
     <Compile Include="Terminal\InfoEnclosure.cs" />
+    <Compile Include="Terminal\TimeDeltaFormatPreset.cs" />
+    <Compile Include="Terminal\TimeSpanFormatPreset.cs" />
+    <Compile Include="Terminal\TimeStampFormatPreset.cs" />
     <Compile Include="Terminal\InfoSeparator.cs" />
     <Compile Include="Terminal\SendItems.cs" />
     <Compile Include="TextTerminal\Settings\SendTextFileSettings.cs" />

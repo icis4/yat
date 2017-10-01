@@ -52,8 +52,9 @@ namespace YAT.Domain
 	[XmlInclude(typeof(RxData))]
 	[XmlInclude(typeof(RxControl))]
 	[XmlInclude(typeof(InfoElement))]
-	[XmlInclude(typeof(DateInfo))]
-	[XmlInclude(typeof(TimeInfo))]
+	[XmlInclude(typeof(TimeStampInfo))]
+	[XmlInclude(typeof(TimeSpanInfo))]
+	[XmlInclude(typeof(TimeDeltaInfo))]
 	[XmlInclude(typeof(PortInfo))]
 	[XmlInclude(typeof(DirectionInfo))]
 	[XmlInclude(typeof(DataLength))]
@@ -218,55 +219,85 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class DateInfo : InfoElement
+		public class TimeStampInfo : InfoElement
 		{
 			/// <summary></summary>
-			public const string Format = "yyyy-MM-dd";
+			public DateTime TimeStamp { get; }
 
 			/// <summary></summary>
-			public DateInfo()
-				: this(DateTime.Now, null, null)
+			public TimeStampInfo(TimeStampInfo other)
+				: base(other.Direction, other.Text)
+			{
+				TimeStamp = other.TimeStamp;
+			}
+
+			/// <summary></summary>
+			public TimeStampInfo(DateTime timeStamp, string format, string enclosureLeft, string enclosureRight)
+				: this(Direction.None, timeStamp, format, enclosureLeft, enclosureRight)
 			{
 			}
 
 			/// <summary></summary>
-			public DateInfo(DateTime timeStamp, string enclosureLeft, string enclosureRight)
-				: this(Direction.None, timeStamp, enclosureLeft, enclosureRight)
+			public TimeStampInfo(Direction direction, DateTime timeStamp, string format, string enclosureLeft, string enclosureRight)
+				: base(direction, enclosureLeft + timeStamp.ToString(format, DateTimeFormatInfo.InvariantInfo) + enclosureRight)
 			{
-			}
-
-			/// <summary></summary>
-			public DateInfo(Direction direction, DateTime timeStamp, string enclosureLeft, string enclosureRight)
-				: base(direction, enclosureLeft + timeStamp.ToString(Format, DateTimeFormatInfo.InvariantInfo) + enclosureRight)
-			{
+				TimeStamp = timeStamp;
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class TimeInfo : InfoElement
+		public class TimeSpanInfo : InfoElement
 		{
-			/// <remarks>
-			/// Output milliseconds for readability, even though last digit only provides limited accuracy.
-			/// </remarks>
-			public const string Format = "HH:mm:ss.fff";
+			/// <summary></summary>
+			public TimeSpan TimeSpan { get; }
 
 			/// <summary></summary>
-			public TimeInfo()
-				: this(DateTime.Now, null, null)
+			public TimeSpanInfo(TimeSpanInfo other)
+				: base(other.Direction, other.Text)
+			{
+				TimeSpan = other.TimeSpan;
+			}
+
+			/// <summary></summary>
+			public TimeSpanInfo(TimeSpan timeStamp, string format, string enclosureLeft, string enclosureRight)
+				: this(Direction.None, timeStamp, format, enclosureLeft, enclosureRight)
 			{
 			}
 
 			/// <summary></summary>
-			public TimeInfo(DateTime timeStamp, string enclosureLeft, string enclosureRight)
-				: this(Direction.None, timeStamp, enclosureLeft, enclosureRight)
+			public TimeSpanInfo(Direction direction, TimeSpan timeSpan, string format, string enclosureLeft, string enclosureRight)
+				: base(direction, enclosureLeft + TimeSpanEx.FormatInvariantTimeSpan(timeSpan, true, true, true) + enclosureRight)
+			{
+				TimeSpan = timeSpan;
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		public class TimeDeltaInfo : InfoElement
+		{
+			/// <summary></summary>
+			public TimeSpan TimeDelta { get; }
+
+			/// <summary></summary>
+			public TimeDeltaInfo(TimeDeltaInfo other)
+				: base(other.Direction, other.Text)
+			{
+				TimeDelta = other.TimeDelta;
+			}
+
+			/// <summary></summary>
+			public TimeDeltaInfo(TimeSpan timeDelta, string format, string enclosureLeft, string enclosureRight)
+				: this(Direction.None, timeDelta, format, enclosureLeft, enclosureRight)
 			{
 			}
 
 			/// <summary></summary>
-			public TimeInfo(Direction direction, DateTime timeStamp, string enclosureLeft, string enclosureRight)
-				: base(direction, enclosureLeft + timeStamp.ToString(Format, DateTimeFormatInfo.InvariantInfo) + enclosureRight)
+			public TimeDeltaInfo(Direction direction, TimeSpan timeDelta, string format, string enclosureLeft, string enclosureRight)
+				: base(direction, enclosureLeft + TimeSpanEx.FormatInvariantTimeSpan(timeDelta, true, true, true) + enclosureRight)
 			{
+				TimeDelta = timeDelta;
 			}
 		}
 
@@ -315,9 +346,13 @@ namespace YAT.Domain
 		public class DataLength : InfoElement
 		{
 			/// <summary></summary>
-			public DataLength()
-				: this(0, null, null)
+			public int LengthByteCount { get; }
+
+			/// <summary></summary>
+			public DataLength(DataLength other)
+				: base(other.Direction, other.Text)
 			{
+				LengthByteCount = other.LengthByteCount;
 			}
 
 			/// <summary></summary>
@@ -332,6 +367,7 @@ namespace YAT.Domain
 			public DataLength(Direction direction, int byteCount, string enclosureLeft, string enclosureRight)
 				: base(direction, enclosureLeft + byteCount.ToString(CultureInfo.InvariantCulture) + enclosureRight)
 			{
+				LengthByteCount = byteCount;
 			}
 		}
 
@@ -655,29 +691,24 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual DisplayElement Clone()
 		{
-			// Ensure to use the proper constructor.
-
-			// Attention: For performance reasons, reflection as shown below is not used
-			//ConstructorInfo ci = GetType().GetConstructor(Type.EmptyTypes);
-			//DisplayElement clone = (DisplayElement)ci.Invoke(null);
-
 			DisplayElement clone;
 
-			if      (this is Nonentity)		clone = new Nonentity();
-			else if (this is TxData)		clone = new TxData();
-			else if (this is TxControl)		clone = new TxControl();
-			else if (this is RxData)		clone = new RxData();
-			else if (this is RxControl)		clone = new RxControl();
-			else if (this is DateInfo)		clone = new DateInfo();
-			else if (this is TimeInfo)		clone = new TimeInfo();
-			else if (this is PortInfo)		clone = new PortInfo();
-			else if (this is DirectionInfo)	clone = new DirectionInfo();
-			else if (this is DataLength)	clone = new DataLength();
-			else if (this is DataSpace)		clone = new DataSpace();
-			else if (this is InfoSeparator)	clone = new InfoSeparator();
-			else if (this is LineStart)		clone = new LineStart();
-			else if (this is LineBreak)		clone = new LineBreak();
-			else if (this is ErrorInfo)		clone = new ErrorInfo();
+			if      (this is Nonentity)     clone = new Nonentity();
+			else if (this is TxData)        clone = new TxData();
+			else if (this is TxControl)     clone = new TxControl();
+			else if (this is RxData)        clone = new RxData();
+			else if (this is RxControl)     clone = new RxControl();
+			else if (this is TimeStampInfo) clone = new TimeStampInfo((TimeStampInfo)this);
+			else if (this is TimeSpanInfo)  clone = new TimeSpanInfo((TimeSpanInfo)this);
+			else if (this is TimeDeltaInfo) clone = new TimeDeltaInfo((TimeDeltaInfo)this);
+			else if (this is PortInfo)      clone = new PortInfo();
+			else if (this is DirectionInfo) clone = new DirectionInfo();
+			else if (this is DataLength)    clone = new DataLength((DataLength)this);
+			else if (this is DataSpace)     clone = new DataSpace();
+			else if (this is InfoSeparator) clone = new InfoSeparator();
+			else if (this is LineStart)     clone = new LineStart();
+			else if (this is LineBreak)     clone = new LineBreak();
+			else if (this is ErrorInfo)     clone = new ErrorInfo();
 			else throw (new TypeLoadException(MessageHelper.InvalidExecutionPreamble + "'" + GetType() + "' is a display element that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			clone.direction  = this.direction;

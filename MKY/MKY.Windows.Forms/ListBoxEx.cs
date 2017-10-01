@@ -376,6 +376,7 @@ namespace MKY.Windows.Forms
 					VerticalScrollToBottom();
 					return (true);
 				}
+
 				if (SelectedIndices[0] == (Items.Count - 2))
 				{
 					SelectedIndices.Clear(); // Clear selection to ensure that scrolling continues.

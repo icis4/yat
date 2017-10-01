@@ -72,23 +72,23 @@ namespace YAT.Log
 	{
 		#region String Definitions
 
-		private const string None_stringSeparator                   = "";
-		private const string None_stringDescription                 = "[None]";
+		private const string None_separator                   = "";
+		private const string None_description                 = "[None]";
 
-		private const string Underscore_stringSeparator             =             "_";
-		private const string Underscore_stringDescription           = "Underscore |_|";
-		private const string UnderscoreWithSpaces_stringSeparator   =                         " _ ";
-		private const string UnderscoreWithSpaces_stringDescription = "Underscore with spaces | _ |";
+		private const string Underscore_separator             =             "_";
+		private const string Underscore_description           = "Underscore |_|";
+		private const string UnderscoreWithSpaces_separator   =                         " _ ";
+		private const string UnderscoreWithSpaces_description = "Underscore with spaces | _ |";
 
-		private const string Dash_stringSeparator                   =         "-";
-		private const string Dash_stringDescription                 = "Dash |-|";
-		private const string DashWithSpaces_stringSeparator         =                   " - ";
-		private const string DashWithSpaces_stringDescription       = "Dash with spaces | - |";
+		private const string Dash_separator                   =       "-";
+		private const string Dash_description                 = "Dash |-|";
+		private const string DashWithSpaces_separator         =                   " - ";
+		private const string DashWithSpaces_description       = "Dash with spaces | - |";
 
-		private const string Ball_stringSeparator                   =       "°";
-		private const string Ball_stringDescription                 = "Ball |°|";
-		private const string BallWithSpaces_stringSeparator         =                   " ° ";
-		private const string BallWithSpaces_stringDescription       = "Ball with spaces | ° |";
+		private const string Ball_separator                   =       "°";
+		private const string Ball_description                 = "Ball |°|";
+		private const string BallWithSpaces_separator         =                   " ° ";
+		private const string BallWithSpaces_description       = "Ball with spaces | ° |";
 
 		#endregion
 
@@ -130,16 +130,16 @@ namespace YAT.Log
 		{
 			switch ((FileNameSeparator)UnderlyingEnum)
 			{
-				case FileNameSeparator.None:                 return (None_stringSeparator);
+				case FileNameSeparator.None:                 return (None_separator);
 
-				case FileNameSeparator.Underscore:           return (Underscore_stringSeparator);
-				case FileNameSeparator.UnderscoreWithSpaces: return (UnderscoreWithSpaces_stringSeparator);
+				case FileNameSeparator.Underscore:           return (Underscore_separator);
+				case FileNameSeparator.UnderscoreWithSpaces: return (UnderscoreWithSpaces_separator);
 
-				case FileNameSeparator.Dash:                 return (Dash_stringSeparator);
-				case FileNameSeparator.DashWithSpaces:       return (DashWithSpaces_stringSeparator);
+				case FileNameSeparator.Dash:                 return (Dash_separator);
+				case FileNameSeparator.DashWithSpaces:       return (DashWithSpaces_separator);
 
-				case FileNameSeparator.Ball:                 return (Ball_stringSeparator);
-				case FileNameSeparator.BallWithSpaces:       return (BallWithSpaces_stringSeparator);
+				case FileNameSeparator.Ball:                 return (Ball_separator);
+				case FileNameSeparator.BallWithSpaces:       return (BallWithSpaces_separator);
 
 				case FileNameSeparator.Explicit:             return (this.explicitSeparator);
 
@@ -152,16 +152,16 @@ namespace YAT.Log
 		{
 			switch ((FileNameSeparator)UnderlyingEnum)
 			{
-				case FileNameSeparator.None:                 return (None_stringDescription);
+				case FileNameSeparator.None:                 return (None_description);
 
-				case FileNameSeparator.Underscore:           return (Underscore_stringDescription);
-				case FileNameSeparator.UnderscoreWithSpaces: return (UnderscoreWithSpaces_stringDescription);
+				case FileNameSeparator.Underscore:           return (Underscore_description);
+				case FileNameSeparator.UnderscoreWithSpaces: return (UnderscoreWithSpaces_description);
 
-				case FileNameSeparator.Dash:                 return (Dash_stringDescription);
-				case FileNameSeparator.DashWithSpaces:       return (DashWithSpaces_stringDescription);
+				case FileNameSeparator.Dash:                 return (Dash_description);
+				case FileNameSeparator.DashWithSpaces:       return (DashWithSpaces_description);
 
-				case FileNameSeparator.Ball:                 return (Ball_stringDescription);
-				case FileNameSeparator.BallWithSpaces:       return (BallWithSpaces_stringDescription);
+				case FileNameSeparator.Ball:                 return (Ball_description);
+				case FileNameSeparator.BallWithSpaces:       return (BallWithSpaces_description);
 
 				case FileNameSeparator.Explicit:             return (this.explicitSeparator);
 
@@ -336,44 +336,44 @@ namespace YAT.Log
 				result = FileNameSeparator.None;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_separator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, None_description))
 			{
 				result = FileNameSeparator.None;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Underscore_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Underscore_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Underscore_separator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Underscore_description))
 			{
 				result = FileNameSeparator.Underscore;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, UnderscoreWithSpaces_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, UnderscoreWithSpaces_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, UnderscoreWithSpaces_separator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, UnderscoreWithSpaces_description))
 			{
 				result = FileNameSeparator.UnderscoreWithSpaces;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Dash_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Dash_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Dash_separator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Dash_description))
 			{
 				result = FileNameSeparator.Dash;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, DashWithSpaces_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, DashWithSpaces_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, DashWithSpaces_separator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, DashWithSpaces_description))
 			{
 				result = FileNameSeparator.DashWithSpaces;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Ball_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Ball_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Ball_separator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Ball_description))
 			{
 				result = FileNameSeparator.Ball;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, BallWithSpaces_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, BallWithSpaces_stringDescription))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, BallWithSpaces_separator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, BallWithSpaces_description))
 			{
 				result = FileNameSeparator.BallWithSpaces;
 				return (true);

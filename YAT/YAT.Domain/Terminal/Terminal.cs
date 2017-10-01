@@ -71,7 +71,7 @@ namespace YAT.Domain
 	/// its specializations add additional functionality.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
-	public class Terminal : IDisposable
+	public abstract class Terminal : IDisposable
 	{
 		#region Constant Help Text
 		//==========================================================================================
@@ -2433,32 +2433,38 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "ps", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual void PrepareLineBeginInfo(DateTime ts, string ps, IODirection d, out DisplayLinePart lp)
+		protected virtual void PrepareLineBeginInfo(DateTime ts, TimeSpan diff, TimeSpan delta, string ps, IODirection d, out DisplayLinePart lp)
 		{
-			if (TerminalSettings.Display.ShowDate || TerminalSettings.Display.ShowTime ||
-				TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
+			if (TerminalSettings.Display.ShowTimeStamp || TerminalSettings.Display.ShowTimeSpan || TerminalSettings.Display.ShowTimeDelta ||
+			    TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
 			{
 				lp = new DisplayLinePart(8); // Preset the required capacity to improve memory management.
 
-				if (TerminalSettings.Display.ShowDate)
+				if (TerminalSettings.Display.ShowTimeStamp)
 				{
-					lp.Add(new DisplayElement.DateInfo(ts, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
+					lp.Add(new DisplayElement.TimeStampInfo(ts, TerminalSettings.Display.TimeStampFormat, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
 
 					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
 						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
 				}
 
-				if (TerminalSettings.Display.ShowTime)
+				if (TerminalSettings.Display.ShowTimeSpan)
 				{
-					lp.Add(new DisplayElement.TimeInfo(ts, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
+					lp.Add(new DisplayElement.TimeSpanInfo(diff, TerminalSettings.Display.TimeSpanFormat, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
 
 					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
 						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
 				}
+				if (TerminalSettings.Display.ShowTimeDelta)
+				{
+					lp.Add(new DisplayElement.TimeDeltaInfo(delta, TerminalSettings.Display.TimeDeltaFormat, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
 
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
+						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
+				}
 				if (TerminalSettings.Display.ShowPort)
 				{
 					lp.Add(new DisplayElement.PortInfo(ps, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
@@ -2502,40 +2508,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessRawChunk(RawChunk raw, DisplayElementCollection elements, List<DisplayLine> lines)
-		{                            // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-			var dl = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-
-			// Line begin:
-			dl.Add(new DisplayElement.LineStart((Direction)raw.Direction));
-
-			if (TerminalSettings.Display.ShowDate || TerminalSettings.Display.ShowTime ||
-				TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
-			{
-				DisplayLinePart info;
-				PrepareLineBeginInfo(raw.TimeStamp, raw.PortStamp, raw.Direction, out info);
-				dl.AddRange(info);
-			}
-
-			// Content:
-			foreach (byte b in raw.Content)
-			{
-				dl.Add(ByteToElement(b, raw.Direction));
-			}
-
-			// Line end:
-			if (TerminalSettings.Display.ShowLength)
-			{
-				DisplayLinePart info;
-				PrepareLineEndInfo(raw.Content.Length, out info);
-				dl.AddRange(info);
-			}
-
-			dl.Add(new DisplayElement.LineBreak((Direction)raw.Direction));
-
-			elements.AddRange(dl.Clone()); // Clone elements because they are needed again a line below.
-			lines.Add(dl);
-		}
+		protected abstract void ProcessRawChunk(RawChunk raw, DisplayElementCollection elements, List<DisplayLine> lines);
 
 		/// <summary></summary>
 		protected virtual void ProcessAndSignalRawChunk(RawChunk raw)

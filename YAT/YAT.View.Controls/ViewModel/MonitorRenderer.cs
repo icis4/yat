@@ -48,8 +48,9 @@ namespace YAT.View.Controls
 		private static Font staticTxControlFont;
 		private static Font staticRxDataFont;
 		private static Font staticRxControlFont;
-		private static Font staticDateFont;
-		private static Font staticTimeFont;
+		private static Font staticTimeStampFont;
+		private static Font staticTimeSpanFont;
+		private static Font staticTimeDeltaFont;
 		private static Font staticPortFont;
 		private static Font staticDirectionFont;
 		private static Font staticLengthFont;
@@ -212,19 +213,24 @@ namespace YAT.View.Controls
 				fontStyle = settings.RxControlFormat.FontStyle;
 				font      = CacheAndAssignIfChanged(ref staticRxControlFont, fontName, fontSize, fontStyle);
 			}
-			else if (element is Domain.DisplayElement.DateInfo)
+			else if (element is Domain.DisplayElement.TimeStampInfo)
 			{
-				foreColor = settings.DateFormat.Color;
-				fontStyle = settings.DateFormat.FontStyle;
-				font      = CacheAndAssignIfChanged(ref staticDateFont, fontName, fontSize, fontStyle);
+				foreColor = settings.TimeStampFormat.Color;
+				fontStyle = settings.TimeStampFormat.FontStyle;
+				font      = CacheAndAssignIfChanged(ref staticTimeStampFont, fontName, fontSize, fontStyle);
 			}
-			else if (element is Domain.DisplayElement.TimeInfo)
+			else if (element is Domain.DisplayElement.TimeSpanInfo)
 			{
-				foreColor = settings.TimeFormat.Color;
-				fontStyle = settings.TimeFormat.FontStyle;
-				font      = CacheAndAssignIfChanged(ref staticTimeFont, fontName, fontSize, fontStyle);
+				foreColor = settings.TimeSpanFormat.Color;
+				fontStyle = settings.TimeSpanFormat.FontStyle;
+				font      = CacheAndAssignIfChanged(ref staticTimeSpanFont, fontName, fontSize, fontStyle);
 			}
-			else if (element is Domain.DisplayElement.PortInfo)
+			else if (element is Domain.DisplayElement.TimeDeltaInfo)
+			{
+				foreColor = settings.TimeDeltaFormat.Color;
+				fontStyle = settings.TimeDeltaFormat.FontStyle;
+				font      = CacheAndAssignIfChanged(ref staticTimeDeltaFont, fontName, fontSize, fontStyle);
+			}			else if (element is Domain.DisplayElement.PortInfo)
 			{
 				foreColor = settings.PortFormat.Color;
 				fontStyle = settings.PortFormat.FontStyle;

@@ -113,8 +113,9 @@
 			this.label_RxRadix = new System.Windows.Forms.Label();
 			this.checkBox_SeparateTxRxRadix = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowRadix = new System.Windows.Forms.CheckBox();
-			this.checkBox_ShowDate = new System.Windows.Forms.CheckBox();
-			this.checkBox_ShowTime = new System.Windows.Forms.CheckBox();
+			this.checkBox_ShowTimeStamp = new System.Windows.Forms.CheckBox();
+			this.checkBox_ShowTimeSpan = new System.Windows.Forms.CheckBox();
+			this.checkBox_ShowTimeDelta = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowConnectTime = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowCountAndRate = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowLength = new System.Windows.Forms.CheckBox();
@@ -725,8 +726,9 @@
 			this.groupBox_Display.Controls.Add(this.label_RxRadix);
 			this.groupBox_Display.Controls.Add(this.checkBox_SeparateTxRxRadix);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowRadix);
-			this.groupBox_Display.Controls.Add(this.checkBox_ShowDate);
-			this.groupBox_Display.Controls.Add(this.checkBox_ShowTime);
+			this.groupBox_Display.Controls.Add(this.checkBox_ShowTimeStamp);
+			this.groupBox_Display.Controls.Add(this.checkBox_ShowTimeSpan);
+			this.groupBox_Display.Controls.Add(this.checkBox_ShowTimeDelta);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowConnectTime);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowCountAndRate);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowLength);
@@ -1096,25 +1098,35 @@
 			this.checkBox_ShowRadix.Text = "Show r&adix";
 			this.checkBox_ShowRadix.CheckedChanged += new System.EventHandler(this.checkBox_ShowRadix_CheckedChanged);
 			// 
-			// checkBox_ShowDate
+			// checkBox_ShowTimeStamp
 			// 
-			this.checkBox_ShowDate.AutoSize = true;
-			this.checkBox_ShowDate.Location = new System.Drawing.Point(12, 187);
-			this.checkBox_ShowDate.Name = "checkBox_ShowDate";
-			this.checkBox_ShowDate.Size = new System.Drawing.Size(77, 17);
-			this.checkBox_ShowDate.TabIndex = 9;
-			this.checkBox_ShowDate.Text = "Show d&ate";
-			this.checkBox_ShowDate.CheckedChanged += new System.EventHandler(this.checkBox_ShowDate_CheckedChanged);
+			this.checkBox_ShowTimeStamp.AutoSize = true;
+			this.checkBox_ShowTimeStamp.Location = new System.Drawing.Point(12, 187);
+			this.checkBox_ShowTimeStamp.Name = "checkBox_ShowTimeStamp";
+			this.checkBox_ShowTimeStamp.Size = new System.Drawing.Size(77, 17);
+			this.checkBox_ShowTimeStamp.TabIndex = 9;
+			this.checkBox_ShowTimeStamp.Text = "Show &time stamp";
+			this.checkBox_ShowTimeStamp.CheckedChanged += new System.EventHandler(this.checkBox_ShowTimeStamp_CheckedChanged);
 			// 
-			// checkBox_ShowTime
+			// checkBox_ShowTimeSpan
 			// 
-			this.checkBox_ShowTime.AutoSize = true;
-			this.checkBox_ShowTime.Location = new System.Drawing.Point(131, 187);
-			this.checkBox_ShowTime.Name = "checkBox_ShowTime";
-			this.checkBox_ShowTime.Size = new System.Drawing.Size(75, 17);
-			this.checkBox_ShowTime.TabIndex = 10;
-			this.checkBox_ShowTime.Text = "Show &time";
-			this.checkBox_ShowTime.CheckedChanged += new System.EventHandler(this.checkBox_ShowTime_CheckedChanged);
+			this.checkBox_ShowTimeSpan.AutoSize = true;
+			this.checkBox_ShowTimeSpan.Location = new System.Drawing.Point(15, 195);
+			this.checkBox_ShowTimeSpan.Name = "checkBox_ShowTimeSpan";
+			this.checkBox_ShowTimeSpan.Size = new System.Drawing.Size(77, 17);
+			this.checkBox_ShowTimeSpan.TabIndex = 10;
+			this.checkBox_ShowTimeSpan.Text = "Show &time stamp";
+			this.checkBox_ShowTimeSpan.CheckedChanged += new System.EventHandler(this.checkBox_ShowTimeSpan_CheckedChanged);
+			// 
+			// checkBox_ShowTimeDelta
+			// 
+			this.checkBox_ShowTimeDelta.AutoSize = true;
+			this.checkBox_ShowTimeDelta.Location = new System.Drawing.Point(18, 203);
+			this.checkBox_ShowTimeDelta.Name = "checkBox_ShowTimeDelta";
+			this.checkBox_ShowTimeDelta.Size = new System.Drawing.Size(77, 17);
+			this.checkBox_ShowTimeDelta.TabIndex = 11;
+			this.checkBox_ShowTimeDelta.Text = "Show &time stamp";
+			this.checkBox_ShowTimeDelta.CheckedChanged += new System.EventHandler(this.checkBox_ShowTimeDelta_CheckedChanged);
 			// 
 			// checkBox_ShowConnectTime
 			// 
@@ -1245,8 +1257,9 @@
 		private MKY.Windows.Forms.TextBoxEx textBox_MaxLineCount;
 		private System.Windows.Forms.Label label_MaxLineCount;
 		private System.Windows.Forms.CheckBox checkBox_KeepCommand;
-		private System.Windows.Forms.CheckBox checkBox_ShowDate;
-		private System.Windows.Forms.CheckBox checkBox_ShowTime;
+		private System.Windows.Forms.CheckBox checkBox_ShowTimeStamp;
+		private System.Windows.Forms.CheckBox checkBox_ShowTimeSpan;
+		private System.Windows.Forms.CheckBox checkBox_ShowTimeDelta;
 		private System.Windows.Forms.CheckBox checkBox_ShowCountAndRate;
 		private System.Windows.Forms.CheckBox checkBox_ShowLength;
 		private MKY.Windows.Forms.ComboBoxEx comboBox_TxRadix;
