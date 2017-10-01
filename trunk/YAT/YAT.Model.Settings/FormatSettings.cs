@@ -61,8 +61,9 @@ namespace YAT.Model.Settings
 		private TextFormat txControlFormat;
 		private TextFormat rxDataFormat;
 		private TextFormat rxControlFormat;
-		private TextFormat dateFormat;
-		private TextFormat timeFormat;
+		private TextFormat timeStampFormat;
+		private TextFormat timeSpanFormat;
+		private TextFormat timeDeltaFormat;
 		private TextFormat portFormat;
 		private TextFormat directionFormat;
 		private TextFormat lengthFormat;
@@ -100,8 +101,9 @@ namespace YAT.Model.Settings
 			TxControlFormat   = new TextFormat(rhs.TxControlFormat);
 			RxDataFormat      = new TextFormat(rhs.RxDataFormat);
 			RxControlFormat   = new TextFormat(rhs.RxControlFormat);
-			DateFormat        = new TextFormat(rhs.DateFormat);
-			TimeFormat        = new TextFormat(rhs.TimeFormat);
+			TimeStampFormat   = new TextFormat(rhs.TimeStampFormat);
+			TimeSpanFormat    = new TextFormat(rhs.TimeSpanFormat);
+			TimeDeltaFormat   = new TextFormat(rhs.TimeDeltaFormat);
 			PortFormat        = new TextFormat(rhs.PortFormat);
 			DirectionFormat   = new TextFormat(rhs.DirectionFormat);
 			LengthFormat      = new TextFormat(rhs.LengthFormat);
@@ -128,8 +130,9 @@ namespace YAT.Model.Settings
 			TxControlFormat   = new TextFormat(TxColorDefault,          false, false, false, false);
 			RxDataFormat      = new TextFormat(RxColorDefault,           true, false, false, false); // Bold.
 			RxControlFormat   = new TextFormat(RxColorDefault,          false, false, false, false);
-			DateFormat        = new TextFormat(InfoColorDefault,        false, false, false, false);
-			TimeFormat        = new TextFormat(InfoColorDefault,        false, false, false, false);
+			TimeStampFormat   = new TextFormat(InfoColorDefault,        false, false, false, false);
+			TimeSpanFormat    = new TextFormat(InfoColorDefault,        false, false, false, false);
+			TimeDeltaFormat   = new TextFormat(InfoColorDefault,        false, false, false, false);
 			PortFormat        = new TextFormat(InfoColorDefault,        false, false, false, false);
 			DirectionFormat   = new TextFormat(InfoColorDefault,        false, false, false, false);
 			LengthFormat      = new TextFormat(InfoColorDefault,        false, false, false, false);
@@ -250,30 +253,45 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("DateFormat")]
-		public TextFormat DateFormat
+		[XmlElement("TimeStampFormat")]
+		public TextFormat TimeStampFormat
 		{
-			get { return (this.dateFormat); }
+			get { return (this.timeStampFormat); }
 			set
 			{
-				if (this.dateFormat != value)
+				if (this.timeStampFormat != value)
 				{
-					this.dateFormat = value;
+					this.timeStampFormat = value;
 					SetMyChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("TimeFormat")]
-		public TextFormat TimeFormat
+		[XmlElement("TimeSpanFormat")]
+		public TextFormat TimeSpanFormat
 		{
-			get { return (this.timeFormat); }
+			get { return (this.timeSpanFormat); }
 			set
 			{
-				if (this.timeFormat != value)
+				if (this.timeSpanFormat != value)
 				{
-					this.timeFormat = value;
+					this.timeSpanFormat = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("TimeDeltaFormat")]
+		public TextFormat TimeDeltaFormat
+		{
+			get { return (this.timeDeltaFormat); }
+			set
+			{
+				if (this.timeDeltaFormat != value)
+				{
+					this.timeDeltaFormat = value;
 					SetMyChanged();
 				}
 			}
@@ -412,8 +430,9 @@ namespace YAT.Model.Settings
 				hashCode = (hashCode * 397) ^ (TxControlFormat   != null ? TxControlFormat  .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (RxDataFormat      != null ? RxDataFormat     .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (RxControlFormat   != null ? RxControlFormat  .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (DateFormat        != null ? DateFormat       .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (TimeFormat        != null ? TimeFormat       .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (TimeStampFormat   != null ? TimeStampFormat  .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (TimeSpanFormat    != null ? TimeSpanFormat   .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (TimeDeltaFormat   != null ? TimeDeltaFormat  .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (PortFormat        != null ? PortFormat       .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (DirectionFormat   != null ? DirectionFormat  .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (LengthFormat      != null ? LengthFormat     .GetHashCode() : 0);
@@ -459,8 +478,9 @@ namespace YAT.Model.Settings
 				ObjectEx.Equals(TxControlFormat,   other.TxControlFormat)   &&
 				ObjectEx.Equals(RxDataFormat,      other.RxDataFormat)      &&
 				ObjectEx.Equals(RxControlFormat,   other.RxControlFormat)   &&
-				ObjectEx.Equals(DateFormat,        other.DateFormat)        &&
-				ObjectEx.Equals(TimeFormat,        other.TimeFormat)        &&
+				ObjectEx.Equals(TimeStampFormat,   other.TimeStampFormat)   &&
+				ObjectEx.Equals(TimeSpanFormat,    other.TimeSpanFormat)    &&
+				ObjectEx.Equals(TimeDeltaFormat,   other.TimeDeltaFormat)   &&
 				ObjectEx.Equals(PortFormat,        other.PortFormat)        &&
 				ObjectEx.Equals(DirectionFormat,   other.DirectionFormat)   &&
 				ObjectEx.Equals(LengthFormat,      other.LengthFormat)      &&

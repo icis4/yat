@@ -593,8 +593,9 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Display.ShowRadix             = f.SettingsResult.Terminal.Display.ShowRadix;
 				this.settingsInEdit.Terminal.Display.ShowBufferLineNumbers = f.SettingsResult.Terminal.Display.ShowBufferLineNumbers;
 				this.settingsInEdit.Terminal.Display.ShowTotalLineNumbers  = f.SettingsResult.Terminal.Display.ShowTotalLineNumbers;
-				this.settingsInEdit.Terminal.Display.ShowDate              = f.SettingsResult.Terminal.Display.ShowDate;
-				this.settingsInEdit.Terminal.Display.ShowTime              = f.SettingsResult.Terminal.Display.ShowTime;
+				this.settingsInEdit.Terminal.Display.ShowTimeStamp         = f.SettingsResult.Terminal.Display.ShowTimeStamp;
+				this.settingsInEdit.Terminal.Display.ShowTimeSpan          = f.SettingsResult.Terminal.Display.ShowTimeSpan;
+				this.settingsInEdit.Terminal.Display.ShowTimeDelta         = f.SettingsResult.Terminal.Display.ShowTimeDelta;
 				this.settingsInEdit.Terminal.Display.ShowPort              = f.SettingsResult.Terminal.Display.ShowPort;
 				this.settingsInEdit.Terminal.Display.ShowDirection         = f.SettingsResult.Terminal.Display.ShowDirection;
 				this.settingsInEdit.Terminal.Display.ShowLength            = f.SettingsResult.Terminal.Display.ShowLength;

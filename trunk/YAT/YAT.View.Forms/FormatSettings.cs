@@ -55,6 +55,12 @@ namespace YAT.View.Forms
 
 		private int[] customColors;
 
+		private DateTime initialTimeStamp;
+
+		private string timeStampFormat;
+		private string timeSpanFormat;
+		private string timeDeltaFormat;
+
 		private Domain.InfoSeparatorEx infoSeparator;
 		private Domain.InfoEnclosureEx infoEnclosure;
 
@@ -69,7 +75,7 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public FormatSettings(Model.Settings.FormatSettings formatSettings, int[] customColors, Domain.InfoSeparatorEx infoSeparator, Domain.InfoEnclosureEx infoEnclosure)
+		public FormatSettings(Model.Settings.FormatSettings formatSettings, int[] customColors, string timeStampFormat, string timeSpanFormat, string timeDeltaFormat, Domain.InfoSeparatorEx infoSeparator, Domain.InfoEnclosureEx infoEnclosure)
 		{
 			InitializeComponent();
 
@@ -77,6 +83,12 @@ namespace YAT.View.Forms
 			this.formatSettingsInEdit = new Model.Settings.FormatSettings(formatSettings);
 
 			this.customColors = customColors;
+
+			this.initialTimeStamp = DateTime.Now;
+
+			this.timeStampFormat = timeStampFormat;
+			this.timeSpanFormat  = timeSpanFormat;
+			this.timeDeltaFormat = timeDeltaFormat;
 
 			this.infoSeparator = infoSeparator;
 			this.infoEnclosure = infoEnclosure;
@@ -262,6 +274,36 @@ namespace YAT.View.Forms
 			}
 		}
 
+		private void textBox_TimeStampFormat_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			// !!!
+		}
+
+		private void comboBox_TimeStampFormatPreset_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			// !!!
+		}
+
+		private void textBox_TimeSpanFormat_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			// !!!
+		}
+
+		private void comboBox_TimeSpanFormatPreset_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			// !!!
+		}
+
+		private void textBox_TimeDeltaFormat_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			// !!!
+		}
+
+		private void comboBox_TimeDeltaFormatPreset_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			// !!!
+		}
+
 		private void button_OK_Click(object sender, EventArgs e)
 		{
 			this.formatSettings = this.formatSettingsInEdit;
@@ -309,14 +351,16 @@ namespace YAT.View.Forms
 			this.monitors = new Controls.Monitor[]
 			{
 				monitor_TxData, monitor_TxControl, monitor_RxData, monitor_RxControl,
-				monitor_Date, monitor_Time, monitor_Port, monitor_Direction, monitor_Length,
+				monitor_TimeStamp, monitor_TimeSpan, monitor_TimeDelta,
+				monitor_Port, monitor_Direction, monitor_Length,
 				monitor_Error,
 			};
 
 			this.textFormats = new Controls.TextFormat[]
 			{
 				textFormat_TxData, textFormat_TxControl, textFormat_RxData, textFormat_RxControl,
-				textFormat_Date, textFormat_Time, textFormat_Port, textFormat_Direction, textFormat_Length,
+				textFormat_TimeStamp, textFormat_TimeSpan, textFormat_TimeDelta,
+				textFormat_Port, textFormat_Direction, textFormat_Length,
 				textFormat_Error,
 			};
 
@@ -331,16 +375,17 @@ namespace YAT.View.Forms
 		{
 			switch (index)
 			{
-				case 0: return (this.formatSettingsInEdit.TxDataFormat);
-				case 1: return (this.formatSettingsInEdit.TxControlFormat);
-				case 2: return (this.formatSettingsInEdit.RxDataFormat);
-				case 3: return (this.formatSettingsInEdit.RxControlFormat);
-				case 4: return (this.formatSettingsInEdit.DateFormat);
-				case 5: return (this.formatSettingsInEdit.TimeFormat);
-				case 6: return (this.formatSettingsInEdit.PortFormat);
-				case 7: return (this.formatSettingsInEdit.DirectionFormat);
-				case 8: return (this.formatSettingsInEdit.LengthFormat);
-				case 9: return (this.formatSettingsInEdit.ErrorFormat);
+				case  0: return (this.formatSettingsInEdit.TxDataFormat);
+				case  1: return (this.formatSettingsInEdit.TxControlFormat);
+				case  2: return (this.formatSettingsInEdit.RxDataFormat);
+				case  3: return (this.formatSettingsInEdit.RxControlFormat);
+				case  4: return (this.formatSettingsInEdit.TimeStampFormat);
+				case  5: return (this.formatSettingsInEdit.TimeSpanFormat);
+				case  6: return (this.formatSettingsInEdit.TimeDeltaFormat);
+				case  7: return (this.formatSettingsInEdit.PortFormat);
+				case  8: return (this.formatSettingsInEdit.DirectionFormat);
+				case  9: return (this.formatSettingsInEdit.LengthFormat);
+				case 10: return (this.formatSettingsInEdit.ErrorFormat);
 			}
 			throw (new ArgumentOutOfRangeException("index", index, MessageHelper.InvalidExecutionPreamble + "There is no format at index '" + index + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -385,7 +430,7 @@ namespace YAT.View.Forms
 				SelectionHelper.Select(comboBox_InfoSeparator, this.infoSeparator, this.infoSeparator);
 				SelectionHelper.Select(comboBox_InfoEnclosure, this.infoEnclosure, this.infoEnclosure);
 
-												  // Clone settings to ensure decoupling:
+				                                  // Clone settings to ensure decoupling:
 				monitor_Example.FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
 
 				SetExamples();
@@ -407,6 +452,8 @@ namespace YAT.View.Forms
 		private void SetExamples()
 		{
 			var now = DateTime.Now;
+			var diff = (now - this.initialTimeStamp);
+			var delta = new TimeSpan(0, 0, 0, 0, 0);
 
 			var infoSeparator      = this.infoSeparator.ToSeparator();
 			var infoEnclosureLeft  = this.infoEnclosure.ToEnclosureLeft();
@@ -418,8 +465,9 @@ namespace YAT.View.Forms
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxControl(0x13, "<CR>")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxData(0x42, "42h")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxControl(0x10, "<LF>")));
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DateInfo(now, infoEnclosureLeft, infoEnclosureRight)));
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeInfo(now, infoEnclosureLeft, infoEnclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeStampInfo(now, timeStampFormat, infoEnclosureLeft, infoEnclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeSpanInfo(diff, timeSpanFormat, infoEnclosureLeft, infoEnclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeDeltaInfo(delta, timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.PortInfo(Domain.Direction.Tx, "COM1", infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Tx, infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DataLength(2, infoEnclosureLeft, infoEnclosureRight)));
@@ -431,9 +479,9 @@ namespace YAT.View.Forms
 			var exampleComplete = new Domain.DisplayRepository(37); // Preset the required capacity to improve memory management.
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
-			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now, infoEnclosureLeft, infoEnclosureRight));
-			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStampInfo(now, timeStampFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeSpanInfo(diff, timeSpanFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDeltaInfo(diff, timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight)); // Also diff since opening!
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.PortInfo(Domain.Direction.Tx, "COM1", infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
@@ -447,9 +495,9 @@ namespace YAT.View.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
-			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now, infoEnclosureLeft, infoEnclosureRight));
-			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStampInfo(now, timeStampFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeSpanInfo(diff, timeSpanFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDeltaInfo(delta, timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.PortInfo(Domain.Direction.Rx, "COM1", infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
@@ -463,9 +511,9 @@ namespace YAT.View.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
-			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now, infoEnclosureLeft, infoEnclosureRight));
-			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStampInfo(now, timeStampFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeSpanInfo(diff, timeSpanFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDeltaInfo(delta, timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.ErrorInfo("Message"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());

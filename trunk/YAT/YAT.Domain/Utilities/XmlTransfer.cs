@@ -42,6 +42,7 @@ namespace YAT.Domain.Utilities
 	public abstract class XmlTransferLine
 	{
 		private DateTime timeStamp;
+		private string port;
 		private Direction direction;
 
 		/// <summary></summary>
@@ -50,9 +51,10 @@ namespace YAT.Domain.Utilities
 		}
 
 		/// <summary></summary>
-		protected XmlTransferLine(DateTime timeStamp, Direction direction)
+		protected XmlTransferLine(DateTime timeStamp, string port, Direction direction)
 		{
 			this.timeStamp = timeStamp;
+			this.port      = port;
 			this.direction = direction;
 		}
 
@@ -62,6 +64,14 @@ namespace YAT.Domain.Utilities
 		{
 			get { return (this.timeStamp); }
 			set { this.timeStamp = value;  }
+		}
+
+		/// <summary></summary>
+		[XmlAttribute("Port")]
+		public virtual string Port
+		{
+			get { return (this.port); }
+			set { this.port = value;  }
 		}
 
 		/// <summary></summary>
@@ -87,8 +97,8 @@ namespace YAT.Domain.Utilities
 		}
 
 		/// <summary></summary>
-		public XmlTransferRawLine(DateTime timeStamp, Direction direction, byte[] content)
-			: base(timeStamp, direction)
+		public XmlTransferRawLine(DateTime timeStamp, string port, Direction direction, byte[] content)
+			: base(timeStamp, port, direction)
 		{
 			this.content = content;
 		}
@@ -117,7 +127,6 @@ namespace YAT.Domain.Utilities
 	[Serializable]
 	public class XmlTransferNeatLine : XmlTransferLine
 	{
-		private string port;
 		private string text;
 		private string errorText;
 		private int length;
@@ -129,20 +138,11 @@ namespace YAT.Domain.Utilities
 
 		/// <summary></summary>
 		public XmlTransferNeatLine(DateTime timeStamp, string port, Direction direction, string text, string errorText, int length)
-			: base(timeStamp, direction)
+			: base(timeStamp, port, direction)
 		{
-			this.port      = port;
 			this.text      = text;
 			this.errorText = errorText;
 			this.length    = length;
-		}
-
-		/// <summary></summary>
-		[XmlAttribute("Port")]
-		public virtual string Port
-		{
-			get { return (this.port); }
-			set { this.port = value; }
 		}
 
 		/// <summary></summary>

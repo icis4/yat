@@ -91,28 +91,34 @@ namespace YAT.Domain
 
 		private class LineState
 		{
-			public LinePosition    Position    { get; set; }
-			public DisplayLinePart Elements    { get; set; }
-			public DisplayLinePart EolElements { get; set; }
-			public SequenceQueue   Eol         { get; set; }
+			public DateTime        InitialTimeStamp { get; set; }
+			public DateTime        LastTimeStamp    { get; set; }
+			public LinePosition    Position         { get; set; }
+			public DisplayLinePart Elements         { get; set; }
+			public DisplayLinePart EolElements      { get; set; }
+			public SequenceQueue   Eol              { get; set; }
 
 			public Dictionary<string, bool> EolOfLastLineOfGivenPortWasCompleteMatch { get; set; }
 
 			public LineState(SequenceQueue eol)
 			{
-				Position    = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-				Elements    = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-				EolElements = new DisplayLinePart(); // Default initial capacity is OK.
-				Eol         = eol;
+				InitialTimeStamp = DateTime.Now;
+				LastTimeStamp    = DateTime.Now;
+				Position         = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+				Elements         = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				EolElements      = new DisplayLinePart(); // Default initial capacity is OK.
+				Eol              = eol;
 
 				EolOfLastLineOfGivenPortWasCompleteMatch = new Dictionary<string, bool>(); // Default initial capacity is OK.
 			}
 
 			public virtual void Reset(string portStamp, bool eolOfLastLineWasCompleteMatch)
 			{
-				Position    = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-				Elements    = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-				EolElements = new DisplayLinePart(); // Default initial capacity is OK.
+				InitialTimeStamp = DateTime.Now;
+				LastTimeStamp    = DateTime.Now;
+				Position         = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+				Elements         = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				EolElements      = new DisplayLinePart(); // Default initial capacity is OK.
 				Eol.Reset();
 
 				if (EolOfLastLineOfGivenPortWasCompleteMatch.ContainsKey(portStamp))
@@ -671,17 +677,17 @@ namespace YAT.Domain
 			}
 		}
 
-		private void ExecuteLineBegin(LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elements)
+		private void ExecuteLineBegin(LineState lineState, DateTime ts, TimeSpan diff, TimeSpan delta, string ps, IODirection d, DisplayElementCollection elements)
 		{                                             // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			var lp = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			lp.Add(new DisplayElement.LineStart()); // Direction may be both!
 
-			if (TerminalSettings.Display.ShowDate || TerminalSettings.Display.ShowTime ||
-				TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
+			if (TerminalSettings.Display.ShowTimeStamp || TerminalSettings.Display.ShowTimeSpan || TerminalSettings.Display.ShowTimeDelta ||
+			    TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
 			{
 				DisplayLinePart info;
-				PrepareLineBeginInfo(ts, ps, d, out info);
+				PrepareLineBeginInfo(ts, diff, delta, ps, d, out info);
 				lp.AddRange(info);
 			}
 
@@ -909,7 +915,7 @@ namespace YAT.Domain
 			{
 				// Line begin and time stamp:
 				if (lineState.Position == LinePosition.Begin)
-					ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elements);
+					ExecuteLineBegin(lineState, raw.TimeStamp, (raw.TimeStamp - lineState.InitialTimeStamp), (raw.TimeStamp - lineState.LastTimeStamp), raw.PortStamp, raw.Direction, elements);
 
 				// Content:
 				ExecuteContent(lineState, raw.Direction, b, elements);

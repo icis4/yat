@@ -99,9 +99,10 @@ namespace YAT.Model.Utilities
 
 			var content = new List<byte>(displayLine.ByteCount); // Preset the initial capacity to improve memory management.
 
-			string dateStr      = "";
-			string timeStr      = "";
-			string directionStr = "";
+			DateTime timeStamp = DateTime.MinValue;
+			TimeSpan timeSpan  = TimeSpan.MinValue;
+			TimeSpan timeDelta = TimeSpan.MinValue;
+			string portStr = "";
 
 			bool containsTx = false;
 			bool containsRx = false;
@@ -156,93 +157,55 @@ namespace YAT.Model.Utilities
 
 				// Then try to cast to the singleton elements:
 				{
-					var casted = (de as DisplayElement.DateInfo);
+					var casted = (de as DisplayElement.TimeStampInfo);
 					if (casted != null)
 					{
-						dateStr = casted.Text;
+						timeStamp = casted.TimeStamp;
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
 				}
 				{
-					var casted = (de as DisplayElement.TimeInfo);
+					var casted = (de as DisplayElement.TimeSpanInfo);
 					if (casted != null)
 					{
-						timeStr = casted.Text;
+						timeSpan = casted.TimeSpan;
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
 				}
 				{
-					var casted = (de as DisplayElement.DirectionInfo);
+					var casted = (de as DisplayElement.TimeDeltaInfo);
 					if (casted != null)
 					{
-						directionStr = casted.Text;
+						timeDelta = casted.TimeDelta;
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
 				}
-
+				{
+					var casted = (de as DisplayElement.PortInfo);
+					if (casted != null)
+					{
+						portStr = casted.Text;
+						continue; // Immediately continue, makes no sense to also try other types!
+					}
+				}
 				// All white-space elements do not need to be processed.
-				// 'PortInfo' is not used with 'XmlTransferRawLine'.
+				// 'DirectionInfo' is handled below.
 				// 'ErrorInfo' is not used with 'XmlTransferRawLine'.
 				// 'Length' is not used with 'XmlTransferRawLine'.
 			}
 
-			// Trim () from the singleton elements and try to create strongly-typed elements:
+			Direction direction;
 
-			DateTime timeStamp = DateTime.MinValue;
-			Direction direction = Direction.None;
-
-			if (!string.IsNullOrEmpty(dateStr) || !string.IsNullOrEmpty(timeStr))
-			{
-				if (!string.IsNullOrEmpty(dateStr)) {
-					dateStr = dateStr.TrimStart('(');
-					dateStr = dateStr.TrimEnd(')');
-				}
-
-				if (!string.IsNullOrEmpty(timeStr)) {
-					timeStr = timeStr.TrimStart('(');
-					timeStr = timeStr.TrimEnd(')');
-				}
-
-				string mergedStr = "";
-				string mergedFmt = "";
-				if (!string.IsNullOrEmpty(dateStr)) {
-					mergedStr += dateStr;
-					mergedFmt += DisplayElement.DateInfo.Format;
-				}
-				if (!string.IsNullOrEmpty(mergedStr)) {
-					mergedStr += " ";
-					mergedFmt += " ";
-				}
-				if (!string.IsNullOrEmpty(timeStr)) {
-					mergedStr += timeStr;
-					mergedFmt += DisplayElement.TimeInfo.Format;
-				}
-
-				if (!DateTime.TryParseExact(mergedStr, mergedFmt, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out timeStamp))
-					success = false;
-			}
-
-			if (!string.IsNullOrEmpty(directionStr))
-			{
-				directionStr = directionStr.TrimStart('(');
-				directionStr = directionStr.TrimEnd(')');
-
-				if (!DirectionEx.TryParse(directionStr, out direction))
-					success = false;
-			}
+			if (containsTx && containsRx)
+				direction = Direction.Bidir;
+			else if (containsTx)
+				direction = Direction.Tx;
+			else if (containsRx)
+				direction = Direction.Rx;
 			else
-			{
-				if (containsTx && containsRx)
-					direction = Direction.Bidir;
-				else if (containsTx)
-					direction = Direction.Tx;
-				else if (containsRx)
-					direction = Direction.Rx;
-				else
-					direction = Direction.None;
-			}
+				direction = Direction.None;
 
-			transferLine = new XmlTransferRawLine(timeStamp, direction, content.ToArray());
+			transferLine = new XmlTransferRawLine(timeStamp, portStr, direction, content.ToArray());
 
 			return (success);
 		}

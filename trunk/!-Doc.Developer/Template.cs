@@ -160,7 +160,7 @@ namespace YAT/*.<TODO>*/
 				// Release of unmanaged resources:
 
 				// Set state to disposed:
-				this.toDo = null
+				this.toDo = null;
 				IsDisposed = true;
 			}
 		}

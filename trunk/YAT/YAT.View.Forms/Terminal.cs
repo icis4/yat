@@ -936,8 +936,9 @@ namespace YAT.View.Forms
 
 				toolStripMenuItem_TerminalMenu_View_ShowBufferLineNumbers.Checked = this.settingsRoot.Display.ShowBufferLineNumbers;
 				toolStripMenuItem_TerminalMenu_View_ShowTotalLineNumbers.Checked  = this.settingsRoot.Display.ShowTotalLineNumbers;
-				toolStripMenuItem_TerminalMenu_View_ShowDate.Checked              = this.settingsRoot.Display.ShowDate;
-				toolStripMenuItem_TerminalMenu_View_ShowTime.Checked              = this.settingsRoot.Display.ShowTime;
+				toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Checked         = this.settingsRoot.Display.ShowTimeStamp;
+				toolStripMenuItem_TerminalMenu_View_ShowTimeSpan.Checked          = this.settingsRoot.Display.ShowTimeDelta;
+				toolStripMenuItem_TerminalMenu_View_ShowTimeDelta.Checked         = this.settingsRoot.Display.ShowTimeSpan;
 				toolStripMenuItem_TerminalMenu_View_ShowPort.Checked              = this.settingsRoot.Display.ShowPort;
 				toolStripMenuItem_TerminalMenu_View_ShowDirection.Checked         = this.settingsRoot.Display.ShowDirection;
 
@@ -1059,14 +1060,19 @@ namespace YAT.View.Forms
 			this.settingsRoot.Display.ShowTotalLineNumbers = !this.settingsRoot.Display.ShowTotalLineNumbers;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_ShowDate_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_ShowTimeStamp_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.Display.ShowDate = !this.settingsRoot.Display.ShowDate;
+			this.settingsRoot.Display.ShowTimeStamp = !this.settingsRoot.Display.ShowTimeStamp;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_ShowTime_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_ShowTimeSpan_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.Display.ShowTime = !this.settingsRoot.Display.ShowTime;
+			this.settingsRoot.Display.ShowTimeSpan = !this.settingsRoot.Display.ShowTimeSpan;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_View_ShowTimeDelta_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Display.ShowTimeDelta = !this.settingsRoot.Display.ShowTimeDelta;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowPort_Click(object sender, EventArgs e)
@@ -1244,8 +1250,9 @@ namespace YAT.View.Forms
 
 				toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers.Checked = this.settingsRoot.Display.ShowBufferLineNumbers;
 				toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers.Checked  = this.settingsRoot.Display.ShowTotalLineNumbers;
-				toolStripMenuItem_MonitorContextMenu_ShowDate.Checked              = this.settingsRoot.Display.ShowDate;
-				toolStripMenuItem_MonitorContextMenu_ShowTime.Checked              = this.settingsRoot.Display.ShowTime;
+				toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Checked         = this.settingsRoot.Display.ShowTimeStamp;
+				toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Checked          = this.settingsRoot.Display.ShowTimeSpan;
+				toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.Checked         = this.settingsRoot.Display.ShowTimeDelta;
 				toolStripMenuItem_MonitorContextMenu_ShowPort.Checked              = this.settingsRoot.Display.ShowPort;
 				toolStripMenuItem_MonitorContextMenu_ShowDirection.Checked         = this.settingsRoot.Display.ShowDirection;
 
@@ -1358,20 +1365,28 @@ namespace YAT.View.Forms
 			this.settingsRoot.Display.ShowTotalLineNumbers = !this.settingsRoot.Display.ShowTotalLineNumbers;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowDate_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_ShowTimeStamp_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			this.settingsRoot.Display.ShowDate = !this.settingsRoot.Display.ShowDate;
+			this.settingsRoot.Display.ShowTimeStamp = !this.settingsRoot.Display.ShowTimeStamp;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowTime_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_ShowTimeSpan_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			this.settingsRoot.Display.ShowTime = !this.settingsRoot.Display.ShowTime;
+			this.settingsRoot.Display.ShowTimeSpan = !this.settingsRoot.Display.ShowTimeSpan;
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_ShowTimeDelta_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.settingsRoot.Display.ShowTimeDelta = !this.settingsRoot.Display.ShowTimeDelta;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowPort_Click(object sender, EventArgs e)
@@ -3464,7 +3479,7 @@ namespace YAT.View.Forms
 		{
 			int[] customColors = this.settingsRoot.View.CustomColorsToWin32();
 
-			var f = new FormatSettings(this.settingsRoot.Format, customColors, this.settingsRoot.Display.InfoSeparator, this.settingsRoot.Display.InfoEnclosure);
+			var f = new FormatSettings(this.settingsRoot.Format, customColors, this.settingsRoot.Display.TimeStampFormat, this.settingsRoot.Display.TimeSpanFormat, this.settingsRoot.Display.TimeDeltaFormat, this.settingsRoot.Display.InfoSeparator, this.settingsRoot.Display.InfoEnclosure);
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
 				Refresh();

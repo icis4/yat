@@ -187,22 +187,29 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.Display.ShowTotalLineNumbers = checkBox_ShowTotalLineNumbers.Checked;
 		}
 
-		private void checkBox_ShowDate_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_ShowTimeStamp_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.Terminal.Display.ShowDate = checkBox_ShowDate.Checked;
+			this.settingsInEdit.Terminal.Display.ShowTimeStamp = checkBox_ShowTimeStamp.Checked;
 		}
 
-		private void checkBox_ShowTime_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_ShowTimeSpan_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.Terminal.Display.ShowTime = checkBox_ShowTime.Checked;
+			this.settingsInEdit.Terminal.Display.ShowTimeSpan = checkBox_ShowTimeSpan.Checked;
 		}
 
+		private void checkBox_ShowTimeDelta_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Display.ShowTimeDelta = checkBox_ShowTimeDelta.Checked;
+		}
 		private void checkBox_ShowPort_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -998,8 +1005,9 @@ namespace YAT.View.Forms
 				// Display:
 				checkBox_ShowBufferLineNumbers.Checked = this.settingsInEdit.Terminal.Display.ShowBufferLineNumbers;
 				checkBox_ShowTotalLineNumbers.Checked  = this.settingsInEdit.Terminal.Display.ShowTotalLineNumbers;
-				checkBox_ShowDate.Checked              = this.settingsInEdit.Terminal.Display.ShowDate;
-				checkBox_ShowTime.Checked              = this.settingsInEdit.Terminal.Display.ShowTime;
+				checkBox_ShowTimeStamp.Checked         = this.settingsInEdit.Terminal.Display.ShowTimeStamp;
+				checkBox_ShowTimeSpan.Checked          = this.settingsInEdit.Terminal.Display.ShowTimeSpan;
+				checkBox_ShowTimeDelta.Checked         = this.settingsInEdit.Terminal.Display.ShowTimeDelta;
 				checkBox_ShowPort.Checked              = this.settingsInEdit.Terminal.Display.ShowPort;
 				checkBox_ShowDirection.Checked         = this.settingsInEdit.Terminal.Display.ShowDirection;
 				checkBox_ShowLength.Checked            = this.settingsInEdit.Terminal.Display.ShowLength;
@@ -1107,8 +1115,9 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Display.ShowRadix             = Domain.Settings.DisplaySettings.ShowRadixDefault;
 				this.settingsInEdit.Terminal.Display.ShowBufferLineNumbers = Domain.Settings.DisplaySettings.ShowBufferLineNumbersDefault;
 				this.settingsInEdit.Terminal.Display.ShowTotalLineNumbers  = Domain.Settings.DisplaySettings.ShowTotalLineNumbersDefault;
-				this.settingsInEdit.Terminal.Display.ShowDate              = Domain.Settings.DisplaySettings.ShowDateDefault;
-				this.settingsInEdit.Terminal.Display.ShowTime              = Domain.Settings.DisplaySettings.ShowTimeDefault;
+				this.settingsInEdit.Terminal.Display.ShowTimeStamp         = Domain.Settings.DisplaySettings.ShowTimeStampDefault;
+				this.settingsInEdit.Terminal.Display.ShowTimeSpan          = Domain.Settings.DisplaySettings.ShowTimeSpanDefault;
+				this.settingsInEdit.Terminal.Display.ShowTimeDelta         = Domain.Settings.DisplaySettings.ShowTimeDeltaDefault;
 				this.settingsInEdit.Terminal.Display.ShowPort              = Domain.Settings.DisplaySettings.ShowPortDefault;
 				this.settingsInEdit.Terminal.Display.ShowDirection         = Domain.Settings.DisplaySettings.ShowDirectionDefault;
 				this.settingsInEdit.Terminal.Display.ShowLength            = Domain.Settings.DisplaySettings.ShowLengthDefault;

@@ -49,10 +49,22 @@ namespace YAT.Domain.Settings
 		public const bool ShowTotalLineNumbersDefault = false;
 
 		/// <summary></summary>
-		public const bool ShowDateDefault = false;
+		public const bool ShowTimeStampDefault = false;
 
 		/// <summary></summary>
-		public const bool ShowTimeDefault = false;
+		public const string TimeStampFormatDefault = TimeStampFormatPresetEx.DefaultFormat;
+
+		/// <summary></summary>
+		public const bool ShowTimeSpanDefault = false;
+
+		/// <summary></summary>
+		public const string TimeSpanFormatDefault = TimeSpanFormatPresetEx.DefaultFormat;
+
+		/// <summary></summary>
+		public const bool ShowTimeDeltaDefault = false;
+
+		/// <summary></summary>
+		public const string TimeDeltaFormatDefault = TimeDeltaFormatPresetEx.DefaultFormat;
 
 		/// <summary></summary>
 		public const bool ShowPortDefault = false;
@@ -87,8 +99,12 @@ namespace YAT.Domain.Settings
 		private bool showRadix;
 		private bool showBufferLineNumbers;
 		private bool showTotalLineNumbers;
-		private bool showDate;
-		private bool showTime;
+		private bool showTimeStamp;
+		private string timeStampFormat;
+		private bool showTimeSpan;
+		private string timeSpanFormat;
+		private bool showTimeDelta;
+		private string timeDeltaFormat;
 		private bool showPort;
 		private bool showDirection;
 		private bool showLength;
@@ -132,8 +148,12 @@ namespace YAT.Domain.Settings
 			ShowRadix             = rhs.ShowRadix;
 			ShowBufferLineNumbers = rhs.ShowBufferLineNumbers;
 			ShowTotalLineNumbers  = rhs.ShowTotalLineNumbers;
-			ShowDate              = rhs.ShowDate;
-			ShowTime              = rhs.ShowTime;
+			ShowTimeStamp         = rhs.ShowTimeStamp;
+			TimeStampFormat       = rhs.TimeStampFormat;
+			ShowTimeStamp         = rhs.ShowTimeStamp;
+			TimeSpanFormat        = rhs.TimeSpanFormat;
+			ShowTimeDelta         = rhs.ShowTimeDelta;
+			TimeDeltaFormat       = rhs.TimeDeltaFormat;
 			ShowPort              = rhs.ShowPort;
 			ShowDirection         = rhs.ShowDirection;
 			ShowLength            = rhs.ShowLength;
@@ -162,8 +182,12 @@ namespace YAT.Domain.Settings
 			ShowRadix             = ShowRadixDefault;
 			ShowBufferLineNumbers = ShowBufferLineNumbersDefault;
 			ShowTotalLineNumbers  = ShowTotalLineNumbersDefault;
-			ShowDate              = ShowDateDefault;
-			ShowTime              = ShowTimeDefault;
+			ShowTimeStamp         = ShowTimeStampDefault;
+			TimeStampFormat       = TimeStampFormatDefault;
+			ShowTimeSpan          = ShowTimeSpanDefault;
+			TimeSpanFormat        = TimeSpanFormatDefault;
+			ShowTimeDelta         = ShowTimeDeltaDefault;
+			TimeDeltaFormat       = TimeDeltaFormatDefault;
 			ShowPort              = ShowPortDefault;
 			ShowDirection         = ShowDirectionDefault;
 			ShowLength            = ShowLengthDefault;
@@ -323,30 +347,90 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("ShowDate")]
-		public virtual bool ShowDate
+		[XmlElement("ShowTimeStamp")]
+		public virtual bool ShowTimeStamp
 		{
-			get { return (this.showDate); }
+			get { return (this.showTimeStamp); }
 			set
 			{
-				if (this.showDate != value)
+				if (this.showTimeStamp != value)
 				{
-					this.showDate = value;
+					this.showTimeStamp = value;
 					SetMyChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("ShowTime")]
-		public virtual bool ShowTime
+		[XmlElement("TimeStampFormat")]
+		public virtual string TimeStampFormat
 		{
-			get { return (this.showTime); }
+			get { return (this.timeStampFormat); }
 			set
 			{
-				if (this.showTime != value)
+				if (this.timeStampFormat != value)
 				{
-					this.showTime = value;
+					this.timeStampFormat = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("ShowTimeSpan")]
+		public virtual bool ShowTimeSpan
+		{
+			get { return (this.showTimeSpan); }
+			set
+			{
+				if (this.showTimeSpan != value)
+				{
+					this.showTimeSpan = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("TimeSpanFormat")]
+		public virtual string TimeSpanFormat
+		{
+			get { return (this.timeSpanFormat); }
+			set
+			{
+				if (this.timeSpanFormat != value)
+				{
+					this.timeSpanFormat = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("ShowTimeDelta")]
+		public virtual bool ShowTimeDelta
+		{
+			get { return (this.showTimeDelta); }
+			set
+			{
+				if (this.showTimeDelta != value)
+				{
+					this.showTimeDelta = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("TimeDeltaFormat")]
+		public virtual string TimeDeltaFormat
+		{
+			get { return (this.timeDeltaFormat); }
+			set
+			{
+				if (this.timeDeltaFormat != value)
+				{
+					this.timeDeltaFormat = value;
 					SetMyChanged();
 				}
 			}
@@ -578,8 +662,12 @@ namespace YAT.Domain.Settings
 				hashCode = (hashCode * 397) ^ ShowRadix            .GetHashCode();
 				hashCode = (hashCode * 397) ^ ShowBufferLineNumbers.GetHashCode();
 				hashCode = (hashCode * 397) ^ ShowTotalLineNumbers .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowDate             .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowTime             .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowTimeStamp        .GetHashCode();
+				hashCode = (hashCode * 397) ^ (TimeStampFormat != null ? TimeStampFormat.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ ShowTimeSpan         .GetHashCode();
+				hashCode = (hashCode * 397) ^ (TimeSpanFormat != null ? TimeSpanFormat.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ ShowTimeDelta        .GetHashCode();
+				hashCode = (hashCode * 397) ^ (TimeDeltaFormat != null ? TimeDeltaFormat.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ ShowPort             .GetHashCode();
 				hashCode = (hashCode * 397) ^ ShowDirection        .GetHashCode();
 				hashCode = (hashCode * 397) ^ ShowLength           .GetHashCode();
@@ -627,8 +715,12 @@ namespace YAT.Domain.Settings
 				ShowRadix            .Equals(other.ShowRadix)             &&
 				ShowBufferLineNumbers.Equals(other.ShowBufferLineNumbers) &&
 				ShowTotalLineNumbers .Equals(other.ShowTotalLineNumbers)  &&
-				ShowDate             .Equals(other.ShowDate)              &&
-				ShowTime             .Equals(other.ShowTime)              &&
+				ShowTimeStamp        .Equals(other.ShowTimeStamp)         &&
+				StringEx.EqualsOrdinal(TimeStampFormat, other.TimeStampFormat) &&
+				ShowTimeSpan         .Equals(other.ShowTimeSpan)          &&
+				StringEx.EqualsOrdinal(TimeSpanFormat, other.TimeSpanFormat) &&
+				ShowTimeDelta        .Equals(other.ShowTimeDelta)         &&
+				StringEx.EqualsOrdinal(TimeDeltaFormat, other.TimeDeltaFormat) &&
 				ShowPort             .Equals(other.ShowPort)              &&
 				ShowDirection        .Equals(other.ShowDirection)         &&
 				ShowLength           .Equals(other.ShowLength)            &&
