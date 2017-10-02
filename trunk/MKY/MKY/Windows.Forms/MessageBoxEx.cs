@@ -38,6 +38,18 @@ namespace MKY.Windows.Forms
 	public static class MessageBoxEx
 	{
 		/// <summary></summary>
+		public static DialogResult Show(string text, string caption)
+		{
+			return (Show(text, caption, (MessageBoxButtons)0));
+		}
+
+		/// <summary></summary>
+		public static DialogResult Show(string text, string caption, MessageBoxButtons buttons)
+		{
+			return (Show(text, caption, buttons, (MessageBoxIcon)0));
+		}
+
+		/// <summary></summary>
 		public static DialogResult Show(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{
 			return (Show(null, text, caption, buttons, icon));

@@ -404,36 +404,9 @@ namespace YAT.View.Controls
 			}
 		}
 
-		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "YAT is not (yet) capable for RTL.")]
 		private void linkLabel_Info_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			var linkUri = (e.Link.LinkData as string);
-			if (linkUri != null)
-			{
-				Exception ex;
-				if (MKY.Net.Browser.TryBrowseUri(linkUri, out ex))
-				{
-					e.Link.Visited = true;
-				}
-				else
-				{
-					string message = "Unable to open link." + Environment.NewLine + Environment.NewLine +
-					                 "System error message:" + Environment.NewLine + ex.Message;
-
-					MessageBox.Show
-					(
-						Parent,
-						message,
-						"Link Error",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
-					);
-				}
-			}
-			else
-			{
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Link data is invalid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
+			LinkHelper.TryBrowseUriAndShowErrorIfItFails(Parent, e);
 		}
 
 		private void comboBox_FlowControl_SelectedIndexChanged(object sender, EventArgs e)

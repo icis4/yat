@@ -342,8 +342,6 @@ namespace YAT.View.Forms
 			this.checkBox_WaitForResponse.Size = new System.Drawing.Size(242, 17);
 			this.checkBox_WaitForResponse.TabIndex = 6;
 			this.checkBox_WaitForResponse.Text = "&Wait for response before sending the next line";
-			this.toolTip.SetToolTip(this.checkBox_WaitForResponse, "Not implemented yet. See feature request #19 and bug #176 in online trackers for " +
-        "details.");
 			this.checkBox_WaitForResponse.UseVisualStyleBackColor = true;
 			this.checkBox_WaitForResponse.CheckedChanged += new System.EventHandler(this.checkBox_WaitForResponse_CheckedChanged);
 			// 
