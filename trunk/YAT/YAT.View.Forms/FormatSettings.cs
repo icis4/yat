@@ -75,7 +75,7 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public FormatSettings(Model.Settings.FormatSettings formatSettings, int[] customColors, string timeStampFormat, string timeSpanFormat, string timeDeltaFormat, Domain.InfoSeparatorEx infoSeparator, Domain.InfoEnclosureEx infoEnclosure)
+		public FormatSettings(Model.Settings.FormatSettings formatSettings, int[] customColors, Domain.InfoSeparatorEx infoSeparator, Domain.InfoEnclosureEx infoEnclosure, string timeStampFormat, string timeSpanFormat, string timeDeltaFormat)
 		{
 			InitializeComponent();
 
@@ -86,12 +86,12 @@ namespace YAT.View.Forms
 
 			this.initialTimeStamp = DateTime.Now;
 
+			this.infoSeparator = infoSeparator;
+			this.infoEnclosure = infoEnclosure;
+
 			this.timeStampFormat = timeStampFormat;
 			this.timeSpanFormat  = timeSpanFormat;
 			this.timeDeltaFormat = timeDeltaFormat;
-
-			this.infoSeparator = infoSeparator;
-			this.infoEnclosure = infoEnclosure;
 
 			InitializeControls();
 
@@ -129,6 +129,24 @@ namespace YAT.View.Forms
 		public Domain.InfoEnclosureEx InfoEnclosureResult
 		{
 			get { return (this.infoEnclosure); }
+		}
+
+		/// <summary></summary>
+		public string TimeStampFormat
+		{
+			get { return (this.timeStampFormat); }
+		}
+
+		/// <summary></summary>
+		public string TimeSpanFormat
+		{
+			get { return (this.timeSpanFormat); }
+		}
+
+		/// <summary></summary>
+		public string TimeDeltaFormat
+		{
+			get { return (this.timeDeltaFormat); }
 		}
 
 		#endregion
@@ -232,6 +250,7 @@ namespace YAT.View.Forms
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
 				);
+
 				e.Cancel = true;
 			}
 		}
@@ -270,38 +289,190 @@ namespace YAT.View.Forms
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
 				);
+
 				e.Cancel = true;
 			}
 		}
 
 		private void textBox_TimeStampFormat_Validating(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			// !!!
+			if (this.isSettingControls)
+				return;
+
+			try
+			{
+				var format = textBox_TimeStampFormat.Text;
+
+				var item = DateTime.Now;
+				item.ToString(format);
+
+				this.timeStampFormat = format;
+				SetControls();
+			}
+			catch (FormatException ex)
+			{
+				string message = "Invalid date/time format!" + Environment.NewLine + Environment.NewLine +
+				                 "System error message:" + Environment.NewLine + ex.Message;
+
+				MessageBoxEx.Show
+				(
+					this,
+					message,
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
+			}
 		}
 
 		private void comboBox_TimeStampFormatPreset_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			// !!!
+			if (this.isSettingControls)
+				return;
+
+			var preset = (comboBox_TimeStampFormatPreset.SelectedItem as Domain.TimeStampFormatPresetEx);
+			if (preset != null)
+			{
+				if (preset != Domain.TimeStampFormatPreset.None)
+				{
+					this.timeStampFormat = preset.ToFormat();
+					SetControls();
+				}
+				else
+				{
+					SetControls();
+				}
+			}
+			else
+			{
+				SetControls();
+			}
 		}
 
 		private void textBox_TimeSpanFormat_Validating(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			// !!!
+			if (this.isSettingControls)
+				return;
+
+			try
+			{
+				var format = textBox_TimeSpanFormat.Text;
+
+			////var item = TimeSpan.Zero; \remind (2017-10-02 / MKY) to be activated as soon as upgraded to .NET 4+
+			////item.ToString(format);
+
+				this.timeSpanFormat = format;
+				SetControls();
+			}
+			catch (FormatException ex)
+			{
+				string message = "Invalid time span format!" + Environment.NewLine + Environment.NewLine +
+				                 "System error message:" + Environment.NewLine + ex.Message;
+
+				MessageBoxEx.Show
+				(
+					this,
+					message,
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
+			}
 		}
 
 		private void comboBox_TimeSpanFormatPreset_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			// !!!
+			if (this.isSettingControls)
+				return;
+
+			var preset = (comboBox_TimeSpanFormatPreset.SelectedItem as Domain.TimeSpanFormatPresetEx);
+			if (preset != null)
+			{
+				if (preset != Domain.TimeSpanFormatPreset.None)
+				{
+					this.timeSpanFormat = preset.ToFormat();
+					SetControls();
+				}
+				else
+				{
+					SetControls();
+				}
+			}
+			else
+			{
+				SetControls();
+			}
 		}
 
 		private void textBox_TimeDeltaFormat_Validating(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			// !!!
+			if (this.isSettingControls)
+				return;
+
+			try
+			{
+				var format = textBox_TimeDeltaFormat.Text;
+
+			////var item = TimeSpan.Zero; \remind (2017-10-02 / MKY) to be activated as soon as upgraded to .NET 4+
+			////item.ToString(format);
+
+				this.timeDeltaFormat = format;
+				SetControls();
+			}
+			catch (FormatException ex)
+			{
+				string message = "Invalid time span format!" + Environment.NewLine + Environment.NewLine +
+				                 "System error message:" + Environment.NewLine + ex.Message;
+
+				MessageBoxEx.Show
+				(
+					this,
+					message,
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
+			}
 		}
 
 		private void comboBox_TimeDeltaFormatPreset_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			// !!!
+			if (this.isSettingControls)
+				return;
+
+			var preset = (comboBox_TimeDeltaFormatPreset.SelectedItem as Domain.TimeDeltaFormatPresetEx);
+			if (preset != null)
+			{
+				if (preset != Domain.TimeDeltaFormatPreset.None)
+				{
+					this.timeDeltaFormat = preset.ToFormat();
+					SetControls();
+				}
+				else
+				{
+					SetControls();
+				}
+			}
+			else
+			{
+				SetControls();
+			}
+		}
+
+		private void linkLabel_DateTimeFormat_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			LinkHelper.TryBrowseUriAndShowErrorIfItFails(Parent, e);
+		}
+
+		private void linkLabel_TimeSpanFormat_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			LinkHelper.TryBrowseUriAndShowErrorIfItFails(Parent, e);
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -335,6 +506,10 @@ namespace YAT.View.Forms
 				this.infoSeparator = Domain.Settings.DisplaySettings.InfoSeparatorDefault;
 				this.infoEnclosure = Domain.Settings.DisplaySettings.InfoEnclosureDefault;
 
+				this.timeStampFormat = Domain.Settings.DisplaySettings.TimeStampFormatDefault;
+				this.timeSpanFormat  = Domain.Settings.DisplaySettings.TimeSpanFormatDefault;
+				this.timeDeltaFormat = Domain.Settings.DisplaySettings.TimeDeltaFormatDefault;
+
 				SetControls();
 			}
 		}
@@ -348,27 +523,56 @@ namespace YAT.View.Forms
 
 		private void InitializeControls()
 		{
-			this.monitors = new Controls.Monitor[]
+			this.isSettingControls.Enter();
+			try
 			{
-				monitor_TxData, monitor_TxControl, monitor_RxData, monitor_RxControl,
-				monitor_TimeStamp, monitor_TimeSpan, monitor_TimeDelta,
-				monitor_Port, monitor_Direction, monitor_Length,
-				monitor_Error,
-			};
+				this.monitors = new Controls.Monitor[]
+				{
+					monitor_TxData, monitor_TxControl, monitor_RxData, monitor_RxControl,
+					monitor_TimeStamp, monitor_TimeSpan, monitor_TimeDelta,
+					monitor_Port, monitor_Direction, monitor_Length,
+					monitor_Error,
+				};
 
-			this.textFormats = new Controls.TextFormat[]
+				this.textFormats = new Controls.TextFormat[]
+				{
+					textFormat_TxData, textFormat_TxControl, textFormat_RxData, textFormat_RxControl,
+					textFormat_TimeStamp, textFormat_TimeSpan, textFormat_TimeDelta,
+					textFormat_Port, textFormat_Direction, textFormat_Length,
+					textFormat_Error,
+				};
+
+				comboBox_InfoSeparator.Items.Clear();
+				comboBox_InfoSeparator.Items.AddRange(Domain.InfoSeparatorEx.GetItems());
+
+				comboBox_InfoEnclosure.Items.Clear();
+				comboBox_InfoEnclosure.Items.AddRange(Domain.InfoEnclosureEx.GetItems());
+
+				comboBox_TimeStampFormatPreset.Items.Clear();
+				comboBox_TimeStampFormatPreset.Items.AddRange(Domain.TimeStampFormatPresetEx.GetItems());
+
+				comboBox_TimeSpanFormatPreset.Items.Clear();
+				comboBox_TimeSpanFormatPreset.Items.AddRange(Domain.TimeSpanFormatPresetEx.GetItems());
+
+				comboBox_TimeDeltaFormatPreset.Items.Clear();
+				comboBox_TimeDeltaFormatPreset.Items.AddRange(Domain.TimeDeltaFormatPresetEx.GetItems());
+
+				var linkText = ".NET" + Environment.NewLine + "Date/Time Format";
+				var linkUri = @"https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings";
+				linkLabel_DateTimeFormat.Links.Clear();
+				linkLabel_DateTimeFormat.Text = linkText;
+				linkLabel_DateTimeFormat.Links.Add(0, linkText.Length, linkUri);
+
+				linkText = ".NET" + Environment.NewLine + "Time Span Format";
+				linkUri = @"https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-timespan-format-strings";
+				linkLabel_TimeSpanFormat.Links.Clear();
+				linkLabel_TimeSpanFormat.Text = linkText;
+				linkLabel_TimeSpanFormat.Links.Add(0, linkText.Length, linkUri);
+			}
+			finally
 			{
-				textFormat_TxData, textFormat_TxControl, textFormat_RxData, textFormat_RxControl,
-				textFormat_TimeStamp, textFormat_TimeSpan, textFormat_TimeDelta,
-				textFormat_Port, textFormat_Direction, textFormat_Length,
-				textFormat_Error,
-			};
-
-			comboBox_InfoSeparator.Items.Clear();
-			comboBox_InfoSeparator.Items.AddRange(Domain.InfoSeparatorEx.GetItems());
-
-			comboBox_InfoEnclosure.Items.Clear();
-			comboBox_InfoEnclosure.Items.AddRange(Domain.InfoEnclosureEx.GetItems());
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private Model.Types.TextFormat GetFormatFromIndex(int index)
@@ -392,7 +596,7 @@ namespace YAT.View.Forms
 
 		private void GetFormatFromControl(int index)
 		{
-			Model.Types.TextFormat tf = GetFormatFromIndex(index);
+			var tf = GetFormatFromIndex(index);
 			tf.FontStyle = this.textFormats[index].FormatFontStyle;
 			tf.Color     = this.textFormats[index].FormatColor;
 		}
@@ -420,7 +624,7 @@ namespace YAT.View.Forms
 				{
 					this.textFormats[i].FormatFontWithoutStyle = this.formatSettingsInEdit.Font;
 
-					Model.Types.TextFormat tf = GetFormatFromIndex(i);
+					var tf = GetFormatFromIndex(i);
 					this.textFormats[i].FormatFontStyle = tf.FontStyle;
 					this.textFormats[i].FormatColor     = tf.Color;
 
@@ -429,6 +633,14 @@ namespace YAT.View.Forms
 
 				SelectionHelper.Select(comboBox_InfoSeparator, this.infoSeparator, this.infoSeparator);
 				SelectionHelper.Select(comboBox_InfoEnclosure, this.infoEnclosure, this.infoEnclosure);
+
+				textBox_TimeStampFormat.Text = this.timeStampFormat;
+				textBox_TimeSpanFormat.Text  = this.timeSpanFormat;
+				textBox_TimeDeltaFormat.Text = this.timeDeltaFormat;
+
+				SelectionHelper.Select(comboBox_TimeStampFormatPreset, this.timeStampFormat, this.timeStampFormat);
+				SelectionHelper.Select(comboBox_TimeSpanFormatPreset,  this.timeSpanFormat,  this.timeSpanFormat);
+				SelectionHelper.Select(comboBox_TimeDeltaFormatPreset, this.timeDeltaFormat, this.timeDeltaFormat);
 
 				                                  // Clone settings to ensure decoupling:
 				monitor_Example.FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);

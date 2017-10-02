@@ -272,7 +272,7 @@ namespace MKY.Time
 			if (IsDisposed)
 				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
 
-			return (TimeSpanEx.FormatInvariantTimeSpan(TimeSpan, true, true));
+			return (TimeSpanEx.FormatInvariantTimeSpan(TimeSpan, true, true, true, true));
 		}
 
 		#endregion

@@ -72,8 +72,8 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Output milliseconds for readability, even though last digit only provides limited accuracy.
 		/// </remarks>
-		private const string Standard_format      = "[d'.'][hh':']mm:ss.fff";
-		private const string Standard_description = "Standard";
+		private const string Standard_format      = @"[d \days ][h][h\:][m]m\:ss\.fff"; // Attention, slightly different than time delta!
+		private const string Standard_description =  "Standard";
 
 		#endregion
 

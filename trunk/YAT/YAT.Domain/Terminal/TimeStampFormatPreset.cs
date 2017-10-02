@@ -97,11 +97,11 @@ namespace YAT.Domain
 		private const string UtcDateAndTime_description               = "UTC date and time";
 
 		private const string LocalDateAndTime_ISO8601_format                  = "s";
-		private const string LocalDateAndTime_ISO8601_description             = "Local date and time (ISO8601)";
+		private const string LocalDateAndTime_ISO8601_description             = "Local date and time ISO8601";
 		private const string LocalDateAndTimeWithTimeZone_ISO8601_format      = "yyyy-MM-ddTHH:mm:ss.fffzzz";
-		private const string LocalDateAndTimeWithTimeZone_ISO8601_description = "Local date and time with time zone (ISO8601)";
+		private const string LocalDateAndTimeWithTimeZone_ISO8601_description = "Local date and time with time zone ISO8601";
 		private const string UtcDateAndTime_ISO8601_format                    = "yyyy-MM-ddTHH:mm:ss.fffK";
-		private const string UtcDateAndTime_ISO8601_description               = "UTC date and time (ISO8601)";
+		private const string UtcDateAndTime_ISO8601_description               = "UTC date and time ISO8601";
 
 		#endregion
 

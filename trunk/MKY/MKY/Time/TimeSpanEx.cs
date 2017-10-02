@@ -38,51 +38,60 @@ namespace MKY
 	public static class TimeSpanEx
 	{
 		/// <summary>
-		/// Returns the value formatted as "[[[[d days ]h]h:]m]m:ss[.f[f[f]]]".
+		/// Returns the value formatted as "[[[[[[d days ]h]h:]m]m:]s]s[.f[f[f]]]".
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ss' just happens to be a proper format string...")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public static string FormatInvariantTimeSpan(TimeSpan value, bool tenths = false, bool hundredths = false, bool thousandths = false)
+		public static string FormatInvariantTimeSpan(TimeSpan value, bool enforceMinutes = true, bool addTenths = false, bool addHundredths = false, bool addThousandths = false)
 		{
 			var sb = new StringBuilder();
 
-			if (thousandths)
+			if (addThousandths)
 			{
 				sb.Insert(0, (value.Milliseconds / 1).ToString("D3", CultureInfo.InvariantCulture));
 				sb.Insert(0, ".");
 			}
-			else if (hundredths)
+			else if (addHundredths)
 			{
 				sb.Insert(0, (value.Milliseconds / 10).ToString("D2", CultureInfo.InvariantCulture));
 				sb.Insert(0, ".");
 			}
-			else if (tenths)
+			else if (addTenths)
 			{
 				sb.Insert(0, (value.Milliseconds / 100).ToString("D1", CultureInfo.InvariantCulture));
 				sb.Insert(0, ".");
 			}
 
-			// There shall at least be "0:00" for readability:
-			sb.Insert(0, value.Seconds.ToString("D2", CultureInfo.InvariantCulture));
-
-			if (value.Minutes <= 0)
+			if ((value.TotalSeconds <= 0.0) && (!enforceMinutes)) // There shall at least be "0":
 			{
-				sb.Insert(0, "0:");
+				sb.Insert(0, "0");
 			}
 			else
 			{
-				sb.Insert(0, ":");
-				sb.Insert(0, value.Minutes.ToString(CultureInfo.InvariantCulture));
+				if (enforceMinutes) // There shall at least be "0:00":
+				{
+					sb.Insert(0, value.Seconds.ToString("D2", CultureInfo.InvariantCulture));
+				}
+				else
+				{
+					sb.Insert(0, value.Seconds.ToString(CultureInfo.InvariantCulture));
+				}
 
-				if (value.Hours > 0)
+				if ((value.TotalMinutes >= 1.0) || enforceMinutes)
 				{
 					sb.Insert(0, ":");
-					sb.Insert(0, value.Hours.ToString(CultureInfo.InvariantCulture));
+					sb.Insert(0, value.Minutes.ToString(CultureInfo.InvariantCulture));
 
-					if (value.Days > 0)
+					if (value.TotalHours >= 1.0)
 					{
-						sb.Insert(0, " days ");
-						sb.Insert(0, value.Days.ToString(CultureInfo.InvariantCulture));
+						sb.Insert(0, ":");
+						sb.Insert(0, value.Hours.ToString(CultureInfo.InvariantCulture));
+
+						if (value.TotalDays >= 1.0)
+						{
+							sb.Insert(0, " days ");
+							sb.Insert(0, value.Days.ToString(CultureInfo.InvariantCulture));
+						}
 					}
 				}
 			}
