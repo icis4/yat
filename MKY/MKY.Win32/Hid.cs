@@ -50,9 +50,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms;
 
 using Microsoft.Win32.SafeHandles;
+
+using MKY.Windows.Forms;
 
 #endregion
 
@@ -1072,11 +1073,10 @@ namespace MKY.Win32
 			Debug.WriteLine(message);
 		}
 
-		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "Don't care, it's for debugging only...")]
 		[Conditional("DEBUG_STRING_ACCESS_MESSAGEBOXES")]
 		private static void DebugStringAccessMessageBoxes(string message)
 		{
-			MessageBox.Show(message);
+			MessageBoxEx.Show(message, "Debug Message");
 		}
 
 		[Conditional("DEBUG_STRING_ACCESS_MESSAGEBOXES")]

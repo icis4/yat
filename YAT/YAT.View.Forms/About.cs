@@ -31,7 +31,6 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
-using MKY;
 using MKY.Windows.Forms;
 
 #endregion
@@ -384,36 +383,9 @@ namespace YAT.View.Forms
 			linkLabel_License.Text += textAfter;
 		}
 
-		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "YAT is not (yet) capable for RTL.")]
 		private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			var linkUri = (e.Link.LinkData as string);
-			if (linkUri != null)
-			{
-				Exception ex;
-				if (MKY.Net.Browser.TryBrowseUri(linkUri, out ex))
-				{
-					e.Link.Visited = true;
-				}
-				else
-				{
-					string message = "Unable to open link." + Environment.NewLine + Environment.NewLine +
-					                 "System error message:" + Environment.NewLine + ex.Message;
-
-					MessageBox.Show
-					(
-						Parent,
-						message,
-						"Link Error",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
-					);
-				}
-			}
-			else
-			{
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Link data is invalid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
+			LinkHelper.TryBrowseUriAndShowErrorIfItFails(Parent, e);
 		}
 
 		#endregion
@@ -538,7 +510,6 @@ namespace YAT.View.Forms
 			return (dr == DialogResult.Yes);
 		}
 
-		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "Don't care, it's for testing only...")]
 		private bool TestPreconditionIsGiven(Type upcomingExceptionType)
 		{
 			if (UnhandledExceptionHandler.ExceptionTypeIsIgnored(upcomingExceptionType))
@@ -547,7 +518,7 @@ namespace YAT.View.Forms
 					"The precondition for the test is not given. The upcoming exception type is currently being ignored." + Environment.NewLine + Environment.NewLine +
 					"Confirm with [OK] to restore the precondition, or [Cancel] the test.";
 
-				var dr = MessageBox.Show
+				var dr = MessageBoxEx.Show
 				(
 					this,
 					precondition,

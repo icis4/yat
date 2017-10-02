@@ -161,7 +161,6 @@ namespace YAT.View.Forms
 			ShowSetRootDirectoryDialog();
 		}
 
-		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "YAT is not (yet) capable for RTL.")]
 		private void button_RootOpen_Click(object sender, EventArgs e)
 		{
 			Exception ex;
@@ -170,7 +169,7 @@ namespace YAT.View.Forms
 				string message = "Unable to open folder." + Environment.NewLine + Environment.NewLine +
 				                 "System error message:" + Environment.NewLine + ex.Message;
 
-				MessageBox.Show
+				MessageBoxEx.Show
 				(
 					Parent,
 					message,

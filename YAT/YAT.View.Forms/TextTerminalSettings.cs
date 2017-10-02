@@ -440,36 +440,9 @@ namespace YAT.View.Forms
 			this.settingsInEdit.TextExclusion.Patterns = new List<string>(stringListEdit_ExcludePatterns.StringList);
 		}
 
-		[SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "YAT is not (yet) capable for RTL.")]
 		private void linkLabel_Regex_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			var linkUri = (e.Link.LinkData as string);
-			if (linkUri != null)
-			{
-				Exception ex;
-				if (MKY.Net.Browser.TryBrowseUri(linkUri, out ex))
-				{
-					e.Link.Visited = true;
-				}
-				else
-				{
-					string message = "Unable to open link." + Environment.NewLine + Environment.NewLine +
-					                 "System error message:" + Environment.NewLine + ex.Message;
-
-					MessageBox.Show
-					(
-						Parent,
-						message,
-						"Link Error",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
-					);
-				}
-			}
-			else
-			{
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Link data is invalid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
+			LinkHelper.TryBrowseUriAndShowErrorIfItFails(Parent, e);
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -526,7 +499,6 @@ namespace YAT.View.Forms
 				linkLabel_Regex.Links.Clear();
 				linkLabel_Regex.Text = linkText;
 				linkLabel_Regex.Links.Add(0, linkText.Length, linkUri);
-				linkLabel_Regex.Visible = true;
 			}
 			finally
 			{
