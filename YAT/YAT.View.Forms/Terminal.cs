@@ -3479,7 +3479,7 @@ namespace YAT.View.Forms
 		{
 			int[] customColors = this.settingsRoot.View.CustomColorsToWin32();
 
-			var f = new FormatSettings(this.settingsRoot.Format, customColors, this.settingsRoot.Display.TimeStampFormat, this.settingsRoot.Display.TimeSpanFormat, this.settingsRoot.Display.TimeDeltaFormat, this.settingsRoot.Display.InfoSeparator, this.settingsRoot.Display.InfoEnclosure);
+			var f = new FormatSettings(this.settingsRoot.Format, customColors, this.settingsRoot.Display.InfoSeparator, this.settingsRoot.Display.InfoEnclosure, this.settingsRoot.Display.TimeStampFormat, this.settingsRoot.Display.TimeSpanFormat, this.settingsRoot.Display.TimeDeltaFormat);
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
 				Refresh();

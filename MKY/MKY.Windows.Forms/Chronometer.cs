@@ -172,7 +172,7 @@ namespace MKY.Windows.Forms
 		/// </remarks>
 		public override string ToString()
 		{
-			return (TimeSpanEx.FormatInvariantTimeSpan(TimeSpan, true, true));
+			return (TimeSpanEx.FormatInvariantTimeSpan(TimeSpan, true, true, true, true));
 		}
 
 		#endregion
