@@ -38,7 +38,7 @@ namespace MKY.Windows.Forms
 		/// converted into a string. This can e.g. be an implicit string conversion operator,
 		/// or the item's ToString() method, or something else.
 		/// </remarks>
-		public static void Select(ComboBox control, object item, string itemText)
+		public static void Select(ComboBox control, object item, string itemText = null)
 		{
 			if (control.Items.Count > 0)
 			{
@@ -51,7 +51,7 @@ namespace MKY.Windows.Forms
 					else
 					{	// Applies if an item that is not in the combo box is selected.
 						control.SelectedIndex = ControlEx.InvalidIndex;
-						control.Text = itemText;
+						control.Text = itemText; // Setting the 'Text' property to null or an empty string ("") sets the SelectedIndex to -1.
 					}
 				}
 				else
@@ -62,7 +62,7 @@ namespace MKY.Windows.Forms
 			else
 			{
 				control.SelectedIndex = ControlEx.InvalidIndex;
-				control.Text = itemText;
+				control.Text = itemText; // Setting the 'Text' property to null or an empty string ("") sets the SelectedIndex to -1.
 			}
 		}
 
@@ -78,7 +78,7 @@ namespace MKY.Windows.Forms
 			else
 			{
 				control.SelectedIndex = ControlEx.InvalidIndex; // -1.
-				control.Text = itemText;
+				control.Text = itemText; // Setting the 'Text' property to null or an empty string ("") sets the SelectedIndex to -1.
 			}
 		}
 

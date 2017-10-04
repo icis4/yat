@@ -143,6 +143,75 @@ namespace YAT.Domain
 
 		#endregion
 
+		#region Parse
+		//==========================================================================================
+		// Parse
+		//==========================================================================================
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static TimeSpanFormatPresetEx Parse(string s)
+		{
+			TimeSpanFormatPresetEx result;
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
+				return (result);
+			else
+				throw (new FormatException(@"""" + s + @""" is an invalid preset string! String must be one of the underlying enumeration designations."));
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out TimeSpanFormatPresetEx result)
+		{
+			TimeSpanFormatPreset enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
+			{
+				result = new TimeSpanFormatPresetEx(enumResult);
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out TimeSpanFormatPreset result)
+		{
+			if (s != null)
+				s = s.Trim();
+
+			if (string.IsNullOrEmpty(s)) // None!
+			{
+				result = TimeSpanFormatPreset.None;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(          s, None_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, None_description))
+			{
+				result = TimeSpanFormatPreset.None;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(          s, Standard_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Standard_description))
+			{
+				result = TimeSpanFormatPreset.Standard;
+				return (true);
+			}
+			else // Invalid string!
+			{
+				result = new TimeSpanFormatPresetEx(); // Default!
+				return (false);
+			}
+		}
+
+		#endregion
+
 		#region GetItems
 		//==========================================================================================
 		// GetItems
