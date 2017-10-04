@@ -727,6 +727,8 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_TextChanged(object sender, EventArgs e)
 		{
+			// Attention, 'isSettingControls' must only be checked further below!
+
 			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndex == ControlEx.InvalidIndex)
 			{
 				string triggerText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text;
@@ -769,6 +771,8 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_TextChanged(object sender, EventArgs e)
 		{
+			// Attention, 'isSettingControls' must only be checked further below!
+
 			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndex == ControlEx.InvalidIndex)
 			{
 				string responseText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text;

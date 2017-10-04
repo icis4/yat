@@ -191,6 +191,123 @@ namespace YAT.Domain
 
 		#endregion
 
+		#region Parse
+		//==========================================================================================
+		// Parse
+		//==========================================================================================
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static TimeStampFormatPresetEx Parse(string s)
+		{
+			TimeStampFormatPresetEx result;
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
+				return (result);
+			else
+				throw (new FormatException(@"""" + s + @""" is an invalid preset string! String must be one of the underlying enumeration designations."));
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out TimeStampFormatPresetEx result)
+		{
+			TimeStampFormatPreset enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
+			{
+				result = new TimeStampFormatPresetEx(enumResult);
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out TimeStampFormatPreset result)
+		{
+			if (s != null)
+				s = s.Trim();
+
+			if (string.IsNullOrEmpty(s)) // None!
+			{
+				result = TimeStampFormatPreset.None;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(          s, None_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, None_description))
+			{
+				result = TimeStampFormatPreset.None;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(          s, LocalTime_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, LocalTime_description))
+			{
+				result = TimeStampFormatPreset.LocalTime;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(          s, LocalTimeWithTimeZone_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, LocalTimeWithTimeZone_description))
+			{
+				result = TimeStampFormatPreset.LocalTimeWithTimeZone;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(          s, UtcTime_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, UtcTime_description))
+			{
+				result = TimeStampFormatPreset.UtcTime;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(          s, LocalDateAndTime_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, LocalDateAndTime_description))
+			{
+				result = TimeStampFormatPreset.LocalDateAndTime;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(          s, LocalDateAndTimeWithTimeZone_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, LocalDateAndTimeWithTimeZone_description))
+			{
+				result = TimeStampFormatPreset.LocalDateAndTimeWithTimeZone;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(          s, UtcDateAndTime_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, UtcDateAndTime_description))
+			{
+				result = TimeStampFormatPreset.UtcDateAndTime;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(          s, LocalDateAndTime_ISO8601_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, LocalDateAndTime_ISO8601_description))
+			{
+				result = TimeStampFormatPreset.LocalDateAndTime_ISO8601;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(          s, LocalDateAndTimeWithTimeZone_ISO8601_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, LocalDateAndTimeWithTimeZone_ISO8601_description))
+			{
+				result = TimeStampFormatPreset.LocalDateAndTimeWithTimeZone_ISO8601;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(          s, UtcDateAndTime_ISO8601_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, UtcDateAndTime_ISO8601_description))
+			{
+				result = TimeStampFormatPreset.UtcDateAndTime_ISO8601;
+				return (true);
+			}
+			else // Invalid string!
+			{
+				result = new TimeStampFormatPresetEx(); // Default!
+				return (false);
+			}
+		}
+
+		#endregion
+
 		#region GetItems
 		//==========================================================================================
 		// GetItems

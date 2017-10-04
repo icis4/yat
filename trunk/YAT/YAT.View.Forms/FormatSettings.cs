@@ -229,16 +229,31 @@ namespace YAT.View.Forms
 			SetControls();
 		}
 
+		private void comboBox_InfoSeparator_TextChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			ValidateAndUpdateInfoSeparator(comboBox_InfoSeparator.Text);
+		}
+
 		private void comboBox_InfoSeparator_Validating(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
+			if (!ValidateAndUpdateInfoSeparator(comboBox_InfoSeparator.Text))
+				e.Cancel = true;
+		}
+
+		private bool ValidateAndUpdateInfoSeparator(string separatorText)
+		{
 			Domain.InfoSeparatorEx separator;
-			if (Domain.InfoSeparatorEx.TryParse(comboBox_InfoSeparator.Text, out separator))
+			if (Domain.InfoSeparatorEx.TryParse(separatorText, out separator))
 			{
 				this.infoSeparator = separator;
 				SetControls();
+				return (true);
 			}
 			else
 			{
@@ -251,7 +266,7 @@ namespace YAT.View.Forms
 					MessageBoxIcon.Error
 				);
 
-				e.Cancel = true;
+				return (false);
 			}
 		}
 
@@ -267,17 +282,32 @@ namespace YAT.View.Forms
 			SetControls();
 		}
 
+		private void comboBox_InfoEnclosure_TextChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			ValidateAndUpdateInfoEnclosure(comboBox_InfoEnclosure.Text);
+		}
+
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_InfoEnclosure_Validating(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
+			if (!ValidateAndUpdateInfoEnclosure(comboBox_InfoEnclosure.Text))
+				e.Cancel = true;
+		}
+
+		private bool ValidateAndUpdateInfoEnclosure(string enclosureText)
+		{
 			Domain.InfoEnclosureEx enclosure;
-			if (Domain.InfoEnclosureEx.TryParse(comboBox_InfoEnclosure.Text, out enclosure))
+			if (Domain.InfoEnclosureEx.TryParse(enclosureText, out enclosure))
 			{
 				this.infoEnclosure = enclosure;
 				SetControls();
+				return (true);
 			}
 			else
 			{
@@ -290,8 +320,17 @@ namespace YAT.View.Forms
 					MessageBoxIcon.Error
 				);
 
-				e.Cancel = true;
+				return (false);
 			}
+		}
+
+		
+		private void textBox_TimeStampFormat_TextChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			ValidateAndUpdateTimeStampFormat(textBox_TimeStampFormat.Text);
 		}
 
 		private void textBox_TimeStampFormat_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -299,15 +338,21 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
+			if (!ValidateAndUpdateTimeStampFormat(textBox_TimeStampFormat.Text))
+				e.Cancel = true;
+		}
+
+		private bool ValidateAndUpdateTimeStampFormat(string format)
+		{
 			try
 			{
-				var format = textBox_TimeStampFormat.Text;
-
 				var item = DateTime.Now;
 				item.ToString(format);
 
 				this.timeStampFormat = format;
 				SetControls();
+
+				return (true);
 			}
 			catch (FormatException ex)
 			{
@@ -323,7 +368,7 @@ namespace YAT.View.Forms
 					MessageBoxIcon.Error
 				);
 
-				e.Cancel = true;
+				return (false);
 			}
 		}
 
@@ -351,20 +396,34 @@ namespace YAT.View.Forms
 			}
 		}
 
+		private void textBox_TimeSpanFormat_TextChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			ValidateAndUpdateTimeSpanFormat(textBox_TimeSpanFormat.Text);
+		}
+
 		private void textBox_TimeSpanFormat_Validating(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
+			if (!ValidateAndUpdateTimeSpanFormat(textBox_TimeSpanFormat.Text))
+				e.Cancel = true;
+		}
+
+		private bool ValidateAndUpdateTimeSpanFormat(string format)
+		{
 			try
 			{
-				var format = textBox_TimeSpanFormat.Text;
-
 			////var item = TimeSpan.Zero; \remind (2017-10-02 / MKY) to be activated as soon as upgraded to .NET 4+
 			////item.ToString(format);
 
 				this.timeSpanFormat = format;
 				SetControls();
+
+				return (true);
 			}
 			catch (FormatException ex)
 			{
@@ -380,7 +439,7 @@ namespace YAT.View.Forms
 					MessageBoxIcon.Error
 				);
 
-				e.Cancel = true;
+				return (false);
 			}
 		}
 
@@ -408,20 +467,34 @@ namespace YAT.View.Forms
 			}
 		}
 
+		private void textBox_TimeDeltaFormat_TextChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			ValidateAndUpdateTimeDeltaFormat(textBox_TimeDeltaFormat.Text);
+		}
+
 		private void textBox_TimeDeltaFormat_Validating(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
+			if (!ValidateAndUpdateTimeDeltaFormat(textBox_TimeDeltaFormat.Text))
+				e.Cancel = true;
+		}
+
+		private bool ValidateAndUpdateTimeDeltaFormat(string format)
+		{
 			try
 			{
-				var format = textBox_TimeDeltaFormat.Text;
-
 			////var item = TimeSpan.Zero; \remind (2017-10-02 / MKY) to be activated as soon as upgraded to .NET 4+
 			////item.ToString(format);
 
 				this.timeDeltaFormat = format;
 				SetControls();
+
+				return (true);
 			}
 			catch (FormatException ex)
 			{
@@ -437,7 +510,7 @@ namespace YAT.View.Forms
 					MessageBoxIcon.Error
 				);
 
-				e.Cancel = true;
+				return (false);
 			}
 		}
 
@@ -638,10 +711,18 @@ namespace YAT.View.Forms
 				textBox_TimeSpanFormat.Text  = this.timeSpanFormat;
 				textBox_TimeDeltaFormat.Text = this.timeDeltaFormat;
 
-				SelectionHelper.Select(comboBox_TimeStampFormatPreset, this.timeStampFormat, this.timeStampFormat);
-				SelectionHelper.Select(comboBox_TimeSpanFormatPreset,  this.timeSpanFormat,  this.timeSpanFormat);
-				SelectionHelper.Select(comboBox_TimeDeltaFormatPreset, this.timeDeltaFormat, this.timeDeltaFormat);
+				// Try to automatically select the according presets:
+				Domain.TimeStampFormatPresetEx timeStampFormatPreset;
+				Domain.TimeSpanFormatPresetEx  timeSpanFormatPreset;
+				Domain.TimeDeltaFormatPresetEx timeDeltaFormatPreset;
 
+				Domain.TimeStampFormatPresetEx.TryParse(this.timeStampFormat, out timeStampFormatPreset);
+				Domain.TimeSpanFormatPresetEx. TryParse(this.timeSpanFormat,  out timeSpanFormatPreset);
+				Domain.TimeDeltaFormatPresetEx.TryParse(this.timeDeltaFormat, out timeDeltaFormatPreset);
+
+				SelectionHelper.Select(comboBox_TimeStampFormatPreset, timeStampFormatPreset, null);
+				SelectionHelper.Select(comboBox_TimeSpanFormatPreset,  timeSpanFormatPreset,  null);
+				SelectionHelper.Select(comboBox_TimeDeltaFormatPreset, timeDeltaFormatPreset, null);
 				                                  // Clone settings to ensure decoupling:
 				monitor_Example.FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
 

@@ -736,6 +736,7 @@ namespace YAT.View.Forms
 			this.textBox_TimeStampFormat.Name = "textBox_TimeStampFormat";
 			this.textBox_TimeStampFormat.Size = new System.Drawing.Size(275, 20);
 			this.textBox_TimeStampFormat.TabIndex = 7;
+			this.textBox_TimeStampFormat.TextChanged += new System.EventHandler(this.textBox_TimeStampFormat_TextChanged);
 			this.textBox_TimeStampFormat.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_TimeStampFormat_Validating);
 			// 
 			// label_TimeSpanFormat
@@ -768,6 +769,7 @@ namespace YAT.View.Forms
 			this.textBox_TimeSpanFormat.Name = "textBox_TimeSpanFormat";
 			this.textBox_TimeSpanFormat.Size = new System.Drawing.Size(275, 20);
 			this.textBox_TimeSpanFormat.TabIndex = 11;
+			this.textBox_TimeSpanFormat.TextChanged += new System.EventHandler(this.textBox_TimeSpanFormat_TextChanged);
 			this.textBox_TimeSpanFormat.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_TimeStampFormat_Validating);
 			// 
 			// label_TimeDeltaFormat
@@ -800,6 +802,7 @@ namespace YAT.View.Forms
 			this.textBox_TimeDeltaFormat.Name = "textBox_TimeDeltaFormat";
 			this.textBox_TimeDeltaFormat.Size = new System.Drawing.Size(275, 20);
 			this.textBox_TimeDeltaFormat.TabIndex = 15;
+			this.textBox_TimeDeltaFormat.TextChanged += new System.EventHandler(this.textBox_TimeDeltaFormat_TextChanged);
 			this.textBox_TimeDeltaFormat.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_TimeStampFormat_Validating);
 			// 
 			// label_InfoEnclosure
@@ -829,6 +832,7 @@ namespace YAT.View.Forms
 			this.comboBox_InfoEnclosure.TabIndex = 3;
 			this.toolTip.SetToolTip(this.comboBox_InfoEnclosure, "The enclosure of informational elements.");
 			this.comboBox_InfoEnclosure.SelectedIndexChanged += new System.EventHandler(this.comboBox_InfoEnclosure_SelectedIndexChanged);
+			this.comboBox_InfoEnclosure.TextChanged += new System.EventHandler(this.comboBox_InfoEnclosure_TextChanged);
 			this.comboBox_InfoEnclosure.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_InfoEnclosure_Validating);
 			// 
 			// comboBox_InfoSeparator
@@ -840,6 +844,7 @@ namespace YAT.View.Forms
 			this.comboBox_InfoSeparator.TabIndex = 1;
 			this.toolTip.SetToolTip(this.comboBox_InfoSeparator, "The separator between adjacent informational elements.");
 			this.comboBox_InfoSeparator.SelectedIndexChanged += new System.EventHandler(this.comboBox_InfoSeparator_SelectedIndexChanged);
+			this.comboBox_InfoSeparator.TextChanged += new System.EventHandler(this.comboBox_InfoSeparator_TextChanged);
 			this.comboBox_InfoSeparator.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_InfoSeparator_Validating);
 			// 
 			// monitor_Example
