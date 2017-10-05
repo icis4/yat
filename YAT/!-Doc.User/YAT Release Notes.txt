@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.0 Delta Version 1.99.80 :: 2017-0x-xx
+YAT 2.0 Delta Version 1.99.80 :: 2017-1x-xx
 ----------------------------------------------------------------------------------------------------
 
 Important changes:
