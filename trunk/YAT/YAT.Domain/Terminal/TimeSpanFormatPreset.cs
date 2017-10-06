@@ -46,7 +46,13 @@ namespace YAT.Domain
 	{
 		None,
 
-		Standard
+		Standard,
+
+		TotalMilliseconds,
+		TotalSeconds,
+		TotalMinutes,
+		TotalHours,
+		TotalDays
 	}
 
 	#pragma warning restore 1591
@@ -74,6 +80,21 @@ namespace YAT.Domain
 		/// </remarks>
 		private const string Standard_format      = @"[d \days ][h][h\:][m]m\:ss\.fff"; // Attention, slightly different than time delta!
 		private const string Standard_description =  "Standard";
+
+		private const string TotalMilliseconds_format      = "!ffffff";
+		private const string TotalMilliseconds_description = "Total number of milliseconds";
+
+		private const string TotalSeconds_format      = "!sss.sss";
+		private const string TotalSeconds_description = "Total number of seconds";
+
+		private const string TotalMinutes_format      = "!mm.mmm";
+		private const string TotalMinutes_description = "Total number of minutes";
+
+		private const string TotalHours_format      = "!h.hhh";
+		private const string TotalHours_description = "Total number of hours";
+
+		private const string TotalDays_format      = "!d.ddd";
+		private const string TotalDays_description = "Total number of days";
 
 		#endregion
 
@@ -105,9 +126,15 @@ namespace YAT.Domain
 		{
 			switch ((TimeSpanFormatPreset)UnderlyingEnum)
 			{
-				case TimeSpanFormatPreset.None:     return (None_format);
+				case TimeSpanFormatPreset.None: return (None_format);
 
 				case TimeSpanFormatPreset.Standard: return (Standard_format);
+
+				case TimeSpanFormatPreset.TotalMilliseconds: return (TotalMilliseconds_format);
+				case TimeSpanFormatPreset.TotalSeconds:      return (TotalSeconds_format);
+				case TimeSpanFormatPreset.TotalMinutes:      return (TotalMinutes_format);
+				case TimeSpanFormatPreset.TotalHours:        return (TotalHours_format);
+				case TimeSpanFormatPreset.TotalDays:         return (TotalDays_format);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -118,9 +145,15 @@ namespace YAT.Domain
 		{
 			switch ((TimeSpanFormatPreset)UnderlyingEnum)
 			{
-				case TimeSpanFormatPreset.None:     return (None_description);
+				case TimeSpanFormatPreset.None: return (None_description);
 
 				case TimeSpanFormatPreset.Standard: return (Standard_description);
+
+				case TimeSpanFormatPreset.TotalMilliseconds: return (TotalMilliseconds_description);
+				case TimeSpanFormatPreset.TotalSeconds:      return (TotalSeconds_description);
+				case TimeSpanFormatPreset.TotalMinutes:      return (TotalMinutes_description);
+				case TimeSpanFormatPreset.TotalHours:        return (TotalHours_description);
+				case TimeSpanFormatPreset.TotalDays:         return (TotalDays_description);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -203,6 +236,36 @@ namespace YAT.Domain
 				result = TimeSpanFormatPreset.Standard;
 				return (true);
 			}
+			else if (StringEx.EqualsOrdinal(          s, TotalMilliseconds_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, TotalMilliseconds_description))
+			{
+				result = TimeSpanFormatPreset.TotalMilliseconds;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(          s, TotalSeconds_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, TotalSeconds_description))
+			{
+				result = TimeSpanFormatPreset.TotalSeconds;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(          s, TotalMinutes_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, TotalMinutes_description))
+			{
+				result = TimeSpanFormatPreset.TotalMinutes;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(          s, TotalHours_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, TotalHours_description))
+			{
+				result = TimeSpanFormatPreset.TotalHours;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(          s, TotalDays_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, TotalDays_description))
+			{
+				result = TimeSpanFormatPreset.TotalDays;
+				return (true);
+			}
 			else // Invalid string!
 			{
 				result = new TimeSpanFormatPresetEx(); // Default!
@@ -222,11 +285,17 @@ namespace YAT.Domain
 		/// </remarks>
 		public static TimeSpanFormatPresetEx[] GetItems()
 		{
-			List<TimeSpanFormatPresetEx> a = new List<TimeSpanFormatPresetEx>(2); // Preset the required capacity to improve memory management.
+			List<TimeSpanFormatPresetEx> a = new List<TimeSpanFormatPresetEx>(7); // Preset the required capacity to improve memory management.
 
 			a.Add(new TimeSpanFormatPresetEx(TimeSpanFormatPreset.None));
 
 			a.Add(new TimeSpanFormatPresetEx(TimeSpanFormatPreset.Standard));
+
+			a.Add(new TimeSpanFormatPresetEx(TimeSpanFormatPreset.TotalMilliseconds));
+			a.Add(new TimeSpanFormatPresetEx(TimeSpanFormatPreset.TotalSeconds));
+			a.Add(new TimeSpanFormatPresetEx(TimeSpanFormatPreset.TotalMinutes));
+			a.Add(new TimeSpanFormatPresetEx(TimeSpanFormatPreset.TotalHours));
+			a.Add(new TimeSpanFormatPresetEx(TimeSpanFormatPreset.TotalDays));
 
 			return (a.ToArray());
 		}

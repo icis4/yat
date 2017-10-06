@@ -138,7 +138,7 @@ namespace MKY
 
 		/// <summary>
 		/// Returns <paramref name="value"/> formatted as "[[[[d days ]h]h:]m]m:ss.fff"
-		/// supporting optional additional formats "Ad", "Ah", "Am", "As", "Afff".
+		/// supporting additional formats "!d.ddd", "!h.hhh", "!mm.mmm", "!sss.sss", "!ffffff".
 		/// </summary>
 		public static string FormatInvariantThousandthsEnforceMinutes(TimeSpan value, string additionalFormat)
 		{
@@ -151,7 +151,7 @@ namespace MKY
 
 		/// <summary>
 		/// Returns <paramref name="value"/> formatted as "[[[[[[d days ]h]h:]m]m:]s]s.fff"
-		/// supporting optional additional formats "Ad", "Ah", "Am", "As", "Afff".
+		/// supporting additional formats "!d.ddd", "!h.hhh", "!mm.mmm", "!sss.sss", "!ffffff".
 		/// /// </summary>
 		public static string FormatInvariantThousandths(TimeSpan value, string additionalFormat)
 		{
@@ -164,33 +164,36 @@ namespace MKY
 
 		/// <summary>
 		/// Returns <paramref name="value"/> formatted as "[[[[d days ]h]h:]m]m:ss.fff"
-		/// supporting optional additional formats "Ad", "Ah", "Am", "As", "Afff".
+		/// supporting additional formats "!d.ddd", "!h.hhh", "!mm.mmm", "!sss.sss", "!ffffff".
 		/// </summary>
+		/// <remarks>
+		/// Output milliseconds for readability, even though last digit only provides limited accuracy.
+		/// </remarks>
 		private static bool TryFormatAdditional(TimeSpan value, string additionalFormat, out string result)
 		{
-			if (StringEx.EqualsOrdinal(additionalFormat, "Afff"))
+			if (StringEx.EqualsOrdinal(additionalFormat, "!ffffff"))
 			{
-				result = string.Format("{0:F0}", value.TotalMilliseconds);
+				result = string.Format(CultureInfo.CurrentCulture, "{0:000000}", value.TotalMilliseconds);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinal(additionalFormat, "As"))
+			else if (StringEx.EqualsOrdinal(additionalFormat, "!sss.sss"))
 			{
-				result = string.Format("{0:F3}", value.TotalSeconds);
+				result = string.Format(CultureInfo.CurrentCulture, "{0:000.000}", value.TotalSeconds);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinal(additionalFormat, "Am"))
+			else if (StringEx.EqualsOrdinal(additionalFormat, "!mm.mmm"))
 			{
-				result = string.Format("{0:F3}", value.TotalMinutes);
+				result = string.Format(CultureInfo.CurrentCulture, "{0:00.000}", value.TotalMinutes);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinal(additionalFormat, "Ah"))
+			else if (StringEx.EqualsOrdinal(additionalFormat, "!h.hhh"))
 			{
-				result = string.Format("{0:F3}", value.TotalHours);
+				result = string.Format(CultureInfo.CurrentCulture, "{0:0.000}", value.TotalHours);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinal(additionalFormat, "Ad"))
+			else if (StringEx.EqualsOrdinal(additionalFormat, "!d.ddd"))
 			{
-				result = string.Format("{0:F3}", value.TotalDays);
+				result = string.Format(CultureInfo.CurrentCulture, "{0:0.000}", value.TotalDays);
 				return (true);
 			}
 
