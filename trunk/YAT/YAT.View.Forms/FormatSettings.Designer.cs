@@ -98,6 +98,7 @@ namespace YAT.View.Forms
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.colorDialog = new System.Windows.Forms.ColorDialog();
 			this.monitor_Example = new YAT.View.Controls.Monitor();
+			this.checkBox_TimeStampUseUtc = new System.Windows.Forms.CheckBox();
 			this.groupBox_Elements.SuspendLayout();
 			this.groupBox_Options.SuspendLayout();
 			this.SuspendLayout();
@@ -641,6 +642,7 @@ namespace YAT.View.Forms
 			// 
 			this.groupBox_Options.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Options.Controls.Add(this.checkBox_TimeStampUseUtc);
 			this.groupBox_Options.Controls.Add(this.label_Reference);
 			this.groupBox_Options.Controls.Add(this.label_Presets);
 			this.groupBox_Options.Controls.Add(this.linkLabel_TimeSpanFormat);
@@ -669,20 +671,20 @@ namespace YAT.View.Forms
 			// 
 			this.label_Reference.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Reference.AutoSize = true;
-			this.label_Reference.Location = new System.Drawing.Point(629, 57);
+			this.label_Reference.Location = new System.Drawing.Point(626, 55);
 			this.label_Reference.Name = "label_Reference";
 			this.label_Reference.Size = new System.Drawing.Size(60, 13);
-			this.label_Reference.TabIndex = 5;
+			this.label_Reference.TabIndex = 8;
 			this.label_Reference.Text = "Reference:";
 			// 
 			// label_Presets
 			// 
 			this.label_Presets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Presets.AutoSize = true;
-			this.label_Presets.Location = new System.Drawing.Point(462, 57);
+			this.label_Presets.Location = new System.Drawing.Point(466, 55);
 			this.label_Presets.Name = "label_Presets";
 			this.label_Presets.Size = new System.Drawing.Size(45, 13);
-			this.label_Presets.TabIndex = 4;
+			this.label_Presets.TabIndex = 7;
 			this.label_Presets.Text = "Presets:";
 			// 
 			// linkLabel_TimeSpanFormat
@@ -692,7 +694,7 @@ namespace YAT.View.Forms
 			this.linkLabel_TimeSpanFormat.Location = new System.Drawing.Point(613, 117);
 			this.linkLabel_TimeSpanFormat.Name = "linkLabel_TimeSpanFormat";
 			this.linkLabel_TimeSpanFormat.Size = new System.Drawing.Size(93, 26);
-			this.linkLabel_TimeSpanFormat.TabIndex = 13;
+			this.linkLabel_TimeSpanFormat.TabIndex = 14;
 			this.linkLabel_TimeSpanFormat.TabStop = true;
 			this.linkLabel_TimeSpanFormat.Text = ".NET\r\nTime Span Format";
 			this.linkLabel_TimeSpanFormat.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -705,7 +707,7 @@ namespace YAT.View.Forms
 			this.linkLabel_DateTimeFormat.Location = new System.Drawing.Point(613, 76);
 			this.linkLabel_DateTimeFormat.Name = "linkLabel_DateTimeFormat";
 			this.linkLabel_DateTimeFormat.Size = new System.Drawing.Size(93, 26);
-			this.linkLabel_DateTimeFormat.TabIndex = 9;
+			this.linkLabel_DateTimeFormat.TabIndex = 10;
 			this.linkLabel_DateTimeFormat.TabStop = true;
 			this.linkLabel_DateTimeFormat.Text = ".NET\r\nDate/Time Format";
 			this.linkLabel_DateTimeFormat.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -717,7 +719,7 @@ namespace YAT.View.Forms
 			this.label_TimeStampFormat.Location = new System.Drawing.Point(12, 80);
 			this.label_TimeStampFormat.Name = "label_TimeStampFormat";
 			this.label_TimeStampFormat.Size = new System.Drawing.Size(66, 13);
-			this.label_TimeStampFormat.TabIndex = 6;
+			this.label_TimeStampFormat.TabIndex = 4;
 			this.label_TimeStampFormat.Text = "T&ime Stamp:";
 			// 
 			// comboBox_TimeStampFormatPreset
@@ -727,7 +729,7 @@ namespace YAT.View.Forms
 			this.comboBox_TimeStampFormatPreset.Location = new System.Drawing.Point(373, 77);
 			this.comboBox_TimeStampFormatPreset.Name = "comboBox_TimeStampFormatPreset";
 			this.comboBox_TimeStampFormatPreset.Size = new System.Drawing.Size(232, 21);
-			this.comboBox_TimeStampFormatPreset.TabIndex = 8;
+			this.comboBox_TimeStampFormatPreset.TabIndex = 9;
 			this.comboBox_TimeStampFormatPreset.SelectedIndexChanged += new System.EventHandler(this.comboBox_TimeStampFormatPreset_SelectedIndexChanged);
 			// 
 			// textBox_TimeStampFormat
@@ -735,7 +737,7 @@ namespace YAT.View.Forms
 			this.textBox_TimeStampFormat.Location = new System.Drawing.Point(88, 77);
 			this.textBox_TimeStampFormat.Name = "textBox_TimeStampFormat";
 			this.textBox_TimeStampFormat.Size = new System.Drawing.Size(275, 20);
-			this.textBox_TimeStampFormat.TabIndex = 7;
+			this.textBox_TimeStampFormat.TabIndex = 5;
 			this.textBox_TimeStampFormat.TextChanged += new System.EventHandler(this.textBox_TimeStampFormat_TextChanged);
 			this.textBox_TimeStampFormat.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_TimeStampFormat_Validating);
 			// 
@@ -745,7 +747,7 @@ namespace YAT.View.Forms
 			this.label_TimeSpanFormat.Location = new System.Drawing.Point(12, 109);
 			this.label_TimeSpanFormat.Name = "label_TimeSpanFormat";
 			this.label_TimeSpanFormat.Size = new System.Drawing.Size(61, 13);
-			this.label_TimeSpanFormat.TabIndex = 10;
+			this.label_TimeSpanFormat.TabIndex = 11;
 			this.label_TimeSpanFormat.Text = "Ti&me Span:";
 			this.toolTip.SetToolTip(this.label_TimeSpanFormat, "Currently limited to the standard format. Will become available as soon as update" +
         "d to .NET 4+ which supports time span formats.");
@@ -757,7 +759,7 @@ namespace YAT.View.Forms
 			this.comboBox_TimeSpanFormatPreset.Location = new System.Drawing.Point(373, 106);
 			this.comboBox_TimeSpanFormatPreset.Name = "comboBox_TimeSpanFormatPreset";
 			this.comboBox_TimeSpanFormatPreset.Size = new System.Drawing.Size(232, 21);
-			this.comboBox_TimeSpanFormatPreset.TabIndex = 12;
+			this.comboBox_TimeSpanFormatPreset.TabIndex = 13;
 			this.toolTip.SetToolTip(this.comboBox_TimeSpanFormatPreset, "Currently limited to the standard format. Will become available as soon as update" +
         "d to .NET 4+ which supports time span formats.");
 			this.comboBox_TimeSpanFormatPreset.SelectedIndexChanged += new System.EventHandler(this.comboBox_TimeSpanFormatPreset_SelectedIndexChanged);
@@ -768,7 +770,7 @@ namespace YAT.View.Forms
 			this.textBox_TimeSpanFormat.Location = new System.Drawing.Point(88, 106);
 			this.textBox_TimeSpanFormat.Name = "textBox_TimeSpanFormat";
 			this.textBox_TimeSpanFormat.Size = new System.Drawing.Size(275, 20);
-			this.textBox_TimeSpanFormat.TabIndex = 11;
+			this.textBox_TimeSpanFormat.TabIndex = 12;
 			this.textBox_TimeSpanFormat.TextChanged += new System.EventHandler(this.textBox_TimeSpanFormat_TextChanged);
 			this.textBox_TimeSpanFormat.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_TimeStampFormat_Validating);
 			// 
@@ -778,7 +780,7 @@ namespace YAT.View.Forms
 			this.label_TimeDeltaFormat.Location = new System.Drawing.Point(12, 138);
 			this.label_TimeDeltaFormat.Name = "label_TimeDeltaFormat";
 			this.label_TimeDeltaFormat.Size = new System.Drawing.Size(61, 13);
-			this.label_TimeDeltaFormat.TabIndex = 14;
+			this.label_TimeDeltaFormat.TabIndex = 15;
 			this.label_TimeDeltaFormat.Text = "Tim&e Delta:";
 			this.toolTip.SetToolTip(this.label_TimeDeltaFormat, "Currently limited to the standard format. Will become available as soon as update" +
         "d to .NET 4+ which supports time span formats.");
@@ -790,7 +792,7 @@ namespace YAT.View.Forms
 			this.comboBox_TimeDeltaFormatPreset.Location = new System.Drawing.Point(373, 135);
 			this.comboBox_TimeDeltaFormatPreset.Name = "comboBox_TimeDeltaFormatPreset";
 			this.comboBox_TimeDeltaFormatPreset.Size = new System.Drawing.Size(232, 21);
-			this.comboBox_TimeDeltaFormatPreset.TabIndex = 16;
+			this.comboBox_TimeDeltaFormatPreset.TabIndex = 17;
 			this.toolTip.SetToolTip(this.comboBox_TimeDeltaFormatPreset, "Currently limited to the standard format. Will become available as soon as update" +
         "d to .NET 4+ which supports time span formats.");
 			this.comboBox_TimeDeltaFormatPreset.SelectedIndexChanged += new System.EventHandler(this.comboBox_TimeDeltaFormatPreset_SelectedIndexChanged);
@@ -801,7 +803,7 @@ namespace YAT.View.Forms
 			this.textBox_TimeDeltaFormat.Location = new System.Drawing.Point(88, 135);
 			this.textBox_TimeDeltaFormat.Name = "textBox_TimeDeltaFormat";
 			this.textBox_TimeDeltaFormat.Size = new System.Drawing.Size(275, 20);
-			this.textBox_TimeDeltaFormat.TabIndex = 15;
+			this.textBox_TimeDeltaFormat.TabIndex = 16;
 			this.textBox_TimeDeltaFormat.TextChanged += new System.EventHandler(this.textBox_TimeDeltaFormat_TextChanged);
 			this.textBox_TimeDeltaFormat.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_TimeStampFormat_Validating);
 			// 
@@ -858,6 +860,17 @@ namespace YAT.View.Forms
 			this.monitor_Example.TabIndex = 3;
 			this.monitor_Example.TabStop = false;
 			this.monitor_Example.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
+			// 
+			// checkBox_TimeStampUseUtc
+			// 
+			this.checkBox_TimeStampUseUtc.AutoSize = true;
+			this.checkBox_TimeStampUseUtc.Location = new System.Drawing.Point(350, 54);
+			this.checkBox_TimeStampUseUtc.Name = "checkBox_TimeStampUseUtc";
+			this.checkBox_TimeStampUseUtc.Size = new System.Drawing.Size(70, 17);
+			this.checkBox_TimeStampUseUtc.TabIndex = 6;
+			this.checkBox_TimeStampUseUtc.Text = "Use &UTC";
+			this.checkBox_TimeStampUseUtc.UseVisualStyleBackColor = true;
+			this.checkBox_TimeStampUseUtc.CheckedChanged += new System.EventHandler(this.checkBox_TimeStampUseUtc_CheckedChanged);
 			// 
 			// FormatSettings
 			// 
@@ -957,5 +970,6 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.LinkLabel linkLabel_TimeSpanFormat;
 		private System.Windows.Forms.Label label_Reference;
 		private System.Windows.Forms.Label label_Presets;
+		private System.Windows.Forms.CheckBox checkBox_TimeStampUseUtc;
 	}
 }

@@ -636,8 +636,11 @@ namespace YAT.Domain
 			this.bidirLineState = new BidirLineState();
 		}
 
-		private void ExecuteLineBegin(LineState lineState, DateTime ts, TimeSpan diff, TimeSpan delta, string ps, IODirection d, DisplayElementCollection elements)
-		{                                             // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+		private void ExecuteLineBegin(LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elements)
+		{
+			if (this.bidirLineState.IsFirstLine) // Properly initialize the time delta:
+				this.bidirLineState.LastLineTimeStamp = ts;
+			                                             // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			var lp = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			lp.Add(new DisplayElement.LineStart()); // Direction may be both!
@@ -646,7 +649,7 @@ namespace YAT.Domain
 			    TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
 			{
 				DisplayLinePart info;
-				PrepareLineBeginInfo(ts, diff, delta, ps, d, out info);
+				PrepareLineBeginInfo(ts, (ts - InitialTimeStamp), (ts - this.bidirLineState.LastLineTimeStamp), ps, d, out info);
 				lp.AddRange(info);
 			}
 
@@ -810,14 +813,19 @@ namespace YAT.Domain
 			line.AddRange(lp);
 			lines.Add(line);
 
-			// Reset line state:
+			this.bidirLineState.IsFirstLine = false;
 			this.bidirLineState.LastLineTimeStamp = lineState.TimeStamp;
+
+			// Reset line state:
 			lineState.Reset();
 		}
 
 		/// <summary></summary>
 		protected override void ProcessRawChunk(RawChunk raw, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
+			if (lines.Count <= 0) // Properly initialize the time delta:
+				this.bidirLineState.LastLineTimeStamp = raw.TimeStamp;
+
 			Settings.BinaryDisplaySettings displaySettings;
 			switch (raw.Direction)
 			{
@@ -845,7 +853,7 @@ namespace YAT.Domain
 				// Line begin and time stamp:
 				if (lineState.Position == LinePosition.Begin)
 				{
-					ExecuteLineBegin(lineState, raw.TimeStamp, (raw.TimeStamp - InitialTimeStamp), (raw.TimeStamp - this.bidirLineState.LastLineTimeStamp), raw.PortStamp, raw.Direction, elements);
+					ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elements);
 
 					if (displaySettings.TimedLineBreak.Enabled)
 						lineState.BreakTimer.Start();
@@ -871,7 +879,7 @@ namespace YAT.Domain
 					// In case of a pending immediately insert the sequence into a new line:
 					if ((elementsForNextLine != null) && (elementsForNextLine.Count > 0))
 					{
-						ExecuteLineBegin(lineState, raw.TimeStamp, (raw.TimeStamp - InitialTimeStamp), (raw.TimeStamp - this.bidirLineState.LastLineTimeStamp), raw.PortStamp, raw.Direction, elements);
+						ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elements);
 
 						foreach (var de in elementsForNextLine)
 						{
@@ -917,11 +925,7 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.PortLineBreakEnabled ||
 				TerminalSettings.Display.DirectionLineBreakEnabled)
 			{
-				if (this.bidirLineState.IsFirstLine)
-				{
-					this.bidirLineState.IsFirstLine = false;
-				}
-				else // is subsequent line
+				if (!this.bidirLineState.IsFirstLine) // is subsequent line
 				{
 					if (!StringEx.EqualsOrdinalIgnoreCase(ps, this.bidirLineState.PortStamp) ||
 						(d != this.bidirLineState.Direction))
