@@ -715,7 +715,7 @@ namespace MKY.IO.Serial.SerialPort
 
 			if (IsTransmissive)
 			{
-				DebugSendRequest("Enqueuing " + data.Length.ToString(CultureInfo.InvariantCulture) + " byte(s) for sending...");
+				DebugSendRequest("Enqueuing " + data.Length.ToString(CultureInfo.CurrentCulture) + " byte(s) for sending...");
 				foreach (byte b in data)
 				{
 					// Wait until there is space in the send queue:
@@ -1984,7 +1984,7 @@ namespace MKY.IO.Serial.SerialPort
 
 					lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 					{
-						DebugTransmission("Enqueuing " + data.Length.ToString(CultureInfo.InvariantCulture) + " byte(s) for receiving...");
+						DebugTransmission("Enqueuing " + data.Length.ToString(CultureInfo.CurrentCulture) + " byte(s) for receiving...");
 						foreach (byte b in data)
 						{
 							this.receiveQueue.Enqueue(b);
@@ -2560,10 +2560,10 @@ namespace MKY.IO.Serial.SerialPort
 			(
 				string.Format
 				(
-					CultureInfo.InvariantCulture,
+					CultureInfo.CurrentCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
-					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
-					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
 					GetType(),
 					"",
 					"[" + ToPortName() + "]",

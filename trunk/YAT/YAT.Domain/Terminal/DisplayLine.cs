@@ -295,8 +295,8 @@ namespace YAT.Domain
 		/// </remarks>
 		public virtual string ToString(string indent)
 		{
-			return (indent + "> ElementCount: " +       Count.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
-					indent + "> ByteCount: " + this.byteCount.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
+			return (indent + "> ElementCount: " +       Count.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
+					indent + "> ByteCount: " + this.byteCount.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
 					indent + "> Elements: " + Environment.NewLine + ElementsToString(indent + "   "));
 		}
 

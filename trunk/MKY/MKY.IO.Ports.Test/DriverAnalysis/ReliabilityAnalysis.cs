@@ -86,7 +86,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 					string nameI = i.Value1 + "_" + i.Value2 + "_";
 					foreach (int lines in Lines)
 					{
-						string name = nameI + lines.ToString(CultureInfo.InvariantCulture);
+						string name = nameI + lines.ToString(CultureInfo.CurrentCulture);
 						yield return (new TestCaseData(i.Value2, lines).SetName(name));
 					}
 				}
@@ -314,7 +314,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 		public virtual void PerformSubsequentTransmissionOfMTSicsEcho(string portName, int linesToTransmit)
 		{
 			// Create file for logging:
-			string filePath = Temp.MakeTempFilePath(GetType(), "SubsequentECHO-" + portName + "-" + linesToTransmit.ToString(CultureInfo.InvariantCulture), ".txt");
+			string filePath = Temp.MakeTempFilePath(GetType(), "SubsequentECHO-" + portName + "-" + linesToTransmit.ToString(CultureInfo.CurrentCulture), ".txt");
 			using (this.file = new StreamWriter(filePath))
 			{
 				// Open port:
@@ -379,10 +379,10 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			sb.AppendLine();
 			sb.AppendLine(@"Summary for """ + portName + @""":");
 			sb.AppendLine("Sent...");
-			sb.AppendLine("..." + sentBytes.ToString(CultureInfo.InvariantCulture) + " bytes.");
+			sb.AppendLine("..." + sentBytes.ToString(CultureInfo.CurrentCulture) + " bytes.");
 			sb.AppendLine("Received...");
-			sb.AppendLine("..." + receivedBytes.ToString(CultureInfo.InvariantCulture) + " bytes, while...");
-			sb.AppendLine("..." + receivedErrors.ToString(CultureInfo.InvariantCulture) + " errors occured.");
+			sb.AppendLine("..." + receivedBytes.ToString(CultureInfo.CurrentCulture) + " bytes, while...");
+			sb.AppendLine("..." + receivedErrors.ToString(CultureInfo.CurrentCulture) + " errors occured.");
 			sb.AppendLine();
 
 			if (exact)
@@ -410,7 +410,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			int receivedLines = 0;
 
 			// Create file for logging:
-			string filePath = Temp.MakeTempFilePath(GetType(), "ContinuousECHO-" + portName + "-" + linesToReceive.ToString(CultureInfo.InvariantCulture), ".txt");
+			string filePath = Temp.MakeTempFilePath(GetType(), "ContinuousECHO-" + portName + "-" + linesToReceive.ToString(CultureInfo.CurrentCulture), ".txt");
 			using (this.file = new StreamWriter(filePath))
 			{
 				// Open port:
@@ -483,10 +483,10 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			sb.AppendLine();
 			sb.AppendLine(@"Summary for """ + portName + @""":");
 			sb.AppendLine("Received...");
-			sb.Append    ("..." + receivedBytes.ToString(CultureInfo.InvariantCulture) + " bytes in ");
-			sb.AppendLine(        receivedLines.ToString(CultureInfo.InvariantCulture) + " lines, resulting in...");
-			sb.AppendLine("..." + (exact ? "exactly " : "an average of ") + bytesPerLine.ToString((exact ? "F1" : "F3"), CultureInfo.InvariantCulture) + " bytes per line, while...");
-			sb.AppendLine("..." + receivedErrors.ToString(CultureInfo.InvariantCulture) + " errors occured.");
+			sb.Append    ("..." + receivedBytes.ToString(CultureInfo.CurrentCulture) + " bytes in ");
+			sb.AppendLine(        receivedLines.ToString(CultureInfo.CurrentCulture) + " lines, resulting in...");
+			sb.AppendLine("..." + (exact ? "exactly " : "an average of ") + bytesPerLine.ToString((exact ? "F1" : "F3"), CultureInfo.CurrentCulture) + " bytes per line, while...");
+			sb.AppendLine("..." + receivedErrors.ToString(CultureInfo.CurrentCulture) + " errors occured.");
 			sb.AppendLine();
 
 			if (exact)

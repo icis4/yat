@@ -272,9 +272,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ToString(string indent)
 		{
-			return (indent + "> LineCapacity: " +    Capacity.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
-					indent + "> LineCount: " +          Count.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
-					indent + "> ByteCount: " + this.byteCount.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
+			return (indent + "> LineCapacity: " +    Capacity.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
+					indent + "> LineCount: " +          Count.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
+					indent + "> ByteCount: " + this.byteCount.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
 					indent + "> Lines: " + Environment.NewLine + LinesToString(indent + "   "));
 		}
 

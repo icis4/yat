@@ -239,7 +239,7 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TimeStampInfo(Direction direction, DateTime timeStamp, string format, string enclosureLeft, string enclosureRight)
-				: base(direction, enclosureLeft + timeStamp.ToString(format, DateTimeFormatInfo.InvariantInfo) + enclosureRight)
+				: base(direction, enclosureLeft + timeStamp.ToString(format, DateTimeFormatInfo.CurrentInfo) + enclosureRight)
 			{
 				TimeStamp = timeStamp;
 			}
@@ -857,7 +857,7 @@ namespace YAT.Domain
 			sb.Append(indent); sb.Append("> Direction:    "); sb.AppendLine(Direction.ToString());
 			sb.Append(indent); sb.Append("> Origin:       "); sb.AppendLine(Origin != null ? Origin.ToString() : "'null'");
 			sb.Append(indent); sb.Append("> Text:         "); sb.AppendLine(Text   != null ? Text              :    ""   );
-			sb.Append(indent); sb.Append("> ByteCount:    "); sb.AppendLine(ByteCount.ToString(CultureInfo.InvariantCulture));
+			sb.Append(indent); sb.Append("> ByteCount:    "); sb.AppendLine(ByteCount.ToString(CultureInfo.CurrentCulture));
 			sb.Append(indent); sb.Append("> Flags:        "); sb.AppendLine(Attributes.ToString());
 
 			return (sb.ToString());

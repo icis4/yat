@@ -181,7 +181,7 @@ namespace YAT.Domain
 
 				var sb = new StringBuilder();
 				sb.AppendLine(indent + "> Data: " + sw);
-				sb.AppendLine(indent + "> TimeStamp: " + TimeStamp.ToLongTimeString() + "." + StringEx.Left(TimeStamp.Millisecond.ToString("D3", CultureInfo.InvariantCulture), 2));
+				sb.AppendLine(indent + "> TimeStamp: " + TimeStamp.ToLongTimeString() + "." + StringEx.Left(TimeStamp.Millisecond.ToString("D3", CultureInfo.CurrentCulture), 2));
 				sb.AppendLine(indent + "> PortStamp: " + PortStamp);
 				sb.AppendLine(indent + "> Direction: " + Direction);
 				return (sb.ToString());

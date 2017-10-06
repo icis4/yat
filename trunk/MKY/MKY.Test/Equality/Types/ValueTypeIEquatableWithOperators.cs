@@ -55,7 +55,7 @@ namespace MKY.Test.Equality.Types
 		/// </remarks>
 		public override string ToString()
 		{
-			return ("B = " + B.ToString(CultureInfo.InvariantCulture));
+			return ("B = " + B.ToString(CultureInfo.CurrentCulture));
 		}
 
 		/// <summary>

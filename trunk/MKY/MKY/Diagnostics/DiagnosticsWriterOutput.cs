@@ -101,7 +101,7 @@ namespace MKY.Diagnostics
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static void WriteTimeStamp(IDiagnosticsWriter writer, StackTrace st, int index, string message, bool appendLineBreak = true)
 		{
-			writer.Write(DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo));
+			writer.Write(DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo));
 
 			if (st != null)
 			{
