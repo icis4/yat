@@ -60,7 +60,7 @@ namespace MKY.Test.Equality.Types
 			return
 			(
 				Environment.NewLine + "      1:Base = " + base.ToString() +
-				Environment.NewLine + "      1:D    = " + D.ToString(CultureInfo.InvariantCulture)
+				Environment.NewLine + "      1:D    = " + D.ToString(CultureInfo.CurrentCulture)
 			);
 		}
 

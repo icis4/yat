@@ -241,11 +241,11 @@ namespace MKY.IO.Ports
 		{
 			return
 			(
-				"RFR=" + RfrDisableCount.ToString(CultureInfo.InvariantCulture) + ", " +
-				"CTS=" + CtsDisableCount.ToString(CultureInfo.InvariantCulture) + ", " +
-				"DTR=" + DtrDisableCount.ToString(CultureInfo.InvariantCulture) + ", " +
-				"DSR=" + DsrDisableCount.ToString(CultureInfo.InvariantCulture) + ", " +
-				"DCD=" + DcdCount       .ToString(CultureInfo.InvariantCulture)
+				"RFR=" + RfrDisableCount.ToString(CultureInfo.CurrentCulture) + ", " +
+				"CTS=" + CtsDisableCount.ToString(CultureInfo.CurrentCulture) + ", " +
+				"DTR=" + DtrDisableCount.ToString(CultureInfo.CurrentCulture) + ", " +
+				"DSR=" + DsrDisableCount.ToString(CultureInfo.CurrentCulture) + ", " +
+				"DCD=" + DcdCount       .ToString(CultureInfo.CurrentCulture)
 			);
 		}
 

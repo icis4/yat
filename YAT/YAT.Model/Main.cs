@@ -1725,7 +1725,7 @@ namespace YAT.Model
 						OnFixedStatusTextRequest("Invalid requested dynamic index!");
 						OnMessageInputRequest
 						(
-							"Invalid requested dynamic index " + id.ToString(CultureInfo.InvariantCulture) + " to perform the operation!" + Environment.NewLine + Environment.NewLine +
+							"Invalid requested dynamic index " + id.ToString(CultureInfo.CurrentCulture) + " to perform the operation!" + Environment.NewLine + Environment.NewLine +
 							"Check the command line arguments. See command line help for details.",
 							"Invalid Terminal Index",
 							MessageBoxButtons.OK,
@@ -1755,7 +1755,7 @@ namespace YAT.Model
 					int delay = this.startArgs.OperationDelay;
 					if (delay > 0)
 					{
-						OnFixedStatusTextRequest("Operation triggered, delaying for " + delay.ToString(CultureInfo.InvariantCulture) + " ms...");
+						OnFixedStatusTextRequest("Operation triggered, delaying for " + delay.ToString(CultureInfo.CurrentCulture) + " ms...");
 						Thread.Sleep(delay);
 					}
 
@@ -1891,7 +1891,7 @@ namespace YAT.Model
 					int delay = this.startArgs.ExitDelay;
 					if (delay > 0)
 					{
-						OnFixedStatusTextRequest("Exit triggered, delaying for " + delay.ToString(CultureInfo.InvariantCulture) + " ms...");
+						OnFixedStatusTextRequest("Exit triggered, delaying for " + delay.ToString(CultureInfo.CurrentCulture) + " ms...");
 						Thread.Sleep(delay);
 					}
 
@@ -2018,10 +2018,10 @@ namespace YAT.Model
 			(
 				string.Format
 				(
-					CultureInfo.InvariantCulture,
+					CultureInfo.CurrentCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
-					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
-					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
 					GetType(),
 					"",
 					"[" + Guid + "]",

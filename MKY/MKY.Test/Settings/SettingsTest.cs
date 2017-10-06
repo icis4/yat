@@ -111,7 +111,7 @@ namespace MKY.Test.Settings
 			/// </remarks>
 			public override string ToString()
 			{
-				return (Environment.NewLine + "        2:SimpleValue = " + SimpleValue.ToString(CultureInfo.InvariantCulture));
+				return (Environment.NewLine + "        2:SimpleValue = " + SimpleValue.ToString(CultureInfo.CurrentCulture));
 			}
 
 			/// <summary>
@@ -273,7 +273,7 @@ namespace MKY.Test.Settings
 			{
 				return
 				(
-					Environment.NewLine + "      1:SimpleValue = "  + SimpleValue.ToString(CultureInfo.InvariantCulture) +
+					Environment.NewLine + "      1:SimpleValue = "  + SimpleValue.ToString(CultureInfo.CurrentCulture) +
 					Environment.NewLine + "      1:ChildLevel2A = " + ChildLevel2A.ToString() +
 					Environment.NewLine + "      1:ChildLevel2B = " + ChildLevel2B.ToString()
 				);
@@ -417,7 +417,7 @@ namespace MKY.Test.Settings
 			{
 				return
 				(
-					Environment.NewLine + "    0:SimpleValue = " + SimpleValue.ToString(CultureInfo.InvariantCulture) +
+					Environment.NewLine + "    0:SimpleValue = " + SimpleValue.ToString(CultureInfo.CurrentCulture) +
 					Environment.NewLine + "    0:ChildLevel1 = " + ChildLevel1.ToString()
 				);
 			}

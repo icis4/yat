@@ -52,7 +52,7 @@ namespace MKY.Diagnostics
 			var sinks = EventHandlerHelper.GetEventSinks(obj, eventName);
 			if (sinks.Count > 0)
 			{
-				var sb = new StringBuilder(sinks.Count.ToString(CultureInfo.InvariantCulture));
+				var sb = new StringBuilder(sinks.Count.ToString(CultureInfo.CurrentCulture));
 
 				if (sinks.Count == 1)
 					sb.Append(" remaining event sink in ");
