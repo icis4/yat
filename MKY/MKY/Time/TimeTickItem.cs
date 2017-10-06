@@ -83,7 +83,7 @@ namespace MKY.Time
 		/// </remarks>
 		public override string ToString()
 		{
-			string strA = TimeTick.ToString(CultureInfo.InvariantCulture);
+			string strA = TimeTick.ToString(CultureInfo.CurrentCulture);
 			string strB = Item.ToString();
 
 			return (strA + " / " + strB);

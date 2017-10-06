@@ -82,7 +82,7 @@ namespace MKY.Time
 		/// </remarks>
 		public override string ToString()
 		{
-			string strA = TimeStamp.ToString(CultureInfo.InvariantCulture);
+			string strA = TimeStamp.ToString(CultureInfo.CurrentCulture);
 			string strB = Item.ToString();
 
 			return (strA + " / " + strB);
