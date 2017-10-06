@@ -1047,6 +1047,13 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount_Click(object sender, EventArgs e)
 		{
 			this.terminal.ResetIOCountAndRate();
+
+			// \remind (2017-10-06 / MKY)
+			// As a consequence of bug #383 "freeze while receiving a lot of fast data", the
+			// 'IOCountChanged' 'IORateChanged' are no longer used by this form. Thus, the
+			// update must manually be triggered:
+
+			SetDataCountAndRateStatus();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowRadix_Click(object sender, EventArgs e)
@@ -1455,6 +1462,13 @@ namespace YAT.View.Forms
 				return;
 
 			this.terminal.ResetIOCountAndRate();
+
+			// \remind (2017-10-06 / MKY)
+			// As a consequence of bug #383 "freeze while receiving a lot of fast data", the
+			// 'IOCountChanged' 'IORateChanged' are no longer used by this form. Thus, the
+			// update must manually be triggered:
+
+			SetDataCountAndRateStatus();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Clear_Click(object sender, EventArgs e)
@@ -3388,22 +3402,22 @@ namespace YAT.View.Forms
 						activityState = MonitorActivityState.Pending;
 				}
 			}
-			monitor_Tx.ActivityState    = activityState;
+			monitor_Tx   .ActivityState = activityState;
 			monitor_Bidir.ActivityState = activityState;
-			monitor_Rx.ActivityState    = activityState;
+			monitor_Rx   .ActivityState = activityState;
 		}
 
 		private void SetMonitorCountAndRateStatus()
 		{
 			bool showConnectTime = this.settingsRoot.Status.ShowConnectTime;
-			monitor_Tx.ShowTimeStatus    = showConnectTime;
+			monitor_Tx   .ShowTimeStatus = showConnectTime;
 			monitor_Bidir.ShowTimeStatus = showConnectTime;
-			monitor_Rx.ShowTimeStatus    = showConnectTime;
+			monitor_Rx   .ShowTimeStatus = showConnectTime;
 
 			bool showCountAndRate = this.settingsRoot.Status.ShowCountAndRate;
-			monitor_Tx.ShowDataStatus    = showCountAndRate;
+			monitor_Tx   .ShowDataStatus = showCountAndRate;
 			monitor_Bidir.ShowDataStatus = showCountAndRate;
-			monitor_Rx.ShowDataStatus    = showCountAndRate;
+			monitor_Rx   .ShowDataStatus = showCountAndRate;
 		}
 
 		private void ReloadMonitors()
@@ -4155,6 +4169,13 @@ namespace YAT.View.Forms
 
 			monitor_Bidir.SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
 			monitor_Rx   .SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "See event handlers below.")]
+		private void SetDataCountAndRateStatus()
+		{
+			SetSentDataCountAndRateStatus();
+			SetReceivedDataCountAndRateStatus();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
