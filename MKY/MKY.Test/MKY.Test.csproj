@@ -155,6 +155,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\SettingsTest.cs" />
     <Compile Include="TestTypes.cs" />
+    <Compile Include="Time\TimeSpanTest.cs" />
     <Compile Include="Types\ArrayExTest.cs" />
     <Compile Include="Types\ByteExTest.cs" />
     <Compile Include="Types\StringExTest.cs" />

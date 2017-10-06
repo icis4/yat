@@ -267,8 +267,8 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TimeSpanInfo(Direction direction, TimeSpan timeSpan, string format, string enclosureLeft, string enclosureRight)
-				: base(direction, enclosureLeft + TimeSpanEx.FormatInvariantTimeSpan(timeSpan, true, true, true, true) + enclosureRight)
-			{                                                                                   // Attention, slightly different than time delta!
+				: base(direction, enclosureLeft + TimeSpanEx.FormatInvariantThousandthsEnforceMinutes(timeSpan, format) + enclosureRight)
+			{                                                                                // Attention, slightly different than time delta below!
 				TimeSpan = timeSpan;
 			}
 		}
@@ -295,8 +295,8 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TimeDeltaInfo(Direction direction, TimeSpan timeDelta, string format, string enclosureLeft, string enclosureRight)
-				: base(direction, enclosureLeft + TimeSpanEx.FormatInvariantTimeSpan(timeDelta, false, true, true, true) + enclosureRight)
-			{                                                                                    // Attention, slightly different than time span!
+				: base(direction, enclosureLeft + TimeSpanEx.FormatInvariantThousandths(timeDelta, format) + enclosureRight)
+			{                                                                   // Attention, slightly different than time span above!
 				TimeDelta = timeDelta;
 			}
 		}

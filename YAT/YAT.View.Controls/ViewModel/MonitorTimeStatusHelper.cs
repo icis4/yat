@@ -137,9 +137,9 @@ namespace YAT.View.Controls
 		{
 			var sb = new StringBuilder();
 
-			sb.Append(TimeSpanEx.FormatInvariantTimeSpan(this.activeConnectTime));
+			sb.Append(TimeSpanEx.FormatInvariantSecondsEnforceMinutes(this.activeConnectTime));
 			sb.Append(Environment.NewLine);
-			sb.Append(TimeSpanEx.FormatInvariantTimeSpan(this.totalConnectTime));
+			sb.Append(TimeSpanEx.FormatInvariantSecondsEnforceMinutes(this.totalConnectTime));
 
 			this.statusText = sb.ToString();
 
