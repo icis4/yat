@@ -38,11 +38,42 @@ namespace MKY
 	public static class TimeSpanEx
 	{
 		/// <summary>
-		/// Returns the value formatted as "[[[[[[d days ]h]h:]m]m:]s]s[.f[f[f]]]".
+		/// Returns <paramref name="value"/> formatted as "[[[[[[d days ]h]h:]m]m:]s]s".
 		/// </summary>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ss' just happens to be a proper format string...")]
+		public static string FormatInvariantSeconds(TimeSpan value)
+		{
+			return (FormatInvariant(value, false, false, false, false));
+		}
+
+		/// <summary>
+		/// Returns <paramref name="value"/> formatted as "[[[[[[d days ]h]h:]m]m:]s]s.fff".
+		/// </summary>
+		public static string FormatInvariantThousandths(TimeSpan value)
+		{
+			return (FormatInvariant(value, false, true, true, true));
+		}
+
+		/// <summary>
+		/// Returns <paramref name="value"/> formatted as "[[[[d days ]h]h:]m]m:ss".
+		/// </summary>
+		public static string FormatInvariantSecondsEnforceMinutes(TimeSpan value)
+		{
+			return (FormatInvariant(value, true, false, false, false));
+		}
+
+		/// <summary>
+		/// Returns <paramref name="value"/> formatted as "[[[[d days ]h]h:]m]m:ss.fff".
+		/// </summary>
+		public static string FormatInvariantThousandthsEnforceMinutes(TimeSpan value)
+		{
+			return (FormatInvariant(value, true, true, true, true));
+		}
+
+		/// <summary>
+		/// Returns <paramref name="value"/> formatted as "[[[[[[d days ]h]h:]m]m:]s]s[.f[f[f]]]".
+		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public static string FormatInvariantTimeSpan(TimeSpan value, bool enforceMinutes = true, bool addTenths = false, bool addHundredths = false, bool addThousandths = false)
+		private static string FormatInvariant(TimeSpan value, bool enforceMinutes = true, bool addTenths = false, bool addHundredths = false, bool addThousandths = false)
 		{
 			var sb = new StringBuilder();
 
@@ -68,35 +99,103 @@ namespace MKY
 			}
 			else
 			{
-				if (enforceMinutes) // There shall at least be "0:00":
+				var addMinutes = ((value.TotalMinutes >= 1.0) || enforceMinutes);
+				if (addMinutes) // There shall at least be "0:00":
 				{
 					sb.Insert(0, value.Seconds.ToString("D2", CultureInfo.InvariantCulture));
-				}
-				else
-				{
-					sb.Insert(0, value.Seconds.ToString(CultureInfo.InvariantCulture));
-				}
-
-				if ((value.TotalMinutes >= 1.0) || enforceMinutes)
-				{
 					sb.Insert(0, ":");
-					sb.Insert(0, value.Minutes.ToString(CultureInfo.InvariantCulture));
 
-					if (value.TotalHours >= 1.0)
+					var addHours = (value.TotalHours >= 1.0);
+					if (addHours) // There shall at least be "0:00:00":
 					{
+						sb.Insert(0, value.Minutes.ToString("D2", CultureInfo.InvariantCulture));
 						sb.Insert(0, ":");
 						sb.Insert(0, value.Hours.ToString(CultureInfo.InvariantCulture));
 
 						if (value.TotalDays >= 1.0)
 						{
-							sb.Insert(0, " days ");
+							if (value.TotalDays < 2.0)
+								sb.Insert(0, " day ");
+							else
+								sb.Insert(0, " days ");
+
 							sb.Insert(0, value.Days.ToString(CultureInfo.InvariantCulture));
 						}
 					}
+					else
+					{
+						sb.Insert(0, value.Minutes.ToString(CultureInfo.InvariantCulture));
+					}
+				}
+				else
+				{
+					sb.Insert(0, value.Seconds.ToString(CultureInfo.InvariantCulture));
 				}
 			}
 
 			return (sb.ToString());
+		}
+
+		/// <summary>
+		/// Returns <paramref name="value"/> formatted as "[[[[d days ]h]h:]m]m:ss.fff"
+		/// supporting optional additional formats "Ad", "Ah", "Am", "As", "Afff".
+		/// </summary>
+		public static string FormatInvariantThousandthsEnforceMinutes(TimeSpan value, string additionalFormat)
+		{
+			string result;
+			if (TryFormatAdditional(value, additionalFormat, out result))
+				return (result);
+
+			return (FormatInvariant(value, true, true, true, true));
+		}
+
+		/// <summary>
+		/// Returns <paramref name="value"/> formatted as "[[[[[[d days ]h]h:]m]m:]s]s.fff"
+		/// supporting optional additional formats "Ad", "Ah", "Am", "As", "Afff".
+		/// /// </summary>
+		public static string FormatInvariantThousandths(TimeSpan value, string additionalFormat)
+		{
+			string result;
+			if (TryFormatAdditional(value, additionalFormat, out result))
+				return (result);
+
+			return (FormatInvariant(value, false, true, true, true));
+		}
+
+		/// <summary>
+		/// Returns <paramref name="value"/> formatted as "[[[[d days ]h]h:]m]m:ss.fff"
+		/// supporting optional additional formats "Ad", "Ah", "Am", "As", "Afff".
+		/// </summary>
+		private static bool TryFormatAdditional(TimeSpan value, string additionalFormat, out string result)
+		{
+			if (StringEx.EqualsOrdinal(additionalFormat, "Afff"))
+			{
+				result = string.Format("{0:F0}", value.TotalMilliseconds);
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(additionalFormat, "As"))
+			{
+				result = string.Format("{0:F3}", value.TotalSeconds);
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(additionalFormat, "Am"))
+			{
+				result = string.Format("{0:F3}", value.TotalMinutes);
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(additionalFormat, "Ah"))
+			{
+				result = string.Format("{0:F3}", value.TotalHours);
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinal(additionalFormat, "Ad"))
+			{
+				result = string.Format("{0:F3}", value.TotalDays);
+				return (true);
+			}
+
+			result = null;
+			return (false);
 		}
 	}
 
