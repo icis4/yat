@@ -136,6 +136,11 @@ namespace MKY.IO.Ports
 		void ResetControlPinCount();
 
 		/// <summary>
+		/// Gets or sets whether framing errors shall be ignored.
+		/// </summary>
+		bool IgnoreFramingErrors { get; set; }
+
+		/// <summary>
 		/// Gets the input break state.
 		/// </summary>
 		bool InputBreak { get; }

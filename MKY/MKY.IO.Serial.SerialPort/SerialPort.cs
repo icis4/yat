@@ -849,6 +849,8 @@ namespace MKY.IO.Serial.SerialPort
 
 				this.port.PortId = this.settings.PortId;
 
+				this.port.IgnoreFramingErrors = this.settings.IgnoreFramingErrors;
+
 				if (this.settings.OutputBufferSize.Enabled)
 					this.port.WriteBufferSize = this.settings.OutputBufferSize.Size;
 
@@ -2257,12 +2259,12 @@ namespace MKY.IO.Serial.SerialPort
 
 				switch (e.EventType)
 				{
-					case System.IO.Ports.SerialError.Frame:    direction = Direction.Input;  message = "Serial COM port input framing error!";            break;
-					case System.IO.Ports.SerialError.Overrun:  direction = Direction.Input;  message = "Serial COM port input character buffer overrun!"; break;
-					case System.IO.Ports.SerialError.RXOver:   direction = Direction.Input;  message = "Serial COM port input buffer overflow!";          break;
-					case System.IO.Ports.SerialError.RXParity: direction = Direction.Input;  message = "Serial COM port input parity error!";             break;
-					case System.IO.Ports.SerialError.TXFull:   direction = Direction.Output; message = "Serial COM port output buffer full!";             break;
-					default:   severity = ErrorSeverity.Fatal; direction = Direction.None;   message = "Unknown serial COM port error!";                  break;
+					case System.IO.Ports.SerialError.Frame:    direction = Direction.Input;  message = "Input framing error!";            break;
+					case System.IO.Ports.SerialError.Overrun:  direction = Direction.Input;  message = "Input character buffer overrun!"; break;
+					case System.IO.Ports.SerialError.RXOver:   direction = Direction.Input;  message = "Input buffer overflow!";          break;
+					case System.IO.Ports.SerialError.RXParity: direction = Direction.Input;  message = "Input parity error!";             break;
+					case System.IO.Ports.SerialError.TXFull:   direction = Direction.Output; message = "Output buffer full!";             break;
+					default:  severity = ErrorSeverity.Fatal;  direction = Direction.None;   message = "Unknown error!";                  break;
 				}
 
 				OnIOErrorAsync(new SerialPortErrorEventArgs(severity, direction, message, e.EventType)); // Async! See remarks above.

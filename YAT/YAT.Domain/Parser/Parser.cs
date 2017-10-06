@@ -116,6 +116,11 @@ namespace YAT.Domain.Parser
 			@"Note that ""\!(" + (KeywordEx)Keyword.LineRepeat + @")"" will repeat as fast as possible, thus resulting in 100% load of the CPU core in use. To prevent this, use this keyword combined with a delay or interval keyword, e.g. ""\!(" + (KeywordEx)Keyword.LineRepeat + @")\!(" + (KeywordEx)Keyword.LineInterval + @")""." + Environment.NewLine +
 			@"Use [Ctrl+B] to break an ongoing ""\!(" + (KeywordEx)Keyword.LineRepeat + @")"" operation." + Environment.NewLine +
 			Environment.NewLine +
+			@"Framing errors on ""\!(" + (KeywordEx)Keyword.FramingErrorsOn + @")""" + Environment.NewLine +
+			@"Framing errors off ""\!(" + (KeywordEx)Keyword.FramingErrorsOff + @")""" + Environment.NewLine +
+			@"Framing errors reset to settings ""\!(" + (KeywordEx)Keyword.FramingErrorsReset + @")""" + Environment.NewLine +
+			@"Framing errors can only occur on serial COM ports." +
+			Environment.NewLine +
 			@"Output break state on ""\!(" + (KeywordEx)Keyword.OutputBreakOn + @")""" + Environment.NewLine +
 			@"Output break state off ""\!(" + (KeywordEx)Keyword.OutputBreakOff + @")""" + Environment.NewLine +
 			@"Output break state toggle ""\!(" + (KeywordEx)Keyword.OutputBreakToggle + @")""" + Environment.NewLine +

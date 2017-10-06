@@ -1364,6 +1364,48 @@ namespace YAT.Domain
 					break;
 				}
 
+				case Parser.Keyword.FramingErrorsOn:
+				{
+					if (this.terminalSettings.IO.IOType == IOType.SerialPort)
+					{
+						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
+						port.IgnoreFramingErrors = false;
+					}
+					else
+					{
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only occur on serial COM ports."));
+					}
+					break;
+				}
+
+				case Parser.Keyword.FramingErrorsOff:
+				{
+					if (this.terminalSettings.IO.IOType == IOType.SerialPort)
+					{
+						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
+						port.IgnoreFramingErrors = true;
+					}
+					else
+					{
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only occur on serial COM ports."));
+					}
+					break;
+				}
+
+				case Parser.Keyword.FramingErrorsReset:
+				{
+					if (this.terminalSettings.IO.IOType == IOType.SerialPort)
+					{
+						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
+						port.IgnoreFramingErrors = TerminalSettings.IO.SerialPort.IgnoreFramingErrors;
+					}
+					else
+					{
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only occur on serial COM ports."));
+					}
+					break;
+				}
+
 				case Parser.Keyword.OutputBreakOn:
 				{
 					if (this.terminalSettings.IO.IOType == IOType.SerialPort)

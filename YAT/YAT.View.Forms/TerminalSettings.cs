@@ -638,6 +638,7 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.IO.SerialPort.OutputMaxBaudRate      = f.SettingsResult.Terminal.IO.SerialPort.OutputMaxBaudRate;
 				this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize           = f.SettingsResult.Terminal.IO.SerialPort.MaxChunkSize;
 				this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate            = f.SettingsResult.Terminal.IO.SerialPort.MaxSendRate;
+				this.settingsInEdit.Terminal.IO.SerialPort.IgnoreFramingErrors    = f.SettingsResult.Terminal.IO.SerialPort.IgnoreFramingErrors;
 				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak    = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak     = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
