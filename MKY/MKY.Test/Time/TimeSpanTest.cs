@@ -112,11 +112,17 @@ namespace MKY.Test.Time
 		{
 			get
 			{
-				yield return (new TestCaseData(new TimeSpan(10, 12, 13, 14, 15), "Afff", "907994015"));
-				yield return (new TestCaseData(new TimeSpan(10, 12, 13, 14, 15), "As",   "907994.015"));
-				yield return (new TestCaseData(new TimeSpan(10, 12, 13, 14, 15), "Am",   "15133.234"));
-				yield return (new TestCaseData(new TimeSpan(10, 12, 13, 14, 15), "Ah",   "252.221"));
-				yield return (new TestCaseData(new TimeSpan(10, 12, 13, 14, 15), "Ad",   "10.509"));
+				yield return (new TestCaseData(new TimeSpan(0, 0, 0, 0, 0), "!ffffff",   "000000"));
+				yield return (new TestCaseData(new TimeSpan(0, 0, 0, 0, 0), "!sss.sss", "000.000"));
+				yield return (new TestCaseData(new TimeSpan(0, 0, 0, 0, 0), "!mm.mmm",   "00.000"));
+				yield return (new TestCaseData(new TimeSpan(0, 0, 0, 0, 0), "!h.hhh",     "0.000"));
+				yield return (new TestCaseData(new TimeSpan(0, 0, 0, 0, 0), "!d.ddd",     "0.000"));
+
+				yield return (new TestCaseData(new TimeSpan(10, 12, 13, 14, 15), "!ffffff",   "907994015"));
+				yield return (new TestCaseData(new TimeSpan(10, 12, 13, 14, 15), "!sss.sss", "907994.015"));
+				yield return (new TestCaseData(new TimeSpan(10, 12, 13, 14, 15), "!mm.mmm",   "15133.234"));
+				yield return (new TestCaseData(new TimeSpan(10, 12, 13, 14, 15), "!h.hhh",      "252.221"));
+				yield return (new TestCaseData(new TimeSpan(10, 12, 13, 14, 15), "!d.ddd",       "10.509"));
 			}
 		}
 		#endregion
