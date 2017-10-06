@@ -152,16 +152,16 @@ namespace MKY.IO
 		/// Writes a line into log file and adds a time stamp.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public virtual void WriteLine(string line)
+		public virtual void WriteLine(string line, string timeStampFormat = "yyyy-MM-dd HH:mm:ss.fff")
 		{
 			AssertNotDisposed();
 
-			DateTime now = DateTime.Now;
+			var now = DateTime.Now;
 			try
 			{
 				lock (this.writer)
 				{	// Output milliseconds for readability, even though last digit only provides limited accuracy.
-					this.writer.WriteLine(now.ToString("yyyy-MM-dd HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo) + "  " + line);
+					this.writer.WriteLine(now.ToString(timeStampFormat, DateTimeFormatInfo.CurrentInfo) + "  " + line);
 					this.writer.Flush();
 				}
 			}

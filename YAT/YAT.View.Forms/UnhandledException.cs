@@ -58,7 +58,7 @@ namespace YAT.View.Forms
 			Text = title;
 
 			// Compose exception text:
-			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
+			using (var sw = new StringWriter(CultureInfo.CurrentCulture))
 			{
 				sw.WriteLine(originMessage);
 				sw.WriteLine();
