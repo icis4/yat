@@ -2197,8 +2197,12 @@ namespace YAT.Model
 
 			if      ( isConnectedNow && !hasBeenConnected)
 			{
-				this.activeConnectChrono.Restart();
-				this.totalConnectChrono.Start();
+				var now = DateTime.Now; // Ensure that all use exactly the same instant.
+
+				this.activeConnectChrono.Restart(now);
+				this.totalConnectChrono.Start(now);
+
+				this.terminal.InitialTimeStamp = now;
 			}
 			else if (!isConnectedNow &&  hasBeenConnected)
 			{
@@ -3585,8 +3589,12 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			this.activeConnectChrono.Reset();
-			this.totalConnectChrono .Reset();
+			var now = DateTime.Now; // Ensure that all use exactly the same instant.
+
+			this.activeConnectChrono.Reset(now);
+			this.totalConnectChrono .Reset(now);
+
+			this.terminal.InitialTimeStamp = now;
 		}
 
 		private void totalConnectChrono_TimeSpanChanged(object sender, TimeSpanEventArgs e)
@@ -4562,10 +4570,10 @@ namespace YAT.Model
 			(
 				string.Format
 				(
-					CultureInfo.InvariantCulture,
+					CultureInfo.CurrentCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
-					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
-					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
 					GetType(),
 					"",
 					"[" + Guid + "]",

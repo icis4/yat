@@ -132,19 +132,19 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public string TimeStampFormat
+		public string TimeStampFormatResult
 		{
 			get { return (this.timeStampFormat); }
 		}
 
 		/// <summary></summary>
-		public string TimeSpanFormat
+		public string TimeSpanFormatResult
 		{
 			get { return (this.timeSpanFormat); }
 		}
 
 		/// <summary></summary>
-		public string TimeDeltaFormat
+		public string TimeDeltaFormatResult
 		{
 			get { return (this.timeDeltaFormat); }
 		}
@@ -773,7 +773,9 @@ namespace YAT.View.Forms
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStampInfo(now, timeStampFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeSpanInfo(diff, timeSpanFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDeltaInfo(diff, timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight)); // Also diff since opening!
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.PortInfo(Domain.Direction.Tx, "COM1", infoEnclosureLeft, infoEnclosureRight));
@@ -789,7 +791,9 @@ namespace YAT.View.Forms
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStampInfo(now, timeStampFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeSpanInfo(diff, timeSpanFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDeltaInfo(delta, timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.PortInfo(Domain.Direction.Rx, "COM1", infoEnclosureLeft, infoEnclosureRight));
@@ -805,7 +809,9 @@ namespace YAT.View.Forms
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStampInfo(now, timeStampFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeSpanInfo(diff, timeSpanFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDeltaInfo(delta, timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.ErrorInfo("Message"));

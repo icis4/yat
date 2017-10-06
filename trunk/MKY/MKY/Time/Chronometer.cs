@@ -199,12 +199,21 @@ namespace MKY.Time
 		/// <summary></summary>
 		public virtual void Start()
 		{
+			Start(DateTime.Now);
+		}
+
+		/// <remarks>
+		/// This overload is useful if multiple objects need to be synchronized in terms of time.
+		/// </remarks>
+		public virtual void Start(DateTime now)
+		{
 			AssertNotDisposed();
 
 			if (!this.timer.Enabled)
 			{
 				this.timer.Start();
-				this.startTimeStamp = DateTime.Now;
+				this.startTimeStamp = now;
+
 				OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
 			}
 		}
@@ -219,6 +228,7 @@ namespace MKY.Time
 			{
 				this.timer.Stop();
 				this.accumulatedTimeSpan += (DateTime.Now - this.startTimeStamp);
+
 				OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
 			}
 		}
@@ -235,9 +245,17 @@ namespace MKY.Time
 		/// <summary></summary>
 		public virtual void Reset()
 		{
+			Reset(DateTime.Now);
+		}
+
+		/// <remarks>
+		/// This overload is useful if multiple objects need to be synchronized in terms of time.
+		/// </remarks>
+		public virtual void Reset(DateTime now)
+		{
 			AssertNotDisposed();
 
-			this.startTimeStamp      = DateTime.Now;
+			this.startTimeStamp = now;
 			this.accumulatedTimeSpan = TimeSpan.Zero;
 
 			OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan.Zero));
@@ -246,11 +264,19 @@ namespace MKY.Time
 		/// <summary></summary>
 		public virtual void Restart()
 		{
+			Restart(DateTime.Now);
+		}
+
+		/// <remarks>
+		/// This overload is useful if multiple objects need to be synchronized in terms of time.
+		/// </remarks>
+		public virtual void Restart(DateTime now)
+		{
 			AssertNotDisposed();
 
 			Stop();
-			Reset();
-			Start();
+			Reset(now);
+			Start(now);
 		}
 
 		#endregion
