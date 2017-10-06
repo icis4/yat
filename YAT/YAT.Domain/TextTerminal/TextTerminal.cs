@@ -91,8 +91,6 @@ namespace YAT.Domain
 
 		private class LineState
 		{
-			public DateTime        InitialTimeStamp { get; set; }
-			public DateTime        LastTimeStamp    { get; set; }
 			public LinePosition    Position         { get; set; }
 			public DisplayLinePart Elements         { get; set; }
 			public DisplayLinePart EolElements      { get; set; }
@@ -100,22 +98,22 @@ namespace YAT.Domain
 
 			public Dictionary<string, bool> EolOfLastLineOfGivenPortWasCompleteMatch { get; set; }
 
+			public DateTime        TimeStamp        { get; set; }
+
 			public LineState(SequenceQueue eol)
 			{
-				InitialTimeStamp = DateTime.Now;
-				LastTimeStamp    = DateTime.Now;
 				Position         = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 				Elements         = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				EolElements      = new DisplayLinePart(); // Default initial capacity is OK.
 				Eol              = eol;
 
 				EolOfLastLineOfGivenPortWasCompleteMatch = new Dictionary<string, bool>(); // Default initial capacity is OK.
+
+				TimeStamp = DateTime.Now;
 			}
 
 			public virtual void Reset(string portStamp, bool eolOfLastLineWasCompleteMatch)
 			{
-				InitialTimeStamp = DateTime.Now;
-				LastTimeStamp    = DateTime.Now;
 				Position         = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 				Elements         = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				EolElements      = new DisplayLinePart(); // Default initial capacity is OK.
@@ -125,27 +123,32 @@ namespace YAT.Domain
 					EolOfLastLineOfGivenPortWasCompleteMatch[portStamp] = eolOfLastLineWasCompleteMatch;
 				else
 					EolOfLastLineOfGivenPortWasCompleteMatch.Add(portStamp, eolOfLastLineWasCompleteMatch);
+
+				TimeStamp = DateTime.Now;
 			}
 		}
 
 		private class BidirLineState
 		{
-			public bool IsFirstLine      { get; set; }
-			public string PortStamp      { get; set; }
-			public IODirection Direction { get; set; }
+			public bool IsFirstLine           { get; set; }
+			public string PortStamp           { get; set; }
+			public IODirection Direction      { get; set; }
+			public DateTime LastLineTimeStamp { get; set; }
 
 			public BidirLineState()
 			{
-				IsFirstLine = true;
-				PortStamp   = null;
-				Direction   = IODirection.None;
+				IsFirstLine       = true;
+				PortStamp         = null;
+				Direction         = IODirection.None;
+				LastLineTimeStamp = DateTime.Now;
 			}
 
 			public BidirLineState(BidirLineState rhs)
 			{
-				IsFirstLine = rhs.IsFirstLine;
-				PortStamp   = rhs.PortStamp;
-				Direction   = rhs.Direction;
+				IsFirstLine       = rhs.IsFirstLine;
+				PortStamp         = rhs.PortStamp;
+				Direction         = rhs.Direction;
+				LastLineTimeStamp = rhs.LastLineTimeStamp;
 			}
 		}
 
@@ -695,6 +698,7 @@ namespace YAT.Domain
 			elements.AddRange(lp);
 
 			lineState.Position = LinePosition.Data;
+			lineState.TimeStamp = ts;
 		}
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
@@ -896,6 +900,7 @@ namespace YAT.Domain
 			}
 
 			// Reset line state:
+			this.bidirLineState.LastLineTimeStamp = lineState.TimeStamp;
 			lineState.Reset(ps, lineState.Eol.IsCompleteMatch);
 		}
 
@@ -915,7 +920,7 @@ namespace YAT.Domain
 			{
 				// Line begin and time stamp:
 				if (lineState.Position == LinePosition.Begin)
-					ExecuteLineBegin(lineState, raw.TimeStamp, (raw.TimeStamp - lineState.InitialTimeStamp), (raw.TimeStamp - lineState.LastTimeStamp), raw.PortStamp, raw.Direction, elements);
+					ExecuteLineBegin(lineState, raw.TimeStamp, (raw.TimeStamp - InitialTimeStamp), (raw.TimeStamp - this.bidirLineState.LastLineTimeStamp), raw.PortStamp, raw.Direction, elements);
 
 				// Content:
 				ExecuteContent(lineState, raw.Direction, b, elements);

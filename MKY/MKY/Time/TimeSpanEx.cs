@@ -79,17 +79,17 @@ namespace MKY
 
 			if (addThousandths)
 			{
-				sb.Insert(0, (value.Milliseconds / 1).ToString("D3", CultureInfo.InvariantCulture));
+				sb.Insert(0, (value.Milliseconds / 1).ToString("D3", CultureInfo.CurrentCulture));
 				sb.Insert(0, ".");
 			}
 			else if (addHundredths)
 			{
-				sb.Insert(0, (value.Milliseconds / 10).ToString("D2", CultureInfo.InvariantCulture));
+				sb.Insert(0, (value.Milliseconds / 10).ToString("D2", CultureInfo.CurrentCulture));
 				sb.Insert(0, ".");
 			}
 			else if (addTenths)
 			{
-				sb.Insert(0, (value.Milliseconds / 100).ToString("D1", CultureInfo.InvariantCulture));
+				sb.Insert(0, (value.Milliseconds / 100).ToString("D1", CultureInfo.CurrentCulture));
 				sb.Insert(0, ".");
 			}
 
@@ -102,15 +102,15 @@ namespace MKY
 				var addMinutes = ((value.TotalMinutes >= 1.0) || enforceMinutes);
 				if (addMinutes) // There shall at least be "0:00":
 				{
-					sb.Insert(0, value.Seconds.ToString("D2", CultureInfo.InvariantCulture));
+					sb.Insert(0, value.Seconds.ToString("D2", CultureInfo.CurrentCulture));
 					sb.Insert(0, ":");
 
 					var addHours = (value.TotalHours >= 1.0);
 					if (addHours) // There shall at least be "0:00:00":
 					{
-						sb.Insert(0, value.Minutes.ToString("D2", CultureInfo.InvariantCulture));
+						sb.Insert(0, value.Minutes.ToString("D2", CultureInfo.CurrentCulture));
 						sb.Insert(0, ":");
-						sb.Insert(0, value.Hours.ToString(CultureInfo.InvariantCulture));
+						sb.Insert(0, value.Hours.ToString(CultureInfo.CurrentCulture));
 
 						if (value.TotalDays >= 1.0)
 						{
@@ -119,17 +119,17 @@ namespace MKY
 							else
 								sb.Insert(0, " days ");
 
-							sb.Insert(0, value.Days.ToString(CultureInfo.InvariantCulture));
+							sb.Insert(0, value.Days.ToString(CultureInfo.CurrentCulture));
 						}
 					}
 					else
 					{
-						sb.Insert(0, value.Minutes.ToString(CultureInfo.InvariantCulture));
+						sb.Insert(0, value.Minutes.ToString(CultureInfo.CurrentCulture));
 					}
 				}
 				else
 				{
-					sb.Insert(0, value.Seconds.ToString(CultureInfo.InvariantCulture));
+					sb.Insert(0, value.Seconds.ToString(CultureInfo.CurrentCulture));
 				}
 			}
 
@@ -138,7 +138,7 @@ namespace MKY
 
 		/// <summary>
 		/// Returns <paramref name="value"/> formatted as "[[[[d days ]h]h:]m]m:ss.fff"
-		/// supporting additional formats "!d.ddd", "!h.hhh", "!mm.mmm", "!sss.sss", "!ffffff".
+		/// supporting additional formats "^d.ddd^", "^h.hhh^", "^mm.mmm^", "^sss.sss^", "^ffffff^".
 		/// </summary>
 		public static string FormatInvariantThousandthsEnforceMinutes(TimeSpan value, string additionalFormat)
 		{
@@ -151,7 +151,7 @@ namespace MKY
 
 		/// <summary>
 		/// Returns <paramref name="value"/> formatted as "[[[[[[d days ]h]h:]m]m:]s]s.fff"
-		/// supporting additional formats "!d.ddd", "!h.hhh", "!mm.mmm", "!sss.sss", "!ffffff".
+		/// supporting additional formats "^d.ddd^", "^h.hhh^", "^mm.mmm^", "^sss.sss^", "^ffffff^".
 		/// /// </summary>
 		public static string FormatInvariantThousandths(TimeSpan value, string additionalFormat)
 		{
@@ -164,34 +164,41 @@ namespace MKY
 
 		/// <summary>
 		/// Returns <paramref name="value"/> formatted as "[[[[d days ]h]h:]m]m:ss.fff"
-		/// supporting additional formats "!d.ddd", "!h.hhh", "!mm.mmm", "!sss.sss", "!ffffff".
+		/// supporting additional formats "^d.ddd^", "^h.hhh^", "^mm.mmm^", "^sss.sss^", "^ffffff^".
 		/// </summary>
+		/// <remarks>
+		/// \remind (2017-06-10 / MKY)
+		/// Additional formats shall be extended after upgrading to .NET 4+ as follows:
+		///  > More flexibility, e.g. "^ss.sss^" and "^ss.ss^" and...
+		///  > Combination with standard formats, i.e. split ^^ and then format each fragment individually.
+		///                                                       (=> dynamically create the format string)
+		/// </remarks>
 		/// <remarks>
 		/// Output milliseconds for readability, even though last digit only provides limited accuracy.
 		/// </remarks>
 		private static bool TryFormatAdditional(TimeSpan value, string additionalFormat, out string result)
 		{
-			if (StringEx.EqualsOrdinal(additionalFormat, "!ffffff"))
+			if      (StringEx.EqualsOrdinal(additionalFormat, "^ffffff^"))
 			{
 				result = string.Format(CultureInfo.CurrentCulture, "{0:000000}", value.TotalMilliseconds);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinal(additionalFormat, "!sss.sss"))
+			else if (StringEx.EqualsOrdinal(additionalFormat, "^sss.sss^"))
 			{
 				result = string.Format(CultureInfo.CurrentCulture, "{0:000.000}", value.TotalSeconds);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinal(additionalFormat, "!mm.mmm"))
+			else if (StringEx.EqualsOrdinal(additionalFormat, "^mm.mmm^"))
 			{
 				result = string.Format(CultureInfo.CurrentCulture, "{0:00.000}", value.TotalMinutes);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinal(additionalFormat, "!h.hhh"))
+			else if (StringEx.EqualsOrdinal(additionalFormat, "^h.hhh^"))
 			{
 				result = string.Format(CultureInfo.CurrentCulture, "{0:0.000}", value.TotalHours);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinal(additionalFormat, "!d.ddd"))
+			else if (StringEx.EqualsOrdinal(additionalFormat, "^d.ddd^"))
 			{
 				result = string.Format(CultureInfo.CurrentCulture, "{0:0.000}", value.TotalDays);
 				return (true);

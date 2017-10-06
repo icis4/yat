@@ -81,19 +81,19 @@ namespace YAT.Domain
 		private const string Standard_format      = @"[d \days ][h][h\:][m][m\:][s]s\.fff"; // Attention, slightly different than time span!
 		private const string Standard_description =  "Standard";
 
-		private const string TotalMilliseconds_format      = "!ffffff";
+		private const string TotalMilliseconds_format      = "^ffffff^";
 		private const string TotalMilliseconds_description = "Total number of milliseconds";
 
-		private const string TotalSeconds_format      = "!sss.sss";
+		private const string TotalSeconds_format      = "^sss.sss^";
 		private const string TotalSeconds_description = "Total number of seconds";
 
-		private const string TotalMinutes_format      = "!mm.mmm";
+		private const string TotalMinutes_format      = "^mm.mmm^";
 		private const string TotalMinutes_description = "Total number of minutes";
 
-		private const string TotalHours_format      = "!h.hhh";
+		private const string TotalHours_format      = "^h.hhh^";
 		private const string TotalHours_description = "Total number of hours";
 
-		private const string TotalDays_format      = "!d.ddd";
+		private const string TotalDays_format      = "^d.ddd^";
 		private const string TotalDays_description = "Total number of days";
 
 		#endregion

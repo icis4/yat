@@ -237,26 +237,24 @@ namespace YAT.Domain
 
 		private class LineState : IDisposable
 		{
-			public DateTime             InitialTimeStamp              { get; set; }
-			public DateTime             LastTimeStamp                 { get; set; }
 			public LinePosition         Position                      { get; set; }
 			public DisplayLinePart      Elements                      { get; set; }
 			public SequenceQueue        SequenceAfter                 { get; set; }
 			public SequenceQueue        SequenceBefore                { get; set; }
 			public List<DisplayElement> PendingSequenceBeforeElements { get; set; }
 			public DateTime             TimeStamp                     { get; set; }
+
 			public LineBreakTimer       BreakTimer                    { get; set; }
 
-			public LineState(SequenceQueue sequenceAfter, SequenceQueue sequenceBefore, DateTime timeStamp, LineBreakTimer breakTimer)
+			public LineState(SequenceQueue sequenceAfter, SequenceQueue sequenceBefore, LineBreakTimer breakTimer)
 			{
-				InitialTimeStamp              = DateTime.Now;
-				LastTimeStamp                 = DateTime.Now;
 				Position                      = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 				Elements                      = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				SequenceAfter                 = sequenceAfter;
 				SequenceBefore                = sequenceBefore;
 				PendingSequenceBeforeElements = new List<DisplayElement>();
-				TimeStamp                     = timeStamp;
+				TimeStamp                     = DateTime.Now;
+
 				BreakTimer                    = breakTimer;
 			}
 
@@ -335,8 +333,6 @@ namespace YAT.Domain
 			{
 				AssertNotDisposed();
 
-				InitialTimeStamp              = DateTime.Now;
-				LastTimeStamp                 = DateTime.Now;
 				Position                      = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 				Elements                      = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				SequenceAfter                  .Reset();
@@ -348,22 +344,25 @@ namespace YAT.Domain
 
 		private class BidirLineState
 		{
-			public bool IsFirstLine      { get; set; }
-			public string PortStamp      { get; set; }
-			public IODirection Direction { get; set; }
+			public bool IsFirstLine           { get; set; }
+			public string PortStamp           { get; set; }
+			public IODirection Direction      { get; set; }
+			public DateTime LastLineTimeStamp { get; set; }
 
 			public BidirLineState()
 			{
-				IsFirstLine = true;
-				PortStamp   = "";
-				Direction   = IODirection.None;
+				IsFirstLine       = true;
+				PortStamp         = null;
+				Direction         = IODirection.None;
+				LastLineTimeStamp = DateTime.Now;
 			}
 
 			public BidirLineState(BidirLineState rhs)
 			{
-				IsFirstLine = rhs.IsFirstLine;
-				PortStamp   = rhs.PortStamp;
-				Direction   = rhs.Direction;
+				IsFirstLine       = rhs.IsFirstLine;
+				PortStamp         = rhs.PortStamp;
+				Direction         = rhs.Direction;
+				LastLineTimeStamp = rhs.LastLineTimeStamp;
 			}
 		}
 
@@ -613,7 +612,7 @@ namespace YAT.Domain
 				if (this.txLineState != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
 					this.txLineState.Dispose();
 
-				this.txLineState = new LineState(new SequenceQueue(txSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore), DateTime.Now, t);
+				this.txLineState = new LineState(new SequenceQueue(txSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore), t);
 
 				// Rx:
 
@@ -631,7 +630,7 @@ namespace YAT.Domain
 				if (this.rxLineState != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
 					this.rxLineState.Dispose();
 
-				this.rxLineState = new LineState(new SequenceQueue(rxSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore), DateTime.Now, t);
+				this.rxLineState = new LineState(new SequenceQueue(rxSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore), t);
 			}
 
 			this.bidirLineState = new BidirLineState();
@@ -812,6 +811,7 @@ namespace YAT.Domain
 			lines.Add(line);
 
 			// Reset line state:
+			this.bidirLineState.LastLineTimeStamp = lineState.TimeStamp;
 			lineState.Reset();
 		}
 
@@ -845,7 +845,7 @@ namespace YAT.Domain
 				// Line begin and time stamp:
 				if (lineState.Position == LinePosition.Begin)
 				{
-					ExecuteLineBegin(lineState, raw.TimeStamp, (raw.TimeStamp - lineState.InitialTimeStamp), (raw.TimeStamp - lineState.LastTimeStamp), raw.PortStamp, raw.Direction, elements);
+					ExecuteLineBegin(lineState, raw.TimeStamp, (raw.TimeStamp - InitialTimeStamp), (raw.TimeStamp - this.bidirLineState.LastLineTimeStamp), raw.PortStamp, raw.Direction, elements);
 
 					if (displaySettings.TimedLineBreak.Enabled)
 						lineState.BreakTimer.Start();
@@ -871,7 +871,7 @@ namespace YAT.Domain
 					// In case of a pending immediately insert the sequence into a new line:
 					if ((elementsForNextLine != null) && (elementsForNextLine.Count > 0))
 					{
-						ExecuteLineBegin(lineState, raw.TimeStamp, (raw.TimeStamp - lineState.InitialTimeStamp), (raw.TimeStamp - lineState.LastTimeStamp), raw.PortStamp, raw.Direction, elements);
+						ExecuteLineBegin(lineState, raw.TimeStamp, (raw.TimeStamp - InitialTimeStamp), (raw.TimeStamp - this.bidirLineState.LastLineTimeStamp), raw.PortStamp, raw.Direction, elements);
 
 						foreach (var de in elementsForNextLine)
 						{
@@ -902,11 +902,12 @@ namespace YAT.Domain
 		{
 			if (lineState.Elements.Count > 0)
 			{
-				TimeSpan span = ts - lineState.TimeStamp;
+				var span = ts - lineState.TimeStamp;
 				if (span.TotalMilliseconds >= displaySettings.TimedLineBreak.Timeout) {
 					ExecuteLineEnd(lineState, elements, lines);
 				}
 			}
+
 			lineState.TimeStamp = ts;
 		}
 

@@ -3493,6 +3493,10 @@ namespace YAT.View.Forms
 
 				this.settingsRoot.Display.InfoSeparator = f.InfoSeparatorResult;
 				this.settingsRoot.Display.InfoEnclosure = f.InfoEnclosureResult;
+
+				this.settingsRoot.Display.TimeStampFormat = f.TimeStampFormatResult;
+				this.settingsRoot.Display.TimeSpanFormat  = f.TimeSpanFormatResult;
+				this.settingsRoot.Display.TimeDeltaFormat = f.TimeDeltaFormatResult;
 			}
 		}
 
@@ -3582,9 +3586,9 @@ namespace YAT.View.Forms
 					var sb = new StringBuilder();
 
 					sb.Append("Selected lines only partially saved to file, only ");
-					sb.Append(savedCount.ToString(CultureInfo.InvariantCulture));
+					sb.Append(savedCount.ToString(CultureInfo.CurrentCulture));
 					sb.Append(" instead of ");
-					sb.Append(requestedCount.ToString(CultureInfo.InvariantCulture));
+					sb.Append(requestedCount.ToString(CultureInfo.CurrentCulture));
 					sb.AppendLine(" could be saved");
 					sb.AppendLine();
 
@@ -5015,10 +5019,10 @@ namespace YAT.View.Forms
 			(
 				string.Format
 				(
-					CultureInfo.InvariantCulture,
+					CultureInfo.CurrentCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
-					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
-					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
 					GetType(),
 					"",
 					"[" + guid + "]",

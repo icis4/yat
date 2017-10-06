@@ -247,6 +247,7 @@ namespace YAT.Domain
 		private Settings.TerminalSettings terminalSettings;
 
 		private RawTerminal rawTerminal;
+		private DateTime initialTimeStamp;
 
 		private Queue<DataSendItem> sendDataQueue = new Queue<DataSendItem>();
 		private bool sendDataThreadRunFlag;
@@ -680,6 +681,23 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		public virtual DateTime InitialTimeStamp
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.initialTimeStamp);
+			}
+			set
+			{
+				AssertNotDisposed();
+
+				this.initialTimeStamp = value;
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool IsStopped
 		{
 			get
@@ -863,6 +881,8 @@ namespace YAT.Domain
 				// potentially allows to call Send() and buffer data before starting the terminal.
 
 				bool result = this.rawTerminal.Start();
+
+				this.initialTimeStamp = DateTime.Now;
 
 				ConfigurePeriodicXOnTimer();
 
@@ -1468,7 +1488,7 @@ namespace YAT.Domain
 			if (successfullyParsed != null)
 			{
 				sb.Append(            " is invalid at position ");
-				sb.Append(                                    (successfullyParsed.Length + 1).ToString(CultureInfo.InvariantCulture) + ".");
+				sb.Append(                                    (successfullyParsed.Length + 1).ToString(CultureInfo.CurrentCulture) + ".");
 				if (successfullyParsed.Length > 0)
 				{
 					sb.Append(                                           @" Only """);
@@ -3282,12 +3302,12 @@ namespace YAT.Domain
 			(
 				string.Format
 				(
-					CultureInfo.InvariantCulture,
+					CultureInfo.CurrentCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
-					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
-					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
 					GetType(),
-					"#" + this.instanceId.ToString("D2", CultureInfo.InvariantCulture),
+					"#" + this.instanceId.ToString("D2", CultureInfo.CurrentCulture),
 					"[" + ToShortIOString() + "]",
 					message
 				)
