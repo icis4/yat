@@ -87,6 +87,10 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 YAT 2.0 Delta Version 1.99.80 :: 2017-1x-xx
 ----------------------------------------------------------------------------------------------------
 
+New:
+- Additional setting and keywords \!(FramingErrorsOn|Off|Reset) that allows configuring the serial
+  COM port behaviour on framing errors. Useful when e.g. changing baud rates (feature request #321).
+
 Important changes:
 - Additional workaround applied to prevent 'ObjectDisposedException' when disconnecting USB/RS-232
   converters (USB CDC) without closing the serial COM port (bug #382). Workaround also applies when

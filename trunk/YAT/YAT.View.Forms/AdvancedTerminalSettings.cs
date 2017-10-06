@@ -504,6 +504,14 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.IO.Endianness = (Domain.EndiannessEx)comboBox_Endianness.SelectedItem;
 		}
 
+		private void checkBox_IgnoreFramingErrors_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.IO.SerialPort.IgnoreFramingErrors = checkBox_IgnoreFramingErrors.Checked;
+		}
+
 		private void checkBox_IndicateBreakStates_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -1077,6 +1085,7 @@ namespace YAT.View.Forms
 				textBox_MaxSendRateSize.Text         = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Size.ToString(CultureInfo.CurrentCulture);
 				textBox_MaxSendRateInterval.Enabled  = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
 				textBox_MaxSendRateInterval.Text     = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Interval.ToString(CultureInfo.CurrentCulture);
+				checkBox_IgnoreFramingErrors.Checked = this.settingsInEdit.Terminal.IO.SerialPort.IgnoreFramingErrors;
 				checkBox_NoSendOnOutputBreak.Checked = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 				checkBox_NoSendOnInputBreak.Checked  = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
@@ -1160,6 +1169,7 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.IO.SerialPort.OutputMaxBaudRate      = MKY.IO.Serial.SerialPort.SerialPortSettings.OutputMaxBaudRateDefault;
 				this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize           = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxChunkSizeDefault;
 				this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate            = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxSendRateDefault;
+				this.settingsInEdit.Terminal.IO.SerialPort.IgnoreFramingErrors    = MKY.IO.Serial.SerialPort.SerialPortSettings.IgnoreFramingErrorsDefault;
 				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak    = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnOutputBreakDefault;
 				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak     = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnInputBreakDefault;
 

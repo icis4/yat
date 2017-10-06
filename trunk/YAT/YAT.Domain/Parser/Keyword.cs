@@ -49,6 +49,9 @@ namespace YAT.Domain.Parser
 		LineRepeat,
 		Eol,
 		NoEol,
+		FramingErrorsOn,
+		FramingErrorsOff,
+		FramingErrorsReset,
 		OutputBreakOn,
 		OutputBreakOff,
 		OutputBreakToggle,
@@ -83,17 +86,20 @@ namespace YAT.Domain.Parser
 	{
 		#region String Definitions
 
-		private const string Clear_string             = "Clear";
-		private const string Delay_string             = "Delay";
-		private const string LineDelay_string         = "LineDelay";
-		private const string LineInterval_string      = "LineInterval";
-		private const string LineRepeat_string        = "LineRepeat";
-		private const string Eol_string               = "EOL";
-		private const string NoEol_string             = "NoEOL";
-		private const string OutputBreakOn_string     = "OutputBreakOn";
-		private const string OutputBreakOff_string    = "OutputBreakOff";
-		private const string OutputBreakToggle_string = "OutputBreakToggle";
-		private const string ReportId_string          = "ReportID"; // "ID" instead of "Id" for better readability.
+		private const string Clear_string              = "Clear";
+		private const string Delay_string              = "Delay";
+		private const string LineDelay_string          = "LineDelay";
+		private const string LineInterval_string       = "LineInterval";
+		private const string LineRepeat_string         = "LineRepeat";
+		private const string Eol_string                = "EOL";
+		private const string NoEol_string              = "NoEOL";
+		private const string FramingErrorsOn_string    = "FramingErrorsOn";
+		private const string FramingErrorsOff_string   = "FramingErrorsOff";
+		private const string FramingErrorsReset_string = "FramingErrorsReset";
+		private const string OutputBreakOn_string      = "OutputBreakOn";
+		private const string OutputBreakOff_string     = "OutputBreakOff";
+		private const string OutputBreakToggle_string  = "OutputBreakToggle";
+		private const string ReportId_string           = "ReportID"; // "ID" instead of "Id" for better readability.
 
 		private const string ZZZ_FIT_string = "ZZZ_FIT"; // = for internal testing.
 
@@ -127,17 +133,20 @@ namespace YAT.Domain.Parser
 		{
 			switch ((Keyword)UnderlyingEnum)
 			{
-				case Keyword.Clear:             return (Clear_string);
-				case Keyword.Delay:             return (Delay_string);
-				case Keyword.LineDelay:         return (LineDelay_string);
-				case Keyword.LineInterval:      return (LineInterval_string);
-				case Keyword.LineRepeat:        return (LineRepeat_string);
-				case Keyword.Eol:               return (Eol_string);
-				case Keyword.NoEol:             return (NoEol_string);
-				case Keyword.OutputBreakOn:     return (OutputBreakOn_string);
-				case Keyword.OutputBreakOff:    return (OutputBreakOff_string);
-				case Keyword.OutputBreakToggle: return (OutputBreakToggle_string);
-				case Keyword.ReportId:          return (ReportId_string);
+				case Keyword.Clear:              return (Clear_string);
+				case Keyword.Delay:              return (Delay_string);
+				case Keyword.LineDelay:          return (LineDelay_string);
+				case Keyword.LineInterval:       return (LineInterval_string);
+				case Keyword.LineRepeat:         return (LineRepeat_string);
+				case Keyword.Eol:                return (Eol_string);
+				case Keyword.NoEol:              return (NoEol_string);
+				case Keyword.FramingErrorsOn:    return (FramingErrorsOn_string);
+				case Keyword.FramingErrorsOff:   return (FramingErrorsOff_string);
+				case Keyword.FramingErrorsReset: return (FramingErrorsReset_string);
+				case Keyword.OutputBreakOn:      return (OutputBreakOn_string);
+				case Keyword.OutputBreakOff:     return (OutputBreakOff_string);
+				case Keyword.OutputBreakToggle:  return (OutputBreakToggle_string);
+				case Keyword.ReportId:           return (ReportId_string);
 
 				case Keyword.ZZZ_FIT: return (ZZZ_FIT_string);
 
@@ -157,7 +166,7 @@ namespace YAT.Domain.Parser
 		/// </remarks>
 		public static KeywordEx[] GetItems()
 		{
-			List<KeywordEx> a = new List<KeywordEx>(11); // Preset the required capacity to improve memory management.
+			List<KeywordEx> a = new List<KeywordEx>(14); // Preset the required capacity to improve memory management.
 
 			// Do not add 'None'.
 
@@ -168,6 +177,9 @@ namespace YAT.Domain.Parser
 			a.Add(new KeywordEx(Keyword.LineRepeat));
 			a.Add(new KeywordEx(Keyword.Eol));
 			a.Add(new KeywordEx(Keyword.NoEol));
+			a.Add(new KeywordEx(Keyword.FramingErrorsOn));
+			a.Add(new KeywordEx(Keyword.FramingErrorsOff));
+			a.Add(new KeywordEx(Keyword.FramingErrorsReset));
 			a.Add(new KeywordEx(Keyword.OutputBreakOn));
 			a.Add(new KeywordEx(Keyword.OutputBreakOff));
 			a.Add(new KeywordEx(Keyword.OutputBreakToggle));
@@ -238,17 +250,20 @@ namespace YAT.Domain.Parser
 
 			switch ((Keyword)UnderlyingEnum)
 			{
-				case Keyword.Clear:             return (noArgSupportedMessage);
-				case Keyword.Delay:             return ("an integer value of 1 or more indicating the delay in milliseconds");    // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
-				case Keyword.LineDelay:         return ("an integer value of 1 or more indicating the delay in milliseconds");    // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
-				case Keyword.LineInterval:      return ("an integer value of 1 or more indicating the interval in milliseconds"); // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
-				case Keyword.LineRepeat:        return ("an integer value of 1 or more indicating the number of repetitions, or " + Settings.SendSettings.LineRepeatInfinite + " for infinite repetitions");
-				case Keyword.Eol:               return (noArgSupportedMessage);                                                   // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
-				case Keyword.NoEol:             return (noArgSupportedMessage);
-				case Keyword.OutputBreakOn:     return (noArgSupportedMessage);
-				case Keyword.OutputBreakOff:    return (noArgSupportedMessage);
-				case Keyword.OutputBreakToggle: return (noArgSupportedMessage);
-				case Keyword.ReportId:          return ("ID must be a numeric value within 0..255"); // Attention, a similar message exists in 'View.Controls.UsbSerialHidDeviceSettings'. Changes here may have to be applied there too.
+				case Keyword.Clear:              return (noArgSupportedMessage);
+				case Keyword.Delay:              return ("an integer value of 1 or more indicating the delay in milliseconds");    // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.LineDelay:          return ("an integer value of 1 or more indicating the delay in milliseconds");    // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.LineInterval:       return ("an integer value of 1 or more indicating the interval in milliseconds"); // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.LineRepeat:         return ("an integer value of 1 or more indicating the number of repetitions, or " + Settings.SendSettings.LineRepeatInfinite + " for infinite repetitions");
+				case Keyword.Eol:                return (noArgSupportedMessage);                                                   // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.NoEol:              return (noArgSupportedMessage);
+				case Keyword.FramingErrorsOn:    return (noArgSupportedMessage);
+				case Keyword.FramingErrorsOff:   return (noArgSupportedMessage);
+				case Keyword.FramingErrorsReset: return (noArgSupportedMessage);
+				case Keyword.OutputBreakOn:      return (noArgSupportedMessage);
+				case Keyword.OutputBreakOff:     return (noArgSupportedMessage);
+				case Keyword.OutputBreakToggle:  return (noArgSupportedMessage);
+				case Keyword.ReportId:           return ("ID must be a numeric value within 0..255"); // Attention, a similar message exists in 'View.Controls.UsbSerialHidDeviceSettings'. Changes here may have to be applied there too.
 
 				case Keyword.ZZZ_FIT: // = for internal testing.
 				{
@@ -344,6 +359,21 @@ namespace YAT.Domain.Parser
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, NoEol_string))
 			{
 				result = Keyword.NoEol;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, FramingErrorsOn_string))
+			{
+				result = Keyword.FramingErrorsOn;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, FramingErrorsOff_string))
+			{
+				result = Keyword.FramingErrorsOff;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, FramingErrorsReset_string))
+			{
+				result = Keyword.FramingErrorsReset;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, OutputBreakOn_string))

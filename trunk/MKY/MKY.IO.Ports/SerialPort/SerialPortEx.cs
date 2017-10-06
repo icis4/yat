@@ -116,12 +116,14 @@ namespace MKY.IO.Ports
 
 		private SerialPortControlPinCount controlPinCount;
 
-		private bool inputBreak;
-		private bool inputBreakSignal;
+		private bool ignoreFramingErrors; // = false
+
+		private bool inputBreak;       // = false
+		private bool inputBreakSignal; // = false
 		private object inputBreakSyncObj = new object();
 
-		private int outputBreakCount;
-		private int inputBreakCount;
+		private int outputBreakCount; // = 0
+		private int inputBreakCount;  // = 0
 
 		#endregion
 
@@ -704,6 +706,25 @@ namespace MKY.IO.Ports
 			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dsr));
 			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dcd));
+		}
+
+		/// <summary>
+		/// Gets or sets whether framing errors shall be ignored.
+		/// </summary>
+		public virtual bool IgnoreFramingErrors
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.ignoreFramingErrors);
+			}
+			set
+			{
+				AssertNotDisposed();
+
+				this.ignoreFramingErrors = value;
+			}
 		}
 
 		/// <summary>
@@ -1377,7 +1398,16 @@ namespace MKY.IO.Ports
 		protected virtual void OnErrorReceived(SerialErrorReceivedEventArgs e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.RaiseSync<SerialErrorReceivedEventArgs, SerialErrorReceivedEventHandler>(ErrorReceived, this, e);
+			{
+				if ((e.EventType == System.IO.Ports.SerialError.Frame) && this.ignoreFramingErrors)
+				{
+					// Ignore.
+				}
+				else
+				{
+					this.eventHelper.RaiseSync<SerialErrorReceivedEventArgs, SerialErrorReceivedEventHandler>(ErrorReceived, this, e);
+				}
+			}
 		}
 
 		/// <summary>

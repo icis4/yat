@@ -108,6 +108,9 @@ namespace MKY.IO.Serial.SerialPort
 		public const int SendRateMaxInterval = 1000; // 1 second.
 
 		/// <summary></summary>
+		public const bool IgnoreFramingErrorsDefault = false;
+
+		/// <summary></summary>
 		public const bool NoSendOnOutputBreakDefault = true;
 
 		/// <summary></summary>
@@ -131,6 +134,8 @@ namespace MKY.IO.Serial.SerialPort
 		private bool outputMaxBaudRate;
 		private ChunkSize maxChunkSize;
 		private SendRate maxSendRate;
+
+		private bool ignoreFramingErrors;
 
 		private bool noSendOnOutputBreak;
 		private bool noSendOnInputBreak;
@@ -205,6 +210,8 @@ namespace MKY.IO.Serial.SerialPort
 			MaxChunkSize        = rhs.MaxChunkSize;
 			MaxSendRate         = rhs.MaxSendRate;
 
+			IgnoreFramingErrors = rhs.IgnoreFramingErrors;
+
 			NoSendOnOutputBreak = rhs.NoSendOnOutputBreak;
 			NoSendOnInputBreak  = rhs.NoSendOnInputBreak;
 
@@ -231,6 +238,8 @@ namespace MKY.IO.Serial.SerialPort
 			OutputMaxBaudRate   = OutputMaxBaudRateDefault;
 			MaxChunkSize        = MaxChunkSizeDefault;
 			MaxSendRate         = MaxSendRateDefault;
+
+			IgnoreFramingErrors = IgnoreFramingErrorsDefault;
 
 			NoSendOnOutputBreak = NoSendOnOutputBreakDefault;
 			NoSendOnInputBreak  = NoSendOnInputBreakDefault;
@@ -382,6 +391,21 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary></summary>
+		[XmlElement("IgnoreFramingErrors")]
+		public virtual bool IgnoreFramingErrors
+		{
+			get { return (this.ignoreFramingErrors); }
+			set
+			{
+				if (this.ignoreFramingErrors != value)
+				{
+					this.ignoreFramingErrors = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("NoSendOnOutputBreak")]
 		public virtual bool NoSendOnOutputBreak
 		{
@@ -461,6 +485,8 @@ namespace MKY.IO.Serial.SerialPort
 				hashCode = (hashCode * 397) ^  MaxChunkSize           .GetHashCode();
 				hashCode = (hashCode * 397) ^  MaxSendRate            .GetHashCode();
 
+				hashCode = (hashCode * 397) ^  IgnoreFramingErrors    .GetHashCode();
+
 				hashCode = (hashCode * 397) ^  NoSendOnOutputBreak    .GetHashCode();
 				hashCode = (hashCode * 397) ^  NoSendOnInputBreak     .GetHashCode();
 
@@ -501,6 +527,8 @@ namespace MKY.IO.Serial.SerialPort
 				OutputMaxBaudRate  .Equals(other.OutputMaxBaudRate) &&
 				MaxChunkSize       .Equals(other.MaxChunkSize)      &&
 				MaxSendRate        .Equals(other.MaxSendRate)       &&
+
+				IgnoreFramingErrors.Equals(other.IgnoreFramingErrors) &&
 
 				NoSendOnOutputBreak.Equals(other.NoSendOnOutputBreak) &&
 				NoSendOnInputBreak .Equals(other.NoSendOnInputBreak)
