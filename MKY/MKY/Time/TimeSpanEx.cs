@@ -79,52 +79,65 @@ namespace MKY
 
 			if (addThousandths)
 			{
-				sb.Insert(0, (value.Milliseconds / 1).ToString("D3", CultureInfo.CurrentCulture));
+				sb.Insert(0, (Math.Abs(value.Milliseconds) / 1).ToString("D3", CultureInfo.CurrentCulture));
 				sb.Insert(0, ".");
 			}
 			else if (addHundredths)
 			{
-				sb.Insert(0, (value.Milliseconds / 10).ToString("D2", CultureInfo.CurrentCulture));
+				sb.Insert(0, (Math.Abs(value.Milliseconds) / 10).ToString("D2", CultureInfo.CurrentCulture));
 				sb.Insert(0, ".");
 			}
 			else if (addTenths)
 			{
-				sb.Insert(0, (value.Milliseconds / 100).ToString("D1", CultureInfo.CurrentCulture));
+				sb.Insert(0, (Math.Abs(value.Milliseconds) / 100).ToString("D1", CultureInfo.CurrentCulture));
 				sb.Insert(0, ".");
 			}
 
-			if ((value.TotalSeconds <= 0.0) && (!enforceMinutes)) // There shall at least be "0":
+			if ((Math.Abs(value.TotalSeconds) <= 0.0) && (!enforceMinutes)) // There shall at least be "0":
 			{
 				sb.Insert(0, "0");
 			}
 			else
 			{
-				var addMinutes = ((value.TotalMinutes >= 1.0) || enforceMinutes);
+				var addMinutes = ((Math.Abs(value.TotalMinutes) >= 1.0) || enforceMinutes);
 				if (addMinutes) // There shall at least be "0:00":
 				{
-					sb.Insert(0, value.Seconds.ToString("D2", CultureInfo.CurrentCulture));
+					sb.Insert(0, Math.Abs(value.Seconds).ToString("D2", CultureInfo.CurrentCulture));
 					sb.Insert(0, ":");
 
-					var addHours = (value.TotalHours >= 1.0);
+					var addHours = (Math.Abs(value.TotalHours) >= 1.0);
 					if (addHours) // There shall at least be "0:00:00":
 					{
-						sb.Insert(0, value.Minutes.ToString("D2", CultureInfo.CurrentCulture));
+						sb.Insert(0, Math.Abs(value.Minutes).ToString("D2", CultureInfo.CurrentCulture));
 						sb.Insert(0, ":");
-						sb.Insert(0, value.Hours.ToString(CultureInfo.CurrentCulture));
 
-						if (value.TotalDays >= 1.0)
+						if (Math.Abs(value.TotalDays) >= 1.0)
 						{
-							if (value.TotalDays < 2.0)
+							sb.Insert(0, Math.Abs(value.Hours).ToString(CultureInfo.CurrentCulture));
+
+							if (Math.Abs(value.TotalDays) < 2.0)
 								sb.Insert(0, " day ");
 							else
 								sb.Insert(0, " days ");
 
 							sb.Insert(0, value.Days.ToString(CultureInfo.CurrentCulture));
 						}
+						else
+						{
+							sb.Insert(0, value.Hours.ToString(CultureInfo.CurrentCulture));
+						}
 					}
 					else
 					{
-						sb.Insert(0, value.Minutes.ToString(CultureInfo.CurrentCulture));
+						if (enforceMinutes && (Math.Abs(value.Minutes) <= 0.0) && (value.TotalSeconds < 0.0))
+						{
+							sb.Insert(0, value.Minutes.ToString(CultureInfo.CurrentCulture));
+							sb.Insert(0, "-");
+						}
+						else
+						{
+							sb.Insert(0, value.Minutes.ToString(CultureInfo.CurrentCulture));
+						}
 					}
 				}
 				else

@@ -3497,7 +3497,7 @@ namespace YAT.View.Forms
 		{
 			int[] customColors = this.settingsRoot.View.CustomColorsToWin32();
 
-			var f = new FormatSettings(this.settingsRoot.Format, customColors, this.settingsRoot.Display.InfoSeparator, this.settingsRoot.Display.InfoEnclosure, this.settingsRoot.Display.TimeStampFormat, this.settingsRoot.Display.TimeSpanFormat, this.settingsRoot.Display.TimeDeltaFormat);
+			var f = new FormatSettings(this.settingsRoot.Format, customColors, this.settingsRoot.Display.InfoSeparator, this.settingsRoot.Display.InfoEnclosure, this.settingsRoot.Display.TimeStampUseUtc, this.settingsRoot.Display.TimeStampFormat, this.settingsRoot.Display.TimeSpanFormat, this.settingsRoot.Display.TimeDeltaFormat);
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
 				Refresh();
@@ -3508,6 +3508,7 @@ namespace YAT.View.Forms
 				this.settingsRoot.Display.InfoSeparator = f.InfoSeparatorResult;
 				this.settingsRoot.Display.InfoEnclosure = f.InfoEnclosureResult;
 
+				this.settingsRoot.Display.TimeStampUseUtc = f.TimeStampUseUtcResult;
 				this.settingsRoot.Display.TimeStampFormat = f.TimeStampFormatResult;
 				this.settingsRoot.Display.TimeSpanFormat  = f.TimeSpanFormatResult;
 				this.settingsRoot.Display.TimeDeltaFormat = f.TimeDeltaFormatResult;

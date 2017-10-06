@@ -232,16 +232,25 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public TimeStampInfo(DateTime timeStamp, string format, string enclosureLeft, string enclosureRight)
-				: this(Direction.None, timeStamp, format, enclosureLeft, enclosureRight)
+			public TimeStampInfo(DateTime timeStamp, string format, bool useUtc, string enclosureLeft, string enclosureRight)
+				: this(Direction.None, timeStamp, format, useUtc, enclosureLeft, enclosureRight)
 			{
 			}
 
 			/// <summary></summary>
-			public TimeStampInfo(Direction direction, DateTime timeStamp, string format, string enclosureLeft, string enclosureRight)
-				: base(direction, enclosureLeft + timeStamp.ToString(format, DateTimeFormatInfo.CurrentInfo) + enclosureRight)
+			public TimeStampInfo(Direction direction, DateTime timeStamp, string format, bool useUtc, string enclosureLeft, string enclosureRight)
+				: base(direction, ToText(timeStamp, format, useUtc, enclosureLeft, enclosureRight))
 			{
 				TimeStamp = timeStamp;
+			}
+
+			/// <summary></summary>
+			protected static string ToText(DateTime timeStamp, string format, bool useUtc, string enclosureLeft, string enclosureRight)
+			{
+				if (useUtc)                          // UTC
+					return (enclosureLeft + timeStamp.ToUniversalTime().ToString(format, DateTimeFormatInfo.CurrentInfo) + enclosureRight);
+				else
+					return (enclosureLeft + timeStamp.ToString(format, DateTimeFormatInfo.CurrentInfo) + enclosureRight);
 			}
 		}
 
@@ -267,10 +276,16 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TimeSpanInfo(Direction direction, TimeSpan timeSpan, string format, string enclosureLeft, string enclosureRight)
-				: base(direction, enclosureLeft + TimeSpanEx.FormatInvariantThousandthsEnforceMinutes(timeSpan, format) + enclosureRight)
-			{                                                                                // Attention, slightly different than time delta below!
+				: base(direction, ToText(timeSpan, format, enclosureLeft, enclosureRight))
+			{
 				TimeSpan = timeSpan;
 			}
+
+			/// <summary></summary>
+			protected static string ToText(TimeSpan timeSpan, string format, string enclosureLeft, string enclosureRight)
+			{
+				return (enclosureLeft + TimeSpanEx.FormatInvariantThousandthsEnforceMinutes(timeSpan, format) + enclosureRight);
+			}                                                                      // Attention, slightly different than time delta below!
 		}
 
 		/// <summary></summary>
@@ -295,10 +310,16 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TimeDeltaInfo(Direction direction, TimeSpan timeDelta, string format, string enclosureLeft, string enclosureRight)
-				: base(direction, enclosureLeft + TimeSpanEx.FormatInvariantThousandths(timeDelta, format) + enclosureRight)
-			{                                                                   // Attention, slightly different than time span above!
+				: base(direction, ToText(timeDelta, format, enclosureLeft, enclosureRight))
+			{
 				TimeDelta = timeDelta;
 			}
+
+			/// <summary></summary>
+			protected static string ToText(TimeSpan timeDelta, string format, string enclosureLeft, string enclosureRight)
+			{
+				return (enclosureLeft + TimeSpanEx.FormatInvariantThousandths(timeDelta, format) + enclosureRight);
+			}                                                         // Attention, slightly different than time span above!
 		}
 
 		/// <summary></summary>

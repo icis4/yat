@@ -55,6 +55,9 @@ namespace YAT.Domain.Settings
 		public const string TimeStampFormatDefault = TimeStampFormatPresetEx.DefaultFormat;
 
 		/// <summary></summary>
+		public const bool TimeStampUseUtcDefault = false;
+
+		/// <summary></summary>
 		public const bool ShowTimeSpanDefault = false;
 
 		/// <summary></summary>
@@ -101,6 +104,7 @@ namespace YAT.Domain.Settings
 		private bool showTotalLineNumbers;
 		private bool showTimeStamp;
 		private string timeStampFormat;
+		private bool timeStampUseUtc;
 		private bool showTimeSpan;
 		private string timeSpanFormat;
 		private bool showTimeDelta;
@@ -150,6 +154,7 @@ namespace YAT.Domain.Settings
 			ShowTotalLineNumbers  = rhs.ShowTotalLineNumbers;
 			ShowTimeStamp         = rhs.ShowTimeStamp;
 			TimeStampFormat       = rhs.TimeStampFormat;
+			TimeStampUseUtc       = rhs.TimeStampUseUtc;
 			ShowTimeStamp         = rhs.ShowTimeStamp;
 			TimeSpanFormat        = rhs.TimeSpanFormat;
 			ShowTimeDelta         = rhs.ShowTimeDelta;
@@ -184,6 +189,7 @@ namespace YAT.Domain.Settings
 			ShowTotalLineNumbers  = ShowTotalLineNumbersDefault;
 			ShowTimeStamp         = ShowTimeStampDefault;
 			TimeStampFormat       = TimeStampFormatDefault;
+			TimeStampUseUtc       = TimeStampUseUtcDefault;
 			ShowTimeSpan          = ShowTimeSpanDefault;
 			TimeSpanFormat        = TimeSpanFormatDefault;
 			ShowTimeDelta         = ShowTimeDeltaDefault;
@@ -371,6 +377,23 @@ namespace YAT.Domain.Settings
 				if (this.timeStampFormat != value)
 				{
 					this.timeStampFormat = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <remarks>
+		/// XML element is named "UTC" instead of .NET-style "Utc" for better readability.
+		/// </remarks>
+		[XmlElement("TimeStampUseUTC")]
+		public virtual bool TimeStampUseUtc
+		{
+			get { return (this.timeStampUseUtc); }
+			set
+			{
+				if (this.timeStampUseUtc != value)
+				{
+					this.timeStampUseUtc = value;
 					SetMyChanged();
 				}
 			}
@@ -664,6 +687,7 @@ namespace YAT.Domain.Settings
 				hashCode = (hashCode * 397) ^ ShowTotalLineNumbers .GetHashCode();
 				hashCode = (hashCode * 397) ^ ShowTimeStamp        .GetHashCode();
 				hashCode = (hashCode * 397) ^ (TimeStampFormat != null ? TimeStampFormat.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ TimeStampUseUtc      .GetHashCode();
 				hashCode = (hashCode * 397) ^ ShowTimeSpan         .GetHashCode();
 				hashCode = (hashCode * 397) ^ (TimeSpanFormat != null ? TimeSpanFormat.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ ShowTimeDelta        .GetHashCode();
@@ -717,6 +741,7 @@ namespace YAT.Domain.Settings
 				ShowTotalLineNumbers .Equals(other.ShowTotalLineNumbers)  &&
 				ShowTimeStamp        .Equals(other.ShowTimeStamp)         &&
 				StringEx.EqualsOrdinal(TimeStampFormat, other.TimeStampFormat) &&
+				TimeStampUseUtc      .Equals(other.TimeStampUseUtc)       &&
 				ShowTimeSpan         .Equals(other.ShowTimeSpan)          &&
 				StringEx.EqualsOrdinal(TimeSpanFormat, other.TimeSpanFormat) &&
 				ShowTimeDelta        .Equals(other.ShowTimeDelta)         &&

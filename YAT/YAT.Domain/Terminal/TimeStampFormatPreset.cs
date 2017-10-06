@@ -46,17 +46,14 @@ namespace YAT.Domain
 	{
 		None,
 
-		LocalTime,
-		LocalTimeWithTimeZone,
-		UtcTime,
+		Time,
+		TimeWithTimeZone,
 
-		LocalDateAndTime,
-		LocalDateAndTimeWithTimeZone,
-		UtcDateAndTime,
+		DateAndTime,
+		DateAndTimeWithTimeZone,
 
-		LocalDateAndTime_ISO8601,
-		LocalDateAndTimeWithTimeZone_ISO8601,
-		UtcDateAndTime_ISO8601
+		DateAndTime_ISO8601,
+		DateAndTimeWithTimeZone_ISO8601
 	}
 
 	#pragma warning restore 1591
@@ -82,34 +79,28 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Output milliseconds for readability, even though last digit only provides limited accuracy.
 		/// </remarks>
-		private const string LocalTime_format                  = "HH:mm:ss.fff";
-		private const string LocalTime_description             = "Local time";
-		private const string LocalTimeWithTimeZone_format      = "HH:mm:ss.fffzzz";
-		private const string LocalTimeWithTimeZone_description = "Local time with time zone";
-		private const string UtcTime_format                    = "HH:mm:ss.fffK";
-		private const string UtcTime_description               = "UTC time";
+		private const string Time_format                  = "HH:mm:ss.fff";
+		private const string Time_description             = "Local time";
+		private const string TimeWithTimeZone_format      = "HH:mm:ss.fffK";
+		private const string TimeWithTimeZone_description = "Time with time zone";
 
-		private const string LocalDateAndTime_format                  = "yyyy-MM-dd HH:mm:ss.fff";
-		private const string LocalDateAndTime_description             = "Local date and time";
-		private const string LocalDateAndTimeWithTimeZone_format      = "yyyy-MM-dd HH:mm:ss.fffzzz";
-		private const string LocalDateAndTimeWithTimeZone_description = "Local date and time with time zone";
-		private const string UtcDateAndTime_format                    = "u";
-		private const string UtcDateAndTime_description               = "UTC date and time";
+		private const string DateAndTime_format                  = "yyyy-MM-dd HH:mm:ss.fff";
+		private const string DateAndTime_description             = "Local date and time";
+		private const string DateAndTimeWithTimeZone_format      = "yyyy-MM-dd HH:mm:ss.fffK";
+		private const string DateAndTimeWithTimeZone_description = "Date and time with time zone";
 
-		private const string LocalDateAndTime_ISO8601_format                  = "s";
-		private const string LocalDateAndTime_ISO8601_description             = "Local date and time ISO8601";
-		private const string LocalDateAndTimeWithTimeZone_ISO8601_format      = "yyyy-MM-ddTHH:mm:ss.fffzzz";
-		private const string LocalDateAndTimeWithTimeZone_ISO8601_description = "Local date and time with time zone ISO8601";
-		private const string UtcDateAndTime_ISO8601_format                    = "yyyy-MM-ddTHH:mm:ss.fffK";
-		private const string UtcDateAndTime_ISO8601_description               = "UTC date and time ISO8601";
+		private const string DateAndTime_ISO8601_format                  = "s";
+		private const string DateAndTime_ISO8601_description             = "Date and time ISO8601";
+		private const string DateAndTimeWithTimeZone_ISO8601_format      = "yyyy-MM-ddTHH:mm:ss.fffK";
+		private const string DateAndTimeWithTimeZone_ISO8601_description = "Date and time with time zone ISO8601";
 
 		#endregion
 
-		/// <summary>Default is <see cref="TimeStampFormatPreset.LocalTime"/>.</summary>
-		public const TimeStampFormatPreset Default = TimeStampFormatPreset.LocalTime;
+		/// <summary>Default is <see cref="TimeStampFormatPreset.Time"/>.</summary>
+		public const TimeStampFormatPreset Default = TimeStampFormatPreset.Time;
 
-		/// <summary>Default is <see cref="TimeStampFormatPreset.LocalTime"/>.</summary>
-		public const string DefaultFormat = LocalTime_format;
+		/// <summary>Default is <see cref="TimeStampFormatPreset.Time"/>.</summary>
+		public const string DefaultFormat = Time_format;
 
 		/// <summary>Default is <see cref="Default"/>.</summary>
 		public TimeStampFormatPresetEx()
@@ -133,19 +124,16 @@ namespace YAT.Domain
 		{
 			switch ((TimeStampFormatPreset)UnderlyingEnum)
 			{
-				case TimeStampFormatPreset.None:                 return (None_format);
+				case TimeStampFormatPreset.None: return (None_format);
 
-				case TimeStampFormatPreset.LocalTime:             return (LocalTime_format);
-				case TimeStampFormatPreset.LocalTimeWithTimeZone: return (LocalTimeWithTimeZone_format);
-				case TimeStampFormatPreset.UtcTime:               return (UtcTime_format);
+				case TimeStampFormatPreset.Time:             return (Time_format);
+				case TimeStampFormatPreset.TimeWithTimeZone: return (TimeWithTimeZone_format);
 
-				case TimeStampFormatPreset.LocalDateAndTime:             return (LocalDateAndTime_format);
-				case TimeStampFormatPreset.LocalDateAndTimeWithTimeZone: return (LocalDateAndTimeWithTimeZone_format);
-				case TimeStampFormatPreset.UtcDateAndTime:               return (UtcDateAndTime_format);
+				case TimeStampFormatPreset.DateAndTime:             return (DateAndTime_format);
+				case TimeStampFormatPreset.DateAndTimeWithTimeZone: return (DateAndTimeWithTimeZone_format);
 
-				case TimeStampFormatPreset.LocalDateAndTime_ISO8601:             return (LocalDateAndTime_ISO8601_format);
-				case TimeStampFormatPreset.LocalDateAndTimeWithTimeZone_ISO8601: return (LocalDateAndTimeWithTimeZone_ISO8601_format);
-				case TimeStampFormatPreset.UtcDateAndTime_ISO8601:               return (UtcDateAndTime_ISO8601_format);
+				case TimeStampFormatPreset.DateAndTime_ISO8601:             return (DateAndTime_ISO8601_format);
+				case TimeStampFormatPreset.DateAndTimeWithTimeZone_ISO8601: return (DateAndTimeWithTimeZone_ISO8601_format);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -156,19 +144,16 @@ namespace YAT.Domain
 		{
 			switch ((TimeStampFormatPreset)UnderlyingEnum)
 			{
-				case TimeStampFormatPreset.None:                 return (None_description);
+				case TimeStampFormatPreset.None: return (None_description);
 
-				case TimeStampFormatPreset.LocalTime:             return (LocalTime_description);
-				case TimeStampFormatPreset.LocalTimeWithTimeZone: return (LocalTimeWithTimeZone_description);
-				case TimeStampFormatPreset.UtcTime:               return (UtcTime_description);
+				case TimeStampFormatPreset.Time:             return (Time_description);
+				case TimeStampFormatPreset.TimeWithTimeZone: return (TimeWithTimeZone_description);
 
-				case TimeStampFormatPreset.LocalDateAndTime:             return (LocalDateAndTime_description);
-				case TimeStampFormatPreset.LocalDateAndTimeWithTimeZone: return (LocalDateAndTimeWithTimeZone_description);
-				case TimeStampFormatPreset.UtcDateAndTime:               return (UtcDateAndTime_description);
+				case TimeStampFormatPreset.DateAndTime:             return (DateAndTime_description);
+				case TimeStampFormatPreset.DateAndTimeWithTimeZone: return (DateAndTimeWithTimeZone_description);
 
-				case TimeStampFormatPreset.LocalDateAndTime_ISO8601:             return (LocalDateAndTime_ISO8601_description);
-				case TimeStampFormatPreset.LocalDateAndTimeWithTimeZone_ISO8601: return (LocalDateAndTimeWithTimeZone_ISO8601_description);
-				case TimeStampFormatPreset.UtcDateAndTime_ISO8601:               return (UtcDateAndTime_ISO8601_description);
+				case TimeStampFormatPreset.DateAndTime_ISO8601:             return (DateAndTime_ISO8601_description);
+				case TimeStampFormatPreset.DateAndTimeWithTimeZone_ISO8601: return (DateAndTimeWithTimeZone_ISO8601_description);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -245,58 +230,40 @@ namespace YAT.Domain
 				result = TimeStampFormatPreset.None;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinal(          s, LocalTime_format) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, LocalTime_description))
+			else if (StringEx.EqualsOrdinal(          s, Time_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Time_description))
 			{
-				result = TimeStampFormatPreset.LocalTime;
+				result = TimeStampFormatPreset.Time;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinal(          s, LocalTimeWithTimeZone_format) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, LocalTimeWithTimeZone_description))
+			else if (StringEx.EqualsOrdinal(          s, TimeWithTimeZone_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, TimeWithTimeZone_description))
 			{
-				result = TimeStampFormatPreset.LocalTimeWithTimeZone;
+				result = TimeStampFormatPreset.TimeWithTimeZone;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinal(          s, UtcTime_format) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, UtcTime_description))
+			else if (StringEx.EqualsOrdinal(          s, DateAndTime_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, DateAndTime_description))
 			{
-				result = TimeStampFormatPreset.UtcTime;
+				result = TimeStampFormatPreset.DateAndTime;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinal(          s, LocalDateAndTime_format) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, LocalDateAndTime_description))
+			else if (StringEx.EqualsOrdinal(          s, DateAndTimeWithTimeZone_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, DateAndTimeWithTimeZone_description))
 			{
-				result = TimeStampFormatPreset.LocalDateAndTime;
+				result = TimeStampFormatPreset.DateAndTimeWithTimeZone;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinal(          s, LocalDateAndTimeWithTimeZone_format) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, LocalDateAndTimeWithTimeZone_description))
+			else if (StringEx.EqualsOrdinal(          s, DateAndTime_ISO8601_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, DateAndTime_ISO8601_description))
 			{
-				result = TimeStampFormatPreset.LocalDateAndTimeWithTimeZone;
+				result = TimeStampFormatPreset.DateAndTime_ISO8601;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinal(          s, UtcDateAndTime_format) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, UtcDateAndTime_description))
+			else if (StringEx.EqualsOrdinal(          s, DateAndTimeWithTimeZone_ISO8601_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, DateAndTimeWithTimeZone_ISO8601_description))
 			{
-				result = TimeStampFormatPreset.UtcDateAndTime;
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinal(          s, LocalDateAndTime_ISO8601_format) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, LocalDateAndTime_ISO8601_description))
-			{
-				result = TimeStampFormatPreset.LocalDateAndTime_ISO8601;
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinal(          s, LocalDateAndTimeWithTimeZone_ISO8601_format) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, LocalDateAndTimeWithTimeZone_ISO8601_description))
-			{
-				result = TimeStampFormatPreset.LocalDateAndTimeWithTimeZone_ISO8601;
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinal(          s, UtcDateAndTime_ISO8601_format) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, UtcDateAndTime_ISO8601_description))
-			{
-				result = TimeStampFormatPreset.UtcDateAndTime_ISO8601;
+				result = TimeStampFormatPreset.DateAndTimeWithTimeZone_ISO8601;
 				return (true);
 			}
 			else // Invalid string!
@@ -318,21 +285,18 @@ namespace YAT.Domain
 		/// </remarks>
 		public static TimeStampFormatPresetEx[] GetItems()
 		{
-			List<TimeStampFormatPresetEx> a = new List<TimeStampFormatPresetEx>(10); // Preset the required capacity to improve memory management.
+			List<TimeStampFormatPresetEx> a = new List<TimeStampFormatPresetEx>(7); // Preset the required capacity to improve memory management.
 
 			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.None));
 
-			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.LocalTime));
-			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.LocalTimeWithTimeZone));
-			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.UtcTime));
+			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.Time));
+			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.TimeWithTimeZone));
 
-			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.LocalDateAndTime));
-			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.LocalDateAndTimeWithTimeZone));
-			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.UtcDateAndTime));
+			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.DateAndTime));
+			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.DateAndTimeWithTimeZone));
 
-			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.LocalDateAndTime_ISO8601));
-			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.LocalDateAndTimeWithTimeZone_ISO8601));
-			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.UtcDateAndTime_ISO8601));
+			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.DateAndTime_ISO8601));
+			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.DateAndTimeWithTimeZone_ISO8601));
 
 			return (a.ToArray());
 		}

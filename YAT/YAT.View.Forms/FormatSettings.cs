@@ -57,6 +57,7 @@ namespace YAT.View.Forms
 
 		private DateTime initialTimeStamp;
 
+		private bool   timeStampUseUtc;
 		private string timeStampFormat;
 		private string timeSpanFormat;
 		private string timeDeltaFormat;
@@ -75,7 +76,7 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public FormatSettings(Model.Settings.FormatSettings formatSettings, int[] customColors, Domain.InfoSeparatorEx infoSeparator, Domain.InfoEnclosureEx infoEnclosure, string timeStampFormat, string timeSpanFormat, string timeDeltaFormat)
+		public FormatSettings(Model.Settings.FormatSettings formatSettings, int[] customColors, Domain.InfoSeparatorEx infoSeparator, Domain.InfoEnclosureEx infoEnclosure, bool timeStampUseUtc, string timeStampFormat, string timeSpanFormat, string timeDeltaFormat)
 		{
 			InitializeComponent();
 
@@ -89,6 +90,7 @@ namespace YAT.View.Forms
 			this.infoSeparator = infoSeparator;
 			this.infoEnclosure = infoEnclosure;
 
+			this.timeStampUseUtc = timeStampUseUtc;
 			this.timeStampFormat = timeStampFormat;
 			this.timeSpanFormat  = timeSpanFormat;
 			this.timeDeltaFormat = timeDeltaFormat;
@@ -129,6 +131,12 @@ namespace YAT.View.Forms
 		public Domain.InfoEnclosureEx InfoEnclosureResult
 		{
 			get { return (this.infoEnclosure); }
+		}
+
+		/// <summary></summary>
+		public bool TimeStampUseUtcResult
+		{
+			get { return (this.timeStampUseUtc); }
 		}
 
 		/// <summary></summary>
@@ -324,7 +332,15 @@ namespace YAT.View.Forms
 			}
 		}
 
-		
+		private void checkBox_TimeStampUseUtc_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.timeStampUseUtc = checkBox_TimeStampUseUtc.Checked;
+			SetControls();
+		}
+
 		private void textBox_TimeStampFormat_TextChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -579,6 +595,7 @@ namespace YAT.View.Forms
 				this.infoSeparator = Domain.Settings.DisplaySettings.InfoSeparatorDefault;
 				this.infoEnclosure = Domain.Settings.DisplaySettings.InfoEnclosureDefault;
 
+				this.timeStampUseUtc = Domain.Settings.DisplaySettings.TimeStampUseUtcDefault;
 				this.timeStampFormat = Domain.Settings.DisplaySettings.TimeStampFormatDefault;
 				this.timeSpanFormat  = Domain.Settings.DisplaySettings.TimeSpanFormatDefault;
 				this.timeDeltaFormat = Domain.Settings.DisplaySettings.TimeDeltaFormatDefault;
@@ -707,9 +724,10 @@ namespace YAT.View.Forms
 				SelectionHelper.Select(comboBox_InfoSeparator, this.infoSeparator, this.infoSeparator);
 				SelectionHelper.Select(comboBox_InfoEnclosure, this.infoEnclosure, this.infoEnclosure);
 
-				textBox_TimeStampFormat.Text = this.timeStampFormat;
-				textBox_TimeSpanFormat.Text  = this.timeSpanFormat;
-				textBox_TimeDeltaFormat.Text = this.timeDeltaFormat;
+				checkBox_TimeStampUseUtc.Checked = this.timeStampUseUtc;
+				textBox_TimeStampFormat.Text     = this.timeStampFormat;
+				textBox_TimeSpanFormat.Text      = this.timeSpanFormat;
+				textBox_TimeDeltaFormat.Text     = this.timeDeltaFormat;
 
 				// Try to automatically select the according presets:
 				Domain.TimeStampFormatPresetEx timeStampFormatPreset;
@@ -758,9 +776,9 @@ namespace YAT.View.Forms
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxControl(0x13, "<CR>")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxData(0x42, "42h")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxControl(0x10, "<LF>")));
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeStampInfo(now, timeStampFormat, infoEnclosureLeft, infoEnclosureRight)));
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeSpanInfo(diff, timeSpanFormat, infoEnclosureLeft, infoEnclosureRight)));
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeDeltaInfo(delta, timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeStampInfo(now, this.timeStampFormat, this.timeStampUseUtc, infoEnclosureLeft, infoEnclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeSpanInfo(diff, this.timeSpanFormat, infoEnclosureLeft, infoEnclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeDeltaInfo(delta, this.timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.PortInfo(Domain.Direction.Tx, "COM1", infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Tx, infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DataLength(2, infoEnclosureLeft, infoEnclosureRight)));
@@ -772,11 +790,11 @@ namespace YAT.View.Forms
 			var exampleComplete = new Domain.DisplayRepository(37); // Preset the required capacity to improve memory management.
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
-			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStampInfo(now, timeStampFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStampInfo(now, this.timeStampFormat, this.timeStampUseUtc, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.TimeSpanInfo(diff, timeSpanFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeSpanInfo(diff, this.timeSpanFormat, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDeltaInfo(diff, timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight)); // Also diff since opening!
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDeltaInfo(diff, this.timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight)); // Also diff since opening!
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.PortInfo(Domain.Direction.Tx, "COM1", infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
@@ -790,11 +808,11 @@ namespace YAT.View.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
-			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStampInfo(now, timeStampFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStampInfo(now, this.timeStampFormat, this.timeStampUseUtc, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.TimeSpanInfo(diff, timeSpanFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeSpanInfo(diff, this.timeSpanFormat, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDeltaInfo(delta, timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDeltaInfo(delta, this.timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.PortInfo(Domain.Direction.Rx, "COM1", infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
@@ -808,11 +826,11 @@ namespace YAT.View.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
-			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStampInfo(now, timeStampFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStampInfo(now, this.timeStampFormat, this.timeStampUseUtc, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.TimeSpanInfo(diff, timeSpanFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeSpanInfo(diff, this.timeSpanFormat, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDeltaInfo(delta, timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDeltaInfo(delta, this.timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.ErrorInfo("Message"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());

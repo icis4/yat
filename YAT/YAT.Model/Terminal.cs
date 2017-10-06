@@ -2203,6 +2203,9 @@ namespace YAT.Model
 				this.totalConnectChrono.Start(now);
 
 				this.terminal.InitialTimeStamp = now;
+
+				if (this.settingsRoot.Display.ShowTimeSpan || this.settingsRoot.Display.ShowTimeSpan)
+					this.terminal.RefreshRepositories();
 			}
 			else if (!isConnectedNow &&  hasBeenConnected)
 			{
@@ -3595,6 +3598,9 @@ namespace YAT.Model
 			this.totalConnectChrono .Reset(now);
 
 			this.terminal.InitialTimeStamp = now;
+
+			if (this.settingsRoot.Display.ShowTimeSpan || this.settingsRoot.Display.ShowTimeSpan)
+				this.terminal.RefreshRepositories();
 		}
 
 		private void totalConnectChrono_TimeSpanChanged(object sender, TimeSpanEventArgs e)
