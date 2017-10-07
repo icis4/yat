@@ -22,7 +22,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -71,11 +70,7 @@ namespace MKY.Windows.Forms
 		/// </remarks>
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			int maxVisibleItems = (int)Math.Ceiling((float)Height / (float)ItemHeight);
-			int maxBottomIndex = TopIndex + maxVisibleItems;
-			int bottomIndex = Math.Min(maxBottomIndex, Items.Count);
-
-			for (int i = TopIndex; i < bottomIndex; i++)
+			for (int i = TopIndex; i <= BottomIndex; i++)
 			{
 				// Calculate bounding box taking the beginning of the item rectangle into account:
 				// e.g. scroll position somewhere in between...
@@ -93,9 +88,9 @@ namespace MKY.Windows.Forms
 
 				// Set normal/selected state:
 				DrawItemState state = DrawItemState.Default;
-				foreach (int index in SelectedIndices)
+				foreach (int selectedIndex in SelectedIndices)
 				{
-					if (index == i)
+					if (selectedIndex == i)
 					{
 						state = DrawItemState.Selected;
 						break;
