@@ -385,6 +385,7 @@ namespace YAT.Domain.Settings
 		/// <remarks>
 		/// XML element is named "UTC" instead of .NET-style "Utc" for better readability.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop you are right, I don't like 'Utc' either...")]
 		[XmlElement("TimeStampUseUTC")]
 		public virtual bool TimeStampUseUtc
 		{

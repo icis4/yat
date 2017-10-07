@@ -38,6 +38,7 @@ namespace MKY.Windows.Forms
 		/// converted into a string. This can e.g. be an implicit string conversion operator,
 		/// or the item's ToString() method, or something else.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
 		public static void Select(ComboBox control, object item, string itemText = null)
 		{
 			if (control.Items.Count > 0)

@@ -205,11 +205,11 @@ namespace YAT.Domain
 			string enclosure;
 
 			enclosure = ToEnclosureLeft();
-			if (str.StartsWith(enclosure))
+			if (str.StartsWith(enclosure, StringComparison.CurrentCulture))
 				str = str.Substring(enclosure.Length);
 
 			enclosure = ToEnclosureRight();
-			if (str.EndsWith(enclosure))
+			if (str.EndsWith(enclosure, StringComparison.CurrentCulture))
 				str = str.Substring(0, (str.Length - enclosure.Length));
 
 			return (str);

@@ -100,8 +100,6 @@ namespace YAT.Model.Utilities
 			var content = new List<byte>(displayLine.ByteCount); // Preset the initial capacity to improve memory management.
 
 			DateTime timeStamp = DateTime.MinValue;
-			TimeSpan timeSpan  = TimeSpan.MinValue;
-			TimeSpan timeDelta = TimeSpan.MinValue;
 			string portStr = "";
 
 			bool containsTx = false;
@@ -165,22 +163,6 @@ namespace YAT.Model.Utilities
 					}
 				}
 				{
-					var casted = (de as DisplayElement.TimeSpanInfo);
-					if (casted != null)
-					{
-						timeSpan = casted.TimeSpan;
-						continue; // Immediately continue, makes no sense to also try other types!
-					}
-				}
-				{
-					var casted = (de as DisplayElement.TimeDeltaInfo);
-					if (casted != null)
-					{
-						timeDelta = casted.TimeDelta;
-						continue; // Immediately continue, makes no sense to also try other types!
-					}
-				}
-				{
 					var casted = (de as DisplayElement.PortInfo);
 					if (casted != null)
 					{
@@ -188,7 +170,10 @@ namespace YAT.Model.Utilities
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
 				}
+
 				// All white-space elements do not need to be processed.
+				// 'TimeSpanInfo' is not used with 'XmlTransferRawLine'.
+				// 'TimeDeltaInfo' is not used with 'XmlTransferRawLine'.
 				// 'DirectionInfo' is handled below.
 				// 'ErrorInfo' is not used with 'XmlTransferRawLine'.
 				// 'Length' is not used with 'XmlTransferRawLine'.

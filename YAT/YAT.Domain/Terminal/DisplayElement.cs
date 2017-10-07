@@ -710,6 +710,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Creates and returns a new object that is a deep-copy of this instance.
 		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Yepp, I know...")]
 		public virtual DisplayElement Clone()
 		{
 			DisplayElement clone;

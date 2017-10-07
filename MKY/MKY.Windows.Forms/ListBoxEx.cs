@@ -58,6 +58,7 @@
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Windows.Forms;
 
 #if (ENABLE_HORIZONTAL_AUTO_SCROLL)
@@ -750,7 +751,7 @@ namespace MKY.Windows.Forms
 		[Conditional("DEBUG_VERTICAL_AUTO_SCROLL")]
 		protected virtual void DebugVerticalAutoScroll(string leadMessage)
 		{
-			Debug.WriteLine(string.Format("{0} : ClientHeight = {1} | ClientItemCapacity = {2} | ItemCount = {3} | FullyVisibleItemCount = {4} | TopIndex = {5} | BottomIndex = {6}", leadMessage, ClientSize.Height, ClientItemCapacity, Items.Count, FullyVisibleItemCount, TopIndex, BottomIndex));
+			Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "{0} : ClientHeight = {1} | ClientItemCapacity = {2} | ItemCount = {3} | FullyVisibleItemCount = {4} | TopIndex = {5} | BottomIndex = {6}", leadMessage, ClientSize.Height, ClientItemCapacity, Items.Count, FullyVisibleItemCount, TopIndex, BottomIndex));
 		}
 
 		#endregion
