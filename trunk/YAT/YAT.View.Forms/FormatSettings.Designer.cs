@@ -78,6 +78,7 @@ namespace YAT.View.Forms
 			this.button_Defaults = new System.Windows.Forms.Button();
 			this.label_Example = new System.Windows.Forms.Label();
 			this.groupBox_Options = new System.Windows.Forms.GroupBox();
+			this.checkBox_TimeStampUseUtc = new System.Windows.Forms.CheckBox();
 			this.label_Reference = new System.Windows.Forms.Label();
 			this.label_Presets = new System.Windows.Forms.Label();
 			this.linkLabel_TimeSpanFormat = new System.Windows.Forms.LinkLabel();
@@ -98,7 +99,6 @@ namespace YAT.View.Forms
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.colorDialog = new System.Windows.Forms.ColorDialog();
 			this.monitor_Example = new YAT.View.Controls.Monitor();
-			this.checkBox_TimeStampUseUtc = new System.Windows.Forms.CheckBox();
 			this.groupBox_Elements.SuspendLayout();
 			this.groupBox_Options.SuspendLayout();
 			this.SuspendLayout();
@@ -667,6 +667,17 @@ namespace YAT.View.Forms
 			this.groupBox_Options.TabStop = false;
 			this.groupBox_Options.Text = "Options";
 			// 
+			// checkBox_TimeStampUseUtc
+			// 
+			this.checkBox_TimeStampUseUtc.AutoSize = true;
+			this.checkBox_TimeStampUseUtc.Location = new System.Drawing.Point(350, 54);
+			this.checkBox_TimeStampUseUtc.Name = "checkBox_TimeStampUseUtc";
+			this.checkBox_TimeStampUseUtc.Size = new System.Drawing.Size(70, 17);
+			this.checkBox_TimeStampUseUtc.TabIndex = 6;
+			this.checkBox_TimeStampUseUtc.Text = "Use &UTC";
+			this.checkBox_TimeStampUseUtc.UseVisualStyleBackColor = true;
+			this.checkBox_TimeStampUseUtc.CheckedChanged += new System.EventHandler(this.checkBox_TimeStampUseUtc_CheckedChanged);
+			// 
 			// label_Reference
 			// 
 			this.label_Reference.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -772,7 +783,7 @@ namespace YAT.View.Forms
 			this.textBox_TimeSpanFormat.Size = new System.Drawing.Size(275, 20);
 			this.textBox_TimeSpanFormat.TabIndex = 12;
 			this.textBox_TimeSpanFormat.TextChanged += new System.EventHandler(this.textBox_TimeSpanFormat_TextChanged);
-			this.textBox_TimeSpanFormat.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_TimeStampFormat_Validating);
+			this.textBox_TimeSpanFormat.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_TimeSpanFormat_Validating);
 			// 
 			// label_TimeDeltaFormat
 			// 
@@ -805,7 +816,7 @@ namespace YAT.View.Forms
 			this.textBox_TimeDeltaFormat.Size = new System.Drawing.Size(275, 20);
 			this.textBox_TimeDeltaFormat.TabIndex = 16;
 			this.textBox_TimeDeltaFormat.TextChanged += new System.EventHandler(this.textBox_TimeDeltaFormat_TextChanged);
-			this.textBox_TimeDeltaFormat.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_TimeStampFormat_Validating);
+			this.textBox_TimeDeltaFormat.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_TimeDeltaFormat_Validating);
 			// 
 			// label_InfoEnclosure
 			// 
@@ -860,17 +871,6 @@ namespace YAT.View.Forms
 			this.monitor_Example.TabIndex = 3;
 			this.monitor_Example.TabStop = false;
 			this.monitor_Example.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
-			// 
-			// checkBox_TimeStampUseUtc
-			// 
-			this.checkBox_TimeStampUseUtc.AutoSize = true;
-			this.checkBox_TimeStampUseUtc.Location = new System.Drawing.Point(350, 54);
-			this.checkBox_TimeStampUseUtc.Name = "checkBox_TimeStampUseUtc";
-			this.checkBox_TimeStampUseUtc.Size = new System.Drawing.Size(70, 17);
-			this.checkBox_TimeStampUseUtc.TabIndex = 6;
-			this.checkBox_TimeStampUseUtc.Text = "Use &UTC";
-			this.checkBox_TimeStampUseUtc.UseVisualStyleBackColor = true;
-			this.checkBox_TimeStampUseUtc.CheckedChanged += new System.EventHandler(this.checkBox_TimeStampUseUtc_CheckedChanged);
 			// 
 			// FormatSettings
 			// 

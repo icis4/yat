@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 using MKY;
@@ -363,7 +364,7 @@ namespace YAT.View.Forms
 			try
 			{
 				var item = DateTime.Now;
-				item.ToString(format);
+				item.ToString(format, CultureInfo.CurrentCulture);
 
 				this.timeStampFormat = format;
 				SetControls();
@@ -696,6 +697,9 @@ namespace YAT.View.Forms
 			this.customColors = this.textFormats[index].CustomColors;
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "YAT.Domain.TimeStampFormatPresetEx.TryParse(System.String,YAT.Domain.TimeStampFormatPresetEx@)", Justification = "Result doesn't matter, it's OK to pass 'null' to 'SelectionHelper'.")]
+		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "YAT.Domain.TimeSpanFormatPresetEx.TryParse(System.String,YAT.Domain.TimeSpanFormatPresetEx@)",   Justification = "Result doesn't matter, it's OK to pass 'null' to 'SelectionHelper'.")]
+		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "YAT.Domain.TimeDeltaFormatPresetEx.TryParse(System.String,YAT.Domain.TimeDeltaFormatPresetEx@)", Justification = "Result doesn't matter, it's OK to pass 'null' to 'SelectionHelper'.")]
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
@@ -741,7 +745,7 @@ namespace YAT.View.Forms
 				SelectionHelper.Select(comboBox_TimeStampFormatPreset, timeStampFormatPreset, null);
 				SelectionHelper.Select(comboBox_TimeSpanFormatPreset,  timeSpanFormatPreset,  null);
 				SelectionHelper.Select(comboBox_TimeDeltaFormatPreset, timeDeltaFormatPreset, null);
-				                                  // Clone settings to ensure decoupling:
+				                                //// Clone settings to ensure decoupling:
 				monitor_Example.FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
 
 				SetExamples();

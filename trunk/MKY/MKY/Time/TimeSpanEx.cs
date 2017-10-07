@@ -40,6 +40,7 @@ namespace MKY
 		/// <summary>
 		/// Returns <paramref name="value"/> formatted as "[[[[[[d days ]h]h:]m]m:]s]s".
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't like the additional formats...")]
 		public static string FormatInvariantSeconds(TimeSpan value)
 		{
 			return (FormatInvariant(value, false, false, false, false));
@@ -48,6 +49,7 @@ namespace MKY
 		/// <summary>
 		/// Returns <paramref name="value"/> formatted as "[[[[[[d days ]h]h:]m]m:]s]s.fff".
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't like the additional formats...")]
 		public static string FormatInvariantThousandths(TimeSpan value)
 		{
 			return (FormatInvariant(value, false, true, true, true));
@@ -56,6 +58,7 @@ namespace MKY
 		/// <summary>
 		/// Returns <paramref name="value"/> formatted as "[[[[d days ]h]h:]m]m:ss".
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't like the additional formats...")]
 		public static string FormatInvariantSecondsEnforceMinutes(TimeSpan value)
 		{
 			return (FormatInvariant(value, true, false, false, false));
@@ -64,6 +67,7 @@ namespace MKY
 		/// <summary>
 		/// Returns <paramref name="value"/> formatted as "[[[[d days ]h]h:]m]m:ss.fff".
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't like the additional formats...")]
 		public static string FormatInvariantThousandthsEnforceMinutes(TimeSpan value)
 		{
 			return (FormatInvariant(value, true, true, true, true));
@@ -153,6 +157,7 @@ namespace MKY
 		/// Returns <paramref name="value"/> formatted as "[[[[d days ]h]h:]m]m:ss.fff"
 		/// supporting additional formats "^d.ddd^", "^h.hhh^", "^mm.mmm^", "^sss.sss^", "^ffffff^".
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't like the additional formats...")]
 		public static string FormatInvariantThousandthsEnforceMinutes(TimeSpan value, string additionalFormat)
 		{
 			string result;
@@ -165,7 +170,8 @@ namespace MKY
 		/// <summary>
 		/// Returns <paramref name="value"/> formatted as "[[[[[[d days ]h]h:]m]m:]s]s.fff"
 		/// supporting additional formats "^d.ddd^", "^h.hhh^", "^mm.mmm^", "^sss.sss^", "^ffffff^".
-		/// /// </summary>
+		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't like the additional formats...")]
 		public static string FormatInvariantThousandths(TimeSpan value, string additionalFormat)
 		{
 			string result;
@@ -184,11 +190,12 @@ namespace MKY
 		/// Additional formats shall be extended after upgrading to .NET 4+ as follows:
 		///  > More flexibility, e.g. "^ss.sss^" and "^ss.ss^" and...
 		///  > Combination with standard formats, i.e. split ^^ and then format each fragment individually.
-		///                                                       (=> dynamically create the format string)
+		///                                                        => Dynamically create the format string.
 		/// </remarks>
 		/// <remarks>
 		/// Output milliseconds for readability, even though last digit only provides limited accuracy.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't like the additional formats...")]
 		private static bool TryFormatAdditional(TimeSpan value, string additionalFormat, out string result)
 		{
 			if      (StringEx.EqualsOrdinal(additionalFormat, "^ffffff^"))

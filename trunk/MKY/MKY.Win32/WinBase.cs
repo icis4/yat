@@ -162,7 +162,7 @@ namespace MKY.Win32
 				public bool Eof      { get { return (this.flags[5]); } set { this.flags[5] = value; } }
 				public bool Txim     { get { return (this.flags[6]); } set { this.flags[6] = value; } }
 
-				[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations" , Justification = "See exception message...")]
+				[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "See exception message...")]
 				[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "value", Justification = "Symmetricity with other flags.")]
 				[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Symmetricity with other flags.")]
 				public uint Reserved                             // [7]...[32] (25 bits)
@@ -222,7 +222,7 @@ namespace MKY.Win32
 				}
 				public bool AbortOnError     { get { return (this.flags[14]); } set { this.flags[14] = value; } }
 
-				[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations" , Justification = "See exception message...")]
+				[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "See exception message...")]
 				[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "value", Justification = "Symmetricity with other flags.")]
 				[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Symmetricity with other flags.")]
 				public uint Dummy2                                       // [15]...[31] (17 bits)

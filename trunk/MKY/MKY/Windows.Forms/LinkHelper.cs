@@ -23,6 +23,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
 namespace MKY.Windows.Forms
@@ -33,6 +34,7 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Clicks the link of the given <see cref="LinkLabel"/>.
 		/// </summary>
+		[SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings", Justification = "'LinkData' just happens to contain a string...")]
 		public static bool TryBrowseUriAndShowErrorIfItFails(IWin32Window owner, LinkLabelLinkClickedEventArgs e)
 		{
 			var linkUri = (e.Link.LinkData as string);
@@ -49,7 +51,6 @@ namespace MKY.Windows.Forms
 				{
 					string message = "Unable to open link!" + Environment.NewLine + Environment.NewLine +
 					                 "System error message:" + Environment.NewLine + ex.Message;
-
 					MessageBoxEx.Show
 					(
 						owner,

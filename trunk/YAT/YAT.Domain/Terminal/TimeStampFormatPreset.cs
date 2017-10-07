@@ -52,8 +52,10 @@ namespace YAT.Domain
 		DateAndTime,
 		DateAndTimeWithTimeZone,
 
-		DateAndTime_ISO8601,
-		DateAndTimeWithTimeZone_ISO8601
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Clearly indicate that this item is a variant of the according previous item.")]
+		DateAndTime_Iso8601,
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Clearly indicate that this item is a variant of the according previous item.")]
+		DateAndTimeWithTimeZone_Iso8601
 	}
 
 	#pragma warning restore 1591
@@ -89,10 +91,10 @@ namespace YAT.Domain
 		private const string DateAndTimeWithTimeZone_format      = "yyyy-MM-dd HH:mm:ss.fffK";
 		private const string DateAndTimeWithTimeZone_description = "Date and time with time zone";
 
-		private const string DateAndTime_ISO8601_format                  = "s";
-		private const string DateAndTime_ISO8601_description             = "Date and time ISO8601";
-		private const string DateAndTimeWithTimeZone_ISO8601_format      = "yyyy-MM-ddTHH:mm:ss.fffK";
-		private const string DateAndTimeWithTimeZone_ISO8601_description = "Date and time with time zone ISO8601";
+		private const string DateAndTime_Iso8601_format                  = "s";
+		private const string DateAndTime_Iso8601_description             = "Date and time ISO8601";
+		private const string DateAndTimeWithTimeZone_Iso8601_format      = "yyyy-MM-ddTHH:mm:ss.fffK";
+		private const string DateAndTimeWithTimeZone_Iso8601_description = "Date and time with time zone ISO8601";
 
 		#endregion
 
@@ -132,8 +134,8 @@ namespace YAT.Domain
 				case TimeStampFormatPreset.DateAndTime:             return (DateAndTime_format);
 				case TimeStampFormatPreset.DateAndTimeWithTimeZone: return (DateAndTimeWithTimeZone_format);
 
-				case TimeStampFormatPreset.DateAndTime_ISO8601:             return (DateAndTime_ISO8601_format);
-				case TimeStampFormatPreset.DateAndTimeWithTimeZone_ISO8601: return (DateAndTimeWithTimeZone_ISO8601_format);
+				case TimeStampFormatPreset.DateAndTime_Iso8601:             return (DateAndTime_Iso8601_format);
+				case TimeStampFormatPreset.DateAndTimeWithTimeZone_Iso8601: return (DateAndTimeWithTimeZone_Iso8601_format);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -152,8 +154,8 @@ namespace YAT.Domain
 				case TimeStampFormatPreset.DateAndTime:             return (DateAndTime_description);
 				case TimeStampFormatPreset.DateAndTimeWithTimeZone: return (DateAndTimeWithTimeZone_description);
 
-				case TimeStampFormatPreset.DateAndTime_ISO8601:             return (DateAndTime_ISO8601_description);
-				case TimeStampFormatPreset.DateAndTimeWithTimeZone_ISO8601: return (DateAndTimeWithTimeZone_ISO8601_description);
+				case TimeStampFormatPreset.DateAndTime_Iso8601:             return (DateAndTime_Iso8601_description);
+				case TimeStampFormatPreset.DateAndTimeWithTimeZone_Iso8601: return (DateAndTimeWithTimeZone_Iso8601_description);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -254,16 +256,16 @@ namespace YAT.Domain
 				result = TimeStampFormatPreset.DateAndTimeWithTimeZone;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinal(          s, DateAndTime_ISO8601_format) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, DateAndTime_ISO8601_description))
+			else if (StringEx.EqualsOrdinal(          s, DateAndTime_Iso8601_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, DateAndTime_Iso8601_description))
 			{
-				result = TimeStampFormatPreset.DateAndTime_ISO8601;
+				result = TimeStampFormatPreset.DateAndTime_Iso8601;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinal(          s, DateAndTimeWithTimeZone_ISO8601_format) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, DateAndTimeWithTimeZone_ISO8601_description))
+			else if (StringEx.EqualsOrdinal(          s, DateAndTimeWithTimeZone_Iso8601_format) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, DateAndTimeWithTimeZone_Iso8601_description))
 			{
-				result = TimeStampFormatPreset.DateAndTimeWithTimeZone_ISO8601;
+				result = TimeStampFormatPreset.DateAndTimeWithTimeZone_Iso8601;
 				return (true);
 			}
 			else // Invalid string!
@@ -295,8 +297,8 @@ namespace YAT.Domain
 			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.DateAndTime));
 			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.DateAndTimeWithTimeZone));
 
-			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.DateAndTime_ISO8601));
-			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.DateAndTimeWithTimeZone_ISO8601));
+			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.DateAndTime_Iso8601));
+			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.DateAndTimeWithTimeZone_Iso8601));
 
 			return (a.ToArray());
 		}

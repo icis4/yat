@@ -325,7 +325,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Terminal(Settings.TerminalSettings settings)
+		protected Terminal(Settings.TerminalSettings settings)
 		{
 			this.instanceId = Interlocked.Increment(ref staticInstanceCounter);
 
@@ -342,7 +342,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public Terminal(Settings.TerminalSettings settings, Terminal terminal)
+		protected Terminal(Settings.TerminalSettings settings, Terminal terminal)
 		{
 			this.instanceId = Interlocked.Increment(ref staticInstanceCounter);
 

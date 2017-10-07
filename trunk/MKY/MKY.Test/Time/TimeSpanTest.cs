@@ -106,7 +106,6 @@ namespace MKY.Test.Time
 			}
 		}
 
-
 		/// <summary></summary>
 		public static IEnumerable TestCasesFormatAdditional
 		{
