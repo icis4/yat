@@ -19,7 +19,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <DocumentationFile>bin\Debug\YATConsole.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\YATConsole.xml</DocumentationFile>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
@@ -30,7 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <ErrorReport>prompt</ErrorReport>
-    <DocumentationFile>bin\Release\YATConsole.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\YATConsole.xml</DocumentationFile>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DebugType>pdbonly</DebugType>
     <DebugSymbols>true</DebugSymbols>

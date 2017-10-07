@@ -41,6 +41,13 @@
 // Enable to continue working/testing an automatically horizontally scrolling list box:
 //#define ENABLE_HORIZONTAL_AUTO_SCROLL
 
+#if (DEBUG)
+
+	// Enable debugging of vertical auto scrolling:
+////#define DEBUG_VERTICAL_AUTO_SCROLL
+
+#endif // DEBUG
+
 #endregion
 
 #region Using
@@ -48,12 +55,14 @@
 // Using
 //==================================================================================================
 
-using System.ComponentModel;
+using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
 #if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -108,6 +117,28 @@ namespace MKY.Windows.Forms
 		private bool verticalAutoScroll = VerticalAutoScrollDefault;
 	#endif
 
+		private float clientItemCapacity; // = 0.0
+
+		private int previousTopIndex; // = 0;
+		private bool userIsScrolling; // = false;
+
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ListBoxEx"/> class.
+		/// </summary>
+		public ListBoxEx()
+		{
+			this.Resize += new EventHandler(this.ListBoxEx_Resize);
+
+			EvaluateClientItemCapacity();
+		}
+
 		#endregion
 
 		#region General
@@ -124,12 +155,121 @@ namespace MKY.Windows.Forms
 
 	#endif
 
+		private void ListBoxEx_Resize(object sender, EventArgs e)
+		{
+			EvaluateClientItemCapacity();
+		}
+
+		/// <summary>
+		/// Sets the number of items that the client area can show.
+		/// </summary>
+		protected virtual void EvaluateClientItemCapacity()
+		{
+			this.clientItemCapacity = (float)ClientSize.Height / (float)ItemHeight;
+
+			DebugVerticalAutoScroll("ClientItemCapacity evaluated");
+		}
+
+		/// <summary>
+		/// Gets the number of items that the client area can show.
+		/// </summary>
+		/// <remarks>
+		/// If <see cref="ListBox.IntegralHeight"/> is set to <c>false</c>, the top or bottom most
+		/// item may only be partially shown and the resulting value will fractional.
+		/// </remarks>
+		/// <remarks>
+		/// If the <see cref="DrawMode"/> property is set to <see cref="DrawMode.OwnerDrawFixed"/>,
+		/// all items have the same height. When the <see cref="DrawMode"/> property is set to
+		/// <see cref="DrawMode.OwnerDrawVariable"/>, the <see cref="ListBox.ItemHeight"/> property
+		/// specifies the height of each item added to the <see cref="ListBox"/>. Because each item
+		/// in an owner-drawn list can have a different height, you can use the <see cref="ListBox.GetItemHeight"/>
+		/// method to get the height of a specific item in the <see cref="ListBox"/>. If you use the
+		/// <see cref="ListBox.ItemHeight"/> property on a <see cref="ListBox"/> with items of
+		/// variable height, this property returns the height of the first item in the control.
+		/// </remarks>
+		public virtual float ClientItemCapacity
+		{
+			get { return (this.clientItemCapacity); }
+		}
+
+		#endregion
+
+		#region Items
+		//==========================================================================================
+		// Items
+		//==========================================================================================
+
+		/// <summary></summary>
+		public virtual int FullyVisibleItemCount
+		{
+			get
+			{
+				int result = Math.Min((int)Math.Floor(ClientItemCapacity), Items.Count);
+				return (result);             // Floor() excludes a partially visible top or bottom most item.
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int BottomIndex
+		{
+			get
+			{
+				int result = Math.Min(TopIndex + (int)Math.Ceiling(ClientItemCapacity), (Items.Count - 1));
+				return (result);                        // Ceiling() includes a partially visible bottom most item.
+			}
+		}
+
 		#endregion
 
 		#region Selection
 		//==========================================================================================
 		// Selection
 		//==========================================================================================
+
+		/// <remarks>
+		/// Note that items gets deselected if another control gets the focus.
+		/// </remarks>
+		public virtual bool ItemIsSelected
+		{
+			get { return (SelectedItems.Count > 0); }
+		}
+
+		/// <remarks>
+		/// Note that items gets deselected if another control gets the focus.
+		/// </remarks>
+		public virtual bool VisibleItemIsSelected
+		{
+			get
+			{
+				foreach (int i in SelectedIndices)
+				{
+					if ((i >= TopIndex) && (i <= BottomIndex))
+						return (true);
+				}
+
+				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Note that items gets deselected if another control gets the focus.
+		/// </remarks>
+		public virtual bool OnlyOneOfTheLastItemsIsSelected
+		{
+			get
+			{
+				if (SelectedIndices.Count == 1)
+				{
+					if (SelectedIndices[0] == (Items.Count - 1))
+						return (true);
+
+					if (SelectedIndices[0] == (Items.Count - 2))
+						return (true);
+				}
+
+				return (false);
+			}
+		}
 
 		/// <summary>
 		/// Select all indices within the list box.
@@ -246,6 +386,35 @@ namespace MKY.Windows.Forms
 
 	#endif // ENABLE_VERTICAL_AUTO_SCROLL
 
+		/// <summary></summary>
+		public virtual bool UserIsScrolling
+		{
+			get
+			{
+				if (this.previousTopIndex > TopIndex)
+				{
+					this.userIsScrolling = true;
+
+					DebugVerticalAutoScroll("User has started scrolling");
+				}
+
+				this.previousTopIndex = TopIndex; // Update.
+
+				return (this.userIsScrolling);
+			}
+		}
+
+		/// <remarks>
+		/// "NearBottom" means at bottom or at least half the visible items close to it.
+		/// This margin accounts for two effects:
+		///  > When an item is added, the item count is already incremented while the top index is still lower.
+		///  > When the user want to reactivate vertical auto scroll while a lot of data is being received, the margin "glues" scrolling.
+		/// </remarks>
+		public virtual bool VerticalScrollBarIsNearBottom
+		{
+			get { return (TopIndex >= ((Items.Count - FullyVisibleItemCount) - (FullyVisibleItemCount / 2))); }
+		}
+
 		#endregion
 
 		#region Scroll > Methods
@@ -343,15 +512,31 @@ namespace MKY.Windows.Forms
 		/// </summary>
 		public void VerticalScrollToBottom()
 		{
-			TopIndex = (Items.Count - 1);
+			DebugVerticalAutoScroll("Doing VerticalScrollToBottom()...");
+
+			TopIndex = (Items.Count - FullyVisibleItemCount);
+
+			if (this.userIsScrolling)
+			{
+				this.userIsScrolling = false;
+
+				DebugVerticalAutoScroll("User has ended scrolling");
+			}
+
+			this.previousTopIndex = TopIndex; // Update.
+
+			DebugVerticalAutoScroll("...VerticalScrollToBottom() done!");
 		}
 
 		/// <summary>
 		/// Vertically scroll the list to the bottom if no items are selected.
 		/// </summary>
-		public bool VerticalScrollToBottomIfNoItemsAreSelected()
+		/// <remarks>
+		/// Note that items gets deselected if another control gets the focus.
+		/// </remarks>
+		public bool VerticalScrollToBottomIfNoItemIsSelected()
 		{
-			if ((SelectedItems.Count == 0) && (Items.Count > 0))
+			if (!ItemIsSelected) // Note that items gets deselected if another control gets the focus.
 			{
 				VerticalScrollToBottom();
 				return (true);
@@ -361,28 +546,49 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary>
-		/// Vertically scroll the list to the bottom if no items are selected, except the last.
+		/// Vertically scroll the list to the bottom if no visible items are selected.
 		/// </summary>
-		public bool VerticalScrollToBottomIfNoItemButTheLastIsSelected()
+		/// <remarks>
+		/// Note that items gets deselected if another control gets the focus.
+		/// </remarks>
+		public bool VerticalScrollToBottomIfNoVisibleItemIsSelected()
 		{
-			if (VerticalScrollToBottomIfNoItemsAreSelected())
+			if (!VisibleItemIsSelected) // Note that items gets deselected if another control gets the focus.
+			{
+				SelectedIndices.Clear(); // Clear selection to ensure that scrolling continues.
+				VerticalScrollToBottom();
+				return (true);
+			}
+
+			return (false);
+		}
+
+		/// <summary>
+		/// Vertically scroll the list to the bottom if no visible items are selected, except for the last.
+		/// </summary>
+		public bool VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastItemsIsSelected()
+		{
+			if (VerticalScrollToBottomIfNoVisibleItemIsSelected())
 				return (true);
 
-			if (SelectedIndices.Count == 1)
-			{
-				if (SelectedIndices[0] == (Items.Count - 1))
-				{
-					SelectedIndices.Clear(); // Clear selection to ensure that scrolling continues.
-					VerticalScrollToBottom();
-					return (true);
-				}
+			// There are visible items!
 
-				if (SelectedIndices[0] == (Items.Count - 2))
-				{
-					SelectedIndices.Clear(); // Clear selection to ensure that scrolling continues.
-					VerticalScrollToBottom();
-					return (true);
-				}
+			if (VerticalScrollToBottomIfOnlyOneOfTheLastItemsIsSelected())
+				return (true);
+
+			return (false);
+		}
+
+		/// <summary>
+		/// Vertically scroll the list to the bottom if no visible items are selected, except for the last.
+		/// </summary>
+		public bool VerticalScrollToBottomIfOnlyOneOfTheLastItemsIsSelected()
+		{
+			if (OnlyOneOfTheLastItemsIsSelected) // Note that items gets deselected if another control gets the focus.
+			{
+				SelectedIndices.Clear(); // Clear selection to ensure that scrolling continues.
+				VerticalScrollToBottom();
+				return (true);
 			}
 
 			return (false);
@@ -532,6 +738,20 @@ namespace MKY.Windows.Forms
 	#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
 
 		#endregion
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG_VERTICAL_AUTO_SCROLL")]
+		protected virtual void DebugVerticalAutoScroll(string leadMessage)
+		{
+			Debug.WriteLine(string.Format("{0} : ClientHeight = {1} | ClientItemCapacity = {2} | ItemCount = {3} | FullyVisibleItemCount = {4} | TopIndex = {5} | BottomIndex = {6}", leadMessage, ClientSize.Height, ClientItemCapacity, Items.Count, FullyVisibleItemCount, TopIndex, BottomIndex));
+		}
 
 		#endregion
 	}

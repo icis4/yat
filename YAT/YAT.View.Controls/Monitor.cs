@@ -811,9 +811,9 @@ namespace YAT.View.Controls
 				if (e.Index >= 0)
 				{
 				#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
-					ListBoxEx lb = fastListBox_Monitor;
+					ListBoxEx lbmon = fastListBox_Monitor;
 				#else
-					ListBox lb = fastListBox_Monitor;
+					ListBox lbmon = fastListBox_Monitor;
 				#endif
 					int requestedWidth;
 
@@ -828,7 +828,7 @@ namespace YAT.View.Controls
 
 						e.DrawBackground();
 
-						MonitorRenderer.DrawAndMeasureLine((lb.Items[e.Index] as Domain.DisplayLine), this.formatSettings,
+						MonitorRenderer.DrawAndMeasureLine((lbmon.Items[e.Index] as Domain.DisplayLine), this.formatSettings,
 						                                   e.Graphics, e.Bounds, e.State, out requestedWidth);
 						e.DrawFocusRectangle();
 					}
@@ -836,7 +836,7 @@ namespace YAT.View.Controls
 					{
 						e.DrawBackground();
 
-						MonitorRenderer.DrawAndMeasureLine((lb.Items[e.Index] as Domain.DisplayLine).Text, e.Font,
+						MonitorRenderer.DrawAndMeasureLine((lbmon.Items[e.Index] as Domain.DisplayLine).Text, e.Font,
 						                                   e.Graphics, e.Bounds, e.State, e.ForeColor, e.BackColor, out requestedWidth);
 						e.DrawFocusRectangle();
 
@@ -847,21 +847,20 @@ namespace YAT.View.Controls
 
 					// The item width and horizontal extent is handled here.
 					// The item height is set in the 'FormatSettings' property.
-					if ((requestedWidth > 0) && (requestedWidth > lb.HorizontalExtent))
-						lb.HorizontalExtent = requestedWidth;
+					if ((requestedWidth > 0) && (requestedWidth > lbmon.HorizontalExtent))
+						lbmon.HorizontalExtent = requestedWidth;
 
 				#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 					// Perform horizontal auto scroll, but only on the last item.
-					if (e.Index == (lb.Items.Count - 1))
-						lb.HorizontalScrollToPosition(requestedWidth - e.Bounds.Width);
+					if (e.Index == (lbmon.Items.Count - 1))
+						lbmon.HorizontalScrollToPosition(requestedWidth - e.Bounds.Width);
 				#endif
 					// Check whether the top index has changed, if so, also scroll the line numbers.
-					// This especially is the case when the monitor gets cleared, the top index will
-					// become 0.
-					if (fastListBox_Monitor_DrawItem_lastTopIndex != lb.TopIndex)
+					// Especially applies when monitor gets cleared, the top index will become 0.
+					if (fastListBox_Monitor_DrawItem_lastTopIndex != lbmon.TopIndex)
 					{
-						fastListBox_Monitor_DrawItem_lastTopIndex = lb.TopIndex;
-						fastListBox_LineNumbers.VerticalScrollToIndex(lb.TopIndex);
+						fastListBox_Monitor_DrawItem_lastTopIndex = lbmon.TopIndex;
+						fastListBox_LineNumbers.VerticalScrollToIndex(lbmon.TopIndex);
 					}
 				}
 			}
@@ -1147,8 +1146,19 @@ namespace YAT.View.Controls
 				this.nextMonitorUpdateTickStamp = (Stopwatch.GetTimestamp() + this.monitorUpdateTickInterval); // Loop-around is OK.
 			}
 
-			if (lbmon.VerticalScrollToBottomIfNoItemButTheLastIsSelected())
-				lblin.VerticalScrollToBottom();
+			if (!lbmon.UserIsScrolling) // Perform scrolling.
+			{
+				if (lbmon.VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastItemsIsSelected())
+					lblin.VerticalScrollToBottom(); // Scroll line numbers accordingly.
+			}
+			else // UserIsScrolling => Suspend scrolling.
+			{
+				if (lbmon.VerticalScrollBarIsNearBottom) // Resume scrolling.
+				{
+					if (lbmon.VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastItemsIsSelected())
+						lblin.VerticalScrollToBottom(); // Scroll line numbers accordingly.
+				}
+			}
 
 			lblin.EndUpdate();
 			lbmon.EndUpdate();
@@ -1175,7 +1185,7 @@ namespace YAT.View.Controls
 			else
 			{
 				// Get current line:
-				int lastLineIndex = lbmon.Items.Count - 1;
+				var lastLineIndex = (lbmon.Items.Count - 1);
 				var current = lbmon.Items[lastLineIndex] as Domain.DisplayLine;
 
 				// If first element, add element to line:
@@ -1189,7 +1199,7 @@ namespace YAT.View.Controls
 					if (element is Domain.DisplayElement.LineStart)
 					{
 						// Remove lines if maximum exceeded:
-						while (lbmon.Items.Count >= (this.maxLineCount))
+						while (lbmon.Items.Count >= this.maxLineCount)
 						{
 							lblin.Items.RemoveAt(0);
 							lbmon.Items.RemoveAt(0);
