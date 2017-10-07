@@ -1550,8 +1550,6 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		protected virtual void ForwardDataToRawTerminal(byte[] data)
 		{
-			AssertNotDisposed();
-
 			try
 			{
 				this.rawTerminal.Send(data);
