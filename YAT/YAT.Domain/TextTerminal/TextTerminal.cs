@@ -928,7 +928,8 @@ namespace YAT.Domain
 					ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elements);
 
 				// Content:
-				ExecuteContent(lineState, raw.Direction, b, elements);
+				if (lineState.Position == LinePosition.Data)
+					ExecuteContent(lineState, raw.Direction, b, elements);
 
 				// Line end and length:
 				if (lineState.Position == LinePosition.End)
@@ -944,8 +945,7 @@ namespace YAT.Domain
 			{
 				if (!this.bidirLineState.IsFirstLine) // is subsequent line
 				{
-					if (!StringEx.EqualsOrdinalIgnoreCase(ps, this.bidirLineState.PortStamp) ||
-						(d != this.bidirLineState.Direction))
+					if (!StringEx.EqualsOrdinalIgnoreCase(ps, this.bidirLineState.PortStamp) || (d != this.bidirLineState.Direction))
 					{
 						LineState lineState;
 
@@ -959,12 +959,12 @@ namespace YAT.Domain
 								default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
 						}
-						else // Attention: Direction changed => Use opposite state.
+						else // Attention: Direction changed => Use other state.
 						{
 							switch (d)
 							{
 								case IODirection.Tx: lineState = this.rxLineState; break; // Reversed!
-								case IODirection.Rx: lineState = this.txLineState; break;
+								case IODirection.Rx: lineState = this.txLineState; break; // Reversed!
 
 								default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
