@@ -118,8 +118,8 @@ namespace YAT.Domain.Parser
 			Environment.NewLine +
 			@"Framing errors on ""\!(" + (KeywordEx)Keyword.FramingErrorsOn + @")""" + Environment.NewLine +
 			@"Framing errors off ""\!(" + (KeywordEx)Keyword.FramingErrorsOff + @")""" + Environment.NewLine +
-			@"Framing errors reset to settings ""\!(" + (KeywordEx)Keyword.FramingErrorsReset + @")""" + Environment.NewLine +
-			@"Framing errors can only occur on serial COM ports." +
+			@"Restore framing error setting ""\!(" + (KeywordEx)Keyword.FramingErrorsRestore + @")""" + Environment.NewLine +
+			@"Framing errors can only be configured on serial COM ports." +
 			Environment.NewLine +
 			@"Output break state on ""\!(" + (KeywordEx)Keyword.OutputBreakOn + @")""" + Environment.NewLine +
 			@"Output break state off ""\!(" + (KeywordEx)Keyword.OutputBreakOff + @")""" + Environment.NewLine +

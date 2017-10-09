@@ -88,7 +88,7 @@ YAT 2.0 Delta Version 1.99.80 :: 2017-1x-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
-- Additional setting and keywords \!(FramingErrorsOn|Off|Reset) that allows configuring the serial
+- Additional setting and keywords \!(FramingErrorsOn|Off|Restore) that allows configuring the serial
   COM port behaviour on framing errors. Useful when e.g. changing baud rates (feature request #321).
 
 Important changes:

@@ -1373,7 +1373,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only occur on serial COM ports."));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports."));
 					}
 					break;
 				}
@@ -1387,12 +1387,12 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only occur on serial COM ports."));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports."));
 					}
 					break;
 				}
 
-				case Parser.Keyword.FramingErrorsReset:
+				case Parser.Keyword.FramingErrorsRestore:
 				{
 					if (this.terminalSettings.IO.IOType == IOType.SerialPort)
 					{
@@ -1401,7 +1401,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only occur on serial COM ports."));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports."));
 					}
 					break;
 				}
