@@ -87,15 +87,11 @@ namespace MKY.Windows.Forms
 				Rectangle bounds = new Rectangle(x, offset * ItemHeight, ir.Width, ItemHeight);
 
 				// Set normal/selected state:
-				DrawItemState state = DrawItemState.Default;
-				foreach (int selectedIndex in SelectedIndices)
-				{
-					if (selectedIndex == i)
-					{
-						state = DrawItemState.Selected;
-						break;
-					}
-				}
+				DrawItemState state;
+				if (SelectedIndices.Contains(i))
+					state = DrawItemState.Selected;
+				else
+					state = DrawItemState.Default;
 
 				// Request drawing of item:
 				OnDrawItem(new DrawItemEventArgs(e.Graphics, Font, bounds, i, state));
