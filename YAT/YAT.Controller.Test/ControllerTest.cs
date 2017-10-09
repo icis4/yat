@@ -26,9 +26,12 @@
 // Using
 //==================================================================================================
 
+using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Windows.Forms;
 
 using MKY.Settings;
+using MKY.Windows.Forms;
 
 using NUnit;
 using NUnit.Framework;
@@ -194,12 +197,27 @@ namespace YAT.Controller.Test
 		// Tests > WorkspaceCommandLineArgRun
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		/// <remarks> COM A and COM B will be opened in this test case
-		/// (WorkspaceArgs refers to WorkspaceSettingsTestCase.W_04_Matthias).</remarks>
+		/// <remarks>
+		/// COM1 and COM2 will be opened in this test case
+		/// (WorkspaceArgs refers to WorkspaceSettingsTestCase.W_04_Matthias).
+		/// </remarks>
 		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void TestWorkspaceCommandLineArgRun()
 		{
+			// \remind (2016-05-26 / MKY) should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
+			// \remind (2017-10-09 / MKY) even better to be eliminated and moved to related tests as attributes.
+			var dr = MessageBoxEx.Show
+			(
+				"This test requires open serial ports 'COM1' and 'COM2'." + Environment.NewLine +
+				"Ensure that VSPE is running and providing these ports.",
+				"Precondition",
+				MessageBoxButtons.OKCancel,
+				MessageBoxIcon.Information
+			);
+
+			if (dr != DialogResult.OK)
+				Assert.Fail("User cancel!");
+
 			using (Main main = new Main(WorkspaceArgs))
 			{
 				RunAndVerifyApplicationWithoutView(main);
@@ -264,12 +282,27 @@ namespace YAT.Controller.Test
 		// Tests > WorkspaceCommandLineArgRunInteractive
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		/// <remarks> COM A and COM B will be opened in this test case
-		/// (WorkspaceArgs refers to WorkspaceSettingsTestCase.W_04_Matthias).</remarks>
+		/// <remarks>
+		/// COM1 and COM2 will be opened in this test case
+		/// (WorkspaceArgs refers to WorkspaceSettingsTestCase.W_04_Matthias).
+		/// </remarks>
 		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory, MKY.IO.Ports.Test.PortBIsAvailableCategory, InteractiveCategory]
 		public virtual void TestWorkspaceCommandLineArgRunInteractive()
 		{
+			// \remind (2016-05-26 / MKY) should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
+			// \remind (2017-10-09 / MKY) even better to be eliminated and moved to related tests as attributes.
+			var dr = MessageBoxEx.Show
+			(
+				"This test requires open serial ports 'COM1' and 'COM2'." + Environment.NewLine +
+				"Ensure that VSPE is running and providing these ports.",
+				"Precondition",
+				MessageBoxButtons.OKCancel,
+				MessageBoxIcon.Information
+			);
+
+			if (dr != DialogResult.OK)
+				Assert.Fail("User cancel!");
+
 			using (Main main = new Main(WorkspaceArgs))
 			{
 				RunAndVerifyApplicationWithView(main);

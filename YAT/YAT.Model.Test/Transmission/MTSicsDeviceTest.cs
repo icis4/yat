@@ -206,9 +206,10 @@ namespace YAT.Model.Test.Transmission
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
-			// \remind (2016-05-26 / MKY) Should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
+			// \remind (2016-05-26 / MKY) should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
+			// \remind (2017-10-09 / MKY) even better to be eliminated and moved to related tests as attributes.
 			var dr = MessageBoxEx.Show
-				(
+			(
 				"This test requires a weighing MT-SICS device:" + Environment.NewLine +
 				" > Serial COM Port: Start weight simulation if no load cell connected." + Environment.NewLine +
 				" > TCP/IP Socket: Start device simulation." + Environment.NewLine +
@@ -216,7 +217,7 @@ namespace YAT.Model.Test.Transmission
 				"Precondition",
 				MessageBoxButtons.OKCancel,
 				MessageBoxIcon.Information
-				);
+			);
 
 			if (dr != DialogResult.OK)
 				Assert.Fail("User cancel!");
