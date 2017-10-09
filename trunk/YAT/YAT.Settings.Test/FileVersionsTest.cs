@@ -62,27 +62,28 @@ namespace YAT.Settings.Test
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
-			// \remind (2016-05-26 / MKY) Should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
+			// \remind (2016-05-26 / MKY) should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
+			// \remind (2017-10-09 / MKY) even better to be eliminated and moved to related tests as attributes.
 			var dr = MessageBoxEx.Show
-				(
+			(
 				"This test requires open serial ports 'COM1' and 'COM2'." + Environment.NewLine +
 				"Ensure that VSPE is running and providing these ports.",
 				"Precondition",
 				MessageBoxButtons.OKCancel,
 				MessageBoxIcon.Information
-				);
+			);
 
 			if (dr != DialogResult.OK)
 				Assert.Fail("User cancel!");
 
 			dr = MessageBoxEx.Show
-				(
+			(
 				"This test requires connected USB Ser/HID device 'VID:0EB8 PID:2303 SNR:YAT.8_SerHID'." + Environment.NewLine +
 				"Ensure that device is connected.",
 				"Precondition",
 				MessageBoxButtons.OKCancel,
 				MessageBoxIcon.Information
-				);
+			);
 
 			if (dr != DialogResult.OK)
 				Assert.Fail("User cancel!");
