@@ -622,19 +622,6 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[XmlIgnore]
-		public virtual int OriginCount
-		{
-			get
-			{
-				if (this.origin != null)
-					return (this.origin.Count);
-				else
-					return (0);
-			}
-		}
-
-		/// <summary></summary>
 		[XmlAttribute("Text")]
 		public virtual string Text
 		{
@@ -747,15 +734,15 @@ namespace YAT.Domain
 		{
 			var clone = Clone(); // Ensure to recreate the proper type.
 
-			// Keep direction, isData and isEol.
+			// Keep direction and attributes.
 
-			// Replace origin and byteCount.
+			// Replace origin and byteCount:
 			var clonedOrigin = new List<Pair<byte[], string>>(1); // Preset the required capacity to improve memory management.
 			clonedOrigin.Add(PerformDeepClone(originItem));
 			clone.origin = clonedOrigin;
-			clone.byteCount = 1;
+			clone.byteCount = originItem.Value1.Length;
 
-			// Replace text.
+			// Replace text:
 			string text = originItem.Value2;
 			clone.text = text;
 

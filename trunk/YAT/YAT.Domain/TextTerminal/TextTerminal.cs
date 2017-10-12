@@ -515,6 +515,7 @@ namespace YAT.Domain
 					TextTerminalSettings.TxEol = Settings.TextTerminalSettings.DefaultEol;
 					txEol = p.Parse(TextTerminalSettings.TxEol);
 				}
+
 				if (!p.TryParse(TextTerminalSettings.RxEol, out rxEol))
 				{
 					// In case of an invalid EOL sequence, default it. This should never happen,
@@ -546,9 +547,9 @@ namespace YAT.Domain
 					return (base.ByteToElement(b, d, r));
 				}
 
-				// Char/String/Unicode:
-				case Radix.Char:
+				// String/Char/Unicode:
 				case Radix.String:
+				case Radix.Char:
 				case Radix.Unicode:
 				{
 					Encoding e = (EncodingEx)TextTerminalSettings.Encoding;
@@ -568,15 +569,15 @@ namespace YAT.Domain
 						}
 						else
 						{
-							char[] c = new char[1]; // 'IsSingleByte'.
+							char[] c = new char[1]; // 'IsSingleByte'!
 							if (e.GetDecoder().GetChars(new byte[] { b }, 0, 1, c, 0, true) == 1)
 							{
 								if (r != Radix.Unicode)
 								{
 									switch (d)
-									{
-										case IODirection.Tx: return (new DisplayElement.TxData(b, c[0].ToString(CultureInfo.InvariantCulture))); // 'IsSingleByte'.
-										case IODirection.Rx: return (new DisplayElement.RxData(b, c[0].ToString(CultureInfo.InvariantCulture))); // 'IsSingleByte'.
+									{                                                               // 'IsSingleByte'!
+										case IODirection.Tx: return (new DisplayElement.TxData(b, c[0].ToString(CultureInfo.InvariantCulture)));
+										case IODirection.Rx: return (new DisplayElement.RxData(b, c[0].ToString(CultureInfo.InvariantCulture)));
 
 										default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 									}
@@ -584,9 +585,9 @@ namespace YAT.Domain
 								else // Unicode:
 								{
 									switch (d)
-									{
-										case IODirection.Tx: return (new DisplayElement.TxData(b, UnicodeValueToNumericString(c[0]))); // 'IsSingleByte'.
-										case IODirection.Rx: return (new DisplayElement.RxData(b, UnicodeValueToNumericString(c[0]))); // 'IsSingleByte'.
+									{                                                                                           // 'IsSingleByte'!
+										case IODirection.Tx: return (new DisplayElement.TxData(b, UnicodeValueToNumericString(c[0])));
+										case IODirection.Rx: return (new DisplayElement.RxData(b, UnicodeValueToNumericString(c[0])));
 
 										default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 									}
@@ -598,80 +599,120 @@ namespace YAT.Domain
 							}
 						}
 					}
-					else // MultiByte
+					else // 'IsMultiByte':
 					{
 						this.rxMultiByteDecodingStream.Add(b);
-						byte[] decodingArray = this.rxMultiByteDecodingStream.ToArray();
 
+						byte[] decodingArray = this.rxMultiByteDecodingStream.ToArray();
 						if (!((EndiannessEx)TerminalSettings.IO.Endianness).IsSameAsMachine)
 							decodingArray = decodingArray.Reverse().ToArray();
 
-						int charCount = e.GetCharCount(decodingArray, 0, decodingArray.Length);
-
-						// If decoding array can be decoded into something useful, decode it.
-						if (charCount == 1)
+						int expectedCharCount = e.GetCharCount(decodingArray);
+						char[] chars = new char[expectedCharCount];
+						int effectiveCharCount = e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true);
+						if (effectiveCharCount == 1)
 						{
-							char[] c = new char[1]; // 'charCount' is 1.
-							if (e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, c, 0, true) == 1)
+							int code = chars[0];
+							if (code != 0xFFFD) // Ensure that 'unknown' character 0xFFFD is not decoded yet.
 							{
-								// Ensure that 'unknown' character 0xFFFD is not decoded yet.
-								int code = c[0];
-								if (code != 0xFFFD)
+								this.rxMultiByteDecodingStream.Clear();
+
+								if ((code < 0x20) || (code == 0x7F)) // Control chars.
 								{
-									this.rxMultiByteDecodingStream.Clear();
-
-									if ((code < 0x20) || (code == 0x7F)) // Control chars.
-									{
-										return (base.ByteToElement(b, d, r));
-									}
-									else if (code == 0x20) // Space.
-									{
-										return (base.ByteToElement(b, d, r));
-									}
-									else if ((code == 0xFF) && TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF)
-									{
-										return (new DisplayElement.Nonentity()); // Return nothing, ignore the character, this results in hiding.
-									}
-									else
-									{
-										if (r != Radix.Unicode)
-										{
-											switch (d)
-											{                                                                     // 'charCount' is 1.
-												case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, c[0].ToString(CultureInfo.InvariantCulture), decodingArray.Length));
-												case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, c[0].ToString(CultureInfo.InvariantCulture), decodingArray.Length));
-
-												default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-											}
-										}
-										else // Unicode:
-										{
-											switch (d)
-											{                                                                                                 // 'charCount' is 1.
-												case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, UnicodeValueToNumericString(c[0]), decodingArray.Length));
-												case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, UnicodeValueToNumericString(c[0]), decodingArray.Length));
-
-												default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-											}
-										}
-									}
+									return (base.ByteToElement(b, d, r));
+								}
+								else if (code == 0x20) // Space.
+								{
+									return (base.ByteToElement(b, d, r));
+								}
+								else if ((code == 0xFF) && TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF)
+								{
+									return (new DisplayElement.Nonentity()); // Ignore the character, this results in hiding.
 								}
 								else
 								{
-									// 'unknown' character 0xFFFD, do not reset stream.
+									if (r != Radix.Unicode)
+									{
+										switch (d)
+										{                                                                               // 'effectiveCharCount' is 1 for sure!
+											case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, chars[0].ToString(CultureInfo.InvariantCulture), decodingArray.Length));
+											case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, chars[0].ToString(CultureInfo.InvariantCulture), decodingArray.Length));
+
+											default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+										}
+									}
+									else // Unicode:
+									{
+										switch (d)
+										{                                                                                                           // 'effectiveCharCount' is 1 for sure!
+											case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, UnicodeValueToNumericString(chars[0]), decodingArray.Length));
+											case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, UnicodeValueToNumericString(chars[0]), decodingArray.Length));
+
+											default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+										}
+									}
 								}
 							}
+							else // Single 'unknown' character 0xFFFD:
+							{
+								return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
+							}
 						}
-						else
+						else // (effectiveCharCount == 0) || (effectiveCharCount > 1)
 						{
-							// Nothing useful to decode into, reset stream.
-							this.rxMultiByteDecodingStream.Clear();
-						}
+							bool isInvalid = false;
 
-						// Nothing to decode (yet).
-						return (new DisplayElement.Nonentity());
+							// If one of the following conditions is given, the byte sequence is invalid:
+
+							if (decodingArray.Length >= e.GetMaxByteCount(1))
+							{
+								isInvalid = true; // Nothing useful to decode even though maximum length reached.
+							}
+							else if (effectiveCharCount > 0)
+							{
+								foreach (char c in chars)
+								{
+									int code = c;
+									if (code != 0xFFFD)
+									{
+										isInvalid = true; // Everything else than 'unknown' character 0xFFFD is invalid.
+										break;
+									}
+								}
+							}
+
+							// If neither of the conditions is given, the byte sequence may not be complete yet:
+
+							if (!isInvalid)
+							{
+								return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
+							}
+							else
+							{
+								var sb = new StringBuilder(@"""");
+
+								bool firstElement = true;
+								foreach (byte invalid in this.rxMultiByteDecodingStream)
+								{
+									if (firstElement)
+										firstElement = false;
+									else
+										sb.Append(" ");
+
+									sb.Append(base.ByteToElement(invalid, d, Radix.Hex));
+								}
+
+								sb.Append(@""" is an invalid ");
+								sb.Append(((EncodingEx)e).DisplayName);
+								sb.Append(" byte sequence!");
+
+								this.rxMultiByteDecodingStream.Clear(); // Reset decoding stream.
+
+								return (new DisplayElement.ErrorInfo((Direction)d, sb.ToString(), true));
+							}
+						} // (effectiveCharCount == 0) || (effectiveCharCount > 1)
 					} // MultiByte
-				}
+				} // String/Char/Unicode
 
 				default:
 				{
@@ -684,7 +725,7 @@ namespace YAT.Domain
 		{
 			if (this.bidirLineState.IsFirstLine) // Properly initialize the time delta:
 				this.bidirLineState.LastLineTimeStamp = ts;
-			                                             //// Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+			                                        //// Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			var lp = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			lp.Add(new DisplayElement.LineStart()); // Direction may be both!
@@ -720,9 +761,11 @@ namespace YAT.Domain
 				{
 					if (de.IsContent)
 						lineState.EolElements.Add(de); // No clone needed as element has just been created.
+					else
+						lp.Add(de); // Still add non-content element, could e.g. be a multi-byte error message.
 
 					// Normal case, EOL consists of a single sequence of control characters:
-					if ((lineState.EolElements.Count == 1) && (lineState.EolElements[0].OriginCount == lineState.Eol.Sequence.Length))
+					if ((lineState.EolElements.Count == 1) && (lineState.EolElements[0].ByteCount == lineState.Eol.Sequence.Length))
 					{
 						// Unfold the elements into single elements for correct processing:
 						var l = new List<DisplayElement>(lineState.EolElements.ByteCount); // Preset the required capacity to improve memory management.
@@ -758,7 +801,7 @@ namespace YAT.Domain
 							byteCount += item.ByteCount;
 
 						// Mark only true EOL elements as EOL:
-						int firstEolIndex = byteCount - lineState.Eol.Sequence.Length;
+						int firstEolIndex = (byteCount - lineState.Eol.Sequence.Length);
 						int currentIndex = 0;
 						foreach (var item in l)
 						{
@@ -781,6 +824,8 @@ namespace YAT.Domain
 				// Keep EOL elements and delay them until EOL is complete:
 				if (de.IsContent)
 					lineState.EolElements.Add(de); // No clone needed as element has just been created further above.
+				else
+					lp.Add(de); // Still add non-content element, could e.g. be a multi-byte error message.
 			}
 			else if (lineState.Eol.IsPartlyMatchBeginning)
 			{
@@ -790,6 +835,8 @@ namespace YAT.Domain
 				// Keep EOL elements and delay them until EOL is complete:
 				if (de.IsContent)
 					lineState.EolElements.Add(de); // No clone needed as element has just been created further above.
+				else
+					lp.Add(de); // Still add non-content element, could e.g. be a multi-byte error message.
 			}
 			else
 			{
@@ -826,7 +873,7 @@ namespace YAT.Domain
 		{
 			if (ElementsAreSeparate(d))
 			{
-				if (lineState.Elements.ByteCount > 0)
+				if ((lineState.Elements.ByteCount > 0) || (lp.ByteCount > 0))
 					lp.Add(new DisplayElement.DataSpace());
 			}
 		}
@@ -844,8 +891,8 @@ namespace YAT.Domain
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of BinaryTerminal for better comparability.
 
-			                                   // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-			DisplayLine line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+			                                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+			var line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			// Process line content:
 			int eolLength = lineState.Eol.Sequence.Length;
@@ -877,7 +924,7 @@ namespace YAT.Domain
 
 			// Process line length:
 			var lp = new DisplayLinePart(); // Default initial capacity is OK.
-			if (TerminalSettings.Display.ShowLength)
+			if (TerminalSettings.Display.ShowLength) // = byte count.
 			{
 				DisplayLinePart info;
 				PrepareLineEndInfo(line.ByteCount, out info);
