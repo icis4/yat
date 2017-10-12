@@ -640,7 +640,7 @@ namespace YAT.Domain
 		{
 			if (this.bidirLineState.IsFirstLine) // Properly initialize the time delta:
 				this.bidirLineState.LastLineTimeStamp = ts;
-			                                             //// Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+			                                        //// Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			var lp = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			lp.Add(new DisplayElement.LineStart()); // Direction may be both!
@@ -783,7 +783,7 @@ namespace YAT.Domain
 		{
 			if (ElementsAreSeparate(d))
 			{
-				if (lineState.Elements.ByteCount > 0)
+				if ((lineState.Elements.ByteCount > 0) || (lp.ByteCount > 0))
 					lp.Add(new DisplayElement.DataSpace());
 			}
 		}
@@ -800,7 +800,7 @@ namespace YAT.Domain
 
 			// Process line length:
 			var lp = new DisplayLinePart(); // Default initial capacity is OK.
-			if (TerminalSettings.Display.ShowLength)
+			if (TerminalSettings.Display.ShowLength) // = byte count.
 			{
 				DisplayLinePart info;
 				PrepareLineEndInfo(lineState.Elements.ByteCount, out info);
