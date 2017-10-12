@@ -982,7 +982,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Radix_Char.Size = new System.Drawing.Size(30, 22);
 			this.toolStripButton_MainTool_Terminal_Radix_Char.Text = "Chr";
 			this.toolStripButton_MainTool_Terminal_Radix_Char.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-			this.toolStripButton_MainTool_Terminal_Radix_Char.ToolTipText = "Radix: Char";
+			this.toolStripButton_MainTool_Terminal_Radix_Char.ToolTipText = "Radix: Character";
 			this.toolStripButton_MainTool_Terminal_Radix_Char.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Radix_Char_Click);
 			// 
 			// toolStripButton_MainTool_Terminal_Radix_Bin

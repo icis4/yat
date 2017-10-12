@@ -490,7 +490,10 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// This option is currently fixed to the byte count. Could potentially be extended such it
+		/// shows the character count for multi-byte encodings (string/character/Unicode radix).
+		/// </remarks>
 		[XmlElement("ShowLength")]
 		public virtual bool ShowLength
 		{

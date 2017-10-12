@@ -58,7 +58,7 @@ namespace YAT.Domain.Test
 		public const int WaitIntervalForStateChange = 100;
 
 		/// <remarks>
-		/// Timeout of 200 ms is a bit too short for serial COM port at 9600 baud,
+		/// Timeout of 200 ms is too short for serial COM port at 9600 baud,
 		/// especially when debugger is connected:
 		///  > SingleLine often takes longer than 200 ms.
 		///  > DoubleLine often takes longer than 400 ms.

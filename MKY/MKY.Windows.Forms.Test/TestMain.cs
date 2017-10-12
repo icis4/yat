@@ -25,12 +25,10 @@ using System;
 using System.Text;
 using System.Windows.Forms;
 
-using MKY.Windows.Forms;
-
 namespace MKY.Windows.Forms.Test
 {
 	/// <summary>
-	/// Test application for <see cref="MKY.Windows.Forms"/>.
+	/// Test application for <see cref="Forms"/>.
 	/// </summary>
 	public static class TestMain
 	{

@@ -702,7 +702,7 @@ namespace MKY.Win32
 					// Obtain the number of characters in dbch_name by subtracting the 32 bytes in
 					// the strucutre that are not part of dbch_name and dividing by 2 because there
 					// are 2 bytes per character.
-					int stringSize = System.Convert.ToInt32((devBroadcastHeader.dbch_size - 32) / 2);
+					int stringSize = Convert.ToInt32((devBroadcastHeader.dbch_size - 32) / 2);
 					int byteCount = stringSize * 2;
 
 					// Marshal data from the unmanaged block pointed to by m.LParam to the managed

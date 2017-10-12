@@ -487,7 +487,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				lock (this.socketConnections)
 				{
-					foreach (ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection connection in this.socketConnections)
+					foreach (var connection in this.socketConnections)
 						connection.BeginSend(data);
 				}
 
