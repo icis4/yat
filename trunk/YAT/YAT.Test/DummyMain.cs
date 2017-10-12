@@ -30,12 +30,12 @@ using MKY.Windows.Forms;
 namespace YAT.Test
 {
 	/// <summary>
-	/// This is the test main dummy for the YAT test projects.
+	/// This is a dummy main for the YAT test projects.
 	/// </summary>
 	/// <remarks>
 	/// See "!-ReadMe.txt" for more information.
 	/// </remarks>
-	public static class TestMain
+	public static class DummyMain
 	{
 		/// <summary>
 		/// The main entry point for the application.
@@ -44,7 +44,7 @@ namespace YAT.Test
 		private static void Main()
 		{
 			var sb = new StringBuilder();
-			sb.AppendLine("Note that this console application is only a dummy for testing purposes.");
+			sb.AppendLine(@"Note that this console application is only a dummy for testing purposes. Use ""YAT"" or ""YATConsole"" instead.");
 			sb.AppendLine();
 			sb.Append    (@"See ""!-ReadMe.txt"" for more information.");
 

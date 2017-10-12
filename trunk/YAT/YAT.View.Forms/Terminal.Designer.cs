@@ -812,7 +812,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Name = "toolStripMenuItem_MonitorContextMenu_ShowLength";
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Size = new System.Drawing.Size(220, 22);
-			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Text = "Show Length";
+			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Text = "Show Length (Byte Count)";
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowLength_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Separator_5
@@ -2303,7 +2303,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_ShowLength.Name = "toolStripMenuItem_TerminalMenu_View_ShowLength";
 			this.toolStripMenuItem_TerminalMenu_View_ShowLength.Size = new System.Drawing.Size(245, 22);
-			this.toolStripMenuItem_TerminalMenu_View_ShowLength.Text = "Show &Length";
+			this.toolStripMenuItem_TerminalMenu_View_ShowLength.Text = "Show &Length (Byte Count)";
 			this.toolStripMenuItem_TerminalMenu_View_ShowLength.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowLength_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Separator_5

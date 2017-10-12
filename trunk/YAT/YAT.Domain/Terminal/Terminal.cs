@@ -2552,7 +2552,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
 		protected virtual void PrepareLineEndInfo(int byteCount, out DisplayLinePart lp)
 		{
-			if (TerminalSettings.Display.ShowLength)
+			if (TerminalSettings.Display.ShowLength) // = byte count.
 			{
 				lp = new DisplayLinePart(2); // Preset the required capacity to improve memory management.
 

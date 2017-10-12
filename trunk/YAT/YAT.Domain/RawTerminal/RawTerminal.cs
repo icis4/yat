@@ -710,7 +710,7 @@ namespace YAT.Domain
 				{
 					try
 					{
-						RawChunk re = new RawChunk(e.Data, e.TimeStamp, e.PortStamp, IODirection.Rx);
+						var re = new RawChunk(e.Data, e.TimeStamp, e.PortStamp, IODirection.Rx);
 						lock (this.repositorySyncObj)
 						{
 							this.rxRepository   .Enqueue(re.Clone()); // Clone element as it is needed again below.
@@ -745,7 +745,7 @@ namespace YAT.Domain
 				{
 					try
 					{
-						RawChunk re = new RawChunk(e.Data, e.TimeStamp, e.PortStamp, IODirection.Tx);
+						var re = new RawChunk(e.Data, e.TimeStamp, e.PortStamp, IODirection.Tx);
 						lock (this.repositorySyncObj)
 						{
 							this.txRepository   .Enqueue(re.Clone()); // Clone element as it is needed again below.
