@@ -2190,39 +2190,56 @@ namespace YAT.Model
 
 		private void terminal_IOChanged(object sender, EventArgs e)
 		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
 			OnIOChanged(e);
 
+			// Attention, the 'IOChanged' event could trigger close = dispose of terminal!
+
 			bool hasBeenConnected = this.terminal_IOChanged_hasBeenConnected;
-			bool isConnectedNow   = this.terminal.IsConnected;
+			bool isConnectedNow = ((this.terminal != null) ? (this.terminal.IsConnected) : (false));
 
-			if      ( isConnectedNow && !hasBeenConnected)
+			if (!IsDisposed)
 			{
-				var now = DateTime.Now; // Ensure that all use exactly the same instant.
+				if      ( isConnectedNow && !hasBeenConnected)
+				{
+					var now = DateTime.Now; // Ensure that all use exactly the same instant.
 
-				this.activeConnectChrono.Restart(now);
-				this.totalConnectChrono.Start(now);
+					this.activeConnectChrono.Restart(now);
+					this.totalConnectChrono.Start(now);
 
-				this.terminal.InitialTimeStamp = now;
+					if (this.terminal != null)
+					{
+						this.terminal.InitialTimeStamp = now;
 
-				if (this.settingsRoot.Display.ShowTimeSpan || this.settingsRoot.Display.ShowTimeSpan)
-					this.terminal.RefreshRepositories();
+						if (this.settingsRoot.Display.ShowTimeSpan || this.settingsRoot.Display.ShowTimeSpan)
+							this.terminal.RefreshRepositories();
+					}
+				}
+				else if (!isConnectedNow &&  hasBeenConnected)
+				{
+					this.activeConnectChrono.Stop();
+					this.totalConnectChrono.Stop();
+				}
 			}
-			else if (!isConnectedNow &&  hasBeenConnected)
-			{
-				this.activeConnectChrono.Stop();
-				this.totalConnectChrono.Stop();
-			}
 
-			this.terminal_IOChanged_hasBeenConnected = this.terminal.IsConnected;
+			this.terminal_IOChanged_hasBeenConnected = isConnectedNow;
 		}
 
 		private void terminal_IOControlChanged(object sender, EventArgs e)
 		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
 			OnIOControlChanged(e);
 		}
 
 		private void terminal_IOError(object sender, Domain.IOErrorEventArgs e)
 		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
 			OnIOError(e);
 		}
 
@@ -2256,6 +2273,9 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_RawChunkSent(object sender, EventArgs<Domain.RawChunk> e)
 		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
 			var currentTickStamp = Stopwatch.GetTimestamp();
 			if (currentTickStamp >= this.terminal_RawChunkSent_nextTimedStatusTextRequestTickStamp)
 			{
@@ -2299,6 +2319,9 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_RawChunkReceived(object sender, EventArgs<Domain.RawChunk> e)
 		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
 			var currentTickStamp = Stopwatch.GetTimestamp();
 			if (currentTickStamp >= this.terminal_RawChunkReceived_nextTimedStatusTextRequestTickStamp)
 			{
@@ -2362,18 +2385,27 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
 		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
 			OnDisplayElementsSent(e);
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
 			OnDisplayElementsReceived(e);
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
 		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
 			// Count:
 			this.txLineCount += e.Lines.Count;
 			OnIOCountChanged(EventArgs.Empty);
@@ -2399,6 +2431,9 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
 		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
 			// Count:
 			this.rxLineCount += e.Lines.Count;
 			OnIOCountChanged(EventArgs.Empty);
@@ -2427,11 +2462,17 @@ namespace YAT.Model
 
 		private void terminal_RepositoryCleared(object sender, EventArgs<Domain.RepositoryType> e)
 		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
 			OnRepositoryCleared(e);
 		}
 
 		private void terminal_RepositoryReloaded(object sender, EventArgs<Domain.RepositoryType> e)
 		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
 			OnRepositoryReloaded(e);
 		}
 

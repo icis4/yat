@@ -676,16 +676,25 @@ namespace YAT.Domain
 
 		private void io_IOChanged(object sender, EventArgs e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			OnIOChanged(EventArgs.Empty);
 		}
 
 		private void io_IOControlChanged(object sender, EventArgs e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			OnIOControlChanged(EventArgs.Empty);
 		}
 
 		private void io_IOError(object sender, MKY.IO.Serial.IOErrorEventArgs e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			var serialPortErrorEventArgs = (e as MKY.IO.Serial.SerialPortErrorEventArgs);
 			if (serialPortErrorEventArgs == null)
 				OnIOError(new IOErrorEventArgs((IOErrorSeverity)e.Severity, (IODirection)e.Direction, e.Message));
@@ -704,7 +713,7 @@ namespace YAT.Domain
 			// do not simply lock() the 'ioDataSyncObj'. Instead, try to get the lock periodically,
 			// but quit = discard the event as soon as the object got disposed of:
 
-			while (!IsDisposed)
+			while (!IsDisposed) // Ensure not to handle events during closing anymore.
 			{
 				if (Monitor.TryEnter(this.ioDataSyncObj, staticRandom.Next(50, 200)))
 				{
@@ -739,7 +748,7 @@ namespace YAT.Domain
 			// do not simply lock() the 'ioDataSyncObj'. Instead, try to get the lock periodically,
 			// but quit = discard the event as soon as the object got disposed of:
 
-			while (!IsDisposed)
+			while (!IsDisposed) // Ensure not to handle events during closing anymore.
 			{
 				if (Monitor.TryEnter(this.ioDataSyncObj, staticRandom.Next(50, 200)))
 				{
