@@ -4048,6 +4048,9 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_IOChanged(object sender, EventArgs e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			SetTerminalControls();
 
 			OnTerminalChanged(EventArgs.Empty);
@@ -4056,13 +4059,19 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_IOControlChanged(object sender, EventArgs e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			SetIOControlControls();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_IOConnectTimeChanged(object sender, TimeSpanEventArgs e)
 		{
-			if (!IsDisposed && TerminalIsAvailable) // Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			if (TerminalIsAvailable)
 			{
 				TimeSpan activeConnectTime;
 				TimeSpan totalConnectTime;
@@ -4082,6 +4091,9 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
 		private void terminal_IOError(object sender, Domain.IOErrorEventArgs e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			SetTerminalControls();
 			OnTerminalChanged(EventArgs.Empty);
 
@@ -4183,7 +4195,10 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (!IsDisposed && TerminalIsAvailable) // Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			if (TerminalIsAvailable)
 			{
 				monitor_Tx   .AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 				monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
@@ -4196,7 +4211,10 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (!IsDisposed && TerminalIsAvailable) // Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			if (TerminalIsAvailable)
 			{
 				monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 				monitor_Rx   .AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
@@ -4209,25 +4227,30 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (!IsDisposed && TerminalIsAvailable) // Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
-			{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			if (TerminalIsAvailable)
 				SetSentDataCountAndRateStatus();
-			}
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (!IsDisposed && TerminalIsAvailable) // Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
-			{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			if (TerminalIsAvailable)
 				SetReceivedDataCountAndRateStatus();
-			}
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_RepositoryCleared(object sender, EventArgs<Domain.RepositoryType> e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			switch (e.Value)
 			{
 				case Domain.RepositoryType.Tx:    monitor_Tx.Clear();    break;
@@ -4239,6 +4262,9 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_RepositoryReloaded(object sender, EventArgs<Domain.RepositoryType> e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			switch (e.Value)
 			{
 				case Domain.RepositoryType.Tx:    monitor_Tx.AddLines   (this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Tx));    break;
@@ -4250,18 +4276,27 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_FixedStatusTextRequest(object sender, EventArgs<string> e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			SetFixedStatusText(e.Value);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_TimedStatusTextRequest(object sender, EventArgs<string> e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			SetTimedStatusText(e.Value);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_ResetStatusTextRequest(object sender, EventArgs e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			ResetStatusText();
 		}
 
@@ -4269,24 +4304,36 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void terminal_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			e.Result = MessageBoxEx.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_SaveAsFileDialogRequest(object sender, Model.DialogEventArgs e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			e.Result = ShowSaveTerminalAsFileDialog();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_CursorRequest(object sender, EventArgs<Cursor> e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			Cursor = e.Value;
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_Saved(object sender, Model.SavedEventArgs e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			SetTerminalControls();
 			SelectSendTextInput();
 		}
@@ -4294,6 +4341,9 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_Closed(object sender, Model.ClosedEventArgs e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			DetachTerminalEventHandlers();
 			this.terminal = null;
 
@@ -4483,7 +4533,7 @@ namespace YAT.View.Forms
 
 				toolStripStatusLabel_TerminalStatus_IOStatus.Text = this.terminal.IOStatusText;
 			}
-			else
+			else // 'TerminalIsNotAvailable'
 			{
 				ResetIOStatusFlashing();
 				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Enabled = false;
@@ -4540,7 +4590,7 @@ namespace YAT.View.Forms
 			Image on  = Properties.Resources.Image_Status_Green_12x12;
 			Image off = Properties.Resources.Image_Status_Red_12x12;
 
-			bool isOpen = this.terminal.IsOpen;
+			bool isOpen = ((this.terminal != null) ? (this.terminal.IsOpen) : (false));
 
 			bool isSerialPort   = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
 			bool isUsbSerialHid = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsUsbSerialHid;
@@ -4561,7 +4611,7 @@ namespace YAT.View.Forms
 
 				if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
 				{
-					MKY.IO.Ports.SerialPortControlPinCount pinCount = this.terminal.SerialPortControlPinCount;
+					var pinCount = ((this.terminal != null) ? (this.terminal.SerialPortControlPinCount) : (new MKY.IO.Ports.SerialPortControlPinCount()));
 
 					toolStripStatusLabel_TerminalStatus_RFR.Text += (" | " + pinCount.RfrDisableCount.ToString(CultureInfo.CurrentCulture));
 					toolStripStatusLabel_TerminalStatus_CTS.Text += (" | " + pinCount.CtsDisableCount.ToString(CultureInfo.CurrentCulture));
@@ -4575,8 +4625,13 @@ namespace YAT.View.Forms
 					toolStripStatusLabel_TerminalStatus_DSR.ToolTipText += (" | DSR Disable Count");
 					toolStripStatusLabel_TerminalStatus_DCD.ToolTipText += (" | DCD Count");
 
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Text  += (" | " + this.terminal.SentXOnCount.ToString(CultureInfo.CurrentCulture)     + " | " + this.terminal.SentXOffCount.ToString(CultureInfo.CurrentCulture));
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Text += (" | " + this.terminal.ReceivedXOnCount.ToString(CultureInfo.CurrentCulture) + " | " + this.terminal.ReceivedXOffCount.ToString(CultureInfo.CurrentCulture));
+					var sentXOnCount      = ((this.terminal != null) ? (this.terminal.SentXOnCount)      : (0));
+					var sentXOffCount     = ((this.terminal != null) ? (this.terminal.SentXOffCount)     : (0));
+					var receivedXOnCount  = ((this.terminal != null) ? (this.terminal.ReceivedXOnCount)  : (0));
+					var receivedXOffCount = ((this.terminal != null) ? (this.terminal.ReceivedXOffCount) : (0));
+
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Text  += (" | " + sentXOnCount.ToString(CultureInfo.CurrentCulture)     + " | " + sentXOffCount.ToString(CultureInfo.CurrentCulture));
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Text += (" | " + receivedXOnCount.ToString(CultureInfo.CurrentCulture) + " | " + receivedXOffCount.ToString(CultureInfo.CurrentCulture));
 
 					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ToolTipText  += (" | XOn Count | XOff Count");
 					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ToolTipText += (" | XOn Count | XOff Count");
@@ -4584,8 +4639,11 @@ namespace YAT.View.Forms
 
 				if (this.settingsRoot.Terminal.Status.ShowBreakCount)
 				{
-					toolStripStatusLabel_TerminalStatus_InputBreak.Text  += (" | " + this.terminal.InputBreakCount.ToString(CultureInfo.CurrentCulture));
-					toolStripStatusLabel_TerminalStatus_OutputBreak.Text += (" | " + this.terminal.OutputBreakCount.ToString(CultureInfo.CurrentCulture));
+					var inputBreakCount      = ((this.terminal != null) ? (this.terminal.InputBreakCount)  : (0));
+					var outputBreakCount     = ((this.terminal != null) ? (this.terminal.OutputBreakCount) : (0));
+
+					toolStripStatusLabel_TerminalStatus_InputBreak.Text  += (" | " + inputBreakCount.ToString(CultureInfo.CurrentCulture));
+					toolStripStatusLabel_TerminalStatus_OutputBreak.Text += (" | " + outputBreakCount.ToString(CultureInfo.CurrentCulture));
 
 					toolStripStatusLabel_TerminalStatus_InputBreak.ToolTipText  += (" | Input Break Count");
 					toolStripStatusLabel_TerminalStatus_OutputBreak.ToolTipText += (" | Output Break Count");
@@ -4780,8 +4838,13 @@ namespace YAT.View.Forms
 
 				if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
 				{
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Text  += (" | " + this.terminal.SentXOnCount.ToString(CultureInfo.CurrentCulture)     + " | " + this.terminal.SentXOffCount.ToString(CultureInfo.CurrentCulture));
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Text += (" | " + this.terminal.ReceivedXOnCount.ToString(CultureInfo.CurrentCulture) + " | " + this.terminal.ReceivedXOffCount.ToString(CultureInfo.CurrentCulture));
+					var sentXOnCount      = ((this.terminal != null) ? (this.terminal.SentXOnCount)      : (0));
+					var sentXOffCount     = ((this.terminal != null) ? (this.terminal.SentXOffCount)     : (0));
+					var receivedXOnCount  = ((this.terminal != null) ? (this.terminal.ReceivedXOnCount)  : (0));
+					var receivedXOffCount = ((this.terminal != null) ? (this.terminal.ReceivedXOffCount) : (0));
+
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Text  += (" | " + sentXOnCount.ToString(CultureInfo.CurrentCulture)     + " | " + sentXOffCount.ToString(CultureInfo.CurrentCulture));
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Text += (" | " + receivedXOnCount.ToString(CultureInfo.CurrentCulture) + " | " + receivedXOffCount.ToString(CultureInfo.CurrentCulture));
 
 					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ToolTipText  += (" | XOn Count | XOff Count");
 					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ToolTipText += (" | XOn Count | XOff Count");
@@ -4890,7 +4953,7 @@ namespace YAT.View.Forms
 
 		private void ResetRfr()
 		{
-			bool isOpen = this.terminal.IsOpen;
+			bool isOpen = ((this.terminal != null) ? (this.terminal.IsOpen) : (false));
 
 			Image on  = Properties.Resources.Image_Status_Green_12x12;
 			Image off = Properties.Resources.Image_Status_Red_12x12;

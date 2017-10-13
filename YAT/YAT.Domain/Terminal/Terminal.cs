@@ -3059,22 +3059,31 @@ namespace YAT.Domain
 
 		private void rawTerminal_IOChanged(object sender, EventArgs e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			OnIOChanged(e);
 		}
 
 		private void rawTerminal_IOControlChanged(object sender, EventArgs e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			OnIOControlChanged(e);
 		}
 
 		private void rawTerminal_IOError(object sender, IOErrorEventArgs e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
 			{
 				var serialPortErrorEventArgs = (e as SerialPortErrorEventArgs);
 				if (serialPortErrorEventArgs != null)
 				{
-					// Handle serial port errors whenever possible.
+					// Handle serial port errors whenever possible:
 					switch (serialPortErrorEventArgs.SerialPortError)
 					{
 						case System.IO.Ports.SerialError.Frame:    OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(RxFramingErrorString));        break;
@@ -3103,6 +3112,9 @@ namespace YAT.Domain
 		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void rawTerminal_RawChunkSent(object sender, EventArgs<RawChunk> e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
 			{
 				OnRawChunkSent(e);
@@ -3113,6 +3125,9 @@ namespace YAT.Domain
 		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void rawTerminal_RawChunkReceived(object sender, EventArgs<RawChunk> e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
 			{
 				OnRawChunkReceived(e);
@@ -3122,6 +3137,9 @@ namespace YAT.Domain
 
 		private void rawTerminal_RepositoryCleared(object sender, EventArgs<RepositoryType> e)
 		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
 			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
 			{
 				ClearMyRepository(e.Value);
