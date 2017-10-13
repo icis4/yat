@@ -148,7 +148,7 @@ namespace YAT.Model.Types
 		{
 			int triggerInt = (int)(AutoTrigger)UnderlyingEnum;
 			if ((triggerInt >= (int)AutoTrigger.PredefinedCommand1) &&
-				(triggerInt <= (int)AutoTrigger.PredefinedCommand12))
+			    (triggerInt <= (int)AutoTrigger.PredefinedCommand12))
 			{
 				return (triggerInt);
 			}
@@ -332,10 +332,10 @@ namespace YAT.Model.Types
 			AutoTrigger enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				if (enumResult == AutoTrigger.Explicit)
-					result = new AutoTriggerEx(s);
-				else
+				if (enumResult != AutoTrigger.Explicit)
 					result = new AutoTriggerEx(enumResult);
+				else
+					result = new AutoTriggerEx(s);
 
 				return (true);
 			}

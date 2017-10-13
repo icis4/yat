@@ -152,7 +152,7 @@ namespace YAT.Model.Types
 			int responseInt = (int)(AutoResponse)UnderlyingEnum;
 
 			if ((responseInt >= (int)AutoResponse.PredefinedCommand1) &&
-				(responseInt <= (int)AutoResponse.PredefinedCommand12))
+			    (responseInt <= (int)AutoResponse.PredefinedCommand12))
 			{
 				return (responseInt);
 			}
@@ -339,9 +339,9 @@ namespace YAT.Model.Types
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
 				if (enumResult != AutoResponse.Explicit)
-					result = new AutoResponseEx(s);
-				else
 					result = new AutoResponseEx(enumResult);
+				else
+					result = new AutoResponseEx(s);
 
 				return (true);
 			}
