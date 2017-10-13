@@ -559,12 +559,12 @@ namespace YAT.View.Forms
 			{
 				bool workspaceIsReady = (this.workspace != null);
 
-				bool workspaceFileIsWritable = false;
+				bool workspaceFileIsReadOnly = false;
 				if (workspaceIsReady)
-					workspaceFileIsWritable = this.workspace.SettingsFileIsWritable;
+					workspaceFileIsReadOnly = this.workspace.SettingsFileIsReadOnly;
 
 				toolStripMenuItem_MainMenu_File_Workspace_Close.Enabled  = workspaceIsReady;
-				toolStripMenuItem_MainMenu_File_Workspace_Save.Enabled   = workspaceIsReady && workspaceFileIsWritable;
+				toolStripMenuItem_MainMenu_File_Workspace_Save.Enabled   = workspaceIsReady && !workspaceFileIsReadOnly;
 				toolStripMenuItem_MainMenu_File_Workspace_SaveAs.Enabled = workspaceIsReady;
 			}
 			finally
@@ -855,9 +855,9 @@ namespace YAT.View.Forms
 			{
 				bool childIsReady = (ActiveMdiChild != null);
 
-				bool terminalFileIsWritable = false;
+				bool terminalFileIsReadOnly = false;
 				if (childIsReady)
-					terminalFileIsWritable = ((Terminal)ActiveMdiChild).SettingsFileIsWritable;
+					terminalFileIsReadOnly = ((Terminal)ActiveMdiChild).SettingsFileIsReadOnly;
 
 				bool terminalIsStopped = false;
 				if (childIsReady)
@@ -888,7 +888,7 @@ namespace YAT.View.Forms
 				if (childIsReady)
 					logFileExists = ((Terminal)ActiveMdiChild).LogFileExists;
 
-				toolStripButton_MainTool_File_Save.Enabled         = childIsReady && terminalFileIsWritable;
+				toolStripButton_MainTool_File_Save.Enabled         = childIsReady && !terminalFileIsReadOnly;
 				toolStripButton_MainTool_Terminal_Start.Enabled    = childIsReady && terminalIsStopped;
 				toolStripButton_MainTool_Terminal_Stop.Enabled     = childIsReady && terminalIsStarted;
 				toolStripButton_MainTool_Terminal_Settings.Enabled = childIsReady;

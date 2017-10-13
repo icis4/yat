@@ -252,19 +252,6 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Returns whether settings file is writable.
-		/// </summary>
-		public virtual bool SettingsFileIsWritable
-		{
-			get
-			{
-				AssertNotDisposed();
-
-				return (this.fileHandler.FileIsWritable);
-			}
-		}
-
-		/// <summary>
 		/// Returns whether settings file is read-only.
 		/// </summary>
 		public virtual bool SettingsFileIsReadOnly
@@ -274,6 +261,19 @@ namespace MKY.Settings
 				AssertNotDisposed();
 
 				return (this.fileHandler.FileIsReadOnly);
+			}
+		}
+
+		/// <summary>
+		/// Returns whether settings file is writable.
+		/// </summary>
+		public virtual bool SettingsFileIsWritable
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.fileHandler.FileIsWritable);
 			}
 		}
 

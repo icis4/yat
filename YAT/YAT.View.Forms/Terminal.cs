@@ -431,7 +431,7 @@ namespace YAT.View.Forms
 			try
 			{
 				if (TerminalIsAvailable)
-					toolStripMenuItem_TerminalMenu_File_Save.Enabled = this.terminal.SettingsFileIsWritable;
+					toolStripMenuItem_TerminalMenu_File_Save.Enabled = !this.terminal.SettingsFileIsReadOnly;
 				else
 					toolStripMenuItem_TerminalMenu_File_Save.Enabled = false;
 			}
@@ -2640,12 +2640,12 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public virtual bool SettingsFileIsWritable
+		public virtual bool SettingsFileIsReadOnly
 		{
 			get
 			{
 				if (TerminalIsAvailable)
-					return (this.terminal.SettingsFileIsWritable);
+					return (this.terminal.SettingsFileIsReadOnly);
 				else
 					return (true);
 			}

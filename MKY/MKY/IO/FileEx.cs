@@ -108,25 +108,19 @@ namespace MKY.IO
 		}
 
 		/// <summary>
-		/// Checks whether the given file is writeable.
+		/// Checks whether the given file path is writeable,
+		/// i.e. is not read-only or the file doesn't exist yet.
 		/// </summary>
 		/// <param name="filePath">The file path.</param>
 		/// <returns>
 		/// Returns <c>true</c> if file is writeable.
 		/// </returns>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static bool IsWritable(string filePath)
 		{
-			try
-			{
-				// Force exception if file is not accessible:
-				FileInfo fi = new FileInfo(filePath);
-				return (fi.Exists && !fi.IsReadOnly);
-			}
-			catch
-			{
-				return (false);
-			}
+			if (File.Exists(filePath))
+				return (!IsReadOnly(filePath));
+			else
+				return (PathEx.IsValid(filePath));
 		}
 
 		/// <summary>
