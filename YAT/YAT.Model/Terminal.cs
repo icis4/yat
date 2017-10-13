@@ -204,10 +204,13 @@ namespace YAT.Model
 		public event EventHandler<TimeSpanEventArgs> IOConnectTimeChanged;
 
 		/// <summary></summary>
-		public event EventHandler IOCountChanged;
+		public event EventHandler IOCountChanged_Promptly;
 
 		/// <summary></summary>
-		public event EventHandler IORateChanged;
+		public event EventHandler IORateChanged_Promptly;
+
+		/// <summary></summary>
+		public event EventHandler IORateChanged_Decimated;
 
 		/// <summary></summary>
 		public event EventHandler<Domain.IOErrorEventArgs> IOError;
@@ -2265,10 +2268,12 @@ namespace YAT.Model
 		/// situation is anticipated in two ways:
 		///  > The <see cref="TimedStatusTextRequest"/> will only be raised
 		///    each <see cref="TimedStatusTextRequestTickInterval"/> milliseconds.
-		///  > The <see cref="IOCountChanged"/> and <see cref="IORateChanged"/> events will not be
-		///    used by the terminal form. Instead, the values will synchronously be retrieved when
-		///    processing <see cref="DisplayElementsSent"/>, <see cref="DisplayElementsReceived"/>,
+		///  > The <see cref="IOCountChanged_Promptly"/> and <see cref="IORateChanged_Promptly"/> events
+		///    will not be used by the terminal form. Instead, the values will synchronously be retrieved
+		///    when processing <see cref="DisplayElementsSent"/>, <see cref="DisplayElementsReceived"/>,
 		///    <see cref="DisplayLinesSent"/> and <see cref="DisplayLinesReceived"/> events.
+		///    In addition, the <see cref="IORateChanged_Decimated"/> event is used to get
+		///    notified on updates after transmission.
 		/// </remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_RawChunkSent(object sender, EventArgs<Domain.RawChunk> e)
@@ -2289,11 +2294,11 @@ namespace YAT.Model
 
 			// Count:
 			this.txByteCount += e.Value.Content.Length;
-			OnIOCountChanged(EventArgs.Empty);
+			OnIOCountChanged_Promptly(EventArgs.Empty);
 
 			// Rate:
 			if (this.txByteRate.Update(e.Value.Content.Length))
-				OnIORateChanged(EventArgs.Empty);
+				OnIORateChanged_Promptly(EventArgs.Empty);
 
 			// Log:
 			if (this.log.IsOn)
@@ -2311,10 +2316,12 @@ namespace YAT.Model
 		/// situation is anticipated in two ways:
 		///  > The <see cref="TimedStatusTextRequest"/> will only be raised
 		///    each <see cref="TimedStatusTextRequestTickInterval"/> milliseconds.
-		///  > The <see cref="IOCountChanged"/> and <see cref="IORateChanged"/> events will not be
-		///    used by the terminal form. Instead, the values will synchronously be retrieved when
-		///    processing <see cref="DisplayElementsSent"/>, <see cref="DisplayElementsReceived"/>,
+		///  > The <see cref="IOCountChanged_Promptly"/> and <see cref="IORateChanged_Promptly"/> events
+		///    will not be used by the terminal form. Instead, the values will synchronously be retrieved
+		///    when processing <see cref="DisplayElementsSent"/>, <see cref="DisplayElementsReceived"/>,
 		///    <see cref="DisplayLinesSent"/> and <see cref="DisplayLinesReceived"/> events.
+		///    In addition, the <see cref="IORateChanged_Decimated"/> event is used to get
+		///    notified on updates after transmission.
 		/// </remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_RawChunkReceived(object sender, EventArgs<Domain.RawChunk> e)
@@ -2335,11 +2342,11 @@ namespace YAT.Model
 
 			// Rate:
 			this.rxByteCount += e.Value.Content.Length;
-			OnIOCountChanged(EventArgs.Empty);
+			OnIOCountChanged_Promptly(EventArgs.Empty);
 
 			// Rate:
 			if (this.rxByteRate.Update(e.Value.Content.Length))
-				OnIORateChanged(EventArgs.Empty);
+				OnIORateChanged_Promptly(EventArgs.Empty);
 
 			// Log:
 			if (this.log.IsOn)
@@ -2408,11 +2415,11 @@ namespace YAT.Model
 
 			// Count:
 			this.txLineCount += e.Lines.Count;
-			OnIOCountChanged(EventArgs.Empty);
+			OnIOCountChanged_Promptly(EventArgs.Empty);
 
 			// Rate:
 			if (this.txLineRate.Update(e.Lines.Count))
-				OnIORateChanged(EventArgs.Empty);
+				OnIORateChanged_Promptly(EventArgs.Empty);
 
 			// Display:
 			OnDisplayLinesSent(e);
@@ -2436,11 +2443,11 @@ namespace YAT.Model
 
 			// Count:
 			this.rxLineCount += e.Lines.Count;
-			OnIOCountChanged(EventArgs.Empty);
+			OnIOCountChanged_Promptly(EventArgs.Empty);
 
 			// Rate:
 			if (this.rxLineRate.Update(e.Lines.Count))
-				OnIORateChanged(EventArgs.Empty);
+				OnIORateChanged_Promptly(EventArgs.Empty);
 
 			// Display:
 			OnDisplayLinesReceived(e);
@@ -3784,14 +3791,15 @@ namespace YAT.Model
 			this.rxByteCount = 0;
 			this.rxLineCount = 0;
 
-			OnIOCountChanged(EventArgs.Empty);
+			OnIOCountChanged_Promptly(EventArgs.Empty);
 
 			this.txByteRate.Reset();
 			this.txLineRate.Reset();
 			this.rxByteRate.Reset();
 			this.rxLineRate.Reset();
 
-			OnIORateChanged(EventArgs.Empty);
+			OnIORateChanged_Promptly(EventArgs.Empty);
+			OnIORateChanged_Decimated(EventArgs.Empty);
 		}
 
 		private void CreateRates()
@@ -3844,8 +3852,11 @@ namespace YAT.Model
 
 		private void rate_Changed(object sender, RateEventArgs e)
 		{
-			if (!IsDisposed)
-				OnIORateChanged(e);
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			OnIORateChanged_Promptly(e);
+			OnIORateChanged_Decimated(e);
 		}
 
 		#endregion
@@ -4430,15 +4441,21 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnIOCountChanged(EventArgs e)
+		protected virtual void OnIOCountChanged_Promptly(EventArgs e)
 		{
-			this.eventHelper.RaiseSync(IOCountChanged, this, e);
+			this.eventHelper.RaiseSync(IOCountChanged_Promptly, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnIORateChanged(EventArgs e)
+		protected virtual void OnIORateChanged_Promptly(EventArgs e)
 		{
-			this.eventHelper.RaiseSync(IORateChanged, this, e);
+			this.eventHelper.RaiseSync(IORateChanged_Promptly, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnIORateChanged_Decimated(EventArgs e)
+		{
+			this.eventHelper.RaiseSync(IORateChanged_Decimated, this, e);
 		}
 
 		/// <summary></summary>

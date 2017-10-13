@@ -3978,8 +3978,9 @@ namespace YAT.View.Forms
 				this.terminal.IOChanged               += terminal_IOChanged;
 				this.terminal.IOControlChanged        += terminal_IOControlChanged;
 				this.terminal.IOConnectTimeChanged    += terminal_IOConnectTimeChanged;
-			////this.terminal.IOCountChanged          += terminal_IOCountChanged; // See further below for reason.
-			////this.terminal.IORateChanged           += terminal_IORateChanged;  // See further below for reason.
+			////this.terminal.IOCountChanged_Promptly += terminal_IOCountChanged_Promptly; // See further below for reason.
+			////this.terminal.IORateChanged_Promptly  += terminal_IORateChanged_Promptly;  // See further below for reason.
+				this.terminal.IORateChanged_Decimated += terminal_IORateChanged_Decimated;
 				this.terminal.IOError                 += terminal_IOError;
 
 				this.terminal.DisplayElementsSent     += terminal_DisplayElementsSent;
@@ -4009,8 +4010,9 @@ namespace YAT.View.Forms
 				this.terminal.IOChanged               -= terminal_IOChanged;
 				this.terminal.IOControlChanged        -= terminal_IOControlChanged;
 				this.terminal.IOConnectTimeChanged    -= terminal_IOConnectTimeChanged;
-			////this.terminal.IOCountChanged          -= terminal_IOCountChanged; // See further below for reason.
-			////this.terminal.IORateChanged           -= terminal_IORateChanged;  // See further below for reason.
+			////this.terminal.IOCountChanged_Promptly -= terminal_IOCountChanged_Promptly; // See further below for reason.
+			////this.terminal.IORateChanged_Promptly  -= terminal_IORateChanged_Promptly;  // See further below for reason.
+				this.terminal.IORateChanged_Decimated -= terminal_IORateChanged_Decimated;
 				this.terminal.IOError                 -= terminal_IOError;
 
 				this.terminal.DisplayElementsSent     -= terminal_DisplayElementsSent;
@@ -4084,8 +4086,33 @@ namespace YAT.View.Forms
 			}
 		}
 
-		// 'terminal_IOCount/RateChanged' are not used because of the reasons described in the remarks of 'terminal_RawChunkSent/Received'.
-		// Instead, the update is done by the 'terminal_DisplayElementsSent/Received' and 'terminal_DisplayLinesSent/Received' handlers further below.
+		// 'terminal_IOCount/RateChanged_Promptly' are is not used because of the reasons described
+		// in the remarks of 'terminal_RawChunkSent/Received' of 'Model.Terminal'. Instead, the update
+		// is done by the 'terminal_DisplayElementsSent/Received' and 'terminal_DisplayLinesSent/Received'
+		// handlers further below.
+		//
+		// 'terminal_IORateChanged_Decimated' is fine.
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		private void terminal_IORateChanged_Decimated(object sender, EventArgs e)
+		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			if (TerminalIsAvailable)
+			{
+				int txByteRate = 0;
+				int txLineRate = 0;
+				int rxByteRate = 0;
+				int rxLineRate = 0;
+
+				this.terminal.GetDataRate(out txByteRate, out txLineRate, out rxByteRate, out rxLineRate);
+
+				monitor_Tx   .SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
+				monitor_Bidir.SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
+				monitor_Rx   .SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
+			}
+		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
