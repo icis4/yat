@@ -182,7 +182,7 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Returns whether setting file is readable.
+		/// Returns whether settings file is readable.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "fi", Justification = "Required to force exception.")]
@@ -199,7 +199,7 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Returns whether setting file is read-only.
+		/// Returns whether settings file is read-only.
 		/// </summary>
 		public virtual bool FileIsReadOnly
 		{
@@ -214,15 +214,22 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Returns whether setting file is writable.
+		/// Returns whether settings file is writable.
 		/// </summary>
 		public virtual bool FileIsWritable
 		{
-			get { return (!FileIsReadOnly); }
+			get
+			{
+				// String validation and file existence:
+				if (!FileExists)
+					return (false);
+
+				return (FileEx.IsWritable(this.filePath));
+			}
 		}
 
 		/// <summary>
-		/// Returns whether setting file has successfully been loaded, <c>false</c> if there was
+		/// Returns whether settings file has successfully been loaded, <c>false</c> if there was
 		/// no valid settings file available.
 		/// </summary>
 		public virtual bool FileSuccessfullyLoaded

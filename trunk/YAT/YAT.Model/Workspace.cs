@@ -724,12 +724,19 @@ namespace YAT.Model
 
 			if (!SettingsFileIsWritable || SettingsFileNoLongerExists)
 			{
-				if (userInteractionIsAllowed) {
-					return (RequestRestrictedSaveAsFromUser(canBeCanceled, out isCanceled));
+				if (this.settingsRoot.ExplicitHaveChanged)
+				{
+					if (userInteractionIsAllowed) {
+						return (RequestRestrictedSaveAsFromUser(canBeCanceled, out isCanceled));
+					}
+					else {
+						return (false); // Let save of explicit change fail if file is restricted.
+					}
 				}
-				else {
-					return (!this.settingsRoot.ExplicitHaveChanged); // Let save of explicit change fail if file is restricted.
-				}                                                    // Skip save of implicit change as save is currently not feasible.
+				else // ImplicitHaveChanged:
+				{
+					return (true); // Skip save of implicit change as save is currently not feasible.
+				}
 			}
 
 			// -------------------------------------------------------------------------------------
@@ -802,10 +809,10 @@ namespace YAT.Model
 			isCanceled = false;
 
 			string reason;
-			if (!SettingsFileIsWritable)
-				reason = "The file is write-protected.";
-			else if (SettingsFileNoLongerExists)
+			if      ( SettingsFileNoLongerExists)
 				reason = "The file no longer exists.";
+			else if (!SettingsFileIsWritable)
+				reason = "The file is write-protected.";
 			else
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'SaveAs'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
