@@ -570,7 +570,7 @@ namespace MKY.Win32
 						pDetailDataBuffer = Marshal.AllocHGlobal(bufferSize);
 
 						// Store cbSize in the first bytes of the array. The number of bytes varies with 32- and 64-bit systems.
-						Marshal.WriteInt32(pDetailDataBuffer, (IntPtr.Size == 4) ? (4 + Marshal.SystemDefaultCharSize) : 8);
+						Marshal.WriteInt32(pDetailDataBuffer, (IntPtr.Size == 4) ? (4 + Marshal.SystemDefaultCharSize) : (8));
 
 						// Call SetupDiGetDeviceInterfaceDetail again.
 						// This time, pass a pointer to DetailDataBuffer and the returned required buffer size.

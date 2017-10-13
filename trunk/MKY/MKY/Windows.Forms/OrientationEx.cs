@@ -185,7 +185,7 @@ namespace MKY.Windows.Forms
 		/// </summary>
 		public static int SizeToWidthOrHeight(Size size, Orientation orientation)
 		{
-			return ((orientation == Orientation.Vertical) ? size.Width : size.Height);
+			return ((orientation == Orientation.Vertical) ? (size.Width) : (size.Height));
 		}
 
 		/// <summary>
@@ -194,7 +194,7 @@ namespace MKY.Windows.Forms
 		/// </summary>
 		public static float SizeToWidthOrHeight(SizeF size, Orientation orientation)
 		{
-			return ((orientation == Orientation.Vertical) ? size.Width : size.Height);
+			return ((orientation == Orientation.Vertical) ? (size.Width) : (size.Height));
 		}
 
 		#endregion

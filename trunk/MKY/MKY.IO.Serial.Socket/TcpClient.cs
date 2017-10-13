@@ -985,7 +985,7 @@ namespace MKY.IO.Serial.Socket
 				// Changes here may have to be applied there too.
 				if (!IsDisposed && IsStarted) // Check 'IsDisposed' first!
 				{
-					// Signal that socket got disconnected to ensure that auto reconnect is allowed.
+					// Signal that socket got disconnected to ensure that auto reconnect is allowed:
 					SetStateSynchronizedAndNotify(SocketState.Disconnected);
 
 					if (AutoReconnectEnabledAndAllowed)
@@ -1035,7 +1035,7 @@ namespace MKY.IO.Serial.Socket
 				// Changes here may have to be applied there too.
 				if (!IsDisposed && IsStarted) // Check 'IsDisposed' first!
 				{
-					// Signal that socket got disconnected to ensure that auto reconnect is allowed.
+					// Signal that socket got disconnected to ensure that auto reconnect is allowed:
 					SetStateSynchronizedAndNotify(SocketState.Disconnected);
 
 					if (AutoReconnectEnabledAndAllowed)

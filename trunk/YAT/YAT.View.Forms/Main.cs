@@ -688,7 +688,7 @@ namespace YAT.View.Forms
 				bool workspaceIsReady = (this.workspace != null);
 				toolStripMenuItem_MainMenu_Window_AlwaysOnTop.Enabled = workspaceIsReady;
 
-				bool alwaysOnTop = ((this.workspace != null) ? this.workspace.SettingsRoot.Workspace.AlwaysOnTop : false);
+				bool alwaysOnTop = ((this.workspace != null) ? (this.workspace.SettingsRoot.Workspace.AlwaysOnTop) : (false));
 				toolStripMenuItem_MainMenu_Window_AlwaysOnTop.Checked = alwaysOnTop;
 
 				toolStripMenuItem_MainMenu_Window_Automatic.Enabled      = childIsReady;
@@ -1946,7 +1946,7 @@ namespace YAT.View.Forms
 			switch (layout)
 			{
 				case WorkspaceLayout.Automatic:
-					int terminalCount = ((this.workspace != null) ? this.workspace.TerminalCount : 0);
+					int terminalCount = ((this.workspace != null) ? (this.workspace.TerminalCount) : (0));
 					if (terminalCount <= 1)
 						MaximizeActiveMdiChild();
 					else
