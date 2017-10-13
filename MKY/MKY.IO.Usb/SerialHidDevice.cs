@@ -1167,16 +1167,13 @@ namespace MKY.IO.Usb
 
 				if (this.reportFormat.UseId)
 				{
-					sb.AppendLine("This may be caused by a mismatching report ID, i.e. the device may not support " + this.reportFormat.Id.ToString(CultureInfo.InvariantCulture));
-					sb.AppendLine();
-					sb.Append    ("Change the settings to a matching report ID or use the \\!(ReportID(<id>)) keyword to set a matching ID, then close and reopen the terminal and try again.");
+					sb.Append("Error may be caused by a mismatching report ID, i.e. the device may not support ID " + this.reportFormat.Id.ToString(CultureInfo.InvariantCulture) + ". ");
+					sb.Append("Change the settings to a matching report ID or use the \\!(ReportID(<id>)) keyword to set a matching ID, then close and reopen the terminal and try again.");
 				}
 				else
 				{
-					sb.AppendLine();
-					sb.AppendLine("This may be caused by mismatching report format settings.");
-					sb.AppendLine();
-					sb.Append    ("Change the settings, then close and reopen the terminal and try again.");
+					sb.Append("Error may be caused by mismatching report format settings. ");
+					sb.Append("Change the settings, then close and reopen the terminal and try again.");
 				}
 
 				string message = sb.ToString();
