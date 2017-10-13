@@ -2348,7 +2348,7 @@ namespace YAT.Model
 				this.log.Write(e.Value, Log.LogChannel.RawRx);
 			}
 
-			// AutoRespose:
+			// AutoResponse:
 			if (this.settingsRoot.AutoResponse.IsActive)
 			{
 				bool isMatch = false;
@@ -2455,7 +2455,7 @@ namespace YAT.Model
 				}
 			}
 
-			// AutoRespose:
+			// AutoResponse:
 			if (this.settingsRoot.AutoResponse.IsActive && (this.settingsRoot.AutoResponse.Trigger == AutoTrigger.AnyLine))
 				SendAutoResponse();
 		}

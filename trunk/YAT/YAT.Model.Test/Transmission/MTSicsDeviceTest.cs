@@ -252,7 +252,7 @@ namespace YAT.Model.Test.Transmission
 		{
 			TerminalSettingsRoot settings = settingsDescriptor.Value1(settingsDescriptor.Value2);
 
-			// Ensure that EOL is displayed, otherwise the EOL bytes are not available for verification.
+			// Ensure that EOL is displayed, otherwise the EOL bytes are not available for verification:
 			settings.TextTerminal.ShowEol = true;
 
 			// Create terminals from settings:
@@ -295,7 +295,7 @@ namespace YAT.Model.Test.Transmission
 					// Verify response:
 					Domain.DisplayLine lastLine = terminal.LastDisplayLineAuxiliary(Domain.RepositoryType.Rx);
 					byte[] actualBytes = lastLine.ElementsToOrigin();
-					Assert.That(ArrayEx.ElementsEqual(expectedBytes, actualBytes), "Unexpected respose from device! Should be " + ArrayEx.ElementsToString(expectedBytes) + " but is " + ArrayEx.ElementsToString(actualBytes));
+					Assert.That(ArrayEx.ElementsEqual(expectedBytes, actualBytes), "Unexpected response from device! Should be " + ArrayEx.ElementsToString(expectedBytes) + " but is " + ArrayEx.ElementsToString(actualBytes));
 					Trace.WriteLine(@"<< """ + expected + @"""");
 					terminal.ClearLastDisplayLineAuxiliary(Domain.RepositoryType.Rx);
 				}
