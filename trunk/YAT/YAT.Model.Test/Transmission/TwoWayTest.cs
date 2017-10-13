@@ -224,7 +224,7 @@ namespace YAT.Model.Test.Transmission
 		                                           Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                           Utilities.TestSet testSet, int transmissionCount)
 		{
-			PerformTransmission(settingsDescriptorA, settingsDescriptorB, testSet, transmissionCount);
+			TransmitAndVerify(settingsDescriptorA, settingsDescriptorB, testSet, transmissionCount);
 		}
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
@@ -238,7 +238,7 @@ namespace YAT.Model.Test.Transmission
 		                                           Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                           Utilities.TestSet testSet, int transmissionCount)
 		{
-			PerformTransmission(settingsDescriptorA, settingsDescriptorB, testSet, transmissionCount);
+			TransmitAndVerify(settingsDescriptorA, settingsDescriptorB, testSet, transmissionCount);
 		}
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
@@ -251,7 +251,7 @@ namespace YAT.Model.Test.Transmission
 		                                    Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                    Utilities.TestSet testSet, int transmissionCount)
 		{
-			PerformTransmission(settingsDescriptorA, settingsDescriptorB, testSet, transmissionCount);
+			TransmitAndVerify(settingsDescriptorA, settingsDescriptorB, testSet, transmissionCount);
 		}
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
@@ -265,15 +265,15 @@ namespace YAT.Model.Test.Transmission
 		                                   Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                   Utilities.TestSet testSet, int transmissionCount)
 		{
-			PerformTransmission(settingsDescriptorA, settingsDescriptorB, testSet, transmissionCount);
+			TransmitAndVerify(settingsDescriptorA, settingsDescriptorB, testSet, transmissionCount);
 		}
 
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too many values to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too many values to verify.")]
-		private static void PerformTransmission(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
-		                                        Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
-		                                        Utilities.TestSet testSet, int transmissionCount)
+		private static void TransmitAndVerify(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
+		                                      Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
+		                                      Utilities.TestSet testSet, int transmissionCount)
 		{
 			var settingsA = settingsDescriptorA.Value1(settingsDescriptorA.Value2);
 			using (var terminalA = new Terminal(settingsA))
@@ -309,12 +309,12 @@ namespace YAT.Model.Test.Transmission
 						}
 						Utilities.WaitForConnection(terminalA, terminalB);
 
-						PerformTransmission(terminalA, terminalB, testSet, transmissionCount);
+						TransmitAndVerify(terminalA, terminalB, testSet, transmissionCount);
 					}
 				}
 				else // Loopback self:
 				{
-					PerformTransmission(terminalA, terminalA, testSet, transmissionCount);
+					TransmitAndVerify(terminalA, terminalA, testSet, transmissionCount);
 				}
 			}
 		}
@@ -322,7 +322,7 @@ namespace YAT.Model.Test.Transmission
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too many values to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too many values to verify.")]
-		private static void PerformTransmission(Terminal terminalA, Terminal terminalB, Utilities.TestSet testSet, int transmissionCount)
+		private static void TransmitAndVerify(Terminal terminalA, Terminal terminalB, Utilities.TestSet testSet, int transmissionCount)
 		{
 			for (int cycle = 1; cycle <= transmissionCount; cycle++)
 			{
