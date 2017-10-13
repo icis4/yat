@@ -1226,7 +1226,7 @@ namespace YAT.Model.Test
 			int expectedTotalLineCount = (expectedPerCycleLineCount * cycle);
 
 			// Calculate timeout factor per line, taking cases with 0 lines into account:
-			int timeoutFactorPerLine = ((expectedPerCycleLineCount > 0) ? expectedPerCycleLineCount : 1);
+			int timeoutFactorPerLine = ((expectedPerCycleLineCount > 0) ? (expectedPerCycleLineCount) : (1));
 
 			// Calculate timeout:
 			int timeout = (WaitTimeoutForLineTransmission * timeoutFactorPerLine);

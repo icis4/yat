@@ -175,7 +175,7 @@ namespace MKY.IO.Usb
 			{
 				// Evaluate the required lengths:
 				int remainingPayloadLength = payload.Length - accumulatedPayloadLength;
-				int payloadLength = ((remainingPayloadLength <= usableLength) ? remainingPayloadLength : usableLength);
+				int payloadLength = ((remainingPayloadLength <= usableLength) ? (remainingPayloadLength) : (usableLength));
 
 				// Create the report, one or two bytes may be used by the report header,
 				// an additional byte may be needed for the terminating zero:
