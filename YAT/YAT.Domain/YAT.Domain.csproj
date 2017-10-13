@@ -98,7 +98,7 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="BinaryTerminal\BinaryTerminal.cs" />
-    <Compile Include="BinaryTerminal\Settings\BinaryDisplaySettings.cs" />
+    <Compile Include="BinarySettings\BinaryDisplaySettings.cs" />
     <Compile Include="BinaryTerminal\Structs.cs" />
     <Compile Include="Endianness.cs" />
     <Compile Include="Enums.cs" />
@@ -132,8 +132,8 @@
     <Compile Include="Terminal\TimeStampFormatPreset.cs" />
     <Compile Include="Terminal\InfoSeparator.cs" />
     <Compile Include="Terminal\SendItems.cs" />
-    <Compile Include="TextTerminal\Settings\SendTextFileSettings.cs" />
-    <Compile Include="TextTerminal\Settings\TextExclusionSettings.cs" />
+    <Compile Include="TextSettings\SendTextFileSettings.cs" />
+    <Compile Include="TextSettings\TextExclusionSettings.cs" />
     <Compile Include="TextTerminal\Structs.cs" />
     <Compile Include="Terminal\Radix.cs" />
     <Compile Include="Terminal\DisplayElement.cs" />
@@ -144,13 +144,13 @@
     <Compile Include="RawTerminal\RawTerminal.cs" />
     <Compile Include="RawTerminal\RawChunk.cs" />
     <Compile Include="RawTerminal\RawRepository.cs" />
-    <Compile Include="BinaryTerminal\Settings\BinaryTerminalSettings.cs" />
+    <Compile Include="BinarySettings\BinaryTerminalSettings.cs" />
     <Compile Include="Settings\BufferSettings.cs" />
     <Compile Include="Settings\TerminalSettings.cs" />
     <Compile Include="Settings\DisplaySettings.cs" />
     <Compile Include="Settings\SendSettings.cs" />
     <Compile Include="TextTerminal\CharSubstitution.cs" />
-    <Compile Include="TextTerminal\Settings\TextTerminalSettings.cs" />
+    <Compile Include="TextSettings\TextTerminalSettings.cs" />
     <Compile Include="TextTerminal\SubstitutionParser.cs" />
     <Compile Include="Terminal\Terminal.cs" />
     <Compile Include="EventArgs.cs" />

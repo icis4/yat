@@ -25,42 +25,32 @@
 using System;
 using System.Xml.Serialization;
 
+// The YAT.Domain.Settings namespace contains all raw/neutral/binary/text terminal infrastructure.
+// This code is intentionally placed into the YAT.Domain.Settings namespace even though the file is
+// located in the YAT.Domain\TextSettings for better separation of the implementation files.
 namespace YAT.Domain.Settings
 {
-	/// <summary></summary>
-	public class BinaryTerminalSettings : MKY.Settings.SettingsItem, IEquatable<BinaryTerminalSettings>
+	/// <remarks>
+	/// Named 'SendTextFileSettings' instead of 'SendFileSettings' to prevent XML invalid operation
+	/// exception "type 'A.X' and 'B.X' use the XML type name 'X' in namespace" when reflecting the
+	/// settings.
+	/// </remarks>
+	[Serializable]
+	public class SendTextFileSettings : MKY.Settings.SettingsItem, IEquatable<SendTextFileSettings>
 	{
-		#region Fields
-		//==========================================================================================
-		// Fields
-		//==========================================================================================
-
-		private bool separateTxRxDisplay;
-		private BinaryDisplaySettings txDisplay;
-		private BinaryDisplaySettings rxDisplay;
-
-		#endregion
-
-		#region Object Lifetime
-		//==========================================================================================
-		// Object Lifetime
-		//==========================================================================================
+		private bool skipEmptyLines;
 
 		/// <summary></summary>
-		public BinaryTerminalSettings()
+		public SendTextFileSettings()
 			: this(MKY.Settings.SettingsType.Explicit)
 		{
 		}
 
 		/// <summary></summary>
-		public BinaryTerminalSettings(MKY.Settings.SettingsType settingsType)
+		public SendTextFileSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
-
-			TxDisplay = new BinaryDisplaySettings(SettingsType);
-			RxDisplay = new BinaryDisplaySettings(SettingsType);
-
 			ClearChanged();
 		}
 
@@ -68,13 +58,10 @@ namespace YAT.Domain.Settings
 		/// Set fields through properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public BinaryTerminalSettings(BinaryTerminalSettings rhs)
+		public SendTextFileSettings(SendTextFileSettings rhs)
 			: base(rhs)
 		{
-			SeparateTxRxDisplay = rhs.SeparateTxRxDisplay;
-
-			TxDisplay = new BinaryDisplaySettings(rhs.TxDisplay);
-			RxDisplay = new BinaryDisplaySettings(rhs.RxDisplay);
+			SkipEmptyLines = rhs.SkipEmptyLines;
 
 			ClearChanged();
 		}
@@ -86,10 +73,8 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			SeparateTxRxDisplay = false;
+			SkipEmptyLines = false;
 		}
-
-		#endregion
 
 		#region Properties
 		//==========================================================================================
@@ -97,61 +82,17 @@ namespace YAT.Domain.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("SeparateTxRxDisplay")]
-		public virtual bool SeparateTxRxDisplay
+		[XmlElement("SkipEmptyLines")]
+		public virtual bool SkipEmptyLines
 		{
-			get { return (this.separateTxRxDisplay); }
+			get { return (this.skipEmptyLines); }
 			set
 			{
-				if (this.separateTxRxDisplay != value)
+				if (this.skipEmptyLines != value)
 				{
-					this.separateTxRxDisplay = value;
+					this.skipEmptyLines = value;
 					SetMyChanged();
 				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("TxDisplay")]
-		public virtual BinaryDisplaySettings TxDisplay
-		{
-			get { return (this.txDisplay); }
-			set
-			{
-				if (this.txDisplay != value)
-				{
-					var oldNode = this.txDisplay;
-					this.txDisplay = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
-
-					AttachOrReplaceOrDetachNode(oldNode, value);
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("RxDisplay")]
-		public virtual BinaryDisplaySettings RxDisplay
-		{
-			get
-			{
-				if (this.separateTxRxDisplay)
-					return (this.rxDisplay);
-				else // Rx redirects to Tx:
-					return (this.txDisplay);
-			}
-			set
-			{
-				if (this.rxDisplay != value)
-				{
-					var oldNode = this.rxDisplay;
-					this.rxDisplay = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
-
-					AttachOrReplaceOrDetachNode(oldNode, value);
-				}
-
-				// Do not redirect on 'set'. this would not be an understandable behaviour.
-				// It could even confuse the user, e.g. when temporarily separating the settings,
-				// and then load them again from XML => temporary settings get lost.
 			}
 		}
 
@@ -175,7 +116,7 @@ namespace YAT.Domain.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ SeparateTxRxDisplay.GetHashCode();
+				hashCode = (hashCode * 397) ^ SkipEmptyLines.GetHashCode();
 
 				return (hashCode);
 			}
@@ -186,7 +127,7 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as BinaryTerminalSettings));
+			return (Equals(obj as SendTextFileSettings));
 		}
 
 		/// <summary>
@@ -196,7 +137,7 @@ namespace YAT.Domain.Settings
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(BinaryTerminalSettings other)
+		public bool Equals(SendTextFileSettings other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
@@ -206,14 +147,14 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				SeparateTxRxDisplay.Equals(other.SeparateTxRxDisplay)
+				SkipEmptyLines.Equals(other.SkipEmptyLines)
 			);
 		}
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(BinaryTerminalSettings lhs, BinaryTerminalSettings rhs)
+		public static bool operator ==(SendTextFileSettings lhs, SendTextFileSettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -226,7 +167,7 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(BinaryTerminalSettings lhs, BinaryTerminalSettings rhs)
+		public static bool operator !=(SendTextFileSettings lhs, SendTextFileSettings rhs)
 		{
 			return (!(lhs == rhs));
 		}

@@ -33,6 +33,9 @@ using System.Xml.Serialization;
 using MKY.Collections;
 using MKY.Diagnostics;
 
+// The YAT.Domain.Settings namespace contains all raw/neutral/binary/text terminal infrastructure.
+// This code is intentionally placed into the YAT.Domain.Settings namespace even though the file is
+// located in the YAT.Domain\TextSettings for better separation of the implementation files.
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>

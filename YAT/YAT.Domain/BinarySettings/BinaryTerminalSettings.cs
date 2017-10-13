@@ -25,27 +25,45 @@
 using System;
 using System.Xml.Serialization;
 
+// The YAT.Domain.Settings namespace contains all raw/neutral/binary/text terminal infrastructure.
+// This code is intentionally placed into the YAT.Domain.Settings namespace even though the file is
+// located in the YAT.Domain\BinarySettings for better separation of the implementation files.
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class BinaryDisplaySettings : MKY.Settings.SettingsItem, IEquatable<BinaryDisplaySettings>
+	public class BinaryTerminalSettings : MKY.Settings.SettingsItem, IEquatable<BinaryTerminalSettings>
 	{
-		private BinaryLengthLineBreak   lengthLineBreak;
-		private BinarySequenceLineBreak sequenceLineBreakBefore;
-		private BinarySequenceLineBreak sequenceLineBreakAfter;
-		private BinaryTimedLineBreak    timedLineBreak;
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
+		private bool separateTxRxDisplay;
+		private BinaryDisplaySettings txDisplay;
+		private BinaryDisplaySettings rxDisplay;
+
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
 
 		/// <summary></summary>
-		public BinaryDisplaySettings()
+		public BinaryTerminalSettings()
 			: this(MKY.Settings.SettingsType.Explicit)
 		{
 		}
 
 		/// <summary></summary>
-		public BinaryDisplaySettings(MKY.Settings.SettingsType settingsType)
+		public BinaryTerminalSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
+
+			TxDisplay = new BinaryDisplaySettings(SettingsType);
+			RxDisplay = new BinaryDisplaySettings(SettingsType);
+
 			ClearChanged();
 		}
 
@@ -53,17 +71,17 @@ namespace YAT.Domain.Settings
 		/// Set fields through properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public BinaryDisplaySettings(BinaryDisplaySettings rhs)
+		public BinaryTerminalSettings(BinaryTerminalSettings rhs)
 			: base(rhs)
 		{
-			LengthLineBreak         = rhs.LengthLineBreak;
-			SequenceLineBreakBefore = rhs.SequenceLineBreakBefore;
-			SequenceLineBreakAfter  = rhs.SequenceLineBreakAfter;
-			TimedLineBreak          = rhs.TimedLineBreak;
+			SeparateTxRxDisplay = rhs.SeparateTxRxDisplay;
+
+			TxDisplay = new BinaryDisplaySettings(rhs.TxDisplay);
+			RxDisplay = new BinaryDisplaySettings(rhs.RxDisplay);
+
 			ClearChanged();
 		}
 
-		/// <summary></summary>
 		/// <remarks>
 		/// Set fields through properties to ensure correct setting of changed flag.
 		/// </remarks>
@@ -71,11 +89,10 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			LengthLineBreak         = new BinaryLengthLineBreak  (true, 16); // Enabled to prevent too long display lines.
-			SequenceLineBreakBefore = new BinarySequenceLineBreak(false, @"ABC");
-			SequenceLineBreakAfter  = new BinarySequenceLineBreak(false, @"\h(00)");
-			TimedLineBreak          = new BinaryTimedLineBreak   (false, 500);
+			SeparateTxRxDisplay = false;
 		}
+
+		#endregion
 
 		#region Properties
 		//==========================================================================================
@@ -83,62 +100,61 @@ namespace YAT.Domain.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("LengthLineBreak")]
-		public BinaryLengthLineBreak LengthLineBreak
+		[XmlElement("SeparateTxRxDisplay")]
+		public virtual bool SeparateTxRxDisplay
 		{
-			get { return (this.lengthLineBreak); }
+			get { return (this.separateTxRxDisplay); }
 			set
 			{
-				if (this.lengthLineBreak != value)
+				if (this.separateTxRxDisplay != value)
 				{
-					this.lengthLineBreak = value;
+					this.separateTxRxDisplay = value;
 					SetMyChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("SequenceLineBreakBefore")]
-		public BinarySequenceLineBreak SequenceLineBreakBefore
+		[XmlElement("TxDisplay")]
+		public virtual BinaryDisplaySettings TxDisplay
 		{
-			get { return (this.sequenceLineBreakBefore); }
+			get { return (this.txDisplay); }
 			set
 			{
-				if (this.sequenceLineBreakBefore != value)
+				if (this.txDisplay != value)
 				{
-					this.sequenceLineBreakBefore = value;
-					SetMyChanged();
+					var oldNode = this.txDisplay;
+					this.txDisplay = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("SequenceLineBreakAfter")]
-		public BinarySequenceLineBreak SequenceLineBreakAfter
+		[XmlElement("RxDisplay")]
+		public virtual BinaryDisplaySettings RxDisplay
 		{
-			get { return (this.sequenceLineBreakAfter); }
-			set
+			get
 			{
-				if (this.sequenceLineBreakAfter != value)
-				{
-					this.sequenceLineBreakAfter = value;
-					SetMyChanged();
-				}
+				if (this.separateTxRxDisplay)
+					return (this.rxDisplay);
+				else // Rx redirects to Tx:
+					return (this.txDisplay);
 			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("TimedLineBreak")]
-		public BinaryTimedLineBreak TimedLineBreak
-		{
-			get { return (this.timedLineBreak); }
 			set
 			{
-				if (this.timedLineBreak != value)
+				if (this.rxDisplay != value)
 				{
-					this.timedLineBreak = value;
-					SetMyChanged();
+					var oldNode = this.rxDisplay;
+					this.rxDisplay = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
 				}
+
+				// Do not redirect on 'set'. this would not be an understandable behaviour.
+				// It could even confuse the user, e.g. when temporarily separating the settings,
+				// and then load them again from XML => temporary settings get lost.
 			}
 		}
 
@@ -162,10 +178,7 @@ namespace YAT.Domain.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ LengthLineBreak        .GetHashCode();
-				hashCode = (hashCode * 397) ^ SequenceLineBreakBefore.GetHashCode();
-				hashCode = (hashCode * 397) ^ SequenceLineBreakAfter .GetHashCode();
-				hashCode = (hashCode * 397) ^ TimedLineBreak         .GetHashCode();
+				hashCode = (hashCode * 397) ^ SeparateTxRxDisplay.GetHashCode();
 
 				return (hashCode);
 			}
@@ -176,7 +189,7 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as BinaryDisplaySettings));
+			return (Equals(obj as BinaryTerminalSettings));
 		}
 
 		/// <summary>
@@ -186,7 +199,7 @@ namespace YAT.Domain.Settings
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(BinaryDisplaySettings other)
+		public bool Equals(BinaryTerminalSettings other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
@@ -196,17 +209,14 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				LengthLineBreak        .Equals(other.LengthLineBreak)         &&
-				SequenceLineBreakBefore.Equals(other.SequenceLineBreakBefore) &&
-				SequenceLineBreakAfter .Equals(other.SequenceLineBreakAfter)  &&
-				TimedLineBreak         .Equals(other.TimedLineBreak)
+				SeparateTxRxDisplay.Equals(other.SeparateTxRxDisplay)
 			);
 		}
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(BinaryDisplaySettings lhs, BinaryDisplaySettings rhs)
+		public static bool operator ==(BinaryTerminalSettings lhs, BinaryTerminalSettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -219,7 +229,7 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(BinaryDisplaySettings lhs, BinaryDisplaySettings rhs)
+		public static bool operator !=(BinaryTerminalSettings lhs, BinaryTerminalSettings rhs)
 		{
 			return (!(lhs == rhs));
 		}
