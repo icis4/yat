@@ -71,7 +71,6 @@ namespace MKY.IO
 		/// Returns <c>true</c> if file is readable.
 		/// </returns>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "fi", Justification = "Required to force exception.")]
 		public static bool IsReadable(string filePath)
 		{
 			try
@@ -98,6 +97,7 @@ namespace MKY.IO
 		{
 			try
 			{
+				// Force exception if file is not accessible:
 				FileInfo fi = new FileInfo(filePath);
 				return (fi.Exists && fi.IsReadOnly);
 			}
@@ -114,9 +114,19 @@ namespace MKY.IO
 		/// <returns>
 		/// Returns <c>true</c> if file is writeable.
 		/// </returns>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static bool IsWritable(string filePath)
 		{
-			return (!IsReadOnly(filePath));
+			try
+			{
+				// Force exception if file is not accessible:
+				FileInfo fi = new FileInfo(filePath);
+				return (fi.Exists && !fi.IsReadOnly);
+			}
+			catch
+			{
+				return (false);
+			}
 		}
 
 		/// <summary>
@@ -126,7 +136,6 @@ namespace MKY.IO
 		/// <returns>
 		/// Returns <c>true</c> if file is findable.
 		/// </returns>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static bool IsFindable(string fileName)
 		{
 			string filePath;
@@ -149,7 +158,7 @@ namespace MKY.IO
 		{
 			try
 			{
-				Process p = new Process();
+				var p = new Process();
 				p.StartInfo.UseShellExecute = false;
 				p.StartInfo.FileName = "WHERE";
 				p.StartInfo.Arguments = fileName;
