@@ -4253,9 +4253,9 @@ namespace YAT.View.Forms
 
 			switch (e.Value)
 			{
-				case Domain.RepositoryType.Tx:    monitor_Tx.Clear();    break;
+				case Domain.RepositoryType.Tx:    monitor_Tx   .Clear(); break;
 				case Domain.RepositoryType.Bidir: monitor_Bidir.Clear(); break;
-				case Domain.RepositoryType.Rx:    monitor_Rx.Clear();    break;
+				case Domain.RepositoryType.Rx:    monitor_Rx   .Clear(); break;
 			}
 		}
 
@@ -4267,9 +4267,9 @@ namespace YAT.View.Forms
 
 			switch (e.Value)
 			{
-				case Domain.RepositoryType.Tx:    monitor_Tx.AddLines   (this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Tx));    break;
+				case Domain.RepositoryType.Tx:    monitor_Tx   .AddLines(this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Tx));    break;
 				case Domain.RepositoryType.Bidir: monitor_Bidir.AddLines(this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Bidir)); break;
-				case Domain.RepositoryType.Rx:    monitor_Rx.AddLines   (this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Rx));    break;
+				case Domain.RepositoryType.Rx:    monitor_Rx   .AddLines(this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Rx));    break;
 			}
 		}
 
