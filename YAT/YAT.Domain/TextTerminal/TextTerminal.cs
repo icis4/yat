@@ -45,9 +45,9 @@ using YAT.Domain.Utilities;
 
 #endregion
 
-// The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
-// is intentionally placed into the YAT.Domain namespace even though the file is located in the
-// YAT.Domain\TextTerminal for better separation of the implementation files.
+// The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure.
+// This code is intentionally placed into the YAT.Domain namespace even though the file is
+// located in the YAT.Domain\TextTerminal for better separation of the implementation files.
 namespace YAT.Domain
 {
 	/// <summary>
@@ -84,8 +84,8 @@ namespace YAT.Domain
 		private enum LinePosition
 		{
 			Begin,
-			Data,
-			DataExceeded,
+			Content,
+			ContentExceeded,
 			End
 		}
 
@@ -130,6 +130,7 @@ namespace YAT.Domain
 
 		private class BidirLineState
 		{
+			public bool IsFirstChunk          { get; set; }
 			public bool IsFirstLine           { get; set; }
 			public string PortStamp           { get; set; }
 			public IODirection Direction      { get; set; }
@@ -137,6 +138,7 @@ namespace YAT.Domain
 
 			public BidirLineState()
 			{
+				IsFirstChunk      = true;
 				IsFirstLine       = true;
 				PortStamp         = null;
 				Direction         = IODirection.None;
@@ -145,6 +147,7 @@ namespace YAT.Domain
 
 			public BidirLineState(BidirLineState rhs)
 			{
+				IsFirstChunk      = rhs.IsFirstChunk;
 				IsFirstLine       = rhs.IsFirstLine;
 				PortStamp         = rhs.PortStamp;
 				Direction         = rhs.Direction;
@@ -525,6 +528,7 @@ namespace YAT.Domain
 					rxEol = p.Parse(TextTerminalSettings.RxEol);
 				}
 			}
+
 			this.txLineState = new LineState(new SequenceQueue(txEol));
 			this.rxLineState = new LineState(new SequenceQueue(rxEol));
 
@@ -579,7 +583,7 @@ namespace YAT.Domain
 										case IODirection.Tx: return (new DisplayElement.TxData(b, c[0].ToString(CultureInfo.InvariantCulture)));
 										case IODirection.Rx: return (new DisplayElement.RxData(b, c[0].ToString(CultureInfo.InvariantCulture)));
 
-										default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+										default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 									}
 								}
 								else // Unicode:
@@ -589,7 +593,7 @@ namespace YAT.Domain
 										case IODirection.Tx: return (new DisplayElement.TxData(b, UnicodeValueToNumericString(c[0])));
 										case IODirection.Rx: return (new DisplayElement.RxData(b, UnicodeValueToNumericString(c[0])));
 
-										default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+										default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 									}
 								}
 							}
@@ -638,7 +642,7 @@ namespace YAT.Domain
 											case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, chars[0].ToString(CultureInfo.InvariantCulture), decodingArray.Length));
 											case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, chars[0].ToString(CultureInfo.InvariantCulture), decodingArray.Length));
 
-											default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+											default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 										}
 									}
 									else // Unicode:
@@ -648,7 +652,7 @@ namespace YAT.Domain
 											case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, UnicodeValueToNumericString(chars[0]), decodingArray.Length));
 											case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, UnicodeValueToNumericString(chars[0]), decodingArray.Length));
 
-											default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+											default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 										}
 									}
 								}
@@ -741,7 +745,7 @@ namespace YAT.Domain
 			lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 			elements.AddRange(lp);
 
-			lineState.Position = LinePosition.Data;
+			lineState.Position = LinePosition.Content;
 			lineState.TimeStamp = ts;
 		}
 
@@ -848,7 +852,7 @@ namespace YAT.Domain
 				lp.Add(de); // No clone needed as element has just been created further above.
 			}
 
-			if (lineState.Position != LinePosition.DataExceeded)
+			if (lineState.Position != LinePosition.ContentExceeded)
 			{
 				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 				elements.AddRange(lp);
@@ -858,10 +862,10 @@ namespace YAT.Domain
 			if (lineState.Position != LinePosition.End)
 			{
 				if ((lineState.Elements.ByteCount >= TerminalSettings.Display.MaxBytePerLineCount) &&
-					(lineState.Position != LinePosition.DataExceeded))
+					(lineState.Position != LinePosition.ContentExceeded))
 				{
-					lineState.Position = LinePosition.DataExceeded;
-					                                     //// Using "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
+					lineState.Position = LinePosition.ContentExceeded;
+					                                     //// Using term "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
 					string message = "Maximal number of bytes per line exceeded! Check the end-of-line settings or increase the limit in the advanced terminal settings.";
 					lineState.Elements.Add(new DisplayElement.ErrorInfo((Direction)d, message, true));
 					elements.Add          (new DisplayElement.ErrorInfo((Direction)d, message, true));
@@ -891,7 +895,7 @@ namespace YAT.Domain
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of BinaryTerminal for better comparability.
 
-			                                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+			                                    // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			var line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			// Process line content:
@@ -965,7 +969,7 @@ namespace YAT.Domain
 				case IODirection.Tx: lineState = this.txLineState; break;
 				case IODirection.Rx: lineState = this.rxLineState; break;
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + raw.Direction + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + raw.Direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			foreach (byte b in raw.Content)
@@ -975,7 +979,7 @@ namespace YAT.Domain
 					ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elements);
 
 				// Content:
-				if (lineState.Position == LinePosition.Data)
+				if (lineState.Position == LinePosition.Content)
 					ExecuteContent(lineState, raw.Direction, b, elements);
 
 				// Line end and length:
@@ -987,10 +991,14 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		private void ProcessAndSignalPortOrDirectionLineBreak(string ps, IODirection d)
 		{
-			if (TerminalSettings.Display.PortLineBreakEnabled ||
-				TerminalSettings.Display.DirectionLineBreakEnabled)
+			if (this.bidirLineState.IsFirstChunk)
 			{
-				if (!this.bidirLineState.IsFirstLine) // is subsequent line
+				this.bidirLineState.IsFirstChunk = false;
+			}
+			else // = 'IsSubsequentChunk'.
+			{
+				if (TerminalSettings.Display.PortLineBreakEnabled ||
+					TerminalSettings.Display.DirectionLineBreakEnabled)
 				{
 					if (!StringEx.EqualsOrdinalIgnoreCase(ps, this.bidirLineState.PortStamp) || (d != this.bidirLineState.Direction))
 					{
@@ -1003,7 +1011,7 @@ namespace YAT.Domain
 								case IODirection.Tx: lineState = this.txLineState; break;
 								case IODirection.Rx: lineState = this.rxLineState; break;
 
-								default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+								default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
 						}
 						else // Attention: Direction changed => Use other state.
@@ -1013,7 +1021,7 @@ namespace YAT.Domain
 								case IODirection.Tx: lineState = this.rxLineState; break; // Reversed!
 								case IODirection.Rx: lineState = this.txLineState; break; // Reversed!
 
-								default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+								default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
 						}
 
@@ -1028,8 +1036,8 @@ namespace YAT.Domain
 							OnDisplayLinesProcessed   (this.bidirLineState.Direction, lines);
 						}
 					} // a line break has been detected
-				} // is subsequent line
-			} // a line break is active
+				} // a line break is active
+			} // is subsequent chunk
 
 			this.bidirLineState.PortStamp = ps;
 			this.bidirLineState.Direction = d;

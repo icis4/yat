@@ -254,7 +254,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 		/// <summary></summary>
 		[Test, IPv4LoopbackIsAvailableCategory]
-		public virtual void TestEolSpace()
+		public virtual void TestEolNone()
 		{
 			const int WaitForOperation = 100;
 			const int WaitForDisposal = 100;
