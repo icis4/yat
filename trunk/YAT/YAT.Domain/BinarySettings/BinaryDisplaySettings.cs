@@ -25,26 +25,27 @@
 using System;
 using System.Xml.Serialization;
 
+// The YAT.Domain.Settings namespace contains all raw/neutral/binary/text terminal infrastructure.
+// This code is intentionally placed into the YAT.Domain.Settings namespace even though the file is
+// located in the YAT.Domain\BinarySettings for better separation of the implementation files.
 namespace YAT.Domain.Settings
 {
-	/// <remarks>
-	/// Named 'SendTextFileSettings' instead of 'SendFileSettings' to prevent XML invalid operation
-	/// exception "type 'A.X' and 'B.X' use the XML type name 'X' in namespace" when reflecting the
-	/// settings.
-	/// </remarks>
-	[Serializable]
-	public class SendTextFileSettings : MKY.Settings.SettingsItem, IEquatable<SendTextFileSettings>
+	/// <summary></summary>
+	public class BinaryDisplaySettings : MKY.Settings.SettingsItem, IEquatable<BinaryDisplaySettings>
 	{
-		private bool skipEmptyLines;
+		private BinaryLengthLineBreak   lengthLineBreak;
+		private BinarySequenceLineBreak sequenceLineBreakBefore;
+		private BinarySequenceLineBreak sequenceLineBreakAfter;
+		private BinaryTimedLineBreak    timedLineBreak;
 
 		/// <summary></summary>
-		public SendTextFileSettings()
+		public BinaryDisplaySettings()
 			: this(MKY.Settings.SettingsType.Explicit)
 		{
 		}
 
 		/// <summary></summary>
-		public SendTextFileSettings(MKY.Settings.SettingsType settingsType)
+		public BinaryDisplaySettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -55,14 +56,17 @@ namespace YAT.Domain.Settings
 		/// Set fields through properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public SendTextFileSettings(SendTextFileSettings rhs)
+		public BinaryDisplaySettings(BinaryDisplaySettings rhs)
 			: base(rhs)
 		{
-			SkipEmptyLines = rhs.SkipEmptyLines;
-
+			LengthLineBreak         = rhs.LengthLineBreak;
+			SequenceLineBreakBefore = rhs.SequenceLineBreakBefore;
+			SequenceLineBreakAfter  = rhs.SequenceLineBreakAfter;
+			TimedLineBreak          = rhs.TimedLineBreak;
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		/// <remarks>
 		/// Set fields through properties to ensure correct setting of changed flag.
 		/// </remarks>
@@ -70,7 +74,10 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			SkipEmptyLines = false;
+			LengthLineBreak         = new BinaryLengthLineBreak  (true, 16); // Enabled to prevent too long display lines.
+			SequenceLineBreakBefore = new BinarySequenceLineBreak(false, @"ABC");
+			SequenceLineBreakAfter  = new BinarySequenceLineBreak(false, @"\h(00)");
+			TimedLineBreak          = new BinaryTimedLineBreak   (false, 500);
 		}
 
 		#region Properties
@@ -79,15 +86,60 @@ namespace YAT.Domain.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("SkipEmptyLines")]
-		public virtual bool SkipEmptyLines
+		[XmlElement("LengthLineBreak")]
+		public BinaryLengthLineBreak LengthLineBreak
 		{
-			get { return (this.skipEmptyLines); }
+			get { return (this.lengthLineBreak); }
 			set
 			{
-				if (this.skipEmptyLines != value)
+				if (this.lengthLineBreak != value)
 				{
-					this.skipEmptyLines = value;
+					this.lengthLineBreak = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("SequenceLineBreakBefore")]
+		public BinarySequenceLineBreak SequenceLineBreakBefore
+		{
+			get { return (this.sequenceLineBreakBefore); }
+			set
+			{
+				if (this.sequenceLineBreakBefore != value)
+				{
+					this.sequenceLineBreakBefore = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("SequenceLineBreakAfter")]
+		public BinarySequenceLineBreak SequenceLineBreakAfter
+		{
+			get { return (this.sequenceLineBreakAfter); }
+			set
+			{
+				if (this.sequenceLineBreakAfter != value)
+				{
+					this.sequenceLineBreakAfter = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("TimedLineBreak")]
+		public BinaryTimedLineBreak TimedLineBreak
+		{
+			get { return (this.timedLineBreak); }
+			set
+			{
+				if (this.timedLineBreak != value)
+				{
+					this.timedLineBreak = value;
 					SetMyChanged();
 				}
 			}
@@ -113,7 +165,10 @@ namespace YAT.Domain.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ SkipEmptyLines.GetHashCode();
+				hashCode = (hashCode * 397) ^ LengthLineBreak        .GetHashCode();
+				hashCode = (hashCode * 397) ^ SequenceLineBreakBefore.GetHashCode();
+				hashCode = (hashCode * 397) ^ SequenceLineBreakAfter .GetHashCode();
+				hashCode = (hashCode * 397) ^ TimedLineBreak         .GetHashCode();
 
 				return (hashCode);
 			}
@@ -124,7 +179,7 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as SendTextFileSettings));
+			return (Equals(obj as BinaryDisplaySettings));
 		}
 
 		/// <summary>
@@ -134,7 +189,7 @@ namespace YAT.Domain.Settings
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(SendTextFileSettings other)
+		public bool Equals(BinaryDisplaySettings other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
@@ -144,14 +199,17 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				SkipEmptyLines.Equals(other.SkipEmptyLines)
+				LengthLineBreak        .Equals(other.LengthLineBreak)         &&
+				SequenceLineBreakBefore.Equals(other.SequenceLineBreakBefore) &&
+				SequenceLineBreakAfter .Equals(other.SequenceLineBreakAfter)  &&
+				TimedLineBreak         .Equals(other.TimedLineBreak)
 			);
 		}
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(SendTextFileSettings lhs, SendTextFileSettings rhs)
+		public static bool operator ==(BinaryDisplaySettings lhs, BinaryDisplaySettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -164,7 +222,7 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(SendTextFileSettings lhs, SendTextFileSettings rhs)
+		public static bool operator !=(BinaryDisplaySettings lhs, BinaryDisplaySettings rhs)
 		{
 			return (!(lhs == rhs));
 		}
