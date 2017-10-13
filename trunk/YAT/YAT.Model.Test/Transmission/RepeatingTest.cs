@@ -221,7 +221,7 @@ namespace YAT.Model.Test.Transmission
 		                                            Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                            int repeatCount, bool doTwoWay, bool executeBreak)
 		{
-			PerformTransmission(settingsDescriptorA, settingsDescriptorB, repeatCount, doTwoWay, executeBreak);
+			TransmitAndVerify(settingsDescriptorA, settingsDescriptorB, repeatCount, doTwoWay, executeBreak);
 		}
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
@@ -235,7 +235,7 @@ namespace YAT.Model.Test.Transmission
 		                                            Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                            int repeatCount, bool doTwoWay, bool executeBreak)
 		{
-			PerformTransmission(settingsDescriptorA, settingsDescriptorB, repeatCount, doTwoWay, executeBreak);
+			TransmitAndVerify(settingsDescriptorA, settingsDescriptorB, repeatCount, doTwoWay, executeBreak);
 		}
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
@@ -248,7 +248,7 @@ namespace YAT.Model.Test.Transmission
 		                                    Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                    int repeatCount, bool doTwoWay, bool executeBreak)
 		{
-			PerformTransmission(settingsDescriptorA, settingsDescriptorB, repeatCount, doTwoWay, executeBreak);
+			TransmitAndVerify(settingsDescriptorA, settingsDescriptorB, repeatCount, doTwoWay, executeBreak);
 		}
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
@@ -262,15 +262,15 @@ namespace YAT.Model.Test.Transmission
 		                                   Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                   int repeatCount, bool doTwoWay, bool executeBreak)
 		{
-			PerformTransmission(settingsDescriptorA, settingsDescriptorB, repeatCount, doTwoWay, executeBreak);
+			TransmitAndVerify(settingsDescriptorA, settingsDescriptorB, repeatCount, doTwoWay, executeBreak);
 		}
 
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too many values to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too many values to verify.")]
-		private static void PerformTransmission(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
-		                                        Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
-		                                        int repeatCount, bool doTwoWay, bool executeBreak)
+		private static void TransmitAndVerify(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
+		                                      Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
+		                                      int repeatCount, bool doTwoWay, bool executeBreak)
 		{
 			var settingsA = settingsDescriptorA.Value1(settingsDescriptorA.Value2);
 			settingsA.Send.DefaultLineRepeat = repeatCount; // Set settings to the desired repeat count.
@@ -308,12 +308,12 @@ namespace YAT.Model.Test.Transmission
 						}
 						Utilities.WaitForConnection(terminalA, terminalB);
 
-						PerformTransmission(terminalA, terminalB, repeatCount, doTwoWay, executeBreak);
+						TransmitAndVerify(terminalA, terminalB, repeatCount, doTwoWay, executeBreak);
 					}
 				}
 				else // Loopback self:
 				{
-					PerformTransmission(terminalA, terminalA, repeatCount, doTwoWay, executeBreak);
+					TransmitAndVerify(terminalA, terminalA, repeatCount, doTwoWay, executeBreak);
 				}
 			}
 		}
@@ -321,7 +321,7 @@ namespace YAT.Model.Test.Transmission
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too many values to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too many values to verify.")]
-		private static void PerformTransmission(Terminal terminalA, Terminal terminalB, int repeatCount, bool doTwoWay, bool executeBreak)
+		private static void TransmitAndVerify(Terminal terminalA, Terminal terminalB, int repeatCount, bool doTwoWay, bool executeBreak)
 		{
 			var command = new Types.Command(RepeatingTestData.TestCommand);
 
@@ -335,12 +335,12 @@ namespace YAT.Model.Test.Transmission
 				var testSet = new Utilities.TestSet
 				(
 					command, repeatCount,
-					ArrayEx.CreateAndInitializeInstance(repeatCount, 2), // Data + EOL
-					ArrayEx.CreateAndInitializeInstance(repeatCount, RepeatingTestData.TestString.Length),
+					ArrayEx.CreateAndInitializeInstance(repeatCount, 2), // Content + EOL.
+					ArrayEx.CreateAndInitializeInstance(repeatCount, (RepeatingTestData.TestString.Length + 2)), // Content + EOL.
 					false
 				);
 
-				var expectedByteCount = (repeatCount * RepeatingTestData.TestString.Length);
+				var expectedByteCount = (repeatCount * (RepeatingTestData.TestString.Length + 2)); // Content + EOL.
 				Utilities.WaitForTransmission(terminalA, terminalB, expectedByteCount, repeatCount);
 				if (doTwoWay) {
 					Utilities.WaitForTransmission(terminalB, terminalA, expectedByteCount, repeatCount);
