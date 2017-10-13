@@ -153,7 +153,7 @@ namespace YAT.Model.Test.Connection
 		                                    Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                    char disconnectIdentifier)
 		{
-			PerformTransmissionAndDisconnect(settingsDescriptorA, settingsDescriptorB, disconnectIdentifier);
+			TransmitAndVerifyAndDisconnect(settingsDescriptorA, settingsDescriptorB, disconnectIdentifier);
 		}
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
@@ -167,15 +167,15 @@ namespace YAT.Model.Test.Connection
 		                                   Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                   char disconnectIdentifier)
 		{
-			PerformTransmissionAndDisconnect(settingsDescriptorA, settingsDescriptorB, disconnectIdentifier);
+			TransmitAndVerifyAndDisconnect(settingsDescriptorA, settingsDescriptorB, disconnectIdentifier);
 		}
 
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too many values to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too many values to verify.")]
-		private static void PerformTransmissionAndDisconnect(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
-		                                                     Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
-		                                                     char disconnectIdentifier)
+		private static void TransmitAndVerifyAndDisconnect(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
+		                                                   Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
+		                                                   char disconnectIdentifier)
 		{
 			var settingsA = settingsDescriptorA.Value1(settingsDescriptorA.Value2);
 			using (var terminalA = new Terminal(settingsA))
@@ -211,17 +211,17 @@ namespace YAT.Model.Test.Connection
 						}
 						Utilities.WaitForConnection(terminalA, terminalB);
 
-						PerformTransmissionAndDisconnect(terminalA, terminalB, disconnectIdentifier, false);
+						TransmitAndVerifyAndDisconnect(terminalA, terminalB, disconnectIdentifier, false);
 					}
 				}
 				else // Loopback self:
 				{
-					PerformTransmissionAndDisconnect(terminalA, terminalA, disconnectIdentifier, true);
+					TransmitAndVerifyAndDisconnect(terminalA, terminalA, disconnectIdentifier, true);
 				}
 			}
 		}
 
-		private static void PerformTransmissionAndDisconnect(Terminal terminalA, Terminal terminalB, char disconnectIdentifier, bool isSameTerminal)
+		private static void TransmitAndVerifyAndDisconnect(Terminal terminalA, Terminal terminalB, char disconnectIdentifier, bool isSameTerminal)
 		{
 			var encoding = ((EncodingEx)terminalA.SettingsRoot.TextTerminal.Encoding).Encoding;
 

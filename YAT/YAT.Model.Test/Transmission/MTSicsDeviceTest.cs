@@ -88,11 +88,12 @@ namespace YAT.Model.Test.Transmission
 			get
 			{
 				// An additional test set of MinuteDurationCategoryAttribute(1) makes little sense.
-				// That just prolongs a test run of MTSicsDeviceTest.PerformTransmission() to
-				// approx. 15 minutes at little to no additional test coverage. Such test set of
-				// MinuteDurationCategoryAttribute(1) resulted in 400 or 480 loops. Thus, the sets
-				// were e.g. 1/10/400/4000/24000/576000 loops. Instead of such long set, the 10
-				// loops test was replaced by sets of 2/5/20 which should give better test coverage.
+				// That just prolongs a test run of MTSicsDeviceTest.Transmission() to approx. 15
+				// minutes at little to no additional test coverage.
+				// Such test set of MinuteDurationCategoryAttribute(1) resulted in 400 or 480 loops.
+				// Thus, the sets were e.g. 1/10/400/4000/24000/576000 loops. Instead of such long
+				// set, the 10 loops test was replaced by sets of 2/5/20 which should give better
+				// test coverage.
 
 				string category10m = new NUnit.MinuteDurationCategoryAttribute(10).Name;
 				string category60m = new NUnit.MinuteDurationCategoryAttribute(60).Name;
@@ -248,7 +249,7 @@ namespace YAT.Model.Test.Transmission
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
 		[Test, TestCaseSource(typeof(MTSicsDeviceTestData), "TestCases")]
-		public virtual void PerformTransmission(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor, string stimulus, string expected, int transmissionCount)
+		public virtual void Transmission(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor, string stimulus, string expected, int transmissionCount)
 		{
 			TerminalSettingsRoot settings = settingsDescriptor.Value1(settingsDescriptor.Value2);
 
