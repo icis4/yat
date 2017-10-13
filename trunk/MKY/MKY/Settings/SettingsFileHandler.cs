@@ -220,10 +220,6 @@ namespace MKY.Settings
 		{
 			get
 			{
-				// String validation and file existence:
-				if (!FileExists)
-					return (false);
-
 				return (FileEx.IsWritable(this.filePath));
 			}
 		}
