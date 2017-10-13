@@ -3358,7 +3358,7 @@ namespace YAT.View.Forms
 				case Domain.IODirection.Tx: this.settingsRoot.Display.TxRadix = radix; break;
 				case Domain.IODirection.Rx: this.settingsRoot.Display.RxRadix = radix; break;
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
