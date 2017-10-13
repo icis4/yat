@@ -1235,18 +1235,17 @@ namespace YAT.View.Controls
 
 		private void ClearAndResetListBoxes()
 		{
-			ListBox lb;
-			
-			lb = fastListBox_LineNumbers;
-			lb.BeginUpdate();
-			lb.Items.Clear();
-			lb.EndUpdate();
+			var lblin = fastListBox_LineNumbers;
+			lblin.BeginUpdate();
+			lblin.Items.Clear();
+			lblin.EndUpdate();
 
-			lb = fastListBox_Monitor;
-			lb.BeginUpdate();
-			lb.Items.Clear();
-			lb.HorizontalExtent = 0;
-			lb.EndUpdate();
+			var lbmon = fastListBox_Monitor;
+			lbmon.BeginUpdate();
+			lbmon.Items.Clear();
+			lbmon.NotifyCleared();
+			lbmon.HorizontalExtent = 0;
+			lbmon.EndUpdate();
 
 			ResizeAndRelocateListBoxes(this.initialLineNumberWidth);
 		}

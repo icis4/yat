@@ -509,6 +509,18 @@ namespace MKY.Windows.Forms
 	#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
 
 		/// <summary>
+		/// Notifies the control that the items got clreard.
+		/// </summary>
+		/// <remarks>
+		/// Required to reset <see cref="UserIsScrolling"/>.
+		/// </remarks>
+		public void NotifyCleared()
+		{
+			this.userIsScrolling = false;
+			this.previousTopIndex = 0;
+		}
+
+		/// <summary>
 		/// Vertically scroll the list to the bottom.
 		/// </summary>
 		public void VerticalScrollToBottom()
