@@ -408,12 +408,25 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				lock (this.portSyncObj)
+				// Do not lock() infinitly in a simple get-property.
+
+				if (Monitor.TryEnter(this.portSyncObj, ThreadWaitTimeout))
 				{
-					if (this.port != null)
-						return (this.port.IsOpen);
-					else
-						return (false);
+					try
+					{
+						if (this.port != null)
+							return (this.port.IsOpen);
+						else
+							return (false);
+					}
+					finally
+					{
+						Monitor.Exit(this.portSyncObj);
+					}
+				}
+				else
+				{
+					return (false);
 				}
 			}
 		}
@@ -425,12 +438,25 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				lock (this.portSyncObj)
+				// Do not lock() infinitly in a simple get-property.
+
+				if (Monitor.TryEnter(this.portSyncObj, ThreadWaitTimeout))
 				{
-					if (IsOpen)
-						return (!this.port.OutputBreak && !this.port.InputBreak);
-					else
-						return (false);
+					try
+					{
+						if (IsOpen)
+							return (!this.port.OutputBreak && !this.port.InputBreak);
+						else
+							return (false);
+					}
+					finally
+					{
+						Monitor.Exit(this.portSyncObj);
+					}
+				}
+				else
+				{
+					return (false);
 				}
 			}
 		}
@@ -442,18 +468,31 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				lock (this.portSyncObj)
+				// Do not lock() infinitly in a simple get-property.
+
+				if (Monitor.TryEnter(this.portSyncObj, ThreadWaitTimeout))
 				{
-					if (IsOpen)
+					try
 					{
-						bool outputBreak = (this.settings.NoSendOnOutputBreak && this.port.OutputBreak);
-						bool inputBreak  = (this.settings.NoSendOnInputBreak  && this.port.InputBreak);
-						return (!outputBreak && !inputBreak);
+						if (IsOpen)
+						{
+							bool outputBreak = (this.settings.NoSendOnOutputBreak && this.port.OutputBreak);
+							bool inputBreak  = (this.settings.NoSendOnInputBreak  && this.port.InputBreak);
+							return (!outputBreak && !inputBreak);
+						}
+						else
+						{
+							return (false);
+						}
 					}
-					else
+					finally
 					{
-						return (false);
+						Monitor.Exit(this.portSyncObj);
 					}
+				}
+				else
+				{
+					return (false);
 				}
 			}
 		}
@@ -1058,10 +1097,6 @@ namespace MKY.IO.Serial.SerialPort
 				// This worked well when closing a port during execution of the application, but again
 				// lead to 'ObjectDisposedException' when exiting the application, each time! The async
 				// implementation was added in SVN revision #1063 and again removed in #1101.
-				//
-				// If closing again leads to deadlocks, consider to implement an improved async variant,
-				// by invoking the code below with a timeout, i.e. terminate the async worker in case it
-				// does not complete within a second or two.
 
 				CloseAndDisposePort(true); // This method is always called 'AfterException'.
 				ClearQueues();
@@ -1101,10 +1136,6 @@ namespace MKY.IO.Serial.SerialPort
 			// This worked well when closing a port during execution of the application, but again
 			// lead to 'ObjectDisposedException' when exiting the application, each time! The async
 			// implementation was added in SVN revision #1063 and again removed in #1101.
-			//
-			// If closing again leads to deadlocks, consider to implement an improved async variant,
-			// by invoking the code below with a timeout, i.e. terminate the async worker in case it
-			// does not complete within a second or two.
 
 			CloseAndDisposePort(isAfterException);
 			ClearQueues();
