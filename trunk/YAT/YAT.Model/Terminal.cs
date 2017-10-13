@@ -1517,6 +1517,20 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public virtual bool SettingsFileIsReadOnly
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.settingsHandler != null)
+					return (this.settingsHandler.SettingsFileIsReadOnly);
+				else
+					return (false);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool SettingsFileIsWritable
 		{
 			get
@@ -1660,7 +1674,7 @@ namespace YAT.Model
 
 			if (!SettingsFileIsWritable || SettingsFileNoLongerExists)
 			{
-				if (this.settingsRoot.ExplicitHaveChanged)
+				if (this.settingsRoot.ExplicitHaveChanged || saveEvenIfNotChanged)
 				{
 					if (userInteractionIsAllowed) {
 						return (RequestRestrictedSaveAsFromUser(canBeCanceled, out isCanceled));

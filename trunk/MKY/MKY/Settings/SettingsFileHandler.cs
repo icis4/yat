@@ -409,7 +409,7 @@ namespace MKY.Settings
 		{
 			bool success = false;
 
-			if (PathEx.IsValid(filePath) && FileEx.IsWritable(filePath))
+			if (FileEx.IsWritable(filePath))
 			{
 				string backup = PathEx.GetUniqueTempPath(); // Backup file can be located anywhere.
 
