@@ -33,9 +33,9 @@ using System.Text;
 
 #endregion
 
-// The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
-// is intentionally placed into the YAT.Domain namespace even though the file is located in the
-// YAT.Domain\TextTerminal for better separation of the implementation files.
+// The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure.
+// This code is intentionally placed into the YAT.Domain namespace even though the file is
+// located in the YAT.Domain\TextTerminal for better separation of the implementation files.
 namespace YAT.Domain.Parser
 {
 	/// <summary>

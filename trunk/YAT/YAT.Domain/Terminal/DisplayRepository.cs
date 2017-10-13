@@ -68,10 +68,10 @@ namespace YAT.Domain
 		public DisplayRepository(int capacity)
 			: base(capacity)
 		{
-			this.capacity    = capacity;           // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+			this.capacity    = capacity;                        // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			this.currentLine = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 		////this.dataCount   = 0;
-			                                         // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+			                                                  // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			this.lastLineAuxiliary = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 		}
 
