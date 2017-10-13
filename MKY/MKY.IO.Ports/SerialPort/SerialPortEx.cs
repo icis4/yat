@@ -1014,7 +1014,7 @@ namespace MKY.IO.Ports
 		{
 			AssertNotDisposed();
 
-			if (IsOpen || isAfterException)
+			if (isAfterException || IsOpen) // Check 'isAfterException' first because the underlying port may have crashed and thus can no longer be accessed with 'IsOpen'.
 			{
 				OnClosing(EventArgs.Empty);
 
