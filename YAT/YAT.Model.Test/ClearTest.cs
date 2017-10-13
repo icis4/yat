@@ -98,8 +98,8 @@ namespace YAT.Model.Test
 					Assert.That(terminalB.Start(), Is.True, @"Failed to start """ + terminalB.Caption + @"""");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
-					// Create test set to verify transmission:
-					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 4 }, new int[] { 3 }, true); // LineStart + EOL + LineBreak result in three more elements.
+					// Create test set to verify transmission:                              // LineStart + EOL + LineBreak result in three more elements.
+					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 4 }, new int[] { 3 }, true);
 
 					// Send test command:
 					terminalA.SendText(testSet.Command);
@@ -142,28 +142,27 @@ namespace YAT.Model.Test
 			{
 				using (var terminalB = new Terminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings()))
 				{
-					Utilities.TestSet testSet;
-
 					// Start and open terminals:
 					Assert.That(terminalA.Start(), Is.True, @"Failed to start """ + terminalA.Caption + @"""");
 					Assert.That(terminalB.Start(), Is.True, @"Failed to start """ + terminalB.Caption + @"""");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
-					// Create test set to verify transmission:
-					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 4 }, new int[] { 3 }, true); // LineStart + EOL + LineBreak result in three more elements.
+					// Create test set to verify transmission:                                            // LineStart + EOL + LineBreak result in three more elements.
+					var testSetInitial   = new Utilities.TestSet(new Types.Command(@"A"),          1, new int[] { 4 }, new int[] { 3 }, true);
+					var testSetContinued = new Utilities.TestSet(new Types.Command(@"B\!(NoEOL)"), 1, new int[] { 4 }, new int[] { 4 }, true);
 
 					// Send test command:
-					terminalA.SendText(testSet.Command);
-					Utilities.WaitForTransmission(terminalA, terminalB, testSet);
+					terminalA.SendText(testSetInitial.Command);
+					Utilities.WaitForTransmission(terminalA, terminalB, testSetInitial);
 
 					// Verify transmission:
 					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 					                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-					                      testSet);
+					                      testSetInitial);
 
 					// Send incomplete line text:
-					terminalA.SendText(@"B\!(NoEOL)");
-					Utilities.WaitForTransmission(terminalA, terminalB, testSet);
+					terminalA.SendText(testSetContinued.Command);
+					Utilities.WaitForTransmission(terminalA, terminalB, testSetContinued);
 
 					// Verify incomplete line:
 					var lines = terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx);
@@ -171,7 +170,7 @@ namespace YAT.Model.Test
 						Assert.Fail("Incomplete line not received!");
 
 					// Create test set to verify clear:
-					testSet = new Utilities.TestSet(new Types.Command(@""), 0, null, null, true); // Empty terminals expected
+					var testSetCleared = new Utilities.TestSet(new Types.Command(@""), 0, null, null, true); // Empty terminals expected
 
 					// Clear data:
 					terminalA.ClearRepositories();
@@ -180,7 +179,7 @@ namespace YAT.Model.Test
 					// Verify clear:
 					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 					                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-					                      testSet);
+					                      testSetCleared);
 				}
 			}
 		}
