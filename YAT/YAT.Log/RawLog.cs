@@ -135,7 +135,10 @@ namespace YAT.Log
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Since raw log uses raw items, time stamp, port and direction are always written to the log.
+		/// This differes from neat log, where only the items that are shown are written to the log.
+		/// </remarks>
 		public virtual void Write(Domain.RawChunk chunk)
 		{
 			AssertNotDisposed();

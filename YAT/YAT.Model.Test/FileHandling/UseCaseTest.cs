@@ -966,15 +966,15 @@ namespace YAT.Model.Test.FileHandling
 
 		private void terminal2_SaveAsFileDialogRequest_SaveAsOK(object sender, DialogEventArgs e)
 		{
-			Terminal terminal = (sender as Terminal);
-			Assert.That(terminal.SaveAs(this.normalTerminal2FilePath), Is.True, "Terminal 2 could not be saved as!");
+			var t = (sender as Terminal);
+			Assert.That(t.SaveAs(this.normalTerminal2FilePath), Is.True, "Terminal 2 could not be saved as!");
 			e.Result = System.Windows.Forms.DialogResult.OK;
 		}
 
 		private void terminal3_SaveAsFileDialogRequest_SaveAsOK(object sender, DialogEventArgs e)
 		{
-			Terminal terminal = (sender as Terminal);
-			Assert.That(terminal.SaveAs(this.normalTerminal3FilePath), Is.True, "Terminal 3 could not be saved as!");
+			var t = (sender as Terminal);
+			Assert.That(t.SaveAs(this.normalTerminal3FilePath), Is.True, "Terminal 3 could not be saved as!");
 			e.Result = System.Windows.Forms.DialogResult.OK;
 		}
 

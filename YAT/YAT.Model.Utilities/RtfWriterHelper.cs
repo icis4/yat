@@ -219,8 +219,8 @@ namespace YAT.Model.Utilities
 				cachedFont = new Font(fontName, fontSize, fontStyle);
 			}
 			else if ((cachedFont.Name != fontName) ||
-					 (cachedFont.Size != fontSize) ||
-					 (cachedFont.Style != fontStyle))
+			         (cachedFont.Size != fontSize) ||
+			         (cachedFont.Style != fontStyle))
 			{
 				// The font has changed, dispose of the cached font and create a new one:
 				cachedFont.Dispose();
