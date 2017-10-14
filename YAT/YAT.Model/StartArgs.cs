@@ -114,7 +114,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public WorkspaceStartArgs ToWorkspaceStartArgs()
 		{
-			WorkspaceStartArgs args = new WorkspaceStartArgs();
+			var args = new WorkspaceStartArgs();
 
 			args.KeepOpen        = this.KeepOpen;
 			args.KeepOpenOnError = this.KeepOpenOnError;
@@ -126,7 +126,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public TerminalStartArgs ToTerminalStartArgs()
 		{
-			TerminalStartArgs args = new TerminalStartArgs();
+			var args = new TerminalStartArgs();
 
 			args.KeepOpen        = this.KeepOpen;
 			args.KeepOpenOnError = this.KeepOpenOnError;
@@ -165,7 +165,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public TerminalStartArgs ToTerminalStartArgs()
 		{
-			TerminalStartArgs args = new TerminalStartArgs();
+			var args = new TerminalStartArgs();
 
 			args.KeepOpen        = this.KeepOpen;
 			args.KeepOpenOnError = this.KeepOpenOnError;

@@ -317,8 +317,7 @@ namespace YAT.View.Forms
 		private void button_OK_Click(object sender, EventArgs e)
 		{
 			// New terminal settings:
-			this.newTerminalSettings = this.newTerminalSettingsInEdit;
-			this.newTerminalSettings.UsbSerialHidMatchSerial = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial; // Defined by the LocalUserSettings.
+			UpdateNewTerminalSettings();
 
 			// Create document settings and fill it with new terminal settings:
 			this.terminalSettings = new Settings.Terminal.TerminalSettingsRoot();
@@ -357,7 +356,14 @@ namespace YAT.View.Forms
 
 		private void button_Cancel_Click(object sender, EventArgs e)
 		{
-			// Do nothing.
+			// Still update to keep changed settings for next new terminal:
+			UpdateNewTerminalSettings();
+		}
+
+		private void UpdateNewTerminalSettings()
+		{
+			this.newTerminalSettings = this.newTerminalSettingsInEdit;
+			this.newTerminalSettings.UsbSerialHidMatchSerial = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial; // Defined by the LocalUserSettings.
 		}
 
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]

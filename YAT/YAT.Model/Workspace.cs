@@ -1398,16 +1398,16 @@ namespace YAT.Model
 			OnFixedStatusTextRequest("Creating new terminal...");
 			OnCursorRequest(Cursors.WaitCursor);
 
-			Terminal terminal = new Terminal(this.startArgs.ToTerminalStartArgs(), settingsHandler);
-			AttachTerminalEventHandlers(terminal);
-			AddTerminalToWorkspace(terminal);
-			OnTerminalAdded(terminal);
+			var t = new Terminal(this.startArgs.ToTerminalStartArgs(), settingsHandler);
+			AttachTerminalEventHandlers(t);
+			AddTerminalToWorkspace(t);
+			OnTerminalAdded(t);
 
 			OnCursorReset();
 			OnTimedStatusTextRequest("New terminal created.");
 
 			// Start terminal:
-			terminal.Start(); // Errors are handled within Start().
+			t.Start(); // Errors are handled within Start().
 
 			return (true); // Successfully created.
 		}
@@ -1637,10 +1637,10 @@ namespace YAT.Model
 				settingsHandler.Settings.Window = windowSettings;
 
 			// Create terminal:
-			Terminal terminal;
+			Terminal t;
 			try
 			{
-				terminal = new Terminal(this.startArgs.ToTerminalStartArgs(), settingsHandler, guid);
+				t = new Terminal(this.startArgs.ToTerminalStartArgs(), settingsHandler, guid);
 			}
 			catch (Exception ex)
 			{
@@ -1649,9 +1649,9 @@ namespace YAT.Model
 				return (false);
 			}
 
-			AttachTerminalEventHandlers(terminal);
-			AddTerminalToWorkspace(terminal, fixedIndex);
-			OnTerminalAdded(terminal);
+			AttachTerminalEventHandlers(t);
+			AddTerminalToWorkspace(t, fixedIndex);
+			OnTerminalAdded(t);
 
 			if (!settingsHandler.Settings.AutoSaved)
 				SetRecent(settingsHandler.SettingsFilePath);
@@ -1752,7 +1752,7 @@ namespace YAT.Model
 
 		private TerminalSettingsItem CreateTerminalSettingsItem(Terminal terminal, int fixedIndex)
 		{
-			TerminalSettingsItem tsi = new TerminalSettingsItem();
+			var tsi = new TerminalSettingsItem();
 
 			string filePath = terminal.SettingsFilePath;
 			if (ApplicationSettings.LocalUserSettings.General.UseRelativePaths)
