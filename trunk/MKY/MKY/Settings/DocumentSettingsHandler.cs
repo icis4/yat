@@ -239,7 +239,7 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Returns whether settings file is readable.
+		/// Returns whether the settings file is readable.
 		/// </summary>
 		public virtual bool SettingsFileIsReadable
 		{
@@ -252,7 +252,7 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Returns whether settings file is read-only.
+		/// Returns whether the settings file is read-only.
 		/// </summary>
 		public virtual bool SettingsFileIsReadOnly
 		{
@@ -265,7 +265,7 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Returns whether settings file is writable.
+		/// Returns whether the settings file is writable.
 		/// </summary>
 		public virtual bool SettingsFileIsWritable
 		{
@@ -278,7 +278,7 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Returns whether settings file has successfully been loaded, <c>false</c> if there was
+		/// Returns whether the settings file has successfully been loaded, <c>false</c> if there was
 		/// no valid settings file available.
 		/// </summary>
 		public virtual bool SettingsFileSuccessfullyLoaded

@@ -122,7 +122,7 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Returns whether the settings file path is defined.
+		/// Determines whether the settings file path is defined.
 		/// </summary>
 		public virtual bool FilePathIsDefined
 		{
@@ -130,7 +130,7 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Returns whether the settings file path is valid.
+		/// Determines whether the settings file path is valid.
 		/// </summary>
 		public virtual bool FilePathIsValid
 		{
@@ -138,7 +138,7 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Returns whether the settings file exists.
+		/// Determines whether the settings file exists.
 		/// </summary>
 		public virtual bool FileExists
 		{
@@ -146,7 +146,7 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Returns whether the settings were loaded from a file but that doesn't exist anymore.
+		/// Determines whether the settings were loaded from a file but that doesn't exist anymore.
 		/// </summary>
 		public virtual bool FileExistsNoMore
 		{
@@ -154,7 +154,7 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Returns whether the settings file is up to date.
+		/// Determines whether the settings file is up to date.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual bool FileIsUpToDate
@@ -182,50 +182,31 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Returns whether settings file is readable.
+		/// Determines whether the settings file is readable, i.e. exists and can be accessed.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "fi", Justification = "Required to force exception.")]
 		public virtual bool FileIsReadable
 		{
-			get
-			{
-				// String validation and file existence:
-				if (!FileExists)
-					return (false);
-
-				return (FileEx.IsReadable(this.filePath));
-			}
+			get { return (FileEx.IsReadable(this.filePath)); }
 		}
 
 		/// <summary>
-		/// Returns whether settings file is read-only.
+		/// Determines whether the settings file is read-only, i.e. exists and is read-only.
 		/// </summary>
 		public virtual bool FileIsReadOnly
 		{
-			get
-			{
-				// String validation and file existence:
-				if (!FileExists)
-					return (false);
-
-				return (FileEx.IsReadOnly(this.filePath));
-			}
+			get { return (FileEx.IsReadOnly(this.filePath)); }
 		}
 
 		/// <summary>
-		/// Returns whether settings file is writable.
+		/// Determines whether the settings file path is writeable, i.e. is not read-only or the file doesn't exist yet.
 		/// </summary>
 		public virtual bool FileIsWritable
 		{
-			get
-			{
-				return (FileEx.IsWritable(this.filePath));
-			}
+			get { return (FileEx.IsWritable(this.filePath)); }
 		}
 
 		/// <summary>
-		/// Returns whether settings file has successfully been loaded, <c>false</c> if there was
+		/// Determines whether the settings file has successfully been loaded, <c>false</c> if there was
 		/// no valid settings file available.
 		/// </summary>
 		public virtual bool FileSuccessfullyLoaded
@@ -234,7 +215,7 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Returns whether settings are feasible to be saved to the settings file.
+		/// Determines whether settings are feasible to be saved to the settings file.
 		/// </summary>
 		public virtual bool SaveIsFeasible
 		{
@@ -316,7 +297,7 @@ namespace MKY.Settings
 			object result = null; // If not successful, return <c>null</c>.
 
 			// First check for file to minimize exceptions thrown:
-			if (File.Exists(filePath) && FileEx.IsReadable(filePath))
+			if (FileEx.IsReadable(filePath))
 			{
 				// First, always try standard deserialization:
 				//  > This is the fastest way of deserialization

@@ -27,6 +27,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Security;
 
 namespace MKY.IO
 {
@@ -49,9 +50,11 @@ namespace MKY.IO
 		/// The size of the given file.
 		/// </returns>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "fi", Justification = "Required to force exception.")]
 		public static long Size(string filePath)
 		{
+			if (!File.Exists(filePath))
+				return (0);
+
 			try
 			{
 				FileInfo fi = new FileInfo(filePath);
@@ -64,29 +67,34 @@ namespace MKY.IO
 		}
 
 		/// <summary>
-		/// Checks whether the given file is readable.
+		/// Determines whether the given file is readable, i.e. exists and can be accessed.
 		/// </summary>
 		/// <param name="filePath">The file path.</param>
 		/// <returns>
 		/// Returns <c>true</c> if file is readable.
 		/// </returns>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static bool IsReadable(string filePath)
 		{
+			if (!File.Exists(filePath))
+				return (false);
+
 			try
 			{
-				// Force exception if file is not accessible:
-				FileInfo fi = new FileInfo(filePath);
+				FileInfo fi = new FileInfo(filePath); // Probe for exceptions caught below.
 				return (fi.Exists);
 			}
-			catch
+			catch (SecurityException) // The caller does not have the required permission.
+			{
+				return (false);
+			}
+			catch (UnauthorizedAccessException) // Access to fileName is denied.
 			{
 				return (false);
 			}
 		}
 
 		/// <summary>
-		/// Checks whether the given file is read-only.
+		/// Determines whether the given file is read-only, i.e. exists and is read-only.
 		/// </summary>
 		/// <param name="filePath">The file path.</param>
 		/// <returns>
@@ -95,21 +103,26 @@ namespace MKY.IO
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static bool IsReadOnly(string filePath)
 		{
+			if (!File.Exists(filePath))
+				return (false);
+
 			try
 			{
-				// Force exception if file is not accessible:
-				FileInfo fi = new FileInfo(filePath);
+				FileInfo fi = new FileInfo(filePath); // Probe for exceptions caught below.
 				return (fi.Exists && fi.IsReadOnly);
 			}
-			catch
+			catch (SecurityException) // The caller does not have the required permission.
+			{
+				return (false);
+			}
+			catch (UnauthorizedAccessException) // Access to fileName is denied.
 			{
 				return (false);
 			}
 		}
 
 		/// <summary>
-		/// Checks whether the given file path is writeable,
-		/// i.e. is not read-only or the file doesn't exist yet.
+		/// Determines whether the given file path is writeable, i.e. is not read-only or the file doesn't exist yet.
 		/// </summary>
 		/// <param name="filePath">The file path.</param>
 		/// <returns>
@@ -124,7 +137,7 @@ namespace MKY.IO
 		}
 
 		/// <summary>
-		/// Checks whether the given file is findable, e.g. via the system's PATH variable.
+		/// Determines whether the given file is findable, e.g. via the system's PATH variable.
 		/// </summary>
 		/// <param name="fileName">The file name, typically an executable.</param>
 		/// <returns>
@@ -139,7 +152,7 @@ namespace MKY.IO
 		}
 
 		/// <summary>
-		/// Checks whether the given file is findable, e.g. via the system's PATH variable.
+		/// Determines whether the given file is findable, e.g. via the system's PATH variable.
 		/// </summary>
 		/// <param name="fileName">The file name, typically an executable.</param>
 		/// <param name="filePath">The path to the file.</param>
