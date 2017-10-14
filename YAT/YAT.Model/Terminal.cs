@@ -1453,8 +1453,8 @@ namespace YAT.Model
 				if (settingsRoot_Changed_sendImmediatelyOld != this.settingsRoot.Terminal.Send.SendImmediately) {
 					settingsRoot_Changed_sendImmediatelyOld = this.settingsRoot.Terminal.Send.SendImmediately;
 
-					// Send immediately has changed, reset the last command:
-					this.settingsRoot.SendText.Command.Clear();
+					// Send immediately has changed, reset the command:
+					this.settingsRoot.SendText.Command = new Command(this.settingsRoot.SendText.Command.DefaultRadix); // Set command to "".
 				}
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal.TextTerminal))

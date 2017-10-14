@@ -385,6 +385,10 @@ namespace YAT.View.Controls
 		public virtual void SelectInput()
 		{
 			comboBox_SingleLineText.Select();
+
+			// In case of single-line text, restore edit mode:
+			if (this.command.IsSingleLineText)
+				SetCursorToEnd();
 		}
 
 		/// <summary></summary>
@@ -915,7 +919,7 @@ namespace YAT.View.Controls
 						comboBox_SingleLineText.Text = "";
 				}
 
-				SetCursorToEnd();
+				SelectInput();
 				SetSendControls();
 			}
 			finally
@@ -1092,12 +1096,7 @@ namespace YAT.View.Controls
 				}
 			}
 
-			// In any case, return to text input box in order to allow navigation through recent commands:
 			SelectInput();
-
-			// In case of single-line text, i.e. cancel above, restore edit mode:
-			if (this.command.IsSingleLineText)
-				SetCursorToEnd();
 		}
 
 		#endregion
