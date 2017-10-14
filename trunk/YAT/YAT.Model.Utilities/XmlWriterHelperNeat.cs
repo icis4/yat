@@ -90,7 +90,7 @@ namespace YAT.Model.Utilities
 		public static bool LineFromDisplayToTransfer(DisplayLine displayLine, out XmlTransferNeatLine transferLine)
 		{
 			// Note that display elements are text-only and no longer contain the underlying typed
-			// information such as the time-stamp of the origin. Since the XML schema is strongly-
+			// information such as the time stamp of the origin. Since the XML schema is strongly-
 			// typed again, the items need to be reconstructed. Not optimal, but simply a trade-off
 			// between display and log performance. After all, XML logging is probably rarly used.
 

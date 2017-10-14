@@ -168,7 +168,10 @@ namespace YAT.Log
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Since neat log uses formatted display lines, only the items that are shown are written to the log.
+		/// This differes from raw log, where time stamp, port and direction are always contained in raw items.
+		/// </remarks>
 		public virtual void WriteLine(Domain.DisplayLine line)
 		{
 			AssertNotDisposed();
