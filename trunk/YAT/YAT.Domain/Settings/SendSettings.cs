@@ -37,7 +37,7 @@ namespace YAT.Domain.Settings
 		public const bool UseExplicitDefaultRadixDefault = false;
 
 		/// <summary></summary>
-		public const bool KeepCommandDefault = true;
+		public const bool KeepSendTextDefault = true;
 
 		/// <summary></summary>
 		public const bool CopyPredefinedDefault = false;
@@ -73,7 +73,7 @@ namespace YAT.Domain.Settings
 		}
 
 		private bool useExplicitDefaultRadix;
-		private bool keepCommand;
+		private bool keepSendText;
 		private bool copyPredefined;
 		private bool sendImmediately;
 		private int  defaultDelay;
@@ -108,7 +108,7 @@ namespace YAT.Domain.Settings
 			: base(rhs)
 		{
 			UseExplicitDefaultRadix = rhs.UseExplicitDefaultRadix;
-			KeepCommand             = rhs.KeepCommand;
+			KeepSendText            = rhs.KeepSendText;
 			CopyPredefined          = rhs.CopyPredefined;
 			SendImmediately         = rhs.SendImmediately;
 			DefaultDelay            = rhs.DefaultDelay;
@@ -131,7 +131,7 @@ namespace YAT.Domain.Settings
 			base.SetMyDefaults();
 
 			UseExplicitDefaultRadix = UseExplicitDefaultRadixDefault;
-			KeepCommand             = KeepCommandDefault;
+			KeepSendText            = KeepSendTextDefault;
 			CopyPredefined          = CopyPredefinedDefault;
 			SendImmediately         = SendImmediatelyDefault;
 			DefaultDelay            = DefaultDelayDefault;
@@ -165,15 +165,15 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("KeepCommand")]
-		public virtual bool KeepCommand
+		[XmlElement("KeepSendText")]
+		public virtual bool KeepSendText
 		{
-			get { return (this.keepCommand); }
+			get { return (this.keepSendText); }
 			set
 			{
-				if (this.keepCommand != value)
+				if (this.keepSendText != value)
 				{
-					this.keepCommand = value;
+					this.keepSendText = value;
 					SetMyChanged();
 				}
 			}
@@ -351,7 +351,7 @@ namespace YAT.Domain.Settings
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
 				hashCode = (hashCode * 397) ^ UseExplicitDefaultRadix        .GetHashCode();
-				hashCode = (hashCode * 397) ^ KeepCommand                    .GetHashCode();
+				hashCode = (hashCode * 397) ^ KeepSendText                   .GetHashCode();
 				hashCode = (hashCode * 397) ^ CopyPredefined                 .GetHashCode();
 				hashCode = (hashCode * 397) ^ SendImmediately                .GetHashCode();
 				hashCode = (hashCode * 397) ^ DefaultDelay;
@@ -393,7 +393,7 @@ namespace YAT.Domain.Settings
 				base.Equals(other) && // Compare all settings nodes.
 
 				UseExplicitDefaultRadix.Equals(other.UseExplicitDefaultRadix) &&
-				KeepCommand            .Equals(other.KeepCommand)             &&
+				KeepSendText           .Equals(other.KeepSendText)            &&
 				CopyPredefined         .Equals(other.CopyPredefined)          &&
 				SendImmediately        .Equals(other.SendImmediately)         &&
 				DefaultDelay           .Equals(other.DefaultDelay)            &&

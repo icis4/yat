@@ -628,7 +628,7 @@ namespace YAT.View.Forms
 
 				// Send:
 				this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix         = f.SettingsResult.Terminal.Send.UseExplicitDefaultRadix;
-				this.settingsInEdit.Terminal.Send.KeepCommand                     = f.SettingsResult.Terminal.Send.KeepCommand;
+				this.settingsInEdit.Terminal.Send.KeepSendText                    = f.SettingsResult.Terminal.Send.KeepSendText;
 				this.settingsInEdit.Terminal.Send.CopyPredefined                  = f.SettingsResult.Terminal.Send.CopyPredefined;
 				this.settingsInEdit.Terminal.Send.SendImmediately                 = f.SettingsResult.Terminal.Send.SendImmediately;
 

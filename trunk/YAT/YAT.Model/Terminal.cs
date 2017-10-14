@@ -3151,7 +3151,7 @@ namespace YAT.Model
 			DoSendText(this.settingsRoot.SendText.Command);
 
 			// Clear command if desired:
-			if (!this.settingsRoot.Send.KeepCommand)
+			if (!this.settingsRoot.Send.KeepSendText)
 				this.settingsRoot.SendText.Command = new Command(this.settingsRoot.SendText.Command.DefaultRadix); // Set command to "".
 		}
 
@@ -3165,7 +3165,7 @@ namespace YAT.Model
 			DoSendTextWithoutEol(this.settingsRoot.SendText.Command);
 
 			// Clear command if desired:
-			if (!this.settingsRoot.Send.KeepCommand)
+			if (!this.settingsRoot.Send.KeepSendText)
 				this.settingsRoot.SendText.Command = new Command(this.settingsRoot.SendText.Command.DefaultRadix); // Set command to "".
 		}
 

@@ -79,7 +79,7 @@
 			this.checkBox_DisableEscapes = new System.Windows.Forms.CheckBox();
 			this.checkBox_SendImmediately = new System.Windows.Forms.CheckBox();
 			this.checkBox_CopyPredefined = new System.Windows.Forms.CheckBox();
-			this.checkBox_KeepCommand = new System.Windows.Forms.CheckBox();
+			this.checkBox_KeepSendText = new System.Windows.Forms.CheckBox();
 			this.groupBox_Display = new System.Windows.Forms.GroupBox();
 			this.groupBox_Display_UsbSerialHid = new System.Windows.Forms.GroupBox();
 			this.checkBox_IncludeNonPayloadData = new System.Windows.Forms.CheckBox();
@@ -288,7 +288,7 @@
 			this.groupBox_Send.Controls.Add(this.checkBox_DisableEscapes);
 			this.groupBox_Send.Controls.Add(this.checkBox_SendImmediately);
 			this.groupBox_Send.Controls.Add(this.checkBox_CopyPredefined);
-			this.groupBox_Send.Controls.Add(this.checkBox_KeepCommand);
+			this.groupBox_Send.Controls.Add(this.checkBox_KeepSendText);
 			this.groupBox_Send.Location = new System.Drawing.Point(281, 165);
 			this.groupBox_Send.Name = "groupBox_Send";
 			this.groupBox_Send.Size = new System.Drawing.Size(263, 464);
@@ -700,16 +700,16 @@
 			this.checkBox_CopyPredefined.UseVisualStyleBackColor = true;
 			this.checkBox_CopyPredefined.CheckedChanged += new System.EventHandler(this.checkBox_CopyPredefined_CheckedChanged);
 			// 
-			// checkBox_KeepCommand
+			// checkBox_KeepSendText
 			// 
-			this.checkBox_KeepCommand.AutoSize = true;
-			this.checkBox_KeepCommand.Location = new System.Drawing.Point(12, 46);
-			this.checkBox_KeepCommand.Name = "checkBox_KeepCommand";
-			this.checkBox_KeepCommand.Size = new System.Drawing.Size(219, 17);
-			this.checkBox_KeepCommand.TabIndex = 1;
-			this.checkBox_KeepCommand.Text = "&Keep command in [Send Text] after send";
-			this.checkBox_KeepCommand.UseVisualStyleBackColor = true;
-			this.checkBox_KeepCommand.CheckedChanged += new System.EventHandler(this.checkBox_KeepCommand_CheckedChanged);
+			this.checkBox_KeepSendText.AutoSize = true;
+			this.checkBox_KeepSendText.Location = new System.Drawing.Point(12, 46);
+			this.checkBox_KeepSendText.Name = "checkBox_KeepSendText";
+			this.checkBox_KeepSendText.Size = new System.Drawing.Size(219, 17);
+			this.checkBox_KeepSendText.TabIndex = 1;
+			this.checkBox_KeepSendText.Text = "&Keep [Send Text] after send";
+			this.checkBox_KeepSendText.UseVisualStyleBackColor = true;
+			this.checkBox_KeepSendText.CheckedChanged += new System.EventHandler(this.checkBox_KeepSendText_CheckedChanged);
 			// 
 			// groupBox_Display
 			// 
@@ -1276,7 +1276,7 @@
 		private System.Windows.Forms.Label label_MaxLineCountUnit;
 		private MKY.Windows.Forms.TextBoxEx textBox_MaxLineCount;
 		private System.Windows.Forms.Label label_MaxLineCount;
-		private System.Windows.Forms.CheckBox checkBox_KeepCommand;
+		private System.Windows.Forms.CheckBox checkBox_KeepSendText;
 		private System.Windows.Forms.CheckBox checkBox_ShowTimeStamp;
 		private System.Windows.Forms.CheckBox checkBox_ShowTimeSpan;
 		private System.Windows.Forms.CheckBox checkBox_ShowTimeDelta;
