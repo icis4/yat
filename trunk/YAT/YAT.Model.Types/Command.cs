@@ -249,7 +249,7 @@ namespace YAT.Model.Types
 					}
 					else if (IsFilePath)
 					{
-						return (Path.GetFileName(FilePath)); // Only use file name for better readability!
+						return (Path.GetFileName(FilePath)); // Only use file name for better readability? Or better use PathEx.Limit(FilePath, <Length>) when fixing #308 "Minor issues with commands"? But what length?
 					}
 					else
 					{
