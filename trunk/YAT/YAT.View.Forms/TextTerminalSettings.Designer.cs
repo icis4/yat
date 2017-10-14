@@ -168,7 +168,7 @@ namespace YAT.View.Forms
 			this.label_RxEol.Name = "label_RxEol";
 			this.label_RxEol.Size = new System.Drawing.Size(97, 13);
 			this.label_RxEol.TabIndex = 3;
-			this.label_RxEol.Text = "&Rx EOL sequence:";
+			this.label_RxEol.Text = "EOL sequence:";
 			// 
 			// comboBox_TxEol
 			// 

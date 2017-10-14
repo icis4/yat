@@ -938,7 +938,7 @@ namespace YAT.View.Forms
 
 				if (arVisible)
 				{
-					toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Hide AutoResponse command";
+					toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Hide Automatic Response";
 
 					// Attention:
 					// Similar code exists in the following location:
@@ -967,7 +967,7 @@ namespace YAT.View.Forms
 				}
 				else
 				{
-					toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Show AutoResponse command";
+					toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Show Automatic Response";
 
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Visible = false;
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Enabled = false;

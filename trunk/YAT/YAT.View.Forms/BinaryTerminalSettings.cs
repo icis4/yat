@@ -200,14 +200,14 @@ namespace YAT.View.Forms
 			try
 			{
 				if (this.settingsInEdit.SeparateTxRxDisplay)
-					groupBox_TxDisplay.Text = "&Tx and Rx";
-				else
 					groupBox_TxDisplay.Text = "&Tx";
+				else
+					groupBox_TxDisplay.Text = "&Tx and Rx";
 
 				binaryTerminalSettingsSet_Tx.Settings = this.settingsInEdit.TxDisplay;
 
-				checkBox_SeparateTxRxDisplay.Checked = this.settingsInEdit.SeparateTxRxDisplay;
-				groupBox_RxDisplay.Enabled = this.settingsInEdit.SeparateTxRxDisplay;
+				checkBox_SeparateTxRxDisplay.Checked  = this.settingsInEdit.SeparateTxRxDisplay;
+				groupBox_RxDisplay.Enabled            = this.settingsInEdit.SeparateTxRxDisplay;
 				binaryTerminalSettingsSet_Rx.Settings = this.settingsInEdit.RxDisplay;
 			}
 			finally
