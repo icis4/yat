@@ -160,7 +160,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_SendContextMenu_KeepCommand = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_SendContextMenu_KeepSendText = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_SendImmediately = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
@@ -206,7 +206,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_TerminalMenu_Send_KeepCommand = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Send_KeepSendText = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
@@ -1305,7 +1305,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_SendContextMenu_Separator_2,
             this.toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix,
             this.toolStripMenuItem_SendContextMenu_Separator_3,
-            this.toolStripMenuItem_SendContextMenu_KeepCommand,
+            this.toolStripMenuItem_SendContextMenu_KeepSendText,
             this.toolStripMenuItem_SendContextMenu_CopyPredefined,
             this.toolStripMenuItem_SendContextMenu_SendImmediately,
             this.toolStripMenuItem_SendContextMenu_Separator_4,
@@ -1391,14 +1391,14 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_Separator_3.Name = "toolStripMenuItem_SendContextMenu_Separator_3";
 			this.toolStripMenuItem_SendContextMenu_Separator_3.Size = new System.Drawing.Size(317, 6);
 			// 
-			// toolStripMenuItem_SendContextMenu_KeepCommand
+			// toolStripMenuItem_SendContextMenu_KeepSendText
 			// 
-			this.toolStripMenuItem_SendContextMenu_KeepCommand.Name = "toolStripMenuItem_SendContextMenu_KeepCommand";
-			this.toolStripMenuItem_SendContextMenu_KeepCommand.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			this.toolStripMenuItem_SendContextMenu_KeepSendText.Name = "toolStripMenuItem_SendContextMenu_KeepSendText";
+			this.toolStripMenuItem_SendContextMenu_KeepSendText.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.K)));
-			this.toolStripMenuItem_SendContextMenu_KeepCommand.Size = new System.Drawing.Size(320, 22);
-			this.toolStripMenuItem_SendContextMenu_KeepCommand.Text = "Keep Command after Send";
-			this.toolStripMenuItem_SendContextMenu_KeepCommand.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_KeepCommand_Click);
+			this.toolStripMenuItem_SendContextMenu_KeepSendText.Size = new System.Drawing.Size(320, 22);
+			this.toolStripMenuItem_SendContextMenu_KeepSendText.Text = "Keep [Send Text] after Send";
+			this.toolStripMenuItem_SendContextMenu_KeepSendText.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_KeepSendText_Click);
 			// 
 			// toolStripMenuItem_SendContextMenu_CopyPredefined
 			// 
@@ -1406,7 +1406,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_CopyPredefined.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.P)));
 			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Size = new System.Drawing.Size(320, 22);
-			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Text = "Copy Predefined to Send Text";
+			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Text = "Copy Predefined to [Send Text]";
 			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_CopyPredefined_Click);
 			// 
 			// toolStripMenuItem_SendContextMenu_SendImmediately
@@ -1429,7 +1429,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_SkipEmptyLines.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.M)));
 			this.toolStripMenuItem_SendContextMenu_SkipEmptyLines.Size = new System.Drawing.Size(320, 22);
-			this.toolStripMenuItem_SendContextMenu_SkipEmptyLines.Text = "Skip Empty Lines on Send File";
+			this.toolStripMenuItem_SendContextMenu_SkipEmptyLines.Text = "Skip Empty Lines on [Send File]";
 			this.toolStripMenuItem_SendContextMenu_SkipEmptyLines.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_SkipEmptyLines_Click);
 			// 
 			// toolStripMenuItem_SendContextMenu_Separator_5
@@ -1751,7 +1751,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_TerminalMenu_Send_Separator_1,
             this.toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix,
             this.toolStripMenuItem_TerminalMenu_Send_Separator_2,
-            this.toolStripMenuItem_TerminalMenu_Send_KeepCommand,
+            this.toolStripMenuItem_TerminalMenu_Send_KeepSendText,
             this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined,
             this.toolStripMenuItem_TerminalMenu_Send_SendImmediately,
             this.toolStripMenuItem_TerminalMenu_Send_Separator_3,
@@ -1812,14 +1812,14 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_2.Name = "toolStripMenuItem_TerminalMenu_Send_Separator_2";
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_2.Size = new System.Drawing.Size(317, 6);
 			// 
-			// toolStripMenuItem_TerminalMenu_Send_KeepCommand
+			// toolStripMenuItem_TerminalMenu_Send_KeepSendText
 			// 
-			this.toolStripMenuItem_TerminalMenu_Send_KeepCommand.Name = "toolStripMenuItem_TerminalMenu_Send_KeepCommand";
-			this.toolStripMenuItem_TerminalMenu_Send_KeepCommand.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			this.toolStripMenuItem_TerminalMenu_Send_KeepSendText.Name = "toolStripMenuItem_TerminalMenu_Send_KeepSendText";
+			this.toolStripMenuItem_TerminalMenu_Send_KeepSendText.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.K)));
-			this.toolStripMenuItem_TerminalMenu_Send_KeepCommand.Size = new System.Drawing.Size(320, 22);
-			this.toolStripMenuItem_TerminalMenu_Send_KeepCommand.Text = "&Keep Command after Send";
-			this.toolStripMenuItem_TerminalMenu_Send_KeepCommand.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_KeepCommand_Click);
+			this.toolStripMenuItem_TerminalMenu_Send_KeepSendText.Size = new System.Drawing.Size(320, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_KeepSendText.Text = "&Keep [Send Text] after Send";
+			this.toolStripMenuItem_TerminalMenu_Send_KeepSendText.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_KeepSendText_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_CopyPredefined
 			// 
@@ -1827,7 +1827,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.P)));
 			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Size = new System.Drawing.Size(320, 22);
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Text = "Copy &Predefined to Send Text";
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Text = "Copy &Predefined to [Send Text]";
 			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_SendImmediately
@@ -1850,7 +1850,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.M)));
 			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Size = new System.Drawing.Size(320, 22);
-			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Text = "Skip Empty Lines on Send File";
+			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Text = "Skip Empty Lines on [Send File]";
 			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_Separator_4
@@ -3158,10 +3158,10 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_RadixContextMenu_Rx_Dec;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_RadixContextMenu_Rx_Hex;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_RadixContextMenu_Rx_Unicode;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_KeepCommand;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_KeepSendText;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_SendContextMenu_Separator_2;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Send_Separator_2;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_KeepCommand;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_KeepSendText;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_CopyPredefined;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_CopyPredefined;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowConnectTime;

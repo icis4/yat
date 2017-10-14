@@ -536,12 +536,12 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix = checkBox_UseExplicitDefaultRadix.Checked;
 		}
 
-		private void checkBox_KeepCommand_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_KeepSendText_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.Terminal.Send.KeepCommand = checkBox_KeepCommand.Checked;
+			this.settingsInEdit.Terminal.Send.KeepSendText = checkBox_KeepSendText.Checked;
 		}
 
 		private void checkBox_CopyPredefined_CheckedChanged(object sender, EventArgs e)
@@ -1060,7 +1060,7 @@ namespace YAT.View.Forms
 
 				// Send:
 				checkBox_UseExplicitDefaultRadix.Checked = this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix;
-				checkBox_KeepCommand.Checked             = this.settingsInEdit.Terminal.Send.KeepCommand;
+				checkBox_KeepSendText.Checked            = this.settingsInEdit.Terminal.Send.KeepSendText;
 				checkBox_CopyPredefined.Checked          = this.settingsInEdit.Terminal.Send.CopyPredefined;
 				checkBox_SendImmediately.Checked         = this.settingsInEdit.Terminal.Send.SendImmediately;
 
@@ -1159,7 +1159,7 @@ namespace YAT.View.Forms
 
 				// Send:
 				this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix         = Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault;
-				this.settingsInEdit.Terminal.Send.KeepCommand                     = Domain.Settings.SendSettings.KeepCommandDefault;
+				this.settingsInEdit.Terminal.Send.KeepSendText                    = Domain.Settings.SendSettings.KeepSendTextDefault;
 				this.settingsInEdit.Terminal.Send.CopyPredefined                  = Domain.Settings.SendSettings.CopyPredefinedDefault;
 				this.settingsInEdit.Terminal.Send.SendImmediately                 = Domain.Settings.SendSettings.SendImmediatelyDefault;
 
