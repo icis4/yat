@@ -517,9 +517,15 @@ namespace YAT.View.Forms
 				// EOL:
 				bool separateEol = this.settingsInEdit.SeparateTxRxEol;
 				if (!separateEol)
+				{
 					label_TxEol.Text = "E&OL sequence:";
+					label_RxEol.Text = "EOL sequence:";
+				}
 				else
+				{
 					label_TxEol.Text = "&Tx EOL sequence:";
+					label_RxEol.Text = "&Rx EOL sequence:";
+				}
 
 				checkBox_SeparateTxRxEol.Checked = separateEol;
 				label_RxEol.Enabled              = separateEol;

@@ -555,14 +555,16 @@ namespace YAT.View.Forms
 				radioButton_Options_ModeCreate.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Create);
 				radioButton_Options_ModeAppend.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Append);
 
-				if (this.settingsInEdit.TextEncodingIsSupported) {
+				if (this.settingsInEdit.TextEncodingIsSupported)
+				{
 					groupBox_Options_TextEncoding.Enabled            =  true;
 					radioButton_Options_TextEncodingUTF8.Checked     = (this.settingsInEdit.TextEncoding == Log.TextEncoding.UTF8);
 					radioButton_Options_TextEncodingTerminal.Checked = (this.settingsInEdit.TextEncoding == Log.TextEncoding.Terminal);
 					checkBox_Options_EmitEncodingPreamble.Checked    =  this.settingsInEdit.EmitEncodingPreamble;
 					checkBox_Options_EmitEncodingPreamble.Text       = (this.settingsInEdit.EmitEncodingPreamble ? "with BOM" : "without BOM");
 				}
-				else {
+				else
+				{
 					groupBox_Options_TextEncoding.Enabled            = false;
 					radioButton_Options_TextEncodingUTF8.Checked     = true; // Show default, XML is UTF-8 too, RTF don't care.
 					radioButton_Options_TextEncodingTerminal.Checked = false;
