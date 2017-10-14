@@ -820,6 +820,10 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
+				// Attention:
+				// Similar code exists in Main.toolStripMenuItem_MainMenu_Log_SetMenuItems().
+				// Changes here may have to be applied there too.
+
 				bool logIsEnabled = (this.settingsRoot.Log.Count > 0);
 				bool logIsOn      =  this.settingsRoot.LogIsOn;
 
@@ -2682,6 +2686,18 @@ namespace YAT.View.Forms
 			{
 				if (TerminalIsAvailable)
 					return (this.terminal.LogIsOn);
+				else
+					return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool AllLogsAreOn
+		{
+			get
+			{
+				if (TerminalIsAvailable)
+					return (this.terminal.AllLogsAreOn);
 				else
 					return (false);
 			}

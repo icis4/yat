@@ -209,7 +209,7 @@ namespace YAT.Log
 					this.rawBidirLog.SetSettings(this.settings.RawLogBidir, new Func<string>(this.settings.MakeRawBidirFilePath), this.settings.WriteMode);
 					this.rawRxLog.SetSettings   (this.settings.RawLogRx,    new Func<string>(this.settings.MakeRawRxFilePath),    this.settings.WriteMode);
 
-					Encoding logEncoding = this.settings.ToTextEncoding(this.textTerminalEncoding);
+					var logEncoding = this.settings.ToTextEncoding(this.textTerminalEncoding);
 
 					this.neatTxLog.SetSettings   (this.settings.NeatLogTx,    new Func<string>(this.settings.MakeNeatTxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat);
 					this.neatBidirLog.SetSettings(this.settings.NeatLogBidir, new Func<string>(this.settings.MakeNeatBidirFilePath), this.settings.WriteMode, logEncoding, this.neatFormat);
@@ -244,6 +244,20 @@ namespace YAT.Log
 					isOn |= l.IsOn;
 				}
 				return (isOn);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool AllAreOn
+		{
+			get
+			{
+				foreach (Log l in this.logs)
+				{
+					if (!l.IsOn)
+						return (false);
+				}
+				return (true);
 			}
 		}
 
