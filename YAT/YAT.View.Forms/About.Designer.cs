@@ -282,7 +282,7 @@
 			// label_ExecuteManualTest3
 			// 
 			this.label_ExecuteManualTest3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_ExecuteManualTest3.Location = new System.Drawing.Point(611, 255);
+			this.label_ExecuteManualTest3.Location = new System.Drawing.Point(611, 291);
 			this.label_ExecuteManualTest3.Name = "label_ExecuteManualTest3";
 			this.label_ExecuteManualTest3.Size = new System.Drawing.Size(16, 16);
 			this.label_ExecuteManualTest3.TabIndex = 19;

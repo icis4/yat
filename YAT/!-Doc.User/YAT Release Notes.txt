@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.0 Delta Version 1.99.80 :: 2017-1x-xx
+YAT 2.0 Delta Version 1.99.80 :: 2017-10-15
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -142,7 +142,9 @@ Limitations and known issues:
    > System errors are output in local language, even though YAT is all-English (bug #66).
    > Single chars are compared case insensitively against recent 'Send Text' commands (bug #347).
    > Auto completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
-   > Horizontal auto scroll is not feasible to implement (feature request #163).
+   > Horizontal auto scrolling of monitors is not feasible to implement (feature request #163).
+   > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
+     selected may lead to a severe drop of the overall performance (rel. to bugs #305, #380, #383).
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
@@ -1230,14 +1232,14 @@ XTerm232 1.0.0 :: 2003-10-14
 5. Roadmap
 ====================================================================================================
 
-YAT 2.0 Final :: Expected in 2017
+YAT 2.0 Final :: Expected in 2017/2018
 ----------------------------------------------------------------------------------------------------
 YAT 2.0 Final will be released once all bugs and feature requests of priority 7 and above have been
 resolved. This state is expected to be reached by the next or next-next version of YAT. For details
 regarding the items, see bugs and feature requests at http://sourceforge.net/projects/y-a-terminal/.
 
 
-YAT 4.0 with Scripting :: Expected in 2018
+YAT 4.0 with Scripting :: Expected in 2018/2019
 ----------------------------------------------------------------------------------------------------
 The next major step for YAT will be the integration of a scripting environment. Scripting will allow
 executing any kind of automatic procedures from within YAT.
