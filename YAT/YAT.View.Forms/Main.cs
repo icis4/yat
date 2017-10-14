@@ -632,9 +632,27 @@ namespace YAT.View.Forms
 			try
 			{
 				bool childIsReady = (ActiveMdiChild != null);
-				toolStripMenuItem_MainMenu_Log_AllOn.Enabled    = childIsReady;
-				toolStripMenuItem_MainMenu_Log_AllOff.Enabled   = childIsReady;
-				toolStripMenuItem_MainMenu_Log_AllClear.Enabled = childIsReady;
+				var t = (ActiveMdiChild as Terminal);
+
+				// Attention:
+				// Similar code exists in Terminal.toolStripMenuItem_TerminalMenu_Log_SetMenuItems().
+				// Changes here may have to be applied there too.
+
+				bool logIsOn = false;
+				if (t != null)
+					logIsOn = t.LogIsOn;
+
+				bool allLogsAreOn = false;
+				if (t != null)
+					allLogsAreOn = t.AllLogsAreOn;
+
+				bool logFileExists = false;
+				if (t != null)
+					logFileExists = t.LogFileExists;
+
+				toolStripMenuItem_MainMenu_Log_AllOn.Enabled    = childIsReady && !allLogsAreOn;
+				toolStripMenuItem_MainMenu_Log_AllOff.Enabled   = childIsReady &&       logIsOn;
+				toolStripMenuItem_MainMenu_Log_AllClear.Enabled = childIsReady &&      (logIsOn || logFileExists);
 			}
 			finally
 			{
