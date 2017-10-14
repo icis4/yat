@@ -979,7 +979,7 @@ namespace YAT.Settings.Test
 
 		private static DocumentSettingsHandler<TerminalSettingsRoot> SetupTerminalSettingsFromFilePath(string filePath)
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
+			var sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
 			sh.SettingsFilePath = filePath;
 			if (!sh.Load())
 			{
@@ -990,7 +990,7 @@ namespace YAT.Settings.Test
 
 		private static DocumentSettingsHandler<WorkspaceSettingsRoot> SetupWorkspaceSettingsFromFilePath(string filePath)
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> sh = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
+			var sh = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
 			sh.SettingsFilePath = filePath;
 			if (!sh.Load())
 			{

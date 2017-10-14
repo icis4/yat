@@ -108,9 +108,9 @@ namespace YAT.View.Test
 			string terminalSettings1FilePath = Temp.MakeTempFilePath(GetType(), Guid.NewGuid().ToString(), ExtensionHelper.TerminalFile);
 			string terminalSettings2FilePath = Temp.MakeTempFilePath(GetType(), Guid.NewGuid().ToString(), ExtensionHelper.TerminalFile);
 
-			DocumentSettingsHandler<WorkspaceSettingsRoot> workspaceSettingsHandler = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
-			DocumentSettingsHandler<TerminalSettingsRoot>  terminalSettingsHandler1 = new DocumentSettingsHandler<TerminalSettingsRoot>();
-			DocumentSettingsHandler<TerminalSettingsRoot>  terminalSettingsHandler2 = new DocumentSettingsHandler<TerminalSettingsRoot>();
+			var workspaceSettingsHandler = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
+			var terminalSettingsHandler1 = new DocumentSettingsHandler<TerminalSettingsRoot>();
+			var terminalSettingsHandler2 = new DocumentSettingsHandler<TerminalSettingsRoot>();
 
 			workspaceSettingsHandler.SettingsFilePath = workspaceSettingsFilePath;
 			terminalSettingsHandler1.SettingsFilePath = terminalSettings1FilePath;
@@ -135,8 +135,8 @@ namespace YAT.View.Test
 			Trace.WriteLine(terminalSettings2FilePath);
 			Trace.Unindent();
 
-			TerminalSettingsItem terminalSettings1Item = new TerminalSettingsItem();
-			TerminalSettingsItem terminalSettings2Item = new TerminalSettingsItem();
+			var terminalSettings1Item = new TerminalSettingsItem();
+			var terminalSettings2Item = new TerminalSettingsItem();
 
 			terminalSettings1Item.FilePath = terminalSettingsHandler1.SettingsFilePath;
 			terminalSettings1Item.FixedIndex = 1;

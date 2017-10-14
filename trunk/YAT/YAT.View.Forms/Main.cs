@@ -1767,11 +1767,15 @@ namespace YAT.View.Forms
 				ApplicationSettings.LocalUserSettings.NewTerminal = f.NewTerminalSettingsResult;
 				ApplicationSettings.Save();
 
-				DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>(f.TerminalSettingsResult);
+				var sh = new DocumentSettingsHandler<TerminalSettingsRoot>(f.TerminalSettingsResult);
 				this.main.CreateNewTerminalFromSettings(sh);
 			}
 			else
 			{
+				// Still update to keep changed settings for next new terminal:
+				ApplicationSettings.LocalUserSettings.NewTerminal = f.NewTerminalSettingsResult;
+				ApplicationSettings.Save();
+
 				ResetStatusText();
 			}
 		}
@@ -2100,7 +2104,7 @@ namespace YAT.View.Forms
 		{
 			// Create terminal form and immediately show it:
 
-			Terminal mdiChild = new Terminal(e.Value);
+			var mdiChild = new Terminal(e.Value);
 			AttachTerminalEventHandlersAndMdiChildToParent(mdiChild);
 
 			this.isLayoutingMdi = true;
@@ -2243,10 +2247,23 @@ namespace YAT.View.Forms
 							SetTerminalLayout(WorkspaceLayout.Minimize);
 							break;
 
+						// There is a limitation here:
+						//
+						// Code execution also gets here if the main form is resized. Thus, if the
+						// workspace layout is 'Automatic' and there is only a single terminal in
+						// the workspace, i.e. 'Maximized', the workspace layout will be changed to
+						// 'Maximized' as well.
+						//
+						// Note the following check doesn't work, as it eliminates the possibility
+						// to intentionally maximize terminal and thus the whole workspace:
+						// if (this.workspace.SettingsRoot.Workspace.Layout != WorkspaceLayout.Automatic))
+						//     Prevent change from automatic to maximize when just resizing the main form.
 						case FormWindowState.Maximized:
-						default:
 							SetTerminalLayout(WorkspaceLayout.Maximize);
 							break;
+
+						default:
+							throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + t.WindowState.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 			}
