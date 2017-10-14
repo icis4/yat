@@ -1042,6 +1042,10 @@ namespace YAT.View.Controls
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowMultiLineBox(Control requestingControl)
 		{
+			var formerText      = comboBox_SingleLineText.Text;
+			var formerForeColor = comboBox_SingleLineText.ForeColor;
+			var formerFont      = comboBox_SingleLineText.Font;
+
 			// Indicate multi-line text:
 			this.isSettingControls.Enter();
 			try
@@ -1072,9 +1076,28 @@ namespace YAT.View.Controls
 
 				ConfirmCommand();
 			}
+			else
+			{
+				// Restore former text:
+				this.isSettingControls.Enter();
+				try
+				{
+					comboBox_SingleLineText.Text      = formerText;
+					comboBox_SingleLineText.ForeColor = formerForeColor;
+					comboBox_SingleLineText.Font      = formerFont;
+				}
+				finally
+				{
+					this.isSettingControls.Leave();
+				}
+			}
 
+			// In any case, return to text input box in order to allow navigation through recent commands:
 			SelectInput();
-			SetCursorToEnd();
+
+			// In case of single-line text, i.e. cancel above, restore edit mode:
+			if (this.command.IsSingleLineText)
+				SetCursorToEnd();
 		}
 
 		#endregion
