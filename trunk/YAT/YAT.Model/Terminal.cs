@@ -204,12 +204,15 @@ namespace YAT.Model
 		public event EventHandler<TimeSpanEventArgs> IOConnectTimeChanged;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Clearly indicate that this item is a variant of the according item.")]
 		public event EventHandler IOCountChanged_Promptly;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Clearly indicate that this item is a variant of the according item.")]
 		public event EventHandler IORateChanged_Promptly;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Clearly indicate that this item is a variant of the according item.")]
 		public event EventHandler IORateChanged_Decimated;
 
 		/// <summary></summary>
@@ -4476,18 +4479,21 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Clearly indicate that this item is a variant of the according item.")]
 		protected virtual void OnIOCountChanged_Promptly(EventArgs e)
 		{
 			this.eventHelper.RaiseSync(IOCountChanged_Promptly, this, e);
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Clearly indicate that this item is a variant of the according item.")]
 		protected virtual void OnIORateChanged_Promptly(EventArgs e)
 		{
 			this.eventHelper.RaiseSync(IORateChanged_Promptly, this, e);
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Clearly indicate that this item is a variant of the according item.")]
 		protected virtual void OnIORateChanged_Decimated(EventArgs e)
 		{
 			this.eventHelper.RaiseSync(IORateChanged_Decimated, this, e);
