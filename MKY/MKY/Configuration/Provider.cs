@@ -22,9 +22,13 @@
 //==================================================================================================
 
 using System.Configuration;
-using System.Diagnostics;
+#if (DEBUG)
+	using System.Diagnostics;
+#endif
 using System.IO;
-using System.Text;
+#if (DEBUG)
+	using System.Text;
+#endif
 
 namespace MKY.Configuration
 {
@@ -129,9 +133,9 @@ namespace MKY.Configuration
 			where T : MergeableConfigurationSection
 		{
 			string solutionFilePath = System.AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-#if (DEBUG)
+		#if (DEBUG)
 			StringBuilder sb;
-#endif
+		#endif
 			// The configuration section of the selected configuration of the solution configuration file:
 			System.Configuration.Configuration solutionConfiguration;
 			if (string.IsNullOrEmpty(solutionConfigurationFileNameSuffix))
@@ -155,7 +159,7 @@ namespace MKY.Configuration
 				T selectedSolutionConfiguration;
 				if (Selector.TryGetSelectedConfiguration<T>(solutionConfiguration, selectionGroupName, sectionsGroupName, out selectedSolutionConfiguration))
 				{
-#if (DEBUG)
+				#if (DEBUG)
 					sb = new StringBuilder();
 					sb.Append("Solution test configuration of ");
 					sb.Append(selectionGroupName);
@@ -163,7 +167,7 @@ namespace MKY.Configuration
 					sb.AppendLine();
 					sb.AppendLine(solutionConfiguration.FilePath);
 					Debug.Write(sb.ToString());
-#endif
+				#endif
 					// Override with and/or add user configuration where requested:
 					string userFilePath;
 					if (EnvironmentEx.TryGetFilePathFromEnvironmentVariableAndVerify(userConfigurationEnvironmentVariableName, out userFilePath))
@@ -177,7 +181,7 @@ namespace MKY.Configuration
 							if (Selector.TryGetSelectedConfiguration<T>(userConfiguration, selectionGroupName, sectionsGroupName, out selectedUserConfiguration))
 							{
 								selectedSolutionConfiguration.MergeWith(selectedUserConfiguration);
-#if (DEBUG)
+							#if (DEBUG)
 								sb = new StringBuilder();
 								sb.Append("Configuration of ");
 								sb.Append(selectionGroupName);
@@ -185,10 +189,10 @@ namespace MKY.Configuration
 								sb.AppendLine();
 								sb.AppendLine(userConfiguration.FilePath);
 								Debug.Write(sb.ToString());
-#endif
+							#endif
 							}
 						}
-#if (DEBUG)
+					#if (DEBUG)
 						else
 						{
 							sb = new StringBuilder();
@@ -197,12 +201,12 @@ namespace MKY.Configuration
 							sb.AppendLine(userFilePath);
 							Debug.Write(sb.ToString());
 						}
-#endif
+					#endif
 					}
 					resultingConfiguration = selectedSolutionConfiguration;
 					return (true);
 				}
-#if (DEBUG)
+			#if (DEBUG)
 				else
 				{
 					sb = new StringBuilder();
@@ -213,9 +217,9 @@ namespace MKY.Configuration
 					sb.AppendLine(solutionConfiguration.FilePath);
 					Debug.Write(sb.ToString());
 				}
-#endif
+			#endif
 			}
-#if (DEBUG)
+		#if (DEBUG)
 			else
 			{
 				sb = new StringBuilder();
@@ -224,7 +228,7 @@ namespace MKY.Configuration
 				sb.AppendLine(solutionFilePath);
 				Debug.Write(sb.ToString());
 			}
-#endif
+		#endif
 			resultingConfiguration = null;
 			return (false);
 		}
