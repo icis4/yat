@@ -1,4 +1,4 @@
-ï»¿@ECHO OFF
+@ECHO OFF
 
 ::==================================================================================================
 :: YAT - Yet Another Terminal.
@@ -12,9 +12,14 @@
 :: ------------------------------------------------------------------------------------------------
 :: See release notes for product version details.
 :: See SVN change log for file revision details.
+::
+:: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+:: Attention: Windows/DOS requires that this file is encoded in ASCII/ANSI and not UTF-8!
+:: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+::
 :: Author(s): Matthias Klaey
 :: ------------------------------------------------------------------------------------------------
-:: Copyright Â© 2003-2017 Matthias KlÃ¤y.
+:: Copyright © 2003-2017 Matthias Kläy.
 :: All rights reserved.
 :: ------------------------------------------------------------------------------------------------
 :: This source code is licensed under the GNU LGPL.
@@ -25,6 +30,10 @@ PUSHD ..
 
 ECHO Cleaning all StyleCop temporaries . . .
 FOR /R %%I IN (.) DO CALL "!-Scripts\CleanDir.cmd" "%%I" "*.StyleCop"
+ECHO . . . successfully cleaned
+
+ECHO Cleaning all StyleCop caches . . .
+FOR /R %%I IN (.) DO CALL "!-Scripts\CleanFiles.cmd" "%%I" "StyleCop.Cache"
 ECHO . . . successfully cleaned
 
 POPD

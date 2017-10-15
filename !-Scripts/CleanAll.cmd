@@ -1,4 +1,4 @@
-ï»¿@ECHO OFF
+@ECHO OFF
 
 ::==================================================================================================
 :: YAT - Yet Another Terminal.
@@ -12,20 +12,28 @@
 :: ------------------------------------------------------------------------------------------------
 :: See release notes for product version details.
 :: See SVN change log for file revision details.
+::
+:: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+:: Attention: Windows/DOS requires that this file is encoded in ASCII/ANSI and not UTF-8!
+:: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+::
 :: Author(s): Matthias Klaey
 :: ------------------------------------------------------------------------------------------------
-:: Copyright Â© 2003-2017 Matthias KlÃ¤y.
+:: Copyright © 2003-2017 Matthias Kläy.
 :: All rights reserved.
 :: ------------------------------------------------------------------------------------------------
 :: This source code is licensed under the GNU LGPL.
 :: See http://www.gnu.org/licenses/lgpl.html for license details.
 ::==================================================================================================
 
-CALL CleanAll-Options.cmd
-CALL CleanAll-Setup.cmd
+:: First clean the large temporaries => speed up subsequent cleans:
 CALL CleanAll-Temp.cmd
-CALL CleanAll-SCM.cmd
+
+:: Then clean the remaining stuff in alphabetical order:
 CALL CleanAll-Analyzer.cmd
+CALL CleanAll-Options.cmd
+CALL CleanAll-SCM.cmd
+CALL CleanAll-Setup.cmd
 
 ::==================================================================================================
 :: End of
