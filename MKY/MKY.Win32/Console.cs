@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.20
+// MKY Version 1.0.21
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -240,7 +240,7 @@ namespace MKY.Win32
 		/// Attaches the input/output/error console handles to the current process.
 		/// Useful for windows applications since they do not support the console by default.
 		/// </summary>
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Emphasize occurance of an native handle.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Emphasize occurrence of an native handle.")]
 		public static bool Attach()
 		{
 			bool success = true;

@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.20
+// MKY Version 1.0.21
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -45,20 +45,7 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("f00fd9b0-5dcb-4ef1-8785-a4bc4b95640f")]
 
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Build and Revision Numbers
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")] => 'Build' will indicate number of days since 2000-01-01.
-//                                      => 'Revision' will indicate number of seconds since midnight divided by two.
-[assembly: AssemblyVersion("1.0.20.*")]
-[assembly: AssemblyFileVersion("1.0.20.0")]
-[assembly: AssemblyInformationalVersion("1.0.20")]
+// Assembly versions are defined by linked-in MKY.Version.cs.
 
 // CLS compliance.
 [assembly: CLSCompliant(true)]
