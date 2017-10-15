@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.20
+// MKY Version 1.0.21
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -816,7 +816,7 @@ namespace MKY
 				offset++;           // Correct the offset created by the dropped double quotes.
 			}
 
-			for (int i = 0; i < l.Count; i += 2) // Check every second chunk for the first occurance of 'seachString'.
+			for (int i = 0; i < l.Count; i += 2) // Check every second chunk for the first occurrence of 'seachString'.
 			{
 				int index = l[i].Value.IndexOf(searchString, comparisonType);
 				if (index >= 0)

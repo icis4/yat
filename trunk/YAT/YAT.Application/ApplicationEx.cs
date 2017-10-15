@@ -46,7 +46,7 @@ namespace YAT
 	////public static readonly string ProductBuildName = " Final";
 
 		/// <summary>The product name postfix that describes the build.</summary>
-	////public static readonly string ProductBuildName = " Delta";
+		public static readonly string ProductBuildName = " Delta";
 
 	/////// <summary>The product name postfix that describes the build.</summary>
 	////public static readonly string ProductBuildName = " Delta'";
@@ -55,7 +55,7 @@ namespace YAT
 	////public static readonly string ProductBuildName = " Delta Development";
 
 	/////// <summary>The product name postfix that describes the build.</summary>
-		public static readonly string ProductBuildName = " Delta Preliminary";
+	////public static readonly string ProductBuildName = " Delta Preliminary";
 
 		/// <summary>The product name including the build description.</summary>
 		public static readonly string ProductNameAndBuildName = ProductName + ProductBuildName;

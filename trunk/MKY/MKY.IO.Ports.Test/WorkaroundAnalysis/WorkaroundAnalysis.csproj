@@ -44,6 +44,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\MKY.Version.cs">
+      <Link>MKY.Version.cs</Link>
+    </Compile>
     <Compile Include="AnalysisMain.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="Diagnostics.cs" />

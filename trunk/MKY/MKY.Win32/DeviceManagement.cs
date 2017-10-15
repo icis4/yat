@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.20
+// MKY Version 1.0.21
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -537,7 +537,7 @@ namespace MKY.Win32
 		/// </summary>
 		/// <param name="classGuid">An interface class GUID.</param>
 		/// <returns>An array containing the path names of the devices currently available on the system.</returns>
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Emphasize occurance of an native pointer.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Emphasize occurrence of an native pointer.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
 		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "MKY.Win32.DeviceManagement+NativeMethods.SetupDiDestroyDeviceInfoList(System.IntPtr)", Justification = "Don't care about the result.")]
 		public static string[] GetDevicesFromGuid(Guid classGuid)
