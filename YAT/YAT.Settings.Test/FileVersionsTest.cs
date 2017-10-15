@@ -117,7 +117,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1807:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
 		public virtual void Test_V1_99_80_TerminalSettingsCase01()
 		{
@@ -125,7 +125,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1807:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void Test_V1_99_80_TerminalSettingsCase02()
 		{
@@ -133,7 +133,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1807:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_80_TerminalSettingsCase03()
 		{
@@ -141,7 +141,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1807:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_80_WorkspaceSettingsCase04()
 		{
@@ -149,7 +149,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1807:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_80_TerminalSettingsCase05()
 		{
@@ -157,7 +157,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1807:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_80_WorkspaceSettingsCase06()
 		{
@@ -165,7 +165,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1807:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_80_TerminalSettingsCase07()
 		{
@@ -173,7 +173,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1807:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_80_WorkspaceSettingsCase08()
 		{

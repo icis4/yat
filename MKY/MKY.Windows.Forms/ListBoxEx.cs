@@ -509,7 +509,7 @@ namespace MKY.Windows.Forms
 	#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
 
 		/// <summary>
-		/// Notifies the control that the items got clreard.
+		/// Notifies the control that the items got cleared.
 		/// </summary>
 		/// <remarks>
 		/// Required to reset <see cref="UserIsScrolling"/>.
