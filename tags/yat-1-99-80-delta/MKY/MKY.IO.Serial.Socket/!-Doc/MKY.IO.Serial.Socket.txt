@@ -1,0 +1,73 @@
+﻿
+MKY.IO.Serial.Socket
+====================
+
+This socket library implements the MKY.IO.Serial.IIOProvider interface for:
+ > TCP/IP Client
+ > TCP/IP Server
+ > TCP/IP AutoSocket
+ > UDP/IP Client
+ > UDP/IP Server
+ > UDP/IP PairSocket
+
+
+ALAZ
+----
+Since created in 2007, this implementation is based on ALAZ:
+ > "An Asynchronous Socket Server and Client, by Andre Azevedo"
+ > http://www.codeproject.com/Articles/14155/An-Asynchronous-Socket-Server-and-Client
+
+Over the years I found a few issues with ALAZ. These issues required to make minor modifications
+to ALAZ. These modifications are described below in more detail. I also fed back the issues to
+Andre by email. But my feedback was never responded, so I asked online whether any updates or
+improvementes of ALAZ can be expected in the future:
+ "The purpose of this library is show how Sockets can be development on .NET; it cannot be called
+  a "project" with upgrades/new versions. Maybe I'll write some update using .NET 4.5 but, till
+  there, you can check SuperSocket Library hosted on codeplex."
+After all, 6 releases (1.0 through 1.5) were published between May 2006 and September 2007. So in
+2007 this indeed looked like an active project. And in 2009 version 2.0 was released. But then,
+well, yet another open-source-dead-end...
+
+See "\ALAZ\!-Packages\2009-04-29 - Version 2.0" for more details.
+
+
+Alternatives to ALAZ
+--------------------
+So, in 2012, I again came to the conclusion that sooner or later I will have to exchange ALAZ by
+some other library and I also looked into SuperSocket as Andre suggested. But the libraries have
+not really proven good enough or suitable for YAT, better than ALAZ, or doesn't seem to be active
+anymore either:
+ > DotnetAsyncSocket, a "TCP/IP socket networking library for .NET"
+   > http://code.google.com/p/dotnetasyncsocket/
+   > Looks fairly handish, and not like an active project
+ > Extasys, an "Asynchronous TCP/UDP socket library"
+   > http://code.google.com/p/extasys/
+   > Looks more mature, but the API does not provide DataSent events, and the project doesn't seem
+     active as well, well, not really a good option either...
+ > SocketAsyncServerAndClient, "C# SocketAsyncEventArgs High Performance Socket Code"
+   > http://www.codeproject.com/Articles/83102/C-SocketAsyncEventArgs-High-Performance-Socket-Cod
+   > Looks quite mature and powerful, but architecture as well as implementation doesn't look
+     that convincing, looks somewhat half-finished...
+ > SuperSocket, "an extensible socket application framework"
+   > http://supersocket.codeplex.com/
+   > In order to reduce dependencies and assemblies, I have decided to remove 'log4net' from all
+     used SuperSocket projects. Only few changes were necessary to 'SuperSocket.Common':
+      > Remove reference to 'log4net'
+      > Remove 'DynamicLog4NetLogger'
+      > Remove 'Log4NetLogger'
+      > In 'SuperSocket.Common.LogUtil.cs'
+         > Comment-out line #5 //using log4net.Config;
+         > Modify line #11 m_logger = null;
+         > Block-comment-out the three static Setup() methods from line #13
+      > In 'SuperSocket.SocketEngine.AppServerBase.cs'
+         > Use 'ConsoleLogger' in any case from line #208
+   > However, I found that SuperSocket doesn't really suit the needs of YAT. SuperSocket is
+     designed to be used for higher level applications, such as custom protocols on TCP/IP.
+     YAT doesn't deal with protocols, it just requires a socket library on binary stream level,
+     but more convenient then what 'System.Net.Sockets' provides by default.
+ > Use of 'System.Net.Sockets' and implement a more convenient library around it on my own. Well,
+   not really an option if something useful like ALAZ is already available.
+
+
+-----------------------
+2012-10 / Matthias Kläy

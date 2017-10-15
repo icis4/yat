@@ -1,0 +1,10 @@
+﻿
+For all MKY and YAT projects:
+
+Properties
+  > svn:keywords
+    > C#
+      > Name  = svn:keywords
+      > Value = URL Author Date Revision
+
+Settings can be imported from "SVNSetup.svnprops"
