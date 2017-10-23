@@ -1,6 +1,6 @@
 ﻿namespace MKY.Windows.Forms.Test
 {
-	partial class WindowsFormsTest
+	partial class ListBoxTest
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -505,7 +505,7 @@
 			this.button_AddSomeLines.UseVisualStyleBackColor = true;
 			this.button_AddSomeLines.Click += new System.EventHandler(this.button_AddSomeLines_Click);
 			// 
-			// WindowsFormsTest
+			// ListBoxTest
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -523,7 +523,7 @@
 			this.Controls.Add(this.button_AddManyLines);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
-			this.Name = "WindowsFormsTest";
+			this.Name = "ListBoxTest";
 			this.Text = "MKY.Windows.Forms.Test";
 			this.groupBox_FastListBox.ResumeLayout(false);
 			this.tableLayoutPanel_FastListBox.ResumeLayout(false);
