@@ -94,6 +94,7 @@
       <HintPath>..\..\NUnit\framework\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -102,17 +103,34 @@
     <Compile Include="..\MKY.Version.cs">
       <Link>Properties\MKY.Version.cs</Link>
     </Compile>
-    <Compile Include="WindowsFormsTest.cs">
+    <Compile Include="ListBoxTest.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WindowsFormsTest.Designer.cs">
-      <DependentUpon>WindowsFormsTest.cs</DependentUpon>
+    <Compile Include="ListBoxTest.Designer.cs">
+      <DependentUpon>ListBoxTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="TestMain.cs" />
+    <Compile Include="TestMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TestMain.Designer.cs">
+      <DependentUpon>TestMain.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="WindowsFormsTest.resx">
-      <DependentUpon>WindowsFormsTest.cs</DependentUpon>
+    <Compile Include="TextInputTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TextInputTest.Designer.cs">
+      <DependentUpon>TextInputTest.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="ListBoxTest.resx">
+      <DependentUpon>ListBoxTest.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TestMain.resx">
+      <DependentUpon>TestMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TextInputTest.resx">
+      <DependentUpon>TextInputTest.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

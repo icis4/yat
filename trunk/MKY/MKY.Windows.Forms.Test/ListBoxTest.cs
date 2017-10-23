@@ -49,25 +49,26 @@ using System.Windows.Forms;
 //==================================================================================================
 
 // Justification = "Used in case of 'ENABLE_HORIZONTAL_AUTO_SCROLL'. Not #if-able as this method is created by the designer."
-[module: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "MKY.Windows.Forms.Test.WindowsFormsTest.#listBoxEx_HorizontalScrolled(System.Object,System.Windows.Forms.ScrollEventArgs)")]
-[module: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "MKY.Windows.Forms.Test.WindowsFormsTest.#listBoxEx_VerticalScrolled(System.Object,System.Windows.Forms.ScrollEventArgs)")]
+[module: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "MKY.Windows.Forms.Test.ListBoxTest.#listBoxEx_HorizontalScrolled(System.Object,System.Windows.Forms.ScrollEventArgs)")]
+[module: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "MKY.Windows.Forms.Test.ListBoxTest.#listBoxEx_VerticalScrolled(System.Object,System.Windows.Forms.ScrollEventArgs)")]
 
 #endregion
 
 namespace MKY.Windows.Forms.Test
 {
 	/// <summary>
-	/// Test form for <see cref="FastListBox"/>.
+	/// Test form for <see cref="ListBoxEx"/> and <see cref="FastListBox"/>.
 	/// </summary>
-	public partial class WindowsFormsTest : Form
+	public partial class ListBoxTest : Form
 	{
 		private List<ListBox> listBoxes;
 		private TextFormatFlags formatFlags;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="WindowsFormsTest"/> class that tests variants of <see cref="ListBox"/>.
+		/// Initializes a new instance of the <see cref="ListBoxTest"/> class which
+		/// tests variants of <see cref="ListBox"/>.
 		/// </summary>
-		public WindowsFormsTest()
+		public ListBoxTest()
 		{
 			InitializeComponent();
 

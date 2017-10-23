@@ -21,57 +21,22 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Text;
 using System.Windows.Forms;
 
 namespace MKY.Windows.Forms.Test
 {
 	/// <summary>
-	/// Test application for <see cref="Forms"/>.
+	/// Test form for <see cref="ListBoxEx"/> and <see cref="FastListBox"/>.
 	/// </summary>
-	public partial class TestMain : Form
+	public partial class TextInputTest : Form
 	{
 		/// <summary>
-		/// The main form for the application.
+		/// Initializes a new instance of the <see cref="TextInputTest"/> class which
+		/// tests variants of the standard text input controls.
 		/// </summary>
-		public TestMain()
+		public TextInputTest()
 		{
 			InitializeComponent();
-		}
-
-		private void button_TextInputControls_Click(object sender, EventArgs e)
-		{
-			var f = new TextInputTest();
-			f.Show(this);
-		}
-
-		private void button_ListBoxControls_Click(object sender, EventArgs e)
-		{
-			var sb = new StringBuilder();
-			sb.AppendLine("Note that this test application may used with ENABLE_HORIZONTAL_AUTO_SCROLL enabled in MKY.Windows.Forms.ListBoxEx.");
-			sb.AppendLine();
-			sb.AppendLine("To enable ENABLE_HORIZONTAL_AUTO_SCROLL, lines #281 and #282 of MKY.Windows.Forms.Test.ListBoxTest.Designer have to be un-commented.");
-			sb.AppendLine();
-			sb.Append    ("You may also run this test application without ENABLE_HORIZONTAL_AUTO_SCROLL enabled.");
-
-			var dr = MessageBoxEx.Show(sb.ToString(), "Note related to ENABLE_HORIZONTAL_AUTO_SCROLL", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
-			if (dr != DialogResult.OK)
-				return;
-
-			var f = new ListBoxTest();
-			f.Show(this);
-		}
-
-		/// <summary>
-		/// The main entry point for the application.
-		/// </summary>
-		[STAThread]
-		private static void Main()
-		{
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new TestMain());
 		}
 	}
 }
