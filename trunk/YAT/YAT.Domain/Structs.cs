@@ -8,7 +8,7 @@
 // $Date: Donnerstag, 5. September 2013 11:02:41$
 // $Revision: 2$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Delta Version 1.99.80
+// YAT 2.0 Epsilon Version 1.99.90
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.

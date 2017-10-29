@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Delta Version 1.99.80
+// YAT 2.0 Epsilon Version 1.99.90
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -45,17 +45,17 @@ namespace YAT
 	/////// <summary>The product name postfix that describes the build.</summary>
 	////public static readonly string ProductBuildName = " Final";
 
+	/////// <summary>The product name postfix that describes the build.</summary>
+	////public static readonly string ProductBuildName = " Epsilon";
+
+	/////// <summary>The product name postfix that describes the build.</summary>
+	////public static readonly string ProductBuildName = " Epsilon'";
+
+	/////// <summary>The product name postfix that describes the build.</summary>
+	////public static readonly string ProductBuildName = " Epsilon Development";
+
 		/// <summary>The product name postfix that describes the build.</summary>
-		public static readonly string ProductBuildName = " Delta";
-
-	/////// <summary>The product name postfix that describes the build.</summary>
-	////public static readonly string ProductBuildName = " Delta'";
-
-	/////// <summary>The product name postfix that describes the build.</summary>
-	////public static readonly string ProductBuildName = " Delta Development";
-
-	/////// <summary>The product name postfix that describes the build.</summary>
-	////public static readonly string ProductBuildName = " Delta Preliminary";
+		public static readonly string ProductBuildName = " Epsilon Preliminary";
 
 		/// <summary>The product name including the build description.</summary>
 		public static readonly string ProductNameAndBuildName = ProductName + ProductBuildName;
