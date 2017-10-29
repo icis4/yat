@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Delta Version 1.99.80
+// YAT 2.0 Epsilon Version 1.99.90
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -35,9 +35,9 @@ using System.Reflection;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")] => 'Build' will indicate number of days since 2000-01-01.
 //                                      => 'Revision' will indicate number of seconds since midnight divided by two.
-[assembly: AssemblyVersion("1.99.80.*")]
-[assembly: AssemblyFileVersion("1.99.80.0")]
-[assembly: AssemblyInformationalVersion("1.99.80")]
+[assembly: AssemblyVersion("1.99.85.*")]
+[assembly: AssemblyFileVersion("1.99.85.0")]
+[assembly: AssemblyInformationalVersion("1.99.85")]
 
 //==================================================================================================
 // End of

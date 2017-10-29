@@ -84,6 +84,44 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
+YAT 2.0 Epsilon Version 1.99.90 :: 201x-xx-xx
+----------------------------------------------------------------------------------------------------
+
+New:
+- 
+
+Important changes:
+- 
+
+Fixed bugs:
+- 
+
+Limitations and known issues:
+- x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
+- General imitations of .NET Windows.Forms:
+   > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
+     before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
+     The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
+   > System errors are output in local language, even though YAT is all-English (bug #66).
+   > Single chars are compared case insensitively against recent 'Send Text' commands (bug #347).
+   > Auto completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
+   > Horizontal auto scrolling of monitors is not feasible to implement (feature request #163).
+   > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
+     selected may lead to a severe drop of the overall performance (rel. to bugs #305, #380, #383).
+- MDI limitations of .NET Windows.Forms:
+   > Issues with frame (bugs #29 and #30).
+   > Issue with window list (bug #31).
+- Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
+- Serial COM port break states may not be supported on certain hardware, e.g. USB/RS-232 converters.
+- USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
+  implementation and test environment would be needed to run it on unixoids (feature request #119).
+- Wait for answer line (text terminals) not yet implemented (feature request #19).
+- Direct send text mode does not yet support special formats and commands (feature request #10).
+- Running YAT for a long period, or creating many terminals, results in memory leaks, which result
+  in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
+  unknown, could even be a limitation of the memory management of the .NET runtime).
+
+
 YAT 2.0 Delta Version 1.99.80 :: 2017-10-15
 ----------------------------------------------------------------------------------------------------
 
@@ -153,7 +191,6 @@ Limitations and known issues:
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
   implementation and test environment would be needed to run it on unixoids (feature request #119).
 - Wait for answer line (text terminals) not yet implemented (feature request #19).
-- Breaking while sending files not possible yet (bug #305 and feature request #295).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet

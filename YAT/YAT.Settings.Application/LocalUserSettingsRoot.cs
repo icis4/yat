@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Delta Version 1.99.80
+// YAT 2.0 Epsilon Version 1.99.90
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -46,7 +46,7 @@ namespace YAT.Settings.Application
 	public class LocalUserSettingsRoot : MKY.Settings.SettingsItem, IEquatable<LocalUserSettingsRoot>, MKY.Xml.IAlternateXmlElementProvider
 	{
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
-		private string settingsVersion = "1.5.2";
+		private string settingsVersion = "1.5.3";
 
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
 		private string productVersion = ApplicationEx.ProductVersion;
