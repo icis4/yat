@@ -2,11 +2,17 @@
 Edition
 -------
 
-Community Edition (2013):
+Community Edition:
 "An unlimited number of users within an organization can use Visual Studio Community for the following scenarios:
   > in a classroom learning environment,
   > for academic research,
   > or for contributing to open source projects."
+
+
+Installation
+------------
+
+Ensure that English language pack is included
 
 
 Visual Studio
@@ -23,19 +29,23 @@ Help > Set Preference > Help Viewer
     > .NET 4.5/4.6
 
 Tools > Options...
+  > Environment
+    > International Settings > English
   > Text Editor
     > All Languages > General > Diplay > Line numers = yes
     > C# > Tabs > Keep tabs
-    > C# > Advanced > Place 'System' usings first
     > C# > Code Style > Qualify member access with 'this' = yes
     > C# > Code Style > Use 'var' when generating locals = no
     > C# > Formatting > All auto = no
+    > C# > Advanced > Place 'System' usings first
   > Debugging
     > General > Step over properties and operators = no
     > General > Require source files to excatly match the original version = no
 
 Edit > Advanced
   > View White Space = true
+
+View > Output
 
 
 Installer
@@ -74,5 +84,13 @@ Shortcuts
 Tools > Options
  > Environment > Keyboard
     > Show "Tools.External"
-       > Command4 (NUnit)
+       > Command2 (NUnit)
           > Alt+N (Global)
+
+
+Toolbar
+-------
+Customize > Commands
+    > Toolbar > Standard
+        > Solution Configuration > Modifiy Selection
+            > Width = 110

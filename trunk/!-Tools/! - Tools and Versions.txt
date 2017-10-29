@@ -3,19 +3,19 @@ Tools & Versions
 ----------------
 
 Resources
-  > DejaVu fonts   2.34
+  > DejaVu fonts   2.37
 
 Repo
   > SourceForge    Allura
-  > TortoiseSVN    1.8.10.26129
-  > AnkhSVN        2.5.12582.28
+  > TortoiseSVN    1.9.7.27907
+  > AnkhSVN        2.6.12735                                [2.7.12815 already installed for VS2017]
 
 Development
-  > Microsoft Visual Studio 2013 Community Edition
+  > Microsoft Visual Studio 2015 Community Edition                          [2017 already installed]
+  > VSI            1.0.0.1                                      [0.8.4 already installed for VS2017]
   > NUnit          2.64
-  > GhostDoc       4.9.14358
-  > StyleCop       4.7.49.0
   > FxCop          10
+  > GhostDoc       5.8.17265
 
 Testing
   > VSPE           0.938.4.846
@@ -24,4 +24,4 @@ Testing
   > WinPcap        4.1.3
 
 ----------------
-2015-09-13 / MKY
+2017-10-28 / MKY
