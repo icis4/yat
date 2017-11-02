@@ -38,6 +38,24 @@ namespace MKY
 	public static class TimeSpanEx
 	{
 		/// <summary>
+		/// Converts the given number of ticks into the corresponding number of milliseconds,
+		/// using <see cref="TimeSpan.TicksPerMillisecond"/>.
+		/// </summary>
+		public static int TicksToTime(long ticks)
+		{
+			return ((int)(ticks / TimeSpan.TicksPerMillisecond));
+		}
+
+		/// <summary>
+		/// Converts the given number of milliseconds into the corresponding number of ticks,
+		/// using <see cref="TimeSpan.TicksPerMillisecond"/>.
+		/// </summary>
+		public static long TimeToTicks(int time)
+		{
+			return (time * TimeSpan.TicksPerMillisecond);
+		}
+
+		/// <summary>
 		/// Returns <paramref name="value"/> formatted as "[[[[[[d days ]h]h:]m]m:]s]s".
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't like the additional formats...")]
