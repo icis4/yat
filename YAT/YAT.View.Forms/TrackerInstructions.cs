@@ -95,7 +95,7 @@ namespace YAT.View.Forms
 				case TrackerType.Support: sb.Append(" directly contact YAT by email."); break;
 				case TrackerType.Feature:
 				case TrackerType.Bug:
-				default:                  sb.Append(" you may provide a valid email address to get email notifications."); break;
+				default:                  sb.Append(" you can optionally provide a email address to get email notifications."); break;
 			}
 			linkLabel_SourceForgeRemark.Text = sb.ToString();
 
@@ -113,9 +113,9 @@ namespace YAT.View.Forms
 
 			// Instructions:
 			sb = new StringBuilder();
-			sb.AppendLine("1. Select 'Create Ticket'.");
-			sb.AppendLine("2. Fill in a 'Title'.");
-			sb.AppendLine("3. Fill in as much information as possible into 'Description':");
+			sb.AppendLine("1. [Create Ticket]");
+			sb.AppendLine("2. Fill in a title.");
+			sb.AppendLine("3. Fill in as much information as possible into the text field:");
 			switch (tracker)
 			{
 				case TrackerType.Support:
@@ -139,13 +139,12 @@ namespace YAT.View.Forms
 				{
 					sb.AppendLine("    > YAT version you are using.");
 					sb.AppendLine("    > Procedure to reproduce the bug.");
-					sb.AppendLine("    > Any additional useful information.");
+					sb.AppendLine("    > Any useful additional information.");
 					break;
 				}
 			}
-			sb.AppendLine("4. Optionally add one or more labels.");
-			sb.AppendLine("5. Optionally add one or more attachments.");
-			sb.AppendLine("6. Select 'Save'.");
+			sb.AppendLine("4. Optionally add attachment(s).");
+			sb.AppendLine("5. [Save]");
 			linkLabel_Instructions.Text = sb.ToString();
 		}
 
