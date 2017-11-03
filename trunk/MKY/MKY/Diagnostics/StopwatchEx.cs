@@ -34,16 +34,24 @@ namespace MKY.Diagnostics
 	public static class StopwatchEx
 	{
 		/// <summary>
-		/// Converts the given number of <see cref="Stopwatch"/> ticks into milliseconds.
+		/// Converts the given number of <see cref="Stopwatch"/> ticks into the corresponding
+		/// number of milliseconds, using <see cref="Stopwatch.Frequency"/>.
 		/// </summary>
+		/// <remarks>
+		/// A similar method exists as <see cref="TimeSpanEx.TicksToTime"/>.
+		/// </remarks>
 		public static int TicksToTime(long ticks)
 		{
 			return ((int)((ticks * 1000 / Stopwatch.Frequency) + 0.5));
 		}
 
 		/// <summary>
-		/// Converts the given number of milliseconds into <see cref="Stopwatch"/> ticks.
+		/// Converts the given number of milliseconds into the corresponding number of
+		/// <see cref="Stopwatch"/> ticks, using <see cref="Stopwatch.Frequency"/>.
 		/// </summary>
+		/// <remarks>
+		/// A similar method exists as <see cref="TimeSpanEx.TimeToTicks"/>.
+		/// </remarks>
 		public static long TimeToTicks(int time)
 		{
 			return (Stopwatch.Frequency * time / 1000);

@@ -41,6 +41,9 @@ namespace MKY
 		/// Converts the given number of ticks into the corresponding number of milliseconds,
 		/// using <see cref="TimeSpan.TicksPerMillisecond"/>.
 		/// </summary>
+		/// <remarks>
+		/// A similar method exists as <see cref="Diagnostics.StopwatchEx.TicksToTime"/>.
+		/// </remarks>
 		public static int TicksToTime(long ticks)
 		{
 			return ((int)(ticks / TimeSpan.TicksPerMillisecond));
@@ -50,6 +53,9 @@ namespace MKY
 		/// Converts the given number of milliseconds into the corresponding number of ticks,
 		/// using <see cref="TimeSpan.TicksPerMillisecond"/>.
 		/// </summary>
+		/// <remarks>
+		/// A similar method exists as <see cref="Diagnostics.StopwatchEx.TimeToTicks"/>.
+		/// </remarks>
 		public static long TimeToTicks(int time)
 		{
 			return (time * TimeSpan.TicksPerMillisecond);
