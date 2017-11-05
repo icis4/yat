@@ -70,31 +70,36 @@ namespace MKY.Windows.Forms
 		/// </remarks>
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			for (int i = TopIndex; i <= BottomIndex; i++)
+			if (Items.Count > 0) // Attention, initially 'TopIndex' = 'BottomIndex' = 0!
 			{
-				// Calculate bounding box taking the beginning of the item rectangle into account:
-				// e.g. scroll position somewhere in between...
-				//         ------XX------
-				// ...results in a complete rectangle (HorizontalExtent) of...
-				//    ------------------------
-				// ...and a text position of...
-				//    ABCDEFGHIJ
-				// ...thus the beginning of the text (x) is a negative value left of the visible rectangle...
-				//    (x)
-				int offset = i - TopIndex;
-				Rectangle ir = GetItemRectangle(i);
-				int x = DisplayRectangle.Width - ir.Width; // (x).
-				Rectangle bounds = new Rectangle(x, offset * ItemHeight, ir.Width, ItemHeight);
+				DebugCountAndIndices("Indices are going to be retrieved");
 
-				// Set normal/selected state:
-				DrawItemState state;
-				if (SelectedIndices.Contains(i))
-					state = DrawItemState.Selected;
-				else
-					state = DrawItemState.Default;
+				for (int i = TopIndex; i <= BottomIndex; i++) // Note that indices work fine here.
+				{
+					// Calculate bounding box taking the beginning of the item rectangle into account:
+					// e.g. scroll position somewhere in between...
+					//         ------XX------
+					// ...results in a complete rectangle (HorizontalExtent) of...
+					//    ------------------------
+					// ...and a text position of...
+					//    ABCDEFGHIJ
+					// ...thus the beginning of the text (x) is a negative value left of the visible rectangle...
+					//    (x)
+					int offset = i - TopIndex;
+					Rectangle ir = GetItemRectangle(i);
+					int x = DisplayRectangle.Width - ir.Width; // (x).
+					Rectangle bounds = new Rectangle(x, offset * ItemHeight, ir.Width, ItemHeight);
 
-				// Request drawing of item:
-				OnDrawItem(new DrawItemEventArgs(e.Graphics, Font, bounds, i, state));
+					// Set normal/selected state:
+					DrawItemState state;
+					if (SelectedIndices.Contains(i))
+						state = DrawItemState.Selected;
+					else
+						state = DrawItemState.Default;
+
+					// Request drawing of item:
+					OnDrawItem(new DrawItemEventArgs(e.Graphics, Font, bounds, i, state));
+				}
 			}
 		}
 	}

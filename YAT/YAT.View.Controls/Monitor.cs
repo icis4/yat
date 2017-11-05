@@ -38,7 +38,10 @@
 #if (DEBUG)
 
 	// Enable debugging of update management (incl. CPU performance measurement):
-////#define DEBUG_UPDATE
+////#define DEBUG_UPDATE               // The 'DebugEnabled' property is set for 'BiDir' monitor.
+
+	// Enable debugging of vertical semi-auto scrolling:
+////#define DEBUG_VERTICAL_AUTO_SCROLL // The 'DebugEnabled' property is set for 'BiDir' monitor.
 
 #endif // DEBUG
 
@@ -118,6 +121,11 @@ namespace YAT.View.Controls
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
 		private readonly long DataStatusTickInterval = StopwatchEx.TimeToTicks(DataStatusIntervalMs);
+
+		// Debug:
+	#if (DEBUG)
+		private const bool DebugEnabledDefault = ListBoxEx.DebugEnabledDefault;
+	#endif
 
 		#endregion
 
@@ -482,6 +490,23 @@ namespace YAT.View.Controls
 			set { this.dataStatusHelper.RxLineRate = value;  }
 		}
 
+	#if (DEBUG)
+
+		/// <remarks>
+		/// Flag in a addition to configuration item to allow selective debugging of just a single
+		/// monitor, e.g. the bidir monitor, to reduce debug output.
+		/// </remarks>
+		[Category("Scroll")]
+		[Description("Enables or disables debugging.")]
+		[DefaultValue(DebugEnabledDefault)]
+		public virtual bool DebugEnabled
+		{
+			get { return (this.fastListBox_Monitor.DebugEnabled); }
+			set { this.fastListBox_Monitor.DebugEnabled = value;  }
+		}
+
+	#endif // DEBUG
+
 		#endregion
 
 		#region Methods
@@ -715,7 +740,8 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <remarks>
-		/// Note that the 'MeasureItem' event measures the item height only and is not needed for 'OwnerDrawnFixed'.
+		/// Note that the 'MeasureItem' event only measures the height and an item and is thus
+		/// only needed for 'OwnerDrawnVariable' and not for 'OwnerDrawnFixed'.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
@@ -744,8 +770,23 @@ namespace YAT.View.Controls
 			}
 		}
 
+		/// <remarks>
+		/// Intentionally initializing to 0 and not ControlEx.InvalidIndex. Doing so would result in
+		/// an unnecessary initial VerticalScrollToIndex() request.
+		/// 
+		/// This also matches to behavior of <see cref="ListBox.TopIndex"/>:
+		/// 
+		/// Initially, the item with the index position zero (0) is at the top of the visible region
+		/// of the ListBox. If the contents of the ListBox have been scrolled, another item might be
+		/// at the top of the control's display area.
+		/// You can use this property to obtain the index within the ListBox.ObjectCollection for the
+		/// ListBox of the item that is currently positioned at the top of the visible region of the
+		/// control.
+		/// You can also use this property to position an item in the list at the top of the visible
+		/// region of the control.
+		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private int fastListBox_Monitor_DrawItem_lastTopIndex = ControlEx.InvalidIndex;
+		private int fastListBox_Monitor_DrawItem_lastTopIndex; // = 0;
 
 		/// <remarks>
 		/// Note that the 'MeasureItem' event is not needed for 'OwnerDrawnFixed' (item height only).
@@ -820,9 +861,9 @@ namespace YAT.View.Controls
 					if (this.formatSettings.FormattingEnabled)
 					{
 						// Handle non-standard background:
-						if (this.formatSettings.BackColor != SystemColors.Window) // Equals FormatSettings.DefaultBackColor
+						if (this.formatSettings.BackColor != SystemColors.Window) // = 'FormatSettings.DefaultBackColor'.
 						{
-							if ((e.State & DrawItemState.Selected) == 0) // Change only needed if item is not selected
+							if ((e.State & DrawItemState.Selected) == 0) // Change only needed if item is not selected.
 								e = new DrawItemEventArgs(e.Graphics, e.Font, e.Bounds, e.Index, e.State, e.ForeColor, this.formatSettings.BackColor);
 						}
 
@@ -845,16 +886,17 @@ namespace YAT.View.Controls
 						// Refer to the 'MKY.Windows.Forms.Test' test application for comparison of the variants.
 					}
 
-					// The item width and horizontal extent is handled here.
+					// The item width and horizontal extent is handled below.
 					// The item height is set in the 'FormatSettings' property.
-					if ((requestedWidth > 0) && (requestedWidth > lbmon.HorizontalExtent))
+					if (lbmon.HorizontalExtent < requestedWidth)
 						lbmon.HorizontalExtent = requestedWidth;
 
 				#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
-					// Perform horizontal auto scroll, but only on the last item.
+					// Perform horizontal auto scroll, but only on the last item:
 					if (e.Index == (lbmon.Items.Count - 1))
 						lbmon.HorizontalScrollToPosition(requestedWidth - e.Bounds.Width);
 				#endif
+
 					// Check whether the top index has changed, if so, also scroll the line numbers.
 					// Especially applies when monitor gets cleared, the top index will become 0.
 					if (fastListBox_Monitor_DrawItem_lastTopIndex != lbmon.TopIndex)
@@ -1146,14 +1188,14 @@ namespace YAT.View.Controls
 				this.nextMonitorUpdateTickStamp = (Stopwatch.GetTimestamp() + this.monitorUpdateTickInterval); // Loop-around is OK.
 			}
 
-			if (!lbmon.UserIsScrolling) // Perform scrolling.
+			if (!lbmon.UserIsScrolling) // Perform auto scroll.
 			{
 				if (lbmon.VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastItemsIsSelected())
 					lblin.VerticalScrollToBottom(); // Scroll line numbers accordingly.
 			}
-			else // UserIsScrolling => Suspend scrolling.
+			else // UserIsScrolling => Suspend auto scroll.
 			{
-				if (lbmon.VerticalScrollBarIsNearBottom) // Resume scrolling.
+				if (lbmon.VerticalScrollBarIsNearBottom) // Resume auto scroll.
 				{
 					if (lbmon.VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastItemsIsSelected())
 						lblin.VerticalScrollToBottom(); // Scroll line numbers accordingly.
@@ -1201,10 +1243,16 @@ namespace YAT.View.Controls
 						// Remove lines if maximum exceeded:
 						while (lbmon.Items.Count >= this.maxLineCount)
 						{
-							lblin.Items.RemoveAt(0);
-							lbmon.Items.RemoveAt(0);
+							int newTopIndexToRestore = (lbmon.TopIndex - 1); // lbmon is master; decrement accounts for item that will be removed.
+							DebugVerticalAutoScroll("Removing least recent item...");
+							lblin.Items.RemoveAt(0); // Remove/RemoveAt() resets 'TopIndex' to 0!
+							lbmon.Items.RemoveAt(0); // \remind (2017-11-05 / MKY) check if still needed after upgrade to .NET 4.0 or higher (FR#229)
+							DebugVerticalAutoScroll("......restoring 'TopIndex'...");
+							lblin.TopIndex = newTopIndexToRestore;
+							lbmon.TopIndex = newTopIndexToRestore;
+							DebugVerticalAutoScroll(".........................done");
 
-							if (!this.showBufferLineNumbers) // This option keeps the offset at 0.
+							if (!this.showBufferLineNumbers) // This option would require the offset to stay at 0.
 							{
 								// Increment the offset independent on 'showTotalLineNumbers' to
 								// have the indeed total value when the user enables the setting.
@@ -1217,8 +1265,10 @@ namespace YAT.View.Controls
 						}
 
 						// Add element to a new line:
-						lblin.Items.Add(0);
+						DebugVerticalAutoScroll("Adding new item..............");
+						lblin.Items.Add(0); // 0 = dummy value. 'null' is not valid.
 						lbmon.Items.Add(new Domain.DisplayLine(element));
+						DebugVerticalAutoScroll(".........................done");
 					}
 					else
 					{
@@ -1466,7 +1516,33 @@ namespace YAT.View.Controls
 		[Conditional("DEBUG_UPDATE")]
 		protected virtual void DebugUpdate(string message)
 		{
-			Debug.WriteLine(message);
+			if (DebugEnabled)
+			{
+				Debug.WriteLine(message);
+			}
+		}
+
+		/// <summary></summary>
+		[Conditional("DEBUG_VERTICAL_AUTO_SCROLL")]
+		protected virtual void DebugVerticalAutoScroll(string leadMessage)
+		{
+			if (DebugEnabled)
+			{
+				Debug.WriteLine
+				(
+					string.Format
+					(
+						CultureInfo.CurrentCulture,
+						"{0} : ItemCount = {1} | FullyVisibleItemCount = {2} | TotalVisibleItemCount = {3} | TopIndex = {4} | BottomIndex = {5}",
+						leadMessage,
+						fastListBox_Monitor.Items.Count,
+						fastListBox_Monitor.FullyVisibleItemCount,
+						fastListBox_Monitor.TotalVisibleItemCount,
+						fastListBox_Monitor.TopIndex,
+						fastListBox_Monitor.BottomIndex
+					)
+				);
+			}
 		}
 
 		#endregion

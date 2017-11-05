@@ -27,6 +27,11 @@
 // Configuration
 //==================================================================================================
 
+// Ideally, the two properties 'HorizontalAutoScroll' and 'VerticalAutoScroll' and the corresponding
+// automatism would be supported by this ListBox extension. However, no feasible implementation has
+// been found. Thus, it was decided to skip the automatism and simply provide the necessary methods
+// that allow the control's parent to trigger scrolling.
+
 // Enable to continue working/testing an automatically vertically scrolling list box:
 //#define ENABLE_VERTICAL_AUTO_SCROLL
 
@@ -34,17 +39,19 @@
 // When enabling 'ENABLE_HORIZONTAL_AUTO_SCROLL', a reference to 'MKY.Win32' and thus Win32 API
 // calls is required. This is undesirable, as there shall be no references to the Win32 API from
 // within true .NET assemblies. As a consequence, when enabling 'ENABLE_HORIZONTAL_AUTO_SCROLL' for
-// e.g. testing or analysis, the reference to 'MKY.Win32' must manually be added. And, when finally
-// introducing 'ENABLE_HORIZONTAL_AUTO_SCROLL', a better solution must be found to deal with any
-// dependencies to the Win32 API.
+// e.g. testing or analysis, the reference to 'MKY.Win32' must manually be added.
 
 // Enable to continue working/testing an automatically horizontally scrolling list box:
 //#define ENABLE_HORIZONTAL_AUTO_SCROLL
 
 #if (DEBUG)
 
-	// Enable debugging of vertical auto scrolling:
-////#define DEBUG_VERTICAL_AUTO_SCROLL
+	// Enable debugging of general stuff:
+////#define DEBUG_CLIENT_AREA               // The 'DebugEnabled' property must also be set!
+////#define DEBUG_COUNT_AND_INDICES         // The 'DebugEnabled' property must also be set!
+
+	// Enable debugging of vertical semi-auto scrolling:
+////#define DEBUG_VERTICAL_SEMI_AUTO_SCROLL // The 'DebugEnabled' property must also be set!
 
 #endif // DEBUG
 
@@ -63,7 +70,11 @@ using System.Windows.Forms;
 
 #if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 using System;
+#endif
+#if (DEBUG)
 using System.ComponentModel;
+#endif
+#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -103,6 +114,11 @@ namespace MKY.Windows.Forms
 		private const bool VerticalAutoScrollDefault = false;
 	#endif
 
+	#if (DEBUG)
+		/// <summary></summary>
+		public const bool DebugEnabledDefault = false;
+	#endif
+
 		#endregion
 
 		#region Fields
@@ -119,9 +135,15 @@ namespace MKY.Windows.Forms
 	#endif
 
 		private float clientItemCapacity; // = 0.0
+		private int fullyVisibleClientItemCapacity; // = 0
+		private int totalVisibleClientItemCapacity; // = 0
 
 		private int previousTopIndex; // = 0;
 		private bool userIsScrolling; // = false;
+
+	#if (DEBUG)
+		private bool debugEnabled = DebugEnabledDefault;
+	#endif
 
 		#endregion
 
@@ -138,6 +160,28 @@ namespace MKY.Windows.Forms
 			this.Resize += new EventHandler(this.ListBoxEx_Resize);
 
 			EvaluateClientItemCapacity();
+		}
+
+		#endregion
+
+		#region Overriden Methods
+		//==========================================================================================
+		// Overriden Methods
+		//==========================================================================================
+
+		/// <summary>
+		/// Raises the <see cref="E:DrawItem" /> event.
+		/// </summary>
+		/// <param name="e">The <see cref="DrawItemEventArgs"/> instance containing the event data.</param>
+		protected override void OnDrawItem(DrawItemEventArgs e)
+		{
+			if (!this.userIsScrolling)
+				EvaluateWhetherUserIsScrolling();
+
+			base.OnDrawItem(e);
+
+			DebugCountAndIndices("TopIndex is going to be retrieved");
+			this.previousTopIndex = TopIndex;
 		}
 
 		#endregion
@@ -164,11 +208,31 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Sets the number of items that the client area can show.
 		/// </summary>
+		/// <remarks>
+		/// If the <see cref="DrawMode"/> property is set to <see cref="DrawMode.OwnerDrawFixed"/>,
+		/// all items have the same height. When the <see cref="DrawMode"/> property is set to
+		/// <see cref="DrawMode.OwnerDrawVariable"/>, the <see cref="ListBox.ItemHeight"/> property
+		/// specifies the height of each item added to the <see cref="ListBox"/>. Because each item
+		/// in an owner-drawn list can have a different height, you can use the <see cref="ListBox.GetItemHeight"/>
+		/// method to get the height of a specific item in the <see cref="ListBox"/>. If you use the
+		/// <see cref="ListBox.ItemHeight"/> property on a <see cref="ListBox"/> with items of
+		/// variable height, this property returns the height of the first item in the control.
+		/// </remarks>
 		protected virtual void EvaluateClientItemCapacity()
 		{
-			this.clientItemCapacity = (float)ClientSize.Height / (float)ItemHeight;
+			if (DrawMode != DrawMode.OwnerDrawVariable)
+			{
+				this.clientItemCapacity = (float)ClientSize.Height / (float)ItemHeight;
 
-			DebugVerticalAutoScroll("ClientItemCapacity evaluated");
+				this.fullyVisibleClientItemCapacity = (int)Math.Floor(this.clientItemCapacity);
+				this.totalVisibleClientItemCapacity = (int)Math.Ceiling(this.clientItemCapacity);
+
+				DebugClientArea("ClientItemCapacity evaluated");
+			}
+			else
+			{
+				DebugClientArea("ClientItemCapacity cannot be evaluated for 'DrawMode.OwnerDrawVariable'!");
+			}
 		}
 
 		/// <summary>
@@ -193,6 +257,36 @@ namespace MKY.Windows.Forms
 			get { return (this.clientItemCapacity); }
 		}
 
+		/// <remarks>
+		/// If the <see cref="DrawMode"/> property is set to <see cref="DrawMode.OwnerDrawFixed"/>,
+		/// all items have the same height. When the <see cref="DrawMode"/> property is set to
+		/// <see cref="DrawMode.OwnerDrawVariable"/>, the <see cref="ListBox.ItemHeight"/> property
+		/// specifies the height of each item added to the <see cref="ListBox"/>. Because each item
+		/// in an owner-drawn list can have a different height, you can use the <see cref="ListBox.GetItemHeight"/>
+		/// method to get the height of a specific item in the <see cref="ListBox"/>. If you use the
+		/// <see cref="ListBox.ItemHeight"/> property on a <see cref="ListBox"/> with items of
+		/// variable height, this property returns the height of the first item in the control.
+		/// </remarks>
+		public virtual int FullyVisibleClientItemCapacity
+		{
+			get { return (this.fullyVisibleClientItemCapacity); }
+		}
+
+		/// <remarks>
+		/// If the <see cref="DrawMode"/> property is set to <see cref="DrawMode.OwnerDrawFixed"/>,
+		/// all items have the same height. When the <see cref="DrawMode"/> property is set to
+		/// <see cref="DrawMode.OwnerDrawVariable"/>, the <see cref="ListBox.ItemHeight"/> property
+		/// specifies the height of each item added to the <see cref="ListBox"/>. Because each item
+		/// in an owner-drawn list can have a different height, you can use the <see cref="ListBox.GetItemHeight"/>
+		/// method to get the height of a specific item in the <see cref="ListBox"/>. If you use the
+		/// <see cref="ListBox.ItemHeight"/> property on a <see cref="ListBox"/> with items of
+		/// variable height, this property returns the height of the first item in the control.
+		/// </remarks>
+		public virtual int TotalVisibleClientItemCapacity
+		{
+			get { return (this.totalVisibleClientItemCapacity); }
+		}
+
 		#endregion
 
 		#region Items
@@ -200,23 +294,55 @@ namespace MKY.Windows.Forms
 		// Items
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// If the <see cref="DrawMode"/> property is set to <see cref="DrawMode.OwnerDrawFixed"/>,
+		/// all items have the same height. When the <see cref="DrawMode"/> property is set to
+		/// <see cref="DrawMode.OwnerDrawVariable"/>, the <see cref="ListBox.ItemHeight"/> property
+		/// specifies the height of each item added to the <see cref="ListBox"/>. Because each item
+		/// in an owner-drawn list can have a different height, you can use the <see cref="ListBox.GetItemHeight"/>
+		/// method to get the height of a specific item in the <see cref="ListBox"/>. If you use the
+		/// <see cref="ListBox.ItemHeight"/> property on a <see cref="ListBox"/> with items of
+		/// variable height, this property returns the height of the first item in the control.
+		/// </remarks>
 		public virtual int FullyVisibleItemCount
 		{
-			get
-			{
-				int result = Math.Min((int)Math.Floor(ClientItemCapacity), Items.Count);
-				return (result);             // Floor() excludes a partially visible top or bottom most item.
-			}
+			get { return (Math.Min(FullyVisibleClientItemCapacity, Items.Count)); }
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// If the <see cref="DrawMode"/> property is set to <see cref="DrawMode.OwnerDrawFixed"/>,
+		/// all items have the same height. When the <see cref="DrawMode"/> property is set to
+		/// <see cref="DrawMode.OwnerDrawVariable"/>, the <see cref="ListBox.ItemHeight"/> property
+		/// specifies the height of each item added to the <see cref="ListBox"/>. Because each item
+		/// in an owner-drawn list can have a different height, you can use the <see cref="ListBox.GetItemHeight"/>
+		/// method to get the height of a specific item in the <see cref="ListBox"/>. If you use the
+		/// <see cref="ListBox.ItemHeight"/> property on a <see cref="ListBox"/> with items of
+		/// variable height, this property returns the height of the first item in the control.
+		/// </remarks>
+		public virtual int TotalVisibleItemCount
+		{
+			get { return (Math.Min(TotalVisibleClientItemCapacity, Items.Count)); }
+		}
+
+		/// <summary>
+		/// The zero-based index of the last visible item in the control.
+		/// If the last item is only partially visible, that index is returned.
+		/// </summary>
+		/// <remarks>
+		/// Same as <see cref="ListBox.TopIndex"/>, this property initially returns zero (0).
+		/// </remarks>
 		public virtual int BottomIndex
 		{
 			get
 			{
-				int result = Math.Min(TopIndex + (int)Math.Ceiling(ClientItemCapacity), (Items.Count - 1));
-				return (result);                        // Ceiling() includes a partially visible bottom most item.
+				// Debug output...
+				// ...is not required here, it is already done at all places where 'BottomIndex' is retrieved.
+				// ...and must not be done here, it would result in stack overflow!
+			////DebugCountAndIndices("TopIndex is going to be retrieved")
+
+				int unsafeResult = (TopIndex + (TotalVisibleItemCount - 1));
+				int   safeResult = Int32Ex.Limit(unsafeResult, 0, (Items.Count - 1));
+				return (safeResult);
 			}
 		}
 
@@ -244,6 +370,8 @@ namespace MKY.Windows.Forms
 			{
 				foreach (int i in SelectedIndices)
 				{
+					DebugCountAndIndices("Indices are going to be retrieved");
+
 					if ((i >= TopIndex) && (i <= BottomIndex))
 						return (true);
 				}
@@ -376,7 +504,7 @@ namespace MKY.Windows.Forms
 					this.verticalAutoScroll = true;
 
 					if (!DesignMode)
-						VerticalScrollToBottomIfNoItemsAreSelected();
+						VerticalScrollToBottomIfNoItemIsSelected();
 				}
 				else
 				{
@@ -388,33 +516,57 @@ namespace MKY.Windows.Forms
 	#endif // ENABLE_VERTICAL_AUTO_SCROLL
 
 		/// <summary></summary>
+		protected virtual void EvaluateWhetherUserIsScrolling()
+		{
+			DebugCountAndIndices("TopIndex is going to be retrieved");
+
+			if (!this.userIsScrolling && (this.previousTopIndex > TopIndex))
+			{
+				this.userIsScrolling = true;
+				DebugVerticalSemiAutoScroll("User has started scrolling.......");
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool UserIsScrolling
 		{
-			get
-			{
-				if (this.previousTopIndex > TopIndex)
-				{
-					this.userIsScrolling = true;
-
-					DebugVerticalAutoScroll("User has started scrolling");
-				}
-
-				this.previousTopIndex = TopIndex; // Update.
-
-				return (this.userIsScrolling);
-			}
+			get { return (this.userIsScrolling); }
 		}
 
 		/// <remarks>
 		/// "NearBottom" means at bottom or at least half the visible items close to it.
 		/// This margin accounts for two effects:
 		///  > When an item is added, the item count is already incremented while the top index is still lower.
-		///  > When the user want to reactivate vertical auto scroll while a lot of data is being received, the margin "glues" scrolling.
+		///  > When the user wants to reactivate vertical auto scroll while a lot of data is being received, the margin "glues" scrolling.
 		/// </remarks>
 		public virtual bool VerticalScrollBarIsNearBottom
 		{
-			get { return (TopIndex >= ((Items.Count - FullyVisibleItemCount) - (FullyVisibleItemCount / 2))); }
+			get
+			{
+				int glueIndex = ((Items.Count - FullyVisibleItemCount) - (FullyVisibleItemCount / 2));
+
+				DebugCountAndIndices("TopIndex is going to be retrieved");
+
+				return (TopIndex >= glueIndex);
+			}
 		}
+
+	#if (DEBUG)
+
+		/// <remarks>
+		/// Flag in a addition to configuration items to allow selective debugging of just a single
+		/// list box, in order to reduce debug output.
+		/// </remarks>
+		[Category("Scroll")]
+		[Description("Enables or disables debugging.")]
+		[DefaultValue(DebugEnabledDefault)]
+		public virtual bool DebugEnabled
+		{
+			get { return (this.debugEnabled); }
+			set { this.debugEnabled = value;  }
+		}
+
+	#endif // DEBUG_VERTICAL_SEMI_AUTO_SCROLL
 
 		#endregion
 
@@ -525,20 +677,31 @@ namespace MKY.Windows.Forms
 		/// </summary>
 		public void VerticalScrollToBottom()
 		{
-			DebugVerticalAutoScroll("Doing VerticalScrollToBottom()...");
-
-			TopIndex = (Items.Count - FullyVisibleItemCount);
-
 			if (this.userIsScrolling)
 			{
 				this.userIsScrolling = false;
-
-				DebugVerticalAutoScroll("User has ended scrolling");
+				DebugVerticalSemiAutoScroll("User has ended scrolling.........");
 			}
 
-			this.previousTopIndex = TopIndex; // Update.
+			int intendedTopIndex = (Items.Count - FullyVisibleItemCount);
 
-			DebugVerticalAutoScroll("...VerticalScrollToBottom() done!");
+			DebugCountAndIndices("TopIndex is going to be retrieved");
+
+			if (TopIndex != intendedTopIndex)
+			{
+				DebugVerticalSemiAutoScroll(string.Format("VerticalScrollToBottom() is about to scroll to intended 'TopIndex' of {0}", intendedTopIndex));
+				DebugCountAndIndices("TopIndex is going to be changed..");
+
+				TopIndex = intendedTopIndex;
+			}
+			else
+			{
+				DebugVerticalSemiAutoScroll(string.Format("VerticalScrollToBottom() has been skipped since current 'TopIndex' already is at intended 'TopIndex' of {0}", intendedTopIndex));
+			}
+
+			DebugCountAndIndices("TopIndex is going to be retrieved");
+
+			this.previousTopIndex = TopIndex;
 		}
 
 		/// <summary>
@@ -551,8 +714,14 @@ namespace MKY.Windows.Forms
 		{
 			if (!ItemIsSelected) // Note that items gets deselected if another control gets the focus.
 			{
+				DebugVerticalSemiAutoScroll("VerticalScrollToBottomIfNoItemIsSelected() is being done...");
+
 				VerticalScrollToBottom();
 				return (true);
+			}
+			else
+			{
+				DebugVerticalSemiAutoScroll("VerticalScrollToBottomIfNoItemIsSelected() has been skipped since no item is selected");
 			}
 
 			return (false);
@@ -568,9 +737,17 @@ namespace MKY.Windows.Forms
 		{
 			if (!VisibleItemIsSelected) // Note that items gets deselected if another control gets the focus.
 			{
-				SelectedIndices.Clear(); // Clear selection to ensure that scrolling continues.
+				DebugVerticalSemiAutoScroll("VerticalScrollToBottomIfNoVisibleItemIsSelected() is being done...");
+
+				if (SelectedIndices.Count > 0)
+					SelectedIndices.Clear(); // Clear selection to ensure that scrolling continues.
+
 				VerticalScrollToBottom();
 				return (true);
+			}
+			else
+			{
+				DebugVerticalSemiAutoScroll("VerticalScrollToBottomIfNoVisibleItemIsSelected() has been skipped since no visible item is selected");
 			}
 
 			return (false);
@@ -593,15 +770,21 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary>
-		/// Vertically scroll the list to the bottom if no visible items are selected, except for the last.
+		/// Vertically scroll the list to the bottom if only one of the last items is selected.
 		/// </summary>
 		public bool VerticalScrollToBottomIfOnlyOneOfTheLastItemsIsSelected()
 		{
 			if (OnlyOneOfTheLastItemsIsSelected) // Note that items gets deselected if another control gets the focus.
 			{
+				DebugVerticalSemiAutoScroll("VerticalScrollToBottomIfOnlyOneOfTheLastItemsIsSelected() is being done...");
+
 				SelectedIndices.Clear(); // Clear selection to ensure that scrolling continues.
 				VerticalScrollToBottom();
 				return (true);
+			}
+			else
+			{
+				DebugVerticalSemiAutoScroll("VerticalScrollToBottomIfOnlyOneOfTheLastItemsIsSelected() has been skipped since more than the last items is selected");
 			}
 
 			return (false);
@@ -760,10 +943,65 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		[Conditional("DEBUG_VERTICAL_AUTO_SCROLL")]
-		protected virtual void DebugVerticalAutoScroll(string leadMessage)
+		[Conditional("DEBUG_CLIENT_AREA")]
+		protected virtual void DebugClientArea(string leadMessage)
 		{
-			Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "{0} : ClientHeight = {1} | ClientItemCapacity = {2} | ItemCount = {3} | FullyVisibleItemCount = {4} | TopIndex = {5} | BottomIndex = {6}", leadMessage, ClientSize.Height, ClientItemCapacity, Items.Count, FullyVisibleItemCount, TopIndex, BottomIndex));
+			if (DebugEnabled)
+			{
+				Debug.WriteLine
+				(
+					string.Format
+					(
+						CultureInfo.CurrentCulture,
+						"{0} : ClientHeight = {1} | ClientItemCapacity = {2} | FullyVisibleClientItemCapacity = {3} | TotalVisibleClientItemCapacity = {4}",
+						leadMessage,
+						ClientSize.Height,
+						ClientItemCapacity,
+						FullyVisibleClientItemCapacity,
+						TotalVisibleClientItemCapacity
+					)
+				);
+			}
+		}
+
+		/// <summary></summary>
+		[Conditional("DEBUG_COUNT_AND_INDICES")]
+		protected virtual void DebugCountAndIndices(string leadMessage)
+		{
+			DebugCountAndIndices(leadMessage, BottomIndex);
+		}
+
+		/// <summary></summary>
+		[Conditional("DEBUG_COUNT_AND_INDICES")]
+		protected virtual void DebugCountAndIndices(string leadMessage, int bottomIndex)
+		{
+			if (DebugEnabled)
+			{
+				Debug.WriteLine
+				(
+					string.Format
+					(
+						CultureInfo.CurrentCulture,
+						"{0} : ItemCount = {1} | FullyVisibleItemCount = {2} | TotalVisibleItemCount = {3} | TopIndex = {4} | BottomIndex = {5}",
+						leadMessage,
+						Items.Count,
+						FullyVisibleItemCount,
+						TotalVisibleItemCount,
+						TopIndex,
+						bottomIndex
+					)
+				);
+			}
+		}
+
+		/// <summary></summary>
+		[Conditional("DEBUG_VERTICAL_SEMI_AUTO_SCROLL")]
+		protected virtual void DebugVerticalSemiAutoScroll(string message)
+		{
+			if (DebugEnabled)
+			{
+				Debug.WriteLine(message);
+			}
 		}
 
 		#endregion

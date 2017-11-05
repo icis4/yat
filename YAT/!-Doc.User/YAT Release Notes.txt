@@ -94,7 +94,8 @@ Important changes:
 - 
 
 Fixed bugs:
-- 
+- Monitor list items no longer jump to top as soon as display buffer has been filled (bug #394,
+  related to feature request #323 implemented in previous release).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
