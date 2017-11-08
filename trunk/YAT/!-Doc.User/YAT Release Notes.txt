@@ -107,8 +107,8 @@ Limitations and known issues:
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
    > System errors are output in local language, even though YAT is all-English (bug #66).
    > Single chars are compared case insensitively against recent 'Send Text' commands (bug #347).
-   > Auto completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
-   > Horizontal auto scrolling of monitors is not feasible to implement (feature request #163).
+   > Automatic completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
+   > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
    > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
      selected may lead to a severe drop of the overall performance (rel. to bugs #305, #380, #383).
 - MDI limitations of .NET Windows.Forms:
@@ -182,8 +182,8 @@ Limitations and known issues:
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
    > System errors are output in local language, even though YAT is all-English (bug #66).
    > Single chars are compared case insensitively against recent 'Send Text' commands (bug #347).
-   > Auto completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
-   > Horizontal auto scrolling of monitors is not feasible to implement (feature request #163).
+   > Automatic completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
+   > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
    > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
      selected may lead to a severe drop of the overall performance (rel. to bugs #305, #380, #383).
 - MDI limitations of .NET Windows.Forms:
@@ -260,8 +260,8 @@ Limitations and known issues:
    > System display scaling other than 100% results in partly clipped controls (bugs #85 and #235).
    > System errors are output in local language, even though YAT is all-English (bug #66).
    > Single chars are compared case insensitively against recent 'Send Text' commands (bug #347).
-   > Auto completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
-   > Horizontal auto scroll is not feasible to implement (feature request #163).
+   > Automatic completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
+   > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
@@ -402,8 +402,8 @@ Limitations and known issues:
    > System display scaling other than 100% results in partly clipped controls (bugs #85 and #235).
    > System errors are output in local language, even though YAT is all-English (bug #66).
    > Single chars are compared case insensitively against recent 'Send Text' commands (bug #347).
-   > Auto completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
-   > Horizontal auto scroll is not feasible to implement (feature request #163).
+   > Automatic completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
+   > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
@@ -525,7 +525,7 @@ Limitations and known issues:
      In .NET Windows.Forms the first click only activates the application but doesn't execute
      anything (bug #210)
    > System errors are output in local language, even though YAT is all-English (bug #66)
-   > Horizontal auto scroll is not feasible to implement (feature request #163)
+   > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163)
 - MDI limitations of .NET Windows.Forms
    > Issues with frame (bugs #29 and #30)
    > Issues with window list (bugs #31, #119, #180 and #213)
