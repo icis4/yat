@@ -386,9 +386,34 @@ namespace YAT.View.Controls
 		{
 			comboBox_SingleLineText.Select();
 
-			// In case of single-line text, restore edit mode:
-			if (this.command.IsSingleLineText)
-				SetCursorToEnd();
+			// Note that the standard behavior of a WinForms combo box is to fully select the whole
+			// text of the selected item when getting focus, whereas the text in a WinForms text box
+			// doesn't. Used to account for this here, using the following code...
+			//
+			// if (this.command.IsSingleLineText) // Keeping default behavior for multi-line since
+			//     SetCursorToEnd();              // editing the end of multi-line text is useless.
+			//
+			// ...with...
+			//
+			// private void SetCursorToEnd()
+			// {
+			//     this.isSettingControls.Enter();
+			//     try {
+			//         comboBox_SingleLineText.SelectionStart = comboBox_SingleLineText.Text.Length;
+			//     }
+			//     finally {
+			//         this.isSettingControls.Leave();
+			//     }
+			// }
+			//
+			// However, this results in inconsistent behavior:
+			//  > Sending the text moves cursor to end (special behavior).
+			//  > Browsing among recents selects all (standard behavior).
+			//  > Opening a dialog (e.g. multi-line text) moves cursor to end (special behavior).
+			//  > Switching among application using [Alt+Tab] selects all (standard behavior).
+			//
+			// The default behavior also has the advantage that user better sees where focus is
+			// located Thus, decided to keep the default behavior.
 		}
 
 		/// <summary></summary>
@@ -441,7 +466,6 @@ namespace YAT.View.Controls
 					if (button_Send.Enabled)
 					{
 						RequestSendCommand();
-						SetCursorToEnd();
 						return (true);
 					}
 				}
@@ -477,7 +501,7 @@ namespace YAT.View.Controls
 				SetExplicitDefaultRadixControls();
 				SetRecentControls();
 				SetCommandControls();
-				SetCursorToEnd();
+				SelectInput();
 			}
 		}
 
@@ -796,7 +820,6 @@ namespace YAT.View.Controls
 		private void button_Send_Click(object sender, EventArgs e)
 		{
 			RequestSendCommand();
-			SetCursorToEnd();
 		}
 
 		#endregion
@@ -919,23 +942,7 @@ namespace YAT.View.Controls
 						comboBox_SingleLineText.Text = "";
 				}
 
-				SelectInput();
 				SetSendControls();
-			}
-			finally
-			{
-				this.isSettingControls.Leave();
-			}
-			DebugCommandLeave();
-		}
-
-		private void SetCursorToEnd()
-		{
-			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
-			this.isSettingControls.Enter();
-			try
-			{
-				comboBox_SingleLineText.SelectionStart = comboBox_SingleLineText.Text.Length;
 			}
 			finally
 			{
@@ -1064,8 +1071,8 @@ namespace YAT.View.Controls
 			}
 
 			// Calculate startup location:
-			Rectangle area = requestingControl.RectangleToScreen(requestingControl.DisplayRectangle);
-			Point formStartupLocation = new Point();
+			var area = requestingControl.RectangleToScreen(requestingControl.DisplayRectangle);
+			var formStartupLocation = new Point();
 			formStartupLocation.X = area.X + area.Width;
 			formStartupLocation.Y = area.Y + area.Height;
 

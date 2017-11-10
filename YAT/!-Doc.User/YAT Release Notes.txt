@@ -91,9 +91,11 @@ New:
 - 
 
 Important changes:
+- Cursor behavior of 'Send Text' improved; the cursor no longer jumps to the end of the input box
+  when sending the text (bug #395).
 - Automatic response extended by selection to respond the received trigger (related to feature
   requests #176, #252 implemented in version 1.99.50).
-  This option combined with setting the trigger to "[Any Line]" makes YAT an echo server.
+  This option combined with setting the trigger to '[Any Line]' makes YAT an echo server.
 - Switching among automatic/manual vertical scrolling in monitor view further improved, especially
   while continuous data is being received (related to bug #394 and feature request #323 implemented
   in previous release).
@@ -155,9 +157,9 @@ Important changes:
 - Option to display the date has been merged with option to display the time, but it is now possible
   to configure the format (feature requests #291, #319 and related to former feature request #14).
   In addition, options to display the time span as well as the time delta have been added.
-- "Comments" exclusion on sending has been migrated to "Text" exclusion that is now supporting
+- 'Comments' exclusion on sending has been migrated to 'Text' exclusion that is now supporting
   regex patterns instead of plain strings (feature request #307). The change adds the possibility
-  to omit empty lines. Attention, former "Comment indicators" settings will have to be reapplied.
+  to omit empty lines. Attention, former 'Comment indicators' settings will have to be reapplied.
 
 Fixed bugs:
 - Serial COM port switching again properly works (bug #376).
@@ -216,7 +218,7 @@ New:
   \!(LineRepeat(<n>)) added (feature requests #13, #139).
 - Additional keyword \!(ReportID(<ID>)) that allows changing the USB Ser/HID report ID while sending
   and thus allows to sequentially write to and read from multiple report IDs (feature request #296).
-- Additional USB Ser/HID preset "Signal 11 HID API" and changed presets "Plain" and "Common" to
+- Additional USB Ser/HID preset 'Signal 11 HID API' and changed presets 'Plain' and 'Common' to
   cover more use cases related to raw binary data (feature request #297 and bug #367).
 
 Important changes:
@@ -240,7 +242,7 @@ Important changes:
 - Automatically generated backup files are now placed into standard temporary folder (feat. #275).
 - Internal event handling refined, resulting in increased stability on stopping/closing/exiting
   (related to feature request #173 and bugs #310, #339).
-- SourceForge file structure simplified, split into "Current" and "Previous" (feature request #278).
+- SourceForge file structure simplified, split into 'Current' and 'Previous' (feature request #278).
 - Binary distribution added because installer is no longer compatible with Win XP (bugs #318, #369).
 - Started to migrate test environment from NUnit V2 to V3, but reverted to 2.6.4 again (feat. #293).
 - NUnit tests migrated from classic to constraint model (related to feature request #293).
