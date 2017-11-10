@@ -627,7 +627,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			IsStoppingAndDisposingSocketSynchronized = true;
 
-			var asyncInvoker = new VoidDelegateVoid(StopAndDisposeSocketAndConnectionsAndThread);
+			var asyncInvoker = new Action(StopAndDisposeSocketAndConnectionsAndThread);
 			asyncInvoker.BeginInvoke(null, null);
 		}
 
