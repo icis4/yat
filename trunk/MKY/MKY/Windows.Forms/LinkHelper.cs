@@ -57,7 +57,7 @@ namespace MKY.Windows.Forms
 						message,
 						"Link Error",
 						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
+						MessageBoxIcon.Error
 					);
 
 					return (false);

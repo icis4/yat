@@ -1510,9 +1510,9 @@ namespace YAT.Model
 					OnMessageInputRequest
 					(
 						"Workspace is already open and will not be re-openend.",
-						"Workspace Warning",
+						"Workspace",
 						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
+						MessageBoxIcon.Exclamation
 					);
 					OnTimedStatusTextRequest("Workspace not re-opened.");
 					return (false);

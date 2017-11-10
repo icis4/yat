@@ -1517,7 +1517,7 @@ namespace YAT.Model
 							errorMessage + Environment.NewLine + Environment.NewLine + "Continue loading workspace?",
 							caption,
 							MessageBoxButtons.YesNo,
-							MessageBoxIcon.Exclamation
+							MessageBoxIcon.Error
 						);
 						OnTimedStatusTextRequest("Terminal not opened!");
 						OnCursorRequest(Cursors.WaitCursor);
@@ -1701,9 +1701,9 @@ namespace YAT.Model
 						OnMessageInputRequest
 						(
 							"Terminal is already open and will not be re-openend.",
-							"Terminal Warning",
+							"Terminal",
 							MessageBoxButtons.OK,
-							MessageBoxIcon.Warning
+							MessageBoxIcon.Exclamation
 						);
 						OnTimedStatusTextRequest("Terminal not re-opened.");
 						return (false);

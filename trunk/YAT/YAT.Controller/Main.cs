@@ -1050,7 +1050,7 @@ namespace YAT.Controller
 			foreach (string line in ResultText)
 				sb.AppendLine(line);
 
-			MessageBoxEx.Show(sb.ToString(), ApplicationEx.ProductNameLong, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			MessageBoxEx.Show(sb.ToString(), ApplicationEx.ProductNameLong, MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
 		#endregion
