@@ -491,6 +491,24 @@ namespace YAT.Settings.Terminal
 			{
 				switch ((Model.Types.AutoResponse)response)
 				{
+					case Model.Types.AutoResponse.SendText:
+					{
+						Model.Types.Command c = SendText.Command;
+						if ((c != null) && (c.IsValid))
+							a.Add(response);
+
+						break;
+					}
+
+					case Model.Types.AutoResponse.SendFile:
+					{
+						Model.Types.Command c = SendFile.Command;
+						if ((c != null) && (c.IsValid))
+							a.Add(response);
+
+						break;
+					}
+
 					case Model.Types.AutoResponse.PredefinedCommand1:
 					case Model.Types.AutoResponse.PredefinedCommand2:
 					case Model.Types.AutoResponse.PredefinedCommand3:
@@ -516,24 +534,6 @@ namespace YAT.Settings.Terminal
 						break;
 					}
 
-					case Model.Types.AutoResponse.SendText:
-					{
-						Model.Types.Command c = SendText.Command;
-						if ((c != null) && (c.IsValid))
-							a.Add(response);
-
-						break;
-					}
-
-					case Model.Types.AutoResponse.SendFile:
-					{
-						Model.Types.Command c = SendFile.Command;
-						if ((c != null) && (c.IsValid))
-							a.Add(response);
-
-						break;
-					}
-
 					case Model.Types.AutoResponse.Explicit:
 					{
 						Model.Types.Command c = new Model.Types.Command(AutoResponse.Response); // No explicit default radix available (yet).
@@ -544,6 +544,7 @@ namespace YAT.Settings.Terminal
 					}
 
 					case Model.Types.AutoResponse.None:
+					case Model.Types.AutoResponse.Trigger:
 					default:
 					{
 						a.Add(response); // Always add these fixed responses.

@@ -91,6 +91,9 @@ New:
 - 
 
 Important changes:
+- Automatic response extended by selection to respond the received trigger (related to feature
+  requests #176, #252 implemented in version 1.99.50).
+  This option combined with setting the trigger to "[Any Line]" makes YAT an echo server.
 - Switching among automatic/manual vertical scrolling in monitor view further improved, especially
   while continuous data is being received (related to bug #394 and feature request #323 implemented
   in previous release).

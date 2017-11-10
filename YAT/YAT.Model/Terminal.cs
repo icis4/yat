@@ -2396,7 +2396,7 @@ namespace YAT.Model
 			// AutoResponse:
 			if (this.settingsRoot.AutoResponse.IsActive)
 			{
-				bool isMatch = false;
+				bool isTriggered = false;
 
 				foreach (byte b in e.Value.Content)
 				{
@@ -2404,8 +2404,8 @@ namespace YAT.Model
 					{
 						if (this.autoResponseHelper != null)
 						{
-							if (this.autoResponseHelper.EnqueueAndMatch(b))
-								isMatch = true;
+							if (this.autoResponseHelper.EnqueueAndMatchTrigger(b))
+								isTriggered = true;
 						}
 						else
 						{
@@ -2414,17 +2414,25 @@ namespace YAT.Model
 					}
 				}
 
-				if (isMatch) // Invoke sending on different thread than the receive thread.
+				if (isTriggered) // Invoke sending on different thread than the receive thread.
 				{
-					var asyncInvoker = new VoidDelegateVoid(terminal_RawChunkReceived_SendAutoResponseAsync);
-					asyncInvoker.BeginInvoke(null, null);
+					byte[] triggerSequence = null;
+
+					lock (this.autoResponseHelperSyncObj)
+					{
+						if (this.autoResponseHelper != null)
+							triggerSequence = this.autoResponseHelper.TriggerSequence;
+					}
+
+					var asyncInvoker = new Action<byte[]>(terminal_RawChunkReceived_SendAutoResponseAsync);
+					asyncInvoker.BeginInvoke(triggerSequence, null, null);
 				}
 			}
 		}
 
-		private void terminal_RawChunkReceived_SendAutoResponseAsync()
+		private void terminal_RawChunkReceived_SendAutoResponseAsync(byte[] triggerSequence)
 		{
-			SendAutoResponse();
+			SendAutoResponse(triggerSequence);
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
@@ -2502,7 +2510,12 @@ namespace YAT.Model
 
 			// AutoResponse:
 			if (this.settingsRoot.AutoResponse.IsActive && (this.settingsRoot.AutoResponse.Trigger == AutoTrigger.AnyLine))
-				SendAutoResponse();
+			{
+				foreach (var de in e.Lines)
+				{
+					SendAutoResponse(de.ElementsToOrigin());
+				}
+			}
 		}
 
 		private void terminal_RepositoryCleared(object sender, EventArgs<Domain.RepositoryType> e)
@@ -2922,7 +2935,7 @@ namespace YAT.Model
 				message,
 				"No interfaces available",
 				MessageBoxButtons.OK,
-				MessageBoxIcon.Warning
+				MessageBoxIcon.Exclamation
 			);
 		}
 
@@ -4339,15 +4352,15 @@ namespace YAT.Model
 			{
 				if (this.settingsRoot.AutoResponse.Trigger.CommandIsRequired) // = sequence required = helper required.
 				{
-					byte[] sequence;
-					if (TryParseCommandToSequence(this.settingsRoot.ActiveAutoResponseTrigger, out sequence))
+					byte[] triggerSequence;
+					if (TryParseCommandToSequence(this.settingsRoot.ActiveAutoResponseTrigger, out triggerSequence))
 					{
 						lock (this.autoResponseHelperSyncObj)
 						{
 							if (this.autoResponseHelper == null)
-								this.autoResponseHelper = new AutoResponseHelper(sequence);
+								this.autoResponseHelper = new AutoResponseHelper(triggerSequence);
 							else
-								this.autoResponseHelper.Sequence = sequence;
+								this.autoResponseHelper.TriggerSequence = triggerSequence;
 						}
 					}
 					else
@@ -4363,7 +4376,7 @@ namespace YAT.Model
 							"To enable again, re-configure the automatic response.",
 							"Automatic Response Error",
 							MessageBoxButtons.OK,
-							MessageBoxIcon.Exclamation
+							MessageBoxIcon.Warning
 						);
 					}
 				}
@@ -4422,26 +4435,27 @@ namespace YAT.Model
 		/// <summary>
 		/// Sends the automatic response.
 		/// </summary>
-		protected virtual void SendAutoResponse()
+		protected virtual void SendAutoResponse(byte[] triggerSequence)
 		{
 			int page = this.settingsRoot.Predefined.SelectedPage;
 
 			switch ((AutoResponse)this.settingsRoot.AutoResponse.Response)
 			{
-				case AutoResponse.PredefinedCommand1:  SendPredefined(page, 1);  break;
-				case AutoResponse.PredefinedCommand2:  SendPredefined(page, 2);  break;
-				case AutoResponse.PredefinedCommand3:  SendPredefined(page, 3);  break;
-				case AutoResponse.PredefinedCommand4:  SendPredefined(page, 4);  break;
-				case AutoResponse.PredefinedCommand5:  SendPredefined(page, 5);  break;
-				case AutoResponse.PredefinedCommand6:  SendPredefined(page, 6);  break;
-				case AutoResponse.PredefinedCommand7:  SendPredefined(page, 7);  break;
-				case AutoResponse.PredefinedCommand8:  SendPredefined(page, 8);  break;
-				case AutoResponse.PredefinedCommand9:  SendPredefined(page, 9);  break;
-				case AutoResponse.PredefinedCommand10: SendPredefined(page, 10); break;
-				case AutoResponse.PredefinedCommand11: SendPredefined(page, 11); break;
-				case AutoResponse.PredefinedCommand12: SendPredefined(page, 12); break;
-				case AutoResponse.SendText:            SendText();               break;
-				case AutoResponse.SendFile:            SendFile();               break;
+				case AutoResponse.Trigger:             SendAutoResponseTrigger(triggerSequence); break;
+				case AutoResponse.SendText:            SendText();                               break;
+				case AutoResponse.SendFile:            SendFile();                               break;
+				case AutoResponse.PredefinedCommand1:  SendPredefined(page, 1);                  break;
+				case AutoResponse.PredefinedCommand2:  SendPredefined(page, 2);                  break;
+				case AutoResponse.PredefinedCommand3:  SendPredefined(page, 3);                  break;
+				case AutoResponse.PredefinedCommand4:  SendPredefined(page, 4);                  break;
+				case AutoResponse.PredefinedCommand5:  SendPredefined(page, 5);                  break;
+				case AutoResponse.PredefinedCommand6:  SendPredefined(page, 6);                  break;
+				case AutoResponse.PredefinedCommand7:  SendPredefined(page, 7);                  break;
+				case AutoResponse.PredefinedCommand8:  SendPredefined(page, 8);                  break;
+				case AutoResponse.PredefinedCommand9:  SendPredefined(page, 9);                  break;
+				case AutoResponse.PredefinedCommand10: SendPredefined(page, 10);                 break;
+				case AutoResponse.PredefinedCommand11: SendPredefined(page, 11);                 break;
+				case AutoResponse.PredefinedCommand12: SendPredefined(page, 12);                 break;
 
 				case AutoResponse.Explicit:
 					SendCommand(new Command(this.settingsRoot.AutoResponse.Response)); // No explicit default radix available (yet).
@@ -4451,6 +4465,15 @@ namespace YAT.Model
 				default:
 					break;
 			}
+		}
+
+		/// <summary>
+		/// Sends the automatic response trigger.
+		/// </summary>
+		protected virtual void SendAutoResponseTrigger(byte[] triggerSequence)
+		{
+			if (triggerSequence != null)
+				this.terminal.Send(triggerSequence);
 		}
 
 		#endregion

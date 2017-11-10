@@ -58,7 +58,7 @@ namespace YAT.Model.Types
 		PredefinedCommand11 = 11,
 		PredefinedCommand12 = 12,
 
-		AnyLine,
+		AnyLine, // Located after predefined commands to allow numbering them 1..12 accordingly.
 
 		Explicit
 	}
@@ -68,7 +68,7 @@ namespace YAT.Model.Types
 	#endregion
 
 	/// <summary>
-	/// Extended enum TriggerEx.
+	/// Extended enum AutoTriggerEx.
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
@@ -89,11 +89,11 @@ namespace YAT.Model.Types
 		private const string             None_string = "[None]";
 		private static readonly string[] None_stringAlternatives = new string[] { "[N]" };
 
-		private const string             PredefinedCommand_string = "[Predefined Command"; // 'StartsWith', see below.
-		private static readonly string[] PredefinedCommand_stringAlternatives = new string[] { "[Predefined", "[PC", "[P" };
-
 		private const string             AnyLine_string = "[Any Line]";
 		private static readonly string[] AnyLine_stringAlternatives = new string[] { "[A]", "[AL]", "[*L]" };
+
+		private const string             PredefinedCommand_string = "[Predefined Command"; // 'StartsWith', see below.
+		private static readonly string[] PredefinedCommand_stringAlternatives = new string[] { "[Predefined", "[PC", "[P" };
 
 		#endregion
 
@@ -104,7 +104,7 @@ namespace YAT.Model.Types
 
 		/// <summary>Default is <see cref="Default"/>.</summary>
 		public AutoTriggerEx()
-			: base(Default)
+			: this(Default)
 		{
 		}
 
@@ -147,6 +147,7 @@ namespace YAT.Model.Types
 		public int ToPredefinedCommandId()
 		{
 			int triggerInt = (int)(AutoTrigger)UnderlyingEnum;
+
 			if ((triggerInt >= (int)AutoTrigger.PredefinedCommand1) &&
 			    (triggerInt <= (int)AutoTrigger.PredefinedCommand12))
 			{
@@ -172,6 +173,7 @@ namespace YAT.Model.Types
 			switch ((AutoTrigger)UnderlyingEnum)
 			{
 				case AutoTrigger.None:                return (None_string);
+				case AutoTrigger.AnyLine:             return (AnyLine_string);
 				case AutoTrigger.PredefinedCommand1:  return (PredefinedCommand_string + " 1]");
 				case AutoTrigger.PredefinedCommand2:  return (PredefinedCommand_string + " 2]");
 				case AutoTrigger.PredefinedCommand3:  return (PredefinedCommand_string + " 3]");
@@ -184,7 +186,6 @@ namespace YAT.Model.Types
 				case AutoTrigger.PredefinedCommand10: return (PredefinedCommand_string + " 10]");
 				case AutoTrigger.PredefinedCommand11: return (PredefinedCommand_string + " 11]");
 				case AutoTrigger.PredefinedCommand12: return (PredefinedCommand_string + " 12]");
-				case AutoTrigger.AnyLine:             return (AnyLine_string);
 				case AutoTrigger.Explicit:            return (this.explicitCommandString);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -289,6 +290,7 @@ namespace YAT.Model.Types
 		{
 			List<AutoTriggerEx> a = new List<AutoTriggerEx>(16); // Preset the initial capacity to improve memory management, 16 is a large enough value.
 			if (addFixed)		a.Add(new AutoTriggerEx(AutoTrigger.None));
+			if (addFixed)		a.Add(new AutoTriggerEx(AutoTrigger.AnyLine));
 			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand1));
 			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand2));
 			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand3));
@@ -301,7 +303,6 @@ namespace YAT.Model.Types
 			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand10));
 			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand11));
 			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand12));
-			if (addFixed)		a.Add(new AutoTriggerEx(AutoTrigger.AnyLine));
 			return (a.ToArray());
 		}
 
@@ -365,6 +366,12 @@ namespace YAT.Model.Types
 				result = AutoTrigger.None;
 				return (true);
 			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, AnyLine_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, AnyLine_stringAlternatives))
+			{
+				result = AutoTrigger.AnyLine;
+				return (true);
+			}
 			else if (StringEx.StartsWithOrdinalIgnoreCase   (s, PredefinedCommand_string) ||
 			         StringEx.StartsWithAnyOrdinalIgnoreCase(s, PredefinedCommand_stringAlternatives))
 			{
@@ -386,12 +393,6 @@ namespace YAT.Model.Types
 				// Fallback:
 				result = AutoTrigger.PredefinedCommand1;
 				return (false);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, AnyLine_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, AnyLine_stringAlternatives))
-			{
-				result = AutoTrigger.AnyLine;
-				return (true);
 			}
 			else // Explicit!
 			{
