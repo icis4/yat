@@ -269,7 +269,7 @@ namespace YAT.View.Controls
 				this.isStartingUp = false;
 				SetExplicitDefaultRadixControls();
 				SetControls();
-				SetCursorToEnd();
+				PrepareUserInput();
 			}
 		}
 
@@ -688,19 +688,6 @@ namespace YAT.View.Controls
 					// Delete:
 					button_Delete.Enabled = false;
 				}
-			}
-			finally
-			{
-				this.isSettingControls.Leave();
-			}
-		}
-
-		private void SetCursorToEnd()
-		{
-			this.isSettingControls.Enter();
-			try
-			{
-				textBox_SingleLineText.SelectionStart = textBox_SingleLineText.Text.Length;
 			}
 			finally
 			{
