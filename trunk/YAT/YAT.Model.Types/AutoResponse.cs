@@ -58,6 +58,8 @@ namespace YAT.Model.Types
 		PredefinedCommand11 = 11,
 		PredefinedCommand12 = 12,
 
+		Trigger, // Located after predefined commands to allow numbering them 1..12 accordingly.
+
 		SendText,
 		SendFile,
 
@@ -90,14 +92,17 @@ namespace YAT.Model.Types
 		private const string             None_string = "[None]";
 		private static readonly string[] None_stringAlternatives = new string[] { "[N]" };
 
-		private const string             PredefinedCommand_string = "[Predefined Command"; // 'StartsWith', see below.
-		private static readonly string[] PredefinedCommand_stringAlternatives = new string[] { "[Predefined", "[PC", "[P" };
+		private const string             Trigger_string = "[Trigger]";
+		private static readonly string[] Trigger_stringAlternatives = new string[] { "[T]" };
 
 		private const string             SendText_string = "[Send Text]";
-		private static readonly string[] SendText_stringAlternatives = new string[] { "[Text]", "[ST]", "[T]" };
+		private static readonly string[] SendText_stringAlternatives = new string[] { "[Text]", "[ST]" };
 
 		private const string             SendFile_string = "[Send File]";
-		private static readonly string[] SendFile_stringAlternatives = new string[] { "[File]", "[SF]", "[F]" };
+		private static readonly string[] SendFile_stringAlternatives = new string[] { "[File]", "[SF]" };
+
+		private const string             PredefinedCommand_string = "[Predefined Command"; // 'StartsWith', see below.
+		private static readonly string[] PredefinedCommand_stringAlternatives = new string[] { "[Predefined", "[PC", "[P" };
 
 		#endregion
 
@@ -116,10 +121,10 @@ namespace YAT.Model.Types
 		/// Do not use with <see cref="AutoResponse.Explicit"/> because that selection requires
 		/// a response command string. Use <see cref="AutoResponseEx(string)"/> instead.
 		/// </remarks>
-		public AutoResponseEx(AutoResponse autoResponse)
-			: base(autoResponse)
+		public AutoResponseEx(AutoResponse response)
+			: base(response)
 		{
-			Debug.Assert((autoResponse != AutoResponse.Explicit), "'AutoResponse.Explicit' requires a response command string, use 'AutoResponseEx(string)' instead!");
+			Debug.Assert((response != AutoResponse.Explicit), "'AutoResponse.Explicit' requires a response command string, use 'AutoResponseEx(string)' instead!");
 		}
 
 		/// <summary></summary>
@@ -176,6 +181,9 @@ namespace YAT.Model.Types
 			switch ((AutoResponse)UnderlyingEnum)
 			{
 				case AutoResponse.None:                return (None_string);
+				case AutoResponse.Trigger:             return (Trigger_string);
+				case AutoResponse.SendText:            return (SendText_string);
+				case AutoResponse.SendFile:            return (SendFile_string);
 				case AutoResponse.PredefinedCommand1:  return (PredefinedCommand_string + " 1]");
 				case AutoResponse.PredefinedCommand2:  return (PredefinedCommand_string + " 2]");
 				case AutoResponse.PredefinedCommand3:  return (PredefinedCommand_string + " 3]");
@@ -188,8 +196,6 @@ namespace YAT.Model.Types
 				case AutoResponse.PredefinedCommand10: return (PredefinedCommand_string + " 10]");
 				case AutoResponse.PredefinedCommand11: return (PredefinedCommand_string + " 11]");
 				case AutoResponse.PredefinedCommand12: return (PredefinedCommand_string + " 12]");
-				case AutoResponse.SendText:            return (SendText_string);
-				case AutoResponse.SendFile:            return (SendFile_string);
 				case AutoResponse.Explicit:            return (this.explicitCommandString);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -294,6 +300,9 @@ namespace YAT.Model.Types
 		{
 			List<AutoResponseEx> a = new List<AutoResponseEx>(16); // Preset the initial capacity to improve memory management, 16 is a large enough value.
 			if (addFixed)		a.Add(new AutoResponseEx(AutoResponse.None));
+			if (addFixed)		a.Add(new AutoResponseEx(AutoResponse.Trigger));
+			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.SendText));
+			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.SendFile));
 			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand1));
 			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand2));
 			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand3));
@@ -306,8 +315,6 @@ namespace YAT.Model.Types
 			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand10));
 			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand11));
 			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand12));
-			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.SendText));
-			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.SendFile));
 			return (a.ToArray());
 		}
 
@@ -371,6 +378,24 @@ namespace YAT.Model.Types
 				result = AutoResponse.None;
 				return (true);
 			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, Trigger_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, Trigger_stringAlternatives))
+			{
+				result = AutoResponse.Trigger;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, SendText_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, SendText_stringAlternatives))
+			{
+				result = AutoResponse.SendText;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, SendFile_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, SendFile_stringAlternatives))
+			{
+				result = AutoResponse.SendFile;
+				return (true);
+			}
 			else if (StringEx.StartsWithOrdinalIgnoreCase   (s, PredefinedCommand_string) ||
 			         StringEx.StartsWithAnyOrdinalIgnoreCase(s, PredefinedCommand_stringAlternatives))
 			{
@@ -392,18 +417,6 @@ namespace YAT.Model.Types
 				// Fallback:
 				result = AutoResponse.PredefinedCommand1;
 				return (false);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, SendText_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, SendText_stringAlternatives))
-			{
-				result = AutoResponse.SendText;
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, SendFile_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, SendFile_stringAlternatives))
-			{
-				result = AutoResponse.SendFile;
-				return (true);
 			}
 			else // Explicit!
 			{

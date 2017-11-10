@@ -28,7 +28,15 @@ using MKY;
 
 namespace YAT.Model.Utilities
 {
-	/// <summary></summary>
+	/// <remarks>
+	/// The automatic response feature is intentionally implemented using a byte sequence (and not
+	/// e.g. a regular expression). Rationale:
+	/// <list type="bullet">
+	/// <item><description>I/O is a byte stream.</description></item>
+	/// <item><description>Works for text as well as binary terminals.</description></item>
+	/// <item><description>Regular expressions only make sense for text.</description></item>
+	/// </list>
+	/// </remarks>
 	public class AutoResponseHelper
 	{
 		/// <remarks>
@@ -36,9 +44,9 @@ namespace YAT.Model.Utilities
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		private byte[] sequence;
+		private byte[] triggerSequence;
 
-		private Domain.SequenceQueue queue;
+		private Domain.SequenceQueue triggerQueue;
 
 		/// <summary></summary>
 		public AutoResponseHelper()
@@ -46,46 +54,56 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		public AutoResponseHelper(byte[] sequence)
+		public AutoResponseHelper(byte[] triggerSequence)
 		{
 			lock (this)
 			{
-				this.sequence = sequence;
-				this.queue = new Domain.SequenceQueue(this.sequence);
+				this.triggerSequence = triggerSequence;
+				this.triggerQueue = new Domain.SequenceQueue(this.triggerSequence);
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
-		public byte[] Sequence
+		public byte[] TriggerSequence
 		{
 			get
 			{
-				return (this.sequence);
+				return (this.triggerSequence);
 			}
 			set
 			{
 				lock (this)
 				{
-					if (!ArrayEx.ElementsEqual(this.sequence, value))
+					if (!ArrayEx.ElementsEqual(this.triggerSequence, value))
 					{
-						this.sequence = value;
-						this.queue = new Domain.SequenceQueue(this.sequence);
+						this.triggerSequence = value;
+						this.triggerQueue = new Domain.SequenceQueue(this.triggerSequence);
 					}
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		public bool EnqueueAndMatch(byte b)
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
+		public byte[] TriggerQueueAsArray()
 		{
 			lock (this)
 			{
-				if (this.queue != null)
+				return (this.triggerQueue.QueueAsArray());
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		public bool EnqueueAndMatchTrigger(byte b)
+		{
+			lock (this)
+			{
+				if (this.triggerQueue != null)
 				{
-					this.queue.Enqueue(b);
-					return (this.queue.IsCompleteMatch);
+					this.triggerQueue.Enqueue(b);
+					return (this.triggerQueue.IsCompleteMatch);
 				}
 				else
 				{

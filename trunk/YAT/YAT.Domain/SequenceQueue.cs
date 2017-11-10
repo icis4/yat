@@ -122,6 +122,13 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
+		public virtual byte[] QueueAsArray()
+		{
+			return (this.queue.ToArray());
+		}
+
+		/// <summary></summary>
 		public virtual bool IsPartlyMatchBeginning
 		{
 			get { return (this.state == State.PartlyMatchBeginning); }
