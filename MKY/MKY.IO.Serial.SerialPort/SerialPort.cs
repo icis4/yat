@@ -1897,7 +1897,9 @@ namespace MKY.IO.Serial.SerialPort
 
 		private void InvokeOutputBreakErrorEvent()
 		{
-			OnIOError(new IOErrorEventArgs
+			OnIOError
+			(
+				new IOErrorEventArgs
 				(
 					ErrorSeverity.Acceptable,
 					Direction.Output,
@@ -1908,7 +1910,9 @@ namespace MKY.IO.Serial.SerialPort
 
 		private void InvokeCtsInactiveErrorEvent()
 		{
-			OnIOError(new IOErrorEventArgs
+			OnIOError
+			(
+				new IOErrorEventArgs
 				(
 					ErrorSeverity.Acceptable,
 					Direction.Output,
@@ -1919,7 +1923,9 @@ namespace MKY.IO.Serial.SerialPort
 
 		private void InvokeXOffErrorEvent()
 		{
-			OnIOError(new IOErrorEventArgs
+			OnIOError
+			(
+				new IOErrorEventArgs
 				(
 					ErrorSeverity.Acceptable,
 					Direction.Output,
