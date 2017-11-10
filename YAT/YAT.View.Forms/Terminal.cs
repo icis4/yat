@@ -3709,7 +3709,7 @@ namespace YAT.View.Forms
 						message,
 						"Print Error",
 						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
+						MessageBoxIcon.Error
 					);
 
 					ResetStatusText();
