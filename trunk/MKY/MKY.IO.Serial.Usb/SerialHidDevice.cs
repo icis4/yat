@@ -707,7 +707,9 @@ namespace MKY.IO.Serial.Usb
 
 		private void InvokeXOffErrorEvent()
 		{
-			OnIOError(new IOErrorEventArgs
+			OnIOError
+			(
+				new IOErrorEventArgs
 				(
 					ErrorSeverity.Acceptable,
 					Direction.Output,
