@@ -616,7 +616,7 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix.Checked = this.settingsRoot.Send.UseExplicitDefaultRadix;
 
 				toolStripMenuItem_TerminalMenu_Send_KeepSendText.Enabled    = !this.settingsRoot.Send.SendImmediately;
-				toolStripMenuItem_TerminalMenu_Send_KeepSendText.Checked    =  this.settingsRoot.Send.KeepSendText;
+				toolStripMenuItem_TerminalMenu_Send_KeepSendText.Checked    = !this.settingsRoot.Send.SendImmediately && this.settingsRoot.Send.KeepSendText;
 				toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked  =  this.settingsRoot.Send.CopyPredefined;
 				toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked =  this.settingsRoot.Send.SendImmediately;
 				toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Enabled  = isTextTerminal;
@@ -2138,7 +2138,7 @@ namespace YAT.View.Forms
 				toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix.Checked = this.settingsRoot.Send.UseExplicitDefaultRadix;
 
 				toolStripMenuItem_SendContextMenu_KeepSendText.Enabled    = !this.settingsRoot.Send.SendImmediately;
-				toolStripMenuItem_SendContextMenu_KeepSendText.Checked    =  this.settingsRoot.Send.KeepSendText;
+				toolStripMenuItem_SendContextMenu_KeepSendText.Checked    = !this.settingsRoot.Send.SendImmediately && this.settingsRoot.Send.KeepSendText;
 				toolStripMenuItem_SendContextMenu_CopyPredefined.Checked  =  this.settingsRoot.Send.CopyPredefined;
 				toolStripMenuItem_SendContextMenu_SendImmediately.Checked =  this.settingsRoot.Send.SendImmediately;
 				toolStripMenuItem_SendContextMenu_SkipEmptyLines.Enabled  = isTextTerminal;
