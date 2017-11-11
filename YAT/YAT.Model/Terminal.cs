@@ -2047,8 +2047,12 @@ namespace YAT.Model
 					case DialogResult.Yes: success = Save(); break;
 					case DialogResult.No:  success = true;   break;
 
+					case DialogResult.Cancel:
 					default:
-						success = false; break; // Also covers 'DialogResult.Cancel'.
+					{
+						OnTimedStatusTextRequest("Canceled, terminal not closed.");
+						return (false);
+					}
 				}
 			}
 
