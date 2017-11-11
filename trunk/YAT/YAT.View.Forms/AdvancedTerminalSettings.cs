@@ -1059,10 +1059,11 @@ namespace YAT.View.Forms
 				checkBox_OutputBreakModifiable.Checked     = this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable;
 
 				// Send:
-				checkBox_UseExplicitDefaultRadix.Checked = this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix;
-				checkBox_KeepSendText.Checked            = this.settingsInEdit.Terminal.Send.KeepSendText;
-				checkBox_CopyPredefined.Checked          = this.settingsInEdit.Terminal.Send.CopyPredefined;
-				checkBox_SendImmediately.Checked         = this.settingsInEdit.Terminal.Send.SendImmediately;
+				checkBox_UseExplicitDefaultRadix.Checked =  this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix;
+				checkBox_KeepSendText.Enabled            = !this.settingsInEdit.Terminal.Send.SendImmediately;
+				checkBox_KeepSendText.Checked            = !this.settingsInEdit.Terminal.Send.SendImmediately && this.settingsInEdit.Terminal.Send.KeepSendText;
+				checkBox_CopyPredefined.Checked          =  this.settingsInEdit.Terminal.Send.CopyPredefined;
+				checkBox_SendImmediately.Checked         =  this.settingsInEdit.Terminal.Send.SendImmediately;
 
 				checkBox_SignalXOnBeforeEachTransmission.Enabled = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
 				checkBox_SignalXOnBeforeEachTransmission.Checked = this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission;
