@@ -1156,8 +1156,12 @@ namespace YAT.Model
 					case DialogResult.Yes: successWithWorkspace = Save(); break;
 					case DialogResult.No:  successWithWorkspace = true;   break;
 
+					case DialogResult.Cancel:
 					default:
-						successWithWorkspace = false;  break; // Also covers 'DialogResult.Cancel'.
+					{
+						OnTimedStatusTextRequest("Canceled, workspace not closed.");
+						return (false);
+					}
 				}
 			}
 
