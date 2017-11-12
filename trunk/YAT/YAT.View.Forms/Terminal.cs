@@ -1053,10 +1053,11 @@ namespace YAT.View.Forms
 		{
 			this.terminal.ResetIOCountAndRate();
 
-			// \remind (2017-10-06 / MKY)
-			// As a consequence of bug #383 "freeze while receiving a lot of fast data", the
-			// 'IOCountChanged' 'IORateChanged' are no longer used by this form. Thus, the
-			// update must manually be triggered:
+			// 'terminal_IOCount/RateChanged_Promptly' are is not used because of the reasons
+			// described in the remarks of 'terminal_RawChunkSent/Received' of 'Model.Terminal'.
+			// Instead, the update is done by the 'terminal_DisplayElementsSent/Received' and
+			// 'terminal_DisplayLinesSent/Received' handlers further below. As a consequence,
+			// the update must manually be triggered:
 
 			SetDataCountAndRateStatus();
 		}
@@ -1260,30 +1261,30 @@ namespace YAT.View.Forms
 				toolStripMenuItem_MonitorContextMenu_Hide.Enabled = isMonitor && hideIsAllowed;
 
 				bool isShowable = ((this.settingsRoot.Display.TxRadixIsShowable) ||
-								   (this.settingsRoot.Display.RxRadixIsShowable));
-				toolStripMenuItem_MonitorContextMenu_ShowRadix.Enabled = isShowable; // Attention, same code further above as well as in 'View.Forms.AdvancedTerminalSettings'.
-				toolStripMenuItem_MonitorContextMenu_ShowRadix.Checked = isShowable && this.settingsRoot.Display.ShowRadix;
+				                   (this.settingsRoot.Display.RxRadixIsShowable));
+				toolStripMenuItem_MonitorContextMenu_Show_Radix.Enabled = isShowable; // Attention, same code further above as well as in 'View.Forms.AdvancedTerminalSettings'.
+				toolStripMenuItem_MonitorContextMenu_Show_Radix.Checked = isShowable && this.settingsRoot.Display.ShowRadix;
 
-				toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers.Checked = this.settingsRoot.Display.ShowBufferLineNumbers;
-				toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers.Checked  = this.settingsRoot.Display.ShowTotalLineNumbers;
-				toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Checked         = this.settingsRoot.Display.ShowTimeStamp;
-				toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Checked          = this.settingsRoot.Display.ShowTimeSpan;
-				toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.Checked         = this.settingsRoot.Display.ShowTimeDelta;
-				toolStripMenuItem_MonitorContextMenu_ShowPort.Checked              = this.settingsRoot.Display.ShowPort;
-				toolStripMenuItem_MonitorContextMenu_ShowDirection.Checked         = this.settingsRoot.Display.ShowDirection;
+				toolStripMenuItem_MonitorContextMenu_Show_BufferLineNumbers.Checked = this.settingsRoot.Display.ShowBufferLineNumbers;
+				toolStripMenuItem_MonitorContextMenu_Show_TotalLineNumbers.Checked  = this.settingsRoot.Display.ShowTotalLineNumbers;
+				toolStripMenuItem_MonitorContextMenu_Show_TimeStamp.Checked         = this.settingsRoot.Display.ShowTimeStamp;
+				toolStripMenuItem_MonitorContextMenu_Show_TimeSpan.Checked          = this.settingsRoot.Display.ShowTimeSpan;
+				toolStripMenuItem_MonitorContextMenu_Show_TimeDelta.Checked         = this.settingsRoot.Display.ShowTimeDelta;
+				toolStripMenuItem_MonitorContextMenu_Show_Port.Checked              = this.settingsRoot.Display.ShowPort;
+				toolStripMenuItem_MonitorContextMenu_Show_Direction.Checked         = this.settingsRoot.Display.ShowDirection;
 
 				bool isText = ((Domain.TerminalTypeEx)terminalType).IsText;
-				toolStripMenuItem_MonitorContextMenu_ShowEol.Enabled = isText;
-				toolStripMenuItem_MonitorContextMenu_ShowEol.Checked = isText && this.settingsRoot.TextTerminal.ShowEol;
+				toolStripMenuItem_MonitorContextMenu_Show_Eol.Enabled = isText;
+				toolStripMenuItem_MonitorContextMenu_Show_Eol.Checked = isText && this.settingsRoot.TextTerminal.ShowEol;
 
-				toolStripMenuItem_MonitorContextMenu_ShowLength.Checked = this.settingsRoot.Display.ShowLength;
+				toolStripMenuItem_MonitorContextMenu_Show_Length.Checked = this.settingsRoot.Display.ShowLength;
 
 				bool showConnectTime = this.settingsRoot.Status.ShowConnectTime;
-				toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Checked  = showConnectTime;
+				toolStripMenuItem_MonitorContextMenu_Show_ConnectTime.Checked  = showConnectTime;
 				toolStripMenuItem_MonitorContextMenu_ResetConnectTime.Enabled = showConnectTime;
 
 				bool showCountAndRate = this.settingsRoot.Status.ShowCountAndRate;
-				toolStripMenuItem_MonitorContextMenu_ShowCountAndRate.Checked  = showCountAndRate;
+				toolStripMenuItem_MonitorContextMenu_Show_CountAndRate.Checked  = showCountAndRate;
 				toolStripMenuItem_MonitorContextMenu_ResetCount.Enabled        = showCountAndRate;
 
 				toolStripMenuItem_MonitorContextMenu_Clear.Enabled = isMonitor;
@@ -1357,7 +1358,7 @@ namespace YAT.View.Forms
 			ShowFormatSettings();
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowRadix_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_Show_Radix_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
@@ -1365,7 +1366,7 @@ namespace YAT.View.Forms
 			this.settingsRoot.Display.ShowRadix = !this.settingsRoot.Display.ShowRadix;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_Show_BufferLineNumbers_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
@@ -1373,7 +1374,7 @@ namespace YAT.View.Forms
 			this.settingsRoot.Display.ShowBufferLineNumbers = !this.settingsRoot.Display.ShowBufferLineNumbers;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_Show_TotalLineNumbers_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
@@ -1381,7 +1382,7 @@ namespace YAT.View.Forms
 			this.settingsRoot.Display.ShowTotalLineNumbers = !this.settingsRoot.Display.ShowTotalLineNumbers;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowTimeStamp_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_Show_TimeStamp_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
@@ -1389,7 +1390,7 @@ namespace YAT.View.Forms
 			this.settingsRoot.Display.ShowTimeStamp = !this.settingsRoot.Display.ShowTimeStamp;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowTimeSpan_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_Show_TimeSpan_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
@@ -1397,7 +1398,7 @@ namespace YAT.View.Forms
 			this.settingsRoot.Display.ShowTimeSpan = !this.settingsRoot.Display.ShowTimeSpan;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowTimeDelta_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_Show_TimeDelta_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
@@ -1405,7 +1406,7 @@ namespace YAT.View.Forms
 			this.settingsRoot.Display.ShowTimeDelta = !this.settingsRoot.Display.ShowTimeDelta;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowPort_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_Show_Port_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
@@ -1413,7 +1414,7 @@ namespace YAT.View.Forms
 			this.settingsRoot.Display.ShowPort = !this.settingsRoot.Display.ShowPort;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowDirection_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_Show_Direction_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
@@ -1421,7 +1422,7 @@ namespace YAT.View.Forms
 			this.settingsRoot.Display.ShowDirection = !this.settingsRoot.Display.ShowDirection;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowEol_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_Show_Eol_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
@@ -1429,7 +1430,7 @@ namespace YAT.View.Forms
 			this.settingsRoot.TextTerminal.ShowEol = !this.settingsRoot.TextTerminal.ShowEol;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowLength_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_Show_Length_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
@@ -1437,7 +1438,7 @@ namespace YAT.View.Forms
 			this.settingsRoot.Display.ShowLength = !this.settingsRoot.Display.ShowLength;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowConnectTime_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_Show_ConnectTime_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
@@ -1453,7 +1454,7 @@ namespace YAT.View.Forms
 			this.terminal.ResetConnectTime();
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowCountAndRate_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_Show_CountAndRate_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
@@ -1468,10 +1469,11 @@ namespace YAT.View.Forms
 
 			this.terminal.ResetIOCountAndRate();
 
-			// \remind (2017-10-06 / MKY)
-			// As a consequence of bug #383 "freeze while receiving a lot of fast data", the
-			// 'IOCountChanged' 'IORateChanged' are no longer used by this form. Thus, the
-			// update must manually be triggered:
+			// 'terminal_IOCount/RateChanged_Promptly' are is not used because of the reasons
+			// described in the remarks of 'terminal_RawChunkSent/Received' of 'Model.Terminal'.
+			// Instead, the update is done by the 'terminal_DisplayElementsSent/Received' and
+			// 'terminal_DisplayLinesSent/Received' handlers further below. As a consequence,
+			// the update must manually be triggered:
 
 			SetDataCountAndRateStatus();
 		}
