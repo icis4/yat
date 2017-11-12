@@ -393,7 +393,7 @@ namespace YAT.View.Forms
 				}
 
 				SetTimedStatus(Status.ChildActivated);
-				SetTerminalText(this.workspace.ActiveTerminalStatusText);
+				SetTerminalInfoText(this.workspace.ActiveTerminalInfoText);
 			}
 			else
 			{
@@ -404,7 +404,7 @@ namespace YAT.View.Forms
 				}
 
 			////SetTimedStatus(Status.ChildClosed) is called by 'terminalMdiChild_FormClosed()'.
-				SetTerminalText("");
+				SetTerminalInfoText("");
 			}
 
 			SetChildControls();
@@ -959,10 +959,10 @@ namespace YAT.View.Forms
 				}
 
 				toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Enabled = childIsReady;
+				toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Checked = arVisible;
 
 				if (arVisible)
 				{
-					toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Checked = arIsActive;
 					toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Hide Automatic Response";
 
 					// Attention:
@@ -992,7 +992,6 @@ namespace YAT.View.Forms
 				}
 				else
 				{
-					toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Checked = false;
 					toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Show Automatic Response";
 
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Visible = false;
@@ -1012,6 +1011,45 @@ namespace YAT.View.Forms
 				toolStripButton_MainTool_Terminal_CopyToClipboard.Enabled   = childIsReady;
 				toolStripButton_MainTool_Terminal_SaveToFile.Enabled        = childIsReady;
 				toolStripButton_MainTool_Terminal_Print.Enabled             = childIsReady;
+
+				bool findVisible = this.localUserSettingsRoot.MainWindow.ShowFindField;
+
+				toolStripButton_MainTool_Terminal_Find_ShowHide.Enabled = childIsReady;
+				toolStripButton_MainTool_Terminal_Find_ShowHide.Checked = findVisible;
+
+				if (findVisible)
+				{
+					toolStripButton_MainTool_Terminal_Find_ShowHide.Text = "Hide Find";
+
+					// Attention:
+					// Similar code exists in the following location:
+					//  > View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
+					// Changes here may have to be applied there too.
+
+					if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
+					{
+						toolStripComboBox_MainTool_Terminal_Find_Text.Visible = true;
+						toolStripComboBox_MainTool_Terminal_Find_Text.Enabled = childIsReady;
+						toolStripComboBox_MainTool_Terminal_Find_Text.Items.Clear();
+						toolStripComboBox_MainTool_Terminal_Find_Text.Items.AddRange(this.localUserSettingsRoot.MainWindow.RecentFindTexts.ToArray());
+
+						SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_Find_Text, this.localUserSettingsRoot.MainWindow.FindText);
+					}
+
+					toolStripButton_MainTool_Terminal_Find_Next    .Visible = true;
+					toolStripButton_MainTool_Terminal_Find_Previous.Visible = true;
+				}
+				else
+				{
+					toolStripButton_MainTool_Terminal_Find_ShowHide.Text = "Show Find";
+
+					toolStripComboBox_MainTool_Terminal_Find_Text.Visible = false;
+					toolStripComboBox_MainTool_Terminal_Find_Text.Enabled = false;
+					toolStripComboBox_MainTool_Terminal_Find_Text.Items.Clear();
+
+					toolStripButton_MainTool_Terminal_Find_Next    .Visible = false;
+					toolStripButton_MainTool_Terminal_Find_Previous.Visible = false;
+				}
 
 				toolStripButton_MainTool_Terminal_Log_Settings.Enabled      = childIsReady;
 				toolStripButton_MainTool_Terminal_Log_On.Enabled            = childIsReady && !logIsOn;
@@ -1222,17 +1260,27 @@ namespace YAT.View.Forms
 			((Terminal)ActiveMdiChild).RequestPrint();
 		}
 
-		private void toolStripButton_MainTool_Terminal_Find_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Terminal_Find_ShowHide_Click(object sender, EventArgs e)
+		{
+			this.localUserSettingsRoot.MainWindow.ShowFindField = !this.localUserSettingsRoot.MainWindow.ShowFindField;
+		}
+
+		private void toolStripComboBox_MainTool_Terminal_Find_Text_SelectedIndexChanged(object sender, EventArgs e)
 		{
 
 		}
 
-		private void toolStripButton_MainTool_Terminal_FindNext_Click(object sender, EventArgs e)
+		private void toolStripComboBox_MainTool_Terminal_Find_Text_TextChanged(object sender, EventArgs e)
 		{
 
 		}
 
-		private void toolStripButton_MainTool_Terminal_FindPrevious_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Terminal_Find_Next_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void toolStripButton_MainTool_Terminal_Find_Previous_Click(object sender, EventArgs e)
 		{
 
 		}
@@ -1752,6 +1800,8 @@ namespace YAT.View.Forms
 
 		private void SetMainControls()
 		{
+			toolStripButton_MainTool_SetControls();
+
 			this.isSettingControls.Enter();
 			try
 			{
@@ -2423,7 +2473,10 @@ namespace YAT.View.Forms
 			ResetStatusText();
 		}
 
-		private void SetTerminalText(string text)
+		/// <remarks>
+		/// Using term 'Info' since the info contains name and indices.
+		/// </remarks>
+		private void SetTerminalInfoText(string text)
 		{
 			toolStripStatusLabel_MainStatus_TerminalInfo.Text = text;
 		}

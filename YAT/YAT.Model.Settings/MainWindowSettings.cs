@@ -23,19 +23,30 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+
+using MKY;
+using MKY.Collections;
+using MKY.Collections.Specialized;
 
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	public class MainWindowSettings : MKY.Settings.SettingsItem, IEquatable<MainWindowSettings>
 	{
+		private const int MaxRecentFindText = 12;
+
 		private FormStartPosition startPosition;
 		private FormWindowState windowState;
 		private Point location;
 		private Size size;
+
+		private bool showFindField;
+		private string findText;
+		private RecentItemCollection<string> recentFindTexts;
 
 		private bool showTerminalInfo;
 		private bool showChrono;
@@ -66,6 +77,10 @@ namespace YAT.Model.Settings
 			Location      = rhs.Location;
 			Size          = rhs.Size;
 
+			ShowFindField   = rhs.ShowFindField;
+			FindText        = rhs.FindText;
+			RecentFindTexts = new RecentItemCollection<string>(rhs.RecentFindTexts);
+
 			ShowTerminalInfo = rhs.ShowTerminalInfo;
 			ShowChrono       = rhs.ShowChrono;
 
@@ -82,7 +97,11 @@ namespace YAT.Model.Settings
 			StartPosition = FormStartPosition.WindowsDefaultLocation;
 			WindowState   = FormWindowState.Normal;
 			Location      = new Point(0, 0);
-			Size          = new Size(912, 684); // Equals 'Size' of the 'YAT.View.Main' form.
+			Size          = new Size(912, 684); // Equals designed 'Size' of the 'View.Main' form.
+
+			ShowFindField   = false;
+			FindText        = null;
+			RecentFindTexts = new RecentItemCollection<string>(MaxRecentFindText);
 
 			ShowTerminalInfo = false;
 			ShowChrono       = true;
@@ -154,6 +173,55 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("ShowFindField")]
+		public bool ShowFindField
+		{
+			get { return (this.showFindField); }
+			set
+			{
+				if (this.showFindField != value)
+				{
+					this.showFindField = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("FindText")]
+		public string FindText
+		{
+			get { return (this.findText); }
+			set
+			{
+				if (this.findText != value)
+				{
+					this.findText = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
+		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
+		[XmlElement("RecentFindTexts")]
+		public RecentItemCollection<string> RecentFindTexts
+		{
+			get { return (this.recentFindTexts); }
+			set
+			{
+				if (this.recentFindTexts != value)
+				{
+					this.recentFindTexts = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <remarks>
+		/// Using term 'Info' since the info contains name and indices.
+		/// </remarks>
 		[XmlElement("ShowTerminalInfo")]
 		public bool ShowTerminalInfo
 		{
@@ -203,10 +271,14 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ StartPosition   .GetHashCode();
-				hashCode = (hashCode * 397) ^ WindowState     .GetHashCode();
-				hashCode = (hashCode * 397) ^ Location        .GetHashCode();
-				hashCode = (hashCode * 397) ^ Size            .GetHashCode();
+				hashCode = (hashCode * 397) ^ StartPosition.GetHashCode();
+				hashCode = (hashCode * 397) ^ WindowState  .GetHashCode();
+				hashCode = (hashCode * 397) ^ Location     .GetHashCode();
+				hashCode = (hashCode * 397) ^ Size         .GetHashCode();
+
+				hashCode = (hashCode * 397) ^  ShowFindField                            .GetHashCode();
+				hashCode = (hashCode * 397) ^ (FindText        != null ? FindText       .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (RecentFindTexts != null ? RecentFindTexts.GetHashCode() : 0);
 
 				hashCode = (hashCode * 397) ^ ShowTerminalInfo.GetHashCode();
 				hashCode = (hashCode * 397) ^ ShowChrono      .GetHashCode();
@@ -244,6 +316,10 @@ namespace YAT.Model.Settings
 				WindowState  .Equals(other.WindowState)   &&
 				Location     .Equals(other.Location)      &&
 				Size         .Equals(other.Size)          &&
+
+				ShowFindField        .Equals(                 other.ShowFindField)   &&
+				StringEx             .EqualsOrdinal(FindText, other.FindText)        &&
+				IEnumerableEx.ElementsEqual( RecentFindTexts, other.RecentFindTexts) &&
 
 				ShowTerminalInfo.Equals(other.ShowTerminalInfo) &&
 				ShowChrono      .Equals(other.ShowChrono)
