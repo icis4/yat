@@ -1208,6 +1208,21 @@ namespace YAT.View.Forms
 			((Terminal)ActiveMdiChild).RequestPrint();
 		}
 
+		private void toolStripButton_MainTool_Terminal_Find_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void toolStripButton_MainTool_Terminal_FindNext_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void toolStripButton_MainTool_Terminal_FindPrevious_Click(object sender, EventArgs e)
+		{
+
+		}
+
 		private void toolStripButton_MainTool_Terminal_Log_Settings_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestEditLogSettings();
