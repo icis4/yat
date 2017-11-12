@@ -104,10 +104,10 @@ namespace YAT.Model.Test.Connection
 				Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
 				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			TerminalSettingsRoot settings = Utilities.GetStartedSerialPortMTSicsDeviceATextSettings();
+			var settings = Utilities.GetStartedSerialPortMTSicsDeviceATextSettings();
 
 			// Create terminals from settings:
-			using (Terminal terminal = new Terminal(settings))
+			using (var terminal = new Terminal(settings))
 			{
 				terminal.MessageInputRequest += Utilities.TerminalMessageInputRequest;
 				if (!terminal.StartIO())
@@ -253,14 +253,14 @@ namespace YAT.Model.Test.Connection
 				Assert.Ignore(UsbHubControl.ErrorMessage);
 				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			UsbHubSettings portOut = UsbHubSettings.Out4;
+			var portOut = UsbHubSettings.Out4;
 
 			// --- Precondition: USB hub is set to its defaults, i.e. all outputs are enabled. -----
 
-			TerminalSettingsRoot settings = Utilities.GetStartedSerialPortMTSicsDeviceATextSettings();
+			var settings = Utilities.GetStartedSerialPortMTSicsDeviceATextSettings();
 
 			// Create terminals from settings:
-			using (Terminal terminal = new Terminal(settings))
+			using (var terminal = new Terminal(settings))
 			{
 				terminal.MessageInputRequest += Utilities.TerminalMessageInputRequest;
 				if (!terminal.StartIO())
@@ -317,13 +317,13 @@ namespace YAT.Model.Test.Connection
 				// --- Test: Disconnect/Reconnect with previous and subsequent sending. ------------
 
 				// Prepare stimulus and expected:
-				Types.Command emptyCommand = new Types.Command("");
+				var emptyCommand = new Types.Command("");
 				var l = new List<byte>(4); // Preset the required capacity to improve memory management.
 				l.Add(0x45); // 'E'
 				l.Add(0x53); // 'S'
 				l.Add(0x0D); // <CR>
 				l.Add(0x0A); // <LF>
-				byte[] emptyCommandExpected = l.ToArray();
+				var emptyCommandExpected = l.ToArray();
 				int expectedTotalLineCount = 0;
 				int expectedTotalByteCount = 0;
 

@@ -251,13 +251,13 @@ namespace YAT.Model.Test.Transmission
 		[Test, TestCaseSource(typeof(MTSicsDeviceTestData), "TestCases")]
 		public virtual void Transmission(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor, string stimulus, string expected, int transmissionCount)
 		{
-			TerminalSettingsRoot settings = settingsDescriptor.Value1(settingsDescriptor.Value2);
+			var settings = settingsDescriptor.Value1(settingsDescriptor.Value2);
 
 			// Ensure that EOL is displayed, otherwise the EOL bytes are not available for verification:
 			settings.TextTerminal.ShowEol = true;
 
 			// Create terminals from settings:
-			using (Terminal terminal = new Terminal(settings))
+			using (var terminal = new Terminal(settings))
 			{
 				terminal.MessageInputRequest += Utilities.TerminalMessageInputRequest;
 				if (!terminal.Start())
@@ -273,7 +273,7 @@ namespace YAT.Model.Test.Transmission
 				Utilities.WaitForOpen(terminal);
 
 				// Prepare stimulus and expected:
-				Types.Command stimulusCommand = new Types.Command(stimulus);
+				var stimulusCommand = new Types.Command(stimulus);
 				
 				var l = new List<byte>(expected.Length); // Preset the required capacity to improve memory management.
 				foreach (char c in expected.ToCharArray())
@@ -282,7 +282,7 @@ namespace YAT.Model.Test.Transmission
 				l.Add(0x0D); // <CR>
 				l.Add(0x0A); // <LF>
 
-				byte[] expectedBytes = l.ToArray();
+				var expectedBytes = l.ToArray();
 				int expectedTotalByteCount = 0;
 
 				for (int i = 0; i < transmissionCount; i++)
@@ -294,8 +294,8 @@ namespace YAT.Model.Test.Transmission
 					Utilities.WaitForReceiving(terminal, expectedTotalByteCount, i + 1); // i = transmission count equals line count.
 
 					// Verify response:
-					Domain.DisplayLine lastLine = terminal.LastDisplayLineAuxiliary(Domain.RepositoryType.Rx);
-					byte[] actualBytes = lastLine.ElementsToOrigin();
+					var lastLine = terminal.LastDisplayLineAuxiliary(Domain.RepositoryType.Rx);
+					var actualBytes = lastLine.ElementsToOrigin();
 					Assert.That(ArrayEx.ElementsEqual(expectedBytes, actualBytes), "Unexpected response from device! Should be " + ArrayEx.ElementsToString(expectedBytes) + " but is " + ArrayEx.ElementsToString(actualBytes));
 					Trace.WriteLine(@"<< """ + expected + @"""");
 					terminal.ClearLastDisplayLineAuxiliary(Domain.RepositoryType.Rx);

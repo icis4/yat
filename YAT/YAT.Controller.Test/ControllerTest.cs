@@ -107,12 +107,12 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestEmptyCommandLine()
 		{
-			using (Main main = new Main(EmptyArgs))
+			using (var m = new Main(EmptyArgs))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.Success);
+				PrepareMainAndVerifyResult(m, MainResult.Success);
 
-				Assert.That(main.CommandLineIsValid,         Is.True);
-				Assert.That(main.CommandLineHelpIsRequested, Is.False);
+				Assert.That(m.CommandLineIsValid,         Is.True);
+				Assert.That(m.CommandLineHelpIsRequested, Is.False);
 			}
 		}
 
@@ -127,12 +127,12 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestTerminalCommandLineArg()
 		{
-			using (Main main = new Main(TerminalArgs))
+			using (var m = new Main(TerminalArgs))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.Success);
+				PrepareMainAndVerifyResult(m, MainResult.Success);
 
-				Assert.That(main.CommandLineIsValid,         Is.True);
-				Assert.That(main.CommandLineHelpIsRequested, Is.False);
+				Assert.That(m.CommandLineIsValid,         Is.True);
+				Assert.That(m.CommandLineHelpIsRequested, Is.False);
 			}
 		}
 
@@ -147,12 +147,12 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestWorkspaceCommandLineArg()
 		{
-			using (Main main = new Main(WorkspaceArgs))
+			using (var m = new Main(WorkspaceArgs))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.Success);
+				PrepareMainAndVerifyResult(m, MainResult.Success);
 
-				Assert.That(main.CommandLineIsValid,         Is.True);
-				Assert.That(main.CommandLineHelpIsRequested, Is.False);
+				Assert.That(m.CommandLineIsValid,         Is.True);
+				Assert.That(m.CommandLineHelpIsRequested, Is.False);
 			}
 		}
 
@@ -167,9 +167,9 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestEmptyCommandLineRun()
 		{
-			using (Main main = new Main(EmptyArgs))
+			using (var m = new Main(EmptyArgs))
 			{
-				RunAndVerifyApplicationWithoutView(main);
+				RunAndVerifyApplicationWithoutView(m);
 			}
 		}
 
@@ -184,9 +184,9 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestTerminalCommandLineArgRun()
 		{
-			using (Main main = new Main(TerminalArgs))
+			using (var m = new Main(TerminalArgs))
 			{
-				RunAndVerifyApplicationWithoutView(main);
+				RunAndVerifyApplicationWithoutView(m);
 			}
 		}
 
@@ -218,9 +218,9 @@ namespace YAT.Controller.Test
 			if (dr != DialogResult.OK)
 				Assert.Fail("User cancel!");
 
-			using (Main main = new Main(WorkspaceArgs))
+			using (var m = new Main(WorkspaceArgs))
 			{
-				RunAndVerifyApplicationWithoutView(main);
+				RunAndVerifyApplicationWithoutView(m);
 			}
 		}
 
@@ -235,9 +235,9 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestSerialPortCommandLineArgRun()
 		{
-			using (Main main = new Main(SerialPortArgs))
+			using (var m = new Main(SerialPortArgs))
 			{
-				RunAndVerifyApplicationWithoutView(main);
+				RunAndVerifyApplicationWithoutView(m);
 			}
 		}
 
@@ -252,9 +252,9 @@ namespace YAT.Controller.Test
 		[Test, InteractiveCategory]
 		public virtual void TestEmptyCommandLineRunInteractive()
 		{
-			using (Main main = new Main(EmptyArgs))
+			using (var m = new Main(EmptyArgs))
 			{
-				RunAndVerifyApplicationWithView(main);
+				RunAndVerifyApplicationWithView(m);
 			}
 		}
 
@@ -269,9 +269,9 @@ namespace YAT.Controller.Test
 		[Test, InteractiveCategory]
 		public virtual void TestTerminalCommandLineArgRunInteractive()
 		{
-			using (Main main = new Main(TerminalArgs))
+			using (var m = new Main(TerminalArgs))
 			{
-				RunAndVerifyApplicationWithView(main);
+				RunAndVerifyApplicationWithView(m);
 			}
 		}
 
@@ -303,9 +303,9 @@ namespace YAT.Controller.Test
 			if (dr != DialogResult.OK)
 				Assert.Fail("User cancel!");
 
-			using (Main main = new Main(WorkspaceArgs))
+			using (var m = new Main(WorkspaceArgs))
 			{
-				RunAndVerifyApplicationWithView(main);
+				RunAndVerifyApplicationWithView(m);
 			}
 		}
 
@@ -320,9 +320,9 @@ namespace YAT.Controller.Test
 		[Test, InteractiveCategory]
 		public virtual void TestSerialPortCommandLineArgRunInteractive()
 		{
-			using (Main main = new Main(SerialPortArgs))
+			using (var m = new Main(SerialPortArgs))
 			{
-				RunAndVerifyApplicationWithView(main);
+				RunAndVerifyApplicationWithView(m);
 			}
 		}
 
@@ -337,13 +337,13 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestClearedOptions()
 		{
-			using (Main main = new Main(null))
+			using (var m = new Main(null))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.Success);
+				PrepareMainAndVerifyResult(m, MainResult.Success);
 
-				Assert.That(main.CommandLineIsValid,         Is.True);
-				Assert.That(main.CommandLineHelpIsRequested, Is.False);
-				Assert.That(main.CommandLineLogoIsRequested, Is.True);
+				Assert.That(m.CommandLineIsValid,         Is.True);
+				Assert.That(m.CommandLineHelpIsRequested, Is.False);
+				Assert.That(m.CommandLineLogoIsRequested, Is.True);
 			}
 		}
 
@@ -358,12 +358,12 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestSetOptions()
 		{
-			using (Main main = new Main(new string[] { "--NoLogo" }))
+			using (var m = new Main(new string[] { "--NoLogo" }))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.Success);
+				PrepareMainAndVerifyResult(m, MainResult.Success);
 
-				Assert.That(main.CommandLineIsValid,         Is.True);
-				Assert.That(main.CommandLineLogoIsRequested, Is.False);
+				Assert.That(m.CommandLineIsValid,         Is.True);
+				Assert.That(m.CommandLineLogoIsRequested, Is.False);
 			}
 		}
 

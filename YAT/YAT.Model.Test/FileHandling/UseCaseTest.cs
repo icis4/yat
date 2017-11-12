@@ -171,28 +171,28 @@ namespace YAT.Model.Test.FileHandling
 			// - Create new terminal
 			//   => Auto workspace with 1 auto terminal
 
-			using (Main main = new Main())
+			using (var m = new Main())
 			{
 				uc = "UC1: ";
-				success = (main.Start() == MainResult.Success);
+				success = (m.Start() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
-				Workspace workspace = main.Workspace;
-				Assert.That(workspace, Is.Not.Null, uc + "Workspace not created!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(0), uc + "Workspace doesn't contain 0 terminals!");
-				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var w = m.Workspace;
+				Assert.That(w, Is.Not.Null, uc + "Workspace not created!");
+				Assert.That(w.TerminalCount, Is.EqualTo(0), uc + "Workspace doesn't contain 0 terminals!");
+				w.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
+				success = w.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True, uc + "Terminal could not be created!");
 
-				Terminal terminal = workspace.ActiveTerminal;
-				Assert.That(terminal, Is.Not.Null, uc + "Terminal could not be created!");
-				terminal.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t = w.ActiveTerminal;
+				Assert.That(t, Is.Not.Null, uc + "Terminal could not be created!");
+				t.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				success = (main.Exit() == MainResult.Success);
+				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
-				Utilities.VerifyFiles(uc, workspace, true, terminal, true);
+				Utilities.VerifyFiles(uc, w, true, t, true);
 			}
 			#endregion
 
@@ -201,31 +201,31 @@ namespace YAT.Model.Test.FileHandling
 			// - Save terminal
 			//   => Auto terminal stays auto
 
-			using (Main main = new Main())
+			using (var m = new Main())
 			{
 				uc = "UC2: ";
-				success = (main.Start() == MainResult.Success);
+				success = (m.Start() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
-				Workspace workspace = main.Workspace;
-				Assert.That(workspace, Is.Not.Null, uc + "Workspace not opened from file!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
-				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var w = m.Workspace;
+				Assert.That(w, Is.Not.Null, uc + "Workspace not opened from file!");
+				Assert.That(w.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
+				w.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				Terminal terminal = workspace.ActiveTerminal;
-				Assert.That(terminal, Is.Not.Null, uc + "Terminal not opened from file!");
-				terminal.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t = w.ActiveTerminal;
+				Assert.That(t, Is.Not.Null, uc + "Terminal not opened from file!");
+				t.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				Utilities.VerifyFiles(uc, workspace, true, terminal, true);
+				Utilities.VerifyFiles(uc, w, true, t, true);
 
-				success = terminal.Save();
+				success = t.Save();
 				Assert.That(success, Is.True, uc + "Terminal could not be saved!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
+				Assert.That(w.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
 
-				success = (main.Exit() == MainResult.Success);
+				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
-				Utilities.VerifyFiles(uc, workspace, true, terminal, true);
+				Utilities.VerifyFiles(uc, w, true, t, true);
 			}
 			#endregion
 
@@ -234,33 +234,33 @@ namespace YAT.Model.Test.FileHandling
 			// - Save terminal as
 			//   => Auto terminal becomes normal terminal
 
-			using (Main main = new Main())
+			using (var m = new Main())
 			{
 				uc = "UC2a: ";
-				success = (main.Start() == MainResult.Success);
+				success = (m.Start() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
-				Workspace workspace = main.Workspace;
-				Assert.That(workspace, Is.Not.Null, uc + "Workspace not opened from file!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
-				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var w = m.Workspace;
+				Assert.That(w, Is.Not.Null, uc + "Workspace not opened from file!");
+				Assert.That(w.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
+				w.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				Terminal terminal = workspace.ActiveTerminal;
-				Assert.That(terminal, Is.Not.Null, uc + "Terminal not opened from file!");
-				terminal.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t = w.ActiveTerminal;
+				Assert.That(t, Is.Not.Null, uc + "Terminal not opened from file!");
+				t.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				Utilities.VerifyFiles(uc, workspace, true, terminal, true);
+				Utilities.VerifyFiles(uc, w, true, t, true);
 
-				string defaultTerminal1FilePath = terminal.SettingsFilePath;
-				success = terminal.SaveAs(this.normalTerminal1FilePath);
+				string defaultTerminal1FilePath = t.SettingsFilePath;
+				success = t.SaveAs(this.normalTerminal1FilePath);
 				Assert.That(success, Is.True, uc + "Terminal could not be saved as!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
+				Assert.That(w.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
 				Assert.That(File.Exists(defaultTerminal1FilePath), Is.False, uc + "Auto terminal file not deleted!");
 
-				success = (main.Exit() == MainResult.Success);
+				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
-				Utilities.VerifyFiles(uc, workspace, true, terminal, true, false);
+				Utilities.VerifyFiles(uc, w, true, t, true, false);
 			}
 			#endregion
 
@@ -269,51 +269,51 @@ namespace YAT.Model.Test.FileHandling
 			// - Create 2 more terminals
 			//   => Auto workspace with 1 normal and 2 auto terminals
 
-			using (Main main = new Main())
+			using (var m = new Main())
 			{
 				uc = "UC3: ";
-				success = (main.Start() == MainResult.Success);
+				success = (m.Start() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
-				Workspace workspace = main.Workspace;
-				Assert.That(workspace, Is.Not.Null, uc + "Workspace not opened from file!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
-				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var w = m.Workspace;
+				Assert.That(w, Is.Not.Null, uc + "Workspace not opened from file!");
+				Assert.That(w.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
+				w.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				Terminal terminal1 = workspace.ActiveTerminal;
-				Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
-				terminal1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t1 = w.ActiveTerminal;
+				Assert.That(t1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
+				t1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				Utilities.VerifyFiles(uc, workspace, true, terminal1, true, false);
-				Assert.That(PathEx.Equals(terminal1.SettingsFilePath, this.normalTerminal1FilePath), uc + "Terminal 1 is not stored at user terminal 1 location!");
+				Utilities.VerifyFiles(uc, w, true, t1, true, false);
+				Assert.That(PathEx.Equals(t1.SettingsFilePath, this.normalTerminal1FilePath), uc + "Terminal 1 is not stored at user terminal 1 location!");
 				var normalTerminal1LastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
+				success = w.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True, uc + "Terminal 2 could not be created!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
+				Assert.That(w.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
 
-				Terminal terminal2 = workspace.ActiveTerminal;
-				Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 could not be created!");
-				terminal2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t2 = w.ActiveTerminal;
+				Assert.That(t2, Is.Not.Null, uc + "Terminal 2 could not be created!");
+				t2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				Assert.That(workspace.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler()), Is.True, "Terminal 3 could not be created!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(3), uc + "Workspace doesn't contain 3 terminals!");
+				Assert.That(w.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler()), Is.True, "Terminal 3 could not be created!");
+				Assert.That(w.TerminalCount, Is.EqualTo(3), uc + "Workspace doesn't contain 3 terminals!");
 
-				Terminal terminal3 = workspace.ActiveTerminal;
-				Assert.That(terminal3, Is.Not.Null, uc + "Terminal 3 could not be created!");
-				terminal3.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t3 = w.ActiveTerminal;
+				Assert.That(t3, Is.Not.Null, uc + "Terminal 3 could not be created!");
+				t3.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				success = (main.Exit() == MainResult.Success);
+				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles
 					(
 					uc,
-					workspace,
+					w,
 					true,
-					new Terminal[] { terminal1, terminal2, terminal3 },
-					new bool[]     { true,      true,      true      }, // Exists.
-					new bool[]     { false,     true,      true      }  // Auto.
+					new Terminal[] { t1,    t2,   t3   },
+					new bool[]     { true,  true, true }, // Exists.
+					new bool[]     { false, true, true }  // Auto.
 					);
 
 				var normalTerminal1LastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
@@ -326,46 +326,46 @@ namespace YAT.Model.Test.FileHandling
 			// - Close terminal 3
 			//   => Auto workspace with 1 normal and 1 auto terminal
 
-			using (Main main = new Main())
+			using (var m = new Main())
 			{
 				uc = "UC3a: ";
-				success = (main.Start() == MainResult.Success);
+				success = (m.Start() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
-				Workspace workspace = main.Workspace;
+				var workspace = m.Workspace;
 				Assert.That(workspace, Is.Not.Null, uc + "Workspace not opened from file!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(3), uc + "Workspace doesn't contain 3 terminals!");
 				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				Terminal terminal1 = workspace.Terminals[0];
-				Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
-				terminal1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
-				Terminal terminal2 = workspace.Terminals[1];
-				Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
-				terminal2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
-				Terminal terminal3 = workspace.Terminals[2];
-				Assert.That(terminal3, Is.Not.Null, uc + "Terminal 3 not opened from file!");
-				terminal3.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t1 = workspace.Terminals[0];
+				Assert.That(t1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
+				t1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t2 = workspace.Terminals[1];
+				Assert.That(t2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
+				t2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t3 = workspace.Terminals[2];
+				Assert.That(t3, Is.Not.Null, uc + "Terminal 3 not opened from file!");
+				t3.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				Utilities.VerifyFiles
 				(
 					uc,
 					workspace,
 					true,
-					new Terminal[] { terminal1, terminal2, terminal3 },
-					new bool[]     { true,      true,      true      }, // Exists.
-					new bool[]     { false,     true,      true      }  // Auto.
+					new Terminal[] { t1,    t2,   t3   },
+					new bool[]     { true,  true, true }, // Exists.
+					new bool[]     { false, true, true }  // Auto.
 				);
 
 				var normalTerminal1LastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
 
-				string autoTerminal3FilePath = terminal3.SettingsFilePath;
-				success = terminal3.Close();
+				string autoTerminal3FilePath = t3.SettingsFilePath;
+				success = t3.Close();
 				Assert.That(success, Is.True, uc + "Terminal 3 could not be closed!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
 				Assert.That(File.Exists(autoTerminal3FilePath), Is.False, uc + "Auto terminal 3 file not deleted!");
 
-				success = (main.Exit() == MainResult.Success);
+				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles
@@ -373,9 +373,9 @@ namespace YAT.Model.Test.FileHandling
 					uc,
 					workspace,
 					true,
-					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // Exists.
-					new bool[]     { false,     true      }  // Auto.
+					new Terminal[] { t1,    t2   },
+					new bool[]     { true,  true }, // Exists.
+					new bool[]     { false, true }  // Auto.
 				);
 
 				var normalTerminal1LastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
@@ -388,52 +388,52 @@ namespace YAT.Model.Test.FileHandling
 			// - Save workspace
 			//   => Auto workspace stays auto workspace
 
-			using (Main main = new Main())
+			using (var m = new Main())
 			{
 				uc = "UC4: ";
-				success = (main.Start() == MainResult.Success);
+				success = (m.Start() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
-				Workspace workspace = main.Workspace;
-				Assert.That(workspace, Is.Not.Null, uc + "Workspace not opened from file!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
-				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var w = m.Workspace;
+				Assert.That(w, Is.Not.Null, uc + "Workspace not opened from file!");
+				Assert.That(w.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
+				w.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				Terminal terminal1 = workspace.Terminals[0];
-				Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
-				terminal1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
-				Terminal terminal2 = workspace.Terminals[1];
-				Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
-				terminal2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t1 = w.Terminals[0];
+				Assert.That(t1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
+				t1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t2 = w.Terminals[1];
+				Assert.That(t2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
+				t2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				Utilities.VerifyFiles
 				(
 					uc,
-					workspace,
+					w,
 					true,
-					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // Exists.
-					new bool[]     { false,     true      }  // Auto.
+					new Terminal[] { t1,    t2   },
+					new bool[]     { true,  true }, // Exists.
+					new bool[]     { false, true }  // Auto.
 				);
 
 				var normalTerminal1LastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
 				var normalTerminal2LastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminal2FilePath);
 
-				success = workspace.Save();
+				success = w.Save();
 				Assert.That(success, Is.True, uc + "Workspace could not be saved!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
+				Assert.That(w.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
 
-				success = (main.Exit() == MainResult.Success);
+				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles
 				(
 					uc,
-					workspace,
+					w,
 					true,
-					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // Exists.
-					new bool[]     { false,     true      }  // Auto.
+					new Terminal[] { t1,    t2   },
+					new bool[]     { true,  true }, // Exists.
+					new bool[]     { false, true }  // Auto.
 				);
 
 				var normalTerminal1LastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
@@ -449,70 +449,70 @@ namespace YAT.Model.Test.FileHandling
 			//   => Auto workspace becomes normal workspace
 			//   => Auto terminal becomes normal terminal
 
-			using (Main main = new Main())
+			using (var m = new Main())
 			{
 				uc = "UC4a: ";
-				success = (main.Start() == MainResult.Success);
+				success = (m.Start() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
-				Workspace workspace = main.Workspace;
-				Assert.That(workspace, Is.Not.Null, uc + "Workspace not opened from file!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
-				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var w = m.Workspace;
+				Assert.That(w, Is.Not.Null, uc + "Workspace not opened from file!");
+				Assert.That(w.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
+				w.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				Terminal terminal1 = workspace.Terminals[0];
-				Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
-				terminal1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
-				Terminal terminal2 = workspace.Terminals[1];
-				Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
-				terminal2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t1 = w.Terminals[0];
+				Assert.That(t1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
+				t1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t2 = w.Terminals[1];
+				Assert.That(t2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
+				t2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				Utilities.VerifyFiles
 				(
 					uc,
-					workspace,
+					w,
 					true,
-					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // Exists.
-					new bool[]     { false,     true      }  // Auto.
+					new Terminal[] { t1,    t2   },
+					new bool[]     { true,  true }, // Exists.
+					new bool[]     { false, true }  // Auto.
 				);
 
-				string autoWorkspaceFilePath = workspace.SettingsFilePath;
-				string autoTerminal2FilePath = terminal2.SettingsFilePath;
-				terminal2.SaveAsFileDialogRequest += terminal2_SaveAsFileDialogRequest_SaveAsOK;
-				success = workspace.SaveAs(this.normalWorkspaceFilePath);
-				terminal2.SaveAsFileDialogRequest -= terminal2_SaveAsFileDialogRequest_SaveAsOK;
+				string autoWorkspaceFilePath = w.SettingsFilePath;
+				string autoTerminal2FilePath = t2.SettingsFilePath;
+				t2.SaveAsFileDialogRequest += terminal2_SaveAsFileDialogRequest_SaveAsOK;
+				success = w.SaveAs(this.normalWorkspaceFilePath);
+				t2.SaveAsFileDialogRequest -= terminal2_SaveAsFileDialogRequest_SaveAsOK;
 				Assert.That(success, Is.True, uc + "Workspace could not be saved as!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
+				Assert.That(w.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
 				Assert.That(File.Exists(autoWorkspaceFilePath), Is.False, uc + "Auto workspace file not deleted!");
 				Assert.That(File.Exists(autoTerminal2FilePath), Is.False, uc + "Auto terminal 2 file not deleted!");
 
 				Utilities.VerifyFiles
 				(
 					uc,
-					workspace,
+					w,
 					true,
 					false,
-					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // Exists.
-					new bool[]     { false,     false     }  // Auto.
+					new Terminal[] { t1,    t2    },
+					new bool[]     { true,  true  }, // Exists.
+					new bool[]     { false, false }  // Auto.
 				);
 
 				var normalTerminal1LastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
 				var normalTerminal2LastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminal2FilePath);
 
-				success = (main.Exit() == MainResult.Success);
+				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles
 				(
 					uc,
-					workspace,
+					w,
 					true,
 					false,
-					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // Exists.
-					new bool[]     { false,     false     }  // Auto.
+					new Terminal[] { t1,    t2    },
+					new bool[]     { true,  true  }, // Exists.
+					new bool[]     { false, false }  // Auto.
 				);
 
 				var normalTerminal1LastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
@@ -527,56 +527,56 @@ namespace YAT.Model.Test.FileHandling
 			// - Create new terminal
 			//   => Terminal becomes normal terminal
 
-			using (Main main = new Main())
+			using (var m = new Main())
 			{
 				uc = "UC5: ";
-				success = (main.Start() == MainResult.Success);
+				success = (m.Start() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
-				Workspace workspace = main.Workspace;
-				Assert.That(workspace, Is.Not.Null, uc + "Workspace not opened from file!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
-				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var w = m.Workspace;
+				Assert.That(w, Is.Not.Null, uc + "Workspace not opened from file!");
+				Assert.That(w.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
+				w.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				Terminal terminal1 = workspace.Terminals[0];
-				Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
-				terminal1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
-				Terminal terminal2 = workspace.Terminals[1];
-				Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
-				terminal2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t1 = w.Terminals[0];
+				Assert.That(t1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
+				t1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t2 = w.Terminals[1];
+				Assert.That(t2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
+				t2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				Utilities.VerifyFiles
 				(
 					uc,
-					workspace,
+					w,
 					true,
 					false,
-					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // Exists.
-					new bool[]     { false,     false     }  // Auto.
+					new Terminal[] { t1,    t2    },
+					new bool[]     { true,  true  }, // Exists.
+					new bool[]     { false, false }  // Auto.
 				);
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
+				success = w.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True, uc + "Terminal 3 could not be created!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(3), uc + "Workspace doesn't contain 3 terminals!");
+				Assert.That(w.TerminalCount, Is.EqualTo(3), uc + "Workspace doesn't contain 3 terminals!");
 
-				Terminal terminal3 = workspace.ActiveTerminal;
-				Assert.That(terminal3, Is.Not.Null, uc + "Terminal 3 could not be created!");
-				terminal3.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t3 = w.ActiveTerminal;
+				Assert.That(t3, Is.Not.Null, uc + "Terminal 3 could not be created!");
+				t3.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				terminal3.SaveAsFileDialogRequest += terminal3_SaveAsFileDialogRequest_SaveAsOK; // Ignore the "remaining event sink" message that will be output during Exit() below.
-				success = (main.Exit() == MainResult.Success);
+				t3.SaveAsFileDialogRequest += terminal3_SaveAsFileDialogRequest_SaveAsOK; // Ignore the "remaining event sink" message that will be output during Exit() below.
+				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles
 				(
 					uc,
-					workspace,
+					w,
 					true,
 					false,
-					new Terminal[] { terminal1, terminal2, terminal3 },
-					new bool[]     { true,      true,      true      }, // Exists.
-					new bool[]     { false,     false,     false     }  // Auto.
+					new Terminal[] { t1,    t2,    t3    },
+					new bool[]     { true,  true,  true  }, // Exists.
+					new bool[]     { false, false, false }  // Auto.
 				);
 			}
 			#endregion
@@ -586,56 +586,56 @@ namespace YAT.Model.Test.FileHandling
 			// - Close terminal 3
 			//   => Normal workspace contains 2 normal terminals but terminal 3 file stays
 
-			using (Main main = new Main())
+			using (var m = new Main())
 			{
 				uc = "UC5a: ";
-				success = (main.Start() == MainResult.Success);
+				success = (m.Start() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
-				Workspace workspace = main.Workspace;
-				Assert.That(workspace, Is.Not.Null, uc + "Workspace not opened from file!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(3), uc + "Workspace doesn't contain 3 terminals!");
-				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var w = m.Workspace;
+				Assert.That(w, Is.Not.Null, uc + "Workspace not opened from file!");
+				Assert.That(w.TerminalCount, Is.EqualTo(3), uc + "Workspace doesn't contain 3 terminals!");
+				w.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				Terminal terminal1 = workspace.Terminals[0];
-				Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
-				terminal1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
-				Terminal terminal2 = workspace.Terminals[1];
-				Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
-				terminal2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
-				Terminal terminal3 = workspace.Terminals[2];
-				Assert.That(terminal3, Is.Not.Null, uc + "Terminal 3 not opened from file!");
-				terminal3.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t1 = w.Terminals[0];
+				Assert.That(t1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
+				t1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t2 = w.Terminals[1];
+				Assert.That(t2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
+				t2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t3 = w.Terminals[2];
+				Assert.That(t3, Is.Not.Null, uc + "Terminal 3 not opened from file!");
+				t3.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				Utilities.VerifyFiles
 				(
 					uc,
-					workspace,
+					w,
 					true,
 					false,
-					new Terminal[] { terminal1, terminal2, terminal3 },
-					new bool[]     { true,      true,      true      }, // Exists.
-					new bool[]     { false,     false,     false     }  // Auto.
+					new Terminal[] { t1,    t2,    t3    },
+					new bool[]     { true,  true,  true  }, // Exists.
+					new bool[]     { false, false, false }  // Auto.
 				);
 
 				var normalTerminal3LastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminal3FilePath);
 
-				success = terminal3.Close();
+				success = t3.Close();
 				Assert.That(success, Is.True, uc + "Terminal 3 could not be closed!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
+				Assert.That(w.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
 
-				success = (main.Exit() == MainResult.Success);
+				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles
 				(
 					uc,
-					workspace,
+					w,
 					true,
 					false,
-					new Terminal[] { terminal1, terminal2, terminal3 },
-					new bool[]     { true,      true,      true      }, // Exists.
-					new bool[]     { false,     false,     false     }  // Auto.
+					new Terminal[] { t1,    t2,    t3    },
+					new bool[]     { true,  true,  true  }, // Exists.
+					new bool[]     { false, false, false }  // Auto.
 				);
 
 				var normalTerminal3LastWriteTimeAfterExit = File.GetLastWriteTimeUtc(this.normalTerminal3FilePath);
@@ -669,36 +669,36 @@ namespace YAT.Model.Test.FileHandling
 			// - Save terminals as
 			//   => Auto workspace with 2 normal terminals
 
-			using (Main main = new Main())
+			using (var m = new Main())
 			{
 				uc = "UC6..9prep: ";
-				success = (main.Start() == MainResult.Success);
+				success = (m.Start() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
-				Workspace workspace = main.Workspace;
+				var workspace = m.Workspace;
 				Assert.That(workspace, Is.Not.Null, uc + "Workspace not created!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(0), uc + "Workspace doesn't contain 0 terminals!");
 				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True, uc + "Terminal 1 could not be created!");
-				Terminal terminal1 = workspace.ActiveTerminal;
-				Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 could not be created!");
-				terminal1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t1 = workspace.ActiveTerminal;
+				Assert.That(t1, Is.Not.Null, uc + "Terminal 1 could not be created!");
+				t1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				success = terminal1.SaveAs(this.normalTerminal1FilePath);
+				success = t1.SaveAs(this.normalTerminal1FilePath);
 				Assert.That(success, Is.True, uc + "Terminal 1 could not be saved as!");
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True, uc + "Terminal 2 could not be created!");
-				Terminal terminal2 = workspace.ActiveTerminal;
-				Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 could not be created!");
-				terminal2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t2 = workspace.ActiveTerminal;
+				Assert.That(t2, Is.Not.Null, uc + "Terminal 2 could not be created!");
+				t2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				success = terminal2.SaveAs(this.normalTerminal2FilePath);
+				success = t2.SaveAs(this.normalTerminal2FilePath);
 				Assert.That(success, Is.True, uc + "Terminal 2 could not be saved as!");
 
-				success = (main.Exit() == MainResult.Success);
+				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles
@@ -706,9 +706,9 @@ namespace YAT.Model.Test.FileHandling
 					uc,
 					workspace,
 					true,
-					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // Exists.
-					new bool[]     { false,     false     }  // Auto.
+					new Terminal[] { t1,    t2    },
+					new bool[]     { true,  true  }, // Exists.
+					new bool[]     { false, false }  // Auto.
 				);
 			}
 			#endregion
@@ -737,32 +737,32 @@ namespace YAT.Model.Test.FileHandling
 			// - Create another terminal
 			//   => Auto workspace with 1 normal and 1 auto terminal
 
-			using (Main main = new Main(this.normalTerminal1FilePath))
+			using (var m = new Main(this.normalTerminal1FilePath))
 			{
 				uc = "UC7: ";
-				success = (main.Start() == MainResult.Success);
+				success = (m.Start() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
-				Workspace workspace = main.Workspace;
+				var workspace = m.Workspace;
 				Assert.That(workspace, Is.Not.Null, uc + "Workspace not created!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
 				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				Terminal terminal1 = workspace.ActiveTerminal;
-				Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 could not be opened!");
-				terminal1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t1 = workspace.ActiveTerminal;
+				Assert.That(t1, Is.Not.Null, uc + "Terminal 1 could not be opened!");
+				t1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				Utilities.VerifyFiles(uc, workspace, false, terminal1, true, false);
+				Utilities.VerifyFiles(uc, workspace, false, t1, true, false);
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True, uc + "Terminal 2 could not be created!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
 
-				Terminal terminal2 = workspace.ActiveTerminal;
-				Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 could not be created!");
-				terminal2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t2 = workspace.ActiveTerminal;
+				Assert.That(t2, Is.Not.Null, uc + "Terminal 2 could not be created!");
+				t2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				success = (main.Exit() == MainResult.Success);
+				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles
@@ -770,9 +770,9 @@ namespace YAT.Model.Test.FileHandling
 					uc,
 					workspace,
 					true,
-					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // Exists.
-					new bool[]     { false,     true      }  // Auto.
+					new Terminal[] { t1,    t2   },
+					new bool[]     { true,  true }, // Exists.
+					new bool[]     { false, true }  // Auto.
 				);
 			}
 			#endregion
@@ -892,28 +892,28 @@ namespace YAT.Model.Test.FileHandling
 		{
 			bool success = false;
 
-			using (Main main = new Main(requestedPath))
+			using (var m = new Main(requestedPath))
 			{
-				success = (main.Start() == MainResult.Success);
+				success = (m.Start() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
-				Workspace workspace = main.Workspace;
-				Assert.That(workspace, Is.Not.Null, uc + "Workspace not created!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
-				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var w = m.Workspace;
+				Assert.That(w, Is.Not.Null, uc + "Workspace not created!");
+				Assert.That(w.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
+				w.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
-				Terminal terminal = workspace.ActiveTerminal;
-				Assert.That(terminal, Is.Not.Null, uc + "Terminal could not be opened!");
-				terminal.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				var t = w.ActiveTerminal;
+				Assert.That(t, Is.Not.Null, uc + "Terminal could not be opened!");
+				t.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				// The auto workspace may still be set to some other workspace. Keep it to compare below.
 				string formerLocalUserAutoWorkspaceFilePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
-				Utilities.VerifyFiles(uc, workspace, false, terminal, true, false);
+				Utilities.VerifyFiles(uc, w, false, t, true, false);
 
-				success = (main.Exit() == MainResult.Success);
+				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
-				Utilities.VerifyFiles(uc, workspace, true, terminal, true, false);
+				Utilities.VerifyFiles(uc, w, true, t, true, false);
 
 				// Ensure that the auto workspace has been changed.
 				string currentLocalUserAutoWorkspaceFilePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
