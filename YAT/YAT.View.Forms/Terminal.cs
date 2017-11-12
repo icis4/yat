@@ -2854,9 +2854,9 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public virtual void RequestToggleAutoResponseVisible()
+		public virtual void RequestAutoResponseVisible(bool visible)
 		{
-			this.settingsRoot.AutoResponse.Visible = !this.settingsRoot.AutoResponse.Visible;
+			this.settingsRoot.AutoResponse.Visible = visible;
 		}
 
 		/// <summary></summary>

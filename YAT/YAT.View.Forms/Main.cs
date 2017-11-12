@@ -889,12 +889,12 @@ namespace YAT.View.Forms
 				var radix = Domain.Radix.None;
 				if (childIsReady)
 				{
-					Model.Terminal terminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
-					if ((terminal != null) && (!terminal.IsDisposed))
+					var t = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+					if ((t != null) && (!t.IsDisposed))
 					{
-						radixIsReady = !(terminal.SettingsRoot.Display.SeparateTxRxRadix);
+						radixIsReady = !(t.SettingsRoot.Display.SeparateTxRxRadix);
 						if (radixIsReady)
-							radix = terminal.SettingsRoot.Display.TxRadix;
+							radix = t.SettingsRoot.Display.TxRadix;
 					}
 				}
 
@@ -928,7 +928,7 @@ namespace YAT.View.Forms
 				toolStripButton_MainTool_Terminal_Radix_Unicode.Checked = (radix == Domain.Radix.Unicode);
 
 				bool arVisible = false;
-				bool arEnabled = false;
+				bool arIsActive = false;
 
 				AutoTriggerEx[] arTriggerItems = AutoTriggerEx.GetFixedItems();
 				AutoTriggerEx   arTrigger      = AutoTrigger.None;
@@ -938,17 +938,23 @@ namespace YAT.View.Forms
 
 				if (childIsReady)
 				{
-					Model.Terminal terminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
-					if ((terminal != null) && (!terminal.IsDisposed))
+					// Icon shall be visible if any terminal uses this option.
+					//
+					// Rationale:
+					// Icons shall not move/shift when switching among terminals.
+					arVisible = AutoResponseVisibleInAnyTerminal;
+
+					var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+					if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
 					{
-						arVisible       = terminal.SettingsRoot.AutoResponse.Visible;
-						arEnabled       = terminal.SettingsRoot.AutoResponse.IsActive;
+					////arVisible       = activeTerminal.SettingsRoot.AutoResponse.Visible; => See above.
+						arIsActive      = activeTerminal.SettingsRoot.AutoResponse.IsActive;
 
-						arTriggerItems  = terminal.SettingsRoot.GetValidAutoResponseTriggerItems();
-						arTrigger       = terminal.SettingsRoot.AutoResponse.Trigger;
+						arTriggerItems  = activeTerminal.SettingsRoot.GetValidAutoResponseTriggerItems();
+						arTrigger       = activeTerminal.SettingsRoot.AutoResponse.Trigger;
 
-						arResponseItems = terminal.SettingsRoot.GetValidAutoResponseResponseItems();
-						arResponse      = terminal.SettingsRoot.AutoResponse.Response;
+						arResponseItems = activeTerminal.SettingsRoot.GetValidAutoResponseResponseItems();
+						arResponse      = activeTerminal.SettingsRoot.AutoResponse.Response;
 					}
 				}
 
@@ -956,6 +962,7 @@ namespace YAT.View.Forms
 
 				if (arVisible)
 				{
+					toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Checked = arIsActive;
 					toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Hide Automatic Response";
 
 					// Attention:
@@ -981,10 +988,11 @@ namespace YAT.View.Forms
 					}
 
 					toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Visible = true;
-					toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Enabled = arEnabled;
+					toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Enabled = arIsActive;
 				}
 				else
 				{
+					toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Checked = false;
 					toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Show Automatic Response";
 
 					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Visible = false;
@@ -1091,7 +1099,13 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Terminal_AutoResponse_ShowHide_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoResponseVisible();
+			// Icon shall be visible if any terminal uses this option.
+			//
+			// Rationale:
+			// Icons shall not move/shift when switching among terminals.
+			//
+			// As a consequence, changing the option must be applied to all terminals:
+			RequestAutoResponseVisibleInAllTerminals(!AutoResponseVisibleInAnyTerminal); // Toggle.
 		}
 
 		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
@@ -2070,6 +2084,28 @@ namespace YAT.View.Forms
 				this.isLayoutingMdi = true;
 				ActiveMdiChild.WindowState = FormWindowState.Maximized;
 				this.isLayoutingMdi = false;
+			}
+		}
+
+		private bool AutoResponseVisibleInAnyTerminal
+		{
+			get
+			{
+				foreach (var anyTerminal in MdiChildren)
+				{
+					if (((Terminal)anyTerminal).UnderlyingTerminal.SettingsRoot.AutoResponse.Visible)
+						return (true);
+				}
+
+				return (false);
+			}
+		}
+
+		private void RequestAutoResponseVisibleInAllTerminals(bool visible)
+		{
+			foreach (var anyTerminal in MdiChildren)
+			{
+				((Terminal)anyTerminal).RequestAutoResponseVisible(visible);
 			}
 		}
 
