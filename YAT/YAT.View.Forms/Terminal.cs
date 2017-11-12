@@ -491,14 +491,19 @@ namespace YAT.View.Forms
 					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled = false;
 				}
 
-				// Edit:
 				bool monitorIsDefined = (this.lastMonitorSelection != Domain.RepositoryType.None);
 				bool editIsNotActive = (!send.EditIsActive);
+
 				toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Enabled       = (monitorIsDefined && editIsNotActive);
 				toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Enabled      = (monitorIsDefined && editIsNotActive);
+
 				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = (monitorIsDefined && editIsNotActive);
 				toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Enabled      =  monitorIsDefined;
 				toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled           =  monitorIsDefined;
+
+				toolStripMenuItem_TerminalMenu_Terminal_Find        .Enabled = monitorIsDefined;
+				toolStripMenuItem_TerminalMenu_Terminal_FindNext    .Enabled = monitorIsDefined && RequestWhetherFindIsReady();
+				toolStripMenuItem_TerminalMenu_Terminal_FindPrevious.Enabled = monitorIsDefined && RequestWhetherFindIsReady();
 			}
 			finally
 			{
@@ -563,17 +568,17 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Find_Click(object sender, EventArgs e)
 		{
-
+			RequestFind();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_FindNext_Click(object sender, EventArgs e)
 		{
-
+			RequestFindNext();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_FindPrevious_Click(object sender, EventArgs e)
 		{
-
+			RequestFindPrevious();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Settings_Click(object sender, EventArgs e)
@@ -1310,6 +1315,10 @@ namespace YAT.View.Forms
 				toolStripMenuItem_MonitorContextMenu_SaveToFile.Enabled      = isMonitor;
 				toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Enabled = isMonitor;
 				toolStripMenuItem_MonitorContextMenu_Print.Enabled           = isMonitor;
+
+				toolStripMenuItem_MonitorContextMenu_Find        .Enabled      = isMonitor;
+				toolStripMenuItem_MonitorContextMenu_FindNext    .Enabled      = isMonitor && RequestWhetherFindIsReady();
+				toolStripMenuItem_MonitorContextMenu_FindPrevious.Enabled      = isMonitor && RequestWhetherFindIsReady();
 			}
 			finally
 			{
@@ -1562,7 +1571,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-
+			RequestFind();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_FindNext_Click(object sender, EventArgs e)
@@ -1570,7 +1579,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-
+			RequestFindNext();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_FindPrevious_Click(object sender, EventArgs e)
@@ -1578,7 +1587,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-
+			RequestFindPrevious();
 		}
 
 		#endregion
@@ -2907,6 +2916,42 @@ namespace YAT.View.Forms
 		public virtual void RequestPrint()
 		{
 			ShowPrintMonitorDialog(GetMonitor(this.lastMonitorSelection));
+		}
+
+		/// <summary></summary>
+		protected virtual void RequestFind()
+		{
+			var main = (this.mdiParent as Main);
+			if (main != null)
+				main.RequestFind();
+		}
+
+		/// <summary></summary>
+		protected virtual bool RequestWhetherFindIsReady()
+		{
+			var main = (this.mdiParent as Main);
+			if (main != null)
+				return (main.FindIsReady);
+			else
+				return (false);
+		}
+
+		/// <summary></summary>
+		public virtual void RequestFind(string text)
+		{
+			//FindNext(GetMonitor(this.lastMonitorSelection));
+		}
+
+		/// <summary></summary>
+		public virtual void RequestFindNext()
+		{
+			//FindNext(GetMonitor(this.lastMonitorSelection));
+		}
+
+		/// <summary></summary>
+		public virtual void RequestFindPrevious()
+		{
+			//FindNext(GetMonitor(this.lastMonitorSelection));
 		}
 
 		/// <summary></summary>
