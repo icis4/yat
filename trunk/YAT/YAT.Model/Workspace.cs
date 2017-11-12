@@ -511,9 +511,12 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Returns a text containing information about the active terminal.
+		/// Gets a text containing information about the active terminal.
 		/// </summary>
-		public virtual string ActiveTerminalStatusText
+		/// <remarks>
+		/// Using term 'Info' since the info contains name and indices.
+		/// </remarks>
+		public virtual string ActiveTerminalInfoText
 		{
 			get
 			{
