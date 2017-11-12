@@ -88,7 +88,7 @@ YAT 2.0 Epsilon Version 1.99.90 :: 201x-xx-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
-- 
+- Simple find/search function for monitor contents added (feature requests #11 and #79).
 
 Important changes:
 - Cursor behavior of 'Send Text' improved; the cursor no longer jumps to the end of the input box
@@ -96,12 +96,12 @@ Important changes:
 - Automatic response extended by selection to respond the received trigger (related to feature
   requests #176, #252 implemented in version 1.99.50).
   This option combined with setting the trigger to '[Any Line]' makes YAT an echo server.
-- Switching among automatic/manual vertical scrolling in monitor view further improved, especially
-  while continuous data is being received (related to bug #394 and feature request #323 implemented
-  in previous release).
+- Switching among automatic/manual vertical scrolling in monitor further improved, especially while
+  continuous data is being received (related to bug #394 and feature request #323 implemented in
+  previous release).
 
 Fixed bugs:
-- Monitor view no longer jump to top as soon as display buffer has been filled (bug #394, related to
+- Monitors no longer jump to top as soon as display buffer has been filled (bug #394, related to
   feature request #323 implemented in previous release).
 
 Limitations and known issues:
@@ -147,8 +147,8 @@ Important changes:
 - Improved speed on sending and receiving, preventing application freeze on fast data (bug #383).
 - Improved responsiveness to send requests while receiving a lot of fast data, as well as
   responsiveness to receive data while sending a lot of fast data (rel. to bugs #305, #380, #383).
-- Auto scroll of the monitor view is not only suspended if one or more lines are selected but also
-  if the scroll bar is moved away from the bottom of the monitor (feature request #323).
+- Automatic vertical scrolling of monitor is not only suspended if one or more lines are selected
+  but also if the scroll bar is moved away from the bottom of the monitor (feature request #323).
 - Break [Ctrl+B] can now also be used to break sending a file (bug #305 and feature request #295).
 - Auto-reconnect of TCP/IP client terminals enabled by default.
 - Text input now supports the [Ctrl+Backspace] shortcut and multi-line text input also the [Ctrl+A]
