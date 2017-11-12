@@ -643,9 +643,39 @@ namespace YAT.View.Forms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Image_Tool_table_rows_insert_above_word_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Tool_table_rows_insert_above_word_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Image_Tool_table_rows_insert_below_word_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Tool_table_rows_insert_below_word_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Image_Tool_table_save_16x16 {
             get {
                 object obj = ResourceManager.GetObject("Image_Tool_table_save_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Image_Tool_table_tab_search_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Tool_table_tab_search_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
