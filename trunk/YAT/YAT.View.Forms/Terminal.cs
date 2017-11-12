@@ -561,6 +561,21 @@ namespace YAT.View.Forms
 			ShowPrintMonitorDialog(GetMonitor(this.lastMonitorSelection));
 		}
 
+		private void toolStripMenuItem_TerminalMenu_Terminal_Find_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Terminal_FindNext_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Terminal_FindPrevious_Click(object sender, EventArgs e)
+		{
+
+		}
+
 		private void toolStripMenuItem_TerminalMenu_Terminal_Settings_Click(object sender, EventArgs e)
 		{
 			ShowTerminalSettings();
@@ -1540,6 +1555,30 @@ namespace YAT.View.Forms
 				return;
 
 			ShowPrintMonitorDialog(GetMonitor(contextMenuStrip_Monitor.SourceControl));
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_Find_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_FindNext_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_FindPrevious_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+
 		}
 
 		#endregion
