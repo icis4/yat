@@ -1084,17 +1084,17 @@ namespace YAT.Settings.Test
 
 		private void ExecuteSettingsCase01(string filePath)
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> sh = SetupTerminalSettingsFromFilePath(filePath);
+			var sh = SetupTerminalSettingsFromFilePath(filePath);
 
 			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(sh))
+			using (var t = new Model.Terminal(sh))
 			{
 				// Required if COM1 is not available.
-				terminal.MessageInputRequest += terminal_MessageInputRequest;
+				t.MessageInputRequest += terminal_MessageInputRequest;
 
-				Assert.That(terminal.Start(), Is.True, @"Failed to start """ + terminal.Caption + @"""");
+				Assert.That(t.Start(), Is.True, @"Failed to start """ + t.Caption + @"""");
 
-				VerifySettingsCase01(terminal);
+				VerifySettingsCase01(t);
 			}
 		}
 
@@ -1112,17 +1112,17 @@ namespace YAT.Settings.Test
 
 		private void ExecuteSettingsCase02(string filePath, bool ignoreBaudRate)
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> sh = SetupTerminalSettingsFromFilePath(filePath);
+			var sh = SetupTerminalSettingsFromFilePath(filePath);
 
 			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(sh))
+			using (var t = new Model.Terminal(sh))
 			{
 				// Required if COM2 is not available.
-				terminal.MessageInputRequest += terminal_MessageInputRequest;
+				t.MessageInputRequest += terminal_MessageInputRequest;
 
-				Assert.That(terminal.Start(), Is.True, @"Failed to start """ + terminal.Caption + @"""");
+				Assert.That(t.Start(), Is.True, @"Failed to start """ + t.Caption + @"""");
 
-				VerifySettingsCase02(terminal, ignoreBaudRate);
+				VerifySettingsCase02(t, ignoreBaudRate);
 			}
 		}
 
@@ -1135,14 +1135,14 @@ namespace YAT.Settings.Test
 
 		private static void ExecuteSettingsCase03(string filePath)
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> sh = SetupTerminalSettingsFromFilePath(filePath);
+			var sh = SetupTerminalSettingsFromFilePath(filePath);
 
 			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(sh))
+			using (var t = new Model.Terminal(sh))
 			{
-				Assert.That(terminal.Start(), Is.True, @"Failed to start """ + terminal.Caption + @"""");
+				Assert.That(t.Start(), Is.True, @"Failed to start """ + t.Caption + @"""");
 
-				VerifySettingsCase03(terminal);
+				VerifySettingsCase03(t);
 			}
 		}
 
@@ -1155,13 +1155,13 @@ namespace YAT.Settings.Test
 
 		private static void ExecuteSettingsCase04(string filePath)
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> sh = SetupWorkspaceSettingsFromFilePath(filePath);
+			var sh = SetupWorkspaceSettingsFromFilePath(filePath);
 
 			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(sh))
+			using (var w = new Model.Workspace(sh))
 			{
-				workspace.OpenTerminals();
-				VerifySettingsCase04(workspace);
+				w.OpenTerminals();
+				VerifySettingsCase04(w);
 			}
 		}
 
@@ -1174,17 +1174,17 @@ namespace YAT.Settings.Test
 
 		private void ExecuteSettingsCase05(string filePath)
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> sh = SetupTerminalSettingsFromFilePath(filePath);
+			var sh = SetupTerminalSettingsFromFilePath(filePath);
 
 			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(sh))
+			using (var t = new Model.Terminal(sh))
 			{
 				// Required if COM1 is not available.
-				terminal.MessageInputRequest += terminal_MessageInputRequest;
+				t.MessageInputRequest += terminal_MessageInputRequest;
 
-				Assert.That(terminal.Start(), Is.True, @"Failed to start """ + terminal.Caption + @"""");
+				Assert.That(t.Start(), Is.True, @"Failed to start """ + t.Caption + @"""");
 
-				VerifySettingsCase05(terminal);
+				VerifySettingsCase05(t);
 			}
 		}
 
@@ -1197,13 +1197,13 @@ namespace YAT.Settings.Test
 
 		private static void ExecuteSettingsCase06(string filePath)
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> sh = SetupWorkspaceSettingsFromFilePath(filePath);
+			var sh = SetupWorkspaceSettingsFromFilePath(filePath);
 
 			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(sh))
+			using (var w = new Model.Workspace(sh))
 			{
-				workspace.OpenTerminals();
-				VerifySettingsCase06(workspace);
+				w.OpenTerminals();
+				VerifySettingsCase06(w);
 			}
 		}
 
@@ -1216,14 +1216,14 @@ namespace YAT.Settings.Test
 
 		private static void ExecuteSettingsCase07(string filePath)
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> sh = SetupTerminalSettingsFromFilePath(filePath);
+			var sh = SetupTerminalSettingsFromFilePath(filePath);
 
 			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(sh))
+			using (var t = new Model.Terminal(sh))
 			{
-				Assert.That(terminal.Start(), Is.True, @"Failed to start """ + terminal.Caption + @"""");
+				Assert.That(t.Start(), Is.True, @"Failed to start """ + t.Caption + @"""");
 
-				VerifySettingsCase07(terminal);
+				VerifySettingsCase07(t);
 			}
 		}
 
@@ -1236,13 +1236,13 @@ namespace YAT.Settings.Test
 
 		private static void ExecuteSettingsCase08(string filePath)
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> sh = SetupWorkspaceSettingsFromFilePath(filePath);
+			var sh = SetupWorkspaceSettingsFromFilePath(filePath);
 
 			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(sh))
+			using (var w = new Model.Workspace(sh))
 			{
-				workspace.OpenTerminals();
-				VerifySettingsCase08(workspace);
+				w.OpenTerminals();
+				VerifySettingsCase08(w);
 			}
 		}
 
@@ -1438,37 +1438,37 @@ namespace YAT.Settings.Test
 		{
 			Assert.That(workspace.TerminalCount, Is.EqualTo(2), "Workspace doesn't contain 2 terminals!");
 
-			Model.Terminal terminal1 = workspace.Terminals[0];
-			Model.Terminal terminal2 = workspace.Terminals[1];
+			Model.Terminal t1 = workspace.Terminals[0];
+			Model.Terminal t2 = workspace.Terminals[1];
 
-			Assert.That(terminal1.SettingsRoot.PredefinedCommand.Pages.Count, Is.EqualTo(1), "Predefined commands do not contain 1 page!");
+			Assert.That(t1.SettingsRoot.PredefinedCommand.Pages.Count, Is.EqualTo(1), "Predefined commands do not contain 1 page!");
 
-			Model.Types.PredefinedCommandPage page;
-			Model.Types.Command command;
+			Model.Types.PredefinedCommandPage p;
+			Model.Types.Command c;
 
-			page = terminal1.SettingsRoot.PredefinedCommand.Pages[0];
-			Assert.That(page.PageName, Is.EqualTo("Page 1"), "First predefined command pages has wrong name!");
-			Assert.That(page.Commands.Count, Is.EqualTo(5), "First predefined command page doesn't contain 5 commands!");
-			command = page.Commands[0];
-			Assert.That(command.Description,  Is.EqualTo("abc"));
-			Assert.That(command.TextLines[0], Is.EqualTo("abc"));
-			command = page.Commands[1];
-			Assert.That(command.Description,  Is.EqualTo("äöü"));
-			Assert.That(command.TextLines[0], Is.EqualTo("äöü"));
-			command = page.Commands[2];
-			Assert.That(command.Description,  Is.EqualTo("ÄÖÜ"));
-			Assert.That(command.TextLines[0], Is.EqualTo("ÄÖÜ"));
-			command = page.Commands[3];
-			Assert.That(command.Description,  Is.EqualTo("$£€"));
-			Assert.That(command.TextLines[0], Is.EqualTo("$£€"));
-			command = page.Commands[4];
-			Assert.That(command.Description,  Is.EqualTo("čěř"));
-			Assert.That(command.TextLines[0], Is.EqualTo("čěř"));
+			p = t1.SettingsRoot.PredefinedCommand.Pages[0];
+			Assert.That(p.PageName, Is.EqualTo("Page 1"), "First predefined command pages has wrong name!");
+			Assert.That(p.Commands.Count, Is.EqualTo(5), "First predefined command page doesn't contain 5 commands!");
+			c = p.Commands[0];
+			Assert.That(c.Description,  Is.EqualTo("abc"));
+			Assert.That(c.TextLines[0], Is.EqualTo("abc"));
+			c = p.Commands[1];
+			Assert.That(c.Description,  Is.EqualTo("äöü"));
+			Assert.That(c.TextLines[0], Is.EqualTo("äöü"));
+			c = p.Commands[2];
+			Assert.That(c.Description,  Is.EqualTo("ÄÖÜ"));
+			Assert.That(c.TextLines[0], Is.EqualTo("ÄÖÜ"));
+			c = p.Commands[3];
+			Assert.That(c.Description,  Is.EqualTo("$£€"));
+			Assert.That(c.TextLines[0], Is.EqualTo("$£€"));
+			c = p.Commands[4];
+			Assert.That(c.Description,  Is.EqualTo("čěř"));
+			Assert.That(c.TextLines[0], Is.EqualTo("čěř"));
 
 			// \todo:
 			// Add tests that verify that terminals are interconnected.
 
-			UnusedLocal.PreventAnalysisWarning(terminal2);
+			UnusedLocal.PreventAnalysisWarning(t2);
 
 			// \todo:
 			// Add tests that send the commands to terminal 2.

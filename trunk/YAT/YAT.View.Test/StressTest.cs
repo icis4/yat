@@ -209,10 +209,10 @@ namespace YAT.View.Test
 				@"-ke"
 			};
 
-			using (Controller.Main main = new Controller.Main(args))
+			using (var m = new Controller.Main(args))
 			{
-				Controller.MainResult mainResult = main.Run();
-				Assert.That(mainResult, Is.EqualTo(Controller.MainResult.Success));
+				var result = m.Run();
+				Assert.That(result, Is.EqualTo(Controller.MainResult.Success));
 			}
 		}
 
