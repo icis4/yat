@@ -1901,11 +1901,11 @@ namespace YAT.Model
 		/// Closes the terminal and prompts if needed if settings have changed.
 		/// </summary>
 		/// <remarks>
-		/// In case of a workspace close, <see cref="Close(bool, bool, bool, bool)"/> below must be called
-		/// with the first argument set to <c>true</c>.
+		/// In case of a workspace close, <see cref="Close(bool, bool, bool, bool)"/> below must be
+		/// called with the first argument set to <c>true</c>.
 		/// 
 		/// In case of intended close of one or all terminals, the user intentionally wants to close
-		/// the terminals, thus, this method will not try to auto save.
+		/// the terminal(s), thus, this method will not try to auto save.
 		/// </remarks>
 		public virtual bool Close()
 		{
