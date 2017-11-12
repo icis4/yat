@@ -765,7 +765,7 @@ namespace YAT.View.Forms
             this.toolStripStatusLabel_MainStatus_Status,
             this.toolStripStatusLabel_MainStatus_TerminalInfo,
             this.toolStripStatusLabel_MainStatus_Chrono});
-			this.statusStrip_Main.Location = new System.Drawing.Point(0, 622);
+			this.statusStrip_Main.Location = new System.Drawing.Point(0, 621);
 			this.statusStrip_Main.Name = "statusStrip_Main";
 			this.statusStrip_Main.ShowItemToolTips = true;
 			this.statusStrip_Main.Size = new System.Drawing.Size(896, 24);
@@ -1062,7 +1062,7 @@ namespace YAT.View.Forms
 			// toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger
 			// 
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Name = "toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger";
-			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Size = new System.Drawing.Size(180, 25);
+			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Size = new System.Drawing.Size(180, 27);
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Visible = false;
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger_SelectedIndexChanged);
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger_TextChanged);
@@ -1070,7 +1070,7 @@ namespace YAT.View.Forms
 			// toolStripComboBox_MainTool_Terminal_AutoResponse_Response
 			// 
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Name = "toolStripComboBox_MainTool_Terminal_AutoResponse_Response";
-			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Size = new System.Drawing.Size(180, 25);
+			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Size = new System.Drawing.Size(180, 27);
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response.ToolTipText = "Enable / Disable Automatic Response,\r\neither refer to one of the commands,\r\nor fi" +
     "ll-in any command text";
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Visible = false;
@@ -1258,7 +1258,7 @@ namespace YAT.View.Forms
 			this.toolStripPanel_Right.Name = "toolStripPanel_Right";
 			this.toolStripPanel_Right.Orientation = System.Windows.Forms.Orientation.Vertical;
 			this.toolStripPanel_Right.RowMargin = new System.Windows.Forms.Padding(0, 3, 0, 0);
-			this.toolStripPanel_Right.Size = new System.Drawing.Size(0, 573);
+			this.toolStripPanel_Right.Size = new System.Drawing.Size(0, 572);
 			// 
 			// toolStripPanel_Left
 			// 
@@ -1267,7 +1267,7 @@ namespace YAT.View.Forms
 			this.toolStripPanel_Left.Name = "toolStripPanel_Left";
 			this.toolStripPanel_Left.Orientation = System.Windows.Forms.Orientation.Vertical;
 			this.toolStripPanel_Left.RowMargin = new System.Windows.Forms.Padding(0, 3, 0, 0);
-			this.toolStripPanel_Left.Size = new System.Drawing.Size(0, 573);
+			this.toolStripPanel_Left.Size = new System.Drawing.Size(0, 572);
 			// 
 			// chronometer_Main
 			// 
@@ -1277,7 +1277,7 @@ namespace YAT.View.Forms
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(896, 646);
+			this.ClientSize = new System.Drawing.Size(896, 645);
 			this.ContextMenuStrip = this.contextMenuStrip_Main;
 			this.Controls.Add(this.toolStripPanel_Left);
 			this.Controls.Add(this.toolStripPanel_Right);
