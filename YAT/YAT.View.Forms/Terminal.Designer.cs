@@ -915,6 +915,7 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Find
 			// 
+			this.toolStripMenuItem_MonitorContextMenu_Find.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_tab_search_16x16;
 			this.toolStripMenuItem_MonitorContextMenu_Find.Name = "toolStripMenuItem_MonitorContextMenu_Find";
 			this.toolStripMenuItem_MonitorContextMenu_Find.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Find.Text = "Find...";
@@ -922,6 +923,7 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_MonitorContextMenu_FindNext
 			// 
+			this.toolStripMenuItem_MonitorContextMenu_FindNext.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_rows_insert_below_word_16x16;
 			this.toolStripMenuItem_MonitorContextMenu_FindNext.Name = "toolStripMenuItem_MonitorContextMenu_FindNext";
 			this.toolStripMenuItem_MonitorContextMenu_FindNext.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_MonitorContextMenu_FindNext.Text = "Find Next";
@@ -929,6 +931,7 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_MonitorContextMenu_FindPrevious
 			// 
+			this.toolStripMenuItem_MonitorContextMenu_FindPrevious.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_rows_insert_above_word_16x16;
 			this.toolStripMenuItem_MonitorContextMenu_FindPrevious.Name = "toolStripMenuItem_MonitorContextMenu_FindPrevious";
 			this.toolStripMenuItem_MonitorContextMenu_FindPrevious.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_MonitorContextMenu_FindPrevious.Text = "Find Previous";
@@ -967,6 +970,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_PredefinedContextMenu_Separator_4,
             this.toolStripMenuItem_PredefinedContextMenu_Hide});
 			this.contextMenuStrip_Predefined.Name = "contextMenuStrip_PredefinedCommands";
+			this.contextMenuStrip_Predefined.OwnerItem = this.toolStripMenuItem_TerminalMenu_Send_Predefined;
 			this.contextMenuStrip_Predefined.Size = new System.Drawing.Size(221, 424);
 			this.contextMenuStrip_Predefined.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Predefined_Opening);
 			// 
@@ -1687,6 +1691,7 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Find
 			// 
+			this.toolStripMenuItem_TerminalMenu_Terminal_Find.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_tab_search_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Find.Name = "toolStripMenuItem_TerminalMenu_Terminal_Find";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Find.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_Find.Size = new System.Drawing.Size(217, 22);
@@ -1695,6 +1700,7 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_FindNext
 			// 
+			this.toolStripMenuItem_TerminalMenu_Terminal_FindNext.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_rows_insert_below_word_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_FindNext.Name = "toolStripMenuItem_TerminalMenu_Terminal_FindNext";
 			this.toolStripMenuItem_TerminalMenu_Terminal_FindNext.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_FindNext.Size = new System.Drawing.Size(217, 22);
@@ -1703,6 +1709,7 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_FindPrevious
 			// 
+			this.toolStripMenuItem_TerminalMenu_Terminal_FindPrevious.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_rows_insert_above_word_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_FindPrevious.Name = "toolStripMenuItem_TerminalMenu_Terminal_FindPrevious";
 			this.toolStripMenuItem_TerminalMenu_Terminal_FindPrevious.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.F)));
