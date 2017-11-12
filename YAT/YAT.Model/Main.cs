@@ -1876,8 +1876,8 @@ namespace YAT.Model
 					if (this.workspace != null)
 					{
 						int id = this.startArgs.RequestedDynamicTerminalIndex;
-						Terminal terminal = this.workspace.GetTerminalByDynamicIndex(id);
-						if ((terminal != null) && (terminal.IsBusy))
+						var t = this.workspace.GetTerminalByDynamicIndex(id);
+						if ((t != null) && (t.IsBusy))
 						{
 							OnTimedStatusTextRequest("Exit triggered, pending while terminal is busy...");
 							return; // Pend!
