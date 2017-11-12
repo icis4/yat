@@ -1267,22 +1267,56 @@ namespace YAT.View.Forms
 
 		private void toolStripComboBox_MainTool_Terminal_Find_Text_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
 
+			var findText = (toolStripComboBox_MainTool_Terminal_Find_Text.SelectedItem as AutoResponseEx);
+			if (findText != null)
+				((Terminal)ActiveMdiChild).RequestFind(findText);
 		}
 
+		/// <remarks>
+		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event way too late,
+		/// only when the hosting control (i.e. the whole tool bar) is being validated.
+		/// </remarks>
 		private void toolStripComboBox_MainTool_Terminal_Find_Text_TextChanged(object sender, EventArgs e)
 		{
+			// Attention, 'isSettingControls' must only be checked further below!
 
+			if (toolStripComboBox_MainTool_Terminal_Find_Text.SelectedIndex == ControlEx.InvalidIndex)
+			{
+				string findText = toolStripComboBox_MainTool_Terminal_Find_Text.Text;
+				int invalidTextStart;
+				if (Utilities.ValidationHelper.ValidateText(this, "find text", findText, out invalidTextStart))
+				{
+					if (!this.isSettingControls)
+					{
+						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
+						try
+						{
+							((Terminal)ActiveMdiChild).RequestFind(findText);
+						}
+						finally
+						{
+							this.mainToolValidationWorkaround_UpdateIsSuspended = false;
+						}
+					}
+				}
+				else
+				{
+					toolStripComboBox_MainTool_Terminal_Find_Text.Text = findText.Remove(invalidTextStart);
+				}
+			}
 		}
 
 		private void toolStripButton_MainTool_Terminal_Find_Next_Click(object sender, EventArgs e)
 		{
-
+			((Terminal)ActiveMdiChild).RequestFindNext();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Find_Previous_Click(object sender, EventArgs e)
 		{
-
+			((Terminal)ActiveMdiChild).RequestFindPrevious();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Log_Settings_Click(object sender, EventArgs e)
@@ -1552,12 +1586,12 @@ namespace YAT.View.Forms
 				WindowState = ApplicationSettings.LocalUserSettings.MainWindow.WindowState;
 
 				// Start position:
-				FormStartPosition savedStartPosition = ApplicationSettings.LocalUserSettings.MainWindow.StartPosition;
-				Point             savedLocation      = ApplicationSettings.LocalUserSettings.MainWindow.Location;
-				Size              savedSize          = ApplicationSettings.LocalUserSettings.MainWindow.Size;
+				var savedStartPosition = ApplicationSettings.LocalUserSettings.MainWindow.StartPosition;
+				var savedLocation      = ApplicationSettings.LocalUserSettings.MainWindow.Location;
+				var savedSize          = ApplicationSettings.LocalUserSettings.MainWindow.Size;
 
-				Rectangle savedBounds = new Rectangle(savedLocation, savedSize);
-				bool isWithinBounds = ScreenEx.IsWithinAnyBounds(savedBounds);
+				var savedBounds = new Rectangle(savedLocation, savedSize);
+				var isWithinBounds = ScreenEx.IsWithinAnyBounds(savedBounds);
 				if (isWithinBounds) // Restore saved settings if within bounds:
 				{
 					StartPosition = savedStartPosition;
@@ -2400,6 +2434,38 @@ namespace YAT.View.Forms
 		}
 
 		#endregion
+
+		#endregion
+
+		#region Find
+		//==========================================================================================
+		// Find
+		//==========================================================================================
+
+		/// <summary>
+		/// Requests to activate the find field.
+		/// </summary>
+		public virtual void RequestFind()
+		{
+			if (!this.localUserSettingsRoot.MainWindow.ShowFindField)
+				this.localUserSettingsRoot.MainWindow.ShowFindField = true;
+
+			toolStripComboBox_MainTool_Terminal_Find_Text.Select();
+		}
+
+		/// <summary>
+		/// Gets whether the find is ready.
+		/// </summary>
+		public virtual bool FindIsReady
+		{
+			get
+			{
+				if (this.localUserSettingsRoot.MainWindow.ShowFindField)
+					return (!string.IsNullOrEmpty(this.localUserSettingsRoot.MainWindow.FindText));
+				else
+					return (false);
+			}
+		}
 
 		#endregion
 
