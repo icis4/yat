@@ -773,18 +773,21 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_ShowRadix.Name = "toolStripMenuItem_MonitorContextMenu_ShowRadix";
 			this.toolStripMenuItem_MonitorContextMenu_ShowRadix.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowRadix.Text = "Show Radix";
+			this.toolStripMenuItem_MonitorContextMenu_ShowRadix.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowRadix_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers.Name = "toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers";
 			this.toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers.Text = "Show Buffer Line Numbers";
+			this.toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers.Name = "toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers";
 			this.toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers.Text = "Show Total Line Numbers";
+			this.toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowTimeStamp
 			// 
@@ -792,6 +795,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Text = "Show Time Stamp";
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.ToolTipText = "Format can be configured in [View > Format...].";
+			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowTimeSpan
 			// 
@@ -799,6 +803,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Text = "Show Time Span";
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.ToolTipText = "Format can be configured in [View > Format...].";
+			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowTimeDelta
 			// 
@@ -806,30 +811,35 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.Text = "Show Time Delta";
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.ToolTipText = "Format can be configured in [View > Format...].";
+			this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowTimeDelta_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowPort
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowPort.Name = "toolStripMenuItem_MonitorContextMenu_ShowPort";
 			this.toolStripMenuItem_MonitorContextMenu_ShowPort.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowPort.Text = "Show Port";
+			this.toolStripMenuItem_MonitorContextMenu_ShowPort.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowPort_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowDirection
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowDirection.Name = "toolStripMenuItem_MonitorContextMenu_ShowDirection";
 			this.toolStripMenuItem_MonitorContextMenu_ShowDirection.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowDirection.Text = "Show Direction";
+			this.toolStripMenuItem_MonitorContextMenu_ShowDirection.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowDirection_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowEol
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Name = "toolStripMenuItem_MonitorContextMenu_ShowEol";
 			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Text = "Show EOL Sequence";
+			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowEol_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowLength
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Name = "toolStripMenuItem_MonitorContextMenu_ShowLength";
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Text = "Show Length (Byte Count)";
+			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowLength_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Separator_5
 			// 

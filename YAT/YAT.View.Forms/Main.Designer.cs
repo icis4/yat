@@ -542,7 +542,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_MainMenu_Log_AllOff,
             this.toolStripMenuItem_MainMenu_Log_Separator_2,
             this.toolStripMenuItem_MainMenu_Log_AllClear});
-			this.toolStripMenuItem_MainMenu_Log.MergeIndex = 3;
+			this.toolStripMenuItem_MainMenu_Log.MergeIndex = 4;
 			this.toolStripMenuItem_MainMenu_Log.Name = "toolStripMenuItem_MainMenu_Log";
 			this.toolStripMenuItem_MainMenu_Log.Size = new System.Drawing.Size(39, 20);
 			this.toolStripMenuItem_MainMenu_Log.Text = "&Log";
@@ -596,7 +596,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_MainMenu_Window_Separator2,
             this.toolStripMenuItem_MainMenu_Window_Minimize,
             this.toolStripMenuItem_MainMenu_Window_Maximize});
-			this.toolStripMenuItem_MainMenu_Window.MergeIndex = 5;
+			this.toolStripMenuItem_MainMenu_Window.MergeIndex = 6;
 			this.toolStripMenuItem_MainMenu_Window.Name = "toolStripMenuItem_MainMenu_Window";
 			this.toolStripMenuItem_MainMenu_Window.Size = new System.Drawing.Size(63, 20);
 			this.toolStripMenuItem_MainMenu_Window.Text = "&Window";
@@ -700,7 +700,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_MainMenu_Help_SubmitBug,
             this.toolStripMenuItem_MainMenu_Help_Separator_3,
             this.toolStripMenuItem_MainMenu_Help_About});
-			this.toolStripMenuItem_MainMenu_Help.MergeIndex = 6;
+			this.toolStripMenuItem_MainMenu_Help.MergeIndex = 7;
 			this.toolStripMenuItem_MainMenu_Help.Name = "toolStripMenuItem_MainMenu_Help";
 			this.toolStripMenuItem_MainMenu_Help.Size = new System.Drawing.Size(44, 20);
 			this.toolStripMenuItem_MainMenu_Help.Text = "&Help";
