@@ -37,7 +37,7 @@ namespace YAT.Model.Utilities
 	/// <item><description>Regular expressions only make sense for text.</description></item>
 	/// </list>
 	/// </remarks>
-	public class AutoResponseHelper
+	public class AutoTriggerHelper
 	{
 		/// <remarks>
 		/// "Guidelines for Collections": "Do use byte arrays instead of collections of bytes."
@@ -49,12 +49,12 @@ namespace YAT.Model.Utilities
 		private Domain.SequenceQueue triggerQueue;
 
 		/// <summary></summary>
-		public AutoResponseHelper()
+		public AutoTriggerHelper()
 		{
 		}
 
 		/// <summary></summary>
-		public AutoResponseHelper(byte[] triggerSequence)
+		public AutoTriggerHelper(byte[] triggerSequence)
 		{
 			lock (this)
 			{

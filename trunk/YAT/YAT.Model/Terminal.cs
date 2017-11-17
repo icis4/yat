@@ -33,6 +33,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Media;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -165,8 +166,14 @@ namespace YAT.Model
 		private Log.Provider log;
 
 		// AutoResponse:
-		private AutoResponseHelper autoResponseHelper;
+		private int autoResponseCount;
+		private AutoTriggerHelper autoResponseHelper;
 		private object autoResponseHelperSyncObj = new object();
+
+		// AutoAction:
+		private int autoActionCount;
+		private AutoTriggerHelper autoActionHelper;
+		private object autoActionHelperSyncObj = new object();
 
 		// Time status:
 		private Chronometer activeConnectChrono;
@@ -237,6 +244,12 @@ namespace YAT.Model
 		public event EventHandler<EventArgs<Domain.RepositoryType>> RepositoryReloaded;
 
 		/// <summary></summary>
+		public event EventHandler<EventArgs<int>> AutoResponseCountChanged;
+
+		/// <summary></summary>
+		public event EventHandler<EventArgs<int>> AutoActionCountChanged;
+
+		/// <summary></summary>
 		public event EventHandler<EventArgs<string>> FixedStatusTextRequest;
 
 		/// <summary></summary>
@@ -259,6 +272,9 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public event EventHandler<ClosedEventArgs> Closed;
+
+		/// <summary></summary>
+		public event EventHandler<EventArgs> ExitRequest;
 
 		#endregion
 
@@ -325,8 +341,9 @@ namespace YAT.Model
 				// Create log:
 				this.log = new Log.Provider(this.settingsRoot.Log, (EncodingEx)this.settingsRoot.TextTerminal.Encoding, this.settingsRoot.Format);
 
-				// Create AutoResponse:
+				// Create AutoResponse/Action:
 				CreateAutoResponse();
+				CreateAutoAction();
 
 				// Create chronos:
 				CreateChronos();
@@ -383,6 +400,7 @@ namespace YAT.Model
 					DisposeRates();
 					DisposeChronos();
 					DisposeAutoResponse();
+					DisposeAutoAction();
 
 					// ...close and dispose of terminal and log...
 					CloseAndDisposeTerminal();
@@ -1428,10 +1446,15 @@ namespace YAT.Model
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.PredefinedCommand))
 			{
 				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+				UpdateAutoAction();   // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.AutoResponse))
 			{
 				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.AutoAction))
+			{
+				UpdateAutoAction(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Format))
 			{
@@ -1452,8 +1475,9 @@ namespace YAT.Model
 				if (settingsRoot_Changed_terminalTypeOld != this.settingsRoot.TerminalType) {
 					settingsRoot_Changed_terminalTypeOld = this.settingsRoot.TerminalType;
 
-					// Terminal type has changed, recreate the auto response:
+					// Terminal type has changed, recreate AutoResponse/Action:
 					UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+					UpdateAutoAction();   // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 				}
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal.IO))
@@ -1461,8 +1485,9 @@ namespace YAT.Model
 				if (settingsRoot_Changed_endianessOld != this.settingsRoot.Terminal.IO.Endianness) {
 					settingsRoot_Changed_endianessOld = this.settingsRoot.Terminal.IO.Endianness;
 
-					// Endianess has changed, recreate the auto response:
+					// Endianess has changed, recreate AutoResponse/Action:
 					UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+					UpdateAutoAction();   // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 				}
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal.Send))
@@ -1479,6 +1504,7 @@ namespace YAT.Model
 				this.log.TextTerminalEncoding = (EncodingEx)this.settingsRoot.Terminal.TextTerminal.Encoding;
 
 				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+				UpdateAutoAction();   // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 			}
 		}
 
@@ -2432,11 +2458,52 @@ namespace YAT.Model
 					asyncInvoker.BeginInvoke(triggerSequence, null, null);
 				}
 			}
+
+			// AutoAction:
+			if (this.settingsRoot.AutoAction.IsActive)
+			{
+				bool isTriggered = false;
+
+				foreach (byte b in e.Value.Content)
+				{
+					lock (this.autoActionHelperSyncObj)
+					{
+						if (this.autoActionHelper != null)
+						{
+							if (this.autoActionHelper.EnqueueAndMatchTrigger(b))
+								isTriggered = true;
+						}
+						else
+						{
+							break; // Break the for-loop if AutoAction got disposed in the meantime.
+						}
+					}
+				}
+
+				if (isTriggered) // Invoke sending on different thread than the receive thread.
+				{
+					byte[] triggerSequence = null;
+
+					lock (this.autoActionHelperSyncObj)
+					{
+						if (this.autoActionHelper != null)
+							triggerSequence = this.autoActionHelper.TriggerSequence;
+					}
+
+					var asyncInvoker = new Action<byte[]>(terminal_RawChunkReceived_InvokeAutoActionAsync);
+					asyncInvoker.BeginInvoke(triggerSequence, null, null);
+				}
+			}
 		}
 
 		private void terminal_RawChunkReceived_SendAutoResponseAsync(byte[] triggerSequence)
 		{
 			SendAutoResponse(triggerSequence);
+		}
+
+		private void terminal_RawChunkReceived_InvokeAutoActionAsync(byte[] triggerSequence)
+		{
+			InvokeAutoAction(triggerSequence);
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
@@ -2475,12 +2542,12 @@ namespace YAT.Model
 			OnDisplayLinesSent(e);
 
 			// Log:
-			foreach (var de in e.Lines)
+			foreach (var dl in e.Lines)
 			{
 				if (this.log.IsOn)
 				{
-					this.log.WriteLine(de, Log.LogChannel.NeatTx);
-					this.log.WriteLine(de, Log.LogChannel.NeatBidir);
+					this.log.WriteLine(dl, Log.LogChannel.NeatTx);
+					this.log.WriteLine(dl, Log.LogChannel.NeatBidir);
 				}
 			}
 		}
@@ -2503,21 +2570,30 @@ namespace YAT.Model
 			OnDisplayLinesReceived(e);
 
 			// Log:
-			foreach (var de in e.Lines)
+			foreach (var dl in e.Lines)
 			{
 				if (this.log.IsOn)
 				{
-					this.log.WriteLine(de, Log.LogChannel.NeatBidir);
-					this.log.WriteLine(de, Log.LogChannel.NeatRx);
+					this.log.WriteLine(dl, Log.LogChannel.NeatBidir);
+					this.log.WriteLine(dl, Log.LogChannel.NeatRx);
 				}
 			}
 
 			// AutoResponse:
 			if (this.settingsRoot.AutoResponse.IsActive && (this.settingsRoot.AutoResponse.Trigger == AutoTrigger.AnyLine))
 			{
-				foreach (var de in e.Lines)
+				foreach (var dl in e.Lines)
 				{
-					SendAutoResponse(de.ElementsToOrigin());
+					SendAutoResponse(dl.ElementsToOrigin());
+				}
+			}
+
+			// AutoAction:
+			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine))
+			{
+				foreach (var dl in e.Lines)
+				{
+					InvokeAutoAction(dl.ElementsToOrigin());
 				}
 			}
 		}
@@ -4331,10 +4407,15 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Auto Response
+		#region Auto
 		//==========================================================================================
-		// Auto Response
+		// Auto
 		//==========================================================================================
+
+		#region Auto > Response
+		//------------------------------------------------------------------------------------------
+		// Auto > Response
+		//------------------------------------------------------------------------------------------
 
 		private void CreateAutoResponse()
 		{
@@ -4362,7 +4443,7 @@ namespace YAT.Model
 						lock (this.autoResponseHelperSyncObj)
 						{
 							if (this.autoResponseHelper == null)
-								this.autoResponseHelper = new AutoResponseHelper(triggerSequence);
+								this.autoResponseHelper = new AutoTriggerHelper(triggerSequence);
 							else
 								this.autoResponseHelper.TriggerSequence = triggerSequence;
 						}
@@ -4396,6 +4477,202 @@ namespace YAT.Model
 					this.autoResponseHelper = null;
 			}
 		}
+
+		/// <summary>
+		/// Sends the automatic response.
+		/// </summary>
+		protected virtual void SendAutoResponse(byte[] triggerSequence)
+		{
+			int page = this.settingsRoot.Predefined.SelectedPage;
+
+			switch ((AutoResponse)this.settingsRoot.AutoResponse.Response)
+			{
+				case AutoResponse.Trigger:             SendAutoResponseTrigger(triggerSequence); break;
+				case AutoResponse.SendText:            SendText();                               break;
+				case AutoResponse.SendFile:            SendFile();                               break;
+				case AutoResponse.PredefinedCommand1:  SendPredefined(page, 1);                  break;
+				case AutoResponse.PredefinedCommand2:  SendPredefined(page, 2);                  break;
+				case AutoResponse.PredefinedCommand3:  SendPredefined(page, 3);                  break;
+				case AutoResponse.PredefinedCommand4:  SendPredefined(page, 4);                  break;
+				case AutoResponse.PredefinedCommand5:  SendPredefined(page, 5);                  break;
+				case AutoResponse.PredefinedCommand6:  SendPredefined(page, 6);                  break;
+				case AutoResponse.PredefinedCommand7:  SendPredefined(page, 7);                  break;
+				case AutoResponse.PredefinedCommand8:  SendPredefined(page, 8);                  break;
+				case AutoResponse.PredefinedCommand9:  SendPredefined(page, 9);                  break;
+				case AutoResponse.PredefinedCommand10: SendPredefined(page, 10);                 break;
+				case AutoResponse.PredefinedCommand11: SendPredefined(page, 11);                 break;
+				case AutoResponse.PredefinedCommand12: SendPredefined(page, 12);                 break;
+
+				case AutoResponse.Explicit:
+					SendCommand(new Command(this.settingsRoot.AutoResponse.Response)); // No explicit default radix available (yet).
+					break;
+
+				case AutoResponse.None:
+				default:
+					break;
+			}
+
+			this.autoResponseCount++;
+			OnAutoResponseCountChanged(new EventArgs<int>(this.autoResponseCount));
+		}
+
+		/// <summary>
+		/// Sends the automatic response trigger.
+		/// </summary>
+		protected virtual void SendAutoResponseTrigger(byte[] triggerSequence)
+		{
+			if (triggerSequence != null)
+				this.terminal.Send(triggerSequence);
+		}
+
+		/// <summary>
+		/// Gets the automatic response count.
+		/// </summary>
+		public virtual int AutoResponseCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.autoResponseCount);
+			}
+		}
+
+		/// <summary>
+		/// Resets the automatic response count.
+		/// </summary>
+		public virtual void ResetAutoResponseCount()
+		{
+			AssertNotDisposed();
+
+			this.autoResponseCount = 0;
+			OnAutoResponseCountChanged(new EventArgs<int>(this.autoResponseCount));
+		}
+
+		#endregion
+
+		#region Auto > Action
+		//------------------------------------------------------------------------------------------
+		// Auto > Action
+		//------------------------------------------------------------------------------------------
+
+		private void CreateAutoAction()
+		{
+			UpdateAutoAction(); // Simply forward to general Update() method.
+		}
+
+		private void DisposeAutoAction()
+		{
+			lock (this.autoActionHelperSyncObj)
+				this.autoActionHelper = null; // Simply delete the reference to the object.
+		}
+
+		/// <summary>
+		/// Updates the automatic Action helper.
+		/// </summary>
+		protected virtual void UpdateAutoAction()
+		{
+			if (this.settingsRoot.AutoAction.IsActive)
+			{
+				if (this.settingsRoot.AutoAction.Trigger.CommandIsRequired) // = sequence required = helper required.
+				{
+					byte[] triggerSequence;
+					if (TryParseCommandToSequence(this.settingsRoot.ActiveAutoActionTrigger, out triggerSequence))
+					{
+						lock (this.autoActionHelperSyncObj)
+						{
+							if (this.autoActionHelper == null)
+								this.autoActionHelper = new AutoTriggerHelper(triggerSequence);
+							else
+								this.autoActionHelper.TriggerSequence = triggerSequence;
+						}
+					}
+					else
+					{
+						lock (this.autoActionHelperSyncObj)
+							this.autoActionHelper = null;
+
+						this.settingsRoot.AutoAction.Deactivate();
+
+						OnMessageInputRequest
+						(
+							"Failed to parse the automatic action trigger! Automatic action has been disabled!" + Environment.NewLine + Environment.NewLine +
+							"To enable again, re-configure the automatic action.",
+							"Automatic Action Error",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Warning
+						);
+					}
+				}
+				else // No command required = no sequence required = no helper required.
+				{
+					lock (this.autoActionHelperSyncObj)
+						this.autoActionHelper = null;
+				}
+			}
+			else // Disabled.
+			{
+				lock (this.autoActionHelperSyncObj)
+					this.autoActionHelper = null;
+			}
+		}
+
+		/// <summary>
+		/// Invokes the automatic Action.
+		/// </summary>
+		protected virtual void InvokeAutoAction(byte[] triggerSequence)
+		{
+			switch ((AutoAction)this.settingsRoot.AutoAction.Action)
+			{
+				case AutoAction.Beep:              SystemSounds.Beep.Play();       break;
+				case AutoAction.ShowMessageBox:    SendText();                     break;
+				case AutoAction.ClearRepositories: ClearRepositories();            break;
+				case AutoAction.ResetCountAndRate: ResetIOCountAndRate();          break;
+				case AutoAction.SwitchLogOn:       SwitchLogOn();                  break;
+				case AutoAction.SwitchLogOff:      SwitchLogOff();                 break;
+				case AutoAction.StopIO:            StopIO();                       break;
+				case AutoAction.CloseTerminal:     Close();                        break;
+				case AutoAction.ExitApplication:   OnExitRequest(EventArgs.Empty); break;
+
+				case AutoAction.None:
+				default:
+					break;
+			}
+
+			this.autoActionCount++;
+			OnAutoActionCountChanged(new EventArgs<int>(this.autoActionCount));
+		}
+
+		/// <summary>
+		/// Gets the automatic Action count.
+		/// </summary>
+		public virtual int AutoActionCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.autoActionCount);
+			}
+		}
+
+		/// <summary>
+		/// Resets the automatic Action count.
+		/// </summary>
+		public virtual void ResetAutoActionCount()
+		{
+			AssertNotDisposed();
+
+			this.autoActionCount = 0;
+			OnAutoActionCountChanged(new EventArgs<int>(this.autoActionCount));
+		}
+
+		#endregion
+
+		#region Auto > Common
+		//------------------------------------------------------------------------------------------
+		// Auto > Common
+		//------------------------------------------------------------------------------------------
 
 		/// <summary>
 		/// Tries to parse the given command into the corresponding byte sequence, taking the current settings into account.
@@ -4436,49 +4713,7 @@ namespace YAT.Model
 			return (false);
 		}
 
-		/// <summary>
-		/// Sends the automatic response.
-		/// </summary>
-		protected virtual void SendAutoResponse(byte[] triggerSequence)
-		{
-			int page = this.settingsRoot.Predefined.SelectedPage;
-
-			switch ((AutoResponse)this.settingsRoot.AutoResponse.Response)
-			{
-				case AutoResponse.Trigger:             SendAutoResponseTrigger(triggerSequence); break;
-				case AutoResponse.SendText:            SendText();                               break;
-				case AutoResponse.SendFile:            SendFile();                               break;
-				case AutoResponse.PredefinedCommand1:  SendPredefined(page, 1);                  break;
-				case AutoResponse.PredefinedCommand2:  SendPredefined(page, 2);                  break;
-				case AutoResponse.PredefinedCommand3:  SendPredefined(page, 3);                  break;
-				case AutoResponse.PredefinedCommand4:  SendPredefined(page, 4);                  break;
-				case AutoResponse.PredefinedCommand5:  SendPredefined(page, 5);                  break;
-				case AutoResponse.PredefinedCommand6:  SendPredefined(page, 6);                  break;
-				case AutoResponse.PredefinedCommand7:  SendPredefined(page, 7);                  break;
-				case AutoResponse.PredefinedCommand8:  SendPredefined(page, 8);                  break;
-				case AutoResponse.PredefinedCommand9:  SendPredefined(page, 9);                  break;
-				case AutoResponse.PredefinedCommand10: SendPredefined(page, 10);                 break;
-				case AutoResponse.PredefinedCommand11: SendPredefined(page, 11);                 break;
-				case AutoResponse.PredefinedCommand12: SendPredefined(page, 12);                 break;
-
-				case AutoResponse.Explicit:
-					SendCommand(new Command(this.settingsRoot.AutoResponse.Response)); // No explicit default radix available (yet).
-					break;
-
-				case AutoResponse.None:
-				default:
-					break;
-			}
-		}
-
-		/// <summary>
-		/// Sends the automatic response trigger.
-		/// </summary>
-		protected virtual void SendAutoResponseTrigger(byte[] triggerSequence)
-		{
-			if (triggerSequence != null)
-				this.terminal.Send(triggerSequence);
-		}
+		#endregion
 
 		#endregion
 
@@ -4566,6 +4801,18 @@ namespace YAT.Model
 		protected virtual void OnRepositoryReloaded(EventArgs<Domain.RepositoryType> e)
 		{
 			this.eventHelper.RaiseSync<EventArgs<Domain.RepositoryType>>(RepositoryReloaded, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnAutoResponseCountChanged(EventArgs<int> e)
+		{
+			this.eventHelper.RaiseSync<EventArgs<int>>(AutoResponseCountChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnAutoActionCountChanged(EventArgs<int> e)
+		{
+			this.eventHelper.RaiseSync<EventArgs<int>>(AutoActionCountChanged, this, e);
 		}
 
 		/// <remarks>Using item parameter instead of <see cref="EventArgs"/> for simplicity.</remarks>
@@ -4665,6 +4912,12 @@ namespace YAT.Model
 		protected virtual void OnClosed(ClosedEventArgs e)
 		{
 			this.eventHelper.RaiseSync<ClosedEventArgs>(Closed, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnExitRequest(EventArgs e)
+		{
+			this.eventHelper.RaiseSync<EventArgs>(ExitRequest, this, e);
 		}
 
 		#endregion
