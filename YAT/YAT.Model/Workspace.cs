@@ -150,6 +150,9 @@ namespace YAT.Model
 		/// <summary></summary>
 		public event EventHandler<ClosedEventArgs> Closed;
 
+		/// <summary></summary>
+		public event EventHandler<EventArgs> ExitRequest;
+
 		#endregion
 
 		#region Object Lifetime
@@ -1305,6 +1308,8 @@ namespace YAT.Model
 			{
 				terminal.Saved  += terminal_Saved;
 				terminal.Closed += terminal_Closed;
+
+				terminal.ExitRequest += terminal_ExitRequest;
 			}
 		}
 
@@ -1314,6 +1319,8 @@ namespace YAT.Model
 			{
 				terminal.Saved  -= terminal_Saved;
 				terminal.Closed -= terminal_Closed;
+
+				terminal.ExitRequest -= terminal_ExitRequest;
 			}
 		}
 
@@ -1355,6 +1362,11 @@ namespace YAT.Model
 			DetachTerminalEventHandlers(t);
 			RemoveTerminalFromWorkspace(t, !e.IsParentClose); // Simply remove the terminal from the workspace, it disposes of itself.
 			OnTerminalRemoved(t);
+		}
+
+		private void terminal_ExitRequest(object sender, EventArgs e)
+		{
+			OnExitRequest(e);
 		}
 
 		#endregion
@@ -2329,6 +2341,12 @@ namespace YAT.Model
 		protected virtual void OnClosed(ClosedEventArgs e)
 		{
 			this.eventHelper.RaiseSync<ClosedEventArgs>(Closed, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnExitRequest(EventArgs e)
+		{
+			this.eventHelper.RaiseSync<EventArgs>(ExitRequest, this, e);
 		}
 
 		#endregion

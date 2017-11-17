@@ -44,6 +44,7 @@ namespace YAT.Settings.Terminal
 		private Domain.Settings.TerminalSettings terminal;
 		private Model.Settings.PredefinedCommandSettings predefinedCommand;
 		private Model.Settings.AutoResponseSettings autoResponse;
+		private Model.Settings.AutoActionSettings autoAction;
 		private Model.Settings.FormatSettings format;
 		private Log.Settings.LogSettings log;
 
@@ -62,6 +63,7 @@ namespace YAT.Settings.Terminal
 			Terminal          = new Domain.Settings.TerminalSettings(SettingsType);
 			PredefinedCommand = new Model.Settings.PredefinedCommandSettings(SettingsType);
 			AutoResponse      = new Model.Settings.AutoResponseSettings(SettingsType);
+			AutoAction        = new Model.Settings.AutoActionSettings(SettingsType);
 			Format            = new Model.Settings.FormatSettings(SettingsType);
 			Log               = new Log.Settings.LogSettings(SettingsType);
 
@@ -81,6 +83,7 @@ namespace YAT.Settings.Terminal
 			Terminal          = new Domain.Settings.TerminalSettings(rhs.Terminal);
 			PredefinedCommand = new Model.Settings.PredefinedCommandSettings(rhs.PredefinedCommand);
 			AutoResponse      = new Model.Settings.AutoResponseSettings(rhs.AutoResponse);
+			AutoAction        = new Model.Settings.AutoActionSettings(rhs.AutoAction);
 			Format            = new Model.Settings.FormatSettings(rhs.Format);
 			Log               = new Log.Settings.LogSettings(rhs.Log);
 
@@ -189,6 +192,23 @@ namespace YAT.Settings.Terminal
 				{
 					var oldNode = this.autoResponse;
 					this.autoResponse = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("AutoAction")]
+		public virtual Model.Settings.AutoActionSettings AutoAction
+		{
+			get { return (this.autoAction); }
+			set
+			{
+				if (this.autoAction != value)
+				{
+					var oldNode = this.autoAction;
+					this.autoAction = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
 
 					AttachOrReplaceOrDetachNode(oldNode, value);
 				}

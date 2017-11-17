@@ -433,6 +433,8 @@
     <None Include="Resources\Tool\Image_Tool_autoresponders_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_email_delete_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_font_add_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_comments_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_comments_delete_16x16.png" />
     <Content Include="Resources\Tool\Image_Tool_font_delete_16x16.png" />
     <Content Include="Resources\Tool\Image_Tool_table_rows_insert_above_word_16x16.png" />
     <Content Include="Resources\Tool\Image_Tool_table_rows_insert_below_word_16x16.png" />

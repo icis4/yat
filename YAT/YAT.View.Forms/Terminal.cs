@@ -160,6 +160,12 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public event EventHandler<Model.SavedEventArgs> Saved;
 
+		/// <summary></summary>
+		public event EventHandler<EventArgs<int>> AutoResponseCountChanged;
+
+		/// <summary></summary>
+		public event EventHandler<EventArgs<int>> AutoActionCountChanged;
+
 		#endregion
 
 		#region Object Lifetime
@@ -477,22 +483,25 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				// Start/stop:
+				bool monitorIsDefined = (this.lastMonitorSelection != Domain.RepositoryType.None);
+				bool editIsNotActive = (!send.EditIsActive); // Required to suppress standard key short cuts while editing.
+
 				if (TerminalIsAvailable)
 				{
 					toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = !this.terminal.IsStarted;
 					toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled  =  this.terminal.IsStarted;
+
 					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled =  this.terminal.IsBusy;
+					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled =  (monitorIsDefined && editIsNotActive);
 				}
 				else
 				{
 					toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = false;
 					toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled  = false;
-					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled = false;
-				}
 
-				bool monitorIsDefined = (this.lastMonitorSelection != Domain.RepositoryType.None);
-				bool editIsNotActive = (!send.EditIsActive);
+					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled = false;
+					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled = false;
+				}
 
 				toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Enabled       = (monitorIsDefined && editIsNotActive);
 				toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Enabled      = (monitorIsDefined && editIsNotActive);
@@ -501,9 +510,9 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Enabled      =  monitorIsDefined;
 				toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled           =  monitorIsDefined;
 
-				toolStripMenuItem_TerminalMenu_Terminal_Find        .Enabled = monitorIsDefined;
-				toolStripMenuItem_TerminalMenu_Terminal_FindNext    .Enabled = monitorIsDefined && RequestWhetherFindIsReady();
-				toolStripMenuItem_TerminalMenu_Terminal_FindPrevious.Enabled = monitorIsDefined && RequestWhetherFindIsReady();
+				toolStripMenuItem_TerminalMenu_Terminal_Find        .Enabled =  monitorIsDefined;
+				toolStripMenuItem_TerminalMenu_Terminal_FindNext    .Enabled = (monitorIsDefined && FindIsReady);
+				toolStripMenuItem_TerminalMenu_Terminal_FindPrevious.Enabled = (monitorIsDefined && FindIsReady);
 			}
 			finally
 			{
@@ -573,12 +582,12 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_FindNext_Click(object sender, EventArgs e)
 		{
-			RequestFindNext();
+			FindNext();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_FindPrevious_Click(object sender, EventArgs e)
 		{
-			RequestFindPrevious();
+			FindPrevious();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Settings_Click(object sender, EventArgs e)
@@ -650,19 +659,20 @@ namespace YAT.View.Forms
 
 				// Attention:
 				// Similar code exists in the following location:
+				//  > toolStripMenuItem_TerminalMenu_Receive_SetMenuItems()
 				//  > View.Forms.Main.toolStripButton_MainTool_SetControls()
 				// Changes here may have to be applied there too.
 
 				if (!this.terminalMenuValidationWorkaround_UpdateIsSuspended)
 				{
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.Clear();
-					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoResponseTriggerItems());
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoTriggerItems());
 
 					AutoTriggerEx trigger = this.settingsRoot.AutoResponse.Trigger;
 					SelectionHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
 
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Clear();
-					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.GetValidAutoResponseResponseItems());
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.GetValidAutoResponseItems());
 
 					AutoResponseEx response = this.settingsRoot.AutoResponse.Response;
 					SelectionHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
@@ -823,6 +833,119 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.AutoResponse.Deactivate();
+		}
+
+		#endregion
+
+		#region Controls Event Handlers > Terminal Menu > Receive
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Terminal Menu > Receive
+		//------------------------------------------------------------------------------------------
+
+		/// <remarks>
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void toolStripMenuItem_TerminalMenu_Receive_SetMenuItems()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction.Checked          = this.settingsRoot.AutoAction.IsActive;
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.Checked  = this.settingsRoot.AutoAction.TriggerIsActive;
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action.Checked = this.settingsRoot.AutoAction.ActionIsActive;
+
+				// Attention:
+				// Similar code exists in the following location:
+				//  > toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
+				//  > View.Forms.Main.toolStripButton_MainTool_SetControls()
+				// Changes here may have to be applied there too.
+
+				if (!this.terminalMenuValidationWorkaround_UpdateIsSuspended)
+				{
+					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.Clear();
+					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoTriggerItems());
+
+					AutoTriggerEx trigger = this.settingsRoot.AutoAction.Trigger;
+					SelectionHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
+
+					toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.Clear();
+					toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.AddRange(this.settingsRoot.GetValidAutoActionItems());
+
+					AutoActionEx response = this.settingsRoot.AutoAction.Action;
+					SelectionHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Action, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
+				}
+
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Enabled = this.settingsRoot.AutoAction.IsActive;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Receive_DropDownOpening(object sender, EventArgs e)
+		{
+			toolStripMenuItem_TerminalMenu_Receive_SetMenuItems();
+		}
+
+		private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			var trigger = (toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedItem as AutoTriggerEx);
+			if (trigger != null)
+				this.settingsRoot.AutoAction.Trigger = trigger;
+		}
+
+		/// <remarks>
+		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event way too late,
+		/// only when the hosting control (i.e. the whole tool bar) is being validated.
+		/// </remarks>
+		private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_TextChanged(object sender, EventArgs e)
+		{
+			// Attention, 'isSettingControls' must only be checked further below!
+
+			if (toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedIndex == ControlEx.InvalidIndex)
+			{
+				string triggerText = toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Text;
+				int invalidTextStart;
+				if (Utilities.ValidationHelper.ValidateText(this, "automatic action trigger", triggerText, out invalidTextStart))
+				{
+					if (!this.isSettingControls)
+					{
+						this.terminalMenuValidationWorkaround_UpdateIsSuspended = true;
+						try
+						{
+							this.settingsRoot.AutoAction.Trigger = triggerText;
+						}
+						finally
+						{
+							this.terminalMenuValidationWorkaround_UpdateIsSuspended = false;
+						}
+					}
+				}
+				else
+				{
+					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Text = triggerText.Remove(invalidTextStart);
+				}
+			}
+		}
+
+		private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Action_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			var action = (toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.SelectedItem as AutoActionEx);
+			if (action != null)
+				this.settingsRoot.AutoAction.Action = action;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.AutoAction.Deactivate();
 		}
 
 		#endregion
@@ -1316,9 +1439,9 @@ namespace YAT.View.Forms
 				toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Enabled = isMonitor;
 				toolStripMenuItem_MonitorContextMenu_Print.Enabled           = isMonitor;
 
-				toolStripMenuItem_MonitorContextMenu_Find        .Enabled      = isMonitor;
-				toolStripMenuItem_MonitorContextMenu_FindNext    .Enabled      = isMonitor && RequestWhetherFindIsReady();
-				toolStripMenuItem_MonitorContextMenu_FindPrevious.Enabled      = isMonitor && RequestWhetherFindIsReady();
+				toolStripMenuItem_MonitorContextMenu_Find        .Enabled =  isMonitor;
+				toolStripMenuItem_MonitorContextMenu_FindNext    .Enabled = (isMonitor && FindIsReady);
+				toolStripMenuItem_MonitorContextMenu_FindPrevious.Enabled = (isMonitor && FindIsReady);
 			}
 			finally
 			{
@@ -1579,7 +1702,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			RequestFindNext();
+			FindNext();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_FindPrevious_Click(object sender, EventArgs e)
@@ -1587,7 +1710,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			RequestFindPrevious();
+			FindPrevious();
 		}
 
 		#endregion
@@ -2881,9 +3004,47 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		public virtual void RequestAutoResponseResetCount()
+		{
+			if (this.terminal != null)
+				this.terminal.ResetAutoResponseCount();
+		}
+
+		/// <summary></summary>
 		public virtual void RequestAutoResponseDeactivate()
 		{
 			this.settingsRoot.AutoResponse.Deactivate();
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoActionVisible(bool visible)
+		{
+			this.settingsRoot.AutoAction.Visible = visible;
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoActionTrigger(AutoTriggerEx trigger)
+		{
+			this.settingsRoot.AutoAction.Trigger = trigger;
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoActionAction(AutoActionEx response)
+		{
+			this.settingsRoot.AutoAction.Action = response;
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoActionResetCount()
+		{
+			if (this.terminal != null)
+				this.terminal.ResetAutoActionCount();
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoActionDeactivate()
+		{
+			this.settingsRoot.AutoAction.Deactivate();
 		}
 
 		/// <summary></summary>
@@ -2927,31 +3088,55 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		protected virtual bool RequestWhetherFindIsReady()
+		protected virtual bool FindIsReady
 		{
-			var main = (this.mdiParent as Main);
-			if (main != null)
-				return (main.FindIsReady);
-			else
-				return (false);
+			get
+			{
+				var main = (this.mdiParent as Main);
+				if (main != null)
+					return (main.FindIsReady);
+				else
+					return (false);
+			}
 		}
 
 		/// <summary></summary>
-		public virtual void RequestFind(string text)
+		public virtual void Find(string pattern)
 		{
-			//FindNext(GetMonitor(this.lastMonitorSelection));
+			var monitor = GetMonitor(this.lastMonitorSelection);
+
+			if (!monitor.TryFind(pattern))
+				ShowNotFoundMessage(pattern);
 		}
 
 		/// <summary></summary>
-		public virtual void RequestFindNext()
+		public virtual void FindNext()
 		{
-			//FindNext(GetMonitor(this.lastMonitorSelection));
+			var monitor = GetMonitor(this.lastMonitorSelection);
+
+			if (!monitor.TryFindNext())
+				ShowNotFoundMessage(monitor.FindPattern);
 		}
 
 		/// <summary></summary>
-		public virtual void RequestFindPrevious()
+		public virtual void FindPrevious()
 		{
-			//FindNext(GetMonitor(this.lastMonitorSelection));
+			var monitor = GetMonitor(this.lastMonitorSelection);
+
+			if (!monitor.TryFindPrevious())
+				ShowNotFoundMessage(monitor.FindPattern);
+		}
+
+		private void ShowNotFoundMessage(string pattern)
+		{
+			MessageBoxEx.Show
+			(
+				this,
+				string.Format(@"The specified pattern ""{0}"" has not been found.", pattern),
+				"Not Found",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information
+			);
 		}
 
 		/// <summary></summary>
@@ -4079,31 +4264,34 @@ namespace YAT.View.Forms
 		{
 			if (this.terminal != null)
 			{
-				this.terminal.IOChanged               += terminal_IOChanged;
-				this.terminal.IOControlChanged        += terminal_IOControlChanged;
-				this.terminal.IOConnectTimeChanged    += terminal_IOConnectTimeChanged;
-			////this.terminal.IOCountChanged_Promptly += terminal_IOCountChanged_Promptly; // See further below for reason.
-			////this.terminal.IORateChanged_Promptly  += terminal_IORateChanged_Promptly;  // See further below for reason.
-				this.terminal.IORateChanged_Decimated += terminal_IORateChanged_Decimated;
-				this.terminal.IOError                 += terminal_IOError;
+				this.terminal.IOChanged                += terminal_IOChanged;
+				this.terminal.IOControlChanged         += terminal_IOControlChanged;
+				this.terminal.IOConnectTimeChanged     += terminal_IOConnectTimeChanged;
+			////this.terminal.IOCountChanged_Promptly  += terminal_IOCountChanged_Promptly; // See further below for reason.
+			////this.terminal.IORateChanged_Promptly   += terminal_IORateChanged_Promptly;  // See further below for reason.
+				this.terminal.IORateChanged_Decimated  += terminal_IORateChanged_Decimated;
+				this.terminal.IOError                  += terminal_IOError;
 
-				this.terminal.DisplayElementsSent     += terminal_DisplayElementsSent;
-				this.terminal.DisplayElementsReceived += terminal_DisplayElementsReceived;
-				this.terminal.DisplayLinesSent        += terminal_DisplayLinesSent;
-				this.terminal.DisplayLinesReceived    += terminal_DisplayLinesReceived;
+				this.terminal.DisplayElementsSent      += terminal_DisplayElementsSent;
+				this.terminal.DisplayElementsReceived  += terminal_DisplayElementsReceived;
+				this.terminal.DisplayLinesSent         += terminal_DisplayLinesSent;
+				this.terminal.DisplayLinesReceived     += terminal_DisplayLinesReceived;
 
-				this.terminal.RepositoryCleared       += terminal_RepositoryCleared;
-				this.terminal.RepositoryReloaded      += terminal_RepositoryReloaded;
+				this.terminal.RepositoryCleared        += terminal_RepositoryCleared;
+				this.terminal.RepositoryReloaded       += terminal_RepositoryReloaded;
 
-				this.terminal.FixedStatusTextRequest  += terminal_FixedStatusTextRequest;
-				this.terminal.TimedStatusTextRequest  += terminal_TimedStatusTextRequest;
-				this.terminal.ResetStatusTextRequest  += terminal_ResetStatusTextRequest;
-				this.terminal.MessageInputRequest     += terminal_MessageInputRequest;
-				this.terminal.SaveAsFileDialogRequest += terminal_SaveAsFileDialogRequest;
-				this.terminal.CursorRequest           += terminal_CursorRequest;
+				this.terminal.AutoResponseCountChanged += terminal_AutoResponseCountChanged;
+				this.terminal.AutoActionCountChanged   += terminal_AutoActionCountChanged;
 
-				this.terminal.Saved                   += terminal_Saved;
-				this.terminal.Closed                  += terminal_Closed;
+				this.terminal.FixedStatusTextRequest   += terminal_FixedStatusTextRequest;
+				this.terminal.TimedStatusTextRequest   += terminal_TimedStatusTextRequest;
+				this.terminal.ResetStatusTextRequest   += terminal_ResetStatusTextRequest;
+				this.terminal.MessageInputRequest      += terminal_MessageInputRequest;
+				this.terminal.SaveAsFileDialogRequest  += terminal_SaveAsFileDialogRequest;
+				this.terminal.CursorRequest            += terminal_CursorRequest;
+
+				this.terminal.Saved                    += terminal_Saved;
+				this.terminal.Closed                   += terminal_Closed;
 			}
 		}
 
@@ -4126,6 +4314,9 @@ namespace YAT.View.Forms
 
 				this.terminal.RepositoryCleared       -= terminal_RepositoryCleared;
 				this.terminal.RepositoryReloaded      -= terminal_RepositoryReloaded;
+
+				this.terminal.AutoResponseCountChanged -= terminal_AutoResponseCountChanged;
+				this.terminal.AutoActionCountChanged   -= terminal_AutoActionCountChanged;
 
 				this.terminal.FixedStatusTextRequest  -= terminal_FixedStatusTextRequest;
 				this.terminal.TimedStatusTextRequest  -= terminal_TimedStatusTextRequest;
@@ -4402,6 +4593,24 @@ namespace YAT.View.Forms
 				case Domain.RepositoryType.Bidir: monitor_Bidir.AddLines(this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Bidir)); break;
 				case Domain.RepositoryType.Rx:    monitor_Rx   .AddLines(this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Rx));    break;
 			}
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		private void terminal_AutoResponseCountChanged(object sender, EventArgs<int> e)
+		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			OnAutoResponseCountChanged(e);
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		private void terminal_AutoActionCountChanged(object sender, EventArgs<int> e)
+		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			OnAutoActionCountChanged(e);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
@@ -5152,6 +5361,18 @@ namespace YAT.View.Forms
 		protected virtual void OnTerminalSaved(Model.SavedEventArgs e)
 		{
 			EventHelper.RaiseSync<Model.SavedEventArgs>(Saved, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnAutoResponseCountChanged(EventArgs<int> e)
+		{
+			EventHelper.RaiseSync<EventArgs<int>>(AutoResponseCountChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnAutoActionCountChanged(EventArgs<int> e)
+		{
+			EventHelper.RaiseSync<EventArgs<int>>(AutoActionCountChanged, this, e);
 		}
 
 		#endregion

@@ -1267,6 +1267,8 @@ namespace YAT.Model
 			{
 				this.workspace.Saved  += workspace_Saved;
 				this.workspace.Closed += workspace_Closed;
+
+				this.workspace.ExitRequest += workspace_ExitRequest;
 			}
 		}
 
@@ -1276,6 +1278,8 @@ namespace YAT.Model
 			{
 				this.workspace.Saved  -= workspace_Saved;
 				this.workspace.Closed -= workspace_Closed;
+
+				this.workspace.ExitRequest -= workspace_ExitRequest;
 			}
 		}
 
@@ -1308,6 +1312,11 @@ namespace YAT.Model
 			DetachWorkspaceEventHandlers();
 			this.workspace = null; // Simply de-reference the workspace, it disposes of itself.
 			OnWorkspaceClosed(e);
+		}
+
+		private void workspace_ExitRequest(object sender, EventArgs e)
+		{
+			Exit();
 		}
 
 		#endregion

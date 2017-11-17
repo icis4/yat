@@ -351,6 +351,14 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
+		public virtual Model.Settings.AutoActionSettings AutoAction
+		{
+			get { return (this.explicit_.AutoAction); }
+			set { this.explicit_.AutoAction = value;  }
+		}
+
+		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
+		[XmlIgnore]
 		public virtual Model.Settings.FormatSettings Format
 		{
 			get { return (this.explicit_.Format); }
@@ -423,7 +431,7 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// The currently valid response items usable for automatic response.
 		/// </summary>
-		public Model.Types.AutoTriggerEx[] GetValidAutoResponseTriggerItems()
+		public Model.Types.AutoTriggerEx[] GetValidAutoTriggerItems()
 		{
 			Model.Types.AutoTriggerEx[] triggers = Model.Types.AutoTriggerEx.GetAllItems();
 			List<Model.Types.AutoTriggerEx> a = new List<Model.Types.AutoTriggerEx>(triggers.Length); // Preset the required capacity to improve memory management.
@@ -482,10 +490,10 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// The currently valid response items usable for automatic response.
 		/// </summary>
-		public Model.Types.AutoResponseEx[] GetValidAutoResponseResponseItems()
+		public Model.Types.AutoResponseEx[] GetValidAutoResponseItems()
 		{
-			Model.Types.AutoResponseEx[] responses = Model.Types.AutoResponseEx.GetAllItems();
-			List<Model.Types.AutoResponseEx> a = new List<Model.Types.AutoResponseEx>(responses.Length); // Preset the required capacity to improve memory management.
+			var responses = Model.Types.AutoResponseEx.GetAllItems();
+			var l = new List<Model.Types.AutoResponseEx>(responses.Length); // Preset the required capacity to improve memory management.
 
 			foreach (Model.Types.AutoResponseEx response in responses)
 			{
@@ -495,7 +503,7 @@ namespace YAT.Settings.Terminal
 					{
 						Model.Types.Command c = SendText.Command;
 						if ((c != null) && (c.IsValid))
-							a.Add(response);
+							l.Add(response);
 
 						break;
 					}
@@ -504,7 +512,7 @@ namespace YAT.Settings.Terminal
 					{
 						Model.Types.Command c = SendFile.Command;
 						if ((c != null) && (c.IsValid))
-							a.Add(response);
+							l.Add(response);
 
 						break;
 					}
@@ -528,7 +536,7 @@ namespace YAT.Settings.Terminal
 						{
 							Model.Types.Command c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
 							if ((c != null) && (c.IsValid))
-								a.Add(response);
+								l.Add(response);
 						}
 
 						break;
@@ -538,7 +546,7 @@ namespace YAT.Settings.Terminal
 					{
 						Model.Types.Command c = new Model.Types.Command(AutoResponse.Response); // No explicit default radix available (yet).
 						if (c.IsValid)
-							a.Add(response);
+							l.Add(response);
 
 						break;
 					}
@@ -547,13 +555,21 @@ namespace YAT.Settings.Terminal
 					case Model.Types.AutoResponse.Trigger:
 					default:
 					{
-						a.Add(response); // Always add these fixed responses.
+						l.Add(response); // Always add these fixed responses.
 						break;
 					}
 				}
 			}
 
-			return (a.ToArray());
+			return (l.ToArray());
+		}
+
+		/// <summary>
+		/// The currently valid response items usable for automatic action.
+		/// </summary>
+		public Model.Types.AutoActionEx[] GetValidAutoActionItems()
+		{
+			return (Model.Types.AutoActionEx.GetItems()); // No restrictions (so far).
 		}
 
 		/// <summary>
@@ -564,57 +580,80 @@ namespace YAT.Settings.Terminal
 		{
 			get
 			{
-				Model.Types.Command response = null;
-
 				if (this.AutoResponse.TriggerIsActive)
+					return (GetActiveAutoTrigger(this.AutoResponse.Trigger));
+
+				return (null);
+			}
+		}
+
+		/// <summary>
+		/// The currently active response used for automatic action.
+		/// </summary>
+		[XmlIgnore]
+		public virtual Model.Types.Command ActiveAutoActionTrigger
+		{
+			get
+			{
+				if (this.AutoAction.TriggerIsActive)
+					return (GetActiveAutoTrigger(this.AutoAction.Trigger));
+
+				return (null);
+			}
+		}
+
+		/// <summary>
+		/// Gets the active automatic trigger.
+		/// </summary>
+		protected virtual Model.Types.Command GetActiveAutoTrigger(Model.Types.AutoTriggerEx trigger)
+		{
+			Model.Types.Command response = null;
+
+			switch ((Model.Types.AutoTrigger)trigger)
+			{
+				case Model.Types.AutoTrigger.PredefinedCommand1:
+				case Model.Types.AutoTrigger.PredefinedCommand2:
+				case Model.Types.AutoTrigger.PredefinedCommand3:
+				case Model.Types.AutoTrigger.PredefinedCommand4:
+				case Model.Types.AutoTrigger.PredefinedCommand5:
+				case Model.Types.AutoTrigger.PredefinedCommand6:
+				case Model.Types.AutoTrigger.PredefinedCommand7:
+				case Model.Types.AutoTrigger.PredefinedCommand8:
+				case Model.Types.AutoTrigger.PredefinedCommand9:
+				case Model.Types.AutoTrigger.PredefinedCommand10:
+				case Model.Types.AutoTrigger.PredefinedCommand11:
+				case Model.Types.AutoTrigger.PredefinedCommand12:
 				{
-					switch ((Model.Types.AutoTrigger)this.AutoResponse.Trigger)
+					int pageId = Predefined.SelectedPage;
+					int commandId = trigger.ToPredefinedCommandId();
+					if (commandId != Model.Types.AutoTriggerEx.InvalidPredefinedCommandId)
 					{
-						case Model.Types.AutoTrigger.PredefinedCommand1:
-						case Model.Types.AutoTrigger.PredefinedCommand2:
-						case Model.Types.AutoTrigger.PredefinedCommand3:
-						case Model.Types.AutoTrigger.PredefinedCommand4:
-						case Model.Types.AutoTrigger.PredefinedCommand5:
-						case Model.Types.AutoTrigger.PredefinedCommand6:
-						case Model.Types.AutoTrigger.PredefinedCommand7:
-						case Model.Types.AutoTrigger.PredefinedCommand8:
-						case Model.Types.AutoTrigger.PredefinedCommand9:
-						case Model.Types.AutoTrigger.PredefinedCommand10:
-						case Model.Types.AutoTrigger.PredefinedCommand11:
-						case Model.Types.AutoTrigger.PredefinedCommand12:
-						{
-							int pageId = Predefined.SelectedPage;
-							int commandId = AutoResponse.Trigger.ToPredefinedCommandId();
-							if (commandId != Model.Types.AutoTriggerEx.InvalidPredefinedCommandId)
-							{
-								Model.Types.Command c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
-								if ((c != null) && (c.IsValid))
-									response = c;
-							}
-
-							break;
-						}
-
-						case Model.Types.AutoTrigger.Explicit:
-						{
-							Model.Types.Command c = new Model.Types.Command(AutoResponse.Trigger); // No explicit default radix available (yet).
-							if (c.IsValid)
-								response = c;
-
-							break;
-						}
-
-						case Model.Types.AutoTrigger.AnyLine:
-						case Model.Types.AutoTrigger.None:
-						default:
-						{
-							break;
-						}
+						Model.Types.Command c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
+						if ((c != null) && (c.IsValid))
+							response = c;
 					}
+
+					break;
 				}
 
-				return (response);
+				case Model.Types.AutoTrigger.Explicit:
+				{
+					Model.Types.Command c = new Model.Types.Command(trigger); // No explicit default radix available (yet).
+					if (c.IsValid)
+						response = c;
+
+					break;
+				}
+
+				case Model.Types.AutoTrigger.AnyLine:
+				case Model.Types.AutoTrigger.None:
+				default:
+				{
+					break;
+				}
 			}
+
+			return (response);
 		}
 
 		#endregion
