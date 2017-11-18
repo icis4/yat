@@ -29,14 +29,13 @@ using System.Windows.Forms;
 namespace MKY.Windows.Forms
 {
 	/// <summary>
-	/// An improved <see cref="TextBox"/> that additionally provides:
+	/// An improved <see cref="ToolStripComboBox"/> that additionally provides:
 	/// <list type="bullet">
 	/// <item><description>The [Ctrl+Backspace] shortcut.</description></item>
-	/// <item><description>The [Ctrl+A] shortcut also if <see cref="TextBox.Multiline"/> is <c>true</c>.</description></item>
 	/// </list>
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
-	public class TextBoxEx : TextBox
+	public class ToolStripComboBoxEx : ToolStripComboBox
 	{
 		/// <remarks>
 		/// Based on https://stackoverflow.com/questions/1124639/winforms-textbox-using-ctrl-backspace-to-delete-whole-word.
@@ -59,46 +58,35 @@ namespace MKY.Windows.Forms
 		{
 			// Attention:
 			// Similar code exists in ComboBoxEx.ProcessCmdKey().
-			// Similar code exists in ToolStripComboBoxEx.ProcessCmdKey().
+			// Similar code exists in TextBoxEx.ProcessCmdKey().
 			// Changes here may have to be applied there too.
 
-			if (ShortcutsEnabled)
+			if (keyData == (Keys.Control | Keys.Back))
 			{
-				if (keyData == (Keys.Control | Keys.Back))
+				if (DropDownStyle != ComboBoxStyle.DropDownList)
 				{
-					if (!ReadOnly)
+					if (SelectionStart > 0)
 					{
-						if (SelectionStart > 0)
-						{
-							int i = (SelectionStart - 1);
+						int i = (SelectionStart - 1);
 
-							// Potentially trim white space:
-							if (char.IsWhiteSpace(Text, i))
-								i = (StringEx.StartIndexOfSameCharacterClass(Text, i) - 1);
+						// Potentially trim white space:
+						if (char.IsWhiteSpace(Text, i))
+							i = (StringEx.StartIndexOfSameCharacterClass(Text, i) - 1);
 
-							// Find previous marker:
-							if (i > 0)
-								i = StringEx.StartIndexOfSameCharacterClass(Text, i);
-							else
-								i = 0; // Limit i as it may become -1 on trimming above.
-
-							// Remove until previous marker or the beginning:
-							Text = Text.Remove(i, SelectionStart - i);
-							SelectionStart = i;
-							return (true);
-						}
+						// Find previous marker:
+						if (i > 0)
+							i = StringEx.StartIndexOfSameCharacterClass(Text, i);
 						else
-						{
-							return (true); // Ignore to prevent a white box being placed.
-						}
-					}
-				}
-				else if (keyData == (Keys.Control | Keys.A))
-				{
-					if (!ReadOnly && Multiline)
-					{
-						SelectAll();
+							i = 0; // Limit i as it may become -1 on trimming above.
+
+						// Remove until previous marker or the beginning:
+						Text = Text.Remove(i, SelectionStart - i);
+						SelectionStart = i;
 						return (true);
+					}
+					else
+					{
+						return (true); // Ignore to prevent a white box being placed.
 					}
 				}
 			}

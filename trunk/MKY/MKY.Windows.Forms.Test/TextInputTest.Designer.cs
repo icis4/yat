@@ -30,10 +30,10 @@
 		{
 			this.textBox = new System.Windows.Forms.TextBox();
 			this.comboBox = new System.Windows.Forms.ComboBox();
-			this.textBoxEx1 = new MKY.Windows.Forms.TextBoxEx();
-			this.comboBoxEx1 = new MKY.Windows.Forms.ComboBoxEx();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
+			this.textBoxEx = new MKY.Windows.Forms.TextBoxEx();
+			this.comboBoxEx = new MKY.Windows.Forms.ComboBoxEx();
+			this.label_Standard = new System.Windows.Forms.Label();
+			this.label_Extended = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// textBox
@@ -57,54 +57,54 @@
 			this.comboBox.TabIndex = 2;
 			this.comboBox.Text = "Some text";
 			// 
-			// textBoxEx1
+			// textBoxEx
 			// 
-			this.textBoxEx1.Location = new System.Drawing.Point(196, 39);
-			this.textBoxEx1.Name = "textBoxEx1";
-			this.textBoxEx1.Size = new System.Drawing.Size(100, 20);
-			this.textBoxEx1.TabIndex = 4;
-			this.textBoxEx1.Text = "Some text";
+			this.textBoxEx.Location = new System.Drawing.Point(196, 39);
+			this.textBoxEx.Name = "textBoxEx";
+			this.textBoxEx.Size = new System.Drawing.Size(100, 20);
+			this.textBoxEx.TabIndex = 4;
+			this.textBoxEx.Text = "Some text";
 			// 
-			// comboBoxEx1
+			// comboBoxEx
 			// 
-			this.comboBoxEx1.FormattingEnabled = true;
-			this.comboBoxEx1.Items.AddRange(new object[] {
+			this.comboBoxEx.FormattingEnabled = true;
+			this.comboBoxEx.Items.AddRange(new object[] {
             "Some item 1",
             "Some item 2",
             "Some item 3"});
-			this.comboBoxEx1.Location = new System.Drawing.Point(302, 39);
-			this.comboBoxEx1.Name = "comboBoxEx1";
-			this.comboBoxEx1.Size = new System.Drawing.Size(121, 21);
-			this.comboBoxEx1.TabIndex = 5;
-			this.comboBoxEx1.Text = "Some text";
+			this.comboBoxEx.Location = new System.Drawing.Point(302, 39);
+			this.comboBoxEx.Name = "comboBoxEx";
+			this.comboBoxEx.Size = new System.Drawing.Size(121, 21);
+			this.comboBoxEx.TabIndex = 5;
+			this.comboBoxEx.Text = "Some text";
 			// 
-			// label1
+			// label_Standard
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(12, 15);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(174, 13);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "Standard (System.Windows.Forms):";
+			this.label_Standard.AutoSize = true;
+			this.label_Standard.Location = new System.Drawing.Point(12, 15);
+			this.label_Standard.Name = "label_Standard";
+			this.label_Standard.Size = new System.Drawing.Size(174, 13);
+			this.label_Standard.TabIndex = 0;
+			this.label_Standard.Text = "Standard (System.Windows.Forms):";
 			// 
-			// label2
+			// label_Extended
 			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(12, 42);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(165, 13);
-			this.label2.TabIndex = 3;
-			this.label2.Text = "Extended (MKY.Windows.Forms):";
+			this.label_Extended.AutoSize = true;
+			this.label_Extended.Location = new System.Drawing.Point(12, 42);
+			this.label_Extended.Name = "label_Extended";
+			this.label_Extended.Size = new System.Drawing.Size(165, 13);
+			this.label_Extended.TabIndex = 3;
+			this.label_Extended.Text = "Extended (MKY.Windows.Forms):";
 			// 
 			// TextInputTest
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(436, 71);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.comboBoxEx1);
-			this.Controls.Add(this.textBoxEx1);
+			this.Controls.Add(this.label_Extended);
+			this.Controls.Add(this.label_Standard);
+			this.Controls.Add(this.comboBoxEx);
+			this.Controls.Add(this.textBoxEx);
 			this.Controls.Add(this.comboBox);
 			this.Controls.Add(this.textBox);
 			this.Name = "TextInputTest";
@@ -118,9 +118,9 @@
 
 		private System.Windows.Forms.TextBox textBox;
 		private System.Windows.Forms.ComboBox comboBox;
-		private TextBoxEx textBoxEx1;
-		private ComboBoxEx comboBoxEx1;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Label label2;
+		private TextBoxEx textBoxEx;
+		private ComboBoxEx comboBoxEx;
+		private System.Windows.Forms.Label label_Standard;
+		private System.Windows.Forms.Label label_Extended;
 	}
 }

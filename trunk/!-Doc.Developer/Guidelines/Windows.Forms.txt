@@ -12,6 +12,7 @@ By default, Ctrl+A is not activated in...
 To activate, use...
  ...MKY.Windows.Forms.TextBoxEx
  ...MKY.Windows.Forms.ComboBoxEx
+ ...MKY.Windows.Forms.ToolStripComboBoxEx
 
 
 Allow proper system scaling for values other than 100%
