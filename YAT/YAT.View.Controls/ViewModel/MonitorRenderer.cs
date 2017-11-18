@@ -101,36 +101,38 @@ namespace YAT.View.Controls
 			if (string.IsNullOrEmpty(s) || s.Length <= 1)
 				s = "88"; // Always measure at least two digits. Otherwise, the line number bar will already jump at 9 > 10.
 
-			Size requestedSize = TextRenderer.MeasureText(graphics, s, font, bounds.Size, staticLineNumberFormat);
+			var requestedSize = TextRenderer.MeasureText(graphics, s, font, bounds.Size, staticLineNumberFormat);
 			requestedWidth = requestedSize.Width;
 		}
 
 		private static void SetLineNumberDrawingObjects(Model.Settings.FormatSettings settings, out Font font)
 		{
-			string    fontName  = settings.Font.Name;
-			float     fontSize  = settings.Font.Size;
-			FontStyle fontStyle = FontStyle.Regular;
+			var fontName  = settings.Font.Name;
+			var fontSize  = settings.Font.Size;
+			var fontStyle = FontStyle.Regular;
 			font = CacheAndAssignIfChanged(ref staticLineNumberFont, fontName, fontSize, fontStyle);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// This overload is used if formatting is disabled.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static void DrawAndMeasureLine(string text, Font font,
+		public static void DrawAndMeasureLine(string text, bool highlight, Font font,
 		                                      Graphics g, Rectangle bounds, DrawItemState state,
 		                                      Color foreColor, Color backColor,
 		                                      out int requestedWidth)
 		{
-			if ((state & DrawItemState.Selected) != 0) // Selected.
-				foreColor = SystemColors.HighlightText;
+			HandleSelectionAndHighlight(state, highlight, ref foreColor, ref backColor);
 
 			TextRenderer.DrawText(g, text, font, bounds, foreColor, backColor, staticMonitorFormat);
 
-			Size requestedSize = TextRenderer.MeasureText(g, text, font, bounds.Size, staticMonitorFormat);
-
+			var requestedSize = TextRenderer.MeasureText(g, text, font, bounds.Size, staticMonitorFormat);
 			requestedWidth = requestedSize.Width;
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// This overload is used if formatting is enabled.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static void DrawAndMeasureLine(Domain.DisplayLine line, Model.Settings.FormatSettings settings,
 		                                      IDeviceContext dc, Rectangle bounds, DrawItemState state,
@@ -146,31 +148,33 @@ namespace YAT.View.Controls
 
 				DrawAndMeasureElement(de, settings, dc,
 				                      new Rectangle(bounds.X + drawnWidth, bounds.Y, bounds.Width - drawnWidth, bounds.Height),
-				                      state, out requestedElementWidth, out drawnElementWidth);
+				                      state, line.Highlight, out requestedElementWidth, out drawnElementWidth);
 
 				requestedWidth += requestedElementWidth;
 				drawnWidth     += drawnElementWidth;
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// This overload is used if formatting is enabled.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static void DrawAndMeasureElement(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
-		                                         IDeviceContext dc, Rectangle bounds, DrawItemState state,
-		                                         out int requestedWidth, out int drawnWidth)
+		private static void DrawAndMeasureElement(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
+		                                          IDeviceContext dc, Rectangle bounds, DrawItemState state, bool highlight,
+		                                          out int requestedWidth, out int drawnWidth)
 		{
 			if (!string.IsNullOrEmpty(element.Text))
 			{
 				Font  font;
 				Color foreColor;
 				Color backColor;
-				SetDrawingObjects(element, settings, state, out font, out foreColor, out backColor);
+				SetDrawingObjects(element, settings, state, highlight, out font, out foreColor, out backColor);
 
 				TextRenderer.DrawText(dc, element.Text, font, bounds, foreColor, backColor, staticMonitorFormat);
 
-				Size requestedSize = TextRenderer.MeasureText(dc, element.Text, font, new Size(int.MaxValue, bounds.Height), staticMonitorFormat);
-				Size drawnSize     = TextRenderer.MeasureText(dc, element.Text, font, bounds.Size, staticMonitorFormat);
+				var requestedSize = TextRenderer.MeasureText(dc, element.Text, font, new Size(int.MaxValue, bounds.Height), staticMonitorFormat);
+				var drawnSize     = TextRenderer.MeasureText(dc, element.Text, font, bounds.Size, staticMonitorFormat);
 
 				requestedWidth = requestedSize.Width;
 				drawnWidth     = drawnSize.Width;
@@ -182,12 +186,12 @@ namespace YAT.View.Controls
 			}
 		}
 
-		private static void SetDrawingObjects(Domain.DisplayElement element, Model.Settings.FormatSettings settings, DrawItemState state,
+		private static void SetDrawingObjects(Domain.DisplayElement element, Model.Settings.FormatSettings settings, DrawItemState state, bool highlight,
 		                                      out Font font, out Color foreColor, out Color backColor)
 		{
-			string    fontName = settings.Font.Name;
-			float     fontSize  = settings.Font.Size;
-			FontStyle fontStyle;
+			var fontName = settings.Font.Name;
+			var fontSize  = settings.Font.Size;
+			var fontStyle = FontStyle.Regular;
 
 			if      (element is Domain.DisplayElement.TxData)
 			{
@@ -230,7 +234,8 @@ namespace YAT.View.Controls
 				foreColor = settings.TimeDeltaFormat.Color;
 				fontStyle = settings.TimeDeltaFormat.FontStyle;
 				font      = CacheAndAssignIfChanged(ref staticTimeDeltaFont, fontName, fontSize, fontStyle);
-			}			else if (element is Domain.DisplayElement.PortInfo)
+			}
+			else if (element is Domain.DisplayElement.PortInfo)
 			{
 				foreColor = settings.PortFormat.Color;
 				fontStyle = settings.PortFormat.FontStyle;
@@ -269,16 +274,7 @@ namespace YAT.View.Controls
 				throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + element.GetType() + "' is a display element that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
-			// Override if the item is selected:
-			if ((state & DrawItemState.Selected) != 0)
-			{
-				foreColor = SystemColors.HighlightText;
-				backColor = SystemColors.Highlight;
-			}
-			else
-			{
-				backColor = settings.BackColor;
-			}
+			HandleSelectionAndHighlight(state, highlight, settings, ref foreColor, out backColor);
 		}
 
 		private static Font CacheAndAssignIfChanged(ref Font cachedFont, string fontName, float fontSize, FontStyle fontStyle)
@@ -298,6 +294,30 @@ namespace YAT.View.Controls
 			}
 
 			return (cachedFont);
+		}
+
+		private static void HandleSelectionAndHighlight(DrawItemState state, bool highlight, ref Color foreColor, ref Color backColor)
+		{
+			//  (               line is selected      ) || (highlight)
+			if (((state & DrawItemState.Selected) != 0) || (highlight))
+			{
+				foreColor = SystemColors.HighlightText;
+				backColor = SystemColors.Highlight;
+			}
+		}
+
+		private static void HandleSelectionAndHighlight(DrawItemState state, bool highlight, Model.Settings.FormatSettings settings, ref Color foreColor, out Color backColor)
+		{
+			//  (               line is selected      ) || (highlight)
+			if (((state & DrawItemState.Selected) != 0) || (highlight))
+			{
+				foreColor = SystemColors.HighlightText;
+				backColor = SystemColors.Highlight;
+			}
+			else
+			{
+				backColor = settings.BackColor;
+			}
 		}
 	}
 }

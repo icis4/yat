@@ -144,7 +144,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Appends and returns the text of all display elements.
 		/// </summary>
-		public string Text
+		public virtual string Text
 		{
 			get
 			{
@@ -153,6 +153,23 @@ namespace YAT.Domain
 					sb.Append(de.Text);
 
 				return (sb.ToString());
+			}
+		}
+
+		/// <summary>
+		/// Indicates whether any <see cref="DisplayElement"/> of this <see cref="DisplayElementCollection"/> is highlighted.
+		/// </summary>
+		public virtual bool Highlight
+		{
+			get
+			{
+				foreach (var de in this)
+				{
+					if (de.Highlight)
+						return (true);
+				}
+
+				return (false);
 			}
 		}
 
@@ -404,60 +421,32 @@ namespace YAT.Domain
 	[Serializable]
 	public class DisplayLine : DisplayLinePart
 	{
-		#region Fields
-		//==========================================================================================
-		// Fields
-		//==========================================================================================
-
-		private bool highlight; // = 0;
-
-		#endregion
-
 		#region Object Lifetime
 		//==========================================================================================
 		// Object Lifetime
 		//==========================================================================================
 
 		/// <summary></summary>
-		public DisplayLine(bool highlight = false)
+		public DisplayLine()
 		{
-			this.highlight = highlight;
 		}
 
 		/// <summary></summary>
-		public DisplayLine(int elementCapacity, bool highlight = false)
+		public DisplayLine(int elementCapacity)
 			: base(elementCapacity)
 		{
-			this.highlight = highlight;
 		}
 
 		/// <summary></summary>
-		public DisplayLine(DisplayElementCollection collection, bool highlight = false)
+		public DisplayLine(DisplayElementCollection collection)
 			: base(collection)
 		{
-			this.highlight = highlight;
 		}
 
 		/// <summary></summary>
-		public DisplayLine(DisplayElement displayElement, bool highlight = false)
+		public DisplayLine(DisplayElement displayElement)
 			: base(displayElement)
 		{
-			this.highlight = highlight;
-		}
-
-		#endregion
-
-		#region Properties
-		//==========================================================================================
-		// Properties
-		//==========================================================================================
-
-		/// <summary>
-		/// Gets a value indicating whether this <see cref="DisplayLine"/> is highlighted.
-		/// </summary>
-		public virtual bool Highlight
-		{
-			get { return (this.highlight); }
 		}
 
 		#endregion
@@ -472,7 +461,7 @@ namespace YAT.Domain
 		/// </summary>
 		public new DisplayLine Clone()
 		{
-			var c = new DisplayLine(Capacity, Highlight); // Preset the required capacity to improve memory management.
+			var c = new DisplayLine(Capacity); // Preset the required capacity to improve memory management.
 			CloneTo(c);
 			return (c);
 		}
