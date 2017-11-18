@@ -703,6 +703,26 @@ namespace YAT.View.Forms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Image_Tool_token_literal_text_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Tool_token_literal_text_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Image_Tool_token_match_character_literally_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Tool_token_match_character_literally_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Image_YAT_16x16 {
             get {
                 object obj = ResourceManager.GetObject("Image_YAT_16x16", resourceCulture);
