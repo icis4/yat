@@ -41,6 +41,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Collections.Specialized;
 using MKY.Contracts;
 using MKY.Diagnostics;
 using MKY.Drawing;
@@ -668,17 +669,19 @@ namespace YAT.View.Forms
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.Clear();
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoTriggerItems());
 
-					AutoTriggerEx trigger = this.settingsRoot.AutoResponse.Trigger;
+					var trigger = this.settingsRoot.AutoResponse.Trigger;
 					SelectionHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
 
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Clear();
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.GetValidAutoResponseItems());
 
-					AutoResponseEx response = this.settingsRoot.AutoResponse.Response;
+					var response = this.settingsRoot.AutoResponse.Response;
 					SelectionHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
 				}
 
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Enabled = this.settingsRoot.AutoResponse.IsActive;
+
+				// Note that 'AutoAction' is implemented in 'Receive'.
 			}
 			finally
 			{
@@ -842,6 +845,8 @@ namespace YAT.View.Forms
 		// Controls Event Handlers > Terminal Menu > Receive
 		//------------------------------------------------------------------------------------------
 
+		// Note that 'AutoResponse' is implemented in 'Send'.
+
 		/// <remarks>
 		/// Must be called each time the corresponding context state changes, because shortcuts
 		/// associated to menu items are only active when items are visible and enabled.
@@ -866,13 +871,13 @@ namespace YAT.View.Forms
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.Clear();
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoTriggerItems());
 
-					AutoTriggerEx trigger = this.settingsRoot.AutoAction.Trigger;
+					var trigger = this.settingsRoot.AutoAction.Trigger;
 					SelectionHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
 
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.Clear();
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.AddRange(this.settingsRoot.GetValidAutoActionItems());
 
-					AutoActionEx response = this.settingsRoot.AutoAction.Action;
+					var response = this.settingsRoot.AutoAction.Action;
 					SelectionHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Action, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
 				}
 
@@ -3105,10 +3110,14 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void Find(string pattern)
 		{
+			ApplicationSettings.RoamingUserSettings.Find.ActivePattern = pattern;
+			ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.Add(new RecentItem<string>(pattern));
+			ApplicationSettings.SaveRoamingUserSettings();
+
 			var monitor = GetMonitor(this.lastMonitorSelection);
 
 			if (!monitor.TryFind(pattern))
-				ShowNotFoundMessage(pattern);
+				ShowNotFoundMessage(pattern, true);
 		}
 
 		/// <summary></summary>
@@ -3117,7 +3126,7 @@ namespace YAT.View.Forms
 			var monitor = GetMonitor(this.lastMonitorSelection);
 
 			if (!monitor.TryFindNext())
-				ShowNotFoundMessage(monitor.FindPattern);
+				ShowNotFoundMessage(monitor.FindPattern, false);
 		}
 
 		/// <summary></summary>
@@ -3126,15 +3135,32 @@ namespace YAT.View.Forms
 			var monitor = GetMonitor(this.lastMonitorSelection);
 
 			if (!monitor.TryFindPrevious())
-				ShowNotFoundMessage(monitor.FindPattern);
+				ShowNotFoundMessage(monitor.FindPattern, false);
 		}
 
-		private void ShowNotFoundMessage(string pattern)
+		private void ShowNotFoundMessage(string pattern, bool isFirst)
 		{
+			var text = new StringBuilder();
+			text.Append("The specified ");
+
+			if (ApplicationSettings.RoamingUserSettings.Find.UseRegex)
+				text.Append("pattern");
+			else
+				text.Append("text");
+
+			text.Append(@" """);
+			text.Append(pattern);
+			text.Append(@""" has not been found");
+
+			if (!isFirst)
+				text.Append(" anymore");
+
+			text.Append(".");
+
 			MessageBoxEx.Show
 			(
 				this,
-				string.Format(@"The specified pattern ""{0}"" has not been found.", pattern),
+				text.ToString(),
 				"Not Found",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information
