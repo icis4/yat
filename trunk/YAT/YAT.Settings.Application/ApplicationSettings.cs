@@ -52,7 +52,7 @@ namespace YAT.Settings.Application
 		// Static Fields
 		//==========================================================================================
 
-		private static ApplicationSettingsHandler<EmptySettingsItem, LocalUserSettingsRoot, EmptySettingsItem> staticSettingsHandler;
+		private static ApplicationSettingsHandler<EmptySettingsItem, LocalUserSettingsRoot, RoamingUserSettingsRoot> staticSettingsHandler;
 
 		#endregion
 
@@ -118,6 +118,63 @@ namespace YAT.Settings.Application
 			}
 		}
 
+		/// <summary></summary>
+		public static bool RoamingUserSettingsAreAvailable
+		{
+			get
+			{
+				return (staticSettingsHandler != null);
+			}
+		}
+
+		/// <summary></summary>
+		public static RoamingUserSettingsRoot RoamingUserSettings
+		{
+			get
+			{
+				if (staticSettingsHandler != null)
+					return (staticSettingsHandler.RoamingUserSettings);
+				else
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The settings have to be created before they can be accessed, ensure to call Create() and if needed also Load() before accessing the settings!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		public static string RoamingUserSettingsFilePath
+		{
+			get
+			{
+				if (staticSettingsHandler != null)
+					return (staticSettingsHandler.RoamingUserSettingsFilePath);
+				else
+					return ("");
+			}
+		}
+
+		/// <summary></summary>
+		public static bool RoamingUserSettingsSuccessfullyLoadedFromFile
+		{
+			get
+			{
+				if (staticSettingsHandler != null)
+					return (staticSettingsHandler.RoamingUserSettingsSuccessfullyLoadedFromFile);
+				else
+					return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public static bool RoamingUserSettingsAreCurrentlyOwnedByThisInstance
+		{
+			get
+			{
+				if (staticSettingsHandler != null)
+					return (staticSettingsHandler.RoamingUserSettingsAreCurrentlyOwnedByThisInstance);
+				else
+					return (false);
+			}
+		}
+
 		#endregion
 
 		#region Static Methods
@@ -129,18 +186,18 @@ namespace YAT.Settings.Application
 		/// Create settings.
 		/// </summary>
 		/// <remarks>
-		/// So far, there are only local user settings.
+		/// So far, there are local and roaming user settings.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public static bool Create(ApplicationSettingsFileAccess localUserSettingsFileAccess)
+		public static bool Create(ApplicationSettingsFileAccess fileAccess)
 		{
 			try
 			{
-				staticSettingsHandler = new ApplicationSettingsHandler<EmptySettingsItem, LocalUserSettingsRoot, EmptySettingsItem>
+				staticSettingsHandler = new ApplicationSettingsHandler<EmptySettingsItem, LocalUserSettingsRoot, RoamingUserSettingsRoot>
 				(
 					ApplicationSettingsFileAccess.None,
-					localUserSettingsFileAccess,
-					ApplicationSettingsFileAccess.None
+					fileAccess,
+					fileAccess
 				);
 
 				return (true);
@@ -159,7 +216,7 @@ namespace YAT.Settings.Application
 		/// Load settings.
 		/// </summary>
 		/// <remarks>
-		/// So far, there are only local user settings.
+		/// So far, there are local and roaming user settings.
 		/// </remarks>
 		/// <returns>
 		/// Returns <c>true</c> if settings could be loaded from the respective file paths,
@@ -168,19 +225,42 @@ namespace YAT.Settings.Application
 		public static bool Load()
 		{
 			if (staticSettingsHandler != null)
-				return (staticSettingsHandler.LoadLocalUserSettings());
+			{
+				bool success;
+
+				success  = staticSettingsHandler.LoadLocalUserSettings();
+				success |= staticSettingsHandler.LoadRoamingUserSettings();
+
+				return (success);
+			}
 			else
+			{
 				return (false);
+			}
 		}
 
 		/// <summary>
-		/// Save settings. To improved performance, settings are only saved if they have changed.
+		/// Save settings. To improved performance, settings shall only be saved if they have changed.
 		/// </summary>
 		/// <remarks>
-		/// So far, there are only local user settings.
+		/// So far, there are local and roaming user settings.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static bool Save()
+		{
+			bool success;
+
+			success  = SaveLocalUserSettings();
+			success |= SaveRoamingUserSettings();
+
+			return (success);
+		}
+
+		/// <summary>
+		/// Save local user settings. To improved performance, settings shall only be saved if they have changed.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		public static bool SaveLocalUserSettings()
 		{
 			if (staticSettingsHandler != null)
 			{
@@ -188,6 +268,34 @@ namespace YAT.Settings.Application
 				{
 					if (staticSettingsHandler.LocalUserSettings.HaveChanged)
 						staticSettingsHandler.SaveLocalUserSettings();
+
+					return (true);
+				}
+				catch (Exception ex)
+				{
+					DebugEx.WriteException(typeof(ApplicationSettings), ex, "Exception while saving the settings!");
+
+					return (false);
+				}
+			}
+			else
+			{
+				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Save roaming user settings. To improved performance, settings shall only be saved if they have changed.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		public static bool SaveRoamingUserSettings()
+		{
+			if (staticSettingsHandler != null)
+			{
+				try
+				{
+					if (staticSettingsHandler.RoamingUserSettings.HaveChanged)
+						staticSettingsHandler.SaveRoamingUserSettings();
 
 					return (true);
 				}

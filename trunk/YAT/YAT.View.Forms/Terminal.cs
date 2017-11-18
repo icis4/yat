@@ -3844,7 +3844,7 @@ namespace YAT.View.Forms
 
 				ApplicationSettings.LocalUserSettings.Extensions.MonitorFiles = Path.GetExtension(sfd.FileName);
 				ApplicationSettings.LocalUserSettings.Paths.MonitorFiles = Path.GetDirectoryName(sfd.FileName);
-				ApplicationSettings.Save();
+				ApplicationSettings.SaveLocalUserSettings();
 
 				SaveMonitor(monitor, sfd.FileName);
 			}
@@ -4730,7 +4730,7 @@ namespace YAT.View.Forms
 				Refresh();
 
 				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(sfd.FileName);
-				ApplicationSettings.Save();
+				ApplicationSettings.SaveLocalUserSettings();
 
 				this.terminal.SaveAs(sfd.FileName);
 			}

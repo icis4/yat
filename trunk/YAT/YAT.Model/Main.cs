@@ -411,7 +411,7 @@ namespace YAT.Model
 			{
 				// Reset workspace file path:
 				ApplicationSettings.LocalUserSettings.AutoWorkspace.ResetFilePath();
-				ApplicationSettings.Save();
+				ApplicationSettings.SaveLocalUserSettings();
 
 				success = CreateNewWorkspace();
 			}
@@ -1007,10 +1007,10 @@ namespace YAT.Model
 		private void CleanupLocalUserDirectory()
 		{
 			// Get all file paths in default directory:
-			List<string> localUserDirectoryFilePaths = new List<string>();
+			var localUserDirectoryFilePaths = new List<string>();
 			try
 			{
-				DirectoryInfo localUserDirectory = Directory.GetParent(ApplicationSettings.LocalUserSettingsFilePath);
+				var localUserDirectory = Directory.GetParent(ApplicationSettings.LocalUserSettingsFilePath);
 				localUserDirectoryFilePaths.AddRange(Directory.GetFiles(localUserDirectory.FullName));
 			}
 			catch
@@ -1022,7 +1022,7 @@ namespace YAT.Model
 			localUserDirectoryFilePaths.Remove(ApplicationSettings.LocalUserSettingsFilePath);
 
 			// Get all active files:
-			List<string> activeFilePaths = new List<string>();
+			var activeFilePaths = new List<string>();
 			if (this.workspace != null)
 			{
 				// Add workspace settings file:
@@ -1142,7 +1142,7 @@ namespace YAT.Model
 		{
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
 			ApplicationSettings.LocalUserSettings.RecentFiles.SetChanged(); // Manual change required because underlying collection is modified.
-			ApplicationSettings.Save();
+			ApplicationSettings.SaveLocalUserSettings();
 		}
 
 		#endregion
@@ -1294,7 +1294,7 @@ namespace YAT.Model
 		{
 			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath  = e.FilePath;
 			ApplicationSettings.LocalUserSettings.AutoWorkspace.AutoSaved = e.IsAutoSave;
-			ApplicationSettings.Save();
+			ApplicationSettings.SaveLocalUserSettings();
 		}
 
 		/// <remarks>
@@ -1306,7 +1306,7 @@ namespace YAT.Model
 			if (!e.IsParentClose) // In case of workspace intended close, reset workspace info.
 			{
 				ApplicationSettings.LocalUserSettings.AutoWorkspace.ResetFilePath();
-				ApplicationSettings.Save();
+				ApplicationSettings.SaveLocalUserSettings();
 			}
 
 			DetachWorkspaceEventHandlers();
@@ -1466,7 +1466,7 @@ namespace YAT.Model
 			// Save auto workspace:
 			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath  = settings.SettingsFilePath;
 			ApplicationSettings.LocalUserSettings.AutoWorkspace.AutoSaved = settings.Settings.AutoSaved;
-			ApplicationSettings.Save();
+			ApplicationSettings.SaveLocalUserSettings();
 
 			// Save recent:
 			if (!settings.Settings.AutoSaved)

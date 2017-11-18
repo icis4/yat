@@ -90,8 +90,6 @@ namespace YAT.Model.Test.FileHandling
 			this.autoOpenWorkspaceToRestore = ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace;
 			this.autoSaveWorkspaceToRestore = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
 			this.workspaceFilePathToRestore = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
-
-			ApplicationSettings.Save();
 		}
 
 		/// <summary></summary>
@@ -105,7 +103,7 @@ namespace YAT.Model.Test.FileHandling
 			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath    = this.workspaceFilePathToRestore;
 
 			// Restore 'normal' file-based application settings.
-			ApplicationSettings.Save();
+			ApplicationSettings.SaveLocalUserSettings();
 			ApplicationSettings.CloseAndDispose();
 
 			Temp.CleanTempPath(GetType());
@@ -127,8 +125,7 @@ namespace YAT.Model.Test.FileHandling
 			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = true;
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = true;
 			ApplicationSettings.LocalUserSettings.AutoWorkspace.ResetFilePath();
-
-			ApplicationSettings.Save();
+			ApplicationSettings.SaveLocalUserSettings();
 
 			Temp.MakeTempPath(GetType());
 		}

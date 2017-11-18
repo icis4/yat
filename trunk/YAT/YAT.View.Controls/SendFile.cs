@@ -606,7 +606,7 @@ namespace YAT.View.Controls
 				}
 
 				ApplicationSettings.LocalUserSettings.Paths.SendFiles = Path.GetDirectoryName(ofd.FileName);
-				ApplicationSettings.Save();
+				ApplicationSettings.SaveLocalUserSettings();
 
 				ConfirmCommand(ofd.FileName);
 			}

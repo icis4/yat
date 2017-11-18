@@ -378,7 +378,7 @@ namespace YAT.View.Controls
 							result = worker.Result;
 
 						ApplicationSettings.LocalUserSettings.General.DetectSerialPortsInUse = detectPortsInUse;
-						ApplicationSettings.Save();
+						ApplicationSettings.SaveLocalUserSettings();
 					}
 					else
 					{

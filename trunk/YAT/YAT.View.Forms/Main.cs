@@ -115,9 +115,6 @@ namespace YAT.View.Forms
 		private Model.Main main;
 		private Model.Workspace workspace;
 
-		// Settings:
-		private LocalUserSettingsRoot localUserSettingsRoot;
-
 		// Toolstrip-combobox-validation-workaround (too late invocation of 'Validate' event):
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 		private bool mainToolValidationWorkaround_UpdateIsSuspended;
@@ -165,9 +162,8 @@ namespace YAT.View.Forms
 
 			Text = this.main.IndicatedName;
 
-			// Link and attach to terminal settings:
-			this.localUserSettingsRoot = ApplicationSettings.LocalUserSettings;
-			AttachLocalUserSettingsEventHandlers();
+			// Link and attach to user settings:
+			AttachUserSettingsEventHandlers();
 
 			ApplyWindowSettingsAccordingToStartup();
 
@@ -459,8 +455,7 @@ namespace YAT.View.Forms
 			DetachMainEventHandlers();
 			this.main = null;
 
-			DetachLocalUserSettingsEventHandlers();
-			this.localUserSettingsRoot = null;
+			DetachUserSettingsEventHandlers();
 		}
 
 		#endregion
@@ -1114,7 +1109,7 @@ namespace YAT.View.Forms
 				toolStripButton_MainTool_Terminal_SaveToFile.Enabled        = childIsReady;
 				toolStripButton_MainTool_Terminal_Print.Enabled             = childIsReady;
 
-				bool findVisible = this.localUserSettingsRoot.MainWindow.ShowFindField;
+				bool findVisible = ApplicationSettings.RoamingUserSettings.Find.ShowFindField;
 
 				toolStripButton_MainTool_Terminal_Find_ShowHide.Enabled = childIsReady;
 				toolStripButton_MainTool_Terminal_Find_ShowHide.Checked = findVisible;
@@ -1133,9 +1128,9 @@ namespace YAT.View.Forms
 						toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = true;
 						toolStripComboBox_MainTool_Terminal_Find_Pattern.Enabled = childIsReady;
 						toolStripComboBox_MainTool_Terminal_Find_Pattern.Items.Clear();
-						toolStripComboBox_MainTool_Terminal_Find_Pattern.Items.AddRange(this.localUserSettingsRoot.MainWindow.RecentFindPatterns.ToArray());
+						toolStripComboBox_MainTool_Terminal_Find_Pattern.Items.AddRange(ApplicationSettings.RoamingUserSettings.Find.RecentFindPatterns.ToArray());
 
-						SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_Find_Pattern, this.localUserSettingsRoot.MainWindow.ActiveFindPattern);
+						SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_Find_Pattern, ApplicationSettings.RoamingUserSettings.Find.ActiveFindPattern);
 					}
 
 					toolStripButton_MainTool_Terminal_Find_Next    .Visible = true;
@@ -1448,7 +1443,8 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Terminal_Find_ShowHide_Click(object sender, EventArgs e)
 		{
-			this.localUserSettingsRoot.MainWindow.ShowFindField = !this.localUserSettingsRoot.MainWindow.ShowFindField;
+			ApplicationSettings.RoamingUserSettings.Find.ShowFindField = !ApplicationSettings.RoamingUserSettings.Find.ShowFindField;
+			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
 		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyDown(object sender, KeyEventArgs e)
@@ -1710,7 +1706,7 @@ namespace YAT.View.Forms
 				return;
 
 			ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo = !ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo;
-			ApplicationSettings.Save();
+			ApplicationSettings.SaveLocalUserSettings();
 		}
 
 		private void toolStripMenuItem_StatusContextMenu_ShowChrono_Click(object sender, EventArgs e)
@@ -1719,7 +1715,7 @@ namespace YAT.View.Forms
 				return;
 
 			ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono = !ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono;
-			ApplicationSettings.Save();
+			ApplicationSettings.SaveLocalUserSettings();
 		}
 
 		private void toolStripMenuItem_StatusContextMenu_Preferences_Click(object sender, EventArgs e)
@@ -1821,7 +1817,7 @@ namespace YAT.View.Forms
 			if (WindowState == FormWindowState.Normal)
 				ApplicationSettings.LocalUserSettings.MainWindow.Size = Size;
 
-			ApplicationSettings.Save();
+			ApplicationSettings.SaveLocalUserSettings();
 		}
 
 		#endregion
@@ -1841,7 +1837,7 @@ namespace YAT.View.Forms
 
 				ApplicationSettings.LocalUserSettings.MainWindow = f.SettingsResult.MainWindow;
 				ApplicationSettings.LocalUserSettings.General    = f.SettingsResult.General;
-				ApplicationSettings.Save();
+				ApplicationSettings.SaveLocalUserSettings();
 			}
 		}
 
@@ -1852,19 +1848,25 @@ namespace YAT.View.Forms
 		// Settings
 		//==========================================================================================
 
-		private void AttachLocalUserSettingsEventHandlers()
+		private void AttachUserSettingsEventHandlers()
 		{
-			if (this.localUserSettingsRoot != null)
-				this.localUserSettingsRoot.Changed += localUserSettingsRoot_Changed;
+			if (ApplicationSettings.LocalUserSettings != null)
+				ApplicationSettings.LocalUserSettings.Changed += userSettingsRoot_Changed;
+
+			if (ApplicationSettings.RoamingUserSettings != null)
+				ApplicationSettings.RoamingUserSettings.Changed += userSettingsRoot_Changed;
 		}
 
-		private void DetachLocalUserSettingsEventHandlers()
+		private void DetachUserSettingsEventHandlers()
 		{
-			if (this.localUserSettingsRoot != null)
-				this.localUserSettingsRoot.Changed -= localUserSettingsRoot_Changed;
+			if (ApplicationSettings.LocalUserSettings != null)
+				ApplicationSettings.LocalUserSettings.Changed -= userSettingsRoot_Changed;
+
+			if (ApplicationSettings.RoamingUserSettings != null)
+				ApplicationSettings.RoamingUserSettings.Changed -= userSettingsRoot_Changed;
 		}
 
-		private void localUserSettingsRoot_Changed(object sender, SettingsEventArgs e)
+		private void userSettingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
 			SetMainControls();
 		}
@@ -1968,8 +1970,7 @@ namespace YAT.View.Forms
 			DetachMainEventHandlers();
 			this.main = null;
 
-			DetachLocalUserSettingsEventHandlers();
-			this.localUserSettingsRoot = null;
+			DetachUserSettingsEventHandlers();
 
 			if (this.closingState == ClosingState.None) // Prevent multiple calls to Close().
 			{
@@ -2086,7 +2087,7 @@ namespace YAT.View.Forms
 				Refresh();
 
 				ApplicationSettings.LocalUserSettings.NewTerminal = f.NewTerminalSettingsResult;
-				ApplicationSettings.Save();
+				ApplicationSettings.SaveLocalUserSettings();
 
 				var sh = new DocumentSettingsHandler<TerminalSettingsRoot>(f.TerminalSettingsResult);
 				this.main.CreateNewTerminalFromSettings(sh);
@@ -2095,7 +2096,7 @@ namespace YAT.View.Forms
 			{
 				// Still update to keep changed settings for next new terminal:
 				ApplicationSettings.LocalUserSettings.NewTerminal = f.NewTerminalSettingsResult;
-				ApplicationSettings.Save();
+				ApplicationSettings.SaveLocalUserSettings();
 
 				ResetStatusText();
 			}
@@ -2124,7 +2125,7 @@ namespace YAT.View.Forms
 				Refresh();
 
 				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(ofd.FileName);
-				ApplicationSettings.Save();
+				ApplicationSettings.SaveLocalUserSettings();
 
 				this.main.OpenFromFile(ofd.FileName);
 			}
@@ -2172,7 +2173,7 @@ namespace YAT.View.Forms
 				Refresh();
 
 				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(ofd.FileName);
-				ApplicationSettings.Save();
+				ApplicationSettings.SaveLocalUserSettings();
 
 				this.main.OpenFromFile(ofd.FileName);
 			}
@@ -2203,7 +2204,7 @@ namespace YAT.View.Forms
 				Refresh();
 
 				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(sfd.FileName);
-				ApplicationSettings.Save();
+				ApplicationSettings.SaveLocalUserSettings();
 
 				this.workspace.SaveAs(sfd.FileName);
 			}
@@ -2677,8 +2678,11 @@ namespace YAT.View.Forms
 		/// </summary>
 		public virtual void RequestFind()
 		{
-			if (!this.localUserSettingsRoot.MainWindow.ShowFindField)
-				this.localUserSettingsRoot.MainWindow.ShowFindField = true;
+			if (!ApplicationSettings.RoamingUserSettings.Find.ShowFindField)
+			{
+				ApplicationSettings.RoamingUserSettings.Find.ShowFindField = true;
+				ApplicationSettings.SaveRoamingUserSettings();
+			}
 
 			toolStripComboBox_MainTool_Terminal_Find_Pattern.Select();
 		}
@@ -2690,8 +2694,8 @@ namespace YAT.View.Forms
 		{
 			get
 			{
-				if (this.localUserSettingsRoot.MainWindow.ShowFindField)
-					return (!string.IsNullOrEmpty(this.localUserSettingsRoot.MainWindow.ActiveFindPattern));
+				if (ApplicationSettings.RoamingUserSettings.Find.ShowFindField)
+					return (!string.IsNullOrEmpty(ApplicationSettings.RoamingUserSettings.Find.ActiveFindPattern));
 				else
 					return (false);
 			}

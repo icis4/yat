@@ -112,7 +112,7 @@ namespace YAT.View.Forms
 
 			ApplicationSettings.LocalUserSettings.Extensions.RawLogFiles  = this.settings.RawExtension;
 			ApplicationSettings.LocalUserSettings.Extensions.NeatLogFiles = this.settings.NeatExtension;
-			ApplicationSettings.Save();
+			ApplicationSettings.SaveLocalUserSettings();
 		}
 
 		private void settings_Form_Changed(object sender, MKY.Settings.SettingsEventArgs e)
@@ -598,7 +598,7 @@ namespace YAT.View.Forms
 				Refresh();
 
 				ApplicationSettings.LocalUserSettings.Paths.LogFiles = Path.GetDirectoryName(ofd.FileName);
-				ApplicationSettings.Save();
+				ApplicationSettings.SaveLocalUserSettings();
 
 				this.settingsInEdit.RootPath = Path.GetDirectoryName(ofd.FileName);
 				this.settingsInEdit.RootFileName = Path.GetFileNameWithoutExtension(ofd.FileName);
