@@ -58,6 +58,7 @@ namespace MKY.Windows.Forms
 		{
 			// Attention:
 			// Similar code exists in TextBoxEx.ProcessCmdKey().
+			// Similar code exists in ToolStripComboBoxEx.ProcessCmdKey().
 			// Changes here may have to be applied there too.
 
 			if (keyData == (Keys.Control | Keys.Back))

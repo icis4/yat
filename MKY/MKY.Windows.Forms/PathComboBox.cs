@@ -30,7 +30,7 @@ namespace MKY.Windows.Forms
 	/// <summary>
 	/// Provides a label that displays path strings with ellipsis.
 	/// </summary>
-	public class PathComboBox : ComboBox
+	public class PathComboBox : ComboBoxEx
 	{
 		/// <summary>
 		/// Draws string with ellipsis.
