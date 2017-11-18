@@ -51,6 +51,12 @@ namespace YAT.Settings.Test
 	#pragma warning disable 1591
 
 	/// <summary></summary>
+	public enum RoamingUserSettingsTestCase
+	{
+		Dummy,
+	}
+
+	/// <summary></summary>
 	public enum LocalUserSettingsTestCase
 	{
 		Dummy,
@@ -126,6 +132,9 @@ namespace YAT.Settings.Test
 		public string Path { get; }
 
 		/// <summary></summary>
+		public Dictionary<RoamingUserSettingsTestCase, string> RoamingUserFilePaths { get; }
+
+		/// <summary></summary>
 		public Dictionary<LocalUserSettingsTestCase, string> LocalUserFilePaths { get; }
 
 		/// <summary></summary>
@@ -154,15 +163,10 @@ namespace YAT.Settings.Test
 			else
 				Path = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-Settings" + System.IO.Path.DirectorySeparatorChar + directory + System.IO.Path.DirectorySeparatorChar;
 
-			LocalUserFilePaths = new Dictionary<LocalUserSettingsTestCase, string>();
-			TerminalFilePaths  = new Dictionary<TerminalSettingsTestCase,  string>();
-			WorkspaceFilePaths = new Dictionary<WorkspaceSettingsTestCase, string>();
-		}
-
-		/// <summary></summary>
-		public void AddLocalUserFileName(LocalUserSettingsTestCase fileKey, string fileName)
-		{
-			LocalUserFilePaths.Add(fileKey, Path + fileName);
+			RoamingUserFilePaths = new Dictionary<RoamingUserSettingsTestCase, string>();
+			LocalUserFilePaths   = new Dictionary<LocalUserSettingsTestCase,   string>();
+			TerminalFilePaths    = new Dictionary<TerminalSettingsTestCase,    string>();
+			WorkspaceFilePaths   = new Dictionary<WorkspaceSettingsTestCase,   string>();
 		}
 
 		/// <summary></summary>

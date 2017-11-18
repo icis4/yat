@@ -24,8 +24,6 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
-using System.Windows.Forms;
 using System.Xml.Serialization;
 
 using MKY;
@@ -35,26 +33,22 @@ using MKY.Collections.Specialized;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	public class MainWindowSettings : MKY.Settings.SettingsItem, IEquatable<MainWindowSettings>
+	public class FindSettings : MKY.Settings.SettingsItem, IEquatable<FindSettings>
 	{
 		private const int MaxRecentFindPatterns = 12;
 
-		private FormStartPosition startPosition;
-		private FormWindowState windowState;
-		private Point location;
-		private Size size;
-
-		private bool showTerminalInfo;
-		private bool showChrono;
+		private bool showFindField;
+		private string activeFindPattern;
+		private RecentItemCollection<string> recentFindPatterns;
 
 		/// <summary></summary>
-		public MainWindowSettings()
+		public FindSettings()
 			: this(MKY.Settings.SettingsType.Explicit)
 		{
 		}
 
 		/// <summary></summary>
-		public MainWindowSettings(MKY.Settings.SettingsType settingsType)
+		public FindSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -65,16 +59,12 @@ namespace YAT.Model.Settings
 		/// Set fields through properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public MainWindowSettings(MainWindowSettings rhs)
+		public FindSettings(FindSettings rhs)
 			: base(rhs)
 		{
-			StartPosition = rhs.StartPosition;
-			WindowState   = rhs.WindowState;
-			Location      = rhs.Location;
-			Size          = rhs.Size;
-
-			ShowTerminalInfo = rhs.ShowTerminalInfo;
-			ShowChrono       = rhs.ShowChrono;
+			ShowFindField      = rhs.ShowFindField;
+			ActiveFindPattern  = rhs.ActiveFindPattern;
+			RecentFindPatterns = new RecentItemCollection<string>(rhs.RecentFindPatterns);
 
 			ClearChanged();
 		}
@@ -86,13 +76,9 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			StartPosition = FormStartPosition.WindowsDefaultLocation;
-			WindowState   = FormWindowState.Normal;
-			Location      = new Point(0, 0);
-			Size          = new Size(912, 684); // Equals designed 'Size' of the 'View.Main' form.
-
-			ShowTerminalInfo = false;
-			ShowChrono       = true;
+			ShowFindField      = false;
+			ActiveFindPattern  = null;
+			RecentFindPatterns = new RecentItemCollection<string>(MaxRecentFindPatterns);
 		}
 
 		#region Properties
@@ -101,92 +87,47 @@ namespace YAT.Model.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("StartPosition")]
-		public FormStartPosition StartPosition
+		[XmlElement("ShowFindField")]
+		public bool ShowFindField
 		{
-			get { return (this.startPosition); }
+			get { return (this.showFindField); }
 			set
 			{
-				if (this.startPosition != value)
+				if (this.showFindField != value)
 				{
-					this.startPosition = value;
+					this.showFindField = value;
 					SetMyChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("WindowState")]
-		public FormWindowState WindowState
+		[XmlElement("ActiveFindPattern")]
+		public string ActiveFindPattern
 		{
-			get { return (this.windowState); }
+			get { return (this.activeFindPattern); }
 			set
 			{
-				if (this.windowState != value)
+				if (this.activeFindPattern != value)
 				{
-					this.windowState = value;
+					this.activeFindPattern = value;
 					SetMyChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("Location")]
-		public Point Location
+		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
+		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
+		[XmlElement("RecentFindPatterns")]
+		public RecentItemCollection<string> RecentFindPatterns
 		{
-			get { return (this.location); }
+			get { return (this.recentFindPatterns); }
 			set
 			{
-				if (this.location != value)
+				if (this.recentFindPatterns != value)
 				{
-					this.location = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("Size")]
-		public Size Size
-		{
-			get { return (this.size); }
-			set
-			{
-				if (this.size != value)
-				{
-					this.size = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <remarks>
-		/// Using term 'Info' since the info contains name and indices.
-		/// </remarks>
-		[XmlElement("ShowTerminalInfo")]
-		public bool ShowTerminalInfo
-		{
-			get { return (this.showTerminalInfo); }
-			set
-			{
-				if (this.showTerminalInfo != value)
-				{
-					this.showTerminalInfo = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("ShowChrono")]
-		public bool ShowChrono
-		{
-			get { return (this.showChrono); }
-			set
-			{
-				if (this.showChrono != value)
-				{
-					this.showChrono = value;
+					this.recentFindPatterns = value;
 					SetMyChanged();
 				}
 			}
@@ -212,13 +153,9 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ StartPosition.GetHashCode();
-				hashCode = (hashCode * 397) ^ WindowState  .GetHashCode();
-				hashCode = (hashCode * 397) ^ Location     .GetHashCode();
-				hashCode = (hashCode * 397) ^ Size         .GetHashCode();
-
-				hashCode = (hashCode * 397) ^ ShowTerminalInfo.GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowChrono      .GetHashCode();
+				hashCode = (hashCode * 397) ^  ShowFindField                                  .GetHashCode();
+				hashCode = (hashCode * 397) ^ (ActiveFindPattern  != null ? ActiveFindPattern .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (RecentFindPatterns != null ? RecentFindPatterns.GetHashCode() : 0);
 
 				return (hashCode);
 			}
@@ -229,7 +166,7 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as MainWindowSettings));
+			return (Equals(obj as FindSettings));
 		}
 
 		/// <summary>
@@ -239,7 +176,7 @@ namespace YAT.Model.Settings
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(MainWindowSettings other)
+		public bool Equals(FindSettings other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
@@ -249,20 +186,16 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				StartPosition.Equals(other.StartPosition) &&
-				WindowState  .Equals(other.WindowState)   &&
-				Location     .Equals(other.Location)      &&
-				Size         .Equals(other.Size)          &&
-
-				ShowTerminalInfo.Equals(other.ShowTerminalInfo) &&
-				ShowChrono      .Equals(other.ShowChrono)
+				ShowFindField        .Equals(                          other.ShowFindField)      &&
+				StringEx             .EqualsOrdinal(ActiveFindPattern, other.ActiveFindPattern)  &&
+				IEnumerableEx.ElementsEqual(       RecentFindPatterns, other.RecentFindPatterns)
 			);
 		}
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(MainWindowSettings lhs, MainWindowSettings rhs)
+		public static bool operator ==(FindSettings lhs, FindSettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -275,7 +208,7 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(MainWindowSettings lhs, MainWindowSettings rhs)
+		public static bool operator !=(FindSettings lhs, FindSettings rhs)
 		{
 			return (!(lhs == rhs));
 		}

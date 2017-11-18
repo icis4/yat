@@ -2182,7 +2182,7 @@ namespace YAT.Model
 		{
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
 			ApplicationSettings.LocalUserSettings.RecentFiles.SetChanged(); // Manual change required because underlying collection is modified.
-			ApplicationSettings.Save();
+			ApplicationSettings.SaveLocalUserSettings();
 		}
 
 		#endregion
