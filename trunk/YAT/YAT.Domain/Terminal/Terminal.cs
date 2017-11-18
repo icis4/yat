@@ -294,10 +294,10 @@ namespace YAT.Domain
 		public event EventHandler<IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<RawChunk>> RawChunkSent;
+		public event EventHandler<RawChunkEventArgs> RawChunkSent;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<RawChunk>> RawChunkReceived;
+		public event EventHandler<RawChunkEventArgs> RawChunkReceived;
 
 		/// <summary></summary>
 		public event EventHandler<DisplayElementsEventArgs> DisplayElementsSent;
@@ -663,21 +663,9 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual Settings.TerminalSettings TerminalSettings
+		protected virtual Settings.TerminalSettings TerminalSettings
 		{
-			get
-			{
-				AssertNotDisposed();
-
-				return (this.terminalSettings);
-			}
-			set
-			{
-				AssertNotDisposed();
-
-				AttachTerminalSettings(value);
-				ApplyTerminalSettings();
-			}
+			get { return (this.terminalSettings); }
 		}
 
 		/// <summary></summary>
@@ -689,6 +677,7 @@ namespace YAT.Domain
 
 				return (this.initialTimeStamp);
 			}
+
 			set
 			{
 				AssertNotDisposed();
@@ -1033,7 +1022,7 @@ namespace YAT.Domain
 			// Each send request shall resume a pending break condition:
 			ResumeBreak();
 
-			if (this.terminalSettings.Send.SignalXOnBeforeEachTransmission)
+			if (TerminalSettings.Send.SignalXOnBeforeEachTransmission)
 				RequestSignalInputXOn();
 
 			// Enqueue the items for sending:
@@ -1352,7 +1341,7 @@ namespace YAT.Domain
 
 				case Parser.Keyword.Delay:
 				{
-					int delay = this.terminalSettings.Send.DefaultDelay;
+					int delay = TerminalSettings.Send.DefaultDelay;
 					if (!ArrayEx.IsNullOrEmpty(result.Args))
 						delay = result.Args[0];
 
@@ -1366,7 +1355,7 @@ namespace YAT.Domain
 
 				case Parser.Keyword.FramingErrorsOn:
 				{
-					if (this.terminalSettings.IO.IOType == IOType.SerialPort)
+					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
 						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.IgnoreFramingErrors = false;
@@ -1380,7 +1369,7 @@ namespace YAT.Domain
 
 				case Parser.Keyword.FramingErrorsOff:
 				{
-					if (this.terminalSettings.IO.IOType == IOType.SerialPort)
+					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
 						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.IgnoreFramingErrors = true;
@@ -1394,7 +1383,7 @@ namespace YAT.Domain
 
 				case Parser.Keyword.FramingErrorsRestore:
 				{
-					if (this.terminalSettings.IO.IOType == IOType.SerialPort)
+					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
 						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.IgnoreFramingErrors = TerminalSettings.IO.SerialPort.IgnoreFramingErrors;
@@ -1408,7 +1397,7 @@ namespace YAT.Domain
 
 				case Parser.Keyword.OutputBreakOn:
 				{
-					if (this.terminalSettings.IO.IOType == IOType.SerialPort)
+					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
 						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.OutputBreak = true;
@@ -1422,7 +1411,7 @@ namespace YAT.Domain
 
 				case Parser.Keyword.OutputBreakOff:
 				{
-					if (this.terminalSettings.IO.IOType == IOType.SerialPort)
+					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
 						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.OutputBreak = false;
@@ -1436,7 +1425,7 @@ namespace YAT.Domain
 
 				case Parser.Keyword.OutputBreakToggle:
 				{
-					if (this.terminalSettings.IO.IOType == IOType.SerialPort)
+					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
 						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.ToggleOutputBreak();
@@ -1450,9 +1439,9 @@ namespace YAT.Domain
 
 				case Parser.Keyword.ReportId:
 				{
-					if (this.terminalSettings.IO.IOType == IOType.UsbSerialHid)
+					if (TerminalSettings.IO.IOType == IOType.UsbSerialHid)
 					{
-						byte reportId = this.terminalSettings.IO.UsbSerialHidDevice.ReportFormat.Id;
+						byte reportId = TerminalSettings.IO.UsbSerialHidDevice.ReportFormat.Id;
 						if (!ArrayEx.IsNullOrEmpty(result.Args))
 							reportId = (byte)result.Args[0];
 
@@ -1802,7 +1791,7 @@ namespace YAT.Domain
 
 		private bool IsSerialPort
 		{
-			get { return ((this.terminalSettings != null) && (this.terminalSettings.IO.IOType == IOType.SerialPort)); }
+			get { return ((this.terminalSettings != null) && (TerminalSettings.IO.IOType == IOType.SerialPort)); }
 		}
 
 		/// <summary>
@@ -1990,7 +1979,7 @@ namespace YAT.Domain
 
 			if (IsSerialPort)
 			{
-				if (!this.terminalSettings.IO.SerialPort.Communication.FlowControlManagesRfrCtsAutomatically)
+				if (!TerminalSettings.IO.SerialPort.Communication.FlowControlManagesRfrCtsAutomatically)
 				{
 					var p = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 					if (p != null)
@@ -2026,7 +2015,7 @@ namespace YAT.Domain
 
 			if (IsSerialPort)
 			{
-				if (!this.terminalSettings.IO.SerialPort.Communication.FlowControlManagesDtrDsrAutomatically)
+				if (!TerminalSettings.IO.SerialPort.Communication.FlowControlManagesDtrDsrAutomatically)
 				{
 					var p = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 					if (p != null)
@@ -2055,7 +2044,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			if (this.terminalSettings.IO.FlowControlManagesXOnXOffManually)
+			if (TerminalSettings.IO.FlowControlManagesXOnXOffManually)
 			{
 				var x = (UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
 				if (x != null)
@@ -2077,7 +2066,7 @@ namespace YAT.Domain
 		/// </returns>
 		public virtual bool RequestSignalInputXOn()
 		{
-			if (this.terminalSettings.IO.FlowControlUsesXOnXOff)
+			if (TerminalSettings.IO.FlowControlUsesXOnXOff)
 			{
 				var x = (UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
 				if (x != null)
@@ -2103,7 +2092,7 @@ namespace YAT.Domain
 
 			if (IsSerialPort)
 			{
-				if (this.terminalSettings.IO.SerialPortOutputBreakIsModifiable)
+				if (TerminalSettings.IO.SerialPortOutputBreakIsModifiable)
 				{
 					var p = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 					if (p != null)
@@ -2119,8 +2108,8 @@ namespace YAT.Domain
 
 		private void ConfigurePeriodicXOnTimer()
 		{
-			if (this.terminalSettings.Send.SignalXOnPeriodically.Enabled)
-				EnablePeriodicXOnTimer(this.terminalSettings.Send.SignalXOnPeriodically.Interval);
+			if (TerminalSettings.Send.SignalXOnPeriodically.Enabled)
+				EnablePeriodicXOnTimer(TerminalSettings.Send.SignalXOnPeriodically.Interval);
 			else
 				DisablePeriodicXOnTimer();
 		}
@@ -2191,32 +2180,66 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Methods > Element Processing
+		#region Methods > Format
 		//------------------------------------------------------------------------------------------
-		// Methods > Element Processing
+		// Methods > Format
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		/// <summary>
+		/// Formats the specified time stamp.
+		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement ByteToElement(byte b, IODirection d)
+		public virtual string Format(DateTime ts, Direction d)
 		{
-			switch (d)
-			{
-				case IODirection.Tx: return (ByteToElement(b, d, this.terminalSettings.Display.TxRadix));
-				case IODirection.Rx: return (ByteToElement(b, d, this.terminalSettings.Display.RxRadix));
+			var de = new DisplayElement.TimeStampInfo(d, ts, TerminalSettings.Display.TimeStampFormat, TerminalSettings.Display.TimeStampUseUtc, "", "");
+			return (de.Text);
+		}
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		/// <summary>
+		/// Formats the specified data sequence.
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		public virtual string Format(byte[] data, IODirection d)
+		{
+			var sb = new StringBuilder();
+			foreach (byte b in data)
+			{
+				sb.Append(Format(b, d));
+
+				if ((sb.Length > 0) && ElementsAreSeparate(d))
+					sb.Append(" ");
 			}
+			return (sb.ToString());
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement ByteToElement(byte b, IODirection d, Radix r)
+		protected virtual string Format(byte b, IODirection d)
 		{
-			bool isByteToHide = false;
+			Radix r;
+			switch (d)
+			{
+				case IODirection.Tx: r = TerminalSettings.Display.TxRadix; break;
+				case IODirection.Rx: r = TerminalSettings.Display.RxRadix; break;
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+
+			bool isControl;
+			bool isByteToHide;
+			bool isError;
+			return (Format(b, d, r, out isControl, out isByteToHide, out isError));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
+		protected virtual string Format(byte b, IODirection d, Radix r, out bool isControl, out bool isByteToHide, out bool isError)
+		{
+			isByteToHide = false;
 			if (b == 0x00)
 			{
 				if (TerminalSettings.CharHide.Hide0x00)
@@ -2233,42 +2256,38 @@ namespace YAT.Domain
 					isByteToHide = true;
 			}
 
-			bool isControl = Ascii.IsControl(b);
-			bool error = false;
-			string text = "";
+			isControl = Ascii.IsControl(b);
+			isError = false;
 
 			switch (r)
 			{
-				// String/Char:
 				case Radix.String:
 				case Radix.Char:
 				{
 					if (isByteToHide)
 					{
-						// Do nothing, ignore the character, this results in hiding.
+						return (null); // Return nothing, ignore the character, this results in hiding.
 					}
 					else if (isControl)
 					{
 						if (TerminalSettings.CharReplace.ReplaceControlChars)
-							text = ByteToControlCharReplacementString(b, TerminalSettings.CharReplace.ControlCharRadix);
+							return (ByteToControlCharReplacementString(b, TerminalSettings.CharReplace.ControlCharRadix));
 						else
-							text = ByteToCharacterString(b);
+							return (ByteToCharacterString(b));
 					}
 					else if (b == ' ') // Space.
 					{
 						if (TerminalSettings.CharReplace.ReplaceSpace)
-							text = Settings.CharReplaceSettings.SpaceReplaceChar;
+							return (Settings.CharReplaceSettings.SpaceReplaceChar);
 						else
-							text = " ";
+							return (" ");
 					}
 					else
 					{
-						text = ByteToCharacterString(b);
+						return (ByteToCharacterString(b));
 					}
-					break;
 				}
 
-				// Bin/Oct/Dec/Hex/Unicode:
 				case Radix.Bin:
 				case Radix.Oct:
 				case Radix.Dec:
@@ -2277,89 +2296,25 @@ namespace YAT.Domain
 				{
 					if (isByteToHide)
 					{
-						// Do nothing, ignore the character, this results in hiding.
+						return (null); // Return nothing, ignore the character, this results in hiding.
 					}
 					else if (isControl)
 					{
 						if (TerminalSettings.CharReplace.ReplaceControlChars)
-							text = ByteToControlCharReplacementString(b, TerminalSettings.CharReplace.ControlCharRadix);
+							return (ByteToControlCharReplacementString(b, TerminalSettings.CharReplace.ControlCharRadix));
 						else
-							text = ByteToNumericRadixString(b, r); // Current display radix.
+							return (ByteToNumericRadixString(b, r)); // Current display radix.
 					}
 					else
 					{
-						text = ByteToNumericRadixString(b, r); // Current display radix.
+						return (ByteToNumericRadixString(b, r)); // Current display radix.
 					}
-					break;
 				}
 
 				default:
 				{
 					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' radix is missing here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
-			}
-
-			if (!error)
-			{
-				if (isByteToHide)
-				{
-					return (new DisplayElement.Nonentity()); // Return nothing, ignore the character, this results in hiding.
-				}
-				else if (isControl)
-				{
-					if (TerminalSettings.CharReplace.ReplaceControlChars)
-					{
-						// Attention:
-						// In order to get well aligned tab stops, tab characters must be data elements.
-						// If they were control elements (i.e. sequence of data and control elements),
-						// tabs would only get aligned within the respective control element,
-						// thus resulting in misaligned tab stops.
-						if ((b == '\t') && !TerminalSettings.CharReplace.ReplaceTab)
-						{
-							switch (d) // Keep tab:
-							{
-								case IODirection.Tx: return (new DisplayElement.TxData(b, text));
-								case IODirection.Rx: return (new DisplayElement.RxData(b, text));
-
-								default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-							}
-						}
-						else
-						{
-							switch (d) // Use dedicated control elements:
-							{
-								case IODirection.Tx: return (new DisplayElement.TxControl(b, text));
-								case IODirection.Rx: return (new DisplayElement.RxControl(b, text));
-
-								default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-							}
-						}
-					}
-					else
-					{
-						switch (d) // Use normal data elements:
-						{
-							case IODirection.Tx: return (new DisplayElement.TxData(b, text));
-							case IODirection.Rx: return (new DisplayElement.RxData(b, text));
-
-							default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-						}
-					}
-				}
-				else
-				{
-					switch (d)
-					{
-						case IODirection.Tx: return (new DisplayElement.TxData(b, text));
-						case IODirection.Rx: return (new DisplayElement.RxData(b, text));
-
-						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-					}
-				}
-			}
-			else
-			{
-				return (new DisplayElement.ErrorInfo((Direction)d, text));
 			}
 		}
 
@@ -2374,7 +2329,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		protected virtual string ByteToAsciiString(byte b)
 		{
-			if ((b == 0x09) && !this.terminalSettings.CharReplace.ReplaceTab)
+			if ((b == 0x09) && !TerminalSettings.CharReplace.ReplaceTab)
 				return ("\t");
 			else
 				return ("<" + Ascii.ConvertToMnemonic(b) + ">");
@@ -2389,28 +2344,28 @@ namespace YAT.Domain
 			{
 				case Radix.Bin:
 				{
-					if (this.terminalSettings.Display.ShowRadix)
+					if (TerminalSettings.Display.ShowRadix)
 						return (ByteEx.ConvertToBinaryString(b) + "b");
 					else
 						return (ByteEx.ConvertToBinaryString(b));
 				}
 				case Radix.Oct:
 				{
-					if (this.terminalSettings.Display.ShowRadix)
+					if (TerminalSettings.Display.ShowRadix)
 						return (ByteEx.ConvertToOctalString(b) + "o");
 					else
 						return (ByteEx.ConvertToOctalString(b));
 				}
 				case Radix.Dec:
 				{
-					if (this.terminalSettings.Display.ShowRadix)
+					if (TerminalSettings.Display.ShowRadix)
 						return (b.ToString("D3", CultureInfo.InvariantCulture) + "d");
 					else
 						return (b.ToString("D3", CultureInfo.InvariantCulture));
 				}
 				case Radix.Hex:
 				{
-					if (this.terminalSettings.Display.ShowRadix)
+					if (TerminalSettings.Display.ShowRadix)
 						return (b.ToString("X2", CultureInfo.InvariantCulture) + "h");
 					else
 						return (b.ToString("X2", CultureInfo.InvariantCulture));
@@ -2430,7 +2385,7 @@ namespace YAT.Domain
 		[CLSCompliant(false)]
 		protected virtual string UnicodeValueToNumericString(ushort value)
 		{
-			if (this.terminalSettings.Display.ShowRadix)
+			if (TerminalSettings.Display.ShowRadix)
 				return ("U+" + value.ToString("X4", CultureInfo.InvariantCulture));
 			else
 				return (       value.ToString("X4", CultureInfo.InvariantCulture));
@@ -2466,8 +2421,8 @@ namespace YAT.Domain
 		{
 			switch (d)
 			{
-				case IODirection.Tx: return (ElementsAreSeparate(this.terminalSettings.Display.TxRadix));
-				case IODirection.Rx: return (ElementsAreSeparate(this.terminalSettings.Display.RxRadix));
+				case IODirection.Tx: return (ElementsAreSeparate(TerminalSettings.Display.TxRadix));
+				case IODirection.Rx: return (ElementsAreSeparate(TerminalSettings.Display.RxRadix));
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -2490,6 +2445,101 @@ namespace YAT.Domain
 				case Radix.Unicode: return (true);
 			}
 			throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' radix is missing here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
+
+		#endregion
+
+		#region Methods > Element Processing
+		//------------------------------------------------------------------------------------------
+		// Methods > Element Processing
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement ByteToElement(byte b, IODirection d)
+		{
+			switch (d)
+			{
+				case IODirection.Tx: return (ByteToElement(b, d, TerminalSettings.Display.TxRadix));
+				case IODirection.Rx: return (ByteToElement(b, d, TerminalSettings.Display.RxRadix));
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement ByteToElement(byte b, IODirection d, Radix r)
+		{
+			bool isControl;
+			bool isByteToHide;
+			bool isError;
+
+			string text = Format(b, d, r, out isControl, out isByteToHide, out isError);
+
+			if      (isError)
+			{
+				return (new DisplayElement.ErrorInfo((Direction)d, text));
+			}
+			else if (isByteToHide)
+			{
+				return (new DisplayElement.Nonentity()); // Return nothing, ignore the character, this results in hiding.
+			}
+			else if (isControl)
+			{
+				if (TerminalSettings.CharReplace.ReplaceControlChars)
+				{
+					// Attention:
+					// In order to get well aligned tab stops, tab characters must be data elements.
+					// If they were control elements (i.e. sequence of data and control elements),
+					// tabs would only get aligned within the respective control element,
+					// thus resulting in misaligned tab stops.
+					if ((b == '\t') && !TerminalSettings.CharReplace.ReplaceTab)
+					{
+						switch (d) // Keep tab:
+						{
+							case IODirection.Tx: return (new DisplayElement.TxData(b, text));
+							case IODirection.Rx: return (new DisplayElement.RxData(b, text));
+
+							default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+					}
+					else
+					{
+						switch (d) // Use dedicated control elements:
+						{
+							case IODirection.Tx: return (new DisplayElement.TxControl(b, text));
+							case IODirection.Rx: return (new DisplayElement.RxControl(b, text));
+
+							default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+					}
+				}
+				else
+				{
+					switch (d) // Use normal data elements:
+					{
+						case IODirection.Tx: return (new DisplayElement.TxData(b, text));
+						case IODirection.Rx: return (new DisplayElement.RxData(b, text));
+
+						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					}
+				}
+			}
+			else // Normal data = neither 'isError' nor 'isByteToHide' nor 'isError':
+			{
+				switch (d)
+				{
+					case IODirection.Tx: return (new DisplayElement.TxData(b, text));
+					case IODirection.Rx: return (new DisplayElement.RxData(b, text));
+
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
 		}
 
 		/// <summary></summary>
@@ -2568,17 +2618,17 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected abstract void ProcessRawChunk(RawChunk raw, DisplayElementCollection elements, List<DisplayLine> lines);
+		protected abstract void ProcessRawChunk(RawChunk raw, DisplayElementCollection elements, List<DisplayLine> lines, bool highlight);
 
 		/// <summary></summary>
-		protected virtual void ProcessAndSignalRawChunk(RawChunk raw)
+		protected virtual void ProcessAndSignalRawChunk(RawChunk raw, bool highlight)
 		{
 			// Collection of elements processed, extends over one or multiple lines,
 			// depending on the number of bytes in raw chunk.
 			var elements = new DisplayElementCollection(); // Default initial capacity is OK.
 			var lines = new List<DisplayLine>();
 
-			ProcessRawChunk(raw, elements, lines);
+			ProcessRawChunk(raw, elements, lines, highlight);
 
 			if (elements.Count > 0)
 			{
@@ -2661,9 +2711,9 @@ namespace YAT.Domain
 
 					// Reload repository:
 					this.isReloading = true;
-					foreach (RawChunk rawChunk in this.rawTerminal.RepositoryToChunks(repository))
+					foreach (var raw in this.rawTerminal.RepositoryToChunks(repository))
 					{
-						ProcessAndSignalRawChunk(rawChunk);
+						ProcessAndSignalRawChunk(raw, false); // Highlighting is not (yet) supported on reloading => bug #211.
 					}
 					this.isReloading = false;
 					OnRepositoryReloaded(new EventArgs<RepositoryType>(repository));
@@ -2709,9 +2759,9 @@ namespace YAT.Domain
 
 					// Reload repositories:
 					this.isReloading = true;
-					foreach (RawChunk rawChunk in this.rawTerminal.RepositoryToChunks(RepositoryType.Bidir))
+					foreach (var raw in this.rawTerminal.RepositoryToChunks(RepositoryType.Bidir))
 					{
-						ProcessAndSignalRawChunk(rawChunk);
+						ProcessAndSignalRawChunk(raw, false); // Highlighting is not (yet) supported on reloading => bug #211.
 					}
 					this.isReloading = false;
 					OnRepositoryReloaded(new EventArgs<RepositoryType>(RepositoryType.Tx));
@@ -3117,8 +3167,9 @@ namespace YAT.Domain
 
 			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
 			{
-				OnRawChunkSent(e);
-				ProcessAndSignalRawChunk(e.Value);
+				var args = new RawChunkEventArgs(e.Value);
+				OnRawChunkSent(args);
+				ProcessAndSignalRawChunk(e.Value, args.Highlight);
 			}
 		}
 
@@ -3130,8 +3181,9 @@ namespace YAT.Domain
 
 			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
 			{
-				OnRawChunkReceived(e);
-				ProcessAndSignalRawChunk(e.Value);
+				var args = new RawChunkEventArgs(e.Value);
+				OnRawChunkReceived(args);
+				ProcessAndSignalRawChunk(e.Value, args.Highlight);
 			}
 		}
 
@@ -3173,15 +3225,15 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRawChunkSent(EventArgs<RawChunk> e)
+		protected virtual void OnRawChunkSent(RawChunkEventArgs e)
 		{
-			this.eventHelper.RaiseSync<EventArgs<RawChunk>>(RawChunkSent, this, e);
+			this.eventHelper.RaiseSync<RawChunkEventArgs>(RawChunkSent, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRawChunkReceived(EventArgs<RawChunk> e)
+		protected virtual void OnRawChunkReceived(RawChunkEventArgs e)
 		{
-			this.eventHelper.RaiseSync<EventArgs<RawChunk>>(RawChunkReceived, this, e);
+			this.eventHelper.RaiseSync<RawChunkEventArgs>(RawChunkReceived, this, e);
 		}
 
 		/// <summary></summary>

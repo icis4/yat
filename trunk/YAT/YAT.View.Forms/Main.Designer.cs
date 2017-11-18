@@ -1095,7 +1095,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripLabel_MainTool_Terminal_AutoResponse_Count.Name = "toolStripLabel_MainTool_Terminal_AutoResponse_Count";
 			this.toolStripLabel_MainTool_Terminal_AutoResponse_Count.Size = new System.Drawing.Size(21, 22);
-			this.toolStripLabel_MainTool_Terminal_AutoResponse_Count.Text = "[0]";
+			this.toolStripLabel_MainTool_Terminal_AutoResponse_Count.Text = "(0)";
 			this.toolStripLabel_MainTool_Terminal_AutoResponse_Count.ToolTipText = "Automatic Response Count\r\nClick to Reset";
 			this.toolStripLabel_MainTool_Terminal_AutoResponse_Count.Visible = false;
 			this.toolStripLabel_MainTool_Terminal_AutoResponse_Count.Click += new System.EventHandler(this.toolStripLabel_MainTool_Terminal_AutoResponse_Count_Click);
@@ -1144,7 +1144,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripLabel_MainTool_Terminal_AutoAction_Count.Name = "toolStripLabel_MainTool_Terminal_AutoAction_Count";
 			this.toolStripLabel_MainTool_Terminal_AutoAction_Count.Size = new System.Drawing.Size(21, 22);
-			this.toolStripLabel_MainTool_Terminal_AutoAction_Count.Text = "[0]";
+			this.toolStripLabel_MainTool_Terminal_AutoAction_Count.Text = "(0)";
 			this.toolStripLabel_MainTool_Terminal_AutoAction_Count.ToolTipText = "Automatic Action Count\r\nClick to Reset";
 			this.toolStripLabel_MainTool_Terminal_AutoAction_Count.Visible = false;
 			this.toolStripLabel_MainTool_Terminal_AutoAction_Count.Click += new System.EventHandler(this.toolStripLabel_MainTool_Terminal_AutoAction_Count_Click);

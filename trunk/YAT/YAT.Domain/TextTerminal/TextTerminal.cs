@@ -99,6 +99,7 @@ namespace YAT.Domain
 			public Dictionary<string, bool> EolOfLastLineOfGivenPortWasCompleteMatch { get; set; }
 
 			public DateTime        TimeStamp        { get; set; }
+			public bool            Highlight        { get; set; }
 
 			public LineState(SequenceQueue eol)
 			{
@@ -110,6 +111,7 @@ namespace YAT.Domain
 				EolOfLastLineOfGivenPortWasCompleteMatch = new Dictionary<string, bool>(); // Default initial capacity is OK.
 
 				TimeStamp = DateTime.Now;
+				Highlight = false;
 			}
 
 			public virtual void Reset(string portStamp, bool eolOfLastLineWasCompleteMatch)
@@ -125,6 +127,7 @@ namespace YAT.Domain
 					EolOfLastLineOfGivenPortWasCompleteMatch.Add(portStamp, eolOfLastLineWasCompleteMatch);
 
 				TimeStamp = DateTime.Now;
+				Highlight = false;
 			}
 		}
 
@@ -542,7 +545,6 @@ namespace YAT.Domain
 		{
 			switch (r)
 			{
-				// Bin/Oct/Dec/Hex:
 				case Radix.Bin:
 				case Radix.Oct:
 				case Radix.Dec:
@@ -551,7 +553,6 @@ namespace YAT.Domain
 					return (base.ByteToElement(b, d, r));
 				}
 
-				// String/Char/Unicode:
 				case Radix.String:
 				case Radix.Char:
 				case Radix.Unicode:
@@ -896,7 +897,7 @@ namespace YAT.Domain
 			// Note: Code sequence the same as ExecuteLineEnd() of BinaryTerminal for better comparability.
 
 			                                    // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-			var line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+			var line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine, lineState.Highlight); // Preset the required capacity to improve memory management.
 
 			// Process line content:
 			int eolLength = lineState.Eol.Sequence.Length;
@@ -961,7 +962,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessRawChunk(RawChunk raw, DisplayElementCollection elements, List<DisplayLine> lines)
+		protected override void ProcessRawChunk(RawChunk raw, DisplayElementCollection elements, List<DisplayLine> lines, bool highlight)
 		{
 			LineState lineState;
 			switch (raw.Direction)
@@ -970,6 +971,11 @@ namespace YAT.Domain
 				case IODirection.Rx: lineState = this.rxLineState; break;
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + raw.Direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+
+			if (highlight) // Activate if needed, leave unchanged otherwise as it could have become highlighted by a previous raw chunk.
+			{
+				lineState.Highlight = true;
 			}
 
 			foreach (byte b in raw.Content)
@@ -1044,13 +1050,13 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessAndSignalRawChunk(RawChunk raw)
+		protected override void ProcessAndSignalRawChunk(RawChunk raw, bool highlight)
 		{
 			// Check whether port or direction has changed:
 			ProcessAndSignalPortOrDirectionLineBreak(raw.PortStamp, raw.Direction);
 
 			// Process the raw chunk:
-			base.ProcessAndSignalRawChunk(raw);
+			base.ProcessAndSignalRawChunk(raw, highlight);
 		}
 
 		#endregion

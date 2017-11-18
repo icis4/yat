@@ -243,6 +243,7 @@ namespace YAT.Domain
 			public SequenceQueue        SequenceBefore                { get; set; }
 			public List<DisplayElement> PendingSequenceBeforeElements { get; set; }
 			public DateTime             TimeStamp                     { get; set; }
+			public bool                 Highlight                     { get; set; }
 
 			public LineBreakTimer       BreakTimer                    { get; set; }
 
@@ -254,6 +255,7 @@ namespace YAT.Domain
 				SequenceBefore                = sequenceBefore;
 				PendingSequenceBeforeElements = new List<DisplayElement>();
 				TimeStamp                     = DateTime.Now;
+				Highlight                     = false;
 
 				BreakTimer                    = breakTimer;
 			}
@@ -339,6 +341,7 @@ namespace YAT.Domain
 				SequenceBefore                 .Reset();
 				PendingSequenceBeforeElements = new List<DisplayElement>();
 				TimeStamp                     = DateTime.Now;
+				Highlight                     = false;
 			}
 		}
 
@@ -796,7 +799,7 @@ namespace YAT.Domain
 			// Note: Code sequence the same as ExecuteLineEnd() of TextTerminal for better comparability.
 
 			                                    // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-			var line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+			var line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine, lineState.Highlight); // Preset the required capacity to improve memory management.
 
 			// Process line content:
 			line.AddRange(lineState.Elements.Clone()); // Clone elements to ensure decoupling.
@@ -824,7 +827,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessRawChunk(RawChunk raw, DisplayElementCollection elements, List<DisplayLine> lines)
+		protected override void ProcessRawChunk(RawChunk raw, DisplayElementCollection elements, List<DisplayLine> lines, bool highlight)
 		{
 			if (lines.Count <= 0) // Properly initialize the time delta:
 				this.bidirLineState.LastLineTimeStamp = raw.TimeStamp;
@@ -845,6 +848,11 @@ namespace YAT.Domain
 				case IODirection.Rx: lineState = this.rxLineState; break;
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + raw.Direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+
+			if (highlight) // Activate if needed, leave unchanged otherwise as it could have become highlighted by a previous raw chunk.
+			{
+				lineState.Highlight = true;
 			}
 
 			foreach (byte b in raw.Content)
@@ -1003,13 +1011,13 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessAndSignalRawChunk(RawChunk raw)
+		protected override void ProcessAndSignalRawChunk(RawChunk raw, bool highlight)
 		{
 			// Check whether port or direction has changed:
 			ProcessAndSignalPortAndDirectionLineBreak(raw.PortStamp, raw.Direction);
 
 			// Process the raw chunk:
-			base.ProcessAndSignalRawChunk(raw);
+			base.ProcessAndSignalRawChunk(raw, highlight);
 		}
 
 		#endregion

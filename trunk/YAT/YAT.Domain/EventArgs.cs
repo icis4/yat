@@ -25,6 +25,8 @@
 using System;
 using System.Collections.Generic;
 
+using MKY;
+
 namespace YAT.Domain
 {
 	/// <summary></summary>
@@ -71,6 +73,20 @@ namespace YAT.Domain
 			: base(message)
 		{
 			SerialPortError = serialPortError;
+		}
+	}
+
+	/// <summary></summary>
+	public class RawChunkEventArgs : EventArgs<RawChunk>
+	{
+		/// <summary></summary>
+		public bool Highlight { get; set; }
+
+		/// <summary></summary>
+		public RawChunkEventArgs(RawChunk value, bool highlight = false)
+			: base(value)
+		{
+			Highlight = highlight;
 		}
 	}
 

@@ -342,8 +342,8 @@ namespace YAT.Model
 				this.log = new Log.Provider(this.settingsRoot.Log, (EncodingEx)this.settingsRoot.TextTerminal.Encoding, this.settingsRoot.Format);
 
 				// Create AutoResponse/Action:
-				CreateAutoResponse();
-				CreateAutoAction();
+				CreateAutoResponseHelper();
+				CreateAutoActionHelper();
 
 				// Create chronos:
 				CreateChronos();
@@ -399,8 +399,8 @@ namespace YAT.Model
 					// ...ensure that timed objects are stopped and do not raise events anymore...
 					DisposeRates();
 					DisposeChronos();
-					DisposeAutoResponse();
-					DisposeAutoAction();
+					DisposeAutoResponseHelper();
+					DisposeAutoActionHelper();
 
 					// ...close and dispose of terminal and log...
 					CloseAndDisposeTerminal();
@@ -2344,7 +2344,7 @@ namespace YAT.Model
 		///    notified on updates after transmission.
 		/// </remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void terminal_RawChunkSent(object sender, EventArgs<Domain.RawChunk> e)
+		private void terminal_RawChunkSent(object sender, Domain.RawChunkEventArgs e)
 		{
 			if (IsDisposed) // Ensure not to handle events during closing anymore.
 				return;
@@ -2392,7 +2392,7 @@ namespace YAT.Model
 		///    notified on updates after transmission.
 		/// </remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void terminal_RawChunkReceived(object sender, EventArgs<Domain.RawChunk> e)
+		private void terminal_RawChunkReceived(object sender, Domain.RawChunkEventArgs e)
 		{
 			if (IsDisposed) // Ensure not to handle events during closing anymore.
 				return;
@@ -2456,6 +2456,8 @@ namespace YAT.Model
 
 					var asyncInvoker = new Action<byte[]>(terminal_RawChunkReceived_SendAutoResponseAsync);
 					asyncInvoker.BeginInvoke(triggerSequence, null, null);
+
+					e.Highlight = true;
 				}
 			}
 
@@ -2490,8 +2492,10 @@ namespace YAT.Model
 							triggerSequence = this.autoActionHelper.TriggerSequence;
 					}
 
-					var asyncInvoker = new Action<byte[]>(terminal_RawChunkReceived_InvokeAutoActionAsync);
-					asyncInvoker.BeginInvoke(triggerSequence, null, null);
+					var asyncInvoker = new Action<byte[], DateTime>(terminal_RawChunkReceived_InvokeAutoActionAsync);
+					asyncInvoker.BeginInvoke(triggerSequence, e.Value.TimeStamp, null, null);
+
+					e.Highlight = true;
 				}
 			}
 		}
@@ -2501,9 +2505,9 @@ namespace YAT.Model
 			SendAutoResponse(triggerSequence);
 		}
 
-		private void terminal_RawChunkReceived_InvokeAutoActionAsync(byte[] triggerSequence)
+		private void terminal_RawChunkReceived_InvokeAutoActionAsync(byte[] triggerSequence, DateTime ts)
 		{
-			InvokeAutoAction(triggerSequence);
+			InvokeAutoAction(triggerSequence, ts);
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
@@ -2593,7 +2597,11 @@ namespace YAT.Model
 			{
 				foreach (var dl in e.Lines)
 				{
-					InvokeAutoAction(dl.ElementsToOrigin());
+					DateTime ts;
+					if (!dl.TryGetTimeStamp(out ts))
+						ts = DateTime.Now;
+
+					InvokeAutoAction(dl.ElementsToOrigin(), ts);
 				}
 			}
 		}
@@ -4412,17 +4420,27 @@ namespace YAT.Model
 		// Auto
 		//==========================================================================================
 
+		// Note that AutoResponse/Action is intentionally implemented in 'Model' instead of 'Domain'
+		// for the following reasons:
+		//  > Triggers relate to 'Model' items SendText/SendFile/PredefinedCommand/....
+		//  > Responses relate to 'Model' items SendText/SendFile/PredefinedCommand/....
+		//  > Actions relate to 'Model' items as well.
+		//
+		// If needed one day, trigger evaluation could be moved to 'Domain', same as EOL evaluation.
+		// Moving this to 'Domain' would e.g. allow for coloring. However, this would require two or
+		// even four more colors (Tx/Rx data/control highlight). This becomes too complicated...
+
 		#region Auto > Response
 		//------------------------------------------------------------------------------------------
 		// Auto > Response
 		//------------------------------------------------------------------------------------------
 
-		private void CreateAutoResponse()
+		private void CreateAutoResponseHelper()
 		{
 			UpdateAutoResponse(); // Simply forward to general Update() method.
 		}
 
-		private void DisposeAutoResponse()
+		private void DisposeAutoResponseHelper()
 		{
 			lock (this.autoResponseHelperSyncObj)
 				this.autoResponseHelper = null; // Simply delete the reference to the object.
@@ -4450,10 +4468,8 @@ namespace YAT.Model
 					}
 					else
 					{
-						lock (this.autoResponseHelperSyncObj)
-							this.autoResponseHelper = null;
-
-						this.settingsRoot.AutoResponse.Deactivate();
+						DeactivateAutoResponse();
+						DisposeAutoResponseHelper();
 
 						OnMessageInputRequest
 						(
@@ -4467,14 +4483,12 @@ namespace YAT.Model
 				}
 				else // No command required = no sequence required = no helper required.
 				{
-					lock (this.autoResponseHelperSyncObj)
-						this.autoResponseHelper = null;
+					DisposeAutoResponseHelper();
 				}
 			}
 			else // Disabled.
 			{
-				lock (this.autoResponseHelperSyncObj)
-					this.autoResponseHelper = null;
+				DisposeAutoResponseHelper();
 			}
 		}
 
@@ -4483,8 +4497,10 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual void SendAutoResponse(byte[] triggerSequence)
 		{
-			int page = this.settingsRoot.Predefined.SelectedPage;
+			this.autoResponseCount++; // Incrementing before sending to have the effective count available during sending.
+			OnAutoResponseCountChanged(new EventArgs<int>(this.autoResponseCount));
 
+			int page = this.settingsRoot.Predefined.SelectedPage;
 			switch ((AutoResponse)this.settingsRoot.AutoResponse.Response)
 			{
 				case AutoResponse.Trigger:             SendAutoResponseTrigger(triggerSequence); break;
@@ -4511,9 +4527,6 @@ namespace YAT.Model
 				default:
 					break;
 			}
-
-			this.autoResponseCount++;
-			OnAutoResponseCountChanged(new EventArgs<int>(this.autoResponseCount));
 		}
 
 		/// <summary>
@@ -4549,6 +4562,17 @@ namespace YAT.Model
 			OnAutoResponseCountChanged(new EventArgs<int>(this.autoResponseCount));
 		}
 
+		/// <summary>
+		/// Deactivates the automatic response.
+		/// </summary>
+		public virtual void DeactivateAutoResponse()
+		{
+			AssertNotDisposed();
+
+			this.settingsRoot.AutoResponse.Deactivate();
+			ResetAutoResponseCount();
+		}
+
 		#endregion
 
 		#region Auto > Action
@@ -4556,19 +4580,19 @@ namespace YAT.Model
 		// Auto > Action
 		//------------------------------------------------------------------------------------------
 
-		private void CreateAutoAction()
+		private void CreateAutoActionHelper()
 		{
 			UpdateAutoAction(); // Simply forward to general Update() method.
 		}
 
-		private void DisposeAutoAction()
+		private void DisposeAutoActionHelper()
 		{
 			lock (this.autoActionHelperSyncObj)
 				this.autoActionHelper = null; // Simply delete the reference to the object.
 		}
 
 		/// <summary>
-		/// Updates the automatic Action helper.
+		/// Updates the automatic action helper.
 		/// </summary>
 		protected virtual void UpdateAutoAction()
 		{
@@ -4589,10 +4613,8 @@ namespace YAT.Model
 					}
 					else
 					{
-						lock (this.autoActionHelperSyncObj)
-							this.autoActionHelper = null;
-
-						this.settingsRoot.AutoAction.Deactivate();
+						DeactivateAutoAction();
+						DisposeAutoActionHelper();
 
 						OnMessageInputRequest
 						(
@@ -4606,45 +4628,67 @@ namespace YAT.Model
 				}
 				else // No command required = no sequence required = no helper required.
 				{
-					lock (this.autoActionHelperSyncObj)
-						this.autoActionHelper = null;
+					DisposeAutoActionHelper();
 				}
 			}
 			else // Disabled.
 			{
-				lock (this.autoActionHelperSyncObj)
-					this.autoActionHelper = null;
+				DisposeAutoActionHelper();
 			}
 		}
 
 		/// <summary>
-		/// Invokes the automatic Action.
+		/// Invokes the automatic action.
 		/// </summary>
-		protected virtual void InvokeAutoAction(byte[] triggerSequence)
+		protected virtual void InvokeAutoAction(byte[] triggerSequence, DateTime ts)
 		{
+			this.autoActionCount++; // Incrementing before invoking to have the effective count available during invoking.
+			OnAutoActionCountChanged(new EventArgs<int>(this.autoActionCount));
+
 			switch ((AutoAction)this.settingsRoot.AutoAction.Action)
 			{
-				case AutoAction.Beep:              SystemSounds.Beep.Play();       break;
-				case AutoAction.ShowMessageBox:    SendText();                     break;
-				case AutoAction.ClearRepositories: ClearRepositories();            break;
-				case AutoAction.ResetCountAndRate: ResetIOCountAndRate();          break;
-				case AutoAction.SwitchLogOn:       SwitchLogOn();                  break;
-				case AutoAction.SwitchLogOff:      SwitchLogOff();                 break;
-				case AutoAction.StopIO:            StopIO();                       break;
-				case AutoAction.CloseTerminal:     Close();                        break;
-				case AutoAction.ExitApplication:   OnExitRequest(EventArgs.Empty); break;
+				case AutoAction.Beep:              SystemSounds.Beep.Play();                      break;
+				case AutoAction.ShowMessageBox:    RequestAutoActionMessage(triggerSequence, ts); break;
+				case AutoAction.ClearRepositories: ClearRepositories();                           break;
+				case AutoAction.ResetCountAndRate: ResetIOCountAndRate();                         break;
+				case AutoAction.SwitchLogOn:       SwitchLogOn();                                 break;
+				case AutoAction.SwitchLogOff:      SwitchLogOff();                                break;
+				case AutoAction.StopIO:            StopIO();                                      break;
+				case AutoAction.CloseTerminal:     Close();                                       break;
+				case AutoAction.ExitApplication:   OnExitRequest(EventArgs.Empty);                break;
 
 				case AutoAction.None:
 				default:
 					break;
 			}
-
-			this.autoActionCount++;
-			OnAutoActionCountChanged(new EventArgs<int>(this.autoActionCount));
 		}
 
 		/// <summary>
-		/// Gets the automatic Action count.
+		/// Notifies the user about the action.
+		/// </summary>
+		protected virtual void RequestAutoActionMessage(byte[] triggerSequence, DateTime ts)
+		{
+			var sb = new StringBuilder();
+			sb.Append(@"Automatic message has been triggered by """);
+			sb.Append(this.terminal.Format(triggerSequence, Domain.IODirection.Rx));
+			sb.Append(@""" the ");
+			sb.Append(this.autoActionCount);
+			sb.Append(Int32Ex.ToEnglishSuffix(this.autoActionCount));
+			sb.Append(" time at ");
+			sb.Append(this.terminal.Format(ts, Domain.Direction.Rx));
+			sb.Append(".");
+
+			OnMessageInputRequest
+			(
+				sb.ToString(),
+				IndicatedName,
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information
+			);
+		}
+
+		/// <summary>
+		/// Gets the automatic action count.
 		/// </summary>
 		public virtual int AutoActionCount
 		{
@@ -4657,7 +4701,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Resets the automatic Action count.
+		/// Resets the automatic action count.
 		/// </summary>
 		public virtual void ResetAutoActionCount()
 		{
@@ -4665,6 +4709,17 @@ namespace YAT.Model
 
 			this.autoActionCount = 0;
 			OnAutoActionCountChanged(new EventArgs<int>(this.autoActionCount));
+		}
+
+		/// <summary>
+		/// Deactivates the automatic action.
+		/// </summary>
+		public virtual void DeactivateAutoAction()
+		{
+			AssertNotDisposed();
+
+			this.settingsRoot.AutoAction.Deactivate();
+			ResetAutoActionCount();
 		}
 
 		#endregion

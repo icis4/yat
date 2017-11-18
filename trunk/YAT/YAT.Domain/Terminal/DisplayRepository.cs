@@ -52,7 +52,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		private int capacity; // = 0;
-		private DisplayLinePart currentLine; // = null;
+		private DisplayLine currentLine; // = null;
 		private int byteCount; // = 0;
 
 		private DisplayLine lastLineAuxiliary; // = null;
@@ -68,8 +68,8 @@ namespace YAT.Domain
 		public DisplayRepository(int capacity)
 			: base(capacity)
 		{
-			this.capacity    = capacity;                        // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-			this.currentLine = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+			this.capacity    = capacity;                    // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+			this.currentLine = new DisplayLine(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 		////this.dataCount   = 0;
 			                                                  // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			this.lastLineAuxiliary = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
@@ -80,10 +80,10 @@ namespace YAT.Domain
 			: base(rhs)
 		{
 			this.capacity    = rhs.capacity;
-			this.currentLine = new DisplayLinePart(rhs.currentLine.Clone());
+			this.currentLine = rhs.currentLine.Clone();
 			this.byteCount   = rhs.byteCount;
 
-			this.lastLineAuxiliary = new DisplayLine(rhs.lastLineAuxiliary.Clone());
+			this.lastLineAuxiliary = rhs.lastLineAuxiliary.Clone();
 		}
 
 	#if (DEBUG)
@@ -226,7 +226,7 @@ namespace YAT.Domain
 
 			// Add current line if it contains elements:
 			if (this.currentLine.Count > 0)
-				lines.Add(new DisplayLine(this.currentLine));
+				lines.Add(this.currentLine.Clone()); // Clone elements to ensure decoupling.
 
 			return (lines);
 		}
