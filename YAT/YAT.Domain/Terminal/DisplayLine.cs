@@ -243,12 +243,18 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual DisplayElementCollection Clone()
 		{
-			var c = new DisplayElementCollection(this.Capacity); // Preset the required capacity to improve memory management.
+			var c = new DisplayElementCollection(Capacity); // Preset the required capacity to improve memory management.
+			CloneTo(c);
+			return (c);
+		}
 
+		/// <summary>
+		/// Clones this collection to the given collection.
+		/// </summary>
+		protected virtual void CloneTo(DisplayElementCollection c)
+		{
 			foreach (var de in this) // Clone the whole collection.
 				c.Add(de.Clone());
-
-			return (c);
 		}
 
 		/// <summary></summary>
@@ -268,6 +274,22 @@ namespace YAT.Domain
 			return (l.ToArray());
 		}
 
+		/// <summary></summary>
+		public virtual bool TryGetTimeStamp(out DateTime result)
+		{
+			foreach (var de in this)
+			{
+				var ts = de as DisplayElement.TimeStampInfo;
+				if (ts != null)
+				{
+					result = ts.TimeStamp;
+					return (true);
+				}
+			}
+
+			result = DateTime.MinValue;
+			return (false);
+		}
 		#endregion
 
 		#region Object Members
@@ -368,26 +390,6 @@ namespace YAT.Domain
 		}
 
 		#endregion
-
-		#region Methods
-		//==========================================================================================
-		// Methods
-		//==========================================================================================
-
-		/// <summary>
-		/// Creates and returns a new object that is a deep-copy of this instance.
-		/// </summary>
-		public new DisplayLine Clone()
-		{
-			var dl = new DisplayLine(this.Capacity); // Preset the required capacity to improve memory management.
-
-			foreach (var de in this) // Clone the whole collection.
-				dl.Add(de.Clone());
-
-			return (dl);
-		}
-
-		#endregion
 	}
 
 	/// <summary>
@@ -402,32 +404,77 @@ namespace YAT.Domain
 	[Serializable]
 	public class DisplayLine : DisplayLinePart
 	{
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
+		private bool highlight; // = 0;
+
+		#endregion
+
 		#region Object Lifetime
 		//==========================================================================================
 		// Object Lifetime
 		//==========================================================================================
 
 		/// <summary></summary>
-		public DisplayLine()
+		public DisplayLine(bool highlight = false)
 		{
+			this.highlight = highlight;
 		}
 
 		/// <summary></summary>
-		public DisplayLine(int elementCapacity)
+		public DisplayLine(int elementCapacity, bool highlight = false)
 			: base(elementCapacity)
 		{
+			this.highlight = highlight;
 		}
 
 		/// <summary></summary>
-		public DisplayLine(DisplayElementCollection collection)
+		public DisplayLine(DisplayElementCollection collection, bool highlight = false)
 			: base(collection)
 		{
+			this.highlight = highlight;
 		}
 
 		/// <summary></summary>
-		public DisplayLine(DisplayElement displayElement)
+		public DisplayLine(DisplayElement displayElement, bool highlight = false)
 			: base(displayElement)
 		{
+			this.highlight = highlight;
+		}
+
+		#endregion
+
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="DisplayLine"/> is highlighted.
+		/// </summary>
+		public virtual bool Highlight
+		{
+			get { return (this.highlight); }
+		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary>
+		/// Creates and returns a new object that is a deep-copy of this instance.
+		/// </summary>
+		public new DisplayLine Clone()
+		{
+			var c = new DisplayLine(Capacity, Highlight); // Preset the required capacity to improve memory management.
+			CloneTo(c);
+			return (c);
 		}
 
 		#endregion

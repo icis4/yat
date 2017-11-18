@@ -993,7 +993,8 @@ namespace YAT.View.Forms
 					}
 
 					toolStripLabel_MainTool_Terminal_AutoResponse_Count.Visible = true;
-					toolStripLabel_MainTool_Terminal_AutoResponse_Count.Text = string.Format("[{0}]", arCount);
+					toolStripLabel_MainTool_Terminal_AutoResponse_Count.Enabled = arIsActive;
+					toolStripLabel_MainTool_Terminal_AutoResponse_Count.Text = string.Format("({0})", arCount);
 
 					toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Visible = true;
 					toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Enabled = arIsActive;
@@ -1082,7 +1083,8 @@ namespace YAT.View.Forms
 					}
 
 					toolStripLabel_MainTool_Terminal_AutoAction_Count.Visible = true;
-					toolStripLabel_MainTool_Terminal_AutoAction_Count.Text = string.Format("[{0}]", aaCount);
+					toolStripLabel_MainTool_Terminal_AutoAction_Count.Enabled = aaIsActive;
+					toolStripLabel_MainTool_Terminal_AutoAction_Count.Text = string.Format("({0})", aaCount);
 
 					toolStripButton_MainTool_Terminal_AutoAction_Deactivate.Visible = true;
 					toolStripButton_MainTool_Terminal_AutoAction_Deactivate.Enabled = aaIsActive;

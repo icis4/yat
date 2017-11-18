@@ -832,7 +832,7 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.AutoResponse.Deactivate();
+			RequestAutoResponseDeactivate();
 		}
 
 		#endregion
@@ -945,7 +945,7 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.AutoAction.Deactivate();
+			RequestAutoActionDeactivate();
 		}
 
 		#endregion
@@ -3013,7 +3013,8 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestAutoResponseDeactivate()
 		{
-			this.settingsRoot.AutoResponse.Deactivate();
+			if (this.terminal != null)
+				this.terminal.DeactivateAutoResponse();
 		}
 
 		/// <summary></summary>
@@ -3044,7 +3045,8 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestAutoActionDeactivate()
 		{
-			this.settingsRoot.AutoAction.Deactivate();
+			if (this.terminal != null)
+				this.terminal.DeactivateAutoAction();
 		}
 
 		/// <summary></summary>

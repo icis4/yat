@@ -60,8 +60,8 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public FontFormat()
 		{
-			this.name = NameDefault;
-			this.size = SizeDefault;
+			this.name  = NameDefault;
+			this.size  = SizeDefault;
 			this.style = StyleDefault;
 			MakeFont();
 		}
@@ -69,8 +69,8 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public FontFormat(string name, float size, FontStyle style)
 		{
-			this.name = name;
-			this.size = size;
+			this.name  = name;
+			this.size  = size;
 			this.style = style;
 			MakeFont();
 		}
@@ -78,8 +78,8 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public FontFormat(FontFormat rhs)
 		{
-			this.name = rhs.name;
-			this.size = rhs.size;
+			this.name  = rhs.name;
+			this.size  = rhs.size;
 			this.style = rhs.style;
 			MakeFont();
 		}
