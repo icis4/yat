@@ -63,6 +63,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -77,7 +78,10 @@ using System.ComponentModel;
 #if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 using System.Runtime.InteropServices;
 using System.Text;
+#endif
+using System.Text.RegularExpressions;
 
+#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 using MKY.Win32;
 #endif
 
@@ -88,7 +92,7 @@ namespace MKY.Windows.Forms
 	/// <summary>
 	/// An improved <see cref="ListBox"/> that additionally provides:
 	/// <list type="bullet">
-	/// <item><description>The <see cref="SelectAllIndices"/> method.</description></item>
+	/// <item><description>The <see cref="SelectAll"/> method.</description></item>
 	/// <item><description>Several "VerticalScroll...()" methods.</description></item>
 	/// </list>
 	/// </summary>
@@ -294,6 +298,64 @@ namespace MKY.Windows.Forms
 		// Items
 		//==========================================================================================
 
+		/// <summary>
+		/// The zero-based index of the first item in the control.
+		/// </summary>
+		/// <remarks>
+		/// If no items are available, this property returns <see cref="ControlEx.InvalidIndex"/>.
+		/// </remarks>
+		public virtual int FirstIndex
+		{
+			get
+			{
+				int result = Math.Max(ControlEx.InvalidIndex, 0);
+				return (result);
+			}
+		}
+
+		/// <summary>
+		/// The zero-based index of the last item in the control.
+		/// </summary>
+		/// <remarks>
+		/// If no items are available, this property returns <see cref="ControlEx.InvalidIndex"/>.
+		/// </remarks>
+		public virtual int LastIndex
+		{
+			get
+			{
+				int result = Math.Max(ControlEx.InvalidIndex, (Items.Count - 1));
+				return (result);
+			}
+		}
+
+		/// <summary>
+		/// The first item in the control.
+		/// </summary>
+		public virtual object FirstItem
+		{
+			get
+			{
+				if (Items.Count > 0)
+					return (Items[0]);
+				else
+					return (null);
+			}
+		}
+
+		/// <summary>
+		/// The  last item in the control.
+		/// </summary>
+		public virtual object LastItem
+		{
+			get
+			{
+				if (Items.Count > 0)
+					return (Items[LastIndex]);
+				else
+					return (null);
+			}
+		}
+
 		/// <remarks>
 		/// If the <see cref="DrawMode"/> property is set to <see cref="DrawMode.OwnerDrawFixed"/>,
 		/// all items have the same height. When the <see cref="DrawMode"/> property is set to
@@ -401,13 +463,111 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary>
-		/// Select all indices within the list box.
+		/// Select all items within the list box.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
-		public void SelectAllIndices()
+		public void SelectAll()
 		{
 			for (int i = 0; i < Items.Count; i++)
 				SetSelected(i, true);
+		}
+
+		#endregion
+
+		#region Find
+		//==========================================================================================
+		// Find
+		//==========================================================================================
+
+		/// <summary>
+		/// Finds the next item in the <see cref="ListBox"/> that matches the given regex.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="ListBox.FindString(string, int)"/> method seems promising at first,
+		/// but there are severe limitations:
+		/// <list type="bullet">
+		/// <item><description>Only searches simple case-sensitve matches.</description></item>
+		/// <item><description>Only searches down.</description></item>
+		/// <item><description>...when reaches the bottom...it continues searching from the top...</description></item>
+		/// <item><description>...first item...that starts with the specified string...</description></item>
+		/// </list>
+		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		/// The <paramref name="regex"/> parameter is <c>null</c>.
+		/// </exception>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// The <paramref name="startIndex"/> parameter is less than zero or greater than or equal
+		/// to the value of the <see cref="ListBox.ObjectCollection.Count"/> property.
+		/// </exception>
+		public int FindNext(Regex regex, int startIndex)
+		{
+			if (regex == null)
+				throw (new ArgumentNullException("regex", "The regex is 'null'!"));
+
+			if (startIndex < NoMatches)
+				throw (new ArgumentOutOfRangeException("startIndex", startIndex, "The start index is less than 'ListBox.NoMatches'!"));
+
+			if (startIndex >= Items.Count)
+				throw (new ArgumentOutOfRangeException("startIndex", startIndex, "The start index is greater or equal 'Item.Count'!"));
+
+			if (Items.Count > 0)
+			{
+				if (startIndex == NoMatches)
+					startIndex = 0; // Same behavior as 'ListBox.FindString(string, int)' method.
+
+				for (int i = startIndex; i < Items.Count; i++)
+				{
+					if (regex.IsMatch(Items[i].ToString()))
+						return (i);
+				}
+			}
+
+			return (NoMatches);
+		}
+
+		/// <summary>
+		/// Finds the previous item in the <see cref="ListBox"/> that matches the given regex.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="ListBox.FindString(string, int)"/> method seems promising at first,
+		/// but there are severe limitations:
+		/// <list type="bullet">
+		/// <item><description>Only searches simple case-sensitve matches.</description></item>
+		/// <item><description>Only searches down.</description></item>
+		/// <item><description>...when reaches the bottom...it continues searching from the top...</description></item>
+		/// <item><description>...first item...that starts with the specified string...</description></item>
+		/// </list>
+		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		/// The <paramref name="regex"/> parameter is <c>null</c>.
+		/// </exception>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// The <paramref name="startIndex"/> parameter is less than zero or greater than or equal
+		/// to the value of the <see cref="ListBox.ObjectCollection.Count"/> property.
+		/// </exception>
+		public int FindPrevious(Regex regex, int startIndex)
+		{
+			if (regex == null)
+				throw (new ArgumentNullException("regex", "The regex is 'null'!"));
+
+			if (startIndex < NoMatches)
+				throw (new ArgumentOutOfRangeException("startIndex", startIndex, "The start index is less than 'ListBox.NoMatches'!"));
+
+			if (startIndex >= Items.Count)
+				throw (new ArgumentOutOfRangeException("startIndex", startIndex, "The start index is greater or equal 'Item.Count'!"));
+
+			if (Items.Count > 0)
+			{
+				if (startIndex == NoMatches)
+					startIndex = 0; // Same behavior as 'ListBox.FindString(string, int)' method.
+
+				for (int i = startIndex; i >= 0; i--)
+				{
+					if (regex.IsMatch(Items[i].ToString()))
+						return (i);
+				}
+			}
+
+			return (NoMatches);
 		}
 
 		#endregion

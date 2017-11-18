@@ -675,7 +675,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainMenu_Window_Minimize.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_application_put_16x16;
 			this.toolStripMenuItem_MainMenu_Window_Minimize.Name = "toolStripMenuItem_MainMenu_Window_Minimize";
 			this.toolStripMenuItem_MainMenu_Window_Minimize.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
-            | System.Windows.Forms.Keys.N)));
+            | System.Windows.Forms.Keys.M)));
 			this.toolStripMenuItem_MainMenu_Window_Minimize.Size = new System.Drawing.Size(217, 22);
 			this.toolStripMenuItem_MainMenu_Window_Minimize.Text = "Mi&nimize";
 			this.toolStripMenuItem_MainMenu_Window_Minimize.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Window_Minimize_Click);
@@ -1248,7 +1248,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_match_character_literally_16x16;
 			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.Name = "toolStripButton_MainTool_Terminal_Find_CaseSensitive";
 			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.Text = "Find Case Sensitive";
+			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.Text = "Find Case Sensitive [Alt+C]";
 			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.Visible = false;
 			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_CaseSensitive_Click);
 			// 
@@ -1258,7 +1258,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Find_WholeWord.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_literal_text_16x16;
 			this.toolStripButton_MainTool_Terminal_Find_WholeWord.Name = "toolStripButton_MainTool_Terminal_Find_WholeWord";
 			this.toolStripButton_MainTool_Terminal_Find_WholeWord.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Find_WholeWord.Text = "Find Whole Word";
+			this.toolStripButton_MainTool_Terminal_Find_WholeWord.Text = "Find Whole Word [Alt+W]";
 			this.toolStripButton_MainTool_Terminal_Find_WholeWord.Visible = false;
 			this.toolStripButton_MainTool_Terminal_Find_WholeWord.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_WholeWord_Click);
 			// 
@@ -1268,7 +1268,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Find_UseRegex.Name = "toolStripButton_MainTool_Terminal_Find_UseRegex";
 			this.toolStripButton_MainTool_Terminal_Find_UseRegex.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton_MainTool_Terminal_Find_UseRegex.Text = ".*";
-			this.toolStripButton_MainTool_Terminal_Find_UseRegex.ToolTipText = "Use Regex";
+			this.toolStripButton_MainTool_Terminal_Find_UseRegex.ToolTipText = "Use Regular Expression [Alt+R]";
 			this.toolStripButton_MainTool_Terminal_Find_UseRegex.Visible = false;
 			this.toolStripButton_MainTool_Terminal_Find_UseRegex.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_UseRegex_Click);
 			// 
@@ -1278,7 +1278,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Find_Next.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_rows_insert_below_word_16x16;
 			this.toolStripButton_MainTool_Terminal_Find_Next.Name = "toolStripButton_MainTool_Terminal_Find_Next";
 			this.toolStripButton_MainTool_Terminal_Find_Next.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Find_Next.Text = "Find Next";
+			this.toolStripButton_MainTool_Terminal_Find_Next.Text = "Find Next [Alt+N]/[Ctrl+Alt+N]";
 			this.toolStripButton_MainTool_Terminal_Find_Next.Visible = false;
 			this.toolStripButton_MainTool_Terminal_Find_Next.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_Next_Click);
 			// 
@@ -1288,7 +1288,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_rows_insert_above_word_16x16;
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Name = "toolStripButton_MainTool_Terminal_Find_Previous";
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Find_Previous.Text = "Find Previous";
+			this.toolStripButton_MainTool_Terminal_Find_Previous.Text = "Find Previous [Alt+P]/[Ctrl+Alt+P]";
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Visible = false;
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_Previous_Click);
 			// 

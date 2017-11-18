@@ -959,7 +959,7 @@ namespace YAT.View.Forms
 				}
 
 				toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Enabled = childIsReady;
-				toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Checked = arVisible;
+				toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Checked = arIsActive;
 
 				if (arVisible)
 				{
@@ -972,27 +972,25 @@ namespace YAT.View.Forms
 
 					if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
 					{
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Visible = true;
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Enabled = childIsReady;
 						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.Clear();
 						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.AddRange(arTriggerItems);
-
 						SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger, arTrigger, new Command(arTrigger).SingleLineText); // No explicit default radix available (yet).
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Enabled = childIsReady;
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Visible = true;
 
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Visible = true;
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Enabled = childIsReady;
 						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.Clear();
 						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.AddRange(arResponseItems);
-
 						SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_AutoResponse_Response, arResponse, new Command(arResponse).SingleLineText); // No explicit default radix available (yet).
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Enabled = childIsReady;
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Visible = true;
 					}
 
-					toolStripLabel_MainTool_Terminal_AutoResponse_Count.Visible = true;
-					toolStripLabel_MainTool_Terminal_AutoResponse_Count.Enabled = arIsActive;
 					toolStripLabel_MainTool_Terminal_AutoResponse_Count.Text = string.Format("({0})", arCount);
+					toolStripLabel_MainTool_Terminal_AutoResponse_Count.Enabled = arIsActive;
+					toolStripLabel_MainTool_Terminal_AutoResponse_Count.Visible = true;
 
-					toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Visible = true;
 					toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Enabled = arIsActive;
+					toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Visible = true;
 				}
 				else
 				{
@@ -1049,7 +1047,7 @@ namespace YAT.View.Forms
 				}
 
 				toolStripButton_MainTool_Terminal_AutoAction_ShowHide.Enabled = childIsReady;
-				toolStripButton_MainTool_Terminal_AutoAction_ShowHide.Checked = aaVisible;
+				toolStripButton_MainTool_Terminal_AutoAction_ShowHide.Checked = aaIsActive;
 
 				if (aaVisible)
 				{
@@ -1062,27 +1060,25 @@ namespace YAT.View.Forms
 
 					if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
 					{
-						toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Visible = true;
-						toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Enabled = childIsReady;
 						toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Items.Clear();
 						toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Items.AddRange(aaTriggerItems);
-
 						SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_AutoAction_Trigger, aaTrigger, new Command(aaTrigger).SingleLineText); // No explicit default radix available (yet).
+						toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Enabled = childIsReady;
+						toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Visible = true;
 
-						toolStripComboBox_MainTool_Terminal_AutoAction_Action.Visible = true;
-						toolStripComboBox_MainTool_Terminal_AutoAction_Action.Enabled = childIsReady;
 						toolStripComboBox_MainTool_Terminal_AutoAction_Action.Items.Clear();
 						toolStripComboBox_MainTool_Terminal_AutoAction_Action.Items.AddRange(aaActionItems);
-
 						SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_AutoAction_Action, aaAction, new Command(aaAction).SingleLineText); // No explicit default radix available (yet).
+						toolStripComboBox_MainTool_Terminal_AutoAction_Action.Enabled = childIsReady;
+						toolStripComboBox_MainTool_Terminal_AutoAction_Action.Visible = true;
 					}
 
-					toolStripLabel_MainTool_Terminal_AutoAction_Count.Visible = true;
-					toolStripLabel_MainTool_Terminal_AutoAction_Count.Enabled = aaIsActive;
 					toolStripLabel_MainTool_Terminal_AutoAction_Count.Text = string.Format("({0})", aaCount);
+					toolStripLabel_MainTool_Terminal_AutoAction_Count.Enabled = aaIsActive;
+					toolStripLabel_MainTool_Terminal_AutoAction_Count.Visible = true;
 
-					toolStripButton_MainTool_Terminal_AutoAction_Deactivate.Visible = true;
 					toolStripButton_MainTool_Terminal_AutoAction_Deactivate.Enabled = aaIsActive;
+					toolStripButton_MainTool_Terminal_AutoAction_Deactivate.Visible = true;
 				}
 				else
 				{
@@ -1109,11 +1105,10 @@ namespace YAT.View.Forms
 				toolStripButton_MainTool_Terminal_SaveToFile.Enabled        = childIsReady;
 				toolStripButton_MainTool_Terminal_Print.Enabled             = childIsReady;
 
-				bool findVisible = ApplicationSettings.RoamingUserSettings.Find.ShowField;
-
 				toolStripButton_MainTool_Terminal_Find_ShowHide.Enabled = childIsReady;
-				toolStripButton_MainTool_Terminal_Find_ShowHide.Checked = findVisible;
+				toolStripButton_MainTool_Terminal_Find_ShowHide.Checked = FindIsReady;
 
+				var findVisible = ApplicationSettings.RoamingUserSettings.Find.ShowField;
 				if (findVisible)
 				{
 					toolStripButton_MainTool_Terminal_Find_ShowHide.Text = "Hide Find";
@@ -1125,13 +1120,37 @@ namespace YAT.View.Forms
 
 					if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
 					{
-						toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = true;
-						toolStripComboBox_MainTool_Terminal_Find_Pattern.Enabled = childIsReady;
 						toolStripComboBox_MainTool_Terminal_Find_Pattern.Items.Clear();
 						toolStripComboBox_MainTool_Terminal_Find_Pattern.Items.AddRange(ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.ToArray());
-
 						SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_Find_Pattern, ApplicationSettings.RoamingUserSettings.Find.ActivePattern);
+						toolStripComboBox_MainTool_Terminal_Find_Pattern.Enabled = childIsReady;
+						toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = true;
 					}
+
+					var useRegex = ApplicationSettings.RoamingUserSettings.Find.UseRegex;
+					if (useRegex)
+					{
+						toolStripButton_MainTool_Terminal_Find_CaseSensitive.Checked = false;
+						toolStripButton_MainTool_Terminal_Find_CaseSensitive.Enabled = false;
+						toolStripButton_MainTool_Terminal_Find_WholeWord    .Checked = false;
+						toolStripButton_MainTool_Terminal_Find_WholeWord    .Enabled = false;
+						toolStripButton_MainTool_Terminal_Find_UseRegex     .Checked = ApplicationSettings.RoamingUserSettings.Find.UseRegex;
+					} //                                       UseRegex     .Enabled = true (always true).
+					else
+					{
+						toolStripButton_MainTool_Terminal_Find_CaseSensitive.Checked = ApplicationSettings.RoamingUserSettings.Find.CaseSensitive;
+						toolStripButton_MainTool_Terminal_Find_CaseSensitive.Enabled = true;
+						toolStripButton_MainTool_Terminal_Find_WholeWord    .Checked = ApplicationSettings.RoamingUserSettings.Find.WholeWord;
+						toolStripButton_MainTool_Terminal_Find_WholeWord    .Enabled = true;
+						toolStripButton_MainTool_Terminal_Find_UseRegex     .Checked = false;
+					} //                                       UseRegex     .Enabled = true (to allow switching).
+
+					toolStripButton_MainTool_Terminal_Find_CaseSensitive.Visible = true;
+					toolStripButton_MainTool_Terminal_Find_WholeWord    .Visible = true;
+					toolStripButton_MainTool_Terminal_Find_UseRegex     .Visible = true;
+
+					toolStripButton_MainTool_Terminal_Find_Next    .Enabled = FindIsReady;
+					toolStripButton_MainTool_Terminal_Find_Previous.Enabled = FindIsReady;
 
 					toolStripButton_MainTool_Terminal_Find_Next    .Visible = true;
 					toolStripButton_MainTool_Terminal_Find_Previous.Visible = true;
@@ -1143,6 +1162,10 @@ namespace YAT.View.Forms
 					toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = false;
 					toolStripComboBox_MainTool_Terminal_Find_Pattern.Enabled = false;
 					toolStripComboBox_MainTool_Terminal_Find_Pattern.Items.Clear();
+
+					toolStripButton_MainTool_Terminal_Find_CaseSensitive.Visible = false;
+					toolStripButton_MainTool_Terminal_Find_WholeWord    .Visible = false;
+					toolStripButton_MainTool_Terminal_Find_UseRegex     .Visible = false;
 
 					toolStripButton_MainTool_Terminal_Find_Next    .Visible = false;
 					toolStripButton_MainTool_Terminal_Find_Previous.Visible = false;
@@ -1445,15 +1468,11 @@ namespace YAT.View.Forms
 		{
 			ApplicationSettings.RoamingUserSettings.Find.ShowField = !ApplicationSettings.RoamingUserSettings.Find.ShowField;
 			ApplicationSettings.SaveRoamingUserSettings();
-		}
 
-		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyDown(object sender, KeyEventArgs e)
-		{
-			if ((e.KeyData & Keys.KeyCode) == Keys.Enter)
+			if (ApplicationSettings.RoamingUserSettings.Find.ShowField)
 			{
-				var pattern = (toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedItem as string);
-				if (pattern != null)
-					((Terminal)ActiveMdiChild).Find(pattern);
+			////toolStripComboBox_MainTool_Terminal_Find_Pattern.Select();    doesn't work, 'ToolStrip'
+				toolStripComboBox_MainTool_Terminal_Find_Pattern.Focus(); // seems to require Focus().
 			}
 		}
 
@@ -1464,7 +1483,9 @@ namespace YAT.View.Forms
 
 			var pattern = (toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedItem as string);
 			if (pattern != null)
-				((Terminal)ActiveMdiChild).Find(pattern);
+			{
+				Find(pattern);
+			}
 		}
 
 		/// <remarks>
@@ -1495,7 +1516,50 @@ namespace YAT.View.Forms
 			}
 		}
 
+		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyDown(object sender, KeyEventArgs e)
+		{
+			if ((e.KeyData & Keys.KeyCode) == Keys.Enter)
+			{
+				e.SuppressKeyPress = true; // Must be done before invoking Find(), as that potentially shows a message box.
+
+				string pattern;
+				if (toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedIndex != ControlEx.InvalidIndex)
+					pattern = (toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedItem as string);
+				else
+					pattern = toolStripComboBox_MainTool_Terminal_Find_Pattern.Text;
+
+				Find(pattern);
+			}
+			else if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
+			{
+				e.SuppressKeyPress = true; // Suppress *any* [Alt] press in order to prevent jumping into menu!
+
+				switch (e.KeyData & Keys.KeyCode)
+				{
+					case Keys.C: ToggleFindCaseSensitive(); break;
+					case Keys.W: ToggleFindWholeWord();     break;
+					case Keys.R: ToggleFindUseRegex();      break;
+					case Keys.N: FindNext();                break; // Same letter as standard shortcut [Ctrl+Alt+N].
+					case Keys.P: FindPrevious();            break; // Same letter as standard shortcut [Ctrl+Alt+P].
+
+					default: break;
+				}
+			}
+		}
+
+		private void Find(string pattern)
+		{
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.Find(pattern);
+		}
+
 		private void toolStripButton_MainTool_Terminal_Find_CaseSensitive_Click(object sender, EventArgs e)
+		{
+			ToggleFindCaseSensitive();
+		}
+
+		private void ToggleFindCaseSensitive()
 		{
 			ApplicationSettings.RoamingUserSettings.Find.CaseSensitive = !ApplicationSettings.RoamingUserSettings.Find.CaseSensitive;
 			ApplicationSettings.SaveRoamingUserSettings();
@@ -1503,11 +1567,21 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Terminal_Find_WholeWord_Click(object sender, EventArgs e)
 		{
+			ToggleFindWholeWord();
+		}
+
+		private void ToggleFindWholeWord()
+		{
 			ApplicationSettings.RoamingUserSettings.Find.WholeWord = !ApplicationSettings.RoamingUserSettings.Find.WholeWord;
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Find_UseRegex_Click(object sender, EventArgs e)
+		{
+			ToggleFindUseRegex();
+		}
+
+		private void ToggleFindUseRegex()
 		{
 			ApplicationSettings.RoamingUserSettings.Find.UseRegex = !ApplicationSettings.RoamingUserSettings.Find.UseRegex;
 			ApplicationSettings.SaveRoamingUserSettings();
@@ -1515,12 +1589,26 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Terminal_Find_Next_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).FindNext();
+			FindNext();
+		}
+
+		private void FindNext()
+		{
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.FindNext();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Find_Previous_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).FindPrevious();
+			FindPrevious();
+		}
+
+		private void FindPrevious()
+		{
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.FindPrevious();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Log_Settings_Click(object sender, EventArgs e)
@@ -2702,7 +2790,8 @@ namespace YAT.View.Forms
 				ApplicationSettings.SaveRoamingUserSettings();
 			}
 
-			toolStripComboBox_MainTool_Terminal_Find_Pattern.Select();
+		////toolStripComboBox_MainTool_Terminal_Find_Pattern.Select()    doesn't work, 'ToolStrip'
+			toolStripComboBox_MainTool_Terminal_Find_Pattern.Focus(); // seems to require Focus().
 		}
 
 		/// <summary>

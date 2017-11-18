@@ -60,6 +60,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Security.Permissions;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 using MKY;
@@ -154,6 +155,10 @@ namespace YAT.View.Controls
 		private int currentLineNumberWidth;
 		private bool showBufferLineNumbers = ShowBufferLineNumbersDefault;
 		private bool showTotalLineNumbers = ShowTotalLineNumbersDefault;
+
+		// Find:
+		private Regex findRegex; // = null;
+		private int lastFindIndex = ListBox.NoMatches;
 
 		// Status:
 		private bool showTimeStatus = ShowTimeStatusDefault;
@@ -490,6 +495,18 @@ namespace YAT.View.Controls
 			set { this.dataStatusHelper.RxLineRate = value;  }
 		}
 
+		/// <summary></summary>
+		public virtual string FindPattern
+		{
+			get
+			{
+				if (this.findRegex != null)
+					return (this.findRegex.ToString());
+
+				return (null);
+			}
+		}
+
 	#if (DEBUG)
 
 		/// <remarks>
@@ -595,7 +612,7 @@ namespace YAT.View.Controls
 		{
 			var lb = fastListBox_Monitor;
 			lb.BeginUpdate();
-			lb.SelectAllIndices();
+			lb.SelectAll();
 			lb.EndUpdate();
 		}
 
@@ -606,6 +623,63 @@ namespace YAT.View.Controls
 			lb.BeginUpdate();
 			lb.ClearSelected();
 			lb.EndUpdate();
+		}
+
+		/// <summary></summary>
+		public virtual bool TryFind(string pattern)
+		{
+			this.findRegex = new Regex(pattern);
+
+			return (TryFindNext());
+		}
+
+		/// <summary></summary>
+		public virtual bool TryFindNext()
+		{
+			var lb = fastListBox_Monitor;
+
+			var nextStartIndex = (this.lastFindIndex + 1);
+			if (nextStartIndex > lb.LastIndex)
+				return (false);
+
+			int i = lb.FindNext(this.findRegex, nextStartIndex);
+			if (i != ListBox.NoMatches)
+			{
+				lb.ClearSelected();
+				lb.SetSelected(i, true);
+				lb.TopIndex = Math.Max(i - (lb.TotalVisibleItemCount / 2), 0);
+
+				this.lastFindIndex = i;
+				return (true);
+			}
+
+			return (false);
+		}
+
+		/// <summary></summary>
+		public virtual bool TryFindPrevious()
+		{
+			var lb = fastListBox_Monitor;
+
+			var nextStartIndex = (this.lastFindIndex - 1);
+			if (nextStartIndex < lb.FirstIndex)
+				return (false);
+
+			if (nextStartIndex == ControlEx.InvalidIndex)
+				return (false);
+
+			int i = lb.FindPrevious(this.findRegex, nextStartIndex);
+			if (i != ListBox.NoMatches)
+			{
+				lb.ClearSelected();
+				lb.SetSelected(i, true);
+				lb.TopIndex = Math.Max(i - (lb.TotalVisibleItemCount / 2), 0);
+
+				this.lastFindIndex = i;
+				return (true);
+			}
+
+			return (false);
 		}
 
 		/// <summary></summary>
@@ -869,7 +943,8 @@ namespace YAT.View.Controls
 
 						e.DrawBackground();
 
-						MonitorRenderer.DrawAndMeasureLine((lbmon.Items[e.Index] as Domain.DisplayLine), this.formatSettings,
+						var dl = (lbmon.Items[e.Index] as Domain.DisplayLine);
+						MonitorRenderer.DrawAndMeasureLine(dl, this.formatSettings,
 						                                   e.Graphics, e.Bounds, e.State, out requestedWidth);
 						e.DrawFocusRectangle();
 					}
@@ -877,7 +952,8 @@ namespace YAT.View.Controls
 					{
 						e.DrawBackground();
 
-						MonitorRenderer.DrawAndMeasureLine((lbmon.Items[e.Index] as Domain.DisplayLine).Text, e.Font,
+						var dl = (lbmon.Items[e.Index] as Domain.DisplayLine);
+						MonitorRenderer.DrawAndMeasureLine(dl.Text, dl.Highlight, e.Font,
 						                                   e.Graphics, e.Bounds, e.State, e.ForeColor, e.BackColor, out requestedWidth);
 						e.DrawFocusRectangle();
 
@@ -893,7 +969,7 @@ namespace YAT.View.Controls
 
 				#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 					// Perform horizontal auto scroll, but only on the last item:
-					if (e.Index == (lbmon.Items.Count - 1))
+					if (e.Index == lbmon.LastIndex)
 						lbmon.HorizontalScrollToPosition(requestedWidth - e.Bounds.Width);
 				#endif
 
@@ -1215,8 +1291,8 @@ namespace YAT.View.Controls
 		/// </remarks>
 		private void AddElementToListBox(Domain.DisplayElement element)
 		{
-			ListBox lblin = fastListBox_LineNumbers;
-			ListBox lbmon = fastListBox_Monitor;
+			var lblin = fastListBox_LineNumbers;
+			var lbmon = fastListBox_Monitor;
 
 			// If first line, add element to a new line:
 			if (lbmon.Items.Count <= 0)
@@ -1227,8 +1303,7 @@ namespace YAT.View.Controls
 			else
 			{
 				// Get current line:
-				var lastLineIndex = (lbmon.Items.Count - 1);
-				var current = lbmon.Items[lastLineIndex] as Domain.DisplayLine;
+				var current = (lbmon.LastItem as Domain.DisplayLine);
 
 				// If first element, add element to line:
 				if (current.Count <= 0)
