@@ -1109,7 +1109,7 @@ namespace YAT.View.Forms
 				toolStripButton_MainTool_Terminal_SaveToFile.Enabled        = childIsReady;
 				toolStripButton_MainTool_Terminal_Print.Enabled             = childIsReady;
 
-				bool findVisible = ApplicationSettings.RoamingUserSettings.Find.ShowFindField;
+				bool findVisible = ApplicationSettings.RoamingUserSettings.Find.ShowField;
 
 				toolStripButton_MainTool_Terminal_Find_ShowHide.Enabled = childIsReady;
 				toolStripButton_MainTool_Terminal_Find_ShowHide.Checked = findVisible;
@@ -1128,9 +1128,9 @@ namespace YAT.View.Forms
 						toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = true;
 						toolStripComboBox_MainTool_Terminal_Find_Pattern.Enabled = childIsReady;
 						toolStripComboBox_MainTool_Terminal_Find_Pattern.Items.Clear();
-						toolStripComboBox_MainTool_Terminal_Find_Pattern.Items.AddRange(ApplicationSettings.RoamingUserSettings.Find.RecentFindPatterns.ToArray());
+						toolStripComboBox_MainTool_Terminal_Find_Pattern.Items.AddRange(ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.ToArray());
 
-						SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_Find_Pattern, ApplicationSettings.RoamingUserSettings.Find.ActiveFindPattern);
+						SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_Find_Pattern, ApplicationSettings.RoamingUserSettings.Find.ActivePattern);
 					}
 
 					toolStripButton_MainTool_Terminal_Find_Next    .Visible = true;
@@ -1443,7 +1443,7 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Terminal_Find_ShowHide_Click(object sender, EventArgs e)
 		{
-			ApplicationSettings.RoamingUserSettings.Find.ShowFindField = !ApplicationSettings.RoamingUserSettings.Find.ShowFindField;
+			ApplicationSettings.RoamingUserSettings.Find.ShowField = !ApplicationSettings.RoamingUserSettings.Find.ShowField;
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -1493,6 +1493,24 @@ namespace YAT.View.Forms
 					);
 				}
 			}
+		}
+
+		private void toolStripButton_MainTool_Terminal_Find_CaseSensitive_Click(object sender, EventArgs e)
+		{
+			ApplicationSettings.RoamingUserSettings.Find.CaseSensitive = !ApplicationSettings.RoamingUserSettings.Find.CaseSensitive;
+			ApplicationSettings.SaveRoamingUserSettings();
+		}
+
+		private void toolStripButton_MainTool_Terminal_Find_WholeWord_Click(object sender, EventArgs e)
+		{
+			ApplicationSettings.RoamingUserSettings.Find.WholeWord = !ApplicationSettings.RoamingUserSettings.Find.WholeWord;
+			ApplicationSettings.SaveRoamingUserSettings();
+		}
+
+		private void toolStripButton_MainTool_Terminal_Find_UseRegex_Click(object sender, EventArgs e)
+		{
+			ApplicationSettings.RoamingUserSettings.Find.UseRegex = !ApplicationSettings.RoamingUserSettings.Find.UseRegex;
+			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Find_Next_Click(object sender, EventArgs e)
@@ -2678,9 +2696,9 @@ namespace YAT.View.Forms
 		/// </summary>
 		public virtual void RequestFind()
 		{
-			if (!ApplicationSettings.RoamingUserSettings.Find.ShowFindField)
+			if (!ApplicationSettings.RoamingUserSettings.Find.ShowField)
 			{
-				ApplicationSettings.RoamingUserSettings.Find.ShowFindField = true;
+				ApplicationSettings.RoamingUserSettings.Find.ShowField = true;
 				ApplicationSettings.SaveRoamingUserSettings();
 			}
 
@@ -2694,8 +2712,8 @@ namespace YAT.View.Forms
 		{
 			get
 			{
-				if (ApplicationSettings.RoamingUserSettings.Find.ShowFindField)
-					return (!string.IsNullOrEmpty(ApplicationSettings.RoamingUserSettings.Find.ActiveFindPattern));
+				if (ApplicationSettings.RoamingUserSettings.Find.ShowField)
+					return (!string.IsNullOrEmpty(ApplicationSettings.RoamingUserSettings.Find.ActivePattern));
 				else
 					return (false);
 			}

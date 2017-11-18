@@ -35,11 +35,15 @@ namespace YAT.Model.Settings
 	/// <summary></summary>
 	public class FindSettings : MKY.Settings.SettingsItem, IEquatable<FindSettings>
 	{
-		private const int MaxRecentFindPatterns = 12;
+		private const int MaxRecentPatterns = 12;
 
-		private bool showFindField;
-		private string activeFindPattern;
-		private RecentItemCollection<string> recentFindPatterns;
+		private bool showField;
+		private string activePattern;
+		private RecentItemCollection<string> recentPatterns;
+
+		private bool caseSensitive;
+		private bool wholeWord;
+		private bool useRegex;
 
 		/// <summary></summary>
 		public FindSettings()
@@ -62,9 +66,13 @@ namespace YAT.Model.Settings
 		public FindSettings(FindSettings rhs)
 			: base(rhs)
 		{
-			ShowFindField      = rhs.ShowFindField;
-			ActiveFindPattern  = rhs.ActiveFindPattern;
-			RecentFindPatterns = new RecentItemCollection<string>(rhs.RecentFindPatterns);
+			ShowField      = rhs.ShowField;
+			ActivePattern  = rhs.ActivePattern;
+			RecentPatterns = new RecentItemCollection<string>(rhs.RecentPatterns);
+
+			CaseSensitive  = rhs.CaseSensitive;
+			WholeWord      = rhs.WholeWord;
+			UseRegex       = rhs.UseRegex;
 
 			ClearChanged();
 		}
@@ -76,9 +84,13 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			ShowFindField      = false;
-			ActiveFindPattern  = null;
-			RecentFindPatterns = new RecentItemCollection<string>(MaxRecentFindPatterns);
+			ShowField      = false;
+			ActivePattern  = null;
+			RecentPatterns = new RecentItemCollection<string>(MaxRecentPatterns);
+
+			CaseSensitive  = true;
+			WholeWord      = false;
+			UseRegex       = false;
 		}
 
 		#region Properties
@@ -87,30 +99,30 @@ namespace YAT.Model.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("ShowFindField")]
-		public bool ShowFindField
+		[XmlElement("ShowField")]
+		public bool ShowField
 		{
-			get { return (this.showFindField); }
+			get { return (this.showField); }
 			set
 			{
-				if (this.showFindField != value)
+				if (this.showField != value)
 				{
-					this.showFindField = value;
+					this.showField = value;
 					SetMyChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("ActiveFindPattern")]
-		public string ActiveFindPattern
+		[XmlElement("ActivePattern")]
+		public string ActivePattern
 		{
-			get { return (this.activeFindPattern); }
+			get { return (this.activePattern); }
 			set
 			{
-				if (this.activeFindPattern != value)
+				if (this.activePattern != value)
 				{
-					this.activeFindPattern = value;
+					this.activePattern = value;
 					SetMyChanged();
 				}
 			}
@@ -119,15 +131,60 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
 		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
-		[XmlElement("RecentFindPatterns")]
-		public RecentItemCollection<string> RecentFindPatterns
+		[XmlElement("RecentPatterns")]
+		public RecentItemCollection<string> RecentPatterns
 		{
-			get { return (this.recentFindPatterns); }
+			get { return (this.recentPatterns); }
 			set
 			{
-				if (this.recentFindPatterns != value)
+				if (this.recentPatterns != value)
 				{
-					this.recentFindPatterns = value;
+					this.recentPatterns = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("CaseSensitive")]
+		public bool CaseSensitive
+		{
+			get { return (this.caseSensitive); }
+			set
+			{
+				if (this.caseSensitive != value)
+				{
+					this.caseSensitive = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("WholeWord")]
+		public bool WholeWord
+		{
+			get { return (this.wholeWord); }
+			set
+			{
+				if (this.wholeWord != value)
+				{
+					this.wholeWord = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("UseRegex")]
+		public bool UseRegex
+		{
+			get { return (this.useRegex); }
+			set
+			{
+				if (this.useRegex != value)
+				{
+					this.useRegex = value;
 					SetMyChanged();
 				}
 			}
@@ -153,9 +210,13 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^  ShowFindField                                  .GetHashCode();
-				hashCode = (hashCode * 397) ^ (ActiveFindPattern  != null ? ActiveFindPattern .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (RecentFindPatterns != null ? RecentFindPatterns.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  ShowField                              .GetHashCode();
+				hashCode = (hashCode * 397) ^ (ActivePattern  != null ? ActivePattern .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (RecentPatterns != null ? RecentPatterns.GetHashCode() : 0);
+
+				hashCode = (hashCode * 397) ^  CaseSensitive                          .GetHashCode();
+				hashCode = (hashCode * 397) ^  WholeWord                              .GetHashCode();
+				hashCode = (hashCode * 397) ^  UseRegex                               .GetHashCode();
 
 				return (hashCode);
 			}
@@ -186,9 +247,13 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				ShowFindField        .Equals(                          other.ShowFindField)      &&
-				StringEx             .EqualsOrdinal(ActiveFindPattern, other.ActiveFindPattern)  &&
-				IEnumerableEx.ElementsEqual(       RecentFindPatterns, other.RecentFindPatterns)
+				ShowField            .Equals(                      other.ShowField)      &&
+				StringEx             .EqualsOrdinal(ActivePattern, other.ActivePattern)  &&
+				IEnumerableEx.ElementsEqual(       RecentPatterns, other.RecentPatterns) &&
+
+				CaseSensitive        .Equals(                      other.CaseSensitive)  &&
+				WholeWord            .Equals(                      other.WholeWord)  &&
+				UseRegex             .Equals(                      other.UseRegex)
 			);
 		}
 
