@@ -756,6 +756,8 @@ namespace YAT.Domain
 		{
 			// Convert content:
 			var de = ByteToElement(b, d);
+			de.Highlight = lineState.Highlight;
+
 			var lp = new DisplayLinePart(); // Default initial capacity is OK.
 
 			// Evaluate EOL, i.e. check whether EOL is about to start or has already started:
@@ -897,7 +899,7 @@ namespace YAT.Domain
 			// Note: Code sequence the same as ExecuteLineEnd() of BinaryTerminal for better comparability.
 
 			                                    // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-			var line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine, lineState.Highlight); // Preset the required capacity to improve memory management.
+			var line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			// Process line content:
 			int eolLength = lineState.Eol.Sequence.Length;
@@ -962,7 +964,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessRawChunk(RawChunk raw, DisplayElementCollection elements, List<DisplayLine> lines, bool highlight)
+		protected override void ProcessRawChunk(RawChunk raw, bool highlight, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			LineState lineState;
 			switch (raw.Direction)

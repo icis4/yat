@@ -2618,7 +2618,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected abstract void ProcessRawChunk(RawChunk raw, DisplayElementCollection elements, List<DisplayLine> lines, bool highlight);
+		protected abstract void ProcessRawChunk(RawChunk raw, bool highlight, DisplayElementCollection elements, List<DisplayLine> lines);
 
 		/// <summary></summary>
 		protected virtual void ProcessAndSignalRawChunk(RawChunk raw, bool highlight)
@@ -2628,7 +2628,7 @@ namespace YAT.Domain
 			var elements = new DisplayElementCollection(); // Default initial capacity is OK.
 			var lines = new List<DisplayLine>();
 
-			ProcessRawChunk(raw, elements, lines, highlight);
+			ProcessRawChunk(raw, highlight, elements, lines);
 
 			if (elements.Count > 0)
 			{

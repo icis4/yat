@@ -531,11 +531,17 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private Direction direction;
-		private List<Pair<byte[], string>> origin;
-		private string text;
-		private int byteCount;
-		private ElementAttributes attributes;
+		private Direction direction;               // = Direction.None;
+		private List<Pair<byte[], string>> origin; // = null;
+		private string text;                       // = null;
+		private int byteCount;                     // = 0;
+		private ElementAttributes attributes;      // = ElementAttributes.None.
+
+		/// <summary>
+		/// Indicates whether this <see cref="DisplayElement"/> is highlighted.
+		/// </summary>
+		[XmlIgnore]
+		public virtual bool Highlight { get; set; } // = false;
 
 		#endregion
 
@@ -725,6 +731,8 @@ namespace YAT.Domain
 			clone.text       = this.text;
 			clone.byteCount  = this.byteCount;
 			clone.attributes = this.attributes;
+
+			clone.Highlight  = this.Highlight;
 
 			return (clone);
 		}
