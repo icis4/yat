@@ -32,7 +32,11 @@ using MKY.Collections.Specialized;
 
 namespace YAT.Model.Settings
 {
-	/// <summary></summary>
+	/// <remarks>
+	/// \remind (2017-11-19 / MKY)
+	/// Could/should be migrated to 'YAT.Application.Settings' or 'YAT.View.Settings'.
+	/// To be done when refactoring the projects on integration with Albatros.
+	/// </remarks>
 	public class FindSettings : MKY.Settings.SettingsItem, IEquatable<FindSettings>
 	{
 		private const int MaxRecentPatterns = 12;
@@ -40,10 +44,7 @@ namespace YAT.Model.Settings
 		private bool showField;
 		private string activePattern;
 		private RecentItemCollection<string> recentPatterns;
-
-		private bool caseSensitive;
-		private bool wholeWord;
-		private bool useRegex;
+		private FindOptions options;
 
 		/// <summary></summary>
 		public FindSettings()
@@ -69,10 +70,7 @@ namespace YAT.Model.Settings
 			ShowField      = rhs.ShowField;
 			ActivePattern  = rhs.ActivePattern;
 			RecentPatterns = new RecentItemCollection<string>(rhs.RecentPatterns);
-
-			CaseSensitive  = rhs.CaseSensitive;
-			WholeWord      = rhs.WholeWord;
-			UseRegex       = rhs.UseRegex;
+			Options        = rhs.Options;
 
 			ClearChanged();
 		}
@@ -87,10 +85,7 @@ namespace YAT.Model.Settings
 			ShowField      = false;
 			ActivePattern  = null;
 			RecentPatterns = new RecentItemCollection<string>(MaxRecentPatterns);
-
-			CaseSensitive  = true;
-			WholeWord      = false;
-			UseRegex       = false;
+			Options        = new FindOptions(true, false, false);
 		}
 
 		#region Properties
@@ -146,45 +141,15 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("CaseSensitive")]
-		public bool CaseSensitive
+		[XmlElement("Options")]
+		public FindOptions Options
 		{
-			get { return (this.caseSensitive); }
+			get { return (this.options); }
 			set
 			{
-				if (this.caseSensitive != value)
+				if (this.options != value)
 				{
-					this.caseSensitive = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("WholeWord")]
-		public bool WholeWord
-		{
-			get { return (this.wholeWord); }
-			set
-			{
-				if (this.wholeWord != value)
-				{
-					this.wholeWord = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("UseRegex")]
-		public bool UseRegex
-		{
-			get { return (this.useRegex); }
-			set
-			{
-				if (this.useRegex != value)
-				{
-					this.useRegex = value;
+					this.options = value;
 					SetMyChanged();
 				}
 			}
@@ -213,10 +178,7 @@ namespace YAT.Model.Settings
 				hashCode = (hashCode * 397) ^  ShowField                              .GetHashCode();
 				hashCode = (hashCode * 397) ^ (ActivePattern  != null ? ActivePattern .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (RecentPatterns != null ? RecentPatterns.GetHashCode() : 0);
-
-				hashCode = (hashCode * 397) ^  CaseSensitive                          .GetHashCode();
-				hashCode = (hashCode * 397) ^  WholeWord                              .GetHashCode();
-				hashCode = (hashCode * 397) ^  UseRegex                               .GetHashCode();
+				hashCode = (hashCode * 397) ^  Options                                .GetHashCode();
 
 				return (hashCode);
 			}
@@ -250,10 +212,7 @@ namespace YAT.Model.Settings
 				ShowField            .Equals(                      other.ShowField)      &&
 				StringEx             .EqualsOrdinal(ActivePattern, other.ActivePattern)  &&
 				IEnumerableEx.ElementsEqual(       RecentPatterns, other.RecentPatterns) &&
-
-				CaseSensitive        .Equals(                      other.CaseSensitive)  &&
-				WholeWord            .Equals(                      other.WholeWord)  &&
-				UseRegex             .Equals(                      other.UseRegex)
+				Options              .Equals(                      other.Options)
 			);
 		}
 

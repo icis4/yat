@@ -23,22 +23,19 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
-using MKY;
-using MKY.Collections;
-using MKY.Collections.Specialized;
-
 namespace YAT.Model.Settings
 {
-	/// <summary></summary>
+	/// <remarks>
+	/// \remind (2017-11-19 / MKY)
+	/// Could/should be migrated to 'YAT.Application.Settings' or 'YAT.View.Settings'.
+	/// To be done when refactoring the projects on integration with Albatros.
+	/// </remarks>
 	public class MainWindowSettings : MKY.Settings.SettingsItem, IEquatable<MainWindowSettings>
 	{
-		private const int MaxRecentFindPatterns = 12;
-
 		private FormStartPosition startPosition;
 		private FormWindowState windowState;
 		private Point location;

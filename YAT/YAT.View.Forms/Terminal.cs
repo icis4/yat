@@ -3116,7 +3116,7 @@ namespace YAT.View.Forms
 
 			var monitor = GetMonitor(this.lastMonitorSelection);
 
-			if (!monitor.TryFind(pattern))
+			if (!monitor.TryFind(pattern, ApplicationSettings.RoamingUserSettings.Find.Options))
 				ShowNotFoundMessage(pattern, true);
 		}
 
@@ -3143,7 +3143,7 @@ namespace YAT.View.Forms
 			var text = new StringBuilder();
 			text.Append("The specified ");
 
-			if (ApplicationSettings.RoamingUserSettings.Find.UseRegex)
+			if (ApplicationSettings.RoamingUserSettings.Find.Options.UseRegex)
 				text.Append("pattern");
 			else
 				text.Append("text");

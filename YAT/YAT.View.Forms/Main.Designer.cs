@@ -675,7 +675,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainMenu_Window_Minimize.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_application_put_16x16;
 			this.toolStripMenuItem_MainMenu_Window_Minimize.Name = "toolStripMenuItem_MainMenu_Window_Minimize";
 			this.toolStripMenuItem_MainMenu_Window_Minimize.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
-            | System.Windows.Forms.Keys.M)));
+            | System.Windows.Forms.Keys.N)));
 			this.toolStripMenuItem_MainMenu_Window_Minimize.Size = new System.Drawing.Size(217, 22);
 			this.toolStripMenuItem_MainMenu_Window_Minimize.Text = "Mi&nimize";
 			this.toolStripMenuItem_MainMenu_Window_Minimize.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Window_Minimize_Click);
@@ -1268,7 +1268,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Find_UseRegex.Name = "toolStripButton_MainTool_Terminal_Find_UseRegex";
 			this.toolStripButton_MainTool_Terminal_Find_UseRegex.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton_MainTool_Terminal_Find_UseRegex.Text = ".*";
-			this.toolStripButton_MainTool_Terminal_Find_UseRegex.ToolTipText = "Use Regular Expression [Alt+R]";
+			this.toolStripButton_MainTool_Terminal_Find_UseRegex.ToolTipText = "Use Regular Expression [Alt+E]";
 			this.toolStripButton_MainTool_Terminal_Find_UseRegex.Visible = false;
 			this.toolStripButton_MainTool_Terminal_Find_UseRegex.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_UseRegex_Click);
 			// 
@@ -1278,7 +1278,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Find_Next.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_rows_insert_below_word_16x16;
 			this.toolStripButton_MainTool_Terminal_Find_Next.Name = "toolStripButton_MainTool_Terminal_Find_Next";
 			this.toolStripButton_MainTool_Terminal_Find_Next.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Find_Next.Text = "Find Next [Alt+N]/[Ctrl+Alt+N]";
+			this.toolStripButton_MainTool_Terminal_Find_Next.Text = "Find Next [F3] / [Ctrl+Alt+F]";
 			this.toolStripButton_MainTool_Terminal_Find_Next.Visible = false;
 			this.toolStripButton_MainTool_Terminal_Find_Next.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_Next_Click);
 			// 
@@ -1288,7 +1288,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_rows_insert_above_word_16x16;
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Name = "toolStripButton_MainTool_Terminal_Find_Previous";
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Find_Previous.Text = "Find Previous [Alt+P]/[Ctrl+Alt+P]";
+			this.toolStripButton_MainTool_Terminal_Find_Previous.Text = "Find Previous [Shift+F3] / [Alt+Shift+F]";
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Visible = false;
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_Previous_Click);
 			// 
