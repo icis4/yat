@@ -67,6 +67,8 @@ using MKY;
 using MKY.Diagnostics;
 using MKY.Windows.Forms;
 
+using YAT.Model.Settings;
+
 #endregion
 
 namespace YAT.View.Controls
@@ -157,6 +159,7 @@ namespace YAT.View.Controls
 		private bool showTotalLineNumbers = ShowTotalLineNumbersDefault;
 
 		// Find:
+		private string findPattern; // = null;
 		private Regex findRegex; // = null;
 		private int lastFindIndex = ListBox.NoMatches;
 
@@ -498,13 +501,13 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		public virtual string FindPattern
 		{
-			get
-			{
-				if (this.findRegex != null)
-					return (this.findRegex.ToString());
+			get { return (this.findPattern); }
+		}
 
-				return (null);
-			}
+		/// <summary></summary>
+		public virtual Regex FindRegex
+		{
+			get { return (this.findRegex); }
 		}
 
 	#if (DEBUG)
@@ -626,9 +629,18 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		public virtual bool TryFind(string pattern)
+		public virtual bool TryFind(string pattern, FindOptions options)
 		{
-			this.findRegex = new Regex(pattern);
+			this.findPattern = pattern;
+
+			var regexOptions = RegexOptions.Singleline;
+			if (!options.CaseSensitive)
+				regexOptions |= RegexOptions.IgnoreCase;
+
+			if (options.WholeWord) // Add the Regex word delimiter:
+				pattern = string.Format("{0}{1}{0}", @"\b", pattern);
+
+			this.findRegex = new Regex(pattern, regexOptions);
 
 			return (TryFindNext());
 		}

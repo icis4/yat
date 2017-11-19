@@ -33,7 +33,11 @@ using MKY.Collections.Specialized;
 
 namespace YAT.Model.Settings
 {
-	/// <summary></summary>
+	/// <remarks>
+	/// \remind (2017-11-19 / MKY)
+	/// Could/should be migrated to 'YAT.Application.Settings' or 'YAT.View.Settings'.
+	/// To be done when refactoring the projects on integration with Albatros.
+	/// </remarks>
 	public class ViewSettings : MKY.Settings.SettingsItem, IEquatable<ViewSettings>
 	{
 		/// <summary></summary>

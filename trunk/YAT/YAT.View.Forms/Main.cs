@@ -1127,20 +1127,20 @@ namespace YAT.View.Forms
 						toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = true;
 					}
 
-					var useRegex = ApplicationSettings.RoamingUserSettings.Find.UseRegex;
+					var useRegex = ApplicationSettings.RoamingUserSettings.Find.Options.UseRegex;
 					if (useRegex)
 					{
 						toolStripButton_MainTool_Terminal_Find_CaseSensitive.Checked = false;
 						toolStripButton_MainTool_Terminal_Find_CaseSensitive.Enabled = false;
 						toolStripButton_MainTool_Terminal_Find_WholeWord    .Checked = false;
 						toolStripButton_MainTool_Terminal_Find_WholeWord    .Enabled = false;
-						toolStripButton_MainTool_Terminal_Find_UseRegex     .Checked = ApplicationSettings.RoamingUserSettings.Find.UseRegex;
+						toolStripButton_MainTool_Terminal_Find_UseRegex     .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.UseRegex;
 					} //                                       UseRegex     .Enabled = true (always true).
 					else
 					{
-						toolStripButton_MainTool_Terminal_Find_CaseSensitive.Checked = ApplicationSettings.RoamingUserSettings.Find.CaseSensitive;
+						toolStripButton_MainTool_Terminal_Find_CaseSensitive.Checked = ApplicationSettings.RoamingUserSettings.Find.Options.CaseSensitive;
 						toolStripButton_MainTool_Terminal_Find_CaseSensitive.Enabled = true;
-						toolStripButton_MainTool_Terminal_Find_WholeWord    .Checked = ApplicationSettings.RoamingUserSettings.Find.WholeWord;
+						toolStripButton_MainTool_Terminal_Find_WholeWord    .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.WholeWord;
 						toolStripButton_MainTool_Terminal_Find_WholeWord    .Enabled = true;
 						toolStripButton_MainTool_Terminal_Find_UseRegex     .Checked = false;
 					} //                                       UseRegex     .Enabled = true (to allow switching).
@@ -1520,27 +1520,49 @@ namespace YAT.View.Forms
 		{
 			if ((e.KeyData & Keys.KeyCode) == Keys.Enter)
 			{
-				e.SuppressKeyPress = true; // Must be done before invoking Find(), as that potentially shows a message box.
-
 				string pattern;
 				if (toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedIndex != ControlEx.InvalidIndex)
 					pattern = (toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedItem as string);
 				else
 					pattern = toolStripComboBox_MainTool_Terminal_Find_Pattern.Text;
 
-				Find(pattern);
+				var asyncInvoker = new Action<string>(Find);   // Find() potentially shows a message box,
+				asyncInvoker.BeginInvoke(pattern, null, null); // thus the key press would not yet be 'Handled'.
+				                                               // Invoking asynchronously instead of calling
+				e.Handled = true;                              // synchronously works around this issue.
 			}
 			else if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
 			{
-				e.SuppressKeyPress = true; // Suppress *any* [Alt] press in order to prevent jumping into menu!
-
 				switch (e.KeyData & Keys.KeyCode)
 				{
-					case Keys.C: ToggleFindCaseSensitive(); break;
-					case Keys.W: ToggleFindWholeWord();     break;
-					case Keys.R: ToggleFindUseRegex();      break;
-					case Keys.N: FindNext();                break; // Same letter as standard shortcut [Ctrl+Alt+N].
-					case Keys.P: FindPrevious();            break; // Same letter as standard shortcut [Ctrl+Alt+P].
+					case Keys.C: ToggleFindCaseSensitive(); e.Handled = true; break;
+					case Keys.W: ToggleFindWholeWord();     e.Handled = true; break;
+					case Keys.E: ToggleFindUseRegex();      e.Handled = true; break;
+
+					default: break;
+				}
+			}
+			else if ((e.KeyData & Keys.KeyCode) == Keys.F3)
+			{
+				switch (e.KeyData & Keys.Modifiers)
+				{
+					case Keys.None:
+					{
+						var asyncInvoker = new Action(FindNext); // FindNext() potentially shows a message box,
+						asyncInvoker.BeginInvoke(null, null);    // thus the key press would not yet be 'Handled'.
+						                                         // Invoking asynchronously instead of calling
+						e.Handled = true;                        // synchronously works around this issue.
+						break;
+					}
+
+					case Keys.Shift:
+					{
+						var asyncInvoker = new Action(FindPrevious); // FindPrevious() potentially shows a message box,
+						asyncInvoker.BeginInvoke(null, null);        // thus the key press would not yet be 'Handled'.
+						                                             // Invoking asynchronously instead of calling
+						e.Handled = true;                            // synchronously works around this issue.
+						break;
+					}
 
 					default: break;
 				}
@@ -1561,7 +1583,9 @@ namespace YAT.View.Forms
 
 		private void ToggleFindCaseSensitive()
 		{
-			ApplicationSettings.RoamingUserSettings.Find.CaseSensitive = !ApplicationSettings.RoamingUserSettings.Find.CaseSensitive;
+			var options = ApplicationSettings.RoamingUserSettings.Find.Options;
+			options.CaseSensitive = !options.CaseSensitive;
+			ApplicationSettings.RoamingUserSettings.Find.Options = options;
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -1572,7 +1596,9 @@ namespace YAT.View.Forms
 
 		private void ToggleFindWholeWord()
 		{
-			ApplicationSettings.RoamingUserSettings.Find.WholeWord = !ApplicationSettings.RoamingUserSettings.Find.WholeWord;
+			var options = ApplicationSettings.RoamingUserSettings.Find.Options;
+			options.WholeWord = !options.WholeWord;
+			ApplicationSettings.RoamingUserSettings.Find.Options = options;
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -1583,7 +1609,9 @@ namespace YAT.View.Forms
 
 		private void ToggleFindUseRegex()
 		{
-			ApplicationSettings.RoamingUserSettings.Find.UseRegex = !ApplicationSettings.RoamingUserSettings.Find.UseRegex;
+			var options = ApplicationSettings.RoamingUserSettings.Find.Options;
+			options.UseRegex = !options.UseRegex;
+			ApplicationSettings.RoamingUserSettings.Find.Options = options;
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 

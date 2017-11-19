@@ -29,7 +29,11 @@ using System.Xml.Serialization;
 
 namespace YAT.Model.Settings
 {
-	/// <summary></summary>
+	/// <remarks>
+	/// \remind (2017-11-19 / MKY)
+	/// Could/should be migrated to 'YAT.Application.Settings' or 'YAT.View.Settings'.
+	/// To be done when refactoring the projects on integration with Albatros.
+	/// </remarks>
 	public class WindowSettings : MKY.Settings.SettingsItem, IEquatable<WindowSettings>
 	{
 		private FormWindowState state;
