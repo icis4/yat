@@ -1127,27 +1127,13 @@ namespace YAT.View.Forms
 						toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = true;
 					}
 
-					var useRegex = ApplicationSettings.RoamingUserSettings.Find.Options.UseRegex;
-					if (useRegex)
-					{
-						toolStripButton_MainTool_Terminal_Find_CaseSensitive.Checked = false;
-						toolStripButton_MainTool_Terminal_Find_CaseSensitive.Enabled = false;
-						toolStripButton_MainTool_Terminal_Find_WholeWord    .Checked = false;
-						toolStripButton_MainTool_Terminal_Find_WholeWord    .Enabled = false;
-						toolStripButton_MainTool_Terminal_Find_UseRegex     .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.UseRegex;
-					} //                                       UseRegex     .Enabled = true (always true).
-					else
-					{
-						toolStripButton_MainTool_Terminal_Find_CaseSensitive.Checked = ApplicationSettings.RoamingUserSettings.Find.Options.CaseSensitive;
-						toolStripButton_MainTool_Terminal_Find_CaseSensitive.Enabled = true;
-						toolStripButton_MainTool_Terminal_Find_WholeWord    .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.WholeWord;
-						toolStripButton_MainTool_Terminal_Find_WholeWord    .Enabled = true;
-						toolStripButton_MainTool_Terminal_Find_UseRegex     .Checked = false;
-					} //                                       UseRegex     .Enabled = true (to allow switching).
+					toolStripButton_MainTool_Terminal_Find_CaseSensitive.Checked = ApplicationSettings.RoamingUserSettings.Find.Options.CaseSensitive;
+					toolStripButton_MainTool_Terminal_Find_CaseSensitive.Enabled = true;
+					toolStripButton_MainTool_Terminal_Find_WholeWord    .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.WholeWord;
+					toolStripButton_MainTool_Terminal_Find_WholeWord    .Enabled = true;
 
 					toolStripButton_MainTool_Terminal_Find_CaseSensitive.Visible = true;
 					toolStripButton_MainTool_Terminal_Find_WholeWord    .Visible = true;
-					toolStripButton_MainTool_Terminal_Find_UseRegex     .Visible = true;
 
 					toolStripButton_MainTool_Terminal_Find_Next    .Enabled = FindIsReady;
 					toolStripButton_MainTool_Terminal_Find_Previous.Enabled = FindIsReady;
@@ -1165,7 +1151,6 @@ namespace YAT.View.Forms
 
 					toolStripButton_MainTool_Terminal_Find_CaseSensitive.Visible = false;
 					toolStripButton_MainTool_Terminal_Find_WholeWord    .Visible = false;
-					toolStripButton_MainTool_Terminal_Find_UseRegex     .Visible = false;
 
 					toolStripButton_MainTool_Terminal_Find_Next    .Visible = false;
 					toolStripButton_MainTool_Terminal_Find_Previous.Visible = false;
@@ -1537,7 +1522,6 @@ namespace YAT.View.Forms
 				{
 					case Keys.C: ToggleFindCaseSensitive(); e.Handled = true; break;
 					case Keys.W: ToggleFindWholeWord();     e.Handled = true; break;
-					case Keys.E: ToggleFindUseRegex();      e.Handled = true; break;
 
 					default: break;
 				}
@@ -1598,19 +1582,6 @@ namespace YAT.View.Forms
 		{
 			var options = ApplicationSettings.RoamingUserSettings.Find.Options;
 			options.WholeWord = !options.WholeWord;
-			ApplicationSettings.RoamingUserSettings.Find.Options = options;
-			ApplicationSettings.SaveRoamingUserSettings();
-		}
-
-		private void toolStripButton_MainTool_Terminal_Find_UseRegex_Click(object sender, EventArgs e)
-		{
-			ToggleFindUseRegex();
-		}
-
-		private void ToggleFindUseRegex()
-		{
-			var options = ApplicationSettings.RoamingUserSettings.Find.Options;
-			options.UseRegex = !options.UseRegex;
 			ApplicationSettings.RoamingUserSettings.Find.Options = options;
 			ApplicationSettings.SaveRoamingUserSettings();
 		}

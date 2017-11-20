@@ -54,9 +54,9 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_FileRecentContextMenu_6 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_FileRecentContextMenu_7 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_FileRecentContextMenu_8 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MainMenu_File_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainContextMenu_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainContextMenu_File_Exit = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_MainMenu_File_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip_Main = new MKY.Windows.Forms.MenuStripEx();
 			this.toolStripMenuItem_MainMenu_File = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_File_New = new System.Windows.Forms.ToolStripMenuItem();
@@ -155,7 +155,6 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_MainTool_Terminal_Find_Pattern = new MKY.Windows.Forms.ToolStripComboBoxEx();
 			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Terminal_Find_WholeWord = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Terminal_Find_UseRegex = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Terminal_Find_Next = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Terminal_Find_Previous = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItem_MainTool_Separator_8 = new System.Windows.Forms.ToolStripSeparator();
@@ -244,7 +243,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_FileRecentContextMenu_7,
             this.toolStripMenuItem_FileRecentContextMenu_8});
 			this.contextMenuStrip_FileRecent.Name = "contextMenuStrip_FileRecent";
-			this.contextMenuStrip_FileRecent.OwnerItem = this.toolStripMenuItem_MainMenu_File_Recent;
+			this.contextMenuStrip_FileRecent.OwnerItem = this.toolStripMenuItem_MainContextMenu_File_Recent;
 			this.contextMenuStrip_FileRecent.Size = new System.Drawing.Size(87, 180);
 			this.contextMenuStrip_FileRecent.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_FileRecent_Opening);
 			this.contextMenuStrip_FileRecent.Paint += new System.Windows.Forms.PaintEventHandler(this.contextMenuStrip_FileRecent_Paint);
@@ -329,6 +328,14 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_FileRecentContextMenu_8.Visible = false;
 			this.toolStripMenuItem_FileRecentContextMenu_8.Click += new System.EventHandler(this.toolStripMenuItem_FileRecentContextMenu_Click);
 			// 
+			// toolStripMenuItem_MainMenu_File_Recent
+			// 
+			this.toolStripMenuItem_MainMenu_File_Recent.DropDown = this.contextMenuStrip_FileRecent;
+			this.toolStripMenuItem_MainMenu_File_Recent.Enabled = false;
+			this.toolStripMenuItem_MainMenu_File_Recent.Name = "toolStripMenuItem_MainMenu_File_Recent";
+			this.toolStripMenuItem_MainMenu_File_Recent.Size = new System.Drawing.Size(243, 22);
+			this.toolStripMenuItem_MainMenu_File_Recent.Text = "&Recent";
+			// 
 			// toolStripMenuItem_MainContextMenu_Separator_2
 			// 
 			this.toolStripMenuItem_MainContextMenu_Separator_2.Name = "toolStripMenuItem_MainContextMenu_Separator_2";
@@ -340,14 +347,6 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Size = new System.Drawing.Size(173, 22);
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Text = "Exit";
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Click += new System.EventHandler(this.toolStripMenuItem_MainContextMenu_File_Exit_Click);
-			// 
-			// toolStripMenuItem_MainMenu_File_Recent
-			// 
-			this.toolStripMenuItem_MainMenu_File_Recent.DropDown = this.contextMenuStrip_FileRecent;
-			this.toolStripMenuItem_MainMenu_File_Recent.Enabled = false;
-			this.toolStripMenuItem_MainMenu_File_Recent.Name = "toolStripMenuItem_MainMenu_File_Recent";
-			this.toolStripMenuItem_MainMenu_File_Recent.Size = new System.Drawing.Size(243, 22);
-			this.toolStripMenuItem_MainMenu_File_Recent.Text = "&Recent";
 			// 
 			// menuStrip_Main
 			// 
@@ -895,7 +894,6 @@ namespace YAT.View.Forms
             this.toolStripComboBox_MainTool_Terminal_Find_Pattern,
             this.toolStripButton_MainTool_Terminal_Find_CaseSensitive,
             this.toolStripButton_MainTool_Terminal_Find_WholeWord,
-            this.toolStripButton_MainTool_Terminal_Find_UseRegex,
             this.toolStripButton_MainTool_Terminal_Find_Next,
             this.toolStripButton_MainTool_Terminal_Find_Previous,
             this.toolStripMenuItem_MainTool_Separator_8,
@@ -1237,6 +1235,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.Name = "toolStripComboBox_MainTool_Terminal_Find_Pattern";
 			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.Size = new System.Drawing.Size(160, 25);
+			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.ToolTipText = "Pattern to Find in Monitor\r\n.NET Regex are supported";
 			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = false;
 			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_SelectedIndexChanged);
 			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.KeyDown += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyDown);
@@ -1249,6 +1248,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.Name = "toolStripButton_MainTool_Terminal_Find_CaseSensitive";
 			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.Text = "Find Case Sensitive [Alt+C]";
+			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.ToolTipText = "Find Case Sensitive [Alt+C] (while in Find)\r\nSame as \"(?-i)\"";
 			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.Visible = false;
 			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_CaseSensitive_Click);
 			// 
@@ -1259,18 +1259,9 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Find_WholeWord.Name = "toolStripButton_MainTool_Terminal_Find_WholeWord";
 			this.toolStripButton_MainTool_Terminal_Find_WholeWord.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton_MainTool_Terminal_Find_WholeWord.Text = "Find Whole Word [Alt+W]";
+			this.toolStripButton_MainTool_Terminal_Find_WholeWord.ToolTipText = "Find Whole Word [Alt+W] (while in Find)\r\nSame as \"\\bSomeWord\\b\"";
 			this.toolStripButton_MainTool_Terminal_Find_WholeWord.Visible = false;
 			this.toolStripButton_MainTool_Terminal_Find_WholeWord.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_WholeWord_Click);
-			// 
-			// toolStripButton_MainTool_Terminal_Find_UseRegex
-			// 
-			this.toolStripButton_MainTool_Terminal_Find_UseRegex.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButton_MainTool_Terminal_Find_UseRegex.Name = "toolStripButton_MainTool_Terminal_Find_UseRegex";
-			this.toolStripButton_MainTool_Terminal_Find_UseRegex.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Find_UseRegex.Text = ".*";
-			this.toolStripButton_MainTool_Terminal_Find_UseRegex.ToolTipText = "Use Regular Expression [Alt+E]";
-			this.toolStripButton_MainTool_Terminal_Find_UseRegex.Visible = false;
-			this.toolStripButton_MainTool_Terminal_Find_UseRegex.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_UseRegex_Click);
 			// 
 			// toolStripButton_MainTool_Terminal_Find_Next
 			// 
@@ -1279,6 +1270,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Find_Next.Name = "toolStripButton_MainTool_Terminal_Find_Next";
 			this.toolStripButton_MainTool_Terminal_Find_Next.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton_MainTool_Terminal_Find_Next.Text = "Find Next [F3] / [Ctrl+Alt+F]";
+			this.toolStripButton_MainTool_Terminal_Find_Next.ToolTipText = "Find Next [F3] (while in Find)\r\n[Ctrl+Alt+F] (outside Find)";
 			this.toolStripButton_MainTool_Terminal_Find_Next.Visible = false;
 			this.toolStripButton_MainTool_Terminal_Find_Next.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_Next_Click);
 			// 
@@ -1289,6 +1281,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Name = "toolStripButton_MainTool_Terminal_Find_Previous";
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Text = "Find Previous [Shift+F3] / [Alt+Shift+F]";
+			this.toolStripButton_MainTool_Terminal_Find_Previous.ToolTipText = "Find Previous [Shift+F3] (while in Find)\r\n[Alt+Shift+F] (outside Find)";
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Visible = false;
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_Previous_Click);
 			// 
@@ -1561,6 +1554,5 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_AutoAction_Deactivate;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Find_CaseSensitive;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Find_WholeWord;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Find_UseRegex;
 	}
 }
