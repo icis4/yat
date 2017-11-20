@@ -3141,14 +3141,7 @@ namespace YAT.View.Forms
 		private void ShowNotFoundMessage(string pattern, bool isFirst)
 		{
 			var text = new StringBuilder();
-			text.Append("The specified ");
-
-			if (ApplicationSettings.RoamingUserSettings.Find.Options.UseRegex)
-				text.Append("pattern");
-			else
-				text.Append("text");
-
-			text.Append(@" """);
+			text.Append(@"The specified pattern """);
 			text.Append(pattern);
 			text.Append(@""" has not been found");
 
@@ -3161,7 +3154,7 @@ namespace YAT.View.Forms
 			(
 				this,
 				text.ToString(),
-				"Not Found",
+				"Pattern Not Found",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information
 			);

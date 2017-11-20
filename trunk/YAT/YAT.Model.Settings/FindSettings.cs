@@ -85,7 +85,7 @@ namespace YAT.Model.Settings
 			ShowField      = false;
 			ActivePattern  = null;
 			RecentPatterns = new RecentItemCollection<string>(MaxRecentPatterns);
-			Options        = new FindOptions(true, false, false);
+			Options        = new FindOptions(true, false);
 		}
 
 		#region Properties
