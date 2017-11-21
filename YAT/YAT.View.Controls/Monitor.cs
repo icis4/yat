@@ -149,7 +149,7 @@ namespace YAT.View.Controls
 
 		// Lines:
 		private int maxLineCount = MaxLineCountDefault;
-		private Model.Settings.FormatSettings formatSettings = new Model.Settings.FormatSettings();
+		private FormatSettings formatSettings = new FormatSettings();
 
 		// Line numbers:
 		private long lineNumberOffset;
@@ -650,8 +650,8 @@ namespace YAT.View.Controls
 		{
 			var lb = fastListBox_Monitor;
 
-			var nextStartIndex = (this.lastFindIndex + 1);
-			if (nextStartIndex > lb.LastIndex)
+			int nextStartIndex;
+			if (!TryGetNextStartIndex(out nextStartIndex))
 				return (false);
 
 			int i = lb.FindNext(this.findRegex, nextStartIndex);
@@ -673,14 +673,11 @@ namespace YAT.View.Controls
 		{
 			var lb = fastListBox_Monitor;
 
-			var nextStartIndex = (this.lastFindIndex - 1);
-			if (nextStartIndex < lb.FirstIndex)
+			int previousStartIndex;
+			if (!TryGetPreviousStartIndex(out previousStartIndex))
 				return (false);
 
-			if (nextStartIndex == ControlEx.InvalidIndex)
-				return (false);
-
-			int i = lb.FindPrevious(this.findRegex, nextStartIndex);
+			int i = lb.FindPrevious(this.findRegex, previousStartIndex);
 			if (i != ListBox.NoMatches)
 			{
 				lb.ClearSelected();
@@ -691,6 +688,72 @@ namespace YAT.View.Controls
 				return (true);
 			}
 
+			return (false);
+		}
+
+		/// <summary></summary>
+		protected virtual bool TryGetNextStartIndex(out int result)
+		{
+			var lb = fastListBox_Monitor;
+
+			if (lb.Items.Count > 0)
+			{
+				if (lb.SelectedIndex != ControlEx.InvalidIndex)
+				{
+					result = (lb.SelectedIndex + 1);
+					if (result <= lb.LastIndex)
+						return (true);
+					else
+						return (false);
+				}
+
+				if (this.lastFindIndex != ControlEx.InvalidIndex)
+				{
+					result = (this.lastFindIndex + 1);
+					if (result <= lb.LastIndex)
+						return (true);
+					else
+						return (false);
+				}
+
+				result = 0;
+				return (true);
+			}
+
+			result = ControlEx.InvalidIndex;
+			return (false);
+		}
+
+		/// <summary></summary>
+		protected virtual bool TryGetPreviousStartIndex(out int result)
+		{
+			var lb = fastListBox_Monitor;
+
+			if (lb.Items.Count > 0)
+			{
+				if (lb.SelectedIndex != ControlEx.InvalidIndex)
+				{
+					result = (lb.SelectedIndex - 1);
+					if (result >= lb.FirstIndex)
+						return (true);
+					else
+						return (false);
+				}
+
+				if (this.lastFindIndex != ControlEx.InvalidIndex)
+				{
+					result = (this.lastFindIndex - 1);
+					if (result >= lb.FirstIndex)
+						return (true);
+					else
+						return (false);
+				}
+
+				result = 0;
+				return (true);
+			}
+
+			result = ControlEx.InvalidIndex;
 			return (false);
 		}
 
