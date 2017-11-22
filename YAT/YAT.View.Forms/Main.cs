@@ -1469,8 +1469,16 @@ namespace YAT.View.Forms
 			var pattern = (toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedItem as string);
 			if (pattern != null)
 			{
-				Find(pattern);
+				FindNext(pattern);
 			}
+		}
+
+		private void ToolStripComboBox_MainTool_Terminal_Find_Pattern_Enter(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			InitializeFindOnEdit();
 		}
 
 		/// <remarks>
@@ -1479,6 +1487,8 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_TextChanged(object sender, EventArgs e)
 		{
+			// Attention, 'isSettingControls' must only be checked further below!
+
 			if (toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedIndex == ControlEx.InvalidIndex)
 			{
 				string pattern = toolStripComboBox_MainTool_Terminal_Find_Pattern.Text;
@@ -1486,6 +1496,19 @@ namespace YAT.View.Forms
 				{
 					var regex = new Regex(pattern);
 					UnusedLocal.PreventAnalysisWarning(regex);
+
+					if (!this.isSettingControls)
+					{
+						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
+						try
+						{
+							FindOnEdit(pattern);
+						}
+						finally
+						{
+							this.mainToolValidationWorkaround_UpdateIsSuspended = false;
+						}
+					}
 				}
 				catch (ArgumentException ex)
 				{
@@ -1503,20 +1526,7 @@ namespace YAT.View.Forms
 
 		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyDown(object sender, KeyEventArgs e)
 		{
-			if ((e.KeyData & Keys.KeyCode) == Keys.Enter)
-			{
-				string pattern;
-				if (toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedIndex != ControlEx.InvalidIndex)
-					pattern = (toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedItem as string);
-				else
-					pattern = toolStripComboBox_MainTool_Terminal_Find_Pattern.Text;
-
-				var asyncInvoker = new Action<string>(Find);   // Find() potentially shows a message box,
-				asyncInvoker.BeginInvoke(pattern, null, null); // thus the key press would not yet be 'Handled'.
-				                                               // Invoking asynchronously instead of calling
-				e.Handled = true;                              // synchronously works around this issue.
-			}
-			else if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
+			if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
 			{
 				switch (e.KeyData & Keys.KeyCode)
 				{
@@ -1525,6 +1535,13 @@ namespace YAT.View.Forms
 
 					default: break;
 				}
+			}
+			else if ((e.KeyData & Keys.KeyCode) == Keys.Enter)
+			{
+				var asyncInvoker = new Action(FindNext); // FindNext() potentially shows a message box,
+				asyncInvoker.BeginInvoke(null, null);    // thus the key press would not yet be 'Handled'.
+				                                         // Invoking asynchronously instead of calling
+				e.Handled = true;                        // synchronously works around this issue.
 			}
 			else if ((e.KeyData & Keys.KeyCode) == Keys.F3)
 			{
@@ -1553,11 +1570,25 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void Find(string pattern)
+		private void InitializeFindOnEdit()
 		{
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
-				t.Find(pattern);
+				t.InitializeFindOnEdit();
+		}
+
+		private void FindOnEdit(string pattern)
+		{
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.FindOnEdit(pattern);
+		}
+
+		private void FindNext(string pattern)
+		{
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.FindNext(pattern);
 		}
 
 		private void toolStripButton_MainTool_Terminal_Find_CaseSensitive_Click(object sender, EventArgs e)
