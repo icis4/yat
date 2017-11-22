@@ -1238,6 +1238,7 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.ToolTipText = "Pattern to Find in Monitor\r\n.NET Regex are supported";
 			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = false;
 			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.Enter += new System.EventHandler(ToolStripComboBox_MainTool_Terminal_Find_Pattern_Enter);
+			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.Leave += new System.EventHandler(ToolStripComboBox_MainTool_Terminal_Find_Pattern_Leave);
 			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_SelectedIndexChanged);
 			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.KeyDown += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyDown);
 			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_TextChanged);
@@ -1270,8 +1271,8 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Find_Next.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_rows_insert_below_word_16x16;
 			this.toolStripButton_MainTool_Terminal_Find_Next.Name = "toolStripButton_MainTool_Terminal_Find_Next";
 			this.toolStripButton_MainTool_Terminal_Find_Next.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Find_Next.Text = "Find Next [F3] / [Ctrl+Alt+F]";
-			this.toolStripButton_MainTool_Terminal_Find_Next.ToolTipText = "Find Next [F3] (while in Find)\r\n[Ctrl+Alt+F] (outside Find)";
+			this.toolStripButton_MainTool_Terminal_Find_Next.Text = "Find Next [Alt+N] / [Enter] / [F3] / [Ctrl+Alt+F]";
+			this.toolStripButton_MainTool_Terminal_Find_Next.ToolTipText = "Find Next [Alt+N] / [Enter] / [F3] (while in Find)\r\n[Ctrl+Alt+F] (always)";
 			this.toolStripButton_MainTool_Terminal_Find_Next.Visible = false;
 			this.toolStripButton_MainTool_Terminal_Find_Next.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_Next_Click);
 			// 
@@ -1281,8 +1282,8 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_rows_insert_above_word_16x16;
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Name = "toolStripButton_MainTool_Terminal_Find_Previous";
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Find_Previous.Text = "Find Previous [Shift+F3] / [Alt+Shift+F]";
-			this.toolStripButton_MainTool_Terminal_Find_Previous.ToolTipText = "Find Previous [Shift+F3] (while in Find)\r\n[Alt+Shift+F] (outside Find)";
+			this.toolStripButton_MainTool_Terminal_Find_Previous.Text = "Find Previous [Alt+P] / [Shift+F3] / [Alt+Shift+F]";
+			this.toolStripButton_MainTool_Terminal_Find_Previous.ToolTipText = "Find Previous [Alt+P] / [Shift+F3] (while in Find)\r\n[Alt+Shift+F] (always)";
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Visible = false;
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_Previous_Click);
 			// 

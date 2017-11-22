@@ -145,6 +145,8 @@ namespace MKY.Windows.Forms
 		private int previousTopIndex; // = 0;
 		private bool userIsScrolling; // = false;
 
+		private int lastSelectedIndex = ControlEx.InvalidIndex;
+
 	#if (DEBUG)
 		private bool debugEnabled = DebugEnabledDefault;
 	#endif
@@ -188,6 +190,18 @@ namespace MKY.Windows.Forms
 			this.previousTopIndex = TopIndex;
 		}
 
+		/// <summary>
+		/// Raises the <see cref="E:SelectedIndexChanged" /> event.
+		/// </summary>
+		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+		protected override void OnSelectedIndexChanged(EventArgs e)
+		{
+			if (SelectedIndices.Count > 0)
+				this.lastSelectedIndex = SelectedIndices[0];
+
+			base.OnSelectedIndexChanged(e);
+		}
+
 		#endregion
 
 		#region General
@@ -195,14 +209,14 @@ namespace MKY.Windows.Forms
 		// General
 		//==========================================================================================
 
-	#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
+#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 
 		private bool IsLeftToRight
 		{
 			get { return (RightToLeft == RightToLeft.No); }
 		}
 
-	#endif
+#endif
 
 		private void ListBoxEx_Resize(object sender, EventArgs e)
 		{
@@ -469,6 +483,14 @@ namespace MKY.Windows.Forms
 		{
 			for (int i = 0; i < Items.Count; i++)
 				SetSelected(i, true);
+		}
+
+		/// <summary>
+		/// Gets the index of the last selected item.
+		/// </summary>
+		public virtual int LastSelectedIndex
+		{
+			get { return (this.lastSelectedIndex); }
 		}
 
 		#endregion
