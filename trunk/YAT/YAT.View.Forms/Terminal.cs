@@ -3108,11 +3108,11 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public virtual void InitializeFindOnEdit()
+		public virtual void ResetFindOnEdit()
 		{
 			var monitor = GetMonitor(this.lastMonitorSelection);
 
-			monitor.InitializeFindOnEdit();
+			monitor.ResetFindOnEdit();
 		}
 
 		/// <summary></summary>

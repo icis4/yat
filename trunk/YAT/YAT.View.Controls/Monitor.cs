@@ -631,9 +631,10 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		public virtual void InitializeFindOnEdit()
+		public virtual void ResetFindOnEdit()
 		{
 			this.isFirstFindOnEdit = true;
+			this.findOnEditStartIndex = ControlEx.InvalidIndex;
 		}
 
 		/// <summary></summary>
@@ -654,7 +655,8 @@ namespace YAT.View.Controls
 			{
 				PrepareFind(pattern, options);
 
-				if (TryFindNext(this.findOnEditStartIndex))
+				int findIndex; // Ignore, always start from selected/initial index.
+				if (TryFindNext(this.findOnEditStartIndex, out findIndex))
 					return (true);
 			}
 
@@ -693,30 +695,16 @@ namespace YAT.View.Controls
 		{
 			this.isFirstFindOnEdit = true;
 
-			int nextStartIndex;
-			if (!TryGetNextStartIndex(out nextStartIndex))
+			int startIndex;
+			if (!TryGetNextStartIndex(out startIndex))
 				return (false);
 
-			return (TryFindNext(nextStartIndex));
-		}
+			int findIndex;
+			if (!TryFindNext(startIndex, out findIndex))
+				return (false);
 
-		/// <summary></summary>
-		protected virtual bool TryFindNext(int startIndex)
-		{
-			var lb = fastListBox_Monitor;
-
-			int i = lb.FindNext(this.findRegex, startIndex);
-			if (i != ListBox.NoMatches)
-			{
-				lb.ClearSelected();
-				lb.SetSelected(i, true);
-				lb.TopIndex = Math.Max(i - (lb.TotalVisibleItemCount / 2), 0);
-
-				this.lastFindIndex = i;
-				return (true);
-			}
-
-			return (false);
+			this.lastFindIndex = findIndex;
+			return (true);
 		}
 
 		/// <summary></summary>
@@ -724,29 +712,55 @@ namespace YAT.View.Controls
 		{
 			this.isFirstFindOnEdit = true;
 
-			int previousStartIndex;
-			if (!TryGetPreviousStartIndex(out previousStartIndex))
+			int startIndex;
+			if (!TryGetPreviousStartIndex(out startIndex))
 				return (false);
 
-			return (TryFindPrevious(previousStartIndex));
+			int findIndex;
+			if (!TryFindPrevious(startIndex, out findIndex))
+				return (false);
+
+			this.lastFindIndex = findIndex;
+			return (true);
 		}
 
 		/// <summary></summary>
-		protected virtual bool TryFindPrevious(int startIndex)
+		protected virtual bool TryFindNext(int startIndex, out int findIndex)
 		{
 			var lb = fastListBox_Monitor;
 
-			int i = lb.FindPrevious(this.findRegex, startIndex);
+			var i = lb.FindNext(this.findRegex, startIndex);
 			if (i != ListBox.NoMatches)
 			{
 				lb.ClearSelected();
 				lb.SetSelected(i, true);
 				lb.TopIndex = Math.Max(i - (lb.TotalVisibleItemCount / 2), 0);
 
-				this.lastFindIndex = i;
+				findIndex = i;
 				return (true);
 			}
 
+			findIndex = ListBox.NoMatches;
+			return (false);
+		}
+
+		/// <summary></summary>
+		protected virtual bool TryFindPrevious(int startIndex, out int findIndex)
+		{
+			var lb = fastListBox_Monitor;
+
+			var i = lb.FindPrevious(this.findRegex, startIndex);
+			if (i != ListBox.NoMatches)
+			{
+				lb.ClearSelected();
+				lb.SetSelected(i, true);
+				lb.TopIndex = Math.Max(i - (lb.TotalVisibleItemCount / 2), 0);
+
+				findIndex = i;
+				return (true);
+			}
+
+			findIndex = ListBox.NoMatches;
 			return (false);
 		}
 
@@ -757,9 +771,9 @@ namespace YAT.View.Controls
 
 			if (lb.Items.Count > 0)
 			{
-				if (lb.SelectedIndices.Count > 0)
+				if (lb.LastSelectedIndex != ControlEx.InvalidIndex)
 				{
-					result = lb.SelectedIndices[0];
+					result = lb.LastSelectedIndex;
 					if (result <= lb.LastIndex)
 						return (true);
 					else

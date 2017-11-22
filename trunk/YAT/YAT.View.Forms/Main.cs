@@ -1469,7 +1469,7 @@ namespace YAT.View.Forms
 			var pattern = (toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedItem as string);
 			if (pattern != null)
 			{
-				FindNext(pattern);
+				ValidateAndFindNext(pattern);
 			}
 		}
 
@@ -1478,7 +1478,30 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			InitializeFindOnEdit();
+			// Suspend shortcuts that are used in find field:
+			foreach (var child in MdiChildren)
+			{
+				var t = (child as Terminal);
+				if (t != null)
+					t.SuspendF3Shortcuts();
+			}
+		}
+
+		private void ToolStripComboBox_MainTool_Terminal_Find_Pattern_Leave(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			// Resume shortcuts that are used in find field:
+			foreach (var child in MdiChildren)
+			{
+				var t = (child as Terminal);
+				if (t != null)
+					t.ResumeF3Shortcuts();
+			}
+
+			// Reset 'FindOnEdit':
+			ResetFindOnEdit();
 		}
 
 		/// <remarks>
@@ -1487,39 +1510,30 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_TextChanged(object sender, EventArgs e)
 		{
-			// Attention, 'isSettingControls' must only be checked further below!
-
-			if (toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedIndex == ControlEx.InvalidIndex)
+			if (!this.isSettingControls)
 			{
-				string pattern = toolStripComboBox_MainTool_Terminal_Find_Pattern.Text;
-				try
+				if (toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedIndex == ControlEx.InvalidIndex)
 				{
-					var regex = new Regex(pattern);
-					UnusedLocal.PreventAnalysisWarning(regex);
-
-					if (!this.isSettingControls)
+					var pattern = toolStripComboBox_MainTool_Terminal_Find_Pattern.Text;
+					try
 					{
-						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
-						try
-						{
-							FindOnEdit(pattern);
-						}
-						finally
-						{
-							this.mainToolValidationWorkaround_UpdateIsSuspended = false;
-						}
+						var regex = new Regex(pattern);
+						UnusedLocal.PreventAnalysisWarning(regex);
 					}
-				}
-				catch (ArgumentException ex)
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						ex.Message,
-						"Invalid Regex",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
+					catch (ArgumentException)
+					{
+						return; // Skip 'FindOnEdit' in case of invalid Regex.
+					}
+
+					this.mainToolValidationWorkaround_UpdateIsSuspended = true;
+					try
+					{
+						ValidateAndFindOnEdit(pattern);
+					}
+					finally
+					{
+						this.mainToolValidationWorkaround_UpdateIsSuspended = false;
+					}
 				}
 			}
 		}
@@ -1530,65 +1544,132 @@ namespace YAT.View.Forms
 			{
 				switch (e.KeyData & Keys.KeyCode)
 				{
-					case Keys.C: ToggleFindCaseSensitive(); e.Handled = true; break;
-					case Keys.W: ToggleFindWholeWord();     e.Handled = true; break;
+					case Keys.C: ToggleFindCaseSensitive(); e.SuppressKeyPress = true; break;
+					case Keys.W: ToggleFindWholeWord();     e.SuppressKeyPress = true; break;
+
+					case Keys.N: ValidateAndFindNext();     e.SuppressKeyPress = true; break;
+					case Keys.P: ValidateAndFindPrevious(); e.SuppressKeyPress = true; break;
 
 					default: break;
+
+					// \remind (2017-11-22 / MKY) there are limitations in WinForm (or Win32):
+					//
+					// [Severe]
+					// Setting 'e.Handled' is *not* sufficient, e.g. [Alt+W] would still activate
+					// the 'Window' menu. Only setting 'e.SuppressKeyPress' works!
+					//
+					// [Acceptable]
+					// Even if all [Alt] events were suppressed above by...
+					//    default: e.SuppressKeyPress = true; break;
+					// ...the underlines still become visible in the menu bar.
+					// Not critical, Visual Studio has exactly the same problem ;-)
+					//
+					// Also remind that only shortcuts that have not been used elsewhere can be
+					// used here. Because, the MDI menu
 				}
 			}
 			else if ((e.KeyData & Keys.KeyCode) == Keys.Enter)
 			{
-				var asyncInvoker = new Action(FindNext); // FindNext() potentially shows a message box,
-				asyncInvoker.BeginInvoke(null, null);    // thus the key press would not yet be 'Handled'.
-				                                         // Invoking asynchronously instead of calling
-				e.Handled = true;                        // synchronously works around this issue.
+				ValidateAndFindNext();
+				e.SuppressKeyPress = true;
 			}
-			else if ((e.KeyData & Keys.KeyCode) == Keys.F3)
-			{
+			else if ((e.KeyData & Keys.KeyCode) == Keys.F3) // Note that F3 shortcuts of terminals
+			{                                               // are suspended while in find field.
 				switch (e.KeyData & Keys.Modifiers)
 				{
-					case Keys.None:
-					{
-						var asyncInvoker = new Action(FindNext); // FindNext() potentially shows a message box,
-						asyncInvoker.BeginInvoke(null, null);    // thus the key press would not yet be 'Handled'.
-						                                         // Invoking asynchronously instead of calling
-						e.Handled = true;                        // synchronously works around this issue.
-						break;
-					}
-
-					case Keys.Shift:
-					{
-						var asyncInvoker = new Action(FindPrevious); // FindPrevious() potentially shows a message box,
-						asyncInvoker.BeginInvoke(null, null);        // thus the key press would not yet be 'Handled'.
-						                                             // Invoking asynchronously instead of calling
-						e.Handled = true;                            // synchronously works around this issue.
-						break;
-					}
+					case Keys.None:  ValidateAndFindNext();     e.SuppressKeyPress = true; break;
+					case Keys.Shift: ValidateAndFindPrevious(); e.SuppressKeyPress = true; break;
 
 					default: break;
 				}
 			}
 		}
 
-		private void InitializeFindOnEdit()
+		/// <summary></summary>
+		protected virtual void ResetFindOnEdit()
 		{
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
-				t.InitializeFindOnEdit();
+				t.ResetFindOnEdit();
 		}
 
-		private void FindOnEdit(string pattern)
+		/// <summary></summary>
+		protected virtual void ValidateAndFindOnEdit(string pattern)
 		{
-			var t = (ActiveMdiChild as Terminal);
-			if (t != null)
-				t.FindOnEdit(pattern);
+			if (ValidateFindPattern(pattern))
+			{
+				var t = (ActiveMdiChild as Terminal);
+				if (t != null)
+					t.FindOnEdit(pattern);
+			}
 		}
 
-		private void FindNext(string pattern)
+		/// <summary></summary>
+		protected virtual void ValidateAndFindNext(string pattern)
 		{
-			var t = (ActiveMdiChild as Terminal);
-			if (t != null)
-				t.FindNext(pattern);
+			if (ValidateFindPattern(pattern))
+			{
+				var t = (ActiveMdiChild as Terminal);
+				if (t != null)
+					t.FindNext(pattern);
+			}
+		}
+
+		private void toolStripButton_MainTool_Terminal_Find_Next_Click(object sender, EventArgs e)
+		{
+			ValidateAndFindNext();
+		}
+
+		/// <summary></summary>
+		protected virtual void ValidateAndFindNext()
+		{
+			var pattern = toolStripComboBox_MainTool_Terminal_Find_Pattern.Text;
+			if (ValidateFindPattern(pattern))
+			{
+				var t = (ActiveMdiChild as Terminal);
+				if (t != null)
+					t.FindNext();
+			}
+		}
+
+		private void toolStripButton_MainTool_Terminal_Find_Previous_Click(object sender, EventArgs e)
+		{
+			ValidateAndFindPrevious();
+		}
+
+		/// <summary></summary>
+		protected virtual void ValidateAndFindPrevious()
+		{
+			var pattern = toolStripComboBox_MainTool_Terminal_Find_Pattern.Text;
+			if (ValidateFindPattern(pattern))
+			{
+				var t = (ActiveMdiChild as Terminal);
+				if (t != null)
+					t.FindPrevious();
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual bool ValidateFindPattern(string pattern)
+		{
+			try
+			{
+				var regex = new Regex(pattern);
+				UnusedLocal.PreventAnalysisWarning(regex);
+				return (true);
+			}
+			catch (ArgumentException ex)
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					ex.Message,
+					"Invalid Find Pattern",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+				return (false);
+			}
 		}
 
 		private void toolStripButton_MainTool_Terminal_Find_CaseSensitive_Click(object sender, EventArgs e)
@@ -1596,7 +1677,8 @@ namespace YAT.View.Forms
 			ToggleFindCaseSensitive();
 		}
 
-		private void ToggleFindCaseSensitive()
+		/// <summary></summary>
+		protected virtual void ToggleFindCaseSensitive()
 		{
 			var options = ApplicationSettings.RoamingUserSettings.Find.Options;
 			options.CaseSensitive = !options.CaseSensitive;
@@ -1609,36 +1691,13 @@ namespace YAT.View.Forms
 			ToggleFindWholeWord();
 		}
 
-		private void ToggleFindWholeWord()
+		/// <summary></summary>
+		protected virtual void ToggleFindWholeWord()
 		{
 			var options = ApplicationSettings.RoamingUserSettings.Find.Options;
 			options.WholeWord = !options.WholeWord;
 			ApplicationSettings.RoamingUserSettings.Find.Options = options;
 			ApplicationSettings.SaveRoamingUserSettings();
-		}
-
-		private void toolStripButton_MainTool_Terminal_Find_Next_Click(object sender, EventArgs e)
-		{
-			FindNext();
-		}
-
-		private void FindNext()
-		{
-			var t = (ActiveMdiChild as Terminal);
-			if (t != null)
-				t.FindNext();
-		}
-
-		private void toolStripButton_MainTool_Terminal_Find_Previous_Click(object sender, EventArgs e)
-		{
-			FindPrevious();
-		}
-
-		private void FindPrevious()
-		{
-			var t = (ActiveMdiChild as Terminal);
-			if (t != null)
-				t.FindPrevious();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Log_Settings_Click(object sender, EventArgs e)
