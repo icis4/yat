@@ -3108,7 +3108,23 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public virtual void Find(string pattern)
+		public virtual void InitializeFindOnEdit()
+		{
+			var monitor = GetMonitor(this.lastMonitorSelection);
+
+			monitor.InitializeFindOnEdit();
+		}
+
+		/// <summary></summary>
+		public virtual void FindOnEdit(string pattern)
+		{
+			var monitor = GetMonitor(this.lastMonitorSelection);
+
+			monitor.TryFindOnEdit(pattern, ApplicationSettings.RoamingUserSettings.Find.Options);
+		}
+
+		/// <summary></summary>
+		public virtual void FindNext(string pattern)
 		{
 			ApplicationSettings.RoamingUserSettings.Find.ActivePattern = pattern;
 			ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.Add(new RecentItem<string>(pattern));
@@ -3116,7 +3132,7 @@ namespace YAT.View.Forms
 
 			var monitor = GetMonitor(this.lastMonitorSelection);
 
-			if (!monitor.TryFind(pattern, ApplicationSettings.RoamingUserSettings.Find.Options))
+			if (!monitor.TryFindNext(pattern, ApplicationSettings.RoamingUserSettings.Find.Options))
 				ShowNotFoundMessage(pattern, true);
 		}
 

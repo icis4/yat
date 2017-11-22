@@ -161,6 +161,8 @@ namespace YAT.View.Controls
 		// Find:
 		private string findPattern; // = null;
 		private Regex findRegex; // = null;
+		private bool isFirstFindOnEdit = true;
+		private int findOnEditStartIndex = ControlEx.InvalidIndex;
 		private int lastFindIndex = ListBox.NoMatches;
 
 		// Status:
@@ -629,7 +631,50 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		public virtual bool TryFind(string pattern, FindOptions options)
+		public virtual void InitializeFindOnEdit()
+		{
+			this.isFirstFindOnEdit = true;
+		}
+
+		/// <summary></summary>
+		public virtual bool TryFindOnEdit(string pattern, FindOptions options)
+		{
+			if (this.isFirstFindOnEdit)
+			{
+				this.isFirstFindOnEdit = false;
+
+				int nextStartIndex;
+				if (TryGetNextStartIndex(out nextStartIndex))
+					this.findOnEditStartIndex = nextStartIndex; // Find will start after current item.
+				else
+					this.findOnEditStartIndex = ControlEx.InvalidIndex; // Find will start at first item.
+			}
+
+			if (!string.IsNullOrEmpty(pattern))
+			{
+				PrepareFind(pattern, options);
+
+				if (TryFindNext(this.findOnEditStartIndex))
+					return (true);
+			}
+
+			var lb = fastListBox_Monitor;
+			lb.ClearSelected();
+			return (false);
+		}
+
+		/// <summary></summary>
+		public virtual bool TryFindNext(string pattern, FindOptions options)
+		{
+			this.isFirstFindOnEdit = true;
+
+			PrepareFind(pattern, options);
+
+			return (TryFindNext());
+		}
+
+		/// <summary></summary>
+		protected virtual void PrepareFind(string pattern, FindOptions options)
 		{
 			this.findPattern = pattern;
 
@@ -641,20 +686,26 @@ namespace YAT.View.Controls
 				pattern = string.Format("{0}{1}{0}", @"\b", pattern);
 
 			this.findRegex = new Regex(pattern, regexOptions);
-
-			return (TryFindNext());
 		}
 
 		/// <summary></summary>
 		public virtual bool TryFindNext()
 		{
-			var lb = fastListBox_Monitor;
+			this.isFirstFindOnEdit = true;
 
 			int nextStartIndex;
 			if (!TryGetNextStartIndex(out nextStartIndex))
 				return (false);
 
-			int i = lb.FindNext(this.findRegex, nextStartIndex);
+			return (TryFindNext(nextStartIndex));
+		}
+
+		/// <summary></summary>
+		protected virtual bool TryFindNext(int startIndex)
+		{
+			var lb = fastListBox_Monitor;
+
+			int i = lb.FindNext(this.findRegex, startIndex);
 			if (i != ListBox.NoMatches)
 			{
 				lb.ClearSelected();
@@ -671,13 +722,21 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		public virtual bool TryFindPrevious()
 		{
-			var lb = fastListBox_Monitor;
+			this.isFirstFindOnEdit = true;
 
 			int previousStartIndex;
 			if (!TryGetPreviousStartIndex(out previousStartIndex))
 				return (false);
 
-			int i = lb.FindPrevious(this.findRegex, previousStartIndex);
+			return (TryFindPrevious(previousStartIndex));
+		}
+
+		/// <summary></summary>
+		protected virtual bool TryFindPrevious(int startIndex)
+		{
+			var lb = fastListBox_Monitor;
+
+			int i = lb.FindPrevious(this.findRegex, startIndex);
 			if (i != ListBox.NoMatches)
 			{
 				lb.ClearSelected();
@@ -692,32 +751,51 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		protected virtual bool TryGetNextStartIndex(out int result)
+		protected virtual bool TryGetCurrentStartIndex(out int result)
 		{
 			var lb = fastListBox_Monitor;
 
 			if (lb.Items.Count > 0)
 			{
-				if (lb.SelectedIndex != ControlEx.InvalidIndex)
+				if (lb.SelectedIndices.Count > 0)
 				{
-					result = (lb.SelectedIndex + 1);
+					result = lb.SelectedIndices[0];
 					if (result <= lb.LastIndex)
 						return (true);
 					else
 						return (false);
 				}
 
-				if (this.lastFindIndex != ControlEx.InvalidIndex)
+				if (this.lastFindIndex != ListBox.NoMatches)
 				{
-					result = (this.lastFindIndex + 1);
+					result = this.lastFindIndex;
 					if (result <= lb.LastIndex)
 						return (true);
 					else
 						return (false);
 				}
 
-				result = 0;
+				result = ControlEx.InvalidIndex;
 				return (true);
+			}
+
+			result = ControlEx.InvalidIndex;
+			return (false);
+		}
+
+		/// <summary></summary>
+		protected virtual bool TryGetNextStartIndex(out int result)
+		{
+			var lb = fastListBox_Monitor;
+
+			int currentStartIndex;
+			if (TryGetCurrentStartIndex(out currentStartIndex))
+			{
+				result = (currentStartIndex + 1);
+				if (result <= lb.LastIndex)
+					return (true);
+				else
+					return (false);
 			}
 
 			result = ControlEx.InvalidIndex;
@@ -729,28 +807,14 @@ namespace YAT.View.Controls
 		{
 			var lb = fastListBox_Monitor;
 
-			if (lb.Items.Count > 0)
+			int currentStartIndex;
+			if (TryGetCurrentStartIndex(out currentStartIndex))
 			{
-				if (lb.SelectedIndex != ControlEx.InvalidIndex)
-				{
-					result = (lb.SelectedIndex - 1);
-					if (result >= lb.FirstIndex)
-						return (true);
-					else
-						return (false);
-				}
-
-				if (this.lastFindIndex != ControlEx.InvalidIndex)
-				{
-					result = (this.lastFindIndex - 1);
-					if (result >= lb.FirstIndex)
-						return (true);
-					else
-						return (false);
-				}
-
-				result = 0;
-				return (true);
+				result = (currentStartIndex - 1);
+				if (result >= lb.FirstIndex)
+					return (true);
+				else
+					return (false);
 			}
 
 			result = ControlEx.InvalidIndex;
