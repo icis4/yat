@@ -3491,33 +3491,36 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private bool toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore; // = false;
-		private bool toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore; // = false;
+		// \remind (2017-11-24 / MKY)
+		// See Main.toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyDown().
 
-		/// <summary>
-		/// Suspends the [Control+F/N/P] shortcuts.
-		/// </summary>
-		public virtual void SuspendCtrlFNPShortcuts()
-		{
-			toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore = toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled;
-			toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore = toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled;
+	////private bool toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore; // = false;
+	////private bool toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore; // = false;
 
-			toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled = false;
-			toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled = false;
+	/////// <summary>
+	/////// Suspends the [Control+F/N/P] shortcuts.
+	/////// </summary>
+	////public virtual void SuspendCtrlFNPShortcuts()
+	////{
+	////	toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore = toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled;
+	////	toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore = toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled;
+	////
+	////	toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled = false;
+	////	toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled = false;
+	////
+	////	// Could be implemented more cleverly, by iterating over all potential shortcut controls
+	////	// and then handle those that use one of the shortcuts in question. However, that would
+	////	// be an overkill, thus using this straight-forward implementation.
+	////}
 
-			// Could be implemented more cleverly, by iterating over all potential shortcut controls
-			// and then handle those that use one of the shortcuts in question. However, that would
-			// be an overkill, thus using this straight-forward implementation.
-		}
-
-		/// <summary>
-		/// Resumes the [Control+F/N/P] shortcuts.
-		/// </summary>
-		public virtual void ResumeCtrlFNPShortcuts()
-		{
-			toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled = toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore;
-			toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled = toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore;
-		}
+	/////// <summary>
+	/////// Resumes the [Control+F/N/P] shortcuts.
+	/////// </summary>
+	////public virtual void ResumeCtrlFNPShortcuts()
+	////{
+	////	toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled = toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore;
+	////	toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled = toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore;
+	////}
 
 		#endregion
 
