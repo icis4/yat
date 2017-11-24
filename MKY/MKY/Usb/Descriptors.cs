@@ -87,6 +87,7 @@ namespace MKY.Usb
 				if (ci != null)
 					l.Add(ci);
 			}
+
 			return (l.ToArray());
 		}
 
