@@ -1468,40 +1468,59 @@ namespace YAT.View.Forms
 
 			var pattern = (toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedItem as string);
 			if (pattern != null)
-			{
 				ValidateAndFindNext(pattern);
-			}
 		}
 
-		private void ToolStripComboBox_MainTool_Terminal_Find_Pattern_Enter(object sender, EventArgs e)
+		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_Enter(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			// Suspend shortcuts that are used in find field:
-			foreach (var child in MdiChildren)
-			{
-				var t = (child as Terminal);
-				if (t != null)
-					t.SuspendF3Shortcuts();
-			}
+			Debug.Write("Entering...");
+			SuspendCtrlFNPShortcuts(); // Suspend while in find field.
+			Debug.WriteLine("...done");
 		}
 
-		private void ToolStripComboBox_MainTool_Terminal_Find_Pattern_Leave(object sender, EventArgs e)
+		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_Leave(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			// Resume shortcuts that are used in find field:
-			foreach (var child in MdiChildren)
-			{
-				var t = (child as Terminal);
-				if (t != null)
-					t.ResumeF3Shortcuts();
-			}
-
-			// Reset 'FindOnEdit':
+			Debug.Write("Leaving...");
+			ResumeCtrlFNPShortcuts(); // Suspended while in find field.
 			ResetFindOnEdit();
+			Debug.WriteLine("...done");
+		}
+
+		private bool toolStripMenuItem_MainMenu_File_New_EnabledToRestore; // = false;
+
+		private void SuspendCtrlFNPShortcuts()
+		{
+			toolStripMenuItem_MainMenu_File_New_EnabledToRestore = toolStripMenuItem_MainMenu_File_New.Enabled;
+			toolStripMenuItem_MainMenu_File_New.Enabled = false;
+
+			// Could be implemented more cleverly, by iterating over all potential shortcut controls
+			// and then handle those that use one of the shortcuts in question. However, that would
+			// be an overkill, thus using this straight-forward implementation.
+
+			foreach (var child in MdiChildren)
+			{
+				var t = (child as Terminal);
+				if (t != null)
+					t.SuspendCtrlFNPShortcuts();
+			}
+		}
+
+		private void ResumeCtrlFNPShortcuts()
+		{
+			toolStripMenuItem_MainMenu_File_New.Enabled = toolStripMenuItem_MainMenu_File_New_EnabledToRestore;
+
+			foreach (var child in MdiChildren)
+			{
+				var t = (child as Terminal);
+				if (t != null)
+					t.ResumeCtrlFNPShortcuts();
+			}
 		}
 
 		/// <remarks>
@@ -1540,45 +1559,47 @@ namespace YAT.View.Forms
 
 		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyDown(object sender, KeyEventArgs e)
 		{
-			if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
+			// \remind (2017-11-22 / MKY) there are limitations in WinForm (or Win32):
+			//
+			// [Severe]
+			// Setting 'e.Handled' is *not* sufficient, e.g. [Alt+W] would still activate the
+			// 'Window' menu. Only setting 'e.SuppressKeyPress' works!
+			//
+			// [Acceptable]
+			// Even if all [Alt] events were suppressed above by...
+			//    default: e.SuppressKeyPress = true; break;
+			// ...the underlines still become visible in the menu bar.
+			// Not critical, Visual Studio has exactly the same problem ;-)
+			//
+			// Also remind that only shortcuts that are not active elsewhere can be used here.
+			// Therefore, the [Ctrl+F/N/P] shortcuts are suspended while in find field.
+
+			if ((e.KeyData & Keys.KeyCode) == Keys.Enter)
+			{
+				ValidateAndFindNext();
+				e.SuppressKeyPress = true;
+			}
+			else if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
 			{
 				switch (e.KeyData & Keys.KeyCode)
 				{
 					case Keys.C: ToggleFindCaseSensitive(); e.SuppressKeyPress = true; break;
 					case Keys.W: ToggleFindWholeWord();     e.SuppressKeyPress = true; break;
 
+					case Keys.F:
 					case Keys.N: ValidateAndFindNext();     e.SuppressKeyPress = true; break;
 					case Keys.P: ValidateAndFindPrevious(); e.SuppressKeyPress = true; break;
 
 					default: break;
-
-					// \remind (2017-11-22 / MKY) there are limitations in WinForm (or Win32):
-					//
-					// [Severe]
-					// Setting 'e.Handled' is *not* sufficient, e.g. [Alt+W] would still activate
-					// the 'Window' menu. Only setting 'e.SuppressKeyPress' works!
-					//
-					// [Acceptable]
-					// Even if all [Alt] events were suppressed above by...
-					//    default: e.SuppressKeyPress = true; break;
-					// ...the underlines still become visible in the menu bar.
-					// Not critical, Visual Studio has exactly the same problem ;-)
-					//
-					// Also remind that only shortcuts that have not been used elsewhere can be
-					// used here. Because, the MDI menu
 				}
 			}
-			else if ((e.KeyData & Keys.KeyCode) == Keys.Enter)
+			else if ((e.KeyData & Keys.Modifiers) == Keys.Control)
 			{
-				ValidateAndFindNext();
-				e.SuppressKeyPress = true;
-			}
-			else if ((e.KeyData & Keys.KeyCode) == Keys.F3) // Note that F3 shortcuts of terminals
-			{                                               // are suspended while in find field.
-				switch (e.KeyData & Keys.Modifiers)
+				switch (e.KeyData & Keys.KeyCode)
 				{
-					case Keys.None:  ValidateAndFindNext();     e.SuppressKeyPress = true; break;
-					case Keys.Shift: ValidateAndFindPrevious(); e.SuppressKeyPress = true; break;
+					case Keys.F:
+					case Keys.N: ValidateAndFindNext();     e.SuppressKeyPress = true; break;
+					case Keys.P: ValidateAndFindPrevious(); e.SuppressKeyPress = true; break;
 
 					default: break;
 				}
