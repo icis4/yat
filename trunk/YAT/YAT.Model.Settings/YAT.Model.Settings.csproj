@@ -99,6 +99,7 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="AutoActionSettings.cs" />
+    <Compile Include="SocketSettings.cs" />
     <Compile Include="FindSettings.cs" />
     <Compile Include="FindOptions.cs" />
     <Compile Include="ViewSettings.cs" />

@@ -31,6 +31,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
+using MKY.Collections.Specialized;
 using MKY.Windows.Forms;
 
 using YAT.Settings.Application;
@@ -217,6 +218,9 @@ namespace YAT.View.Forms
 		private void socketSelection_RemoteHostChanged(object sender, EventArgs e)
 		{
 			this.newTerminalSettingsInEdit.SocketRemoteHost = socketSelection.RemoteHost;
+
+			ApplicationSettings.RoamingUserSettings.Socket.RecentRemoteHosts.Add(new RecentItem<string>(socketSelection.RemoteHost));
+			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
 		private void socketSelection_RemoteTcpPortChanged(object sender, EventArgs e)
