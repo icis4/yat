@@ -1471,57 +1471,63 @@ namespace YAT.View.Forms
 				ValidateAndFindNext(pattern);
 		}
 
-		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_Enter(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
+		// \remind (2017-11-24 / MKY)
+		// See toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyDown() further below.
 
-			Debug.Write("Entering...");
-			SuspendCtrlFNPShortcuts(); // Suspend while in find field.
-			Debug.WriteLine("...done");
-		}
+	////this.toolStripComboBox_MainTool_Terminal_Find_Pattern.Enter += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_Enter);
+	////this.toolStripComboBox_MainTool_Terminal_Find_Pattern.Leave += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_Leave);
 
-		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_Leave(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
+	////private void toolStripComboBox_MainTool_Terminal_Find_Pattern_Enter(object sender, EventArgs e)
+	////{
+	////	if (this.isSettingControls)
+	////		return;
+	////
+	////	DebugToolStrip("Entering...");
+	////	SuspendCtrlFNPShortcuts(); // Suspend while in find field.
+	////	DebugToolStrip("...done");
+	////}
 
-			Debug.Write("Leaving...");
-			ResumeCtrlFNPShortcuts(); // Suspended while in find field.
-			ResetFindOnEdit();
-			Debug.WriteLine("...done");
-		}
+	////private void toolStripComboBox_MainTool_Terminal_Find_Pattern_Leave(object sender, EventArgs e)
+	////{
+	////	if (this.isSettingControls)
+	////		return;
+	////
+	////	DebugToolStrip("Leaving...");
+	////	ResumeCtrlFNPShortcuts(); // Suspended while in find field.
+	////	ResetFindOnEdit();
+	////	DebugToolStrip("...done");
+	////}
 
-		private bool toolStripMenuItem_MainMenu_File_New_EnabledToRestore; // = false;
+	////private bool toolStripMenuItem_MainMenu_File_New_EnabledToRestore; // = false;
 
-		private void SuspendCtrlFNPShortcuts()
-		{
-			toolStripMenuItem_MainMenu_File_New_EnabledToRestore = toolStripMenuItem_MainMenu_File_New.Enabled;
-			toolStripMenuItem_MainMenu_File_New.Enabled = false;
+	////private void SuspendCtrlFNPShortcuts()
+	////{
+	////	toolStripMenuItem_MainMenu_File_New_EnabledToRestore = toolStripMenuItem_MainMenu_File_New.Enabled;
+	////	toolStripMenuItem_MainMenu_File_New.Enabled = false;
+	////
+	////	// Could be implemented more cleverly, by iterating over all potential shortcut controls
+	////	// and then handle those that use one of the shortcuts in question. However, that would
+	////	// be an overkill, thus using this straight-forward implementation.
+	////
+	////	foreach (var child in MdiChildren)
+	////	{
+	////		var t = (child as Terminal);
+	////		if (t != null)
+	////			t.SuspendCtrlFNPShortcuts();
+	////	}
+	////}
 
-			// Could be implemented more cleverly, by iterating over all potential shortcut controls
-			// and then handle those that use one of the shortcuts in question. However, that would
-			// be an overkill, thus using this straight-forward implementation.
-
-			foreach (var child in MdiChildren)
-			{
-				var t = (child as Terminal);
-				if (t != null)
-					t.SuspendCtrlFNPShortcuts();
-			}
-		}
-
-		private void ResumeCtrlFNPShortcuts()
-		{
-			toolStripMenuItem_MainMenu_File_New.Enabled = toolStripMenuItem_MainMenu_File_New_EnabledToRestore;
-
-			foreach (var child in MdiChildren)
-			{
-				var t = (child as Terminal);
-				if (t != null)
-					t.ResumeCtrlFNPShortcuts();
-			}
-		}
+	////private void ResumeCtrlFNPShortcuts()
+	////{
+	////	toolStripMenuItem_MainMenu_File_New.Enabled = toolStripMenuItem_MainMenu_File_New_EnabledToRestore;
+	////
+	////	foreach (var child in MdiChildren)
+	////	{
+	////		var t = (child as Terminal);
+	////		if (t != null)
+	////			t.ResumeCtrlFNPShortcuts();
+	////	}
+	////}
 
 		/// <remarks>
 		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event way too late,
@@ -1593,17 +1599,70 @@ namespace YAT.View.Forms
 					default: break;
 				}
 			}
-			else if ((e.KeyData & Keys.Modifiers) == Keys.Control)
+		////else if ((e.KeyData & Keys.Modifiers) == Keys.Control)
+		////{
+		////	switch (e.KeyData & Keys.KeyCode)
+		////	{
+		////		case Keys.F:
+		////		case Keys.N: ValidateAndFindNext();     e.SuppressKeyPress = true; break;
+		////		case Keys.P: ValidateAndFindPrevious(); e.SuppressKeyPress = true; break;
+		////
+		////		default: break;
+		////	}
+		////}
+
+			// \remind (2017-11-24 / MKY)
+			// These shortcuts could not be properly implemented. There are (at least) two issus:
+			//  1. Shortcuts can only be active if nowhere else in use.
+			//      => Suspend/ResumeCtrlFNPShortcuts() above and in terminal.
+			//  2. The ToolStripComboBox 'Leave' event is fired as soon as a MsgBox is shown
+			//     (e.g. "no more found"). As a consequence, the other shortcuts are already
+			//     active again, even though editing still continues?!?
+			//      => Shortcuts disabled, already spent more than time enough...
+			//
+			// In case of finding a solution/workaround one day, don't forget to adjust the
+			// tool tip text accordingly:
+			//  > Next: [Ctrl+F/N] / [Alt+F/N]
+			//  > Previous: [Ctrl+P]
+		}
+
+		/// <remarks>
+		/// Suppress same keys for symmetricity with 'KeyDown' above.
+		/// </remarks>
+		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyUp(object sender, KeyEventArgs e)
+		{
+			if ((e.KeyData & Keys.KeyCode) == Keys.Enter)
+			{
+				e.SuppressKeyPress = true;
+			}
+			else if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
 			{
 				switch (e.KeyData & Keys.KeyCode)
 				{
+					case Keys.C: e.SuppressKeyPress = true; break;
+					case Keys.W: e.SuppressKeyPress = true; break;
+
 					case Keys.F:
-					case Keys.N: ValidateAndFindNext();     e.SuppressKeyPress = true; break;
-					case Keys.P: ValidateAndFindPrevious(); e.SuppressKeyPress = true; break;
+					case Keys.N: e.SuppressKeyPress = true; break;
+					case Keys.P: e.SuppressKeyPress = true; break;
 
 					default: break;
 				}
 			}
+		////else if ((e.KeyData & Keys.Modifiers) == Keys.Control)
+		////{
+		////	switch (e.KeyData & Keys.KeyCode)
+		////	{
+		////		case Keys.F:
+		////		case Keys.N: e.SuppressKeyPress = true; break;
+		////		case Keys.P: e.SuppressKeyPress = true; break;
+		////
+		////		default: break;
+		////	}
+		////}
+
+			// \remind (2017-11-24 / MKY)
+			// See toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyDown() above.
 		}
 
 		/// <summary></summary>
