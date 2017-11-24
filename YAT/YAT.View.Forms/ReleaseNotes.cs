@@ -92,9 +92,6 @@ namespace YAT.View.Forms
 			{
 				textBox_ReleaseNotes.Text = "Couldn't read release notes from" + Environment.NewLine + filePath;
 			}
-
-			textBox_ReleaseNotes.SelectionStart = 0;
-			textBox_ReleaseNotes.SelectionLength = 0;
 		}
 
 		private void button_Close_Click(object sender, EventArgs e)

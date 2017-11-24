@@ -74,11 +74,6 @@ namespace YAT.View.Forms
 		private void UnhandledException_Load(object sender, EventArgs e)
 		{
 			textBox_Exception.Text = this.multiLineText;
-
-			// Don't know why it is necessary to manually deselect the text.
-			// DeselectAll() isn't sufficient, setting the properties works.
-			textBox_Exception.SelectionLength = 0;
-			textBox_Exception.SelectionStart = 0;
 		}
 
 		#region Controls Event Handlers
