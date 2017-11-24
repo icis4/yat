@@ -209,14 +209,14 @@ namespace MKY.Windows.Forms
 		// General
 		//==========================================================================================
 
-#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
+	#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 
 		private bool IsLeftToRight
 		{
 			get { return (RightToLeft == RightToLeft.No); }
 		}
 
-#endif
+	#endif
 
 		private void ListBoxEx_Resize(object sender, EventArgs e)
 		{
@@ -270,6 +270,8 @@ namespace MKY.Windows.Forms
 		/// <see cref="ListBox.ItemHeight"/> property on a <see cref="ListBox"/> with items of
 		/// variable height, this property returns the height of the first item in the control.
 		/// </remarks>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual float ClientItemCapacity
 		{
 			get { return (this.clientItemCapacity); }
@@ -285,6 +287,8 @@ namespace MKY.Windows.Forms
 		/// <see cref="ListBox.ItemHeight"/> property on a <see cref="ListBox"/> with items of
 		/// variable height, this property returns the height of the first item in the control.
 		/// </remarks>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual int FullyVisibleClientItemCapacity
 		{
 			get { return (this.fullyVisibleClientItemCapacity); }
@@ -300,6 +304,8 @@ namespace MKY.Windows.Forms
 		/// <see cref="ListBox.ItemHeight"/> property on a <see cref="ListBox"/> with items of
 		/// variable height, this property returns the height of the first item in the control.
 		/// </remarks>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual int TotalVisibleClientItemCapacity
 		{
 			get { return (this.totalVisibleClientItemCapacity); }
@@ -318,6 +324,8 @@ namespace MKY.Windows.Forms
 		/// <remarks>
 		/// If no items are available, this property returns <see cref="ControlEx.InvalidIndex"/>.
 		/// </remarks>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual int FirstIndex
 		{
 			get
@@ -333,6 +341,8 @@ namespace MKY.Windows.Forms
 		/// <remarks>
 		/// If no items are available, this property returns <see cref="ControlEx.InvalidIndex"/>.
 		/// </remarks>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual int LastIndex
 		{
 			get
@@ -345,6 +355,8 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// The first item in the control.
 		/// </summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual object FirstItem
 		{
 			get
@@ -359,6 +371,8 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// The  last item in the control.
 		/// </summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual object LastItem
 		{
 			get
@@ -380,6 +394,8 @@ namespace MKY.Windows.Forms
 		/// <see cref="ListBox.ItemHeight"/> property on a <see cref="ListBox"/> with items of
 		/// variable height, this property returns the height of the first item in the control.
 		/// </remarks>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual int FullyVisibleItemCount
 		{
 			get { return (Math.Min(FullyVisibleClientItemCapacity, Items.Count)); }
@@ -395,6 +411,8 @@ namespace MKY.Windows.Forms
 		/// <see cref="ListBox.ItemHeight"/> property on a <see cref="ListBox"/> with items of
 		/// variable height, this property returns the height of the first item in the control.
 		/// </remarks>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual int TotalVisibleItemCount
 		{
 			get { return (Math.Min(TotalVisibleClientItemCapacity, Items.Count)); }
@@ -407,6 +425,8 @@ namespace MKY.Windows.Forms
 		/// <remarks>
 		/// Same as <see cref="ListBox.TopIndex"/>, this property initially returns zero (0).
 		/// </remarks>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual int BottomIndex
 		{
 			get
@@ -432,6 +452,8 @@ namespace MKY.Windows.Forms
 		/// <remarks>
 		/// Note that items gets deselected if another control gets the focus.
 		/// </remarks>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual bool ItemIsSelected
 		{
 			get { return (SelectedItems.Count > 0); }
@@ -440,6 +462,8 @@ namespace MKY.Windows.Forms
 		/// <remarks>
 		/// Note that items gets deselected if another control gets the focus.
 		/// </remarks>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual bool VisibleItemIsSelected
 		{
 			get
@@ -459,6 +483,8 @@ namespace MKY.Windows.Forms
 		/// <remarks>
 		/// Note that items gets deselected if another control gets the focus.
 		/// </remarks>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual bool OnlyOneOfTheLastItemsIsSelected
 		{
 			get
@@ -488,6 +514,8 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Gets the index of the last selected item.
 		/// </summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual int LastSelectedIndex
 		{
 			get { return (this.lastSelectedIndex); }
@@ -710,6 +738,8 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary></summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual bool UserIsScrolling
 		{
 			get { return (this.userIsScrolling); }
@@ -721,6 +751,8 @@ namespace MKY.Windows.Forms
 		///  > When an item is added, the item count is already incremented while the top index is still lower.
 		///  > When the user wants to reactivate vertical auto scroll while a lot of data is being received, the margin "glues" scrolling.
 		/// </remarks>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual bool VerticalScrollBarIsNearBottom
 		{
 			get
