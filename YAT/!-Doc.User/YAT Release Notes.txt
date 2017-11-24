@@ -89,10 +89,11 @@ YAT 2.0 Epsilon Version 1.99.90 :: 201x-xx-xx
 
 New:
 - Simple find/search function for monitor contents added (feature requests #11 and #79).
-- Automatic action feature, YAT can automatically invoke an action when receiving a configurable
-  trigger sequence (feature requests #11, #314, #320, #325).
+- Previous remote TCP/IP and UDP/IP hosts are remembered (feature request #273).
 - Option to show a copy of the active monitor line in an additional text box, allowing to select
   and copy/paste characters and words (feature request #313).
+- Automatic action feature, YAT can automatically invoke an action when receiving a configurable
+  trigger sequence (feature requests #11, #314, #320, #325).
 
 Important changes:
 - Cursor behavior of 'Send Text' improved; the cursor no longer jumps to the end of the input box

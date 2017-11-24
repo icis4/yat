@@ -22,53 +22,60 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-#region Using
-//==================================================================================================
-// Using
-//==================================================================================================
-
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-using MKY;
+using MKY.Collections;
+using MKY.Collections.Specialized;
 
-using YAT.Application.Utilities;
-
-#endregion
-
-namespace YAT.Settings.Application
+namespace YAT.Model.Settings
 {
-	/// <summary></summary>
-	[XmlRoot("RoamingUserSettings")]
-	public class RoamingUserSettingsRoot : MKY.Settings.SettingsItem, IEquatable<RoamingUserSettingsRoot>
+	/// <remarks>
+	/// \remind (2017-11-19 / MKY)
+	/// Could/should be migrated to 'YAT.Application.Settings' or 'YAT.View.Settings'.
+	/// To be done when refactoring the projects on integration with Albatros.
+	/// </remarks>
+	public class SocketSettings : MKY.Settings.SettingsItem, IEquatable<SocketSettings>
 	{
-		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
-		private string settingsVersion = "1.0.0";
+		private const int MaxRecentRemoteHosts = 12;
 
-		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
-		private string productVersion = ApplicationEx.ProductVersion;
-
-		private Model.Settings.SocketSettings socket;
-		private Model.Settings.FindSettings find;
+		private RecentItemCollection<string> recentRemoteHosts;
 
 		/// <summary></summary>
-		public RoamingUserSettingsRoot()
-			: base(MKY.Settings.SettingsType.Explicit)
+		public SocketSettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			Socket = new Model.Settings.SocketSettings(MKY.Settings.SettingsType.Explicit);
-			Find   = new Model.Settings.FindSettings(MKY.Settings.SettingsType.Explicit);
+		}
+
+		/// <summary></summary>
+		public SocketSettings(MKY.Settings.SettingsType settingsType)
+			: base(settingsType)
+		{
+			SetMyDefaults();
+			ClearChanged();
+		}
+
+		/// <remarks>
+		/// Set fields through properties even though changed flag will be cleared anyway.
+		/// There potentially is additional code that needs to be run within the property method.
+		/// </remarks>
+		public SocketSettings(SocketSettings rhs)
+			: base(rhs)
+		{
+			RecentRemoteHosts = new RecentItemCollection<string>(rhs.RecentRemoteHosts);
 
 			ClearChanged();
 		}
 
-		/// <summary></summary>
-		public RoamingUserSettingsRoot(RoamingUserSettingsRoot rhs)
-			: base(rhs)
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
+		protected override void SetMyDefaults()
 		{
-			Socket = new Model.Settings.SocketSettings(rhs.Socket);
-			Find   = new Model.Settings.FindSettings(rhs.Find);
+			base.SetMyDefaults();
 
-			ClearChanged();
+			RecentRemoteHosts = new RecentItemCollection<string>(MaxRecentRemoteHosts);
 		}
 
 		#region Properties
@@ -77,75 +84,18 @@ namespace YAT.Settings.Application
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("FileType")]
-		public virtual string FileType
+		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
+		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
+		[XmlElement("RecentRemoteHosts")]
+		public RecentItemCollection<string> RecentRemoteHosts
 		{
-			get { return (ApplicationEx.ProductName + " roaming user settings"); }
-			set { } // Do nothing.
-		}
-
-		/// <summary></summary>
-		[XmlElement("SettingsVersion")]
-		public virtual string SettingsVersion
-		{
-			get { return (this.settingsVersion); }
-			set { } // Do nothing.
-		}
-
-		/// <summary></summary>
-		[XmlElement("ProductVersion")]
-		public virtual string ProductVersion
-		{
-			get { return (this.productVersion); }
-			set { } // Do nothing.
-		}
-
-		/// <summary></summary>
-		[XmlElement("Warning")]
-		public virtual string Warning
-		{
-			get { return ("Modifying this file may cause undefined behavior!"); }
-			set { } // Do nothing.
-		}
-
-		/// <summary></summary>
-		[XmlElement("Saved")]
-		public virtual SaveInfo Saved
-		{
-			get { return (new SaveInfo(DateTime.Now, Environment.UserName)); }
-			set { } // Do nothing.
-		}
-
-		/// <summary></summary>
-		[XmlElement("Socket")]
-		public virtual Model.Settings.SocketSettings Socket
-		{
-			get { return (this.socket); }
+			get { return (this.recentRemoteHosts); }
 			set
 			{
-				if (this.socket != value)
+				if (this.recentRemoteHosts != value)
 				{
-					var oldNode = this.socket;
-					this.socket = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
-
-					AttachOrReplaceOrDetachNode(oldNode, value);
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("Find")]
-		public virtual Model.Settings.FindSettings Find
-		{
-			get { return (this.find); }
-			set
-			{
-				if (this.find != value)
-				{
-					var oldNode = this.find;
-					this.find = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
-
-					AttachOrReplaceOrDetachNode(oldNode, value);
+					this.recentRemoteHosts = value;
+					SetMyChanged();
 				}
 			}
 		}
@@ -170,7 +120,7 @@ namespace YAT.Settings.Application
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ ProductVersion.GetHashCode();
+				hashCode = (hashCode * 397) ^ (RecentRemoteHosts != null ? RecentRemoteHosts.GetHashCode() : 0);
 
 				return (hashCode);
 			}
@@ -181,7 +131,7 @@ namespace YAT.Settings.Application
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as RoamingUserSettingsRoot));
+			return (Equals(obj as SocketSettings));
 		}
 
 		/// <summary>
@@ -191,7 +141,7 @@ namespace YAT.Settings.Application
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(RoamingUserSettingsRoot other)
+		public bool Equals(SocketSettings other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
@@ -201,14 +151,14 @@ namespace YAT.Settings.Application
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				StringEx.EqualsOrdinalIgnoreCase(ProductVersion, other.ProductVersion)
+				IEnumerableEx.ElementsEqual(RecentRemoteHosts, other.RecentRemoteHosts)
 			);
 		}
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(RoamingUserSettingsRoot lhs, RoamingUserSettingsRoot rhs)
+		public static bool operator ==(SocketSettings lhs, SocketSettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -221,7 +171,7 @@ namespace YAT.Settings.Application
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(RoamingUserSettingsRoot lhs, RoamingUserSettingsRoot rhs)
+		public static bool operator !=(SocketSettings lhs, SocketSettings rhs)
 		{
 			return (!(lhs == rhs));
 		}
