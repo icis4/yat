@@ -38,6 +38,7 @@
 			this.label_UserName = new System.Windows.Forms.Label();
 			this.groupBox_Communication = new System.Windows.Forms.GroupBox();
 			this.groupBox_Communication_SerialPorts = new System.Windows.Forms.GroupBox();
+			this.checkBox_IgnoreFramingErrors = new System.Windows.Forms.CheckBox();
 			this.checkBox_OutputBreakModifiable = new System.Windows.Forms.CheckBox();
 			this.checkBox_IndicateBreakStates = new System.Windows.Forms.CheckBox();
 			this.comboBox_Endianness = new MKY.Windows.Forms.ComboBoxEx();
@@ -124,7 +125,7 @@
 			this.label_MaxLineCountUnit = new System.Windows.Forms.Label();
 			this.label_MaxLineCount = new System.Windows.Forms.Label();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.checkBox_IgnoreFramingErrors = new System.Windows.Forms.CheckBox();
+			this.checkBox_ShowCopyOfActiveLine = new System.Windows.Forms.CheckBox();
 			this.groupBox_User.SuspendLayout();
 			this.groupBox_Communication.SuspendLayout();
 			this.groupBox_Communication_SerialPorts.SuspendLayout();
@@ -229,6 +230,17 @@
 			this.groupBox_Communication_SerialPorts.TabIndex = 2;
 			this.groupBox_Communication_SerialPorts.TabStop = false;
 			this.groupBox_Communication_SerialPorts.Text = "Serial COM Ports";
+			// 
+			// checkBox_IgnoreFramingErrors
+			// 
+			this.checkBox_IgnoreFramingErrors.AutoSize = true;
+			this.checkBox_IgnoreFramingErrors.Location = new System.Drawing.Point(6, 19);
+			this.checkBox_IgnoreFramingErrors.Name = "checkBox_IgnoreFramingErrors";
+			this.checkBox_IgnoreFramingErrors.Size = new System.Drawing.Size(122, 17);
+			this.checkBox_IgnoreFramingErrors.TabIndex = 0;
+			this.checkBox_IgnoreFramingErrors.Text = "Ignore &framing errors";
+			this.checkBox_IgnoreFramingErrors.UseVisualStyleBackColor = true;
+			this.checkBox_IgnoreFramingErrors.CheckedChanged += new System.EventHandler(this.checkBox_IgnoreFramingErrors_CheckedChanged);
 			// 
 			// checkBox_OutputBreakModifiable
 			// 
@@ -705,7 +717,7 @@
 			this.checkBox_KeepSendText.AutoSize = true;
 			this.checkBox_KeepSendText.Location = new System.Drawing.Point(12, 46);
 			this.checkBox_KeepSendText.Name = "checkBox_KeepSendText";
-			this.checkBox_KeepSendText.Size = new System.Drawing.Size(219, 17);
+			this.checkBox_KeepSendText.Size = new System.Drawing.Size(159, 17);
 			this.checkBox_KeepSendText.TabIndex = 1;
 			this.checkBox_KeepSendText.Text = "&Keep [Send Text] after send";
 			this.checkBox_KeepSendText.UseVisualStyleBackColor = true;
@@ -715,6 +727,7 @@
 			// 
 			this.groupBox_Display.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox_Display.Controls.Add(this.checkBox_ShowCopyOfActiveLine);
 			this.groupBox_Display.Controls.Add(this.groupBox_Display_UsbSerialHid);
 			this.groupBox_Display.Controls.Add(this.textBox_MaxBytePerLineCount);
 			this.groupBox_Display.Controls.Add(this.label_MaxBytePerLineCountUnit);
@@ -899,7 +912,7 @@
 			// checkBox_ShowFlowControlCount
 			// 
 			this.checkBox_ShowFlowControlCount.AutoSize = true;
-			this.checkBox_ShowFlowControlCount.Location = new System.Drawing.Point(12, 256);
+			this.checkBox_ShowFlowControlCount.Location = new System.Drawing.Point(131, 279);
 			this.checkBox_ShowFlowControlCount.Name = "checkBox_ShowFlowControlCount";
 			this.checkBox_ShowFlowControlCount.Size = new System.Drawing.Size(122, 17);
 			this.checkBox_ShowFlowControlCount.TabIndex = 16;
@@ -1207,16 +1220,15 @@
 			this.label_MaxLineCount.Text = "Display &maximal";
 			this.label_MaxLineCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// checkBox_IgnoreFramingErrors
+			// checkBox_ShowCopyOfActiveLine
 			// 
-			this.checkBox_IgnoreFramingErrors.AutoSize = true;
-			this.checkBox_IgnoreFramingErrors.Location = new System.Drawing.Point(6, 19);
-			this.checkBox_IgnoreFramingErrors.Name = "checkBox_IgnoreFramingErrors";
-			this.checkBox_IgnoreFramingErrors.Size = new System.Drawing.Size(122, 17);
-			this.checkBox_IgnoreFramingErrors.TabIndex = 0;
-			this.checkBox_IgnoreFramingErrors.Text = "Ignore &framing errors";
-			this.checkBox_IgnoreFramingErrors.UseVisualStyleBackColor = true;
-			this.checkBox_IgnoreFramingErrors.CheckedChanged += new System.EventHandler(this.checkBox_IgnoreFramingErrors_CheckedChanged);
+			this.checkBox_ShowCopyOfActiveLine.AutoSize = true;
+			this.checkBox_ShowCopyOfActiveLine.Location = new System.Drawing.Point(12, 256);
+			this.checkBox_ShowCopyOfActiveLine.Name = "checkBox_ShowCopyOfActiveLine";
+			this.checkBox_ShowCopyOfActiveLine.Size = new System.Drawing.Size(142, 17);
+			this.checkBox_ShowCopyOfActiveLine.TabIndex = 30;
+			this.checkBox_ShowCopyOfActiveLine.Text = "Show copy of &active line";
+			this.checkBox_ShowCopyOfActiveLine.CheckedChanged += new System.EventHandler(this.checkBox_ShowCopyOfActiveLine_CheckedChanged);
 			// 
 			// AdvancedTerminalSettings
 			// 
@@ -1363,5 +1375,6 @@
 		private System.Windows.Forms.GroupBox groupBox_Display_UsbSerialHid;
 		private System.Windows.Forms.CheckBox checkBox_IncludeNonPayloadData;
 		private System.Windows.Forms.CheckBox checkBox_IgnoreFramingErrors;
+		private System.Windows.Forms.CheckBox checkBox_ShowCopyOfActiveLine;
 	}
 }

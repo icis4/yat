@@ -485,7 +485,10 @@ namespace YAT.View.Forms
 			try
 			{
 				bool monitorIsDefined = (this.lastMonitorSelection != Domain.RepositoryType.None);
-				bool editIsNotActive = (!send.EditIsActive); // Required to suppress standard key short cuts while editing.
+				bool textIsNotFocused = !(send         .TextFocused ||
+				                          monitor_Tx   .TextFocused ||
+				                          monitor_Bidir.TextFocused ||
+				                          monitor_Rx   .TextFocused); // Required to suppress standard key shortcuts like [Ctrl+A] and [Ctrl+C].
 
 				if (TerminalIsAvailable)
 				{
@@ -493,7 +496,7 @@ namespace YAT.View.Forms
 					toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled  =  this.terminal.IsStarted;
 
 					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled =  this.terminal.IsBusy;
-					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled =  (monitorIsDefined && editIsNotActive);
+					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled =  (monitorIsDefined && textIsNotFocused);
 				}
 				else
 				{
@@ -504,10 +507,10 @@ namespace YAT.View.Forms
 					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled = false;
 				}
 
-				toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Enabled       = (monitorIsDefined && editIsNotActive);
-				toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Enabled      = (monitorIsDefined && editIsNotActive);
+				toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Enabled       = (monitorIsDefined && textIsNotFocused);
+				toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Enabled      = (monitorIsDefined && textIsNotFocused);
 
-				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = (monitorIsDefined && editIsNotActive);
+				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = (monitorIsDefined && textIsNotFocused);
 				toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Enabled      =  monitorIsDefined;
 				toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled           =  monitorIsDefined;
 
@@ -1102,7 +1105,8 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_View_ShowEol.Enabled = (isText);
 				toolStripMenuItem_TerminalMenu_View_ShowEol.Checked = (isText && this.settingsRoot.TextTerminal.ShowEol);
 
-				toolStripMenuItem_TerminalMenu_View_ShowLength.Checked = this.settingsRoot.Display.ShowLength;
+				toolStripMenuItem_TerminalMenu_View_ShowLength.Checked           = this.settingsRoot.Display.ShowLength;
+				toolStripMenuItem_TerminalMenu_View_ShowCopyOfActiveLine.Checked = this.settingsRoot.Display.ShowCopyOfActiveLine;
 
 				// Flow control count:
 				bool showFlowControlCount = this.settingsRoot.Status.ShowFlowControlCount;
@@ -1258,6 +1262,11 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_TerminalMenu_View_ShowLength_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Display.ShowLength = !this.settingsRoot.Display.ShowLength;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_View_ShowCopyOfActiveLine_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Display.ShowCopyOfActiveLine = !this.settingsRoot.Display.ShowCopyOfActiveLine;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_FlowControlCount_ShowCount_Click(object sender, EventArgs e)
@@ -1425,7 +1434,8 @@ namespace YAT.View.Forms
 				toolStripMenuItem_MonitorContextMenu_ShowEol.Enabled = isText;
 				toolStripMenuItem_MonitorContextMenu_ShowEol.Checked = isText && this.settingsRoot.TextTerminal.ShowEol;
 
-				toolStripMenuItem_MonitorContextMenu_ShowLength.Checked = this.settingsRoot.Display.ShowLength;
+				toolStripMenuItem_MonitorContextMenu_ShowLength.Checked           = this.settingsRoot.Display.ShowLength;
+				toolStripMenuItem_MonitorContextMenu_ShowCopyOfActiveLine.Checked = this.settingsRoot.Display.ShowCopyOfActiveLine;
 
 				bool showConnectTime = this.settingsRoot.Status.ShowConnectTime;
 				toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Checked  = showConnectTime;
@@ -1510,6 +1520,46 @@ namespace YAT.View.Forms
 			ShowFormatSettings();
 		}
 
+		private void toolStripMenuItem_MonitorContextMenu_ShowConnectTime_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.settingsRoot.Status.ShowConnectTime = !this.settingsRoot.Status.ShowConnectTime;
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_ResetConnectTime_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.terminal.ResetConnectTime();
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_ShowCountAndRate_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.settingsRoot.Status.ShowCountAndRate = !this.settingsRoot.Status.ShowCountAndRate;
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_ResetCount_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.terminal.ResetIOCountAndRate();
+
+			// 'terminal_IOCount/RateChanged_Promptly' are is not used because of the reasons
+			// described in the remarks of 'terminal_RawChunkSent/Received' of 'Model.Terminal'.
+			// Instead, the update is done by the 'terminal_DisplayElementsSent/Received' and
+			// 'terminal_DisplayLinesSent/Received' handlers further below. As a consequence,
+			// the update must manually be triggered:
+
+			SetDataCountAndRateStatus();
+		}
+
 		private void toolStripMenuItem_MonitorContextMenu_ShowRadix_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
@@ -1590,44 +1640,12 @@ namespace YAT.View.Forms
 			this.settingsRoot.Display.ShowLength = !this.settingsRoot.Display.ShowLength;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowConnectTime_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_ShowCopyOfActiveLine_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			this.settingsRoot.Status.ShowConnectTime = !this.settingsRoot.Status.ShowConnectTime;
-		}
-
-		private void toolStripMenuItem_MonitorContextMenu_ResetConnectTime_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			this.terminal.ResetConnectTime();
-		}
-
-		private void toolStripMenuItem_MonitorContextMenu_ShowCountAndRate_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			this.settingsRoot.Status.ShowCountAndRate = !this.settingsRoot.Status.ShowCountAndRate;
-		}
-
-		private void toolStripMenuItem_MonitorContextMenu_ResetCount_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			this.terminal.ResetIOCountAndRate();
-
-			// 'terminal_IOCount/RateChanged_Promptly' are is not used because of the reasons
-			// described in the remarks of 'terminal_RawChunkSent/Received' of 'Model.Terminal'.
-			// Instead, the update is done by the 'terminal_DisplayElementsSent/Received' and
-			// 'terminal_DisplayLinesSent/Received' handlers further below. As a consequence,
-			// the update must manually be triggered:
-
-			SetDataCountAndRateStatus();
+			this.settingsRoot.Display.ShowCopyOfActiveLine = !this.settingsRoot.Display.ShowCopyOfActiveLine;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Clear_Click(object sender, EventArgs e)
@@ -2609,6 +2627,15 @@ namespace YAT.View.Forms
 			this.lastMonitorSelection = Domain.RepositoryType.Rx;
 		}
 
+		/// <remarks>
+		/// Ensure that the edit shortcuts such as [Ctrl+A] and [Ctrl+C] are disabled while the send
+		/// control is being edited.
+		/// </remarks>
+		private void monitor_TextFocusedChanged(object sender, EventArgs e)
+		{
+			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
+		}
+
 		#endregion
 
 		#region Controls Event Handlers > Predefined
@@ -2650,10 +2677,10 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Ensure that the edit shortcuts such as Ctrl-A are disabled while the send control is
-		/// being edited.
+		/// Ensure that the edit shortcuts such as [Ctrl+A] and [Ctrl+C] are disabled while the send
+		/// control is being edited.
 		/// </remarks>
-		private void send_EditFocusStateChanged(object sender, EventArgs e)
+		private void send_TextFocusChanged(object sender, EventArgs e)
 		{
 			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
 		}
@@ -3729,26 +3756,27 @@ namespace YAT.View.Forms
 			ResumeLayout();
 		}
 
-		private void SetMonitorLineCount()
+		private void SetMonitorSettings()
 		{
 			monitor_Tx   .MaxLineCount = this.settingsRoot.Display.MaxLineCount;
 			monitor_Bidir.MaxLineCount = this.settingsRoot.Display.MaxLineCount;
 			monitor_Rx   .MaxLineCount = this.settingsRoot.Display.MaxLineCount;
-		}
 
-		private void SetMonitorLineNumbers()
-		{
 			bool showBufferLineNumbers = this.settingsRoot.Display.ShowBufferLineNumbers;
 			bool showTotalLineNumbers  = this.settingsRoot.Display.ShowTotalLineNumbers;
 
 			monitor_Tx   .SetLineNumbers(showBufferLineNumbers, showTotalLineNumbers);
 			monitor_Bidir.SetLineNumbers(showBufferLineNumbers, showTotalLineNumbers);
 			monitor_Rx   .SetLineNumbers(showBufferLineNumbers, showTotalLineNumbers);
+
+			monitor_Tx   .ShowCopyOfActiveLine = this.settingsRoot.Display.ShowCopyOfActiveLine;
+			monitor_Bidir.ShowCopyOfActiveLine = this.settingsRoot.Display.ShowCopyOfActiveLine;
+			monitor_Rx   .ShowCopyOfActiveLine = this.settingsRoot.Display.ShowCopyOfActiveLine;
 		}
 
 		private void SetMonitorIOStatus()
 		{
-			MonitorActivityState activityState = MonitorActivityState.Inactive;
+			var activityState = MonitorActivityState.Inactive;
 			if (TerminalIsAvailable)
 			{
 				if (this.terminal.IsStarted)
@@ -4243,8 +4271,7 @@ namespace YAT.View.Forms
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Display))
 			{
-				SetMonitorLineCount();
-				SetMonitorLineNumbers();
+				SetMonitorSettings();
 				SetDisplayControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Send))
@@ -4308,8 +4335,7 @@ namespace YAT.View.Forms
 
 			SetIOStatus();
 			SetIOControlControls();
-			SetMonitorLineCount();
-			SetMonitorLineNumbers();
+			SetMonitorSettings();
 			SetMonitorIOStatus();
 			SetMonitorCountAndRateStatus();
 		}

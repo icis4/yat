@@ -95,7 +95,7 @@
 			this.sendText.Size = new System.Drawing.Size(706, 27);
 			this.sendText.TabIndex = 0;
 			this.sendText.CommandChanged += new System.EventHandler(this.sendText_CommandChanged);
-			this.sendText.EditFocusStateChanged += new System.EventHandler(this.sendText_EditFocusStateChanged);
+			this.sendText.TextFocusedChanged += new System.EventHandler(this.sendText_TextFocusedChanged);
 			this.sendText.SendCommandRequest += new System.EventHandler<YAT.View.Controls.SendTextOptionEventArgs>(this.sendText_SendCommandRequest);
 			// 
 			// panel_SendFile

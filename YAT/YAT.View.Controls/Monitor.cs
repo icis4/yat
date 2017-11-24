@@ -119,6 +119,9 @@ namespace YAT.View.Controls
 		private const bool ShowTimeStatusDefault = false;
 		private const bool ShowDataStatusDefault = false;
 
+		// Copy of active line:
+		private const bool ShowCopyOfActiveLineDefault = false;
+
 		// Update:
 		private const int DataStatusIntervalMs = 31; // Interval shall be quite short => fixed to 31 ms (a prime number) = approx. 32 updates per second.
 
@@ -158,18 +161,21 @@ namespace YAT.View.Controls
 		private bool showBufferLineNumbers = ShowBufferLineNumbersDefault;
 		private bool showTotalLineNumbers = ShowTotalLineNumbersDefault;
 
+		// Status:
+		private bool showTimeStatus = ShowTimeStatusDefault;
+		private MonitorTimeStatusHelper timeStatusHelper;
+		private bool showDataStatus = ShowDataStatusDefault;
+		private MonitorDataStatusHelper dataStatusHelper;
+
+		// Copy of active line:
+		private bool showCopyOfActiveLine = ShowCopyOfActiveLineDefault;
+
 		// Find:
 		private string findPattern; // = null;
 		private Regex findRegex; // = null;
 		private bool isFirstFindOnEdit = true;
 		private int findOnEditStartIndex = ControlEx.InvalidIndex;
 		private int lastFindIndex = ListBox.NoMatches;
-
-		// Status:
-		private bool showTimeStatus = ShowTimeStatusDefault;
-		private MonitorTimeStatusHelper timeStatusHelper;
-		private bool showDataStatus = ShowDataStatusDefault;
-		private MonitorDataStatusHelper dataStatusHelper;
 
 		// Update:
 		private List<object> pendingElementsAndLines = new List<object>(32); // Preset the initial capacity to improve memory management, 32 is an arbitrary value.
@@ -180,6 +186,18 @@ namespace YAT.View.Controls
 
 		// Note that 'Stopwatch' is used instead of 'DateTime.Now.Ticks' or 'Environment.TickCount'
 		// as suggested in several online resources.
+
+		#endregion
+
+		#region Events
+		//==========================================================================================
+		// Events
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Category("Property Changed")]
+		[Description("Event raised when the TextFocusState property is changed.")]
+		public event EventHandler TextFocusedChanged;
 
 		#endregion
 
@@ -202,16 +220,14 @@ namespace YAT.View.Controls
 			this.timeStatusHelper.StatusTextChanged += timeStatusHelper_StatusTextChanged;
 			this.dataStatusHelper.StatusTextChanged += dataStatusHelper_StatusTextChanged;
 
-			ApplyFontToListBoxes(); // Required to initialize 'ListBox.ItemHeight', e.g. with scale != 100% (96 DPI).
+			ApplyFont(); // Required to initialize 'ListBox.ItemHeight', e.g. with scale != 100% (96 DPI).
 
 			// Attention:
 			// Since the line number list box will display the vertical scroll bar automatically,
 			// the line number list box is placed underneath the monitor list box and sized larger
 			// than it would have to be.
 			this.initialLineNumberWidth = EffectiveWidthToRequestedWidth(fastListBox_LineNumbers.Width);
-			ResizeAndRelocateListBoxes(this.initialLineNumberWidth);
-
-			SetControls();
+			SetControls(this.initialLineNumberWidth);
 		}
 
 		#endregion
@@ -234,7 +250,7 @@ namespace YAT.View.Controls
 				{
 					this.repositoryType = value;
 					this.dataStatusHelper.RepositoryType = value;
-					SetControls();
+					SetRepositoryDependentControls();
 				}
 			}
 		}
@@ -251,7 +267,7 @@ namespace YAT.View.Controls
 				if (this.activityState != value)
 				{
 					this.activityState = value;
-					SetControls();
+					SetRepositoryDependentControls();
 				}
 			}
 		}
@@ -277,7 +293,7 @@ namespace YAT.View.Controls
 		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual Model.Settings.FormatSettings FormatSettings
+		public virtual FormatSettings FormatSettings
 		{
 			set
 			{
@@ -292,7 +308,7 @@ namespace YAT.View.Controls
 						fastListBox_Monitor.BackColor = this.formatSettings.BackColor;
 
 					if (fontHasChanged)
-						ApplyFontToListBoxes();
+						ApplyFont();
 					else
 						fastListBox_Monitor.Invalidate(); // Required e.g. when enabling/disabling formatting.
 				}
@@ -315,7 +331,7 @@ namespace YAT.View.Controls
 					if (this.showBufferLineNumbers) // This option keeps the offset at 0.
 						this.lineNumberOffset = 0;
 
-					SetLineNumbersControls();
+					ResizeAndRelocateControls();
 				}
 			}
 		}
@@ -332,7 +348,7 @@ namespace YAT.View.Controls
 				if (this.showTotalLineNumbers != value)
 				{
 					this.showTotalLineNumbers = value;
-					SetLineNumbersControls();
+					ResizeAndRelocateControls();
 				}
 			}
 		}
@@ -362,7 +378,7 @@ namespace YAT.View.Controls
 
 			if (hasChanged)
 			{
-				SetLineNumbersControls();
+				ResizeAndRelocateControls();
 			}
 		}
 
@@ -498,6 +514,32 @@ namespace YAT.View.Controls
 		{
 			get { return (this.dataStatusHelper.RxLineRate); }
 			set { this.dataStatusHelper.RxLineRate = value;  }
+		}
+
+		/// <remarks>
+		/// Name only "Active" instead of "LastActive" for simplicity.
+		/// </remarks>
+		[Category("Monitor")]
+		[Description("Show a copy of the active line.")]
+		[DefaultValue(ShowCopyOfActiveLineDefault)]
+		public virtual bool ShowCopyOfActiveLine
+		{
+			get { return (this.showCopyOfActiveLine); }
+			set
+			{
+				if (this.showCopyOfActiveLine != value)
+				{
+					this.showCopyOfActiveLine = value;
+					ResizeAndRelocateControls();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[Browsable(false)]
+		public virtual bool TextFocused
+		{
+			get { return (textBox_CopyOfActiveLine.Focused); }
 		}
 
 		/// <summary></summary>
@@ -883,7 +925,7 @@ namespace YAT.View.Controls
 			if ((txLineCount <= 0) && (rxLineCount <= 0))
 			{
 				this.lineNumberOffset = 0;
-				SetLineNumbersControls();
+				ResizeAndRelocateControls();
 			}
 
 			this.dataStatusHelper.SetCount(txByteCount, txLineCount, rxByteCount, rxLineCount);
@@ -900,42 +942,6 @@ namespace YAT.View.Controls
 		public virtual void ResetDataStatus()
 		{
 			this.dataStatusHelper.Reset();
-		}
-
-		#endregion
-
-		#region Control Special Keys
-		//==========================================================================================
-		// Control Special Keys
-		//==========================================================================================
-
-		/// <remarks>
-		/// In case of pressing a modifier key (e.g. [Shift]), this method is invoked twice! Both
-		/// invocations will state msg=0x100 (WM_KEYDOWN)! See:
-		/// https://msdn.microsoft.com/en-us/library/system.windows.forms.control.processcmdkey.aspx:
-		/// The ProcessCmdKey method first determines whether the control has a ContextMenu, and if
-		/// so, enables the ContextMenu to process the command key. If the command key is not a menu
-		/// shortcut and the control has a parent, the key is passed to the parent's ProcessCmdKey
-		/// method. The net effect is that command keys are "bubbled" up the control hierarchy. In
-		/// addition to the key the user pressed, the key data also indicates which, if any, modifier
-		/// keys were pressed at the same time as the key. Modifier keys include the SHIFT, CTRL, and
-		/// ALT keys.
-		/// </remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
-		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-		{
-			// Ctrl+A = Select All is implemented directly within here since it is a common shortcut.
-			if (keyData == (Keys.Control | Keys.A))
-			{
-				SelectAll();
-				return (true);
-			}
-
-			// Ctrl+Shift+N = Select None not needs to be implemented in here, it can be implemented
-			// by the parent form as a normal menu shortcut.
-
-			return (base.ProcessCmdKey(ref msg, keyData));
 		}
 
 		#endregion
@@ -966,6 +972,14 @@ namespace YAT.View.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
+		private void fastListBox_Monitor_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			var lb = fastListBox_Monitor;
+
+			if (lb.SelectedItems.Count > 0)
+				SetCopyOfActiveLine(lb.SelectedItems[0]);
+		}
+
 		/// <remarks>
 		/// Note that the 'MeasureItem' event only measures the height and an item and is thus
 		/// only needed for 'OwnerDrawnVariable' and not for 'OwnerDrawnFixed'.
@@ -992,7 +1006,7 @@ namespace YAT.View.Controls
 					// The item width is handled here.
 					// The item height is set in the 'FormatSettings' property.
 					if ((requestedWidth > 0) && (requestedWidth > EffectiveWidthToRequestedWidth(lb.Width)))
-						ResizeAndRelocateListBoxes(requestedWidth);
+						ResizeAndRelocateControls(requestedWidth);
 				}
 			}
 		}
@@ -1219,6 +1233,16 @@ namespace YAT.View.Controls
 			}
 		}
 
+		private void textBox_CopyOfActiveLine_Enter(object sender, EventArgs e)
+		{
+			OnTextFocusedChanged(e);
+		}
+
+		private void textBox_CopyOfActiveLine_Leave(object sender, EventArgs e)
+		{
+			OnTextFocusedChanged(e);
+		}
+
 		#endregion
 
 		#region Utilities Event Handlers
@@ -1243,35 +1267,25 @@ namespace YAT.View.Controls
 		// Non-Public Methods
 		//==========================================================================================
 
-		/// <summary>
-		/// Applies the font to the list boxes.
-		/// </summary>
-		/// <remarks>
-		/// Directly apply the new settings to the list boxes. This ensures that update is only done
-		/// done when required, as the update leads to move of list box to top, and re-drawing. Both
-		/// takes time and impacts the monitor behavior. Thus, only update if really needed.
-		/// </remarks>
-		private void ApplyFontToListBoxes()
+		private static int EffectiveWidthToRequestedWidth(int effectiveWidth)
 		{
-			ListBox lb;
-			Font f = this.formatSettings.Font;
-
-			lb = fastListBox_LineNumbers;
-			lb.BeginUpdate();
-			lb.Font = (Font)f.Clone();
-			lb.ItemHeight = f.Height;
-			lb.Invalidate();
-			lb.EndUpdate();
-
-			lb = fastListBox_Monitor;
-			lb.BeginUpdate();
-			lb.Font = (Font)f.Clone();
-			lb.ItemHeight = f.Height;
-			lb.Invalidate();
-			lb.EndUpdate();
+			return (effectiveWidth - (VerticalScrollBarWidth + AdditionalMargin));
 		}
 
-		private void SetControls()
+		private void SetControls(int requestedLineNumberWidth)
+		{
+			SetRepositoryDependentControls();
+
+			SetTimeStatusVisible();
+			SetTimeStatusText();
+
+			SetDataStatusVisible();
+			SetDataStatusText();
+
+			ResizeAndRelocateControls(requestedLineNumberWidth);
+		}
+
+		private void SetRepositoryDependentControls()
 		{
 			if (this.repositoryType != Domain.RepositoryType.None)
 			{
@@ -1281,13 +1295,15 @@ namespace YAT.View.Controls
 					case Domain.RepositoryType.Bidir: this.imageInactive = Properties.Resources.Image_Monitor_Bidir_28x28_Grey; this.imageActive = Properties.Resources.Image_Monitor_Bidir_28x28_BluePurple; break;
 					case Domain.RepositoryType.Rx:    this.imageInactive = Properties.Resources.Image_Monitor_Rx_28x28_Grey;    this.imageActive = Properties.Resources.Image_Monitor_Rx_28x28_Purple;        break;
 				}
+
 				pictureBox_Monitor.BackgroundImage = this.imageInactive;
 
 				// Image blending:
 				switch (this.activityState)
 				{
 					case MonitorActivityState.Active:   this.imageOpacityState = OpacityState.Inactive; pictureBox_Monitor.Image = this.imageActive; break;
-					case MonitorActivityState.Inactive: this.imageOpacityState = OpacityState.Inactive; pictureBox_Monitor.Image = null;         break;
+					case MonitorActivityState.Inactive: this.imageOpacityState = OpacityState.Inactive; pictureBox_Monitor.Image = null;             break;
+
 					case MonitorActivityState.Pending:
 					{
 						if (this.imageOpacityState == OpacityState.Inactive)
@@ -1308,34 +1324,50 @@ namespace YAT.View.Controls
 						break;
 					}
 				}
+
 				this.activityStateOld = this.activityState;
 
 				timer_Opacity.Enabled = (this.imageOpacityState != OpacityState.Inactive);
 
-				fastListBox_LineNumbers.Height = (Height - panel_Picture.Height);
-				fastListBox_LineNumbers.Top = panel_Picture.Height;
-
-				fastListBox_Monitor.Height = (Height - panel_Picture.Height);
-				fastListBox_Monitor.Top = panel_Picture.Height;
-
 				panel_Picture.Visible = true;
 			}
-			else
+			else // Adjust monitor for compact view, e.g. in 'FormatSettings' dialog:
 			{
 				panel_Picture.Visible = false;
-
-				fastListBox_LineNumbers.Top = 0;
-				fastListBox_LineNumbers.Height = Height;
-
-				fastListBox_Monitor.Top = 0;
-				fastListBox_Monitor.Height = Height;
 			}
+		}
 
-			SetTimeStatusVisible();
-			SetTimeStatusText();
+		/// <summary>
+		/// Applies the font to the list boxes.
+		/// </summary>
+		/// <remarks>
+		/// Directly apply the new settings to the list boxes. This ensures that update is only done
+		/// done when required, as the update leads to move of list box to top, and re-drawing. Both
+		/// takes time and impacts the monitor behavior. Thus, only update if really needed.
+		/// </remarks>
+		private void ApplyFont()
+		{
+			var f = this.formatSettings.Font;
 
-			SetDataStatusVisible();
-			SetDataStatusText();
+			var lb = fastListBox_LineNumbers;
+			lb.BeginUpdate();
+			lb.Font = (Font)f.Clone();
+			lb.ItemHeight = f.Height;
+			lb.Invalidate();
+			lb.EndUpdate();
+
+			lb = fastListBox_Monitor;
+			lb.BeginUpdate();
+			lb.Font = (Font)f.Clone();
+			lb.ItemHeight = f.Height;
+			lb.Invalidate();
+			lb.EndUpdate();
+
+			var tb = textBox_CopyOfActiveLine;
+			tb.Font = (Font)f.Clone();
+			tb.Invalidate();
+
+			ResizeAndRelocateControls();
 		}
 
 		private void AddElementsOrLines(object elementsOrLines)
@@ -1433,6 +1465,8 @@ namespace YAT.View.Controls
 
 			lblin.EndUpdate();
 			lbmon.EndUpdate();
+
+			SetCopyOfActiveLine(lbmon.LastItem);
 		}
 
 		/// <summary>
@@ -1506,11 +1540,6 @@ namespace YAT.View.Controls
 			}
 		}
 
-		private void SetLineNumbersControls()
-		{
-			ResizeAndRelocateListBoxes(this.currentLineNumberWidth);
-		}
-
 		private void ClearAndResetListBoxes()
 		{
 			var lblin = fastListBox_LineNumbers;
@@ -1525,39 +1554,94 @@ namespace YAT.View.Controls
 			lbmon.HorizontalExtent = 0;
 			lbmon.EndUpdate();
 
-			ResizeAndRelocateListBoxes(this.initialLineNumberWidth);
+			ResizeAndRelocateControls(this.initialLineNumberWidth);
 		}
 
-		private void ResizeAndRelocateListBoxes(int requestedWidth)
+		private void ResizeAndRelocateControls()
 		{
-			bool showLineNumbers = (this.showBufferLineNumbers || this.showTotalLineNumbers);
+			ResizeAndRelocateControls(this.currentLineNumberWidth);
+		}
 
-			fastListBox_LineNumbers.Visible = showLineNumbers;
+		private void ResizeAndRelocateControls(int requestedLineNumberWidth)
+		{
+			// --- Width ---
 
-			if (showLineNumbers)
+			bool showLN = (this.showBufferLineNumbers || this.showTotalLineNumbers);
+
+			fastListBox_LineNumbers.Visible = showLN;
+
+			if (showLN)
 			{
-				int effectiveWidth = requestedWidth + VerticalScrollBarWidth + AdditionalMargin;
+				int effectiveWidth = requestedLineNumberWidth + VerticalScrollBarWidth + AdditionalMargin;
 				fastListBox_LineNumbers.Width = effectiveWidth;
-				fastListBox_LineNumbers.Invalidate();
 
-				int effectiveLeft = requestedWidth + AdditionalMargin; // Hide the vertical scroll bar.
-				fastListBox_Monitor.Left = effectiveLeft;
+				int effectiveLeft = requestedLineNumberWidth + AdditionalMargin; // Hide the vertical scroll
+				fastListBox_Monitor.Left = effectiveLeft;                        // bar of the line numbers.
 				fastListBox_Monitor.Width = (Width - effectiveLeft);
-				fastListBox_Monitor.Invalidate();
+
+				textBox_CopyOfActiveLine.Left = effectiveLeft;
+				textBox_CopyOfActiveLine.Width = (Width - effectiveLeft);
 			}
 			else
 			{
 				fastListBox_Monitor.Left = 0;
 				fastListBox_Monitor.Width = Width;
-				fastListBox_Monitor.Invalidate();
+
+				textBox_CopyOfActiveLine.Left = 0;
+				textBox_CopyOfActiveLine.Width = Width;
 			}
 
-			this.currentLineNumberWidth = requestedWidth;
+			this.currentLineNumberWidth = requestedLineNumberWidth;
+
+			// --- Height ---
+
+			var availableHeight = Height;
+			var showAL = this.showCopyOfActiveLine;
+
+			textBox_CopyOfActiveLine.Visible = showAL;
+
+			if (showAL)
+			{
+				int activeLineHeight = (textBox_CopyOfActiveLine.Height + 1); // 1 aligns with 'SendPredefined'.
+				textBox_CopyOfActiveLine.Top = (Height - activeLineHeight);
+
+				availableHeight -= (activeLineHeight + 3); // 3 standard margin.
+			}
+			else
+			{
+				availableHeight -= 1; // 1 aligns with 'SendPredefined'.
+			}
+
+			if (panel_Picture.Visible)
+			{
+				availableHeight -= panel_Picture.Height;
+
+				fastListBox_LineNumbers.Height = availableHeight;
+				fastListBox_LineNumbers.Top = panel_Picture.Height;
+
+				fastListBox_Monitor.Height = availableHeight;
+				fastListBox_Monitor.Top = panel_Picture.Height;
+			}
+			else
+			{
+				fastListBox_LineNumbers.Top = 0;
+				fastListBox_LineNumbers.Height = availableHeight;
+
+				fastListBox_Monitor.Top = 0;
+				fastListBox_Monitor.Height = availableHeight;
+			}
 		}
 
-		private static int EffectiveWidthToRequestedWidth(int effectiveWidth)
+		/// <remarks>
+		/// Name only "Active" instead of "LastActive" for simplicity.
+		/// </remarks>
+		private void SetCopyOfActiveLine(object item)
 		{
-			return (effectiveWidth - (VerticalScrollBarWidth + AdditionalMargin));
+			var dl = item as Domain.DisplayLine;
+			if (dl != null)
+				textBox_CopyOfActiveLine.Text = dl.Text;
+			else
+				textBox_CopyOfActiveLine.Text = "";
 		}
 
 		/// <remarks>Separated from <see cref="SetTimeStatusText"/> to improve performance.</remarks>
@@ -1731,6 +1815,19 @@ namespace YAT.View.Controls
 		{
 			if (!timer_DataStatusUpdateTimeout.Enabled)
 				timer_DataStatusUpdateTimeout.Start();
+		}
+
+		#endregion
+
+		#region Event Raising
+		//==========================================================================================
+		// Event Raising
+		//==========================================================================================
+
+		/// <summary></summary>
+		protected virtual void OnTextFocusedChanged(EventArgs e)
+		{
+			EventHelper.RaiseSync(TextFocusedChanged, this, e);
 		}
 
 		#endregion

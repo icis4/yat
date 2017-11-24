@@ -81,8 +81,8 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Category("Property Changed")]
-		[Description("Event raised when the EditFocusState property is changed.")]
-		public event EventHandler EditFocusStateChanged;
+		[Description("Event raised when the TextFocused property is changed.")]
+		public event EventHandler TextFocusedChanged;
 
 		/// <summary></summary>
 		[Category("Action")]
@@ -301,9 +301,9 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		public virtual bool EditIsActive
+		public virtual bool TextFocused
 		{
-			get { return (sendText.EditIsActive); }
+			get { return (sendText.TextFocused); }
 		}
 
 		#endregion
@@ -323,9 +323,9 @@ namespace YAT.View.Controls
 			OnTextCommandChanged(e);
 		}
 
-		private void sendText_EditFocusStateChanged(object sender, EventArgs e)
+		private void sendText_TextFocusedChanged(object sender, EventArgs e)
 		{
-			OnEditFocusStateChanged(e);
+			OnTextFocusedChanged(e);
 		}
 
 		private void sendText_SendCommandRequest(object sender, SendTextOptionEventArgs e)
@@ -394,9 +394,9 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		protected virtual void OnEditFocusStateChanged(EventArgs e)
+		protected virtual void OnTextFocusedChanged(EventArgs e)
 		{
-			EventHelper.RaiseSync(EditFocusStateChanged, this, e);
+			EventHelper.RaiseSync(TextFocusedChanged, this, e);
 		}
 
 		/// <summary></summary>
