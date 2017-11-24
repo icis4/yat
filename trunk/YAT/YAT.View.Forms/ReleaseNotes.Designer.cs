@@ -42,28 +42,28 @@
 			this.button_Close.Location = new System.Drawing.Point(677, 418);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
-			this.button_Close.TabIndex = 1;
+			this.button_Close.TabIndex = 0;
 			this.button_Close.Text = "Close";
 			this.button_Close.Click += new System.EventHandler(this.button_Close_Click);
 			// 
 			// groupBox_ReleaseNotes
 			// 
-			this.groupBox_ReleaseNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_ReleaseNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_ReleaseNotes.Controls.Add(this.textBox_ReleaseNotes);
 			this.groupBox_ReleaseNotes.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_ReleaseNotes.Name = "groupBox_ReleaseNotes";
 			this.groupBox_ReleaseNotes.Size = new System.Drawing.Size(740, 393);
-			this.groupBox_ReleaseNotes.TabIndex = 0;
+			this.groupBox_ReleaseNotes.TabIndex = 1;
 			this.groupBox_ReleaseNotes.TabStop = false;
 			this.groupBox_ReleaseNotes.Text = "&Release Notes";
 			// 
 			// textBox_ReleaseNotes
 			// 
-			this.textBox_ReleaseNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.textBox_ReleaseNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox_ReleaseNotes.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.textBox_ReleaseNotes.Location = new System.Drawing.Point(6, 19);
 			this.textBox_ReleaseNotes.Multiline = true;
@@ -73,7 +73,7 @@
 			this.textBox_ReleaseNotes.Size = new System.Drawing.Size(728, 368);
 			this.textBox_ReleaseNotes.TabIndex = 0;
 			this.textBox_ReleaseNotes.Text = "<RELEASE NOTES>\r\n0123456789012345678901234567890123456789012345678901234567890123" +
-				"456789012345678901234567890123456789";
+    "456789012345678901234567890123456789";
 			this.textBox_ReleaseNotes.WordWrap = false;
 			// 
 			// ReleaseNotes

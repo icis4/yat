@@ -44,21 +44,10 @@ namespace YAT.View.Forms
 			Text = text;
 
 			// Help texts:
-			textBox_ParserFormat.Text = Domain.Parser.Parser.FormatHelp;
-			textBox_ParserFormat.SelectionStart = 0;
-			textBox_ParserFormat.SelectionLength = 0;
-
-			textBox_ParserKeyword.Text = Domain.Parser.Parser.KeywordHelp;
-			textBox_ParserKeyword.SelectionStart = 0;
-			textBox_ParserKeyword.SelectionLength = 0;
-
+			textBox_ParserFormat.Text        = Domain.Parser.Parser.FormatHelp;
+			textBox_ParserKeyword.Text       = Domain.Parser.Parser.KeywordHelp;
 			textBox_TextTerminalKeyword.Text = Domain.TextTerminal.KeywordHelp;
-			textBox_TextTerminalKeyword.SelectionStart = 0;
-			textBox_TextTerminalKeyword.SelectionLength = 0;
-
-			textBox_SerialPort.Text = Domain.Terminal.SerialPortHelp;
-			textBox_SerialPort.SelectionStart = 0;
-			textBox_SerialPort.SelectionLength = 0;
+			textBox_SerialPort.Text          = Domain.Terminal.SerialPortHelp;
 		}
 
 		private void button_Close_Click(object sender, EventArgs e)

@@ -32,7 +32,8 @@ namespace MKY.Windows.Forms
 	/// An improved <see cref="TextBox"/> that additionally provides:
 	/// <list type="bullet">
 	/// <item><description>The [Ctrl+Backspace] shortcut.</description></item>
-	/// <item><description>The [Ctrl+A] shortcut also if <see cref="TextBox.Multiline"/> is <c>true</c>.</description></item>
+	/// <item><description>The [Ctrl+A] shortcut also if <see cref="TextBoxBase.ReadOnly"/> or <see cref="TextBox.Multiline"/> is <c>true</c>.</description></item>
+	/// <item><description>Setting <see cref="Text"/> doesn't select all if <see cref="TextBoxBase.ReadOnly"/> or <see cref="TextBox.Multiline"/> is <c>true</c>.</description></item>
 	/// </list>
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
@@ -95,7 +96,7 @@ namespace MKY.Windows.Forms
 				}
 				else if (keyData == (Keys.Control | Keys.A))
 				{
-					if (!ReadOnly && Multiline)
+					if (ReadOnly || Multiline) // Limitation of standard "TextBox".
 					{
 						SelectAll();
 						return (true);
@@ -104,6 +105,28 @@ namespace MKY.Windows.Forms
 			}
 
 			return (base.ProcessCmdKey(ref msg, keyData));
+		}
+
+		/// <summary>
+		/// Gets or sets the text.
+		/// </summary>
+		public override string Text
+		{
+			get
+			{
+				return (base.Text);
+			}
+
+			set
+			{
+				base.Text = value;
+
+				if (ReadOnly || Multiline) // Limitation of standard "TextBox".
+				{
+					SelectionLength = 0; // DeselectAll() doesn't work, setting the properties works.
+					SelectionStart = 0;
+				}
+			}
 		}
 	}
 }
