@@ -139,6 +139,22 @@ namespace YAT.View.Forms
 		// Controls Event Handlers
 		//==========================================================================================
 
+		private void checkBox_ShowConnectTime_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Status.ShowConnectTime = checkBox_ShowConnectTime.Checked;
+		}
+
+		private void checkBox_ShowCountAndRate_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Status.ShowCountAndRate = checkBox_ShowCountAndRate.Checked;
+		}
+
 		private void checkBox_SeparateTxRxRadix_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -274,20 +290,12 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.Display.ShowLength = checkBox_ShowLength.Checked;
 		}
 
-		private void checkBox_ShowConnectTime_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_ShowCopyOfActiveLine_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.Terminal.Status.ShowConnectTime = checkBox_ShowConnectTime.Checked;
-		}
-
-		private void checkBox_ShowCountAndRate_CheckedChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			this.settingsInEdit.Terminal.Status.ShowCountAndRate = checkBox_ShowCountAndRate.Checked;
+			this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine = checkBox_ShowCopyOfActiveLine.Checked;
 		}
 
 		private void checkBox_ShowFlowControlCount_CheckedChanged(object sender, EventArgs e)
@@ -1011,6 +1019,8 @@ namespace YAT.View.Forms
 				checkBox_ShowRadix.Checked = isShowable && this.settingsInEdit.Terminal.Display.ShowRadix;
 
 				// Display:
+				checkBox_ShowConnectTime.Checked       = this.settingsInEdit.Terminal.Status.ShowConnectTime;
+				checkBox_ShowCountAndRate.Checked      = this.settingsInEdit.Terminal.Status.ShowCountAndRate;
 				checkBox_ShowBufferLineNumbers.Checked = this.settingsInEdit.Terminal.Display.ShowBufferLineNumbers;
 				checkBox_ShowTotalLineNumbers.Checked  = this.settingsInEdit.Terminal.Display.ShowTotalLineNumbers;
 				checkBox_ShowTimeStamp.Checked         = this.settingsInEdit.Terminal.Display.ShowTimeStamp;
@@ -1019,8 +1029,7 @@ namespace YAT.View.Forms
 				checkBox_ShowPort.Checked              = this.settingsInEdit.Terminal.Display.ShowPort;
 				checkBox_ShowDirection.Checked         = this.settingsInEdit.Terminal.Display.ShowDirection;
 				checkBox_ShowLength.Checked            = this.settingsInEdit.Terminal.Display.ShowLength;
-				checkBox_ShowConnectTime.Checked       = this.settingsInEdit.Terminal.Status.ShowConnectTime;
-				checkBox_ShowCountAndRate.Checked      = this.settingsInEdit.Terminal.Status.ShowCountAndRate;
+				checkBox_ShowCopyOfActiveLine.Checked  = this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine;
 
 				checkBox_ShowFlowControlCount.Enabled = this.settingsInEdit.Terminal.IO.FlowControlIsInUse;
 				checkBox_ShowFlowControlCount.Checked = this.settingsInEdit.Terminal.Status.ShowFlowControlCount;

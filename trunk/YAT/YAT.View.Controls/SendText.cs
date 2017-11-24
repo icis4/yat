@@ -86,11 +86,19 @@ namespace YAT.View.Controls
 		// Types
 		//==========================================================================================
 
-		private enum EditFocusState
+		/// <summary></summary>
+		protected enum TextFocusState
 		{
+			/// <summary></summary>
 			EditIsInactive,
+
+			/// <summary></summary>
 			EditHasFocus,
+
+			/// <summary></summary>
 			IsLeavingEdit,
+
+			/// <summary></summary>
 			IsLeavingParent
 		}
 
@@ -104,6 +112,9 @@ namespace YAT.View.Controls
 		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypeDefault;
 		private const Domain.Parser.Modes ParseModeDefault = Domain.Parser.Modes.Default;
 
+		/// <summary></summary>
+		public const bool SendImmediatelyDefault = false;
+
 		private const bool TerminalIsReadyToSendDefault = false;
 
 		/// <remarks>
@@ -111,9 +122,6 @@ namespace YAT.View.Controls
 		/// Set same value as splitContainer.SplitterDistance is designed.
 		/// </remarks>
 		private const int SendSplitterDistanceDefault = 356;
-
-		/// <summary></summary>
-		public const bool SendImmediatelyDefault = false;
 
 		#endregion
 
@@ -136,7 +144,7 @@ namespace YAT.View.Controls
 
 		private int sendSplitterDistance = SendSplitterDistanceDefault;
 
-		private EditFocusState editFocusState = EditFocusState.EditIsInactive;
+		private TextFocusState textFocusState; // = TextFocusState.EditIsInactive;
 		private bool isValidated; // = false;
 
 		#endregion
@@ -153,8 +161,8 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Category("Property Changed")]
-		[Description("Event raised when the EditFocusState property is changed.")]
-		public event EventHandler EditFocusStateChanged;
+		[Description("Event raised when the TextFocused property is changed.")]
+		public event EventHandler TextFocusedChanged;
 
 		/// <summary></summary>
 		[Category("Action")]
@@ -358,20 +366,22 @@ namespace YAT.View.Controls
 			}
 		}
 
-		/// <remarks>Function instead of property to emphasize purpose and prevent naming conflict among enum and property.</remarks>
-		private void SetEditFocusState(EditFocusState state)
+		/// <remarks>
+		/// Function instead of property to emphasize purpose and prevent naming conflict among enum and property.
+		/// </remarks>
+		private void SetTextFocusState(TextFocusState value)
 		{
-			if (this.editFocusState != state)
+			if (this.textFocusState != value)
 			{
-				this.editFocusState = state;
-				OnEditFocusStateChanged(EventArgs.Empty);
+				this.textFocusState = value;
+				OnTextFocusedChanged(EventArgs.Empty);
 			}
 		}
 
 		/// <summary></summary>
-		public virtual bool EditIsActive
+		public virtual bool TextFocused
 		{
-			get { return (this.editFocusState != EditFocusState.EditIsInactive); }
+			get { return (this.textFocusState != TextFocusState.EditIsInactive); }
 		}
 
 		#endregion
@@ -459,7 +469,7 @@ namespace YAT.View.Controls
 		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if (EditIsActive)
+			if (TextFocused)
 			{
 				if ((keyData & Keys.KeyCode) == Keys.Enter)
 				{
@@ -510,7 +520,7 @@ namespace YAT.View.Controls
 		/// </remarks>
 		private void SendText_Enter(object sender, EventArgs e)
 		{
-			SetEditFocusState(EditFocusState.EditIsInactive);
+			SetTextFocusState(TextFocusState.EditIsInactive);
 		}
 
 		/// <remarks>
@@ -524,9 +534,9 @@ namespace YAT.View.Controls
 		private void SendText_Leave(object sender, EventArgs e)
 		{
 			if (this.isValidated)
-				SetEditFocusState(EditFocusState.EditIsInactive);
+				SetTextFocusState(TextFocusState.EditIsInactive);
 			else
-				SetEditFocusState(EditFocusState.IsLeavingParent);
+				SetTextFocusState(TextFocusState.IsLeavingParent);
 		}
 
 		#endregion
@@ -616,7 +626,7 @@ namespace YAT.View.Controls
 			// Changes here may have to be applied there too.
 
 			// Clear "<Enter a command...>" if needed.
-			if ((this.editFocusState == EditFocusState.EditIsInactive) && !this.command.IsText)
+			if ((this.textFocusState == TextFocusState.EditIsInactive) && !this.command.IsText)
 			{
 				this.isSettingControls.Enter();
 				try
@@ -631,7 +641,7 @@ namespace YAT.View.Controls
 				}
 			}
 
-			SetEditFocusState(EditFocusState.EditHasFocus);
+			SetTextFocusState(TextFocusState.EditHasFocus);
 
 			// No need to set this.isValidated = false yet. The 'TextChanged' event will do so.
 
@@ -659,9 +669,9 @@ namespace YAT.View.Controls
 			// Changes here may have to be applied there too.
 
 			if (this.isValidated)
-				SetEditFocusState(EditFocusState.EditIsInactive);
+				SetTextFocusState(TextFocusState.EditIsInactive);
 			else
-				SetEditFocusState(EditFocusState.IsLeavingEdit);
+				SetTextFocusState(TextFocusState.IsLeavingEdit);
 
 			DebugCommandLeave();
 		}
@@ -672,8 +682,6 @@ namespace YAT.View.Controls
 
 			if (this.sendImmediately)
 			{
-				this.isValidated = true; // Implicitly in any case.
-
 				byte asciiCode;
 				string text;
 
@@ -683,6 +691,8 @@ namespace YAT.View.Controls
 					text = "<" + Ascii.ConvertToMnemonic(asciiCode) + ">";
 				else // Applies to Unicode control characters U+0080..U+009F
 					text = @"\U+" + ((ushort)(e.KeyChar)).ToString("X4", CultureInfo.InvariantCulture);
+
+				this.isValidated = true; // Implicitly in any case.
 
 				ConfirmPartialText(text);
 				OnSendCommandRequest(new SendTextOptionEventArgs(SendTextOption.Normal));
@@ -767,15 +777,15 @@ namespace YAT.View.Controls
 			{
 				// Postpone validation if focus is leaving the parent!
 				// Validation will again be done after re-entering edit.
-				if (this.editFocusState != EditFocusState.IsLeavingParent)
+				if (this.textFocusState != TextFocusState.IsLeavingParent)
 				{
 					// Easter egg ;-)
 					if (SendTextSettings.IsEasterEggCommand(comboBox_SingleLineText.Text))
 					{
 						this.isValidated = true;
 
-						if (this.editFocusState == EditFocusState.IsLeavingEdit)
-							SetEditFocusState(EditFocusState.EditIsInactive);
+						if (this.textFocusState == TextFocusState.IsLeavingEdit)
+							SetTextFocusState(TextFocusState.EditIsInactive);
 
 						ConfirmSingleLineText(comboBox_SingleLineText.Text);
 
@@ -790,8 +800,8 @@ namespace YAT.View.Controls
 					{
 						this.isValidated = true;
 
-						if (this.editFocusState == EditFocusState.IsLeavingEdit)
-							SetEditFocusState(EditFocusState.EditIsInactive);
+						if (this.textFocusState == TextFocusState.IsLeavingEdit)
+							SetTextFocusState(TextFocusState.EditIsInactive);
 
 						ConfirmSingleLineText(comboBox_SingleLineText.Text);
 
@@ -799,13 +809,13 @@ namespace YAT.View.Controls
 						return;
 					}
 
-					SetEditFocusState(EditFocusState.EditHasFocus);
+					SetTextFocusState(TextFocusState.EditHasFocus);
 					comboBox_SingleLineText.Select(invalidTextStart, invalidTextLength);
 					e.Cancel = true;
 				}
 				else // EditFocusState.IsLeavingParent
 				{
-					SetEditFocusState(EditFocusState.EditIsInactive);
+					SetTextFocusState(TextFocusState.EditIsInactive);
 				}
 			}
 
@@ -905,7 +915,7 @@ namespace YAT.View.Controls
 				else
 					SelectionHelper.Deselect(comboBox_ExplicitDefaultRadix);
 
-				if (this.editFocusState == EditFocusState.EditIsInactive)
+				if (this.textFocusState == TextFocusState.EditIsInactive)
 				{
 					if (this.command.IsText)
 					{
@@ -1160,9 +1170,9 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		protected virtual void OnEditFocusStateChanged(EventArgs e)
+		protected virtual void OnTextFocusedChanged(EventArgs e)
 		{
-			EventHelper.RaiseSync(EditFocusStateChanged, this, e);
+			EventHelper.RaiseSync(TextFocusedChanged, this, e);
 		}
 
 		/// <summary></summary>

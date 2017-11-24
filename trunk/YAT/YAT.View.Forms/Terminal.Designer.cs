@@ -97,6 +97,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_ShowDirection = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ShowEol = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MonitorContextMenu_ShowCopyOfActiveLine = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Separator_5 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_Format = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
@@ -279,6 +280,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_ShowDirection = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_ShowEol = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_ShowLength = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_ShowCopyOfActiveLine = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Separator_5 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_FlowControlCount = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_FlowControlCount_ShowCount = new System.Windows.Forms.ToolStripMenuItem();
@@ -390,6 +392,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_MonitorContextMenu_ShowDirection,
             this.toolStripMenuItem_MonitorContextMenu_ShowEol,
             this.toolStripMenuItem_MonitorContextMenu_ShowLength,
+            this.toolStripMenuItem_MonitorContextMenu_ShowCopyOfActiveLine,
             this.toolStripMenuItem_MonitorContextMenu_Separator_5,
             this.toolStripMenuItem_MonitorContextMenu_Format,
             this.toolStripMenuItem_MonitorContextMenu_Separator_6,
@@ -833,6 +836,13 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Text = "Show Length (Byte Count)";
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowLength_Click);
+			// 
+			// toolStripMenuItem_MonitorContextMenu_ShowCopyOfActiveLine
+			// 
+			this.toolStripMenuItem_MonitorContextMenu_ShowCopyOfActiveLine.Name = "toolStripMenuItem_MonitorContextMenu_ShowCopyOfActiveLine";
+			this.toolStripMenuItem_MonitorContextMenu_ShowCopyOfActiveLine.Size = new System.Drawing.Size(220, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ShowCopyOfActiveLine.Text = "Show Copy of Active Line";
+			this.toolStripMenuItem_MonitorContextMenu_ShowCopyOfActiveLine.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowCopyOfActiveLine_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Separator_5
 			// 
@@ -2220,6 +2230,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_TerminalMenu_View_ShowDirection,
             this.toolStripMenuItem_TerminalMenu_View_ShowEol,
             this.toolStripMenuItem_TerminalMenu_View_ShowLength,
+            this.toolStripMenuItem_TerminalMenu_View_ShowCopyOfActiveLine,
             this.toolStripMenuItem_TerminalMenu_View_Separator_5,
             this.toolStripMenuItem_TerminalMenu_View_FlowControlCount,
             this.toolStripMenuItem_TerminalMenu_View_BreakCount,
@@ -2456,6 +2467,13 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_ShowLength.Size = new System.Drawing.Size(245, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ShowLength.Text = "Show &Length (Byte Count)";
 			this.toolStripMenuItem_TerminalMenu_View_ShowLength.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowLength_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_View_ShowCopyOfActiveLine
+			// 
+			this.toolStripMenuItem_TerminalMenu_View_ShowCopyOfActiveLine.Name = "toolStripMenuItem_TerminalMenu_View_ShowCopyOfActiveLine";
+			this.toolStripMenuItem_TerminalMenu_View_ShowCopyOfActiveLine.Size = new System.Drawing.Size(245, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ShowCopyOfActiveLine.Text = "Show Copy of &Active Line";
+			this.toolStripMenuItem_TerminalMenu_View_ShowCopyOfActiveLine.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowCopyOfActiveLine_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Separator_5
 			// 
@@ -2938,6 +2956,7 @@ namespace YAT.View.Forms
 			this.monitor_Tx.TabIndex = 0;
 			this.monitor_Tx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Tx.Enter += new System.EventHandler(this.monitor_Tx_Enter);
+			this.monitor_Tx.TextFocusedChanged += new System.EventHandler(this.monitor_TextFocusedChanged);
 			// 
 			// splitContainer_RxMonitor
 			// 
@@ -2983,6 +3002,7 @@ namespace YAT.View.Forms
 			this.monitor_Bidir.TabIndex = 0;
 			this.monitor_Bidir.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Bidir.Enter += new System.EventHandler(this.monitor_Bidir_Enter);
+			this.monitor_Bidir.TextFocusedChanged += new System.EventHandler(this.monitor_TextFocusedChanged);
 			// 
 			// panel_Monitor_Rx
 			// 
@@ -3006,6 +3026,7 @@ namespace YAT.View.Forms
 			this.monitor_Rx.TabIndex = 0;
 			this.monitor_Rx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Rx.Enter += new System.EventHandler(this.monitor_Rx_Enter);
+			this.monitor_Rx.TextFocusedChanged += new System.EventHandler(this.monitor_TextFocusedChanged);
 			// 
 			// panel_Predefined
 			// 
@@ -3060,7 +3081,7 @@ namespace YAT.View.Forms
 			this.send.Size = new System.Drawing.Size(878, 94);
 			this.send.TabIndex = 0;
 			this.send.TextCommandChanged += new System.EventHandler(this.send_TextCommandChanged);
-			this.send.EditFocusStateChanged += new System.EventHandler(this.send_EditFocusStateChanged);
+			this.send.TextFocusedChanged += new System.EventHandler(this.send_TextFocusChanged);
 			this.send.SendTextCommandRequest += new System.EventHandler<YAT.View.Controls.SendTextOptionEventArgs>(this.send_SendTextCommandRequest);
 			this.send.FileCommandChanged += new System.EventHandler(this.send_FileCommandChanged);
 			this.send.SendFileCommandRequest += new System.EventHandler(this.send_SendFileCommandRequest);
@@ -3264,6 +3285,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowTimeSpan;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowTimeDelta;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowLength;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowCopyOfActiveLine;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_View_Separator_3;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Terminal_Separator_2;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_Clear;
@@ -3424,6 +3446,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowDirection;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowEol;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowLength;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowCopyOfActiveLine;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger;
