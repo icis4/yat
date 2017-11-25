@@ -127,6 +127,7 @@
     <Compile Include="Net\IPNetworkInterfaceDescriptorPair.cs" />
     <Compile Include="Net\IPNetworkInterfacePredicates.cs" />
     <Compile Include="Net\IPEndPointEx.cs" />
+    <Compile Include="Net\RecentIPFilterCollection.cs" />
     <Compile Include="Net\RecentIPHostCollection.cs" />
     <Compile Include="Random\RandomEx.cs" />
     <Compile Include="Reflection\InvocationHelper.cs" />

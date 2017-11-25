@@ -62,6 +62,15 @@ namespace MKY.Collections.Specialized
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
+		/// Adds the specified item.
+		/// </summary>
+		/// <param name="item">The item.</param>
+		public virtual void Add(T item)
+		{
+			base.Add(new RecentItem<T>(item));
+		}
+
+		/// <summary>
 		/// Determines whether an element is in the collections.
 		/// </summary>
 		public virtual bool Contains(T item)

@@ -90,6 +90,7 @@ namespace YAT.View.Controls
 		private int localUdpPort                    = LocalPortDefault;
 
 		private RecentIPHostCollection recentRemoteHosts; // = null;
+		private RecentIPFilterCollection recentLocalFilters; // = null;
 		private RecentItemCollection<int> recentPorts; // = null;
 
 		#endregion
@@ -312,6 +313,22 @@ namespace YAT.View.Controls
 				if (this.recentRemoteHosts != value)
 				{
 					this.recentRemoteHosts = value;
+					SetControls();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual RecentIPFilterCollection RecentLocalFilters
+		{
+			get { return (this.recentLocalFilters); }
+			set
+			{
+				if (this.recentLocalFilters != value)
+				{
+					this.recentLocalFilters = value;
 					SetControls();
 				}
 			}
@@ -647,13 +664,17 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
-				// Remote host:
 				comboBox_RemoteHost.Items.Clear();
-				comboBox_RemoteHost.Items.AddRange(IPHostEx.GetItems());
+				comboBox_RemoteHost.Items.AddRange(this.recentRemoteHosts.ToArray());
 
-				// Local filter:
+				comboBox_RemotePort.Items.Clear();
+				comboBox_RemotePort.Items.AddRange(this.recentPorts.ToArray());
+
 				comboBox_LocalFilter.Items.Clear();
-				comboBox_LocalFilter.Items.AddRange(IPFilterEx.GetItems());
+				comboBox_LocalFilter.Items.AddRange(this.recentLocalFilters.ToArray());
+
+				comboBox_LocalPort.Items.Clear();
+				comboBox_LocalPort.Items.AddRange(this.recentPorts.ToArray());
 			}
 			finally
 			{

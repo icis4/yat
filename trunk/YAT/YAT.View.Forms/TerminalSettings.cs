@@ -231,20 +231,26 @@ namespace YAT.View.Forms
 
 		private void socketSelection_RemoteHostChanged(object sender, EventArgs e)
 		{
-			this.settingsInEdit.Terminal.IO.Socket.RemoteHost = socketSelection.RemoteHost;
-
-			ApplicationSettings.RoamingUserSettings.Socket.RecentRemoteHosts.Add(new RecentItem<string>(socketSelection.RemoteHost));
+			var host = socketSelection.RemoteHost;
+			this.settingsInEdit.Terminal.IO.Socket.RemoteHost = host;
+			ApplicationSettings.RoamingUserSettings.Socket.RecentRemoteHosts.Add(host);
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
 		private void socketSelection_RemoteTcpPortChanged(object sender, EventArgs e)
 		{
-			this.settingsInEdit.Terminal.IO.Socket.RemoteTcpPort = socketSelection.RemoteTcpPort;
+			var port = socketSelection.RemoteTcpPort;
+			this.settingsInEdit.Terminal.IO.Socket.RemoteTcpPort = port;
+			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
+			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
 		private void socketSelection_RemoteUdpPortChanged(object sender, EventArgs e)
 		{
-			this.settingsInEdit.Terminal.IO.Socket.RemoteUdpPort = socketSelection.RemoteUdpPort;
+			var port = socketSelection.RemoteUdpPort;
+			this.settingsInEdit.Terminal.IO.Socket.RemoteUdpPort = port;
+			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
+			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
 		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
@@ -254,17 +260,26 @@ namespace YAT.View.Forms
 
 		private void socketSelection_LocalFilterChanged(object sender, EventArgs e)
 		{
-			this.settingsInEdit.Terminal.IO.Socket.LocalFilter = socketSelection.LocalFilter;
+			var filter = socketSelection.LocalFilter;
+			this.settingsInEdit.Terminal.IO.Socket.LocalFilter = filter;
+			ApplicationSettings.RoamingUserSettings.Socket.RecentLocalFilters.Add(filter);
+			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
 		private void socketSelection_LocalTcpPortChanged(object sender, EventArgs e)
 		{
-			this.settingsInEdit.Terminal.IO.Socket.LocalTcpPort = socketSelection.LocalTcpPort;
+			var port = socketSelection.LocalTcpPort;
+			this.settingsInEdit.Terminal.IO.Socket.LocalTcpPort = port;
+			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
+			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
 		private void socketSelection_LocalUdpPortChanged(object sender, EventArgs e)
 		{
-			this.settingsInEdit.Terminal.IO.Socket.LocalUdpPort = socketSelection.LocalUdpPort;
+			var port = socketSelection.LocalUdpPort;
+			this.settingsInEdit.Terminal.IO.Socket.LocalUdpPort = port;
+			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
+			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
 		private void socketSettings_TcpClientAutoReconnectChanged(object sender, EventArgs e)
@@ -474,16 +489,17 @@ namespace YAT.View.Forms
 				serialPortSettings.AliveMonitor = this.settingsInEdit.Terminal.IO.SerialPort.AliveMonitor;
 				serialPortSettings.AutoReopen   = this.settingsInEdit.Terminal.IO.SerialPort.AutoReopen;
 
-				socketSelection.SocketType        = (Domain.IOTypeEx)ioType;
-				socketSelection.RemoteHost        = this.settingsInEdit.Terminal.IO.Socket.RemoteHost;
-				socketSelection.RemoteTcpPort     = this.settingsInEdit.Terminal.IO.Socket.RemoteTcpPort;
-				socketSelection.RemoteUdpPort     = this.settingsInEdit.Terminal.IO.Socket.RemoteUdpPort;
-				socketSelection.LocalInterface    = this.settingsInEdit.Terminal.IO.Socket.LocalInterface;
-				socketSelection.LocalFilter       = this.settingsInEdit.Terminal.IO.Socket.LocalFilter;
-				socketSelection.LocalTcpPort      = this.settingsInEdit.Terminal.IO.Socket.LocalTcpPort;
-				socketSelection.LocalUdpPort      = this.settingsInEdit.Terminal.IO.Socket.LocalUdpPort;
-				socketSelection.RecentRemoteHosts = ApplicationSettings.RoamingUserSettings.Socket.RecentRemoteHosts;
-				socketSelection.RecentPorts       = ApplicationSettings.RoamingUserSettings.Socket.RecentPorts;
+				socketSelection.SocketType         = (Domain.IOTypeEx)ioType;
+				socketSelection.RemoteHost         = this.settingsInEdit.Terminal.IO.Socket.RemoteHost;
+				socketSelection.RemoteTcpPort      = this.settingsInEdit.Terminal.IO.Socket.RemoteTcpPort;
+				socketSelection.RemoteUdpPort      = this.settingsInEdit.Terminal.IO.Socket.RemoteUdpPort;
+				socketSelection.LocalInterface     = this.settingsInEdit.Terminal.IO.Socket.LocalInterface;
+				socketSelection.LocalFilter        = this.settingsInEdit.Terminal.IO.Socket.LocalFilter;
+				socketSelection.LocalTcpPort       = this.settingsInEdit.Terminal.IO.Socket.LocalTcpPort;
+				socketSelection.LocalUdpPort       = this.settingsInEdit.Terminal.IO.Socket.LocalUdpPort;
+				socketSelection.RecentRemoteHosts  = ApplicationSettings.RoamingUserSettings.Socket.RecentRemoteHosts;
+				socketSelection.RecentLocalFilters = ApplicationSettings.RoamingUserSettings.Socket.RecentLocalFilters;
+				socketSelection.RecentPorts        = ApplicationSettings.RoamingUserSettings.Socket.RecentPorts;
 
 				socketSettings.SocketType             = (Domain.IOTypeEx)ioType;
 				socketSettings.TcpClientAutoReconnect = this.settingsInEdit.Terminal.IO.Socket.TcpClientAutoReconnect;

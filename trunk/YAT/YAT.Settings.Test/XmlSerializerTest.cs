@@ -128,11 +128,11 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void TestRecentSerialization()
 		{
-			string filePath = Temp.MakeTempFilePath(GetType(), "RecentFileSettings", FileExtension);
+			var filePath = Temp.MakeTempFilePath(GetType(), "RecentFileSettings", FileExtension);
 
 			var ric = new RecentItemCollection<string>();
-			ric.Add(new RecentItem<string>("RIA"));
-			ric.Add(new RecentItem<string>("RIB"));
+			ric.Add("RIA");
+			ric.Add("RIB");
 
 			var rfs = new RecentFileSettings();
 			rfs.FilePaths = ric;
