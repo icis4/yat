@@ -219,7 +219,7 @@ namespace YAT.View.Forms
 		{
 			var host = socketSelection.RemoteHost;
 			this.newTerminalSettingsInEdit.SocketRemoteHost = host;
-			ApplicationSettings.RoamingUserSettings.Socket.RecentRemoteHosts.Add(host);
+			ApplicationSettings.RoamingUserSettings.Socket.RecentRemoteHosts.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(host);
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -227,7 +227,7 @@ namespace YAT.View.Forms
 		{
 			var port = socketSelection.RemoteTcpPort;
 			this.newTerminalSettingsInEdit.SocketRemoteTcpPort = port;
-			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
+			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(port);
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -235,7 +235,7 @@ namespace YAT.View.Forms
 		{
 			var port = socketSelection.RemoteUdpPort;
 			this.newTerminalSettingsInEdit.SocketRemoteUdpPort = socketSelection.RemoteUdpPort;
-			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
+			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(port);
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -248,7 +248,7 @@ namespace YAT.View.Forms
 		{
 			var filter = socketSelection.LocalFilter;
 			this.newTerminalSettingsInEdit.SocketLocalFilter = filter;
-			ApplicationSettings.RoamingUserSettings.Socket.RecentLocalFilters.Add(filter);
+			ApplicationSettings.RoamingUserSettings.Socket.RecentLocalFilters.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(filter);
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -264,7 +264,7 @@ namespace YAT.View.Forms
 		{
 			var port = socketSelection.LocalUdpPort;
 			this.newTerminalSettingsInEdit.SocketLocalUdpPort = port;
-			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
+			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(port);
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 

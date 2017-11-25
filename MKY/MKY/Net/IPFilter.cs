@@ -85,6 +85,11 @@ namespace MKY.Net
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public class IPFilterEx : EnumEx, IEquatable<IPFilterEx>
 	{
+		/// <remarks>
+		/// The list of fixed items of this extended enum.
+		/// </remarks>
+		protected static List<IPFilterEx> staticItems;
+
 		#region String Definitions
 
 		/// <remarks>Explicitly using "[any]" instead of "[Any]" same as "[localhost]" and "[loopback]".</remarks>
@@ -432,28 +437,39 @@ namespace MKY.Net
 
 		#endregion
 
-		#region GetItems
+		#region Items
 		//==========================================================================================
-		// GetItems
+		// Items
 		//==========================================================================================
 
 		/// <remarks>
-		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
+		/// The list of fixed items of this extended enum.
 		/// </remarks>
-		public static IPFilterEx[] GetItems()
+		public static List<IPFilterEx> GetItems()
 		{
-			var a = new List<IPFilterEx>(6); // Preset the required capacity to improve memory management.
+			if (staticItems == null)
+			{
+				var staticItems = new List<IPFilterEx>(6); // Preset the required capacity to improve memory management.
 
-			a.Add(new IPFilterEx(IPFilter.Any));
-			a.Add(new IPFilterEx(IPFilter.Localhost));
-			a.Add(new IPFilterEx(IPFilter.IPv4Any));
-			a.Add(new IPFilterEx(IPFilter.IPv4Localhost));
-			a.Add(new IPFilterEx(IPFilter.IPv6Any));
-			a.Add(new IPFilterEx(IPFilter.IPv6Localhost));
+				staticItems.Add(new IPFilterEx(IPFilter.Any));
+				staticItems.Add(new IPFilterEx(IPFilter.Localhost));
+				staticItems.Add(new IPFilterEx(IPFilter.IPv4Any));
+				staticItems.Add(new IPFilterEx(IPFilter.IPv4Localhost));
+				staticItems.Add(new IPFilterEx(IPFilter.IPv6Any));
+				staticItems.Add(new IPFilterEx(IPFilter.IPv6Localhost));
 
-			// This method shall only return the fixed items, 'Explicit' is not added therefore.
+				// The shall only contain the fixed items, 'Explicit' is not added therefore.
+			}
 
-			return (a.ToArray());
+			return (staticItems);
+		}
+
+		/// <summary>
+		/// Determines whether the enumeration contains the specified item.
+		/// </summary>
+		public static bool Contains(IPFilterEx item)
+		{
+			return (GetItems().Contains(item));
 		}
 
 		#endregion
