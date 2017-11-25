@@ -163,7 +163,8 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static WorkspaceLayoutEx[] GetItems()
 		{
-			List<WorkspaceLayoutEx> a = new List<WorkspaceLayoutEx>(7); // Preset the required capacity to improve memory management.
+			var a = new List<WorkspaceLayoutEx>(7); // Preset the required capacity to improve memory management.
+
 			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.Automatic));
 			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.Cascade));
 			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.TileHorizontal));
@@ -171,6 +172,7 @@ namespace YAT.Model.Types
 			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.Manual));
 			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.Minimize));
 			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.Maximize));
+
 			return (a.ToArray());
 		}
 

@@ -298,7 +298,8 @@ namespace YAT.Domain
 		/// </remarks>
 		public static InfoSeparatorEx[] GetItems()
 		{
-			List<InfoSeparatorEx> a = new List<InfoSeparatorEx>(12); // Preset the required capacity to improve memory management.
+			var a = new List<InfoSeparatorEx>(12); // Preset the required capacity to improve memory management.
+
 			a.Add(new InfoSeparatorEx(InfoSeparator.None));
 			a.Add(new InfoSeparatorEx(InfoSeparator.Space));
 			a.Add(new InfoSeparatorEx(InfoSeparator.Underscore));
@@ -311,6 +312,9 @@ namespace YAT.Domain
 			a.Add(new InfoSeparatorEx(InfoSeparator.CommaWithSpace));
 			a.Add(new InfoSeparatorEx(InfoSeparator.Semicolon));
 			a.Add(new InfoSeparatorEx(InfoSeparator.SemicolonWithSpace));
+
+			// This method shall only return the fixed items, 'Explicit' is not added therefore.
+
 			return (a.ToArray());
 		}
 

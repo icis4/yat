@@ -313,11 +313,15 @@ namespace YAT.Domain
 		/// </remarks>
 		public static InfoEnclosureEx[] GetItems()
 		{
-			List<InfoEnclosureEx> a = new List<InfoEnclosureEx>(4); // Preset the required capacity to improve memory management.
+			var a = new List<InfoEnclosureEx>(4); // Preset the required capacity to improve memory management.
+
 			a.Add(new InfoEnclosureEx(InfoEnclosure.None));
 			a.Add(new InfoEnclosureEx(InfoEnclosure.Parentheses));
 			a.Add(new InfoEnclosureEx(InfoEnclosure.SquareBrackets));
 			a.Add(new InfoEnclosureEx(InfoEnclosure.CurlyBraces));
+
+			// This method shall only return the fixed items, 'Explicit' is not added therefore.
+
 			return (a.ToArray());
 		}
 

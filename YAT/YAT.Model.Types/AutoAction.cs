@@ -214,7 +214,8 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static AutoActionEx[] GetItems()
 		{
-			List<AutoActionEx> a = new List<AutoActionEx>(9); // Preset the initial capacity to improve memory management, 16 is a large enough value.
+			var a = new List<AutoActionEx>(9); // Preset the initial capacity to improve memory management, 16 is a large enough value.
+
 			a.Add(new AutoActionEx(AutoAction.None));
 			a.Add(new AutoActionEx(AutoAction.Beep));
 			a.Add(new AutoActionEx(AutoAction.ShowMessageBox));
@@ -224,6 +225,7 @@ namespace YAT.Model.Types
 			a.Add(new AutoActionEx(AutoAction.SwitchLogOff));
 			a.Add(new AutoActionEx(AutoAction.CloseTerminal));
 			a.Add(new AutoActionEx(AutoAction.ExitApplication));
+
 			return (a.ToArray());
 		}
 

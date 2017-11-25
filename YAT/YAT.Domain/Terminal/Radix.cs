@@ -188,17 +188,20 @@ namespace YAT.Domain
 		/// </remarks>
 		public static RadixEx[] GetItems()
 		{
-			List<RadixEx> a = new List<RadixEx>(6); // Preset the required capacity to improve memory management.
+			var a = new List<RadixEx>(6); // Preset the required capacity to improve memory management.
 
-			a.Add(new RadixEx(Radix.String)); // Alpha radices.
+			// Alpha:
+			a.Add(new RadixEx(Radix.String));
 			a.Add(new RadixEx(Radix.Char));
 
-			a.Add(new RadixEx(Radix.Bin)); // Numeric radices.
+			// Numeric:
+			a.Add(new RadixEx(Radix.Bin));
 			a.Add(new RadixEx(Radix.Oct));
 			a.Add(new RadixEx(Radix.Dec));
 			a.Add(new RadixEx(Radix.Hex));
 
-			a.Add(new RadixEx(Radix.Unicode)); // Special radices.
+			// Special:
+			a.Add(new RadixEx(Radix.Unicode));
 
 			return (a.ToArray());
 		}

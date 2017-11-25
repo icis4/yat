@@ -285,7 +285,7 @@ namespace YAT.Domain
 		/// </remarks>
 		public static TimeSpanFormatPresetEx[] GetItems()
 		{
-			List<TimeSpanFormatPresetEx> a = new List<TimeSpanFormatPresetEx>(7); // Preset the required capacity to improve memory management.
+			var a = new List<TimeSpanFormatPresetEx>(7); // Preset the required capacity to improve memory management.
 
 			a.Add(new TimeSpanFormatPresetEx(TimeSpanFormatPreset.None));
 

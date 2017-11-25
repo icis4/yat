@@ -102,11 +102,13 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public static DataBitsEx[] GetItems()
 		{
-			List<DataBitsEx> a = new List<DataBitsEx>(4); // Preset the required capacity to improve memory management.
+			var a = new List<DataBitsEx>(4); // Preset the required capacity to improve memory management.
+
 			a.Add(new DataBitsEx(DataBits.Five));
 			a.Add(new DataBitsEx(DataBits.Six));
 			a.Add(new DataBitsEx(DataBits.Seven));
 			a.Add(new DataBitsEx(DataBits.Eight));
+
 			return (a.ToArray());
 		}
 

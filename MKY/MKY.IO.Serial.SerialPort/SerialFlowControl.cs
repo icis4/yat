@@ -151,7 +151,8 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		public static new SerialFlowControlEx[] GetItems()
 		{
-			List<SerialFlowControlEx> a = new List<SerialFlowControlEx>(8); // Preset the required capacity to improve memory management.
+			var a = new List<SerialFlowControlEx>(8); // Preset the required capacity to improve memory management.
+
 			a.Add(new SerialFlowControlEx(SerialFlowControl.None));
 			a.Add(new SerialFlowControlEx(SerialFlowControl.Hardware));
 			a.Add(new SerialFlowControlEx(SerialFlowControl.Software));
@@ -160,6 +161,7 @@ namespace MKY.IO.Serial.SerialPort
 			a.Add(new SerialFlowControlEx(SerialFlowControl.ManualSoftware));
 			a.Add(new SerialFlowControlEx(SerialFlowControl.ManualCombined));
 			a.Add(new SerialFlowControlEx(SerialFlowControl.RS485));
+
 			return (a.ToArray());
 		}
 

@@ -120,12 +120,14 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public static ParityEx[] GetItems()
 		{
-			List<ParityEx> a = new List<ParityEx>(5); // Preset the required capacity to improve memory management.
+			var a = new List<ParityEx>(5); // Preset the required capacity to improve memory management.
+
 			a.Add(new ParityEx(Parity.Even));
 			a.Add(new ParityEx(Parity.Odd));
 			a.Add(new ParityEx(Parity.None));
 			a.Add(new ParityEx(Parity.Mark));
 			a.Add(new ParityEx(Parity.Space));
+
 			return (a.ToArray());
 		}
 
