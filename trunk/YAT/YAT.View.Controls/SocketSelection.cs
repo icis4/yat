@@ -472,15 +472,18 @@ namespace YAT.View.Controls
 			}
 		}
 
+	////private void comboBox_RemotePort_SelectedIndexChanged(object sender, EventArgs e)
+	////is not required since     "     _Validating() below gets called anyway.
+
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Table-style coding.")]
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
-		private void textBox_RemotePort_Validating(object sender, CancelEventArgs e)
+		private void comboBox_RemotePort_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
 			int port;
-			if (int.TryParse(textBox_RemotePort.Text, out port) && IPEndPointEx.IsValidPort(port))
+			if (int.TryParse(comboBox_RemotePort.Text, out port) && IPEndPointEx.IsValidPort(port))
 			{
 				if ((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket))
 				{
@@ -553,15 +556,18 @@ namespace YAT.View.Controls
 			SetLocalInterfaceList();
 		}
 
+	////private void comboBox_LocalPort_SelectedIndexChanged(object sender, EventArgs e)
+	////is not required since     "    _Validating() below gets called anyway.
+
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Table-style coding.")]
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
-		private void textBox_LocalPort_Validating(object sender, CancelEventArgs e)
+		private void comboBox_LocalPort_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
 			int port;
-			if (int.TryParse(textBox_LocalPort.Text, out port) && IPEndPointEx.IsValidPort(port))
+			if (int.TryParse(comboBox_LocalPort.Text, out port) && IPEndPointEx.IsValidPort(port))
 			{
 				if ((this.socketType == SocketType.TcpServer) || (this.socketType == SocketType.TcpAutoSocket))
 				{
@@ -827,18 +833,18 @@ namespace YAT.View.Controls
 				// Remote port:
 				if (!DesignMode && Enabled && ((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket)))
 				{
-					textBox_RemotePort.Enabled = true;
-					textBox_RemotePort.Text = this.remoteTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
+					comboBox_RemotePort.Enabled = true;
+					comboBox_RemotePort.Text = this.remoteTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
 				}
 				else if (!DesignMode && Enabled && ((this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpPairSocket)))
 				{
-					textBox_RemotePort.Enabled = true;
-					textBox_RemotePort.Text = this.remoteUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
+					comboBox_RemotePort.Enabled = true;
+					comboBox_RemotePort.Text = this.remoteUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
 				}
 				else
 				{
-					textBox_RemotePort.Enabled = false;
-					textBox_RemotePort.Text = "";
+					comboBox_RemotePort.Enabled = false;
+					comboBox_RemotePort.Text = "";
 				}
 
 				// Local interface:
@@ -876,18 +882,18 @@ namespace YAT.View.Controls
 				// Local port:
 				if (Enabled && ((this.socketType == SocketType.TcpServer) || (this.socketType == SocketType.TcpAutoSocket)))
 				{
-					textBox_LocalPort.Enabled = true;
-					textBox_LocalPort.Text = this.localTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
+					comboBox_LocalPort.Enabled = true;
+					comboBox_LocalPort.Text = this.localTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
 				}
 				else if (Enabled && ((this.socketType == SocketType.UdpServer) || (this.socketType == SocketType.UdpPairSocket)))
 				{
-					textBox_LocalPort.Enabled = true;
-					textBox_LocalPort.Text = this.localUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
+					comboBox_LocalPort.Enabled = true;
+					comboBox_LocalPort.Text = this.localUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
 				}
 				else
 				{
-					textBox_LocalPort.Enabled = false;
-					textBox_LocalPort.Text = "";
+					comboBox_LocalPort.Enabled = false;
+					comboBox_LocalPort.Text = "";
 				}
 
 				// Local filter:

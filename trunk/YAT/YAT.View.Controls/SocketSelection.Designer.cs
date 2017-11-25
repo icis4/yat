@@ -31,9 +31,9 @@
 			this.components = new System.ComponentModel.Container();
 			this.label_RemoteHost = new System.Windows.Forms.Label();
 			this.label_RemotePort = new System.Windows.Forms.Label();
-			this.textBox_RemotePort = new MKY.Windows.Forms.TextBoxEx();
+			this.comboBox_RemotePort = new MKY.Windows.Forms.ComboBoxEx();
 			this.comboBox_RemoteHost = new MKY.Windows.Forms.ComboBoxEx();
-			this.textBox_LocalPort = new MKY.Windows.Forms.TextBoxEx();
+			this.comboBox_LocalPort = new MKY.Windows.Forms.ComboBoxEx();
 			this.label_LocalPort = new System.Windows.Forms.Label();
 			this.label_LocalInterface = new System.Windows.Forms.Label();
 			this.comboBox_LocalInterface = new MKY.Windows.Forms.ComboBoxEx();
@@ -62,15 +62,15 @@
 			this.label_RemotePort.TabIndex = 2;
 			this.label_RemotePort.Text = "&Remote TCP Port:";
 			// 
-			// textBox_RemotePort
+			// comboBox_RemotePort
 			// 
-			this.textBox_RemotePort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.comboBox_RemotePort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBox_RemotePort.Location = new System.Drawing.Point(101, 30);
-			this.textBox_RemotePort.Name = "textBox_RemotePort";
-			this.textBox_RemotePort.Size = new System.Drawing.Size(156, 20);
-			this.textBox_RemotePort.TabIndex = 3;
-			this.textBox_RemotePort.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_RemotePort_Validating);
+			this.comboBox_RemotePort.Location = new System.Drawing.Point(101, 30);
+			this.comboBox_RemotePort.Name = "comboBox_RemotePort";
+			this.comboBox_RemotePort.Size = new System.Drawing.Size(156, 21);
+			this.comboBox_RemotePort.TabIndex = 3;
+			this.comboBox_RemotePort.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_RemotePort_Validating);
 			// 
 			// comboBox_RemoteHost
 			// 
@@ -84,15 +84,15 @@
         "tact YAT via \"Help > Request Feature\" to request additional presets.");
 			this.comboBox_RemoteHost.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_RemoteHost_Validating);
 			// 
-			// textBox_LocalPort
+			// comboBox_LocalPort
 			// 
-			this.textBox_LocalPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.comboBox_LocalPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBox_LocalPort.Location = new System.Drawing.Point(101, 102);
-			this.textBox_LocalPort.Name = "textBox_LocalPort";
-			this.textBox_LocalPort.Size = new System.Drawing.Size(156, 20);
-			this.textBox_LocalPort.TabIndex = 9;
-			this.textBox_LocalPort.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_LocalPort_Validating);
+			this.comboBox_LocalPort.Location = new System.Drawing.Point(101, 102);
+			this.comboBox_LocalPort.Name = "comboBox_LocalPort";
+			this.comboBox_LocalPort.Size = new System.Drawing.Size(156, 21);
+			this.comboBox_LocalPort.TabIndex = 9;
+			this.comboBox_LocalPort.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_LocalPort_Validating);
 			// 
 			// label_LocalPort
 			// 
@@ -174,8 +174,8 @@
 			this.Controls.Add(this.label_OnDialogMessage);
 			this.Controls.Add(this.comboBox_LocalFilter);
 			this.Controls.Add(this.button_RefreshLocalInterfaces);
-			this.Controls.Add(this.textBox_LocalPort);
-			this.Controls.Add(this.textBox_RemotePort);
+			this.Controls.Add(this.comboBox_LocalPort);
+			this.Controls.Add(this.comboBox_RemotePort);
 			this.Controls.Add(this.comboBox_LocalInterface);
 			this.Controls.Add(this.comboBox_RemoteHost);
 			this.Controls.Add(this.label_LocalPort);
@@ -195,9 +195,9 @@
 
 		private System.Windows.Forms.Label label_RemoteHost;
 		private System.Windows.Forms.Label label_RemotePort;
-		private MKY.Windows.Forms.TextBoxEx textBox_RemotePort;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_RemotePort;
 		private MKY.Windows.Forms.ComboBoxEx comboBox_RemoteHost;
-		private MKY.Windows.Forms.TextBoxEx textBox_LocalPort;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_LocalPort;
 		private System.Windows.Forms.Label label_LocalPort;
 		private System.Windows.Forms.Label label_LocalInterface;
 		private MKY.Windows.Forms.ComboBoxEx comboBox_LocalInterface;
