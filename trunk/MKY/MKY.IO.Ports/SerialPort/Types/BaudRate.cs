@@ -222,7 +222,8 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public static BaudRateEx[] GetItems()
 		{
-			List<BaudRateEx> a = new List<BaudRateEx>(32); // Preset the required capacity to improve memory management, 32 is a large enough value.
+			var a = new List<BaudRateEx>(32); // Preset the required capacity to improve memory management, 32 is a large enough value.
+
 			a.Add(new BaudRateEx(BaudRate.Baud000075));
 			a.Add(new BaudRateEx(BaudRate.Baud000110));
 			a.Add(new BaudRateEx(BaudRate.Baud000134));
@@ -247,6 +248,9 @@ namespace MKY.IO.Ports
 			a.Add(new BaudRateEx(BaudRate.Baud256000));
 			a.Add(new BaudRateEx(BaudRate.Baud460800));
 			a.Add(new BaudRateEx(BaudRate.Baud921600));
+
+			// This method shall only return the fixed items, 'Explicit' is not added therefore.
+
 			return (a.ToArray());
 		}
 

@@ -75,10 +75,12 @@ namespace MKY
 	///
 	///     public static ModeEx[] GetItems()
 	///     {
-	///         List[ModeEx] a = new List[ModeEx](3); // [] must be replaced be angle brackets
+	///         var a = new List[ModeEx](3); // [] must be replaced be angle brackets
+	///
 	///         a.Add(new ModeEx(Mode.Fast));
 	///         a.Add(new ModeEx(Mode.Normal));
 	///         a.Add(new ModeEx(Mode.Slow));
+	///
 	///         return (a.ToArray());
 	///     }
 	///
@@ -426,7 +428,7 @@ namespace MKY
 		/// <exception cref="ArgumentException">
 		/// value is not of type ex.
 		/// </exception>
-		public static string GetName(Type enumExType, object value)
+		public static string GetUnderlyingEnumName(Type enumExType, object value)
 		{
 			return (Enum.GetName(EnumExTypeToUnderlyingEnumType(enumExType), value));
 		}
@@ -443,7 +445,7 @@ namespace MKY
 		/// <exception cref="ArgumentNullException">
 		/// ex or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
-		public static string[] GetNames(Type enumExType)
+		public static string[] GetUnderlyingEnumNames(Type enumExType)
 		{
 			return (Enum.GetNames(EnumExTypeToUnderlyingEnumType(enumExType)));
 		}
@@ -460,7 +462,7 @@ namespace MKY
 		/// <exception cref="ArgumentNullException">
 		/// ex or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
-		public static Array GetValues(Type enumExType)
+		public static Array GetUnderlyingEnumValues(Type enumExType)
 		{
 			return (Enum.GetValues(EnumExTypeToUnderlyingEnumType(enumExType)));
 		}
@@ -476,15 +478,15 @@ namespace MKY
 		/// <exception cref="ArgumentNullException">
 		/// ex or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
-		public static Enum[] GetItems(Type enumExType)
+		public static Enum[] GetUnderlyingEnumItems(Type enumExType)
 		{
-			Type underlyingEnumType = EnumExTypeToUnderlyingEnumType(enumExType);
-			FieldInfo[] fis = underlyingEnumType.GetFields(BindingFlags.Public | BindingFlags.Static);
-			List<Enum> items = new List<Enum>(fis.Length); // Preset the required capacity to improve memory management.
+			var underlyingEnumType = EnumExTypeToUnderlyingEnumType(enumExType);
+			var fis = underlyingEnumType.GetFields(BindingFlags.Public | BindingFlags.Static);
+			var items = new List<Enum>(fis.Length); // Preset the required capacity to improve memory management.
 
-			foreach (FieldInfo fi in fis)
+			foreach (var fi in fis)
 			{
-				Enum e = (Enum)fi.GetValue(null);
+				var e = (Enum)fi.GetValue(null);
 				items.Add(e);
 			}
 

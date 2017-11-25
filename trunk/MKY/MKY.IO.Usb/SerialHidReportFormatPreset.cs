@@ -258,7 +258,7 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public static SerialHidReportFormatPresetEx[] GetItems()
 		{
-			List<SerialHidReportFormatPresetEx> a = new List<SerialHidReportFormatPresetEx>(8); // Preset the required capacity to improve memory management.
+			var a = new List<SerialHidReportFormatPresetEx>(8); // Preset the required capacity to improve memory management.
 
 			a.Add(new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.None));
 			a.Add(new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.Plain));

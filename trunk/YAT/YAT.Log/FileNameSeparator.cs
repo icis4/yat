@@ -264,7 +264,8 @@ namespace YAT.Log
 		/// </remarks>
 		public static FileNameSeparatorEx[] GetItems()
 		{
-			List<FileNameSeparatorEx> a = new List<FileNameSeparatorEx>(7); // Preset the required capacity to improve memory management.
+			var a = new List<FileNameSeparatorEx>(7); // Preset the required capacity to improve memory management.
+
 			a.Add(new FileNameSeparatorEx(FileNameSeparator.None));
 			a.Add(new FileNameSeparatorEx(FileNameSeparator.Underscore));
 			a.Add(new FileNameSeparatorEx(FileNameSeparator.UnderscoreWithSpaces));
@@ -272,6 +273,9 @@ namespace YAT.Log
 			a.Add(new FileNameSeparatorEx(FileNameSeparator.DashWithSpaces));
 			a.Add(new FileNameSeparatorEx(FileNameSeparator.Ball));
 			a.Add(new FileNameSeparatorEx(FileNameSeparator.BallWithSpaces));
+
+			// This method shall only return the fixed items, 'Explicit' is not added therefore.
+
 			return (a.ToArray());
 		}
 

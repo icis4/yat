@@ -298,23 +298,27 @@ namespace YAT.Model.Types
 		/// </remarks>
 		private static AutoResponseEx[] GetItems(bool addFixed, bool addVariable)
 		{
-			List<AutoResponseEx> a = new List<AutoResponseEx>(16); // Preset the initial capacity to improve memory management, 16 is a large enough value.
-			if (addFixed)		a.Add(new AutoResponseEx(AutoResponse.None));
-			if (addFixed)		a.Add(new AutoResponseEx(AutoResponse.Trigger));
-			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.SendText));
-			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.SendFile));
-			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand1));
-			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand2));
-			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand3));
-			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand4));
-			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand5));
-			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand6));
-			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand7));
-			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand8));
-			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand9));
-			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand10));
-			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand11));
-			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand12));
+			var a = new List<AutoResponseEx>(16); // Preset the initial capacity to improve memory management, 16 is a large enough value.
+
+			if (addFixed)    a.Add(new AutoResponseEx(AutoResponse.None));
+			if (addFixed)    a.Add(new AutoResponseEx(AutoResponse.Trigger));
+			if (addVariable) a.Add(new AutoResponseEx(AutoResponse.SendText));
+			if (addVariable) a.Add(new AutoResponseEx(AutoResponse.SendFile));
+			if (addVariable) a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand1));
+			if (addVariable) a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand2));
+			if (addVariable) a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand3));
+			if (addVariable) a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand4));
+			if (addVariable) a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand5));
+			if (addVariable) a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand6));
+			if (addVariable) a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand7));
+			if (addVariable) a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand8));
+			if (addVariable) a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand9));
+			if (addVariable) a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand10));
+			if (addVariable) a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand11));
+			if (addVariable) a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand12));
+
+			// This method shall only return the fixed items, 'Explicit' is not added therefore.
+
 			return (a.ToArray());
 		}
 

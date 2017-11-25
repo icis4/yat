@@ -285,7 +285,7 @@ namespace YAT.Domain
 		/// </remarks>
 		public static TimeDeltaFormatPresetEx[] GetItems()
 		{
-			List<TimeDeltaFormatPresetEx> a = new List<TimeDeltaFormatPresetEx>(7); // Preset the required capacity to improve memory management.
+			var a = new List<TimeDeltaFormatPresetEx>(7); // Preset the required capacity to improve memory management.
 
 			a.Add(new TimeDeltaFormatPresetEx(TimeDeltaFormatPreset.None));
 

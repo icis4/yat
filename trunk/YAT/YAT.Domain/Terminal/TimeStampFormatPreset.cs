@@ -287,7 +287,7 @@ namespace YAT.Domain
 		/// </remarks>
 		public static TimeStampFormatPresetEx[] GetItems()
 		{
-			List<TimeStampFormatPresetEx> a = new List<TimeStampFormatPresetEx>(7); // Preset the required capacity to improve memory management.
+			var a = new List<TimeStampFormatPresetEx>(7); // Preset the required capacity to improve memory management.
 
 			a.Add(new TimeStampFormatPresetEx(TimeStampFormatPreset.None));
 

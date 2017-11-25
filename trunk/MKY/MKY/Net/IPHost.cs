@@ -22,6 +22,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -30,6 +35,8 @@ using System.Net;
 using System.Net.Sockets;
 
 using MKY.Diagnostics;
+
+#endregion
 
 namespace MKY.Net
 {
@@ -405,10 +412,14 @@ namespace MKY.Net
 		/// </remarks>
 		public static IPHostEx[] GetItems()
 		{
-			List<IPHostEx> a = new List<IPHostEx>(3); // Preset the required capacity to improve memory management.
+			var a = new List<IPHostEx>(3); // Preset the required capacity to improve memory management.
+
 			a.Add(new IPHostEx(IPHost.Localhost));
 			a.Add(new IPHostEx(IPHost.IPv4Localhost));
 			a.Add(new IPHostEx(IPHost.IPv6Localhost));
+
+			// This method shall only return the fixed items, 'Explicit' is not added therefore.
+
 			return (a.ToArray());
 		}
 

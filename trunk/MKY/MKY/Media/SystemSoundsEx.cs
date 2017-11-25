@@ -146,13 +146,15 @@ namespace MKY.Media
 		/// </remarks>
 		public static SystemSoundsEx[] GetItems()
 		{
-			List<SystemSoundsEx> a = new List<SystemSoundsEx>(6); // Preset the required capacity to improve memory management.
+			var a = new List<SystemSoundsEx>(6); // Preset the required capacity to improve memory management.
+
 			a.Add(new SystemSoundsEx(SystemSounds.None));
 			a.Add(new SystemSoundsEx(SystemSounds.Asterisk));
 			a.Add(new SystemSoundsEx(SystemSounds.Beep));
 			a.Add(new SystemSoundsEx(SystemSounds.Exclamation));
 			a.Add(new SystemSoundsEx(SystemSounds.Hand));
 			a.Add(new SystemSoundsEx(SystemSounds.Question));
+
 			return (a.ToArray());
 		}
 

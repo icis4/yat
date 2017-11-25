@@ -99,11 +99,13 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public static StopBitsEx[] GetItems()
 		{
-			List<StopBitsEx> a = new List<StopBitsEx>(4); // Preset the required capacity to improve memory management.
+			var a = new List<StopBitsEx>(4); // Preset the required capacity to improve memory management.
+
 			a.Add(new StopBitsEx(StopBits.None));
 			a.Add(new StopBitsEx(StopBits.One));
 			a.Add(new StopBitsEx(StopBits.OnePointFive));
 			a.Add(new StopBitsEx(StopBits.Two));
+
 			return (a.ToArray());
 		}
 

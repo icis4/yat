@@ -941,7 +941,7 @@ namespace MKY.Text
 		/// </remarks>
 		public static EncodingEx[] GetItems()
 		{
-			List<EncodingEx> a = new List<EncodingEx>(256); // Preset the initial capacity to improve memory management, 256 is a large enough value.
+			var a = new List<EncodingEx>(256); // Preset the initial capacity to improve memory management, 256 is a large enough value.
 
 			a.Add(new EncodingEx((SupportedEncoding)Encoding.Default.CodePage));
 

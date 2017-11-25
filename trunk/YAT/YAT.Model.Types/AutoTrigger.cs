@@ -288,21 +288,25 @@ namespace YAT.Model.Types
 		/// </remarks>
 		private static AutoTriggerEx[] GetItems(bool addFixed, bool addVariable)
 		{
-			List<AutoTriggerEx> a = new List<AutoTriggerEx>(16); // Preset the initial capacity to improve memory management, 16 is a large enough value.
-			if (addFixed)		a.Add(new AutoTriggerEx(AutoTrigger.None));
-			if (addFixed)		a.Add(new AutoTriggerEx(AutoTrigger.AnyLine));
-			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand1));
-			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand2));
-			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand3));
-			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand4));
-			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand5));
-			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand6));
-			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand7));
-			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand8));
-			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand9));
-			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand10));
-			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand11));
-			if (addVariable)	a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand12));
+			var a = new List<AutoTriggerEx>(16); // Preset the initial capacity to improve memory management, 16 is a large enough value.
+
+			if (addFixed)    a.Add(new AutoTriggerEx(AutoTrigger.None));
+			if (addFixed)    a.Add(new AutoTriggerEx(AutoTrigger.AnyLine));
+			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand1));
+			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand2));
+			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand3));
+			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand4));
+			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand5));
+			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand6));
+			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand7));
+			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand8));
+			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand9));
+			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand10));
+			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand11));
+			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand12));
+
+			// This method shall only return the fixed items, 'Explicit' is not added therefore.
+
 			return (a.ToArray());
 		}
 

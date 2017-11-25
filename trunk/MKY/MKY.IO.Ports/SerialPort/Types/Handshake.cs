@@ -126,11 +126,13 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public static HandshakeEx[] GetItems()
 		{
-			List<HandshakeEx> a = new List<HandshakeEx>(4); // Preset the required capacity to improve memory management.
+			var a = new List<HandshakeEx>(4); // Preset the required capacity to improve memory management.
+
 			a.Add(new HandshakeEx(Handshake.None));
 			a.Add(new HandshakeEx(Handshake.RequestToSend));
 			a.Add(new HandshakeEx(Handshake.XOnXOff));
 			a.Add(new HandshakeEx(Handshake.RequestToSendXOnXOff));
+
 			return (a.ToArray());
 		}
 
