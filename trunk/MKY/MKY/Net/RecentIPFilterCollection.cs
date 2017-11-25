@@ -60,6 +60,35 @@ namespace MKY.Net
 		// Methods
 		//------------------------------------------------------------------------------------------
 
+		/// <summary>
+		/// Remove the most recent item if the collection already contains <see cref="T:RecentItemCollection`1.Capacity" /> items.
+		/// </summary>
+		/// <returns>
+		/// <c>true</c> if an item is successfully removed; otherwise, <c>false</c>.
+		/// <c>false</c> is also returned if no item was not found in the collection.
+		/// </returns>
+		public override bool RemoveMostRecent()
+		{
+			if (Count > 0)
+			{
+				var sortedReversed = new List<RecentItem<string>>(this);
+
+				sortedReversed.Sort();
+				sortedReversed.Reverse();
+
+				foreach (var item in sortedReversed)
+				{
+					if (!IPFilterEx.Contains(item.Item)) // Do not remove the fixed items.
+					{
+						Remove(item.Item);
+						return (true);
+					}
+				}
+			}
+
+			return (false);
+		}
+
 		#endregion
 	}
 }

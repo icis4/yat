@@ -77,6 +77,11 @@ namespace MKY.Net
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public class IPHostEx : EnumEx, IEquatable<IPHostEx>
 	{
+		/// <remarks>
+		/// The list of fixed items of this extended enum.
+		/// </remarks>
+		protected static List<IPHostEx> staticItems;
+
 		#region String Definitions
 
 		/// <remarks>Explicitly using the more common spelling "[localhost]" instead of "[Localhost]".</remarks>
@@ -402,25 +407,36 @@ namespace MKY.Net
 
 		#endregion
 
-		#region GetItems
+		#region Items
 		//==========================================================================================
-		// GetItems
+		// Items
 		//==========================================================================================
 
 		/// <remarks>
-		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
+		/// The list of fixed items of this extended enum.
 		/// </remarks>
-		public static IPHostEx[] GetItems()
+		public static List<IPHostEx> GetItems()
 		{
-			var a = new List<IPHostEx>(3); // Preset the required capacity to improve memory management.
+			if (staticItems == null)
+			{
+				staticItems = new List<IPHostEx>(3); // Preset the required capacity to improve memory management.
 
-			a.Add(new IPHostEx(IPHost.Localhost));
-			a.Add(new IPHostEx(IPHost.IPv4Localhost));
-			a.Add(new IPHostEx(IPHost.IPv6Localhost));
+				staticItems.Add(new IPHostEx(IPHost.Localhost));
+				staticItems.Add(new IPHostEx(IPHost.IPv4Localhost));
+				staticItems.Add(new IPHostEx(IPHost.IPv6Localhost));
 
-			// This method shall only return the fixed items, 'Explicit' is not added therefore.
+				// The shall only contain the fixed items, 'Explicit' is not added therefore.
+			}
 
-			return (a.ToArray());
+			return (staticItems);
+		}
+
+		/// <summary>
+		/// Determines whether the enumeration contains the specified item.
+		/// </summary>
+		public static bool Contains(IPHostEx item)
+		{
+			return (GetItems().Contains(item));
 		}
 
 		#endregion

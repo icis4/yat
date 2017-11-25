@@ -88,6 +88,15 @@ namespace MKY.Collections.Specialized
 		/// Inserts the recent item at the beginning of the collection (least recent). The most
 		/// recent item will be removed in case the collection already contains <see cref="T:RecentItemCollection`1.Capacity"/> items.
 		/// </summary>
+		public virtual void ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(T item)
+		{
+			ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(new RecentItem<T>(item));
+		}
+
+		/// <summary>
+		/// Inserts the recent item at the beginning of the collection (least recent). The most
+		/// recent item will be removed in case the collection already contains <see cref="T:RecentItemCollection`1.Capacity"/> items.
+		/// </summary>
 		public virtual void ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(RecentItem<T> item)
 		{
 			// Remove all equal items, as they are becoming less recent than the new item:
@@ -112,13 +121,13 @@ namespace MKY.Collections.Specialized
 			if (Count > 0)
 			{
 				var sorted = new List<RecentItem<T>>(this);
+
 				sorted.Sort();
-				return (Remove(sorted[sorted.Count - 1])); // Remove the last item in the collection.
+
+				return (Remove(sorted.Last()));
 			}
-			else
-			{
-				return (false);
-			}
+
+			return (false);
 		}
 
 		/// <summary>

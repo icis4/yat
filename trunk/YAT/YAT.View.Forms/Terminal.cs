@@ -3154,7 +3154,7 @@ namespace YAT.View.Forms
 		public virtual void FindNext(string pattern)
 		{
 			ApplicationSettings.RoamingUserSettings.Find.ActivePattern = pattern;
-			ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.Add(new RecentItem<string>(pattern));
+			ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(new RecentItem<string>(pattern));
 			ApplicationSettings.SaveRoamingUserSettings();
 
 			var monitor = GetMonitor(this.lastMonitorSelection);

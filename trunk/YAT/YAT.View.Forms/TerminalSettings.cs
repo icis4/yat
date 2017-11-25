@@ -233,7 +233,7 @@ namespace YAT.View.Forms
 		{
 			var host = socketSelection.RemoteHost;
 			this.settingsInEdit.Terminal.IO.Socket.RemoteHost = host;
-			ApplicationSettings.RoamingUserSettings.Socket.RecentRemoteHosts.Add(host);
+			ApplicationSettings.RoamingUserSettings.Socket.RecentRemoteHosts.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(host);
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -241,7 +241,7 @@ namespace YAT.View.Forms
 		{
 			var port = socketSelection.RemoteTcpPort;
 			this.settingsInEdit.Terminal.IO.Socket.RemoteTcpPort = port;
-			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
+			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(port);
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -249,7 +249,7 @@ namespace YAT.View.Forms
 		{
 			var port = socketSelection.RemoteUdpPort;
 			this.settingsInEdit.Terminal.IO.Socket.RemoteUdpPort = port;
-			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
+			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(port);
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -262,7 +262,7 @@ namespace YAT.View.Forms
 		{
 			var filter = socketSelection.LocalFilter;
 			this.settingsInEdit.Terminal.IO.Socket.LocalFilter = filter;
-			ApplicationSettings.RoamingUserSettings.Socket.RecentLocalFilters.Add(filter);
+			ApplicationSettings.RoamingUserSettings.Socket.RecentLocalFilters.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(filter);
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -270,7 +270,7 @@ namespace YAT.View.Forms
 		{
 			var port = socketSelection.LocalTcpPort;
 			this.settingsInEdit.Terminal.IO.Socket.LocalTcpPort = port;
-			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
+			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(port);
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -278,7 +278,7 @@ namespace YAT.View.Forms
 		{
 			var port = socketSelection.LocalUdpPort;
 			this.settingsInEdit.Terminal.IO.Socket.LocalUdpPort = port;
-			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
+			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(port);
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
