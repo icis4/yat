@@ -42,6 +42,7 @@ namespace YAT.Model.Settings
 		private const int MaxRecentItems = 12;
 
 		private RecentIPHostCollection recentRemoteHosts;
+		private RecentIPFilterCollection recentLocalFilters;
 		private RecentItemCollection<int> recentPorts;
 
 		/// <summary></summary>
@@ -65,8 +66,9 @@ namespace YAT.Model.Settings
 		public SocketSettings(SocketSettings rhs)
 			: base(rhs)
 		{
-			RecentRemoteHosts = new RecentIPHostCollection(rhs.RecentRemoteHosts);
-			RecentPorts       = new RecentItemCollection<int>(rhs.RecentPorts);
+			RecentRemoteHosts  = new RecentIPHostCollection(rhs.RecentRemoteHosts);
+			RecentLocalFilters = new RecentIPFilterCollection(rhs.RecentLocalFilters);
+			RecentPorts        = new RecentItemCollection<int>(rhs.RecentPorts);
 
 			ClearChanged();
 		}
@@ -81,8 +83,11 @@ namespace YAT.Model.Settings
 			RecentRemoteHosts = new RecentIPHostCollection(MaxRecentItems);
 			// Standard hosts are automatically added by the collection.
 
+			RecentLocalFilters = new RecentIPFilterCollection(MaxRecentItems);
+			// Standard hosts are automatically added by the collection.
+
 			RecentPorts = new RecentItemCollection<int>(MaxRecentItems);
-			RecentPorts.Add(new RecentItem<int>(MKY.IO.Serial.Socket.SocketSettings.DefaultPort));
+			RecentPorts.Add(MKY.IO.Serial.Socket.SocketSettings.DefaultPort);
 		}
 
 		#region Properties
@@ -102,6 +107,23 @@ namespace YAT.Model.Settings
 				if (this.recentRemoteHosts != value)
 				{
 					this.recentRemoteHosts = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
+		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
+		[XmlElement("RecentLocalFilters")]
+		public RecentIPFilterCollection RecentLocalFilters
+		{
+			get { return (this.recentLocalFilters); }
+			set
+			{
+				if (this.recentLocalFilters != value)
+				{
+					this.recentLocalFilters = value;
 					SetMyChanged();
 				}
 			}
@@ -144,8 +166,9 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ (RecentRemoteHosts != null ? RecentRemoteHosts.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (RecentPorts       != null ? RecentPorts      .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (RecentRemoteHosts  != null ? RecentRemoteHosts .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (RecentLocalFilters != null ? RecentLocalFilters.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (RecentPorts        != null ? RecentPorts       .GetHashCode() : 0);
 
 				return (hashCode);
 			}
@@ -176,8 +199,9 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				IEnumerableEx.ElementsEqual(RecentRemoteHosts, other.RecentRemoteHosts) &&
-				IEnumerableEx.ElementsEqual(RecentPorts,       other.RecentPorts)
+				IEnumerableEx.ElementsEqual(RecentRemoteHosts,  other.RecentRemoteHosts)  &&
+				IEnumerableEx.ElementsEqual(RecentLocalFilters, other.RecentLocalFilters) &&
+				IEnumerableEx.ElementsEqual(RecentPorts,        other.RecentPorts)
 			);
 		}
 

@@ -89,7 +89,7 @@ YAT 2.0 Epsilon Version 1.99.90 :: 201x-xx-xx
 
 New:
 - Simple find/search function for monitor contents added (feature requests #11 and #79).
-- Recent TCP/IP and UDP/IP ports and remote hosts are remembered (feature request #273).
+- Recent TCP/IP and UDP/IP ports, remote hosts and local filters are remembered (feat. req. #273).
 - Option to show a copy of the active monitor line in an additional text box, allowing to select
   and copy/paste characters and words (feature request #313).
 - Automatic action feature, YAT can automatically invoke an action when receiving a configurable
