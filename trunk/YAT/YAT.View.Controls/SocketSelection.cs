@@ -35,6 +35,7 @@ using System.Net;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Collections.Specialized;
 using MKY.IO.Serial.Socket;
 using MKY.Net;
 using MKY.Windows.Forms;
@@ -87,6 +88,9 @@ namespace YAT.View.Controls
 		private IPFilterEx localFilter              = LocalFilterDefault;
 		private int localTcpPort                    = LocalPortDefault;
 		private int localUdpPort                    = LocalPortDefault;
+
+		private RecentIPHostCollection recentRemoteHosts; // = null;
+		private RecentItemCollection<int> recentPorts; // = null;
 
 		#endregion
 
@@ -180,8 +184,8 @@ namespace YAT.View.Controls
 			set
 			{
 				if ((this.remoteHost != value) || // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-					(value.Address.Equals(IPAddress.Loopback))) // Always SetControls() to be able to
-				{	                                            //   deal with the different types of
+				    (value.Address.Equals(IPAddress.Loopback))) // Always SetControls() to be able to
+				{                                               //   deal with the different types of
 					this.remoteHost = value;                    //   localhost/loopback.
 					SetControls();
 					OnRemoteHostChanged(EventArgs.Empty);
@@ -293,6 +297,38 @@ namespace YAT.View.Controls
 					this.localUdpPort = value;
 					SetControls();
 					OnLocalUdpPortChanged(EventArgs.Empty);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual RecentIPHostCollection RecentRemoteHosts
+		{
+			get { return (this.recentRemoteHosts); }
+			set
+			{
+				if (this.recentRemoteHosts != value)
+				{
+					this.recentRemoteHosts = value;
+					SetControls();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual RecentItemCollection<int> RecentPorts
+		{
+			get { return (this.recentPorts); }
+			set
+			{
+				if (this.recentPorts != value)
+				{
+					this.recentPorts = value;
+					SetControls();
 				}
 			}
 		}

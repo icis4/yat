@@ -474,14 +474,16 @@ namespace YAT.View.Forms
 				serialPortSettings.AliveMonitor = this.settingsInEdit.Terminal.IO.SerialPort.AliveMonitor;
 				serialPortSettings.AutoReopen   = this.settingsInEdit.Terminal.IO.SerialPort.AutoReopen;
 
-				socketSelection.SocketType      = (Domain.IOTypeEx)ioType;
-				socketSelection.RemoteHost      = this.settingsInEdit.Terminal.IO.Socket.RemoteHost;
-				socketSelection.RemoteTcpPort   = this.settingsInEdit.Terminal.IO.Socket.RemoteTcpPort;
-				socketSelection.RemoteUdpPort   = this.settingsInEdit.Terminal.IO.Socket.RemoteUdpPort;
-				socketSelection.LocalInterface  = this.settingsInEdit.Terminal.IO.Socket.LocalInterface;
-				socketSelection.LocalFilter     = this.settingsInEdit.Terminal.IO.Socket.LocalFilter;
-				socketSelection.LocalTcpPort    = this.settingsInEdit.Terminal.IO.Socket.LocalTcpPort;
-				socketSelection.LocalUdpPort    = this.settingsInEdit.Terminal.IO.Socket.LocalUdpPort;
+				socketSelection.SocketType        = (Domain.IOTypeEx)ioType;
+				socketSelection.RemoteHost        = this.settingsInEdit.Terminal.IO.Socket.RemoteHost;
+				socketSelection.RemoteTcpPort     = this.settingsInEdit.Terminal.IO.Socket.RemoteTcpPort;
+				socketSelection.RemoteUdpPort     = this.settingsInEdit.Terminal.IO.Socket.RemoteUdpPort;
+				socketSelection.LocalInterface    = this.settingsInEdit.Terminal.IO.Socket.LocalInterface;
+				socketSelection.LocalFilter       = this.settingsInEdit.Terminal.IO.Socket.LocalFilter;
+				socketSelection.LocalTcpPort      = this.settingsInEdit.Terminal.IO.Socket.LocalTcpPort;
+				socketSelection.LocalUdpPort      = this.settingsInEdit.Terminal.IO.Socket.LocalUdpPort;
+				socketSelection.RecentRemoteHosts = ApplicationSettings.RoamingUserSettings.Socket.RecentRemoteHosts;
+				socketSelection.RecentPorts       = ApplicationSettings.RoamingUserSettings.Socket.RecentPorts;
 
 				socketSettings.SocketType             = (Domain.IOTypeEx)ioType;
 				socketSettings.TcpClientAutoReconnect = this.settingsInEdit.Terminal.IO.Socket.TcpClientAutoReconnect;

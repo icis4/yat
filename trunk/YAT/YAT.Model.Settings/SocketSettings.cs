@@ -28,6 +28,7 @@ using System.Xml.Serialization;
 
 using MKY.Collections;
 using MKY.Collections.Specialized;
+using MKY.Net;
 
 namespace YAT.Model.Settings
 {
@@ -38,9 +39,10 @@ namespace YAT.Model.Settings
 	/// </remarks>
 	public class SocketSettings : MKY.Settings.SettingsItem, IEquatable<SocketSettings>
 	{
-		private const int MaxRecentRemoteHosts = 12;
+		private const int MaxRecentItems = 12;
 
-		private RecentItemCollection<string> recentRemoteHosts;
+		private RecentIPHostCollection recentRemoteHosts;
+		private RecentItemCollection<int> recentPorts;
 
 		/// <summary></summary>
 		public SocketSettings()
@@ -63,7 +65,8 @@ namespace YAT.Model.Settings
 		public SocketSettings(SocketSettings rhs)
 			: base(rhs)
 		{
-			RecentRemoteHosts = new RecentItemCollection<string>(rhs.RecentRemoteHosts);
+			RecentRemoteHosts = new RecentIPHostCollection(rhs.RecentRemoteHosts);
+			RecentPorts       = new RecentItemCollection<int>(rhs.RecentPorts);
 
 			ClearChanged();
 		}
@@ -75,7 +78,11 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			RecentRemoteHosts = new RecentItemCollection<string>(MaxRecentRemoteHosts);
+			RecentRemoteHosts = new RecentIPHostCollection(MaxRecentItems);
+			// Standard hosts are automatically added by the collection.
+
+			RecentPorts = new RecentItemCollection<int>(MaxRecentItems);
+			RecentPorts.Add(new RecentItem<int>(MKY.IO.Serial.Socket.SocketSettings.DefaultPort));
 		}
 
 		#region Properties
@@ -87,7 +94,7 @@ namespace YAT.Model.Settings
 		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
 		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
 		[XmlElement("RecentRemoteHosts")]
-		public RecentItemCollection<string> RecentRemoteHosts
+		public RecentIPHostCollection RecentRemoteHosts
 		{
 			get { return (this.recentRemoteHosts); }
 			set
@@ -95,6 +102,23 @@ namespace YAT.Model.Settings
 				if (this.recentRemoteHosts != value)
 				{
 					this.recentRemoteHosts = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
+		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
+		[XmlElement("RecentPorts")]
+		public RecentItemCollection<int> RecentPorts
+		{
+			get { return (this.recentPorts); }
+			set
+			{
+				if (this.recentPorts != value)
+				{
+					this.recentPorts = value;
 					SetMyChanged();
 				}
 			}
@@ -121,6 +145,7 @@ namespace YAT.Model.Settings
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
 				hashCode = (hashCode * 397) ^ (RecentRemoteHosts != null ? RecentRemoteHosts.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (RecentPorts       != null ? RecentPorts      .GetHashCode() : 0);
 
 				return (hashCode);
 			}
@@ -151,7 +176,8 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				IEnumerableEx.ElementsEqual(RecentRemoteHosts, other.RecentRemoteHosts)
+				IEnumerableEx.ElementsEqual(RecentRemoteHosts, other.RecentRemoteHosts) &&
+				IEnumerableEx.ElementsEqual(RecentPorts,       other.RecentPorts)
 			);
 		}
 

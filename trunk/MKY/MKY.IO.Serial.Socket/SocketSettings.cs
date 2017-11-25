@@ -65,11 +65,14 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Why not, the .NET framework itself does it everywhere...")]
 		public static readonly IPFilterEx LocalFilterDefault = new IPFilterEx(IPFilter.Any);
 
-		/// <summary></summary>
-		public const int RemotePortDefault = 10000;
+		/// <remarks>Intentionally named "Default..." instead of "...Default" since its a general default, and not a default of a property.</remarks>
+		public const int DefaultPort = 10000;
 
 		/// <summary></summary>
-		public const int LocalPortDefault = 10000;
+		public const int RemotePortDefault = DefaultPort;
+
+		/// <summary></summary>
+		public const int LocalPortDefault = DefaultPort;
 
 		/// <remarks>
 		/// Must be implemented as property that creates a new object on each call to ensure that
