@@ -446,14 +446,16 @@ namespace YAT.View.Forms
 				serialPortSettings.AliveMonitor = this.newTerminalSettingsInEdit.SerialPortAliveMonitor;
 				serialPortSettings.AutoReopen   = this.newTerminalSettingsInEdit.SerialPortAutoReopen;
 
-				socketSelection.SocketType      = (Domain.IOTypeEx)ioType;
-				socketSelection.RemoteHost      = this.newTerminalSettingsInEdit.SocketRemoteHost;
-				socketSelection.RemoteTcpPort   = this.newTerminalSettingsInEdit.SocketRemoteTcpPort;
-				socketSelection.RemoteUdpPort   = this.newTerminalSettingsInEdit.SocketRemoteUdpPort;
-				socketSelection.LocalInterface  = this.newTerminalSettingsInEdit.SocketLocalInterface;
-				socketSelection.LocalFilter     = this.newTerminalSettingsInEdit.SocketLocalFilter;
-				socketSelection.LocalTcpPort    = this.newTerminalSettingsInEdit.SocketLocalTcpPort;
-				socketSelection.LocalUdpPort    = this.newTerminalSettingsInEdit.SocketLocalUdpPort;
+				socketSelection.SocketType        = (Domain.IOTypeEx)ioType;
+				socketSelection.RemoteHost        = this.newTerminalSettingsInEdit.SocketRemoteHost;
+				socketSelection.RemoteTcpPort     = this.newTerminalSettingsInEdit.SocketRemoteTcpPort;
+				socketSelection.RemoteUdpPort     = this.newTerminalSettingsInEdit.SocketRemoteUdpPort;
+				socketSelection.LocalInterface    = this.newTerminalSettingsInEdit.SocketLocalInterface;
+				socketSelection.LocalFilter       = this.newTerminalSettingsInEdit.SocketLocalFilter;
+				socketSelection.LocalTcpPort      = this.newTerminalSettingsInEdit.SocketLocalTcpPort;
+				socketSelection.LocalUdpPort      = this.newTerminalSettingsInEdit.SocketLocalUdpPort;
+				socketSelection.RecentRemoteHosts = ApplicationSettings.RoamingUserSettings.Socket.RecentRemoteHosts;
+				socketSelection.RecentPorts       = ApplicationSettings.RoamingUserSettings.Socket.RecentPorts;
 
 				socketSettings.SocketType             = (Domain.IOTypeEx)ioType;
 				socketSettings.TcpClientAutoReconnect = this.newTerminalSettingsInEdit.TcpClientAutoReconnect;
