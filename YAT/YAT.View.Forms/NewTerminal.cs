@@ -219,7 +219,8 @@ namespace YAT.View.Forms
 		{
 			var host = socketSelection.RemoteHost;
 			this.newTerminalSettingsInEdit.SocketRemoteHost = host;
-			ApplicationSettings.RoamingUserSettings.Socket.RecentRemoteHosts.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(host);
+			ApplicationSettings.RoamingUserSettings.Socket.RecentRemoteHosts.Add(host);
+			ApplicationSettings.RoamingUserSettings.Socket.SetChanged(); // Manual change required because underlying collection is modified.
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -227,7 +228,8 @@ namespace YAT.View.Forms
 		{
 			var port = socketSelection.RemoteTcpPort;
 			this.newTerminalSettingsInEdit.SocketRemoteTcpPort = port;
-			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(port);
+			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
+			ApplicationSettings.RoamingUserSettings.Socket.SetChanged(); // Manual change required because underlying collection is modified.
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -235,7 +237,8 @@ namespace YAT.View.Forms
 		{
 			var port = socketSelection.RemoteUdpPort;
 			this.newTerminalSettingsInEdit.SocketRemoteUdpPort = socketSelection.RemoteUdpPort;
-			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(port);
+			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
+			ApplicationSettings.RoamingUserSettings.Socket.SetChanged(); // Manual change required because underlying collection is modified.
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -248,7 +251,8 @@ namespace YAT.View.Forms
 		{
 			var filter = socketSelection.LocalFilter;
 			this.newTerminalSettingsInEdit.SocketLocalFilter = filter;
-			ApplicationSettings.RoamingUserSettings.Socket.RecentLocalFilters.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(filter);
+			ApplicationSettings.RoamingUserSettings.Socket.RecentLocalFilters.Add(filter);
+			ApplicationSettings.RoamingUserSettings.Socket.SetChanged(); // Manual change required because underlying collection is modified.
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -257,6 +261,7 @@ namespace YAT.View.Forms
 			var port = socketSelection.LocalTcpPort;
 			this.newTerminalSettingsInEdit.SocketLocalTcpPort = port;
 			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
+			ApplicationSettings.RoamingUserSettings.Socket.SetChanged(); // Manual change required because underlying collection is modified.
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -264,7 +269,8 @@ namespace YAT.View.Forms
 		{
 			var port = socketSelection.LocalUdpPort;
 			this.newTerminalSettingsInEdit.SocketLocalUdpPort = port;
-			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(port);
+			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
+			ApplicationSettings.RoamingUserSettings.Socket.SetChanged(); // Manual change required because underlying collection is modified.
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -287,8 +293,9 @@ namespace YAT.View.Forms
 
 		private void usbSerialHidDeviceSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
-			// Attention, same code exists in in the following location:
-			//  > TerminalSettings.usbSerialHidDeviceSelection_DeviceInfoChanged
+			// Attention:
+			// Same code exists in in the following location:
+			//  > TerminalSettings.usbSerialHidDeviceSelection_DeviceInfoChanged()
 			// Changes here must be applied there too.
 
 			MKY.IO.Usb.DeviceInfo deviceInfo = usbSerialHidDeviceSelection.DeviceInfo;
