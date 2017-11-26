@@ -54,14 +54,21 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
-		private const SocketType SocketTypeDefault                         = SocketTypeEx.Default;
+		private const SocketType SocketTypeDefault                         =  SocketTypeEx.Default;
 
-		private static readonly IPHostEx RemoteHostDefault                 = MKY.IO.Serial.Socket.SocketSettings.RemoteHostDefault;
-		private const int                RemotePortDefault                 = MKY.IO.Serial.Socket.SocketSettings.RemotePortDefault;
+		private static readonly IPHostEx RemoteHostDefault                 =  MKY.IO.Serial.Socket.SocketSettings.RemoteHostDefault;
+		private const int                RemotePortDefault                 =  MKY.IO.Serial.Socket.SocketSettings.RemotePortDefault;
 
-		private static readonly IPNetworkInterfaceEx LocalInterfaceDefault = MKY.IO.Serial.Socket.SocketSettings.LocalInterfaceDefault;
-		private static readonly IPFilterEx           LocalFilterDefault    = MKY.IO.Serial.Socket.SocketSettings.LocalFilterDefault;
-		private const int                            LocalPortDefault      = MKY.IO.Serial.Socket.SocketSettings.LocalPortDefault;
+		private static readonly IPNetworkInterfaceEx LocalInterfaceDefault =  MKY.IO.Serial.Socket.SocketSettings.LocalInterfaceDefault;
+		private static readonly IPFilterEx           LocalFilterDefault    =  MKY.IO.Serial.Socket.SocketSettings.LocalFilterDefault;
+		private const int                            LocalTcpPortDefault   =  MKY.IO.Serial.Socket.SocketSettings.LocalPortDefault;
+		private const int                            LocalUdpPortDefault   = (MKY.IO.Serial.Socket.SocketSettings.LocalPortDefault + 1);
+
+		// Note that separate local port defaults are needed to account for the fact, that this
+		// control implements an additional logic for UDP ports:
+		//  > LocalUdpPort = (port + 1);
+		//  > RemoteUdpPort = (port - 1);
+		// The first is the "normal" case, thus using this logic as default.
 
 		#endregion
 
@@ -86,8 +93,8 @@ namespace YAT.View.Controls
 
 		private IPNetworkInterfaceEx localInterface = LocalInterfaceDefault;
 		private IPFilterEx localFilter              = LocalFilterDefault;
-		private int localTcpPort                    = LocalPortDefault;
-		private int localUdpPort                    = LocalPortDefault;
+		private int localTcpPort                    = LocalTcpPortDefault;
+		private int localUdpPort                    = LocalUdpPortDefault;
 
 		private RecentIPHostCollection recentRemoteHosts; // = null;
 		private RecentIPFilterCollection recentLocalFilters; // = null;
@@ -269,7 +276,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Socket")]
 		[Description("The local TCP port.")]
-		[DefaultValue(LocalPortDefault)]
+		[DefaultValue(LocalTcpPortDefault)]
 		public virtual int LocalTcpPort
 		{
 			get { return (this.localTcpPort); }
@@ -287,7 +294,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Socket")]
 		[Description("The local UDP port.")]
-		[DefaultValue(LocalPortDefault)]
+		[DefaultValue(LocalUdpPortDefault)]
 		public virtual int LocalUdpPort
 		{
 			get { return (this.localUdpPort); }
@@ -504,17 +511,16 @@ namespace YAT.View.Controls
 			{
 				if ((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket))
 				{
-					RemoteTcpPort = port;
-
 					// Also set the local port:
 					//  > For client:     Same port, makes it easier setting the server settings for a same connection.
 					//  > For AutoSocket: Typically using same port for client and server.
 					LocalTcpPort = port;
+
+					// Set the remote port after setting the local port, thus on top in recents:
+					RemoteTcpPort = port;
 				}
 				else if ((this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpPairSocket))
 				{
-					RemoteUdpPort = port;
-
 					// Also set the local port:
 					//  > For client: Same port, makes it easier setting the server settings for a same connection.
 					//  > For socket:
@@ -529,15 +535,18 @@ namespace YAT.View.Controls
 						if (RemoteHost.IsLocalhost)
 						{
 							if (port < IPEndPoint.MaxPort)
-								LocalUdpPort = port + 1;
+								LocalUdpPort = (port + 1);
 							else
-								LocalUdpPort = IPEndPoint.MaxPort - 1;
+								LocalUdpPort = (IPEndPoint.MaxPort - 1);
 						}
 						else
 						{
 							LocalUdpPort = port;
 						}
 					}
+
+					// Set the remote port after setting the local port, thus on top in recents:
+					RemoteUdpPort = port;
 				}
 			}
 			else
@@ -588,17 +597,16 @@ namespace YAT.View.Controls
 			{
 				if ((this.socketType == SocketType.TcpServer) || (this.socketType == SocketType.TcpAutoSocket))
 				{
-					LocalTcpPort = port;
-
 					// Also set the remote port:
 					//  > For server: Same port, makes it easier setting the client settings for a same connection.
 					if (this.socketType == SocketType.TcpServer)
 						RemoteTcpPort = port;
+
+					// Set the local port after setting the remote port, thus on top in recents:
+					LocalTcpPort = port;
 				}
 				else if ((this.socketType == SocketType.UdpServer) || (this.socketType == SocketType.UdpPairSocket))
 				{
-					LocalUdpPort = port;
-
 					// Also set the remote port:
 					//  > For server:
 					//     > On local host, typically using adjecent ports for client and server.
@@ -608,15 +616,18 @@ namespace YAT.View.Controls
 						if (RemoteHost.IsLocalhost)
 						{
 							if (port > IPEndPoint.MinPort)
-								RemoteUdpPort = port - 1;
+								RemoteUdpPort = (port - 1);
 							else
-								RemoteUdpPort = IPEndPoint.MinPort + 1;
+								RemoteUdpPort = (IPEndPoint.MinPort + 1);
 						}
 						else
 						{
 							RemoteUdpPort = port;
 						}
 					}
+
+					// Set the local port after setting the remote port, thus on top in recents:
+					LocalUdpPort = port;
 				}
 			}
 			else
@@ -833,8 +844,8 @@ namespace YAT.View.Controls
 			{
 				// Remote host address:
 				if (!DesignMode && Enabled && (this.remoteHost != null) &&
-					((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket) ||
-					 (this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpPairSocket)))
+				    ((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket) ||
+				     (this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpPairSocket)))
 				{
 					comboBox_RemoteHost.Enabled = true;
 					SelectionHelper.Select(comboBox_RemoteHost, this.remoteHost, this.remoteHost);

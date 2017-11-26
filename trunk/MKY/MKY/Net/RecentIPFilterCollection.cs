@@ -55,11 +55,6 @@ namespace MKY.Net
 		{
 		}
 
-		#region Methods
-		//------------------------------------------------------------------------------------------
-		// Methods
-		//------------------------------------------------------------------------------------------
-
 		/// <summary>
 		/// Remove the most recent item if the collection already contains <see cref="T:RecentItemCollection`1.Capacity" /> items.
 		/// </summary>
@@ -88,8 +83,6 @@ namespace MKY.Net
 
 			return (false);
 		}
-
-		#endregion
 	}
 }
 
