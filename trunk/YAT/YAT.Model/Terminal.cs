@@ -2180,7 +2180,7 @@ namespace YAT.Model
 		/// <param name="recentFile">Recent file.</param>
 		private static void SetRecent(string recentFile)
 		{
-			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
+			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Add(recentFile);
 			ApplicationSettings.LocalUserSettings.RecentFiles.SetChanged(); // Manual change required because underlying collection is modified.
 			ApplicationSettings.SaveLocalUserSettings();
 		}
@@ -3423,7 +3423,7 @@ namespace YAT.Model
 					clone = new Command(this.partialCommandLine, false, c.DefaultRadix);
 
 				// Put clone into recent history:
-				this.settingsRoot.SendText.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(new RecentItem<Command>(clone));
+				this.settingsRoot.SendText.RecentCommands.Add(new RecentItem<Command>(clone));
 				this.settingsRoot.SendText.SetChanged(); // Manual change required because underlying collection is modified.
 
 				// Reset the partial command line:
@@ -3493,7 +3493,7 @@ namespace YAT.Model
 			var clone = new Command(c);
 
 			// Put clone into recent history:
-			this.settingsRoot.SendFile.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(new RecentItem<Command>(clone));
+			this.settingsRoot.SendFile.RecentCommands.Add(new RecentItem<Command>(clone));
 			this.settingsRoot.SendFile.SetChanged(); // Manual change required because underlying collection is modified.
 		}
 

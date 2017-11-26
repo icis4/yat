@@ -94,6 +94,7 @@ namespace YAT.Model.Test
 			ApplicationSettings.LocalUserSettings.RecentFiles = new Settings.RecentFileSettings();
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Add(TerminalFilePath);
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Add(WorkspaceFilePath);
+			ApplicationSettings.LocalUserSettings.RecentFiles.SetChanged(); // Manual change required because underlying collection is modified.
 		}
 
 		/// <summary></summary>
