@@ -1014,8 +1014,8 @@ namespace YAT.View.Forms
 				comboBox_RxRadix.SelectedItem      = (Domain.RadixEx)this.settingsInEdit.Terminal.Display.RxRadix;
 
 				bool isShowable = ((this.settingsInEdit.Terminal.Display.TxRadixIsShowable) ||
-								   (this.settingsInEdit.Terminal.Display.RxRadixIsShowable));
-				checkBox_ShowRadix.Enabled = isShowable; // Attention, same code in two locations in 'View.Forms.Terminal'.
+				                   (this.settingsInEdit.Terminal.Display.RxRadixIsShowable));
+				checkBox_ShowRadix.Enabled = isShowable; // Attention: Same code in two locations in 'View.Forms.Terminal'.
 				checkBox_ShowRadix.Checked = isShowable && this.settingsInEdit.Terminal.Display.ShowRadix;
 
 				// Display:

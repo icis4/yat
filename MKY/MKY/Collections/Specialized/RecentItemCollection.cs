@@ -62,16 +62,52 @@ namespace MKY.Collections.Specialized
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Adds the specified item.
+		/// Adds the item to the collection. The item will be inserted at the beginning of
+		/// the collection (least recent). If the collection already contains the specified number
+		/// of items (<see cref="T:RecentItemCollection`1.Capacity"/>), the most recent item will
+		/// be removed from the collection.
 		/// </summary>
-		/// <param name="item">The item.</param>
 		public virtual void Add(T item)
 		{
-			base.Add(new RecentItem<T>(item));
+			Add(new RecentItem<T>(item));
 		}
 
 		/// <summary>
-		/// Determines whether an element is in the collections.
+		/// Adds the item to the collection. The item will be inserted at the location according
+		/// to the time stamp of the item. If the collection already contains the specified number
+		/// of items (<see cref="T:RecentItemCollection`1.Capacity"/>), the most recent item will
+		/// be removed from the collection.
+		/// </summary>
+		public new void Add(RecentItem<T> item)
+		{
+			// Remove all equal items, as they are becoming less recent than the new item:
+			RemoveAll(li => (li == item));
+
+			// Ensure there is space for the item to be added:
+			while ((Count > 0) && (Count >= Capacity))
+			{
+				RemoveMostRecent();
+			}
+
+			// Insert the item at the according location:
+			Insert(0, item);
+			Sort(); // Typically not needed, but item could contain a more recent time stamp.
+		}
+
+		/// <summary>
+		/// Adds the items to the collection. The items will be inserted at the location according
+		/// to the time stamp of the item. If the collection already contains the specified number
+		/// of items (<see cref="T:RecentItemCollection`1.Capacity"/>), the most recent item will
+		/// be removed from the collection.
+		/// </summary>
+		public new void AddRange(IEnumerable<RecentItem<T>> collection)
+		{
+			foreach (var item in collection)
+				Add(item);
+		}
+
+		/// <summary>
+		/// Determines whether collection contains the specified item.
 		/// </summary>
 		public virtual bool Contains(T item)
 		{
@@ -82,31 +118,6 @@ namespace MKY.Collections.Specialized
 			}
 
 			return (false);
-		}
-
-		/// <summary>
-		/// Inserts the recent item at the beginning of the collection (least recent). The most
-		/// recent item will be removed in case the collection already contains <see cref="T:RecentItemCollection`1.Capacity"/> items.
-		/// </summary>
-		public virtual void ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(T item)
-		{
-			ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(new RecentItem<T>(item));
-		}
-
-		/// <summary>
-		/// Inserts the recent item at the beginning of the collection (least recent). The most
-		/// recent item will be removed in case the collection already contains <see cref="T:RecentItemCollection`1.Capacity"/> items.
-		/// </summary>
-		public virtual void ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(RecentItem<T> item)
-		{
-			// Remove all equal items, as they are becoming less recent than the new item:
-			RemoveAll(li => (li == item));
-
-			// Ensure there is space for the item to be inserted:
-			while ((Count > 0) && (Count >= Capacity))
-				RemoveMostRecent();
-
-			Insert(0, item);
 		}
 
 		/// <summary>
@@ -163,7 +174,7 @@ namespace MKY.Collections.Specialized
 				}
 
 				// Remove the duplicates from the collection:
-				foreach (RecentItem<T> ri in duplicates)
+				foreach (var ri in duplicates)
 				{
 					Remove(ri);
 				}
@@ -199,7 +210,9 @@ namespace MKY.Collections.Specialized
 			var items = new List<T>(Count); // Preset the initial capacity to improve memory management.
 
 			foreach (var ri in this)
+			{
 				items.Add(ri.Item);
+			}
 
 			return (items.ToArray());
 		}
@@ -218,7 +231,7 @@ namespace MKY.Collections.Specialized
 			{
 				if (!Contains(item))
 				{
-					ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(new RecentItem<T>(item));
+					Add(new RecentItem<T>(item));
 					hasChanged = true;
 				}
 			}

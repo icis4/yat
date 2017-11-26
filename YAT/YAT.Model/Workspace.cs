@@ -1267,7 +1267,7 @@ namespace YAT.Model
 		/// <param name="recentFile">Recent file.</param>
 		private static void SetRecent(string recentFile)
 		{
-			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
+			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Add(recentFile);
 			ApplicationSettings.LocalUserSettings.RecentFiles.SetChanged(); // Manual change required because underlying collection is modified.
 			ApplicationSettings.SaveLocalUserSettings();
 		}
