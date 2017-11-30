@@ -3018,70 +3018,6 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public virtual void RequestAutoResponseVisible(bool visible)
-		{
-			this.settingsRoot.AutoResponse.Visible = visible;
-		}
-
-		/// <summary></summary>
-		public virtual void RequestAutoResponseTrigger(AutoTriggerEx trigger)
-		{
-			this.settingsRoot.AutoResponse.Trigger = trigger;
-		}
-
-		/// <summary></summary>
-		public virtual void RequestAutoResponseResponse(AutoResponseEx response)
-		{
-			this.settingsRoot.AutoResponse.Response = response;
-		}
-
-		/// <summary></summary>
-		public virtual void RequestAutoResponseResetCount()
-		{
-			if (this.terminal != null)
-				this.terminal.ResetAutoResponseCount();
-		}
-
-		/// <summary></summary>
-		public virtual void RequestAutoResponseDeactivate()
-		{
-			if (this.terminal != null)
-				this.terminal.DeactivateAutoResponse();
-		}
-
-		/// <summary></summary>
-		public virtual void RequestAutoActionVisible(bool visible)
-		{
-			this.settingsRoot.AutoAction.Visible = visible;
-		}
-
-		/// <summary></summary>
-		public virtual void RequestAutoActionTrigger(AutoTriggerEx trigger)
-		{
-			this.settingsRoot.AutoAction.Trigger = trigger;
-		}
-
-		/// <summary></summary>
-		public virtual void RequestAutoActionAction(AutoActionEx response)
-		{
-			this.settingsRoot.AutoAction.Action = response;
-		}
-
-		/// <summary></summary>
-		public virtual void RequestAutoActionResetCount()
-		{
-			if (this.terminal != null)
-				this.terminal.ResetAutoActionCount();
-		}
-
-		/// <summary></summary>
-		public virtual void RequestAutoActionDeactivate()
-		{
-			if (this.terminal != null)
-				this.terminal.DeactivateAutoAction();
-		}
-
-		/// <summary></summary>
 		public virtual void RequestClear()
 		{
 			if (this.terminal != null)
@@ -3235,6 +3171,70 @@ namespace YAT.View.Forms
 		{
 			if (this.terminal != null)
 				this.terminal.OpenLogDirectory();
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoActionVisible(bool visible)
+		{
+			this.settingsRoot.AutoAction.Visible = visible;
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoActionTrigger(AutoTriggerEx trigger)
+		{
+			this.settingsRoot.AutoAction.Trigger = trigger;
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoActionAction(AutoActionEx response)
+		{
+			this.settingsRoot.AutoAction.Action = response;
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoActionResetCount()
+		{
+			if (this.terminal != null)
+				this.terminal.ResetAutoActionCount();
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoActionDeactivate()
+		{
+			if (this.terminal != null)
+				this.terminal.DeactivateAutoAction();
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoResponseVisible(bool visible)
+		{
+			this.settingsRoot.AutoResponse.Visible = visible;
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoResponseTrigger(AutoTriggerEx trigger)
+		{
+			this.settingsRoot.AutoResponse.Trigger = trigger;
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoResponseResponse(AutoResponseEx response)
+		{
+			this.settingsRoot.AutoResponse.Response = response;
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoResponseResetCount()
+		{
+			if (this.terminal != null)
+				this.terminal.ResetAutoResponseCount();
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoResponseDeactivate()
+		{
+			if (this.terminal != null)
+				this.terminal.DeactivateAutoResponse();
 		}
 
 		/// <summary></summary>
