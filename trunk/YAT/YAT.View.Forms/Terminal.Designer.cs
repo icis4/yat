@@ -2023,7 +2023,7 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate
 			// 
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_comments_delete_16x16;
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_email_delete_16x16;
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Size = new System.Drawing.Size(171, 22);
@@ -2039,6 +2039,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Receive.Name = "toolStripMenuItem_TerminalMenu_Receive";
 			this.toolStripMenuItem_TerminalMenu_Receive.Size = new System.Drawing.Size(59, 20);
 			this.toolStripMenuItem_TerminalMenu_Receive.Text = "&Receive";
+			this.toolStripMenuItem_TerminalMenu_Receive.DropDownOpening += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Receive_DropDownOpening);
 			// 
 			// toolStripMenuItem_TerminalMenu_Receive_AutoAction
 			// 

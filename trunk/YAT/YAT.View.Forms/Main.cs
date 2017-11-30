@@ -1240,190 +1240,6 @@ namespace YAT.View.Forms
 			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Unicode);
 		}
 
-		private void toolStripButton_MainTool_Terminal_AutoResponse_ShowHide_Click(object sender, EventArgs e)
-		{
-			// Icon shall be visible if any terminal uses this option.
-			//
-			// Rationale:
-			// Icons shall not move/shift when switching among terminals.
-			//
-			// As a consequence, changing the option must be applied to all terminals:
-			RequestAutoResponseVisibleInAllTerminals(!AutoResponseVisibleInAnyTerminal); // Toggle.
-		}
-
-		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			var trigger = (toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
-			if (trigger != null)
-				((Terminal)ActiveMdiChild).RequestAutoResponseTrigger(trigger);
-		}
-
-		/// <remarks>
-		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event
-		/// way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
-		/// </remarks>
-		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger_TextChanged(object sender, EventArgs e)
-		{
-			// Attention, 'isSettingControls' must only be checked further below!
-
-			if (toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedIndex == ControlEx.InvalidIndex)
-			{
-				string triggerText = toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Text;
-				int invalidTextStart;
-				if (Utilities.ValidationHelper.ValidateText(this, "automatic response trigger", triggerText, out invalidTextStart))
-				{
-					if (!this.isSettingControls)
-					{
-						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
-						try
-						{
-							((Terminal)ActiveMdiChild).RequestAutoResponseTrigger(triggerText);
-						}
-						finally
-						{
-							this.mainToolValidationWorkaround_UpdateIsSuspended = false;
-						}
-					}
-				}
-				else
-				{
-					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Text = triggerText.Remove(invalidTextStart);
-				}
-			}
-		}
-
-		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Response_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			var response = (toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedItem as AutoResponseEx);
-			if (response != null)
-				((Terminal)ActiveMdiChild).RequestAutoResponseResponse(response);
-		}
-
-		/// <remarks>
-		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event
-		/// way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
-		/// </remarks>
-		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Response_TextChanged(object sender, EventArgs e)
-		{
-			// Attention, 'isSettingControls' must only be checked further below!
-
-			if (toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedIndex == ControlEx.InvalidIndex)
-			{
-				string responseText = toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Text;
-				int invalidTextStart;
-				if (Utilities.ValidationHelper.ValidateText(this, "automatic response", responseText, out invalidTextStart))
-				{
-					if (!this.isSettingControls)
-					{
-						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
-						try
-						{
-							((Terminal)ActiveMdiChild).RequestAutoResponseResponse(responseText);
-						}
-						finally
-						{
-							this.mainToolValidationWorkaround_UpdateIsSuspended = false;
-						}
-					}
-				}
-				else
-				{
-					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Text = responseText.Remove(invalidTextStart);
-				}
-			}
-		}
-
-		private void toolStripLabel_MainTool_Terminal_AutoResponse_Count_Click(object sender, EventArgs e)
-		{
-			((Terminal)ActiveMdiChild).RequestAutoResponseResetCount();
-		}
-
-		private void toolStripButton_MainTool_Terminal_AutoResponse_Deactivate_Click(object sender, EventArgs e)
-		{
-			((Terminal)ActiveMdiChild).RequestAutoResponseDeactivate();
-		}
-
-		private void toolStripButton_MainTool_Terminal_AutoAction_ShowHide_Click(object sender, EventArgs e)
-		{
-			// Icon shall be visible if any terminal uses this option.
-			//
-			// Rationale:
-			// Icons shall not move/shift when switching among terminals.
-			//
-			// As a consequence, changing the option must be applied to all terminals:
-			RequestAutoActionVisibleInAllTerminals(!AutoActionVisibleInAnyTerminal); // Toggle.
-		}
-
-		private void toolStripComboBox_MainTool_Terminal_AutoAction_Trigger_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			var trigger = (toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.SelectedItem as AutoTriggerEx);
-			if (trigger != null)
-				((Terminal)ActiveMdiChild).RequestAutoActionTrigger(trigger);
-		}
-
-		/// <remarks>
-		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event
-		/// way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
-		/// </remarks>
-		private void toolStripComboBox_MainTool_Terminal_AutoAction_Trigger_TextChanged(object sender, EventArgs e)
-		{
-			// Attention, 'isSettingControls' must only be checked further below!
-
-			if (toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.SelectedIndex == ControlEx.InvalidIndex)
-			{
-				string triggerText = toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Text;
-				int invalidTextStart;
-				if (Utilities.ValidationHelper.ValidateText(this, "automatic action trigger", triggerText, out invalidTextStart))
-				{
-					if (!this.isSettingControls)
-					{
-						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
-						try
-						{
-							((Terminal)ActiveMdiChild).RequestAutoActionTrigger(triggerText);
-						}
-						finally
-						{
-							this.mainToolValidationWorkaround_UpdateIsSuspended = false;
-						}
-					}
-				}
-				else
-				{
-					toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Text = triggerText.Remove(invalidTextStart);
-				}
-			}
-		}
-
-		private void toolStripComboBox_MainTool_Terminal_AutoAction_Action_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			var response = (toolStripComboBox_MainTool_Terminal_AutoAction_Action.SelectedItem as AutoActionEx);
-			if (response != null)
-				((Terminal)ActiveMdiChild).RequestAutoActionAction(response);
-		}
-
-		private void toolStripLabel_MainTool_Terminal_AutoAction_Count_Click(object sender, EventArgs e)
-		{
-			((Terminal)ActiveMdiChild).RequestAutoActionResetCount();
-		}
-
-		private void toolStripButton_MainTool_Terminal_AutoAction_Deactivate_Click(object sender, EventArgs e)
-		{
-			((Terminal)ActiveMdiChild).RequestAutoActionDeactivate();
-		}
-
 		private void toolStripButton_MainTool_Terminal_Clear_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestClear();
@@ -1803,6 +1619,190 @@ namespace YAT.View.Forms
 		private void toolStripButton_MainTool_Terminal_Log_OpenDirectory_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestOpenLogDirectory();
+		}
+
+		private void toolStripButton_MainTool_Terminal_AutoAction_ShowHide_Click(object sender, EventArgs e)
+		{
+			// Icon shall be visible if any terminal uses this option.
+			//
+			// Rationale:
+			// Icons shall not move/shift when switching among terminals.
+			//
+			// As a consequence, changing the option must be applied to all terminals:
+			RequestAutoActionVisibleInAllTerminals(!AutoActionVisibleInAnyTerminal); // Toggle.
+		}
+
+		private void toolStripComboBox_MainTool_Terminal_AutoAction_Trigger_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			var trigger = (toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.SelectedItem as AutoTriggerEx);
+			if (trigger != null)
+				((Terminal)ActiveMdiChild).RequestAutoActionTrigger(trigger);
+		}
+
+		/// <remarks>
+		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event
+		/// way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
+		/// </remarks>
+		private void toolStripComboBox_MainTool_Terminal_AutoAction_Trigger_TextChanged(object sender, EventArgs e)
+		{
+			// Attention, 'isSettingControls' must only be checked further below!
+
+			if (toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.SelectedIndex == ControlEx.InvalidIndex)
+			{
+				string triggerText = toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Text;
+				int invalidTextStart;
+				if (Utilities.ValidationHelper.ValidateText(this, "automatic action trigger", triggerText, out invalidTextStart))
+				{
+					if (!this.isSettingControls)
+					{
+						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
+						try
+						{
+							((Terminal)ActiveMdiChild).RequestAutoActionTrigger(triggerText);
+						}
+						finally
+						{
+							this.mainToolValidationWorkaround_UpdateIsSuspended = false;
+						}
+					}
+				}
+				else
+				{
+					toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Text = triggerText.Remove(invalidTextStart);
+				}
+			}
+		}
+
+		private void toolStripComboBox_MainTool_Terminal_AutoAction_Action_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			var response = (toolStripComboBox_MainTool_Terminal_AutoAction_Action.SelectedItem as AutoActionEx);
+			if (response != null)
+				((Terminal)ActiveMdiChild).RequestAutoActionAction(response);
+		}
+
+		private void toolStripLabel_MainTool_Terminal_AutoAction_Count_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestAutoActionResetCount();
+		}
+
+		private void toolStripButton_MainTool_Terminal_AutoAction_Deactivate_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestAutoActionDeactivate();
+		}
+
+		private void toolStripButton_MainTool_Terminal_AutoResponse_ShowHide_Click(object sender, EventArgs e)
+		{
+			// Icon shall be visible if any terminal uses this option.
+			//
+			// Rationale:
+			// Icons shall not move/shift when switching among terminals.
+			//
+			// As a consequence, changing the option must be applied to all terminals:
+			RequestAutoResponseVisibleInAllTerminals(!AutoResponseVisibleInAnyTerminal); // Toggle.
+		}
+
+		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			var trigger = (toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
+			if (trigger != null)
+				((Terminal)ActiveMdiChild).RequestAutoResponseTrigger(trigger);
+		}
+
+		/// <remarks>
+		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event
+		/// way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
+		/// </remarks>
+		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger_TextChanged(object sender, EventArgs e)
+		{
+			// Attention, 'isSettingControls' must only be checked further below!
+
+			if (toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedIndex == ControlEx.InvalidIndex)
+			{
+				string triggerText = toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Text;
+				int invalidTextStart;
+				if (Utilities.ValidationHelper.ValidateText(this, "automatic response trigger", triggerText, out invalidTextStart))
+				{
+					if (!this.isSettingControls)
+					{
+						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
+						try
+						{
+							((Terminal)ActiveMdiChild).RequestAutoResponseTrigger(triggerText);
+						}
+						finally
+						{
+							this.mainToolValidationWorkaround_UpdateIsSuspended = false;
+						}
+					}
+				}
+				else
+				{
+					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Text = triggerText.Remove(invalidTextStart);
+				}
+			}
+		}
+
+		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Response_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			var response = (toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedItem as AutoResponseEx);
+			if (response != null)
+				((Terminal)ActiveMdiChild).RequestAutoResponseResponse(response);
+		}
+
+		/// <remarks>
+		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event
+		/// way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
+		/// </remarks>
+		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Response_TextChanged(object sender, EventArgs e)
+		{
+			// Attention, 'isSettingControls' must only be checked further below!
+
+			if (toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedIndex == ControlEx.InvalidIndex)
+			{
+				string responseText = toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Text;
+				int invalidTextStart;
+				if (Utilities.ValidationHelper.ValidateText(this, "automatic response", responseText, out invalidTextStart))
+				{
+					if (!this.isSettingControls)
+					{
+						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
+						try
+						{
+							((Terminal)ActiveMdiChild).RequestAutoResponseResponse(responseText);
+						}
+						finally
+						{
+							this.mainToolValidationWorkaround_UpdateIsSuspended = false;
+						}
+					}
+				}
+				else
+				{
+					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Text = responseText.Remove(invalidTextStart);
+				}
+			}
+		}
+
+		private void toolStripLabel_MainTool_Terminal_AutoResponse_Count_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestAutoResponseResetCount();
+		}
+
+		private void toolStripButton_MainTool_Terminal_AutoResponse_Deactivate_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestAutoResponseDeactivate();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Format_Click(object sender, EventArgs e)
