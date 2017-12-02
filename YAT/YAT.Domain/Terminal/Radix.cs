@@ -35,33 +35,29 @@ namespace YAT.Domain
 {
 	#region Enum Radix
 
+	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+	// warnings for each undocumented member below. Documenting each member makes little sense
+	// since they pretty much tell their purpose and documentation tags between the members
+	// makes the code less readable.
+	#pragma warning disable 1591
+
 	/// <summary></summary>
 	public enum Radix
 	{
-		/// <summary></summary>
 		None,
 
-		/// <summary></summary>
 		String,
-
-		/// <summary></summary>
 		Char,
 
-		/// <summary></summary>
 		Bin,
-
-		/// <summary></summary>
 		Oct,
-
-		/// <summary></summary>
 		Dec,
-
-		/// <summary></summary>
 		Hex,
 
-		/// <summary></summary>
 		Unicode
 	}
+
+	#pragma warning restore 1591
 
 	#endregion
 

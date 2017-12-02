@@ -41,7 +41,7 @@ namespace YAT.Model.Types
 	/// <summary></summary>
 	public enum AutoAction
 	{
-		None = 0,
+		None,
 
 		Highlight,
 		Beep,
