@@ -4647,6 +4647,7 @@ namespace YAT.Model
 
 			switch ((AutoAction)this.settingsRoot.AutoAction.Action)
 			{
+				case AutoAction.Highlight:         /* no additional action */                     break;
 				case AutoAction.Beep:              SystemSounds.Beep.Play();                      break;
 				case AutoAction.ShowMessageBox:    RequestAutoActionMessage(triggerSequence, ts); break;
 				case AutoAction.ClearRepositories: ClearRepositories();                           break;

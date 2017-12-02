@@ -43,6 +43,7 @@ namespace YAT.Model.Types
 	{
 		None = 0,
 
+		Highlight,
 		Beep,
 		ShowMessageBox,
 
@@ -76,6 +77,9 @@ namespace YAT.Model.Types
 
 		private const string             None_string = "[None]";
 		private static readonly string[] None_stringAlternatives = new string[] { "[N]" };
+
+		private const string             Highlight_string = "[Highlight (only)]";
+		private static readonly string[] Highlight_stringAlternatives = new string[] { "[H]" };
 
 		private const string             Beep_string = "[Beep]";
 		private static readonly string[] Beep_stringAlternatives = new string[] { "[B]" };
@@ -135,6 +139,7 @@ namespace YAT.Model.Types
 			switch ((AutoAction)UnderlyingEnum)
 			{
 				case AutoAction.None:              return (None_string);
+				case AutoAction.Highlight:         return (Highlight_string);
 				case AutoAction.Beep:              return (Beep_string);
 				case AutoAction.ShowMessageBox:    return (ShowMessageBox_string);
 				case AutoAction.ClearRepositories: return (ClearRepositories_string);
@@ -214,9 +219,10 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static AutoActionEx[] GetItems()
 		{
-			var a = new List<AutoActionEx>(9); // Preset the initial capacity to improve memory management, 16 is a large enough value.
+			var a = new List<AutoActionEx>(10); // Preset the initial capacity to improve memory management, 16 is a large enough value.
 
 			a.Add(new AutoActionEx(AutoAction.None));
+			a.Add(new AutoActionEx(AutoAction.Highlight));
 			a.Add(new AutoActionEx(AutoAction.Beep));
 			a.Add(new AutoActionEx(AutoAction.ShowMessageBox));
 			a.Add(new AutoActionEx(AutoAction.ClearRepositories));
@@ -283,6 +289,12 @@ namespace YAT.Model.Types
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, None_stringAlternatives))
 			{
 				result = AutoAction.None;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, Highlight_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, Highlight_stringAlternatives))
+			{
+				result = AutoAction.Highlight;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase   (s, Beep_string) ||
