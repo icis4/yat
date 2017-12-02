@@ -86,6 +86,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_RadixContextMenu_Rx_Dec = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_RadixContextMenu_Rx_Unicode = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_Radix = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_ShowRadix = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers = new System.Windows.Forms.ToolStripMenuItem();
@@ -114,7 +115,6 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_Find = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_FindNext = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_FindPrevious = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_View_Radix = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Predefined = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_PredefinedContextMenu_Command_1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_Command_2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -410,7 +410,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_MonitorContextMenu_FindNext,
             this.toolStripMenuItem_MonitorContextMenu_FindPrevious});
 			this.contextMenuStrip_Monitor.Name = "contextMenuStrip_Monitor";
-			this.contextMenuStrip_Monitor.Size = new System.Drawing.Size(221, 674);
+			this.contextMenuStrip_Monitor.Size = new System.Drawing.Size(221, 696);
 			this.contextMenuStrip_Monitor.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Monitor_Opening);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Panels
@@ -535,7 +535,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_RadixContextMenu_TxRadix,
             this.toolStripMenuItem_RadixContextMenu_RxRadix});
 			this.contextMenuStrip_Radix.Name = "contextMenuStrip_Radix";
-			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_TerminalMenu_View_Radix;
+			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_MonitorContextMenu_Radix;
 			this.contextMenuStrip_Radix.Size = new System.Drawing.Size(151, 248);
 			this.contextMenuStrip_Radix.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Radix_Opening);
 			// 
@@ -759,6 +759,13 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_RadixContextMenu_Rx_Unicode.Text = "&Unicode";
 			this.toolStripMenuItem_RadixContextMenu_Rx_Unicode.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Rx_Unicode_Click);
 			// 
+			// toolStripMenuItem_TerminalMenu_View_Radix
+			// 
+			this.toolStripMenuItem_TerminalMenu_View_Radix.DropDown = this.contextMenuStrip_Radix;
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Name = "toolStripMenuItem_TerminalMenu_View_Radix";
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(245, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Text = "&Radix";
+			// 
 			// toolStripMenuItem_MonitorContextMenu_Separator_4
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Separator_4.Name = "toolStripMenuItem_MonitorContextMenu_Separator_4";
@@ -954,13 +961,6 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_FindPrevious.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_MonitorContextMenu_FindPrevious.Text = "Find Previous";
 			this.toolStripMenuItem_MonitorContextMenu_FindPrevious.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_FindPrevious_Click);
-			// 
-			// toolStripMenuItem_TerminalMenu_View_Radix
-			// 
-			this.toolStripMenuItem_TerminalMenu_View_Radix.DropDown = this.contextMenuStrip_Radix;
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Name = "toolStripMenuItem_TerminalMenu_View_Radix";
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(245, 22);
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Text = "&Radix";
 			// 
 			// contextMenuStrip_Predefined
 			// 
@@ -1998,8 +1998,8 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Name = "toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger";
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Size = new System.Drawing.Size(180, 23);
-			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ToolTipText = "Enable or disable an automatic response trigger,\r\neither refer to one of the comm" +
-    "ands,\r\nor fill-in any command text";
+			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ToolTipText = "Configure Automatic Response Trigger,\r\neither refer to one of the commands,\r\nor f" +
+    "ill-in any command text";
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_SelectedIndexChanged);
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_TextChanged);
 			// 
@@ -2016,8 +2016,8 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Name = "toolStripComboBox_TerminalMenu_Send_AutoResponse_Response";
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Size = new System.Drawing.Size(180, 23);
-			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.ToolTipText = "Enable or disable an automatic response,\r\neither refer to one of the commands,\r\no" +
-    "r fill-in any command text";
+			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.ToolTipText = "Enable / Disable Automatic Response,\r\neither refer to one of the commands,\r\nor fi" +
+    "ll-in any command text";
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_SelectedIndexChanged);
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.TextChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_TextChanged);
 			// 
@@ -2049,7 +2049,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate});
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_comments_16x16;
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction.Name = "toolStripMenuItem_TerminalMenu_Receive_AutoAction";
-			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction.Size = new System.Drawing.Size(135, 22);
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction.Text = "&AutoAction";
 			// 
 			// toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger
@@ -2057,7 +2057,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger});
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.Name = "toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger";
-			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.Size = new System.Drawing.Size(129, 22);
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.Text = "&Trigger";
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.ToolTipText = "The trigger that initiates an action";
 			// 
@@ -2065,8 +2065,8 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Name = "toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger";
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Size = new System.Drawing.Size(180, 23);
-			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ToolTipText = "Enable or disable an automatic response trigger,\r\neither refer to one of the comm" +
-    "ands,\r\nor fill-in any command text";
+			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ToolTipText = "Configure Automatic Action Trigger,\r\neither refer to one of the commands,\r\nor fil" +
+    "l-in any command text";
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_SelectedIndexChanged);
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_TextChanged);
 			// 
@@ -2075,7 +2075,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action});
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action.Name = "toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action";
-			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action.Size = new System.Drawing.Size(129, 22);
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action.Text = "&Action";
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action.ToolTipText = "The action that is automatically executed";
 			// 
@@ -2083,15 +2083,15 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Name = "toolStripComboBox_TerminalMenu_Receive_AutoAction_Action";
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Size = new System.Drawing.Size(180, 23);
-			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.ToolTipText = "Enable or disable an automatic response,\r\neither refer to one of the commands,\r\no" +
-    "r fill-in any command text";
+			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.ToolTipText = "Enable / Disable Automatic Action\r\n\r\nNote that trigger will be highlighted for ev" +
+    "ery action";
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action_SelectedIndexChanged);
 			// 
 			// toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate
 			// 
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_comments_delete_16x16;
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Name = "toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate";
-			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Size = new System.Drawing.Size(129, 22);
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Text = "&Deactivate";
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate_Click);
 			// 
@@ -2956,8 +2956,8 @@ namespace YAT.View.Forms
 			this.monitor_Tx.Size = new System.Drawing.Size(203, 417);
 			this.monitor_Tx.TabIndex = 0;
 			this.monitor_Tx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_Tx.Enter += new System.EventHandler(this.monitor_Tx_Enter);
 			this.monitor_Tx.TextFocusedChanged += new System.EventHandler(this.monitor_TextFocusedChanged);
+			this.monitor_Tx.Enter += new System.EventHandler(this.monitor_Tx_Enter);
 			// 
 			// splitContainer_RxMonitor
 			// 
@@ -3002,8 +3002,8 @@ namespace YAT.View.Forms
 			this.monitor_Bidir.Size = new System.Drawing.Size(205, 417);
 			this.monitor_Bidir.TabIndex = 0;
 			this.monitor_Bidir.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_Bidir.Enter += new System.EventHandler(this.monitor_Bidir_Enter);
 			this.monitor_Bidir.TextFocusedChanged += new System.EventHandler(this.monitor_TextFocusedChanged);
+			this.monitor_Bidir.Enter += new System.EventHandler(this.monitor_Bidir_Enter);
 			// 
 			// panel_Monitor_Rx
 			// 
@@ -3026,8 +3026,8 @@ namespace YAT.View.Forms
 			this.monitor_Rx.Size = new System.Drawing.Size(207, 417);
 			this.monitor_Rx.TabIndex = 0;
 			this.monitor_Rx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_Rx.Enter += new System.EventHandler(this.monitor_Rx_Enter);
 			this.monitor_Rx.TextFocusedChanged += new System.EventHandler(this.monitor_TextFocusedChanged);
+			this.monitor_Rx.Enter += new System.EventHandler(this.monitor_Rx_Enter);
 			// 
 			// panel_Predefined
 			// 

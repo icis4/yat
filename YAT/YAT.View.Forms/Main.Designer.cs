@@ -892,8 +892,8 @@ namespace YAT.View.Forms
             this.toolStripButton_MainTool_Terminal_Log_OpenDirectory,
             this.toolStripMenuItem_MainTool_Separator_7,
             this.toolStripButton_MainTool_Terminal_AutoAction_ShowHide,
-            this.toolStripComboBox_MainTool_Terminal_AutoAction_Action,
             this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger,
+            this.toolStripComboBox_MainTool_Terminal_AutoAction_Action,
             this.toolStripLabel_MainTool_Terminal_AutoAction_Count,
             this.toolStripButton_MainTool_Terminal_AutoAction_Deactivate,
             this.toolStripMenuItem_MainTool_Separator_8,
@@ -1250,7 +1250,8 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.Name = "toolStripComboBox_MainTool_Terminal_AutoAction_Action";
 			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.Size = new System.Drawing.Size(160, 25);
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.ToolTipText = "Enable / Disable Automatic Action";
+			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.ToolTipText = "Enable / Disable Automatic Action\r\n\r\nNote that trigger will be highlighted for ev" +
+    "ery action";
 			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.Visible = false;
 			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoAction_Action_SelectedIndexChanged);
 			// 
