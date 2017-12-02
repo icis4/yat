@@ -2519,7 +2519,7 @@ namespace YAT.Domain
 						}
 					}
 				}
-				else
+				else // Do not 'ReplaceControlChars':
 				{
 					switch (d) // Use normal data elements:
 					{
@@ -2530,7 +2530,7 @@ namespace YAT.Domain
 					}
 				}
 			}
-			else // Normal data = neither 'isError' nor 'isByteToHide' nor 'isError':
+			else // Neither 'isError' nor 'isByteToHide' nor 'isError' = normal data:
 			{
 				switch (d)
 				{
