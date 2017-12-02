@@ -2641,10 +2641,18 @@ namespace YAT.View.Forms
 		{
 			get
 			{
-				foreach (var anyTerminal in MdiChildren)
+				foreach (var f in MdiChildren)
 				{
-					if (((Terminal)anyTerminal).UnderlyingTerminal.SettingsRoot.AutoResponse.Visible)
-						return (true);
+					var t = (f as Terminal);
+					if (t != null)
+					{
+						var model = t.UnderlyingTerminal;
+						if (model != null)
+						{
+							if (model.SettingsRoot.AutoResponse.Visible)
+								return (true);
+						}
+					}
 				}
 
 				return (false);
@@ -2653,9 +2661,11 @@ namespace YAT.View.Forms
 
 		private void RequestAutoResponseVisibleInAllTerminals(bool visible)
 		{
-			foreach (var anyTerminal in MdiChildren)
+			foreach (var f in MdiChildren)
 			{
-				((Terminal)anyTerminal).RequestAutoResponseVisible(visible);
+				var t = (f as Terminal);
+				if (t != null)
+					t.RequestAutoResponseVisible(visible);
 			}
 		}
 
@@ -2663,10 +2673,18 @@ namespace YAT.View.Forms
 		{
 			get
 			{
-				foreach (var anyTerminal in MdiChildren)
+				foreach (var f in MdiChildren)
 				{
-					if (((Terminal)anyTerminal).UnderlyingTerminal.SettingsRoot.AutoAction.Visible)
-						return (true);
+					var t = (f as Terminal);
+					if (t != null)
+					{
+						var model = t.UnderlyingTerminal;
+						if (model != null)
+						{
+							if (model.SettingsRoot.AutoAction.Visible)
+								return (true);
+						}
+					}
 				}
 
 				return (false);
@@ -2675,9 +2693,11 @@ namespace YAT.View.Forms
 
 		private void RequestAutoActionVisibleInAllTerminals(bool visible)
 		{
-			foreach (var anyTerminal in MdiChildren)
+			foreach (var f in MdiChildren)
 			{
-				((Terminal)anyTerminal).RequestAutoActionVisible(visible);
+				var t = (f as Terminal);
+				if (t != null)
+					t.RequestAutoActionVisible(visible);
 			}
 		}
 
