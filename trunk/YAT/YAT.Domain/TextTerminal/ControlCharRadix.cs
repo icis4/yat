@@ -35,10 +35,15 @@ namespace YAT.Domain
 {
 	#region Enum ControlCharRadix
 
+	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+	// warnings for each undocumented member below. Documenting each member makes little sense
+	// since they pretty much tell their purpose and documentation tags between the members
+	// makes the code less readable.
+	#pragma warning disable 1591
+
 	/// <summary></summary>
 	public enum ControlCharRadix
 	{
-		/// <summary></summary>
 		None = Radix.None,
 
 		/// <remarks>
@@ -48,19 +53,11 @@ namespace YAT.Domain
 		[Obsolete("String makes no sense for single byte/character replacement.")]
 		String = Radix.String,
 
-		/// <summary></summary>
 		Char = Radix.Char,
 
-		/// <summary></summary>
 		Bin = Radix.Bin,
-
-		/// <summary></summary>
 		Oct = Radix.Oct,
-
-		/// <summary></summary>
 		Dec = Radix.Dec,
-
-		/// <summary></summary>
 		Hex = Radix.Hex,
 
 		/// <remarks>
@@ -70,9 +67,10 @@ namespace YAT.Domain
 		[Obsolete("Unicode makes no sense for control character replacement.")]
 		Unicode = Radix.Unicode,
 
-		/// <summary></summary>
-		AsciiMnemonic,
+		AsciiMnemonic
 	}
+
+	#pragma warning restore 1591
 
 	#endregion
 

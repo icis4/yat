@@ -22,30 +22,28 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
 // YAT.Domain\Terminal for better separation of the implementation files.
 namespace YAT.Domain
 {
+	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+	// warnings for each undocumented member below. Documenting each member makes little sense
+	// since they pretty much tell their purpose and documentation tags between the members
+	// makes the code less readable.
+	#pragma warning disable 1591
+
 	/// <summary></summary>
 	public enum RepositoryType
 	{
-		/// <summary></summary>
 		None,
 
-		/// <summary></summary>
 		Tx,
-
-		/// <summary></summary>
 		Bidir,
-
-		/// <summary></summary>
 		Rx
 	}
+
+	#pragma warning restore 1591
 }
 
 //==================================================================================================

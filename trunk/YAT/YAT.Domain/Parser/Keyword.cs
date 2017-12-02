@@ -42,6 +42,7 @@ namespace YAT.Domain.Parser
 	public enum Keyword
 	{
 		None,
+
 		Clear,
 		Delay,
 		LineDelay,
