@@ -2148,15 +2148,15 @@ namespace YAT.View.Forms
 		{
 			if (contextMenuStrip_Predefined.SourceControl == groupBox_Predefined)
 			{
-				int id = predefined.GetCommandIdFromScreenPoint(new Point(contextMenuStrip_Predefined.Left, contextMenuStrip_Predefined.Top));
-				Command c = predefined.GetCommandFromId(id);
+				var id = predefined.GetCommandIdFromScreenPoint(new Point(contextMenuStrip_Predefined.Left, contextMenuStrip_Predefined.Top));
+				var c = predefined.GetCommandFromId(id);
 
 				contextMenuStrip_Predefined_SelectedCommand = id;
 				contextMenuStrip_Predefined_CopyToSendText = c;
 
 				toolStripMenuItem_PredefinedContextMenu_Separator_3.Visible = true;
 
-				ToolStripMenuItem mi = toolStripMenuItem_PredefinedContextMenu_CopyToSendText;
+				var mi = toolStripMenuItem_PredefinedContextMenu_CopyToSendText;
 				mi.Visible = true;
 				if (c != null)
 				{
@@ -2247,7 +2247,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			Command c = contextMenuStrip_Predefined_CopyToSendText;
+			var c = contextMenuStrip_Predefined_CopyToSendText;
 			if (c != null)
 			{
 				if (c.IsText)

@@ -80,13 +80,14 @@ namespace YAT.Domain
 	public class RawChunkEventArgs : EventArgs<RawChunk>
 	{
 		/// <summary></summary>
-		public bool Highlight { get; set; }
+		public bool Highlight { get; set; } // = false;
 
-		/// <summary></summary>
-		public RawChunkEventArgs(RawChunk value, bool highlight = false)
+		/// <remarks>
+		/// <see cref="Highlight"/> is intended to be set by the event sink.
+		/// </remarks>
+		public RawChunkEventArgs(RawChunk value)
 			: base(value)
 		{
-			Highlight = highlight;
 		}
 	}
 
