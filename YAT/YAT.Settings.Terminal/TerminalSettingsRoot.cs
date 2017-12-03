@@ -457,7 +457,7 @@ namespace YAT.Settings.Terminal
 						int commandId = trigger.ToPredefinedCommandId();
 						if (commandId != Model.Types.AutoTriggerEx.InvalidPredefinedCommandId)
 						{
-							Model.Types.Command c = PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
+							var c = PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
 							if ((c != null) && (c.IsValid))
 								a.Add(trigger);
 						}
@@ -467,7 +467,7 @@ namespace YAT.Settings.Terminal
 
 					case Model.Types.AutoTrigger.Explicit:
 					{
-						Model.Types.Command c = new Model.Types.Command(AutoResponse.Trigger); // No explicit default radix available (yet).
+						var c = new Model.Types.Command(AutoResponse.Trigger); // No explicit default radix available (yet).
 						if (c.IsValid)
 							a.Add(trigger);
 
@@ -501,7 +501,7 @@ namespace YAT.Settings.Terminal
 				{
 					case Model.Types.AutoResponse.SendText:
 					{
-						Model.Types.Command c = SendText.Command;
+						var c = SendText.Command;
 						if ((c != null) && (c.IsValid))
 							l.Add(response);
 
@@ -510,7 +510,7 @@ namespace YAT.Settings.Terminal
 
 					case Model.Types.AutoResponse.SendFile:
 					{
-						Model.Types.Command c = SendFile.Command;
+						var c = SendFile.Command;
 						if ((c != null) && (c.IsValid))
 							l.Add(response);
 
@@ -534,7 +534,7 @@ namespace YAT.Settings.Terminal
 						int commandId = response.ToPredefinedCommandId();
 						if (commandId != Model.Types.AutoResponseEx.InvalidPredefinedCommandId)
 						{
-							Model.Types.Command c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
+							var c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
 							if ((c != null) && (c.IsValid))
 								l.Add(response);
 						}
@@ -544,7 +544,7 @@ namespace YAT.Settings.Terminal
 
 					case Model.Types.AutoResponse.Explicit:
 					{
-						Model.Types.Command c = new Model.Types.Command(AutoResponse.Response); // No explicit default radix available (yet).
+						var c = new Model.Types.Command(AutoResponse.Response); // No explicit default radix available (yet).
 						if (c.IsValid)
 							l.Add(response);
 
@@ -628,7 +628,7 @@ namespace YAT.Settings.Terminal
 					int commandId = trigger.ToPredefinedCommandId();
 					if (commandId != Model.Types.AutoTriggerEx.InvalidPredefinedCommandId)
 					{
-						Model.Types.Command c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
+						var c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
 						if ((c != null) && (c.IsValid))
 							response = c;
 					}
@@ -638,7 +638,7 @@ namespace YAT.Settings.Terminal
 
 				case Model.Types.AutoTrigger.Explicit:
 				{
-					Model.Types.Command c = new Model.Types.Command(trigger); // No explicit default radix available (yet).
+					var c = new Model.Types.Command(trigger); // No explicit default radix available (yet).
 					if (c.IsValid)
 						response = c;
 

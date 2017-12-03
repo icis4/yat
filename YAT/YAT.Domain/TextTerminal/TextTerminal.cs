@@ -342,7 +342,7 @@ namespace YAT.Domain
 			{
 				foreach (Regex r in TextTerminalSettings.TextExclusion.Regexes)
 				{
-					Match m = r.Match(textToParse);
+					var m = r.Match(textToParse);
 					if (m.Success)
 						textToParse = textToParse.Remove(m.Index, m.Length);
 

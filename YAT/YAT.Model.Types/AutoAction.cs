@@ -78,7 +78,7 @@ namespace YAT.Model.Types
 		private const string             None_string = "[None]";
 		private static readonly string[] None_stringAlternatives = new string[] { "[N]" };
 
-		private const string             Highlight_string = "[Highlight (only)]";
+		private const string             Highlight_string = "[Highlight Only]";
 		private static readonly string[] Highlight_stringAlternatives = new string[] { "[H]" };
 
 		private const string             Beep_string = "[Beep]";
