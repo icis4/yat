@@ -2588,8 +2588,15 @@ namespace YAT.Model
 			{
 				foreach (var dl in e.Lines)
 				{
-					SendAutoResponse(dl.ElementsToOrigin());
+					SendAutoResponse(WholeLineToOrigin(dl)); // Whole trigger line including EOL.
 				}
+
+				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
+				// would result in all received lines highligted.
+				//
+				// Also note that implementation wouldn't be that simple, since "e.Highlight = true"
+				// doesn't help in this 'LinesReceived' event, as the monitors already get updated
+				// in the 'ElementsReceived' event above.
 			}
 
 			// AutoAction:
@@ -2601,9 +2608,39 @@ namespace YAT.Model
 					if (!dl.TryGetTimeStamp(out ts))
 						ts = DateTime.Now;
 
-					InvokeAutoAction(dl.ElementsToOrigin(), ts);
+					InvokeAutoAction(WholeLineToOrigin(dl), ts); // Whole trigger line including EOL.
+				}
+
+				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
+				// would result in all received lines highligted.
+				//
+				// Also note that implementation wouldn't be that simple, since "e.Highlight = true"
+				// doesn't help in this 'LinesReceived' event, as the monitors already get updated
+				// in the 'ElementsReceived' event above.
+			}
+		}
+
+		private byte[] WholeLineToOrigin(Domain.DisplayLine dl)
+		{
+			var l = new List<byte>(dl.ElementsToOrigin());
+
+			if (this.settingsRoot.TerminalType == Domain.TerminalType.Text)
+			{
+				if (this.settingsRoot.TextTerminal.ShowEol) // Remove Rx EOL:
+				{
+					byte[] rxEolSequence;
+					if (this.terminal.TryParse(this.settingsRoot.TextTerminal.RxEol, out rxEolSequence))
+						l.RemoveRange((l.Count - rxEolSequence.Length), rxEolSequence.Length);
+				}
+
+				{                                           // Append Tx EOL:
+					byte[] txEolSequence;
+					if (this.terminal.TryParse(this.settingsRoot.TextTerminal.TxEol, out txEolSequence))
+						l.AddRange(txEolSequence);
 				}
 			}
+
+			return (l.ToArray());
 		}
 
 		private void terminal_RepositoryCleared(object sender, EventArgs<Domain.RepositoryType> e)
@@ -3518,7 +3555,7 @@ namespace YAT.Model
 				return (false);
 
 			// Process command:
-			Command c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
+			var c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
 			if (c.IsValidText)
 			{
 				SendText(c);
@@ -3558,7 +3595,7 @@ namespace YAT.Model
 				return (false);
 
 			// Process command:
-			Command c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
+			var c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
 			if (c.IsValidText)
 			{
 				this.settingsRoot.SendText.Command = new Command(c);
