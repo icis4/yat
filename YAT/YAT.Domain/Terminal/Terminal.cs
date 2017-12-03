@@ -2447,6 +2447,54 @@ namespace YAT.Domain
 			throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' radix is missing here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
+		/// <summary>
+		/// Converts the given value to a sendable text.
+		/// </summary>
+		/// <remarks>
+		/// If the value is a printable character, the string contains that character.
+		/// If the value is a control character, the ASCII mnemonic or Unicode representation is returned.
+		/// </remarks>
+		/// <remarks>
+		/// This method is a copy of the code in MKY.CharEx.ConvertToPrintableString().
+		/// Intentionally copied since the angle bracket and Unicode representations
+		/// are explicitly required by YAT.
+		/// </remarks>
+		public static string ConvertToSendableText(char value)
+		{
+			if (!char.IsControl(value))
+				return (value.ToString());
+
+			// ASCII control characters:
+			byte asciiCode;
+			if ((CharEx.TryConvertToByte(value, out asciiCode)) && (Ascii.IsControl(asciiCode)))
+				return ("<" + Ascii.ConvertToMnemonic(asciiCode) + ">");
+
+			// Unicode control characters U+0080..U+009F:
+			return (@"\U+" + ((ushort)(value)).ToString("X4", CultureInfo.InvariantCulture));
+		}
+
+		/// <summary>
+		/// Converts the given value to a sendable text.
+		/// </summary>
+		/// <remarks>
+		/// Printable characters are kept, control characters are converted into the ASCII mnemonic
+		/// or Unicode representation as required.
+		/// </remarks>
+		/// <remarks>
+		/// This method is a copy of the code in MKY.CharEx.ConvertToPrintableString().
+		/// Intentionally copied since the angle bracket and Unicode representations
+		/// are explicitly required by YAT.
+		/// </remarks>
+		public static string ConvertToSendableText(string value)
+		{
+			var sb = new StringBuilder();
+
+			foreach (char c in value)
+				sb.Append(ConvertToSendableText(c));
+
+			return (sb.ToString());
+		}
+
 		#endregion
 
 		#region Methods > Element Processing

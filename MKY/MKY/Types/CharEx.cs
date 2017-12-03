@@ -24,6 +24,9 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+using MKY.Text;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
 // MKY.Types for consistency with the System namespace.
@@ -60,6 +63,27 @@ namespace MKY
 				ascii = 0x00;
 				return (false);
 			}
+		}
+
+		/// <summary>
+		/// Converts the given character to a printable string.
+		/// </summary>
+		/// <remarks>
+		/// If the value is a printable character, the string contains that character.
+		/// If the value is a control character, the ASCII mnemonic or Unicode representation is returned.
+		/// </remarks>
+		public static string ConvertToPrintableString(char value)
+		{
+			if (!char.IsControl(value))
+				return (value.ToString());
+
+			// ASCII control characters:
+			byte asciiCode;
+			if ((TryConvertToByte(value, out asciiCode)) && (Ascii.IsControl(asciiCode)))
+				return ("<" + Ascii.ConvertToMnemonic(asciiCode) + ">");
+
+			// Unicode control characters U+0080..U+009F:
+			return (@"\U+" + ((ushort)(value)).ToString("X4", CultureInfo.InvariantCulture));
 		}
 	}
 }
