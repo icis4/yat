@@ -31,6 +31,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Text;
 
 using MKY;
 
@@ -102,6 +103,28 @@ namespace YAT.Domain
 			Data = data;
 		}
 
+		/// <summary></summary>
+		protected string DataAsPrintableString
+		{
+			get
+			{
+				var sb = new StringBuilder();
+
+				bool isFirst = true;
+				foreach (byte b in Data)
+				{
+					if (isFirst)
+						isFirst = false;
+					else
+						sb.Append(" ");
+
+					sb.Append(b.ToString("X2", CultureInfo.InvariantCulture) + "h");
+				}
+
+				return (sb.ToString());
+			}
+		}
+
 		#region Object Members
 		//==========================================================================================
 		// Object Members
@@ -110,32 +133,13 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public override string ToString(string indent)
 		{
-			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
-			{
-				foreach (byte b in Data)
-					sw.Write(Convert.ToChar(b));
-
-				return (indent + sw.ToString());
-			}
+			return (indent + DataAsPrintableString);
 		}
 
 		/// <summary></summary>
 		public override string ToDetailedString(string indent)
 		{
-			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
-			{
-				bool begin = true;
-				foreach (byte b in Data)
-				{
-					if (!begin)
-						sw.Write(" ");
-
-					begin = false;
-					sw.Write(b.ToString("X2", CultureInfo.InvariantCulture) + "h");
-				}
-
-				return (indent + "> Data: " + sw + Environment.NewLine);
-			}
+			return (indent + "> Data: " + DataAsPrintableString + Environment.NewLine);
 		}
 
 		#endregion
@@ -165,6 +169,12 @@ namespace YAT.Domain
 			IsLine       = isLine;
 		}
 
+		/// <summary></summary>
+		protected string DataAsPrintableString
+		{
+			get { return (StringEx.ConvertToPrintableString(Data)); }
+		}
+
 		#region Object Members
 		//==========================================================================================
 		// Object Members
@@ -173,15 +183,15 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public override string ToString(string indent)
 		{
-			return (indent + Data);
+			return (indent + DataAsPrintableString);
 		}
 
 		/// <summary></summary>
 		public override string ToDetailedString(string indent)
 		{
-			return (indent + "> Data         : " + Data         + Environment.NewLine +
-					indent + "> DefaultRadix : " + DefaultRadix + Environment.NewLine +
-					indent + "> IsLine       : " + IsLine       + Environment.NewLine);
+			return (indent + "> Data         : " + DataAsPrintableString + Environment.NewLine +
+			        indent + "> DefaultRadix : " + DefaultRadix          + Environment.NewLine +
+			        indent + "> IsLine       : " + IsLine                + Environment.NewLine);
 		}
 
 		#endregion
@@ -221,7 +231,7 @@ namespace YAT.Domain
 		public virtual string ToDetailedString(string indent)
 		{
 			return (indent + "> FilePath     : " + FilePath     + Environment.NewLine +
-					indent + "> DefaultRadix : " + DefaultRadix + Environment.NewLine);
+			        indent + "> DefaultRadix : " + DefaultRadix + Environment.NewLine);
 		}
 
 		#endregion

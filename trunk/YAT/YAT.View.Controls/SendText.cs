@@ -682,19 +682,9 @@ namespace YAT.View.Controls
 
 			if (this.sendImmediately)
 			{
-				byte asciiCode;
-				string text;
-
-				if (!char.IsControl(e.KeyChar))
-					text = e.KeyChar.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for keys!
-				else if ((CharEx.TryConvertToByte(e.KeyChar, out asciiCode)) && (Ascii.IsControl(asciiCode)))
-					text = "<" + Ascii.ConvertToMnemonic(asciiCode) + ">";
-				else // Applies to Unicode control characters U+0080..U+009F
-					text = @"\U+" + ((ushort)(e.KeyChar)).ToString("X4", CultureInfo.InvariantCulture);
-
 				this.isValidated = true; // Implicitly in any case.
 
-				ConfirmPartialText(text);
+				ConfirmPartialText(Domain.Terminal.ConvertToSendableText(e.KeyChar));
 				OnSendCommandRequest(new SendTextOptionEventArgs(SendTextOption.Normal));
 			}
 

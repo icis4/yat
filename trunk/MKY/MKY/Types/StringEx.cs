@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 
 #endregion
 
@@ -872,6 +873,30 @@ namespace MKY
 			}
 
 			return (0);
+		}
+
+		#endregion
+
+		#region ToString
+		//------------------------------------------------------------------------------------------
+		// ToString
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Converts the given value to a printable string.
+		/// </summary>
+		/// <remarks>
+		/// Printable characters are kept, control characters are converted into the ASCII mnemonic
+		/// or Unicode representation as required.
+		/// </remarks>
+		public static string ConvertToPrintableString(string value)
+		{
+			var sb = new StringBuilder();
+
+			foreach (char c in value)
+				sb.Append(CharEx.ConvertToPrintableString(c));
+
+			return (sb.ToString());
 		}
 
 		#endregion
