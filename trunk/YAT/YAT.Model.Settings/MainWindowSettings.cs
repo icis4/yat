@@ -42,6 +42,7 @@ namespace YAT.Model.Settings
 		private Size size;
 
 		private bool showTerminalInfo;
+		private bool showTime;
 		private bool showChrono;
 
 		/// <summary></summary>
@@ -71,6 +72,7 @@ namespace YAT.Model.Settings
 			Size          = rhs.Size;
 
 			ShowTerminalInfo = rhs.ShowTerminalInfo;
+			ShowTime         = rhs.ShowTime;
 			ShowChrono       = rhs.ShowChrono;
 
 			ClearChanged();
@@ -89,6 +91,7 @@ namespace YAT.Model.Settings
 			Size          = new Size(912, 684); // Equals designed 'Size' of the 'View.Main' form.
 
 			ShowTerminalInfo = false;
+			ShowTime         = false;
 			ShowChrono       = true;
 		}
 
@@ -175,6 +178,21 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("ShowTime")]
+		public bool ShowTime
+		{
+			get { return (this.showTime); }
+			set
+			{
+				if (this.showTime != value)
+				{
+					this.showTime = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("ShowChrono")]
 		public bool ShowChrono
 		{
@@ -215,6 +233,7 @@ namespace YAT.Model.Settings
 				hashCode = (hashCode * 397) ^ Size         .GetHashCode();
 
 				hashCode = (hashCode * 397) ^ ShowTerminalInfo.GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowTime        .GetHashCode();
 				hashCode = (hashCode * 397) ^ ShowChrono      .GetHashCode();
 
 				return (hashCode);
@@ -252,6 +271,7 @@ namespace YAT.Model.Settings
 				Size         .Equals(other.Size)          &&
 
 				ShowTerminalInfo.Equals(other.ShowTerminalInfo) &&
+				ShowTime        .Equals(other.ShowTime)         &&
 				ShowChrono      .Equals(other.ShowChrono)
 			);
 		}

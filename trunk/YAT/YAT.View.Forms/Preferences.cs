@@ -137,6 +137,14 @@ namespace YAT.View.Forms
 			this.settingsInEdit.MainWindow.ShowTerminalInfo = checkBox_ShowTerminalInfo.Checked;
 		}
 
+		private void checkBox_ShowTime_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.MainWindow.ShowTime = checkBox_ShowTime.Checked;
+		}
+
 		private void checkBox_ShowChrono_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -271,6 +279,7 @@ namespace YAT.View.Forms
 			try
 			{
 				checkBox_ShowTerminalInfo.Checked  = this.settingsInEdit.MainWindow.ShowTerminalInfo;
+				checkBox_ShowTime.Checked          = this.settingsInEdit.MainWindow.ShowTime;
 				checkBox_ShowChrono.Checked        = this.settingsInEdit.MainWindow.ShowChrono;
 
 				checkBox_AutoOpenWorkspace.Checked = this.settingsInEdit.General.AutoOpenWorkspace;

@@ -1972,6 +1972,7 @@ namespace YAT.View.Forms
 		private void contextMenuStrip_Status_Opening(object sender, CancelEventArgs e)
 		{
 			toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Checked = ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo;
+			toolStripMenuItem_StatusContextMenu_ShowTime.Checked         = ApplicationSettings.LocalUserSettings.MainWindow.ShowTime;
 			toolStripMenuItem_StatusContextMenu_ShowChrono.Checked       = ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono;
 		}
 
@@ -1981,6 +1982,15 @@ namespace YAT.View.Forms
 				return;
 
 			ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo = !ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo;
+			ApplicationSettings.SaveLocalUserSettings();
+		}
+
+		private void toolStripMenuItem_StatusContextMenu_ShowTime_Click(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			ApplicationSettings.LocalUserSettings.MainWindow.ShowTime = !ApplicationSettings.LocalUserSettings.MainWindow.ShowTime;
 			ApplicationSettings.SaveLocalUserSettings();
 		}
 
@@ -2000,9 +2010,25 @@ namespace YAT.View.Forms
 
 		#endregion
 
-		#region Controls Event Handlers > Status > Chrono
+		#region Controls Event Handlers > Time
 		//------------------------------------------------------------------------------------------
-		// Controls Event Handlers > Status > Chrono
+		// Controls Event Handlers > Time
+		//------------------------------------------------------------------------------------------
+
+		/// <remarks>
+		/// Currently fixed/limited to local time "T" but could be extended to be configurable
+		/// (e.g. UTC) if requested.
+		/// </remarks>
+		private void timer_Time_Tick(object sender, EventArgs e)
+		{
+			toolStripStatusLabel_MainStatus_Time.Text = DateTime.Now.ToString("T", DateTimeFormatInfo.CurrentInfo);
+		}
+
+		#endregion
+
+		#region Controls Event Handlers > Chrono
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Chrono
 		//------------------------------------------------------------------------------------------
 
 		private void toolStripStatusLabel_MainStatus_Chrono_Click(object sender, EventArgs e)
@@ -2015,13 +2041,6 @@ namespace YAT.View.Forms
 			chronometer_Main.Stop();
 			chronometer_Main.Reset();
 		}
-
-		#endregion
-
-		#region Controls Event Handlers > Chrono
-		//------------------------------------------------------------------------------------------
-		// Controls Event Handlers > Chrono
-		//------------------------------------------------------------------------------------------
 
 		private void chronometer_Main_TimeSpanChanged(object sender, TimeSpanEventArgs e)
 		{
@@ -2305,7 +2324,10 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
+				timer_Time.Enabled = ApplicationSettings.LocalUserSettings.MainWindow.ShowTime;
+
 				toolStripStatusLabel_MainStatus_TerminalInfo.Visible = ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo;
+				toolStripStatusLabel_MainStatus_Time.Visible         = ApplicationSettings.LocalUserSettings.MainWindow.ShowTime;
 				toolStripStatusLabel_MainStatus_Chrono.Visible       = ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono;
 			}
 			finally
