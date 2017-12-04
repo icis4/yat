@@ -94,6 +94,7 @@ New:
   and copy/paste characters and words (feature request #313).
 - Automatic action feature, YAT can automatically invoke an action when receiving a configurable
   trigger sequence (feature requests #11, #314, #320, #325).
+- Local time can optionally be shown in the main status bar (feature request #328).
 
 Important changes:
 - Cursor behavior of 'Send Text' improved; the cursor no longer jumps to the end of the input box

@@ -108,11 +108,13 @@ namespace YAT.View.Forms
 			this.statusStrip_Main = new MKY.Windows.Forms.StatusStripEx();
 			this.contextMenuStrip_Status = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_StatusContextMenu_ShowTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_StatusContextMenu_ShowChrono = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_StatusContextMenu_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_StatusContextMenu_Preferences = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripStatusLabel_MainStatus_Status = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel_MainStatus_TerminalInfo = new System.Windows.Forms.ToolStripStatusLabel();
+			this.toolStripStatusLabel_MainStatus_Time = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel_MainStatus_Chrono = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStrip_Main = new MKY.Windows.Forms.ToolStripEx();
 			this.toolStripButton_MainTool_File_New = new System.Windows.Forms.ToolStripButton();
@@ -153,8 +155,8 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItem_MainTool_Separator_7 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_MainTool_Terminal_AutoAction_ShowHide = new System.Windows.Forms.ToolStripButton();
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action = new MKY.Windows.Forms.ToolStripComboBoxEx();
 			this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger = new MKY.Windows.Forms.ToolStripComboBoxEx();
+			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action = new MKY.Windows.Forms.ToolStripComboBoxEx();
 			this.toolStripLabel_MainTool_Terminal_AutoAction_Count = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripButton_MainTool_Terminal_AutoAction_Deactivate = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItem_MainTool_Separator_8 = new System.Windows.Forms.ToolStripSeparator();
@@ -170,6 +172,7 @@ namespace YAT.View.Forms
 			this.toolStripPanel_Left = new System.Windows.Forms.ToolStripPanel();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.chronometer_Main = new MKY.Windows.Forms.Chronometer(this.components);
+			this.timer_Time = new System.Windows.Forms.Timer(this.components);
 			this.contextMenuStrip_Main.SuspendLayout();
 			this.contextMenuStrip_FileRecent.SuspendLayout();
 			this.menuStrip_Main.SuspendLayout();
@@ -773,6 +776,7 @@ namespace YAT.View.Forms
 			this.statusStrip_Main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel_MainStatus_Status,
             this.toolStripStatusLabel_MainStatus_TerminalInfo,
+            this.toolStripStatusLabel_MainStatus_Time,
             this.toolStripStatusLabel_MainStatus_Chrono});
 			this.statusStrip_Main.Location = new System.Drawing.Point(0, 621);
 			this.statusStrip_Main.Name = "statusStrip_Main";
@@ -784,11 +788,12 @@ namespace YAT.View.Forms
 			// 
 			this.contextMenuStrip_Status.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo,
+            this.toolStripMenuItem_StatusContextMenu_ShowTime,
             this.toolStripMenuItem_StatusContextMenu_ShowChrono,
             this.toolStripMenuItem_StatusContextMenu_Separator_1,
             this.toolStripMenuItem_StatusContextMenu_Preferences});
 			this.contextMenuStrip_Status.Name = "contextMenuStrip_Status";
-			this.contextMenuStrip_Status.Size = new System.Drawing.Size(193, 76);
+			this.contextMenuStrip_Status.Size = new System.Drawing.Size(193, 98);
 			this.contextMenuStrip_Status.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Status_Opening);
 			// 
 			// toolStripMenuItem_StatusContextMenu_ShowTerminalInfo
@@ -798,13 +803,22 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Text = "Show Terminal Indices";
 			this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Click += new System.EventHandler(this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo_Click);
 			// 
+			// toolStripMenuItem_StatusContextMenu_ShowTime
+			// 
+			this.toolStripMenuItem_StatusContextMenu_ShowTime.Checked = true;
+			this.toolStripMenuItem_StatusContextMenu_ShowTime.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.toolStripMenuItem_StatusContextMenu_ShowTime.Name = "toolStripMenuItem_StatusContextMenu_ShowTime";
+			this.toolStripMenuItem_StatusContextMenu_ShowTime.Size = new System.Drawing.Size(192, 22);
+			this.toolStripMenuItem_StatusContextMenu_ShowTime.Text = "Show Local Time";
+			this.toolStripMenuItem_StatusContextMenu_ShowTime.Click += new System.EventHandler(this.toolStripMenuItem_StatusContextMenu_ShowTime_Click);
+			// 
 			// toolStripMenuItem_StatusContextMenu_ShowChrono
 			// 
 			this.toolStripMenuItem_StatusContextMenu_ShowChrono.Checked = true;
 			this.toolStripMenuItem_StatusContextMenu_ShowChrono.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItem_StatusContextMenu_ShowChrono.Name = "toolStripMenuItem_StatusContextMenu_ShowChrono";
 			this.toolStripMenuItem_StatusContextMenu_ShowChrono.Size = new System.Drawing.Size(192, 22);
-			this.toolStripMenuItem_StatusContextMenu_ShowChrono.Text = "Show Stopwatch";
+			this.toolStripMenuItem_StatusContextMenu_ShowChrono.Text = "Show Chronometer";
 			this.toolStripMenuItem_StatusContextMenu_ShowChrono.Click += new System.EventHandler(this.toolStripMenuItem_StatusContextMenu_ShowChrono_Click);
 			// 
 			// toolStripMenuItem_StatusContextMenu_Separator_1
@@ -823,7 +837,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripStatusLabel_MainStatus_Status.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripStatusLabel_MainStatus_Status.Name = "toolStripStatusLabel_MainStatus_Status";
-			this.toolStripStatusLabel_MainStatus_Status.Size = new System.Drawing.Size(828, 19);
+			this.toolStripStatusLabel_MainStatus_Status.Size = new System.Drawing.Size(775, 19);
 			this.toolStripStatusLabel_MainStatus_Status.Spring = true;
 			this.toolStripStatusLabel_MainStatus_Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_MainStatus_Status.ToolTipText = "Program Status";
@@ -836,6 +850,17 @@ namespace YAT.View.Forms
 			this.toolStripStatusLabel_MainStatus_TerminalInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_MainStatus_TerminalInfo.ToolTipText = "Active Terminal (Auto Name / Sequential ID / Dynamic Index / Fixed Index)";
 			// 
+			// toolStripStatusLabel_MainStatus_Time
+			// 
+			this.toolStripStatusLabel_MainStatus_Time.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.toolStripStatusLabel_MainStatus_Time.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+			this.toolStripStatusLabel_MainStatus_Time.Name = "toolStripStatusLabel_MainStatus_Time";
+			this.toolStripStatusLabel_MainStatus_Time.Size = new System.Drawing.Size(53, 19);
+			this.toolStripStatusLabel_MainStatus_Time.Text = "23:59:59";
+			this.toolStripStatusLabel_MainStatus_Time.ToolTipText = "Local Time";
+			// 
 			// toolStripStatusLabel_MainStatus_Chrono
 			// 
 			this.toolStripStatusLabel_MainStatus_Chrono.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
@@ -846,7 +871,7 @@ namespace YAT.View.Forms
 			this.toolStripStatusLabel_MainStatus_Chrono.Name = "toolStripStatusLabel_MainStatus_Chrono";
 			this.toolStripStatusLabel_MainStatus_Chrono.Size = new System.Drawing.Size(53, 19);
 			this.toolStripStatusLabel_MainStatus_Chrono.Text = "0:00.000";
-			this.toolStripStatusLabel_MainStatus_Chrono.ToolTipText = "Chronometer (m:ss.ths), click to Start/Stop, double-click to Reset";
+			this.toolStripStatusLabel_MainStatus_Chrono.ToolTipText = "Chronometer (m:ss.ths),\r\nclick to Start/Stop,\r\ndouble-click to Reset";
 			this.toolStripStatusLabel_MainStatus_Chrono.Click += new System.EventHandler(this.toolStripStatusLabel_MainStatus_Chrono_Click);
 			this.toolStripStatusLabel_MainStatus_Chrono.DoubleClick += new System.EventHandler(this.toolStripStatusLabel_MainStatus_Chrono_DoubleClick);
 			// 
@@ -1246,15 +1271,6 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_AutoAction_ShowHide.Text = "Show Automatic Action";
 			this.toolStripButton_MainTool_Terminal_AutoAction_ShowHide.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_AutoAction_ShowHide_Click);
 			// 
-			// toolStripComboBox_MainTool_Terminal_AutoAction_Action
-			// 
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.Name = "toolStripComboBox_MainTool_Terminal_AutoAction_Action";
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.Size = new System.Drawing.Size(160, 25);
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.ToolTipText = "Enable / Disable Automatic Action\r\n\r\nNote that trigger will be highlighted for ev" +
-    "ery action";
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.Visible = false;
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoAction_Action_SelectedIndexChanged);
-			// 
 			// toolStripComboBox_MainTool_Terminal_AutoAction_Trigger
 			// 
 			this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Name = "toolStripComboBox_MainTool_Terminal_AutoAction_Trigger";
@@ -1264,6 +1280,15 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Visible = false;
 			this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger_SelectedIndexChanged);
 			this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger_TextChanged);
+			// 
+			// toolStripComboBox_MainTool_Terminal_AutoAction_Action
+			// 
+			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.Name = "toolStripComboBox_MainTool_Terminal_AutoAction_Action";
+			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.Size = new System.Drawing.Size(160, 27);
+			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.ToolTipText = "Enable / Disable Automatic Action\r\n\r\nNote that trigger will be highlighted for ev" +
+    "ery action";
+			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.Visible = false;
+			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoAction_Action_SelectedIndexChanged);
 			// 
 			// toolStripLabel_MainTool_Terminal_AutoAction_Count
 			// 
@@ -1382,6 +1407,11 @@ namespace YAT.View.Forms
 			// chronometer_Main
 			// 
 			this.chronometer_Main.TimeSpanChanged += new System.EventHandler<MKY.TimeSpanEventArgs>(this.chronometer_Main_TimeSpanChanged);
+			// 
+			// timer_Time
+			// 
+			this.timer_Time.Interval = 50;
+			this.timer_Time.Tick += new System.EventHandler(this.timer_Time_Tick);
 			// 
 			// Main
 			// 
@@ -1511,6 +1541,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_MainStatus_TerminalInfo;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip_Status;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_StatusContextMenu_ShowTerminalInfo;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_StatusContextMenu_ShowTime;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_StatusContextMenu_ShowChrono;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_StatusContextMenu_Separator_1;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_StatusContextMenu_Preferences;
@@ -1556,5 +1587,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_AutoAction_Deactivate;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Find_CaseSensitive;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Find_WholeWord;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_MainStatus_Time;
+		private System.Windows.Forms.Timer timer_Time;
 	}
 }

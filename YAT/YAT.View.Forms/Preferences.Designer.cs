@@ -51,9 +51,10 @@
 			this.checkBox_AutoSaveWorkspace = new System.Windows.Forms.CheckBox();
 			this.checkBox_AutoOpenWorkspace = new System.Windows.Forms.CheckBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.groupBox_NetworkInterfaces = new System.Windows.Forms.GroupBox();
 			this.checkBox_AskForAlternateNetworkInterface = new System.Windows.Forms.CheckBox();
+			this.groupBox_NetworkInterfaces = new System.Windows.Forms.GroupBox();
 			this.label_NetworkInterfaceAlternate = new System.Windows.Forms.Label();
+			this.checkBox_ShowTime = new System.Windows.Forms.CheckBox();
 			this.groupBox_UsbDevices.SuspendLayout();
 			this.groupBox_Main.SuspendLayout();
 			this.groupBox_SerialPorts.SuspendLayout();
@@ -99,7 +100,7 @@
 			this.groupBox_UsbDevices.Controls.Add(this.label_UsbDeviceAlternate);
 			this.groupBox_UsbDevices.Controls.Add(this.checkBox_MatchUsbSerial);
 			this.groupBox_UsbDevices.Controls.Add(this.label_UsbDeviceDiscovery);
-			this.groupBox_UsbDevices.Location = new System.Drawing.Point(12, 394);
+			this.groupBox_UsbDevices.Location = new System.Drawing.Point(12, 417);
 			this.groupBox_UsbDevices.Name = "groupBox_UsbDevices";
 			this.groupBox_UsbDevices.Size = new System.Drawing.Size(246, 108);
 			this.groupBox_UsbDevices.TabIndex = 4;
@@ -153,11 +154,12 @@
 			// 
 			// groupBox_Main
 			// 
+			this.groupBox_Main.Controls.Add(this.checkBox_ShowTime);
 			this.groupBox_Main.Controls.Add(this.checkBox_ShowChrono);
 			this.groupBox_Main.Controls.Add(this.checkBox_ShowTerminalInfo);
 			this.groupBox_Main.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Main.Name = "groupBox_Main";
-			this.groupBox_Main.Size = new System.Drawing.Size(245, 70);
+			this.groupBox_Main.Size = new System.Drawing.Size(246, 93);
 			this.groupBox_Main.TabIndex = 0;
 			this.groupBox_Main.TabStop = false;
 			this.groupBox_Main.Text = "Main";
@@ -165,10 +167,10 @@
 			// checkBox_ShowChrono
 			// 
 			this.checkBox_ShowChrono.AutoSize = true;
-			this.checkBox_ShowChrono.Location = new System.Drawing.Point(12, 42);
+			this.checkBox_ShowChrono.Location = new System.Drawing.Point(12, 65);
 			this.checkBox_ShowChrono.Name = "checkBox_ShowChrono";
 			this.checkBox_ShowChrono.Size = new System.Drawing.Size(175, 17);
-			this.checkBox_ShowChrono.TabIndex = 1;
+			this.checkBox_ShowChrono.TabIndex = 2;
 			this.checkBox_ShowChrono.Text = "Show c&hronometer in status bar";
 			this.checkBox_ShowChrono.UseVisualStyleBackColor = true;
 			this.checkBox_ShowChrono.CheckedChanged += new System.EventHandler(this.checkBox_ShowChrono_CheckedChanged);
@@ -191,7 +193,7 @@
 			this.groupBox_SerialPorts.Controls.Add(this.checkBox_RetrieveSerialPortCaptions);
 			this.groupBox_SerialPorts.Controls.Add(this.label_SerialPortDiscovery);
 			this.groupBox_SerialPorts.Controls.Add(this.checkBox_DetectSerialPortsInUse);
-			this.groupBox_SerialPorts.Location = new System.Drawing.Point(12, 187);
+			this.groupBox_SerialPorts.Location = new System.Drawing.Point(12, 210);
 			this.groupBox_SerialPorts.Name = "groupBox_SerialPorts";
 			this.groupBox_SerialPorts.Size = new System.Drawing.Size(246, 131);
 			this.groupBox_SerialPorts.TabIndex = 2;
@@ -262,7 +264,7 @@
 			this.groupBox_Workspace.Controls.Add(this.checkBox_UseRelativePaths);
 			this.groupBox_Workspace.Controls.Add(this.checkBox_AutoSaveWorkspace);
 			this.groupBox_Workspace.Controls.Add(this.checkBox_AutoOpenWorkspace);
-			this.groupBox_Workspace.Location = new System.Drawing.Point(12, 88);
+			this.groupBox_Workspace.Location = new System.Drawing.Point(12, 111);
 			this.groupBox_Workspace.Name = "groupBox_Workspace";
 			this.groupBox_Workspace.Size = new System.Drawing.Size(246, 93);
 			this.groupBox_Workspace.TabIndex = 1;
@@ -302,17 +304,6 @@
 			this.checkBox_AutoOpenWorkspace.UseVisualStyleBackColor = true;
 			this.checkBox_AutoOpenWorkspace.CheckedChanged += new System.EventHandler(this.checkBox_AutoOpenWorkspace_CheckedChanged);
 			// 
-			// groupBox_NetworkInterfaces
-			// 
-			this.groupBox_NetworkInterfaces.Controls.Add(this.checkBox_AskForAlternateNetworkInterface);
-			this.groupBox_NetworkInterfaces.Controls.Add(this.label_NetworkInterfaceAlternate);
-			this.groupBox_NetworkInterfaces.Location = new System.Drawing.Point(12, 324);
-			this.groupBox_NetworkInterfaces.Name = "groupBox_NetworkInterfaces";
-			this.groupBox_NetworkInterfaces.Size = new System.Drawing.Size(246, 64);
-			this.groupBox_NetworkInterfaces.TabIndex = 3;
-			this.groupBox_NetworkInterfaces.TabStop = false;
-			this.groupBox_NetworkInterfaces.Text = "Network Interfaces";
-			// 
 			// checkBox_AskForAlternateNetworkInterface
 			// 
 			this.checkBox_AskForAlternateNetworkInterface.AutoSize = true;
@@ -326,6 +317,17 @@
 			this.checkBox_AskForAlternateNetworkInterface.UseVisualStyleBackColor = true;
 			this.checkBox_AskForAlternateNetworkInterface.CheckedChanged += new System.EventHandler(this.checkBox_AskForAlternateNetworkInterface_CheckedChanged);
 			// 
+			// groupBox_NetworkInterfaces
+			// 
+			this.groupBox_NetworkInterfaces.Controls.Add(this.checkBox_AskForAlternateNetworkInterface);
+			this.groupBox_NetworkInterfaces.Controls.Add(this.label_NetworkInterfaceAlternate);
+			this.groupBox_NetworkInterfaces.Location = new System.Drawing.Point(12, 347);
+			this.groupBox_NetworkInterfaces.Name = "groupBox_NetworkInterfaces";
+			this.groupBox_NetworkInterfaces.Size = new System.Drawing.Size(246, 64);
+			this.groupBox_NetworkInterfaces.TabIndex = 3;
+			this.groupBox_NetworkInterfaces.TabStop = false;
+			this.groupBox_NetworkInterfaces.Text = "Network Interfaces";
+			// 
 			// label_NetworkInterfaceAlternate
 			// 
 			this.label_NetworkInterfaceAlternate.AutoSize = true;
@@ -335,13 +337,24 @@
 			this.label_NetworkInterfaceAlternate.TabIndex = 0;
 			this.label_NetworkInterfaceAlternate.Text = "When an interface is no longer available,...";
 			// 
+			// checkBox_ShowTime
+			// 
+			this.checkBox_ShowTime.AutoSize = true;
+			this.checkBox_ShowTime.Location = new System.Drawing.Point(12, 42);
+			this.checkBox_ShowTime.Name = "checkBox_ShowTime";
+			this.checkBox_ShowTime.Size = new System.Drawing.Size(160, 17);
+			this.checkBox_ShowTime.TabIndex = 1;
+			this.checkBox_ShowTime.Text = "Show local t&ime in status bar";
+			this.checkBox_ShowTime.UseVisualStyleBackColor = true;
+			this.checkBox_ShowTime.CheckedChanged += new System.EventHandler(this.checkBox_ShowTime_CheckedChanged);
+			// 
 			// Preferences
 			// 
 			this.AcceptButton = this.button_OK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(357, 514);
+			this.ClientSize = new System.Drawing.Size(357, 537);
 			this.Controls.Add(this.groupBox_NetworkInterfaces);
 			this.Controls.Add(this.groupBox_UsbDevices);
 			this.Controls.Add(this.groupBox_SerialPorts);
@@ -399,5 +412,6 @@
 		private System.Windows.Forms.GroupBox groupBox_NetworkInterfaces;
 		private System.Windows.Forms.CheckBox checkBox_AskForAlternateNetworkInterface;
 		private System.Windows.Forms.Label label_NetworkInterfaceAlternate;
+		private System.Windows.Forms.CheckBox checkBox_ShowTime;
 	}
 }
