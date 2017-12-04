@@ -387,6 +387,15 @@ namespace YAT.View.Forms
 				{
 					this.invokeLayout = false;
 					LayoutWorkspace();
+
+					// There is a limitation here:
+					//
+					// The 'FormClosed' event is invoked before the MDI child has been disposed of.
+					// Thus, layouting would take the just-about-to-be-closed terminal into account.
+					// The workaround with 'invokeLayout' unfortunately doesn't work as well, as the
+					// close form is still active when this 'MdiChildActivate' event is invoked...
+					//
+					// Keeping this limitation, shall again be checked after upgrading to .NET 4.0+.
 				}
 
 				SetTimedStatus(Status.ChildActivated);
@@ -2977,8 +2986,17 @@ namespace YAT.View.Forms
 			// Sender MUST be a terminal, otherwise something must have freaked out...
 			DetachTerminalEventHandlersAndMdiChildFromParent(sender as Terminal);
 
-			// Update the layout AFTER to ensure that closed MDI child has been disposed:
+			// Update the layout AFTER to ensure that closed MDI child has been disposed of:
 			this.invokeLayout = true;
+
+			// There is a limitation here:
+			//
+			// This 'FormClosed' event is invoked before the MDI child has been disposed of.
+			// Thus, layouting would take the just-about-to-be-closed terminal into account.
+			// The workaround with 'invokeLayout' unfortunately doesn't work as well, as the
+			// close form is still active when the 'MdiChildActivate' event is invoked...
+			//
+			// Keeping this limitation, shall again be checked after upgrading to .NET 4.0+.
 		}
 
 		#endregion
