@@ -1607,27 +1607,37 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Terminal_Log_Settings_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestEditLogSettings();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.RequestEditLogSettings();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Log_On_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestSwitchLogOn();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.RequestSwitchLogOn();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Log_Off_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestSwitchLogOff();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.RequestSwitchLogOff();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Log_Open_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestOpenLogFile();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.RequestOpenLogFile();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Log_OpenDirectory_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestOpenLogDirectory();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.RequestOpenLogDirectory();
 		}
 
 		private void toolStripButton_MainTool_Terminal_AutoAction_ShowHide_Click(object sender, EventArgs e)
@@ -1697,12 +1707,16 @@ namespace YAT.View.Forms
 
 		private void toolStripLabel_MainTool_Terminal_AutoAction_Count_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestAutoActionResetCount();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.RequestAutoActionResetCount();
 		}
 
 		private void toolStripButton_MainTool_Terminal_AutoAction_Deactivate_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestAutoActionDeactivate();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.RequestAutoActionDeactivate();
 		}
 
 		private void toolStripButton_MainTool_Terminal_AutoResponse_ShowHide_Click(object sender, EventArgs e)
@@ -1806,17 +1820,23 @@ namespace YAT.View.Forms
 
 		private void toolStripLabel_MainTool_Terminal_AutoResponse_Count_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestAutoResponseResetCount();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.RequestAutoResponseResetCount();
 		}
 
 		private void toolStripButton_MainTool_Terminal_AutoResponse_Deactivate_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestAutoResponseDeactivate();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.RequestAutoResponseDeactivate();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Format_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestEditFormatSettings();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.RequestEditFormatSettings();
 		}
 
 		#endregion
