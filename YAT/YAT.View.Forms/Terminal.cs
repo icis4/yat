@@ -755,7 +755,7 @@ namespace YAT.View.Forms
 
 			var trigger = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
-				this.settingsRoot.AutoResponse.Trigger = trigger;
+				RequestAutoResponseTrigger(trigger);
 		}
 
 		/// <remarks>
@@ -777,7 +777,7 @@ namespace YAT.View.Forms
 						this.terminalMenuValidationWorkaround_UpdateIsSuspended = true;
 						try
 						{
-							this.settingsRoot.AutoResponse.Trigger = triggerText;
+							RequestAutoResponseTrigger(triggerText);
 						}
 						finally
 						{
@@ -799,7 +799,7 @@ namespace YAT.View.Forms
 
 			var response = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedItem as AutoResponseEx);
 			if (response != null)
-				this.settingsRoot.AutoResponse.Response = response;
+				RequestAutoResponseResponse(response);
 		}
 
 		/// <remarks>
@@ -821,7 +821,7 @@ namespace YAT.View.Forms
 						this.terminalMenuValidationWorkaround_UpdateIsSuspended = true;
 						try
 						{
-							this.settingsRoot.AutoResponse.Response = responseText;
+							RequestAutoResponseResponse(responseText);
 						}
 						finally
 						{
@@ -904,7 +904,7 @@ namespace YAT.View.Forms
 
 			var trigger = (toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
-				this.settingsRoot.AutoAction.Trigger = trigger;
+				RequestAutoActionTrigger(trigger);
 		}
 
 		/// <remarks>
@@ -926,7 +926,7 @@ namespace YAT.View.Forms
 						this.terminalMenuValidationWorkaround_UpdateIsSuspended = true;
 						try
 						{
-							this.settingsRoot.AutoAction.Trigger = triggerText;
+							RequestAutoActionTrigger(triggerText);
 						}
 						finally
 						{
@@ -948,7 +948,7 @@ namespace YAT.View.Forms
 
 			var action = (toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.SelectedItem as AutoActionEx);
 			if (action != null)
-				this.settingsRoot.AutoAction.Action = action;
+				RequestAutoActionAction(action);
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate_Click(object sender, EventArgs e)
@@ -3182,13 +3182,51 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestAutoActionTrigger(AutoTriggerEx trigger)
 		{
-			this.settingsRoot.AutoAction.Trigger = trigger;
+			if ((trigger == AutoTrigger.AnyLine) && (this.settingsRoot.AutoAction.Action == AutoAction.Highlight))
+			{
+				var text = new StringBuilder();
+				text.AppendLine("Trigger cannot be set to 'Any Line' if action is 'Highlight Only'!");
+				text.AppendLine();
+				text.Append    ("Reason: Lines are not highlighted if trigger is 'Any Line' as that would result in all received lines highlighted.");
+
+				MessageBoxEx.Show
+				(
+					this,
+					text.ToString(),
+					"Currently Invalid Trigger",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Exclamation
+				);
+			}
+			else
+			{
+				this.settingsRoot.AutoAction.Trigger = trigger;
+			}
 		}
 
 		/// <summary></summary>
-		public virtual void RequestAutoActionAction(AutoActionEx response)
+		public virtual void RequestAutoActionAction(AutoActionEx action)
 		{
-			this.settingsRoot.AutoAction.Action = response;
+			if ((action == AutoAction.Highlight) && (this.settingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine))
+			{
+				var text = new StringBuilder();
+				text.AppendLine("Action cannot be set to 'Highlight Only' if trigger is 'Any Line'!");
+				text.AppendLine();
+				text.Append    ("Reason: Lines are not highlighted if trigger is 'Any Line' as that would result in all received lines highlighted.");
+
+				MessageBoxEx.Show
+				(
+					this,
+					text.ToString(),
+					"Currently Invalid Action",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Exclamation
+				);
+			}
+			else
+			{
+				this.settingsRoot.AutoAction.Action = action;
+			}
 		}
 
 		/// <summary></summary>

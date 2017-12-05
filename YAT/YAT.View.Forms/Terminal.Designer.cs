@@ -2082,6 +2082,7 @@ namespace YAT.View.Forms
 			// 
 			// toolStripComboBox_TerminalMenu_Receive_AutoAction_Action
 			// 
+			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Name = "toolStripComboBox_TerminalMenu_Receive_AutoAction_Action";
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Size = new System.Drawing.Size(180, 23);
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.ToolTipText = "Enable / Disable Automatic Action\r\n\r\nNote that...\r\n...trigger is highlighted for " +
