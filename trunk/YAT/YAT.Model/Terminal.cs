@@ -2626,17 +2626,17 @@ namespace YAT.Model
 
 			if (this.settingsRoot.TerminalType == Domain.TerminalType.Text)
 			{
+				var textTerminal = this.terminal as Domain.TextTerminal;
+
 				if (this.settingsRoot.TextTerminal.ShowEol) // Remove Rx EOL:
 				{
-					byte[] rxEolSequence;
-					if (this.terminal.TryParse(this.settingsRoot.TextTerminal.RxEol, out rxEolSequence))
-						l.RemoveRange((l.Count - rxEolSequence.Length), rxEolSequence.Length);
+					var rxEolSequence = textTerminal.RxEolSequence;
+					l.RemoveRange((l.Count - rxEolSequence.Length), rxEolSequence.Length);
 				}
 
 				{                                           // Append Tx EOL:
-					byte[] txEolSequence;
-					if (this.terminal.TryParse(this.settingsRoot.TextTerminal.TxEol, out txEolSequence))
-						l.AddRange(txEolSequence);
+					var txEolSequence = textTerminal.TxEolSequence;
+					l.AddRange(txEolSequence);
 				}
 			}
 

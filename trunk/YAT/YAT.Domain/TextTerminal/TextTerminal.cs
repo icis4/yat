@@ -281,6 +281,38 @@ namespace YAT.Domain
 			}
 		}
 
+		/// <summary>
+		/// Gets the Tx EOL sequence.
+		/// </summary>
+		public byte[] TxEolSequence
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.txLineState != null)
+					return (this.txLineState.Eol.Sequence);
+				else
+					return (null);
+			}
+		}
+
+		/// <summary>
+		/// Gets the Rx EOL sequence.
+		/// </summary>
+		public byte[] RxEolSequence
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.rxLineState != null)
+					return (this.rxLineState.Eol.Sequence);
+				else
+					return (null);
+			}
+		}
+
 		#endregion
 
 		#region Methods
