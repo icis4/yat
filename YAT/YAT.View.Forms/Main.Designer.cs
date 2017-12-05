@@ -1276,7 +1276,8 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Name = "toolStripComboBox_MainTool_Terminal_AutoAction_Trigger";
 			this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Size = new System.Drawing.Size(160, 25);
 			this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.ToolTipText = "Configure Automatic Action Trigger,\r\neither refer to one of the commands,\r\nor fil" +
-    "l-in any command text";
+    "l-in any command text.\r\n\r\nNote that...\r\n...\'Any Line\' is not available if action" +
+    " is \'Highlight Only\'.";
 			this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Visible = false;
 			this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger_SelectedIndexChanged);
 			this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger_TextChanged);
@@ -1285,8 +1286,8 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.Name = "toolStripComboBox_MainTool_Terminal_AutoAction_Action";
 			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.Size = new System.Drawing.Size(160, 27);
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.ToolTipText = "Enable / Disable Automatic Action\r\n\r\nNote that trigger will be highlighted for ev" +
-    "ery action";
+			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.ToolTipText = "Enable / Disable Automatic Action\r\n\r\nNote that...\r\n...trigger is highlighted for " +
+    "every action.\r\n...\'Highlight Only\' is not available if trigger is \'Any Line\'.";
 			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.Visible = false;
 			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoAction_Action_SelectedIndexChanged);
 			// 
@@ -1328,7 +1329,7 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Name = "toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger";
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Size = new System.Drawing.Size(160, 25);
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.ToolTipText = "Configure Automatic Response Trigger,\r\neither refer to one of the commands,\r\nor f" +
-    "ill-in any command text";
+    "ill-in any command text.";
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Visible = false;
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger_SelectedIndexChanged);
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger_TextChanged);
@@ -1338,7 +1339,7 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Name = "toolStripComboBox_MainTool_Terminal_AutoResponse_Response";
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Size = new System.Drawing.Size(160, 25);
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response.ToolTipText = "Enable / Disable Automatic Response,\r\neither refer to one of the commands,\r\nor fi" +
-    "ll-in any command text";
+    "ll-in any command text.";
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Visible = false;
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response_SelectedIndexChanged);
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response_TextChanged);
