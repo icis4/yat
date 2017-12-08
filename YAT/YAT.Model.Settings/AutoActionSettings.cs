@@ -35,7 +35,6 @@ namespace YAT.Model.Settings
 	/// <summary></summary>
 	public class AutoActionSettings : MKY.Settings.SettingsItem, IEquatable<AutoActionSettings>
 	{
-		private bool visible;
 		private AutoTriggerEx trigger;
 		private AutoActionEx action;
 
@@ -60,7 +59,6 @@ namespace YAT.Model.Settings
 		public AutoActionSettings(AutoActionSettings rhs)
 			: base(rhs)
 		{
-			Visible = rhs.Visible;
 			Trigger = rhs.Trigger;
 			Action  = rhs.Action;
 			ClearChanged();
@@ -73,7 +71,6 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			Visible = false;
 			Trigger = AutoTrigger.None;
 			Action  = AutoAction.None;
 		}
@@ -82,21 +79,6 @@ namespace YAT.Model.Settings
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
-
-		/// <summary></summary>
-		[XmlElement("Visible")]
-		public bool Visible
-		{
-			get { return (this.visible); }
-			set
-			{
-				if (this.visible != value)
-				{
-					this.visible = value;
-					SetMyChanged();
-				}
-			}
-		}
 
 		/// <remarks>
 		/// This 'EnumEx' cannot be serialized, thus, the helper below is used for serialization.
@@ -221,8 +203,6 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ Visible.GetHashCode();
-
 				hashCode = (hashCode * 397) ^ (Trigger_ForSerialization != null ? Trigger_ForSerialization.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ ( Action_ForSerialization != null ?  Action_ForSerialization.GetHashCode() : 0);
 
@@ -255,10 +235,8 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				Visible.Equals(other.Visible) &&
-
 				StringEx.EqualsOrdinalIgnoreCase(Trigger_ForSerialization, other.Trigger_ForSerialization) &&
-				StringEx.EqualsOrdinalIgnoreCase( Action_ForSerialization, other.Action_ForSerialization)
+				StringEx.EqualsOrdinalIgnoreCase( Action_ForSerialization, other. Action_ForSerialization)
 			);
 		}
 

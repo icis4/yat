@@ -932,7 +932,6 @@ namespace YAT.View.Forms
 				toolStripButton_MainTool_Terminal_Radix_Hex.Checked     = (radix == Domain.Radix.Hex);
 				toolStripButton_MainTool_Terminal_Radix_Unicode.Checked = (radix == Domain.Radix.Unicode);
 
-				bool arVisible = false;
 				bool arIsActive = false;
 
 				AutoTriggerEx[] arTriggerItems = AutoTriggerEx.GetFixedItems();
@@ -945,12 +944,6 @@ namespace YAT.View.Forms
 
 				if (childIsReady)
 				{
-					// Icon shall be visible if any terminal uses this option.
-					//
-					// Rationale:
-					// Icons shall not move/shift when switching among terminals.
-					arVisible = AutoResponseVisibleInAnyTerminal;
-
 					var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
 					if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
 					{
@@ -970,7 +963,7 @@ namespace YAT.View.Forms
 				toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Enabled = childIsReady;
 				toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Checked = arIsActive;
 
-				if (arVisible)
+				if (ApplicationSettings.RoamingUserSettings.View.AutoResponseVisible)
 				{
 					toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Hide Automatic Response";
 
@@ -1020,7 +1013,6 @@ namespace YAT.View.Forms
 					toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Enabled = false;
 				}
 
-				bool aaVisible = false;
 				bool aaIsActive = false;
 
 				AutoTriggerEx[] aaTriggerItems = AutoTriggerEx.GetFixedItems();
@@ -1033,12 +1025,6 @@ namespace YAT.View.Forms
 
 				if (childIsReady)
 				{
-					// Icon shall be visible if any terminal uses this option.
-					//
-					// Rationale:
-					// Icons shall not move/shift when switching among terminals.
-					aaVisible = AutoActionVisibleInAnyTerminal;
-
 					var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
 					if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
 					{
@@ -1058,7 +1044,7 @@ namespace YAT.View.Forms
 				toolStripButton_MainTool_Terminal_AutoAction_ShowHide.Enabled = childIsReady;
 				toolStripButton_MainTool_Terminal_AutoAction_ShowHide.Checked = aaIsActive;
 
-				if (aaVisible)
+				if (ApplicationSettings.RoamingUserSettings.View.AutoActionVisible)
 				{
 					toolStripButton_MainTool_Terminal_AutoAction_ShowHide.Text = "Hide Automatic Action";
 
@@ -1117,7 +1103,7 @@ namespace YAT.View.Forms
 				toolStripButton_MainTool_Terminal_Find_ShowHide.Enabled = childIsReady;
 				toolStripButton_MainTool_Terminal_Find_ShowHide.Checked = FindIsReady;
 
-				var findVisible = ApplicationSettings.RoamingUserSettings.Find.ShowField;
+				var findVisible = ApplicationSettings.RoamingUserSettings.View.FindVisible;
 				if (findVisible)
 				{
 					toolStripButton_MainTool_Terminal_Find_ShowHide.Text = "Hide Find";
@@ -1276,10 +1262,10 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Terminal_Find_ShowHide_Click(object sender, EventArgs e)
 		{
-			ApplicationSettings.RoamingUserSettings.Find.ShowField = !ApplicationSettings.RoamingUserSettings.Find.ShowField;
+			ApplicationSettings.RoamingUserSettings.View.FindVisible = !ApplicationSettings.RoamingUserSettings.View.FindVisible;
 			ApplicationSettings.SaveRoamingUserSettings();
 
-			if (ApplicationSettings.RoamingUserSettings.Find.ShowField)
+			if (ApplicationSettings.RoamingUserSettings.View.FindVisible)
 			{
 			////toolStripComboBox_MainTool_Terminal_Find_Pattern.Select();    doesn't work, 'ToolStrip'
 				toolStripComboBox_MainTool_Terminal_Find_Pattern.Focus(); // seems to require Focus().
@@ -1642,13 +1628,8 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Terminal_AutoAction_ShowHide_Click(object sender, EventArgs e)
 		{
-			// Icon shall be visible if any terminal uses this option.
-			//
-			// Rationale:
-			// Icons shall not move/shift when switching among terminals.
-			//
-			// As a consequence, changing the option must be applied to all terminals:
-			RequestAutoActionVisibleInAllTerminals(!AutoActionVisibleInAnyTerminal); // Toggle.
+			ApplicationSettings.RoamingUserSettings.View.AutoActionVisible = !ApplicationSettings.RoamingUserSettings.View.AutoActionVisible;
+			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
 		private void toolStripComboBox_MainTool_Terminal_AutoAction_Trigger_SelectedIndexChanged(object sender, EventArgs e)
@@ -1721,13 +1702,8 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Terminal_AutoResponse_ShowHide_Click(object sender, EventArgs e)
 		{
-			// Icon shall be visible if any terminal uses this option.
-			//
-			// Rationale:
-			// Icons shall not move/shift when switching among terminals.
-			//
-			// As a consequence, changing the option must be applied to all terminals:
-			RequestAutoResponseVisibleInAllTerminals(!AutoResponseVisibleInAnyTerminal); // Toggle.
+			ApplicationSettings.RoamingUserSettings.View.AutoResponseVisible = !ApplicationSettings.RoamingUserSettings.View.AutoResponseVisible;
+			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
 		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
@@ -2688,70 +2664,6 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private bool AutoResponseVisibleInAnyTerminal
-		{
-			get
-			{
-				foreach (var f in MdiChildren)
-				{
-					var t = (f as Terminal);
-					if (t != null)
-					{
-						var model = t.UnderlyingTerminal;
-						if (model != null)
-						{
-							if (model.SettingsRoot.AutoResponse.Visible)
-								return (true);
-						}
-					}
-				}
-
-				return (false);
-			}
-		}
-
-		private void RequestAutoResponseVisibleInAllTerminals(bool visible)
-		{
-			foreach (var f in MdiChildren)
-			{
-				var t = (f as Terminal);
-				if (t != null)
-					t.RequestAutoResponseVisible(visible);
-			}
-		}
-
-		private bool AutoActionVisibleInAnyTerminal
-		{
-			get
-			{
-				foreach (var f in MdiChildren)
-				{
-					var t = (f as Terminal);
-					if (t != null)
-					{
-						var model = t.UnderlyingTerminal;
-						if (model != null)
-						{
-							if (model.SettingsRoot.AutoAction.Visible)
-								return (true);
-						}
-					}
-				}
-
-				return (false);
-			}
-		}
-
-		private void RequestAutoActionVisibleInAllTerminals(bool visible)
-		{
-			foreach (var f in MdiChildren)
-			{
-				var t = (f as Terminal);
-				if (t != null)
-					t.RequestAutoActionVisible(visible);
-			}
-		}
-
 		#endregion
 
 		#region Workspace > Lifetime
@@ -3033,9 +2945,9 @@ namespace YAT.View.Forms
 		/// </summary>
 		public virtual void RequestFind()
 		{
-			if (!ApplicationSettings.RoamingUserSettings.Find.ShowField)
+			if (!ApplicationSettings.RoamingUserSettings.View.FindVisible)
 			{
-				ApplicationSettings.RoamingUserSettings.Find.ShowField = true;
+				ApplicationSettings.RoamingUserSettings.View.FindVisible = true;
 				ApplicationSettings.SaveRoamingUserSettings();
 			}
 
@@ -3050,7 +2962,7 @@ namespace YAT.View.Forms
 		{
 			get
 			{
-				if (ApplicationSettings.RoamingUserSettings.Find.ShowField)
+				if (ApplicationSettings.RoamingUserSettings.View.FindVisible)
 					return (!string.IsNullOrEmpty(ApplicationSettings.RoamingUserSettings.Find.ActivePattern));
 				else
 					return (false);

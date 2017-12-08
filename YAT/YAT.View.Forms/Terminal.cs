@@ -3174,12 +3174,6 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public virtual void RequestAutoActionVisible(bool visible)
-		{
-			this.settingsRoot.AutoAction.Visible = visible;
-		}
-
-		/// <summary></summary>
 		public virtual void RequestAutoActionTrigger(AutoTriggerEx trigger)
 		{
 			if ((trigger == AutoTrigger.AnyLine) && (this.settingsRoot.AutoAction.Action == AutoAction.Highlight))
@@ -3241,12 +3235,6 @@ namespace YAT.View.Forms
 		{
 			if (this.terminal != null)
 				this.terminal.DeactivateAutoAction();
-		}
-
-		/// <summary></summary>
-		public virtual void RequestAutoResponseVisible(bool visible)
-		{
-			this.settingsRoot.AutoResponse.Visible = visible;
 		}
 
 		/// <summary></summary>
@@ -3918,7 +3906,7 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowFormatSettings()
 		{
-			int[] customColors = this.settingsRoot.View.CustomColorsToWin32();
+			int[] customColors = ApplicationSettings.RoamingUserSettings.View.CustomColorsToWin32();
 
 			var f = new FormatSettings(this.settingsRoot.Format, customColors, this.settingsRoot.Display.InfoSeparator, this.settingsRoot.Display.InfoEnclosure, this.settingsRoot.Display.TimeStampUseUtc, this.settingsRoot.Display.TimeStampFormat, this.settingsRoot.Display.TimeSpanFormat, this.settingsRoot.Display.TimeDeltaFormat);
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
@@ -3926,7 +3914,11 @@ namespace YAT.View.Forms
 				Refresh();
 				this.settingsRoot.Format = f.FormatSettingsResult;
 
-				this.settingsRoot.View.UpdateCustomColorsFromWin32(f.CustomColors);
+				if (!ArrayEx.ElementsEqual(customColors, f.CustomColors))
+				{
+					ApplicationSettings.RoamingUserSettings.View.UpdateCustomColorsFromWin32(f.CustomColors);
+					ApplicationSettings.SaveRoamingUserSettings();
+				}
 
 				this.settingsRoot.Display.InfoSeparator = f.InfoSeparatorResult;
 				this.settingsRoot.Display.InfoEnclosure = f.InfoEnclosureResult;

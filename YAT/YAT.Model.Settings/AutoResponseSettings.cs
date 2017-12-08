@@ -35,7 +35,6 @@ namespace YAT.Model.Settings
 	/// <summary></summary>
 	public class AutoResponseSettings : MKY.Settings.SettingsItem, IEquatable<AutoResponseSettings>
 	{
-		private bool visible;
 		private AutoTriggerEx trigger;
 		private AutoResponseEx response;
 
@@ -60,7 +59,6 @@ namespace YAT.Model.Settings
 		public AutoResponseSettings(AutoResponseSettings rhs)
 			: base(rhs)
 		{
-			Visible  = rhs.Visible;
 			Trigger  = rhs.Trigger;
 			Response = rhs.Response;
 			ClearChanged();
@@ -73,7 +71,6 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			Visible  = false;
 			Trigger  = AutoTrigger.None;
 			Response = AutoResponse.None;
 		}
@@ -82,21 +79,6 @@ namespace YAT.Model.Settings
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
-
-		/// <summary></summary>
-		[XmlElement("Visible")]
-		public bool Visible
-		{
-			get { return (this.visible); }
-			set
-			{
-				if (this.visible != value)
-				{
-					this.visible = value;
-					SetMyChanged();
-				}
-			}
-		}
 
 		/// <remarks>
 		/// This 'EnumEx' cannot be serialized, thus, the helper below is used for serialization.
@@ -221,9 +203,7 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ Visible.GetHashCode();
-
-				hashCode = (hashCode * 397) ^ (Trigger_ForSerialization  != null ? Trigger_ForSerialization .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ ( Trigger_ForSerialization != null ?  Trigger_ForSerialization.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (Response_ForSerialization != null ? Response_ForSerialization.GetHashCode() : 0);
 
 				return (hashCode);
@@ -255,9 +235,7 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				Visible.Equals(other.Visible) &&
-
-				StringEx.EqualsOrdinalIgnoreCase(Trigger_ForSerialization,  other.Trigger_ForSerialization) &&
+				StringEx.EqualsOrdinalIgnoreCase( Trigger_ForSerialization, other. Trigger_ForSerialization) &&
 				StringEx.EqualsOrdinalIgnoreCase(Response_ForSerialization, other.Response_ForSerialization)
 			);
 		}

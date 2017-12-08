@@ -43,6 +43,9 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public const int MaxCustomColors = 16;
 
+		private bool findVisible;
+		private bool autoActionVisible;
+		private bool autoResponseVisible;
 		private RecentItemCollection<string> customColors;
 
 		/// <summary></summary>
@@ -66,7 +69,10 @@ namespace YAT.Model.Settings
 		public ViewSettings(ViewSettings rhs)
 			: base(rhs)
 		{
-			CustomColors = new RecentItemCollection<string>(rhs.CustomColors);
+			FindVisible         = rhs.FindVisible;
+			AutoActionVisible   = rhs.AutoActionVisible;
+			AutoResponseVisible = rhs.AutoResponseVisible;
+			CustomColors        = new RecentItemCollection<string>(rhs.CustomColors);
 
 			ClearChanged();
 		}
@@ -78,13 +84,61 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			CustomColors = new RecentItemCollection<string>(MaxCustomColors);
+			FindVisible         = false;
+			AutoActionVisible   = false;
+			AutoResponseVisible = false;
+			CustomColors        = new RecentItemCollection<string>(MaxCustomColors);
 		}
 
 		#region Properties
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <summary></summary>
+		[XmlElement("FindVisible")]
+		public bool FindVisible
+		{
+			get { return (this.findVisible); }
+			set
+			{
+				if (this.findVisible != value)
+				{
+					this.findVisible = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("AutoActionVisible")]
+		public bool AutoActionVisible
+		{
+			get { return (this.autoActionVisible); }
+			set
+			{
+				if (this.autoActionVisible != value)
+				{
+					this.autoActionVisible = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("AutoResponseVisible")]
+		public bool AutoResponseVisible
+		{
+			get { return (this.autoResponseVisible); }
+			set
+			{
+				if (this.autoResponseVisible != value)
+				{
+					this.autoResponseVisible = value;
+					SetMyChanged();
+				}
+			}
+		}
 
 		/// <remarks>
 		/// Using string because...
@@ -165,6 +219,9 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
+				hashCode = (hashCode * 397) ^  FindVisible                        .GetHashCode();
+				hashCode = (hashCode * 397) ^  AutoActionVisible                  .GetHashCode();
+				hashCode = (hashCode * 397) ^  AutoResponseVisible                .GetHashCode();
 				hashCode = (hashCode * 397) ^ (CustomColors != null ? CustomColors.GetHashCode() : 0);
 
 				return (hashCode);
@@ -196,6 +253,9 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
+				FindVisible          .Equals(             other.FindVisible)         &&
+				AutoActionVisible    .Equals(             other.AutoActionVisible)   &&
+				AutoResponseVisible  .Equals(             other.AutoResponseVisible) &&
 				IEnumerableEx.ElementsEqual(CustomColors, other.CustomColors)
 			);
 		}

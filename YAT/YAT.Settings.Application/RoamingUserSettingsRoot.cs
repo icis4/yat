@@ -50,6 +50,7 @@ namespace YAT.Settings.Application
 
 		private Model.Settings.SocketSettings socket;
 		private Model.Settings.FindSettings find;
+		private Model.Settings.ViewSettings view;
 
 		/// <summary></summary>
 		public RoamingUserSettingsRoot()
@@ -57,6 +58,7 @@ namespace YAT.Settings.Application
 		{
 			Socket = new Model.Settings.SocketSettings(MKY.Settings.SettingsType.Explicit);
 			Find   = new Model.Settings.FindSettings(MKY.Settings.SettingsType.Explicit);
+			View   = new Model.Settings.ViewSettings(MKY.Settings.SettingsType.Explicit);
 
 			ClearChanged();
 		}
@@ -67,6 +69,7 @@ namespace YAT.Settings.Application
 		{
 			Socket = new Model.Settings.SocketSettings(rhs.Socket);
 			Find   = new Model.Settings.FindSettings(rhs.Find);
+			View   = new Model.Settings.ViewSettings(rhs.View);
 
 			ClearChanged();
 		}
@@ -144,6 +147,23 @@ namespace YAT.Settings.Application
 				{
 					var oldNode = this.find;
 					this.find = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("View")]
+		public virtual Model.Settings.ViewSettings View
+		{
+			get { return (this.view); }
+			set
+			{
+				if (this.view != value)
+				{
+					var oldNode = this.view;
+					this.view = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
 
 					AttachOrReplaceOrDetachNode(oldNode, value);
 				}

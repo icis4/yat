@@ -40,7 +40,6 @@ namespace YAT.Settings.Terminal
 		private Model.Settings.PredefinedSettings predefined;
 		private Model.Settings.WindowSettings window;
 		private Model.Settings.LayoutSettings layout;
-		private Model.Settings.ViewSettings view;
 
 		/// <summary></summary>
 		public ImplicitSettings()
@@ -59,7 +58,6 @@ namespace YAT.Settings.Terminal
 			Predefined = new Model.Settings.PredefinedSettings(SettingsType);
 			Window     = new Model.Settings.WindowSettings(SettingsType);
 			Layout     = new Model.Settings.LayoutSettings(SettingsType);
-			View       = new Model.Settings.ViewSettings(SettingsType);
 
 			ClearChanged();
 		}
@@ -78,7 +76,6 @@ namespace YAT.Settings.Terminal
 			Predefined = new Model.Settings.PredefinedSettings(rhs.Predefined);
 			Window     = new Model.Settings.WindowSettings(rhs.Window);
 			Layout     = new Model.Settings.LayoutSettings(rhs.Layout);
-			View       = new Model.Settings.ViewSettings(rhs.View);
 
 			ClearChanged();
 		}
@@ -203,23 +200,6 @@ namespace YAT.Settings.Terminal
 				{
 					var oldNode = this.layout;
 					this.layout = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
-
-					AttachOrReplaceOrDetachNode(oldNode, value);
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("View")]
-		public virtual Model.Settings.ViewSettings View
-		{
-			get { return (this.view); }
-			set
-			{
-				if (this.view != value)
-				{
-					var oldNode = this.view;
-					this.view = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
 
 					AttachOrReplaceOrDetachNode(oldNode, value);
 				}
