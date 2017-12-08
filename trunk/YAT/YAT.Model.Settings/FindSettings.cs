@@ -41,7 +41,6 @@ namespace YAT.Model.Settings
 	{
 		private const int MaxRecentPatterns = 12;
 
-		private bool showField;
 		private string activePattern;
 		private RecentItemCollection<string> recentPatterns;
 		private FindOptions options;
@@ -67,7 +66,6 @@ namespace YAT.Model.Settings
 		public FindSettings(FindSettings rhs)
 			: base(rhs)
 		{
-			ShowField      = rhs.ShowField;
 			ActivePattern  = rhs.ActivePattern;
 			RecentPatterns = new RecentItemCollection<string>(rhs.RecentPatterns);
 			Options        = rhs.Options;
@@ -82,7 +80,6 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			ShowField      = false;
 			ActivePattern  = null;
 			RecentPatterns = new RecentItemCollection<string>(MaxRecentPatterns);
 			Options        = new FindOptions(true, false);
@@ -92,21 +89,6 @@ namespace YAT.Model.Settings
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
-
-		/// <summary></summary>
-		[XmlElement("ShowField")]
-		public bool ShowField
-		{
-			get { return (this.showField); }
-			set
-			{
-				if (this.showField != value)
-				{
-					this.showField = value;
-					SetMyChanged();
-				}
-			}
-		}
 
 		/// <summary></summary>
 		[XmlElement("ActivePattern")]
@@ -175,7 +157,6 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^  ShowField                              .GetHashCode();
 				hashCode = (hashCode * 397) ^ (ActivePattern  != null ? ActivePattern .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (RecentPatterns != null ? RecentPatterns.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^  Options                                .GetHashCode();
@@ -209,7 +190,6 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				ShowField            .Equals(                      other.ShowField)      &&
 				StringEx             .EqualsOrdinal(ActivePattern, other.ActivePattern)  &&
 				IEnumerableEx.ElementsEqual(       RecentPatterns, other.RecentPatterns) &&
 				Options              .Equals(                      other.Options)

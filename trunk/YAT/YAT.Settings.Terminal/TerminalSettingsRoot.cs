@@ -413,14 +413,6 @@ namespace YAT.Settings.Terminal
 			set { this.implicit_.Layout = value;  }
 		}
 
-		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
-		[XmlIgnore]
-		public virtual Model.Settings.ViewSettings View
-		{
-			get { return (this.implicit_.View); }
-			set { this.implicit_.View = value;  }
-		}
-
 		#endregion
 
 		#region Properties > Combinations
