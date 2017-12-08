@@ -1405,7 +1405,7 @@ namespace YAT.Model
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'endianessOld' does start with a lower case letter.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private Domain.Endianness settingsRoot_Changed_endianessOld = Domain.Settings.IOSettings.EndiannessDefault;
+		private Domain.Endianness settingsRoot_Changed_endiannessOld = Domain.Settings.IOSettings.EndiannessDefault;
 
 		/// <remarks>
 		/// Required to solve the issue described in bug #223 "Settings events should state the exact settings diff".
@@ -1482,10 +1482,10 @@ namespace YAT.Model
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal.IO))
 			{
-				if (settingsRoot_Changed_endianessOld != this.settingsRoot.Terminal.IO.Endianness) {
-					settingsRoot_Changed_endianessOld = this.settingsRoot.Terminal.IO.Endianness;
+				if (settingsRoot_Changed_endiannessOld != this.settingsRoot.Terminal.IO.Endianness) {
+					settingsRoot_Changed_endiannessOld = this.settingsRoot.Terminal.IO.Endianness;
 
-					// Endianess has changed, recreate AutoResponse/Action:
+					// Endianness has changed, recreate AutoResponse/Action:
 					UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 					UpdateAutoAction();   // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 				}
