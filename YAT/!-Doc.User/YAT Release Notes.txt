@@ -111,6 +111,9 @@ Important changes:
 Fixed bugs:
 - Monitors no longer jump to top as soon as display buffer has been filled (bugs #394 and #398 as
   well as feature request #326; related to feature request #323 implemented in previous release).
+- Endianness of multi-byte encoded characters fixed, UTF-8 no longer results in spurious warning
+  messages (bug #400, regression of bug #343 fixed for version 1.99.70).
+- Code page for UTF-32 LE/BE encodings fixed (related to bug #400).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).

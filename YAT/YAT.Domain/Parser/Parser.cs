@@ -698,41 +698,29 @@ namespace YAT.Domain.Parser
 		/// <summary>
 		/// Encodes <paramref name="s"/> containing a plain string into bytes.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Symmetricity with TryEncodeCharItem() below.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Symmetricity with TryEncodeCharItem() below.")]
 		internal virtual bool TryEncodeStringItem(string s, out byte[] result, ref FormatException formatException)
 		{
-			if (((EndiannessEx)this.endianness).IsSameAsMachine)
-			{
-				result = this.encoding.GetBytes(s);
-			}
-			else // is not same as machine:
-			{
-				using (var bytes = new MemoryStream())
-				{
-					foreach (char c in s)
-					{
-						var a = this.encoding.GetBytes(new char[] { c });
-						a = a.Reverse().ToArray(); // Reverses bytes order.
-						bytes.Write(a, 0, a.Length);
-					}
-					result = bytes.ToArray();
-				}
-			}
+			result = GetBytes(s);
 			return (true);
 		}
 
 		/// <summary>
-		/// Encodes the given character, taking encoding and endianness into account.
+		/// Encodes the given string, taking encoding into account.
 		/// </summary>
-		public byte[] GetBytes(char c)
+		public byte[] GetBytes(string s)
 		{
-			byte[] a = this.encoding.GetBytes(new char[] { c });
-
-			if (!((EndiannessEx)this.endianness).IsSameAsMachine)
-				a = a.Reverse().ToArray();
-
+			byte[] a = this.encoding.GetBytes(s);
 			return (a);
+
+			// \remind (2017-12-09 / MKY / bug #400)
+			// YAT versions 1.99.70 and 1.99.80 used to take the endianness into account when encoding
+			// and decoding multi-byte encoded characters. However, it was always done, but of course e.g.
+			// UTF-8 is independent on endianness. The endianness would only have to be applied single
+			// multi-byte values, not multi-byte values split into multiple fragments. However, a .NET
+			// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
+			// not. Thus, it was decided to again remove the character encoding endianness awareness.
 		}
 
 		/// <summary>
@@ -753,6 +741,23 @@ namespace YAT.Domain.Parser
 				result = null;
 				return (false);
 			}
+		}
+
+		/// <summary>
+		/// Encodes the given character, taking encoding into account.
+		/// </summary>
+		public byte[] GetBytes(char c)
+		{
+			byte[] a = this.encoding.GetBytes(new char[] { c });
+			return (a);
+
+			// \remind (2017-12-09 / MKY / bug #400)
+			// YAT versions 1.99.70 and 1.99.80 used to take the endianness into account when encoding
+			// and decoding multi-byte encoded characters. However, it was always done, but of course e.g.
+			// UTF-8 is independent on endianness. The endianness would only have to be applied single
+			// multi-byte values, not multi-byte values split into multiple fragments. However, a .NET
+			// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
+			// not. Thus, it was decided to again remove the character encoding endianness awareness.
 		}
 
 		/// <summary>
