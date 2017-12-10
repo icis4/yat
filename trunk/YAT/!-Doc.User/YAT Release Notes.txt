@@ -113,8 +113,8 @@ Fixed bugs:
   well as feature request #326; related to feature request #323 implemented in previous release).
 - Endianness of multi-byte encoded characters fixed, UTF-8 no longer results in spurious warning
   messages (bug #400, regression of bug #343 fixed for version 1.99.70).
-- Code page for UTF-32 LE/BE encodings fixed (related to bug #400).
-- Superfluous spaces for multi-byte LE encodings fixed (related to bug #400).
+- Superfluous spaces for multi-byte LE encodings fixed (related to bug #400 and feat. request #271).
+- Code page of UTF-32 LE/BE encodings fixed (related to bug #400).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
@@ -137,7 +137,7 @@ Limitations and known issues:
 - Serial COM port break states may not be supported on certain hardware, e.g. USB/RS-232 converters.
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
   implementation and test environment would be needed to run it on unixoids (feature request #119).
-- Wait for answer line (text terminals) not yet implemented (feature request #19).
+- Wait for answer line (text terminals) not yet implemented (feature request #19 and bug #176).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
@@ -212,7 +212,7 @@ Limitations and known issues:
 - Serial COM port break states may not be supported on certain hardware, e.g. USB/RS-232 converters.
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
   implementation and test environment would be needed to run it on unixoids (feature request #119).
-- Wait for answer line (text terminals) not yet implemented (feature request #19).
+- Wait for answer line (text terminals) not yet implemented (feature request #19 and bug #176).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
@@ -296,7 +296,7 @@ Limitations and known issues:
 - Serial COM port break states may not be supported on certain hardware, e.g. USB/RS-232 converters.
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
   implementation and test environment would be needed to run it on unixoids (feature request #119).
-- Wait for answer line (text terminals) not yet implemented (feature request #19).
+- Wait for answer line (text terminals) not yet implemented (feature request #19 and bug #176).
 - Breaking while sending files not possible yet (bug #305 and feature request #295).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
@@ -440,7 +440,7 @@ Limitations and known issues:
   implementation and test environment would be needed to run it on unixoids (feature request #119).
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #139).
 - Keyword \!(Repeat(<Item>, <Repetitions>, <Delay>)) not yet implemented (feature request #13).
-- Wait for answer line (text terminals) not yet implemented (feature request #19).
+- Wait for answer line (text terminals) not yet implemented (feature request #19 and bug #176).
 - Breaking while sending files not possible yet (bug #305).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
@@ -564,7 +564,7 @@ Limitations and known issues:
   implementation and test environment would be needed to run it on unixoids (feature request #119)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #139)
 - Keyword \!(Repeat(<Item>, <Repetitions>, <Delay>)) not yet implemented (feature request #13)
-- Wait for answer line (text terminals) not yet implemented (feature request #19)
+- Wait for answer line (text terminals) not yet implemented (feature request #19 and bug #176)
 - Breaking while sending files not possible yet (bug #305)
 - Direct send text mode does not yet support special formats and commands (feature request #10)
 - Logging is limited to text, RTF format not yet implemented (feature requests #233)

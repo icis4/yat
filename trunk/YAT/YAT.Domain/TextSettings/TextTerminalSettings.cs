@@ -39,10 +39,25 @@ namespace YAT.Domain.Settings
 	public class TextTerminalSettings : MKY.Settings.SettingsItem, IEquatable<TextTerminalSettings>
 	{
 		/// <summary></summary>
-		public static readonly string DefaultEol = EolEx.Parse(Environment.NewLine);
+		public const bool SeparateTxRxEolDefault = false;
 
 		/// <summary></summary>
-		public static readonly int DefaultEncoding = (EncodingEx)System.Text.Encoding.Default;
+		public static readonly string EolDefault = EolEx.Parse(Environment.NewLine);
+
+		/// <summary></summary>
+		public static readonly int EncodingDefault = (EncodingEx)System.Text.Encoding.Default;
+
+		/// <summary></summary>
+		public const bool ShowEolDefault = false;
+
+		/// <summary></summary>
+		public static readonly TextLineSendDelay LineSendDelayDefault = new TextLineSendDelay(false, 500, 1);
+
+		/// <summary></summary>
+		public static readonly WaitForResponse WaitForResponseDefault = new WaitForResponse(false, 500);
+
+		/// <summary></summary>
+		public const CharSubstitution CharSubstitutionDefault = CharSubstitution.None;
 
 		private bool   separateTxRxEol;
 		private string txEol;
@@ -109,14 +124,14 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			SeparateTxRxEol  = false;
-			TxEol            = DefaultEol;
-			RxEol            = DefaultEol;
-			Encoding         = DefaultEncoding;
-			ShowEol          = false;
-			LineSendDelay    = new TextLineSendDelay(false, 500, 1);
-			WaitForResponse  = new WaitForResponse(false, 500);
-			CharSubstitution = CharSubstitution.None;
+			SeparateTxRxEol  = SeparateTxRxEolDefault;
+			TxEol            = EolDefault;
+			RxEol            = EolDefault;
+			Encoding         = EncodingDefault;
+			ShowEol          = ShowEolDefault;
+			LineSendDelay    = LineSendDelayDefault;
+			WaitForResponse  = WaitForResponseDefault;
+			CharSubstitution = CharSubstitutionDefault;
 		}
 
 		/// <remarks>
@@ -277,16 +292,20 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// \remind (2017-12-11 / MKY)
+		/// This feature is not yet implemented.
+		/// It is tracked as feature request #19 and bug #176.
+		/// </remarks>
 		[XmlElement("WaitForResponse")]
 		public virtual WaitForResponse WaitForResponse
 		{
 			get { return (this.waitForResponse); }
 			set
 			{
-				if (this.waitForResponse != value)
+				if (this.waitForResponse != WaitForResponseDefault) // value)
 				{
-					this.waitForResponse = value;
+					this.waitForResponse = WaitForResponseDefault; // value;
 					SetMyChanged();
 				}
 			}

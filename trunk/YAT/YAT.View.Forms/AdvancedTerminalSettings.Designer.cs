@@ -82,6 +82,7 @@
 			this.checkBox_CopyPredefined = new System.Windows.Forms.CheckBox();
 			this.checkBox_KeepSendText = new System.Windows.Forms.CheckBox();
 			this.groupBox_Display = new System.Windows.Forms.GroupBox();
+			this.checkBox_ShowCopyOfActiveLine = new System.Windows.Forms.CheckBox();
 			this.groupBox_Display_UsbSerialHid = new System.Windows.Forms.GroupBox();
 			this.checkBox_IncludeNonPayloadData = new System.Windows.Forms.CheckBox();
 			this.textBox_MaxBytePerLineCount = new MKY.Windows.Forms.TextBoxEx();
@@ -125,7 +126,6 @@
 			this.label_MaxLineCountUnit = new System.Windows.Forms.Label();
 			this.label_MaxLineCount = new System.Windows.Forms.Label();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.checkBox_ShowCopyOfActiveLine = new System.Windows.Forms.CheckBox();
 			this.groupBox_User.SuspendLayout();
 			this.groupBox_Communication.SuspendLayout();
 			this.groupBox_Communication_SerialPorts.SuspendLayout();
@@ -273,9 +273,6 @@
 			this.comboBox_Endianness.Name = "comboBox_Endianness";
 			this.comboBox_Endianness.Size = new System.Drawing.Size(172, 21);
 			this.comboBox_Endianness.TabIndex = 1;
-			this.toolTip.SetToolTip(this.comboBox_Endianness, "The byte order of the serial communication.\r\nE.g. applies to multi-byte encoded c" +
-        "haracters for text terminals.\r\nThe default is \'Big-Endian\' which is the default " +
-        "for most network protocols.");
 			this.comboBox_Endianness.SelectedIndexChanged += new System.EventHandler(this.comboBox_Endianness_SelectedIndexChanged);
 			// 
 			// label_Endianness
@@ -765,6 +762,16 @@
 			this.groupBox_Display.TabStop = false;
 			this.groupBox_Display.Text = "Display Settings";
 			// 
+			// checkBox_ShowCopyOfActiveLine
+			// 
+			this.checkBox_ShowCopyOfActiveLine.AutoSize = true;
+			this.checkBox_ShowCopyOfActiveLine.Location = new System.Drawing.Point(12, 256);
+			this.checkBox_ShowCopyOfActiveLine.Name = "checkBox_ShowCopyOfActiveLine";
+			this.checkBox_ShowCopyOfActiveLine.Size = new System.Drawing.Size(142, 17);
+			this.checkBox_ShowCopyOfActiveLine.TabIndex = 30;
+			this.checkBox_ShowCopyOfActiveLine.Text = "Show copy of &active line";
+			this.checkBox_ShowCopyOfActiveLine.CheckedChanged += new System.EventHandler(this.checkBox_ShowCopyOfActiveLine_CheckedChanged);
+			// 
 			// groupBox_Display_UsbSerialHid
 			// 
 			this.groupBox_Display_UsbSerialHid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -1219,16 +1226,6 @@
 			this.label_MaxLineCount.TabIndex = 20;
 			this.label_MaxLineCount.Text = "Display &maximal";
 			this.label_MaxLineCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// checkBox_ShowCopyOfActiveLine
-			// 
-			this.checkBox_ShowCopyOfActiveLine.AutoSize = true;
-			this.checkBox_ShowCopyOfActiveLine.Location = new System.Drawing.Point(12, 256);
-			this.checkBox_ShowCopyOfActiveLine.Name = "checkBox_ShowCopyOfActiveLine";
-			this.checkBox_ShowCopyOfActiveLine.Size = new System.Drawing.Size(142, 17);
-			this.checkBox_ShowCopyOfActiveLine.TabIndex = 30;
-			this.checkBox_ShowCopyOfActiveLine.Text = "Show copy of &active line";
-			this.checkBox_ShowCopyOfActiveLine.CheckedChanged += new System.EventHandler(this.checkBox_ShowCopyOfActiveLine_CheckedChanged);
 			// 
 			// AdvancedTerminalSettings
 			// 

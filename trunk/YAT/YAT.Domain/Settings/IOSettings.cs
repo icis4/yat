@@ -184,7 +184,12 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// \remind (2017-12-11 / MKY)
+		/// The endianness is currently fixed to 'Big-Endian (Network, Motorola)'.
+		/// It was used by former versions of YAT but is currently not used anymore.
+		/// Still, the setting is kept for future enhancements as documented in bug #343.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Endianness", Justification = "'Endianness' is a correct English term.")]
 		[XmlElement("Endianness")]
 		public virtual Endianness Endianness
@@ -192,9 +197,9 @@ namespace YAT.Domain.Settings
 			get { return (this.endianness); }
 			set
 			{
-				if (this.endianness != value)
+				if (this.endianness != EndiannessDefault) // value)
 				{
-					this.endianness = value;
+					this.endianness = EndiannessDefault; // value;
 					SetMyChanged();
 				}
 			}
