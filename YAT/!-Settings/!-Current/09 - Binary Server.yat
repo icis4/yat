@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <FileType>YAT Terminal Settings</FileType>
-  <SettingsVersion>1.5.2</SettingsVersion>
-  <ProductVersion>1.99.80</ProductVersion>
+  <SettingsVersion>1.5.3</SettingsVersion>
+  <ProductVersion>1.99.85</ProductVersion>
   <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
-    <TimeStamp>2017-12-09T20:09:51.7588057+01:00</TimeStamp>
+    <TimeStamp>2017-12-10T23:08:52.9007008+01:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
@@ -129,6 +129,7 @@
         <ShowLength>false</ShowLength>
         <MaxLineCount>1000</MaxLineCount>
         <MaxBytePerLineCount>1000</MaxBytePerLineCount>
+        <ShowCopyOfActiveLine>false</ShowCopyOfActiveLine>
         <PortLineBreakEnabled>true</PortLineBreakEnabled>
         <DirectionLineBreakEnabled>true</DirectionLineBreakEnabled>
         <InfoSeparator> </InfoSeparator>
@@ -233,10 +234,13 @@
     </Terminal>
     <PredefinedCommand />
     <AutoResponse>
-      <Visible>false</Visible>
       <Trigger>[None]</Trigger>
       <Response>[None]</Response>
     </AutoResponse>
+    <AutoAction>
+      <Trigger>[None]</Trigger>
+      <Action>[None]</Action>
+    </AutoAction>
     <Format>
       <Font>
         <Name>DejaVu Sans Mono</Name>
@@ -367,6 +371,5 @@
       <SendTextPanelIsVisible>true</SendTextPanelIsVisible>
       <SendFilePanelIsVisible>true</SendFilePanelIsVisible>
     </Layout>
-    <View />
   </Implicit>
 </Settings>

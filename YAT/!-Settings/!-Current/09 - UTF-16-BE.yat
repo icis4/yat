@@ -5,7 +5,7 @@
   <ProductVersion>1.99.85</ProductVersion>
   <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
-    <TimeStamp>2017-12-10T15:26:53.7294764+01:00</TimeStamp>
+    <TimeStamp>2017-12-10T23:34:49.885278+01:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
@@ -402,94 +402,6 @@
         <IsFilePath>false</IsFilePath>
         <FilePath />
       </Command>
-      <RecentCommands>
-        <Item>
-          <IsDefined>true</IsDefined>
-          <Description>一二州</Description>
-          <DefaultRadix>String</DefaultRadix>
-          <CommandLines>一二州</CommandLines>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Item>
-        <TimeStamp>2017-12-10T15:26:35.5918926+01:00</TimeStamp>
-      </RecentCommands>
-      <RecentCommands>
-        <Item>
-          <IsDefined>true</IsDefined>
-          <Description>čěř</Description>
-          <DefaultRadix>String</DefaultRadix>
-          <CommandLines>čěř</CommandLines>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Item>
-        <TimeStamp>2017-12-10T14:52:45.6935696+01:00</TimeStamp>
-      </RecentCommands>
-      <RecentCommands>
-        <Item>
-          <IsDefined>true</IsDefined>
-          <Description>︙</Description>
-          <DefaultRadix>String</DefaultRadix>
-          <CommandLines>︙</CommandLines>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Item>
-        <TimeStamp>2017-12-09T20:36:57.987298+01:00</TimeStamp>
-      </RecentCommands>
-      <RecentCommands>
-        <Item>
-          <IsDefined>true</IsDefined>
-          <Description>'Notenschlüssel'</Description>
-          <DefaultRadix>String</DefaultRadix>
-          <CommandLines>𝄞</CommandLines>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Item>
-        <TimeStamp>2017-12-09T20:30:34.5540571+01:00</TimeStamp>
-      </RecentCommands>
-      <RecentCommands>
-        <Item>
-          <IsDefined>true</IsDefined>
-          <Description>$£€</Description>
-          <DefaultRadix>String</DefaultRadix>
-          <CommandLines>$£€</CommandLines>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Item>
-        <TimeStamp>2017-12-09T20:20:52.5141926+01:00</TimeStamp>
-      </RecentCommands>
-      <RecentCommands>
-        <Item>
-          <IsDefined>true</IsDefined>
-          <Description>ÄÖÜ</Description>
-          <DefaultRadix>String</DefaultRadix>
-          <CommandLines>ÄÖÜ</CommandLines>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Item>
-        <TimeStamp>2017-12-09T20:20:51.5145343+01:00</TimeStamp>
-      </RecentCommands>
-      <RecentCommands>
-        <Item>
-          <IsDefined>true</IsDefined>
-          <Description>äöü</Description>
-          <DefaultRadix>String</DefaultRadix>
-          <CommandLines>äöü</CommandLines>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Item>
-        <TimeStamp>2017-12-09T20:20:50.3865549+01:00</TimeStamp>
-      </RecentCommands>
-      <RecentCommands>
-        <Item>
-          <IsDefined>true</IsDefined>
-          <Description>abc</Description>
-          <DefaultRadix>String</DefaultRadix>
-          <CommandLines>abc</CommandLines>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Item>
-        <TimeStamp>2017-12-09T20:20:48.6589397+01:00</TimeStamp>
-      </RecentCommands>
     </SendText>
     <SendFile>
       <Command>
