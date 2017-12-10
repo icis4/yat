@@ -730,7 +730,7 @@ namespace YAT.Domain
 			// Add current element if it wasn't consumed above:
 			if (de != null)
 			{
-				AddSpaceIfNecessary(lineState, d, lp);
+				AddSpaceIfNecessary(lineState, d, lp, de);
 				lp.Add(de);
 			}
 
@@ -779,19 +779,19 @@ namespace YAT.Domain
 		{
 			if (lineState.PendingSequenceBeforeElements.Count > 0)
 			{
-				foreach (DisplayElement dePending in lineState.PendingSequenceBeforeElements)
+				foreach (var de in lineState.PendingSequenceBeforeElements)
 				{
-					AddSpaceIfNecessary(lineState, d, lp);
-					lp.Add(dePending);
+					AddSpaceIfNecessary(lineState, d, lp, de);
+					lp.Add(de);
 				}
 
 				lineState.PendingSequenceBeforeElements.Clear();
 			}
 		}
 
-		private void AddSpaceIfNecessary(LineState lineState, IODirection d, DisplayLinePart lp)
+		private void AddSpaceIfNecessary(LineState lineState, IODirection d, DisplayLinePart lp, DisplayElement de)
 		{
-			if (ElementsAreSeparate(d))
+			if (ElementsAreSeparate(d) && !string.IsNullOrEmpty(de.Text))
 			{
 				if ((lineState.Elements.ByteCount > 0) || (lp.ByteCount > 0))
 					lp.Add(new DisplayElement.DataSpace());

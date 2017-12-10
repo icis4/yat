@@ -114,6 +114,7 @@ Fixed bugs:
 - Endianness of multi-byte encoded characters fixed, UTF-8 no longer results in spurious warning
   messages (bug #400, regression of bug #343 fixed for version 1.99.70).
 - Code page for UTF-32 LE/BE encodings fixed (related to bug #400).
+- Superfluous spaces for multi-byte LE encodings fixed (related to bug #400).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
@@ -127,6 +128,7 @@ Limitations and known issues:
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
    > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
      selected may lead to a severe drop of the overall performance (rel. to bugs #305, #380, #383).
+   > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
