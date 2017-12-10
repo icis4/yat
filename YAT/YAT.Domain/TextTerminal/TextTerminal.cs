@@ -823,7 +823,7 @@ namespace YAT.Domain
 						// Add them as separate items:
 						foreach (var item in l)
 						{
-							AddSpaceIfNecessary(lineState, d, lp);
+							AddSpaceIfNecessary(lineState, d, lp, item);
 							lp.Add(item); // No clone needed as all items have just been recreated futher above.
 						}
 					}
@@ -855,7 +855,7 @@ namespace YAT.Domain
 							if (currentIndex > firstEolIndex)
 								item.IsEol = true;
 
-							AddSpaceIfNecessary(lineState, d, lp);
+							AddSpaceIfNecessary(lineState, d, lp, item);
 							lp.Add(item); // No clone needed as all items have just been recreated futher above.
 						}
 					}
@@ -889,7 +889,7 @@ namespace YAT.Domain
 				TreatEolAsNormal(lineState, lp);
 
 				// Add non-EOL element:
-				AddSpaceIfNecessary(lineState, d, lp);
+				AddSpaceIfNecessary(lineState, d, lp, de);
 				lp.Add(de); // No clone needed as element has just been created further above.
 			}
 
@@ -914,9 +914,9 @@ namespace YAT.Domain
 			}
 		}
 
-		private void AddSpaceIfNecessary(LineState lineState, IODirection d, DisplayLinePart lp)
+		private void AddSpaceIfNecessary(LineState lineState, IODirection d, DisplayLinePart lp, DisplayElement de)
 		{
-			if (ElementsAreSeparate(d))
+			if (ElementsAreSeparate(d) && !string.IsNullOrEmpty(de.Text))
 			{
 				if ((lineState.Elements.ByteCount > 0) || (lp.ByteCount > 0))
 					lp.Add(new DisplayElement.DataSpace());
