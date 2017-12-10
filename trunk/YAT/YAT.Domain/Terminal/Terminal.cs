@@ -3416,19 +3416,34 @@ namespace YAT.Domain
 			var sb = new StringBuilder();
 			lock (this.repositorySyncObj)
 			{
-				sb.AppendLine(indent + "> Settings: " + this.terminalSettings);
+				if (this.terminalSettings != null) // Possible during disposing.
+				{
+					sb.AppendLine(indent + "> Settings: " + this.terminalSettings);
+				}
 
-				sb.AppendLine(indent + "> RawTerminal: ");
-				sb.AppendLine(this.rawTerminal.ToString(indent + "   "));
+				if (this.rawTerminal != null) // Possible during disposing.
+				{
+					sb.AppendLine(indent + "> RawTerminal: ");
+					sb.AppendLine(this.rawTerminal.ToString(indent + "   "));
+				}
 
-				sb.AppendLine(indent + "> TxRepository: ");
-				sb.Append(this.txRepository.ToString(indent + "   ")); // Repository will add 'NewLine'.
+				if (this.txRepository != null) // Possible during disposing.
+				{
+					sb.AppendLine(indent + "> TxRepository: ");
+					sb.Append    (this.txRepository.ToString(indent + "   ")); // Repository will add 'NewLine'.
+				}
 
-				sb.AppendLine(indent + "> BidirRepository: ");
-				sb.Append(this.txRepository.ToString(indent + "   ")); // Repository will add 'NewLine'.
+				if (this.bidirRepository != null) // Possible during disposing.
+				{
+					sb.AppendLine(indent + "> BidirRepository: ");
+					sb.Append    (this.bidirRepository.ToString(indent + "   ")); // Repository will add 'NewLine'.
+				}
 
-				sb.AppendLine(indent + "> RxRepository: ");
-				sb.Append(this.txRepository.ToString(indent + "   ")); // Repository will add 'NewLine'.
+				if (this.bidirRepository != null) // Possible during disposing.
+				{
+					sb.AppendLine(indent + "> RxRepository: ");
+					sb.Append    (this.rxRepository.ToString(indent + "   ")); // Repository will add 'NewLine'.
+				}
 			}
 			return (sb.ToString());
 		}

@@ -26,6 +26,7 @@ using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
 using System.Text;
 
 namespace MKY.Diagnostics
@@ -67,23 +68,45 @@ namespace MKY.Diagnostics
 				foreach (var sink in sinks)
 				{
 					string target;
-					try
+					if ((sink.Value2 != null) && (sink.Value2.Target != null))
 					{
-						target = sink.Value2.Target.ToString();
+						try
+						{
+							target = sink.Value2.Target.ToString();
+						}
+						catch (Exception ex)
+						{
+							using (var sw = new StringWriter(CultureInfo.CurrentCulture))
+							{
+								AnyWriter.WriteException(sw, sink.Value2.Target.GetType(), ex, "Exception while retrieving target information!");
+								target = sw.ToString();
+							}
+						}
 					}
-					catch (Exception ex)
+					else
 					{
-						target = "Exception while retrieving object information!" + Environment.NewLine + ex.Message;
+						target = "Unable to retrieve target information!";
 					}
 
 					string method;
-					try
+					if ((sink.Value2 != null) && (sink.Value2.Method != null))
 					{
-						method = sink.Value2.Method.ToString();
+						try
+						{
+							method = sink.Value2.Method.ToString();
+						}
+						catch (Exception ex)
+						{
+							using (var sw = new StringWriter(CultureInfo.CurrentCulture))
+							{
+								AnyWriter.WriteException(sw, sink.Value2.Method.GetType(), ex, "Exception while retrieving method information!");
+								method = sw.ToString();
+							}
+						}
 					}
-					catch (Exception ex)
+					else
 					{
-						method = "Exception while retrieving object information!" + Environment.NewLine + ex.Message;
+						method = "Unable to retrieve method information!";
 					}
 
 					Debug.WriteLine(@"""" + target + @""" still references """ + method + @"""");
