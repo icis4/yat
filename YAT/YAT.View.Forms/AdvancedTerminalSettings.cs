@@ -509,7 +509,27 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.Terminal.IO.Endianness = (Domain.EndiannessEx)comboBox_Endianness.SelectedItem;
+		////this.settingsInEdit.Terminal.IO.Endianness = (Domain.EndiannessEx)comboBox_Endianness.SelectedItem;
+
+			var endianness = (Domain.EndiannessEx)comboBox_Endianness.SelectedItem;
+			if (endianness != this.settingsInEdit.Terminal.IO.Endianness)
+			{
+				string message =
+					"The endianness is currently fixed to 'Big-Endian (Network, Motorola)'. " +
+					"It was used by former versions of YAT but is currently not used anymore. " +
+					"Still, the setting is kept for future enhancements as documented in bug #343.";
+
+				MessageBoxEx.Show
+				(
+					this,
+					message,
+					"Limitation",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information
+				);
+
+				SetControls();
+			}
 		}
 
 		private void checkBox_IgnoreFramingErrors_CheckedChanged(object sender, EventArgs e)

@@ -340,9 +340,28 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			var wfr = this.settingsInEdit.WaitForResponse;
-			wfr.Enabled = checkBox_WaitForResponse.Checked;
-			this.settingsInEdit.WaitForResponse = wfr;
+		////var wfr = this.settingsInEdit.WaitForResponse;
+		////wfr.Enabled = checkBox_WaitForResponse.Checked;
+		////this.settingsInEdit.WaitForResponse = wfr;
+
+			var enabled = checkBox_WaitForResponse.Checked;
+			if (enabled != this.settingsInEdit.WaitForResponse.Enabled)
+			{
+				string message =
+					"This feature is not yet implemented. " +
+					"It is tracked as feature request #19 and bug #176.";
+
+				MessageBoxEx.Show
+				(
+					this,
+					message,
+					"Limitation",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information
+				);
+
+				SetControls();
+			}
 		}
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
@@ -354,9 +373,27 @@ namespace YAT.View.Forms
 			int timeout;
 			if (int.TryParse(textBox_WaitForResponse.Text, out timeout) && (timeout >= 1))
 			{
-				var wfr = this.settingsInEdit.WaitForResponse;
-				wfr.Timeout = timeout;
-				this.settingsInEdit.WaitForResponse = wfr;
+			////var wfr = this.settingsInEdit.WaitForResponse;
+			////wfr.Timeout = timeout;
+			////this.settingsInEdit.WaitForResponse = wfr;
+
+				if (timeout != this.settingsInEdit.WaitForResponse.Timeout)
+				{
+					string message =
+						"This feature is not yet implemented. " +
+						"It is tracked as feature request #19 and bug #176.";
+
+					MessageBoxEx.Show
+					(
+						this,
+						message,
+						"Limitation",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Information
+					);
+
+					SetControls();
+				}
 			}
 			else
 			{
@@ -556,16 +593,10 @@ namespace YAT.View.Forms
 				textBox_DelayInterval.Enabled = delayEnabled;
 				textBox_DelayInterval.Text    = this.settingsInEdit.LineSendDelay.LineInterval.ToString(CultureInfo.CurrentCulture);
 
-				// \remind (2017-04-05 / MKY) (feature request #19 and bug #176)
-			////bool waitEnabled                  = this.settingsInEdit.WaitForResponse.Enabled;
-			////checkBox_WaitForResponse.Checked  = waitEnabled;
-			////textBox_WaitForResponse.Enabled   = waitEnabled;
-			////textBox_WaitForResponse.Text      = this.settingsInEdit.WaitForResponse.Timeout.ToString(CultureInfo.CurrentCulture);
-			////checkBox_WaitForResponse.ToolTip  = see designer
-				checkBox_WaitForResponse.Enabled  = false;
-				label_WaitForResponse.Enabled     = false;
-				textBox_WaitForResponse.Enabled   = false;
-				label_WaitForResponseUnit.Enabled = false;
+				bool waitEnabled                 = this.settingsInEdit.WaitForResponse.Enabled;
+				checkBox_WaitForResponse.Checked = waitEnabled;
+				textBox_WaitForResponse.Enabled  = waitEnabled;
+				textBox_WaitForResponse.Text     = this.settingsInEdit.WaitForResponse.Timeout.ToString(CultureInfo.CurrentCulture);
 
 				switch (this.settingsInEdit.CharSubstitution)
 				{
