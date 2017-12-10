@@ -777,6 +777,9 @@ namespace YAT.Domain.Parser
 		/// <paramref name="radix"/> and converts them into bytes. The digits will sequentially be
 		/// parsed and converted byte-by-byte.
 		/// </summary>
+		/// <remarks>
+		/// Implementation allows e.g. \h(01020A0F) to easily send data from e.g. a .hex file.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for recursion.")]
 		internal virtual bool TryParseAndConvertContiguousNumericItem(string s, Radix radix, out byte[] result, ref FormatException formatException)
