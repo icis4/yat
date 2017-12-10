@@ -920,28 +920,23 @@ namespace YAT.Domain.Parser
 						{
 							bool found = false;
 
-							int from = Math.Min(4, remaining.Length);
+							int from = Math.Min(4, remaining.Length); // Note the limitation FR #329: Unicode is limited to the basic multilingual plane (U+0000..U+FFFF).
 							for (int i = from; i >= 1; i--) // Probe the 4-3-2-1 left-most characters for a valid hexadecimal Unicode value.
 							{
 								ushort value;
 								if (ushort.TryParse(StringEx.Left(remaining, i), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out value))
 								{
-									if (value <= 0xFF)
-									{
-										bytes.WriteByte((byte)value);
-									}
-									else
-									{
-										byte upper = (byte)((value & 0xFF00) >> 8);
-										byte lower = (byte)((value & 0x00FF) >> 0);
-										switch (this.endianness)
-										{
-											case Endianness.BigEndian:    bytes.WriteByte(upper); bytes.WriteByte(lower); break;
-											case Endianness.LittleEndian: bytes.WriteByte(lower); bytes.WriteByte(upper); break;
+									var c = char.ConvertFromUtf32(value);
+									var a = this.encoding.GetBytes(c);
+									bytes.Write(a, 0, a.Length);
 
-											default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.endianness + "' is an endianness that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-										}
-									}
+									// \remind (2017-12-09 / MKY / bug #400)
+									// YAT versions 1.99.70 and 1.99.80 used to take the endianness into account when encoding
+									// and decoding multi-byte encoded characters. However, it was always done, but of course e.g.
+									// UTF-8 is independent on endianness. The endianness would only have to be applied single
+									// multi-byte values, not multi-byte values split into multiple fragments. However, a .NET
+									// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
+									// not. Thus, it was decided to again remove the character encoding endianness awareness.
 
 									remaining = remaining.Remove(0, i);
 									found = true;
