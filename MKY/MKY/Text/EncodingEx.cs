@@ -230,10 +230,10 @@ namespace MKY.Text
 		UTF16BE = 1201,
 
 		/// <summary>Unicode (UTF-32).</summary>
-		UTF32 = 65005,
+		UTF32 = 12000,
 
 		/// <summary>Unicode (UTF-32 Big-Endian).</summary>
-		UTF32BE = 65006,
+		UTF32BE = 12001,
 
 		//------------------------------------------------------------------------------------------
 		// ISO
