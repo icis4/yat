@@ -2381,7 +2381,10 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Note the limitation FR #329:
+		/// Unicode is limited to the basic multilingual plane (U+0000..U+FFFF).
+		/// </remarks>
 		[CLSCompliant(false)]
 		protected virtual string UnicodeValueToNumericString(ushort value)
 		{
