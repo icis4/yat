@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
@@ -70,7 +71,7 @@ namespace YAT.Domain
 			private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(LineBreakTimer).FullName);
 
 			private int timeout;
-			private System.Threading.Timer timer;
+			private Timer timer;
 			private object timerSyncObj = new object();
 
 			/// <summary></summary>
@@ -102,6 +103,7 @@ namespace YAT.Domain
 			{
 				if (!IsDisposed)
 				{
+					Debug.WriteLine("Remind (2016-09-08 / MKY) 'Elapsed' event handler not yet free'd, whole timer handling should be encapsulated into the 'LineState' class.");
 					DebugEventManagement.DebugWriteAllEventRemains(this);
 					this.eventHelper.DiscardAllEventsAndExceptions();
 
@@ -284,10 +286,10 @@ namespace YAT.Domain
 					if (disposing)
 					{
 						// In the 'normal' case, the timer is stopped in ExecuteLineEnd().
-						if (this.BreakTimer != null)
+						if (BreakTimer != null)
 						{
-							this.BreakTimer.Dispose();
-							EventHandlerHelper.RemoveAllEventHandlers(this.BreakTimer);
+							BreakTimer.Dispose();
+							EventHandlerHelper.RemoveAllEventHandlers(BreakTimer);
 
 							// \remind (2016-09-08 / MKY)
 							// Whole timer handling should be encapsulated into the 'LineState' class.
@@ -295,7 +297,7 @@ namespace YAT.Domain
 					}
 
 					// Set state to disposed:
-					this.BreakTimer = null;
+					BreakTimer = null;
 					IsDisposed = true;
 				}
 			}
@@ -413,7 +415,7 @@ namespace YAT.Domain
 				// Tx:
 
 				this.txLineState = casted.txLineState;
-				                                             //// \remind (2016-09-08 / MKY)
+				                                         //// \remind (2016-09-08 / MKY)
 				if (this.txLineState.BreakTimer != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
 					this.txLineState.BreakTimer.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
 
@@ -423,7 +425,7 @@ namespace YAT.Domain
 				// Rx:
 
 				this.rxLineState = casted.rxLineState;
-				                                             //// \remind (2016-09-08 / MKY)
+				                                         //// \remind (2016-09-08 / MKY)
 				if (this.rxLineState.BreakTimer != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
 					this.rxLineState.BreakTimer.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
 
