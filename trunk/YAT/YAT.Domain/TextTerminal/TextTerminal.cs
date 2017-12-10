@@ -550,7 +550,7 @@ namespace YAT.Domain
 					// In case of an invalid EOL sequence, default it. This should never happen,
 					// YAT verifies the EOL sequence when the user enters it. However, the user might
 					// manually edit the EOL sequence in a settings file.
-					TextTerminalSettings.TxEol = Settings.TextTerminalSettings.DefaultEol;
+					TextTerminalSettings.TxEol = Settings.TextTerminalSettings.EolDefault;
 					txEol = p.Parse(TextTerminalSettings.TxEol);
 				}
 
@@ -559,7 +559,7 @@ namespace YAT.Domain
 					// In case of an invalid EOL sequence, default it. This should never happen,
 					// YAT verifies the EOL sequence when the user enters it. However, the user might
 					// manually edit the EOL sequence in a settings file.
-					TextTerminalSettings.RxEol = Settings.TextTerminalSettings.DefaultEol;
+					TextTerminalSettings.RxEol = Settings.TextTerminalSettings.EolDefault;
 					rxEol = p.Parse(TextTerminalSettings.RxEol);
 				}
 			}
