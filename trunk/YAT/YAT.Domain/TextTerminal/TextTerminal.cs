@@ -638,14 +638,20 @@ namespace YAT.Domain
 					}
 					else // 'IsMultiByte':
 					{
-						this.rxMultiByteDecodingStream.Add(b);
+						// \remind (2017-12-09 / MKY / bug #400)
+						// YAT versions 1.99.70 and 1.99.80 used to take the endianness into account when encoding
+						// and decoding multi-byte encoded characters. However, it was always done, but of course e.g.
+						// UTF-8 is independent on endianness. The endianness would only have to be applied single
+						// multi-byte values, not multi-byte values split into multiple fragments. However, a .NET
+						// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
+						// not. Thus, it was decided to again remove the character encoding endianness awareness.
 
+						this.rxMultiByteDecodingStream.Add(b);
 						byte[] decodingArray = this.rxMultiByteDecodingStream.ToArray();
-						if (!((EndiannessEx)TerminalSettings.IO.Endianness).IsSameAsMachine)
-							decodingArray = decodingArray.Reverse().ToArray();
 
 						int expectedCharCount = e.GetCharCount(decodingArray);
 						char[] chars = new char[expectedCharCount];
+
 						int effectiveCharCount = e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true);
 						if (effectiveCharCount == 1)
 						{
@@ -739,9 +745,9 @@ namespace YAT.Domain
 									sb.Append(base.ByteToElement(invalid, d, Radix.Hex));
 								}
 
-								sb.Append(@""" is an invalid ");
+								sb.Append(@""" is an invalid '");
 								sb.Append(((EncodingEx)e).DisplayName);
-								sb.Append(" byte sequence!");
+								sb.Append("' byte sequence!");
 
 								this.rxMultiByteDecodingStream.Clear(); // Reset decoding stream.
 

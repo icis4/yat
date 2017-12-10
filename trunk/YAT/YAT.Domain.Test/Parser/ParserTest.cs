@@ -279,89 +279,108 @@ namespace YAT.Domain.Test.Parser
 		// Test Cases
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Good online tools:
+		/// https://www.branah.com/unicode-converter
+		/// https://r12a.github.io/apps/conversion/
+		/// https://r12a.github.io/apps/encodings/
+		/// </remarks>
 		public static IEnumerable TestCases
 		{
 			get
 			{
 				// ASCII:
-				yield return (new TestCaseData(Encoding.ASCII, Endianness.LittleEndian, "abc", new byte[] { 0x61, 0x62, 0x63 }));
-				yield return (new TestCaseData(Encoding.ASCII, Endianness.BigEndian,    "abc", new byte[] { 0x61, 0x62, 0x63 }));
+				yield return (new TestCaseData(Encoding.ASCII, "abc", new byte[] { 0x61, 0x62, 0x63 }));
 
 				// UTF-8:
-				yield return (new TestCaseData(Encoding.UTF8, Endianness.LittleEndian, "abc", new byte[] { 0x61, 0x62, 0x63 }));
-				yield return (new TestCaseData(Encoding.UTF8, Endianness.LittleEndian, "äöü", new byte[] { 0xC3, 0xA4, 0xC3, 0xB6, 0xC3, 0xBC }));
-				yield return (new TestCaseData(Encoding.UTF8, Endianness.LittleEndian, "ÄÖÜ", new byte[] { 0xC3, 0x84, 0xC3, 0x96, 0xC3, 0x9C }));
-				yield return (new TestCaseData(Encoding.UTF8, Endianness.LittleEndian, "$£€", new byte[] { 0x24, 0xC2, 0xA3, 0xE2, 0x82, 0xAC })); // 1-2-3 bytes !!!
-				yield return (new TestCaseData(Encoding.UTF8, Endianness.LittleEndian, "čěř", new byte[] { 0xC4, 0x8D, 0xC4, 0x9B, 0xC5, 0x99 }));
-				yield return (new TestCaseData(Encoding.UTF8, Endianness.BigEndian,    "abc", new byte[] { 0x61, 0x62, 0x63 }));
-				yield return (new TestCaseData(Encoding.UTF8, Endianness.BigEndian,    "äöü", new byte[] { 0xA4, 0xC3, 0xB6, 0xC3, 0xBC, 0xC3 }));
-				yield return (new TestCaseData(Encoding.UTF8, Endianness.BigEndian,    "ÄÖÜ", new byte[] { 0x84, 0xC3, 0x96, 0xC3, 0x9C, 0xC3 }));
-				yield return (new TestCaseData(Encoding.UTF8, Endianness.BigEndian,    "$£€", new byte[] { 0x24, 0xA3, 0xC2, 0xAC, 0x82, 0xE2 })); // 1-2-3 bytes !!!
-				yield return (new TestCaseData(Encoding.UTF8, Endianness.BigEndian,    "čěř", new byte[] { 0x8D, 0xC4, 0x9B, 0xC4, 0x99, 0xC5 }));
+				yield return (new TestCaseData(Encoding.UTF8, "abc", new byte[] { 0x61, 0x62, 0x63 }));
+				yield return (new TestCaseData(Encoding.UTF8, "äöü", new byte[] { 0xC3, 0xA4, 0xC3, 0xB6, 0xC3, 0xBC }));
+				yield return (new TestCaseData(Encoding.UTF8, "ÄÖÜ", new byte[] { 0xC3, 0x84, 0xC3, 0x96, 0xC3, 0x9C }));
+				yield return (new TestCaseData(Encoding.UTF8, "$£€", new byte[] { 0x24, 0xC2, 0xA3, 0xE2, 0x82, 0xAC })); // 1-2-3 bytes !!!
+				yield return (new TestCaseData(Encoding.UTF8, "čěř", new byte[] { 0xC4, 0x8D, 0xC4, 0x9B, 0xC5, 0x99 }));
 
-				yield return (new TestCaseData(Encoding.UTF8, Endianness.LittleEndian, @"\0<CR>\n", new byte[] { 0x00, 0x0D, 0x0A }));
-				yield return (new TestCaseData(Encoding.UTF8, Endianness.BigEndian,    @"\0<CR>\n", new byte[] { 0x00, 0x0D, 0x0A }));
+				yield return (new TestCaseData(Encoding.UTF8, "一二州", new byte[] { 0xE4, 0xB8, 0x80, 0xE4, 0xBA, 0x8C, 0xE5, 0xB7, 0x9E }));
+				//                                            yi er zhou is U+4E00 U+4E8C U+5DDE
+				yield return (new TestCaseData(Encoding.UTF8, "︙", new byte[] { 0xEF, 0xB8, 0x99 }));
+				//                                            'Vertical Horizontal Ellipsis' is U+FE19
+				yield return (new TestCaseData(Encoding.UTF8, "𝄞", new byte[] { 0xF0, 0x9D, 0x84, 0x9E }));
+				//                                            'Notenschlüssel' is U+1D11E but U+10000 does not seem supported by .NET 3.5 WindowForms...
+				yield return (new TestCaseData(Encoding.UTF8, @"\0<CR>\n", new byte[] { 0x00, 0x0D, 0x0A }));
 
 				// UTF-16 (little endian, i.e. machine endianness):
-				yield return (new TestCaseData(Encoding.Unicode, Endianness.LittleEndian, "abc", new byte[] { 0x61, 0x00, 0x62, 0x00, 0x63, 0x00 }));
-				yield return (new TestCaseData(Encoding.Unicode, Endianness.LittleEndian, "äöü", new byte[] { 0xE4, 0x00, 0xF6, 0x00, 0xFC, 0x00 }));
-				yield return (new TestCaseData(Encoding.Unicode, Endianness.LittleEndian, "ÄÖÜ", new byte[] { 0xC4, 0x00, 0xD6, 0x00, 0xDC, 0x00 }));
-				yield return (new TestCaseData(Encoding.Unicode, Endianness.LittleEndian, "$£€", new byte[] { 0x24, 0x00, 0xA3, 0x00, 0xAC, 0x20 }));
-				yield return (new TestCaseData(Encoding.Unicode, Endianness.LittleEndian, "čěř", new byte[] { 0x0D, 0x01, 0x1B, 0x01, 0x59, 0x01 }));
-				yield return (new TestCaseData(Encoding.Unicode, Endianness.BigEndian,    "abc", new byte[] { 0x00, 0x61, 0x00, 0x62, 0x00, 0x63 }));
-				yield return (new TestCaseData(Encoding.Unicode, Endianness.BigEndian,    "äöü", new byte[] { 0x00, 0xE4, 0x00, 0xF6, 0x00, 0xFC }));
-				yield return (new TestCaseData(Encoding.Unicode, Endianness.BigEndian,    "ÄÖÜ", new byte[] { 0x00, 0xC4, 0x00, 0xD6, 0x00, 0xDC }));
-				yield return (new TestCaseData(Encoding.Unicode, Endianness.BigEndian,    "$£€", new byte[] { 0x00, 0x24, 0x00, 0xA3, 0x20, 0xAC }));
-				yield return (new TestCaseData(Encoding.Unicode, Endianness.BigEndian,    "čěř", new byte[] { 0x01, 0x0D, 0x01, 0x1B, 0x01, 0x59 }));
+				yield return (new TestCaseData(Encoding.Unicode, "abc", new byte[] { 0x61, 0x00, 0x62, 0x00, 0x63, 0x00 }));
+				yield return (new TestCaseData(Encoding.Unicode, "äöü", new byte[] { 0xE4, 0x00, 0xF6, 0x00, 0xFC, 0x00 }));
+				yield return (new TestCaseData(Encoding.Unicode, "ÄÖÜ", new byte[] { 0xC4, 0x00, 0xD6, 0x00, 0xDC, 0x00 }));
+				yield return (new TestCaseData(Encoding.Unicode, "$£€", new byte[] { 0x24, 0x00, 0xA3, 0x00, 0xAC, 0x20 }));
+				yield return (new TestCaseData(Encoding.Unicode, "čěř", new byte[] { 0x0D, 0x01, 0x1B, 0x01, 0x59, 0x01 }));
 
-				yield return (new TestCaseData(Encoding.Unicode, Endianness.LittleEndian, @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x0D, 0x00, 0x0A, 0x00 }));
-				yield return (new TestCaseData(Encoding.Unicode, Endianness.BigEndian,    @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x00, 0x0D, 0x00, 0x0A }));
+				yield return (new TestCaseData(Encoding.Unicode, "一二州", new byte[] { 0x00, 0x4E, 0x8C, 0x4E, 0xDE, 0x5D }));
+				//                                               yi er zhou is U+4E00 U+4E8C U+5DDE
+				yield return (new TestCaseData(Encoding.Unicode, "︙", new byte[] { 0x19, 0xFE }));
+				//                                               'Vertical Horizontal Ellipsis' is U+FE19
+				yield return (new TestCaseData(Encoding.Unicode, "𝄞", new byte[] { 0x34, 0xD8, 0x1E, 0xDD }));
+				//                                               'Notenschlüssel' is U+1D11E but U+10000 does not seem supported by .NET 3.5 WindowForms...
+				yield return (new TestCaseData(Encoding.Unicode, @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x0D, 0x00, 0x0A, 0x00 }));
 
 				// UTF-16 (big endian, i.e. network endianness):
-				yield return (new TestCaseData(Encoding.BigEndianUnicode, Endianness.LittleEndian, "abc", new byte[] { 0x00, 0x61, 0x00, 0x62, 0x00, 0x63 }));
-				yield return (new TestCaseData(Encoding.BigEndianUnicode, Endianness.LittleEndian, "äöü", new byte[] { 0x00, 0xE4, 0x00, 0xF6, 0x00, 0xFC }));
-				yield return (new TestCaseData(Encoding.BigEndianUnicode, Endianness.LittleEndian, "ÄÖÜ", new byte[] { 0x00, 0xC4, 0x00, 0xD6, 0x00, 0xDC }));
-				yield return (new TestCaseData(Encoding.BigEndianUnicode, Endianness.LittleEndian, "$£€", new byte[] { 0x00, 0x24, 0x00, 0xA3, 0x20, 0xAC }));
-				yield return (new TestCaseData(Encoding.BigEndianUnicode, Endianness.LittleEndian, "čěř", new byte[] { 0x01, 0x0D, 0x01, 0x1B, 0x01, 0x59 }));
-				yield return (new TestCaseData(Encoding.BigEndianUnicode, Endianness.BigEndian,    "abc", new byte[] { 0x61, 0x00, 0x62, 0x00, 0x63, 0x00 }));
-				yield return (new TestCaseData(Encoding.BigEndianUnicode, Endianness.BigEndian,    "äöü", new byte[] { 0xE4, 0x00, 0xF6, 0x00, 0xFC, 0x00 }));
-				yield return (new TestCaseData(Encoding.BigEndianUnicode, Endianness.BigEndian,    "ÄÖÜ", new byte[] { 0xC4, 0x00, 0xD6, 0x00, 0xDC, 0x00 }));
-				yield return (new TestCaseData(Encoding.BigEndianUnicode, Endianness.BigEndian,    "$£€", new byte[] { 0x24, 0x00, 0xA3, 0x00, 0xAC, 0x20 }));
-				yield return (new TestCaseData(Encoding.BigEndianUnicode, Endianness.BigEndian,    "čěř", new byte[] { 0x0D, 0x01, 0x1B, 0x01, 0x59, 0x01 }));
+				yield return (new TestCaseData(Encoding.BigEndianUnicode, "abc", new byte[] { 0x00, 0x61, 0x00, 0x62, 0x00, 0x63 }));
+				yield return (new TestCaseData(Encoding.BigEndianUnicode, "äöü", new byte[] { 0x00, 0xE4, 0x00, 0xF6, 0x00, 0xFC }));
+				yield return (new TestCaseData(Encoding.BigEndianUnicode, "ÄÖÜ", new byte[] { 0x00, 0xC4, 0x00, 0xD6, 0x00, 0xDC }));
+				yield return (new TestCaseData(Encoding.BigEndianUnicode, "$£€", new byte[] { 0x00, 0x24, 0x00, 0xA3, 0x20, 0xAC }));
+				yield return (new TestCaseData(Encoding.BigEndianUnicode, "čěř", new byte[] { 0x01, 0x0D, 0x01, 0x1B, 0x01, 0x59 }));
 
-				yield return (new TestCaseData(Encoding.BigEndianUnicode, Endianness.LittleEndian, @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x00, 0x0D, 0x00, 0x0A }));
-				yield return (new TestCaseData(Encoding.BigEndianUnicode, Endianness.BigEndian,    @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x0D, 0x00, 0x0A, 0x00 }));
+				yield return (new TestCaseData(Encoding.BigEndianUnicode, "一二州", new byte[] { 0x4E, 0x00, 0x4E, 0x8C, 0x5D, 0xDE }));
+				//                                                        yi er zhou is U+4E00 U+4E8C U+5DDE
+				yield return (new TestCaseData(Encoding.BigEndianUnicode, "︙", new byte[] { 0xFE, 0x19 }));
+				//                                                        'Vertical Horizontal Ellipsis' is U+FE19
+				yield return (new TestCaseData(Encoding.BigEndianUnicode, "𝄞", new byte[] { 0xD8, 0x34, 0xDD, 0x1E }));
+				//                                                        'Notenschlüssel' is U+1D11E but U+10000 does not seem supported by .NET 3.5 WindowForms...
+				yield return (new TestCaseData(Encoding.BigEndianUnicode, @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x00, 0x0D, 0x00, 0x0A }));
 
 				// UTF-32 (little endian, i.e. machine endianness):
-				yield return (new TestCaseData(Encoding.UTF32, Endianness.LittleEndian, "abc", new byte[] { 0x61, 0x00, 0x00, 0x00, 0x62, 0x00, 0x00, 0x00, 0x63, 0x00, 0x00, 0x00 }));
-				yield return (new TestCaseData(Encoding.UTF32, Endianness.LittleEndian, "äöü", new byte[] { 0xE4, 0x00, 0x00, 0x00, 0xF6, 0x00, 0x00, 0x00, 0xFC, 0x00, 0x00, 0x00 }));
-				yield return (new TestCaseData(Encoding.UTF32, Endianness.LittleEndian, "ÄÖÜ", new byte[] { 0xC4, 0x00, 0x00, 0x00, 0xD6, 0x00, 0x00, 0x00, 0xDC, 0x00, 0x00, 0x00 }));
-				yield return (new TestCaseData(Encoding.UTF32, Endianness.LittleEndian, "$£€", new byte[] { 0x24, 0x00, 0x00, 0x00, 0xA3, 0x00, 0x00, 0x00, 0xAC, 0x20, 0x00, 0x00 }));
-				yield return (new TestCaseData(Encoding.UTF32, Endianness.LittleEndian, "čěř", new byte[] { 0x0D, 0x01, 0x00, 0x00, 0x1B, 0x01, 0x00, 0x00, 0x59, 0x01, 0x00, 0x00 }));
-				yield return (new TestCaseData(Encoding.UTF32, Endianness.BigEndian,    "abc", new byte[] { 0x00, 0x00, 0x00, 0x61, 0x00, 0x00, 0x00, 0x62, 0x00, 0x00, 0x00, 0x63 }));
-				yield return (new TestCaseData(Encoding.UTF32, Endianness.BigEndian,    "äöü", new byte[] { 0x00, 0x00, 0x00, 0xE4, 0x00, 0x00, 0x00, 0xF6, 0x00, 0x00, 0x00, 0xFC }));
-				yield return (new TestCaseData(Encoding.UTF32, Endianness.BigEndian,    "ÄÖÜ", new byte[] { 0x00, 0x00, 0x00, 0xC4, 0x00, 0x00, 0x00, 0xD6, 0x00, 0x00, 0x00, 0xDC }));
-				yield return (new TestCaseData(Encoding.UTF32, Endianness.BigEndian,    "$£€", new byte[] { 0x00, 0x00, 0x00, 0x24, 0x00, 0x00, 0x00, 0xA3, 0x00, 0x00, 0x20, 0xAC }));
-				yield return (new TestCaseData(Encoding.UTF32, Endianness.BigEndian,    "čěř", new byte[] { 0x00, 0x00, 0x01, 0x0D, 0x00, 0x00, 0x01, 0x1B, 0x00, 0x00, 0x01, 0x59 }));
+				yield return (new TestCaseData(Encoding.UTF32, "abc", new byte[] { 0x61, 0x00, 0x00, 0x00, 0x62, 0x00, 0x00, 0x00, 0x63, 0x00, 0x00, 0x00 }));
+				yield return (new TestCaseData(Encoding.UTF32, "äöü", new byte[] { 0xE4, 0x00, 0x00, 0x00, 0xF6, 0x00, 0x00, 0x00, 0xFC, 0x00, 0x00, 0x00 }));
+				yield return (new TestCaseData(Encoding.UTF32, "ÄÖÜ", new byte[] { 0xC4, 0x00, 0x00, 0x00, 0xD6, 0x00, 0x00, 0x00, 0xDC, 0x00, 0x00, 0x00 }));
+				yield return (new TestCaseData(Encoding.UTF32, "$£€", new byte[] { 0x24, 0x00, 0x00, 0x00, 0xA3, 0x00, 0x00, 0x00, 0xAC, 0x20, 0x00, 0x00 }));
+				yield return (new TestCaseData(Encoding.UTF32, "čěř", new byte[] { 0x0D, 0x01, 0x00, 0x00, 0x1B, 0x01, 0x00, 0x00, 0x59, 0x01, 0x00, 0x00 }));
 
-				yield return (new TestCaseData(Encoding.UTF32, Endianness.LittleEndian, @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00 }));
-				yield return (new TestCaseData(Encoding.UTF32, Endianness.BigEndian,    @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x0A }));
+				yield return (new TestCaseData(Encoding.UTF32, "一二州", new byte[] { 0x00, 0x4E, 0x00, 0x00, 0x8C, 0x4E, 0x00, 0x00, 0xDE, 0x5D, 0x00, 0x00 }));
+				//                                             yi er zhou is U+4E00 U+4E8C U+5DDE
+				yield return (new TestCaseData(Encoding.UTF32, "︙", new byte[] { 0x19, 0xFE, 0x00, 0x00 }));
+				//                                             'Vertical Horizontal Ellipsis' is U+FE19
+				yield return (new TestCaseData(Encoding.UTF32, "𝄞", new byte[] { 0x1E, 0xD1, 0x01, 0x00 }));
+				//                                             'Notenschlüssel' is U+1D11E but U+10000 does not seem supported by .NET 3.5 WindowForms...
+				yield return (new TestCaseData(Encoding.UTF32, @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00 }));
 
 				// UTF-32 (big endian, i.e. network endianness):
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), Endianness.LittleEndian, "abc", new byte[] { 0x00, 0x00, 0x00, 0x61, 0x00, 0x00, 0x00, 0x62, 0x00, 0x00, 0x00, 0x63 }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), Endianness.LittleEndian, "äöü", new byte[] { 0x00, 0x00, 0x00, 0xE4, 0x00, 0x00, 0x00, 0xF6, 0x00, 0x00, 0x00, 0xFC }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), Endianness.LittleEndian, "ÄÖÜ", new byte[] { 0x00, 0x00, 0x00, 0xC4, 0x00, 0x00, 0x00, 0xD6, 0x00, 0x00, 0x00, 0xDC }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), Endianness.LittleEndian, "$£€", new byte[] { 0x00, 0x00, 0x00, 0x24, 0x00, 0x00, 0x00, 0xA3, 0x00, 0x00, 0x20, 0xAC }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), Endianness.LittleEndian, "čěř", new byte[] { 0x00, 0x00, 0x01, 0x0D, 0x00, 0x00, 0x01, 0x1B, 0x00, 0x00, 0x01, 0x59 }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), Endianness.BigEndian,    "abc", new byte[] { 0x61, 0x00, 0x00, 0x00, 0x62, 0x00, 0x00, 0x00, 0x63, 0x00, 0x00, 0x00 }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), Endianness.BigEndian,    "äöü", new byte[] { 0xE4, 0x00, 0x00, 0x00, 0xF6, 0x00, 0x00, 0x00, 0xFC, 0x00, 0x00, 0x00 }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), Endianness.BigEndian,    "ÄÖÜ", new byte[] { 0xC4, 0x00, 0x00, 0x00, 0xD6, 0x00, 0x00, 0x00, 0xDC, 0x00, 0x00, 0x00 }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), Endianness.BigEndian,    "$£€", new byte[] { 0x24, 0x00, 0x00, 0x00, 0xA3, 0x00, 0x00, 0x00, 0xAC, 0x20, 0x00, 0x00 }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), Endianness.BigEndian,    "čěř", new byte[] { 0x0D, 0x01, 0x00, 0x00, 0x1B, 0x01, 0x00, 0x00, 0x59, 0x01, 0x00, 0x00 }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "abc", new byte[] { 0x00, 0x00, 0x00, 0x61, 0x00, 0x00, 0x00, 0x62, 0x00, 0x00, 0x00, 0x63 }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "äöü", new byte[] { 0x00, 0x00, 0x00, 0xE4, 0x00, 0x00, 0x00, 0xF6, 0x00, 0x00, 0x00, 0xFC }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "ÄÖÜ", new byte[] { 0x00, 0x00, 0x00, 0xC4, 0x00, 0x00, 0x00, 0xD6, 0x00, 0x00, 0x00, 0xDC }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "$£€", new byte[] { 0x00, 0x00, 0x00, 0x24, 0x00, 0x00, 0x00, 0xA3, 0x00, 0x00, 0x20, 0xAC }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "čěř", new byte[] { 0x00, 0x00, 0x01, 0x0D, 0x00, 0x00, 0x01, 0x1B, 0x00, 0x00, 0x01, 0x59 }));
 
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), Endianness.LittleEndian, @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x0A }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), Endianness.BigEndian,    @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00 }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "一二州", new byte[] { 0x00, 0x00, 0x4E, 0x00, 0x00, 0x00, 0x4E, 0x8C, 0x00, 0x00, 0x5D, 0xDE }));
+				//                                                                                yi er zhou is U+4E00 U+4E8C U+5DDE
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "︙", new byte[] { 0x00, 0x00, 0xFE, 0x19 }));
+				//                                                                                'Vertical Horizontal Ellipsis' is U+FE19
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "𝄞", new byte[] { 0x00, 0x01, 0xD1, 0x1E }));
+				//                                                                                'Notenschlüssel' is U+1D11E but U+10000 does not seem supported by .NET 3.5 WindowForms...
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x0A }));
+
+				// Big5:
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "一二州", new byte[] { 0xA4, 0x40, 0xA4, 0x47, 0xA6, 0x7B }));
+
+				// GBK:                                                                 // is GBK !!!
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "一二州", new byte[] { 0xD2, 0xBB, 0xB6, 0xFE, 0xD6, 0xDD }));
+
+				// GB2312 (-80):                                                          // is GB2312 !!!
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.X_CP20936), "一二州", new byte[] { 0xD2, 0xBB, 0xB6, 0xFE, 0xD6, 0xDD }));
+
+				// GB18030:
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "一二州", new byte[] { 0xD2, 0xBB, 0xB6, 0xFE, 0xD6, 0xDD }));
+
+				// Shift-JIS:
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "一二州", new byte[] { 0x88, 0xEA, 0x93, 0xF1, 0x8F, 0x42 }));
 			}
 		}
 
@@ -624,9 +643,25 @@ namespace YAT.Domain.Test.Parser
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "bytes", Justification = "The naming emphasizes the difference between bytes and other parameters.")]
 		[Test, TestCaseSource(typeof(EncodingTestData), "TestCases")]
-		public virtual void TestParserEncoding(Encoding encoding, Endianness endianness, string s, byte[] expectedBytes)
+		public virtual void TestParserEncoding(Encoding encoding, string s, byte[] expectedBytes)
 		{
-			using (var p = new Domain.Parser.Parser(encoding, endianness))
+			// \remind (2017-12-09 / MKY / bug #400)
+			// YAT versions 1.99.70 and 1.99.80 used to take the endianness into account when encoding
+			// and decoding multi-byte encoded characters. However, it was always done, but of course e.g.
+			// UTF-8 is independent on endianness. The endianness would only have to be applied single
+			// multi-byte values, not multi-byte values split into multiple fragments. However, a .NET
+			// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
+			// not. Thus, it was decided to again remove the character encoding endianness awareness.
+
+			using (var p = new Domain.Parser.Parser(encoding, Endianness.LittleEndian))
+			{
+				byte[] actualBytes;
+				string successfullyParsed;
+				Assert.That(p.TryParse(s, out actualBytes, out successfullyParsed), Is.True, @"Failed! Only """ + successfullyParsed + @""" could successfully be parsed!");
+				Assert.That(actualBytes, Is.EqualTo(expectedBytes));
+			}
+
+			using (var p = new Domain.Parser.Parser(encoding, Endianness.BigEndian))
 			{
 				byte[] actualBytes;
 				string successfullyParsed;
