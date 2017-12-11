@@ -2588,7 +2588,7 @@ namespace YAT.Model
 			{
 				foreach (var dl in e.Lines)
 				{
-					SendAutoResponse(WholeLineToOrigin(dl)); // Whole trigger line including EOL.
+					SendAutoResponse(LineWithoutRxEolToOrigin(dl));
 				}
 
 				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
@@ -2608,7 +2608,7 @@ namespace YAT.Model
 					if (!dl.TryGetTimeStamp(out ts))
 						ts = DateTime.Now;
 
-					InvokeAutoAction(WholeLineToOrigin(dl), ts); // Whole trigger line including EOL.
+					InvokeAutoAction(LineWithoutRxEolToOrigin(dl), ts);
 				}
 
 				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
@@ -2620,23 +2620,19 @@ namespace YAT.Model
 			}
 		}
 
-		private byte[] WholeLineToOrigin(Domain.DisplayLine dl)
+		private byte[] LineWithoutRxEolToOrigin(Domain.DisplayLine dl)
 		{
 			var l = new List<byte>(dl.ElementsToOrigin());
 
 			if (this.settingsRoot.TerminalType == Domain.TerminalType.Text)
 			{
-				var textTerminal = this.terminal as Domain.TextTerminal;
+				var textTerminal = (this.terminal as Domain.TextTerminal);
 
-				if (this.settingsRoot.TextTerminal.ShowEol) // Remove Rx EOL:
+				// Remove Rx EOL:
+				if (this.settingsRoot.TextTerminal.ShowEol)
 				{
 					var rxEolSequence = textTerminal.RxEolSequence;
 					l.RemoveRange((l.Count - rxEolSequence.Length), rxEolSequence.Length);
-				}
-
-				{                                           // Append Tx EOL:
-					var txEolSequence = textTerminal.TxEolSequence;
-					l.AddRange(txEolSequence);
 				}
 			}
 
@@ -3733,14 +3729,11 @@ namespace YAT.Model
 		/// <summary>
 		/// Returns contents of desired repository as string.
 		/// </summary>
-		/// <remarks>
-		/// Can be used for debugging purposes.
-		/// </remarks>
-		public virtual string RepositoryToString(Domain.RepositoryType repositoryType)
+		public virtual string RepositoryToDiagnosticsString(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
-			return (this.terminal.RepositoryToString(repositoryType));
+			return (this.terminal.RepositoryToDiagnosticsString(repositoryType));
 		}
 
 		#endregion
@@ -4572,7 +4565,23 @@ namespace YAT.Model
 		protected virtual void SendAutoResponseTrigger(byte[] triggerSequence)
 		{
 			if (triggerSequence != null)
-				this.terminal.Send(triggerSequence);
+				this.terminal.Send(TriggerSequenceWithTxEol(triggerSequence));
+		}
+
+		private byte[] TriggerSequenceWithTxEol(byte[] triggerSequence)
+		{
+			var l = new List<byte>(triggerSequence);
+
+			if (this.settingsRoot.TerminalType == Domain.TerminalType.Text)
+			{
+				var textTerminal = (this.terminal as Domain.TextTerminal);
+
+				// Add Tx EOL:
+				var txEolSequence = textTerminal.TxEolSequence;
+				l.AddRange(txEolSequence);
+			}
+
+			return (l.ToArray());
 		}
 
 		/// <summary>
