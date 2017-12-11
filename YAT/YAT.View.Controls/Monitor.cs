@@ -97,6 +97,7 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
+		private const bool ShowStatusPanelDefault = true;
 		private const Domain.RepositoryType RepositoryTypeDefault = Domain.RepositoryType.None;
 
 		// State:
@@ -140,6 +141,7 @@ namespace YAT.View.Controls
 		// Fields
 		//==========================================================================================
 
+		private bool showStatusPanel = ShowStatusPanelDefault;
 		private Domain.RepositoryType repositoryType = RepositoryTypeDefault;
 
 		// State:
@@ -239,6 +241,23 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Category("Monitor")]
+		[Description("Configures status panel visibility.")]
+		[DefaultValue(ShowStatusPanelDefault)]
+		public virtual bool ShowStatusPanel
+		{
+			get { return (this.showStatusPanel); }
+			set
+			{
+				if (this.showStatusPanel != value)
+				{
+					this.showStatusPanel = value;
+					SetControls();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[Category("Monitor")]
 		[Description("The repository type.")]
 		[DefaultValue(RepositoryTypeDefault)]
 		public virtual Domain.RepositoryType RepositoryType
@@ -250,7 +269,7 @@ namespace YAT.View.Controls
 				{
 					this.repositoryType = value;
 					this.dataStatusHelper.RepositoryType = value;
-					SetRepositoryDependentControls();
+					SetControls();
 				}
 			}
 		}
@@ -267,7 +286,7 @@ namespace YAT.View.Controls
 				if (this.activityState != value)
 				{
 					this.activityState = value;
-					SetRepositoryDependentControls();
+					SetActivityStateControls();
 				}
 			}
 		}
@@ -329,9 +348,12 @@ namespace YAT.View.Controls
 					this.showBufferLineNumbers = value;
 
 					if (this.showBufferLineNumbers) // This option keeps the offset at 0.
+					{
 						this.lineNumberOffset = 0;
+						fastListBox_LineNumbers.Invalidate();
+					}
 
-					ResizeAndRelocateControls();
+					SetControls();
 				}
 			}
 		}
@@ -348,7 +370,7 @@ namespace YAT.View.Controls
 				if (this.showTotalLineNumbers != value)
 				{
 					this.showTotalLineNumbers = value;
-					ResizeAndRelocateControls();
+					SetControls();
 				}
 			}
 		}
@@ -365,7 +387,10 @@ namespace YAT.View.Controls
 				this.showBufferLineNumbers = showBufferLineNumbers;
 
 				if (this.showBufferLineNumbers) // This option keeps the offset at 0.
+				{
 					this.lineNumberOffset = 0;
+					fastListBox_LineNumbers.Invalidate();
+				}
 
 				hasChanged = true;
 			}
@@ -378,7 +403,7 @@ namespace YAT.View.Controls
 
 			if (hasChanged)
 			{
-				ResizeAndRelocateControls();
+				SetControls();
 			}
 		}
 
@@ -530,7 +555,7 @@ namespace YAT.View.Controls
 				if (this.showCopyOfActiveLine != value)
 				{
 					this.showCopyOfActiveLine = value;
-					ResizeAndRelocateControls();
+					SetControls();
 				}
 			}
 		}
@@ -925,7 +950,7 @@ namespace YAT.View.Controls
 			if ((txLineCount <= 0) && (rxLineCount <= 0))
 			{
 				this.lineNumberOffset = 0;
-				ResizeAndRelocateControls();
+				fastListBox_LineNumbers.Invalidate();
 			}
 
 			this.dataStatusHelper.SetCount(txByteCount, txLineCount, rxByteCount, rxLineCount);
@@ -1272,9 +1297,17 @@ namespace YAT.View.Controls
 			return (effectiveWidth - (VerticalScrollBarWidth + AdditionalMargin));
 		}
 
+		private void SetControls()
+		{
+			SetControls(this.currentLineNumberWidth);
+		}
+
 		private void SetControls(int requestedLineNumberWidth)
 		{
+			panel_Picture.Visible = ShowStatusPanel; // // Adjust monitor for compact view, e.g. in 'FormatSettings' dialog:
+
 			SetRepositoryDependentControls();
+			SetActivityStateControls();
 
 			SetTimeStatusVisible();
 			SetTimeStatusText();
@@ -1287,9 +1320,9 @@ namespace YAT.View.Controls
 
 		private void SetRepositoryDependentControls()
 		{
-			if (this.repositoryType != Domain.RepositoryType.None)
+			if (RepositoryType != Domain.RepositoryType.None)
 			{
-				switch (this.repositoryType)
+				switch (RepositoryType)
 				{
 					case Domain.RepositoryType.Tx:    this.imageInactive = Properties.Resources.Image_Monitor_Tx_28x28_Grey;    this.imageActive = Properties.Resources.Image_Monitor_Tx_28x28_Blue;          break;
 					case Domain.RepositoryType.Bidir: this.imageInactive = Properties.Resources.Image_Monitor_Bidir_28x28_Grey; this.imageActive = Properties.Resources.Image_Monitor_Bidir_28x28_BluePurple; break;
@@ -1297,9 +1330,14 @@ namespace YAT.View.Controls
 				}
 
 				pictureBox_Monitor.BackgroundImage = this.imageInactive;
+			}
+		}
 
-				// Image blending:
-				switch (this.activityState)
+		private void SetActivityStateControls()
+		{
+			if (RepositoryType != Domain.RepositoryType.None)
+			{
+				switch (ActivityState)
 				{
 					case MonitorActivityState.Active:   this.imageOpacityState = OpacityState.Inactive; pictureBox_Monitor.Image = this.imageActive; break;
 					case MonitorActivityState.Inactive: this.imageOpacityState = OpacityState.Inactive; pictureBox_Monitor.Image = null;             break;
@@ -1325,15 +1363,9 @@ namespace YAT.View.Controls
 					}
 				}
 
-				this.activityStateOld = this.activityState;
+				this.activityStateOld = ActivityState;
 
 				timer_Opacity.Enabled = (this.imageOpacityState != OpacityState.Inactive);
-
-				panel_Picture.Visible = true;
-			}
-			else // Adjust monitor for compact view, e.g. in 'FormatSettings' dialog:
-			{
-				panel_Picture.Visible = false;
 			}
 		}
 
@@ -1612,7 +1644,7 @@ namespace YAT.View.Controls
 				availableHeight -= 1; // 1 aligns with 'SendPredefined'.
 			}
 
-			if (panel_Picture.Visible)
+			if (ShowStatusPanel)
 			{
 				availableHeight -= panel_Picture.Height;
 

@@ -219,6 +219,7 @@ namespace YAT.View.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.monitor_Port.Location = new System.Drawing.Point(88, 249);
 			this.monitor_Port.Name = "monitor_Port";
+			this.monitor_Port.ShowStatusPanel = false;
 			this.monitor_Port.Size = new System.Drawing.Size(275, 23);
 			this.monitor_Port.TabIndex = 23;
 			this.monitor_Port.TabStop = false;
@@ -288,6 +289,7 @@ namespace YAT.View.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.monitor_TimeStamp.Location = new System.Drawing.Point(88, 162);
 			this.monitor_TimeStamp.Name = "monitor_TimeStamp";
+			this.monitor_TimeStamp.ShowStatusPanel = false;
 			this.monitor_TimeStamp.Size = new System.Drawing.Size(275, 23);
 			this.monitor_TimeStamp.TabIndex = 14;
 			this.monitor_TimeStamp.TabStop = false;
@@ -322,6 +324,7 @@ namespace YAT.View.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.monitor_Direction.Location = new System.Drawing.Point(88, 278);
 			this.monitor_Direction.Name = "monitor_Direction";
+			this.monitor_Direction.ShowStatusPanel = false;
 			this.monitor_Direction.Size = new System.Drawing.Size(275, 23);
 			this.monitor_Direction.TabIndex = 26;
 			this.monitor_Direction.TabStop = false;
@@ -343,6 +346,7 @@ namespace YAT.View.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.monitor_Error.Location = new System.Drawing.Point(88, 336);
 			this.monitor_Error.Name = "monitor_Error";
+			this.monitor_Error.ShowStatusPanel = false;
 			this.monitor_Error.Size = new System.Drawing.Size(275, 23);
 			this.monitor_Error.TabIndex = 32;
 			this.monitor_Error.TabStop = false;
@@ -355,6 +359,7 @@ namespace YAT.View.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.monitor_Length.Location = new System.Drawing.Point(88, 307);
 			this.monitor_Length.Name = "monitor_Length";
+			this.monitor_Length.ShowStatusPanel = false;
 			this.monitor_Length.Size = new System.Drawing.Size(275, 23);
 			this.monitor_Length.TabIndex = 29;
 			this.monitor_Length.TabStop = false;
@@ -367,6 +372,7 @@ namespace YAT.View.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.monitor_TimeSpan.Location = new System.Drawing.Point(88, 191);
 			this.monitor_TimeSpan.Name = "monitor_TimeSpan";
+			this.monitor_TimeSpan.ShowStatusPanel = false;
 			this.monitor_TimeSpan.Size = new System.Drawing.Size(275, 23);
 			this.monitor_TimeSpan.TabIndex = 17;
 			this.monitor_TimeSpan.TabStop = false;
@@ -379,6 +385,7 @@ namespace YAT.View.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.monitor_TimeDelta.Location = new System.Drawing.Point(88, 220);
 			this.monitor_TimeDelta.Name = "monitor_TimeDelta";
+			this.monitor_TimeDelta.ShowStatusPanel = false;
 			this.monitor_TimeDelta.Size = new System.Drawing.Size(275, 23);
 			this.monitor_TimeDelta.TabIndex = 20;
 			this.monitor_TimeDelta.TabStop = false;
@@ -391,6 +398,7 @@ namespace YAT.View.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.monitor_RxControl.Location = new System.Drawing.Point(88, 133);
 			this.monitor_RxControl.Name = "monitor_RxControl";
+			this.monitor_RxControl.ShowStatusPanel = false;
 			this.monitor_RxControl.Size = new System.Drawing.Size(275, 23);
 			this.monitor_RxControl.TabIndex = 11;
 			this.monitor_RxControl.TabStop = false;
@@ -403,6 +411,7 @@ namespace YAT.View.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.monitor_RxData.Location = new System.Drawing.Point(88, 104);
 			this.monitor_RxData.Name = "monitor_RxData";
+			this.monitor_RxData.ShowStatusPanel = false;
 			this.monitor_RxData.Size = new System.Drawing.Size(275, 23);
 			this.monitor_RxData.TabIndex = 8;
 			this.monitor_RxData.TabStop = false;
@@ -415,6 +424,7 @@ namespace YAT.View.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.monitor_TxControl.Location = new System.Drawing.Point(88, 75);
 			this.monitor_TxControl.Name = "monitor_TxControl";
+			this.monitor_TxControl.ShowStatusPanel = false;
 			this.monitor_TxControl.Size = new System.Drawing.Size(275, 23);
 			this.monitor_TxControl.TabIndex = 5;
 			this.monitor_TxControl.TabStop = false;
@@ -427,6 +437,7 @@ namespace YAT.View.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.monitor_TxData.Location = new System.Drawing.Point(88, 46);
 			this.monitor_TxData.Name = "monitor_TxData";
+			this.monitor_TxData.ShowStatusPanel = false;
 			this.monitor_TxData.Size = new System.Drawing.Size(275, 23);
 			this.monitor_TxData.TabIndex = 2;
 			this.monitor_TxData.TabStop = false;
@@ -867,6 +878,7 @@ namespace YAT.View.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.monitor_Example.Location = new System.Drawing.Point(100, 599);
 			this.monitor_Example.Name = "monitor_Example";
+			this.monitor_Example.ShowStatusPanel = false;
 			this.monitor_Example.Size = new System.Drawing.Size(625, 63);
 			this.monitor_Example.TabIndex = 3;
 			this.monitor_Example.TabStop = false;
