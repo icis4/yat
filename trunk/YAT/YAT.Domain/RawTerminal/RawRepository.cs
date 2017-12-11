@@ -171,63 +171,51 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			return (ToString(""));
-		}
-
-		/// <summary></summary>
-		public virtual string ToString(string indent)
-		{
-			return (QueueToString(indent));
-		}
-
-		/// <summary></summary>
-		public virtual string ToDetailedString()
-		{
-			return (ToDetailedString(""));
-		}
-
-		/// <summary></summary>
-		public virtual string ToDetailedString(string indent)
-		{
-			return (indent + "> Capacity: " + this.capacity + Environment.NewLine +
-					indent + "> Queue: " + Environment.NewLine +
-					QueueToDetailedString(indent + "   "));
+			return (QueueToString());
 		}
 
 		/// <summary></summary>
 		public virtual string QueueToString()
 		{
-			return (QueueToString(""));
-		}
-
-		/// <summary></summary>
-		public virtual string QueueToString(string indent)
-		{
 			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
 			{
 				foreach (var re in ToChunks())
-					sw.Write(re.ToString(indent));
+					sw.Write(re.ToString());
 
 				return (sw.ToString());
 			}
 		}
 
 		/// <summary></summary>
-		public virtual string QueueToDetailedString()
+		public virtual string ToDiagnosticsString()
 		{
-			return (QueueToDetailedString(""));
+			return (ToDiagnosticsString(""));
 		}
 
 		/// <summary></summary>
-		public virtual string QueueToDetailedString(string indent)
+		public virtual string ToDiagnosticsString(string indent)
+		{
+			return (indent + "> Capacity: " + this.capacity + Environment.NewLine +
+					indent + "> Queue: " + Environment.NewLine +
+					QueueToDiagnosticsString(indent + "   "));
+		}
+
+		/// <summary></summary>
+		public virtual string QueueToDiagnosticsString()
+		{
+			return (QueueToDiagnosticsString(""));
+		}
+
+		/// <summary></summary>
+		public virtual string QueueToDiagnosticsString(string indent)
 		{
 			var sb = new StringBuilder();
 
 			int i = 0;
-			foreach (RawChunk re in ToChunks())
+			foreach (var re in ToChunks())
 			{
 				sb.Append(indent + "> RawChunk#" + (i++) + ":" + Environment.NewLine);
-				sb.Append(re.ToDetailedString(indent + "   "));
+				sb.Append(re.ToDiagnosticsString(indent + "   "));
 			}
 
 			if (i == 0)
