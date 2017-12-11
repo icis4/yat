@@ -266,26 +266,26 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			return (ToString(""));
+			return (ToDiagnosticsString("")); // No 'real' ToString() method required yet.
 		}
 
 		/// <summary></summary>
-		public virtual string ToString(string indent)
+		public virtual string ToDiagnosticsString(string indent)
 		{
 			return (indent + "> LineCapacity: " +    Capacity.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
 					indent + "> LineCount: " +          Count.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
 					indent + "> ByteCount: " + this.byteCount.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
-					indent + "> Lines: " + Environment.NewLine + LinesToString(indent + "   "));
+					indent + "> Lines: " + Environment.NewLine + LinesToDiagnosticsString(indent + "   "));
 		}
 
 		/// <summary></summary>
-		public virtual string LinesToString()
+		public virtual string LinesToDiagnosticsString()
 		{
-			return (LinesToString(""));
+			return (LinesToDiagnosticsString(""));
 		}
 
 		/// <summary></summary>
-		public virtual string LinesToString(string indent)
+		public virtual string LinesToDiagnosticsString(string indent)
 		{
 			var sb = new StringBuilder();
 
@@ -293,7 +293,7 @@ namespace YAT.Domain
 			foreach (var dl in ToLines())
 			{
 				sb.Append(indent + "> DisplayLine#" + (i++) + ":" + Environment.NewLine);
-				sb.Append(dl.ToString(indent + "   "));
+				sb.Append(dl.ToDiagnosticsString(indent + "   "));
 			}
 
 			if (i == 0)

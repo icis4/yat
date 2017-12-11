@@ -275,6 +275,23 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		public virtual bool TryGetTimeStamp(out DateTime result)
+		{
+			foreach (var de in this)
+			{
+				var ts = de as DisplayElement.TimeStampInfo;
+				if (ts != null)
+				{
+					result = ts.TimeStamp;
+					return (true);
+				}
+			}
+
+			result = DateTime.MinValue;
+			return (false);
+		}
+
+		/// <summary></summary>
 		public virtual byte[] ElementsToOrigin()
 		{
 			var l = new List<byte>(this.ByteCount); // Preset the initial capacity to improve memory management.
@@ -292,21 +309,16 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual bool TryGetTimeStamp(out DateTime result)
+		public virtual string ElementsToString()
 		{
-			foreach (var de in this)
-			{
-				var ts = de as DisplayElement.TimeStampInfo;
-				if (ts != null)
-				{
-					result = ts.TimeStamp;
-					return (true);
-				}
-			}
+			var sb = new StringBuilder();
 
-			result = DateTime.MinValue;
-			return (false);
+			foreach (var de in this)
+				sb.Append(de.ToString());
+
+			return (sb.ToString());
 		}
+
 		#endregion
 
 		#region Object Members
@@ -319,11 +331,7 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			var sb = new StringBuilder();
-			foreach (var de in this)
-				sb.Append(de.ToString());
-
-			return (sb.ToString());
+			return (ElementsToString()); // Opposed to ...Diagnostics...() below, this is a 'real' ToString() method.
 		}
 
 		/// <summary>
@@ -332,21 +340,21 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ToString(string indent)
+		public virtual string ToDiagnosticsString(string indent)
 		{
 			return (indent + "> ElementCount: " +       Count.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
 					indent + "> ByteCount: " + this.byteCount.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
-					indent + "> Elements: " + Environment.NewLine + ElementsToString(indent + "   "));
+					indent + "> Elements: " + Environment.NewLine + ElementsToDiagnosticsString(indent + "   "));
 		}
 
 		/// <summary></summary>
-		public virtual string ElementsToString()
+		public virtual string ElementsToDiagnosticsString()
 		{
-			return (ElementsToString(""));
+			return (ElementsToDiagnosticsString(""));
 		}
 
 		/// <summary></summary>
-		public virtual string ElementsToString(string indent)
+		public virtual string ElementsToDiagnosticsString(string indent)
 		{
 			var sb = new StringBuilder();
 

@@ -509,7 +509,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual string RepositoryToString(RepositoryType repositoryType, string indent)
+		public virtual string RepositoryToDiagnosticsString(RepositoryType repositoryType, string indent)
 		{
 			AssertNotDisposed();
 
@@ -518,9 +518,9 @@ namespace YAT.Domain
 			{
 				switch (repositoryType)
 				{
-					case RepositoryType.Tx:    s = this.txRepository   .ToString(indent); break;
-					case RepositoryType.Bidir: s = this.bidirRepository.ToString(indent); break;
-					case RepositoryType.Rx:    s = this.rxRepository   .ToString(indent); break;
+					case RepositoryType.Tx:    s = this.txRepository   .ToDiagnosticsString(indent); break;
+					case RepositoryType.Bidir: s = this.bidirRepository.ToDiagnosticsString(indent); break;
+					case RepositoryType.Rx:    s = this.rxRepository   .ToDiagnosticsString(indent); break;
 					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
@@ -831,11 +831,11 @@ namespace YAT.Domain
 		{
 			// See below why AssertNotDisposed() is not called on such basic method!
 
-			return (ToString(""));
+			return (ToDiagnosticsString("")); // No 'real' ToString() method required yet.
 		}
 
 		/// <summary></summary>
-		public virtual string ToString(string indent)
+		public virtual string ToDiagnosticsString(string indent)
 		{
 			if (IsDisposed)
 				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
@@ -844,13 +844,13 @@ namespace YAT.Domain
 			lock (this.repositorySyncObj)
 			{
 				sb.AppendLine(indent + "> TxRepository: ");
-				sb.Append(this.txRepository.ToString(indent + "   "));    // Repository will add 'NewLine'.
+				sb.Append(this.txRepository.ToDiagnosticsString(indent + "   "));    // Repository will add 'NewLine'.
 
 				sb.AppendLine(indent + "> BidirRepository: ");
-				sb.Append(this.bidirRepository.ToString(indent + "   ")); // Repository will add 'NewLine'.
+				sb.Append(this.bidirRepository.ToDiagnosticsString(indent + "   ")); // Repository will add 'NewLine'.
 				
 				sb.AppendLine(indent + "> RxRepository: ");
-				sb.Append(this.rxRepository.ToString(indent + "   "));    // Repository will add 'NewLine'.
+				sb.Append(this.rxRepository.ToDiagnosticsString(indent + "   "));    // Repository will add 'NewLine'.
 				
 				sb.Append(indent + "> I/O: " + this.io.ToString());
 			}

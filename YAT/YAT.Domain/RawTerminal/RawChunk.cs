@@ -143,29 +143,23 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			return (ToString(""));
-		}
-
-		/// <summary></summary>
-		public virtual string ToString(string indent)
-		{
 			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
 			{
 				foreach (byte b in Content)
 					sw.Write(Convert.ToChar(b));
 
-				return (indent + sw.ToString());
+				return (sw.ToString());
 			}
 		}
 
 		/// <summary></summary>
-		public virtual string ToDetailedString()
+		public virtual string ToDiagnosticsString()
 		{
-			return (ToDetailedString(""));
+			return (ToDiagnosticsString(""));
 		}
 
 		/// <summary></summary>
-		public virtual string ToDetailedString(string indent)
+		public virtual string ToDiagnosticsString(string indent)
 		{
 			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
 			{

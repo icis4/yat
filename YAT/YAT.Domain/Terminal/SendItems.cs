@@ -65,25 +65,14 @@ namespace YAT.Domain
 		// Object Members
 		//==========================================================================================
 
-		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
-		/// </summary>
-		public override string ToString()
+		/// <summary></summary>
+		public virtual string ToDiagnosticsString()
 		{
-			return (ToString(""));
+			return (ToDiagnosticsString(""));
 		}
 
 		/// <summary></summary>
-		public abstract string ToString(string indent);
-
-		/// <summary></summary>
-		public virtual string ToDetailedString()
-		{
-			return (ToDetailedString(""));
-		}
-
-		/// <summary></summary>
-		public abstract string ToDetailedString(string indent);
+		public abstract string ToDiagnosticsString(string indent);
 
 		#endregion
 	}
@@ -131,13 +120,13 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public override string ToString(string indent)
+		public override string ToString()
 		{
-			return (indent + DataAsPrintableString);
+			return (DataAsPrintableString);
 		}
 
 		/// <summary></summary>
-		public override string ToDetailedString(string indent)
+		public override string ToDiagnosticsString(string indent)
 		{
 			return (indent + "> Data: " + DataAsPrintableString + Environment.NewLine);
 		}
@@ -181,13 +170,13 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public override string ToString(string indent)
+		public override string ToString()
 		{
-			return (indent + DataAsPrintableString);
+			return (DataAsPrintableString);
 		}
 
 		/// <summary></summary>
-		public override string ToDetailedString(string indent)
+		public override string ToDiagnosticsString(string indent)
 		{
 			return (indent + "> Data         : " + DataAsPrintableString + Environment.NewLine +
 			        indent + "> DefaultRadix : " + DefaultRadix          + Environment.NewLine +
@@ -222,13 +211,13 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual string ToString(string indent)
+		public override string ToString()
 		{
-			return (indent + FilePath);
+			return (FilePath);
 		}
 
 		/// <summary></summary>
-		public virtual string ToDetailedString(string indent)
+		public virtual string ToDiagnosticsString(string indent)
 		{
 			return (indent + "> FilePath     : " + FilePath     + Environment.NewLine +
 			        indent + "> DefaultRadix : " + DefaultRadix + Environment.NewLine);
