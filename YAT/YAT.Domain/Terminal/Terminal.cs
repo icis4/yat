@@ -2180,64 +2180,103 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Methods > Format
+		#region Methods > Element Processing
 		//------------------------------------------------------------------------------------------
-		// Methods > Format
+		// Methods > Element Processing
 		//------------------------------------------------------------------------------------------
-
-		/// <summary>
-		/// Formats the specified time stamp.
-		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		public virtual string Format(DateTime ts, Direction d)
-		{
-			var de = new DisplayElement.TimeStampInfo(d, ts, TerminalSettings.Display.TimeStampFormat, TerminalSettings.Display.TimeStampUseUtc, "", "");
-			return (de.Text);
-		}
-
-		/// <summary>
-		/// Formats the specified data sequence.
-		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		public virtual string Format(byte[] data, IODirection d)
-		{
-			var sb = new StringBuilder();
-			foreach (byte b in data)
-			{
-				sb.Append(Format(b, d));
-
-				if ((sb.Length > 0) && ElementsAreSeparate(d))
-					sb.Append(" ");
-			}
-			return (sb.ToString());
-		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		protected virtual string Format(byte b, IODirection d)
+		protected virtual DisplayElement ByteToElement(byte b, IODirection d)
 		{
-			Radix r;
 			switch (d)
 			{
-				case IODirection.Tx: r = TerminalSettings.Display.TxRadix; break;
-				case IODirection.Rx: r = TerminalSettings.Display.RxRadix; break;
+				case IODirection.Tx: return (ByteToElement(b, d, TerminalSettings.Display.TxRadix));
+				case IODirection.Rx: return (ByteToElement(b, d, TerminalSettings.Display.RxRadix));
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-
-			bool isControl;
-			bool isByteToHide;
-			bool isError;
-			return (Format(b, d, r, out isControl, out isByteToHide, out isError));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		protected virtual string Format(byte b, IODirection d, Radix r, out bool isControl, out bool isByteToHide, out bool isError)
+		protected virtual DisplayElement ByteToElement(byte b, IODirection d, Radix r)
+		{
+			bool isControl;
+			bool isByteToHide;
+			bool isError;
+
+			string text = ByteToText(b, d, r, out isControl, out isByteToHide, out isError);
+
+			if      (isError)
+			{
+				return (new DisplayElement.ErrorInfo((Direction)d, text));
+			}
+			else if (isByteToHide)
+			{
+				return (new DisplayElement.Nonentity()); // Return nothing, ignore the character, this results in hiding.
+			}
+			else if (isControl)
+			{
+				if (TerminalSettings.CharReplace.ReplaceControlChars)
+				{
+					// Attention:
+					// In order to get well aligned tab stops, tab characters must be data elements.
+					// If they were control elements (i.e. sequence of data and control elements),
+					// tabs would only get aligned within the respective control element,
+					// thus resulting in misaligned tab stops.
+					if ((b == '\t') && !TerminalSettings.CharReplace.ReplaceTab)
+					{
+						switch (d) // Keep tab:
+						{
+							case IODirection.Tx: return (new DisplayElement.TxData(b, text));
+							case IODirection.Rx: return (new DisplayElement.RxData(b, text));
+
+							default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+					}
+					else
+					{
+						switch (d) // Use dedicated control elements:
+						{
+							case IODirection.Tx: return (new DisplayElement.TxControl(b, text));
+							case IODirection.Rx: return (new DisplayElement.RxControl(b, text));
+
+							default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+					}
+				}
+				else // Do not 'ReplaceControlChars':
+				{
+					switch (d) // Use normal data elements:
+					{
+						case IODirection.Tx: return (new DisplayElement.TxData(b, text));
+						case IODirection.Rx: return (new DisplayElement.RxData(b, text));
+
+						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					}
+				}
+			}
+			else // Neither 'isError' nor 'isByteToHide' nor 'isError' = normal data:
+			{
+				switch (d)
+				{
+					case IODirection.Tx: return (new DisplayElement.TxData(b, text));
+					case IODirection.Rx: return (new DisplayElement.RxData(b, text));
+
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
+		protected virtual string ByteToText(byte b, IODirection d, Radix r, out bool isControl, out bool isByteToHide, out bool isError)
 		{
 			isByteToHide = false;
 			if (b == 0x00)
@@ -2450,149 +2489,6 @@ namespace YAT.Domain
 			throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' radix is missing here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
-		/// <summary>
-		/// Converts the given value to a sendable text.
-		/// </summary>
-		/// <remarks>
-		/// If the value is a printable character, the string contains that character.
-		/// If the value is a control character, the ASCII mnemonic or Unicode representation is returned.
-		/// </remarks>
-		/// <remarks>
-		/// This method is a copy of the code in MKY.CharEx.ConvertToPrintableString().
-		/// Intentionally copied since the angle bracket and Unicode representations
-		/// are explicitly required by YAT.
-		/// </remarks>
-		public static string ConvertToSendableText(char value)
-		{
-			if (!char.IsControl(value))
-				return (value.ToString());
-
-			// ASCII control characters:
-			byte asciiCode;
-			if ((CharEx.TryConvertToByte(value, out asciiCode)) && (Ascii.IsControl(asciiCode)))
-				return ("<" + Ascii.ConvertToMnemonic(asciiCode) + ">");
-
-			// Unicode control characters U+0080..U+009F:
-			return (@"\U+" + ((ushort)(value)).ToString("X4", CultureInfo.InvariantCulture));
-		}
-
-		/// <summary>
-		/// Converts the given value to a sendable text.
-		/// </summary>
-		/// <remarks>
-		/// Printable characters are kept, control characters are converted into the ASCII mnemonic
-		/// or Unicode representation as required.
-		/// </remarks>
-		/// <remarks>
-		/// This method is a copy of the code in MKY.CharEx.ConvertToPrintableString().
-		/// Intentionally copied since the angle bracket and Unicode representations
-		/// are explicitly required by YAT.
-		/// </remarks>
-		public static string ConvertToSendableText(string value)
-		{
-			var sb = new StringBuilder();
-
-			foreach (char c in value)
-				sb.Append(ConvertToSendableText(c));
-
-			return (sb.ToString());
-		}
-
-		#endregion
-
-		#region Methods > Element Processing
-		//------------------------------------------------------------------------------------------
-		// Methods > Element Processing
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement ByteToElement(byte b, IODirection d)
-		{
-			switch (d)
-			{
-				case IODirection.Tx: return (ByteToElement(b, d, TerminalSettings.Display.TxRadix));
-				case IODirection.Rx: return (ByteToElement(b, d, TerminalSettings.Display.RxRadix));
-
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement ByteToElement(byte b, IODirection d, Radix r)
-		{
-			bool isControl;
-			bool isByteToHide;
-			bool isError;
-
-			string text = Format(b, d, r, out isControl, out isByteToHide, out isError);
-
-			if      (isError)
-			{
-				return (new DisplayElement.ErrorInfo((Direction)d, text));
-			}
-			else if (isByteToHide)
-			{
-				return (new DisplayElement.Nonentity()); // Return nothing, ignore the character, this results in hiding.
-			}
-			else if (isControl)
-			{
-				if (TerminalSettings.CharReplace.ReplaceControlChars)
-				{
-					// Attention:
-					// In order to get well aligned tab stops, tab characters must be data elements.
-					// If they were control elements (i.e. sequence of data and control elements),
-					// tabs would only get aligned within the respective control element,
-					// thus resulting in misaligned tab stops.
-					if ((b == '\t') && !TerminalSettings.CharReplace.ReplaceTab)
-					{
-						switch (d) // Keep tab:
-						{
-							case IODirection.Tx: return (new DisplayElement.TxData(b, text));
-							case IODirection.Rx: return (new DisplayElement.RxData(b, text));
-
-							default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-						}
-					}
-					else
-					{
-						switch (d) // Use dedicated control elements:
-						{
-							case IODirection.Tx: return (new DisplayElement.TxControl(b, text));
-							case IODirection.Rx: return (new DisplayElement.RxControl(b, text));
-
-							default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-						}
-					}
-				}
-				else // Do not 'ReplaceControlChars':
-				{
-					switch (d) // Use normal data elements:
-					{
-						case IODirection.Tx: return (new DisplayElement.TxData(b, text));
-						case IODirection.Rx: return (new DisplayElement.RxData(b, text));
-
-						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-					}
-				}
-			}
-			else // Neither 'isError' nor 'isByteToHide' nor 'isError' = normal data:
-			{
-				switch (d)
-				{
-					case IODirection.Tx: return (new DisplayElement.TxData(b, text));
-					case IODirection.Rx: return (new DisplayElement.RxData(b, text));
-
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-			}
-		}
-
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "ps", Justification = "Short and compact for improved readability.")]
@@ -2690,6 +2586,133 @@ namespace YAT.Domain
 					OnDisplayLinesProcessed(raw.Direction, lines);
 				}
 			}
+		}
+
+		#endregion
+
+		#region Methods > Format
+		//------------------------------------------------------------------------------------------
+		// Methods > Format
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Formats the specified time stamp.
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		public virtual string Format(DateTime ts, Direction d)
+		{
+			var de = new DisplayElement.TimeStampInfo(d, ts, TerminalSettings.Display.TimeStampFormat, TerminalSettings.Display.TimeStampUseUtc, "", "");
+			return (de.Text);
+		}
+
+		/// <summary>
+		/// Formats the specified data sequence.
+		/// </summary>
+		/// <remarks>
+		/// \remind (2017-12-11 / MKY)
+		/// Currently limited to a <see cref="DisplayLinePart"/>. Refactoring would be required to
+		/// format whole lines or even multiple lines (<see cref="ProcessRawChunk"/> instead of
+		/// <see cref="ByteToElement(byte, IODirection, Radix)"/>).
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		public virtual string Format(byte[] data, IODirection d)
+		{
+			switch (d)
+			{
+				case IODirection.Tx: return (Format(data, d, TerminalSettings.Display.TxRadix));
+				case IODirection.Rx: return (Format(data, d, TerminalSettings.Display.RxRadix));
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary>
+		/// Formats the specified data sequence.
+		/// </summary>
+		/// <remarks>
+		/// \remind (2017-12-11 / MKY)
+		/// Currently limited to a <see cref="DisplayLinePart"/>. Refactoring would be required to
+		/// format whole lines or even multiple lines (<see cref="ProcessRawChunk"/> instead of
+		/// <see cref="ByteToElement(byte, IODirection, Radix)"/>).
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
+		public virtual string Format(byte[] data, IODirection d, Radix r)
+		{
+			var lp = new DisplayLinePart();
+
+			foreach (byte b in data)
+			{
+				var de = ByteToElement(b, d, r);
+				lp.Add(de);
+				AddSpaceIfNecessary(d, lp, de);
+			}
+
+			return (lp.ElementsToString());
+		}
+
+		private void AddSpaceIfNecessary(IODirection d, DisplayLinePart lp, DisplayElement de)
+		{
+			if (ElementsAreSeparate(d) && !string.IsNullOrEmpty(de.Text))
+			{
+				if (lp.ByteCount > 0)
+					lp.Add(new DisplayElement.DataSpace());
+			}
+		}
+
+		#endregion
+
+		#region Methods > Convert
+		//------------------------------------------------------------------------------------------
+		// Methods > Convert
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Converts the given value to a sendable text.
+		/// </summary>
+		/// <remarks>
+		/// If the value is a printable character, the string contains that character.
+		/// If the value is a control character, the ASCII mnemonic or Unicode representation is returned.
+		/// </remarks>
+		/// <remarks>
+		/// This method is a copy of the code in MKY.CharEx.ConvertToPrintableString().
+		/// Intentionally copied since the angle bracket and Unicode representations
+		/// are explicitly required by YAT.
+		/// </remarks>
+		public static string ConvertToSendableText(char value)
+		{
+			if (!char.IsControl(value))
+				return (value.ToString());
+
+			// ASCII control characters:
+			byte asciiCode;
+			if ((CharEx.TryConvertToByte(value, out asciiCode)) && (Ascii.IsControl(asciiCode)))
+				return ("<" + Ascii.ConvertToMnemonic(asciiCode) + ">");
+
+			// Unicode control characters U+0080..U+009F:
+			return (@"\U+" + ((ushort)(value)).ToString("X4", CultureInfo.InvariantCulture));
+		}
+
+		/// <summary>
+		/// Converts the given value to a sendable text.
+		/// </summary>
+		/// <remarks>
+		/// Printable characters are kept, control characters are converted into the ASCII mnemonic
+		/// or Unicode representation as required.
+		/// </remarks>
+		/// <remarks>
+		/// This method is a copy of the code in MKY.CharEx.ConvertToPrintableString().
+		/// Intentionally copied since the angle bracket and Unicode representations
+		/// are explicitly required by YAT.
+		/// </remarks>
+		public static string ConvertToSendableText(string value)
+		{
+			var sb = new StringBuilder();
+
+			foreach (char c in value)
+				sb.Append(ConvertToSendableText(c));
+
+			return (sb.ToString());
 		}
 
 		#endregion
@@ -2956,13 +2979,13 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual string RepositoryToString(RepositoryType repository)
+		public virtual string RepositoryToDiagnosticsString(RepositoryType repository)
 		{
-			return (RepositoryToString(repository, ""));
+			return (RepositoryToDiagnosticsString(repository, ""));
 		}
 
 		/// <summary></summary>
-		public virtual string RepositoryToString(RepositoryType repository, string indent)
+		public virtual string RepositoryToDiagnosticsString(RepositoryType repository, string indent)
 		{
 			AssertNotDisposed();
 
@@ -2970,9 +2993,9 @@ namespace YAT.Domain
 			{
 				switch (repository)
 				{
-					case RepositoryType.Tx:    return (this.txRepository   .ToString(indent));
-					case RepositoryType.Bidir: return (this.bidirRepository.ToString(indent));
-					case RepositoryType.Rx:    return (this.rxRepository   .ToString(indent));
+					case RepositoryType.Tx:    return (this.txRepository   .ToDiagnosticsString(indent));
+					case RepositoryType.Bidir: return (this.bidirRepository.ToDiagnosticsString(indent));
+					case RepositoryType.Rx:    return (this.rxRepository   .ToDiagnosticsString(indent));
 				}
 				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -3407,11 +3430,11 @@ namespace YAT.Domain
 		{
 			// See below why AssertNotDisposed() is not called on such basic method!
 
-			return (ToString(""));
+			return (ToDiagnosticsString("")); // No 'real' ToString() method required yet.
 		}
 
 		/// <summary></summary>
-		public virtual string ToString(string indent)
+		public virtual string ToDiagnosticsString(string indent)
 		{
 			if (IsDisposed)
 				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
@@ -3427,25 +3450,25 @@ namespace YAT.Domain
 				if (this.rawTerminal != null) // Possible during disposing.
 				{
 					sb.AppendLine(indent + "> RawTerminal: ");
-					sb.AppendLine(this.rawTerminal.ToString(indent + "   "));
+					sb.AppendLine(this.rawTerminal.ToDiagnosticsString(indent + "   "));
 				}
 
 				if (this.txRepository != null) // Possible during disposing.
 				{
 					sb.AppendLine(indent + "> TxRepository: ");
-					sb.Append    (this.txRepository.ToString(indent + "   ")); // Repository will add 'NewLine'.
+					sb.Append    (this.txRepository.ToDiagnosticsString(indent + "   ")); // Repository will add 'NewLine'.
 				}
 
 				if (this.bidirRepository != null) // Possible during disposing.
 				{
 					sb.AppendLine(indent + "> BidirRepository: ");
-					sb.Append    (this.bidirRepository.ToString(indent + "   ")); // Repository will add 'NewLine'.
+					sb.Append    (this.bidirRepository.ToDiagnosticsString(indent + "   ")); // Repository will add 'NewLine'.
 				}
 
 				if (this.bidirRepository != null) // Possible during disposing.
 				{
 					sb.AppendLine(indent + "> RxRepository: ");
-					sb.Append    (this.rxRepository.ToString(indent + "   ")); // Repository will add 'NewLine'.
+					sb.Append    (this.rxRepository.ToDiagnosticsString(indent + "   ")); // Repository will add 'NewLine'.
 				}
 			}
 			return (sb.ToString());
