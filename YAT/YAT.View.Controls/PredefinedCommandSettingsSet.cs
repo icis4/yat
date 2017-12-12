@@ -269,7 +269,6 @@ namespace YAT.View.Controls
 				this.isStartingUp = false;
 				SetExplicitDefaultRadixControls();
 				SetControls();
-				PrepareUserInput();
 			}
 		}
 
@@ -292,7 +291,8 @@ namespace YAT.View.Controls
 	////is not required since           "         _Validating() below gets called anyway.
 
 		/// <remarks>
-		/// Attention, similar code exists in <see cref="SendText.comboBox_ExplicitDefaultRadix_Validating"/>.
+		/// Attention:
+		/// Similar code exists in <see cref="SendText.comboBox_ExplicitDefaultRadix_Validating"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		private void comboBox_ExplicitDefaultRadix_Validating(object sender, CancelEventArgs e)
@@ -522,15 +522,20 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual void PrepareUserInput()
+		public virtual void SelectInput()
 		{
 			this.isSettingControls.Enter();
 			try
 			{
 				if (this.command.IsFilePath)
+				{
 					button_SetFile.Select();
-				else // inc. IsText
+				}
+				else // incl. IsText
+				{
 					textBox_SingleLineText.Select();
+					textBox_SingleLineText.SelectionStart = textBox_SingleLineText.Text.Length;
+				}
 			}
 			finally
 			{
@@ -834,7 +839,7 @@ namespace YAT.View.Controls
 				}
 
 				ApplicationSettings.LocalUserSettings.Paths.SendFiles = Path.GetDirectoryName(ofd.FileName);
-				ApplicationSettings.Save();
+				ApplicationSettings.SaveLocalUserSettings();
 
 				this.command.FilePath = ofd.FileName;
 
