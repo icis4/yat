@@ -97,8 +97,8 @@ New:
 - Local time can optionally be shown in the main status bar (feature request #328).
 
 Important changes:
-- Cursor behavior of 'Send Text' improved; the cursor no longer jumps to the end of the input box
-  when sending the text (bug #395).
+- Cursor behavior of 'Send Text' improved; cursor no longer jumps to the end of the input box when
+  sending the text (bug #395).
 - Shortcut of 'Save to File' changed from [Ctrl+F] to [Ctrl+T] (consequence of feat. #11 and #79).
 - Automatic response trigger is highlighted, same as automatic action trigger (rel. to feat. #320).
 - Automatic response extended by selection to respond the received trigger (related to feature
