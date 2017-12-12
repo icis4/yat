@@ -141,8 +141,11 @@ namespace YAT.View.Forms
 		private TerminalSettingsRoot settingsRoot;
 		private bool handlingTerminalSettingsIsSuspended; // = false; // A simple flag is sufficient as
 		                                                              // the form is ISynchronizeInvoke.
-		// Status
+		// Status:
 		private bool ioStatusIndicatorFlashingIsOn; // = false;
+
+		// Find:
+		private string lastFindPattern; // = null;
 
 		// Toolstrip-combobox-validation-workaround (too late invocation of 'Validate' event):
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
@@ -586,12 +589,12 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_FindNext_Click(object sender, EventArgs e)
 		{
-			FindNext();
+			RequestFindNext();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_FindPrevious_Click(object sender, EventArgs e)
 		{
-			FindPrevious();
+			RequestFindPrevious();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Settings_Click(object sender, EventArgs e)
@@ -1725,7 +1728,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			FindNext();
+			RequestFindNext();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_FindPrevious_Click(object sender, EventArgs e)
@@ -1733,7 +1736,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			FindPrevious();
+			RequestFindPrevious();
 		}
 
 		#endregion
@@ -3058,6 +3061,22 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		protected virtual void RequestFindNext()
+		{
+			var main = (this.mdiParent as Main);
+			if (main != null)
+				main.RequestFindNext();
+		}
+
+		/// <summary></summary>
+		protected virtual void RequestFindPrevious()
+		{
+			var main = (this.mdiParent as Main);
+			if (main != null)
+				main.RequestFindPrevious();
+		}
+
+		/// <summary></summary>
 		protected virtual bool FindIsReady
 		{
 			get
@@ -3074,16 +3093,20 @@ namespace YAT.View.Forms
 		public virtual void ResetFindOnEdit()
 		{
 			var monitor = GetMonitor(this.lastMonitorSelection);
-
 			monitor.ResetFindOnEdit();
 		}
 
 		/// <summary></summary>
 		public virtual void FindOnEdit(string pattern)
 		{
-			var monitor = GetMonitor(this.lastMonitorSelection);
+			ApplicationSettings.RoamingUserSettings.Find.ActivePattern = pattern;
+			ApplicationSettings.SaveRoamingUserSettings();
 
-			monitor.TryFindOnEdit(pattern, ApplicationSettings.RoamingUserSettings.Find.Options);
+			var monitor = GetMonitor(this.lastMonitorSelection);
+			if (monitor.TryFindOnEdit(pattern, ApplicationSettings.RoamingUserSettings.Find.Options))
+			{
+				this.lastFindPattern = pattern;
+			}
 		}
 
 		/// <summary></summary>
@@ -3091,30 +3114,37 @@ namespace YAT.View.Forms
 		{
 			ApplicationSettings.RoamingUserSettings.Find.ActivePattern = pattern;
 			ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.Add(new RecentItem<string>(pattern));
+			ApplicationSettings.RoamingUserSettings.Find.SetChanged(); // Manual change required because underlying collection is modified.
 			ApplicationSettings.SaveRoamingUserSettings();
 
 			var monitor = GetMonitor(this.lastMonitorSelection);
-
-			if (!monitor.TryFindNext(pattern, ApplicationSettings.RoamingUserSettings.Find.Options))
-				ShowNotFoundMessage(pattern, true);
+			if (monitor.TryFindNext(pattern, ApplicationSettings.RoamingUserSettings.Find.Options))
+			{
+				this.lastFindPattern = pattern;
+			}
+			else
+			{
+				ShowNotFoundMessage(pattern, (pattern != this.lastFindPattern));
+			}
 		}
 
 		/// <summary></summary>
-		public virtual void FindNext()
+		public virtual void FindPrevious(string pattern)
 		{
+			ApplicationSettings.RoamingUserSettings.Find.ActivePattern = pattern;
+			ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.Add(new RecentItem<string>(pattern));
+			ApplicationSettings.RoamingUserSettings.Find.SetChanged(); // Manual change required because underlying collection is modified.
+			ApplicationSettings.SaveRoamingUserSettings();
+
 			var monitor = GetMonitor(this.lastMonitorSelection);
-
-			if (!monitor.TryFindNext())
-				ShowNotFoundMessage(monitor.FindPattern, false);
-		}
-
-		/// <summary></summary>
-		public virtual void FindPrevious()
-		{
-			var monitor = GetMonitor(this.lastMonitorSelection);
-
-			if (!monitor.TryFindPrevious())
-				ShowNotFoundMessage(monitor.FindPattern, false);
+			if (monitor.TryFindPrevious(pattern, ApplicationSettings.RoamingUserSettings.Find.Options))
+			{
+				this.lastFindPattern = pattern;
+			}
+			else
+			{
+				ShowNotFoundMessage(pattern, (pattern != this.lastFindPattern));
+			}
 		}
 
 		private void ShowNotFoundMessage(string pattern, bool isFirst)

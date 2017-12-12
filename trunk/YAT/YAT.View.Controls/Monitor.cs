@@ -743,6 +743,16 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		public virtual bool TryFindPrevious(string pattern, FindOptions options)
+		{
+			this.isFirstFindOnEdit = true;
+
+			PrepareFind(pattern, options);
+
+			return (TryFindPrevious());
+		}
+
+		/// <summary></summary>
 		protected virtual void PrepareFind(string pattern, FindOptions options)
 		{
 			this.findPattern = pattern;
@@ -758,10 +768,8 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		public virtual bool TryFindNext()
+		protected virtual bool TryFindNext()
 		{
-			this.isFirstFindOnEdit = true;
-
 			int startIndex;
 			if (!TryGetNextStartIndex(out startIndex))
 				return (false);
@@ -775,10 +783,8 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		public virtual bool TryFindPrevious()
+		protected virtual bool TryFindPrevious()
 		{
-			this.isFirstFindOnEdit = true;
-
 			int startIndex;
 			if (!TryGetPreviousStartIndex(out startIndex))
 				return (false);

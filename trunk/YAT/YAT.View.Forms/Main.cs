@@ -1115,9 +1115,12 @@ namespace YAT.View.Forms
 
 					if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
 					{
+						var activePattern = ApplicationSettings.RoamingUserSettings.Find.ActivePattern;
+						var recentPatterns = ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.ToArray();
+
 						toolStripComboBox_MainTool_Terminal_Find_Pattern.Items.Clear();
-						toolStripComboBox_MainTool_Terminal_Find_Pattern.Items.AddRange(ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.ToArray());
-						SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_Find_Pattern, ApplicationSettings.RoamingUserSettings.Find.ActivePattern);
+						toolStripComboBox_MainTool_Terminal_Find_Pattern.Items.AddRange(recentPatterns);
+						SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_Find_Pattern, activePattern, activePattern);
 						toolStripComboBox_MainTool_Terminal_Find_Pattern.Enabled = childIsReady;
 						toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = true;
 					}
@@ -1277,9 +1280,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			var pattern = (toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedItem as string);
-			if (pattern != null)
-				ValidateAndFindNext(pattern);
+			ValidateAndFindOnEdit();
 		}
 
 		// \remind (2017-11-24 / MKY)
@@ -1364,7 +1365,7 @@ namespace YAT.View.Forms
 					this.mainToolValidationWorkaround_UpdateIsSuspended = true;
 					try
 					{
-						ValidateAndFindOnEdit(pattern);
+						FindOnEdit(pattern); // No need to ValidateAndFindOnEdit(pattern) since just validated above.
 					}
 					finally
 					{
@@ -1485,25 +1486,19 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		protected virtual void ValidateAndFindOnEdit(string pattern)
+		protected virtual void FindOnEdit(string pattern)
 		{
-			if (ValidateFindPattern(pattern))
-			{
-				var t = (ActiveMdiChild as Terminal);
-				if (t != null)
-					t.FindOnEdit(pattern);
-			}
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.FindOnEdit(pattern);
 		}
 
 		/// <summary></summary>
-		protected virtual void ValidateAndFindNext(string pattern)
+		protected virtual void ValidateAndFindOnEdit()
 		{
+			var pattern = toolStripComboBox_MainTool_Terminal_Find_Pattern.Text;
 			if (ValidateFindPattern(pattern))
-			{
-				var t = (ActiveMdiChild as Terminal);
-				if (t != null)
-					t.FindNext(pattern);
-			}
+				FindOnEdit(pattern);
 		}
 
 		private void toolStripButton_MainTool_Terminal_Find_Next_Click(object sender, EventArgs e)
@@ -1519,7 +1514,7 @@ namespace YAT.View.Forms
 			{
 				var t = (ActiveMdiChild as Terminal);
 				if (t != null)
-					t.FindNext();
+					t.FindNext(pattern);
 			}
 		}
 
@@ -1536,7 +1531,7 @@ namespace YAT.View.Forms
 			{
 				var t = (ActiveMdiChild as Terminal);
 				if (t != null)
-					t.FindPrevious();
+					t.FindPrevious(pattern);
 			}
 		}
 
@@ -2941,6 +2936,20 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary>
+		/// Gets whether the find is ready.
+		/// </summary>
+		public virtual bool FindIsReady
+		{
+			get
+			{
+				if (ApplicationSettings.RoamingUserSettings.View.FindVisible)
+					return (!string.IsNullOrEmpty(ApplicationSettings.RoamingUserSettings.Find.ActivePattern));
+				else
+					return (false);
+			}
+		}
+
+		/// <summary>
 		/// Requests to activate the find field.
 		/// </summary>
 		public virtual void RequestFind()
@@ -2956,17 +2965,19 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary>
-		/// Gets whether the find is ready.
+		/// Requests find next.
 		/// </summary>
-		public virtual bool FindIsReady
+		public virtual void RequestFindNext()
 		{
-			get
-			{
-				if (ApplicationSettings.RoamingUserSettings.View.FindVisible)
-					return (!string.IsNullOrEmpty(ApplicationSettings.RoamingUserSettings.Find.ActivePattern));
-				else
-					return (false);
-			}
+			ValidateAndFindNext();
+		}
+
+		/// <summary>
+		/// Requests find previous.
+		/// </summary>
+		public virtual void RequestFindPrevious()
+		{
+			ValidateAndFindPrevious();
 		}
 
 		#endregion
