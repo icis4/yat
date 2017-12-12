@@ -31,15 +31,20 @@ namespace MKY.Windows.Forms
 	public static class SelectionHelper
 	{
 		/// <summary>
-		/// Selects the given item in a <see cref="ListControl"/>.
+		/// Selects the given item in a <see cref="ComboBox"/>.
 		/// </summary>
 		/// <remarks>
-		/// Separate <paramref name="itemText"/> need to selectively chose the way the item is
+		/// If <paramref name="item"/> is not contained, <see cref="ComboBox.SelectedIndex"/>
+		/// is set to <see cref="ControlEx.InvalidIndex"/>. Optionally, the text is set to the
+		/// given <paramref name="fallbackText"/>.
+		/// </remarks>
+		/// <remarks>
+		/// Separate <paramref name="fallbackText"/> need to selectively chose the way the item is
 		/// converted into a string. This can e.g. be an implicit string conversion operator,
 		/// or the item's ToString() method, or something else.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public static void Select(ComboBox control, object item, string itemText = null)
+		public static void Select(ComboBox control, object item, string fallbackText = null)
 		{
 			if (control.Items.Count > 0)
 			{
@@ -51,8 +56,8 @@ namespace MKY.Windows.Forms
 					}
 					else
 					{	// Applies if an item that is not in the combo box is selected.
-						control.SelectedIndex = ControlEx.InvalidIndex;
-						control.Text = itemText; // Setting the 'Text' property to null or an empty string ("") sets the SelectedIndex to -1.
+						control.SelectedIndex = ControlEx.InvalidIndex; // Explicitly set the SelectedIndex to -1.
+						control.Text = fallbackText;
 					}
 				}
 				else
@@ -62,76 +67,49 @@ namespace MKY.Windows.Forms
 			}
 			else
 			{
-				control.SelectedIndex = ControlEx.InvalidIndex;
-				control.Text = itemText; // Setting the 'Text' property to null or an empty string ("") sets the SelectedIndex to -1.
+				control.SelectedIndex = ControlEx.InvalidIndex; // Explicitly set the SelectedIndex to -1.
+				control.Text = fallbackText;
 			}
 		}
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "Same type as Select() above.")]
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public static void Deselect(ComboBox control, string itemText = null)
+		/// <remarks>
+		/// <see cref="ListControl.SelectedIndex"/> is set to <see cref="ControlEx.InvalidIndex"/>.
+		/// </remarks>
+		/// <remarks>
+		/// Provided for symmetricity with <see cref="Select(ComboBox, object, string)"/> above.
+		/// </remarks>
+		public static void Deselect(ListControl control)
 		{
-			if (string.IsNullOrEmpty(itemText))
-			{
-				control.Text = null; // Setting the 'Text' property to null or an empty string ("") sets the SelectedIndex to -1.
-			}
-			else
-			{
-				control.SelectedIndex = ControlEx.InvalidIndex; // -1.
-				control.Text = itemText; // Setting the 'Text' property to null or an empty string ("") sets the SelectedIndex to -1.
-			}
+			control.SelectedIndex = ControlEx.InvalidIndex;
 		}
 
 		/// <summary>
 		/// Selects the given item in a <see cref="ToolStripComboBox"/>.
 		/// </summary>
 		/// <remarks>
-		/// Separate <paramref name="itemText"/> need to selectively chose the way the item is
+		/// If <paramref name="item"/> is not contained, <see cref="ComboBox.SelectedIndex"/>
+		/// is set to <see cref="ControlEx.InvalidIndex"/>. Optionally, the text is set to the
+		/// given <paramref name="fallbackText"/>.
+		/// </remarks>
+		/// <remarks>
+		/// Separate <paramref name="fallbackText"/> need to selectively chose the way the item is
 		/// converted into a string. This can e.g. be an implicit string conversion operator,
 		/// or the item's ToString() method, or something else.
 		/// </remarks>
-		public static void Select(ToolStripComboBox control, object item, string itemText = null)
+		public static void Select(ToolStripComboBox control, object item, string fallbackText = null)
 		{
-			if (control.Items.Count > 0)
-			{
-				if (item != null)
-				{
-					if (control.Items.Contains(item))
-					{	// Applies if an item of the combo box is selected.
-						control.SelectedItem = item;
-					}
-					else
-					{	// Applies if an item that is not in the combo box is selected.
-						control.SelectedIndex = ControlEx.InvalidIndex;
-						control.Text = itemText;
-					}
-				}
-				else
-				{	// Item doesn't exist, use default = first item in the combo box, or none if list is empty.
-					control.SelectedIndex = 0;
-				}
-			}
-			else
-			{
-				control.SelectedIndex = ControlEx.InvalidIndex;
-				control.Text = itemText;
-			}
+			Select(control.ComboBox, item, fallbackText);
 		}
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public static void Deselect(ToolStripComboBox control, string itemText = null)
+		/// <remarks>
+		/// <see cref="ToolStripComboBox.SelectedIndex"/> is set to <see cref="ControlEx.InvalidIndex"/>.
+		/// </remarks>
+		/// <remarks>
+		/// Provided for symmetricity with <see cref="Select(ToolStripComboBox, object, string)"/> above.
+		/// </remarks>
+		public static void Deselect(ToolStripComboBox control)
 		{
-			if (string.IsNullOrEmpty(itemText))
-			{
-				control.Text = null; // Setting the 'Text' property to null or an empty string ("") sets the SelectedIndex to -1.
-			}
-			else
-			{
-				control.SelectedIndex = ControlEx.InvalidIndex; // -1.
-				control.Text = itemText;
-			}
+			Deselect(control.ComboBox);
 		}
 	}
 }

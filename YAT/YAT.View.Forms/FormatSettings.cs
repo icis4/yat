@@ -742,9 +742,9 @@ namespace YAT.View.Forms
 				Domain.TimeSpanFormatPresetEx. TryParse(this.timeSpanFormat,  out timeSpanFormatPreset);
 				Domain.TimeDeltaFormatPresetEx.TryParse(this.timeDeltaFormat, out timeDeltaFormatPreset);
 
-				SelectionHelper.Select(comboBox_TimeStampFormatPreset, timeStampFormatPreset, null);
-				SelectionHelper.Select(comboBox_TimeSpanFormatPreset,  timeSpanFormatPreset,  null);
-				SelectionHelper.Select(comboBox_TimeDeltaFormatPreset, timeDeltaFormatPreset, null);
+				SelectionHelper.Select(comboBox_TimeStampFormatPreset, timeStampFormatPreset);
+				SelectionHelper.Select(comboBox_TimeSpanFormatPreset,  timeSpanFormatPreset );
+				SelectionHelper.Select(comboBox_TimeDeltaFormatPreset, timeDeltaFormatPreset);
 				                                //// Clone settings to ensure decoupling:
 				monitor_Example.FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
 

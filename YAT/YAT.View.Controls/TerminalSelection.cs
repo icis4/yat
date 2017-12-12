@@ -258,7 +258,7 @@ namespace YAT.View.Controls
 					comboBox_TerminalType.SelectedItem = (Domain.TerminalTypeEx)this.terminalType;
 					comboBox_IOType.SelectedItem       = (Domain.IOTypeEx)this.ioType;
 				}
-				else
+				else // Note that 'SelectionHelper' is not used for this 'DropDownList'-style ComboBox.
 				{
 					comboBox_TerminalType.SelectedIndex = ControlEx.InvalidIndex;
 					comboBox_IOType.SelectedIndex       = ControlEx.InvalidIndex;

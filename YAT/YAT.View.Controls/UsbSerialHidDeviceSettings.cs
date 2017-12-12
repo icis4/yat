@@ -509,7 +509,7 @@ namespace YAT.View.Controls
 					// listed. It is not possible to set the 'SelectedIndex' to 'ControlEx.InvalidIndex'
 					// and then set an arbitrary 'Text';
 				}
-				else
+				else // Note that 'SelectionHelper' is not used for this 'DropDownList'-style ComboBox.
 				{
 					comboBox_Preset.SelectedIndex = ControlEx.InvalidIndex;
 				}
