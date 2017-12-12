@@ -221,10 +221,10 @@ namespace YAT.View.Forms
 			// Initially set controls and validate its contents where needed:
 			SetControls();
 
-			int requestedCommand = Int32Ex.Limit(this.startupControl.RequestedCommand, 1, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage);
+			var requestedCommand = Int32Ex.Limit(this.startupControl.RequestedCommand, 1, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage);
 			var requestedControl = this.predefinedCommandSettingsSets[requestedCommand - 1];
 			requestedControl.Select();
-			requestedControl.PrepareUserInput();
+			requestedControl.SelectInput();
 		}
 
 		#endregion
