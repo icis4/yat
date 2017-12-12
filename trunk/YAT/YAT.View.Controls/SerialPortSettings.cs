@@ -484,12 +484,14 @@ namespace YAT.View.Controls
 			try
 			{
 				var baudRate = (MKY.IO.Ports.BaudRate)this.baudRate;
-				if (Enabled && (baudRate == MKY.IO.Ports.BaudRate.Explicit))
-					comboBox_BaudRate.Text = new MKY.IO.Ports.BaudRateEx(baudRate);
-				else if (Enabled)
-					comboBox_BaudRate.SelectedItem = new MKY.IO.Ports.BaudRateEx(baudRate);
+				if (Enabled)
+				{
+					SelectionHelper.Select(comboBox_BaudRate, (MKY.IO.Ports.BaudRateEx)baudRate, (MKY.IO.Ports.BaudRateEx)baudRate);
+				}
 				else
-					comboBox_BaudRate.SelectedIndex = ControlEx.InvalidIndex;
+				{
+					SelectionHelper.Deselect(comboBox_BaudRate);
+				}
 
 				if (Enabled)
 				{

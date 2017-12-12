@@ -894,10 +894,10 @@ namespace YAT.View.Controls
 					else
 					{
 						comboBox_LocalInterface.Enabled = false;
-						SelectionHelper.Deselect(comboBox_LocalInterface, (IPNetworkInterfaceEx)IPNetworkInterfaceEx.Default);
+						comboBox_LocalInterface.SelectedItem = (IPNetworkInterfaceEx)IPNetworkInterfaceEx.Default;
 					}
 				}
-				else
+				else // Note that 'SelectionHelper' is not used for this 'DropDownList'-style ComboBox.
 				{
 					comboBox_LocalInterface.SelectedIndex = ControlEx.InvalidIndex;
 				}
@@ -938,24 +938,18 @@ namespace YAT.View.Controls
 						case SocketType.UdpClient:
 						{
 							comboBox_LocalFilter.Enabled = false;
-							SelectionHelper.Deselect(comboBox_LocalFilter, (IPFilterEx)IPFilterEx.Default);
+							SelectionHelper.Select(comboBox_LocalFilter, (IPFilterEx)IPFilterEx.Default);
 							break;
 						}
 
 						case SocketType.UdpServer:
 						{
 							comboBox_LocalFilter.Enabled = true;
-							if (comboBox_LocalFilter.Items.Count > 0)
-							{
-								if (this.localFilter != null)
-									comboBox_LocalFilter.SelectedItem = this.localFilter;
-								else
-									comboBox_LocalFilter.SelectedItem = (IPFilterEx)IPFilterEx.Default;
-							}
+
+							if (this.localFilter != null)
+								SelectionHelper.Select(comboBox_LocalFilter, this.localFilter, this.localFilter);
 							else
-							{
-								comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
-							}
+								SelectionHelper.Select(comboBox_LocalFilter, (IPFilterEx)IPFilterEx.Default);
 
 							break;
 						}
@@ -963,7 +957,7 @@ namespace YAT.View.Controls
 						case SocketType.UdpPairSocket:
 						{
 							comboBox_LocalFilter.Enabled = false;
-							SelectionHelper.Deselect(comboBox_LocalFilter, (IPFilterEx)IPFilterEx.Default);
+							SelectionHelper.Select(comboBox_LocalFilter, (IPFilterEx)IPFilterEx.Default);
 							break;
 						}
 
@@ -978,8 +972,7 @@ namespace YAT.View.Controls
 					label_LocalFilter.Visible = false;
 					comboBox_LocalFilter.Visible = false;
 					comboBox_LocalFilter.Enabled = false;
-					comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
-					comboBox_LocalFilter.Text = "";
+					SelectionHelper.Deselect(comboBox_LocalFilter);
 				}
 			}
 			finally
