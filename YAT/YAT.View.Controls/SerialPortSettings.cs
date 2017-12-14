@@ -276,6 +276,23 @@ namespace YAT.View.Controls
 
 		#endregion
 
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <remarks>See remarks in <see cref="ComboBoxEx"/>.</remarks>
+		public virtual void OnFormDeactivateWorkaround()
+		{
+			comboBox_BaudRate.OnFormDeactivateWorkaround();
+		////comboBox_DataBits    is a standard ComboBox.
+		////comboBox_Parity      is a standard ComboBox.
+		////comboBox_StopBits    is a standard ComboBox.
+		////comboBox_FlowControl is a standard ComboBox.
+		}
+
+		#endregion
+
 		#region Control Event Handlers
 		//==========================================================================================
 		// Control Event Handlers

@@ -606,6 +606,7 @@ namespace YAT.View.Forms
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Log Settings";
+			this.Deactivate += new System.EventHandler(this.LogSettings_Deactivate);
 			this.Shown += new System.EventHandler(this.LogSettings_Shown);
 			this.groupBox_Settings.ResumeLayout(false);
 			this.groupBox_Settings.PerformLayout();

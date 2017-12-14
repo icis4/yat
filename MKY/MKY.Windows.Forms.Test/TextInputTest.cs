@@ -21,12 +21,13 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Windows.Forms;
 
 namespace MKY.Windows.Forms.Test
 {
 	/// <summary>
-	/// Test form for <see cref="ListBoxEx"/> and <see cref="FastListBox"/>.
+	/// Test form for <see cref="TextBoxEx"/> and <see cref="ComboBoxEx"/>.
 	/// </summary>
 	public partial class TextInputTest : Form
 	{
@@ -37,6 +38,12 @@ namespace MKY.Windows.Forms.Test
 		public TextInputTest()
 		{
 			InitializeComponent();
+		}
+
+		private void TextInputTest_Deactivate(object sender, EventArgs e)
+		{
+		////comboBox is a standard ComboBox.
+			comboBoxEx.OnFormDeactivateWorkaround();
 		}
 	}
 }

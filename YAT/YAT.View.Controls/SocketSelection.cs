@@ -359,6 +359,29 @@ namespace YAT.View.Controls
 
 		#endregion
 
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary></summary>
+		public virtual void RefreshLocalInterfaceList()
+		{
+			SetLocalInterfaceList();
+		}
+
+		/// <remarks>See remarks in <see cref="ComboBoxEx"/>.</remarks>
+		public virtual void OnFormDeactivateWorkaround()
+		{
+			comboBox_RemoteHost .OnFormDeactivateWorkaround();
+			comboBox_RemotePort .OnFormDeactivateWorkaround();
+		////comboBox_LocalInterface is a standard ComboBox.
+			comboBox_LocalFilter.OnFormDeactivateWorkaround();
+			comboBox_LocalPort  .OnFormDeactivateWorkaround();
+		}
+
+		#endregion
+
 		#region Control Event Handlers
 		//==========================================================================================
 		// Control Event Handlers
@@ -648,19 +671,6 @@ namespace YAT.View.Controls
 
 				e.Cancel = true;
 			}
-		}
-
-		#endregion
-
-		#region Methods
-		//==========================================================================================
-		// Methods
-		//==========================================================================================
-
-		/// <summary></summary>
-		public virtual void RefreshLocalInterfaceList()
-		{
-			SetLocalInterfaceList();
 		}
 
 		#endregion

@@ -22,9 +22,32 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of cursor position and text selection:
+////#define DEBUG_CURSOR_AND_SELECTION
+
+#endif // DEBUG
+
+#endregion
+
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
+using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Permissions;
 using System.Windows.Forms;
+
+#endregion
 
 namespace MKY.Windows.Forms
 {
@@ -32,11 +55,17 @@ namespace MKY.Windows.Forms
 	/// An improved <see cref="ComboBox"/> that additionally provides:
 	/// <list type="bullet">
 	/// <item><description>The [Ctrl+Backspace] shortcut.</description></item>
+	/// <item><description>Restore of cursor position and text selection on getting focus, same behavior as <see cref="TextBox"/>.</description></item>
 	/// </list>
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public class ComboBoxEx : ComboBox
 	{
+	////private bool hasFocus; // = false;   <=   commented out as poor man's [Conditional("DEBUG_CURSOR_AND_SELECTION")]
+
+		private int lastSelectionStart = ControlEx.InvalidIndex;
+		private int lastSelectionLength; // = 0;
+
 		/// <remarks>
 		/// Based on https://stackoverflow.com/questions/1124639/winforms-textbox-using-ctrl-backspace-to-delete-whole-word.
 		/// </remarks>
@@ -93,6 +122,158 @@ namespace MKY.Windows.Forms
 
 			return (base.ProcessCmdKey(ref msg, keyData));
 		}
+
+		/// <summary>
+		/// Implements the same selection behaviour on getting focus as <see cref="TextBox"/>.
+		/// </summary>
+		/// <remarks>
+		/// Attention: Thanks to the Microsoft guys, the implementation is trickier than necessary!
+		/// 
+		/// Event sequence on entering the control using [Tab]:
+		///  1. 'Enter'
+		///  2. 'LostFocus' !!!
+		///  3. 'GotFocus'
+		/// 
+		/// Event sequence on entering the control when changing applications (e.g. using [Alt+Tab]):
+		///      No 'Enter' !!!
+		///  1. 'LostFocus' !!!
+		///  2. 'GotFocus'
+		/// 
+		/// (Note that this is "slightly" different to what is stated at
+		/// https://docs.microsoft.com/en-us/dotnet/framework/winforms/order-of-events-in-windows-forms.)
+		/// 
+		/// Event sequence on leaving the control using [Tab]:
+		///  1. 'Leave'     and values are OK.
+		///  2. 'LostFocus' but values are 0/0 !!!
+		/// 
+		/// Event sequence on leaving the control when changing applications (e.g. using [Alt+Tab]):
+		///  1. 'LostFocus' but values are 0/0 !!!
+		/// 
+		/// Resulting constraints and solution/workaround:
+		///  a') 'OnLostFocus' is called each time just before 'OnGotFocus', thus focus state would have to be kept as well.
+		///  a)  'OnLostFocus' cannot keep the values anyway, for whatever reason...
+		///        => 'OnLeave' is OK for [Tab], but [Alt+Tab] must be notified from parent form.
+		///  b') 'OnEnter' couldn't restore the values, for whatever reason it is too early.
+		///  b)  'OnEnter' cannot restore the values anyway, since it isn't called on [Alt+Tab].
+		///        => 'OnGotFocus' is OK.
+		/// </remarks>
+		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+		protected override void OnGotFocus(EventArgs e)
+		{
+			DebugCursorAndSelection("OnGotFocus...");
+
+			// Attention:
+			// Same code exists in ToolStripComboBoxEx.OnGotFocus().
+			// Changes here will have to be applied there too.
+
+			base.OnGotFocus(e);
+		////this.hasFocus = true;   <=   commented out as poor man's [Conditional("DEBUG_CURSOR_AND_SELECTION")]
+
+			if (this.lastSelectionStart != ControlEx.InvalidIndex)
+			{
+				SelectionStart  = this.lastSelectionStart;
+				SelectionLength = this.lastSelectionLength;
+
+				DebugCursorAndSelection("...cursor position and text selection restored.");
+			}
+			else
+			{
+				DebugCursorAndSelection("...cursor position and text selection left unchanged.");
+			}
+		}
+
+	/////// <summary>
+	/////// Implements the same selection behaviour on getting focus as <see cref="TextBox"/>.
+	/////// </summary>
+	/////// <remarks>
+	/////// Attention: See remarks in <see cref="OnGotFocus(EventArgs)"/>!
+	/////// </remarks>
+	/////// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+	////protected override void OnEnter(EventArgs e)
+	////{
+	////	DebugCursorAndSelection("OnEnter");
+	////	base.OnEnter(e);
+	////}
+
+		/// <summary>
+		/// Implements the same selection behaviour on getting focus as <see cref="TextBox"/>.
+		/// </summary>
+		/// <remarks>
+		/// Attention: See remarks in <see cref="OnGotFocus(EventArgs)"/>!
+		/// </remarks>
+		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+		protected override void OnLeave(EventArgs e)
+		{
+			DebugCursorAndSelection("OnLeave...");
+
+			// Attention:
+			// Same code exists in ToolStripComboBoxEx.OnLeave().
+			// Changes here will have to be applied there too.
+
+			this.lastSelectionStart  = SelectionStart;
+			this.lastSelectionLength = SelectionLength;
+
+			DebugCursorAndSelection(string.Format("...cursor position {0} and text selection {1} implicitly remembered.", this.lastSelectionStart, this.lastSelectionLength));
+
+			base.OnLeave(e);
+		}
+
+		/// <summary>
+		/// Implements the same selection behaviour on getting focus as <see cref="TextBox"/>.
+		/// </summary>
+		/// <remarks>
+		/// Attention: See remarks in <see cref="OnGotFocus(EventArgs)"/>!
+		/// </remarks>
+		public virtual void OnFormDeactivateWorkaround()
+		{
+			DebugCursorAndSelection("OnFormDeactivateWorkaround...");
+
+			// Attention:
+			// Same code exists in ToolStripComboBoxEx.OnFormDeactivateWorkaround().
+			// Changes here will have to be applied there too.
+
+			this.lastSelectionStart  = SelectionStart;
+			this.lastSelectionLength = SelectionLength;
+
+			DebugCursorAndSelection(string.Format("...cursor position {0} and text selection {1} explicitly remembered.", this.lastSelectionStart, this.lastSelectionLength));
+		}
+
+	/////// <summary>
+	/////// Implements the same selection behaviour on getting focus as <see cref="TextBox"/>.
+	/////// </summary>
+	/////// <remarks>
+	/////// Attention: See remarks in <see cref="OnGotFocus(EventArgs)"/>!
+	/////// </remarks>
+	/////// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+	////protected override void OnLostFocus(EventArgs e)
+	////{
+	////	DebugCursorAndSelection("OnLostFocus...");
+	////
+	////	if (this.hasFocus)
+	////	{
+	////		DebugCursorAndSelection(string.Format("...cursor position {0} and text selection {1} are 0/0 !!!", SelectionStart, SelectionLength));
+	////	}
+	////	else
+	////	{
+	////		DebugCursorAndSelection("...cursor position and text selection *NOT* valid as control doesn't have focus !!!");
+	////	}
+	////
+	////	this.hasFocus = false;
+	////	base.OnLostFocus(e);
+	////}
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		[Conditional("DEBUG_CURSOR_AND_SELECTION")]
+		private static void DebugCursorAndSelection(string message)
+		{
+			Debug.WriteLine(message);
+		}
+
+		#endregion
 	}
 }
 

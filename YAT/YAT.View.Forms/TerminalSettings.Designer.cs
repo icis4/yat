@@ -263,6 +263,7 @@ namespace YAT.View.Forms
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Terminal Settings";
+			this.Deactivate += new System.EventHandler(this.TerminalSettings_Deactivate);
 			this.Shown += new System.EventHandler(this.TerminalSettings_Shown);
 			this.groupBox_Settings.ResumeLayout(false);
 			this.groupBox_PortSettings.ResumeLayout(false);

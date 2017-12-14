@@ -166,7 +166,7 @@ namespace YAT.View.Forms
 			this.label_RxEol.Enabled = false;
 			this.label_RxEol.Location = new System.Drawing.Point(8, 70);
 			this.label_RxEol.Name = "label_RxEol";
-			this.label_RxEol.Size = new System.Drawing.Size(97, 13);
+			this.label_RxEol.Size = new System.Drawing.Size(81, 13);
 			this.label_RxEol.TabIndex = 3;
 			this.label_RxEol.Text = "EOL sequence:";
 			// 
@@ -461,6 +461,7 @@ namespace YAT.View.Forms
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Text Terminal Settings";
+			this.Deactivate += new System.EventHandler(this.TextTerminalSettings_Deactivate);
 			this.Shown += new System.EventHandler(this.TextTerminalSettings_Shown);
 			this.groupBox_Settings.ResumeLayout(false);
 			this.groupBox_Settings.PerformLayout();

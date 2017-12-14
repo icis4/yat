@@ -30,18 +30,19 @@
 		{
 			this.textBox = new System.Windows.Forms.TextBox();
 			this.comboBox = new System.Windows.Forms.ComboBox();
-			this.textBoxEx = new MKY.Windows.Forms.TextBoxEx();
-			this.comboBoxEx = new MKY.Windows.Forms.ComboBoxEx();
 			this.label_Standard = new System.Windows.Forms.Label();
 			this.label_Extended = new System.Windows.Forms.Label();
+			this.comboBoxEx = new MKY.Windows.Forms.ComboBoxEx();
+			this.textBoxEx = new MKY.Windows.Forms.TextBoxEx();
+			this.button_TabStopDummy = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// textBox
 			// 
-			this.textBox.Location = new System.Drawing.Point(196, 12);
+			this.textBox.Location = new System.Drawing.Point(197, 44);
 			this.textBox.Name = "textBox";
 			this.textBox.Size = new System.Drawing.Size(100, 20);
-			this.textBox.TabIndex = 1;
+			this.textBox.TabIndex = 3;
 			this.textBox.Text = "Some text";
 			// 
 			// comboBox
@@ -51,19 +52,29 @@
             "Some item 1",
             "Some item 2",
             "Some item 3"});
-			this.comboBox.Location = new System.Drawing.Point(302, 12);
+			this.comboBox.Location = new System.Drawing.Point(303, 43);
 			this.comboBox.Name = "comboBox";
 			this.comboBox.Size = new System.Drawing.Size(121, 21);
-			this.comboBox.TabIndex = 2;
+			this.comboBox.TabIndex = 5;
 			this.comboBox.Text = "Some text";
 			// 
-			// textBoxEx
+			// label_Standard
 			// 
-			this.textBoxEx.Location = new System.Drawing.Point(196, 39);
-			this.textBoxEx.Name = "textBoxEx";
-			this.textBoxEx.Size = new System.Drawing.Size(100, 20);
-			this.textBoxEx.TabIndex = 4;
-			this.textBoxEx.Text = "Some text";
+			this.label_Standard.AutoSize = true;
+			this.label_Standard.Location = new System.Drawing.Point(12, 47);
+			this.label_Standard.Name = "label_Standard";
+			this.label_Standard.Size = new System.Drawing.Size(174, 13);
+			this.label_Standard.TabIndex = 1;
+			this.label_Standard.Text = "Standard (System.Windows.Forms):";
+			// 
+			// label_Extended
+			// 
+			this.label_Extended.AutoSize = true;
+			this.label_Extended.Location = new System.Drawing.Point(12, 73);
+			this.label_Extended.Name = "label_Extended";
+			this.label_Extended.Size = new System.Drawing.Size(165, 13);
+			this.label_Extended.TabIndex = 2;
+			this.label_Extended.Text = "Extended (MKY.Windows.Forms):";
 			// 
 			// comboBoxEx
 			// 
@@ -72,35 +83,35 @@
             "Some item 1",
             "Some item 2",
             "Some item 3"});
-			this.comboBoxEx.Location = new System.Drawing.Point(302, 39);
+			this.comboBoxEx.Location = new System.Drawing.Point(303, 70);
 			this.comboBoxEx.Name = "comboBoxEx";
 			this.comboBoxEx.Size = new System.Drawing.Size(121, 21);
-			this.comboBoxEx.TabIndex = 5;
+			this.comboBoxEx.TabIndex = 6;
 			this.comboBoxEx.Text = "Some text";
 			// 
-			// label_Standard
+			// textBoxEx
 			// 
-			this.label_Standard.AutoSize = true;
-			this.label_Standard.Location = new System.Drawing.Point(12, 15);
-			this.label_Standard.Name = "label_Standard";
-			this.label_Standard.Size = new System.Drawing.Size(174, 13);
-			this.label_Standard.TabIndex = 0;
-			this.label_Standard.Text = "Standard (System.Windows.Forms):";
+			this.textBoxEx.Location = new System.Drawing.Point(197, 70);
+			this.textBoxEx.Name = "textBoxEx";
+			this.textBoxEx.Size = new System.Drawing.Size(100, 20);
+			this.textBoxEx.TabIndex = 4;
+			this.textBoxEx.Text = "Some text";
 			// 
-			// label_Extended
+			// button_TabStopDummy
 			// 
-			this.label_Extended.AutoSize = true;
-			this.label_Extended.Location = new System.Drawing.Point(12, 42);
-			this.label_Extended.Name = "label_Extended";
-			this.label_Extended.Size = new System.Drawing.Size(165, 13);
-			this.label_Extended.TabIndex = 3;
-			this.label_Extended.Text = "Extended (MKY.Windows.Forms):";
+			this.button_TabStopDummy.Location = new System.Drawing.Point(197, 12);
+			this.button_TabStopDummy.Name = "button_TabStopDummy";
+			this.button_TabStopDummy.Size = new System.Drawing.Size(227, 23);
+			this.button_TabStopDummy.TabIndex = 0;
+			this.button_TabStopDummy.Text = "TabStop Dummy";
+			this.button_TabStopDummy.UseVisualStyleBackColor = true;
 			// 
 			// TextInputTest
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(436, 71);
+			this.ClientSize = new System.Drawing.Size(436, 103);
+			this.Controls.Add(this.button_TabStopDummy);
 			this.Controls.Add(this.label_Extended);
 			this.Controls.Add(this.label_Standard);
 			this.Controls.Add(this.comboBoxEx);
@@ -109,6 +120,7 @@
 			this.Controls.Add(this.textBox);
 			this.Name = "TextInputTest";
 			this.Text = "TextInputTest";
+			this.Deactivate += new System.EventHandler(this.TextInputTest_Deactivate);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -122,5 +134,6 @@
 		private ComboBoxEx comboBoxEx;
 		private System.Windows.Forms.Label label_Standard;
 		private System.Windows.Forms.Label label_Extended;
+		private System.Windows.Forms.Button button_TabStopDummy;
 	}
 }

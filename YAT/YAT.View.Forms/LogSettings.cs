@@ -144,6 +144,13 @@ namespace YAT.View.Forms
 			SetControls();
 		}
 
+		private void LogSettings_Deactivate(object sender, EventArgs e)
+		{
+			comboBox_Raw_Extension        .OnFormDeactivateWorkaround();
+			comboBox_Neat_Extension       .OnFormDeactivateWorkaround();
+			comboBox_Options_NameSeparator.OnFormDeactivateWorkaround();
+		}
+
 		#endregion
 
 		#region Controls Event Handlers

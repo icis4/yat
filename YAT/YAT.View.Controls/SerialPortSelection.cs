@@ -192,6 +192,12 @@ namespace YAT.View.Controls
 			SetPortList();
 		}
 
+		/// <remarks>See remarks in <see cref="ComboBoxEx"/>.</remarks>
+		public virtual void OnFormDeactivateWorkaround()
+		{
+			comboBox_Port.OnFormDeactivateWorkaround();
+		}
+
 		#endregion
 
 		#region Control Event Handlers
