@@ -266,7 +266,8 @@ namespace YAT.View.Controls
 			{
 				pageButtons.TerminalIsReadyToSend = this.terminalIsReadyToSend;
 
-				if ((this.pages != null) && (this.pages.Count > 0) && (this.selectedPage >= 1) && (this.selectedPage <= this.pages.Count))
+				if ((this.pages != null) && (this.pages.Count > 0) &&
+				    (this.selectedPage >= 1) && (this.selectedPage <= this.pages.Count))
 				{
 					pageButtons.Commands = this.pages[SelectedPageIndex].Commands;
 
@@ -278,8 +279,10 @@ namespace YAT.View.Controls
 
 					comboBox_Pages.Enabled = true;
 					comboBox_Pages.Items.Clear();
-					foreach (PredefinedCommandPage p in this.pages)
-						comboBox_Pages.Items.Add(p.PageName);
+
+					foreach (var page in this.pages)
+						comboBox_Pages.Items.Add(page.PageName);
+
 					comboBox_Pages.SelectedIndex = SelectedPageIndex;
 				}
 				else
