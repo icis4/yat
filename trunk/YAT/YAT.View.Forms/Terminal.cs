@@ -310,7 +310,7 @@ namespace YAT.View.Forms
 
 			this.mdiParent = MdiParent;
 
-			// Immediately set terminal controls so the terminal "looks" nice from the very start.
+			// Immediately set terminal controls so the terminal "looks nice" from the very start:
 			SetTerminalControls();
 		}
 
@@ -320,7 +320,7 @@ namespace YAT.View.Forms
 			monitor_Bidir.Activate();
 			monitor_Rx   .Activate();
 
-			// Select send text control to enable immediate user input.
+			// Select send text control to enable immediate user input:
 			SelectSendTextInput();
 		}
 
@@ -329,6 +329,16 @@ namespace YAT.View.Forms
 			monitor_Tx   .Deactivate();
 			monitor_Bidir.Deactivate();
 			monitor_Rx   .Deactivate();
+
+			// OnFormDeactivateWorkaround:
+			toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger .OnFormDeactivateWorkaround();
+			toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.OnFormDeactivateWorkaround();
+			toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.OnFormDeactivateWorkaround();
+		////toolStripComboBox_TerminalMenu_Receive_AutoAction_Action is a standard ToolStripComboBox.
+		////toolStripComboBox_TerminalMenu_View_Panels_Orientation   is a standard ToolStripComboBox.
+		////toolStripComboBox_MonitorContextMenu_Panels_Orientation  is a standard ToolStripComboBox.
+
+			send.OnFormDeactivateWorkaround();
 		}
 
 		private void Terminal_LocationChanged(object sender, EventArgs e)

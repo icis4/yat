@@ -146,6 +146,13 @@ namespace YAT.View.Forms
 			SetControls();
 		}
 
+		private void TextTerminalSettings_Deactivate(object sender, EventArgs e)
+		{
+			comboBox_Encoding.OnFormDeactivateWorkaround();
+			comboBox_TxEol   .OnFormDeactivateWorkaround();
+			comboBox_RxEol   .OnFormDeactivateWorkaround();
+		}
+
 		#endregion
 
 		#region Controls Event Handlers
@@ -606,10 +613,10 @@ namespace YAT.View.Forms
 				}
 
 				bool enabled = this.settingsInEdit.TextExclusion.Enabled;
-				checkBox_Exclude.Checked               = enabled;
-				stringListEdit_ExcludePatterns.Enabled = enabled;
+				checkBox_Exclude.Checked                  = enabled;
+				stringListEdit_ExcludePatterns.Enabled    = enabled;
 				stringListEdit_ExcludePatterns.StringList = this.settingsInEdit.TextExclusion.Patterns.ToArray();
-				linkLabel_Regex.Enabled                = enabled;
+				linkLabel_Regex.Enabled                   = enabled;
 			}
 			finally
 			{

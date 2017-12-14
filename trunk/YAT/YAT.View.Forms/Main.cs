@@ -416,6 +416,15 @@ namespace YAT.View.Forms
 			SetChildControls();
 		}
 
+		private void Main_Deactivate(object sender, EventArgs e)
+		{
+			toolStripComboBox_MainTool_Terminal_Find_Pattern         .OnFormDeactivateWorkaround();
+			toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger .OnFormDeactivateWorkaround();
+			toolStripComboBox_MainTool_Terminal_AutoResponse_Response.OnFormDeactivateWorkaround();
+			toolStripComboBox_MainTool_Terminal_AutoAction_Trigger   .OnFormDeactivateWorkaround();
+		////toolStripComboBox_MainTool_Terminal_AutoAction_Action is a standard ToolStripComboBox.
+		}
+
 		private void Main_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			// Prevent multiple calls to Exit()/Close():

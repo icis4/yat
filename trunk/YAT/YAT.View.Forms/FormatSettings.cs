@@ -182,6 +182,15 @@ namespace YAT.View.Forms
 			SetControls();
 		}
 
+		private void FormatSettings_Deactivate(object sender, EventArgs e)
+		{
+			comboBox_InfoSeparator.OnFormDeactivateWorkaround();
+			comboBox_InfoEnclosure.OnFormDeactivateWorkaround();
+		////comboBox_TimeStampFormatPreset is a standard ComboBox.
+		////comboBox_TimeSpanFormatPreset  is a standard ComboBox.
+		////comboBox_TimeDeltaFormatPreset is a standard ComboBox.
+		}
+
 		#endregion
 
 		#region Controls Event Handlers

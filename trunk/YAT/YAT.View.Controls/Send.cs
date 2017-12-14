@@ -154,6 +154,13 @@ namespace YAT.View.Controls
 			}
 		}
 
+		/// <remarks>See remarks in <see cref="MKY.Windows.Forms.ComboBoxEx"/>.</remarks>
+		public virtual void OnFormDeactivateWorkaround()
+		{
+			sendText.OnFormDeactivateWorkaround();
+		////sendFile doesn't contain a ComboBoxEx
+		}
+
 		#endregion
 
 		#region Properties

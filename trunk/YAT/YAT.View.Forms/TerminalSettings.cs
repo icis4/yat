@@ -140,6 +140,13 @@ namespace YAT.View.Forms
 			SetControls();
 		}
 
+		private void TerminalSettings_Deactivate(object sender, EventArgs e)
+		{
+			serialPortSelection.OnFormDeactivateWorkaround();
+			serialPortSettings .OnFormDeactivateWorkaround();
+			socketSelection    .OnFormDeactivateWorkaround();
+		}
+
 		#endregion
 
 		#region Controls Event Handlers

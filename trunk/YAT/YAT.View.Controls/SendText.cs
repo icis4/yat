@@ -446,6 +446,12 @@ namespace YAT.View.Controls
 				SetSendControls();
 		}
 
+		/// <remarks>See remarks in <see cref="ComboBoxEx"/>.</remarks>
+		public virtual void OnFormDeactivateWorkaround()
+		{
+			comboBox_SingleLineText.OnFormDeactivateWorkaround();
+		}
+
 		#endregion
 
 		#region Control Special Keys

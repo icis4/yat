@@ -45,7 +45,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Bidir = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Rx = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Separator1 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripComboBox_MonitorContextMenu_Panels_Orientation = new MKY.Windows.Forms.ToolStripComboBoxEx();
+			this.toolStripComboBox_MonitorContextMenu_Panels_Orientation = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripMenuItem_MonitorContextMenu_Hide = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime = new System.Windows.Forms.ToolStripMenuItem();
@@ -235,7 +235,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger = new MKY.Windows.Forms.ToolStripComboBoxEx();
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action = new MKY.Windows.Forms.ToolStripComboBoxEx();
+			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log_On = new System.Windows.Forms.ToolStripMenuItem();
@@ -254,7 +254,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Bidir = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Rx = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripComboBox_TerminalMenu_View_Panels_Orientation = new MKY.Windows.Forms.ToolStripComboBoxEx();
+			this.toolStripComboBox_TerminalMenu_View_Panels_Orientation = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Predefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
@@ -3294,7 +3294,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_Clear;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_View_Separator_1;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_View_Separator_4;
-		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_TerminalMenu_View_Panels_Orientation;
+		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_TerminalMenu_View_Panels_Orientation;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_Presets;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowEol;
 		private System.Windows.Forms.Panel panel_Send;
@@ -3348,7 +3348,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MonitorContextMenu_Separator_7;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Terminal_Separator_4;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_SaveToFile;
-		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MonitorContextMenu_Panels_Orientation;
+		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_MonitorContextMenu_Panels_Orientation;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_View_Panels_Separator_4;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowRadix;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_PredefinedContextMenu_Page_Separator;
@@ -3455,7 +3455,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger;
 		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action;
-		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_TerminalMenu_Receive_AutoAction_Action;
+		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_TerminalMenu_Receive_AutoAction_Action;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate;
 	}
 }
