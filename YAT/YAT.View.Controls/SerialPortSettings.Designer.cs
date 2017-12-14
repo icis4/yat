@@ -30,10 +30,10 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SerialPortSettings));
-			this.comboBox_StopBits = new MKY.Windows.Forms.ComboBoxEx();
-			this.comboBox_FlowControl = new MKY.Windows.Forms.ComboBoxEx();
-			this.comboBox_Parity = new MKY.Windows.Forms.ComboBoxEx();
-			this.comboBox_DataBits = new MKY.Windows.Forms.ComboBoxEx();
+			this.comboBox_StopBits = new System.Windows.Forms.ComboBox();
+			this.comboBox_FlowControl = new System.Windows.Forms.ComboBox();
+			this.comboBox_Parity = new System.Windows.Forms.ComboBox();
+			this.comboBox_DataBits = new System.Windows.Forms.ComboBox();
 			this.comboBox_BaudRate = new MKY.Windows.Forms.ComboBoxEx();
 			this.label_FlowControl = new System.Windows.Forms.Label();
 			this.label_StopBits = new System.Windows.Forms.Label();
@@ -247,10 +247,10 @@
 
 		#endregion
 
-		private MKY.Windows.Forms.ComboBoxEx comboBox_StopBits;
-		private MKY.Windows.Forms.ComboBoxEx comboBox_FlowControl;
-		private MKY.Windows.Forms.ComboBoxEx comboBox_Parity;
-		private MKY.Windows.Forms.ComboBoxEx comboBox_DataBits;
+		private System.Windows.Forms.ComboBox comboBox_StopBits;
+		private System.Windows.Forms.ComboBox comboBox_FlowControl;
+		private System.Windows.Forms.ComboBox comboBox_Parity;
+		private System.Windows.Forms.ComboBox comboBox_DataBits;
 		private MKY.Windows.Forms.ComboBoxEx comboBox_BaudRate;
 		private System.Windows.Forms.Label label_FlowControl;
 		private System.Windows.Forms.Label label_StopBits;

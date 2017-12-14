@@ -31,7 +31,7 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReleaseNotes));
 			this.button_Close = new System.Windows.Forms.Button();
 			this.groupBox_ReleaseNotes = new System.Windows.Forms.GroupBox();
-			this.textBox_ReleaseNotes = new MKY.Windows.Forms.TextBoxEx();
+			this.textBox_ReleaseNotes = new System.Windows.Forms.TextBox();
 			this.groupBox_ReleaseNotes.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -99,6 +99,6 @@
 
 		private System.Windows.Forms.Button button_Close;
 		private System.Windows.Forms.GroupBox groupBox_ReleaseNotes;
-		private MKY.Windows.Forms.TextBoxEx textBox_ReleaseNotes;
+		private System.Windows.Forms.TextBox textBox_ReleaseNotes;
 	}
 }

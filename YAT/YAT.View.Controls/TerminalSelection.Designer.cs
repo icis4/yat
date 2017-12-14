@@ -30,9 +30,9 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TerminalSelection));
-			this.comboBox_TerminalType = new MKY.Windows.Forms.ComboBoxEx();
+			this.comboBox_TerminalType = new System.Windows.Forms.ComboBox();
 			this.label_TerminalType = new System.Windows.Forms.Label();
-			this.comboBox_IOType = new MKY.Windows.Forms.ComboBoxEx();
+			this.comboBox_IOType = new System.Windows.Forms.ComboBox();
 			this.label_IOType = new System.Windows.Forms.Label();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.SuspendLayout();
@@ -96,9 +96,9 @@
 
 		#endregion
 
-		private MKY.Windows.Forms.ComboBoxEx comboBox_TerminalType;
+		private System.Windows.Forms.ComboBox comboBox_TerminalType;
 		private System.Windows.Forms.Label label_TerminalType;
-		private MKY.Windows.Forms.ComboBoxEx comboBox_IOType;
+		private System.Windows.Forms.ComboBox comboBox_IOType;
 		private System.Windows.Forms.Label label_IOType;
 		private System.Windows.Forms.ToolTip toolTip;
 	}
