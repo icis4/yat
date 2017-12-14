@@ -40,7 +40,7 @@
 			this.button_Delete = new System.Windows.Forms.Button();
 			this.splitContainer_ExplicitDefaultRadix = new System.Windows.Forms.SplitContainer();
 			this.panel_ExplicitDefaultRadix = new System.Windows.Forms.Panel();
-			this.comboBox_ExplicitDefaultRadix = new MKY.Windows.Forms.ComboBoxEx();
+			this.comboBox_ExplicitDefaultRadix = new System.Windows.Forms.ComboBox();
 			this.panel_Command = new System.Windows.Forms.Panel();
 			this.splitContainer_ExplicitDefaultRadix.Panel1.SuspendLayout();
 			this.splitContainer_ExplicitDefaultRadix.Panel2.SuspendLayout();
@@ -231,7 +231,7 @@
 		private System.Windows.Forms.Button button_SetFile;
 		private System.Windows.Forms.Button button_Delete;
 		private System.Windows.Forms.SplitContainer splitContainer_ExplicitDefaultRadix;
-		private MKY.Windows.Forms.ComboBoxEx comboBox_ExplicitDefaultRadix;
+		private System.Windows.Forms.ComboBox comboBox_ExplicitDefaultRadix;
 		private System.Windows.Forms.Panel panel_ExplicitDefaultRadix;
 		private System.Windows.Forms.Panel panel_Command;
 	}

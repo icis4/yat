@@ -41,8 +41,8 @@
 			this.textBox_Id = new MKY.Windows.Forms.TextBoxEx();
 			this.checkBox_SeparateRxId = new System.Windows.Forms.CheckBox();
 			this.textBox_RxId = new MKY.Windows.Forms.TextBoxEx();
-			this.comboBox_Preset = new MKY.Windows.Forms.ComboBoxEx();
-			this.comboBox_FlowControl = new MKY.Windows.Forms.ComboBoxEx();
+			this.comboBox_Preset = new System.Windows.Forms.ComboBox();
+			this.comboBox_FlowControl = new System.Windows.Forms.ComboBox();
 			this.label_Line = new System.Windows.Forms.Label();
 			this.label_Preset = new System.Windows.Forms.Label();
 			this.label_Preview_1 = new System.Windows.Forms.Label();
@@ -369,7 +369,7 @@
 		private System.Windows.Forms.CheckBox checkBox_SeparateRxId;
 		private MKY.Windows.Forms.TextBoxEx textBox_RxId;
 		private System.Windows.Forms.Label label_Line;
-		private MKY.Windows.Forms.ComboBoxEx comboBox_Preset;
+		private System.Windows.Forms.ComboBox comboBox_Preset;
 		private System.Windows.Forms.Label label_Preset;
 		private System.Windows.Forms.Label label_Preview_1;
 		private System.Windows.Forms.Label label_Preview_2;
@@ -379,6 +379,6 @@
 		private System.Windows.Forms.Label label_Preview_6;
 		private System.Windows.Forms.Label label_Preview_7;
 		private System.Windows.Forms.Label label_FlowControl;
-		private MKY.Windows.Forms.ComboBoxEx comboBox_FlowControl;
+		private System.Windows.Forms.ComboBox comboBox_FlowControl;
 	}
 }

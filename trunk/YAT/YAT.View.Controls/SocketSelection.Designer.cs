@@ -36,7 +36,7 @@
 			this.comboBox_LocalPort = new MKY.Windows.Forms.ComboBoxEx();
 			this.label_LocalPort = new System.Windows.Forms.Label();
 			this.label_LocalInterface = new System.Windows.Forms.Label();
-			this.comboBox_LocalInterface = new MKY.Windows.Forms.ComboBoxEx();
+			this.comboBox_LocalInterface = new System.Windows.Forms.ComboBox();
 			this.button_RefreshLocalInterfaces = new System.Windows.Forms.Button();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.comboBox_LocalFilter = new MKY.Windows.Forms.ComboBoxEx();
@@ -200,7 +200,7 @@
 		private MKY.Windows.Forms.ComboBoxEx comboBox_LocalPort;
 		private System.Windows.Forms.Label label_LocalPort;
 		private System.Windows.Forms.Label label_LocalInterface;
-		private MKY.Windows.Forms.ComboBoxEx comboBox_LocalInterface;
+		private System.Windows.Forms.ComboBox comboBox_LocalInterface;
 		private System.Windows.Forms.Button button_RefreshLocalInterfaces;
 		private System.Windows.Forms.ToolTip toolTip;
 		private MKY.Windows.Forms.ComboBoxEx comboBox_LocalFilter;

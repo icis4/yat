@@ -32,7 +32,7 @@
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Monitor));
 			this.panel_Monitor = new System.Windows.Forms.Panel();
-			this.textBox_CopyOfActiveLine = new MKY.Windows.Forms.TextBoxEx();
+			this.textBox_CopyOfActiveLine = new System.Windows.Forms.TextBox();
 			this.fastListBox_Monitor = new MKY.Windows.Forms.FastListBox();
 			this.fastListBox_LineNumbers = new MKY.Windows.Forms.FastListBox();
 			this.panel_Picture = new System.Windows.Forms.Panel();
@@ -234,6 +234,6 @@
 		private System.Windows.Forms.Label label_DataStatusEmpty;
 		private System.Windows.Forms.Label label_TimeStatusEmpty;
 		private System.Windows.Forms.Timer timer_ProcessorLoad;
-		private MKY.Windows.Forms.TextBoxEx textBox_CopyOfActiveLine;
+		private System.Windows.Forms.TextBox textBox_CopyOfActiveLine;
 	}
 }
