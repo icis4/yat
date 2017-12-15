@@ -501,15 +501,15 @@ namespace YAT.View.Forms
 				bool textIsNotFocused = !(send         .TextFocused ||
 				                          monitor_Tx   .TextFocused ||
 				                          monitor_Bidir.TextFocused ||
-				                          monitor_Rx   .TextFocused); // Required to suppress standard key shortcuts like [Ctrl+A] and [Ctrl+C].
-
+				                          monitor_Rx   .TextFocused); // Required to suppress standard key shortcuts
+				                                                      // [Ctrl+A], [Ctrl+C] and [Ctrl+Delete].
 				if (TerminalIsAvailable)
 				{
 					toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = !this.terminal.IsStarted;
 					toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled  =  this.terminal.IsStarted;
 
 					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled =  this.terminal.IsBusy;
-					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled =  (monitorIsDefined && textIsNotFocused);
+					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled =  monitorIsDefined;
 				}
 				else
 				{
@@ -520,10 +520,10 @@ namespace YAT.View.Forms
 					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled = false;
 				}
 
-				toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Enabled       = (monitorIsDefined && textIsNotFocused);
-				toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Enabled      = (monitorIsDefined && textIsNotFocused);
+				toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Enabled       = (monitorIsDefined && textIsNotFocused); // [Ctrl+A]
+				toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Enabled      = (monitorIsDefined && textIsNotFocused); // [Ctrl+Delete]
 
-				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = (monitorIsDefined && textIsNotFocused);
+				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = (monitorIsDefined && textIsNotFocused); // [Ctrl+C]
 				toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Enabled      =  monitorIsDefined;
 				toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled           =  monitorIsDefined;
 
