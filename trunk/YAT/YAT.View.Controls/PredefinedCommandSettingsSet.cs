@@ -245,6 +245,35 @@ namespace YAT.View.Controls
 
 		#endregion
 
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary></summary>
+		public virtual void SelectInput()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				if (this.command.IsFilePath)
+				{
+					button_SetFile.Select();
+				}
+				else // incl. IsText
+				{
+					textBox_SingleLineText.Select();
+					textBox_SingleLineText.SelectionStart = textBox_SingleLineText.Text.Length;
+				}
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		#endregion
+
 		#region Control Event Handlers
 		//==========================================================================================
 		// Control Event Handlers
@@ -512,35 +541,6 @@ namespace YAT.View.Controls
 			this.command.Clear();
 			SetControls();
 			OnCommandChanged(EventArgs.Empty);
-		}
-
-		#endregion
-
-		#region Public Methods
-		//==========================================================================================
-		// Public Methods
-		//==========================================================================================
-
-		/// <summary></summary>
-		public virtual void SelectInput()
-		{
-			this.isSettingControls.Enter();
-			try
-			{
-				if (this.command.IsFilePath)
-				{
-					button_SetFile.Select();
-				}
-				else // incl. IsText
-				{
-					textBox_SingleLineText.Select();
-					textBox_SingleLineText.SelectionStart = textBox_SingleLineText.Text.Length;
-				}
-			}
-			finally
-			{
-				this.isSettingControls.Leave();
-			}
 		}
 
 		#endregion
