@@ -502,7 +502,7 @@ namespace YAT.View.Forms
 				                          monitor_Tx   .TextFocused ||
 				                          monitor_Bidir.TextFocused ||
 				                          monitor_Rx   .TextFocused); // Required to suppress standard key shortcuts
-				                                                      // [Ctrl+A], [Ctrl+C] and [Ctrl+Delete].
+				                                                      // [Ctrl+A], [Ctrl+C] and [Ctrl+Delete] below.
 				if (TerminalIsAvailable)
 				{
 					toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = !this.terminal.IsStarted;
