@@ -304,11 +304,11 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void Terminal_Shown(object sender, EventArgs e)
 		{
-			this.splitContainerHelper.PerformScaling(this);
-
 			this.isStartingUp = false;
 
 			this.mdiParent = MdiParent;
+
+			this.splitContainerHelper.PerformScaling(this);
 
 			// Immediately set terminal controls so the terminal "looks nice" from the very start:
 			SetTerminalControls();
