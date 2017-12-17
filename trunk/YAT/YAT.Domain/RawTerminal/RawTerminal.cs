@@ -553,9 +553,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Settings
+		#region Settings Methods
 		//==========================================================================================
-		// Settings
+		// Settings Methods
 		//==========================================================================================
 
 		private void AttachBufferSettings(Settings.BufferSettings bufferSettings)
@@ -635,9 +635,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region I/O
+		#region I/O Methods
 		//==========================================================================================
-		// I/O
+		// I/O Methods
 		//==========================================================================================
 
 		private void AttachIO(IIOProvider io)
