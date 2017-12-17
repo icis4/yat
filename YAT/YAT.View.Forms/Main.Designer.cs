@@ -1162,6 +1162,8 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.KeyDown += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyDown);
 			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.KeyUp += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyUp);
 			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_TextChanged);
+			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.Enter += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_Enter);
+			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.Leave += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_Leave);
 			// 
 			// toolStripButton_MainTool_Terminal_Find_CaseSensitive
 			// 
@@ -1192,7 +1194,8 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Find_Next.Name = "toolStripButton_MainTool_Terminal_Find_Next";
 			this.toolStripButton_MainTool_Terminal_Find_Next.Size = new System.Drawing.Size(23, 24);
 			this.toolStripButton_MainTool_Terminal_Find_Next.Text = "Find Next";
-			this.toolStripButton_MainTool_Terminal_Find_Next.ToolTipText = "Find Next\r\n[Enter] / [Alt+N] / [Alt+F] (while in Find)\r\n[Ctrl+Alt+F] (always)";
+			this.toolStripButton_MainTool_Terminal_Find_Next.ToolTipText = "Find Next\r\n[Enter] / [Ctrl+F/N] / [Alt+F/N] (while in Find)\r\n[Ctrl+Alt+F] (always" +
+    ")";
 			this.toolStripButton_MainTool_Terminal_Find_Next.Visible = false;
 			this.toolStripButton_MainTool_Terminal_Find_Next.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_Next_Click);
 			// 
@@ -1203,7 +1206,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Name = "toolStripButton_MainTool_Terminal_Find_Previous";
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Size = new System.Drawing.Size(23, 24);
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Text = "Find Previous";
-			this.toolStripButton_MainTool_Terminal_Find_Previous.ToolTipText = "Find Previous\r\n[Alt+P] (while in Find)\r\n[Alt+Shift+F] (always)";
+			this.toolStripButton_MainTool_Terminal_Find_Previous.ToolTipText = "Find Previous\r\n[Ctrl+P] / [Alt+P] (while in Find)\r\n[Alt+Shift+F] (always)";
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Visible = false;
 			this.toolStripButton_MainTool_Terminal_Find_Previous.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_Previous_Click);
 			// 

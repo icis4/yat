@@ -22,6 +22,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of tool strip state and validation:
+////#define DEBUG_TOOL_STRIP
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -117,7 +131,7 @@ namespace YAT.View.Forms
 
 		// Toolstrip-combobox-validation-workaround (too late invocation of 'Validate' event):
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
-		private bool mainToolValidationWorkaround_UpdateIsSuspended;
+		private bool mainToolValidationWorkaround_UpdateIsSuspended; // = false
 
 		#endregion
 
@@ -1280,7 +1294,7 @@ namespace YAT.View.Forms
 			if (ApplicationSettings.RoamingUserSettings.View.FindVisible)
 			{
 			////toolStripComboBox_MainTool_Terminal_Find_Pattern.Select();    doesn't work, 'ToolStrip'
-				toolStripComboBox_MainTool_Terminal_Find_Pattern.Focus(); // seems to require Focus().
+				toolStripComboBox_MainTool_Terminal_Find_Pattern.Focus(); // seems to require calling Focus().
 			}
 		}
 
@@ -1292,63 +1306,58 @@ namespace YAT.View.Forms
 			ValidateAndFindOnEdit();
 		}
 
-		// \remind (2017-11-24 / MKY)
-		// See toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyDown() further below.
+		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_Enter(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+		
+			DebugToolStrip("Entering...");
+			SuspendCtrlFNPShortcuts(); // Suspend while in find field.
+			DebugToolStrip("...done");
+		}
 
-	////this.toolStripComboBox_MainTool_Terminal_Find_Pattern.Enter += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_Enter);
-	////this.toolStripComboBox_MainTool_Terminal_Find_Pattern.Leave += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_Leave);
+		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_Leave(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+		
+			DebugToolStrip("Leaving...");
+			ResumeCtrlFNPShortcuts(); // Suspended while in find field.
+			ResetFindOnEdit();
+			DebugToolStrip("...done");
+		}
 
-	////private void toolStripComboBox_MainTool_Terminal_Find_Pattern_Enter(object sender, EventArgs e)
-	////{
-	////	if (this.isSettingControls)
-	////		return;
-	////
-	////	DebugToolStrip("Entering...");
-	////	SuspendCtrlFNPShortcuts(); // Suspend while in find field.
-	////	DebugToolStrip("...done");
-	////}
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
+		private bool toolStripMenuItem_MainMenu_File_New_EnabledToRestore; // = false;
 
-	////private void toolStripComboBox_MainTool_Terminal_Find_Pattern_Leave(object sender, EventArgs e)
-	////{
-	////	if (this.isSettingControls)
-	////		return;
-	////
-	////	DebugToolStrip("Leaving...");
-	////	ResumeCtrlFNPShortcuts(); // Suspended while in find field.
-	////	ResetFindOnEdit();
-	////	DebugToolStrip("...done");
-	////}
+		private void SuspendCtrlFNPShortcuts()
+		{
+			toolStripMenuItem_MainMenu_File_New_EnabledToRestore = toolStripMenuItem_MainMenu_File_New.Enabled;
+			toolStripMenuItem_MainMenu_File_New.Enabled = false;
+		
+			// Could be implemented more cleverly, by iterating over all potential shortcut controls
+			// and then handle those that use one of the shortcuts in question. However, that would
+			// be an overkill, thus using this straight-forward implementation.
+		
+			foreach (var child in MdiChildren)
+			{
+				var t = (child as Terminal);
+				if (t != null)
+					t.SuspendCtrlFNPShortcuts();
+			}
+		}
 
-	////private bool toolStripMenuItem_MainMenu_File_New_EnabledToRestore; // = false;
-
-	////private void SuspendCtrlFNPShortcuts()
-	////{
-	////	toolStripMenuItem_MainMenu_File_New_EnabledToRestore = toolStripMenuItem_MainMenu_File_New.Enabled;
-	////	toolStripMenuItem_MainMenu_File_New.Enabled = false;
-	////
-	////	// Could be implemented more cleverly, by iterating over all potential shortcut controls
-	////	// and then handle those that use one of the shortcuts in question. However, that would
-	////	// be an overkill, thus using this straight-forward implementation.
-	////
-	////	foreach (var child in MdiChildren)
-	////	{
-	////		var t = (child as Terminal);
-	////		if (t != null)
-	////			t.SuspendCtrlFNPShortcuts();
-	////	}
-	////}
-
-	////private void ResumeCtrlFNPShortcuts()
-	////{
-	////	toolStripMenuItem_MainMenu_File_New.Enabled = toolStripMenuItem_MainMenu_File_New_EnabledToRestore;
-	////
-	////	foreach (var child in MdiChildren)
-	////	{
-	////		var t = (child as Terminal);
-	////		if (t != null)
-	////			t.ResumeCtrlFNPShortcuts();
-	////	}
-	////}
+		private void ResumeCtrlFNPShortcuts()
+		{
+			toolStripMenuItem_MainMenu_File_New.Enabled = toolStripMenuItem_MainMenu_File_New_EnabledToRestore;
+		
+			foreach (var child in MdiChildren)
+			{
+				var t = (child as Terminal);
+				if (t != null)
+					t.ResumeCtrlFNPShortcuts();
+			}
+		}
 
 		/// <remarks>
 		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event way too late,
@@ -1386,20 +1395,27 @@ namespace YAT.View.Forms
 
 		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyDown(object sender, KeyEventArgs e)
 		{
-			// \remind (2017-11-22 / MKY) there are limitations in WinForm (or Win32):
+			// \remind (2017-11-22..12-16 / MKY) there are limitations in .NET WinForms (or Win32):
 			//
 			// [Severe]
 			// Setting 'e.Handled' is *not* sufficient, e.g. [Alt+W] would still activate the
 			// 'Window' menu. Only setting 'e.SuppressKeyPress' works!
 			//
 			// [Acceptable]
-			// Even if all [Alt] events were suppressed above by...
+			// Even if all [Alt] events were suppressed by...
 			//    default: e.SuppressKeyPress = true; break;
 			// ...the underlines still become visible in the menu bar.
 			// Not critical, Visual Studio has exactly the same problem ;-)
 			//
-			// Also remind that only shortcuts that are not active elsewhere can be used here.
+			// [Severe]
+			// Only shortcuts that are not active elsewhere can be used here.
 			// Therefore, the [Ctrl+F/N/P] shortcuts are suspended while in find field.
+			//  => Suspend/ResumeCtrlFNPShortcuts() above and in terminals.
+			//
+			// [Severe]
+			// The ToolStripComboBox 'Leave' event is fired as soon as a MsgBox is shown (e.g.
+			// "no more found"). As a consequence, the other shortcuts are already active again.
+			//  => Not showing a "no more found" message box anymore.
 
 			if ((e.KeyData & Keys.KeyCode) == Keys.Enter)
 			{
@@ -1420,31 +1436,17 @@ namespace YAT.View.Forms
 					default: break;
 				}
 			}
-		////else if ((e.KeyData & Keys.Modifiers) == Keys.Control)
-		////{
-		////	switch (e.KeyData & Keys.KeyCode)
-		////	{
-		////		case Keys.F:
-		////		case Keys.N: ValidateAndFindNext();     e.SuppressKeyPress = true; break;
-		////		case Keys.P: ValidateAndFindPrevious(); e.SuppressKeyPress = true; break;
-		////
-		////		default: break;
-		////	}
-		////}
-
-			// \remind (2017-11-24 / MKY)
-			// These shortcuts could not be properly implemented. There are (at least) two issus:
-			//  1. Shortcuts can only be active if nowhere else in use.
-			//      => Suspend/ResumeCtrlFNPShortcuts() above and in terminal.
-			//  2. The ToolStripComboBox 'Leave' event is fired as soon as a MsgBox is shown
-			//     (e.g. "no more found"). As a consequence, the other shortcuts are already
-			//     active again, even though editing still continues?!?
-			//      => Shortcuts disabled, already spent more than time enough...
-			//
-			// In case of finding a solution/workaround one day, don't forget to adjust the
-			// tool tip text accordingly:
-			//  > Next: [Ctrl+F/N] / [Alt+F/N]
-			//  > Previous: [Ctrl+P]
+			else if ((e.KeyData & Keys.Modifiers) == Keys.Control)
+			{
+				switch (e.KeyData & Keys.KeyCode)
+				{
+					case Keys.F:
+					case Keys.N: ValidateAndFindNext();     e.SuppressKeyPress = true; break;
+					case Keys.P: ValidateAndFindPrevious(); e.SuppressKeyPress = true; break;
+			
+					default: break;
+				}
+			}
 		}
 
 		/// <remarks>
@@ -1470,20 +1472,17 @@ namespace YAT.View.Forms
 					default: break;
 				}
 			}
-		////else if ((e.KeyData & Keys.Modifiers) == Keys.Control)
-		////{
-		////	switch (e.KeyData & Keys.KeyCode)
-		////	{
-		////		case Keys.F:
-		////		case Keys.N: e.SuppressKeyPress = true; break;
-		////		case Keys.P: e.SuppressKeyPress = true; break;
-		////
-		////		default: break;
-		////	}
-		////}
-
-			// \remind (2017-11-24 / MKY)
-			// See toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyDown() above.
+			else if ((e.KeyData & Keys.Modifiers) == Keys.Control)
+			{
+				switch (e.KeyData & Keys.KeyCode)
+				{
+					case Keys.F:
+					case Keys.N: e.SuppressKeyPress = true; break;
+					case Keys.P: e.SuppressKeyPress = true; break;
+			
+					default: break;
+				}
+			}
 		}
 
 		/// <summary></summary>
@@ -1523,7 +1522,7 @@ namespace YAT.View.Forms
 			{
 				var t = (ActiveMdiChild as Terminal);
 				if (t != null)
-					t.FindNext(pattern);
+					t.FindNext(pattern, MessageBoxIsPermissible);
 			}
 		}
 
@@ -1540,7 +1539,19 @@ namespace YAT.View.Forms
 			{
 				var t = (ActiveMdiChild as Terminal);
 				if (t != null)
-					t.FindPrevious(pattern);
+					t.FindPrevious(pattern, MessageBoxIsPermissible);
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual bool MessageBoxIsPermissible
+		{
+			get
+			{
+				if (ApplicationSettings.RoamingUserSettings.View.FindVisible)
+					return (!this.toolStripComboBox_MainTool_Terminal_Find_Pattern.Focused);
+				else
+					return (false);
 			}
 		}
 
@@ -3099,6 +3110,13 @@ namespace YAT.View.Forms
 					message
 				)
 			);
+		}
+
+		/// <summary></summary>
+		[Conditional("DEBUG_TOOL_STRIP")]
+		protected virtual void DebugToolStrip(string message)
+		{
+			Debug.WriteLine(message);
 		}
 
 		#endregion
