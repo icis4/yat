@@ -404,6 +404,7 @@ namespace YAT.View.Controls
 			if (this.isStartingUp)
 			{
 				this.isStartingUp = false;
+
 				InitializeControls();
 				SetControls();
 			}
