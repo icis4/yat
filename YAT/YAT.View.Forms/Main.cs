@@ -32,6 +32,9 @@
 	// Enable debugging of tool strip state and validation:
 ////#define DEBUG_TOOL_STRIP
 
+	// Enable debugging of MDI related state changes:
+////#define DEBUG_MDI
+
 #endif // DEBUG
 
 #endregion
@@ -432,11 +435,21 @@ namespace YAT.View.Forms
 
 		private void Main_Deactivate(object sender, EventArgs e)
 		{
+			DebugMdi("Deactivated");
+
 			toolStripComboBox_MainTool_Terminal_Find_Pattern         .OnFormDeactivateWorkaround();
 			toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger .OnFormDeactivateWorkaround();
 			toolStripComboBox_MainTool_Terminal_AutoResponse_Response.OnFormDeactivateWorkaround();
 			toolStripComboBox_MainTool_Terminal_AutoAction_Trigger   .OnFormDeactivateWorkaround();
 		////toolStripComboBox_MainTool_Terminal_AutoAction_Action is a standard ToolStripComboBox.
+
+			// Also notify the active MDI child about switching to another application:
+			var f = (ActiveMdiChild as IOnFormDeactivateWorkaround);
+			if (f != null)
+				f.OnFormDeactivateWorkaround();
+
+			// Do not notify the other MDI children, as their ComboBoxes would keep the state
+			// without having focus, which is somewhat undefined.
 		}
 
 		private void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -447,7 +460,7 @@ namespace YAT.View.Forms
 				this.closingState = ClosingState.IsClosingFromForm;
 
 				// Also notify MDI children about closing:
-				foreach (var f in this.MdiChildren)
+				foreach (var f in MdiChildren)
 				{
 					var t = (f as Terminal);
 					if (t != null)
@@ -464,7 +477,7 @@ namespace YAT.View.Forms
 					this.closingState = ClosingState.None;
 
 					// Also revert closing state for MDI children:
-					foreach (var f in this.MdiChildren)
+					foreach (var f in MdiChildren)
 					{
 						var t = (f as Terminal);
 						if (t != null)
@@ -3117,6 +3130,12 @@ namespace YAT.View.Forms
 		protected virtual void DebugToolStrip(string message)
 		{
 			Debug.WriteLine(message);
+		}
+
+		[Conditional("DEBUG_MDI")]
+		private void DebugMdi(string message)
+		{
+			DebugMessage(message);
 		}
 
 		#endregion
