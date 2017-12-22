@@ -22,6 +22,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of MDI related state changes:
+////#define DEBUG_MDI
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -70,7 +84,7 @@ namespace YAT.View.Forms
 {
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
-	public partial class Terminal : Form
+	public partial class Terminal : Form, IOnFormDeactivateWorkaround
 	{
 		#region Types
 		//==========================================================================================
@@ -316,6 +330,8 @@ namespace YAT.View.Forms
 
 		private void Terminal_Activated(object sender, EventArgs e)
 		{
+			DebugMdi("Activated");
+
 			monitor_Tx   .Activate();
 			monitor_Bidir.Activate();
 			monitor_Rx   .Activate();
@@ -326,11 +342,19 @@ namespace YAT.View.Forms
 
 		private void Terminal_Deactivate(object sender, EventArgs e)
 		{
+			DebugMdi("Deactivated");
+
 			monitor_Tx   .Deactivate();
 			monitor_Bidir.Deactivate();
 			monitor_Rx   .Deactivate();
 
-			// OnFormDeactivateWorkaround:
+			// Apply the workaround when switching among the forms of the MDI application:
+			OnFormDeactivateWorkaround();
+		}
+
+		/// <remarks>See remarks in <see cref="ComboBoxEx"/>.</remarks>
+		public virtual void OnFormDeactivateWorkaround()
+		{
 			toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger .OnFormDeactivateWorkaround();
 			toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.OnFormDeactivateWorkaround();
 			toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.OnFormDeactivateWorkaround();
@@ -5632,6 +5656,12 @@ namespace YAT.View.Forms
 					message
 				)
 			);
+		}
+
+		[Conditional("DEBUG_MDI")]
+		private void DebugMdi(string message)
+		{
+			DebugMessage(message);
 		}
 
 		#endregion
