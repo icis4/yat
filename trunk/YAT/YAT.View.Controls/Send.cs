@@ -34,6 +34,7 @@ using System.Windows.Forms;
 
 using MKY;
 using MKY.Collections.Specialized;
+using MKY.Windows.Forms;
 
 using YAT.Model.Types;
 
@@ -43,7 +44,7 @@ namespace YAT.View.Controls
 {
 	/// <summary></summary>
 	[DefaultEvent("SendCommandRequest")]
-	public partial class Send : UserControl
+	public partial class Send : UserControl, IOnFormDeactivateWorkaround
 	{
 		#region Constants
 		//==========================================================================================

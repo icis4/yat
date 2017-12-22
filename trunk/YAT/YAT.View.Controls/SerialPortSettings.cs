@@ -41,7 +41,7 @@ namespace YAT.View.Controls
 {
 	/// <summary></summary>
 	[DefaultEvent("BaudRateChanged")]
-	public partial class SerialPortSettings : UserControl
+	public partial class SerialPortSettings : UserControl, IOnFormDeactivateWorkaround
 	{
 		// \fixme
 		// This settings control should be simplified to use SerialPort.SerialCommunicationSettings
