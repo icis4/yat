@@ -996,7 +996,6 @@ namespace YAT.View.Forms
 					}
 				}
 
-				toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Enabled = childIsReady;
 				toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Checked = arIsActive;
 
 				if (ApplicationSettings.RoamingUserSettings.View.AutoResponseVisible)
@@ -1077,7 +1076,6 @@ namespace YAT.View.Forms
 					}
 				}
 
-				toolStripButton_MainTool_Terminal_AutoAction_ShowHide.Enabled = childIsReady;
 				toolStripButton_MainTool_Terminal_AutoAction_ShowHide.Checked = aaIsActive;
 
 				if (ApplicationSettings.RoamingUserSettings.View.AutoActionVisible)
@@ -1136,7 +1134,6 @@ namespace YAT.View.Forms
 				toolStripButton_MainTool_Terminal_SaveToFile.Enabled        = childIsReady;
 				toolStripButton_MainTool_Terminal_Print.Enabled             = childIsReady;
 
-				toolStripButton_MainTool_Terminal_Find_ShowHide.Enabled = childIsReady;
 				toolStripButton_MainTool_Terminal_Find_ShowHide.Checked = FindIsReady;
 
 				var findVisible = ApplicationSettings.RoamingUserSettings.View.FindVisible;
@@ -1162,15 +1159,15 @@ namespace YAT.View.Forms
 					}
 
 					toolStripButton_MainTool_Terminal_Find_CaseSensitive.Checked = ApplicationSettings.RoamingUserSettings.Find.Options.CaseSensitive;
-					toolStripButton_MainTool_Terminal_Find_CaseSensitive.Enabled = true;
+					toolStripButton_MainTool_Terminal_Find_CaseSensitive.Enabled = childIsReady;
 					toolStripButton_MainTool_Terminal_Find_WholeWord    .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.WholeWord;
-					toolStripButton_MainTool_Terminal_Find_WholeWord    .Enabled = true;
+					toolStripButton_MainTool_Terminal_Find_WholeWord    .Enabled = childIsReady;
 
 					toolStripButton_MainTool_Terminal_Find_CaseSensitive.Visible = true;
 					toolStripButton_MainTool_Terminal_Find_WholeWord    .Visible = true;
 
-					toolStripButton_MainTool_Terminal_Find_Next    .Enabled = FindIsReady;
-					toolStripButton_MainTool_Terminal_Find_Previous.Enabled = FindIsReady;
+					toolStripButton_MainTool_Terminal_Find_Next    .Enabled = (childIsReady && FindIsReady);
+					toolStripButton_MainTool_Terminal_Find_Previous.Enabled = (childIsReady && FindIsReady);
 
 					toolStripButton_MainTool_Terminal_Find_Next    .Visible = true;
 					toolStripButton_MainTool_Terminal_Find_Previous.Visible = true;
@@ -1179,9 +1176,9 @@ namespace YAT.View.Forms
 				{
 					toolStripButton_MainTool_Terminal_Find_ShowHide.Text = "Show Find";
 
-					toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = false;
-					toolStripComboBox_MainTool_Terminal_Find_Pattern.Enabled = false;
+					SelectionHelper.Deselect(toolStripComboBox_MainTool_Terminal_Find_Pattern);
 					toolStripComboBox_MainTool_Terminal_Find_Pattern.Items.Clear();
+					toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = false;
 
 					toolStripButton_MainTool_Terminal_Find_CaseSensitive.Visible = false;
 					toolStripButton_MainTool_Terminal_Find_WholeWord    .Visible = false;
@@ -1190,13 +1187,13 @@ namespace YAT.View.Forms
 					toolStripButton_MainTool_Terminal_Find_Previous.Visible = false;
 				}
 
-				toolStripButton_MainTool_Terminal_Log_Settings.Enabled      = childIsReady;
-				toolStripButton_MainTool_Terminal_Log_On.Enabled            = childIsReady && !logIsOn;
-				toolStripButton_MainTool_Terminal_Log_Off.Enabled           = childIsReady &&  logIsOn;
-				toolStripButton_MainTool_Terminal_Log_OpenFile.Enabled      = childIsReady &&  logFileExists;
-				toolStripButton_MainTool_Terminal_Log_OpenDirectory.Enabled = childIsReady;
+				toolStripButton_MainTool_Terminal_Log_Settings.Enabled      =  childIsReady;
+				toolStripButton_MainTool_Terminal_Log_On.Enabled            = (childIsReady && !logIsOn);
+				toolStripButton_MainTool_Terminal_Log_Off.Enabled           = (childIsReady &&  logIsOn);
+				toolStripButton_MainTool_Terminal_Log_OpenFile.Enabled      = (childIsReady &&  logFileExists);
+				toolStripButton_MainTool_Terminal_Log_OpenDirectory.Enabled =  childIsReady;
 
-				toolStripButton_MainTool_Terminal_Format.Enabled            = childIsReady;
+				toolStripButton_MainTool_Terminal_Format.Enabled            =  childIsReady;
 			}
 			finally
 			{

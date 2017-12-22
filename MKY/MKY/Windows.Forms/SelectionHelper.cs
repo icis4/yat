@@ -81,6 +81,7 @@ namespace MKY.Windows.Forms
 		public static void Deselect(ListControl control)
 		{
 			control.SelectedIndex = ControlEx.InvalidIndex;
+			control.Text = "";
 		}
 
 		/// <summary>
