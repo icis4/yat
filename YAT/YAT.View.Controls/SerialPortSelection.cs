@@ -56,7 +56,7 @@ namespace YAT.View.Controls
 {
 	/// <summary></summary>
 	[DefaultEvent("PortIdChanged")]
-	public partial class SerialPortSelection : UserControl
+	public partial class SerialPortSelection : UserControl, IOnFormDeactivateWorkaround
 	{
 		#region Constants
 		//==========================================================================================

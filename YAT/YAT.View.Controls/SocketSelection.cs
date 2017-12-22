@@ -47,7 +47,7 @@ namespace YAT.View.Controls
 	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
 	[DefaultEvent("HostNameOrAddressChanged")]
-	public partial class SocketSelection : UserControl
+	public partial class SocketSelection : UserControl, IOnFormDeactivateWorkaround
 	{
 		#region Constants
 		//==========================================================================================
