@@ -44,8 +44,10 @@ namespace MKY.Windows.Forms
 	/// </list>
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
-	public class ToolStripComboBoxEx : ToolStripComboBox
+	public class ToolStripComboBoxEx : ToolStripComboBox, IOnFormDeactivateWorkaround
 	{
+		private bool hasFocusAndFormDeactivateWorkaroundHasNotYetBeenApplied; // = false;
+
 		private int lastSelectionStart = ControlEx.InvalidIndex;
 		private int lastSelectionLength; // = 0;
 
@@ -117,6 +119,11 @@ namespace MKY.Windows.Forms
 		///  2. 'LostFocus' !!!
 		///  3. 'GotFocus'
 		/// 
+		/// Event sequence on entering the control when switching among MDI children (e.g. using [Ctrl+Tab]):
+		///  1. 'Enter'
+		///  2. 'LostFocus' !!!
+		///  3. 'GotFocus'
+		/// 
 		/// Event sequence on entering the control when changing applications (e.g. using [Alt+Tab]):
 		///      No 'Enter' !!!
 		///  1. 'LostFocus' !!!
@@ -127,15 +134,19 @@ namespace MKY.Windows.Forms
 		/// 
 		/// Event sequence on leaving the control using [Tab]:
 		///  1. 'Leave'     and values are OK.
-		///  2. 'LostFocus' but values are 0/0 !!!
+		///  2. 'LostFocus' but values invalidly are 0/0 !!!
+		/// 
+		/// Event sequence on entering the control when switching among MDI children (e.g. using [Ctrl+Tab]):
+		///  1. 'LostFocus' but values invalidly are 0/0 !!!
+		///  2. 'Leave'     but values invalidly are 0/0 !!!
 		/// 
 		/// Event sequence on leaving the control when changing applications (e.g. using [Alt+Tab]):
-		///  1. 'LostFocus' but values are 0/0 !!!
+		///  1. 'LostFocus' but values invalidly are 0/0 !!!
 		/// 
 		/// Resulting constraints and solution/workaround:
 		///  a') 'OnLostFocus' is called each time just before 'OnGotFocus', thus focus state would have to be kept as well.
 		///  a)  'OnLostFocus' cannot keep the values anyway, for whatever reason...
-		///        => 'OnLeave' is OK for [Tab], but [Alt+Tab] must be notified from parent form.
+		///        => 'OnLeave' is OK for [Tab], but [Ctrl+Tab] and [Alt+Tab] must be notified from parent form.
 		///  b') 'OnEnter' couldn't restore the values, for whatever reason it is too early.
 		///  b)  'OnEnter' cannot restore the values anyway, since it isn't called on [Alt+Tab].
 		///        => 'OnGotFocus' is OK.
@@ -148,6 +159,7 @@ namespace MKY.Windows.Forms
 			// Changes here will have to be applied there too.
 
 			base.OnGotFocus(e);
+			this.hasFocusAndFormDeactivateWorkaroundHasNotYetBeenApplied = true; // [HasFocus = true]
 
 			if (this.lastSelectionStart != ControlEx.InvalidIndex)
 			{
@@ -169,8 +181,12 @@ namespace MKY.Windows.Forms
 			// Same code exists in ComboBoxEx.OnLeave().
 			// Changes here will have to be applied there too.
 
-			this.lastSelectionStart  = SelectionStart;
-			this.lastSelectionLength = SelectionLength;
+			if (this.hasFocusAndFormDeactivateWorkaroundHasNotYetBeenApplied)
+			{
+				this.lastSelectionStart  = SelectionStart;
+				this.lastSelectionLength = SelectionLength;
+
+			}
 
 			base.OnLeave(e);
 		}
@@ -189,6 +205,8 @@ namespace MKY.Windows.Forms
 
 			this.lastSelectionStart  = SelectionStart;
 			this.lastSelectionLength = SelectionLength;
+
+			this.hasFocusAndFormDeactivateWorkaroundHasNotYetBeenApplied = false; // [WorkaroundHasBeenApplied = true] == [WorkaroundHasNotYetBeenApplied = false]
 		}
 	}
 }

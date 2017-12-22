@@ -111,8 +111,9 @@ Important changes:
   previous release).
 
 Fixed bugs:
-- Monitors no longer jump to top as soon as display buffer has been filled (bugs #394 and #398 as
+- Monitors no longer scroll to top as soon as display buffer has been filled (bugs #394 and #398 as
   well as feature request #326; related to feature request #323 implemented in previous release).
+- Focus no longer moves away from 'Send Text' when switching applications (bug #391).
 - Endianness of multi-byte encoded characters fixed, UTF-8 no longer results in spurious warning
   messages (bug #400, regression of bug #343 fixed for version 1.99.70).
 - Superfluous spaces for multi-byte LE encodings fixed (related to bug #400 and feat. request #271).
