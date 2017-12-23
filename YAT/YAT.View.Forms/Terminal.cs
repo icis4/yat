@@ -337,7 +337,7 @@ namespace YAT.View.Forms
 			monitor_Rx   .Activate();
 
 			// Select send text control to enable immediate user input:
-			SelectSendTextInput();
+			send.SelectSendTextInput();
 		}
 
 		private void Terminal_Deactivate(object sender, EventArgs e)
@@ -4246,18 +4246,6 @@ namespace YAT.View.Forms
 
 		#endregion
 
-		#region Send Panel
-		//==========================================================================================
-		// Send Panel
-		//==========================================================================================
-
-		private void SelectSendTextInput()
-		{
-			send.SelectSendTextInput();
-		}
-
-		#endregion
-
 		#region Settings
 		//==========================================================================================
 		// Settings
@@ -4865,7 +4853,6 @@ namespace YAT.View.Forms
 				return; // Ensure not to handle events during closing anymore.
 
 			SetTerminalControls();
-			SelectSendTextInput();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
@@ -4927,8 +4914,6 @@ namespace YAT.View.Forms
 				ResetStatusText();
 			}
 
-			SelectSendTextInput();
-
 			return (dr);
 		}
 
@@ -4975,8 +4960,6 @@ namespace YAT.View.Forms
 			{
 				ResetStatusText();
 			}
-
-			SelectSendTextInput();
 		}
 
 		#endregion
@@ -5530,8 +5513,6 @@ namespace YAT.View.Forms
 				Refresh();
 				this.settingsRoot.Log = f.SettingsResult;
 			}
-
-			SelectSendTextInput();
 		}
 
 		#endregion

@@ -250,7 +250,12 @@ namespace YAT.View.Controls
 		// Methods
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Required to be called "from the outside" because...
+		/// ...if called in the constructor of the control, SetControls() has not yet been called.
+		/// ...if called in the 'Paint' handler of the control, the last control in the designed form code gets selected.
+		///            (due to the fact that a form only has one focus ^ ^)
+		/// </remarks>
 		public virtual void SelectInput()
 		{
 			this.isSettingControls.Enter();
