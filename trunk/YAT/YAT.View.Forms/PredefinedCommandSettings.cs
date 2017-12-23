@@ -223,8 +223,8 @@ namespace YAT.View.Forms
 
 			var requestedCommand = Int32Ex.Limit(this.startupControl.RequestedCommand, 1, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage);
 			var requestedControl = this.predefinedCommandSettingsSets[requestedCommand - 1];
+			requestedControl.PrepareUserInput(); // See remarks of this method!
 			requestedControl.Select();
-			requestedControl.SelectInput(); // See remarks of this method!
 		}
 
 		#endregion
