@@ -79,7 +79,7 @@ namespace YAT.View.Controls
 	/// For a future refactoring, consider to separate the common code into a common view-model.
 	/// </remarks>
 	[DefaultEvent("SendCommandRequest")]
-	public partial class SendText : UserControl
+	public partial class SendText : UserControl, IOnFormDeactivateWorkaround
 	{
 		#region Types
 		//==========================================================================================
@@ -391,39 +391,15 @@ namespace YAT.View.Controls
 		// Methods
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Required to be called "from the outside" because...
+		/// ...if called in the constructor of the control, SetControls() has not yet been called.
+		/// ...if called in the 'Paint' handler of the control, the last terminal in the application gets selected.
+		///    (due to the fact that an application only has one focus ^ ^)
+		/// </remarks>
 		public virtual void SelectInput()
 		{
 			comboBox_SingleLineText.Select();
-
-			// Note that the standard behavior of a WinForms combo box is to fully select the whole
-			// text of the selected item when getting focus, whereas the text in a WinForms text box
-			// doesn't. Used to account for this here, using the following code...
-			//
-			// if (this.command.IsSingleLineText) // Keeping default behavior for multi-line since
-			//     SetCursorToEnd();              // editing the end of multi-line text is useless.
-			//
-			// ...with...
-			//
-			// private void SetCursorToEnd()
-			// {
-			//     this.isSettingControls.Enter();
-			//     try {
-			//         comboBox_SingleLineText.SelectionStart = comboBox_SingleLineText.Text.Length;
-			//     }
-			//     finally {
-			//         this.isSettingControls.Leave();
-			//     }
-			// }
-			//
-			// However, this results in inconsistent behavior:
-			//  > Sending the text moves cursor to end (special behavior).
-			//  > Browsing among recents selects all (standard behavior).
-			//  > Opening a dialog (e.g. multi-line text) moves cursor to end (special behavior).
-			//  > Switching among application using [Alt+Tab] selects all (standard behavior).
-			//
-			// The default behavior also has the advantage that user better sees where focus is
-			// located Thus, decided to keep the default behavior.
 		}
 
 		/// <summary></summary>
@@ -514,10 +490,10 @@ namespace YAT.View.Controls
 			if (this.isStartingUp)
 			{
 				this.isStartingUp = false;
+
 				SetExplicitDefaultRadixControls();
 				SetRecentControls();
 				SetCommandControls();
-				SelectInput();
 			}
 		}
 
@@ -543,7 +519,9 @@ namespace YAT.View.Controls
 				SetTextFocusState(TextFocusState.EditIsInactive);
 			else
 				SetTextFocusState(TextFocusState.IsLeavingParent);
-		}
+
+			SetSendControls(); // Required to restore "Send Text (F3)"
+		}                      // after "Send Text w/o EOL (Ctrl+F3)".
 
 		#endregion
 
@@ -1147,7 +1125,13 @@ namespace YAT.View.Controls
 
 		private bool WithoutEolIsRequestedAndAllowed
 		{
-			get { return (ContainsFocus && (ModifierKeys == Keys.Control) && !this.command.IsMultiLineText); }
+			get
+			{
+				if (ContainsFocus && !this.command.IsMultiLineText)
+					return ((ModifierKeys & Keys.Control) != 0);
+				else
+					return (false);
+			}
 		}
 
 		#endregion

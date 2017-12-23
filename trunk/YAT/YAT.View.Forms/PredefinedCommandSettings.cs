@@ -223,10 +223,10 @@ namespace YAT.View.Forms
 
 			var requestedCommand = Int32Ex.Limit(this.startupControl.RequestedCommand, 1, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage);
 			var requestedControl = this.predefinedCommandSettingsSets[requestedCommand - 1];
-			requestedControl.Select();      // Required to call SelectInput() "from the outside" because...
-			requestedControl.SelectInput(); // ...if called in the constructor of the control, SetControls() has not yet been called.
-		}                                   // ...if called in the 'Paint' handler of the control, the last control in the designer list gets selected.
-		                                    //            (due to the fact that a form only has one focus ^ ^)
+			requestedControl.Select();
+			requestedControl.SelectInput(); // See remarks of this method!
+		}
+
 		#endregion
 
 		#region Controls Event Handlers
