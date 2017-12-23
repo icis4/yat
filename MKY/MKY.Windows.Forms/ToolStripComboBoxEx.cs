@@ -46,10 +46,15 @@ namespace MKY.Windows.Forms
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public class ToolStripComboBoxEx : ToolStripComboBox, IOnFormDeactivateWorkaround
 	{
-		private bool hasFocusAndFormDeactivateWorkaroundHasNotYetBeenApplied; // = false;
+		/// <summary>
+		/// Gets or sets the previous starting index of text selected in the combo box.
+		/// </summary>
+		public int PreviousSelectionStart { get; protected set; } = ControlEx.InvalidIndex;
 
-		private int lastSelectionStart = ControlEx.InvalidIndex;
-		private int lastSelectionLength; // = 0;
+		/// <summary>
+		/// Gets or sets the previous number of characters selected in the editable portion of the combo box.
+		/// </summary>
+		public int PreviousSelectionLength { get; protected set; } // = 0;
 
 		/// <remarks>
 		/// Based on https://stackoverflow.com/questions/1124639/winforms-textbox-using-ctrl-backspace-to-delete-whole-word.
@@ -134,14 +139,14 @@ namespace MKY.Windows.Forms
 		/// 
 		/// Event sequence on leaving the control using [Tab]:
 		///  1. 'Leave'     and values are OK.
-		///  2. 'LostFocus' but values invalidly are 0/0 !!!
+		///  2. 'LostFocus' but values already are 0/0...
 		/// 
 		/// Event sequence on entering the control when switching among MDI children (e.g. using [Ctrl+Tab]):
-		///  1. 'LostFocus' but values invalidly are 0/0 !!!
+		///  1. 'LostFocus' but values already are 0/0...
 		///  2. 'Leave'     but values invalidly are 0/0 !!!
 		/// 
 		/// Event sequence on leaving the control when changing applications (e.g. using [Alt+Tab]):
-		///  1. 'LostFocus' but values invalidly are 0/0 !!!
+		///  1. 'LostFocus' but values already are 0/0...
 		/// 
 		/// Resulting constraints and solution/workaround:
 		///  a') 'OnLostFocus' is called each time just before 'OnGotFocus', thus focus state would have to be kept as well.
@@ -159,12 +164,11 @@ namespace MKY.Windows.Forms
 			// Changes here will have to be applied there too.
 
 			base.OnGotFocus(e);
-			this.hasFocusAndFormDeactivateWorkaroundHasNotYetBeenApplied = true; // [HasFocus = true]
 
-			if (this.lastSelectionStart != ControlEx.InvalidIndex)
+			if (PreviousSelectionStart != ControlEx.InvalidIndex)
 			{
-				SelectionStart  = this.lastSelectionStart;
-				SelectionLength = this.lastSelectionLength;
+				SelectionStart  = PreviousSelectionStart;
+				SelectionLength = PreviousSelectionLength;
 			}
 		}
 
@@ -181,10 +185,10 @@ namespace MKY.Windows.Forms
 			// Same code exists in ComboBoxEx.OnLeave().
 			// Changes here will have to be applied there too.
 
-			if (this.hasFocusAndFormDeactivateWorkaroundHasNotYetBeenApplied)
+			if (Focused)
 			{
-				this.lastSelectionStart  = SelectionStart;
-				this.lastSelectionLength = SelectionLength;
+				PreviousSelectionStart  = SelectionStart;
+				PreviousSelectionLength = SelectionLength;
 
 			}
 
@@ -203,10 +207,11 @@ namespace MKY.Windows.Forms
 			// Same code exists in ComboBoxEx.OnFormDeactivateWorkaround().
 			// Changes here will have to be applied there too.
 
-			this.lastSelectionStart  = SelectionStart;
-			this.lastSelectionLength = SelectionLength;
-
-			this.hasFocusAndFormDeactivateWorkaroundHasNotYetBeenApplied = false; // [WorkaroundHasBeenApplied = true] == [WorkaroundHasNotYetBeenApplied = false]
+			if (Focused)
+			{
+				PreviousSelectionStart  = SelectionStart;
+				PreviousSelectionLength = SelectionLength;
+			}
 		}
 	}
 }

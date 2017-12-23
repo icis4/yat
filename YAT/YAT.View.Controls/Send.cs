@@ -125,8 +125,8 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		public virtual void SelectSendTextInput()
 		{
+			sendText.PrepareUserInput();
 			sendText.Select();
-			sendText.SelectInput();
 		}
 
 		/// <summary></summary>

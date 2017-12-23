@@ -394,12 +394,17 @@ namespace YAT.View.Controls
 		/// <remarks>
 		/// Required to be called "from the outside" because...
 		/// ...if called in the constructor of the control, SetControls() has not yet been called.
-		/// ...if called in the 'Paint' handler of the control, the last terminal in the application gets selected.
-		///    (due to the fact that an application only has one focus ^ ^)
+		/// ...if called in the 'Paint' handler of the control, the last terminal in the application
+		///    gets selected.    (due to the fact that an application  ^ ^ only has one focus)
+		/// ...if called in the 'Enter' handler of the control, the (front) input gets selected even
+		///    when focus enters "from the back".
 		/// </remarks>
-		public virtual void SelectInput()
+		public virtual void PrepareUserInput()
 		{
 			comboBox_SingleLineText.Select();
+
+			// No need to set the cursor to the end by "SelectionStart = Text.Length" as the combo
+			// box is a ComboBoxEx that remembers the cursor location.
 		}
 
 		/// <summary></summary>
@@ -1037,9 +1042,12 @@ namespace YAT.View.Controls
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowMultiLineBox(Control requestingControl)
 		{
-			var formerText      = comboBox_SingleLineText.Text;
-			var formerForeColor = comboBox_SingleLineText.ForeColor;
-			var formerFont      = comboBox_SingleLineText.Font;
+			var previousText            = comboBox_SingleLineText.Text;
+			var previousForeColor       = comboBox_SingleLineText.ForeColor;
+			var previousFont            = comboBox_SingleLineText.Font;
+
+			var previousSelectionStart  = comboBox_SingleLineText.PreviousSelectionStart;
+			var previousSelectionLength = comboBox_SingleLineText.PreviousSelectionLength;
 
 			// Indicate multi-line text:
 			this.isSettingControls.Enter();
@@ -1070,6 +1078,18 @@ namespace YAT.View.Controls
 				this.isValidated = true; // Command has been validated by multi-line box.
 
 				ConfirmCommand();
+
+				// Select the whole line for ComboBox' standard behavior when scrolling through item list:
+				this.isSettingControls.Enter();
+				try
+				{
+					comboBox_SingleLineText.Select();    // First select...
+					comboBox_SingleLineText.SelectAll(); // ...then override default behavior.
+				}
+				finally
+				{
+					this.isSettingControls.Leave();
+				}
 			}
 			else
 			{
@@ -1077,17 +1097,29 @@ namespace YAT.View.Controls
 				this.isSettingControls.Enter();
 				try
 				{
-					comboBox_SingleLineText.Text      = formerText;
-					comboBox_SingleLineText.ForeColor = formerForeColor;
-					comboBox_SingleLineText.Font      = formerFont;
+					// Restore former text:
+					comboBox_SingleLineText.Text            = previousText;
+					comboBox_SingleLineText.ForeColor       = previousForeColor;
+					comboBox_SingleLineText.Font            = previousFont;
+
+					// Also restore cursor location and text selection:
+					if (previousSelectionStart != ControlEx.InvalidIndex)
+					{
+						comboBox_SingleLineText.Select();                                 // First select...
+						comboBox_SingleLineText.SelectionStart  = previousSelectionStart; // ...then override default behavior.
+						comboBox_SingleLineText.SelectionLength = previousSelectionLength;
+					}
+					else // Fallback:
+					{
+						comboBox_SingleLineText.Select();    // First select...
+						comboBox_SingleLineText.SelectAll(); // ...then override default behavior.
+					}
 				}
 				finally
 				{
 					this.isSettingControls.Leave();
 				}
 			}
-
-			SelectInput();
 		}
 
 		#endregion
