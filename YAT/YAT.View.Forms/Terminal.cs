@@ -350,6 +350,9 @@ namespace YAT.View.Forms
 
 			// Apply the workaround when switching among the forms of the MDI application:
 			OnFormDeactivateWorkaround();
+
+			// Select send text control to perpare user input on 'Activated' above:
+			send.SelectSendTextInput();
 		}
 
 		/// <remarks>See remarks in <see cref="ComboBoxEx"/>.</remarks>
