@@ -687,16 +687,20 @@ namespace YAT.View.Controls
 			try
 			{
 				comboBox_RemoteHost.Items.Clear();
-				comboBox_RemoteHost.Items.AddRange(this.recentRemoteHosts.ToArray());
+				if (this.recentRemoteHosts != null)
+					comboBox_RemoteHost.Items.AddRange(this.recentRemoteHosts.ToArray());
 
 				comboBox_RemotePort.Items.Clear();
-				comboBox_RemotePort.Items.AddRange(this.recentPorts.ToArray());
+				if (this.recentPorts != null)
+					comboBox_RemotePort.Items.AddRange(this.recentPorts.ToArray());
 
 				comboBox_LocalFilter.Items.Clear();
-				comboBox_LocalFilter.Items.AddRange(this.recentLocalFilters.ToArray());
+				if (this.recentLocalFilters != null)
+					comboBox_LocalFilter.Items.AddRange(this.recentLocalFilters.ToArray());
 
 				comboBox_LocalPort.Items.Clear();
-				comboBox_LocalPort.Items.AddRange(this.recentPorts.ToArray());
+				if (this.recentPorts != null)
+					comboBox_LocalPort.Items.AddRange(this.recentPorts.ToArray());
 			}
 			finally
 			{
@@ -738,7 +742,7 @@ namespace YAT.View.Controls
 
 				this.localInterfaceListIsBeingSetOrIsAlreadySet = true; // Purpose see remarks above.
 
-				IPNetworkInterfaceCollection localInterfaces = new IPNetworkInterfaceCollection();
+				var localInterfaces = new IPNetworkInterfaceCollection();
 				localInterfaces.FillWithAvailableLocalInterfaces();
 
 				// Attention:

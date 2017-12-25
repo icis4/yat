@@ -438,7 +438,7 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
-				comboBox_Preset.Items.AddRange     (MKY.IO.Usb.SerialHidReportFormatPresetEx.GetItems());
+				comboBox_Preset     .Items.AddRange(MKY.IO.Usb.SerialHidReportFormatPresetEx.GetItems());
 				comboBox_FlowControl.Items.AddRange(MKY.IO.Serial.Usb.SerialHidFlowControlEx.GetItems());
 			}
 			finally

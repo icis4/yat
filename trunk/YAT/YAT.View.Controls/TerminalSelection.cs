@@ -131,7 +131,7 @@ namespace YAT.View.Controls
 			InitializeComponent();
 
 			comboBox_TerminalType.Items.AddRange(Domain.TerminalTypeEx.GetItems());
-			comboBox_IOType.Items.AddRange(Domain.IOTypeEx.GetItems());
+			comboBox_IOType      .Items.AddRange(Domain.IOTypeEx      .GetItems());
 
 			// SetControls() is initially called in the 'Paint' event handler.
 		}
