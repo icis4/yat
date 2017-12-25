@@ -98,8 +98,9 @@ New:
 
 Important changes:
 - Cursor behavior of 'Send Text' improved:
-   > Cursor no longer jumps to the end of the input box when sending the text (bug #395).
    > Cursor position and text selection is remembered (related to bugs #391 and #395).
+   > Cursor no longer jumps to the end of the input box when sending the text (bug #395).
+   > Cursor no longer jumps to the beginning of the input box after edit of recent text (bug #391).
 - Shortcut of 'Clear' changed from [Shift+Delete] to [Ctrl+L] (related to change stated above).
 - Shortcut of 'Save to File' changed from [Ctrl+F] to [Ctrl+T] (consequence of feat. #11 and #79).
 - Automatic response trigger is highlighted, same as automatic action trigger (rel. to feat. #320).
