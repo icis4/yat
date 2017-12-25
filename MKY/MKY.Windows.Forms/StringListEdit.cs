@@ -97,7 +97,10 @@ namespace MKY.Windows.Forms
 			set
 			{
 				listBox_StringList.Items.Clear();
-				listBox_StringList.Items.AddRange(value);
+
+				if (value != null) // Empty array is OK, but 'null' results in exception.
+					listBox_StringList.Items.AddRange(value);
+
 				SetControls();
 				OnStringListChanged(EventArgs.Empty);
 			}

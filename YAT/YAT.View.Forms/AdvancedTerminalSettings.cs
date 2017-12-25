@@ -1001,9 +1001,9 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				comboBox_TxRadix.Items.AddRange(Domain.RadixEx.GetItems());
-				comboBox_RxRadix.Items.AddRange(Domain.RadixEx.GetItems());
-				comboBox_Endianness.Items.AddRange(Domain.EndiannessEx.GetItems());
+				comboBox_TxRadix              .Items.AddRange(Domain.RadixEx           .GetItems());
+				comboBox_RxRadix              .Items.AddRange(Domain.RadixEx           .GetItems());
+				comboBox_Endianness           .Items.AddRange(Domain.EndiannessEx      .GetItems());
 				comboBox_ControlCharacterRadix.Items.AddRange(Domain.ControlCharRadixEx.GetItems());
 			}
 			finally
