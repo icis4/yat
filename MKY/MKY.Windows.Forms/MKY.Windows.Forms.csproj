@@ -103,7 +103,7 @@
     <Compile Include="Chronometer.Designer.cs">
       <DependentUpon>Chronometer.cs</DependentUpon>
     </Compile>
-    <Compile Include="IOnFormDeactivateWorkaround.cs" />
+    <Compile Include="ComboBoxWorkaround.cs" />
     <Compile Include="ToolStripComboBoxEx.cs">
       <SubType>Component</SubType>
     </Compile>

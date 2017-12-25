@@ -29,8 +29,8 @@
 
 #if (DEBUG)
 
-	// Enable debugging of state changes and validation related to the handled command:
-////#define DEBUG_COMMAND
+	// Enable debugging of state changes and validation related to user input:
+////#define DEBUG_USER_INPUT
 
 #endif // DEBUG
 
@@ -46,7 +46,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Globalization;
+using System.Reflection;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
@@ -54,7 +54,6 @@ using MKY;
 using MKY.Collections;
 using MKY.Collections.Specialized;
 using MKY.Drawing;
-using MKY.Text;
 using MKY.Windows.Forms;
 
 using YAT.Model.Settings;
@@ -204,7 +203,7 @@ namespace YAT.View.Controls
 			{
 				if (this.command != value)
 				{
-					DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+					DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
 
 					if (value != null)
 					{
@@ -220,7 +219,7 @@ namespace YAT.View.Controls
 					SetCommandControls();
 					OnCommandChanged(EventArgs.Empty);
 
-					DebugCommandLeave();
+					DebugUserInputLeave();
 				}
 			}
 		}
@@ -236,12 +235,12 @@ namespace YAT.View.Controls
 			{
 				if (!IEnumerableEx.ElementsEqual(this.recent, value))
 				{
-					DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+					DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
 
 					this.recent = new RecentItemCollection<Command>(value); // Clone collection to ensure decoupling.
 					SetRecentControls(); // Recent must immediately be updated, otherwise order will be wrong on arrow-up/down.
 
-					DebugCommandLeave();
+					DebugUserInputLeave();
 				}
 			}
 		}
@@ -399,12 +398,35 @@ namespace YAT.View.Controls
 		/// ...if called in the 'Enter' handler of the control, the (front) input gets selected even
 		///    when focus enters "from the back".
 		/// </remarks>
+		public virtual void StandbyInUserInput()
+		{
+			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
+
+			comboBox_SingleLineText.Select();
+			comboBox_SingleLineText.SelectionStart = 0;
+			comboBox_SingleLineText.SelectionLength = 0;
+
+			DebugUserInputLeave();
+		}
+
+		/// <remarks>
+		/// Required to be called "from the outside" because...
+		/// ...if called in the constructor of the control, SetControls() has not yet been called.
+		/// ...if called in the 'Paint' handler of the control, the last terminal in the application
+		///    gets selected.    (due to the fact that an application  ^ ^ only has one focus)
+		/// ...if called in the 'Enter' handler of the control, the (front) input gets selected even
+		///    when focus enters "from the back".
+		/// </remarks>
 		public virtual void PrepareUserInput()
 		{
+			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
+
 			comboBox_SingleLineText.Select();
 
 			// No need to set the cursor to the end by "SelectionStart = Text.Length" as the combo
-			// box is a ComboBoxEx that remembers the cursor location.
+			// box is a ComboBoxEx that remembers cursor location and text selection.
+
+			DebugUserInputLeave();
 		}
 
 		/// <summary></summary>
@@ -497,8 +519,8 @@ namespace YAT.View.Controls
 				this.isStartingUp = false;
 
 				SetExplicitDefaultRadixControls();
-				SetRecentControls();
-				SetCommandControls();
+			////SetRecentControls();  has already been called on initially settings settings anyway.
+			////SetCommandControls(); has already been called on initially settings settings anyway.
 			}
 		}
 
@@ -608,7 +630,7 @@ namespace YAT.View.Controls
 
 		private void comboBox_SingleLineText_Enter(object sender, EventArgs e)
 		{
-			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
 
 			// Attention:
 			// Similar code exists in PredefinedCommandSettingsSet.textBox_SingleLineText_Enter().
@@ -634,7 +656,7 @@ namespace YAT.View.Controls
 
 			// No need to set this.isValidated = false yet. The 'TextChanged' event will do so.
 
-			DebugCommandLeave();
+			DebugUserInputLeave();
 		}
 
 		/// <remarks>
@@ -651,7 +673,7 @@ namespace YAT.View.Controls
 		/// </remarks>
 		private void comboBox_SingleLineText_Leave(object sender, EventArgs e)
 		{
-			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
 
 			// Attention:
 			// Similar code exists in PredefinedCommandSettingsSet.textBox_SingleLineText_Leave().
@@ -662,12 +684,12 @@ namespace YAT.View.Controls
 			else
 				SetTextFocusState(TextFocusState.IsLeavingEdit);
 
-			DebugCommandLeave();
+			DebugUserInputLeave();
 		}
 
 		private void comboBox_SingleLineText_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
 
 			if (this.sendImmediately)
 			{
@@ -677,7 +699,7 @@ namespace YAT.View.Controls
 				OnSendCommandRequest(new SendTextOptionEventArgs(SendTextOption.Normal));
 			}
 
-			DebugCommandLeave();
+			DebugUserInputLeave();
 		}
 
 		private void comboBox_SingleLineText_TextChanged(object sender, EventArgs e)
@@ -685,7 +707,7 @@ namespace YAT.View.Controls
 			if (this.isSettingControls)
 				return;
 
-			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
 
 			// Attention:
 			// Similar code exists in PredefinedCommandSettingsSet.textBox_SingleLineText_TextChanged().
@@ -698,7 +720,7 @@ namespace YAT.View.Controls
 
 			SetSendControls();
 
-			DebugCommandLeave();
+			DebugUserInputLeave();
 		}
 
 		/// <remarks>
@@ -711,7 +733,7 @@ namespace YAT.View.Controls
 			if (this.isSettingControls)
 				return;
 
-			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
 
 			this.isValidated = true; // Commands in history have already been validated.
 
@@ -726,7 +748,7 @@ namespace YAT.View.Controls
 				}
 			}
 
-			DebugCommandLeave();
+			DebugUserInputLeave();
 		}
 		
 		/// <remarks>
@@ -746,7 +768,7 @@ namespace YAT.View.Controls
 			if (this.isSettingControls)
 				return;
 
-			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
 
 			// Attention:
 			// Similar code exists in PredefinedCommandSettingsSet.textBox_SingleLineText_Validating().
@@ -768,7 +790,7 @@ namespace YAT.View.Controls
 
 						ConfirmSingleLineText(comboBox_SingleLineText.Text);
 
-						DebugCommandLeave();
+						DebugUserInputLeave();
 						return;
 					}
 
@@ -784,7 +806,7 @@ namespace YAT.View.Controls
 
 						ConfirmSingleLineText(comboBox_SingleLineText.Text);
 
-						DebugCommandLeave();
+						DebugUserInputLeave();
 						return;
 					}
 
@@ -798,7 +820,7 @@ namespace YAT.View.Controls
 				}
 			}
 
-			DebugCommandLeave();
+			DebugUserInputLeave();
 		}
 
 		private void button_SetMultiLineText_Click(object sender, EventArgs e)
@@ -852,7 +874,8 @@ namespace YAT.View.Controls
 
 		private void SetRecentControls()
 		{
-			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
+
 			this.isSettingControls.Enter();
 			try
 			{
@@ -862,7 +885,8 @@ namespace YAT.View.Controls
 				int selectionLength = comboBox_SingleLineText.SelectionLength;
 
 				comboBox_SingleLineText.Items.Clear();
-				if ((this.recent != null) && (this.recent.Count > 0))
+
+				if (this.recent != null) // Empty array is OK, but 'null' results in exception.
 					comboBox_SingleLineText.Items.AddRange(this.recent.ToArray());
 
 				// Immediately update the updated item list:
@@ -877,7 +901,8 @@ namespace YAT.View.Controls
 			{
 				this.isSettingControls.Leave();
 			}
-			DebugCommandLeave();
+
+			DebugUserInputLeave();
 		}
 
 		/// <remarks>
@@ -885,7 +910,8 @@ namespace YAT.View.Controls
 		/// </remarks>
 		private void SetCommandControls()
 		{
-			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
+
 			this.isSettingControls.Enter();
 			try
 			{
@@ -904,7 +930,15 @@ namespace YAT.View.Controls
 						if (comboBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
 							comboBox_SingleLineText.Font = SystemFonts.DefaultFont;
 
+						// Keep cursor position and text selection:
+						int selectionStart  = comboBox_SingleLineText.SelectionStart;
+						int selectionLength = comboBox_SingleLineText.SelectionLength;
+
 						comboBox_SingleLineText.Text = this.command.SingleLineText;
+
+						// Restore cursor position and text selection (as much as possible):
+						comboBox_SingleLineText.SelectionStart  = selectionStart;
+						comboBox_SingleLineText.SelectionLength = selectionLength;
 					}
 					else
 					{
@@ -926,9 +960,21 @@ namespace YAT.View.Controls
 						comboBox_SingleLineText.Font = SystemFonts.DefaultFont;
 
 					if (this.command.IsText && !this.command.IsPartialText)
+					{
+						// Keep cursor position and text selection:
+						int selectionStart  = comboBox_SingleLineText.SelectionStart;
+						int selectionLength = comboBox_SingleLineText.SelectionLength;
+
 						comboBox_SingleLineText.Text = this.command.SingleLineText;
+
+						// Restore cursor position and text selection (as much as possible):
+						comboBox_SingleLineText.SelectionStart  = selectionStart;
+						comboBox_SingleLineText.SelectionLength = selectionLength;
+					}
 					else
+					{
 						comboBox_SingleLineText.Text = "";
+					}
 				}
 
 				SetSendControls();
@@ -937,7 +983,8 @@ namespace YAT.View.Controls
 			{
 				this.isSettingControls.Leave();
 			}
-			DebugCommandLeave();
+
+			DebugUserInputLeave();
 		}
 
 		private void SetSendControls()
@@ -1201,34 +1248,35 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		[Conditional("DEBUG_COMMAND")]
-		protected virtual void DebugCommandEnter(string methodName)
+		[Conditional("DEBUG_USER_INPUT")]
+		protected virtual void DebugUserInputEnter(string methodName)
 		{
 			Debug.WriteLine(methodName);
 			Debug.Indent();
 
-			DebugCommandState();
+			DebugUserInputState();
 		}
 
 		/// <summary></summary>
-		[Conditional("DEBUG_COMMAND")]
-		protected virtual void DebugCommandLeave()
+		[Conditional("DEBUG_USER_INPUT")]
+		protected virtual void DebugUserInputLeave()
 		{
-			DebugCommandState();
+			DebugUserInputState();
 
 			Debug.Unindent();
 		}
 
 		/// <summary></summary>
-		[Conditional("DEBUG_COMMAND")]
-		protected virtual void DebugCommandState()
+		[Conditional("DEBUG_USER_INPUT")]
+		protected virtual void DebugUserInputState()
 		{
-			Debug.Write    ("Text    = "      + comboBox_SingleLineText.Text);
-			Debug.Write    (" with cursor @ " + comboBox_SingleLineText.SelectionStart);
-			Debug.WriteLine(" and sel.idx @ " + comboBox_SingleLineText.SelectedIndex);
+			Debug.Write    (@"Text   = """         + comboBox_SingleLineText.Text);
+			Debug.Write    (@""" / Cursor @ "      + comboBox_SingleLineText.SelectionStart);
+			Debug.Write    (" / Selection @ "      + comboBox_SingleLineText.SelectionLength);
+			Debug.WriteLine(" / Selected index @ " + comboBox_SingleLineText.SelectedIndex);
 
 			if (this.recent != null)
-				Debug.WriteLine("Recent = " + ArrayEx.ElementsToString(this.recent.ToArray()));
+				Debug.WriteLine(@"Recent = """ + ArrayEx.ElementsToString(this.recent.ToArray()) + @"""");
 		}
 
 		#endregion
