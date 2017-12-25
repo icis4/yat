@@ -336,8 +336,8 @@ namespace YAT.View.Forms
 			monitor_Bidir.Activate();
 			monitor_Rx   .Activate();
 
-			// Select send text control to enable immediate user input:
-			send.SelectSendTextInput();
+			// Enable immediate user input:
+			send.SelectAndPrepareUserInput();
 		}
 
 		private void Terminal_Deactivate(object sender, EventArgs e)
@@ -351,8 +351,8 @@ namespace YAT.View.Forms
 			// Apply the workaround when switching among the forms of the MDI application:
 			OnFormDeactivateWorkaround();
 
-			// Select send text control to perpare user input on 'Activated' above:
-			send.SelectSendTextInput();
+			// Deselect other controls to prepare user input for 'Activated' above:
+			send.StandbyInUserInput();
 		}
 
 		/// <remarks>See remarks in <see cref="ComboBoxEx"/>.</remarks>
