@@ -355,22 +355,6 @@ namespace YAT.View.Forms
 			send.StandbyInUserInput();
 		}
 
-		/// <remarks>
-		/// See explanation in <see cref="Main.Main_Shown(object, EventArgs)"/>.
-		/// </remarks>
-		public virtual void StandbyInUserInputWorkaround()
-		{
-			send.StandbyInUserInput();
-		}
-
-		/// <remarks>
-		/// See explanation in <see cref="Main.Main_Shown(object, EventArgs)"/>.
-		/// </remarks>
-		public virtual void SelectAndPrepareUserInputWorkaround()
-		{
-			send.SelectAndPrepareUserInput();
-		}
-
 		/// <remarks>See remarks in <see cref="ComboBoxEx"/>.</remarks>
 		public virtual void OnFormDeactivateWorkaround()
 		{

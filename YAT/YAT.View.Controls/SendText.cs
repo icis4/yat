@@ -400,11 +400,14 @@ namespace YAT.View.Controls
 		/// </remarks>
 		public virtual void StandbyInUserInput()
 		{
+			if (this.isStartingUp)
+				this.isStartingUpInStandby = true;
+
 			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
 
 			comboBox_SingleLineText.Select();
-			comboBox_SingleLineText.SelectionStart = 0;
 			comboBox_SingleLineText.SelectionLength = 0;
+			comboBox_SingleLineText.SelectionStart = comboBox_SingleLineText.Text.Length;
 
 			DebugUserInputLeave();
 		}
@@ -419,12 +422,15 @@ namespace YAT.View.Controls
 		/// </remarks>
 		public virtual void PrepareUserInput()
 		{
+			if (this.isStartingUp)
+				this.isStartingUpInStandby = false;
+
 			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
 
 			comboBox_SingleLineText.Select();
 
-			// No need to set the cursor to the end by "SelectionStart = Text.Length" as the combo
-			// box is a ComboBoxEx that remembers cursor location and text selection.
+			// No need to set the cursor to the end by "SelectionStart = Text.Length" as the
+			// combo box is a ComboBoxEx that remembers cursor location and text selection.
 
 			DebugUserInputLeave();
 		}
@@ -506,6 +512,11 @@ namespace YAT.View.Controls
 		private bool isStartingUp = true;
 
 		/// <summary>
+		/// Startup flag wo work around the issue described below.
+		/// </summary>
+		private bool isStartingUpInStandby; // = false;
+
+		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
 		/// <remarks>
@@ -518,9 +529,50 @@ namespace YAT.View.Controls
 			{
 				this.isStartingUp = false;
 
-				SetExplicitDefaultRadixControls();
-			////SetRecentControls();  has already been called on initially settings settings anyway.
-			////SetCommandControls(); has already been called on initially settings settings anyway.
+				DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
+
+				SetExplicitDefaultRadixControls(); // Attention, this method typically collapses the explicit default radix panel, and layouting apparently resets text selection in the combo box!
+				SetRecentControls();
+				SetCommandControls();
+
+				if (this.isStartingUpInStandby) // Attention, see comments below!
+				{
+					comboBox_SingleLineText.SelectionLength = 0;
+					comboBox_SingleLineText.SelectionStart = comboBox_SingleLineText.Text.Length;
+				}
+
+				DebugUserInputLeave();
+
+				// Without the workaround above, the "Send Text" content of all terminals is fully
+				// selected, i.e. same as after calling "SelectAndPrepareUserInput()", even though
+				// "StandbyInUserInput()" has been called before. Sequence:
+				//  > Main_Shown (event handler in 'Forms.Main')
+				//     > main.Start()
+				//        > 1st terminal is created
+				//           > 'Send' is initialized
+				//              > 'set_Command' => Cursor @ 0 / Selection @ 0 / Selected index @ -1
+				//              > 'set_Recent'  => Cursor @ 0 / Selection @ 0 / Selected index @ 0
+				//        > 1st Terminal_Activated (event handler in 'Forms.Terminal')
+				//           > "Send.SelectAndPrepareUserInput()"
+				//              > Cursor @ 0 / Selection @ <ALL> / Selected index @ 0
+				//        > 2nd terminal is created
+				//           > 'Send' is initialized
+				//              > 'set_Command' => Cursor @ 0 / Selection @ 0 / Selected index @ -1
+				//              > 'set_Recent'  => Cursor @ 0 / Selection @ 0 / Selected index @ 0
+				//        > 1st Terminal_Deactivate (event handler in 'Forms.Terminal')
+				//           > "Send.StandbyInUserInput()"
+				//              > Cursor @ <END> / Selection @ 0 / Selected index @ 0
+				//        > 2nd Terminal_Activated (event handler in 'Forms.Terminal')
+				//           > "Send.SelectAndPrepareUserInput()"
+				//              > Cursor @ 0 / Selection @ <ALL> / Selected index @ 0
+				//
+				//     All fine so far, but then something happens, and when Start() returns,
+				//     the state is => Cursor @ 0 / Selection @ <ALL> / Selected index @ 0 !!!
+				//
+				//     Suspecting the issue is caused by layouting, as there is a similar issue with
+				//     SetExplicitDefaultRadixControls() above. That method typically collapses the
+				//     explicit default radix panel, and layouting apparently resets text selection
+				//     in the combo box!
 			}
 		}
 
@@ -936,7 +988,7 @@ namespace YAT.View.Controls
 
 						comboBox_SingleLineText.Text = this.command.SingleLineText;
 
-						// Restore cursor position and text selection (as much as possible):
+						// Restore cursor position and text selection (as possible):
 						comboBox_SingleLineText.SelectionStart  = selectionStart;
 						comboBox_SingleLineText.SelectionLength = selectionLength;
 					}
@@ -967,7 +1019,7 @@ namespace YAT.View.Controls
 
 						comboBox_SingleLineText.Text = this.command.SingleLineText;
 
-						// Restore cursor position and text selection (as much as possible):
+						// Restore cursor position and text selection (as possible):
 						comboBox_SingleLineText.SelectionStart  = selectionStart;
 						comboBox_SingleLineText.SelectionLength = selectionLength;
 					}
