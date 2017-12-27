@@ -3187,32 +3187,38 @@ namespace YAT.Model
 				{
 					OnFixedStatusTextRequest("Terminal could not be started!");
 
-					string yatLead, yatText;
-					ErrorHelper.MakeStartHint(this.settingsRoot.IOType, out yatLead, out yatText);
+					if (ApplicationSettings.LocalUserSettings.General.NotifyNonAvailableIO)
+					{
+						string yatLead, yatText;
+						ErrorHelper.MakeStartHint(this.settingsRoot.IOType, out yatLead, out yatText);
 
-					OnMessageInputRequest
-					(
-						ErrorHelper.ComposeMessage("Terminal could not be started!", string.Empty, yatLead, yatText),
-						"Terminal Warning",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
-					);
+						OnMessageInputRequest
+						(
+							ErrorHelper.ComposeMessage("Terminal could not be started!", string.Empty, yatLead, yatText),
+							"Terminal Warning",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Warning
+						);
+					}
 				}
 			}
 			catch (Exception ex)
 			{
 				OnFixedStatusTextRequest("Error starting terminal!");
 
-				string yatLead, yatText;
-				ErrorHelper.MakeExceptionHint(this.settingsRoot.IOType, out yatLead, out yatText);
+				if (ApplicationSettings.LocalUserSettings.General.NotifyNonAvailableIO)
+				{
+					string yatLead, yatText;
+					ErrorHelper.MakeExceptionHint(this.settingsRoot.IOType, out yatLead, out yatText);
 
-				OnMessageInputRequest
-				(
-					ErrorHelper.ComposeMessage("Unable to start terminal!", ex, yatLead, yatText),
-					"Terminal Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-				);
+					OnMessageInputRequest
+					(
+						ErrorHelper.ComposeMessage("Unable to start terminal!", ex, yatLead, yatText),
+						"Terminal Error",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+					);
+				}
 			}
 
 			return (success);

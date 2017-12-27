@@ -45,6 +45,8 @@ namespace YAT.Application.Settings
 		private bool autoSaveWorkspace;
 		private bool useRelativePaths;
 
+		private bool notifyNonAvailableIO;
+
 		private bool retrieveSerialPortCaptions;
 		private bool detectSerialPortsInUse;
 		private bool askForAlternateSerialPort;
@@ -75,9 +77,11 @@ namespace YAT.Application.Settings
 		public GeneralSettings(GeneralSettings rhs)
 			: base(rhs)
 		{
-			AutoOpenWorkspace          = rhs.AutoOpenWorkspace;
-			AutoSaveWorkspace          = rhs.AutoSaveWorkspace;
-			UseRelativePaths           = rhs.UseRelativePaths;
+			AutoOpenWorkspace = rhs.AutoOpenWorkspace;
+			AutoSaveWorkspace = rhs.AutoSaveWorkspace;
+			UseRelativePaths  = rhs.UseRelativePaths;
+
+			NotifyNonAvailableIO = rhs.NotifyNonAvailableIO;
 
 			RetrieveSerialPortCaptions = rhs.RetrieveSerialPortCaptions;
 			DetectSerialPortsInUse     = rhs.DetectSerialPortsInUse;
@@ -85,8 +89,8 @@ namespace YAT.Application.Settings
 
 			AskForAlternateNetworkInterface = rhs.AskForAlternateNetworkInterface;
 
-			MatchUsbSerial             = rhs.MatchUsbSerial;
-			AskForAlternateUsbDevice   = rhs.AskForAlternateUsbDevice;
+			MatchUsbSerial           = rhs.MatchUsbSerial;
+			AskForAlternateUsbDevice = rhs.AskForAlternateUsbDevice;
 
 			ClearChanged();
 		}
@@ -98,9 +102,11 @@ namespace YAT.Application.Settings
 		{
 			base.SetMyDefaults();
 
-			AutoOpenWorkspace          = true;
-			AutoSaveWorkspace          = true;
-			UseRelativePaths           = true;
+			AutoOpenWorkspace = true;
+			AutoSaveWorkspace = true;
+			UseRelativePaths  = true;
+
+			NotifyNonAvailableIO = true;
 
 			RetrieveSerialPortCaptions = true;
 			DetectSerialPortsInUse     = true;
@@ -108,8 +114,8 @@ namespace YAT.Application.Settings
 
 			AskForAlternateNetworkInterface = true;
 
-			MatchUsbSerial             = true;
-			AskForAlternateUsbDevice   = true;
+			MatchUsbSerial           = true;
+			AskForAlternateUsbDevice = true;
 		}
 
 		#region Properties
@@ -164,6 +170,21 @@ namespace YAT.Application.Settings
 				if (this.useRelativePaths != value)
 				{
 					this.useRelativePaths = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("NotifyNonAvailableIO")]
+		public virtual bool NotifyNonAvailableIO
+		{
+			get { return (this.notifyNonAvailableIO); }
+			set
+			{
+				if (this.notifyNonAvailableIO != value)
+				{
+					this.notifyNonAvailableIO = value;
 					SetMyChanged();
 				}
 			}
@@ -279,9 +300,11 @@ namespace YAT.Application.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ AutoOpenWorkspace         .GetHashCode();
-				hashCode = (hashCode * 397) ^ AutoSaveWorkspace         .GetHashCode();
-				hashCode = (hashCode * 397) ^ UseRelativePaths          .GetHashCode();
+				hashCode = (hashCode * 397) ^ AutoOpenWorkspace.GetHashCode();
+				hashCode = (hashCode * 397) ^ AutoSaveWorkspace.GetHashCode();
+				hashCode = (hashCode * 397) ^ UseRelativePaths .GetHashCode();
+
+				hashCode = (hashCode * 397) ^ NotifyNonAvailableIO.GetHashCode();
 
 				hashCode = (hashCode * 397) ^ RetrieveSerialPortCaptions.GetHashCode();
 				hashCode = (hashCode * 397) ^ DetectSerialPortsInUse    .GetHashCode();
@@ -289,8 +312,8 @@ namespace YAT.Application.Settings
 
 				hashCode = (hashCode * 397) ^ AskForAlternateNetworkInterface.GetHashCode();
 
-				hashCode = (hashCode * 397) ^ MatchUsbSerial            .GetHashCode();
-				hashCode = (hashCode * 397) ^ AskForAlternateUsbDevice  .GetHashCode();
+				hashCode = (hashCode * 397) ^ MatchUsbSerial          .GetHashCode();
+				hashCode = (hashCode * 397) ^ AskForAlternateUsbDevice.GetHashCode();
 
 				return (hashCode);
 			}
@@ -321,18 +344,20 @@ namespace YAT.Application.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				AutoOpenWorkspace         .Equals(other.AutoOpenWorkspace) &&
-				AutoSaveWorkspace         .Equals(other.AutoSaveWorkspace) &&
-				UseRelativePaths          .Equals(other.UseRelativePaths)  &&
+				AutoOpenWorkspace.Equals(other.AutoOpenWorkspace) &&
+				AutoSaveWorkspace.Equals(other.AutoSaveWorkspace) &&
+				UseRelativePaths .Equals(other.UseRelativePaths)  &&
+
+				NotifyNonAvailableIO.Equals(other.NotifyNonAvailableIO) &&
 
 				RetrieveSerialPortCaptions.Equals(other.RetrieveSerialPortCaptions) &&
 				DetectSerialPortsInUse    .Equals(other.DetectSerialPortsInUse)     &&
 				AskForAlternateSerialPort .Equals(other.AskForAlternateSerialPort)  &&
 
-				AskForAlternateNetworkInterface.Equals(other.AskForAlternateNetworkInterface)  &&
+				AskForAlternateNetworkInterface.Equals(other.AskForAlternateNetworkInterface) &&
 
-				MatchUsbSerial            .Equals(other.MatchUsbSerial) &&
-				AskForAlternateUsbDevice  .Equals(other.AskForAlternateUsbDevice)
+				MatchUsbSerial          .Equals(other.MatchUsbSerial)           &&
+				AskForAlternateUsbDevice.Equals(other.AskForAlternateUsbDevice)
 			);
 		}
 
