@@ -294,14 +294,30 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "OpenTerminal", ShortName = "ot", Description = "Open the terminal.")]
-		public bool OpenTerminal;
+		[CLSCompliant(false)]
+		[OptionArg(Names = new string[] { "OpenTerminal", "OpenPort" }, ShortNames = new string[] { "ot", "op" }, Description = "Open the terminal/port.")]
+		public bool StartTerminal;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[CLSCompliant(false)]
+		[OptionArg(Names = new string[] { "KeepTerminalClosed", "KeepPortClosed" }, ShortNames = new string[] { "ktc", "kpc" }, Description =
+			"Keep terminal(s)/port(s) closed, even if settings request to open." + EnvironmentEx.NewLineConstWorkaround +
+			"This option overrides the 'OpenTerminal/OpenPort' / 'ot/op' option if both options are given.")]
+		public bool KeepTerminalStopped;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[CLSCompliant(false)]
 		[OptionArg(Names = new string[] { "Log", "LogOn" }, ShortName = "lo", Description = "Switch logging on.")]
 		public bool LogOn;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[OptionArg(Name = "KeepLogOff", ShortName = "klf", Description =
+			"Keep log(s) switched off, even if settings request to switch on." + EnvironmentEx.NewLineConstWorkaround +
+			"This option overrides the 'LogOn' / 'lo' option if both options are given.")]
+		public bool KeepLogOff;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
