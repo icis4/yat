@@ -110,6 +110,8 @@ Important changes:
 - Switching among automatic/manual vertical scrolling in monitor further improved, especially while
   continuous data is being received (related to bug #394 and feature request #323 implemented in
   previous release).
+- Additional command line options 'KeepTerminalClosed/KeepPortClosed' and 'KeepLogOff' (bug #392).
+- Additional command line option alias 'OpenPort' for 'OpenTerminal' (related to bug #392).
 
 Fixed bugs:
 - Monitors no longer scroll to top as soon as display buffer has been filled (bugs #394 and #398 as
@@ -1295,7 +1297,7 @@ XTerm232 1.0.0 :: 2003-10-14
 5. Roadmap
 ====================================================================================================
 
-YAT 2.0 Final :: Expected in 2017/2018
+YAT 2.0 Final :: Expected in early 2018
 ----------------------------------------------------------------------------------------------------
 YAT 2.0 Final will be released once all bugs and feature requests of priority 7 and above have been
 resolved. This state is expected to be reached by the next or next-next version of YAT. For details

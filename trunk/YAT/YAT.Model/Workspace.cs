@@ -1531,7 +1531,7 @@ namespace YAT.Model
 
 						OnCursorReset();
 						OnFixedStatusTextRequest("Error opening terminal!");
-						DialogResult result = OnMessageInputRequest
+						var dr = OnMessageInputRequest
 						(
 							errorMessage + Environment.NewLine + Environment.NewLine + "Continue loading workspace?",
 							caption,
@@ -1541,7 +1541,7 @@ namespace YAT.Model
 						OnTimedStatusTextRequest("Terminal not opened!");
 						OnCursorRequest(Cursors.WaitCursor);
 
-						if (result == DialogResult.No)
+						if (dr == DialogResult.No)
 						{
 							// Remove all remaining items:
 							int remainingCount = (clone.Count - (i + 1));
@@ -1654,6 +1654,19 @@ namespace YAT.Model
 			// Set window settings if there are:
 			if (windowSettings != null)
 				settingsHandler.Settings.Window = windowSettings;
+
+			// Override settings if requested:
+			if (this.startArgs.Override.StartTerminal)
+				settingsHandler.Settings.TerminalIsStarted = true;
+
+			if (this.startArgs.Override.KeepTerminalStopped)
+				settingsHandler.Settings.TerminalIsStarted = false;
+
+			if (this.startArgs.Override.LogOn)
+				settingsHandler.Settings.LogIsOn = true;
+
+			if (this.startArgs.Override.KeepLogOff)
+				settingsHandler.Settings.LogIsOn = false;
 
 			// Create terminal:
 			Terminal t;

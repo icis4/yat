@@ -579,11 +579,11 @@ namespace YAT.Model
 				int requestedDynamicTerminalIndex = this.commandLineArgs.RequestedDynamicTerminalIndex;
 				int lastDynamicIndex = Indices.IndexToDynamicIndex(this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1);
 				
-				if     ((requestedDynamicTerminalIndex >= Indices.FirstDynamicIndex) && (requestedDynamicTerminalIndex <= lastDynamicIndex))
+				if     ((          requestedDynamicTerminalIndex >= Indices.FirstDynamicIndex) && (requestedDynamicTerminalIndex <= lastDynamicIndex))
 					this.startArgs.RequestedDynamicTerminalIndex = requestedDynamicTerminalIndex;
-				else if (requestedDynamicTerminalIndex == Indices.DefaultDynamicIndex)
+				else if (          requestedDynamicTerminalIndex == Indices.DefaultDynamicIndex)
 					this.startArgs.RequestedDynamicTerminalIndex = Indices.DefaultDynamicIndex;
-				else if (requestedDynamicTerminalIndex == Indices.InvalidDynamicIndex)
+				else if (          requestedDynamicTerminalIndex == Indices.InvalidDynamicIndex)
 					this.startArgs.RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex; // Usable to disable the operation.
 				else
 					return (false);
@@ -623,21 +623,23 @@ namespace YAT.Model
 			}
 
 			// Prio 8 = Override settings as desired:
-			if (this.startArgs.TerminalSettingsHandler != null)
+			if (this.startArgs.TerminalSettingsHandler != null) // Applies to a dedicated terminal.
 			{
-				bool terminalIsStarted = this.startArgs.TerminalSettingsHandler.Settings.TerminalIsStarted;
-				bool logIsOn           = this.startArgs.TerminalSettingsHandler.Settings.LogIsOn;
-
-				if (ProcessCommandLineArgsIntoExistingTerminalSettings(this.startArgs.TerminalSettingsHandler.Settings.Terminal, ref terminalIsStarted, ref logIsOn))
-				{
-					this.startArgs.TerminalSettingsHandler.Settings.TerminalIsStarted = terminalIsStarted;
-					this.startArgs.TerminalSettingsHandler.Settings.LogIsOn           = logIsOn;
-				}
-				else
-				{
+				if (!ProcessCommandLineArgsIntoExistingTerminalSettings(this.startArgs.TerminalSettingsHandler.Settings.Terminal))
 					return (false);
-				}
 			}
+
+			if (this.commandLineArgs.OptionIsGiven("StartTerminal"))
+				this.startArgs.Override.StartTerminal       = this.commandLineArgs.StartTerminal;
+
+			if (this.commandLineArgs.OptionIsGiven("KeepTerminalStopped"))
+				this.startArgs.Override.KeepTerminalStopped = this.commandLineArgs.KeepTerminalStopped;
+
+			if (this.commandLineArgs.OptionIsGiven("LogOn"))
+				this.startArgs.Override.LogOn               = this.commandLineArgs.LogOn;
+
+			if (this.commandLineArgs.OptionIsGiven("KeepLogOff"))
+				this.startArgs.Override.KeepLogOff          = this.commandLineArgs.KeepLogOff;
 
 			// Prio 9 = Perform requested operation:
 			if (this.startArgs.RequestedDynamicTerminalIndex != Indices.InvalidDynamicIndex)
@@ -685,7 +687,7 @@ namespace YAT.Model
 		/// differently. Therefore, this implementation looks a bit weird.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals", Justification = "Well...")]
-		private bool ProcessCommandLineArgsIntoExistingTerminalSettings(Domain.Settings.TerminalSettings terminalSettings, ref bool terminalIsStarted, ref bool logIsOn)
+		private bool ProcessCommandLineArgsIntoExistingTerminalSettings(Domain.Settings.TerminalSettings terminalSettings)
 		{
 			if (this.commandLineArgs.OptionIsGiven("TerminalType"))
 			{
@@ -705,7 +707,7 @@ namespace YAT.Model
 					return (false);
 			}
 
-			Domain.IOType finalIOType = terminalSettings.IO.IOType;
+			var finalIOType = terminalSettings.IO.IOType;
 			if (finalIOType == Domain.IOType.SerialPort)
 			{
 				if (this.commandLineArgs.OptionIsGiven("SerialPort"))
@@ -776,11 +778,11 @@ namespace YAT.Model
 				}
 			}
 			else if ((finalIOType == Domain.IOType.TcpClient) ||
-					 (finalIOType == Domain.IOType.TcpServer) ||
-					 (finalIOType == Domain.IOType.TcpAutoSocket) ||
-					 (finalIOType == Domain.IOType.UdpClient) ||
-					 (finalIOType == Domain.IOType.UdpServer) ||
-					 (finalIOType == Domain.IOType.UdpPairSocket))
+			         (finalIOType == Domain.IOType.TcpServer) ||
+			         (finalIOType == Domain.IOType.TcpAutoSocket) ||
+			         (finalIOType == Domain.IOType.UdpClient) ||
+			         (finalIOType == Domain.IOType.UdpServer) ||
+			         (finalIOType == Domain.IOType.UdpPairSocket))
 			{
 				if (this.commandLineArgs.OptionIsGiven("RemoteHost"))
 				{
@@ -791,9 +793,9 @@ namespace YAT.Model
 						return (false);
 				}
 				if (((finalIOType == Domain.IOType.TcpClient) ||
-					 (finalIOType == Domain.IOType.TcpAutoSocket) ||
-					 (finalIOType == Domain.IOType.UdpClient) ||
-					 (finalIOType == Domain.IOType.UdpPairSocket)) &&
+				     (finalIOType == Domain.IOType.TcpAutoSocket) ||
+				     (finalIOType == Domain.IOType.UdpClient) ||
+				     (finalIOType == Domain.IOType.UdpPairSocket)) &&
 					this.commandLineArgs.OptionIsGiven("RemotePort"))
 				{
 					if (MKY.Net.IPEndPointEx.IsValidPort(this.commandLineArgs.RemotePort))
@@ -802,8 +804,8 @@ namespace YAT.Model
 						return (false);
 				}
 				if (((finalIOType == Domain.IOType.TcpClient) || 
-					 (finalIOType == Domain.IOType.TcpServer) ||
-					 (finalIOType == Domain.IOType.TcpAutoSocket)) &&
+				     (finalIOType == Domain.IOType.TcpServer) ||
+				     (finalIOType == Domain.IOType.TcpAutoSocket)) &&
 					this.commandLineArgs.OptionIsGiven("LocalInterface"))
 				{
 					MKY.Net.IPNetworkInterfaceEx localInterface;
@@ -813,7 +815,7 @@ namespace YAT.Model
 						return (false);
 				}
 				if (((finalIOType == Domain.IOType.UdpServer) ||
-					 (finalIOType == Domain.IOType.UdpPairSocket)) &&
+				     (finalIOType == Domain.IOType.UdpPairSocket)) &&
 					this.commandLineArgs.OptionIsGiven("LocalFilter"))
 				{
 					MKY.Net.IPFilterEx localFilter;
@@ -823,9 +825,9 @@ namespace YAT.Model
 						return (false);
 				}
 				if (((finalIOType == Domain.IOType.TcpServer) ||
-					 (finalIOType == Domain.IOType.TcpAutoSocket) ||
-					 (finalIOType == Domain.IOType.UdpServer) ||
-					 (finalIOType == Domain.IOType.UdpPairSocket)) &&
+				     (finalIOType == Domain.IOType.TcpAutoSocket) ||
+				     (finalIOType == Domain.IOType.UdpServer) ||
+				     (finalIOType == Domain.IOType.UdpPairSocket)) &&
 					this.commandLineArgs.OptionIsGiven("LocalPort"))
 				{
 					if (MKY.Net.IPEndPointEx.IsValidPort(this.commandLineArgs.LocalPort))
@@ -834,7 +836,7 @@ namespace YAT.Model
 						return (false);
 				}
 				if ((finalIOType == Domain.IOType.TcpClient) &&
-					this.commandLineArgs.OptionIsGiven("TCPAutoReconnect"))
+				    this.commandLineArgs.OptionIsGiven("TCPAutoReconnect"))
 				{
 					if (this.commandLineArgs.TcpAutoReconnect == 0)
 						terminalSettings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.AutoInterval(false, 0);
@@ -844,7 +846,7 @@ namespace YAT.Model
 						return (false);
 				}
 				if ((finalIOType == Domain.IOType.UdpServer) &&
-					this.commandLineArgs.OptionIsGiven("UdpServerSendMode"))
+				    this.commandLineArgs.OptionIsGiven("UdpServerSendMode"))
 				{
 					MKY.IO.Serial.Socket.UdpServerSendMode sendMode;
 					if (MKY.IO.Serial.Socket.UdpServerSendModeEx.TryFrom(this.commandLineArgs.UdpServerSendMode, out sendMode))
@@ -917,12 +919,6 @@ namespace YAT.Model
 				return (false);
 			}
 
-			if (this.commandLineArgs.OptionIsGiven("OpenTerminal"))
-				terminalIsStarted = this.commandLineArgs.OpenTerminal;
-
-			if (this.commandLineArgs.OptionIsGiven("LogOn"))
-				logIsOn = this.commandLineArgs.LogOn;
-
 			return (true);
 		}
 
@@ -938,62 +934,59 @@ namespace YAT.Model
 		{
 			// These are temporary settings. Therefore, child items of these settings are not
 			// cloned below. They can simply be assigned and will then later be assigned back.
-			Domain.Settings.TerminalSettings terminalSettings = new Domain.Settings.TerminalSettings();
+			var temp = new Domain.Settings.TerminalSettings();
 
-			terminalSettings.TerminalType                        = newTerminalSettings.TerminalType;
-			terminalSettings.IO.IOType                           = newTerminalSettings.IOType;
+			temp.TerminalType                        = newTerminalSettings.TerminalType;
+			temp.IO.IOType                           = newTerminalSettings.IOType;
 
-			terminalSettings.IO.SerialPort.PortId                = newTerminalSettings.SerialPortId;
-			terminalSettings.IO.SerialPort.Communication         = newTerminalSettings.SerialPortCommunication;
-			terminalSettings.IO.SerialPort.AliveMonitor          = newTerminalSettings.SerialPortAliveMonitor;
-			terminalSettings.IO.SerialPort.AutoReopen            = newTerminalSettings.SerialPortAutoReopen;
+			temp.IO.SerialPort.PortId                = newTerminalSettings.SerialPortId;
+			temp.IO.SerialPort.Communication         = newTerminalSettings.SerialPortCommunication;
+			temp.IO.SerialPort.AliveMonitor          = newTerminalSettings.SerialPortAliveMonitor;
+			temp.IO.SerialPort.AutoReopen            = newTerminalSettings.SerialPortAutoReopen;
 
-			terminalSettings.IO.Socket.RemoteHost                = newTerminalSettings.SocketRemoteHost;
-			terminalSettings.IO.Socket.RemoteTcpPort             = newTerminalSettings.SocketRemoteTcpPort;
-			terminalSettings.IO.Socket.RemoteUdpPort             = newTerminalSettings.SocketRemoteUdpPort;
-			terminalSettings.IO.Socket.LocalInterface            = newTerminalSettings.SocketLocalInterface;
-			terminalSettings.IO.Socket.LocalFilter               = newTerminalSettings.SocketLocalFilter;
-			terminalSettings.IO.Socket.LocalTcpPort              = newTerminalSettings.SocketLocalTcpPort;
-			terminalSettings.IO.Socket.LocalUdpPort              = newTerminalSettings.SocketLocalUdpPort;
-			terminalSettings.IO.Socket.TcpClientAutoReconnect    = newTerminalSettings.TcpClientAutoReconnect;
-			terminalSettings.IO.Socket.UdpServerSendMode         = newTerminalSettings.UdpServerSendMode;
+			temp.IO.Socket.RemoteHost                = newTerminalSettings.SocketRemoteHost;
+			temp.IO.Socket.RemoteTcpPort             = newTerminalSettings.SocketRemoteTcpPort;
+			temp.IO.Socket.RemoteUdpPort             = newTerminalSettings.SocketRemoteUdpPort;
+			temp.IO.Socket.LocalInterface            = newTerminalSettings.SocketLocalInterface;
+			temp.IO.Socket.LocalFilter               = newTerminalSettings.SocketLocalFilter;
+			temp.IO.Socket.LocalTcpPort              = newTerminalSettings.SocketLocalTcpPort;
+			temp.IO.Socket.LocalUdpPort              = newTerminalSettings.SocketLocalUdpPort;
+			temp.IO.Socket.TcpClientAutoReconnect    = newTerminalSettings.TcpClientAutoReconnect;
+			temp.IO.Socket.UdpServerSendMode         = newTerminalSettings.UdpServerSendMode;
 
-			terminalSettings.IO.UsbSerialHidDevice.DeviceInfo    = newTerminalSettings.UsbSerialHidDeviceInfo;
-			terminalSettings.IO.UsbSerialHidDevice.MatchSerial   = newTerminalSettings.UsbSerialHidMatchSerial;
-			terminalSettings.IO.UsbSerialHidDevice.ReportFormat  = newTerminalSettings.UsbSerialHidReportFormat;
-			terminalSettings.IO.UsbSerialHidDevice.RxFilterUsage = newTerminalSettings.UsbSerialHidRxFilterUsage;
-			terminalSettings.IO.UsbSerialHidDevice.FlowControl   = newTerminalSettings.UsbSerialHidFlowControl;
-			terminalSettings.IO.UsbSerialHidDevice.AutoOpen      = newTerminalSettings.UsbSerialHidAutoOpen;
+			temp.IO.UsbSerialHidDevice.DeviceInfo    = newTerminalSettings.UsbSerialHidDeviceInfo;
+			temp.IO.UsbSerialHidDevice.MatchSerial   = newTerminalSettings.UsbSerialHidMatchSerial;
+			temp.IO.UsbSerialHidDevice.ReportFormat  = newTerminalSettings.UsbSerialHidReportFormat;
+			temp.IO.UsbSerialHidDevice.RxFilterUsage = newTerminalSettings.UsbSerialHidRxFilterUsage;
+			temp.IO.UsbSerialHidDevice.FlowControl   = newTerminalSettings.UsbSerialHidFlowControl;
+			temp.IO.UsbSerialHidDevice.AutoOpen      = newTerminalSettings.UsbSerialHidAutoOpen;
 
-			bool terminalIsStarted = newTerminalSettings.StartTerminal;
-			bool logIsOn           = false; // Doesn't matter, new terminal settings do not have this option.
-
-			if (ProcessCommandLineArgsIntoExistingTerminalSettings(terminalSettings, ref terminalIsStarted, ref logIsOn))
+			if (ProcessCommandLineArgsIntoExistingTerminalSettings(temp))
 			{
-				newTerminalSettings.TerminalType              = terminalSettings.TerminalType;
-				newTerminalSettings.IOType                    = terminalSettings.IO.IOType;
+				newTerminalSettings.TerminalType              = temp.TerminalType;
+				newTerminalSettings.IOType                    = temp.IO.IOType;
 
-				newTerminalSettings.SerialPortId              = terminalSettings.IO.SerialPort.PortId;
-				newTerminalSettings.SerialPortCommunication   = terminalSettings.IO.SerialPort.Communication;
-				newTerminalSettings.SerialPortAliveMonitor    = terminalSettings.IO.SerialPort.AliveMonitor;
-				newTerminalSettings.SerialPortAutoReopen      = terminalSettings.IO.SerialPort.AutoReopen;
+				newTerminalSettings.SerialPortId              = temp.IO.SerialPort.PortId;
+				newTerminalSettings.SerialPortCommunication   = temp.IO.SerialPort.Communication;
+				newTerminalSettings.SerialPortAliveMonitor    = temp.IO.SerialPort.AliveMonitor;
+				newTerminalSettings.SerialPortAutoReopen      = temp.IO.SerialPort.AutoReopen;
 
-				newTerminalSettings.SocketRemoteHost          = terminalSettings.IO.Socket.RemoteHost;
-				newTerminalSettings.SocketRemoteTcpPort       = terminalSettings.IO.Socket.RemoteTcpPort;
-				newTerminalSettings.SocketRemoteUdpPort       = terminalSettings.IO.Socket.RemoteUdpPort;
-				newTerminalSettings.SocketLocalInterface      = terminalSettings.IO.Socket.LocalInterface;
-				newTerminalSettings.SocketLocalFilter         = terminalSettings.IO.Socket.LocalFilter;
-				newTerminalSettings.SocketLocalTcpPort        = terminalSettings.IO.Socket.LocalTcpPort;
-				newTerminalSettings.SocketLocalUdpPort        = terminalSettings.IO.Socket.LocalUdpPort;
-				newTerminalSettings.TcpClientAutoReconnect    = terminalSettings.IO.Socket.TcpClientAutoReconnect;
-				newTerminalSettings.UdpServerSendMode         = terminalSettings.IO.Socket.UdpServerSendMode;
+				newTerminalSettings.SocketRemoteHost          = temp.IO.Socket.RemoteHost;
+				newTerminalSettings.SocketRemoteTcpPort       = temp.IO.Socket.RemoteTcpPort;
+				newTerminalSettings.SocketRemoteUdpPort       = temp.IO.Socket.RemoteUdpPort;
+				newTerminalSettings.SocketLocalInterface      = temp.IO.Socket.LocalInterface;
+				newTerminalSettings.SocketLocalFilter         = temp.IO.Socket.LocalFilter;
+				newTerminalSettings.SocketLocalTcpPort        = temp.IO.Socket.LocalTcpPort;
+				newTerminalSettings.SocketLocalUdpPort        = temp.IO.Socket.LocalUdpPort;
+				newTerminalSettings.TcpClientAutoReconnect    = temp.IO.Socket.TcpClientAutoReconnect;
+				newTerminalSettings.UdpServerSendMode         = temp.IO.Socket.UdpServerSendMode;
 
-				newTerminalSettings.UsbSerialHidDeviceInfo    = terminalSettings.IO.UsbSerialHidDevice.DeviceInfo;
-				newTerminalSettings.UsbSerialHidMatchSerial   = terminalSettings.IO.UsbSerialHidDevice.MatchSerial;
-				newTerminalSettings.UsbSerialHidReportFormat  = terminalSettings.IO.UsbSerialHidDevice.ReportFormat;
-				newTerminalSettings.UsbSerialHidRxFilterUsage = terminalSettings.IO.UsbSerialHidDevice.RxFilterUsage;
-				newTerminalSettings.UsbSerialHidFlowControl   = terminalSettings.IO.UsbSerialHidDevice.FlowControl;
-				newTerminalSettings.UsbSerialHidAutoOpen      = terminalSettings.IO.UsbSerialHidDevice.AutoOpen;
+				newTerminalSettings.UsbSerialHidDeviceInfo    = temp.IO.UsbSerialHidDevice.DeviceInfo;
+				newTerminalSettings.UsbSerialHidMatchSerial   = temp.IO.UsbSerialHidDevice.MatchSerial;
+				newTerminalSettings.UsbSerialHidReportFormat  = temp.IO.UsbSerialHidDevice.ReportFormat;
+				newTerminalSettings.UsbSerialHidRxFilterUsage = temp.IO.UsbSerialHidDevice.RxFilterUsage;
+				newTerminalSettings.UsbSerialHidFlowControl   = temp.IO.UsbSerialHidDevice.FlowControl;
+				newTerminalSettings.UsbSerialHidAutoOpen      = temp.IO.UsbSerialHidDevice.AutoOpen;
 
 				return (true);
 			}
@@ -1755,10 +1748,10 @@ namespace YAT.Model
 					if (!requestedTerminal.IsReadyToSend)
 					{
 						OnTimedStatusTextRequest("Operation triggered, pending until terminal is ready to transmit...");
-						return; // Pend!
-					}                                   // Using term 'Transmission' to indicate potential
-														// 'intelligence' to send + receive/verify the data.
-														// Preconditions fullfilled!
+						return; // Pend!                               Using term 'Transmission' to indicate potential
+					}           //                                     'intelligence' to send + receive/verify the data.
+
+					// Preconditions fullfilled!
 					StopAndDisposeOperationTimer();
 
 					int delay = this.startArgs.OperationDelay;
@@ -1835,8 +1828,8 @@ namespace YAT.Model
 
 		private void CreateAndStartExitTimerIfNeeded(bool operationSuccess)
 		{
-			if ((!this.startArgs.KeepOpen) &&
-				(!(this.startArgs.KeepOpenOnError && !operationSuccess)))
+			if ((! this.startArgs.KeepOpen) &&
+			    (!(this.startArgs.KeepOpenOnError && !operationSuccess)))
 			{
 				if (operationSuccess)
 					OnFixedStatusTextRequest("Operation successfully performed, triggering exit...");

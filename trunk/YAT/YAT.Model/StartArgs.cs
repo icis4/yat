@@ -46,6 +46,114 @@ using YAT.Settings.Workspace;
 namespace YAT.Model
 {
 	/// <summary></summary>
+	public struct Override : IEquatable<Override>
+	{
+		/// <summary></summary>
+		public bool StartTerminal { get; set; }
+
+		/// <summary></summary>
+		public bool KeepTerminalStopped { get; set; }
+
+		/// <summary></summary>
+		public bool LogOn { get; set; }
+
+		/// <summary></summary>
+		public bool KeepLogOff { get; set; }
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override string ToString()
+		{
+			return
+			(
+				StartTerminal       + ", " +
+				KeepTerminalStopped + ", " +
+				LogOn               + ", " +
+				KeepLogOff
+			);
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    StartTerminal      .GetHashCode();
+				hashCode = (hashCode * 397) ^ KeepTerminalStopped.GetHashCode();
+				hashCode = (hashCode * 397) ^ LogOn              .GetHashCode();
+				hashCode = (hashCode * 397) ^ KeepLogOff         .GetHashCode();
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is Override)
+				return (Equals((Override)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public bool Equals(Override other)
+		{
+			return
+			(
+				StartTerminal      .Equals(other.StartTerminal)       &&
+				KeepTerminalStopped.Equals(other.KeepTerminalStopped) &&
+				LogOn              .Equals(other.LogOn)               &&
+				KeepLogOff         .Equals(other.KeepLogOff)
+			);
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have value equality.
+		/// </summary>
+		public static bool operator ==(Override lhs, Override rhs)
+		{
+			return (lhs.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have value inequality.
+		/// </summary>
+		public static bool operator !=(Override lhs, Override rhs)
+		{
+			return (!(lhs == rhs));
+		}
+
+		#endregion
+	}
+
+	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Start arguments are implemented as public just as command line arguments are.")]
 	public class MainStartArgs
 	{
@@ -58,6 +166,10 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		public DocumentSettingsHandler<TerminalSettingsRoot> TerminalSettingsHandler;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		public Override Override;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
@@ -116,17 +228,7 @@ namespace YAT.Model
 		{
 			var args = new WorkspaceStartArgs();
 
-			args.KeepOpen        = this.KeepOpen;
-			args.KeepOpenOnError = this.KeepOpenOnError;
-			args.NonInteractive  = this.NonInteractive;
-
-			return (args);
-		}
-
-		/// <summary></summary>
-		public TerminalStartArgs ToTerminalStartArgs()
-		{
-			var args = new TerminalStartArgs();
+			args.Override = this.Override;
 
 			args.KeepOpen        = this.KeepOpen;
 			args.KeepOpenOnError = this.KeepOpenOnError;
@@ -152,6 +254,10 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		public Override Override;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		public bool KeepOpen;
 
 		/// <summary></summary>
@@ -167,8 +273,6 @@ namespace YAT.Model
 		{
 			var args = new TerminalStartArgs();
 
-			args.KeepOpen        = this.KeepOpen;
-			args.KeepOpenOnError = this.KeepOpenOnError;
 			args.NonInteractive  = this.NonInteractive;
 
 			return (args);
@@ -188,14 +292,6 @@ namespace YAT.Model
 	public class TerminalStartArgs
 	{
 		private const string VisibilitySuppressionJustification = "Start arguments are implemented as public just as command line arguments are.";
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		public bool KeepOpen;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		public bool KeepOpenOnError;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
