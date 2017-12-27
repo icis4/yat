@@ -110,8 +110,9 @@ Important changes:
 - Switching among automatic/manual vertical scrolling in monitor further improved, especially while
   continuous data is being received (related to bug #394 and feature request #323 implemented in
   previous release).
-- Additional command line options 'KeepTerminalClosed/KeepPortClosed' and 'KeepLogOff' (bug #392).
-- Additional command line option alias 'OpenPort' for 'OpenTerminal' (related to bug #392).
+- Additional option to inhibit warning if a port/interface/device is no longer available (bug #392).
+- Additional command line options 'KeepTerminalClosed/Stopped' and 'KeepLogOff' (bug #392).
+- Additional command line option alias 'StartTerminal' for 'OpenTerminal' (related to bug #392).
 
 Fixed bugs:
 - Monitors no longer scroll to top as soon as display buffer has been filled (bugs #394 and #398 as
