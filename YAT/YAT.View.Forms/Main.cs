@@ -239,11 +239,65 @@ namespace YAT.View.Forms
 		{
 			this.isStartingUp = false;
 
-			// Start YAT according to the requested settings. Temporarily notify MDI layouting
-			// to prevent that initial layouting overwrites the workspace settings.
-			this.isLayoutingMdi = true;
-			this.result = this.main.Start();
+			// Start:
+
+			this.isLayoutingMdi = true;      // Temporarily notify MDI layouting to prevent that
+			this.result = this.main.Start(); // initial layouting overwrites the workspace settings.
 			this.isLayoutingMdi = false;
+
+			// Without the following workaround, the "Send Text" content of all terminals is fully
+			// selected, i.e. same as after calling "Send.SelectAndPrepareUserInput()", even though
+			// "Send.StandbyInUserInput()" has been called before. Sequence:
+			//  > Main_Shown (this event handler)
+			//     > this.main.Start() (above)
+			//        > 1st terminal is created
+			//           > 'Send' is initialized
+			//              > 'set_Command' => Cursor @ 0 / Selection @ 0 / Selected index @ -1
+			//              > 'set_Recent'  => Cursor @ 0 / Selection @ 0 / Selected index @ 0
+			//        > 1st Terminal_Activated (event handler in 'Terminal')
+			//           > "Send.SelectAndPrepareUserInput()"
+			//              > Cursor @ 0 / Selection @ <ALL> / Selected index @ 0
+			//        > 2nd terminal is created
+			//           > 'Send' is initialized
+			//              > 'set_Command' => Cursor @ 0 / Selection @ 0 / Selected index @ -1
+			//              > 'set_Recent'  => Cursor @ 0 / Selection @ 0 / Selected index @ 0
+			//        > 1st Terminal_Deactivate (event handler in 'Terminal')
+			//           > "Send.StandbyInUserInput()"
+			//              > Cursor @ <END> / Selection @ 0 / Selected index @ 0
+			//        > 2nd Terminal_Activated (event handler in 'Terminal')
+			//           > "Send.SelectAndPrepareUserInput()"
+			//              > Cursor @ 0 / Selection @ <ALL> / Selected index @ 0
+			//
+			//        All fine so far, but then something (whatever ?!?) happens, and when Start()
+			//        returns above => Cursor @ 0 / Selection @ <ALL> / Selected index @ 0 ?!?
+			//
+			//       (Issue could not be found in Main_MdiChildActivate)
+			//       (Issue could not be found in ComboBoxEx)
+			//
+			//        Suspecting the issue is caused by layouting, as there is a similar issue
+			//        if SetExplicitDefaultRadixControls() was called in the SendText_Paint event.
+			//        That method typically collapses the explicit default radix panel, and that
+			//        apparently resets text selection in the combo box!
+			//
+			//        Working around this startup issue here:
+
+			Terminal active = null;
+			foreach (var f in MdiChildren)
+			{
+				var t = (f as Terminal);
+				if (t != null)
+				{
+					if (t != ActiveMdiChild)
+						t.StandbyInUserInputWorkaround();
+					else
+						active = t;
+				}
+			}
+
+			if (active != null)                               // Order of MDI children is undefined,
+				active.SelectAndPrepareUserInputWorkaround(); // ensure that active child is focused!
+
+			// Handle startup settings that relate to main:
 
 			if (this.result != Model.MainResult.Success)
 			{
@@ -353,9 +407,9 @@ namespace YAT.View.Forms
 					if (this.main.StartArgs.ShowNewTerminalDialog)
 					{
 						// Let those settings that are given by the command line args be modified/overridden:
-						Model.Settings.NewTerminalSettings processed = new Model.Settings.NewTerminalSettings(ApplicationSettings.LocalUserSettings.NewTerminal);
-						if (this.main.ProcessCommandLineArgsIntoExistingNewTerminalSettings(processed))
-							ShowNewTerminalDialog(processed);
+						var processedSettings = new Model.Settings.NewTerminalSettings(ApplicationSettings.LocalUserSettings.NewTerminal);
+						if (this.main.ProcessCommandLineArgsIntoExistingNewTerminalSettings(processedSettings))
+							ShowNewTerminalDialog(processedSettings);
 						else
 							ShowNewTerminalDialog();
 					}
@@ -2874,7 +2928,7 @@ namespace YAT.View.Forms
 
 		private void terminalMdiChild_Changed(object sender, EventArgs e)
 		{
-		////SetTimedStatus(Status.ChildChanged) is no longer used to limit information.
+		////SetTimedStatus(Status.ChildChanged) is no longer used, in order to reduce the amount of status information.
 
 			SetChildControls();
 		}
@@ -3020,8 +3074,8 @@ namespace YAT.View.Forms
 		private enum Status
 		{
 			ChildActivated,
-		////ChildActive is no longer used to limit information.
-		////ChildChanged is no longer used to limit information. Used to display "childText + " changed"" but that results in such messages each time a command is sent (due to the 'IsReadyToSend' changes). In order to get this again, 'IsReadyToSend' changes would have to be separated from the 'IOChanged' event.
+		////ChildActive is no longer used, in order to reduce the amount of status information.
+		////ChildChanged is no longer used, in order to reduce the amount of status information. Used to display "childText + " changed"" but that resulted in messages each time a command was sent (due to the 'IsReadyToSend' changes). In order to get this again, 'IsReadyToSend' changes would have to be separated from the 'IOChanged' event.
 			ChildSaved,
 			ChildClosed,
 			Default,
