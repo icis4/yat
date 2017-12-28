@@ -61,7 +61,7 @@ namespace MKY.Windows.Forms
 					}
 				}
 				else
-				{	// Item doesn't exist, use default = first item in the combo box, or none if list is empty.
+				{	// Item doesn't exist, use default = first item in the combo box.
 					control.SelectedIndex = 0;
 				}
 			}
@@ -73,12 +73,12 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <remarks>
-		/// <see cref="ListControl.SelectedIndex"/> is set to <see cref="ControlEx.InvalidIndex"/>.
+		/// <see cref="ComboBox.SelectedIndex"/> is set to <see cref="ControlEx.InvalidIndex"/>.
 		/// </remarks>
 		/// <remarks>
 		/// Provided for symmetricity with <see cref="Select(ComboBox, object, string)"/> above.
 		/// </remarks>
-		public static void Deselect(ListControl control)
+		public static void Deselect(ComboBox control)
 		{
 			control.SelectedIndex = ControlEx.InvalidIndex;
 			control.Text = "";
