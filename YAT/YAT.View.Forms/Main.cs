@@ -906,6 +906,7 @@ namespace YAT.View.Forms
 		// Controls Event Handlers > Toolbar
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'aa' = AutoAction, 'ar' = AutoResponse.")]
 		private void toolStripButton_MainTool_SetControls()
 		{
 			this.isSettingControls.Enter();
@@ -1471,6 +1472,7 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// Suppress same keys for symmetricity with 'KeyDown' above.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
 		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyUp(object sender, KeyEventArgs e)
 		{
 			if ((e.KeyData & Keys.KeyCode) == Keys.Enter)

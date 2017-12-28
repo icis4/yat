@@ -77,11 +77,6 @@ namespace MKY.Net
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public class IPHostEx : EnumEx, IEquatable<IPHostEx>
 	{
-		/// <remarks>
-		/// The list of fixed items of this extended enum.
-		/// </remarks>
-		protected static List<IPHostEx> staticItems;
-
 		#region String Definitions
 
 		/// <remarks>Explicitly using the more common spelling "[localhost]" instead of "[Localhost]".</remarks>
@@ -93,6 +88,11 @@ namespace MKY.Net
 		private const string IPv6Localhost_string = "IPv6 localhost";
 
 		#endregion
+
+		/// <remarks>
+		/// The list of fixed items of this extended enum.
+		/// </remarks>
+		private static List<IPHostEx> staticItems;
 
 		private string    explicitName; // = null;
 		private IPAddress explicitAddress  = IPAddress.None;

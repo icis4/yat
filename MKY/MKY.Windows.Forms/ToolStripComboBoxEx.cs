@@ -134,7 +134,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary>
-		/// Implements the same selection behaviour on getting focus as <see cref="TextBox"/>.
+		/// Implements the same selection behavior on getting focus as <see cref="TextBox"/>.
 		/// </summary>
 		/// <remarks>
 		/// Attention: Thanks to the Microsoft guys, the implementation is trickier than necessary!
@@ -177,6 +177,7 @@ namespace MKY.Windows.Forms
 		///        => 'OnGotFocus' is OK.
 		/// </remarks>
 		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 		protected override void OnGotFocus(EventArgs e)
 		{
 			DebugCursorAndSelection("OnGotFocus...");
@@ -201,7 +202,7 @@ namespace MKY.Windows.Forms
 		}
 
 	/////// <summary>
-	/////// Implements the same selection behaviour on getting focus as <see cref="TextBox"/>.
+	/////// Implements the same selection behavior on getting focus as <see cref="TextBox"/>.
 	/////// </summary>
 	/////// <remarks>
 	/////// Attention: See remarks in <see cref="OnGotFocus(EventArgs)"/>!
@@ -215,10 +216,12 @@ namespace MKY.Windows.Forms
 	////}
 
 		/// <summary>
-		/// Implements the same selection behaviour on getting focus as <see cref="TextBox"/>.
+		/// Implements the same selection behavior on getting focus as <see cref="TextBox"/>.
 		/// </summary>
 		/// <remarks>
 		/// Attention: See remarks in <see cref="OnGotFocus(EventArgs)"/>!
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
 		protected override void OnLeave(EventArgs e)
@@ -245,10 +248,12 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary>
-		/// Implements the same selection behaviour on getting focus as <see cref="TextBox"/>.
+		/// Implements the same selection behavior on getting focus as <see cref="TextBox"/>.
 		/// </summary>
 		/// <remarks>
 		/// Attention: See remarks in <see cref="OnGotFocus(EventArgs)"/>!
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public virtual void OnFormDeactivateWorkaround()
 		{
@@ -272,7 +277,7 @@ namespace MKY.Windows.Forms
 		}
 
 	/////// <summary>
-	/////// Implements the same selection behaviour on getting focus as <see cref="TextBox"/>.
+	/////// Implements the same selection behavior on getting focus as <see cref="TextBox"/>.
 	/////// </summary>
 	/////// <remarks>
 	/////// Attention: See remarks in <see cref="OnGotFocus(EventArgs)"/>!

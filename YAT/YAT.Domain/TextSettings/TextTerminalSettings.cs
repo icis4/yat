@@ -23,6 +23,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 using MKY;
@@ -35,6 +36,7 @@ using MKY.Text.RegularExpressions;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
 	[Serializable]
 	public class TextTerminalSettings : MKY.Settings.SettingsItem, IEquatable<TextTerminalSettings>
 	{
@@ -212,7 +214,7 @@ namespace YAT.Domain.Settings
 					SetMyChanged();
 				}
 
-				// Do not redirect on 'set'. this would not be an understandable behaviour.
+				// Do not redirect on 'set'. this would not be an understandable behavior.
 				// It could even confuse the user, e.g. when temporarily separating the settings,
 				// and then load them again from XML => temporary settings get lost.
 			}

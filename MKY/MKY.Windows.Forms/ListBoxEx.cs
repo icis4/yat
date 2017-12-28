@@ -63,23 +63,16 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Windows.Forms;
-
-#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
-using System;
-#endif
-#if (DEBUG)
-using System.ComponentModel;
-#endif
 #if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 using System.Runtime.InteropServices;
 using System.Text;
 #endif
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 #if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 using MKY.Win32;
@@ -535,7 +528,7 @@ namespace MKY.Windows.Forms
 		/// The <see cref="ListBox.FindString(string, int)"/> method seems promising at first,
 		/// but there are severe limitations:
 		/// <list type="bullet">
-		/// <item><description>Only searches simple case-sensitve matches.</description></item>
+		/// <item><description>Only searches simple case-sensitive matches.</description></item>
 		/// <item><description>Only searches down.</description></item>
 		/// <item><description>...when reaches the bottom...it continues searching from the top...</description></item>
 		/// <item><description>...first item...that starts with the specified string...</description></item>
@@ -581,7 +574,7 @@ namespace MKY.Windows.Forms
 		/// The <see cref="ListBox.FindString(string, int)"/> method seems promising at first,
 		/// but there are severe limitations:
 		/// <list type="bullet">
-		/// <item><description>Only searches simple case-sensitve matches.</description></item>
+		/// <item><description>Only searches simple case-sensitive matches.</description></item>
 		/// <item><description>Only searches down.</description></item>
 		/// <item><description>...when reaches the bottom...it continues searching from the top...</description></item>
 		/// <item><description>...first item...that starts with the specified string...</description></item>
@@ -1160,7 +1153,9 @@ namespace MKY.Windows.Forms
 		[Conditional("DEBUG_CLIENT_AREA")]
 		protected virtual void DebugClientArea(string leadMessage)
 		{
+		#if (DEBUG)
 			if (DebugEnabled)
+		#endif
 			{
 				Debug.WriteLine
 				(
@@ -1189,7 +1184,9 @@ namespace MKY.Windows.Forms
 		[Conditional("DEBUG_COUNT_AND_INDICES")]
 		protected virtual void DebugCountAndIndices(string leadMessage, int bottomIndex)
 		{
+		#if (DEBUG)
 			if (DebugEnabled)
+		#endif
 			{
 				Debug.WriteLine
 				(
@@ -1212,7 +1209,9 @@ namespace MKY.Windows.Forms
 		[Conditional("DEBUG_VERTICAL_SEMI_AUTO_SCROLL")]
 		protected virtual void DebugVerticalSemiAutoScroll(string message)
 		{
+		#if (DEBUG)
 			if (DebugEnabled)
+		#endif
 			{
 				Debug.WriteLine(message);
 			}

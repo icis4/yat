@@ -38,6 +38,7 @@ namespace YAT.Model.Settings
 	/// Could/should be migrated to 'YAT.Application.Settings' or 'YAT.View.Settings'.
 	/// To be done when refactoring the projects on integration with Albatros.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Albatros' is a name.")]
 	public class ViewSettings : MKY.Settings.SettingsItem, IEquatable<ViewSettings>
 	{
 		/// <summary></summary>

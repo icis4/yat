@@ -512,7 +512,7 @@ namespace YAT.View.Controls
 		private bool isStartingUp = true;
 
 		/// <summary>
-		/// Startup flag wo work around the issue described below.
+		/// Startup flag to work around the issue described below.
 		/// </summary>
 		private bool isStartingUpInStandby; // = false;
 

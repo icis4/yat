@@ -12,6 +12,7 @@
       <Word>rhs</Word>
       <Word>Equatable</Word>
       <Word>Mergeable</Word>
+      <Word>Sendable</Word>
       <Word>Transmissive</Word>
       <Word>Chrono</Word>
       <Word>Eol</Word>
