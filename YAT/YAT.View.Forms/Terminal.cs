@@ -3134,7 +3134,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public virtual void FindOnEdit(string pattern)
+		public virtual FindResult TryFindOnEdit(string pattern)
 		{
 			ApplicationSettings.RoamingUserSettings.Find.ActivePattern = pattern;
 			ApplicationSettings.SaveRoamingUserSettings();
@@ -3143,11 +3143,19 @@ namespace YAT.View.Forms
 			if (monitor.TryFindOnEdit(pattern, ApplicationSettings.RoamingUserSettings.Find.Options))
 			{
 				this.lastFindPattern = pattern;
+
+				return (FindResult.Found);
+			}
+			else
+			{
+				bool isFirst = (pattern != this.lastFindPattern);
+
+				return (isFirst ? FindResult.NotFoundAtAll : FindResult.NotFoundAnymore);
 			}
 		}
 
 		/// <summary></summary>
-		public virtual void FindNext(string pattern, bool messageBoxIsPermissible)
+		public virtual FindResult TryFindNext(string pattern, bool messageBoxIsPermissible)
 		{
 			ApplicationSettings.RoamingUserSettings.Find.ActivePattern = pattern;
 			ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.Add(new RecentItem<string>(pattern));
@@ -3158,16 +3166,22 @@ namespace YAT.View.Forms
 			if (monitor.TryFindNext(pattern, ApplicationSettings.RoamingUserSettings.Find.Options))
 			{
 				this.lastFindPattern = pattern;
+
+				return (FindResult.Found);
 			}
 			else
 			{
+				bool isFirst = (pattern != this.lastFindPattern);
+
 				if (messageBoxIsPermissible)
-					ShowNotFoundMessage(pattern, (pattern != this.lastFindPattern));
+					ShowNotFoundMessage(pattern, isFirst);
+
+				return (isFirst ? FindResult.NotFoundAtAll : FindResult.NotFoundAnymore);
 			}
 		}
 
 		/// <summary></summary>
-		public virtual void FindPrevious(string pattern, bool messageBoxIsPermissible)
+		public virtual FindResult TryFindPrevious(string pattern, bool messageBoxIsPermissible)
 		{
 			ApplicationSettings.RoamingUserSettings.Find.ActivePattern = pattern;
 			ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.Add(new RecentItem<string>(pattern));
@@ -3178,11 +3192,17 @@ namespace YAT.View.Forms
 			if (monitor.TryFindPrevious(pattern, ApplicationSettings.RoamingUserSettings.Find.Options))
 			{
 				this.lastFindPattern = pattern;
+
+				return (FindResult.Found);
 			}
 			else
 			{
+				bool isFirst = (pattern != this.lastFindPattern);
+
 				if (messageBoxIsPermissible)
-					ShowNotFoundMessage(pattern, (pattern != this.lastFindPattern));
+					ShowNotFoundMessage(pattern, isFirst);
+
+				return (isFirst ? FindResult.NotFoundAtAll : FindResult.NotFoundAnymore);
 			}
 		}
 

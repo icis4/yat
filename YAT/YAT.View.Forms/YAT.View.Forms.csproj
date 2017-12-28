@@ -117,6 +117,7 @@
     <Compile Include="AdvancedTerminalSettings.Designer.cs">
       <DependentUpon>AdvancedTerminalSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Enums.cs" />
     <Compile Include="FormatSettings.cs">
       <SubType>Form</SubType>
     </Compile>
