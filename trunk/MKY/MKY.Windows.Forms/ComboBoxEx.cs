@@ -42,6 +42,7 @@
 //==================================================================================================
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Permissions;
@@ -64,11 +65,15 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Gets or sets the previous starting index of text selected in the combo box.
 		/// </summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int PreviousSelectionStart { get; protected set; } = ControlEx.InvalidIndex;
 
 		/// <summary>
 		/// Gets or sets the previous number of characters selected in the editable portion of the combo box.
 		/// </summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int PreviousSelectionLength { get; protected set; } // = 0;
 
 		/// <remarks>
