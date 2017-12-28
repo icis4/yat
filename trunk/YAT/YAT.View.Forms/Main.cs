@@ -76,6 +76,7 @@ using YAT.Settings.Terminal;
 // Module-level FxCop suppressions
 //==================================================================================================
 
+[module: SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Scope = "member", Target = "YAT.View.Forms.Main.#InitializeComponent()", Justification = "Well, any better idea on how to implement a millisecond update ticker? And, the timer is only used if the user choses so.")]
 [module: SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "YAT.View.Forms.Main.#toolTip", Justification = "This is a bug in FxCop.")]
 
 #endregion
@@ -1094,7 +1095,7 @@ namespace YAT.View.Forms
 						toolStripComboBox_MainTool_Terminal_AutoAction_Action.Visible = true;
 					}
 
-					toolStripLabel_MainTool_Terminal_AutoAction_Count.Text = string.Format("({0})", aaCount);
+					toolStripLabel_MainTool_Terminal_AutoAction_Count.Text = string.Format(CultureInfo.CurrentUICulture, "({0})", aaCount);
 					toolStripLabel_MainTool_Terminal_AutoAction_Count.Enabled = aaIsActive;
 					toolStripLabel_MainTool_Terminal_AutoAction_Count.Visible = true;
 
@@ -1176,7 +1177,7 @@ namespace YAT.View.Forms
 						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Visible = true;
 					}
 
-					toolStripLabel_MainTool_Terminal_AutoResponse_Count.Text = string.Format("({0})", arCount);
+					toolStripLabel_MainTool_Terminal_AutoResponse_Count.Text = string.Format(CultureInfo.CurrentUICulture, "({0})", arCount);
 					toolStripLabel_MainTool_Terminal_AutoResponse_Count.Enabled = arIsActive;
 					toolStripLabel_MainTool_Terminal_AutoResponse_Count.Visible = true;
 
@@ -2004,7 +2005,7 @@ namespace YAT.View.Forms
 				// Hide all:
 				for (int i = 0; i < Model.Settings.RecentFileSettings.MaxFilePaths; i++)
 				{
-					string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1);
+					string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1); // 'InvariantCulture' for prefix!
 					this.menuItems_recent[i].Text = "&" + prefix;
 					this.menuItems_recent[i].Visible = false;
 				}
@@ -2012,7 +2013,7 @@ namespace YAT.View.Forms
 				// Show valid:
 				for (int i = 0; i < ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count; i++)
 				{
-					string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1);
+					string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1); // 'InvariantCulture' for prefix!
 					string file = PathEx.Limit(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i].Item, 60);
 					if (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i] != null)
 					{

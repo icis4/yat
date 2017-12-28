@@ -763,7 +763,7 @@ namespace YAT.View.Controls
 				regexOptions |= RegexOptions.IgnoreCase;
 
 			if (options.WholeWord) // Add the Regex word delimiter:
-				pattern = string.Format("{0}{1}{0}", @"\b", pattern);
+				pattern = string.Format(CultureInfo.CurrentUICulture, "{0}{1}{0}", @"\b", pattern);
 
 			this.findRegex = new Regex(pattern, regexOptions);
 		}

@@ -125,7 +125,7 @@ namespace MKY.Net
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public IPNetworkInterfaceEx(IPAddress address, string description = null)
 		{
 			if (string.IsNullOrEmpty(description)) // Defined by address only.

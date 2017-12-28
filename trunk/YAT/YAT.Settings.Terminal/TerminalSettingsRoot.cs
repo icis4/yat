@@ -423,7 +423,7 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// The currently valid response items usable for automatic response.
 		/// </summary>
-		public Model.Types.AutoTriggerEx[] GetValidAutoTriggerItems()
+		public virtual Model.Types.AutoTriggerEx[] GetValidAutoTriggerItems()
 		{
 			Model.Types.AutoTriggerEx[] triggers = Model.Types.AutoTriggerEx.GetAllItems();
 			List<Model.Types.AutoTriggerEx> a = new List<Model.Types.AutoTriggerEx>(triggers.Length); // Preset the required capacity to improve memory management.
@@ -482,7 +482,7 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// The currently valid response items usable for automatic response.
 		/// </summary>
-		public Model.Types.AutoResponseEx[] GetValidAutoResponseItems()
+		public virtual Model.Types.AutoResponseEx[] GetValidAutoResponseItems()
 		{
 			var responses = Model.Types.AutoResponseEx.GetAllItems();
 			var l = new List<Model.Types.AutoResponseEx>(responses.Length); // Preset the required capacity to improve memory management.
@@ -559,7 +559,8 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// The currently valid response items usable for automatic action.
 		/// </summary>
-		public Model.Types.AutoActionEx[] GetValidAutoActionItems()
+		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Symmetricity with GetValidAutoResponseItems() above.")]
+		public virtual Model.Types.AutoActionEx[] GetValidAutoActionItems()
 		{
 			return (Model.Types.AutoActionEx.GetItems()); // No restrictions (so far).
 		}

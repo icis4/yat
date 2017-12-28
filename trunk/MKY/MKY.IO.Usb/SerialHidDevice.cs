@@ -169,7 +169,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Returns an array of all USB HID devices currently available on the system.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static new DeviceInfo[] GetDevices(bool retrieveStringsFromDevice = true)
 		{
 			// \remind (MKY 2013-06-08)

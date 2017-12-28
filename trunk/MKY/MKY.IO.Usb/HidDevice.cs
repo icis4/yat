@@ -89,7 +89,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Returns an array of all USB HID devices currently available on the system.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static new DeviceInfo[] GetDevices(bool retrieveStringsFromDevice = true)
 		{
 			return (GetDevicesFromGuid(GetGuidFromDeviceClass(DeviceClass.Hid), retrieveStringsFromDevice));
@@ -99,7 +99,7 @@ namespace MKY.IO.Usb
 		/// Returns an array of the USB HID devices of the given usage page currently available
 		/// on the system.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[CLSCompliant(false)]
 		public static DeviceInfo[] GetDevices(HidUsagePage usagePage, bool retrieveStringsFromDevice = true)
 		{
@@ -122,7 +122,7 @@ namespace MKY.IO.Usb
 		/// Returns an array of the USB HID devices of the given usage page and usage currently
 		/// available on the system.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[CLSCompliant(false)]
 		public static DeviceInfo[] GetDevices(HidUsagePage usagePage, HidUsageId usageId, bool retrieveStringsFromDevice = true)
 		{

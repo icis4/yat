@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
@@ -134,7 +135,7 @@ namespace MKY.Net
 		/// <summary>
 		/// Creates an explicit <see cref="IPHostEx"/> object, using the provided host name and optional address.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public IPHostEx(string name, IPAddress address = null)
 		{
 			SetUnderlyingEnum(IPHost.Explicit);
@@ -415,7 +416,8 @@ namespace MKY.Net
 		/// <remarks>
 		/// The list of fixed items of this extended enum.
 		/// </remarks>
-		public static List<IPHostEx> GetItems()
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Symmetricity with Enum.GetNames() and Enum.GetValues().")]
+		public static ReadOnlyCollection<IPHostEx> GetItems()
 		{
 			if (staticItems == null)
 			{
@@ -428,7 +430,7 @@ namespace MKY.Net
 				// The shall only contain the fixed items, 'Explicit' is not added therefore.
 			}
 
-			return (staticItems);
+			return (staticItems.AsReadOnly());
 		}
 
 		/// <summary>

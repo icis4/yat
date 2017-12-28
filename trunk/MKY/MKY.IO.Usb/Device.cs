@@ -94,7 +94,7 @@ namespace MKY.IO.Usb
 		/// \todo: This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
 		/// </remarks>
 		/// <param name="retrieveStringsFromDevice">Enable or disable string retrieval from device.</param>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static DeviceInfo[] GetDevices(bool retrieveStringsFromDevice = true)
 		{
 			return (GetDevicesFromGuid(GetGuidFromDeviceClass(DeviceClass.Any), retrieveStringsFromDevice));
@@ -108,7 +108,7 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		/// <param name="deviceClass">USB device class.</param>
 		/// <param name="retrieveStringsFromDevice">Enable or disable string retrieval from device.</param>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static DeviceInfo[] GetDevicesFromClass(DeviceClass deviceClass, bool retrieveStringsFromDevice = true)
 		{
 			return (GetDevicesFromGuid(GetGuidFromDeviceClass(deviceClass), retrieveStringsFromDevice));
@@ -122,7 +122,7 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		/// <param name="classGuid">GUID of a class of devices.</param>
 		/// <param name="retrieveStringsFromDevice">Enable or disable string retrieval from device.</param>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
 		public static DeviceInfo[] GetDevicesFromGuid(Guid classGuid, bool retrieveStringsFromDevice = true)
 		{
@@ -234,7 +234,7 @@ namespace MKY.IO.Usb
 		/// Returns the information of the device with the given path,
 		/// or <c>null</c> if no device could be found on the given path.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static DeviceInfo GetDeviceInfoFromPath(string path, bool retrieveStringsFromDevice = true)
 		{
 			if (retrieveStringsFromDevice)

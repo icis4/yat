@@ -71,7 +71,7 @@ namespace MKY.Windows.Forms
 		/// <returns>
 		/// One of the System.Windows.Forms.DialogResult values.
 		/// </returns>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[ModalBehavior(ModalBehavior.Always)]
 		public static DialogResult Show(IWin32Window owner, string caption, string status1, string status2 = null)
 		{
@@ -110,7 +110,7 @@ namespace MKY.Windows.Forms
 		/// <returns>
 		/// One of the System.Windows.Forms.DialogResult values.
 		/// </returns>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Setting is required to be received, modified and returned.")]
 		[ModalBehavior(ModalBehavior.Always)]
 		public static DialogResult Show(IWin32Window owner, string caption, string status1, string status2, string settingText, ref bool setting, bool showCancel = true, int timeout = System.Threading.Timeout.Infinite)
@@ -121,7 +121,7 @@ namespace MKY.Windows.Forms
 
 		/// <summary></summary>
 		[ModalBehavior(ModalBehavior.Never)]
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static StatusBox Create(string caption, string status1, string status2 = null)
 		{
 			return (new StatusBox(caption, status1, status2));
@@ -152,14 +152,14 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		protected StatusBox(string caption, string status1, string status2 = null)
 			: this(caption, status1, status2, null, false, true)
 		{
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		protected StatusBox(string caption, string status1, string status2, string settingText, bool setting, bool showCancel = true, int timeout = System.Threading.Timeout.Infinite)
 		{
 			InitializeComponent();
@@ -259,7 +259,7 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[ModalBehavior(ModalBehavior.Always)]
 		public DialogResult ShowDialog(IWin32Window owner, string caption, string status1, string status2 = null)
 		{
@@ -268,7 +268,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Setting is required to be received, modified and returned.")]
 		[ModalBehavior(ModalBehavior.Always)]
 		public DialogResult ShowDialog(IWin32Window owner, string settingText, ref bool setting, bool showCancel = true, int timeout = System.Threading.Timeout.Infinite)
@@ -277,7 +277,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Setting is required to be received, modified and returned.")]
 		[ModalBehavior(ModalBehavior.Always)]
 		public DialogResult ShowDialog(IWin32Window owner, string caption, string status1, string status2, string settingText, ref bool setting, bool showCancel = true, int timeout = System.Threading.Timeout.Infinite)
@@ -387,7 +387,7 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Closes the status box.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public void CloseSynchronized(DialogResult dr = DialogResult.None)
 		{

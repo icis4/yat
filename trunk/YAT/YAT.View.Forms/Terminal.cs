@@ -3642,6 +3642,7 @@ namespace YAT.View.Forms
 		/// <summary>
 		/// Suspends the [Control+F/N/P] shortcuts.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "FNP", Justification = "FNP refers to these three specific keys.")]
 		public virtual void SuspendCtrlFNPShortcuts()
 		{
 			toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore = toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled;
@@ -3658,6 +3659,7 @@ namespace YAT.View.Forms
 		/// <summary>
 		/// Resumes the [Control+F/N/P] shortcuts.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "FNP", Justification = "FNP refers to these three specific keys.")]
 		public virtual void ResumeCtrlFNPShortcuts()
 		{
 			toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled = toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore;

@@ -100,7 +100,7 @@ namespace MKY
 		/// <summary>
 		/// Returns <paramref name="value"/> formatted as "[[[[[[d days ]h]h:]m]m:]s]s[.f[f[f]]]".
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		private static string FormatInvariant(TimeSpan value, bool enforceMinutes = true, bool addTenths = false, bool addHundredths = false, bool addThousandths = false)
 		{
 			var sb = new StringBuilder();

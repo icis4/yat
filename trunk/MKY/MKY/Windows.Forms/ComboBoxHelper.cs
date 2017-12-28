@@ -44,7 +44,7 @@ namespace MKY.Windows.Forms
 		/// converted into a string. This can e.g. be an implicit string conversion operator,
 		/// or the item's ToString() method, or something else.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void Select(ComboBox control, object item, string fallbackText = null)
 		{
 			int selectionStart  = 0;
@@ -96,6 +96,7 @@ namespace MKY.Windows.Forms
 		/// <remarks>
 		/// Provided for symmetricity with <see cref="Select(ComboBox, object, string)"/> above.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "Symmetricity with Select() above.")]
 		public static void Deselect(ComboBox control)
 		{
 			control.SelectedIndex = ControlEx.InvalidIndex;

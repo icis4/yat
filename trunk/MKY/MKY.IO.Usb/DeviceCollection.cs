@@ -85,7 +85,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Fills list with the available USB devices.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void FillWithAvailableDevices(bool retrieveStringsFromDevice = true)
 		{
 			lock (this)
