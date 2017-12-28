@@ -1880,7 +1880,9 @@ namespace YAT.View.Controls
 		[Conditional("DEBUG_UPDATE")]
 		protected virtual void DebugUpdate(string message)
 		{
+		#if (DEBUG)
 			if (DebugEnabled)
+		#endif
 			{
 				Debug.WriteLine(message);
 			}
@@ -1890,7 +1892,9 @@ namespace YAT.View.Controls
 		[Conditional("DEBUG_VERTICAL_AUTO_SCROLL")]
 		protected virtual void DebugVerticalAutoScroll(string leadMessage)
 		{
+		#if (DEBUG)
 			if (DebugEnabled)
+		#endif
 			{
 				Debug.WriteLine
 				(
