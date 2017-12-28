@@ -22,12 +22,28 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of cursor position and text selection:
+////#define DEBUG_CURSOR_AND_SELECTION
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
 //==================================================================================================
 
 using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Permissions;
 using System.Windows.Forms;
@@ -49,11 +65,15 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Gets or sets the previous starting index of text selected in the combo box.
 		/// </summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int PreviousSelectionStart { get; protected set; } = ControlEx.InvalidIndex;
 
 		/// <summary>
 		/// Gets or sets the previous number of characters selected in the editable portion of the combo box.
 		/// </summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int PreviousSelectionLength { get; protected set; } // = 0;
 
 		/// <remarks>
@@ -159,6 +179,8 @@ namespace MKY.Windows.Forms
 		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
 		protected override void OnGotFocus(EventArgs e)
 		{
+			DebugCursorAndSelection("OnGotFocus...");
+
 			// Attention:
 			// Same code exists in ComboBoxEx.OnGotFocus().
 			// Changes here will have to be applied there too.
@@ -169,8 +191,28 @@ namespace MKY.Windows.Forms
 			{
 				SelectionStart  = PreviousSelectionStart;
 				SelectionLength = PreviousSelectionLength;
+
+				DebugCursorAndSelection(string.Format("...cursor position {0} and text selection length {1} restored.", SelectionStart, SelectionLength));
+			}
+			else
+			{
+				DebugCursorAndSelection("...cursor position and text selection left unchanged.");
 			}
 		}
+
+	/////// <summary>
+	/////// Implements the same selection behaviour on getting focus as <see cref="TextBox"/>.
+	/////// </summary>
+	/////// <remarks>
+	/////// Attention: See remarks in <see cref="OnGotFocus(EventArgs)"/>!
+	/////// </remarks>
+	/////// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+	////protected override void OnEnter(EventArgs e)
+	////{
+	////	DebugCursorAndSelection("OnEnter");
+	////
+	////	base.OnEnter(e);
+	////}
 
 		/// <summary>
 		/// Implements the same selection behaviour on getting focus as <see cref="TextBox"/>.
@@ -181,6 +223,8 @@ namespace MKY.Windows.Forms
 		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
 		protected override void OnLeave(EventArgs e)
 		{
+			DebugCursorAndSelection("OnLeave...");
+
 			// Attention:
 			// Same code exists in ComboBoxEx.OnLeave().
 			// Changes here will have to be applied there too.
@@ -190,6 +234,11 @@ namespace MKY.Windows.Forms
 				PreviousSelectionStart  = SelectionStart;
 				PreviousSelectionLength = SelectionLength;
 
+				DebugCursorAndSelection(string.Format("...cursor position {0} and text selection length {1} implicitly remembered.", PreviousSelectionStart, PreviousSelectionLength));
+			}
+			else
+			{
+				DebugCursorAndSelection("...cursor position and text selection *NOT* valid as control doesn't have focus !!!");
 			}
 
 			base.OnLeave(e);
@@ -203,6 +252,8 @@ namespace MKY.Windows.Forms
 		/// </remarks>
 		public virtual void OnFormDeactivateWorkaround()
 		{
+			DebugCursorAndSelection("OnFormDeactivateWorkaround...");
+
 			// Attention:
 			// Same code exists in ComboBoxEx.OnFormDeactivateWorkaround().
 			// Changes here will have to be applied there too.
@@ -211,8 +262,42 @@ namespace MKY.Windows.Forms
 			{
 				PreviousSelectionStart  = SelectionStart;
 				PreviousSelectionLength = SelectionLength;
+
+				DebugCursorAndSelection(string.Format("...cursor position {0} and text selection length {1} explicitly remembered.", PreviousSelectionStart, PreviousSelectionLength));
+			}
+			else
+			{
+				DebugCursorAndSelection("...cursor position and text selection *NOT* valid as control doesn't have focus !!!");
 			}
 		}
+
+	/////// <summary>
+	/////// Implements the same selection behaviour on getting focus as <see cref="TextBox"/>.
+	/////// </summary>
+	/////// <remarks>
+	/////// Attention: See remarks in <see cref="OnGotFocus(EventArgs)"/>!
+	/////// </remarks>
+	/////// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+	////protected override void OnLostFocus(EventArgs e)
+	////{
+	////	DebugCursorAndSelection("OnLostFocus...");
+	////	DebugCursorAndSelection("...cursor position and text selection *NOT* valid as control doesn't have focus !!!");
+	////
+	////	base.OnLostFocus(e);
+	////}
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		[Conditional("DEBUG_CURSOR_AND_SELECTION")]
+		private static void DebugCursorAndSelection(string message)
+		{
+			Debug.WriteLine(message);
+		}
+
+		#endregion
 	}
 }
 
