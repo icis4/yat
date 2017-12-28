@@ -931,23 +931,10 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
-				// Keep text field because Items.Clear() will reset this:
-				string text         = comboBox_SingleLineText.Text;
-				int selectionStart  = comboBox_SingleLineText.SelectionStart;
-				int selectionLength = comboBox_SingleLineText.SelectionLength;
-
-				comboBox_SingleLineText.Items.Clear();
-
-				if (this.recent != null) // Empty array is OK, but 'null' results in exception.
-					comboBox_SingleLineText.Items.AddRange(this.recent.ToArray());
-
-				// Immediately update the updated item list:
-				comboBox_SingleLineText.Refresh();
-
-				// Restore text field:
-				comboBox_SingleLineText.Text            = text;
-				comboBox_SingleLineText.SelectionStart  = selectionStart;
-				comboBox_SingleLineText.SelectionLength = selectionLength;
+				if (this.recent != null)
+					ComboBoxHelper.UpdateItemsWhileInEdit(comboBox_SingleLineText, this.recent.ToArray());
+				else
+					ComboBoxHelper.ClearItemsWhileInEdit(comboBox_SingleLineText);
 			}
 			finally
 			{
@@ -982,15 +969,7 @@ namespace YAT.View.Controls
 						if (comboBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
 							comboBox_SingleLineText.Font = SystemFonts.DefaultFont;
 
-						// Keep cursor position and text selection:
-						int selectionStart  = comboBox_SingleLineText.SelectionStart;
-						int selectionLength = comboBox_SingleLineText.SelectionLength;
-
-						comboBox_SingleLineText.Text = this.command.SingleLineText;
-
-						// Restore cursor position and text selection (as possible):
-						comboBox_SingleLineText.SelectionStart  = selectionStart;
-						comboBox_SingleLineText.SelectionLength = selectionLength;
+						ComboBoxHelper.UpdateTextWhileInEdit(comboBox_SingleLineText, this.command.SingleLineText);
 					}
 					else
 					{
@@ -1013,15 +992,7 @@ namespace YAT.View.Controls
 
 					if (this.command.IsText && !this.command.IsPartialText)
 					{
-						// Keep cursor position and text selection:
-						int selectionStart  = comboBox_SingleLineText.SelectionStart;
-						int selectionLength = comboBox_SingleLineText.SelectionLength;
-
-						comboBox_SingleLineText.Text = this.command.SingleLineText;
-
-						// Restore cursor position and text selection (as possible):
-						comboBox_SingleLineText.SelectionStart  = selectionStart;
-						comboBox_SingleLineText.SelectionLength = selectionLength;
+						ComboBoxHelper.UpdateTextWhileInEdit(comboBox_SingleLineText, this.command.SingleLineText);
 					}
 					else
 					{

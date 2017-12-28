@@ -984,9 +984,9 @@ namespace YAT.View.Forms
 							var activePattern = ApplicationSettings.RoamingUserSettings.Find.ActivePattern;
 							var recentPatterns = ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.ToArray();
 
-							toolStripComboBox_MainTool_Terminal_Find_Pattern.Items.Clear();
-							toolStripComboBox_MainTool_Terminal_Find_Pattern.Items.AddRange(recentPatterns);
-							ToolStripComboBoxHelper.Select(toolStripComboBox_MainTool_Terminal_Find_Pattern, activePattern, activePattern);
+							ToolStripComboBoxHelper.UpdateItemsWhileInEdit(toolStripComboBox_MainTool_Terminal_Find_Pattern, recentPatterns);
+							ToolStripComboBoxHelper.Select                (toolStripComboBox_MainTool_Terminal_Find_Pattern, activePattern, activePattern);
+
 							toolStripComboBox_MainTool_Terminal_Find_Pattern.Enabled = childIsReady;
 							toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = true;
 						}
@@ -1009,8 +1009,9 @@ namespace YAT.View.Forms
 					{
 						toolStripButton_MainTool_Terminal_Find_ShowHide.Text = "Show Find";
 
-						ToolStripComboBoxHelper.Deselect(toolStripComboBox_MainTool_Terminal_Find_Pattern);
-						toolStripComboBox_MainTool_Terminal_Find_Pattern.Items.Clear();
+						ToolStripComboBoxHelper.Deselect             (toolStripComboBox_MainTool_Terminal_Find_Pattern);
+						ToolStripComboBoxHelper.ClearItemsWhileInEdit(toolStripComboBox_MainTool_Terminal_Find_Pattern);
+
 						toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = false;
 
 						toolStripButton_MainTool_Terminal_Find_CaseSensitive.Visible = false;

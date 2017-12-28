@@ -57,6 +57,33 @@ namespace MKY.Windows.Forms
 		{
 			ComboBoxHelper.Deselect(control.ComboBox);
 		}
+
+		/// <summary>
+		/// Updates the text of the <see cref="ToolStripComboBox"/> while staying in edit,
+		/// i.e. cursor location and text selection is kept.
+		/// </summary>
+		public static void UpdateTextWhileInEdit(ToolStripComboBox control, string text)
+		{
+			ComboBoxHelper.UpdateTextWhileInEdit(control.ComboBox, text);
+		}
+
+		/// <summary>
+		/// Updates the items of the <see cref="ToolStripComboBox"/> while staying in edit,
+		/// i.e. cursor location and text selection is kept.
+		/// </summary>
+		public static void UpdateItemsWhileInEdit(ToolStripComboBox control, object[] items)
+		{
+			ComboBoxHelper.UpdateItemsWhileInEdit(control.ComboBox, items);
+		}
+
+		/// <summary>
+		/// Clears the items of the <see cref="ToolStripComboBox"/> while staying in edit,
+		/// i.e. cursor location and text selection is kept.
+		/// </summary>
+		public static void ClearItemsWhileInEdit(ToolStripComboBox control)
+		{
+			ComboBoxHelper.ClearItemsWhileInEdit(control.ComboBox);
+		}
 	}
 }
 
