@@ -633,9 +633,9 @@ namespace YAT.View.Controls
 			try
 			{
 				if (!DesignMode && Enabled && (this.portId != null))
-					SelectionHelper.Select(comboBox_Port, this.portId, this.portId);
+					ComboBoxHelper.Select(comboBox_Port, this.portId, this.portId);
 				else
-					SelectionHelper.Deselect(comboBox_Port);
+					ComboBoxHelper.Deselect(comboBox_Port);
 			}
 			finally
 			{

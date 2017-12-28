@@ -376,9 +376,9 @@ namespace YAT.View.Controls
 			try
 			{
 				if (!DesignMode && Enabled && (this.deviceInfo != null))
-					SelectionHelper.Select(comboBox_Device, this.deviceInfo, this.deviceInfo);
+					ComboBoxHelper.Select(comboBox_Device, this.deviceInfo, this.deviceInfo);
 				else
-					SelectionHelper.Deselect(comboBox_Device);
+					ComboBoxHelper.Deselect(comboBox_Device);
 			}
 			finally
 			{

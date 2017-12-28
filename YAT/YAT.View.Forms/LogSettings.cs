@@ -550,7 +550,7 @@ namespace YAT.View.Forms
 				checkBox_Options_NameTime.Checked    = this.settingsInEdit.NameTime;
 
 				Log.FileNameSeparatorEx separator = this.settingsInEdit.NameSeparator;
-				SelectionHelper.Select(comboBox_Options_NameSeparator, separator, separator);
+				ComboBoxHelper.Select(comboBox_Options_NameSeparator, separator, separator);
 
 				bool dateTimeEnabled = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Create);
 				checkBox_Options_NameDate.Enabled = dateTimeEnabled;

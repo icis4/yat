@@ -713,13 +713,13 @@ namespace YAT.View.Forms
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoTriggerItems());
 
 					var trigger = this.settingsRoot.AutoResponse.Trigger;
-					SelectionHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
+					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
 
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Clear();
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.GetValidAutoResponseItems());
 
 					var response = this.settingsRoot.AutoResponse.Response;
-					SelectionHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
+					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
 				}
 
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Enabled = this.settingsRoot.AutoResponse.IsActive;
@@ -915,13 +915,13 @@ namespace YAT.View.Forms
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoTriggerItems());
 
 					var trigger = this.settingsRoot.AutoAction.Trigger;
-					SelectionHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
+					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
 
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.Clear();
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.AddRange(this.settingsRoot.GetValidAutoActionItems());
 
 					var response = this.settingsRoot.AutoAction.Action;
-					SelectionHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Action, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
+					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Action, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
 				}
 
 				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Enabled = this.settingsRoot.AutoAction.IsActive;

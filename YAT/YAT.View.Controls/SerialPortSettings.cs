@@ -504,11 +504,11 @@ namespace YAT.View.Controls
 				var baudRate = (MKY.IO.Ports.BaudRate)this.baudRate;
 				if (Enabled)
 				{
-					SelectionHelper.Select(comboBox_BaudRate, (MKY.IO.Ports.BaudRateEx)baudRate, (MKY.IO.Ports.BaudRateEx)baudRate);
+					ComboBoxHelper.Select(comboBox_BaudRate, (MKY.IO.Ports.BaudRateEx)baudRate, (MKY.IO.Ports.BaudRateEx)baudRate);
 				}
 				else
 				{
-					SelectionHelper.Deselect(comboBox_BaudRate);
+					ComboBoxHelper.Deselect(comboBox_BaudRate);
 				}
 
 				if (Enabled)
