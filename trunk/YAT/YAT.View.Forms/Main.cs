@@ -986,7 +986,7 @@ namespace YAT.View.Forms
 
 							toolStripComboBox_MainTool_Terminal_Find_Pattern.Items.Clear();
 							toolStripComboBox_MainTool_Terminal_Find_Pattern.Items.AddRange(recentPatterns);
-							SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_Find_Pattern, activePattern, activePattern);
+							ToolStripComboBoxHelper.Select(toolStripComboBox_MainTool_Terminal_Find_Pattern, activePattern, activePattern);
 							toolStripComboBox_MainTool_Terminal_Find_Pattern.Enabled = childIsReady;
 							toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = true;
 						}
@@ -1009,7 +1009,7 @@ namespace YAT.View.Forms
 					{
 						toolStripButton_MainTool_Terminal_Find_ShowHide.Text = "Show Find";
 
-						SelectionHelper.Deselect(toolStripComboBox_MainTool_Terminal_Find_Pattern);
+						ToolStripComboBoxHelper.Deselect(toolStripComboBox_MainTool_Terminal_Find_Pattern);
 						toolStripComboBox_MainTool_Terminal_Find_Pattern.Items.Clear();
 						toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = false;
 
@@ -1081,13 +1081,13 @@ namespace YAT.View.Forms
 					{
 						toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Items.Clear();
 						toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Items.AddRange(aaTriggerItems);
-						SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_AutoAction_Trigger, aaTrigger, new Command(aaTrigger).SingleLineText); // No explicit default radix available (yet).
+						ToolStripComboBoxHelper.Select(toolStripComboBox_MainTool_Terminal_AutoAction_Trigger, aaTrigger, new Command(aaTrigger).SingleLineText); // No explicit default radix available (yet).
 						toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Enabled = childIsReady;
 						toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Visible = true;
 
 						toolStripComboBox_MainTool_Terminal_AutoAction_Action.Items.Clear();
 						toolStripComboBox_MainTool_Terminal_AutoAction_Action.Items.AddRange(aaActionItems);
-						SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_AutoAction_Action, aaAction, new Command(aaAction).SingleLineText); // No explicit default radix available (yet).
+						ToolStripComboBoxHelper.Select(toolStripComboBox_MainTool_Terminal_AutoAction_Action, aaAction, new Command(aaAction).SingleLineText); // No explicit default radix available (yet).
 						toolStripComboBox_MainTool_Terminal_AutoAction_Action.Enabled = childIsReady;
 						toolStripComboBox_MainTool_Terminal_AutoAction_Action.Visible = true;
 					}
@@ -1163,13 +1163,13 @@ namespace YAT.View.Forms
 					{
 						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.Clear();
 						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.AddRange(arTriggerItems);
-						SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger, arTrigger, new Command(arTrigger).SingleLineText); // No explicit default radix available (yet).
+						ToolStripComboBoxHelper.Select(toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger, arTrigger, new Command(arTrigger).SingleLineText); // No explicit default radix available (yet).
 						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Enabled = childIsReady;
 						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Visible = true;
 
 						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.Clear();
 						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.AddRange(arResponseItems);
-						SelectionHelper.Select(toolStripComboBox_MainTool_Terminal_AutoResponse_Response, arResponse, new Command(arResponse).SingleLineText); // No explicit default radix available (yet).
+						ToolStripComboBoxHelper.Select(toolStripComboBox_MainTool_Terminal_AutoResponse_Response, arResponse, new Command(arResponse).SingleLineText); // No explicit default radix available (yet).
 						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Enabled = childIsReady;
 						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Visible = true;
 					}

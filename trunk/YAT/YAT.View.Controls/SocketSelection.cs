@@ -863,12 +863,12 @@ namespace YAT.View.Controls
 				     (this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpPairSocket)))
 				{
 					comboBox_RemoteHost.Enabled = true;
-					SelectionHelper.Select(comboBox_RemoteHost, this.remoteHost, this.remoteHost);
+					ComboBoxHelper.Select(comboBox_RemoteHost, this.remoteHost, this.remoteHost);
 				}
 				else
 				{
 					comboBox_RemoteHost.Enabled = false;
-					SelectionHelper.Deselect(comboBox_RemoteHost);
+					ComboBoxHelper.Deselect(comboBox_RemoteHost);
 				}
 
 				// Remote port label:
@@ -953,7 +953,7 @@ namespace YAT.View.Controls
 						case SocketType.UdpClient:
 						{
 							comboBox_LocalFilter.Enabled = false;
-							SelectionHelper.Select(comboBox_LocalFilter, (IPFilterEx)IPFilterEx.Default);
+							ComboBoxHelper.Select(comboBox_LocalFilter, (IPFilterEx)IPFilterEx.Default);
 							break;
 						}
 
@@ -962,9 +962,9 @@ namespace YAT.View.Controls
 							comboBox_LocalFilter.Enabled = true;
 
 							if (this.localFilter != null)
-								SelectionHelper.Select(comboBox_LocalFilter, this.localFilter, this.localFilter);
+								ComboBoxHelper.Select(comboBox_LocalFilter, this.localFilter, this.localFilter);
 							else
-								SelectionHelper.Select(comboBox_LocalFilter, (IPFilterEx)IPFilterEx.Default);
+								ComboBoxHelper.Select(comboBox_LocalFilter, (IPFilterEx)IPFilterEx.Default);
 
 							break;
 						}
@@ -972,7 +972,7 @@ namespace YAT.View.Controls
 						case SocketType.UdpPairSocket:
 						{
 							comboBox_LocalFilter.Enabled = false;
-							SelectionHelper.Select(comboBox_LocalFilter, (IPFilterEx)IPFilterEx.Default);
+							ComboBoxHelper.Select(comboBox_LocalFilter, (IPFilterEx)IPFilterEx.Default);
 							break;
 						}
 
@@ -987,7 +987,7 @@ namespace YAT.View.Controls
 					label_LocalFilter.Visible = false;
 					comboBox_LocalFilter.Visible = false;
 					comboBox_LocalFilter.Enabled = false;
-					SelectionHelper.Deselect(comboBox_LocalFilter);
+					ComboBoxHelper.Deselect(comboBox_LocalFilter);
 				}
 			}
 			finally

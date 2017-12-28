@@ -734,8 +734,8 @@ namespace YAT.View.Forms
 					this.textFormats[i].CustomColors = this.customColors;
 				}
 
-				SelectionHelper.Select(comboBox_InfoSeparator, this.infoSeparator, this.infoSeparator);
-				SelectionHelper.Select(comboBox_InfoEnclosure, this.infoEnclosure, this.infoEnclosure);
+				ComboBoxHelper.Select(comboBox_InfoSeparator, this.infoSeparator, this.infoSeparator);
+				ComboBoxHelper.Select(comboBox_InfoEnclosure, this.infoEnclosure, this.infoEnclosure);
 
 				checkBox_TimeStampUseUtc.Checked = this.timeStampUseUtc;
 				textBox_TimeStampFormat.Text     = this.timeStampFormat;
@@ -751,9 +751,9 @@ namespace YAT.View.Forms
 				Domain.TimeSpanFormatPresetEx. TryParse(this.timeSpanFormat,  out timeSpanFormatPreset);
 				Domain.TimeDeltaFormatPresetEx.TryParse(this.timeDeltaFormat, out timeDeltaFormatPreset);
 
-				SelectionHelper.Select(comboBox_TimeStampFormatPreset, timeStampFormatPreset);
-				SelectionHelper.Select(comboBox_TimeSpanFormatPreset,  timeSpanFormatPreset );
-				SelectionHelper.Select(comboBox_TimeDeltaFormatPreset, timeDeltaFormatPreset);
+				ComboBoxHelper.Select(comboBox_TimeStampFormatPreset, timeStampFormatPreset);
+				ComboBoxHelper.Select(comboBox_TimeSpanFormatPreset,  timeSpanFormatPreset );
+				ComboBoxHelper.Select(comboBox_TimeDeltaFormatPreset, timeDeltaFormatPreset);
 				                                //// Clone settings to ensure decoupling:
 				monitor_Example.FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
 
