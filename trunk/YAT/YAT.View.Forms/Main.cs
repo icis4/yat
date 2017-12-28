@@ -1543,7 +1543,7 @@ namespace YAT.View.Forms
 		{
 			if (!string.IsNullOrEmpty(pattern))
 			{
-				FindResult fr = FindResult.Reset;
+				var fr = FindResult.Reset;
 
 				var t = (ActiveMdiChild as Terminal);
 				if (t != null)
@@ -1578,7 +1578,7 @@ namespace YAT.View.Forms
 			var pattern = toolStripComboBox_MainTool_Terminal_Find_Pattern.Text;
 			if (ValidateFindPattern(pattern))
 			{
-				FindResult fr = FindResult.Reset;
+				var fr = FindResult.Reset;
 
 				var t = (ActiveMdiChild as Terminal);
 				if (t != null)
@@ -1603,7 +1603,7 @@ namespace YAT.View.Forms
 			var pattern = toolStripComboBox_MainTool_Terminal_Find_Pattern.Text;
 			if (ValidateFindPattern(pattern))
 			{
-				FindResult fr = FindResult.Reset;
+				var fr = FindResult.Reset;
 
 				var t = (ActiveMdiChild as Terminal);
 				if (t != null)
