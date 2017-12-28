@@ -130,6 +130,7 @@ Limitations and known issues:
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
    > System errors are output in local language, even though YAT is all-English (bug #66).
+   > Tool strip combo box slightly flickers when updating item list, e.g. 'Find Pattern' (bug #402).
    > Single chars are compared case insensitively against recent 'Send Text' commands (bug #347).
    > Automatic completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
