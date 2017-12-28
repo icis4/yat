@@ -1385,6 +1385,7 @@ namespace YAT.View.Forms
 					}
 					catch (ArgumentException)
 					{
+						SetFindFieldColors(FindResult.Invalid);
 						return; // Skip 'FindOnEdit' in case of invalid Regex.
 					}
 
@@ -1493,20 +1494,34 @@ namespace YAT.View.Forms
 			}
 		}
 
-		/// <summary></summary>
-		protected virtual void ResetFindOnEdit()
+		private void SetFindFieldColors(FindResult value)
 		{
-			var t = (ActiveMdiChild as Terminal);
-			if (t != null)
-				t.ResetFindOnEdit();
-		}
+			switch (value)
+			{
+				case FindResult.Reset:
+				case FindResult.Found:
+					toolStripComboBox_MainTool_Terminal_Find_Pattern.BackColor = SystemColors.Window;
+					toolStripComboBox_MainTool_Terminal_Find_Pattern.ForeColor = SystemColors.WindowText;
+					break;
 
-		/// <summary></summary>
-		protected virtual void FindOnEdit(string pattern)
-		{
-			var t = (ActiveMdiChild as Terminal);
-			if (t != null)
-				t.FindOnEdit(pattern);
+				case FindResult.NotFoundAnymore:
+					toolStripComboBox_MainTool_Terminal_Find_Pattern.BackColor = SystemColors.Highlight;     // Same color as last found line,
+					toolStripComboBox_MainTool_Terminal_Find_Pattern.ForeColor = SystemColors.HighlightText; // which is also 'highlighted'.
+					break;
+
+				case FindResult.NotFoundAtAll:
+					toolStripComboBox_MainTool_Terminal_Find_Pattern.BackColor = SystemColors.Info;
+					toolStripComboBox_MainTool_Terminal_Find_Pattern.ForeColor = SystemColors.InfoText;
+					break;
+
+				case FindResult.Invalid:
+					toolStripComboBox_MainTool_Terminal_Find_Pattern.BackColor = SystemColors.ControlDark;
+					toolStripComboBox_MainTool_Terminal_Find_Pattern.ForeColor = SystemColors.ControlText;
+					break;
+
+				default:
+					throw (new ArgumentOutOfRangeException("value", value, MessageHelper.InvalidExecutionPreamble + "'" + value + "' is a find result that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		/// <summary></summary>
@@ -1514,7 +1529,42 @@ namespace YAT.View.Forms
 		{
 			var pattern = toolStripComboBox_MainTool_Terminal_Find_Pattern.Text;
 			if (ValidateFindPattern(pattern))
+			{
 				FindOnEdit(pattern);
+			}
+			else
+			{
+				SetFindFieldColors(FindResult.Invalid);
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void FindOnEdit(string pattern)
+		{
+			if (!string.IsNullOrEmpty(pattern))
+			{
+				FindResult fr = FindResult.Reset;
+
+				var t = (ActiveMdiChild as Terminal);
+				if (t != null)
+					fr = t.TryFindOnEdit(pattern);
+
+				SetFindFieldColors(fr);
+			}
+			else
+			{
+				ResetFindOnEdit();
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void ResetFindOnEdit()
+		{
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.ResetFindOnEdit();
+
+			SetFindFieldColors(FindResult.Reset);
 		}
 
 		private void toolStripButton_MainTool_Terminal_Find_Next_Click(object sender, EventArgs e)
@@ -1528,9 +1578,17 @@ namespace YAT.View.Forms
 			var pattern = toolStripComboBox_MainTool_Terminal_Find_Pattern.Text;
 			if (ValidateFindPattern(pattern))
 			{
+				FindResult fr = FindResult.Reset;
+
 				var t = (ActiveMdiChild as Terminal);
 				if (t != null)
-					t.FindNext(pattern, MessageBoxIsPermissible);
+					fr = t.TryFindNext(pattern, MessageBoxIsPermissible);
+
+				SetFindFieldColors(fr);
+			}
+			else
+			{
+				SetFindFieldColors(FindResult.Invalid);
 			}
 		}
 
@@ -1545,9 +1603,17 @@ namespace YAT.View.Forms
 			var pattern = toolStripComboBox_MainTool_Terminal_Find_Pattern.Text;
 			if (ValidateFindPattern(pattern))
 			{
+				FindResult fr = FindResult.Reset;
+
 				var t = (ActiveMdiChild as Terminal);
 				if (t != null)
-					t.FindPrevious(pattern, MessageBoxIsPermissible);
+					fr = t.TryFindPrevious(pattern, MessageBoxIsPermissible);
+
+				SetFindFieldColors(fr);
+			}
+			else
+			{
+				SetFindFieldColors(FindResult.Invalid);
 			}
 		}
 
@@ -1574,14 +1640,17 @@ namespace YAT.View.Forms
 			}
 			catch (ArgumentException ex)
 			{
-				MessageBoxEx.Show
-				(
-					this,
-					ex.Message,
-					"Invalid Find Pattern",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-				);
+				if (MessageBoxIsPermissible)
+				{
+					MessageBoxEx.Show
+					(
+						this,
+						ex.Message,
+						"Invalid Find Pattern",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+					);
+				}
 				return (false);
 			}
 		}
