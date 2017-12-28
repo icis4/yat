@@ -274,7 +274,7 @@ namespace YAT.Model.Test
 			/// <param name="expectedByteCounts">The expected number of raw byte content per display line, including potentially hidden EOL or control bytes.</param>
 			/// <param name="expectedAlsoApplyToA">Flag indicating that expected values not only apply to B but also A.</param>
 			/// <param name="clearedIsExpectedInTheEnd">Flag indicating that cleared terminals are expected in the end.</param>
-			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 			public TestSet(Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedByteCounts, bool expectedAlsoApplyToA, bool clearedIsExpectedInTheEnd = false)
 			{
 				Command = command;

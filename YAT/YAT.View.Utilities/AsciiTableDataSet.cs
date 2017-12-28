@@ -42,7 +42,7 @@ namespace YAT.View.Utilities
 		public AsciiTableDataSet()
 		{
 			DataTable t = new DataTable("ASCII");
-			t.Locale = CultureInfo.InvariantCulture;
+			t.Locale = CultureInfo.CurrentUICulture;
 
 			DataColumn c;
 			DataRow r;
@@ -87,8 +87,8 @@ namespace YAT.View.Utilities
 			for (byte i = 0; i <= 0x1F; i++)
 			{
 				r = t.NewRow();
-				r[Dec] = i.ToString("D",  CultureInfo.InvariantCulture);
-				r[Hex] = i.ToString("X2", CultureInfo.InvariantCulture);
+				r[Dec] = i.ToString("D",  CultureInfo.InvariantCulture); // 'InvariantCulture' since this is a technical table.
+				r[Hex] = i.ToString("X2", CultureInfo.InvariantCulture); // 'InvariantCulture' since this is a technical table.
 				r[Mnemonic]    = MKY.Text.Ascii.ConvertToMnemonic(i);
 				r[Escape]      = MKY.Text.Escape.ConvertToEscapeSequence(i);
 				r[Description] = MKY.Text.Ascii.ConvertToDescription(i);
@@ -97,8 +97,8 @@ namespace YAT.View.Utilities
 			for (byte i = 0x7F; i <= 0x7F; i++)
 			{
 				r = t.NewRow();
-				r[Dec] = i.ToString("D",  CultureInfo.InvariantCulture);
-				r[Hex] = i.ToString("X2", CultureInfo.InvariantCulture);
+				r[Dec] = i.ToString("D",  CultureInfo.InvariantCulture); // 'InvariantCulture' since this is a technical table.
+				r[Hex] = i.ToString("X2", CultureInfo.InvariantCulture); // 'InvariantCulture' since this is a technical table.
 				r[Mnemonic]    = MKY.Text.Ascii.ConvertToMnemonic(i);
 				r[Escape]      = MKY.Text.Escape.ConvertToEscapeSequence(i);
 				r[Description] = MKY.Text.Ascii.ConvertToDescription(i);

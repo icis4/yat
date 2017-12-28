@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
@@ -152,7 +153,7 @@ namespace MKY.Net
 		/// <summary>
 		/// Creates an explicit <see cref="IPFilterEx"/> object, using the provided host name and optional address.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public IPFilterEx(string name, IPAddress address = null)
 		{
 			SetUnderlyingEnum(IPFilter.Explicit);
@@ -445,11 +446,12 @@ namespace MKY.Net
 		/// <remarks>
 		/// The list of fixed items of this extended enum.
 		/// </remarks>
-		public static List<IPFilterEx> GetItems()
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Symmetricity with Enum.GetNames() and Enum.GetValues().")]
+		public static ReadOnlyCollection<IPFilterEx> GetItems()
 		{
 			if (staticItems == null)
 			{
-				var staticItems = new List<IPFilterEx>(6); // Preset the required capacity to improve memory management.
+				staticItems = new List<IPFilterEx>(6); // Preset the required capacity to improve memory management.
 
 				staticItems.Add(new IPFilterEx(IPFilter.Any));
 				staticItems.Add(new IPFilterEx(IPFilter.Localhost));
@@ -461,7 +463,7 @@ namespace MKY.Net
 				// The shall only contain the fixed items, 'Explicit' is not added therefore.
 			}
 
-			return (staticItems);
+			return (staticItems.AsReadOnly());
 		}
 
 		/// <summary>

@@ -22,6 +22,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
 namespace MKY.Windows.Forms
@@ -42,6 +43,7 @@ namespace MKY.Windows.Forms
 		/// converted into a string. This can e.g. be an implicit string conversion operator,
 		/// or the item's ToString() method, or something else.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void Select(ToolStripComboBox control, object item, string fallbackText = null)
 		{
 			ComboBoxHelper.Select(control.ComboBox, item, fallbackText);

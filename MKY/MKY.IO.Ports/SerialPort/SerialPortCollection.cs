@@ -126,7 +126,7 @@ namespace MKY.IO.Ports
 		/// Attention, this may take quite some time, depending on the available ports.
 		/// Therefore, the default value is <c>false</c>.
 		/// </param>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void FillWithAvailablePorts(bool retrieveCaptions = false)
 		{
 			lock (this)
@@ -189,7 +189,7 @@ namespace MKY.IO.Ports
 		/// <remarks>
 		/// Attention, this may take quite some time, depending on the available ports.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void RetrieveCaptions(bool forceRetrieveFromSystem = false)
 		{
 			bool useCaptionsFromCache;
@@ -263,7 +263,7 @@ namespace MKY.IO.Ports
 		/// be opened. Set the <see cref="SerialPortChangedAndCancelEventArgs.Cancel"/> property
 		/// to <c>true</c> to cancel port scanning.
 		/// </param>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void DetectPortsThatAreInUse(EventHandler<SerialPortChangedAndCancelEventArgs> portChangedCallback = null)
 		{
 			var otherPortInUseLookup = RetrieveOtherPortInUseLookup();
@@ -295,7 +295,7 @@ namespace MKY.IO.Ports
 		/// not. Therefore, this method actively tries to open every port! This may take quite some
 		/// time, depending on the available ports.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void DetectWhetherPortIsInUse(SerialPortId portId)
 		{
 			var otherPortInUseLookup = RetrieveOtherPortInUseLookup();
@@ -350,7 +350,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Detects whether the port is in use and marks the port ID accordingly.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		protected static void DetectWhetherPortIsInUse(SerialPortId portId, bool isInUseByActivePort, InUseInfo activePortInUseInfo, bool isInUseByOtherPort, List<InUseInfo> otherPortInUseInfo, string otherAppInUseText = null)
 		{
@@ -393,7 +393,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Composes the 'InUse' text.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		protected static string ComposeInUseText(bool isInUseByActivePort, InUseInfo activePortInUseInfo, List<InUseInfo> otherPortInUseInfo, string otherAppInUseText = null)
 		{
 			var inUseText = new StringBuilder();

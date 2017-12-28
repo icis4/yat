@@ -1174,6 +1174,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
 		[Conditional("DEBUG_COUNT_AND_INDICES")]
 		protected virtual void DebugCountAndIndices(string leadMessage)
 		{
@@ -1181,6 +1182,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
 		[Conditional("DEBUG_COUNT_AND_INDICES")]
 		protected virtual void DebugCountAndIndices(string leadMessage, int bottomIndex)
 		{

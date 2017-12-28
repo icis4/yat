@@ -34,21 +34,21 @@ namespace YAT.Model.Utilities
 	public static class ErrorHelper
 	{
 		/// <remarks>Provides [str] and [str, str] and [str, str, str] and [str, str, str, str].</remarks>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static string ComposeMessage(string lead, string leadAddOn = null, string secondaryLead = null, string secondaryText = null)
 		{
 			return (ComposeMessage(lead, leadAddOn, null, secondaryLead, secondaryText));
 		}
 
 		/// <remarks>Provides [str, ex].</remarks>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static string ComposeMessage(string lead, Exception ex, string secondaryLead = null, string secondaryText = null)
 		{
 			return (ComposeMessage(lead, null, ex, secondaryLead, secondaryText));
 		}
 
 		/// <remarks>Provides [str, str, ex].</remarks>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static string ComposeMessage(string lead, string leadAddOn, Exception ex, string secondaryLead = null, string secondaryText = null)
 		{
 			var sb = new StringBuilder(lead);

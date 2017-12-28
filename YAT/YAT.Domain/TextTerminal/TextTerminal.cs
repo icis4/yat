@@ -284,6 +284,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Gets the Tx EOL sequence.
 		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
 		public byte[] TxEolSequence
 		{
 			get
@@ -300,6 +301,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Gets the Rx EOL sequence.
 		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
 		public byte[] RxEolSequence
 		{
 			get
@@ -346,7 +348,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Tries to parse <paramref name="s"/>, taking the current settings into account.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public override bool TryParse(string s, out byte[] result, Radix defaultRadix = Radix.String)
 		{
 			using (var p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, TerminalSettings.Send.ToParseMode()))

@@ -52,7 +52,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes location to <see cref="System.Diagnostics.Trace"/>.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[Conditional("TRACE")]
 		public static void WriteLocation(string message = null)
 		{
@@ -64,7 +64,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes time stamp and location to <see cref="System.Diagnostics.Trace"/>.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[Conditional("TRACE")]
 		public static void WriteTimeStamp(string message = null)
 		{
@@ -77,7 +77,7 @@ namespace MKY.Diagnostics
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
 		/// to <see cref="System.Diagnostics.Trace"/>.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[Conditional("TRACE")]
 		public static void WriteException(Type type, Exception ex, string leadMessage = null)
 		{
@@ -89,7 +89,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes a <see cref="StackTrace"/> to <see cref="System.Diagnostics.Trace"/>.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[Conditional("TRACE")]
 		public static void WriteStack(Type type, string leadMessage = null)
 		{
@@ -99,7 +99,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes a <see cref="StackTrace"/> to <see cref="System.Diagnostics.Trace"/>.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[Conditional("TRACE")]
 		public static void WriteStack(Type type, StackTrace st, string leadMessage = null)
 		{
@@ -111,7 +111,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes the properties of a <see cref="Message"/> to <see cref="System.Diagnostics.Trace"/>.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
 		[Conditional("TRACE")]
 		public static void WriteWindowsFormsMessage(Type type, Message m, string leadMessage = null)
@@ -124,7 +124,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes the properties of a <see cref="FileStream"/> to <see cref="System.Diagnostics.Trace"/>.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[Conditional("TRACE")]
 		public static void WriteFileStream(Type type, FileStream fs, string leadMessage = null)
 		{

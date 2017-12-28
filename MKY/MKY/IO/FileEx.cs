@@ -276,7 +276,7 @@ namespace MKY.IO
 		/// <remarks>
 		/// <see cref="PathEx.GetUniqueTempPath"/> offers a similar method using a globally unique file name.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static string GetUniqueFilePath(string initialFilePath, string separator = null)
 		{
 			if (File.Exists(initialFilePath)) // Name needs to be changed:

@@ -100,6 +100,7 @@ namespace MKY.Collections.Specialized
 		/// of items (<see cref="T:RecentItemCollection`1.Capacity"/>), the most recent item will
 		/// be removed from the collection.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
 		public new void AddRange(IEnumerable<RecentItem<T>> collection)
 		{
 			foreach (var item in collection)

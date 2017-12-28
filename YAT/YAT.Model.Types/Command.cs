@@ -114,7 +114,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public Command(Domain.Radix defaultRadix = DefaultRadixDefault)
 		{
 			Initialize(defaultRadix);
@@ -127,42 +127,42 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public Command(string textLine, bool isPartialText = false, Domain.Radix defaultRadix = DefaultRadixDefault)
 			: this("", textLine, isPartialText, defaultRadix)
 		{
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public Command(string description, string textLine, bool isPartialText = false, Domain.Radix defaultRadix = DefaultRadixDefault)
 		{
 			Initialize(true, description, new string[] { textLine }, defaultRadix, isPartialText, false, false, "");
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public Command(bool isPartialTextEol, Domain.Radix defaultRadix = DefaultRadixDefault)
 		{
 			Initialize(true, "", UndefinedTextLines, defaultRadix, false, isPartialTextEol, false, "");
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public Command(string[] textLines, Domain.Radix defaultRadix = DefaultRadixDefault)
 			: this("", textLines, defaultRadix)
 		{
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public Command(string description, string[] textLines, Domain.Radix defaultRadix = DefaultRadixDefault)
 		{
 			Initialize(true, description, textLines, defaultRadix, false, false, false, "");
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public Command(string description, bool isFilePath, string filePath, Domain.Radix defaultRadix = DefaultRadixDefault)
 		{
 			Initialize(true, description, UndefinedTextLines, defaultRadix, false, false, isFilePath, filePath);

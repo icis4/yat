@@ -150,7 +150,7 @@ namespace YAT.Domain
 		public bool IsLine { get; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public ParsableDataSendItem(string data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault, bool isLine = false)
 		{
 			Data         = data;
@@ -198,7 +198,7 @@ namespace YAT.Domain
 		public Radix DefaultRadix { get; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public FileSendItem(string filePath, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
 			FilePath     = filePath;

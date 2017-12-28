@@ -93,7 +93,7 @@ namespace MKY.Xml.Schema
 		/// <param name="path">The path.</param>
 		/// <param name="intendedFileNameWithoutExtension">Name of the intended file.</param>
 		/// <param name="fileExtension">Extension of the file.</param>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void ToFile(Type type, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
 		{
 			var document = XmlDocumentEx.CreateDefaultDocument(type);
@@ -110,7 +110,7 @@ namespace MKY.Xml.Schema
 		/// <param name="path">The path.</param>
 		/// <param name="intendedFileNameWithoutExtension">Name of the intended file.</param>
 		/// <param name="fileExtension">Extension of the file.</param>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
 		public static void ToFile(XmlDocument document, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
 		{
@@ -137,7 +137,7 @@ namespace MKY.Xml.Schema
 		/// <param name="index">The index of the current schema to save.</param>
 		/// <param name="fileExtension">Extension of the file.</param>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'postfix' is a correct English term and 'postfixed' seems the obvious participle.")]
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void ToFile(XmlSchema schema, string path, string intendedFileNameWithoutExtension, int count = 1, int index = 0, string fileExtension = ".xsd")
 		{
 			string effectiveFilePath;
