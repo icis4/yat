@@ -37,6 +37,7 @@ namespace YAT.Model.Settings
 	/// Could/should be migrated to 'YAT.Application.Settings' or 'YAT.View.Settings'.
 	/// To be done when refactoring the projects on integration with Albatros.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Albatros' is a name.")]
 	public class SocketSettings : MKY.Settings.SettingsItem, IEquatable<SocketSettings>
 	{
 		private const int MaxRecentItems = 12;
@@ -81,10 +82,10 @@ namespace YAT.Model.Settings
 			base.SetMyDefaults();
 
 			RecentRemoteHosts = new RecentIPHostCollection(MaxRecentItems);
-			// Standard hosts are automatically added by the collection.
+			//// Standard hosts are automatically added by the collection.
 
 			RecentLocalFilters = new RecentIPFilterCollection(MaxRecentItems);
-			// Standard hosts are automatically added by the collection.
+			//// Standard hosts are automatically added by the collection.
 
 			RecentPorts = new RecentItemCollection<int>(MaxRecentItems);
 			RecentPorts.Add(MKY.IO.Serial.Socket.SocketSettings.LocalPortDefault);

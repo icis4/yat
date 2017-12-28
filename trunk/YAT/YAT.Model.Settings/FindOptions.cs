@@ -28,7 +28,7 @@ namespace YAT.Model.Settings
 {
 	/// <remarks>
 	/// Initially prepared 'UseRegex' which would override/disable 'CaseSensitive' and 'WholeWord'.
-	/// However, the straight-forware implementation of 'WholeWord' (simply surrounding the word
+	/// However, the straight-forward implementation of 'WholeWord' (simply surrounding the word
 	/// with \b) conflicts with this, since Regex is to be used then anyway. Thus, decided to
 	/// remove the 'UseRegex' option and use Regex implicitly.
 	/// </remarks>

@@ -190,6 +190,7 @@ namespace YAT.Domain.Settings
 		/// It was used by former versions of YAT but is currently not used anymore.
 		/// Still, the setting is kept for future enhancements as documented in bug #343.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Endianness' is a correct English term.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Endianness", Justification = "'Endianness' is a correct English term.")]
 		[XmlElement("Endianness")]
 		public virtual Endianness Endianness

@@ -85,11 +85,6 @@ namespace MKY.Net
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public class IPFilterEx : EnumEx, IEquatable<IPFilterEx>
 	{
-		/// <remarks>
-		/// The list of fixed items of this extended enum.
-		/// </remarks>
-		protected static List<IPFilterEx> staticItems;
-
 		#region String Definitions
 
 		/// <remarks>Explicitly using "[any]" instead of "[Any]" same as "[localhost]" and "[loopback]".</remarks>
@@ -109,6 +104,11 @@ namespace MKY.Net
 		private const string IPv6Localhost_string = "IPv6 localhost";
 
 		#endregion
+
+		/// <remarks>
+		/// The list of fixed items of this extended enum.
+		/// </remarks>
+		private static List<IPFilterEx> staticItems;
 
 		private string    explicitName; // = null;
 		private IPAddress explicitAddress  = IPAddress.None;

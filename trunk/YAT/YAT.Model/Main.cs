@@ -1828,7 +1828,7 @@ namespace YAT.Model
 
 		private void CreateAndStartExitTimerIfNeeded(bool operationSuccess)
 		{
-			if ((! this.startArgs.KeepOpen) &&
+			if ((!this.startArgs.KeepOpen) &&
 			    (!(this.startArgs.KeepOpenOnError && !operationSuccess)))
 			{
 				if (operationSuccess)
