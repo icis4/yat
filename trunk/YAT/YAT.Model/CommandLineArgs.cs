@@ -309,14 +309,14 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[CLSCompliant(false)]
-		[OptionArg(Names = new string[] { "Log", "LogOn" }, ShortName = "lo", Description = "Switch logging on.")]
+		[OptionArg(Names = new string[] { "Log", "LogOn" }, ShortName = "ln", Description = "Switch logging on.")]
 		public bool LogOn;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "KeepLogOff", ShortName = "klf", Description =
 			"Keep log(s) switched off, even if settings request to switch on." + EnvironmentEx.NewLineConstWorkaround +
-			"This option overrides the 'LogOn' option if both options are given.")]
+			"This option overrides the 'Log/LogOn' option if both options are given.")]
 		public bool KeepLogOff;
 
 		/// <summary></summary>
