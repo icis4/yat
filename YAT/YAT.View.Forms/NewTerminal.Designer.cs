@@ -204,11 +204,11 @@ namespace YAT.View.Forms
 			this.checkBox_StartTerminal.AutoSize = true;
 			this.checkBox_StartTerminal.Checked = true;
 			this.checkBox_StartTerminal.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox_StartTerminal.Location = new System.Drawing.Point(113, 418);
+			this.checkBox_StartTerminal.Location = new System.Drawing.Point(74, 418);
 			this.checkBox_StartTerminal.Name = "checkBox_StartTerminal";
-			this.checkBox_StartTerminal.Size = new System.Drawing.Size(79, 17);
+			this.checkBox_StartTerminal.Size = new System.Drawing.Size(165, 17);
 			this.checkBox_StartTerminal.TabIndex = 2;
-			this.checkBox_StartTerminal.Text = "&Open/Start";
+			this.checkBox_StartTerminal.Text = "&Open/Start the New Terminal";
 			this.checkBox_StartTerminal.CheckedChanged += new System.EventHandler(this.checkBox_StartTerminal_CheckedChanged);
 			// 
 			// pictureBox_New
