@@ -63,18 +63,39 @@ namespace MKY.Windows.Forms
 	public class ComboBoxEx : ComboBox, IOnFormDeactivateWorkaround
 	{
 		/// <summary>
+		/// Gets or sets the previous cursor position and text selection.
+		/// </summary>
+		protected ComboBoxHelper.CursorAndSelection CursorAndSelectionHelper { get; set; } = new ComboBoxHelper.CursorAndSelection();
+
+		/// <summary>
 		/// Gets or sets the previous starting index of text selected in the combo box.
 		/// </summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public int PreviousSelectionStart { get; protected set; } = ControlEx.InvalidIndex;
+		public int PreviousSelectionStart
+		{
+			get { return (CursorAndSelectionHelper.PreviousSelectionStart); }
+		}
 
 		/// <summary>
 		/// Gets or sets the previous number of characters selected in the editable portion of the combo box.
 		/// </summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public int PreviousSelectionLength { get; protected set; } // = 0;
+		public int PreviousSelectionLength
+		{
+			get { return (CursorAndSelectionHelper.PreviousSelectionLength); }
+		}
+
+		/// <summary>
+		/// Gets or sets whether the previous selection spans to the end of the editable portion of the combo box.
+		/// </summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public bool PreviousSelectionSpansEnd
+		{
+			get { return (CursorAndSelectionHelper.PreviousSelectionSpansEnd); }
+		}
 
 		/// <remarks>
 		/// Based on https://stackoverflow.com/questions/1124639/winforms-textbox-using-ctrl-backspace-to-delete-whole-word.
@@ -96,8 +117,9 @@ namespace MKY.Windows.Forms
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			// Attention:
-			// Similar code exists in TextBoxEx.ProcessCmdKey().
-			// Similar code exists in ToolStripComboBoxEx.ProcessCmdKey().
+			// Similar code exists in...
+			// ...TextBoxEx.ProcessCmdKey().
+			// ...ToolStripComboBoxEx.ProcessCmdKey().
 			// Changes here may have to be applied there too.
 
 			if (keyData == (Keys.Control | Keys.Back))
@@ -190,9 +212,7 @@ namespace MKY.Windows.Forms
 
 			if (PreviousSelectionStart != ControlEx.InvalidIndex)
 			{
-				SelectionStart  = PreviousSelectionStart;
-				SelectionLength = PreviousSelectionLength;
-
+				CursorAndSelectionHelper.Restore(this);
 				DebugCursorAndSelection(string.Format("...cursor position {0} and text selection length {1} restored.", SelectionStart, SelectionLength));
 			}
 			else
@@ -234,9 +254,7 @@ namespace MKY.Windows.Forms
 
 			if (Focused)
 			{
-				PreviousSelectionStart  = SelectionStart;
-				PreviousSelectionLength = SelectionLength;
-
+				CursorAndSelectionHelper.Remember(this);
 				DebugCursorAndSelection(string.Format("...cursor position {0} and text selection length {1} implicitly remembered.", PreviousSelectionStart, PreviousSelectionLength));
 			}
 			else
@@ -265,9 +283,7 @@ namespace MKY.Windows.Forms
 
 			if (Focused)
 			{
-				PreviousSelectionStart  = SelectionStart;
-				PreviousSelectionLength = SelectionLength;
-
+				CursorAndSelectionHelper.Remember(this);
 				DebugCursorAndSelection(string.Format("...cursor position {0} and text selection length {1} explicitly remembered.", PreviousSelectionStart, PreviousSelectionLength));
 			}
 			else

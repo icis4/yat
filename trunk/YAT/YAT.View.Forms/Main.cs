@@ -977,8 +977,8 @@ namespace YAT.View.Forms
 						toolStripButton_MainTool_Terminal_Find_ShowHide.Text = "Hide Find";
 
 						// Attention:
-						// Similar code exists in the following location:
-						//  > View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
+						// Similar code exists in...
+						// ...View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
 						// Changes here may have to be applied there too.
 
 						if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
@@ -986,7 +986,7 @@ namespace YAT.View.Forms
 							var activePattern = ApplicationSettings.RoamingUserSettings.Find.ActivePattern;
 							var recentPatterns = ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.ToArray();
 
-							ToolStripComboBoxHelper.UpdateItemsWhileInEdit(toolStripComboBox_MainTool_Terminal_Find_Pattern, recentPatterns);
+							ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_Terminal_Find_Pattern, recentPatterns);
 							ToolStripComboBoxHelper.Select                (toolStripComboBox_MainTool_Terminal_Find_Pattern, activePattern, activePattern);
 
 							toolStripComboBox_MainTool_Terminal_Find_Pattern.Enabled = childIsReady;
@@ -1012,7 +1012,7 @@ namespace YAT.View.Forms
 						toolStripButton_MainTool_Terminal_Find_ShowHide.Text = "Show Find";
 
 						ToolStripComboBoxHelper.Deselect             (toolStripComboBox_MainTool_Terminal_Find_Pattern);
-						ToolStripComboBoxHelper.ClearItemsWhileInEdit(toolStripComboBox_MainTool_Terminal_Find_Pattern);
+						ToolStripComboBoxHelper.ClearItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_Terminal_Find_Pattern);
 
 						toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = false;
 
@@ -1158,8 +1158,8 @@ namespace YAT.View.Forms
 					toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Hide Automatic Response";
 
 					// Attention:
-					// Similar code exists in the following location:
-					//  > View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
+					// Similar code exists in...
+					// ...View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
 					// Changes here may have to be applied there too.
 
 					if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
