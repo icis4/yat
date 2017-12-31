@@ -660,9 +660,9 @@ namespace YAT.View.Forms
 				// Prepare the menu item properties based on state and settings.
 				//
 				// Attention:
-				// Similar code exists in the following locations:
-				//  > View.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
-				//  > View.Controls.SendText.SetControls()
+				// Similar code exists in...
+				// ...View.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
+				// ...View.Controls.SendText.SetControls()
 				// Changes here may have to be applied there too.
 				//
 				// Main and context menu are separated as there are subtle differences between them.
@@ -702,9 +702,9 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Checked = this.settingsRoot.AutoResponse.ResponseIsActive;
 
 				// Attention:
-				// Similar code exists in the following location:
-				//  > toolStripMenuItem_TerminalMenu_Receive_SetMenuItems()
-				//  > View.Forms.Main.toolStripButton_MainTool_SetControls()
+				// Similar code exists in...
+				// ...toolStripMenuItem_TerminalMenu_Receive_SetMenuItems()
+				// ...View.Forms.Main.toolStripButton_MainTool_SetControls()
 				// Changes here may have to be applied there too.
 
 				if (!this.terminalMenuValidationWorkaround_UpdateIsSuspended)
@@ -904,9 +904,9 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action.Checked = this.settingsRoot.AutoAction.ActionIsActive;
 
 				// Attention:
-				// Similar code exists in the following location:
-				//  > toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
-				//  > View.Forms.Main.toolStripButton_MainTool_SetControls()
+				// Similar code exists in...
+				// ...toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
+				// ...View.Forms.Main.toolStripButton_MainTool_SetControls()
 				// Changes here may have to be applied there too.
 
 				if (!this.terminalMenuValidationWorkaround_UpdateIsSuspended)
@@ -2188,7 +2188,7 @@ namespace YAT.View.Forms
 		{
 			if (contextMenuStrip_Predefined.SourceControl == groupBox_Predefined)
 			{
-				var id = predefined.GetCommandIdFromScreenPoint(new Point(contextMenuStrip_Predefined.Left, contextMenuStrip_Predefined.Top));
+				var id = predefined.GetCommandIdFromLocation(new Point(contextMenuStrip_Predefined.Left, contextMenuStrip_Predefined.Top));
 				var c = predefined.GetCommandFromId(id);
 
 				contextMenuStrip_Predefined_SelectedCommand = id;
@@ -2342,9 +2342,9 @@ namespace YAT.View.Forms
 				// Prepare the menu item properties based on state and settings.
 				//
 				// Attention:
-				// Similar code exists in the following locations:
-				//  > View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
-				//  > View.Controls.SendText.SetControls()
+				// Similar code exists in...
+				// ...View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
+				// ...View.Controls.SendText.SetControls()
 				// Changes here may have to be applied there too.
 				//
 				// Context and main menu are separated as there are subtle differences between them.
