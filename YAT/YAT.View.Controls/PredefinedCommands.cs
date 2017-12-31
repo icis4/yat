@@ -198,18 +198,18 @@ namespace YAT.View.Controls
 		/// Returns command ID (1..max) that is assigned to the button at the specified location.
 		/// Returns 0 if no button.
 		/// </summary>
-		public virtual int GetCommandIdFromScreenPoint(Point point)
+		public virtual int GetCommandIdFromLocation(Point point)
 		{
-			return (pageButtons.GetCommandIdFromScreenPoint(point));
+			return (pageButtons.GetCommandIdFromLocation(point));
 		}
 
 		/// <summary>
 		/// Returns command that is assigned to the button at the specified location.
 		/// Returns <c>null</c> if no button or if command is undefined or invalid.
 		/// </summary>
-		public virtual Command GetCommandFromScreenPoint(Point point)
+		public virtual Command GetCommandFromLocation(Point point)
 		{
-			return (pageButtons.GetCommandFromScreenPoint(point));
+			return (pageButtons.GetCommandFromLocation(point));
 		}
 
 		#endregion

@@ -170,21 +170,18 @@ namespace YAT.View.Controls
 		/// Returns command ID (1..max) that is assigned to the button at the specified location.
 		/// Returns 0 if no button.
 		/// </summary>
-		public virtual int GetCommandIdFromScreenPoint(Point point)
+		public virtual int GetCommandIdFromLocation(Point point)
 		{
-			Point client = PointToClient(point);
+			Point requested = PointToClient(point);
 
 			// Ensure that location is within control:
-			if ((client.X < 0) || (client.X > Width))
-				return (0);
-			if ((client.Y < 0) || (client.Y > Height))
-				return (0);
+			if ((requested.X < 0) || (requested.X > Width))  return (0);
+			if ((requested.Y < 0) || (requested.Y > Height)) return (0);
 
-			int accumulatedHeight = 0;
+			// Find corresponding button:
 			for (int i = 0; i < this.buttons_commands.Count; i++)
 			{
-				accumulatedHeight += this.buttons_commands[i].Height;
-				if (client.Y <= accumulatedHeight)
+				if (requested.Y <= this.buttons_commands[i].Bottom)
 					return (i + 1); // ID = 1..max
 			}
 
@@ -195,9 +192,9 @@ namespace YAT.View.Controls
 		/// Returns command that is assigned to the button at the specified location.
 		/// Returns <c>null</c> if no button or if command is undefined or invalid.
 		/// </summary>
-		public Command GetCommandFromScreenPoint(Point point)
+		public Command GetCommandFromLocation(Point point)
 		{
-			return (GetCommandFromId(GetCommandIdFromScreenPoint(point)));
+			return (GetCommandFromId(GetCommandIdFromLocation(point)));
 		}
 
 		#endregion
