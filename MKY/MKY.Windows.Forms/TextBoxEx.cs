@@ -59,8 +59,9 @@ namespace MKY.Windows.Forms
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			// Attention:
-			// Similar code exists in ComboBoxEx.ProcessCmdKey().
-			// Similar code exists in ToolStripComboBoxEx.ProcessCmdKey().
+			// Similar code exists in...
+			// ...ComboBoxEx.ProcessCmdKey().
+			// ...ToolStripComboBoxEx.ProcessCmdKey().
 			// Changes here may have to be applied there too.
 
 			if (ShortcutsEnabled)
