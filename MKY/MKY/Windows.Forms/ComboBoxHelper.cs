@@ -22,7 +22,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
@@ -31,6 +30,56 @@ namespace MKY.Windows.Forms
 	/// <summary></summary>
 	public static class ComboBoxHelper
 	{
+		/// <remarks></remarks>
+		public class CursorAndSelection
+		{
+			/// <summary>
+			/// Gets or sets the previous starting index of text selected in the combo box.
+			/// </summary>
+			public int  PreviousSelectionStart { get; protected set; } = ControlEx.InvalidIndex;
+
+			/// <summary>
+			/// Gets or sets the previous number of characters selected in the editable portion of the combo box.
+			/// </summary>
+			public int  PreviousSelectionLength { get; protected set; } // = 0;
+
+			/// <summary>
+			/// Gets or sets whether the previous selection spans to the end of the editable portion of the combo box.
+			/// </summary>
+			public bool PreviousSelectionSpansEnd { get; protected set; } // = false;
+
+			/// <summary>
+			/// Remembers the current cursor position and text selection of the specified control.
+			/// </summary>
+			public void Remember(ComboBox control)
+			{
+				PreviousSelectionStart  = control.SelectionStart;
+				PreviousSelectionLength = control.SelectionLength;
+
+				if (control.SelectionLength > 0)
+					PreviousSelectionSpansEnd = (control.SelectionLength == (control.Text.Length - control.SelectionStart));
+				else
+					PreviousSelectionSpansEnd = false;
+			}
+
+			/// <summary>
+			/// Restores the previously remembered cursor position and text selection on the specified control.
+			/// </summary>
+			public void Restore(ComboBox control)
+			{
+				if (!PreviousSelectionSpansEnd) // Simply restore:
+				{
+					control.SelectionStart  = PreviousSelectionStart;
+					control.SelectionLength = PreviousSelectionLength;
+				}
+				else // PreviousSelectionSpansEnd => Calculate:
+				{
+					control.SelectionStart  = PreviousSelectionStart;
+					control.SelectionLength = (control.Text.Length - control.SelectionStart);
+				}
+			}
+		}
+
 		/// <summary>
 		/// Selects the given item in a <see cref="ComboBox"/>.
 		/// </summary>
@@ -47,14 +96,11 @@ namespace MKY.Windows.Forms
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void Select(ComboBox control, object item, string fallbackText = null)
 		{
-			int selectionStart  = 0;
-			int selectionLength = 0;
+			var cursorAndSelection = new CursorAndSelection();
 
 			if (control.DropDownStyle != ComboBoxStyle.DropDownList)
 			{
-				// Keep cursor position and text selection:
-				selectionStart  = control.SelectionStart;
-				selectionLength = control.SelectionLength;
+				cursorAndSelection.Remember(control);
 			}
 
 			if (control.Items.Count > 0)
@@ -84,9 +130,7 @@ namespace MKY.Windows.Forms
 
 			if (control.DropDownStyle != ComboBoxStyle.DropDownList)
 			{
-				// Restore cursor position and text selection (as possible):
-				control.SelectionStart  = selectionStart;
-				control.SelectionLength = selectionLength;
+				cursorAndSelection.Restore(control);
 			}
 		}
 
@@ -107,57 +151,53 @@ namespace MKY.Windows.Forms
 		/// Updates the text of the <see cref="ComboBox"/> while staying in edit,
 		/// i.e. cursor location and text selection is kept.
 		/// </summary>
-		public static void UpdateTextWhileInEdit(ComboBox control, string text)
+		public static void UpdateTextKeepingCursorAndSelection(ComboBox control, string text)
 		{
-			int selectionStart  = 0;
-			int selectionLength = 0;
+			var cursorAndSelection = new CursorAndSelection();
 
 			if (control.DropDownStyle != ComboBoxStyle.DropDownList)
-			{
-				// Keep cursor position and text selection:
-				selectionStart  = control.SelectionStart;
-				selectionLength = control.SelectionLength;
-			}
+				cursorAndSelection.Remember(control);
 
 			control.Text = text;
 
 			if (control.DropDownStyle != ComboBoxStyle.DropDownList)
-			{
-				// Restore cursor position and text selection (as possible):
-				control.SelectionStart  = selectionStart;
-				control.SelectionLength = selectionLength;
-			}
+				cursorAndSelection.Restore(control);
 		}
 
 		/// <summary>
 		/// Updates the items of the <see cref="ComboBox"/> while staying in edit,
 		/// i.e. cursor location and text selection is kept.
 		/// </summary>
-		public static void UpdateItemsWhileInEdit(ComboBox control, object[] items)
+		public static void UpdateItemsKeepingCursorAndSelection(ComboBox control, object[] items)
 		{
-			// Keep text field because Items.Clear() will reset this:
-			string text         = control.Text;
-			int selectionStart  = control.SelectionStart;
-			int selectionLength = control.SelectionLength;
+			var cursorAndSelection = new CursorAndSelection();
+
+			if (control.DropDownStyle != ComboBoxStyle.DropDownList)
+				cursorAndSelection.Remember(control);
+
+			// Also remember text field because Items.Clear() will reset this:
+			string text = control.Text;
 
 			control.Items.Clear();
 
 			if (items != null) // Empty array is OK, but 'null' results in exception.
 				control.Items.AddRange(items);
 
-			// Restore text field:
-			control.Text            = text;
-			control.SelectionStart  = selectionStart;
-			control.SelectionLength = selectionLength;
+			// First restore text field:
+			control.Text = text;
+
+			if (control.DropDownStyle != ComboBoxStyle.DropDownList)
+				cursorAndSelection.Restore(control);
+
 		}
 
 		/// <summary>
 		/// Clears the items of the <see cref="ComboBox"/> while staying in edit,
 		/// i.e. cursor location and text selection is kept.
 		/// </summary>
-		public static void ClearItemsWhileInEdit(ComboBox control)
+		public static void ClearItemsKeepingCursorAndSelection(ComboBox control)
 		{
-			UpdateItemsWhileInEdit(control, null);
+			UpdateItemsKeepingCursorAndSelection(control, null);
 		}
 	}
 }

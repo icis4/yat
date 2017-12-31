@@ -932,9 +932,9 @@ namespace YAT.View.Controls
 			try
 			{
 				if (this.recent != null)
-					ComboBoxHelper.UpdateItemsWhileInEdit(comboBox_SingleLineText, this.recent.ToArray());
+					ComboBoxHelper.UpdateItemsKeepingCursorAndSelection(comboBox_SingleLineText, this.recent.ToArray());
 				else
-					ComboBoxHelper.ClearItemsWhileInEdit(comboBox_SingleLineText);
+					ComboBoxHelper.ClearItemsKeepingCursorAndSelection(comboBox_SingleLineText);
 			}
 			finally
 			{
@@ -969,7 +969,7 @@ namespace YAT.View.Controls
 						if (comboBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
 							comboBox_SingleLineText.Font = SystemFonts.DefaultFont;
 
-						ComboBoxHelper.UpdateTextWhileInEdit(comboBox_SingleLineText, this.command.SingleLineText);
+						ComboBoxHelper.UpdateTextKeepingCursorAndSelection(comboBox_SingleLineText, this.command.SingleLineText);
 					}
 					else
 					{
@@ -992,7 +992,7 @@ namespace YAT.View.Controls
 
 					if (this.command.IsText && !this.command.IsPartialText)
 					{
-						ComboBoxHelper.UpdateTextWhileInEdit(comboBox_SingleLineText, this.command.SingleLineText);
+						ComboBoxHelper.UpdateTextKeepingCursorAndSelection(comboBox_SingleLineText, this.command.SingleLineText);
 					}
 					else
 					{
@@ -1020,9 +1020,9 @@ namespace YAT.View.Controls
 				// Prepare the button properties based on state and settings.
 				//
 				// Attention:
-				// Similar code exists in the following locations:
-				//  > YAT.View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
-				//  > YAT.View.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
+				// Similar code exists in...
+				// ...YAT.View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
+				// ...YAT.View.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
 				// Changes here may have to be applied there too.
 
 				var text = "Send Text (F3)";
