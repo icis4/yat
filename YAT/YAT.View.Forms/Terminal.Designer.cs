@@ -142,9 +142,6 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_PredefinedContextMenu_Page_7 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_Page_8 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_Page_9 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_Page_10 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_Page_11 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_Page_12 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_PredefinedContextMenu_Define = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
@@ -1131,10 +1128,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_PredefinedContextMenu_Page_6,
             this.toolStripMenuItem_PredefinedContextMenu_Page_7,
             this.toolStripMenuItem_PredefinedContextMenu_Page_8,
-            this.toolStripMenuItem_PredefinedContextMenu_Page_9,
-            this.toolStripMenuItem_PredefinedContextMenu_Page_10,
-            this.toolStripMenuItem_PredefinedContextMenu_Page_11,
-            this.toolStripMenuItem_PredefinedContextMenu_Page_12});
+            this.toolStripMenuItem_PredefinedContextMenu_Page_9});
 			this.toolStripMenuItem_PredefinedContextMenu_Page.Name = "toolStripMenuItem_PredefinedContextMenu_Page";
 			this.toolStripMenuItem_PredefinedContextMenu_Page.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page.Text = "&Page";
@@ -1142,7 +1136,7 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_PredefinedContextMenu_Page_Next
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.Name = "toolStripMenuItem_PredefinedContextMenu_Page_Next";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
+			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.Right)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.Text = "&Next";
@@ -1151,7 +1145,7 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_PredefinedContextMenu_Page_Previous
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.Name = "toolStripMenuItem_PredefinedContextMenu_Page_Previous";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
+			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.Left)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.Text = "&Previous";
@@ -1166,8 +1160,8 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_1.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_1.Name = "toolStripMenuItem_PredefinedContextMenu_Page_1";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_1.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.F1)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_1.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.D1)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_1.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_1.Tag = "1";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_1.Text = "&1: <Undefined>";
@@ -1177,8 +1171,8 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_2.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_2.Name = "toolStripMenuItem_PredefinedContextMenu_Page_2";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_2.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.F2)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_2.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.D2)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_2.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_2.Tag = "2";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_2.Text = "&2: <Undefined>";
@@ -1188,8 +1182,8 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_3.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_3.Name = "toolStripMenuItem_PredefinedContextMenu_Page_3";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_3.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.F3)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_3.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.D3)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_3.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_3.Tag = "3";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_3.Text = "&3: <Undefined>";
@@ -1199,8 +1193,8 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_4.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_4.Name = "toolStripMenuItem_PredefinedContextMenu_Page_4";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_4.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.F4)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_4.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.D4)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_4.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_4.Tag = "4";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_4.Text = "&4: <Undefined>";
@@ -1210,8 +1204,8 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_5.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_5.Name = "toolStripMenuItem_PredefinedContextMenu_Page_5";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_5.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.F5)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_5.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.D5)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_5.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_5.Tag = "5";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_5.Text = "&5: <Undefined>";
@@ -1221,8 +1215,8 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_6.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_6.Name = "toolStripMenuItem_PredefinedContextMenu_Page_6";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_6.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.F6)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_6.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.D6)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_6.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_6.Tag = "6";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_6.Text = "&6: <Undefined>";
@@ -1232,8 +1226,8 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_7.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_7.Name = "toolStripMenuItem_PredefinedContextMenu_Page_7";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_7.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.F7)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_7.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.D7)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_7.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_7.Tag = "7";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_7.Text = "&7: <Undefined>";
@@ -1243,8 +1237,8 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_8.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_8.Name = "toolStripMenuItem_PredefinedContextMenu_Page_8";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_8.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.F8)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_8.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.D8)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_8.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_8.Tag = "8";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_8.Text = "&8: <Undefined>";
@@ -1254,45 +1248,12 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_9.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_9.Name = "toolStripMenuItem_PredefinedContextMenu_Page_9";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_9.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.F9)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_9.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.D9)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_9.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_9.Tag = "9";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_9.Text = "&9: <Undefined>";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_9.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Page_Click);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Page_10
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Page_10.Enabled = false;
-			this.toolStripMenuItem_PredefinedContextMenu_Page_10.Name = "toolStripMenuItem_PredefinedContextMenu_Page_10";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_10.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.F10)));
-			this.toolStripMenuItem_PredefinedContextMenu_Page_10.Size = new System.Drawing.Size(247, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Page_10.Tag = "10";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_10.Text = "1&0: <Undefined>";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_10.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Page_Click);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Page_11
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Page_11.Enabled = false;
-			this.toolStripMenuItem_PredefinedContextMenu_Page_11.Name = "toolStripMenuItem_PredefinedContextMenu_Page_11";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_11.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.F11)));
-			this.toolStripMenuItem_PredefinedContextMenu_Page_11.Size = new System.Drawing.Size(247, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Page_11.Tag = "11";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_11.Text = "11: <Undefined>";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_11.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Page_Click);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Page_12
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Page_12.Enabled = false;
-			this.toolStripMenuItem_PredefinedContextMenu_Page_12.Name = "toolStripMenuItem_PredefinedContextMenu_Page_12";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_12.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.F12)));
-			this.toolStripMenuItem_PredefinedContextMenu_Page_12.Size = new System.Drawing.Size(247, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Page_12.Tag = "12";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_12.Text = "12: <Undefined>";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_12.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Page_Click);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_Separator_2
 			// 
@@ -3360,9 +3321,6 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Page_7;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Page_8;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Page_9;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Page_10;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Page_11;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Page_12;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_SendImmediately;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_SendImmediately;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_OutputBreak;

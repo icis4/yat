@@ -119,9 +119,9 @@ Fixed bugs:
   well as feature request #326; related to feature request #323 implemented in previous release).
 - Focus no longer moves away from 'Send Text' when switching applications (bug #391).
 - Standard word selection shortcuts [Ctrl+Shift+Left|Right] also work when commands are predefined.
-- Shortcuts to navigate command pages changed from [Ctrl+Shift+Left|Right] to [Alt+Shift+Left|Right]
-  and shortcuts to 'Copy to Send Text' changed from [Alt+Shift+F1..F12] to [Ctrl+Shift+F1..F12]
-  (consequence of change above).
+- Shortcuts to navigate command pages changed from [Ctrl+Shift+Left|Right] to [Ctrl+Alt+Left|Right]
+  and [Ctrl+Shift+F1..F12] to [Ctrl+Alt+1..9] as well as shortcuts to 'Copy to Send Text' changed
+  from [Alt+Shift+F1..F12] to [Ctrl+Shift+F1..F12] (consequence of change above).
 - Endianness of multi-byte encoded characters fixed, UTF-8 no longer results in spurious warning
   messages (bug #400, regression of bug #343 fixed for version 1.99.70).
 - Superfluous spaces for multi-byte LE encodings fixed (related to bug #400 and feat. request #271).
