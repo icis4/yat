@@ -2043,7 +2043,7 @@ namespace YAT.View.Forms
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1303:ConstFieldNamesMustBeginWithUpperCaseLetter", Justification = "'MaxPages' indeed starts with an upper case letter.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private const int menuItems_Predefined_MaxPages = 12;
+		private const int menuItems_Predefined_MaxPagesWithMenuItem = 9;
 
 		private void contextMenuStrip_Predefined_Initialize()
 		{
@@ -2061,7 +2061,7 @@ namespace YAT.View.Forms
 			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_11);
 			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_12);
 
-			this.menuItems_Predefined_Pages = new List<ToolStripMenuItem>(menuItems_Predefined_MaxPages); // Preset the required capacity to improve memory management.
+			this.menuItems_Predefined_Pages = new List<ToolStripMenuItem>(menuItems_Predefined_MaxPagesWithMenuItem); // Preset the required capacity to improve memory management.
 			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_1);
 			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_2);
 			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_3);
@@ -2071,9 +2071,6 @@ namespace YAT.View.Forms
 			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_7);
 			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_8);
 			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_9);
-			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_10);
-			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_11);
-			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_12);
 		}
 
 		/// <remarks>
@@ -2095,28 +2092,28 @@ namespace YAT.View.Forms
 				if (pageCount > 0)
 				{
 					toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled  = (predefined.SelectedPage > 1);
-					toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled      = (predefined.SelectedPage < pageCount);
+					toolStripMenuItem_PredefinedContextMenu_Page_Next    .Enabled  = (predefined.SelectedPage < pageCount);
 					toolStripMenuItem_PredefinedContextMenu_Page_Separator.Visible = true;
 				}
 				else
 				{
 					toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled  = false;
-					toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled      = false;
+					toolStripMenuItem_PredefinedContextMenu_Page_Next    .Enabled  = false;
 					toolStripMenuItem_PredefinedContextMenu_Page_Separator.Visible = false;
 				}
 
-				for (int i = 0; i < Math.Min(pageCount, menuItems_Predefined_MaxPages); i++)
+				for (int i = 0; i < Math.Min(pageCount, menuItems_Predefined_MaxPagesWithMenuItem); i++)
 				{
-					this.menuItems_Predefined_Pages[i].Text    = MenuEx.PrependIndex(i + 1, pages[i].PageName);
-					this.menuItems_Predefined_Pages[i].Visible = true;
-					this.menuItems_Predefined_Pages[i].Enabled = this.terminal.IsOpen;
+					this.menuItems_Predefined_Pages[i].Text    =  MenuEx.PrependIndex(i + 1, pages[i].PageName);
+					this.menuItems_Predefined_Pages[i].Visible =  true;
+					this.menuItems_Predefined_Pages[i].Enabled = (pageCount > 1); // No need to navigate a single page.
 				}
 
-				for (int i = pageCount; i < menuItems_Predefined_MaxPages; i++)
+				for (int i = pageCount; i < menuItems_Predefined_MaxPagesWithMenuItem; i++)
 				{
-					this.menuItems_Predefined_Pages[i].Text    = MenuEx.PrependIndex(i + 1, "<Undefined>");
-					this.menuItems_Predefined_Pages[i].Visible = false;
-					this.menuItems_Predefined_Pages[i].Enabled = false;
+					this.menuItems_Predefined_Pages[i].Text    =  MenuEx.PrependIndex(i + 1, "<Undefined>");
+					this.menuItems_Predefined_Pages[i].Visible =  false;
+					this.menuItems_Predefined_Pages[i].Enabled =  false;
 				}
 
 				// Commands:
@@ -4414,6 +4411,8 @@ namespace YAT.View.Forms
 				{
 					this.isSettingControls.Leave();
 				}
+
+				SetPredefinedControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Window))
 			{
