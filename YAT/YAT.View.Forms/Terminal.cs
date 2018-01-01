@@ -2284,7 +2284,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			var c = contextMenuStrip_Predefined_CopyToSendText;
+			var c = new Command(contextMenuStrip_Predefined_CopyToSendText); // Clone command to ensure decoupling.
 			if (c != null)
 			{
 				if (c.IsText)
@@ -2299,7 +2299,8 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommand - 1, this.settingsRoot.SendText.Command);
+			var c = new Command(this.settingsRoot.SendText.Command); // Clone command to ensure decoupling.
+			this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommand - 1, c);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile_Click(object sender, EventArgs e)
@@ -2307,7 +2308,8 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommand - 1, this.settingsRoot.SendFile.Command);
+			var c = new Command(this.settingsRoot.SendFile.Command); // Clone command to ensure decoupling.
+			this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommand - 1, c);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Hide_Click(object sender, EventArgs e)
