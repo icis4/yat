@@ -325,7 +325,7 @@ namespace MKY.IO.Serial.Socket.Test
 
 		internal static void AssertStopped(IIOProvider io)
 		{
-			Assert.That(io.IsStopped);
+			Assert.That( io.IsStopped);
 			Assert.That(!io.IsOpen);
 			Assert.That(!io.IsConnected);
 			Assert.That(!io.IsTransmissive);
