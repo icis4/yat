@@ -257,7 +257,7 @@ namespace YAT.Model.Test.Transmission
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too many values to verify.")]
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
-		[Test, TestCaseSource(typeof(TwoWayTestData), "TestCasesIPLoopbackSelfs")]
+		[Test, TestCaseSource(typeof(RepeatingTestData), "TestCasesIPLoopbackSelfs")]
 		public static void IPLoopbackSelfs(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
 		                                   Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                   int repeatCount, bool doTwoWay, bool executeBreak)
