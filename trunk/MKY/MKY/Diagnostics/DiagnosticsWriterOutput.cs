@@ -64,10 +64,10 @@ namespace MKY.Diagnostics
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void WriteLocation(IDiagnosticsWriter writer, StackTrace st, int index, string message, bool appendLineBreak = true)
 		{
-			StackFrame sf = st.GetFrame(index);
+			var sf = st.GetFrame(index);
 			if (sf != null)
 			{
-				MethodBase m = sf.GetMethod();
+				var m = sf.GetMethod();
 				writer.Write(m.ReflectedType.FullName);
 				writer.Write(".");
 				writer.Write(m.Name);

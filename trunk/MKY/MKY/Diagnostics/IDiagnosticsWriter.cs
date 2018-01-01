@@ -53,7 +53,8 @@ namespace MKY.Diagnostics
 		/// Gets or sets the number of spaces in an indent.
 		/// </summary>
 		/// <value>
-		/// The number of spaces in an indent. The default is four.
+		/// The number of spaces in an indent. The default is four (same as the default
+		/// of <see cref="Debug.IndentSize"/> and <see cref="Trace.IndentSize"/>).
 		/// </value>
 		int IndentSize
 		{
