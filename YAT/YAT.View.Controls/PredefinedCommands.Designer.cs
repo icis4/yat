@@ -33,12 +33,12 @@
 			this.label_Shortcuts = new System.Windows.Forms.Label();
 			this.splitContainer_Lower = new System.Windows.Forms.SplitContainer();
 			this.panel_Commands = new System.Windows.Forms.Panel();
+			this.pageButtons = new YAT.View.Controls.PredefinedCommandPageButtons();
 			this.panel_Navigation = new System.Windows.Forms.Panel();
 			this.comboBox_Pages = new System.Windows.Forms.ComboBox();
 			this.label_Page = new System.Windows.Forms.Label();
 			this.button_PagePrevious = new System.Windows.Forms.Button();
 			this.button_PageNext = new System.Windows.Forms.Button();
-			this.pageButtons = new YAT.View.Controls.PredefinedCommandPageButtons();
 			this.splitContainer_Commands.Panel1.SuspendLayout();
 			this.splitContainer_Commands.Panel2.SuspendLayout();
 			this.splitContainer_Commands.SuspendLayout();
@@ -90,7 +90,7 @@
 			this.label_Shortcuts.Name = "label_Shortcuts";
 			this.label_Shortcuts.Size = new System.Drawing.Size(144, 26);
 			this.label_Shortcuts.TabIndex = 0;
-			this.label_Shortcuts.Text = "Shift+F1..F12  to send\r\nAlt+Shift+F1..F12  to copy";
+			this.label_Shortcuts.Text = "Shift+F1..F12  to send\r\nCtrl+Shift+F1..F12  to copy";
 			this.label_Shortcuts.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// splitContainer_Lower
@@ -125,6 +125,17 @@
 			this.panel_Commands.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
 			this.panel_Commands.Size = new System.Drawing.Size(144, 287);
 			this.panel_Commands.TabIndex = 0;
+			// 
+			// pageButtons
+			// 
+			this.pageButtons.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pageButtons.Location = new System.Drawing.Point(3, 0);
+			this.pageButtons.Margin = new System.Windows.Forms.Padding(3, 2, 3, 3);
+			this.pageButtons.Name = "pageButtons";
+			this.pageButtons.Size = new System.Drawing.Size(138, 287);
+			this.pageButtons.TabIndex = 0;
+			this.pageButtons.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
+			this.pageButtons.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
 			// 
 			// panel_Navigation
 			// 
@@ -181,17 +192,6 @@
 			this.button_PageNext.Text = ">";
 			this.button_PageNext.UseVisualStyleBackColor = true;
 			this.button_PageNext.Click += new System.EventHandler(this.button_PageNext_Click);
-			// 
-			// pageButtons
-			// 
-			this.pageButtons.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.pageButtons.Location = new System.Drawing.Point(3, 0);
-			this.pageButtons.Margin = new System.Windows.Forms.Padding(3, 2, 3, 3);
-			this.pageButtons.Name = "pageButtons";
-			this.pageButtons.Size = new System.Drawing.Size(138, 287);
-			this.pageButtons.TabIndex = 0;
-			this.pageButtons.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
-			this.pageButtons.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
 			// 
 			// PredefinedCommands
 			// 

@@ -1142,7 +1142,7 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_PredefinedContextMenu_Page_Next
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.Name = "toolStripMenuItem_PredefinedContextMenu_Page_Next";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.Right)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.Text = "&Next";
@@ -1151,7 +1151,7 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_PredefinedContextMenu_Page_Previous
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.Name = "toolStripMenuItem_PredefinedContextMenu_Page_Previous";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.Left)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.Text = "&Previous";
@@ -1166,7 +1166,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_1.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_1.Name = "toolStripMenuItem_PredefinedContextMenu_Page_1";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_1.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			this.toolStripMenuItem_PredefinedContextMenu_Page_1.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.F1)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_1.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_1.Tag = "1";
@@ -1177,7 +1177,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_2.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_2.Name = "toolStripMenuItem_PredefinedContextMenu_Page_2";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_2.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			this.toolStripMenuItem_PredefinedContextMenu_Page_2.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.F2)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_2.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_2.Tag = "2";
@@ -1188,7 +1188,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_3.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_3.Name = "toolStripMenuItem_PredefinedContextMenu_Page_3";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_3.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			this.toolStripMenuItem_PredefinedContextMenu_Page_3.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.F3)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_3.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_3.Tag = "3";
@@ -1199,7 +1199,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_4.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_4.Name = "toolStripMenuItem_PredefinedContextMenu_Page_4";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_4.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			this.toolStripMenuItem_PredefinedContextMenu_Page_4.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.F4)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_4.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_4.Tag = "4";
@@ -1210,7 +1210,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_5.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_5.Name = "toolStripMenuItem_PredefinedContextMenu_Page_5";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_5.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			this.toolStripMenuItem_PredefinedContextMenu_Page_5.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.F5)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_5.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_5.Tag = "5";
@@ -1221,7 +1221,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_6.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_6.Name = "toolStripMenuItem_PredefinedContextMenu_Page_6";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_6.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			this.toolStripMenuItem_PredefinedContextMenu_Page_6.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.F6)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_6.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_6.Tag = "6";
@@ -1232,7 +1232,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_7.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_7.Name = "toolStripMenuItem_PredefinedContextMenu_Page_7";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_7.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			this.toolStripMenuItem_PredefinedContextMenu_Page_7.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.F7)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_7.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_7.Tag = "7";
@@ -1243,7 +1243,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_8.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_8.Name = "toolStripMenuItem_PredefinedContextMenu_Page_8";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_8.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			this.toolStripMenuItem_PredefinedContextMenu_Page_8.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.F8)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_8.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_8.Tag = "8";
@@ -1254,7 +1254,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_9.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_9.Name = "toolStripMenuItem_PredefinedContextMenu_Page_9";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_9.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			this.toolStripMenuItem_PredefinedContextMenu_Page_9.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.F9)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_9.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_9.Tag = "9";
@@ -1265,7 +1265,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_10.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_10.Name = "toolStripMenuItem_PredefinedContextMenu_Page_10";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_10.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			this.toolStripMenuItem_PredefinedContextMenu_Page_10.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.F10)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_10.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_10.Tag = "10";
@@ -1276,7 +1276,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_11.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_11.Name = "toolStripMenuItem_PredefinedContextMenu_Page_11";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_11.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			this.toolStripMenuItem_PredefinedContextMenu_Page_11.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.F11)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_11.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_11.Tag = "11";
@@ -1287,7 +1287,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_12.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_12.Name = "toolStripMenuItem_PredefinedContextMenu_Page_12";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_12.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+			this.toolStripMenuItem_PredefinedContextMenu_Page_12.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.F12)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_12.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_12.Tag = "12";
