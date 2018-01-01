@@ -2094,7 +2094,7 @@ namespace YAT.View.Forms
 
 				if (pageCount > 0)
 				{
-					toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled  = (predefined.SelectedPage > 0);
+					toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled  = (predefined.SelectedPage > 1);
 					toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled      = (predefined.SelectedPage < pageCount);
 					toolStripMenuItem_PredefinedContextMenu_Page_Separator.Visible = true;
 				}

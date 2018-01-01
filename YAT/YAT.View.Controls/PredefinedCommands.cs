@@ -272,7 +272,7 @@ namespace YAT.View.Controls
 					pageButtons.Commands = this.pages[SelectedPageIndex].Commands;
 
 					button_PagePrevious.Enabled = (this.selectedPage > 1);
-					button_PageNext.Enabled = (this.selectedPage < this.pages.Count);
+					button_PageNext.Enabled     = (this.selectedPage < this.pages.Count);
 
 					label_Page.Enabled = true;
 					label_Page.Text = "Page " + this.selectedPage + "/" + this.pages.Count;
