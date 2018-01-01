@@ -274,10 +274,10 @@ namespace YAT.View.Controls
 					button_PagePrevious.Enabled = (this.selectedPage > 1);
 					button_PageNext.Enabled     = (this.selectedPage < this.pages.Count);
 
-					label_Page.Enabled = true;
+					label_Page.Enabled = (this.pages.Count > 1); // No need to navigate a single page.
 					label_Page.Text = "Page " + this.selectedPage + "/" + this.pages.Count;
 
-					comboBox_Pages.Enabled = true;
+					comboBox_Pages.Enabled = (this.pages.Count > 1); // No need to navigate a single page.
 					comboBox_Pages.Items.Clear();
 
 					foreach (var page in this.pages)
