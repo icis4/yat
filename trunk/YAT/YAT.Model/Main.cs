@@ -622,13 +622,20 @@ namespace YAT.Model
 				this.startArgs.RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex; // Disable the operation.
 			}
 
-			// Prio 8 = Override settings as desired:
+			// Prio 8 = Override explicit settings as desired:
 			if (this.startArgs.TerminalSettingsHandler != null) // Applies to a dedicated terminal.
 			{
 				if (!ProcessCommandLineArgsIntoExistingTerminalSettings(this.startArgs.TerminalSettingsHandler.Settings.Terminal))
 					return (false);
+
+				if (this.commandLineArgs.OptionIsGiven("StartTerminal"))
+					this.startArgs.TerminalSettingsHandler.Settings.TerminalIsStarted = this.commandLineArgs.StartTerminal;
+
+				if (this.commandLineArgs.OptionIsGiven("LogOn"))
+					this.startArgs.TerminalSettingsHandler.Settings.LogIsOn           = this.commandLineArgs.LogOn;
 			}
 
+			// Prio 9 = Override overall settings as desired:
 			if (this.commandLineArgs.OptionIsGiven("StartTerminal"))
 				this.startArgs.Override.StartTerminal       = this.commandLineArgs.StartTerminal;
 
@@ -641,7 +648,7 @@ namespace YAT.Model
 			if (this.commandLineArgs.OptionIsGiven("KeepLogOff"))
 				this.startArgs.Override.KeepLogOff          = this.commandLineArgs.KeepLogOff;
 
-			// Prio 9 = Perform requested operation:
+			// Prio 10 = Perform requested operation:
 			if (this.startArgs.RequestedDynamicTerminalIndex != Indices.InvalidDynamicIndex)
 			{
 				if (this.commandLineArgs.OptionIsGiven("TransmitText"))
@@ -656,7 +663,7 @@ namespace YAT.Model
 				}
 			}
 
-			// Prio 10 = Set behavior:
+			// Prio 11 = Set behavior:
 			if (this.startArgs.PerformOperationOnRequestedTerminal)
 			{
 				this.startArgs.OperationDelay = this.commandLineArgs.OperationDelay;
@@ -671,7 +678,7 @@ namespace YAT.Model
 				this.startArgs.KeepOpenOnError = true;
 			}
 
-			// Prio 11 = Tile:
+			// Prio 12 = Tile:
 			this.startArgs.TileHorizontal = this.commandLineArgs.TileHorizontal;
 			this.startArgs.TileVertical   = this.commandLineArgs.TileVertical;
 
