@@ -22,6 +22,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics;
 using System.IO;
 
 namespace MKY.Diagnostics
@@ -54,8 +55,17 @@ namespace MKY.Diagnostics
 		// Indent
 		//==========================================================================================
 
-		private int indentSize = 4;
-		private string indentString = new string(' ', 4);
+		/// <summary>
+		/// The default number of spaces in an indent.
+		/// </summary>
+		/// <value>
+		/// The number of spaces in an indent. The default is four (same as the default
+		/// of <see cref="Debug.IndentSize"/> and <see cref="Trace.IndentSize"/>).
+		/// </value>
+		public const int IndentSizeDefault = 4;
+
+		private int indentSize = IndentSizeDefault;
+		private string indentString = new string(' ', IndentSizeDefault);
 
 		private int indentLevel; // = 0;
 
