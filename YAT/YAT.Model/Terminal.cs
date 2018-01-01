@@ -3456,10 +3456,21 @@ namespace YAT.Model
 			{
 				// Clone the command for the recent commands collection:
 				Command clone;
-				if (!c.IsPartialTextEol)
+				if (c.IsSingleLineText || c.IsMultiLineText)
+				{
 					clone = new Command(c); // 'Normal' case, simply clone the command.
-				else                        // Partial, create an equivalent single line text.
-					clone = new Command(this.partialCommandLine, false, c.DefaultRadix);
+				}
+				else if (c.IsPartialTextEol)
+				{                                        // Create a single line text command,
+					if (this.partialCommandLine != null) // using the previously sent characters:
+						clone = new Command(this.partialCommandLine, false, c.DefaultRadix);
+					else
+						clone = new Command(c); // Keep partial EOL.
+				}
+				else
+				{
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Condition is invalid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 
 				// Put clone into recent history:
 				this.settingsRoot.SendText.RecentCommands.Add(new RecentItem<Command>(clone));
