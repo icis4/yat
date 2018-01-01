@@ -212,9 +212,9 @@ namespace YAT.Model.Test.Transmission
 			var dr = MessageBoxEx.Show
 			(
 				"This test requires a weighing MT-SICS device:" + Environment.NewLine +
-				" > Serial COM Port: Start weight simulation if no load cell connected." + Environment.NewLine +
+				" > Serial COM Port: Start WeightSim if no load cell connected." + Environment.NewLine +
 				" > TCP/IP Socket: Start device simulation." + Environment.NewLine +
-				" > USB Ser/HID: Start weight simulation if no load cell connected.",
+				" > USB Ser/HID: Start WeightSim if no load cell connected.",
 				"Precondition",
 				MessageBoxButtons.OKCancel,
 				MessageBoxIcon.Information

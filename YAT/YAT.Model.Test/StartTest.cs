@@ -822,7 +822,7 @@ namespace YAT.Model.Test
 
 		private static void PrepareMainAndVerifyResult(Main main, MainResult expectedMainResult)
 		{
-			MainResult mainResult = main.PrepareStart();
+			var mainResult = main.PrepareStart();
 			Assert.That(mainResult, Is.EqualTo(expectedMainResult));
 		}
 
