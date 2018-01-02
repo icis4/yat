@@ -100,9 +100,9 @@ namespace MKY.Windows.Forms
 						control.SelectionLength = (control.Text.Length - control.SelectionStart);
 					}
 
-					// Minor issue:
-					//  > If selection was done in reverse direction, i.e. cursor is located to the
-					//    left of the selection, e.g. Iabc, Restore() again reverts this, e.g. abcI.
+					// \remind (2018-01-02 / MKY) minor issue (bug #403):
+					// If selection was done in reverse direction, i.e. cursor is located to the
+					// left of the selection, e.g. Iabc, Restore() again reverts this, e.g. abcI.
 				}
 			}
 		}

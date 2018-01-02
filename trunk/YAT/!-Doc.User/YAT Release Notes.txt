@@ -134,12 +134,13 @@ Limitations and known issues:
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
    > System errors are output in local language, even though YAT is all-English (bug #66).
+   > Combo box cannot restore some corner-case cursor positions (bug #403).
    > Tool strip combo box slightly flickers when updating item list, e.g. 'Find Pattern' (bug #402).
    > Single chars are compared case insensitively against recent 'Send Text' commands (bug #347).
    > Automatic completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
    > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
-     selected may lead to a severe drop of the overall performance (rel. to bugs #305, #380, #383).
+     selected may lead to a severe drop of the overall performance (related to bug #383).
    > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
@@ -216,7 +217,7 @@ Limitations and known issues:
    > Automatic completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
    > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
-     selected may lead to a severe drop of the overall performance (rel. to bugs #305, #380, #383).
+     selected may lead to a severe drop of the overall performance (related to bug #383).
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
