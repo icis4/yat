@@ -3472,12 +3472,16 @@ namespace YAT.Model
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Condition is invalid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
+				// Reset the partial command line, in any case:
+				this.partialCommandLine = null;
+
+				// Clear potential description, as that shall not be considered for recents,
+				// e.g. same command with different description shall only be listed once:
+				clone.ClearDescription();
+
 				// Put clone into recent history:
 				this.settingsRoot.SendText.RecentCommands.Add(new RecentItem<Command>(clone));
 				this.settingsRoot.SendText.SetChanged(); // Manual change required because underlying collection is modified.
-
-				// Reset the partial command line:
-				this.partialCommandLine = null;
 			}
 		}
 
@@ -3541,6 +3545,10 @@ namespace YAT.Model
 		{
 			// Clone the command for the recent commands collection:
 			var clone = new Command(c);
+
+			// Clear potential description, as that shall not be considered for recents,
+			// e.g. same command with different description shall only be listed once:
+			clone.ClearDescription();
 
 			// Put clone into recent history:
 			this.settingsRoot.SendFile.RecentCommands.Add(new RecentItem<Command>(clone));
