@@ -204,21 +204,21 @@ namespace YAT.View.Controls
 				if (this.command != value)
 				{
 					DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
-
-					if (value != null)
 					{
-						this.command = value;
-						this.isValidated = value.IsValidText;
-					}
-					else
-					{
-						this.command = new Command();
-						this.isValidated = false;
-					}
+						if (value != null)
+						{
+							this.command = value;
+							this.isValidated = value.IsValidText;
+						}
+						else
+						{
+							this.command = new Command();
+							this.isValidated = false;
+						}
 
-					SetCommandControls();
-					OnCommandChanged(EventArgs.Empty);
-
+						SetCommandControls();
+						OnCommandChanged(EventArgs.Empty);
+					}
 					DebugUserInputLeave();
 				}
 			}
@@ -236,10 +236,10 @@ namespace YAT.View.Controls
 				if (!IEnumerableEx.ElementsEqual(this.recent, value))
 				{
 					DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
-
-					this.recent = new RecentItemCollection<Command>(value); // Clone collection to ensure decoupling.
-					SetRecentControls(); // Recent must immediately be updated, otherwise order will be wrong on arrow-up/down.
-
+					{
+						this.recent = new RecentItemCollection<Command>(value); // Clone collection to ensure decoupling.
+						SetRecentControls(); // Recent must immediately be updated, otherwise order will be wrong on arrow-up/down.
+					}
 					DebugUserInputLeave();
 				}
 			}
@@ -404,11 +404,11 @@ namespace YAT.View.Controls
 				this.isStartingUpInStandby = true;
 
 			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
-
-			comboBox_SingleLineText.Select();
-			comboBox_SingleLineText.SelectionLength = 0;
-			comboBox_SingleLineText.SelectionStart = comboBox_SingleLineText.Text.Length;
-
+			{
+				comboBox_SingleLineText.Select();
+				comboBox_SingleLineText.SelectionLength = 0;
+				comboBox_SingleLineText.SelectionStart = comboBox_SingleLineText.Text.Length;
+			}
 			DebugUserInputLeave();
 		}
 
@@ -426,12 +426,12 @@ namespace YAT.View.Controls
 				this.isStartingUpInStandby = false;
 
 			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
+			{
+				comboBox_SingleLineText.Select();
 
-			comboBox_SingleLineText.Select();
-
-			// No need to set the cursor to the end by "SelectionStart = Text.Length" as the
-			// combo box is a ComboBoxEx that remembers cursor location and text selection.
-
+				// No need to set the cursor to the end by "SelectionStart = Text.Length" as the
+				// combo box is a ComboBoxEx that remembers cursor location and text selection.
+			}
 			DebugUserInputLeave();
 		}
 
@@ -530,17 +530,17 @@ namespace YAT.View.Controls
 				this.isStartingUp = false;
 
 				DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
-
-				SetExplicitDefaultRadixControls(); // Attention, this method typically collapses the explicit default radix panel, and layouting apparently resets text selection in the combo box!
-				SetRecentControls();
-				SetCommandControls();
-
-				if (this.isStartingUpInStandby) // Attention, see comments below!
 				{
-					comboBox_SingleLineText.SelectionLength = 0;
-					comboBox_SingleLineText.SelectionStart = comboBox_SingleLineText.Text.Length;
-				}
+					SetExplicitDefaultRadixControls(); // Attention, this method typically collapses the explicit default radix panel, and layouting apparently resets text selection in the combo box!
+					SetRecentControls();
+					SetCommandControls();
 
+					if (this.isStartingUpInStandby) // Attention, see comments below!
+					{
+						comboBox_SingleLineText.SelectionLength = 0;
+						comboBox_SingleLineText.SelectionStart = comboBox_SingleLineText.Text.Length;
+					}
+				}
 				DebugUserInputLeave();
 
 				// Without the workaround above, the "Send Text" content of all terminals is fully
@@ -581,7 +581,11 @@ namespace YAT.View.Controls
 		/// </remarks>
 		private void SendText_Enter(object sender, EventArgs e)
 		{
-			SetTextFocusState(TextFocusState.EditIsInactive);
+			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
+			{
+				SetTextFocusState(TextFocusState.EditIsInactive);
+			}
+			DebugUserInputLeave();
 		}
 
 		/// <remarks>
@@ -594,13 +598,17 @@ namespace YAT.View.Controls
 		/// </remarks>
 		private void SendText_Leave(object sender, EventArgs e)
 		{
-			if (this.isValidated)
-				SetTextFocusState(TextFocusState.EditIsInactive);
-			else
-				SetTextFocusState(TextFocusState.IsLeavingParent);
+			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
+			{
+				if (this.isValidated)
+					SetTextFocusState(TextFocusState.EditIsInactive);
+				else
+					SetTextFocusState(TextFocusState.IsLeavingParent);
 
-			SetSendControls(); // Required to restore "Send Text (F3)"
-		}                      // after "Send Text w/o EOL (Ctrl+F3)".
+				SetSendControls(); // Required to restore "Send Text (F3)"
+			}                      // after "Send Text w/o EOL (Ctrl+F3)".
+			DebugUserInputLeave();
+		}
 
 		#endregion
 
@@ -683,31 +691,31 @@ namespace YAT.View.Controls
 		private void comboBox_SingleLineText_Enter(object sender, EventArgs e)
 		{
 			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
-
-			// Attention:
-			// Similar code exists in PredefinedCommandSettingsSet.textBox_SingleLineText_Enter().
-			// Changes here may have to be applied there too.
-
-			// Clear "<Enter a command...>" if needed.
-			if ((this.textFocusState == TextFocusState.EditIsInactive) && !this.command.IsText)
 			{
-				this.isSettingControls.Enter();
-				try
+				// Attention:
+				// Similar code exists in PredefinedCommandSettingsSet.textBox_SingleLineText_Enter().
+				// Changes here may have to be applied there too.
+
+				// Clear "<Enter a command...>" if needed.
+				if ((this.textFocusState == TextFocusState.EditIsInactive) && !this.command.IsText)
 				{
-					comboBox_SingleLineText.Text      = "";
-					comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
-					comboBox_SingleLineText.Font      = SystemFonts.DefaultFont;
+					this.isSettingControls.Enter();
+					try
+					{
+						comboBox_SingleLineText.Text      = "";
+						comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
+						comboBox_SingleLineText.Font      = SystemFonts.DefaultFont;
+					}
+					finally
+					{
+						this.isSettingControls.Leave();
+					}
 				}
-				finally
-				{
-					this.isSettingControls.Leave();
-				}
+
+				SetTextFocusState(TextFocusState.EditHasFocus);
+
+				// No need to set this.isValidated = false yet. The 'TextChanged' event will do so.
 			}
-
-			SetTextFocusState(TextFocusState.EditHasFocus);
-
-			// No need to set this.isValidated = false yet. The 'TextChanged' event will do so.
-
 			DebugUserInputLeave();
 		}
 
@@ -726,31 +734,31 @@ namespace YAT.View.Controls
 		private void comboBox_SingleLineText_Leave(object sender, EventArgs e)
 		{
 			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
+			{
+				// Attention:
+				// Similar code exists in PredefinedCommandSettingsSet.textBox_SingleLineText_Leave().
+				// Changes here may have to be applied there too.
 
-			// Attention:
-			// Similar code exists in PredefinedCommandSettingsSet.textBox_SingleLineText_Leave().
-			// Changes here may have to be applied there too.
-
-			if (this.isValidated)
-				SetTextFocusState(TextFocusState.EditIsInactive);
-			else
-				SetTextFocusState(TextFocusState.IsLeavingEdit);
-
+				if (this.isValidated)
+					SetTextFocusState(TextFocusState.EditIsInactive);
+				else
+					SetTextFocusState(TextFocusState.IsLeavingEdit);
+			}
 			DebugUserInputLeave();
 		}
 
 		private void comboBox_SingleLineText_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
-
-			if (this.sendImmediately)
 			{
-				this.isValidated = true; // Implicitly in any case.
+				if (this.sendImmediately)
+				{
+					this.isValidated = true; // Implicitly in any case.
 
-				ConfirmPartialText(Domain.Terminal.ConvertToSendableText(e.KeyChar));
-				OnSendCommandRequest(new SendTextOptionEventArgs(SendTextOption.Normal));
+					ConfirmPartialText(Domain.Terminal.ConvertToSendableText(e.KeyChar));
+					OnSendCommandRequest(new SendTextOptionEventArgs(SendTextOption.Normal));
+				}
 			}
-
 			DebugUserInputLeave();
 		}
 
@@ -760,18 +768,18 @@ namespace YAT.View.Controls
 				return;
 
 			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
+			{
+				// Attention:
+				// Similar code exists in PredefinedCommandSettingsSet.textBox_SingleLineText_TextChanged().
+				// Changes here may have to be applied there too.
 
-			// Attention:
-			// Similar code exists in PredefinedCommandSettingsSet.textBox_SingleLineText_TextChanged().
-			// Changes here may have to be applied there too.
+				if (this.sendImmediately)
+					comboBox_SingleLineText.Text = ""; // Instantly reset the text.
+				else
+					this.isValidated = false; // Reset the validation flag.
 
-			if (this.sendImmediately)
-				comboBox_SingleLineText.Text = ""; // Instantly reset the text.
-			else
-				this.isValidated = false; // Reset the validation flag.
-
-			SetSendControls();
-
+				SetSendControls();
+			}
 			DebugUserInputLeave();
 		}
 
@@ -786,20 +794,20 @@ namespace YAT.View.Controls
 				return;
 
 			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
-
-			this.isValidated = true; // Commands in history have already been validated.
-
-			if (comboBox_SingleLineText.SelectedItem != null)
 			{
-				var ri = (comboBox_SingleLineText.SelectedItem as RecentItem<Command>);
-				if (ri != null)
-				{
-					this.command = ri.Item;
+				this.isValidated = true; // Commands in history have already been validated.
 
-					ConfirmCommand();
+				if (comboBox_SingleLineText.SelectedItem != null)
+				{
+					var ri = (comboBox_SingleLineText.SelectedItem as RecentItem<Command>);
+					if (ri != null)
+					{
+						this.command = ri.Item;
+
+						ConfirmCommand();
+					}
 				}
 			}
-
 			DebugUserInputLeave();
 		}
 		
@@ -821,57 +829,57 @@ namespace YAT.View.Controls
 				return;
 
 			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
-
-			// Attention:
-			// Similar code exists in PredefinedCommandSettingsSet.textBox_SingleLineText_Validating().
-			// Changes here may have to be applied there too.
-
-			if (!this.isValidated)
 			{
-				// Postpone validation if focus is leaving the parent!
-				// Validation will again be done after re-entering edit.
-				if (this.textFocusState != TextFocusState.IsLeavingParent)
+				// Attention:
+				// Similar code exists in PredefinedCommandSettingsSet.textBox_SingleLineText_Validating().
+				// Changes here may have to be applied there too.
+
+				if (!this.isValidated)
 				{
-					// Easter egg ;-)
-					if (SendTextSettings.IsEasterEggCommand(comboBox_SingleLineText.Text))
+					// Postpone validation if focus is leaving the parent!
+					// Validation will again be done after re-entering edit.
+					if (this.textFocusState != TextFocusState.IsLeavingParent)
 					{
-						this.isValidated = true;
+						// Easter egg ;-)
+						if (SendTextSettings.IsEasterEggCommand(comboBox_SingleLineText.Text))
+						{
+							this.isValidated = true;
 
-						if (this.textFocusState == TextFocusState.IsLeavingEdit)
-							SetTextFocusState(TextFocusState.EditIsInactive);
+							if (this.textFocusState == TextFocusState.IsLeavingEdit)
+								SetTextFocusState(TextFocusState.EditIsInactive);
 
-						ConfirmSingleLineText(comboBox_SingleLineText.Text);
+							ConfirmSingleLineText(comboBox_SingleLineText.Text);
 
-						DebugUserInputLeave();
-						return;
+							DebugUserInputLeave();
+							return;
+						}
+
+						// Single line => Validate!
+						int invalidTextStart;
+						int invalidTextLength;
+						if (Utilities.ValidationHelper.ValidateText(this, "text", comboBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, this.command.DefaultRadix, this.parseMode))
+						{
+							this.isValidated = true;
+
+							if (this.textFocusState == TextFocusState.IsLeavingEdit)
+								SetTextFocusState(TextFocusState.EditIsInactive);
+
+							ConfirmSingleLineText(comboBox_SingleLineText.Text);
+
+							DebugUserInputLeave();
+							return;
+						}
+
+						SetTextFocusState(TextFocusState.EditHasFocus);
+						comboBox_SingleLineText.Select(invalidTextStart, invalidTextLength);
+						e.Cancel = true;
 					}
-
-					// Single line => Validate!
-					int invalidTextStart;
-					int invalidTextLength;
-					if (Utilities.ValidationHelper.ValidateText(this, "text", comboBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, this.command.DefaultRadix, this.parseMode))
+					else // EditFocusState.IsLeavingParent
 					{
-						this.isValidated = true;
-
-						if (this.textFocusState == TextFocusState.IsLeavingEdit)
-							SetTextFocusState(TextFocusState.EditIsInactive);
-
-						ConfirmSingleLineText(comboBox_SingleLineText.Text);
-
-						DebugUserInputLeave();
-						return;
+						SetTextFocusState(TextFocusState.EditIsInactive);
 					}
-
-					SetTextFocusState(TextFocusState.EditHasFocus);
-					comboBox_SingleLineText.Select(invalidTextStart, invalidTextLength);
-					e.Cancel = true;
-				}
-				else // EditFocusState.IsLeavingParent
-				{
-					SetTextFocusState(TextFocusState.EditIsInactive);
 				}
 			}
-
 			DebugUserInputLeave();
 		}
 
@@ -927,20 +935,20 @@ namespace YAT.View.Controls
 		private void SetRecentControls()
 		{
 			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
-
-			this.isSettingControls.Enter();
-			try
 			{
-				if (this.recent != null)
-					ComboBoxHelper.UpdateItemsKeepingCursorAndSelection(comboBox_SingleLineText, this.recent.ToArray());
-				else
-					ComboBoxHelper.ClearItemsKeepingCursorAndSelection(comboBox_SingleLineText);
+				this.isSettingControls.Enter();
+				try
+				{
+					if (this.recent != null)
+						ComboBoxHelper.UpdateItemsKeepingCursorAndSelection(comboBox_SingleLineText, this.recent.ToArray());
+					else
+						ComboBoxHelper.ClearItemsKeepingCursorAndSelection(comboBox_SingleLineText);
+				}
+				finally
+				{
+					this.isSettingControls.Leave();
+				}
 			}
-			finally
-			{
-				this.isSettingControls.Leave();
-			}
-
 			DebugUserInputLeave();
 		}
 
@@ -950,18 +958,39 @@ namespace YAT.View.Controls
 		private void SetCommandControls()
 		{
 			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
-
-			this.isSettingControls.Enter();
-			try
 			{
-				if (this.useExplicitDefaultRadix)
-					ComboBoxHelper.Select(comboBox_ExplicitDefaultRadix, (Domain.RadixEx)this.command.DefaultRadix, (Domain.RadixEx)this.command.DefaultRadix);
-				else
-					ComboBoxHelper.Deselect(comboBox_ExplicitDefaultRadix);
-
-				if (this.textFocusState == TextFocusState.EditIsInactive)
+				this.isSettingControls.Enter();
+				try
 				{
-					if (this.command.IsText)
+					if (this.useExplicitDefaultRadix)
+						ComboBoxHelper.Select(comboBox_ExplicitDefaultRadix, (Domain.RadixEx)this.command.DefaultRadix, (Domain.RadixEx)this.command.DefaultRadix);
+					else
+						ComboBoxHelper.Deselect(comboBox_ExplicitDefaultRadix);
+
+					if (this.textFocusState == TextFocusState.EditIsInactive)
+					{
+						if (this.command.IsText)
+						{
+							if (comboBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
+								comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
+
+							if (comboBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
+								comboBox_SingleLineText.Font = SystemFonts.DefaultFont;
+
+							ComboBoxHelper.UpdateTextKeepingCursorAndSelection(comboBox_SingleLineText, this.command.SingleLineText);
+						}
+						else
+						{
+							if (comboBox_SingleLineText.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+								comboBox_SingleLineText.ForeColor = SystemColors.GrayText;
+
+							if (comboBox_SingleLineText.Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
+								comboBox_SingleLineText.Font = DrawingEx.DefaultFontItalic;
+
+							comboBox_SingleLineText.Text = Command.EnterTextText;
+						}
+					}
+					else
 					{
 						if (comboBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
 							comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
@@ -969,44 +998,23 @@ namespace YAT.View.Controls
 						if (comboBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
 							comboBox_SingleLineText.Font = SystemFonts.DefaultFont;
 
-						ComboBoxHelper.UpdateTextKeepingCursorAndSelection(comboBox_SingleLineText, this.command.SingleLineText);
+						if (this.command.IsText && !this.command.IsPartialText)
+						{
+							ComboBoxHelper.UpdateTextKeepingCursorAndSelection(comboBox_SingleLineText, this.command.SingleLineText);
+						}
+						else
+						{
+							comboBox_SingleLineText.Text = "";
+						}
 					}
-					else
-					{
-						if (comboBox_SingleLineText.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-							comboBox_SingleLineText.ForeColor = SystemColors.GrayText;
 
-						if (comboBox_SingleLineText.Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
-							comboBox_SingleLineText.Font = DrawingEx.DefaultFontItalic;
-
-						comboBox_SingleLineText.Text = Command.EnterTextText;
-					}
+					SetSendControls();
 				}
-				else
+				finally
 				{
-					if (comboBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-						comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
-
-					if (comboBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-						comboBox_SingleLineText.Font = SystemFonts.DefaultFont;
-
-					if (this.command.IsText && !this.command.IsPartialText)
-					{
-						ComboBoxHelper.UpdateTextKeepingCursorAndSelection(comboBox_SingleLineText, this.command.SingleLineText);
-					}
-					else
-					{
-						comboBox_SingleLineText.Text = "";
-					}
+					this.isSettingControls.Leave();
 				}
-
-				SetSendControls();
 			}
-			finally
-			{
-				this.isSettingControls.Leave();
-			}
-
 			DebugUserInputLeave();
 		}
 

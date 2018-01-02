@@ -45,6 +45,9 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+#if (DEBUG)
+	using System.Reflection;
+#endif
 using System.Security.Permissions;
 using System.Windows.Forms;
 
@@ -177,6 +180,10 @@ namespace MKY.Windows.Forms
 		///  2. 'LostFocus' !!!
 		///  3. 'GotFocus'
 		/// 
+		/// Event sequence on entering the control by mouse click within same control or form:
+		///  1. 'Enter'
+		///  2. 'GotFocus'
+		/// 
 		/// Event sequence on entering the control when switching among MDI children (e.g. using [Ctrl+Tab]):
 		///  1. 'Enter'
 		///  2. 'LostFocus' !!!
@@ -188,32 +195,37 @@ namespace MKY.Windows.Forms
 		///  2. 'GotFocus'
 		/// 
 		/// (Note that this is "slightly" different to what is stated at
-		/// https://docs.microsoft.com/en-us/dotnet/framework/winforms/order-of-events-in-windows-forms.)
+		/// https://docs.microsoft.com/en-us/dotnet/framework/winforms/order-of-events-in-windows-forms...)
 		/// 
 		/// Event sequence on leaving the control using [Tab]:
 		///  1. 'Leave'     and values are OK.
 		///  2. 'LostFocus' but values already are 0/0...
 		/// 
-		/// Event sequence on entering the control when switching among MDI children (e.g. using [Ctrl+Tab]):
+		/// Event sequence on leaving the control by mouse click within same control or form:
+		///  1. 'LostFocus' but values already are 0/0...
+		///  2. 'Leave'     but values invalidly are 0/0 !!!
+		/// 
+		/// Event sequence on leaving the control when switching among MDI children (e.g. using [Ctrl+Tab]):
 		///  1. 'LostFocus' but values already are 0/0...
 		///  2. 'Leave'     but values invalidly are 0/0 !!!
 		/// 
 		/// Event sequence on leaving the control when changing applications (e.g. using [Alt+Tab]):
 		///  1. 'LostFocus' but values already are 0/0...
 		/// 
-		/// Resulting constraints and solution/workaround:
-		///  a') 'OnLostFocus' is called each time just before 'OnGotFocus', thus focus state would have to be kept as well.
-		///  a)  'OnLostFocus' cannot keep the values anyway, for whatever reason...
-		///        => 'OnLeave' is OK for [Tab], but [Ctrl+Tab] and [Alt+Tab] must be notified from parent form.
-		///  b') 'OnEnter' couldn't restore the values, for whatever reason it is too early.
-		///  b)  'OnEnter' cannot restore the values anyway, since it isn't called on [Alt+Tab].
-		///        => 'OnGotFocus' is OK.
+		/// Resulting constraints and solution/workaround/remaining:
+		///  a') 'LostFocus' is called just before 'GotFocus' in several cases, thus focus state would have to be kept as well.
+		///  a)  'LostFocus' cannot keep the values anyway, for whatever reason...
+		///        => 'Leave' is OK for [Tab], but [Ctrl+Tab] and [Alt+Tab] must be notified from parent form.
+		///        => 'Leave' is *not* OK for mouse click, and there is no known workaround !!! [YAT bug #403 "Issues with ComboBoxEx"]
+		///  b') 'Enter' couldn't restore the values, for whatever reason it is too early.
+		///  b)  'Enter' cannot restore the values anyway, since it isn't called on [Alt+Tab].
+		///        => 'GotFocus' is OK.
 		/// </remarks>
 		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 		protected override void OnGotFocus(EventArgs e)
 		{
-			DebugCursorAndSelection("OnGotFocus...");
+			DebugCursorAndSelection(GetType().Name + "." + MethodBase.GetCurrentMethod().Name + "...");
 
 			// Attention:
 			// Same code exists in ComboBoxEx.OnGotFocus().
@@ -241,7 +253,7 @@ namespace MKY.Windows.Forms
 	/////// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
 	////protected override void OnEnter(EventArgs e)
 	////{
-	////	DebugCursorAndSelection("OnEnter");
+	////	DebugCursorAndSelection(GetType().Name + "." + MethodBase.GetCurrentMethod().Name);
 	////
 	////	base.OnEnter(e);
 	////}
@@ -257,7 +269,7 @@ namespace MKY.Windows.Forms
 		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
 		protected override void OnLeave(EventArgs e)
 		{
-			DebugCursorAndSelection("OnLeave...");
+			DebugCursorAndSelection(GetType().Name + "." + MethodBase.GetCurrentMethod().Name + "...");
 
 			// Attention:
 			// Same code exists in ComboBoxEx.OnLeave().
@@ -286,7 +298,7 @@ namespace MKY.Windows.Forms
 		/// </remarks>
 		public virtual void OnFormDeactivateWorkaround()
 		{
-			DebugCursorAndSelection("OnFormDeactivateWorkaround...");
+			DebugCursorAndSelection(GetType().Name + "." + MethodBase.GetCurrentMethod().Name + "...");
 
 			// Attention:
 			// Same code exists in ComboBoxEx.OnFormDeactivateWorkaround().
@@ -312,7 +324,7 @@ namespace MKY.Windows.Forms
 	/////// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
 	////protected override void OnLostFocus(EventArgs e)
 	////{
-	////	DebugCursorAndSelection("OnLostFocus...");
+	////	DebugCursorAndSelection(GetType().Name + "." + MethodBase.GetCurrentMethod().Name + "...");
 	////	DebugCursorAndSelection(string.Format("...cursor position {0} and text selection length {1} *NOT* valid as control doesn't have focus !!!", SelectionStart, SelectionLength));
 	////
 	////	base.OnLostFocus(e);
