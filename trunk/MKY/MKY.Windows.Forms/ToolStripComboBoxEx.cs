@@ -68,6 +68,16 @@ namespace MKY.Windows.Forms
 		protected ComboBoxHelper.CursorAndSelection CursorAndSelectionHelper { get; set; } = new ComboBoxHelper.CursorAndSelection();
 
 		/// <summary>
+		/// Gets or sets whether the previous cursor position is at the end of the editable portion of the combo box.
+		/// </summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public bool PreviousCursorIsAtEnd
+		{
+			get { return (CursorAndSelectionHelper.PreviousCursorIsAtEnd); }
+		}
+
+		/// <summary>
 		/// Gets or sets the previous starting index of text selected in the combo box.
 		/// </summary>
 		[Browsable(false)]
@@ -218,7 +228,7 @@ namespace MKY.Windows.Forms
 			}
 			else
 			{
-				DebugCursorAndSelection("...cursor position and text selection left unchanged.");
+				DebugCursorAndSelection(string.Format("...cursor position {0} and text selection length {1} left unchanged.", SelectionStart, SelectionLength));
 			}
 		}
 
@@ -260,7 +270,7 @@ namespace MKY.Windows.Forms
 			}
 			else
 			{
-				DebugCursorAndSelection("...cursor position and text selection *NOT* valid as control doesn't have focus !!!");
+				DebugCursorAndSelection(string.Format("...cursor position {0} and text selection length {1} *NOT* valid as control doesn't have focus !!!", SelectionStart, SelectionLength));
 			}
 
 			base.OnLeave(e);
@@ -285,11 +295,11 @@ namespace MKY.Windows.Forms
 			if (Focused)
 			{
 				CursorAndSelectionHelper.Remember(this.ComboBox);
-				DebugCursorAndSelection(string.Format("...cursor position {0} and text selection length {1} explicitly remembered.", PreviousSelectionStart, PreviousSelectionLength));
+				DebugCursorAndSelection(string.Format("...cursor position {0} and text selection length {1} explicitly remembered.", SelectionStart, SelectionLength));
 			}
 			else
 			{
-				DebugCursorAndSelection("...cursor position and text selection *NOT* valid as control doesn't have focus !!!");
+				DebugCursorAndSelection(string.Format("...cursor position {0} and text selection length {1} *NOT* valid as control doesn't have focus !!!", SelectionStart, SelectionLength));
 			}
 		}
 
@@ -303,7 +313,7 @@ namespace MKY.Windows.Forms
 	////protected override void OnLostFocus(EventArgs e)
 	////{
 	////	DebugCursorAndSelection("OnLostFocus...");
-	////	DebugCursorAndSelection("...cursor position and text selection *NOT* valid as control doesn't have focus !!!");
+	////	DebugCursorAndSelection(string.Format("...cursor position {0} and text selection length {1} *NOT* valid as control doesn't have focus !!!", SelectionStart, SelectionLength));
 	////
 	////	base.OnLostFocus(e);
 	////}

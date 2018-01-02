@@ -34,6 +34,11 @@ namespace MKY.Windows.Forms
 		public class CursorAndSelection
 		{
 			/// <summary>
+			/// Gets or sets whether the previous cursor position is at the end of the editable portion of the combo box.
+			/// </summary>
+			public bool PreviousCursorIsAtEnd { get; protected set; } // = false;
+
+			/// <summary>
 			/// Gets or sets the previous starting index of text selected in the combo box.
 			/// </summary>
 			public int  PreviousSelectionStart { get; protected set; } = ControlEx.InvalidIndex;
@@ -53,10 +58,12 @@ namespace MKY.Windows.Forms
 			/// </summary>
 			public void Remember(ComboBox control)
 			{
+				PreviousCursorIsAtEnd = (control.SelectionStart == control.Text.Length);
+
 				PreviousSelectionStart  = control.SelectionStart;
 				PreviousSelectionLength = control.SelectionLength;
 
-				if (control.SelectionLength > 0)
+				if (control.SelectionLength == 0)
 					PreviousSelectionSpansEnd = (control.SelectionLength == (control.Text.Length - control.SelectionStart));
 				else
 					PreviousSelectionSpansEnd = false;
@@ -67,15 +74,35 @@ namespace MKY.Windows.Forms
 			/// </summary>
 			public void Restore(ComboBox control)
 			{
-				if (!PreviousSelectionSpansEnd) // Simply restore:
+				if (PreviousSelectionLength == 0)
 				{
-					control.SelectionStart  = PreviousSelectionStart;
-					control.SelectionLength = PreviousSelectionLength;
+					if (!PreviousCursorIsAtEnd) // Simply restore selection:
+					{
+						control.SelectionStart  = PreviousSelectionStart;
+						control.SelectionLength = 0;
+					}
+					else // PreviousCursorIsAtEnd => Re-calculate position:
+					{
+						control.SelectionStart  = control.Text.Length;
+						control.SelectionLength = 0;
+					}
 				}
-				else // PreviousSelectionSpansEnd => Calculate:
+				else
 				{
-					control.SelectionStart  = PreviousSelectionStart;
-					control.SelectionLength = (control.Text.Length - control.SelectionStart);
+					if (!PreviousSelectionSpansEnd) // Simply restore selection:
+					{
+						control.SelectionStart  = PreviousSelectionStart;
+						control.SelectionLength = PreviousSelectionLength;
+					}
+					else // PreviousSelectionSpansEnd => Re-calculate selection:
+					{
+						control.SelectionStart  = PreviousSelectionStart;
+						control.SelectionLength = (control.Text.Length - control.SelectionStart);
+					}
+
+					// Minor issue:
+					//  > If selection was done in reverse direction, i.e. cursor is located to the
+					//    left of the selection, e.g. Iabc, Restore() again reverts this, e.g. abcI.
 				}
 			}
 		}
