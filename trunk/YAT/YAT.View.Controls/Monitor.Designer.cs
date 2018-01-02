@@ -112,6 +112,7 @@
 			this.fastListBox_LineNumbers.ScrollAlwaysVisible = true;
 			this.fastListBox_LineNumbers.Size = new System.Drawing.Size(40, 242);
 			this.fastListBox_LineNumbers.TabIndex = 0;
+			this.fastListBox_LineNumbers.TabStop = false;
 			this.fastListBox_LineNumbers.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.fastListBox_LineNumbers_DrawItem);
 			// 
 			// panel_Picture
