@@ -807,17 +807,12 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual bool RequestNormalSaveAsFromUser()
 		{
-			switch (OnSaveAsFileDialogRequest())
+			switch (OnSaveAsFileDialogRequest()) // 'Save File Dialog' offers [OK] and [Cancel].
 			{
 				case DialogResult.OK:
-				case DialogResult.Yes:
 					return (true);
 
-				case DialogResult.No:
-					OnTimedStatusTextRequest("Workspace not saved!");
-					return (true);
-
-				default:
+				default: // incl. Cancel:
 					return (false);
 			}
 		}
@@ -2292,11 +2287,10 @@ namespace YAT.Model
 
 				OnCursorReset(); // Just in case...
 
-				MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
+				var e = new MessageInputEventArgs(text, caption, buttons, icon);
 				this.eventHelper.RaiseSync<MessageInputEventArgs>(MessageInputRequest, this, e);
 
-				// Ensure that the request is processed!
-				if (e.Result == DialogResult.None)
+				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Message Input' request by the workspace was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 				return (e.Result);
@@ -2317,11 +2311,10 @@ namespace YAT.Model
 			{
 				OnCursorReset(); // Just in case...
 
-				DialogEventArgs e = new DialogEventArgs();
+				var e = new DialogEventArgs();
 				this.eventHelper.RaiseSync<DialogEventArgs>(SaveAsFileDialogRequest, this, e);
 
-				// Ensure that the request is processed!
-				if (e.Result == DialogResult.None)
+				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by the workspace was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 				return (e.Result);

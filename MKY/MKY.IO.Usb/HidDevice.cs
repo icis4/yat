@@ -232,7 +232,7 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		private static void StaticMessageCallback(ref Message m)
 		{
-			DeviceEvent de = MessageToDeviceEvent(ref m);
+			var de = MessageToDeviceEvent(ref m);
 
 			if ((de == DeviceEvent.Connected) ||
 				(de == DeviceEvent.Disconnected))
@@ -244,7 +244,7 @@ namespace MKY.IO.Usb
 					{
 						case DeviceEvent.Connected:
 						{
-							DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Hid, new DeviceInfo(devicePath));
+							var e = new DeviceEventArgs(DeviceClass.Hid, new DeviceInfo(devicePath));
 
 							Debug.WriteLine("USB HID device connected:");
 							Debug.Indent();
@@ -258,7 +258,7 @@ namespace MKY.IO.Usb
 
 						case DeviceEvent.Disconnected:
 						{
-							DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Hid, new DeviceInfo(devicePath));
+							var e = new DeviceEventArgs(DeviceClass.Hid, new DeviceInfo(devicePath));
 
 							Debug.WriteLine("USB HID device disconnected:");
 							Debug.Indent();
