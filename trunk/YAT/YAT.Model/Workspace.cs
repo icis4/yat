@@ -241,7 +241,7 @@ namespace YAT.Model
 					// ...dispose of terminals (normally they dispose of themselves)...
 					if (this.terminals != null)
 					{
-						foreach (Terminal t in this.terminals)
+						foreach (var t in this.terminals)
 							t.Dispose();
 
 						this.terminals.Clear();
@@ -900,7 +900,7 @@ namespace YAT.Model
 			this.settingsHandler.SettingsFilePath = absoluteFilePath;
 
 			// ...adjust the potentially relative terminal files paths to the new absolute workspace file path...
-			foreach (Terminal t in this.terminals)
+			foreach (var t in this.terminals)
 				ReplaceTerminalInWorkspaceSettings(t);
 
 			// ...and then, save the workspace itself:
@@ -1328,7 +1328,7 @@ namespace YAT.Model
 		{
 			if (this.terminals != null)
 			{
-				foreach (Terminal t in this.terminals)
+				foreach (var t in this.terminals)
 					DetachTerminalEventHandlers(t);
 			}
 		}
@@ -1387,8 +1387,8 @@ namespace YAT.Model
 
 				if (this.terminals != null)
 				{
-					List<string> filePaths = new List<string>(this.terminals.Count); // Preset the initial capacity to improve memory management.
-					foreach (Terminal t in this.terminals)
+					var filePaths = new List<string>(this.terminals.Count); // Preset the initial capacity to improve memory management.
+					foreach (var t in this.terminals)
 					{
 						if (t.SettingsFileExists)
 							filePaths.Add(t.SettingsFilePath);
@@ -1701,7 +1701,7 @@ namespace YAT.Model
 
 			if (this.terminals != null)
 			{
-				foreach (Terminal t in this.terminals)
+				foreach (var t in this.terminals)
 				{
 					if (!t.Start())
 						success = false;
@@ -1725,7 +1725,7 @@ namespace YAT.Model
 		{
 			if (this.terminals != null)
 			{
-				foreach (Terminal t in this.terminals)
+				foreach (var t in this.terminals)
 				{
 					if (PathEx.Equals(terminalFilePath, t.SettingsFilePath))
 					{
@@ -1931,7 +1931,7 @@ namespace YAT.Model
 
 			if (this.terminals != null)
 			{
-				foreach (Terminal t in this.terminals)
+				foreach (var t in this.terminals)
 				{
 					if (t.Guid == guid)
 						return (t);
@@ -1953,7 +1953,7 @@ namespace YAT.Model
 
 			if (this.terminals != null)
 			{
-				foreach (Terminal t in this.terminals)
+				foreach (var t in this.terminals)
 				{
 					if (t.SequentialIndex == sequentialIndex)
 						return (t);
@@ -2037,8 +2037,8 @@ namespace YAT.Model
 
 			// Calling Save() on a terminal may modify 'this.terminals' in the terminal_Saved()
 			// event, therefore clone the list first.
-			List<Terminal> clone = new List<Terminal>(this.terminals);
-			foreach (Terminal t in clone)
+			var clonedTerminalCollection = new List<Terminal>(this.terminals);
+			foreach (var t in clonedTerminalCollection)
 			{
 				bool isCanceled;
 				if (!t.SaveConsiderately(autoSaveIsAllowedOnTerminals, userInteractionIsAllowed, saveEvenIfNotChanged, true, out isCanceled))
@@ -2060,8 +2060,8 @@ namespace YAT.Model
 
 			// Calling Save() on a terminal may modify 'this.terminals' in the terminal_Saved()
 			// event, therefore clone the list first.
-			List<Terminal> clone = new List<Terminal>(this.terminals);
-			foreach (Terminal t in clone)
+			var clonedTerminalCollection = new List<Terminal>(this.terminals);
+			foreach (var t in clonedTerminalCollection)
 			{
 				if (t.SettingsFileHasAlreadyBeenNormallySaved)
 				{
@@ -2107,8 +2107,8 @@ namespace YAT.Model
 
 			// Calling Close() on a terminal will modify 'this.terminals' in the terminal_Closed()
 			// event, therefore clone the list first.
-			List<Terminal> clone = new List<Terminal>(this.terminals);
-			foreach (Terminal t in clone)
+			var clonedTerminalCollection = new List<Terminal>(this.terminals);
+			foreach (var t in clonedTerminalCollection)
 			{
 				if (!t.Close(isWorkspaceClose, doSave, autoSaveIsAllowedOnTerminals, autoDeleteIsRequested))
 					success = false;
@@ -2126,7 +2126,7 @@ namespace YAT.Model
 
 			if (this.terminals != null)
 			{
-				foreach (Terminal t in this.terminals)
+				foreach (var t in this.terminals)
 				{
 					if (!t.SwitchLogOn())
 						success = false;
@@ -2145,7 +2145,7 @@ namespace YAT.Model
 
 			if (this.terminals != null)
 			{
-				foreach (Terminal t in this.terminals)
+				foreach (var t in this.terminals)
 				{
 					if (!t.SwitchLogOff())
 						success = false;
@@ -2164,7 +2164,7 @@ namespace YAT.Model
 
 			if (this.terminals != null)
 			{
-				foreach (Terminal t in this.terminals)
+				foreach (var t in this.terminals)
 				{
 					if (!t.ClearLog())
 						success = false;
