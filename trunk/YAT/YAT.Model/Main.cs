@@ -1977,11 +1977,10 @@ namespace YAT.Model
 
 				OnCursorReset(); // Just in case...
 
-				MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
+				var e = new MessageInputEventArgs(text, caption, buttons, icon);
 				this.eventHelper.RaiseSync<MessageInputEventArgs>(MessageInputRequest, this, e);
 
-				// Ensure that the request is processed!
-				if (e.Result == DialogResult.None)
+				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + " 'Message Input' request by main was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 				return (e.Result);
