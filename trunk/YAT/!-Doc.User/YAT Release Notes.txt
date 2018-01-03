@@ -126,6 +126,7 @@ Fixed bugs:
   messages (bug #400, regression of bug #343 fixed for version 1.99.70).
 - Superfluous spaces for multi-byte LE encodings fixed (related to bug #400 and feat. request #271).
 - Code page of UTF-32 LE/BE encodings fixed (related to bug #400).
+- 'ArgumentOutOfRangeException' when command line arguments refer to an empty workspace fixed.
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
@@ -196,7 +197,7 @@ Fixed bugs:
 - Calculation of buffer line numbers fixed (related to bug #380).
 - Calculation of length of multi-byte encoded EOL sequences fixed.
 - Erroneous error message when changing log file separator fixed (bug #378).
-- InvalidOperationException when defining user defined log file separator or monitor format
+- 'InvalidOperationException' when defining user defined log file separator or monitor format
   enclosure or separator fixed (partly related to bug #378).
 - Minor issues with predefined and send commands fixed (parts of bug #308).
 - Description of predefined commands can be changed again (bugs #377 and #386).
@@ -407,12 +408,12 @@ Important changes:
 
 Fixed bugs:
 - Use of USB/RS-232 converters (USB CDC) while disconnect, undock or hibernate without closing the
-  serial COM port no longer leads to an ObjectDisposedException or UnauthorizedAccessException in
+  serial COM port no longer leads to an 'ObjectDisposedException' or 'UnauthorizedAccessException'
   in most cases (bugs #224, #254, #293, #316 and #345). However, it is still required to reset the
   converters, i.e. disconnect and reconnect them, or restart the computer. In addition, it may be
   required to disconnect or reset any device sending continuous data. Otherwise, related serial COM
   ports may no longer be opened. Issue is being reported by many users of .NET, but Microsoft seems
-  to have no plans fixing it. If an ObjectDisposedException or UnauthorizedAccessException still
+  to have no plans fixing it. If an 'ObjectDisposedException' or 'UnauthorizedAccessException' still
   occurs, the serial COM port connection monitoring has to be disabled in the terminal settings.
 - TCP/IP local interface setting fixed:
    > Setting is now properly applied to all TCP/IP sockets (bug #322).
@@ -424,7 +425,7 @@ Fixed bugs:
   include the time stamp now properly use the time stamp of the open operation (related to feature
   requests #69, #103, #233, #245).
 - Long monitor content is now displayed properly even when horizontally scrolling (bug #125).
-- ExternalException "A generic error occurred in GDI+" while drawing has been fixed by reverting
+- 'ExternalException' "A generic error occurred in GDI+" while drawing has been fixed by reverting
   from GDI+ to GDI (bugs #191, #266, #284, #286 and #325).
 - .NET Windows.Forms MDI issues with window list worked-around (bugs #119, #180 and #213).
 
@@ -473,7 +474,7 @@ Important changes:
 - Serial COM port send chunk size can no longer be configured (related to feature request #235)
 
 Fixed bugs:
-- SocketException when resolving URL of a not yet available remote host fixed (bug #312)
+- 'SocketException' when resolving URL of a not yet available remote host fixed (bug #312)
 - Invalid handling of remote host IP address fixed (bugs #313, #314 and #315)
 - Local user settings (previous workspace/terminals, recent files, window location, preferences) are
   again loaded from the latest previous version (bug #311)
@@ -483,7 +484,7 @@ YAT 2.0 Gamma 1' Version 1.99.33 :: 2015-06-07
 ----------------------------------------------------------------------------------------------------
 
 Fixed bugs:
-- FormatException when opening the terminal settings of a terminal that is based on an existing
+- 'FormatException' when opening the terminal settings of a terminal that is based on an existing
   .yat file fixed, additional test cases added to regression testing (bugs #306 and #307)
 - Issues with 'Send File' fixed, handling of recent commands and shortcuts improved (bug #304)
 
@@ -543,12 +544,12 @@ Fixed bugs:
 - Exceptions and issues while closing terminal or application fixed (bugs #72, #267, #287, #288)
 - Memory leak when subsequently creating and closing terminals fixed (bug #263)
 - Excessive memory occupation after standby fixed (bug #243)
-- MissingMethodException of 'Boolean System.Threading.WaitHandle.WaitOne(Int32)' fixed by adding
+- 'MissingMethodException' of 'Boolean System.Threading.WaitHandle.WaitOne(Int32)' fixed by adding
   .NET 3.5 SP1 as prerequisite to setup/installer (bug #273)
 - Start from command line no longer always generates a terminal (bug #262)
-- InvalidOperationException when starting YAT with /r command line option fixed (bug #260)
-- NullReferenceException when starting YAT with /tf command line option fixed (bug #280)
-- ThreadException upon copy of exception data to clipboard fixed (bug #245)
+- 'InvalidOperationException' when starting YAT with /r command line option fixed (bug #260)
+- 'NullReferenceException' when starting YAT with /tf command line option fixed (bug #280)
+- 'ThreadException' upon copy of exception data to clipboard fixed (bug #245)
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2013 on .NET 3.5 SP1 (feat. #229)
@@ -570,7 +571,7 @@ Limitations and known issues:
      supported on Win7/64 (bug #254)
    > Handling of serial COM port break states may not be supported (feature request #109)
 - Use of USB/RS-232 converters (USB CDC) while hibernate or undock without closing the serial COM
-  port leads to ObjectDisposedException in the system internal infrastructure (bugs #293 and #316)
+  port leads to 'ObjectDisposedException' in the system internal infrastructure (bugs #293 and #316)
 - Use of internal serial COM port may lead to slowdown of the application on certain computers; due
   to superfluous events triggered by the control pins (bugs #271 and #277); root cause yet unknown
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
@@ -654,12 +655,12 @@ Fixed bugs:
 - Missing tool tip on main window fixed, wrong tool tip on terminal window fixed (bug #3471809>#219)
 - Printer dialog also gets shown on 64-bit systems
 - 'SaveAs' dialog no longer shows .yat.yat in case of already saved files (bug #3532391>#227)
-- Handling potential FileNotFoundException in YAT.Gui.Forms.WelcomeScreen added (bug #3576101>#241)
-- Handling UnauthorizedAccessException in YAT.Model.Terminal/Workspace improved (bug #3533201>#228)
-- Handling InvalidOperationException in ALAZ.SystemEx.BaseSocketConHost improved (bug #3528765>#226)
-- NullReferenceException in YAT.Log.Logs fixed (bug #3534799>#230)
-- IndexOutOfRangeException in YAT.Domain.RawRepository fixed (bug #3483085>#223)
-- ArgumentException and OverflowException in MKY.Time.Rate fixed (bug #3479634>#220)
+- Handling of 'FileNotFoundException' in YAT.Gui.Forms.WelcomeScreen (bug #3576101>#241)
+- Handling of 'UnauthorizedAccessException' in YAT.Model.Terminal/Workspace (bug #3533201>#228)
+- Handling of 'InvalidOperationException' in ALAZ.SystemEx.BaseSocketConHost (bug #3528765>#226)
+- 'NullReferenceException' in YAT.Log.Logs fixed (bug #3534799>#230)
+- 'IndexOutOfRangeException' in YAT.Domain.RawRepository fixed (bug #3483085>#223)
+- 'ArgumentException' and 'OverflowException' in MKY.Time.Rate fixed (bug #3479634>#220)
 - Cancel during port scan should no longer result in an exception (bug #1804920>#23)
 - Improvement of modal behavior in case of console and non-view execution (bug #3516441>#225)
 - Proper startup when YAT is started minimized or without view (bug #3542973>#237)
@@ -754,7 +755,7 @@ Fixed bugs:
 - Exception due to invalid panel layout (splitter distance) is now handled (bug #3426400)
 - Error message in case of an error when opening a port or socket improved (bug #2213639)
 - Exception in case of a computer without any devices (e.g. off-line notebook) fixed (bug #3060623)
-- NullReferenceException in YAT.Log fixed (bug #3441961)
+- 'NullReferenceException' in YAT.Log fixed (bug #3441961)
 
 Limitations and known issues:
 - General imitations of .NET Windows.Forms
