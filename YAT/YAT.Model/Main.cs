@@ -576,33 +576,36 @@ namespace YAT.Model
 			// Prio 7 = Retrieve the requested terminal within the workspace and validate it:
 			if (this.startArgs.WorkspaceSettingsHandler != null) // Applies to a terminal within a workspace.
 			{
-				int requestedDynamicTerminalIndex = this.commandLineArgs.RequestedDynamicTerminalIndex;
-				int lastDynamicIndex = Indices.IndexToDynamicIndex(this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1);
-				
-				if     ((          requestedDynamicTerminalIndex >= Indices.FirstDynamicIndex) && (requestedDynamicTerminalIndex <= lastDynamicIndex))
-					this.startArgs.RequestedDynamicTerminalIndex = requestedDynamicTerminalIndex;
-				else if (          requestedDynamicTerminalIndex == Indices.DefaultDynamicIndex)
-					this.startArgs.RequestedDynamicTerminalIndex = Indices.DefaultDynamicIndex;
-				else if (          requestedDynamicTerminalIndex == Indices.InvalidDynamicIndex)
-					this.startArgs.RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex; // Usable to disable the operation.
-				else
-					return (false);
-
-				if (this.startArgs.RequestedDynamicTerminalIndex != Indices.InvalidDynamicIndex)
+				if (this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count > 0)
 				{
-					string workspaceFilePath = this.startArgs.WorkspaceSettingsHandler.SettingsFilePath;
-
-					string terminalFilePath;
-					if (this.startArgs.RequestedDynamicTerminalIndex == Indices.DefaultDynamicIndex) // The last terminal is the default.
-						terminalFilePath = this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1].FilePath;
-					else
-						terminalFilePath = this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[Indices.DynamicIndexToIndex(this.startArgs.RequestedDynamicTerminalIndex)].FilePath;
-
-					DocumentSettingsHandler<TerminalSettingsRoot> sh;
-					if (OpenTerminalFile(workspaceFilePath, terminalFilePath, out sh))
-						this.startArgs.TerminalSettingsHandler = sh;
+					int requestedDynamicTerminalIndex = this.commandLineArgs.RequestedDynamicTerminalIndex;
+					int lastDynamicIndex = Indices.IndexToDynamicIndex(this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1);
+				
+					if     ((          requestedDynamicTerminalIndex >= Indices.FirstDynamicIndex) && (requestedDynamicTerminalIndex <= lastDynamicIndex))
+						this.startArgs.RequestedDynamicTerminalIndex = requestedDynamicTerminalIndex;
+					else if (          requestedDynamicTerminalIndex == Indices.DefaultDynamicIndex)
+						this.startArgs.RequestedDynamicTerminalIndex  = Indices.DefaultDynamicIndex;
+					else if (          requestedDynamicTerminalIndex == Indices.InvalidDynamicIndex)
+						this.startArgs.RequestedDynamicTerminalIndex  = Indices.InvalidDynamicIndex; // Usable to disable the operation.
 					else
 						return (false);
+
+					if (this.startArgs.RequestedDynamicTerminalIndex != Indices.InvalidDynamicIndex)
+					{
+						string workspaceFilePath = this.startArgs.WorkspaceSettingsHandler.SettingsFilePath;
+
+						string terminalFilePath;
+						if (this.startArgs.RequestedDynamicTerminalIndex == Indices.DefaultDynamicIndex) // The last terminal is the default.
+							terminalFilePath = this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1].FilePath;
+						else
+							terminalFilePath = this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[Indices.DynamicIndexToIndex(this.startArgs.RequestedDynamicTerminalIndex)].FilePath;
+
+						DocumentSettingsHandler<TerminalSettingsRoot> sh;
+						if (OpenTerminalFile(workspaceFilePath, terminalFilePath, out sh))
+							this.startArgs.TerminalSettingsHandler = sh;
+						else
+							return (false);
+					}
 				}
 			}
 			else if (this.startArgs.TerminalSettingsHandler != null) // Applies to a dedicated terminal.
