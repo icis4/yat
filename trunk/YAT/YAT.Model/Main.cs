@@ -1170,7 +1170,7 @@ namespace YAT.Model
 		{
 			bool workspaceSuccess;
 			if (this.workspace != null)
-				workspaceSuccess = this.workspace.Close(true);
+				workspaceSuccess = this.workspace.CloseConsiderately(true);
 			else
 				workspaceSuccess = true;
 
@@ -1301,8 +1301,8 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// See remarks of <see cref="YAT.Model.Workspace.Close(bool)"/> for details on why this event handler
-		/// needs to treat the Closed event differently in case of a parent (i.e. main) close.
+		/// See remarks of <see cref="Workspace.CloseConsiderately"/> for details on why this handler
+		/// needs to treat the event differently in case of a parent (i.e. main) close.
 		/// </remarks>
 		private void workspace_Closed(object sender, ClosedEventArgs e)
 		{

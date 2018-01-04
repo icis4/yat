@@ -1643,23 +1643,24 @@ namespace YAT.Model
 		{
 			// AssertNotDisposed() is called by 'Save(...)' below.
 
-			bool isCanceled;
-			return (SaveConsiderately(true, true, true, false, out isCanceled)); // Save even if not changed since saving
-		}                                                                        // all terminals was explicitly requested.
+			bool isCanceled;                               // Save even if not changed since explicitly requesting saving.
+			return (SaveConsiderately(false, true, true, true, false, out isCanceled));
+		}
 
 		/// <summary>
 		/// Silently tries to save terminal to file, i.e. without any user interaction.
 		/// </summary>
-		public virtual bool TrySaveConsideratelyWithoutUserInteraction(bool autoSaveIsAllowed)
+		public virtual bool TrySaveConsideratelyWithoutUserInteraction(bool isWorkspaceClose, bool autoSaveIsAllowed)
 		{
 			bool isCanceled;
-			return (SaveConsiderately(autoSaveIsAllowed, false, false, false, out isCanceled));
+			return (SaveConsiderately(isWorkspaceClose, autoSaveIsAllowed, false, false, false, out isCanceled));
 		}
 
 		/// <summary>
 		/// This method implements the logic that is needed when saving, opposed to the method
 		/// <see cref="SaveToFile"/> which just performs the actual save, i.e. file handling.
 		/// </summary>
+		/// <param name="isWorkspaceClose">Indicates that workspace closes.</param>
 		/// <param name="autoSaveIsAllowed">
 		/// Auto save means that the settings have been saved at an automatically chosen location,
 		/// without telling the user anything about it.
@@ -1669,7 +1670,7 @@ namespace YAT.Model
 		/// <param name="canBeCanceled">Indicates whether save can be canceled.</param>
 		/// <param name="isCanceled">Indicates whether save has been canceled.</param>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool SaveConsiderately(bool autoSaveIsAllowed, bool userInteractionIsAllowed, bool saveEvenIfNotChanged, bool canBeCanceled, out bool isCanceled)
+		public virtual bool SaveConsiderately(bool isWorkspaceClose, bool autoSaveIsAllowed, bool userInteractionIsAllowed, bool saveEvenIfNotChanged, bool canBeCanceled, out bool isCanceled)
 		{
 			AssertNotDisposed();
 
@@ -1694,7 +1695,7 @@ namespace YAT.Model
 					this.settingsHandler.SettingsFilePath = ComposeAbsoluteAutoSaveFilePath();
 				}
 				else if (userInteractionIsAllowed) {
-					return (RequestNormalSaveAsFromUser());
+					return (RequestNormalSaveAsFromUser(isWorkspaceClose, false, out isCanceled));
 				}
 				else {
 					return (false); // Let save fail if the file path is invalid and no user interaction is allowed
@@ -1704,7 +1705,7 @@ namespace YAT.Model
 			{
 				// Ensure that former auto files are 'Saved As' if auto save is no longer allowed:
 				if (userInteractionIsAllowed) {
-					return (RequestNormalSaveAsFromUser());
+					return (RequestNormalSaveAsFromUser(isWorkspaceClose, false, out isCanceled));
 				}
 				else {
 					return (false);
@@ -1720,7 +1721,7 @@ namespace YAT.Model
 				if (this.settingsRoot.ExplicitHaveChanged || saveEvenIfNotChanged)
 				{
 					if (userInteractionIsAllowed) {
-						return (RequestRestrictedSaveAsFromUser(canBeCanceled, out isCanceled));
+						return (RequestRestrictedSaveAsFromUser(isWorkspaceClose, autoSaveIsAllowed, canBeCanceled, out isCanceled));
 					}
 					else {
 						return (false); // Let save of explicit change fail if file is restricted.
@@ -1778,21 +1779,52 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual bool RequestNormalSaveAsFromUser()
+		protected virtual bool RequestNormalSaveAsFromUser(bool isWorkspaceClose, bool autoSaveIsAllowed, out bool isCanceled)
 		{
+			if (isWorkspaceClose && !autoSaveIsAllowed)
+			{
+				// Ask user whether to save terminal, to give user to possibility to chose 'No'.
+				// This is required since the 'Save File Dialog' only offers [OK] and [Cancel].
+
+				var dr = OnMessageInputRequest
+				(
+					"Save terminal?",
+					IndicatedName,
+					MessageBoxButtons.YesNoCancel,
+					MessageBoxIcon.Question
+				);
+
+				switch (dr)
+				{
+					case DialogResult.Yes:
+						break; // Continue with save below.
+
+					case DialogResult.No:
+						isCanceled = false;
+						return (true); // Success, as user explicitly chose 'No'.
+
+					case DialogResult.Cancel:
+					default:
+						isCanceled = true;
+						return (false);
+				}
+			}
+
 			switch (OnSaveAsFileDialogRequest()) // 'Save File Dialog' offers [OK] and [Cancel].
 			{
 				case DialogResult.OK:
+					isCanceled = false;
 					return (true);
 
 				default: // incl. Cancel:
+					isCanceled = true;
 					return (false);
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		protected virtual bool RequestRestrictedSaveAsFromUser(bool canBeCanceled, out bool isCanceled)
+		protected virtual bool RequestRestrictedSaveAsFromUser(bool isWorkspaceClose, bool autoSaveIsAllowed, bool canBeCanceled, out bool isCanceled)
 		{
 			isCanceled = false;
 
@@ -1821,7 +1853,7 @@ namespace YAT.Model
 			switch (dr)
 			{
 				case DialogResult.Yes:
-					return (RequestNormalSaveAsFromUser());
+					return (RequestNormalSaveAsFromUser(isWorkspaceClose, autoSaveIsAllowed, out isCanceled));
 
 				case DialogResult.No:
 					OnTimedStatusTextRequest("Terminal not saved!");
@@ -1922,15 +1954,15 @@ namespace YAT.Model
 		/// Closes the terminal and prompts if needed if settings have changed.
 		/// </summary>
 		/// <remarks>
-		/// In case of a workspace close, <see cref="Close(bool, bool, bool, bool)"/> below must be
-		/// called with the first argument set to <c>true</c>.
+		/// In case of a workspace close, <see cref="CloseConsiderately"/> below must be called
+		/// with the first argument set to <c>true</c>.
 		/// 
 		/// In case of intended close of one or all terminals, the user intentionally wants to close
 		/// the terminal(s), thus, this method will not try to auto save.
 		/// </remarks>
 		public virtual bool Close()
 		{
-			return (Close(false, true, false, true)); // See remarks above.
+			return (CloseConsiderately(false, true, false, true)); // See remarks above.
 		}
 
 		/// <summary>
@@ -1964,7 +1996,7 @@ namespace YAT.Model
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		public virtual bool Close(bool isWorkspaceClose, bool doSave, bool autoSaveIsAllowed, bool autoDeleteIsRequested)
+		public virtual bool CloseConsiderately(bool isWorkspaceClose, bool doSave, bool autoSaveIsAllowed, bool autoDeleteIsRequested)
 		{
 			AssertNotDisposed();
 
@@ -2046,7 +2078,7 @@ namespace YAT.Model
 			// -------------------------------------------------------------------------------------
 
 			if (!success && doSave)
-				success = TrySaveConsideratelyWithoutUserInteraction(autoSaveIsAllowed); // Try auto save.
+				success = TrySaveConsideratelyWithoutUserInteraction(isWorkspaceClose, autoSaveIsAllowed); // Try auto save.
 
 			// -------------------------------------------------------------------------------------
 			// If not successfully saved so far, evaluate next step according to rules above:
