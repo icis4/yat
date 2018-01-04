@@ -1895,7 +1895,7 @@ namespace YAT.Model
 		/// The path to the former auto saved file, it will be deleted if the file can successfully
 		/// be stored in the new location.
 		/// </param>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		protected virtual bool SaveToFile(bool isAutoSave, string autoSaveFilePathToDelete)
 		{
 			OnFixedStatusTextRequest("Saving terminal...");
@@ -2699,7 +2699,6 @@ namespace YAT.Model
 		/// open/check/start sequence.
 		/// </remarks>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual CheckResult CheckIOAvailability()
 		{
 			switch (this.settingsRoot.IOType)
@@ -2993,7 +2992,7 @@ namespace YAT.Model
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		private bool TryGetSerialPortAlternate(MKY.IO.Ports.SerialPortCollection ports, out MKY.IO.Ports.SerialPortId portIdAlternate)
 		{
 			// If not allowed to detect 'InUse', no reliable alternate can be evaluted:
@@ -3194,7 +3193,7 @@ namespace YAT.Model
 		/// Starts the terminal's I/O instance.
 		/// </summary>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool StartIO(bool saveStatus)
 		{
 			bool success = false;
@@ -3264,7 +3263,7 @@ namespace YAT.Model
 		/// Stops the terminal's I/O instance.
 		/// </summary>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool StopIO(bool saveStatus)
 		{
 			bool success = false;
@@ -4310,14 +4309,14 @@ namespace YAT.Model
 
 				return (true);
 			}
-			catch (IOException ex)
+			catch (Exception ex)
 			{
+				string yatLead, yatText;
+				ErrorHelper.MakeLogHint(this.log, out yatLead, out yatText);
+
 				OnMessageInputRequest
 				(
-					"Unable to switch log on."                           + Environment.NewLine + Environment.NewLine +
-					"System message:" + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine +
-					ApplicationEx.ProductName + " hint:" + Environment.NewLine +
-					"Log file could already be in use.",
+					ErrorHelper.ComposeMessage("Unable to switch log on.", ex, yatLead, yatText),
 					"Log File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
@@ -4336,14 +4335,14 @@ namespace YAT.Model
 
 				return (true);
 			}
-			catch (IOException ex)
+			catch (Exception ex)
 			{
+				string yatLead, yatText;
+				ErrorHelper.MakeLogHint(this.log, out yatLead, out yatText);
+
 				OnMessageInputRequest
 				(
-					"Unable to clear log."                               + Environment.NewLine + Environment.NewLine +
-					"System message:" + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine +
-					ApplicationEx.ProductName + " hint:" + Environment.NewLine +
-					"Log file could already be in use.",
+					ErrorHelper.ComposeMessage("Unable to clear log.", ex, yatLead, yatText),
 					"Log File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
@@ -4363,12 +4362,11 @@ namespace YAT.Model
 
 				return (true);
 			}
-			catch (IOException ex)
+			catch (Exception ex)
 			{
 				OnMessageInputRequest
 				(
-					"Unable to switch log off." + Environment.NewLine + Environment.NewLine +
-					"System message:" + Environment.NewLine + ex.Message,
+					ErrorHelper.ComposeMessage("Unable to clear log.", ex),
 					"Log File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
