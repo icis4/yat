@@ -4919,7 +4919,7 @@ namespace YAT.View.Forms
 			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.TerminalFile);
 			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
 
-			// Check wether the terminal has already been saved as a .yat file.
+			// Check whether the terminal has already been saved as a .yat file.
 			if (StringEx.EndsWithOrdinalIgnoreCase(IndicatedName, ExtensionHelper.TerminalFile))
 				sfd.FileName = IndicatedName;
 			else
