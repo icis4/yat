@@ -40,7 +40,7 @@ namespace MKY.Net
 		/// <summary>
 		/// Finds an available TCP port chosen by the system or the system's TCP stack.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public static bool TryFindAvailableTcpPort(out int result)
 		{
 			const int Attempts = 7; // Should be sufficient...

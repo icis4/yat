@@ -355,7 +355,6 @@ namespace MKY.Settings
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual void Save()
 		{
 			AssertNotDisposed();
@@ -370,7 +369,6 @@ namespace MKY.Settings
 		/// <returns>
 		/// Returns <c>true</c> if settings file successfully deleted.
 		/// </returns>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual bool TryDelete()
 		{
 			AssertNotDisposed();

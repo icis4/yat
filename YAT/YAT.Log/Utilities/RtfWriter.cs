@@ -236,7 +236,7 @@ namespace YAT.Log.Utilities
 		#endregion
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure to handle any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public virtual void WriteLine(DisplayLine line)
 		{
 			AssertNotDisposed();

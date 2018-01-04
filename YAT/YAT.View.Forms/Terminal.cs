@@ -5120,7 +5120,6 @@ namespace YAT.View.Forms
 			ioStatusIndicatorFlashingIsOn = false; // Reset flashing phase (initially 'false').
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals", Justification = "Well...")]
 		private void SetIOControlControls()
 		{

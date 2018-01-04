@@ -778,6 +778,7 @@ namespace MKY.IO.Ports
 		{
 			if (sourceType == typeof(int))    return (true);
 			if (sourceType == typeof(string)) return (true);
+
 			return (base.CanConvertFrom(context, sourceType));
 		}
 
@@ -787,6 +788,7 @@ namespace MKY.IO.Ports
 		{
 			if (value is int)    return (new SerialPortId((int)value));
 			if (value is string) return (SerialPortId.ParseStandardPortName((string)value));
+
 			return (base.ConvertFrom(context, culture, value));
 		}
 
@@ -795,10 +797,12 @@ namespace MKY.IO.Ports
 		{
 			if (destinationType == typeof(int))    return (true);
 			if (destinationType == typeof(string)) return (true);
+
 			if (destinationType == typeof(InstanceDescriptor))
 			{
 				return (true);
 			}
+
 			return (base.CanConvertTo(context, destinationType));
 		}
 
@@ -808,6 +812,7 @@ namespace MKY.IO.Ports
 		{
 			if (destinationType == typeof(int))    return (((SerialPortId)value).StandardPortNumber);
 			if (destinationType == typeof(string)) return (((SerialPortId)value).Name);
+
 			if (destinationType == typeof(InstanceDescriptor) && value is SerialPortId)
 			{
 				SerialPortId port = (SerialPortId)value;
@@ -815,11 +820,12 @@ namespace MKY.IO.Ports
 				if (ctor != null)
 					return (new InstanceDescriptor(ctor, new object[] { port.StandardPortNumber }));
 			}
+
 			return (base.ConvertTo(context, culture, value, destinationType));
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		[SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Performance is not an issue here, readability is...")]
 		public override bool IsValid(ITypeDescriptorContext context, object value)
 		{
@@ -828,11 +834,13 @@ namespace MKY.IO.Ports
 				try   { SerialPortId port = new SerialPortId((int)value);    UnusedLocal.PreventAnalysisWarning(port); return (true); }
 				catch { return (false); }
 			}
+
 			if (value is string)
 			{
 				try   { SerialPortId port = new SerialPortId((string)value); UnusedLocal.PreventAnalysisWarning(port); return (true); }
 				catch { return (false); }
 			}
+
 			return (base.IsValid(context, value));
 		}
 	}

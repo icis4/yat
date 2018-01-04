@@ -631,7 +631,7 @@ namespace MKY.IO.Serial.Socket
 			asyncInvoker.BeginInvoke(null, null);
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private void StopAndDisposeSocketAndConnectionsAndThread()
 		{
 			lock (this.socketSyncObj)
@@ -1099,7 +1099,7 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private void reconnectTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			if (AutoReconnectEnabledAndAllowed)

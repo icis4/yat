@@ -789,7 +789,7 @@ namespace MKY.IO.Serial.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool TryCreateAndStartDevice()
 		{
 			try
@@ -890,7 +890,7 @@ namespace MKY.IO.Serial.Usb
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private void DisposeDeviceAndThreads()
 		{
 			lock (this.deviceSyncObj)

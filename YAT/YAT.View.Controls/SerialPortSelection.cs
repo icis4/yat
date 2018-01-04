@@ -329,7 +329,6 @@ namespace YAT.View.Controls
 		/// 
 		/// Note that the same fix has been implemented in <see cref="SocketSelection"/> and <see cref="UsbSerialHidDeviceSelection"/>.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]
 		private void SetPortList()
 		{

@@ -52,7 +52,7 @@ namespace MKY.Net
 		/// <param name="uri">URI to browse.</param>
 		/// <param name="exception">Exception object, in case of failure.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		[SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "Process.Start() requires a string.")]
 		public static bool TryBrowseUri(string uri, out Exception exception)
 		{

@@ -49,7 +49,7 @@ namespace MKY.IO.Ports
 		/// If there is a need to manually browse through the WMI entries, use a tool like the "WMI Explorer".
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Emphasizes that this is a call to underlying system functions.")]
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public static Dictionary<string, string> GetCaptionsFromSystem()
 		{
 			Dictionary<string, string> result = new Dictionary<string, string>();

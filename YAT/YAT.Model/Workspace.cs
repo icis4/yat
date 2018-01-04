@@ -910,7 +910,7 @@ namespace YAT.Model
 		/// The path to the former auto saved file, it will be deleted if the file can successfully
 		/// be stored in the new location.
 		/// </param>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		protected virtual bool SaveToFile(bool isAutoSave, string autoSaveFilePathToDelete)
 		{
 			OnFixedStatusTextRequest("Saving workspace...");
@@ -1071,7 +1071,7 @@ namespace YAT.Model
 				{
 					// Save normally saved terminals even if workspace was or will not be auto saved!
 					if (autoSaveIsAllowedForTerminals)
-						successWithTerminals = SaveAllTerminalsWhereFileHasAlreadyBeenNormallySavedOnClose(true);
+						successWithTerminals = SaveAllTerminalsWhereFileHasAlreadyBeenNormallySavedOnClose();
 					else
 						successWithTerminals = SaveAllTerminalsOnClose(false);
 				}
@@ -1642,7 +1642,7 @@ namespace YAT.Model
 			return (OpenTerminalFromSettings(settingsHandler, Guid.Empty, Indices.DefaultFixedIndex, null, out exception));
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure to handle any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid, int fixedIndex, WindowSettings windowSettings, out Exception exception)
 		{
 			AssertNotDisposed();
@@ -1750,7 +1750,7 @@ namespace YAT.Model
 			return (true);
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure to handle any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool OpenTerminalFile(string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
 		{
 			// Try to combine the workspace path with terminal path, but only if that is a relative path:
@@ -2048,7 +2048,7 @@ namespace YAT.Model
 			return (SaveAllTerminalsConsiderately(true, autoSaveIsAllowed, false));
 		}
 
-		private bool SaveAllTerminalsConsiderately(bool isOnClose, bool autoSaveIsAllowed, bool saveEvenIfNotChanged)
+		private bool SaveAllTerminalsConsiderately(bool isWorkspaceClose, bool autoSaveIsAllowed, bool saveEvenIfNotChanged)
 		{
 			bool success = true;
 
@@ -2063,7 +2063,7 @@ namespace YAT.Model
 			foreach (var t in clonedTerminalCollection)
 			{
 				bool isCanceled;
-				if (!t.SaveConsiderately(true, autoSaveIsAllowedOnTerminals, true, saveEvenIfNotChanged, true, out isCanceled))
+				if (!t.SaveConsiderately(isWorkspaceClose, autoSaveIsAllowedOnTerminals, true, saveEvenIfNotChanged, true, out isCanceled))
 				{
 					success = false;
 
@@ -2076,7 +2076,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		private bool SaveAllTerminalsWhereFileHasAlreadyBeenNormallySavedOnClose(bool autoSaveIsAllowed)
+		private bool SaveAllTerminalsWhereFileHasAlreadyBeenNormallySavedOnClose()
 		{
 			bool success = true;
 

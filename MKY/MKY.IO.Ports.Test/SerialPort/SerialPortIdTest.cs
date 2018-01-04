@@ -136,7 +136,6 @@ namespace MKY.IO.Ports.Test.SerialPort
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[Test, TestCaseSource(typeof(SerialPortIdTestData), "TestCases")]
 		public virtual void TestSerialization(int standardPortNumber, string portName, string[] portDescriptions)
 		{

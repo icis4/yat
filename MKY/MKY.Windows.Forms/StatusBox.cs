@@ -317,7 +317,7 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Updates the first status line of the status box.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public void SetStatus1Synchronized(string status)
 		{
 			try
@@ -352,7 +352,7 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Updates the second status line of the status box.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public void SetStatus2Synchronized(string status)
 		{
 			try
@@ -388,7 +388,7 @@ namespace MKY.Windows.Forms
 		/// Closes the status box.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public void CloseSynchronized(DialogResult dr = DialogResult.None)
 		{
 			try

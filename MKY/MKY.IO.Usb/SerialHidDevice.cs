@@ -968,7 +968,7 @@ namespace MKY.IO.Usb
 			this.stream.BeginRead(inputReportBuffer, 0, InputReportByteLength, new AsyncCallback(AsyncReadCompleted), inputReportBuffer);
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private void AsyncReadCompleted(IAsyncResult result)
 		{
 			try
@@ -1132,7 +1132,7 @@ namespace MKY.IO.Usb
 			DebugThreadState("ReceiveThread() has terminated.");
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private void Write(byte[] payload)
 		{
 			try
@@ -1182,7 +1182,7 @@ namespace MKY.IO.Usb
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private void CloseStream()
 		{
 			if (this.stream != null)

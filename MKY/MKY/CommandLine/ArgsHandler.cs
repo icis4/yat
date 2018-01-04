@@ -491,7 +491,7 @@ namespace MKY.CommandLine
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		protected virtual bool ParseOption(string optionArgWithoutIndicator, string nextArg, out bool nextArgHasBeenConsumedToo, out object value, out FieldInfo field)
 		{
 			try
@@ -575,7 +575,7 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Initializes an option argument.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		protected virtual bool InitializeOption(FieldInfo field, object value)
 		{
 			try
@@ -595,7 +595,7 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Initializes an option argument.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		protected virtual bool InitializeArrayOption(FieldInfo field, object[] values)
 		{
 			try
@@ -656,7 +656,7 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Initializes a value argument.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		protected virtual bool InitializeValue(string value, int index)
 		{
 			try

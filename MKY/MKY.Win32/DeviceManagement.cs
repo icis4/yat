@@ -654,7 +654,7 @@ namespace MKY.Win32
 		/// is attached or removed.
 		/// </summary>
 		/// <param name="deviceNotificationHandle">Handle returned previously by RegisterDeviceNotification.</param>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public static void UnregisterDeviceNotificationHandle(IntPtr deviceNotificationHandle)
 		{
 			try

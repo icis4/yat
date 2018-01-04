@@ -999,7 +999,6 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void CloseAndDisposePort(bool isAfterException)
 		{
 			lock (this.portSyncObj)
@@ -1123,7 +1122,7 @@ namespace MKY.IO.Serial.SerialPort
 			DoResetPortAndThreads(isAfterException, false);
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		private void DoResetPortAndThreads(bool isAfterException, bool withNotify)
 		{
 			StopAndDisposeReopenTimeout();
@@ -1709,7 +1708,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// Attention, sending a whole chunk is implemented in <see cref="TryWriteChunkToPort"/> below.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool TryWriteByteToPort(byte b, out bool isWriteTimeout, out bool isOutputBreak, out bool signalIOControlChanged)
 		{
 			isWriteTimeout         = false;
@@ -1788,7 +1787,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// Attention, sending a single byte is implemented in <see cref="TryWriteByteToPort"/> above.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool TryWriteChunkToPort(int maxChunkSize, out List<byte> effectiveChunkData, out bool isWriteTimeout, out bool isOutputBreak, out bool signalIOControlChanged)
 		{
 			isWriteTimeout         = false;
@@ -2159,7 +2158,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// Asynchronously invoke incoming events to prevent potential deadlocks if close/dispose
 		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that any exception leads to restart or reset of port.")]
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "SerialPort.PinChanged: Only one event handler can execute at a time.")]
 		private void port_PinChanged(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
@@ -2251,7 +2250,7 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private object ioControlEventTimeout_Elapsed_SyncObj = new object();
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		private void ioControlEventTimeout_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			// Ensure that only one timer elapsed event thread is active at a time. Because if the
@@ -2355,7 +2354,6 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private object aliveMonitor_Elapsed_SyncObj = new object();
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void aliveMonitor_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			// Ensure that only one timer elapsed event thread is active at a time. Because if the
@@ -2430,7 +2428,7 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private object reopenTimeout_Elapsed_SyncObj = new object();
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that any exception leads to restart or reset of port.")]
 		private void reopenTimeout_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			// Ensure that only one timer elapsed event thread is active at a time. Because if the

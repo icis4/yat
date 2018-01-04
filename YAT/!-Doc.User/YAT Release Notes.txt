@@ -126,6 +126,7 @@ Fixed bugs:
   messages (bug #400, regression of bug #343 fixed for version 1.99.70).
 - Superfluous spaces for multi-byte LE encodings fixed (related to bug #400 and feat. request #271).
 - Code page of UTF-32 LE/BE encodings fixed (related to bug #400).
+- 'UnauthorizedAccessException' on no longer valid log file path fixed (bug #404).
 - 'ArgumentOutOfRangeException' when command line arguments refer to an empty workspace fixed.
 
 Limitations and known issues:

@@ -104,7 +104,7 @@ namespace YAT.View.Forms
 		/// <summary>
 		/// Loads the application settings on a separate thread.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private void LoadApplicationSettingsAsync()
 		{
 			try

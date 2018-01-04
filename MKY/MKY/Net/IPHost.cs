@@ -564,7 +564,7 @@ namespace MKY.Net
 		/// <summary>
 		/// Tries to resolve an IP address from DNS.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public static bool TryResolve(string s, out IPAddress result)
 		{
 			if (!string.IsNullOrEmpty(s))
