@@ -957,12 +957,12 @@ namespace YAT.Model.Test.FileHandling
 
 				int workspaceCountBefore = this.workspace_MessageInputRequest_No_counter;
 				w.MessageInputRequest += workspace_MessageInputRequest_No; // Ignore the "remaining event sink" message that will be output during Exit() below.
-				int terminalCountBefore = this.terminal_SaveAsFileDialogRequest_No_counter;
-				t2.SaveAsFileDialogRequest += terminal_SaveAsFileDialogRequest_No; // Ignore the "remaining event sink" message that will be output during Exit() below.
+				int terminalCountBefore = this.terminal_MessageInputRequest_No_counter;
+				t2.MessageInputRequest += terminal_MessageInputRequest_No; // Ignore the "remaining event sink" message that will be output during Exit() below.
 				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
-				int terminalCountAfter = this.terminal_SaveAsFileDialogRequest_No_counter;
-				Assert.That(terminalCountAfter, Is.Not.EqualTo(terminalCountBefore), "Terminal 2 'SaveAsFileDialogRequest' was not called!");
+				int terminalCountAfter = this.terminal_MessageInputRequest_No_counter;
+				Assert.That(terminalCountAfter, Is.Not.EqualTo(terminalCountBefore), "Terminal 2 'MessageInputRequest' was not called!");
 				int workspaceCountAfter = this.workspace_MessageInputRequest_No_counter;
 				Assert.That(workspaceCountAfter, Is.Not.EqualTo(workspaceCountBefore), "Workspace 'MessageInputRequest' was not called!");
 
@@ -1173,26 +1173,26 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(w.ActiveTerminalSequentialIndex, Is.EqualTo(1),                         step + "Sequential index of terminal 1 isn't 1!");
 
 				success = w.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
-				Assert.That(success,   Is.True,     step + "Terminal 2 could not be created!");
+				Assert.That(success, Is.True,     step + "Terminal 2 could not be created!");
 				var t2 = w.ActiveTerminal;
-				Assert.That(t2, Is.Not.Null, step + "Terminal 2 could not be created!");
+				Assert.That(t2,      Is.Not.Null, step + "Terminal 2 could not be created!");
 
 				success = t2.SaveAs(this.normalTerminal2FilePath);
-				Assert.That(success,   Is.True,      step + "Terminal 2 could not be saved as!");
+				Assert.That(success, Is.True,     step + "Terminal 2 could not be saved as!");
 
 				success = w.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
-				Assert.That(success,   Is.True,     step + "Terminal 3 could not be created!");
-				var terminal3 = w.ActiveTerminal;
-				Assert.That(terminal3, Is.Not.Null, step + "Terminal 3 could not be created!");
+				Assert.That(success, Is.True,     step + "Terminal 3 could not be created!");
+				var t3 = w.ActiveTerminal;
+				Assert.That(t3,      Is.Not.Null, step + "Terminal 3 could not be created!");
 
-				success = terminal3.SaveAs(this.normalTerminal3FilePath);
-				Assert.That(success,   Is.True,     step + "Terminal 3 could not be saved as!");
+				success = t3.SaveAs(this.normalTerminal3FilePath);
+				Assert.That(success, Is.True,     step + "Terminal 3 could not be saved as!");
 
 				success = w.Save();
-				Assert.That(success, Is.True, step + "Workspace could not be saved!");
+				Assert.That(success, Is.True,     step + "Workspace could not be saved!");
 
 				success = (m.Exit() == MainResult.Success);
-				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
+				Assert.That(success, Is.True,     step + "Main could not be exited successfully!");
 			}
 			#endregion
 
@@ -1225,7 +1225,7 @@ namespace YAT.Model.Test.FileHandling
 
 				w.ActivateTerminalBySequentialIndex(2);
 				success = w.CloseActiveTerminal();
-				Assert.That(success,                 Is.True,       step + "Terminal 2 could not be closed!");
+				Assert.That(success,         Is.True,       step + "Terminal 2 could not be closed!");
 				Assert.That(w.TerminalCount, Is.EqualTo(2), step + "Workspace doesn't contain 2 terminals!");
 
 				success = w.Save();
@@ -1312,16 +1312,6 @@ namespace YAT.Model.Test.FileHandling
 		{
 			e.Result = System.Windows.Forms.DialogResult.No;
 			this.terminal_MessageInputRequest_No_counter++;
-		}
-
-		/// <remarks>Counter can be used to assert that handler indeed was called.</remarks>
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private int terminal_SaveAsFileDialogRequest_No_counter; // = 0;
-
-		private void terminal_SaveAsFileDialogRequest_No(object sender, DialogEventArgs e)
-		{
-			e.Result = System.Windows.Forms.DialogResult.No;
-			this.terminal_SaveAsFileDialogRequest_No_counter++;
 		}
 
 		#endregion

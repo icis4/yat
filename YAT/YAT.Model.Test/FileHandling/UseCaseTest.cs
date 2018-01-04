@@ -476,9 +476,11 @@ namespace YAT.Model.Test.FileHandling
 
 				string autoWorkspaceFilePath = w.SettingsFilePath;
 				string autoTerminal2FilePath = t2.SettingsFilePath;
+				t2.MessageInputRequest     += terminal2_MessageInputRequest_Yes;
 				t2.SaveAsFileDialogRequest += terminal2_SaveAsFileDialogRequest_SaveAsOK;
 				success = w.SaveAs(this.normalWorkspaceFilePath);
 				t2.SaveAsFileDialogRequest -= terminal2_SaveAsFileDialogRequest_SaveAsOK;
+				t2.MessageInputRequest     -= terminal2_MessageInputRequest_Yes;
 				Assert.That(success, Is.True, uc + "Workspace could not be saved as!");
 				Assert.That(w.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
 				Assert.That(File.Exists(autoWorkspaceFilePath), Is.False, uc + "Auto workspace file not deleted!");
@@ -561,6 +563,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(t3, Is.Not.Null, uc + "Terminal 3 could not be created!");
 				t3.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
 
+				t3.MessageInputRequest     += terminal3_MessageInputRequest_Yes;          // Ignore the "remaining event sink" message that will be output during Exit() below.
 				t3.SaveAsFileDialogRequest += terminal3_SaveAsFileDialogRequest_SaveAsOK; // Ignore the "remaining event sink" message that will be output during Exit() below.
 				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
@@ -931,34 +934,24 @@ namespace YAT.Model.Test.FileHandling
 		// Event Handlers
 		//==========================================================================================
 
-		/// <remarks>Counter can be used to assert that handler indeed was called.</remarks>
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private int main_MessageInputRequest_Cancel_counter; // = 0;
-
 		private void main_MessageInputRequest_Cancel(object sender, MessageInputEventArgs e)
 		{
 			e.Result = System.Windows.Forms.DialogResult.Cancel;
-			this.main_MessageInputRequest_Cancel_counter++;
 		}
-
-		/// <remarks>Counter can be used to assert that handler indeed was called.</remarks>
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private int main_WorkspaceOpened_AttachToWorkspace_MessageInputRequest_No_counter; // = 0;
 
 		private void main_WorkspaceOpened_AttachToWorkspace_MessageInputRequest_No(object sender, EventArgs<Workspace> e)
 		{
 			e.Value.MessageInputRequest += workspace_MessageInputRequest_No;
-			this.main_WorkspaceOpened_AttachToWorkspace_MessageInputRequest_No_counter++;
 		}
-
-		/// <remarks>Counter can be used to assert that handler indeed was called.</remarks>
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private int workspace_MessageInputRequest_No_counter; // = 0;
 
 		private void workspace_MessageInputRequest_No(object sender, MessageInputEventArgs e)
 		{
 			e.Result = System.Windows.Forms.DialogResult.No;
-			this.workspace_MessageInputRequest_No_counter++;
+		}
+
+		private void terminal2_MessageInputRequest_Yes(object sender, MessageInputEventArgs e)
+		{
+			e.Result = System.Windows.Forms.DialogResult.Yes;
 		}
 
 		private void terminal2_SaveAsFileDialogRequest_SaveAsOK(object sender, DialogEventArgs e)
@@ -968,16 +961,16 @@ namespace YAT.Model.Test.FileHandling
 			e.Result = System.Windows.Forms.DialogResult.OK;
 		}
 
+		private void terminal3_MessageInputRequest_Yes(object sender, MessageInputEventArgs e)
+		{
+			e.Result = System.Windows.Forms.DialogResult.Yes;
+		}
+
 		private void terminal3_SaveAsFileDialogRequest_SaveAsOK(object sender, DialogEventArgs e)
 		{
 			var t = (sender as Terminal);
 			Assert.That(t.SaveAs(this.normalTerminal3FilePath), Is.True, "Terminal 3 could not be saved as!");
 			e.Result = System.Windows.Forms.DialogResult.OK;
-		}
-
-		private void terminal_SaveAsFileDialogRequest_No(object sender, DialogEventArgs e)
-		{
-			e.Result = System.Windows.Forms.DialogResult.No;
 		}
 
 		#endregion

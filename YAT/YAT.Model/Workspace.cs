@@ -666,13 +666,13 @@ namespace YAT.Model
 			AssertNotDisposed();
 
 			// First, save all contained terminals:
-			if (!SaveAllTerminals(true, true, false))
+			if (!SaveAllTerminalsNormally(true))
 				return (false);
 
 			// Then, save the workspace itself:
-			bool isCanceled;
-			return (SaveConsiderately(true, true, true, false, out isCanceled)); // Save even if not changed since saving
-		}                                                                        // all terminals was explicitly requested.
+			bool isCanceled;                       // Save even if not changed since explicitly requesting saving.
+			return (SaveConsiderately(true, true, true, false, out isCanceled));
+		}
 
 		/// <summary>
 		/// Silently tries to save terminal to file, i.e. without any user interaction.
@@ -868,11 +868,11 @@ namespace YAT.Model
 		/// <remarks>
 		/// Note that not only the workspace gets saved, but also the terminals. Consider the
 		/// default case:
-		/// 1. Application start, default workspace is created
-		/// 2. Create a terminal
-		/// 3. Intentionally save the workspace as
-		/// => The user expects to save the terminal as well.
-		/// => No saving the terminal would lead to a normal file referring to an auto file!
+		///  1. Application start, default workspace is created.
+		///  2. Create a terminal.
+		///  3. Intentionally save the workspace as.
+		///      => The user expects to save the terminal as well.
+		///      => No saving the terminal would lead to a normal file referring to an auto file!
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
@@ -881,7 +881,7 @@ namespace YAT.Model
 			AssertNotDisposed();
 
 			// First, save all contained terminals:
-			if (!SaveAllTerminals(false, true, false))
+			if (!SaveAllTerminalsNormally(false))
 				return (false);
 
 			var absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(filePath);
@@ -966,12 +966,12 @@ namespace YAT.Model
 		/// Closes the workspace and prompts if the settings have changed.
 		/// </summary>
 		/// <remarks>
-		/// In case of a main close, <see cref="Close(bool)"/> below must be called with
-		/// the first argument set to <c>true</c>.
+		/// In case of a main close, <see cref="CloseConsiderately"/> below must be called
+		/// with the first argument set to <c>true</c>.
 		/// </remarks>
 		public virtual bool Close()
 		{
-			return (Close(false)); // See remarks above.
+			return (CloseConsiderately(false)); // See remarks above.
 		}
 
 		/// <summary>
@@ -1008,7 +1008,7 @@ namespace YAT.Model
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		public virtual bool Close(bool isMainExit)
+		public virtual bool CloseConsiderately(bool isMainExit)
 		{
 			AssertNotDisposed();
 
@@ -1063,17 +1063,17 @@ namespace YAT.Model
 				if (doSaveWorkspace)
 				{
 					if (autoSaveIsAllowedForTerminals)
-						successWithTerminals = SaveAllTerminals(true, true, false);
+						successWithTerminals = SaveAllTerminalsOnClose(true);
 					else
-						successWithTerminals = SaveAllTerminals(false, true, false);
+						successWithTerminals = SaveAllTerminalsOnClose(false);
 				}
 				else
 				{
 					// Save normally saved terminals even if workspace was or will not be auto saved!
 					if (autoSaveIsAllowedForTerminals)
-						successWithTerminals = SaveAllTerminalsWhereFileHasAlreadyBeenNormallySaved(false);
+						successWithTerminals = SaveAllTerminalsWhereFileHasAlreadyBeenNormallySavedOnClose(true);
 					else
-						successWithTerminals = SaveAllTerminals(false, true, false);
+						successWithTerminals = SaveAllTerminalsOnClose(false);
 				}
 			}
 
@@ -1086,6 +1086,7 @@ namespace YAT.Model
 				if (!this.settingsRoot.HaveChanged)
 				{
 					// Nothing has changed, no need to do anything with workspace.
+
 					doSaveWorkspace = false;
 					autoSaveIsAllowedForWorkspace = false;
 					successWithWorkspace = true;
@@ -1093,6 +1094,7 @@ namespace YAT.Model
 				else if (!this.settingsRoot.ExplicitHaveChanged)
 				{
 					// Implicit have changed, save is not required but try to auto save if desired.
+
 					if (autoSaveIsAllowedForWorkspace)
 						doSaveWorkspace = true;
 					else
@@ -1101,6 +1103,7 @@ namespace YAT.Model
 				else
 				{
 					// Explicit have changed, save is required, but only if desired.
+
 					if (!ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace && !SettingsFileHasAlreadyBeenNormallySaved)
 					{
 						doSaveWorkspace = false;
@@ -1113,6 +1116,7 @@ namespace YAT.Model
 				if (!this.settingsRoot.HaveChanged)
 				{
 					// Nothing has changed, no need to do anything with workspace.
+
 					doSaveWorkspace = false;
 					autoSaveIsAllowedForWorkspace = false;
 					successWithWorkspace = true;
@@ -1120,6 +1124,7 @@ namespace YAT.Model
 				else if (!this.settingsRoot.ExplicitHaveChanged)
 				{
 					// Implicit have changed, but do not try to auto save since user intends to close.
+
 					doSaveWorkspace = false;
 					autoSaveIsAllowedForWorkspace = false;
 					successWithWorkspace = true;
@@ -1147,7 +1152,7 @@ namespace YAT.Model
 				var dr = OnMessageInputRequest
 				(
 					"Save workspace?",
-					IndicatedName,
+					ApplicationEx.ProductName, // Do not use 'IndicatedName' as that would refer to the active terminal.
 					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Question
 				);
@@ -1337,7 +1342,7 @@ namespace YAT.Model
 
 		private void terminal_Saved(object sender, SavedEventArgs e)
 		{
-			Terminal t = (Terminal)sender;
+			var t = (Terminal)sender;
 
 			ReplaceTerminalInWorkspace(t);
 
@@ -1346,13 +1351,12 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// See remarks of <see cref="Terminal.Close(bool, bool, bool, bool)"/> for details on why
-		/// this event handler needs to treat the Closed event differently in case of a parent
-		/// (i.e. workspace) close.
+		/// See remarks of <see cref="Terminal.CloseConsiderately"/> for details on why this handler
+		/// needs to treat the event differently in case of a parent (i.e. workspace) close.
 		/// </remarks>
 		private void terminal_Closed(object sender, ClosedEventArgs e)
 		{
-			Terminal t = (Terminal)sender;
+			var t = (Terminal)sender;
 
 			DetachTerminalEventHandlers(t);
 			RemoveTerminalFromWorkspace(t, !e.IsParentClose); // Simply remove the terminal from the workspace, it disposes of itself.
@@ -2017,11 +2021,28 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			return (SaveAllTerminals(true, true, true)); // Save even if not changed since saving
-		}                                                // all terminals was explicitly requested.
+			return (SaveAllTerminalsEvenIfNotChanged(true)); // Save even if not changed since explicitly requesting saving all.
+		}
 
 		/// <summary></summary>
-		private bool SaveAllTerminals(bool autoSaveIsAllowed, bool userInteractionIsAllowed, bool saveEvenIfNotChanged)
+		protected virtual bool SaveAllTerminalsEvenIfNotChanged(bool autoSaveIsAllowed)
+		{
+			return (SaveAllTerminalsConsiderately(false, autoSaveIsAllowed, true));
+		}
+
+		/// <summary></summary>
+		protected virtual bool SaveAllTerminalsNormally(bool autoSaveIsAllowed)
+		{
+			return (SaveAllTerminalsConsiderately(false, autoSaveIsAllowed, false));
+		}
+
+		/// <summary></summary>
+		protected virtual bool SaveAllTerminalsOnClose(bool autoSaveIsAllowed)
+		{
+			return (SaveAllTerminalsConsiderately(true, autoSaveIsAllowed, false));
+		}
+
+		private bool SaveAllTerminalsConsiderately(bool isOnClose, bool autoSaveIsAllowed, bool saveEvenIfNotChanged)
 		{
 			bool success = true;
 
@@ -2036,7 +2057,7 @@ namespace YAT.Model
 			foreach (var t in clonedTerminalCollection)
 			{
 				bool isCanceled;
-				if (!t.SaveConsiderately(autoSaveIsAllowedOnTerminals, userInteractionIsAllowed, saveEvenIfNotChanged, true, out isCanceled))
+				if (!t.SaveConsiderately(true, autoSaveIsAllowedOnTerminals, true, saveEvenIfNotChanged, true, out isCanceled))
 				{
 					success = false;
 
@@ -2049,7 +2070,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		private bool SaveAllTerminalsWhereFileHasAlreadyBeenNormallySaved(bool saveEvenIfNotChanged)
+		private bool SaveAllTerminalsWhereFileHasAlreadyBeenNormallySavedOnClose(bool autoSaveIsAllowed)
 		{
 			bool success = true;
 
@@ -2060,8 +2081,8 @@ namespace YAT.Model
 			{
 				if (t.SettingsFileHasAlreadyBeenNormallySaved)
 				{
-					bool isCanceled;
-					if (!t.SaveConsiderately(false, true, saveEvenIfNotChanged, true, out isCanceled))
+					bool isCanceled;                 // 'false' since "where file has already been *normally* saved"!
+					if (!t.SaveConsiderately(true, false, true, false, true, out isCanceled))
 					{
 						success = false;
 
@@ -2089,7 +2110,7 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// See remarks of <see cref="Terminal.Close(bool, bool, bool, bool)"/> for details on 'WorkspaceClose'.
+		/// See remarks of <see cref="Terminal.CloseConsiderately"/> for details on 'WorkspaceClose'.
 		/// </remarks>
 		private bool CloseAllTerminals(bool isWorkspaceClose, bool doSave, bool autoSaveIsAllowed, bool autoDeleteIsRequested)
 		{
@@ -2105,7 +2126,7 @@ namespace YAT.Model
 			var clonedTerminalCollection = new List<Terminal>(this.terminals);
 			foreach (var t in clonedTerminalCollection)
 			{
-				if (!t.Close(isWorkspaceClose, doSave, autoSaveIsAllowedOnTerminals, autoDeleteIsRequested))
+				if (!t.CloseConsiderately(isWorkspaceClose, doSave, autoSaveIsAllowedOnTerminals, autoDeleteIsRequested))
 					success = false;
 			}
 
