@@ -1,0 +1,40 @@
+﻿
+Topics:
+Communications
+Scientific/Engineering
+Serial
+
+License:
+LGPL
+
+Operating System:
+Grouping and Descriptive Categories » 32-bit MS Windows (NT/2000/XP)
+Grouping and Descriptive Categories » 64-bit MS Windows
+Modern (Vendor-Supported) Desktop Operating Systems » Vista
+Modern (Vendor-Supported) Desktop Operating Systems » Win2K
+Modern (Vendor-Supported) Desktop Operating Systems » Windows 7
+Modern (Vendor-Supported) Desktop Operating Systems » Windows 8
+Modern (Vendor-Supported) Desktop Operating Systems » WinXP
+
+Database Environment:
+Database API » XML-based
+
+Development Status:
+5 - Production/Stable
+
+Intended Audience
+by End-User Class » Advanced End Users
+by End-User Class » Developers
+by Industry or Sector » Information Technology
+by Industry or Sector » Manufacturing
+by Industry or Sector » Science/Research
+by Industry or Sector » Telecommunications Industry
+
+Programming Language:
+C#
+
+Translations:
+English
+
+User Interface:
+.NET/Mono

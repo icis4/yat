@@ -62,7 +62,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "YAT", "YAT", "{3A9BAAD8-3A8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.SourceForge", "!-Doc.SourceForge", "{E8A8F664-6F72-4139-A7B1-BB950EEC20AC}"
 	ProjectSection(SolutionItems) = preProject
-		YAT\!-Doc.SourceForge\Description.txt = YAT\!-Doc.SourceForge\Description.txt
+		YAT\!-Doc.SourceForge\Categorization.txt = YAT\!-Doc.SourceForge\Categorization.txt
+		YAT\!-Doc.SourceForge\Metadata.txt = YAT\!-Doc.SourceForge\Metadata.txt
+		YAT\!-Doc.SourceForge\Registration.txt = YAT\!-Doc.SourceForge\Registration.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.User", "!-Doc.User", "{ABECE297-BF82-4016-93F9-DF7204BA05F5}"
