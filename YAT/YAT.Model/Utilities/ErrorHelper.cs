@@ -27,6 +27,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 using MKY;
+using MKY.IO;
 
 namespace YAT.Model.Utilities
 {
@@ -142,7 +143,7 @@ namespace YAT.Model.Utilities
 			{
 				case Domain.IOType.SerialPort:
 				{
-					yatLead = ApplicationEx.ProductName + " hints:";
+					yatLead = ApplicationEx.ProductName + " hint:";
 					yatText = "Check the communication settings and keep in mind that hardware and driver may limit the allowed settings.";
 					break;
 				}
@@ -219,6 +220,56 @@ namespace YAT.Model.Utilities
 					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + ioType + "' is an I/O type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "yat", Justification = "YAT is YAT, man!")]
+		public static void MakeLogHint(Log.Provider log, out string yatLead, out string yatText)
+		{
+			var hintText = new StringBuilder();
+			int hintCount = 0;
+
+			if (log != null)
+			{
+				try
+				{
+					if (!DirectoryEx.TryOpen(log.Settings.RootPath))
+					{
+						if (hintText.Length > 0)
+							hintText.AppendLine();
+
+						hintText.Append("Log root path is invalid. Check the log settings.");
+						hintCount++;
+					}
+				}
+				catch { }
+
+				try
+				{
+					if (log.FileExists)
+					{
+						if (hintText.Length > 0)
+							hintText.AppendLine();
+
+						hintText.Append("Log file(s) could already be in use. Ensure that no other application accesses the log file(s).");
+						hintCount++;
+					}
+				}
+				catch { }
+			}
+			else
+			{
+				if (hintText.Length > 0)
+					hintText.AppendLine();
+
+				hintText.Append("Check the log settings.");
+				hintCount++;
+			}
+
+			yatLead = ApplicationEx.ProductName + (hintCount <= 1 ? " hint:" : " hints:");
+			yatText = hintText.ToString();
 		}
 	}
 }

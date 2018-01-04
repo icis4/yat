@@ -22,34 +22,38 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Reflection;
-using System.Runtime.InteropServices;
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
 
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-[assembly: AssemblyTitle("YAT.Model.Utilities")]
-[assembly: AssemblyDescription("YAT model utilities")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("YAT")]
-[assembly: AssemblyProduct("YAT")]
-[assembly: AssemblyCopyright("Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil. Copyright © 2003-2017 Matthias Kläy. All rights reserved.")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
+using System.Collections.Generic;
+using System.Windows.Forms;
 
-// Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
-// COM, set the ComVisible attribute to true on that type.
-[assembly: ComVisible(false)]
+using YAT.Domain;
+using YAT.Format.Settings;
 
-// The following GUID is for the ID of the typelib if this project is exposed to COM.
-[assembly: Guid("6ddef24c-b339-4d55-ac54-44f3512f13fe")]
+#endregion
 
-// Assembly versions are defined by linked-in YAT.Version.cs.
+namespace YAT.View.Utilities
+{
+	/// <summary>
+	/// Static utility class providing text writer functionality for YAT.
+	/// </summary>
+	public static class TextWriterHelper
+	{
+		/// <remarks>
+		/// Pragmatic implementation of saving text to a file.
+		/// </remarks>
+		public static int LinesToFile(List<DisplayLine> lines, string filePath, FormatSettings formatSettings)
+		{
+			var richTextProvider = RtfWriterHelper.LinesToRichTextBox(lines, formatSettings);
+			richTextProvider.SaveFile(filePath, RichTextBoxStreamType.UnicodePlainText);
 
-// CLS compliance.
-[assembly: CLSCompliant(true)]
+			return (lines.Count); // Assume success, an exception should otherwise be thrown above.
+		}
+	}
+}
 
 //==================================================================================================
 // End of

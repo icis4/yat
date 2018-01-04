@@ -359,7 +359,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual Model.Settings.FormatSettings Format
+		public virtual Format.Settings.FormatSettings Format
 		{
 			get { return (this.explicit_.Format); }
 			set { this.explicit_.Format = value;  }

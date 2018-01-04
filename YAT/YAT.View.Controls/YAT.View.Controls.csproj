@@ -344,17 +344,21 @@
       <Project>{1C44A8C0-7805-4172-8746-2DB750803FFF}</Project>
       <Name>YAT.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\YAT.Format\YAT.Format.csproj">
+      <Project>{7a7d2db5-90cc-4bf0-9c80-fa7b8f6aac74}</Project>
+      <Name>YAT.Format</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YAT.Model.Settings\YAT.Model.Settings.csproj">
-      <Project>{E9FF1D5E-84E0-4ADB-94EC-662903931295}</Project>
+      <Project>{e9ff1d5e-84e0-4adb-94ec-662903931295}</Project>
       <Name>YAT.Model.Settings</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Model.Types\YAT.Model.Types.csproj">
-      <Project>{651BA67D-9B00-4245-9C99-481F20273A62}</Project>
+      <Project>{651ba67d-9b00-4245-9c99-481f20273a62}</Project>
       <Name>YAT.Model.Types</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Model.Utilities\YAT.Model.Utilities.csproj">
-      <Project>{7a7d2db5-90cc-4bf0-9c80-fa7b8f6aac74}</Project>
-      <Name>YAT.Model.Utilities</Name>
+    <ProjectReference Include="..\YAT.Model\YAT.Model.csproj">
+      <Project>{93a4ca8c-a158-4994-ab07-9577bdae6f9b}</Project>
+      <Name>YAT.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Settings.Application\YAT.Settings.Application.csproj">
       <Project>{69A8CBB4-7D00-4A3D-9CF7-220DD02C2EB7}</Project>

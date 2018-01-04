@@ -59,7 +59,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
-using System.Security.Permissions;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -67,7 +66,8 @@ using MKY;
 using MKY.Diagnostics;
 using MKY.Windows.Forms;
 
-using YAT.Model.Settings;
+using YAT.Format.Settings;
+using YAT.Model.Types;
 
 #endregion
 

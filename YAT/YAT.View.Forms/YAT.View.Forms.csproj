@@ -337,6 +337,10 @@
       <Project>{1C44A8C0-7805-4172-8746-2DB750803FFF}</Project>
       <Name>YAT.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\YAT.Format\YAT.Format.csproj">
+      <Project>{7A7D2DB5-90CC-4BF0-9C80-FA7B8F6AAC74}</Project>
+      <Name>YAT.Format</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YAT.Log\YAT.Log.csproj">
       <Project>{7B0B343D-F992-4A1E-8E07-CB8EC651A5E6}</Project>
       <Name>YAT.Log</Name>
@@ -348,10 +352,6 @@
     <ProjectReference Include="..\YAT.Model.Types\YAT.Model.Types.csproj">
       <Project>{651BA67D-9B00-4245-9C99-481F20273A62}</Project>
       <Name>YAT.Model.Types</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\YAT.Model.Utilities\YAT.Model.Utilities.csproj">
-      <Project>{7A7D2DB5-90CC-4BF0-9C80-FA7B8F6AAC74}</Project>
-      <Name>YAT.Model.Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Model\YAT.Model.csproj">
       <Project>{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}</Project>

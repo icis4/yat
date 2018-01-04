@@ -22,11 +22,19 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Text;
 
 using YAT.Application.Utilities;
-using YAT.Model.Utilities;
+using YAT.Format.Settings;
+using YAT.Log.Utilities;
+
+#endregion
 
 namespace YAT.Log
 {
@@ -43,7 +51,7 @@ namespace YAT.Log
 
 		private FileType fileType;
 		private Encoding encoding;
-		private Model.Settings.FormatSettings format;
+		private FormatSettings format;
 
 		private XmlWriterNeat xmlWriter;
 		private RtfWriter rtfWriter;
@@ -51,7 +59,7 @@ namespace YAT.Log
 		private object writerSyncObj = new object();
 
 		/// <summary></summary>
-		public NeatLog(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode, Encoding encoding, Model.Settings.FormatSettings format)
+		public NeatLog(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode, Encoding encoding, FormatSettings format)
 			: base(enabled, makeFilePath, writeMode)
 		{
 			this.encoding = encoding;
@@ -79,7 +87,7 @@ namespace YAT.Log
 		#endregion
 
 		/// <summary></summary>
-		public void SetSettings(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode, Encoding encoding, Model.Settings.FormatSettings format)
+		public void SetSettings(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode, Encoding encoding, FormatSettings format)
 		{
 			AssertNotDisposed();
 
