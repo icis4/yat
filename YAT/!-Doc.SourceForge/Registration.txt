@@ -1,0 +1,21 @@
+﻿
+Registration description:
+YAT features a complete, convenient and flexible terminal to communicate to your devices using RS-232/422/423/485 or TCP/IP or UDP/IP connections. Finally Windows users can get rid of the old Win 3.11 terminal (COM1-4 only) and Hyperterm (what the heck is the phone number for?).
+YAT can also be used to communicate with your device simulations using localhost TCP or UDP connections. Client and server mode is possible, in adition, there's an AutoSocket mode which automatically detects whether the terminal should run as client or server.
+YAT is a terminal (a connection end point). If you're looking for a tool to monitor serial data between an application and a device, or between two devices, check out HHD Serial Monitor. It's worth the bucks.
+
+Tags:
+hid
+rs-232
+rs-422
+rs-423
+rs-485
+ser/hid
+tcp
+tcp/ip
+tcp/ip-autosocket
+tcp/ip-client
+tcp/ip-server
+udp
+udp/ip
+usb
