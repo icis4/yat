@@ -1669,7 +1669,7 @@ namespace YAT.Model
 		/// <param name="saveEvenIfNotChanged">Indicates whether save must happen even if not changed.</param>
 		/// <param name="canBeCanceled">Indicates whether save can be canceled.</param>
 		/// <param name="isCanceled">Indicates whether save has been canceled.</param>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool SaveConsiderately(bool isWorkspaceClose, bool autoSaveIsAllowed, bool userInteractionIsAllowed, bool saveEvenIfNotChanged, bool canBeCanceled, out bool isCanceled)
 		{
 			AssertNotDisposed();
@@ -1779,6 +1779,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual bool RequestNormalSaveAsFromUser(bool isWorkspaceClose, bool autoSaveIsAllowed, out bool isCanceled)
 		{
 			if (isWorkspaceClose && !autoSaveIsAllowed)
@@ -1823,7 +1824,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual bool RequestRestrictedSaveAsFromUser(bool isWorkspaceClose, bool autoSaveIsAllowed, bool canBeCanceled, out bool isCanceled)
 		{
 			isCanceled = false;
@@ -4298,6 +4299,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public virtual bool SwitchLogOn()
 		{
 			try
@@ -4327,6 +4329,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public virtual bool ClearLog()
 		{
 			try
@@ -4353,6 +4356,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public virtual bool SwitchLogOff()
 		{
 			try
