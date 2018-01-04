@@ -22,37 +22,34 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-#region Using
-//==================================================================================================
-// Using
-//==================================================================================================
+using System;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
-using System.Collections.Generic;
-using System.Windows.Forms;
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
+[assembly: AssemblyTitle("YAT.Format")]
+[assembly: AssemblyDescription("YAT format infrastructure")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("YAT")]
+[assembly: AssemblyProduct("YAT")]
+[assembly: AssemblyCopyright("Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil. Copyright © 2003-2017 Matthias Kläy. All rights reserved.")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
 
-using YAT.Domain;
+// Setting ComVisible to false makes the types in this assembly not visible 
+// to COM components.  If you need to access a type in this assembly from 
+// COM, set the ComVisible attribute to true on that type.
+[assembly: ComVisible(false)]
 
-#endregion
+// The following GUID is for the ID of the typelib if this project is exposed to COM.
+[assembly: Guid("6ddef24c-b339-4d55-ac54-44f3512f13fe")]
 
-namespace YAT.Model.Utilities
-{
-	/// <summary>
-	/// Static utility class providing text writer functionality for YAT.
-	/// </summary>
-	public static class TextWriterHelper
-	{
-		/// <remarks>
-		/// Pragmatic implementation of saving text to a file.
-		/// </remarks>
-		public static int LinesToFile(List<DisplayLine> lines, string filePath, Settings.FormatSettings formatSettings)
-		{
-			var richTextProvider = RtfWriterHelper.LinesToRichTextBox(lines, formatSettings);
-			richTextProvider.SaveFile(filePath, RichTextBoxStreamType.UnicodePlainText);
+// Assembly versions are defined by linked-in YAT.Version.cs.
 
-			return (lines.Count); // Assume success, an exception should otherwise be thrown above.
-		}
-	}
-}
+// CLS compliance.
+[assembly: CLSCompliant(true)]
 
 //==================================================================================================
 // End of

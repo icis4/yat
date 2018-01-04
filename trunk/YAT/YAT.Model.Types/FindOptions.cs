@@ -24,7 +24,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace YAT.Model.Settings
+namespace YAT.Model.Types
 {
 	/// <remarks>
 	/// Initially prepared 'UseRegex' which would override/disable 'CaseSensitive' and 'WholeWord'.

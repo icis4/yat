@@ -41,7 +41,7 @@ using YAT.Domain.Utilities;
 
 #endregion
 
-namespace YAT.Model.Utilities
+namespace YAT.Log.Utilities
 {
 	/// <summary>
 	/// Utility class providing XML writer functionality for YAT.

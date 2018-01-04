@@ -22,9 +22,16 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
+
+#endregion
 
 namespace YAT.Domain.Utilities
 {

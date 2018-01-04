@@ -35,7 +35,7 @@ using YAT.Domain;
 
 #endregion
 
-namespace YAT.Model.Utilities
+namespace YAT.Log.Utilities
 {
 	/// <summary>
 	/// Utility class providing text writer functionality for YAT.

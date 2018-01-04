@@ -90,6 +90,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +105,11 @@
     <Compile Include="Enums.cs" />
     <Compile Include="FileNameSeparator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\RtfWriter.cs" />
+    <Compile Include="Utilities\TextWriter.cs" />
+    <Compile Include="Utilities\XmlWriter.cs" />
+    <Compile Include="Utilities\XmlWriterHelperNeat.cs" />
+    <Compile Include="Utilities\XmlWriterHelperRaw.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\YAT.snk" />
@@ -121,13 +127,9 @@
       <Project>{1c44a8c0-7805-4172-8746-2db750803fff}</Project>
       <Name>YAT.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Model.Settings\YAT.Model.Settings.csproj">
-      <Project>{e9ff1d5e-84e0-4adb-94ec-662903931295}</Project>
-      <Name>YAT.Model.Settings</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\YAT.Model.Utilities\YAT.Model.Utilities.csproj">
+    <ProjectReference Include="..\YAT.Format\YAT.Format.csproj">
       <Project>{7a7d2db5-90cc-4bf0-9c80-fa7b8f6aac74}</Project>
-      <Name>YAT.Model.Utilities</Name>
+      <Name>YAT.Format</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Settings.Application\YAT.Settings.Application.csproj">
       <Project>{69A8CBB4-7D00-4A3D-9CF7-220DD02C2EB7}</Project>

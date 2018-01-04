@@ -40,11 +40,11 @@ using MKY;
 using MKY.Collections.Generic;
 
 using YAT.Domain;
-using YAT.Model.Settings;
+using YAT.Format.Settings;
 
 #endregion
 
-namespace YAT.Model.Utilities
+namespace YAT.Log.Utilities
 {
 	/// <summary>
 	/// Utility class providing RTF writer functionality for YAT.
@@ -93,19 +93,19 @@ namespace YAT.Model.Utilities
 			var ci = CultureInfo.CurrentCulture; // Do not use the UICulture as people are likely to use English on non-US computers too.
 
 			PaperSize paper;
-			if      (StringEx.EndsWithOrdinalIgnoreCase  (ci.Name, "-US"))		paper = PaperSize.Letter;
-			else																paper = PaperSize.A4;
+			if      (StringEx.EndsWithOrdinalIgnoreCase  (ci.Name, "-US"))      paper = PaperSize.Letter;
+			else                                                                paper = PaperSize.A4;
 
 			Lcid lcid;
-			if      (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "de"		))	lcid = Lcid.German;
-			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "fr"		))	lcid = Lcid.French;
-			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "it"		))	lcid = Lcid.Italian;
-			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "es"		))	lcid = Lcid.Spanish;
-			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "ja"		))	lcid = Lcid.Japanese;
-			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "ko"		))	lcid = Lcid.Korean;
-			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "zh-Hans"))	lcid = Lcid.SimplifiedChinese;
-			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "zh-Hant"))	lcid = Lcid.TraditionalChinese;
-			else																lcid = Lcid.English;
+			if      (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "de"     ))  lcid = Lcid.German;
+			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "fr"     ))  lcid = Lcid.French;
+			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "it"     ))  lcid = Lcid.Italian;
+			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "es"     ))  lcid = Lcid.Spanish;
+			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "ja"     ))  lcid = Lcid.Japanese;
+			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "ko"     ))  lcid = Lcid.Korean;
+			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "zh-Hans"))  lcid = Lcid.SimplifiedChinese;
+			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "zh-Hant"))  lcid = Lcid.TraditionalChinese;
+			else                                                                lcid = Lcid.English;
 
 			// Document base:
 			this.document = new RtfDocument(paper, PaperOrientation.Landscape, lcid); // Same orientation as maximized terminal monitor.

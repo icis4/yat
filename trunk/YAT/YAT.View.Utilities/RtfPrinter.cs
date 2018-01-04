@@ -35,10 +35,11 @@ using System.IO;
 using System.Windows.Forms;
 
 using YAT.Domain;
+using YAT.Format.Settings;
 
 #endregion
 
-namespace YAT.Model.Utilities
+namespace YAT.View.Utilities
 {
 	/// <summary>
 	/// Utility class providing RTF printer functionality for YAT.
@@ -142,7 +143,7 @@ namespace YAT.Model.Utilities
 		/// <exception cref="InvalidPrinterException">
 		/// The printer named in the <see cref="PrinterSettings.PrinterName"/> property does not exist.
 		/// </exception>
-		public virtual void Print(List<DisplayLine> lines, Settings.FormatSettings formatSettings)
+		public virtual void Print(List<DisplayLine> lines, FormatSettings formatSettings)
 		{
 			if (this.foreColorBrushColor != formatSettings.PortFormat.Color)
 			{

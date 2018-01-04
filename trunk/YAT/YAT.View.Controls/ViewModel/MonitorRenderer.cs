@@ -22,12 +22,21 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
 
 using MKY;
+
+using YAT.Format.Settings;
+
+#endregion
 
 // This code is intentionally placed into the YAT.View.Controls namespace even though the file is
 // located in YAT.View.Controls.ViewModel for same location as parent control.
@@ -89,7 +98,7 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static void DrawAndMeasureLineNumber(string s, Model.Settings.FormatSettings settings,
+		public static void DrawAndMeasureLineNumber(string s, FormatSettings settings,
 		                                            Graphics graphics, Rectangle bounds,
 		                                            out int requestedWidth)
 		{
@@ -105,7 +114,7 @@ namespace YAT.View.Controls
 			requestedWidth = requestedSize.Width;
 		}
 
-		private static void SetLineNumberDrawingObjects(Model.Settings.FormatSettings settings, out Font font)
+		private static void SetLineNumberDrawingObjects(FormatSettings settings, out Font font)
 		{
 			var fontName  = settings.Font.Name;
 			var fontSize  = settings.Font.Size;
@@ -134,7 +143,7 @@ namespace YAT.View.Controls
 		/// This overload is used if formatting is enabled.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static void DrawAndMeasureLine(Domain.DisplayLine line, Model.Settings.FormatSettings settings,
+		public static void DrawAndMeasureLine(Domain.DisplayLine line, FormatSettings settings,
 		                                      IDeviceContext dc, Rectangle bounds, DrawItemState state,
 		                                      out int requestedWidth)
 		{
@@ -160,7 +169,7 @@ namespace YAT.View.Controls
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		private static void DrawAndMeasureElement(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
+		private static void DrawAndMeasureElement(Domain.DisplayElement element, FormatSettings settings,
 		                                          IDeviceContext dc, Rectangle bounds, DrawItemState state, bool highlight,
 		                                          out int requestedWidth, out int drawnWidth)
 		{
@@ -186,7 +195,7 @@ namespace YAT.View.Controls
 			}
 		}
 
-		private static void SetDrawingObjects(Domain.DisplayElement element, Model.Settings.FormatSettings settings, DrawItemState state, bool highlight,
+		private static void SetDrawingObjects(Domain.DisplayElement element, FormatSettings settings, DrawItemState state, bool highlight,
 		                                      out Font font, out Color foreColor, out Color backColor)
 		{
 			var fontName = settings.Font.Name;
@@ -306,7 +315,7 @@ namespace YAT.View.Controls
 			}
 		}
 
-		private static void HandleSelectionAndHighlight(DrawItemState state, bool highlight, Model.Settings.FormatSettings settings, ref Color foreColor, out Color backColor)
+		private static void HandleSelectionAndHighlight(DrawItemState state, bool highlight, FormatSettings settings, ref Color foreColor, out Color backColor)
 		{
 			//  (               line is selected      ) || (highlight)
 			if (((state & DrawItemState.Selected) != 0) || (highlight))

@@ -22,9 +22,18 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Text;
+
+using YAT.Format.Settings;
+
+#endregion
 
 namespace YAT.Log
 {
@@ -38,7 +47,7 @@ namespace YAT.Log
 
 		private Settings.LogSettings settings;
 		private Encoding textTerminalEncoding;
-		private Model.Settings.FormatSettings neatFormat;
+		private FormatSettings neatFormat;
 
 		private List<Log> logs;
 		private List<Log> rawLogs;
@@ -60,7 +69,7 @@ namespace YAT.Log
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Provider(Settings.LogSettings settings, Encoding textTerminalEncoding, Model.Settings.FormatSettings neatFormat)
+		public Provider(Settings.LogSettings settings, Encoding textTerminalEncoding, FormatSettings neatFormat)
 		{
 			this.settings             = settings;
 			this.textTerminalEncoding = textTerminalEncoding;
@@ -109,7 +118,7 @@ namespace YAT.Log
 					// In the 'normal' case, SwitchOff() has already been called.
 					if (this.logs != null)
 					{
-						foreach (Log l in this.logs)
+						foreach (var l in this.logs)
 							l.Dispose();
 					}
 				}
@@ -177,7 +186,7 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		public virtual Model.Settings.FormatSettings NeatFormat
+		public virtual FormatSettings NeatFormat
 		{
 			get { return (this.neatFormat); }
 			set
@@ -224,7 +233,7 @@ namespace YAT.Log
 			get
 			{
 				int count = 0;
-				foreach (Log l in this.logs)
+				foreach (var l in this.logs)
 				{
 					if (l.IsEnabled)
 						count++;
@@ -239,7 +248,7 @@ namespace YAT.Log
 			get
 			{
 				bool isOn = false;
-				foreach (Log l in this.logs)
+				foreach (var l in this.logs)
 				{
 					isOn |= l.IsOn;
 				}
@@ -252,7 +261,7 @@ namespace YAT.Log
 		{
 			get
 			{
-				foreach (Log l in this.logs)
+				foreach (var l in this.logs)
 				{
 					if (!l.IsOn)
 						return (false);
@@ -266,12 +275,12 @@ namespace YAT.Log
 		{
 			get
 			{
-				bool fileExsists = false;
-				foreach (Log l in this.logs)
+				bool fileExists = false;
+				foreach (var l in this.logs)
 				{
-					fileExsists |= l.FileExists;
+					fileExists |= l.FileExists;
 				}
-				return (fileExsists);
+				return (fileExists);
 			}
 		}
 
@@ -285,28 +294,28 @@ namespace YAT.Log
 		/// <summary></summary>
 		public virtual void SwitchOn()
 		{
-			foreach (Log l in this.logs)
+			foreach (var l in this.logs)
 				l.Open();
 		}
 
 		/// <summary></summary>
 		public virtual void Clear()
 		{
-			foreach (Log l in this.logs)
+			foreach (var l in this.logs)
 				l.Clear();
 		}
 
 		/// <summary></summary>
 		public virtual void Flush()
 		{
-			foreach (Log l in this.logs)
+			foreach (var l in this.logs)
 				l.Flush();
 		}
 
 		/// <summary></summary>
 		public virtual void SwitchOff()
 		{
-			foreach (Log l in this.logs)
+			foreach (var l in this.logs)
 				l.Close();
 		}
 
@@ -333,9 +342,9 @@ namespace YAT.Log
 		{
 			get
 			{
-				List<string> result = new List<string>(this.logs.Count); // Preset the initial capacity to improve memory management.
+				var result = new List<string>(this.logs.Count); // Preset the initial capacity to improve memory management.
 
-				foreach (Log l in this.logs)
+				foreach (var l in this.logs)
 				{
 					if (l.IsEnabled)
 						result.Add(l.FilePath);

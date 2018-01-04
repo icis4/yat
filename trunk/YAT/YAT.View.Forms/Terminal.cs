@@ -3938,9 +3938,9 @@ namespace YAT.View.Forms
 			Cursor = Cursors.WaitCursor;
 
 			                                // Clone settings to ensure decoupling:
-			monitor_Tx   .FormatSettings = new Model.Settings.FormatSettings(this.settingsRoot.Format);
-			monitor_Bidir.FormatSettings = new Model.Settings.FormatSettings(this.settingsRoot.Format);
-			monitor_Rx   .FormatSettings = new Model.Settings.FormatSettings(this.settingsRoot.Format);
+			monitor_Tx   .FormatSettings = new Format.Settings.FormatSettings(this.settingsRoot.Format);
+			monitor_Bidir.FormatSettings = new Format.Settings.FormatSettings(this.settingsRoot.Format);
+			monitor_Rx   .FormatSettings = new Format.Settings.FormatSettings(this.settingsRoot.Format);
 
 			Cursor = Cursors.Default;
 			SetTimedStatusText("Reformatting done");
@@ -4033,7 +4033,7 @@ namespace YAT.View.Forms
 		private void CopyMonitorToClipboard(Controls.Monitor monitor)
 		{
 			SetFixedStatusText("Copying data to clipboard...");
-			Model.Utilities.RtfWriterHelper.LinesToClipboard(monitor.SelectedLines, this.settingsRoot.Format);
+			Utilities.RtfWriterHelper.LinesToClipboard(monitor.SelectedLines, this.settingsRoot.Format);
 			SetTimedStatusText("Data copied to clipboard");
 		}
 
@@ -4081,18 +4081,18 @@ namespace YAT.View.Forms
 				if (ExtensionHelper.IsXmlFile(filePath))
 				{
 				#if FALSE // Enable to use the raw instead of neat XML export schema, useful for development purposes of the raw XML schema.
-					savedCount = Model.Utilities.XmlWriterHelperRaw.LinesToFile(monitor.SelectedLines, filePath, true);
+					savedCount = Log.Utilities.XmlWriterHelperRaw.LinesToFile(monitor.SelectedLines, filePath, true);
 				#else
-					savedCount = Model.Utilities.XmlWriterHelperNeat.LinesToFile(monitor.SelectedLines, filePath, true);
+					savedCount = Log.Utilities.XmlWriterHelperNeat.LinesToFile(monitor.SelectedLines, filePath, true);
 				#endif
 				}
 				else if (ExtensionHelper.IsRtfFile(filePath))
 				{
-					savedCount = Model.Utilities.RtfWriterHelper.LinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
+					savedCount = Utilities.RtfWriterHelper.LinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
 				}
 				else
 				{
-					savedCount = Model.Utilities.TextWriterHelper.LinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
+					savedCount = Utilities.TextWriterHelper.LinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
 				}
 
 				if (savedCount == requestedCount)
@@ -4177,7 +4177,7 @@ namespace YAT.View.Forms
 		{
 			SetFixedStatusText("Printing data...");
 
-			using (var printer = new Model.Utilities.RtfPrinter(settings))
+			using (var printer = new Utilities.RtfPrinter(settings))
 			{
 				try
 				{

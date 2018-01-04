@@ -134,6 +134,10 @@
       <Project>{1C44A8C0-7805-4172-8746-2DB750803FFF}</Project>
       <Name>YAT.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\YAT.Format\YAT.Format.csproj">
+      <Project>{7a7d2db5-90cc-4bf0-9c80-fa7b8f6aac74}</Project>
+      <Name>YAT.Format</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YAT.Log\YAT.Log.csproj">
       <Project>{7B0B343D-F992-4A1E-8E07-CB8EC651A5E6}</Project>
       <Name>YAT.Log</Name>

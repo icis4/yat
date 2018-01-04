@@ -22,74 +22,54 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Xml.Serialization;
 
 using MKY;
+using MKY.Drawing;
 
-namespace YAT.Model.Types
+#endregion
+
+namespace YAT.Format.Types
 {
 	/// <summary></summary>
-	[SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Justification = "Only used to hold font settings.")]
 	[Serializable]
-	public class FontFormat : IEquatable<FontFormat>
+	public class TextFormat : IEquatable<TextFormat>
 	{
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
+		private Color color;
+		private FontStyle fontStyle;
 
 		/// <summary></summary>
-		public const string NameDefault = "DejaVu Sans Mono";
-
-		/// <summary></summary>
-		public const float SizeDefault = 8.25f;
-
-		/// <summary></summary>
-		public const FontStyle StyleDefault = FontStyle.Regular;
-
-		#endregion
-
-		private string name;
-		private float size;
-		private FontStyle style;
-		private Font font;
-
-		/// <summary></summary>
-		public FontFormat()
+		public TextFormat()
 		{
-			this.name  = NameDefault;
-			this.size  = SizeDefault;
-			this.style = StyleDefault;
-			MakeFont();
+			this.color     = Color.Black;
+			this.fontStyle = FontStyle.Regular;
 		}
 
 		/// <summary></summary>
-		public FontFormat(string name, float size, FontStyle style)
+		public TextFormat(Color color, bool bold, bool italic, bool underline, bool strikeout)
 		{
-			this.name  = name;
-			this.size  = size;
-			this.style = style;
-			MakeFont();
+			this.color     = color;
+			this.fontStyle = FontStyle.Regular;
+
+			Bold      = bold;
+			Italic    = italic;
+			Underline = underline;
+			Strikeout = strikeout;
 		}
 
 		/// <summary></summary>
-		public FontFormat(FontFormat rhs)
+		public TextFormat(TextFormat rhs)
 		{
-			this.name  = rhs.name;
-			this.size  = rhs.size;
-			this.style = rhs.style;
-			MakeFont();
-		}
-
-		private void MakeFont()
-		{
-			if (this.font != null)
-				this.font.Dispose();
-
-			this.font = new Font(this.name, this.size, this.style);
+			this.color     = rhs.color;
+			this.fontStyle = rhs.fontStyle;
 		}
 
 		#region Properties
@@ -97,53 +77,88 @@ namespace YAT.Model.Types
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
-		[XmlElement("Name")]
-		public virtual string Name
+		/// <remarks>
+		/// <see cref="Color"/> cannot be serialized, thus, the helper below is used for serialization.
+		/// </remarks>
+		[XmlIgnore]
+		public virtual Color Color
 		{
-			get { return (this.name); }
-			set
-			{
-				this.name = value;
-				MakeFont();
-			}
+			get { return (this.color); }
+			set { this.color = value;  }
+		}
+
+		/// <remarks>
+		/// Using string because <see cref="Color"/> cannot be serialized.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
+		[XmlElement("Color")]
+		public virtual string Color_ForSerialization
+		{
+			get { return (ColorTranslator.ToHtml(Color));           }
+			set { Color = ColorTranslatorEx.FromHtmlOrWin32(value); } // Also allow Win32 for backward compatibility!
 		}
 
 		/// <summary></summary>
-		[XmlElement("Size")]
-		public virtual float Size
+		[XmlElement("FontStyle")]
+		public virtual FontStyle FontStyle
 		{
-			get { return (this.size); }
-			set
-			{
-				this.size = value;
-				MakeFont();
-			}
+			get { return (this.fontStyle); }
+			set { this.fontStyle = value;  }
 		}
 
 		/// <summary></summary>
-		[XmlElement("Style")]
-		public virtual FontStyle Style
+		[XmlIgnore]
+		public virtual bool Bold
 		{
-			get { return (this.style); }
+			get { return ((this.fontStyle & FontStyle.Bold) != 0); }
 			set
 			{
-				this.style = value;
-				MakeFont();
+				if (value)
+					this.fontStyle |= FontStyle.Bold;
+				else
+					this.fontStyle &= ~FontStyle.Bold;
 			}
 		}
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public virtual Font Font
+		public virtual bool Italic
 		{
-			get { return (this.font); }
+			get { return ((this.fontStyle & FontStyle.Italic) != 0); }
 			set
 			{
-				this.name = value.Name;
-				this.size = value.Size;
-				this.style = value.Style;
-				MakeFont();
+				if (value)
+					this.fontStyle |= FontStyle.Italic;
+				else
+					this.fontStyle &= ~FontStyle.Italic;
+			}
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool Underline
+		{
+			get { return ((this.fontStyle & FontStyle.Underline) != 0); }
+			set
+			{
+				if (value)
+					this.fontStyle |= FontStyle.Underline;
+				else
+					this.fontStyle &= ~FontStyle.Underline;
+			}
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool Strikeout
+		{
+			get { return ((this.fontStyle & FontStyle.Strikeout) != 0); }
+			set
+			{
+				if (value)
+					this.fontStyle |= FontStyle.Strikeout;
+				else
+					this.fontStyle &= ~FontStyle.Strikeout;
 			}
 		}
 
@@ -165,11 +180,9 @@ namespace YAT.Model.Types
 		{
 			unchecked
 			{
-				int hashCode;
+				int hashCode = (Color_ForSerialization != null ? Color_ForSerialization.GetHashCode() : 0);
 
-				hashCode =                   (Name != null ? Name.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ Size               .GetHashCode();
-				hashCode = (hashCode * 397) ^ Style              .GetHashCode();
+				hashCode = (hashCode * 397) ^ FontStyle.GetHashCode();
 
 				return (hashCode);
 			}
@@ -180,7 +193,7 @@ namespace YAT.Model.Types
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as FontFormat));
+			return (Equals(obj as TextFormat));
 		}
 
 		/// <summary>
@@ -190,7 +203,7 @@ namespace YAT.Model.Types
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(FontFormat other)
+		public bool Equals(TextFormat other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
@@ -198,16 +211,15 @@ namespace YAT.Model.Types
 
 			return
 			(
-				StringEx.EqualsOrdinalIgnoreCase(Name, other.Name) &&
-				Size .Equals(other.Size) &&
-				Style.Equals(other.Style)
+				StringEx.EqualsOrdinalIgnoreCase(Color_ForSerialization, other.Color_ForSerialization) &&
+				FontStyle.Equals(other.FontStyle)
 			);
 		}
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(FontFormat lhs, FontFormat rhs)
+		public static bool operator ==(TextFormat lhs, TextFormat rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -220,7 +232,7 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(FontFormat lhs, FontFormat rhs)
+		public static bool operator !=(TextFormat lhs, TextFormat rhs)
 		{
 			return (!(lhs == rhs));
 		}

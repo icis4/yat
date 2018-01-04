@@ -30,9 +30,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.IO;
 
+using MKY.Collections.Generic;
 using MKY.Xml.Schema;
 using MKY.Xml.Serialization;
 
@@ -41,21 +41,21 @@ using YAT.Domain.Utilities;
 
 #endregion
 
-namespace YAT.Model.Utilities
+namespace YAT.Log.Utilities
 {
 	/// <summary>
 	/// Static utility class providing XML writer functionality for YAT.
 	/// </summary>
-	public static class XmlWriterHelperNeat
+	public static class XmlWriterHelperRaw
 	{
 		/// <returns>Returns the number of lines that could successfully be written to the file.</returns>
 		public static int LinesToFile(List<DisplayLine> displayLines, string filePath, bool addSchema)
 		{
-			List<XmlTransferNeatLine> transferLines;
+			List<XmlTransferRawLine> transferLines;
 			int count = LinesFromDisplayToTransfer(displayLines, out transferLines);
 			if (count > 0)
 			{
-				Type type = typeof(List<XmlTransferNeatLine>);
+				Type type = typeof(List<XmlTransferRawLine>);
 				XmlSerializerEx.SerializeToFile(filePath, type, transferLines);
 
 				if (addSchema)
@@ -70,12 +70,12 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <returns>Returns the number of lines that could successfully be converted.</returns>
-		private static int LinesFromDisplayToTransfer(List<DisplayLine> displayLines, out List<XmlTransferNeatLine> transferLines)
+		private static int LinesFromDisplayToTransfer(List<DisplayLine> displayLines, out List<XmlTransferRawLine> transferLines)
 		{
-			transferLines = new List<XmlTransferNeatLine>(displayLines.Count); // Preset the required capacity to improve memory management.
+			transferLines = new List<XmlTransferRawLine>(displayLines.Count); // Preset the required capacity to improve memory management.
 			foreach (var dl in displayLines)
 			{
-				XmlTransferNeatLine tl;
+				XmlTransferRawLine tl;
 				if (LineFromDisplayToTransfer(dl, out tl))
 					transferLines.Add(tl);
 				else
@@ -87,7 +87,7 @@ namespace YAT.Model.Utilities
 
 		/// <returns>Returns <c>true</c> if the line could successfully be converted.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool LineFromDisplayToTransfer(DisplayLine displayLine, out XmlTransferNeatLine transferLine)
+		public static bool LineFromDisplayToTransfer(DisplayLine displayLine, out XmlTransferRawLine transferLine)
 		{
 			// Note that display elements are text-only and no longer contain the underlying typed
 			// information such as the time stamp of the origin. Since the XML schema is strongly-
@@ -96,12 +96,10 @@ namespace YAT.Model.Utilities
 
 			bool success = true;
 
-			string textStr = "";
-			string errorStr = "";
+			var content = new List<byte>(displayLine.ByteCount); // Preset the initial capacity to improve memory management.
 
 			DateTime timeStamp = DateTime.MinValue;
 			string portStr = "";
-			int lengthByteCount = 0;
 
 			bool containsTx = false;
 			bool containsRx = false;
@@ -113,7 +111,9 @@ namespace YAT.Model.Utilities
 					var casted = (de as DisplayElement.TxData);
 					if (casted != null)
 					{
-						textStr += casted.Text;
+						foreach (Pair<byte[], string> origin in casted.Origin)
+							content.AddRange(origin.Value1);
+
 						containsTx = true;
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
@@ -122,7 +122,9 @@ namespace YAT.Model.Utilities
 					var casted = (de as DisplayElement.TxControl);
 					if (casted != null)
 					{
-						textStr += casted.Text;
+						foreach (Pair<byte[], string> origin in casted.Origin)
+							content.AddRange(origin.Value1);
+
 						containsTx = true;
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
@@ -131,7 +133,9 @@ namespace YAT.Model.Utilities
 					var casted = (de as DisplayElement.RxData);
 					if (casted != null)
 					{
-						textStr += casted.Text;
+						foreach (Pair<byte[], string> origin in casted.Origin)
+							content.AddRange(origin.Value1);
+
 						containsRx = true;
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
@@ -140,16 +144,10 @@ namespace YAT.Model.Utilities
 					var casted = (de as DisplayElement.RxControl);
 					if (casted != null)
 					{
-						textStr += casted.Text;
+						foreach (Pair<byte[], string> origin in casted.Origin)
+							content.AddRange(origin.Value1);
+
 						containsRx = true;
-						continue; // Immediately continue, makes no sense to also try other types!
-					}
-				}
-				{
-					var casted = (de as DisplayElement.ErrorInfo);
-					if (casted != null)
-					{
-						errorStr += casted.Text;
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
 				}
@@ -171,19 +169,13 @@ namespace YAT.Model.Utilities
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
 				}
-				{
-					var casted = (de as DisplayElement.DataLength);
-					if (casted != null)
-					{
-						lengthByteCount = casted.LengthByteCount;
-						continue; // Immediately continue, makes no sense to also try other types!
-					}
-				}
 
 				// All white-space elements do not need to be processed.
 				// 'TimeSpanInfo' is not used with 'XmlTransferRawLine'.
 				// 'TimeDeltaInfo' is not used with 'XmlTransferRawLine'.
 				// 'DirectionInfo' is handled below.
+				// 'ErrorInfo' is not used with 'XmlTransferRawLine'.
+				// 'Length' is not used with 'XmlTransferRawLine'.
 			}
 
 			Direction direction;
@@ -197,7 +189,7 @@ namespace YAT.Model.Utilities
 			else
 				direction = Direction.None;
 
-			transferLine = new XmlTransferNeatLine(timeStamp, portStr, direction, textStr, errorStr, lengthByteCount);
+			transferLine = new XmlTransferRawLine(timeStamp, portStr, direction, content.ToArray());
 
 			return (success);
 		}

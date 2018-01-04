@@ -51,8 +51,8 @@ namespace YAT.View.Forms
 
 		private SettingControlsHelper isSettingControls;
 
-		private Model.Settings.FormatSettings formatSettings;
-		private Model.Settings.FormatSettings formatSettingsInEdit;
+		private Format.Settings.FormatSettings formatSettings;
+		private Format.Settings.FormatSettings formatSettingsInEdit;
 
 		private int[] customColors;
 
@@ -77,12 +77,12 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public FormatSettings(Model.Settings.FormatSettings formatSettings, int[] customColors, Domain.InfoSeparatorEx infoSeparator, Domain.InfoEnclosureEx infoEnclosure, bool timeStampUseUtc, string timeStampFormat, string timeSpanFormat, string timeDeltaFormat)
+		public FormatSettings(Format.Settings.FormatSettings formatSettings, int[] customColors, Domain.InfoSeparatorEx infoSeparator, Domain.InfoEnclosureEx infoEnclosure, bool timeStampUseUtc, string timeStampFormat, string timeSpanFormat, string timeDeltaFormat)
 		{
 			InitializeComponent();
 
 			this.formatSettings = formatSettings;
-			this.formatSettingsInEdit = new Model.Settings.FormatSettings(formatSettings);
+			this.formatSettingsInEdit = new Format.Settings.FormatSettings(formatSettings);
 
 			this.customColors = customColors;
 
@@ -117,7 +117,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public Model.Settings.FormatSettings FormatSettingsResult
+		public Format.Settings.FormatSettings FormatSettingsResult
 		{
 			get { return (this.formatSettings); }
 		}
@@ -675,7 +675,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private Model.Types.TextFormat GetFormatFromIndex(int index)
+		private Format.Types.TextFormat GetFormatFromIndex(int index)
 		{
 			switch (index)
 			{
@@ -718,7 +718,7 @@ namespace YAT.View.Forms
 
 				for (int i = 0; i < this.monitors.Length; i++)
 				{                                      // Clone settings to ensure decoupling:
-					this.monitors[i].FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
+					this.monitors[i].FormatSettings = new Format.Settings.FormatSettings(this.formatSettingsInEdit);
 				}
 
 				checkBox_EnableFormatting.Checked = this.formatSettingsInEdit.FormattingEnabled;
@@ -755,7 +755,7 @@ namespace YAT.View.Forms
 				ComboBoxHelper.Select(comboBox_TimeSpanFormatPreset,  timeSpanFormatPreset );
 				ComboBoxHelper.Select(comboBox_TimeDeltaFormatPreset, timeDeltaFormatPreset);
 				                                //// Clone settings to ensure decoupling:
-				monitor_Example.FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
+				monitor_Example.FormatSettings = new Format.Settings.FormatSettings(this.formatSettingsInEdit);
 
 				SetExamples();
 			}

@@ -1550,11 +1550,11 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Model.Utilities, Version=1.99.53.30220, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Format, Version=1.99.53.30220, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                 }
-            "SourcePath" = "8:YAT.Model.Utilities.dll"
+            "SourcePath" = "8:YAT.Format.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_119A1D045E5248589D943AE9406E69E8"

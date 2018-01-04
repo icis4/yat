@@ -28,41 +28,31 @@ using System.Drawing;
 using System.Xml.Serialization;
 
 using MKY;
-using MKY.Drawing;
 
-namespace YAT.Model.Types
+namespace YAT.Format.Types
 {
 	/// <summary></summary>
 	[Serializable]
-	public class TextFormat : IEquatable<TextFormat>
+	public class BackFormat : IEquatable<BackFormat>
 	{
 		private Color color;
-		private FontStyle fontStyle;
 
 		/// <summary></summary>
-		public TextFormat()
+		public BackFormat()
 		{
-			this.color     = Color.Black;
-			this.fontStyle = FontStyle.Regular;
+			this.color = Color.Black;
 		}
 
 		/// <summary></summary>
-		public TextFormat(Color color, bool bold, bool italic, bool underline, bool strikeout)
+		public BackFormat(Color color)
 		{
-			this.color     = color;
-			this.fontStyle = FontStyle.Regular;
-
-			Bold      = bold;
-			Italic    = italic;
-			Underline = underline;
-			Strikeout = strikeout;
+			this.color = color;
 		}
 
 		/// <summary></summary>
-		public TextFormat(TextFormat rhs)
+		public BackFormat(BackFormat rhs)
 		{
-			this.color     = rhs.color;
-			this.fontStyle = rhs.fontStyle;
+			this.color = rhs.color;
 		}
 
 		#region Properties
@@ -87,72 +77,8 @@ namespace YAT.Model.Types
 		[XmlElement("Color")]
 		public virtual string Color_ForSerialization
 		{
-			get { return (ColorTranslator.ToHtml(Color));           }
-			set { Color = ColorTranslatorEx.FromHtmlOrWin32(value); } // Also allow Win32 for backward compatibility!
-		}
-
-		/// <summary></summary>
-		[XmlElement("FontStyle")]
-		public virtual FontStyle FontStyle
-		{
-			get { return (this.fontStyle); }
-			set { this.fontStyle = value;  }
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
-		public virtual bool Bold
-		{
-			get { return ((this.fontStyle & FontStyle.Bold) != 0); }
-			set
-			{
-				if (value)
-					this.fontStyle |= FontStyle.Bold;
-				else
-					this.fontStyle &= ~FontStyle.Bold;
-			}
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
-		public virtual bool Italic
-		{
-			get { return ((this.fontStyle & FontStyle.Italic) != 0); }
-			set
-			{
-				if (value)
-					this.fontStyle |= FontStyle.Italic;
-				else
-					this.fontStyle &= ~FontStyle.Italic;
-			}
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
-		public virtual bool Underline
-		{
-			get { return ((this.fontStyle & FontStyle.Underline) != 0); }
-			set
-			{
-				if (value)
-					this.fontStyle |= FontStyle.Underline;
-				else
-					this.fontStyle &= ~FontStyle.Underline;
-			}
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
-		public virtual bool Strikeout
-		{
-			get { return ((this.fontStyle & FontStyle.Strikeout) != 0); }
-			set
-			{
-				if (value)
-					this.fontStyle |= FontStyle.Strikeout;
-				else
-					this.fontStyle &= ~FontStyle.Strikeout;
-			}
+			get { return (ColorTranslator.ToHtml(Color));  }
+			set { Color = ColorTranslator.FromHtml(value); }
 		}
 
 		#endregion
@@ -173,11 +99,7 @@ namespace YAT.Model.Types
 		{
 			unchecked
 			{
-				int hashCode = (Color_ForSerialization != null ? Color_ForSerialization.GetHashCode() : 0);
-
-				hashCode = (hashCode * 397) ^ FontStyle.GetHashCode();
-
-				return (hashCode);
+				return (Color_ForSerialization != null ? Color_ForSerialization.GetHashCode() : 0);
 			}
 		}
 
@@ -186,7 +108,7 @@ namespace YAT.Model.Types
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as TextFormat));
+			return (Equals(obj as BackFormat));
 		}
 
 		/// <summary>
@@ -196,7 +118,7 @@ namespace YAT.Model.Types
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(TextFormat other)
+		public bool Equals(BackFormat other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
@@ -204,15 +126,14 @@ namespace YAT.Model.Types
 
 			return
 			(
-				StringEx.EqualsOrdinalIgnoreCase(Color_ForSerialization, other.Color_ForSerialization) &&
-				FontStyle.Equals(other.FontStyle)
+				StringEx.EqualsOrdinalIgnoreCase(Color_ForSerialization, other.Color_ForSerialization)
 			);
 		}
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(TextFormat lhs, TextFormat rhs)
+		public static bool operator ==(BackFormat lhs, BackFormat rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -225,7 +146,7 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(TextFormat lhs, TextFormat rhs)
+		public static bool operator !=(BackFormat lhs, BackFormat rhs)
 		{
 			return (!(lhs == rhs));
 		}

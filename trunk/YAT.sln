@@ -138,7 +138,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Model.Test", "YAT\YAT.M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Model.Types", "YAT\YAT.Model.Types\YAT.Model.Types.csproj", "{651BA67D-9B00-4245-9C99-481F20273A62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Model.Utilities", "YAT\YAT.Model.Utilities\YAT.Model.Utilities.csproj", "{7A7D2DB5-90CC-4BF0-9C80-FA7B8F6AAC74}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Format", "YAT\YAT.Format\YAT.Format.csproj", "{7A7D2DB5-90CC-4BF0-9C80-FA7B8F6AAC74}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Settings.Application", "YAT\YAT.Settings.Application\YAT.Settings.Application.csproj", "{69A8CBB4-7D00-4A3D-9CF7-220DD02C2EB7}"
 EndProject

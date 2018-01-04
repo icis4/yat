@@ -22,6 +22,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -30,6 +35,10 @@ using System.Windows.Forms;
 
 using MKY;
 using MKY.Windows.Forms;
+
+using YAT.Format.Types;
+
+#endregion
 
 namespace YAT.View.Controls
 {
@@ -44,8 +53,8 @@ namespace YAT.View.Controls
 
 		private SettingControlsHelper isSettingControls;
 
-		private Font font = new Font(Model.Types.FontFormat.NameDefault, Model.Types.FontFormat.SizeDefault, Model.Types.FontFormat.StyleDefault);
-		private Color color = Control.DefaultForeColor;
+		private Font font = new Font(FontFormat.NameDefault, FontFormat.SizeDefault, FontFormat.StyleDefault);
+		private Color color = DefaultForeColor;
 		private int[] customColors; // = null;
 
 		#endregion
@@ -128,7 +137,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Format")]
 		[Description("The font style.")]
-		[DefaultValue(Model.Types.FontFormat.StyleDefault)]
+		[DefaultValue(FontFormat.StyleDefault)]
 		public virtual FontStyle FormatFontStyle
 		{
 			get { return (this.font.Style); }

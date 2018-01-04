@@ -35,10 +35,11 @@ using System.Windows.Forms;
 using MKY;
 
 using YAT.Domain;
+using YAT.Format.Settings;
 
 #endregion
 
-namespace YAT.Model.Utilities
+namespace YAT.View.Utilities
 {
 	/// <summary>
 	/// Static utility class providing RTF writer functionality for YAT.
@@ -64,7 +65,7 @@ namespace YAT.Model.Utilities
 		/// <remarks>
 		/// Pragmatic implementation of copying RTF to the clipboard. 'netrtfwriter' is only used for stream-based logging.
 		/// </remarks>
-		public static int LinesToClipboard(List<DisplayLine> lines, Settings.FormatSettings settings)
+		public static int LinesToClipboard(List<DisplayLine> lines, FormatSettings settings)
 		{
 			var richTextProvider = LinesToRichTextBox(lines, settings);
 			richTextProvider.SelectAll();
@@ -76,7 +77,7 @@ namespace YAT.Model.Utilities
 		/// <remarks>
 		/// Pragmatic implementation of saving RTF to a file. 'netrtfwriter' is only used for stream-based logging.
 		/// </remarks>
-		public static int LinesToFile(List<DisplayLine> lines, string filePath, Settings.FormatSettings settings)
+		public static int LinesToFile(List<DisplayLine> lines, string filePath, FormatSettings settings)
 		{
 			var richTextProvider = LinesToRichTextBox(lines, settings);
 			richTextProvider.SaveFile(filePath, RichTextBoxStreamType.RichText);
@@ -85,7 +86,7 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		internal static RichTextBox LinesToRichTextBox(List<DisplayLine> lines, Settings.FormatSettings settings)
+		internal static RichTextBox LinesToRichTextBox(List<DisplayLine> lines, FormatSettings settings)
 		{
 			var richTextProvider = new RichTextBox();
 			richTextProvider.Font      = settings.Font;
@@ -97,18 +98,18 @@ namespace YAT.Model.Utilities
 			return (richTextProvider);
 		}
 
-		private static void AppendDisplayLine(RichTextBox richTextProvider, DisplayLine line, Settings.FormatSettings settings)
+		private static void AppendDisplayLine(RichTextBox richTextProvider, DisplayLine line, FormatSettings settings)
 		{
 			AppendDisplayElements(richTextProvider, line, settings);
 		}
 
-		private static void AppendDisplayElements(RichTextBox richTextProvider, List<DisplayElement> elements, Settings.FormatSettings settings)
+		private static void AppendDisplayElements(RichTextBox richTextProvider, List<DisplayElement> elements, FormatSettings settings)
 		{
 			foreach (var de in elements)
 				AppendDisplayElement(richTextProvider, de, settings);
 		}
 
-		private static void AppendDisplayElement(RichTextBox richTextProvider, DisplayElement element, Settings.FormatSettings settings)
+		private static void AppendDisplayElement(RichTextBox richTextProvider, DisplayElement element, FormatSettings settings)
 		{
 			Font font;
 			Color color;
@@ -123,7 +124,7 @@ namespace YAT.Model.Utilities
 				richTextProvider.AppendText(element.Text);
 		}
 
-		private static void SetDrawingObjects(DisplayElement element, Settings.FormatSettings settings, out Font font, out Color color)
+		private static void SetDrawingObjects(DisplayElement element, FormatSettings settings, out Font font, out Color color)
 		{
 			string fontName = settings.Font.Name;
 			float fontSize = settings.Font.Size;

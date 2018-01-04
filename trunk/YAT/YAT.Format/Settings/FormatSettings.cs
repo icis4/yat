@@ -28,9 +28,9 @@ using System.Xml.Serialization;
 
 using MKY;
 
-using YAT.Model.Types;
+using YAT.Format.Types;
 
-namespace YAT.Model.Settings
+namespace YAT.Format.Settings
 {
 	/// <summary></summary>
 	public class FormatSettings : MKY.Settings.SettingsItem, IEquatable<FormatSettings>
