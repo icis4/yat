@@ -301,7 +301,6 @@ namespace MKY
 			/// thread.
 			/// </summary>
 			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event raising.")]
-			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 			public virtual void RaiseSync(Delegate eventDelegate, params object[] args)
 			{
 				if (eventDelegate == null)
@@ -330,7 +329,6 @@ namespace MKY
 			/// <typeparam name="TEventArgs">The type of the EventArgs of the requested event.</typeparam>
 			[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Haven't found any alternative way to implement a generic event helper.")]
 			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event raising.")]
-			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 			public virtual void RaiseSync<TEventArgs>(Delegate eventDelegate, params object[] args)
 				where TEventArgs : EventArgs
 			{
@@ -433,7 +431,6 @@ namespace MKY
 			/// <typeparam name="TEventArgs">The type of the EventArgs of the requested event.</typeparam>
 			[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Haven't found any alternative way to implement a generic event helper.")]
 			[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event raising.")]
-			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 			public virtual void RaiseAsync<TEventArgs>(Delegate eventDelegate, params object[] args)
 				where TEventArgs : EventArgs
 			{
@@ -504,7 +501,7 @@ namespace MKY
 			// Safe Invoke
 			//======================================================================================
 
-			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 			[OneWay]
 			private void InvokeSynchronized(ISynchronizeInvoke sinkTarget, Delegate sink, object[] args)
 			{
@@ -559,7 +556,7 @@ namespace MKY
 				}
 			}
 
-			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 			[OneWay]
 			private void InvokeOnCurrentThread(Delegate sink, object[] args)
 			{

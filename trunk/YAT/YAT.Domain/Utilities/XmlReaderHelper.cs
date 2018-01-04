@@ -56,7 +56,7 @@ namespace YAT.Domain.Utilities
 		/// A <see cref="InvalidDataException"/> is thrown if the file is empty or doesn't match the expected XML schema.
 		/// </exception>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public static int LinesFromFile(string filePath, out string[] lines)
 		{
 			if (!File.Exists(filePath))

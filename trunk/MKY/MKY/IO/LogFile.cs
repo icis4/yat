@@ -152,7 +152,7 @@ namespace MKY.IO
 		/// Writes a line into log file and adds a time stamp.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public virtual void WriteLine(string line, string timeStampFormat = "yyyy-MM-dd HH:mm:ss.fff")
 		{
 			AssertNotDisposed();
@@ -166,15 +166,13 @@ namespace MKY.IO
 					this.writer.Flush();
 				}
 			}
-			catch
-			{
-			}
+			catch { }
 		}
 
 		/// <summary>
 		/// Closes log file.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public virtual void Close()
 		{
 			AssertNotDisposed();
@@ -186,9 +184,7 @@ namespace MKY.IO
 					this.writer.Close();
 				}
 			}
-			catch
-			{
-			}
+			catch { }
 		}
 	}
 }

@@ -476,7 +476,9 @@ namespace YAT.Controller
 		/// <remarks>
 		/// Exceptions are only handled in case of 'Release', otherwise by the debugger.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+	#if (HANDLE_UNHANDLED_EXCEPTIONS)
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
+	#endif
 		private MainResult RunFullyWithView()
 		{
 			MessageHelper.RequestSupport =      "Support may be requested as described in 'Help > Request Support'.";
@@ -683,7 +685,9 @@ namespace YAT.Controller
 		/// <remarks>
 		/// Exceptions are only handled in case of 'Release', otherwise by the debugger.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+	#if (HANDLE_UNHANDLED_EXCEPTIONS)
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
+	#endif
 		private MainResult RunWithViewButOutputErrorsOnConsole()
 		{
 			MessageHelper.RequestSupport =      "Support may be requested as described in 'Help > Request Support'.";
@@ -829,7 +833,9 @@ namespace YAT.Controller
 		/// <remarks>
 		/// Exceptions are only handled in case of 'Release', otherwise by the debugger.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+	#if (HANDLE_UNHANDLED_EXCEPTIONS)
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
+	#endif
 		private MainResult RunFullyFromConsole()
 		{
 			MessageHelper.RequestSupport =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
@@ -934,7 +940,9 @@ namespace YAT.Controller
 		/// <remarks>
 		/// Exceptions are only handled in case of 'Release', otherwise by the debugger.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+	#if (HANDLE_UNHANDLED_EXCEPTIONS)
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
+	#endif
 		private MainResult RunInvisible()
 		{
 			MessageHelper.RequestSupport =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";

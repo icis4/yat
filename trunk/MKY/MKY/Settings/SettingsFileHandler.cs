@@ -156,7 +156,7 @@ namespace MKY.Settings
 		/// <summary>
 		/// Determines whether the settings file is up to date.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public virtual bool FileIsUpToDate
 		{
 			get
@@ -290,7 +290,7 @@ namespace MKY.Settings
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be created.
 		/// </exception>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public object LoadFromFile(string filePath, Type type, IEnumerable<AlternateXmlElement> alternateXmlElements)
 		{
 			bool success = false;
@@ -372,7 +372,6 @@ namespace MKY.Settings
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public bool SaveToFile(Type type, object settings)
 		{
 			return (SaveToFile(this.filePath, type, settings));
@@ -381,7 +380,7 @@ namespace MKY.Settings
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public bool SaveToFile(string filePath, Type type, object settings)
 		{
 			bool success = false;
@@ -455,7 +454,6 @@ namespace MKY.Settings
 		/// <returns>
 		/// Returns <c>true</c> if file successfully saved.
 		/// </returns>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual bool TryDelete()
 		{
 			return (FileEx.TryDelete(this.filePath));

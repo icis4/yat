@@ -69,7 +69,6 @@ namespace MKY.IO.Serial.Usb.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[Test, TestCaseSource(typeof(DeviceInfoTestData), "TestCases")]
 		public virtual void TestSerialization(bool isValid, int vendorId, int productId, bool matchSerial, string serial, string[] descriptors)
 		{

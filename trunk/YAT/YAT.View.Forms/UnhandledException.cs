@@ -81,7 +81,7 @@ namespace YAT.View.Forms
 		// Controls Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an explicit user interaction.")]
 		private void button_CopyToClipboard_Click(object sender, EventArgs e)
 		{

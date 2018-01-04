@@ -188,7 +188,7 @@ namespace YAT.Settings.Application
 		/// <remarks>
 		/// So far, there are local and roaming user settings.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public static bool Create(ApplicationSettingsFileAccess fileAccess)
 		{
 			try
@@ -245,7 +245,6 @@ namespace YAT.Settings.Application
 		/// <remarks>
 		/// So far, there are local and roaming user settings.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static bool Save()
 		{
 			bool success;
@@ -259,7 +258,7 @@ namespace YAT.Settings.Application
 		/// <summary>
 		/// Save local user settings. To improved performance, settings shall only be saved if they have changed.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public static bool SaveLocalUserSettings()
 		{
 			if (staticSettingsHandler != null)
@@ -287,7 +286,7 @@ namespace YAT.Settings.Application
 		/// <summary>
 		/// Save roaming user settings. To improved performance, settings shall only be saved if they have changed.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public static bool SaveRoamingUserSettings()
 		{
 			if (staticSettingsHandler != null)
@@ -315,7 +314,7 @@ namespace YAT.Settings.Application
 		/// <summary>
 		/// Close the application settings and release all resources.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public static bool CloseAndDispose()
 		{
 			if (staticSettingsHandler != null)

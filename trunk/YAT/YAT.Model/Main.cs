@@ -1006,7 +1006,7 @@ namespace YAT.Model
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		private void CleanupLocalUserDirectory()
 		{
 			// Get all file paths in default directory:
@@ -1429,7 +1429,7 @@ namespace YAT.Model
 			return (OpenWorkspaceFromSettings(settingsHandler, guid, Indices.InvalidIndex, null, out exception));
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure to handle any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings, Guid guid, int dynamicTerminalIndexToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace, out Exception exception)
 		{
 			AssertNotDisposed();
@@ -1539,7 +1539,7 @@ namespace YAT.Model
 			return (OpenWorkspaceFile(filePath, out settingsHandler, out guid, out exception));
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure to handle any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool OpenWorkspaceFile(string filePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, out Guid guid, out Exception exception)
 		{
 			try
@@ -1632,7 +1632,7 @@ namespace YAT.Model
 			return (OpenTerminalFile(workspaceFilePath, terminalFilePath, out settingsHandler, out exception));
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure to handle any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
 		{
 			// Try to combine the workspace path with terminal path, but only if that is a relative path:
@@ -1699,7 +1699,6 @@ namespace YAT.Model
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private object operationTimer_Elapsed_SyncObj = new object();
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void operationTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			// Ensure that only one timer elapsed event thread is active at a time. Because if the
@@ -1874,7 +1873,7 @@ namespace YAT.Model
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private object exitTimer_Elapsed_SyncObj = new object();
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private void exitTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			// Ensure that only one timer elapsed event thread is active at a time. Because if the

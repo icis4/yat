@@ -622,7 +622,6 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>
 		/// Try to start as client.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void StartConnecting()
 		{
 			int randomDelay = SocketBase.Random.Next(MinConnectDelay, MaxConnectDelay);
@@ -662,7 +661,6 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>
 		/// Try to start as server.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void StartListening()
 		{
 			int randomDelay = SocketBase.Random.Next(MinListenDelay, MaxListenDelay);

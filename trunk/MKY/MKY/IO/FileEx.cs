@@ -49,7 +49,7 @@ namespace MKY.IO
 		/// <returns>
 		/// The size of the given file.
 		/// </returns>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public static long Size(string filePath)
 		{
 			if (!File.Exists(filePath))
@@ -100,7 +100,7 @@ namespace MKY.IO
 		/// <returns>
 		/// Returns <c>true</c> if file is read-only.
 		/// </returns>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public static bool IsReadOnly(string filePath)
 		{
 			if (!File.Exists(filePath))
@@ -160,7 +160,7 @@ namespace MKY.IO
 		/// Returns <c>true</c> if file is findable.
 		/// </returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public static bool IsFindable(string fileName, out string filePath)
 		{
 			try
@@ -201,7 +201,7 @@ namespace MKY.IO
 		/// <returns>
 		/// Returns <c>true</c> if file successfully saved.
 		/// </returns>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public static bool TryDelete(string filePath)
 		{
 			// No need to check whether string is valid, 'File.Exists()' returns <c>false</c>
@@ -227,7 +227,7 @@ namespace MKY.IO
 		/// <summary>
 		/// Swaps two existing files.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public static void Swap(string filePathA, string filePathB)
 		{
 			string filePathTemp = PathEx.GetUniqueTempPath(); // No extension needed.

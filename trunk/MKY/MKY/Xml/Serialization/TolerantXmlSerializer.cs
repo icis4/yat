@@ -322,7 +322,7 @@ namespace MKY.Xml.Serialization
 		/// <summary>
 		/// Tries to copy the value if both navigators are pointing to an element with a compatible type.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		private static bool TryToCopyValue(XPathNavigator inputNavigator, XPathNavigator outputNavigator)
 		{
 			// Navigate to parents to set typed value.
@@ -348,7 +348,7 @@ namespace MKY.Xml.Serialization
 		/// <summary>
 		/// Tries to copy a complete node.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		private static bool TryToCopyNode(XPathNavigator inputNavigator, XPathNavigator outputNavigator)
 		{
 			try

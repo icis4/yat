@@ -281,7 +281,7 @@ namespace MKY.Settings
 			/// Returns <c>true</c> if settings could be loaded from the given file path,
 			/// returns <c>false</c> if they could not be loaded and were set to defaults instead.
 			/// </returns>
-			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 			public virtual bool Load()
 			{
 				AssertNotDisposed();
@@ -912,7 +912,7 @@ namespace MKY.Settings
 		/// Returns false if either settings could not be loaded from its file path and have been
 		/// set to defaults.
 		/// </returns>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public virtual bool Load()
 		{
 			// AssertNotDisposed() is called by 'Load()' below.
@@ -1007,7 +1007,7 @@ namespace MKY.Settings
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public virtual void Save()
 		{
 			AssertNotDisposed();
