@@ -1021,7 +1021,7 @@ namespace YAT.Model
 				formerExistingAutoFilePath = this.settingsHandler.SettingsFilePath;
 
 			// -------------------------------------------------------------------------------------
-			// Evaluate save requirements for workspace and terminals:
+			// Evaluate save requirements:
 			// -------------------------------------------------------------------------------------
 
 			bool doSaveWorkspace = true;
@@ -1102,7 +1102,7 @@ namespace YAT.Model
 				}
 				else
 				{
-					// Explicit have changed, save is required, but only if desired.
+					// Explicit have changed, save is required, except if auto-save is not desired.
 
 					if (!ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace && !SettingsFileHasAlreadyBeenNormallySaved)
 					{
@@ -1131,7 +1131,13 @@ namespace YAT.Model
 				}
 				else
 				{
-					// Explicit have changed, save is required.
+					// Explicit have changed, save is required, except if auto-save makes no sense.
+
+					if (!SettingsFileHasAlreadyBeenNormallySaved)
+					{
+						doSaveWorkspace = false;
+						successWithWorkspace = true;
+					}
 				}
 			}
 
