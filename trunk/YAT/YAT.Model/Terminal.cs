@@ -4466,7 +4466,7 @@ namespace YAT.Model
 				string rootPath = this.log.Settings.RootPath;
 
 				Exception ex;
-				if (!DirectoryEx.TryOpen(rootPath, out ex))
+				if (!DirectoryEx.TryBrowse(rootPath, out ex))
 				{
 					OnMessageInputRequest
 					(
