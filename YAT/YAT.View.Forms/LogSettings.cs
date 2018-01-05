@@ -171,7 +171,7 @@ namespace YAT.View.Forms
 		private void button_RootOpen_Click(object sender, EventArgs e)
 		{
 			Exception ex;
-			if (!DirectoryEx.TryOpen(this.settingsInEdit.RootPath, out ex))
+			if (!DirectoryEx.TryBrowse(this.settingsInEdit.RootPath, out ex))
 			{
 				string message = "Unable to open folder." + Environment.NewLine + Environment.NewLine +
 				                 "System error message:" + Environment.NewLine + ex.Message;
