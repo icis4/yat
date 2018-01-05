@@ -24,6 +24,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Text;
 
 using MKY;
@@ -234,37 +235,46 @@ namespace YAT.Model.Utilities
 
 			if (log != null)
 			{
-				try
+				var path = log.Settings.RootPath;
+
+				if (!Directory.Exists(path)) // Exists() never throws.
 				{
-					if (!DirectoryEx.TryOpen(log.Settings.RootPath))
+					if (hintText.Length > 0)
+						hintText.AppendLine();
+
+					hintText.Append("Log root path does not exist. Either restore the path, or change it in the log settings.");
+					hintCount++;
+				}
+				else
+				{
+					if (!DirectoryEx.IsWritable(path)) // IsWritable() never throws.
 					{
 						if (hintText.Length > 0)
 							hintText.AppendLine();
 
-						hintText.Append("Log root path is invalid. Check the log settings.");
+						hintText.Append("Log root path is not writable. Either make the path writeable, or change it in the log settings.");
 						hintCount++;
 					}
-				}
-				catch { }
-
-				try
-				{
-					if (log.FileExists)
+					else
 					{
-						if (hintText.Length > 0)
-							hintText.AppendLine();
+						try
+						{
+							if (log.FileExists)
+							{
+								if (hintText.Length > 0)
+									hintText.AppendLine();
 
-						hintText.Append("Log file(s) could already be in use. Ensure that no other application accesses the log file(s).");
-						hintCount++;
+								hintText.Append("Log file(s) could already be in use. Ensure that no other application accesses the log file(s).");
+								hintCount++;
+							}
+						}
+						catch { }
 					}
 				}
-				catch { }
 			}
-			else
-			{
-				if (hintText.Length > 0)
-					hintText.AppendLine();
 
+			if (hintText.Length == 0) // No dedicated hint found => Use generic hint:
+			{
 				hintText.Append("Check the log settings.");
 				hintCount++;
 			}

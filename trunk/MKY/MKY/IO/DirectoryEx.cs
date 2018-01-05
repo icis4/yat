@@ -26,6 +26,8 @@ using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Security.AccessControl;
+using System.Security.Principal;
 
 namespace MKY.IO
 {
@@ -36,28 +38,89 @@ namespace MKY.IO
 	public static class DirectoryEx
 	{
 		/// <summary>
-		/// Tries to open the given path with the system's explorer.
+		/// Determines whether the given path can be written to.
 		/// </summary>
-		/// <param name="directoryPath">File to open.</param>
-		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-		public static bool TryOpen(string directoryPath)
+		public static bool IsWritable(string path)
 		{
-			Exception exception;
-			return (TryOpen(directoryPath, out exception));
+			// \remind (2018-01-05 / MKY) to be changed as soon as upgraded to .NET 4.0+
+		////var permissionSet = new PermissionSet(PermissionState.None);
+		////var writePermission = new FileIOPermission(FileIOPermissionAccess.Write, path);
+		////permissionSet.AddPermission(writePermission);
+		////return (permissionSet.IsSubsetOf(AppDomain.CurrentDomain.PermissionSet));
+
+			DirectorySecurity acl;
+			try {
+				acl = Directory.GetAccessControl(path);
+			}
+			catch {
+				return (false);
+			}
+
+			if (acl == null) {
+				return (false);
+			}
+
+			AuthorizationRuleCollection rules;
+			try {
+				rules = acl.GetAccessRules(true, true, typeof(SecurityIdentifier));
+			}
+			catch {
+				return (false);
+			}
+
+			if (rules == null) {
+				return (false);
+			}
+
+			bool allow = false;
+			bool deny  = false;
+
+			foreach (FileSystemAccessRule rule in rules)
+			{
+				if ((rule.FileSystemRights & FileSystemRights.Write) == 0)
+					continue; // Ignore other rules than 'Write'.
+
+				switch (rule.AccessControlType)
+				{
+					case AccessControlType.Allow: allow = true; break;
+					case AccessControlType.Deny:  deny  = true; break;
+
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + rule.AccessControlType.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+
+			return (allow && !deny);
 		}
 
 		/// <summary>
-		/// Tries to open the given path with the system's explorer.
+		/// Tries to open the given path with the system's file browser/explorer.
 		/// </summary>
-		/// <param name="directoryPath">File to open.</param>
+		/// <remarks>
+		/// Named "browse" instead of "open" to emphasize that system browser/explorer is used.
+		/// </remarks>
+		/// <param name="path">Directory to browse.</param>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		public static bool TryBrowse(string path)
+		{
+			Exception exception;
+			return (TryBrowse(path, out exception));
+		}
+
+		/// <summary>
+		/// Tries to open the given path with the system's file browser/explorer.
+		/// </summary>
+		/// <remarks>
+		/// Named "browse" instead of "open" to emphasize that system browser/explorer is used.
+		/// </remarks>
+		/// <param name="path">Directory to browse.</param>
 		/// <param name="exception">Exception object, in case of failure.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		public static bool TryOpen(string directoryPath, out Exception exception)
+		public static bool TryBrowse(string path, out Exception exception)
 		{
 			try
 			{
-				Process.Start(directoryPath);
+				Process.Start(path);
 				exception = null;
 				return (true);
 			}
