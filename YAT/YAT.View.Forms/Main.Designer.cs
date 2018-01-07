@@ -141,12 +141,12 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_SaveToFile = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Terminal_Print = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItem_MainTool_Separator_5 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripButton_MainTool_Terminal_Find_ShowHide = new System.Windows.Forms.ToolStripButton();
-			this.toolStripComboBox_MainTool_Terminal_Find_Pattern = new MKY.Windows.Forms.ToolStripComboBoxEx();
-			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Terminal_Find_WholeWord = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Terminal_Find_Next = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Terminal_Find_Previous = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Find_ShowHide = new System.Windows.Forms.ToolStripButton();
+			this.toolStripComboBox_MainTool_Find_Pattern = new MKY.Windows.Forms.ToolStripComboBoxEx();
+			this.toolStripButton_MainTool_Find_CaseSensitive = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Find_WholeWord = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Find_Next = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Find_Previous = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItem_MainTool_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_MainTool_Terminal_Log_Settings = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Terminal_Log_On = new System.Windows.Forms.ToolStripButton();
@@ -903,12 +903,12 @@ namespace YAT.View.Forms
             this.toolStripButton_MainTool_Terminal_SaveToFile,
             this.toolStripButton_MainTool_Terminal_Print,
             this.toolStripMenuItem_MainTool_Separator_5,
-            this.toolStripButton_MainTool_Terminal_Find_ShowHide,
-            this.toolStripComboBox_MainTool_Terminal_Find_Pattern,
-            this.toolStripButton_MainTool_Terminal_Find_CaseSensitive,
-            this.toolStripButton_MainTool_Terminal_Find_WholeWord,
-            this.toolStripButton_MainTool_Terminal_Find_Next,
-            this.toolStripButton_MainTool_Terminal_Find_Previous,
+            this.toolStripButton_MainTool_Find_ShowHide,
+            this.toolStripComboBox_MainTool_Find_Pattern,
+            this.toolStripButton_MainTool_Find_CaseSensitive,
+            this.toolStripButton_MainTool_Find_WholeWord,
+            this.toolStripButton_MainTool_Find_Next,
+            this.toolStripButton_MainTool_Find_Previous,
             this.toolStripMenuItem_MainTool_Separator_6,
             this.toolStripButton_MainTool_Terminal_Log_Settings,
             this.toolStripButton_MainTool_Terminal_Log_On,
@@ -1143,72 +1143,72 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainTool_Separator_5.Name = "toolStripMenuItem_MainTool_Separator_5";
 			this.toolStripMenuItem_MainTool_Separator_5.Size = new System.Drawing.Size(6, 25);
 			// 
-			// toolStripButton_MainTool_Terminal_Find_ShowHide
+			// toolStripButton_MainTool_Find_ShowHide
 			// 
-			this.toolStripButton_MainTool_Terminal_Find_ShowHide.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Find_ShowHide.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_tab_search_16x16;
-			this.toolStripButton_MainTool_Terminal_Find_ShowHide.Name = "toolStripButton_MainTool_Terminal_Find_ShowHide";
-			this.toolStripButton_MainTool_Terminal_Find_ShowHide.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Find_ShowHide.Text = "Find...";
-			this.toolStripButton_MainTool_Terminal_Find_ShowHide.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_ShowHide_Click);
+			this.toolStripButton_MainTool_Find_ShowHide.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Find_ShowHide.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_tab_search_16x16;
+			this.toolStripButton_MainTool_Find_ShowHide.Name = "toolStripButton_MainTool_Find_ShowHide";
+			this.toolStripButton_MainTool_Find_ShowHide.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Find_ShowHide.Text = "Find...";
+			this.toolStripButton_MainTool_Find_ShowHide.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_ShowHide_Click);
 			// 
-			// toolStripComboBox_MainTool_Terminal_Find_Pattern
+			// toolStripComboBox_MainTool_Find_Pattern
 			// 
-			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.Name = "toolStripComboBox_MainTool_Terminal_Find_Pattern";
-			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.Size = new System.Drawing.Size(160, 27);
-			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.ToolTipText = "Pattern to Find in Monitor\r\n.NET Regex are supported";
-			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = false;
-			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_SelectedIndexChanged);
-			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.Enter += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_Enter);
-			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.Leave += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_Leave);
-			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.KeyDown += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyDown);
-			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.KeyUp += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyUp);
-			this.toolStripComboBox_MainTool_Terminal_Find_Pattern.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_Find_Pattern_TextChanged);
+			this.toolStripComboBox_MainTool_Find_Pattern.Name = "toolStripComboBox_MainTool_Find_Pattern";
+			this.toolStripComboBox_MainTool_Find_Pattern.Size = new System.Drawing.Size(160, 27);
+			this.toolStripComboBox_MainTool_Find_Pattern.ToolTipText = "Pattern to Find in Monitor\r\n.NET Regex are supported";
+			this.toolStripComboBox_MainTool_Find_Pattern.Visible = false;
+			this.toolStripComboBox_MainTool_Find_Pattern.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Find_Pattern_SelectedIndexChanged);
+			this.toolStripComboBox_MainTool_Find_Pattern.Enter += new System.EventHandler(this.toolStripComboBox_MainTool_Find_Pattern_Enter);
+			this.toolStripComboBox_MainTool_Find_Pattern.Leave += new System.EventHandler(this.toolStripComboBox_MainTool_Find_Pattern_Leave);
+			this.toolStripComboBox_MainTool_Find_Pattern.KeyDown += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_Find_Pattern_KeyDown);
+			this.toolStripComboBox_MainTool_Find_Pattern.KeyUp += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_Find_Pattern_KeyUp);
+			this.toolStripComboBox_MainTool_Find_Pattern.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Find_Pattern_TextChanged);
 			// 
-			// toolStripButton_MainTool_Terminal_Find_CaseSensitive
+			// toolStripButton_MainTool_Find_CaseSensitive
 			// 
-			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_match_character_literally_16x16;
-			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.Name = "toolStripButton_MainTool_Terminal_Find_CaseSensitive";
-			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.Size = new System.Drawing.Size(23, 24);
-			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.Text = "Find Case Sensitive";
-			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.ToolTipText = "Find Case Sensitive\r\nSame as \"(?-i)\"\r\n[Alt+C] (while in Find)";
-			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.Visible = false;
-			this.toolStripButton_MainTool_Terminal_Find_CaseSensitive.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_CaseSensitive_Click);
+			this.toolStripButton_MainTool_Find_CaseSensitive.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Find_CaseSensitive.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_match_character_literally_16x16;
+			this.toolStripButton_MainTool_Find_CaseSensitive.Name = "toolStripButton_MainTool_Find_CaseSensitive";
+			this.toolStripButton_MainTool_Find_CaseSensitive.Size = new System.Drawing.Size(23, 24);
+			this.toolStripButton_MainTool_Find_CaseSensitive.Text = "Find Case Sensitive";
+			this.toolStripButton_MainTool_Find_CaseSensitive.ToolTipText = "Find Case Sensitive\r\nSame as \"(?-i)\"\r\n[Alt+C] (while in Find)";
+			this.toolStripButton_MainTool_Find_CaseSensitive.Visible = false;
+			this.toolStripButton_MainTool_Find_CaseSensitive.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_CaseSensitive_Click);
 			// 
-			// toolStripButton_MainTool_Terminal_Find_WholeWord
+			// toolStripButton_MainTool_Find_WholeWord
 			// 
-			this.toolStripButton_MainTool_Terminal_Find_WholeWord.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Find_WholeWord.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_literal_text_16x16;
-			this.toolStripButton_MainTool_Terminal_Find_WholeWord.Name = "toolStripButton_MainTool_Terminal_Find_WholeWord";
-			this.toolStripButton_MainTool_Terminal_Find_WholeWord.Size = new System.Drawing.Size(23, 24);
-			this.toolStripButton_MainTool_Terminal_Find_WholeWord.Text = "Find Whole Word";
-			this.toolStripButton_MainTool_Terminal_Find_WholeWord.ToolTipText = "Find Whole Word\r\nSame as \"\\bSomeWord\\b\"\r\n[Alt+W] (while in Find)";
-			this.toolStripButton_MainTool_Terminal_Find_WholeWord.Visible = false;
-			this.toolStripButton_MainTool_Terminal_Find_WholeWord.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_WholeWord_Click);
+			this.toolStripButton_MainTool_Find_WholeWord.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Find_WholeWord.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_literal_text_16x16;
+			this.toolStripButton_MainTool_Find_WholeWord.Name = "toolStripButton_MainTool_Find_WholeWord";
+			this.toolStripButton_MainTool_Find_WholeWord.Size = new System.Drawing.Size(23, 24);
+			this.toolStripButton_MainTool_Find_WholeWord.Text = "Find Whole Word";
+			this.toolStripButton_MainTool_Find_WholeWord.ToolTipText = "Find Whole Word\r\nSame as \"\\bSomeWord\\b\"\r\n[Alt+W] (while in Find)";
+			this.toolStripButton_MainTool_Find_WholeWord.Visible = false;
+			this.toolStripButton_MainTool_Find_WholeWord.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_WholeWord_Click);
 			// 
-			// toolStripButton_MainTool_Terminal_Find_Next
+			// toolStripButton_MainTool_Find_Next
 			// 
-			this.toolStripButton_MainTool_Terminal_Find_Next.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Find_Next.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_rows_insert_below_word_16x16;
-			this.toolStripButton_MainTool_Terminal_Find_Next.Name = "toolStripButton_MainTool_Terminal_Find_Next";
-			this.toolStripButton_MainTool_Terminal_Find_Next.Size = new System.Drawing.Size(23, 24);
-			this.toolStripButton_MainTool_Terminal_Find_Next.Text = "Find Next";
-			this.toolStripButton_MainTool_Terminal_Find_Next.ToolTipText = "Find Next\r\n[Enter] / [Ctrl+F/N] / [Alt+F/N] (while in Find)\r\n[Ctrl+Alt+F] (always" +
+			this.toolStripButton_MainTool_Find_Next.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Find_Next.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_rows_insert_below_word_16x16;
+			this.toolStripButton_MainTool_Find_Next.Name = "toolStripButton_MainTool_Find_Next";
+			this.toolStripButton_MainTool_Find_Next.Size = new System.Drawing.Size(23, 24);
+			this.toolStripButton_MainTool_Find_Next.Text = "Find Next";
+			this.toolStripButton_MainTool_Find_Next.ToolTipText = "Find Next\r\n[Enter] / [Ctrl+F/N] / [Alt+F/N] (while in Find)\r\n[Ctrl+Alt+F] (always" +
     ")";
-			this.toolStripButton_MainTool_Terminal_Find_Next.Visible = false;
-			this.toolStripButton_MainTool_Terminal_Find_Next.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_Next_Click);
+			this.toolStripButton_MainTool_Find_Next.Visible = false;
+			this.toolStripButton_MainTool_Find_Next.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_Next_Click);
 			// 
-			// toolStripButton_MainTool_Terminal_Find_Previous
+			// toolStripButton_MainTool_Find_Previous
 			// 
-			this.toolStripButton_MainTool_Terminal_Find_Previous.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Find_Previous.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_rows_insert_above_word_16x16;
-			this.toolStripButton_MainTool_Terminal_Find_Previous.Name = "toolStripButton_MainTool_Terminal_Find_Previous";
-			this.toolStripButton_MainTool_Terminal_Find_Previous.Size = new System.Drawing.Size(23, 24);
-			this.toolStripButton_MainTool_Terminal_Find_Previous.Text = "Find Previous";
-			this.toolStripButton_MainTool_Terminal_Find_Previous.ToolTipText = "Find Previous\r\n[Ctrl+P] / [Alt+P] (while in Find)\r\n[Alt+Shift+F] (always)";
-			this.toolStripButton_MainTool_Terminal_Find_Previous.Visible = false;
-			this.toolStripButton_MainTool_Terminal_Find_Previous.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Find_Previous_Click);
+			this.toolStripButton_MainTool_Find_Previous.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Find_Previous.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_rows_insert_above_word_16x16;
+			this.toolStripButton_MainTool_Find_Previous.Name = "toolStripButton_MainTool_Find_Previous";
+			this.toolStripButton_MainTool_Find_Previous.Size = new System.Drawing.Size(23, 24);
+			this.toolStripButton_MainTool_Find_Previous.Text = "Find Previous";
+			this.toolStripButton_MainTool_Find_Previous.ToolTipText = "Find Previous\r\n[Ctrl+P] / [Alt+P] (while in Find)\r\n[Alt+Shift+F] (always)";
+			this.toolStripButton_MainTool_Find_Previous.Visible = false;
+			this.toolStripButton_MainTool_Find_Previous.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_Previous_Click);
 			// 
 			// toolStripMenuItem_MainTool_Separator_6
 			// 
@@ -1580,10 +1580,10 @@ namespace YAT.View.Forms
 		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_AutoResponse_Deactivate;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_8;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Find_ShowHide;
-		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_Terminal_Find_Pattern;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Find_Next;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Find_Previous;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_ShowHide;
+		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_Find_Pattern;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_Next;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_Previous;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel_MainTool_Terminal_AutoResponse_Count;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_AutoAction_ShowHide;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_9;
@@ -1591,8 +1591,8 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_MainTool_Terminal_AutoAction_Action;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel_MainTool_Terminal_AutoAction_Count;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_AutoAction_Deactivate;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Find_CaseSensitive;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Find_WholeWord;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_CaseSensitive;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_WholeWord;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_MainStatus_Time;
 		private System.Windows.Forms.Timer timer_Time;
 	}
