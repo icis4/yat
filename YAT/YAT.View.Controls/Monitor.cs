@@ -736,7 +736,7 @@ namespace YAT.View.Controls
 
 				if (TryFindPrevious(this.findOnEditStartIndex))
 				{
-					resultingDirection = FindDirection.Reverse;
+					resultingDirection = FindDirection.Backward;
 					return (true);
 				}
 			}

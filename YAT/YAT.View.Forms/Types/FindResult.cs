@@ -34,6 +34,9 @@ namespace YAT.View.Forms
 		/// <summary>Find has not been triggered yet, or find has been reset.</summary>
 		Reset,
 
+		/// <summary>Pattern is empty.</summary>
+		Empty,
+
 		/// <summary>Pattern has been found.</summary>
 		Found,
 
