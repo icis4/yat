@@ -78,7 +78,7 @@ namespace MKY
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		/// <remarks>
-		/// To be replaced by .NET 4.0+ "Guid.TryParse()" after upgrading to .NET 4.0+.
+		/// To be replaced by .NET 4+ "Guid.TryParse()" after upgrading to .NET 4+.
 		/// </remarks>
 		public static bool TryParseTolerantly(string s, out Guid guid)
 		{
