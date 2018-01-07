@@ -2920,6 +2920,7 @@ namespace YAT.View.Forms
 			this.monitor_Tx.TabIndex = 0;
 			this.monitor_Tx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Tx.TextFocusedChanged += new System.EventHandler(this.monitor_TextFocusedChanged);
+			this.monitor_Tx.FindChanged += new System.EventHandler(this.monitor_FindChanged);
 			this.monitor_Tx.Enter += new System.EventHandler(this.monitor_Tx_Enter);
 			// 
 			// splitContainer_RxMonitor
@@ -2965,6 +2966,7 @@ namespace YAT.View.Forms
 			this.monitor_Bidir.TabIndex = 0;
 			this.monitor_Bidir.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Bidir.TextFocusedChanged += new System.EventHandler(this.monitor_TextFocusedChanged);
+			this.monitor_Bidir.FindChanged += new System.EventHandler(this.monitor_FindChanged);
 			this.monitor_Bidir.Enter += new System.EventHandler(this.monitor_Bidir_Enter);
 			// 
 			// panel_Monitor_Rx
@@ -2989,6 +2991,7 @@ namespace YAT.View.Forms
 			this.monitor_Rx.TabIndex = 0;
 			this.monitor_Rx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Rx.TextFocusedChanged += new System.EventHandler(this.monitor_TextFocusedChanged);
+			this.monitor_Rx.FindChanged += new System.EventHandler(this.monitor_FindChanged);
 			this.monitor_Rx.Enter += new System.EventHandler(this.monitor_Rx_Enter);
 			// 
 			// panel_Predefined
