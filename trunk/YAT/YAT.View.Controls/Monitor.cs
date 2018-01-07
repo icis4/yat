@@ -202,6 +202,11 @@ namespace YAT.View.Controls
 		[Description("Event raised when the TextFocusState property is changed.")]
 		public event EventHandler TextFocusedChanged;
 
+		/// <summary></summary>
+		[Category("Notification")]
+		[Description("Event raised when the TextFind has changed.")]
+		public event EventHandler FindChanged;
+
 		#endregion
 
 		#region Object Lifetime
@@ -706,7 +711,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		public virtual bool TryFindOnEdit(string pattern, FindOptions options)
+		public virtual bool TryFindOnEdit(string pattern, FindOptions options, out FindDirection resultingDirection)
 		{
 			if (this.isFirstFindOnEdit)
 			{
@@ -723,13 +728,23 @@ namespace YAT.View.Controls
 			{
 				PrepareFind(pattern, options);
 
-				int findIndex; // Ignore, always start from selected/initial index.
-				if (TryFindNext(this.findOnEditStartIndex, out findIndex))
+				if (TryFindNext(this.findOnEditStartIndex))
+				{
+					resultingDirection = FindDirection.Forward;
 					return (true);
+				}
+
+				if (TryFindPrevious(this.findOnEditStartIndex))
+				{
+					resultingDirection = FindDirection.Reverse;
+					return (true);
+				}
 			}
 
 			var lb = fastListBox_Monitor;
 			lb.ClearSelected();
+
+			resultingDirection = FindDirection.Undetermined;
 			return (false);
 		}
 
@@ -799,6 +814,13 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		protected virtual bool TryFindNext(int startIndex)
+		{
+			int findIndex;
+			return (TryFindNext(startIndex, out findIndex));
+		}
+
+		/// <summary></summary>
 		protected virtual bool TryFindNext(int startIndex, out int findIndex)
 		{
 			var lb = fastListBox_Monitor;
@@ -811,11 +833,20 @@ namespace YAT.View.Controls
 				lb.TopIndex = Math.Max(i - (lb.TotalVisibleItemCount / 2), 0);
 
 				findIndex = i;
+				OnFindChanged(EventArgs.Empty);
 				return (true);
 			}
 
 			findIndex = ListBox.NoMatches;
+			OnFindChanged(EventArgs.Empty);
 			return (false);
+		}
+
+		/// <summary></summary>
+		protected virtual bool TryFindPrevious(int startIndex)
+		{
+			int findIndex;
+			return (TryFindPrevious(startIndex, out findIndex));
 		}
 
 		/// <summary></summary>
@@ -831,10 +862,12 @@ namespace YAT.View.Controls
 				lb.TopIndex = Math.Max(i - (lb.TotalVisibleItemCount / 2), 0);
 
 				findIndex = i;
+				OnFindChanged(EventArgs.Empty);
 				return (true);
 			}
 
 			findIndex = ListBox.NoMatches;
+			OnFindChanged(EventArgs.Empty);
 			return (false);
 		}
 
@@ -1334,6 +1367,8 @@ namespace YAT.View.Controls
 					case Domain.RepositoryType.Tx:    this.imageInactive = Properties.Resources.Image_Monitor_Tx_28x28_Grey;    this.imageActive = Properties.Resources.Image_Monitor_Tx_28x28_Blue;          break;
 					case Domain.RepositoryType.Bidir: this.imageInactive = Properties.Resources.Image_Monitor_Bidir_28x28_Grey; this.imageActive = Properties.Resources.Image_Monitor_Bidir_28x28_BluePurple; break;
 					case Domain.RepositoryType.Rx:    this.imageInactive = Properties.Resources.Image_Monitor_Rx_28x28_Grey;    this.imageActive = Properties.Resources.Image_Monitor_Rx_28x28_Purple;        break;
+
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + RepositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				pictureBox_Monitor.BackgroundImage = this.imageInactive;
@@ -1867,6 +1902,12 @@ namespace YAT.View.Controls
 		protected virtual void OnTextFocusedChanged(EventArgs e)
 		{
 			EventHelper.RaiseSync(TextFocusedChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnFindChanged(EventArgs e)
+		{
+			EventHelper.RaiseSync(FindChanged, this, e);
 		}
 
 		#endregion
