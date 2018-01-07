@@ -43,6 +43,13 @@ namespace MKY.Windows.Forms
 		/// converted into a string. This can e.g. be an implicit string conversion operator,
 		/// or the item's ToString() method, or something else.
 		/// </remarks>
+		/// <remarks>
+		/// Attention, <see cref="ComboBox"/> objects have a limitation regarding case sensitivity:
+		/// If <see cref="ComboBox.Text"/> is e.g. set to "aa" while <see cref="ComboBox.Items"/>
+		/// contain "AA", that item is wrongly selected.
+		/// 
+		/// Issue is documented as YAT bug #347. Issue shall again check after upgrade to .NET 4+.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void Select(ToolStripComboBox control, object item, string fallbackText = null)
 		{
@@ -64,6 +71,13 @@ namespace MKY.Windows.Forms
 		/// Updates the text of the <see cref="ToolStripComboBox"/> while staying in edit,
 		/// i.e. cursor location and text selection is kept.
 		/// </summary>
+		/// <remarks>
+		/// Attention, <see cref="ComboBox"/> objects have a limitation regarding case sensitivity:
+		/// If <see cref="ComboBox.Text"/> is e.g. set to "aa" while <see cref="ComboBox.Items"/>
+		/// contain "AA", that item is wrongly selected.
+		/// 
+		/// Issue is documented as YAT bug #347. Issue shall again check after upgrade to .NET 4+.
+		/// </remarks>
 		public static void UpdateTextKeepingCursorAndSelection(ToolStripComboBox control, string text)
 		{
 			ComboBoxHelper.UpdateTextKeepingCursorAndSelection(control.ComboBox, text);
@@ -73,6 +87,13 @@ namespace MKY.Windows.Forms
 		/// Updates the items of the <see cref="ToolStripComboBox"/> while staying in edit,
 		/// i.e. cursor location and text selection is kept.
 		/// </summary>
+		/// <remarks>
+		/// Attention, <see cref="ComboBox"/> objects have a limitation regarding case sensitivity:
+		/// If <see cref="ComboBox.Text"/> is e.g. set to "aa" while <see cref="ComboBox.Items"/>
+		/// contain "AA", that item is wrongly selected.
+		/// 
+		/// Issue is documented as YAT bug #347. Issue shall again check after upgrade to .NET 4+.
+		/// </remarks>
 		public static void UpdateItemsKeepingCursorAndSelection(ToolStripComboBox control, object[] items)
 		{
 			ComboBoxHelper.UpdateItemsKeepingCursorAndSelection(control.ComboBox, items);

@@ -30,6 +30,11 @@ namespace MKY.Windows.Forms
 	/// <summary></summary>
 	public static class ComboBoxHelper
 	{
+		#region CursorAndSelection
+		//==========================================================================================
+		// CursorAndSelection
+		//==========================================================================================
+
 		/// <remarks></remarks>
 		public class CursorAndSelection
 		{
@@ -107,6 +112,8 @@ namespace MKY.Windows.Forms
 			}
 		}
 
+		#endregion
+
 		/// <summary>
 		/// Selects the given item in a <see cref="ComboBox"/>.
 		/// </summary>
@@ -119,6 +126,13 @@ namespace MKY.Windows.Forms
 		/// Separate <paramref name="fallbackText"/> need to selectively chose the way the item is
 		/// converted into a string. This can e.g. be an implicit string conversion operator,
 		/// or the item's ToString() method, or something else.
+		/// </remarks>
+		/// <remarks>
+		/// Attention, <see cref="ComboBox"/> objects have a limitation regarding case sensitivity:
+		/// If <see cref="ComboBox.Text"/> is e.g. set to "aa" while <see cref="ComboBox.Items"/>
+		/// contain "AA", that item is wrongly selected.
+		/// 
+		/// Issue is documented as YAT bug #347. Issue shall again check after upgrade to .NET 4+.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void Select(ComboBox control, object item, string fallbackText = null)
@@ -178,6 +192,13 @@ namespace MKY.Windows.Forms
 		/// Updates the text of the <see cref="ComboBox"/> while staying in edit,
 		/// i.e. cursor location and text selection is kept.
 		/// </summary>
+		/// <remarks>
+		/// Attention, <see cref="ComboBox"/> objects have a limitation regarding case sensitivity:
+		/// If <see cref="ComboBox.Text"/> is e.g. set to "aa" while <see cref="ComboBox.Items"/>
+		/// contain "AA", that item is wrongly selected.
+		/// 
+		/// Issue is documented as YAT bug #347. Issue shall again check after upgrade to .NET 4+.
+		/// </remarks>
 		public static void UpdateTextKeepingCursorAndSelection(ComboBox control, string text)
 		{
 			var cursorAndSelection = new CursorAndSelection();
@@ -195,6 +216,13 @@ namespace MKY.Windows.Forms
 		/// Updates the items of the <see cref="ComboBox"/> while staying in edit,
 		/// i.e. cursor location and text selection is kept.
 		/// </summary>
+		/// <remarks>
+		/// Attention, <see cref="ComboBox"/> objects have a limitation regarding case sensitivity:
+		/// If <see cref="ComboBox.Text"/> is e.g. set to "aa" while <see cref="ComboBox.Items"/>
+		/// contain "AA", that item is wrongly selected.
+		/// 
+		/// Issue is documented as YAT bug #347. Issue shall again check after upgrade to .NET 4+.
+		/// </remarks>
 		public static void UpdateItemsKeepingCursorAndSelection(ComboBox control, object[] items)
 		{
 			var cursorAndSelection = new CursorAndSelection();
