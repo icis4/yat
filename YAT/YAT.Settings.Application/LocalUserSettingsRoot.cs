@@ -271,6 +271,7 @@ namespace YAT.Settings.Application
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "SendFiles",           new string[] { "SendFilesPath" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "LogFiles",            new string[] { "LogFilesPath" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "MonitorFiles",        new string[] { "MonitorFilesPath" } ),
+		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "MainWindow"  }, "AlwaysOnTop",         formerly located in workspace settings */
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "NewTerminal" }, "SocketRemoteTcpPort", new string[] { "SocketRemotePort" } ),
 		};
 
