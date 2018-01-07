@@ -1156,7 +1156,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripComboBox_MainTool_Find_Pattern.Name = "toolStripComboBox_MainTool_Find_Pattern";
 			this.toolStripComboBox_MainTool_Find_Pattern.Size = new System.Drawing.Size(160, 27);
-			this.toolStripComboBox_MainTool_Find_Pattern.ToolTipText = "Pattern to Find in Monitor\r\n.NET Regex are supported";
+			this.toolStripComboBox_MainTool_Find_Pattern.ToolTipText = resources.GetString("toolStripComboBox_MainTool_Find_Pattern.ToolTipText");
 			this.toolStripComboBox_MainTool_Find_Pattern.Visible = false;
 			this.toolStripComboBox_MainTool_Find_Pattern.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Find_Pattern_SelectedIndexChanged);
 			this.toolStripComboBox_MainTool_Find_Pattern.Enter += new System.EventHandler(this.toolStripComboBox_MainTool_Find_Pattern_Enter);
