@@ -39,7 +39,6 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public const WorkspaceLayout LayoutDefault = WorkspaceLayout.Automatic;
 
-		private bool alwaysOnTop;
 		private WorkspaceLayout layout;
 		private GuidList<TerminalSettingsItem> terminalSettings;
 
@@ -64,7 +63,6 @@ namespace YAT.Model.Settings
 		public WorkspaceSettings(WorkspaceSettings rhs)
 			: base(rhs)
 		{
-			AlwaysOnTop      = rhs.AlwaysOnTop;
 			Layout           = rhs.Layout;
 			TerminalSettings = new GuidList<TerminalSettingsItem>(rhs.TerminalSettings);
 			ClearChanged();
@@ -77,7 +75,6 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			AlwaysOnTop      = false;
 			Layout           = LayoutDefault;
 			TerminalSettings = new GuidList<TerminalSettingsItem>();
 		}
@@ -86,21 +83,6 @@ namespace YAT.Model.Settings
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
-
-		/// <summary></summary>
-		[XmlElement("AlwaysOnTop")]
-		public bool AlwaysOnTop
-		{
-			get { return (this.alwaysOnTop); }
-			set
-			{
-				if (this.alwaysOnTop != value)
-				{
-					this.alwaysOnTop = value;
-					SetMyChanged();
-				}
-			}
-		}
 
 		/// <summary></summary>
 		[XmlElement("Layout")]
@@ -154,7 +136,6 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^  AlwaysOnTop     .GetHashCode();
 				hashCode = (hashCode * 397) ^  Layout          .GetHashCode();
 				hashCode = (hashCode * 397) ^  TerminalSettings.GetHashCode();
 
@@ -187,7 +168,6 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				AlwaysOnTop.Equals(other.AlwaysOnTop) &&
 				Layout     .Equals(other.Layout)      &&
 				IEnumerableEx.ElementsEqual(TerminalSettings, other.TerminalSettings)
 			);

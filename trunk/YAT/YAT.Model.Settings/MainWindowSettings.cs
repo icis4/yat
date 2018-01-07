@@ -42,6 +42,7 @@ namespace YAT.Model.Settings
 		private FormWindowState windowState;
 		private Point location;
 		private Size size;
+		private bool alwaysOnTop;
 
 		private bool showTerminalInfo;
 		private bool showTime;
@@ -72,6 +73,7 @@ namespace YAT.Model.Settings
 			WindowState   = rhs.WindowState;
 			Location      = rhs.Location;
 			Size          = rhs.Size;
+			AlwaysOnTop   = rhs.AlwaysOnTop;
 
 			ShowTerminalInfo = rhs.ShowTerminalInfo;
 			ShowTime         = rhs.ShowTime;
@@ -91,6 +93,7 @@ namespace YAT.Model.Settings
 			WindowState   = FormWindowState.Normal;
 			Location      = new Point(0, 0);
 			Size          = new Size(912, 684); // Equals designed 'Size' of the 'View.Main' form.
+			AlwaysOnTop   = false;
 
 			ShowTerminalInfo = false;
 			ShowTime         = false;
@@ -157,6 +160,21 @@ namespace YAT.Model.Settings
 				if (this.size != value)
 				{
 					this.size = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("AlwaysOnTop")]
+		public bool AlwaysOnTop
+		{
+			get { return (this.alwaysOnTop); }
+			set
+			{
+				if (this.alwaysOnTop != value)
+				{
+					this.alwaysOnTop = value;
 					SetMyChanged();
 				}
 			}
@@ -233,6 +251,7 @@ namespace YAT.Model.Settings
 				hashCode = (hashCode * 397) ^ WindowState  .GetHashCode();
 				hashCode = (hashCode * 397) ^ Location     .GetHashCode();
 				hashCode = (hashCode * 397) ^ Size         .GetHashCode();
+				hashCode = (hashCode * 397) ^ AlwaysOnTop  .GetHashCode();
 
 				hashCode = (hashCode * 397) ^ ShowTerminalInfo.GetHashCode();
 				hashCode = (hashCode * 397) ^ ShowTime        .GetHashCode();
@@ -271,6 +290,7 @@ namespace YAT.Model.Settings
 				WindowState  .Equals(other.WindowState)   &&
 				Location     .Equals(other.Location)      &&
 				Size         .Equals(other.Size)          &&
+				AlwaysOnTop  .Equals(other.AlwaysOnTop)   &&
 
 				ShowTerminalInfo.Equals(other.ShowTerminalInfo) &&
 				ShowTime        .Equals(other.ShowTime)         &&
