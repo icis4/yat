@@ -42,7 +42,7 @@ namespace MKY.IO
 		/// </summary>
 		public static bool IsWritable(string path)
 		{
-			// \remind (2018-01-05 / MKY) to be changed as soon as upgraded to .NET 4.0+
+			// \remind (2018-01-05 / MKY) to be changed as soon as upgraded to .NET 4+
 		////var permissionSet = new PermissionSet(PermissionState.None);
 		////var writePermission = new FileIOPermission(FileIOPermissionAccess.Write, path);
 		////permissionSet.AddPermission(writePermission);
