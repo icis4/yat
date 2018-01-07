@@ -2867,9 +2867,12 @@ namespace YAT.Domain
 			{
 				switch (repository)
 				{
+					case RepositoryType.None:    /* Nothing to do. */        break;
+
 					case RepositoryType.Tx:    this.txRepository   .Clear(); break;
 					case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
 					case RepositoryType.Rx:    this.rxRepository   .Clear(); break;
+
 					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
@@ -2888,11 +2891,14 @@ namespace YAT.Domain
 			{
 				switch (repository)
 				{
+					case RepositoryType.None:  return (0);
+
 					case RepositoryType.Tx:    return (this.txRepository   .ByteCount);
 					case RepositoryType.Bidir: return (this.bidirRepository.ByteCount);
 					case RepositoryType.Rx:    return (this.rxRepository   .ByteCount);
+
+					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
-				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2905,11 +2911,14 @@ namespace YAT.Domain
 			{
 				switch (repository)
 				{
+					case RepositoryType.None:  return (0);
+
 					case RepositoryType.Tx:    return (this.txRepository   .Count);
 					case RepositoryType.Bidir: return (this.bidirRepository.Count);
 					case RepositoryType.Rx:    return (this.rxRepository   .Count);
+
+					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
-				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2922,11 +2931,14 @@ namespace YAT.Domain
 			{
 				switch (repository)
 				{
+					case RepositoryType.None:  return (null);
+
 					case RepositoryType.Tx:    return (this.txRepository   .ToElements());
 					case RepositoryType.Bidir: return (this.bidirRepository.ToElements());
 					case RepositoryType.Rx:    return (this.rxRepository   .ToElements());
+
+					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
-				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2939,11 +2951,14 @@ namespace YAT.Domain
 			{
 				switch (repository)
 				{
+					case RepositoryType.None:  return (null);
+
 					case RepositoryType.Tx:    return (this.txRepository.   ToLines());
 					case RepositoryType.Bidir: return (this.bidirRepository.ToLines());
 					case RepositoryType.Rx:    return (this.rxRepository   .ToLines());
+
+					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
-				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2956,11 +2971,14 @@ namespace YAT.Domain
 			{
 				switch (repository)
 				{
+					case RepositoryType.None:  return (null);
+
 					case RepositoryType.Tx:    return (this.txRepository.   LastLineAuxiliary());
 					case RepositoryType.Bidir: return (this.bidirRepository.LastLineAuxiliary());
 					case RepositoryType.Rx:    return (this.rxRepository   .LastLineAuxiliary());
+
+					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
-				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2973,9 +2991,12 @@ namespace YAT.Domain
 			{
 				switch (repository)
 				{
+					case RepositoryType.None:    /* Nothing to do. */                         break;
+
 					case RepositoryType.Tx:    this.txRepository.   ClearLastLineAuxiliary(); break;
 					case RepositoryType.Bidir: this.bidirRepository.ClearLastLineAuxiliary(); break;
 					case RepositoryType.Rx:    this.rxRepository   .ClearLastLineAuxiliary(); break;
+
 					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
@@ -2996,11 +3017,14 @@ namespace YAT.Domain
 			{
 				switch (repository)
 				{
+					case RepositoryType.None:  return (null);
+
 					case RepositoryType.Tx:    return (this.txRepository   .ToDiagnosticsString(indent));
 					case RepositoryType.Bidir: return (this.bidirRepository.ToDiagnosticsString(indent));
 					case RepositoryType.Rx:    return (this.rxRepository   .ToDiagnosticsString(indent));
+
+					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
-				throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

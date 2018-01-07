@@ -443,9 +443,12 @@ namespace YAT.Domain
 			{
 				switch (repositoryType)
 				{
+					case RepositoryType.None:      /* Nothing to do. */             break;
+
 					case RepositoryType.Tx:    l = this.txRepository   .ToChunks(); break;
 					case RepositoryType.Bidir: l = this.bidirRepository.ToChunks(); break;
 					case RepositoryType.Rx:    l = this.rxRepository   .ToChunks(); break;
+
 					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
@@ -464,14 +467,17 @@ namespace YAT.Domain
 
 			lock (this.repositorySyncObj)
 			{
-				/* \todo:
-				switch (repositoryType)
-				{
-					case RepositoryType.Tx:    this.txRepository   .Clear(); break;
-					case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
-					case RepositoryType.Rx:    this.rxRepository   .Clear(); break;
-					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				} */
+			////\todo:
+			////switch (repositoryType)
+			////{
+			////	case RepositoryType.None:      /* Nothing to do. */      break;
+			////
+			////	case RepositoryType.Tx:    this.txRepository   .Clear(); break;
+			////	case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
+			////	case RepositoryType.Rx:    this.rxRepository   .Clear(); break;
+			////
+			////	default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			////}
 
 				this.txRepository.Clear();
 				this.bidirRepository.Clear();
@@ -518,9 +524,12 @@ namespace YAT.Domain
 			{
 				switch (repositoryType)
 				{
+					case RepositoryType.None:        /* Nothing to do. */                            break;
+
 					case RepositoryType.Tx:    s = this.txRepository   .ToDiagnosticsString(indent); break;
 					case RepositoryType.Bidir: s = this.bidirRepository.ToDiagnosticsString(indent); break;
 					case RepositoryType.Rx:    s = this.rxRepository   .ToDiagnosticsString(indent); break;
+
 					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}

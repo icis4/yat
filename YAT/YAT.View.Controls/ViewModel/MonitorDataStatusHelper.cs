@@ -277,18 +277,21 @@ namespace YAT.View.Controls
 
 		private void SetStatusText()
 		{
-			var sb = new StringBuilder();
-			switch (RepositoryType)
+			if (RepositoryType != Domain.RepositoryType.None)
 			{
-				case Domain.RepositoryType.Tx:    AppendTxStatus(sb);                                                     break;
-				case Domain.RepositoryType.Bidir: AppendTxStatus(sb); sb.Append(Environment.NewLine); AppendRxStatus(sb); break;
-				case Domain.RepositoryType.Rx:                                                        AppendRxStatus(sb); break;
+				var sb = new StringBuilder();
+				switch (RepositoryType)
+				{
+					case Domain.RepositoryType.Tx:    AppendTxStatus(sb);                                                     break;
+					case Domain.RepositoryType.Bidir: AppendTxStatus(sb); sb.Append(Environment.NewLine); AppendRxStatus(sb); break;
+					case Domain.RepositoryType.Rx:                                                        AppendRxStatus(sb); break;
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + RepositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + RepositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+				this.statusText = sb.ToString();
+
+				OnStatusTextChanged(EventArgs.Empty);
 			}
-			this.statusText = sb.ToString();
-
-			OnStatusTextChanged(EventArgs.Empty);
 		}
 
 		private void AppendTxStatus(StringBuilder sb)
