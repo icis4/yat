@@ -22,27 +22,23 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-namespace YAT.View.Forms
+// This code is intentionally placed into the YAT.View.Controls namespace even though the file is
+// located in YAT.View.Controls.Types for same location as parent control.
+namespace YAT.View.Controls
 {
 	/// <summary>
 	/// The result of a find operation.
 	/// </summary>
-	public enum FindResult
+	public enum FindDirection
 	{
 		/// <summary>Find has not been triggered yet, or find has been reset.</summary>
-		Reset,
+		Undetermined,
 
-		/// <summary>Pattern has been found.</summary>
-		Found,
+		/// <summary>Find next, i.e. forward.</summary>
+		Forward,
 
-		/// <summary>Pattern has not been found anymore.</summary>
-		NotFoundAnymore,
-
-		/// <summary>Pattern has not been found at all.</summary>
-		NotFoundAtAll,
-
-		/// <summary>Pattern is invalid.</summary>
-		Invalid
+		/// <summary>Find previous, i.e. reverse.</summary>
+		Reverse
 	}
 }
 
