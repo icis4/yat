@@ -554,9 +554,8 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Enabled      =  monitorIsDefined;
 				toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled           =  monitorIsDefined;
 
-				toolStripMenuItem_TerminalMenu_Terminal_Find        .Enabled =  monitorIsDefined;
-				toolStripMenuItem_TerminalMenu_Terminal_FindNext    .Enabled = (monitorIsDefined && FindIsReady);
-				toolStripMenuItem_TerminalMenu_Terminal_FindPrevious.Enabled = (monitorIsDefined && FindIsReady);
+				toolStripMenuItem_TerminalMenu_Terminal_FindNext    .Enabled = (monitorIsDefined && FindNextIsFeasible);
+				toolStripMenuItem_TerminalMenu_Terminal_FindPrevious.Enabled = (monitorIsDefined && FindPreviousIsFeasible);
 			}
 			finally
 			{
@@ -1450,9 +1449,13 @@ namespace YAT.View.Forms
 				bool hideIsAllowed = false;
 				switch (monitorType)
 				{
+					case Domain.RepositoryType.None: /* Nothing to do. */ break;
+
 					case Domain.RepositoryType.Tx:    hideIsAllowed = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);    break;
 					case Domain.RepositoryType.Bidir: hideIsAllowed = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.RxMonitorPanelIsVisible);    break;
 					case Domain.RepositoryType.Rx:    hideIsAllowed = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.BidirMonitorPanelIsVisible); break;
+
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + monitorType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 				toolStripMenuItem_MonitorContextMenu_Hide.Visible = hideIsAllowed;
 				toolStripMenuItem_MonitorContextMenu_Hide.Enabled = isMonitor && hideIsAllowed;
@@ -1494,9 +1497,8 @@ namespace YAT.View.Forms
 				toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Enabled = isMonitor;
 				toolStripMenuItem_MonitorContextMenu_Print.Enabled           = isMonitor;
 
-				toolStripMenuItem_MonitorContextMenu_Find        .Enabled =  isMonitor;
-				toolStripMenuItem_MonitorContextMenu_FindNext    .Enabled = (isMonitor && FindIsReady);
-				toolStripMenuItem_MonitorContextMenu_FindPrevious.Enabled = (isMonitor && FindIsReady);
+				toolStripMenuItem_MonitorContextMenu_FindNext    .Enabled = (isMonitor && FindNextIsFeasible);
+				toolStripMenuItem_MonitorContextMenu_FindPrevious.Enabled = (isMonitor && FindPreviousIsFeasible);
 			}
 			finally
 			{
@@ -1544,11 +1546,16 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			switch (GetMonitorType(contextMenuStrip_Monitor.SourceControl))
+			var monitorType = GetMonitorType(contextMenuStrip_Monitor.SourceControl);
+			switch (monitorType)
 			{
+				case Domain.RepositoryType.None: /* Nothing to do. */ break;
+
 				case Domain.RepositoryType.Tx:    this.settingsRoot.Layout.TxMonitorPanelIsVisible    = false; break;
 				case Domain.RepositoryType.Bidir: this.settingsRoot.Layout.BidirMonitorPanelIsVisible = false; break;
 				case Domain.RepositoryType.Rx:    this.settingsRoot.Layout.RxMonitorPanelIsVisible    = false; break;
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + monitorType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -1693,7 +1700,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			Domain.RepositoryType repositoryType = GetMonitorType(contextMenuStrip_Monitor.SourceControl);
+			var repositoryType = GetMonitorType(contextMenuStrip_Monitor.SourceControl);
 			if (repositoryType != Domain.RepositoryType.None)
 				ClearMonitor(repositoryType);
 			else
@@ -1705,7 +1712,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			Domain.RepositoryType repositoryType = GetMonitorType(contextMenuStrip_Monitor.SourceControl);
+			var repositoryType = GetMonitorType(contextMenuStrip_Monitor.SourceControl);
 			if (repositoryType != Domain.RepositoryType.None)
 				RefreshMonitor(repositoryType);
 			else
@@ -2675,6 +2682,14 @@ namespace YAT.View.Forms
 			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
 		}
 
+		/// <remarks>
+		/// Ensure that the find shortcuts [*Modifiers*+F] are enabled/disabled properly.
+		/// </remarks>
+		private void monitor_FindChanged(object sender, EventArgs e)
+		{
+			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
+		}
+
 		#endregion
 
 		#region Controls Event Handlers > Predefined
@@ -3097,6 +3112,32 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		protected virtual bool FindNextIsFeasible
+		{
+			get
+			{
+				var main = (this.mdiParent as Main);
+				if (main != null)
+					return (main.FindNextIsFeasible);
+				else
+					return (false);
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual bool FindPreviousIsFeasible
+		{
+			get
+			{
+				var main = (this.mdiParent as Main);
+				if (main != null)
+					return (main.FindPreviousIsFeasible);
+				else
+					return (false);
+			}
+		}
+
+		/// <summary></summary>
 		protected virtual void RequestFindNext()
 		{
 			var main = (this.mdiParent as Main);
@@ -3113,33 +3154,36 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		protected virtual bool FindIsReady
+		public virtual void EmptyFindOnEdit()
 		{
-			get
-			{
-				var main = (this.mdiParent as Main);
-				if (main != null)
-					return (main.FindIsReady);
-				else
-					return (false);
-			}
-		}
+			ApplicationSettings.RoamingUserSettings.Find.ActivePattern = "";
+			ApplicationSettings.SaveRoamingUserSettings();
 
-		/// <summary></summary>
-		public virtual void ResetFindOnEdit()
-		{
 			var monitor = GetMonitor(this.lastMonitorSelection);
 			monitor.ResetFindOnEdit();
 		}
 
 		/// <summary></summary>
-		public virtual FindResult TryFindOnEdit(string pattern)
+		public virtual void LeaveFindOnEdit(string pattern)
 		{
 			ApplicationSettings.RoamingUserSettings.Find.ActivePattern = pattern;
 			ApplicationSettings.SaveRoamingUserSettings();
 
 			var monitor = GetMonitor(this.lastMonitorSelection);
-			if (monitor.TryFindOnEdit(pattern, ApplicationSettings.RoamingUserSettings.Find.Options))
+			monitor.ResetFindOnEdit();
+		}
+
+		/// <summary></summary>
+		public virtual FindResult TryFindOnEdit(string pattern, out FindDirection resultingDirection)
+		{
+			// The active pattern semms not have to be saved each time, it is saved on LeaveFindOnEdit() anyway.
+			// But, when anything else changes (e.g. find options, or the terminal is closed/opened) the pattern would get reset.
+
+			ApplicationSettings.RoamingUserSettings.Find.ActivePattern = pattern;
+			ApplicationSettings.SaveRoamingUserSettings();
+
+			var monitor = GetMonitor(this.lastMonitorSelection);
+			if (monitor.TryFindOnEdit(pattern, ApplicationSettings.RoamingUserSettings.Find.Options, out resultingDirection))
 			{
 				this.lastFindPattern = pattern;
 
@@ -3156,6 +3200,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual FindResult TryFindNext(string pattern, bool messageBoxIsPermissible)
 		{
+			// The active pattern wouldn't have to be saved each time, it is saved on LeaveFindOnEdit() anyway.
+			// But, the recent has to be saved each time, as the time stamp changes. Thus, saving both anyway.
+
 			ApplicationSettings.RoamingUserSettings.Find.ActivePattern = pattern;
 			ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.Add(new RecentItem<string>(pattern));
 			ApplicationSettings.RoamingUserSettings.Find.SetChanged(); // Manual change required because underlying collection is modified.
@@ -3182,6 +3229,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual FindResult TryFindPrevious(string pattern, bool messageBoxIsPermissible)
 		{
+			// The active pattern wouldn't have to be saved each time, it is saved on LeaveFindOnEdit() anyway.
+			// But, the recent has to be saved each time, as the time stamp changes. Thus, saving both anyway.
+
 			ApplicationSettings.RoamingUserSettings.Find.ActivePattern = pattern;
 			ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.Add(new RecentItem<string>(pattern));
 			ApplicationSettings.RoamingUserSettings.Find.SetChanged(); // Manual change required because underlying collection is modified.
@@ -3463,15 +3513,16 @@ namespace YAT.View.Forms
 					}
 
 					// splitContainer_Tx/RxMonitor:
-					// One of the panels MUST be visible, if none is visible, then bidir is shown anyway.
-					bool txIsVisible    = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
-					bool bidirIsVisible = this.settingsRoot.Layout.BidirMonitorPanelIsVisible || (!this.settingsRoot.Layout.TxMonitorPanelIsVisible && !this.settingsRoot.Layout.RxMonitorPanelIsVisible);
-					bool rxIsVisible    = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
 
 					// Orientation:
 					var orientation = this.settingsRoot.Layout.MonitorOrientation;
 					splitContainer_TxMonitor.Orientation = orientation;
 					splitContainer_RxMonitor.Orientation = orientation;
+
+					// One of the panels MUST be visible, if none is visible, then bidir is shown anyway.
+					bool txIsVisible    = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
+					bool bidirIsVisible = this.settingsRoot.Layout.BidirMonitorPanelIsVisible || (!this.settingsRoot.Layout.TxMonitorPanelIsVisible && !this.settingsRoot.Layout.RxMonitorPanelIsVisible);
+					bool rxIsVisible    = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
 
 					// Tx split contains Tx and Bidir+Rx:
 					if (txIsVisible)
@@ -3522,6 +3573,71 @@ namespace YAT.View.Forms
 						splitContainer_RxMonitor.Panel1Collapsed = true;
 					}
 					splitContainer_RxMonitor.Panel2Collapsed = !rxIsVisible;
+
+					// Update last monitor selection:
+					switch (this.lastMonitorSelection)
+					{
+						case Domain.RepositoryType.None: // This is the case on startup.
+						{
+							if (bidirIsVisible) // BiDir (center) is priority #1.
+								this.lastMonitorSelection = Domain.RepositoryType.Bidir;
+							else if (txIsVisible) // Tx (left) is priority #2.
+								this.lastMonitorSelection = Domain.RepositoryType.Tx;
+							else if (rxIsVisible)
+								this.lastMonitorSelection = Domain.RepositoryType.Rx;
+							else
+								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "One of the monitors must be visible!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+							break;
+						}
+
+						case Domain.RepositoryType.Tx:
+						{
+							if (!txIsVisible)
+							{
+								if (bidirIsVisible) // BiDir (center) is priority #1.
+									this.lastMonitorSelection = Domain.RepositoryType.Bidir;
+								else if (rxIsVisible)
+									this.lastMonitorSelection = Domain.RepositoryType.Rx;
+								else
+									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "One of the monitors must be visible!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
+
+							break;
+						}
+
+						case Domain.RepositoryType.Bidir:
+						{
+							if (!bidirIsVisible)
+							{
+								if (txIsVisible) // Tx (left) is priority #2.
+									this.lastMonitorSelection = Domain.RepositoryType.Tx;
+								else if (rxIsVisible)
+									this.lastMonitorSelection = Domain.RepositoryType.Rx;
+								else
+									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "One of the monitors must be visible!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
+
+							break;
+						}
+
+						case Domain.RepositoryType.Rx:
+						{
+							if (!rxIsVisible)
+							{
+								if (bidirIsVisible) // BiDir (center) is priority #1.
+									this.lastMonitorSelection = Domain.RepositoryType.Bidir;
+								else if (txIsVisible)
+									this.lastMonitorSelection = Domain.RepositoryType.Tx;
+								else
+									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "One of the monitors must be visible!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
+
+							break;
+						}
+
+						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.lastMonitorSelection + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					}
 				}
 
 				// splitContainer_Terminal and splitContainer_Send:
@@ -3645,10 +3761,10 @@ namespace YAT.View.Forms
 		public virtual void SuspendCtrlFNPShortcuts()
 		{
 			toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore = toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled;
-			toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore = toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled;
+			toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore  = toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled;
 		
 			toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled = false;
-			toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled = false;
+			toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled  = false;
 		
 			// Could be implemented more cleverly, by iterating over all potential shortcut controls
 			// and then handle those that use one of the shortcuts in question. However, that would
@@ -3662,7 +3778,7 @@ namespace YAT.View.Forms
 		public virtual void ResumeCtrlFNPShortcuts()
 		{
 			toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled = toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore;
-			toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled = toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore;
+			toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled  = toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore;
 		}
 
 		#endregion
@@ -3813,12 +3929,9 @@ namespace YAT.View.Forms
 
 		private Domain.RepositoryType GetMonitorType(Control source)
 		{
-			if ((source == monitor_Tx)    || (source == panel_Monitor_Tx))
-				return (Domain.RepositoryType.Tx);
-			if ((source == monitor_Bidir) || (source == panel_Monitor_Bidir))
-				return (Domain.RepositoryType.Bidir);
-			if ((source == monitor_Rx)    || (source == panel_Monitor_Rx))
-				return (Domain.RepositoryType.Rx);
+			if ((source == monitor_Tx)    || (source == panel_Monitor_Tx))    return (Domain.RepositoryType.Tx);
+			if ((source == monitor_Bidir) || (source == panel_Monitor_Bidir)) return (Domain.RepositoryType.Bidir);
+			if ((source == monitor_Rx)    || (source == panel_Monitor_Rx))    return (Domain.RepositoryType.Rx);
 
 			return (Domain.RepositoryType.None);
 		}
@@ -3835,7 +3948,8 @@ namespace YAT.View.Forms
 				case Domain.RepositoryType.Tx:    return (monitor_Tx);
 				case Domain.RepositoryType.Bidir: return (monitor_Bidir);
 				case Domain.RepositoryType.Rx:    return (monitor_Rx);
-				default:                          return (null);
+
+				default: return (null);
 			}
 		}
 
@@ -3950,6 +4064,10 @@ namespace YAT.View.Forms
 		{
 			switch (repositoryType)
 			{
+				case Domain.RepositoryType.None:
+					// Nothing to do.
+					break;
+
 				case Domain.RepositoryType.Tx:
 				case Domain.RepositoryType.Bidir:
 				case Domain.RepositoryType.Rx:
@@ -3965,6 +4083,10 @@ namespace YAT.View.Forms
 		{
 			switch (repositoryType)
 			{
+				case Domain.RepositoryType.None:
+					// Nothing to do.
+					break;
+
 				case Domain.RepositoryType.Tx:
 				case Domain.RepositoryType.Bidir:
 				case Domain.RepositoryType.Rx:
@@ -4779,9 +4901,13 @@ namespace YAT.View.Forms
 
 			switch (e.Value)
 			{
+				case Domain.RepositoryType.None:  /* Nothing to do. */   break;
+
 				case Domain.RepositoryType.Tx:    monitor_Tx   .Clear(); break;
 				case Domain.RepositoryType.Bidir: monitor_Bidir.Clear(); break;
 				case Domain.RepositoryType.Rx:    monitor_Rx   .Clear(); break;
+
+				default: throw (new ArgumentOutOfRangeException("e", e.Value, MessageHelper.InvalidExecutionPreamble + "'" + e.Value + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -4793,9 +4919,13 @@ namespace YAT.View.Forms
 
 			switch (e.Value)
 			{
+				case Domain.RepositoryType.None:  /* Nothing to do. */                                                                         break;
+
 				case Domain.RepositoryType.Tx:    monitor_Tx   .AddLines(this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Tx));    break;
 				case Domain.RepositoryType.Bidir: monitor_Bidir.AddLines(this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Bidir)); break;
 				case Domain.RepositoryType.Rx:    monitor_Rx   .AddLines(this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Rx));    break;
+
+				default: throw (new ArgumentOutOfRangeException("e", e.Value, MessageHelper.InvalidExecutionPreamble + "'" + e.Value + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

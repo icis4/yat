@@ -68,6 +68,7 @@ using YAT.Application.Utilities;
 using YAT.Model.Types;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
+using YAT.View.Controls;
 
 #endregion
 
@@ -134,6 +135,12 @@ namespace YAT.View.Forms
 		private Model.Main main;
 		private Model.Workspace workspace;
 
+		// Find:
+		private FindDirection findDirection; // = FindDirection.Undetermined;
+		private FindResult findResult;       // = FindResult.Reset;
+		private bool findNextIsFeasible;     // = false
+		private bool findPreviousIsFeasible; // = false
+
 		// Toolstrip-combobox-validation-workaround (too late invocation of 'Validate' event):
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 		private bool mainToolValidationWorkaround_UpdateIsSuspended; // = false
@@ -186,8 +193,6 @@ namespace YAT.View.Forms
 
 			ApplyWindowSettingsAccordingToStartup();
 
-			SetControls();
-
 			DebugMessage("...successfully created.");
 		}
 
@@ -233,13 +238,15 @@ namespace YAT.View.Forms
 		/// event can depend on a properly drawn form, as the 'Paint' event of this form and its
 		/// child controls has been raised before this 'Shown' event.
 		/// Note that this main form is only created when YAT is run WITH a view. If YAT is run
-		/// WITHOUT a view, <see cref="YAT.Model.Main.Start"/> is called by either
+		/// WITHOUT a view, <see cref="Model.Main.Start"/> is called by either
 		/// YAT.Controller.Main.RunFullyFromConsole() or YAT.Controller.Main.RunInvisible().
 		/// </remarks>
 		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
 		private void Main_Shown(object sender, EventArgs e)
 		{
 			this.isStartingUp = false;
+
+			SetControls();
 
 			this.isLayoutingMdi = true;      // Temporarily notify MDI layouting to prevent that
 			this.result = this.main.Start(); // initial layouting overwrites the workspace settings.
@@ -412,7 +419,7 @@ namespace YAT.View.Forms
 					// The workaround with 'invokeLayout' unfortunately doesn't work as well, as the
 					// close form is still active when this 'MdiChildActivate' event is invoked...
 					//
-					// Keeping this limitation, shall again be checked after upgrading to .NET 4.0+.
+					// Keeping this limitation, shall again be checked after upgrading to .NET 4+.
 				}
 
 				SetTimedStatus(Status.ChildActivated);
@@ -437,7 +444,7 @@ namespace YAT.View.Forms
 		{
 			DebugMdi("Deactivated");
 
-			toolStripComboBox_MainTool_Terminal_Find_Pattern         .OnFormDeactivateWorkaround();
+			toolStripComboBox_MainTool_Find_Pattern         .OnFormDeactivateWorkaround();
 			toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger .OnFormDeactivateWorkaround();
 			toolStripComboBox_MainTool_Terminal_AutoResponse_Response.OnFormDeactivateWorkaround();
 			toolStripComboBox_MainTool_Terminal_AutoAction_Trigger   .OnFormDeactivateWorkaround();
@@ -667,7 +674,7 @@ namespace YAT.View.Forms
 		/// Must be called each time the corresponding context state changes, because shortcuts
 		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
-		private void toolStripMenuItem_MainMenu_Log_SetMenuItems()
+		private void toolStripMenuItem_MainMenu_Log_SetChildMenuItems()
 		{
 			this.isSettingControls.Enter();
 			try
@@ -703,7 +710,7 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_MainMenu_Log_DropDownOpening(object sender, EventArgs e)
 		{
-			toolStripMenuItem_MainMenu_Log_SetMenuItems();
+			toolStripMenuItem_MainMenu_Log_SetChildMenuItems();
 		}
 
 		private void toolStripMenuItem_MainMenu_Log_AllOn_Click(object sender, EventArgs e)
@@ -732,6 +739,28 @@ namespace YAT.View.Forms
 		/// Must be called each time the corresponding context state changes, because shortcuts
 		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
+		private void toolStripMenuItem_MainMenu_Window_SetMainMenuItems()
+		{
+			toolStripMenuItem_MainMenu_Window_SetMainMenuItems(false);
+		}
+
+		private void toolStripMenuItem_MainMenu_Window_SetMainMenuItems(bool isDropDownOpening)
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				toolStripMenuItem_MainMenu_Window_AlwaysOnTop.Checked = ApplicationSettings.LocalUserSettings.MainWindow.AlwaysOnTop;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		/// <remarks>
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
 		private void toolStripMenuItem_MainMenu_Window_SetChildMenuItems()
 		{
 			toolStripMenuItem_MainMenu_Window_SetChildMenuItems(false);
@@ -744,12 +773,6 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				bool workspaceIsReady = (this.workspace != null);
-				toolStripMenuItem_MainMenu_Window_AlwaysOnTop.Enabled = workspaceIsReady;
-
-				bool alwaysOnTop = ((this.workspace != null) ? (this.workspace.SettingsRoot.Workspace.AlwaysOnTop) : (false));
-				toolStripMenuItem_MainMenu_Window_AlwaysOnTop.Checked = alwaysOnTop;
-
 				toolStripMenuItem_MainMenu_Window_Automatic.Enabled      = childIsReady;
 				toolStripMenuItem_MainMenu_Window_Cascade.Enabled        = childIsReady;
 				toolStripMenuItem_MainMenu_Window_TileHorizontal.Enabled = childIsReady;
@@ -801,12 +824,14 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_MainMenu_Window_DropDownOpening(object sender, EventArgs e)
 		{
+			toolStripMenuItem_MainMenu_Window_SetMainMenuItems(true);
 			toolStripMenuItem_MainMenu_Window_SetChildMenuItems(true);
 		}
 
 		private void toolStripMenuItem_MainMenu_Window_AlwaysOnTop_Click(object sender, EventArgs e)
 		{
-			ToggleAlwaysOnTop();
+			ApplicationSettings.LocalUserSettings.MainWindow.AlwaysOnTop = !ApplicationSettings.LocalUserSettings.MainWindow.AlwaysOnTop;
+			ApplicationSettings.SaveLocalUserSettings();
 		}
 
 		private void toolStripMenuItem_MainMenu_Window_Automatic_Click(object sender, EventArgs e)
@@ -941,6 +966,7 @@ namespace YAT.View.Forms
 				}
 
 				toolStripButton_MainTool_File_Save.Enabled         = childIsReady && !terminalFileIsReadOnly;
+
 				toolStripButton_MainTool_Terminal_Start.Enabled    = childIsReady && terminalIsStopped;
 				toolStripButton_MainTool_Terminal_Stop.Enabled     = childIsReady && terminalIsStarted;
 				toolStripButton_MainTool_Terminal_Settings.Enabled = childIsReady;
@@ -961,69 +987,13 @@ namespace YAT.View.Forms
 				toolStripButton_MainTool_Terminal_Radix_Hex.Checked     = (radix == Domain.Radix.Hex);
 				toolStripButton_MainTool_Terminal_Radix_Unicode.Checked = (radix == Domain.Radix.Unicode);
 
-				toolStripButton_MainTool_Terminal_Clear.Enabled             = childIsReady;
-				toolStripButton_MainTool_Terminal_Refresh.Enabled           = childIsReady;
-				toolStripButton_MainTool_Terminal_CopyToClipboard.Enabled   = childIsReady;
-				toolStripButton_MainTool_Terminal_SaveToFile.Enabled        = childIsReady;
-				toolStripButton_MainTool_Terminal_Print.Enabled             = childIsReady;
+				toolStripButton_MainTool_Terminal_Clear.Enabled           = childIsReady;
+				toolStripButton_MainTool_Terminal_Refresh.Enabled         = childIsReady;
+				toolStripButton_MainTool_Terminal_CopyToClipboard.Enabled = childIsReady;
+				toolStripButton_MainTool_Terminal_SaveToFile.Enabled      = childIsReady;
+				toolStripButton_MainTool_Terminal_Print.Enabled           = childIsReady;
 
-				DebugFindEnter(MethodBase.GetCurrentMethod().Name);
-				{
-					toolStripButton_MainTool_Terminal_Find_ShowHide.Checked = FindIsReady;
-
-					var findVisible = ApplicationSettings.RoamingUserSettings.View.FindVisible;
-					if (findVisible)
-					{
-						toolStripButton_MainTool_Terminal_Find_ShowHide.Text = "Hide Find";
-
-						// Attention:
-						// Similar code exists in...
-						// ...View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
-						// Changes here may have to be applied there too.
-
-						if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
-						{
-							var activePattern = ApplicationSettings.RoamingUserSettings.Find.ActivePattern;
-							var recentPatterns = ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.ToArray();
-
-							ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_Terminal_Find_Pattern, recentPatterns);
-							ToolStripComboBoxHelper.Select                (toolStripComboBox_MainTool_Terminal_Find_Pattern, activePattern, activePattern);
-
-							toolStripComboBox_MainTool_Terminal_Find_Pattern.Enabled = childIsReady;
-							toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = true;
-						}
-
-						toolStripButton_MainTool_Terminal_Find_CaseSensitive.Checked = ApplicationSettings.RoamingUserSettings.Find.Options.CaseSensitive;
-						toolStripButton_MainTool_Terminal_Find_CaseSensitive.Enabled = childIsReady;
-						toolStripButton_MainTool_Terminal_Find_WholeWord    .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.WholeWord;
-						toolStripButton_MainTool_Terminal_Find_WholeWord    .Enabled = childIsReady;
-
-						toolStripButton_MainTool_Terminal_Find_CaseSensitive.Visible = true;
-						toolStripButton_MainTool_Terminal_Find_WholeWord    .Visible = true;
-
-						toolStripButton_MainTool_Terminal_Find_Next    .Enabled = (childIsReady && FindIsReady);
-						toolStripButton_MainTool_Terminal_Find_Previous.Enabled = (childIsReady && FindIsReady);
-
-						toolStripButton_MainTool_Terminal_Find_Next    .Visible = true;
-						toolStripButton_MainTool_Terminal_Find_Previous.Visible = true;
-					}
-					else
-					{
-						toolStripButton_MainTool_Terminal_Find_ShowHide.Text = "Show Find";
-
-						ToolStripComboBoxHelper.Deselect             (toolStripComboBox_MainTool_Terminal_Find_Pattern);
-						ToolStripComboBoxHelper.ClearItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_Terminal_Find_Pattern);
-
-						toolStripComboBox_MainTool_Terminal_Find_Pattern.Visible = false;
-
-						toolStripButton_MainTool_Terminal_Find_CaseSensitive.Visible = false;
-						toolStripButton_MainTool_Terminal_Find_WholeWord    .Visible = false;
-
-						toolStripButton_MainTool_Terminal_Find_Next    .Visible = false;
-						toolStripButton_MainTool_Terminal_Find_Previous.Visible = false;
-					}
-				}
-				DebugFindLeave();
+				toolStripButton_MainTool_SetFindControls(); // See remarks of that method.
 
 				bool logIsOn = false;
 				if (childIsReady)
@@ -1211,6 +1181,80 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <remarks>
+		/// Separated to prevent flickering of non-find controls (e.g. AutoAction and AutoResponse)
+		/// when editing the search pattern.
+		/// </remarks>
+		private void toolStripButton_MainTool_SetFindControls()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				bool childIsReady = (ActiveMdiChild != null);
+
+				DebugFindEnter(MethodBase.GetCurrentMethod().Name);
+				{
+					var findVisible = ApplicationSettings.RoamingUserSettings.View.FindVisible;
+					if (findVisible)
+					{
+						toolStripButton_MainTool_Find_ShowHide.Checked = true;
+						toolStripButton_MainTool_Find_ShowHide.Text = "Hide Find";
+
+						// Attention:
+						// Similar code exists in...
+						// ...View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
+						// Changes here may have to be applied there too.
+
+						if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
+						{
+							var activePattern = ApplicationSettings.RoamingUserSettings.Find.ActivePattern;
+							var recentPatterns = ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.ToArray();
+
+							ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_Find_Pattern, recentPatterns);
+							ToolStripComboBoxHelper.Select                              (toolStripComboBox_MainTool_Find_Pattern, activePattern, activePattern);
+
+							toolStripComboBox_MainTool_Find_Pattern.Enabled = childIsReady;
+							toolStripComboBox_MainTool_Find_Pattern.Visible = true;
+						}
+
+						toolStripButton_MainTool_Find_CaseSensitive.Checked = ApplicationSettings.RoamingUserSettings.Find.Options.CaseSensitive;
+						toolStripButton_MainTool_Find_CaseSensitive.Enabled = childIsReady;
+						toolStripButton_MainTool_Find_WholeWord    .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.WholeWord;
+						toolStripButton_MainTool_Find_WholeWord    .Enabled = childIsReady;
+
+						toolStripButton_MainTool_Find_CaseSensitive.Visible = true;
+						toolStripButton_MainTool_Find_WholeWord    .Visible = true;
+
+						SetFindState();
+
+						toolStripButton_MainTool_Find_Next    .Visible = true;
+						toolStripButton_MainTool_Find_Previous.Visible = true;
+					}
+					else
+					{
+						toolStripButton_MainTool_Find_ShowHide.Checked = false;
+						toolStripButton_MainTool_Find_ShowHide.Text = "Show Find";
+
+						ToolStripComboBoxHelper.Deselect                           (toolStripComboBox_MainTool_Find_Pattern);
+						ToolStripComboBoxHelper.ClearItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_Find_Pattern);
+
+						toolStripComboBox_MainTool_Find_Pattern.Visible = false;
+
+						toolStripButton_MainTool_Find_CaseSensitive.Visible = false;
+						toolStripButton_MainTool_Find_WholeWord    .Visible = false;
+
+						toolStripButton_MainTool_Find_Next    .Visible = false;
+						toolStripButton_MainTool_Find_Previous.Visible = false;
+					}
+				}
+				DebugFindLeave();
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
 		private void toolStripButton_MainTool_File_New_Click(object sender, EventArgs e)
 		{
 			ShowNewTerminalDialog();
@@ -1306,7 +1350,7 @@ namespace YAT.View.Forms
 			((Terminal)ActiveMdiChild).RequestPrint();
 		}
 
-		private void toolStripButton_MainTool_Terminal_Find_ShowHide_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Find_ShowHide_Click(object sender, EventArgs e)
 		{
 			ApplicationSettings.RoamingUserSettings.View.FindVisible = !ApplicationSettings.RoamingUserSettings.View.FindVisible;
 			ApplicationSettings.SaveRoamingUserSettings();
@@ -1314,11 +1358,11 @@ namespace YAT.View.Forms
 			if (ApplicationSettings.RoamingUserSettings.View.FindVisible)
 			{
 			////toolStripComboBox_MainTool_Terminal_Find_Pattern.Select();    doesn't work, 'ToolStrip'
-				toolStripComboBox_MainTool_Terminal_Find_Pattern.Focus(); // seems to require calling Focus().
+				toolStripComboBox_MainTool_Find_Pattern.Focus(); // seems to require calling Focus().
 			}
 		}
 
-		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_SelectedIndexChanged(object sender, EventArgs e)
+		private void toolStripComboBox_MainTool_Find_Pattern_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
@@ -1326,24 +1370,25 @@ namespace YAT.View.Forms
 			ValidateAndFindOnEdit();
 		}
 
-		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_Enter(object sender, EventArgs e)
+		private void toolStripComboBox_MainTool_Find_Pattern_Enter(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
-		
+
 			DebugFindEnter(MethodBase.GetCurrentMethod().Name);
 			SuspendCtrlFNPShortcuts(); // Suspend while in find field.
+			EnterFindOnEdit();
 			DebugFindLeave();
 		}
 
-		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_Leave(object sender, EventArgs e)
+		private void toolStripComboBox_MainTool_Find_Pattern_Leave(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
-		
+
 			DebugFindEnter(MethodBase.GetCurrentMethod().Name);
+			LeaveFindOnEdit(toolStripComboBox_MainTool_Find_Pattern.Text);
 			ResumeCtrlFNPShortcuts(); // Suspended while in find field.
-			ResetFindOnEdit();
 			DebugFindLeave();
 		}
 
@@ -1383,38 +1428,45 @@ namespace YAT.View.Forms
 		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event way too late,
 		/// only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// </remarks>
-		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_TextChanged(object sender, EventArgs e)
+		private void toolStripComboBox_MainTool_Find_Pattern_TextChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
 			{
-				if (toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedIndex == ControlEx.InvalidIndex)
+				if (toolStripComboBox_MainTool_Find_Pattern.SelectedIndex == ControlEx.InvalidIndex)
 				{
-					var pattern = toolStripComboBox_MainTool_Terminal_Find_Pattern.Text;
-					try
+					var pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
+					if (!string.IsNullOrEmpty(pattern))
 					{
-						var regex = new Regex(pattern);
-						UnusedLocal.PreventAnalysisWarning(regex);
-					}
-					catch (ArgumentException)
-					{
-						SetFindFieldColors(FindResult.Invalid);
-						return; // Skip 'FindOnEdit' in case of invalid Regex.
-					}
+						try
+						{
+							var regex = new Regex(pattern);
+							UnusedLocal.PreventAnalysisWarning(regex);
+						}
+						catch (ArgumentException)
+						{
+							SetFindState(FindDirection.Undetermined, FindResult.Invalid);
+							return; // Skip 'FindOnEdit' in case of invalid Regex.
+						}
 
-					this.mainToolValidationWorkaround_UpdateIsSuspended = true;
-					try
-					{
-						FindOnEdit(pattern); // No need to ValidateAndFindOnEdit(pattern) since just validated above.
+						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
+						try
+						{
+							FindOnEdit(pattern); // No need to ValidateAndFindOnEdit(pattern) since just validated above.
+						}
+						finally
+						{
+							this.mainToolValidationWorkaround_UpdateIsSuspended = false;
+						}
 					}
-					finally
+					else
 					{
-						this.mainToolValidationWorkaround_UpdateIsSuspended = false;
+						EmptyFindOnEdit();
 					}
 				}
 			}
 		}
 
-		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyDown(object sender, KeyEventArgs e)
+		private void toolStripComboBox_MainTool_Find_Pattern_KeyDown(object sender, KeyEventArgs e)
 		{
 			// \remind (2017-11-22..12-16 / MKY) there are limitations in .NET WinForms (or Win32):
 			//
@@ -1440,7 +1492,7 @@ namespace YAT.View.Forms
 
 			if ((e.KeyData & Keys.KeyCode) == Keys.Enter)
 			{
-				ValidateAndFindNext();
+				ValidateAndFindNext(); // [Enter] shall always be active.
 				e.SuppressKeyPress = true;
 			}
 			else if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
@@ -1450,9 +1502,9 @@ namespace YAT.View.Forms
 					case Keys.C: ToggleFindCaseSensitive(); e.SuppressKeyPress = true; break;
 					case Keys.W: ToggleFindWholeWord();     e.SuppressKeyPress = true; break;
 
-					case Keys.F:
-					case Keys.N: ValidateAndFindNext();     e.SuppressKeyPress = true; break;
-					case Keys.P: ValidateAndFindPrevious(); e.SuppressKeyPress = true; break;
+					case Keys.F:      // Additional shortcuts shall be executable under same conditions as normal shortcuts.
+					case Keys.N: if (FindNextIsFeasible)     { ValidateAndFindNext();     } e.SuppressKeyPress = true; break;
+					case Keys.P: if (FindPreviousIsFeasible) { ValidateAndFindPrevious(); } e.SuppressKeyPress = true; break;
 
 					default: break;
 				}
@@ -1461,9 +1513,9 @@ namespace YAT.View.Forms
 			{
 				switch (e.KeyData & Keys.KeyCode)
 				{
-					case Keys.F:
-					case Keys.N: ValidateAndFindNext();     e.SuppressKeyPress = true; break;
-					case Keys.P: ValidateAndFindPrevious(); e.SuppressKeyPress = true; break;
+					case Keys.F:      // Additional shortcuts shall be executable under same conditions as normal shortcuts.
+					case Keys.N: if (FindNextIsFeasible)     { ValidateAndFindNext();     } e.SuppressKeyPress = true; break;
+					case Keys.P: if (FindPreviousIsFeasible) { ValidateAndFindPrevious(); } e.SuppressKeyPress = true; break;
 			
 					default: break;
 				}
@@ -1474,7 +1526,7 @@ namespace YAT.View.Forms
 		/// Suppress same keys for symmetricity with 'KeyDown' above.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
-		private void toolStripComboBox_MainTool_Terminal_Find_Pattern_KeyUp(object sender, KeyEventArgs e)
+		private void toolStripComboBox_MainTool_Find_Pattern_KeyUp(object sender, KeyEventArgs e)
 		{
 			if ((e.KeyData & Keys.KeyCode) == Keys.Enter)
 			{
@@ -1507,47 +1559,89 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void SetFindFieldColors(FindResult value)
+		private void SetFindState()
 		{
-			switch (value)
+			SetFindState(this.findDirection, this.findResult);
+		}
+
+		private void SetFindState(FindDirection direction, FindResult result)
+		{
+			this.findDirection = direction;
+			this.findResult    = result;
+
+			switch (result)
 			{
 				case FindResult.Reset:
+					toolStripComboBox_MainTool_Find_Pattern.BackColor = SystemColors.Window;
+					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.WindowText;
+					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = true;
+					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = true;
+					break;
+
+				case FindResult.Empty:
+					toolStripComboBox_MainTool_Find_Pattern.BackColor = SystemColors.Window;
+					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.WindowText;
+					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = false;
+					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = false;
+					break;
+
 				case FindResult.Found:
-					toolStripComboBox_MainTool_Terminal_Find_Pattern.BackColor = SystemColors.Window;
-					toolStripComboBox_MainTool_Terminal_Find_Pattern.ForeColor = SystemColors.WindowText;
+					toolStripComboBox_MainTool_Find_Pattern.BackColor = SystemColors.Window;     // Same colors as
+					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.WindowText; // 'Reset' above.
+					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = true;
+					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = true;
 					break;
 
 				case FindResult.NotFoundAnymore:
-					toolStripComboBox_MainTool_Terminal_Find_Pattern.BackColor = SystemColors.Highlight;     // Same color as last found line,
-					toolStripComboBox_MainTool_Terminal_Find_Pattern.ForeColor = SystemColors.HighlightText; // which is also 'highlighted'.
+					toolStripComboBox_MainTool_Find_Pattern.BackColor = SystemColors.Highlight;     // Same color as last found line,
+					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.HighlightText; // which is also 'highlighted'.
+					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = (direction != FindDirection.Forward);
+					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = (direction != FindDirection.Backward);
 					break;
 
 				case FindResult.NotFoundAtAll:
-					toolStripComboBox_MainTool_Terminal_Find_Pattern.BackColor = SystemColors.Info;
-					toolStripComboBox_MainTool_Terminal_Find_Pattern.ForeColor = SystemColors.InfoText;
+					toolStripComboBox_MainTool_Find_Pattern.BackColor = SystemColors.Info;
+					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.InfoText;
+					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = false;
+					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = false;
 					break;
 
 				case FindResult.Invalid:
-					toolStripComboBox_MainTool_Terminal_Find_Pattern.BackColor = SystemColors.ControlDark;
-					toolStripComboBox_MainTool_Terminal_Find_Pattern.ForeColor = SystemColors.ControlText;
+					toolStripComboBox_MainTool_Find_Pattern.BackColor = SystemColors.ControlDark;
+					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.ControlText;
+					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = false;
+					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = false;
 					break;
 
 				default:
-					throw (new ArgumentOutOfRangeException("value", value, MessageHelper.InvalidExecutionPreamble + "'" + value + "' is a find result that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("value", result, MessageHelper.InvalidExecutionPreamble + "'" + result + "' is a find result that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
+		}
+
+		/// <summary></summary>
+		protected virtual void EnterFindOnEdit()
+		{
+			ValidateAndFindOnEdit();
 		}
 
 		/// <summary></summary>
 		protected virtual void ValidateAndFindOnEdit()
 		{
-			var pattern = toolStripComboBox_MainTool_Terminal_Find_Pattern.Text;
-			if (ValidateFindPattern(pattern))
+			var pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
+			if (!string.IsNullOrEmpty(pattern))
 			{
-				FindOnEdit(pattern);
+				if (ValidateFindPattern(pattern))
+				{
+					FindOnEdit(pattern);
+				}
+				else
+				{
+					SetFindState(FindDirection.Undetermined, FindResult.Invalid);
+				}
 			}
-			else
+			else // Opposed to FindNext/Previous(), an "empty" FindOnEdit() shall result in 'Reset'.
 			{
-				SetFindFieldColors(FindResult.Invalid);
+				EmptyFindOnEdit();
 			}
 		}
 
@@ -1556,31 +1650,42 @@ namespace YAT.View.Forms
 		{
 			if (!string.IsNullOrEmpty(pattern))
 			{
+				var fd = FindDirection.Undetermined;
 				var fr = FindResult.Reset;
 
 				var t = (ActiveMdiChild as Terminal);
 				if (t != null)
-					fr = t.TryFindOnEdit(pattern);
+					fr = t.TryFindOnEdit(pattern, out fd);
 
-				SetFindFieldColors(fr);
+				SetFindState(fd, fr);
 			}
 			else
 			{
-				ResetFindOnEdit();
+				EmptyFindOnEdit();
 			}
 		}
 
 		/// <summary></summary>
-		protected virtual void ResetFindOnEdit()
+		protected virtual void EmptyFindOnEdit()
 		{
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
-				t.ResetFindOnEdit();
+				t.EmptyFindOnEdit();
 
-			SetFindFieldColors(FindResult.Reset);
+			SetFindState(FindDirection.Undetermined, FindResult.Empty);
 		}
 
-		private void toolStripButton_MainTool_Terminal_Find_Next_Click(object sender, EventArgs e)
+		/// <summary></summary>
+		protected virtual void LeaveFindOnEdit(string pattern)
+		{
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.LeaveFindOnEdit(pattern);
+
+			SetFindState(FindDirection.Undetermined, FindResult.Reset);
+		}
+
+		private void toolStripButton_MainTool_Find_Next_Click(object sender, EventArgs e)
 		{
 			ValidateAndFindNext();
 		}
@@ -1588,8 +1693,8 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void ValidateAndFindNext()
 		{
-			var pattern = toolStripComboBox_MainTool_Terminal_Find_Pattern.Text;
-			if (ValidateFindPattern(pattern))
+			var pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
+			if (!string.IsNullOrEmpty(pattern) && ValidateFindPattern(pattern))
 			{
 				var fr = FindResult.Reset;
 
@@ -1597,15 +1702,15 @@ namespace YAT.View.Forms
 				if (t != null)
 					fr = t.TryFindNext(pattern, MessageBoxIsPermissible);
 
-				SetFindFieldColors(fr);
+				SetFindState(FindDirection.Forward, fr);
 			}
 			else
 			{
-				SetFindFieldColors(FindResult.Invalid);
+				SetFindState(FindDirection.Forward, FindResult.Invalid);
 			}
 		}
 
-		private void toolStripButton_MainTool_Terminal_Find_Previous_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Find_Previous_Click(object sender, EventArgs e)
 		{
 			ValidateAndFindPrevious();
 		}
@@ -1613,7 +1718,7 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void ValidateAndFindPrevious()
 		{
-			var pattern = toolStripComboBox_MainTool_Terminal_Find_Pattern.Text;
+			var pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
 			if (ValidateFindPattern(pattern))
 			{
 				var fr = FindResult.Reset;
@@ -1622,11 +1727,11 @@ namespace YAT.View.Forms
 				if (t != null)
 					fr = t.TryFindPrevious(pattern, MessageBoxIsPermissible);
 
-				SetFindFieldColors(fr);
+				SetFindState(FindDirection.Backward, fr);
 			}
 			else
 			{
-				SetFindFieldColors(FindResult.Invalid);
+				SetFindState(FindDirection.Backward, FindResult.Invalid);
 			}
 		}
 
@@ -1636,7 +1741,7 @@ namespace YAT.View.Forms
 			get
 			{
 				if (ApplicationSettings.RoamingUserSettings.View.FindVisible)
-					return (!this.toolStripComboBox_MainTool_Terminal_Find_Pattern.Focused);
+					return (!this.toolStripComboBox_MainTool_Find_Pattern.Focused);
 				else
 					return (false);
 			}
@@ -1668,7 +1773,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void toolStripButton_MainTool_Terminal_Find_CaseSensitive_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Find_CaseSensitive_Click(object sender, EventArgs e)
 		{
 			ToggleFindCaseSensitive();
 		}
@@ -1682,7 +1787,7 @@ namespace YAT.View.Forms
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
-		private void toolStripButton_MainTool_Terminal_Find_WholeWord_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Find_WholeWord_Click(object sender, EventArgs e)
 		{
 			ToggleFindWholeWord();
 		}
@@ -2255,24 +2360,52 @@ namespace YAT.View.Forms
 		private void AttachUserSettingsEventHandlers()
 		{
 			if (ApplicationSettings.LocalUserSettings != null)
-				ApplicationSettings.LocalUserSettings.Changed += userSettingsRoot_Changed;
+				ApplicationSettings.LocalUserSettings.Changed += localUserSettingsRoot_Changed;
 
 			if (ApplicationSettings.RoamingUserSettings != null)
-				ApplicationSettings.RoamingUserSettings.Changed += userSettingsRoot_Changed;
+				ApplicationSettings.RoamingUserSettings.Changed += roamingUserSettingsRoot_Changed;
 		}
 
 		private void DetachUserSettingsEventHandlers()
 		{
 			if (ApplicationSettings.LocalUserSettings != null)
-				ApplicationSettings.LocalUserSettings.Changed -= userSettingsRoot_Changed;
+				ApplicationSettings.LocalUserSettings.Changed -= localUserSettingsRoot_Changed;
 
 			if (ApplicationSettings.RoamingUserSettings != null)
-				ApplicationSettings.RoamingUserSettings.Changed -= userSettingsRoot_Changed;
+				ApplicationSettings.RoamingUserSettings.Changed -= roamingUserSettingsRoot_Changed;
 		}
 
-		private void userSettingsRoot_Changed(object sender, SettingsEventArgs e)
+		private void localUserSettingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
-			SetMainControls();
+			if (e.Inner == null)
+			{
+				// Nothing to do, no need to care about 'ProductVersion' and such.
+			}
+			else if (ReferenceEquals(e.Inner.Source, ApplicationSettings.LocalUserSettings.MainWindow))
+			{
+				SetMainControls();
+			}
+			else if (ReferenceEquals(e.Inner.Source, ApplicationSettings.LocalUserSettings.RecentFiles))
+			{
+				SetRecentControls();
+			}
+		}
+
+		private void roamingUserSettingsRoot_Changed(object sender, SettingsEventArgs e)
+		{
+			if (e.Inner == null)
+			{
+				// Nothing to do, no need to care about 'ProductVersion' and such.
+			}
+			else if (ReferenceEquals(e.Inner.Source, ApplicationSettings.RoamingUserSettings.Find))
+			{
+				SetFindControls();
+			}
+			else if (ReferenceEquals(e.Inner.Source, ApplicationSettings.RoamingUserSettings.View))
+			{
+				SetMainControls();
+				SetChildControls(); // Child controls must also be updated when Find/AA/AR visibility changes.
+			}
 		}
 
 		#endregion
@@ -2429,7 +2562,10 @@ namespace YAT.View.Forms
 
 		private void SetMainControls()
 		{
-			toolStripButton_MainTool_SetControls();
+			// Shortcuts associated to menu items are only active when items are visible and enabled!
+			toolStripMenuItem_MainMenu_Window_SetMainMenuItems();
+
+			toolStripButton_MainTool_SetControls(); // Contains 'Main' as well as 'Child' dependent controls.
 
 			this.isSettingControls.Enter();
 			try
@@ -2444,16 +2580,27 @@ namespace YAT.View.Forms
 			{
 				this.isSettingControls.Leave();
 			}
+
+			TopMost = ApplicationSettings.LocalUserSettings.MainWindow.AlwaysOnTop;
+		}
+
+		/// <remarks>
+		/// Separated to prevent flickering of non-find controls (e.g. AutoAction and AutoResponse)
+		/// when editing the search pattern.
+		/// </remarks>
+		private void SetFindControls()
+		{
+			toolStripButton_MainTool_SetFindControls(); // See above.
 		}
 
 		private void SetChildControls()
 		{
-			toolStripButton_MainTool_SetControls();
-
 			// Shortcuts associated to menu items are only active when items are visible and enabled!
 			toolStripMenuItem_MainMenu_File_SetChildMenuItems();
-			toolStripMenuItem_MainMenu_Log_SetMenuItems();
+			toolStripMenuItem_MainMenu_Log_SetChildMenuItems();
 			toolStripMenuItem_MainMenu_Window_SetChildMenuItems();
+
+			toolStripButton_MainTool_SetControls(); // Contains 'Main' as well as 'Child' dependent controls.
 		}
 
 		private void SetRecentControls()
@@ -2467,9 +2614,6 @@ namespace YAT.View.Forms
 		{
 			// Shortcuts associated to menu items are only active when items are visible and enabled!
 			toolStripMenuItem_MainMenu_File_Workspace_SetMenuItems();
-
-			if (this.workspace != null)
-				this.TopMost = this.workspace.SettingsRoot.Workspace.AlwaysOnTop;
 		}
 
 		#region Main > Methods > New
@@ -2621,12 +2765,6 @@ namespace YAT.View.Forms
 			}
 
 			return (dr);
-		}
-
-		private void ToggleAlwaysOnTop()
-		{
-			if (this.workspace != null)
-				this.workspace.SettingsRoot.Workspace.AlwaysOnTop = !this.workspace.SettingsRoot.Workspace.AlwaysOnTop;
 		}
 
 		/// <summary>
@@ -3033,7 +3171,7 @@ namespace YAT.View.Forms
 			// The workaround with 'invokeLayout' unfortunately doesn't work as well, as the
 			// close form is still active when the 'MdiChildActivate' event is invoked...
 			//
-			// Keeping this limitation, shall again be checked after upgrading to .NET 4.0+.
+			// Keeping this limitation, shall again be checked after upgrading to .NET 4+.
 		}
 
 		#endregion
@@ -3044,20 +3182,6 @@ namespace YAT.View.Forms
 		//==========================================================================================
 		// Find
 		//==========================================================================================
-
-		/// <summary>
-		/// Gets whether the find is ready.
-		/// </summary>
-		public virtual bool FindIsReady
-		{
-			get
-			{
-				if (ApplicationSettings.RoamingUserSettings.View.FindVisible)
-					return (!string.IsNullOrEmpty(ApplicationSettings.RoamingUserSettings.Find.ActivePattern));
-				else
-					return (false);
-			}
-		}
 
 		/// <summary>
 		/// Requests to activate the find field.
@@ -3071,7 +3195,31 @@ namespace YAT.View.Forms
 			}
 
 		////toolStripComboBox_MainTool_Terminal_Find_Pattern.Select()    doesn't work, 'ToolStrip'
-			toolStripComboBox_MainTool_Terminal_Find_Pattern.Focus(); // seems to require Focus().
+			toolStripComboBox_MainTool_Find_Pattern.Focus(); // seems to require Focus().
+		}
+
+		/// <summary>
+		/// Gets whether the find is ready to search forward.
+		/// </summary>
+		public virtual bool FindNextIsFeasible
+		{
+			get
+			{
+				bool childIsReady = (ActiveMdiChild != null);
+				return (childIsReady && this.findNextIsFeasible);
+			}
+		}
+
+		/// <summary>
+		/// Gets whether the find is ready to search backward.
+		/// </summary>
+		public virtual bool FindPreviousIsFeasible
+		{
+			get
+			{
+				bool childIsReady = (ActiveMdiChild != null);
+				return (childIsReady && this.findPreviousIsFeasible);
+			}
 		}
 
 		/// <summary>
@@ -3231,10 +3379,10 @@ namespace YAT.View.Forms
 		[Conditional("DEBUG_FIND")]
 		protected virtual void DebugFindState()
 		{
-			Debug.Write    (@"Text   = """         + toolStripComboBox_MainTool_Terminal_Find_Pattern.Text);
-			Debug.Write    (@""" / Cursor @ "      + toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectionStart);
-			Debug.Write    (" / Selection @ "      + toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectionLength);
-			Debug.WriteLine(" / Selected index @ " + toolStripComboBox_MainTool_Terminal_Find_Pattern.SelectedIndex);
+			Debug.Write    (@"Text   = """         + toolStripComboBox_MainTool_Find_Pattern.Text);
+			Debug.Write    (@""" / Cursor @ "      + toolStripComboBox_MainTool_Find_Pattern.SelectionStart);
+			Debug.Write    (" / Selection @ "      + toolStripComboBox_MainTool_Find_Pattern.SelectionLength);
+			Debug.WriteLine(" / Selected index @ " + toolStripComboBox_MainTool_Find_Pattern.SelectedIndex);
 		}
 
 		#endregion
