@@ -3,16 +3,16 @@
 # Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 # Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 # -------------------------------------------------------------------------------------------------
-# $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/!-Scripts/CleanAll.cmd $
-# $Revision: 1229 $
-# $Date: 2017-02-06 13:12:15 +0100 (Mo, 06 Feb 2017) $
-# $Author: maettu_this $
+# $URL$
+# $Revision$
+# $Date$
+# $Author$
 # -------------------------------------------------------------------------------------------------
 # See release notes for product version details.
 # See SVN change log for file revision details.
 # Author(s): Matthias Klaey
 # -------------------------------------------------------------------------------------------------
-# Copyright © 2003-2017 Matthias Kläy.
+# Copyright © 2003-2018 Matthias Kläy.
 # All rights reserved.
 # -------------------------------------------------------------------------------------------------
 # This source code is licensed under the GNU LGPL.
@@ -347,5 +347,5 @@ Write-Output $result
 
 #===================================================================================================
 # End of
-# $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/!-Scripts/CleanAll.cmd $
+# $URL$
 #===================================================================================================

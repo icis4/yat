@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.Developer", "!-Doc.De
 	ProjectSection(SolutionItems) = preProject
 		!-Doc.Developer\HowToAddProject.txt = !-Doc.Developer\HowToAddProject.txt
 		!-Doc.Developer\HowToAddTestProject.txt = !-Doc.Developer\HowToAddTestProject.txt
+		!-Doc.Developer\HowToCreateSetupProjects.txt = !-Doc.Developer\HowToCreateSetupProjects.txt
 		!-Doc.Developer\HowToExportArgoUML.txt = !-Doc.Developer\HowToExportArgoUML.txt
 		!-Doc.Developer\HowToRunAndDebugNUnitTests.txt = !-Doc.Developer\HowToRunAndDebugNUnitTests.txt
 		!-Doc.Developer\HowToUpdateCopyrightYear.txt = !-Doc.Developer\HowToUpdateCopyrightYear.txt
@@ -20,6 +21,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Scripts", "!-Scripts", "{08FEFDFE-B7C8-4D17-9C8F-3B3108242FB4}"
 	ProjectSection(SolutionItems) = preProject
 		!-Tools\CallPowerShellScript.cmd = !-Tools\CallPowerShellScript.cmd
+		!-Scripts\CleanAll-Analyzer.cmd = !-Scripts\CleanAll-Analyzer.cmd
 		!-Scripts\CleanAll-Options.cmd = !-Scripts\CleanAll-Options.cmd
 		!-Scripts\CleanAll-SCM.cmd = !-Scripts\CleanAll-SCM.cmd
 		!-Scripts\CleanAll-Setup.cmd = !-Scripts\CleanAll-Setup.cmd
