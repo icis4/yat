@@ -495,7 +495,7 @@ namespace YAT.Controller
 			// Create model and view and run application:
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
-				MKY.Windows.Forms.ApplicationEx.EnableVisualStylesAndSetTextRenderingIfNotAlreadyDoneSo();
+				MKY.Windows.Forms.ApplicationEx.EnableVisualStylesAndSetTextRenderingIfNotInitializedYet();
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				try
 			#endif
@@ -704,7 +704,7 @@ namespace YAT.Controller
 			// Create model and view and run application:
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
-				MKY.Windows.Forms.ApplicationEx.EnableVisualStylesAndSetTextRenderingIfNotAlreadyDoneSo();
+				MKY.Windows.Forms.ApplicationEx.EnableVisualStylesAndSetTextRenderingIfNotInitializedYet();
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				try
 			#endif

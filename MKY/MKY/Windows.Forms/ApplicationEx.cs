@@ -33,7 +33,7 @@ namespace MKY.Windows.Forms
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class ApplicationEx
 	{
-		private static bool staticVisualStylesAndTextRenderingIsAlreadyDoneSo;
+		private static bool staticVisualStylesAndTextRenderingHasBeenInitialized;
 
 		/// <summary>
 		/// Helper method to deal with application startup requirements of .NET 2.0 and later.
@@ -47,14 +47,14 @@ namespace MKY.Windows.Forms
 		/// method ensures that this only happens once. This is particularly useful when
 		/// calling application startup from a test environment such as NUnit.
 		/// </remarks>
-		public static bool EnableVisualStylesAndSetTextRenderingIfNotAlreadyDoneSo()
+		public static bool EnableVisualStylesAndSetTextRenderingIfNotInitializedYet()
 		{
-			if (!staticVisualStylesAndTextRenderingIsAlreadyDoneSo)
+			if (!staticVisualStylesAndTextRenderingHasBeenInitialized)
 			{
 				Application.EnableVisualStyles();
 				Application.SetCompatibleTextRenderingDefault(false);
 
-				staticVisualStylesAndTextRenderingIsAlreadyDoneSo = true;
+				staticVisualStylesAndTextRenderingHasBeenInitialized = true;
 
 				return (true);
 			}
