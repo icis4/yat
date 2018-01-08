@@ -4,9 +4,9 @@
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
-// $Author: stroppel-1$
-// $Date: Donnerstag, 5. September 2013 11:02:41$
-// $Revision: 2$
+// $Revision$
+// $Date$
+// $Author$
 // ------------------------------------------------------------------------------------------------
 // YAT 2.0 Epsilon Version 1.99.90
 // ------------------------------------------------------------------------------------------------
@@ -14,7 +14,7 @@
 // See SVN change log for file revision details.
 // Author(s): Matthias Klaey
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2007-2017 Matthias Kläy.
+// Copyright © 2007-2018 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
