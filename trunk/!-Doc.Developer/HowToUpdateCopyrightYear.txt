@@ -1,10 +1,10 @@
-
+ï»¿
 1.	Open Visual Studio (without opening the solution).
 
 2.	Search for the following strings (match case and whole word) throughout...
 	*.vdproj
 	...and update year:
-	 > "Copyright © 2003-2018 Matthias Kläy."  =>   4 replacements
+	 > "Copyright Â© 2003-2018 Matthias KlÃ¤y."  =>   4 replacements
 
 (The above step is required because the .vdproj files cannot be edited while the solution is open.)
 
@@ -17,10 +17,10 @@
 5.	Search for the following strings (match case and whole word) throughout...
 	*.sln;*csproj;*.vcproj;*.ps1;*.bat;*.cmd;*.txt;*.cs;*.resx;*.resw;*.wsdl;*.xaml;*.xml;*.xsl;*.xslt;*.xsd;*.dtd;*.htm;*.html;*.css
 	...and update year:
-	 > "Copyright © 2003-2018 Matthias Kläy."  => 427 replacements
-	 > "Copyright © 2007-2018 Matthias Kläy."  => 147 replacements
-	 > "Copyright © 2010-2018 Matthias Kläy."  =>  60 replacements
-	 > "2018, Matthias Kläy"                   =>   2 replacements
+	 > "Copyright Â© 2003-2018 Matthias KlÃ¤y."  => 427 replacements
+	 > "Copyright Â© 2007-2018 Matthias KlÃ¤y."  => 147 replacements
+	 > "Copyright Â© 2010-2018 Matthias KlÃ¤y."  =>  60 replacements
+	 > "2018, Matthias KlÃ¤y"                   =>   2 replacements
 
 6.	Then, verify throughout "\Trunk\*.*" (neither match case and nor whole word) and there...
 	...should be no more hits except within SVN, archives and other explainable locations:
@@ -29,7 +29,7 @@
 
 7.	Finally, commit all changes, verifying that SVN properties of all files are up-to-date.
 
-(Note that this procedure "schlägt drei weitere Fliegen auf einen Streich":
+(Note that this procedure "schlÃ¤gt drei weitere Fliegen auf einen Streich":
  > Detection whether all intended files are included in the solution.
  > Detection whether SVN properties of all files are up-to-date.
  > Detection whether filter above is complete.)

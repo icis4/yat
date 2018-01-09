@@ -1,3 +1,4 @@
+﻿
 Welcome to YAT
 Terminal Monitor
 Terminal Settings - Serial Port

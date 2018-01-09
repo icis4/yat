@@ -1,4 +1,4 @@
-This is MKY.IO.Ports.Test.WorkaroundAnalysis.OnMainThread.AnalysisMain
+﻿This is MKY.IO.Ports.Test.WorkaroundAnalysis.OnMainThread.AnalysisMain
 that analyzes/demonstrates issues with the .NET 2.0.50727.8669
 System.IO.Ports.SerialPort class and known workarounds, using
 COM3on Win Microsoft Windows NT 6.1.7601 Service Pack 1
@@ -44,4 +44,4 @@ nt32* lpEvtMask, NativeOverlapped* lpOverlapped)
    bei System.Threading.ExecutionContext.Run(ExecutionContext executionContext,
 ContextCallback callback, Object state)
    bei System.Threading.ThreadHelper.ThreadStart()
-Dr�cken Sie eine beliebige Taste . . .
+Drücken Sie eine beliebige Taste . . .

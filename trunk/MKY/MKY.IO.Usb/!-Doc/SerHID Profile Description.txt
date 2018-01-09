@@ -1,4 +1,4 @@
-
+﻿
 USB Ser/HID
 ===========
 
@@ -74,4 +74,4 @@ implementation of Ser/HID on a device, see [5].
 
 
 ------------------------------------------------------------------
-2012-03 / Matthias Kl�y, based on documentation by Adrian Rempfler
+2012-03 / Matthias Kläy, based on documentation by Adrian Rempfler

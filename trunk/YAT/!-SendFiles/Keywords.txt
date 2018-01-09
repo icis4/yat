@@ -1,2 +1,2 @@
-A\!(NoEOL)
+﻿A\!(NoEOL)
 BB\!(EOL)CCC

@@ -1,4 +1,4 @@
-
+ï»¿
 YAT uses two separate setup projects for x86 and x64. See 'ProjectSetup.txt' for details.
 
 Both projects are configured according to the following steps, changes have to be applied to both.
@@ -68,16 +68,16 @@ Setup project configuration
     > Icon =        Primary output #2           #3                      #4
 9. Configure 'User Interface'
     > Banner = Banner.bmp for all dialogs
-    > Copyright = YAT is licensed under the GNU LGPL.                                                                                See http://www.gnu.org/licenses/lgpl.html for license details.                                   Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.                    Copyright © 2003-2018 Matthias Kläy. All rights reserved.
+    > Copyright = YAT is licensed under the GNU LGPL.                                                                                See http://www.gnu.org/licenses/lgpl.html for license details.                                   Copyright Â© 2003-2004 HSR Hochschule fÃ¼r Technik Rapperswil.                    Copyright Â© 2003-2018 Matthias KlÃ¤y. All rights reserved.
 10. Configure 'Launch Conditions'
     > .NET = 3.5
 11. Project Properties
     > Icon = Primary output #1
-    > Author = Matthias Kläy
+    > Author = Matthias KlÃ¤y
     > Description = YAT - Yet Another Terminal
     > DetectNewer = True
     > InstallAll = True
-    > Keywords = Terminal; RS-232; RS-422; RS-423; RS-485; TCP/IP; UDP/IP; USB Ser/HID; Matthias Kläy; HSR; Mettler-Toledo; SourceForge
+    > Keywords = Terminal; RS-232; RS-422; RS-423; RS-485; TCP/IP; UDP/IP; USB Ser/HID; Matthias KlÃ¤y; HSR; Mettler-Toledo; SourceForge
     > Localization = English
     > Manufacturer = YAT
     > Manufacturer URL = http://sourceforge.net/projects/y-a-terminal/

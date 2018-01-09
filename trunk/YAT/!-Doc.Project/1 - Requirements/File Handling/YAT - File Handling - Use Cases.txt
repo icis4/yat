@@ -1,44 +1,44 @@
-
+ï»¿
 Use Cases UFI 2007-08-13
 ------------------------
 
-User öffnet YATzum ersten Mal -- User öffnet Terminal -- User schliesst YAT
+User Ã¶ffnet YAT zum ersten Mal -- User Ã¶ffnet Terminal -- User schliesst YAT
 --> Workspace wird in DefaulAppConfig gespeichert
 --> Terminal wird in DefaultTermConfig01 gespeichert
 
-User öffnet YATmit Default Einstellung -- User speichert Teminal --> UserTermConfigXY -- User schliesst YAT
+User Ã¶ffnet YAT mit Default Einstellung -- User speichert Teminal --> UserTermConfigXY -- User schliesst YAT
 --> Workspace wird in DefaulAppConfig gespeichert
 --> Terminal ist bereits gespeichert
 
-User öffnet YATmit Default Einstellung -- User öffnet zusätzliches Terminal -- User schliesst YAT
+User Ã¶ffnet YAT mit Default Einstellung -- User Ã¶ffnet zusÃ¤tzliches Terminal -- User schliesst YAT
 --> Workspace wird in DefaulAppConfig gespeichert
 --> Terminal1 ist bereits gespeichert
 --> Terminal2 wird in DefaultTermConfig01 gespeichert
 
-User öffnet YATmit Default Einstellung -- User speichert Workspace
+User Ã¶ffnet YAT mit Default Einstellung -- User speichert Workspace
 --> UserAppConfigXY
---> dadurch müssen alle Default-Terminal auch gespeichert werden: UserTermConfigXY (oder es wird ein Defaultnamen abgeleitet vom Workspace z.B. UserAppConfigXYTermXY verwendet)
+--> dadurch mÃ¼ssen alle Default-Terminal auch gespeichert werden: UserTermConfigXY (oder es wird ein Defaultnamen abgeleitet vom Workspace z.B. UserAppConfigXYTermXY verwendet)
 
 User schliesst YAT
 --> Workspace (UserAppConfigXY) wird in DefaulAppConfig gespeichert
 --> Terminals sind bereits gespeichert
 
-User öffnet YATmit UserAppConfigXY -- User öffnet zusätzliches Terminal -- User schliesst YAT
+User Ã¶ffnet YAT mit UserAppConfigXY -- User Ã¶ffnet zusÃ¤tzliches Terminal -- User schliesst YAT
 --> User muss Terminal speichern UserTermConfigXY (oder ...)
 --> UserAppConfigXY wird angepasst
---> DefaulAppConfig wird mit UserAppConfigXY überschrieben
+--> DefaulAppConfig wird mit UserAppConfigXY Ã¼berschrieben
 
-User öffnet YATmit UserTermConfigXY -- User schliesst YAT
+User Ã¶ffnet YAT mit UserTermConfigXY -- User schliesst YAT
 --> Workspace wird in DefaulAppConfig gespeichert
 
-User öffnet YATmit UserTermConfigXY -- User öffnet zusätzliches Terminal -- User schliesst YAT
+User Ã¶ffnet YAT mit UserTermConfigXY -- User Ã¶ffnet zusÃ¤tzliches Terminal -- User schliesst YAT
 --> Workspace wird in DefaulAppConfig gespeichert
 --> Terminal wird in DefaultTermConfig01 gespeichert
 
 
 Offene Fragen:
 
-> Werden nicht mehr benötigte DefaultTermConfigXY Dateien gelöscht?
+> Werden nicht mehr benÃ¶tigte DefaultTermConfigXY Dateien gelÃ¶scht?
 > Wenn eine bestehende UserAppConfig mit mindestens einer UserTermConfig unter einem anderen Namen gespeichert wird, werden die Terminaldatei auch kopiert oder greifen dann zwei UserAppConfigs auf die gleichen UserTermConfigs zu?
 
 

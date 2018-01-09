@@ -1,3 +1,4 @@
+﻿
 Dear Andre Luis,
 
 I came across another issue when shutting down a pair of an ALAZ client connected to an ALAZ server within the same application. I ran into a deadlock while shutting down the open connection. It happens in ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Active.get(). Is there a need to lock the field when reading its status? The situation is as follows:
