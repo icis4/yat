@@ -1,4 +1,4 @@
-
+﻿
 ALAZ
 ====
 
@@ -83,4 +83,4 @@ Potential issues which don't have any impact on YAT, so no modifications were do
 
 
 -----------------------
-2012-10 / Matthias Kl�y
+2012-10 / Matthias Kläy

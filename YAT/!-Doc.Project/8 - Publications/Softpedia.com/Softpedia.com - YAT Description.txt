@@ -1,4 +1,4 @@
-
+ï»¿
 Terminal that you can use
 -------------------------
 
@@ -8,12 +8,12 @@ YAT is an accessible and handy tool that supports RS-232/422/423/485 as well as 
 
 Here are some key features of "YAT":
 
-· Serial terminal (connection endpoint)
-· Sends single-line commands, multi-line commands and files
-· Unlimited number of predefined commands
-· Versatile monitoring of sent and received data
-· Advanced settings for text and binary sessions
-· Workspace supporting multiple terminals
+Â· Serial terminal (connection endpoint)
+Â· Sends single-line commands, multi-line commands and files
+Â· Unlimited number of predefined commands
+Â· Versatile monitoring of sent and received data
+Â· Advanced settings for text and binary sessions
+Â· Workspace supporting multiple terminals
 
 
 

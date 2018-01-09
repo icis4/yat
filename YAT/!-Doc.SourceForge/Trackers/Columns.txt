@@ -1,4 +1,4 @@
-
+﻿
 Shown (in this order)
  > #			(ticket_num)
  > Summary		(summary)
