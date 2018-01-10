@@ -2132,16 +2132,16 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_folder_explorer_16x16;
 			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.MergeAction = System.Windows.Forms.MergeAction.Insert;
-			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.MergeIndex = 6;
+			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.MergeIndex = 7;
 			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.Name = "toolStripMenuItem_TerminalMenu_Log_OpenDirectory";
 			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.Size = new System.Drawing.Size(250, 22);
-			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.Text = "Open Log Folder in File Browser...";
+			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.Text = "O&pen Log Folder in File Browser...";
 			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Log_Separator_3
 			// 
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_3.MergeAction = System.Windows.Forms.MergeAction.Insert;
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_3.MergeIndex = 6;
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_3.MergeIndex = 8;
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_3.Name = "toolStripMenuItem_TerminalMenu_Log_Separator_3";
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_3.Size = new System.Drawing.Size(247, 6);
 			// 
@@ -2150,7 +2150,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Enabled = false;
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_page_white_lightning_16x16;
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.MergeAction = System.Windows.Forms.MergeAction.Insert;
-			this.toolStripMenuItem_TerminalMenu_Log_Clear.MergeIndex = 6;
+			this.toolStripMenuItem_TerminalMenu_Log_Clear.MergeIndex = 9;
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Name = "toolStripMenuItem_TerminalMenu_Log_Clear";
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Size = new System.Drawing.Size(250, 22);
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Text = "&Clear";

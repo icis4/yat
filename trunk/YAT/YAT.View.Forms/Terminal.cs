@@ -1022,10 +1022,10 @@ namespace YAT.View.Forms
 				if (this.terminal != null)
 					logFileExists = this.terminal.LogFileExists;
 
-				toolStripMenuItem_TerminalMenu_Log_On.Enabled       = logIsEnabled && !logIsOn;
-				toolStripMenuItem_TerminalMenu_Log_Off.Enabled      = logIsEnabled &&  logIsOn;
-				toolStripMenuItem_TerminalMenu_Log_OpenFile.Enabled = logIsEnabled &&  logFileExists;
-				toolStripMenuItem_TerminalMenu_Log_Clear.Enabled    = logIsEnabled && (logIsOn || logFileExists);
+				toolStripMenuItem_TerminalMenu_Log_On.Enabled       = (logIsEnabled && !logIsOn);
+				toolStripMenuItem_TerminalMenu_Log_Off.Enabled      = (logIsEnabled &&  logIsOn);
+				toolStripMenuItem_TerminalMenu_Log_OpenFile.Enabled = (logIsEnabled &&  logFileExists);
+				toolStripMenuItem_TerminalMenu_Log_Clear.Enabled    = (logIsEnabled &&  logIsOn);
 			}
 			finally
 			{

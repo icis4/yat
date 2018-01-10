@@ -558,7 +558,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainMenu_Log_AllOn.MergeIndex = 1;
 			this.toolStripMenuItem_MainMenu_Log_AllOn.Name = "toolStripMenuItem_MainMenu_Log_AllOn";
 			this.toolStripMenuItem_MainMenu_Log_AllOn.Size = new System.Drawing.Size(118, 22);
-			this.toolStripMenuItem_MainMenu_Log_AllOn.Text = "&All On";
+			this.toolStripMenuItem_MainMenu_Log_AllOn.Text = "&All Terminals On";
 			this.toolStripMenuItem_MainMenu_Log_AllOn.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Log_AllOn_Click);
 			// 
 			// toolStripMenuItem_MainMenu_Log_Separator_1
@@ -572,7 +572,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainMenu_Log_AllOff.MergeIndex = 4;
 			this.toolStripMenuItem_MainMenu_Log_AllOff.Name = "toolStripMenuItem_MainMenu_Log_AllOff";
 			this.toolStripMenuItem_MainMenu_Log_AllOff.Size = new System.Drawing.Size(118, 22);
-			this.toolStripMenuItem_MainMenu_Log_AllOff.Text = "A&ll Off";
+			this.toolStripMenuItem_MainMenu_Log_AllOff.Text = "A&ll Terminals Off";
 			this.toolStripMenuItem_MainMenu_Log_AllOff.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Log_AllOff_Click);
 			// 
 			// toolStripMenuItem_MainMenu_Log_Separator_2
@@ -583,10 +583,10 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_MainMenu_Log_AllClear
 			// 
-			this.toolStripMenuItem_MainMenu_Log_AllClear.MergeIndex = 7;
+			this.toolStripMenuItem_MainMenu_Log_AllClear.MergeIndex = 10;
 			this.toolStripMenuItem_MainMenu_Log_AllClear.Name = "toolStripMenuItem_MainMenu_Log_AllClear";
 			this.toolStripMenuItem_MainMenu_Log_AllClear.Size = new System.Drawing.Size(118, 22);
-			this.toolStripMenuItem_MainMenu_Log_AllClear.Text = "Clea&r All";
+			this.toolStripMenuItem_MainMenu_Log_AllClear.Text = "All Terminals Clea&r";
 			this.toolStripMenuItem_MainMenu_Log_AllClear.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Log_AllClear_Click);
 			// 
 			// toolStripMenuItem_MainMenu_Window
