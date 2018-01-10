@@ -45,17 +45,14 @@ namespace YAT
 	/////// <summary>The product name postfix that describes the build.</summary>
 	////public static readonly string ProductBuildName = " Final";
 
-	/////// <summary>The product name postfix that describes the build.</summary>
-	////public static readonly string ProductBuildName = " Epsilon";
+		/// <summary>The product name postfix that describes the build.</summary>
+		public static readonly string ProductBuildName = " Epsilon";
 
 	/////// <summary>The product name postfix that describes the build.</summary>
-	////public static readonly string ProductBuildName = " Epsilon'";
+	////public static readonly string ProductBuildName = " Epsilon Preliminary";
 
 	/////// <summary>The product name postfix that describes the build.</summary>
 	////public static readonly string ProductBuildName = " Epsilon Development";
-
-		/// <summary>The product name postfix that describes the build.</summary>
-		public static readonly string ProductBuildName = " Epsilon Preliminary";
 
 		/// <summary>The product name including the build description.</summary>
 		public static readonly string ProductNameAndBuildName = ProductName + ProductBuildName;

@@ -35,9 +35,9 @@ using System.Reflection;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")] => 'Build' will indicate number of days since 2000-01-01.
 //                                      => 'Revision' will indicate number of seconds since midnight divided by two.
-[assembly: AssemblyVersion("1.99.85.*")]
-[assembly: AssemblyFileVersion("1.99.85.0")]
-[assembly: AssemblyInformationalVersion("1.99.85")]
+[assembly: AssemblyVersion("1.99.90.*")]
+[assembly: AssemblyFileVersion("1.99.90.0")]
+[assembly: AssemblyInformationalVersion("1.99.90")]
 
 //==================================================================================================
 // End of
