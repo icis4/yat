@@ -1785,6 +1785,8 @@ namespace YAT.View.Forms
 			options.CaseSensitive = !options.CaseSensitive;
 			ApplicationSettings.RoamingUserSettings.Find.Options = options;
 			ApplicationSettings.SaveRoamingUserSettings();
+
+			ValidateAndFindOnEdit();
 		}
 
 		private void toolStripButton_MainTool_Find_WholeWord_Click(object sender, EventArgs e)
@@ -1799,6 +1801,8 @@ namespace YAT.View.Forms
 			options.WholeWord = !options.WholeWord;
 			ApplicationSettings.RoamingUserSettings.Find.Options = options;
 			ApplicationSettings.SaveRoamingUserSettings();
+
+			ValidateAndFindOnEdit();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Log_Settings_Click(object sender, EventArgs e)
