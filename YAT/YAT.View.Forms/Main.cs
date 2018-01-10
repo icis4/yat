@@ -698,9 +698,9 @@ namespace YAT.View.Forms
 				if (t != null)
 					logFileExists = t.LogFileExists;
 
-				toolStripMenuItem_MainMenu_Log_AllOn.Enabled    = childIsReady && !allLogsAreOn;
-				toolStripMenuItem_MainMenu_Log_AllOff.Enabled   = childIsReady &&       logIsOn;
-				toolStripMenuItem_MainMenu_Log_AllClear.Enabled = childIsReady &&      (logIsOn || logFileExists);
+				toolStripMenuItem_MainMenu_Log_AllOn.Enabled    = (childIsReady && !allLogsAreOn);
+				toolStripMenuItem_MainMenu_Log_AllOff.Enabled   = (childIsReady &&       logIsOn);
+				toolStripMenuItem_MainMenu_Log_AllClear.Enabled = (childIsReady &&       logIsOn);
 			}
 			finally
 			{
