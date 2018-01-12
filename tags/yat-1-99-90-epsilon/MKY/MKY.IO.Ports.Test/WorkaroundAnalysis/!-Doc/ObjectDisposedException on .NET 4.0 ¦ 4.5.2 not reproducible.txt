@@ -1,0 +1,220 @@
+﻿This is MKY.IO.Ports.Test.WorkaroundAnalysis.AnalysisMain
+that analyzes/demonstrates issues with the .NET 4.0.30319.42000
+System.IO.Ports.SerialPort class and known workarounds, using
+COM3 on Win Microsoft Windows NT 6.1.7601 Service Pack 1
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+
+Successfully closed COM3
+
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+
+Successfully closed COM3
+
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+
+Successfully closed COM3
+
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+
+Successfully closed COM3
+
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+
+Successfully closed COM3
+
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+
+Successfully closed COM3
+
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+
+Successfully closed COM3
+
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+
+Successfully closed COM3
+
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+
+Successfully closed COM3
+
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+
+Successfully closed COM3
+
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+
+Successfully closed COM3
+
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+
+Successfully closed COM3
+
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+
+Successfully closed COM3
+
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+
+Successfully closed COM3
+
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+
+Successfully closed COM3
+
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+
+Successfully closed COM3
+
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+
+Successfully closed COM3
+
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+
+Successfully closed COM3
+
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+
+Successfully closed COM3
+
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate

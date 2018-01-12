@@ -1,0 +1,21 @@
+﻿
+Editor's Opinion
+----------------
+
+Are you looking for an easy to use terminal that can operate and debug serial communication ports? YAT is the right tool for the job. This versatile and reliable piece of software is a very convenient solution for every possible user.
+
+
+Editor's Description
+--------------------
+
+Although its name might sound a bit sarcastic (Yet Another Terminal), YAT is actually a very effective application that will work like charm each time you use it. This dependable tool is truly a great way to operate and debug serial communication ports.
+
+YAT is an intuitive application that will make your job a little easier by allowing you to send an unlimited number of commands, by letting you predefine commands so that you don't have to manually insert them each time, by enabling you to send files and single or muli-line commands and by offering you the possibility to make advanced settings for your text and binary sessions.
+
+YAT is a comprehensive application that is designed to support RS-232/422/423/485 as well as TCP-Client / Server / AutoSocket, UDP and USB Ser/HID.
+
+Summing up, YAT is a comprehensive, handy and effective terminal that can help you easily operate and quickly debug serial communication ports.
+
+
+---------------------------------------------
+Added 2012-01-20 / 1.99.28 Beta 4 Candidate 1

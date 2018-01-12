@@ -1,0 +1,7 @@
+﻿
+NUnit
+-----
+
+Test naming:
+ > Only use test names potentially valid for identifiers
+   (Rationale: Automatically named tests are named with the respective method name)

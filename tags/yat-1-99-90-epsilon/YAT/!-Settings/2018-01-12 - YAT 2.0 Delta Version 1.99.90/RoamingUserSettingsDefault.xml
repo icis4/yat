@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RoamingUserSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <FileType>YAT roaming user settings</FileType>
+  <SettingsVersion>1.0.0</SettingsVersion>
+  <ProductVersion>1.99.90</ProductVersion>
+  <Warning>Modifying this file may cause undefined behavior!</Warning>
+  <Saved>
+    <TimeStamp>2018-01-10T22:01:39.4787614+01:00</TimeStamp>
+    <UserName>Matthias</UserName>
+  </Saved>
+  <Socket>
+    <RecentPorts>
+      <Item>10000</Item>
+      <TimeStamp>2018-01-10T22:01:39.3413649+01:00</TimeStamp>
+    </RecentPorts>
+    <RecentPorts>
+      <Item>10001</Item>
+      <TimeStamp>2018-01-10T22:01:39.3413649+01:00</TimeStamp>
+    </RecentPorts>
+  </Socket>
+  <Find>
+    <Options>
+      <CaseSensitive>true</CaseSensitive>
+      <WholeWord>false</WholeWord>
+    </Options>
+  </Find>
+  <View>
+    <FindVisible>false</FindVisible>
+    <AutoActionVisible>false</AutoActionVisible>
+    <AutoResponseVisible>false</AutoResponseVisible>
+  </View>
+</RoamingUserSettings>

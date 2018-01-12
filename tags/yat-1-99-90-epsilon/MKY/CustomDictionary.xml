@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dictionary>
+  <Words>
+    <Recognized>
+      <Word>c</Word>
+      <Word>s</Word>
+      <Word>str</Word>
+      <Word>strA</Word>
+      <Word>strB</Word>
+      <Word>obj</Word>
+      <Word>lhs</Word>
+      <Word>rhs</Word>
+      <Word>Equatable</Word>
+      <Word>Mergeable</Word>
+      <Word>Transmissive</Word>
+      <Word>Localhost</Word>
+      <Word>Rx</Word>
+      <Word>Tx</Word>
+      <Word>Vid</Word>
+      <Word>Pid</Word>
+    </Recognized>
+    <DiscreteExceptions>
+      <Term>InCase</Term>
+      <Term>TimeStamp</Term>
+    </DiscreteExceptions>
+  </Words>
+  <Acronyms>
+    <CasingExceptions>
+      <Acronym>MKY</Acronym>
+    </CasingExceptions>
+  </Acronyms>
+</Dictionary>

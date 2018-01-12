@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <FileType>YAT Workspace Settings</FileType>
+  <SettingsVersion>1.2.1</SettingsVersion>
+  <ProductVersion>1.99.70</ProductVersion>
+  <Warning>Modifying this file may cause undefined behavior!</Warning>
+  <Saved>
+    <TimeStamp>2017-07-01T16:25:15.7252217+02:00</TimeStamp>
+    <UserName>Matthias</UserName>
+  </Saved>
+  <AutoSaved>false</AutoSaved>
+  <Workspace>
+    <AlwaysOnTop>false</AlwaysOnTop>
+    <Layout>Automatic</Layout>
+    <TerminalSettings>
+      <FilePath>.\06 - TCP AutoSocket 1 - Connected.yat</FilePath>
+      <FixedIndex>1</FixedIndex>
+      <Window>
+        <State>Normal</State>
+        <Location>
+          <X>0</X>
+          <Y>0</Y>
+        </Location>
+        <Size>
+          <Width>390</Width>
+          <Height>485</Height>
+        </Size>
+      </Window>
+    </TerminalSettings>
+    <TerminalSettings>
+      <FilePath>.\06 - TCP AutoSocket 2 - Connected.yat</FilePath>
+      <FixedIndex>2</FixedIndex>
+      <Window>
+        <State>Normal</State>
+        <Location>
+          <X>390</X>
+          <Y>0</Y>
+        </Location>
+        <Size>
+          <Width>390</Width>
+          <Height>485</Height>
+        </Size>
+      </Window>
+    </TerminalSettings>
+  </Workspace>
+</Settings>

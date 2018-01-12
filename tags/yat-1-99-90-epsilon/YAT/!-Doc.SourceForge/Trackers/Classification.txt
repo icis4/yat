@@ -1,0 +1,6 @@
+﻿
+9 = Highest priority => Immediately do a new release to fix such issues
+7 = High priority    => Must be done prior to next release
+5 = Medium priority  => Not critical, but should be done as soon as time permits
+3 = Low priority     => Do when there's time / in the mood / related work ongoing
+1 = Remind           => Not (yet) fixable due to <reason>
