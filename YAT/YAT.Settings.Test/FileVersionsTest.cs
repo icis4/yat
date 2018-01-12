@@ -111,9 +111,88 @@ namespace YAT.Settings.Test
 		// Tests
 		//==========================================================================================
 
+		#region Tests > YAT 2.0 Epsilon Version 1.99.90
+		//------------------------------------------------------------------------------------------
+		// Tests > YAT 2.0 Epsilon Version 1.99.90
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
+		public virtual void Test_V1_99_90_TerminalSettingsCase01()
+		{
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_90.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
+		public virtual void Test_V1_99_90_TerminalSettingsCase02()
+		{
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_90.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V1_99_90_TerminalSettingsCase03()
+		{
+			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_90.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V1_99_90_WorkspaceSettingsCase04()
+		{
+			ExecuteSettingsCase04(SettingsFilesProvider.FilePaths_V1_99_90.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V1_99_90_TerminalSettingsCase05()
+		{
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_90.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V1_99_90_WorkspaceSettingsCase06()
+		{
+			ExecuteSettingsCase06(SettingsFilesProvider.FilePaths_V1_99_90.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_06_Matthias]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V1_99_90_TerminalSettingsCase07()
+		{
+			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_90.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V1_99_90_WorkspaceSettingsCase08()
+		{
+			ExecuteSettingsCase08(SettingsFilesProvider.FilePaths_V1_99_90.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_08_Matthias]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V1_99_90_WorkspaceSettingsCase09()
+		{
+			ExecuteSettingsCase08(SettingsFilesProvider.FilePaths_V1_99_90.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_09_Matthias]);
+		}
+
+		#endregion
+
 		#region Tests > YAT 2.0 Delta Version 1.99.80
 		//------------------------------------------------------------------------------------------
-		// Tests > Delta Version 1.99.80
+		// Tests > YAT 2.0 Delta Version 1.99.80
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
@@ -1190,9 +1269,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Settings Cases > 06 :: Workspace :: 2 TCP AutoSocket Terminals
+		#region Settings Cases > 06 :: Workspace :: 2 TCP/IP AutoSocket Terminals
 		//------------------------------------------------------------------------------------------
-		// Settings Cases > 06 :: Workspace :: 2 TCP AutoSocket Terminals
+		// Settings Cases > 06 :: Workspace :: 2 TCP/IP AutoSocket Terminals
 		//------------------------------------------------------------------------------------------
 
 		private static void ExecuteSettingsCase06(string filePath)
@@ -1229,9 +1308,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Settings Cases > 08 :: Workspace :: 2 TCP AutoSocket Terminals with Unicode Predefined
+		#region Settings Cases > 08 :: Workspace :: 2 TCP/IP AutoSocket Terminals / Unicode Predefined
 		//------------------------------------------------------------------------------------------
-		// Settings Cases > 08 :: Workspace :: 2 TCP AutoSocket Terminals with Unicode Predefined
+		// Settings Cases > 08 :: Workspace :: 2 TCP/IP AutoSocket Terminals / Unicode Predefined
 		//------------------------------------------------------------------------------------------
 
 		private static void ExecuteSettingsCase08(string filePath)
@@ -1248,6 +1327,25 @@ namespace YAT.Settings.Test
 
 		#endregion
 
+		#region Settings Cases > 09 :: Workspace :: 6 TCP/IP AutoSocket Terminals / Encodings
+		//------------------------------------------------------------------------------------------
+		// Settings Cases > 09 :: Workspace :: 6 TCP/IP AutoSocket Terminals / Encodings
+		//------------------------------------------------------------------------------------------
+
+		private static void ExecuteSettingsCase09(string filePath)
+		{
+			var sh = SetupWorkspaceSettingsFromFilePath(filePath);
+
+			// Create workspace from settings and check whether settings are correctly set.
+			using (var w = new Model.Workspace(sh))
+			{
+				w.OpenTerminals();
+				VerifySettingsCase09(w);
+			}
+		}
+
+		#endregion
+
 		#region Settings Cases > Event Handlers
 		//------------------------------------------------------------------------------------------
 		// Settings Cases > Event Handlers
@@ -1255,7 +1353,7 @@ namespace YAT.Settings.Test
 
 		private void terminal_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
-			e.Result = System.Windows.Forms.DialogResult.OK;
+			e.Result = DialogResult.OK;
 		}
 
 		#endregion
@@ -1399,9 +1497,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Settings Case Verifications > 06 :: Workspace :: 2 TCP AutoSocket Terminals
+		#region Settings Case Verifications > 06 :: Workspace :: 2 TCP/IP AutoSocket Terminals
 		//------------------------------------------------------------------------------------------
-		// Settings Case Verifications > 06 :: Workspace :: 2 TCP AutoSocket Terminals
+		// Settings Case Verifications > 06 :: Workspace :: 2 TCP/IP AutoSocket Terminals
 		//------------------------------------------------------------------------------------------
 
 		private static void VerifySettingsCase06(Model.Workspace workspace)
@@ -1429,17 +1527,17 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Settings Case Verifications > 08 :: Workspace :: 2 TCP AutoSocket Terminals with Unicode Predefined
+		#region Settings Case Verifications > 08 :: Workspace :: 2 TCP/IP AutoSocket Terminals / Unicode Predefined
 		//------------------------------------------------------------------------------------------
-		// Settings Case Verifications > 08 :: Workspace :: 2 TCP AutoSocket Terminals with Unicode Predefined
+		// Settings Case Verifications > 08 :: Workspace :: 2 TCP/IP AutoSocket Terminals / Unicode Predefined
 		//------------------------------------------------------------------------------------------
 
 		private static void VerifySettingsCase08(Model.Workspace workspace)
 		{
 			Assert.That(workspace.TerminalCount, Is.EqualTo(2), "Workspace doesn't contain 2 terminals!");
 
-			Model.Terminal t1 = workspace.Terminals[0];
-			Model.Terminal t2 = workspace.Terminals[1];
+			var t1 = workspace.Terminals[0];
+			var t2 = workspace.Terminals[1];
 
 			Assert.That(t1.SettingsRoot.PredefinedCommand.Pages.Count, Is.EqualTo(1), "Predefined commands do not contain 1 page!");
 
@@ -1475,6 +1573,57 @@ namespace YAT.Settings.Test
 
 			// \todo:
 			// Add tests that verify the commands at terminal 2.
+		}
+
+		#endregion
+
+		#region Settings Case Verifications > 09 :: Workspace :: 6 TCP/IP AutoSocket Terminals / Encodings
+		//------------------------------------------------------------------------------------------
+		// Settings Case Verifications > 09 :: Workspace :: 6 TCP/IP AutoSocket Terminals / Encodings
+		//------------------------------------------------------------------------------------------
+
+		private static void VerifySettingsCase09(Model.Workspace workspace)
+		{
+			Assert.That(workspace.TerminalCount, Is.EqualTo(6), "Workspace doesn't contain 6 terminals!");
+
+			foreach (var t in workspace.Terminals)
+			{
+				if (t.IndicatedName.Contains("Binary Server"))
+					break; // No test for binary server yet.
+
+				Assert.That(t.SettingsRoot.PredefinedCommand.Pages.Count, Is.EqualTo(1), "Predefined commands do not contain 1 page!");
+
+				Model.Types.PredefinedCommandPage p;
+				Model.Types.Command c;
+
+				p = t.SettingsRoot.PredefinedCommand.Pages[0];
+				Assert.That(p.PageName, Is.EqualTo("Page 1"), "First predefined command pages has wrong name!");
+				Assert.That(p.Commands.Count, Is.EqualTo(8), "First predefined command page doesn't contain 8 commands!"); // 7 + 1 dummy.
+				c = p.Commands[0];
+				Assert.That(c.Description,  Is.EqualTo("abc"));
+				Assert.That(c.TextLines[0], Is.EqualTo("abc"));
+				c = p.Commands[1];
+				Assert.That(c.Description,  Is.EqualTo("äöü"));
+				Assert.That(c.TextLines[0], Is.EqualTo("äöü"));
+				c = p.Commands[2];
+				Assert.That(c.Description,  Is.EqualTo("ÄÖÜ"));
+				Assert.That(c.TextLines[0], Is.EqualTo("ÄÖÜ"));
+				c = p.Commands[3];
+				Assert.That(c.Description,  Is.EqualTo("$£€"));
+				Assert.That(c.TextLines[0], Is.EqualTo("$£€"));
+				c = p.Commands[4];
+				Assert.That(c.Description,  Is.EqualTo("čěř"));
+				Assert.That(c.TextLines[0], Is.EqualTo("čěř"));
+				c = p.Commands[5];
+				Assert.That(c.Description,  Is.EqualTo("一二州"));
+				Assert.That(c.TextLines[0], Is.EqualTo("一二州"));
+				c = p.Commands[6];
+				Assert.That(c.Description,  Is.EqualTo("︙"));
+				Assert.That(c.TextLines[0], Is.EqualTo("︙"));
+
+				// \todo:
+				// ...
+			}
 		}
 
 		#endregion
