@@ -711,6 +711,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool TryFindOnEdit(string pattern, FindOptions options, out FindDirection resultingDirection)
 		{
 			if (this.isFirstFindOnEdit)

@@ -694,10 +694,6 @@ namespace YAT.View.Forms
 				if (t != null)
 					allLogsAreOn = t.AllLogsAreOn;
 
-				bool logFileExists = false;
-				if (t != null)
-					logFileExists = t.LogFileExists;
-
 				toolStripMenuItem_MainMenu_Log_AllOn.Enabled    = (childIsReady && !allLogsAreOn);
 				toolStripMenuItem_MainMenu_Log_AllOff.Enabled   = (childIsReady &&       logIsOn);
 				toolStripMenuItem_MainMenu_Log_AllClear.Enabled = (childIsReady &&       logIsOn);
@@ -740,11 +736,6 @@ namespace YAT.View.Forms
 		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
 		private void toolStripMenuItem_MainMenu_Window_SetMainMenuItems()
-		{
-			toolStripMenuItem_MainMenu_Window_SetMainMenuItems(false);
-		}
-
-		private void toolStripMenuItem_MainMenu_Window_SetMainMenuItems(bool isDropDownOpening)
 		{
 			this.isSettingControls.Enter();
 			try
@@ -824,7 +815,7 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_MainMenu_Window_DropDownOpening(object sender, EventArgs e)
 		{
-			toolStripMenuItem_MainMenu_Window_SetMainMenuItems(true);
+			toolStripMenuItem_MainMenu_Window_SetMainMenuItems();
 			toolStripMenuItem_MainMenu_Window_SetChildMenuItems(true);
 		}
 

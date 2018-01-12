@@ -73,11 +73,12 @@ namespace MKY.Windows.Forms
 		/// </summary>
 		/// <remarks>
 		/// Attention, <see cref="ComboBox"/> objects have a limitation regarding case sensitivity:
-		/// If <see cref="ComboBox.Text"/> is e.g. set to "aa" while <see cref="ComboBox.Items"/>
-		/// contain "AA", that item is wrongly selected.
+		/// If <see cref="ComboBox.Text"/> is e.g. set to "abc" while <see cref="ComboBox.Items"/>
+		/// contain "ABC", that item is wrongly selected.
 		/// 
 		/// Issue is documented as YAT bug #347. Issue shall again check after upgrade to .NET 4+.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Come on, 'abc'...")]
 		public static void UpdateTextKeepingCursorAndSelection(ToolStripComboBox control, string text)
 		{
 			ComboBoxHelper.UpdateTextKeepingCursorAndSelection(control.ComboBox, text);
@@ -89,11 +90,12 @@ namespace MKY.Windows.Forms
 		/// </summary>
 		/// <remarks>
 		/// Attention, <see cref="ComboBox"/> objects have a limitation regarding case sensitivity:
-		/// If <see cref="ComboBox.Text"/> is e.g. set to "aa" while <see cref="ComboBox.Items"/>
-		/// contain "AA", that item is wrongly selected.
+		/// If <see cref="ComboBox.Text"/> is e.g. set to "abc" while <see cref="ComboBox.Items"/>
+		/// contain "ABC", that item is wrongly selected.
 		/// 
 		/// Issue is documented as YAT bug #347. Issue shall again check after upgrade to .NET 4+.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Come on, 'abc'...")]
 		public static void UpdateItemsKeepingCursorAndSelection(ToolStripComboBox control, object[] items)
 		{
 			ComboBoxHelper.UpdateItemsKeepingCursorAndSelection(control.ComboBox, items);

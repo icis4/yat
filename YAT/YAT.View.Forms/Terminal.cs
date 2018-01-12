@@ -3174,6 +3174,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual FindResult TryFindOnEdit(string pattern, out FindDirection resultingDirection)
 		{
 			// The active pattern semms not have to be saved each time, it is saved on LeaveFindOnEdit() anyway.
