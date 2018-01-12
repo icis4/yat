@@ -93,7 +93,7 @@ namespace MKY.IO.Usb
 				Clear();
 
 				DebugVerboseIndent("Retrieving connected USB devices...");
-				foreach (DeviceInfo di in Device.GetDevicesFromGuid(this.classGuid, retrieveStringsFromDevice))
+				foreach (var di in Device.GetDevicesFromGuid(this.classGuid, retrieveStringsFromDevice))
 				{
 					DebugVerboseIndent(di);
 					Add(di);
@@ -118,7 +118,7 @@ namespace MKY.IO.Usb
 		{
 			lock (this)
 			{
-				foreach (DeviceInfo di in this)
+				foreach (var di in this)
 				{
 					if (di.EqualsVidPid(item))
 						return (true);

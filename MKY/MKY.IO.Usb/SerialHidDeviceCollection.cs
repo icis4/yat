@@ -79,7 +79,7 @@ namespace MKY.IO.Usb
 				Clear();
 
 				DebugVerboseIndent("Retrieving connected USB Ser/HID devices...");
-				foreach (DeviceInfo di in SerialHidDevice.GetDevices(retrieveStringsFromDevice))
+				foreach (var di in SerialHidDevice.GetDevices(retrieveStringsFromDevice))
 				{
 					DebugVerboseIndent(di);
 					Add(di);
