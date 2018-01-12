@@ -143,7 +143,7 @@ namespace YAT.View.Forms
 			this.checkBox_SeparateTxRxEol.Name = "checkBox_SeparateTxRxEol";
 			this.checkBox_SeparateTxRxEol.Size = new System.Drawing.Size(217, 17);
 			this.checkBox_SeparateTxRxEol.TabIndex = 2;
-			this.checkBox_SeparateTxRxEol.Text = "&Separate EOL sequencies for Tx and Rx";
+			this.checkBox_SeparateTxRxEol.Text = "&Separate EOL sequences for Tx and Rx";
 			this.checkBox_SeparateTxRxEol.UseVisualStyleBackColor = true;
 			this.checkBox_SeparateTxRxEol.CheckedChanged += new System.EventHandler(this.checkBox_SeparateTxRxEol_CheckedChanged);
 			// 
