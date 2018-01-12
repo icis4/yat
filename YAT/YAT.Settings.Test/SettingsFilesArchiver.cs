@@ -67,20 +67,20 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[Test]
-		public virtual void ArchiveRoamingUserSettings()
-		{
-			var document = XmlDocumentEx.CreateDefaultDocument(typeof(RoamingUserSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
-			ArchiveSchema (document, StaticPaths.Path, "RoamingUserSettingsSchema");
-			ArchiveDefault(document, StaticPaths.Path, "RoamingUserSettingsDefault");
-		}
-
-		/// <summary></summary>
-		[Test]
 		public virtual void ArchiveLocalUserSettings()
 		{
 			var document = XmlDocumentEx.CreateDefaultDocument(typeof(LocalUserSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
 			ArchiveSchema (document, StaticPaths.Path, "LocalUserSettingsSchema");
 			ArchiveDefault(document, StaticPaths.Path, "LocalUserSettingsDefault");
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void ArchiveRoamingUserSettings()
+		{
+			var document = XmlDocumentEx.CreateDefaultDocument(typeof(RoamingUserSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
+			ArchiveSchema (document, StaticPaths.Path, "RoamingUserSettingsSchema");
+			ArchiveDefault(document, StaticPaths.Path, "RoamingUserSettingsDefault");
 		}
 
 		/// <summary></summary>

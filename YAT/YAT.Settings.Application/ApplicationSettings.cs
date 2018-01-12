@@ -22,12 +22,19 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 
 using MKY;
 using MKY.Diagnostics;
 using MKY.Settings;
+
+#endregion
 
 namespace YAT.Settings.Application
 {
