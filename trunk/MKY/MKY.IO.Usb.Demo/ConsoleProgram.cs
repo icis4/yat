@@ -32,12 +32,12 @@ namespace MKY.IO.Usb.Demo
 		[STAThread]
 		public static void Main()
 		{
-			DeviceCollection devices = new DeviceCollection(DeviceClass.Hid);
+			var devices = new DeviceCollection(DeviceClass.Hid);
 			devices.FillWithAvailableDevices(true); // Retrieve strings from devices in order to get serial strings.
 
 			Console.Out.WriteLine();
 			Console.Out.WriteLine("USB HID Devices");
-			foreach (DeviceInfo device in devices)
+			foreach (var device in devices)
 			{
 				Console.Out.Write(" + ");
 				Console.Out.WriteLine(device.ToString());

@@ -105,7 +105,7 @@ namespace MKY.IO.Usb
 				Clear();
 
 				DebugVerboseIndent("Retrieving connected USB HID devices...");
-				foreach (DeviceInfo di in HidDevice.GetDevices(this.usagePage, this.usageId, retrieveStringsFromDevice))
+				foreach (var di in HidDevice.GetDevices(this.usagePage, this.usageId, retrieveStringsFromDevice))
 				{
 					DebugVerboseIndent(di);
 					Add(di);

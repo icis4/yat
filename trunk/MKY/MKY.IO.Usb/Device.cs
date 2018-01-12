@@ -370,14 +370,14 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool GetDeviceInfoFromVidAndPid(int vendorId, int productId, out string path, out string manufacturer, out string product, out string serial)
 		{
-			foreach (DeviceInfo device in GetDevicesFromClass(DeviceClass.Hid))
+			foreach (var di in GetDevicesFromClass(DeviceClass.Hid))
 			{
-				if (device.EqualsVidPid(vendorId, productId))
+				if (di.EqualsVidPid(vendorId, productId))
 				{
-					path         = device.Path;
-					manufacturer = device.Manufacturer;
-					product      = device.Product;
-					serial       = device.Serial;
+					path         = di.Path;
+					manufacturer = di.Manufacturer;
+					product      = di.Product;
+					serial       = di.Serial;
 
 					return (true);
 				}
@@ -420,13 +420,13 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool GetDeviceInfoFromVidAndPidAndSerial(int vendorId, int productId, string serial, out string path, out string manufacturer, out string product)
 		{
-			foreach (DeviceInfo device in GetDevicesFromClass(DeviceClass.Hid))
+			foreach (var di in GetDevicesFromClass(DeviceClass.Hid))
 			{
-				if (device.Equals(vendorId, productId, serial))
+				if (di.Equals(vendorId, productId, serial))
 				{
-					path         = device.Path;
-					manufacturer = device.Manufacturer;
-					product      = device.Product;
+					path         = di.Path;
+					manufacturer = di.Manufacturer;
+					product      = di.Product;
 
 					return (true);
 				}
