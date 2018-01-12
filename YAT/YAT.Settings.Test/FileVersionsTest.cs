@@ -185,7 +185,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_90_WorkspaceSettingsCase09()
 		{
-			ExecuteSettingsCase08(SettingsFilesProvider.FilePaths_V1_99_90.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_09_Matthias]);
+			ExecuteSettingsCase09(SettingsFilesProvider.FilePaths_V1_99_90.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_09_Matthias]);
 		}
 
 		#endregion
