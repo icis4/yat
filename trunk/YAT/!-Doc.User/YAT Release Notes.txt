@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.0 Epsilon Version 1.99.90 :: 2018-01-xx
+YAT 2.0 Epsilon Version 1.99.90 :: 2018-01-12
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -179,7 +179,7 @@ Important changes:
 - Improved responsiveness to send requests while receiving a lot of fast data, as well as
   responsiveness to receive data while sending a lot of fast data (rel. to bugs #305, #380, #383).
 - Automatic vertical scrolling of monitor is not only suspended if one or more lines are selected
-  but also if the scroll bar is moved away from the bottom of the monitor (feature request #323).
+  but also, if the scroll bar is moved away from the bottom of the monitor (feature request #323).
 - Break [Ctrl+B] can now also be used to break sending a file (bug #305 and feature request #295).
 - Auto-reconnect of TCP/IP client terminals enabled by default.
 - Text input now supports the [Ctrl+Backspace] shortcut and multi-line text input also the [Ctrl+A]
@@ -248,8 +248,8 @@ New:
 - Option to disable formatting, useful when highest data throughput slows down the view (feat. #39).
 - Keywords with arguments \!(Delay(<ms>)), \!(LineDelay(<ms>)), \!(LineInterval(<ms>)) and
   \!(LineRepeat(<n>)) added (feature requests #13, #139).
-- Additional keyword \!(ReportID(<ID>)) that allows changing the USB Ser/HID report ID while sending
-  and thus allows to sequentially write to and read from multiple report IDs (feature request #296).
+- Additional keyword \!(ReportID(<ID>)) allows changing the USB Ser/HID report ID while sending and
+  thus, allows to sequentially write to and read from multiple report IDs (feature request #296).
 - Additional USB Ser/HID preset 'Signal 11 HID API' and changed presets 'Plain' and 'Common' to
   cover more use cases related to raw binary data (feature request #297 and bug #367).
 
