@@ -1311,11 +1311,12 @@ XTerm232 1.0.0 :: 2003-10-14
 5. Roadmap
 ====================================================================================================
 
-YAT 2.0 Final :: Expected in early 2018
+YAT 2.0 Final :: Expected soon
 ----------------------------------------------------------------------------------------------------
-YAT 2.0 Final will be released once all bugs and feature requests of priority 7 and above have been
-resolved. This state is expected to be reached by the next or next-next version of YAT. For details
-regarding the items, see bugs and feature requests at http://sourceforge.net/projects/y-a-terminal/.
+All bugs and feature requests of priority 7 and above have been resolved. YAT 2.0 Final will be
+released very soon, after waiting a few months for user feedback, and resolving potential new bug
+reports and minor change requests. For details regarding the items, see bugs and feature requests
+at http://sourceforge.net/projects/y-a-terminal/.
 
 
 YAT 4.0 with Scripting :: Expected in 2018/2019
