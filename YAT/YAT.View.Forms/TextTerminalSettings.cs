@@ -616,7 +616,6 @@ namespace YAT.View.Forms
 				checkBox_Exclude.Checked                  = enabled;
 				stringListEdit_ExcludePatterns.Enabled    = enabled;
 				stringListEdit_ExcludePatterns.StringList = this.settingsInEdit.TextExclusion.Patterns.ToArray();
-				linkLabel_Regex.Enabled                   = enabled;
 			}
 			finally
 			{
