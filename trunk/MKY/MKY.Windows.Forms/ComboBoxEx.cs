@@ -69,7 +69,7 @@ namespace MKY.Windows.Forms
 		protected ComboBoxHelper.CursorAndSelection CursorAndSelectionHelper { get; set; } = new ComboBoxHelper.CursorAndSelection();
 
 		/// <summary>
-		/// Gets or sets whether the previous cursor position is at the end of the editable portion of the combo box.
+		/// Gets whether the previous cursor position is at the end of the editable portion of the combo box.
 		/// </summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -79,7 +79,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary>
-		/// Gets or sets the previous starting index of text selected in the combo box.
+		/// Gets the previous starting index of text selected in the combo box.
 		/// </summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -89,7 +89,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary>
-		/// Gets or sets the previous number of characters selected in the editable portion of the combo box.
+		/// Gets the previous number of characters selected in the editable portion of the combo box.
 		/// </summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -99,7 +99,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary>
-		/// Gets or sets whether the previous selection spans to the end of the editable portion of the combo box.
+		/// Gets whether the previous selection spans to the end of the editable portion of the combo box.
 		/// </summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

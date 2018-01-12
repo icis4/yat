@@ -40,6 +40,7 @@ namespace MKY.IO
 		/// <summary>
 		/// Determines whether the given path can be written to.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public static bool IsWritable(string path)
 		{
 			// \remind (2018-01-05 / MKY) to be changed as soon as upgraded to .NET 4+
