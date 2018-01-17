@@ -406,7 +406,7 @@ namespace YAT.Domain
 			{
 				case Parser.Keyword.Eol:
 				{
-					ForwardDataToRawTerminal(this.txLineState.Eol.Sequence);
+					ForwardDataToRawTerminal(this.txLineState.Eol.Sequence); // In-line.
 					break;
 				}
 
@@ -418,11 +418,21 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// \remind (2018-01-17 / MKY / FR#333) there is a limitation in this implementation:
+		/// This method will be called sligtly after the line content has been forwarded to the raw
+		/// terminal, thus may result in a short delay between content and EOL. With 9600 baud, no
+		/// delay is noticable. With 115200 baud, delay is still not noticable most of the times,
+		/// but sometimes it's 30 ms! For most use cases this doesn't matter. But still, it is not
+		/// ideal, as behavior doesn't reproduce.
+		/// On the other hand, there are also drawbacks in refactoring the current implementation.
+		/// Already tried once in 2015 (while working between TextTerminal.cs SVN revisions 680 and
+		/// 695), but reverted again.
+		/// </remarks>
 		protected override void ProcessLineEnd(bool sendEol)
 		{
 			if (sendEol)
-				ForwardDataToRawTerminal(this.txLineState.Eol.Sequence);
+				ForwardDataToRawTerminal(this.txLineState.Eol.Sequence); // End-of-line.
 		}
 
 		/// <summary></summary>
