@@ -87,6 +87,10 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 YAT 2.0 Final :: 2018-0x-xx
 ----------------------------------------------------------------------------------------------------
 
+Important changes:
+- Option to enable/disable <...> and \... escape sequences has been separated for 'Send Text' and
+  'Send File'. By default, escapes are enabled for 'Send Text' and disabled for 'Send File'.
+
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
 - General imitations of .NET Windows.Forms:

@@ -943,7 +943,7 @@ namespace YAT.Domain
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public virtual bool TryParse(string s, out byte[] result, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
+		public virtual bool TryParseText(string s, out byte[] result, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
 			using (var p = new Parser.Parser(TerminalSettings.IO.Endianness, TerminalSettings.Send.ToParseMode()))
 				return (p.TryParse(s, out result, defaultRadix));
@@ -959,63 +959,73 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual void Send(byte[] data)
 		{
-			// AssertNotDisposed() is called by DoSend() below.
+			// AssertNotDisposed() is called by DoSendData().
 
-			DoSend(new RawDataSendItem(data));
+			DoSendData(new RawDataSendItem(data));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public virtual void Send(string data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
+		public virtual void SendText(string data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by DoSend() below.
+			// AssertNotDisposed() is called by DoSendData().
 
-			DoSend(new ParsableDataSendItem(data, defaultRadix));
+			var parseMode = TerminalSettings.Send.ToParseMode();
+
+			DoSendData(new TextDataSendItem(data, defaultRadix, parseMode, false));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public virtual void SendLine(string dataLine, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
+		public virtual void SendTextLine(string dataLine, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by DoSend() below.
+			// AssertNotDisposed() is called by DoSendData().
 
-			DoSend(new ParsableDataSendItem(dataLine, defaultRadix, true));
+			var parseMode = TerminalSettings.Send.ToParseMode();
+
+			DoSendData(new TextDataSendItem(dataLine, defaultRadix, parseMode, true));
 		}
 
 		/// <remarks>
 		/// Required to allow sending multi-line commands in a single operation. Otherwise, using
-		/// <see cref="SendLine"/>, sending gets mixed-up because of the following sequence:
+		/// <see cref="SendTextLine"/>, sending gets mixed-up because of the following sequence:
 		///  1. First line gets sent/enqueued.
 		///  2. Second line gets sent/enqueued.
 		///  3. Response to first line is received and displayed
 		///     and so on, mix-up among sent and received lines...
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public virtual void SendLines(string[] dataLines, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
+		public virtual void SendTextLines(string[] dataLines, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by DoSend() below.
+			// AssertNotDisposed() is called by DoSendData().
 
-			var l = new List<ParsableDataSendItem>(dataLines.Length);
+			var parseMode = TerminalSettings.Send.ToParseMode();
+
+			var l = new List<TextDataSendItem>(dataLines.Length); // Preset the required capacity to improve memory management.
 			foreach (string dataLine in dataLines)
-				l.Add(new ParsableDataSendItem(dataLine, defaultRadix, true));
+				l.Add(new TextDataSendItem(dataLine, defaultRadix, parseMode, true));
 
-			DoSend(l.ToArray());
+			DoSendData(l.ToArray());
 		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public abstract void SendFileLine(string dataLine, Radix defaultRadix = Parser.Parser.DefaultRadixDefault);
 
 		/// <remarks>
 		/// This method shall not be overridden. All send items shall be enqueued using this
 		/// method, but inheriting terminals can override <see cref="ProcessSendDataItem"/> instead.
 		/// </remarks>
-		protected void DoSend(DataSendItem item)
+		protected void DoSendData(DataSendItem item)
 		{
-			DoSend(new DataSendItem[] { item });
+			DoSendData(new DataSendItem[] { item });
 		}
 
 		/// <remarks>
 		/// This method shall not be overridden. All send items shall be enqueued using this
 		/// method, but inheriting terminals can override <see cref="ProcessSendDataItem"/> instead.
 		/// </remarks>
-		protected void DoSend(IEnumerable<DataSendItem> items)
+		protected void DoSendData(IEnumerable<DataSendItem> items)
 		{
 			AssertNotDisposed();
 
@@ -1046,7 +1056,7 @@ namespace YAT.Domain
 		/// events are invoked, instead, outgoing data is buffered.
 		/// </summary>
 		/// <remarks>
-		/// Will be signaled by <see cref="DoSend(IEnumerable{DataSendItem})"/> above.
+		/// Will be signaled by <see cref="DoSendData(IEnumerable{DataSendItem})"/> above.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void SendDataThread()
@@ -1159,33 +1169,33 @@ namespace YAT.Domain
 			var rsi = (item as RawDataSendItem);
 			if (rsi != null)
 			{
-				ProcessRawSendItem(rsi);
+				ProcessRawDataSendItem(rsi);
 			}
 			else
 			{
-				var psi = (item as ParsableDataSendItem);
+				var psi = (item as TextDataSendItem);
 				if (psi != null)
-					ProcessParsableSendItem(psi);
+					ProcessTextDataSendItem(psi);
 				else
 					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + item.GetType() + "' is a send item type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessRawSendItem(RawDataSendItem item)
+		protected virtual void ProcessRawDataSendItem(RawDataSendItem item)
 		{
 			ForwardDataToRawTerminal(item.Data); // Nothing for further processing, simply forward.
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Parsable", Justification = "'Parsable' is a correct English term.")]
-		protected virtual void ProcessParsableSendItem(ParsableDataSendItem item)
+		protected virtual void ProcessTextDataSendItem(TextDataSendItem item)
 		{
 			bool hasSucceeded;
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
 
-			using (var p = new Parser.Parser(TerminalSettings.IO.Endianness, TerminalSettings.Send.ToParseMode()))
+			using (var p = new Parser.Parser(TerminalSettings.IO.Endianness, item.ParseMode))
 				hasSucceeded = p.TryParse(item.Data, out parseResult, out textSuccessfullyParsed, item.DefaultRadix);
 
 			if (hasSucceeded)
@@ -1587,9 +1597,9 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void SendFile(string filePath, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by DoSend() below.
+			// AssertNotDisposed() is called by DoSendFile().
 
-			DoSend(filePath, defaultRadix);
+			DoSendFile(filePath, defaultRadix);
 		}
 
 		/// <remarks>
@@ -1597,9 +1607,9 @@ namespace YAT.Domain
 		/// method, but inheriting terminals can override <see cref="ProcessSendFileItem"/> instead.
 		/// </remarks>
 		/// <remarks>
-		/// Separate "Do...()" method for symmetricity with <see cref="DoSend(IEnumerable{DataSendItem})"/>.
+		/// Separate "Do...()" method for symmetricity with <see cref="DoSendData(IEnumerable{DataSendItem})"/>.
 		/// </remarks>
-		protected void DoSend(string filePath, Radix defaultRadix)
+		protected void DoSendFile(string filePath, Radix defaultRadix)
 		{
 			AssertNotDisposed();
 
@@ -1614,11 +1624,11 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Will be signaled by <see cref="DoSend(string, Radix)"/> above.
+		/// Will be signaled by <see cref="DoSendFile(string, Radix)"/> above.
 		/// </remarks>
 		/// <remarks>
 		/// Separate thread (and not integrated into <see cref="SendDataThread"/>) because that
-		/// thread queues <see cref="ParsableDataSendItem"/> objects, thus some kind of a two-level
+		/// thread queues <see cref="TextDataSendItem"/> objects, thus some kind of a two-level
 		/// infrastructure is required (SendFile => SendData). The considered \!(SendFile("..."))
 		/// keyword doesn't help either since the file may again contain keywords, thus again some
 		/// kind of a two-level infrastructure is required.
@@ -1727,7 +1737,7 @@ namespace YAT.Domain
 					string line;
 					while ((line = sr.ReadLine()) != null)
 					{
-						SendLine(line, item.DefaultRadix);
+						SendTextLine(line, item.DefaultRadix);
 
 						if (BreakSendFile)
 						{

@@ -45,6 +45,12 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const bool SendImmediatelyDefault = false;
 
+		/// <remarks>
+		/// Applies to [Send Text]. Setting for [Send File] is defined by
+		/// <see cref="SendTextFileSettings.EnableEscapesDefault"/>.
+		/// </remarks>
+		public const bool EnableEscapesDefault = true;
+
 		/// <summary></summary>
 		public const int DefaultDelayDefault = 100;
 
@@ -56,9 +62,6 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		public const int DefaultLineRepeatDefault = LineRepeatInfinite;
-
-		/// <summary></summary>
-		public const bool DisableEscapesDefault = false;
 
 		/// <summary></summary>
 		public const bool SignalXOnBeforeEachTransmissionDefault = false;
@@ -76,11 +79,11 @@ namespace YAT.Domain.Settings
 		private bool keepSendText;
 		private bool copyPredefined;
 		private bool sendImmediately;
+		private bool enableEscapes;
 		private int  defaultDelay;
 		private int  defaultLineDelay;
 		private int  defaultLineInterval;
 		private int  defaultLineRepeat;
-		private bool disableEscapes;
 
 		// Serial port specific send settings. Located here (and not in 'SerialPortSettings) as they are endemic to YAT.
 		private bool signalXOnBeforeEachTransmission;
@@ -111,11 +114,11 @@ namespace YAT.Domain.Settings
 			KeepSendText            = rhs.KeepSendText;
 			CopyPredefined          = rhs.CopyPredefined;
 			SendImmediately         = rhs.SendImmediately;
+			EnableEscapes           = rhs.enableEscapes;
 			DefaultDelay            = rhs.DefaultDelay;
 			DefaultLineDelay        = rhs.DefaultLineDelay;
 			DefaultLineInterval     = rhs.DefaultLineInterval;
 			DefaultLineRepeat       = rhs.DefaultLineRepeat;
-			DisableEscapes          = rhs.DisableEscapes;
 
 			SignalXOnBeforeEachTransmission = rhs.SignalXOnBeforeEachTransmission;
 			SignalXOnPeriodically           = rhs.SignalXOnPeriodically;
@@ -134,11 +137,11 @@ namespace YAT.Domain.Settings
 			KeepSendText            = KeepSendTextDefault;
 			CopyPredefined          = CopyPredefinedDefault;
 			SendImmediately         = SendImmediatelyDefault;
+			EnableEscapes           = EnableEscapesDefault;
 			DefaultDelay            = DefaultDelayDefault;
 			DefaultLineDelay        = DefaultLineDelayDefault;
 			DefaultLineInterval     = DefaultLineIntervalDefault;
 			DefaultLineRepeat       = DefaultLineRepeatDefault;
-			DisableEscapes          = DisableEscapesDefault;
 
 			SignalXOnBeforeEachTransmission = SignalXOnBeforeEachTransmissionDefault;
 			SignalXOnPeriodically           = SignalXOnPeriodicallyDefault;
@@ -209,6 +212,24 @@ namespace YAT.Domain.Settings
 			}
 		}
 
+		/// <remarks>
+		/// Applies to [Send Text]. Setting for [Send File] is defined by
+		/// <see cref="SendTextFileSettings.EnableEscapes"/>.
+		/// </remarks>
+		[XmlElement("EnableEscapes")]
+		public virtual bool EnableEscapes
+		{
+			get { return (this.enableEscapes); }
+			set
+			{
+				if (this.enableEscapes != value)
+				{
+					this.enableEscapes = value;
+					SetMyChanged();
+				}
+			}
+		}
+
 		/// <summary></summary>
 		[XmlElement("DefaultDelay")]
 		public virtual int DefaultDelay
@@ -270,21 +291,6 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("DisableEscapes")]
-		public virtual bool DisableEscapes
-		{
-			get { return (this.disableEscapes); }
-			set
-			{
-				if (this.disableEscapes != value)
-				{
-					this.disableEscapes = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
 		[XmlElement("SignalXOnBeforeEachTransmission")]
 		public virtual bool SignalXOnBeforeEachTransmission
 		{
@@ -324,10 +330,10 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public virtual Parser.Modes ToParseMode()
 		{
-			if (DisableEscapes)
-				return (Parser.Modes.NoEscapes);
-			else
+			if (EnableEscapes)
 				return (Parser.Modes.AllEscapes);
+			else
+				return (Parser.Modes.NoEscapes);
 		}
 
 		#endregion
@@ -350,15 +356,15 @@ namespace YAT.Domain.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ UseExplicitDefaultRadix        .GetHashCode();
-				hashCode = (hashCode * 397) ^ KeepSendText                   .GetHashCode();
-				hashCode = (hashCode * 397) ^ CopyPredefined                 .GetHashCode();
-				hashCode = (hashCode * 397) ^ SendImmediately                .GetHashCode();
+				hashCode = (hashCode * 397) ^ UseExplicitDefaultRadix.GetHashCode();
+				hashCode = (hashCode * 397) ^ KeepSendText           .GetHashCode();
+				hashCode = (hashCode * 397) ^ CopyPredefined         .GetHashCode();
+				hashCode = (hashCode * 397) ^ SendImmediately        .GetHashCode();
+				hashCode = (hashCode * 397) ^ EnableEscapes          .GetHashCode();
 				hashCode = (hashCode * 397) ^ DefaultDelay;
 				hashCode = (hashCode * 397) ^ DefaultLineDelay;
 				hashCode = (hashCode * 397) ^ DefaultLineInterval;
 				hashCode = (hashCode * 397) ^ DefaultLineRepeat;
-				hashCode = (hashCode * 397) ^ DisableEscapes                 .GetHashCode();
 
 				hashCode = (hashCode * 397) ^ SignalXOnBeforeEachTransmission.GetHashCode();
 				hashCode = (hashCode * 397) ^ SignalXOnPeriodically          .GetHashCode();
@@ -396,11 +402,11 @@ namespace YAT.Domain.Settings
 				KeepSendText           .Equals(other.KeepSendText)            &&
 				CopyPredefined         .Equals(other.CopyPredefined)          &&
 				SendImmediately        .Equals(other.SendImmediately)         &&
+				EnableEscapes          .Equals(other.EnableEscapes)           &&
 				DefaultDelay           .Equals(other.DefaultDelay)            &&
 				DefaultLineDelay       .Equals(other.DefaultLineDelay)        &&
 				DefaultLineInterval    .Equals(other.DefaultLineInterval)     &&
 				DefaultLineRepeat      .Equals(other.DefaultLineRepeat)       &&
-				DisableEscapes         .Equals(other.DisableEscapes)          &&
 
 				SignalXOnBeforeEachTransmission.Equals(other.SignalXOnBeforeEachTransmission) &&
 				SignalXOnPeriodically          .Equals(other.SignalXOnPeriodically)

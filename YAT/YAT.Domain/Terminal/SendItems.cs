@@ -138,7 +138,7 @@ namespace YAT.Domain
 	/// Defines a text data item that shall be sent by the terminal.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Parsable", Justification = "'Parsable' is a correct English term.")]
-	public class ParsableDataSendItem : DataSendItem
+	public class TextDataSendItem : DataSendItem
 	{
 		/// <summary></summary>
 		public string Data { get; }
@@ -147,14 +147,17 @@ namespace YAT.Domain
 		public Radix DefaultRadix { get; }
 
 		/// <summary></summary>
+		public Parser.Modes ParseMode { get; }
+
+		/// <summary></summary>
 		public bool IsLine { get; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public ParsableDataSendItem(string data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault, bool isLine = false)
+		public TextDataSendItem(string data, Radix defaultRadix, Parser.Modes parseMode, bool isLine)
 		{
 			Data         = data;
 			DefaultRadix = defaultRadix;
+			ParseMode    = parseMode;
 			IsLine       = isLine;
 		}
 
@@ -180,6 +183,7 @@ namespace YAT.Domain
 		{
 			return (indent + "> Data         : " + DataAsPrintableString + Environment.NewLine +
 			        indent + "> DefaultRadix : " + DefaultRadix          + Environment.NewLine +
+			        indent + "> ParseMode    : " + ParseMode             + Environment.NewLine +
 			        indent + "> IsLine       : " + IsLine                + Environment.NewLine);
 		}
 

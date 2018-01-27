@@ -247,7 +247,7 @@ namespace YAT.View.Controls
 		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual Domain.Parser.Modes ParseMode
+		public virtual Domain.Parser.Modes ParseModeForText
 		{
 			set
 			{

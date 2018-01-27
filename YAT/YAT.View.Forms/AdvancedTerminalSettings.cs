@@ -826,6 +826,27 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak = checkBox_NoSendOnInputBreak.Checked;
 		}
 
+		private void checkBox_EnableEscapesForText_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Send.EnableEscapes = checkBox_EnableEscapesForText.Checked;
+		}
+
+		/// <remarks>
+		/// Even though this [Send File] setting only applies to text terminals, it is located here
+		/// in <see cref="AdvancedTerminalSettings"/> (next to the setting for [Send Text]) instead
+		/// in <see cref="TextTerminalSettings"/> for easier finding it.
+		/// </remarks>
+		private void checkBox_EnableEscapesForFile_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.TextTerminal.SendFile.EnableEscapes = checkBox_EnableEscapesForFile.Checked;
+		}
+
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_DefaultDelay_Validating(object sender, CancelEventArgs e)
 		{
@@ -947,14 +968,6 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void checkBox_DisableEscapes_CheckedChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			this.settingsInEdit.Terminal.Send.DisableEscapes = checkBox_DisableEscapes.Checked;
-		}
-
 		private void textBox_UserName_TextChanged(object sender, EventArgs e)
 		{
 			// No need to validate the freely definable name.
@@ -1014,6 +1027,7 @@ namespace YAT.View.Forms
 
 		private void SetControls()
 		{
+			bool isTextTerminal = (this.settingsInEdit.Terminal.TerminalType == Domain.TerminalType.Text);
 			bool isSerialPort   = ((Domain.IOTypeEx)this.settingsInEdit.Terminal.IO.IOType).IsSerialPort;
 			bool isUsbSerialHid = ((Domain.IOTypeEx)this.settingsInEdit.Terminal.IO.IOType).IsUsbSerialHid;
 
@@ -1119,13 +1133,15 @@ namespace YAT.View.Forms
 				checkBox_NoSendOnOutputBreak.Checked = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 				checkBox_NoSendOnInputBreak.Checked  = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
-				groupBox_Send_Keywords.Enabled   = !this.settingsInEdit.Terminal.Send.DisableEscapes;
+				checkBox_EnableEscapesForText.Checked = this.settingsInEdit.Terminal.Send.EnableEscapes;
+				checkBox_EnableEscapesForFile.Enabled = isTextTerminal;
+				checkBox_EnableEscapesForFile.Checked = this.settingsInEdit.Terminal.TextTerminal.SendFile.EnableEscapes;
+
+				groupBox_Send_Keywords.Enabled   = (this.settingsInEdit.Terminal.Send.EnableEscapes || this.settingsInEdit.Terminal.TextTerminal.SendFile.EnableEscapes);
 				textBox_DefaultDelay.Text        =  this.settingsInEdit.Terminal.Send.DefaultDelay.ToString(CultureInfo.CurrentCulture);
 				textBox_DefaultLineDelay.Text    =  this.settingsInEdit.Terminal.Send.DefaultLineDelay.ToString(CultureInfo.CurrentCulture);
 				textBox_DefaultLineInterval.Text =  this.settingsInEdit.Terminal.Send.DefaultLineInterval.ToString(CultureInfo.CurrentCulture);
 				textBox_DefaultLineRepeat.Text   =  this.settingsInEdit.Terminal.Send.DefaultLineRepeat.ToString(CultureInfo.CurrentCulture);
-
-				checkBox_DisableEscapes.Checked = this.settingsInEdit.Terminal.Send.DisableEscapes;
 
 				// User:
 				textBox_UserName.Text = this.settingsInEdit.UserName;
@@ -1203,12 +1219,13 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak    = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnOutputBreakDefault;
 				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak     = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnInputBreakDefault;
 
+				this.settingsInEdit.Terminal.Send.EnableEscapes                   = Domain.Settings.SendSettings.EnableEscapesDefault;
+				this.settingsInEdit.Terminal.TextTerminal.SendFile.EnableEscapes  = Domain.Settings.SendTextFileSettings.EnableEscapesDefault;
+
 				this.settingsInEdit.Terminal.Send.DefaultDelay                    = Domain.Settings.SendSettings.DefaultDelayDefault;
 				this.settingsInEdit.Terminal.Send.DefaultLineDelay                = Domain.Settings.SendSettings.DefaultLineDelayDefault;
 				this.settingsInEdit.Terminal.Send.DefaultLineInterval             = Domain.Settings.SendSettings.DefaultLineIntervalDefault;
 				this.settingsInEdit.Terminal.Send.DefaultLineRepeat               = Domain.Settings.SendSettings.DefaultLineRepeatDefault;
-
-				this.settingsInEdit.Terminal.Send.DisableEscapes                  = Domain.Settings.SendSettings.DisableEscapesDefault;
 
 				// User:
 				this.settingsInEdit.UserName = Settings.Terminal.ExplicitSettings.UserNameDefault;

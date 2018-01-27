@@ -141,7 +141,7 @@ namespace YAT.View.Forms
 			this.checkBox_SeparateTxRxEol.AutoSize = true;
 			this.checkBox_SeparateTxRxEol.Location = new System.Drawing.Point(11, 45);
 			this.checkBox_SeparateTxRxEol.Name = "checkBox_SeparateTxRxEol";
-			this.checkBox_SeparateTxRxEol.Size = new System.Drawing.Size(217, 17);
+			this.checkBox_SeparateTxRxEol.Size = new System.Drawing.Size(215, 17);
 			this.checkBox_SeparateTxRxEol.TabIndex = 2;
 			this.checkBox_SeparateTxRxEol.Text = "&Separate EOL sequences for Tx and Rx";
 			this.checkBox_SeparateTxRxEol.UseVisualStyleBackColor = true;
@@ -358,7 +358,7 @@ namespace YAT.View.Forms
 			// label_WaitForResponse
 			// 
 			this.label_WaitForResponse.AutoSize = true;
-			this.label_WaitForResponse.Location = new System.Drawing.Point(27, 89);
+			this.label_WaitForResponse.Location = new System.Drawing.Point(28, 89);
 			this.label_WaitForResponse.Name = "label_WaitForResponse";
 			this.label_WaitForResponse.Size = new System.Drawing.Size(84, 13);
 			this.label_WaitForResponse.TabIndex = 7;
@@ -368,7 +368,7 @@ namespace YAT.View.Forms
 			// label_WaitForResponseUnit
 			// 
 			this.label_WaitForResponseUnit.AutoSize = true;
-			this.label_WaitForResponseUnit.Location = new System.Drawing.Point(162, 89);
+			this.label_WaitForResponseUnit.Location = new System.Drawing.Point(163, 89);
 			this.label_WaitForResponseUnit.Name = "label_WaitForResponseUnit";
 			this.label_WaitForResponseUnit.Size = new System.Drawing.Size(20, 13);
 			this.label_WaitForResponseUnit.TabIndex = 9;
@@ -387,7 +387,7 @@ namespace YAT.View.Forms
 			// 
 			// textBox_WaitForResponse
 			// 
-			this.textBox_WaitForResponse.Location = new System.Drawing.Point(111, 86);
+			this.textBox_WaitForResponse.Location = new System.Drawing.Point(112, 86);
 			this.textBox_WaitForResponse.Name = "textBox_WaitForResponse";
 			this.textBox_WaitForResponse.Size = new System.Drawing.Size(51, 20);
 			this.textBox_WaitForResponse.TabIndex = 8;
