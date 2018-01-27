@@ -90,6 +90,7 @@ YAT 2.0 Final :: 2018-0x-xx
 Important changes:
 - Option to enable/disable <...> and \... escape sequences has been separated for 'Send Text' and
   'Send File'. By default, escapes are enabled for 'Send Text' and disabled for 'Send File'.
+- Binary distributions now contain DejaVu fonts for manual installation (feature request #331).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
