@@ -169,7 +169,7 @@ namespace YAT.Domain.Test.TextTerminal
 						int expectedTotalLineCountB = 0;
 
 						text = ""; // A#1
-						terminalA.SendLine(text);
+						terminalA.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountA += (textByteCount + eolByteCountAB);
@@ -177,7 +177,7 @@ namespace YAT.Domain.Test.TextTerminal
 						WaitAndVerify(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
 						text = "AA"; // A#2
-						terminalA.SendLine(text);
+						terminalA.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountA += (textByteCount + eolByteCountAB);
@@ -185,7 +185,7 @@ namespace YAT.Domain.Test.TextTerminal
 						WaitAndVerify(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
 						text = "ABABAB"; // A#3
-						terminalA.SendLine(text);
+						terminalA.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountA += (textByteCount + eolByteCountAB);
@@ -193,7 +193,7 @@ namespace YAT.Domain.Test.TextTerminal
 						WaitAndVerify(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
 						text = "<CR>"; // B#1
-						terminalB.SendLine(text);
+						terminalB.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountB += (textByteCount + eolByteCountBA);
@@ -201,7 +201,7 @@ namespace YAT.Domain.Test.TextTerminal
 						WaitAndVerify(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
 						text = "<CR><CR>"; // B#2
-						terminalB.SendLine(text);
+						terminalB.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountB += (textByteCount + eolByteCountBA);
@@ -209,7 +209,7 @@ namespace YAT.Domain.Test.TextTerminal
 						WaitAndVerify(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
 						text = "<CR><CR><ESC>"; // B#3
-						terminalB.SendLine(text);
+						terminalB.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountB += (textByteCount + eolByteCountBA);
@@ -217,7 +217,7 @@ namespace YAT.Domain.Test.TextTerminal
 						WaitAndVerify(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
 						text = "<ESC>"; // A#4
-						terminalA.SendLine(text);
+						terminalA.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountA += (textByteCount + eolByteCountAB);
@@ -225,7 +225,7 @@ namespace YAT.Domain.Test.TextTerminal
 						WaitAndVerify(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
 						text = "BBBB"; // B#4
-						terminalB.SendLine(text);
+						terminalB.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountB += (textByteCount + eolByteCountBA);
@@ -274,27 +274,27 @@ namespace YAT.Domain.Test.TextTerminal
 					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
-					terminalA.SendLine("A"); // Line #1 A >> B, must not result in line break.
+					terminalA.SendTextLine("A"); // Line #1 A >> B, must not result in line break.
 					Thread.Sleep(WaitForOperation);
 					Verify(terminalA, terminalB, 1);
 
-					terminalB.SendLine("BB"); // Line #2 B >> A, due to direction line break.
+					terminalB.SendTextLine("BB"); // Line #2 B >> A, due to direction line break.
 					Thread.Sleep(WaitForOperation);
 					Verify(terminalB, terminalA, 2);
 
-					terminalB.SendLine("BB"); // Still line #2 B >> A, must not result in additional line break.
+					terminalB.SendTextLine("BB"); // Still line #2 B >> A, must not result in additional line break.
 					Thread.Sleep(WaitForOperation);
 					Verify(terminalB, terminalA, 2);
 
-					terminalB.SendLine("BB"); // Still line #2 B >> A, must not result in additional line break.
+					terminalB.SendTextLine("BB"); // Still line #2 B >> A, must not result in additional line break.
 					Thread.Sleep(WaitForOperation);
 					Verify(terminalB, terminalA, 2);
 
-					terminalA.SendLine("AAA"); // Line #3 A >> B, due to direction line break.
+					terminalA.SendTextLine("AAA"); // Line #3 A >> B, due to direction line break.
 					Thread.Sleep(WaitForOperation);
 					Verify(terminalA, terminalB, 3);
 
-					terminalA.SendLine("AAA"); // Still line #3 A >> B, must not result in additional line break.
+					terminalA.SendTextLine("AAA"); // Still line #3 A >> B, must not result in additional line break.
 					Thread.Sleep(WaitForOperation);
 					Verify(terminalA, terminalB, 3);
 
