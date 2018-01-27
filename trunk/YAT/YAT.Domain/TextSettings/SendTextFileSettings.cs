@@ -38,7 +38,17 @@ namespace YAT.Domain.Settings
 	[Serializable]
 	public class SendTextFileSettings : MKY.Settings.SettingsItem, IEquatable<SendTextFileSettings>
 	{
+		/// <summary></summary>
+		public const bool SkipEmptyLinesDefault = false;
+
+		/// <remarks>
+		/// Applies to [Send File]. Setting for [Send Text] is defined by
+		/// <see cref="SendSettings.EnableEscapesDefault"/>.
+		/// </remarks>
+		public const bool EnableEscapesDefault = false;
+
 		private bool skipEmptyLines;
+		private bool enableEscapes;
 
 		/// <summary></summary>
 		public SendTextFileSettings()
@@ -62,6 +72,7 @@ namespace YAT.Domain.Settings
 			: base(rhs)
 		{
 			SkipEmptyLines = rhs.SkipEmptyLines;
+			EnableEscapes  = rhs.enableEscapes;
 
 			ClearChanged();
 		}
@@ -73,7 +84,8 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			SkipEmptyLines = false;
+			SkipEmptyLines = SkipEmptyLinesDefault;
+			EnableEscapes  = EnableEscapesDefault;
 		}
 
 		#region Properties
@@ -94,6 +106,41 @@ namespace YAT.Domain.Settings
 					SetMyChanged();
 				}
 			}
+		}
+
+		/// <remarks>
+		/// Applies to [Send File]. Setting for [Send Text] is defined by
+		/// <see cref="SendSettings.EnableEscapes"/>.
+		/// </remarks>
+		/// <summary></summary>
+		[XmlElement("EnableEscapes")]
+		public virtual bool EnableEscapes
+		{
+			get { return (this.enableEscapes); }
+			set
+			{
+				if (this.enableEscapes != value)
+				{
+					this.enableEscapes = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary></summary>
+		public virtual Parser.Modes ToParseMode()
+		{
+			if (EnableEscapes)
+				return (Parser.Modes.AllEscapes);
+			else
+				return (Parser.Modes.NoEscapes);
 		}
 
 		#endregion
@@ -117,6 +164,7 @@ namespace YAT.Domain.Settings
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
 				hashCode = (hashCode * 397) ^ SkipEmptyLines.GetHashCode();
+				hashCode = (hashCode * 397) ^ EnableEscapes .GetHashCode();
 
 				return (hashCode);
 			}
@@ -147,7 +195,8 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				SkipEmptyLines.Equals(other.SkipEmptyLines)
+				SkipEmptyLines.Equals(other.SkipEmptyLines) &&
+				EnableEscapes .Equals(other.EnableEscapes)
 			);
 		}
 

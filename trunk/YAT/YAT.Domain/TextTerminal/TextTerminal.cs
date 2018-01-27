@@ -349,7 +349,7 @@ namespace YAT.Domain
 		/// Tries to parse <paramref name="s"/>, taking the current settings into account.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public override bool TryParse(string s, out byte[] result, Radix defaultRadix = Radix.String)
+		public override bool TryParseText(string s, out byte[] result, Radix defaultRadix = Radix.String)
 		{
 			using (var p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, TerminalSettings.Send.ToParseMode()))
 				return (p.TryParse(s, out result, defaultRadix));
@@ -362,12 +362,23 @@ namespace YAT.Domain
 		// Methods > Send Data
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public override void SendFileLine(string dataLine, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
+		{
+			// AssertNotDisposed() is called by DoSendData().
+
+			var parseMode = TextTerminalSettings.SendFile.ToParseMode();
+
+			DoSendData(new TextDataSendItem(dataLine, defaultRadix, parseMode, true));
+		}
+
 		/// <remarks>
 		/// \remind (2017-09-02 / MKY) there is a limitation in this implementation:
 		/// This method will be called per item, not per complete line. But, regexes below are
 		/// likely using beginning or end of line anchors ("^" and "$"). Well, a limitation.
 		/// </remarks>
-		protected override void ProcessParsableSendItem(ParsableDataSendItem item)
+		protected override void ProcessTextDataSendItem(TextDataSendItem item)
 		{
 			string textToParse = item.Data;
 
@@ -390,7 +401,7 @@ namespace YAT.Domain
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
 
-			using (var p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, TerminalSettings.Send.ToParseMode()))
+			using (var p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, item.ParseMode))
 				hasSucceeded = p.TryParse(textToParse, out parseResult, out textSuccessfullyParsed, item.DefaultRadix);
 
 			if (hasSucceeded)
@@ -482,7 +493,7 @@ namespace YAT.Domain
 						if (string.IsNullOrEmpty(line) && TextTerminalSettings.SendFile.SkipEmptyLines)
 							continue;
 
-						SendLine(line);
+						SendFileLine(line);
 
 						if (BreakSendFile)
 						{
@@ -502,7 +513,7 @@ namespace YAT.Domain
 						if (string.IsNullOrEmpty(line) && TextTerminalSettings.SendFile.SkipEmptyLines)
 							continue;
 
-						SendLine(line);
+						SendFileLine(line);
 
 						if (BreakSendFile)
 						{
@@ -523,7 +534,7 @@ namespace YAT.Domain
 							if (string.IsNullOrEmpty(line) && TextTerminalSettings.SendFile.SkipEmptyLines)
 								continue;
 
-							SendLine(line, item.DefaultRadix);
+							SendFileLine(line, item.DefaultRadix);
 
 							if (BreakSendFile)
 							{

@@ -502,6 +502,17 @@ namespace YAT.Domain
 		// Methods > Send Data
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public override void SendFileLine(string dataLine, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
+		{
+			// AssertNotDisposed() is called by DoSendData().
+
+			var parseMode = Parser.Modes.NoEscapes;
+
+			DoSendData(new TextDataSendItem(dataLine, defaultRadix, parseMode, true));
+		}
+
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
 		[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1022:PositiveSignsMustBeSpacedCorrectly", Justification = "What's wrong with closing parenthesis_+_quote? Bug in StyleCop?")]
 		protected override void ProcessInLineKeywords(Parser.KeywordResult result)
@@ -550,7 +561,7 @@ namespace YAT.Domain
 					XmlReaderHelper.LinesFromFile(item.FilePath, out lines); // Read all at once for simplicity.
 					foreach (string line in lines)
 					{
-						SendLine(line);
+						SendFileLine(line);
 
 						if (BreakSendFile)
 						{

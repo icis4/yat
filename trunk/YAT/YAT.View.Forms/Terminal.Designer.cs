@@ -165,10 +165,12 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_KeepSendText = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_SendImmediately = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_SendContextMenu_EnableEscapesForText = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_SendContextMenu_SkipEmptyLines = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_SendContextMenu_Separator_5 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_SendContextMenu_Separator_5 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_SendContextMenu_SkipEmptyLines = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_SendContextMenu_EnableEscapesForFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip_Terminal = new MKY.Windows.Forms.MenuStripEx();
 			this.toolStripMenuItem_TerminalMenu_File = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_File_Close = new System.Windows.Forms.ToolStripMenuItem();
@@ -215,10 +217,12 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_KeepSendText = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_Send_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Send_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_5 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse = new System.Windows.Forms.ToolStripMenuItem();
@@ -1327,12 +1331,14 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_SendContextMenu_KeepSendText,
             this.toolStripMenuItem_SendContextMenu_CopyPredefined,
             this.toolStripMenuItem_SendContextMenu_SendImmediately,
+            this.toolStripMenuItem_SendContextMenu_EnableEscapesForText,
             this.toolStripMenuItem_SendContextMenu_Separator_4,
-            this.toolStripMenuItem_SendContextMenu_SkipEmptyLines,
+            this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText,
             this.toolStripMenuItem_SendContextMenu_Separator_5,
-            this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText});
+            this.toolStripMenuItem_SendContextMenu_SkipEmptyLines,
+            this.toolStripMenuItem_SendContextMenu_EnableEscapesForFile});
 			this.contextMenuStrip_Send.Name = "contextMenuStrip_Send";
-			this.contextMenuStrip_Send.Size = new System.Drawing.Size(321, 254);
+			this.contextMenuStrip_Send.Size = new System.Drawing.Size(321, 298);
 			this.contextMenuStrip_Send.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Send_Opening);
 			// 
 			// toolStripMenuItem_SendContextMenu_Panels
@@ -1437,10 +1443,31 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_SendImmediately.Text = "Send Each Character Immediately";
 			this.toolStripMenuItem_SendContextMenu_SendImmediately.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_SendImmediately_Click);
 			// 
+			// toolStripMenuItem_SendContextMenu_EnableEscapesForText
+			// 
+			this.toolStripMenuItem_SendContextMenu_EnableEscapesForText.Name = "toolStripMenuItem_SendContextMenu_EnableEscapesForText";
+			this.toolStripMenuItem_SendContextMenu_EnableEscapesForText.Size = new System.Drawing.Size(320, 22);
+			this.toolStripMenuItem_SendContextMenu_EnableEscapesForText.Text = "Enable <...> and \\... Escapes on [Send Text]";
+			this.toolStripMenuItem_SendContextMenu_EnableEscapesForText.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_EnableEscapesForText_Click);
+			// 
 			// toolStripMenuItem_SendContextMenu_Separator_4
 			// 
 			this.toolStripMenuItem_SendContextMenu_Separator_4.Name = "toolStripMenuItem_SendContextMenu_Separator_4";
 			this.toolStripMenuItem_SendContextMenu_Separator_4.Size = new System.Drawing.Size(317, 6);
+			// 
+			// toolStripMenuItem_SendContextMenu_ExpandMultiLineText
+			// 
+			this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText.Name = "toolStripMenuItem_SendContextMenu_ExpandMultiLineText";
+			this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.E)));
+			this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText.Size = new System.Drawing.Size(320, 22);
+			this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText.Text = "Expand Multi-Line Text";
+			this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText_Click);
+			// 
+			// toolStripMenuItem_SendContextMenu_Separator_5
+			// 
+			this.toolStripMenuItem_SendContextMenu_Separator_5.Name = "toolStripMenuItem_SendContextMenu_Separator_5";
+			this.toolStripMenuItem_SendContextMenu_Separator_5.Size = new System.Drawing.Size(317, 6);
 			// 
 			// toolStripMenuItem_SendContextMenu_SkipEmptyLines
 			// 
@@ -1451,19 +1478,12 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_SkipEmptyLines.Text = "Skip Empty Lines on [Send File]";
 			this.toolStripMenuItem_SendContextMenu_SkipEmptyLines.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_SkipEmptyLines_Click);
 			// 
-			// toolStripMenuItem_SendContextMenu_Separator_5
+			// toolStripMenuItem_SendContextMenu_EnableEscapesForFile
 			// 
-			this.toolStripMenuItem_SendContextMenu_Separator_5.Name = "toolStripMenuItem_SendContextMenu_Separator_5";
-			this.toolStripMenuItem_SendContextMenu_Separator_5.Size = new System.Drawing.Size(317, 6);
-			// 
-			// toolStripMenuItem_SendContextMenu_ExpandMultiLineText
-			// 
-			this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText.Name = "toolStripMenuItem_SendContextMenu_ExpandMultiLineText";
-			this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.E)));
-			this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText.Size = new System.Drawing.Size(320, 22);
-			this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText.Text = "Expand Multi-Line Text";
-			this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText_Click);
+			this.toolStripMenuItem_SendContextMenu_EnableEscapesForFile.Name = "toolStripMenuItem_SendContextMenu_EnableEscapesForFile";
+			this.toolStripMenuItem_SendContextMenu_EnableEscapesForFile.Size = new System.Drawing.Size(320, 22);
+			this.toolStripMenuItem_SendContextMenu_EnableEscapesForFile.Text = "Enable <...> and \\... Escapes on [Send File]";
+			this.toolStripMenuItem_SendContextMenu_EnableEscapesForFile.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_EnableEscapesForFile_Click);
 			// 
 			// menuStrip_Terminal
 			// 
@@ -1812,10 +1832,12 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_TerminalMenu_Send_KeepSendText,
             this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined,
             this.toolStripMenuItem_TerminalMenu_Send_SendImmediately,
+            this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText,
             this.toolStripMenuItem_TerminalMenu_Send_Separator_3,
-            this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines,
-            this.toolStripMenuItem_TerminalMenu_Send_Separator_4,
             this.toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText,
+            this.toolStripMenuItem_TerminalMenu_Send_Separator_4,
+            this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines,
+            this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile,
             this.toolStripMenuItem_TerminalMenu_Send_Separator_5,
             this.toolStripMenuItem_TerminalMenu_Send_Predefined,
             this.toolStripMenuItem_TerminalMenu_Send_Separator_6,
@@ -1897,24 +1919,17 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.Text = "Send Each Character &Immediately";
 			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_SendImmediately_Click);
 			// 
+			// toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText.Name = "toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText";
+			this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText.Size = new System.Drawing.Size(320, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText.Text = "&Enable <...> and \\... Escapes on [Send Text]";
+			this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText_Click);
+			// 
 			// toolStripMenuItem_TerminalMenu_Send_Separator_3
 			// 
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_3.Name = "toolStripMenuItem_TerminalMenu_Send_Separator_3";
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_3.Size = new System.Drawing.Size(317, 6);
-			// 
-			// toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines
-			// 
-			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Name = "toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines";
-			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.M)));
-			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Size = new System.Drawing.Size(320, 22);
-			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Text = "Skip Empty Lines on [Send File]";
-			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines_Click);
-			// 
-			// toolStripMenuItem_TerminalMenu_Send_Separator_4
-			// 
-			this.toolStripMenuItem_TerminalMenu_Send_Separator_4.Name = "toolStripMenuItem_TerminalMenu_Send_Separator_4";
-			this.toolStripMenuItem_TerminalMenu_Send_Separator_4.Size = new System.Drawing.Size(317, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText
 			// 
@@ -1922,8 +1937,29 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.E)));
 			this.toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText.Size = new System.Drawing.Size(320, 22);
-			this.toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText.Text = "&Expand Multi-Line Text";
+			this.toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText.Text = "E&xpand Multi-Line Text";
 			this.toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_Send_Separator_4
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_Separator_4.Name = "toolStripMenuItem_TerminalMenu_Send_Separator_4";
+			this.toolStripMenuItem_TerminalMenu_Send_Separator_4.Size = new System.Drawing.Size(317, 6);
+			// 
+			// toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Name = "toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines";
+			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.M)));
+			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Size = new System.Drawing.Size(320, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Text = "&Skip Empty Lines on [Send File]";
+			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile.Name = "toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile";
+			this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile.Size = new System.Drawing.Size(320, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile.Text = "E&nable <...> and \\... Escapes on [Send File]";
+			this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_Separator_5
 			// 
@@ -2010,8 +2046,8 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate});
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_comments_16x16;
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction.Name = "toolStripMenuItem_TerminalMenu_Receive_AutoAction";
-			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction.Size = new System.Drawing.Size(135, 22);
-			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction.Text = "&AutoAction";
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction.Size = new System.Drawing.Size(168, 22);
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction.Text = "&Automatic Action";
 			// 
 			// toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger
 			// 
@@ -3417,5 +3453,9 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action;
 		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_TerminalMenu_Receive_AutoAction_Action;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_EnableEscapesForText;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_EnableEscapesForFile;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile;
 	}
 }

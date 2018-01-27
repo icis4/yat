@@ -679,13 +679,18 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak    = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak     = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
+				this.settingsInEdit.Terminal.Send.EnableEscapes                   = f.SettingsResult.Terminal.Send.EnableEscapes;
+				this.settingsInEdit.Terminal.TextTerminal.SendFile.EnableEscapes  = f.SettingsResult.Terminal.TextTerminal.SendFile.EnableEscapes;
+				// Even though this [Send File] setting only applies to text terminals, it is located
+				// in 'AdvancedTerminalSettings' (next to the setting for [Send Text]) instead
+				// in 'TextTerminalSettings' for easier finding it.
+
 				this.settingsInEdit.Terminal.Send.DefaultDelay                    = f.SettingsResult.Terminal.Send.DefaultDelay;
 				this.settingsInEdit.Terminal.Send.DefaultLineDelay                = f.SettingsResult.Terminal.Send.DefaultLineDelay;
 				this.settingsInEdit.Terminal.Send.DefaultLineInterval             = f.SettingsResult.Terminal.Send.DefaultLineInterval;
 				this.settingsInEdit.Terminal.Send.DefaultLineRepeat               = f.SettingsResult.Terminal.Send.DefaultLineRepeat;
 
-				this.settingsInEdit.Terminal.Send.DisableEscapes                  = f.SettingsResult.Terminal.Send.DisableEscapes;
-
+				// User:
 				this.settingsInEdit.UserName = f.SettingsResult.UserName;
 			}
 		}

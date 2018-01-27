@@ -83,7 +83,7 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypeDefault;
-		private const Domain.Parser.Modes ParseModeDefault = Domain.Parser.Modes.Default;
+		private const Domain.Parser.Modes ParseModeForTextDefault = Domain.Parser.Modes.Default;
 
 		private const string ShortcutStringDefault = "Shift+F1";
 
@@ -100,7 +100,7 @@ namespace YAT.View.Controls
 
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
 		private bool useExplicitDefaultRadix = Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault;
-		private Domain.Parser.Modes parseMode = ParseModeDefault;
+		private Domain.Parser.Modes parseModeForText = ParseModeForTextDefault;
 
 		private EditFocusState editFocusState = EditFocusState.EditIsInactive;
 		private bool isValidated; // = false;
@@ -213,13 +213,13 @@ namespace YAT.View.Controls
 		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual Domain.Parser.Modes ParseMode
+		public virtual Domain.Parser.Modes ParseModeForText
 		{
 			set
 			{
-				if (this.parseMode != value)
+				if (this.parseModeForText != value)
 				{
-					this.parseMode = value;
+					this.parseModeForText = value;
 					SetControls();
 				}
 			}
@@ -361,7 +361,7 @@ namespace YAT.View.Controls
 			if (this.command.IsSingleLineText)
 			{
 				var text = this.command.SingleLineText;
-				if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", text, radix, this.parseMode))
+				if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", text, radix, this.parseModeForText))
 				{
 					this.command.DefaultRadix = radix;
 				////this.isValidated is intentionally not set, as the validation above only verifies the changed radix but not the text.
@@ -375,7 +375,7 @@ namespace YAT.View.Controls
 
 				foreach (var text in this.command.MultiLineText)
 				{
-					if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", text, radix, this.parseMode))
+					if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", text, radix, this.parseModeForText))
 						isValid = false;
 				}
 
@@ -504,7 +504,7 @@ namespace YAT.View.Controls
 				// Single line => Validate!
 				int invalidTextStart;
 				int invalidTextLength;
-				if (Utilities.ValidationHelper.ValidateText(this, "text", textBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, this.command.DefaultRadix, this.parseMode))
+				if (Utilities.ValidationHelper.ValidateText(this, "text", textBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, this.command.DefaultRadix, this.parseModeForText))
 				{
 					this.isValidated = true;
 
@@ -767,7 +767,7 @@ namespace YAT.View.Controls
 			formStartupLocation.Y = area.Y + area.Height;
 
 			// Show multi-line box:
-			var f = new MultiLineBox(this.command, formStartupLocation, this.command.DefaultRadix, this.parseMode);
+			var f = new MultiLineBox(this.command, formStartupLocation, this.command.DefaultRadix, this.parseModeForText);
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
 				Refresh();

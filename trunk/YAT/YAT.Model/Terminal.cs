@@ -3397,17 +3397,17 @@ namespace YAT.Model
 				if (c.IsSingleLineText)
 				{
 					if (SendTextSettings.IsEasterEggCommand(c.SingleLineText))
-						this.terminal.SendLine(SendTextSettings.EasterEggCommandText, Domain.Radix.String);
+						this.terminal.SendTextLine(SendTextSettings.EasterEggCommandText, Domain.Radix.String);
 					else
-						this.terminal.SendLine(c.SingleLineText, c.DefaultRadix);
+						this.terminal.SendTextLine(c.SingleLineText, c.DefaultRadix);
 				}
 				else if (c.IsMultiLineText)
 				{
-					this.terminal.SendLines(c.MultiLineText, c.DefaultRadix);
+					this.terminal.SendTextLines(c.MultiLineText, c.DefaultRadix);
 				}
 				else if (c.IsPartialText)
 				{
-					this.terminal.Send(c.PartialText, c.DefaultRadix);
+					this.terminal.SendText(c.PartialText, c.DefaultRadix);
 
 					// Compile the partial command line for later use:
 					if (string.IsNullOrEmpty(this.partialCommandLine))
@@ -3417,7 +3417,7 @@ namespace YAT.Model
 				}
 				else if (c.IsPartialTextEol)
 				{
-					this.terminal.SendLine("", Domain.Radix.String);
+					this.terminal.SendTextLine("", Domain.Radix.String);
 				}
 				else
 				{
@@ -3444,13 +3444,13 @@ namespace YAT.Model
 				if (c.IsSingleLineText)
 				{
 					if (SendTextSettings.IsEasterEggCommand(c.SingleLineText))
-						this.terminal.Send(SendTextSettings.EasterEggCommandText, Domain.Radix.String);
+						this.terminal.SendText(SendTextSettings.EasterEggCommandText, Domain.Radix.String);
 					else
-						this.terminal.Send(c.SingleLineText, c.DefaultRadix);
+						this.terminal.SendText(c.SingleLineText, c.DefaultRadix);
 				}
 				else if (c.IsPartialText)
 				{
-					this.terminal.Send(c.PartialText, c.DefaultRadix);
+					this.terminal.SendText(c.PartialText, c.DefaultRadix);
 
 					// Compile the partial command line for later use:
 					if (string.IsNullOrEmpty(this.partialCommandLine))
@@ -4840,7 +4840,7 @@ namespace YAT.Model
 				if (c.IsSingleLineText)
 				{
 					byte[] lineResult;
-					if (this.terminal.TryParse(c.SingleLineText, out lineResult, c.DefaultRadix))
+					if (this.terminal.TryParseText(c.SingleLineText, out lineResult, c.DefaultRadix))
 					{
 						sequence = lineResult;
 						return (true);
@@ -4853,7 +4853,7 @@ namespace YAT.Model
 					foreach (string line in c.MultiLineText)
 					{
 						byte[] lineResult;
-						if (this.terminal.TryParse(line, out lineResult, c.DefaultRadix))
+						if (this.terminal.TryParseText(line, out lineResult, c.DefaultRadix))
 							commandResult.AddRange(lineResult);
 					}
 
