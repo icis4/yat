@@ -47,6 +47,7 @@ namespace YAT.Model.Settings
 		private bool findVisible;
 		private bool autoActionVisible;
 		private bool autoResponseVisible;
+
 		private RecentItemCollection<string> customColors;
 
 		/// <summary></summary>
@@ -73,7 +74,8 @@ namespace YAT.Model.Settings
 			FindVisible         = rhs.FindVisible;
 			AutoActionVisible   = rhs.AutoActionVisible;
 			AutoResponseVisible = rhs.AutoResponseVisible;
-			CustomColors        = new RecentItemCollection<string>(rhs.CustomColors);
+
+			CustomColors = new RecentItemCollection<string>(rhs.CustomColors);
 
 			ClearChanged();
 		}
@@ -88,7 +90,8 @@ namespace YAT.Model.Settings
 			FindVisible         = false;
 			AutoActionVisible   = false;
 			AutoResponseVisible = false;
-			CustomColors        = new RecentItemCollection<string>(MaxCustomColors);
+
+			CustomColors = new RecentItemCollection<string>(MaxCustomColors);
 		}
 
 		#region Properties
@@ -220,9 +223,10 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^  FindVisible                        .GetHashCode();
-				hashCode = (hashCode * 397) ^  AutoActionVisible                  .GetHashCode();
-				hashCode = (hashCode * 397) ^  AutoResponseVisible                .GetHashCode();
+				hashCode = (hashCode * 397) ^ FindVisible        .GetHashCode();
+				hashCode = (hashCode * 397) ^ AutoActionVisible  .GetHashCode();
+				hashCode = (hashCode * 397) ^ AutoResponseVisible.GetHashCode();
+
 				hashCode = (hashCode * 397) ^ (CustomColors != null ? CustomColors.GetHashCode() : 0);
 
 				return (hashCode);
@@ -254,9 +258,10 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				FindVisible          .Equals(             other.FindVisible)         &&
-				AutoActionVisible    .Equals(             other.AutoActionVisible)   &&
-				AutoResponseVisible  .Equals(             other.AutoResponseVisible) &&
+				FindVisible        .Equals(other.FindVisible)         &&
+				AutoActionVisible  .Equals(other.AutoActionVisible)   &&
+				AutoResponseVisible.Equals(other.AutoResponseVisible) &&
+
 				IEnumerableEx.ElementsEqual(CustomColors, other.CustomColors)
 			);
 		}

@@ -33,6 +33,9 @@ namespace YAT.Domain.Parser
 	public enum Modes
 	{
 		/// <summary></summary>
+		None = NoEscapes,
+
+		/// <summary></summary>
 		NoEscapes = 0,
 
 		/// <summary></summary>
