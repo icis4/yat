@@ -72,7 +72,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary></summary>
-		public const bool OutputMaxBaudRateDefault = true;
+		public const bool BufferMaxBaudRateDefault = true;
 
 		/// <summary>
 		/// Default of 48 bytes reflects the typical USB report size of 64, minus some bytes of
@@ -131,7 +131,7 @@ namespace MKY.IO.Serial.SerialPort
 		private AutoInterval aliveMonitor;
 		private AutoInterval autoReopen;
 		private OutputBufferSize outputBufferSize;
-		private bool outputMaxBaudRate;
+		private bool bufferMaxBaudRate;
 		private ChunkSize maxChunkSize;
 		private SendRate maxSendRate;
 
@@ -206,7 +206,7 @@ namespace MKY.IO.Serial.SerialPort
 			AliveMonitor        = rhs.AliveMonitor;
 			AutoReopen          = rhs.AutoReopen;
 			OutputBufferSize    = rhs.OutputBufferSize;
-			OutputMaxBaudRate   = rhs.OutputMaxBaudRate;
+			BufferMaxBaudRate   = rhs.BufferMaxBaudRate;
 			MaxChunkSize        = rhs.MaxChunkSize;
 			MaxSendRate         = rhs.MaxSendRate;
 
@@ -235,7 +235,7 @@ namespace MKY.IO.Serial.SerialPort
 			AliveMonitor        = AliveMonitorDefault;
 			AutoReopen          = AutoReopenDefault;
 			OutputBufferSize    = OutputBufferSizeDefault;
-			OutputMaxBaudRate   = OutputMaxBaudRateDefault;
+			BufferMaxBaudRate   = BufferMaxBaudRateDefault;
 			MaxChunkSize        = MaxChunkSizeDefault;
 			MaxSendRate         = MaxSendRateDefault;
 
@@ -316,7 +316,7 @@ namespace MKY.IO.Serial.SerialPort
 
 		/// <summary>
 		/// The serial ports 'WriteBufferSize' typically is 2048. However, devices may
-		/// not be able to deal with that much data.
+		/// not be able to deal with that much data. <see cref="SerialPort"/> for details.
 		/// </summary>
 		[XmlElement("OutputBufferSize")]
 		public virtual OutputBufferSize OutputBufferSize
@@ -332,16 +332,23 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
-		/// <summary></summary>
-		[XmlElement("OutputMaxBaudRate")]
-		public virtual bool OutputMaxBaudRate
+		/// <summary>
+		/// The serial ports 'WriteBufferSize' typically is 2048. However, devices may
+		/// not be able to deal with that much data. <see cref="SerialPort"/> for details.
+		/// </summary>
+		/// <remarks>
+		/// Somewhat awkward name, but neither "OutputMaxBaudRate" nor "WriteMaxBaudRate"
+		/// nor "LimitBufferToBaudRate" are better...
+		/// </remarks>
+		[XmlElement("BufferMaxBaudRate")]
+		public virtual bool BufferMaxBaudRate
 		{
-			get { return (this.outputMaxBaudRate); }
+			get { return (this.bufferMaxBaudRate); }
 			set
 			{
-				if (this.outputMaxBaudRate != value)
+				if (this.bufferMaxBaudRate != value)
 				{
-					this.outputMaxBaudRate = value;
+					this.bufferMaxBaudRate = value;
 					SetMyChanged();
 				}
 			}
@@ -481,7 +488,7 @@ namespace MKY.IO.Serial.SerialPort
 				hashCode = (hashCode * 397) ^  AliveMonitor           .GetHashCode();
 				hashCode = (hashCode * 397) ^  AutoReopen             .GetHashCode();
 				hashCode = (hashCode * 397) ^  OutputBufferSize       .GetHashCode();
-				hashCode = (hashCode * 397) ^  OutputMaxBaudRate      .GetHashCode();
+				hashCode = (hashCode * 397) ^  BufferMaxBaudRate      .GetHashCode();
 				hashCode = (hashCode * 397) ^  MaxChunkSize           .GetHashCode();
 				hashCode = (hashCode * 397) ^  MaxSendRate            .GetHashCode();
 
@@ -524,7 +531,7 @@ namespace MKY.IO.Serial.SerialPort
 				AliveMonitor       .Equals(other.AliveMonitor)      &&
 				AutoReopen         .Equals(other.AutoReopen)        &&
 				OutputBufferSize   .Equals(other.OutputBufferSize)  &&
-				OutputMaxBaudRate  .Equals(other.OutputMaxBaudRate) &&
+				BufferMaxBaudRate  .Equals(other.BufferMaxBaudRate) &&
 				MaxChunkSize       .Equals(other.MaxChunkSize)      &&
 				MaxSendRate        .Equals(other.MaxSendRate)       &&
 

@@ -1549,7 +1549,7 @@ namespace MKY.IO.Serial.SerialPort
 									// See 'port_DataReceived()' for more details on receiving.
 									//
 									// Finally (MKy/SSt/ATo in Q3/2016), the root cause for the data loss could be tracked down
-									// to the physical limitations of the USB/COM or SPI/COM converter: If more data is sent
+									// to the physical limitations of the USB/COM and SPI/COM converter: If more data is sent
 									// than the baud rate permits forwarding, the converter simply discards superfluous data!
 									// Of course, what else could it do... Actually, it could propagate the information back to
 									// 'System.IO.Ports.SerialPort.BytesToWrite'. But that obviously isn't done...
@@ -1557,7 +1557,7 @@ namespace MKY.IO.Serial.SerialPort
 									// Solution: Limit output writing to baud rate :-)
 
 									// Reduce chunk size if maximum is limited to baud rate:
-									if (this.settings.OutputMaxBaudRate)
+									if (this.settings.BufferMaxBaudRate)
 									{
 										int remainingSizeInInterval = (maxFramesPerInterval - maxBaudRatePerInterval.Value);
 										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, remainingSizeInInterval);
@@ -1587,7 +1587,7 @@ namespace MKY.IO.Serial.SerialPort
 
 										// Update the send rates with the effective chunk size:
 
-										if (this.settings.OutputMaxBaudRate)
+										if (this.settings.BufferMaxBaudRate)
 											maxBaudRatePerInterval.Update(effectiveChunkData.Count);
 
 										if (this.settings.MaxSendRate.Enabled)
@@ -1958,7 +1958,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// implementation again uses the 'normal' method.
 		/// 
 		/// Finally (MKy/SSt/ATo in Q3/2016), the root cause for the data loss could be tracked down
-		/// to the physical limitations of the USB/COM or SPI/COM converter: If more data is sent
+		/// to the physical limitations of the USB/COM and SPI/COM converter: If more data is sent
 		/// than the baud rate permits forwarding, the converter simply discards superfluous data!
 		/// Of course, what else could it do... Actually, it could propagate the information back to
 		/// <see cref="System.IO.Ports.SerialPort.BytesToWrite"/>. But that obviously isn't done...
