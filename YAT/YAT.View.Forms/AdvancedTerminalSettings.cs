@@ -631,12 +631,12 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void checkBox_OutputMaxBaudRate_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_BufferMaxBaudRate_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.Terminal.IO.SerialPort.OutputMaxBaudRate = checkBox_OutputMaxBaudRate.Checked;
+			this.settingsInEdit.Terminal.IO.SerialPort.BufferMaxBaudRate = checkBox_BufferMaxBaudRate.Checked;
 		}
 
 		private void checkBox_MaxChunkSizeEnable_CheckedChanged(object sender, EventArgs e)
@@ -1120,7 +1120,7 @@ namespace YAT.View.Forms
 				checkBox_OutputBufferSize.Checked    = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Enabled;
 				textBox_OutputBufferSize.Enabled     = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Enabled;
 				textBox_OutputBufferSize.Text        = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Size.ToString(CultureInfo.CurrentCulture);
-				checkBox_OutputMaxBaudRate.Checked   = this.settingsInEdit.Terminal.IO.SerialPort.OutputMaxBaudRate;
+				checkBox_BufferMaxBaudRate.Checked   = this.settingsInEdit.Terminal.IO.SerialPort.BufferMaxBaudRate;
 				checkBox_MaxChunkSizeEnable.Checked  = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Enabled;
 				textBox_MaxChunkSize.Enabled         = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Enabled;
 				textBox_MaxChunkSize.Text            = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Size.ToString(CultureInfo.CurrentCulture);
@@ -1212,7 +1212,7 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission = Domain.Settings.SendSettings.SignalXOnBeforeEachTransmissionDefault;
 				this.settingsInEdit.Terminal.Send.SignalXOnPeriodically           = Domain.Settings.SendSettings.SignalXOnPeriodicallyDefault;
 				this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize       = MKY.IO.Serial.SerialPort.SerialPortSettings.OutputBufferSizeDefault;
-				this.settingsInEdit.Terminal.IO.SerialPort.OutputMaxBaudRate      = MKY.IO.Serial.SerialPort.SerialPortSettings.OutputMaxBaudRateDefault;
+				this.settingsInEdit.Terminal.IO.SerialPort.BufferMaxBaudRate      = MKY.IO.Serial.SerialPort.SerialPortSettings.BufferMaxBaudRateDefault;
 				this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize           = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxChunkSizeDefault;
 				this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate            = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxSendRateDefault;
 				this.settingsInEdit.Terminal.IO.SerialPort.IgnoreFramingErrors    = MKY.IO.Serial.SerialPort.SerialPortSettings.IgnoreFramingErrorsDefault;

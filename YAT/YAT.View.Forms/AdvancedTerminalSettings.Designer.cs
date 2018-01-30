@@ -49,7 +49,7 @@
 			this.label_SignalXOnPeriodicallyIntervalUnit = new System.Windows.Forms.Label();
 			this.groupBox_Send_SerialPorts = new System.Windows.Forms.GroupBox();
 			this.textBox_MaxChunkSize = new MKY.Windows.Forms.TextBoxEx();
-			this.checkBox_OutputMaxBaudRate = new System.Windows.Forms.CheckBox();
+			this.checkBox_BufferMaxBaudRate = new System.Windows.Forms.CheckBox();
 			this.textBox_MaxSendRateSize = new MKY.Windows.Forms.TextBoxEx();
 			this.textBox_MaxSendRateInterval = new MKY.Windows.Forms.TextBoxEx();
 			this.textBox_OutputBufferSize = new MKY.Windows.Forms.TextBoxEx();
@@ -347,7 +347,7 @@
 			this.groupBox_Send_SerialPorts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Send_SerialPorts.Controls.Add(this.textBox_MaxChunkSize);
-			this.groupBox_Send_SerialPorts.Controls.Add(this.checkBox_OutputMaxBaudRate);
+			this.groupBox_Send_SerialPorts.Controls.Add(this.checkBox_BufferMaxBaudRate);
 			this.groupBox_Send_SerialPorts.Controls.Add(this.textBox_MaxSendRateSize);
 			this.groupBox_Send_SerialPorts.Controls.Add(this.textBox_MaxSendRateInterval);
 			this.groupBox_Send_SerialPorts.Controls.Add(this.textBox_OutputBufferSize);
@@ -369,7 +369,7 @@
 			// 
 			// textBox_MaxChunkSize
 			// 
-			this.textBox_MaxChunkSize.Location = new System.Drawing.Point(136, 63);
+			this.textBox_MaxChunkSize.Location = new System.Drawing.Point(132, 63);
 			this.textBox_MaxChunkSize.Name = "textBox_MaxChunkSize";
 			this.textBox_MaxChunkSize.Size = new System.Drawing.Size(48, 20);
 			this.textBox_MaxChunkSize.TabIndex = 5;
@@ -377,17 +377,17 @@
 			this.textBox_MaxChunkSize.TextChanged += new System.EventHandler(this.textBox_MaxChunkSize_TextChanged);
 			this.textBox_MaxChunkSize.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaxChunkSize_Validating);
 			// 
-			// checkBox_OutputMaxBaudRate
+			// checkBox_BufferMaxBaudRate
 			// 
-			this.checkBox_OutputMaxBaudRate.AutoSize = true;
-			this.checkBox_OutputMaxBaudRate.Location = new System.Drawing.Point(6, 42);
-			this.checkBox_OutputMaxBaudRate.Name = "checkBox_OutputMaxBaudRate";
-			this.checkBox_OutputMaxBaudRate.Size = new System.Drawing.Size(207, 17);
-			this.checkBox_OutputMaxBaudRate.TabIndex = 3;
-			this.checkBox_OutputMaxBaudRate.Text = "Output no more than baud &rate permits";
-			this.toolTip.SetToolTip(this.checkBox_OutputMaxBaudRate, resources.GetString("checkBox_OutputMaxBaudRate.ToolTip"));
-			this.checkBox_OutputMaxBaudRate.UseVisualStyleBackColor = true;
-			this.checkBox_OutputMaxBaudRate.CheckedChanged += new System.EventHandler(this.checkBox_OutputMaxBaudRate_CheckedChanged);
+			this.checkBox_BufferMaxBaudRate.AutoSize = true;
+			this.checkBox_BufferMaxBaudRate.Location = new System.Drawing.Point(6, 42);
+			this.checkBox_BufferMaxBaudRate.Name = "checkBox_BufferMaxBaudRate";
+			this.checkBox_BufferMaxBaudRate.Size = new System.Drawing.Size(206, 17);
+			this.checkBox_BufferMaxBaudRate.TabIndex = 3;
+			this.checkBox_BufferMaxBaudRate.Text = "Buffer not more than baud &rate permits";
+			this.toolTip.SetToolTip(this.checkBox_BufferMaxBaudRate, resources.GetString("checkBox_BufferMaxBaudRate.ToolTip"));
+			this.checkBox_BufferMaxBaudRate.UseVisualStyleBackColor = true;
+			this.checkBox_BufferMaxBaudRate.CheckedChanged += new System.EventHandler(this.checkBox_BufferMaxBaudRate_CheckedChanged);
 			// 
 			// textBox_MaxSendRateSize
 			// 
@@ -444,9 +444,9 @@
 			this.checkBox_MaxChunkSizeEnable.AutoSize = true;
 			this.checkBox_MaxChunkSizeEnable.Location = new System.Drawing.Point(6, 65);
 			this.checkBox_MaxChunkSizeEnable.Name = "checkBox_MaxChunkSizeEnable";
-			this.checkBox_MaxChunkSizeEnable.Size = new System.Drawing.Size(133, 17);
+			this.checkBox_MaxChunkSizeEnable.Size = new System.Drawing.Size(129, 17);
 			this.checkBox_MaxChunkSizeEnable.TabIndex = 4;
-			this.checkBox_MaxChunkSizeEnable.Text = "Output &chunks of max.";
+			this.checkBox_MaxChunkSizeEnable.Text = "Buffer &chunks of max.";
 			this.toolTip.SetToolTip(this.checkBox_MaxChunkSizeEnable, "Limiting the chunk size enables use cases where a device is not\r\ncapable to proce" +
         "ss more than a certain number of bytes per paket.");
 			this.checkBox_MaxChunkSizeEnable.UseVisualStyleBackColor = true;
@@ -455,7 +455,7 @@
 			// label_MaxChunkSizeUnit
 			// 
 			this.label_MaxChunkSizeUnit.AutoSize = true;
-			this.label_MaxChunkSizeUnit.Location = new System.Drawing.Point(186, 66);
+			this.label_MaxChunkSizeUnit.Location = new System.Drawing.Point(182, 66);
 			this.label_MaxChunkSizeUnit.Name = "label_MaxChunkSizeUnit";
 			this.label_MaxChunkSizeUnit.Size = new System.Drawing.Size(32, 13);
 			this.label_MaxChunkSizeUnit.TabIndex = 6;
@@ -1383,7 +1383,7 @@
 		private System.Windows.Forms.Label label_MaxBytePerLineCountUnit;
 		private System.Windows.Forms.Label label_MaxBytePerLineCount;
 		private System.Windows.Forms.CheckBox checkBox_UseExplicitDefaultRadix;
-		private System.Windows.Forms.CheckBox checkBox_OutputMaxBaudRate;
+		private System.Windows.Forms.CheckBox checkBox_BufferMaxBaudRate;
 		private System.Windows.Forms.GroupBox groupBox_Display_UsbSerialHid;
 		private System.Windows.Forms.CheckBox checkBox_IncludeNonPayloadData;
 		private System.Windows.Forms.CheckBox checkBox_IgnoreFramingErrors;
