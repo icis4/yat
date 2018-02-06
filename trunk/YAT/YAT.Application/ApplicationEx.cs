@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Epsilon Version 1.99.90
+// YAT 2.0 Almost Final Version 1.99.95
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -46,7 +46,10 @@ namespace YAT
 	////public static readonly string ProductBuildName = " Final";
 
 		/// <summary>The product name postfix that describes the build.</summary>
-		public static readonly string ProductBuildName = " Epsilon";
+		public static readonly string ProductBuildName = " Almost Final";
+
+	/////// <summary>The product name postfix that describes the build.</summary>
+	////public static readonly string ProductBuildName = " Epsilon";
 
 	/////// <summary>The product name postfix that describes the build.</summary>
 	////public static readonly string ProductBuildName = " Epsilon Preliminary";
