@@ -92,6 +92,9 @@ Important changes:
   'Send File'. By default, escapes are enabled for 'Send Text' and disabled for 'Send File'.
 - Binary distributions now contain DejaVu fonts for manual installation (feature request #331).
 
+Fixed bugs:
+- 'SplitterDistance' value related 'ArgumentOutOfRangeException' (on startup) fixed (bug #408).
+
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
 - General imitations of .NET Windows.Forms:
