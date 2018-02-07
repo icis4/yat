@@ -119,7 +119,7 @@ namespace MKY.IO.Ports
 					"baudRate",
 					baudRate,
 					"Baud rate must be a potentially valid baud rate value!"
-				)); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
+				)); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
 			}
 		}
 

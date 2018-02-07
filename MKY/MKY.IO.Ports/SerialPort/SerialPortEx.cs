@@ -337,7 +337,7 @@ namespace MKY.IO.Ports
 				if (base.PortName != value.Name)
 				{
 					if (IsOpen)
-						throw (new InvalidOperationException("The serial COM port is already open, it must be stopped before changing the port ID!")); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
+						throw (new InvalidOperationException("The serial COM port is already open, it must be stopped before changing the port ID!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
 
 					base.PortName = value.Name;
 					OnPortChanged(EventArgs.Empty);
