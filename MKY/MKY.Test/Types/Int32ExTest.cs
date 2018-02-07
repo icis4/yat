@@ -40,39 +40,39 @@ namespace MKY.Test.Types
 		{
 			get
 			{
-				yield return (new TestCaseData( 0,  0, -1,  true,  true));
+				yield return (new TestCaseData(-1,  0,  0,  true,  true));
 				yield return (new TestCaseData( 0,  0,  0,  true,  true));
-				yield return (new TestCaseData( 0,  0,  1,  true,  true));
+				yield return (new TestCaseData( 1,  0,  0,  true,  true));
 
-				yield return (new TestCaseData( 0,  1, -1,  true, false));
-				yield return (new TestCaseData( 0,  1,  0,  true, false));
-				yield return (new TestCaseData( 0,  1,  1, false,  true));
-				yield return (new TestCaseData( 0,  1,  2, false,  true));
+				yield return (new TestCaseData(-1,  0,  1,  true, false));
+				yield return (new TestCaseData( 0,  0,  1,  true, false));
+				yield return (new TestCaseData( 1,  0,  1, false,  true));
+				yield return (new TestCaseData( 2,  0,  1, false,  true));
 
-				yield return (new TestCaseData(-1,  0, -2,  true, false));
-				yield return (new TestCaseData(-1,  0, -1,  true, false));
-				yield return (new TestCaseData(-1,  0,  0, false,  true));
-				yield return (new TestCaseData(-1,  0,  1, false,  true));
+				yield return (new TestCaseData(-2, -1,  0,  true, false));
+				yield return (new TestCaseData(-1, -1,  0,  true, false));
+				yield return (new TestCaseData( 0, -1,  0, false,  true));
+				yield return (new TestCaseData( 1, -1,  0, false,  true));
 
-				yield return (new TestCaseData(-1,  1, -2,  true, false));
-				yield return (new TestCaseData(-1,  1, -1,  true, false));
-				yield return (new TestCaseData(-1,  1,  0, false, false));
-				yield return (new TestCaseData(-1,  1,  1, false,  true));
-				yield return (new TestCaseData(-1,  1,  2, false,  true));
+				yield return (new TestCaseData(-2, -1,  1,  true, false));
+				yield return (new TestCaseData(-1, -1,  1,  true, false));
+				yield return (new TestCaseData( 0, -1,  1, false, false));
+				yield return (new TestCaseData( 1, -1,  1, false,  true));
+				yield return (new TestCaseData( 2, -1,  1, false,  true));
 
-				yield return (new TestCaseData(int.MinValue, int.MaxValue,            0, false, false));
-				yield return (new TestCaseData(int.MinValue, int.MaxValue, int.MinValue,  true, false));
-				yield return (new TestCaseData(int.MinValue, int.MaxValue, int.MaxValue, false,  true));
+				yield return (new TestCaseData(           0, int.MinValue, int.MaxValue, false, false));
+				yield return (new TestCaseData(int.MinValue, int.MinValue, int.MaxValue,  true, false));
+				yield return (new TestCaseData(int.MaxValue, int.MinValue, int.MaxValue, false,  true));
 
-				yield return (new TestCaseData(int.MinValue, int.MaxValue, int.MinValue + 1, false, false));
-				yield return (new TestCaseData(int.MinValue, int.MaxValue, int.MaxValue - 1, false, false));
+				yield return (new TestCaseData(int.MinValue + 1, int.MinValue, int.MaxValue, false, false));
+				yield return (new TestCaseData(int.MaxValue - 1, int.MinValue, int.MaxValue, false, false));
 
-				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MinValue,      true, false));
-				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MinValue + 1,  true, false));
-				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MinValue + 2, false, false));
-				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MaxValue - 2, false, false));
-				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MaxValue - 1, false,  true));
-				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MaxValue,     false,  true));
+				yield return (new TestCaseData(int.MinValue,     int.MinValue + 1, int.MaxValue - 1,  true, false));
+				yield return (new TestCaseData(int.MinValue + 1, int.MinValue + 1, int.MaxValue - 1,  true, false));
+				yield return (new TestCaseData(int.MinValue + 2, int.MinValue + 1, int.MaxValue - 1, false, false));
+				yield return (new TestCaseData(int.MaxValue - 2, int.MinValue + 1, int.MaxValue - 1, false, false));
+				yield return (new TestCaseData(int.MaxValue - 1, int.MinValue + 1, int.MaxValue - 1, false,  true));
+				yield return (new TestCaseData(int.MaxValue,     int.MinValue + 1, int.MaxValue - 1, false,  true));
 			}
 		}
 
@@ -95,7 +95,7 @@ namespace MKY.Test.Types
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(Int32ExTestData), "TestCases")]
-		public virtual void Limit(int min, int max, int value, bool valueMinimized, bool valueMaximized)
+		public virtual void Limit(int value, int min, int max, bool valueMinimized, bool valueMaximized)
 		{
 			int limited = Int32Ex.Limit(value, min, max);
 
