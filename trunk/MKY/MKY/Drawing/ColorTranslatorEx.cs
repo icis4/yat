@@ -54,7 +54,7 @@ namespace MKY.Drawing
 				}
 				else
 				{
-					throw (new ArgumentException("Color string could not be converted into a color structure!", "colorString", exHtml)); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
+					throw (new ArgumentException("Color string could not be converted into a color structure!", "colorString", exHtml)); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
 				}
 			}
 		}

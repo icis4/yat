@@ -22,6 +22,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
@@ -64,7 +65,8 @@ namespace MKY.Windows.Forms
 					if (sc.SplitterDistance != scaledDistance)
 					{
 						int widthOrHeight = OrientationEx.SizeToWidthOrHeight(sc, sc.Orientation);
-						sc.SplitterDistance = Int32Ex.Limit(scaledDistance, 0, (widthOrHeight - 1));
+						if (widthOrHeight > 0) // otherwise adjustment is skipped.
+							sc.SplitterDistance = Int32Ex.Limit(scaledDistance, 0, (widthOrHeight - 1)); // 'widthOrHeight' is 1 or above.
 					}
 
 					// Continue with the panels:

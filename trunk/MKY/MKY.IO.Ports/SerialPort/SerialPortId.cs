@@ -245,7 +245,7 @@ namespace MKY.IO.Ports
 						"value",
 						value,
 						"Standard port numbers are " + FirstStandardPortNumber + " to " + LastStandardPortNumber + "!"
-					)); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
+					)); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
 				}
 			}
 		}

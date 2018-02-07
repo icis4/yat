@@ -44,7 +44,7 @@ namespace MKY
 		public static float Limit(float value, float min, float max)
 		{
 			if (min > max)
-				throw (new ArgumentException(string.Format("Precondition is 'min' <= 'max', but 'min' is {0} and 'max' is {1}!", min, max))); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
+				throw (new ArgumentException(string.Format("Precondition is 'min' <= 'max', but 'min' is {0} and 'max' is {1}!", min, max))); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
 
 			if (value < min)
 				return (min);

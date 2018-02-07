@@ -202,10 +202,10 @@ namespace MKY.IO.Usb
 		private void Initialize(string path, int vendorId, int productId, string manufacturer, string product, string serial)
 		{
 			if (!IsValidVendorId(vendorId))
-				throw (new ArgumentOutOfRangeException("vendorId", vendorId, "'" + vendorId + "' is an invalid vendor ID!")); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
+				throw (new ArgumentOutOfRangeException("vendorId", vendorId, "'" + vendorId + "' is an invalid vendor ID!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
 
 			if (!IsValidProductId(productId))
-				throw (new ArgumentOutOfRangeException("productId", productId, "'" + productId + "' is an invalid product ID!")); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
+				throw (new ArgumentOutOfRangeException("productId", productId, "'" + productId + "' is an invalid product ID!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
 
 			this.path = path;
 
