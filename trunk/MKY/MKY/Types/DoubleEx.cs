@@ -36,32 +36,16 @@ namespace MKY
 	public static class DoubleEx
 	{
 		/// <summary>
-		/// Limits <paramref name="value"/> to the min value specified.
-		/// </summary>
-		public static double LimitMin(double value, double min)
-		{
-			if (value < min)
-				return (min);
-
-			return (value);
-		}
-
-		/// <summary>
-		/// Limits <paramref name="value"/> to the max value specified.
-		/// </summary>
-		public static double LimitMax(double value, double max)
-		{
-			if (value > max)
-				return (max);
-
-			return (value);
-		}
-
-		/// <summary>
 		/// Limits <paramref name="value"/> to the values specified.
 		/// </summary>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="min"/> is larger than <paramref name="max"/>.
+		/// </exception>
 		public static double Limit(double value, double min, double max)
 		{
+			if (min > max)
+				throw (new ArgumentException(string.Format("Precondition is 'min' <= 'max', but 'min' is {0} and 'max' is {1}!", min, max))); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
+
 			if (value < min)
 				return (min);
 

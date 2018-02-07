@@ -36,32 +36,16 @@ namespace MKY
 	public static class SingleEx
 	{
 		/// <summary>
-		/// Limits <paramref name="value"/> to the <paramref name="min"/> value specified.
-		/// </summary>
-		public static float LimitMin(float value, float min)
-		{
-			if (value < min)
-				return (min);
-
-			return (value);
-		}
-
-		/// <summary>
-		/// Limits <paramref name="value"/> to the <paramref name="max"/> value specified.
-		/// </summary>
-		public static float LimitMax(float value, float max)
-		{
-			if (value > max)
-				return (max);
-
-			return (value);
-		}
-
-		/// <summary>
 		/// Limits <paramref name="value"/> to the values specified.
 		/// </summary>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="min"/> is larger than <paramref name="max"/>.
+		/// </exception>
 		public static float Limit(float value, float min, float max)
 		{
+			if (min > max)
+				throw (new ArgumentException(string.Format("Precondition is 'min' <= 'max', but 'min' is {0} and 'max' is {1}!", min, max))); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
+
 			if (value < min)
 				return (min);
 
