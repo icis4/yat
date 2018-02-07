@@ -40,21 +40,27 @@ namespace MKY
 		/// <summary>
 		/// The default support request message is <![CDATA["Support may be requested at the origin of this software."]]>.
 		/// </summary>
-		public const string RequestSupportDefault = "Support may be requested at the origin of this software.";
+		public const string RequestSupportDefault = "Support may be requested at the origin of this software. Describe what you want to achieve or what doesn't work as detailed as possible";
 
 		/// <summary>
-		/// The default feature request message is <![CDATA["New features can be requested at the origin of this software."]]>.
+		/// The default feature request message is <![CDATA["New features may be requested at the origin of this software. Describe your request as detailed as possible (use case or user story, preconditions, postconditions,...)."]]>.
 		/// </summary>
-		public const string RequestFeatureDefault = "New features can be requested at the origin of this software.";
+		public const string RequestFeatureDefault = "New features may be requested at the origin of this software. Describe your request as detailed as possible (use case or user story, preconditions, postconditions,...).";
+
+		/// <summary>
+		/// The default change request message is <![CDATA["Changes may be requested at the origin of this software. Describe your request as detailed as possible (use case or user story, preconditions, postconditions,...)."]]>.
+		/// </summary>
+		public const string RequestChangeDefault = "Changes may be requested at the origin of this software. Describe your request as detailed as possible (use case or user story, preconditions, postconditions,...).";
 
 		/// <summary>
 		/// The default bug submission message is <![CDATA["Please report this issue at the origin of this software."]]>.
 		/// </summary>
-		public const string SubmitBugDefault = "Please report this issue at the origin of this software.";
+		public const string SubmitBugDefault = "Please report this issue at the origin of this software. Include as much information as possible";
 
 		private static string staticInvalidExecutionPreamble = InvalidExecutionPreambleDefault;
 		private static string staticRequestSupport           = RequestSupportDefault;
 		private static string staticRequestFeature           = RequestFeatureDefault;
+		private static string staticRequestChange            = RequestChangeDefault;
 		private static string staticSubmitBug                = SubmitBugDefault;
 
 		/// <summary>
@@ -85,6 +91,16 @@ namespace MKY
 		{
 			get { return (staticRequestFeature); }
 			set { staticRequestFeature = value;  }
+		}
+
+		/// <summary>
+		/// The currently active change request message.
+		/// By default <see cref="RequestChangeDefault"/>.
+		/// </summary>
+		public static string RequestChange
+		{
+			get { return (staticRequestChange); }
+			set { staticRequestChange = value;  }
 		}
 
 		/// <summary>

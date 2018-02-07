@@ -483,6 +483,7 @@ namespace YAT.Controller
 		{
 			MessageHelper.RequestSupport =      "Support may be requested as described in 'Help > Request Support'.";
 			MessageHelper.RequestFeature = "New features can be requested as described in 'Help > Request Feature'.";
+			MessageHelper.RequestChange  = "Changes can also be requested as described in 'Help > Request Feature'.";
 			MessageHelper.SubmitBug      =      "Please report this issue as described in 'Help > Submit Bug'.";
 		#if (HANDLE_UNHANDLED_EXCEPTIONS)
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler:
@@ -692,6 +693,7 @@ namespace YAT.Controller
 		{
 			MessageHelper.RequestSupport =      "Support may be requested as described in 'Help > Request Support'.";
 			MessageHelper.RequestFeature = "New features can be requested as described in 'Help > Request Feature'.";
+			MessageHelper.RequestChange  = "Changes can also be requested as described in 'Help > Request Feature'.";
 			MessageHelper.SubmitBug      =      "Please report this issue as described in 'Help > Submit Bug'.";
 		#if (HANDLE_UNHANDLED_EXCEPTIONS)
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler:
@@ -840,6 +842,7 @@ namespace YAT.Controller
 		{
 			MessageHelper.RequestSupport =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
 			MessageHelper.RequestFeature = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
+			MessageHelper.RequestChange  = "Changes can also be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
 			MessageHelper.SubmitBug =           "Please report this issue at <sourceforge.net/projects/y-a-terminal/bugs/>.";
 		#if (HANDLE_UNHANDLED_EXCEPTIONS)
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler:
@@ -947,6 +950,7 @@ namespace YAT.Controller
 		{
 			MessageHelper.RequestSupport =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
 			MessageHelper.RequestFeature = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
+			MessageHelper.RequestChange  = "Changes can also be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
 			MessageHelper.SubmitBug =           "Please report this issue at <sourceforge.net/projects/y-a-terminal/bugs/>.";
 		#if (HANDLE_UNHANDLED_EXCEPTIONS)
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler:
