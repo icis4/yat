@@ -23,7 +23,6 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Windows.Forms;
 
@@ -70,10 +69,10 @@ namespace YAT.View.Forms
 			sb = new StringBuilder();
 			switch (tracker)
 			{
-				case TrackerType.Support: sb.Append("Support for YAT can be requested online.");  break;
-				case TrackerType.Feature: sb.Append("Features for YAT can be requested online."); break;
+				case TrackerType.Support: sb.Append("Support for "              + ApplicationEx.ProductName + " can be requested online."); break;
+				case TrackerType.Feature: sb.Append("Features and changes for " + ApplicationEx.ProductName + " can be requested online."); break;
 				case TrackerType.Bug:
-				default:                  sb.Append("Bugs for YAT can be submitted online.");     break;
+				default:                  sb.Append("Bugs for "                 + ApplicationEx.ProductName + " can be submitted online."); break;
 			}
 			sb.Append(" Follow the link below and proceed according to the instructions.");
 			linkLabel_Intro.Text = sb.ToString();
@@ -83,16 +82,16 @@ namespace YAT.View.Forms
 			sb.Append("If you have a SourceForge.net account, you are advised to log on to SourceForge.");
 			switch (tracker)
 			{
-				case TrackerType.Support: sb.Append(" You can then send a support request via the website's integrated email service.");  break;
+				case TrackerType.Support: sb.Append(" You can participate in or start a discussion, or send an email via the website's integrated email service."); break;
 				case TrackerType.Feature: sb.Append(" You will then get email notifications about the progress of the feature request."); break;
 				case TrackerType.Bug:
-				default:                  sb.Append(" You will then get email notifications about the progress of the bug submission.");  break;
+				default:                  sb.Append(" You will then get email notifications about the progress of the bug submission."); break;
 			}
 			sb.AppendLine();
 			sb.Append("If you don't have a SourceForge.net account,");
 			switch (tracker)
 			{
-				case TrackerType.Support: sb.Append(" directly contact YAT by email."); break;
+				case TrackerType.Support: sb.Append(" you can participate in or start a discussion, or directly contact " + ApplicationEx.ProductName + " by email."); break;
 				case TrackerType.Feature:
 				case TrackerType.Bug:
 				default:                  sb.Append(" you can optionally provide a email address to get email notifications."); break;
@@ -120,25 +119,25 @@ namespace YAT.View.Forms
 			{
 				case TrackerType.Support:
 				{
-					sb.AppendLine("    > YAT version you are using.");
+					sb.AppendLine("    > Environment (" + ApplicationEx.ProductName + " version, operating system, devices,...).");
 					sb.AppendLine("    > What you want to achieve.");
-					sb.AppendLine("    > What didn't work.");
+					sb.AppendLine("    > What doesn't work.");
 					break;
 				}
 
 				case TrackerType.Feature:
 				{
-					sb.AppendLine("    > YAT version you are using.");
-					sb.AppendLine("    > Expected behavior of the new feature.");
-					sb.AppendLine("    > Use case(s) of the new feature.");
+					sb.AppendLine("    > Environment (" + ApplicationEx.ProductName + " version, operating system, devices,...).");
+					sb.AppendLine("    > Expected behavior of the new or changed feature.");
+					sb.AppendLine("    > Use case(s) of the new or changed feature.");
 					break;
 				}
 
 				case TrackerType.Bug:
 				default:
 				{
-					sb.AppendLine("    > YAT version you are using.");
-					sb.AppendLine("    > Procedure to reproduce the bug.");
+					sb.AppendLine("    > Environment (" + ApplicationEx.ProductName + " version, operating system, devices,...).");
+					sb.AppendLine("    > Steps to reproduce the bug.");
 					sb.AppendLine("    > Any useful additional information.");
 					break;
 				}
