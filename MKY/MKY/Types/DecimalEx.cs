@@ -22,6 +22,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
@@ -37,8 +38,14 @@ namespace MKY
 		/// <summary>
 		/// Limits <paramref name="value"/> to the values specified.
 		/// </summary>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="min"/> is larger than <paramref name="max"/>.
+		/// </exception>
 		public static decimal Limit(decimal value, decimal min, decimal max)
 		{
+			if (min > max)
+				throw (new ArgumentException(string.Format("Precondition is 'min' <= 'max', but 'min' is {0} and 'max' is {1}!", min, max))); // Do not append 'MessageHelper.SubmitBug' as caller could rely on this exception text.
+
 			if (value < min)
 				return (min);
 
