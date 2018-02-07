@@ -210,7 +210,7 @@ namespace YAT.View.Forms
 			int pageCount = this.settingsInEdit.Pages.Count;
 			if (pageCount > 0)
 			{
-				this.selectedPage = Int32Ex.Limit(this.startupControl.RequestedPage, 1, pageCount);
+				this.selectedPage = Int32Ex.Limit(this.startupControl.RequestedPage, 1, pageCount); // 'Count' is 1 or above.
 			}
 			else // Create a page if no page exists yet:
 			{
@@ -221,7 +221,7 @@ namespace YAT.View.Forms
 			// Initially set controls and validate its contents where needed:
 			SetControls();
 
-			var requestedCommand = Int32Ex.Limit(this.startupControl.RequestedCommand, 1, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage);
+			var requestedCommand = Int32Ex.Limit(this.startupControl.RequestedCommand, 1, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); // 'Max' is 1 or above.
 			var requestedControl = this.predefinedCommandSettingsSets[requestedCommand - 1];
 			requestedControl.PrepareUserInput(); // See remarks of this method!
 			requestedControl.Select();
@@ -583,7 +583,7 @@ namespace YAT.View.Forms
 				== DialogResult.Yes)
 			{
 				this.settingsInEdit.Pages.RemoveAt(SelectedPageIndex);
-				this.selectedPage = Int32Ex.Limit(this.selectedPage, 1, this.settingsInEdit.Pages.Count);
+				this.selectedPage = Int32Ex.Limit(this.selectedPage, 1, Math.Max(this.settingsInEdit.Pages.Count, 1)); // 'max' must be 1 or above.
 				SetControls();
 			}
 		}

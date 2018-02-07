@@ -430,7 +430,7 @@ namespace MKY.Windows.Forms
 			////DebugCountAndIndices("TopIndex is going to be retrieved")
 
 				int unsafeResult = (TopIndex + (TotalVisibleItemCount - 1));
-				int   safeResult = Int32Ex.Limit(unsafeResult, 0, (Items.Count - 1));
+				int   safeResult = Int32Ex.Limit(unsafeResult, 0, Math.Max((Items.Count - 1), 0)); // 'max' must be 0 or above.
 				return (safeResult);
 			}
 		}

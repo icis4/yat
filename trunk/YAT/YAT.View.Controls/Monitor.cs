@@ -1809,10 +1809,10 @@ namespace YAT.View.Controls
 			}
 			else
 			{
-				int x = (processorLoadPercentage - LowerLoad); // x is max. 75%
+				int x = (processorLoadPercentage - LowerLoad); // Resulting x is max. 75%
 				int y = (x * x) / 5;
 
-				y = Int32Ex.Limit(y, LowerInterval, UpperInterval);
+				y = Int32Ex.Limit(y, LowerInterval, UpperInterval); // 'min' and 'max' are fixed.
 
 				this.monitorUpdateTickInterval = StopwatchEx.TimeToTicks(y);
 				this.performImmediateUpdate = false;

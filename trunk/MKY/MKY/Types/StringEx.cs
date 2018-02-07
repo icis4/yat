@@ -589,7 +589,7 @@ namespace MKY
 			var l = new List<string>(str.Length); // Preset the required capacity to improve memory management.
 			for (int i = 0; i < str.Length; i += desiredChunkLength)
 			{
-				int effectiveChunkLength = Int32Ex.Limit(desiredChunkLength, 0, str.Length - i);
+				int effectiveChunkLength = Int32Ex.Limit(desiredChunkLength, 0, (str.Length - i)); // Remaining length is always above 0.
 				l.Add(str.Substring(i, effectiveChunkLength));
 			}
 			return (l.ToArray());
@@ -640,7 +640,7 @@ namespace MKY
 					splitIndex = (startIndex + desiredChunkLength);
 
 				// Limit to split within the string and execute the split:
-				splitIndex = Int32Ex.Limit(splitIndex, startIndex, str.Length);
+				splitIndex = Int32Ex.Limit(splitIndex, startIndex, str.Length); // Length is always above start index.
 				int length = (splitIndex - startIndex);
 				chunks.Add(str.Substring(startIndex, length));
 				startIndex += length;
