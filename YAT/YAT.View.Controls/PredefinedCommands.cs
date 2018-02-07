@@ -140,7 +140,7 @@ namespace YAT.View.Controls
 			{
 				int selectedPageNew;
 				if ((this.pages != null) && (this.pages.Count > 0))
-					selectedPageNew = Int32Ex.Limit(value, SelectedPageDefault, this.pages.Count);
+					selectedPageNew = Int32Ex.Limit(value, SelectedPageDefault, this.pages.Count); // 'Count' is 1 or above.
 				else
 					selectedPageNew = SelectedPageDefault;
 

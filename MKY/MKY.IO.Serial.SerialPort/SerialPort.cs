@@ -1560,21 +1560,21 @@ namespace MKY.IO.Serial.SerialPort
 									if (this.settings.BufferMaxBaudRate)
 									{
 										int remainingSizeInInterval = (maxFramesPerInterval - maxBaudRatePerInterval.Value);
-										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, remainingSizeInInterval);
+										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, Math.Max(remainingSizeInInterval, 0)); // 'max' must be 0 or above.
 									}
 
 									// Reduce chunk size if maximum send rate is specified:
 									if (this.settings.MaxSendRate.Enabled)
 									{
 										int remainingSizeInInterval = (this.settings.MaxSendRate.Size - maxSendRate.Value);
-										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, remainingSizeInInterval);
+										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, Math.Max(remainingSizeInInterval, 0)); // 'max' must be 0 or above.
 									}
 
 									// Further reduce chunk size if maximum is specified:
 									if (this.settings.MaxChunkSize.Enabled)
 									{
 										int maxChunkSizeSetting = this.settings.MaxChunkSize.Size;
-										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, maxChunkSizeSetting);
+										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, maxChunkSizeSetting); // 'Setting' is always above 0.
 									}
 
 									List<byte> effectiveChunkData;

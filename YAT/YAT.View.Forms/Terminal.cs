@@ -3540,7 +3540,7 @@ namespace YAT.View.Forms
 
 						int distance = (int)((this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
 
-						splitContainer_Predefined.SplitterDistance = Int32Ex.Limit(distance, 0, (splitContainer_Predefined.Width - 1));
+						splitContainer_Predefined.SplitterDistance = Int32Ex.Limit(distance, 0, Math.Max((splitContainer_Predefined.Width - 1), 0)); // 'max' must be 0 or above.
 					}
 					else
 					{
@@ -3575,7 +3575,7 @@ namespace YAT.View.Forms
 
 							int distance = (int)((this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
 
-							splitContainer_TxMonitor.SplitterDistance = Int32Ex.Limit(distance, 0, (widthOrHeight - 1));
+							splitContainer_TxMonitor.SplitterDistance = Int32Ex.Limit(distance, 0, Math.Max((widthOrHeight - 1), 0)); // 'max' must be 0 or above.
 						}
 					}
 					else
@@ -3600,7 +3600,7 @@ namespace YAT.View.Forms
 
 							int distance = (int)((this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
 
-							splitContainer_RxMonitor.SplitterDistance = Int32Ex.Limit(distance, 0, (widthOrHeight - 1));
+							splitContainer_RxMonitor.SplitterDistance = Int32Ex.Limit(distance, 0, Math.Max((widthOrHeight - 1), 0)); // 'max' must be 0 or above.
 						}
 					}
 					else
@@ -3698,9 +3698,9 @@ namespace YAT.View.Forms
 
 				// Local scope for 'distance':
 				{
-					int distance = splitContainer_Terminal.Height - panel_Send.Height - splitContainer_Terminal.SplitterWidth;
+					int distance = (splitContainer_Terminal.Height - panel_Send.Height - splitContainer_Terminal.SplitterWidth);
 					if (splitContainer_Terminal.SplitterDistance != distance)
-						splitContainer_Terminal.SplitterDistance = Int32Ex.Limit(distance, 0, (splitContainer_Terminal.Height - 1));
+						splitContainer_Terminal.SplitterDistance = Int32Ex.Limit(distance, 0, Math.Max((splitContainer_Terminal.Height - 1), 0)); // 'max' must be 0 or above.
 				}
 
 				LayoutSend();
@@ -3720,7 +3720,7 @@ namespace YAT.View.Forms
 			const int PredefinedOffset = 6; // 2 x margin of 3 (frame + buttons)
 			int absoluteX = splitContainer_Predefined.SplitterDistance + splitContainer_Predefined.Left;
 			int relativeX = absoluteX - send.Left + PredefinedOffset;
-			send.SendSplitterDistance = Int32Ex.Limit(relativeX, 0, (send.Width - 1));
+			send.SendSplitterDistance = Int32Ex.Limit(relativeX, 0, Math.Max((send.Width - 1), 0)); // 'max' must be 0 or above.
 		}
 
 		private void SetDisplayControls()

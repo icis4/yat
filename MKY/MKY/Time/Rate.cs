@@ -195,7 +195,7 @@ namespace MKY.Time
 				foreach (TimeStampItem<int> tsi in qa)
 				{
 					TimeSpan ts = (now - tsi.TimeStamp);
-					int i = Int32Ex.Limit((int)(ts.TotalMilliseconds / this.interval), 0, numberOfIntervals - 1);
+					int i = Int32Ex.Limit((int)(ts.TotalMilliseconds / this.interval), 0, Math.Max((numberOfIntervals - 1), 0)); // 'max' must be 0 or above.
 					valuePerInterval[i] += tsi.Item;
 				}
 
