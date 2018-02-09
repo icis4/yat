@@ -119,7 +119,7 @@ namespace YAT.View.Forms
 			{
 				case TrackerType.Support:
 				{
-					sb.AppendLine("    > Environment (" + ApplicationEx.ProductName + " version, operating system, devices,...).");
+					sb.AppendLine("    > Environment (" + ApplicationEx.ProductName + " version and settings, devices, system,...).");
 					sb.AppendLine("    > What you want to achieve.");
 					sb.AppendLine("    > What doesn't work.");
 					break;
@@ -127,7 +127,7 @@ namespace YAT.View.Forms
 
 				case TrackerType.Feature:
 				{
-					sb.AppendLine("    > Environment (" + ApplicationEx.ProductName + " version, operating system, devices,...).");
+					sb.AppendLine("    > Environment (" + ApplicationEx.ProductName + " version and settings, devices, system,...).");
 					sb.AppendLine("    > Expected behavior of the new or changed feature.");
 					sb.AppendLine("    > Use case(s) of the new or changed feature.");
 					break;
@@ -136,7 +136,7 @@ namespace YAT.View.Forms
 				case TrackerType.Bug:
 				default:
 				{
-					sb.AppendLine("    > Environment (" + ApplicationEx.ProductName + " version, operating system, devices,...).");
+					sb.AppendLine("    > Environment (" + ApplicationEx.ProductName + " version and settings, devices, system,...).");
 					sb.AppendLine("    > Steps to reproduce the bug.");
 					sb.AppendLine("    > Any useful additional information.");
 					break;
