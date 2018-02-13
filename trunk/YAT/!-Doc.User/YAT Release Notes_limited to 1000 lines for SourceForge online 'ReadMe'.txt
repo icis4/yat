@@ -92,6 +92,10 @@ Important changes:
   'Send File'. By default, escapes are enabled for 'Send Text' and disabled for 'Send File'.
 - Binary distributions now contain DejaVu fonts for manual installation (feature request #331).
 
+Fixed bugs:
+- 'SplitterDistance' value related 'InvalidOperationException' on startup (bug #409).
+- 'SplitterDistance' value related 'ArgumentOutOfRangeException' on startup (bug #408).
+
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
 - General imitations of .NET Windows.Forms:
@@ -227,7 +231,7 @@ Important changes:
   shortcut (feature request #317 as workaround to limitation of .NET Windows.Forms).
 - Warning on invalid multi-byte encoded byte sequences for string, character and Unicode radix.
 - Option to display the date has been merged with option to display the time, but it is now possible
-  to configure the format (feature requests #291, #319 and related to former feature request #14).
+  to configure the format (feature requests #31, #291, #319 and related to former feature req. #14).
   In addition, options to display the time span as well as the time delta have been added.
 - 'Comments' exclusion on sending has been migrated to 'Text' exclusion that is now supporting
   regex patterns instead of plain strings (feature request #307). The change adds the possibility
