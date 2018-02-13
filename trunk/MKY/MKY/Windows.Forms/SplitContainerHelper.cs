@@ -61,12 +61,9 @@ namespace MKY.Windows.Forms
 				{
 					// Adjust splitter distance:
 					int scaledDistance = CalculateScaledDistanceFromUnscaled(sc, sc.SplitterDistance);
-					if (sc.SplitterDistance != scaledDistance)
-					{
-						int widthOrHeight = OrientationEx.SizeToWidthOrHeight(sc, sc.Orientation);
-						if (widthOrHeight > 0) // otherwise adjustment is skipped.
-							sc.SplitterDistance = Int32Ex.Limit(scaledDistance, 0, (widthOrHeight - 1)); // 'widthOrHeight' is 1 or above.
-					}
+					int limitedDistance = LimitSplitterDistance(sc, scaledDistance);
+					if (sc.SplitterDistance != limitedDistance)
+						sc.SplitterDistance = limitedDistance;
 
 					// Continue with the panels:
 					PerformScaling(sc.Panel1);
@@ -128,6 +125,23 @@ namespace MKY.Windows.Forms
 			{
 				return (scaledDistance);
 			}
+		}
+
+		/// <summary>
+		/// Limits <paramref name="distance"/> according to the preconditions of the
+		/// <see cref="SplitContainer.SplitterDistance"/> property.
+		/// </summary>
+		public static int LimitSplitterDistance(SplitContainer sc, int distance)
+		{
+			int widthOrHeight = OrientationEx.SizeToWidthOrHeight(sc, sc.Orientation);
+
+			int min =                       (sc.Panel1Collapsed ? 0 : sc.Panel1MinSize);
+			int max = (widthOrHeight - 1) - (sc.Panel2Collapsed ? 0 : sc.Panel2MinSize);
+
+			min = Int32Ex.Limit(min, 0, (widthOrHeight - 1)); // Both values must be 0 or above but
+			max = Int32Ex.Limit(max, 0, (widthOrHeight - 1)); // not above the size of the control.
+
+			return (Int32Ex.Limit(distance, min, max));
 		}
 	}
 }
