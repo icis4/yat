@@ -41,7 +41,7 @@ using System.Text;
 namespace MKY.IO
 {
 	/// <summary>
-	/// Utility methods for <see cref="System.IO.Path"/>.
+	/// Utility methods for <see cref="Path"/>.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class PathEx
@@ -414,7 +414,7 @@ namespace MKY.IO
 		/// </summary>
 		/// <remarks>
 		/// Returns <paramref name="directoryPathB"/> if it already is relative.
-		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
+		/// Why is this functionality not already provided by <see cref="Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
 		/// Saying hello to StyleCop ;-.
@@ -433,7 +433,7 @@ namespace MKY.IO
 		/// </summary>
 		/// <remarks>
 		/// Returns <paramref name="filePath"/> if it already is relative.
-		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
+		/// Why is this functionality not already provided by <see cref="Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
 		/// Saying hello to StyleCop ;-.
@@ -455,7 +455,7 @@ namespace MKY.IO
 		/// </summary>
 		/// <remarks>
 		/// Returns <paramref name="directoryPath"/> if it already is relative.
-		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
+		/// Why is this functionality not already provided by <see cref="Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
 		/// Saying hello to StyleCop ;-.
@@ -474,7 +474,7 @@ namespace MKY.IO
 		/// </summary>
 		/// <remarks>
 		/// Returns <paramref name="filePathB"/> if it already is relative.
-		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
+		/// Why is this functionality not already provided by <see cref="Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
 		/// Saying hello to StyleCop ;-.
@@ -499,15 +499,15 @@ namespace MKY.IO
 		/// </summary>
 		/// <remarks>
 		/// Returns <paramref name="directoryPathB"/> if it is absolute.
-		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
+		/// Why is this functionality not already provided by <see cref="Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static string CombineDirectoryPaths(string directoryPathA, string directoryPathB)
 		{
-			if ( Path.IsPathRooted(directoryPathB)) return (directoryPathB);
-			if (!Path.IsPathRooted(directoryPathA)) return (null);
+			if ( Path.IsPathRooted(directoryPathB))   return (directoryPathB);
+			if (!Path.IsPathRooted(directoryPathA))   return (null);
 
 			if (string.IsNullOrEmpty(directoryPathB)) return (directoryPathA);
 
@@ -520,7 +520,7 @@ namespace MKY.IO
 		/// </summary>
 		/// <remarks>
 		/// Returns <paramref name="filePath"/> if it is absolute.
-		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
+		/// Why is this functionality not already provided by <see cref="Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
 		/// Saying hello to StyleCop ;-.
@@ -530,7 +530,7 @@ namespace MKY.IO
 			if ( Path.IsPathRooted(filePath))      return (filePath);
 			if (!Path.IsPathRooted(directoryPath)) return (null);
 
-			if (string.IsNullOrEmpty(filePath)) return (directoryPath);
+			if (string.IsNullOrEmpty(filePath))    return (directoryPath);
 
 			string fileName = Path.GetFileName(filePath);
 			string absolutePath = DoCombineDirectoryPaths(directoryPath, Path.GetDirectoryName(filePath));
@@ -544,15 +544,15 @@ namespace MKY.IO
 		/// </summary>
 		/// <remarks>
 		/// Returns <paramref name="directoryPath"/> if it is absolute.
-		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
+		/// Why is this functionality not already provided by <see cref="Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static string CombineFileAndDirectoryPaths(string filePath, string directoryPath)
 		{
-			if ( Path.IsPathRooted(directoryPath)) return (directoryPath);
-			if (!Path.IsPathRooted(filePath))      return (null);
+			if ( Path.IsPathRooted(directoryPath))   return (directoryPath);
+			if (!Path.IsPathRooted(filePath))        return (null);
 
 			if (string.IsNullOrEmpty(directoryPath)) return (filePath);
 
@@ -565,15 +565,15 @@ namespace MKY.IO
 		/// </summary>
 		/// <remarks>
 		/// Returns <paramref name="filePathB"/> if it is absolute.
-		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
+		/// Why is this functionality not already provided by <see cref="Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static string CombineFilePaths(string filePathA, string filePathB)
 		{
-			if ( Path.IsPathRooted(filePathB)) return (filePathB);
-			if (!Path.IsPathRooted(filePathA)) return (null);
+			if ( Path.IsPathRooted(filePathB))   return (filePathB);
+			if (!Path.IsPathRooted(filePathA))   return (null);
 
 			if (string.IsNullOrEmpty(filePathB)) return (filePathA);
 
