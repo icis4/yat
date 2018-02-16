@@ -1638,7 +1638,7 @@ namespace YAT.Model
 			absoluteTerminalFilePath = PathEx.CombineFilePaths(EnvironmentEx.ResolveAbsolutePath(workspaceFilePath), terminalFilePath);
 
 			// Alternatively, try to use terminal file path only:
-			if (string.IsNullOrEmpty(absoluteTerminalFilePath) || !File.Exists(absoluteTerminalFilePath))
+			if (string.IsNullOrEmpty(absoluteTerminalFilePath))
 				absoluteTerminalFilePath = EnvironmentEx.ResolveAbsolutePath(terminalFilePath);
 
 			try
