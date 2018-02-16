@@ -541,29 +541,31 @@ namespace YAT.Model
 			{
 				if (ExtensionHelper.IsWorkspaceFile(requestedFilePath))
 				{
+					string absoluteFilePath;
 					DocumentSettingsHandler<WorkspaceSettingsRoot> sh;
 					Exception ex;
-					if (OpenWorkspaceFile(requestedFilePath, out sh, out ex))
+					if (OpenWorkspaceFile(requestedFilePath, out absoluteFilePath, out sh, out ex))
 					{
 						this.startArgs.WorkspaceSettingsHandler = sh;
 					}
 					else
 					{
-						this.startArgs.ErrorMessage = ErrorHelper.ComposeMessage("Unable to open workspace file", requestedFilePath, ex);
+						this.startArgs.ErrorMessage = ErrorHelper.ComposeMessage("Unable to open workspace file", absoluteFilePath, ex);
 						return (false);
 					}
 				}
 				else if (ExtensionHelper.IsTerminalFile(requestedFilePath))
 				{
+					string absoluteFilePath;
 					DocumentSettingsHandler<TerminalSettingsRoot> sh;
 					Exception ex;
-					if (OpenTerminalFile(requestedFilePath, out sh, out ex))
+					if (OpenTerminalFile(requestedFilePath, out absoluteFilePath, out sh, out ex))
 					{
 						this.startArgs.TerminalSettingsHandler = sh;
 					}
 					else
 					{
-						this.startArgs.ErrorMessage = ErrorHelper.ComposeMessage("Unable to open terminal file", requestedFilePath, ex);
+						this.startArgs.ErrorMessage = ErrorHelper.ComposeMessage("Unable to open terminal file", absoluteFilePath, ex);
 						return (false);
 					}
 				}
@@ -1388,10 +1390,11 @@ namespace YAT.Model
 		/// <summary></summary>
 		private bool OpenWorkspaceFromFile(string filePath, out string errorMessage)
 		{
+			string absoluteFilePath;
 			DocumentSettingsHandler<WorkspaceSettingsRoot> sh;
 			Guid guid;
 			Exception ex;
-			if (OpenWorkspaceFile(filePath, out sh, out guid, out ex))
+			if (OpenWorkspaceFile(filePath, out absoluteFilePath, out sh, out guid, out ex))
 			{
 				if (OpenWorkspaceFromSettings(sh, guid, out ex))
 				{
@@ -1400,13 +1403,13 @@ namespace YAT.Model
 				}
 				else
 				{
-					errorMessage = ErrorHelper.ComposeMessage("Unable to open workspace", filePath, ex);
+					errorMessage = ErrorHelper.ComposeMessage("Unable to open workspace", absoluteFilePath, ex);
 					return (false);
 				}
 			}
 			else
 			{
-				errorMessage = ErrorHelper.ComposeMessage("Unable to open workspace file", filePath, ex);
+				errorMessage = ErrorHelper.ComposeMessage("Unable to open workspace file", absoluteFilePath, ex);
 				return (false);
 			}
 		}
@@ -1533,19 +1536,21 @@ namespace YAT.Model
 			return (true);
 		}
 
-		private bool OpenWorkspaceFile(string filePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, out Exception exception)
+		private bool OpenWorkspaceFile(string filePath, out string absoluteFilePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, out Exception exception)
 		{
 			Guid guid;
-			return (OpenWorkspaceFile(filePath, out settingsHandler, out guid, out exception));
+			return (OpenWorkspaceFile(filePath, out absoluteFilePath, out settingsHandler, out guid, out exception));
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool OpenWorkspaceFile(string filePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, out Guid guid, out Exception exception)
+		private bool OpenWorkspaceFile(string filePath, out string absoluteFilePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, out Guid guid, out Exception exception)
 		{
+			absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(filePath);
+
 			try
 			{
 				var sh = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
-				sh.SettingsFilePath = EnvironmentEx.ResolveAbsolutePath(filePath);
+				sh.SettingsFilePath = absoluteFilePath;
 				if (sh.Load())
 				{
 					settingsHandler = sh;
@@ -1614,29 +1619,23 @@ namespace YAT.Model
 		// Terminal > Private Methods
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		private bool OpenTerminalFile(string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
+		private bool OpenTerminalFile(string terminalFilePath, out string absoluteTerminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
 		{
-			Exception exception;
-			return (OpenTerminalFile(terminalFilePath, out settingsHandler, out exception));
-		}
-
-		private bool OpenTerminalFile(string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
-		{
-			return (OpenTerminalFile("", terminalFilePath, out settingsHandler, out exception));
+			return (OpenTerminalFile("", terminalFilePath, out absoluteTerminalFilePath, out settingsHandler, out exception));
 		}
 
 		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
+			string absoluteTerminalFilePath;
 			Exception exception;
-			return (OpenTerminalFile(workspaceFilePath, terminalFilePath, out settingsHandler, out exception));
+			return (OpenTerminalFile(workspaceFilePath, terminalFilePath, out absoluteTerminalFilePath, out settingsHandler, out exception));
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
+		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out string absoluteTerminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
 		{
 			// Try to combine the workspace path with terminal path, but only if that is a relative path:
-			var absoluteTerminalFilePath = PathEx.CombineFilePaths(EnvironmentEx.ResolveAbsolutePath(workspaceFilePath), terminalFilePath);
+			absoluteTerminalFilePath = PathEx.CombineFilePaths(EnvironmentEx.ResolveAbsolutePath(workspaceFilePath), terminalFilePath);
 
 			// Alternatively, try to use terminal file path only:
 			if (string.IsNullOrEmpty(absoluteTerminalFilePath) || !File.Exists(absoluteTerminalFilePath))
