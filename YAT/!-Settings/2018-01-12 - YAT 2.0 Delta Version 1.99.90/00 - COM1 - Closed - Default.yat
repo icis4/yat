@@ -324,11 +324,11 @@
     </Log>
   </Explicit>
   <Implicit>
-    <TerminalIsStarted>true</TerminalIsStarted>
+    <TerminalIsStarted>false</TerminalIsStarted>
     <SendText>
       <Command>
-        <IsDefined>true</IsDefined>
-        <Description>[empty]</Description>
+        <IsDefined>false</IsDefined>
+        <Description />
         <DefaultRadix>String</DefaultRadix>
         <CommandLines />
         <IsFilePath>false</IsFilePath>
