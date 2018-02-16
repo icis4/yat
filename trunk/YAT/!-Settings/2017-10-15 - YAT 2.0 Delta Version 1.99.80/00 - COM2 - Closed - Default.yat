@@ -320,7 +320,7 @@
     </Log>
   </Explicit>
   <Implicit>
-    <TerminalIsStarted>true</TerminalIsStarted>
+    <TerminalIsStarted>false</TerminalIsStarted>
     <SendText>
       <Command>
         <IsDefined>false</IsDefined>
