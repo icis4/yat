@@ -1613,9 +1613,10 @@ namespace YAT.Model
 
 		private bool OpenTerminalFromFile(string filePath, Guid guid, int fixedIndex, WindowSettings windowSettings, out string errorMessage)
 		{
+			string absoluteFilePath;
 			DocumentSettingsHandler<TerminalSettingsRoot> sh;
 			Exception ex;
-			if (OpenTerminalFile(filePath, out sh, out ex))
+			if (OpenTerminalFile(filePath, out absoluteFilePath, out sh, out ex))
 			{
 				if (OpenTerminalFromSettings(sh, guid, fixedIndex, windowSettings, out ex))
 				{
@@ -1624,13 +1625,13 @@ namespace YAT.Model
 				}
 				else
 				{
-					errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal", filePath, ex);
+					errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal", absoluteFilePath, ex);
 					return (false);
 				}
 			}
 			else
 			{
-				errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal file", filePath, ex);
+				errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal file", absoluteFilePath, ex);
 				return (false);
 			}
 		}
@@ -1751,19 +1752,19 @@ namespace YAT.Model
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool OpenTerminalFile(string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
+		private bool OpenTerminalFile(string filePath, out string absoluteFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
 		{
 			// Try to combine the workspace path with terminal path, but only if that is a relative path:
-			var absoluteTerminalFilePath = PathEx.CombineFilePaths(this.settingsHandler.SettingsFilePath, terminalFilePath);
+			absoluteFilePath = PathEx.CombineFilePaths(this.settingsHandler.SettingsFilePath, filePath);
 
 			// Alternatively, try to use terminal file path only:
-			if (string.IsNullOrEmpty(absoluteTerminalFilePath) || !File.Exists(absoluteTerminalFilePath))
-				absoluteTerminalFilePath = EnvironmentEx.ResolveAbsolutePath(terminalFilePath);
+			if (string.IsNullOrEmpty(absoluteFilePath) || !File.Exists(absoluteFilePath))
+				absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(filePath);
 
 			try
 			{
 				var sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
-				sh.SettingsFilePath = absoluteTerminalFilePath;
+				sh.SettingsFilePath = absoluteFilePath;
 				if (sh.Load())
 				{
 					settingsHandler = sh;
