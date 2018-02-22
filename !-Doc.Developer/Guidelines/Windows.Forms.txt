@@ -54,6 +54,10 @@ Additional information:
     > #235 "Controls clipped " https://sourceforge.net/p/y-a-terminal/bugs/235/
     > #85 "Improper UI scaling for 120 dpi on Win Vista" https://sourceforge.net/p/y-a-terminal/bugs/85/
 
+If still issues:
+ > Check the values of 'AutoScaleDimensions', 'AutoScaleMode' and 'ClientSize' for each form.
+   'AutoScaleDimensions' and 'ClientSize' may change depending on the setup of the computer where a form gets designed.
+
 
 StatusStrip
 -----------
