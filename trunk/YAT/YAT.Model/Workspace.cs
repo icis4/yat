@@ -1463,7 +1463,7 @@ namespace YAT.Model
 			var clone = new GuidList<TerminalSettingsItem>(this.settingsRoot.TerminalSettings);
 			for (int i = 0; i < clone.Count; i++)
 			{
-				TerminalSettingsItem item = clone[i];
+				var item = clone[i];
 
 				// \remind
 				// Check whether the item is defined. Because under certain error conditions there 
