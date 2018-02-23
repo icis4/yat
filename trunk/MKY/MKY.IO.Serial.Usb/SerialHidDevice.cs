@@ -279,7 +279,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				IO.Usb.DeviceInfo di = DeviceInfo;
+				var di = DeviceInfo;
 				if (di != null)
 					return (di.ToString());
 				else
@@ -814,7 +814,7 @@ namespace MKY.IO.Serial.Usb
 			if (this.device != null)
 				DisposeDeviceAndThreads();
 
-			IO.Usb.DeviceInfo di = this.settings.DeviceInfo;
+			var di = this.settings.DeviceInfo;
 			if (di != null)
 			{
 				StartThreads();
@@ -1378,7 +1378,7 @@ namespace MKY.IO.Serial.Usb
 			if (IsDisposed)
 				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
 
-			IO.Usb.DeviceInfo di = DeviceInfo;
+			var di = DeviceInfo;
 			if (di != null)
 				return (di.ToString());
 			else
@@ -1391,7 +1391,7 @@ namespace MKY.IO.Serial.Usb
 			if (IsDisposed)
 				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
 
-			IO.Usb.DeviceInfo di = DeviceInfo;
+			var di = DeviceInfo;
 			if (di != null)
 				return (di.ToShortString());
 			else
