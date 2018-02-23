@@ -95,6 +95,7 @@ Important changes:
 Fixed bugs:
 - 'SplitterDistance' value related 'InvalidOperationException' on startup fixed (bug #409).
 - 'SplitterDistance' value related 'ArgumentOutOfRangeException' on startup fixed (bug #408).
+- 'NullReferenceException' under certain conditions when .yat file got deleted fixed (bug #407).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
