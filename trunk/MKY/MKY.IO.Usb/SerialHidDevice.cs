@@ -74,7 +74,7 @@ namespace MKY.IO.Usb
 		{
 			Reset,
 			Starting,
-			Started,
+			Stopping,
 			ConnectedAndClosed,
 			ConnectedAndOpened,
 			DisconnectedAndWaitingForReopen,
@@ -613,11 +613,9 @@ namespace MKY.IO.Usb
 
 				switch (this.state)
 				{
-					case State.Started:
 					case State.ConnectedAndClosed:
 					case State.ConnectedAndOpened:
 					case State.DisconnectedAndWaitingForReopen:
-					case State.DisconnectedAndClosed:
 						return (true);
 
 					default:
@@ -693,16 +691,7 @@ namespace MKY.IO.Usb
 
 			DebugMessage("Starting...");
 			SetStateSynchronized(State.Starting);
-			if (Open())
-			{
-				SetStateSynchronized(State.Started);
-				return (true);
-			}
-			else
-			{
-				SetStateSynchronized(State.Reset);
-				return (false);
-			}
+			return (Open()); // Resulting state will be set in Open().
 		}
 
 		/// <summary>
@@ -714,8 +703,8 @@ namespace MKY.IO.Usb
 			AssertNotDisposed();
 
 			DebugMessage("Stopping...");
-			Close();
-			SetStateSynchronized(State.Reset);
+			SetStateSynchronized(State.Stopping);
+			Close(); // Resulting state will be set in Close().
 		}
 
 		/// <summary>
@@ -727,7 +716,10 @@ namespace MKY.IO.Usb
 
 			// The stream may already exist and be ready.
 			if (IsOpen)
+			{
+				SetStateSynchronized(State.ConnectedAndOpened);
 				return (true);
+			}
 
 			DebugMessage("Opening...");
 			CreateAndStartReceiveThread();
@@ -945,6 +937,13 @@ namespace MKY.IO.Usb
 		// Methods > Stream
 		//------------------------------------------------------------------------------------------
 
+		/// <remarks>
+		/// Currently, this implementation is fixed to true Ser/HID devices. On 2018-02-23 attempted
+		/// to create a <see cref="Win32.Hid.CreateSharedReadHandle"/> to check whether accessing a
+		/// true HID device (e.g. a mouse) would also work. It doesn't, both calls (read/write as
+		/// well as read-only) result in "API call returned code '5' meaning 'access denied'".
+		/// Looks like the HID driver enforces exclusive device access.
+		/// </remarks>
 		private bool CreateStream()
 		{
 			SafeFileHandle readWriteHandle;
