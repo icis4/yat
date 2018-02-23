@@ -1112,6 +1112,30 @@ namespace YAT.Domain
 			this.bidirLineState.Direction = d;
 		}
 
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		private void ProcessAndSignalLineBreak(string ps, IODirection d)
+		{
+			LineState lineState;
+			switch (d)
+			{
+				case IODirection.Tx: lineState = this.txLineState; break;
+				case IODirection.Rx: lineState = this.rxLineState; break;
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+
+			if (lineState.Elements.Count > 0)
+			{
+				var elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				var lines = new List<DisplayLine>();
+
+				ExecuteLineEnd(lineState, ps, elements, lines);
+
+				OnDisplayElementsProcessed(d, elements);
+				OnDisplayLinesProcessed(d, lines);
+			}
+		}
+
 		/// <summary></summary>
 		protected override void ProcessAndSignalRawChunk(RawChunk raw, bool highlight)
 		{
@@ -1120,6 +1144,10 @@ namespace YAT.Domain
 
 			// Process the raw chunk:
 			base.ProcessAndSignalRawChunk(raw, highlight);
+
+			// Enforce line break if requested:
+			if (TerminalSettings.Display.ChunkLineBreakEnabled)
+				ProcessAndSignalLineBreak(raw.PortStamp, raw.Direction);
 		}
 
 		#endregion

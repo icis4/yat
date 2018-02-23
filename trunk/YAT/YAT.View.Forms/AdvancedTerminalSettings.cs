@@ -370,6 +370,14 @@ namespace YAT.View.Forms
 			}
 		}
 
+		private void checkBox_ChunkLineBreak_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Display.ChunkLineBreakEnabled = checkBox_ChunkLineBreak.Checked;
+		}
+
 		private void textBox_MaxLineCount_TextChanged(object sender, EventArgs e)
 		{
 			int lines;
@@ -1072,6 +1080,7 @@ namespace YAT.View.Forms
 
 				checkBox_PortLineBreak.Checked      = this.settingsInEdit.Terminal.Display.PortLineBreakEnabled;
 				checkBox_DirectionLineBreak.Checked = this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled;
+				checkBox_ChunkLineBreak.Checked     = this.settingsInEdit.Terminal.Display.ChunkLineBreakEnabled;
 				textBox_MaxLineCount.Text           = this.settingsInEdit.Terminal.Display.MaxLineCount.ToString(CultureInfo.CurrentCulture);
 				textBox_MaxBytePerLineCount.Text    = this.settingsInEdit.Terminal.Display.MaxBytePerLineCount.ToString(CultureInfo.CurrentCulture);
 
@@ -1183,6 +1192,7 @@ namespace YAT.View.Forms
 
 				this.settingsInEdit.Terminal.Display.PortLineBreakEnabled      = Domain.Settings.DisplaySettings.PortLineBreakEnabledDefault;
 				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = Domain.Settings.DisplaySettings.DirectionLineBreakEnabledDefault;
+				this.settingsInEdit.Terminal.Display.ChunkLineBreakEnabled     = Domain.Settings.DisplaySettings.ChunkLineBreakEnabledDefault;
 				this.settingsInEdit.Terminal.Display.MaxLineCount              = Domain.Settings.DisplaySettings.MaxLineCountDefault;
 				this.settingsInEdit.Terminal.Display.MaxBytePerLineCount       = Domain.Settings.DisplaySettings.MaxBytePerLineCountDefault;
 
@@ -1229,6 +1239,9 @@ namespace YAT.View.Forms
 
 				// User:
 				this.settingsInEdit.UserName = Settings.Terminal.ExplicitSettings.UserNameDefault;
+
+				// I/O dependent settings:
+				this.settingsInEdit.Terminal.UpdateIOTypeDependentSettings();
 			}
 			finally
 			{

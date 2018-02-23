@@ -125,6 +125,7 @@ namespace YAT.Domain.Settings
 					this.ioType = value;
 
 					// Set socket host type as well:
+
 					if (Socket != null)
 						Socket.Type = (IOTypeEx)value;
 

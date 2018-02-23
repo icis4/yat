@@ -87,6 +87,10 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 YAT 2.0 Final :: 2018-0x-xx
 ----------------------------------------------------------------------------------------------------
 
+New:
+- Option to break lines on each sent or received chunk (feature request 335).
+  Useful for message- rather than stream-oriented communication, e.g. most use cases of UDP/IP.
+
 Important changes:
 - Option to enable/disable <...> and \... escape sequences has been separated for 'Send Text' and
   'Send File'. By default, escapes are enabled for 'Send Text' and disabled for 'Send File'.
