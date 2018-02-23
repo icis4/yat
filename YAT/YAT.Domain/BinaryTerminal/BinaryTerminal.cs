@@ -1002,7 +1002,7 @@ namespace YAT.Domain
 		}
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		private void ProcessAndSignalTimedLineBreak(IODirection d)
+		private void ProcessAndSignalLineBreak(IODirection d)
 		{
 			LineState lineState;
 			switch (d)
@@ -1033,6 +1033,10 @@ namespace YAT.Domain
 
 			// Process the raw chunk:
 			base.ProcessAndSignalRawChunk(raw, highlight);
+
+			// Enforce line break if requested:
+			if (TerminalSettings.Display.ChunkLineBreakEnabled)
+				ProcessAndSignalLineBreak(raw.Direction);
 		}
 
 		#endregion
@@ -1134,12 +1138,12 @@ namespace YAT.Domain
 
 		private void txTimedLineBreak_Elapsed(object sender, EventArgs e)
 		{
-			ProcessAndSignalTimedLineBreak(IODirection.Tx);
+			ProcessAndSignalLineBreak(IODirection.Tx);
 		}
 
 		private void rxTimedLineBreak_Elapsed(object sender, EventArgs e)
 		{
-			ProcessAndSignalTimedLineBreak(IODirection.Rx);
+			ProcessAndSignalLineBreak(IODirection.Rx);
 		}
 
 		#endregion

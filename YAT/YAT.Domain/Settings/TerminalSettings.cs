@@ -329,6 +329,27 @@ namespace YAT.Domain.Settings
 
 		#endregion
 
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <remarks>
+		/// \remind (2018-02-23 / MKY)
+		/// Not a 'nice' solution, but it works...
+		/// </remarks>
+		public void UpdateIOTypeDependentSettings()
+		{
+			bool isUdpSocket = ((IOTypeEx)IO.IOType).IsUdpSocket;
+
+			if (Display != null)
+				Display.ChunkLineBreakEnabled = isUdpSocket;
+
+			SetMyChanged();
+		}
+
+		#endregion
+
 		#region Object Members
 		//==========================================================================================
 		// Object Members

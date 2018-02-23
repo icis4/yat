@@ -94,6 +94,9 @@ namespace YAT.Domain.Settings
 		public const bool DirectionLineBreakEnabledDefault = true;
 
 		/// <summary></summary>
+		public const bool ChunkLineBreakEnabledDefault = false;
+
+		/// <summary></summary>
 		public static readonly string InfoSeparatorDefault = " "; // Space for better separability of elements.
 
 		/// <summary></summary>
@@ -121,6 +124,7 @@ namespace YAT.Domain.Settings
 
 		private bool portLineBreakEnabled;
 		private bool directionLineBreakEnabled;
+		private bool chunkLineBreakEnabled;
 
 		private InfoSeparatorEx infoSeparator; // = null;
 		private InfoEnclosureEx infoEnclosure; // = null;
@@ -172,6 +176,7 @@ namespace YAT.Domain.Settings
 
 			PortLineBreakEnabled      = rhs.PortLineBreakEnabled;
 			DirectionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
+			ChunkLineBreakEnabled     = rhs.ChunkLineBreakEnabled;
 
 			InfoSeparator     = rhs.InfoSeparator;
 			InfoEnclosure     = rhs.InfoEnclosure;
@@ -208,6 +213,7 @@ namespace YAT.Domain.Settings
 
 			PortLineBreakEnabled      = PortLineBreakEnabledDefault;
 			DirectionLineBreakEnabled = DirectionLineBreakEnabledDefault;
+			ChunkLineBreakEnabled     = ChunkLineBreakEnabledDefault;
 
 			InfoSeparator     = InfoSeparatorDefault;
 			InfoEnclosure     = InfoEnclosureDefault;
@@ -602,6 +608,21 @@ namespace YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("ChunkLineBreakEnabled")]
+		public virtual bool ChunkLineBreakEnabled
+		{
+			get { return (this.chunkLineBreakEnabled); }
+			set
+			{
+				if (this.chunkLineBreakEnabled != value)
+				{
+					this.chunkLineBreakEnabled = value;
+					SetMyChanged();
+				}
+			}
+		}
+
 		/// <remarks>
 		/// This 'EnumEx' cannot be serialized, thus, the helper below is used for serialization.
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
@@ -728,6 +749,7 @@ namespace YAT.Domain.Settings
 
 				hashCode = (hashCode * 397) ^ PortLineBreakEnabled     .GetHashCode();
 				hashCode = (hashCode * 397) ^ DirectionLineBreakEnabled.GetHashCode();
+				hashCode = (hashCode * 397) ^ ChunkLineBreakEnabled    .GetHashCode();
 
 				hashCode = (hashCode * 397) ^ (InfoSeparator != null ? InfoSeparator.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (InfoEnclosure != null ? InfoEnclosure.GetHashCode() : 0);
@@ -783,6 +805,7 @@ namespace YAT.Domain.Settings
 
 				PortLineBreakEnabled     .Equals(other.PortLineBreakEnabled)      &&
 				DirectionLineBreakEnabled.Equals(other.DirectionLineBreakEnabled) &&
+				ChunkLineBreakEnabled    .Equals(other.ChunkLineBreakEnabled)     &&
 
 				ObjectEx.Equals(InfoSeparator, other.InfoSeparator) &&
 				ObjectEx.Equals(InfoEnclosure, other.InfoEnclosure)

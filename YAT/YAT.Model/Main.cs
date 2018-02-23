@@ -714,9 +714,17 @@ namespace YAT.Model
 			{
 				Domain.IOType ioType;
 				if (Domain.IOTypeEx.TryParse(this.commandLineArgs.IOType, out ioType))
-					terminalSettings.IO.IOType = ioType;
+				{
+					if (terminalSettings.IO.IOType != ioType)
+					{
+						terminalSettings.IO.IOType = ioType;
+						terminalSettings.UpdateIOTypeDependentSettings(); // Update because I/O type has changed.
+					}
+				}
 				else
+				{
 					return (false);
+				}
 			}
 
 			var finalIOType = terminalSettings.IO.IOType;
