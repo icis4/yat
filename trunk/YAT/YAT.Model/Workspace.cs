@@ -718,7 +718,14 @@ namespace YAT.Model
 			if (!this.settingsHandler.SettingsFilePathIsValid)
 			{
 				if (autoSaveIsAllowed) {
+					// Set the new file path...
 					this.settingsHandler.SettingsFilePath = ComposeAbsoluteAutoSaveFilePath();
+
+					// ...adjust the potentially relative terminal files paths to the new absolute workspace file path...
+					foreach (var t in this.terminals)
+						ReplaceTerminalInWorkspaceSettings(t);
+
+					// ...and further down, save the workspace itself.
 				}
 				else if (userInteractionIsAllowed) {
 					return (RequestNormalSaveAsFromUser());
@@ -1795,7 +1802,7 @@ namespace YAT.Model
 			string filePath = terminal.SettingsFilePath;
 			if (ApplicationSettings.LocalUserSettings.General.UseRelativePaths)
 			{
-				PathCompareResult pcr = PathEx.CompareFilePaths(this.settingsHandler.SettingsFilePath, terminal.SettingsFilePath);
+				var pcr = PathEx.CompareFilePaths(this.settingsHandler.SettingsFilePath, terminal.SettingsFilePath);
 				if (pcr.AreRelative)
 					filePath = pcr.RelativePath;
 			}
