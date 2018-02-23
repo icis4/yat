@@ -193,29 +193,29 @@ namespace MKY.Time
 		/// <summary></summary>
 		public int UpdateInterval
 		{
-			get { AssertNotDisposed(); return (this.updateInterval); }
-			set { AssertNotDisposed(); this.updateInterval = value;  }
+			get { AssertNotDisposed(); return (this.updateInterval);        }
+			set { AssertNotDisposed();         this.updateInterval = value; }
 		}
 
 		/// <summary></summary>
 		public int RateInterval
 		{
-			get { AssertNotDisposed(); return (this.rate.Interval); }
-			set { AssertNotDisposed(); this.rate.Interval = value;  }
+			get { AssertNotDisposed(); return (this.rate.Interval);        }
+			set { AssertNotDisposed();         this.rate.Interval = value; }
 		}
 
 		/// <summary></summary>
 		public int RateWindow
 		{
-			get { AssertNotDisposed(); return (this.rate.Window); }
-			set { AssertNotDisposed(); this.rate.Window = value;  }
+			get { AssertNotDisposed(); return (this.rate.Window);        }
+			set { AssertNotDisposed();         this.rate.Window = value; }
 		}
 
 		/// <summary></summary>
 		public int RateValue
 		{
-			get { AssertNotDisposed(); return (this.rate.Value); }
-			set { AssertNotDisposed(); this.rate.Value = value;  }
+			get { AssertNotDisposed(); return (this.rate.Value);        }
+			set { AssertNotDisposed();         this.rate.Value = value; }
 		}
 
 		#endregion

@@ -151,7 +151,7 @@ namespace YAT.Settings.Workspace
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public MKY.GuidList<TerminalSettingsItem> TerminalSettings
+		public GuidList<TerminalSettingsItem> TerminalSettings
 		{
 			get { return (this.workspace.TerminalSettings); }
 		}
