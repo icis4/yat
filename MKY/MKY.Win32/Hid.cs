@@ -788,7 +788,40 @@ namespace MKY.Win32
 		/// Creates a device handle of the HID device at the given system path.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool CreateSharedReadWriteHandle(string devicePath, out SafeFileHandle readHandle)
+		public static bool CreateSharedReadHandle(string devicePath, out SafeFileHandle handle)
+		{
+			SafeFileHandle h = FileIO.NativeMethods.CreateFile
+			(
+				devicePath,
+				FileIO.NativeTypes.Access.GENERIC_READ,
+				FileIO.NativeTypes.ShareMode.SHARE_READ,
+				IntPtr.Zero,
+				FileIO.NativeTypes.CreationDisposition.OPEN_EXISTING,
+				FileIO.NativeTypes.AttributesAndFlags.FLAG_OVERLAPPED,
+				IntPtr.Zero
+			);
+
+			if (!h.IsInvalid)
+			{
+				handle = h;
+				return (true);
+			}
+
+			Debug.WriteLine("USB HID couldn't create shared device read handle.");
+			Debug.Indent();
+			Debug.WriteLine("Path = " + devicePath);
+			Debug.WriteLine(WinError.LastErrorToString());
+			Debug.Unindent();
+
+			handle = null;
+			return (false);
+		}
+
+		/// <summary>
+		/// Creates a device handle of the HID device at the given system path.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public static bool CreateSharedReadWriteHandle(string devicePath, out SafeFileHandle handle)
 		{
 			SafeFileHandle h = FileIO.NativeMethods.CreateFile
 			(
@@ -803,7 +836,7 @@ namespace MKY.Win32
 
 			if (!h.IsInvalid)
 			{
-				readHandle = h;
+				handle = h;
 				return (true);
 			}
 
@@ -813,7 +846,7 @@ namespace MKY.Win32
 			Debug.WriteLine(WinError.LastErrorToString());
 			Debug.Unindent();
 
-			readHandle = null;
+			handle = null;
 			return (false);
 		}
 
