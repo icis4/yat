@@ -935,6 +935,8 @@ namespace YAT.Model
 								{
 									if (IsOpen)
 										sb.Append("Connected - Open");
+									else if (device.Settings.AutoOpen)
+										sb.Append("Connected - Waiting for reopen");
 									else
 										sb.Append("Connected - Closed");
 								}
@@ -1202,8 +1204,10 @@ namespace YAT.Model
 								{
 									if (IsOpen)
 										sb.Append(" is connected and open");
+									else if (device.Settings.AutoOpen)
+										sb.Append(" is connected but waiting for reopen");
 									else
-										sb.Append(" is connected and closed");
+										sb.Append(" is connected but closed");
 								}
 								else if (device.Settings.AutoOpen)
 								{
