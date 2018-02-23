@@ -165,8 +165,8 @@ namespace MKY.Time
 		/// <summary></summary>
 		public double Interval
 		{
-			get { AssertNotDisposed(); return (this.timer.Interval); }
-			set { AssertNotDisposed(); this.timer.Interval = value;  }
+			get { AssertNotDisposed(); return (this.timer.Interval);        }
+			set { AssertNotDisposed();         this.timer.Interval = value; }
 		}
 
 		/// <summary></summary>

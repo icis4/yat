@@ -161,8 +161,8 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual string SettingsFilePath
 		{
-			get { AssertNotDisposed(); return (this.fileHandler.FilePath); }
-			set { AssertNotDisposed(); this.fileHandler.FilePath = value;  }
+			get { AssertNotDisposed(); return (this.fileHandler.FilePath);        }
+			set { AssertNotDisposed();         this.fileHandler.FilePath = value; }
 		}
 
 		/// <summary></summary>
