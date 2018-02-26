@@ -566,7 +566,7 @@ namespace YAT.View.Controls
 			{
 				case Domain.TerminalType.Binary:
 				{
-					initialExtension = ApplicationSettings.LocalUserSettings.Extensions.BinarySendFiles;
+					initialExtension = ApplicationSettings.RoamingUserSettings.Extensions.BinarySendFiles;
 
 					ofd.Filter      = ExtensionHelper.BinaryFilesFilter;
 					ofd.FilterIndex = ExtensionHelper.BinaryFilesFilterHelper(initialExtension);
@@ -576,7 +576,7 @@ namespace YAT.View.Controls
 				case Domain.TerminalType.Text:
 				default:
 				{
-					initialExtension = ApplicationSettings.LocalUserSettings.Extensions.TextSendFiles;
+					initialExtension = ApplicationSettings.RoamingUserSettings.Extensions.TextSendFiles;
 
 					ofd.Filter      = ExtensionHelper.TextFilesFilter;
 					ofd.FilterIndex = ExtensionHelper.TextFilesFilterHelper(initialExtension);
@@ -596,20 +596,21 @@ namespace YAT.View.Controls
 				{
 					case Domain.TerminalType.Binary:
 					{
-						ApplicationSettings.LocalUserSettings.Extensions.BinarySendFiles = Path.GetExtension(ofd.FileName);
+						ApplicationSettings.RoamingUserSettings.Extensions.BinarySendFiles = Path.GetExtension(ofd.FileName);
 						break;
 					}
 
 					case Domain.TerminalType.Text:
 					default:
 					{
-						ApplicationSettings.LocalUserSettings.Extensions.TextSendFiles = Path.GetExtension(ofd.FileName);
+						ApplicationSettings.RoamingUserSettings.Extensions.TextSendFiles = Path.GetExtension(ofd.FileName);
 						break;
 					}
 				}
 
 				ApplicationSettings.LocalUserSettings.Paths.SendFiles = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
+				ApplicationSettings.SaveRoamingUserSettings();
 
 				ConfirmCommand(ofd.FileName);
 			}

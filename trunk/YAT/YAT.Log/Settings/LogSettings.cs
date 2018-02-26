@@ -169,12 +169,12 @@ namespace YAT.Log.Settings
 			RawLogTx     = false;
 			RawLogBidir  = false;
 			RawLogRx     = false;
-			RawExtension = ApplicationSettings.LocalUserSettings.Extensions.RawLogFiles;
+			RawExtension = ApplicationSettings.RoamingUserSettings.Extensions.RawLogFiles;
 
 			NeatLogTx     = false;
 			NeatLogBidir  = true;
 			NeatLogRx     = false;
-			NeatExtension = ApplicationSettings.LocalUserSettings.Extensions.NeatLogFiles;
+			NeatExtension = ApplicationSettings.RoamingUserSettings.Extensions.NeatLogFiles;
 
 			NameFormat    = false;
 			NameChannel   = false;

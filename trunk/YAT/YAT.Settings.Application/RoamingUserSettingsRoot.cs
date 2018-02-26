@@ -28,10 +28,13 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 using MKY;
 
+using YAT.Application.Settings;
 using YAT.Application.Utilities;
 
 #endregion
@@ -43,22 +46,28 @@ namespace YAT.Settings.Application
 	public class RoamingUserSettingsRoot : MKY.Settings.SettingsItem, IEquatable<RoamingUserSettingsRoot>
 	{
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
-		private string settingsVersion = "1.0.0";
+		private string settingsVersion = "1.1.0";
 
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
 		private string productVersion = ApplicationEx.ProductVersion;
 
+		private Model.Settings.NewTerminalSettings newTerminal;
 		private Model.Settings.SocketSettings socket;
 		private Model.Settings.FindSettings find;
 		private Model.Settings.ViewSettings view;
+		private Model.Settings.RecentFileSettings recentFiles;
+		private ExtensionSettings extensions;
 
 		/// <summary></summary>
 		public RoamingUserSettingsRoot()
 			: base(MKY.Settings.SettingsType.Explicit)
 		{
-			Socket = new Model.Settings.SocketSettings(MKY.Settings.SettingsType.Explicit);
-			Find   = new Model.Settings.FindSettings(MKY.Settings.SettingsType.Explicit);
-			View   = new Model.Settings.ViewSettings(MKY.Settings.SettingsType.Explicit);
+			NewTerminal = new Model.Settings.NewTerminalSettings(MKY.Settings.SettingsType.Explicit);
+			Socket      = new Model.Settings.SocketSettings(MKY.Settings.SettingsType.Explicit);
+			Find        = new Model.Settings.FindSettings(MKY.Settings.SettingsType.Explicit);
+			View        = new Model.Settings.ViewSettings(MKY.Settings.SettingsType.Explicit);
+			RecentFiles = new Model.Settings.RecentFileSettings(MKY.Settings.SettingsType.Explicit);
+			Extensions  = new ExtensionSettings(MKY.Settings.SettingsType.Explicit);
 
 			ClearChanged();
 		}
@@ -67,9 +76,12 @@ namespace YAT.Settings.Application
 		public RoamingUserSettingsRoot(RoamingUserSettingsRoot rhs)
 			: base(rhs)
 		{
-			Socket = new Model.Settings.SocketSettings(rhs.Socket);
-			Find   = new Model.Settings.FindSettings(rhs.Find);
-			View   = new Model.Settings.ViewSettings(rhs.View);
+			NewTerminal = new Model.Settings.NewTerminalSettings(rhs.NewTerminal);
+			Socket      = new Model.Settings.SocketSettings(rhs.Socket);
+			Find        = new Model.Settings.FindSettings(rhs.Find);
+			View        = new Model.Settings.ViewSettings(rhs.View);
+			RecentFiles = new Model.Settings.RecentFileSettings(rhs.RecentFiles);
+			Extensions  = new ExtensionSettings(rhs.Extensions);
 
 			ClearChanged();
 		}
@@ -117,6 +129,23 @@ namespace YAT.Settings.Application
 		{
 			get { return (new SaveInfo(DateTime.Now, Environment.UserName)); }
 			set { } // Do nothing.
+		}
+
+		/// <summary></summary>
+		[XmlElement("NewTerminal")]
+		public virtual Model.Settings.NewTerminalSettings NewTerminal
+		{
+			get { return (this.newTerminal); }
+			set
+			{
+				if (this.newTerminal != value)
+				{
+					var oldNode = this.newTerminal;
+					this.newTerminal = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
 		}
 
 		/// <summary></summary>
@@ -168,6 +197,63 @@ namespace YAT.Settings.Application
 					AttachOrReplaceOrDetachNode(oldNode, value);
 				}
 			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("RecentFiles")]
+		public virtual Model.Settings.RecentFileSettings RecentFiles
+		{
+			get { return (this.recentFiles); }
+			set
+			{
+				if (this.recentFiles != value)
+				{
+					var oldNode = this.recentFiles;
+					this.recentFiles = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("Extensions")]
+		public virtual ExtensionSettings Extensions
+		{
+			get { return (this.extensions); }
+			set
+			{
+				if (this.extensions != value)
+				{
+					var oldNode = this.extensions;
+					this.extensions = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
+		}
+
+		#endregion
+
+		#region Alternate Elements
+		//==========================================================================================
+		// Alternate Elements
+		//==========================================================================================
+
+		/// <summary>
+		/// Alternate XML elements for backward compatibility with old settings.
+		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "See comment above.")]
+		private static readonly MKY.Xml.AlternateXmlElement[] StaticAlternateXmlElements =
+		{                                                // XML path:                  local name of XML element:           alternate local name(s), i.e. former name(s) of XML element:
+		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "NewTerminal" }, "SocketRemoteTcpPort", formerly located in local user settings */
+		};
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual IEnumerable<MKY.Xml.AlternateXmlElement> AlternateXmlElements
+		{
+			get { return (StaticAlternateXmlElements); }
 		}
 
 		#endregion
