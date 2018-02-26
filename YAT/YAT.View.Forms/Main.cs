@@ -360,7 +360,7 @@ namespace YAT.View.Forms
 					if (this.main.StartArgs.ShowNewTerminalDialog)
 					{
 						// Let those settings that are given by the command line args be modified/overridden:
-						var processedSettings = new Model.Settings.NewTerminalSettings(ApplicationSettings.LocalUserSettings.NewTerminal);
+						var processedSettings = new Model.Settings.NewTerminalSettings(ApplicationSettings.RoamingUserSettings.NewTerminal);
 						if (this.main.ProcessCommandLineArgsIntoExistingNewTerminalSettings(processedSettings))
 							ShowNewTerminalDialog(processedSettings);
 						else
@@ -552,12 +552,12 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void toolStripMenuItem_MainMenu_File_SetRecentMenuItems()
 		{
-			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ValidateAll();
+			ApplicationSettings.RoamingUserSettings.RecentFiles.FilePaths.ValidateAll();
 
 			this.isSettingControls.Enter();
 			try
 			{
-				toolStripMenuItem_MainMenu_File_Recent.Enabled = (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count > 0);
+				toolStripMenuItem_MainMenu_File_Recent.Enabled = (ApplicationSettings.RoamingUserSettings.RecentFiles.FilePaths.Count > 0);
 			}
 			finally
 			{
@@ -2037,12 +2037,12 @@ namespace YAT.View.Forms
 			}
 
 			// Update and show recent files:
-			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ValidateAll();
+			ApplicationSettings.RoamingUserSettings.RecentFiles.FilePaths.ValidateAll();
 
 			this.isSettingControls.Enter();
 			try
 			{
-				toolStripMenuItem_MainContextMenu_File_Recent.Enabled = (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count > 0);
+				toolStripMenuItem_MainContextMenu_File_Recent.Enabled = (ApplicationSettings.RoamingUserSettings.RecentFiles.FilePaths.Count > 0);
 			}
 			finally
 			{
@@ -2111,11 +2111,11 @@ namespace YAT.View.Forms
 				}
 
 				// Show valid:
-				for (int i = 0; i < ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count; i++)
+				for (int i = 0; i < ApplicationSettings.RoamingUserSettings.RecentFiles.FilePaths.Count; i++)
 				{
 					string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1); // 'InvariantCulture' for prefix!
-					string file = PathEx.Limit(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i].Item, 60);
-					if (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i] != null)
+					string file = PathEx.Limit(ApplicationSettings.RoamingUserSettings.RecentFiles.FilePaths[i].Item, 60);
+					if (ApplicationSettings.RoamingUserSettings.RecentFiles.FilePaths[i] != null)
 					{
 						this.menuItems_recent[i].Text = "&" + prefix + file;
 						this.menuItems_recent[i].Enabled = true;
@@ -2380,10 +2380,6 @@ namespace YAT.View.Forms
 			{
 				SetMainControls();
 			}
-			else if (ReferenceEquals(e.Inner.Source, ApplicationSettings.LocalUserSettings.RecentFiles))
-			{
-				SetRecentControls();
-			}
 		}
 
 		private void roamingUserSettingsRoot_Changed(object sender, SettingsEventArgs e)
@@ -2400,6 +2396,10 @@ namespace YAT.View.Forms
 			{
 				SetMainControls();
 				SetChildControls(); // Child controls must also be updated when Find/AA/AR visibility changes.
+			}
+			else if (ReferenceEquals(e.Inner.Source, ApplicationSettings.RoamingUserSettings.RecentFiles))
+			{
+				SetRecentControls();
 			}
 		}
 
@@ -2619,7 +2619,7 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowNewTerminalDialog()
 		{
-			ShowNewTerminalDialog(ApplicationSettings.LocalUserSettings.NewTerminal);
+			ShowNewTerminalDialog(ApplicationSettings.RoamingUserSettings.NewTerminal);
 		}
 
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
@@ -2632,8 +2632,8 @@ namespace YAT.View.Forms
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUserSettings.NewTerminal = f.NewTerminalSettingsResult;
-				ApplicationSettings.SaveLocalUserSettings();
+				ApplicationSettings.RoamingUserSettings.NewTerminal = f.NewTerminalSettingsResult;
+				ApplicationSettings.SaveRoamingUserSettings();
 
 				var sh = new DocumentSettingsHandler<TerminalSettingsRoot>(f.TerminalSettingsResult);
 				this.main.CreateNewTerminalFromSettings(sh);
@@ -2641,8 +2641,8 @@ namespace YAT.View.Forms
 			else
 			{
 				// Still update to keep changed settings for next new terminal:
-				ApplicationSettings.LocalUserSettings.NewTerminal = f.NewTerminalSettingsResult;
-				ApplicationSettings.SaveLocalUserSettings();
+				ApplicationSettings.RoamingUserSettings.NewTerminal = f.NewTerminalSettingsResult;
+				ApplicationSettings.SaveRoamingUserSettings();
 
 				ResetStatusText();
 			}

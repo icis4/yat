@@ -1280,9 +1280,9 @@ namespace YAT.Model
 		/// <param name="recentFile">Recent file.</param>
 		private static void SetRecent(string recentFile)
 		{
-			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Add(recentFile);
-			ApplicationSettings.LocalUserSettings.RecentFiles.SetChanged(); // Manual change required because underlying collection is modified.
-			ApplicationSettings.SaveLocalUserSettings();
+			ApplicationSettings.RoamingUserSettings.RecentFiles.FilePaths.Add(recentFile);
+			ApplicationSettings.RoamingUserSettings.RecentFiles.SetChanged(); // Manual change required because underlying collection is modified.
+			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
 		#endregion

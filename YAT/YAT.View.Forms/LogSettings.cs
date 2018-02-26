@@ -110,9 +110,9 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Changed -= settings_Form_Changed;
 			this.settings = this.settingsInEdit;
 
-			ApplicationSettings.LocalUserSettings.Extensions.RawLogFiles  = this.settings.RawExtension;
-			ApplicationSettings.LocalUserSettings.Extensions.NeatLogFiles = this.settings.NeatExtension;
-			ApplicationSettings.SaveLocalUserSettings();
+			ApplicationSettings.RoamingUserSettings.Extensions.RawLogFiles  = this.settings.RawExtension;
+			ApplicationSettings.RoamingUserSettings.Extensions.NeatLogFiles = this.settings.NeatExtension;
+			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
 		private void settings_Form_Changed(object sender, MKY.Settings.SettingsEventArgs e)

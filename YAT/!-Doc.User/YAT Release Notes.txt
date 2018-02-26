@@ -94,6 +94,7 @@ New:
 Important changes:
 - Option to enable/disable <...> and \... escape sequences has been separated for 'Send Text' and
   'Send File'. By default, escapes are enabled for 'Send Text' and disabled for 'Send File'.
+- Location of new terminal and recent file settings moved from local to roaming user settings.
 - Binary distributions now contain DejaVu fonts for manual installation (feature request #331).
 
 Fixed bugs:

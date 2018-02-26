@@ -4207,7 +4207,7 @@ namespace YAT.View.Forms
 		{
 			SetFixedStatusText("Preparing to save data...");
 
-			string initialExtension = ApplicationSettings.LocalUserSettings.Extensions.MonitorFiles;
+			string initialExtension = ApplicationSettings.RoamingUserSettings.Extensions.MonitorFiles;
 
 			var sfd = new SaveFileDialog();
 			sfd.Title = "Save As";
@@ -4221,9 +4221,10 @@ namespace YAT.View.Forms
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUserSettings.Extensions.MonitorFiles = Path.GetExtension(sfd.FileName);
+				ApplicationSettings.RoamingUserSettings.Extensions.MonitorFiles = Path.GetExtension(sfd.FileName);
 				ApplicationSettings.LocalUserSettings.Paths.MonitorFiles = Path.GetDirectoryName(sfd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
+				ApplicationSettings.SaveRoamingUserSettings();
 
 				SaveMonitor(monitor, sfd.FileName);
 			}
