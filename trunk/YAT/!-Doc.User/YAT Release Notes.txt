@@ -92,6 +92,7 @@ New:
   Useful for message- rather than stream-oriented communication, e.g. most use cases of UDP/IP.
 
 Important changes:
+- UDP/IP terminals by default now use [None] as EOL sequence (related to feature request 335).
 - Option to enable/disable <...> and \... escape sequences has been separated for 'Send Text' and
   'Send File'. By default, escapes are enabled for 'Send Text' and disabled for 'Send File'.
 - Location of new terminal and recent file settings moved from local to roaming user settings.

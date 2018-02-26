@@ -342,8 +342,18 @@ namespace YAT.Domain.Settings
 		{
 			bool isUdpSocket = ((IOTypeEx)IO.IOType).IsUdpSocket;
 
-			if (Display != null)
+			// Attention:
+			// When changing code below, messages in terminalSelection_IOTypeChanged() of
+			// View.Forms.TerminalSettings have to be adapted accordingly.
+
+			if (Display != null) {
 				Display.ChunkLineBreakEnabled = isUdpSocket;
+			}
+
+			if (TextTerminal != null) {
+				TextTerminal.TxEol = (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault);
+				TextTerminal.RxEol = (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault);
+			}
 
 			SetMyChanged();
 		}
