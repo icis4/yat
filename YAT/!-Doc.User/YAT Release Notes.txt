@@ -92,10 +92,13 @@ New:
   Useful for message- rather than stream-oriented communication, e.g. most use cases of UDP/IP.
 
 Important changes:
-- UDP/IP terminals by default now use [None] as EOL sequence (related to feature request 335).
+- UDP/IP terminals by default now use [None] as EOL sequence (related to feature request #335).
+- UDP/IP related settings 'break lines on each sent or received chunk' and 'EOL sequence' are
+  automatically changed when the port type gets changed. This automatism is only applied if the
+  settings are at their defaults, i.e. have not been changed by the user; otherwise, the user is
+  asked whether the settings shall be changed (related to feature request #335).
 - Option to enable/disable <...> and \... escape sequences has been separated for 'Send Text' and
   'Send File'. By default, escapes are enabled for 'Send Text' and disabled for 'Send File'.
-- Location of new terminal and recent file settings moved from local to roaming user settings.
 - Binary distributions now contain DejaVu fonts for manual installation (feature request #331).
 
 Fixed bugs:

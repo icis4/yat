@@ -173,7 +173,6 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			var ioTypeOld             =                   this.settingsInEdit.Terminal.IO.IOType;
 			var ioTypeOldWasUdpSocket = ((Domain.IOTypeEx)this.settingsInEdit.Terminal.IO.IOType).IsUdpSocket;
 
 			this.settingsInEdit.Terminal.IO.IOType =                   terminalSelection.IOType;
@@ -183,38 +182,45 @@ namespace YAT.View.Forms
 			{
 				DialogResult dr;
 
-				if (ioTypeNewIsUdpSocket)
+				if (this.settingsInEdit.Terminal.IOTypeDependentSettingsWereDefaults(ioTypeOldWasUdpSocket))
 				{
-					dr = MessageBoxEx.Show
-					(
-						this,
-						"Port type has changed to UDP/IP. Shall UDP/IP related settings be changed accordingly?" + Environment.NewLine + Environment.NewLine +
-						"Confirming with [Yes] will..." + Environment.NewLine +
-						"...change the 'EOL sequence(s)' to [None]." + Environment.NewLine +
-						"...enable 'break lines on each chunk'.",
-						"Settings",
-						MessageBoxButtons.YesNo,
-						MessageBoxIcon.Question
-					);
+					dr = DialogResult.Yes; // Update silently.
 				}
-				else // ioTypeOldWasUdpSocket
+				else // Update only if confirmed by the user.
 				{
-					dr = MessageBoxEx.Show
-					(
-						this,
-						"Port type has changed to other than UDP/IP. Shall UDP/IP related settings be changed accordingly?" + Environment.NewLine + Environment.NewLine +
-						"Confirming with [Yes] will..." + Environment.NewLine +
-						"...change the 'EOL sequence(s)' to the system default." + Environment.NewLine +
-						"...disable 'break lines on each chunk'.",
-						"Settings",
-						MessageBoxButtons.YesNo,
-						MessageBoxIcon.Question
-					);
+					if (ioTypeNewIsUdpSocket)
+					{
+						dr = MessageBoxEx.Show
+						(
+							this,
+							"Port type has changed to UDP/IP. Shall UDP/IP related settings be changed accordingly?" + Environment.NewLine + Environment.NewLine +
+							"Confirming with [Yes] will..." + Environment.NewLine +
+							"...change the 'EOL sequence(s)' to [None]." + Environment.NewLine +
+							"...enable 'break lines on each chunk'.",
+							"Settings",
+							MessageBoxButtons.YesNo,
+							MessageBoxIcon.Question
+						);
+					}
+					else // ioTypeOldWasUdpSocket
+					{
+						dr = MessageBoxEx.Show
+						(
+							this,
+							"Port type has changed to other than UDP/IP. Shall UDP/IP related settings be changed accordingly?" + Environment.NewLine + Environment.NewLine +
+							"Confirming with [Yes] will..." + Environment.NewLine +
+							"...change the 'EOL sequence(s)' to the system default." + Environment.NewLine +
+							"...disable 'break lines on each chunk'.",
+							"Settings",
+							MessageBoxButtons.YesNo,
+							MessageBoxIcon.Question
+						);
+					}
 				}
 
 				if (dr == DialogResult.Yes)
 				{
-					this.settingsInEdit.Terminal.UpdateIOTypeDependentSettings(); // Update only if confirmed by the user.
+					this.settingsInEdit.Terminal.UpdateIOTypeDependentSettings(ioTypeNewIsUdpSocket);
 				}
 			}
 
