@@ -55,6 +55,8 @@ namespace YAT.Settings.Application
 		private PathSettings paths;
 		private AutoWorkspaceSettings autoAutoWorkspace;
 		private Model.Settings.MainWindowSettings mainWindow;
+		private Model.Settings.NewTerminalSettings newTerminal;
+		private Model.Settings.RecentFileSettings recentFiles;
 
 		/// <summary></summary>
 		public LocalUserSettingsRoot()
@@ -64,6 +66,8 @@ namespace YAT.Settings.Application
 			Paths         = new PathSettings(MKY.Settings.SettingsType.Explicit);
 			AutoWorkspace = new AutoWorkspaceSettings(MKY.Settings.SettingsType.Explicit);
 			MainWindow    = new Model.Settings.MainWindowSettings(MKY.Settings.SettingsType.Explicit);
+			NewTerminal   = new Model.Settings.NewTerminalSettings(MKY.Settings.SettingsType.Explicit);
+			RecentFiles   = new Model.Settings.RecentFileSettings(MKY.Settings.SettingsType.Explicit);
 
 			ClearChanged();
 		}
@@ -76,6 +80,8 @@ namespace YAT.Settings.Application
 			Paths         = new PathSettings(rhs.Paths);
 			AutoWorkspace = new AutoWorkspaceSettings(rhs.AutoWorkspace);
 			MainWindow    = new Model.Settings.MainWindowSettings(rhs.MainWindow);
+			NewTerminal   = new Model.Settings.NewTerminalSettings(rhs.NewTerminal);
+			RecentFiles   = new Model.Settings.RecentFileSettings(rhs.RecentFiles);
 
 			ClearChanged();
 		}
@@ -193,6 +199,40 @@ namespace YAT.Settings.Application
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("NewTerminal")]
+		public virtual Model.Settings.NewTerminalSettings NewTerminal
+		{
+			get { return (this.newTerminal); }
+			set
+			{
+				if (this.newTerminal != value)
+				{
+					var oldNode = this.newTerminal;
+					this.newTerminal = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("RecentFiles")]
+		public virtual Model.Settings.RecentFileSettings RecentFiles
+		{
+			get { return (this.recentFiles); }
+			set
+			{
+				if (this.recentFiles != value)
+				{
+					var oldNode = this.recentFiles;
+					this.recentFiles = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
+		}
+
 		#endregion
 
 		#region Alternate Elements
@@ -212,7 +252,7 @@ namespace YAT.Settings.Application
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "LogFiles",            new string[] { "LogFilesPath" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "MonitorFiles",        new string[] { "MonitorFilesPath" } ),
 		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "MainWindow"  }, "AlwaysOnTop",         formerly located in workspace settings */
-		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "NewTerminal" }, "SocketRemoteTcpPort", now located in roaming user settings */
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "NewTerminal" }, "SocketRemoteTcpPort", new string[] { "SocketRemotePort" } ),
 		};
 
 		/// <summary></summary>
