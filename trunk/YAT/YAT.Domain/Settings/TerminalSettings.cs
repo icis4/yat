@@ -338,13 +338,43 @@ namespace YAT.Domain.Settings
 		/// \remind (2018-02-23 / MKY)
 		/// Not a 'nice' solution, but it works...
 		/// </remarks>
-		public void UpdateIOTypeDependentSettings()
+		public virtual bool IOTypeDependentSettingsWereDefaults(bool isUdpSocket)
 		{
-			bool isUdpSocket = ((IOTypeEx)IO.IOType).IsUdpSocket;
-
 			// Attention:
-			// When changing code below, messages in terminalSelection_IOTypeChanged() of
-			// View.Forms.TerminalSettings have to be adapted accordingly.
+			// When changing code below,...
+			// ...code of method below has to be adapted accordingly.
+			// ...messages in terminalSelection_IOTypeChanged() of View.Forms.TerminalSettings have to be adapted accordingly.
+
+			bool areDefaults = true;
+
+			areDefaults &= (Display.ChunkLineBreakEnabled == isUdpSocket);
+
+			areDefaults &= (TextTerminal.TxEol == (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault));
+			areDefaults &= (TextTerminal.RxEol == (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault));
+			areDefaults &= (TextTerminal.SeparateTxRxEol == false);
+
+			return (areDefaults);
+		}
+
+		/// <remarks>
+		/// \remind (2018-02-23 / MKY)
+		/// Not a 'nice' solution, but it works...
+		/// </remarks>
+		public virtual void UpdateIOTypeDependentSettings()
+		{
+			UpdateIOTypeDependentSettings(((IOTypeEx)IO.IOType).IsUdpSocket);
+		}
+
+		/// <remarks>
+		/// \remind (2018-02-23 / MKY)
+		/// Not a 'nice' solution, but it works...
+		/// </remarks>
+		public virtual void UpdateIOTypeDependentSettings(bool isUdpSocket)
+		{
+			// Attention:
+			// When changing code below,...
+			// ...code of property above has to be adapted accordingly.
+			// ...messages in terminalSelection_IOTypeChanged() of View.Forms.TerminalSettings have to be adapted accordingly.
 
 			if (Display != null) {
 				Display.ChunkLineBreakEnabled = isUdpSocket;
@@ -353,6 +383,7 @@ namespace YAT.Domain.Settings
 			if (TextTerminal != null) {
 				TextTerminal.TxEol = (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault);
 				TextTerminal.RxEol = (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault);
+				TextTerminal.SeparateTxRxEol = false;
 			}
 
 			SetMyChanged();
