@@ -453,12 +453,12 @@ namespace YAT.Model
 			{
 				// Application settings can only be accessed after they have been created/loaded.
 				// However, this validation method may be called before the settings are available.
-				if (ApplicationSettings.RoamingUserSettingsAreAvailable)
+				if (ApplicationSettings.LocalUserSettingsAreAvailable)
 				{
-					ApplicationSettings.RoamingUserSettings.RecentFiles.FilePaths.ValidateAll();
-					if (ApplicationSettings.RoamingUserSettings.RecentFiles.FilePaths.Count > 0)
+					ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ValidateAll();
+					if (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count > 0)
 					{
-						string mostRecent = ApplicationSettings.RoamingUserSettings.RecentFiles.FilePaths[0];
+						string mostRecent = ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[0];
 						if (File.Exists(mostRecent))
 						{
 							if (ExtensionHelper.IsWorkspaceFile(mostRecent) ||
