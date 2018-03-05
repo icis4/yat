@@ -135,16 +135,21 @@ namespace YAT.View.Forms
 
 			// Provide the exception to the user:
 			UnhandledExceptionResult userResult;
-			if (System.Windows.Forms.Application.OpenForms.Count > 0)
+			var formsCount = System.Windows.Forms.Application.OpenForms.Count;
+			if (formsCount > 0)
 			{
-				Form f = System.Windows.Forms.Application.OpenForms[0];
+				var f = System.Windows.Forms.Application.OpenForms[formsCount - 1]; // Best guess that most recent form is the right one to query...
 				if (f.InvokeRequired)
 				{
-					ProvideExceptionToUserDelegate invoker = new ProvideExceptionToUserDelegate(ProvideExceptionToUserInvocation);
-					userResult = (UnhandledExceptionResult)f.Invoke(invoker, owner, exception, originMessage, exceptionType, mayBeContinued);
+					var resetInvoker = new ResetCursorAndStatusDelegate(ResetCursorAndStatusInvocation);
+					f.Invoke(resetInvoker, f);
+
+					var provideInvoker = new ProvideExceptionToUserDelegate(ProvideExceptionToUserInvocation);
+					userResult = (UnhandledExceptionResult)f.Invoke(provideInvoker, owner, exception, originMessage, exceptionType, mayBeContinued);
 				}
 				else
 				{
+					ResetCursorAndStatusInvocation(f);
 					userResult = ProvideExceptionToUserInvocation(owner, exception, originMessage, exceptionType, mayBeContinued);
 				}
 			}
@@ -175,99 +180,138 @@ namespace YAT.View.Forms
 			return (userResult);
 		}
 
+		private delegate void ResetCursorAndStatusDelegate(Form active);
+
+		private static void ResetCursorAndStatusInvocation(Form active)
+		{
+			try
+			{
+				active.Cursor = Cursors.Default;
+			}
+			catch { } // Best effort! Catch any subsequent exception!
+
+			try
+			{
+				var activeAsMain = active as Main;
+				if (activeAsMain != null)
+				{
+					activeAsMain.ResetStatusText();
+				}
+				else
+				{
+					foreach (var form in System.Windows.Forms.Application.OpenForms)
+					{
+						var formAsMain = form as Main;
+						if (formAsMain != null)
+						{
+							formAsMain.ResetStatusText();
+						}
+					}
+				}
+			}
+			catch { } // Best effort! Catch any subsequent exception!
+		}
+
 		private delegate UnhandledExceptionResult ProvideExceptionToUserDelegate(IWin32Window owner, Exception exception, string originMessage, UnhandledExceptionType exceptionType, bool mayBeContinued);
 
 		private static UnhandledExceptionResult ProvideExceptionToUserInvocation(IWin32Window owner, Exception exception, string originMessage, UnhandledExceptionType exceptionType, bool mayBeContinued)
 		{
-			string productName = ApplicationEx.ProductName;
-
-			StringBuilder titleBuilder = new StringBuilder(productName);
+			try
 			{
-				titleBuilder.Append(" Unhandled");
-				switch (exceptionType)
+				var productName = ApplicationEx.ProductName;
+
+				var titleBuilder = new StringBuilder(productName);
 				{
-					case UnhandledExceptionType.Synchronous:                 titleBuilder.Append(" Synchronous");                   break;
-					case UnhandledExceptionType.AsynchronousSynchronized:    titleBuilder.Append(" Asynchronous Synchronized");     break;
-					case UnhandledExceptionType.AsynchronousNonSynchronized: titleBuilder.Append(" Asynchronous Non-Synchronized"); break;
+					titleBuilder.Append(" Unhandled");
+					switch (exceptionType)
+					{
+						case UnhandledExceptionType.Synchronous:                 titleBuilder.Append(" Synchronous");                   break;
+						case UnhandledExceptionType.AsynchronousSynchronized:    titleBuilder.Append(" Asynchronous Synchronized");     break;
+						case UnhandledExceptionType.AsynchronousNonSynchronized: titleBuilder.Append(" Asynchronous Non-Synchronized"); break;
+					}
+					titleBuilder.Append(" Exception");
 				}
-				titleBuilder.Append(" Exception");
-			}
-			string title = titleBuilder.ToString();
+				var title = titleBuilder.ToString();
 
-			if (exception != null)
-			{
-				string message =
-					originMessage + Environment.NewLine + Environment.NewLine +
-					"Show detailed information?";
+				if (exception != null)
+				{
+					var message =
+						originMessage + Environment.NewLine + Environment.NewLine +
+						"Show detailed information?";
 
-				if (MessageBoxEx.Show
+					if (MessageBoxEx.Show
+						(
+						owner,
+						message,
+						title,
+						MessageBoxButtons.YesNo,
+						MessageBoxIcon.Error
+						)
+						== DialogResult.Yes)
+					{
+						var f = new UnhandledException(exception, title, originMessage);
+						ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, owner);
+					}
+				}
+				else
+				{
+					MessageBoxEx.Show
 					(
-					owner,
-					message,
-					title,
-					MessageBoxButtons.YesNo,
-					MessageBoxIcon.Error
-					)
-					== DialogResult.Yes)
-				{
-					var f = new UnhandledException(exception, title, originMessage);
-					ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, owner);
-				}
-			}
-			else
-			{
-				MessageBoxEx.Show
-				(
-					owner,
-					originMessage,
-					title,
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-				);
-			}
-
-			if (mayBeContinued)
-			{
-				string message =
-					"After this unhandled exception you are advised to exit and restart " + productName + "." + Environment.NewLine + Environment.NewLine +
-					"Select [Cancel/Abort] to exit and restart " + productName + " now." + Environment.NewLine +
-					"Or would you like to continue and [Retry] anyway?" + Environment.NewLine +
-					"Or would you like to continue but [Ignore] such unhandled exceptions?";
-
-				UnhandledExceptionResult result;
-				switch (MessageBoxEx.Show(owner, message, title, MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Exclamation))
-				{
-					case DialogResult.Retry:  result = UnhandledExceptionResult.Continue;          break;
-					case DialogResult.Ignore: result = UnhandledExceptionResult.ContinueAndIgnore; break; // Intentionally ignore further exceptions.
-					default:                  result = UnhandledExceptionResult.Exit;              break; // Don't care about any exceptions anymore.
+						owner,
+						originMessage,
+						title,
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+					);
 				}
 
-				if (result == UnhandledExceptionResult.Exit)
+				if (mayBeContinued)
 				{
-					message = "Would you like to restart " + productName + " right away?";
+					var message =
+						"After this unhandled exception you are advised to exit and restart " + productName + "." + Environment.NewLine + Environment.NewLine +
+						"Select [Cancel/Abort] to exit and restart " + productName + " now." + Environment.NewLine +
+						"Or would you like to continue and [Retry] anyway?" + Environment.NewLine +
+						"Or would you like to continue but [Ignore] such unhandled exceptions?";
+
+					UnhandledExceptionResult result;
+					switch (MessageBoxEx.Show(owner, message, title, MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Exclamation))
+					{
+						case DialogResult.Retry:  result = UnhandledExceptionResult.Continue;          break;
+						case DialogResult.Ignore: result = UnhandledExceptionResult.ContinueAndIgnore; break; // Intentionally ignore further exceptions.
+						default:                  result = UnhandledExceptionResult.Exit;              break; // Don't care about any exceptions anymore.
+					}
+
+					if (result == UnhandledExceptionResult.Exit)
+					{
+						message = "Would you like to restart " + productName + " right away?";
+						switch (MessageBoxEx.Show(owner, message, productName + " Restart", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+						{
+							case DialogResult.Yes: result = UnhandledExceptionResult.ExitAndRestart; break;
+							default:               result = UnhandledExceptionResult.Exit;           break;
+						}
+					}
+
+					return (result);
+				}
+				else
+				{
+					var message =
+						"After this unhandled exception " + productName + " will have to exit." + Environment.NewLine +
+						"Would you like to restart " + productName + " after exit?";
+
+					UnhandledExceptionResult result;
 					switch (MessageBoxEx.Show(owner, message, productName + " Restart", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
 					{
 						case DialogResult.Yes: result = UnhandledExceptionResult.ExitAndRestart; break;
 						default:               result = UnhandledExceptionResult.Exit;           break;
 					}
-				}
 
-				return (result);
+					return (result);
+				}
 			}
-			else
+			catch // Best effort! Catch any subsequent exception!
 			{
-				string message =
-					"After this unhandled exception " + productName + " will have to exit." + Environment.NewLine +
-					"Would you like to restart " + productName + " after exit?";
-
-				UnhandledExceptionResult result;
-				switch (MessageBoxEx.Show(owner, message, productName + " Restart", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-				{
-					case DialogResult.Yes: result = UnhandledExceptionResult.ExitAndRestart; break;
-					default:               result = UnhandledExceptionResult.Exit;           break;
-				}
-
-				return (result);
+				return (UnhandledExceptionResult.Exit);
 			}
 		}
 	}

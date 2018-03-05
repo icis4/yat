@@ -406,6 +406,8 @@ namespace YAT.View.Forms
 			if (TestExecutionIsIntended(message) &&
 				TestPreconditionIsGiven(typeof(Exception)))
 			{
+				this.Cursor = Cursors.WaitCursor; // Verify that cursor is reset by the unhandled exception handler.
+
 				throw (new InvalidOperationException("Unhandled synchronous exception test :: This is the outer exception.", new InvalidOperationException("This is the inner exception.")));
 
 				// Using explicit exception types...
@@ -424,6 +426,8 @@ namespace YAT.View.Forms
 			if (TestExecutionIsIntended(message) &&
 				TestPreconditionIsGiven(typeof(Exception)))
 			{
+				this.Cursor = Cursors.WaitCursor; // Verify that cursor is reset by the unhandled exception handler.
+
 				timer_ExecuteManualTest2.Start();
 			}
 		}
@@ -462,6 +466,8 @@ namespace YAT.View.Forms
 			if (TestExecutionIsIntended(message) &&
 				TestPreconditionIsGiven(typeof(Exception)))
 			{
+				this.Cursor = Cursors.WaitCursor; // Verify that cursor is reset by the unhandled exception handler.
+
 				lock (this.timer_ExecuteManualTest3SyncObj)
 				{                  // Explicitly using 'System.Threading.Timer' to prevent naming conflict with 'System.Windows.Forms.Timer'.
 					this.timer_ExecuteManualTest3 = new System.Threading.Timer(new System.Threading.TimerCallback(timer_ExecuteManualTest3_Timeout), null, 100, System.Threading.Timeout.Infinite);
