@@ -588,6 +588,14 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.Send.Text.SendImmediately = checkBox_SendImmediately.Checked;
 		}
 
+		private void checkBox_SkipEmptyLines_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Send.File.SkipEmptyLines = checkBox_SkipEmptyLines.Checked;
+		}
+
 		private void checkBox_CopyPredefined_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -1115,6 +1123,7 @@ namespace YAT.View.Forms
 				checkBox_KeepSendText.Enabled            = !this.settingsInEdit.Terminal.Send.Text.SendImmediately;
 				checkBox_KeepSendText.Checked            = !this.settingsInEdit.Terminal.Send.Text.SendImmediately && this.settingsInEdit.Terminal.Send.Text.KeepSendText;
 				checkBox_SendImmediately.Checked         =  this.settingsInEdit.Terminal.Send.Text.SendImmediately;
+				checkBox_SkipEmptyLines.Checked          =  this.settingsInEdit.Terminal.Send.File.SkipEmptyLines;
 				checkBox_CopyPredefined.Checked          =  this.settingsInEdit.Terminal.Send.CopyPredefined;
 
 				checkBox_SignalXOnBeforeEachTransmission.Enabled = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;

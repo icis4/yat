@@ -128,6 +128,7 @@
 			this.label_MaxLineCountUnit = new System.Windows.Forms.Label();
 			this.label_MaxLineCount = new System.Windows.Forms.Label();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.checkBox_SkipEmptyLines = new System.Windows.Forms.CheckBox();
 			this.groupBox_User.SuspendLayout();
 			this.groupBox_Communication.SuspendLayout();
 			this.groupBox_Communication_SerialPorts.SuspendLayout();
@@ -178,9 +179,9 @@
 			this.groupBox_User.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox_User.Controls.Add(this.textBox_UserName);
 			this.groupBox_User.Controls.Add(this.label_UserName);
-			this.groupBox_User.Location = new System.Drawing.Point(281, 658);
+			this.groupBox_User.Location = new System.Drawing.Point(281, 662);
 			this.groupBox_User.Name = "groupBox_User";
-			this.groupBox_User.Size = new System.Drawing.Size(263, 49);
+			this.groupBox_User.Size = new System.Drawing.Size(263, 45);
 			this.groupBox_User.TabIndex = 3;
 			this.groupBox_User.TabStop = false;
 			this.groupBox_User.Text = "User Settings";
@@ -189,7 +190,7 @@
 			// 
 			this.textBox_UserName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBox_UserName.Location = new System.Drawing.Point(94, 17);
+			this.textBox_UserName.Location = new System.Drawing.Point(99, 17);
 			this.textBox_UserName.Name = "textBox_UserName";
 			this.textBox_UserName.Size = new System.Drawing.Size(158, 20);
 			this.textBox_UserName.TabIndex = 1;
@@ -213,7 +214,7 @@
 			this.groupBox_Communication.Controls.Add(this.label_Endianness);
 			this.groupBox_Communication.Location = new System.Drawing.Point(281, 12);
 			this.groupBox_Communication.Name = "groupBox_Communication";
-			this.groupBox_Communication.Size = new System.Drawing.Size(263, 147);
+			this.groupBox_Communication.Size = new System.Drawing.Size(263, 142);
 			this.groupBox_Communication.TabIndex = 1;
 			this.groupBox_Communication.TabStop = false;
 			this.groupBox_Communication.Text = "&Communication Settings";
@@ -225,9 +226,9 @@
 			this.groupBox_Communication_SerialPorts.Controls.Add(this.checkBox_IgnoreFramingErrors);
 			this.groupBox_Communication_SerialPorts.Controls.Add(this.checkBox_OutputBreakModifiable);
 			this.groupBox_Communication_SerialPorts.Controls.Add(this.checkBox_IndicateBreakStates);
-			this.groupBox_Communication_SerialPorts.Location = new System.Drawing.Point(6, 49);
+			this.groupBox_Communication_SerialPorts.Location = new System.Drawing.Point(6, 48);
 			this.groupBox_Communication_SerialPorts.Name = "groupBox_Communication_SerialPorts";
-			this.groupBox_Communication_SerialPorts.Size = new System.Drawing.Size(251, 92);
+			this.groupBox_Communication_SerialPorts.Size = new System.Drawing.Size(251, 88);
 			this.groupBox_Communication_SerialPorts.TabIndex = 2;
 			this.groupBox_Communication_SerialPorts.TabStop = false;
 			this.groupBox_Communication_SerialPorts.Text = "Serial COM Ports";
@@ -290,6 +291,7 @@
 			this.groupBox_Send.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Send.Controls.Add(this.checkBox_SkipEmptyLines);
 			this.groupBox_Send.Controls.Add(this.checkBox_EnableEscapesForText);
 			this.groupBox_Send.Controls.Add(this.checkBox_UseExplicitDefaultRadix);
 			this.groupBox_Send.Controls.Add(this.label_SignalXOnPeriodicallyIntervalUnit);
@@ -302,9 +304,9 @@
 			this.groupBox_Send.Controls.Add(this.checkBox_SendImmediately);
 			this.groupBox_Send.Controls.Add(this.checkBox_CopyPredefined);
 			this.groupBox_Send.Controls.Add(this.checkBox_KeepSendText);
-			this.groupBox_Send.Location = new System.Drawing.Point(281, 165);
+			this.groupBox_Send.Location = new System.Drawing.Point(281, 161);
 			this.groupBox_Send.Name = "groupBox_Send";
-			this.groupBox_Send.Size = new System.Drawing.Size(263, 487);
+			this.groupBox_Send.Size = new System.Drawing.Size(263, 497);
 			this.groupBox_Send.TabIndex = 2;
 			this.groupBox_Send.TabStop = false;
 			this.groupBox_Send.Text = "Send Settin&gs";
@@ -312,10 +314,10 @@
 			// checkBox_EnableEscapesForText
 			// 
 			this.checkBox_EnableEscapesForText.AutoSize = true;
-			this.checkBox_EnableEscapesForText.Location = new System.Drawing.Point(12, 326);
+			this.checkBox_EnableEscapesForText.Location = new System.Drawing.Point(12, 343);
 			this.checkBox_EnableEscapesForText.Name = "checkBox_EnableEscapesForText";
 			this.checkBox_EnableEscapesForText.Size = new System.Drawing.Size(237, 17);
-			this.checkBox_EnableEscapesForText.TabIndex = 9;
+			this.checkBox_EnableEscapesForText.TabIndex = 10;
 			this.checkBox_EnableEscapesForText.Text = "&Enable <...> and \\... escapes on [Send Text]";
 			this.checkBox_EnableEscapesForText.UseVisualStyleBackColor = true;
 			this.checkBox_EnableEscapesForText.CheckedChanged += new System.EventHandler(this.checkBox_EnableEscapesForText_CheckedChanged);
@@ -336,10 +338,10 @@
 			// label_SignalXOnPeriodicallyIntervalUnit
 			// 
 			this.label_SignalXOnPeriodicallyIntervalUnit.AutoSize = true;
-			this.label_SignalXOnPeriodicallyIntervalUnit.Location = new System.Drawing.Point(218, 135);
+			this.label_SignalXOnPeriodicallyIntervalUnit.Location = new System.Drawing.Point(218, 158);
 			this.label_SignalXOnPeriodicallyIntervalUnit.Name = "label_SignalXOnPeriodicallyIntervalUnit";
 			this.label_SignalXOnPeriodicallyIntervalUnit.Size = new System.Drawing.Size(20, 13);
-			this.label_SignalXOnPeriodicallyIntervalUnit.TabIndex = 7;
+			this.label_SignalXOnPeriodicallyIntervalUnit.TabIndex = 8;
 			this.label_SignalXOnPeriodicallyIntervalUnit.Text = "ms";
 			this.label_SignalXOnPeriodicallyIntervalUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -361,10 +363,10 @@
 			this.groupBox_Send_SerialPorts.Controls.Add(this.label_MaxSendRateIntervalUnit2);
 			this.groupBox_Send_SerialPorts.Controls.Add(this.checkBox_NoSendOnInputBreak);
 			this.groupBox_Send_SerialPorts.Controls.Add(this.checkBox_NoSendOnOutputBreak);
-			this.groupBox_Send_SerialPorts.Location = new System.Drawing.Point(6, 158);
+			this.groupBox_Send_SerialPorts.Location = new System.Drawing.Point(6, 179);
 			this.groupBox_Send_SerialPorts.Name = "groupBox_Send_SerialPorts";
-			this.groupBox_Send_SerialPorts.Size = new System.Drawing.Size(251, 161);
-			this.groupBox_Send_SerialPorts.TabIndex = 8;
+			this.groupBox_Send_SerialPorts.Size = new System.Drawing.Size(251, 158);
+			this.groupBox_Send_SerialPorts.TabIndex = 9;
 			this.groupBox_Send_SerialPorts.TabStop = false;
 			this.groupBox_Send_SerialPorts.Text = "Serial COM Ports";
 			// 
@@ -520,10 +522,10 @@
 			// 
 			// textBox_SignalXOnPeriodicallyInterval
 			// 
-			this.textBox_SignalXOnPeriodicallyInterval.Location = new System.Drawing.Point(168, 132);
+			this.textBox_SignalXOnPeriodicallyInterval.Location = new System.Drawing.Point(168, 155);
 			this.textBox_SignalXOnPeriodicallyInterval.Name = "textBox_SignalXOnPeriodicallyInterval";
 			this.textBox_SignalXOnPeriodicallyInterval.Size = new System.Drawing.Size(48, 20);
-			this.textBox_SignalXOnPeriodicallyInterval.TabIndex = 6;
+			this.textBox_SignalXOnPeriodicallyInterval.TabIndex = 7;
 			this.textBox_SignalXOnPeriodicallyInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textBox_SignalXOnPeriodicallyInterval.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_SignalXOnPeriodicallyInterval_Validating);
 			// 
@@ -543,10 +545,10 @@
 			this.groupBox_Send_Keywords.Controls.Add(this.label_DefaultDelayUnit);
 			this.groupBox_Send_Keywords.Controls.Add(this.textBox_DefaultDelay);
 			this.groupBox_Send_Keywords.Controls.Add(this.label_DefaultDelay);
-			this.groupBox_Send_Keywords.Location = new System.Drawing.Point(6, 372);
+			this.groupBox_Send_Keywords.Location = new System.Drawing.Point(6, 385);
 			this.groupBox_Send_Keywords.Name = "groupBox_Send_Keywords";
-			this.groupBox_Send_Keywords.Size = new System.Drawing.Size(251, 109);
-			this.groupBox_Send_Keywords.TabIndex = 11;
+			this.groupBox_Send_Keywords.Size = new System.Drawing.Size(251, 106);
+			this.groupBox_Send_Keywords.TabIndex = 12;
 			this.groupBox_Send_Keywords.TabStop = false;
 			this.groupBox_Send_Keywords.Text = "&Keywords";
 			// 
@@ -671,10 +673,10 @@
 			// checkBox_SignalXOnPeriodicallyEnable
 			// 
 			this.checkBox_SignalXOnPeriodicallyEnable.AutoSize = true;
-			this.checkBox_SignalXOnPeriodicallyEnable.Location = new System.Drawing.Point(12, 134);
+			this.checkBox_SignalXOnPeriodicallyEnable.Location = new System.Drawing.Point(12, 157);
 			this.checkBox_SignalXOnPeriodicallyEnable.Name = "checkBox_SignalXOnPeriodicallyEnable";
 			this.checkBox_SignalXOnPeriodicallyEnable.Size = new System.Drawing.Size(159, 17);
-			this.checkBox_SignalXOnPeriodicallyEnable.TabIndex = 5;
+			this.checkBox_SignalXOnPeriodicallyEnable.TabIndex = 6;
 			this.checkBox_SignalXOnPeriodicallyEnable.Text = "Send XOn periodically every";
 			this.checkBox_SignalXOnPeriodicallyEnable.UseVisualStyleBackColor = true;
 			this.checkBox_SignalXOnPeriodicallyEnable.CheckedChanged += new System.EventHandler(this.checkBox_SignalXOnPeriodicallyEnable_CheckedChanged);
@@ -682,21 +684,21 @@
 			// checkBox_SignalXOnBeforeEachTransmission
 			// 
 			this.checkBox_SignalXOnBeforeEachTransmission.AutoSize = true;
-			this.checkBox_SignalXOnBeforeEachTransmission.Location = new System.Drawing.Point(12, 111);
+			this.checkBox_SignalXOnBeforeEachTransmission.Location = new System.Drawing.Point(12, 134);
 			this.checkBox_SignalXOnBeforeEachTransmission.Name = "checkBox_SignalXOnBeforeEachTransmission";
 			this.checkBox_SignalXOnBeforeEachTransmission.Size = new System.Drawing.Size(195, 17);
-			this.checkBox_SignalXOnBeforeEachTransmission.TabIndex = 4;
-			this.checkBox_SignalXOnBeforeEachTransmission.Text = "Send XOn before each &transmission";
+			this.checkBox_SignalXOnBeforeEachTransmission.TabIndex = 5;
+			this.checkBox_SignalXOnBeforeEachTransmission.Text = "Send XOn before each transmission";
 			this.checkBox_SignalXOnBeforeEachTransmission.UseVisualStyleBackColor = true;
 			this.checkBox_SignalXOnBeforeEachTransmission.CheckedChanged += new System.EventHandler(this.checkBox_SignalXOnBeforeEachTransmission_CheckedChanged);
 			// 
 			// checkBox_EnableEscapesForFile
 			// 
 			this.checkBox_EnableEscapesForFile.AutoSize = true;
-			this.checkBox_EnableEscapesForFile.Location = new System.Drawing.Point(12, 349);
+			this.checkBox_EnableEscapesForFile.Location = new System.Drawing.Point(12, 364);
 			this.checkBox_EnableEscapesForFile.Name = "checkBox_EnableEscapesForFile";
 			this.checkBox_EnableEscapesForFile.Size = new System.Drawing.Size(232, 17);
-			this.checkBox_EnableEscapesForFile.TabIndex = 10;
+			this.checkBox_EnableEscapesForFile.TabIndex = 11;
 			this.checkBox_EnableEscapesForFile.Text = "Enable <...> and \\... escapes on [Send File]";
 			this.toolTip.SetToolTip(this.checkBox_EnableEscapesForFile, "Only applies to text terminals.");
 			this.checkBox_EnableEscapesForFile.UseVisualStyleBackColor = true;
@@ -705,11 +707,11 @@
 			// checkBox_SendImmediately
 			// 
 			this.checkBox_SendImmediately.AutoSize = true;
-			this.checkBox_SendImmediately.Location = new System.Drawing.Point(12, 88);
+			this.checkBox_SendImmediately.Location = new System.Drawing.Point(12, 65);
 			this.checkBox_SendImmediately.Name = "checkBox_SendImmediately";
-			this.checkBox_SendImmediately.Size = new System.Drawing.Size(183, 17);
-			this.checkBox_SendImmediately.TabIndex = 3;
-			this.checkBox_SendImmediately.Text = "Send each character immediately";
+			this.checkBox_SendImmediately.Size = new System.Drawing.Size(241, 17);
+			this.checkBox_SendImmediately.TabIndex = 2;
+			this.checkBox_SendImmediately.Text = "Send each [Send Text] character immediately";
 			this.toolTip.SetToolTip(this.checkBox_SendImmediately, "Emulates a terminal/direct mode.");
 			this.checkBox_SendImmediately.UseVisualStyleBackColor = true;
 			this.checkBox_SendImmediately.CheckedChanged += new System.EventHandler(this.checkBox_SendImmediately_CheckedChanged);
@@ -717,11 +719,11 @@
 			// checkBox_CopyPredefined
 			// 
 			this.checkBox_CopyPredefined.AutoSize = true;
-			this.checkBox_CopyPredefined.Location = new System.Drawing.Point(12, 65);
+			this.checkBox_CopyPredefined.Location = new System.Drawing.Point(12, 111);
 			this.checkBox_CopyPredefined.Name = "checkBox_CopyPredefined";
-			this.checkBox_CopyPredefined.Size = new System.Drawing.Size(223, 17);
-			this.checkBox_CopyPredefined.TabIndex = 2;
-			this.checkBox_CopyPredefined.Text = "Copy predefined to [Send Text] after send";
+			this.checkBox_CopyPredefined.Size = new System.Drawing.Size(244, 17);
+			this.checkBox_CopyPredefined.TabIndex = 4;
+			this.checkBox_CopyPredefined.Text = "Copy predefined to [Send Text/File] after send";
 			this.checkBox_CopyPredefined.UseVisualStyleBackColor = true;
 			this.checkBox_CopyPredefined.CheckedChanged += new System.EventHandler(this.checkBox_CopyPredefined_CheckedChanged);
 			// 
@@ -1258,6 +1260,17 @@
 			this.label_MaxLineCount.Text = "Displa&y maximal";
 			this.label_MaxLineCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// checkBox_SkipEmptyLines
+			// 
+			this.checkBox_SkipEmptyLines.AutoSize = true;
+			this.checkBox_SkipEmptyLines.Location = new System.Drawing.Point(12, 88);
+			this.checkBox_SkipEmptyLines.Name = "checkBox_SkipEmptyLines";
+			this.checkBox_SkipEmptyLines.Size = new System.Drawing.Size(170, 17);
+			this.checkBox_SkipEmptyLines.TabIndex = 3;
+			this.checkBox_SkipEmptyLines.Text = "Skip empty lines on [Send File]";
+			this.checkBox_SkipEmptyLines.UseVisualStyleBackColor = true;
+			this.checkBox_SkipEmptyLines.CheckedChanged += new System.EventHandler(this.checkBox_SkipEmptyLines_CheckedChanged);
+			// 
 			// AdvancedTerminalSettings
 			// 
 			this.AcceptButton = this.button_OK;
@@ -1406,5 +1419,6 @@
 		private System.Windows.Forms.CheckBox checkBox_ShowCopyOfActiveLine;
 		private System.Windows.Forms.CheckBox checkBox_EnableEscapesForText;
 		private System.Windows.Forms.CheckBox checkBox_ChunkLineBreak;
+		private System.Windows.Forms.CheckBox checkBox_SkipEmptyLines;
 	}
 }

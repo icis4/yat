@@ -716,9 +716,10 @@ namespace YAT.View.Forms
 
 				// Send:
 				this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix         = f.SettingsResult.Terminal.Send.UseExplicitDefaultRadix;
-				this.settingsInEdit.Terminal.Send.CopyPredefined                  = f.SettingsResult.Terminal.Send.CopyPredefined;
 				this.settingsInEdit.Terminal.Send.Text.KeepSendText               = f.SettingsResult.Terminal.Send.Text.KeepSendText;
 				this.settingsInEdit.Terminal.Send.Text.SendImmediately            = f.SettingsResult.Terminal.Send.Text.SendImmediately;
+				this.settingsInEdit.Terminal.Send.File.SkipEmptyLines             = f.SettingsResult.Terminal.Send.File.SkipEmptyLines;
+				this.settingsInEdit.Terminal.Send.CopyPredefined                  = f.SettingsResult.Terminal.Send.CopyPredefined;
 
 				this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission = f.SettingsResult.Terminal.Send.SignalXOnBeforeEachTransmission;
 				this.settingsInEdit.Terminal.Send.SignalXOnPeriodically           = f.SettingsResult.Terminal.Send.SignalXOnPeriodically;
