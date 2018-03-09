@@ -333,6 +333,66 @@ namespace YAT.View.Forms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Image_Tool_control_pause_blue_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Tool_control_pause_blue_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Image_Tool_control_pause_blue_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Tool_control_pause_blue_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Image_Tool_control_play_blue_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Tool_control_play_blue_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Image_Tool_control_play_blue_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Tool_control_play_blue_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Image_Tool_control_stop_blue_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Tool_control_stop_blue_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Image_Tool_control_stop_blue_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Tool_control_stop_blue_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Image_Tool_delete_16x16 {
             get {
                 object obj = ResourceManager.GetObject("Image_Tool_delete_16x16", resourceCulture);
@@ -396,6 +456,16 @@ namespace YAT.View.Forms.Properties {
         internal static System.Drawing.Bitmap Image_Tool_font_delete_16x16 {
             get {
                 object obj = ResourceManager.GetObject("Image_Tool_font_delete_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Image_Tool_gift_add_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Tool_gift_add_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -593,6 +663,36 @@ namespace YAT.View.Forms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Image_Tool_script_edit_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Tool_script_edit_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Image_Tool_script_error_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Tool_script_error_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Image_Tool_script_gear_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Tool_script_gear_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Image_Tool_script_go_16x16 {
             get {
                 object obj = ResourceManager.GetObject("Image_Tool_script_go_16x16", resourceCulture);
@@ -603,9 +703,9 @@ namespace YAT.View.Forms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Image_Tool_script_green_16x16 {
+        internal static System.Drawing.Bitmap Image_Tool_script_lightning_16x16 {
             get {
-                object obj = ResourceManager.GetObject("Image_Tool_script_green_16x16", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_Tool_script_lightning_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -613,19 +713,9 @@ namespace YAT.View.Forms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Image_Tool_script_red_16x16 {
+        internal static System.Drawing.Bitmap Image_Tool_script_save_16x16 {
             get {
-                object obj = ResourceManager.GetObject("Image_Tool_script_red_16x16", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Image_Tool_script_yellow_16x16 {
-            get {
-                object obj = ResourceManager.GetObject("Image_Tool_script_yellow_16x16", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_Tool_script_save_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
