@@ -37,19 +37,7 @@ namespace YAT.Domain.Settings
 		public const bool UseExplicitDefaultRadixDefault = false;
 
 		/// <summary></summary>
-		public const bool KeepSendTextDefault = true;
-
-		/// <summary></summary>
 		public const bool CopyPredefinedDefault = false;
-
-		/// <summary></summary>
-		public const bool SendImmediatelyDefault = false;
-
-		/// <remarks>
-		/// Applies to [Send Text]. Setting for [Send File] is defined by
-		/// <see cref="SendTextFileSettings.EnableEscapesDefault"/>.
-		/// </remarks>
-		public const bool EnableEscapesDefault = true;
 
 		/// <summary></summary>
 		public const int DefaultDelayDefault = 100;
@@ -76,10 +64,11 @@ namespace YAT.Domain.Settings
 		}
 
 		private bool useExplicitDefaultRadix;
-		private bool keepSendText;
 		private bool copyPredefined;
-		private bool sendImmediately;
-		private bool enableEscapes;
+
+		private SendSettingsText text;
+		private SendSettingsFile file;
+
 		private int  defaultDelay;
 		private int  defaultLineDelay;
 		private int  defaultLineInterval;
@@ -100,6 +89,10 @@ namespace YAT.Domain.Settings
 			: base(settingsType)
 		{
 			SetMyDefaults();
+
+			Text = new SendSettingsText(settingsType);
+			File = new SendSettingsFile(settingsType);
+
 			ClearChanged();
 		}
 
@@ -111,14 +104,15 @@ namespace YAT.Domain.Settings
 			: base(rhs)
 		{
 			UseExplicitDefaultRadix = rhs.UseExplicitDefaultRadix;
-			KeepSendText            = rhs.KeepSendText;
 			CopyPredefined          = rhs.CopyPredefined;
-			SendImmediately         = rhs.SendImmediately;
-			EnableEscapes           = rhs.enableEscapes;
-			DefaultDelay            = rhs.DefaultDelay;
-			DefaultLineDelay        = rhs.DefaultLineDelay;
-			DefaultLineInterval     = rhs.DefaultLineInterval;
-			DefaultLineRepeat       = rhs.DefaultLineRepeat;
+
+			Text = rhs.Text;
+			File = rhs.File;
+
+			DefaultDelay        = rhs.DefaultDelay;
+			DefaultLineDelay    = rhs.DefaultLineDelay;
+			DefaultLineInterval = rhs.DefaultLineInterval;
+			DefaultLineRepeat   = rhs.DefaultLineRepeat;
 
 			SignalXOnBeforeEachTransmission = rhs.SignalXOnBeforeEachTransmission;
 			SignalXOnPeriodically           = rhs.SignalXOnPeriodically;
@@ -134,14 +128,12 @@ namespace YAT.Domain.Settings
 			base.SetMyDefaults();
 
 			UseExplicitDefaultRadix = UseExplicitDefaultRadixDefault;
-			KeepSendText            = KeepSendTextDefault;
 			CopyPredefined          = CopyPredefinedDefault;
-			SendImmediately         = SendImmediatelyDefault;
-			EnableEscapes           = EnableEscapesDefault;
-			DefaultDelay            = DefaultDelayDefault;
-			DefaultLineDelay        = DefaultLineDelayDefault;
-			DefaultLineInterval     = DefaultLineIntervalDefault;
-			DefaultLineRepeat       = DefaultLineRepeatDefault;
+
+			DefaultDelay        = DefaultDelayDefault;
+			DefaultLineDelay    = DefaultLineDelayDefault;
+			DefaultLineInterval = DefaultLineIntervalDefault;
+			DefaultLineRepeat   = DefaultLineRepeatDefault;
 
 			SignalXOnBeforeEachTransmission = SignalXOnBeforeEachTransmissionDefault;
 			SignalXOnPeriodically           = SignalXOnPeriodicallyDefault;
@@ -168,21 +160,6 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("KeepSendText")]
-		public virtual bool KeepSendText
-		{
-			get { return (this.keepSendText); }
-			set
-			{
-				if (this.keepSendText != value)
-				{
-					this.keepSendText = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
 		[XmlElement("CopyPredefined")]
 		public virtual bool CopyPredefined
 		{
@@ -198,34 +175,35 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("SendImmediately")]
-		public virtual bool SendImmediately
+		[XmlElement("Text")]
+		public SendSettingsText Text
 		{
-			get { return (this.sendImmediately); }
+			get { return (this.text); }
 			set
 			{
-				if (this.sendImmediately != value)
+				if (this.text != value)
 				{
-					this.sendImmediately = value;
-					SetMyChanged();
+					var oldNode = this.text;
+					this.text = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
 				}
 			}
 		}
 
-		/// <remarks>
-		/// Applies to [Send Text]. Setting for [Send File] is defined by
-		/// <see cref="SendTextFileSettings.EnableEscapes"/>.
-		/// </remarks>
-		[XmlElement("EnableEscapes")]
-		public virtual bool EnableEscapes
+		/// <summary></summary>
+		[XmlElement("File")]
+		public SendSettingsFile File
 		{
-			get { return (this.enableEscapes); }
+			get { return (this.file); }
 			set
 			{
-				if (this.enableEscapes != value)
+				if (this.file != value)
 				{
-					this.enableEscapes = value;
-					SetMyChanged();
+					var oldNode = this.file;
+					this.file = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
 				}
 			}
 		}
@@ -322,22 +300,6 @@ namespace YAT.Domain.Settings
 
 		#endregion
 
-		#region Methods
-		//==========================================================================================
-		// Methods
-		//==========================================================================================
-
-		/// <summary></summary>
-		public virtual Parser.Modes ToParseMode()
-		{
-			if (EnableEscapes)
-				return (Parser.Modes.AllEscapes);
-			else
-				return (Parser.Modes.NoEscapes);
-		}
-
-		#endregion
-
 		#region Object Members
 		//==========================================================================================
 		// Object Members
@@ -357,10 +319,8 @@ namespace YAT.Domain.Settings
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
 				hashCode = (hashCode * 397) ^ UseExplicitDefaultRadix.GetHashCode();
-				hashCode = (hashCode * 397) ^ KeepSendText           .GetHashCode();
 				hashCode = (hashCode * 397) ^ CopyPredefined         .GetHashCode();
-				hashCode = (hashCode * 397) ^ SendImmediately        .GetHashCode();
-				hashCode = (hashCode * 397) ^ EnableEscapes          .GetHashCode();
+
 				hashCode = (hashCode * 397) ^ DefaultDelay;
 				hashCode = (hashCode * 397) ^ DefaultLineDelay;
 				hashCode = (hashCode * 397) ^ DefaultLineInterval;
@@ -399,14 +359,12 @@ namespace YAT.Domain.Settings
 				base.Equals(other) && // Compare all settings nodes.
 
 				UseExplicitDefaultRadix.Equals(other.UseExplicitDefaultRadix) &&
-				KeepSendText           .Equals(other.KeepSendText)            &&
 				CopyPredefined         .Equals(other.CopyPredefined)          &&
-				SendImmediately        .Equals(other.SendImmediately)         &&
-				EnableEscapes          .Equals(other.EnableEscapes)           &&
-				DefaultDelay           .Equals(other.DefaultDelay)            &&
-				DefaultLineDelay       .Equals(other.DefaultLineDelay)        &&
-				DefaultLineInterval    .Equals(other.DefaultLineInterval)     &&
-				DefaultLineRepeat      .Equals(other.DefaultLineRepeat)       &&
+
+				DefaultDelay       .Equals(other.DefaultDelay)        &&
+				DefaultLineDelay   .Equals(other.DefaultLineDelay)    &&
+				DefaultLineInterval.Equals(other.DefaultLineInterval) &&
+				DefaultLineRepeat  .Equals(other.DefaultLineRepeat)   &&
 
 				SignalXOnBeforeEachTransmission.Equals(other.SignalXOnBeforeEachTransmission) &&
 				SignalXOnPeriodically          .Equals(other.SignalXOnPeriodically)

@@ -351,7 +351,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public override bool TryParseText(string s, out byte[] result, Radix defaultRadix = Radix.String)
 		{
-			using (var p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, TerminalSettings.Send.ToParseMode()))
+			using (var p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, TerminalSettings.Send.Text.ToParseMode()))
 				return (p.TryParse(s, out result, defaultRadix));
 		}
 
@@ -368,7 +368,7 @@ namespace YAT.Domain
 		{
 			// AssertNotDisposed() is called by DoSendData().
 
-			var parseMode = TextTerminalSettings.SendFile.ToParseMode();
+			var parseMode = TerminalSettings.Send.File.ToParseMode();
 
 			DoSendData(new TextDataSendItem(dataLine, defaultRadix, parseMode, true));
 		}
@@ -391,7 +391,7 @@ namespace YAT.Domain
 					if (m.Success)
 						textToParse = textToParse.Remove(m.Index, m.Length);
 
-					if (TextTerminalSettings.SendFile.SkipEmptyLines && string.IsNullOrEmpty(textToParse))
+					if (TerminalSettings.Send.File.SkipEmptyLines && string.IsNullOrEmpty(textToParse))
 						return;
 				}
 			}
@@ -490,7 +490,7 @@ namespace YAT.Domain
 					XmlReaderHelper.LinesFromFile(item.FilePath, out lines); // Read all at once for simplicity.
 					foreach (string line in lines)
 					{
-						if (string.IsNullOrEmpty(line) && TextTerminalSettings.SendFile.SkipEmptyLines)
+						if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
 							continue;
 
 						SendFileLine(line);
@@ -510,7 +510,7 @@ namespace YAT.Domain
 					RtfReaderHelper.LinesFromRtfFile(item.FilePath, out lines); // Read all at once for simplicity.
 					foreach (string line in lines)
 					{
-						if (string.IsNullOrEmpty(line) && TextTerminalSettings.SendFile.SkipEmptyLines)
+						if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
 							continue;
 
 						SendFileLine(line);
@@ -531,7 +531,7 @@ namespace YAT.Domain
 						string line;
 						while ((line = sr.ReadLine()) != null)
 						{
-							if (string.IsNullOrEmpty(line) && TextTerminalSettings.SendFile.SkipEmptyLines)
+							if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
 								continue;
 
 							SendFileLine(line, item.DefaultRadix);

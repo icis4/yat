@@ -716,9 +716,9 @@ namespace YAT.View.Forms
 
 				// Send:
 				this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix         = f.SettingsResult.Terminal.Send.UseExplicitDefaultRadix;
-				this.settingsInEdit.Terminal.Send.KeepSendText                    = f.SettingsResult.Terminal.Send.KeepSendText;
 				this.settingsInEdit.Terminal.Send.CopyPredefined                  = f.SettingsResult.Terminal.Send.CopyPredefined;
-				this.settingsInEdit.Terminal.Send.SendImmediately                 = f.SettingsResult.Terminal.Send.SendImmediately;
+				this.settingsInEdit.Terminal.Send.Text.KeepSendText               = f.SettingsResult.Terminal.Send.Text.KeepSendText;
+				this.settingsInEdit.Terminal.Send.Text.SendImmediately            = f.SettingsResult.Terminal.Send.Text.SendImmediately;
 
 				this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission = f.SettingsResult.Terminal.Send.SignalXOnBeforeEachTransmission;
 				this.settingsInEdit.Terminal.Send.SignalXOnPeriodically           = f.SettingsResult.Terminal.Send.SignalXOnPeriodically;
@@ -730,11 +730,8 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak    = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak     = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
-				this.settingsInEdit.Terminal.Send.EnableEscapes                   = f.SettingsResult.Terminal.Send.EnableEscapes;
-				this.settingsInEdit.Terminal.TextTerminal.SendFile.EnableEscapes  = f.SettingsResult.Terminal.TextTerminal.SendFile.EnableEscapes;
-				// Even though this [Send File] setting only applies to text terminals, it is located
-				// in 'AdvancedTerminalSettings' (next to the setting for [Send Text]) instead
-				// in 'TextTerminalSettings' for easier finding it.
+				this.settingsInEdit.Terminal.Send.Text.EnableEscapes              = f.SettingsResult.Terminal.Send.Text.EnableEscapes;
+				this.settingsInEdit.Terminal.Send.File.EnableEscapes              = f.SettingsResult.Terminal.Send.File.EnableEscapes;
 
 				this.settingsInEdit.Terminal.Send.DefaultDelay                    = f.SettingsResult.Terminal.Send.DefaultDelay;
 				this.settingsInEdit.Terminal.Send.DefaultLineDelay                = f.SettingsResult.Terminal.Send.DefaultLineDelay;
