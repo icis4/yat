@@ -38,7 +38,7 @@ namespace YAT.Domain.Settings
 
 		private TerminalType terminalType;
 
-		// Type independent settings.
+		// Type independent settings:
 		private IOSettings io;
 		private StatusSettings status;
 		private BufferSettings buffer;
@@ -47,7 +47,7 @@ namespace YAT.Domain.Settings
 		private CharHideSettings charHide;
 		private SendSettings send;
 
-		// Type dependent settings.
+		// Type dependent settings:
 		private TextTerminalSettings textTerminal;
 		private BinaryTerminalSettings binaryTerminal;
 
