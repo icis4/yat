@@ -102,25 +102,25 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public static readonly string InfoEnclosureDefault = "()"; // Parentheses for better recognizability of info elements.
 
-		private bool separateTxRxRadix;
-		private Radix txRadix;
-		private Radix rxRadix;
-		private bool showRadix;
-		private bool showBufferLineNumbers;
-		private bool showTotalLineNumbers;
-		private bool showTimeStamp;
+		private bool   separateTxRxRadix;
+		private Radix  txRadix;
+		private Radix  rxRadix;
+		private bool   showRadix;
+		private bool   showBufferLineNumbers;
+		private bool   showTotalLineNumbers;
+		private bool   showTimeStamp;
 		private string timeStampFormat;
-		private bool timeStampUseUtc;
-		private bool showTimeSpan;
+		private bool   timeStampUseUtc;
+		private bool   showTimeSpan;
 		private string timeSpanFormat;
-		private bool showTimeDelta;
+		private bool   showTimeDelta;
 		private string timeDeltaFormat;
-		private bool showPort;
-		private bool showDirection;
-		private bool showLength;
-		private int maxLineCount;
-		private int maxBytePerLineCount;
-		private bool showCopyOfActiveLine;
+		private bool   showPort;
+		private bool   showDirection;
+		private bool   showLength;
+		private int    maxLineCount;
+		private int    maxBytePerLineCount;
+		private bool   showCopyOfActiveLine;
 
 		private bool portLineBreakEnabled;
 		private bool directionLineBreakEnabled;
