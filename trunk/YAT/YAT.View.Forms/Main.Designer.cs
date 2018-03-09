@@ -54,9 +54,9 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_FileRecentContextMenu_6 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_FileRecentContextMenu_7 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_FileRecentContextMenu_8 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MainMenu_File_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainContextMenu_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainContextMenu_File_Exit = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_MainMenu_File_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip_Main = new MKY.Windows.Forms.MenuStripEx();
 			this.toolStripMenuItem_MainMenu_File = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_File_New = new System.Windows.Forms.ToolStripMenuItem();
@@ -104,6 +104,8 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainMenu_Help_RequestFeature = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Help_SubmitBug = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Help_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_MainMenu_Help_Donate = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MainMenu_Help_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainMenu_Help_About = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip_Main = new MKY.Windows.Forms.StatusStripEx();
 			this.contextMenuStrip_Status = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -246,7 +248,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_FileRecentContextMenu_7,
             this.toolStripMenuItem_FileRecentContextMenu_8});
 			this.contextMenuStrip_FileRecent.Name = "contextMenuStrip_FileRecent";
-			this.contextMenuStrip_FileRecent.OwnerItem = this.toolStripMenuItem_MainMenu_File_Recent;
+			this.contextMenuStrip_FileRecent.OwnerItem = this.toolStripMenuItem_MainContextMenu_File_Recent;
 			this.contextMenuStrip_FileRecent.Size = new System.Drawing.Size(87, 180);
 			this.contextMenuStrip_FileRecent.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_FileRecent_Opening);
 			this.contextMenuStrip_FileRecent.Paint += new System.Windows.Forms.PaintEventHandler(this.contextMenuStrip_FileRecent_Paint);
@@ -331,6 +333,14 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_FileRecentContextMenu_8.Visible = false;
 			this.toolStripMenuItem_FileRecentContextMenu_8.Click += new System.EventHandler(this.toolStripMenuItem_FileRecentContextMenu_Click);
 			// 
+			// toolStripMenuItem_MainMenu_File_Recent
+			// 
+			this.toolStripMenuItem_MainMenu_File_Recent.DropDown = this.contextMenuStrip_FileRecent;
+			this.toolStripMenuItem_MainMenu_File_Recent.Enabled = false;
+			this.toolStripMenuItem_MainMenu_File_Recent.Name = "toolStripMenuItem_MainMenu_File_Recent";
+			this.toolStripMenuItem_MainMenu_File_Recent.Size = new System.Drawing.Size(243, 22);
+			this.toolStripMenuItem_MainMenu_File_Recent.Text = "&Recent";
+			// 
 			// toolStripMenuItem_MainContextMenu_Separator_2
 			// 
 			this.toolStripMenuItem_MainContextMenu_Separator_2.Name = "toolStripMenuItem_MainContextMenu_Separator_2";
@@ -342,14 +352,6 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Size = new System.Drawing.Size(173, 22);
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Text = "Exit";
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Click += new System.EventHandler(this.toolStripMenuItem_MainContextMenu_File_Exit_Click);
-			// 
-			// toolStripMenuItem_MainMenu_File_Recent
-			// 
-			this.toolStripMenuItem_MainMenu_File_Recent.DropDown = this.contextMenuStrip_FileRecent;
-			this.toolStripMenuItem_MainMenu_File_Recent.Enabled = false;
-			this.toolStripMenuItem_MainMenu_File_Recent.Name = "toolStripMenuItem_MainMenu_File_Recent";
-			this.toolStripMenuItem_MainMenu_File_Recent.Size = new System.Drawing.Size(243, 22);
-			this.toolStripMenuItem_MainMenu_File_Recent.Text = "&Recent";
 			// 
 			// menuStrip_Main
 			// 
@@ -557,7 +559,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_MainMenu_Log_AllOn.MergeIndex = 1;
 			this.toolStripMenuItem_MainMenu_Log_AllOn.Name = "toolStripMenuItem_MainMenu_Log_AllOn";
-			this.toolStripMenuItem_MainMenu_Log_AllOn.Size = new System.Drawing.Size(118, 22);
+			this.toolStripMenuItem_MainMenu_Log_AllOn.Size = new System.Drawing.Size(172, 22);
 			this.toolStripMenuItem_MainMenu_Log_AllOn.Text = "&All Terminals On";
 			this.toolStripMenuItem_MainMenu_Log_AllOn.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Log_AllOn_Click);
 			// 
@@ -565,13 +567,13 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_MainMenu_Log_Separator_1.MergeIndex = 2;
 			this.toolStripMenuItem_MainMenu_Log_Separator_1.Name = "toolStripMenuItem_MainMenu_Log_Separator_1";
-			this.toolStripMenuItem_MainMenu_Log_Separator_1.Size = new System.Drawing.Size(115, 6);
+			this.toolStripMenuItem_MainMenu_Log_Separator_1.Size = new System.Drawing.Size(169, 6);
 			// 
 			// toolStripMenuItem_MainMenu_Log_AllOff
 			// 
 			this.toolStripMenuItem_MainMenu_Log_AllOff.MergeIndex = 4;
 			this.toolStripMenuItem_MainMenu_Log_AllOff.Name = "toolStripMenuItem_MainMenu_Log_AllOff";
-			this.toolStripMenuItem_MainMenu_Log_AllOff.Size = new System.Drawing.Size(118, 22);
+			this.toolStripMenuItem_MainMenu_Log_AllOff.Size = new System.Drawing.Size(172, 22);
 			this.toolStripMenuItem_MainMenu_Log_AllOff.Text = "A&ll Terminals Off";
 			this.toolStripMenuItem_MainMenu_Log_AllOff.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Log_AllOff_Click);
 			// 
@@ -579,13 +581,13 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_MainMenu_Log_Separator_2.MergeIndex = 5;
 			this.toolStripMenuItem_MainMenu_Log_Separator_2.Name = "toolStripMenuItem_MainMenu_Log_Separator_2";
-			this.toolStripMenuItem_MainMenu_Log_Separator_2.Size = new System.Drawing.Size(115, 6);
+			this.toolStripMenuItem_MainMenu_Log_Separator_2.Size = new System.Drawing.Size(169, 6);
 			// 
 			// toolStripMenuItem_MainMenu_Log_AllClear
 			// 
 			this.toolStripMenuItem_MainMenu_Log_AllClear.MergeIndex = 10;
 			this.toolStripMenuItem_MainMenu_Log_AllClear.Name = "toolStripMenuItem_MainMenu_Log_AllClear";
-			this.toolStripMenuItem_MainMenu_Log_AllClear.Size = new System.Drawing.Size(118, 22);
+			this.toolStripMenuItem_MainMenu_Log_AllClear.Size = new System.Drawing.Size(172, 22);
 			this.toolStripMenuItem_MainMenu_Log_AllClear.Text = "All Terminals Clea&r";
 			this.toolStripMenuItem_MainMenu_Log_AllClear.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Log_AllClear_Click);
 			// 
@@ -704,6 +706,8 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_MainMenu_Help_RequestFeature,
             this.toolStripMenuItem_MainMenu_Help_SubmitBug,
             this.toolStripMenuItem_MainMenu_Help_Separator_3,
+            this.toolStripMenuItem_MainMenu_Help_Donate,
+            this.toolStripMenuItem_MainMenu_Help_Separator_4,
             this.toolStripMenuItem_MainMenu_Help_About});
 			this.toolStripMenuItem_MainMenu_Help.MergeIndex = 7;
 			this.toolStripMenuItem_MainMenu_Help.Name = "toolStripMenuItem_MainMenu_Help";
@@ -715,58 +719,73 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainMenu_Help_Contents.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_help_16x16;
 			this.toolStripMenuItem_MainMenu_Help_Contents.Name = "toolStripMenuItem_MainMenu_Help_Contents";
 			this.toolStripMenuItem_MainMenu_Help_Contents.ShortcutKeys = System.Windows.Forms.Keys.F1;
-			this.toolStripMenuItem_MainMenu_Help_Contents.Size = new System.Drawing.Size(161, 22);
-			this.toolStripMenuItem_MainMenu_Help_Contents.Text = "&Contents";
+			this.toolStripMenuItem_MainMenu_Help_Contents.Size = new System.Drawing.Size(170, 22);
+			this.toolStripMenuItem_MainMenu_Help_Contents.Text = "&Contents...";
 			this.toolStripMenuItem_MainMenu_Help_Contents.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_Contents_Click);
 			// 
 			// toolStripMenuItem_MainMenu_Help_Separator_1
 			// 
 			this.toolStripMenuItem_MainMenu_Help_Separator_1.Name = "toolStripMenuItem_MainMenu_Help_Separator_1";
-			this.toolStripMenuItem_MainMenu_Help_Separator_1.Size = new System.Drawing.Size(158, 6);
+			this.toolStripMenuItem_MainMenu_Help_Separator_1.Size = new System.Drawing.Size(167, 6);
 			// 
 			// toolStripMenuItem_MainMenu_Help_ReleaseNotes
 			// 
 			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes.Name = "toolStripMenuItem_MainMenu_Help_ReleaseNotes";
-			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes.Size = new System.Drawing.Size(161, 22);
-			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes.Text = "&Release Notes";
+			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes.Size = new System.Drawing.Size(170, 22);
+			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes.Text = "&Release Notes...";
 			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_ReleaseNotes_Click);
 			// 
 			// toolStripMenuItem_MainMenu_Help_Separator_2
 			// 
 			this.toolStripMenuItem_MainMenu_Help_Separator_2.Name = "toolStripMenuItem_MainMenu_Help_Separator_2";
-			this.toolStripMenuItem_MainMenu_Help_Separator_2.Size = new System.Drawing.Size(158, 6);
+			this.toolStripMenuItem_MainMenu_Help_Separator_2.Size = new System.Drawing.Size(167, 6);
 			// 
 			// toolStripMenuItem_MainMenu_Help_RequestSupport
 			// 
 			this.toolStripMenuItem_MainMenu_Help_RequestSupport.Name = "toolStripMenuItem_MainMenu_Help_RequestSupport";
-			this.toolStripMenuItem_MainMenu_Help_RequestSupport.Size = new System.Drawing.Size(161, 22);
-			this.toolStripMenuItem_MainMenu_Help_RequestSupport.Text = "Request &Support";
+			this.toolStripMenuItem_MainMenu_Help_RequestSupport.Size = new System.Drawing.Size(170, 22);
+			this.toolStripMenuItem_MainMenu_Help_RequestSupport.Text = "Request &Support...";
 			this.toolStripMenuItem_MainMenu_Help_RequestSupport.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_RequestSupport_Click);
 			// 
 			// toolStripMenuItem_MainMenu_Help_RequestFeature
 			// 
 			this.toolStripMenuItem_MainMenu_Help_RequestFeature.Name = "toolStripMenuItem_MainMenu_Help_RequestFeature";
-			this.toolStripMenuItem_MainMenu_Help_RequestFeature.Size = new System.Drawing.Size(161, 22);
-			this.toolStripMenuItem_MainMenu_Help_RequestFeature.Text = "Request &Feature";
+			this.toolStripMenuItem_MainMenu_Help_RequestFeature.Size = new System.Drawing.Size(170, 22);
+			this.toolStripMenuItem_MainMenu_Help_RequestFeature.Text = "Request &Feature...";
 			this.toolStripMenuItem_MainMenu_Help_RequestFeature.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_RequestFeature_Click);
 			// 
 			// toolStripMenuItem_MainMenu_Help_SubmitBug
 			// 
 			this.toolStripMenuItem_MainMenu_Help_SubmitBug.Name = "toolStripMenuItem_MainMenu_Help_SubmitBug";
-			this.toolStripMenuItem_MainMenu_Help_SubmitBug.Size = new System.Drawing.Size(161, 22);
-			this.toolStripMenuItem_MainMenu_Help_SubmitBug.Text = "Submit &Bug";
+			this.toolStripMenuItem_MainMenu_Help_SubmitBug.Size = new System.Drawing.Size(170, 22);
+			this.toolStripMenuItem_MainMenu_Help_SubmitBug.Text = "Submit &Bug...";
 			this.toolStripMenuItem_MainMenu_Help_SubmitBug.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_SubmitBug_Click);
 			// 
 			// toolStripMenuItem_MainMenu_Help_Separator_3
 			// 
 			this.toolStripMenuItem_MainMenu_Help_Separator_3.Name = "toolStripMenuItem_MainMenu_Help_Separator_3";
-			this.toolStripMenuItem_MainMenu_Help_Separator_3.Size = new System.Drawing.Size(158, 6);
+			this.toolStripMenuItem_MainMenu_Help_Separator_3.Size = new System.Drawing.Size(167, 6);
+			// 
+			// toolStripMenuItem_MainMenu_Help_Donate
+			// 
+			this.toolStripMenuItem_MainMenu_Help_Donate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.toolStripMenuItem_MainMenu_Help_Donate.ForeColor = System.Drawing.SystemColors.HotTrack;
+			this.toolStripMenuItem_MainMenu_Help_Donate.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_gift_add_16x16;
+			this.toolStripMenuItem_MainMenu_Help_Donate.Name = "toolStripMenuItem_MainMenu_Help_Donate";
+			this.toolStripMenuItem_MainMenu_Help_Donate.Size = new System.Drawing.Size(170, 22);
+			this.toolStripMenuItem_MainMenu_Help_Donate.Text = "&Donate... Thanks!";
+			this.toolStripMenuItem_MainMenu_Help_Donate.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_Donate_Click);
+			// 
+			// toolStripMenuItem_MainMenu_Help_Separator_4
+			// 
+			this.toolStripMenuItem_MainMenu_Help_Separator_4.Name = "toolStripMenuItem_MainMenu_Help_Separator_4";
+			this.toolStripMenuItem_MainMenu_Help_Separator_4.Size = new System.Drawing.Size(167, 6);
 			// 
 			// toolStripMenuItem_MainMenu_Help_About
 			// 
 			this.toolStripMenuItem_MainMenu_Help_About.Image = global::YAT.View.Forms.Properties.Resources.Image_YAT_16x16;
 			this.toolStripMenuItem_MainMenu_Help_About.Name = "toolStripMenuItem_MainMenu_Help_About";
-			this.toolStripMenuItem_MainMenu_Help_About.Size = new System.Drawing.Size(161, 22);
+			this.toolStripMenuItem_MainMenu_Help_About.Size = new System.Drawing.Size(170, 22);
 			this.toolStripMenuItem_MainMenu_Help_About.Text = "&About...";
 			this.toolStripMenuItem_MainMenu_Help_About.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_About_Click);
 			// 
@@ -1595,5 +1614,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_WholeWord;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_MainStatus_Time;
 		private System.Windows.Forms.Timer timer_Time;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_Donate;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainMenu_Help_Separator_4;
 	}
 }

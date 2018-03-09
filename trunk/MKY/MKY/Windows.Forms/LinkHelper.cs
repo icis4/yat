@@ -40,16 +40,35 @@ namespace MKY.Windows.Forms
 			var linkUri = (e.Link.LinkData as string);
 			if (linkUri != null)
 			{
+				var success = TryBrowseUriAndShowErrorIfItFails(owner, linkUri);
+
+				if (success)
+					e.Link.Visited = true;
+
+				return (success);
+			}
+			else
+			{
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Link data is invalid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary>
+		/// Clicks the given <paramref name="linkUri"/>.
+		/// </summary>
+		[SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings", Justification = "Flexibility!")]
+		public static bool TryBrowseUriAndShowErrorIfItFails(IWin32Window owner, string linkUri)
+		{
+			if (!string.IsNullOrEmpty(linkUri))
+			{
 				Exception ex;
 				if (Net.Browser.TryBrowseUri(linkUri, out ex))
 				{
-					e.Link.Visited = true;
-
 					return (true);
 				}
 				else
 				{
-					string message = "Unable to open link!" + Environment.NewLine + Environment.NewLine +
+					string message = "Unable to open <" + linkUri + ">!" + Environment.NewLine + Environment.NewLine +
 					                 "System error message:" + Environment.NewLine + ex.Message;
 					MessageBoxEx.Show
 					(
@@ -65,7 +84,7 @@ namespace MKY.Windows.Forms
 			}
 			else
 			{
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Link data is invalid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Link is invalid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 	}
