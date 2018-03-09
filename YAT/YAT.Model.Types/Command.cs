@@ -713,6 +713,14 @@ namespace YAT.Model.Types
 			this.description = "";
 		}
 
+		/// <summary></summary>
+		public virtual Command ToCommandWithoutDefaultRadix()
+		{
+			var c = new Command(this);
+			c.DefaultRadix = DefaultRadixDefault;
+			return (c);
+		}
+
 		#endregion
 
 		#region Object Members

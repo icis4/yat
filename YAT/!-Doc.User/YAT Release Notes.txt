@@ -99,6 +99,9 @@ Important changes:
   asked whether the settings shall be changed (related to feature request #335).
 - Option to enable/disable <...> and \... escape sequences has been separated for 'Send Text' and
   'Send File'. By default, escapes are enabled for 'Send Text' and disabled for 'Send File'.
+- 'Send File' now also sends (formatted) text files for binary terminals, including support for
+  'Explicit Default Radix' and other send file related settings (bug #411).
+- Location of some send related settings has changed (related to bug #411).
 - Binary distributions now contain DejaVu fonts for manual installation (feature request #331).
 
 Fixed bugs:

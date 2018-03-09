@@ -38,7 +38,6 @@ using MKY;
 using MKY.Diagnostics;
 
 using YAT.Application.Utilities;
-using YAT.Domain.Utilities;
 
 #endregion
 
@@ -508,7 +507,7 @@ namespace YAT.Domain
 		{
 			// AssertNotDisposed() is called by DoSendData().
 
-			var parseMode = Parser.Modes.NoEscapes;
+			var parseMode = TerminalSettings.Send.File.ToParseMode();
 
 			DoSendData(new TextDataSendItem(dataLine, defaultRadix, parseMode, true));
 		}
@@ -557,20 +556,11 @@ namespace YAT.Domain
 			{
 				if (ExtensionHelper.IsXmlFile(item.FilePath))
 				{
-					string[] lines;
-					XmlReaderHelper.LinesFromFile(item.FilePath, out lines); // Read all at once for simplicity.
-					foreach (string line in lines)
-					{
-						SendFileLine(line);
-
-						if (BreakSendFile)
-						{
-							OnIOChanged(EventArgs.Empty); // Raise the event to indicate that sending is no longer ongoing.
-							break;
-						}
-
-						Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
-					}
+					ProcessSendXmlFileItem(item);
+				}
+				else if (ExtensionHelper.IsTextFile(item.FilePath))
+				{
+					ProcessSendTextFileItem(item);
 				}
 				else
 				{

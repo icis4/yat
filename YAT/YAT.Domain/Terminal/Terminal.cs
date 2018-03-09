@@ -55,6 +55,8 @@ using MKY.Contracts;
 using MKY.Diagnostics;
 using MKY.Text;
 
+using YAT.Domain.Utilities;
+
 #endregion
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
@@ -1728,6 +1730,58 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		protected abstract void ProcessSendFileItem(FileSendItem item);
+
+		/// <summary></summary>
+		protected virtual void ProcessSendTextFileItem(FileSendItem item)
+		{
+			ProcessSendTextFileItem(item, Encoding.Default);
+		}
+
+		/// <summary></summary>
+		protected virtual void ProcessSendTextFileItem(FileSendItem item, Encoding encodingFallback)
+		{
+			using (var sr = new StreamReader(item.FilePath, encodingFallback, true))
+			{                             // Automatically detect encoding from BOM, otherwise use fallback.
+				string line;
+				while ((line = sr.ReadLine()) != null)
+				{
+					if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
+						continue;
+
+					SendFileLine(line, item.DefaultRadix);
+
+					if (BreakSendFile)
+					{
+						OnIOChanged(EventArgs.Empty); // Raise the event to indicate that sending is no longer ongoing.
+						break;
+					}
+
+					Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
+				}
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void ProcessSendXmlFileItem(FileSendItem item)
+		{
+			string[] lines;
+			XmlReaderHelper.LinesFromFile(item.FilePath, out lines); // Read all at once for simplicity.
+			foreach (string line in lines)
+			{
+				if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
+					continue;
+
+				SendFileLine(line);
+
+				if (BreakSendFile)
+				{
+					OnIOChanged(EventArgs.Empty); // Raise the event to indicate that sending is no longer ongoing.
+					break;
+				}
+
+				Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
+			}
+		}
 
 		#endregion
 
