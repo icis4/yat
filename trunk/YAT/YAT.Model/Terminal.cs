@@ -3334,9 +3334,9 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendText()
 		{
-			// AssertNotDisposed() is called by 'DoSend...' below.
+			// AssertNotDisposed() is called by 'Send...' below.
 
-			DoSendText(this.settingsRoot.SendText.Command);
+			SendText(this.settingsRoot.SendText.Command);
 
 			// Clear command if desired:
 			if (!this.settingsRoot.Send.Text.KeepSendText)
@@ -3348,9 +3348,9 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendTextWithoutEol()
 		{
-			// AssertNotDisposed() is called by 'DoSend...' below.
+			// AssertNotDisposed() is called by 'Send...' below.
 
-			DoSendTextWithoutEol(this.settingsRoot.SendText.Command);
+			SendTextWithoutEol(this.settingsRoot.SendText.Command);
 
 			// Clear command if desired:
 			if (!this.settingsRoot.Send.Text.KeepSendText)
@@ -3362,9 +3362,9 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendPartialTextEol()
 		{
-			// AssertNotDisposed() is called by 'DoSend...' below.
+			// AssertNotDisposed() is called by 'Send...' below.
 
-			DoSendText(new Command(true, this.settingsRoot.SendText.Command.DefaultRadix));
+			SendText(new Command(true, this.settingsRoot.SendText.Command.DefaultRadix));
 		}
 
 		/// <summary>
@@ -3373,9 +3373,9 @@ namespace YAT.Model
 		/// <param name="text">Text to be sent.</param>
 		public virtual void SendText(string text)
 		{
-			// AssertNotDisposed() is called by 'DoSend...' below.
+			// AssertNotDisposed() is called by 'Send...' below.
 
-			DoSendText(new Command(text));
+			SendText(new Command(text));
 		}
 
 		/// <summary>
@@ -3386,9 +3386,29 @@ namespace YAT.Model
 		{
 			// AssertNotDisposed() is called by 'DoSend...' below.
 
-			DoSendText(command);
+			if (this.settingsRoot.Terminal.Send.UseExplicitDefaultRadix)
+				DoSendText(command);
+			else
+				DoSendFile(command.ToCommandWithoutDefaultRadix());
 		}
 
+		/// <summary>
+		/// Sends given text command.
+		/// </summary>
+		/// <param name="command">Text command to be sent.</param>
+		public virtual void SendTextWithoutEol(Command command)
+		{
+			// AssertNotDisposed() is called by 'DoSend...' below.
+
+			if (this.settingsRoot.Terminal.Send.UseExplicitDefaultRadix)
+				DoSendTextWithoutEol(command);
+			else
+				DoSendTextWithoutEol(command.ToCommandWithoutDefaultRadix());
+		}
+
+		/// <remarks>
+		/// Separate "Do...()" method for obvious handling of 'UseExplicitDefaultRadix'.
+		/// </remarks>
 		/// <remarks>
 		/// Argument of this protected method named "c" for compactness.
 		/// </remarks>
@@ -3436,6 +3456,9 @@ namespace YAT.Model
 			}
 		}
 
+		/// <remarks>
+		/// Separate "Do...()" method for obvious handling of 'UseExplicitDefaultRadix'.
+		/// </remarks>
 		/// <remarks>
 		/// Argument of this protected method named "c" for compactness.
 		/// </remarks>
@@ -3541,11 +3564,14 @@ namespace YAT.Model
 		{
 			// AssertNotDisposed() is called by 'DoSend...' below.
 
-			DoSendFile(command);
+			if (this.settingsRoot.Terminal.Send.UseExplicitDefaultRadix)
+				DoSendFile(command);
+			else
+				DoSendFile(command.ToCommandWithoutDefaultRadix());
 		}
 
 		/// <remarks>
-		/// Separate "Do...()" method for symmetricity with "DoSendText...()".
+		/// Separate "Do...()" method for obvious handling of 'UseExplicitDefaultRadix'.
 		/// </remarks>
 		/// <remarks>
 		/// Argument of this protected method named "c" for compactness.

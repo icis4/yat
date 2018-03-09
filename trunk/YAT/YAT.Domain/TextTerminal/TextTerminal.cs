@@ -32,7 +32,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -486,23 +485,7 @@ namespace YAT.Domain
 			{
 				if (ExtensionHelper.IsXmlFile(item.FilePath))
 				{
-					string[] lines;
-					XmlReaderHelper.LinesFromFile(item.FilePath, out lines); // Read all at once for simplicity.
-					foreach (string line in lines)
-					{
-						if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
-							continue;
-
-						SendFileLine(line);
-
-						if (BreakSendFile)
-						{
-							OnIOChanged(EventArgs.Empty); // Raise the event to indicate that sending is no longer ongoing.
-							break;
-						}
-
-						Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
-					}
+					ProcessSendXmlFileItem(item);
 				}
 				else if (ExtensionHelper.IsRtfFile(item.FilePath))
 				{
@@ -526,25 +509,7 @@ namespace YAT.Domain
 				}
 				else
 				{
-					using (var sr = new StreamReader(item.FilePath, (EncodingEx)TextTerminalSettings.Encoding, true))
-					{                             // Automatically detect encoding from BOM, otherwise use given setting.
-						string line;
-						while ((line = sr.ReadLine()) != null)
-						{
-							if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
-								continue;
-
-							SendFileLine(line, item.DefaultRadix);
-
-							if (BreakSendFile)
-							{
-								OnIOChanged(EventArgs.Empty); // Raise the event to indicate that sending is no longer ongoing.
-								break;
-							}
-
-							Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
-						}
-					}
+					ProcessSendTextFileItem(item, (EncodingEx)TextTerminalSettings.Encoding);
 				}
 			}
 			catch (Exception ex)
