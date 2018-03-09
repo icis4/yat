@@ -47,9 +47,12 @@ CD 32x32
 ECHO Tool images (32x32) . . .
 
 SET TARGET=..\%TARGET_FORM_TOOL%
-COPY application_add.png %TARGET%\Image_Tool_application_add_32x32.png
-COPY help.png            %TARGET%\Image_Tool_help_32x32.png
-COPY information.png     %TARGET%\Image_Tool_information_32x32.png
+COPY application_add.png    %TARGET%\Image_Tool_application_add_32x32.png
+COPY control_pause_blue.png %TARGET%\Image_Tool_control_pause_blue_32x32.png
+COPY control_play_blue.png  %TARGET%\Image_Tool_control_play_blue_32x32.png
+COPY control_stop_blue.png  %TARGET%\Image_Tool_control_stop_blue_32x32.png
+COPY help.png               %TARGET%\Image_Tool_help_32x32.png
+COPY information.png        %TARGET%\Image_Tool_information_32x32.png
 
 CD..
 ::--------------------------------------------------------------------------------------------------
