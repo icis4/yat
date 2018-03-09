@@ -668,7 +668,7 @@ namespace YAT.View.Forms
 
 				string sendTextText = "Text";
 				bool sendTextEnabled = this.settingsRoot.SendText.Command.IsValidText;
-				if (this.settingsRoot.Send.SendImmediately)
+				if (this.settingsRoot.Send.Text.SendImmediately)
 				{
 					if (isTextTerminal)
 						sendTextText = "EOL";
@@ -682,23 +682,22 @@ namespace YAT.View.Forms
 
 				toolStripMenuItem_TerminalMenu_Send_Text.Text              = sendTextText;
 				toolStripMenuItem_TerminalMenu_Send_Text.Enabled           = sendTextEnabled && this.terminal.IsReadyToSend;
-				toolStripMenuItem_TerminalMenu_Send_TextWithoutEol.Enabled = sendTextEnabled && this.terminal.IsReadyToSend && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.SendImmediately;
+				toolStripMenuItem_TerminalMenu_Send_TextWithoutEol.Enabled = sendTextEnabled && this.terminal.IsReadyToSend && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.Text.SendImmediately;
 				toolStripMenuItem_TerminalMenu_Send_File.Enabled           = sendFileEnabled && this.terminal.IsReadyToSend;
 
 				toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix.Checked = this.settingsRoot.Send.UseExplicitDefaultRadix;
 
-				toolStripMenuItem_TerminalMenu_Send_KeepSendText.Enabled         = !this.settingsRoot.Send.SendImmediately;
-				toolStripMenuItem_TerminalMenu_Send_KeepSendText.Checked         = !this.settingsRoot.Send.SendImmediately && this.settingsRoot.Send.KeepSendText;
-				toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked       =  this.settingsRoot.Send.CopyPredefined;
-				toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked      =  this.settingsRoot.Send.SendImmediately;
-				toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText.Checked =  this.settingsRoot.Send.EnableEscapes;
+				toolStripMenuItem_TerminalMenu_Send_KeepSendText.Enabled         = !this.settingsRoot.Send.Text.SendImmediately;
+				toolStripMenuItem_TerminalMenu_Send_KeepSendText.Checked         = !this.settingsRoot.Send.Text.SendImmediately && this.settingsRoot.Send.Text.KeepSendText;
+				toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked      =  this.settingsRoot.Send.Text.SendImmediately;
+				toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText.Checked =  this.settingsRoot.Send.Text.EnableEscapes;
 
-				toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText.Enabled  =  this.settingsRoot.SendText.Command.IsMultiLineText;
+				toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Checked       = this.settingsRoot.Send.File.SkipEmptyLines;
+				toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile.Checked = this.settingsRoot.Send.File.EnableEscapes;
 
-				toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Enabled       = isTextTerminal;
-				toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Checked       = this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines;
-				toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile.Enabled = isTextTerminal;
-				toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile.Checked = this.settingsRoot.TextTerminal.SendFile.EnableEscapes;
+				toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked =  this.settingsRoot.Send.CopyPredefined;
+
+				toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText.Enabled =  this.settingsRoot.SendText.Command.IsMultiLineText;
 
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse.Checked          = this.settingsRoot.AutoResponse.IsActive;
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Checked  = this.settingsRoot.AutoResponse.TriggerIsActive;
@@ -742,7 +741,7 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Send_Text_Click(object sender, EventArgs e)
 		{
-			if (!this.settingsRoot.Send.SendImmediately)
+			if (!this.settingsRoot.Send.Text.SendImmediately)
 				this.terminal.SendText();
 			else
 				this.terminal.SendPartialTextEol();
@@ -750,7 +749,7 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Send_TextWithoutEol_Click(object sender, EventArgs e)
 		{
-			if (!this.settingsRoot.Send.SendImmediately)
+			if (!this.settingsRoot.Send.Text.SendImmediately)
 				this.terminal.SendTextWithoutEol();
 			else
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + @"""Send Text w/o EOL"" is invalid when ""Send Immediately"" is active!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -768,7 +767,27 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Send_KeepSendText_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.Send.KeepSendText = !this.settingsRoot.Send.KeepSendText;
+			this.settingsRoot.Send.Text.KeepSendText = !this.settingsRoot.Send.Text.KeepSendText;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Send_SendImmediately_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Send.Text.SendImmediately = !this.settingsRoot.Send.Text.SendImmediately;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Send.Text.EnableEscapes = !this.settingsRoot.Send.Text.EnableEscapes;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Send.File.SkipEmptyLines = !this.settingsRoot.Send.File.SkipEmptyLines;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Send.File.EnableEscapes = !this.settingsRoot.Send.File.EnableEscapes;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_CopyPredefined_Click(object sender, EventArgs e)
@@ -776,29 +795,9 @@ namespace YAT.View.Forms
 			this.settingsRoot.Send.CopyPredefined = !this.settingsRoot.Send.CopyPredefined;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_Send_SendImmediately_Click(object sender, EventArgs e)
-		{
-			this.settingsRoot.Send.SendImmediately = !this.settingsRoot.Send.SendImmediately;
-		}
-
-		private void toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText_Click(object sender, EventArgs e)
-		{
-			this.settingsRoot.Send.EnableEscapes = !this.settingsRoot.Send.EnableEscapes;
-		}
-
 		private void toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.SendText.ExpandMultiLineText();
-		}
-
-		private void toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines_Click(object sender, EventArgs e)
-		{
-			this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines = !this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines;
-		}
-
-		private void toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile_Click(object sender, EventArgs e)
-		{
-			this.settingsRoot.TextTerminal.SendFile.EnableEscapes = !this.settingsRoot.TextTerminal.SendFile.EnableEscapes;
 		}
 
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
@@ -2371,7 +2370,7 @@ namespace YAT.View.Forms
 
 				string sendTextText = "Send Text";
 				bool sendTextEnabled = this.settingsRoot.SendText.Command.IsValidText;
-				if (this.settingsRoot.Send.SendImmediately)
+				if (this.settingsRoot.Send.Text.SendImmediately)
 				{
 					if (isTextTerminal)
 						sendTextText = "Send EOL";
@@ -2388,23 +2387,22 @@ namespace YAT.View.Forms
 
 				toolStripMenuItem_SendContextMenu_SendText.Text              = sendTextText;
 				toolStripMenuItem_SendContextMenu_SendText.Enabled           = sendTextEnabled && this.terminal.IsReadyToSend;
-				toolStripMenuItem_SendContextMenu_SendTextWithoutEol.Enabled = sendTextEnabled && this.terminal.IsReadyToSend && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.SendImmediately;
+				toolStripMenuItem_SendContextMenu_SendTextWithoutEol.Enabled = sendTextEnabled && this.terminal.IsReadyToSend && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.Text.SendImmediately;
 				toolStripMenuItem_SendContextMenu_SendFile.Enabled           = sendFileEnabled && this.terminal.IsReadyToSend;
 
 				toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix.Checked = this.settingsRoot.Send.UseExplicitDefaultRadix;
 
-				toolStripMenuItem_SendContextMenu_KeepSendText.Enabled         = !this.settingsRoot.Send.SendImmediately;
-				toolStripMenuItem_SendContextMenu_KeepSendText.Checked         = !this.settingsRoot.Send.SendImmediately && this.settingsRoot.Send.KeepSendText;
-				toolStripMenuItem_SendContextMenu_CopyPredefined.Checked       =  this.settingsRoot.Send.CopyPredefined;
-				toolStripMenuItem_SendContextMenu_SendImmediately.Checked      =  this.settingsRoot.Send.SendImmediately;
-				toolStripMenuItem_SendContextMenu_EnableEscapesForText.Checked =  this.settingsRoot.Send.EnableEscapes;
+				toolStripMenuItem_SendContextMenu_KeepSendText.Enabled         = !this.settingsRoot.Send.Text.SendImmediately;
+				toolStripMenuItem_SendContextMenu_KeepSendText.Checked         = !this.settingsRoot.Send.Text.SendImmediately && this.settingsRoot.Send.Text.KeepSendText;
+				toolStripMenuItem_SendContextMenu_SendImmediately.Checked      =  this.settingsRoot.Send.Text.SendImmediately;
+				toolStripMenuItem_SendContextMenu_EnableEscapesForText.Checked =  this.settingsRoot.Send.Text.EnableEscapes;
 
-				toolStripMenuItem_SendContextMenu_ExpandMultiLineText.Enabled  =  this.settingsRoot.SendText.Command.IsMultiLineText;
+				toolStripMenuItem_SendContextMenu_SkipEmptyLines.Checked       = this.settingsRoot.Send.File.SkipEmptyLines;
+				toolStripMenuItem_SendContextMenu_EnableEscapesForFile.Checked = this.settingsRoot.Send.File.EnableEscapes;
 
-				toolStripMenuItem_SendContextMenu_SkipEmptyLines.Enabled       = isTextTerminal;
-				toolStripMenuItem_SendContextMenu_SkipEmptyLines.Checked       = this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines;
-				toolStripMenuItem_SendContextMenu_EnableEscapesForFile.Enabled = isTextTerminal;
-				toolStripMenuItem_SendContextMenu_EnableEscapesForFile.Checked = this.settingsRoot.TextTerminal.SendFile.EnableEscapes;
+				toolStripMenuItem_SendContextMenu_CopyPredefined.Checked =  this.settingsRoot.Send.CopyPredefined;
+
+				toolStripMenuItem_SendContextMenu_ExpandMultiLineText.Enabled =  this.settingsRoot.SendText.Command.IsMultiLineText;
 			}
 			finally
 			{
@@ -2422,7 +2420,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			if (!this.settingsRoot.Send.SendImmediately)
+			if (!this.settingsRoot.Send.Text.SendImmediately)
 				this.terminal.SendText();
 			else
 				this.terminal.SendPartialTextEol();
@@ -2433,7 +2431,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			if (!this.settingsRoot.Send.SendImmediately)
+			if (!this.settingsRoot.Send.Text.SendImmediately)
 				this.terminal.SendTextWithoutEol();
 			else
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + @"""Send Text w/o EOL"" is invalid when ""Send Immediately"" is active!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -2476,7 +2474,39 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			this.settingsRoot.Send.KeepSendText = !this.settingsRoot.Send.KeepSendText;
+			this.settingsRoot.Send.Text.KeepSendText = !this.settingsRoot.Send.Text.KeepSendText;
+		}
+
+		private void toolStripMenuItem_SendContextMenu_SendImmediately_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.settingsRoot.Send.Text.SendImmediately = !this.settingsRoot.Send.Text.SendImmediately;
+		}
+
+		private void toolStripMenuItem_SendContextMenu_EnableEscapesForText_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.settingsRoot.Send.Text.EnableEscapes = !this.settingsRoot.Send.Text.EnableEscapes;
+		}
+
+		private void toolStripMenuItem_SendContextMenu_EnableEscapesForFile_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.settingsRoot.Send.File.EnableEscapes = !this.settingsRoot.Send.File.EnableEscapes;
+		}
+
+		private void toolStripMenuItem_SendContextMenu_SkipEmptyLines_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.settingsRoot.Send.File.SkipEmptyLines = !this.settingsRoot.Send.File.SkipEmptyLines;
 		}
 
 		private void toolStripMenuItem_SendContextMenu_CopyPredefined_Click(object sender, EventArgs e)
@@ -2487,44 +2517,12 @@ namespace YAT.View.Forms
 			this.settingsRoot.Send.CopyPredefined = !this.settingsRoot.Send.CopyPredefined;
 		}
 
-		private void toolStripMenuItem_SendContextMenu_SendImmediately_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			this.settingsRoot.Send.SendImmediately = !this.settingsRoot.Send.SendImmediately;
-		}
-
-		private void toolStripMenuItem_SendContextMenu_EnableEscapesForText_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			this.settingsRoot.Send.EnableEscapes = !this.settingsRoot.Send.EnableEscapes;
-		}
-
 		private void toolStripMenuItem_SendContextMenu_ExpandMultiLineText_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
 			this.settingsRoot.SendText.ExpandMultiLineText();
-		}
-
-		private void toolStripMenuItem_SendContextMenu_EnableEscapesForFile_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			this.settingsRoot.TextTerminal.SendFile.EnableEscapes = !this.settingsRoot.TextTerminal.SendFile.EnableEscapes;
-		}
-
-		private void toolStripMenuItem_SendContextMenu_SkipEmptyLines_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines = !this.settingsRoot.TextTerminal.SendFile.SkipEmptyLines;
 		}
 
 		#endregion
@@ -3781,8 +3779,8 @@ namespace YAT.View.Forms
 				send.RecentFileCommands      = this.settingsRoot.SendFile.RecentCommands;
 				send.TerminalType            = this.settingsRoot.TerminalType;
 				send.UseExplicitDefaultRadix = this.settingsRoot.Send.UseExplicitDefaultRadix;
-				send.ParseModeForText        = this.settingsRoot.Send.ToParseMode();
-				send.SendTextImmediately     = this.settingsRoot.Send.SendImmediately;
+				send.ParseModeForText        = this.settingsRoot.Send.Text.ToParseMode();
+				send.SendTextImmediately     = this.settingsRoot.Send.Text.SendImmediately;
 				send.TerminalIsReadyToSend   = this.terminal.IsReadyToSend;
 			}
 			finally
@@ -4421,7 +4419,7 @@ namespace YAT.View.Forms
 				this.settingsRoot.PredefinedCommand,
 				this.settingsRoot.TerminalType,
 				this.settingsRoot.Send.UseExplicitDefaultRadix,
-				this.settingsRoot.Send.ToParseMode(),
+				this.settingsRoot.Send.Text.ToParseMode(),
 				page,
 				command
 			);

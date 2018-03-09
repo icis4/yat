@@ -31,33 +31,30 @@ using System.Xml.Serialization;
 namespace YAT.Domain.Settings
 {
 	/// <remarks>
-	/// Named 'SendTextFileSettings' instead of 'SendFileSettings' to prevent XML invalid operation
+	/// Named 'SendSettingsFile.cs' instead of 'SendFileSettings' to prevent XML invalid operation
 	/// exception "type 'A.X' and 'B.X' use the XML type name 'X' in namespace" when reflecting the
 	/// settings.
 	/// </remarks>
 	[Serializable]
-	public class SendTextFileSettings : MKY.Settings.SettingsItem, IEquatable<SendTextFileSettings>
+	public class SendSettingsFile : MKY.Settings.SettingsItem, IEquatable<SendSettingsFile>
 	{
 		/// <summary></summary>
 		public const bool SkipEmptyLinesDefault = false;
 
-		/// <remarks>
-		/// Applies to [Send File]. Setting for [Send Text] is defined by
-		/// <see cref="SendSettings.EnableEscapesDefault"/>.
-		/// </remarks>
+		/// <summary></summary>
 		public const bool EnableEscapesDefault = false;
 
 		private bool skipEmptyLines;
 		private bool enableEscapes;
 
 		/// <summary></summary>
-		public SendTextFileSettings()
+		public SendSettingsFile()
 			: this(MKY.Settings.SettingsType.Explicit)
 		{
 		}
 
 		/// <summary></summary>
-		public SendTextFileSettings(MKY.Settings.SettingsType settingsType)
+		public SendSettingsFile(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -68,7 +65,7 @@ namespace YAT.Domain.Settings
 		/// Set fields through properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public SendTextFileSettings(SendTextFileSettings rhs)
+		public SendSettingsFile(SendSettingsFile rhs)
 			: base(rhs)
 		{
 			SkipEmptyLines = rhs.SkipEmptyLines;
@@ -108,10 +105,6 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <remarks>
-		/// Applies to [Send File]. Setting for [Send Text] is defined by
-		/// <see cref="SendSettings.EnableEscapes"/>.
-		/// </remarks>
 		/// <summary></summary>
 		[XmlElement("EnableEscapes")]
 		public virtual bool EnableEscapes
@@ -175,7 +168,7 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as SendTextFileSettings));
+			return (Equals(obj as SendSettingsFile));
 		}
 
 		/// <summary>
@@ -185,7 +178,7 @@ namespace YAT.Domain.Settings
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(SendTextFileSettings other)
+		public bool Equals(SendSettingsFile other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
@@ -203,7 +196,7 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(SendTextFileSettings lhs, SendTextFileSettings rhs)
+		public static bool operator ==(SendSettingsFile lhs, SendSettingsFile rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -216,7 +209,7 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(SendTextFileSettings lhs, SendTextFileSettings rhs)
+		public static bool operator !=(SendSettingsFile lhs, SendSettingsFile rhs)
 		{
 			return (!(lhs == rhs));
 		}

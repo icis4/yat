@@ -945,7 +945,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual bool TryParseText(string s, out byte[] result, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
-			using (var p = new Parser.Parser(TerminalSettings.IO.Endianness, TerminalSettings.Send.ToParseMode()))
+			using (var p = new Parser.Parser(TerminalSettings.IO.Endianness, TerminalSettings.Send.Text.ToParseMode()))
 				return (p.TryParse(s, out result, defaultRadix));
 		}
 
@@ -970,7 +970,7 @@ namespace YAT.Domain
 		{
 			// AssertNotDisposed() is called by DoSendData().
 
-			var parseMode = TerminalSettings.Send.ToParseMode();
+			var parseMode = TerminalSettings.Send.Text.ToParseMode();
 
 			DoSendData(new TextDataSendItem(data, defaultRadix, parseMode, false));
 		}
@@ -981,7 +981,7 @@ namespace YAT.Domain
 		{
 			// AssertNotDisposed() is called by DoSendData().
 
-			var parseMode = TerminalSettings.Send.ToParseMode();
+			var parseMode = TerminalSettings.Send.Text.ToParseMode();
 
 			DoSendData(new TextDataSendItem(dataLine, defaultRadix, parseMode, true));
 		}
@@ -999,7 +999,7 @@ namespace YAT.Domain
 		{
 			// AssertNotDisposed() is called by DoSendData().
 
-			var parseMode = TerminalSettings.Send.ToParseMode();
+			var parseMode = TerminalSettings.Send.Text.ToParseMode();
 
 			var l = new List<TextDataSendItem>(dataLines.Length); // Preset the required capacity to improve memory management.
 			foreach (string dataLine in dataLines)
@@ -1727,33 +1727,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		protected virtual void ProcessSendFileItem(FileSendItem item)
-		{
-			try
-			{
-				using (var sr = new StreamReader(item.FilePath))
-				{
-					string line;
-					while ((line = sr.ReadLine()) != null)
-					{
-						SendTextLine(line, item.DefaultRadix);
-
-						if (BreakSendFile)
-						{
-							OnIOChanged(EventArgs.Empty); // Raise the event to indicate that sending is no longer ongoing.
-							break;
-						}
-
-						Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, @"Error reading file """ + item.FilePath + @""": " + ex.Message));
-			}
-		}
+		protected abstract void ProcessSendFileItem(FileSendItem item);
 
 		#endregion
 

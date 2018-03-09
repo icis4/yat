@@ -1416,7 +1416,7 @@ namespace YAT.Model
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'sendImmediatelyOld' does start with a lower case letter.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private bool settingsRoot_Changed_sendImmediatelyOld = Domain.Settings.SendSettings.SendImmediatelyDefault;
+		private bool settingsRoot_Changed_sendImmediatelyOld = Domain.Settings.SendSettingsText.SendImmediatelyDefault;
 
 		private void settingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
@@ -1496,8 +1496,8 @@ namespace YAT.Model
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal.Send))
 			{
-				if (settingsRoot_Changed_sendImmediatelyOld != this.settingsRoot.Terminal.Send.SendImmediately) {
-					settingsRoot_Changed_sendImmediatelyOld = this.settingsRoot.Terminal.Send.SendImmediately;
+				if (settingsRoot_Changed_sendImmediatelyOld != this.settingsRoot.Terminal.Send.Text.SendImmediately) {
+					settingsRoot_Changed_sendImmediatelyOld = this.settingsRoot.Terminal.Send.Text.SendImmediately;
 
 					// Send immediately has changed, reset the command:
 					this.settingsRoot.SendText.Command = new Command(this.settingsRoot.SendText.Command.DefaultRadix); // Set command to "".
@@ -3339,7 +3339,7 @@ namespace YAT.Model
 			DoSendText(this.settingsRoot.SendText.Command);
 
 			// Clear command if desired:
-			if (!this.settingsRoot.Send.KeepSendText)
+			if (!this.settingsRoot.Send.Text.KeepSendText)
 				this.settingsRoot.SendText.Command = new Command(this.settingsRoot.SendText.Command.DefaultRadix); // Set command to "".
 		}
 
@@ -3353,7 +3353,7 @@ namespace YAT.Model
 			DoSendTextWithoutEol(this.settingsRoot.SendText.Command);
 
 			// Clear command if desired:
-			if (!this.settingsRoot.Send.KeepSendText)
+			if (!this.settingsRoot.Send.Text.KeepSendText)
 				this.settingsRoot.SendText.Command = new Command(this.settingsRoot.SendText.Command.DefaultRadix); // Set command to "".
 		}
 

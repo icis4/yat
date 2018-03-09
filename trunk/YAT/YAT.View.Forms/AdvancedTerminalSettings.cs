@@ -577,7 +577,15 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.Terminal.Send.KeepSendText = checkBox_KeepSendText.Checked;
+			this.settingsInEdit.Terminal.Send.Text.KeepSendText = checkBox_KeepSendText.Checked;
+		}
+
+		private void checkBox_SendImmediately_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Send.Text.SendImmediately = checkBox_SendImmediately.Checked;
 		}
 
 		private void checkBox_CopyPredefined_CheckedChanged(object sender, EventArgs e)
@@ -586,14 +594,6 @@ namespace YAT.View.Forms
 				return;
 
 			this.settingsInEdit.Terminal.Send.CopyPredefined = checkBox_CopyPredefined.Checked;
-		}
-
-		private void checkBox_SendImmediately_CheckedChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			this.settingsInEdit.Terminal.Send.SendImmediately = checkBox_SendImmediately.Checked;
 		}
 
 		private void checkBox_OutputBufferSize_CheckedChanged(object sender, EventArgs e)
@@ -839,7 +839,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.Terminal.Send.EnableEscapes = checkBox_EnableEscapesForText.Checked;
+			this.settingsInEdit.Terminal.Send.Text.EnableEscapes = checkBox_EnableEscapesForText.Checked;
 		}
 
 		/// <remarks>
@@ -852,7 +852,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.Terminal.TextTerminal.SendFile.EnableEscapes = checkBox_EnableEscapesForFile.Checked;
+			this.settingsInEdit.Terminal.Send.File.EnableEscapes = checkBox_EnableEscapesForFile.Checked;
 		}
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
@@ -1112,10 +1112,10 @@ namespace YAT.View.Forms
 
 				// Send:
 				checkBox_UseExplicitDefaultRadix.Checked =  this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix;
-				checkBox_KeepSendText.Enabled            = !this.settingsInEdit.Terminal.Send.SendImmediately;
-				checkBox_KeepSendText.Checked            = !this.settingsInEdit.Terminal.Send.SendImmediately && this.settingsInEdit.Terminal.Send.KeepSendText;
+				checkBox_KeepSendText.Enabled            = !this.settingsInEdit.Terminal.Send.Text.SendImmediately;
+				checkBox_KeepSendText.Checked            = !this.settingsInEdit.Terminal.Send.Text.SendImmediately && this.settingsInEdit.Terminal.Send.Text.KeepSendText;
+				checkBox_SendImmediately.Checked         =  this.settingsInEdit.Terminal.Send.Text.SendImmediately;
 				checkBox_CopyPredefined.Checked          =  this.settingsInEdit.Terminal.Send.CopyPredefined;
-				checkBox_SendImmediately.Checked         =  this.settingsInEdit.Terminal.Send.SendImmediately;
 
 				checkBox_SignalXOnBeforeEachTransmission.Enabled = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
 				checkBox_SignalXOnBeforeEachTransmission.Checked = this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission;
@@ -1142,11 +1142,11 @@ namespace YAT.View.Forms
 				checkBox_NoSendOnOutputBreak.Checked = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 				checkBox_NoSendOnInputBreak.Checked  = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
-				checkBox_EnableEscapesForText.Checked = this.settingsInEdit.Terminal.Send.EnableEscapes;
+				checkBox_EnableEscapesForText.Checked = this.settingsInEdit.Terminal.Send.Text.EnableEscapes;
 				checkBox_EnableEscapesForFile.Enabled = isTextTerminal;
-				checkBox_EnableEscapesForFile.Checked = this.settingsInEdit.Terminal.TextTerminal.SendFile.EnableEscapes;
+				checkBox_EnableEscapesForFile.Checked = this.settingsInEdit.Terminal.Send.File.EnableEscapes;
 
-				groupBox_Send_Keywords.Enabled   = (this.settingsInEdit.Terminal.Send.EnableEscapes || this.settingsInEdit.Terminal.TextTerminal.SendFile.EnableEscapes);
+				groupBox_Send_Keywords.Enabled   = (this.settingsInEdit.Terminal.Send.Text.EnableEscapes || this.settingsInEdit.Terminal.Send.File.EnableEscapes);
 				textBox_DefaultDelay.Text        =  this.settingsInEdit.Terminal.Send.DefaultDelay.ToString(CultureInfo.CurrentCulture);
 				textBox_DefaultLineDelay.Text    =  this.settingsInEdit.Terminal.Send.DefaultLineDelay.ToString(CultureInfo.CurrentCulture);
 				textBox_DefaultLineInterval.Text =  this.settingsInEdit.Terminal.Send.DefaultLineInterval.ToString(CultureInfo.CurrentCulture);
@@ -1215,9 +1215,9 @@ namespace YAT.View.Forms
 
 				// Send:
 				this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix         = Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault;
-				this.settingsInEdit.Terminal.Send.KeepSendText                    = Domain.Settings.SendSettings.KeepSendTextDefault;
 				this.settingsInEdit.Terminal.Send.CopyPredefined                  = Domain.Settings.SendSettings.CopyPredefinedDefault;
-				this.settingsInEdit.Terminal.Send.SendImmediately                 = Domain.Settings.SendSettings.SendImmediatelyDefault;
+				this.settingsInEdit.Terminal.Send.Text.KeepSendText               = Domain.Settings.SendSettingsText.KeepSendTextDefault;
+				this.settingsInEdit.Terminal.Send.Text.SendImmediately            = Domain.Settings.SendSettingsText.SendImmediatelyDefault;
 
 				this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission = Domain.Settings.SendSettings.SignalXOnBeforeEachTransmissionDefault;
 				this.settingsInEdit.Terminal.Send.SignalXOnPeriodically           = Domain.Settings.SendSettings.SignalXOnPeriodicallyDefault;
@@ -1229,8 +1229,8 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak    = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnOutputBreakDefault;
 				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak     = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnInputBreakDefault;
 
-				this.settingsInEdit.Terminal.Send.EnableEscapes                   = Domain.Settings.SendSettings.EnableEscapesDefault;
-				this.settingsInEdit.Terminal.TextTerminal.SendFile.EnableEscapes  = Domain.Settings.SendTextFileSettings.EnableEscapesDefault;
+				this.settingsInEdit.Terminal.Send.Text.EnableEscapes              = Domain.Settings.SendSettingsText.EnableEscapesDefault;
+				this.settingsInEdit.Terminal.Send.File.EnableEscapes              = Domain.Settings.SendSettingsFile.EnableEscapesDefault;
 
 				this.settingsInEdit.Terminal.Send.DefaultDelay                    = Domain.Settings.SendSettings.DefaultDelayDefault;
 				this.settingsInEdit.Terminal.Send.DefaultLineDelay                = Domain.Settings.SendSettings.DefaultLineDelayDefault;

@@ -67,15 +67,9 @@ namespace YAT.Domain.Settings
 		private int    encoding;
 		private bool   showEol;
 
-		private TextLineSendDelay  lineSendDelay;
-		private WaitForResponse    waitForResponse;
-		private CharSubstitution   charSubstitution;
-
-		/// <remarks>
-		/// Named 'sendFile' even though the type is named 'SendTextFile' because of reason
-		/// documented in the remarks of <see cref="SendTextFileSettings"/>.
-		/// </remarks>
-		private SendTextFileSettings sendFile;
+		private TextLineSendDelay     lineSendDelay;
+		private WaitForResponse       waitForResponse;
+		private CharSubstitution      charSubstitution;
 		private TextExclusionSettings textExclusion;
 
 		/// <summary></summary>
@@ -90,7 +84,6 @@ namespace YAT.Domain.Settings
 		{
 			SetMyDefaults();
 
-			SendFile   = new SendTextFileSettings(SettingsType);
 			TextExclusion = new TextExclusionSettings(SettingsType);
 
 			SetNodeDefaults();
@@ -113,7 +106,6 @@ namespace YAT.Domain.Settings
 			WaitForResponse  = rhs.WaitForResponse;
 			CharSubstitution = rhs.CharSubstitution;
 
-			SendFile      = new SendTextFileSettings(rhs.SendFile);
 			TextExclusion = new TextExclusionSettings(rhs.TextExclusion);
 
 			ClearChanged();
@@ -246,26 +238,6 @@ namespace YAT.Domain.Settings
 				{
 					this.showEol = value;
 					SetMyChanged();
-				}
-			}
-		}
-
-		/// <remarks>
-		/// Named 'SendFile' even though the type is named 'SendTextFile' because of reason
-		/// documented in the remarks of <see cref="SendTextFileSettings"/>.
-		/// </remarks>
-		[XmlElement("SendFile")]
-		public virtual SendTextFileSettings SendFile
-		{
-			get { return (this.sendFile); }
-			set
-			{
-				if (this.sendFile != value)
-				{
-					var oldNode = this.sendFile;
-					this.sendFile = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
-
-					AttachOrReplaceOrDetachNode(oldNode, value);
 				}
 			}
 		}
