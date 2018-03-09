@@ -497,7 +497,6 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.CheckBox checkBox_Exclude;
 		private MKY.Windows.Forms.StringListEdit stringListEdit_ExcludePatterns;
 		private System.Windows.Forms.ToolTip toolTip;
-		private System.Windows.Forms.CheckBox checkBox_SkipEmptyLines;
 		private System.Windows.Forms.LinkLabel linkLabel_Regex;
 	}
 }
