@@ -87,14 +87,27 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 YAT 2.0 Final :: 2018-0x-xx
 ----------------------------------------------------------------------------------------------------
 
+New:
+- Option to break lines on each sent or received chunk (feature request 335).
+  Useful for message- rather than stream-oriented communication, e.g. most use cases of UDP/IP.
+
 Important changes:
-- Option to enable/disable <...> and \... escape sequences has been separated for 'Send Text' and
-  'Send File'. By default, escapes are enabled for 'Send Text' and disabled for 'Send File'.
+- UDP/IP terminals by default now use "[None]" as EOL sequence (related to feature request #335).
+- UDP/IP related settings 'break lines on each sent or received chunk' and 'EOL sequence' are
+  automatically changed when the port type gets changed. This automatism is only applied if the
+  settings are at their defaults, i.e. have not been changed by the user; otherwise, the user is
+  asked whether the settings shall be changed (related to feature request #335).
+- Option to enable/disable <...> and \... escape sequences has been separated for [Send Text] and
+  [Send File]. By default, escapes are enabled for [Send Text] and disabled for [Send File].
+- [Send File] now also sends (formatted) text files for binary terminals, including support for
+  [Explicit Default Radix] and other send file related settings (bug #411).
+- Location of some send related settings has changed (related to bug #411).
 - Binary distributions now contain DejaVu fonts for manual installation (feature request #331).
 
 Fixed bugs:
-- 'SplitterDistance' value related 'InvalidOperationException' on startup (bug #409).
-- 'SplitterDistance' value related 'ArgumentOutOfRangeException' on startup (bug #408).
+- 'SplitterDistance' value related 'InvalidOperationException' on startup fixed (bug #409).
+- 'SplitterDistance' value related 'ArgumentOutOfRangeException' on startup fixed (bug #408).
+- 'NullReferenceException' under certain conditions when .yat file got deleted fixed (bug #407).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
@@ -106,8 +119,8 @@ Limitations and known issues:
    > Tool strip combo box slightly flickers when updating item list, e.g. 'Find Pattern' (bug #402).
    > Combo box cannot restore some corner-case cursor positions (bug #403).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
-     if that is contained in the item list, e.g. the recent 'Send Text' or 'Find' items (bug #347).
-   > Automatic completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
+     if that is contained in the item list, e.g. the recent [Send Text] or 'Find' items (bug #347).
+   > Automatic completion for e.g. [Send Text] is not feasible to implement (feature request #227).
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
    > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
      selected may lead to a severe drop of the overall performance (related to bug #383).
@@ -142,16 +155,16 @@ New:
 - Local time can optionally be shown in the main status bar (feature request #328).
 
 Important changes:
-- Cursor behavior of 'Send Text' improved:
+- Cursor behavior of [Send Text] improved:
    > Cursor position and text selection is remembered (related to bugs #391 and #395).
    > Cursor no longer jumps to the end of the input box when sending the text (bug #395).
    > Cursor no longer jumps to the beginning of the input box after edit of recent (rel. bug #391).
-- Shortcut of 'Clear' changed from [Shift+Delete] to [Ctrl+L] (related to change stated above).
-- Shortcut of 'Save to File' changed from [Ctrl+F] to [Ctrl+T] (consequence of feat. #11 and #79).
+- Shortcut of [Clear] changed from (Shift+Delete) to (Ctrl+L) (related to change stated above).
+- Shortcut of [Save to File] changed from (Ctrl+F) to (Ctrl+T) (consequence of feat. #11 and #79).
 - Automatic response trigger is highlighted, same as automatic action trigger (rel. to feat. #320).
 - Automatic response extended by selection to respond the received trigger (related to feature
   requests #176, #252 implemented in version 1.99.50).
-  This option combined with setting the trigger to '[Any Line]' makes YAT an echo server.
+  This option combined with setting the trigger to "[Any Line]" makes YAT an echo server.
 - Switching among automatic/manual vertical scrolling in monitor further improved, especially while
   continuous data is being received (related to bug #394 and feature request #323 implemented in
   previous release).
@@ -163,11 +176,11 @@ Important changes:
 Fixed bugs:
 - Monitors no longer scroll to top as soon as display buffer has been filled (bugs #394 and #398 as
   well as feature request #326; related to feature request #323 implemented in previous release).
-- Focus no longer moves away from 'Send Text' when switching applications (bug #391).
-- Standard word selection shortcuts [Ctrl+Shift+Left|Right] also work when commands are predefined.
-- Shortcuts to navigate command pages changed from [Ctrl+Shift+Left|Right] to [Ctrl+Alt+Left|Right]
-  and [Ctrl+Shift+F1..F12] to [Ctrl+Alt+1..9] as well as shortcuts to 'Copy to Send Text' changed
-  from [Alt+Shift+F1..F12] to [Ctrl+Shift+F1..F12] (consequence of change above).
+- Focus no longer moves away from [Send Text] when switching applications (bug #391).
+- Standard word selection shortcuts (Ctrl+Shift+Left|Right) also work when commands are predefined.
+- Shortcuts to navigate command pages changed from (Ctrl+Shift+Left|Right) to (Ctrl+Alt+Left|Right)
+  and (Ctrl+Shift+F1..F12) to (Ctrl+Alt+1..9) as well as shortcuts to 'Copy to Send Text' changed
+  from (Alt+Shift+F1..F12) to (Ctrl+Shift+F1..F12) (consequence of change above).
 - Endianness of multi-byte encoded characters fixed, UTF-8 no longer results in spurious warning
   messages (bug #400, regression of bug #343 fixed for version 1.99.70).
 - Superfluous spaces for multi-byte LE encodings fixed (related to bug #400 and feat. request #271).
@@ -185,8 +198,8 @@ Limitations and known issues:
    > Tool strip combo box slightly flickers when updating item list, e.g. 'Find Pattern' (bug #402).
    > Combo box cannot restore some corner-case cursor positions (bug #403).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
-     if that is contained in the item list, e.g. the recent 'Send Text' or 'Find' items (bug #347).
-   > Automatic completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
+     if that is contained in the item list, e.g. the recent [Send Text] or 'Find' items (bug #347).
+   > Automatic completion for e.g. [Send Text] is not feasible to implement (feature request #227).
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
    > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
      selected may lead to a severe drop of the overall performance (related to bug #383).
@@ -225,9 +238,9 @@ Important changes:
   responsiveness to receive data while sending a lot of fast data (rel. to bugs #305, #380, #383).
 - Automatic vertical scrolling of monitor is not only suspended if one or more lines are selected
   but also, if the scroll bar is moved away from the bottom of the monitor (feature request #323).
-- Break [Ctrl+B] can now also be used to break sending a file (bug #305 and feature request #295).
+- Break (Ctrl+B) can now also be used to break sending a file (bug #305 and feature request #295).
 - Auto-reconnect of TCP/IP client terminals enabled by default.
-- Text input now supports the [Ctrl+Backspace] shortcut and multi-line text input also the [Ctrl+A]
+- Text input now supports the (Ctrl+Backspace) shortcut and multi-line text input also the (Ctrl+A)
   shortcut (feature request #317 as workaround to limitation of .NET Windows.Forms).
 - Warning on invalid multi-byte encoded byte sequences for string, character and Unicode radix.
 - Option to display the date has been merged with option to display the time, but it is now possible
@@ -263,8 +276,8 @@ Limitations and known issues:
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
    > System errors are output in local language, even though YAT is all-English (bug #66).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
-     if that is contained in the item list, e.g. the recent 'Send Text' or 'Find' items (bug #347).
-   > Automatic completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
+     if that is contained in the item list, e.g. the recent [Send Text] items (bug #347).
+   > Automatic completion for e.g. [Send Text] is not feasible to implement (feature request #227).
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
    > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
      selected may lead to a severe drop of the overall performance (related to bug #383).
@@ -286,7 +299,7 @@ YAT 2.0 Gamma 3 Version 1.99.70 :: 2017-07-04
 ----------------------------------------------------------------------------------------------------
 
 New:
-- 'Send Text' without EOL by [Ctrl+Enter] or [Ctrl+F3] (feature requests #281, #283, #285).
+- [Send Text] without EOL by (Ctrl+Enter) or (Ctrl+F3) (feature requests #281, #283, #285).
 - Option to send data in Unicode notation as "\U+...." or C-style "\u...." or YAT-style "\U(....)
   as well as option to show data in Unicode notation "U+...." added (feature request #271).
 - Option to disable BOM (Unicode encoding preamble) when logging in UTF8 added (bug #363).
@@ -342,8 +355,8 @@ Limitations and known issues:
    > System display scaling other than 100% results in partly clipped controls (bugs #85 and #235).
    > System errors are output in local language, even though YAT is all-English (bug #66).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
-     if that is contained in the item list, e.g. the recent 'Send Text' or 'Find' items (bug #347).
-   > Automatic completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
+     if that is contained in the item list, e.g. the recent [Send Text] items (bug #347).
+   > Automatic completion for e.g. [Send Text] is not feasible to implement (feature request #227).
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
@@ -422,14 +435,14 @@ New:
 - Window can be configured to always stay on top (feature request #241).
 
 Important changes:
-- 'Send Command' renamed to 'Send Text' (related to feature request #252).
+- 'Send Command' renamed to [Send Text] (related to feature request #252).
 - Active terminal is highlighted/emphasized (feature request #247).
-- Automatic terminal layout added. Use 'Window > ...' for dedicated layout (feature request #247).
+- Automatic terminal layout added. Use [Window > ...] for dedicated layout (feature request #247).
 - If YAT is not the active app, a single click is now sufficient to execute an action (bug #210).
 - Icons migrated from glyfx to FatCow (much larger variety) as preparation for the items below.
 - Additional log menu items and toolbar icons added, including indication whether logging is
   switched on or off, as well as opening/viewing of log file (feature requests #69, #103, #245).
-- XML schema on 'Monitor > Save To File...' aligned with XML schema of logging in XML. Schema
+- XML schema on [Monitor > Save To File...] aligned with XML schema of logging in XML. Schema
   is saved in additional .xsd file (related to feature requests #26 and #27).
 - Several other menu items and toolbar icons added (includes feature request #222).
 - Parser is now capable to handle contiguous values such as \h(01020304) (related to bug #326).
@@ -485,8 +498,8 @@ Limitations and known issues:
    > System display scaling other than 100% results in partly clipped controls (bugs #85 and #235).
    > System errors are output in local language, even though YAT is all-English (bug #66).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
-     if that is contained in the item list, e.g. the recent 'Send Text' or 'Find' items (bug #347).
-   > Automatic completion for e.g. 'Send Text' is not feasible to implement (feature request #227).
+     if that is contained in the item list, e.g. the recent [Send Text] items (bug #347).
+   > Automatic completion for e.g. [Send Text] is not feasible to implement (feature request #227).
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
@@ -537,7 +550,7 @@ YAT 2.0 Gamma 1' Version 1.99.33 :: 2015-06-07
 Fixed bugs:
 - 'FormatException' when opening the terminal settings of a terminal that is based on an existing
   .yat file fixed, additional test cases added to regression testing (bugs #306 and #307)
-- Issues with 'Send File' fixed, handling of recent commands and shortcuts improved (bug #304)
+- Issues with [Send File] fixed, handling of recent commands and shortcuts improved (bug #304)
 
 
 YAT 2.0 Gamma 1 Version 1.99.32 :: 2015-06-01
@@ -572,7 +585,7 @@ Important changes:
   dialog to fixed values, independent on the values that were selected before (related to bug #262)
 - Command line console output is now channeled to stdout or stderr depending on whether it is normal
   or error information (feature request #192)
-- More information on virtual serial port tools added to 'Help > About' (feature request #198)
+- More information on virtual serial port tools added to [Help > About] (feature request #198)
 - DejaVu fonts updated to 2.34
 - Visual Studio upgraded to 2013 Community Edition, incl. installer (VSI) (feature request #221)
 - Installer split into separate packages for x86 and x64 (feature requests #175 and #191)
@@ -649,7 +662,7 @@ New:
 
 Important changes:
 - Update to DejaVu fonts 2.33
-- 'File > Open' now also allows to select workspace files (feature request #1917388>#41)
+- [File > Open] now also allows to select workspace files (feature request #1917388>#41)
 - Monitors automatically start vertical scrolling again if the last item gets selected
 - Massive refactoring of the send data/event path, implementation is now fully asynchronous
    > Fixes several display and performance issues (bugs #3072919>#157, #3137968>#175, #3292415>#198)
@@ -751,7 +764,7 @@ YAT 2.0 Beta 4 Candidate 1 Version 1.99.28 :: 2011-12-05
 New:
 - Support for C-style escape sequences (feature request #3044830)
 - Text terminals: Comments can be chosen to be ignored while sending (feature request #2848298)
-   > Comment indicators can be configured in Terminal Settings > Text Settings
+   > Comment indicators can be configured in [Terminal > Settings > Text Settings]
    > C/C++/C#/Java style "//" and Basic/BAT/DOS style "REM" comment indicators are predefined
 - 'Manual' flow control split into 'Manual Hardware', 'Manual Software' and 'Manual Combined'
 - Serial ports: XOn/XOff state is indicated (feature request #3066635)
@@ -789,7 +802,7 @@ Important changes:
    > Already seems to work fine, test case added and successfully passed, limitation removed
 - Exception handling refactored, now using 'Application.ThreadException' for 'Windows.Forms'
   and 'AppDomain.UnhandledException' for all other threads (also fixes bug #3292682)
-- "Unhandled Exception" now shows all information including inner exceptions (bug #3290314)
+- 'Unhandled Exception' now shows all information including inner exceptions (bug #3290314)
 - MKY.Data added
 - MKY.Settings.Settings renamed to MKY.Settings.SettingsItem
 - MKY.IO and MKY.IO.Net added to prepare refactoring of MKY.IO.Serial (feature request #3388950)
@@ -799,7 +812,7 @@ Important changes:
 
 Fixed bugs:
 - YAT no longer asks twice whether to save (bug #3121250)
-   > Only applied in case of 'File > Preferences... > Save current workspace automatically' = 'No'
+   > Only applies if [File > Preferences... > Save current workspace automatically] is 'No'
 - Serial COM ports now properly support XOn/XOff and RTS/CTS flow control (bug #3432512)
 - Multi-line commands are again kept in 'Send Command' (bug #3121249)
 - Exception when selecting an undefined predefined command using 'Shift+Fx' fixed (bug #3367649)
@@ -848,7 +861,7 @@ YAT 2.0 Alpha 2 Version 1.99.3 :: 2007-02-07
 YAT 2.0 Alpha 1 Version 1.99.0 :: 2007-01-23
 
 Content of the above Alpha and Beta versions has been removed in order to compact this file such it
-fits the SourceForge limitation regarding the number of lines in the online release notes.
+fits the SourceForge limitation of ~1000 lines for the online release notes.
 
 
 
@@ -861,7 +874,7 @@ XTerm232 1.0.1 :: 2003-10-30
 XTerm232 1.0.0 :: 2003-10-14
 
 Content of the above historical versions has been removed in order to compact this file such it
-fits the SourceForge limitation regarding the number of lines in the online release notes.
+fits the SourceForge limitation of ~1000 lines for the online release notes.
 
 
 ====================================================================================================
