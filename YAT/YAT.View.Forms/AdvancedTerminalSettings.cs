@@ -850,11 +850,6 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.Send.Text.EnableEscapes = checkBox_EnableEscapesForText.Checked;
 		}
 
-		/// <remarks>
-		/// Even though this [Send File] setting only applies to text terminals, it is located here
-		/// in <see cref="AdvancedTerminalSettings"/> (next to the setting for [Send Text]) instead
-		/// in <see cref="TextTerminalSettings"/> for easier finding it.
-		/// </remarks>
 		private void checkBox_EnableEscapesForFile_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
