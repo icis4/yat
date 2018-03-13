@@ -3389,7 +3389,7 @@ namespace YAT.Model
 			if (this.settingsRoot.Terminal.Send.UseExplicitDefaultRadix)
 				DoSendText(command);
 			else
-				DoSendFile(command.ToCommandWithoutDefaultRadix());
+				DoSendText(command.ToCommandWithoutDefaultRadix());
 		}
 
 		/// <summary>
@@ -3421,7 +3421,7 @@ namespace YAT.Model
 				if (c.IsSingleLineText)
 				{
 					if (SendTextSettings.IsEasterEggCommand(c.SingleLineText))
-						this.terminal.SendTextLine(SendTextSettings.EasterEggCommandText, Domain.Radix.String);
+						this.terminal.EnqueueEasterEggMessage();
 					else
 						this.terminal.SendTextLine(c.SingleLineText, c.DefaultRadix);
 				}
@@ -3471,7 +3471,7 @@ namespace YAT.Model
 				if (c.IsSingleLineText)
 				{
 					if (SendTextSettings.IsEasterEggCommand(c.SingleLineText))
-						this.terminal.SendText(SendTextSettings.EasterEggCommandText, Domain.Radix.String);
+						this.terminal.EnqueueEasterEggMessage();
 					else
 						this.terminal.SendText(c.SingleLineText, c.DefaultRadix);
 				}
