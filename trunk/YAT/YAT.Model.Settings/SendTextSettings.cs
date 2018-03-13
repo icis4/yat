@@ -247,7 +247,7 @@ namespace YAT.Model.Settings
 		// Special ;-)
 		//------------------------------------------------------------------------------------------
 
-		private const string EasterEggCommand = @"E/-\5+|三ⴽ ɛ99";
+		private const string EasterEggCommand = @"E/-\5+|三ⴽ ε99";
 
 		/// <summary></summary>
 		public static bool IsEasterEggCommand(string command)
