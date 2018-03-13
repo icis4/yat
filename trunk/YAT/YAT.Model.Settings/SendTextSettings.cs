@@ -242,24 +242,17 @@ namespace YAT.Model.Settings
 
 		#endregion
 
-		#region Comparison
+		#region Special ;-)
 		//------------------------------------------------------------------------------------------
-		// Comparison ;-)
+		// Special ;-)
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private const string EasterEggCommand = @"\easteregg";
+		private const string EasterEggCommand = @"E/-\5+|三ⴽ ɛ99";
 
 		/// <summary></summary>
 		public static bool IsEasterEggCommand(string command)
 		{
 			return (StringEx.EqualsOrdinalIgnoreCase(command, EasterEggCommand));
-		}
-
-		/// <summary></summary>
-		public static string EasterEggCommandText
-		{
-			get { return (":-)"); }
 		}
 
 		#endregion

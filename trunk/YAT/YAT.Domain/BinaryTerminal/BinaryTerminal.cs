@@ -529,7 +529,7 @@ namespace YAT.Domain
 					}
 
 					string info = (Parser.KeywordEx)(result.Keyword) + " keyword is not supported for binary terminals";
-					OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(info));
+					OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, info));
 					break;
 				}
 

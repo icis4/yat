@@ -1473,7 +1473,7 @@ namespace YAT.Domain
 					if (ElementsAreSeparate(IODirection.Tx))
 						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.DataSpace());
 
-					OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(MessageHelper.InvalidExecutionPreamble + "The '" + (Parser.KeywordEx)result.Keyword + "' keyword is unknown! " + MessageHelper.SubmitBug));
+					OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, MessageHelper.InvalidExecutionPreamble + "The '" + (Parser.KeywordEx)result.Keyword + "' keyword is unknown! " + MessageHelper.SubmitBug));
 					break;
 				}
 			}
@@ -2631,6 +2631,21 @@ namespace YAT.Domain
 
 		#endregion
 
+		#region Methods > Special ;-)
+		//------------------------------------------------------------------------------------------
+		// Methods > Special ;-)
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Enqueues the easter egg message.
+		/// </summary>
+		public virtual void EnqueueEasterEggMessage()
+		{
+			OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "The bites have been eaten by the rabbit ;-]", true));
+		}
+
+		#endregion
+
 		#region Methods > Format
 		//------------------------------------------------------------------------------------------
 		// Methods > Format
@@ -3275,11 +3290,11 @@ namespace YAT.Domain
 					// Handle serial port errors whenever possible:
 					switch (serialPortErrorEventArgs.SerialPortError)
 					{
-						case System.IO.Ports.SerialError.Frame:    OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(RxFramingErrorString));        break;
-						case System.IO.Ports.SerialError.Overrun:  OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(RxBufferOverrunErrorString));  break;
-						case System.IO.Ports.SerialError.RXOver:   OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(RxBufferOverflowErrorString)); break;
-						case System.IO.Ports.SerialError.RXParity: OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(RxParityErrorString));         break;
-						case System.IO.Ports.SerialError.TXFull:   OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(TxBufferFullErrorString));     break;
+						case System.IO.Ports.SerialError.Frame:    OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxFramingErrorString));        break;
+						case System.IO.Ports.SerialError.Overrun:  OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxBufferOverrunErrorString));  break;
+						case System.IO.Ports.SerialError.RXOver:   OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxBufferOverflowErrorString)); break;
+						case System.IO.Ports.SerialError.RXParity: OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxParityErrorString));         break;
+						case System.IO.Ports.SerialError.TXFull:   OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, TxBufferFullErrorString));     break;
 						default:                                   OnIOError(e); break;
 					}
 				}
