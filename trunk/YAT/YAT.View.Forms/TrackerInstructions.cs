@@ -101,11 +101,11 @@ namespace YAT.View.Forms
 			// Links:
 			string link = "";
 			switch (tracker)
-			{
-				case TrackerType.Support: link   = "https://sourceforge.net/projects/y-a-terminal/support";    break;
-				case TrackerType.Feature: link   = "https://sourceforge.net/p/y-a-terminal/feature-requests/"; break;
+			{                                                                // No idea why SF uses "projects" instead of "p" here...
+				case TrackerType.Support: link = "https://sourceforge.net/projects/y-a-terminal/support";    break;
+				case TrackerType.Feature: link = "https://sourceforge.net/p/y-a-terminal/feature-requests/"; break;
 				case TrackerType.Bug:
-				default:                  link   = "https://sourceforge.net/p/y-a-terminal/bugs/";             break;
+				default:                  link = "https://sourceforge.net/p/y-a-terminal/bugs/";             break;
 			}
 			linkLabel_Link.Text = link;
 			linkLabel_Link.Links.Add(0, link.Length, link);
