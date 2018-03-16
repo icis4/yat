@@ -1038,7 +1038,6 @@ namespace YAT.View.Forms
 
 		private void SetControls()
 		{
-			bool isTextTerminal = (this.settingsInEdit.Terminal.TerminalType == Domain.TerminalType.Text);
 			bool isSerialPort   = ((Domain.IOTypeEx)this.settingsInEdit.Terminal.IO.IOType).IsSerialPort;
 			bool isUsbSerialHid = ((Domain.IOTypeEx)this.settingsInEdit.Terminal.IO.IOType).IsUsbSerialHid;
 
@@ -1147,7 +1146,6 @@ namespace YAT.View.Forms
 				checkBox_NoSendOnInputBreak.Checked  = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
 				checkBox_EnableEscapesForText.Checked = this.settingsInEdit.Terminal.Send.Text.EnableEscapes;
-				checkBox_EnableEscapesForFile.Enabled = isTextTerminal;
 				checkBox_EnableEscapesForFile.Checked = this.settingsInEdit.Terminal.Send.File.EnableEscapes;
 
 				groupBox_Send_Keywords.Enabled   = (this.settingsInEdit.Terminal.Send.Text.EnableEscapes || this.settingsInEdit.Terminal.Send.File.EnableEscapes);
