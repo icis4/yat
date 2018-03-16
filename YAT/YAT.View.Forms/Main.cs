@@ -910,7 +910,8 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Never)]
 		private void toolStripMenuItem_MainMenu_Help_Donate_Click(object sender, EventArgs e)
 		{
-			LinkHelper.TryBrowseUriAndShowErrorIfItFails(this, "https://www.paypal.me/YetAnotherTerminal");
+			var link = "https://sourceforge.net/p/y-a-terminal/donate/";
+			LinkHelper.TryBrowseUriAndShowErrorIfItFails(this, link);
 		}
 
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
