@@ -114,7 +114,7 @@ namespace YAT.Model
 		// Terminal list.
 		private GuidList<Terminal> terminals = new GuidList<Terminal>();
 		private Terminal activeTerminal; // = null;
-		private Dictionary<int, Terminal> fixedIndices = new Dictionary<int, Terminal>();
+		private Dictionary<int, Terminal> fixedIds = new Dictionary<int, Terminal>();
 
 		#endregion
 
@@ -466,50 +466,50 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Returns the one based sequential index of the active terminal.
+		/// Returns the sequential ID of the active terminal.
 		/// </summary>
-		public virtual int ActiveTerminalSequentialIndex
+		public virtual int ActiveTerminalSequentialId
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (this.activeTerminal != null)
-					return (this.activeTerminal.SequentialIndex);
+					return (this.activeTerminal.SequentialId);
 				else
-					return (0);
+					return (TerminalIds.InvalidSequentialId);
 			}
 		}
 
 		/// <summary>
-		/// Returns the dynamic one based index of the active terminal.
+		/// Returns the dynamic ID of the active terminal.
 		/// </summary>
-		public virtual int ActiveTerminalDynamicIndex
+		public virtual int ActiveTerminalDynamicId
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (this.activeTerminal != null)
-					return (GetDynamicIndexByTerminal(this.activeTerminal));
+					return (GetDynamicIdByTerminal(this.activeTerminal));
 				else
-					return (0);
+					return (TerminalIds.InvalidDynamicId);
 			}
 		}
 
 		/// <summary>
-		/// Returns the fixed one based index of the active terminal.
+		/// Returns the fixed ID of the active terminal.
 		/// </summary>
-		public virtual int ActiveTerminalFixedIndex
+		public virtual int ActiveTerminalFixedId
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (this.activeTerminal != null)
-					return (GetFixedIndexByTerminal(this.activeTerminal));
+					return (GetFixedIdByTerminal(this.activeTerminal));
 				else
-					return (0);
+					return (TerminalIds.InvalidFixedId);
 			}
 		}
 
@@ -517,7 +517,7 @@ namespace YAT.Model
 		/// Gets a text containing information about the active terminal.
 		/// </summary>
 		/// <remarks>
-		/// Using term 'Info' since the info contains name and indices.
+		/// Using term 'Info' since the info contains name and IDs.
 		/// </remarks>
 		public virtual string ActiveTerminalInfoText
 		{
@@ -529,11 +529,11 @@ namespace YAT.Model
 				{
 					var sb = new StringBuilder(ActiveTerminal.SequentialName);
 					sb.Append("/Seq#");
-					sb.Append(ActiveTerminalSequentialIndex);
+					sb.Append(ActiveTerminalSequentialId);
 					sb.Append("/Dyn#");
-					sb.Append(ActiveTerminalDynamicIndex);
+					sb.Append(ActiveTerminalDynamicId);
 					sb.Append("/Fix#");
-					sb.Append(ActiveTerminalFixedIndex);
+					sb.Append(ActiveTerminalFixedId);
 					return (sb.ToString());
 				}
 				else
@@ -1448,13 +1448,13 @@ namespace YAT.Model
 		/// </summary>
 		public virtual int OpenTerminals()
 		{
-			return (OpenTerminals(Indices.InvalidIndex, null));
+			return (OpenTerminals(TerminalIds.InvalidIndex, null));
 		}
 
 		/// <summary>
 		/// Opens terminals according to workspace settings and returns number of successfully opened terminals.
 		/// </summary>
-		public virtual int OpenTerminals(int dynamicTerminalIndexToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace)
+		public virtual int OpenTerminals(int dynamicTerminalIdToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace)
 		{
 			AssertNotDisposed();
 
@@ -1486,21 +1486,21 @@ namespace YAT.Model
 
 					// Replace the desired terminal settings if requested:
 					bool isToReplace = false;
-					if (dynamicTerminalIndexToReplace == Indices.DefaultDynamicIndex)
+					if (dynamicTerminalIdToReplace == TerminalIds.DefaultDynamicId)
 					{
 						if (i == (clone.Count - 1)) // The last terminal is the default.
 							isToReplace = true;
 					}
 					else
 					{
-						if (i == Indices.DynamicIndexToIndex(dynamicTerminalIndexToReplace))
+						if (i == TerminalIds.DynamicIdToIndex(dynamicTerminalIdToReplace))
 							isToReplace = true;
 					}
 
 					if (isToReplace)
 					{
 						Exception ex;
-						if (OpenTerminalFromSettings(terminalSettingsToReplace, item.Guid, item.FixedIndex, item.Window, out ex))
+						if (OpenTerminalFromSettings(terminalSettingsToReplace, item.Guid, item.FixedId, item.Window, out ex))
 						{
 							openedTerminalCount++;
 							success = true;
@@ -1515,7 +1515,7 @@ namespace YAT.Model
 					}
 					else // In all other cases, 'normally' open the terminal from the given file:
 					{
-						if (OpenTerminalFromFile(item.FilePath, item.Guid, item.FixedIndex, item.Window, out errorMessage))
+						if (OpenTerminalFromFile(item.FilePath, item.Guid, item.FixedId, item.Window, out errorMessage))
 						{                                   // Error must be handled here because of looping over terminals.
 							openedTerminalCount++;
 							success = true;
@@ -1596,7 +1596,7 @@ namespace YAT.Model
 			OnCursorRequest(Cursors.WaitCursor);
 
 			string errorMessage;
-			if (OpenTerminalFromFile(filePath, Guid.Empty, Indices.DefaultFixedIndex, null, out errorMessage))
+			if (OpenTerminalFromFile(filePath, Guid.Empty, TerminalIds.DefaultFixedId, null, out errorMessage))
 			{
 				OnCursorReset();
 				return (true);
@@ -1618,14 +1618,14 @@ namespace YAT.Model
 			}
 		}
 
-		private bool OpenTerminalFromFile(string filePath, Guid guid, int fixedIndex, WindowSettings windowSettings, out string errorMessage)
+		private bool OpenTerminalFromFile(string filePath, Guid guid, int fixedId, WindowSettings windowSettings, out string errorMessage)
 		{
 			string absoluteFilePath;
 			DocumentSettingsHandler<TerminalSettingsRoot> sh;
 			Exception ex;
 			if (OpenTerminalFile(filePath, out absoluteFilePath, out sh, out ex))
 			{
-				if (OpenTerminalFromSettings(sh, guid, fixedIndex, windowSettings, out ex))
+				if (OpenTerminalFromSettings(sh, guid, fixedId, windowSettings, out ex))
 				{
 					errorMessage = null;
 					return (true);
@@ -1647,11 +1647,11 @@ namespace YAT.Model
 		public virtual bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
 			Exception exception;
-			return (OpenTerminalFromSettings(settingsHandler, Guid.Empty, Indices.DefaultFixedIndex, null, out exception));
+			return (OpenTerminalFromSettings(settingsHandler, Guid.Empty, TerminalIds.DefaultFixedId, null, out exception));
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid, int fixedIndex, WindowSettings windowSettings, out Exception exception)
+		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid, int fixedId, WindowSettings windowSettings, out Exception exception)
 		{
 			AssertNotDisposed();
 
@@ -1695,7 +1695,7 @@ namespace YAT.Model
 			}
 
 			AttachTerminalEventHandlers(t);
-			AddTerminalToWorkspace(t, fixedIndex);
+			AddTerminalToWorkspace(t, fixedId);
 			OnTerminalAdded(t);
 
 			if (!settingsHandler.Settings.AutoSaved)
@@ -1795,7 +1795,7 @@ namespace YAT.Model
 			}
 		}
 
-		private TerminalSettingsItem CreateTerminalSettingsItem(Terminal terminal, int fixedIndex)
+		private TerminalSettingsItem CreateTerminalSettingsItem(Terminal terminal, int fixedId)
 		{
 			var tsi = new TerminalSettingsItem();
 
@@ -1810,24 +1810,24 @@ namespace YAT.Model
 			tsi.Guid = terminal.Guid;
 			tsi.FilePath = filePath;
 
-			if (fixedIndex >= Indices.FirstFixedIndex)
-				tsi.FixedIndex = fixedIndex;
+			if (fixedId >= TerminalIds.FirstFixedId)
+				tsi.FixedId = fixedId;
 
 			tsi.Window = new WindowSettings(terminal.SettingsRoot.Window); // Clone window settings to ensure decoupling.
 
 			return (tsi);
 		}
 
-		private void AddTerminalToWorkspace(Terminal terminal, int requestedFixedIndex = Indices.DefaultFixedIndex)
+		private void AddTerminalToWorkspace(Terminal terminal, int requestedFixedId = TerminalIds.DefaultFixedId)
 		{
 			// Add terminal to terminal list:
 			this.terminals.Add(terminal);
 			this.activeTerminal = terminal;
-			int effectiveIndex = AddTerminalToFixedIndices(terminal, requestedFixedIndex);
+			int effectiveId = AddTerminalToFixedIds(terminal, requestedFixedId);
 
 			// Add terminal settings for new terminals:
 			// Replace terminal settings if workspace settings have been loaded from file prior.
-			this.settingsRoot.TerminalSettings.AddOrReplace(CreateTerminalSettingsItem(terminal, effectiveIndex));
+			this.settingsRoot.TerminalSettings.AddOrReplace(CreateTerminalSettingsItem(terminal, effectiveId));
 			this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
 		}
 
@@ -1846,7 +1846,7 @@ namespace YAT.Model
 		/// </summary>
 		private void ReplaceTerminalInWorkspaceSettings(Terminal terminal)
 		{
-			TerminalSettingsItem tsiNew = CreateTerminalSettingsItem(terminal, GetFixedIndexByTerminal(terminal));
+			TerminalSettingsItem tsiNew = CreateTerminalSettingsItem(terminal, GetFixedIdByTerminal(terminal));
 			TerminalSettingsItem tsiOld = this.settingsRoot.TerminalSettings.Find(terminal.Guid);
 			if ((tsiOld == null) || (tsiNew != tsiOld))
 			{
@@ -1866,29 +1866,29 @@ namespace YAT.Model
 
 			// Remove terminal from workspace lists:
 			this.terminals.Remove(terminal.Guid);
-			RemoveTerminalFromFixedIndices(terminal);
+			RemoveTerminalFromFixedIds(terminal);
 			DeactivateTerminal(terminal);
 		}
 
-		private int AddTerminalToFixedIndices(Terminal terminal, int requestedFixedIndex)
+		private int AddTerminalToFixedIds(Terminal terminal, int requestedFixedId)
 		{
-			// First, try to lookup the requested fixed index if suitable:
-			if (requestedFixedIndex >= Indices.FirstFixedIndex)
+			// First, try to lookup the requested fixed ID if suitable:
+			if (requestedFixedId >= TerminalIds.FirstFixedId)
 			{
-				if (!this.fixedIndices.ContainsKey(requestedFixedIndex))
+				if (!this.fixedIds.ContainsKey(requestedFixedId))
 				{
-					this.fixedIndices.Add(requestedFixedIndex, terminal);
-					return (requestedFixedIndex);
+					this.fixedIds.Add(requestedFixedId, terminal);
+					return (requestedFixedId);
 				}
 			}
 
-			// As fallback, use the next available fixed index:
-			for (int i = Indices.FirstFixedIndex; i <= int.MaxValue; i++)
+			// As fallback, use the next available fixed ID:
+			for (int id = TerminalIds.FirstFixedId; id <= int.MaxValue; id++)
 			{
-				if (!this.fixedIndices.ContainsKey(i))
+				if (!this.fixedIds.ContainsKey(id))
 				{
-					this.fixedIndices.Add(i, terminal);
-					return (i);
+					this.fixedIds.Add(id, terminal);
+					return (id);
 				}
 			}
 
@@ -1896,9 +1896,9 @@ namespace YAT.Model
 			throw (new OverflowException("Constant index of terminals exceeded!"));
 		}
 
-		private void RemoveTerminalFromFixedIndices(Terminal terminal)
+		private void RemoveTerminalFromFixedIds(Terminal terminal)
 		{
-			this.fixedIndices.Remove(GetFixedIndexByTerminal(terminal));
+			this.fixedIds.Remove(GetFixedIdByTerminal(terminal));
 		}
 
 		#endregion
@@ -1909,36 +1909,35 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Returns the fixed index of the given terminal.
+		/// Returns the fixed ID of the given terminal.
 		/// </summary>
-		public virtual int GetFixedIndexByTerminal(Terminal terminal)
+		public virtual int GetFixedIdByTerminal(Terminal terminal)
 		{
-			foreach (KeyValuePair<int, Terminal> kvp in this.fixedIndices)
+			foreach (KeyValuePair<int, Terminal> kvp in this.fixedIds)
 			{
 				if (kvp.Value == terminal)
 					return (kvp.Key);
 			}
 
-			throw (new ArgumentOutOfRangeException("terminal", terminal, MessageHelper.InvalidExecutionPreamble + "Terminal'" + terminal + "'not found in index table!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new ArgumentOutOfRangeException("terminal", terminal, MessageHelper.InvalidExecutionPreamble + "Terminal'" + terminal + "'not found in ID table!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary>
-		/// Returns the dynamic index of the given terminal.
+		/// Returns the dynamic ID of the given terminal.
 		/// </summary>
-		public virtual int GetDynamicIndexByTerminal(Terminal terminal)
+		public virtual int GetDynamicIdByTerminal(Terminal terminal)
 		{
 			AssertNotDisposed();
 
 			int index = this.terminals.IndexOf(this.activeTerminal);
-			return (Indices.IndexToDynamicIndex(index));
+			return (TerminalIds.IndexToDynamicId(index));
 		}
 
 		/// <summary>
-		/// Returns the terminal with the given GUID. If no terminal with this GUID exists,
-		/// <c>null</c> is returned.
+		/// Tries to return the terminal with the given GUID.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
-		public virtual Terminal GetTerminalByGuid(Guid guid)
+		public virtual bool TryGetTerminalByGuid(Guid guid, out Terminal terminal)
 		{
 			AssertNotDisposed();
 
@@ -1947,20 +1946,23 @@ namespace YAT.Model
 				foreach (var t in this.terminals)
 				{
 					if (t.Guid == guid)
-						return (t);
+					{
+						terminal = t;
+						return (true);
+					}
 				}
 			}
 
-			return (null);
+			terminal = null;
+			return (false);
 		}
 
 		/// <summary>
-		/// Returns the terminal with the given sequential index. The sequential index relates to the
-		/// number indicated in the terminal name, e.g. "Terminal1" or "Terminal2". The sequential
-		/// index starts at 1 and is unique throughout the execution of the program. If no terminal
-		/// with this index exists, <c>null</c> is returned.
+		/// Tries to return the terminal with the given sequential ID. The ID corresponds to the
+		/// number indicated in the terminal name, e.g. "Terminal1" or "Terminal2". The ID starts
+		/// at 1 and is unique throughout the execution of the program.
 		/// </summary>
-		public virtual Terminal GetTerminalBySequentialIndex(int sequentialIndex)
+		public virtual bool TryGetTerminalBySequentialId(int sequentialId, out Terminal terminal)
 		{
 			AssertNotDisposed();
 
@@ -1968,59 +1970,72 @@ namespace YAT.Model
 			{
 				foreach (var t in this.terminals)
 				{
-					if (t.SequentialIndex == sequentialIndex)
-						return (t);
+					if (t.SequentialId == sequentialId)
+					{
+						terminal = t;
+						return (true);
+					}
 				}
 			}
 
-			return (null);
+			terminal = null;
+			return (false);
 		}
 
 		/// <summary>
-		/// Returns the terminal with the given dynamic index. The dynamic index represents
-		/// the order in which the terminals were created. If a terminal is closed, the dynamic
-		/// index of all latter terminals is adjusted. If no terminal with this index exists,
-		/// <c>null</c> is returned.
+		/// Tries to return the terminal with the given dynamic ID. The dynamic ID represents the
+		/// order in which the terminals got created. If a terminal gets closed, the dynamic ID of
+		/// all subsequent terminals is adjusted.
 		/// </summary>
 		/// <remarks>
-		/// The index must be in the range of 1...NumberOfTerminals, or 0 to return the currently
+		/// The index must be in the range of 1...NumberOfTerminals, or 0 to select the currently
 		/// active terminal.
 		/// </remarks>
-		public virtual Terminal GetTerminalByDynamicIndex(int dynamicIndex)
+		public virtual bool TryGetTerminalByDynamicId(int dynamicId, out Terminal terminal)
 		{
 			AssertNotDisposed();
 
-			if (dynamicIndex == Indices.DefaultDynamicIndex)
+			if (dynamicId == TerminalIds.DefaultDynamicId)
 			{
-				return (this.activeTerminal);
+				terminal = this.activeTerminal;
+				return (true);
 			}
 			else
 			{
-				int index = Indices.DynamicIndexToIndex(dynamicIndex);
+				int index = TerminalIds.DynamicIdToIndex(dynamicId);
 				if ((index >= 0) && (index < this.terminals.Count))
-					return (this.terminals[index]);
+				{
+					terminal = this.terminals[index];
+					return (true);
+				}
 				else
-					return (null);
+				{
+					terminal = null;
+					return (false);
+				}
 			}
 		}
 
 		/// <summary>
-		/// Returns the terminal with the given fixed index. The fixed index represents the
-		/// order in which the terminals initially were created but doesn't change throughout the
-		/// execution of the program. If a terminal is closed, the corresponding index becomes
-		/// available and will be used for the next terminal that is opened, i.e. a new terminal
-		/// always gets the lowest available fixed index. If no terminal with this index exists,
-		/// <c>null</c> is returned.
+		/// Tries to return the terminal with the given fixed ID. The fixed ID represents the order
+		/// in which the terminals initially got created and doesn't change throughout the execution
+		/// of the program. If a terminal is closed, the corresponding ID becomes available and will
+		/// be used for the next terminal that is opened, i.e. a new terminal always gets the lowest
+		/// available fixed ID.
 		/// </summary>
-		public virtual Terminal GetTerminalByFixedIndex(int index)
+		public virtual bool TryGetTerminalByFixedId(int index, out Terminal terminal)
 		{
 			AssertNotDisposed();
 
-			Terminal t;
-			if (this.fixedIndices.TryGetValue(index, out t))
-				return (t);
+			if (this.fixedIds.TryGetValue(index, out terminal))
+			{
+				return (true);
+			}
 			else
-				return (null);
+			{
+				terminal = null;
+				return (false);
+			}
 		}
 
 		#endregion
@@ -2220,9 +2235,11 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual void ActivateTerminalBySequentialIndex(int index)
+		public virtual void ActivateTerminalBySequentialId(int sequentialId)
 		{
-			ActivateTerminal(GetTerminalBySequentialIndex(index));
+			Terminal t;
+			if (TryGetTerminalBySequentialId(sequentialId, out t))
+				ActivateTerminal(t);
 		}
 
 		/// <summary></summary>

@@ -35,25 +35,25 @@ namespace YAT.Model.Settings
 	public class TerminalSettingsItem : MKY.Settings.SettingsItem, IEquatable<TerminalSettingsItem>, IGuidProvider
 	{
 		/// <remarks>
-		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
+		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
 		/// </remarks>
-		public const int FirstFixedIndex = 1;
+		public const int FirstFixedId = 1;
 
 		/// <remarks>
-		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
-		/// Index 0 means 'default'.
+		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
+		/// ID 0 means 'default' = the active terminal.
 		/// </remarks>
-		public const int DefaultFixedIndex = 0;
+		public const int DefaultFixedId = 0;
 
 		/// <remarks>
-		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
-		/// Index -1 means 'invalid'.
+		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
+		/// ID -1 means 'invalid' = no terminal.
 		/// </remarks>
-		public const int InvalidFixedIndex = -1;
+		public const int InvalidFixedId = -1;
 
 		private string filePath;
 		private Guid guid;
-		private int fixedIndex;
+		private int fixedId;
 		private WindowSettings window;
 
 		/// <summary></summary>
@@ -80,9 +80,9 @@ namespace YAT.Model.Settings
 		public TerminalSettingsItem(TerminalSettingsItem rhs)
 			: base(rhs)
 		{
-			FilePath   = rhs.FilePath;
-			Guid       = rhs.Guid;
-			FixedIndex = rhs.FixedIndex;
+			FilePath = rhs.FilePath;
+			Guid     = rhs.Guid;
+			FixedId  = rhs.FixedId;
 
 			Window = new WindowSettings(rhs.Window);
 
@@ -96,9 +96,9 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			FilePath   = "";
-			Guid       = Guid.Empty;
-			FixedIndex = DefaultFixedIndex;
+			FilePath = "";
+			Guid     = Guid.Empty;
+			FixedId  = DefaultFixedId;
 		}
 
 		#region Properties
@@ -147,15 +147,15 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("FixedIndex")]
-		public virtual int FixedIndex
+		[XmlElement("FixedId")]
+		public virtual int FixedId
 		{
-			get { return (this.fixedIndex); }
+			get { return (this.fixedId); }
 			set
 			{
-				if (this.fixedIndex != value)
+				if (this.fixedId != value)
 				{
-					this.fixedIndex = value;
+					this.fixedId = value;
 					SetMyChanged();
 				}
 			}
@@ -210,7 +210,7 @@ namespace YAT.Model.Settings
 
 				hashCode = (hashCode * 397) ^ (FilePath != null ? FilePath.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^  Guid                       .GetHashCode();
-				hashCode = (hashCode * 397) ^  FixedIndex                 .GetHashCode();
+				hashCode = (hashCode * 397) ^  FixedId                    .GetHashCode();
 
 				return (hashCode);
 			}
@@ -241,9 +241,9 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				PathEx    .Equals(FilePath, other.FilePath) &&
-				Guid      .Equals(          other.Guid)     &&
-				FixedIndex.Equals(          other.FixedIndex)
+				PathEx .Equals(FilePath, other.FilePath) &&
+				Guid   .Equals(          other.Guid)     &&
+				FixedId.Equals(          other.FixedId)
 			);
 		}
 

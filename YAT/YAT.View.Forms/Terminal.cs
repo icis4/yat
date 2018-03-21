@@ -5129,7 +5129,7 @@ namespace YAT.View.Forms
 
 			var f = new TerminalSettings(this.settingsRoot.Explicit);
 
-			f.TerminalId     = this.terminal.SequentialIndex;
+			f.TerminalId     = this.terminal.SequentialId;
 			f.TerminalIsOpen = this.terminal.IsOpen;
 
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)

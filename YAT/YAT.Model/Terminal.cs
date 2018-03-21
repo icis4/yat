@@ -75,7 +75,7 @@ namespace YAT.Model
 		/// Static counter to number terminals. Counter is incremented before first use, first
 		/// terminal therefore is "Terminal1".
 		/// </summary>
-		private const int SequentialIndexCounterDefault = (Indices.FirstSequentialIndex - 1);
+		private const int SequentialIdCounterDefault = (TerminalIds.FirstSequentialId - 1);
 
 		#endregion
 
@@ -84,7 +84,7 @@ namespace YAT.Model
 		// Static Fields
 		//==========================================================================================
 
-		private static int staticSequentialIndexCounter = SequentialIndexCounterDefault;
+		private static int staticSequentialIdCounter = SequentialIdCounterDefault;
 
 		#endregion
 
@@ -111,11 +111,11 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <remarks>
-		/// Needed to test the indices feature of terminals and workspace.
+		/// Needed to test the ID feature of terminals and workspace.
 		/// </remarks>
-		public static void ResetSequentialIndexCounter()
+		public static void ResetSequentialIdCounter()
 		{
-			staticSequentialIndexCounter = SequentialIndexCounterDefault;
+			staticSequentialIdCounter = SequentialIdCounterDefault;
 		}
 
 		#endregion
@@ -151,7 +151,7 @@ namespace YAT.Model
 
 		private TerminalStartArgs startArgs;
 		private Guid guid;
-		private int sequentialIndex;
+		private int sequentialId;
 		private string sequentialName;
 		private string fileName;
 
@@ -329,8 +329,8 @@ namespace YAT.Model
 				AttachSettingsEventHandlers();
 
 				// Set ID and name(s):
-				this.sequentialIndex = ++staticSequentialIndexCounter;
-				this.sequentialName = TerminalText + this.sequentialIndex.ToString(CultureInfo.CurrentCulture);
+				this.sequentialId = ++staticSequentialIdCounter;
+				this.sequentialName = TerminalText + this.sequentialId.ToString(CultureInfo.CurrentCulture);
 				if (!this.settingsRoot.AutoSaved && this.settingsHandler.SettingsFilePathIsValid)
 					this.fileName = Path.GetFileName(this.settingsHandler.SettingsFilePath);
 
@@ -471,13 +471,13 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual int SequentialIndex
+		public virtual int SequentialId
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.sequentialIndex);
+				return (this.sequentialId);
 			}
 		}
 

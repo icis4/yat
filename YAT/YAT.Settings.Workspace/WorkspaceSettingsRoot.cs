@@ -22,13 +22,21 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 using MKY;
 
 using YAT.Application.Utilities;
 using YAT.Model.Settings;
+
+#endregion
 
 namespace YAT.Settings.Workspace
 {
@@ -157,6 +165,46 @@ namespace YAT.Settings.Workspace
 		}
 
 		#endregion
+
+		#endregion
+
+		#region Alternate Elements
+		//==========================================================================================
+		// Alternate Elements
+		//==========================================================================================
+
+		/// <summary>
+		/// Alternate XML elements for backward compatibility with old settings.
+		/// </summary>
+		/// <remarks>
+		/// \remind (2008-06-07 / MKY) (2 hours to the first Euro2008 game :-)
+		/// Instead of this approach, an [AlternateXmlElementAttribute] based approach should be tried
+		/// in a future version. Such approach would be beneficial in terms of modularity because the
+		/// XML path wouldn't need to be considered, i.e. changes in the path could be handled. This is
+		/// not the case currently.
+		/// \remind (2011-10-09 / MKY) (no Euro2012 games with Switzerland :-(
+		/// Cannot alternate 'Display.ShowConnectTime|ShowCounters' to 'Status.ShowConnectTime|ShowCountAndRate'
+		/// due to limitation described above.
+		/// \remind (2012-10-29 / MKY)
+		/// Attention, the solution above is OK for the give use case, however, it wouldn't allow to
+		/// alternate the depth of the path as well. Such alternate is required for the commented
+		/// case with 'EolComment' below.
+		/// \remind (2016-04-05 / MKY)
+		/// Ideally, simple alternate elements should be definable right at the element. Example:
+		/// "SocketSettings.HostType" got simplified to "SocketSettings.Type"
+		/// The alternate name (i.e. the old name) should be definable in 'SocketSettings'.
+		/// </remarks>
+		private static readonly MKY.Xml.AlternateXmlElement[] StaticAlternateXmlElements =
+		{                                                // XML path:                                   local name of XML element: alternate local name(s), i.e. former name(s) of XML element:
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Workspace", "TerminalSettings", }, "FixedId", new string[] { "FixedIndex" } ),
+		};
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual IEnumerable<MKY.Xml.AlternateXmlElement> AlternateXmlElements
+		{
+			get { return (StaticAlternateXmlElements); }
+		}
 
 		#endregion
 

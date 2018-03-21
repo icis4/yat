@@ -1102,17 +1102,16 @@ namespace YAT.Model.Test.FileHandling
 
 		#endregion
 
-		#region Tests > TestIndicesWithinWorkspace
+		#region Tests > TestIdsWithinWorkspace
 		//------------------------------------------------------------------------------------------
-		// Tests > TestIndicesWithinWorkspace
+		// Tests > TestIdsWithinWorkspace
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// This test verifies the 'DynamicIndex', 'SequentialIndex' and 'FixedIndex' indices within a workspace.
+		/// This test verifies the 'DynamicId', 'SequentialId' and 'FixedId' within a workspace.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
 		[Test]
-		public virtual void TestIndicesWithinWorkspace()
+		public virtual void TestIdsWithinWorkspace()
 		{
 			bool success = false;
 			string step = "";
@@ -1123,7 +1122,7 @@ namespace YAT.Model.Test.FileHandling
 			// - Save terminal as
 			// - Save workspace as
 			//   => Workspace must contain 1 terminal with fixed index 1
-			Terminal.ResetSequentialIndexCounter();
+			Terminal.ResetSequentialIdCounter();
 			using (var m = new Main())
 			{
 				step = "Step 1: ";
@@ -1156,8 +1155,8 @@ namespace YAT.Model.Test.FileHandling
 			// - Create 2 additional terminals
 			// - Save terminals as
 			// - Save workspace
-			//   => Workspace must contain 3 terminals with fixed indices 1, 2 and 3
-			Terminal.ResetSequentialIndexCounter();
+			//   => Workspace must contain 3 terminals with fixed IDs 1, 2 and 3
+			Terminal.ResetSequentialIdCounter();
 			using (var m = new Main())
 			{
 				step = "Step 2: ";
@@ -1168,9 +1167,9 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(w,               Is.Not.Null,   step + "Workspace not created!");
 				Assert.That(w.TerminalCount, Is.EqualTo(1), step + "Workspace doesn't contain 1 terminal!");
 
-				Assert.That(w.ActiveTerminalFixedIndex,      Is.EqualTo(Indices.FirstFixedIndex),   step + "Fixed index of terminal 1 isn't "   + Indices.FirstFixedIndex + "!");
-				Assert.That(w.ActiveTerminalDynamicIndex,    Is.EqualTo(Indices.FirstDynamicIndex), step + "Dynamic index of terminal 1 isn't " + Indices.FirstDynamicIndex + "!");
-				Assert.That(w.ActiveTerminalSequentialIndex, Is.EqualTo(1),                         step + "Sequential index of terminal 1 isn't 1!");
+				Assert.That(w.ActiveTerminalFixedId,      Is.EqualTo(TerminalIds.FirstFixedId),   step + "Fixed index of terminal 1 isn't "   + TerminalIds.FirstFixedId + "!");
+				Assert.That(w.ActiveTerminalDynamicId,    Is.EqualTo(TerminalIds.FirstDynamicId), step + "Dynamic index of terminal 1 isn't " + TerminalIds.FirstDynamicId + "!");
+				Assert.That(w.ActiveTerminalSequentialId, Is.EqualTo(1),                         step + "Sequential index of terminal 1 isn't 1!");
 
 				success = w.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True,     step + "Terminal 2 could not be created!");
@@ -1198,11 +1197,11 @@ namespace YAT.Model.Test.FileHandling
 
 			#region Step 3
 			// - Subsequent start
-			//   => Workspace must contain 3 terminals with fixed indices 1, 2 and 3
+			//   => Workspace must contain 3 terminals with fixed IDs 1, 2 and 3
 			// - Close the second terminal
 			// - Save workspace
-			//   => Workspace must contain 2 terminals with fixed indices 1 and 3
-			Terminal.ResetSequentialIndexCounter();
+			//   => Workspace must contain 2 terminals with fixed IDs 1 and 3
+			Terminal.ResetSequentialIdCounter();
 			using (var m = new Main())
 			{
 				step = "Step 3: ";
@@ -1213,17 +1212,17 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(w,               Is.Not.Null,   step + "Workspace not created!");
 				Assert.That(w.TerminalCount, Is.EqualTo(3), step + "Workspace doesn't contain 3 terminals!");
 
-				int first = Indices.FirstSequentialIndex;
-				int last  = Indices.FirstSequentialIndex + w.TerminalCount - 1;
-				for (int i = first; i <= last; i++)
+				int first = TerminalIds.FirstSequentialId;
+				int last  = TerminalIds.FirstSequentialId + w.TerminalCount - 1;
+				for (int id = first; id <= last; id++)
 				{
-					w.ActivateTerminalBySequentialIndex(i);
-					Assert.That(w.ActiveTerminalFixedIndex,      Is.EqualTo(i), step + "Fixed index of terminal "      + i + " isn't " + i + "!");
-					Assert.That(w.ActiveTerminalDynamicIndex,    Is.EqualTo(i), step + "Dynamic index of terminal "    + i + " isn't " + i + "!");
-					Assert.That(w.ActiveTerminalSequentialIndex, Is.EqualTo(i), step + "Sequential index of terminal " + i + " isn't " + i + "!");
+					w.ActivateTerminalBySequentialId(id);
+					Assert.That(w.ActiveTerminalFixedId,      Is.EqualTo(id), step + "Fixed index of terminal "      + id + " isn't " + id + "!");
+					Assert.That(w.ActiveTerminalDynamicId,    Is.EqualTo(id), step + "Dynamic index of terminal "    + id + " isn't " + id + "!");
+					Assert.That(w.ActiveTerminalSequentialId, Is.EqualTo(id), step + "Sequential index of terminal " + id + " isn't " + id + "!");
 				}
 
-				w.ActivateTerminalBySequentialIndex(2);
+				w.ActivateTerminalBySequentialId(2);
 				success = w.CloseActiveTerminal();
 				Assert.That(success,         Is.True,       step + "Terminal 2 could not be closed!");
 				Assert.That(w.TerminalCount, Is.EqualTo(2), step + "Workspace doesn't contain 2 terminals!");
@@ -1237,8 +1236,8 @@ namespace YAT.Model.Test.FileHandling
 
 			#region Step 4
 			// - Subsequent start
-			//   => Workspace must contain 2 terminals with fixed indices 1 and 3
-			Terminal.ResetSequentialIndexCounter();
+			//   => Workspace must contain 2 terminals with fixed IDs 1 and 3
+			Terminal.ResetSequentialIdCounter();
 			using (var m = new Main())
 			{
 				step = "Step 4: ";
@@ -1249,15 +1248,15 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(w,               Is.Not.Null,   step + "Workspace not created!");
 				Assert.That(w.TerminalCount, Is.EqualTo(2), step + "Workspace doesn't contain 2 terminals!");
 
-				w.ActivateTerminalBySequentialIndex(1);
-				Assert.That(w.ActiveTerminalFixedIndex,      Is.EqualTo(Indices.FirstFixedIndex),   step + "Fixed index of terminal 1 isn't "   + Indices.FirstFixedIndex + "!");
-				Assert.That(w.ActiveTerminalDynamicIndex,    Is.EqualTo(Indices.FirstDynamicIndex), step + "Dynamic index of terminal 1 isn't " + Indices.FirstDynamicIndex + "!");
-				Assert.That(w.ActiveTerminalSequentialIndex, Is.EqualTo(1),                         step + "Sequential index of terminal 1 isn't 1!");
+				w.ActivateTerminalBySequentialId(1);
+				Assert.That(w.ActiveTerminalFixedId,      Is.EqualTo(TerminalIds.FirstFixedId),   step + "Fixed index of terminal 1 isn't "   + TerminalIds.FirstFixedId + "!");
+				Assert.That(w.ActiveTerminalDynamicId,    Is.EqualTo(TerminalIds.FirstDynamicId), step + "Dynamic index of terminal 1 isn't " + TerminalIds.FirstDynamicId + "!");
+				Assert.That(w.ActiveTerminalSequentialId, Is.EqualTo(1),                         step + "Sequential index of terminal 1 isn't 1!");
 
-				w.ActivateTerminalBySequentialIndex(2);
-				Assert.That(w.ActiveTerminalFixedIndex,      Is.EqualTo(3), step + "Fixed index of terminal 3 isn't 3!");
-				Assert.That(w.ActiveTerminalDynamicIndex,    Is.EqualTo(2), step + "Dynamic index of terminal 3 isn't 2!");
-				Assert.That(w.ActiveTerminalSequentialIndex, Is.EqualTo(2), step + "Sequential index of terminal 3 isn't 2!");
+				w.ActivateTerminalBySequentialId(2);
+				Assert.That(w.ActiveTerminalFixedId,      Is.EqualTo(3), step + "Fixed index of terminal 3 isn't 3!");
+				Assert.That(w.ActiveTerminalDynamicId,    Is.EqualTo(2), step + "Dynamic index of terminal 3 isn't 2!");
+				Assert.That(w.ActiveTerminalSequentialId, Is.EqualTo(2), step + "Sequential index of terminal 3 isn't 2!");
 
 				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");

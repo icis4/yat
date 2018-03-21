@@ -3316,7 +3316,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Using term 'Info' since the info contains name and indices.
+		/// Using term 'Info' since the info contains name and IDs.
 		/// </remarks>
 		private void SetTerminalInfoText(string text)
 		{
