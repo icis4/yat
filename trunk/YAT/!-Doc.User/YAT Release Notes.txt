@@ -102,6 +102,9 @@ Important changes:
 - [Send File] now also sends (formatted) text files for binary terminals, including support for
   [Explicit Default Radix] and other send file related settings (bug #411).
 - Location of some send related settings has changed (related to bug #411).
+- The "DynamicIndex"/"DynamicTerminalIndex" command line option has been changed to "DynamicId"/
+  "DynamicTerminalId" to emphasize that the value is a 1 (and not 0) based ID, incl. the option
+  to use value 0 to select the currently active terminal.
 - Binary distributions now contain DejaVu fonts for manual installation (feature request #331).
 
 Fixed bugs:

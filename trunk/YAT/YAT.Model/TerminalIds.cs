@@ -22,13 +22,10 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace YAT.Model
 {
 	/// <summary></summary>
-	[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
-	public static class Indices
+	public static class TerminalIds
 	{
 		/// <remarks>
 		/// 'Normal' indices are 0 based.
@@ -42,74 +39,74 @@ namespace YAT.Model
 		public const int InvalidIndex = -1;
 
 		/// <remarks>
-		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
+		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
 		/// </remarks>
-		public const int FirstDynamicIndex = 1;
+		public const int FirstDynamicId = 1;
 
 		/// <remarks>
-		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
+		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
+		/// ID 0 means 'default' = the active terminal.
+		/// </remarks>
+		public const int DefaultDynamicId = 0;
+
+		/// <remarks>
+		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
+		/// ID -1 means 'invalid' = no terminal.
+		/// </remarks>
+		public const int InvalidDynamicId = -1;
+
+		/// <remarks>
+		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
+		/// </remarks>
+		public const int FirstSequentialId = 1;
+
+		/// <remarks>
+		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
 		/// Index 0 means 'default' = the active terminal.
 		/// </remarks>
-		public const int DefaultDynamicIndex = 0;
+		public const int DefaultSequentialId = 0;
 
 		/// <remarks>
-		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
-		/// Index -1 means 'invalid'.
+		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
+		/// ID -1 means 'invalid' = no terminal.
 		/// </remarks>
-		public const int InvalidDynamicIndex = -1;
+		public const int InvalidSequentialId = -1;
 
 		/// <remarks>
-		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
+		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
 		/// </remarks>
-		public const int FirstSequentialIndex = 1;
+		public const int FirstFixedId = Settings.TerminalSettingsItem.FirstFixedId;
 
 		/// <remarks>
-		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
-		/// Index 0 means 'default' = the active terminal.
+		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
+		/// ID 0 means 'default' = the active terminal.
 		/// </remarks>
-		public const int DefaultSequentialIndex = 0;
+		public const int DefaultFixedId = Settings.TerminalSettingsItem.DefaultFixedId;
 
 		/// <remarks>
-		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
-		/// Index -1 means 'invalid'.
+		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
+		/// ID -1 means 'invalid' = no terminal.
 		/// </remarks>
-		public const int InvalidSequentialIndex = -1;
-
-		/// <remarks>
-		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
-		/// </remarks>
-		public const int FirstFixedIndex = Settings.TerminalSettingsItem.FirstFixedIndex;
-
-		/// <remarks>
-		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
-		/// Index 0 means 'default' = the active terminal.
-		/// </remarks>
-		public const int DefaultFixedIndex = Settings.TerminalSettingsItem.DefaultFixedIndex;
-
-		/// <remarks>
-		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
-		/// Index -1 means 'invalid'.
-		/// </remarks>
-		public const int InvalidFixedIndex = Settings.TerminalSettingsItem.InvalidFixedIndex;
+		public const int InvalidFixedId = Settings.TerminalSettingsItem.InvalidFixedId;
 
 		/// <summary>
-		/// Returns the 'normal' index of the given dynamic index.
+		/// Returns the 'normal' index of the given dynamic ID.
 		/// </summary>
-		public static int IndexToDynamicIndex(int index)
+		public static int IndexToDynamicId(int index)
 		{
 			if (index >= FirstIndex)
-				return (FirstDynamicIndex + (index - FirstIndex));
+				return (FirstDynamicId + (index - FirstIndex));
 			else
-				return (InvalidDynamicIndex);
+				return (InvalidDynamicId);
 		}
 
 		/// <summary>
-		/// Returns the dynamic index of the given 'normal' index.
+		/// Returns the dynamic ID of the given 'normal' index.
 		/// </summary>
-		public static int DynamicIndexToIndex(int dynamicIndex)
+		public static int DynamicIdToIndex(int dynamicId)
 		{
-			if (dynamicIndex >= FirstDynamicIndex)
-				return (FirstIndex + (dynamicIndex - FirstDynamicIndex));
+			if (dynamicId >= FirstDynamicId)
+				return (FirstIndex + (dynamicId - FirstDynamicId));
 			else
 				return (InvalidIndex);
 		}

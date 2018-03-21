@@ -133,7 +133,7 @@ namespace YAT.Model.Test
 				Assert.That(m.StartArgs.ShowNewTerminalDialog,    Is.True);
 
 				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.StartArgs.RequestedDynamicTerminalIndex,       Is.EqualTo(Indices.DefaultDynamicIndex));
+				Assert.That(m.StartArgs.RequestedDynamicTerminalId,       Is.EqualTo(TerminalIds.DefaultDynamicId));
 				Assert.That(m.StartArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
 				Assert.That(m.StartArgs.KeepOpen,        Is.True);
@@ -422,7 +422,7 @@ namespace YAT.Model.Test
 				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
 
 				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.StartArgs.RequestedDynamicTerminalIndex,       Is.EqualTo(Indices.DefaultDynamicIndex));
+				Assert.That(m.StartArgs.RequestedDynamicTerminalId,       Is.EqualTo(TerminalIds.DefaultDynamicId));
 				Assert.That(m.StartArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
 				Assert.That(m.StartArgs.ShowNewTerminalDialog, Is.False);
@@ -464,7 +464,7 @@ namespace YAT.Model.Test
 				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
 
 				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.StartArgs.RequestedDynamicTerminalIndex,       Is.EqualTo(Indices.DefaultDynamicIndex));
+				Assert.That(m.StartArgs.RequestedDynamicTerminalId,       Is.EqualTo(TerminalIds.DefaultDynamicId));
 				Assert.That(m.StartArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
 				Assert.That(m.StartArgs.ShowNewTerminalDialog, Is.False);
@@ -505,7 +505,7 @@ namespace YAT.Model.Test
 				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
 
 				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.StartArgs.RequestedDynamicTerminalIndex,       Is.EqualTo(Indices.DefaultDynamicIndex));
+				Assert.That(m.StartArgs.RequestedDynamicTerminalId,       Is.EqualTo(TerminalIds.DefaultDynamicId));
 				Assert.That(m.StartArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
 				Assert.That(m.StartArgs.ShowNewTerminalDialog, Is.False);
@@ -565,7 +565,7 @@ namespace YAT.Model.Test
 
 				Assert.That(m.StartArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
 				Assert.That(m.StartArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
-				Assert.That(m.StartArgs.RequestedDynamicTerminalIndex,             Is.EqualTo(2));
+				Assert.That(m.StartArgs.RequestedDynamicTerminalId,             Is.EqualTo(2));
 				Assert.That(m.StartArgs.TerminalSettingsHandler,                   Is.Not.Null);
 				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.DataBits, Is.EqualTo(MKY.IO.Ports.DataBits.Seven));
 
@@ -632,7 +632,7 @@ namespace YAT.Model.Test
 				Assert.That(m.StartArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
 				Assert.That(m.StartArgs.TerminalSettingsHandler,                   Is.Not.Null);
 				Assert.That(m.StartArgs.RequestedTransmitText,                     Is.EqualTo(text));
-				Assert.That(m.StartArgs.RequestedDynamicTerminalIndex,             Is.EqualTo(2));
+				Assert.That(m.StartArgs.RequestedDynamicTerminalId,             Is.EqualTo(2));
 
 				Assert.That(m.StartArgs.ShowNewTerminalDialog,               Is.False);
 				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.True);
@@ -699,7 +699,7 @@ namespace YAT.Model.Test
 				Assert.That(m.StartArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
 				Assert.That(m.StartArgs.TerminalSettingsHandler,                   Is.Not.Null);
 				Assert.That(m.StartArgs.RequestedTransmitFilePath,                 Is.EqualTo(filePath));
-				Assert.That(m.StartArgs.RequestedDynamicTerminalIndex,             Is.EqualTo(2));
+				Assert.That(m.StartArgs.RequestedDynamicTerminalId,             Is.EqualTo(2));
 
 				Assert.That(m.StartArgs.ShowNewTerminalDialog,               Is.False);
 				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.True);

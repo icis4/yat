@@ -344,7 +344,7 @@ namespace YAT.Model
 			{
 				if (workspaceIsRequested && terminalIsRequested)
 				{
-					success = OpenWorkspaceFromSettings(this.startArgs.WorkspaceSettingsHandler, this.startArgs.RequestedDynamicTerminalIndex, this.startArgs.TerminalSettingsHandler);
+					success = OpenWorkspaceFromSettings(this.startArgs.WorkspaceSettingsHandler, this.startArgs.RequestedDynamicTerminalId, this.startArgs.TerminalSettingsHandler);
 				}
 				else if (workspaceIsRequested) // Workspace only.
 				{
@@ -580,27 +580,27 @@ namespace YAT.Model
 			{
 				if (this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count > 0)
 				{
-					int requestedDynamicTerminalIndex = this.commandLineArgs.RequestedDynamicTerminalIndex;
-					int lastDynamicIndex = Indices.IndexToDynamicIndex(this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1);
+					int requestedDynamicTerminalId = this.commandLineArgs.RequestedDynamicTerminalId;
+					int lastDynamicId = TerminalIds.IndexToDynamicId(this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1);
 				
-					if     ((          requestedDynamicTerminalIndex >= Indices.FirstDynamicIndex) && (requestedDynamicTerminalIndex <= lastDynamicIndex))
-						this.startArgs.RequestedDynamicTerminalIndex = requestedDynamicTerminalIndex;
-					else if (          requestedDynamicTerminalIndex == Indices.DefaultDynamicIndex)
-						this.startArgs.RequestedDynamicTerminalIndex  = Indices.DefaultDynamicIndex;
-					else if (          requestedDynamicTerminalIndex == Indices.InvalidDynamicIndex)
-						this.startArgs.RequestedDynamicTerminalIndex  = Indices.InvalidDynamicIndex; // Usable to disable the operation.
+					if     ((          requestedDynamicTerminalId >= TerminalIds.FirstDynamicId) && (requestedDynamicTerminalId <= lastDynamicId))
+						this.startArgs.RequestedDynamicTerminalId = requestedDynamicTerminalId;
+					else if (          requestedDynamicTerminalId == TerminalIds.DefaultDynamicId)
+						this.startArgs.RequestedDynamicTerminalId  = TerminalIds.DefaultDynamicId;
+					else if (          requestedDynamicTerminalId == TerminalIds.InvalidDynamicId)
+						this.startArgs.RequestedDynamicTerminalId  = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
 					else
 						return (false);
 
-					if (this.startArgs.RequestedDynamicTerminalIndex != Indices.InvalidDynamicIndex)
+					if (this.startArgs.RequestedDynamicTerminalId != TerminalIds.InvalidDynamicId)
 					{
 						string workspaceFilePath = this.startArgs.WorkspaceSettingsHandler.SettingsFilePath;
 
 						string terminalFilePath;
-						if (this.startArgs.RequestedDynamicTerminalIndex == Indices.DefaultDynamicIndex) // The last terminal is the default.
+						if (this.startArgs.RequestedDynamicTerminalId == TerminalIds.DefaultDynamicId) // The last terminal is the default.
 							terminalFilePath = this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1].FilePath;
 						else
-							terminalFilePath = this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[Indices.DynamicIndexToIndex(this.startArgs.RequestedDynamicTerminalIndex)].FilePath;
+							terminalFilePath = this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[TerminalIds.DynamicIdToIndex(this.startArgs.RequestedDynamicTerminalId)].FilePath;
 
 						DocumentSettingsHandler<TerminalSettingsRoot> sh;
 						if (OpenTerminalFile(workspaceFilePath, terminalFilePath, out sh))
@@ -612,19 +612,19 @@ namespace YAT.Model
 			}
 			else if (this.startArgs.TerminalSettingsHandler != null) // Applies to a dedicated terminal.
 			{
-				if (this.commandLineArgs.RequestedDynamicTerminalIndex == Indices.InvalidDynamicIndex)
-					this.startArgs.RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex; // Usable to disable the operation.
+				if (this.commandLineArgs.RequestedDynamicTerminalId == TerminalIds.InvalidDynamicId)
+					this.startArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
 			}
 			else if (this.commandLineArgs.NewIsRequested) // Applies to a new terminal.
 			{
-				if (this.commandLineArgs.RequestedDynamicTerminalIndex == Indices.InvalidDynamicIndex)
-					this.startArgs.RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex; // Usable to disable the operation.
+				if (this.commandLineArgs.RequestedDynamicTerminalId == TerminalIds.InvalidDynamicId)
+					this.startArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
 
 				this.startArgs.TerminalSettingsHandler = new DocumentSettingsHandler<TerminalSettingsRoot>();
 			}
 			else
 			{
-				this.startArgs.RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex; // Disable the operation.
+				this.startArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Disable the operation.
 			}
 
 			// Prio 8 = Override explicit settings as desired:
@@ -654,7 +654,7 @@ namespace YAT.Model
 				this.startArgs.Override.KeepLogOff          = this.commandLineArgs.KeepLogOff;
 
 			// Prio 10 = Perform requested operation:
-			if (this.startArgs.RequestedDynamicTerminalIndex != Indices.InvalidDynamicIndex)
+			if (this.startArgs.RequestedDynamicTerminalId != TerminalIds.InvalidDynamicId)
 			{
 				if (this.commandLineArgs.OptionIsGiven("TransmitText"))
 				{
@@ -1253,7 +1253,7 @@ namespace YAT.Model
 							else
 								inUseText = "(selected by " + t.IndicatedName + ")";
 
-							inUseLookup.Add(new MKY.IO.Ports.InUseInfo(t.SequentialIndex, portId, t.IsOpen, inUseText));
+							inUseLookup.Add(new MKY.IO.Ports.InUseInfo(t.SequentialId, portId, t.IsOpen, inUseText));
 						}
 					}
 
@@ -1429,19 +1429,19 @@ namespace YAT.Model
 			return (OpenWorkspaceFromSettings(settingsHandler, Guid.NewGuid(), out exception));
 		}
 
-		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, int dynamicTerminalIndexToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace)
+		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, int dynamicTerminalIdToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace)
 		{
 			Exception exception;
-			return (OpenWorkspaceFromSettings(settingsHandler, Guid.NewGuid(), dynamicTerminalIndexToReplace, terminalSettingsToReplace, out exception));
+			return (OpenWorkspaceFromSettings(settingsHandler, Guid.NewGuid(), dynamicTerminalIdToReplace, terminalSettingsToReplace, out exception));
 		}
 
 		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, Guid guid, out Exception exception)
 		{
-			return (OpenWorkspaceFromSettings(settingsHandler, guid, Indices.InvalidIndex, null, out exception));
+			return (OpenWorkspaceFromSettings(settingsHandler, guid, TerminalIds.InvalidIndex, null, out exception));
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings, Guid guid, int dynamicTerminalIndexToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace, out Exception exception)
+		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings, Guid guid, int dynamicTerminalIdToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace, out Exception exception)
 		{
 			AssertNotDisposed();
 
@@ -1490,7 +1490,7 @@ namespace YAT.Model
 			OnTimedStatusTextRequest("Workspace opened.");
 
 			// Open workspace terminals:
-			int terminalCount = this.workspace.OpenTerminals(dynamicTerminalIndexToReplace, terminalSettingsToReplace);
+			int terminalCount = this.workspace.OpenTerminals(dynamicTerminalIdToReplace, terminalSettingsToReplace);
 			if (terminalCount == 1)
 				OnTimedStatusTextRequest("Workspace terminal opened.");
 			else if (terminalCount > 1)
@@ -1735,18 +1735,19 @@ namespace YAT.Model
 						return;
 					}
 
-					int id = this.startArgs.RequestedDynamicTerminalIndex;
-					Terminal requestedTerminal = this.workspace.GetTerminalByDynamicIndex(id);
-					if (requestedTerminal == null)
+					int id = this.startArgs.RequestedDynamicTerminalId;
+
+					Terminal requestedTerminal;
+					if (!this.workspace.TryGetTerminalByDynamicId(id, out requestedTerminal))
 					{
 						StopAndDisposeOperationTimer();
 
-						OnFixedStatusTextRequest("Invalid requested dynamic index!");
+						OnFixedStatusTextRequest("Invalid requested dynamic ID!");
 						OnMessageInputRequest
 						(
-							"Invalid requested dynamic index " + id.ToString(CultureInfo.CurrentCulture) + " to perform the operation!" + Environment.NewLine + Environment.NewLine +
+							"Invalid requested dynamic ID " + id.ToString(CultureInfo.CurrentCulture) + " to perform the operation!" + Environment.NewLine + Environment.NewLine +
 							"Check the command line arguments. See command line help for details.",
-							"Invalid Terminal Index",
+							"Invalid Terminal ID",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Stop
 						);
@@ -1894,9 +1895,10 @@ namespace YAT.Model
 				{
 					if (this.workspace != null)
 					{
-						int id = this.startArgs.RequestedDynamicTerminalIndex;
-						var t = this.workspace.GetTerminalByDynamicIndex(id);
-						if ((t != null) && (t.IsBusy))
+						int id = this.startArgs.RequestedDynamicTerminalId;
+
+						Terminal t;
+						if (this.workspace.TryGetTerminalByDynamicId(id, out t) && (t.IsBusy))
 						{
 							OnTimedStatusTextRequest("Exit triggered, pending while terminal is busy...");
 							return; // Pend!

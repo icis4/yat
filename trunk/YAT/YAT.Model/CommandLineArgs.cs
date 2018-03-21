@@ -77,12 +77,11 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]
+		[CLSCompliant(false)]                                                          // Attention, "tt" = "TransmitText"!
 		[OptionArg(Names = new string[] { "Type", "TerminalType" }, ShortNames = new string[] { "t", "ty" }, Description =
 			"The desired terminal type. Valid values are 'Text', 'T' or 'Binary', 'B'. The default value is 'Text'.")]
 		public string TerminalType;
 
-		/// <summary></summary>
 		/// <remarks>
 		/// This option is intentionally called 'PortType' because it shall match the name on the 'New Terminal' and 'Terminal Settings' dialog.
 		/// </remarks>
@@ -334,15 +333,15 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[CLSCompliant(false)]
-		[OptionArg(Names = new string[] { "DynamicIndex", "DynamicTerminalIndex" }, ShortName = "di", Description =
-			"Perform any requested operation on the terminal with the given dynamic index within the opening workspace." + EnvironmentEx.NewLineConstWorkaround +
-			"Valid values are 1 based indices 1, 2, 3,... up to the number of open terminals. " +
+		[OptionArg(Names = new string[] { "DynamicId", "DynamicTerminalId" }, ShortNames = new string[] { "di", "dti" }, Description =
+			"Perform any requested operation on the terminal with the given dynamic ID within the opening workspace." + EnvironmentEx.NewLineConstWorkaround +
+			"Valid values are 1, 2, 3,... up to the number of open terminals. " +
 			"0 indicates that the currently active terminal is used, which typically is the last terminal opened. " +
-			"The default value is 0." + EnvironmentEx.NewLineConstWorkaround +
+			"The default value is 0, i.e. the currently active terminal." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies when opening a workspace that contains more than one terminal." + EnvironmentEx.NewLineConstWorkaround + EnvironmentEx.NewLineConstWorkaround +
 			"In addition, -1 may be used to indicate 'none', i.e. no operation is performed at all. " +
-			"This setting is useful to temporarily switch off the requested operation without having to completely edit the command line.")]
-		public int RequestedDynamicTerminalIndex = Indices.DefaultDynamicIndex;
+			"This value is useful to temporarily switch off the requested operation without having to completely edit the command line.")]
+		public int RequestedDynamicTerminalId = TerminalIds.ActiveDynamicId;
 
 		/// <remarks>Using term 'Transmit' to indicate potential 'intelligence' to send + receive/verify the data.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]

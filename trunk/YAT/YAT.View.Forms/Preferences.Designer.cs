@@ -200,7 +200,7 @@
 			this.checkBox_ShowTerminalInfo.Name = "checkBox_ShowTerminalInfo";
 			this.checkBox_ShowTerminalInfo.Size = new System.Drawing.Size(188, 17);
 			this.checkBox_ShowTerminalInfo.TabIndex = 0;
-			this.checkBox_ShowTerminalInfo.Text = "Show &terminal indices in status bar";
+			this.checkBox_ShowTerminalInfo.Text = "Show &terminal IDs in status bar";
 			this.checkBox_ShowTerminalInfo.UseVisualStyleBackColor = true;
 			this.checkBox_ShowTerminalInfo.CheckedChanged += new System.EventHandler(this.checkBox_ShowTerminalInfo_CheckedChanged);
 			// 

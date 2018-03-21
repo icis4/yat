@@ -819,7 +819,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Name = "toolStripMenuItem_StatusContextMenu_ShowTerminalInfo";
 			this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Size = new System.Drawing.Size(192, 22);
-			this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Text = "Show Terminal Indices";
+			this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Text = "Show Terminal IDs";
 			this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Click += new System.EventHandler(this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo_Click);
 			// 
 			// toolStripMenuItem_StatusContextMenu_ShowTime
@@ -867,7 +867,7 @@ namespace YAT.View.Forms
 			this.toolStripStatusLabel_MainStatus_TerminalInfo.Name = "toolStripStatusLabel_MainStatus_TerminalInfo";
 			this.toolStripStatusLabel_MainStatus_TerminalInfo.Size = new System.Drawing.Size(0, 19);
 			this.toolStripStatusLabel_MainStatus_TerminalInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripStatusLabel_MainStatus_TerminalInfo.ToolTipText = "Active Terminal (Auto Name / Sequential ID / Dynamic Index / Fixed Index)";
+			this.toolStripStatusLabel_MainStatus_TerminalInfo.ToolTipText = "Active Terminal (Auto Name / Sequential ID / Dynamic ID / Fixed ID)";
 			// 
 			// toolStripStatusLabel_MainStatus_Time
 			// 
