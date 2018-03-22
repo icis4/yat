@@ -52,12 +52,12 @@ namespace MKY.IO.Ports
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public static Dictionary<string, string> GetCaptionsFromSystem()
 		{
-			Dictionary<string, string> result = new Dictionary<string, string>();
+			var result = new Dictionary<string, string>();
 
 			try
 			{
-				ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity");
-				foreach (ManagementObject obj in searcher.Get())
+				var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity");
+				foreach (var obj in searcher.Get())
 				{
 					try
 					{
@@ -89,7 +89,7 @@ namespace MKY.IO.Ports
 				}
 
 				searcher = new ManagementObjectSearcher("SELECT * FROM Win32_POTSModem");
-				foreach (ManagementObject obj in searcher.Get())
+				foreach (var obj in searcher.Get())
 				{
 					try
 					{
