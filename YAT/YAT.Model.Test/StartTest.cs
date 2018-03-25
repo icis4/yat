@@ -133,7 +133,7 @@ namespace YAT.Model.Test
 				Assert.That(m.StartArgs.ShowNewTerminalDialog,    Is.True);
 
 				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.StartArgs.RequestedDynamicTerminalId,       Is.EqualTo(TerminalIds.DefaultDynamicId));
+				Assert.That(m.StartArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
 				Assert.That(m.StartArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
 				Assert.That(m.StartArgs.KeepOpen,        Is.True);
@@ -422,7 +422,7 @@ namespace YAT.Model.Test
 				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
 
 				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.StartArgs.RequestedDynamicTerminalId,       Is.EqualTo(TerminalIds.DefaultDynamicId));
+				Assert.That(m.StartArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
 				Assert.That(m.StartArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
 				Assert.That(m.StartArgs.ShowNewTerminalDialog, Is.False);
@@ -464,7 +464,7 @@ namespace YAT.Model.Test
 				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
 
 				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.StartArgs.RequestedDynamicTerminalId,       Is.EqualTo(TerminalIds.DefaultDynamicId));
+				Assert.That(m.StartArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
 				Assert.That(m.StartArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
 				Assert.That(m.StartArgs.ShowNewTerminalDialog, Is.False);
@@ -505,7 +505,7 @@ namespace YAT.Model.Test
 				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
 
 				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.StartArgs.RequestedDynamicTerminalId,       Is.EqualTo(TerminalIds.DefaultDynamicId));
+				Assert.That(m.StartArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
 				Assert.That(m.StartArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
 				Assert.That(m.StartArgs.ShowNewTerminalDialog, Is.False);

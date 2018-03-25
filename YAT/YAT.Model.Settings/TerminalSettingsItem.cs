@@ -41,13 +41,13 @@ namespace YAT.Model.Settings
 
 		/// <remarks>
 		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
-		/// ID 0 means 'default' = the active terminal.
+		/// ID 0 refers to the active terminal, i.e. the 'default' terminal.
 		/// </remarks>
-		public const int DefaultFixedId = 0;
+		public const int ActiveFixedId = 0;
 
 		/// <remarks>
 		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
-		/// ID -1 means 'invalid' = no terminal.
+		/// ID -1 means 'invalid', i.e. no terminal.
 		/// </remarks>
 		public const int InvalidFixedId = -1;
 
@@ -98,7 +98,7 @@ namespace YAT.Model.Settings
 
 			FilePath = "";
 			Guid     = Guid.Empty;
-			FixedId  = DefaultFixedId;
+			FixedId  = ActiveFixedId;
 		}
 
 		#region Properties

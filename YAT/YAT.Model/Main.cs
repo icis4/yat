@@ -585,8 +585,8 @@ namespace YAT.Model
 				
 					if     ((          requestedDynamicTerminalId >= TerminalIds.FirstDynamicId) && (requestedDynamicTerminalId <= lastDynamicId))
 						this.startArgs.RequestedDynamicTerminalId = requestedDynamicTerminalId;
-					else if (          requestedDynamicTerminalId == TerminalIds.DefaultDynamicId)
-						this.startArgs.RequestedDynamicTerminalId  = TerminalIds.DefaultDynamicId;
+					else if (          requestedDynamicTerminalId == TerminalIds.ActiveDynamicId)
+						this.startArgs.RequestedDynamicTerminalId  = TerminalIds.ActiveDynamicId;
 					else if (          requestedDynamicTerminalId == TerminalIds.InvalidDynamicId)
 						this.startArgs.RequestedDynamicTerminalId  = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
 					else
@@ -597,7 +597,7 @@ namespace YAT.Model
 						string workspaceFilePath = this.startArgs.WorkspaceSettingsHandler.SettingsFilePath;
 
 						string terminalFilePath;
-						if (this.startArgs.RequestedDynamicTerminalId == TerminalIds.DefaultDynamicId) // The last terminal is the default.
+						if (this.startArgs.RequestedDynamicTerminalId == TerminalIds.ActiveDynamicId) // The active terminal is located last in the collection:
 							terminalFilePath = this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1].FilePath;
 						else
 							terminalFilePath = this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[TerminalIds.DynamicIdToIndex(this.startArgs.RequestedDynamicTerminalId)].FilePath;
