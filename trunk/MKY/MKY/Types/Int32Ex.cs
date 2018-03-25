@@ -24,6 +24,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
 // MKY.Types for consistency with the System namespace.
@@ -45,7 +46,7 @@ namespace MKY
 		public static int Limit(int value, int min, int max)
 		{
 			if (min > max)
-				throw (new ArgumentException(string.Format("Precondition is 'min' <= 'max', but 'min' is {0} and 'max' is {1}!", min, max))); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
+				throw (new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Precondition is 'min' <= 'max', but 'min' is {0} and 'max' is {1}!", min, max))); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
 
 			if (value < min)
 				return (min);

@@ -532,7 +532,7 @@ namespace MKY
 
 		#endregion
 
-		#region Limit()
+		#region Limit
 
 		/// <summary>
 		/// Limits the give string to the specified max length. If the string exceed the max length,
