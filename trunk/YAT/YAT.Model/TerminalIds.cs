@@ -45,13 +45,13 @@ namespace YAT.Model
 
 		/// <remarks>
 		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
-		/// ID 0 means 'default' = the active terminal.
+		/// ID 0 refers to the active terminal, i.e. the 'default' terminal.
 		/// </remarks>
-		public const int DefaultDynamicId = 0;
+		public const int ActiveDynamicId = 0;
 
 		/// <remarks>
 		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
-		/// ID -1 means 'invalid' = no terminal.
+		/// ID -1 means 'invalid', i.e. no terminal.
 		/// </remarks>
 		public const int InvalidDynamicId = -1;
 
@@ -62,13 +62,13 @@ namespace YAT.Model
 
 		/// <remarks>
 		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
-		/// Index 0 means 'default' = the active terminal.
+		/// ID 0 refers to the active terminal, i.e. the 'default' terminal.
 		/// </remarks>
-		public const int DefaultSequentialId = 0;
+		public const int ActiveSequentialId = 0;
 
 		/// <remarks>
 		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
-		/// ID -1 means 'invalid' = no terminal.
+		/// ID -1 means 'invalid', i.e. no terminal.
 		/// </remarks>
 		public const int InvalidSequentialId = -1;
 
@@ -79,13 +79,13 @@ namespace YAT.Model
 
 		/// <remarks>
 		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
-		/// ID 0 means 'default' = the active terminal.
+		/// ID 0 refers to the active terminal, i.e. the 'default' terminal.
 		/// </remarks>
-		public const int DefaultFixedId = Settings.TerminalSettingsItem.DefaultFixedId;
+		public const int ActiveFixedId = Settings.TerminalSettingsItem.ActiveFixedId;
 
 		/// <remarks>
 		/// IDs are 1 (not 0) based for consistency with "Terminal1"...
-		/// ID -1 means 'invalid' = no terminal.
+		/// ID -1 means 'invalid', i.e. no terminal.
 		/// </remarks>
 		public const int InvalidFixedId = Settings.TerminalSettingsItem.InvalidFixedId;
 

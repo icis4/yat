@@ -1486,9 +1486,9 @@ namespace YAT.Model
 
 					// Replace the desired terminal settings if requested:
 					bool isToReplace = false;
-					if (dynamicTerminalIdToReplace == TerminalIds.DefaultDynamicId)
+					if (dynamicTerminalIdToReplace == TerminalIds.ActiveDynamicId)
 					{
-						if (i == (clone.Count - 1)) // The last terminal is the default.
+						if (i == (clone.Count - 1)) // The active terminal is located last in the collection.
 							isToReplace = true;
 					}
 					else
@@ -1596,7 +1596,7 @@ namespace YAT.Model
 			OnCursorRequest(Cursors.WaitCursor);
 
 			string errorMessage;
-			if (OpenTerminalFromFile(filePath, Guid.Empty, TerminalIds.DefaultFixedId, null, out errorMessage))
+			if (OpenTerminalFromFile(filePath, Guid.Empty, TerminalIds.ActiveFixedId, null, out errorMessage))
 			{
 				OnCursorReset();
 				return (true);
@@ -1647,7 +1647,7 @@ namespace YAT.Model
 		public virtual bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
 			Exception exception;
-			return (OpenTerminalFromSettings(settingsHandler, Guid.Empty, TerminalIds.DefaultFixedId, null, out exception));
+			return (OpenTerminalFromSettings(settingsHandler, Guid.Empty, TerminalIds.ActiveFixedId, null, out exception));
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
@@ -1818,7 +1818,7 @@ namespace YAT.Model
 			return (tsi);
 		}
 
-		private void AddTerminalToWorkspace(Terminal terminal, int requestedFixedId = TerminalIds.DefaultFixedId)
+		private void AddTerminalToWorkspace(Terminal terminal, int requestedFixedId = TerminalIds.ActiveFixedId)
 		{
 			// Add terminal to terminal list:
 			this.terminals.Add(terminal);
@@ -1995,7 +1995,7 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			if (dynamicId == TerminalIds.DefaultDynamicId)
+			if (dynamicId == TerminalIds.ActiveDynamicId)
 			{
 				terminal = this.activeTerminal;
 				return (true);
