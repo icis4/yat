@@ -938,12 +938,13 @@ namespace MKY.IO.Usb
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// Currently, this implementation is fixed to true Ser/HID devices. On 2018-02-23 attempted
-		/// to create a <see cref="Win32.Hid.CreateSharedReadHandle"/> to check whether accessing a
-		/// true HID device (e.g. a mouse) would also work. It doesn't, both calls (read/write as
-		/// well as read-only) result in "API call returned code '5' meaning 'access denied'".
+		/// Currently, this implementation is fixed to true Ser/HID devices. Attempted to create a
+		/// <see cref="Win32.Hid.CreateSharedReadHandle"/> to check whether accessing a true HID
+		/// device (e.g. a mouse) would also work on 2018-02-23. It doesn't, both calls (read/write
+		/// as well as read-only) result in "API call returned code '5' meaning 'access denied'".
 		/// Looks like the HID driver enforces exclusive device access.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Ser/HID'... And adding 'Ser/HID' to 'CustomDictionary.xml' doesn't help either...")]
 		private bool CreateStream()
 		{
 			SafeFileHandle readWriteHandle;
