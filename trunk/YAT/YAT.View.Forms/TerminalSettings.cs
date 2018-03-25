@@ -29,10 +29,10 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using System.Windows.Forms;
 
 using MKY;
-using MKY.Collections.Specialized;
 using MKY.Windows.Forms;
 
 using YAT.Settings.Application;
@@ -190,13 +190,17 @@ namespace YAT.View.Forms
 				{
 					if (ioTypeNewIsUdpSocket)
 					{
+						var message = new StringBuilder();
+						message.AppendLine("Port type has changed to UDP/IP. Shall UDP/IP related settings be changed accordingly?");
+						message.AppendLine("");
+						message.AppendLine("Confirming with [Yes] will...");
+						message.AppendLine("...change the 'EOL sequence(s)' to [None].");
+						message.Append    ("...enable 'break lines on each chunk'.");
+
 						dr = MessageBoxEx.Show
 						(
 							this,
-							"Port type has changed to UDP/IP. Shall UDP/IP related settings be changed accordingly?" + Environment.NewLine + Environment.NewLine +
-							"Confirming with [Yes] will..." + Environment.NewLine +
-							"...change the 'EOL sequence(s)' to [None]." + Environment.NewLine +
-							"...enable 'break lines on each chunk'.",
+							message.ToString(),
 							"Settings",
 							MessageBoxButtons.YesNo,
 							MessageBoxIcon.Question
@@ -204,13 +208,17 @@ namespace YAT.View.Forms
 					}
 					else // ioTypeOldWasUdpSocket
 					{
+						var message = new StringBuilder();
+						message.AppendLine("Port type has changed to other than UDP/IP. Shall UDP/IP related settings be changed accordingly?");
+						message.AppendLine("");
+						message.AppendLine("Confirming with [Yes] will...");
+						message.AppendLine("...change the 'EOL sequence(s)' to the system default.");
+						message.Append    ("...disable 'break lines on each chunk'.");
+
 						dr = MessageBoxEx.Show
 						(
 							this,
-							"Port type has changed to other than UDP/IP. Shall UDP/IP related settings be changed accordingly?" + Environment.NewLine + Environment.NewLine +
-							"Confirming with [Yes] will..." + Environment.NewLine +
-							"...change the 'EOL sequence(s)' to the system default." + Environment.NewLine +
-							"...disable 'break lines on each chunk'.",
+							message.ToString(),
 							"Settings",
 							MessageBoxButtons.YesNo,
 							MessageBoxIcon.Question
