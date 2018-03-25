@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Almost Final Version 1.99.95
+// YAT Version 2.0.0
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -42,11 +42,11 @@ namespace YAT
 		/// <summary>The product name.</summary>
 		public static readonly string ProductName = System.Windows.Forms.Application.ProductName;
 
-	/////// <summary>The product name postfix that describes the build.</summary>
-	////public static readonly string ProductBuildName = " Final";
-
 		/// <summary>The product name postfix that describes the build.</summary>
-		public static readonly string ProductBuildName = " Almost Final";
+		public static readonly string ProductBuildName = " Final";
+
+	/////// <summary>The product name postfix that describes the build.</summary>
+	////public static readonly string ProductBuildName = " Almost Final";
 
 	/////// <summary>The product name postfix that describes the build.</summary>
 	////public static readonly string ProductBuildName = " Epsilon";
