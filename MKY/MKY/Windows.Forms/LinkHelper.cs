@@ -56,6 +56,7 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Clicks the given <paramref name="linkUri"/>.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings", MessageId = "1#", Justification = "Flexibility!")]
 		[SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings", Justification = "Flexibility!")]
 		public static bool TryBrowseUriAndShowErrorIfItFails(IWin32Window owner, string linkUri)
 		{
