@@ -445,9 +445,50 @@ namespace YAT.View.Controls
 			try
 			{
 				if (this.useExplicitDefaultRadix)
-					ComboBoxHelper.Select(comboBox_ExplicitDefaultRadix, (Domain.RadixEx)this.command.DefaultRadix, (Domain.RadixEx)this.command.DefaultRadix);
+				{
+					bool explicitDefaultRadixIsTakenIntoAccount = false;
+					if ((this.command != null) && (this.command.IsFilePath))
+					{
+						switch (this.terminalType)
+						{
+							case Domain.TerminalType.Binary:
+							{
+								explicitDefaultRadixIsTakenIntoAccount = false;
+
+								if (ExtensionHelper.IsTextFile(this.command.FilePath))
+									explicitDefaultRadixIsTakenIntoAccount = true; // (Yet) only used for text files.
+
+								break;
+							}
+
+							case Domain.TerminalType.Text:
+							default:
+							{
+								explicitDefaultRadixIsTakenIntoAccount = true;
+
+								if ((ExtensionHelper.IsXmlFile(this.command.FilePath)) ||
+									(ExtensionHelper.IsRtfFile(this.command.FilePath)))
+										explicitDefaultRadixIsTakenIntoAccount = false; // Not (yet) used for XML nor RTF files.
+
+								break;
+							}
+						}
+					}
+
+					comboBox_ExplicitDefaultRadix.Enabled = explicitDefaultRadixIsTakenIntoAccount;
+
+					Domain.RadixEx resultingDefaultRadix = Domain.Parser.Parser.DefaultRadixDefault;
+					if (explicitDefaultRadixIsTakenIntoAccount)
+						resultingDefaultRadix = this.command.DefaultRadix;
+
+					ComboBoxHelper.Select(comboBox_ExplicitDefaultRadix, resultingDefaultRadix, resultingDefaultRadix);
+				}
 				else
+				{
+					comboBox_ExplicitDefaultRadix.Enabled = true;
+
 					ComboBoxHelper.Deselect(comboBox_ExplicitDefaultRadix);
+				}
 
 				pathComboBox_FilePath.Items.Clear();
 
@@ -568,8 +609,8 @@ namespace YAT.View.Controls
 				{
 					initialExtension = ApplicationSettings.RoamingUserSettings.Extensions.BinarySendFiles;
 
-					ofd.Filter      = ExtensionHelper.BinaryFilesFilter;
-					ofd.FilterIndex = ExtensionHelper.BinaryFilesFilterHelper(initialExtension);
+					ofd.Filter      = ExtensionHelper.BinarySendFilesFilter;
+					ofd.FilterIndex = ExtensionHelper.BinarySendFilesFilterHelper(initialExtension);
 					break;
 				}
 

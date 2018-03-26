@@ -497,11 +497,11 @@ namespace YAT.View.Forms
 			try
 			{
 				comboBox_Raw_Extension.Items.Clear();
-				foreach (string ext in ExtensionHelper.BinaryFilesWithDot)
+				foreach (string ext in ExtensionHelper.BinaryLogFileExtensionsWithDot)
 					comboBox_Raw_Extension.Items.Add(ext);
 
 				comboBox_Neat_Extension.Items.Clear();
-				foreach (string ext in ExtensionHelper.TextFilesWithDot)
+				foreach (string ext in ExtensionHelper.TextLogFileExtensionsWithDot)
 					comboBox_Neat_Extension.Items.Add(ext);
 
 				comboBox_Options_NameSeparator.Items.Clear();
