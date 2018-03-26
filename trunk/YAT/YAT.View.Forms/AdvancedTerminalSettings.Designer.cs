@@ -44,6 +44,7 @@
 			this.comboBox_Endianness = new System.Windows.Forms.ComboBox();
 			this.label_Endianness = new System.Windows.Forms.Label();
 			this.groupBox_Send = new System.Windows.Forms.GroupBox();
+			this.checkBox_SkipEmptyLines = new System.Windows.Forms.CheckBox();
 			this.checkBox_EnableEscapesForText = new System.Windows.Forms.CheckBox();
 			this.checkBox_UseExplicitDefaultRadix = new System.Windows.Forms.CheckBox();
 			this.label_SignalXOnPeriodicallyIntervalUnit = new System.Windows.Forms.Label();
@@ -128,7 +129,6 @@
 			this.label_MaxLineCountUnit = new System.Windows.Forms.Label();
 			this.label_MaxLineCount = new System.Windows.Forms.Label();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.checkBox_SkipEmptyLines = new System.Windows.Forms.CheckBox();
 			this.groupBox_User.SuspendLayout();
 			this.groupBox_Communication.SuspendLayout();
 			this.groupBox_Communication_SerialPorts.SuspendLayout();
@@ -310,6 +310,17 @@
 			this.groupBox_Send.TabIndex = 2;
 			this.groupBox_Send.TabStop = false;
 			this.groupBox_Send.Text = "Send Settin&gs";
+			// 
+			// checkBox_SkipEmptyLines
+			// 
+			this.checkBox_SkipEmptyLines.AutoSize = true;
+			this.checkBox_SkipEmptyLines.Location = new System.Drawing.Point(12, 88);
+			this.checkBox_SkipEmptyLines.Name = "checkBox_SkipEmptyLines";
+			this.checkBox_SkipEmptyLines.Size = new System.Drawing.Size(170, 17);
+			this.checkBox_SkipEmptyLines.TabIndex = 3;
+			this.checkBox_SkipEmptyLines.Text = "Skip empty lines on [Send File]";
+			this.checkBox_SkipEmptyLines.UseVisualStyleBackColor = true;
+			this.checkBox_SkipEmptyLines.CheckedChanged += new System.EventHandler(this.checkBox_SkipEmptyLines_CheckedChanged);
 			// 
 			// checkBox_EnableEscapesForText
 			// 
@@ -1104,9 +1115,9 @@
 			this.checkBox_ReplaceControlCharacters.AutoSize = true;
 			this.checkBox_ReplaceControlCharacters.Location = new System.Drawing.Point(6, 19);
 			this.checkBox_ReplaceControlCharacters.Name = "checkBox_ReplaceControlCharacters";
-			this.checkBox_ReplaceControlCharacters.Size = new System.Drawing.Size(167, 17);
+			this.checkBox_ReplaceControlCharacters.Size = new System.Drawing.Size(154, 17);
 			this.checkBox_ReplaceControlCharacters.TabIndex = 0;
-			this.checkBox_ReplaceControlCharacters.Text = "Replace all control characters";
+			this.checkBox_ReplaceControlCharacters.Text = "Replace control characters";
 			this.checkBox_ReplaceControlCharacters.CheckedChanged += new System.EventHandler(this.checkBox_ReplaceControlCharacters_CheckedChanged);
 			// 
 			// checkBox_DirectionLineBreak
@@ -1259,17 +1270,6 @@
 			this.label_MaxLineCount.TabIndex = 22;
 			this.label_MaxLineCount.Text = "Displa&y maximal";
 			this.label_MaxLineCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// checkBox_SkipEmptyLines
-			// 
-			this.checkBox_SkipEmptyLines.AutoSize = true;
-			this.checkBox_SkipEmptyLines.Location = new System.Drawing.Point(12, 88);
-			this.checkBox_SkipEmptyLines.Name = "checkBox_SkipEmptyLines";
-			this.checkBox_SkipEmptyLines.Size = new System.Drawing.Size(170, 17);
-			this.checkBox_SkipEmptyLines.TabIndex = 3;
-			this.checkBox_SkipEmptyLines.Text = "Skip empty lines on [Send File]";
-			this.checkBox_SkipEmptyLines.UseVisualStyleBackColor = true;
-			this.checkBox_SkipEmptyLines.CheckedChanged += new System.EventHandler(this.checkBox_SkipEmptyLines_CheckedChanged);
 			// 
 			// AdvancedTerminalSettings
 			// 
