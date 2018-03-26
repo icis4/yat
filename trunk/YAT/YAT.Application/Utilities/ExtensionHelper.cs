@@ -241,8 +241,10 @@ namespace YAT.Application.Utilities
 				return (4);
 		}
 
-		/// <summary></summary>
-		public static ReadOnlyCollection<string> TextFilesWithDot
+		/// <remarks>
+		/// Only applies to log files.
+		/// </remarks>
+		public static ReadOnlyCollection<string> TextLogFileExtensionsWithDot
 		{
 			get
 			{
@@ -268,12 +270,16 @@ namespace YAT.Application.Utilities
 			get { return (".log"); }
 		}
 
-		/// <summary></summary>
-		public static string BinaryFilesFilter
+		/// <remarks>
+		/// Only applies to [Send File], i.e. does contain text file extensions.
+		/// </remarks>
+		public static string BinarySendFilesFilter
 		{
 			get
 			{
 				return ("Binary Files (*.dat;*.bin;*.binary)|*.dat;*.bin;*.binary" +
+						"|" +
+						"Text Files (*.txt;*.text;*.log)|*.txt;*.text;*.log" +
 						"|" +
 						"XML Files (*.xml)|*.xml" +
 						"|" +
@@ -281,19 +287,25 @@ namespace YAT.Application.Utilities
 			}
 		}
 
-		/// <summary></summary>
-		public static int BinaryFilesFilterHelper(string extension)
+		/// <remarks>
+		/// Only applies to [Send File], i.e. does contain text file extensions.
+		/// </remarks>
+		public static int BinarySendFilesFilterHelper(string extension)
 		{
 			if      (IsBinaryFile(extension))
 				return (1);
-			else if (IsXmlExtension(extension))
+			else if (IsTextExtension(extension))
 				return (2);
-			else
+			else if (IsXmlExtension(extension))
 				return (3);
+			else
+				return (4);
 		}
 
-		/// <summary></summary>
-		public static ReadOnlyCollection<string> BinaryFilesWithDot
+		/// <remarks>
+		/// Only applies to log files, i.e. does not contain text file extensions (which are also sendable by binary terminals).
+		/// </remarks>
+		public static ReadOnlyCollection<string> BinaryLogFileExtensionsWithDot
 		{
 			get
 			{

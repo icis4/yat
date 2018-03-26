@@ -562,7 +562,7 @@ namespace YAT.Domain
 				{
 					ProcessSendTextFileItem(item);
 				}
-				else
+				else // By default treat as binary file:
 				{
 					using (FileStream fs = File.OpenRead(item.FilePath))
 					{

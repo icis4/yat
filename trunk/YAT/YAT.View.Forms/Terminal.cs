@@ -4209,7 +4209,7 @@ namespace YAT.View.Forms
 
 			var sfd = new SaveFileDialog();
 			sfd.Title = "Save As";
-			sfd.Filter      = ExtensionHelper.TextFilesFilter;
+			sfd.Filter      = ExtensionHelper.TextFilesFilter; // Fixed to text files since monitor displays lines.
 			sfd.FilterIndex = ExtensionHelper.TextFilesFilterHelper(initialExtension);
 			sfd.DefaultExt  = PathEx.DenormalizeExtension(initialExtension);
 			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MonitorFiles;

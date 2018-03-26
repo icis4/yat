@@ -807,8 +807,8 @@ namespace YAT.View.Controls
 				{
 					initialExtension = ApplicationSettings.RoamingUserSettings.Extensions.BinarySendFiles;
 
-					ofd.Filter      = ExtensionHelper.BinaryFilesFilter;
-					ofd.FilterIndex = ExtensionHelper.BinaryFilesFilterHelper(initialExtension);
+					ofd.Filter      = ExtensionHelper.BinarySendFilesFilter;
+					ofd.FilterIndex = ExtensionHelper.BinarySendFilesFilterHelper(initialExtension);
 					break;
 				}
 

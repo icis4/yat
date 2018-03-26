@@ -508,7 +508,7 @@ namespace YAT.Domain
 						Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
 					}
 				}
-				else
+				else // By default treat as text file:
 				{
 					ProcessSendTextFileItem(item, (EncodingEx)TextTerminalSettings.Encoding);
 				}
