@@ -362,8 +362,7 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public override void SendFileLine(string dataLine, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
+		public override void SendFileLine(string dataLine, Radix defaultRadix)
 		{
 			// AssertNotDisposed() is called by DoSendData().
 
@@ -497,7 +496,7 @@ namespace YAT.Domain
 						if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
 							continue;
 
-						SendFileLine(line);
+						SendFileLine(line, item.DefaultRadix);
 
 						if (BreakSendFile)
 						{

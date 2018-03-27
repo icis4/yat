@@ -1771,7 +1771,7 @@ namespace YAT.Domain
 				if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
 					continue;
 
-				SendFileLine(line);
+				SendFileLine(line, item.DefaultRadix);
 
 				if (BreakSendFile)
 				{

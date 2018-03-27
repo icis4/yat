@@ -99,7 +99,9 @@
 			this.comboBox_ExplicitDefaultRadix.Name = "comboBox_ExplicitDefaultRadix";
 			this.comboBox_ExplicitDefaultRadix.Size = new System.Drawing.Size(74, 21);
 			this.comboBox_ExplicitDefaultRadix.TabIndex = 0;
-			this.toolTip.SetToolTip(this.comboBox_ExplicitDefaultRadix, "Select the radix which is used by default,\r\ni.e. without an escape sequence.");
+			this.toolTip.SetToolTip(this.comboBox_ExplicitDefaultRadix, "Select the radix which is used by default,\r\ni.e. without an escape sequence.\r\n\r\nI" +
+        "t applies to sending text files (incl. RFT, XML,...),\r\nbut not to sending binary" +
+        " files.");
 			this.comboBox_ExplicitDefaultRadix.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_ExplicitDefaultRadix_Validating);
 			// 
 			// splitContainer_Send
