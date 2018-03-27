@@ -29,6 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SendFile));
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.button_OpenFile = new System.Windows.Forms.Button();
 			this.button_Send = new System.Windows.Forms.Button();
@@ -59,7 +60,7 @@
 			this.button_OpenFile.Size = new System.Drawing.Size(25, 21);
 			this.button_OpenFile.TabIndex = 1;
 			this.button_OpenFile.Text = "...";
-			this.toolTip.SetToolTip(this.button_OpenFile, "Browse for a file");
+			this.toolTip.SetToolTip(this.button_OpenFile, resources.GetString("button_OpenFile.ToolTip"));
 			this.button_OpenFile.Click += new System.EventHandler(this.button_OpenFile_Click);
 			// 
 			// button_Send
@@ -86,7 +87,7 @@
 			this.pathComboBox_FilePath.Name = "pathComboBox_FilePath";
 			this.pathComboBox_FilePath.Size = new System.Drawing.Size(238, 21);
 			this.pathComboBox_FilePath.TabIndex = 0;
-			this.toolTip.SetToolTip(this.pathComboBox_FilePath, "<Enter> to send file, drop down\r\nfor recent files, <...> to browse for a file");
+			this.toolTip.SetToolTip(this.pathComboBox_FilePath, "<Enter> to send file,\r\ndrop down for recent files,\r\n[...] to browse for a file");
 			this.pathComboBox_FilePath.SelectedIndexChanged += new System.EventHandler(this.pathComboBox_FilePath_SelectedIndexChanged);
 			// 
 			// comboBox_ExplicitDefaultRadix
@@ -100,8 +101,8 @@
 			this.comboBox_ExplicitDefaultRadix.Size = new System.Drawing.Size(74, 21);
 			this.comboBox_ExplicitDefaultRadix.TabIndex = 0;
 			this.toolTip.SetToolTip(this.comboBox_ExplicitDefaultRadix, "Select the radix which is used by default,\r\ni.e. without an escape sequence.\r\n\r\nI" +
-        "t applies to sending text files (incl. RFT, XML,...),\r\nbut not to sending binary" +
-        " files.");
+        "t applies to sending text files (incl. RTF, XML),\r\nbut not to sending binary fil" +
+        "es.");
 			this.comboBox_ExplicitDefaultRadix.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_ExplicitDefaultRadix_Validating);
 			// 
 			// splitContainer_Send
