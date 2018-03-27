@@ -51,17 +51,16 @@ namespace MKY.Windows.Forms
 		/// Index value if the tag property of <paramref name="sender"/> is a valid value;
 		/// <see cref="InvalidIndex"/> otherwise.
 		/// </returns>
-		/// <remarks>
-		/// Attention:
-		/// This function also exists in <see cref="ControlEx"/>.
-		/// Changes here must be applied there too.
-		/// </remarks>
 		public static int TagToIndex(object sender)
 		{
-			ToolStripMenuItem control = sender as ToolStripMenuItem;
+			// Attention:
+			// Same code exists in ControlEx.TagToIndex().
+			// Changes here must be applied there too.
+
+			var control = sender as ToolStripMenuItem;
 			if (control != null)
 			{
-				string tag = control.Tag as string;
+				var tag = control.Tag as string;
 				if (tag != null)
 				{
 					int index;
