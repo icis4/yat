@@ -584,6 +584,10 @@ namespace YAT.Domain
 							Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
 						}
 					}
+
+					// Note that 'item.DefaultRadix' is not used for sending binary files.
+					// This fact is considered in 'View.Controls.SendFile.SetRecentAndCommandControls()'.
+					// Changes in behavior above will have to be adapted in that control method as well.
 				}
 			}
 			catch (Exception ex)

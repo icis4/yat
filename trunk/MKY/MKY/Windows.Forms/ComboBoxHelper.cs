@@ -157,17 +157,31 @@ namespace MKY.Windows.Forms
 					{	// Applies if an item that is not in the combo box is selected.
 						control.SelectedIndex = ControlEx.InvalidIndex; // Explicitly set the SelectedIndex to -1.
 						control.Text = fallbackText;
+
+						// Note taken from MSDN:
+						// "Setting the Text property to 'null' or an empty string ("") sets the SelectedIndex to -1."
 					}
 				}
 				else
-				{	// Item doesn't exist, use default = first item in the combo box.
-					control.SelectedIndex = 0;
+				{
+					if (!string.IsNullOrEmpty(fallbackText))
+					{	// Applies if explicitly setting the fallback text.
+						control.SelectedIndex = ControlEx.InvalidIndex; // Explicitly set the SelectedIndex to -1.
+						control.Text = fallbackText;
+					}
+					else
+					{	// Neither item nor fallback is given, use default = first item in the combo box.
+						control.SelectedIndex = 0;
+					}
 				}
 			}
 			else
 			{
 				control.SelectedIndex = ControlEx.InvalidIndex; // Explicitly set the SelectedIndex to -1.
 				control.Text = fallbackText;
+
+				// Note taken from MSDN:
+				// "Setting the Text property to 'null' or an empty string ("") sets the SelectedIndex to -1."
 			}
 
 			if (control.DropDownStyle != ComboBoxStyle.DropDownList)
@@ -185,8 +199,11 @@ namespace MKY.Windows.Forms
 		[SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "Symmetricity with Select() above.")]
 		public static void Deselect(ComboBox control)
 		{
-			control.SelectedIndex = ControlEx.InvalidIndex;
-			control.Text = "";
+			control.SelectedIndex = ControlEx.InvalidIndex; // Explicitly set the SelectedIndex to -1.
+			control.Text = "";                              // Wouldn't be necessary, see note below.
+
+			// Note taken from MSDN:
+			// "Setting the Text property to 'null' or an empty string ("") sets the SelectedIndex to -1."
 		}
 
 		/// <summary>

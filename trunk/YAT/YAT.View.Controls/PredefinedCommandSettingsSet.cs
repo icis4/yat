@@ -568,6 +568,10 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
+				// Attention:
+				// Same code exists in SendFile.InitializeControls().
+				// Changes here must be applied there too.
+
 				comboBox_ExplicitDefaultRadix.Items.Clear();
 				comboBox_ExplicitDefaultRadix.Items.AddRange(Domain.RadixEx.GetItems());
 			}
@@ -582,6 +586,10 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
+				// Attention:
+				// Same code exists in SendFile.SetExplicitDefaultRadixControls().
+				// Changes here must be applied there too.
+
 				splitContainer_ExplicitDefaultRadix.Panel1Collapsed = !this.useExplicitDefaultRadix;
 			}
 			finally
@@ -595,10 +603,47 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
+				// Default radix:
+
+				// Attention:
+				// Same code exists in SendFile.SetRecentAndCommandControls().
+				// Changes here must be applied there too.
+
 				if (this.useExplicitDefaultRadix)
-					ComboBoxHelper.Select(comboBox_ExplicitDefaultRadix, (Domain.RadixEx)this.command.DefaultRadix, (Domain.RadixEx)this.command.DefaultRadix);
+				{
+					bool explicitDefaultRadixIsTakenIntoAccount = false;
+					if ((this.command != null) && (this.command.IsFilePath))
+					{
+						if (this.terminalType == Domain.TerminalType.Text)
+						{
+							explicitDefaultRadixIsTakenIntoAccount = true; // Supported for text, RTF, XML,...
+						}
+						else // incl. Type == Domain.TerminalType.Binary:
+						{
+							explicitDefaultRadixIsTakenIntoAccount = false; // Not supported for any binary format.
+
+							if (ExtensionHelper.IsTextFile(this.command.FilePath) ||
+								ExtensionHelper.IsXmlFile(this.command.FilePath))
+							{
+								explicitDefaultRadixIsTakenIntoAccount = true; // Supported for text and XML.
+							}
+						}
+					}
+
+					comboBox_ExplicitDefaultRadix.Enabled = explicitDefaultRadixIsTakenIntoAccount;
+
+					Domain.RadixEx resultingDefaultRadix = this.command.DefaultRadix;
+					ComboBoxHelper.Select(comboBox_ExplicitDefaultRadix, resultingDefaultRadix, resultingDefaultRadix);
+
+					// Note: It is not possible to select 'None' as that item is not contained in the
+					// drop down list and the 'DropDownStyle' is set to 'ComboBoxStyle.DropDownList'.
+				}
 				else
+				{
+					comboBox_ExplicitDefaultRadix.Enabled = false;
+
 					ComboBoxHelper.Deselect(comboBox_ExplicitDefaultRadix);
+				}
 
 				// Description:
 				textBox_Description.Text = this.command.Description;

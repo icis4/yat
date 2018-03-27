@@ -71,6 +71,10 @@ namespace YAT.Domain
 	{
 		#region String Definitions
 
+		private const string None_string      = "None";
+		private const string None_stringValue = "None";
+		private const string None_stringShort = "N";
+
 		private const string String_string      = "String";
 		private const string String_stringValue = "Str";
 		private const string String_stringShort = "S";
@@ -126,6 +130,7 @@ namespace YAT.Domain
 		{
 			switch ((Radix)UnderlyingEnum)
 			{
+				case Radix.None:    return (None_string);
 				case Radix.String:  return (String_string);
 				case Radix.Char:    return (Char_string);
 				case Radix.Bin:     return (Bin_string);
@@ -143,6 +148,7 @@ namespace YAT.Domain
 		{
 			switch ((Radix)UnderlyingEnum)
 			{
+				case Radix.None:    return (None_stringShort);
 				case Radix.String:  return (String_stringShort);
 				case Radix.Char:    return (Char_stringShort);
 				case Radix.Bin:     return (Bin_stringShort);
@@ -160,6 +166,7 @@ namespace YAT.Domain
 		{
 			switch ((Radix)UnderlyingEnum)
 			{
+				case Radix.None:    return (None_stringValue);
 				case Radix.String:  return (String_stringValue);
 				case Radix.Char:    return (Char_stringValue);
 				case Radix.Bin:     return (Bin_stringValue);
@@ -184,7 +191,9 @@ namespace YAT.Domain
 		/// </remarks>
 		public static RadixEx[] GetItems()
 		{
-			var a = new List<RadixEx>(6); // Preset the required capacity to improve memory management.
+			var a = new List<RadixEx>(7); // Preset the required capacity to improve memory management.
+
+			// 'None' shall not be listed.
 
 			// Alpha:
 			a.Add(new RadixEx(Radix.String));
@@ -247,6 +256,8 @@ namespace YAT.Domain
 			if (s != null)
 				s = s.Trim();
 
+			// 'None' is located at end of if-else-if.
+
 			if      (StringEx.EqualsOrdinalIgnoreCase(s, String_stringShort) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, String_stringValue) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, String_string))
@@ -294,6 +305,13 @@ namespace YAT.Domain
 			         StringEx.EqualsOrdinalIgnoreCase(s, Unicode_string))
 			{
 				result = Radix.Unicode;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_stringShort) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringValue) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, None_string))
+			{
+				result = Radix.None; // Last in if-else-if since this is the least used selection.
 				return (true);
 			}
 			else // Invalid string!

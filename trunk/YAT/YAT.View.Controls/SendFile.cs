@@ -416,6 +416,10 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
+				// Attention:
+				// Same code exists in PredefinedCommandSettingsSet.InitializeControls().
+				// Changes here must be applied there too.
+
 				comboBox_ExplicitDefaultRadix.Items.Clear();
 				comboBox_ExplicitDefaultRadix.Items.AddRange(Domain.RadixEx.GetItems());
 			}
@@ -430,6 +434,10 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
+				// Attention:
+				// Same code exists in PredefinedCommandSettingsSet.SetExplicitDefaultRadixControls().
+				// Changes here must be applied there too.
+
 				splitContainer_ExplicitDefaultRadix.Panel1Collapsed = !this.useExplicitDefaultRadix;
 			}
 			finally
@@ -444,52 +452,49 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
+				// Default radix:
+
+				// Attention:
+				// Same code exists in PredefinedCommandSettingsSet.SetControls().
+				// Changes here must be applied there too.
+
 				if (this.useExplicitDefaultRadix)
 				{
 					bool explicitDefaultRadixIsTakenIntoAccount = false;
 					if ((this.command != null) && (this.command.IsFilePath))
 					{
-						switch (this.terminalType)
+						if (this.terminalType == Domain.TerminalType.Text)
 						{
-							case Domain.TerminalType.Binary:
+							explicitDefaultRadixIsTakenIntoAccount = true; // Supported for text, RTF, XML,...
+						}
+						else // incl. Type == Domain.TerminalType.Binary:
+						{
+							explicitDefaultRadixIsTakenIntoAccount = false; // Not supported for any binary format.
+
+							if (ExtensionHelper.IsTextFile(this.command.FilePath) ||
+								ExtensionHelper.IsXmlFile(this.command.FilePath))
 							{
-								explicitDefaultRadixIsTakenIntoAccount = false;
-
-								if (ExtensionHelper.IsTextFile(this.command.FilePath))
-									explicitDefaultRadixIsTakenIntoAccount = true; // (Yet) only used for text files.
-
-								break;
-							}
-
-							case Domain.TerminalType.Text:
-							default:
-							{
-								explicitDefaultRadixIsTakenIntoAccount = true;
-
-								if ((ExtensionHelper.IsXmlFile(this.command.FilePath)) ||
-									(ExtensionHelper.IsRtfFile(this.command.FilePath)))
-										explicitDefaultRadixIsTakenIntoAccount = false; // Not (yet) used for XML nor RTF files.
-
-								break;
+								explicitDefaultRadixIsTakenIntoAccount = true; // Supported for text and XML.
 							}
 						}
 					}
 
 					comboBox_ExplicitDefaultRadix.Enabled = explicitDefaultRadixIsTakenIntoAccount;
 
-					Domain.RadixEx resultingDefaultRadix = Domain.Parser.Parser.DefaultRadixDefault;
-					if (explicitDefaultRadixIsTakenIntoAccount)
-						resultingDefaultRadix = this.command.DefaultRadix;
-
+					Domain.RadixEx resultingDefaultRadix = this.command.DefaultRadix;
 					ComboBoxHelper.Select(comboBox_ExplicitDefaultRadix, resultingDefaultRadix, resultingDefaultRadix);
+
+					// Note: It is not possible to select 'None' as that item is not contained in the
+					// drop down list and the 'DropDownStyle' is set to 'ComboBoxStyle.DropDownList'.
 				}
 				else
 				{
-					comboBox_ExplicitDefaultRadix.Enabled = true;
+					comboBox_ExplicitDefaultRadix.Enabled = false;
 
 					ComboBoxHelper.Deselect(comboBox_ExplicitDefaultRadix);
 				}
 
+				// Recents:
 				pathComboBox_FilePath.Items.Clear();
 
 				// Fill the drop down list, depending on the amount of recent files:
