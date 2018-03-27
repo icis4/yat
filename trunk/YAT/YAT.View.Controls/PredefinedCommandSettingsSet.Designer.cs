@@ -29,6 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PredefinedCommandSettingsSet));
 			this.pathLabel_FilePath = new MKY.Windows.Forms.PathLabel();
 			this.checkBox_IsFile = new System.Windows.Forms.CheckBox();
 			this.button_SetMultiLineText = new System.Windows.Forms.Button();
@@ -38,9 +39,9 @@
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.button_SetFile = new System.Windows.Forms.Button();
 			this.button_Delete = new System.Windows.Forms.Button();
+			this.comboBox_ExplicitDefaultRadix = new System.Windows.Forms.ComboBox();
 			this.splitContainer_ExplicitDefaultRadix = new System.Windows.Forms.SplitContainer();
 			this.panel_ExplicitDefaultRadix = new System.Windows.Forms.Panel();
-			this.comboBox_ExplicitDefaultRadix = new System.Windows.Forms.ComboBox();
 			this.panel_Command = new System.Windows.Forms.Panel();
 			this.splitContainer_ExplicitDefaultRadix.Panel1.SuspendLayout();
 			this.splitContainer_ExplicitDefaultRadix.Panel2.SuspendLayout();
@@ -60,7 +61,7 @@
 			this.pathLabel_FilePath.Size = new System.Drawing.Size(229, 20);
 			this.pathLabel_FilePath.TabIndex = 2;
 			this.pathLabel_FilePath.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolTip.SetToolTip(this.pathLabel_FilePath, "File path, click or press <...> to browse for a file");
+			this.toolTip.SetToolTip(this.pathLabel_FilePath, "File path, use [...] to browse for a file");
 			this.pathLabel_FilePath.Click += new System.EventHandler(this.pathLabel_FilePath_Click);
 			// 
 			// checkBox_IsFile
@@ -84,7 +85,8 @@
 			this.button_SetMultiLineText.Size = new System.Drawing.Size(25, 21);
 			this.button_SetMultiLineText.TabIndex = 3;
 			this.button_SetMultiLineText.Text = "...";
-			this.toolTip.SetToolTip(this.button_SetMultiLineText, "Multi-line text");
+			this.toolTip.SetToolTip(this.button_SetMultiLineText, "Enter multi-line text.\r\n\r\nLines will be sent sequentially,\r\nby default, the EOL s" +
+        "equence\r\nwill be appended to each line.");
 			this.button_SetMultiLineText.Click += new System.EventHandler(this.button_SetMultiLineText_Click);
 			// 
 			// label_Shortcut
@@ -118,7 +120,7 @@
 			this.textBox_SingleLineText.Name = "textBox_SingleLineText";
 			this.textBox_SingleLineText.Size = new System.Drawing.Size(229, 20);
 			this.textBox_SingleLineText.TabIndex = 1;
-			this.toolTip.SetToolTip(this.textBox_SingleLineText, "Enter text, press <...> to enter multi-line text");
+			this.toolTip.SetToolTip(this.textBox_SingleLineText, "Enter text, use [...] to enter multi-line text");
 			this.textBox_SingleLineText.TextChanged += new System.EventHandler(this.textBox_SingleLineText_TextChanged);
 			this.textBox_SingleLineText.Enter += new System.EventHandler(this.textBox_SingleLineText_Enter);
 			this.textBox_SingleLineText.Leave += new System.EventHandler(this.textBox_SingleLineText_Leave);
@@ -132,7 +134,7 @@
 			this.button_SetFile.Size = new System.Drawing.Size(25, 21);
 			this.button_SetFile.TabIndex = 4;
 			this.button_SetFile.Text = "...";
-			this.toolTip.SetToolTip(this.button_SetFile, "Browse for file");
+			this.toolTip.SetToolTip(this.button_SetFile, resources.GetString("button_SetFile.ToolTip"));
 			this.button_SetFile.Click += new System.EventHandler(this.button_SetFile_Click);
 			// 
 			// button_Delete
@@ -146,6 +148,19 @@
 			this.button_Delete.TabIndex = 7;
 			this.toolTip.SetToolTip(this.button_Delete, "Clear command");
 			this.button_Delete.Click += new System.EventHandler(this.button_Delete_Click);
+			// 
+			// comboBox_ExplicitDefaultRadix
+			// 
+			this.comboBox_ExplicitDefaultRadix.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_ExplicitDefaultRadix.FormattingEnabled = true;
+			this.comboBox_ExplicitDefaultRadix.Location = new System.Drawing.Point(0, 0);
+			this.comboBox_ExplicitDefaultRadix.Name = "comboBox_ExplicitDefaultRadix";
+			this.comboBox_ExplicitDefaultRadix.Size = new System.Drawing.Size(77, 21);
+			this.comboBox_ExplicitDefaultRadix.TabIndex = 0;
+			this.toolTip.SetToolTip(this.comboBox_ExplicitDefaultRadix, "Select the radix which is used by default,\r\ni.e. without an escape sequence.\r\n\r\nI" +
+        "t applies to sending text files (incl. RTF, XML),\r\nbut not to sending binary fil" +
+        "es.");
+			this.comboBox_ExplicitDefaultRadix.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_ExplicitDefaultRadix_Validating);
 			// 
 			// splitContainer_ExplicitDefaultRadix
 			// 
@@ -174,19 +189,6 @@
 			this.panel_ExplicitDefaultRadix.Name = "panel_ExplicitDefaultRadix";
 			this.panel_ExplicitDefaultRadix.Size = new System.Drawing.Size(80, 21);
 			this.panel_ExplicitDefaultRadix.TabIndex = 1;
-			// 
-			// comboBox_ExplicitDefaultRadix
-			// 
-			this.comboBox_ExplicitDefaultRadix.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox_ExplicitDefaultRadix.FormattingEnabled = true;
-			this.comboBox_ExplicitDefaultRadix.Location = new System.Drawing.Point(0, 0);
-			this.comboBox_ExplicitDefaultRadix.Name = "comboBox_ExplicitDefaultRadix";
-			this.comboBox_ExplicitDefaultRadix.Size = new System.Drawing.Size(77, 21);
-			this.comboBox_ExplicitDefaultRadix.TabIndex = 0;
-			this.toolTip.SetToolTip(this.comboBox_ExplicitDefaultRadix, "Select the radix which is used by default,\r\ni.e. without an escape sequence.\r\n\r\nI" +
-        "t applies to sending text files (incl. RFT, XML,...),\r\nbut not to sending binary" +
-        " files.");
-			this.comboBox_ExplicitDefaultRadix.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_ExplicitDefaultRadix_Validating);
 			// 
 			// panel_Command
 			// 

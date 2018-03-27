@@ -59,7 +59,8 @@
 			this.button_SetMultiLineText.Size = new System.Drawing.Size(25, 21);
 			this.button_SetMultiLineText.TabIndex = 1;
 			this.button_SetMultiLineText.Text = "...";
-			this.toolTip.SetToolTip(this.button_SetMultiLineText, "Multi-line text");
+			this.toolTip.SetToolTip(this.button_SetMultiLineText, "Enter multi-line text.\r\n\r\nLines will be sent sequentially,\r\nby default, the EOL s" +
+        "equence\r\nwill be appended to each line.");
 			this.button_SetMultiLineText.UseVisualStyleBackColor = true;
 			this.button_SetMultiLineText.Click += new System.EventHandler(this.button_SetMultiLineText_Click);
 			// 
@@ -86,7 +87,7 @@
 			this.comboBox_SingleLineText.Name = "comboBox_SingleLineText";
 			this.comboBox_SingleLineText.Size = new System.Drawing.Size(238, 21);
 			this.comboBox_SingleLineText.TabIndex = 0;
-			this.toolTip.SetToolTip(this.comboBox_SingleLineText, "Fill-in text, <Enter> to send,\r\ndrop down for recent text,\r\n<...> to enter multi-" +
+			this.toolTip.SetToolTip(this.comboBox_SingleLineText, "Fill-in text, <Enter> to send,\r\ndrop down for recent text,\r\n[...] to enter multi-" +
         "line text");
 			this.comboBox_SingleLineText.SelectedIndexChanged += new System.EventHandler(this.comboBox_SingleLineText_SelectedIndexChanged);
 			this.comboBox_SingleLineText.TextChanged += new System.EventHandler(this.comboBox_SingleLineText_TextChanged);
@@ -102,7 +103,7 @@
 			this.comboBox_ExplicitDefaultRadix.Name = "comboBox_ExplicitDefaultRadix";
 			this.comboBox_ExplicitDefaultRadix.Size = new System.Drawing.Size(74, 21);
 			this.comboBox_ExplicitDefaultRadix.TabIndex = 0;
-			this.toolTip.SetToolTip(this.comboBox_ExplicitDefaultRadix, "Select the radix which is used by default,");
+			this.toolTip.SetToolTip(this.comboBox_ExplicitDefaultRadix, "Select the radix which is used by default,\r\ni.e. without an escape sequence.");
 			this.comboBox_ExplicitDefaultRadix.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_ExplicitDefaultRadix_Validating);
 			// 
 			// splitContainer_Send
