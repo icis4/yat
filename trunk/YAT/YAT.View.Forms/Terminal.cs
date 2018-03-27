@@ -1143,7 +1143,7 @@ namespace YAT.View.Forms
 				// Display:
 				bool isShowable = ((this.settingsRoot.Display.TxRadixIsShowable) ||
 				                   (this.settingsRoot.Display.RxRadixIsShowable));
-				toolStripMenuItem_TerminalMenu_View_ShowRadix.Enabled = isShowable; // Attention: Same code further below as well as in 'View.Forms.AdvancedTerminalSettings'.
+				toolStripMenuItem_TerminalMenu_View_ShowRadix.Enabled = isShowable; // Attention: Same code exists further below as well as in 'View.Forms.AdvancedTerminalSettings'.
 				toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked = isShowable && this.settingsRoot.Display.ShowRadix;
 
 				toolStripMenuItem_TerminalMenu_View_ShowBufferLineNumbers.Checked = this.settingsRoot.Display.ShowBufferLineNumbers;
@@ -1475,7 +1475,7 @@ namespace YAT.View.Forms
 
 				bool isShowable = ((this.settingsRoot.Display.TxRadixIsShowable) ||
 				                   (this.settingsRoot.Display.RxRadixIsShowable));
-				toolStripMenuItem_MonitorContextMenu_ShowRadix.Enabled = isShowable; // Attention: Same code further above as well as in 'View.Forms.AdvancedTerminalSettings'.
+				toolStripMenuItem_MonitorContextMenu_ShowRadix.Enabled = isShowable; // Attention: Same code exists further above as well as in 'View.Forms.AdvancedTerminalSettings'.
 				toolStripMenuItem_MonitorContextMenu_ShowRadix.Checked = isShowable && this.settingsRoot.Display.ShowRadix;
 
 				toolStripMenuItem_MonitorContextMenu_ShowBufferLineNumbers.Checked = this.settingsRoot.Display.ShowBufferLineNumbers;
