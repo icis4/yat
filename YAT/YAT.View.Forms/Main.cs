@@ -1211,21 +1211,21 @@ namespace YAT.View.Forms
 							ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_Find_Pattern, recentPatterns);
 							ToolStripComboBoxHelper.Select                              (toolStripComboBox_MainTool_Find_Pattern, activePattern, activePattern);
 
-							toolStripComboBox_MainTool_Find_Pattern.Enabled = childIsReady;
-							toolStripComboBox_MainTool_Find_Pattern.Visible = true;
+							toolStripComboBox_MainTool_Find_Pattern.Visible = true; // Note that pattern shall also be editable when no terminal is open.
 						}
 
 						toolStripButton_MainTool_Find_CaseSensitive.Checked = ApplicationSettings.RoamingUserSettings.Find.Options.CaseSensitive;
 						toolStripButton_MainTool_Find_CaseSensitive.Enabled = childIsReady;
+						toolStripButton_MainTool_Find_CaseSensitive.Visible = true;
 						toolStripButton_MainTool_Find_WholeWord    .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.WholeWord;
 						toolStripButton_MainTool_Find_WholeWord    .Enabled = childIsReady;
-
-						toolStripButton_MainTool_Find_CaseSensitive.Visible = true;
 						toolStripButton_MainTool_Find_WholeWord    .Visible = true;
 
 						SetFindState();
 
+						toolStripButton_MainTool_Find_Next    .Enabled = childIsReady;
 						toolStripButton_MainTool_Find_Next    .Visible = true;
+						toolStripButton_MainTool_Find_Previous.Enabled = childIsReady;
 						toolStripButton_MainTool_Find_Previous.Visible = true;
 					}
 					else
