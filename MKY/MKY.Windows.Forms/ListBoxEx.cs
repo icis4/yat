@@ -522,7 +522,7 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary>
-		/// Finds the next item in the <see cref="ListBox"/> that matches the given regex.
+		/// Finds the next item in the <see cref="ListBox"/> that matches the given text and/or regex.
 		/// </summary>
 		/// <remarks>
 		/// The <see cref="ListBox.FindString(string, int)"/> method seems promising at first,
@@ -534,18 +534,12 @@ namespace MKY.Windows.Forms
 		/// <item><description>...first item...that starts with the specified string...</description></item>
 		/// </list>
 		/// </remarks>
-		/// <exception cref="ArgumentNullException">
-		/// The <paramref name="regex"/> parameter is <c>null</c>.
-		/// </exception>
 		/// <exception cref="ArgumentOutOfRangeException">
 		/// The <paramref name="startIndex"/> parameter is less than zero or greater than or equal
 		/// to the value of the <see cref="ListBox.ObjectCollection.Count"/> property.
 		/// </exception>
-		public int FindNext(Regex regex, int startIndex)
+		public virtual int FindNext(string text, bool textCaseSensitive, bool textWholeWord, Regex regex, int startIndex)
 		{
-			if (regex == null)
-				throw (new ArgumentNullException("regex", "The regex is 'null'!"));
-
 			if (startIndex < NoMatches)
 				throw (new ArgumentOutOfRangeException("startIndex", startIndex, "The start index is less than 'ListBox.NoMatches'!"));
 
@@ -559,8 +553,19 @@ namespace MKY.Windows.Forms
 
 				for (int i = startIndex; i < Items.Count; i++)
 				{
-					if (regex.IsMatch(Items[i].ToString()))
-						return (i);
+					var str = Items[i].ToString();
+
+					if (!string.IsNullOrEmpty(text))
+					{
+						if (TryFind(str, text, textCaseSensitive, textWholeWord))
+							return (i);
+					}
+
+					if (regex != null)
+					{
+						if (regex.IsMatch(str))
+							return (i);
+					}
 				}
 			}
 
@@ -568,7 +573,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary>
-		/// Finds the previous item in the <see cref="ListBox"/> that matches the given regex.
+		/// Finds the previous item in the <see cref="ListBox"/> that matches the given text and/or regex.
 		/// </summary>
 		/// <remarks>
 		/// The <see cref="ListBox.FindString(string, int)"/> method seems promising at first,
@@ -580,18 +585,12 @@ namespace MKY.Windows.Forms
 		/// <item><description>...first item...that starts with the specified string...</description></item>
 		/// </list>
 		/// </remarks>
-		/// <exception cref="ArgumentNullException">
-		/// The <paramref name="regex"/> parameter is <c>null</c>.
-		/// </exception>
 		/// <exception cref="ArgumentOutOfRangeException">
 		/// The <paramref name="startIndex"/> parameter is less than zero or greater than or equal
 		/// to the value of the <see cref="ListBox.ObjectCollection.Count"/> property.
 		/// </exception>
-		public int FindPrevious(Regex regex, int startIndex)
+		public virtual int FindPrevious(string text, bool textCaseSensitive, bool textWholeWord, Regex regex, int startIndex)
 		{
-			if (regex == null)
-				throw (new ArgumentNullException("regex", "The regex is 'null'!"));
-
 			if (startIndex < NoMatches)
 				throw (new ArgumentOutOfRangeException("startIndex", startIndex, "The start index is less than 'ListBox.NoMatches'!"));
 
@@ -605,13 +604,39 @@ namespace MKY.Windows.Forms
 
 				for (int i = startIndex; i >= 0; i--)
 				{
-					if (regex.IsMatch(Items[i].ToString()))
-						return (i);
+					var str = Items[i].ToString();
+
+					if (!string.IsNullOrEmpty(text))
+					{
+						if (TryFind(str, text, textCaseSensitive, textWholeWord))
+							return (i);
+					}
+
+					if (regex != null)
+					{
+						if (regex.IsMatch(str))
+							return (i);
+					}
 				}
 			}
 
 			return (NoMatches);
 		}
+
+		/// <summary></summary>
+		protected virtual bool TryFind(string str, string findText, bool caseSensitive, bool wholeWord)
+		{
+			StringComparison comparisonType;
+			if (caseSensitive)
+				comparisonType = StringComparison.CurrentCulture;
+			else
+				comparisonType = StringComparison.CurrentCultureIgnoreCase;
+
+			if (wholeWord)
+				return (StringEx.IndexOfWholeWord(str, findText, comparisonType) >= 0);
+			else
+				return (str.IndexOf(findText, comparisonType) >= 0); // Using string.IndexOf() because string.Contains()
+		}                                                            // does not allow controlling culture and case.
 
 		#endregion
 

@@ -174,7 +174,11 @@ namespace YAT.View.Controls
 		private bool showCopyOfActiveLine = ShowCopyOfActiveLineDefault;
 
 		// Find:
+		/// <remarks>Using "Pattern" instead of "TextOrPattern" for simplicity.</remarks>
 		private string findPattern; // = null;
+		private string findText; // = null;
+		private bool findTextCaseSensitive; // = false;
+		private bool findTextWholeWord; // = false;
 		private Regex findRegex; // = null;
 		private bool isFirstFindOnEdit = true;
 		private int findOnEditStartIndex = ControlEx.InvalidIndex;
@@ -573,18 +577,6 @@ namespace YAT.View.Controls
 			get { return (textBox_CopyOfActiveLine.Focused); }
 		}
 
-		/// <summary></summary>
-		public virtual string FindPattern
-		{
-			get { return (this.findPattern); }
-		}
-
-		/// <summary></summary>
-		public virtual Regex FindRegex
-		{
-			get { return (this.findRegex); }
-		}
-
 	#if (DEBUG)
 
 		/// <remarks>
@@ -710,7 +702,9 @@ namespace YAT.View.Controls
 			this.findOnEditStartIndex = ControlEx.InvalidIndex;
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Using "pattern" instead of "textOrPattern" for simplicity.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool TryFindOnEdit(string pattern, FindOptions options, out FindDirection resultingDirection)
 		{
@@ -749,7 +743,9 @@ namespace YAT.View.Controls
 			return (false);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Using "pattern" instead of "textOrPattern" for simplicity.
+		/// </remarks>
 		public virtual bool TryFindNext(string pattern, FindOptions options)
 		{
 			this.isFirstFindOnEdit = true;
@@ -759,7 +755,9 @@ namespace YAT.View.Controls
 			return (TryFindNext());
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Using "pattern" instead of "textOrPattern" for simplicity.
+		/// </remarks>
 		public virtual bool TryFindPrevious(string pattern, FindOptions options)
 		{
 			this.isFirstFindOnEdit = true;
@@ -774,14 +772,30 @@ namespace YAT.View.Controls
 		{
 			this.findPattern = pattern;
 
-			var regexOptions = RegexOptions.Singleline;
-			if (!options.CaseSensitive)
-				regexOptions |= RegexOptions.IgnoreCase;
+			if (options.UseRegex)
+			{
+				var regexOptions = RegexOptions.Singleline;
 
-			if (options.WholeWord) // Add the Regex word delimiter:
-				pattern = string.Format(CultureInfo.CurrentUICulture, "{0}{1}{0}", @"\b", pattern);
+				if (!options.CaseSensitive)
+					regexOptions |= RegexOptions.IgnoreCase;
 
-			this.findRegex = new Regex(pattern, regexOptions);
+				if (options.WholeWord) // Add the Regex word delimiter:
+					pattern = string.Format(CultureInfo.CurrentUICulture, "{0}{1}{0}", @"\b", pattern);
+
+				this.findRegex = new Regex(pattern, regexOptions);
+
+				this.findText              = null;
+				this.findTextCaseSensitive = false;
+				this.findTextWholeWord     = false;
+			}
+			else
+			{
+				this.findText              = pattern;
+				this.findTextCaseSensitive = options.CaseSensitive;
+				this.findTextWholeWord     = options.WholeWord;
+
+				this.findRegex = null;
+			}
 		}
 
 		/// <summary></summary>
@@ -826,7 +840,7 @@ namespace YAT.View.Controls
 		{
 			var lb = fastListBox_Monitor;
 
-			var i = lb.FindNext(this.findRegex, startIndex);
+			var i = lb.FindNext(this.findText, this.findTextCaseSensitive, this.findTextWholeWord, this.findRegex, startIndex);
 			if (i != ListBox.NoMatches)
 			{
 				lb.ClearSelected();
@@ -855,7 +869,7 @@ namespace YAT.View.Controls
 		{
 			var lb = fastListBox_Monitor;
 
-			var i = lb.FindPrevious(this.findRegex, startIndex);
+			var i = lb.FindPrevious(this.findText, this.findTextCaseSensitive, this.findTextWholeWord, this.findRegex, startIndex);
 			if (i != ListBox.NoMatches)
 			{
 				lb.ClearSelected();

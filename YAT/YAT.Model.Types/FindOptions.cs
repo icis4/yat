@@ -26,12 +26,7 @@ using System.Xml.Serialization;
 
 namespace YAT.Model.Types
 {
-	/// <remarks>
-	/// Initially prepared 'UseRegex' which would override/disable 'CaseSensitive' and 'WholeWord'.
-	/// However, the straight-forward implementation of 'WholeWord' (simply surrounding the word
-	/// with \b) conflicts with this, since Regex is to be used then anyway. Thus, decided to
-	/// remove the 'UseRegex' option and use Regex implicitly.
-	/// </remarks>
+	/// <summary></summary>
 	[Serializable]
 	public struct FindOptions : IEquatable<FindOptions>
 	{
@@ -44,10 +39,15 @@ namespace YAT.Model.Types
 		public bool WholeWord { get; set; }
 
 		/// <summary></summary>
-		public FindOptions(bool caseSensitive, bool wholeWord)
+		[XmlElement("UseRegex")]
+		public bool UseRegex { get; set; }
+
+		/// <summary></summary>
+		public FindOptions(bool caseSensitive, bool wholeWord, bool useRegex)
 		{
 			CaseSensitive = caseSensitive;
 			WholeWord     = wholeWord;
+			UseRegex      = useRegex;
 		}
 
 		#region Object Members
@@ -67,7 +67,8 @@ namespace YAT.Model.Types
 			return
 			(
 				CaseSensitive + ", " +
-				WholeWord
+				WholeWord     + ", " +
+				UseRegex
 			);
 		}
 
@@ -86,6 +87,7 @@ namespace YAT.Model.Types
 
 				hashCode =                    CaseSensitive.GetHashCode();
 				hashCode = (hashCode * 397) ^ WholeWord    .GetHashCode();
+				hashCode = (hashCode * 397) ^ UseRegex     .GetHashCode();
 
 				return (hashCode);
 			}
@@ -114,7 +116,8 @@ namespace YAT.Model.Types
 			return
 			(
 				CaseSensitive.Equals(other.CaseSensitive) &&
-				WholeWord    .Equals(other.WholeWord)
+				WholeWord    .Equals(other.WholeWord)     &&
+				UseRegex     .Equals(other.UseRegex)
 			);
 		}
 

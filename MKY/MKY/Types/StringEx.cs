@@ -773,6 +773,106 @@ namespace MKY
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
+		/// Reports the index of the first occurrence of the same character class in <paramref name="str"/>.
+		/// </summary>
+		/// <param name="str">The <see cref="string"/> object to process.</param>
+		/// <param name="startIndex">The search starting position.</param>
+		/// <returns>
+		/// The zero-based index position of the start of the same character class in the string.
+		/// </returns>
+		public static int IndexOfSameCharacterClass(string str, int startIndex)
+		{
+			int i = startIndex;
+
+			if (char.IsWhiteSpace(str, i)) // Includes 'IsSeparator' (Unicode space/line/paragraph
+			{                              // separators) as well as 'IsControl' (<CR>, <LF>,...).
+				for (/* i */; i >= 0; i--)
+				{
+					if (!char.IsWhiteSpace(str, i))
+						return (i + 1);
+				}
+			}
+			else if (char.IsPunctuation(str, i))
+			{
+				for (/* i */; i >= 0; i--)
+				{
+					if (!char.IsPunctuation(str, i))
+						return (i + 1);
+				}
+			}
+			else if (char.IsSymbol(str, i))
+			{
+				for (/* i */; i >= 0; i--)
+				{
+					if (!char.IsSymbol(str, i))
+						return (i + 1);
+				}
+			}
+			else
+			{
+				for (/* i */; i >= 0; i--)
+				{
+					if (char.IsWhiteSpace(str, i) || char.IsPunctuation(str, i) || char.IsSymbol(str, i))
+						return (i + 1);
+				}
+			}
+
+			return (0);
+		}
+
+		/// <summary>
+		/// Reports the index of the first occurrence of the specified word in <paramref name="str"/>.
+		/// </summary>
+		/// <param name="str">The <see cref="string"/> object to process.</param>
+		/// <param name="searchWord">The word to search for.</param>
+		/// <param name="comparisonType">One of the <see cref="StringComparison"/> values.</param>
+		/// <returns>
+		/// The zero-based index position of the start of the same character class in the string.
+		/// </returns>
+		public static int IndexOfWholeWord(string str, string searchWord, StringComparison comparisonType)
+		{
+			return (IndexOfWholeWord(str, searchWord, 0, comparisonType));
+		}
+
+		/// <summary>
+		/// Reports the index of the first occurrence of the specified word in <paramref name="str"/>.
+		/// </summary>
+		/// <param name="str">The <see cref="string"/> object to process.</param>
+		/// <param name="searchWord">The word to search for.</param>
+		/// <param name="startIndex">The search starting position.</param>
+		/// <param name="comparisonType">One of the <see cref="StringComparison"/> values.</param>
+		/// <returns>
+		/// The zero-based index position of the start of the same character class in the string.
+		/// </returns>
+		public static int IndexOfWholeWord(string str, string searchWord, int startIndex, StringComparison comparisonType)
+		{
+			int i = startIndex;  // Using string.IndexOf() because string.Contains() does not allow controlling culture and case.
+			while ((i < str.Length) && ((i = str.IndexOf(searchWord, i, comparisonType)) != InvalidIndex))
+			{
+				bool isStartBoundary;
+				int wordStart = i;
+				if (wordStart <= 0)
+					isStartBoundary = true;
+				else
+					isStartBoundary = !char.IsLetterOrDigit(str[wordStart - 1]);
+
+				bool isEndBoundary;
+				int wordEnd = (i + searchWord.Length - 1);
+				if (wordEnd >= (str.Length - 1))
+					isEndBoundary = true;
+				else
+					isEndBoundary = !char.IsLetterOrDigit(str[wordEnd + 1]);
+
+				if (isStartBoundary && isEndBoundary)
+					return (i);
+
+				i++;
+			}
+
+			return (InvalidIndex);
+		}
+
+		/// <summary>
 		/// Reports the index of the first occurrence of the specified string in <paramref name="str"/>.
 		/// Parameters specify the starting search position in the string, the number of characters
 		/// in the current string to search, and the type of search to use for the specified string.
@@ -825,54 +925,6 @@ namespace MKY
 			}
 
 			return (InvalidIndex);
-		}
-
-		/// <summary>
-		/// Returns the start index of the same character class.
-		/// </summary>
-		/// <param name="str">The <see cref="string"/> object to process.</param>
-		/// <param name="startIndex">The search starting position.</param>
-		/// <returns>
-		/// The zero-based index position of the start of the same character class in the string.
-		/// </returns>
-		public static int StartIndexOfSameCharacterClass(string str, int startIndex)
-		{
-			int i = startIndex;
-
-			if (char.IsWhiteSpace(str, i)) // Includes 'IsSeparator' (Unicode space/line/paragraph
-			{                              // separators) as well as 'IsControl' (<CR>, <LF>,...).
-				for (/* i */; i >= 0; i--)
-				{
-					if (!char.IsWhiteSpace(str, i))
-						return (i + 1);
-				}
-			}
-			else if (char.IsPunctuation(str, i))
-			{
-				for (/* i */; i >= 0; i--)
-				{
-					if (!char.IsPunctuation(str, i))
-						return (i + 1);
-				}
-			}
-			else if (char.IsSymbol(str, i))
-			{
-				for (/* i */; i >= 0; i--)
-				{
-					if (!char.IsSymbol(str, i))
-						return (i + 1);
-				}
-			}
-			else
-			{
-				for (/* i */; i >= 0; i--)
-				{
-					if (char.IsWhiteSpace(str, i) || char.IsPunctuation(str, i) || char.IsSymbol(str, i))
-						return (i + 1);
-				}
-			}
-
-			return (0);
 		}
 
 		#endregion

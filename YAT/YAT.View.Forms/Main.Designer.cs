@@ -129,13 +129,13 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Start = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Terminal_Stop = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItem_MainTool_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripButton_MainTool_Terminal_Radix_String = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Terminal_Radix_Char = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Terminal_Radix_Bin = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Terminal_Radix_Oct = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Terminal_Radix_Dec = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Terminal_Radix_Hex = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Terminal_Radix_Unicode = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Radix_String = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Radix_Char = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Radix_Bin = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Radix_Oct = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Radix_Dec = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Radix_Hex = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Radix_Unicode = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItem_MainTool_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_MainTool_Terminal_Clear = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Terminal_Refresh = new System.Windows.Forms.ToolStripButton();
@@ -147,26 +147,27 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_MainTool_Find_Pattern = new MKY.Windows.Forms.ToolStripComboBoxEx();
 			this.toolStripButton_MainTool_Find_CaseSensitive = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Find_WholeWord = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Find_UseRegex = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Find_Next = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Find_Previous = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItem_MainTool_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripButton_MainTool_Terminal_Log_Settings = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Terminal_Log_On = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Terminal_Log_Off = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Terminal_Log_OpenFile = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Log_Settings = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Log_On = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Log_Off = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Log_OpenFile = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Log_OpenDirectory = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItem_MainTool_Separator_7 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripButton_MainTool_Terminal_AutoAction_ShowHide = new System.Windows.Forms.ToolStripButton();
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger = new MKY.Windows.Forms.ToolStripComboBoxEx();
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action = new System.Windows.Forms.ToolStripComboBox();
-			this.toolStripLabel_MainTool_Terminal_AutoAction_Count = new System.Windows.Forms.ToolStripLabel();
-			this.toolStripButton_MainTool_Terminal_AutoAction_Deactivate = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_AutoAction_ShowHide = new System.Windows.Forms.ToolStripButton();
+			this.toolStripComboBox_MainTool_AutoAction_Trigger = new MKY.Windows.Forms.ToolStripComboBoxEx();
+			this.toolStripComboBox_MainTool_AutoAction_Action = new System.Windows.Forms.ToolStripComboBox();
+			this.toolStripLabel_MainTool_AutoAction_Count = new System.Windows.Forms.ToolStripLabel();
+			this.toolStripButton_MainTool_AutoAction_Deactivate = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItem_MainTool_Separator_8 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripButton_MainTool_Terminal_AutoResponse_ShowHide = new System.Windows.Forms.ToolStripButton();
-			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger = new MKY.Windows.Forms.ToolStripComboBoxEx();
-			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response = new MKY.Windows.Forms.ToolStripComboBoxEx();
-			this.toolStripLabel_MainTool_Terminal_AutoResponse_Count = new System.Windows.Forms.ToolStripLabel();
-			this.toolStripButton_MainTool_Terminal_AutoResponse_Deactivate = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_AutoResponse_ShowHide = new System.Windows.Forms.ToolStripButton();
+			this.toolStripComboBox_MainTool_AutoResponse_Trigger = new MKY.Windows.Forms.ToolStripComboBoxEx();
+			this.toolStripComboBox_MainTool_AutoResponse_Response = new MKY.Windows.Forms.ToolStripComboBoxEx();
+			this.toolStripLabel_MainTool_AutoResponse_Count = new System.Windows.Forms.ToolStripLabel();
+			this.toolStripButton_MainTool_AutoResponse_Deactivate = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItem_MainTool_Separator_9 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_MainTool_Terminal_Format = new System.Windows.Forms.ToolStripButton();
 			this.toolStripPanel_Top = new System.Windows.Forms.ToolStripPanel();
@@ -908,13 +909,13 @@ namespace YAT.View.Forms
             this.toolStripButton_MainTool_Terminal_Start,
             this.toolStripButton_MainTool_Terminal_Stop,
             this.toolStripMenuItem_MainTool_Separator_3,
-            this.toolStripButton_MainTool_Terminal_Radix_String,
-            this.toolStripButton_MainTool_Terminal_Radix_Char,
-            this.toolStripButton_MainTool_Terminal_Radix_Bin,
-            this.toolStripButton_MainTool_Terminal_Radix_Oct,
-            this.toolStripButton_MainTool_Terminal_Radix_Dec,
-            this.toolStripButton_MainTool_Terminal_Radix_Hex,
-            this.toolStripButton_MainTool_Terminal_Radix_Unicode,
+            this.toolStripButton_MainTool_Radix_String,
+            this.toolStripButton_MainTool_Radix_Char,
+            this.toolStripButton_MainTool_Radix_Bin,
+            this.toolStripButton_MainTool_Radix_Oct,
+            this.toolStripButton_MainTool_Radix_Dec,
+            this.toolStripButton_MainTool_Radix_Hex,
+            this.toolStripButton_MainTool_Radix_Unicode,
             this.toolStripMenuItem_MainTool_Separator_4,
             this.toolStripButton_MainTool_Terminal_Clear,
             this.toolStripButton_MainTool_Terminal_Refresh,
@@ -926,26 +927,27 @@ namespace YAT.View.Forms
             this.toolStripComboBox_MainTool_Find_Pattern,
             this.toolStripButton_MainTool_Find_CaseSensitive,
             this.toolStripButton_MainTool_Find_WholeWord,
+            this.toolStripButton_MainTool_Find_UseRegex,
             this.toolStripButton_MainTool_Find_Next,
             this.toolStripButton_MainTool_Find_Previous,
             this.toolStripMenuItem_MainTool_Separator_6,
-            this.toolStripButton_MainTool_Terminal_Log_Settings,
-            this.toolStripButton_MainTool_Terminal_Log_On,
-            this.toolStripButton_MainTool_Terminal_Log_Off,
-            this.toolStripButton_MainTool_Terminal_Log_OpenFile,
-            this.toolStripButton_MainTool_Terminal_Log_OpenDirectory,
+            this.toolStripButton_MainTool_Log_Settings,
+            this.toolStripButton_MainTool_Log_On,
+            this.toolStripButton_MainTool_Log_Off,
+            this.toolStripButton_MainTool_Log_OpenFile,
+            this.toolStripButton_MainTool_Log_OpenDirectory,
             this.toolStripMenuItem_MainTool_Separator_7,
-            this.toolStripButton_MainTool_Terminal_AutoAction_ShowHide,
-            this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger,
-            this.toolStripComboBox_MainTool_Terminal_AutoAction_Action,
-            this.toolStripLabel_MainTool_Terminal_AutoAction_Count,
-            this.toolStripButton_MainTool_Terminal_AutoAction_Deactivate,
+            this.toolStripButton_MainTool_AutoAction_ShowHide,
+            this.toolStripComboBox_MainTool_AutoAction_Trigger,
+            this.toolStripComboBox_MainTool_AutoAction_Action,
+            this.toolStripLabel_MainTool_AutoAction_Count,
+            this.toolStripButton_MainTool_AutoAction_Deactivate,
             this.toolStripMenuItem_MainTool_Separator_8,
-            this.toolStripButton_MainTool_Terminal_AutoResponse_ShowHide,
-            this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger,
-            this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response,
-            this.toolStripLabel_MainTool_Terminal_AutoResponse_Count,
-            this.toolStripButton_MainTool_Terminal_AutoResponse_Deactivate,
+            this.toolStripButton_MainTool_AutoResponse_ShowHide,
+            this.toolStripComboBox_MainTool_AutoResponse_Trigger,
+            this.toolStripComboBox_MainTool_AutoResponse_Response,
+            this.toolStripLabel_MainTool_AutoResponse_Count,
+            this.toolStripButton_MainTool_AutoResponse_Deactivate,
             this.toolStripMenuItem_MainTool_Separator_9,
             this.toolStripButton_MainTool_Terminal_Format});
 			this.toolStrip_Main.Location = new System.Drawing.Point(3, 0);
@@ -1037,75 +1039,75 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainTool_Separator_3.Name = "toolStripMenuItem_MainTool_Separator_3";
 			this.toolStripMenuItem_MainTool_Separator_3.Size = new System.Drawing.Size(6, 25);
 			// 
-			// toolStripButton_MainTool_Terminal_Radix_String
+			// toolStripButton_MainTool_Radix_String
 			// 
-			this.toolStripButton_MainTool_Terminal_Radix_String.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButton_MainTool_Terminal_Radix_String.Name = "toolStripButton_MainTool_Terminal_Radix_String";
-			this.toolStripButton_MainTool_Terminal_Radix_String.Size = new System.Drawing.Size(25, 22);
-			this.toolStripButton_MainTool_Terminal_Radix_String.Text = "Str";
-			this.toolStripButton_MainTool_Terminal_Radix_String.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-			this.toolStripButton_MainTool_Terminal_Radix_String.ToolTipText = "Radix: String";
-			this.toolStripButton_MainTool_Terminal_Radix_String.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Radix_String_Click);
+			this.toolStripButton_MainTool_Radix_String.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton_MainTool_Radix_String.Name = "toolStripButton_MainTool_Radix_String";
+			this.toolStripButton_MainTool_Radix_String.Size = new System.Drawing.Size(25, 22);
+			this.toolStripButton_MainTool_Radix_String.Text = "Str";
+			this.toolStripButton_MainTool_Radix_String.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.toolStripButton_MainTool_Radix_String.ToolTipText = "Radix: String";
+			this.toolStripButton_MainTool_Radix_String.Click += new System.EventHandler(this.toolStripButton_MainTool_Radix_String_Click);
 			// 
-			// toolStripButton_MainTool_Terminal_Radix_Char
+			// toolStripButton_MainTool_Radix_Char
 			// 
-			this.toolStripButton_MainTool_Terminal_Radix_Char.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButton_MainTool_Terminal_Radix_Char.Name = "toolStripButton_MainTool_Terminal_Radix_Char";
-			this.toolStripButton_MainTool_Terminal_Radix_Char.Size = new System.Drawing.Size(30, 22);
-			this.toolStripButton_MainTool_Terminal_Radix_Char.Text = "Chr";
-			this.toolStripButton_MainTool_Terminal_Radix_Char.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-			this.toolStripButton_MainTool_Terminal_Radix_Char.ToolTipText = "Radix: Character";
-			this.toolStripButton_MainTool_Terminal_Radix_Char.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Radix_Char_Click);
+			this.toolStripButton_MainTool_Radix_Char.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton_MainTool_Radix_Char.Name = "toolStripButton_MainTool_Radix_Char";
+			this.toolStripButton_MainTool_Radix_Char.Size = new System.Drawing.Size(30, 22);
+			this.toolStripButton_MainTool_Radix_Char.Text = "Chr";
+			this.toolStripButton_MainTool_Radix_Char.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.toolStripButton_MainTool_Radix_Char.ToolTipText = "Radix: Character";
+			this.toolStripButton_MainTool_Radix_Char.Click += new System.EventHandler(this.toolStripButton_MainTool_Radix_Char_Click);
 			// 
-			// toolStripButton_MainTool_Terminal_Radix_Bin
+			// toolStripButton_MainTool_Radix_Bin
 			// 
-			this.toolStripButton_MainTool_Terminal_Radix_Bin.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButton_MainTool_Terminal_Radix_Bin.Name = "toolStripButton_MainTool_Terminal_Radix_Bin";
-			this.toolStripButton_MainTool_Terminal_Radix_Bin.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Radix_Bin.Text = "2";
-			this.toolStripButton_MainTool_Terminal_Radix_Bin.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-			this.toolStripButton_MainTool_Terminal_Radix_Bin.ToolTipText = "Radix: Binary";
-			this.toolStripButton_MainTool_Terminal_Radix_Bin.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Radix_Bin_Click);
+			this.toolStripButton_MainTool_Radix_Bin.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton_MainTool_Radix_Bin.Name = "toolStripButton_MainTool_Radix_Bin";
+			this.toolStripButton_MainTool_Radix_Bin.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Radix_Bin.Text = "2";
+			this.toolStripButton_MainTool_Radix_Bin.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.toolStripButton_MainTool_Radix_Bin.ToolTipText = "Radix: Binary";
+			this.toolStripButton_MainTool_Radix_Bin.Click += new System.EventHandler(this.toolStripButton_MainTool_Radix_Bin_Click);
 			// 
-			// toolStripButton_MainTool_Terminal_Radix_Oct
+			// toolStripButton_MainTool_Radix_Oct
 			// 
-			this.toolStripButton_MainTool_Terminal_Radix_Oct.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButton_MainTool_Terminal_Radix_Oct.Name = "toolStripButton_MainTool_Terminal_Radix_Oct";
-			this.toolStripButton_MainTool_Terminal_Radix_Oct.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Radix_Oct.Text = "8";
-			this.toolStripButton_MainTool_Terminal_Radix_Oct.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-			this.toolStripButton_MainTool_Terminal_Radix_Oct.ToolTipText = "Radix: Octal";
-			this.toolStripButton_MainTool_Terminal_Radix_Oct.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Radix_Oct_Click);
+			this.toolStripButton_MainTool_Radix_Oct.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton_MainTool_Radix_Oct.Name = "toolStripButton_MainTool_Radix_Oct";
+			this.toolStripButton_MainTool_Radix_Oct.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Radix_Oct.Text = "8";
+			this.toolStripButton_MainTool_Radix_Oct.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.toolStripButton_MainTool_Radix_Oct.ToolTipText = "Radix: Octal";
+			this.toolStripButton_MainTool_Radix_Oct.Click += new System.EventHandler(this.toolStripButton_MainTool_Radix_Oct_Click);
 			// 
-			// toolStripButton_MainTool_Terminal_Radix_Dec
+			// toolStripButton_MainTool_Radix_Dec
 			// 
-			this.toolStripButton_MainTool_Terminal_Radix_Dec.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButton_MainTool_Terminal_Radix_Dec.Name = "toolStripButton_MainTool_Terminal_Radix_Dec";
-			this.toolStripButton_MainTool_Terminal_Radix_Dec.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Radix_Dec.Text = "10";
-			this.toolStripButton_MainTool_Terminal_Radix_Dec.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-			this.toolStripButton_MainTool_Terminal_Radix_Dec.ToolTipText = "Radix: Decimal";
-			this.toolStripButton_MainTool_Terminal_Radix_Dec.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Radix_Dec_Click);
+			this.toolStripButton_MainTool_Radix_Dec.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton_MainTool_Radix_Dec.Name = "toolStripButton_MainTool_Radix_Dec";
+			this.toolStripButton_MainTool_Radix_Dec.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Radix_Dec.Text = "10";
+			this.toolStripButton_MainTool_Radix_Dec.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.toolStripButton_MainTool_Radix_Dec.ToolTipText = "Radix: Decimal";
+			this.toolStripButton_MainTool_Radix_Dec.Click += new System.EventHandler(this.toolStripButton_MainTool_Radix_Dec_Click);
 			// 
-			// toolStripButton_MainTool_Terminal_Radix_Hex
+			// toolStripButton_MainTool_Radix_Hex
 			// 
-			this.toolStripButton_MainTool_Terminal_Radix_Hex.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButton_MainTool_Terminal_Radix_Hex.Name = "toolStripButton_MainTool_Terminal_Radix_Hex";
-			this.toolStripButton_MainTool_Terminal_Radix_Hex.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Radix_Hex.Text = "16";
-			this.toolStripButton_MainTool_Terminal_Radix_Hex.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-			this.toolStripButton_MainTool_Terminal_Radix_Hex.ToolTipText = "Radix: Hexadecimal";
-			this.toolStripButton_MainTool_Terminal_Radix_Hex.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Radix_Hex_Click);
+			this.toolStripButton_MainTool_Radix_Hex.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton_MainTool_Radix_Hex.Name = "toolStripButton_MainTool_Radix_Hex";
+			this.toolStripButton_MainTool_Radix_Hex.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Radix_Hex.Text = "16";
+			this.toolStripButton_MainTool_Radix_Hex.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.toolStripButton_MainTool_Radix_Hex.ToolTipText = "Radix: Hexadecimal";
+			this.toolStripButton_MainTool_Radix_Hex.Click += new System.EventHandler(this.toolStripButton_MainTool_Radix_Hex_Click);
 			// 
-			// toolStripButton_MainTool_Terminal_Radix_Unicode
+			// toolStripButton_MainTool_Radix_Unicode
 			// 
-			this.toolStripButton_MainTool_Terminal_Radix_Unicode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButton_MainTool_Terminal_Radix_Unicode.Name = "toolStripButton_MainTool_Terminal_Radix_Unicode";
-			this.toolStripButton_MainTool_Terminal_Radix_Unicode.Size = new System.Drawing.Size(27, 22);
-			this.toolStripButton_MainTool_Terminal_Radix_Unicode.Text = "U+";
-			this.toolStripButton_MainTool_Terminal_Radix_Unicode.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-			this.toolStripButton_MainTool_Terminal_Radix_Unicode.ToolTipText = "Radix: Unicode";
-			this.toolStripButton_MainTool_Terminal_Radix_Unicode.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Radix_Unicode_Click);
+			this.toolStripButton_MainTool_Radix_Unicode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton_MainTool_Radix_Unicode.Name = "toolStripButton_MainTool_Radix_Unicode";
+			this.toolStripButton_MainTool_Radix_Unicode.Size = new System.Drawing.Size(27, 22);
+			this.toolStripButton_MainTool_Radix_Unicode.Text = "U+";
+			this.toolStripButton_MainTool_Radix_Unicode.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.toolStripButton_MainTool_Radix_Unicode.ToolTipText = "Radix: Unicode";
+			this.toolStripButton_MainTool_Radix_Unicode.Click += new System.EventHandler(this.toolStripButton_MainTool_Radix_Unicode_Click);
 			// 
 			// toolStripMenuItem_MainTool_Separator_4
 			// 
@@ -1191,7 +1193,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Find_CaseSensitive.Name = "toolStripButton_MainTool_Find_CaseSensitive";
 			this.toolStripButton_MainTool_Find_CaseSensitive.Size = new System.Drawing.Size(23, 24);
 			this.toolStripButton_MainTool_Find_CaseSensitive.Text = "Find Case Sensitive";
-			this.toolStripButton_MainTool_Find_CaseSensitive.ToolTipText = "Find Case Sensitive\r\nSame as \"(?-i)\"\r\n[Alt+C] (while in Find)";
+			this.toolStripButton_MainTool_Find_CaseSensitive.ToolTipText = "Find Case Sensitive\r\nSame as \"(?-i)\" when using regex\r\n[Alt+C] (while in Find)";
 			this.toolStripButton_MainTool_Find_CaseSensitive.Visible = false;
 			this.toolStripButton_MainTool_Find_CaseSensitive.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_CaseSensitive_Click);
 			// 
@@ -1202,9 +1204,19 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Find_WholeWord.Name = "toolStripButton_MainTool_Find_WholeWord";
 			this.toolStripButton_MainTool_Find_WholeWord.Size = new System.Drawing.Size(23, 24);
 			this.toolStripButton_MainTool_Find_WholeWord.Text = "Find Whole Word";
-			this.toolStripButton_MainTool_Find_WholeWord.ToolTipText = "Find Whole Word\r\nSame as \"\\bSomeWord\\b\"\r\n[Alt+W] (while in Find)";
+			this.toolStripButton_MainTool_Find_WholeWord.ToolTipText = "Find Whole Word\r\nSame as \"\\bSomeWord\\b\" when using regex\r\n[Alt+W] (while in Find)";
 			this.toolStripButton_MainTool_Find_WholeWord.Visible = false;
 			this.toolStripButton_MainTool_Find_WholeWord.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_WholeWord_Click);
+			// 
+			// toolStripButton_MainTool_Find_UseRegex
+			// 
+			this.toolStripButton_MainTool_Find_UseRegex.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton_MainTool_Find_UseRegex.Name = "toolStripButton_MainTool_Find_UseRegex";
+			this.toolStripButton_MainTool_Find_UseRegex.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Find_UseRegex.Text = ".*";
+			this.toolStripButton_MainTool_Find_UseRegex.ToolTipText = "Use Regular Expression\r\n[Alt+E] (while in Find)";
+			this.toolStripButton_MainTool_Find_UseRegex.Visible = false;
+			this.toolStripButton_MainTool_Find_UseRegex.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_UseRegex_Click);
 			// 
 			// toolStripButton_MainTool_Find_Next
 			// 
@@ -1234,157 +1246,157 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainTool_Separator_6.Name = "toolStripMenuItem_MainTool_Separator_6";
 			this.toolStripMenuItem_MainTool_Separator_6.Size = new System.Drawing.Size(6, 25);
 			// 
-			// toolStripButton_MainTool_Terminal_Log_Settings
+			// toolStripButton_MainTool_Log_Settings
 			// 
-			this.toolStripButton_MainTool_Terminal_Log_Settings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Log_Settings.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_page_white_edit_16x16;
-			this.toolStripButton_MainTool_Terminal_Log_Settings.Name = "toolStripButton_MainTool_Terminal_Log_Settings";
-			this.toolStripButton_MainTool_Terminal_Log_Settings.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Log_Settings.Text = "Log Settings...";
-			this.toolStripButton_MainTool_Terminal_Log_Settings.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Log_Settings_Click);
+			this.toolStripButton_MainTool_Log_Settings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Log_Settings.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_page_white_edit_16x16;
+			this.toolStripButton_MainTool_Log_Settings.Name = "toolStripButton_MainTool_Log_Settings";
+			this.toolStripButton_MainTool_Log_Settings.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Log_Settings.Text = "Log Settings...";
+			this.toolStripButton_MainTool_Log_Settings.Click += new System.EventHandler(this.toolStripButton_MainTool_Log_Settings_Click);
 			// 
-			// toolStripButton_MainTool_Terminal_Log_On
+			// toolStripButton_MainTool_Log_On
 			// 
-			this.toolStripButton_MainTool_Terminal_Log_On.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Log_On.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_accept_document_16x16;
-			this.toolStripButton_MainTool_Terminal_Log_On.Name = "toolStripButton_MainTool_Terminal_Log_On";
-			this.toolStripButton_MainTool_Terminal_Log_On.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Log_On.Text = "Switch Log On";
-			this.toolStripButton_MainTool_Terminal_Log_On.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Log_On_Click);
+			this.toolStripButton_MainTool_Log_On.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Log_On.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_accept_document_16x16;
+			this.toolStripButton_MainTool_Log_On.Name = "toolStripButton_MainTool_Log_On";
+			this.toolStripButton_MainTool_Log_On.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Log_On.Text = "Switch Log On";
+			this.toolStripButton_MainTool_Log_On.Click += new System.EventHandler(this.toolStripButton_MainTool_Log_On_Click);
 			// 
-			// toolStripButton_MainTool_Terminal_Log_Off
+			// toolStripButton_MainTool_Log_Off
 			// 
-			this.toolStripButton_MainTool_Terminal_Log_Off.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Log_Off.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_page_white_delete_16x16;
-			this.toolStripButton_MainTool_Terminal_Log_Off.Name = "toolStripButton_MainTool_Terminal_Log_Off";
-			this.toolStripButton_MainTool_Terminal_Log_Off.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Log_Off.Text = "Switch Log Off";
-			this.toolStripButton_MainTool_Terminal_Log_Off.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Log_Off_Click);
+			this.toolStripButton_MainTool_Log_Off.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Log_Off.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_page_white_delete_16x16;
+			this.toolStripButton_MainTool_Log_Off.Name = "toolStripButton_MainTool_Log_Off";
+			this.toolStripButton_MainTool_Log_Off.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Log_Off.Text = "Switch Log Off";
+			this.toolStripButton_MainTool_Log_Off.Click += new System.EventHandler(this.toolStripButton_MainTool_Log_Off_Click);
 			// 
-			// toolStripButton_MainTool_Terminal_Log_OpenFile
+			// toolStripButton_MainTool_Log_OpenFile
 			// 
-			this.toolStripButton_MainTool_Terminal_Log_OpenFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Log_OpenFile.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_page_white_magnify_16x16;
-			this.toolStripButton_MainTool_Terminal_Log_OpenFile.Name = "toolStripButton_MainTool_Terminal_Log_OpenFile";
-			this.toolStripButton_MainTool_Terminal_Log_OpenFile.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Log_OpenFile.Text = "Open Log File(s) in Editor...";
-			this.toolStripButton_MainTool_Terminal_Log_OpenFile.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Log_Open_Click);
+			this.toolStripButton_MainTool_Log_OpenFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Log_OpenFile.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_page_white_magnify_16x16;
+			this.toolStripButton_MainTool_Log_OpenFile.Name = "toolStripButton_MainTool_Log_OpenFile";
+			this.toolStripButton_MainTool_Log_OpenFile.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Log_OpenFile.Text = "Open Log File(s) in Editor...";
+			this.toolStripButton_MainTool_Log_OpenFile.Click += new System.EventHandler(this.toolStripButton_MainTool_Log_Open_Click);
 			// 
-			// toolStripButton_MainTool_Terminal_Log_OpenDirectory
+			// toolStripButton_MainTool_Log_OpenDirectory
 			// 
-			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_folder_explorer_16x16;
-			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.Name = "toolStripButton_MainTool_Terminal_Log_OpenDirectory";
-			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.Text = "Open Log Folder in File Browser...";
-			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Log_OpenDirectory_Click);
+			this.toolStripButton_MainTool_Log_OpenDirectory.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Log_OpenDirectory.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_folder_explorer_16x16;
+			this.toolStripButton_MainTool_Log_OpenDirectory.Name = "toolStripButton_MainTool_Log_OpenDirectory";
+			this.toolStripButton_MainTool_Log_OpenDirectory.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Log_OpenDirectory.Text = "Open Log Folder in File Browser...";
+			this.toolStripButton_MainTool_Log_OpenDirectory.Click += new System.EventHandler(this.toolStripButton_MainTool_Log_OpenDirectory_Click);
 			// 
 			// toolStripMenuItem_MainTool_Separator_7
 			// 
 			this.toolStripMenuItem_MainTool_Separator_7.Name = "toolStripMenuItem_MainTool_Separator_7";
 			this.toolStripMenuItem_MainTool_Separator_7.Size = new System.Drawing.Size(6, 25);
 			// 
-			// toolStripButton_MainTool_Terminal_AutoAction_ShowHide
+			// toolStripButton_MainTool_AutoAction_ShowHide
 			// 
-			this.toolStripButton_MainTool_Terminal_AutoAction_ShowHide.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_AutoAction_ShowHide.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_comments_16x16;
-			this.toolStripButton_MainTool_Terminal_AutoAction_ShowHide.Name = "toolStripButton_MainTool_Terminal_AutoAction_ShowHide";
-			this.toolStripButton_MainTool_Terminal_AutoAction_ShowHide.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_AutoAction_ShowHide.Text = "Show Automatic Action";
-			this.toolStripButton_MainTool_Terminal_AutoAction_ShowHide.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_AutoAction_ShowHide_Click);
+			this.toolStripButton_MainTool_AutoAction_ShowHide.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_AutoAction_ShowHide.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_comments_16x16;
+			this.toolStripButton_MainTool_AutoAction_ShowHide.Name = "toolStripButton_MainTool_AutoAction_ShowHide";
+			this.toolStripButton_MainTool_AutoAction_ShowHide.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_AutoAction_ShowHide.Text = "Show Automatic Action";
+			this.toolStripButton_MainTool_AutoAction_ShowHide.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoAction_ShowHide_Click);
 			// 
-			// toolStripComboBox_MainTool_Terminal_AutoAction_Trigger
+			// toolStripComboBox_MainTool_AutoAction_Trigger
 			// 
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Name = "toolStripComboBox_MainTool_Terminal_AutoAction_Trigger";
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Size = new System.Drawing.Size(160, 27);
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.ToolTipText = "Configure Automatic Action Trigger,\r\neither refer to one of the commands,\r\nor fil" +
+			this.toolStripComboBox_MainTool_AutoAction_Trigger.Name = "toolStripComboBox_MainTool_AutoAction_Trigger";
+			this.toolStripComboBox_MainTool_AutoAction_Trigger.Size = new System.Drawing.Size(160, 27);
+			this.toolStripComboBox_MainTool_AutoAction_Trigger.ToolTipText = "Configure Automatic Action Trigger,\r\neither refer to one of the commands,\r\nor fil" +
     "l-in any command text.\r\n\r\nNote that...\r\n...\'Any Line\' is not available if action" +
     " is \'Highlight Only\'.";
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Visible = false;
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger_SelectedIndexChanged);
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoAction_Trigger_TextChanged);
+			this.toolStripComboBox_MainTool_AutoAction_Trigger.Visible = false;
+			this.toolStripComboBox_MainTool_AutoAction_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoAction_Trigger_SelectedIndexChanged);
+			this.toolStripComboBox_MainTool_AutoAction_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoAction_Trigger_TextChanged);
 			// 
-			// toolStripComboBox_MainTool_Terminal_AutoAction_Action
+			// toolStripComboBox_MainTool_AutoAction_Action
 			// 
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.Name = "toolStripComboBox_MainTool_Terminal_AutoAction_Action";
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.Size = new System.Drawing.Size(160, 27);
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.ToolTipText = "Enable / Disable Automatic Action\r\n\r\nNote that...\r\n...trigger is highlighted for " +
+			this.toolStripComboBox_MainTool_AutoAction_Action.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.toolStripComboBox_MainTool_AutoAction_Action.Name = "toolStripComboBox_MainTool_AutoAction_Action";
+			this.toolStripComboBox_MainTool_AutoAction_Action.Size = new System.Drawing.Size(160, 27);
+			this.toolStripComboBox_MainTool_AutoAction_Action.ToolTipText = "Enable / Disable Automatic Action\r\n\r\nNote that...\r\n...trigger is highlighted for " +
     "every action.\r\n...\'Highlight Only\' is not available if trigger is \'Any Line\'.";
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.Visible = false;
-			this.toolStripComboBox_MainTool_Terminal_AutoAction_Action.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoAction_Action_SelectedIndexChanged);
+			this.toolStripComboBox_MainTool_AutoAction_Action.Visible = false;
+			this.toolStripComboBox_MainTool_AutoAction_Action.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoAction_Action_SelectedIndexChanged);
 			// 
-			// toolStripLabel_MainTool_Terminal_AutoAction_Count
+			// toolStripLabel_MainTool_AutoAction_Count
 			// 
-			this.toolStripLabel_MainTool_Terminal_AutoAction_Count.Name = "toolStripLabel_MainTool_Terminal_AutoAction_Count";
-			this.toolStripLabel_MainTool_Terminal_AutoAction_Count.Size = new System.Drawing.Size(21, 24);
-			this.toolStripLabel_MainTool_Terminal_AutoAction_Count.Text = "(0)";
-			this.toolStripLabel_MainTool_Terminal_AutoAction_Count.ToolTipText = "Automatic Action Count\r\nClick to Reset";
-			this.toolStripLabel_MainTool_Terminal_AutoAction_Count.Visible = false;
-			this.toolStripLabel_MainTool_Terminal_AutoAction_Count.Click += new System.EventHandler(this.toolStripLabel_MainTool_Terminal_AutoAction_Count_Click);
+			this.toolStripLabel_MainTool_AutoAction_Count.Name = "toolStripLabel_MainTool_AutoAction_Count";
+			this.toolStripLabel_MainTool_AutoAction_Count.Size = new System.Drawing.Size(21, 24);
+			this.toolStripLabel_MainTool_AutoAction_Count.Text = "(0)";
+			this.toolStripLabel_MainTool_AutoAction_Count.ToolTipText = "Automatic Action Count\r\nClick to Reset";
+			this.toolStripLabel_MainTool_AutoAction_Count.Visible = false;
+			this.toolStripLabel_MainTool_AutoAction_Count.Click += new System.EventHandler(this.toolStripLabel_MainTool_AutoAction_Count_Click);
 			// 
-			// toolStripButton_MainTool_Terminal_AutoAction_Deactivate
+			// toolStripButton_MainTool_AutoAction_Deactivate
 			// 
-			this.toolStripButton_MainTool_Terminal_AutoAction_Deactivate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_AutoAction_Deactivate.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_comments_delete_16x16;
-			this.toolStripButton_MainTool_Terminal_AutoAction_Deactivate.Name = "toolStripButton_MainTool_Terminal_AutoAction_Deactivate";
-			this.toolStripButton_MainTool_Terminal_AutoAction_Deactivate.Size = new System.Drawing.Size(23, 24);
-			this.toolStripButton_MainTool_Terminal_AutoAction_Deactivate.Text = "Deactivate Automatic Action";
-			this.toolStripButton_MainTool_Terminal_AutoAction_Deactivate.Visible = false;
-			this.toolStripButton_MainTool_Terminal_AutoAction_Deactivate.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_AutoAction_Deactivate_Click);
+			this.toolStripButton_MainTool_AutoAction_Deactivate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_AutoAction_Deactivate.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_comments_delete_16x16;
+			this.toolStripButton_MainTool_AutoAction_Deactivate.Name = "toolStripButton_MainTool_AutoAction_Deactivate";
+			this.toolStripButton_MainTool_AutoAction_Deactivate.Size = new System.Drawing.Size(23, 24);
+			this.toolStripButton_MainTool_AutoAction_Deactivate.Text = "Deactivate Automatic Action";
+			this.toolStripButton_MainTool_AutoAction_Deactivate.Visible = false;
+			this.toolStripButton_MainTool_AutoAction_Deactivate.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoAction_Deactivate_Click);
 			// 
 			// toolStripMenuItem_MainTool_Separator_8
 			// 
 			this.toolStripMenuItem_MainTool_Separator_8.Name = "toolStripMenuItem_MainTool_Separator_8";
 			this.toolStripMenuItem_MainTool_Separator_8.Size = new System.Drawing.Size(6, 25);
 			// 
-			// toolStripButton_MainTool_Terminal_AutoResponse_ShowHide
+			// toolStripButton_MainTool_AutoResponse_ShowHide
 			// 
-			this.toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_autoresponders_16x16;
-			this.toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Name = "toolStripButton_MainTool_Terminal_AutoResponse_ShowHide";
-			this.toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Show Automatic Response";
-			this.toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_AutoResponse_ShowHide_Click);
+			this.toolStripButton_MainTool_AutoResponse_ShowHide.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_AutoResponse_ShowHide.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_autoresponders_16x16;
+			this.toolStripButton_MainTool_AutoResponse_ShowHide.Name = "toolStripButton_MainTool_AutoResponse_ShowHide";
+			this.toolStripButton_MainTool_AutoResponse_ShowHide.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_AutoResponse_ShowHide.Text = "Show Automatic Response";
+			this.toolStripButton_MainTool_AutoResponse_ShowHide.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoResponse_ShowHide_Click);
 			// 
-			// toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger
+			// toolStripComboBox_MainTool_AutoResponse_Trigger
 			// 
-			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Name = "toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger";
-			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Size = new System.Drawing.Size(160, 27);
-			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.ToolTipText = "Configure Automatic Response Trigger,\r\neither refer to one of the commands,\r\nor f" +
+			this.toolStripComboBox_MainTool_AutoResponse_Trigger.Name = "toolStripComboBox_MainTool_AutoResponse_Trigger";
+			this.toolStripComboBox_MainTool_AutoResponse_Trigger.Size = new System.Drawing.Size(160, 27);
+			this.toolStripComboBox_MainTool_AutoResponse_Trigger.ToolTipText = "Configure Automatic Response Trigger,\r\neither refer to one of the commands,\r\nor f" +
     "ill-in any command text.";
-			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Visible = false;
-			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger_SelectedIndexChanged);
-			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger_TextChanged);
+			this.toolStripComboBox_MainTool_AutoResponse_Trigger.Visible = false;
+			this.toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Trigger_SelectedIndexChanged);
+			this.toolStripComboBox_MainTool_AutoResponse_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Trigger_TextChanged);
 			// 
-			// toolStripComboBox_MainTool_Terminal_AutoResponse_Response
+			// toolStripComboBox_MainTool_AutoResponse_Response
 			// 
-			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Name = "toolStripComboBox_MainTool_Terminal_AutoResponse_Response";
-			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Size = new System.Drawing.Size(160, 25);
-			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response.ToolTipText = "Enable / Disable Automatic Response,\r\neither refer to one of the commands,\r\nor fi" +
+			this.toolStripComboBox_MainTool_AutoResponse_Response.Name = "toolStripComboBox_MainTool_AutoResponse_Response";
+			this.toolStripComboBox_MainTool_AutoResponse_Response.Size = new System.Drawing.Size(160, 25);
+			this.toolStripComboBox_MainTool_AutoResponse_Response.ToolTipText = "Enable / Disable Automatic Response,\r\neither refer to one of the commands,\r\nor fi" +
     "ll-in any command text.";
-			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Visible = false;
-			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response_SelectedIndexChanged);
-			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_Terminal_AutoResponse_Response_TextChanged);
+			this.toolStripComboBox_MainTool_AutoResponse_Response.Visible = false;
+			this.toolStripComboBox_MainTool_AutoResponse_Response.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Response_SelectedIndexChanged);
+			this.toolStripComboBox_MainTool_AutoResponse_Response.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Response_TextChanged);
 			// 
-			// toolStripLabel_MainTool_Terminal_AutoResponse_Count
+			// toolStripLabel_MainTool_AutoResponse_Count
 			// 
-			this.toolStripLabel_MainTool_Terminal_AutoResponse_Count.Name = "toolStripLabel_MainTool_Terminal_AutoResponse_Count";
-			this.toolStripLabel_MainTool_Terminal_AutoResponse_Count.Size = new System.Drawing.Size(21, 22);
-			this.toolStripLabel_MainTool_Terminal_AutoResponse_Count.Text = "(0)";
-			this.toolStripLabel_MainTool_Terminal_AutoResponse_Count.ToolTipText = "Automatic Response Count\r\nClick to Reset";
-			this.toolStripLabel_MainTool_Terminal_AutoResponse_Count.Visible = false;
-			this.toolStripLabel_MainTool_Terminal_AutoResponse_Count.Click += new System.EventHandler(this.toolStripLabel_MainTool_Terminal_AutoResponse_Count_Click);
+			this.toolStripLabel_MainTool_AutoResponse_Count.Name = "toolStripLabel_MainTool_AutoResponse_Count";
+			this.toolStripLabel_MainTool_AutoResponse_Count.Size = new System.Drawing.Size(21, 22);
+			this.toolStripLabel_MainTool_AutoResponse_Count.Text = "(0)";
+			this.toolStripLabel_MainTool_AutoResponse_Count.ToolTipText = "Automatic Response Count\r\nClick to Reset";
+			this.toolStripLabel_MainTool_AutoResponse_Count.Visible = false;
+			this.toolStripLabel_MainTool_AutoResponse_Count.Click += new System.EventHandler(this.toolStripLabel_MainTool_AutoResponse_Count_Click);
 			// 
-			// toolStripButton_MainTool_Terminal_AutoResponse_Deactivate
+			// toolStripButton_MainTool_AutoResponse_Deactivate
 			// 
-			this.toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_email_delete_16x16;
-			this.toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Name = "toolStripButton_MainTool_Terminal_AutoResponse_Deactivate";
-			this.toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Text = "Deactivate Automatic Response";
-			this.toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Visible = false;
-			this.toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_AutoResponse_Deactivate_Click);
+			this.toolStripButton_MainTool_AutoResponse_Deactivate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_AutoResponse_Deactivate.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_email_delete_16x16;
+			this.toolStripButton_MainTool_AutoResponse_Deactivate.Name = "toolStripButton_MainTool_AutoResponse_Deactivate";
+			this.toolStripButton_MainTool_AutoResponse_Deactivate.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_AutoResponse_Deactivate.Text = "Deactivate Automatic Response";
+			this.toolStripButton_MainTool_AutoResponse_Deactivate.Visible = false;
+			this.toolStripButton_MainTool_AutoResponse_Deactivate.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoResponse_Deactivate_Click);
 			// 
 			// toolStripMenuItem_MainTool_Separator_9
 			// 
@@ -1555,14 +1567,14 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_CopyToClipboard;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Print;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_3;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_Bin;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_Oct;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_Dec;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_Hex;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_Unicode;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Radix_Bin;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Radix_Oct;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Radix_Dec;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Radix_Hex;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Radix_Unicode;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_4;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_Char;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_String;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Radix_Char;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Radix_String;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_MainStatus_TerminalInfo;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip_Status;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_StatusContextMenu_ShowTerminalInfo;
@@ -1570,9 +1582,9 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_StatusContextMenu_ShowChrono;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_StatusContextMenu_Separator_1;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_StatusContextMenu_Preferences;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Log_On;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Log_Off;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Log_Settings;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Log_On;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Log_Off;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Log_Settings;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_5;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_6;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Format;
@@ -1587,31 +1599,32 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainMenu_Window_Separator1;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Window_Minimize;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_File_SaveWorkspace;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Log_OpenFile;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Log_OpenDirectory;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Log_OpenFile;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Log_OpenDirectory;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_RequestSupport;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Window_Automatic;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Window_AlwaysOnTop;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainMenu_Window_Separator2;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_7;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_AutoResponse_ShowHide;
-		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_Terminal_AutoResponse_Response;
-		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_AutoResponse_Deactivate;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoResponse_ShowHide;
+		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_AutoResponse_Response;
+		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_AutoResponse_Trigger;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoResponse_Deactivate;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_8;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_ShowHide;
 		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_Find_Pattern;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_Next;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_Previous;
-		private System.Windows.Forms.ToolStripLabel toolStripLabel_MainTool_Terminal_AutoResponse_Count;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_AutoAction_ShowHide;
+		private System.Windows.Forms.ToolStripLabel toolStripLabel_MainTool_AutoResponse_Count;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoAction_ShowHide;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_9;
-		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_Terminal_AutoAction_Trigger;
-		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_MainTool_Terminal_AutoAction_Action;
-		private System.Windows.Forms.ToolStripLabel toolStripLabel_MainTool_Terminal_AutoAction_Count;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_AutoAction_Deactivate;
+		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_AutoAction_Trigger;
+		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_MainTool_AutoAction_Action;
+		private System.Windows.Forms.ToolStripLabel toolStripLabel_MainTool_AutoAction_Count;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoAction_Deactivate;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_CaseSensitive;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_WholeWord;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_UseRegex;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_MainStatus_Time;
 		private System.Windows.Forms.Timer timer_Time;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_Donate;
