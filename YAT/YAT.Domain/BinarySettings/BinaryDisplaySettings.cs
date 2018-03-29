@@ -33,6 +33,18 @@ namespace YAT.Domain.Settings
 	/// <summary></summary>
 	public class BinaryDisplaySettings : MKY.Settings.SettingsItem, IEquatable<BinaryDisplaySettings>
 	{
+		/// <summary></summary>
+		public static readonly BinaryLengthLineBreak LengthLineBreakDefault = new BinaryLengthLineBreak  (true, 16); // Enabled to prevent too long display lines.
+
+		/// <summary></summary>
+		public static readonly BinarySequenceLineBreak SequenceLineBreakBeforeDefault = new BinarySequenceLineBreak(false, @"ABC");
+
+		/// <summary></summary>
+		public static readonly BinarySequenceLineBreak SequenceLineBreakAfterDefault = new BinarySequenceLineBreak(false, @"\h(00)");
+
+		/// <summary></summary>
+		public static readonly BinaryTimedLineBreak TimedLineBreakDefault = new BinaryTimedLineBreak(false, 500);
+
 		private BinaryLengthLineBreak   lengthLineBreak;
 		private BinarySequenceLineBreak sequenceLineBreakBefore;
 		private BinarySequenceLineBreak sequenceLineBreakAfter;
@@ -63,6 +75,7 @@ namespace YAT.Domain.Settings
 			SequenceLineBreakBefore = rhs.SequenceLineBreakBefore;
 			SequenceLineBreakAfter  = rhs.SequenceLineBreakAfter;
 			TimedLineBreak          = rhs.TimedLineBreak;
+
 			ClearChanged();
 		}
 
@@ -74,10 +87,10 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			LengthLineBreak         = new BinaryLengthLineBreak  (true, 16); // Enabled to prevent too long display lines.
-			SequenceLineBreakBefore = new BinarySequenceLineBreak(false, @"ABC");
-			SequenceLineBreakAfter  = new BinarySequenceLineBreak(false, @"\h(00)");
-			TimedLineBreak          = new BinaryTimedLineBreak   (false, 500);
+			LengthLineBreak         = LengthLineBreakDefault;
+			SequenceLineBreakBefore = SequenceLineBreakBeforeDefault;
+			SequenceLineBreakAfter  = SequenceLineBreakAfterDefault;
+			TimedLineBreak          = TimedLineBreakDefault;
 		}
 
 		#region Properties

@@ -242,7 +242,7 @@ namespace YAT.View.Controls
 			int timeout;
 			if (int.TryParse(textBox_TimedLineBreakTimeout.Text, out timeout) && (timeout >= 0))
 			{
-				Domain.BinaryTimedLineBreak tlb = this.settings.TimedLineBreak;
+				var tlb = this.settings.TimedLineBreak;
 				tlb.Timeout = timeout;
 				this.settings.TimedLineBreak = tlb;
 				SetControls();
