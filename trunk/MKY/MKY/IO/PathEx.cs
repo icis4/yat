@@ -226,18 +226,14 @@ namespace MKY.IO
 		/// Named 'IsContained' instead of 'Contains' as <paramref name="str"/> can be any string,
 		/// not just a path string..
 		/// </remarks>
-		/// <remarks>
-		/// Implemented using <see cref="string.IndexOf(string, StringComparison)"/> because
-		/// <see cref="string.Contains(string)"/> does not allow controlling culture and case.
-		/// </remarks>
 		public static bool IsContained(string str, string path)
 		{
 			if (string.IsNullOrEmpty(path))
 				return (false);
 
 			// First try without converting anything:
-			if (str.IndexOf(path, ComparisonType) >= 0)
-				return (true);
+			if (str.IndexOf(path, ComparisonType) >= 0) // Using string.IndexOf() because string.Contains()
+				return (true);                          // does not allow controlling culture and case.
 
 			// No success, try to convert 'str' (as 'path' is more likely platform-correct):
 			var strToPlatform = ConvertToPlatform(str);
