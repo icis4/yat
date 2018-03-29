@@ -431,6 +431,8 @@ namespace YAT.Domain
 				this.rxLineState.BreakTimer = new LineBreakTimer(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
 				this.rxLineState.BreakTimer.Elapsed += rxTimedLineBreak_Elapsed;
 
+				// Bidir:
+
 				this.bidirLineState = new BidirLineState(casted.bidirLineState);
 			}
 			else
@@ -645,6 +647,8 @@ namespace YAT.Domain
 
 				this.rxLineState = new LineState(new SequenceQueue(rxSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore), t);
 			}
+
+			// Bidir:
 
 			this.bidirLineState = new BidirLineState();
 		}
