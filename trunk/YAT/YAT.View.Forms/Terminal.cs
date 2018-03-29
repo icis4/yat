@@ -159,6 +159,7 @@ namespace YAT.View.Forms
 		private bool ioStatusIndicatorFlashingIsOn; // = false;
 
 		// Find:
+		/// <remarks>Using "Pattern" instead of "TextOrPattern" for simplicity.</remarks>
 		private string lastFindPattern; // = null;
 
 		// Toolstrip-combobox-validation-workaround (too late invocation of 'Validate' event):
@@ -3195,7 +3196,9 @@ namespace YAT.View.Forms
 			monitor.ResetFindOnEdit();
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Using "pattern" instead of "textOrPattern" for simplicity.
+		/// </remarks>
 		public virtual void LeaveFindOnEdit(string pattern)
 		{
 			ApplicationSettings.RoamingUserSettings.Find.ActivePattern = pattern;
@@ -3205,7 +3208,9 @@ namespace YAT.View.Forms
 			monitor.ResetFindOnEdit();
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Using "pattern" instead of "textOrPattern" for simplicity.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual FindResult TryFindOnEdit(string pattern, out FindDirection resultingDirection)
 		{
@@ -3230,7 +3235,9 @@ namespace YAT.View.Forms
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Using "pattern" instead of "textOrPattern" for simplicity.
+		/// </remarks>
 		public virtual FindResult TryFindNext(string pattern, bool messageBoxIsPermissible)
 		{
 			// The active pattern wouldn't have to be saved each time, it is saved on LeaveFindOnEdit() anyway.
@@ -3259,7 +3266,9 @@ namespace YAT.View.Forms
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Using "pattern" instead of "textOrPattern" for simplicity.
+		/// </remarks>
 		public virtual FindResult TryFindPrevious(string pattern, bool messageBoxIsPermissible)
 		{
 			// The active pattern wouldn't have to be saved each time, it is saved on LeaveFindOnEdit() anyway.
@@ -3288,10 +3297,20 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <remarks>
+		/// Using "pattern" instead of "textOrPattern" for simplicity.
+		/// </remarks>
 		private void ShowNotFoundMessage(string pattern, bool isFirst)
 		{
 			var text = new StringBuilder();
-			text.Append(@"The specified pattern """);
+			text.Append("The specified ");
+
+			if (ApplicationSettings.RoamingUserSettings.Find.Options.UseRegex)
+				text.Append("pattern");
+			else
+				text.Append("text");
+
+			text.Append(@" """);
 			text.Append(pattern);
 			text.Append(@""" has not been found");
 
@@ -3300,11 +3319,19 @@ namespace YAT.View.Forms
 
 			text.Append(".");
 
+			var caption = new StringBuilder();
+			if (ApplicationSettings.RoamingUserSettings.Find.Options.UseRegex)
+				caption.Append("Pattern");
+			else
+				caption.Append("Text");
+
+			caption.Append(" Not Found");
+
 			MessageBoxEx.Show
 			(
 				this,
 				text.ToString(),
-				"Pattern Not Found",
+				caption.ToString(),
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information
 			);

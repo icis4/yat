@@ -445,10 +445,10 @@ namespace YAT.View.Forms
 			DebugMdi("Deactivated");
 
 			toolStripComboBox_MainTool_Find_Pattern         .OnFormDeactivateWorkaround();
-			toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger .OnFormDeactivateWorkaround();
-			toolStripComboBox_MainTool_Terminal_AutoResponse_Response.OnFormDeactivateWorkaround();
-			toolStripComboBox_MainTool_Terminal_AutoAction_Trigger   .OnFormDeactivateWorkaround();
-		////toolStripComboBox_MainTool_Terminal_AutoAction_Action is a standard ToolStripComboBox.
+			toolStripComboBox_MainTool_AutoResponse_Trigger .OnFormDeactivateWorkaround();
+			toolStripComboBox_MainTool_AutoResponse_Response.OnFormDeactivateWorkaround();
+			toolStripComboBox_MainTool_AutoAction_Trigger   .OnFormDeactivateWorkaround();
+		////toolStripComboBox_MainTool_AutoAction_Action is a standard ToolStripComboBox.
 
 			// Also notify the active MDI child about switching to another application:
 			var f = (ActiveMdiChild as IOnFormDeactivateWorkaround);
@@ -969,21 +969,21 @@ namespace YAT.View.Forms
 				toolStripButton_MainTool_Terminal_Stop.Enabled     = childIsReady && terminalIsStarted;
 				toolStripButton_MainTool_Terminal_Settings.Enabled = childIsReady;
 
-				toolStripButton_MainTool_Terminal_Radix_String.Enabled  = childIsReady && radixIsReady;
-				toolStripButton_MainTool_Terminal_Radix_Char.Enabled    = childIsReady && radixIsReady;
-				toolStripButton_MainTool_Terminal_Radix_Bin.Enabled     = childIsReady && radixIsReady;
-				toolStripButton_MainTool_Terminal_Radix_Oct.Enabled     = childIsReady && radixIsReady;
-				toolStripButton_MainTool_Terminal_Radix_Dec.Enabled     = childIsReady && radixIsReady;
-				toolStripButton_MainTool_Terminal_Radix_Hex.Enabled     = childIsReady && radixIsReady;
-				toolStripButton_MainTool_Terminal_Radix_Unicode.Enabled = childIsReady && radixIsReady;
+				toolStripButton_MainTool_Radix_String.Enabled  = childIsReady && radixIsReady;
+				toolStripButton_MainTool_Radix_Char.Enabled    = childIsReady && radixIsReady;
+				toolStripButton_MainTool_Radix_Bin.Enabled     = childIsReady && radixIsReady;
+				toolStripButton_MainTool_Radix_Oct.Enabled     = childIsReady && radixIsReady;
+				toolStripButton_MainTool_Radix_Dec.Enabled     = childIsReady && radixIsReady;
+				toolStripButton_MainTool_Radix_Hex.Enabled     = childIsReady && radixIsReady;
+				toolStripButton_MainTool_Radix_Unicode.Enabled = childIsReady && radixIsReady;
 
-				toolStripButton_MainTool_Terminal_Radix_String.Checked  = (radix == Domain.Radix.String);
-				toolStripButton_MainTool_Terminal_Radix_Char.Checked    = (radix == Domain.Radix.Char);
-				toolStripButton_MainTool_Terminal_Radix_Bin.Checked     = (radix == Domain.Radix.Bin);
-				toolStripButton_MainTool_Terminal_Radix_Oct.Checked     = (radix == Domain.Radix.Oct);
-				toolStripButton_MainTool_Terminal_Radix_Dec.Checked     = (radix == Domain.Radix.Dec);
-				toolStripButton_MainTool_Terminal_Radix_Hex.Checked     = (radix == Domain.Radix.Hex);
-				toolStripButton_MainTool_Terminal_Radix_Unicode.Checked = (radix == Domain.Radix.Unicode);
+				toolStripButton_MainTool_Radix_String.Checked  = (radix == Domain.Radix.String);
+				toolStripButton_MainTool_Radix_Char.Checked    = (radix == Domain.Radix.Char);
+				toolStripButton_MainTool_Radix_Bin.Checked     = (radix == Domain.Radix.Bin);
+				toolStripButton_MainTool_Radix_Oct.Checked     = (radix == Domain.Radix.Oct);
+				toolStripButton_MainTool_Radix_Dec.Checked     = (radix == Domain.Radix.Dec);
+				toolStripButton_MainTool_Radix_Hex.Checked     = (radix == Domain.Radix.Hex);
+				toolStripButton_MainTool_Radix_Unicode.Checked = (radix == Domain.Radix.Unicode);
 
 				toolStripButton_MainTool_Terminal_Clear.Enabled           = childIsReady;
 				toolStripButton_MainTool_Terminal_Refresh.Enabled         = childIsReady;
@@ -1001,11 +1001,11 @@ namespace YAT.View.Forms
 				if (childIsReady)
 					logFileExists = ((Terminal)ActiveMdiChild).LogFileExists;
 
-				toolStripButton_MainTool_Terminal_Log_Settings.Enabled      =  childIsReady;
-				toolStripButton_MainTool_Terminal_Log_On.Enabled            = (childIsReady && !logIsOn);
-				toolStripButton_MainTool_Terminal_Log_Off.Enabled           = (childIsReady &&  logIsOn);
-				toolStripButton_MainTool_Terminal_Log_OpenFile.Enabled      = (childIsReady &&  logFileExists);
-				toolStripButton_MainTool_Terminal_Log_OpenDirectory.Enabled =  childIsReady;
+				toolStripButton_MainTool_Log_Settings.Enabled      =  childIsReady;
+				toolStripButton_MainTool_Log_On.Enabled            = (childIsReady && !logIsOn);
+				toolStripButton_MainTool_Log_Off.Enabled           = (childIsReady &&  logIsOn);
+				toolStripButton_MainTool_Log_OpenFile.Enabled      = (childIsReady &&  logFileExists);
+				toolStripButton_MainTool_Log_OpenDirectory.Enabled =  childIsReady;
 
 				// AutoAction:
 
@@ -1037,11 +1037,11 @@ namespace YAT.View.Forms
 					}
 				}
 
-				toolStripButton_MainTool_Terminal_AutoAction_ShowHide.Checked = aaIsActive;
+				toolStripButton_MainTool_AutoAction_ShowHide.Checked = aaIsActive;
 
 				if (ApplicationSettings.RoamingUserSettings.View.AutoActionVisible)
 				{
-					toolStripButton_MainTool_Terminal_AutoAction_ShowHide.Text = "Hide Automatic Action";
+					toolStripButton_MainTool_AutoAction_ShowHide.Text = "Hide Automatic Action";
 
 					// Attention:
 					// Similaa code exists in the following location:
@@ -1050,43 +1050,43 @@ namespace YAT.View.Forms
 
 					if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
 					{
-						toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Items.Clear();
-						toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Items.AddRange(aaTriggerItems);
-						ToolStripComboBoxHelper.Select(toolStripComboBox_MainTool_Terminal_AutoAction_Trigger, aaTrigger, new Command(aaTrigger).SingleLineText); // No explicit default radix available (yet).
-						toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Enabled = childIsReady;
-						toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Visible = true;
+						toolStripComboBox_MainTool_AutoAction_Trigger.Items.Clear();
+						toolStripComboBox_MainTool_AutoAction_Trigger.Items.AddRange(aaTriggerItems);
+						ToolStripComboBoxHelper.Select(toolStripComboBox_MainTool_AutoAction_Trigger, aaTrigger, new Command(aaTrigger).SingleLineText); // No explicit default radix available (yet).
+						toolStripComboBox_MainTool_AutoAction_Trigger.Enabled = childIsReady;
+						toolStripComboBox_MainTool_AutoAction_Trigger.Visible = true;
 
-						toolStripComboBox_MainTool_Terminal_AutoAction_Action.Items.Clear();
-						toolStripComboBox_MainTool_Terminal_AutoAction_Action.Items.AddRange(aaActionItems);
-						ToolStripComboBoxHelper.Select(toolStripComboBox_MainTool_Terminal_AutoAction_Action, aaAction, new Command(aaAction).SingleLineText); // No explicit default radix available (yet).
-						toolStripComboBox_MainTool_Terminal_AutoAction_Action.Enabled = childIsReady;
-						toolStripComboBox_MainTool_Terminal_AutoAction_Action.Visible = true;
+						toolStripComboBox_MainTool_AutoAction_Action.Items.Clear();
+						toolStripComboBox_MainTool_AutoAction_Action.Items.AddRange(aaActionItems);
+						ToolStripComboBoxHelper.Select(toolStripComboBox_MainTool_AutoAction_Action, aaAction, new Command(aaAction).SingleLineText); // No explicit default radix available (yet).
+						toolStripComboBox_MainTool_AutoAction_Action.Enabled = childIsReady;
+						toolStripComboBox_MainTool_AutoAction_Action.Visible = true;
 					}
 
-					toolStripLabel_MainTool_Terminal_AutoAction_Count.Text = string.Format(CultureInfo.CurrentUICulture, "({0})", aaCount);
-					toolStripLabel_MainTool_Terminal_AutoAction_Count.Enabled = aaIsActive;
-					toolStripLabel_MainTool_Terminal_AutoAction_Count.Visible = true;
+					toolStripLabel_MainTool_AutoAction_Count.Text = string.Format(CultureInfo.CurrentUICulture, "({0})", aaCount);
+					toolStripLabel_MainTool_AutoAction_Count.Enabled = aaIsActive;
+					toolStripLabel_MainTool_AutoAction_Count.Visible = true;
 
-					toolStripButton_MainTool_Terminal_AutoAction_Deactivate.Enabled = aaIsActive;
-					toolStripButton_MainTool_Terminal_AutoAction_Deactivate.Visible = true;
+					toolStripButton_MainTool_AutoAction_Deactivate.Enabled = aaIsActive;
+					toolStripButton_MainTool_AutoAction_Deactivate.Visible = true;
 				}
 				else
 				{
-					toolStripButton_MainTool_Terminal_AutoAction_ShowHide.Text = "Show Automatic Action";
+					toolStripButton_MainTool_AutoAction_ShowHide.Text = "Show Automatic Action";
 
-					toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Visible = false;
-					toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Enabled = false;
-					toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Items.Clear();
+					toolStripComboBox_MainTool_AutoAction_Trigger.Visible = false;
+					toolStripComboBox_MainTool_AutoAction_Trigger.Enabled = false;
+					toolStripComboBox_MainTool_AutoAction_Trigger.Items.Clear();
 
-					toolStripComboBox_MainTool_Terminal_AutoAction_Action.Visible = false;
-					toolStripComboBox_MainTool_Terminal_AutoAction_Action.Enabled = false;
-					toolStripComboBox_MainTool_Terminal_AutoAction_Action.Items.Clear();
+					toolStripComboBox_MainTool_AutoAction_Action.Visible = false;
+					toolStripComboBox_MainTool_AutoAction_Action.Enabled = false;
+					toolStripComboBox_MainTool_AutoAction_Action.Items.Clear();
 
-					toolStripLabel_MainTool_Terminal_AutoAction_Count.Visible = false;
-					toolStripLabel_MainTool_Terminal_AutoAction_Count.Text = "";
+					toolStripLabel_MainTool_AutoAction_Count.Visible = false;
+					toolStripLabel_MainTool_AutoAction_Count.Text = "";
 
-					toolStripButton_MainTool_Terminal_AutoAction_Deactivate.Visible = false;
-					toolStripButton_MainTool_Terminal_AutoAction_Deactivate.Enabled = false;
+					toolStripButton_MainTool_AutoAction_Deactivate.Visible = false;
+					toolStripButton_MainTool_AutoAction_Deactivate.Enabled = false;
 				}
 
 				// AutoResponse:
@@ -1119,11 +1119,11 @@ namespace YAT.View.Forms
 					}
 				}
 
-				toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Checked = arIsActive;
+				toolStripButton_MainTool_AutoResponse_ShowHide.Checked = arIsActive;
 
 				if (ApplicationSettings.RoamingUserSettings.View.AutoResponseVisible)
 				{
-					toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Hide Automatic Response";
+					toolStripButton_MainTool_AutoResponse_ShowHide.Text = "Hide Automatic Response";
 
 					// Attention:
 					// Similar code exists in...
@@ -1132,43 +1132,43 @@ namespace YAT.View.Forms
 
 					if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
 					{
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.Clear();
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.AddRange(arTriggerItems);
-						ToolStripComboBoxHelper.Select(toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger, arTrigger, new Command(arTrigger).SingleLineText); // No explicit default radix available (yet).
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Enabled = childIsReady;
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Visible = true;
+						toolStripComboBox_MainTool_AutoResponse_Trigger.Items.Clear();
+						toolStripComboBox_MainTool_AutoResponse_Trigger.Items.AddRange(arTriggerItems);
+						ToolStripComboBoxHelper.Select(toolStripComboBox_MainTool_AutoResponse_Trigger, arTrigger, new Command(arTrigger).SingleLineText); // No explicit default radix available (yet).
+						toolStripComboBox_MainTool_AutoResponse_Trigger.Enabled = childIsReady;
+						toolStripComboBox_MainTool_AutoResponse_Trigger.Visible = true;
 
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.Clear();
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.AddRange(arResponseItems);
-						ToolStripComboBoxHelper.Select(toolStripComboBox_MainTool_Terminal_AutoResponse_Response, arResponse, new Command(arResponse).SingleLineText); // No explicit default radix available (yet).
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Enabled = childIsReady;
-						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Visible = true;
+						toolStripComboBox_MainTool_AutoResponse_Response.Items.Clear();
+						toolStripComboBox_MainTool_AutoResponse_Response.Items.AddRange(arResponseItems);
+						ToolStripComboBoxHelper.Select(toolStripComboBox_MainTool_AutoResponse_Response, arResponse, new Command(arResponse).SingleLineText); // No explicit default radix available (yet).
+						toolStripComboBox_MainTool_AutoResponse_Response.Enabled = childIsReady;
+						toolStripComboBox_MainTool_AutoResponse_Response.Visible = true;
 					}
 
-					toolStripLabel_MainTool_Terminal_AutoResponse_Count.Text = string.Format(CultureInfo.CurrentUICulture, "({0})", arCount);
-					toolStripLabel_MainTool_Terminal_AutoResponse_Count.Enabled = arIsActive;
-					toolStripLabel_MainTool_Terminal_AutoResponse_Count.Visible = true;
+					toolStripLabel_MainTool_AutoResponse_Count.Text = string.Format(CultureInfo.CurrentUICulture, "({0})", arCount);
+					toolStripLabel_MainTool_AutoResponse_Count.Enabled = arIsActive;
+					toolStripLabel_MainTool_AutoResponse_Count.Visible = true;
 
-					toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Enabled = arIsActive;
-					toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Visible = true;
+					toolStripButton_MainTool_AutoResponse_Deactivate.Enabled = arIsActive;
+					toolStripButton_MainTool_AutoResponse_Deactivate.Visible = true;
 				}
 				else
 				{
-					toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Show Automatic Response";
+					toolStripButton_MainTool_AutoResponse_ShowHide.Text = "Show Automatic Response";
 
-					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Visible = false;
-					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Enabled = false;
-					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.Clear();
+					toolStripComboBox_MainTool_AutoResponse_Trigger.Visible = false;
+					toolStripComboBox_MainTool_AutoResponse_Trigger.Enabled = false;
+					toolStripComboBox_MainTool_AutoResponse_Trigger.Items.Clear();
 
-					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Visible = false;
-					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Enabled = false;
-					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.Clear();
+					toolStripComboBox_MainTool_AutoResponse_Response.Visible = false;
+					toolStripComboBox_MainTool_AutoResponse_Response.Enabled = false;
+					toolStripComboBox_MainTool_AutoResponse_Response.Items.Clear();
 
-					toolStripLabel_MainTool_Terminal_AutoResponse_Count.Visible = false;
-					toolStripLabel_MainTool_Terminal_AutoResponse_Count.Text = "";
+					toolStripLabel_MainTool_AutoResponse_Count.Visible = false;
+					toolStripLabel_MainTool_AutoResponse_Count.Text = "";
 
-					toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Visible = false;
-					toolStripButton_MainTool_Terminal_AutoResponse_Deactivate.Enabled = false;
+					toolStripButton_MainTool_AutoResponse_Deactivate.Visible = false;
+					toolStripButton_MainTool_AutoResponse_Deactivate.Enabled = false;
 				}
 
 				toolStripButton_MainTool_Terminal_Format.Enabled =  childIsReady;
@@ -1220,6 +1220,9 @@ namespace YAT.View.Forms
 						toolStripButton_MainTool_Find_WholeWord    .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.WholeWord;
 						toolStripButton_MainTool_Find_WholeWord    .Enabled = childIsReady;
 						toolStripButton_MainTool_Find_WholeWord    .Visible = true;
+						toolStripButton_MainTool_Find_UseRegex     .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.UseRegex;
+						//                            UseRegex     .Enabled = true (always true).
+						toolStripButton_MainTool_Find_UseRegex     .Visible = true;
 
 						SetFindState();
 
@@ -1240,6 +1243,7 @@ namespace YAT.View.Forms
 
 						toolStripButton_MainTool_Find_CaseSensitive.Visible = false;
 						toolStripButton_MainTool_Find_WholeWord    .Visible = false;
+						toolStripButton_MainTool_Find_UseRegex     .Visible = false;
 
 						toolStripButton_MainTool_Find_Next    .Visible = false;
 						toolStripButton_MainTool_Find_Previous.Visible = false;
@@ -1288,37 +1292,37 @@ namespace YAT.View.Forms
 			((Terminal)ActiveMdiChild).RequestEditTerminalSettings();
 		}
 
-		private void toolStripButton_MainTool_Terminal_Radix_String_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Radix_String_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.String);
 		}
 
-		private void toolStripButton_MainTool_Terminal_Radix_Char_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Radix_Char_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Char);
 		}
 
-		private void toolStripButton_MainTool_Terminal_Radix_Bin_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Radix_Bin_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Bin);
 		}
 
-		private void toolStripButton_MainTool_Terminal_Radix_Oct_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Radix_Oct_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Oct);
 		}
 
-		private void toolStripButton_MainTool_Terminal_Radix_Dec_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Radix_Dec_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Dec);
 		}
 
-		private void toolStripButton_MainTool_Terminal_Radix_Hex_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Radix_Hex_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Hex);
 		}
 
-		private void toolStripButton_MainTool_Terminal_Radix_Unicode_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Radix_Unicode_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Unicode);
 		}
@@ -1435,15 +1439,10 @@ namespace YAT.View.Forms
 					var pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
 					if (!string.IsNullOrEmpty(pattern))
 					{
-						try
-						{
-							var regex = new Regex(pattern);
-							UnusedLocal.PreventAnalysisWarning(regex);
-						}
-						catch (ArgumentException)
+						if (!TryValidateFindPattern(pattern))
 						{
 							SetFindState(FindDirection.Undetermined, FindResult.Invalid);
-							return; // Skip 'FindOnEdit' in case of invalid Regex.
+							return; // Skip 'FindOnEdit' in case of invalid (regex) pattern.
 						}
 
 						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
@@ -1499,6 +1498,7 @@ namespace YAT.View.Forms
 				{
 					case Keys.C: ToggleFindCaseSensitive(); e.SuppressKeyPress = true; break;
 					case Keys.W: ToggleFindWholeWord();     e.SuppressKeyPress = true; break;
+					case Keys.E: ToggleFindUseRegex();      e.SuppressKeyPress = true; break;
 
 					case Keys.F:      // Additional shortcuts shall be executable under same conditions as normal shortcuts.
 					case Keys.N: if (FindNextIsFeasible)     { ValidateAndFindNext();     } e.SuppressKeyPress = true; break;
@@ -1536,6 +1536,7 @@ namespace YAT.View.Forms
 				{
 					case Keys.C: e.SuppressKeyPress = true; break;
 					case Keys.W: e.SuppressKeyPress = true; break;
+					case Keys.E: e.SuppressKeyPress = true; break;
 
 					case Keys.F:
 					case Keys.N: e.SuppressKeyPress = true; break;
@@ -1745,29 +1746,74 @@ namespace YAT.View.Forms
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Using "pattern" instead of "textOrPattern" for simplicity.
+		/// </remarks>
 		protected virtual bool ValidateFindPattern(string pattern)
 		{
-			try
+			string errorMessage;
+			if (TryValidateFindPattern(pattern, out errorMessage))
 			{
-				var regex = new Regex(pattern);
-				UnusedLocal.PreventAnalysisWarning(regex);
 				return (true);
 			}
-			catch (ArgumentException ex)
+			else
 			{
 				if (MessageBoxIsPermissible)
 				{
+					var caption = new StringBuilder("Invalid Find ");
+					if (ApplicationSettings.RoamingUserSettings.Find.Options.UseRegex)
+						caption.Append("Pattern");
+					else
+						caption.Append("Text");
+
 					MessageBoxEx.Show
 					(
 						this,
-						ex.Message,
-						"Invalid Find Pattern",
+						errorMessage,
+						caption.ToString(),
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
 					);
 				}
+
 				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Using "pattern" instead of "textOrPattern" for simplicity.
+		/// </remarks>
+		protected virtual bool TryValidateFindPattern(string pattern)
+		{
+			string errorMessage;
+			return (TryValidateFindPattern(pattern, out errorMessage));
+		}
+
+		/// <remarks>
+		/// Using "pattern" instead of "textOrPattern" for simplicity.
+		/// </remarks>
+		protected virtual bool TryValidateFindPattern(string pattern, out string errorMessage)
+		{
+			if (ApplicationSettings.RoamingUserSettings.Find.Options.UseRegex)
+			{
+				try
+				{
+					var regex = new Regex(pattern);
+					UnusedLocal.PreventAnalysisWarning(regex);
+
+					errorMessage = null;
+					return (true);
+				}
+				catch (ArgumentException ex)
+				{
+					errorMessage = ex.Message;
+					return (false);
+				}
+			}
+			else // Not using regex:
+			{
+				errorMessage = null;
+				return (true);
 			}
 		}
 
@@ -1803,53 +1849,69 @@ namespace YAT.View.Forms
 			ValidateAndFindOnEdit();
 		}
 
-		private void toolStripButton_MainTool_Terminal_Log_Settings_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Find_UseRegex_Click(object sender, EventArgs e)
+		{
+			ToggleFindUseRegex();
+		}
+
+		/// <summary></summary>
+		protected virtual void ToggleFindUseRegex()
+		{
+			var options = ApplicationSettings.RoamingUserSettings.Find.Options;
+			options.UseRegex = !options.UseRegex;
+			ApplicationSettings.RoamingUserSettings.Find.Options = options;
+			ApplicationSettings.SaveRoamingUserSettings();
+
+			ValidateAndFindOnEdit();
+		}
+
+		private void toolStripButton_MainTool_Log_Settings_Click(object sender, EventArgs e)
 		{
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.RequestEditLogSettings();
 		}
 
-		private void toolStripButton_MainTool_Terminal_Log_On_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Log_On_Click(object sender, EventArgs e)
 		{
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.RequestSwitchLogOn();
 		}
 
-		private void toolStripButton_MainTool_Terminal_Log_Off_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Log_Off_Click(object sender, EventArgs e)
 		{
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.RequestSwitchLogOff();
 		}
 
-		private void toolStripButton_MainTool_Terminal_Log_Open_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Log_Open_Click(object sender, EventArgs e)
 		{
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.RequestOpenLogFile();
 		}
 
-		private void toolStripButton_MainTool_Terminal_Log_OpenDirectory_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Log_OpenDirectory_Click(object sender, EventArgs e)
 		{
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.RequestOpenLogDirectory();
 		}
 
-		private void toolStripButton_MainTool_Terminal_AutoAction_ShowHide_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_AutoAction_ShowHide_Click(object sender, EventArgs e)
 		{
 			ApplicationSettings.RoamingUserSettings.View.AutoActionVisible = !ApplicationSettings.RoamingUserSettings.View.AutoActionVisible;
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
-		private void toolStripComboBox_MainTool_Terminal_AutoAction_Trigger_SelectedIndexChanged(object sender, EventArgs e)
+		private void toolStripComboBox_MainTool_AutoAction_Trigger_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			var trigger = (toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.SelectedItem as AutoTriggerEx);
+			var trigger = (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
 				((Terminal)ActiveMdiChild).RequestAutoActionTrigger(trigger);
 		}
@@ -1858,13 +1920,13 @@ namespace YAT.View.Forms
 		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event
 		/// way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// </remarks>
-		private void toolStripComboBox_MainTool_Terminal_AutoAction_Trigger_TextChanged(object sender, EventArgs e)
+		private void toolStripComboBox_MainTool_AutoAction_Trigger_TextChanged(object sender, EventArgs e)
 		{
 			// Attention, 'isSettingControls' must only be checked further below!
 
-			if (toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.SelectedIndex == ControlEx.InvalidIndex)
+			if (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedIndex == ControlEx.InvalidIndex)
 			{
-				string triggerText = toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Text;
+				string triggerText = toolStripComboBox_MainTool_AutoAction_Trigger.Text;
 				int invalidTextStart;
 				if (Utilities.ValidationHelper.ValidateText(this, "automatic action trigger", triggerText, out invalidTextStart))
 				{
@@ -1883,47 +1945,47 @@ namespace YAT.View.Forms
 				}
 				else
 				{
-					toolStripComboBox_MainTool_Terminal_AutoAction_Trigger.Text = triggerText.Remove(invalidTextStart);
+					toolStripComboBox_MainTool_AutoAction_Trigger.Text = triggerText.Remove(invalidTextStart);
 				}
 			}
 		}
 
-		private void toolStripComboBox_MainTool_Terminal_AutoAction_Action_SelectedIndexChanged(object sender, EventArgs e)
+		private void toolStripComboBox_MainTool_AutoAction_Action_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			var response = (toolStripComboBox_MainTool_Terminal_AutoAction_Action.SelectedItem as AutoActionEx);
+			var response = (toolStripComboBox_MainTool_AutoAction_Action.SelectedItem as AutoActionEx);
 			if (response != null)
 				((Terminal)ActiveMdiChild).RequestAutoActionAction(response);
 		}
 
-		private void toolStripLabel_MainTool_Terminal_AutoAction_Count_Click(object sender, EventArgs e)
+		private void toolStripLabel_MainTool_AutoAction_Count_Click(object sender, EventArgs e)
 		{
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.RequestAutoActionResetCount();
 		}
 
-		private void toolStripButton_MainTool_Terminal_AutoAction_Deactivate_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_AutoAction_Deactivate_Click(object sender, EventArgs e)
 		{
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.RequestAutoActionDeactivate();
 		}
 
-		private void toolStripButton_MainTool_Terminal_AutoResponse_ShowHide_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_AutoResponse_ShowHide_Click(object sender, EventArgs e)
 		{
 			ApplicationSettings.RoamingUserSettings.View.AutoResponseVisible = !ApplicationSettings.RoamingUserSettings.View.AutoResponseVisible;
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
-		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
+		private void toolStripComboBox_MainTool_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			var trigger = (toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
+			var trigger = (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
 				((Terminal)ActiveMdiChild).RequestAutoResponseTrigger(trigger);
 		}
@@ -1932,13 +1994,13 @@ namespace YAT.View.Forms
 		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event
 		/// way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// </remarks>
-		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger_TextChanged(object sender, EventArgs e)
+		private void toolStripComboBox_MainTool_AutoResponse_Trigger_TextChanged(object sender, EventArgs e)
 		{
 			// Attention, 'isSettingControls' must only be checked further below!
 
-			if (toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedIndex == ControlEx.InvalidIndex)
+			if (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedIndex == ControlEx.InvalidIndex)
 			{
-				string triggerText = toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Text;
+				string triggerText = toolStripComboBox_MainTool_AutoResponse_Trigger.Text;
 				int invalidTextStart;
 				if (Utilities.ValidationHelper.ValidateText(this, "automatic response trigger", triggerText, out invalidTextStart))
 				{
@@ -1957,17 +2019,17 @@ namespace YAT.View.Forms
 				}
 				else
 				{
-					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Text = triggerText.Remove(invalidTextStart);
+					toolStripComboBox_MainTool_AutoResponse_Trigger.Text = triggerText.Remove(invalidTextStart);
 				}
 			}
 		}
 
-		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Response_SelectedIndexChanged(object sender, EventArgs e)
+		private void toolStripComboBox_MainTool_AutoResponse_Response_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			var response = (toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedItem as AutoResponseEx);
+			var response = (toolStripComboBox_MainTool_AutoResponse_Response.SelectedItem as AutoResponseEx);
 			if (response != null)
 				((Terminal)ActiveMdiChild).RequestAutoResponseResponse(response);
 		}
@@ -1976,13 +2038,13 @@ namespace YAT.View.Forms
 		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event
 		/// way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// </remarks>
-		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Response_TextChanged(object sender, EventArgs e)
+		private void toolStripComboBox_MainTool_AutoResponse_Response_TextChanged(object sender, EventArgs e)
 		{
 			// Attention, 'isSettingControls' must only be checked further below!
 
-			if (toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedIndex == ControlEx.InvalidIndex)
+			if (toolStripComboBox_MainTool_AutoResponse_Response.SelectedIndex == ControlEx.InvalidIndex)
 			{
-				string responseText = toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Text;
+				string responseText = toolStripComboBox_MainTool_AutoResponse_Response.Text;
 				int invalidTextStart;
 				if (Utilities.ValidationHelper.ValidateText(this, "automatic response", responseText, out invalidTextStart))
 				{
@@ -2001,19 +2063,19 @@ namespace YAT.View.Forms
 				}
 				else
 				{
-					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Text = responseText.Remove(invalidTextStart);
+					toolStripComboBox_MainTool_AutoResponse_Response.Text = responseText.Remove(invalidTextStart);
 				}
 			}
 		}
 
-		private void toolStripLabel_MainTool_Terminal_AutoResponse_Count_Click(object sender, EventArgs e)
+		private void toolStripLabel_MainTool_AutoResponse_Count_Click(object sender, EventArgs e)
 		{
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.RequestAutoResponseResetCount();
 		}
 
-		private void toolStripButton_MainTool_Terminal_AutoResponse_Deactivate_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_AutoResponse_Deactivate_Click(object sender, EventArgs e)
 		{
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)

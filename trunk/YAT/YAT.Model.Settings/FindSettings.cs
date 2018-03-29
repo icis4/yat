@@ -92,7 +92,7 @@ namespace YAT.Model.Settings
 
 			ActivePattern  = null;
 			RecentPatterns = new RecentItemCollection<string>(MaxRecentPatterns);
-			Options        = new FindOptions(true, false);
+			Options        = new FindOptions(true, false, false);
 		}
 
 		#region Properties
@@ -100,7 +100,9 @@ namespace YAT.Model.Settings
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Using "Pattern" instead of "TextOrPattern" for simplicity.
+		/// </remarks>
 		[XmlElement("ActivePattern")]
 		public string ActivePattern
 		{
@@ -115,7 +117,9 @@ namespace YAT.Model.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Using "Pattern" instead of "TextOrPattern" for simplicity.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
 		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
 		[XmlElement("RecentPatterns")]
