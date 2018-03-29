@@ -143,11 +143,11 @@ namespace MKY.Windows.Forms
 
 						// Potentially trim white space:
 						if (char.IsWhiteSpace(Text, i))
-							i = (StringEx.StartIndexOfSameCharacterClass(Text, i) - 1);
+							i = (StringEx.IndexOfSameCharacterClass(Text, i) - 1);
 
 						// Find previous marker:
 						if (i > 0)
-							i = StringEx.StartIndexOfSameCharacterClass(Text, i);
+							i = StringEx.IndexOfSameCharacterClass(Text, i);
 						else
 							i = 0; // Limit i as it may become -1 on trimming above.
 
