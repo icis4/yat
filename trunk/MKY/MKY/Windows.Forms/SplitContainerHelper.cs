@@ -22,8 +22,10 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace MKY.Windows.Forms
@@ -61,9 +63,12 @@ namespace MKY.Windows.Forms
 				{
 					// Adjust splitter distance:
 					int scaledDistance = CalculateScaledDistanceFromUnscaled(sc, sc.SplitterDistance);
-					int limitedDistance = LimitSplitterDistance(sc, scaledDistance);
-					if (sc.SplitterDistance != limitedDistance)
-						sc.SplitterDistance = limitedDistance;
+					int limitedDistance;
+					if (TryLimitSplitterDistance(sc, scaledDistance, out limitedDistance))
+					{
+						if (sc.SplitterDistance != limitedDistance)
+							sc.SplitterDistance = limitedDistance;
+					}
 
 					// Continue with the panels:
 					PerformScaling(sc.Panel1);
@@ -131,7 +136,7 @@ namespace MKY.Windows.Forms
 		/// Limits <paramref name="distance"/> according to the preconditions of the
 		/// <see cref="SplitContainer.SplitterDistance"/> property.
 		/// </summary>
-		public static int LimitSplitterDistance(SplitContainer sc, int distance)
+		public static bool TryLimitSplitterDistance(SplitContainer sc, int distance, out int limited)
 		{
 			int widthOrHeight = OrientationEx.SizeToWidthOrHeight(sc, sc.Orientation);
 
@@ -141,7 +146,17 @@ namespace MKY.Windows.Forms
 			min = Int32Ex.Limit(min, 0, (widthOrHeight - 1)); // Both values must be 0 or above but
 			max = Int32Ex.Limit(max, 0, (widthOrHeight - 1)); // not above the size of the control.
 
-			return (Int32Ex.Limit(distance, min, max));
+			if (min <= max) // Normal case if everything is OK:
+			{
+				limited = Int32Ex.Limit(distance, min, max);
+				return (true);
+			}
+			else // Case e.g. if there are mistakes in the layout of a form.
+			{    // Needed to prevent 'ArgumentException' at Int32Ex.Limit().
+				Debug.WriteLine(string.Format(CultureInfo.InvariantCulture, "Result should be 'min' <= 'max', but 'min' is {0} and 'max' is {1}! Check the layout and resulting size of '{2}'!", min, max, sc.Name));
+				limited = 0;
+				return (false);
+			}
 		}
 	}
 }
