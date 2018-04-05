@@ -45,7 +45,7 @@ namespace YAT.Settings.Workspace
 	public class WorkspaceSettingsRoot : MKY.Settings.SettingsItem, IEquatable<WorkspaceSettingsRoot>
 	{
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
-		private string settingsVersion = "1.2.2";
+		private string settingsVersion = "1.2.3";
 
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
 		private string productVersion = ApplicationEx.ProductVersion;
