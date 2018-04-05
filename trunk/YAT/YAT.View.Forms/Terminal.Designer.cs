@@ -163,7 +163,6 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_SendContextMenu_KeepSendText = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_SendContextMenu_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_SendImmediately = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_EnableEscapesForText = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
@@ -171,6 +170,8 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_Separator_5 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_SendContextMenu_SkipEmptyLines = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_EnableEscapesForFile = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_SendContextMenu_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_SendContextMenu_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip_Terminal = new MKY.Windows.Forms.MenuStripEx();
 			this.toolStripMenuItem_TerminalMenu_File = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_File_Close = new System.Windows.Forms.ToolStripMenuItem();
@@ -215,7 +216,6 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Send_KeepSendText = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
@@ -224,7 +224,9 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_5 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_TerminalMenu_Send_Separator_7 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger = new MKY.Windows.Forms.ToolStripComboBoxEx();
@@ -335,8 +337,6 @@ namespace YAT.View.Forms
 			this.timer_RfrLuminescence = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.timer_IOStatusIndicator = new System.Windows.Forms.Timer(this.components);
-			this.toolStripMenuItem_SendContextMenu_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_TerminalMenu_Send_Separator_7 = new System.Windows.Forms.ToolStripSeparator();
 			this.contextMenuStrip_Monitor.SuspendLayout();
 			this.contextMenuStrip_Radix.SuspendLayout();
 			this.contextMenuStrip_Predefined.SuspendLayout();
@@ -1428,15 +1428,6 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_KeepSendText.Text = "Keep [Send Text] after Send";
 			this.toolStripMenuItem_SendContextMenu_KeepSendText.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_KeepSendText_Click);
 			// 
-			// toolStripMenuItem_SendContextMenu_CopyPredefined
-			// 
-			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Name = "toolStripMenuItem_SendContextMenu_CopyPredefined";
-			this.toolStripMenuItem_SendContextMenu_CopyPredefined.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.P)));
-			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Size = new System.Drawing.Size(333, 22);
-			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Text = "Copy Predefined to [Send Text/File]";
-			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_CopyPredefined_Click);
-			// 
 			// toolStripMenuItem_SendContextMenu_SendImmediately
 			// 
 			this.toolStripMenuItem_SendContextMenu_SendImmediately.Name = "toolStripMenuItem_SendContextMenu_SendImmediately";
@@ -1487,6 +1478,20 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_EnableEscapesForFile.Size = new System.Drawing.Size(333, 22);
 			this.toolStripMenuItem_SendContextMenu_EnableEscapesForFile.Text = "Enable <...> and \\... Escapes on [Send File]";
 			this.toolStripMenuItem_SendContextMenu_EnableEscapesForFile.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_EnableEscapesForFile_Click);
+			// 
+			// toolStripMenuItem_SendContextMenu_Separator_6
+			// 
+			this.toolStripMenuItem_SendContextMenu_Separator_6.Name = "toolStripMenuItem_SendContextMenu_Separator_6";
+			this.toolStripMenuItem_SendContextMenu_Separator_6.Size = new System.Drawing.Size(330, 6);
+			// 
+			// toolStripMenuItem_SendContextMenu_CopyPredefined
+			// 
+			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Name = "toolStripMenuItem_SendContextMenu_CopyPredefined";
+			this.toolStripMenuItem_SendContextMenu_CopyPredefined.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.P)));
+			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Size = new System.Drawing.Size(333, 22);
+			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Text = "Copy Predefined to [Send Text/File]";
+			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_CopyPredefined_Click);
 			// 
 			// menuStrip_Terminal
 			// 
@@ -1905,15 +1910,6 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_KeepSendText.Text = "&Keep [Send Text] after Send";
 			this.toolStripMenuItem_TerminalMenu_Send_KeepSendText.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_KeepSendText_Click);
 			// 
-			// toolStripMenuItem_TerminalMenu_Send_CopyPredefined
-			// 
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Name = "toolStripMenuItem_TerminalMenu_Send_CopyPredefined";
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.P)));
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Size = new System.Drawing.Size(333, 22);
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Text = "Copy &Predefined to [Send Text/File]";
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined_Click);
-			// 
 			// toolStripMenuItem_TerminalMenu_Send_SendImmediately
 			// 
 			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.Name = "toolStripMenuItem_TerminalMenu_Send_SendImmediately";
@@ -1970,10 +1966,24 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_5.Name = "toolStripMenuItem_TerminalMenu_Send_Separator_5";
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_5.Size = new System.Drawing.Size(330, 6);
 			// 
+			// toolStripMenuItem_TerminalMenu_Send_CopyPredefined
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Name = "toolStripMenuItem_TerminalMenu_Send_CopyPredefined";
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.P)));
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Size = new System.Drawing.Size(333, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Text = "Copy &Predefined to [Send Text/File]";
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined_Click);
+			// 
 			// toolStripMenuItem_TerminalMenu_Send_Separator_6
 			// 
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_6.Name = "toolStripMenuItem_TerminalMenu_Send_Separator_6";
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_6.Size = new System.Drawing.Size(330, 6);
+			// 
+			// toolStripMenuItem_TerminalMenu_Send_Separator_7
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_Separator_7.Name = "toolStripMenuItem_TerminalMenu_Send_Separator_7";
+			this.toolStripMenuItem_TerminalMenu_Send_Separator_7.Size = new System.Drawing.Size(330, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_AutoResponse
 			// 
@@ -2866,9 +2876,9 @@ namespace YAT.View.Forms
 			// splitContainer_Terminal.Panel2
 			// 
 			this.splitContainer_Terminal.Panel2.Controls.Add(this.panel_Send);
-			this.splitContainer_Terminal.Panel2MinSize = 93;
+			this.splitContainer_Terminal.Panel2MinSize = 96;
 			this.splitContainer_Terminal.Size = new System.Drawing.Size(884, 537);
-			this.splitContainer_Terminal.SplitterDistance = 443;
+			this.splitContainer_Terminal.SplitterDistance = 440;
 			this.splitContainer_Terminal.SplitterWidth = 1;
 			this.splitContainer_Terminal.TabIndex = 0;
 			this.splitContainer_Terminal.TabStop = false;
@@ -2888,7 +2898,7 @@ namespace YAT.View.Forms
 			// 
 			this.splitContainer_Predefined.Panel2.Controls.Add(this.panel_Predefined);
 			this.splitContainer_Predefined.Panel2MinSize = 144;
-			this.splitContainer_Predefined.Size = new System.Drawing.Size(884, 443);
+			this.splitContainer_Predefined.Size = new System.Drawing.Size(884, 440);
 			this.splitContainer_Predefined.SplitterDistance = 651;
 			this.splitContainer_Predefined.TabIndex = 0;
 			this.splitContainer_Predefined.TabStop = false;
@@ -2901,7 +2911,7 @@ namespace YAT.View.Forms
 			this.panel_Monitor.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor.Name = "panel_Monitor";
 			this.panel_Monitor.Padding = new System.Windows.Forms.Padding(3, 3, 1, 0);
-			this.panel_Monitor.Size = new System.Drawing.Size(651, 443);
+			this.panel_Monitor.Size = new System.Drawing.Size(651, 440);
 			this.panel_Monitor.TabIndex = 0;
 			// 
 			// groupBox_Monitor
@@ -2912,7 +2922,7 @@ namespace YAT.View.Forms
 			this.groupBox_Monitor.Location = new System.Drawing.Point(3, 3);
 			this.groupBox_Monitor.Name = "groupBox_Monitor";
 			this.groupBox_Monitor.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.groupBox_Monitor.Size = new System.Drawing.Size(647, 440);
+			this.groupBox_Monitor.Size = new System.Drawing.Size(647, 437);
 			this.groupBox_Monitor.TabIndex = 0;
 			this.groupBox_Monitor.TabStop = false;
 			this.groupBox_Monitor.Text = "Monitor";
@@ -2932,7 +2942,7 @@ namespace YAT.View.Forms
 			// 
 			this.splitContainer_TxMonitor.Panel2.Controls.Add(this.splitContainer_RxMonitor);
 			this.splitContainer_TxMonitor.Panel2MinSize = 100;
-			this.splitContainer_TxMonitor.Size = new System.Drawing.Size(641, 424);
+			this.splitContainer_TxMonitor.Size = new System.Drawing.Size(641, 421);
 			this.splitContainer_TxMonitor.SplitterDistance = 209;
 			this.splitContainer_TxMonitor.TabIndex = 0;
 			this.splitContainer_TxMonitor.TabStop = false;
@@ -2945,7 +2955,7 @@ namespace YAT.View.Forms
 			this.panel_Monitor_Tx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Tx.Name = "panel_Monitor_Tx";
 			this.panel_Monitor_Tx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Tx.Size = new System.Drawing.Size(209, 424);
+			this.panel_Monitor_Tx.Size = new System.Drawing.Size(209, 421);
 			this.panel_Monitor_Tx.TabIndex = 0;
 			// 
 			// monitor_Tx
@@ -2956,7 +2966,7 @@ namespace YAT.View.Forms
 			this.monitor_Tx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Tx.Name = "monitor_Tx";
 			this.monitor_Tx.RepositoryType = YAT.Domain.RepositoryType.Tx;
-			this.monitor_Tx.Size = new System.Drawing.Size(203, 421);
+			this.monitor_Tx.Size = new System.Drawing.Size(203, 418);
 			this.monitor_Tx.TabIndex = 0;
 			this.monitor_Tx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Tx.TextFocusedChanged += new System.EventHandler(this.monitor_TextFocusedChanged);
@@ -2978,7 +2988,7 @@ namespace YAT.View.Forms
 			// 
 			this.splitContainer_RxMonitor.Panel2.Controls.Add(this.panel_Monitor_Rx);
 			this.splitContainer_RxMonitor.Panel2MinSize = 48;
-			this.splitContainer_RxMonitor.Size = new System.Drawing.Size(428, 424);
+			this.splitContainer_RxMonitor.Size = new System.Drawing.Size(428, 421);
 			this.splitContainer_RxMonitor.SplitterDistance = 211;
 			this.splitContainer_RxMonitor.TabIndex = 0;
 			this.splitContainer_RxMonitor.TabStop = false;
@@ -2991,7 +3001,7 @@ namespace YAT.View.Forms
 			this.panel_Monitor_Bidir.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Bidir.Name = "panel_Monitor_Bidir";
 			this.panel_Monitor_Bidir.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(211, 424);
+			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(211, 421);
 			this.panel_Monitor_Bidir.TabIndex = 0;
 			// 
 			// monitor_Bidir
@@ -3002,7 +3012,7 @@ namespace YAT.View.Forms
 			this.monitor_Bidir.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Bidir.Name = "monitor_Bidir";
 			this.monitor_Bidir.RepositoryType = YAT.Domain.RepositoryType.Bidir;
-			this.monitor_Bidir.Size = new System.Drawing.Size(205, 421);
+			this.monitor_Bidir.Size = new System.Drawing.Size(205, 418);
 			this.monitor_Bidir.TabIndex = 0;
 			this.monitor_Bidir.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Bidir.TextFocusedChanged += new System.EventHandler(this.monitor_TextFocusedChanged);
@@ -3016,7 +3026,7 @@ namespace YAT.View.Forms
 			this.panel_Monitor_Rx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Rx.Name = "panel_Monitor_Rx";
 			this.panel_Monitor_Rx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Rx.Size = new System.Drawing.Size(213, 424);
+			this.panel_Monitor_Rx.Size = new System.Drawing.Size(213, 421);
 			this.panel_Monitor_Rx.TabIndex = 0;
 			// 
 			// monitor_Rx
@@ -3027,7 +3037,7 @@ namespace YAT.View.Forms
 			this.monitor_Rx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Rx.Name = "monitor_Rx";
 			this.monitor_Rx.RepositoryType = YAT.Domain.RepositoryType.Rx;
-			this.monitor_Rx.Size = new System.Drawing.Size(207, 421);
+			this.monitor_Rx.Size = new System.Drawing.Size(207, 418);
 			this.monitor_Rx.TabIndex = 0;
 			this.monitor_Rx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Rx.TextFocusedChanged += new System.EventHandler(this.monitor_TextFocusedChanged);
@@ -3041,7 +3051,7 @@ namespace YAT.View.Forms
 			this.panel_Predefined.Location = new System.Drawing.Point(0, 0);
 			this.panel_Predefined.Name = "panel_Predefined";
 			this.panel_Predefined.Padding = new System.Windows.Forms.Padding(1, 3, 3, 0);
-			this.panel_Predefined.Size = new System.Drawing.Size(229, 443);
+			this.panel_Predefined.Size = new System.Drawing.Size(229, 440);
 			this.panel_Predefined.TabIndex = 0;
 			// 
 			// groupBox_Predefined
@@ -3051,7 +3061,7 @@ namespace YAT.View.Forms
 			this.groupBox_Predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox_Predefined.Location = new System.Drawing.Point(1, 3);
 			this.groupBox_Predefined.Name = "groupBox_Predefined";
-			this.groupBox_Predefined.Size = new System.Drawing.Size(225, 440);
+			this.groupBox_Predefined.Size = new System.Drawing.Size(225, 437);
 			this.groupBox_Predefined.TabIndex = 0;
 			this.groupBox_Predefined.TabStop = false;
 			this.groupBox_Predefined.Text = "&Predefined Commands";
@@ -3061,7 +3071,7 @@ namespace YAT.View.Forms
 			this.predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.predefined.Location = new System.Drawing.Point(3, 16);
 			this.predefined.Name = "predefined";
-			this.predefined.Size = new System.Drawing.Size(219, 421);
+			this.predefined.Size = new System.Drawing.Size(219, 418);
 			this.predefined.TabIndex = 0;
 			this.predefined.SelectedPageChanged += new System.EventHandler(this.predefined_SelectedPageChanged);
 			this.predefined.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.predefined_SendCommandRequest);
@@ -3074,7 +3084,7 @@ namespace YAT.View.Forms
 			this.panel_Send.Location = new System.Drawing.Point(0, 0);
 			this.panel_Send.Name = "panel_Send";
 			this.panel_Send.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Send.Size = new System.Drawing.Size(884, 93);
+			this.panel_Send.Size = new System.Drawing.Size(884, 96);
 			this.panel_Send.TabIndex = 0;
 			// 
 			// send
@@ -3084,7 +3094,7 @@ namespace YAT.View.Forms
 			this.send.Location = new System.Drawing.Point(3, 0);
 			this.send.Name = "send";
 			this.send.SendSplitterDistance = 655;
-			this.send.Size = new System.Drawing.Size(878, 90);
+			this.send.Size = new System.Drawing.Size(878, 93);
 			this.send.TabIndex = 0;
 			this.send.TextCommandChanged += new System.EventHandler(this.send_TextCommandChanged);
 			this.send.TextFocusedChanged += new System.EventHandler(this.send_TextFocusChanged);
@@ -3100,16 +3110,6 @@ namespace YAT.View.Forms
 			// timer_IOStatusIndicator
 			// 
 			this.timer_IOStatusIndicator.Tick += new System.EventHandler(this.timer_IOStatusIndicator_Tick);
-			// 
-			// toolStripMenuItem_SendContextMenu_Separator_6
-			// 
-			this.toolStripMenuItem_SendContextMenu_Separator_6.Name = "toolStripMenuItem_SendContextMenu_Separator_6";
-			this.toolStripMenuItem_SendContextMenu_Separator_6.Size = new System.Drawing.Size(330, 6);
-			// 
-			// toolStripMenuItem_TerminalMenu_Send_Separator_7
-			// 
-			this.toolStripMenuItem_TerminalMenu_Send_Separator_7.Name = "toolStripMenuItem_TerminalMenu_Send_Separator_7";
-			this.toolStripMenuItem_TerminalMenu_Send_Separator_7.Size = new System.Drawing.Size(330, 6);
 			// 
 			// Terminal
 			// 
