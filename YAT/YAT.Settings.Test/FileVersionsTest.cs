@@ -111,6 +111,85 @@ namespace YAT.Settings.Test
 		// Tests
 		//==========================================================================================
 
+		#region Tests > YAT 2.0 Final Version 2.0.0
+		//------------------------------------------------------------------------------------------
+		// Tests > YAT 2.0 Final Version 2.0.0
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
+		public virtual void Test_V2_0_0_TerminalSettingsCase01()
+		{
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V2_0_0.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
+		public virtual void Test_V2_0_0_TerminalSettingsCase02()
+		{
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V2_0_0.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V2_0_0_TerminalSettingsCase03()
+		{
+			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V2_0_0.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V2_0_0_WorkspaceSettingsCase04()
+		{
+			ExecuteSettingsCase04(SettingsFilesProvider.FilePaths_V2_0_0.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V2_0_0_TerminalSettingsCase05()
+		{
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V2_0_0.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V2_0_0_WorkspaceSettingsCase06()
+		{
+			ExecuteSettingsCase06(SettingsFilesProvider.FilePaths_V2_0_0.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_06_Matthias]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V2_0_0_TerminalSettingsCase07()
+		{
+			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V2_0_0.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V2_0_0_WorkspaceSettingsCase08()
+		{
+			ExecuteSettingsCase08(SettingsFilesProvider.FilePaths_V2_0_0.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_08_Matthias]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V2_0_0_WorkspaceSettingsCase09()
+		{
+			ExecuteSettingsCase09(SettingsFilesProvider.FilePaths_V2_0_0.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_09_Matthias]);
+		}
+
+		#endregion
+
 		#region Tests > YAT 2.0 Epsilon Version 1.99.90
 		//------------------------------------------------------------------------------------------
 		// Tests > YAT 2.0 Epsilon Version 1.99.90
