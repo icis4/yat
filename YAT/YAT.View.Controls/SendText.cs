@@ -361,9 +361,12 @@ namespace YAT.View.Controls
 				// No need to call SetControls(); as only the splitter will be moved, and that will
 				// not be accessed anywhere else.
 
-				int limitedDistance = SplitContainerHelper.LimitSplitterDistance(splitContainer_Send, this.sendSplitterDistance);
-				if (splitContainer_Send.SplitterDistance != limitedDistance)
-					splitContainer_Send.SplitterDistance = limitedDistance;
+				int limitedDistance;
+				if (SplitContainerHelper.TryLimitSplitterDistance(splitContainer_Send, this.sendSplitterDistance, out limitedDistance))
+				{
+					if (splitContainer_Send.SplitterDistance != limitedDistance)
+						splitContainer_Send.SplitterDistance = limitedDistance;
+				}
 			}
 		}
 
