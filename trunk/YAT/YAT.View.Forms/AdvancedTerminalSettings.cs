@@ -1089,6 +1089,7 @@ namespace YAT.View.Forms
 				// Char replace:
 				bool replaceControlChars                    = this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars;
 				checkBox_ReplaceControlCharacters.Checked   = replaceControlChars;
+				label_ControlCharacterRadix.Enabled         = replaceControlChars;
 				comboBox_ControlCharacterRadix.Enabled      = replaceControlChars;
 				comboBox_ControlCharacterRadix.SelectedItem = (Domain.ControlCharRadixEx)this.settingsInEdit.Terminal.CharReplace.ControlCharRadix;
 				bool replaceTabEnabled                      =  replaceControlChars  &&  (this.settingsInEdit.Terminal.CharReplace.ControlCharRadix == Domain.ControlCharRadix.AsciiMnemonic);

@@ -1082,7 +1082,7 @@
 			this.comboBox_ControlCharacterRadix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_ControlCharacterRadix.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox_ControlCharacterRadix.Location = new System.Drawing.Point(125, 38);
+			this.comboBox_ControlCharacterRadix.Location = new System.Drawing.Point(125, 39);
 			this.comboBox_ControlCharacterRadix.Name = "comboBox_ControlCharacterRadix";
 			this.comboBox_ControlCharacterRadix.Size = new System.Drawing.Size(121, 21);
 			this.comboBox_ControlCharacterRadix.TabIndex = 2;
@@ -1104,7 +1104,7 @@
 			// label_ControlCharacterRadix
 			// 
 			this.label_ControlCharacterRadix.AutoSize = true;
-			this.label_ControlCharacterRadix.Location = new System.Drawing.Point(3, 41);
+			this.label_ControlCharacterRadix.Location = new System.Drawing.Point(3, 42);
 			this.label_ControlCharacterRadix.Name = "label_ControlCharacterRadix";
 			this.label_ControlCharacterRadix.Size = new System.Drawing.Size(37, 13);
 			this.label_ControlCharacterRadix.TabIndex = 1;
